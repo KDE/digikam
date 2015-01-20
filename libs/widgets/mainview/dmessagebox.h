@@ -119,7 +119,7 @@ public:
                                       const QStringList& items,
                                       const QString& dontAskAgainName = QString());
 
-private:
+public:
 
     static int createMessageBox(QDialog* const dialog,
                                 QDialogButtonBox* const buttons,
@@ -127,8 +127,7 @@ private:
                                 const QString& text,
                                 QWidget* const listWidget,
                                 const QString& ask,
-                                bool* checkboxReturn
-                               );
+                                bool* checkboxReturn);
     
     static QIcon messageBoxIcon(QMessageBox::Icon icon);
 };

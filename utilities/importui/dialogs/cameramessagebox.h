@@ -111,18 +111,6 @@ public:
                                          const QString& text,
                                          const CamItemInfoList& items,
                                          const QString& dontAskAgainName = QString());
-
-private:
-
-    static int createMessageBox(CameraThumbsCtrl* const ctrl,
-                                QDialog* const dialog,
-                                QDialogButtonBox* const buttons,
-                                const QIcon& icon,
-                                const QString& text,
-                                const CamItemInfoList& items,
-                                const QString& ask,
-                                bool* checkboxReturn
-                               );
 };
 
 } // namespace Digikam

@@ -227,11 +227,15 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
     QObject::connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
                      dialog, SLOT(accept()));
 
+    CameraItemList* const listWidget = new CameraItemList(dialog);
+    listWidget->setThumbCtrl(ctrl);
+    listWidget->setItems(items);
+
     bool checkboxResult = false;
 
-    createMessageBox(ctrl, dialog, buttons, QIcon::fromTheme("dialog-information"), text, items,
-                     dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
-                     &checkboxResult);
+    DMessageBox::createMessageBox(dialog, buttons, DMessageBox::messageBoxIcon(QMessageBox::Information), text, listWidget,
+                                  dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
+                                  &checkboxResult);
 
     DMessageBox::saveMsgBoxShouldBeShown(dontShowAgainName, checkboxResult);
 }
@@ -264,10 +268,14 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
     QObject::connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
                      dialog, SLOT(reject()));
 
+    CameraItemList* const listWidget = new CameraItemList(dialog);
+    listWidget->setThumbCtrl(ctrl);
+    listWidget->setItems(items);
+    
     bool checkboxResult = false;
-    const int result    = createMessageBox(ctrl, dialog, buttons, QIcon::fromTheme("dialog-warning"), text, items,
-                                           dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
-                                           &checkboxResult);
+    const int result    = DMessageBox::createMessageBox(dialog, buttons, DMessageBox::messageBoxIcon(QMessageBox::Warning), text, listWidget,
+                                                        dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
+                                                        &checkboxResult);
 
     if (result != QDialog::Accepted)
     {
@@ -277,95 +285,6 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
     DMessageBox::saveMsgBoxShouldBeShown(dontAskAgainName, checkboxResult);
 
     return QMessageBox::Yes;
-}
-
-int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
-                                       QDialog* const dialog,
-                                       QDialogButtonBox* const buttons,
-                                       const QIcon& icon,
-                                       const QString& text,
-                                       const CamItemInfoList& items,
-                                       const QString& ask,
-                                       bool* checkboxReturn)
-{
-    QWidget* const mainWidget     = new QWidget(dialog);
-    QVBoxLayout* const mainLayout = new QVBoxLayout(mainWidget);
-    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-
-    QHBoxLayout* const hLayout    = new QHBoxLayout();
-    hLayout->setMargin(0);
-    hLayout->setSpacing(-1); // use default spacing
-    mainLayout->addLayout(hLayout, 5);
-
-    //--------------------------------------------------------------------------------
-
-    QLabel* const iconLabel       = new QLabel(mainWidget);
-    QStyleOption option;
-    option.initFrom(mainWidget);
-    iconLabel->setPixmap(icon.pixmap(mainWidget->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, &option, mainWidget)));
-
-    QVBoxLayout* const iconLayout = new QVBoxLayout();
-    iconLayout->addStretch(1);
-    iconLayout->addWidget(iconLabel);
-    iconLayout->addStretch(5);
-    hLayout->addLayout(iconLayout, 0);
-    hLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-
-    //--------------------------------------------------------------------------------
-
-    QLabel* const messageLabel    = new QLabel(text, mainWidget);
-    messageLabel->setOpenExternalLinks(true);
-    messageLabel->setWordWrap(true);
-    messageLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    QPalette messagePal(messageLabel->palette());
-    messagePal.setColor(QPalette::Window, Qt::transparent);
-    messageLabel->setPalette(messagePal);
-    hLayout->addWidget(messageLabel, 5);
-
-    //--------------------------------------------------------------------------------
-
-    CameraItemList* const listWidget = new CameraItemList(mainWidget);
-    listWidget->setThumbCtrl(ctrl);
-    listWidget->setItems(items);
-    mainLayout->addWidget(listWidget, 50);
-
-    //--------------------------------------------------------------------------------
-
-    QPointer<QCheckBox> checkbox = 0;
-
-    if (!ask.isEmpty())
-    {
-        checkbox = new QCheckBox(ask, mainWidget);
-        mainLayout->addWidget(checkbox);
-
-        if (checkboxReturn)
-        {
-            checkbox->setChecked(*checkboxReturn);
-        }
-    }
-
-    //--------------------------------------------------------------------------------
-
-    mainLayout->addWidget(buttons);
-    dialog->setLayout(mainLayout);
-
-    //--------------------------------------------------------------------------------
-
-    // We use a QPointer because the dialog may get deleted
-    // during exec() if the parent of the dialog gets deleted.
-    // In that case the QPointer will reset to 0.
-    QPointer<QDialog> guardedDialog = dialog;
-
-    const int result = guardedDialog->exec();
-
-    if (checkbox && checkboxReturn)
-    {
-        *checkboxReturn = checkbox->isChecked();
-    }
-
-    delete(QDialog*) guardedDialog;
-    return result;
 }
 
 } // namespace Digikam
