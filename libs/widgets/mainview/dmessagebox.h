@@ -109,7 +109,7 @@ public:
 public:
 
     /** Show a message box with Continue and Cancel buttons, and wait user feedback.
-     *  Return QMessageBox::Yes or QMessageBox::Cancel
+     *  Return QMessageBox::Yes or QMessageBox::Cancel.
      */
     static int showContinueCancel(QMessageBox::Icon icon,
                                   QWidget* const parent,
@@ -119,7 +119,7 @@ public:
    
     /** Show List of items to processs into a message box with Continue and Cancel buttons,
      *  and wait user feedback.
-     *  Return QMessageBox::Yes or QMessageBox::Cancel
+     *  Return QMessageBox::Yes or QMessageBox::Cancel.
      */
     static int showContinueCancelList(QMessageBox::Icon icon,
                                       QWidget* const parent,
@@ -127,6 +127,17 @@ public:
                                       const QString& text,
                                       const QStringList& items,
                                       const QString& dontAskAgainName = QString());
+           
+    /** Show widget into a message box with Continue and Cancel buttons,
+     *  and wait user feedback.
+     *  Return QMessageBox::Yes or QMessageBox::Cancel.
+     */
+    static int showContinueCancelWidget(QMessageBox::Icon icon,
+                                        QWidget* const parent,
+                                        const QString& caption,
+                                        const QString& text,
+                                        QWidget* const listWidget,
+                                        const QString& dontAskAgainName);
 
 public:
 

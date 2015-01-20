@@ -224,44 +224,11 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
                                                 const CamItemInfoList& items,
                                                 const QString& dontAskAgainName)
 {
-    if (!DMessageBox::readMsgBoxShouldBeShown(dontAskAgainName))
-    {
-        return QMessageBox::Yes;
-    }
-
-    QDialog* const dialog = new QDialog(parent, Qt::Dialog);
-    dialog->setWindowTitle(caption.isEmpty() ? i18n("Warning") : caption);
-    dialog->setObjectName("warningYesNo");
-    dialog->setModal(true);
-
-    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::Cancel, dialog);
-    buttons->button(QDialogButtonBox::Yes)->setDefault(true);
-    buttons->button(QDialogButtonBox::Yes)->setText(i18n("Continue"));
-    buttons->button(QDialogButtonBox::Cancel)->setShortcut(Qt::Key_Escape);
-    
-    QObject::connect(buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
-                     dialog, SLOT(accept()));
-
-    QObject::connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
-                     dialog, SLOT(reject()));
-
-    CameraItemList* const listWidget = new CameraItemList(dialog);
+    CameraItemList* const listWidget = new CameraItemList();
     listWidget->setThumbCtrl(ctrl);
     listWidget->setItems(items);
-    
-    bool checkboxResult = false;
-    const int result    = DMessageBox::createMessageBox(dialog, buttons, DMessageBox::messageBoxIcon(QMessageBox::Warning), text, listWidget,
-                                                        dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
-                                                        &checkboxResult);
 
-    if (result != QDialog::Accepted)
-    {
-        return QMessageBox::Cancel;
-    }
-
-    DMessageBox::saveMsgBoxShouldBeShown(dontAskAgainName, checkboxResult);
-
-    return QMessageBox::Yes;
+    return (DMessageBox::showContinueCancelWidget(QMessageBox::Warning, parent, caption, text, listWidget, dontAskAgainName));
 }
 
 } // namespace Digikam
