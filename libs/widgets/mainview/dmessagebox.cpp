@@ -80,6 +80,24 @@ void DMessageBox::showInformationList(QMessageBox::Icon icon,
                                       const QStringList& items,
                                       const QString& dontShowAgainName)
 {
+    QListWidget* listWidget = 0;
+
+    if (!items.isEmpty())
+    {
+        listWidget = new QListWidget();
+        listWidget->addItems(items);
+    }
+    
+    showInformationWidget(icon, parent, caption, text, listWidget, dontShowAgainName);
+}
+
+void DMessageBox::showInformationWidget(QMessageBox::Icon icon,
+                                        QWidget* const parent,
+                                        const QString& caption,
+                                        const QString& text,
+                                        QWidget* const listWidget,
+                                        const QString& dontShowAgainName)
+{
     if (!readMsgBoxShouldBeShown(dontShowAgainName))
     {
         return;
@@ -97,14 +115,6 @@ void DMessageBox::showInformationList(QMessageBox::Icon icon,
     QObject::connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
                      dialog, SLOT(accept()));
 
-    QListWidget* listWidget = 0;
-
-    if (!items.isEmpty())
-    {
-        listWidget = new QListWidget(dialog);
-        listWidget->addItems(items);
-    }
-    
     bool  checkboxResult = false;
 
     createMessageBox(dialog, buttons, messageBoxIcon(icon), text, listWidget,
@@ -169,7 +179,7 @@ int DMessageBox::showYesNoCancelList(QMessageBox::Icon icon,
 
     if (!items.isEmpty())
     {
-        listWidget = new QListWidget(dialog);
+        listWidget = new QListWidget();
         listWidget->addItems(items);
     }
     
@@ -234,7 +244,7 @@ int DMessageBox::showContinueCancelList(QMessageBox::Icon icon,
 
     if (!items.isEmpty())
     {
-        listWidget = new QListWidget(dialog);
+        listWidget = new QListWidget();
         listWidget->addItems(items);
     }
     
@@ -302,6 +312,7 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
 
     if (listWidget)
     {
+        listWidget->setParent(mainWidget);
         mainLayout->addWidget(listWidget, 50);
     }
    

@@ -72,6 +72,15 @@ public:
                                     const QString& text,
                                     const QStringList& items,
                                     const QString& dontShowAgainName = QString());
+    
+    /** Show widget into an informative message box.
+     */
+    static void showInformationWidget(QMessageBox::Icon icon,
+                                      QWidget* const parent,
+                                      const QString& caption,
+                                      const QString& text,
+                                      QWidget* const listWidget,
+                                      const QString& dontShowAgainName);
 
 public:
 

@@ -210,34 +210,11 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
                                        const CamItemInfoList& items,
                                        const QString& dontShowAgainName)
 {
-    if (!DMessageBox::readMsgBoxShouldBeShown(dontShowAgainName))
-    {
-        return;
-    }
-
-    QDialog* const dialog = new QDialog(parent, Qt::Dialog);
-    dialog->setWindowTitle(caption.isEmpty() ? i18n("Information") : caption);
-    dialog->setObjectName("information");
-    dialog->setModal(true);
-
-    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, dialog);
-    buttons->button(QDialogButtonBox::Ok)->setDefault(true);
-    buttons->button(QDialogButtonBox::Ok)->setShortcut(Qt::Key_Escape);
-
-    QObject::connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
-                     dialog, SLOT(accept()));
-
-    CameraItemList* const listWidget = new CameraItemList(dialog);
+    CameraItemList* const listWidget = new CameraItemList();
     listWidget->setThumbCtrl(ctrl);
     listWidget->setItems(items);
 
-    bool checkboxResult = false;
-
-    DMessageBox::createMessageBox(dialog, buttons, DMessageBox::messageBoxIcon(QMessageBox::Information), text, listWidget,
-                                  dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
-                                  &checkboxResult);
-
-    DMessageBox::saveMsgBoxShouldBeShown(dontShowAgainName, checkboxResult);
+    DMessageBox::showInformationWidget(QMessageBox::Information, parent, caption, text, listWidget, dontShowAgainName);
 }
 
 int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
