@@ -1149,7 +1149,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/infodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/triplechoicedialog.cpp
        )
 
     set(libdeletedialog_SRCS

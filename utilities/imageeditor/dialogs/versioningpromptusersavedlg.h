@@ -25,23 +25,34 @@
 #ifndef VERSIONINGPROMPTUSERSAVEDIALOG_H
 #define VERSIONINGPROMPTUSERSAVEDIALOG_H
 
-// Local includes
+// Qt includes
 
-#include "triplechoicedialog.h"
+#include <QDialog>
+
+class QAbstractButton;
 
 namespace Digikam
 {
 
-class VersioningPromptUserSaveDialog : public TripleChoiceDialog
+class VersioningPromptUserSaveDialog : public QDialog
 {
 public:
 
-    explicit VersioningPromptUserSaveDialog(QWidget* const parent, bool allowCancel = true);
+    explicit VersioningPromptUserSaveDialog(QWidget* const parent);
     ~VersioningPromptUserSaveDialog();
 
     bool shallSave()    const;
     bool newVersion()   const;
     bool shallDiscard() const;
+    
+private Q_SLOTS:
+
+    void slotButtonClicked(QAbstractButton*);
+    
+private:
+
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
