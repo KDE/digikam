@@ -22,9 +22,10 @@
  *
  * ============================================================ */
 
-// KDE includes
+// Qt includes
 
-#include <KMimeType>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 // Local includes
 
@@ -95,6 +96,7 @@ bool Filter::match(const QStringList& wildcards, const QString& name)
     {
         match = regexp(wildcard).exactMatch(name);
         //qCDebug(LOG_IMPORTUI) << "**" << wildcard << name << match;
+
         if (match)
         {
             break;
@@ -113,14 +115,14 @@ const QStringList& Filter::mimeWildcards(const QString& mime)
 
         foreach(const QString& m, list)
         {
-            KMimeType::Ptr mime = KMimeType::mimeType(m);
+            QMimeType mime = QMimeDatabase().mimeTypeForName(m);
 
-            if (!mime)
+            if (!mime.isValid())
             {
                 continue;
             }
 
-            foreach(const QString& pattern, mime->patterns())
+            foreach(const QString& pattern, mime.globPatterns())
             {
                 wc.append(pattern);
             }

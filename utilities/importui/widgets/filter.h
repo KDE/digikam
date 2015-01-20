@@ -44,11 +44,11 @@ public:
     ~Filter();
 
     QString toString();
-    void  fromString(const QString& filter);
-    bool  match(const QStringList& wildcards, const QString& name);
-    const QRegExp& regexp(const QString& wildcard);
-    const QStringList& mimeWildcards(const QString& mime);
-    bool  matchesCurrentFilter(const CamItemInfo& item);
+    void    fromString(const QString& filter);
+    bool    match(const QStringList& wildcards, const QString& name);
+    const   QRegExp& regexp(const QString& wildcard);
+    const   QStringList& mimeWildcards(const QString& mime);
+    bool    matchesCurrentFilter(const CamItemInfo& item);
 
 public:
 
