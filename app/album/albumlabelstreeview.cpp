@@ -33,6 +33,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_globals.h"
 #include "searchxml.h"
 #include "searchtabheader.h"
 #include "albummanager.h"
@@ -45,7 +46,6 @@
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
 #include "tagscache.h"
-#include "digikam_globals.h"
 #include "applicationsettings.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"

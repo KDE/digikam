@@ -41,10 +41,8 @@
 #include <QPushButton>
 #include <QMenu>
 #include <QIcon>
-
-// KDE includes
-
-#include <kmessagebox.h>
+#include <QCheckBox>
+#include <QMessageBox>
 
 // Libkexiv2 includes
 
@@ -54,13 +52,15 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "captionedit.h"
-#include "ddatetimeedit.h"
 #include "addtagslineedit.h"
 #include "applicationsettings.h"
 #include "albumthumbnailloader.h"
+#include "captionedit.h"
 #include "collectionscanner.h"
 #include "databasetransaction.h"
+#include "dnotificationwrapper.h"
+#include "ddatetimeedit.h"
+#include "digikamapp.h"
 #include "fileactionmngr.h"
 #include "ratingwidget.h"
 #include "scancontroller.h"
@@ -551,10 +551,6 @@ void ImageDescEditTab::slotChangingItems()
 
 void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub)
 {
-    QDialog* const dialog = new QDialog(this);
-    dialog->setWindowTitle(i18n("Apply changes?"));
-    dialog->setModal(true);
-
     int changedFields = 0;
 
     if (hub->titlesChanged())
@@ -673,22 +669,31 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Meta
         text += i18n("<p>Do you want to apply your changes?</p>");
     }
 
-    bool alwaysApply = false;
-    int returnCode   = KMessageBox::createKMessageBox(dialog,
-                                                      new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::No),
-                                                      QMessageBox::Information,
-                                                      text,
-                                                      QStringList(),
-                                                      i18n("Always apply changes without confirmation"),
-                                                      &alwaysApply,
-                                                      KMessageBox::Notify);
+    bool alwaysApply            = false;
+    QCheckBox* const alwaysCBox = new QCheckBox(i18n("Always apply changes without confirmation"));
+
+    QMessageBox msgBox(QMessageBox::Information,
+                       i18n("Apply changes?"),
+                       text,
+                       QMessageBox::Yes | QMessageBox::No,
+                       qApp->activeWindow());
+    msgBox.setCheckBox(alwaysCBox);
+    msgBox.setDefaultButton(QMessageBox::No);
+    msgBox.setEscapeButton(QMessageBox::No);
+
+    // Pop-up a message in desktop notification manager
+    DNotificationWrapper(QString(), i18n("Apply changes?"),
+                         DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+
+    int returnCode = msgBox.exec();
+    alwaysApply    = msgBox.checkBox()->isChecked();
 
     if (alwaysApply)
     {
         ApplicationSettings::instance()->setApplySidebarChangesDirectly(true);
     }
 
-    if (returnCode == KMessageBox::No)
+    if (returnCode == QMessageBox::No)
     {
         delete hub;
         return;
