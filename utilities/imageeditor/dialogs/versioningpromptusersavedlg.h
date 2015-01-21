@@ -36,6 +36,8 @@ namespace Digikam
 
 class VersioningPromptUserSaveDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
 
     explicit VersioningPromptUserSaveDialog(QWidget* const parent);
@@ -44,11 +46,11 @@ public:
     bool shallSave()    const;
     bool newVersion()   const;
     bool shallDiscard() const;
-    
+
 private Q_SLOTS:
 
     void slotButtonClicked(QAbstractButton*);
-    
+
 private:
 
     class Private;

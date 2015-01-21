@@ -91,7 +91,7 @@ VersioningPromptUserSaveDialog::VersioningPromptUserSaveDialog(QWidget* const pa
 
     connect(d->buttons, SIGNAL(clicked(QAbstractButton*)),
             this, SLOT(slotButtonClicked(QAbstractButton*)));
-    
+
     QWidget* const mainWidget = new QWidget;
 
     // -- Icon and Header --
@@ -99,7 +99,7 @@ VersioningPromptUserSaveDialog::VersioningPromptUserSaveDialog(QWidget* const pa
     QLabel* const warningIcon = new QLabel;
     warningIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, this)));
     QLabel* const editIcon    = new QLabel;
-    editIcon->setPixmap(QIcon::fromTheme("document-edit").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
+    editIcon->setPixmap(QIcon::fromTheme("document-edit").pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, this)));
     QLabel* const question    = new QLabel;
     question->setTextFormat(Qt::RichText);
     question->setText(i18nc("@label",
@@ -131,13 +131,13 @@ VersioningPromptUserSaveDialog::~VersioningPromptUserSaveDialog()
 void VersioningPromptUserSaveDialog::slotButtonClicked(QAbstractButton* button)
 {
     d->clicked = d->buttons->standardButton(button);
-    
+
     if (d->clicked == QDialogButtonBox::Cancel)
     {
         reject();
         return;
     }
-    
+
     accept();
 }
 
