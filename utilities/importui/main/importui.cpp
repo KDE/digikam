@@ -310,7 +310,6 @@ void ImportUI::setupActions()
     connect(d->cameraCancelAction, SIGNAL(triggered()), this, SLOT(slotCancelButton()));
     actionCollection()->addAction("importui_cancelprocess", d->cameraCancelAction);
     d->cameraCancelAction->setEnabled(false);
-    d->cameraActions->addAction(d->cameraCancelAction);
 
     // -----------------------------------------------------------------
 
@@ -1085,6 +1084,7 @@ void ImportUI::slotBusy(bool val)
         }
 
         d->busy = false;
+        d->cameraCancelAction->setEnabled(false);
         d->cameraActions->setEnabled(true);
         d->advBox->setEnabled(true);
 
