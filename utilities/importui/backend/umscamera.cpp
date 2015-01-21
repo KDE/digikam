@@ -47,9 +47,7 @@ extern "C"
 
 // KDE includes
 
-#include <kio/global.h>
 #include <klocalizedstring.h>
-#include <kmimetype.h>
 
 #include <solid/device.h>
 #include <solid/storageaccess.h>
@@ -184,7 +182,6 @@ bool UMSCamera::getFolders(const QString& folder)
 
         QString subFolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
         subFolderList.append(subFolder);
-
     }
 
     if (subFolderList.isEmpty())

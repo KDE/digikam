@@ -39,17 +39,7 @@
 
 // KDE includes
 
-#include <kcomponentdata.h>
-
-#include <klibloader.h>
 #include <klocalizedstring.h>
-#include <kmimetype.h>
-#include <kservicetypetrader.h>
-
-
-
-#include <kio/global.h>
-#include <kio/thumbcreator.h>
 
 // Libkdcraw includes
 
@@ -60,7 +50,6 @@
 
 #include <kexiv2previews.h>
 #include <rotationmatrix.h>
-#include <libkexiv2_version.h>
 
 // Local includes
 
@@ -235,6 +224,7 @@ QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect
     {
         d->dbIdForReplacement = -1;    // just to prevent bugs
     }
+
     // get info about path
     ThumbnailInfo info = makeThumbnailInfo(identifier, rect);
 
@@ -336,12 +326,12 @@ QImage ThumbnailCreator::scaleForStorage(const QImage& qimage) const
 {
     if (qimage.width() > d->storageSize() || qimage.height() > d->storageSize())
     {
-        /*
-        Cheat scaling is disabled because of quality problems - see bug #224999
+/*      Cheat scaling is disabled because of quality problems - see bug #224999
+
         // Perform cheat scaling (http://labs.trolltech.com/blogs/2009/01/26/creating-thumbnail-preview)
         int cheatSize = maxSize - (3*(maxSize - d->storageSize()) / 4);
         qimage        = qimage.scaled(cheatSize, cheatSize, Qt::KeepAspectRatio, Qt::FastTransformation);
-        */
+*/
         QImage scaledThumb = qimage.scaled(d->storageSize(), d->storageSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         return scaledThumb;
@@ -355,8 +345,11 @@ QString ThumbnailCreator::identifierForDetail(const ThumbnailInfo& info, const Q
     QUrl url;
     url.setScheme("detail");
     url.setPath(info.filePath);
-    /* A scheme to support loading by database id, but this is a hack. Solve cleanly later (schema update)
+
+/*  A scheme to support loading by database id, but this is a hack. Solve cleanly later (schema update)
+
     url.setPath(identifier.fileName);
+
     if (!identifier.uniqueHash.isNull())
     {
         url.addQueryItem("hash", identifier.uniqueHash);
@@ -366,9 +359,10 @@ QString ThumbnailCreator::identifierForDetail(const ThumbnailInfo& info, const Q
     {
         url.addQueryItem("path", identifier.filePath);
     }
-    */
+*/
     QString r = QString("%1,%2-%3x%4").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
     url.addQueryItem("rect", r);
+
     return url.toString();
 }
 
@@ -554,7 +548,6 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         }
 
         // See bug #339144 : only handle preview if right libkexiv2 version is used.
-#if KEXIV2_VERSION >= 0x020302
 
         // Special case with DNG file. See bug #338081
         if (qimage.isNull())
@@ -564,8 +557,6 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             KExiv2Iface::KExiv2Previews preview(path);
             qimage = preview.image();
         }
-
-#endif
 
         // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
         if (qimage.isNull() && !failedAtDImg)
@@ -789,7 +780,6 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     }
 
     ThumbnailDatabaseAccess access;
-
     DatabaseCoreBackend::QueryState lastQueryState = DatabaseCoreBackend::ConnectionError;
 
     while (lastQueryState == DatabaseCoreBackend::ConnectionError)
@@ -919,7 +909,6 @@ bool ThumbnailCreator::isInDatabase(const ThumbnailInfo& info) const
 ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) const
 {
     DatabaseThumbnailInfo dbInfo = loadDatabaseThumbnailInfo(info);
-
     ThumbnailImage image;
 
     if (dbInfo.data.isNull())
@@ -982,10 +971,13 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
     // Give priority to main database's rotation flag
     // NOTE: Breaks rotation of RAWs which do not contain JPEG previews
     image.exifOrientation = info.orientationHint;
-    if (image.exifOrientation == DMetadata::ORIENTATION_UNSPECIFIED && !info.filePath.isEmpty() && LoadSaveThread::infoProvider())
+
+    if (image.exifOrientation == DMetadata::ORIENTATION_UNSPECIFIED &&
+        !info.filePath.isEmpty() && LoadSaveThread::infoProvider())
     {
         image.exifOrientation = LoadSaveThread::infoProvider()->orientationHint(info.filePath);
     }
+
     if (image.exifOrientation == DMetadata::ORIENTATION_UNSPECIFIED)
     {
         image.exifOrientation = dbInfo.orientationHint;
@@ -1126,7 +1118,7 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
     if (temp.open())
     {
-        QString tempFileName   = temp.fileName();
+        QString tempFileName = temp.fileName();
 
         if (qimage.save(tempFileName, "PNG", 0))
         {
@@ -1137,7 +1129,7 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
 #ifndef Q_OS_WIN
             ret = QFile::rename(QFile::encodeName(tempFileName).constData(),
-                              QFile::encodeName(thumbPath).constData());
+                                QFile::encodeName(thumbPath).constData());
             if (ret != 0)
 #else
             if(::MoveFileEx(tempFileName.utf16(), thumbPath.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)

@@ -37,11 +37,7 @@
 
 // KDE includes
 
-#include <klocalizedstring.h>
 #include <kcalendarsystem.h>
-#include <kcomponentdata.h>
-#include <kmimetype.h>
-#include <klocale.h>
 
 // Libkexiv2 includes
 
