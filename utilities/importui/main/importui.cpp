@@ -305,8 +305,7 @@ void ImportUI::setupActions()
     connect(d->cameraCancelAction, SIGNAL(triggered()), this, SLOT(slotCancelButton()));
     ac->addAction("importui_cancelprocess", d->cameraCancelAction);
     d->cameraCancelAction->setEnabled(false);
-    d->cameraActions->addAction(d->cameraCancelAction);
-
+    
     // -----------------------------------------------------------------
 
     d->cameraInfoAction = new QAction(QIcon::fromTheme("camera-photo"), i18nc("@action Information about camera", "Information"), this);
@@ -1063,6 +1062,7 @@ void ImportUI::slotBusy(bool val)
         }
 
         d->busy = false;
+        d->cameraCancelAction->setEnabled(false);
         d->cameraActions->setEnabled(true);
         d->advBox->setEnabled(true);
 
