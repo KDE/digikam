@@ -69,26 +69,15 @@ extern "C"
 #include <QMimeType>
 #include <QMessageBox>
 #include <QApplication>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 // KDE includes
 
-
 #include <kactionmenu.h>
-#include <kselectaction.h>
 #include <kactioncollection.h>
-#include <kglobal.h>
-
 #include <klocalizedstring.h>
-#include <kmultitabbar.h>
-#include <kprotocolinfo.h>
-#include <kstandardaction.h>
-#include <kstandarddirs.h>
-#include <kstatusbar.h>
-#include <ktoggleaction.h>
-#include <ktoolbar.h>
-#include <ktoolbarpopupaction.h>
 #include <ksqueezedtextlabel.h>
-#include <kmimetype.h>
 
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
@@ -97,7 +86,6 @@ extern "C"
 // Libkdcraw includes
 
 #include <kdcraw.h>
-#include <libkdcraw_version.h>
 
 // Local includes
 
@@ -1285,12 +1273,12 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
 
         foreach (const QUrl& url, validUrls)
         {
-            if (KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
+            if (QMimeDatabase().mimeTypeForUrl(url).name().startsWith("image", Qt::CaseInsensitive))
             {
                 imagesUrls << url;
             }
 
-            if (KMimeType::findByUrl(url)->name() == "inode/directory")
+            if (QMimeDatabase().mimeTypeForUrl(url).name() == "inode/directory")
             {
                 foldersUrls << url;
             }
