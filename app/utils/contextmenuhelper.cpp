@@ -42,13 +42,10 @@
 
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kfileitem.h>
+#include <kstandardaction.h>
 #include <klocalizedstring.h>
-#include <kmimetype.h>
-#include <kmimetypetrader.h>
 #include <kopenwithdialog.h>
 #include <krun.h>
-#include <kstandardaction.h>
 
 #ifdef HAVE_KDEPIMLIBS
 

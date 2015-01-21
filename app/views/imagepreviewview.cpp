@@ -40,10 +40,7 @@
 
 // KDE includes
 
-#include <kactionmenu.h>
 #include <klocalizedstring.h>
-#include <kmimetype.h>
-#include <kmimetypetrader.h>
 #include <ktoggleaction.h>
 
 // Local includes

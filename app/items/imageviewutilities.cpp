@@ -29,15 +29,10 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QUrl>
 
 // KDE includes
 
-#include <kio/jobuidelegate.h>
-#include <kmimetype.h>
-#include <krun.h>
-#include <kservice.h>
-#include <kmimetypetrader.h>
-#include <QUrl>
 #include <kwindowsystem.h>
 
 // Local includes

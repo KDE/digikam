@@ -31,8 +31,6 @@
 
 // KDE includes
 
-#include <kfilemetainfo.h>
-#include <kmimetype.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -1605,7 +1603,7 @@ QString ImageScanner::detectImageFormat() const
         }
     }
 
-    // See BUG #339341: KMimeType can return garbage. Take file name suffix instead.
+    // See BUG #339341: Take file name suffix instead type mime analyze.
     return d->fileInfo.suffix().toUpper();
 }
 
