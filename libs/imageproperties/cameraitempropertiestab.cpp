@@ -30,13 +30,13 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QIcon>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kconfig.h>
 #include <kfileitem.h>
-#include <kmimetype.h>
 #include <klocale.h>
 
 // Local includes
@@ -452,11 +452,11 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
     }
     else
     {
-        KMimeType::Ptr mimeType = KMimeType::mimeType(itemInfo.mime, KMimeType::ResolveAliases);
+        QMimeType mimeType = QMimeDatabase().mimeTypeForName(itemInfo.mime);
 
-        if (mimeType)
+        if (mimeType.isValid())
         {
-            d->labelImageMime->setText(mimeType->comment());
+            d->labelImageMime->setText(mimeType.comment());
         }
         else
         {

@@ -171,7 +171,7 @@ void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 
     foreach(const QUrl& item, d->selectedItems)
     {
-        const QString mimeType = QMimeDatabase().mimeTypeForUrl(item.path(), QMimeDatabase::MatchExtension).name();
+        const QString mimeType = QMimeDatabase().mimeTypeForFile(item.path(), QMimeDatabase::MatchExtension).name();
 
         if (!mimeTypes.contains(mimeType))
         {
