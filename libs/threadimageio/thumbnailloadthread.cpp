@@ -32,11 +32,12 @@
 #include <QPainter>
 #include <QMessageBox>
 #include <QIcon>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmimetype.h>
 #include <kio/previewjob.h>
 
 // Local includes
@@ -864,11 +865,11 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
 {
     QPixmap pix;
 
-    KMimeType::Ptr mimeType = KMimeType::findByPath(description.filePath);
+    QMimeType mimeType = QMimeDatabase().mimeTypeForFile(description.filePath);
 
-    if (mimeType)
+    if (mimeType.isValid())
     {
-        pix = QIcon::fromTheme(mimeType->iconName()).pixmap(128);
+        pix = QIcon::fromTheme(mimeType.iconName()).pixmap(128);
     }
 
     if (pix.isNull())
