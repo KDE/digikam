@@ -27,13 +27,11 @@
 
 #include <QAction>
 #include <QIcon>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 // KDE includes
 
-#include <kactionmenu.h>
-#include <kactioncollection.h>
-#include <kservice.h>
-#include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <kopenwithdialog.h>
 #include <krun.h>
@@ -67,7 +65,7 @@ public:
     }
 
     QList<qlonglong>             selectedIds;
-    QList<QUrl>                   selectedItems;
+    QList<QUrl>                  selectedItems;
 
     QMap<int, QAction*>          queueActions;
     QMap<QString, KService::Ptr> servicesMap;
@@ -173,7 +171,7 @@ void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 
     foreach(const QUrl& item, d->selectedItems)
     {
-        const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
+        const QString mimeType = QMimeDatabase().mimeTypeForUrl(item).name();
 
         if (!mimeTypes.contains(mimeType))
         {
