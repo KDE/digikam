@@ -60,23 +60,19 @@
 #include <QMenu>
 #include <QIcon>
 #include <QMessageBox>
+#include <QStatusBar>
 
 // KDE includes
 
 #include <kactioncollection.h>
-#include <kcalendarsystem.h>
 #include <kedittoolbar.h>
-#include <khelpmenu.h>
 #include <klocalizedstring.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
-#include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
-#include <ktoolbar.h>
 #include <kurllabel.h>
 #include <kmessagewidget.h>
-#include <kio/global.h>
 
 // Libkdcraw includes
 
