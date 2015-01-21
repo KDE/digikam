@@ -6,7 +6,7 @@
  * Date        : 2008-12-10
  * Description : misc file operation methods
  *
- * Copyright (C) 2014      by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -37,10 +37,11 @@
 #include <QDir>
 #include <QWidget>
 #include <QFile>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 // KDE includes
 
-#include <kmimetype.h>
 #include <krun.h>
 #include <kmimetypetrader.h>
 
@@ -61,11 +62,13 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     if (info.isSymLink())
     {
         dest = info.symLinkTarget();
+
         qCDebug(DIGIKAM_GENERAL_LOG) << "Target filePath" << QDir::toNativeSeparators(dest) << "is a symlink pointing to"
-                 << QDir::toNativeSeparators(dest) << ". Storing image there.";
+                                     << QDir::toNativeSeparators(dest) << ". Storing image there.";
     }
 
 #ifndef Q_OS_WIN
+
     QByteArray dstFileName = QFile::encodeName(dest).constData();
 
     // Store old permissions:
@@ -84,6 +87,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     {
         filePermissions = stbuf.st_mode;
     }
+
 #endif // Q_OS_WIN
 
     struct stat st;
@@ -113,11 +117,13 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     }
 
 #ifndef Q_OS_WIN
+
     // restore permissions
     if (::chmod(dstFileName.constData(), filePermissions) != 0)
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore file permissions for file " << dstFileName;
     }
+
 #endif // Q_OS_WIN
 
     return true;
@@ -136,7 +142,7 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWi
 
     foreach (const QUrl& url, urls)
     {
-        const QString mimeType = KMimeType::findByUrl(url, 0, true, true)->name();
+        const QString mimeType = QMimeDatabase().mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension).name();
         KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
 
         if (offers.isEmpty())
@@ -144,7 +150,7 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWi
             return;
         }
 
-        KService::Ptr ptr                            = offers.first();
+        KService::Ptr ptr                             = offers.first();
         QMap<KService::Ptr, QList<QUrl>>::iterator it = servicesMap.find(ptr);
 
         if (it != servicesMap.end())
@@ -175,7 +181,7 @@ KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
 
     foreach(const QUrl& item, urls)
     {
-        const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
+        const QString mimeType = QMimeDatabase().mimeTypeForFile(item.path(), QMimeDatabase::MatchExtension).name();
 
         if (!mimeTypes.contains(mimeType))
         {
