@@ -38,12 +38,12 @@
 
 // Qt includes
 
-#include <QtCore/QSocketNotifier>
-#include <QtCore/QHash>
-#include <QtCore/QDirIterator>
-#include <QtCore/QFile>
-#include <QtCore/QQueue>
-#include <QtCore/QScopedArrayPointer>
+#include <QSocketNotifier>
+#include <QHash>
+#include <QDirIterator>
+#include <QFile>
+#include <QQueue>
+#include <QScopedArrayPointer>
 
 // Local includes
 
@@ -60,17 +60,21 @@ namespace
     QByteArray stripTrailingSlash( const QByteArray& path )
     {
         QByteArray p( path );
+
         if ( p.endsWith( '/' ) )
             p.truncate( p.length()-1 );
+
         return p;
     }
 
     QByteArray concatPath( const QByteArray& p1, const QByteArray& p2 )
     {
         QByteArray p(p1);
+
         if( p.isEmpty() || p[p.length()-1] != '/' )
             p.append('/');
         p.append(p2);
+
         return p;
     }
 }
@@ -82,7 +86,7 @@ class KInotify::Private
 {
 public:
 
-    explicit Private( KInotify* parent )
+    explicit Private( KInotify* const parent )
         : watchHiddenFolders( false ),
           m_inotifyFd( -1 ),
           m_notifier( 0 ),
@@ -95,6 +99,8 @@ public:
     {
         close();
     }
+
+public:
 
     QHash<int, QByteArray> cookies;
     QHash<int, QByteArray> watchPathHash;
@@ -110,6 +116,8 @@ public:
     WatchFlags             flags;
 
     bool                   watchHiddenFolders;
+
+public:
 
     int inotify()
     {
@@ -145,7 +153,7 @@ public:
         int wd = inotify_add_watch( inotify(), path.data(), mask );
         if ( wd > 0 )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << "Successfully added watch for" << path << pathHash.count();
+//          qCDebug(DIGIKAM_GENERAL_LOG) << "Successfully added watch for" << path << pathHash.count();
             QByteArray normalized = stripTrailingSlash( path );
             watchPathHash.insert( wd, normalized );
             pathWatchHash.insert( normalized, wd );
@@ -155,12 +163,14 @@ public:
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create watch for" << path;
             static bool userLimitReachedSignaled = false;
+
             if ( !userLimitReachedSignaled && errno == ENOSPC )
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "User limit reached. Please raise the inotify user watch limit.";
                 userLimitReachedSignaled = true;
                 emit q->watchUserLimitReached();
             }
+
             return false;
         }
     }
@@ -175,10 +185,12 @@ public:
         QScopedArrayPointer<char> entryData( new char[len] );
         struct dirent* entry = ( struct dirent* )entryData.data();
 
-        DIR* dir = opendir( path.data() );
+        DIR* const dir = opendir( path.data() );
+
         if ( dir )
         {
             struct dirent *result = 0;
+
             while ( !readdir_r( dir, entry, &result ) )
             {
 
@@ -280,8 +292,7 @@ private:
     KInotify*        q;
 };
 
-
-KInotify::KInotify( QObject* parent )
+KInotify::KInotify( QObject* const parent )
     : QObject( parent ),
       d( new Private( this ) )
 {
@@ -292,10 +303,10 @@ KInotify::~KInotify()
     delete d;
 }
 
-
 bool KInotify::available()
 {
     KInotify q;
+
     if( q.d->inotify() > 0 )
     {
         // trueg: Copied from KDirWatch.
@@ -374,18 +385,20 @@ bool KInotify::removeWatch( const QString& path )
             ++it;
         }
     }
+
     return true;
 }
 
 bool KInotify::removeDirectory( const QString& path )
 {
     QByteArray encodedPath = QFile::encodeName( path ).constData();
+    int wd                 = d->pathWatchHash.value(encodedPath);
 
-    int wd = d->pathWatchHash.value(encodedPath);
     if (wd)
     {
         d->removeWatch(wd);
     }
+
     return true;
 }
 
@@ -395,6 +408,7 @@ bool KInotify::removeAllWatches()
     {
         d->removeWatch(wd);
     }
+
     return true;
 }
 
@@ -591,20 +605,32 @@ namespace Digikam
 class KInotify::Private
 {
 public:
-    void _k_addWatches() {}
+
+    void _k_addWatches()
+    {
+    }
 };
-KInotify::KInotify(QObject* parent) : QObject(parent), d(0) {}
-KInotify::~KInotify() {}
-bool KInotify::available() { return false; }
-bool KInotify::watchingPath( const QString&) const { return false; }
-bool KInotify::filterWatch( const QString &, WatchEvents & , WatchFlags&) { return false; }
-bool KInotify::addWatch( const QString&, WatchEvents, WatchFlags) { return false; }
-bool KInotify::removeWatch( const QString&) { return false; }
-bool KInotify::removeDirectory( const QString& ) { return false; }
-bool KInotify::removeAllWatches() { return false; }
-bool KInotify::watchDirectory(const QString& ) { return false; }
-bool KInotify::watchDirectoryAndSubdirs(const QString&) { return false; }
-void KInotify::slotEvent( int ) { }
+
+KInotify::KInotify(QObject* parent)
+    : QObject(parent),
+      d(0)
+    {
+    }
+
+KInotify::~KInotify()
+{
+}
+
+bool KInotify::available()                                              { return false; }
+bool KInotify::watchingPath( const QString&) const                      { return false; }
+bool KInotify::filterWatch( const QString&, WatchEvents& , WatchFlags&) { return false; }
+bool KInotify::addWatch( const QString&, WatchEvents, WatchFlags)       { return false; }
+bool KInotify::removeWatch( const QString&)                             { return false; }
+bool KInotify::removeDirectory( const QString& )                        { return false; }
+bool KInotify::removeAllWatches()                                       { return false; }
+bool KInotify::watchDirectory(const QString& )                          { return false; }
+bool KInotify::watchDirectoryAndSubdirs(const QString&)                 { return false; }
+void KInotify::slotEvent( int )                                         {               }
 
 } // namespace Digikam
 

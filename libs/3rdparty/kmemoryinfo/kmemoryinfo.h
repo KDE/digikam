@@ -1,5 +1,5 @@
 /*
-   Copyright 2010 Pino Toscano <pino@kde.org>
+   Copyright 2010 Pino Toscano <pino at kde dot org>
    Copyright 2011 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 
    This library is free software; you can redistribute it and/or
