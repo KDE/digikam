@@ -293,6 +293,7 @@ void EditorCore::slotImageLoaded(const LoadingDescription& loadingDescription, c
         d->origHeight = d->image.height();
         d->width      = d->origWidth;
         d->height     = d->origHeight;
+        d->image.setAttribute("originalSize", d->image.size());
 
         updateColorManagement();
     }
@@ -303,22 +304,6 @@ void EditorCore::slotImageLoaded(const LoadingDescription& loadingDescription, c
 
     emit signalImageLoaded(d->currentDescription.filePath, valRet);
     setModified();
-
-    /*
-     *  TODO: FilterManager test block -- to be removed later
-     *
-        FilterAction fa("digikam:BCGFilter", 1);
-        fa.addParameter("contrast", 1);
-        fa.addParameter("channel", 1);
-        fa.addParameter("brightness", 1);
-        fa.addParameter("gamma", 1.2);
-
-        DImgThreadedFilter *f =  DImgFilterManager::instance()->createFilter("digikam:BCGFilter", 1);
-        f->readParameters(fa);
-        f->setupFilter(img);
-        f->startFilterDirectly();
-        delete f;
-    */
 }
 
 void EditorCore::updateColorManagement()
