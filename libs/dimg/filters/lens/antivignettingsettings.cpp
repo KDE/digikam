@@ -39,6 +39,8 @@
 
 // KDE includes
 
+#include "dimg_debug.h"
+
 #include <klocalizedstring.h>
 #include <kseparator.h>
 #include <kglobalsettings.h>
