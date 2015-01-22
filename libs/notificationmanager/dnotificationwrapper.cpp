@@ -34,8 +34,6 @@
 
 // KDE includes
 
-#include <kglobalsettings.h>
-
 #include <knotification.h>
 #include <kpassivepopup.h>
 
