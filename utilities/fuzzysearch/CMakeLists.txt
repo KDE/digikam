@@ -5,3 +5,7 @@ set(libfuzzysearch_SRCS
     findduplicatesalbumitem.cpp
     sketchwidget.cpp
 )
+
+add_library(fuzzysearch ${libfuzzysearch_SRCS})
+target_link_libraries(fuzzysearch
+                         )

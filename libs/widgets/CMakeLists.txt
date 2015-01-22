@@ -15,6 +15,8 @@ set(libcommonwidgets_SRCS
     common/visibilitycontroller.cpp
     common/workingwidget.cpp
     common/widgets_debug.cpp
+    
+    common/databasewidget.cpp # FIXME used to belong to separate target, check
 )
 
 set(libmainview_SRCS
@@ -79,7 +81,6 @@ set(libiccprofileswidgets_SRCS
 
 add_library(digikamwidgets STATIC ${libmainview_SRCS} ${libcommonwidgets_SRCS} ${libgraphicsviewwidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libitemview_SRCS} ${libmetadatawidgets_SRCS})
 target_link_libraries(digikamwidgets
-                      digikamcore
                       digikamdialogs
                       dimg
                       

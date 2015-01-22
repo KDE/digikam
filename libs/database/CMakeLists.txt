@@ -66,6 +66,11 @@ set(libalbumsqlite2_SRCS
     utils/upgradedb_sqlite2tosqlite3.cpp
 )
 
+set(libimgqsort_SRCS
+    imgqsort/imgqsort.cpp
+)
+
+
 # Shared libdigikamdatabase ########################################################
 
 set(digikamdatabase_LIB_SRCS
@@ -74,6 +79,7 @@ set(digikamdatabase_LIB_SRCS
         ${libdatabasemodels_SRCS}
         ${libhaar_SRCS}
         ${pgfutils_SRCS}
+        ${libimgqsort_SRCS}
 )
 
 if(Baloo_FOUND)
@@ -87,7 +93,6 @@ endif()
 add_library(digikamdatabase STATIC ${digikamdatabase_LIB_SRCS})
 
 target_link_libraries(digikamdatabase
-                      digikamcore
                       dmetadata
                       digikamwidgets
                       

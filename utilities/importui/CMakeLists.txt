@@ -4,65 +4,87 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-set(libimportui_SRCS
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/backend/cameracontroller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backend/camerathumbsctrl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backend/camerahistoryupdater.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backend/dkcamera.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backend/gpcamera.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backend/camiteminfo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/backend/umscamera.cpp
+# libgphoto2 library rules
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerafolderdialog.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerainfodialog.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/capturedlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/cameramessagebox.cpp
+if(GPHOTO2_FOUND)
+    include_directories(${GPHOTO2_INCLUDE_DIRS})
+endif()
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/capturewidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/freespacewidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/renamecustomizer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/albumcustomizer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/advancedsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/scriptingsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/filter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/filtercombo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/importcontextmenu.cpp
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/models/importimagemodel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/models/importthumbnailmodel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/models/importfiltermodel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/models/camitemsortsettings.cpp
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/items/itemviewimportdelegate.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/items/importcategorydrawer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/items/importdelegate.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/items/importtooltipfiller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/items/importoverlays.cpp
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/camerafolderview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/cameranamehelper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/freespacetooltip.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/importcategorizedview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/importthumbnailbar.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/importpreviewview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/importiconview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/importiconview_p.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/importstackedview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/views/importview.cpp
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/main/importsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/main/importui.cpp
+set(libimportuibackend_SRCS
+    backend/cameracontroller.cpp
+    backend/camerathumbsctrl.cpp
+    backend/camerahistoryupdater.cpp
+    backend/dkcamera.cpp
+    backend/gpcamera.cpp
+    backend/camiteminfo.cpp
+    backend/umscamera.cpp
 )
 
+set(libimportui_SRCS
+    dialogs/camerafolderdialog.cpp
+    dialogs/camerainfodialog.cpp
+    dialogs/capturedlg.cpp
+    dialogs/cameramessagebox.cpp
+
+    widgets/capturewidget.cpp
+    widgets/freespacewidget.cpp
+    widgets/renamecustomizer.cpp
+    widgets/albumcustomizer.cpp
+    widgets/advancedsettings.cpp
+    widgets/scriptingsettings.cpp
+    widgets/filter.cpp
+    widgets/filtercombo.cpp
+    widgets/importcontextmenu.cpp
+
+    models/importimagemodel.cpp
+    models/importthumbnailmodel.cpp
+    models/importfiltermodel.cpp
+    models/camitemsortsettings.cpp
+
+    items/camerafolderitem.cpp
+    items/itemviewimportdelegate.cpp
+    items/importcategorydrawer.cpp
+    items/importdelegate.cpp
+    items/importtooltipfiller.cpp
+    items/importoverlays.cpp
+
+    views/camerafolderview.cpp
+    views/cameranamehelper.cpp
+    views/freespacetooltip.cpp
+    views/importcategorizedview.cpp
+    views/importthumbnailbar.cpp
+    views/importpreviewview.cpp
+    views/importiconview.cpp
+    views/importiconview_p.cpp
+    views/importstackedview.cpp
+    views/importview.cpp
+
+    main/importsettings.cpp
+    main/importui.cpp
+)
+
+# TODO backend shouldn't probably be required to linkg against all of these?
+
+add_library(importuibackend STATIC ${libimportuibackend_SRCS})
+target_link_libraries(importuibackend
+                         Qt5::Core
+                         Qt5::Gui
+                         Qt5::Widgets
+                         Qt5::Concurrent
+                         Qt5::Sql
+                         KF5::KDELibs4Support
+)
 add_library(importui STATIC ${libimportui_SRCS})
 
 target_link_libraries(importui
-                      digikamcore
-                      KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
-                     )
+                      #digikamcore
+                      importuibackend
+                      
+                      KF5::NotifyConfig
+                      KF5::KExiv2
+                      KF5::KDcraw
+)
 
 install(FILES main/importui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

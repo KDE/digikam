@@ -31,7 +31,6 @@
 #include <QThread>
 #include <QString>
 #include <QFileInfo>
-#include <QPixmap>
 
 // Local includes
 
@@ -47,6 +46,7 @@ namespace Digikam
 
 class CameraCommand;
 class RenameResult;
+class DHistoryView;
 
 class CameraController : public QThread
 {

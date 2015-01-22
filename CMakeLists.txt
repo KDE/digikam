@@ -559,61 +559,61 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/album
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/album
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/film
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/film
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/models
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/template
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser
-                        ${CMAKE_CURRENT_SOURCE_DIR}/tests
-                        ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory
+                        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser
+                        #${CMAKE_CURRENT_SOURCE_DIR}/tests
+                        #${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common
@@ -676,34 +676,29 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${LCMS_INCLUDE_DIR}
     )
 
-    if(X11_FOUND)
-        include_directories(${X11_INCLUDE_DIR})
-    endif()
+#    if(X11_FOUND)
+#        include_directories(${X11_INCLUDE_DIR})
+#    endif()
 
     # JPEG2000 support
 
-    if(JASPER_FOUND)
-        include_directories(${JASPER_INCLUDE_DIR})
-    endif()
-
-    # libgphoto2 library rules
-
-    if(GPHOTO2_FOUND)
-        include_directories(${GPHOTO2_INCLUDE_DIRS})
-    endif()
+#    if(JASPER_FOUND)
+#        include_directories(${JASPER_INCLUDE_DIR})
+#    endif()
 
     # Boost library rules
 
     IF(Boost_FOUND)
         include_directories(${Boost_INCLUDE_DIRS})
     ENDIF()
+    
+    # libgphoto2 library rules
+    message(INFO "gphoto2 includes are required only to display the version in the about data/component info, refactor")
 
-    # LibLqr-1 library rules
-
-    if(LQR-1_FOUND)
-        include_directories(${LQR-1_INCLUDE_DIRS})
-        set(liblqr_LIBS ${LQR-1_LIBRARIES})
+    if(GPHOTO2_FOUND)
+        include_directories(${GPHOTO2_INCLUDE_DIRS})
     endif()
+
 
     # Lensfun library rules
 
@@ -754,35 +749,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/baloo/baloowrap.cpp
        )
 
-
-
-    set(libimgqsort_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort/imgqsort.cpp
-       )
-
-
-    set(libdatabaseui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/databasewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/migrationdlg.cpp
-       )
-
-    set(pgfutils_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/pgfutils.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/digikam_debug.cpp
-       )
-
     set(libkde3rdparty_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo/kmemoryinfo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify/kinotify.cpp
        )
-
-
-    if(${KF5KGeoMap_FOUND})
-        set(libgpssearch_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
-           )
-    endif()
 
     set(libimageversionssidebar_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imageversionsmodel.cpp
@@ -981,7 +951,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     set(libdigikamhelpers_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/uifilevalidator.cpp
-       )
+    )
 
     add_subdirectory(data)
     add_subdirectory(utilities)

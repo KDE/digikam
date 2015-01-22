@@ -17,3 +17,7 @@ endif()
 if(${KF5Kipi_FOUND})
     add_subdirectory(kipiiface)
 endif()
+
+if(${KF5KGeoMap_FOUND})
+    add_subdirectory(gpssearch)
+endif()
