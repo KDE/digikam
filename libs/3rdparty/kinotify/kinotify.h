@@ -23,8 +23,8 @@
 
 // Qt includes
 
-#include <QtCore/QObject>
-#include <QtCore/QFlags>
+#include <QObject>
+#include <QFlags>
 
 // Local includes
 
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT KInotify : public QObject
 
 public:
 
-    explicit KInotify( QObject* parent = 0 );
+    explicit KInotify( QObject* const parent = 0 );
     virtual ~KInotify();
 
     /**

@@ -175,7 +175,9 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     }
 
     jpeg_create_decompress(&cinfo);
+
 #ifdef Q_CC_MSVC
+
     QFile inFile(path);
     QByteArray buffer;
 
@@ -186,9 +188,13 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     }
 
     jpeg_memory_src(&cinfo, (JOCTET*)buffer.data(), buffer.size());
-#else
+
+#else  // Q_CC_MSVC
+
     jpeg_stdio_src(&cinfo, inputFile);
-#endif
+
+#endif // Q_CC_MSVC
+
     jpeg_read_header(&cinfo, true);
 
     int imgSize = qMax(cinfo.image_width, cinfo.image_height);
@@ -334,6 +340,8 @@ JpegRotator::JpegRotator(const QString& file)
     m_documentName = info.fileName();
 }
 
+// -----------------------------------------------------------------------------
+
 void JpegRotator::setCurrentOrientation(KExiv2::ImageOrientation orientation)
 {
     m_orientation = orientation;
@@ -426,6 +434,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
         updateMetadata(tempFile, matrix);
 
         // atomic rename
+
 #ifndef Q_OS_WIN
         if (::rename(QFile::encodeName(tempFile).constData(), QFile::encodeName(dest).constData()) != 0)
 #else
@@ -504,14 +513,19 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
         // Restore permissions in all cases
 
 #ifndef Q_OS_WIN
+
         if (::chmod(QFile::encodeName(fileName).constData(), st.st_mode) != 0)
         {
             qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore file permissions for file " << fileName;
         }
-#else
+
+#else  // Q_OS_WIN
+
         QFile::Permissions permissions = QFile::permissions(m_file);
         QFile::setPermissions(fileName, permissions);
-#endif
+
+#endif //Q_OS_WIN
+
     }
 }
 
@@ -527,10 +541,12 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
     transformoption.trim            = false;
 
 #if (JPEG_LIB_VERSION >= 80)
+
     // we need to initialize a few more parameters, see bug 274947
     transformoption.perfect         = false;
     transformoption.crop            = false;
-#endif
+
+#endif // (JPEG_LIB_VERSION >= 80)
 
     // NOTE : Cast is fine here. See libkexiv2/rotationmatrix.h for details.
     transformoption.transform       = (JXFORM_CODE)action;

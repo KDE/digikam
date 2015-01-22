@@ -31,7 +31,6 @@
 #include <QString>
 #include <QImage>
 
-
 // KExiv2 includes
 
 #include <rotationmatrix.h>
