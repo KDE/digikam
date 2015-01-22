@@ -4,5 +4,5 @@ set(libversionmanager_SRCS
 
 add_library(versionmanager STATIC ${libversionmanager_SRCS})
 target_link_libraries(versionmanager
-                         Qt5::Core
+                         dimg
 )

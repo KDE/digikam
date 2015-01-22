@@ -8,8 +8,6 @@ set(libfacemanagement_SRCS
 
 add_library(facemanagement STATIC ${libfacemanagement_SRCS})
 target_link_libraries(facemanagement
-                      digikamcore
+                      KF5::KFace
                       digikamdatabase
-                      
-                      ${KF5KFace_LIBRARIES}
 )

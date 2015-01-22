@@ -58,14 +58,13 @@ set(libeditoriface_SRCS
 )
 
 add_library(imageeditor STATIC ${libeditorcore_SRCS} ${libeditordlg_SRCS} ${libeditorgui_SRCS} ${libeditoriface_SRCS} ${libeditorplugin_SRCS} ${libeditorprintiface_SRCS} ${libeditorrawimport_SRCS} ${libeditorwidgets_SRCS})
+
+target_include_directories(imageeditor PUBLIC
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/printiface>
+                              )
+
 target_link_libraries(imageeditor
-                      digikamcore
                       versionmanager
-                      
-                      #Qt5::Core
-                      #Qt5::Gui
-                      #Qt5::Widgets
-                      #Qt5::Sql
                       
                       #KF5::KDELibs4Support # for KMessageBox
                       #KF5::NotifyConfig # for KNotifyConfigWidget

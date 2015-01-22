@@ -146,6 +146,7 @@ if(EIGEN3_FOUND)
         filters/sharp/refocusfilter.cpp
         filters/sharp/matrix.cpp
     )
+    include_directories(${EIGEN3_INCLUDE_DIR})
 endif()
 
 set(libdimgloaders_SRCS
@@ -191,8 +192,24 @@ if(LQR-1_FOUND)
     set(liblqr_LIBS ${LQR-1_LIBRARIES})
 endif()
 
+target_include_directories(dimg
+                               PUBLIC
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/loaders>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/bcg>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/wb>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/curves>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/icc>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/greycstoration>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lens>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/levels>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dklcms> # ugly hack for dklcms.. librarify or move to dimg?
+)
 
 target_link_libraries(dimg
+                      digikamwidgets
                       dmetadata
                       dthread
                       jpegutils

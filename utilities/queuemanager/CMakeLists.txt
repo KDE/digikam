@@ -71,11 +71,10 @@ endif()
 add_library(queuemanager STATIC ${libqueuemanager_SRCS})
 
 target_link_libraries(queuemanager
-                      digikamcore
                       KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
-                     )
+                      KF5::KExiv2
+                      KF5::KDcraw
+)
 
 if(LENSFUN_FOUND)
     message(INFO " move lensfun to its own library")

@@ -35,12 +35,13 @@ set(libsetup_SRCS
 
 add_library(setup STATIC ${libsetup_SRCS} ${libsetupshowfoto_SRCS})
 target_link_libraries(setup
-                      digikamcore # is this needed?
                       digikamtemplate
+                      maintenance
+                      importui
+                      slideshow
+                      dimg
 
-                      #Qt5::Core
                       Qt5::Widgets
-                      #Qt5::Sql
                       
                       #KF5::KDELibs4Support # for KLineEdit
 )

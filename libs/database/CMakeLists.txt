@@ -92,6 +92,21 @@ endif()
 
 add_library(digikamdatabase STATIC ${digikamdatabase_LIB_SRCS})
 
+# TODO clean this up by changing the includes using database to use longer path?
+target_include_directories(digikamdatabase
+                               PUBLIC
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
+)
+
 target_link_libraries(digikamdatabase
                       dmetadata
                       digikamwidgets

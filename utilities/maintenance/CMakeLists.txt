@@ -29,10 +29,13 @@ if(${KF5KFace_FOUND})
     target_link_libraries(maintenance facemanagement)
 endif()
 
+target_include_directories(maintenance PUBLIC
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+)
+
 
 target_link_libraries(maintenance
-                      digikamcore
-                      digikamgui
+                      database
                       notificationmanager
                       progressmanager
 )

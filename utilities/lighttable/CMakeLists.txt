@@ -13,12 +13,10 @@ set(liblighttable_SRCS
 
 add_library(lighttable STATIC ${liblighttable_SRCS})
 target_link_libraries(lighttable
-                      digikamcore
-                      #Qt5::Core
-                      #Qt5::Gui
-                      #Qt5::Sql
-                      #Qt5::Widgets
+                      Qt5::Gui
                       
+                      kipiiface
+
                       #KF5::KDELibs4Support # for KMultiTabBar
                       #KF5::NotifyConfig
 )

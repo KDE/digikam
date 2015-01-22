@@ -10,6 +10,7 @@ set(libtemplate_SRCS
 add_library(digikamtemplate STATIC ${libtemplate_SRCS})
 
 target_link_libraries(digikamtemplate
+                        dmetadata
                       Qt5::Core
                       Qt5::Widgets
                       Qt5::Xml
