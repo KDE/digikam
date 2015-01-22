@@ -33,7 +33,6 @@
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 

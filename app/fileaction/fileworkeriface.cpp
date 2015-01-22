@@ -37,7 +37,6 @@
 #include "digikam_globals.h"
 #include "jpegutils.h"
 #include "dimg.h"
-
 #include "facetagseditor.h"
 
 namespace Digikam

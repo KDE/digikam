@@ -24,9 +24,6 @@
 #ifndef SLIDESHOWBUILDER_H
 #define SLIDESHOWBUILDER_H
 
-// Qt includes
-
-
 // Local includes
 
 #include "imageinfo.h"

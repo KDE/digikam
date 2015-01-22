@@ -24,9 +24,6 @@
 #ifndef FILEWORKERIFACE_H
 #define FILEWORKERIFACE_H
 
-// Qt includes
-
-
 // Local includes
 
 #include "fileactionmngr.h"

@@ -25,7 +25,7 @@
 #ifndef IMPORTDRAGDROP_H
 #define IMPORTDRAGDROP_H
 
-// KDE includes
+// Qt includes
 
 #include <QMenu>
 
@@ -34,8 +34,6 @@
 #include "abstractitemdragdrophandler.h"
 #include "importimagemodel.h"
 #include "album.h"
-
-class KJob;
 
 namespace Digikam
 {
@@ -54,10 +52,6 @@ public:
     virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);
     virtual QStringList    mimeTypes() const;
     virtual QMimeData*     createMimeData(const QList<QModelIndex> &);
-
-Q_SIGNALS:
-
-    void dioResult(KJob*);
 
 private:
 

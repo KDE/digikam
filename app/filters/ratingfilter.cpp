@@ -29,14 +29,11 @@
 
 #include <QLayout>
 #include <QToolButton>
+#include <QMenu>
 
 // KDE includes
 
-#include <QMenu>
-
 #include <klocalizedstring.h>
-
-
 
 // Local includes
 

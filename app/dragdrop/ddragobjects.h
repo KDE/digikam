@@ -29,9 +29,6 @@
 #include <QMimeData>
 #include <QList>
 #include <QStringList>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

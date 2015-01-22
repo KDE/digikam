@@ -30,9 +30,6 @@
 // Qt includes
 
 #include <QStringList>
-
-// KDE includes
-
 #include <QUrl>
 
 // Libkdcraw includes

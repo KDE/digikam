@@ -127,8 +127,8 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
     }
     else if (DItemDrag::canDecode(e->mimeData()))
     {
-        QList<QUrl>       urls;
-        QList<QUrl>       kioURLs;
+        QList<QUrl>      urls;
+        QList<QUrl>      kioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
@@ -202,7 +202,8 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             }
         }
 
-        //If nothing selected, use dropped on tag
+        // If nothing selected, use dropped on tag
+
         if(tagIdList.isEmpty())
         {
             tagIdList << destAlbum->id();
@@ -239,7 +240,6 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
 Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& dropIndex)
 {
-
     TAlbum* const destAlbum = model()->albumForIndex(dropIndex);
 
     if (DTagListDrag::canDecode(e->mimeData()))
@@ -262,6 +262,7 @@ Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelInde
 
         // Allow dragging on empty space to move the dragged album under the root albumForIndex
         // - unless the itemDrag is already at root level
+
         if (!destAlbum)
         {
             if (droppedAlbum->parent()->isRoot())
@@ -275,12 +276,14 @@ Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelInde
         }
 
         // Dragging an item on itself makes no sense
+
         if (destAlbum == droppedAlbum)
         {
             return Qt::IgnoreAction;
         }
 
         // Dragging a parent on its child makes no sense
+
         if (destAlbum && droppedAlbum && droppedAlbum->isAncestorOf(destAlbum))
         {
             return Qt::IgnoreAction;

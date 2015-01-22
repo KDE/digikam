@@ -33,7 +33,6 @@
 
 #include <kconfiggroup.h>
 
-
 // Local includes
 
 #include "album.h"

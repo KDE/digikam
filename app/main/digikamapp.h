@@ -45,7 +45,6 @@
 #include "digikam_export.h"
 #include "dxmlguiwindow.h"
 
-class QAction;
 class KActionMenu;
 
 namespace Solid

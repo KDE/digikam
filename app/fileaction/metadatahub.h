@@ -32,9 +32,6 @@
 #include <QDateTime>
 #include <QMap>
 
-// KDE includes
-
-
 // Local includes
 
 #include "metadatasettings.h"

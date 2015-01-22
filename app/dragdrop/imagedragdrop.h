@@ -24,7 +24,7 @@
 #ifndef IMAGEDRAGDROP_H
 #define IMAGEDRAGDROP_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
 
@@ -33,8 +33,6 @@
 #include "imageinfo.h"
 #include "abstractitemdragdrophandler.h"
 #include "imagealbummodel.h"
-
-class KJob;
 
 namespace Digikam
 {
@@ -72,7 +70,6 @@ Q_SIGNALS:
     void urlsDropped(const QList<QUrl>& urls);
     void assignTags(const QList<ImageInfo>& list, const QList<int>& tagIDs);
     void addToGroup(const ImageInfo& pick, const QList<ImageInfo>& infos);
-    void dioResult(KJob*);
 
 protected:
 

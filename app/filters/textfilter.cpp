@@ -27,12 +27,11 @@
 
 #include <QAction>
 #include <QToolButton>
+#include <QMenu>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <QMenu>
-
 
 namespace Digikam
 {

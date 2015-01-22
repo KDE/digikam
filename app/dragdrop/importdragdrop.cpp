@@ -33,7 +33,6 @@
 
 #include <klocalizedstring.h>
 #include <kurlmimedata.h>
-#include <kio/job.h>
 
 // Local includes
 
@@ -199,7 +198,7 @@ Qt::DropAction ImportDragDropHandler::accepts(const QDropEvent* e, const QModelI
         return Qt::MoveAction;
     }
 
-    if (DTagListDrag::canDecode(e->mimeData())            ||
+    if (DTagListDrag::canDecode(e->mimeData())        ||
         DCameraItemListDrag::canDecode(e->mimeData()) ||
         DCameraDragObject::canDecode(e->mimeData()))
     {
