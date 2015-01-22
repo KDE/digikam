@@ -98,6 +98,30 @@ set(libdimgfilters_SRCS
     filters/lens/pixelaccess.cpp
 )
 
+# ugly hack, but better than listing these in main cmakelists or polluting includes
+include_directories(imagehistory/ 
+                      filters/
+                      filters/decorate/
+                      filters/film/
+                      filters/fx/
+                      filters/auto/
+                      filters/cb/
+                      filters/bcg/
+                      filters/bw/
+                      filters/hsl/
+                      filters/icc/
+                      filters/lc/
+                      filters/nr/
+                      filters/sharp/
+                      filters/levels/
+                      filters/curves/
+                      filters/wb/
+                      filters/transform/
+                      filters/greycstoration/
+                      filters/lens/
+                      loaders/
+)
+
 if(LQR-1_FOUND)
     set(libdimgfilters_SRCS
         ${libdimgfilters_SRCS}
@@ -113,6 +137,7 @@ if(LENSFUN_FOUND)
         filters/lens/lensfuniface.cpp
         filters/lens/lensfunsettings.cpp
     )
+    include_directories(${LENSFUN_INCLUDE_DIRS})
 endif()
 
 if(EIGEN3_FOUND)
@@ -138,7 +163,10 @@ set(libdimgloaders_SRCS
     loaders/pgfsettings.cpp
 )
 
+# JPEG2000 support
+
 if(JASPER_FOUND)
+    # this should be compiled separately to the lib, cleans if checks
     set(libdimgloaders_SRCS
         ${libdimgloaders_SRCS}
         loaders/jp2kloader.cpp
@@ -154,6 +182,13 @@ endif()
 
 if(JASPER_FOUND)
     target_link_libraries(dimg ${JASPER_LIBRARIES})
+endif()
+
+
+# LibLqr-1 library rules for content-aware filter
+if(LQR-1_FOUND)
+    include_directories(${LQR-1_INCLUDE_DIRS})
+    set(liblqr_LIBS ${LQR-1_LIBRARIES})
 endif()
 
 

@@ -15,11 +15,11 @@ set(digikamcore_LIB_SRCS
 #    ${libdimgloaders_SRCS}
 #    ${libdimgfilters_SRCS}
 #    ${libdmetadata_SRCS}
-    ${libjpegutils_SRCS}
+#    ${libjpegutils_SRCS}
 #    ${libprogressmanager_SRCS}
 #    ${libdatabasecore_SRCS}
 #    ${libthreadimageio_SRCS}
-    ${pgfutils_SRCS}
+#    ${pgfutils_SRCS}
     ${libdigikamhelpers_SRCS}
 #    ${libtthread_SRCS}
 #    ${libversionmanager_SRCS}
@@ -40,7 +40,7 @@ set(digikamcore_LIB_SRCS
 #    ${libgenericmodels_SRCS}
 
     # utilities
-    ${libslideshow_SRCS}
+#    ${libslideshow_SRCS}
 #    ${libeditorcore_SRCS}
 #    ${libeditordlg_SRCS}
 #    ${libeditorprintiface_SRCS}
@@ -139,11 +139,9 @@ install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # digiKam binary progam #########################################################
 
-set(digikam_SRCS ${libeditorgui_SRCS}
+set(digikam_SRCS
                  ${libimageversionssidebar_SRCS}
-                 ${libfuzzysearch_SRCS}
-                 ${libalbummodels_SRCS}
-                 ${libimgqsort_SRCS}
+                 
                  main/main.cpp
 )
 
@@ -155,15 +153,16 @@ if(KF5KFace_FOUND)
     set(digikam_SRCS ${digikam_SRCS} ${libfacemanagement_SRCS})
 endif()
 
-if(KF5KGeoMap_FOUND)
-    set(digikam_SRCS ${digikam_SRCS} ${libkgeomaphelper_SRCS} ${libgpssearch_SRCS})
-endif()
 
 qt5_add_dbus_adaptor(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
 KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 
 add_executable(digikam ${digikam_SRCS})
+
+if(KF5KGeoMap_FOUND) # fixme hackish
+    target_link_libraries(digikam gpssearch)
+endif()
 
 # TO fill plist XML file for OSX #####################################################
 
@@ -179,12 +178,14 @@ set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURREN
 target_link_libraries(digikam
                       digikamcore
                       digikamgui
-                      
+                      digikammodels
 
                       progressmanager
                       notificationmanager
                       maintenance
                       slideshow
+                      imageeditor
+                      fuzzysearch
 
                       kipiiface
 

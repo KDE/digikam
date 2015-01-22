@@ -8,6 +8,8 @@ set(libdialogs_SRCS
     libsinfodlg.cpp
     rawcameradlg.cpp
     triplechoicedialog.cpp
+    
+    migrationdlg.cpp # used to belong to separate target, verify FIXME
 )
 
 set(libdeletedialog_SRCS
@@ -17,7 +19,6 @@ set(libdeletedialog_SRCS
 add_library(digikamdialogs STATIC ${libdialogs_SRCS} ${libdeletedialog_SRCS})
 
 target_link_libraries(digikamdialogs
-                      digikamcore
                       dmetadata
                       
                       Qt5::Core

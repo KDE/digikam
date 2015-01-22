@@ -1,3 +1,5 @@
+set(libpgfutils_SRCS pgfutils.cpp)
+
 set(libthreadimageio_SRCS
     filereadwritelock.cpp
     loadsavethread.cpp
@@ -17,10 +19,9 @@ set(libthreadimageio_SRCS
     thumbnailsize.cpp
 )
 
-add_library(threadimageio STATIC ${libthreadimageio_SRCS})
+add_library(threadimageio STATIC ${libthreadimageio_SRCS} ${libpgfutils_SRCS})
 
 target_link_libraries(threadimageio
-                      digikamcore
                       digikamdatabase
                       dthread
                       

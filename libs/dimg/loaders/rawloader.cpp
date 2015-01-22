@@ -42,14 +42,7 @@
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"
-#include "icctransform.h"
-#include "imagehistogram.h"
-#include "imagelevels.h"
-#include "curvesfilter.h"
-#include "bcgfilter.h"
-#include "wbfilter.h"
 #include "digikam_globals.h"
-#include "dimagehistory.h"
 
 namespace Digikam
 {
