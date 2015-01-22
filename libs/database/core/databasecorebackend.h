@@ -32,6 +32,7 @@
 #include <QString>
 #include <QStringList>
 #include <QSqlQuery>
+#include <QSqlError>
 
 // Local includes
 
