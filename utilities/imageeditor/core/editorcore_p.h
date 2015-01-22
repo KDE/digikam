@@ -152,11 +152,7 @@ void EditorCore::Private::putImageData(uchar* const data, int w, int h, bool six
     }
 
     image.putImageData(w, h, sixteenBit, image.hasAlpha(), data);
-
-    if (image.size() != image.originalSize())
-    {
-        image.setAttribute("originalSize", image.size());
-    }
+    image.setAttribute("originalSize", image.size());
 }
 
 void EditorCore::Private::resetValues()
@@ -225,11 +221,7 @@ void EditorCore::Private::applyBuiltinFilter(const DImgBuiltinFilter& filter, Un
     width      = origWidth;
     height     = origHeight;
 
-    if (image.size() != image.originalSize())
-    {
-        image.setAttribute("originalSize", image.size());
-    }
-
+    image.setAttribute("originalSize", image.size());
     EditorCore::defaultInstance()->setModified();
 }
 

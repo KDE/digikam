@@ -21,4 +21,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 013 ==> 342448 - Compile issues in origin/master Jan/2015.
 014 ==> 342931 - Wrong apect ratio in item properties and in item view.
 015 ==> 341821 - "Cancel" button in Import window does nothing [patch].
-016 ==> 
+016 ==> 343013 - CANVAS : on working with raw images marked square isn't crop accurate [patch].
+017 ==> 

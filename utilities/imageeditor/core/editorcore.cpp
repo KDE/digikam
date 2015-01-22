@@ -299,6 +299,7 @@ void EditorCore::slotImageLoaded(const LoadingDescription& loadingDescription, c
         d->width      = d->origWidth;
         d->height     = d->origHeight;
 
+        d->image.setAttribute("originalSize", d->image.size());
         updateColorManagement();
     }
     else
