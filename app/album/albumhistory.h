@@ -34,7 +34,7 @@
 #include <QObject>
 #include <QStringList>
 
-//KDE includes
+// Local includes
 
 #include "albumlabelstreeview.h"
 

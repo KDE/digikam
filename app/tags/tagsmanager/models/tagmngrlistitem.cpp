@@ -23,16 +23,13 @@
 
 #include "tagmngrlistitem.h"
 
-// Qt includes
-
-
 // KDE includes
 
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "album.h"
 

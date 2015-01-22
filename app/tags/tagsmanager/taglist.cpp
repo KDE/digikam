@@ -30,12 +30,9 @@
 #include <QPushButton>
 #include <QVariant>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumtreeview.h"
 #include "tagmngrtreeview.h"
 #include "tagmngrlistmodel.h"

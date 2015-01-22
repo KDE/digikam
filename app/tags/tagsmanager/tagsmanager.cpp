@@ -40,7 +40,6 @@
 
 #include <klocalizedstring.h>
 #include <ktoolbar.h>
-#include <kmainwindow.h>
 #include <kmultitabbar.h>
 #include <kactionmenu.h>
 

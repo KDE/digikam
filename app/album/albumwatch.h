@@ -28,9 +28,6 @@
 
 #include <QThread>
 #include <QString>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

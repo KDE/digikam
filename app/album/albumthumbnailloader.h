@@ -29,9 +29,6 @@
 #include <QObject>
 #include <QPixmap>
 
-// KDE includes
-
-
 namespace Digikam
 {
 

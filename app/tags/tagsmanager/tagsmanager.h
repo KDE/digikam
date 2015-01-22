@@ -31,6 +31,9 @@
 // KDE includes
 
 #include <kmainwindow.h>
+
+// Local includes
+
 #include "statesavingobject.h"
 
 namespace Digikam

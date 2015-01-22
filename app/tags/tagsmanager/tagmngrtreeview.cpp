@@ -29,15 +29,12 @@
 
 #include <QModelIndex>
 #include <QQueue>
-
-// KDE includes
-
-#include "digikam_debug.h"
 #include <QMenu>
 #include <QAction>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "contextmenuhelper.h"
 #include "tagsmanager.h"
 

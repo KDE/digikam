@@ -25,6 +25,7 @@
 #include "tagpropwidget.h"
 
 // Qt includes
+
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>

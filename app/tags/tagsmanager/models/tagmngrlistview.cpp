@@ -30,17 +30,17 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <QItemSelectionModel>
-
-// KDE includes
-
-#include "digikam_debug.h"
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
+
+// KDE includes
+
 #include <klocalizedstring.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "contextmenuhelper.h"
 #include "tagmngrlistmodel.h"
 #include "tagmngrlistitem.h"

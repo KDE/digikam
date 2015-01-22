@@ -33,10 +33,8 @@
 #include <QList>
 #include <QString>
 #include <QMap>
-
-// KDE includes
-
 #include <QUrl>
+
 
 // Local includes
 
