@@ -6,8 +6,8 @@
 * Date        : 2009-04-30
 * Description : rating icon view item at mouse hover
 *
-* Copyright (C) 2008      by Peter Penz <peter.penz@gmx.at>
-* Copyright (C) 2010      by Aditya Bhatt <caulier dot gilles at gmail dot com>
+* Copyright (C) 2008      by Peter Penz <peter dot penz at gmx dot at>
+* Copyright (C) 2010      by Aditya Bhatt <adityabhatt1991 at gmail dot com>
 * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
 *
@@ -26,13 +26,9 @@
 
 #include "tagslineeditoverlay.h"
 
-// Qt includes
-
-
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 
 // Local includes
 
@@ -60,7 +56,6 @@ AddTagsLineEdit* TagsLineEditOverlay::addTagsLineEdit() const
 
 QWidget* TagsLineEditOverlay::createWidget()
 {
-    //const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     AddTagsLineEdit* const lineEdit = new AddTagsLineEdit(parentWidget());
     lineEdit->setPlaceholderText("Name");
     lineEdit->setReadOnly(false);
@@ -153,6 +148,7 @@ void TagsLineEditOverlay::updateTag()
 
     ImageInfo info = ImageModel::retrieveImageInfo(m_index);
     qCDebug(DIGIKAM_GENERAL_LOG) << "called updateTag()";
+
     //TODO: ADD ratingWidget()->setRating(info.rating());
 }
 
@@ -188,7 +184,7 @@ void TagsLineEditOverlay::slotEntered(const QModelIndex& index)
 {
     AbstractWidgetDelegateOverlay::slotEntered(index);
 
-    // see bug 228810, this is a small workaround
+    // see bug #228810, this is a small workaround
     if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
     {
         addTagsLineEdit()->setVisible(true);

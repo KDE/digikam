@@ -27,6 +27,7 @@
 #include "tagcheckview.h"
 
 // Qt includes
+
 #include <QMenu>
 #include <QAction>
 

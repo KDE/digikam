@@ -59,8 +59,10 @@ public:
     void setModel(TagModel* model);
     void setModel(AlbumFilterModel* model);
     void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, AlbumFilterModel* filterModel);
+
     /** Reads a tag treeview and takes the currently selected tag into account
-     *  when suggesting a parent tag for a new tag, and a default action. */
+     *  when suggesting a parent tag for a new tag, and a default action.
+     */
     void setTagTreeView(TagTreeView* treeView);
 
     /**

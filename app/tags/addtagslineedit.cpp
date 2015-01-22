@@ -339,9 +339,11 @@ void AddTagsLineEdit::setCompletedItems(const QStringList& items, bool doAutoSug
 
             d->completionBox->setItems(txt, items);
 
-            /*const bool blocked = d->completionBox->blockSignals( true );
+/*
+            const bool blocked = d->completionBox->blockSignals( true );
             d->completionBox->setCurrentCompletionText(currentSelection);
-            d->completionBox->blockSignals( blocked );*/
+            d->completionBox->blockSignals( blocked );
+*/
         }
         else // completion box not visible yet -> show it
         {

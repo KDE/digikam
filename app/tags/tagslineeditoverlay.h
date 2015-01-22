@@ -6,7 +6,7 @@
  * Date        : 2009-04-30
  * Description : line edit for addition of tags on mouse hover
  *
- * Copyright (C) 2010 by Aditya Bhatt <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
