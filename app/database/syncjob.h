@@ -30,9 +30,6 @@
 #include <QObject>
 #include <QPixmap>
 
-// KDE includes
-
-
 class QString;
 
 namespace Digikam

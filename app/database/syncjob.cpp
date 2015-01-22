@@ -28,12 +28,6 @@
 
 #include <QEventLoop>
 
-// KDE includes
-
-
-
-
-
 // Local includes
 
 #include "applicationsettings.h"

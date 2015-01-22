@@ -31,7 +31,6 @@
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
 
 #include <kio/job.h>

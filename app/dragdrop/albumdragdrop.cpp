@@ -36,7 +36,7 @@
 
 #include <klocalizedstring.h>
 #include <kurlmimedata.h>
-#include <kio/job.h>
+//#include <kio/job.h>
 
 // Local includes
 

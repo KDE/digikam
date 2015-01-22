@@ -26,17 +26,10 @@
 
 #include "datefolderview.h"
 
-// Qt includes
-
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-
-
-#include <kconfig.h>
-
 #include <kcalendarsystem.h>
 #include <kconfiggroup.h>
 

@@ -25,9 +25,12 @@
 #ifndef DIO_H
 #define DIO_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
+
+// KDE includes
+
 #include <kio/job.h>
 #include <kio/copyjob.h>
 
