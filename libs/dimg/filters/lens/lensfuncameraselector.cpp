@@ -209,7 +209,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
             this, SLOT(slotMakeSelected()));
 
     connect(d->model, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotModelSelected()));
+            this, SLOT(slotModelChanged()));
 
     connect(d->lens, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotLensSelected()));
@@ -241,21 +241,27 @@ LensFunIface* LensFunCameraSelector::iface() const
 LensFunContainer LensFunCameraSelector::settings()
 {
     // Update settings in LensFun interface
+
     blockSignals(true);
+
     slotModelSelected();
     slotLensSelected();
     slotFocalChanged();
     slotApertureChanged();
     slotDistanceChanged();
+
     blockSignals(false);
+
     return d->iface->settings();
 }
 
 void LensFunCameraSelector::setSettings(const LensFunContainer& settings)
 {
     blockSignals(true);
+
     d->iface->setSettings(settings);
     refreshSettingsView();
+
     blockSignals(false);
 }
 
@@ -387,6 +393,10 @@ LensFunIface::MetadataMatch LensFunCameraSelector::findFromMetadata()
 
 void LensFunCameraSelector::refreshSettingsView()
 {
+    d->make->blockSignals(true);
+    d->model->blockSignals(true);
+    d->lens->blockSignals(true);
+    
     d->makeLabel->setStyleSheet(qApp->styleSheet());
     d->modelLabel->setStyleSheet(qApp->styleSheet());
     d->lensLabel->setStyleSheet(qApp->styleSheet());
@@ -564,6 +574,10 @@ void LensFunCameraSelector::refreshSettingsView()
             d->distLabel->setStyleSheet(d->orangeStyle);
         }
     }
+    
+    d->make->blockSignals(false);
+    d->model->blockSignals(false);
+    d->lens->blockSignals(false);
 }
 
 void LensFunCameraSelector::populateDeviceCombos()
@@ -621,6 +635,7 @@ void LensFunCameraSelector::populateLensCombo()
 {
     d->lens->blockSignals(true);
     d->lens->combo()->clear();
+    d->lens->blockSignals(false);
 
     QVariant v = d->model->combo()->itemData(d->model->currentIndex());
 
@@ -668,6 +683,12 @@ void LensFunCameraSelector::slotMakeSelected()
     // Fill Lens list for current Maker & Model and fire signalLensSettingsChanged()
     populateLensCombo();
     slotLensSelected();
+}
+
+void LensFunCameraSelector::slotModelChanged()
+{
+    populateLensCombo();
+    slotModelSelected();
 }
 
 void LensFunCameraSelector::slotModelSelected()

@@ -39,7 +39,6 @@
 
 #include <klocalizedstring.h>
 
-
 // Libkdcraw includes
 
 #include <dcrawinfocontainer.h>
@@ -1919,6 +1918,7 @@ QString DMetadata::getLensDescription() const
     lensExifTags.append("Exif.NikonLd2.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.NikonLd3.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.Minolta.LensID");        // Minolta Cameras Makernote.
+    lensExifTags.append("Exif.Photo.LensModel");       // Sony Cameras Makernote (and others?).
     lensExifTags.append("Exif.Sony1.LensID");          // Sony Cameras Makernote.
     lensExifTags.append("Exif.Sony2.LensID");          // Sony Cameras Makernote.
     lensExifTags.append("Exif.SonyMinolta.LensID");    // Sony Cameras Makernote.
@@ -1929,7 +1929,9 @@ QString DMetadata::getLensDescription() const
     lensExifTags.append("Exif.Samsung2.LensType");     // Samsung Cameras Makernote.
     lensExifTags.append("Exif.Photo.0xFDEA");          // Non-standard Exif tag set by Camera Raw.
     lensExifTags.append("Exif.OlympusEq.LensModel");   // Olympus Cameras Makernote.
-    //lensExifTags.append("Exif.OlympusEq.LensType");    // Olympus Cameras Makernote. FIXME is this necessary? exiv2 returns complete name, which doesn't match with lensfun information, see #311295
+    
+    // Olympus Cameras Makernote. FIXME is this necessary? exiv2 returns complete name, which doesn't match with lensfun information, see bug #311295
+    //lensExifTags.append("Exif.OlympusEq.LensType");    
 
     // TODO : add Fuji camera Makernotes.
 

@@ -27,10 +27,7 @@
 
 // Qt includes
 
-#include <QtCore/QByteArray>
-
-// KDE includes
-
+#include <QByteArray>
 #include <QUrl>
 
 // Libkexiv2 includes
