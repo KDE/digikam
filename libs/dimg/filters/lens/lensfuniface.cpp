@@ -146,7 +146,7 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
         DevicePtr cam = *cameras;
         //        kDebug() << "Query camera:" << cam->Maker << "-" << cam->Model;
 
-        if (QString(cam->Maker) == make && QString(cam->Model) == model)
+        if (QString::compare(cam->Maker, make, Qt::CaseInsensitive) == 0 && QString(cam->Model) == model)
         {
             kDebug() << "Search for camera " << make << "-" << model << " ==> true";
             return cam;

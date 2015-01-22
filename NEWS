@@ -22,4 +22,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 014 ==> 342931 - Wrong apect ratio in item properties and in item view.
 015 ==> 341821 - "Cancel" button in Import window does nothing [patch].
 016 ==> 343013 - CANVAS : on working with raw images marked square isn't crop accurate [patch].
-017 ==> 
+017 ==> 343080 - Cannot find the right lensfun profile for RAW lens correction [patch].
+018 ==> 

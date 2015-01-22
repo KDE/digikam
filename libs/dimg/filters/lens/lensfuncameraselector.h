@@ -78,6 +78,7 @@ private Q_SLOTS:
 
     void slotUseMetadata(bool);
     void slotMakeSelected();
+    void slotModelChanged();
     void slotModelSelected();
     void slotLensSelected();
     void slotFocalChanged();

@@ -1919,6 +1919,7 @@ QString DMetadata::getLensDescription() const
     lensExifTags.append("Exif.NikonLd2.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.NikonLd3.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.Minolta.LensID");        // Minolta Cameras Makernote.
+    lensExifTags.append("Exif.Photo.LensModel");       // Sony Cameras Makernote and others?
     lensExifTags.append("Exif.Sony1.LensID");          // Sony Cameras Makernote.
     lensExifTags.append("Exif.Sony2.LensID");          // Sony Cameras Makernote.
     lensExifTags.append("Exif.SonyMinolta.LensID");    // Sony Cameras Makernote.

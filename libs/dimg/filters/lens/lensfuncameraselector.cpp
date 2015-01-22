@@ -206,7 +206,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
             this, SLOT(slotMakeSelected()));
 
     connect(d->model, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotModelSelected()));
+            this, SLOT(slotModelChanged()));
 
     connect(d->lens, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotLensSelected()));
@@ -384,6 +384,10 @@ LensFunIface::MetadataMatch LensFunCameraSelector::findFromMetadata()
 
 void LensFunCameraSelector::refreshSettingsView()
 {
+    d->make->blockSignals(true);
+    d->model->blockSignals(true);
+    d->lens->blockSignals(true);
+
     d->makeLabel->setStyleSheet(kapp->styleSheet());
     d->modelLabel->setStyleSheet(kapp->styleSheet());
     d->lensLabel->setStyleSheet(kapp->styleSheet());
@@ -561,6 +565,10 @@ void LensFunCameraSelector::refreshSettingsView()
             d->distLabel->setStyleSheet(d->orangeStyle);
         }
     }
+
+    d->make->blockSignals(false);
+    d->model->blockSignals(false);
+    d->lens->blockSignals(false);
 }
 
 void LensFunCameraSelector::populateDeviceCombos()
@@ -618,6 +626,7 @@ void LensFunCameraSelector::populateLensCombo()
 {
     d->lens->blockSignals(true);
     d->lens->combo()->clear();
+    d->lens->blockSignals(false);
 
     QVariant v = d->model->combo()->itemData(d->model->currentIndex());
 
@@ -665,6 +674,12 @@ void LensFunCameraSelector::slotMakeSelected()
     // Fill Lens list for current Maker & Model and fire signalLensSettingsChanged()
     populateLensCombo();
     slotLensSelected();
+}
+
+void LensFunCameraSelector::slotModelChanged()
+{
+    populateLensCombo();
+    slotModelSelected();
 }
 
 void LensFunCameraSelector::slotModelSelected()
