@@ -80,13 +80,28 @@ set(libiccprofileswidgets_SRCS
 )
 
 add_library(digikamwidgets STATIC ${libmainview_SRCS} ${libcommonwidgets_SRCS} ${libgraphicsviewwidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libitemview_SRCS} ${libmetadatawidgets_SRCS})
+
+target_include_directories(digikamwidgets
+                              PUBLIC
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/mainview>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/itemview>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/graphicsview>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/iccprofiles>
+)
+
 target_link_libraries(digikamwidgets
-                      digikamdialogs
+                      digikamdialogs # for libsinfodlg
                       dimg
+                      digikammodels
                       
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
+                      
+                      KF5::Kipi # about dialog requires kipi
+                      KF5::KFace # about dialog
                       
                       KF5::KDELibs4Support # for KLineEdit
 )

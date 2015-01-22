@@ -21,6 +21,11 @@ set(libthreadimageio_SRCS
 
 add_library(threadimageio STATIC ${libthreadimageio_SRCS} ${libpgfutils_SRCS})
 
+target_include_directories(threadimageio
+                              PUBLIC
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+)
+
 target_link_libraries(threadimageio
                       digikamdatabase
                       dthread

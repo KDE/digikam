@@ -12,7 +12,6 @@ add_library(kio_digikamtags MODULE ${kio_digikamtags_PART_SRCS})
 
 target_link_libraries(kio_digikamtags
                       digikamdatabase
-                      digikamcore
                       KF5::KIOCore
                       Qt5::Core
 )
@@ -25,7 +24,6 @@ add_library(kio_digikamalbums MODULE ${kio_digikamalbums_PART_SRCS})
 
 target_link_libraries(kio_digikamalbums
                       digikamdatabase
-                      digikamcore
                       KF5::KIOCore
                       Qt5::Core
 )
@@ -38,7 +36,6 @@ add_library(kio_digikamdates MODULE ${kio_digikamdates_PART_SRCS})
 
 target_link_libraries(kio_digikamdates
                       digikamdatabase
-                      digikamcore
                       KF5::KIOCore
                       Qt5::Core
 )
@@ -51,7 +48,6 @@ add_library(kio_digikammapimages MODULE ${kio_digikammapimages_PART_SRCS})
 
 target_link_libraries(kio_digikammapimages
                       digikamdatabase
-                      digikamcore
                       KF5::KIOCore
                       Qt5::Core
 )
@@ -64,7 +60,6 @@ add_library(kio_digikamsearch MODULE ${kio_digikamsearch_PART_SRCS})
 
 target_link_libraries(kio_digikamsearch
                       digikamdatabase
-                      digikamcore
                       KF5::KIOCore
                       Qt5::Core
 )

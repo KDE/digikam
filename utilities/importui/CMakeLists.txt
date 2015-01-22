@@ -61,14 +61,15 @@ set(libimportui_SRCS
     views/importstackedview.cpp
     views/importview.cpp
 
-    main/importsettings.cpp
     main/importui.cpp
 )
 
 # TODO backend shouldn't probably be required to linkg against all of these?
 
 add_library(importuibackend STATIC ${libimportuibackend_SRCS})
+
 target_link_libraries(importuibackend
+                        dmetadata
                          Qt5::Core
                          Qt5::Gui
                          Qt5::Widgets
@@ -78,8 +79,15 @@ target_link_libraries(importuibackend
 )
 add_library(importui STATIC ${libimportui_SRCS})
 
+target_include_directories(importui PUBLIC
+                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>"
+                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/backend>"
+                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>"
+                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>"
+                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/models>"
+)
+
 target_link_libraries(importui
-                      #digikamcore
                       importuibackend
                       
                       KF5::NotifyConfig

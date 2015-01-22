@@ -10,7 +10,7 @@ set(libslideshow_SRCS
     slideshowsettings.cpp
 )
 
-add_library(slideshow ${libslideshow_SRCS})
+add_library(slideshow STATIC ${libslideshow_SRCS})
 target_link_libraries(slideshow
                       digikamwidgets
                       digikamdatabase

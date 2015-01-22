@@ -63,18 +63,20 @@ add_library(digikamcore STATIC ${digikamcore_LIB_SRCS})
 add_dependencies(digikamcore digikam-gitversion)
 
 target_link_libraries(digikamcore
-                      digikammodels
-                      digikamdatabase
-                      digikamwidgets
+                      #digikammodels
+                      #digikamdatabase
+                      #digikamwidgets
                       
-                      digikamdialogs
-                      digikamtemplate
+                      #digikamdialogs
+                      #digikamtemplate
                       
-                      threadimageio
+                      #threadimageio
                       
-                      dthread
-                      dmetadata
-                      dimg
+                      #dthread
+                      #dmetadata
+                      #dimg
+                      
+                      imageeditor
                       
                       Qt5::Core
                       Qt5::Sql
@@ -186,6 +188,7 @@ target_link_libraries(digikam
                       slideshow
                       imageeditor
                       fuzzysearch
+                      imageeditor
 
                       kipiiface
 

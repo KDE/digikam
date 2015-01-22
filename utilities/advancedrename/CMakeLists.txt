@@ -23,9 +23,13 @@ file(GLOB libadvancedrename_UI
 
 ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 
+include_directories(common/)
+
 add_library(advancedrename STATIC ${libadvancedrename_SRCS})
 
 target_link_libraries(advancedrename
+                        digikamdatabase
+                        
                       Qt5::Widgets
                       Qt5::Sql
                       

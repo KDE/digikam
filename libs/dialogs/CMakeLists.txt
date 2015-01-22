@@ -7,9 +7,8 @@ set(libdialogs_SRCS
     infodlg.cpp
     libsinfodlg.cpp
     rawcameradlg.cpp
-    triplechoicedialog.cpp
     
-    migrationdlg.cpp # used to belong to separate target, verify FIXME
+    migrationdlg.cpp # used to belong to separate target (database dependency?) verify FIXME
 )
 
 set(libdeletedialog_SRCS
@@ -19,7 +18,6 @@ set(libdeletedialog_SRCS
 add_library(digikamdialogs STATIC ${libdialogs_SRCS} ${libdeletedialog_SRCS})
 
 target_link_libraries(digikamdialogs
-                      dmetadata
                       
                       Qt5::Core
                       Qt5::Gui
@@ -29,4 +27,8 @@ target_link_libraries(digikamdialogs
                       KF5::KDELibs4Support # # KSqueezedTextLabel
                       
                       KF5::KDcraw
+                      digikamdatabase # migrationdlg needs this
+                      versionmanager # migrationdlg needs this too
+                      threadimageio # loadingdescription for imagedialog
+                      dmetadata
 )

@@ -14,7 +14,6 @@ set(libfirstrun_SRCS
 add_library(firstrun STATIC ${libfirstrun_SRCS})
 target_link_libraries(firstrun
                       digikamdatabase
-                      digikamcore # only for logging! FIXME
                       Qt5::Widgets
                       
                       KF5::WidgetsAddons
