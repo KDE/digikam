@@ -15,6 +15,10 @@ set(libdeletedialog_SRCS
     deletedialog.cpp
 )
 
+if(LENSFUN_FOUND)
+    include_directories(${LENSFUN_INCLUDE_DIRS})
+endif()
+
 add_library(digikamdialogs STATIC ${libdialogs_SRCS} ${libdeletedialog_SRCS})
 
 target_link_libraries(digikamdialogs
