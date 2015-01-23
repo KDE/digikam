@@ -26,9 +26,9 @@
 #ifndef RATINGFILTER_H
 #define RATINGFILTER_H
 
-// KDE includes
+// Libkdcraw includes
 
-#include "khbox.h"
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -36,6 +36,8 @@
 #include "ratingwidget.h"
 
 class QAction;
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
