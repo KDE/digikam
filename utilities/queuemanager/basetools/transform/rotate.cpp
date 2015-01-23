@@ -35,8 +35,8 @@
 
 // Libkdcraw includes
 
-#include <rwidgetutils.h>
-#include <rcombobox.h>
+#include <KDCRAW/RWidgetUtils>
+#include <KDCRAW/RComboBox>
 
 // Local includes
 

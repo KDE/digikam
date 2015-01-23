@@ -40,8 +40,8 @@
 
 // Libkdcraw includes
 
-#include <rwidgetutils.h>
-#include <rnuminput.h>
+#include <KDCRAW/RWidgetUtils>
+#include <KDCRAW/RNumInput>
 
 // Local includes
 

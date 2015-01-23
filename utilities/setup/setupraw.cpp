@@ -39,7 +39,7 @@
 
 // Libkdcraw includes
 
-#include <dcrawsettingswidget.h>
+#include <KDCRAW/DcrawSettingsWidget>
 #include <libkdcraw_version.h>
 
 // Local includes

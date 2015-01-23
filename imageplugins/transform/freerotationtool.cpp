@@ -47,8 +47,8 @@
 
 // Libkdcraw includes
 
-#include <rexpanderbox.h>
-#include <rwidgetutils.h>
+#include <KDCRAW/RExpanderBox>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 

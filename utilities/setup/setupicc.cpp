@@ -56,8 +56,8 @@
 
 // Libkdcraw includes
 
-#include <squeezedcombobox.h>
-#include <rwidgetutils.h>
+#include <KDCRAW/SqueezedComboBox>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 

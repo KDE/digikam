@@ -41,8 +41,8 @@
 
 // Libkdcraw includes
 
-#include <dcrawinfocontainer.h>
-#include <kdcraw.h>
+#include <KDCRAW/DcrawInfoContainer>
+#include <KDCRAW/KDcraw>
 
 // Local includes
 

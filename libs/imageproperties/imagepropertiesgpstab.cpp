@@ -57,7 +57,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // Libkdcraw includes
 
-#include <rwidgetutils.h>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 

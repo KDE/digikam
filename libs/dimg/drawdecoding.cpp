@@ -29,10 +29,9 @@
 
 #include <QDomDocument>
 
-// Libkdcraw includes
+// KDcraw includes
 
-#include <kdcraw.h>
-#include <libkdcraw_version.h>
+#include <KDCRAW/KDcraw>
 
 // Local includes
 

@@ -43,10 +43,10 @@
 
 // Libkdcraw includes
 
-#include <rnuminput.h>
-#include <rcombobox.h>
-#include <rexpanderbox.h>
-#include <rwidgetutils.h>
+#include <KDCRAW/RNumInput>
+#include <KDCRAW/RComboBox>
+#include <KDCRAW/RExpanderBox>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 

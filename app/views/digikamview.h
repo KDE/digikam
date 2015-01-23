@@ -34,7 +34,7 @@
 
 // Libkdcraw includes
 
-#include <rwidgetutils.h>
+#include <KDCRAW/RWidgetUtils>
 
 // libkexiv2 includes
 

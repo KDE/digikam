@@ -32,7 +32,7 @@
 
 // Libkdcraw includes
 
-#include <rexpanderbox.h>
+#include <KDCRAW/RExpanderBox>
 
 // Local includes
 
