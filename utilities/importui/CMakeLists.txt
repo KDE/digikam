@@ -20,6 +20,8 @@ set(libimportuibackend_SRCS
     backend/gpcamera.cpp
     backend/camiteminfo.cpp
     backend/umscamera.cpp
+
+    main/importsettings.cpp # TODO main / backend?
 )
 
 set(libimportui_SRCS
@@ -89,6 +91,11 @@ target_link_libraries(importuibackend
                          Qt5::Sql
                          KF5::KDELibs4Support
 )
+
+if(GPHOTO2_FOUND)
+    target_link_libraries(importuibackend ${GPHOTO2_LIBRARIES})
+endif()
+
 add_library(importui STATIC ${libimportui_SRCS})
 
 target_include_directories(importui PUBLIC

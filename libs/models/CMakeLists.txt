@@ -7,6 +7,7 @@ set(libdatabasemodels_SRCS
     imagelistmodel.cpp
     imagesortsettings.cpp
     imagethumbnailmodel.cpp
+    imageversionsmodel.cpp
 )
 
 set(libalbummodels_SRCS

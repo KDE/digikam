@@ -127,6 +127,7 @@ if(LQR-1_FOUND)
         ${libdimgfilters_SRCS}
         filters/transform/contentawarefilter.cpp
     )
+    include_directories(${LQR-1_INCLUDE_DIRS})
 endif()
 
 if(LENSFUN_FOUND)
@@ -185,11 +186,9 @@ if(JASPER_FOUND)
     target_link_libraries(dimg ${JASPER_LIBRARIES})
 endif()
 
-
 # LibLqr-1 library rules for content-aware filter
 if(LQR-1_FOUND)
-    include_directories(${LQR-1_INCLUDE_DIRS})
-    set(liblqr_LIBS ${LQR-1_LIBRARIES})
+    target_link_libraries(dimg ${LQR-1_LIBRARIES})
 endif()
 
 add_dependencies(dimg digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents

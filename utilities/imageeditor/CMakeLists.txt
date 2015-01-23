@@ -28,6 +28,7 @@ set(libeditorwidgets_SRCS
 set(libeditordlg_SRCS
     dialogs/colorcorrectiondlg.cpp
     dialogs/softproofdialog.cpp
+    dialogs/versioningpromptusersavedlg.cpp
 )
 
 set(libeditorgui_SRCS
