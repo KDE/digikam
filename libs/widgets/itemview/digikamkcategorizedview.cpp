@@ -36,8 +36,8 @@
 
 // KDE includes
 
-#include "kcategorydrawer.h"
-#include "kcategorizedsortfilterproxymodel.h"
+#include <kcategorydrawer.h>
+#include <kcategorizedsortfilterproxymodel.h>
 
 // By defining DOLPHIN_DRAGANDDROP the custom drag and drop implementation of
 // DigikamKCategorizedView is bypassed to have a consistent drag and drop look for all
