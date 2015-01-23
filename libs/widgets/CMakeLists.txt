@@ -81,9 +81,12 @@ set(libiccprofileswidgets_SRCS
 
 add_library(digikamwidgets STATIC ${libmainview_SRCS} ${libcommonwidgets_SRCS} ${libgraphicsviewwidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libitemview_SRCS} ${libmetadatawidgets_SRCS})
 
+add_dependencies(digikamwidgets digikam-gitversion) # splashscreen shows version
+
 target_include_directories(digikamwidgets
                               PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/colorchooser>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/mainview>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/itemview>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/graphicsview>
