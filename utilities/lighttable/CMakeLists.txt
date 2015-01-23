@@ -16,9 +16,6 @@ target_link_libraries(lighttable
                       Qt5::Gui
                       
                       kipiiface
-
-                      #KF5::KDELibs4Support # for KMultiTabBar
-                      #KF5::NotifyConfig
 )
-
+# TODO link against kipi only if kipi found?
 install( FILES lighttablewindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )

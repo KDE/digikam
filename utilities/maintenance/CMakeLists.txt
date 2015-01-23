@@ -35,7 +35,7 @@ target_include_directories(maintenance PUBLIC
 
 
 target_link_libraries(maintenance
-                      database
+                      digikamdatabase
                       notificationmanager
                       progressmanager
 )
