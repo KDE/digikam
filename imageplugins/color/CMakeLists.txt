@@ -22,16 +22,9 @@ set(digikamimageplugin_color_PART_SRCS autocorrectiontool.cpp
 add_library(digikamimageplugin_color MODULE ${digikamimageplugin_color_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_color
-                      digikamcore
+                      editorplugin
 
-                      Qt5::Core
-                      Qt5::Gui
-
-                      KF5::KDELibs4Support
-                      KF5::KIOCore
-
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      #KF5::KIOCore
                      )
 
 install(TARGETS digikamimageplugin_color             DESTINATION ${PLUGIN_INSTALL_DIR})

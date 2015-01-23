@@ -27,16 +27,16 @@ endif()
 add_library(digikamimageplugin_transform MODULE ${digikamimageplugin_transform_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_transform
-                      digikamcore
+                      editorplugin
 
-                      Qt5::Core
-                      Qt5::Gui
+                      #Qt5::Core
+                      #Qt5::Gui
 
-                      KF5::KDELibs4Support
-                      KF5::KIOCore
+                      #KF5::KDELibs4Support
+                      #KF5::KIOCore
 
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      #${KF5KExiv2_LIBRARIES}
+                      #${KF5KDcraw_LIBRARIES}
                      )
 
 install(TARGETS digikamimageplugin_transform             DESTINATION ${PLUGIN_INSTALL_DIR})

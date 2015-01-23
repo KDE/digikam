@@ -14,7 +14,7 @@ set(digikamimageplugin_decorate_PART_SRCS imageplugin_decorate.cpp
 add_library(digikamimageplugin_decorate MODULE ${digikamimageplugin_decorate_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_decorate
-                      digikamcore
+                      editorplugin
 
                       Qt5::Core
                       Qt5::Gui
