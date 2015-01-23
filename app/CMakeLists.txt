@@ -315,6 +315,10 @@ if(${KF5KGeoMap_FOUND})
        )
 endif()
 
+if(${KF5Kipi_FOUND})
+    target_link_libraries(digikamgui KF5::Kipi)
+endif()
+
 
 # digiKam binary progam #########################################################
 

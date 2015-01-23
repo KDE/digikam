@@ -41,7 +41,7 @@
 
 // Libkipi includes
 
-#include <configwidget.h>
+#include <KIPI/ConfigWidget>
 
 using namespace KIPI;
 

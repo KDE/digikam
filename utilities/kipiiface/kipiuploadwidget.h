@@ -27,8 +27,8 @@
 
 // Libkipi includes
 
-#include <imagecollection.h>
-#include <uploadwidget.h>
+#include <KIPI/ImageCollection>
+#include <KIPI/UploadWidget>
 
 class QWidget;
 
