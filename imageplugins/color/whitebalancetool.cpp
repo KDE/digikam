@@ -33,12 +33,7 @@
 
 // KDE includes
 
-#include <kconfig.h>
-
-
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
-
 
 // Local includes
 

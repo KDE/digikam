@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <kactioncollection.h>
-#include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocalizedstring.h>
 
