@@ -39,8 +39,8 @@
 
 // KDE includes
 
-#include <kio/deletejob.h>
 #include <klocalizedstring.h>
+#include <kio/deletejob.h>
 
 // Libkdcraw includes
 

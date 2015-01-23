@@ -39,7 +39,6 @@
 // KDE includes
 
 #include <kio/slavebase.h>
-#include <kjob.h>
 #include <kio/job.h>
 
 class kio_digikamalbums : public QObject, public KIO::SlaveBase
