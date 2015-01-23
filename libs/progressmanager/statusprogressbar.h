@@ -29,7 +29,7 @@
 // Qt includes
 
 #include <QStackedWidget>
-#include <QtCore/QString>
+#include <QString>
 
 // Local includes
 

@@ -33,12 +33,12 @@
 #include <QSize>
 #include <QPoint>
 #include <QPixmap>
+#include <QUrl>
 #include <QTreeWidget>
 
 // KDE includes
 
-#include <QUrl>
-#include <klocale.h>
+//#include <klocale.h>
 
 // Local includes
 

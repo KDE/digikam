@@ -29,6 +29,7 @@
 #include <QRect>
 #include <QString>
 #include <QVariant>
+#include <QDebug>
 
 // Local includes
 

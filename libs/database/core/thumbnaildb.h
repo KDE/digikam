@@ -27,13 +27,13 @@
 
 // Qt includes
 
-#include <QtCore/QString>
-#include <QtCore/QList>
-#include <QtCore/QStringList>
-#include <QtCore/QDateTime>
-#include <QtCore/QPair>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
+#include <QString>
+#include <QList>
+#include <QStringList>
+#include <QDateTime>
+#include <QPair>
+#include <QMap>
+#include <QHash>
 
 // Local includes
 

@@ -36,9 +36,6 @@
 #include <QObject>
 #include <QString>
 #include <QRect>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

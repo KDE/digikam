@@ -31,15 +31,15 @@
 
 // KDE includes
 
+#include <klocalizedstring.h>
+#include <kconfiggroup.h>
+
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <klocalizedstring.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "collectionscannerobserver.h"
 #include "databasecorebackend.h"
 #include "databasetransaction.h"

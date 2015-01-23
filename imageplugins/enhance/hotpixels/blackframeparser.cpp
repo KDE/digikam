@@ -46,9 +46,7 @@
 
 // KDE includes
 
-
 #include <kio/netaccess.h>
-#include <kio/job.h>
 
 namespace DigikamEnhanceImagePlugin
 {

@@ -25,10 +25,8 @@
 
 // Qt includes
 
-
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-#include <KDebug>
 
 // Local includes
 

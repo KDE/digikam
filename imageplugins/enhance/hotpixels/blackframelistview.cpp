@@ -32,6 +32,10 @@
 #include <QPainter>
 #include <QPixmap>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 namespace DigikamEnhanceImagePlugin
 {
 

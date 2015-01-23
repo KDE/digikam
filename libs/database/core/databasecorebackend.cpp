@@ -39,12 +39,9 @@
 #include <QThread>
 #include <QTime>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dbactiontype.h"
 #include "thumbnailschemaupdater.h"
 
