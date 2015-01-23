@@ -42,10 +42,6 @@
 #include <QThread>
 #include <QSystemSemaphore>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_debug.h"
