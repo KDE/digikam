@@ -24,15 +24,9 @@
 
 #include "imagethumbnailbar.h"
 
-// KDE includes
+// Qt includes
 
-#include <kactionmenu.h>
-#include <kactioncollection.h>
-#include <krun.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kstandardaction.h>
-#include <kwindowsystem.h>
+#include <QEvent>
 
 // Local includes
 

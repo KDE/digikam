@@ -25,10 +25,6 @@
 
 #include "digikamimageview_p.h"
 
-// KDE includes
-
-#include <kactionmenu.h>
-
 // Local includes
 
 #include "contextmenuhelper.h"

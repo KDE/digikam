@@ -22,9 +22,6 @@
 
 #include "tableview_column_item.h"
 
-// Qt includes
-
-
 // KDE includes
 
 #include <klocale.h>

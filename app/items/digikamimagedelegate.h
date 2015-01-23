@@ -24,8 +24,6 @@
 #ifndef DIGIKAMIMAGEDELEGATE_H
 #define DIGIKAMIMAGEDELEGATE_H
 
-// Qt includes
-
 // Local includes
 
 #include "imagedelegate.h"

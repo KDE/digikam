@@ -36,16 +36,6 @@
 #include <QAction>
 #include <QUrl>
 
-// KDE includes
-
-#include <kactionmenu.h>
-#include <kactioncollection.h>
-#include <krun.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kstandardaction.h>
-#include <kwindowsystem.h>
-
 // Local includes
 
 #include "digikam_debug.h"

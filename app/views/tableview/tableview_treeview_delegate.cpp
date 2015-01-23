@@ -26,12 +26,8 @@
 
 #include <QTreeView>
 
-// KDE includes
-
-
 // local includes
 
-/// @todo clean up includes
 #include "digikam_debug.h"
 #include "contextmenuhelper.h"
 #include "databasefields.h"

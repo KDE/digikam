@@ -32,10 +32,8 @@
 
 #include <kcategorizedsortfilterproxymodel.h>
 
-
 // local includes
 
-/// @todo clean up includes and use forward-declarations where possible
 #include "digikam_export.h"
 #include "imagealbummodel.h"
 #include "imagefiltermodel.h"

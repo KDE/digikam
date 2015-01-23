@@ -27,10 +27,6 @@
 
 #include <QTimer>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_debug.h"

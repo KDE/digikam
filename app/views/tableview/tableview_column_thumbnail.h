@@ -23,11 +23,6 @@
 #ifndef TABLEVIEW_COLUMN_THUMBNAIL_H
 #define TABLEVIEW_COLUMN_THUMBNAIL_H
 
-// Qt includes
-
-
-// KDE includes
-
 // local includes
 
 #include "tableview_columnfactory.h"

@@ -28,14 +28,10 @@
 #include <QHeaderView>
 #include <QTreeView>
 #include <QMenu>
-
-// KDE includes
-
 #include <QAction>
 
 // local includes
 
-/// @todo clean up includes
 #include "digikam_debug.h"
 #include "contextmenuhelper.h"
 #include "imageinfo.h"

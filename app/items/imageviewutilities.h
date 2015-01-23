@@ -29,21 +29,11 @@
 
 #include <QList>
 #include <QWidget>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes
 
 #include "imageinfo.h"
-
-class KJob;
-
-namespace KIO
-{
-    class Job;
-}
 
 namespace Digikam
 {

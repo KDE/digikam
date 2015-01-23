@@ -26,12 +26,9 @@
 
 #include <QTimer>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // local includes
 
+#include "digikam_debug.h"
 #include "imagefiltermodel.h"
 #include "tableview_model.h"
 #include "tableview_shared.h"

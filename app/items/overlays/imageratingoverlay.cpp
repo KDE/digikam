@@ -25,9 +25,6 @@
 
 #include "imageratingoverlay.h"
 
-// Qt includes
-
-
 // KDE includes
 
 #include <klocalizedstring.h>

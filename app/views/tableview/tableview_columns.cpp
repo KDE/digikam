@@ -22,12 +22,6 @@
 
 #include "tableview_columns.h"
 
-// Qt includes
-
-// KDE includes
-
-// local includes
-
 namespace Digikam
 {
 

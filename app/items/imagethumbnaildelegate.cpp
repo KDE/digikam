@@ -27,10 +27,6 @@
 #include "imagethumbnaildelegate.h"
 #include "imagedelegatepriv.h"
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -45,7 +41,7 @@
 namespace Digikam
 {
 
-void ImageThumbnailDelegatePrivate::init(ImageThumbnailDelegate* q)
+void ImageThumbnailDelegatePrivate::init(ImageThumbnailDelegate* const q)
 {
     QObject::connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
                      q, SLOT(slotSetupChanged()));

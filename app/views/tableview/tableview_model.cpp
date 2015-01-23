@@ -31,12 +31,9 @@
 
 #include <QTimer>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasechangesets.h"

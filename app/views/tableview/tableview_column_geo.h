@@ -27,8 +27,6 @@
 
 #include <QStringList>
 
-// KDE includes
-
 // local includes
 
 #include "tableview_columnfactory.h"

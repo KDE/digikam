@@ -27,10 +27,6 @@
 #include "digikamimagedelegate.h"
 #include "imagedelegatepriv.h"
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_debug.h"

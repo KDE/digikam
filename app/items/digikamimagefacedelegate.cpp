@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-DigikamImageFaceDelegate::DigikamImageFaceDelegate(ImageCategorizedView* parent)
+DigikamImageFaceDelegate::DigikamImageFaceDelegate(ImageCategorizedView* const parent)
     : DigikamImageDelegate(*new DigikamImageFaceDelegatePrivate, parent)
 {
 }

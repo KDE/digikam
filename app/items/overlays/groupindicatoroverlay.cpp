@@ -25,17 +25,13 @@
 
 #include "groupindicatoroverlay.h"
 
-// Qt includes
-
-
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
-
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imagedelegate.h"
 #include "imagemodel.h"
 #include "imagecategorizedview.h"

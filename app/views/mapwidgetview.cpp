@@ -34,8 +34,6 @@
 
 // KDE includes
 
-
-
 #include <kconfig.h>
 
 // Libkgeomap includes
