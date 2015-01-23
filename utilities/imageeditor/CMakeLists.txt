@@ -4,6 +4,14 @@ set(libeditorplugin_SRCS
     plugin/imagepluginloader.cpp
 )
 
+add_library(editorplugin STATIC ${libeditorplugin_SRCS})
+target_link_libraries(editorplugin
+                         dimg
+)
+target_include_directories(editorplugin INTERFACE
+                               "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plugin>"
+)
+
 install(FILES plugin/digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 set(libeditorwidgets_SRCS
@@ -40,13 +48,22 @@ set(libeditorcore_SRCS
 set(libeditorprintiface_SRCS
     printiface/printhelper.cpp
     printiface/printoptionspage.cpp
-   )
+)
+
+
+ki18n_wrap_ui(libeditorprintiface_SRCS
+              printiface/printoptionspage.ui
+)
+
+kconfig_add_kcfg_files(libeditorprintiface_SRCS
+                       printiface/digikamconfig.kcfgc
+)
 
 set(libeditorrawimport_SRCS
     rawimport/rawimport.cpp
     rawimport/rawpreview.cpp
     rawimport/rawsettingsbox.cpp
-   )
+)
    
 set(libeditoriface_SRCS
     editor/editortool.cpp
@@ -61,11 +78,17 @@ add_library(imageeditor STATIC ${libeditorcore_SRCS} ${libeditordlg_SRCS} ${libe
 
 target_include_directories(imageeditor PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/printiface>
-                              )
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/editor>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dialogs>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rawimport>
+)
 
 target_link_libraries(imageeditor
                       versionmanager
+                      editorplugin
                       
-                      #KF5::KDELibs4Support # for KMessageBox
                       #KF5::NotifyConfig # for KNotifyConfigWidget
 )

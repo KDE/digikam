@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <QtCore/QString>
+#include <QString>
 #include <QPixmap>
 
 // KDE includes
