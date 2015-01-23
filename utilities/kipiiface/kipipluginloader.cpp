@@ -40,7 +40,7 @@
 
 // Libkipi includes
 
-#include <pluginloader.h>
+#include <KIPI/PluginLoader>
 
 // Local includes
 
