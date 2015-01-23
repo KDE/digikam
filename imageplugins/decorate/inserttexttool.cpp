@@ -47,13 +47,8 @@
 // KDE includes
 
 #include <kcolorbutton.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-
 #include <kfontchooser.h>
-
 #include <klocalizedstring.h>
-
 #include <ktextedit.h>
 
 // Local includes

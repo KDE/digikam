@@ -32,12 +32,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
-
-#include <kconfig.h>
-#include <kconfiggroup.h>
-
-
 #include <klocalizedstring.h>
 
 // Libkdcraw includes

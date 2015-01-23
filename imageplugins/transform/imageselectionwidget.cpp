@@ -60,12 +60,6 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-// KDE includes
-
-
-
-
-
 // Local includes
 
 #include "digikam_debug.h"

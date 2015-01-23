@@ -36,12 +36,8 @@
 
 // KDE includes
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
-
 #include <klocalizedstring.h>
 #include <kseparator.h>
-
 
 // Local includes
 

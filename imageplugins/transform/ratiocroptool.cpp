@@ -47,10 +47,7 @@
 // KDE includes
 
 #include <kcolorbutton.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kstandardguiitem.h>
 
 // Libkdcraw includes
 
@@ -249,7 +246,6 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     // need to set the button to a KStdGuiItem that has no icon
     QPushButton* const tryBtn = d->gboxSettings->button(EditorToolSettings::Try);
-    KGuiItem::assign(tryBtn, KStandardGuiItem::test());
     tryBtn->setText(i18n("Max. Aspect"));
     tryBtn->setToolTip(i18n("Set selection area to the maximum size according "
                             "to the current ratio."));

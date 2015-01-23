@@ -54,7 +54,6 @@
 
 // KDE includes
 
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 #include <kurllabel.h>

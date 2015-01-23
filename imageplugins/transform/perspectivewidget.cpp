@@ -43,12 +43,6 @@
 #include <QPixmap>
 #include <QPolygon>
 
-// KDE includes
-
-
-
-
-
 
 // Local includes
 

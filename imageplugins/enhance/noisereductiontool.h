@@ -27,7 +27,6 @@
 // Local includes
 
 #include "editortool.h"
-#include "nrfilter.h"
 
 using namespace Digikam;
 

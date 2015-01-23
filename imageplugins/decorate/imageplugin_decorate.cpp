@@ -24,17 +24,15 @@
 #include "imageplugin_decorate.h"
 
 // Qt Includes
+
 #include <QKeySequence>
+#include <QAction>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kgenericfactory.h>
 #include <klibloader.h>
-#include <QAction>
 #include <kactioncollection.h>
-
-
 
 // Local includes
 

@@ -24,15 +24,13 @@
 #include "imageplugin_transform.h"
 
 // Qt includes
+
 #include <QKeySequence>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <kactioncollection.h>
-
-
-#include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocalizedstring.h>
 

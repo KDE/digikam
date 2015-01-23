@@ -41,8 +41,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 
@@ -51,7 +49,6 @@
 #include <rcombobox.h>
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <libkdcraw_version.h>
 
 // Local includes
 
@@ -494,11 +491,7 @@ void ContentAwareResizeTool::readSettings()
     d->maskPenSize->setValue(group.readEntry(d->configBrushSizeEntry,               d->maskPenSize->defaultValue()));
     d->preserveSkinTones->setChecked(group.readEntry(d->configPreserveTonesEntry,   false));
 
-#if KDCRAW_VERSION >= 0x020000
     d->expanderBox->readSettings(group);
-#else
-    d->expanderBox->readSettings();
-#endif
 
     enableContentAwareSettings(d->mixedRescaleInput->value() > 0.0);
 
@@ -520,11 +513,7 @@ void ContentAwareResizeTool::writeSettings()
     group.writeEntry(d->configBrushSizeEntry,         d->maskPenSize->value());
     group.writeEntry(d->configPreserveTonesEntry,     d->preserveSkinTones->isChecked());
 
-#if KDCRAW_VERSION >= 0x020000
     d->expanderBox->writeSettings(group);
-#else
-    d->expanderBox->writeSettings();
-#endif
 
     group.sync();
 }

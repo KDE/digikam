@@ -32,7 +32,6 @@
 
 #include <cstring>
 
-
 namespace DigikamTransformImagePlugin
 {
 

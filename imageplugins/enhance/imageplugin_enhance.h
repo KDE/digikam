@@ -31,7 +31,6 @@
 // Local includes
 
 #include "imageplugin.h"
-#include "digikam_export.h"
 
 using namespace Digikam;
 

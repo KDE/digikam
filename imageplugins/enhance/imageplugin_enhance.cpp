@@ -27,16 +27,14 @@
 
 #include <QKeySequence>
 #include <QApplication>
+#include <QAction>
 
 // KDE includes
 
 #include <kpassivepopup.h>
 #include <klocalizedstring.h>
-#include <kgenericfactory.h>
 #include <klibloader.h>
-#include <QAction>
 #include <kactioncollection.h>
-
 
 // Local includes
 

@@ -42,15 +42,12 @@
 
 // KDE includes
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 
 // Libkdcraw includes
 
 #include <rexpanderbox.h>
-#include <libkdcraw_version.h>
 
 // Local includes
 
@@ -275,11 +272,7 @@ void FreeRotationTool::readSettings()
 
     d->settingsView->readSettings(group);
 
-#if KDCRAW_VERSION >= 0x020000
     d->expanderBox->readSettings(group);
-#else
-    d->expanderBox->readSettings();
-#endif
 
     resetPoints();
     slotColorGuideChanged();
@@ -291,11 +284,7 @@ void FreeRotationTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
     d->settingsView->writeSettings(group);
 
-#if KDCRAW_VERSION >= 0x020000
     d->expanderBox->writeSettings(group);
-#else
-    d->expanderBox->writeSettings();
-#endif
 
     group.sync();
 }
@@ -397,13 +386,8 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength) const
         QString delimiter(" ");
         int times = (diff / 2);
 
-#if QT_VERSION >= 0x040500
         tmp.prepend(delimiter.repeated(times));
         tmp.append(delimiter.repeated(times));
-#else
-        tmp.prepend(repeatString(delimiter, times));
-        tmp.append(repeatString(delimiter, times));
-#endif
 
         diff = qAbs<int>(maxLength - tmp.count());
 
@@ -417,11 +401,7 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength) const
             // too short?
             else if (tmp.count() < maxLength)
             {
-#if QT_VERSION >= 0x040500
                 tmp.append(delimiter.repeated(diff));
-#else
-                tmp.append(repeatString(delimiter, diff));
-#endif
             }
         }
     }

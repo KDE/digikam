@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -39,6 +38,7 @@
 #include "dimg.h"
 #include "nrestimate.h"
 #include "nrsettings.h"
+#include "nrfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
