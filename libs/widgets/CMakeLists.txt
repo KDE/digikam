@@ -19,6 +19,20 @@ set(libcommonwidgets_SRCS
     common/databasewidget.cpp # FIXME used to belong to separate target, check
 )
 
+set(libimagehistory_SRCS
+    imagehistory/filtershistorywidget.cpp
+    imagehistory/imagefiltershistoryitemdelegate.cpp
+    imagehistory/imagefiltershistorymodel.cpp
+    imagehistory/imagefiltershistorytreeitem.cpp
+    imagehistory/versionswidget.cpp
+)
+
+set(libcolorchooser_SRCS
+    colorchooser/dcolorvalueselector.cpp
+    colorchooser/dhuesaturationselect.cpp
+    colorchooser/dcolorchoosermode.cpp
+)
+
 set(libmainview_SRCS
     mainview/dxmlguiwindow.cpp
     mainview/daboutdata.cpp
@@ -30,6 +44,7 @@ set(libmainview_SRCS
     mainview/thumbbardock.cpp
     mainview/thememanager.cpp
     mainview/sidebar.cpp
+    mainview/dmessagebox.cpp
     ../../app/utils/digikam_globals.cpp
    )
 
@@ -79,7 +94,16 @@ set(libiccprofileswidgets_SRCS
     iccprofiles/iccprofilescombobox.cpp
 )
 
-add_library(digikamwidgets STATIC ${libmainview_SRCS} ${libcommonwidgets_SRCS} ${libgraphicsviewwidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libitemview_SRCS} ${libmetadatawidgets_SRCS})
+add_library(digikamwidgets STATIC 
+    ${libmainview_SRCS}
+    ${libcommonwidgets_SRCS}
+    ${libgraphicsviewwidgets_SRCS}
+    ${libiccprofileswidgets_SRCS}
+    ${libitemview_SRCS}
+    ${libmetadatawidgets_SRCS}
+    ${libcolorchooser_SRCS}
+    ${libimagehistory_SRCS}
+)
 
 add_dependencies(digikamwidgets digikam-gitversion) # splashscreen shows version
 

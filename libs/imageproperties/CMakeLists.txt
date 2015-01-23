@@ -3,6 +3,12 @@ set(libimageproperties_SRCS
     imagepropertiestab.cpp
     imagepropertiesmetadatatab.cpp
     imagepropertiescolorstab.cpp
+
+    # TODO these used to be somewhere else before, refactor?
+    imagepropertiesversionstab.cpp
+    versionstreeview.cpp
+    versionsoverlays.cpp
+    versionsdelegate.cpp
    )
 
 if(${KF5KGeoMap_FOUND})
@@ -27,11 +33,13 @@ add_library(imagepropertiesdigikam STATIC ${libimageproperties_SRCS} ${libimagep
 if(${KF5KGeoMap_FOUND})
     target_link_libraries(imagepropertiesdigikam KF5::KGeoMap)
 endif()
+
+# TODO we need this to showfoto?
 #add_library(imageproperties STATIC ${libimageproperties_SRCS})
 
 target_link_libraries(imagepropertiesdigikam
-
                       digikamgui # required for Album FIXME
+                      digikamwidgets
                       
                       Qt5::Core
                       Qt5::Gui

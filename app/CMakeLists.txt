@@ -65,10 +65,6 @@ if(LENSFUN_FOUND)
    target_link_libraries(digikamcore ${LENSFUN_LIBRARIES})
 endif()
 
-if(LQR-1_FOUND)
-   target_link_libraries(digikamcore ${liblqr_LIBS})
-endif()
-
 if(KF5Kipi_FOUND)
    target_link_libraries(digikamcore ${KF5Kipi_LIBRARIES})
 endif()
@@ -198,6 +194,7 @@ set(libdigikamgui_SRCS
     utils/sidebarwidget.cpp
     utils/slideshowbuilder.cpp
     utils/digikammodelcollection.cpp
+    utils/digikam_debug.cpp # TODO should this be here or elsewhere?
 
     views/tableview/tableview.cpp
     views/tableview/tableview_treeview.cpp
@@ -245,8 +242,33 @@ set(libdigikamgui_SRCS
     ${digikamadaptor_SRCS}
 )
 
+if(ENABLE_MEDIAPLAYER)
+    set(libdigikamgui_SRCS
+        ${libdigikamgui_SRCS}
+        views/mediaplayerview.cpp
+       )
+endif()
+
+if(${KF5KFace_FOUND})
+    set(libdigikamgui_SRCS
+        ${libdigikamgui_SRCS}
+        items/digikamimagefacedelegate.cpp
+        items/overlays/assignnameoverlay.cpp
+        items/overlays/facerejectionoverlay.cpp
+       )
+endif()
+
+if(${KF5KGeoMap_FOUND})
+    set(libdigikamgui_SRCS
+        ${libdigikamgui_SRCS}
+        views/mapwidgetview.cpp
+       )
+endif()
+
 # TODO this should be turned from static to dynamic
 add_library(digikamgui STATIC ${libdigikamgui_SRCS})
+
+
 
 # TODO temporary ugly hack, the common utils used by other components (esp. utilities and libs) should be moved to libs..
 target_include_directories(digikamgui PUBLIC
@@ -284,6 +306,7 @@ target_link_libraries(digikamgui
                       firstrun
                       lighttable
                       fuzzysearch
+                      maintenance
                       
                       Qt5::Core
                       Qt5::Gui
@@ -292,28 +315,6 @@ target_link_libraries(digikamgui
                       Qt5::WebKitWidgets
                       
 )
-if(ENABLE_MEDIAPLAYER)
-    set(libdigikamgui_SRCS
-        ${libdigikamgui_SRCS}
-        views/mediaplayerview.cpp
-       )
-endif()
-   
-if(${KF5KFace_FOUND})
-    set(libdigikamgui_SRCS
-        ${libdigikamgui_SRCS}
-        items/digikamimagefacedelegate.cpp
-        items/overlays/assignnameoverlay.cpp
-        items/overlays/facerejectionoverlay.cpp
-       )
-endif()
-
-if(${KF5KGeoMap_FOUND})
-    set(libdigikamgui_SRCS
-        ${libdigikamgui_SRCS}
-        views/mapwidgetview.cpp
-       )
-endif()
 
 if(${KF5Kipi_FOUND})
     target_link_libraries(digikamgui KF5::Kipi)
