@@ -46,9 +46,9 @@
 
 // Libkdcraw includes
 
-#include <rexpanderbox.h>
-#include <rnuminput.h>
-#include <rwidgetutils.h>
+#include <KDCRAW/RExpanderBox>
+#include <KDCRAW/RNumInput>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 

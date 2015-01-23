@@ -31,7 +31,7 @@
 
 // KDcraw includes
 
-#include <kdcraw.h>
+#include <KDCRAW/KDcraw>
 
 // Local includes
 

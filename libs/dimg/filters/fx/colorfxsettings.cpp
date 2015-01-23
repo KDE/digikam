@@ -33,8 +33,8 @@
 #include "dimg_debug.h"
 
 
-#include <rnuminput.h>
-#include <rcombobox.h>
+#include <KDCRAW/RNumInput>
+#include <KDCRAW/RComboBox>
 #include <QApplication>
 #include <QStyle>
 

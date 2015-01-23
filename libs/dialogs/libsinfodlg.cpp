@@ -44,7 +44,7 @@
 // Libkdcraw includes
 
 #include <libkdcraw_version.h>
-#include <kdcraw.h>
+#include <KDCRAW/KDcraw>
 
 #ifdef HAVE_KGEOMAP
 // Libkgeomap includes

@@ -80,7 +80,7 @@
 
 // Libkdcraw includes
 
-#include <kdcraw.h>
+#include <KDCRAW/KDcraw>
 #include <libkdcraw_version.h>
 
 // Libkexiv2

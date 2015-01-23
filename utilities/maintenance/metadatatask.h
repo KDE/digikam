@@ -30,7 +30,7 @@
 
 // Libkdcraw includes
 
-#include "ractionjob.h"
+#include "KDCRAW/RActionJob"
 
 // Local includes
 
