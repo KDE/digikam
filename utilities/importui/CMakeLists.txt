@@ -64,12 +64,24 @@ set(libimportui_SRCS
     main/importui.cpp
 )
 
+# TODO this is basically the same as target_include_directories..
+include_directories(
+    main/
+    backend/
+    widgets/
+    views/
+    models/
+    items/
+    dialogs/
+)
+
 # TODO backend shouldn't probably be required to linkg against all of these?
 
 add_library(importuibackend STATIC ${libimportuibackend_SRCS})
 
 target_link_libraries(importuibackend
-                        dmetadata
+                         dmetadata
+                         advancedrename
                          Qt5::Core
                          Qt5::Gui
                          Qt5::Widgets
@@ -85,6 +97,8 @@ target_include_directories(importui PUBLIC
                               "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>"
                               "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>"
                               "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/models>"
+                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items>"
+                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dialogs>"
 )
 
 target_link_libraries(importui
