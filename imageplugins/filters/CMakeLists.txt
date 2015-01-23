@@ -18,16 +18,16 @@ set(digikamimageplugin_fxfilters_PART_SRCS imageplugin_fxfilters.cpp
 add_library(digikamimageplugin_fxfilters MODULE ${digikamimageplugin_fxfilters_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_fxfilters
-                      digikamcore
+                      editorplugin
 
-                      Qt5::Core
-                      Qt5::Gui
+                      #Qt5::Core
+                      #Qt5::Gui
 
-                      KF5::KDELibs4Support
-                      KF5::KIOCore
+                      #KF5::KDELibs4Support
+                      #KF5::KIOCore
 
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      #${KF5KExiv2_LIBRARIES}
+                      #${KF5KDcraw_LIBRARIES}
                      )
 
 install(TARGETS digikamimageplugin_fxfilters             DESTINATION ${PLUGIN_INSTALL_DIR})
