@@ -57,6 +57,8 @@ KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/apps/hi*-app-showfoto.png")
 
 add_executable(showfoto ${showfoto_SRCS})
 
+add_dependencies(showfoto digikam-gitversion)
+
 # To fill plist XML file for OSX #####################################################
 
 set(MACOSX_APP_NAME_STRING             "showfoto")
