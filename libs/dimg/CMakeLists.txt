@@ -192,19 +192,34 @@ if(LQR-1_FOUND)
     set(liblqr_LIBS ${LQR-1_LIBRARIES})
 endif()
 
+add_dependencies(dimg digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
+
+# TODO clear this up. users should be using more complete path than direct one...
+# TODO this is just the same as with include_directories, macro?
 target_include_directories(dimg
                                PUBLIC
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/loaders>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/decorate>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/film>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/fx>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/auto>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/cb>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/bcg>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/wb>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/curves>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/bw>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/hsl>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/icc>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lc>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/nr>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/sharp>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/levels>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/curves>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/wb>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/transform>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/greycstoration>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lens>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/levels>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dklcms> # ugly hack for dklcms.. librarify or move to dimg?
 )
 
