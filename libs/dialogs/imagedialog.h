@@ -24,9 +24,12 @@
 #ifndef IMAGEDIALOG_H
 #define IMAGEDIALOG_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
+
+// KDE includes
+
 #include <kpreviewwidgetbase.h>
 
 // Local includes

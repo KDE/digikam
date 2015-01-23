@@ -72,7 +72,8 @@ public:
 };
 
 DatabaseCopyThread::DatabaseCopyThread(QWidget* const parent)
-    : QThread(parent), d(new Private)
+    : QThread(parent),
+      d(new Private)
 {
 }
 

@@ -73,7 +73,8 @@ public:
 };
 
 DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     setModal(true);
     setWindowTitle(caption);

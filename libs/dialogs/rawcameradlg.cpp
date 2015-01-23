@@ -60,7 +60,8 @@ public:
 };
 
 RawCameraDlg::RawCameraDlg(QWidget* const parent)
-    : InfoDlg(parent), d(new Private)
+    : InfoDlg(parent),
+      d(new Private)
 {
     setWindowTitle(i18n("List of supported RAW cameras"));
 
@@ -83,7 +84,7 @@ RawCameraDlg::RawCameraDlg(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGridLayout* grid = dynamic_cast<QGridLayout*>(mainWidget()->layout());
+    QGridLayout* const  grid = dynamic_cast<QGridLayout*>(mainWidget()->layout());
     grid->addWidget(d->header,    1, 0, 1, -1);
     grid->addWidget(d->searchBar, 3, 0, 1, -1);
 
@@ -108,7 +109,7 @@ void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 
     while (*it)
     {
-        QTreeWidgetItem* item  = *it;
+        QTreeWidgetItem* const item  = *it;
 
         if (item->text(0).toLower().contains(search, settings.caseSensitive))
         {

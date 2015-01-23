@@ -74,7 +74,8 @@ public:
 };
 
 DeleteItem::DeleteItem(QTreeWidget* const parent, const QUrl& url)
-    : QTreeWidgetItem(parent), d(new Private)
+    : QTreeWidgetItem(parent),
+      d(new Private)
 {
     d->url = url;
 

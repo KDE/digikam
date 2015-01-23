@@ -35,23 +35,22 @@
 
 #include <klocale.h>
 #include <klocalizedstring.h>
-
 #include <kfiledialog.h>
 
 // Libkdcraw includes
 
-#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_globals.h"
+#include "thumbnailloadthread.h"
 #include "ditemtooltip.h"
 #include "dmetadata.h"
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
-#include "thumbnailloadthread.h"
-#include "digikam_globals.h"
+
 
 namespace Digikam
 {

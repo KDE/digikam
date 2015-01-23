@@ -68,7 +68,8 @@ public:
 };
 
 InfoDlg::InfoDlg(QWidget* const parent)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     setModal(false);
     setWindowTitle(i18n("Shared Libraries and Components Information"));
