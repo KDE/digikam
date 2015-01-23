@@ -9,6 +9,7 @@ set(libkipiiface_SRCS
 
 add_library(kipiiface STATIC ${libkipiiface_SRCS})
 
+# TODO we shouldn't depend on digikamgui, but on a specific library providing what we need
 target_link_libraries(kipiiface
                       digikamgui # for digikamapp
                       
