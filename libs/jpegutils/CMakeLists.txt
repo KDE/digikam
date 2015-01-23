@@ -19,7 +19,7 @@ add_library(jpegutils STATIC ${libjpegutils_SRCS})
 
 target_include_directories(jpegutils
                               PUBLIC
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${DIGIKAM_LIBJPEG_DIR}>
 )
 
