@@ -23,9 +23,16 @@ file(GLOB libadvancedrename_UI
 
 ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 
-include_directories(common/)
+# TODO for internal use, prefer complete include paths instead of this
+include_directories(common/ parser/options/ parser/options/database/ parser/options/database/keys/ parser/modifiers/)
 
 add_library(advancedrename STATIC ${libadvancedrename_SRCS})
+
+# TODO what do we want to expose? check
+target_include_directories(advancedrename PUBLIC
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/parser>
+)
 
 target_link_libraries(advancedrename
                         digikamdatabase
@@ -36,4 +43,4 @@ target_link_libraries(advancedrename
                       KF5::KExiv2
                       KF5::KDcraw
                       KF5::KDELibs4Support
-                     )
+)
