@@ -5,10 +5,14 @@ add_subdirectory(lighttable)
 add_subdirectory(importui)
 add_subdirectory(slideshow)
 add_subdirectory(setup)
-
+add_subdirectory(fuzzysearch)
 add_subdirectory(firstrun)
 add_subdirectory(maintenance)
 add_subdirectory(searchwindow)
+
+if(${Baloo_FOUND})
+    add_subdirectory(baloo)
+endif()
 
 if(${KF5KFace_FOUND})
     add_subdirectory(facemanagement)
