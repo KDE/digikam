@@ -29,18 +29,12 @@
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-
-#include <kconfig.h>
-
-
-
-
 #include <klocalizedstring.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

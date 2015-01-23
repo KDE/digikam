@@ -28,10 +28,6 @@
 
 #include <QCollator>
 
-// KDE includes
-
-#include <kstringhandler.h>
-
 // Local includes
 
 #include "showfotoiteminfo.h"

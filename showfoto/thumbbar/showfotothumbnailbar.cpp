@@ -28,12 +28,9 @@
 
 #include <QTimer>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "showfotodelegate.h"
 #include "showfotofiltermodel.h"
 #include "itemviewtooltip.h"

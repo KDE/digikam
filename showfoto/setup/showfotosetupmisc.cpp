@@ -39,11 +39,8 @@
 
 // KDE includes
 
-#include <kconfig.h>
-
 #include <klocalizedstring.h>
 #include <kmultitabbar.h>
-
 
 // Libkdcraw includes
 

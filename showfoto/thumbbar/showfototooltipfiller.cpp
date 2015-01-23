@@ -31,10 +31,8 @@
 // KDE includes
 
 #include <klocale.h>
-#include <kfileitem.h>
-#include <kglobalsettings.h>
-#include <kconfiggroup.h>
 #include <klocalizedstring.h>
+#include <kio/global.h>
 
 // Local includes
 

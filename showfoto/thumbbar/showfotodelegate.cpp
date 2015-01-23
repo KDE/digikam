@@ -33,7 +33,7 @@
 
 // KDE includes
 
-
+#include <ksharedconfig.h>
 
 // Local includes
 

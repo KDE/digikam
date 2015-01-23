@@ -25,8 +25,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <kio/global.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -35,6 +33,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dmetadata.h"
 #include "imagescanner.h"
 #include "thumbnailsize.h"

@@ -25,13 +25,11 @@
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "showfotodelegate.h"
 #include "showfotoimagemodel.h"
 #include "showfotocategorizedview.h"
