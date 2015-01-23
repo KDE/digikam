@@ -65,13 +65,34 @@ endif()
 if(LENSFUN_FOUND)
     set(libqueuemanager_SRCS ${libqueuemanager_SRCS}
         basetools/enhance/lensautofix.cpp
-       )
+    )
+    include_directories(${LENSFUN_INCLUDE_DIRS})
 endif()
 
 add_library(queuemanager STATIC ${libqueuemanager_SRCS})
 
+# TODO instead of including subdirs, just modify the sources
+include_directories(
+    manager/
+    basetools/
+    basetools/color/
+    basetools/convert/
+    basetools/decorate/
+    basetools/enhance/
+    basetools/filters/
+    basetools/metadata/
+    basetools/transform/
+    views/
+    main/
+)
+
+target_include_directories(queuemanager PUBLIC
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/manager>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
+)
+
 target_link_libraries(queuemanager
-                      KF5::KDELibs4Support
                       KF5::KExiv2
                       KF5::KDcraw
 )
