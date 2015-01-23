@@ -1,3 +1,5 @@
+configure_file(dbconfigversion.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/dbconfigversion.h)
+
 set(libdatabasecore_SRCS
     core/databasecorebackend.cpp
     core/databaseparameters.cpp
@@ -82,10 +84,6 @@ set(digikamdatabase_LIB_SRCS
         ${libimgqsort_SRCS}
 )
 
-if(Baloo_FOUND)
-    set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libbaloowrap_SRCS})
-endif()
-
 if(SQLITE2_FOUND)
     set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libalbumsqlite2_SRCS})
 endif()
@@ -105,6 +103,7 @@ target_include_directories(digikamdatabase
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
 )
 
 target_link_libraries(digikamdatabase
@@ -130,8 +129,8 @@ if(KF5KGeoMap_FOUND)
     target_link_libraries(digikamdatabase ${KF5KGeoMap_LIBRARIES})
 endif()
 
-if(Baloo_FOUND)
-    target_link_libraries(digikamdatabase KF5::BalooCore KF5::BalooFiles KF5::FileMetaData)
+if(Baloo_FOUND) # circular linking, because we need baloowrap.h path.
+    target_link_libraries(digikamdatabase baloowrap)
 endif()
 
 if(SQLITE2_FOUND)
