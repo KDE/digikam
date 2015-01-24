@@ -31,19 +31,17 @@
 #include <QLayout>
 #include <QTextStream>
 #include <QToolTip>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rcombobox.h>
-#include <QApplication>
-#include <QStyle>
 
 using namespace KDcrawIface;
 

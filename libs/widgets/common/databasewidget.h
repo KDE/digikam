@@ -31,12 +31,11 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QSpinBox>
+#include <QUrl>
 #include <QCheckBox>
 
 // KDE includes
 
-
-#include <QUrl>
 #include <kurlrequester.h>
 
 // Local includes

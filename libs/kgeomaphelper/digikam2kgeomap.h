@@ -29,9 +29,6 @@
 #include <QDateTime>
 #include <QObject>
 #include <QSize>
-
-// KDE includes
-
 #include <QUrl>
 
 // libkgeomap includes

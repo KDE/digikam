@@ -26,12 +26,9 @@
 #include <QCheckBox>
 #include <QString>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "lensfuniface.h"
 #include "dmetadata.h"
 

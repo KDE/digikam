@@ -23,10 +23,6 @@
 
 #include "imagealbumfiltermodel.h"
 
-// KDE includes
-
-#include <kstringhandler.h>
-
 // Local includes
 
 #include "imagefiltermodelpriv.h"

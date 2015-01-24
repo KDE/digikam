@@ -39,7 +39,7 @@
 
 #include <QtConcurrent>
 
-// KDE includes
+// Local includes
 
 #include "digikam_debug.h"
 

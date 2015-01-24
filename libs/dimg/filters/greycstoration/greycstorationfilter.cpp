@@ -40,12 +40,9 @@
 #include <QMutexLocker>
 #include <QWaitCondition>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dynamicthread.h"
 
 #define cimg_plugin "greycstoration.h"

@@ -24,9 +24,6 @@
  * ============================================================ */
 
 #include "iccprofile.h"
-
-// LCMS
-
 #include "digikam-lcms.h"
 
 // Qt includes

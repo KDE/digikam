@@ -24,7 +24,7 @@
 
 #include "invertfilter.h"
 
-// KDE includes
+// Local includes
 
 #include "digikam_debug.h"
 

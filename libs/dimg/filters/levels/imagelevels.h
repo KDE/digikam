@@ -24,7 +24,7 @@
 #ifndef IMAGELEVELS_H
 #define IMAGELEVELS_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
 

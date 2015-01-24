@@ -35,9 +35,6 @@
 #include <QMap>
 #include <QString>
 #include <QSet>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

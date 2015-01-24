@@ -35,9 +35,8 @@
 #include <QVariant>
 #include <QMatrix>
 
-// libkexiv2 includes
+// Libkexiv2 includes
 
-#include <libkexiv2_version.h>
 #include <kexiv2previews.h>
 
 // Libkdcraw includes
@@ -561,6 +560,7 @@ bool PreviewLoadingTask::loadImagePreview(int sizeLimit)
     DMetadata metadata(m_loadingDescription.filePath);
 
     QImage previewImage;
+
     if (metadata.getImagePreview(previewImage))
     {
         if (sizeLimit == -1 || qMax(previewImage.width(), previewImage.height()) > sizeLimit)

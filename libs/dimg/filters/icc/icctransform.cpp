@@ -24,6 +24,7 @@
  * ============================================================ */
 
 #include "icctransform.h"
+#include "digikam-lcms.h"
 
 // Qt includes
 
@@ -34,18 +35,11 @@
 
 // KDE includes
 
-#include <kconfig.h>
-
-
 #include <kconfiggroup.h>
-#include "digikam_debug.h"
-
-// Lcms includes
-
-#include "digikam-lcms.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimgloaderobserver.h"
 
 namespace Digikam

@@ -36,7 +36,6 @@
 // KDE includes
 
 #include <kfontdialog.h>
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
 namespace Digikam

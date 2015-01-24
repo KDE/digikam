@@ -26,18 +26,16 @@
 #include <QString>
 #include <QVBoxLayout>
 #include <QCheckBox>
-
-// KDE includes
-
-#include <kglobalsettings.h>
-#include "digikam_debug.h"
-
-#include <klocalizedstring.h>
 #include <QApplication>
 #include <QStyle>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
+#include "digikam_debug.h"
 #include "dxmlguiwindow.h"
 #include "fullscreensettings.h"
 

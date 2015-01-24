@@ -22,10 +22,6 @@
 #ifndef LENSFUNFILTER_H
 #define LENSFUNFILTER_H
 
-// KDE includes
-
-#include <klocale.h>
-
 // Local includes
 
 #include "digikam_config.h"

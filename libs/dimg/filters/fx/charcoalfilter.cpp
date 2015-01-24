@@ -36,12 +36,9 @@
 #include <QtConcurrent>
 #include <QMutex>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "blurfilter.h"
 #include "stretchfilter.h"

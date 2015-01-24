@@ -33,10 +33,6 @@
 #include <QThreadPool>
 #include <QWaitCondition>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_debug.h"

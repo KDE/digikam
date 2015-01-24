@@ -28,17 +28,15 @@
 #include <QList>
 #include <QMenu>
 #include <QPointer>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <klocalizedstring.h>
 
 // Libkgeomap includes
 
 #include <kgeomap_widget.h>
-
-// local includes
 
 namespace Digikam
 {

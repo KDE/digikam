@@ -37,6 +37,7 @@
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
+#include <klocale.h>
 
 // Libkdcraw includes
 

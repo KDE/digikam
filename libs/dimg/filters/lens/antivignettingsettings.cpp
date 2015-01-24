@@ -41,7 +41,6 @@
 
 #include <klocalizedstring.h>
 #include <kseparator.h>
-#include <kglobalsettings.h>
 
 // Libkdcraw includes
 

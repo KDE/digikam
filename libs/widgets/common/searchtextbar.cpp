@@ -38,8 +38,6 @@
 #include <kconfiggroup.h>
 #include <kcompletion.h>
 
-#include <kconfig.h>
-
 // Local includes
 
 #include "digikam_debug.h"

@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModel::ImageFilterModelPrivate* d)
+ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModel::ImageFilterModelPrivate* const d)
     : d(d)
 {
 }

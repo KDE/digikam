@@ -41,7 +41,7 @@
 #include <QImage>
 #include <QColor>
 
-// KDE includes
+// Local includes
 
 #include "digikam_debug.h"
 

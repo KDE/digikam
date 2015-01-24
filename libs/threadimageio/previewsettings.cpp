@@ -34,8 +34,8 @@ PreviewSettings::PreviewSettings(Quality quality, RawLoading rawLoading)
 
 bool PreviewSettings::operator==(const PreviewSettings& other) const
 {
-    return quality == other.quality &&
-           rawLoading == other.rawLoading;
+    return (quality    == other.quality &&
+            rawLoading == other.rawLoading);
 }
 
 }   // namespace Digikam

@@ -27,16 +27,17 @@
 
 #include <QGridLayout>
 #include <QLabel>
+#include <QApplication>
+#include <QStyle>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
+// Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rcombobox.h>
-#include <QApplication>
-#include <QStyle>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 namespace Digikam
 {

@@ -44,12 +44,9 @@
 #include <cstdlib>
 #include <cerrno>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "imagehistogram.h"
 #include "digikam_globals.h"
 

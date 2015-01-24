@@ -29,10 +29,6 @@
 #include "imagefiltermodelpriv.h"
 #include "imagefiltermodelthreads.h"
 
-// KDE includes
-
-#include <kstringhandler.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -66,7 +62,7 @@ void ImageSortFilterModel::setSourceFilterModel(ImageSortFilterModel* source)
 {
     if (source)
     {
-        ImageModel* model = sourceImageModel();
+        ImageModel* const model = sourceImageModel();
 
         if (model)
         {
@@ -180,22 +176,26 @@ qlonglong ImageSortFilterModel::imageId(const QModelIndex& index) const
 QList<ImageInfo> ImageSortFilterModel::imageInfos(const QList<QModelIndex>& indexes) const
 {
     QList<ImageInfo> infos;
-    ImageModel* model = sourceImageModel();
+    ImageModel* const model = sourceImageModel();
+
     foreach(const QModelIndex& index, indexes)
     {
         infos << model->imageInfo(mapToSourceImageModel(index));
     }
+
     return infos;
 }
 
 QList<qlonglong> ImageSortFilterModel::imageIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
-    ImageModel* model = sourceImageModel();
+    ImageModel* const model = sourceImageModel();
+
     foreach(const QModelIndex& index, indexes)
     {
         ids << model->imageId(mapToSourceImageModel(index));
     }
+
     return ids;
 }
 
@@ -217,8 +217,8 @@ QModelIndex ImageSortFilterModel::indexForImageId(qlonglong id) const
 QList<ImageInfo> ImageSortFilterModel::imageInfosSorted() const
 {
     QList<ImageInfo> infos;
-    const int        size  = rowCount();
-    ImageModel*      model = sourceImageModel();
+    const int         size  = rowCount();
+    ImageModel* const model = sourceImageModel();
 
     for (int i=0; i<size; ++i)
     {
@@ -667,6 +667,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     // Nonetheless, QList and ImageInfo is fast. We could as well
     // reimplement ImageInfoList to ImageInfoVector (internally with templates?)
     ImageInfoList infoList;
+
     if (needPrepareTags || needPrepareGroups)
     {
         infoList = package.infos.toList();
@@ -718,7 +719,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     {
         foreach(const ImageInfo& info, package.infos)
         {
-            package.filterResults[info.id()] = localFilter.matches(info) &&
+            package.filterResults[info.id()] = localFilter.matches(info)        &&
                                                localVersionFilter.matches(info) &&
                                                localGroupFilter.matches(info);
         }
@@ -726,10 +727,11 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     else if (hasOneMatch)
     {
         bool matchForText;
+
         foreach(const ImageInfo& info, package.infos)
         {
             package.filterResults[info.id()] = localFilter.matches(info, &matchForText) &&
-                                               localVersionFilter.matches(info) &&
+                                               localVersionFilter.matches(info)         &&
                                                localGroupFilter.matches(info);
 
             if (matchForText)
@@ -741,10 +743,11 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     else
     {
         bool result, matchForText;
+
         foreach(const ImageInfo& info, package.infos)
         {
             result                           = localFilter.matches(info, &matchForText) &&
-                                               localVersionFilter.matches(info) &&
+                                               localVersionFilter.matches(info)         &&
                                                localGroupFilter.matches(info);
             package.filterResults[info.id()] = result;
 
@@ -830,7 +833,7 @@ int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelInd
     qlonglong leftGroupImageId = leftInfo.groupImageId();
     qlonglong rightGroupImageId = rightInfo.groupImageId();
 
-    return compareInfosCategories(leftGroupImageId == -1 ? leftInfo : ImageInfo(leftGroupImageId),
+    return compareInfosCategories(leftGroupImageId  == -1 ? leftInfo  : ImageInfo(leftGroupImageId),
                                   rightGroupImageId == -1 ? rightInfo : ImageInfo(rightGroupImageId));
 }
 
@@ -880,7 +883,7 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
     }
 
     // Use the group leader for sorting
-    return infosLessThan(leftGroupImageId == -1 ? leftInfo : ImageInfo(leftGroupImageId),
+    return infosLessThan(leftGroupImageId  == -1 ? leftInfo  : ImageInfo(leftGroupImageId),
                          rightGroupImageId == -1 ? rightInfo : ImageInfo(rightGroupImageId));
 }
 
@@ -962,7 +965,7 @@ void ImageFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
 
     // do we filter at all?
     if (!d->versionFilter.isFilteringByTags() &&
-        !d->filter.isFilteringByTags() &&
+        !d->filter.isFilteringByTags()        &&
         !d->filter.isFilteringByText())
     {
         return;
@@ -1007,6 +1010,7 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
 
     // is one of our images affected?
     bool imageAffected = false;
+
     foreach(const qlonglong& id, changeset.ids())
     {
         // if one matching image id is found, trigger a refresh
@@ -1042,19 +1046,20 @@ NoDuplicatesImageFilterModel::NoDuplicatesImageFilterModel(QObject* parent)
 bool NoDuplicatesImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+
     if (index.data(ImageModel::ExtraDataDuplicateCount).toInt() <= 1)
     {
         return true;
     }
 
     QModelIndex previousIndex = sourceModel()->index(source_row - 1, 0, source_parent);
+
     if (!previousIndex.isValid())
     {
         return true;
     }
 
-    if (sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(index))
-        == sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(previousIndex)))
+    if (sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(index)) == sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(previousIndex)))
     {
         return false;
     }
@@ -1080,16 +1085,20 @@ void NoDuplicatesImageFilterModel::setSourceModel(QAbstractItemModel* model)
 void NoDuplicatesImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int begin, int end)
 {
     bool needInvalidate = false;
+
     for (int i = begin; i<=end; ++i)
     {
         QModelIndex index = sourceModel()->index(i, 0, parent);
+
         // filtered out by us?
         if (!mapFromSource(index).isValid())
         {
             continue;
         }
+
         QModelIndex sourceIndex = mapFromDirectSourceToSourceImageModel(index);
         qlonglong id = sourceImageModel()->imageId(sourceIndex);
+
         if (sourceImageModel()->numberOfIndexesForImageId(id) > 1)
         {
             needInvalidate = true;

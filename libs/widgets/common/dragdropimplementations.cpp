@@ -45,6 +45,7 @@ DragDropModelImplementation::DragDropModelImplementation()
 Qt::ItemFlags DragDropModelImplementation::dragDropFlags(const QModelIndex& index) const
 {
     Q_UNUSED(index);
+
     if (!m_dragDropHandler)
     {
         return 0;
@@ -56,14 +57,17 @@ Qt::ItemFlags DragDropModelImplementation::dragDropFlags(const QModelIndex& inde
 Qt::ItemFlags DragDropModelImplementation::dragDropFlagsV2(const QModelIndex& index) const
 {
     Qt::ItemFlags flags;
+
     if (isDragEnabled(index))
     {
         flags |= Qt::ItemIsDragEnabled;
     }
+
     if (isDropEnabled(index))
     {
         flags |= Qt::ItemIsDropEnabled;
     }
+
     return flags;
 }
 
@@ -124,7 +128,7 @@ AbstractItemDragDropHandler* DragDropModelImplementation::dragDropHandler() cons
 
 void DragDropViewImplementation::cut()
 {
-    QMimeData* data = asView()->model()->mimeData(asView()->selectionModel()->selectedIndexes());
+    QMimeData* const data = asView()->model()->mimeData(asView()->selectionModel()->selectedIndexes());
 
     if (data)
     {
@@ -135,7 +139,7 @@ void DragDropViewImplementation::cut()
 
 void DragDropViewImplementation::copy()
 {
-    QMimeData* data = asView()->model()->mimeData(asView()->selectionModel()->selectedIndexes());
+    QMimeData* const data = asView()->model()->mimeData(asView()->selectionModel()->selectedIndexes());
 
     if (data)
     {
@@ -146,7 +150,7 @@ void DragDropViewImplementation::copy()
 
 void DragDropViewImplementation::paste()
 {
-    const QMimeData* data = qApp->clipboard()->mimeData(QClipboard::Clipboard);
+    const QMimeData* const data = qApp->clipboard()->mimeData(QClipboard::Clipboard);
 
     if (!data)
     {
@@ -182,15 +186,15 @@ void DragDropViewImplementation::startDrag(Qt::DropActions supportedActions)
 
     if (indexes.count() > 0)
     {
-        QMimeData* data = asView()->model()->mimeData(indexes);
+        QMimeData* const data = asView()->model()->mimeData(indexes);
 
         if (!data)
         {
             return;
         }
 
-        QPixmap pixmap = pixmapForDrag(indexes);
-        QDrag* drag    = new QDrag(asView());
+        QPixmap pixmap    = pixmapForDrag(indexes);
+        QDrag* const drag = new QDrag(asView());
         drag->setPixmap(pixmap);
         drag->setMimeData(data);
         drag->exec(supportedActions, Qt::IgnoreAction);
@@ -199,7 +203,7 @@ void DragDropViewImplementation::startDrag(Qt::DropActions supportedActions)
 
 void DragDropViewImplementation::dragEnterEvent(QDragEnterEvent* e)
 {
-    AbstractItemDragDropHandler* handler = dragDropHandler();
+    AbstractItemDragDropHandler* const handler = dragDropHandler();
 
     if (handler && handler->acceptsMimeData(e->mimeData()))
     {
@@ -215,7 +219,7 @@ void DragDropViewImplementation::dragMoveEvent(QDragMoveEvent* e)
 {
     // Note: Must call parent view first. This is done by the DECLARE... macro.
 
-    AbstractItemDragDropHandler* handler = dragDropHandler();
+    AbstractItemDragDropHandler* const handler = dragDropHandler();
 
     if (handler)
     {
@@ -238,7 +242,7 @@ void DragDropViewImplementation::dropEvent(QDropEvent* e)
 {
     // Note: Must call parent view first. This is done by the DECLARE... macro.
 
-    AbstractItemDragDropHandler* handler = dragDropHandler();
+    AbstractItemDragDropHandler* const handler = dragDropHandler();
 
     if (handler)
     {

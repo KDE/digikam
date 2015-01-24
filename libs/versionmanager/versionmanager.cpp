@@ -27,13 +27,11 @@
 // Qt includes
 
 #include <QDir>
+#include <QUrl>
 
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kdiskfreespaceinfo.h>
-
-#include <QUrl>
 
 // Local includes
 
@@ -637,16 +635,6 @@ public:
 
     DefaultVersionNamingScheme defaultScheme;
 };
-
-/*
-bool hasFreeSpace(const QString& path, int assumedFileSize) const;
-
-bool VersionManager::VersionManagerPriv::hasFreeSpace(const QString& path, int assumedFileSize) const
-{
-    KDiskFreeSpaceInfo diskInfo = KDiskFreeSpaceInfo::freeSpaceInfo(originalPath);
-    return diskInfo.isValid() && diskInfo.available() > (uint)assumedFileSize * 2;
-}
-*/
 
 // ------------------------------------------------------------------------------------------------------
 

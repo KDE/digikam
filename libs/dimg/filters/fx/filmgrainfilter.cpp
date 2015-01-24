@@ -35,12 +35,9 @@
 #include <QtConcurrent>
 #include <QMutex>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "digikam_globals.h"
 #include "randomnumbergenerator.h"
