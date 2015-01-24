@@ -110,6 +110,7 @@ add_test(statesavingobjecttest statesavingobjecttest)
 ecm_mark_as_test(statesavingobjecttest)
 
 target_link_libraries(statesavingobjecttest
+                      digikamwidgets
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
@@ -149,6 +150,7 @@ add_test(searchtextbartest searchtextbartest)
 ecm_mark_as_test(searchtextbartest)
 
 target_link_libraries(searchtextbartest
+                      digikamwidgets
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
@@ -337,6 +339,7 @@ set(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
 add_executable(qtpgftest ${qtpgftest_SRCS})
 ecm_mark_nongui_executable(qtpgftest)
 target_link_libraries(qtpgftest
+                      threadimageio # for PGFUtils
                       Qt5::Core
                       Qt5::Gui
                       KF5::KIOCore
@@ -348,6 +351,7 @@ set(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
 add_executable(pgfscaled ${pgfscaled_SRCS})
 ecm_mark_nongui_executable(pgfscaled)
 target_link_libraries(pgfscaled
+                      threadimageio # for PGFUtils
                       Qt5::Core
                       Qt5::Gui
                       KF5::KIOCore
@@ -359,6 +363,7 @@ set(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
 add_executable(loadpgfdata ${loadpgfdata_SRCS})
 ecm_mark_nongui_executable(loadpgfdata)
 target_link_libraries(loadpgfdata
+                      threadimageio # for PGFUtils
                       Qt5::Core
                       Qt5::Gui
                       KF5::KIOCore
@@ -400,6 +405,7 @@ if(LENSFUN_FOUND)
     add_executable(testlensfuniface ${testlensfuniface_SRCS})
     ecm_mark_nongui_executable(testlensfuniface)
     target_link_libraries(testlensfuniface
+                          dimg # TODO move lensuniface to libs..
                           Qt5::Core
                           KF5::KDELibs4Support
                           KF5::KExiv2
@@ -424,6 +430,7 @@ set (testnrestimate_SRCS testnrestimate.cpp)
 add_executable (testnrestimate ${testnrestimate_SRCS})
 ecm_mark_nongui_executable(testnrestimate)
 target_link_libraries(testnrestimate
+                      dimg
                       Qt5::Core
                       Qt5::Gui
                       KF5::KDELibs4Support
@@ -438,6 +445,7 @@ set(testautocrop_SRCS testautocrop.cpp)
 add_executable(testautocrop ${testautocrop_SRCS})
 ecm_mark_nongui_executable(testautocrop)
 target_link_libraries(testautocrop
+                      dimg
                       Qt5::Core
                       Qt5::Gui
                       KF5::KDELibs4Support
