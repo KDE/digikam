@@ -22,9 +22,10 @@
  * ============================================================ */
 
 #include "jpegsettings.h"
-#include <QApplication>
+
 // Qt includes
 
+#include <QApplication>
 #include <QFrame>
 #include <QGridLayout>
 #include <QLabel>

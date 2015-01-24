@@ -30,7 +30,7 @@
 #include <QDateTime>
 #include <QThreadPool>
 
-// KDE includes
+// Local includes
 
 #include "digikam_debug.h"
 

@@ -30,13 +30,12 @@
 #include <QCheckBox>
 #include <QLayout>
 #include <QGridLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
-#include <QApplication>
-#include <QStyle>
 
 namespace Digikam
 {

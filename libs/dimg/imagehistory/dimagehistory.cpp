@@ -33,10 +33,6 @@
 #include <QFileInfo>
 #include <QUrl>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_debug.h"

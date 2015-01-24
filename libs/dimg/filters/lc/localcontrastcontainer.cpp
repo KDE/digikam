@@ -32,7 +32,7 @@
 
 // Qt includes
 
-#include <qmath.h>
+#include <QtMath>
 
 // KDE includes
 

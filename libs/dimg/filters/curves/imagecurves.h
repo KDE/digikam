@@ -29,9 +29,6 @@
 #include <QSharedDataPointer>
 #include <QPoint>
 #include <QPolygon>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

@@ -36,12 +36,9 @@
 #include <QFile>
 #include <QSharedData>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "curvescontainer.h"
 #include "filteraction.h"
 #include "digikam_globals.h"

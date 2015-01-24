@@ -24,7 +24,7 @@
 #ifndef JPEGSETTINGS_H
 #define JPEGSETTINGS_H
 
-// KDE includes
+// Qt includes
 
 #include <QWidget>
 

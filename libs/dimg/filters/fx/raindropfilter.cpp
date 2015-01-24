@@ -36,7 +36,7 @@
 
 #include <QDateTime>
 #include <QRect>
-#include <qmath.h>
+#include <QtMath>
 #include <QtConcurrent>
 
 // Local includes

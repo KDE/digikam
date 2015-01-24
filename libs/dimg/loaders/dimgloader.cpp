@@ -36,13 +36,9 @@
 #include <QFile>
 #include <QFileInfo>
 
-// KDE includes
-
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"

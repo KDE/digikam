@@ -38,12 +38,9 @@ extern "C"
 #include <QFile>
 #include <QByteArray>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "digikam_config.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"

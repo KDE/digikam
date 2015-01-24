@@ -35,7 +35,7 @@
 
 // Qt includes
 
-#include <qmath.h>
+#include <QtMath>
 #include <QtConcurrent>
 
 // Local includes

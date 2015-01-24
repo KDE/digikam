@@ -24,16 +24,13 @@
 
 #include "rawprocessingfilter.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // KDcraw includes
 
 #include <kdcraw.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "bcgfilter.h"
 #include "curvesfilter.h"
 #include "digikam_export.h"

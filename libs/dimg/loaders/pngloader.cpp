@@ -43,16 +43,13 @@ extern "C"
 #include <QByteArray>
 #include <QSysInfo>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Libkexiv2 includes
 
 #include <kexiv2.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "digikam_config.h"
 #include "digikam_version.h"
 #include "dimg.h"

@@ -24,7 +24,7 @@
 #ifndef TIFFSETTINGS_H
 #define TIFFSETTINGS_H
 
-// KDE includes
+// Qt includes
 
 #include <QWidget>
 

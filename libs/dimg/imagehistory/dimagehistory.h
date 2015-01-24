@@ -25,7 +25,7 @@
 #ifndef DIMAGEHISTORY_H
 #define DIMAGEHISTORY_H
 
-//Qt includes
+// Qt includes
 
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>

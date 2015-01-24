@@ -35,7 +35,7 @@ class FilmProfile
 {
 public:
 
-    FilmProfile(double rdm=0, double gdm=0, double bdm=0)
+    FilmProfile(double rdm=0.0, double gdm=0.0, double bdm=0.0)
         : redDmax(rdm),
           greenDmax(gdm),
           blueDmax(bdm),
@@ -114,11 +114,11 @@ private:
 
 // --------------------------------------------------------------------------------------------------------
 
-class FilmContainer::FilmContainerPriv
+class FilmContainer::Private
 {
 public:
 
-    FilmContainerPriv()
+    Private()
         : gamma(1.0),
           exposure(1.0),
           sixteenBit(false),
@@ -129,7 +129,7 @@ public:
     {
     }
 
-    ~FilmContainerPriv()
+    ~Private()
     {
     }
 
@@ -144,15 +144,15 @@ public:
 
 // ------------------------------------------------------------------
 
-class FilmFilter::FilmFilterPriv
+class FilmFilter::Private
 {
 public:
 
-    FilmFilterPriv()
+    Private()
     {
     }
 
-    ~FilmFilterPriv()
+    ~Private()
     {
     }
 

@@ -33,13 +33,9 @@
 
 #include <QByteArray>
 
-// KDE includes
-
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "icctransform.h"

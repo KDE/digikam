@@ -45,8 +45,6 @@
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 
-
-
 // Libkdcraw includes
 
 #include <rnuminput.h>

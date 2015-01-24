@@ -29,9 +29,10 @@
 
 #include <QDomDocument>
 
-// KDcraw includes
+// Libkdcraw includes
 
 #include <kdcraw.h>
+#include <libkdcraw_version.h>
 
 // Local includes
 
@@ -45,7 +46,9 @@ class RawDecodingSettingsWriter
 public:
 
     RawDecodingSettingsWriter(const RawDecodingSettings& settings, FilterAction& action, const QString& prefix = QString())
-        : settings(settings), action(action), prefix(prefix)
+        : settings(settings),
+          action(action),
+          prefix(prefix)
     {
         timeOptimizedSettings.optimizeTimeLoading();
     }
@@ -63,6 +66,7 @@ public:
             action.addParameter(key, value);
         }
     }
+
 #define AddParameterIfNotDefault(name) AddParameterIfNotDefaultWithValue(name, name)
 #define AddParameterIfNotDefaultWithValue(name, value) \
         addParameterIfNotDefault(prefix + #name, settings.value, defaultSettings.value)
@@ -348,10 +352,10 @@ bool DRawDecoding::postProcessingSettingsIsDirty() const
 
 bool DRawDecoding::operator==(const DRawDecoding& other) const
 {
-    return rawPrm       == other.rawPrm       &&
-           bcg          == other.bcg          &&
-           wb           == other.wb           &&
-           curvesAdjust == other.curvesAdjust;
+    return (rawPrm       == other.rawPrm       &&
+            bcg          == other.bcg          &&
+            wb           == other.wb           &&
+            curvesAdjust == other.curvesAdjust);
 }
 
 DRawDecoding DRawDecoding::fromFilterAction(const FilterAction& action, const QString& prefix)
@@ -378,10 +382,12 @@ void DRawDecoding::writeToFilterAction(FilterAction& action, const QString& pref
     {
         bcg.writeToFilterAction(action, prefix);
     }
+
     if (!wb.isDefault())
     {
         wb.writeToFilterAction(action, prefix);
     }
+
     if (!curvesAdjust.isEmpty())
     {
         curvesAdjust.writeToFilterAction(action, prefix);
@@ -557,6 +563,7 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, RawDecodingSe
     for (QDomNode node = elm.firstChild(); !node.isNull(); node = node.nextSibling())
     {
         QDomElement echild = node.toElement();
+
         if (echild.isNull())
         {
             continue;

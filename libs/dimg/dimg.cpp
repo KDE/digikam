@@ -54,13 +54,8 @@ extern "C"
 #include <QSysInfo>
 #include <QUuid>
 
-// KDE includes
-
-
-
 // Libkdcraw includes
 
-#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Libkexiv2 includes
@@ -1952,6 +1947,8 @@ QImage DImg::copyQImage(int x, int y, int w, int h) const
     return img.copyQImage();
 }
 
+// --------------------------------------------------------------------------------------
+
 class PixmapPaintEngineDetector
 {
 public:
@@ -1972,13 +1969,15 @@ private:
     {
         QPixmap pix(1, 1);
         QPainter p(&pix);
-        return p.paintEngine() && p.paintEngine()->type() == QPaintEngine::Raster;
+        return (p.paintEngine() && p.paintEngine()->type() == QPaintEngine::Raster);
     }
 
     const bool m_isRaster;
 };
 
 Q_GLOBAL_STATIC(PixmapPaintEngineDetector, pixmapPaintEngineDetector)
+
+// --------------------------------------------------------------------------------------
 
 QPixmap DImg::convertToPixmap() const
 {
@@ -3164,6 +3163,7 @@ void DImg::setHistoryBranchAfter(const DImageHistory& historyBeforeBranch, bool 
 void DImg::setHistoryBranchForLastSteps(int numberOfLastHistorySteps, bool isBranch)
 {
     int firstStep = m_priv->imageHistory.size() - numberOfLastHistorySteps;
+
     if (firstStep < m_priv->imageHistory.size())
     {
         if (isBranch)

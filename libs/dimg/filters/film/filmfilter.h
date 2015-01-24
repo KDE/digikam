@@ -31,8 +31,6 @@
 #include <QListWidgetItem>
 #include <QSharedPointer>
 
-// KDE includes
-
 // Local includes
 
 #include "dimgthreadedfilter.h"
@@ -126,8 +124,8 @@ private:
 
 private:
 
-    class FilmContainerPriv;
-    QSharedPointer<FilmContainerPriv> d;
+    class Private;
+    QSharedPointer<Private> d;
 };
 
 // ---------------------------------------------------------------------------------------------------
@@ -174,8 +172,8 @@ private:
 
 private:
 
-    class FilmFilterPriv;
-    FilmFilterPriv* d;
+    class Private;
+    Private* d;
 };
 
 } // namespace Digikam

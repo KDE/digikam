@@ -29,12 +29,9 @@
 
 #include <QListWidget>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "filmfilter_p.h"
 #include "invertfilter.h"
 
@@ -42,12 +39,12 @@ namespace Digikam
 {
 
 FilmContainer::FilmContainer() :
-    d(QSharedPointer<FilmContainerPriv>(new FilmContainerPriv))
+    d(QSharedPointer<Private>(new Private))
 {
 }
 
 FilmContainer::FilmContainer(CNFilmProfile profile, double gamma, bool sixteenBit)
-    : d(QSharedPointer<FilmContainerPriv>(new FilmContainerPriv))
+    : d(QSharedPointer<Private>(new Private))
 {
     d->gamma      = gamma;
     d->sixteenBit = sixteenBit;
@@ -211,11 +208,12 @@ int FilmContainer::whitePointForChannel(int ch) const
 {
     int max = d->sixteenBit ? 65535 : 255;
 
-    switch (ch) {
-    case RedChannel:    return d->whitePoint.red();
-    case GreenChannel:  return d->whitePoint.green();
-    case BlueChannel:   return d->whitePoint.blue();
-    default:            return max;
+    switch (ch)
+    {
+        case RedChannel:    return d->whitePoint.red();
+        case GreenChannel:  return d->whitePoint.green();
+        case BlueChannel:   return d->whitePoint.blue();
+        default:            return max;
     }
 
     /* not reached */
@@ -258,6 +256,7 @@ LevelsContainer FilmContainer::toLevels() const
         l.hInput[i]  = whitePointForChannel(i) * d->profile.wp(i);
         l.lOutput[i] = 0;
         l.hOutput[i] = max;
+
         if (d->applyBalance)
             l.gamma[i]   = gammaForChannel(i);
         else
@@ -335,7 +334,7 @@ const QMap<int, QString> FilmContainer::profileMap = FilmContainer::profileMapIn
 
 FilmFilter::FilmFilter(QObject* const parent)
     : DImgThreadedFilter(parent, "FilmFilter"),
-      d(new FilmFilterPriv())
+      d(new Private())
 {
     d->film = FilmContainer();
     initFilter();
@@ -343,7 +342,7 @@ FilmFilter::FilmFilter(QObject* const parent)
 
 FilmFilter::FilmFilter(DImg* const orgImage, QObject* const parent, const FilmContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "FilmFilter"),
-      d(new FilmFilterPriv())
+      d(new Private())
 {
     d->film = settings;
     initFilter();

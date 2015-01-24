@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <qmath.h>
+#include <QtMath>
 
 // Local includes
 

@@ -28,12 +28,9 @@
 
 #include <QScopedPointer>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "digikam_export.h"
 #include "dimgbuiltinfilter.h"
 #include "dimgfiltermanager.h"

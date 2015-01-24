@@ -25,6 +25,8 @@
 #ifndef BWSEPIAFILTER_H
 #define BWSEPIAFILTER_H
 
+// Qt includes
+
 #include <QPolygon>
 
 // Local includes

@@ -29,12 +29,9 @@
 #include <cstdio>
 #include <cmath>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "dcolor.h"
 

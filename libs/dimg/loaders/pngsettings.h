@@ -24,7 +24,7 @@
 #ifndef PNGSETTINGS_H
 #define PNGSETTINGS_H
 
-// KDE includes
+// Qt includes
 
 #include <QWidget>
 

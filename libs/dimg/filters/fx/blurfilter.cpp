@@ -27,11 +27,11 @@
 
 // Qt includes
 
-#include <qmath.h>
+#include <QtMath>
 #include <QtConcurrent>
 #include <QMutex>
 
-// KDE includes
+// Local includes
 
 #include "digikam_debug.h"
 

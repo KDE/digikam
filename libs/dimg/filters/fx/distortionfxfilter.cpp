@@ -40,7 +40,7 @@
 #include <QSize>
 #include <QMutex>
 #include <QtConcurrent>
-#include <qmath.h>
+#include <QtMath>
 
 // Local includes
 

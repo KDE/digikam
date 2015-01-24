@@ -24,7 +24,7 @@
 #ifndef JP2KSETTINGS_H
 #define JP2KSETTINGS_H
 
-// KDE includes
+// Qt includes
 
 #include <QWidget>
 
