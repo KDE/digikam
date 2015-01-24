@@ -49,7 +49,7 @@
 #include "imagehistorygraphdata.h"
 #include "imagehistorygraphmodel.h"
 #include "iofilesettings.h"
-#include "modeltest.h"
+#include "modeltest/modeltest.h"
 #include "tagscache.h"
 
 using namespace Digikam;
@@ -74,8 +74,8 @@ void DImageHistoryGraphTest::initTestCase()
     DatabaseAccess::setParameters(params, DatabaseAccess::MainApplication);
     QVERIFY(DatabaseAccess::checkReadyForUse(0));
     QVERIFY(QFile(dbFile).exists());
-    CollectionManager::instance()->addLocation(collectionDir.path());
-    CollectionManager::instance()->addLocation(imagePath());
+    CollectionManager::instance()->addLocation(QUrl::fromLocalFile(collectionDir.path()));
+    CollectionManager::instance()->addLocation(QUrl::fromLocalFile(imagePath()));
     QList<CollectionLocation> locs = CollectionManager::instance()->allAvailableLocations();
     QVERIFY(locs.size() == 2);
 
