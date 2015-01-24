@@ -23,9 +23,8 @@
 
 #include "cameranamehelpertest.h"
 
-// KDE includes
-
-#include <qtest_kde.h>
+// Qt includes
+#include <QTest>
 
 // Local includes
 
@@ -34,7 +33,7 @@
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(CameraNameHelperTest, GUI)
+QTEST_MAIN(CameraNameHelperTest)
 
 void CameraNameHelperTest::testCreateCameraName_data()
 {
