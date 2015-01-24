@@ -29,6 +29,7 @@
 #include <QXmlSimpleReader>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <QDebug>
 
 namespace
 {
@@ -139,6 +140,7 @@ bool UiFileValidator::fixConfigFile(const QString& destination)
 
     if (!isWritable(fw))
     {
+        qWarning() << "UiFileValidator: Destination file is not writable:" << fw.fileName();
         return false;
     }
 
@@ -146,6 +148,7 @@ bool UiFileValidator::fixConfigFile(const QString& destination)
 
     if (result.isEmpty())
     {
+        qWarning() << "UiFileValidator: Fixed config file is empty";
         return false;
     }
 
