@@ -180,74 +180,19 @@ target_link_libraries(filesaveoptionsboxtest
 #set(albummodeltest_SRCS
 #    albummodeltest.cpp
 #    modeltest/modeltest.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/album.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albummanager.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumsettings.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumthumbnailloader.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/databaseguierrorhandler.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common/databasewidget.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/scancontroller.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/dkcamera.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/gpcamera.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameralist.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameraselection.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameratype.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setup.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupdatabase.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcollections.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcollectionview.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupalbumview.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcategory.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuptooltip.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmetadata.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuptemplate.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmime.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuplighttable.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupeditor.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupiofiles.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupdcraw.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupicc.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupplugins.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupslideshow.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupscriptmanager.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/scriptplugintype.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupversioning.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcamera.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmisc.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupversioning.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch/batchthumbsgenerator.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/abstractalbummodel.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/albumfiltermodel.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/albummodel.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/subjectedit.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatelist.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatemanager.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatepanel.cpp
-#   )
-#
+#)
+
 #add_executable(albummodeltest ${albummodeltest_SRCS})
-add_test(albummodeltest albummodeltest)
-ecm_mark_as_test(albummodeltest)
-#
+#add_test(albummodeltest albummodeltest)
+#ecm_mark_as_test(albummodeltest)
+
 #target_link_libraries(albummodeltest
-#                      Qt5::Gui
 #                      Qt5::Test
-#                      Qt5::Xml
-#                      Qt5::Sql
 #                      KF5::KIOCore
 #                      KF5::KDELibs4Support
-#                      KF5::KDcraw
-#                      KF5::KExiv2
+
 #                      digikamdatabase
-#                     )
-#
-#if(${KF5Kipi_FOUND})
-#    target_link_libraries(albummodeltest KF5::Kipi)
-#endif()
-#
-#if(GPHOTO2_FOUND)
-#     target_link_libraries(albummodeltest ${GPHOTO2_LIBRARIES})
-#endif()
+#)
 
 #------------------------------------------------------------------------
 
