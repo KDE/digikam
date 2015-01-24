@@ -40,12 +40,9 @@
 #include <QImageReader>
 #include <QMap>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "jpegutils.h"
 #include "dimg.h"
 #include "imageinfo.h"
@@ -54,7 +51,6 @@
 #include "albumdb.h"
 #include "databasebackend.h"
 #include "searchxml.h"
-#include "haar.h"
 #include "sqlquery.h"
 
 using namespace std;

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// Local includes
 #include "databaseservererror.h"
 
 namespace Digikam

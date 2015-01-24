@@ -24,7 +24,6 @@
 #ifndef DATABASEBACKEND_P_H
 #define DATABASEBACKEND_P_H
 
-
 #include "databasecorebackend_p.h"
 
 // Local includes

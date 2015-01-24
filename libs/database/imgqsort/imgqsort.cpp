@@ -36,12 +36,9 @@
 #include <QTextStream>
 #include <QFile>
 
-// Kde include
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "mixerfilter.h"
 #include "nrfilter.h"
 #include "nrestimate.h"

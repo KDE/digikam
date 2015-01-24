@@ -28,18 +28,19 @@
 #include <QFileInfo>
 #include <QFile>
 #include <QDir>
+#include <QUrl>
 
 // KDE includes
 
+#include <klocalizedstring.h>
+#include <kconfiggroup.h>
+/*
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <klocalizedstring.h>
-#include <QUrl>
-#include <kconfiggroup.h>
-
+*/
 // Libkdcraw includes
 
-#include <libkdcraw_version.h>
+//#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes

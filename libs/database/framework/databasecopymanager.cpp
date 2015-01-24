@@ -23,7 +23,7 @@
 
 #include "databasecopymanager.h"
 
-// QT includes
+// Qt includes
 
 #include <QSqlError>
 #include <QSqlDriver>

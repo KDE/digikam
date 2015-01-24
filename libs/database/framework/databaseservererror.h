@@ -24,12 +24,14 @@
 #ifndef DATABASESERVERERROR_H_
 #define DATABASESERVERERROR_H_
 
-// QT includes
+// Qt includes
+
 #include <QString>
 #include <QVariant>
 #include <QDBusArgument>
 
 // Local includes
+
 #include "dbusutilities.h"
 #include "digikam_export.h"
 

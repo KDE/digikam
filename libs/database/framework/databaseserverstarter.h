@@ -24,7 +24,7 @@
 #ifndef DATABASESERVER_H_
 #define DATABASESERVER_H_
 
-// QT includes
+// Qt includes
 
 #include <QProcess>
 #include <QString>

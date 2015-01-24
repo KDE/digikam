@@ -32,11 +32,6 @@
 #include <QFileInfo>
 #include <QList>
 
-// KDE includes
-
-
-#include <kio/global.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -66,7 +61,7 @@ struct _Tag
     QString icon;
 };
 
-qlonglong findOrAddImage(DatabaseBackend* backend, int dirid, const QString& name,
+qlonglong findOrAddImage(DatabaseBackend* const backend, int dirid, const QString& name,
                          const QString& caption)
 {
     QList<QVariant> values;
@@ -88,28 +83,9 @@ qlonglong findOrAddImage(DatabaseBackend* backend, int dirid, const QString& nam
 }
 
 
-bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, const QString& sql2DBPath)
+bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* const albumDB, DatabaseBackend* const backend, const QString& sql2DBPath)
 {
     QString libraryPath = QDir::cleanPath(sql2DBPath);
-
-    /*
-    QString newDB= libraryPath + "/digikam3.db";
-
-    #ifdef NFS_HACK
-    newDB = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(newDB)));
-    qCDebug(DIGIKAM_GENERAL_LOG) << "NFS: " << newDB;
-    #endif
-
-    AlbumDB db3;
-    albumDB->setDBPath(newDB);
-    if (!albumDB->isValid())
-    {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open new Album Database";
-        return false;
-    }
-    */
-
-    //DatabaseAccess access;
 
     if (albumDB->getSetting("UpgradedFromSqlite2") == "yes")
     {
@@ -117,13 +93,6 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
     }
 
     QString dbPath = libraryPath + "/digikam3.db";
-
-    /*
-    #ifdef NFS_HACK
-    dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(dbPath)));
-    qCDebug(DIGIKAM_GENERAL_LOG) << "From NFS: " << dbPath;
-    #endif
-    */
 
     QFileInfo fi(dbPath);
 

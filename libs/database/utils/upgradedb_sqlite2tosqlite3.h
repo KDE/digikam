@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-extern bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, const QString& sql2DBPath);
+extern bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* const albumDB, DatabaseBackend* const backend, const QString& sql2DBPath);
 
 }  // namespace Digikam
 

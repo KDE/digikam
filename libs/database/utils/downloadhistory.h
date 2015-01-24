@@ -44,7 +44,7 @@ public:
     {
         StatusUnknown = -1,
         NotDownloaded = 0,
-        Downloaded = 1
+        Downloaded    = 1
     };
 
     /**

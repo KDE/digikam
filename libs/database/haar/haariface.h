@@ -32,10 +32,10 @@
 #include <QString>
 #include <QMap>
 #include <QList>
-#include <haar.h>
 
 // Local includes
 
+#include "haar.h"
 #include "digikam_export.h"
 
 class QImage;

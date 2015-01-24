@@ -32,10 +32,6 @@
 #include <QWriteLocker>
 #include <QMap>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_debug.h"

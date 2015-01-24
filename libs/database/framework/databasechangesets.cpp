@@ -31,7 +31,8 @@ ImageChangeset::ImageChangeset()
 }
 
 ImageChangeset::ImageChangeset(QList<qlonglong> ids, DatabaseFields::Set changes)
-    : m_ids(ids), m_changes(changes)
+    : m_ids(ids),
+      m_changes(changes)
 {
 }
 
@@ -80,12 +81,15 @@ ImageTagChangeset::ImageTagChangeset()
 }
 
 ImageTagChangeset::ImageTagChangeset(QList<qlonglong> ids, QList<int> tags, Operation op)
-    : m_ids(ids), m_tags(tags), m_operation(op)
+    : m_ids(ids),
+      m_tags(tags),
+      m_operation(op)
 {
 }
 
 ImageTagChangeset::ImageTagChangeset(qlonglong id, QList<int> tags, Operation op)
-    : m_tags(tags), m_operation(op)
+    : m_tags(tags),
+      m_operation(op)
 {
     m_ids << id;
 }
@@ -161,12 +165,15 @@ CollectionImageChangeset::CollectionImageChangeset()
 }
 
 CollectionImageChangeset::CollectionImageChangeset(QList<qlonglong> ids, QList<int> albums, Operation op)
-    : m_ids(ids), m_albums(albums), m_operation(op)
+    : m_ids(ids),
+      m_albums(albums),
+      m_operation(op)
 {
 }
 
 CollectionImageChangeset::CollectionImageChangeset(QList<qlonglong> ids, int album, Operation op)
-    : m_ids(ids), m_operation(op)
+    : m_ids(ids),
+      m_operation(op)
 {
     m_albums << album;
 }
@@ -237,12 +244,14 @@ CollectionImageChangeset::Operation CollectionImageChangeset::operation() const
 // ---------------------------------------------------------------------------------
 
 AlbumChangeset::AlbumChangeset()
-    : m_id(-1), m_operation(Unknown)
+    : m_id(-1),
+      m_operation(Unknown)
 {
 }
 
 AlbumChangeset::AlbumChangeset(int albumId, Operation operation)
-    : m_id(albumId), m_operation(operation)
+    : m_id(albumId),
+      m_operation(operation)
 {
 }
 
@@ -277,12 +286,14 @@ const AlbumChangeset& AlbumChangeset::operator>>(QDBusArgument& argument) const
 // ---------------------------------------------------------------------------------
 
 TagChangeset::TagChangeset()
-    : m_id(-1), m_operation(Unknown)
+    : m_id(-1),
+      m_operation(Unknown)
 {
 }
 
 TagChangeset::TagChangeset(int albumId, Operation operation)
-    : m_id(albumId), m_operation(operation)
+    : m_id(albumId),
+      m_operation(operation)
 {
 }
 
@@ -317,12 +328,14 @@ const TagChangeset& TagChangeset::operator>>(QDBusArgument& argument) const
 // ---------------------------------------------------------------------------------
 
 AlbumRootChangeset::AlbumRootChangeset()
-    : m_id(-1), m_operation(Unknown)
+    : m_id(-1),
+      m_operation(Unknown)
 {
 }
 
 AlbumRootChangeset::AlbumRootChangeset(int albumId, Operation operation)
-    : m_id(albumId), m_operation(operation)
+    : m_id(albumId),
+      m_operation(operation)
 {
 }
 
@@ -357,12 +370,14 @@ const AlbumRootChangeset& AlbumRootChangeset::operator>>(QDBusArgument& argument
 // ---------------------------------------------------------------------------------
 
 SearchChangeset::SearchChangeset()
-    : m_id(-1), m_operation(Unknown)
+    : m_id(-1),
+      m_operation(Unknown)
 {
 }
 
 SearchChangeset::SearchChangeset(int albumId, Operation operation)
-    : m_id(albumId), m_operation(operation)
+    : m_id(albumId),
+      m_operation(operation)
 {
 }
 

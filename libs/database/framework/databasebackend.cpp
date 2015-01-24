@@ -33,11 +33,6 @@
 #include <QSqlError>
 #include <QThread>
 
-// KDE includes
-
-
-
-
 // Local includes
 
 #include "schemaupdater.h"

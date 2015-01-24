@@ -28,10 +28,6 @@
 #include <QSharedData>
 #include <QMultiMap>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_debug.h"

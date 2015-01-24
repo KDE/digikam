@@ -27,7 +27,7 @@
 class QDBusArgument;
 
 #define DECLARE_METATYPE_FOR_DBUS(x) \
-Q_DECLARE_METATYPE(x)\
+Q_DECLARE_METATYPE(x) \
 \
 inline QDBusArgument& operator<<(QDBusArgument& argument, const x& changeset) \
 { \

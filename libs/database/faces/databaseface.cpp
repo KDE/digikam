@@ -28,12 +28,9 @@
 
 #include <QStringList>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "databaseconstants.h"
 #include "tagregion.h"
 #include "tagscache.h"

@@ -24,7 +24,7 @@
 
 #include "databasethumbnailinfoprovider.h"
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
 

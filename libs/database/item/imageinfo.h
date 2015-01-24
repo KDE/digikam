@@ -33,9 +33,6 @@
 #include <QDateTime>
 #include <QList>
 #include <QSize>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes
