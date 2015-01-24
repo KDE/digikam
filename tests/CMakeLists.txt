@@ -314,15 +314,18 @@ target_link_libraries(dimagefilteractiontest
 
 #------------------------------------------------------------------------
 
-set(databasefieldstest_SRCS
-    databasefieldstest.cpp
-)
+# undefined reference to `Digikam::DatabaseFields::FieldMetaInfo<QFlags<Digikam::DatabaseFields::ImagesField> >::Last'
+# happens even though file defining those libs/database/framework/databasefields.h is included and linking against digikamdatabase..
+#set(databasefieldstest_SRCS
+#    databasefieldstest.cpp
+#)
 
 #add_executable(databasefieldstest ${databasefieldstest_SRCS})
-add_test(databasefieldstest databasefieldstest)
-ecm_mark_as_test(databasefieldstest)
+#add_test(databasefieldstest databasefieldstest)
+#ecm_mark_as_test(databasefieldstest)
 
 #target_link_libraries(databasefieldstest
+#                      digikamdatabase
 #                      Qt5::Gui
 #                      Qt5::Test
 #                      KF5::KDELibs4Support
@@ -330,10 +333,6 @@ ecm_mark_as_test(databasefieldstest)
 #)
 
 #------------------------------------------------------------------------
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
-                    ${PGF_INCLUDE_DIRS}
-)
 
 set(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
 add_executable(qtpgftest ${qtpgftest_SRCS})
