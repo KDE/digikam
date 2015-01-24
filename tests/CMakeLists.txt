@@ -21,11 +21,11 @@ ecm_mark_as_test(advancedrenametest)
 target_link_libraries(advancedrenametest
                       Qt5::Gui
                       Qt5::Test
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      
+                      KF5::KExiv2
+                      KF5::KDcraw
                       KF5::KDELibs4Support
                       ${OpenCV_LIBRARIES}
-                      digikamcore
                       digikamdatabase
                       advancedrename
 )
@@ -44,12 +44,11 @@ target_link_libraries(renamecustomizertest
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
-                      digikamcore
                       digikamdatabase
                       importui
                       advancedrename
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
 )
 
@@ -57,18 +56,6 @@ target_link_libraries(renamecustomizertest
 
 set(cameranamehelper_SRCS
     cameranamehelpertest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/views/cameranamehelper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/gpcamera.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/camiteminfo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/dkcamera.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_p.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_albums.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_database.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_iconview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_mime.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_miscs.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_tooltips.cpp
 )
 
 add_executable(cameranamehelpertest ${cameranamehelper_SRCS})
@@ -77,12 +64,12 @@ ecm_mark_as_test(cameranamehelpertest)
 
 target_link_libraries(cameranamehelpertest
                       Qt5::Gui
+                      Qt5::Widgets
                       Qt5::Test
                       KF5::KDELibs4Support
-                      digikamcore
                       digikamdatabase
-                      ${KF5KDcraw_LIBRARIES}
-                      ${KF5KExiv2_LIBRARIES}
+                      KF5::KDcraw
+                      KF5::KExiv2
                       ${OpenCV_LIBRARIES}
 )
 
@@ -104,7 +91,6 @@ target_link_libraries(uifilevalidatortest
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
-                      digikamcore
                       digikamdatabase
                       ${OpenCV_LIBRARIES}
 )
@@ -127,7 +113,6 @@ target_link_libraries(statesavingobjecttest
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
-                      digikamcore
                       ${OpenCV_LIBRARIES}
 )
 
@@ -146,10 +131,10 @@ add_test(freerotationtest freerotationtest)
 ecm_mark_as_test(freerotationtest)
 
 target_link_libraries(freerotationtest
+                      dimg
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
-                      digikamcore
                       ${OpenCV_LIBRARIES}
                      )
 
@@ -167,7 +152,6 @@ target_link_libraries(searchtextbartest
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
-                      digikamcore
                       ${OpenCV_LIBRARIES}
 )
 
@@ -182,10 +166,10 @@ add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
 ecm_mark_as_test(filesaveoptionsboxtest)
 
 target_link_libraries(filesaveoptionsboxtest
+                      digikamwidgets
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
-                      digikamcore
                       ${OpenCV_LIBRARIES}
 )
 
@@ -250,10 +234,9 @@ ecm_mark_as_test(albummodeltest)
 #                      Qt5::Sql
 #                      KF5::KIOCore
 #                      KF5::KDELibs4Support
-#                      ${KF5KDcraw_LIBRARIES}
-#                      ${KF5KExiv2_LIBRARIES}
+#                      KF5::KDcraw
+#                      KF5::KExiv2
 #                      digikamdatabase
-#                      digikamcore
 #                     )
 #
 #if(${KF5Kipi_FOUND})
@@ -276,11 +259,11 @@ add_test(dimagehistorytest dimagehistorytest)
 ecm_mark_as_test(dimagehistorytest)
 
 target_link_libraries(dimagehistorytest
+                      dimg
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
-                      digikamcore
+                      KF5::KExiv2
                       ${OpenCV_LIBRARIES}
 )
 
@@ -292,19 +275,20 @@ set(dimagehistorygraphtest_SRCS
     modeltest/modeltest.cpp
 )
 
+
 add_executable(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
 add_test(dimagehistorygraphtest dimagehistorygraphtest)
 ecm_mark_as_test(dimagehistorygraphtest)
 
 target_link_libraries(dimagehistorygraphtest
+                      dimg
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
                       KF5::KIOCore
-                      ${KF5KExiv2_LIBRARIES}
+                      KF5::KExiv2
                       ${OpenCV_LIBRARIES}
                       digikamdatabase
-                      digikamcore
 )
 
 #------------------------------------------------------------------------
@@ -318,12 +302,12 @@ add_test(dimagefilteractiontest dimagefilteractiontest)
 ecm_mark_as_test(dimagefilteractiontest)
 
 target_link_libraries(dimagefilteractiontest
+                      dimg
                       Qt5::Gui
                       Qt5::Test
                       KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
+                      KF5::KExiv2
                       ${OpenCV_LIBRARIES}
-                      digikamcore
 )
 
 #------------------------------------------------------------------------
@@ -340,8 +324,7 @@ ecm_mark_as_test(databasefieldstest)
 #                      Qt5::Gui
 #                      Qt5::Test
 #                      KF5::KDELibs4Support
-#                      ${KF5KExiv2_LIBRARIES}
-#                      digikamcore
+#                      KF5::KExiv2
 #)
 
 #------------------------------------------------------------------------
@@ -389,12 +372,12 @@ set(testdimgloader_SRCS testdimgloader.cpp)
 add_executable(testdimgloader ${testdimgloader_SRCS})
 ecm_mark_nongui_executable(testdimgloader)
 target_link_libraries(testdimgloader
-                      digikamcore
+                      dimg
                       Qt5::Core
                       Qt5::Gui
                       KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
 )
 
@@ -402,12 +385,12 @@ set(loadsavethreadtest_SRCS loadsavethreadtest.cpp)
 add_executable(loadsavethreadtest ${loadsavethreadtest_SRCS})
 ecm_mark_nongui_executable(loadsavethreadtest)
 target_link_libraries(loadsavethreadtest
-                      digikamcore
+                      dimg
                       Qt5::Core
                       Qt5::Gui
                       KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
 )
 
@@ -417,10 +400,9 @@ if(LENSFUN_FOUND)
     add_executable(testlensfuniface ${testlensfuniface_SRCS})
     ecm_mark_nongui_executable(testlensfuniface)
     target_link_libraries(testlensfuniface
-                          digikamcore
                           Qt5::Core
                           KF5::KDELibs4Support
-                          ${KF5KExiv2_LIBRARIES}
+                          KF5::KExiv2
                           ${LENSFUN_LIBRARIES}
                           ${OpenCV_LIBRARIES}
     )
@@ -442,12 +424,11 @@ set (testnrestimate_SRCS testnrestimate.cpp)
 add_executable (testnrestimate ${testnrestimate_SRCS})
 ecm_mark_nongui_executable(testnrestimate)
 target_link_libraries(testnrestimate
-                      digikamcore
                       Qt5::Core
                       Qt5::Gui
                       KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
 )
 
@@ -457,45 +438,29 @@ set(testautocrop_SRCS testautocrop.cpp)
 add_executable(testautocrop ${testautocrop_SRCS})
 ecm_mark_nongui_executable(testautocrop)
 target_link_libraries(testautocrop
-                      digikamcore
                       Qt5::Core
                       Qt5::Gui
                       KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
 )
 
 #------------------------------------------------------------------------
 
 set(testdatabase_SRCS testdatabase.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/album.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumhistory.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albummanager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumwatch.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/scancontroller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/databaseguierrorhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_p.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_albums.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_database.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_iconview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_miscs.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_mime.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_tooltips.cpp
 )
 
 add_executable(testdatabase ${testdatabase_SRCS})
 target_link_libraries(testdatabase
-                      digikamcore
                       digikamdatabase
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
                       KF5::KDELibs4Support
                       KF5::KIOCore
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
 )
 
