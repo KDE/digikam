@@ -16,15 +16,13 @@ set(digikamimageplugin_color_PART_SRCS autocorrectiontool.cpp
                                        adjustlevelstool.cpp
                                        imageplugin_color.cpp
                                        filmtool.cpp
-   )
+)
 
 
 add_library(digikamimageplugin_color MODULE ${digikamimageplugin_color_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_color
                       editorplugin
-
-                      #KF5::KIOCore
                      )
 
 install(TARGETS digikamimageplugin_color             DESTINATION ${PLUGIN_INSTALL_DIR})
