@@ -32,6 +32,7 @@
 #include <QString>
 #include <QTimer>
 #include <QCommandLineParser>
+#include <QDebug>
 
 // KDE includes
 
@@ -40,7 +41,6 @@
 
 // digiKam includes
 
-#include "digikam_debug.h"
 #include "daboutdata.h"
 #include "albummanager.h"
 #include "collectionlocation.h"
@@ -99,7 +99,7 @@ int main(int argc, char** argv)
     // initialize database
     bool b = AlbumManager::instance()->setDatabase(params, false, "/media/fotos/Digikam Sample/");
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Database initialization done: " << b;
+    qDebug() << "Database initialization done: " << b;
 
     QTimer::singleShot(500, &app, SLOT(quit()));
     app.exec();

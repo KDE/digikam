@@ -23,18 +23,17 @@
 
 #include "databasefieldstest.h"
 
-// KDE includes
+// Qt includes
 
-#include <qtest_kde.h>
+#include <QTest>
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "databasefields.h"
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(DatabaseFieldsTest, GUI)
+QTEST_MAIN(DatabaseFieldsTest)
 
 using namespace DatabaseFields;
 

@@ -27,9 +27,9 @@
 
 #include <cmath>
 
-// KDE includes
+// Qt includes
 
-#include <qtest_kde.h>
+#include <QTest>
 
 // Local includes
 
@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(FreeRotationTest, GUI)
+QTEST_MAIN(FreeRotationTest)
 
 void FreeRotationTest::testCalculateAngle_data()
 {

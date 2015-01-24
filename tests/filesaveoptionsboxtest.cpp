@@ -22,9 +22,9 @@
 
 #include "filesaveoptionsboxtest.h"
 
-// KDE includes
+// Qt includes
 
-#include <qtest_kde.h>
+#include <QTest>
 
 // Local inclues
 
@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(FileSaveOptionsBoxTest, GUI)
+QTEST_MAIN(FileSaveOptionsBoxTest)
 
 void FileSaveOptionsBoxTest::testDiscoverFormat_data()
 {

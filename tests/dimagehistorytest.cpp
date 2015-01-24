@@ -29,10 +29,8 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTime>
-
-// KDE includes
-
-#include <qtest_kde.h>
+#include <QTest>
+#include <QDebug>
 
 // Local includes
 
@@ -44,7 +42,7 @@
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(DImageHistoryTest, GUI)
+QTEST_MAIN(DImageHistoryTest)
 
 void DImageHistoryTest::initTestCase()
 {
