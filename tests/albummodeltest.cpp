@@ -31,11 +31,11 @@
 
 // KDE includes
 
+#include <KUrl>
 #include <kio/netaccess.h>
 
 // Local includes
 
-#include "albumdb.h"
 #include "albumfiltermodel.h"
 #include "albummanager.h"
 #include "albummodel.h"
@@ -43,15 +43,15 @@
 #include "albumthumbnailloader.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
-#include "digikam_config.h"
+//#include "digikam_config.h"
 #include "loadingcacheinterface.h"
-#include "modeltest.h"
+#include "modeltest/modeltest.h"
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
 
 using namespace Digikam;
 
-const QString IMAGE_PATH(KDESRCDIR"albummodeltestimages");
+const QString IMAGE_PATH(QFINDTESTDATA("albummodeltestimages"));
 
 QTEST_MAIN(AlbumModelTest)
 
@@ -73,7 +73,7 @@ void AlbumModelTest::initTestCase()
     if (QDir::temp().exists(tempSuffix))
     {
         QString msg = QString("Error creating temp path") + dbPath;
-        QVERIFY2(false, msg.toAscii().data());
+        QVERIFY2(false, msg);
     }
 
     QDir::temp().mkdir(tempSuffix);
@@ -131,14 +131,14 @@ void AlbumModelTest::cleanupTestCase()
     QString error; \
     result = AlbumManager::instance()->createPAlbum(parent, name, name, \
                     QDate::currentDate(), albumCategory, error); \
-    QVERIFY2(result, QString(QString("Error creating PAlbum for test: ") + error).toAscii()); \
+    QVERIFY2(result, "Error creating PAlbum for test: " + error); \
 }
 
 #define safeCreateTAlbum(parent, name, result) \
 { \
     QString error; \
     result = AlbumManager::instance()->createTAlbum(parent, name, "", error); \
-    QVERIFY2(result, QString(QString("Error creating TAlbum for test: ") + error).toAscii()); \
+    QVERIFY2(result, "Error creating TAlbum for test: ") + error); \
 }
 
 void AlbumModelTest::init()
@@ -189,7 +189,7 @@ void AlbumModelTest::init()
     // Create some more through AlbumManager
     palbumRoot2 = AlbumManager::instance()->createPAlbum(dbPath, "root2",
                   "root album 2", QDate::currentDate(), albumCategory, error);
-    QVERIFY2(palbumRoot2, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
+    QVERIFY2(palbumRoot2, "Error creating PAlbum for test: " + error);
 
     safeCreatePAlbum(palbumRoot0, "root0child0", palbumChild0Root0);
     safeCreatePAlbum(palbumRoot0, "root0child1", palbumChild1Root0);
@@ -349,7 +349,7 @@ void AlbumModelTest::slotStartModelDataChanged(const QModelIndex& topLeft, const
         {
             QString message = "Album id " + QString::number(albumId)
                               + " was changed before adding signal was received";
-            QFAIL(message.toAscii().data());
+            QFAIL(message);
             qDebug() << message;
         }
 
@@ -404,9 +404,9 @@ void AlbumModelTest::cleanup()
 
     QString error;
     bool removed = AlbumManager::instance()->deleteTAlbum(talbumRoot0, error);
-    QVERIFY2(removed, QString("Error removing a tag: " + error).toAscii());
+    QVERIFY2(removed, "Error removing a tag: " + error);
     removed = AlbumManager::instance()->deleteTAlbum(talbumRoot1, error);
-    QVERIFY2(removed, QString("Error removing a tag: " + error).toAscii());
+    QVERIFY2(removed, "Error removing a tag: " + error);
 
     QCOMPARE(AlbumManager::instance()->allTAlbums().size(), 1);
 
@@ -452,13 +452,13 @@ void AlbumModelTest::testDisablePAlbumCount()
     {
         QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
         QString collectionTitle = albumModel.data(collectionIndex, Qt::DisplayRole).toString();
-        QVERIFY2(countRegEx.exactMatch(collectionTitle), QString('\'' + collectionTitle + "' matching error").toAscii().data());
+        QVERIFY2(countRegEx.exactMatch(collectionTitle), collectionTitle + " matching error");
 
         for (int albumRow = 0; albumRow < albumModel.rowCount(collectionIndex); ++albumRow)
         {
             QModelIndex albumIndex = albumModel.index(albumRow, 0, collectionIndex);
             QString albumTitle = albumModel.data(albumIndex, Qt::DisplayRole).toString();
-            QVERIFY2(countRegEx.exactMatch(albumTitle), QString('\'' + albumTitle + "' matching error").toAscii().data());
+            QVERIFY2(countRegEx.exactMatch(albumTitle), albumTitle + " matching error");
         }
 
     }
@@ -474,13 +474,13 @@ void AlbumModelTest::testDisablePAlbumCount()
     {
         QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
         QString collectionTitle = albumModel.data(collectionIndex, Qt::DisplayRole).toString();
-        QVERIFY2(!countRegEx.exactMatch(collectionTitle), QString('\'' + collectionTitle + "' matching error").toAscii().data());
+        QVERIFY2(!countRegEx.exactMatch(collectionTitle), collectionTitle + "' matching error");
 
         for (int albumRow = 0; albumRow < albumModel.rowCount(collectionIndex); ++albumRow)
         {
             QModelIndex albumIndex = albumModel.index(albumRow, 0, collectionIndex);
             QString albumTitle = albumModel.data(albumIndex, Qt::DisplayRole).toString();
-            QVERIFY2(!countRegEx.exactMatch(albumTitle), QString('\'' + albumTitle + "' matching error").toAscii().data());
+            QVERIFY2(!countRegEx.exactMatch(albumTitle), albumTitle + " matching error");
         }
 
     }
