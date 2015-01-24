@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include <template.h>
+#include "template.h"
 
 namespace Digikam
 {
