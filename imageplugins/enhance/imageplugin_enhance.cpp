@@ -306,5 +306,3 @@ void ImagePlugin_Enhance::slotAntiVignetting()
 }
 
 } // namespace DigikamEnhanceImagePlugin
-
-#include "imageplugin_enhance.moc"
