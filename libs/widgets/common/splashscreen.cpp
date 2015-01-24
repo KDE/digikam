@@ -78,7 +78,8 @@ public:
 };
 
 SplashScreen::SplashScreen()
-    : KSplashScreen(QPixmap()), d(new Private)
+    : QSplashScreen(QPixmap()),
+      d(new Private)
 {
     QPixmap splash;
 

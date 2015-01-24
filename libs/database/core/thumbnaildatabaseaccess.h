@@ -30,7 +30,6 @@
 #include "databaseparameters.h"
 #include "databaseerrorhandler.h"
 
-
 namespace Digikam
 {
 

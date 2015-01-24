@@ -28,10 +28,7 @@
 // Qt includes
 
 #include <QPainter>
-
-// KDE includes
-
-#include <ksplashscreen.h>
+#include <QSplashScreen>
 
 // Local includes
 
@@ -40,7 +37,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SplashScreen : public KSplashScreen
+class DIGIKAM_EXPORT SplashScreen : public QSplashScreen
 {
     Q_OBJECT
 
