@@ -30,6 +30,7 @@
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QTest>
+#include <QDebug>
 
 // Libkexiv2 includes
 

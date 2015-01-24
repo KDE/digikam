@@ -26,6 +26,7 @@
 
 #include <QFileInfo>
 #include <QString>
+#include <QDebug>
 
 // Libkexiv2 includes
 
@@ -33,7 +34,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
 #include "drawdecoding.h"
 #include "nrestimate.h"
@@ -48,8 +48,8 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "testnrestimate - test NR parameters";
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Usage: <image>";
+        qDebug() << "testnrestimate - test NR parameters";
+        qDebug() << "Usage: <image>";
         return -1;
     }
 
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
     nre.startFilterDirectly();
     NRContainer prm = nre.settings();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << prm;
+    qDebug() << prm;
 
     NRFilter nrf(&img, 0, prm);
     nrf.startFilterDirectly();

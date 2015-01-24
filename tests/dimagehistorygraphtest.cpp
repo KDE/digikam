@@ -30,11 +30,13 @@
 #include <QFileInfo>
 #include <QTime>
 #include <QTreeView>
+#include <QDebug>
+#include <QTest>
 
 // KDE includes
 
 #include <kio/netaccess.h>
-#include <qtest_kde.h>
+#include <KUrl> // TODO port
 
 // Local includes
 
@@ -54,7 +56,7 @@
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(DImageHistoryGraphTest, GUI)
+QTEST_MAIN(DImageHistoryGraphTest)
 
 void DImageHistoryGraphTest::initTestCase()
 {

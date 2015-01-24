@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QTime>
 #include <QTest>
+#include <QDebug>
 
 // Libkexiv2 includes
 
