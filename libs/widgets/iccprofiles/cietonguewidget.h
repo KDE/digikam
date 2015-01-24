@@ -29,17 +29,11 @@
 #include <QWidget>
 #include <QColor>
 #include <QPaintEvent>
-
-// KDE includes
-
 #include <QUrl>
-
-// lcms includes
-
-#include "digikam-lcms.h"
 
 // Local includes
 
+#include "digikam-lcms.h"
 #include "digikam_export.h"
 
 namespace Digikam

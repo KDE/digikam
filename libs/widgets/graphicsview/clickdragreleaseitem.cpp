@@ -31,12 +31,9 @@
 #include <QObject>
 #include <QPointF>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "itemvisibilitycontroller.h"
 
 namespace Digikam

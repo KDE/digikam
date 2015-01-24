@@ -28,12 +28,9 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "graphicsdimgitem.h"
 #include "graphicsdimgview.h"
 #include "imagezoomsettings.h"

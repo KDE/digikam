@@ -28,9 +28,6 @@
 
 #include <QWidget>
 #include <QModelIndex>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

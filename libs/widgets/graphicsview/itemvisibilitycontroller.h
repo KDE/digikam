@@ -29,8 +29,6 @@
 #include <QAbstractAnimation>
 #include <QVariant>
 
-// KDE includes
-
 // Local includes
 
 #include "digikam_export.h"

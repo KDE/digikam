@@ -34,14 +34,11 @@
 
 // KDE includes
 
-
-
-
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "cietonguewidget.h"
 #include "metadatalistview.h"
 

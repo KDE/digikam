@@ -23,12 +23,9 @@
 
 #include "dimgchilditem.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "graphicsdimgitem.h"
 #include "imagezoomsettings.h"
 

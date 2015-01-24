@@ -28,9 +28,6 @@
 
 #include <QAbstractListModel>
 #include <QList>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes
