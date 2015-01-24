@@ -26,7 +26,7 @@
 
 #include <QFileInfo>
 #include <QDateTime>
-#include <QTestWidgets>
+#include <QTest>
 
 // KDE includes
 

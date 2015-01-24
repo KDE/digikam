@@ -55,10 +55,13 @@
 namespace Digikam
 {
 
+#pragma message("should real setup allow overloading of this?!")
+/*
 bool Setup::execSinglePage(Page)
 {
     return true;
 }
+*/
 
 }
 
@@ -67,8 +70,7 @@ using namespace Digikam;
 int main(int argc, char** argv)
 {
     KAboutData aboutData("digikam",
-                         0,
-                         ki18n("digiKam"),
+                         i18n("digiKam"),
                          digiKamVersion().toAscii(),
                          DAboutData::digiKamSlogan(),
                          KAboutLicense::GPL,
