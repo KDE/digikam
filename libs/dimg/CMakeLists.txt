@@ -222,6 +222,11 @@ target_include_directories(dimg
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dklcms> # ugly hack for dklcms.. librarify or move to dimg?
 )
 
+# TODO ugly way to expose lensfun include dirs to users of dimg..
+if(LENSFUN_FOUND)
+    target_include_directories(dimg PUBLIC ${LENSFUN_INCLUDE_DIRS})
+endif()
+
 target_link_libraries(dimg
                       digikamwidgets
                       dmetadata
