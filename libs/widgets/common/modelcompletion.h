@@ -28,7 +28,7 @@
 
 // QT includes
 
-#include <qabstractitemmodel.h>
+#include <QAbstractItemModel>
 
 // KDE includes
 
