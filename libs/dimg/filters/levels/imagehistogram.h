@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QtCore/QEvent>
-#include <QtCore/QThread>
+#include <QEvent>
+#include <QThread>
 
 // Local includes
 

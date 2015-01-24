@@ -28,8 +28,8 @@
 
 // Qt includes
 
-#include <QtCore/QEvent>
-#include <QtCore/QString>
+#include <QEvent>
+#include <QString>
 #include <QLabel>
 
 // Local includes

@@ -27,7 +27,7 @@
 // Qt includes
 
 #include <QWidget>
-#include <QtCore/QEvent>
+#include <QEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
 

@@ -32,9 +32,9 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
-#include <QtCore/QPoint>
-#include <QtCore/QEvent>
-#include <QtCore/QTimerEvent>
+#include <QPoint>
+#include <QEvent>
+#include <QTimerEvent>
 
 // Local includes
 

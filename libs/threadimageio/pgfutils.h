@@ -26,9 +26,9 @@
 
 // Qt includes
 
-#include <QtCore/QString>
+#include <QString>
 #include <QImage>
-#include <QtCore/QByteArray>
+#include <QByteArray>
 
 // Local includes
 

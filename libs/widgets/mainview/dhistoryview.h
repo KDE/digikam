@@ -28,8 +28,8 @@
 
 #include <QTreeWidget>
 #include <QWidget>
-#include <QtCore/QString>
-#include <QtCore/QVariant>
+#include <QString>
+#include <QVariant>
 
 // Local includes
 

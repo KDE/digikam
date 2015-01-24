@@ -36,12 +36,10 @@
 
 #include <kfileitem.h>
 #include <klocalizedstring.h>
-#include <kconfig.h>
-#include <kglobalsettings.h>
+#include <kconfiggroup.h>
 
 // Libkdcraw includes
 
-#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes
@@ -205,10 +203,9 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
 
     QString str;
     QString unavailable(i18n("<i>unavailable</i>"));
-
-    KFileItem fi(url);
     QFileInfo fileInfo(url.toLocalFile());
     DMetadata metaData(url.toLocalFile());
+    KFileItem fi(url);
 
     // -- File system information -----------------------------------------
 
@@ -216,10 +213,10 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     str = KLocale::global()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
     m_propertiesTab->setFileModifiedDate(str);
 
-    str = QString("%1 (%2)").arg(KIO::convertSize(fi.size()))
-          .arg(KLocale::global()->formatNumber(fi.size(), 0));
+    str = QString("%1 (%2)").arg(KIO::convertSize(fileInfo.size()))
+          .arg(KLocale::global()->formatNumber(fileInfo.size(), 0));
     m_propertiesTab->setFileSize(str);
-    m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fi.user()).arg(fi.group()));
+    m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
     m_propertiesTab->setFilePermissions(fi.permissionsString());
 
     // -- Image Properties --------------------------------------------------
@@ -361,11 +358,7 @@ void ImagePropertiesSideBar::doLoadState()
 
     KConfigGroup group = getConfigGroup();
 
-#if KDCRAW_VERSION >= 0x020000
     m_propertiesTab->readSettings(group);
-#else
-    m_propertiesTab->readSettings();
-#endif
 
 #ifdef HAVE_KGEOMAP
     const KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
@@ -385,11 +378,7 @@ void ImagePropertiesSideBar::doSaveState()
 
     KConfigGroup group = getConfigGroup();
 
-#if KDCRAW_VERSION >= 0x020000
     m_propertiesTab->writeSettings(group);
-#else
-    m_propertiesTab->writeSettings();
-#endif
 
 #ifdef HAVE_KGEOMAP
     KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));

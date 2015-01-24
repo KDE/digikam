@@ -26,7 +26,7 @@
 #ifndef IMAGEPROPERTIESSIDEBARDB_H
 #define IMAGEPROPERTIESSIDEBARDB_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
 

@@ -47,22 +47,22 @@ namespace Coordinates
 
 inline double toRadians(double deg)
 {
-    return deg * M_PI / 180.0;
+    return (deg * M_PI / 180.0);
 }
 
 inline double toRadiansFactor()
 {
-    return M_PI / 180.0;
+    return (M_PI / 180.0);
 }
 
 inline double toDegrees(double rad)
 {
-    return rad * 180.0 / M_PI;
+    return (rad * 180.0 / M_PI);
 }
 
 inline double toDegreesFactor()
 {
-    return 180.0 / M_PI;
+    return (180.0 / M_PI);
 }
 
 } // namespace Coordinates

@@ -34,7 +34,6 @@
 // KDE includes
 
 #include <kcategorydrawer.h>
-#include <kcolorscheme.h>
 #include <klocalizedstring.h>
 #include <kpixmapsequence.h>
 

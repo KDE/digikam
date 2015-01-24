@@ -32,11 +32,11 @@
 
 // Qt includes
 
-#include <QtCore/QByteArray>
-#include <QtCore/QFlags>
-#include <QtCore/QSize>
-#include <QtCore/QRect>
-#include <QtCore/QVariant>
+#include <QByteArray>
+#include <QFlags>
+#include <QSize>
+#include <QRect>
+#include <QVariant>
 
 // Local includes
 

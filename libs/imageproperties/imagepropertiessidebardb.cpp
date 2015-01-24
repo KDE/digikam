@@ -32,13 +32,13 @@
 #include <QRect>
 #include <QColor>
 #include <QSplitter>
+#include <QFileInfo>
 
 // KDE includes
 
 #include <kfileitem.h>
 #include <klocalizedstring.h>
-#include <kconfig.h>
-
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -531,8 +531,9 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
         {
             QString str;
             QString unavailable(i18n("<i>unavailable</i>"));
+            QFileInfo fileInfo(url.toLocalFile());
             KFileItem fi(url);
-
+            
             // -- File system information -----------------------------------------
 
             ImageCommonContainer commonInfo  = info.imageCommonContainer();
@@ -547,7 +548,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             m_propertiesTab->setFileSize(str);
 
             //  These infos are not stored in DB
-            m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fi.user()).arg(fi.group()));
+            m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
             m_propertiesTab->setFilePermissions(fi.permissionsString());
 
             // -- Image Properties --------------------------------------------------

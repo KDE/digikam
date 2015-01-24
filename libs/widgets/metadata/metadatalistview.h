@@ -27,8 +27,8 @@
 
 // Qt includes
 
-#include <QtCore/QString>
-#include <QtCore/QMap>
+#include <QString>
+#include <QMap>
 #include <QResizeEvent>
 #include <QTreeWidget>
 

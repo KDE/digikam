@@ -25,8 +25,6 @@
 #ifndef VERSIONSOVERLAYS_H
 #define VERSIONSOVERLAYS_H
 
-// Qt includes
-
 // KDE includes
 
 #include <kguiitem.h>

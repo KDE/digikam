@@ -704,6 +704,7 @@ void ImagePropertiesTab::setVideoAudioBitRate(const QString& str)
     QString audioBitRateString = str;
     bool ok;
     const int audioBitRateInt = str.toInt(&ok);
+
     if (ok)
     {
         audioBitRateString = KLocale::global()->formatNumber(audioBitRateInt, 0);

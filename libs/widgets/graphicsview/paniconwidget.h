@@ -28,12 +28,12 @@
 // Qt includes
 
 #include <QWidget>
-#include <QtCore/QRect>
+#include <QRect>
 #include <QImage>
 #include <QPixmap>
 #include <QHideEvent>
 #include <QMouseEvent>
-#include <QtCore/QTimerEvent>
+#include <QTimerEvent>
 #include <QPaintEvent>
 
 // Local includes

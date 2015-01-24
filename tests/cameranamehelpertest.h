@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class CameraNameHelperTest : public QObject
 {

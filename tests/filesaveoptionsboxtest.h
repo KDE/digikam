@@ -25,7 +25,7 @@
 
 // Qt includes
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class FileSaveOptionsBoxTest : public QObject
 {

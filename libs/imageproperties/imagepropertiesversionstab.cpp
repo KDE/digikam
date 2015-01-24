@@ -29,16 +29,13 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QModelIndex>
+#include <QUrl>
 
 // KDE includes
 
-#include <kconfig.h>
 #include <kconfiggroup.h>
-
 #include <klocalizedstring.h>
-
 #include <kstandardguiitem.h>
-#include <QUrl>
 
 // Local includes
 

@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include <QUrl>
 #include <klocalizedstring.h>
 
 // Local includes

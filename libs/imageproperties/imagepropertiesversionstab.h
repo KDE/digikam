@@ -30,9 +30,6 @@
 #include <QModelIndex>
 #include <QPoint>
 #include <QTabWidget>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

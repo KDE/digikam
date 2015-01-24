@@ -27,7 +27,7 @@
 // Qt includes
 
 #include <QSharedDataPointer>
-#include <QtCore/QPoint>
+#include <QPoint>
 #include <QPolygon>
 
 // KDE includes

@@ -28,9 +28,6 @@
 
 #include <QString>
 #include <QColor>
-
-// KDE includes
-
 #include <QUrl>
 
 // Libkdcraw includes

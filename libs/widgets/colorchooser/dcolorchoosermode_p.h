@@ -29,7 +29,7 @@
 
 // Qt includes
 
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 class QColor;
 

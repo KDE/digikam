@@ -29,7 +29,7 @@
 #include <QLabel>
 #include <QListView>
 #include <QComboBox>
-#include <QtCore/QPersistentModelIndex>
+#include <QPersistentModelIndex>
 
 // KDE includes
 

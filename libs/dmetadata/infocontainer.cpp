@@ -25,7 +25,7 @@
 
 // Qt includes
 
-#include <QtCore/QDataStream>
+#include <QDataStream>
 
 namespace Digikam
 {

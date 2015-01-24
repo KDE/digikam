@@ -27,8 +27,8 @@
 
 // Qt includes
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 

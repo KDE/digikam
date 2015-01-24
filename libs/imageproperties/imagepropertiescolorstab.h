@@ -29,9 +29,6 @@
 #include <QWidget>
 #include <QByteArray>
 #include <QTabWidget>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

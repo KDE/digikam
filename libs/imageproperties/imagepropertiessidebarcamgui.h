@@ -26,7 +26,7 @@
 #ifndef IMAGEPROPERTIESSIDEBARCAMGUI_H
 #define IMAGEPROPERTIESSIDEBARCAMGUI_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
 

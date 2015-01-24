@@ -27,10 +27,10 @@
 
 //Qt includes
 
-#include <QtCore/QXmlStreamWriter>
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QHash>
-#include <QtCore/QList>
+#include <QXmlStreamWriter>
+#include <QXmlStreamReader>
+#include <QHash>
+#include <QList>
 #include <QMetaType>
 #include <QSharedDataPointer>
 #include <QString>
