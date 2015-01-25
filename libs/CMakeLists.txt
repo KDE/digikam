@@ -12,6 +12,7 @@ add_subdirectory(notificationmanager)
 add_subdirectory(models)
 add_subdirectory(template)
 add_subdirectory(dialogs)
+add_subdirectory(3rdparty)
 
 if(${KF5KGeoMap_FOUND})
     add_subdirectory(kgeomaphelper)

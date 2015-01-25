@@ -566,11 +566,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # digiKam target parts
 
-    set(libkde3rdparty_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo/kmemoryinfo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify/kinotify.cpp
-       )
-
     add_subdirectory(data)
     add_subdirectory(utilities)
     add_subdirectory(app)

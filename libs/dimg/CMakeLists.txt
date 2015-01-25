@@ -232,6 +232,7 @@ target_link_libraries(dimg
                       dmetadata
                       dthread
                       jpegutils
+                      3rdparty # KMemoryInfo
                       
                       Qt5::Core
                       Qt5::Gui

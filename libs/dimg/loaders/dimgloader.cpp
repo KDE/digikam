@@ -46,7 +46,7 @@
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
-#include "kmemoryinfo.h"
+#include "kmemoryinfo/kmemoryinfo.h"
 
 namespace Digikam
 {
