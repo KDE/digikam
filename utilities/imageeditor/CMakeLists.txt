@@ -75,7 +75,7 @@ set(libeditoriface_SRCS
     editor/actioncategorizedview.cpp
 )
 
-add_library(imageeditor STATIC ${libeditorcore_SRCS} ${libeditordlg_SRCS} ${libeditorgui_SRCS} ${libeditoriface_SRCS} ${libeditorplugin_SRCS} ${libeditorprintiface_SRCS} ${libeditorrawimport_SRCS} ${libeditorwidgets_SRCS})
+add_library(imageeditor STATIC ${libeditorcore_SRCS} ${libeditordlg_SRCS} ${libeditorgui_SRCS} ${libeditoriface_SRCS} ${libeditorprintiface_SRCS} ${libeditorrawimport_SRCS} ${libeditorwidgets_SRCS})
 
 target_include_directories(imageeditor PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/printiface>
@@ -90,6 +90,4 @@ target_include_directories(imageeditor PUBLIC
 target_link_libraries(imageeditor
                       versionmanager
                       editorplugin
-                      
-                      #KF5::NotifyConfig # for KNotifyConfigWidget
 )

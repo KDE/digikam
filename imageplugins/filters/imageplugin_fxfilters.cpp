@@ -186,3 +186,5 @@ void ImagePlugin_FxFilters::slotFilmGrain()
 }
 
 } // namespace DigikamFxFiltersImagePlugin
+
+#include "imageplugin_fxfilters.moc"

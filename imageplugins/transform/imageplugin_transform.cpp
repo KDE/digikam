@@ -207,3 +207,5 @@ void ImagePlugin_Transform::slotFreeRotation()
 }
 
 } // namespace DigikamTransformImagePlugin
+
+#include "imageplugin_transform.moc"
