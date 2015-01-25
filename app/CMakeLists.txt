@@ -30,7 +30,6 @@ target_link_libraries(digikamcore
                       KF5::NotifyConfig
 
                       ${OpenCV_LIBRARIES}
-                      ${PGF_LIBRARIES}
 
                       # Required by CImg library which is using pthread internally.
                       ${CMAKE_THREAD_LIBS_INIT}

@@ -1,3 +1,6 @@
+# Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
+#kde_target_enable_exceptions()
+
 set(libdimg_SRCS
     dimg.cpp
     dimg_debug.cpp
@@ -232,6 +235,7 @@ target_link_libraries(dimg
                       dmetadata
                       dthread
                       jpegutils
+                      pgfutils
                       3rdparty # KMemoryInfo
                       
                       Qt5::Core
@@ -242,6 +246,10 @@ target_link_libraries(dimg
 
                       KF5::KDELibs4Support # required for KColorButton
                       
+                      # Required by CImg library which is using pthread internally.
+                      # TODO is this necessary still?
+                      ${CMAKE_THREAD_LIBS_INIT}
+
                       ${LCMS_LIBRARIES} # filters
                       
                       ${TIFF_LIBRARIES}
