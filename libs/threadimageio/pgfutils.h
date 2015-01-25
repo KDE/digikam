@@ -30,10 +30,6 @@
 #include <QImage>
 #include <QByteArray>
 
-// Local includes
-
-#include "digikam_export.h"
-
 namespace Digikam
 {
 

@@ -39,10 +39,7 @@ extern "C"
 #include <QImage>
 #include <QByteArray>
 #include <QFile>
-
-// Local includes
-
-#include "digikam_debug.h"
+#include <QDebug>
 
 // Windows includes
 
@@ -69,12 +66,12 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
     {
         if (data.isEmpty())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "PGF image data to decode : size is null";
+            qDebug() << "PGFUtils: PGF image data to decode : size is null";
             return false;
         }
 
         CPGFMemoryStream stream((UINT8*)data.data(), (size_t)data.size());
-        if (verbose) qCDebug(DIGIKAM_GENERAL_LOG) << "image data stream size is : " << stream.GetSize();
+        if (verbose) qDebug() << "PGFUtils: image data stream size is : " << stream.GetSize();
 
         CPGFImage pgfImg;
         // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
@@ -82,18 +79,18 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
 
         pgfImg.Open(&stream);
 
-        if (verbose) qCDebug(DIGIKAM_GENERAL_LOG) << "PGF image is open";
+        if (verbose) qDebug() << "PGFUtils: PGF image is open";
 
         if (pgfImg.Channels() != 4)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "PGF channels not supported";
+            qDebug() << "PGFUtils: PGF channels not supported";
             return false;
         }
 
         img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_ARGB32);
         pgfImg.Read();
 
-        if (verbose) qCDebug(DIGIKAM_GENERAL_LOG) << "PGF image is read";
+        if (verbose) qDebug() << "PGFUtils: PGF image is read";
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
         {
@@ -106,7 +103,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
             pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
         }
 
-        if (verbose) qCDebug(DIGIKAM_GENERAL_LOG) << "PGF image is decoded";
+        if (verbose) qDebug() << "PGFUtils: PGF image is decoded";
     }
     catch (IOException& e)
     {
@@ -117,7 +114,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
             err -= AppError;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error running libpgf (" << err << ")!";
+        qDebug() << "PGFUtils: Error running libpgf (" << err << ")!";
         return false;
     }
 
@@ -135,7 +132,7 @@ bool writePGFImageFile(const QImage& image, const QString& filePath, int quality
 
     if (fd == INVALID_HANDLE_VALUE)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Could not open destination file.";
+        qDebug() << "PGFUtils: Error: Could not open destination file.";
         return false;
     }
 
@@ -144,7 +141,7 @@ bool writePGFImageFile(const QImage& image, const QString& filePath, int quality
 
     if (fd == -1)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Could not open destination file.";
+        qDebug() << "PGFUtils: Error: Could not open destination file.";
         return false;
     }
 #endif
@@ -155,12 +152,12 @@ bool writePGFImageFile(const QImage& image, const QString& filePath, int quality
 
     if (!nWrittenBytes)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Written PGF file : data size is null";
+        qDebug() << "PGFUtils: Written PGF file : data size is null";
         ret = false;
     }
     else
     {
-        if (verbose) qCDebug(DIGIKAM_GENERAL_LOG) << "file size written : " << nWrittenBytes;
+        if (verbose) qDebug() << "PGFUtils: file size written : " << nWrittenBytes;
     }
 
 #ifdef WIN32
@@ -182,7 +179,7 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
         CPGFMemoryStream stream(rawSize);
 
         if (verbose)
-            qCDebug(DIGIKAM_GENERAL_LOG) << "PGF stream memory allocation in bytes: " << rawSize;
+            qDebug() << "PGFUtils: PGF stream memory allocation in bytes: " << rawSize;
 
         UINT32 nWrittenBytes = 0;
         bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
@@ -203,13 +200,13 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
 
         if (!pgfsize)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Encoded PGF image : data size is null";
+            qDebug() << "PGFUtils: Encoded PGF image : data size is null";
             ret = false;
         }
         else
         {
             if (verbose)
-                qCDebug(DIGIKAM_GENERAL_LOG) << "data size written : " << pgfsize;
+                qDebug() << "PGFUtils: data size written : " << pgfsize;
         }
 
         return ret;
@@ -223,7 +220,7 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
             err -= AppError;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error running libpgf (" << err << ")!";
+        qDebug() << "PGFUtils: Error running libpgf (" << err << ")!";
         return false;
     }
 }
@@ -234,7 +231,7 @@ bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int qual
     {
         if (image.isNull())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Thumb image is null";
+            qDebug() << "PGFUtils: Thumb image is null";
             return false;
         }
 
@@ -244,7 +241,7 @@ bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int qual
         if (image.format() != QImage::Format_ARGB32)
         {
             img = image.convertToFormat(QImage::Format_ARGB32);
-            if (verbose) qCDebug(DIGIKAM_GENERAL_LOG) << "RGB => ARGB";
+            if (verbose) qDebug() << "PGFUtils: RGB => ARGB";
         }
         else
         {
@@ -276,15 +273,15 @@ bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int qual
 
         if (verbose)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "PGF image settings:";
-            qCDebug(DIGIKAM_GENERAL_LOG) << "   width: "              << header.width;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "   height: "             << header.height;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "   nLevels: "            << header.nLevels;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "   quality: "            << header.quality;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "   bpp: "                << header.bpp;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "   channels: "           << header.channels;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "   mode: "               << header.mode;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "   usedBitsPerChannel: " << header.usedBitsPerChannel;
+            qDebug() << "PGFUtils: PGF image settings:";
+            qDebug() << "PGFUtils:    width: "              << header.width;
+            qDebug() << "PGFUtils:    height: "             << header.height;
+            qDebug() << "PGFUtils:    nLevels: "            << header.nLevels;
+            qDebug() << "PGFUtils:    quality: "            << header.quality;
+            qDebug() << "PGFUtils:    bpp: "                << header.bpp;
+            qDebug() << "PGFUtils:    channels: "           << header.channels;
+            qDebug() << "PGFUtils:    mode: "               << header.mode;
+            qDebug() << "PGFUtils:    usedBitsPerChannel: " << header.usedBitsPerChannel;
         }
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
@@ -320,7 +317,7 @@ bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int qual
             err -= AppError;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error running libpgf (" << err << ")!";
+        qDebug() << "PGFUtils: Error running libpgf (" << err << ")!";
         return false;
     }
 
@@ -333,7 +330,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 
     if (!file)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Could not open source file.";
+        qDebug() << "PGFUtils: Error: Could not open source file.";
         return false;
     }
 
@@ -412,16 +409,16 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 
 /*
         const PGFHeader* header = pgf.GetHeader();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF width    = " << header->width;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF height   = " << header->height;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF bbp      = " << header->bpp;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF channels = " << header->channels;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF quality  = " << header->quality;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF mode     = " << header->mode;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF levels   = " << header->nLevels;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Level (w x h)= " << i << "(" << pgf.Width(i)
+        qDebug() << "PGFUtils: PGF width    = " << header->width;
+        qDebug() << "PGFUtils: PGF height   = " << header->height;
+        qDebug() << "PGFUtils: PGF bbp      = " << header->bpp;
+        qDebug() << "PGFUtils: PGF channels = " << header->channels;
+        qDebug() << "PGFUtils: PGF quality  = " << header->quality;
+        qDebug() << "PGFUtils: PGF mode     = " << header->mode;
+        qDebug() << "PGFUtils: PGF levels   = " << header->nLevels;
+        qDebug() << "PGFUtils: Level (w x h)= " << i << "(" << pgf.Width(i)
                                       << " x " << pgf.Height(i) << ")";
-        qCDebug(DIGIKAM_GENERAL_LOG) << "QImage depth = " << img.depth();
+        qDebug() << "PGFUtils: QImage depth = " << img.depth();
 */
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
@@ -444,7 +441,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
             err -= AppError;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error running libpgf (" << err << ")!";
+        qDebug() << "PGFUtils: Error running libpgf (" << err << ")!";
         return false;
     }
 
