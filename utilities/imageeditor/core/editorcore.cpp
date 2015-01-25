@@ -300,7 +300,6 @@ void EditorCore::slotImageLoaded(const LoadingDescription& loadingDescription, c
         d->height     = d->origHeight;
 
         d->image.setAttribute("originalSize", d->image.size());
-        updateColorManagement();
     }
     else
     {
@@ -327,24 +326,14 @@ void EditorCore::slotImageLoaded(const LoadingDescription& loadingDescription, c
     */
 }
 
-void EditorCore::updateColorManagement()
-{
-    IccManager manager(d->image);
-
-    if (d->doSoftProofing)
-    {
-        d->monitorICCtrans = manager.displaySoftProofingTransform(d->cmSettings.defaultProofProfile, d->displayingWidget);
-    }
-    else
-    {
-        d->monitorICCtrans = manager.displayTransform(d->displayingWidget);
-    }
-}
-
 void EditorCore::setSoftProofingEnabled(bool enabled)
 {
     d->doSoftProofing = enabled;
-    updateColorManagement();
+}
+
+bool EditorCore::softProofingEnabled() const
+{
+    return d->doSoftProofing;
 }
 
 void EditorCore::slotLoadingProgress(const LoadingDescription& loadingDescription, float progress)
@@ -740,29 +729,16 @@ void EditorCore::putImg(const QString& caller, const FilterAction& action, const
 void EditorCore::setUndoImg(const UndoMetadataContainer& c, const DImg& img)
 {
     // called from UndoManager
-    bool changesIcc = c.changesIccProfile(d->image);
-
     d->putImageData(img.bits(), img.width(), img.height(), img.sixteenBit());
     c.toImage(d->image);
-
-    if (changesIcc)
-    {
-        updateColorManagement();
-    }
 }
 
 void EditorCore::imageUndoChanged(const UndoMetadataContainer& c)
 {
     // called from UndoManager
-    bool changesIcc = c.changesIccProfile(d->image);
     d->origWidth    = d->image.width();
     d->origHeight   = d->image.height();
     c.toImage(d->image);
-
-    if (changesIcc)
-    {
-        updateColorManagement();
-    }
 }
 
 void EditorCore::setFileOriginData(const QVariant& data)
@@ -813,7 +789,6 @@ void EditorCore::putIccProfile(const IccProfile& profile)
 
     //kDebug() << "Embedding profile: " << profile;
     d->image.setIccProfile(profile);
-    updateColorManagement();
     setModified();
 }
 
@@ -888,11 +863,11 @@ QPixmap EditorCore::convertToPixmap(DImg& img) const
 
         if (d->doSoftProofing)
         {
-            transform = manager.displaySoftProofingTransform(d->cmSettings.defaultProofProfile, d->displayingWidget);
+            transform = manager.displaySoftProofingTransform(d->cmSettings.defaultProofProfile);
         }
         else
         {
-            transform = manager.displayTransform(d->displayingWidget);
+            transform = manager.displayTransform();
         }
 
         pix = img.convertToPixmap(transform);

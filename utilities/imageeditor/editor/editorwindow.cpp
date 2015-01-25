@@ -2709,6 +2709,7 @@ void EditorWindow::slotUpdateSoftProofingState()
 {
     bool on = d->viewSoftProofAction->isChecked();
     m_canvas->setSoftProofingEnabled(on);
+    d->toolIface->updateICCSettings();
 }
 
 void EditorWindow::slotSetUnderExposureIndicator(bool on)

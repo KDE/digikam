@@ -115,13 +115,24 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
         // Apply CM settings.
 
+        bool doSoftProofing              = EditorCore::defaultInstance()->softProofingEnabled();
         ICCSettingsContainer iccSettings = EditorCore::defaultInstance()->getICCSettings();
 
-        if (iccSettings.enableCM && iccSettings.useManagedView)
+        if (iccSettings.enableCM && (iccSettings.useManagedView || doSoftProofing))
         {
             IccManager   manager(scaledImage);
-            IccTransform monitorICCtrans = manager.displayTransform(widget);
-            pix                          = scaledImage.convertToPixmap(monitorICCtrans);
+            IccTransform monitorICCtrans;
+
+            if (doSoftProofing)
+            {
+                monitorICCtrans = manager.displaySoftProofingTransform(iccSettings.defaultProofProfile, widget);
+            }
+            else
+            {
+                monitorICCtrans = manager.displayTransform(widget);
+            }
+
+            pix = scaledImage.convertToPixmap(monitorICCtrans);
         }
         else
         {

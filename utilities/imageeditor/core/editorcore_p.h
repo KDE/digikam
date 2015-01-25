@@ -120,8 +120,6 @@ public:
     SharedLoadSaveThread*      thread;
     LoadingDescription         currentDescription;
     LoadingDescription         nextRawDescription;
-
-    IccTransform               monitorICCtrans;
 };
 
 void EditorCore::Private::putImageData(uchar* const data, int w, int h, bool sixteenBit)

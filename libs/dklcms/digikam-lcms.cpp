@@ -256,9 +256,9 @@ DWORD dkCmsGetProfileICCversion(cmsHPROFILE hProfile)
 void dkCmsSetAlarmCodes(int r, int g, int b)
 {
     cmsUInt16Number NewAlarm[cmsMAXCHANNELS];
-    NewAlarm[0] = (cmsUInt16Number)r;
-    NewAlarm[1] = (cmsUInt16Number)g;
-    NewAlarm[2] = (cmsUInt16Number)b;
+    NewAlarm[0] = (cmsUInt16Number)r * 256;
+    NewAlarm[1] = (cmsUInt16Number)g * 256;
+    NewAlarm[2] = (cmsUInt16Number)b * 256;
     cmsSetAlarmCodes(NewAlarm);
 }
 
