@@ -42,7 +42,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "databaseparameters.h"
-#include "kinotify.h"
+#include "kinotify/kinotify.h"
 #include "scancontroller.h"
 
 namespace Digikam
