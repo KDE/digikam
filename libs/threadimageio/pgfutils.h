@@ -26,13 +26,9 @@
 
 // Qt includes
 
-#include <QtCore/QString>
+#include <QString>
 #include <QImage>
-#include <QtCore/QByteArray>
-
-// Local includes
-
-#include "digikam_export.h"
+#include <QByteArray>
 
 namespace Digikam
 {
