@@ -44,6 +44,7 @@
 
 #include <klocalizedstring.h>
 #include <kurllabel.h>
+#include <ksharedconfig.h>
 
 // Local includes
 

@@ -25,12 +25,9 @@
 
 #include "undoaction.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "editorcore.h"
 
 namespace Digikam

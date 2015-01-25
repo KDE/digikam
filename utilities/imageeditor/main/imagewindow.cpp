@@ -51,19 +51,15 @@
 
 // KDE includes
 
-#include <kactionmenu.h>
+#include <ksqueezedtextlabel.h>
 #include <kactioncollection.h>
 #include <kcategorizedview.h>
-#include <kconfig.h>
 #include <klocalizedstring.h>
 #include <kselectaction.h>
 #include <kstandardaction.h>
-#include <kstatusbar.h>
 #include <ktoggleaction.h>
-#include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
-#include <ksqueezedtextlabel.h>
 
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>

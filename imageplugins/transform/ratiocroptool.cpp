@@ -48,6 +48,7 @@
 
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
 
 // Libkdcraw includes
 

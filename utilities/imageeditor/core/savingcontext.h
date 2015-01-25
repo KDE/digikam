@@ -29,9 +29,6 @@
 
 #include <QString>
 #include <QTemporaryFile>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

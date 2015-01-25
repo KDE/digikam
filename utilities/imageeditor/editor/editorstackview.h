@@ -24,7 +24,7 @@
 #ifndef EDITORSTACKVIEW_H
 #define EDITORSTACKVIEW_H
 
-// KDE includes
+// Qt includes
 
 #include <QStackedWidget>
 

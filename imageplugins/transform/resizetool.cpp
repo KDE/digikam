@@ -57,6 +57,7 @@
 #include <klocalizedstring.h>
 #include <kseparator.h>
 #include <kurllabel.h>
+#include <ksharedconfig.h>
 
 // Libkdcraw includes
 

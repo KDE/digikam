@@ -34,12 +34,9 @@
 
 #include <QList>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "editorcore.h"
 #include "undoaction.h"
 #include "undocache.h"

@@ -32,12 +32,9 @@
 #include <QBitmap>
 #include <QPainter>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "exposurecontainer.h"
 #include "iccmanager.h"
 #include "iccsettingscontainer.h"

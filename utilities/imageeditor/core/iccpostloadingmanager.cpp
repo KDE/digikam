@@ -29,12 +29,9 @@
 
 #include <QPointer>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "colorcorrectiondlg.h"
 #include "iccprofile.h"
 #include "icctransform.h"

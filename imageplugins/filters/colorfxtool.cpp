@@ -41,14 +41,10 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
-#include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kconfiggroup.h>
-
-
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
-
 
 // Local includes
 

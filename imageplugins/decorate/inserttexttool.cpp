@@ -50,6 +50,7 @@
 #include <kfontchooser.h>
 #include <klocalizedstring.h>
 #include <ktextedit.h>
+#include <ksharedconfig.h>
 
 // Local includes
 

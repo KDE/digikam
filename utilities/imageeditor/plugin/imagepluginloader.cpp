@@ -33,13 +33,12 @@
 
 #include <kservicetypetrader.h>
 #include <klibloader.h>
-
 #include <klocalizedstring.h>
 #include <kxmlguiclient.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "splashscreen.h"
 #include "uifilevalidator.h"
 

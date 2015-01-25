@@ -58,24 +58,21 @@
 #include <QPushButton>
 #include <QAction>
 #include <QMenuBar>
+#include <QStatusBar>
 #include <QMenu>
 #include <QIcon>
 
 // KDE includes
 
 #include <kactioncategory.h>
-#include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
-#include <kfileitemdelegate.h>
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kopenwithdialog.h>
 #include <knotifyconfigwidget.h>
-#include <kprotocolinfo.h>
 #include <kselectaction.h>
 #include <kseparator.h>
 #include <kservice.h>
@@ -84,19 +81,14 @@
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
-#include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
-#include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <krun.h>
-#include <kurlcombobox.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 #include <ksqueezedtextlabel.h>
 
-#include <kio/job.h>
-#include <kio/netaccess.h>
 #include <kio/copyjob.h>
 
 // Libkdcraw includes
