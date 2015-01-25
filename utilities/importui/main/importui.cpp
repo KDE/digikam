@@ -727,7 +727,7 @@ void ImportUI::setupStatusBar()
 
     d->cameraFreeSpace = new FreeSpaceWidget(statusBar(), 100);
 
-    if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
+    if (cameraUseGPhotoDriver())
     {
         d->cameraFreeSpace->setMode(FreeSpaceWidget::GPhotoCamera);
         connect(d->controller, SIGNAL(signalFreeSpace(ulong,ulong)),
@@ -952,7 +952,7 @@ void ImportUI::slotCancelButton()
 
 void ImportUI::refreshFreeSpace()
 {
-    if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
+    if (cameraUseGPhotoDriver())
     {
         d->controller->getFreeSpace();
     }
@@ -1681,18 +1681,62 @@ void ImportUI::slotLocked(const QString& folder, const QString& file, bool statu
 
 void ImportUI::slotUpdateDownloadName()
 {
-    CamItemInfoList list = d->view->allItems();
+    d->view->setIconViewUpdatesEnabled(false);
+
+    bool noSelection          = d->view->selectedCamItemInfos().count() == 0;
+    CamItemInfoList list      = d->view->allItems();
+    DownloadSettings settings = downloadSettings();
 
     foreach (CamItemInfo info, list)
     {
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
         kDebug() << "slotDownloadNameChanged, old: " << refInfo.downloadName;
-        refInfo.downloadName = d->renameCustomizer->newName(info.name, info.ctime);
+
+        QString newName = info.name;
+
+        if (noSelection || d->view->isSelected(info.url()))
+        {
+            newName = d->renameCustomizer->newName(info.name, info.ctime);
+        }
+
+        // Renaming files for the converting jpg to a lossless format
+        // is from cameracontroller.cpp moved here.
+
+        if (settings.convertJpeg && info.mime == QString("image/jpeg") &&
+           (noSelection || d->view->isSelected(info.url())))
+        {
+            QFileInfo     fi(newName);
+            QString ext = fi.suffix();
+
+            if (!ext.isEmpty())
+            {
+                if (ext == "JPG" || ext == "JPE" || ext == "JPEG")
+                {
+                    ext = settings.losslessFormat.toUpper();
+                }
+                else if (ext == "Jpg" || ext == "Jpe" || ext == "Jpeg")
+                {
+                    ext    = settings.losslessFormat.toLower();
+                    ext[0] = ext[0].toUpper();
+                }
+                else
+                {
+                   ext = settings.losslessFormat.toLower();
+                }
+
+                newName = fi.completeBaseName() + '.' + ext;
+            }
+            else
+            {
+                newName = newName + '.' + settings.losslessFormat.toLower();
+            }
+        }
+
+        refInfo.downloadName = newName;
         kDebug() << "slotDownloadNameChanged, new: " << refInfo.downloadName;
     }
 
-    // connected to slotUpdateDownloadNames, and used externally
-    //emit signalNewSelection(hasSelection);
+    d->view->setIconViewUpdatesEnabled(true);
 }
 
 //FIXME: the new pictures are marked by CameraHistoryUpdater which is not working yet.
@@ -1992,29 +2036,6 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     QSet<QString> usedDownloadPaths;
     CamItemInfoList list = d->view->allItems();
 
-    if (!d->renameCustomizer->useDefault())
-    {
-        QList<ParseSettings> renameFiles;
-
-        foreach(CamItemInfo info, list)
-        {
-            if (onlySelected && (d->view->isSelected(info.url())))
-            {
-                ParseSettings parseSettings;
-                parseSettings.fileUrl      = info.name;
-                parseSettings.creationTime = info.ctime;
-                renameFiles.append(parseSettings);
-            }
-        }
-
-        d->renameCustomizer->renameManager()->addFiles(renameFiles);
-        d->renameCustomizer->renameManager()->parseFiles();
-    }
-    else
-    {
-        d->renameCustomizer->renameManager()->reset();
-    }
-
     foreach(CamItemInfo info, list)
     {
         if (onlySelected && !(d->view->isSelected(info.url())))
@@ -2282,25 +2303,22 @@ void ImportUI::slotNewSelection(bool hasSelection)
         d->markAsDownloadedAction->setEnabled(false);
     }
 
-    if (!d->renameCustomizer->useDefault())
+    QList<ParseSettings> renameFiles;
+    CamItemInfoList list = hasSelection ? d->view->selectedCamItemInfos() : d->view->allItems();
+
+    foreach(CamItemInfo info, list)
     {
-        QList<ParseSettings> renameFiles;
-        CamItemInfoList list = hasSelection ? d->view->selectedCamItemInfos() : d->view->allItems();
+        ParseSettings parseSettings;
 
-        foreach(CamItemInfo info, list)
-        {
-            ParseSettings parseSettings;
-            parseSettings.fileUrl = info.name;
-            parseSettings.creationTime = info.ctime;
-            renameFiles.append(parseSettings);
-        }
-
-        d->renameCustomizer->renameManager()->reset();
-        d->renameCustomizer->renameManager()->addFiles(renameFiles);
-        d->renameCustomizer->renameManager()->parseFiles();
+        parseSettings.fileUrl      = info.name;
+        parseSettings.creationTime = info.ctime;
+        renameFiles.append(parseSettings);
     }
 
-    // TODO why new name is calculated on selection basis?!
+    d->renameCustomizer->renameManager()->reset();
+    d->renameCustomizer->renameManager()->addFiles(renameFiles);
+    d->renameCustomizer->renameManager()->parseFiles();
+
     slotUpdateDownloadName();
 
     unsigned long fSize = 0;
@@ -2547,6 +2565,11 @@ bool ImportUI::cameraDelDirSupport() const
 bool ImportUI::cameraUseUMSDriver() const
 {
     return d->controller->cameraDriverType() == DKCamera::UMSDriver;
+}
+
+bool ImportUI::cameraUseGPhotoDriver() const
+{
+    return d->controller->cameraDriverType() == DKCamera::GPhotoDriver;
 }
 
 void ImportUI::enableZoomPlusAction(bool val)

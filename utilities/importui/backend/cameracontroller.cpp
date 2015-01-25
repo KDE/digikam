@@ -680,8 +680,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     temp     = tempURL2.toLocalFile();
 
                     // when convertnig a file, we need to set the new format extension..
-                    // would another place be better for this?
-                    dest = dest.left(dest.lastIndexOf('.')) + losslessFormat;
+                    // The new extension is already set in importui.cpp.
+
                     kDebug() << "Convert to LossLess: " << file << " using (" << tempURL << ")  destination: " << dest;
 
                     if (!JPEGUtils::jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))

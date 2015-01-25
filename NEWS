@@ -24,4 +24,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 016 ==> 343013 - CANVAS : on working with raw images marked square isn't crop accurate [patch].
 017 ==> 343080 - Cannot find the right lensfun profile for RAW lens correction [patch].
 018 ==> 343221 - Softproofing in editor does not work anymore [patch].
-019 ==> 
+019 ==> 342996 - Corrections for rename settings in images import [patch].
+020 ==> 314441 - Rename settings while importing ignored [patch].
+
