@@ -13,59 +13,16 @@ set(libdigikamhelpers_SRCS
     utils/uifilevalidator.cpp
 )
 
-# TODO 3rdparty libs could form one collection?
 set(digikamcore_LIB_SRCS
     ${libdigikamhelpers_SRCS}
 )
-# TODO this should be turned from static to dynamic
+# TODO this is now just a placeholder holding uifilevalidator.. to be changed later to expose a dynamic library for other apps to use?
 add_library(digikamcore STATIC ${digikamcore_LIB_SRCS})
 
 target_link_libraries(digikamcore
-
                       Qt5::Core
-                      Qt5::Sql
-                      Qt5::Concurrent
-
-                      KF5::KDELibs4Support
-                      KF5::NotifyConfig
-
-                      ${OpenCV_LIBRARIES}
-
-                      # Required by CImg library which is using pthread internally.
-                      ${CMAKE_THREAD_LIBS_INIT}
-
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      Qt5::Xml
 )
-
-if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamcore Qt5::Multimedia)
-endif()
-
-#if(X11_FOUND)
-#    target_link_libraries(digikamcore Qt5::X11Extras ${X11_LIBRARIES})
-#endif()
-
-if(APPLE)
-    target_link_libraries(digikamcore /System/Library/Frameworks/AppKit.framework)
-endif()
-
-# For Contents Aware Resizer and Lens auto-correction tools.
-if(GLIB2_FOUND)
-    target_link_libraries(digikamcore ${GLIB2_LIBRARIES})
-endif()
-
-#if(JASPER_FOUND)
-#    target_link_libraries(digikamcore ${JASPER_LIBRARIES})
-#endif()
-
-if(LENSFUN_FOUND)
-   target_link_libraries(digikamcore ${LENSFUN_LIBRARIES})
-endif()
-
-if(KF5Kipi_FOUND)
-   target_link_libraries(digikamcore ${KF5Kipi_LIBRARIES})
-endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
@@ -96,7 +53,6 @@ include_directories(
     tags/tagsmanager/models/
     main/
     ${CMAKE_CURRENT_BINARY_DIR}/app/utils # for qt5_add_dbus_adaptor adaptor, TODO
-    ../utilities/baloo/ # ugly, ugly hack, TODO
 )
 
 qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
@@ -312,8 +268,25 @@ target_link_libraries(digikamgui
                       Qt5::Widgets
                       Qt5::Sql
                       Qt5::WebKitWidgets
-                      
 )
+
+# TODO check if these linkings are required?
+if(Baloo_FOUND)
+    target_link_libraries(digikamgui baloowrap)
+endif()
+
+if(ENABLE_MEDIAPLAYER)
+    target_link_libraries(digikamgui Qt5::Multimedia Qt5::MultimediaWidgets)
+endif()
+
+# For Contents Aware Resizer and Lens auto-correction tools.
+if(GLIB2_FOUND)
+    target_link_libraries(digikamgui ${GLIB2_LIBRARIES})
+endif()
+
+if(APPLE)
+    target_link_libraries(digikamgui /System/Library/Frameworks/AppKit.framework)
+endif()
 
 if(${KF5Kipi_FOUND})
     target_link_libraries(digikamgui KF5::Kipi)
@@ -359,25 +332,9 @@ target_link_libraries(digikam
                       
                       ${OpenCV_LIBRARIES}
 )
-if(ENABLE_MEDIAPLAYER)
-  target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
-endif()
 
 if(KDEPIMLIBS_FOUND)
   target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
-endif()
-
-
-if(KF5KFace_FOUND)
-   target_link_libraries(digikam KF5::KFace)
-endif()
-
-if(KF5KGeoMap_FOUND)
-   target_link_libraries(digikam KF5::GeoMap)
-endif()
-
-if(KF5Kipi_FOUND)
-    target_link_libraries(digikam kipiiface) # is kipi-iface needed here?
 endif()
 
 if(NOT WIN32)

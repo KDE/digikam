@@ -140,6 +140,11 @@ if(SQLITE2_FOUND)
     target_link_libraries(digikamdatabase ${SQLITE2_LIBRARIES})
 endif()
 
+# for imgqsort, does it even belong to database?
+if(OpenCV_FOUND)
+    target_link_libraries(digikamdatabase ${OpenCV_LIBRARIES})
+endif()
+
 set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
 install(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )

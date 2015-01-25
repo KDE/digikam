@@ -250,6 +250,12 @@ target_include_directories(dimg
 # TODO ugly way to expose lensfun include dirs to users of dimg..
 if(LENSFUN_FOUND)
     target_include_directories(dimg PUBLIC ${LENSFUN_INCLUDE_DIRS})
+    target_link_libraries(dimg ${LENSFUN_LIBRARIES})
+endif()
+
+# for nrfilter
+if(OpenCV_FOUND)
+    target_link_libraries(dimg ${OpenCV_LIBRARIES})
 endif()
 
 target_link_libraries(dimg
