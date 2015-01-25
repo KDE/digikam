@@ -58,6 +58,9 @@ set(libdatabase_SRCS
     utils/tagscache.cpp
 )
 
+# enable exceptions
+kde_source_files_enable_exceptions(imagehistory/imagehistorygraph.cpp imagehistory/imagehistorygraphmodel.cpp)
+
 set(libhaar_SRCS
     haar/haar.cpp
     haar/haariface.cpp

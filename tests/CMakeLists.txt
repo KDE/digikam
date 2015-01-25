@@ -4,6 +4,9 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+# enabling for everything although only required by dimg*
+kde_enable_exceptions()
+
 add_subdirectory(imgqsort)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})

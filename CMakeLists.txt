@@ -517,40 +517,27 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
 
-    # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
-    # TODO should this be moved out from here to the plugin config?
-    kde_enable_exceptions()
 
     # ==================================================================================================
     # Includes rules
 
+    # TODO cimg is only used by greycstoration of dimg, move it there?
+    # TODO digikam_export.h, version.h, git_version.h and config-digikam.h should be created to the main binarydir? or main sourcedir?
     include_directories(
-                        ${PGF_INCLUDE_DIRS}
-
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify
   
                         app/utils/ # required for digikam_export.h
                         
                         # version.h, gitversion.h config-digikam.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/utils
-
-                        # dbconfigversion.h
-                        #${CMAKE_CURRENT_BINARY_DIR}/app/database
-
     )
-
-#    if(X11_FOUND)
-#        include_directories(${X11_INCLUDE_DIR})
-#    endif()
 
     # Boost library rules
 
     # TODO add this where it is needed?
-    IF(Boost_FOUND)
-        include_directories(${Boost_INCLUDE_DIRS})
-    ENDIF()
+    #IF(Boost_FOUND)
+    #    include_directories(${Boost_INCLUDE_DIRS})
+    #ENDIF()
     
     # libgphoto2 library rules
     message(INFO "gphoto2 includes are required only to display the version in the about data/component info, refactor")
@@ -562,10 +549,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # Common targets parts
 
     add_subdirectory(libs)
-
-    # ==================================================================================================
-    # digiKam target parts
-
     add_subdirectory(data)
     add_subdirectory(utilities)
     add_subdirectory(app)

@@ -1,5 +1,4 @@
-# Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
-#kde_target_enable_exceptions()
+kde_enable_exceptions()
 
 set(libdimg_SRCS
     dimg.cpp
