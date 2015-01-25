@@ -17,7 +17,7 @@ set(libthreadimageio_SRCS
     thumbnailsize.cpp
 )
 
-add_library(threadimageio STATIC ${libthreadimageio_SRCS} ${libpgfutils_SRCS})
+add_library(threadimageio STATIC ${libthreadimageio_SRCS})
 
 target_link_libraries(threadimageio
                       digikamdatabase
