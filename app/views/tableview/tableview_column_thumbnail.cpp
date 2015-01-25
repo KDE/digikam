@@ -31,7 +31,7 @@
 
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "imagefiltermodel.h"
 #include "tableview.h"

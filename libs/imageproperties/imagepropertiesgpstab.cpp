@@ -60,7 +60,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 #include <rwidgetutils.h>
 
-// local includes
+// Local includes
 
 #include "digikam_debug.h"
 #include "imagegpsmodelhelper.h"

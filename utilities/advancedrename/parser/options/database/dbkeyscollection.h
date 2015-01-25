@@ -28,7 +28,7 @@
 
 #include <QMap>
 
-// local includes
+// Local includes
 
 #include "parsesettings.h"
 

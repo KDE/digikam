@@ -27,7 +27,7 @@
 
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "databaseinfocontainers.h"
 #include "imageinfo.h"

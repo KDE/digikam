@@ -23,7 +23,7 @@
 #ifndef TABLEVIEW_COLUMNS_H
 #define TABLEVIEW_COLUMNS_H
 
-// local includes
+// Local includes
 
 #include "tableview_column_audiovideo.h"
 #include "tableview_column_digikam.h"

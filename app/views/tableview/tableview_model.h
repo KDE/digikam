@@ -28,7 +28,7 @@
 #include <QAbstractItemModel>
 #include <QUrl>
 
-// local includes
+// Local includes
 
 #include "databasechangesets.h"
 #include "tableview_shared.h"

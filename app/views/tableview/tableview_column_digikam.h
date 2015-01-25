@@ -29,7 +29,7 @@
 
 // KDE includes
 
-// local includes
+// Local includes
 
 #include "tableview_columnfactory.h"
 

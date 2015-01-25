@@ -24,7 +24,7 @@
 #ifndef COMMONKEYS_H
 #define COMMONKEYS_H
 
-// local includes
+// Local includes
 
 #include "dbkeyscollection.h"
 #include "parsesettings.h"

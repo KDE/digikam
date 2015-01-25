@@ -26,7 +26,7 @@
 
 #include "digikam2kgeomap.h"
 
-// local includes
+// Local includes
 
 #include "imageinfo.h"
 #include "imageposition.h"

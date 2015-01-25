@@ -29,7 +29,7 @@
 
 #include <QDialog>
 
-// local includes
+// Local includes
 
 #include "filtercombo.h"
 

@@ -29,7 +29,7 @@ extern "C"
 #include <lensfun.h>
 }
 
-// local includes
+// Local includes
 
 #include "dmetadata.h"
 #include "digikam_export.h"

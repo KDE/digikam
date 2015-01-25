@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "digikam_debug.h"
 #include "imageinfo.h"

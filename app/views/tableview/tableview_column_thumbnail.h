@@ -23,7 +23,7 @@
 #ifndef TABLEVIEW_COLUMN_THUMBNAIL_H
 #define TABLEVIEW_COLUMN_THUMBNAIL_H
 
-// local includes
+// Local includes
 
 #include "tableview_columnfactory.h"
 

@@ -22,7 +22,7 @@
 
 #include "tableview_columnfactory.h"
 
-// local includes
+// Local includes
 
 #include "digikam_debug.h"
 #include "imagefiltermodel.h"

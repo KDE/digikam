@@ -40,7 +40,7 @@
 #include <kseparator.h>
 #include <kicondialog.h>
 
-// local includes
+// Local includes
 
 #include "digikam_debug.h"
 #include "searchtextbar.h"

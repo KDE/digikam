@@ -24,7 +24,7 @@
 #ifndef POSITIONKEYS_H
 #define POSITIONKEYS_H
 
-// local includes
+// Local includes
 
 #include "dbkeyscollection.h"
 #include "parsesettings.h"

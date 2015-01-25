@@ -43,7 +43,7 @@
 #include <kmultitabbar.h>
 #include <kactionmenu.h>
 
-// local includes
+// Local includes
 
 #include "digikam_debug.h"
 #include "digikam_config.h"

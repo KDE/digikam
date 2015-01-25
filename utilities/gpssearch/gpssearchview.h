@@ -36,7 +36,7 @@
 #include <modelhelper.h>
 #include <kgeomap_widget.h>
 
-// local includes
+// Local includes
 
 #include "statesavingobject.h"
 #include "imagefiltermodel.h"

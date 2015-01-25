@@ -29,7 +29,7 @@
 #include <QList>
 #include <QVariant>
 
-// local includes
+// Local includes
 
 #include "digikam_export.h"
 

@@ -32,7 +32,7 @@
 
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"

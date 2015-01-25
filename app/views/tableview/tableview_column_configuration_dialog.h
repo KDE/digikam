@@ -27,7 +27,7 @@
 
 #include <QDialog>
 
-// local includes
+// Local includes
 
 #include "tableview_columnfactory.h"
 #include "tableview_shared.h"

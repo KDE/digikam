@@ -28,7 +28,7 @@
 
 #include <QString>
 
-// local includes
+// Local includes
 
 #include "rule.h"
 

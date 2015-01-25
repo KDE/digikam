@@ -27,11 +27,7 @@
 
 #include <QFileInfo>
 
-// Libkexiv2 includes
-
-#include <libkexiv2_version.h>
-
-// local includes
+// Local includes
 
 #include "cameranameoption.h"
 #include "databaseoption.h"
@@ -73,10 +69,7 @@ Parser::Parser()
     registerOption(new SequenceNumberOption());
     registerOption(new DateOption());
     registerOption(new DatabaseOption());
-
-#if KEXIV2_VERSION >= 0x010000
     registerOption(new MetadataOption());
-#endif
 
     // --------------------------------------------------------
 
@@ -196,13 +189,13 @@ ParseResults Parser::results(ParseSettings& settings)
 {
     ParseResults results;
 
-    foreach(Rule* option, d->options)
+    foreach(Rule* const option, d->options)
     {
         ParseResults r = option->parse(settings);
         results.append(r);
     }
 
-    foreach(Rule* modifier, d->modifiers)
+    foreach(Rule* const modifier, d->modifiers)
     {
         ParseResults r = modifier->parse(settings);
         results.append(r);
@@ -228,19 +221,18 @@ QString Parser::parse(ParseSettings& settings)
 
     ParseResults results;
 
-    foreach(Rule* option, d->options)
+    foreach(Rule* const option, d->options)
     {
         ParseResults r = option->parse(settings);
         results.append(r);
     }
 
     settings.invalidModifiers = applyModifiers(settings.parseString, results);
-    QString newName  = results.replaceTokens(settings.parseString);
-
-    settings.results = results;
+    QString newName           = results.replaceTokens(settings.parseString);
+    settings.results          = results;
 
     // remove invalid modifiers from the new name
-    foreach(const Rule* mod, d->modifiers)
+    foreach(const Rule* const mod, d->modifiers)
     {
         newName.remove(mod->regExp());
     }
@@ -267,13 +259,11 @@ bool Parser::tokenAtPosition(ParseSettings& settings, int pos)
 
 bool Parser::tokenAtPosition(ParseSettings& settings, int pos, int& start, int& length)
 {
-    bool found = false;
-
-    ParseResults r = results(settings);
-
+    bool found                   = false;
+    ParseResults r               = results(settings);
     ParseResults::ResultsKey key = r.keyAtApproximatePosition(pos);
-    start  = key.first;
-    length = key.second;
+    start                        = key.first;
+    length                       = key.second;
 
     if ((pos >= start) && (pos <= start + length))
     {
@@ -302,10 +292,10 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
     // modifierMap maps the actual modifier objects to the entries in the modifierResults structure
     QMap<ParseResults::ResultsKey, Rule*> modifierMap;
 
-    foreach(Rule* modifier, d->modifiers)
+    foreach(Rule* const modifier, d->modifiers)
     {
         QRegExp regExp = modifier->regExp();
-        int pos = 0;
+        int pos        = 0;
 
         while (pos > -1)
         {
@@ -339,7 +329,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
             if (modifierResults.hasKeyAtPosition(pos))
             {
                 ParseResults::ResultsKey mkey = modifierResults.keyAtPosition(pos);
-                Rule* mod                     = modifierMap[mkey];
+                Rule* const mod               = modifierMap[mkey];
                 QString modToken              = modifierResults.token(mkey);
 
                 QString token                 = results.token(key);

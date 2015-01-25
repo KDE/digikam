@@ -30,7 +30,7 @@
 #include <QMenu>
 #include <QAction>
 
-// local includes
+// Local includes
 
 #include "digikam_debug.h"
 #include "contextmenuhelper.h"

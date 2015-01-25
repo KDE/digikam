@@ -24,7 +24,7 @@
 
 #include "importrenameparser.h"
 
-// local includes
+// Local includes
 
 #include "databaseoption.h"
 
@@ -37,7 +37,7 @@ ImportRenameParser::ImportRenameParser()
     // unregister options that are not suitable during import
     RulesList oplist = options();
 
-    foreach(Rule* option, oplist)
+    foreach(Rule* const option, oplist)
     {
         if (dynamic_cast<DatabaseOption*>(option))
         {

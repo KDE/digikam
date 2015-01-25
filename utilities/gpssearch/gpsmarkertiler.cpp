@@ -31,7 +31,7 @@
 #include <QRectF>
 #include <QTimer>
 
-// local includes
+// Local includes
 
 #include "digikam2kgeomap_database.h"
 #include "dnotificationwrapper.h"

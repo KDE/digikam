@@ -29,7 +29,7 @@
 
 #include <QComboBox>
 
-// local includes
+// Local includes
 
 #include "imagefiltersettings.h"
 

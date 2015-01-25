@@ -27,7 +27,7 @@
 
 #include <QStringList>
 
-// local includes
+// Local includes
 
 #include "tableview_columnfactory.h"
 

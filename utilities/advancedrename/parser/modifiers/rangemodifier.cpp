@@ -33,7 +33,6 @@
 
 #include <klocalizedstring.h>
 
-
 // Local includes
 
 #include "ui_rangemodifierdialogwidget.h"

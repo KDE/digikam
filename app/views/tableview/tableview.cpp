@@ -32,7 +32,7 @@
 #include <QAction>
 #include <QIcon>
 
-// local includes
+// Local includes
 
 #include "contextmenuhelper.h"
 #include "fileactionmngr.h"

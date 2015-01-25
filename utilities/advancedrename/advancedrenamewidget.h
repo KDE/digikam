@@ -29,7 +29,8 @@
 #include <QString>
 #include <QWidget>
 
-// local includes
+// Local includes
+
 #include "rule.h"
 
 class QMenu;

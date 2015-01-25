@@ -23,7 +23,7 @@
 
 #include "imagegpsmodelhelper.h"
 
-// local includes
+// Local includes
 
 #include "digikam2kgeomap.h"
 

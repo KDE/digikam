@@ -35,7 +35,7 @@
 #include <kgeomap_primitives.h>
 #include <modelhelper.h>
 
-// local includes
+// Local includes
 
 #include "thumbnailloadthread.h"
 

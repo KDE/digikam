@@ -42,7 +42,7 @@
 #include <abstractmarkertiler.h>
 #include <kgeomap_widget.h>
 
-// local includes
+// Local includes
 
 #include "digikam_export.h"
 #include "imageposition.h"

@@ -30,14 +30,13 @@
 #include <QGridLayout>
 #include <QString>
 #include <QMap>
+#include <QPushButton>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
-#include <QPushButton>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

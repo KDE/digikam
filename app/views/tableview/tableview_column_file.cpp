@@ -33,7 +33,7 @@
 #include <klocalizedstring.h>
 #include <kformat.h>
 
-// local includes
+// Local includes
 
 #include "digikam_debug.h"
 #include "imageinfo.h"

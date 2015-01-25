@@ -24,7 +24,7 @@
 #ifndef METADATAKEYS_H
 #define METADATAKEYS_H
 
-// local includes
+// Local includes
 
 #include "dbkeyscollection.h"
 #include "parsesettings.h"

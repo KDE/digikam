@@ -24,12 +24,9 @@
 #ifndef ADVANCEDRENAMEMANAGER_H
 #define ADVANCEDRENAMEMANAGER_H
 
-// KDE includes
-
-#include <QUrl>
-
 // Qt includes
 
+#include <QUrl>
 #include <QString>
 #include <QStringList>
 

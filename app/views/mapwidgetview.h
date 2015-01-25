@@ -38,7 +38,7 @@
 
 #include <kcategorizedsortfilterproxymodel.h>
 
-// local includes
+// Local includes
 
 #include "statesavingobject.h"
 #include "digikam_export.h"

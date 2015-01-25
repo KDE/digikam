@@ -26,7 +26,7 @@
 
 #include <QTimer>
 
-// local includes
+// Local includes
 
 #include "digikam_debug.h"
 #include "imagefiltermodel.h"

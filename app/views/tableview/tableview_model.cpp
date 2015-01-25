@@ -31,7 +31,7 @@
 
 #include <QTimer>
 
-// local includes
+// Local includes
 
 #include "digikam_debug.h"
 #include "albumdb.h"
