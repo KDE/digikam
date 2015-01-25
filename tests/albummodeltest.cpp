@@ -28,10 +28,10 @@
 #include <QDir>
 #include <QTest>
 #include <QDebug>
+#include <QUrl>
 
 // KDE includes
 
-#include <KUrl>
 #include <kio/netaccess.h>
 
 // Local includes
@@ -43,7 +43,6 @@
 #include "albumthumbnailloader.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
-//#include "digikam_config.h"
 #include "loadingcacheinterface.h"
 #include "modeltest/modeltest.h"
 #include "scancontroller.h"
@@ -116,7 +115,7 @@ void AlbumModelTest::cleanupTestCase()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
 
-    KUrl deleteUrl = QUrl::fromLocalFile(dbPath);
+    QUrl deleteUrl = QUrl::fromLocalFile(dbPath);
     KIO::NetAccess::del(deleteUrl, 0);
     qDebug() << "deleted test folder " << deleteUrl;
 
@@ -359,7 +358,7 @@ void AlbumModelTest::slotStartModelDataChanged(const QModelIndex& topLeft, const
 
 void AlbumModelTest::deletePAlbum(PAlbum* album)
 {
-    KUrl u;
+    QUrl u;
     u.setProtocol("file");
     u.setPath(album->folderPath());
     KIO::NetAccess::del(u, 0);
