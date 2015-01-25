@@ -31,13 +31,7 @@ add_library(digikamimageplugin_enhance MODULE ${digikamimageplugin_enhance_PART_
 
 target_link_libraries(digikamimageplugin_enhance
                       editorplugin
-
-                      #KF5::KDELibs4Support
-                      #KF5::KIOCore
-
-                      #${KF5KExiv2_LIBRARIES}
-                      #${KF5KDcraw_LIBRARIES}
-                     )
+)
 
 if(LENSFUN_FOUND)
    target_link_libraries(digikamimageplugin_enhance ${LENSFUN_LIBRARIES})
