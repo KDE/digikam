@@ -119,3 +119,5 @@ void ImagePlugin_Decorate::slotTexture()
 }
 
 } // namespace DigikamDecorateImagePlugin
+
+#include "imageplugin_decorate.moc"

@@ -425,3 +425,5 @@ void ImagePlugin_Color::slotAutoCorrection()
 }
 
 } // namespace DigikamColorImagePlugin
+
+#include "imageplugin_color.moc"
