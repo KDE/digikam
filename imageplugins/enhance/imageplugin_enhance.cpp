@@ -49,7 +49,7 @@
 #include "inpaintingtool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
-#include "hotpixelstool.h"
+#include "hotpixels/hotpixelstool.h"
 #include "digikam_config.h"
 
 #ifdef HAVE_LENSFUN

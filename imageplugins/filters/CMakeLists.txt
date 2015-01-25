@@ -19,16 +19,7 @@ add_library(digikamimageplugin_fxfilters MODULE ${digikamimageplugin_fxfilters_P
 
 target_link_libraries(digikamimageplugin_fxfilters
                       editorplugin
-
-                      #Qt5::Core
-                      #Qt5::Gui
-
-                      #KF5::KDELibs4Support
-                      #KF5::KIOCore
-
-                      #${KF5KExiv2_LIBRARIES}
-                      #${KF5KDcraw_LIBRARIES}
-                     )
+)
 
 install(TARGETS digikamimageplugin_fxfilters             DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES digikamimageplugin_fxfilters_ui.rc         DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
