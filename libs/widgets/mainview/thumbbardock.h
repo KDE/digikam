@@ -39,7 +39,7 @@
 
 // KDE includes
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <ktoggleaction.h>
 
 // Local includes

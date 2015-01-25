@@ -31,10 +31,6 @@
 
 #include <QKeySequence>
 
-// KDE includes
-
-#include <ktoggleaction.h>
-
 namespace Digikam
 {
 

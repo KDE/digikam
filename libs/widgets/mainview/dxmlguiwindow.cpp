@@ -37,18 +37,16 @@
 #include <QDesktopWidget>
 #include <QKeySequence>
 #include <QMenuBar>
+#include <QStatusBar>
 #include <QMenu>
 
 // KDE includes
 
 #include <kxmlguiwindow.h>
 #include <ktogglefullscreenaction.h>
-#include <kglobalsettings.h>
-#include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
-
 #include <klocalizedstring.h>
 
 // Local includes
@@ -182,7 +180,7 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
 
 void DXmlGuiWindow::createSidebarActions()
 {
-    KActionCollection * const ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
     QAction* const tlsb = new QAction(i18n("Toggle Left Side-bar"), this);
     connect(tlsb, SIGNAL(triggered()), this, SLOT(slotToggleLeftSideBar()));
     ac->addAction("toggle-left-sidebar", tlsb);

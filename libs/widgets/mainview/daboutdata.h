@@ -27,12 +27,11 @@
 // Qt includes
 
 #include <QObject>
+#include <QUrl>
 
 // KDE includes
 
-#include <QUrl>
 #include <kaboutdata.h>
-#include <klocalizedstring.h>
 
 // Local includes
 

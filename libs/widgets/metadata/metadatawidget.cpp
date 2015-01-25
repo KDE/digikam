@@ -52,14 +52,7 @@
 // KDE includes
 
 #include <kfiledialog.h>
-
-#include <kglobalsettings.h>
-
 #include <klocalizedstring.h>
-
-// Libkexiv2 includes
-
-#include <libkexiv2_version.h>
 
 // Local includes
 

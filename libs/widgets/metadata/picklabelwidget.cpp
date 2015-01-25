@@ -39,7 +39,6 @@
 
 // KDE includes
 
-#include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
 #include <kxmlguiwindow.h>

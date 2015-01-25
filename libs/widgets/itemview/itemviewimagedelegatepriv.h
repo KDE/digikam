@@ -34,10 +34,6 @@
 #include <QPainter>
 #include <QPolygon>
 
-// KDE includes
-
-#include <klocale.h>
-
 // Local includes
 
 #include "digikam_debug.h"

@@ -39,16 +39,15 @@
 #include <QTextDocument>
 #include <QByteArray>
 #include <QBuffer>
+#include <QDesktopWidget>
 
 // KDE includes
 
 #include <klocalizedstring.h>
+
+// Local includes
+
 #include "digikam_debug.h"
-#include <kglobalsettings.h>
-
-
-
-#include <QDesktopWidget>
 
 namespace Digikam
 {

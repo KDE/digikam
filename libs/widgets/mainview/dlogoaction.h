@@ -24,7 +24,7 @@
 #ifndef DLOGO_ACTION_H
 #define DLOGO_ACTION_H
 
-// KDE includes
+// Qt includes
 
 #include <QWidgetAction>
 

@@ -46,7 +46,6 @@
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
 #include <kxmlguiwindow.h>

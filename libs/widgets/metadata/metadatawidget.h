@@ -28,9 +28,6 @@
 
 #include <QWidget>
 #include <QString>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

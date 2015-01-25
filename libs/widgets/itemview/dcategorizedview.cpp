@@ -35,7 +35,7 @@
 
 // KDE includes
 
-
+#include <kglobalsettings.h>
 
 // Local includes
 
@@ -824,7 +824,7 @@ void DCategorizedView::mouseMoveEvent(QMouseEvent* event)
     {
         indexVisualRect = visualRect(index);
 
-        if (d->usePointingHand &&
+        if (d->usePointingHand                      &&
             KGlobalSettings::changeCursorOverIcon() &&
             d->delegate->acceptsActivation(event->pos(), indexVisualRect, index))
         {

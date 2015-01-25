@@ -32,11 +32,11 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "mdkeylistviewitem.h"
 #include "metadatalistviewitem.h"
 

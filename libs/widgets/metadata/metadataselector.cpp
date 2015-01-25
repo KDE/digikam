@@ -29,13 +29,12 @@
 #include <QHeaderView>
 #include <QGridLayout>
 #include <QApplication>
+#include <QPushButton>
+#include <QStyle>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
-#include <QPushButton>
-#include <QStyle>
 
 // Local includes
 
@@ -46,8 +45,10 @@ namespace Digikam
 {
 
 MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem* const parent, const QString& key,
-        const QString& title, const QString& desc)
-    : QTreeWidgetItem(parent), m_key(key), m_parent(parent)
+                                           const QString& title, const QString& desc)
+    : QTreeWidgetItem(parent),
+      m_key(key),
+      m_parent(parent)
 {
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
@@ -106,8 +107,6 @@ MetadataSelector::~MetadataSelector()
 {
 }
 
-#if KEXIV2_VERSION >= 0x010000
-
 void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
 {
     clear();
@@ -159,8 +158,6 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
     }
     expandAll();
 }
-
-#endif
 
 void MetadataSelector::setcheckedTagsList(const QStringList& list)
 {
@@ -268,7 +265,8 @@ public:
 };
 
 MetadataSelectorView::MetadataSelectorView(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
     d->selector             = new MetadataSelector(this);
@@ -307,14 +305,10 @@ MetadataSelectorView::~MetadataSelectorView()
     delete d;
 }
 
-#if KEXIV2_VERSION >= 0x010000
-
 void MetadataSelectorView::setTagsMap(const DMetadata::TagsMap& map)
 {
     d->selector->setTagsMap(map);
 }
-
-#endif
 
 void MetadataSelectorView::setcheckedTagsList(const QStringList& list)
 {

@@ -27,11 +27,9 @@
 
 #include <QApplication>
 
-// KDE includes
+// Local includes
 
 #include "digikam_debug.h"
-
-// Local includes
 
 namespace Digikam
 {

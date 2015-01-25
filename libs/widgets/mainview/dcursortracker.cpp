@@ -38,10 +38,6 @@
 #include <QTimer>
 #include <QToolTip>
 
-// KDE includes
-
-
-
 namespace Digikam
 {
 

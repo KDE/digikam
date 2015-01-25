@@ -28,13 +28,13 @@
 #include <QString>
 #include <QIcon>
 #include <QDesktopServices>
-#include <QUrl>
 #include <QAction>
 
 // KDE includes
 
 #include <kactioncollection.h>
 #include <kxmlguiwindow.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
@@ -98,7 +98,7 @@ const QString DAboutData::digiKamSloganFormated()
 const QString DAboutData::digiKamSlogan()
 {
     return i18n("Manage your photographs like a professional, "
-                 "with the power of open source");
+                "with the power of open source");
 }
 
 const QString DAboutData::copyright()

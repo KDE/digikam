@@ -32,10 +32,6 @@
 #include <QString>
 #include <QImage>
 #include <QEvent>
-
-// KDE includes
-
-#include <kglobalsettings.h>
 #include <QFontDatabase>
 
 // Local includes

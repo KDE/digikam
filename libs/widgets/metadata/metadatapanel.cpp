@@ -38,7 +38,6 @@
 
 // Libkexiv2 includes
 
-#include <libkexiv2_version.h>
 #include <kexiv2.h>
 
 // Local includes
@@ -232,10 +231,6 @@ MetadataPanel::MetadataPanel(QTabWidget* const tab)
     d->xmpViewerConfig->setDefaultFilter(d->defaultXmpFilter);
     d->tab->addTab(d->xmpViewerConfig, i18n("XMP viewer"));
 
-#if KEXIV2_VERSION < 0x010000
-    d->tab->setTabBarHidden(true);
-#endif
-
     slotTabChanged(d->tab->currentIndex());
 
     // --------------------------------------------------------
@@ -275,7 +270,6 @@ QStringList MetadataPanel::defaultXmpFilter()
 
 void MetadataPanel::applySettings()
 {
-#if KEXIV2_VERSION >= 0x010000
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
@@ -300,8 +294,6 @@ void MetadataPanel::applySettings()
     }
 
     config->sync();
-
-#endif // KEXIV2_VERSION >= 0x010000
 }
 
 void MetadataPanel::slotTabChanged(int)
@@ -311,8 +303,6 @@ void MetadataPanel::slotTabChanged(int)
     qApp->processEvents();
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Properties SideBar");
-
-#if KEXIV2_VERSION >= 0x010000
 
     QWidget* const tab = d->tab->currentWidget();
 
@@ -348,8 +338,6 @@ void MetadataPanel::slotTabChanged(int)
             d->xmpViewerConfig->setcheckedTagsList(group.readEntry("XMP Tags Filter", d->xmpViewerConfig->defaultFilter()));
         }
     }
-
-#endif // KEXIV2_VERSION >= 0x010000
 
     qApp->restoreOverrideCursor();
 }
