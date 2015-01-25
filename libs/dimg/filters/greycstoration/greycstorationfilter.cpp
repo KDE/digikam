@@ -48,7 +48,7 @@
 
 #include "dynamicthread.h"
 
-#define cimg_plugin "greycstoration.h"
+#define cimg_plugin "cimg/greycstoration.h"
 
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter
  */
@@ -69,7 +69,7 @@
 
 // CImg includes
 
-#include "CImg.h"
+#include "cimg/CImg.h"
 
 // Restore warnings
 #if not defined(__APPLE__) && defined(__GNUC__)
