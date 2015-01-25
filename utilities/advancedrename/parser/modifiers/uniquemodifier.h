@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <qstringlist.h>
+#include <QStringList>
 
 // Local includes
 
