@@ -33,10 +33,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkface includes
-
-#include <libkface_version.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -672,11 +668,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
                 {
                     // Only perform this call if recognition as results, to prevent crash in QMap. See bug #335624
 
-#if KFACE_VERSION >= 0x030500
                     tagId = FaceTags::getOrCreateTagForIdentity(package->recognitionResults[i].attributesMap());
-#else
-                    tagId = FaceTags::getOrCreateTagForIdentity(package->recognitionResults[i].attributes);
-#endif
                 }
 
                 package->databaseFaces[i]        = utils.changeSuggestedName(package->databaseFaces[i], tagId);
@@ -850,7 +842,7 @@ QString DetectionBenchmarker::result() const
                                      "This means the result is cannot be representative; "
                                      "it can only be used to compare preselected collections, "
                                      "and the specificity and false-positive rate have little meaning. </p>")
-                .arg(negativeImages).arg(totalImages);
+                                     .arg(negativeImages).arg(totalImages);
         negativeImages     = qMax(negativeImages, 1);
     }
 
@@ -917,6 +909,7 @@ RecognitionBenchmarker::RecognitionBenchmarker(FacePipeline::Private* const d)
 QString RecognitionBenchmarker::result() const
 {
     int totalImages = 0;
+
     foreach (const Statistics& stat, results)
     {
         totalImages += stat.knownFaces;
@@ -927,6 +920,7 @@ QString RecognitionBenchmarker::result() const
                         "%1 Images <br/>"
                         "%2 Identities <br/>"
                         "</p><p>").arg(totalImages).arg(results.size());
+
     for (QMap<int, Statistics>::const_iterator it = results.begin(); it != results.end(); ++it)
     {
         const Statistics& stat = it.value();
@@ -935,6 +929,7 @@ QString RecognitionBenchmarker::result() const
         s += QString(": %1 faces, %2 (%3%) correctly recognized<br/>")
             .arg(stat.knownFaces).arg(stat.correctlyRecognized).arg(correctRate * 100);
     }
+
     s += "</p>";
     return s;
 }
@@ -953,6 +948,7 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
             result.correctlyRecognized++;
         }
     }
+
     emit processed(package);
 }
 
@@ -969,15 +965,9 @@ public:
 
     KFaceIface::ImageListProvider* newImages(const KFaceIface::Identity& identity)
     {
-#if KFACE_VERSION >= 0x030500
         if (imagesToTrain.contains(identity.id()))
         {
             KFaceIface::QListImageListProvider& provider = imagesToTrain[identity.id()];
-#else
-        if (imagesToTrain.contains(identity.id))
-        {
-            KFaceIface::QListImageListProvider& provider = imagesToTrain[identity.id];
-#endif
             provider.reset();
             return &provider;
         }
@@ -1023,11 +1013,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 
             KFaceIface::Identity identity = utils.identityForTag(dbFace.tagId(), database);
 
-#if KFACE_VERSION >= 0x030500
             identities  << identity.id();
-#else
-            identities  << identity.id;
-#endif
 
             if (!identitySet.contains(identity))
             {
@@ -1226,7 +1212,7 @@ bool FacePipeline::Private::hasFinished()
 void FacePipeline::Private::checkFinished()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Check for finish: " << packagesOnTheRoad << "packages,"
-             << infosForFiltering << "infos to filter, hasFinished()" << hasFinished();
+                                 << infosForFiltering << "infos to filter, hasFinished()" << hasFinished();
 
     if (hasFinished())
     {

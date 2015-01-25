@@ -32,10 +32,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkface includes
-
-#include <libkface_version.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -113,11 +109,7 @@ QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
         }
 
         // We'll get the unknownPersonTagId if the identity is null
-#if KFACE_VERSION >= 0x030500
         int tagId               = FaceTags::getOrCreateTagForIdentity(identity.attributesMap());
-#else
-        int tagId               = FaceTags::getOrCreateTagForIdentity(identity.attributes);
-#endif
         QRect fullSizeRect      = TagRegion::relativeToAbsolute(detectedFaces[i], fullSize);
         DatabaseFace::Type type = identity.isNull() ? DatabaseFace::UnknownName : DatabaseFace::UnconfirmedName;
 
@@ -275,33 +267,21 @@ KFaceIface::Identity FaceUtils::identityForTag(int tagId, KFaceIface::Recognitio
 
     if (!identity.isNull())
     {
-#if KFACE_VERSION >= 0x030500
         qCDebug(DIGIKAM_GENERAL_LOG) << "Found kface identity" << identity.id() << "for tag" << tagId;
-#else
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found kface identity" << identity.id << "for tag" << tagId;
-#endif
         return identity;
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Adding new kface identity with attributes" << attributes;
     identity = db.addIdentity(attributes);
-    
-#if KFACE_VERSION >= 0x030500
+
     FaceTags::applyTagIdentityMapping(tagId, identity.attributesMap());
-#else
-    FaceTags::applyTagIdentityMapping(tagId, identity.attributes);
-#endif
 
     return identity;
 }
 
 int FaceUtils::tagForIdentity(const KFaceIface::Identity& identity) const
 {
-#if KFACE_VERSION >= 0x030500
     return FaceTags::getOrCreateTagForIdentity(identity.attributesMap());
-#else
-    return FaceTags::getOrCreateTagForIdentity(identity.attributes);
-#endif
 }
 
 // --- Editing normal tags, reimplemented with FileActionMngr ---

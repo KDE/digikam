@@ -30,8 +30,6 @@
 #include <QGraphicsWidget>
 #include <QObject>
 
-// KDE includes
-
 // Local includes
 
 #include "addtagscombobox.h"
