@@ -82,6 +82,7 @@ public:
     bool    cameraMkDirSupport() const;
     bool    cameraDelDirSupport() const;
     bool    cameraUseUMSDriver() const;
+    bool    cameraUseGPhotoDriver() const;
     QString cameraTitle() const;
 
     void enableZoomPlusAction(bool val);

@@ -684,9 +684,9 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     tempURL2.setPath(tempURL2.path() + '/' + (QString(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
                     temp     = tempURL2.toLocalFile();
 
-                    // when convertnig a file, we need to set the new format extension..
-                    // would another place be better for this?
-                    dest = dest.left(dest.lastIndexOf('.')) + losslessFormat;
+                    // When converting a file, we need to set the new format extension..
+                    // The new extension is already set in importui.cpp.
+                    
                     qCDebug(LOG_IMPORTUI) << "Convert to LossLess: " << file << " using (" << tempURL << ")  destination: " << dest;
 
                     if (!JPEGUtils::jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))

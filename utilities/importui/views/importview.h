@@ -61,6 +61,7 @@ public:
     void setThumbSize(int size);
     void toggleShowBar(bool b);
     void toggleFullScreen(bool set);
+    void setIconViewUpdatesEnabled(bool b);
 
     void scrollTo(const QString& folder, const QString& file);
 

@@ -856,4 +856,9 @@ void ImportView::toggleFullScreen(bool set)
     d->stackedView->importPreviewView()->toggleFullScreen(set);
 }
 
+void ImportView::setIconViewUpdatesEnabled(bool b)
+{
+    d->iconView->setUpdatesEnabled(b);
+}
+
 } // namespace Digikam
