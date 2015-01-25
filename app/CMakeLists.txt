@@ -16,7 +16,6 @@ set(libdigikamhelpers_SRCS
 # TODO 3rdparty libs could form one collection?
 set(digikamcore_LIB_SRCS
     ${libdigikamhelpers_SRCS}
-    ${libkde3rdparty_SRCS}
 )
 # TODO this should be turned from static to dynamic
 add_library(digikamcore STATIC ${digikamcore_LIB_SRCS})
@@ -307,6 +306,7 @@ target_link_libraries(digikamgui
                       lighttable
                       fuzzysearch
                       maintenance
+                      3rdparty
                       
                       Qt5::Core
                       Qt5::Gui
