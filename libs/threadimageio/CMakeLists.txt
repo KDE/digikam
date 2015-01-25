@@ -23,6 +23,7 @@ target_link_libraries(threadimageio
                       digikamdatabase
                       dthread
                       pgfutils
+                      3rdparty
                       
                       Qt5::Core
                       Qt5::Gui

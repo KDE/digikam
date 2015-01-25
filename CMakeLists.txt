@@ -471,28 +471,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
     add_custom_target(digikam-gitversion ALL COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake")
 
     # ==================================================================================================
-    # get the gcc version
-
-    # CImg.h version 1.2.8 do not compile fine with gcc 4.3.x
-    # See bug #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
-    # Using -fno-tree-pre is work around this problem.
-
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        exec_program(${CMAKE_CXX_COMPILER} ARGS ${CMAKE_CXX_COMPILER_ARG1} --version OUTPUT_VARIABLE VERSION_GCC_INFO)
-        string(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")
-
-        # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the patch level, handle this here:
-        if(NOT GCC_VERSION)
-            string(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
-        endif()
-
-        if (${GCC_VERSION} VERSION_LESS "4.3.0")
-            message(STATUS "Adjusting compilation flags for GCC version (${GCC_VERSION} )")
-            add_definitions(-fno-tree-pre)
-        endif()
-    endif()
-
-    # ==================================================================================================
     # To prevent warnings from M$ compiler
 
     if(WIN32 AND MSVC)
@@ -521,23 +499,13 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Includes rules
 
-    # TODO cimg is only used by greycstoration of dimg, move it there?
     # TODO digikam_export.h, version.h, git_version.h and config-digikam.h should be created to the main binarydir? or main sourcedir?
     include_directories(
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
-  
                         app/utils/ # required for digikam_export.h
                         
                         # version.h, gitversion.h config-digikam.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/utils
     )
-
-    # Boost library rules
-
-    # TODO add this where it is needed?
-    #IF(Boost_FOUND)
-    #    include_directories(${Boost_INCLUDE_DIRS})
-    #ENDIF()
     
     # libgphoto2 library rules
     message(INFO "gphoto2 includes are required only to display the version in the about data/component info, refactor")
