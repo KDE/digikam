@@ -34,7 +34,6 @@
 
 // KDE includes
 
-#include <kio/global.h>
 #include <kio/job.h>
 
 // libkgeomap includes
@@ -122,8 +121,8 @@ private:
     void removeMarkerFromTileAndChildren(const qlonglong imageId, const KGeoMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile);
     void addMarkerToTileAndChildren(const qlonglong imageId, const KGeoMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel);
 
-    class GPSMarkerTilerPrivate;
-    GPSMarkerTilerPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

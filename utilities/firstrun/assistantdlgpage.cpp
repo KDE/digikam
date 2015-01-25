@@ -35,7 +35,6 @@
 
 #include <kseparator.h>
 #include <kassistantdialog.h>
-#include <kpagewidgetmodel.h>
 
 // Libkdcraw includes
 

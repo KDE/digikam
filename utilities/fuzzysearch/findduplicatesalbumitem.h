@@ -27,9 +27,6 @@
 // Qt includes
 
 #include <QTreeWidget>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

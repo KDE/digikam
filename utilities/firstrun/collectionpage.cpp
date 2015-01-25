@@ -42,7 +42,6 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
-#include <kglobalsettings.h>
 
 // Local includes
 

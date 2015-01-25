@@ -74,7 +74,7 @@ public:
     QList<qlonglong> imagesId;
 };
 
-class GPSMarkerTiler::GPSMarkerTilerPrivate
+class GPSMarkerTiler::Private
 {
 public:
 
@@ -94,7 +94,7 @@ public:
         QList<GPSImageInfo> dataFromDatabase;
     };
 
-    GPSMarkerTilerPrivate()
+    Private()
         : jobs(),
           thumbnailLoadThread(0),
           thumbnailMap(),
@@ -129,7 +129,7 @@ public:
  * @param parent Parent object
  */
 GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel)
-    : KGeoMap::AbstractMarkerTiler(parent), d(new GPSMarkerTilerPrivate())
+    : KGeoMap::AbstractMarkerTiler(parent), d(new Private())
 {
     resetRootTile();
 
@@ -250,7 +250,7 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
 
     currentJob->addMetaData("wantDirectQuery", "false");
 
-    GPSMarkerTilerPrivate::InternalJobs currentJobInfo;
+    Private::InternalJobs currentJobInfo;
 
     currentJobInfo.kioJob = currentJob;
     currentJobInfo.level  = level;
@@ -512,7 +512,7 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
     QByteArray  di(data);
     QDataStream ds(&di, QIODevice::ReadOnly);
 
-    GPSMarkerTilerPrivate::InternalJobs* internalJob = 0;
+    Private::InternalJobs* internalJob = 0;
 
     for (int i = 0; i < d->jobs.count(); ++i)
     {
