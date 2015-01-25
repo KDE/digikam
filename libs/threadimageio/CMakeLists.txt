@@ -1,23 +1,3 @@
-# TODO move pgfutils to own dir?
-
-# Enable C++ Exceptions support, required by pgfutils
-kde_source_files_enable_exceptions(pgfutils.cpp)
-
-message(INFO " move pgfutils to its own subdir from threadimageio?")
-include_directories(${PGF_INCLUDE_DIRS})
-
-set(libpgfutils_SRCS pgfutils.cpp)
-
-add_library(pgfutils ${libpgfutils_SRCS})
-
-target_include_directories(pgfutils PUBLIC ${PGF_INCLUDE_DIRS})
-
-target_link_libraries(pgfutils
-                         Qt5::Gui
-                         ${PGF_LIBRARIES}
-)
-
-
 set(libthreadimageio_SRCS
     filereadwritelock.cpp
     loadsavethread.cpp
