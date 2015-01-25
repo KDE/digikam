@@ -221,7 +221,6 @@ void Canvas::applyTransform(const IccTransform& t)
     }
     else
     {
-        d->core->updateColorManagement();
         viewport()->update();
     }
 }

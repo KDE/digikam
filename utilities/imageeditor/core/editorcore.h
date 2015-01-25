@@ -70,8 +70,8 @@ public:
 
     void    load(const QString& filename, IOFileSettings* const iofileSettings);
     void    applyTransform(const IccTransform& transform);
-    void    updateColorManagement();
     void    setSoftProofingEnabled(bool enabled);
+    bool    softProofingEnabled() const;
 
     void                 setICCSettings(const ICCSettingsContainer& cmSettings);
     ICCSettingsContainer getICCSettings() const;

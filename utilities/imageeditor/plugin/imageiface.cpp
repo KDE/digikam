@@ -365,13 +365,24 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
         }
 
         QPixmap              pixImage;
+        bool doSoftProofing              = d->core->softProofingEnabled();
         ICCSettingsContainer iccSettings = d->core->getICCSettings();
 
-        if (iccSettings.enableCM && iccSettings.useManagedView)
+        if (iccSettings.enableCM && (iccSettings.useManagedView || doSoftProofing))
         {
-            IccManager manager(d->targetPreviewImage);
-            IccTransform monitorICCtrans = manager.displayTransform();
-            pixImage                     = d->targetPreviewImage.convertToPixmap(monitorICCtrans);
+            IccManager   manager(d->targetPreviewImage);
+            IccTransform monitorICCtrans;
+
+            if (doSoftProofing)
+            {
+                monitorICCtrans = manager.displaySoftProofingTransform(iccSettings.defaultProofProfile);
+            }
+            else
+            {
+                monitorICCtrans = manager.displayTransform();
+            }
+
+            pixImage = d->targetPreviewImage.convertToPixmap(monitorICCtrans);
         }
         else
         {
