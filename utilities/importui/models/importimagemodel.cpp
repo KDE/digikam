@@ -27,12 +27,9 @@
 
 #include <QHash>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "downloadhistory.h"
 #include "cameracontroller.h"
 

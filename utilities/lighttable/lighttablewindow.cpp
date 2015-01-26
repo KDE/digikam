@@ -31,12 +31,12 @@
 #include <QVBoxLayout>
 #include <QAction>
 #include <QMenuBar>
+#include <QStatusBar>
 #include <QMenu>
 
 // KDE includes
 
 #include <kactioncollection.h>
-#include <kconfig.h>
 #include <kedittoolbar.h>
 #include <klocalizedstring.h>
 #include <knotifyconfigwidget.h>
@@ -44,16 +44,13 @@
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
-#include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
-#include <ktoolbar.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
 // Libkdcraw includes
 
-#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes

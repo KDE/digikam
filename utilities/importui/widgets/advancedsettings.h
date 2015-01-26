@@ -29,9 +29,9 @@
 #include <QWidget>
 #include <QDateTime>
 
-// KDE includes
+// KDE includes 
 
-#include <kconfig.h>
+#include <kconfiggroup.h>
 
 // Local settings
 

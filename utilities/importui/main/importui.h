@@ -35,9 +35,6 @@
 #include <QKeyEvent>
 #include <QCloseEvent>
 #include <QMultiMap>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

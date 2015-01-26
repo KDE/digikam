@@ -59,7 +59,6 @@ extern "C"
 #include <klocalizedstring.h>
 #include <kprocess.h>
 #include <kmacroexpander.h>
-
 #include <kio/renamedialog.h>
 #include <kio/global.h>
 

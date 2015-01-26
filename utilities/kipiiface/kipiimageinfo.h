@@ -33,9 +33,6 @@
 #include <QString>
 #include <QStringList>
 #include <QMap>
-
-// KDE includes
-
 #include <QUrl>
 
 // LibKipi includes

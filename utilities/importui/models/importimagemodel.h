@@ -27,9 +27,6 @@
 // Qt includes
 
 #include <QAbstractListModel>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

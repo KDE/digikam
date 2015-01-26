@@ -26,7 +26,6 @@
 #include "filtercombo.h"
 #include "filter.h"
 #include "importimagemodel.h"
-#include <KDebug>
 
 namespace Digikam
 {
@@ -512,10 +511,9 @@ bool ImportFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sour
     if(d->filter->matchesCurrentFilter(info)) {
         return true;
     }
-    
+
     return false;
 }
-
 
 // -------------------------------------------------------------------------------------------------------
 

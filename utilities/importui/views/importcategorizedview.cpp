@@ -27,12 +27,9 @@
 
 #include <QTimer>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "camitemsortsettings.h"
 #include "iccsettings.h"
 #include "imageselectionoverlay.h"

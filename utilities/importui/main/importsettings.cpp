@@ -24,13 +24,14 @@
 
 #include "importsettings.h"
 
+// Qt includes
+
+#include <QFontDatabase>
+
 // KDE includes
 
-
-#include <kglobalsettings.h>
-#include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kconfiggroup.h>
-#include <QFontDatabase>
 
 // Local includes
 

@@ -33,9 +33,8 @@
 
 // KDE includes
 
-#include <kio/global.h>
-#include <kconfig.h>
 #include <klocalizedstring.h>
+#include <kio/global.h>
 
 // LibKipi includes
 

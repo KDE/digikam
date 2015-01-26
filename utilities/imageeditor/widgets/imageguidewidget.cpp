@@ -34,15 +34,10 @@
 #include <QFont>
 #include <QFontMetrics>
 
-// KDE includes
-
-
-
-#include "digikam_debug.h"
-
 // Local includes
 
 #include "dimg.h"
+#include "digikam_debug.h"
 #include "previewtoolbar.h"
 #include "exposurecontainer.h"
 #include "iccsettingscontainer.h"

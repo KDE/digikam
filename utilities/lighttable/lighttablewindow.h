@@ -28,11 +28,7 @@
 
 #include <QString>
 #include <QCloseEvent>
-
-// KDE includes
-
 #include <QUrl>
-#include <ktoggleaction.h>
 
 // Local includes
 

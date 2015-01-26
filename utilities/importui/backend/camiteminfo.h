@@ -31,9 +31,6 @@
 #include <QByteArray>
 #include <QDateTime>
 #include <QDebug>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

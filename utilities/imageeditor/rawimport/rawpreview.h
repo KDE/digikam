@@ -29,9 +29,6 @@
 #include <QImage>
 #include <QPixmap>
 #include <QResizeEvent>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

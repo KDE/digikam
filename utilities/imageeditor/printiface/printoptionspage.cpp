@@ -38,8 +38,6 @@
 // KDE includes
 
 #include <kconfigdialogmanager.h>
-#include <kconfig.h>
-#include <kglobalsettings.h>
 
 // Local includes
 

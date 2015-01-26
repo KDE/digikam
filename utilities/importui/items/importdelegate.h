@@ -25,7 +25,7 @@
 #ifndef IMPORTDELEGATE_H
 #define IMPORTDELEGATE_H
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <QListView>
 
 // Local includes

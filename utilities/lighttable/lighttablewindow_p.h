@@ -27,10 +27,10 @@
 // Qt includes
 
 #include <QSplitter>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <kselectaction.h>
 #include <ksqueezedtextlabel.h>
 

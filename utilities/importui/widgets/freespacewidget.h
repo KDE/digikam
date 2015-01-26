@@ -28,11 +28,9 @@
 
 #include <QString>
 #include <QWidget>
-
-// KDE includes
-
 #include <QAction>
 
+// KDE includes
 
 #include <kdiskfreespaceinfo.h>
 

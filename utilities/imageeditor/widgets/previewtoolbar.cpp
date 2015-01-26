@@ -33,9 +33,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
-
-
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>

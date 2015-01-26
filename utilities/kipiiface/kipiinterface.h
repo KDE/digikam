@@ -37,7 +37,6 @@
 // Libkipi includes
 
 #include <interface.h>
-#include <libkipi_version.h>
 
 // Local includes
 
@@ -94,10 +93,8 @@ public:
 
     KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const;
 
-    #if KIPI_VERSION >= 0x020100
     void aboutToEdit(const QUrl& url, KIPI::EditHints hints);
     void editingFinished(const QUrl& url, KIPI::EditHints hints);
-    #endif
 
 public Q_SLOTS:
 

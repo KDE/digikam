@@ -24,10 +24,13 @@
 #ifndef ImportContextMenu_H
 #define ImportContextMenu_H
 
+// Qt includes
+
+#include <QMenu>
+
 // KDE includes
 
 #include <kactioncollection.h>
-#include <QMenu>
 
 // Local includes
 

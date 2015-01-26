@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ktextedit.h>
 #include <khelpclient.h>
 
 namespace Digikam
@@ -51,7 +50,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
 
     // ----------------------------------------------------------
 
-    KTextEdit* const summaryView = new KTextEdit(summary);
+    QTextEdit* const summaryView = new QTextEdit(summary);
     summaryView->setWordWrapMode(QTextOption::WordWrap);
     summaryView->setReadOnly(true);
 
@@ -61,7 +60,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
 
     // ----------------------------------------------------------
 
-    KTextEdit* const manualView  = new KTextEdit(manual);
+    QTextEdit* const manualView  = new QTextEdit(manual);
     manualView->setWordWrapMode(QTextOption::WordWrap);
     manualView->setReadOnly(true);
 
@@ -71,7 +70,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
 
     // ----------------------------------------------------------
 
-    KTextEdit* const aboutView   = new KTextEdit(about);
+    QTextEdit* const aboutView   = new QTextEdit(about);
     aboutView->setWordWrapMode(QTextOption::WordWrap);
     aboutView->setReadOnly(true);
 

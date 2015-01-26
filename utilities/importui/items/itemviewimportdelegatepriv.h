@@ -32,10 +32,6 @@
 #include <QPolygon>
 #include <QModelIndex>
 
-// KDE includes
-
-#include <klocale.h>
-
 // Local includes
 
 #include "digikam_debug.h"

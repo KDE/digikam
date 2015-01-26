@@ -23,7 +23,7 @@
 #ifndef RAWIMPORTDLG_H
 #define RAWIMPORTDLG_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
 

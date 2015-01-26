@@ -29,11 +29,11 @@
 
 #include <QPointer>
 #include <QAction>
+#include <QMenu>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <QMenu>
 
 // Local includes
 

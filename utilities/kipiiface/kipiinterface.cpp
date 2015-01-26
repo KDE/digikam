@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <klocalizedstring.h>
 
 // Libkipi includes
@@ -445,7 +444,6 @@ void KipiInterface::progressCompleted(const QString& id)
     }
 }
 
-#if KIPI_VERSION >= 0x020100
 void KipiInterface::aboutToEdit(const QUrl& url, KIPI::EditHints hints)
 {
     if (hints == KIPI::HintMetadataOnlyChange)
@@ -463,8 +461,6 @@ void KipiInterface::editingFinished(const QUrl& url, KIPI::EditHints hints)
         ScanController::instance()->finishFileMetadataWrite(info, !(hints & KIPI::HintEditAborted));
     }
 }
-#endif
-
 
 // ---------------------------------------------------------------------------------------
 

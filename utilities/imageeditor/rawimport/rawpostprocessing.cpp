@@ -23,12 +23,9 @@
 
 #include "rawpostprocessing.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "imagehistogram.h"
 #include "imagelevels.h"
 #include "wbfilter.h"

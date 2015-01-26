@@ -23,7 +23,7 @@
 #ifndef RAWSETTINGSBOX_H
 #define RAWSETTINGSBOX_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
 

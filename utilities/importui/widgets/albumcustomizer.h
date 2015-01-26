@@ -29,9 +29,9 @@
 
 #include <QWidget>
 
-// KDE includes
+// KDE includes 
 
-#include <kconfig.h>
+#include <kconfiggroup.h>
 
 namespace Digikam
 {

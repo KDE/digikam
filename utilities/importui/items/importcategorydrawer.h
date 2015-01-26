@@ -30,7 +30,6 @@
 
 // KDE includes
 
-
 #include <kcategorydrawer.h>
 
 namespace Digikam

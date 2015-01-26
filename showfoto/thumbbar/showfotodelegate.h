@@ -27,7 +27,7 @@
 
 // Qt includes
 
-//#include <qglobal.h>
+//#include <QtGlobal>
 #include <QListView>
 
 // Local includes

@@ -31,8 +31,6 @@
 
 // KDE includes
 
-
-
 #include <kio/previewjob.h>
 
 // Local includes

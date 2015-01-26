@@ -30,8 +30,6 @@
 #include "dmetadata.h"
 #include "digikam_debug.h"
 
-#include <QDebug>
-
 namespace Digikam
 {
 

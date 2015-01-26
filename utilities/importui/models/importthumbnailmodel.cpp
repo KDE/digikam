@@ -28,14 +28,9 @@
 #include <QCache>
 #include <QReadWriteLock>
 
-// KDE includes
-
-#include <kio/previewjob.h>
-#include "digikam_debug.h"
-
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "cameracontroller.h"
 
 namespace Digikam

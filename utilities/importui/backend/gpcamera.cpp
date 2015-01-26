@@ -51,12 +51,11 @@ extern "C"
 
 // KDE includes
 
-#include <kcodecs.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "digikam_config.h"
 #include "dmetadata.h"
 
