@@ -318,8 +318,7 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
         connect(action, SIGNAL(changed()),
                 this, SLOT(slotTagActionChanged()));
 
-#pragma message("PORT QT5")
-//        d->tagsActionMap.insert(tagId, action);
+        d->tagsActionMap.insert(tagId, action);
     }
 
     return true;
