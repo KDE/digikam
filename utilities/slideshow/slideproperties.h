@@ -28,9 +28,6 @@
 #include <QPainter>
 #include <QString>
 #include <QColor>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

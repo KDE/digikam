@@ -35,9 +35,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kaboutdata.h>
-
-#include <kcomponentdata.h>
 
 namespace Digikam
 {

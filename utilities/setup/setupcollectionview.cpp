@@ -54,7 +54,6 @@
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
 #include <kurlrequester.h>
-#include <kwidgetitemdelegate.h>
 
 // Local includes
 

@@ -28,10 +28,9 @@
 
 #include <QLabel>
 #include <QString>
+#include <QAction>
 
 // KDE includes
-
-#include <QAction>
 
 #include <kselectaction.h>
 #include <ktoggleaction.h>

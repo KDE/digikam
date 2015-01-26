@@ -40,7 +40,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kconfig.h>
 #include <kwindowconfig.h>
 #include <khelpclient.h>
 

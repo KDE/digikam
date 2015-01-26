@@ -45,7 +45,6 @@
 
 // KDE includes
 
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
 #include <khelpclient.h>

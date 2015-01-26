@@ -24,7 +24,7 @@
 #ifndef QUEUE_SETTINGS_H
 #define QUEUE_SETTINGS_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
 

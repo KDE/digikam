@@ -35,7 +35,6 @@
 #include <klocalizedstring.h>
 #include <kurllabel.h>
 
-
 // Libkdcraw includes
 
 #include <rwidgetutils.h>

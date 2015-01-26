@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kconfig.h>
+
 #include <kselectaction.h>
 #include <kstatusbar.h>
 #include <ksqueezedtextlabel.h>

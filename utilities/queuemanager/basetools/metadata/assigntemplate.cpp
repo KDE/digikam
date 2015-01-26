@@ -32,8 +32,6 @@
 
 #include <klocalizedstring.h>
 
-
-
 // Local includes
 
 #include "dimg.h"

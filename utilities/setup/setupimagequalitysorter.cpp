@@ -36,7 +36,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes

@@ -39,7 +39,6 @@ extern "C"
 
 #include <klocalizedstring.h>
 
-
 // Local includes
 
 #include "digikam_debug.h"

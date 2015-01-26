@@ -30,11 +30,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
-
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "borderfilter.h"
 #include "bordersettings.h"

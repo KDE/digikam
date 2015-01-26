@@ -43,21 +43,18 @@
 #include <QTextEdit>
 #include <QTimeLine>
 #include <QVBoxLayout>
+#include <QPushButton>
+#include <QTextEdit>
 
 // KDE includes
 
-
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <QPushButton>
 #include <kstandardguiitem.h>
-#include <ktextedit.h>
-#include <KGuiItem>
-#include <KStandardGuiItem>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummodel.h"
 #include "ratingwidget.h"
 #include "thememanager.h"
@@ -623,7 +620,7 @@ StyleSheetDebugger::StyleSheetDebugger(QWidget* const object)
 
     QVBoxLayout* vbox = new QVBoxLayout;
 
-    m_edit            = new KTextEdit;
+    m_edit            = new QTextEdit;
     vbox->addWidget(m_edit, 1);
     m_okButton = new QPushButton;
     KGuiItem::assign(m_okButton,KStandardGuiItem::ok());

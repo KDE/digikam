@@ -36,6 +36,7 @@
 #include <QKeySequence>
 #include <QAction>
 #include <QMenuBar>
+#include <QStatusBar>
 #include <QMenu>
 #include <QMessageBox>
 
@@ -49,10 +50,8 @@
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
-#include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
-#include <ktoolbar.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 

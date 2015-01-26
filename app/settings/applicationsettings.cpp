@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kconfig.h>
+
 
 // Local includes
 

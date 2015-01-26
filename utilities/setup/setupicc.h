@@ -31,9 +31,6 @@
 #include <QScrollArea>
 #include <QMap>
 #include <QDir>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

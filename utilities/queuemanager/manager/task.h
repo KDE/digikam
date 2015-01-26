@@ -25,7 +25,7 @@
 #ifndef TASK_H
 #define TASK_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
 

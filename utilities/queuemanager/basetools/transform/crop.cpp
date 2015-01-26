@@ -37,8 +37,6 @@
 
 #include <klocalizedstring.h>
 
-
-
 // Libkdcraw includes
 
 #include <rnuminput.h>

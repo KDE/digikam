@@ -37,11 +37,10 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 
-// KFace includes
+// Libkface includes
 
 #include <recognitiondatabase.h>
 

@@ -47,10 +47,8 @@
 
 // KDE includes
 
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kurllabel.h>
-#include <kconfig.h>
 
 // Local includes
 

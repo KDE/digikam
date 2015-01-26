@@ -37,7 +37,7 @@
 
 // KDE includes
 
-#include <kconfig.h>
+
 #include <klocalizedstring.h>
 #include <ktip.h>
 #include <kaboutdata.h>

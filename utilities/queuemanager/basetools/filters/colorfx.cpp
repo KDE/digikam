@@ -23,13 +23,9 @@
 
 #include "colorfx.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "colorfxfilter.h"
 #include "colorfxsettings.h"

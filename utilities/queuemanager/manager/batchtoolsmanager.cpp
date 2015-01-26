@@ -23,10 +23,6 @@
 
 #include "batchtoolsmanager.h"
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_config.h"

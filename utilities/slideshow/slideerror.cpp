@@ -28,13 +28,12 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QPalette>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-#include <QApplication>
-#include <QStyle>
 
 namespace Digikam
 {

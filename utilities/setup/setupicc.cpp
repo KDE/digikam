@@ -456,7 +456,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
                                                  "You can specify an additional folder:"));
     d->iccFolderLabel->setWordWrap(true);
 
-    d->defaultPathKU           = new KUrlRequester;
+    d->defaultPathKU            = new KUrlRequester;
     d->iccFolderLabel->setBuddy(d->defaultPathKU);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
     d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);

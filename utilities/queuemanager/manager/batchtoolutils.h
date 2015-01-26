@@ -30,9 +30,6 @@
 #include <QVariant>
 #include <QMap>
 #include <QList>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

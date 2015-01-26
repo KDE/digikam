@@ -24,7 +24,7 @@
 
 #include "rawprocessingfilter.h"
 
-// KDcraw includes
+// Libkdcraw includes
 
 #include <kdcraw.h>
 

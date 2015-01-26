@@ -33,8 +33,6 @@
 
 #include <klocalizedstring.h>
 
-
-
 // Libkdcraw includes
 
 #include <rwidgetutils.h>

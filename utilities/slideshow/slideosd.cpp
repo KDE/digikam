@@ -33,11 +33,6 @@
 #include <QApplication>
 #include <QProgressBar>
 
-// KDE includes
-
-
-
-
 // Windows includes
 
 #ifdef Q_OS_WIN32

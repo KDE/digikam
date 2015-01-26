@@ -51,7 +51,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kpagedialog.h>
 #include <kurlrequester.h>
 
 // Local includes

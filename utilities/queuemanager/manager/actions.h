@@ -28,9 +28,6 @@
 
 #include <QString>
 #include <QMetaType>
-
-// KDE includes
-
 #include <QUrl>
 
 namespace Digikam

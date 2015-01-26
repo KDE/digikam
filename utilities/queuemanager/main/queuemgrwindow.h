@@ -29,9 +29,6 @@
 #include <QMap>
 #include <QString>
 #include <QCloseEvent>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes

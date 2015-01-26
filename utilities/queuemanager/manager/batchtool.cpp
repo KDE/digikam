@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -44,6 +43,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimgbuiltinfilter.h"
 #include "dimgloaderobserver.h"
 #include "dimgthreadedfilter.h"

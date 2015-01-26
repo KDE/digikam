@@ -28,14 +28,12 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QWidget>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
-
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

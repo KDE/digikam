@@ -26,17 +26,12 @@
 // Qt includes
 
 #include <QPainter>
-
-// KDE includes
-
-#include "digikam_debug.h"
-#include <kglobalsettings.h>
-
 #include <QApplication>
 #include <QDesktopWidget>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "previewloadthread.h"
 

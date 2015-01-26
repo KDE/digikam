@@ -27,15 +27,11 @@
 
 #include <QString>
 #include <QDataStream>
-
-// KDE includes
-
-#include <kio/job.h>
 #include <QUrl>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "imagelister.h"
 #include "dnotificationwrapper.h"

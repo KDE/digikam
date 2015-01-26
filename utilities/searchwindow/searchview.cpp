@@ -40,7 +40,6 @@
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 #include <kguiitem.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
