@@ -26,11 +26,9 @@
 
 #include "datefolderview.h"
 
-
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kcalendarsystem.h>
 #include <kconfiggroup.h>
 
 // Local includes
