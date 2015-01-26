@@ -37,11 +37,11 @@
 #include <QToolButton>
 #include <QList>
 #include <QComboBox>
+#include <QLocale>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <klocale.h>
 
 // Local includes
 
@@ -288,7 +288,7 @@ void DZoomBar::slotZoomTextChanged()
 {
     QString txt = d->zoomCombo->currentText();
     bool ok     = false;
-    double zoom = KLocale::global()->readNumber(txt, &ok) / 100.0;
+    double zoom = QLocale().toDouble(txt, &ok) / 100.0;
 
     if (ok && zoom > 0.0 && zoom <= 48.0)
     {
