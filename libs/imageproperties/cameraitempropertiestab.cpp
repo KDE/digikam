@@ -32,11 +32,11 @@
 #include <QIcon>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QLocale>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <klocale.h>
 #include <kio/global.h>
 
 // Local includes
@@ -434,14 +434,14 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
 
     if (itemInfo.ctime.isValid())
     {
-        d->labelFileDate->setText(KLocale::global()->formatDateTime(itemInfo.ctime, KLocale::ShortDate, true));
+        d->labelFileDate->setText(QLocale().toString(itemInfo.ctime, QLocale::ShortFormat));
     }
     else
     {
         d->labelFileDate->setText(unknown);
     }
 
-    str = i18n("%1 (%2)", KIO::convertSize(itemInfo.size), KLocale::global()->formatNumber(itemInfo.size, 0));
+    str = i18n("%1 (%2)", KIO::convertSize(itemInfo.size), QLocale().toString(itemInfo.size));
     d->labelFileSize->setText(str);
 
     // -- Image Properties --------------------------------------------------
@@ -536,7 +536,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
 
     if (photoInfo.dateTime.isValid())
     {
-        str = KLocale::global()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
+        str = QLocale().toString(photoInfo.dateTime, QLocale::ShortFormat);
         d->labelPhotoDateTime->setText(str);
     }
     else

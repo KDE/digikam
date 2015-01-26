@@ -33,10 +33,10 @@
 #include <QColor>
 #include <QSplitter>
 #include <QFileInfo>
+#include <QLocale>
 
 // KDE includes
 
-#include <klocale.h>
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
@@ -541,11 +541,11 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             ImageMetadataContainer photoInfo = info.imageMetadataContainer();
             VideoMetadataContainer videoInfo = info.videoMetadataContainer();
 
-            str = KLocale::global()->formatDateTime(commonInfo.fileModificationDate, KLocale::ShortDate, true);
+            str = QLocale().toString(commonInfo.fileModificationDate, QLocale::ShortFormat);
             m_propertiesTab->setFileModifiedDate(str);
 
             str = QString("%1 (%2)").arg(KIO::convertSize(commonInfo.fileSize))
-                  .arg(KLocale::global()->formatNumber(commonInfo.fileSize, 0));
+                                    .arg(QLocale().toString(commonInfo.fileSize));
             m_propertiesTab->setFileSize(str);
 
             //  These infos are not stored in DB
@@ -592,7 +592,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
 
             if (commonInfo.creationDate.isValid())
             {
-                str = KLocale::global()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
+                str = QLocale().toString(commonInfo.creationDate, QLocale::ShortFormat);
                 m_propertiesTab->setPhotoDateTime(str);
             }
             else

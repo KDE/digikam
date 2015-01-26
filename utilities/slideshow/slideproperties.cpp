@@ -31,11 +31,11 @@
 #include <QTextDocument>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QLocale>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <klocale.h>
 
 // Local includes
 
@@ -233,7 +233,7 @@ void SlideProperties::paintEvent(QPaintEvent*)
     {
         if (photoInfo.dateTime.isValid())
         {
-            str = KLocale::global()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
+            str = QLocale().toString(photoInfo.dateTime, QLocale::ShortFormat);
             printInfoText(p, offset, str);
         }
     }
