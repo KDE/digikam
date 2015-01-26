@@ -309,15 +309,15 @@ int TimeLineWidget::cursorInfo(QString& infoDate) const
 
         case Week:
         {
-            int weekNb = d->calendar->week(date);
+            int weekNb    = d->calendar->week(date);
             QDate endDate = d->calendar->addDays(date, 7);
-            infoDate = i18nc("Week #weeknumber - month name - year string\nStart:\tEnd: ",
-                             "Week #%1 - %2 %3\n%4\t%5",
-                             weekNb,
-                             d->calendar->monthName(date),
-                             d->calendar->formatDate(date, "%Y"),
-                             i18n("Start: ") + d->calendar->formatDate(date,    KLocale::Day, KLocale::LongNumber),
-                             i18n("End: ")   + d->calendar->formatDate(endDate, KLocale::Day, KLocale::LongNumber));
+            infoDate      = i18nc("Week #weeknumber - month name - year string\nStart:\tEnd: ",
+                                  "Week #%1 - %2 %3\n%4\t%5",
+                                  weekNb,
+                                  d->calendar->monthName(date),
+                                  d->calendar->formatDate(date, "%Y"),
+                                  i18n("Start: ") + d->calendar->formatDate(date,    KLocale::Day, KLocale::LongNumber),
+                                  i18n("End: ")   + d->calendar->formatDate(endDate, KLocale::Day, KLocale::LongNumber));
             break;
         }
 

@@ -26,10 +26,10 @@
 
 #include <QFormLayout>
 #include <QComboBox>
+#include <QLocale>
 
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -40,17 +40,17 @@
 namespace
 {
 
-QString FormatAltitude(const qreal altitudeInMeters, const KLocale::MeasureSystem& measureSystem)
+QString FormatAltitude(const qreal altitudeInMeters, const QLocale::MeasurementSystem& measureSystem)
 {
-    if (measureSystem == KLocale::Metric)
+    if (measureSystem == QLocale::MetricSystem)
     {
-        const QString altitudeInMetersString = KLocale::global()->formatNumber(altitudeInMeters, 2);
+        const QString altitudeInMetersString = QLocale().toString(altitudeInMeters);
         return QString("%1 m").arg(altitudeInMetersString);
     }
     else
     {
-        const qreal altitudeInFeet = altitudeInMeters /* m */ / ( 0.3048 /* m/foot */ );
-        const QString altitudeInFeetString = KLocale::global()->formatNumber(altitudeInFeet, 2);
+        const qreal altitudeInFeet         = altitudeInMeters /* m */ / ( 0.3048 /* m/foot */ );
+        const QString altitudeInFeetString = QLocale().toString(altitudeInFeet, 'g', 2);
         return QString("%1 ft").arg(altitudeInFeetString);
     }
 }
@@ -157,8 +157,8 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
                 return QString();
             }
 
-            return QString("%1,%2").arg(KLocale::global()->formatNumber(info.latitudeNumber(), 7))
-                                   .arg(KLocale::global()->formatNumber(info.longitudeNumber(), 7));
+            return QString("%1,%2").arg(QLocale().toString(info.latitudeNumber(),  'g', 7))
+                                   .arg(QLocale().toString(info.longitudeNumber(), 'g', 7));
         }
 
         case SubColumnAltitude:
@@ -170,16 +170,16 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
             }
 
             /// @todo Use an enum instead to avoid lots of string comparisons
-            const QString formatKey = configuration.getSetting("format", "kde");
-            KLocale::MeasureSystem measureSystem = KLocale::global()->measureSystem();
+            const QString formatKey                  = configuration.getSetting("format", "kde");
+            QLocale::MeasurementSystem measureSystem = QLocale().measurementSystem();
 
-            if (formatKey=="metric")
+            if (formatKey == "metric")
             {
-                measureSystem = KLocale::Metric;
+                measureSystem = QLocale::MetricSystem;
             }
-            else if (formatKey=="imperial")
+            else if (formatKey == "imperial")
             {
-                measureSystem = KLocale::Imperial;
+                measureSystem = QLocale::ImperialSystem;
             }
 
             const QString formattedAltitude = FormatAltitude(info.altitudeNumber(), measureSystem);
@@ -241,8 +241,8 @@ ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(
         {
             QFormLayout* const box1 = new QFormLayout();
             selectorAltitudeUnit    = new QComboBox(this);
-            selectorAltitudeUnit->addItem(i18n("KDE default"), QString("kde"));
-            selectorAltitudeUnit->addItem(i18n("Metric units"), QString("metric"));
+            selectorAltitudeUnit->addItem(i18n("KDE default"),    QString("kde"));
+            selectorAltitudeUnit->addItem(i18n("Metric units"),   QString("metric"));
             selectorAltitudeUnit->addItem(i18n("Imperial units"), QString("imperial"));
             box1->addRow(i18n("Display format"), selectorAltitudeUnit);
 

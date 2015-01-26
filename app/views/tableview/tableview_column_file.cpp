@@ -26,10 +26,10 @@
 
 #include <QFormLayout>
 #include <QComboBox>
+#include <QLocale>
 
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 #include <kformat.h>
 
@@ -141,38 +141,38 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
 
     switch (subColumn)
     {
-    case SubColumnName:
-        return info.fileUrl().fileName();
-        break;
+        case SubColumnName:
+            return info.fileUrl().fileName();
+            break;
 
-    case SubColumnFilePath:
-        return info.fileUrl().path();
-        break;
+        case SubColumnFilePath:
+            return info.fileUrl().path();
+            break;
 
-    case SubColumnSize:
-    {
-        /// @todo Add configuration options for SI-prefixes
-        /// @todo Use an enum instead to avoid lots of string comparisons
-        const QString formatKey = configuration.getSetting("format", "kde");
-        if (formatKey=="kde")
+        case SubColumnSize:
         {
-            return KFormat().formatByteSize(info.fileSize());
+            /// @todo Add configuration options for SI-prefixes
+            /// @todo Use an enum instead to avoid lots of string comparisons
+            const QString formatKey = configuration.getSetting("format", "kde");
+
+            if (formatKey == "kde")
+            {
+                return KFormat().formatByteSize(info.fileSize());
+            }
+            else
+            {
+                // formatKey=="plain"
+                return QLocale().toString(info.fileSize());
+            }
+            break;
         }
-        else
+
+        case SubColumnLastModified:
         {
-            // formatKey=="plain"
-            return KLocale::global()->formatNumber(info.fileSize(), 0);
+            const QDateTime lastModifiedTime = info.modDateTime();
+
+            return QLocale().toString(lastModifiedTime, QLocale::ShortFormat);
         }
-        break;
-    }
-
-    case SubColumnLastModified:
-    {
-        const QDateTime lastModifiedTime = info.modDateTime();
-
-        return KLocale::global()->formatDateTime(lastModifiedTime, KLocale::ShortDate, true);
-    }
-
     }
 
     return QVariant();
@@ -185,28 +185,27 @@ TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(TableViewMode
 
     switch (subColumn)
     {
-    case SubColumnSize:
-    {
-        const int sizeA = infoA.fileSize();
-        const int sizeB = infoB.fileSize();
+        case SubColumnSize:
+        {
+            const int sizeA = infoA.fileSize();
+            const int sizeB = infoB.fileSize();
 
-        return compareHelper<int>(sizeA, sizeB);
+            return compareHelper<int>(sizeA, sizeB);
+        }
+
+        case SubColumnLastModified:
+        {
+            const QDateTime dtA = infoA.modDateTime();
+            const QDateTime dtB = infoB.modDateTime();
+
+            return compareHelper<QDateTime>(dtA, dtB);
+        }
+
+        default:
+
+            qCWarning(DIGIKAM_GENERAL_LOG) << "file: unimplemented comparison, subColumn=" << subColumn;
+            return CmpEqual;
     }
-
-    case SubColumnLastModified:
-    {
-        const QDateTime dtA = infoA.modDateTime();
-        const QDateTime dtB = infoB.modDateTime();
-
-        return compareHelper<QDateTime>(dtA, dtB);
-    }
-
-    default:
-
-        qCWarning(DIGIKAM_GENERAL_LOG) << "file: unimplemented comparison, subColumn=" << subColumn;
-        return CmpEqual;
-    }
-
 }
 
 ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(

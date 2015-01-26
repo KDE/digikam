@@ -28,11 +28,11 @@
 
 #include <QDateTime>
 #include <QTextDocument>
+#include <QLocale>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <klocale.h>
 #include <kio/global.h>
 
 // Local includes
@@ -74,14 +74,14 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
         if (settings->getToolTipsShowFileDate())
         {
             QDateTime createdDate  = info.ctime;
-            str                    = KLocale::global()->formatDateTime(createdDate, KLocale::ShortDate, true);
+            str                    = QLocale().toString(createdDate, QLocale::ShortFormat);
             tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowFileSize())
         {
             tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
-            QString localeFileSize = KLocale::global()->formatNumber(info.size, 0);
+            QString localeFileSize = QLocale().toString(info.size);
             str                    = i18n("%1 (%2)", KIO::convertSize(info.size), localeFileSize);
             tip                   += str + cnt.cellEnd;
         }

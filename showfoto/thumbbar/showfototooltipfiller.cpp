@@ -27,10 +27,10 @@
 
 #include <QDateTime>
 #include <QTextDocument>
+#include <QLocale>
 
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 #include <kio/global.h>
 
@@ -77,14 +77,14 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
         if (settings->getShowFileDate())
         {
             QDateTime createdDate  = info.dtime;
-            str                    = KLocale::global()->formatDateTime(createdDate, KLocale::ShortDate, true);
+            str                    = QLocale().toString(createdDate, QLocale::ShortFormat);
             tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getShowFileSize())
         {
             tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
-            QString localeFileSize = KLocale::global()->formatNumber(info.size, 0);
+            QString localeFileSize = QLocale().toString(info.size);
             str                    = i18n("%1 (%2)", KIO::convertSize(info.size), localeFileSize);
             tip                   += str + cnt.cellEnd;
         }
@@ -134,7 +134,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                 ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
 
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
-                      .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
+                                        .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
 
                 if (str.length() > cnt.maxStringLength)
                 {
@@ -149,7 +149,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                 if (info.ctime.isValid())
                 {
                     QDateTime createdDate  = info.ctime;
-                    str                    = KLocale::global()->formatDateTime(createdDate, KLocale::ShortDate, true);
+                    str                    = QLocale().toString(createdDate, QLocale::ShortFormat);
                     tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
                 }
                 else
@@ -183,7 +183,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
             if (settings->getShowPhotoExpo())
             {
                 str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? cnt.unavailable : photoInfo.exposureTime)
-                      .arg(photoInfo.sensitivity.isEmpty() ? cnt.unavailable : i18n("%1 ISO",photoInfo.sensitivity));
+                                        .arg(photoInfo.sensitivity.isEmpty()  ? cnt.unavailable : i18n("%1 ISO",photoInfo.sensitivity));
 
                 if (str.length() > cnt.maxStringLength)
                 {

@@ -26,10 +26,10 @@
 
 #include <QFormLayout>
 #include <QComboBox>
+#include <QLocale>
 
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -54,22 +54,20 @@ ColumnPhotoProperties::ColumnPhotoProperties(
   : TableViewColumn(tableViewShared, pConfiguration, parent),
     subColumn(pSubColumn)
 {
-
 }
 
 ColumnPhotoProperties::~ColumnPhotoProperties()
 {
-
 }
 
 QStringList ColumnPhotoProperties::getSubColumns()
 {
     QStringList columns;
     columns << QLatin1String("cameramaker") << QLatin1String("cameramodel")
-            << QLatin1String("lens") << QLatin1String("aperture")
-            << QLatin1String("focal") << QLatin1String("exposure")
+            << QLatin1String("lens")        << QLatin1String("aperture")
+            << QLatin1String("focal")       << QLatin1String("exposure")
             << QLatin1String("sensitivity") << QLatin1String("modeprogram")
-            << QLatin1String("flash") << QLatin1String("whitebalance");
+            << QLatin1String("flash")       << QLatin1String("whitebalance");
 
     return columns;
 }
@@ -218,6 +216,7 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
             {
                 return focalLengthString;
             }
+
             if (focalLengthString.isEmpty())
             {
                 return QString();
@@ -262,10 +261,11 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
             {
                 return QString();
             }
+
             /// @todo Remove trailing zeros?
             /// @todo Align right? --> better align at decimal point
             const QString exposureTimeString = exposureTimeLocalizedString
-                .subs(KLocale::global()->formatNumber(exposureTime, 3))
+                .subs(QLocale().toString(exposureTime, 'g', 3))
                 .toString();
             return exposureTimeString;
         }
@@ -433,7 +433,6 @@ ColumnPhotoConfigurationWidget::ColumnPhotoConfigurationWidget(
 
 ColumnPhotoConfigurationWidget::~ColumnPhotoConfigurationWidget()
 {
-
 }
 
 TableViewColumnConfiguration ColumnPhotoConfigurationWidget::getNewConfiguration()

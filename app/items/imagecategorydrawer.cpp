@@ -7,7 +7,7 @@
  * Description : Qt item view for images - category drawer
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2011      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,10 +28,10 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QLocale>
 
 // KDE includes
 
-#include <kcalendarsystem.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -261,16 +261,16 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
 
     QDate date    = album->date();
 
-    KLocale tmpLocale(*KLocale::global());
+    QLocale tmpLocale;
 
-    tmpLocale.setDateFormat("%d"); // day of month with two digits
-    QString day   = tmpLocale.formatDate(date);
+    // day of month with two digits
+    QString day   = tmpLocale.toString(date, "%d");
 
-    tmpLocale.setDateFormat("%b"); // short form of the month
-    QString month = tmpLocale.formatDate(date);
+    // short form of the month
+    QString month = tmpLocale.toString(date, "%b");
 
-    tmpLocale.setDateFormat("%Y"); // long form of the year
-    QString year  = tmpLocale.formatDate(date);
+    // long form of the year
+    QString year  = tmpLocale.toString(date, "%Y");
 
     *subLine      = i18ncp("%1: day of month with two digits, %2: short month name, %3: year",
                            "Album Date: %2 %3 %4 - 1 Item", "Album Date: %2 %3 %4 - %1 Items",
@@ -338,12 +338,12 @@ void ImageCategoryDrawer::textForDAlbum(DAlbum* album, int count, QString* heade
     if (album->range() == DAlbum::Month)
     {
         *header = i18nc("Month String - Year String", "%1 %2",
-                        KLocale::global()->calendar()->monthName(album->date(), KCalendarSystem::LongName),
-                        KLocale::global()->calendar()->formatDate(album->date(), "%Y"));
+                        QLocale().monthName(album->date().month(), QLocale::LongFormat),
+                        album->date().year());
     }
     else
     {
-        *header = QString("%1").arg(KLocale::global()->calendar()->year(album->date()));
+        *header = QString("%1").arg(album->date().year());
     }
 
     *subLine = i18np("1 Item", "%1 Items", count);

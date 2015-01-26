@@ -22,9 +22,12 @@
 
 #include "tableview_column_item.h"
 
+// Qt includes
+
+#include <QLocale>
+
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -191,10 +194,10 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
     switch (subColumn)
     {
         case SubColumnWidth:
-            return KLocale::global()->formatNumber(info.dimensions().width(), 0);
+            return QLocale().toString(info.dimensions().width());
 
         case SubColumnHeight:
-            return KLocale::global()->formatNumber(info.dimensions().height(), 0);
+            return QLocale().toString(info.dimensions().height());
 
         case SubColumnDimensions:
         {
@@ -205,8 +208,8 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
                 return QString();
             }
 
-            const QString widthString  = KLocale::global()->formatNumber(imgSize.width(),  0);
-            const QString heightString = KLocale::global()->formatNumber(imgSize.height(), 0);
+            const QString widthString  = QLocale().toString(imgSize.width());
+            const QString heightString = QLocale().toString(imgSize.height());
 
             return QString("%1x%2").arg(widthString).arg(heightString);
         }
@@ -222,7 +225,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             }
 
             /// @todo make this configurable with si-prefixes
-            return KLocale::global()->formatNumber(pixelCount, 0);
+            return QLocale().toString(pixelCount);
         }
 
         case SubColumnAspectRatio:
@@ -264,7 +267,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
         {
             const QDateTime creationDateTime = info.dateTime();
 
-            return KLocale::global()->formatDateTime(creationDateTime, KLocale::ShortDate, true);
+            return QLocale().toString(creationDateTime, QLocale::ShortFormat);
         }
 
         case SubColumnDigitizationDateTime:
@@ -272,7 +275,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             const ImageCommonContainer commonInfo = info.imageCommonContainer();
             const QDateTime digitizationDateTime = commonInfo.digitizationDate;
 
-            return KLocale::global()->formatDateTime(digitizationDateTime, KLocale::ShortDate, true);
+            return QLocale().toString(digitizationDateTime, QLocale::ShortFormat);
         }
     }
 

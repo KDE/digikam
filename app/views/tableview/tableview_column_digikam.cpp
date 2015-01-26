@@ -22,9 +22,12 @@
 
 #include "tableview_column_digikam.h"
 
+// Qt includes
+
+#include <QLocale>
+
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -265,7 +268,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
                 return QString();
             }
 
-            return KLocale::global()->formatNumber(itemRating, 0);
+            return QLocale().toString(itemRating);
         }
 
     case SubColumnPickLabel:

@@ -37,10 +37,10 @@
 #include <QMouseEvent>
 #include <QValidator>
 #include <QDesktopWidget>
+#include <QLocale>
 
 // KDE includes
 
-#include <kcalendarsystem.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -74,8 +74,7 @@ public:
             return Acceptable;
         }
 
-        bool ok = false;
-        KLocale::global()->readDate( str, &ok );
+        bool ok = QLocale().toDate(str).isValid();
 
         if ( ok )
         {
@@ -126,7 +125,7 @@ DDateEdit::DDateEdit(QWidget* const parent, const char* const name)
     setEditable( true );
 
     d->date       = QDate::currentDate();
-    QString today = KLocale::global()->formatDate( d->date, KLocale::ShortDate );
+    QString today = QLocale().toString(d->date, QLocale::ShortFormat);
 
     addItem( today );
     setCurrentIndex( 0 );
@@ -339,7 +338,7 @@ QDate DDateEdit::parseDate( bool* replaced ) const
     }
     else
     {
-        result = KLocale::global()->readDate( text );
+        result = QLocale().toDate(text);
     }
 
     return result;
@@ -463,7 +462,7 @@ void DDateEdit::setupKeywords()
 
     for ( int i = 1; i <= 7; ++i )
     {
-        dayName = KLocale::global()->calendar()->weekDayName( i ).toLower();
+        dayName = QLocale().dayName(i, QLocale::LongFormat).toLower();
         d->keywordMap.insert( dayName, i + 100 );
     }
 }
@@ -481,7 +480,7 @@ void DDateEdit::updateView()
 
     if ( d->date.isValid() )
     {
-        dateString = KLocale::global()->formatDate( d->date, KLocale::ShortDate );
+        dateString = QLocale().toString(d->date, QLocale::ShortFormat);
     }
 
     // We do not want to generate a signal here,

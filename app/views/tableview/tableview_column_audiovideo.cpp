@@ -22,9 +22,12 @@
 
 #include "tableview_column_audiovideo.h"
 
+// Qt includes
+
+#include <QLocale>
+
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -147,12 +150,13 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
         {
             bool ok;
             const int audioBitRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::AudioBitRate).toInt(&ok);
+
             if (!ok)
             {
                 return QString();
             }
 
-            const QString audioBitRateString = KLocale::global()->formatNumber(audioBitRate, 0);
+            const QString audioBitRateString = QLocale().toString(audioBitRate);
             return audioBitRateString;
         }
     case SubColumnAudioChannelType:
@@ -170,25 +174,27 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
             bool ok;
             // duration is in milliseconds
             const double duration = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::Duration).toDouble(&ok);
+
             if (!ok)
             {
                 return QString();
             }
 
-            const QTime durationTime = QTime().addMSecs(duration);
-            const QString durationString = KLocale::global()->formatTime(durationTime, true, true);
+            const QTime durationTime     = QTime().addMSecs(duration);
+            const QString durationString = QLocale().toString(durationTime);
             return durationString;
         }
     case SubColumnFrameRate:
         {
             bool ok;
             const double frameRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FrameRate).toDouble(&ok);
+
             if (!ok)
             {
                 return QString();
             }
 
-            const QString frameRateString = KLocale::global()->formatNumber(frameRate);
+            const QString frameRateString = QLocale().toString(frameRate);
             return frameRateString;
         }
     case SubColumnVideoCodec:
@@ -206,8 +212,7 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
     /// @todo All the values used here are actually returned as strings in the QVariants, but should be stored as int/double
     switch (subColumn)
     {
-
-    case SubColumnAudioBitRate:
+        case SubColumnAudioBitRate:
         {
             const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::AudioBitRate);
             const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::AudioBitRate);
@@ -217,6 +222,7 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
             const int audioBitRateB = variantB.toDouble(&okB);
 
             ColumnCompareResult result;
+
             if (!compareHelperBoolFailCheck(okA, okB, &result))
             {
                 return result;
@@ -225,7 +231,7 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
             return compareHelper<int>(audioBitRateA, audioBitRateB);
         }
 
-    case SubColumnDuration:
+        case SubColumnDuration:
         {
             const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::Duration);
             const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::Duration);
@@ -235,6 +241,7 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
             const double durationB = variantB.toDouble(&okB);
 
             ColumnCompareResult result;
+
             if (!compareHelperBoolFailCheck(okA, okB, &result))
             {
                 return result;
@@ -243,7 +250,7 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
             return compareHelper<double>(durationA, durationB);
         }
 
-    case SubColumnFrameRate:
+        case SubColumnFrameRate:
         {
             const QVariant variantA = s->tableViewModel->itemDatabaseFieldRaw(itemA, DatabaseFields::FrameRate);
             const QVariant variantB = s->tableViewModel->itemDatabaseFieldRaw(itemB, DatabaseFields::FrameRate);
@@ -253,6 +260,7 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
             const double frameRateB = variantB.toDouble(&okB);
 
             ColumnCompareResult result;
+
             if (!compareHelperBoolFailCheck(okA, okB, &result))
             {
                 return result;
@@ -261,10 +269,10 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
             return compareHelper<double>(frameRateA, frameRateB);
         }
 
-    default:
-        qCWarning(DIGIKAM_GENERAL_LOG) << "item: unimplemented comparison, subColumn=" << subColumn;
-        return CmpEqual;
-    }
+        default:
+            qCWarning(DIGIKAM_GENERAL_LOG) << "item: unimplemented comparison, subColumn=" << subColumn;
+            return CmpEqual;
+        }
 }
 
 void ColumnAudioVideoProperties::setConfiguration(const TableViewColumnConfiguration& newConfiguration)

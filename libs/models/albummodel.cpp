@@ -26,10 +26,10 @@
 // Qt includes
 
 #include <QIcon>
+#include <QLocale>
 
 // KDE includes
 
-#include <kcalendarsystem.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -314,7 +314,7 @@ QString DateAlbumModel::albumName(Album* album) const
     }
     else
     {
-        return KLocale::global()->calendar()->monthName(dalbum->date(), KCalendarSystem::LongName);
+        return QLocale().monthName(dalbum->date().month(), QLocale::LongFormat);
     }
 }
 

@@ -35,10 +35,10 @@
 #include <QApplication>
 #include <QCache>
 #include <QPainter>
+#include <QLocale>
 
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -177,7 +177,7 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
 
 QString DItemDelegate::dateToString(const QDateTime& datetime)
 {
-    return KLocale::global()->formatDateTime(datetime, KLocale::ShortDate, false);
+    return QLocale().toString(datetime, QLocale::ShortFormat);
 }
 
 QString DItemDelegate::squeezedTextCached(QPainter* const p, int width, const QString& text) const
@@ -185,7 +185,7 @@ QString DItemDelegate::squeezedTextCached(QPainter* const p, int width, const QS
     QCache<QString, QString>* const cache = &const_cast<DItemDelegate*>(this)->d->squeezedTextCache;
     // We do not need to include the font into cache key, the cache is cleared on font change
     QString cacheKey                      = QString::number(width) + QString::number(qHash(text));
-    QString* cachedString                 = cache->object(cacheKey);
+    QString* const cachedString           = cache->object(cacheKey);
 
     if (cachedString)
     {

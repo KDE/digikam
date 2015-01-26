@@ -44,10 +44,10 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QIcon>
+#include <QLocale>
 
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 
@@ -415,8 +415,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 
         d->latitude->setText(QString::number(coordinates.lat()));
         d->longitude->setText(QString::number(coordinates.lon()));
-        d->date->setText(KLocale::global()->formatDateTime(info.dateTime,
-                         KLocale::ShortDate, true));
+        d->date->setText(QLocale().toString(info.dateTime, QLocale::ShortFormat));
     }
 
     for (int i=0; i<d->gpsInfoList.count(); ++i)

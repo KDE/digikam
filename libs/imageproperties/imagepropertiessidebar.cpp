@@ -31,13 +31,13 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QIcon>
+#include <QLocale>
 
 // KDE includes
 
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
 
 // Libkdcraw includes
 
@@ -211,11 +211,11 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     // -- File system information -----------------------------------------
 
     QDateTime modifiedDate = fileInfo.lastModified();
-    str = KLocale::global()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
+    str = QLocale().toString(modifiedDate, QLocale::ShortFormat);
     m_propertiesTab->setFileModifiedDate(str);
 
     str = QString("%1 (%2)").arg(KIO::convertSize(fileInfo.size()))
-          .arg(KLocale::global()->formatNumber(fileInfo.size(), 0));
+                            .arg(QLocale().toString(fileInfo.size()));
     m_propertiesTab->setFileSize(str);
     m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
     m_propertiesTab->setFilePermissions(fi.permissionsString());
@@ -271,7 +271,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
 
     if (photoInfo.dateTime.isValid())
     {
-        str = KLocale::global()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
+        str = QLocale().toString(photoInfo.dateTime, QLocale::ShortFormat);
         m_propertiesTab->setPhotoDateTime(str);
     }
     else
