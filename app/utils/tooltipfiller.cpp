@@ -27,11 +27,11 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QLocale>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <klocale.h>
 #include <kio/global.h>
 
 // Local includes
@@ -89,14 +89,14 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         if (settings->getToolTipsShowFileDate())
         {
             QDateTime modifiedDate = commonInfo.fileModificationDate;
-            str                    = KLocale::global()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
+            str                    = QLocale().toString(modifiedDate, QLocale::ShortFormat);
             tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowFileSize())
         {
             tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
-            QString localeFileSize = KLocale::global()->formatNumber(commonInfo.fileSize, 0);
+            QString localeFileSize = QLocale().toString(commonInfo.fileSize);
             str                    = i18n("%1 (%2)", KIO::convertSize(commonInfo.fileSize), localeFileSize);
             tip                   += str + cnt.cellEnd;
         }
@@ -174,7 +174,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             {
                 if (commonInfo.creationDate.isValid())
                 {
-                    str = KLocale::global()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
+                    str = QLocale().toString(commonInfo.creationDate, QLocale::ShortFormat);
 
                     if (str.length() > cnt.maxStringLength)
                     {
@@ -317,7 +317,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 if (ok)
                 {
                     const QTime durationTime = QTime().addMSecs(durationDouble);
-                    durationString = KLocale::global()->formatTime(durationTime, true, true);
+                    durationString = QLocale().toString(durationTime, QLocale::ShortFormat);
                 }
 
                 str = videoInfo.duration.isEmpty() ? cnt.unavailable : durationString;
@@ -338,7 +338,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (ok)
                 {
-                    frameRateString = KLocale::global()->formatNumber(frameRateDouble);
+                    frameRateString = QLocale().toString(frameRateDouble);
                 }
 
                 str = videoInfo.frameRate.isEmpty() ? cnt.unavailable : frameRateString;
@@ -371,7 +371,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (ok)
                 {
-                    audioBitRateString = KLocale::global()->formatNumber(audioBitRateInt, 0);
+                    audioBitRateString = QLocale().toString(audioBitRateInt);
                 }
 
                 str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : audioBitRateString;
@@ -573,7 +573,7 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
         if (settings->getToolTipsShowAlbumDate())
         {
             QDate date = album->date();
-            str        = KLocale::global()->formatDate(date, KLocale::ShortDate);
+            str        = QLocale().toString(date, QLocale::ShortFormat);
             tip        += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 

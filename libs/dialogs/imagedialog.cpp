@@ -30,10 +30,10 @@
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QLocale>
 
 // KDE includes
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
 
@@ -173,7 +173,7 @@ void ImageDialogPreview::showPreview(const QUrl& url)
             }
             else
             {
-                dateTime = KLocale::global()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
+                dateTime = QLocale().toString(info.dateTime, QLocale::ShortFormat);
             }
 
             if (info.aperture.isEmpty())
