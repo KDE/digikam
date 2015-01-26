@@ -334,11 +334,14 @@ void TagsActionMngr::slotTagActionChanged()
     }
 
     int tagId       = action->data().toInt();
-#pragma message("PORT QT5")
-/*
-    QKeySequence ks = action->shortcut().primary();
+
+    QKeySequence ks;
+    QStringList lst = action->shortcut().toString().split(QLatin1Char(','));
+
+    if (!lst.isEmpty())
+        ks = QKeySequence(lst.first());
+    
     updateTagShortcut(tagId, ks);
-*/
 }
 
 void TagsActionMngr::updateTagShortcut(int tagId, const QKeySequence& ks)
