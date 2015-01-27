@@ -36,10 +36,11 @@
 #include <QPixmap>
 #include <QPalette>
 #include <QTimer>
+#include <QLocale>
+#include <QDate>
 
 // KDE includes
 
-#include <kcalendarsystem.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -243,11 +244,10 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
                 if (!weekvisible)
                 {
-                    int weeknr = KLocale::global()->calendar()->week(QDate(d->year,
-                                 d->month, d->days[index].day));
+                    int weeknr = QDate(d->year, d->month, d->days[index].day).weekNumber();
                     p.setPen(d->active ? Qt::black : Qt::gray);
                     p.setFont(fnBold);
-                    p.fillRect(1, sy, d->currw-1, d->currh-1, QColor(210,210,210));
+                    p.fillRect(1, sy, d->currw-1, d->currh-1, QColor(210, 210, 210));
                     p.drawText(1, sy, d->currw-1, d->currh-1, Qt::AlignVCenter|Qt::AlignHCenter,
                                QString::number(weeknr));
                     weekvisible = true;
@@ -264,7 +264,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
     sy = 2*d->currh;
 
-    for (int i=1; i<8; ++i)
+    for (int i = 1; i < 8; ++i)
     {
         sx     = d->currw * i;
         r.moveTopLeft(QPoint(sx+1,sy+1));
@@ -272,8 +272,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
         p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
-                   KLocale::global()->calendar()->weekDayName(i, KCalendarSystem::ShortDayName)
-                   .remove(2,1));
+                   QLocale().dayName(i, QLocale::ShortFormat).remove(2, 1));
         ++index;
     }
 
@@ -282,10 +281,9 @@ void MonthWidget::paintEvent(QPaintEvent*)
     fnBold.setPointSize(fnBold.pointSize()+2);
     p.setFont(fnBold);
 
-    p.drawText(r, Qt::AlignCenter,
-               QString("%1 %2")
-               .arg(KLocale::global()->calendar()->monthName(d->month, KCalendarSystem::LongDayName))
-               .arg(KLocale::global()->calendar()->year(QDate(d->year,d->month,1))));
+    p.drawText(r, Qt::AlignCenter, QString("%1 %2")
+               .arg(QLocale().monthName(d->month, QLocale::LongFormat))
+               .arg(QDate(d->year, d->month, 1).year()));
 
     p.end();
 
