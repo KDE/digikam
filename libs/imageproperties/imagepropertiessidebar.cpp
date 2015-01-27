@@ -32,6 +32,8 @@
 #include <QApplication>
 #include <QIcon>
 #include <QLocale>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 // KDE includes
 
@@ -236,7 +238,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     }
     else
     {
-        m_propertiesTab->setImageMime(fi.mimeComment());
+        m_propertiesTab->setImageMime(QMimeDatabase().mimeTypeForFile(fileInfo).comment());
 
         dims = metaData.getPixelSize();
 
