@@ -30,9 +30,7 @@
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <klocalizedstring.h>
-#include <kurllabel.h>
 
 // Local includes
 

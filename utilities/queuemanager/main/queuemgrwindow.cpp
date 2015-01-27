@@ -46,7 +46,6 @@
 #include <kedittoolbar.h>
 #include <klocalizedstring.h>
 #include <knotifyconfigwidget.h>
-#include <kselectaction.h>
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
