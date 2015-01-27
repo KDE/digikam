@@ -14,6 +14,7 @@ add_subdirectory(models)
 add_subdirectory(template)
 add_subdirectory(dialogs)
 add_subdirectory(3rdparty)
+add_subdirectory(fileactionmanager)
 
 if(${KF5KGeoMap_FOUND})
     add_subdirectory(kgeomaphelper)

@@ -6,51 +6,36 @@
 
 # We need to include the setup dir for showfoto BEFORE the other include dirs,
 # otherwise the one from the "utilities" dir will be used
+# TODO is this still required?
 include_directories(BEFORE
                     ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar
                     ${CMAKE_CURRENT_SOURCE_DIR}/setup
                     ${CMAKE_CURRENT_SOURCE_DIR}/main
 )
 
-#Require by Greycstoration algorithm (CImg.h)
-kde_enable_exceptions()
-
-set(libshowfotosetup_SRCS
-    setup/setuptooltip.cpp
-    setup/setupmisc.cpp
-    setup/setupmetadata.cpp
-    setup/setup.cpp
-)
-
 set(showfoto_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupeditor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupiofiles.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupraw.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupicc.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupslideshow.cpp
+    setup/showfotosetuptooltip.cpp
+    setup/showfotosetupmisc.cpp
+    setup/showfotosetupmetadata.cpp
+    setup/showfotosetup.cpp
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/setup/showfotosetuptooltip.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/setup/showfotosetupmisc.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/setup/showfotosetupmetadata.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/setup/showfotosetup.cpp
+    thumbbar/showfotoiteminfo.cpp
+    thumbbar/showfotoimagemodel.cpp
+    thumbbar/showfotothumbnailmodel.cpp
+    thumbbar/showfotofiltermodel.cpp
+    thumbbar/showfotodragdrophandler.cpp
+    thumbbar/showfotokineticscroller.cpp
+    thumbbar/showfotoitemsortsettings.cpp
+    thumbbar/showfotocoordinatesoverlay.cpp
+    thumbbar/itemviewshowfotodelegate.cpp
+    thumbbar/showfotodelegate.cpp
+    thumbbar/showfototooltipfiller.cpp
+    thumbbar/showfotocategorizedview.cpp
+    thumbbar/showfotothumbnailbar.cpp
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotoiteminfo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotoimagemodel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotothumbnailmodel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotofiltermodel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotodragdrophandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotokineticscroller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotoitemsortsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotocoordinatesoverlay.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/itemviewshowfotodelegate.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotodelegate.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfototooltipfiller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotocategorizedview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotothumbnailbar.cpp
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/main/showfotosettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/main/main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/main/showfoto.cpp
+    main/showfotosettings.cpp
+    main/main.cpp
+    main/showfoto.cpp
 )
 
 KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/apps/hi*-app-showfoto.png")
@@ -70,16 +55,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.i
 set_target_properties(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 
 target_link_libraries(showfoto
-                      digikamcore
-
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
-                      ${KGEOMAP_LIBRARIES}
-                      KF5::KIOCore
-                      KF5::KDELibs4Support
-
-                      ${LCMS_LIBRARIES}
-                      ${OpenCV_LIBRARIES}
+                      dimg
+                      fileactionmanager
 )
 
 if(${KF5KGeoMap_FOUND})
