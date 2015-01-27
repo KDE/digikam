@@ -123,15 +123,6 @@ set(libdigikamgui_SRCS
     items/overlays/imagecoordinatesoverlay.cpp
     items/overlays/imageselectionoverlay.cpp
 
-    fileaction/metadatahub.cpp
-    fileaction/fileactionprogress.cpp
-    fileaction/fileactionmngr.cpp
-    fileaction/fileactionmngr_p.cpp
-    fileaction/imageinfotasksplitter.cpp
-    fileaction/databaseworkeriface.cpp
-    fileaction/fileworkeriface.cpp
-    fileaction/fileactionimageinfolist.cpp
-
     settings/applicationsettings.cpp
     settings/applicationsettings_p.cpp
     settings/applicationsettings_albums.cpp
@@ -236,7 +227,6 @@ target_include_directories(digikamgui PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items/overlays> # common too, move out
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/fileaction>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/database>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/date> # belongs to libs/widgets?
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dragdrop>
@@ -262,6 +252,8 @@ target_link_libraries(digikamgui
                       fuzzysearch
                       maintenance
                       3rdparty
+
+                      fileactionmanager
                       
                       Qt5::Core
                       Qt5::Gui
