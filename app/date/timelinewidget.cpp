@@ -35,10 +35,12 @@
 #include <QTimer>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QLocale>
+#include <QDate>
 
 // KDE includes
 
-#include <kcalendarsystem.h>
+#include <klocale.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -72,7 +74,6 @@ public:
         startPos(96),
         slotNextTimer(0),
         slotPreviousTimer(0),
-        calendar(KLocale::global()->calendar()),
         timeUnit(TimeLineWidget::Month),
         scaleMode(TimeLineWidget::LinScale)
     {
@@ -106,12 +107,10 @@ public:
 
     QRect                        focusRect;
 
-    QMap<YearRefPair, StatPair>  dayStatMap;        // Store Days count statistics.
+    QMap<YearRefPair, StatPair>  dayStatMap;        // Store Days  count statistics.
     QMap<YearRefPair, StatPair>  weekStatMap;       // Store Weeks count statistics.
     QMap<YearRefPair, StatPair>  monthStatMap;      // Store Month count statistics.
     QMap<int,         StatPair>  yearStatMap;       // Store Years count statistics.
-
-    const KCalendarSystem*       calendar;
 
     TimeLineWidget::TimeUnit     timeUnit;
     TimeLineWidget::ScaleMode    scaleMode;
@@ -254,7 +253,7 @@ void TimeLineWidget::setCursorDateTime(const QDateTime& dateTime)
             // Go to the first day of week.
             int weekYear = date.year(); // Changed for week shared between 2 years (Dec/Jan).
 
-            int weekNb   = d->calendar->week(date, &weekYear);
+            int weekNb   = date.weekNumber(&weekYear);
 
             dt           = firstDayOfWeek(weekYear, weekNb);
             break;
@@ -303,21 +302,21 @@ int TimeLineWidget::cursorInfo(QString& infoDate) const
     {
         case Day:
         {
-            infoDate = KLocale::global()->formatDate(date);
+            infoDate = QLocale().toString(date, QLocale::LongFormat);
             break;
         }
 
         case Week:
         {
-            int weekNb    = d->calendar->week(date);
-            QDate endDate = d->calendar->addDays(date, 7);
+            int weekNb    = date.weekNumber();
+            QDate endDate = date.addDays(7);
             infoDate      = i18nc("Week #weeknumber - month name - year string\nStart:\tEnd: ",
                                   "Week #%1 - %2 %3\n%4\t%5",
                                   weekNb,
-                                  d->calendar->monthName(date),
-                                  d->calendar->formatDate(date, "%Y"),
-                                  i18n("Start: ") + d->calendar->formatDate(date,    KLocale::Day, KLocale::LongNumber),
-                                  i18n("End: ")   + d->calendar->formatDate(endDate, KLocale::Day, KLocale::LongNumber));
+                                  QLocale().monthName(date.month(), QLocale::LongFormat),
+                                  QLocale().toString(date, QLatin1String("yyyy")),
+                                  i18n("Start: ") + QLocale().toString(date, QLatin1String("dd")),
+                                  i18n("End: ")   + QLocale().toString(endDate, QLatin1String("dd")));
             break;
         }
 
@@ -325,14 +324,14 @@ int TimeLineWidget::cursorInfo(QString& infoDate) const
         {
             infoDate = i18nc("month-name year-string",
                              "%1 %2",
-                             d->calendar->monthName(date),
-                             d->calendar->formatDate(date, "%Y"));
+                             QLocale().monthName(date.month(), QLocale::LongFormat),
+                             QLocale().toString(date, QLatin1String("yyyy")));
             break;
         }
 
         case Year:
         {
-            infoDate = d->calendar->formatDate(date, "%Y");
+            infoDate = QLocale().toString(date, QLatin1String("yyyy"));
             break;
         }
     }
@@ -351,7 +350,7 @@ void TimeLineWidget::setRefDateTime(const QDateTime& dateTime)
         case Week:
         {
             // Go to the first day of week.
-            int dayWeekOffset = (-1) * (d->calendar->dayOfWeek(date) - 1);
+            int dayWeekOffset = (-1) * (date.dayOfWeek() - 1);
             dt = dt.addDays(dayWeekOffset);
             break;
         }
@@ -581,10 +580,10 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
 
         int year  = it.key().date().year();
         int month = it.key().date().month();
-        int day   = d->calendar->dayOfYear(it.key().date());
+        int day   = it.key().date().dayOfYear();
         int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
 
-        int week  = d->calendar->week(it.key().date(), &yearForWeek);
+        int week  = it.key().date().weekNumber(&yearForWeek);
 
         // Stats Years values.
 
@@ -759,19 +758,19 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
                 fnt.setPointSize(fnt.pointSize() - 4);
                 p.setFont(fnt);
                 p.setPen(subDateColor);
-                QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName).at(0));
+                QString txt = QLocale().dayName(ref.date().day(), QLocale::ShortFormat);
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
                 p.drawText(barRect.left() + ((barRect.width() - br.width()) / 2),
                            barRect.bottom() + br.height(), txt);
                 p.restore();
             }
 
-            if (d->calendar->dayOfWeek(ref.date()) == 1)
+            if (ref.date().day() == 1)
             {
                 p.setPen(dateColor);
                 p.drawLine(barRect.left(), barRect.bottom(),
                            barRect.left(), barRect.bottom() + d->bottomMargin / 2);
-                QString txt = KLocale::global()->formatDate(ref.date(), KLocale::ShortDate);
+                QString txt = QLocale().toString(ref.date(), QLocale::ShortFormat);
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
                 p.drawText(barRect.left() - br.width() / 2, barRect.bottom() + d->bottomMargin, txt);
             }
@@ -781,7 +780,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
 
         case Week:
         {
-            int week = d->calendar->week(ref.date());
+            int week = ref.date().weekNumber();
 
             {
                 p.save();
@@ -802,7 +801,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
             {
                 p.drawLine(barRect.left(), barRect.bottom(),
                            barRect.left(), barRect.bottom() + d->bottomMargin / 2);
-                QString txt = KLocale::global()->formatDate(ref.date(), KLocale::ShortDate);
+                QString txt = QLocale().toString(ref.date(), QLocale::ShortFormat);
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
 
                 if (week != 50)
@@ -827,7 +826,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
                 fnt.setPointSize(fnt.pointSize() - 4);
                 p.setFont(fnt);
                 p.setPen(subDateColor);
-                QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName).at(0));
+                QString txt = QLocale().monthName(ref.date().month(), QLocale::ShortFormat);
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
                 p.drawText(barRect.left() + ((barRect.width() - br.width()) / 2),
                            barRect.bottom() + br.height(), txt);
@@ -1330,10 +1329,10 @@ int TimeLineWidget::statForDateTime(const QDateTime& dt, SelectionMode& selected
     int count        = 0;
     int year         = dt.date().year();
     int month        = dt.date().month();
-    int day          = d->calendar->dayOfYear(dt.date());
+    int day          = dt.date().dayOfYear();
     int yearForWeek  = year;  // Used with week shared between 2 years decade (Dec/Jan).
 
-    int week         = d->calendar->week(dt.date(), &yearForWeek);
+    int week         = dt.date().weekNumber(&yearForWeek);
 
     selected         = Unselected;
 
@@ -1403,7 +1402,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
     int month       = dt.date().month();
     int yearForWeek = year;  // Used with week shared between 2 years decade (Dec/Jan).
 
-    int week        = d->calendar->week(dt.date(), &yearForWeek);
+    int week        = dt.date().weekNumber(&yearForWeek);
 
     QDateTime dts, dte;
 
@@ -1429,7 +1428,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
         case Month:
         {
             dts = QDateTime(QDate(year, month, 1));
-            dte = dts.addDays(d->calendar->daysInMonth(dts.date()));
+            dte = dts.addDays(dts.date().daysInMonth());
             setDaysRangeSelection(dts, dte, selected);
             updateMonthSelection(dts, dte);
             break;
@@ -1438,7 +1437,7 @@ void TimeLineWidget::setDateTimeSelected(const QDateTime& dt, SelectionMode sele
         case Year:
         {
             dts = QDateTime(QDate(year, 1, 1));
-            dte = dts.addDays(d->calendar->daysInYear(dts.date()));
+            dte = dts.addDays(dts.date().daysInYear());
             setDaysRangeSelection(dts, dte, selected);
             updateYearSelection(dts, dte);
             break;
@@ -1457,8 +1456,7 @@ void TimeLineWidget::updateWeekSelection(const QDateTime& dts, const QDateTime& 
     do
     {
         yearForWeek = dt.date().year();
-
-        week        = d->calendar->week(dt.date(), &yearForWeek);
+        week        = dt.date().weekNumber(&yearForWeek);
         dtsWeek     = firstDayOfWeek(yearForWeek, week);
         dteWeek     = dtsWeek.addDays(7);
         it          = d->weekStatMap.find(Private::YearRefPair(yearForWeek, week));
@@ -1485,7 +1483,7 @@ void TimeLineWidget::updateMonthSelection(const QDateTime& dts, const QDateTime&
         year     = dt.date().year();
         month    = dt.date().month();
         dtsMonth = QDateTime(QDate(year, month, 1));
-        dteMonth = dtsMonth.addDays(d->calendar->daysInMonth(dtsMonth.date()));
+        dteMonth = dtsMonth.addDays(dtsMonth.date().daysInMonth());
         it       = d->monthStatMap.find(Private::YearRefPair(year, month));
 
         if (it != d->monthStatMap.end())
@@ -1509,7 +1507,7 @@ void TimeLineWidget::updateYearSelection(const QDateTime& dts, const QDateTime& 
     {
         year    = dt.date().year();
         dtsYear = QDateTime(QDate(year, 1, 1));
-        dteYear = dtsYear.addDays(d->calendar->daysInYear(dtsYear.date()));
+        dteYear = dtsYear.addDays(dtsYear.date().daysInYear());
         it      = d->yearStatMap.find(year);
 
         if (it != d->yearStatMap.end())
@@ -1552,7 +1550,7 @@ void TimeLineWidget::setDaysRangeSelection(const QDateTime& dts, const QDateTime
     do
     {
         year = dt.date().year();
-        day  = d->calendar->dayOfYear(dt.date());
+        day  = dt.date().dayOfYear();
         it   = d->dayStatMap.find(Private::YearRefPair(year, day));
 
         if (it != d->dayStatMap.end())
@@ -1577,7 +1575,7 @@ TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const Q
     do
     {
         year = dt.date().year();
-        day  = d->calendar->dayOfYear(dt.date());
+        day  = dt.date().dayOfYear();
         it   = d->dayStatMap.find(Private::YearRefPair(year, day));
 
         if (it != d->dayStatMap.end())
@@ -1991,7 +1989,7 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber) const
     {
         dt      = dt.addDays(1);
 
-        weekNum = d->calendar->week(dt.date(), &weekYear);
+        weekNum = dt.date().weekNumber(&weekYear);
     }
     while (weekNum != 1 && weekYear != year);
 
