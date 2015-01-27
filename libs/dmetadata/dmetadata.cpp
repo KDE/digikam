@@ -34,6 +34,7 @@
 #include <QDomDocument>
 #include <QFile>
 #include <QFileInfo>
+#include <QLocale>
 
 // KDE includes
 
@@ -2653,8 +2654,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
             }
 
             // Try "en-us"
-            KLocale* locale = KLocale::global();
-            QString spec = locale->language().toLower() + '-' + locale->country().toLower();
+            QString spec = QLocale().name().toLower().replace(QLatin1Char('_'), QLatin1Char('-'));
 
             if (map.contains(spec))
             {
@@ -2662,8 +2662,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
             }
 
             // Try "en-"
-            QStringList keys = map.keys();
-            QRegExp exp(locale->language().toLower() + '-');
+            QStringList keys    = map.keys();
+            QString spec2       = QLocale().name().toLower();
+            QRegExp exp(spec2.left(spec2.indexOf(QLatin1Char('_'))) + QLatin1Char('-'));
             QStringList matches = keys.filter(exp);
 
             if (!matches.isEmpty())
