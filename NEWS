@@ -26,5 +26,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 018 ==> 343221 - Softproofing in editor does not work anymore [patch].
 019 ==> 342996 - Corrections for rename settings in images import [patch].
 020 ==> 314441 - Rename settings while importing ignored [patch].
-021 ==> 342430 - When selecting a subset of images instead of all images to download from camera,
+021 ==> 328541 - Cursor sometimes stays "busy".
+022 ==> 342430 - When selecting a subset of images instead of all images to download from camera,
                  the numbering of the renamed images adds the number of selected images to the sequence numbers.
