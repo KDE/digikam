@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,6 +20,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
+ *
  * ============================================================ */
 
 #include "imagequerybuilder.h"
@@ -34,10 +36,7 @@
 #include <QMap>
 #include <QRectF>
 #include <QUrl>
-
-// KDE includes
-
-#include <kcalendarsystem.h>
+#include <QLocale>
 
 // Libkexiv2 includes
 
@@ -99,12 +98,11 @@ bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeN
 ImageQueryBuilder::ImageQueryBuilder()
 {
     // build a lookup table for month names
-    const KCalendarSystem* const cal = KLocale::global()->calendar();
 
     for (int i=1; i<=12; ++i)
     {
-        m_shortMonths[i-1] = cal->monthName(i, 2000, KCalendarSystem::ShortName).toLower();
-        m_longMonths[i-1]  = cal->monthName(i, 2000, KCalendarSystem::LongName).toLower();
+        m_shortMonths[i-1] = QLocale().monthName(i, QLocale::ShortFormat).toLower();
+        m_longMonths[i-1]  = QLocale().monthName(i, QLocale::LongFormat).toLower();
     }
 
     m_imageTagPropertiesJoined = false;
