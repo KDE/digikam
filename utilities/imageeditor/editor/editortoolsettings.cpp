@@ -44,7 +44,6 @@
 
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
-#include <kstandardguiitem.h>
 
 // Libkdcraw includes
 
@@ -185,17 +184,16 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->defaultBtn = new QPushButton;
-    KGuiItem::assign(d->defaultBtn, KStandardGuiItem::defaults());
+    d->defaultBtn = new QPushButton(i18n("Defaults"));
     d->defaultBtn->setIcon(QIcon::fromTheme("document-revert"));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
 
-    d->okBtn = new QPushButton;
-    KGuiItem::assign(d->okBtn, KStandardGuiItem::ok());
+    d->okBtn = new QPushButton(i18n("Ok"));
+    d->okBtn->setIcon(QIcon::fromTheme("dialog-ok"));
     d->okBtn->setDefault(true);
 
-    d->cancelBtn = new QPushButton;
-    KGuiItem::assign(d->cancelBtn, KStandardGuiItem::cancel());
+    d->cancelBtn = new QPushButton(i18n("Cancel"));
+    d->cancelBtn->setIcon(QIcon::fromTheme("dialog-cancel"));
 
     QHBoxLayout* const hbox1 = new QHBoxLayout;
     hbox1->addWidget(d->defaultBtn);
@@ -205,18 +203,16 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->loadBtn = new QPushButton;
-    KGuiItem::assign(d->loadBtn, KStandardGuiItem::open());
-    d->loadBtn->setText(i18n("Load..."));
+    d->loadBtn = new QPushButton(i18n("Load..."));
+    d->loadBtn->setIcon(QIcon::fromTheme("document-open"));
     d->loadBtn->setToolTip(i18n("Load all parameters from settings text file."));
 
-    d->saveAsBtn = new QPushButton;
-    KGuiItem::assign(d->saveAsBtn, KStandardGuiItem::saveAs());
+    d->saveAsBtn = new QPushButton(i18n("Save As..."));
+    d->saveAsBtn->setIcon(QIcon::fromTheme("document-save-as"));
     d->saveAsBtn->setToolTip(i18n("Save all parameters to settings text file."));
 
-    d->tryBtn = new QPushButton;
-    KGuiItem::assign(d->tryBtn, KStandardGuiItem::apply());
-    d->tryBtn->setText(i18n("Try"));
+    d->tryBtn = new QPushButton(i18n("Try"));
+    d->tryBtn->setIcon(QIcon::fromTheme("dialog-ok-apply"));
     d->tryBtn->setToolTip(i18n("Try all settings."));
 
     QHBoxLayout* const hbox2 = new QHBoxLayout;
