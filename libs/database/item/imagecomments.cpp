@@ -24,10 +24,13 @@
 
 #include "imagecomments.h"
 
+// Qt includes
+
+#include <QLocale>
+
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <klocale.h>
 
 // Local includes
 
@@ -194,9 +197,9 @@ QString ImageComments::defaultComment(int* const index, DatabaseComment::Type ty
         return QString();
     }
 
-    KLocale* const locale = KLocale::global();
-    QString langCode      = locale->language().toLower() + '-';
-    QString fullCode      = langCode + locale->country().toLower();
+    QString spec     = QLocale().name().toLower();
+    QString langCode = spec.left(spec.indexOf(QLatin1Char('_'))) + QLatin1Char('-');
+    QString fullCode = spec.replace(QLatin1Char('_'), QLatin1Char('-'));
 
     int fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch;
 
