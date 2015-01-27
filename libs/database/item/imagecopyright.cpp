@@ -24,10 +24,13 @@
 
 #include "imagecopyright.h"
 
+// Qt includes
+
+#include <QLocale>
+
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <klocale.h>
 
 // Local includes
 
@@ -495,9 +498,10 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     if (languageCode.isNull())
     {
         // find local language
-        KLocale* const locale = KLocale::global();
-        langCode              = locale->language().toLower() + '-';
-        fullCode              = langCode + locale->country().toLower();
+        
+        QString spec     = QLocale().name().toLower();
+        QString langCode = spec.left(spec.indexOf(QLatin1Char('_'))) + QLatin1Char('-');
+        QString fullCode = spec.replace(QLatin1Char('_'), QLatin1Char('-'));        
     }
     else if (languageCode == "x-default")
     {
