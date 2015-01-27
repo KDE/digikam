@@ -264,13 +264,13 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
     QLocale tmpLocale;
 
     // day of month with two digits
-    QString day   = tmpLocale.toString(date, "%d");
+    QString day   = tmpLocale.toString(date, QLatin1String("dd"));
 
     // short form of the month
-    QString month = tmpLocale.toString(date, "%b");
+    QString month = tmpLocale.toString(date, QLatin1String("ddd"));
 
     // long form of the year
-    QString year  = tmpLocale.toString(date, "%Y");
+    QString year  = tmpLocale.toString(date, QLatin1String("yyyy"));
 
     *subLine      = i18ncp("%1: day of month with two digits, %2: short month name, %3: year",
                            "Album Date: %2 %3 %4 - 1 Item", "Album Date: %2 %3 %4 - %1 Items",
