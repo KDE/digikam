@@ -245,7 +245,6 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    // need to set the button to a KStdGuiItem that has no icon
     QPushButton* const tryBtn = d->gboxSettings->button(EditorToolSettings::Try);
     tryBtn->setText(i18n("Max. Aspect"));
     tryBtn->setToolTip(i18n("Set selection area to the maximum size according "

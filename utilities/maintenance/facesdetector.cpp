@@ -38,7 +38,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstandardguiitem.h>
 
 // Libkface includes
 
@@ -70,8 +69,7 @@ public:
         QVBoxLayout* const vbox     = new QVBoxLayout;
         QTextEdit* const edit       = new QTextEdit;
         vbox->addWidget(edit, 1);
-        QPushButton* const okButton = new QPushButton;
-        KGuiItem::assign(okButton,KStandardGuiItem::ok());
+        QPushButton* const okButton = new QPushButton(i18n("Ok"));
         vbox->addWidget(okButton, 0, Qt::AlignRight);
 
         setLayout(vbox);
