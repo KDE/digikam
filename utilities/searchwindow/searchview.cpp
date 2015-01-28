@@ -38,8 +38,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstandardguiitem.h>
-#include <kguiitem.h>
 
 // Local includes
 
@@ -500,18 +498,16 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* const cache
 {
     m_mainLayout      = new QHBoxLayout;
 
-    m_addGroupsButton = new QPushButton;
-    KGuiItem::assign(m_addGroupsButton,KStandardGuiItem::add());
-    m_addGroupsButton->setText(i18n("Add Search Group"));
+    m_addGroupsButton = new QPushButton(i18n("Add Search Group"));
+    m_addGroupsButton->setIcon(QIcon::fromTheme("list-add"));
 
     connect(m_addGroupsButton, SIGNAL(clicked()),
             this, SIGNAL(addGroupPressed()));
 
     m_mainLayout->addWidget(m_addGroupsButton);
 
-    m_resetButton = new QPushButton;
-    KGuiItem::assign(m_resetButton,KStandardGuiItem::reset());
-    //m_addGroupsButton->setText(i18n("Reset"));
+    m_resetButton = new QPushButton(i18n("Reset"));
+    m_resetButton->setIcon(QIcon::fromTheme("edit-undo"));
 
     connect(m_resetButton, SIGNAL(clicked()),
             this, SIGNAL(resetPressed()));
