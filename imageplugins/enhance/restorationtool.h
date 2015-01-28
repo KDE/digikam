@@ -50,7 +50,6 @@ private Q_SLOTS:
     void slotSaveAsSettings();
     void slotLoadSettings();
     void slotResetSettings();
-    void processCImgUrl(const QString&);
     void slotResetValues(int);
 
 private:

@@ -56,8 +56,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurllabel.h>
 #include <ksharedconfig.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -66,6 +69,8 @@
 #include "greycstorationsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
+
+using namespace KDcrawIface;
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -169,13 +174,11 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->mainTab                     = new QTabWidget(d->gboxSettings->plainPage());
-    QWidget* const firstPage       = new QWidget(d->mainTab);
+    d->mainTab               = new QTabWidget(d->gboxSettings->plainPage());
+    QWidget* const firstPage = new QWidget(d->mainTab);
 
-    KUrlLabel* const cimgLogoLabel = new KUrlLabel();
-    cimgLogoLabel->setText(QString());
-    cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    cimgLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png")));
+    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
+                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     QLabel* const typeLabel = new QLabel(i18n("Filtering type:"));
@@ -230,9 +233,6 @@ InPaintingTool::InPaintingTool(QObject* const parent)
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
     // -------------------------------------------------------------
-
-    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(processCImgUrl(QString)));
 
     connect(d->inpaintingTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
@@ -353,11 +353,6 @@ void InPaintingTool::slotResetSettings()
     }
 
     d->settingsWidget->setSettings(settings);
-}
-
-void InPaintingTool::processCImgUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 void InPaintingTool::preparePreview()

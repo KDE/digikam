@@ -43,8 +43,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurllabel.h>
 #include <ksharedconfig.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -53,6 +56,8 @@
 #include "greycstorationsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
+
+using namespace KDcrawIface;
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -147,11 +152,9 @@ RestorationTool::RestorationTool(QObject* const parent)
     QGridLayout* const grid  = new QGridLayout(firstPage);
     d->mainTab->addTab( firstPage, i18n("Preset") );
 
-    KUrlLabel* const cimgLogoLabel = new KUrlLabel(firstPage);
-    cimgLogoLabel->setText(QString());
-    cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    cimgLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png")));
-    cimgLogoLabel->setToolTip( i18n("Visit CImg library website"));
+    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
+                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"));
+    cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     QLabel* const typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
@@ -191,9 +194,6 @@ RestorationTool::RestorationTool(QObject* const parent)
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
-
-    connect(cimgLogoLabel, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(processCImgUrl(QString)));
 
     connect(d->restorationTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
@@ -320,11 +320,6 @@ void RestorationTool::slotResetSettings()
     }
 
     d->settingsWidget->setSettings(settings);
-}
-
-void RestorationTool::processCImgUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 void RestorationTool::preparePreview()
