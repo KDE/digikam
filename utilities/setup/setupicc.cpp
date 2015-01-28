@@ -54,12 +54,12 @@
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kpagedialog.h>
-#include <kurllabel.h>
 #include <kurlrequester.h>
 
 // Libkdcraw includes
 
 #include <squeezedcombobox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -174,12 +174,12 @@ public:
 SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     : QScrollArea(parent), d(new Private)
 {
-    d->mainDialog            = dialog;
-    d->tab                   = new QTabWidget(viewport());
+    d->mainDialog                  = dialog;
+    d->tab                         = new QTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    d->behaviorPanel         = new QWidget;
+    d->behaviorPanel               = new QWidget;
     QVBoxLayout* const mainLayout  = new QVBoxLayout(d->behaviorPanel);
 
     // --------------------------------------------------------
@@ -187,16 +187,15 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QWidget* const colorPolicy     = new QWidget;
     QGridLayout* const gridHeader  = new QGridLayout(colorPolicy);
 
-    d->enableColorManagement = new QCheckBox(colorPolicy);
+    d->enableColorManagement       = new QCheckBox(colorPolicy);
     d->enableColorManagement->setText(i18n("Enable Color Management"));
     d->enableColorManagement->setWhatsThis(i18n("<ul><li>Checked: Color Management is enabled</li>"
                                                 "<li>Unchecked: Color Management is "
                                                 "disabled</li></ul>"));
 
-    KUrlLabel* const lcmsLogoLabel = new KUrlLabel(colorPolicy);
-    lcmsLogoLabel->setText(QString());
-    lcmsLogoLabel->setUrl("http://www.littlecms.com");
-    lcmsLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-lcms.png")));
+    RActiveLabel* const lcmsLogoLabel = new RActiveLabel(QUrl("http://www.littlecms.com"),
+                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-lcms.png"),
+                                                         colorPolicy);
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
     gridHeader->addWidget(d->enableColorManagement, 0, 0, 1, 1);
