@@ -50,7 +50,6 @@
 
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -90,9 +89,6 @@ AnimatedClearButton::AnimatedClearButton(QWidget* const parent)
 
     connect(d, SIGNAL(visibleChanged()),
             this, SLOT(visibleChanged()));
-
-    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)),
-            this, SLOT(updateAnimationSettings()));
 }
 
 QSize AnimatedClearButton::sizeHint() const
@@ -618,14 +614,14 @@ StyleSheetDebugger::StyleSheetDebugger(QWidget* const object)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QVBoxLayout* vbox = new QVBoxLayout;
+    QVBoxLayout* const vbox = new QVBoxLayout;
+    m_edit                  = new QTextEdit;
 
-    m_edit            = new QTextEdit;
-    vbox->addWidget(m_edit, 1);
-    m_okButton = new QPushButton;
-    KGuiItem::assign(m_okButton,KStandardGuiItem::ok());
+    m_okButton = new QPushButton(i18n("Ok"));
+    m_okButton->setIcon(QIcon::fromTheme("dialog-ok"));
+
+    vbox->addWidget(m_edit,     1);
     vbox->addWidget(m_okButton, 0, Qt::AlignRight);
-
     setLayout(vbox);
 
     connect(m_okButton, SIGNAL(clicked()),
