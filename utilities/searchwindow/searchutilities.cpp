@@ -45,6 +45,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QTextEdit>
+#include <QIcon>
 
 // KDE includes
 

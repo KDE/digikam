@@ -29,11 +29,11 @@
 #include <QKeyEvent>
 #include <QToolButton>
 #include <QApplication>
+#include <QIcon>
 
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <kstandardguiitem.h>
 
 // kdcraw includes
 
@@ -91,7 +91,7 @@ private:
     void         updateLayout();
     void         updateVisualStyle();
 
-    QToolButton* createToolButton(const KGuiItem& item) const;
+    QToolButton* createToolButton(const QIcon& icon, const QString& text, const QString& tip = QString()) const;
 
     QWidget* addTagsWidget() const
     {
@@ -166,12 +166,12 @@ void AssignNameWidget::Private::clearWidgets()
     clickLabel = 0;
 }
 
-QToolButton* AssignNameWidget::Private::createToolButton(const KGuiItem& gui) const
+QToolButton* AssignNameWidget::Private::createToolButton(const QIcon& icon, const QString& text, const QString& tip) const
 {
     QToolButton* const b = new QToolButton;
-    b->setIcon(gui.icon());
-    b->setText(gui.text());
-    b->setToolTip(gui.toolTip());
+    b->setIcon(icon);
+    b->setText(text);
+    b->setToolTip(tip);
     b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     return b;
 }
@@ -251,7 +251,7 @@ void AssignNameWidget::Private::checkWidgets()
 
             if (!confirmButton)
             {
-                confirmButton = createToolButton(KStandardGuiItem::ok());
+                confirmButton = createToolButton(QIcon::fromTheme("dialog-ok"), i18n("Ok"));
 
                 if (mode == UnconfirmedEditMode)
                 {
@@ -265,7 +265,7 @@ void AssignNameWidget::Private::checkWidgets()
 
             if (!rejectButton)
             {
-                rejectButton = createToolButton(KStandardGuiItem::remove());
+                rejectButton = createToolButton(QIcon::fromTheme("list-remove"), i18n("Remove"));
 
                 q->connect(rejectButton, SIGNAL(clicked()),
                            q, SLOT(slotReject()));

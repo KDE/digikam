@@ -34,6 +34,7 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QDialogButtonBox>
+#include <QIcon>
 
 // KDE includes
 
@@ -52,7 +53,8 @@ namespace Digikam
 {
 
 AbstractSearchGroupContainer::AbstractSearchGroupContainer(QWidget* const parent)
-    : QWidget(parent), m_groupIndex(0)
+    : QWidget(parent),
+      m_groupIndex(0)
 {
 }
 
