@@ -32,10 +32,6 @@
 #include <QMap>
 #include <QApplication>
 
-// KDE includes
-
-#include <klocale.h>
-
 #ifdef HAVE_KIPI
 
 // Libkipi includes

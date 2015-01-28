@@ -36,10 +36,6 @@
 #include <QUrl>
 #include <QTreeWidget>
 
-// KDE includes
-
-//#include <klocale.h>
-
 // Local includes
 
 #include "blackframeparser.h"
