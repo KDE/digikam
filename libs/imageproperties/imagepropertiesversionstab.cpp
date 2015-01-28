@@ -30,12 +30,12 @@
 #include <QLabel>
 #include <QModelIndex>
 #include <QUrl>
+#include <QIcon>
 
 // KDE includes
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -155,7 +155,9 @@ void ImagePropertiesVersionsTab::addShowHideOverlay()
 
 void ImagePropertiesVersionsTab::addOpenImageAction()
 {
-    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(KStandardGuiItem::open());
+    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme("document-open"),
+                                                                               i18n("Open"),
+                                                                               i18n("Open file"));
 
     connect(overlay, SIGNAL(activated(ImageInfo)),
             this, SIGNAL(actionTriggered(ImageInfo)));
@@ -163,10 +165,9 @@ void ImagePropertiesVersionsTab::addOpenImageAction()
 
 void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceModel)
 {
-    KGuiItem gui(i18n("Go To Albums"), "folder-image",
-                 i18nc("@info:tooltip", "Go to the album of this image"));
-
-    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(gui);
+    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme("folder-image"),
+                                                                               i18n("Go To Albums"),
+                                                                               i18nc("@info:tooltip", "Go to the album of this image"));
     overlay->setReferenceModel(referenceModel);
 
     connect(overlay, SIGNAL(activated(ImageInfo)),

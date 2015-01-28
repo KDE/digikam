@@ -187,9 +187,9 @@ VersionsDelegate* VersionsWidget::delegate() const
     return d->delegate;
 }
 
-ActionVersionsOverlay* VersionsWidget::addActionOverlay(const KGuiItem& item)
+ActionVersionsOverlay* VersionsWidget::addActionOverlay(const QIcon& icon, const QString& text, const QString& tip)
 {
-    ActionVersionsOverlay* const overlay = new ActionVersionsOverlay(this, item);
+    ActionVersionsOverlay* const overlay = new ActionVersionsOverlay(this, icon, text, tip);
     d->view->addOverlay(overlay);
     return overlay;
 }

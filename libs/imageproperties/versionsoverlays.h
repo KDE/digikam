@@ -25,9 +25,8 @@
 #ifndef VERSIONSOVERLAYS_H
 #define VERSIONSOVERLAYS_H
 
-// KDE includes
-
-#include <kguiitem.h>
+#include <QString>
+#include <QIcon>
 
 // Local includes
 
@@ -77,7 +76,7 @@ class ActionVersionsOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ActionVersionsOverlay(QObject* const parent, const KGuiItem& gui);
+    ActionVersionsOverlay(QObject* const parent, const QIcon& icon, const QString& text, const QString& tip = QString());
     virtual void setActive(bool active);
 
     void setReferenceModel(const ImageModel* model);
@@ -103,7 +102,9 @@ protected:
 
 protected:
 
-    KGuiItem          m_gui;
+    QIcon             m_icon;
+    QString           m_text;
+    QString           m_tip;
     const ImageModel* m_referenceModel;
 };
 

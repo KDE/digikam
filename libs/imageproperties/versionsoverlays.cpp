@@ -24,10 +24,6 @@
 
 #include "versionsoverlays.h"
 
-// Qt includes
-
-#include <QIcon>
-
 // KDE includes
 
 #include <klocalizedstring.h>
@@ -49,7 +45,7 @@ class ShowHideVersionsOverlay::Button : public ItemViewHoverButton
 {
 public:
 
-    explicit Button(QAbstractItemView* parentView);
+    explicit Button(QAbstractItemView* const parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -58,7 +54,7 @@ protected:
     virtual void updateToolTip();
 };
 
-ShowHideVersionsOverlay::Button::Button(QAbstractItemView* parentView)
+ShowHideVersionsOverlay::Button::Button(QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView)
 {
 }
@@ -165,7 +161,7 @@ class ActionVersionsOverlay::Button : public ItemViewHoverButton
 {
 public:
 
-    Button(QAbstractItemView* const parentView, const KGuiItem& gui);
+    Button(QAbstractItemView* const parentView, const QIcon& icon, const QString& text, const QString& tip);
     virtual QSize sizeHint() const;
 
 protected:
@@ -175,11 +171,16 @@ protected:
 
 protected:
 
-    KGuiItem gui;
+    QIcon   m_icon;
+    QString m_text;
+    QString m_tip;
 };
 
-ActionVersionsOverlay::Button::Button(QAbstractItemView* const parentView, const KGuiItem& gui)
-    : ItemViewHoverButton(parentView), gui(gui)
+ActionVersionsOverlay::Button::Button(QAbstractItemView* const parentView, const QIcon& icon, const QString& text, const QString& tip)
+    : ItemViewHoverButton(parentView),
+      m_icon(icon),
+      m_text(text),
+      m_tip(tip)
 {
 }
 
@@ -190,19 +191,22 @@ QSize ActionVersionsOverlay::Button::sizeHint() const
 
 QIcon ActionVersionsOverlay::Button::icon()
 {
-    return QIcon::fromTheme(gui.iconName());
+    return m_icon;
 }
 
 void ActionVersionsOverlay::Button::updateToolTip()
 {
-    setToolTip(gui.toolTip());
+    setToolTip(m_tip);
 }
 
 // ------------------------------------------------------------------------------------------
 
-ActionVersionsOverlay::ActionVersionsOverlay(QObject* const parent, const KGuiItem& gui)
+ActionVersionsOverlay::ActionVersionsOverlay(QObject* const parent, const QIcon& icon, const QString& text, const QString& tip)
     : HoverButtonDelegateOverlay(parent),
-      m_gui(gui), m_referenceModel(0)
+      m_icon(icon),
+      m_text(text),
+      m_tip(tip),
+      m_referenceModel(0)
 {
 }
 
@@ -233,7 +237,7 @@ void ActionVersionsOverlay::setActive(bool active)
 
 ItemViewHoverButton* ActionVersionsOverlay::createButton()
 {
-    return new Button(view(), m_gui);
+    return new Button(view(), m_icon, m_text, m_tip);
 }
 
 void ActionVersionsOverlay::updateButton(const QModelIndex& index)
