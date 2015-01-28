@@ -47,11 +47,14 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurllabel.h>
 
 // Libkexiv2 includes
 
 #include <kexiv2.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -62,6 +65,7 @@
 #include "metadatasettings.h"
 
 using namespace KExiv2Iface;
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -289,10 +293,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QGridLayout* const infoBoxGrid  = new QGridLayout;
     infoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    KUrlLabel* const exiv2LogoLabel = new KUrlLabel(infoBox);
-    exiv2LogoLabel->setText(QString());
-    exiv2LogoLabel->setUrl("http://www.exiv2.org");
-    exiv2LogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png")));
+    RActiveLabel* const exiv2LogoLabel = new RActiveLabel(QUrl("http://www.exiv2.org"),
+                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png"),
+                                                          infoBox);
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
     QLabel* const explanation = new QLabel(infoBox);
@@ -527,9 +530,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     readSettings();
 
-    connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(slotProcessExiv2Url(QString)));
-
     connect(d->exifRotateBox, SIGNAL(toggled(bool)),
             this, SLOT(slotExifAutoRotateToggled(bool)));
 
@@ -549,11 +549,6 @@ void SetupMetadata::setActiveMainTab(MetadataTab tab)
 void SetupMetadata::setActiveSubTab(int tab)
 {
     d->displaySubTab->setCurrentIndex(tab);
-}
-
-void SetupMetadata::slotProcessExiv2Url(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 void SetupMetadata::applySettings()

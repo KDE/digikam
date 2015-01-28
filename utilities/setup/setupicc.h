@@ -67,7 +67,6 @@ private:
 private Q_SLOTS:
 
     void slotToggledEnabled();
-    void processLcmsUrl(const QString&);
     void slotUrlChanged();
     void slotUrlTextChanged();
     void slotClickedIn();

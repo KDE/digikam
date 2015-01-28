@@ -513,9 +513,6 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     connect(d->enableColorManagement, SIGNAL(toggled(bool)),
             this, SLOT(slotToggledEnabled()));
 
-    connect(lcmsLogoLabel, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(processLcmsUrl(QString)));
-
     connect(d->infoProofProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedProof()));
 
@@ -562,11 +559,6 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
 SetupICC::~SetupICC()
 {
     delete d;
-}
-
-void SetupICC::processLcmsUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 void SetupICC::applySettings()
