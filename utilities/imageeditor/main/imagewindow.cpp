@@ -731,7 +731,7 @@ void ImageWindow::slotContextMenu()
         ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(m_contextMenu);
         RatingMenuAction* const rmenu     = new RatingMenuAction(m_contextMenu);
         menuLabels->addAction(pmenu);
-        menuLabels->addAction(cmenu);
+        menuLabels->addAction(cmenu->menuAction());
         menuLabels->addAction(rmenu);
         m_contextMenu->addMenu(menuLabels);
 

@@ -505,7 +505,7 @@ void ContextMenuHelper::addLabelsAction()
     ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(d->parent);
     RatingMenuAction* const rmenu     = new RatingMenuAction(d->parent);
     menuLabels->addAction(pmenu);
-    menuLabels->addAction(cmenu);
+    menuLabels->addAction(cmenu->menuAction());
     menuLabels->addAction(rmenu);
     addSubMenu(menuLabels);
 

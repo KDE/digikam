@@ -36,7 +36,6 @@
 #include <QFontMetrics>
 #include <QFont>
 #include <QToolButton>
-#include <QMenu>
 
 // KDE includes
 
@@ -529,9 +528,9 @@ void ColorLabelSelector::slotColorLabelChanged(int id)
 // -----------------------------------------------------------------------------
 
 ColorLabelMenuAction::ColorLabelMenuAction(QMenu* const parent)
-    : KActionMenu(parent)
+    : QMenu(parent)
 {
-    setText(i18n("Color"));
+    setTitle(i18n("Color"));
     QWidgetAction* const wa     = new QWidgetAction(this);
     ColorLabelWidget* const clw = new ColorLabelWidget(parent);
     wa->setDefaultWidget(clw);
