@@ -400,7 +400,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 
         if (!coordinates.hasAltitude())
         {
-            d->altitude->setText("Undefined");
+            d->altitude->setText(i18n("Undefined"));
         }
         else
         {
