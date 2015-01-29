@@ -34,7 +34,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -42,6 +45,8 @@
 #include "lensfunsettings.h"
 #include "lensfuncameraselector.h"
 #include "lensfuniface.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -81,9 +86,9 @@ void LensAutoFix::registerSettingsWidget()
     note->setWordWrap(true);
     note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    d->cameraSelector      = new LensFunCameraSelector();
-    KSeparator* const line = new KSeparator(Qt::Horizontal);
-    d->settingsView        = new LensFunSettings();
+    d->cameraSelector       = new LensFunCameraSelector();
+    RLineWidget* const line = new RLineWidget(Qt::Horizontal);
+    d->settingsView         = new LensFunSettings();
     d->cameraSelector->setPassiveMetadataUsage(true);
     d->cameraSelector->setEnabledUseMetadata(true);
 

@@ -49,7 +49,6 @@
 #include <kdatepicker.h>
 #include <klocalizedstring.h>
 #include <ktextedit.h>
-#include <kseparator.h>
 #include <khelpclient.h>
 
 // Libkdcraw includes
@@ -148,7 +147,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     topLabel->setWordWrap(false);
 
-    KSeparator* const topLine = new KSeparator(Qt::Horizontal);
+    RLineWidget* const topLine = new RLineWidget(Qt::Horizontal);
 
     // --------------------------------------------------------
 

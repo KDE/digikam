@@ -40,12 +40,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rexpanderbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -56,11 +56,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class AntiVignettingSettings::AntiVignettingSettingsPriv
+class AntiVignettingSettings::Private
 {
 public:
 
-    AntiVignettingSettingsPriv() :
+    Private() :
         addVignettingCheck(0),
         maskPreviewLabel(0),
         densityInput(0),
@@ -91,20 +91,20 @@ public:
     RDoubleNumInput*      xOffsetInput;
     RDoubleNumInput*      yOffsetInput;
 };
-const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configAddVignettingAdjustmentEntry("AddVignettingAdjustment");
-const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configDensityAdjustmentEntry("DensityAdjustment");
-const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configPowerAdjustmentEntry("PowerAdjustment");
-const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configInnerRadiusAdjustmentEntry("InnerRadiusAdjustment");
-const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configOuterRadiusAdjustmentEntry("OuterRadiusAdjustment");
-const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configAddVignettingEntry("AddVignetting");
-const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configXOffsetEntry("XOffset");
-const QString AntiVignettingSettings::AntiVignettingSettingsPriv::configYOffsetEntry("YOffset");
+const QString AntiVignettingSettings::Private::configAddVignettingAdjustmentEntry("AddVignettingAdjustment");
+const QString AntiVignettingSettings::Private::configDensityAdjustmentEntry("DensityAdjustment");
+const QString AntiVignettingSettings::Private::configPowerAdjustmentEntry("PowerAdjustment");
+const QString AntiVignettingSettings::Private::configInnerRadiusAdjustmentEntry("InnerRadiusAdjustment");
+const QString AntiVignettingSettings::Private::configOuterRadiusAdjustmentEntry("OuterRadiusAdjustment");
+const QString AntiVignettingSettings::Private::configAddVignettingEntry("AddVignetting");
+const QString AntiVignettingSettings::Private::configXOffsetEntry("XOffset");
+const QString AntiVignettingSettings::Private::configYOffsetEntry("YOffset");
 
 // --------------------------------------------------------
 
 AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     : QWidget(parent),
-      d(new AntiVignettingSettingsPriv)
+      d(new Private)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -182,7 +182,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     d->yOffsetInput->setDefaultValue(0);
     d->yOffsetInput->setWhatsThis(i18n("Y offset "));
 
-    KSeparator* line = new KSeparator(Qt::Horizontal);
+    RLineWidget* line = new RLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------
 

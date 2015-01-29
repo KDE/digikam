@@ -42,8 +42,13 @@
 // KDE includes
 
 #include <khelpclient.h>
-#include <kseparator.h>
 #include <klocalizedstring.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -94,7 +99,7 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     topLabel->setWordWrap(false);
 
-    KSeparator* const topLine = new KSeparator(Qt::Horizontal);
+    RLineWidget* const topLine = new RLineWidget(Qt::Horizontal);
 
     // --------------------------------------------------------
 

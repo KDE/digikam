@@ -74,7 +74,7 @@
 #include <kopenwithdialog.h>
 #include <knotifyconfigwidget.h>
 #include <kselectaction.h>
-#include <kseparator.h>
+
 #include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>

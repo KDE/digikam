@@ -41,8 +41,11 @@
 
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
-#include <kseparator.h>
 #include <ksharedconfig.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -50,6 +53,8 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "perspectivewidget.h"
+
+using namespace KDcrawIface;
 
 namespace DigikamTransformImagePlugin
 {
@@ -139,7 +144,7 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    KSeparator* line         = new KSeparator (Qt::Horizontal);
+    RLineWidget* line        = new RLineWidget (Qt::Horizontal);
     QLabel* angleLabel       = new QLabel(i18n("Angles (in degrees):"));
     QLabel* label3           = new QLabel(i18n("  Top left:"));
     d->topLeftAngleLabel     = new QLabel;
@@ -152,7 +157,7 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    KSeparator* line2          = new KSeparator (Qt::Horizontal);
+    RLineWidget* line2         = new RLineWidget (Qt::Horizontal);
     d->drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"));
     d->drawGridCheckBox        = new QCheckBox(i18n("Draw grid"));
     d->inverseTransformation   = new QCheckBox(i18n("Inverse transformation"));

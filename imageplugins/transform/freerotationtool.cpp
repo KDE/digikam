@@ -43,12 +43,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
 #include <ksharedconfig.h>
 
 // Libkdcraw includes
 
 #include <rexpanderbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -210,10 +210,9 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    KSeparator* const line  = new KSeparator(Qt::Horizontal);
-    d->settingsView   = new FreeRotationSettings(d->gboxSettings->plainPage());
-
-    d->expanderBox    = new RExpanderBox;
+    RLineWidget* const line  = new RLineWidget(Qt::Horizontal);
+    d->settingsView          = new FreeRotationSettings(d->gboxSettings->plainPage());
+    d->expanderBox           = new RExpanderBox;
     d->expanderBox->setObjectName("FreeRotationTool Expander");
     d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme("freerotation"), i18n("Automatic Adjustment"),
                             QString("AutoAdjustContainer"), true);

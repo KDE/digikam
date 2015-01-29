@@ -41,9 +41,12 @@
 
 #include <klocalizedstring.h>
 #include <kicondialog.h>
-#include <kseparator.h>
 #include <kkeysequencewidget.h>
 #include <khelpclient.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -53,6 +56,8 @@
 #include "tagsactionmngr.h"
 #include "databaseconstants.h"
 #include "digikam_debug.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -133,7 +138,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
 
-    KSeparator* const line  = new KSeparator(Qt::Horizontal, page);
+    RLineWidget* const line  = new RLineWidget(Qt::Horizontal, page);
 
     // --------------------------------------------------------
 

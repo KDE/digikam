@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class BorderSettingsPriv;
+class Private;
 
 class DIGIKAM_EXPORT BorderSettings : public QWidget
 {
@@ -80,7 +80,7 @@ private:
 
 private:
 
-    BorderSettingsPriv* const d;
+    Private* const d;
 };
 
 }  // namespace Digikam

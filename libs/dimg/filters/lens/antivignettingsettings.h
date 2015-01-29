@@ -70,8 +70,8 @@ private Q_SLOTS:
 
 private:
 
-    class AntiVignettingSettingsPriv;
-    AntiVignettingSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

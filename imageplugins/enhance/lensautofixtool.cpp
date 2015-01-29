@@ -37,8 +37,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
 #include <ksharedconfig.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -50,6 +53,8 @@
 #include "lensfunfilter.h"
 #include "lensfunsettings.h"
 #include "lensfuncameraselector.h"
+
+using namespace KDcrawIface;
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -109,7 +114,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* const parent)
     DImg* const img        = d->previewWidget->imageIface()->original();
     DMetadata meta(img->getMetadata());
     d->cameraSelector->setMetadata(meta);
-    KSeparator* const line = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    RLineWidget* const line = new RLineWidget(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 

@@ -37,8 +37,11 @@
 // KDE includes
 
 #include <kkeysequencewidget.h>
-#include <kseparator.h>
 #include <kicondialog.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -48,6 +51,8 @@
 #include "albummanager.h"
 #include "tagsactionmngr.h"
 #include "syncjob.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -95,7 +100,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
 
-    KSeparator* const line = new KSeparator(Qt::Horizontal, this);
+    RLineWidget* const line = new RLineWidget(Qt::Horizontal, this);
 
     // --------------------------------------------------------
 

@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kseparator.h>
+
 #include <kassistantdialog.h>
 
 // Libkdcraw includes
@@ -89,7 +89,7 @@ AssistantDlgPage::AssistantDlgPage(KAssistantDialog* const dlg, const QString& t
     vbox->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     
-    KSeparator* const line = new KSeparator(Qt::Vertical, panel);
+    RLineWidget* const line = new RLineWidget(Qt::Vertical, panel);
 
     d->hlay->addWidget(vbox);
     d->hlay->addWidget(line);

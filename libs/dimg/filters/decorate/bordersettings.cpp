@@ -40,13 +40,13 @@
 
 #include <klocalizedstring.h>
 #include <kcolorbutton.h>
-#include <kseparator.h>
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rcombobox.h>
 #include <rexpanderbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -57,11 +57,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class BorderSettingsPriv
+class Private
 {
 public:
 
-    BorderSettingsPriv() :
+    Private() :
         preserveAspectRatio(0),
         labelBackground(0),
         labelBorderPercent(0),
@@ -108,23 +108,23 @@ public:
     RIntNumInput*        borderPercent;
     RIntNumInput*        borderWidth;
 };
-const QString BorderSettingsPriv::configBorderTypeEntry("Border Type");
-const QString BorderSettingsPriv::configBorderPercentEntry("Border Percent");
-const QString BorderSettingsPriv::configBorderWidthEntry("Border Width");
-const QString BorderSettingsPriv::configPreserveAspectRatioEntry("Preserve Aspect Ratio");
-const QString BorderSettingsPriv::configSolidColorEntry("Solid Color");
-const QString BorderSettingsPriv::configNiepceBorderColorEntry("Niepce Border Color");
-const QString BorderSettingsPriv::configNiepceLineColorEntry("Niepce Line Color");
-const QString BorderSettingsPriv::configBevelUpperLeftColorEntry("Bevel Upper Left Color");
-const QString BorderSettingsPriv::configBevelLowerRightColorEntry("Bevel Lower Right Color");
-const QString BorderSettingsPriv::configDecorativeFirstColorEntry("Decorative First Color");
-const QString BorderSettingsPriv::configDecorativeSecondColorEntry("Decorative Second Color");
+const QString Private::configBorderTypeEntry("Border Type");
+const QString Private::configBorderPercentEntry("Border Percent");
+const QString Private::configBorderWidthEntry("Border Width");
+const QString Private::configPreserveAspectRatioEntry("Preserve Aspect Ratio");
+const QString Private::configSolidColorEntry("Solid Color");
+const QString Private::configNiepceBorderColorEntry("Niepce Border Color");
+const QString Private::configNiepceLineColorEntry("Niepce Line Color");
+const QString Private::configBevelUpperLeftColorEntry("Bevel Upper Left Color");
+const QString Private::configBevelLowerRightColorEntry("Bevel Lower Right Color");
+const QString Private::configDecorativeFirstColorEntry("Decorative First Color");
+const QString Private::configDecorativeSecondColorEntry("Decorative Second Color");
 
 // --------------------------------------------------------
 
 BorderSettings::BorderSettings(QWidget* parent)
     : QWidget(parent),
-      d(new BorderSettingsPriv)
+      d(new Private)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -153,7 +153,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->borderType->setDefaultIndex(BorderContainer::SolidBorder);
     d->borderType->setWhatsThis(i18n("Select the border type to add around the image here."));
 
-    KSeparator* line1 = new KSeparator(Qt::Horizontal);
+    RLineWidget* line1 = new RLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 
@@ -176,7 +176,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->borderWidth->setDefaultValue(100);
     d->borderWidth->setWhatsThis(i18n("Set here the border width in pixels to add around the image."));
 
-    KSeparator* line2 = new KSeparator(Qt::Horizontal);
+    RLineWidget* line2 = new RLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 

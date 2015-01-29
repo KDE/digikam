@@ -42,7 +42,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
+
 #include <ksharedconfig.h>
 
 // Libkdcraw includes

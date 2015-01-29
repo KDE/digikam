@@ -42,13 +42,13 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
 
 // Libkdcraw includes
 
 #include <rcombobox.h>
 #include <rnuminput.h>
 #include <rexpanderbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -150,10 +150,10 @@ SharpSettings::SharpSettings(QWidget* const parent)
 
     d->stack = new QStackedWidget(parent);
 
-    grid->addWidget(label1,                 0, 0, 1, 1);
-    grid->addWidget(d->sharpMethod,         0, 1, 1, 1);
-    grid->addWidget(new KSeparator(parent), 1, 0, 1, 2);
-    grid->addWidget(d->stack,               2, 0, 1, 2);
+    grid->addWidget(label1,                                  0, 0, 1, 1);
+    grid->addWidget(d->sharpMethod,                          0, 1, 1, 1);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, parent), 1, 0, 1, 2);
+    grid->addWidget(d->stack,                                2, 0, 1, 2);
     grid->setRowStretch(3, 10);
     grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));

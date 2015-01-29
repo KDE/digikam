@@ -41,7 +41,10 @@
 
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
-#include <kseparator.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -49,6 +52,8 @@
 #include "iccsettingscontainer.h"
 #include "iccsettings.h"
 #include "iccprofileinfodlg.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -100,8 +105,8 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
 
     // ---
 
-    QLabel* const headerLabel   = new QLabel(i18n("<b>Configure the Soft Proofing View</b>"));
-    KSeparator* const separator = new KSeparator(Qt::Horizontal);
+    QLabel* const headerLabel    = new QLabel(i18n("<b>Configure the Soft Proofing View</b>"));
+    RLineWidget* const separator = new RLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------
 

@@ -36,10 +36,10 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kseparator.h>
 
 // Libkdcraw includes
 
+#include <rwidgetutils.h>
 #include <rnuminput.h>
 
 // Local includes
@@ -169,7 +169,7 @@ ShearTool::ShearTool(QObject* const parent)
                                           "to the sheared image. "
                                           "To smooth the target image, it will be blurred a little."));
 
-    KSeparator* line = new KSeparator(Qt::Horizontal);
+    RLineWidget* line = new RLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------
 

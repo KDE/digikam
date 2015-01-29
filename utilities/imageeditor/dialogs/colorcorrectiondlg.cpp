@@ -43,8 +43,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
 #include <khelpclient.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -54,6 +57,8 @@
 #include "icctransform.h"
 #include "iccprofileinfodlg.h"
 #include "iccprofilescombobox.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -246,7 +251,7 @@ QLayout* ColorCorrectionDlg::createHeading() const
     logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    KSeparator* const line  = new KSeparator(Qt::Horizontal);
+    RLineWidget* const line  = new RLineWidget(Qt::Horizontal);
 
     QGridLayout* const grid = new QGridLayout;
     grid->addWidget(icon,    0, 0);

@@ -46,7 +46,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
+
 
 // Libkdcraw includes
 
@@ -456,7 +456,7 @@ void FaceScanDialog::setupUi()
 
     advancedLayout->addWidget(cpuExplanation,                 0, 0);
     advancedLayout->addWidget(d->useFullCpuButton,            1, 0);
-    advancedLayout->addWidget(new KSeparator(Qt::Horizontal), 2, 0);
+    advancedLayout->addWidget(new RLineWidget(Qt::Horizontal), 2, 0);
     advancedLayout->addWidget(d->retrainAllButton,            3, 0);
     advancedLayout->addWidget(d->benchmarkDetectionButton,    4, 0);
     advancedLayout->addWidget(d->benchmarkRecognitionButton,  5, 0);
