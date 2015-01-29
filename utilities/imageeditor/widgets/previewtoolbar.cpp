@@ -30,12 +30,12 @@
 #include <QToolButton>
 #include <QAbstractButton>
 #include <QStandardPaths>
+#include <QMenu>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kactionmenu.h>
 
 // Local includes
 
@@ -74,7 +74,7 @@ public:
     QButtonGroup* previewButtons;
     QActionGroup* actionsGroup;
 
-    KActionMenu*  actionsMenu;
+    QMenu*        actionsMenu;
 };
 
 PreviewToolBar::PreviewToolBar(QWidget* const parent)
@@ -178,7 +178,7 @@ PreviewToolBar::~PreviewToolBar()
 
 void PreviewToolBar::registerMenuActionGroup(EditorWindow* const editor)
 {
-    d->actionsMenu  = new KActionMenu(i18nc("@action Select image editor preview mode", "Preview Mode"), editor);
+    d->actionsMenu  = new QMenu(i18nc("@action Select image editor preview mode", "Preview Mode"), editor);
     d->actionsGroup = new QActionGroup(d->actionsMenu);
 
     connect(d->actionsGroup, SIGNAL(triggered(QAction*)),
@@ -194,7 +194,7 @@ void PreviewToolBar::registerMenuActionGroup(EditorWindow* const editor)
         d->actionsMenu->addAction(ac);
     }
 
-    editor->actionCollection()->addAction("editorwindow_previewmode", d->actionsMenu);
+    editor->actionCollection()->addAction("editorwindow_previewmode", d->actionsMenu->menuAction());
 }
 
 void PreviewToolBar::slotActionTriggered(QAction* ac)
