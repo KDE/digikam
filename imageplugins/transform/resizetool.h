@@ -63,7 +63,6 @@ private Q_SLOTS:
     void slotLoadSettings();
     void slotResetSettings();
     void slotValuesChanged();
-    void processCImgUrl(const QString&);
     void slotRestorationToggled(bool);
 
 private:

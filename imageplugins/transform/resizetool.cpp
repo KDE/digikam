@@ -55,13 +55,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
-#include <kurllabel.h>
 #include <ksharedconfig.h>
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -137,7 +136,7 @@ public:
 
     QTabWidget*             mainTab;
 
-    KUrlLabel*              cimgLogoLabel;
+    RActiveLabel*           cimgLogoLabel;
 
     ImageGuideWidget*       previewWidget;
 
@@ -237,10 +236,9 @@ ResizeTool::ResizeTool(QObject* const parent)
     d->hpInput->setObjectName("hpInput");
     d->hpInput->setWhatsThis( i18n("New image height in percent (%)."));
 
-    d->cimgLogoLabel = new KUrlLabel(firstPage);
-    d->cimgLogoLabel->setText(QString());
-    d->cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    d->cimgLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png")));
+    d->cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
+                                        QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"),
+                                        firstPage);
     d->cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
@@ -251,19 +249,19 @@ ResizeTool::ResizeTool(QObject* const parent)
                                          "This process can take some time."), firstPage);
     d->restorationTips->setWordWrap(true);
 
-    grid->addWidget(d->preserveRatioBox,       0, 0, 1, 3);
-    grid->addWidget(label1,                    1, 0, 1, 1);
-    grid->addWidget(d->wInput,                 1, 1, 1, 2);
-    grid->addWidget(label2,                    2, 0, 1, 1);
-    grid->addWidget(d->hInput,                 2, 1, 1, 2);
-    grid->addWidget(label3,                    3, 0, 1, 1);
-    grid->addWidget(d->wpInput,                3, 1, 1, 2);
-    grid->addWidget(label4,                    4, 0, 1, 1);
-    grid->addWidget(d->hpInput,                4, 1, 1, 2);
-    grid->addWidget(new KSeparator(firstPage), 5, 0, 1, 3);
-    grid->addWidget(d->cimgLogoLabel,          6, 0, 3, 1);
-    grid->addWidget(d->useGreycstorationBox,   6, 1, 1, 2);
-    grid->addWidget(d->restorationTips,        7, 1, 1, 2);
+    grid->addWidget(d->preserveRatioBox,                        0, 0, 1, 3);
+    grid->addWidget(label1,                                     1, 0, 1, 1);
+    grid->addWidget(d->wInput,                                  1, 1, 1, 2);
+    grid->addWidget(label2,                                     2, 0, 1, 1);
+    grid->addWidget(d->hInput,                                  2, 1, 1, 2);
+    grid->addWidget(label3,                                     3, 0, 1, 1);
+    grid->addWidget(d->wpInput,                                 3, 1, 1, 2);
+    grid->addWidget(label4,                                     4, 0, 1, 1);
+    grid->addWidget(d->hpInput,                                 4, 1, 1, 2);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, firstPage), 5, 0, 1, 3);
+    grid->addWidget(d->cimgLogoLabel,                           6, 0, 3, 1);
+    grid->addWidget(d->useGreycstorationBox,                    6, 1, 1, 2);
+    grid->addWidget(d->restorationTips,                         7, 1, 1, 2);
     grid->setRowStretch(8, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
@@ -284,9 +282,6 @@ ResizeTool::ResizeTool(QObject* const parent)
     setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
-
-    connect(d->cimgLogoLabel, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(processCImgUrl(QString)));
 
     connect(d->wInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotValuesChanged()));
@@ -564,11 +559,6 @@ void ResizeTool::slotRestorationToggled(bool b)
     d->cimgLogoLabel->setEnabled(b);
     toolSettings()->enableButton(EditorToolSettings::Load, b);
     toolSettings()->enableButton(EditorToolSettings::SaveAs, b);
-}
-
-void ResizeTool::processCImgUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 void ResizeTool::slotLoadSettings()
