@@ -36,7 +36,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -44,6 +47,8 @@
 #include "importsettings.h"
 #include "setupcamera.h"
 #include "dfontselect.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -403,7 +408,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showItemDimensionsBox = new QCheckBox(i18n("Show item dimensions"));
     d->showItemDimensionsBox->setWhatsThis(i18n("Set this option to display the item dimensions."));
 
-    KSeparator* const line   = new KSeparator(Qt::Horizontal, d->photoSettingBox);
+    RLineWidget* const line  = new RLineWidget(Qt::Horizontal, d->photoSettingBox);
     QLabel* const label      = new QLabel(i18n("Note: these settings require \"Use File Metadata\" option from Camera Setup Behavior page."), d->photoSettingBox);
 
     d->showItemPhotoMakeBox  = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
