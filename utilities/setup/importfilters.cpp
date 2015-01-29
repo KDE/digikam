@@ -40,13 +40,18 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
 #include <kmimetypechooser.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "filtercombo.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -73,7 +78,7 @@ public:
 
     QLineEdit*          filterName;
     QCheckBox*          mimeCheckBox;
-    KSqueezedTextLabel* mimeLabel;
+    RAdjustableLabel*   mimeLabel;
     QToolButton*        mimeButton;
     QCheckBox*          fileNameCheckBox;
     QLineEdit*          fileNameEdit;
@@ -110,7 +115,7 @@ ImportFilters::ImportFilters(QWidget* const parent)
     horizontalLayout = new QHBoxLayout();
     spacer           = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
     horizontalLayout->addItem(spacer);
-    d->mimeLabel     = new KSqueezedTextLabel(page);
+    d->mimeLabel     = new RAdjustableLabel(page);
     horizontalLayout->addWidget(d->mimeLabel);
     d->mimeButton    = new QToolButton(page);
     d->mimeButton->setText("Select Type Mime...");
@@ -203,19 +208,19 @@ void ImportFilters::mimeCheckBoxClicked()
 {
     if (!d->mimeCheckBox->isChecked())
     {
-        d->mimeLabel->clear();
+        d->mimeLabel->setAdjustedText();
     }
 }
 
 void ImportFilters::mimeButtonClicked()
 {
     QString text     = i18n("Select the MimeTypes you want for this filter.");
-    QStringList list = d->mimeLabel->text().split(';', QString::SkipEmptyParts);
+    QStringList list = d->mimeLabel->adjustedText().split(';', QString::SkipEmptyParts);
     KMimeTypeChooserDialog dlg(i18n("Select Mime Types"), text, list, "image", this);
 
     if (dlg.exec() == QDialog::Accepted)
     {
-        d->mimeLabel->setText(dlg.chooser()->mimeTypes().join(";"));
+        d->mimeLabel->setAdjustedText(dlg.chooser()->mimeTypes().join(";"));
     }
 }
 
@@ -223,7 +228,7 @@ void ImportFilters::setData(const Filter& filter)
 {
     d->filterName->setText(filter.name);
     d->mimeCheckBox->setChecked(!filter.mimeFilter.isEmpty());
-    d->mimeLabel->setText(filter.mimeFilter);
+    d->mimeLabel->setAdjustedText(filter.mimeFilter);
     d->mimeButton->setEnabled(!filter.mimeFilter.isEmpty());
     d->fileNameCheckBox->setChecked(!filter.fileFilter.isEmpty());
     d->fileNameEdit->setText(filter.fileFilter.join(";"));
@@ -237,7 +242,7 @@ void ImportFilters::setData(const Filter& filter)
 void ImportFilters::getData(Filter* const filter)
 {
     filter->name       = d->filterName->text();
-    filter->mimeFilter = d->mimeLabel->text();
+    filter->mimeFilter = d->mimeLabel->adjustedText();
     filter->fileFilter = d->fileNameEdit->text().split(';', QString::SkipEmptyParts);
     filter->pathFilter = d->pathEdit->text().split(';', QString::SkipEmptyParts);
     filter->onlyNew    = d->newFilesCheckBox->isChecked();

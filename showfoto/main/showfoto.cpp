@@ -77,7 +77,6 @@ extern "C"
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
 
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
@@ -86,6 +85,7 @@ extern "C"
 // Libkdcraw includes
 
 #include <kdcraw.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -123,11 +123,14 @@ extern "C"
 #include "showfotosettings.h"
 #include "showfoto_p.h"
 
+using namespace KDcrawIface;
+
 namespace ShowFoto
 {
 
 ShowFoto::ShowFoto(const QList<QUrl>& urlList)
-    : Digikam::EditorWindow("Showfoto"), d(new Private)
+    : Digikam::EditorWindow("Showfoto"),
+      d(new Private)
 {
     setXMLFile("showfotoui.rc");
 
@@ -614,7 +617,7 @@ void ShowFoto::slotChanged()
     QString str = (!dims.isValid()) ? i18nc("unknown image dimensions", "Unknown")
                                     : i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
                                             dims.width(),dims.height(),mpixels);
-    m_resLabel->setText(str);
+    m_resLabel->setAdjustedText(str);
 
     if (!d->thumbBar->currentInfo().isNull())
     {

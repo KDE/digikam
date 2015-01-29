@@ -87,7 +87,6 @@
 #include <krun.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <ksqueezedtextlabel.h>
 
 #include <kio/copyjob.h>
 
@@ -145,6 +144,8 @@
 #include "versioningpromptusersavedlg.h"
 #include "undostate.h"
 #include "versionmanager.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -665,12 +666,13 @@ void EditorWindow::setupStatusBar()
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel, 100);
 
-    d->infoLabel = new KSqueezedTextLabel(i18n("No selection"), statusBar());
+    d->infoLabel = new RAdjustableLabel(statusBar());
+    d->infoLabel->setAdjustedText(i18n("No selection"));
     d->infoLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(d->infoLabel, 100);
     d->infoLabel->setToolTip(i18n("Information about current image selection"));
 
-    m_resLabel   = new KSqueezedTextLabel(statusBar());
+    m_resLabel   = new RAdjustableLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip(i18n("Information about image size"));
@@ -2728,7 +2730,7 @@ PreviewToolBar::PreviewMode EditorWindow::previewMode() const
 
 void EditorWindow::setToolInfoMessage(const QString& txt)
 {
-    d->infoLabel->setText(txt);
+    d->infoLabel->setAdjustedText(txt);
 }
 
 VersionManager* EditorWindow::versionManager() const

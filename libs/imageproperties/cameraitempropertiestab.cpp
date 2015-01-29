@@ -39,10 +39,16 @@
 #include <klocalizedstring.h>
 #include <kio/global.h>
 
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
 // Local includes
 
 #include "imagepropertiestxtlabel.h"
 #include "imagepropertiestab.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -356,37 +362,37 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
 {
     if (itemInfo.isNull())
     {
-        d->labelFile->setText(QString());
-        d->labelFolder->setText(QString());
-        d->labelFileIsReadable->setText(QString());
-        d->labelFileIsWritable->setText(QString());
-        d->labelFileDate->setText(QString());
-        d->labelFileSize->setText(QString());
-        d->labelImageMime->setText(QString());
-        d->labelImageDimensions->setText(QString());
-        d->labelImageRatio->setText(QString());
-        d->labelNewFileName->setText(QString());
-        d->labelAlreadyDownloaded->setText(QString());
+        d->labelFile->setAdjustedText(QString());
+        d->labelFolder->setAdjustedText(QString());
+        d->labelFileIsReadable->setAdjustedText(QString());
+        d->labelFileIsWritable->setAdjustedText(QString());
+        d->labelFileDate->setAdjustedText(QString());
+        d->labelFileSize->setAdjustedText(QString());
+        d->labelImageMime->setAdjustedText(QString());
+        d->labelImageDimensions->setAdjustedText(QString());
+        d->labelImageRatio->setAdjustedText(QString());
+        d->labelNewFileName->setAdjustedText(QString());
+        d->labelAlreadyDownloaded->setAdjustedText(QString());
 
-        d->labelPhotoMake->setText(QString());
-        d->labelPhotoModel->setText(QString());
-        d->labelPhotoDateTime->setText(QString());
-        d->labelPhotoLens->setText(QString());
-        d->labelPhotoAperture->setText(QString());
-        d->labelPhotoFocalLength->setText(QString());
-        d->labelPhotoExposureTime->setText(QString());
-        d->labelPhotoSensitivity->setText(QString());
-        d->labelPhotoExposureMode->setText(QString());
-        d->labelPhotoFlash->setText(QString());
-        d->labelPhotoWhiteBalance->setText(QString());
+        d->labelPhotoMake->setAdjustedText(QString());
+        d->labelPhotoModel->setAdjustedText(QString());
+        d->labelPhotoDateTime->setAdjustedText(QString());
+        d->labelPhotoLens->setAdjustedText(QString());
+        d->labelPhotoAperture->setAdjustedText(QString());
+        d->labelPhotoFocalLength->setAdjustedText(QString());
+        d->labelPhotoExposureTime->setAdjustedText(QString());
+        d->labelPhotoSensitivity->setAdjustedText(QString());
+        d->labelPhotoExposureMode->setAdjustedText(QString());
+        d->labelPhotoFlash->setAdjustedText(QString());
+        d->labelPhotoWhiteBalance->setAdjustedText(QString());
 
-        d->labelVideoAspectRatio->setText(QString());
-        d->labelVideoAudioBitRate->setText(QString());
-        d->labelVideoAudioChannelType->setText(QString());
-        d->labelVideoAudioCompressor->setText(QString());
-        d->labelVideoDuration->setText(QString());
-        d->labelVideoFrameRate->setText(QString());
-        d->labelVideoVideoCodec->setText(QString());
+        d->labelVideoAspectRatio->setAdjustedText(QString());
+        d->labelVideoAudioBitRate->setAdjustedText(QString());
+        d->labelVideoAudioChannelType->setAdjustedText(QString());
+        d->labelVideoAudioCompressor->setAdjustedText(QString());
+        d->labelVideoDuration->setAdjustedText(QString());
+        d->labelVideoFrameRate->setAdjustedText(QString());
+        d->labelVideoVideoCodec->setAdjustedText(QString());
 
         setEnabled(false);
         return;
@@ -399,8 +405,8 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
 
     // -- Camera file system information ------------------------------------------
 
-    d->labelFile->setText(itemInfo.name);
-    d->labelFolder->setText(itemInfo.folder);
+    d->labelFile->setAdjustedText(itemInfo.name);
+    d->labelFolder->setAdjustedText(itemInfo.folder);
 
     if (itemInfo.readPermissions < 0)
     {
@@ -415,7 +421,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         str = i18n("Yes");
     }
 
-    d->labelFileIsReadable->setText(str);
+    d->labelFileIsReadable->setAdjustedText(str);
 
     if (itemInfo.writePermissions < 0)
     {
@@ -430,25 +436,25 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         str = i18n("Yes");
     }
 
-    d->labelFileIsWritable->setText(str);
+    d->labelFileIsWritable->setAdjustedText(str);
 
     if (itemInfo.ctime.isValid())
     {
-        d->labelFileDate->setText(QLocale().toString(itemInfo.ctime, QLocale::ShortFormat));
+        d->labelFileDate->setAdjustedText(QLocale().toString(itemInfo.ctime, QLocale::ShortFormat));
     }
     else
     {
-        d->labelFileDate->setText(unknown);
+        d->labelFileDate->setAdjustedText(unknown);
     }
 
     str = i18n("%1 (%2)", KIO::convertSize(itemInfo.size), QLocale().toString(itemInfo.size));
-    d->labelFileSize->setText(str);
+    d->labelFileSize->setAdjustedText(str);
 
     // -- Image Properties --------------------------------------------------
 
     if (itemInfo.mime == "image/x-raw")
     {
-        d->labelImageMime->setText(i18n("RAW Image"));
+        d->labelImageMime->setAdjustedText(i18n("RAW Image"));
     }
     else
     {
@@ -456,11 +462,11 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
 
         if (mimeType.isValid())
         {
-            d->labelImageMime->setText(mimeType.comment());
+            d->labelImageMime->setAdjustedText(mimeType.comment());
         }
         else
         {
-            d->labelImageMime->setText(itemInfo.mime);    // last fallback
+            d->labelImageMime->setAdjustedText(itemInfo.mime);    // last fallback
         }
     }
 
@@ -488,16 +494,16 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     str = (!dims.isValid()) ? unknown : i18n("%1x%2 (%3Mpx)",
             dims.width(), dims.height(), mpixels);
-    d->labelImageDimensions->setText(str);
+    d->labelImageDimensions->setAdjustedText(str);
 
     if (!dims.isValid()) str = unknown;
     else ImagePropertiesTab::aspectRatioToString(dims.width(), dims.height(), str);
 
-    d->labelImageRatio->setText(str);
+    d->labelImageRatio->setAdjustedText(str);
 
     // -- Download information ------------------------------------------
 
-    d->labelNewFileName->setText(itemInfo.downloadName.isEmpty() ? i18n("<i>unchanged</i>") : itemInfo.downloadName);
+    d->labelNewFileName->setAdjustedText(itemInfo.downloadName.isEmpty() ? i18n("<i>unchanged</i>") : itemInfo.downloadName);
 
     if (itemInfo.downloaded == CamItemInfo::DownloadUnknown)
     {
@@ -512,7 +518,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         str = i18n("No");
     }
 
-    d->labelAlreadyDownloaded->setText(str);
+    d->labelAlreadyDownloaded->setAdjustedText(str);
 
     // -- Photograph information ------------------------------------------
     // Note: If something is changed here, please updated albumfiletip section too.
@@ -531,55 +537,55 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
 
     ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
     ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
-    d->labelPhotoMake->setText(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
-    d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
+    d->labelPhotoMake->setAdjustedText(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
+    d->labelPhotoModel->setAdjustedText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
     if (photoInfo.dateTime.isValid())
     {
         str = QLocale().toString(photoInfo.dateTime, QLocale::ShortFormat);
-        d->labelPhotoDateTime->setText(str);
+        d->labelPhotoDateTime->setAdjustedText(str);
     }
     else
     {
-        d->labelPhotoDateTime->setText(unavailable);
+        d->labelPhotoDateTime->setAdjustedText(unavailable);
     }
 
-    d->labelPhotoLens->setText(photoInfo.lens.isEmpty() ? unavailable : photoInfo.lens);
-    d->labelPhotoAperture->setText(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
+    d->labelPhotoLens->setAdjustedText(photoInfo.lens.isEmpty() ? unavailable : photoInfo.lens);
+    d->labelPhotoAperture->setAdjustedText(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
 
     if (photoInfo.focalLength35mm.isEmpty())
     {
-        d->labelPhotoFocalLength->setText(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
+        d->labelPhotoFocalLength->setAdjustedText(photoInfo.focalLength.isEmpty() ? unavailable : photoInfo.focalLength);
     }
     else
     {
         str = i18n("%1 (%2)", photoInfo.focalLength, photoInfo.focalLength35mm);
-        d->labelPhotoFocalLength->setText(str);
+        d->labelPhotoFocalLength->setAdjustedText(str);
     }
 
-    d->labelPhotoExposureTime->setText(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
-    d->labelPhotoSensitivity->setText(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
+    d->labelPhotoExposureTime->setAdjustedText(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
+    d->labelPhotoSensitivity->setAdjustedText(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
 
     if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
     {
-        d->labelPhotoExposureMode->setText(unavailable);
+        d->labelPhotoExposureMode->setAdjustedText(unavailable);
     }
     else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
     {
-        d->labelPhotoExposureMode->setText(photoInfo.exposureMode);
+        d->labelPhotoExposureMode->setAdjustedText(photoInfo.exposureMode);
     }
     else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
     {
-        d->labelPhotoExposureMode->setText(photoInfo.exposureProgram);
+        d->labelPhotoExposureMode->setAdjustedText(photoInfo.exposureProgram);
     }
     else
     {
         str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
-        d->labelPhotoExposureMode->setText(str);
+        d->labelPhotoExposureMode->setAdjustedText(str);
     }
 
-    d->labelPhotoFlash->setText(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
-    d->labelPhotoWhiteBalance->setText(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
+    d->labelPhotoFlash->setAdjustedText(photoInfo.flash.isEmpty() ? unavailable : photoInfo.flash);
+    d->labelPhotoWhiteBalance->setAdjustedText(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 
     // -- Video information ------------------------------------------
 
@@ -594,13 +600,13 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         widget(2)->show();
     }
 
-    d->labelVideoAspectRatio->setText(videoInfo.aspectRatio.isEmpty()           ? unavailable : videoInfo.aspectRatio);
-    d->labelVideoAudioBitRate->setText(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
-    d->labelVideoAudioChannelType->setText(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
-    d->labelVideoAudioCompressor->setText(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
-    d->labelVideoDuration->setText(videoInfo.duration.isEmpty()                 ? unavailable : videoInfo.duration);
-    d->labelVideoFrameRate->setText(videoInfo.frameRate.isEmpty()               ? unavailable : videoInfo.frameRate);
-    d->labelVideoVideoCodec->setText(videoInfo.videoCodec.isEmpty()             ? unavailable : videoInfo.videoCodec);
+    d->labelVideoAspectRatio->setAdjustedText(videoInfo.aspectRatio.isEmpty()           ? unavailable : videoInfo.aspectRatio);
+    d->labelVideoAudioBitRate->setAdjustedText(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
+    d->labelVideoAudioChannelType->setAdjustedText(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
+    d->labelVideoAudioCompressor->setAdjustedText(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
+    d->labelVideoDuration->setAdjustedText(videoInfo.duration.isEmpty()                 ? unavailable : videoInfo.duration);
+    d->labelVideoFrameRate->setAdjustedText(videoInfo.frameRate.isEmpty()               ? unavailable : videoInfo.frameRate);
+    d->labelVideoVideoCodec->setAdjustedText(videoInfo.videoCodec.isEmpty()             ? unavailable : videoInfo.videoCodec);
 }
 
 }  // namespace Digikam

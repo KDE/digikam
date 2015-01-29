@@ -41,16 +41,21 @@
 
 // KDE includes
 
-#include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "thememanager.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -480,7 +485,7 @@ public:
         ratingWidget = 0;
     }
 
-    KSqueezedTextLabel* shortcut;
+    RAdjustableLabel* shortcut;
 
     RatingWidget*       ratingWidget;
 };
@@ -494,7 +499,7 @@ RatingBox::RatingBox(QWidget* const parent)
     d->ratingWidget = new RatingWidget(this);
     d->ratingWidget->setTracking(false);
 
-    d->shortcut = new KSqueezedTextLabel(this);
+    d->shortcut = new RAdjustableLabel(this);
     QFont fnt   = d->shortcut->font();
     fnt.setItalic(true);
     d->shortcut->setFont(fnt);
@@ -527,7 +532,7 @@ void RatingBox::slotUpdateDescription(int rating)
         QAction* const ac = app->actionCollection()->action(QString("rateshortcut-%1").arg(rating));
 
         if (ac)
-            d->shortcut->setText(ac->shortcut().toString());
+            d->shortcut->setAdjustedText(ac->shortcut().toString());
     }
 }
 

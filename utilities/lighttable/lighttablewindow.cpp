@@ -316,7 +316,7 @@ void LightTableWindow::setupStatusBar()
     d->leftZoomBar->setEnabled(false);
     statusBar()->addWidget(d->leftZoomBar, 1);
 
-    d->leftFileName = new KSqueezedTextLabel(statusBar());
+    d->leftFileName = new RAdjustableLabel(statusBar());
     d->leftFileName->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     statusBar()->addWidget(d->leftFileName, 10);
 
@@ -324,7 +324,7 @@ void LightTableWindow::setupStatusBar()
     d->statusProgressBar->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(d->statusProgressBar, 10);
 
-    d->rightFileName = new KSqueezedTextLabel(statusBar());
+    d->rightFileName = new RAdjustableLabel(statusBar());
     d->rightFileName->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     statusBar()->addWidget(d->rightFileName, 10);
 
@@ -798,11 +798,11 @@ void LightTableWindow::slotRightPanelLeftButtonClicked()
 void LightTableWindow::slotLeftPreviewLoaded(bool b)
 {
     d->leftZoomBar->setEnabled(b);
-    d->leftFileName->clear();
+    d->leftFileName->setAdjustedText();
 
     if (b)
     {
-        d->leftFileName->setText(d->previewView->leftImageInfo().name());
+        d->leftFileName->setAdjustedText(d->previewView->leftImageInfo().name());
         d->previewView->checkForSelection(d->thumbView->currentInfo());
         d->thumbView->setOnLeftPanel(d->previewView->leftImageInfo());
 
@@ -829,11 +829,11 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
 void LightTableWindow::slotRightPreviewLoaded(bool b)
 {
     d->rightZoomBar->setEnabled(b);
-    d->rightFileName->clear();
+    d->rightFileName->setAdjustedText();
 
     if (b)
     {
-        d->rightFileName->setText(d->previewView->rightImageInfo().name());
+        d->rightFileName->setAdjustedText(d->previewView->rightImageInfo().name());
         d->previewView->checkForSelection(d->thumbView->currentInfo());
         d->thumbView->setOnRightPanel(d->previewView->rightImageInfo());
 

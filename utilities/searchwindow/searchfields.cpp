@@ -1827,7 +1827,7 @@ SearchFieldChoice::SearchFieldChoice(QObject* const parent)
     : SearchField(parent),
       m_comboBox(0), m_type(QVariant::Invalid)
 {
-    m_model = new ChoiceSearchModel(this);
+    m_model   = new ChoiceSearchModel(this);
     m_anyText = i18n("Any");
 }
 
@@ -2004,7 +2004,7 @@ class SearchFieldChoice : public SearchField
     // macro name will fix this issue. When uncommenting this block again, make sure to
     // fix the macro name of course.
 
-    Q_OBJ ECT
+    Q_ OBJECT
 
 public:
 
@@ -2060,7 +2060,7 @@ void SearchFieldChoice::setupValueWidgets(QGridLayout *layout, int row, int colu
     m_vbox = new QVBoxLayout;
     layout->addLayout(m_vbox, row, column, 1, 3);
 
-    m_label->setTextElideMode(Qt::ElideRight);
+    m_label->setElideMode(Qt::ElideRight);
     m_vbox->addWidget(m_label);
 
     connect(m_label, SIGNAL(activated()),

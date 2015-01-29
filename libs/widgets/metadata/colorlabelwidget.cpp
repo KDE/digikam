@@ -40,14 +40,19 @@
 
 // KDE includes
 
-#include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
 // Local includes
 
 #include "digikam_debug.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -92,7 +97,7 @@ public:
 
     RHBox*              descBox;
 
-    KSqueezedTextLabel* shortcut;
+    RAdjustableLabel* shortcut;
 };
 
 ColorLabelWidget::ColorLabelWidget(QWidget* const parent)
@@ -181,7 +186,7 @@ ColorLabelWidget::ColorLabelWidget(QWidget* const parent)
     d->descBox->setMargin(0);
     d->descBox->setSpacing(0);
     d->desc     = new QLabel(d->descBox);
-    d->shortcut = new KSqueezedTextLabel(d->descBox);
+    d->shortcut = new RAdjustableLabel(d->descBox);
     QFont fnt = d->shortcut->font();
     fnt.setItalic(true);
     d->shortcut->setFont(fnt);
@@ -235,7 +240,7 @@ void ColorLabelWidget::updateDescription(ColorLabel label)
         QAction* const ac = app->actionCollection()->action(QString("colorshortcut-%1").arg(label));
 
         if (ac)
-            d->shortcut->setText(ac->shortcut().toString());
+            d->shortcut->setAdjustedText(ac->shortcut().toString());
     }
 }
 

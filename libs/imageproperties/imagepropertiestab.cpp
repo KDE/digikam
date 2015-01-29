@@ -417,7 +417,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     d->labelColorLabel        = new DTextLabelValue(0, w5);
     d->labelRating            = new DTextLabelValue(0, w5);
     d->labelTags              = new DTextLabelValue(0, w5);
-    d->labelTags->setTextElideMode(Qt::ElideLeft);
+    d->labelTags->setElideMode(Qt::ElideLeft);
 
     glay5->addWidget(d->caption,         0, 0, 1, 1);
     glay5->addWidget(d->labelCaption,    0, 1, 1, 1);
@@ -451,44 +451,44 @@ void ImagePropertiesTab::setCurrentURL(const QUrl& url)
 {
     if (url.isEmpty())
     {
-        d->labelFile->clear();
-        d->labelFolder->clear();
-        d->labelFileModifiedDate->clear();
-        d->labelFileSize->clear();
-        d->labelFileOwner->clear();
-        d->labelFilePermissions->clear();
+        d->labelFile->setAdjustedText();
+        d->labelFolder->setAdjustedText();
+        d->labelFileModifiedDate->setAdjustedText();
+        d->labelFileSize->setAdjustedText();
+        d->labelFileOwner->setAdjustedText();
+        d->labelFilePermissions->setAdjustedText();
 
-        d->labelImageMime->clear();
-        d->labelImageDimensions->clear();
-        d->labelImageRatio->clear();
-        d->labelImageBitDepth->clear();
-        d->labelImageColorMode->clear();
+        d->labelImageMime->setAdjustedText();
+        d->labelImageDimensions->setAdjustedText();
+        d->labelImageRatio->setAdjustedText();
+        d->labelImageBitDepth->setAdjustedText();
+        d->labelImageColorMode->setAdjustedText();
 
-        d->labelPhotoMake->clear();
-        d->labelPhotoModel->clear();
-        d->labelPhotoDateTime->clear();
-        d->labelPhotoLens->clear();
-        d->labelPhotoAperture->clear();
-        d->labelPhotoFocalLength->clear();
-        d->labelPhotoExposureTime->clear();
-        d->labelPhotoSensitivity->clear();
-        d->labelPhotoExposureMode->clear();
-        d->labelPhotoFlash->clear();
-        d->labelPhotoWhiteBalance->clear();
+        d->labelPhotoMake->setAdjustedText();
+        d->labelPhotoModel->setAdjustedText();
+        d->labelPhotoDateTime->setAdjustedText();
+        d->labelPhotoLens->setAdjustedText();
+        d->labelPhotoAperture->setAdjustedText();
+        d->labelPhotoFocalLength->setAdjustedText();
+        d->labelPhotoExposureTime->setAdjustedText();
+        d->labelPhotoSensitivity->setAdjustedText();
+        d->labelPhotoExposureMode->setAdjustedText();
+        d->labelPhotoFlash->setAdjustedText();
+        d->labelPhotoWhiteBalance->setAdjustedText();
 
-        d->labelCaption->clear();
-        d->labelPickLabel->clear();
-        d->labelColorLabel->clear();
-        d->labelRating->clear();
-        d->labelTags->clear();
+        d->labelCaption->setAdjustedText();
+        d->labelPickLabel->setAdjustedText();
+        d->labelColorLabel->setAdjustedText();
+        d->labelRating->setAdjustedText();
+        d->labelTags->setAdjustedText();
 
-        d->labelVideoAspectRatio->clear();
-        d->labelVideoDuration->clear();
-        d->labelVideoFrameRate->clear();
-        d->labelVideoVideoCodec->clear();
-        d->labelVideoAudioBitRate->clear();
-        d->labelVideoAudioChannelType->clear();
-        d->labelVideoAudioCompressor->clear();
+        d->labelVideoAspectRatio->setAdjustedText();
+        d->labelVideoDuration->setAdjustedText();
+        d->labelVideoFrameRate->setAdjustedText();
+        d->labelVideoVideoCodec->setAdjustedText();
+        d->labelVideoAudioBitRate->setAdjustedText();
+        d->labelVideoAudioChannelType->setAdjustedText();
+        d->labelVideoAudioCompressor->setAdjustedText();
 
         setEnabled(false);
         return;
@@ -496,8 +496,8 @@ void ImagePropertiesTab::setCurrentURL(const QUrl& url)
 
     setEnabled(true);
 
-    d->labelFile->setText(url.fileName());
-    d->labelFolder->setText(QDir::toNativeSeparators(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()));
+    d->labelFile->setAdjustedText(url.fileName());
+    d->labelFolder->setAdjustedText(QDir::toNativeSeparators(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()));
 }
 
 void ImagePropertiesTab::setPhotoInfoDisable(const bool b)
@@ -526,111 +526,111 @@ void ImagePropertiesTab::setVideoInfoDisable(const bool b)
 
 void ImagePropertiesTab::setFileModifiedDate(const QString& str)
 {
-    d->labelFileModifiedDate->setText(str);
+    d->labelFileModifiedDate->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setFileSize(const QString& str)
 {
-    d->labelFileSize->setText(str);
+    d->labelFileSize->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setFileOwner(const QString& str)
 {
-    d->labelFileOwner->setText(str);
+    d->labelFileOwner->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setFilePermissions(const QString& str)
 {
-    d->labelFilePermissions->setText(str);
+    d->labelFilePermissions->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setImageMime(const QString& str)
 {
-    d->labelImageMime->setText(str);
+    d->labelImageMime->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setImageDimensions(const QString& str)
 {
-    d->labelImageDimensions->setText(str);
+    d->labelImageDimensions->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setImageRatio(const QString& str)
 {
-    d->labelImageRatio->setText(str);
+    d->labelImageRatio->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setImageBitDepth(const QString& str)
 {
-    d->labelImageBitDepth->setText(str);
+    d->labelImageBitDepth->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setImageColorMode(const QString& str)
 {
-    d->labelImageColorMode->setText(str);
+    d->labelImageColorMode->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoMake(const QString& str)
 {
-    d->labelPhotoMake->setText(str);
+    d->labelPhotoMake->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoModel(const QString& str)
 {
-    d->labelPhotoModel->setText(str);
+    d->labelPhotoModel->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoDateTime(const QString& str)
 {
-    d->labelPhotoDateTime->setText(str);
+    d->labelPhotoDateTime->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoLens(const QString& str)
 {
-    d->labelPhotoLens->setText(str);
+    d->labelPhotoLens->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoAperture(const QString& str)
 {
-    d->labelPhotoAperture->setText(str);
+    d->labelPhotoAperture->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoFocalLength(const QString& str)
 {
-    d->labelPhotoFocalLength->setText(str);
+    d->labelPhotoFocalLength->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoExposureTime(const QString& str)
 {
-    d->labelPhotoExposureTime->setText(str);
+    d->labelPhotoExposureTime->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoSensitivity(const QString& str)
 {
-    d->labelPhotoSensitivity->setText(str);
+    d->labelPhotoSensitivity->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoExposureMode(const QString& str)
 {
-    d->labelPhotoExposureMode->setText(str);
+    d->labelPhotoExposureMode->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoFlash(const QString& str)
 {
-    d->labelPhotoFlash->setText(str);
+    d->labelPhotoFlash->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setPhotoWhiteBalance(const QString& str)
 {
-    d->labelPhotoWhiteBalance->setText(str);
+    d->labelPhotoWhiteBalance->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::showOrHideCaptionAndTags()
 {
-    bool hasCaption    = !d->labelCaption->text().isEmpty();
-    bool hasPickLabel  = !d->labelPickLabel->text().isEmpty();
-    bool hasColorLabel = !d->labelColorLabel->text().isEmpty();
-    bool hasRating     = !d->labelRating->text().isEmpty();
-    bool hasTags       = !d->labelTags->text().isEmpty();
+    bool hasCaption    = !d->labelCaption->adjustedText().isEmpty();
+    bool hasPickLabel  = !d->labelPickLabel->adjustedText().isEmpty();
+    bool hasColorLabel = !d->labelColorLabel->adjustedText().isEmpty();
+    bool hasRating     = !d->labelRating->adjustedText().isEmpty();
+    bool hasTags       = !d->labelTags->adjustedText().isEmpty();
 
     d->caption->setVisible(hasCaption);
     d->labelCaption->setVisible(hasCaption);
@@ -648,18 +648,18 @@ void ImagePropertiesTab::showOrHideCaptionAndTags()
 
 void ImagePropertiesTab::setCaption(const QString& str)
 {
-    d->labelCaption->setText(str);
+    d->labelCaption->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setColorLabel(int colorId)
 {
     if (colorId == NoColorLabel)
     {
-        d->labelColorLabel->setText(QString());
+        d->labelColorLabel->setAdjustedText(QString());
     }
     else
     {
-        d->labelColorLabel->setText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
+        d->labelColorLabel->setAdjustedText(ColorLabelWidget::labelColorName((ColorLabel)colorId));
     }
 }
 
@@ -667,11 +667,11 @@ void ImagePropertiesTab::setPickLabel(int pickId)
 {
     if (pickId == NoPickLabel)
     {
-        d->labelPickLabel->setText(QString());
+        d->labelPickLabel->setAdjustedText(QString());
     }
     else
     {
-        d->labelPickLabel->setText(PickLabelWidget::labelPickName((PickLabel)pickId));
+        d->labelPickLabel->setAdjustedText(PickLabelWidget::labelPickName((PickLabel)pickId));
     }
 }
 
@@ -690,12 +690,12 @@ void ImagePropertiesTab::setRating(int rating)
         }
     }
 
-    d->labelRating->setText(str);
+    d->labelRating->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setVideoAspectRatio(const QString& str)
 {
-    d->labelVideoAspectRatio->setText(str);
+    d->labelVideoAspectRatio->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setVideoAudioBitRate(const QString& str)
@@ -710,17 +710,17 @@ void ImagePropertiesTab::setVideoAudioBitRate(const QString& str)
         audioBitRateString = QLocale().toString(audioBitRateInt);
     }
 
-    d->labelVideoAudioBitRate->setText(audioBitRateString);
+    d->labelVideoAudioBitRate->setAdjustedText(audioBitRateString);
 }
 
 void ImagePropertiesTab::setVideoAudioChannelType(const QString& str)
 {
-    d->labelVideoAudioChannelType->setText(str);
+    d->labelVideoAudioChannelType->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setVideoAudioCompressor(const QString& str)
 {
-    d->labelVideoAudioCompressor->setText(str);
+    d->labelVideoAudioCompressor->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setVideoDuration(const QString& str)
@@ -737,7 +737,7 @@ void ImagePropertiesTab::setVideoDuration(const QString& str)
         durationString = QLocale().toString(durationTime, QLocale::ShortFormat);
     }
 
-    d->labelVideoDuration->setText(durationString);
+    d->labelVideoDuration->setAdjustedText(durationString);
 }
 
 void ImagePropertiesTab::setVideoFrameRate(const QString& str)
@@ -752,18 +752,18 @@ void ImagePropertiesTab::setVideoFrameRate(const QString& str)
         frameRateString = QLocale().toString(frameRateDouble);
     }
 
-    d->labelVideoFrameRate->setText(frameRateString);
+    d->labelVideoFrameRate->setAdjustedText(frameRateString);
 }
 
 void ImagePropertiesTab::setVideoVideoCodec(const QString& str)
 {
-    d->labelVideoVideoCodec->setText(str);
+    d->labelVideoVideoCodec->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)
 {
     Q_UNUSED(tagNames);
-    d->labelTags->setText(shortenedTagPaths(tagPaths).join("\n"));
+    d->labelTags->setAdjustedText(shortenedTagPaths(tagPaths).join("\n"));
 }
 
 typedef QPair<QString, QVariant> PathValuePair;

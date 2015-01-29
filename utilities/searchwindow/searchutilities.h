@@ -35,10 +35,6 @@
 #include <QDoubleSpinBox>
 #include <QSpinBox>
 
-// KDE includes
-
-#include <ksqueezedtextlabel.h>
-
 // Local includes
 
 #include "comboboxutilities.h"

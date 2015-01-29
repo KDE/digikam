@@ -33,7 +33,6 @@
 
 // KDE includes
 
-
 #include <kassistantdialog.h>
 
 // Libkdcraw includes

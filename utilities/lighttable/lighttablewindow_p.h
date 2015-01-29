@@ -32,7 +32,10 @@
 // KDE includes
 
 #include <kselectaction.h>
-#include <ksqueezedtextlabel.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -43,6 +46,8 @@
 #include "lighttableview.h"
 #include "lighttablethumbbar.h"
 #include "thumbbardock.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -133,8 +138,8 @@ public:
     KToggleAction*            showMenuBarAction;
     KToggleAction*            clearOnCloseAction;
 
-    KSqueezedTextLabel*       leftFileName;
-    KSqueezedTextLabel*       rightFileName;
+    RAdjustableLabel*       leftFileName;
+    RAdjustableLabel*       rightFileName;
 
     SidebarSplitter*          hSplitter;
     ThumbBarDock*             barViewDock;

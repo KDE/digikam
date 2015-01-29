@@ -35,13 +35,18 @@
 
 // KDE includes
 
-#include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "progressmanager.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -77,7 +82,7 @@ public:
     QPushButton*        cancelButton;
     QProgressBar*       progressBar;
 
-    KSqueezedTextLabel* textLabel;
+    RAdjustableLabel*   textLabel;
 };
 
 StatusProgressBar::StatusProgressBar(QWidget* const parent)
@@ -86,7 +91,7 @@ StatusProgressBar::StatusProgressBar(QWidget* const parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    d->textLabel            = new KSqueezedTextLabel(this);
+    d->textLabel            = new RAdjustableLabel(this);
     d->progressWidget       = new QWidget(this);
     QHBoxLayout* const hBox = new QHBoxLayout(d->progressWidget);
     d->progressBar          = new QProgressBar(d->progressWidget);
@@ -132,7 +137,7 @@ void StatusProgressBar::setNotificationTitle(const QString& title, const QIcon &
 
 void StatusProgressBar::setText(const QString& text)
 {
-    d->textLabel->setText(text);
+    d->textLabel->setAdjustedText(text);
 }
 
 void StatusProgressBar::setAlignment(Qt::Alignment a)

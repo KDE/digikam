@@ -47,7 +47,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
 
 // Libkdcraw includes
 
@@ -171,8 +170,8 @@ public:
 
     DColorValueSelector*      vSelector;
 
-    KSqueezedTextLabel*       labelFile;
-    KSqueezedTextLabel*       labelFolder;
+    RAdjustableLabel*       labelFile;
+    RAdjustableLabel*       labelFolder;
 
     ImageInfo                 imageInfo;
 
@@ -279,9 +278,9 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     // ---------------------------------------------------------------
 
     QLabel* const file   = new QLabel(i18n("<b>File</b>:"));
-    d->labelFile         = new KSqueezedTextLabel(0);
+    d->labelFile         = new RAdjustableLabel(0);
     QLabel* const folder = new QLabel(i18n("<b>Folder</b>:"));
-    d->labelFolder       = new KSqueezedTextLabel(0);
+    d->labelFolder       = new RAdjustableLabel(0);
     int hgt              = fontMetrics().height() - 2;
     file->setMaximumHeight(hgt);
     folder->setMaximumHeight(hgt);
@@ -907,8 +906,8 @@ void FuzzySearchView::setCurrentImage(qlonglong imageid)
 void FuzzySearchView::setCurrentImage(const ImageInfo& info)
 {
     d->imageInfo = info;
-    d->labelFile->setText(d->imageInfo.name());
-    d->labelFolder->setText(d->imageInfo.fileUrl().adjusted(QUrl::RemoveFilename).path());
+    d->labelFile->setAdjustedText(d->imageInfo.name());
+    d->labelFolder->setAdjustedText(d->imageInfo.fileUrl().adjusted(QUrl::RemoveFilename).path());
     d->thumbLoadThread->find(d->imageInfo.thumbnailIdentifier());
 }
 

@@ -47,7 +47,6 @@
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
 
 // Libkdcraw includes
 
@@ -375,14 +374,14 @@ void ImagePropertiesColorsTab::setData(const QUrl& url, const QRect& selectionAr
     d->iccProfileWidget->loadFromURL(QUrl());
 
     // Clear information.
-    d->labelMeanValue->clear();
-    d->labelPixelsValue->clear();
-    d->labelStdDevValue->clear();
-    d->labelCountValue->clear();
-    d->labelMedianValue->clear();
-    d->labelPercentileValue->clear();
-    d->labelColorDepth->clear();
-    d->labelAlphaChannel->clear();
+    d->labelMeanValue->setAdjustedText();
+    d->labelPixelsValue->setAdjustedText();
+    d->labelStdDevValue->setAdjustedText();
+    d->labelCountValue->setAdjustedText();
+    d->labelMedianValue->setAdjustedText();
+    d->labelPercentileValue->setAdjustedText();
+    d->labelColorDepth->setAdjustedText();
+    d->labelAlphaChannel->setAdjustedText();
 
     if (url.isEmpty())
     {
@@ -678,13 +677,13 @@ void ImagePropertiesColorsTab::slotUpdateIntervRange(int range)
 
 void ImagePropertiesColorsTab::updateInformation()
 {
-    d->labelColorDepth->setText(d->image.sixteenBit() ? i18n("16 bits") : i18n("8 bits"));
-    d->labelAlphaChannel->setText(d->image.hasAlpha() ? i18n("Yes")     : i18n("No"));
+    d->labelColorDepth->setAdjustedText(d->image.sixteenBit() ? i18n("16 bits") : i18n("8 bits"));
+    d->labelAlphaChannel->setAdjustedText(d->image.hasAlpha() ? i18n("Yes")     : i18n("No"));
 }
 
 void ImagePropertiesColorsTab::updateStatistics()
 {
-    ImageHistogram* renderedHistogram = d->histogramBox->histogram()->currentHistogram();
+    ImageHistogram* const renderedHistogram = d->histogramBox->histogram()->currentHistogram();
 
     if (!renderedHistogram)
     {
@@ -703,24 +702,24 @@ void ImagePropertiesColorsTab::updateStatistics()
     }
 
     double mean = renderedHistogram->getMean(channel, min, max);
-    d->labelMeanValue->setText(value.setNum(mean, 'f', 1));
+    d->labelMeanValue->setAdjustedText(value.setNum(mean, 'f', 1));
 
     double pixels = renderedHistogram->getPixels();
-    d->labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
+    d->labelPixelsValue->setAdjustedText(value.setNum((float)pixels, 'f', 0));
 
     double stddev = renderedHistogram->getStdDev(channel, min, max);
-    d->labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
+    d->labelStdDevValue->setAdjustedText(value.setNum(stddev, 'f', 1));
 
     double counts = renderedHistogram->getCount(channel, min, max);
-    d->labelCountValue->setText(value.setNum((float)counts, 'f', 0));
+    d->labelCountValue->setAdjustedText(value.setNum((float)counts, 'f', 0));
 
     double median = renderedHistogram->getMedian(channel, min, max);
-    d->labelMedianValue->setText(value.setNum(median, 'f', 1));
+    d->labelMedianValue->setAdjustedText(value.setNum(median, 'f', 1));
 
     double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
-    d->labelPercentileValue->setText(value.setNum(percentile, 'f', 1));
+    d->labelPercentileValue->setAdjustedText(value.setNum(percentile, 'f', 1));
 
-    d->labelImageRegion->setText( (type == FullImageHistogram) ? i18n("Full Image") : i18n("Image Region") );
+    d->labelImageRegion->setAdjustedText( (type == FullImageHistogram) ? i18n("Full Image") : i18n("Image Region") );
 }
 
 void ImagePropertiesColorsTab::getICCData()

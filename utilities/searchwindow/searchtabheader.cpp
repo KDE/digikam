@@ -42,7 +42,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -52,6 +55,8 @@
 #include "searchfolderview.h"
 #include "searchwindow.h"
 #include "searchxml.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -163,9 +168,9 @@ public:
     QLineEdit*          saveNameEdit;
     QToolButton*        saveButton;
 
-    KSqueezedTextLabel* storedKeywordEditName;
+    RAdjustableLabel*   storedKeywordEditName;
     QLineEdit*          storedKeywordEdit;
-    KSqueezedTextLabel* storedAdvancedEditName;
+    RAdjustableLabel*   storedAdvancedEditName;
     QPushButton*        storedAdvancedEditLabel;
 
     QTimer*             keywordEditTimer;
@@ -252,8 +257,8 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
     d->editSimpleWidget->setTitle(i18n("Edit Stored Search"));
 
     QVBoxLayout* const vbox1 = new QVBoxLayout;
-    d->storedKeywordEditName = new KSqueezedTextLabel(this);
-    d->storedKeywordEditName->setTextElideMode(Qt::ElideRight);
+    d->storedKeywordEditName = new RAdjustableLabel(this);
+    d->storedKeywordEditName->setElideMode(Qt::ElideRight);
     d->storedKeywordEdit     = new QLineEdit(this);
 
     vbox1->addWidget(d->storedKeywordEditName);
@@ -270,8 +275,8 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
 
     QVBoxLayout* const vbox2   = new QVBoxLayout;
 
-    d->storedAdvancedEditName  = new KSqueezedTextLabel(this);
-    d->storedAdvancedEditName->setTextElideMode(Qt::ElideRight);
+    d->storedAdvancedEditName  = new RAdjustableLabel(this);
+    d->storedAdvancedEditName->setElideMode(Qt::ElideRight);
     d->storedAdvancedEditLabel = new QPushButton(i18n("Edit..."), this);
 
     vbox2->addWidget(d->storedAdvancedEditName);
@@ -380,14 +385,14 @@ void SearchTabHeader::selectedSearchChanged(Album* a)
         else if (album->isKeywordSearch())
         {
             d->lowerArea->setCurrentWidget(d->editSimpleWidget);
-            d->storedKeywordEditName->setText(album->title());
+            d->storedKeywordEditName->setAdjustedText(album->title());
             d->storedKeywordEdit->setText(keywordsFromQuery(album->query()));
             d->keywordEdit->showAdvancedSearch(false);
         }
         else
         {
             d->lowerArea->setCurrentWidget(d->editAdvancedWidget);
-            d->storedAdvancedEditName->setText(album->title());
+            d->storedAdvancedEditName->setAdjustedText(album->title());
             d->keywordEdit->showAdvancedSearch(false);
         }
     }

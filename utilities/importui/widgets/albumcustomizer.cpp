@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
@@ -81,7 +80,7 @@ public:
 
     QToolButton*        tooltipToggleButton;
 
-    KSqueezedTextLabel* customExample;
+    RAdjustableLabel* customExample;
 
     QComboBox*          folderDateFormat;
 
@@ -130,7 +129,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     d->tooltipToggleButton->setIcon(QIcon::fromTheme("dialog-information"));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
-    d->customExample       = new KSqueezedTextLabel(this);
+    d->customExample       = new RAdjustableLabel(this);
 
     albumVlay->addWidget(d->autoAlbumExtCheck);
     albumVlay->addWidget(d->autoAlbumDateCheck);
@@ -254,16 +253,16 @@ void AlbumCustomizer::slotCustomizerChanged()
 
         if (customDateFormatIsValid())
         {
-            d->customExample->setText(i18nc("Example of custom date format for album naming", "Ex.: %1", date.toString(customDateFormat())));
+            d->customExample->setAdjustedText(i18nc("Example of custom date format for album naming", "Ex.: %1", date.toString(customDateFormat())));
         }
         else
         {
-            d->customExample->setText(i18nc("Custom date format", "Format is not valid..."));
+            d->customExample->setAdjustedText(i18nc("Custom date format", "Format is not valid..."));
         }
     }
     else
     {
-        d->customExample->clear();
+        d->customExample->setAdjustedText();
     }
 }
 

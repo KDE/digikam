@@ -45,7 +45,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -68,6 +71,8 @@
 #include "tagsmanager.h"
 #include "albumlabelstreeview.h"
 #include "albumdb.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -616,7 +621,7 @@ public:
 
     QComboBox*                timeUnitCB;
     QLineEdit*                nameEdit;
-    KSqueezedTextLabel*       cursorDateLabel;
+    RAdjustableLabel*       cursorDateLabel;
 
     SearchTextBar*            searchDateBar;
     EditableSearchTreeView*   timeLineFolderView;
@@ -709,7 +714,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     d->scrollBar->setMinimum(0);
     d->scrollBar->setSingleStep(1);
 
-    d->cursorDateLabel  = new KSqueezedTextLabel(0, panel);
+    d->cursorDateLabel  = new RAdjustableLabel(panel);
     d->cursorCountLabel = new QLabel(panel);
     d->cursorCountLabel->setAlignment(Qt::AlignRight);
 
@@ -936,7 +941,7 @@ void TimelineSideBarWidget::slotCursorPositionChanged()
 {
     QString txt;
     int val = d->timeLineWidget->cursorInfo(txt);
-    d->cursorDateLabel->setText(txt);
+    d->cursorDateLabel->setAdjustedText(txt);
     d->cursorCountLabel->setText((val == 0) ? i18n("no item") : i18np("1 item", "%1 items", val));
 }
 

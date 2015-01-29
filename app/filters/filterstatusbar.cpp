@@ -34,7 +34,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -60,11 +65,11 @@ public:
         settingsBtn = 0;
     }
 
-    int                 status;
+    int               status;
 
-    KSqueezedTextLabel* info;
-    QToolButton*        resetBtn;
-    QToolButton*        settingsBtn;
+    RAdjustableLabel* info;
+    QToolButton*      resetBtn;
+    QToolButton*      settingsBtn;
 
     ImageFilterSettings settings;
 };
@@ -74,7 +79,7 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
 {
     QHBoxLayout* const vlay = new QHBoxLayout(this);
 
-    d->info        = new KSqueezedTextLabel(this);
+    d->info        = new RAdjustableLabel(this);
     d->info->setContextMenuPolicy(Qt::NoContextMenu);
     d->info->setAutoFillBackground(true);
     d->info->setFocusPolicy(Qt::NoFocus);
@@ -171,7 +176,7 @@ void FilterStatusBar::slotFilterMatches(bool match)
 
     if (filtersList.isEmpty())
     {
-        d->info->setText(i18n("No active filter"));
+        d->info->setAdjustedText(i18n("No active filter"));
         d->info->setToolTip(QString());
         d->resetBtn->setEnabled(false);
         d->status = Private::None;
@@ -180,11 +185,11 @@ void FilterStatusBar::slotFilterMatches(bool match)
     {
         if (filtersList.count() == 1)
         {
-            d->info->setText(i18n("One active filter"));
+            d->info->setAdjustedText(i18n("One active filter"));
         }
         else
         {
-            d->info->setText(i18np("1 active filter", "%1 active filters", filtersList.count()));
+            d->info->setAdjustedText(i18np("1 active filter", "%1 active filters", filtersList.count()));
         }
 
         d->info->setToolTip(message);

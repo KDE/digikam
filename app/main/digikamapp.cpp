@@ -82,6 +82,7 @@
 
 #include <kdcraw.h>
 #include <libkdcraw_version.h>
+#include <rwidgetutils.h>
 
 // Libkexiv2
 
@@ -149,6 +150,8 @@
 using KIO::Job;
 using KIO::UDSEntryList;
 using KIO::UDSEntry;
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -574,7 +577,7 @@ void DigikamApp::setupViewConnections()
 
 void DigikamApp::setupStatusBar()
 {
-    d->statusLabel = new KSqueezedTextLabel(statusBar());
+    d->statusLabel = new RAdjustableLabel(statusBar());
     d->statusLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     statusBar()->addWidget(d->statusLabel, 100);
 
@@ -1539,7 +1542,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
         }
     }
 
-    d->statusLabel->setText(d->statusBarSelectionText);
+    d->statusLabel->setAdjustedText(d->statusBarSelectionText);
 }
 
 void DigikamApp::slotSelectionChanged(int selectionCount)

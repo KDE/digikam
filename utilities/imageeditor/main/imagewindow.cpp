@@ -51,7 +51,6 @@
 
 // KDE includes
 
-#include <ksqueezedtextlabel.h>
 #include <kactioncollection.h>
 #include <kcategorizedview.h>
 #include <klocalizedstring.h>
@@ -63,6 +62,10 @@
 
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -762,7 +765,7 @@ void ImageWindow::slotChanged()
     QString str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
                                                              dims.width(), dims.height(), mpixels);
 
-    m_resLabel->setText(str);
+    m_resLabel->setAdjustedText(str);
 
     if (!d->currentIsValid())
     {

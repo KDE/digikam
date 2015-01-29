@@ -49,7 +49,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
 
 // Libkgeomap includes
 
@@ -103,10 +102,10 @@ public:
     QToolButton*              detailsBtn;
     QComboBox*                detailsCombo;
 
-    KSqueezedTextLabel*       altitude;
-    KSqueezedTextLabel*       latitude;
-    KSqueezedTextLabel*       longitude;
-    KSqueezedTextLabel*       date;
+    RAdjustableLabel*       altitude;
+    RAdjustableLabel*       latitude;
+    RAdjustableLabel*       longitude;
+    RAdjustableLabel*       date;
 
     KGeoMap::KGeoMapWidget*   map;
     KGeoMap::ItemMarkerTiler* itemMarkerTiler;
@@ -154,10 +153,10 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     d->latLabel         = new QLabel(i18n("<b>Latitude</b>:"),  this);
     d->lonLabel         = new QLabel(i18n("<b>Longitude</b>:"), this);
     d->dateLabel        = new QLabel(i18n("<b>Date</b>:"),      this);
-    d->altitude         = new KSqueezedTextLabel(0, this);
-    d->latitude         = new KSqueezedTextLabel(0, this);
-    d->longitude        = new KSqueezedTextLabel(0, this);
-    d->date             = new KSqueezedTextLabel(0, this);
+    d->altitude         = new RAdjustableLabel(this);
+    d->latitude         = new RAdjustableLabel(this);
+    d->longitude        = new RAdjustableLabel(this);
+    d->date             = new RAdjustableLabel(this);
     d->altitude->setAlignment(Qt::AlignRight);
     d->latitude->setAlignment(Qt::AlignRight);
     d->longitude->setAlignment(Qt::AlignRight);
@@ -373,10 +372,10 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl& url)
 
 void ImagePropertiesGPSTab::clearGPSInfo()
 {
-    d->altitude->clear();
-    d->latitude->clear();
-    d->longitude->clear();
-    d->date->clear();
+    d->altitude->setAdjustedText();
+    d->latitude->setAdjustedText();
+    d->longitude->setAdjustedText();
+    d->date->setAdjustedText();
     d->itemModel->clear();
     setEnabled(false);
 }
@@ -384,10 +383,10 @@ void ImagePropertiesGPSTab::clearGPSInfo()
 void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 {
     // Clear info label
-    d->altitude->clear();
-    d->latitude->clear();
-    d->longitude->clear();
-    d->date->clear();
+    d->altitude->setAdjustedText();
+    d->latitude->setAdjustedText();
+    d->longitude->setAdjustedText();
+    d->date->setAdjustedText();
     d->gpsInfoList.clear();
     d->itemModel->clear();
     d->gpsInfoList = list;
@@ -406,16 +405,16 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 
         if (!coordinates.hasAltitude())
         {
-            d->altitude->setText("Undefined");
+            d->altitude->setAdjustedText(i18n("Undefined"));
         }
         else
         {
-            d->altitude->setText(QString("%1 m").arg(QString::number(coordinates.alt())));
+            d->altitude->setAdjustedText(QString("%1 m").arg(QString::number(coordinates.alt())));
         }
 
-        d->latitude->setText(QString::number(coordinates.lat()));
-        d->longitude->setText(QString::number(coordinates.lon()));
-        d->date->setText(QLocale().toString(info.dateTime, QLocale::ShortFormat));
+        d->latitude->setAdjustedText(QString::number(coordinates.lat()));
+        d->longitude->setAdjustedText(QString::number(coordinates.lon()));
+        d->date->setAdjustedText(QLocale().toString(info.dateTime, QLocale::ShortFormat));
     }
 
     for (int i=0; i<d->gpsInfoList.count(); ++i)

@@ -46,7 +46,7 @@ class QTimeEdit;
 class QTreeView;
 class QComboBox;
 class QLineEdit;
-class KSqueezedTextLabel;
+class RAdjustableLabel;
 
 namespace Digikam
 {

@@ -38,7 +38,12 @@
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <ksqueezedtextlabel.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
+using namespace KDcrawIface;
 
 class DTextLabelName : public QLabel
 {
@@ -63,19 +68,19 @@ public:
 
 // -------------------------------------------------------------------
 
-class DTextLabelValue : public KSqueezedTextLabel
+class DTextLabelValue : public RAdjustableLabel
 {
 
 public:
 
     explicit DTextLabelValue(const QString& value, QWidget* const parent=0)
-        : KSqueezedTextLabel(parent)
+        : RAdjustableLabel(parent)
     {
-        setText(value);
+        setAdjustedText(value);
         setFont(KGlobalSettings::smallestReadableFont());
         setAlignment(Qt::AlignLeft | Qt::AlignTop);
         setWordWrap(false);
-        setTextElideMode(Qt::ElideRight);
+        setElideMode(Qt::ElideRight);
     };
 
     ~DTextLabelValue()

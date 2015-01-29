@@ -37,6 +37,10 @@
 #include <kactionmenu.h>
 #include <kservice.h>
 
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -52,8 +56,9 @@ class QToolButton;
 class QWidgetAction;
 
 class KActionCollection;
-class KSqueezedTextLabel;
 class KToggleAction;
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -149,26 +154,26 @@ public:
     QToolButton*                 underExposureIndicator;
     QToolButton*                 overExposureIndicator;
 
-    KSqueezedTextLabel*          infoLabel;
+    RAdjustableLabel*            infoLabel;
 
     KActionCollection*           imagepluginsActionCollection;
 
     QAction*                     copyAction;
-    QAction *                     cropAction;
-    QAction *                     autoCropAction;
-    QAction *                     filePrintAction;
-    QAction *                     flipHorizAction;
-    QAction *                     flipVertAction;
-    QAction *                     rotateLeftAction;
-    QAction *                     rotateRightAction;
-    QAction *                     selectAllAction;
-    QAction *                     selectNoneAction;
-    QAction *                     slideShowAction;
-    QAction *                     softProofOptionsAction;
-    QAction *                     zoomFitToSelectAction;
+    QAction*                     cropAction;
+    QAction*                     autoCropAction;
+    QAction*                     filePrintAction;
+    QAction*                     flipHorizAction;
+    QAction*                     flipVertAction;
+    QAction*                     rotateLeftAction;
+    QAction*                     rotateRightAction;
+    QAction*                     selectAllAction;
+    QAction*                     selectNoneAction;
+    QAction*                     slideShowAction;
+    QAction*                     softProofOptionsAction;
+    QAction*                     zoomFitToSelectAction;
     QAction*                     zoomMinusAction;
     QAction*                     zoomPlusAction;
-    QAction *                     zoomTo100percents;
+    QAction*                     zoomTo100percents;
 
     QSignalMapper*               undoSignalMapper;
     QSignalMapper*               redoSignalMapper;

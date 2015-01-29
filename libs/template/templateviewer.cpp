@@ -286,8 +286,8 @@ void TemplateViewer::setTemplate(const Template& t)
     d->labelContactCity->setText(t.contactInfo().city);
     d->labelContactCountry->setText(t.contactInfo().country);
     d->labelContactPhone->setText(t.contactInfo().phone);
-    d->labelContactEmail->setText(QString("<a href=\"mailto:%1\">%2</a>").arg(t.contactInfo().email).arg(t.contactInfo().email));
-    d->labelContactWebUrl->setText(QString("<a href=\"%1\">%2</a>").arg(t.contactInfo().webUrl).arg(t.contactInfo().webUrl));
+    d->labelContactEmail->setAdjustedText(QString("<a href=\"mailto:%1\">%2</a>").arg(t.contactInfo().email).arg(t.contactInfo().email));
+    d->labelContactWebUrl->setAdjustedText(QString("<a href=\"%1\">%2</a>").arg(t.contactInfo().webUrl).arg(t.contactInfo().webUrl));
 
     d->subjectsList->clear();
     d->subjectsList->addItems(t.IptcSubjects());

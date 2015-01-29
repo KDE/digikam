@@ -40,7 +40,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -60,16 +65,16 @@ public:
     {
     }
 
-    QLabel*             logo;
-    QLabel*             title;
-    QLabel*             label;
+    QLabel*           logo;
+    QLabel*           title;
+    QLabel*           label;
 
-    QLabel*             actionPix;
-    KSqueezedTextLabel* actionLabel;
+    QLabel*           actionPix;
+    RAdjustableLabel* actionLabel;
 
-    QProgressBar*       progress;
+    QProgressBar*     progress;
     
-    QDialogButtonBox*   buttons;
+    QDialogButtonBox* buttons;
 };
 
 DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
@@ -86,7 +91,7 @@ DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
     QGridLayout* const grid = new QGridLayout(page);
 
     d->actionPix      = new QLabel(page);
-    d->actionLabel    = new KSqueezedTextLabel(page);
+    d->actionLabel    = new RAdjustableLabel(page);
     d->logo           = new QLabel(page);
     d->progress       = new QProgressBar(page);
     d->title          = new QLabel(page);
@@ -150,7 +155,7 @@ void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
     }
 
     d->actionPix->setPixmap(pix);
-    d->actionLabel->setText(text);
+    d->actionLabel->setAdjustedText(text);
 }
 
 void DProgressDlg::reset()

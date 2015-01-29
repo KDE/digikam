@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
 
 // Libkdcraw includes
 
@@ -97,9 +96,9 @@ public:
     const QString       orangeStyle;
     const QString       greenStyle;
 
-    KSqueezedTextLabel* lensDescription;
-    KSqueezedTextLabel* makeDescription;
-    KSqueezedTextLabel* modelDescription;
+    RAdjustableLabel* lensDescription;
+    RAdjustableLabel* makeDescription;
+    RAdjustableLabel* modelDescription;
 
     RComboBox*          make;
     RComboBox*          model;
@@ -129,7 +128,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     RHBox* hbox1        = new RHBox(this);
     d->makeLabel        = new QLabel(i18nc("camera make",  "Make:"),  hbox1);
     QLabel* space1      = new QLabel(hbox1);
-    d->makeDescription  = new KSqueezedTextLabel(hbox1);
+    d->makeDescription  = new RAdjustableLabel(hbox1);
     hbox1->setStretchFactor(space1, 10);
     d->makeDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->makeDescription->setWhatsThis(i18n("This is the camera maker description string found in image meta-data. "
@@ -141,7 +140,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     RHBox* hbox2        = new RHBox(this);
     d->modelLabel       = new QLabel(i18nc("camera model", "Model:"), hbox2);
     QLabel* space2      = new QLabel(hbox2);
-    d->modelDescription = new KSqueezedTextLabel(hbox2);
+    d->modelDescription = new RAdjustableLabel(hbox2);
     hbox2->setStretchFactor(space2, 10);
     d->modelDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->modelDescription->setWhatsThis(i18n("This is the camera model description string found in image meta-data. "
@@ -153,7 +152,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     RHBox* hbox3        = new RHBox(this);
     d->lensLabel        = new QLabel(i18nc("camera lens",  "Lens:"),  hbox3);
     QLabel* space3      = new QLabel(hbox3);
-    d->lensDescription  = new KSqueezedTextLabel(hbox3);
+    d->lensDescription  = new RAdjustableLabel(hbox3);
     d->lensDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->lensDescription->setWhatsThis(i18n("This is the lens description string found in image meta-data. "
                                           "This one is used to query and found relevant lens information from Lensfun database."));
@@ -319,9 +318,9 @@ void LensFunCameraSelector::setPassiveMetadataUsage(bool b)
 
 void LensFunCameraSelector::slotUseMetadata(bool b)
 {
-    d->makeDescription->clear();
-    d->modelDescription->clear();
-    d->lensDescription->clear();
+    d->makeDescription->setAdjustedText();
+    d->modelDescription->setAdjustedText();
+    d->lensDescription->setAdjustedText();
     d->metadataResult->clear();
     d->makeLabel->setStyleSheet(qApp->styleSheet());
     d->modelLabel->setStyleSheet(qApp->styleSheet());
@@ -406,7 +405,7 @@ void LensFunCameraSelector::refreshSettingsView()
 
     if (!d->passiveMetadataUsage)
     {
-        d->makeDescription->setText(QString("<i>%1</i>").arg(d->iface->makeDescription()));
+        d->makeDescription->setAdjustedText(QString("<i>%1</i>").arg(d->iface->makeDescription()));
     }
 
     int makerIdx = -1;
@@ -454,7 +453,7 @@ void LensFunCameraSelector::refreshSettingsView()
 
     if (!d->passiveMetadataUsage)
     {
-        d->modelDescription->setText(QString("<i>%1</i>").arg(d->iface->modelDescription()));
+        d->modelDescription->setAdjustedText(QString("<i>%1</i>").arg(d->iface->modelDescription()));
     }
 
     int modelIdx = -1;
@@ -489,7 +488,7 @@ void LensFunCameraSelector::refreshSettingsView()
 
     if (!d->passiveMetadataUsage)
     {
-        d->lensDescription->setText(QString("<i>%1</i>").arg(d->iface->lensDescription()));
+        d->lensDescription->setAdjustedText(QString("<i>%1</i>").arg(d->iface->lensDescription()));
     }
 
     int lensIdx = -1;

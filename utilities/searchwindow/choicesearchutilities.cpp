@@ -250,7 +250,7 @@ RSqueezedClickLabel* ChoiceSearchComboBox::label() const
 
 void ChoiceSearchComboBox::setLabelText(const QString& text)
 {
-    m_label->setText(text);
+    m_label->setAdjustedText(text);
 }
 
 void ChoiceSearchComboBox::labelClicked()
@@ -269,7 +269,7 @@ void ChoiceSearchComboBox::installView(QAbstractItemView* v)
 
     // create the label
     m_label = new RSqueezedClickLabel;
-    m_label->setTextElideMode(Qt::ElideRight);
+    m_label->setElideMode(Qt::ElideRight);
 
     // set a line edit that carries the label
     ProxyClickLineEdit* lineEdit = new ProxyClickLineEdit;

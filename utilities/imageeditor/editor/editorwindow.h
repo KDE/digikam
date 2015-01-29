@@ -38,6 +38,10 @@
 
 #include <kjob.h>
 
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -51,11 +55,12 @@ class QMenu;
 class QAction;
 
 class KActionMenu;
-class KSqueezedTextLabel;
 class KCategorizedView;
 class KSelectAction;
 class KToggleAction;
 class KToolBarPopupAction;
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -105,7 +110,7 @@ protected:
     bool                      m_setExifOrientationTag;
     bool                      m_editingOriginalImage;
 
-    KSqueezedTextLabel*       m_resLabel;
+    RAdjustableLabel*         m_resLabel;
 
     QColor                    m_bgColor;
 

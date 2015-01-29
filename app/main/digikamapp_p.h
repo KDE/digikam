@@ -36,10 +36,12 @@
 
 // KDE includes
 
-
 #include <kselectaction.h>
 #include <kstatusbar.h>
-#include <ksqueezedtextlabel.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -54,6 +56,8 @@
 class KToolBarPopupAction;
 class KToggleAction;
 class KActionMenu;
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -322,7 +326,7 @@ public:
     CameraList*                         cameraList;
     TagsActionMngr*                     tagsActionManager;
     DZoomBar*                           zoomBar;
-    KSqueezedTextLabel*                 statusLabel;
+    RAdjustableLabel*                   statusLabel;
     QString                             statusBarSelectionText;
 
     DigikamModelCollection*             modelCollection;
