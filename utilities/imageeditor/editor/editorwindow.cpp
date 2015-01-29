@@ -74,7 +74,6 @@
 #include <kopenwithdialog.h>
 #include <knotifyconfigwidget.h>
 #include <kselectaction.h>
-
 #include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
@@ -374,9 +373,9 @@ void EditorWindow::setupStandardActions()
     connect(m_saveNewVersionAsAction, SIGNAL(triggered()), this, SLOT(saveNewVersionAs()));
     //ac->addAction("editorwindow_savenewversionas", m_saveNewVersionAsAction);
 
-    m_saveNewVersionInFormatAction = new KActionMenu(QIcon::fromTheme("image-x-generic"),
-                                                     i18nc("@action Save As New Version...Save in format...",
-                                                           "Save in Format"), this);
+    m_saveNewVersionInFormatAction = new QMenu(i18nc("@action Save As New Version...Save in format...",
+                                                     "Save in Format"), this);
+    m_saveNewVersionInFormatAction->setIcon(QIcon::fromTheme("image-x-generic"));
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG"),      "JPG");
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "TIFF"),      "TIFF");
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PNG"),       "PNG");
@@ -385,7 +384,7 @@ void EditorWindow::setupStandardActions()
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG 2000"), "JP2");
 #endif // HAVE_JASPER
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionAsAction);
-    m_saveNewVersionAction->menu()->addAction(m_saveNewVersionInFormatAction);
+    m_saveNewVersionAction->menu()->addAction(m_saveNewVersionInFormatAction->menuAction());
 
     m_saveAction = KStandardAction::save(this, SLOT(save()), this);
     ac->addAction("editorwindow_save", m_saveAction);
@@ -638,12 +637,11 @@ void EditorWindow::setupStandardActions()
 
     // -- Tool control actions ---------------------------------------------------------
 
-    m_selectToolsAction = new KActionMenu(QIcon::fromTheme("applications-graphics"),
-                                          i18nc("@action Select image editor tool/filter", "Select Tool"), this);
-    m_selectToolsAction->setDelayed(false);
+    m_selectToolsAction = new QMenu(i18nc("@action Select image editor tool/filter", "Select Tool"), this);
+    m_selectToolsAction->setIcon(QIcon::fromTheme("applications-graphics"));
     m_selectToolsAction->setVisible(false);
-    ac->addAction("editorwindow_selecttool", m_selectToolsAction);
-    
+    ac->addAction("editorwindow_selecttool", m_selectToolsAction->menuAction());
+
     // NOTE: setup is done after image plugins are loaded
 
     m_applyToolAction = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Ok"), this);
@@ -2783,11 +2781,11 @@ void EditorWindow::setupSelectToolsAction()
     m_selectToolsAction->addAction(viewAction);
     m_selectToolsAction->setVisible(true);
 
-    connect(m_selectToolsAction->menu(), SIGNAL(aboutToShow()),
+    connect(m_selectToolsAction, SIGNAL(aboutToShow()),
             this, SLOT(slotSelectToolsMenuAboutToShow()));
 
     connect(d->selectToolsActionView, SIGNAL(clicked(QModelIndex)),
-            m_selectToolsAction->menu(), SLOT(close()));
+            m_selectToolsAction, SLOT(close()));
 }
 
 void EditorWindow::slotSelectToolsMenuAboutToShow()

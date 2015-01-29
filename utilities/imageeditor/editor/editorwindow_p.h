@@ -34,7 +34,6 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kactionmenu.h>
 #include <kservice.h>
 
 // Libkdcraw includes
@@ -122,7 +121,7 @@ public:
     }
 
     void legacyUpdateSplitterState(KConfigGroup& group);
-    void plugNewVersionInFormatAction(EditorWindow* const q, KActionMenu* const menuAction, const QString& text, const QString& format);
+    void plugNewVersionInFormatAction(EditorWindow* const q, QMenu* const menuAction, const QString& text, const QString& format);
     void addPageUpDownActions(EditorWindow* const q, QWidget* const w);
 
 public:
@@ -281,7 +280,7 @@ void EditorWindow::Private::legacyUpdateSplitterState(KConfigGroup& group)
     }
 }
 
-void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, KActionMenu* const menuAction,
+void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, QMenu* const menuAction,
                                                          const QString& text, const QString& format)
 {
     if (!formatMenuActionMapper)
@@ -292,13 +291,13 @@ void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, 
                 q, SLOT(saveNewVersionInFormat(QString)));
     }
 
-    QAction * const action = new QAction(text, q);
+    QAction* const action = new QAction(text, q);
 
     connect(action, SIGNAL(triggered()),
             formatMenuActionMapper, SLOT(map()));
 
     formatMenuActionMapper->setMapping(action, format);
-    menuAction->menu()->addAction(action);
+    menuAction->addAction(action);
 }
 
 void EditorWindow::Private::addPageUpDownActions(EditorWindow* const q, QWidget* const w)

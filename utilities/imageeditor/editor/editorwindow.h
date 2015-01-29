@@ -54,7 +54,6 @@ class QSplitter;
 class QMenu;
 class QAction;
 
-class KActionMenu;
 class KCategorizedView;
 class KSelectAction;
 class KToggleAction;
@@ -123,7 +122,7 @@ protected:
     KToolBarPopupAction*      m_saveNewVersionAction;
     QAction *                 m_saveCurrentVersionAction;
     QAction *                 m_saveNewVersionAsAction;
-    KActionMenu*              m_saveNewVersionInFormatAction;
+    QMenu*                    m_saveNewVersionInFormatAction;
     QAction *                 m_exportAction;
     QAction*                  m_revertAction;
     QAction *                 m_discardChangesAction;
@@ -142,7 +141,7 @@ protected:
     KToolBarPopupAction*      m_undoAction;
     KToolBarPopupAction*      m_redoAction;
 
-    KActionMenu*              m_selectToolsAction;
+    QMenu*                    m_selectToolsAction;
 
     QMenu*                    m_contextMenu;
     QMenu*                    m_servicesMenu;
