@@ -71,7 +71,6 @@
 #include <kshortcutsdialog.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
-#include <kurllabel.h>
 #include <kmessagewidget.h>
 
 // Libkdcraw includes

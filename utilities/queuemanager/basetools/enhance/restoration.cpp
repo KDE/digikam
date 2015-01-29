@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurllabel.h>
 
 // Libkdcraw includes
 
@@ -66,10 +65,9 @@ void Restoration::registerSettingsWidget()
 {
     RVBox* const vbox = new RVBox;
 
-    KUrlLabel* const cimgLogoLabel = new KUrlLabel(vbox);
-    cimgLogoLabel->setText(QString());
-    cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    cimgLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png")));
+    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
+                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"),
+                                                         vbox);
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     new QLabel(i18n("Filter:"), vbox);

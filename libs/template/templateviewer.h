@@ -50,11 +50,6 @@ public:
 
     void setTemplate(const Template& t);
 
-private Q_SLOTS:
-
-    void slotProcessUrl(const QString&);
-    void slotProcessEmail(const QString&);
-
 private:
 
     class Private;

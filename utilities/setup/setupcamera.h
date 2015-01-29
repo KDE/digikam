@@ -56,8 +56,6 @@ Q_SIGNALS:
     
 private Q_SLOTS:
 
-    void slotProcessGphotoUrl(const QString& url);
-
     void slotSelectionChanged();
 
     void slotAddCamera();

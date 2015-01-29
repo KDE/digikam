@@ -43,7 +43,6 @@
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <kurllabel.h>
 
 // Local includes
 

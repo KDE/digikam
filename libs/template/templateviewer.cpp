@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurllabel.h>
 
 // Libkexiv2 includes
 
@@ -112,45 +111,45 @@ public:
     DTextLabelName* source;
     DTextLabelName* instructions;
 
-    DTextList*      namesList;
-    DTextBrowser*   labelPosition;
-    DTextBrowser*   labelCredit;
-    DTextBrowser*   labelCopyright;
-    DTextBrowser*   labelUsages;
-    DTextBrowser*   labelSource;
-    DTextBrowser*   labelInstructions;
+    DTextList*       namesList;
+    DTextBrowser*    labelPosition;
+    DTextBrowser*    labelCredit;
+    DTextBrowser*    labelCopyright;
+    DTextBrowser*    labelUsages;
+    DTextBrowser*    labelSource;
+    DTextBrowser*    labelInstructions;
 
     // IPTC Location info.
 
-    DTextLabelName* locationCountry;
-    DTextLabelName* locationProvinceState;
-    DTextLabelName* locationCity;
-    DTextLabelName* locationSublocation;
+    DTextLabelName*  locationCountry;
+    DTextLabelName*  locationProvinceState;
+    DTextLabelName*  locationCity;
+    DTextLabelName*  locationSublocation;
 
-    DTextBrowser*   labelLocationCountry;
-    DTextBrowser*   labelLocationProvinceState;
-    DTextBrowser*   labelLocationCity;
-    DTextBrowser*   labelLocationSublocation;
+    DTextBrowser*    labelLocationCountry;
+    DTextBrowser*    labelLocationProvinceState;
+    DTextBrowser*    labelLocationCity;
+    DTextBrowser*    labelLocationSublocation;
 
     // IPTC Contact info.
 
-    DTextLabelName* contactCity;
-    DTextLabelName* contactCountry;
-    DTextLabelName* contactAddress;
-    DTextLabelName* contactPostalCode;
-    DTextLabelName* contactProvinceState;
-    DTextLabelName* contactPhone;
-    DTextLabelName* contactEmail;
-    DTextLabelName* contactWebUrl;
+    DTextLabelName*  contactCity;
+    DTextLabelName*  contactCountry;
+    DTextLabelName*  contactAddress;
+    DTextLabelName*  contactPostalCode;
+    DTextLabelName*  contactProvinceState;
+    DTextLabelName*  contactPhone;
+    DTextLabelName*  contactEmail;
+    DTextLabelName*  contactWebUrl;
 
-    DTextBrowser*   labelContactCity;
-    DTextBrowser*   labelContactCountry;
-    DTextBrowser*   labelContactAddress;
-    DTextBrowser*   labelContactPostalCode;
-    DTextBrowser*   labelContactProvinceState;
-    DTextBrowser*   labelContactPhone;
-    KUrlLabel*      labelContactEmail;
-    KUrlLabel*      labelContactWebUrl;
+    DTextBrowser*    labelContactCity;
+    DTextBrowser*    labelContactCountry;
+    DTextBrowser*    labelContactAddress;
+    DTextBrowser*    labelContactPostalCode;
+    DTextBrowser*    labelContactProvinceState;
+    DTextBrowser*    labelContactPhone;
+    DTextLabelValue* labelContactEmail;
+    DTextLabelValue* labelContactWebUrl;
 
     // IPTC Subjects info.
     DTextList*      subjectsList;
@@ -161,7 +160,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 {
     setFrameStyle(QFrame::NoFrame);
 
-    RVBox* w1            = new RVBox(this);
+    RVBox* const w1      = new RVBox(this);
     d->names             = new DTextLabelName(i18n("Names:"), w1);
     d->namesList         = new DTextList(QStringList(), w1);
     d->position          = new DTextLabelName(i18n("Position:"), w1);
@@ -191,7 +190,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 
     // ------------------------------------------------------------------
 
-    RVBox* w2                     = new RVBox(this);
+    RVBox* const w2               = new RVBox(this);
     d->locationCity               = new DTextLabelName(i18n("City:"), w2);
     d->labelLocationCity          = new DTextBrowser(QString(), w2);
     d->locationSublocation        = new DTextLabelName(i18n("Sublocation:"), w2);
@@ -211,7 +210,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 
     // ------------------------------------------------------------------
 
-    RVBox* w3                    = new RVBox(this);
+    RVBox* const w3              = new RVBox(this);
     d->contactAddress            = new DTextLabelName(i18n("Address:"), w3);
     d->labelContactAddress       = new DTextBrowser(QString(), w3);
     d->contactPostalCode         = new DTextLabelName(i18n("Postal Code:"), w3);
@@ -225,10 +224,18 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->contactPhone              = new DTextLabelName(i18n("Phone:"), w3);
     d->labelContactPhone         = new DTextBrowser(QString(), w3);
     d->contactEmail              = new DTextLabelName(i18n("Email:"), w3);
-    d->labelContactEmail         = new KUrlLabel(w3);
+    d->labelContactEmail         = new DTextLabelValue(QString(), w3);
     d->contactWebUrl             = new DTextLabelName(i18n("URL:"), w3);
-    d->labelContactWebUrl        = new KUrlLabel(w3);
+    d->labelContactWebUrl        = new DTextLabelValue(QString(), w3);
 
+    d->labelContactEmail->setOpenExternalLinks(true);
+    d->labelContactEmail->setTextFormat(Qt::RichText);
+    d->labelContactEmail->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+
+    d->labelContactWebUrl->setOpenExternalLinks(true);
+    d->labelContactWebUrl->setTextFormat(Qt::RichText);
+    d->labelContactWebUrl->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    
     d->contactAddress->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactPostalCode->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactCity->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -243,19 +250,13 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 
     // ------------------------------------------------------------------
 
-    RVBox* w4       = new RVBox(this);
+    RVBox* const w4 = new RVBox(this);
     d->subjectsList = new DTextList(QStringList(), w4);
 
     addItem(w4, QIcon::fromTheme("feed-subscribe"),
             i18n("Subjects"), QString("Subjects"), true);
 
     addStretch();
-
-    connect(d->labelContactWebUrl, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(slotProcessUrl(QString)));
-
-    connect(d->labelContactEmail, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(slotProcessEmail(QString)));
 }
 
 TemplateViewer::~TemplateViewer()
@@ -285,24 +286,11 @@ void TemplateViewer::setTemplate(const Template& t)
     d->labelContactCity->setText(t.contactInfo().city);
     d->labelContactCountry->setText(t.contactInfo().country);
     d->labelContactPhone->setText(t.contactInfo().phone);
-    d->labelContactEmail->setUrl(t.contactInfo().email);
-    d->labelContactEmail->setText(t.contactInfo().email);
-    QUrl url(t.contactInfo().webUrl);
-    d->labelContactWebUrl->setText(url.host());
-    d->labelContactWebUrl->setUrl(url.url());
+    d->labelContactEmail->setText(QString("<a href=\"mailto:%1\">%2</a>").arg(t.contactInfo().email).arg(t.contactInfo().email));
+    d->labelContactWebUrl->setText(QString("<a href=\"%1\">%2</a>").arg(t.contactInfo().webUrl).arg(t.contactInfo().webUrl));
 
     d->subjectsList->clear();
     d->subjectsList->addItems(t.IptcSubjects());
-}
-
-void TemplateViewer::slotProcessUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
-}
-
-void TemplateViewer::slotProcessEmail(const QString& email)
-{
-    QDesktopServices::openUrl(QUrl(QString("mailto:") + email));
 }
 
 }  // namespace Digikam

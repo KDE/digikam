@@ -40,12 +40,17 @@
 
 // KDE includes
 
-#include <kurllabel.h>
 #include <klocalizedstring.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "daboutdata.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -62,15 +67,15 @@ public:
         progressCount = 0;
     }
 
-    bool       alignOnright;
+    bool          alignOnright;
 
-    int        progressCount;         // Position of animation.
+    int           progressCount;         // Position of animation.
 
-    QTimer*    progressTimer;
+    QTimer*       progressTimer;
 
-    QPixmap    progressPixmap;
+    QPixmap       progressPixmap;
 
-    KUrlLabel* urlLabel;
+    RActiveLabel* urlLabel;
 };
 
 DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
@@ -115,7 +120,7 @@ void DLogoAction::stop()
 
     if (d->urlLabel)
     {
-        d->urlLabel->setPixmap(d->progressPixmap.copy(0, 0, 144, 32));
+        d->urlLabel->updateData(DAboutData::webProjectUrl(), d->progressPixmap.copy(0, 0, 144, 32).toImage());
     }
 }
 
@@ -136,7 +141,7 @@ void DLogoAction::slotProgressTimerDone()
 
     if (d->urlLabel)
     {
-        d->urlLabel->setPixmap(anim);
+        d->urlLabel->updateData(DAboutData::webProjectUrl(), anim.toImage());
     }
 
     d->progressTimer->start(100);
@@ -146,13 +151,9 @@ QWidget* DLogoAction::createWidget(QWidget* parent)
 {
     QWidget* const container  = new QWidget(parent);
     QHBoxLayout* const layout = new QHBoxLayout(container);
-    d->urlLabel               = new KUrlLabel(DAboutData::webProjectUrl().url(), QString(), container);
-    d->urlLabel->setMargin(0);
-    d->urlLabel->setScaledContents(false);
-    d->urlLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    d->urlLabel               = new RActiveLabel(DAboutData::webProjectUrl(), QString(), container);
     d->urlLabel->setToolTip(i18n("Visit digiKam project website"));
-    d->urlLabel->setPixmap(d->progressPixmap.copy(0, 0, 144, 32));
-    d->urlLabel->setFocusPolicy(Qt::NoFocus);
+    d->urlLabel->updateData(DAboutData::webProjectUrl(), d->progressPixmap.copy(0, 0, 144, 32).toImage());
 
     layout->setMargin(0);
     layout->setSpacing(0);
@@ -164,9 +165,6 @@ QWidget* DLogoAction::createWidget(QWidget* parent)
 
     layout->addWidget(d->urlLabel);
 
-    connect(d->urlLabel, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(slotProcessUrl(QString)));
-
     return container;
 }
 
@@ -175,11 +173,6 @@ void DLogoAction::deleteWidget(QWidget* widget)
     stop();
     d->urlLabel = 0;
     QWidgetAction::deleteWidget(widget);
-}
-
-void DLogoAction::slotProcessUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 } // namespace Digikam

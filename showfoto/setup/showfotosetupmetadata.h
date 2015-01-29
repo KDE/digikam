@@ -52,16 +52,11 @@ public:
     ~SetupMetadata();
 
     void applySettings();
-
     void setActiveTab(MetadataTab tab);
 
 private:
 
     void readSettings();
-
-private Q_SLOTS:
-
-    void slotProcessExiv2Url(const QString& url);
 
 private:
 

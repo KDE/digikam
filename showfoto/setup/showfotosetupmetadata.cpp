@@ -42,16 +42,21 @@
 
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kurllabel.h>
 
 // Libkexiv2 includes
 
 #include <kexiv2.h>
 
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
 // Local includes
 
 #include "metadatapanel.h"
 #include "metadatasettings.h"
+
+using namespace KDcrawIface;
 
 namespace ShowFoto
 {
@@ -108,10 +113,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     QGridLayout* const grid = new QGridLayout(box);
     box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    KUrlLabel* const exiv2LogoLabel = new KUrlLabel(box);
-    exiv2LogoLabel->setText(QString());
-    exiv2LogoLabel->setUrl("http://www.exiv2.org");
-    exiv2LogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png")));
+    RActiveLabel* const exiv2LogoLabel = new RActiveLabel(QUrl("http://www.exiv2.org"),
+                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png"),
+                                                          box);
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
     QLabel* const explanation = new QLabel(box);
@@ -160,20 +164,11 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     // --------------------------------------------------------
 
     readSettings();
-
-    connect(exiv2LogoLabel, static_cast<void (KUrlLabel::*)(const QString &)>(&KUrlLabel::leftClickedUrl), this, &SetupMetadata::slotProcessExiv2Url);
-
-    // --------------------------------------------------------
 }
 
 SetupMetadata::~SetupMetadata()
 {
     delete d;
-}
-
-void SetupMetadata::slotProcessExiv2Url(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 void SetupMetadata::applySettings()

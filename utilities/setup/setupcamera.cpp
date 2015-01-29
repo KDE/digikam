@@ -48,7 +48,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurllabel.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -64,6 +67,9 @@
 #include "importsettings.h"
 #include "fullscreensettings.h"
 #include "dxmlguiwindow.h"
+
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -309,11 +315,10 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QSpacerItem* const spacer        = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    KUrlLabel* const gphotoLogoLabel = new KUrlLabel(panel);
-    gphotoLogoLabel->setText(QString());
-    gphotoLogoLabel->setUrl("http://www.gphoto.org");
-    gphotoLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-gphoto.png")));
+    QSpacerItem* const spacer           = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    RActiveLabel* const gphotoLogoLabel = new RActiveLabel(QUrl("http://www.gphoto.org"),
+                                                           QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-gphoto.png"),
+                                                           panel);
     gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));
 
 #ifndef HAVE_GPHOTO2
@@ -519,9 +524,6 @@ SetupCamera::SetupCamera(QWidget* const parent)
     adjustSize();
 
     // -------------------------------------------------------------
-
-    connect(gphotoLogoLabel, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(slotProcessGphotoUrl(QString)));
 
     connect(d->listView, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -767,11 +769,6 @@ bool SetupCamera::checkSettings()
     }
 
     return true;
-}
-
-void SetupCamera::slotProcessGphotoUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 void SetupCamera::slotSelectionChanged()

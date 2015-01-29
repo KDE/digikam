@@ -56,7 +56,6 @@ protected:
 private Q_SLOTS:
 
     void slotProgressTimerDone();
-    void slotProcessUrl(const QString&);
 
 private:
 
