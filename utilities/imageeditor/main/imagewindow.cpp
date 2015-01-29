@@ -730,9 +730,9 @@ void ImageWindow::slotContextMenu()
         PickLabelMenuAction* const pmenu  = new PickLabelMenuAction(m_contextMenu);
         ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(m_contextMenu);
         RatingMenuAction* const rmenu     = new RatingMenuAction(m_contextMenu);
-        menuLabels->addAction(pmenu);
+        menuLabels->addAction(pmenu->menuAction());
         menuLabels->addAction(cmenu->menuAction());
-        menuLabels->addAction(rmenu);
+        menuLabels->addAction(rmenu->menuAction());
         m_contextMenu->addMenu(menuLabels);
 
         connect(pmenu, SIGNAL(signalPickLabelChanged(int)),

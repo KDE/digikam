@@ -37,7 +37,7 @@
 #include <QTimeLine>
 #include <QFont>
 #include <QAction>
-#include <QMenu>
+#include <QWidgetAction>
 
 // KDE includes
 
@@ -539,9 +539,9 @@ void RatingBox::slotUpdateDescription(int rating)
 // -------------------------------------------------------------------------------
 
 RatingMenuAction::RatingMenuAction(QMenu* const parent)
-    : KActionMenu(parent)
+    : QMenu(parent)
 {
-    setText(i18n("Rating"));
+    setTitle(i18n("Rating"));
     QWidgetAction* const wa = new QWidgetAction(this);
     RatingBox* const rb     = new RatingBox(parent);
     wa->setDefaultWidget(rb);

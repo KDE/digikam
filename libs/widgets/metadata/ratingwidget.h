@@ -32,10 +32,7 @@
 #include <QMouseEvent>
 #include <QPolygon>
 #include <QIcon>
-
-// KDE includes
-
-#include <kactionmenu.h>
+#include <QMenu>
 
 // Libkdcraw includes
 
@@ -44,8 +41,6 @@
 // Local includes
 
 #include "digikam_export.h"
-
-class QMenu;
 
 using namespace KDcrawIface;
 
@@ -145,7 +140,7 @@ private:
 
 // --------------------------------------------------------------------
 
-class DIGIKAM_EXPORT RatingMenuAction : public KActionMenu
+class DIGIKAM_EXPORT RatingMenuAction : public QMenu
 {
     Q_OBJECT
 

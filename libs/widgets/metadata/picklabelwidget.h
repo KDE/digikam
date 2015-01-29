@@ -31,10 +31,7 @@
 #include <QEvent>
 #include <QList>
 #include <QMetaType>
-
-// KDE includes
-
-#include <kactionmenu.h>
+#include <QMenu>
 
 // Libkdcraw includes
 
@@ -44,8 +41,6 @@
 
 #include "digikam_globals.h"
 #include "digikam_export.h"
-
-class QMenu;
 
 using namespace KDcrawIface;
 
@@ -136,7 +131,7 @@ private:
 
 // ------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT PickLabelMenuAction : public KActionMenu
+class DIGIKAM_EXPORT PickLabelMenuAction : public QMenu
 {
     Q_OBJECT
 

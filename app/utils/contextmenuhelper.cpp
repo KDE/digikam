@@ -504,9 +504,9 @@ void ContextMenuHelper::addLabelsAction()
     PickLabelMenuAction* const pmenu  = new PickLabelMenuAction(d->parent);
     ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(d->parent);
     RatingMenuAction* const rmenu     = new RatingMenuAction(d->parent);
-    menuLabels->addAction(pmenu);
+    menuLabels->addAction(pmenu->menuAction());
     menuLabels->addAction(cmenu->menuAction());
-    menuLabels->addAction(rmenu);
+    menuLabels->addAction(rmenu->menuAction());
     addSubMenu(menuLabels);
 
     connect(pmenu, SIGNAL(signalPickLabelChanged(int)),

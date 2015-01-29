@@ -35,7 +35,6 @@
 #include <QFont>
 #include <QToolButton>
 #include <QApplication>
-#include <QMenu>
 
 // KDE includes
 
@@ -368,9 +367,9 @@ void PickLabelSelector::slotPickLabelChanged(int id)
 // -----------------------------------------------------------------------------
 
 PickLabelMenuAction::PickLabelMenuAction(QMenu* const parent)
-    : KActionMenu(parent)
+    : QMenu(parent)
 {
-    setText(i18n("Pick"));
+    setTitle(i18n("Pick"));
     QWidgetAction* const wa    = new QWidgetAction(this);
     PickLabelWidget* const plw = new PickLabelWidget(parent);
     wa->setDefaultWidget(plw);
