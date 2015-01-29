@@ -1,0 +1,31 @@
+*****************************************************************************************************
+digiKam 4.7.0 - Release date: 2015-01-25
+
+NEW FEATURES:
+
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 341054 - No way to filter only files of a specific extension.
+002 ==> 342073 - The creation of the selection has a dysfunction after a very fast mouse double click [patch].
+003 ==> 342273 - CANVAS : When using zoom +/- from the staus-bar are image artifacts is visible [patch].
+004 ==> 342229 - Crash attempting to rotate empty (NULL) thumbnail [patch].
+005 ==> 342293 - Each mouse right click creates a new Open With entry in the context menu [patch].
+006 ==> 342346 - Show only vendor specific meta data which is relevant.
+007 ==> 336127 - Rename pattern textbox not tall enough and uses hard-coded font colors [patch].
+008 ==> 342149 - Freezes when mousing over "create tag from address book" in the right click tag menu [patch].
+009 ==> 340384 - Segmentation fault when creating new album.
+010 ==> 338785 - digiKam face detection finds no faces.
+011 ==> 342602 - Restore toggle fit to window and last zoom in the image editor [patch].
+012 ==> 342708 - A little less image shift in the mouse over preview mode [patch].
+013 ==> 342448 - Compile issues in origin/master Jan/2015.
+014 ==> 342931 - Wrong apect ratio in item properties and in item view.
+015 ==> 341821 - "Cancel" button in Import window does nothing [patch].
+016 ==> 343013 - CANVAS : on working with raw images marked square isn't crop accurate [patch].
+017 ==> 343080 - Cannot find the right lensfun profile for RAW lens correction [patch].
+018 ==> 343221 - Softproofing in editor does not work anymore [patch].
+019 ==> 342996 - Corrections for rename settings in images import [patch].
+020 ==> 314441 - Rename settings while importing ignored [patch].
+021 ==> 328541 - Cursor sometimes stays "busy".
+022 ==> 342430 - When selecting a subset of images instead of all images to download from camera,
+                 the numbering of the renamed images adds the number of selected images to the sequence numbers.
