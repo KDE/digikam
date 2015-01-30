@@ -64,23 +64,19 @@
 
 // KDE includes
 
+#include <klocalizedstring.h>
 #include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
-#include <klocalizedstring.h>
 #include <kopenwithdialog.h>
 #include <knotifyconfigwidget.h>
-#include <kselectaction.h>
 #include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
 #include <kshortcutsdialog.h>
-#include <kstandardaction.h>
-#include <kstandardshortcut.h>
-#include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbarpopupaction.h>
 #include <krun.h>
