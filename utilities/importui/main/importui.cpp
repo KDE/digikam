@@ -359,10 +359,10 @@ void ImportUI::setupActions()
 
     // --- Download actions ----------------------------------------------------
 
-    d->downloadAction = new KActionMenu(QIcon::fromTheme("document-save"), i18nc("@title:menu", "Download"), this);
-    d->downloadAction->setDelayed(false);
-    ac->addAction("importui_imagedownload", d->downloadAction);
-    d->cameraActions->addAction(d->downloadAction);
+    d->downloadAction = new QMenu(i18nc("@title:menu", "Download"), this);
+    d->downloadAction->setIcon(QIcon::fromTheme("document-save"));
+    ac->addAction("importui_imagedownload", d->downloadAction->menuAction());
+    d->cameraActions->addAction(d->downloadAction->menuAction());
 
     d->downloadNewAction = new QAction(QIcon::fromTheme("favorites"), i18nc("@action", "Download New"), this);
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
@@ -432,10 +432,10 @@ void ImportUI::setupActions()
 
     // --- Delete actions ------------------------------------------------------
 
-    d->deleteAction = new KActionMenu(QIcon::fromTheme("user-trash"), i18nc("@title:menu", "Delete"), this);
-    d->deleteAction->setDelayed(false);
-    ac->addAction("importui_delete", d->deleteAction);
-    d->cameraActions->addAction(d->deleteAction);
+    d->deleteAction = new QMenu(i18nc("@title:menu", "Delete"), this);
+    d->deleteAction->setIcon(QIcon::fromTheme("user-trash"));
+    ac->addAction("importui_delete", d->deleteAction->menuAction());
+    d->cameraActions->addAction(d->deleteAction->menuAction());
 
     d->deleteSelectedAction = new QAction(QIcon::fromTheme("edit-delete"), i18nc("@action", "Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));

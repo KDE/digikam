@@ -38,7 +38,6 @@
 #include <khelpmenu.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
-#include <kactionmenu.h>
 
 // Libkdcraw includes
 
@@ -178,11 +177,11 @@ public:
     QAction*                      decreaseThumbsAction;
     QAction*                      zoomFitToWindowAction;
     QAction*                      zoomTo100percents;
-    KActionMenu*                  deleteAction;
+    QMenu*                        deleteAction;
     QAction*                      deleteNewAction;
     QAction*                      deleteAllAction;
     QAction*                      deleteSelectedAction;
-    KActionMenu*                  downloadAction;
+    QMenu*                        downloadAction;
     QAction*                      downloadNewAction;
     QAction*                      downloadAllAction;
     QAction*                      downloadSelectedAction;
