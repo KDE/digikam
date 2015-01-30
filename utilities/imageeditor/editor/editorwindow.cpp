@@ -77,7 +77,6 @@
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
 #include <kshortcutsdialog.h>
-#include <ktogglefullscreenaction.h>
 #include <ktoolbarpopupaction.h>
 #include <krun.h>
 #include <kwindowsystem.h>

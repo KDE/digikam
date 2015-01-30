@@ -64,13 +64,11 @@
 
 // KDE includes
 
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
-#include <klocalizedstring.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
-#include <ktoggleaction.h>
-#include <ktogglefullscreenaction.h>
 #include <kmessagewidget.h>
 
 // Libkdcraw includes

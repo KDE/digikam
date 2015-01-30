@@ -36,16 +36,11 @@
 
 // KDE includes
 
+#include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
-#include <klocalizedstring.h>
 #include <knotifyconfigwidget.h>
-#include <kselectaction.h>
 #include <kshortcutsdialog.h>
-#include <kstandardaction.h>
-#include <kstandardshortcut.h>
-#include <ktoggleaction.h>
-#include <ktogglefullscreenaction.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
