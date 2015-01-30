@@ -1609,7 +1609,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
     endif()
 
     if(BUILD_TESTING)
-        ADD_SUBDIRECTORY(tests)
+       # not yet ported
+       # add_subdirectory(tests)
     endif()
 
     if(NOT WIN32)
