@@ -38,8 +38,10 @@
 
 #include "digikam_export.h"
 
+class QMenu;
+
 class KXmlGuiWindow;
-class KActionMenu;
+
 
 namespace Digikam
 {
@@ -60,7 +62,7 @@ public:
 
     QString defaultThemeName() const;
 
-    void    setThemeMenuAction(KActionMenu* const action);
+    void    setThemeMenuAction(QMenu* const action);
     void    registerThemeActions(KXmlGuiWindow* const kwin);
 
 Q_SIGNALS:

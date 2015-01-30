@@ -33,19 +33,18 @@
 #include <QBitmap>
 #include <QPainter>
 #include <QPixmap>
-#include <QMenu>
 #include <QApplication>
 #include <QAction>
 #include <QStandardPaths>
 #include <QDirIterator>
 #include <QMessageBox>
+#include <QMenu>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
-#include <kactionmenu.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
 #include <kxmlguiwindow.h>
@@ -85,7 +84,7 @@ public:
     QMap<QString, QString> themeMap;            // map<theme name, theme config path>
 
     QActionGroup*          themeMenuActionGroup;
-    KActionMenu*           themeMenuAction;
+    QMenu*                 themeMenuAction;
 };
 
 ThemeManager::ThemeManager()
@@ -156,7 +155,7 @@ void ThemeManager::slotChangePalette()
     emit signalThemeChanged();
 }
 
-void ThemeManager::setThemeMenuAction(KActionMenu* const action)
+void ThemeManager::setThemeMenuAction(QMenu* const action)
 {
     d->themeMenuAction = action;
     populateThemeMenu();
@@ -167,7 +166,7 @@ void ThemeManager::registerThemeActions(KXmlGuiWindow* const kwin)
     if (!d->themeMenuAction)
         return;
 
-    kwin->actionCollection()->addAction("theme_menu", d->themeMenuAction);
+    kwin->actionCollection()->addAction("theme_menu", d->themeMenuAction->menuAction());
 }
 
 void ThemeManager::populateThemeMenu()
@@ -177,15 +176,15 @@ void ThemeManager::populateThemeMenu()
 
     QString theme(currentThemeName());
 
-    d->themeMenuAction->menu()->clear();
+    d->themeMenuAction->clear();
     delete d->themeMenuActionGroup;
 
-    d->themeMenuActionGroup       = new QActionGroup(d->themeMenuAction);
+    d->themeMenuActionGroup = new QActionGroup(d->themeMenuAction);
 
     connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
 
-    QAction* const action         = new QAction(defaultThemeName(), d->themeMenuActionGroup);
+    QAction* const action   = new QAction(defaultThemeName(), d->themeMenuActionGroup);
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 

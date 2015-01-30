@@ -74,7 +74,6 @@ extern "C"
 
 // KDE includes
 
-#include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
@@ -413,7 +412,7 @@ void ShowFoto::setupUserArea()
 
 void ShowFoto::setupActions()
 {
-    Digikam::ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
+    Digikam::ThemeManager::instance()->setThemeMenuAction(new QMenu(i18n("&Themes"), this));
     setupStandardActions();
 
     // Extra 'File' menu actions ---------------------------------------------
