@@ -462,21 +462,25 @@ void ImportUI::setupActions()
     d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme("viewimage"), i18nc("@title:group", "Views"), this);
     ac->addAction("importui_view_selection", d->imageViewSelectionAction);
 
-    d->iconViewAction = new KToggleAction(QIcon::fromTheme("view-list-icons"),
-                                          i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
+    d->iconViewAction = new QAction(QIcon::fromTheme("view-list-icons"),
+                                    i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
+    d->iconViewAction->setCheckable(true);
     ac->addAction("importui_icon_view", d->iconViewAction);
     connect(d->iconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->iconViewAction);
 
-    d->camItemPreviewAction = new KToggleAction(QIcon::fromTheme("viewimage"), i18nc("@action View the selected image", "Preview Item"), this);
+    d->camItemPreviewAction = new QAction(QIcon::fromTheme("viewimage"),
+                                                i18nc("@action View the selected image", "Preview Item"), this);
+    d->camItemPreviewAction->setCheckable(true);
     ac->addAction("importui_item_view", d->camItemPreviewAction);
     ac->setDefaultShortcut(d->camItemPreviewAction, Qt::Key_F3);
     connect(d->camItemPreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
 
 #ifdef HAVE_KGEOMAP
-    d->mapViewAction = new KToggleAction(QIcon::fromTheme("applications-internet"),
-                                         i18nc("@action Switch to map view", "Map"), this);
+    d->mapViewAction = new QAction(QIcon::fromTheme("applications-internet"),
+                                   i18nc("@action Switch to map view", "Map"), this);
+    d->mapViewAction->setCheckable(true);
     ac->addAction("importui_map_view", d->mapViewAction);
     connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->mapViewAction);
@@ -584,7 +588,8 @@ void ImportUI::setupActions()
 
     // ------------------------------------------------------------------------------------------------
 
-    d->viewCMViewAction = new KToggleAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction = new QAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction->setCheckable(true);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     ac->addAction("color_managed_view", d->viewCMViewAction);
     ac->setDefaultShortcut(d->viewCMViewAction, Qt::Key_F12);
@@ -594,12 +599,14 @@ void ImportUI::setupActions()
     createFullScreenAction("importui_fullscreen");
     createSidebarActions();
 
-    d->showLogAction = new KToggleAction(QIcon::fromTheme("view-history"), i18nc("@option:check", "Show History"), this);
+    d->showLogAction = new QAction(QIcon::fromTheme("view-history"), i18nc("@option:check", "Show History"), this);
+    d->showLogAction->setCheckable(true);
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     ac->addAction("importui_showlog", d->showLogAction);
     ac->setDefaultShortcut(d->showLogAction, Qt::CTRL + Qt::Key_H);
 
-    d->showBarAction = new KToggleAction(QIcon::fromTheme("view-choose"), i18nc("@option:check", "Show Thumbbar"), this);
+    d->showBarAction = new QAction(QIcon::fromTheme("view-choose"), i18nc("@option:check", "Show Thumbbar"), this);
+    d->showBarAction->setCheckable(true);
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     ac->addAction("showthumbs", d->showBarAction);
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);

@@ -204,15 +204,15 @@ public:
     KSelectAction*                itemsGroupAction;
     KToggleAction*                showMenuBarAction;
     QAction*                      showPreferencesAction;
-    KToggleAction*                showLogAction;
-    KToggleAction*                showBarAction;
+    QAction*                      showLogAction;
+    QAction*                      showBarAction;
     KSelectAction*                imageViewSelectionAction;
-    KToggleAction*                iconViewAction;
-    KToggleAction*                camItemPreviewAction;
+    QAction*                      iconViewAction;
+    QAction*                      camItemPreviewAction;
 #ifdef HAVE_KGEOMAP
-    KToggleAction*                mapViewAction;
+    QAction*                      mapViewAction;
 #endif // HAVE_KGEOMAP
-    KToggleAction*                viewCMViewAction;
+    QAction*                      viewCMViewAction;
 
     QActionGroup*                 cameraActions;
 
