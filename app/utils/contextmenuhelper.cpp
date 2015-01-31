@@ -40,7 +40,6 @@
 
 // KDE includes
 
-#include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <klocalizedstring.h>
