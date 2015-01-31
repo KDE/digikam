@@ -868,31 +868,35 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme("viewimage"), i18n("Views"), this);
-    //d->imageViewSelectionAction->setDelayed(false);
     ac->addAction("view_selection", d->imageViewSelectionAction);
 
-    d->imageIconViewAction = new KToggleAction(QIcon::fromTheme("view-list-icons"),
-                                               i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
+    d->imageIconViewAction = new QAction(QIcon::fromTheme("view-list-icons"),
+                                         i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
+    d->imageIconViewAction->setCheckable(true);
     ac->addAction("icon_view", d->imageIconViewAction);
     connect(d->imageIconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->imageIconViewAction);
 
-    d->imagePreviewAction = new KToggleAction(QIcon::fromTheme("viewimage"), i18nc("View the selected image", "Preview Image"), this);
+    d->imagePreviewAction = new QAction(QIcon::fromTheme("viewimage"),
+                                        i18nc("View the selected image", "Preview Image"), this);
+    d->imagePreviewAction->setCheckable(true);
     ac->addAction("image_view", d->imagePreviewAction);
     ac->setDefaultShortcut(d->imagePreviewAction, Qt::Key_F3);
     connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->imagePreviewAction);
 
 #ifdef HAVE_KGEOMAP
-    d->imageMapViewAction = new KToggleAction(QIcon::fromTheme("applications-internet"),
-                                              i18nc("@action Switch to map view", "Map"), this);
+    d->imageMapViewAction = new QAction(QIcon::fromTheme("applications-internet"),
+                                        i18nc("@action Switch to map view", "Map"), this);
+    d->imageMapViewAction->setCheckable(true);
     ac->addAction("map_view", d->imageMapViewAction);
     connect(d->imageMapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->imageMapViewAction);
 #endif // HAVE_KGEOMAP
 
-    d->imageTableViewAction = new KToggleAction(QIcon::fromTheme("view-list-details"),
-                                                i18nc("@action Switch to table view", "Table"), this);
+    d->imageTableViewAction = new QAction(QIcon::fromTheme("view-list-details"),
+                                          i18nc("@action Switch to table view", "Table"), this);
+    d->imageTableViewAction->setCheckable(true);
     ac->addAction("table_view", d->imageTableViewAction);
     connect(d->imageTableViewAction, SIGNAL(triggered()), d->view, SLOT(slotTableView()));
     d->imageViewSelectionAction->addAction(d->imageTableViewAction);
@@ -1060,13 +1064,15 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->recurseAlbumsAction = new KToggleAction(i18n("Include Album Sub-Tree"), this);
+    d->recurseAlbumsAction = new QAction(i18n("Include Album Sub-Tree"), this);
+    d->recurseAlbumsAction->setCheckable(true);
     d->recurseAlbumsAction->setWhatsThis(i18n("Activate this option to show all sub-albums below "
                                               "the current album."));
     connect(d->recurseAlbumsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseAlbums(bool)));
     ac->addAction("albums_recursive", d->recurseAlbumsAction);
 
-    d->recurseTagsAction = new KToggleAction(i18n("Include Tag Sub-Tree"), this);
+    d->recurseTagsAction = new QAction(i18n("Include Tag Sub-Tree"), this);
+    d->recurseTagsAction->setCheckable(true);
     d->recurseTagsAction->setWhatsThis(i18n("Activate this option to show all images marked by the given tag "
                                             "and all its sub-tags."));
     connect(d->recurseTagsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseTags(bool)));
@@ -1188,7 +1194,8 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->showBarAction = new KToggleAction(QIcon::fromTheme("view-choose"), i18n("Show Thumbbar"), this);
+    d->showBarAction = new QAction(QIcon::fromTheme("view-choose"), i18n("Show Thumbbar"), this);
+    d->showBarAction->setCheckable(true);
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     ac->addAction("showthumbs", d->showBarAction);
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
@@ -1265,7 +1272,8 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->viewCMViewAction = new KToggleAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction = new QAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction->setCheckable(true);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     ac->addAction("color_managed_view", d->viewCMViewAction);
     ac->setDefaultShortcut(d->viewCMViewAction, Qt::Key_F12);

@@ -236,12 +236,12 @@ public:
 
     // Image Actions
     KSelectAction*                      imageViewSelectionAction;
-    KToggleAction*                      imagePreviewAction;
+    QAction*                            imagePreviewAction;
 #ifdef HAVE_KGEOMAP
-    KToggleAction*                      imageMapViewAction;
+    QAction*                            imageMapViewAction;
 #endif // HAVE_KGEOMAP
-    KToggleAction*                      imageTableViewAction;
-    KToggleAction*                      imageIconViewAction;
+    QAction*                            imageTableViewAction;
+    QAction*                            imageIconViewAction;
     QAction*                            imageLightTableAction;
     QAction*                            imageAddLightTableAction;
     QAction*                            imageAddCurrentQueueAction;
@@ -283,11 +283,11 @@ public:
     KSelectAction*                      imageGroupAction;
     KSelectAction*                      imageGroupSortOrderAction;
     KSelectAction*                      albumSortAction;
-    KToggleAction*                      recurseAlbumsAction;
-    KToggleAction*                      recurseTagsAction;
-    KToggleAction*                      showBarAction;
+    QAction*                            recurseAlbumsAction;
+    QAction*                            recurseTagsAction;
+    QAction*                            showBarAction;
     KToggleAction*                      showMenuBarAction;
-    KToggleAction*                      viewCMViewAction;
+    QAction*                            viewCMViewAction;
 
     // Tools Actions
     QMenu*                              slideShowAction;
