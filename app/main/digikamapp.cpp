@@ -2775,14 +2775,22 @@ void DigikamApp::setupExifOrientationActions()
     d->imageExifOrientationActionMenu = new QMenu(i18n("Adjust Exif Orientation Tag"), this);
     ac->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu->menuAction());
 
-    d->imageSetExifOrientation1Action = new KToggleAction(i18nc("normal exif orientation", "Normal"), this);
-    d->imageSetExifOrientation2Action = new KToggleAction(i18n("Flipped Horizontally"), this);
-    d->imageSetExifOrientation3Action = new KToggleAction(i18n("Rotated Upside Down"), this);
-    d->imageSetExifOrientation4Action = new KToggleAction(i18n("Flipped Vertically"), this);
-    d->imageSetExifOrientation5Action = new KToggleAction(i18n("Rotated Right / Horiz. Flipped"), this);
-    d->imageSetExifOrientation6Action = new KToggleAction(i18n("Rotated Right"), this);
-    d->imageSetExifOrientation7Action = new KToggleAction(i18n("Rotated Right / Vert. Flipped"), this);
-    d->imageSetExifOrientation8Action = new KToggleAction(i18n("Rotated Left"), this);
+    d->imageSetExifOrientation1Action = new QAction(i18nc("normal exif orientation", "Normal"), this);
+    d->imageSetExifOrientation1Action->setCheckable(true);
+    d->imageSetExifOrientation2Action = new QAction(i18n("Flipped Horizontally"),               this);
+    d->imageSetExifOrientation2Action->setCheckable(true);
+    d->imageSetExifOrientation3Action = new QAction(i18n("Rotated Upside Down"),                this);
+    d->imageSetExifOrientation3Action->setCheckable(true);
+    d->imageSetExifOrientation4Action = new QAction(i18n("Flipped Vertically"),                 this);
+    d->imageSetExifOrientation4Action->setCheckable(true);
+    d->imageSetExifOrientation5Action = new QAction(i18n("Rotated Right / Horiz. Flipped"),     this);
+    d->imageSetExifOrientation5Action->setCheckable(true);
+    d->imageSetExifOrientation6Action = new QAction(i18n("Rotated Right"),                      this);
+    d->imageSetExifOrientation6Action->setCheckable(true);
+    d->imageSetExifOrientation7Action = new QAction(i18n("Rotated Right / Vert. Flipped"),      this);
+    d->imageSetExifOrientation7Action->setCheckable(true);
+    d->imageSetExifOrientation8Action = new QAction(i18n("Rotated Left"),                       this);
+    d->imageSetExifOrientation8Action->setCheckable(true);
 
     d->exifOrientationActionGroup = new QActionGroup(d->imageExifOrientationActionMenu);
     d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation1Action);
@@ -2795,22 +2803,14 @@ void DigikamApp::setupExifOrientationActions()
     d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation8Action);
     d->imageSetExifOrientation1Action->setChecked(true);
 
-    ac->addAction("image_set_exif_orientation_normal",
-                                  d->imageSetExifOrientation1Action);
-    ac->addAction("image_set_exif_orientation_flipped_horizontal",
-                                  d->imageSetExifOrientation2Action);
-    ac->addAction("image_set_exif_orientation_rotated_upside_down",
-                                  d->imageSetExifOrientation3Action);
-    ac->addAction("image_set_exif_orientation_flipped_vertically",
-                                  d->imageSetExifOrientation4Action);
-    ac->addAction("image_set_exif_orientation_rotated_right_hor_flipped",
-                                  d->imageSetExifOrientation5Action);
-    ac->addAction("image_set_exif_orientation_rotated_right",
-                                  d->imageSetExifOrientation6Action);
-    ac->addAction("image_set_exif_orientation_rotated_right_ver_flipped",
-                                  d->imageSetExifOrientation7Action);
-    ac->addAction("image_set_exif_orientation_rotated_left",
-                                  d->imageSetExifOrientation8Action);
+    ac->addAction("image_set_exif_orientation_normal",                    d->imageSetExifOrientation1Action);
+    ac->addAction("image_set_exif_orientation_flipped_horizontal",        d->imageSetExifOrientation2Action);
+    ac->addAction("image_set_exif_orientation_rotated_upside_down",       d->imageSetExifOrientation3Action);
+    ac->addAction("image_set_exif_orientation_flipped_vertically",        d->imageSetExifOrientation4Action);
+    ac->addAction("image_set_exif_orientation_rotated_right_hor_flipped", d->imageSetExifOrientation5Action);
+    ac->addAction("image_set_exif_orientation_rotated_right",             d->imageSetExifOrientation6Action);
+    ac->addAction("image_set_exif_orientation_rotated_right_ver_flipped", d->imageSetExifOrientation7Action);
+    ac->addAction("image_set_exif_orientation_rotated_left",              d->imageSetExifOrientation8Action);
 
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation1Action);
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation2Action);
