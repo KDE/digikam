@@ -2912,7 +2912,7 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
 
 void DigikamApp::setupImageTransformActions()
 {
-    KActionCollection *ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
     d->imageRotateActionMenu = new KActionMenu(QIcon::fromTheme("object-rotate-right"), i18n("Rotate"), ac);
     d->imageRotateActionMenu->setDelayed(false);
@@ -2935,9 +2935,9 @@ void DigikamApp::setupImageTransformActions()
 
     // -----------------------------------------------------------------------------------
 
-    d->imageFlipActionMenu = new KActionMenu(QIcon::fromTheme("flip-horizontal"), i18n("Flip"), ac);
-    d->imageFlipActionMenu->setDelayed(false);
-
+    d->imageFlipActionMenu = new QMenu(i18n("Flip"), this);
+    d->imageFlipActionMenu->setIcon(QIcon::fromTheme("flip-horizontal"));
+    
     QAction* const hori = ac->addAction("flip_horizontal");
     hori->setText(i18n("Horizontally"));
     ac->setDefaultShortcut(hori, Qt::CTRL+Qt::Key_Asterisk);
@@ -2952,7 +2952,7 @@ void DigikamApp::setupImageTransformActions()
             this, SLOT(slotTransformAction()));
     d->imageFlipActionMenu->addAction(verti);
 
-    ac->addAction("image_flip", d->imageFlipActionMenu);
+    ac->addAction("image_flip", d->imageFlipActionMenu->menuAction());
 
     // -----------------------------------------------------------------------------------
 

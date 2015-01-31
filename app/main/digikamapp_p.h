@@ -263,7 +263,7 @@ public:
     KToggleAction*                      imageSetExifOrientation8Action;
     QAction*                            imageRenameAction;
     KActionMenu*                        imageRotateActionMenu;
-    KActionMenu*                        imageFlipActionMenu;
+    QMenu*                              imageFlipActionMenu;
     QAction*                            imageAutoExifActionMenu;
     QAction*                            imageDeleteAction;
     KActionMenu*                        imageExifOrientationActionMenu;
