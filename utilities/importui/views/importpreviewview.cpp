@@ -148,7 +148,7 @@ public:
     QAction*                nextAction;
     QAction*                rotLeftAction;
     QAction*                rotRightAction;
-    //KToggleAction*        peopleToggleAction;
+    //QAction*              peopleToggleAction;
     //QAction*              addPersonAction;
     //QAction*              forgetFacesAction;
 
@@ -193,8 +193,8 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
     d->rotRightAction      = new QAction(QIcon::fromTheme("object-rotate-right"),      i18nc("@info:tooltip", "Rotate Right"), this);
     //FIXME: d->addPersonAction    = new QAction(QIcon::fromTheme("list-add-user"),    i18n("Add a Face Tag"),                 this);
     //FIXME: d->forgetFacesAction  = new QAction(QIcon::fromTheme("list-remove-user"), i18n("Clear all faces on this image"),  this);
-    //FIXME: d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"),                                                 this);
-    //FIXME: d->peopleToggleAction->setIcon(QIcon::fromTheme("user-identity"));
+    //FIXME: d->peopleToggleAction = new Qaction(QIcon::fromTheme("user-identity"),    i18n("Show Face Tags"),                 this);
+    //FIXME: d->peopleToggleAction->setCheckable(true);
 
     d->toolBar = new QToolBar(this);
 

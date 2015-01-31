@@ -82,10 +82,10 @@ public:
         firstAction(0),
         lastAction(0),
         showBarAction(0),
+        showMenuBarAction(0),
         viewCMViewAction(0),
         syncPreviewAction(0),
         navigateByPairAction(0),
-        showMenuBarAction(0),
         clearOnCloseAction(0),
         leftFileName(0),
         rightFileName(0),
@@ -131,15 +131,15 @@ public:
     QAction*                  firstAction;
     QAction*                  lastAction;
 
-    KToggleAction*            showBarAction;
-    KToggleAction*            viewCMViewAction;
-    KToggleAction*            syncPreviewAction;
-    KToggleAction*            navigateByPairAction;
-    KToggleAction*            showMenuBarAction;
-    KToggleAction*            clearOnCloseAction;
+    QAction*                  showBarAction;
+    QAction*                  showMenuBarAction;
+    QAction*                  viewCMViewAction;
+    QAction*                  syncPreviewAction;
+    QAction*                  navigateByPairAction;
+    QAction*                  clearOnCloseAction;
 
-    RAdjustableLabel*       leftFileName;
-    RAdjustableLabel*       rightFileName;
+    RAdjustableLabel*         leftFileName;
+    RAdjustableLabel*         rightFileName;
 
     SidebarSplitter*          hSplitter;
     ThumbBarDock*             barViewDock;

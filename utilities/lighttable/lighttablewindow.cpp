@@ -524,22 +524,25 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->syncPreviewAction = new KToggleAction(QIcon::fromTheme("view-split-left-right"), i18n("Synchronize"), this);
+    d->syncPreviewAction = new QAction(QIcon::fromTheme("view-split-left-right"), i18n("Synchronize"), this);
     d->syncPreviewAction->setEnabled(false);
+    d->syncPreviewAction->setCheckable(true);
     d->syncPreviewAction->setWhatsThis(i18n("Synchronize preview from left and right panels"));
     connect(d->syncPreviewAction, SIGNAL(triggered()), this, SLOT(slotToggleSyncPreview()));
     ac->addAction("lighttable_syncpreview", d->syncPreviewAction);
     ac->setDefaultShortcut(d->syncPreviewAction, Qt::CTRL + Qt::SHIFT + Qt::Key_Y);
 
-    d->navigateByPairAction = new KToggleAction(QIcon::fromTheme("system-run"), i18n("By Pair"), this);
+    d->navigateByPairAction = new QAction(QIcon::fromTheme("system-run"), i18n("By Pair"), this);
     d->navigateByPairAction->setEnabled(false);
+    d->navigateByPairAction->setCheckable(true);
     d->navigateByPairAction->setWhatsThis(i18n("Navigate by pairs with all items"));
     connect(d->navigateByPairAction, SIGNAL(triggered()), this, SLOT(slotToggleNavigateByPair()));
     ac->addAction("lighttable_navigatebypair", d->navigateByPairAction);
     ac->setDefaultShortcut(d->navigateByPairAction, Qt::CTRL + Qt::SHIFT + Qt::Key_P);
 
-    d->clearOnCloseAction = new KToggleAction(QIcon::fromTheme("edit-clear"), i18n("Clear On Close"), this);
+    d->clearOnCloseAction = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear On Close"), this);
     d->clearOnCloseAction->setEnabled(true);
+    d->clearOnCloseAction->setCheckable(true);
     d->clearOnCloseAction->setToolTip(i18n("Clear light table when it is closed"));
     d->clearOnCloseAction->setWhatsThis(i18n("Remove all images from the light table when it is closed"));
     ac->addAction("lighttable_clearonclose", d->clearOnCloseAction);
@@ -606,7 +609,8 @@ void LightTableWindow::setupActions()
 
     // -----------------------------------------------------------
 
-    d->viewCMViewAction = new KToggleAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction = new QAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction->setCheckable(true);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     ac->addAction("color_managed_view", d->viewCMViewAction);
     ac->setDefaultShortcut(d->viewCMViewAction, Qt::Key_F12);
