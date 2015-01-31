@@ -41,7 +41,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ktoggleaction.h>
 
 // Local includes
 
@@ -116,7 +115,7 @@ public:
 
 #ifdef HAVE_KFACE
     FaceGroup*             faceGroup;
-    KToggleAction*         peopleToggleAction;
+    QAction*               peopleToggleAction;
     QAction*               addPersonAction;
     QAction*               forgetFacesAction;
 #endif /* HAVE_KFACE */
@@ -164,8 +163,8 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 #ifdef HAVE_KFACE
     d->addPersonAction     = new QAction(QIcon::fromTheme("list-add-user"),       i18n("Add a Face Tag"),                 this);
     d->forgetFacesAction   = new QAction(QIcon::fromTheme("list-remove-user"),    i18n("Clear all faces on this image"),  this);
-    d->peopleToggleAction  = new KToggleAction(i18n("Show Face Tags"),                                             this);
-    d->peopleToggleAction->setIcon(QIcon::fromTheme("user-identity"));
+    d->peopleToggleAction  = new QAction(QIcon::fromTheme("user-identity"),       i18n("Show Face Tags"),                 this);
+    d->peopleToggleAction->setCheckable(true);
 #endif /* HAVE_KFACE */
 
     d->toolBar             = new QToolBar(this);
