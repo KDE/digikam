@@ -6,7 +6,7 @@
  * Date        : 2009-15-08
  * Description : A floatable/dockable widget for thumbnail bars (ThumbBarView
  *               and its descendants), providing i drag handle similar to the
- *               one on toolbars and a standard KToggleAction to show/hide the
+ *               one on toolbars and a standard Action to show/hide the
  *               thumbnail bar. It inherits QDockWidget and can be used in
  *               the dock area's of a QMainWindow.
  *
@@ -106,7 +106,7 @@ public:
      */
     void reInitialize();
 
-    /** Return a KToggleAction to show and hide the thumbnail bar.
+    /** Return an Action to show and hide the thumbnail bar.
      */
     QAction* getToggleAction(QObject* const parent, const QString& caption = i18n("Show Thumbbar")) const;
 
