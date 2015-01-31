@@ -2912,8 +2912,8 @@ void DigikamApp::setupImageTransformActions()
 {
     KActionCollection* const ac = actionCollection();
 
-    d->imageRotateActionMenu = new KActionMenu(QIcon::fromTheme("object-rotate-right"), i18n("Rotate"), ac);
-    d->imageRotateActionMenu->setDelayed(false);
+    d->imageRotateActionMenu = new QMenu(i18n("Rotate"), this);
+    d->imageRotateActionMenu->setIcon(QIcon::fromTheme("object-rotate-right"));
 
     QAction* const left = ac->addAction("rotate_ccw");
     left->setText(i18nc("rotate image left", "Left"));
@@ -2929,7 +2929,7 @@ void DigikamApp::setupImageTransformActions()
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(right);
 
-    ac->addAction("image_rotate", d->imageRotateActionMenu);
+    ac->addAction("image_rotate", d->imageRotateActionMenu->menuAction());
 
     // -----------------------------------------------------------------------------------
 
