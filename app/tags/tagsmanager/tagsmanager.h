@@ -143,7 +143,6 @@ protected:
     void closeEvent(QCloseEvent* event);
 
     virtual void doLoadState();
-
     virtual void doSaveState();
 
 private:

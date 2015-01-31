@@ -29,12 +29,6 @@
 #include <QObject>
 #include <QWidget>
 
-// KDE includes
-
-#include <kactioncollection.h>
-
-// Local includes
-
 class KActionCollection;
 
 namespace Digikam

@@ -35,13 +35,13 @@
 #include <QApplication>
 #include <QAction>
 #include <QMessageBox>
+#include <QMenu>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <ktoolbar.h>
 #include <kmultitabbar.h>
-#include <kactionmenu.h>
 
 // Local includes
 
@@ -98,8 +98,8 @@ public:
     KMainWindow*     treeWindow;
     KToolBar*        mainToolbar;
     KMultiTabBar*    rightToolBar;
-    KActionMenu*     organizeAction;
-    KActionMenu*     syncexportAction;
+    QMenu*           organizeAction;
+    QMenu*           syncexportAction;
     QAction*         tagProperties;
     QAction*         addAction;
     QAction*         delAction;
@@ -109,11 +109,12 @@ public:
     TagList*         listView;
     TagPropWidget*   tagPropWidget;
     TagModel*        tagModel;
-
 };
 
 TagsManager::TagsManager()
-    : KMainWindow(0), StateSavingObject(this), d(new Private())
+    : KMainWindow(0),
+      StateSavingObject(this),
+      d(new Private())
 {
     setObjectName("Tags Manager");
     d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);;
@@ -656,9 +657,8 @@ void TagsManager::setupActions()
     d->delAction = new QAction(QIcon::fromTheme("list-remove"),"",d->treeWindow);
 
     /** organize group **/
-    d->organizeAction      = new KActionMenu(QIcon::fromTheme("autocorrection"),
-                                             i18nc("@title:menu", "Organize"),this);
-    d->organizeAction->setDelayed(false);
+    d->organizeAction            = new QMenu(i18nc("@title:menu", "Organize"),this);
+    d->organizeAction->setIcon(QIcon::fromTheme("autocorrection"));
 
     QAction* const resetIcon     = new QAction(QIcon::fromTheme("view-refresh"),
                                          i18n("Reset tag Icon"), this);
@@ -724,9 +724,8 @@ void TagsManager::setupActions()
     d->organizeAction->addAction(delTagFromImg);
 
     /** Sync & Export Group **/
-    d->syncexportAction = new KActionMenu(QIcon::fromTheme("server-database"),
-                                          i18n("Sync &Export"),this);
-    d->syncexportAction->setDelayed(false);
+    d->syncexportAction     = new QMenu(i18n("Sync &Export"), this);
+    d->syncexportAction->setIcon(QIcon::fromTheme("server-database"));
 
     QAction* const wrDbImg  = new QAction(QIcon::fromTheme("view-refresh"),
                                           i18n("Write Tags from Database "
@@ -745,8 +744,7 @@ void TagsManager::setupActions()
                               "Existing tags won't be affected"));
 
     setHelpText(wipeAll, i18n("Delete all tags from database only. Will not sync with files. "
-                             "Proceed with caution."));
-
+                              "Proceed with caution."));
 
     connect(wrDbImg, SIGNAL(triggered()),
             this, SLOT(slotWriteToImg()));
@@ -763,8 +761,8 @@ void TagsManager::setupActions()
 
     d->mainToolbar->addAction(d->addAction);
     d->mainToolbar->addAction(d->delAction);
-    d->mainToolbar->addAction(d->organizeAction);
-    d->mainToolbar->addAction(d->syncexportAction);
+    d->mainToolbar->addAction(d->organizeAction->menuAction());
+    d->mainToolbar->addAction(d->syncexportAction->menuAction());
     d->mainToolbar->addAction(new DLogoAction(this));
     this->addToolBar(d->mainToolbar);
 
@@ -794,7 +792,6 @@ void TagsManager::setHelpText(QAction *action, const QString &text)
         action->setWhatsThis(text);
     }
 }
-
 
 void TagsManager::enableRootTagActions(bool value)
 {
