@@ -65,6 +65,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <ktoggleaction.h>
 #include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>

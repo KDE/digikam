@@ -56,7 +56,6 @@ class QAction;
 
 class KCategorizedView;
 class KSelectAction;
-class KToggleAction;
 class KToolBarPopupAction;
 
 using namespace KDcrawIface;
@@ -136,7 +135,7 @@ protected:
     QAction *                 m_applyToolAction;
     QAction *                 m_closeToolAction;
 
-    KToggleAction*            m_showBarAction;
+    QAction*                  m_showBarAction;
 
     KToolBarPopupAction*      m_undoAction;
     KToolBarPopupAction*      m_redoAction;

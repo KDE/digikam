@@ -36,11 +36,11 @@
 #include <QStyle>
 #include <QStyleOptionToolBar>
 #include <QMainWindow>
+#include <QAction>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ktoggleaction.h>
 
 // Local includes
 
@@ -108,7 +108,7 @@ public:
 
     /** Return a KToggleAction to show and hide the thumbnail bar.
      */
-    KToggleAction* getToggleAction(QObject* const parent, const QString& caption = i18n("Show Thumbbar")) const;
+    QAction* getToggleAction(QObject* const parent, const QString& caption = i18n("Show Thumbbar")) const;
 
     /** The normal show() and hide() functions don't apply that well, because
      *  there are two orthogonal reasons to hide the thumbbar: the user doesn't
