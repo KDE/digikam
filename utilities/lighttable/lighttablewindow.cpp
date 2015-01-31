@@ -37,6 +37,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
 #include <knotifyconfigwidget.h>

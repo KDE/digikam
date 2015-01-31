@@ -48,6 +48,7 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
+#include <ktoggleaction.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <knotifyconfigwidget.h>

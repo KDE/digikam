@@ -47,6 +47,8 @@
 #include "lighttablethumbbar.h"
 #include "thumbbardock.h"
 
+class KToggleAction;
+
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -132,7 +134,7 @@ public:
     QAction*                  lastAction;
 
     QAction*                  showBarAction;
-    QAction*                  showMenuBarAction;
+    KToggleAction*            showMenuBarAction;
     QAction*                  viewCMViewAction;
     QAction*                  syncPreviewAction;
     QAction*                  navigateByPairAction;

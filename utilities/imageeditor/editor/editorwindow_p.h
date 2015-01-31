@@ -186,7 +186,7 @@ public:
     KToggleAction*               viewSoftProofAction;
     KToggleAction*               viewUnderExpoAction;
     KToggleAction*               viewOverExpoAction;
-    KToggleAction*               showMenuBarAction;
+    QAction*                     showMenuBarAction;
 
     ActionCategorizedView*       selectToolsActionView;
 
