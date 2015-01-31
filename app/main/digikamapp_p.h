@@ -33,6 +33,7 @@
 #include <QSignalMapper>
 #include <QString>
 #include <QAction>
+#include <QMenu>
 
 // KDE includes
 
@@ -292,7 +293,7 @@ public:
     KToggleAction*                      viewCMViewAction;
 
     // Tools Actions
-    KActionMenu*                        slideShowAction;
+    QMenu*                              slideShowAction;
     QAction*                            slideShowAllAction;
     QAction*                            slideShowSelectionAction;
     QAction*                            slideShowRecursiveAction;

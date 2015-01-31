@@ -1241,9 +1241,9 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->slideShowAction = new KActionMenu(QIcon::fromTheme("view-presentation"), i18n("Slideshow"), this);
-    d->slideShowAction->setDelayed(false);
-    ac->addAction("slideshow", d->slideShowAction);
+    d->slideShowAction = new QMenu(i18n("Slideshow"), this);
+    d->slideShowAction->setIcon(QIcon::fromTheme("view-presentation"));
+    ac->addAction("slideshow", d->slideShowAction->menuAction());
 
     d->slideShowAllAction = new QAction(i18n("All"), this);
     connect(d->slideShowAllAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowAll()));
@@ -2988,7 +2988,7 @@ void DigikamApp::slotTransformAction()
     }
 }
 
-KActionMenu* DigikamApp::slideShowMenu() const
+QMenu* DigikamApp::slideShowMenu() const
 {
     return d->slideShowAction;
 }
@@ -2996,6 +2996,7 @@ KActionMenu* DigikamApp::slideShowMenu() const
 void DigikamApp::rebuild()
 {
     QString file = xmlFile();
+
     if (!file.isEmpty())
     {
         setXMLGUIBuildDocument(QDomDocument());

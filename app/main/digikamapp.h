@@ -32,6 +32,7 @@
 
 #include <QAction>
 #include <QString>
+#include <QMenu>
 
 // KDE includes
 
@@ -44,8 +45,6 @@
 #include "digikam_config.h"
 #include "digikam_export.h"
 #include "dxmlguiwindow.h"
-
-class KActionMenu;
 
 namespace Solid
 {
@@ -77,7 +76,7 @@ public:
 
     static DigikamApp* instance();
 
-    KActionMenu* slideShowMenu() const;
+    QMenu* slideShowMenu() const;
 
     void autoDetect();
     void downloadFrom(const QString& cameraGuiPath);

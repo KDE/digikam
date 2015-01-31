@@ -244,7 +244,7 @@ QList<QAction*> KipiPluginLoader::kipiActionsByCategory(Category cat) const
 void KipiPluginLoader::slotKipiPluginPlug()
 {
     // Ugly hack. Remove "advancedslideshow" action from Slideshow menu
-    foreach(QAction* const action, d->app->slideShowMenu()->menu()->actions())
+    foreach(QAction* const action, d->app->slideShowMenu()->actions())
     {
         if (action->objectName() == "advancedslideshow")
             d->app->slideShowMenu()->removeAction(action);
