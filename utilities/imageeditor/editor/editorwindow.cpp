@@ -500,7 +500,8 @@ void EditorWindow::setupStandardActions()
     ac->addAction("editorwindow_zoomto100percents", d->zoomTo100percents);
     ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Comma);
 
-    d->zoomFitToWindowAction = new KToggleAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction = new QAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction->setCheckable(true);
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotToggleFitToWindow()));
     ac->addAction("editorwindow_zoomfit2window", d->zoomFitToWindowAction);
     ac->setDefaultShortcut(d->zoomFitToWindowAction, Qt::ALT + Qt::CTRL + Qt::Key_E);
@@ -523,7 +524,8 @@ void EditorWindow::setupStandardActions()
     ac->addAction("editorwindow_slideshow", d->slideShowAction);
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
 
-    d->viewUnderExpoAction = new KToggleAction(QIcon::fromTheme("underexposure"), i18n("Under-Exposure Indicator"), this);
+    d->viewUnderExpoAction = new QAction(QIcon::fromTheme("underexposure"), i18n("Under-Exposure Indicator"), this);
+    d->viewUnderExpoAction->setCheckable(true);
     d->viewUnderExpoAction->setWhatsThis(i18n("Set this option to display black "
                                               "overlaid on the image. This will help you to avoid "
                                               "under-exposing the image."));
@@ -531,7 +533,8 @@ void EditorWindow::setupStandardActions()
     ac->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
     ac->setDefaultShortcut(d->viewUnderExpoAction, Qt::Key_F10);
 
-    d->viewOverExpoAction = new KToggleAction(QIcon::fromTheme("overexposure"), i18n("Over-Exposure Indicator"), this);
+    d->viewOverExpoAction = new QAction(QIcon::fromTheme("overexposure"), i18n("Over-Exposure Indicator"), this);
+    d->viewOverExpoAction->setCheckable(true);
     d->viewOverExpoAction->setWhatsThis(i18n("Set this option to display white "
                                              "overlaid on the image. This will help you to avoid "
                                              "over-exposing the image."));
@@ -539,7 +542,8 @@ void EditorWindow::setupStandardActions()
     ac->addAction("editorwindow_overexposure", d->viewOverExpoAction);
     ac->setDefaultShortcut(d->viewOverExpoAction, Qt::Key_F11);
 
-    d->viewCMViewAction = new KToggleAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction = new QAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction->setCheckable(true);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     ac->addAction("editorwindow_cmview", d->viewCMViewAction);
     ac->setDefaultShortcut(d->viewCMViewAction, Qt::Key_F12);
@@ -548,7 +552,8 @@ void EditorWindow::setupStandardActions()
     connect(d->softProofOptionsAction, SIGNAL(triggered()), this, SLOT(slotSoftProofingOptions()));
     ac->addAction("editorwindow_softproofoptions", d->softProofOptionsAction);
 
-    d->viewSoftProofAction = new KToggleAction(QIcon::fromTheme("document-print-preview"), i18n("Soft Proofing View"), this);
+    d->viewSoftProofAction = new QAction(QIcon::fromTheme("document-print-preview"), i18n("Soft Proofing View"), this);
+    d->viewSoftProofAction->setCheckable(true);
     connect(d->viewSoftProofAction, SIGNAL(triggered()), this, SLOT(slotUpdateSoftProofingState()));
     ac->addAction("editorwindow_softproofview", d->viewSoftProofAction);
 

@@ -55,7 +55,6 @@ class QToolButton;
 class QWidgetAction;
 
 class KActionCollection;
-class KToggleAction;
 
 using namespace KDcrawIface;
 
@@ -181,11 +180,11 @@ public:
     QEventLoop*                  waitingLoop;
     QDialog*                     currentWindowModalDialog;
 
-    KToggleAction*               zoomFitToWindowAction;
-    KToggleAction*               viewCMViewAction;
-    KToggleAction*               viewSoftProofAction;
-    KToggleAction*               viewUnderExpoAction;
-    KToggleAction*               viewOverExpoAction;
+    QAction*                     zoomFitToWindowAction;
+    QAction*                     viewCMViewAction;
+    QAction*                     viewSoftProofAction;
+    QAction*                     viewUnderExpoAction;
+    QAction*                     viewOverExpoAction;
     QAction*                     showMenuBarAction;
 
     ActionCategorizedView*       selectToolsActionView;
