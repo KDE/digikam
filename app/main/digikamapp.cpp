@@ -48,7 +48,6 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kactionmenu.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <knotifyconfigwidget.h>
@@ -233,10 +232,10 @@ DigikamApp::DigikamApp()
     connect(IccSettings::instance(), SIGNAL(settingsChanged()),
             this, SLOT(slotColorManagementOptionsChanged()));
 
-    d->cameraMenu      = new KActionMenu(this);
-    d->usbMediaMenu    = new KActionMenu(this);
-    d->cardReaderMenu  = new KActionMenu(this);
-    d->quickImportMenu = new KActionMenu(this);
+    d->cameraMenu      = new QMenu(this);
+    d->usbMediaMenu    = new QMenu(this);
+    d->cardReaderMenu  = new QMenu(this);
+    d->quickImportMenu = new QMenu(this);
 
     d->cameraList = new CameraList(this, QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QString( "/cameras.xml"));
 
@@ -967,9 +966,9 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->quickImportMenu->setText(i18nc("@action Import photos from camera", "Import"));
+    d->quickImportMenu->setTitle(i18nc("@action Import photos from camera", "Import"));
     d->quickImportMenu->setIcon(QIcon::fromTheme("camera-photo"));
-    ac->addAction("import_auto", d->quickImportMenu);
+    ac->addAction("import_auto", d->quickImportMenu->menuAction());
 
     // -----------------------------------------------------------------
 
@@ -1612,16 +1611,16 @@ void DigikamApp::loadCameras()
 {
     KActionCollection *ac = actionCollection();
 
-    d->cameraMenu->setText(i18n("Cameras"));
+    d->cameraMenu->setTitle(i18n("Cameras"));
     d->cameraMenu->setIcon(QIcon::fromTheme("camera-photo"));
-    d->usbMediaMenu->setText(i18n("USB Storage Devices"));
+    d->usbMediaMenu->setTitle(i18n("USB Storage Devices"));
     d->usbMediaMenu->setIcon(QIcon::fromTheme("drive-removable-media-usb"));
-    d->cardReaderMenu->setText(i18n("Card Readers"));
+    d->cardReaderMenu->setTitle(i18n("Card Readers"));
     d->cardReaderMenu->setIcon(QIcon::fromTheme("media-flash-smart-media"));
 
-    ac->addAction("cameras",     d->cameraMenu);
-    ac->addAction("usb_media",   d->usbMediaMenu);
-    ac->addAction("card_reader", d->cardReaderMenu);
+    ac->addAction("cameras",     d->cameraMenu->menuAction());
+    ac->addAction("usb_media",   d->usbMediaMenu->menuAction());
+    ac->addAction("card_reader", d->cardReaderMenu->menuAction());
 
     // -----------------------------------------------------------------
 
@@ -2063,8 +2062,8 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 void DigikamApp::fillSolidMenus()
 {
     QHash<QString, QDateTime> newAppearanceTimes;
-    d->usbMediaMenu->menu()->clear();
-    d->cardReaderMenu->menu()->clear();
+    d->usbMediaMenu->clear();
+    d->cardReaderMenu->clear();
 
     // delete the actionGroups to avoid duplicate menu entries
     delete d->solidUsmActionGroup;
@@ -2351,8 +2350,8 @@ void DigikamApp::fillSolidMenus()
     d->cameraAppearanceTimes = newAppearanceTimes;
 
     // disable empty menus
-    d->usbMediaMenu->setEnabled(!d->usbMediaMenu->menu()->isEmpty());
-    d->cardReaderMenu->setEnabled(!d->cardReaderMenu->menu()->isEmpty());
+    d->usbMediaMenu->setEnabled(!d->usbMediaMenu->isEmpty());
+    d->cardReaderMenu->setEnabled(!d->cardReaderMenu->isEmpty());
 
     updateCameraMenu();
     updateQuickImportAction();
@@ -2686,7 +2685,7 @@ void DigikamApp::moveEvent(QMoveEvent*)
 
 void DigikamApp::updateCameraMenu()
 {
-    d->cameraMenu->menu()->clear();
+    d->cameraMenu->clear();
 
     foreach(QAction* const action, d->solidCameraActionGroup->actions())
     {
@@ -2716,7 +2715,7 @@ void DigikamApp::updateCameraMenu()
 
 void DigikamApp::updateQuickImportAction()
 {
-    d->quickImportMenu->menu()->clear();
+    d->quickImportMenu->clear();
 
     foreach(QAction* const action, d->solidCameraActionGroup->actions())
     {
@@ -2733,7 +2732,7 @@ void DigikamApp::updateQuickImportAction()
         d->quickImportMenu->addAction(action);
     }
 
-    if (d->quickImportMenu->menu()->actions().isEmpty())
+    if (d->quickImportMenu->actions().isEmpty())
     {
         d->quickImportMenu->setEnabled(false);
     }
@@ -2744,7 +2743,7 @@ void DigikamApp::updateQuickImportAction()
         QAction*  primaryAction = 0;
         QDateTime latest;
 
-        foreach(QAction* const action, d->quickImportMenu->menu()->actions())
+        foreach(QAction* const action, d->quickImportMenu->actions())
         {
             QDateTime appearanceTime = d->cameraAppearanceTimes.value(action->data().toString());
 
@@ -2757,13 +2756,11 @@ void DigikamApp::updateQuickImportAction()
 
         if (!primaryAction)
         {
-            primaryAction = d->quickImportMenu->menu()->actions().first();
+            primaryAction = d->quickImportMenu->actions().first();
         }
 
         connect(d->quickImportMenu, SIGNAL(triggered()),
                 primaryAction, SLOT(trigger()));
-
-        d->quickImportMenu->setDelayed(d->quickImportMenu->menu()->actions().size() > 1);
     }
 }
 

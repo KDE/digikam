@@ -56,14 +56,12 @@
 
 class KToolBarPopupAction;
 class KToggleAction;
-class KActionMenu;
 
 using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class DCOPIface;
 class ImportUI;
 class SearchTextBar;
 class FilterStatusBar;
@@ -188,7 +186,6 @@ public:
         eventLoop(0),
         filterStatusBar(0),
         splashScreen(0),
-        dcopIface(0),
         view(0),
         cameraList(0),
         tagsActionManager(0),
@@ -201,10 +198,10 @@ public:
     bool                                autoShowZoomToolTip;
     bool                                validIccPath;
 
-    KActionMenu*                        cameraMenu;
-    KActionMenu*                        usbMediaMenu;
-    KActionMenu*                        cardReaderMenu;
-    KActionMenu*                        quickImportMenu;
+    QMenu*                              cameraMenu;
+    QMenu*                              usbMediaMenu;
+    QMenu*                              cardReaderMenu;
+    QMenu*                              quickImportMenu;
     QHash<QString, QDateTime>           cameraAppearanceTimes;
 
     KSharedConfig::Ptr                  config;
@@ -322,7 +319,6 @@ public:
 
     FilterStatusBar*                    filterStatusBar;
     SplashScreen*                       splashScreen;
-    DCOPIface*                          dcopIface;
     DigikamView*                        view;
     CameraList*                         cameraList;
     TagsActionMngr*                     tagsActionManager;
