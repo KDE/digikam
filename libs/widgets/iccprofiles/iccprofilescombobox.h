@@ -28,10 +28,7 @@
 
 #include <QComboBox>
 #include <QIcon>
-
-// KDE includes
-
-#include <kactionmenu.h>
+#include <QMenu>
 
 // Libkdcraw includes
 
@@ -98,7 +95,7 @@ public:
 
 // ----------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT IccProfilesMenuAction : public KActionMenu
+class DIGIKAM_EXPORT IccProfilesMenuAction : public QMenu
 {
     Q_OBJECT
 
@@ -112,23 +109,22 @@ public:
      * removes duplicates (in newly added list) by file path, sorts them and adds them in sorted order.
      */
     void addProfiles(const QList<IccProfile>& profile);
+
     /**
      * Add the given profile with the given description, or, if null, a standard description.
      * Does not test for duplicity, does not sort into existing profiles.
      */
     void addProfile(const IccProfile& profile, const QString& description = QString());
+
     /**
      * Equivalent to calling clear() and addProfiles().
      */
     void replaceProfiles(const QList<IccProfile>& profile);
+
     /**
      * Disables if the menu is currently empty.
      */
     void disableIfEmpty();
-    /**
-     * Clears the menu.
-     */
-    void clear();
 
 Q_SIGNALS:
 

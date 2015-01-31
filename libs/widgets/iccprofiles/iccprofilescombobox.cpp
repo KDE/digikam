@@ -185,32 +185,30 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
 // ------------------------------------------------------------------------------------------
 
 IccProfilesMenuAction::IccProfilesMenuAction(const QIcon& icon, const QString& text, QObject* const parent)
-    : KActionMenu(icon, text, parent),
+    : QMenu(text),
       m_parent(parent)
 {
+    setIcon(icon);
     m_mapper = new QSignalMapper(this);
+
     connect(m_mapper, SIGNAL(mapped(QObject*)),
             this, SLOT(slotTriggered(QObject*)));
 }
 
 IccProfilesMenuAction::IccProfilesMenuAction(const QString& text, QObject* const parent)
-    : KActionMenu(text, parent),
+    : QMenu(text),
       m_parent(parent)
 {
     m_mapper = new QSignalMapper(this);
+
     connect(m_mapper, SIGNAL(mapped(QObject*)),
             this, SLOT(slotTriggered(QObject*)));
 }
 
 void IccProfilesMenuAction::replaceProfiles(const QList<IccProfile>& profiles)
 {
-    menu()->clear();
+    clear();
     addProfiles(profiles);
-}
-
-void IccProfilesMenuAction::clear()
-{
-    menu()->clear();
 }
 
 void IccProfilesMenuAction::addProfiles(const QList<IccProfile>& givenProfiles)
@@ -234,7 +232,7 @@ void IccProfilesMenuAction::addProfile(const IccProfile& profile, const QString&
         description = profileUserString(profile);
     }
 
-    QAction * const action = new QAction(d.left(50), m_parent);
+    QAction* const action = new QAction(d.left(50), m_parent);
     action->setData(QVariant::fromValue(profile));
     addAction(action);
 
@@ -246,7 +244,7 @@ void IccProfilesMenuAction::addProfile(const IccProfile& profile, const QString&
 
 void IccProfilesMenuAction::disableIfEmpty()
 {
-    if (menu()->isEmpty())
+    if (isEmpty())
     {
         setEnabled(false);
     }
@@ -254,7 +252,7 @@ void IccProfilesMenuAction::disableIfEmpty()
 
 void IccProfilesMenuAction::slotTriggered(QObject* obj)
 {
-    QAction * action = static_cast<QAction*>(obj);
+    QAction* const action = static_cast<QAction*>(obj);
     IccProfile profile = action->data().value<IccProfile>();
 
     if (!profile.isNull())
