@@ -266,7 +266,7 @@ public:
     QMenu*                              imageFlipActionMenu;
     QAction*                            imageAutoExifActionMenu;
     QAction*                            imageDeleteAction;
-    KActionMenu*                        imageExifOrientationActionMenu;
+    QMenu*                              imageExifOrientationActionMenu;
 
     // Edit Actions
     QAction*                            cutItemsAction;

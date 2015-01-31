@@ -2741,7 +2741,7 @@ void DigikamApp::updateQuickImportAction()
     {
         disconnect(d->quickImportMenu, SIGNAL(triggered()), 0, 0);
 
-        QAction* primaryAction = 0;
+        QAction*  primaryAction = 0;
         QDateTime latest;
 
         foreach(QAction* const action, d->quickImportMenu->menu()->actions())
@@ -2769,16 +2769,14 @@ void DigikamApp::updateQuickImportAction()
 
 void DigikamApp::setupExifOrientationActions()
 {
-    KActionCollection *ac = actionCollection();
-
+    KActionCollection* const ac                = actionCollection();
     QSignalMapper* const exifOrientationMapper = new QSignalMapper(d->view);
 
     connect(exifOrientationMapper, SIGNAL(mapped(int)),
             d->view, SLOT(slotImageExifOrientation(int)));
 
-    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif Orientation Tag"), this);
-    d->imageExifOrientationActionMenu->setDelayed(false);
-    ac->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu);
+    d->imageExifOrientationActionMenu = new QMenu(i18n("Adjust Exif Orientation Tag"), this);
+    ac->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu->menuAction());
 
     d->imageSetExifOrientation1Action = new KToggleAction(i18nc("normal exif orientation", "Normal"), this);
     d->imageSetExifOrientation2Action = new KToggleAction(i18n("Flipped Horizontally"), this);
