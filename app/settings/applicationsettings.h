@@ -36,11 +36,11 @@
 
 // KDE includes
 
-#include <kmultitabbar.h>
 #include <kconfiggroup.h>
 
 // Local includes
 
+#include "sidebar.h"
 #include "databaseparameters.h"
 #include "versionmanager.h"
 
@@ -419,8 +419,8 @@ public:
     void setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
 
-    void setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style);
-    KMultiTabBar::KMultiTabBarStyle getSidebarTitleStyle() const;
+    void setSidebarTitleStyle(DMultiTabBar::TextStyle style);
+    DMultiTabBar::TextStyle getSidebarTitleStyle() const;
 
     void setVersionManagerSettings(const VersionManagerSettings& settings);
     VersionManagerSettings getVersionManagerSettings() const;

@@ -264,7 +264,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
 
-    d->leftSideBar = new Sidebar(this, d->splitter, KMultiTabBar::Left);
+    d->leftSideBar = new Sidebar(this, d->splitter, Qt::LeftEdge);
     d->leftSideBar->setObjectName("Digikam Left Sidebar");
     d->splitter->setParent(this);
 
@@ -290,7 +290,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->addPageUpDownActions(this, d->stackedview->mediaPlayerView());
 #endif //HAVE_VIDEOPLAYER
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
+    d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
     // album folder view

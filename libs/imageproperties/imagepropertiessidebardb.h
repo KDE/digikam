@@ -58,7 +58,7 @@ class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 public:
 
     ImagePropertiesSideBarDB(QWidget* const parent, SidebarSplitter* const splitter,
-                             KMultiTabBarPosition side=KMultiTabBar::Left,
+                             Qt::Edge side=Qt::LeftEdge,
                              bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarDB();

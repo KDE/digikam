@@ -253,7 +253,7 @@ void LightTableWindow::setupUserArea()
     QHBoxLayout* const hlay = new QHBoxLayout(mainW);
 
     // The left sidebar
-    d->leftSideBar          = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
+    d->leftSideBar          = new ImagePropertiesSideBarDB(mainW, d->hSplitter, Qt::LeftEdge, true);
 
     // The central preview is wrapped in a KMainWindow so that the thumbnail
     // bar can float around it.
@@ -263,7 +263,7 @@ void LightTableWindow::setupUserArea()
     viewContainer->setCentralWidget(d->previewView);
 
     // The right sidebar.
-    d->rightSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Right, true);
+    d->rightSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, Qt::RightEdge, true);
 
     hlay->addWidget(d->leftSideBar);
     hlay->addWidget(d->hSplitter);

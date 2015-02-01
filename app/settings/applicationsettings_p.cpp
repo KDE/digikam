@@ -194,7 +194,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const q)
       ratingFilterCond(0),
       recursiveAlbums(false),
       recursiveTags(false),
-      sidebarTitleStyle(KMultiTabBar::VSNET),
+      sidebarTitleStyle(DMultiTabBar::ActiveIconText),
       albumSortOrder(ApplicationSettings::ByFolder),
       albumSortChanged(false),
       imageSortOrder(0),
@@ -238,7 +238,7 @@ void ApplicationSettings::Private::init()
     thumbnailSize                       = ThumbnailSize::Medium;
     treeThumbnailSize                   = 22;
     treeviewFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    sidebarTitleStyle                   = KMultiTabBar::VSNET;
+    sidebarTitleStyle                   = DMultiTabBar::ActiveIconText;
 
     ratingFilterCond                    = ImageFilterSettings::GreaterEqualCondition;
 

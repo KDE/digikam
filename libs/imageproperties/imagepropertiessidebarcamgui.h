@@ -51,7 +51,7 @@ class ImagePropertiesSideBarCamGui : public Sidebar
 public:
 
     ImagePropertiesSideBarCamGui(QWidget* const parent, SidebarSplitter* const splitter,
-                                 KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
+                                 Qt::Edge side=Qt::LeftEdge, bool mimimizedDefault=false);
 
     ~ImagePropertiesSideBarCamGui();
 

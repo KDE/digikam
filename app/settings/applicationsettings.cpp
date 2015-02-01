@@ -131,8 +131,8 @@ void ApplicationSettings::readSettings()
     d->treeviewFont                     = group.readEntry(d->configTreeViewFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     d->currentTheme                     = group.readEntry(d->configThemeEntry,                        ThemeManager::instance()->defaultThemeName());
 
-    d->sidebarTitleStyle                = (KMultiTabBar::KMultiTabBarStyle)group.readEntry(d->configSidebarTitleStyleEntry,
-                                          (int)KMultiTabBar::VSNET);
+    d->sidebarTitleStyle                = (DMultiTabBar::TextStyle)group.readEntry(d->configSidebarTitleStyleEntry,
+                                          (int)DMultiTabBar::ActiveIconText);
 
     d->ratingFilterCond                 = group.readEntry(d->configRatingFilterConditionEntry,
                                           (int)ImageFilterSettings::GreaterEqualCondition);

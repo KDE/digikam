@@ -301,7 +301,7 @@ void ImageWindow::setupUserArea()
 
     m_splitter->setStretchFactor(0, 10);      // set Canvas default size to max.
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
+    d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
     d->rightSideBar->getFiltersHistoryTab()->addOpenImageAction();
 

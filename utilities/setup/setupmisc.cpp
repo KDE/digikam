@@ -169,7 +169,7 @@ void SetupMisc::applySettings()
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
     settings->setShowPermanentDeleteDialog(d->showPermanentDeleteDialogCheck->isChecked());
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
-    settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
+    settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
     settings->setStringComparisonType((ApplicationSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
     settings->setApplicationStyle(d->applicationStyle->currentText());
     settings->saveSettings();
@@ -183,7 +183,7 @@ void SetupMisc::readSettings()
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());
     d->showPermanentDeleteDialogCheck->setChecked(settings->getShowPermanentDeleteDialog());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
-    d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == KMultiTabBar::VSNET ? 0 : 1);
+    d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle()));
 }

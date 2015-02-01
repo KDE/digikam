@@ -41,7 +41,6 @@
 
 #include <klocalizedstring.h>
 #include <ktoolbar.h>
-#include <kmultitabbar.h>
 
 // Local includes
 
@@ -55,6 +54,7 @@
 #include "searchtextbar.h"
 #include "tageditdlg.h"
 #include "albumdb.h"
+#include "sidebar.h"
 #include "dlogoaction.h"
 #include "metadatasynchronizer.h"
 #include "fileactionmngr.h"
@@ -97,7 +97,7 @@ public:
     QSplitter*       splitter;
     KMainWindow*     treeWindow;
     KToolBar*        mainToolbar;
-    KMultiTabBar*    rightToolBar;
+    DMultiTabBar*    rightToolBar;
     QMenu*           organizeAction;
     QMenu*           syncexportAction;
     QAction*         tagProperties;
@@ -188,7 +188,7 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->treeWindow    = new KMainWindow(this);
      setupActions();
 
-     d->splitter = new QSplitter();
+     d->splitter      = new QSplitter();
 
      d->listView      = new TagList(d->tagMngrView,Dialog);
 
@@ -214,7 +214,7 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
 
 void TagsManager::slotOpenProperties()
 {
-    KMultiTabBarTab* const sender = (KMultiTabBarTab*)QObject::sender();
+    DMultiTabBarTab* const sender = dynamic_cast<DMultiTabBarTab*>(QObject::sender());
 
     if (sender->isChecked())
     {
@@ -769,9 +769,9 @@ void TagsManager::setupActions()
     /**
      * Right Toolbar with vertical properties button
      */
-    d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
+    d->rightToolBar = new DMultiTabBar(Qt::RightEdge);
     d->rightToolBar->appendTab(QIcon::fromTheme("tag-properties").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)), 0, i18n("Tag Properties"));
-    d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
+    d->rightToolBar->setStyle(DMultiTabBar::AllIconsText);
 
     connect(d->rightToolBar->tab(0), SIGNAL(clicked()),
             this, SLOT(slotOpenProperties()));

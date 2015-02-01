@@ -57,12 +57,12 @@ bool ApplicationSettings::getShowSplashScreen() const
     return d->showSplash;
 }
 
-void ApplicationSettings::setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style)
+void ApplicationSettings::setSidebarTitleStyle(DMultiTabBar::TextStyle style)
 {
     d->sidebarTitleStyle = style;
 }
 
-KMultiTabBar::KMultiTabBarStyle ApplicationSettings::getSidebarTitleStyle() const
+DMultiTabBar::TextStyle ApplicationSettings::getSidebarTitleStyle() const
 {
     return d->sidebarTitleStyle;
 }

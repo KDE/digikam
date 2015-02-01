@@ -231,7 +231,7 @@ void ImportUI::setupUserArea()
     d->view             = new ImportView(this, model, filterModel, vbox);
     d->view->importFilterModel()->setCameraThumbsController(d->camThumbsCtrl);
     d->historyView      = new DHistoryView(vbox);
-    d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
+    d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle(QFrame::NoFrame);
     d->splitter->setFrameShadow(QFrame::Plain);

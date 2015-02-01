@@ -356,7 +356,7 @@ void ShowFoto::setupUserArea()
 
     m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
-    d->rightSideBar = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
+    d->rightSideBar = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Qt::RightEdge);
     d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
 
     hlay->addWidget(m_splitter);
@@ -475,7 +475,7 @@ void ShowFoto::applySettings()
     d->settings->readSettings();
 
     d->rightSideBar->setStyle(d->settings->getRightSideBarStyle() == 0 ?
-                              KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
+                              DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
 
     QString currentStyle = qApp->style()->objectName();
     QString newStyle     = d->settings->getApplicationStyle();

@@ -107,14 +107,13 @@ public:
      */
     bool fullScreenIsActive() const;
 
-    QAction* statusBarMenuAction() const;
-
 protected:
 
     DLogoAction* m_animLogo;
 
 protected:
 
+    QAction* statusBarMenuAction() const;
     QAction* showMenuBarAction() const;
 
     void closeEvent(QCloseEvent* e);

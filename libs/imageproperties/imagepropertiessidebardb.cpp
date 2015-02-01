@@ -95,7 +95,7 @@ public:
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, SidebarSplitter* const splitter,
-                                                   KMultiTabBarPosition side, bool mimimizedDefault)
+                                                   Qt::Edge side, bool mimimizedDefault)
     : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
       d(new Private)
 {

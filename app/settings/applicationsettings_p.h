@@ -222,7 +222,7 @@ public:
 
     KSharedConfigPtr                          config;
 
-    KMultiTabBar::KMultiTabBarStyle           sidebarTitleStyle;
+    DMultiTabBar::TextStyle           sidebarTitleStyle;
 
     // album view settings
     ApplicationSettings::AlbumSortOrder       albumSortOrder;
