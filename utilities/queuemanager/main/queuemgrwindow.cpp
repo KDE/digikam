@@ -412,8 +412,7 @@ void QueueMgrWindow::setupActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
-    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), ac);
-
+    createSettingsActions();
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), ac);
@@ -437,7 +436,7 @@ void QueueMgrWindow::setupActions()
 
     createGUI(xmlFile());
 
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
+    showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
 
 void QueueMgrWindow::refreshView()
@@ -692,11 +691,6 @@ void QueueMgrWindow::populateToolsList()
     {
         d->toolsView->addTool(tool);
     }
-}
-
-void QueueMgrWindow::slotShowMenuBar()
-{
-    menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
 void QueueMgrWindow::slotRun()
@@ -1051,7 +1045,7 @@ void QueueMgrWindow::customizedFullScreenMode(bool set)
 {
     statusBarMenuAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
-    d->showMenuBarAction->setEnabled(!set);
+    showMenuBarAction()->setEnabled(!set);
 }
 
 }  // namespace Digikam

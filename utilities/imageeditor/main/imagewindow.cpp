@@ -178,6 +178,8 @@ ImageWindow::ImageWindow()
     setupStatusBar();
     createGUI(xmlFile());
 
+    showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
+
     // Load image plugins to GUI
 
     m_imagePluginLoader = ImagePluginLoader::instance();

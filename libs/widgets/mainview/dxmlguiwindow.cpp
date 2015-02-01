@@ -45,6 +45,7 @@
 #include <kxmlguiwindow.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
+#include <ktoggleaction.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
@@ -74,6 +75,7 @@ public:
         menubarVisibility      = true;
         statusbarVisibility    = true;
         libsInfoAction         = 0;
+        showMenuBarAction      = 0;
         about                  = 0;
         dbStatAction           = 0;
         anim                   = 0;
@@ -126,6 +128,7 @@ public:
     // Common Help actions
     QAction*                 dbStatAction;
     QAction*                 libsInfoAction;
+    QAction*                 showMenuBarAction;
     DAboutData*              about;
     DLogoAction*             anim;
 };
@@ -210,6 +213,21 @@ void DXmlGuiWindow::createSidebarActions()
     connect(nrsb, SIGNAL(triggered()), this, SLOT(slotNextRightSideBarTab()));
     ac->addAction("next-right-sidebar-tab", nrsb);
     ac->setDefaultShortcut(nrsb, Qt::CTRL + Qt::META + Qt::Key_PageDown);
+}
+
+void DXmlGuiWindow::createSettingsActions()
+{
+    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+}
+
+QAction* DXmlGuiWindow::showMenuBarAction() const
+{
+    return d->showMenuBarAction;
+}
+
+void DXmlGuiWindow::slotShowMenuBar()
+{
+    menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

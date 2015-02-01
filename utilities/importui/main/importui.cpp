@@ -614,7 +614,7 @@ void ImportUI::setupActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
-    d->showMenuBarAction = KStandardAction::showMenubar(this,     SLOT(slotShowMenuBar()),       ac);
+    createSettingsActions();
     KStandardAction::keyBindings(this,                            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,                      SLOT(slotConfToolbars()),      ac);
     KStandardAction::configureNotifications(this,                 SLOT(slotConfNotifications()), ac);
@@ -648,7 +648,7 @@ void ImportUI::setupActions()
 
     createGUI(xmlFile());
 
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
+    showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
 
 void ImportUI::setupConnections()
@@ -2607,11 +2607,6 @@ void ImportUI::slotToggleShowBar()
     showThumbBar(d->showBarAction->isChecked());
 }
 
-void ImportUI::slotShowMenuBar()
-{
-    menuBar()->setVisible(d->showMenuBarAction->isChecked());
-}
-
 void ImportUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
                           const QString& folder, const QString& file)
 {
@@ -2693,7 +2688,7 @@ void ImportUI::customizedFullScreenMode(bool set)
 {
     statusBarMenuAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
-    d->showMenuBarAction->setEnabled(!set);
+    showMenuBarAction()->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toogleShowBar();
 

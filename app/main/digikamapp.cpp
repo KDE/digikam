@@ -48,7 +48,6 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <ktoggleaction.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <knotifyconfigwidget.h>
@@ -1200,7 +1199,7 @@ void DigikamApp::setupActions()
     ac->addAction("showthumbs", d->showBarAction);
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
 
-    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), ac);
+    createSettingsActions();
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
@@ -1386,7 +1385,7 @@ void DigikamApp::initGui()
     d->recurseAlbumsAction->setChecked(ApplicationSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(ApplicationSettings::instance()->getRecurseTags());
     d->showBarAction->setChecked(ApplicationSettings::instance()->getShowThumbbar());
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
+    showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 
     slotSwitchedToIconView();
 }
@@ -2682,11 +2681,6 @@ void DigikamApp::slotToggleShowBar()
     d->view->toggleShowBar(d->showBarAction->isChecked());
 }
 
-void DigikamApp::slotShowMenuBar()
-{
-    menuBar()->setVisible(d->showMenuBarAction->isChecked());
-}
-
 void DigikamApp::moveEvent(QMoveEvent*)
 {
     emit signalWindowHasMoved();
@@ -3090,7 +3084,7 @@ void DigikamApp::customizedFullScreenMode(bool set)
 {
     statusBarMenuAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
-    d->showMenuBarAction->setEnabled(!set);
+    showMenuBarAction()->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toogleShowBar();
 

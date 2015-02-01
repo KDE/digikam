@@ -606,8 +606,7 @@ void EditorWindow::setupStandardActions()
     m_showBarAction = thumbBar()->getToggleAction(this);
     ac->addAction("editorwindow_showthumbs", m_showBarAction);
 
-    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), ac);
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
+    createSettingsActions();
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
@@ -2694,11 +2693,6 @@ void EditorWindow::setToolStopProgress()
     m_nameLabel->setProgressValue(0);
     m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
     slotUpdateItemInfo();
-}
-
-void EditorWindow::slotShowMenuBar()
-{
-    menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
 void EditorWindow::slotCloseTool()

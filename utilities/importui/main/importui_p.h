@@ -37,7 +37,6 @@
 
 #include <khelpmenu.h>
 #include <kselectaction.h>
-#include <ktoggleaction.h>
 
 // Libkdcraw includes
 
@@ -111,7 +110,6 @@ public:
         itemSortAction(0),
         itemSortOrderAction(0),
         itemsGroupAction(0),
-        showMenuBarAction(0),
         showPreferencesAction(0),
         showLogAction(0),
         showBarAction(0),
@@ -202,7 +200,6 @@ public:
     KSelectAction*                itemSortAction;
     KSelectAction*                itemSortOrderAction;
     KSelectAction*                itemsGroupAction;
-    KToggleAction*                showMenuBarAction;
     QAction*                      showPreferencesAction;
     QAction*                      showLogAction;
     QAction*                      showBarAction;

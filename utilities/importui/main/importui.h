@@ -98,6 +98,7 @@ Q_SIGNALS:
     void signalNewSelection(bool);
 
 public Q_SLOTS:
+
     void slotDownload(bool onlySelected, bool deleteAfter, Album* pAlbum = 0);
     void slotUploadItems(const QList<QUrl>&); // public to be used in drag'n'drop
 
@@ -219,7 +220,6 @@ private Q_SLOTS:
 
     void slotEditKeys();
     void slotToggleShowBar();
-    void slotShowMenuBar();
     void slotConfToolbars();
     void slotConfNotifications();
     void slotNewToolbarConfig();

@@ -55,7 +55,6 @@
 #include "digikamview.h"
 
 class KToolBarPopupAction;
-class KToggleAction;
 
 using namespace KDcrawIface;
 
@@ -72,7 +71,8 @@ class ProgressEntry
 public:
 
     ProgressEntry()
-        : progress(0), canCancel(false)
+        : progress(0),
+          canCancel(false)
     {
     }
 
@@ -163,7 +163,6 @@ public:
         recurseAlbumsAction(0),
         recurseTagsAction(0),
         showBarAction(0),
-        showMenuBarAction(0),
         viewCMViewAction(0),
         slideShowAction(0),
         slideShowAllAction(0),
@@ -286,7 +285,6 @@ public:
     QAction*                            recurseAlbumsAction;
     QAction*                            recurseTagsAction;
     QAction*                            showBarAction;
-    KToggleAction*                      showMenuBarAction;
     QAction*                            viewCMViewAction;
 
     // Tools Actions

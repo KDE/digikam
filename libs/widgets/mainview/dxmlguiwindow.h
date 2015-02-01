@@ -28,6 +28,7 @@
 
 #include <QWidget>
 #include <QObject>
+#include <QAction>
 
 // KDE includes
 
@@ -76,6 +77,10 @@ public:
     explicit DXmlGuiWindow(QWidget* const parent=0, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
     virtual ~DXmlGuiWindow();
 
+    /** Create common actions to setup all digiKam main windows.
+     */
+    void createSettingsActions();
+
     /** Create common actions from Help menu for all digiKam main windows.
      */
     void createHelpActions(bool coreOptions=true);
@@ -110,6 +115,8 @@ protected:
 
 protected:
 
+    QAction* showMenuBarAction() const;
+
     void closeEvent(QCloseEvent* e);
     void keyPressEvent(QKeyEvent* e);
     bool eventFilter(QObject* obj, QEvent* ev);
@@ -136,6 +143,7 @@ protected:
 private Q_SLOTS:
 
     void slotToggleFullScreen(bool);
+    void slotShowMenuBar();
 
     // Slots for common Help Actions
     virtual void slotComponentsInfo()          {};

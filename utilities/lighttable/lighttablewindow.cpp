@@ -37,13 +37,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
-#include <kxmlguifactory.h>
+//#include <kxmlguifactory.h>
 
 // Libkdcraw includes
 
@@ -618,7 +617,7 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
-    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), ac);
+    createSettingsActions();
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
@@ -685,7 +684,7 @@ void LightTableWindow::setupActions()
 
     createGUI(xmlFile());
 
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
+    showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
 
 // Deal with items dropped onto the thumbbar (e.g. from the Album view)
@@ -1585,11 +1584,6 @@ void LightTableWindow::slotDBStat()
     showDigikamDatabaseStat();
 }
 
-void LightTableWindow::slotShowMenuBar()
-{
-    menuBar()->setVisible(d->showMenuBarAction->isChecked());
-}
-
 void LightTableWindow::slotApplicationSettingsChanged()
 {
     d->leftSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
@@ -1683,7 +1677,7 @@ void LightTableWindow::customizedFullScreenMode(bool set)
 {
     statusBarMenuAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
-    d->showMenuBarAction->setEnabled(!set);
+    showMenuBarAction()->setEnabled(!set);
     d->showBarAction->setEnabled(!set);
     d->previewView->toggleFullScreen(set);
 }

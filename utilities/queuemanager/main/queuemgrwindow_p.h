@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <kselectaction.h>
-#include <ktoggleaction.h>
 
 // Local includes
 
@@ -89,7 +88,6 @@ public:
         toolsView              = 0;
         batchToolsMgr          = 0;
         toolSettings           = 0;
-        showMenuBarAction      = 0;
         thread                 = 0;
         currentQueueToProcess  = 0;
     }
@@ -120,8 +118,6 @@ public:
     SidebarSplitter*         topSplitter;
     SidebarSplitter*         bottomSplitter;
     SidebarSplitter*         verticalSplitter;
-
-    KToggleAction*           showMenuBarAction;
 
     BatchToolsManager*       batchToolsMgr;
 
