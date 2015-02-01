@@ -42,7 +42,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 
 // Libkdcraw includes
@@ -54,6 +53,7 @@
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "thememanager.h"
+#include "dxmlguiwindow.h"
 
 using namespace KDcrawIface;
 
@@ -525,14 +525,16 @@ RatingBox::~RatingBox()
 
 void RatingBox::slotUpdateDescription(int rating)
 {
-    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(qApp->activeWindow());
+    DXmlGuiWindow* const app = dynamic_cast<DXmlGuiWindow*>(qApp->activeWindow());
 
     if (app)
     {
         QAction* const ac = app->actionCollection()->action(QString("rateshortcut-%1").arg(rating));
 
         if (ac)
+        {
             d->shortcut->setAdjustedText(ac->shortcut().toString());
+        }
     }
 }
 

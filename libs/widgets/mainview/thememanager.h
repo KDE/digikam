@@ -40,12 +40,10 @@
 
 class QMenu;
 
-class KXmlGuiWindow;
-
-
 namespace Digikam
 {
 
+class DXmlGuiWindow;
 class Theme;
 
 class DIGIKAM_EXPORT ThemeManager : public QObject
@@ -63,7 +61,7 @@ public:
     QString defaultThemeName() const;
 
     void    setThemeMenuAction(QMenu* const action);
-    void    registerThemeActions(KXmlGuiWindow* const kwin);
+    void    registerThemeActions(DXmlGuiWindow* const kwin);
 
 Q_SIGNALS:
 

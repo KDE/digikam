@@ -273,7 +273,7 @@ void ShowFoto::show()
 
     // Display application window.
 
-    KXmlGuiWindow::show();
+    QMainWindow::show();
 
     // Report errors from ICC repository path.
 

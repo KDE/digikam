@@ -37,10 +37,9 @@
 
 #include "digikam_export.h"
 
-class KXmlGuiWindow;
-
 namespace Digikam
 {
+class DXmlGuiWindow;
 
 class DIGIKAM_EXPORT DAboutData : public QObject
 {
@@ -48,7 +47,7 @@ class DIGIKAM_EXPORT DAboutData : public QObject
 
 public:
 
-    explicit DAboutData(KXmlGuiWindow* const parent);
+    explicit DAboutData(DXmlGuiWindow* const parent);
     ~DAboutData();
 
     void registerHelpActions();

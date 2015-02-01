@@ -38,7 +38,6 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
-#include <kxmlguiwindow.h>
 
 // Libkipi includes
 
@@ -205,7 +204,8 @@ KipiPluginLoader* KipiPluginLoader::m_instance = 0;
 // -----------------------------------------------------------------------------------------------------------------------
 
 KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const splash)
-    : QObject(parent), d(new Private(this))
+    : QObject(parent),
+      d(new Private(this))
 {
     m_instance      = this;
     d->splashScreen = splash;

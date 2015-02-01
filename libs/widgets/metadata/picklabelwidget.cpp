@@ -39,7 +39,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 
 // Libkdcraw includes
@@ -49,6 +48,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "dxmlguiwindow.h"
 
 using namespace KDcrawIface;
 
@@ -177,14 +177,16 @@ void PickLabelWidget::updateDescription(PickLabel label)
 {
     d->desc->setText(labelPickName(label));
 
-    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(qApp->activeWindow());
+    DXmlGuiWindow* const app = dynamic_cast<DXmlGuiWindow*>(qApp->activeWindow());
 
     if (app)
     {
         QAction* const ac = app->actionCollection()->action(QString("pickshortcut-%1").arg(label));
 
         if (ac)
+        {
             d->shortcut->setAdjustedText(ac->shortcut().toString());
+        }
     }
 }
 

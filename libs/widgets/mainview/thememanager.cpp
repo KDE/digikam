@@ -47,12 +47,12 @@
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
-#include <kxmlguiwindow.h>
 #include <ktoolinvocation.h>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -161,7 +161,7 @@ void ThemeManager::setThemeMenuAction(QMenu* const action)
     populateThemeMenu();
 }
 
-void ThemeManager::registerThemeActions(KXmlGuiWindow* const kwin)
+void ThemeManager::registerThemeActions(DXmlGuiWindow* const kwin)
 {
     if (!d->themeMenuAction)
         return;

@@ -40,7 +40,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 
 // Libkdcraw includes
@@ -49,6 +48,7 @@
 
 // Local includes
 
+#include "dxmlguiwindow.h"
 #include "digikam_debug.h"
 
 using namespace KDcrawIface;
@@ -232,14 +232,16 @@ void ColorLabelWidget::updateDescription(ColorLabel label)
 {
     d->desc->setText(labelColorName(label));
 
-    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(qApp->activeWindow());
+    DXmlGuiWindow* const app = dynamic_cast<DXmlGuiWindow*>(qApp->activeWindow());
 
     if (app)
     {
         QAction* const ac = app->actionCollection()->action(QString("colorshortcut-%1").arg(label));
 
         if (ac)
+        {
             d->shortcut->setAdjustedText(ac->shortcut().toString());
+        }
     }
 }
 

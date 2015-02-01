@@ -33,17 +33,17 @@
 // KDE includes
 
 #include <kactioncollection.h>
-#include <kxmlguiwindow.h>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "componentsinfo.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
 
-DAboutData::DAboutData(KXmlGuiWindow* const parent)
+DAboutData::DAboutData(DXmlGuiWindow* const parent)
     : QObject(parent)
 {
 }
@@ -54,7 +54,7 @@ DAboutData::~DAboutData()
 
 void DAboutData::registerHelpActions()
 {
-    KXmlGuiWindow* const kwin          = dynamic_cast<KXmlGuiWindow*>(parent());
+    DXmlGuiWindow* const kwin          = dynamic_cast<DXmlGuiWindow*>(parent());
 
     QAction * const rawCameraListAction = new QAction(QIcon::fromTheme("kdcraw"), i18n("Supported RAW Cameras"), kwin);
     connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
