@@ -56,7 +56,6 @@
 #include <klocalizedstring.h>
 #include <kselectaction.h>
 #include <kstandardaction.h>
-#include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 
