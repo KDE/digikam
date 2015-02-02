@@ -32,7 +32,6 @@
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <kwindowconfig.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -190,7 +189,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
         showPage((Page)group.readEntry("Setup Page", (int)EditorPage));
     }
 
-    KWindowConfig::restoreWindowSize(windowHandle(), group);
+    Digikam::DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
 
     show();
 }
@@ -200,7 +199,7 @@ Setup::~Setup()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     group.writeEntry("Setup Page", (int)activePageIndex());
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    Digikam::DXmlGuiWindow::saveWindowSize(windowHandle(), group);
     config->sync();
     delete d;
 }

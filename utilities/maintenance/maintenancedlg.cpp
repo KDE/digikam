@@ -40,7 +40,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kwindowconfig.h>
 
 // Libkdcraw includes
 
@@ -409,7 +408,7 @@ void MaintenanceDlg::readSettings()
         slotItemToggled(i, d->expanderBox->isChecked(i));
     }
 
-    KWindowConfig::restoreWindowSize(windowHandle(), group);
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
 }
 
 void MaintenanceDlg::writeSettings()
@@ -440,7 +439,7 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configMetadataSync,        prm.metadataSync);
     group.writeEntry(d->configSyncDirection,       prm.syncDirection);
 
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
 }
 
 void MaintenanceDlg::slotItemToggled(int index, bool b)

@@ -50,6 +50,7 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <khelpclient.h>
+#include <kwindowconfig.h>
 
 // Local includes
 
@@ -541,6 +542,16 @@ bool DXmlGuiWindow::thumbbarVisibility() const
 void DXmlGuiWindow::openHandbook(const QString& anchor, const QString& appname)
 {
     KHelpClient::invokeHelp(anchor, appname);
+}
+
+void DXmlGuiWindow::restoreWindowSize(QWindow* const win, const KConfigGroup& group)
+{
+    KWindowConfig::restoreWindowSize(win, group);
+}
+
+void DXmlGuiWindow::saveWindowSize(QWindow* const win, KConfigGroup& group)
+{
+    KWindowConfig::saveWindowSize(win, group);
 }
 
 } // namespace Digikam

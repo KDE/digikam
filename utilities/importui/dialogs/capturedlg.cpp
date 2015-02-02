@@ -34,7 +34,6 @@
 
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
-#include <kwindowconfig.h>
 
 // Local includes
 
@@ -89,7 +88,7 @@ CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller
     setLayout(vbx);
 
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
-    KWindowConfig::restoreWindowSize(windowHandle(), group);
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
 
     // -------------------------------------------------------------
 
@@ -136,7 +135,7 @@ void CaptureDlg::closeEvent(QCloseEvent* e)
     }
 
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
 
     e->accept();
 }
@@ -151,7 +150,7 @@ void CaptureDlg::slotCancel()
     }
 
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
 
     reject();
 }
@@ -174,7 +173,7 @@ void CaptureDlg::slotCapture()
                this, SLOT(slotPreviewDone(QImage)));
 
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
     d->controller->capture();
 
     accept();

@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kwindowconfig.h>
 
 #ifdef HAVE_KIPI
 
@@ -345,7 +344,7 @@ Setup::Setup(QWidget* const parent)
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
-    KWindowConfig::restoreWindowSize(windowHandle(), group);
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
 
     show();
 }
@@ -355,7 +354,7 @@ Setup::~Setup()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     group.writeEntry("Setup Page", (int)activePageIndex());
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
     config->sync();
     delete d;
 }

@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QObject>
 #include <QAction>
+#include <QWindow>
 
 // KDE includes
 
@@ -108,6 +109,8 @@ public:
     bool fullScreenIsActive() const;
     
     static void openHandbook(const QString& anchor = QString(), const QString& appname = QString());
+    static void restoreWindowSize(QWindow* const win, const KConfigGroup& group);
+    static void saveWindowSize(QWindow* const win, KConfigGroup& group);
 
 protected:
 
