@@ -543,11 +543,11 @@ class DMultiTabBar::Private
 {
 public:
 
-    DMultiTabBarFrame*         m_internal;
-    QBoxLayout*                m_lay;
-    QFrame*                    m_btnTabSep;
-    QList<DMultiTabBarButton*> m_buttons;
-    Qt::Edge                   m_position;
+    DMultiTabBarFrame*         internal;
+    QBoxLayout*                layout;
+    QFrame*                    btnTabSep;
+    QList<DMultiTabBarButton*> buttons;
+    Qt::Edge                   position;
 };
 
 DMultiTabBar::DMultiTabBar(Qt::Edge pos, QWidget* const parent)
@@ -556,35 +556,35 @@ DMultiTabBar::DMultiTabBar(Qt::Edge pos, QWidget* const parent)
 {
     if (pos == Qt::LeftEdge || pos == Qt::RightEdge)
     {
-        d->m_lay = new QVBoxLayout(this);
+        d->layout = new QVBoxLayout(this);
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding/*, true*/);
     }
     else
     {
-        d->m_lay = new QHBoxLayout(this);
+        d->layout = new QHBoxLayout(this);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed/*, true*/);
     }
 
-    d->m_lay->setMargin(0);
-    d->m_lay->setSpacing(0);
+    d->layout->setMargin(0);
+    d->layout->setSpacing(0);
 
-    d->m_internal = new DMultiTabBarFrame(this, pos);
+    d->internal = new DMultiTabBarFrame(this, pos);
     setPosition(pos);
     setStyle(ActiveIconText);
-    d->m_lay->insertWidget(0, d->m_internal);
-    d->m_lay->insertWidget(0, d->m_btnTabSep = new QFrame(this));
-    d->m_btnTabSep->setFixedHeight(4);
-    d->m_btnTabSep->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    d->m_btnTabSep->setLineWidth(2);
-    d->m_btnTabSep->hide();
+    d->layout->insertWidget(0, d->internal);
+    d->layout->insertWidget(0, d->btnTabSep = new QFrame(this));
+    d->btnTabSep->setFixedHeight(4);
+    d->btnTabSep->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    d->btnTabSep->setLineWidth(2);
+    d->btnTabSep->hide();
 
     updateGeometry();
 }
 
 DMultiTabBar::~DMultiTabBar()
 {
-    qDeleteAll(d->m_buttons);
-    d->m_buttons.clear();
+    qDeleteAll(d->buttons);
+    d->buttons.clear();
     delete d;
 }
 
@@ -594,17 +594,17 @@ int DMultiTabBar::appendButton(const QPixmap &pic, int id, QMenu *popup, const Q
     // a button with a QMenu can have another size. Make sure the button has always the same size.
     btn->setFixedWidth(btn->height());
     btn->setMenu(popup);
-    d->m_buttons.append(btn);
-    d->m_lay->insertWidget(0,btn);
+    d->buttons.append(btn);
+    d->layout->insertWidget(0,btn);
     btn->show();
-    d->m_btnTabSep->show();
+    d->btnTabSep->show();
     return 0;
 }
 
 void DMultiTabBar::updateSeparator()
 {
     bool hideSep = true;
-    QListIterator<DMultiTabBarButton*> it(d->m_buttons);
+    QListIterator<DMultiTabBarButton*> it(d->buttons);
 
     while (it.hasNext())
     {
@@ -616,20 +616,20 @@ void DMultiTabBar::updateSeparator()
     }
     
     if (hideSep)
-        d->m_btnTabSep->hide();
+        d->btnTabSep->hide();
     else
-        d->m_btnTabSep->show();
+        d->btnTabSep->show();
 }
 
 int DMultiTabBar::appendTab(const QPixmap& pic, int id, const QString& text)
 {
-    d->m_internal->appendTab(pic,id,text);
+    d->internal->appendTab(pic,id,text);
     return 0;
 }
 
 DMultiTabBarButton* DMultiTabBar::button(int id) const
 {
-    QListIterator<DMultiTabBarButton*> it(d->m_buttons);
+    QListIterator<DMultiTabBarButton*> it(d->buttons);
 
     while (it.hasNext())
     {
@@ -644,27 +644,27 @@ DMultiTabBarButton* DMultiTabBar::button(int id) const
 
 DMultiTabBarTab* DMultiTabBar::tab(int id) const
 {
-    return d->m_internal->tab(id);
+    return d->internal->tab(id);
 }
 
 void DMultiTabBar::removeButton(int id)
 {
-    for (int pos = 0 ; pos < d->m_buttons.count() ; pos++)
+    for (int pos = 0 ; pos < d->buttons.count() ; pos++)
     {
-        if (d->m_buttons.at(pos)->id() == id)
+        if (d->buttons.at(pos)->id() == id)
         {
-            d->m_buttons.takeAt(pos)->deleteLater();
+            d->buttons.takeAt(pos)->deleteLater();
             break;
         }
     }
 
-    if (d->m_buttons.count() == 0)
-        d->m_btnTabSep->hide();
+    if (d->buttons.count() == 0)
+        d->btnTabSep->hide();
 }
 
 void DMultiTabBar::removeTab(int id)
 {
-    d->m_internal->removeTab(id);
+    d->internal->removeTab(id);
 }
 
 void DMultiTabBar::setTab(int id,bool state)
@@ -687,23 +687,23 @@ bool DMultiTabBar::isTabRaised(int id) const
 
 void DMultiTabBar::setStyle(TextStyle style)
 {
-    d->m_internal->setStyle(style);
+    d->internal->setStyle(style);
 }
 
 DMultiTabBar::TextStyle DMultiTabBar::tabStyle() const
 {
-    return d->m_internal->d->style;
+    return d->internal->d->style;
 }
 
 void DMultiTabBar::setPosition(Qt::Edge pos)
 {
-    d->m_position = pos;
-    d->m_internal->setPosition(pos);
+    d->position = pos;
+    d->internal->setPosition(pos);
 }
 
 Qt::Edge DMultiTabBar::position() const
 {
-    return d->m_position;
+    return d->position;
 }
 
 void DMultiTabBar::fontChange(const QFont&)
