@@ -1198,7 +1198,6 @@ void DigikamApp::setupActions()
 
     createSettingsActions();
 
-    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
     KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
