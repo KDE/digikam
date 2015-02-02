@@ -262,8 +262,8 @@ protected:
 
 private:
 
-    Qt::Edge                m_position;
-    DMultiTabBar::TextStyle m_style;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------------------
@@ -285,15 +285,6 @@ public:
     void showActiveTabTexts(bool show);
     QList<DMultiTabBarTab*>* tabs();
 
-private:
-
-    friend class DMultiTabBar;
-
-    QBoxLayout*             m_mainLayout;
-    QList<DMultiTabBarTab*> m_tabs;
-    Qt::Edge                m_position;
-    DMultiTabBar::TextStyle m_style;
-
 protected:
 
     /**
@@ -303,6 +294,15 @@ protected:
      */
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void mousePressEvent(QMouseEvent*);
+
+private:
+
+    friend class DMultiTabBar;
+
+    QBoxLayout*             m_mainLayout;
+    QList<DMultiTabBarTab*> m_tabs;
+    Qt::Edge                m_position;
+    DMultiTabBar::TextStyle m_style;
 };
 
 // -------------------------------------------------------------------------------------

@@ -223,14 +223,23 @@ void DMultiTabBarButton::paintEvent(QPaintEvent*)
 
 // -------------------------------------------------------------------------------------
 
+class DMultiTabBarTab::Private
+{
+public:
+
+    Qt::Edge                position;
+    DMultiTabBar::TextStyle style;
+};
+
 DMultiTabBarTab::DMultiTabBarTab(const QPixmap& pic, const QString& text,
                                        int id, QWidget* const parent,
                                        Qt::Edge pos,
                                        DMultiTabBar::TextStyle style)
     : DMultiTabBarButton(pic, text, id, parent),
-      m_style(style)
+      d(new Private)
 {
-    m_position = pos;
+    d->style    = style;
+    d->position = pos;
     setToolTip(text);
     setCheckable(true);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -239,17 +248,18 @@ DMultiTabBarTab::DMultiTabBarTab(const QPixmap& pic, const QString& text,
 
 DMultiTabBarTab::~DMultiTabBarTab()
 {
+    delete d;
 }
 
 void DMultiTabBarTab::setPosition(Qt::Edge pos)
 {
-    m_position = pos;
+    d->position = pos;
     updateGeometry();
 }
 
 void DMultiTabBarTab::setStyle(DMultiTabBar::TextStyle style)
 {
-    m_style = style;
+    d->style = style;
     updateGeometry();
 }
 
@@ -369,12 +379,12 @@ void DMultiTabBarTab::setIcon(const QPixmap& icon)
 
 bool DMultiTabBarTab::shouldDrawText() const
 {
-    return (m_style == DMultiTabBar::AllIconsText) || isChecked();
+    return (d->style == DMultiTabBar::AllIconsText) || isChecked();
 }
 
 bool DMultiTabBarTab::isVertical() const
 {
-    return (m_position == Qt::RightEdge || m_position == Qt::LeftEdge);
+    return (d->position == Qt::RightEdge || d->position == Qt::LeftEdge);
 }
 
 void DMultiTabBarTab::paintEvent(QPaintEvent*)
@@ -445,10 +455,10 @@ void DMultiTabBarTab::paintEvent(QPaintEvent*)
     
     if (isVertical())
     {
-        if (m_position == Qt::LeftEdge && !rtl)
+        if (d->position == Qt::LeftEdge && !rtl)
             bottomIcon = true;
 
-        if (m_position == Qt::RightEdge && rtl)
+        if (d->position == Qt::RightEdge && rtl)
             bottomIcon = true;
     }
 
