@@ -50,7 +50,6 @@
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
-#include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <ktip.h>
 #include <ktoolbar.h>
@@ -684,7 +683,7 @@ void DigikamApp::setupAccelerators()
 
 void DigikamApp::setupActions()
 {
-    KActionCollection *ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
     d->solidCameraActionGroup = new QActionGroup(this);
     connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)),
@@ -1202,7 +1201,6 @@ void DigikamApp::setupActions()
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
-    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), ac);
     KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
@@ -2455,11 +2453,6 @@ void DigikamApp::slotConfToolbars()
 void DigikamApp::slotNewToolbarConfig()
 {
     applyMainWindowSettings(ApplicationSettings::instance()->generalConfigGroup());
-}
-
-void DigikamApp::slotConfNotifications()
-{
-    KNotifyConfigWidget::configure(this);
 }
 
 void DigikamApp::slotShowTip()

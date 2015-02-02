@@ -100,7 +100,7 @@ public:
      */
     void createFullScreenAction(const QString& name);
 
-    /** Read full-screen settings from KDE config file.
+    /** Read full-screen settings fr    void slotConfNotifications();om KDE config file.
      */
     void readFullScreenSettings(const KConfigGroup& group);
 
@@ -148,6 +148,7 @@ private Q_SLOTS:
 
     void slotToggleFullScreen(bool);
     void slotShowMenuBar();
+    void slotConfNotifications();
 
     // Slots for common Help Actions
     virtual void slotComponentsInfo()          {};

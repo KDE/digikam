@@ -45,7 +45,6 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
-#include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
@@ -415,7 +414,6 @@ void QueueMgrWindow::setupActions()
     createSettingsActions();
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
-    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), ac);
     KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
     // ---------------------------------------------------------------------------------
@@ -574,11 +572,6 @@ void QueueMgrWindow::slotConfToolbars()
             this, SLOT(slotNewToolbarConfig()));
 
     dlg.exec();
-}
-
-void QueueMgrWindow::slotConfNotifications()
-{
-    KNotifyConfigWidget::configure(this);
 }
 
 void QueueMgrWindow::slotNewToolbarConfig()

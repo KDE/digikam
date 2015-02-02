@@ -39,10 +39,8 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
-#include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
-//#include <kxmlguifactory.h>
 
 // Libkdcraw includes
 
@@ -621,7 +619,6 @@ void LightTableWindow::setupActions()
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
-    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), ac);
     KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
     // ---------------------------------------------------------------------------------
@@ -1488,11 +1485,6 @@ void LightTableWindow::slotConfToolbars()
             this, SLOT(slotNewToolbarConfig()));
 
     dlg.exec();
-}
-
-void LightTableWindow::slotConfNotifications()
-{
-    KNotifyConfigWidget::configure(this);
 }
 
 void LightTableWindow::slotNewToolbarConfig()

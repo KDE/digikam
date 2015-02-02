@@ -51,6 +51,7 @@
 #include <klocalizedstring.h>
 #include <khelpclient.h>
 #include <kwindowconfig.h>
+#include <knotifyconfigwidget.h>
 
 // Local includes
 
@@ -220,6 +221,7 @@ void DXmlGuiWindow::createSidebarActions()
 void DXmlGuiWindow::createSettingsActions()
 {
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
 }
 
 QAction* DXmlGuiWindow::showMenuBarAction() const
@@ -230,6 +232,11 @@ QAction* DXmlGuiWindow::showMenuBarAction() const
 void DXmlGuiWindow::slotShowMenuBar()
 {
     menuBar()->setVisible(d->showMenuBarAction->isChecked());
+}
+
+void DXmlGuiWindow::slotConfNotifications()
+{
+    KNotifyConfigWidget::configure(this);
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

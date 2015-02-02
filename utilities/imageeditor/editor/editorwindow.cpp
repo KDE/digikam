@@ -72,7 +72,6 @@
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
 #include <kopenwithdialog.h>
-#include <knotifyconfigwidget.h>
 #include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
@@ -609,7 +608,6 @@ void EditorWindow::setupStandardActions()
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
-    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), ac);
     KStandardAction::preferences(this,            SLOT(setup()),                 ac);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
@@ -785,11 +783,6 @@ void EditorWindow::slotConfToolbars()
             this, SLOT(slotNewToolbarConfig()));
 
     dlg.exec();
-}
-
-void EditorWindow::slotConfNotifications()
-{
-    KNotifyConfigWidget::configure(this);
 }
 
 void EditorWindow::slotNewToolbarConfig()

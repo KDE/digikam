@@ -67,7 +67,6 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
-#include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <kmessagewidget.h>
 
@@ -617,7 +616,6 @@ void ImportUI::setupActions()
     createSettingsActions();
     KStandardAction::keyBindings(this,                            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,                      SLOT(slotConfToolbars()),      ac);
-    KStandardAction::configureNotifications(this,                 SLOT(slotConfNotifications()), ac);
     d->showPreferencesAction = KStandardAction::preferences(this, SLOT(slotSetup()),             ac);
 
     // ---------------------------------------------------------------------------------
@@ -2520,11 +2518,6 @@ void ImportUI::slotConfToolbars()
             this, SLOT(slotNewToolbarConfig()));
 
     dlg.exec();
-}
-
-void ImportUI::slotConfNotifications()
-{
-    KNotifyConfigWidget::configure(this);
 }
 
 void ImportUI::slotNewToolbarConfig()
