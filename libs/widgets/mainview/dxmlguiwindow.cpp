@@ -52,6 +52,7 @@
 #include <khelpclient.h>
 #include <kwindowconfig.h>
 #include <knotifyconfigwidget.h>
+#include <kshortcutsdialog.h>
 
 // Local includes
 
@@ -220,8 +221,9 @@ void DXmlGuiWindow::createSidebarActions()
 
 void DXmlGuiWindow::createSettingsActions()
 {
-    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
-    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
+    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()),       actionCollection());
+    KStandardAction::configureNotifications(this,             SLOT(slotConfNotifications()), actionCollection());
+    KStandardAction::keyBindings(this,                        SLOT(slotEditKeys()),          actionCollection());
 }
 
 QAction* DXmlGuiWindow::showMenuBarAction() const
@@ -237,6 +239,18 @@ void DXmlGuiWindow::slotShowMenuBar()
 void DXmlGuiWindow::slotConfNotifications()
 {
     KNotifyConfigWidget::configure(this);
+}
+
+void DXmlGuiWindow::editKeyboardShortcuts(KActionCollection* const extraac, const QString& actitle)
+{
+    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
+                            KShortcutsEditor::LetterShortcutsAllowed, this);
+    dialog.addCollection(actionCollection(), i18nc("general keyboard shortcuts", "General"));
+
+    if (extraac)
+        dialog.addCollection(extraac, actitle);
+
+    dialog.configure();
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

@@ -39,7 +39,6 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
-#include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
 
 // Libkdcraw includes
@@ -617,7 +616,6 @@ void LightTableWindow::setupActions()
 
     createSettingsActions();
 
-    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
     KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
@@ -1466,13 +1464,6 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
 void LightTableWindow::slotProgressBarCancelButtonPressed()
 {
     d->cancelSlideShow = true;
-}
-
-void LightTableWindow::slotEditKeys()
-{
-    KShortcutsDialog dialog(KShortcutsEditor::AllActions, KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection(actionCollection(), i18n("General"));
-    dialog.configure();
 }
 
 void LightTableWindow::slotConfToolbars()

@@ -119,7 +119,13 @@ protected:
 protected:
 
     QAction* statusBarMenuAction() const;
-    QAction* showMenuBarAction() const;
+    QAction* showMenuBarAction()   const;
+
+    /** Call this method from your main window to show keyboard shortcut config dialog 
+     *  with an extra action collection to configure. This method is called by slotEditKeys()
+     *  which can be re-implement in child class for cutomization.
+     */
+    void editKeyboardShortcuts(KActionCollection* const extraac=0, const QString& actitle=QString());
 
     void closeEvent(QCloseEvent* e);
     void keyPressEvent(QKeyEvent* e);
@@ -161,6 +167,9 @@ private Q_SLOTS:
     virtual void slotNextLeftSideBarTab()      {};
     virtual void slotPreviousRightSideBarTab() {};
     virtual void slotNextRightSideBarTab()     {};
+
+    // Slots for common Settings actions
+    virtual void slotEditKeys()                { editKeyboardShortcuts(); };
 
 private:
 

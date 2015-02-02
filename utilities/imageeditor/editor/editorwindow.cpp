@@ -75,7 +75,6 @@
 #include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
-#include <kshortcutsdialog.h>
 #include <ktoolbarpopupaction.h>
 #include <krun.h>
 #include <kwindowsystem.h>
@@ -606,7 +605,6 @@ void EditorWindow::setupStandardActions()
 
     createSettingsActions();
 
-    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
     KStandardAction::preferences(this,            SLOT(setup()),                 ac);
 
@@ -742,11 +740,7 @@ void EditorWindow::printImage(const QUrl&)
 
 void EditorWindow::slotEditKeys()
 {
-    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
-                            KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection(actionCollection(), i18nc("general editor shortcuts", "General"));
-    dialog.addCollection(d->imagepluginsActionCollection, i18nc("imageplugins shortcuts", "Image Plugins"));
-    dialog.configure();
+    editKeyboardShortcuts(d->imagepluginsActionCollection, i18nc("imageplugins shortcuts", "Image Plugins"));
 }
 
 void EditorWindow::slotAboutToShowUndoMenu()

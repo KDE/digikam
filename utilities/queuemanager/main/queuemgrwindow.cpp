@@ -45,7 +45,6 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
-#include <kshortcutsdialog.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
@@ -412,7 +411,7 @@ void QueueMgrWindow::setupActions()
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     createSettingsActions();
-    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
+
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
     KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
@@ -551,14 +550,6 @@ void QueueMgrWindow::refreshStatusBar()
         d->clearQueueAction->setEnabled(items > 0);
         d->runAction->setEnabled((tasks > 0) && (pendingItems > 0));
     }
-}
-
-void QueueMgrWindow::slotEditKeys()
-{
-    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
-                            KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection(actionCollection(), i18n("General"));
-    dialog.configure();
 }
 
 void QueueMgrWindow::slotConfToolbars()

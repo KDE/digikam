@@ -50,7 +50,6 @@
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
-#include <kshortcutsdialog.h>
 #include <ktip.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
@@ -2426,16 +2425,12 @@ void DigikamApp::slotSetupChanged()
 
 void DigikamApp::slotEditKeys()
 {
-    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
-                            KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection(actionCollection(), i18nc("general keyboard shortcuts", "General"));
-
 #ifdef HAVE_KIPI
-    dialog.addCollection(KipiPluginLoader::instance()->pluginsActionCollection(),
-                         i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
+    editKeyboardShortcuts(KipiPluginLoader::instance()->pluginsActionCollection(),
+                          i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
+#else
+    editKeyboardShortcuts();
 #endif /* HAVE_KIPI */
-
-    dialog.configure();
 }
 
 void DigikamApp::slotConfToolbars()

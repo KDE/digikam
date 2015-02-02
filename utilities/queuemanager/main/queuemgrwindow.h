@@ -114,7 +114,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotEditKeys();
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();

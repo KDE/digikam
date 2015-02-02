@@ -218,7 +218,6 @@ private Q_SLOTS:
 
     void setFilter(Filter *);
 
-    void slotEditKeys();
     void slotToggleShowBar();
     void slotConfToolbars();
     void slotNewToolbarConfig();

@@ -67,7 +67,6 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
-#include <kshortcutsdialog.h>
 #include <kmessagewidget.h>
 
 // Libkdcraw includes
@@ -614,7 +613,7 @@ void ImportUI::setupActions()
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     createSettingsActions();
-    KStandardAction::keyBindings(this,                            SLOT(slotEditKeys()),          ac);
+
     KStandardAction::configureToolbars(this,                      SLOT(slotConfToolbars()),      ac);
     d->showPreferencesAction = KStandardAction::preferences(this, SLOT(slotSetup()),             ac);
 
@@ -2497,14 +2496,6 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
     }
 
     return true;
-}
-
-void ImportUI::slotEditKeys()
-{
-    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
-                            KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection(actionCollection(), i18nc("@title", "General"));
-    dialog.configure();
 }
 
 void ImportUI::slotConfToolbars()

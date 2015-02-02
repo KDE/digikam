@@ -139,7 +139,6 @@ private Q_SLOTS:
 
     void slotProgressBarCancelButtonPressed();
     void slotToggleSlideShow();
-    void slotEditKeys();
     void slotConfToolbars();
     void slotNewToolbarConfig();
     void slotSetup();
