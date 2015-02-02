@@ -48,10 +48,10 @@
 #include <QMenu>
 #include <QApplication>
 #include <QStyle>
+#include <QFileDialog>
 
 // KDE includes
 
-#include <kfiledialog.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -428,23 +428,22 @@ void MetadataWidget::slotPrintMetadata()
 
 QUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
-    QPointer<KFileDialog> fileSaveDialog = new KFileDialog(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)), QString(), this);
-    fileSaveDialog->setOperationMode(KFileDialog::Saving);
-    fileSaveDialog->setMode(KFile::File);
-    fileSaveDialog->setSelection(d->fileName);
-    fileSaveDialog->setWindowTitle(caption);
-    fileSaveDialog->setFilter(fileFilter);
+    QPointer<QFileDialog> fileSaveDialog = new QFileDialog(this, caption, QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    fileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
+    fileSaveDialog->setFileMode(QFileDialog::AnyFile);
+    fileSaveDialog->selectFile(d->fileName);
+    fileSaveDialog->setNameFilter(fileFilter);
 
+    QList<QUrl> urls;
+    
     // Check for cancel.
-    if ( fileSaveDialog->exec() == KFileDialog::Accepted )
+    if (fileSaveDialog->exec() == QDialog::Accepted)
     {
-        QUrl selUrl = fileSaveDialog->selectedUrl();
-        delete fileSaveDialog;
-        return selUrl;
+        urls = fileSaveDialog->selectedUrls();
     }
-
+    
     delete fileSaveDialog;
-    return QUrl();
+    return (!urls.isEmpty() ? urls[0] : QUrl());
 }
 
 void MetadataWidget::setMode(int mode)

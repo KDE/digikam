@@ -405,7 +405,7 @@ void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong 
     Q_D(const ItemViewImageDelegate);
 
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes)); //squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
+    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));
 }
 
 void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,
