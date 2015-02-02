@@ -45,7 +45,6 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kwindowsystem.h>
-//#include <kxmlguifactory.h>
 
 // Libkdcraw includes
 
