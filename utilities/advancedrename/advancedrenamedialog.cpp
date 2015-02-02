@@ -45,11 +45,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <khelpclient.h>
 #include <kconfiggroup.h>
 
 // Local includes
 
+#include "dxmlguiwindow.h"
 #include "advancedrenamewidget.h"
 #include "contextmenuhelper.h"
 #include "parser.h"
@@ -573,7 +573,7 @@ NewNamesList AdvancedRenameDialog::filterNewNames() const
 
 void AdvancedRenameDialog::slotHelp()
 {
-    KHelpClient::invokeHelp("advancedrename.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("advancedrename.anchor", "digikam");
 }
     
 }  // namespace Digikam

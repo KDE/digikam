@@ -106,6 +106,8 @@ public:
     /** Return true if managed window is currently in Full Screen Mode.
      */
     bool fullScreenIsActive() const;
+    
+    static void openHandbook(const QString& anchor = QString(), const QString& appname = QString());
 
 protected:
 

@@ -43,7 +43,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <khelpclient.h>
 
 // Libkdcraw includes
 
@@ -57,6 +56,7 @@
 #include "icctransform.h"
 #include "iccprofileinfodlg.h"
 #include "iccprofilescombobox.h"
+#include "dxmlguiwindow.h"
 
 using namespace KDcrawIface;
 
@@ -866,7 +866,7 @@ void ColorCorrectionDlg::setSettings()
 
 void ColorCorrectionDlg::slotHelp()
 {
-    KHelpClient::invokeHelp("iccprofile.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("iccprofile.anchor", "digikam");
 }
 
 }  // namespace Digikam

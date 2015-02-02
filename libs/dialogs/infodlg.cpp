@@ -44,11 +44,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <khelpclient.h>
 
 // Local includes
 
 #include "daboutdata.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -197,7 +197,7 @@ void InfoDlg::slotCopy2ClipBoard()
 
 void InfoDlg::slotHelp()
 {
-    KHelpClient::invokeHelp("digikam");
+    DXmlGuiWindow::openHandbook("digikam");
 }
 
 }  // namespace Digikam

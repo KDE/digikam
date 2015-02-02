@@ -57,7 +57,6 @@
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 #include <kformat.h>
-#include <khelpclient.h>
 
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
@@ -2473,7 +2472,7 @@ void DigikamApp::slotShowTip()
 
 void DigikamApp::slotShowKipiHelp()
 {
-    KHelpClient::invokeHelp( QString(), "kipi-plugins" );
+    DXmlGuiWindow::openHandbook( QString(), "kipi-plugins" );
 }
 
 void DigikamApp::slotDBStat()

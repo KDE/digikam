@@ -41,12 +41,15 @@
 
 // KDE includes
 
-#include <khelpclient.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
 
 #include <rwidgetutils.h>
+
+// Local includes
+
+#include "dxmlguiwindow.h"
 
 using namespace KDcrawIface;
 
@@ -224,7 +227,7 @@ void WorkflowDlg::slotTitleChanged(const QString& text)
 
 void WorkflowDlg::slotHelp()
 {
-    KHelpClient::invokeHelp("workflowdlg.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("workflowdlg.anchor", "digikam");
 }
 
 }  // namespace Digikam

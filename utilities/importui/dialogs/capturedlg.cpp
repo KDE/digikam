@@ -35,12 +35,12 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 #include <kwindowconfig.h>
-#include <khelpclient.h>
 
 // Local includes
 
 #include "cameracontroller.h"
 #include "capturewidget.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -192,7 +192,7 @@ void CaptureDlg::slotPreviewDone(const QImage& preview)
 
 void CaptureDlg::slotHelp()
 {
-    KHelpClient::invokeHelp("camerainterface.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("camerainterface.anchor", "digikam");
 }
 
 }  // namespace Digikam

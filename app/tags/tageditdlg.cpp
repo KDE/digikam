@@ -42,7 +42,6 @@
 #include <klocalizedstring.h>
 #include <kicondialog.h>
 #include <kkeysequencewidget.h>
-#include <khelpclient.h>
 
 // Libkdcraw includes
 
@@ -56,6 +55,7 @@
 #include "tagsactionmngr.h"
 #include "databaseconstants.h"
 #include "digikam_debug.h"
+#include "dxmlguiwindow.h"
 
 using namespace KDcrawIface;
 
@@ -495,7 +495,7 @@ void TagEditDlg::showtagsListCreationError(QWidget* const parent, const QMap<QSt
 
 void TagEditDlg::slotHelp()
 {
-    KHelpClient::invokeHelp("tagscreation.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("tagscreation.anchor", "digikam");
 }
 
 // ------------------------------------------------------------------------------

@@ -49,6 +49,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
+#include <khelpclient.h>
 
 // Local includes
 
@@ -535,6 +536,11 @@ void DXmlGuiWindow::customizedFullScreenMode(bool set)
 bool DXmlGuiWindow::thumbbarVisibility() const
 {
     return true;
+}
+
+void DXmlGuiWindow::openHandbook(const QString& anchor, const QString& appname)
+{
+    KHelpClient::invokeHelp(anchor, appname);
 }
 
 } // namespace Digikam

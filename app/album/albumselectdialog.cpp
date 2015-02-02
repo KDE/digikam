@@ -41,7 +41,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <khelpclient.h>
 
 // Local includes
 
@@ -50,6 +49,7 @@
 #include "albumselectwidget.h"
 #include "albumthumbnailloader.h"
 #include "collectionmanager.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -175,7 +175,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* const parent, PAlbum* const albu
 
 void AlbumSelectDialog::slotHelp()
 {
-    KHelpClient::invokeHelp("targetalbumdialog.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("targetalbumdialog.anchor", "digikam");
 }
 
 }  // namespace Digikam

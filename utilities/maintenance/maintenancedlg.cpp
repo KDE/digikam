@@ -41,7 +41,6 @@
 
 #include <klocalizedstring.h>
 #include <kwindowconfig.h>
-#include <khelpclient.h>
 
 // Libkdcraw includes
 
@@ -57,6 +56,7 @@
 #include "facescansettings.h"
 #include "imagequalitysettings.h"
 #include "metadatasynchronizer.h"
+#include "dxmlguiwindow.h"
 
 using namespace KDcrawIface;
 
@@ -490,7 +490,7 @@ void MaintenanceDlg::slotQualitySetup()
 
 void MaintenanceDlg::slotHelp()
 {
-    KHelpClient::invokeHelp("digikam");
+    DXmlGuiWindow::openHandbook("digikam");
 }
 
 }  // namespace Digikam

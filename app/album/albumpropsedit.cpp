@@ -49,7 +49,6 @@
 #include <kdatepicker.h>
 #include <klocalizedstring.h>
 #include <ktextedit.h>
-#include <khelpclient.h>
 
 // Libkdcraw includes
 
@@ -62,6 +61,7 @@
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "databaseaccess.h"
+#include "dxmlguiwindow.h"
 
 using namespace KDcrawIface;
 
@@ -466,7 +466,7 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
 
 void AlbumPropsEdit::slotHelp()
 {
-    KHelpClient::invokeHelp("albumpropsedit.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("albumpropsedit.anchor", "digikam");
 }
 
 }  // namespace Digikam

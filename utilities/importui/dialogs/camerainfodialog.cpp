@@ -33,7 +33,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <khelpclient.h>
+
+// Local includes
+
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -88,7 +91,7 @@ CameraInfoDialog::~CameraInfoDialog()
 
 void CameraInfoDialog::slotHelp()
 {
-    KHelpClient::invokeHelp("digitalstillcamera.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("digitalstillcamera.anchor", "digikam");
 }
 
 }  // namespace Digikam

@@ -30,10 +30,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <khelpclient.h>
 
 // Local incudes
 
+#include "dxmlguiwindow.h"
 #include "welcomepage.h"
 #include "collectionpage.h"
 #include "rawpage.h"
@@ -103,7 +103,7 @@ AssistantDlg::~AssistantDlg()
 
 void AssistantDlg::slotHelp()
 {
-    KHelpClient::invokeHelp("firstrundialog.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("firstrundialog.anchor", "digikam");
 }
 
 QString AssistantDlg::firstAlbumPath() const

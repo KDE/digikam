@@ -34,7 +34,6 @@
 
 #include <klocalizedstring.h>
 #include <kwindowconfig.h>
-#include <khelpclient.h>
 
 #ifdef HAVE_KIPI
 
@@ -69,6 +68,7 @@ using namespace KIPI;
 #include "setupdatabase.h"
 #include "setupversioning.h"
 #include "importsettings.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -362,7 +362,7 @@ Setup::~Setup()
 
 void Setup::slotHelp()
 {
-    KHelpClient::invokeHelp("setupdialog.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("setupdialog.anchor", "digikam");
 }
 
 void Setup::setTemplate(const Template& t)

@@ -32,11 +32,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <khelpclient.h>
 
 // Local includes
 
 #include "iccprofilewidget.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -79,7 +79,7 @@ ICCProfileInfoDlg::~ICCProfileInfoDlg()
 
 void ICCProfileInfoDlg::slotHelp()
 {
-    KHelpClient::invokeHelp("iccprofile.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("iccprofile.anchor", "digikam");
 }
 
 }  // namespace Digikam

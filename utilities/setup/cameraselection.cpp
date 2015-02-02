@@ -47,12 +47,12 @@
 
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
-#include <khelpclient.h>
 
 // Local includes
 
 #include "digikam_config.h"
 #include "gpcamera.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -591,7 +591,7 @@ void CameraSelection::slotSearchTextChanged(const SearchTextSettings& settings)
 
 void CameraSelection::slotHelp()
 {
-    KHelpClient::invokeHelp("cameraselection.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("cameraselection.anchor", "digikam");
 }
 
 }  // namespace Digikam

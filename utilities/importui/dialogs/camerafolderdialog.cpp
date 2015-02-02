@@ -37,7 +37,6 @@
 
 // KDE includes
 
-#include <khelpclient.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -45,6 +44,7 @@
 #include "digikam_debug.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -202,7 +202,7 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
 
 void CameraFolderDialog::slotHelp()
 {
-    KHelpClient::invokeHelp("camerainterface.anchor", "digikam");
+    DXmlGuiWindow::openHandbook("camerainterface.anchor", "digikam");
 }
 
 }  // namespace Digikam

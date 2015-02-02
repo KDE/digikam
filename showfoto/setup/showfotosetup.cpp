@@ -34,7 +34,6 @@
 #include <ksharedconfig.h>
 #include <kwindowconfig.h>
 #include <klocalizedstring.h>
-#include <khelpclient.h>
 
 // Local includes
 
@@ -46,6 +45,7 @@
 #include "showfotosetupmisc.h"
 #include "showfotosetupmetadata.h"
 #include "showfotosetuptooltip.h"
+#include "dxmlguiwindow.h"
 
 namespace ShowFoto
 {
@@ -207,7 +207,7 @@ Setup::~Setup()
 
 void Setup::slotHelp()
 {
-    KHelpClient::invokeHelp("setupdialog.anchor", "showfoto");
+    Digikam::DXmlGuiWindow::openHandbook("setupdialog.anchor", "showfoto");
 }
 
 void Setup::slotOkClicked()
