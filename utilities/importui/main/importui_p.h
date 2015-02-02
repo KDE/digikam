@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include <khelpmenu.h>
 #include <kselectaction.h>
 
 // Libkdcraw includes
@@ -121,7 +120,6 @@ public:
 #endif // HAVE_KGEOMAP
         viewCMViewAction(0),
         cameraActions(0),
-        helpMenu(0),
         advBox(0),
         splitter(0),
         camThumbsCtrl(0),
@@ -214,8 +212,6 @@ public:
     QActionGroup*                 cameraActions;
 
     QUrl                          lastDestURL;
-
-    KHelpMenu*                    helpMenu;
 
     RExpanderBox*                 advBox;
 
