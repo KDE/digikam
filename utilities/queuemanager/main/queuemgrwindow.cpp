@@ -413,7 +413,6 @@ void QueueMgrWindow::setupActions()
     createSettingsActions();
 
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
-    KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
     // ---------------------------------------------------------------------------------
 

@@ -1199,7 +1199,6 @@ void DigikamApp::setupActions()
     createSettingsActions();
 
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
-    KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);

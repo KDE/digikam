@@ -170,6 +170,7 @@ private Q_SLOTS:
 
     // Slots for common Settings actions
     virtual void slotEditKeys()                { editKeyboardShortcuts(); };
+    virtual void slotSetup() = 0;
 
 private:
 

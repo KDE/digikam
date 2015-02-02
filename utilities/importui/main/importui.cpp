@@ -615,7 +615,6 @@ void ImportUI::setupActions()
     createSettingsActions();
 
     KStandardAction::configureToolbars(this,                      SLOT(slotConfToolbars()),      ac);
-    d->showPreferencesAction = KStandardAction::preferences(this, SLOT(slotSetup()),             ac);
 
     // ---------------------------------------------------------------------------------
 

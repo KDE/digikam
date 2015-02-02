@@ -224,6 +224,7 @@ void DXmlGuiWindow::createSettingsActions()
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()),       actionCollection());
     KStandardAction::configureNotifications(this,             SLOT(slotConfNotifications()), actionCollection());
     KStandardAction::keyBindings(this,                        SLOT(slotEditKeys()),          actionCollection());
+    KStandardAction::preferences(this,                        SLOT(slotSetup()),             actionCollection());
 }
 
 QAction* DXmlGuiWindow::showMenuBarAction() const
