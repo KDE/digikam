@@ -35,7 +35,6 @@
 #include <kmimetypetrader.h>
 #include <kopenwithdialog.h>
 #include <krun.h>
-#include <kstandardaction.h>
 #include <klocalizedstring.h>
 
 // Local includes

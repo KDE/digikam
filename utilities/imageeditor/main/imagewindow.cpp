@@ -52,11 +52,8 @@
 // KDE includes
 
 #include <kactioncollection.h>
-#include <kcategorizedview.h>
 #include <klocalizedstring.h>
 #include <kselectaction.h>
-#include <kstandardaction.h>
-#include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 
 #include <kio/job.h>
