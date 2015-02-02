@@ -49,6 +49,9 @@
 namespace Digikam
 {
 
+class DMultiTabBarButton;
+class DMultiTabBarTab;
+
 /**
  * A Widget for horizontal and vertical tabs.
  */
@@ -116,12 +119,12 @@ public:
     /**
      * get a pointer to a button within the button area identified by its ID
      */
-    class DMultiTabBarButton* button(int id) const;
+    DMultiTabBarButton* button(int id) const;
 
     /**
      * get a pointer to a tab within the tab area, identiifed by its ID
      */
-    class DMultiTabBarTab* tab(int id) const;
+    DMultiTabBarTab* tab(int id) const;
 
     /**
      * set the real position of the widget.
@@ -204,16 +207,77 @@ private:
 
 // -------------------------------------------------------------------------------------
 
-class DMultiTabBarInternal: public QFrame
+class DIGIKAM_EXPORT DMultiTabBarTab: public DMultiTabBarButton
+{
+    Q_OBJECT
+
+public:
+
+    virtual ~DMultiTabBarTab();
+
+    virtual QSize sizeHint()        const;
+    virtual QSize minimumSizeHint() const;
+
+public Q_SLOTS:
+
+    /**
+     * this is used internaly, but can be used by the user.
+     * It the according call of DMultiTabBar is invoked though this modifications will be overwritten
+     */
+    void setPosition(Qt::Edge);
+
+    /**
+     * this is used internaly, but can be used by the user.
+     * It the according call of DMultiTabBar is invoked though this modifications will be overwritten
+     */
+    void setStyle(DMultiTabBar::TextStyle);
+
+    /**
+     * set the active state of the tab
+     * @param  state true==active false==not active
+     */
+    void setState(bool state);
+
+    void setIcon(const QString&);
+    void setIcon(const QPixmap&);
+
+protected:
+
+    void    computeMargins (int* hMargin, int* vMargin)  const;
+    QSize   computeSizeHint(bool withText)               const;
+    bool    shouldDrawText()                             const;
+    bool    isVertical()                                 const;
+    QPixmap iconPixmap()                                 const;
+    void    initStyleOption(QStyleOptionToolButton* opt) const;
+
+    friend class DMultiTabBarFrame;
+
+    /**
+     * This class should never be created except with the appendTab call of DMultiTabBar
+     */
+    DMultiTabBarTab(const QPixmap& pic, const QString&, int id, QWidget* const parent,
+                    Qt::Edge pos, DMultiTabBar::TextStyle style);
+    
+    virtual void paintEvent(QPaintEvent*);
+
+private:
+
+    Qt::Edge                m_position;
+    DMultiTabBar::TextStyle m_style;
+};
+
+// -------------------------------------------------------------------------------------
+
+class DMultiTabBarFrame: public QFrame
 {
     Q_OBJECT
     
 public:
 
-    DMultiTabBarInternal(QWidget* const parent, Qt::Edge pos);
-    virtual ~DMultiTabBarInternal();
+    DMultiTabBarFrame(QWidget* const parent, Qt::Edge pos);
+    virtual ~DMultiTabBarFrame();
 
-    int appendTab(const QPixmap&, int=-1, const QString& =QString());
+    int appendTab(const QPixmap&, int = -1, const QString& = QString());
     DMultiTabBarTab* tab(int) const;
     void removeTab(int);
     void setPosition(Qt::Edge pos);
@@ -239,67 +303,6 @@ protected:
      */
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void mousePressEvent(QMouseEvent*);
-};
-
-// -------------------------------------------------------------------------------------
-
-class DIGIKAM_EXPORT DMultiTabBarTab: public DMultiTabBarButton
-{
-    Q_OBJECT
-
-public:
-
-    virtual ~DMultiTabBarTab();
-
-    virtual QSize sizeHint()        const;
-    virtual QSize minimumSizeHint() const;
-
-public Q_SLOTS:
-
-    /**
-     * this is used internaly, but can be used by the user, if (s)he wants to
-     * It the according call of DMultiTabBar is invoked though this modifications will be overwritten
-     */
-    void setPosition(Qt::Edge);
-
-    /**
-     * this is used internaly, but can be used by the user, if (s)he wants to
-     * It the according call of DMultiTabBar is invoked though this modifications will be overwritten
-     */
-    void setStyle(DMultiTabBar::TextStyle);
-
-    /**
-     * set the active state of the tab
-     * @param  state true==active false==not active
-     */
-    void setState(bool state);
-
-    void setIcon(const QString&);
-    void setIcon(const QPixmap&);
-
-protected:
-
-    void    computeMargins (int* hMargin, int* vMargin)  const;
-    QSize   computeSizeHint(bool withText)               const;
-    bool    shouldDrawText()                             const;
-    bool    isVertical()                                 const;
-    QPixmap iconPixmap()                                 const;
-    void    initStyleOption(QStyleOptionToolButton* opt) const;
-
-    friend class DMultiTabBarInternal;
-
-    /**
-     * This class should never be created except with the appendTab call of DMultiTabBar
-     */
-    DMultiTabBarTab(const QPixmap& pic, const QString&, int id, QWidget* const parent,
-                    Qt::Edge pos, DMultiTabBar::TextStyle style);
-    
-    virtual void paintEvent(QPaintEvent*);
-
-private:
-
-    Qt::Edge                m_position;
-    DMultiTabBar::TextStyle m_style;
 };
 
 // -------------------------------------------------------------------------------------

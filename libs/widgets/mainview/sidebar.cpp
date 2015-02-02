@@ -58,7 +58,7 @@
 namespace Digikam
 {
 
-DMultiTabBarInternal::DMultiTabBarInternal(QWidget* const parent, Qt::Edge pos)
+DMultiTabBarFrame::DMultiTabBarFrame(QWidget* const parent, Qt::Edge pos)
     : QFrame(parent)
 {
     m_position = pos;
@@ -75,13 +75,13 @@ DMultiTabBarInternal::DMultiTabBarInternal(QWidget* const parent, Qt::Edge pos)
     setBackgroundRole(QPalette::Background);
 }
 
-DMultiTabBarInternal::~DMultiTabBarInternal()
+DMultiTabBarFrame::~DMultiTabBarFrame()
 {
     qDeleteAll(m_tabs);
     m_tabs.clear();
 }
 
-void DMultiTabBarInternal::setStyle(DMultiTabBar::TextStyle style)
+void DMultiTabBarFrame::setStyle(DMultiTabBar::TextStyle style)
 {
     m_style = style;
 
@@ -91,19 +91,17 @@ void DMultiTabBarInternal::setStyle(DMultiTabBar::TextStyle style)
     updateGeometry();
 }
 
-void DMultiTabBarInternal::contentsMousePressEvent(QMouseEvent* e)
+void DMultiTabBarFrame::contentsMousePressEvent(QMouseEvent* e)
 {
     e->ignore();
 }
 
-void DMultiTabBarInternal::mousePressEvent(QMouseEvent* e)
+void DMultiTabBarFrame::mousePressEvent(QMouseEvent* e)
 {
     e->ignore();
 }
 
-// -------------------------------------------------------------------------------------
-
-DMultiTabBarTab* DMultiTabBarInternal::tab(int id) const
+DMultiTabBarTab* DMultiTabBarFrame::tab(int id) const
 {
     QListIterator<DMultiTabBarTab*> it(m_tabs);
 
@@ -118,7 +116,7 @@ DMultiTabBarTab* DMultiTabBarInternal::tab(int id) const
     return 0;
 }
 
-int DMultiTabBarInternal::appendTab(const QPixmap& pic, int id, const QString& text)
+int DMultiTabBarFrame::appendTab(const QPixmap& pic, int id, const QString& text)
 {
     DMultiTabBarTab* const tab = new DMultiTabBarTab(pic, text, id, this, m_position, m_style);
     m_tabs.append(tab);
@@ -129,7 +127,7 @@ int DMultiTabBarInternal::appendTab(const QPixmap& pic, int id, const QString& t
     return 0;
 }
 
-void DMultiTabBarInternal::removeTab(int id)
+void DMultiTabBarFrame::removeTab(int id)
 {
     for (int pos = 0 ; pos < m_tabs.count() ; pos++)
     {
@@ -142,7 +140,7 @@ void DMultiTabBarInternal::removeTab(int id)
     }
 }
 
-void DMultiTabBarInternal::setPosition(Qt::Edge pos)
+void DMultiTabBarFrame::setPosition(Qt::Edge pos)
 {
     m_position = pos;
 
@@ -152,7 +150,7 @@ void DMultiTabBarInternal::setPosition(Qt::Edge pos)
     updateGeometry();
 }
 
-QList<DMultiTabBarTab*>* DMultiTabBarInternal::tabs()
+QList<DMultiTabBarTab*>* DMultiTabBarFrame::tabs()
 {
     return &m_tabs;
 }
@@ -193,18 +191,18 @@ int DMultiTabBarButton::id() const
     return m_id;
 }
 
-void DMultiTabBarButton::hideEvent(QHideEvent* he)
+void DMultiTabBarButton::hideEvent(QHideEvent* e)
 {
-    QPushButton::hideEvent(he);
+    QPushButton::hideEvent(e);
     DMultiTabBar* const tb = dynamic_cast<DMultiTabBar*>(parentWidget());
 
     if (tb)
         tb->updateSeparator();
 }
 
-void DMultiTabBarButton::showEvent(QShowEvent* he)
+void DMultiTabBarButton::showEvent(QShowEvent* e)
 {
-    QPushButton::showEvent(he);
+    QPushButton::showEvent(e);
     DMultiTabBar* const tb = dynamic_cast<DMultiTabBar*>(parentWidget());
 
     if (tb)
@@ -338,14 +336,17 @@ QSize DMultiTabBarTab::computeSizeHint(bool withText) const
     size.setHeight(size.height() + 2*minorMargin);
 
     if (withText)
+    {
         // Add enough room for the text, and an extra major margin.
         size.setWidth(size.width() + textSize.width() + majorMargin);
+    }
 
-    // flip time?
     if (isVertical())
+    {
         return QSize(size.height(), size.width());
-    else
-        return size;
+    }
+    
+    return size;
 }
 
 void DMultiTabBarTab::setState(bool newState)
@@ -421,7 +422,9 @@ void DMultiTabBarTab::paintEvent(QPaintEvent*)
         // See whether anything is left. Qt will return either
         // ... or the ellipsis unicode character, 0x2026
         if (t == QLatin1String("...") || t == QChar(0x2026))
+        {
             t.clear();
+        }
     }
 
     // Label time.... Simple case: no text, so just plop down the icon right in the center
@@ -444,10 +447,10 @@ void DMultiTabBarTab::paintEvent(QPaintEvent*)
     {
         if (m_position == Qt::LeftEdge && !rtl)
             bottomIcon = true;
+
         if (m_position == Qt::RightEdge && rtl)
             bottomIcon = true;
     }
-    //alignFlags = Qt::AlignLeading | Qt::AlignVCenter;
 
     if (isVertical())
     {
@@ -480,7 +483,9 @@ void DMultiTabBarTab::paintEvent(QPaintEvent*)
     style()->drawItemPixmap(&painter, iconArea, Qt::AlignCenter | Qt::AlignVCenter, icon);
 
     if (t.isEmpty())
+    {
         return;
+    }
 
     QRect labelPaintArea = labelArea;
 
@@ -516,11 +521,11 @@ class DMultiTabBar::Private
 {
 public:
 
-    class DMultiTabBarInternal* m_internal;
-    QBoxLayout*                 m_l;
-    QFrame*                     m_btnTabSep;
-    QList<DMultiTabBarButton*>  m_buttons;
-    Qt::Edge                    m_position;
+    class DMultiTabBarFrame*   m_internal;
+    QBoxLayout*                m_lay;
+    QFrame*                    m_btnTabSep;
+    QList<DMultiTabBarButton*> m_buttons;
+    Qt::Edge                   m_position;
 };
 
 DMultiTabBar::DMultiTabBar(Qt::Edge pos, QWidget* const parent)
@@ -529,23 +534,23 @@ DMultiTabBar::DMultiTabBar(Qt::Edge pos, QWidget* const parent)
 {
     if (pos == Qt::LeftEdge || pos == Qt::RightEdge)
     {
-        d->m_l=new QVBoxLayout(this);
+        d->m_lay = new QVBoxLayout(this);
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding/*, true*/);
     }
     else
     {
-        d->m_l=new QHBoxLayout(this);
+        d->m_lay = new QHBoxLayout(this);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed/*, true*/);
     }
 
-    d->m_l->setMargin(0);
-    d->m_l->setSpacing(0);
+    d->m_lay->setMargin(0);
+    d->m_lay->setSpacing(0);
 
-    d->m_internal = new DMultiTabBarInternal(this, pos);
+    d->m_internal = new DMultiTabBarFrame(this, pos);
     setPosition(pos);
     setStyle(ActiveIconText);
-    d->m_l->insertWidget(0, d->m_internal);
-    d->m_l->insertWidget(0, d->m_btnTabSep = new QFrame(this));
+    d->m_lay->insertWidget(0, d->m_internal);
+    d->m_lay->insertWidget(0, d->m_btnTabSep = new QFrame(this));
     d->m_btnTabSep->setFixedHeight(4);
     d->m_btnTabSep->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     d->m_btnTabSep->setLineWidth(2);
@@ -568,7 +573,7 @@ int DMultiTabBar::appendButton(const QPixmap &pic, int id, QMenu *popup, const Q
     btn->setFixedWidth(btn->height());
     btn->setMenu(popup);
     d->m_buttons.append(btn);
-    d->m_l->insertWidget(0,btn);
+    d->m_lay->insertWidget(0,btn);
     btn->show();
     d->m_btnTabSep->show();
     return 0;
@@ -576,14 +581,14 @@ int DMultiTabBar::appendButton(const QPixmap &pic, int id, QMenu *popup, const Q
 
 void DMultiTabBar::updateSeparator()
 {
-    bool hideSep=true;
+    bool hideSep = true;
     QListIterator<DMultiTabBarButton*> it(d->m_buttons);
 
     while (it.hasNext())
     {
         if (it.next()->isVisibleTo(this))
         {
-            hideSep=false;
+            hideSep = false;
             break;
         }
     }
@@ -604,11 +609,11 @@ DMultiTabBarButton* DMultiTabBar::button(int id) const
 {
     QListIterator<DMultiTabBarButton*> it(d->m_buttons);
 
-    while ( it.hasNext() )
+    while (it.hasNext())
     {
         DMultiTabBarButton* const button = it.next();
     
-        if ( button->id() == id )
+        if (button->id() == id)
             return button;
     }
 
@@ -622,16 +627,16 @@ DMultiTabBarTab* DMultiTabBar::tab(int id) const
 
 void DMultiTabBar::removeButton(int id)
 {
-    for (int pos=0;pos<d->m_buttons.count();pos++)
+    for (int pos = 0 ; pos < d->m_buttons.count() ; pos++)
     {
-        if (d->m_buttons.at(pos)->id()==id)
+        if (d->m_buttons.at(pos)->id() == id)
         {
             d->m_buttons.takeAt(pos)->deleteLater();
             break;
         }
     }
 
-    if (d->m_buttons.count()==0)
+    if (d->m_buttons.count() == 0)
         d->m_btnTabSep->hide();
 }
 
@@ -642,7 +647,7 @@ void DMultiTabBar::removeTab(int id)
 
 void DMultiTabBar::setTab(int id,bool state)
 {
-    DMultiTabBarTab* const ttab=tab(id);
+    DMultiTabBarTab* const ttab = tab(id);
 
     if (ttab)
         ttab->setState(state);
@@ -650,7 +655,7 @@ void DMultiTabBar::setTab(int id,bool state)
 
 bool DMultiTabBar::isTabRaised(int id) const
 {
-    DMultiTabBarTab* const ttab=tab(id);
+    DMultiTabBarTab* const ttab = tab(id);
 
     if (ttab)
         return ttab->isChecked();
