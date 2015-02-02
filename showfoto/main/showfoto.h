@@ -55,8 +55,8 @@ public:
 
 public Q_SLOTS:
 
-    bool slotSetup();
-    bool slotSetupICC();
+    void slotSetup();
+    void slotSetupICC();
     
 private:
 

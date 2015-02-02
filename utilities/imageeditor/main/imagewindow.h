@@ -63,8 +63,8 @@ public:
 
 public Q_SLOTS:
 
-    bool slotSetup();
-    bool slotSetupICC();
+    void slotSetup();
+    void slotSetupICC();
 
     void loadImageInfos(const ImageInfoList& imageInfoList,
                         const ImageInfo& imageInfoCurrent, const QString& caption);

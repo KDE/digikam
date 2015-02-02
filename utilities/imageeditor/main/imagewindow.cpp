@@ -942,14 +942,14 @@ void ImageWindow::slotUpdateItemInfo()
 */
 }
 
-bool ImageWindow::slotSetup()
+void ImageWindow::slotSetup()
 {
-    return Setup::execDialog(this);
+    Setup::execDialog(this);
 }
 
-bool ImageWindow::slotSetupICC()
+void ImageWindow::slotSetupICC()
 {
-    return Setup::execSinglePage(this, Setup::ICCPage);
+    Setup::execSinglePage(this, Setup::ICCPage);
 }
 
 void ImageWindow::slotToMainWindow()
