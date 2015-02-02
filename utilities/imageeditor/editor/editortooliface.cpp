@@ -258,7 +258,7 @@ void EditorToolIface::slotApplyTool()
 
 void EditorToolIface::setupICC()
 {
-    d->editor->setupICC();
+    d->editor->slotSetupICC();
 }
 
 void EditorToolIface::themeChanged()

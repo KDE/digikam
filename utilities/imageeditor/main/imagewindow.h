@@ -56,15 +56,15 @@ public:
     static ImageWindow* imageWindow();
     static bool         imageWindowCreated();
 
-    bool setup();
-    bool setupICC();
-
     bool queryClose();
     void toggleTag(int tagID);
 
     virtual VersionManager* versionManager() const;
 
 public Q_SLOTS:
+
+    bool slotSetup();
+    bool slotSetupICC();
 
     void loadImageInfos(const ImageInfoList& imageInfoList,
                         const ImageInfo& imageInfoCurrent, const QString& caption);

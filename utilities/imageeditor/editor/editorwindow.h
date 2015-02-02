@@ -91,8 +91,8 @@ public:
 
 public Q_SLOTS:
 
-    virtual bool setup() = 0;
-    virtual bool setupICC() = 0;
+    virtual bool slotSetup() = 0;
+    virtual bool slotSetupICC() = 0;
 
 Q_SIGNALS:
 

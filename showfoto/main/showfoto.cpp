@@ -639,12 +639,12 @@ void ShowFoto::slotFilePrint()
     printImage(d->thumbBar->currentUrl());
 }
 
-bool ShowFoto::setup()
+bool ShowFoto::slotSetup()
 {
     return setup(false);
 }
 
-bool ShowFoto::setupICC()
+bool ShowFoto::slotSetupICC()
 {
     return setup(true);
 }

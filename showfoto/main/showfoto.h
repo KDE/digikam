@@ -51,11 +51,13 @@ public:
     explicit ShowFoto(const QList<QUrl>& urlList);
     ~ShowFoto();
 
-    bool setup();
-    bool setupICC();
-
     virtual void show();
 
+public Q_SLOTS:
+
+    bool slotSetup();
+    bool slotSetupICC();
+    
 private:
 
     bool setup(bool iccSetupPage=false);

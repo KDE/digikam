@@ -352,8 +352,9 @@ void PrintOptionsPage::slotAlertSettings(bool t)
 void PrintOptionsPage::slotSetupDlg()
 {
     EditorWindow* const editor = dynamic_cast<EditorWindow*>(d->mParent);
+
     if (editor)
-        editor->setupICC();
+        editor->slotSetupICC();
 }
 
 } // namespace DigiKam

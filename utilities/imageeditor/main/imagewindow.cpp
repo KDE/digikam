@@ -923,7 +923,7 @@ void ImageWindow::slotUpdateItemInfo()
         m_lastAction->setEnabled(false);
     }
 
-    /*
+/*
     // Disable some menu actions if the current root image URL
     // is not include in the digiKam Albums library database.
     // This is necessary when ImageEditor is opened from cameraclient.
@@ -939,15 +939,15 @@ void ImageWindow::slotUpdateItemInfo()
     {
         m_fileDeleteAction->setEnabled(true);
     }
-    */
+*/
 }
 
-bool ImageWindow::setup()
+bool ImageWindow::slotSetup()
 {
     return Setup::execDialog(this);
 }
 
-bool ImageWindow::setupICC()
+bool ImageWindow::slotSetupICC()
 {
     return Setup::execSinglePage(this, Setup::ICCPage);
 }
