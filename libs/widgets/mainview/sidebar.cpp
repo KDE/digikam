@@ -58,35 +58,47 @@
 namespace Digikam
 {
 
-DMultiTabBarFrame::DMultiTabBarFrame(QWidget* const parent, Qt::Edge pos)
-    : QFrame(parent)
+class DMultiTabBarFrame::Private
 {
-    m_position = pos;
+public:
+
+    QBoxLayout*             mainLayout;
+    QList<DMultiTabBarTab*> tabs;
+    Qt::Edge                position;
+    DMultiTabBar::TextStyle style;
+};
+
+DMultiTabBarFrame::DMultiTabBarFrame(QWidget* const parent, Qt::Edge pos)
+    : QFrame(parent),
+      d(new Private)
+{
+    d->position = pos;
 
     if (pos == Qt::LeftEdge || pos == Qt::RightEdge)
-        m_mainLayout = new QVBoxLayout(this);
+        d->mainLayout = new QVBoxLayout(this);
     else
-        m_mainLayout = new QHBoxLayout(this);
+        d->mainLayout = new QHBoxLayout(this);
 
-    m_mainLayout->setMargin(0);
-    m_mainLayout->setSpacing(0);
-    m_mainLayout->addStretch();
+    d->mainLayout->setMargin(0);
+    d->mainLayout->setSpacing(0);
+    d->mainLayout->addStretch();
     setFrameStyle(NoFrame);
     setBackgroundRole(QPalette::Background);
 }
 
 DMultiTabBarFrame::~DMultiTabBarFrame()
 {
-    qDeleteAll(m_tabs);
-    m_tabs.clear();
+    qDeleteAll(d->tabs);
+    d->tabs.clear();
+    delete d;
 }
 
 void DMultiTabBarFrame::setStyle(DMultiTabBar::TextStyle style)
 {
-    m_style = style;
+    d->style = style;
 
-    for (int i = 0 ; i < m_tabs.count() ; i++)
-        m_tabs.at(i)->setStyle(m_style);
+    for (int i = 0 ; i < d->tabs.count() ; i++)
+        d->tabs.at(i)->setStyle(d->style);
 
     updateGeometry();
 }
@@ -103,7 +115,7 @@ void DMultiTabBarFrame::mousePressEvent(QMouseEvent* e)
 
 DMultiTabBarTab* DMultiTabBarFrame::tab(int id) const
 {
-    QListIterator<DMultiTabBarTab*> it(m_tabs);
+    QListIterator<DMultiTabBarTab*> it(d->tabs);
 
     while (it.hasNext())
     {
@@ -118,23 +130,23 @@ DMultiTabBarTab* DMultiTabBarFrame::tab(int id) const
 
 int DMultiTabBarFrame::appendTab(const QPixmap& pic, int id, const QString& text)
 {
-    DMultiTabBarTab* const tab = new DMultiTabBarTab(pic, text, id, this, m_position, m_style);
-    m_tabs.append(tab);
+    DMultiTabBarTab* const tab = new DMultiTabBarTab(pic, text, id, this, d->position, d->style);
+    d->tabs.append(tab);
 
     // Insert before the stretch.
-    m_mainLayout->insertWidget(m_tabs.size()-1, tab);
+    d->mainLayout->insertWidget(d->tabs.size()-1, tab);
     tab->show();
     return 0;
 }
 
 void DMultiTabBarFrame::removeTab(int id)
 {
-    for (int pos = 0 ; pos < m_tabs.count() ; pos++)
+    for (int pos = 0 ; pos < d->tabs.count() ; pos++)
     {
-        if (m_tabs.at(pos)->id() == id)
+        if (d->tabs.at(pos)->id() == id)
         {
             // remove & delete the tab
-            delete m_tabs.takeAt(pos);
+            delete d->tabs.takeAt(pos);
             break;
         }
     }
@@ -142,17 +154,17 @@ void DMultiTabBarFrame::removeTab(int id)
 
 void DMultiTabBarFrame::setPosition(Qt::Edge pos)
 {
-    m_position = pos;
+    d->position = pos;
 
-    for (int i = 0 ; i < m_tabs.count() ; i++)
-        m_tabs.at(i)->setPosition(m_position);
+    for (int i = 0 ; i < d->tabs.count() ; i++)
+        d->tabs.at(i)->setPosition(d->position);
 
     updateGeometry();
 }
 
 QList<DMultiTabBarTab*>* DMultiTabBarFrame::tabs()
 {
-    return &m_tabs;
+    return &d->tabs;
 }
 
 // -------------------------------------------------------------------------------------
@@ -531,7 +543,7 @@ class DMultiTabBar::Private
 {
 public:
 
-    class DMultiTabBarFrame*   m_internal;
+    DMultiTabBarFrame*         m_internal;
     QBoxLayout*                m_lay;
     QFrame*                    m_btnTabSep;
     QList<DMultiTabBarButton*> m_buttons;
@@ -680,7 +692,7 @@ void DMultiTabBar::setStyle(TextStyle style)
 
 DMultiTabBar::TextStyle DMultiTabBar::tabStyle() const
 {
-    return d->m_internal->m_style;
+    return d->m_internal->d->style;
 }
 
 void DMultiTabBar::setPosition(Qt::Edge pos)
