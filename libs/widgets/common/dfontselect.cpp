@@ -32,10 +32,10 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QFontDialog>
 
 // KDE includes
 
-#include <kfontdialog.h>
 #include <klocalizedstring.h>
 
 namespace Digikam
@@ -147,10 +147,10 @@ bool DFontSelect::event(QEvent* e)
 
 void DFontSelect::slotOpenFontDialog()
 {
-    QFont f          = font();
-    const int result = KFontDialog::getFont(f, KFontChooser::NoDisplayFlags, this);
+    bool ok = false;
+    QFont f = QFontDialog::getFont(&ok, font(), this);
 
-    if (result == KFontDialog::Accepted)
+    if (ok)
     {
         d->font = f;
         d->modeCombo->setFont(d->font);
