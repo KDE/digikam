@@ -48,7 +48,6 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <ktip.h>
 #include <ktoolbar.h>
@@ -149,10 +148,12 @@ namespace Digikam
 DigikamApp* DigikamApp::m_instance = 0;
 
 DigikamApp::DigikamApp()
-    : DXmlGuiWindow(0), d(new Private)
+    : DXmlGuiWindow(0),
+      d(new Private)
 {
     // --------------------------------------------------------
 
+    setConfigGroupName(ApplicationSettings::instance()->generalConfigGroupName());
     setFullScreenOptions(FS_ALBUMGUI);
     setXMLFile("digikamui.rc");
 
@@ -178,7 +179,7 @@ DigikamApp::DigikamApp()
 
     setObjectName("Digikam");
 
-    KConfigGroup group = ApplicationSettings::instance()->generalConfigGroup();
+    KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
 
     if (group.readEntry("Show Splash", true) &&
         !qApp->isSessionRestored())
@@ -1197,8 +1198,6 @@ void DigikamApp::setupActions()
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
 
     createSettingsActions();
-
-    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
@@ -2401,7 +2400,7 @@ void DigikamApp::slotSetupChanged()
     }
 
     // Load full-screen options
-    KConfigGroup group = ApplicationSettings::instance()->generalConfigGroup();
+    KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
     readFullScreenSettings(group);
 
     d->view->applySettings();
@@ -2429,23 +2428,6 @@ void DigikamApp::slotEditKeys()
 #else
     editKeyboardShortcuts();
 #endif /* HAVE_KIPI */
-}
-
-void DigikamApp::slotConfToolbars()
-{
-    KConfigGroup group = ApplicationSettings::instance()->generalConfigGroup();
-    saveMainWindowSettings(group);
-    KEditToolBar dlg(factory(), this);
-
-    connect(&dlg, SIGNAL(newToolBarConfig()),
-            this, SLOT(slotNewToolbarConfig()));
-
-    dlg.exec();
-}
-
-void DigikamApp::slotNewToolbarConfig()
-{
-    applyMainWindowSettings(ApplicationSettings::instance()->generalConfigGroup());
 }
 
 void DigikamApp::slotShowTip()

@@ -44,9 +44,8 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kedittoolbar.h>
 #include <kwindowsystem.h>
-#include <kxmlguifactory.h>
+//#include <kxmlguifactory.h>
 
 // Libkdcraw includes
 
@@ -102,8 +101,10 @@ bool QueueMgrWindow::queueManagerWindowCreated()
 }
 
 QueueMgrWindow::QueueMgrWindow()
-    : DXmlGuiWindow(0), d(new Private)
+    : DXmlGuiWindow(0),
+      d(new Private)
 {
+    setConfigGroupName("Batch Queue Manager Settings");
     setXMLFile("queuemgrwindowui.rc");
 
     // --------------------------------------------------------
@@ -145,7 +146,7 @@ QueueMgrWindow::QueueMgrWindow()
 
     readSettings();
     applySettings();
-    setAutoSaveSettings("Batch Queue Manager Settings", true);
+    setAutoSaveSettings(configGroupName(), true);
 
     populateToolsList();
     slotQueueContentsChanged();
@@ -412,8 +413,6 @@ void QueueMgrWindow::setupActions()
 
     createSettingsActions();
 
-    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
-
     // ---------------------------------------------------------------------------------
 
     ThemeManager::instance()->registerThemeActions(this);
@@ -444,7 +443,7 @@ void QueueMgrWindow::refreshView()
 void QueueMgrWindow::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("Batch Queue Manager Settings");
+    KConfigGroup group        = config->group(configGroupName());
 
     d->verticalSplitter->restoreState(group, d->VERTICAL_SPLITTER_CONFIG_KEY);
     d->bottomSplitter->restoreState(group,   d->BOTTOM_SPLITTER_CONFIG_KEY);
@@ -456,7 +455,7 @@ void QueueMgrWindow::readSettings()
 void QueueMgrWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("Batch Queue Manager Settings");
+    KConfigGroup group        = config->group(configGroupName());
 
     d->topSplitter->saveState(group,      d->TOP_SPLITTER_CONFIG_KEY);
     d->bottomSplitter->saveState(group,   d->BOTTOM_SPLITTER_CONFIG_KEY);
@@ -476,7 +475,7 @@ void QueueMgrWindow::applySettings()
     d->queuePool->applySettings();
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("Batch Queue Manager Settings");
+    KConfigGroup group        = config->group(configGroupName());
     readFullScreenSettings(group);
 }
 
@@ -549,24 +548,6 @@ void QueueMgrWindow::refreshStatusBar()
         d->clearQueueAction->setEnabled(items > 0);
         d->runAction->setEnabled((tasks > 0) && (pendingItems > 0));
     }
-}
-
-void QueueMgrWindow::slotConfToolbars()
-{
-    KConfigGroup group = KSharedConfig::openConfig()->group("Batch Queue Manager Settings");
-    saveMainWindowSettings(group);
-
-    KEditToolBar dlg(factory(), this);
-
-    connect(&dlg, SIGNAL(newToolbarConfig()),
-            this, SLOT(slotNewToolbarConfig()));
-
-    dlg.exec();
-}
-
-void QueueMgrWindow::slotNewToolbarConfig()
-{
-    applyMainWindowSettings(KSharedConfig::openConfig()->group("Batch Queue Manager Settings"));
 }
 
 void QueueMgrWindow::slotSetup()

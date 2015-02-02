@@ -197,10 +197,10 @@ ImageWindow::ImageWindow()
 
     readSettings();
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(configGroupName());
     applyMainWindowSettings(group);
     d->thumbBarDock->setShouldBeVisible(group.readEntry(d->configShowThumbbarEntry, false));
-    setAutoSaveSettings(EditorWindow::CONFIG_GROUP_NAME, true);
+    setAutoSaveSettings(configGroupName(), true);
     d->viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
 
     //-------------------------------------------------------------
@@ -250,7 +250,7 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     }
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(configGroupName());
     saveMainWindowSettings(group);
     saveSettings();
 
@@ -284,7 +284,7 @@ bool ImageWindow::queryClose()
 void ImageWindow::setupUserArea()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(configGroupName());
 
     QWidget* const widget   = new QWidget(this);
     QHBoxLayout* const hlay = new QHBoxLayout(widget);

@@ -68,7 +68,6 @@
 #include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
-#include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
 #include <kopenwithdialog.h>
@@ -142,12 +141,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-const QString EditorWindow::CONFIG_GROUP_NAME = "ImageViewer Settings";
-
 EditorWindow::EditorWindow(const char* const name)
     : DXmlGuiWindow(0),
       d(new Private)
 {
+    setConfigGroupName(QLatin1String("ImageViewer Settings"));
     setObjectName(name);
     setWindowFlags(Qt::Window);
     setFullScreenOptions(FS_EDITOR);
@@ -605,8 +603,6 @@ void EditorWindow::setupStandardActions()
 
     createSettingsActions();
 
-    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
-
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
@@ -766,23 +762,6 @@ void EditorWindow::slotAboutToShowRedoMenu()
     }
 }
 
-void EditorWindow::slotConfToolbars()
-{
-    KConfigGroup group(KSharedConfig::openConfig(), CONFIG_GROUP_NAME);
-    saveMainWindowSettings(group);
-    KEditToolBar dlg(factory(), this);
-
-    connect(&dlg, SIGNAL(newToolbarConfig()),
-            this, SLOT(slotNewToolbarConfig()));
-
-    dlg.exec();
-}
-
-void EditorWindow::slotNewToolbarConfig()
-{
-    applyMainWindowSettings(KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME));
-}
-
 void EditorWindow::slotIncreaseZoom()
 {
     m_stackView->increaseZoom();
@@ -912,7 +891,7 @@ void EditorWindow::unLoadImagePlugins()
 void EditorWindow::readStandardSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(configGroupName());
 
     // Restore Canvas layout
     if (group.hasKey(d->configVerticalSplitterSizesEntry) && m_vSplitter)
@@ -947,7 +926,7 @@ void EditorWindow::applyStandardSettings()
 
     // -- GUI Settings -------------------------------------------------------
 
-    KConfigGroup group = KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
+    KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
 
     d->legacyUpdateSplitterState(group);
     m_splitter->restoreState(group);
@@ -975,7 +954,7 @@ void EditorWindow::applyIOSettings()
 {
     // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
 
-    KConfigGroup group = KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
+    KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
 
     m_IOFileSettings->JPEGCompression     = JPEGSettings::convertCompressionForLibJpeg(group.readEntry(d->configJpegCompressionEntry, 75));
 
@@ -1047,7 +1026,7 @@ void EditorWindow::applyColorManagementSettings()
 void EditorWindow::saveStandardSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(configGroupName());
 
     group.writeEntry(d->configAutoZoomEntry, d->zoomFitToWindowAction->isChecked());
     m_splitter->saveState(group);
@@ -1865,7 +1844,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 
     // restore old settings for the dialog
     KSharedConfig::Ptr config         = KSharedConfig::openConfig();
-    KConfigGroup group                = config->group(CONFIG_GROUP_NAME);
+    KConfigGroup group                = config->group(configGroupName());
     const QString optionLastExtension = "LastSavedImageExtension";
     QString ext                       = group.readEntry(optionLastExtension, "png");
 
@@ -2779,7 +2758,7 @@ void EditorWindow::slotSelectToolsMenuAboutToShow()
 void EditorWindow::slotThemeChanged()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(configGroupName());
 
     if (!group.readEntry(d->configUseThemeBackgroundColorEntry, true))
     {

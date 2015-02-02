@@ -51,8 +51,10 @@
 #include <klocalizedstring.h>
 #include <khelpclient.h>
 #include <kwindowconfig.h>
+#include <ksharedconfig.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
+#include <kedittoolbar.h>
 
 // Local includes
 
@@ -135,12 +137,15 @@ public:
     QAction*                 showMenuBarAction;
     DAboutData*              about;
     DLogoAction*             anim;
+
+    QString                  configGroupName;
 };
 
 // --------------------------------------------------------------------------------------------------------
 
 DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
-    : KXmlGuiWindow(parent, f), d(new Private)
+    : KXmlGuiWindow(parent, f),
+      d(new Private)
 {
     m_animLogo = 0;
     installEventFilter(this);
@@ -149,6 +154,16 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 DXmlGuiWindow::~DXmlGuiWindow()
 {
     delete d;
+}
+
+void DXmlGuiWindow::setConfigGroupName(const QString& name)
+{
+    d->configGroupName = name;
+}
+
+QString DXmlGuiWindow::configGroupName() const
+{
+    return d->configGroupName;
 }
 
 void DXmlGuiWindow::closeEvent(QCloseEvent* e)
@@ -225,6 +240,7 @@ void DXmlGuiWindow::createSettingsActions()
     KStandardAction::configureNotifications(this,             SLOT(slotConfNotifications()), actionCollection());
     KStandardAction::keyBindings(this,                        SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::preferences(this,                        SLOT(slotSetup()),             actionCollection());
+    KStandardAction::configureToolbars(this,                  SLOT(slotConfToolbars()),      actionCollection());
 }
 
 QAction* DXmlGuiWindow::showMenuBarAction() const
@@ -252,6 +268,25 @@ void DXmlGuiWindow::editKeyboardShortcuts(KActionCollection* const extraac, cons
         dialog.addCollection(extraac, actitle);
 
     dialog.configure();
+}
+
+void DXmlGuiWindow::slotConfToolbars()
+{
+    KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
+    saveMainWindowSettings(group);
+
+    KEditToolBar dlg(factory(), this);
+
+    connect(&dlg, SIGNAL(newToolbarConfig()),
+            this, SLOT(slotNewToolbarConfig()));
+
+    dlg.exec();
+}
+
+void DXmlGuiWindow::slotNewToolbarConfig()
+{
+    KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
+    applyMainWindowSettings(group);
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

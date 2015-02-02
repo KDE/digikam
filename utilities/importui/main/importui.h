@@ -219,8 +219,6 @@ private Q_SLOTS:
     void setFilter(Filter *);
 
     void slotToggleShowBar();
-    void slotConfToolbars();
-    void slotNewToolbarConfig();
     void slotSetup();
     void slotColorManagementOptionsChanged();
     void slotToggleColorManagedView();

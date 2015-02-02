@@ -38,7 +38,6 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kedittoolbar.h>
 #include <kwindowsystem.h>
 
 // Libkdcraw includes
@@ -96,8 +95,10 @@ bool LightTableWindow::lightTableWindowCreated()
 }
 
 LightTableWindow::LightTableWindow()
-    : DXmlGuiWindow(0), d(new Private)
+    : DXmlGuiWindow(0),
+      d(new Private)
 {
+    setConfigGroupName(QLatin1String("LightTable Settings"));
     setXMLFile("lighttablewindowui.rc");
 
     // --------------------------------------------------------
@@ -136,7 +137,7 @@ LightTableWindow::LightTableWindow()
     d->rightSideBar->populateTags();
 
     applySettings();
-    setAutoSaveSettings("LightTable Settings", true);
+    setAutoSaveSettings(configGroupName(), true);
 }
 
 LightTableWindow::~LightTableWindow()
@@ -152,7 +153,7 @@ LightTableWindow::~LightTableWindow()
 void LightTableWindow::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("LightTable Settings");
+    KConfigGroup group        = config->group(configGroupName());
 
     d->hSplitter->restoreState(group, "Horizontal Splitter State");
     d->barViewDock->setShouldBeVisible(group.readEntry("Show Thumbbar", true));
@@ -170,7 +171,7 @@ void LightTableWindow::readSettings()
 void LightTableWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("LightTable Settings");
+    KConfigGroup group        = config->group(configGroupName());
     d->hSplitter->saveState(group, "Horizontal Splitter State");
     group.writeEntry("Show Thumbbar", d->barViewDock->shouldBeVisible());
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
@@ -187,7 +188,7 @@ void LightTableWindow::writeSettings()
 void LightTableWindow::applySettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("LightTable Settings");
+    KConfigGroup group        = config->group(configGroupName());
     d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel", true);
     d->autoSyncPreview        = group.readEntry("Auto Sync Preview",     true);
     d->clearOnCloseAction->setChecked(group.readEntry("Clear On Close", false));
@@ -615,8 +616,6 @@ void LightTableWindow::setupActions()
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     createSettingsActions();
-
-    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
 
     // ---------------------------------------------------------------------------------
 
@@ -1463,23 +1462,6 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
 void LightTableWindow::slotProgressBarCancelButtonPressed()
 {
     d->cancelSlideShow = true;
-}
-
-void LightTableWindow::slotConfToolbars()
-{
-    KConfigGroup group(KSharedConfig::openConfig(), "LightTable Settings");
-    saveMainWindowSettings(group);
-    KEditToolBar dlg(factory(), this);
-
-    connect(&dlg, SIGNAL(newToolbarConfig()),
-            this, SLOT(slotNewToolbarConfig()));
-
-    dlg.exec();
-}
-
-void LightTableWindow::slotNewToolbarConfig()
-{
-    applyMainWindowSettings(KSharedConfig::openConfig()->group("LightTable Settings"));
 }
 
 void LightTableWindow::slotSetup()

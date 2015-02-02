@@ -360,7 +360,7 @@ void SetupAlbumView::applySettings()
     settings->setShowFolderTreeViewItemsCount(d->showFolderTreeViewItemsCount->isChecked());
     settings->saveSettings();
 
-    KConfigGroup group = settings->generalConfigGroup();
+    KConfigGroup group = KSharedConfig::openConfig()->group(settings->generalConfigGroupName());
     d->fullScreenSettings->saveSettings(group);
 
     // Method ThumbnailSize::setUseLargeThumbs() is not called here to prevent dysfunction between Thumbs DB and icon if
@@ -426,7 +426,7 @@ void SetupAlbumView::readSettings()
     d->previewShowIcons->setChecked(settings->getPreviewShowIcons());
     d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());
 
-    KConfigGroup group = settings->generalConfigGroup();
+    KConfigGroup group = KSharedConfig::openConfig()->group(settings->generalConfigGroupName());
     d->fullScreenSettings->readSettings(group);
 
     ThumbnailSize::readSettings(group);

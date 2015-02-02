@@ -78,6 +78,11 @@ public:
     explicit DXmlGuiWindow(QWidget* const parent=0, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
     virtual ~DXmlGuiWindow();
 
+    /** Manage config group name used by window instance to get/set settings from config file
+     */
+    void setConfigGroupName(const QString& name);
+    QString configGroupName() const;
+    
     /** Create common actions to setup all digiKam main windows.
      */
     void createSettingsActions();
@@ -155,6 +160,8 @@ private Q_SLOTS:
     void slotToggleFullScreen(bool);
     void slotShowMenuBar();
     void slotConfNotifications();
+    void slotConfToolbars();
+    void slotNewToolbarConfig();
 
     // Slots for common Help Actions
     virtual void slotComponentsInfo()          {};

@@ -66,7 +66,6 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kedittoolbar.h>
 #include <kmessagewidget.h>
 
 // Libkdcraw includes
@@ -128,8 +127,11 @@ ImportUI* ImportUI::m_instance = 0;
 ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
                    const QString& model, const QString& port,
                    const QString& path, int startIndex)
-    : DXmlGuiWindow(parent), d(new Private)
+    : DXmlGuiWindow(parent),
+      d(new Private)
 {
+    setConfigGroupName(QLatin1String("Camera Settings"));
+
     setXMLFile("importui.rc");
     setFullScreenOptions(FS_IMPORTUI);
 
@@ -166,7 +168,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     // -- Read settings --------------------------------------------------
 
     readSettings();
-    setAutoSaveSettings("Camera Settings", true);
+    setAutoSaveSettings(configGroupName(), true);
 
     // -------------------------------------------------------------------
 
@@ -613,8 +615,6 @@ void ImportUI::setupActions()
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     createSettingsActions();
-
-    KStandardAction::configureToolbars(this,                      SLOT(slotConfToolbars()),      ac);
 
     // ---------------------------------------------------------------------------------
 
@@ -2497,24 +2497,6 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
     return true;
 }
 
-void ImportUI::slotConfToolbars()
-{
-    KConfigGroup group = KSharedConfig::openConfig()->group("Camera Settings");
-    saveMainWindowSettings(group);
-
-    KEditToolBar dlg(factory(), this);
-
-    connect(&dlg, SIGNAL(newToolbarConfig()),
-            this, SLOT(slotNewToolbarConfig()));
-
-    dlg.exec();
-}
-
-void ImportUI::slotNewToolbarConfig()
-{
-    applyMainWindowSettings(KSharedConfig::openConfig()->group("Camera Settings"));
-}
-
 void ImportUI::slotSetup()
 {
     Setup::execDialog(this);
@@ -2696,7 +2678,7 @@ void ImportUI::toogleShowBar()
 void ImportUI::slotSetupChanged()
 {
     // Load full-screen options
-    KConfigGroup group = ApplicationSettings::instance()->generalConfigGroup();
+    KConfigGroup group = KSharedConfig::openConfig()->group(ApplicationSettings::instance()->generalConfigGroupName());
     readFullScreenSettings(group);
 
     d->view->applySettings();

@@ -149,7 +149,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     // Show splash-screen at start up.
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(configGroupName());
 
     if (group.readEntry("ShowSplash", true) && !qApp->isSessionRestored())
     {
@@ -207,7 +207,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
     readSettings();
     applySettings();
-    setAutoSaveSettings(EditorWindow::CONFIG_GROUP_NAME, true);
+    setAutoSaveSettings(configGroupName(), true);
 
     d->rightSideBar->loadState();
 
@@ -342,7 +342,7 @@ void ShowFoto::setupConnections()
 void ShowFoto::setupUserArea()
 {
     KSharedConfig::Ptr config  = KSharedConfig::openConfig();
-    KConfigGroup group         = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    KConfigGroup group         = config->group(configGroupName());
 
     QWidget* const widget      = new QWidget(this);
     QHBoxLayout* const hlay    = new QHBoxLayout(widget);
@@ -1160,7 +1160,7 @@ void ShowFoto::openFolder(const QUrl& url)
     // Determine sort ordering for the entries from configuration setting:
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    KConfigGroup group        = config->group(configGroupName());
 
     QDir::SortFlags flag;
     bool            reverse   = group.readEntry("ReverseSort", false);

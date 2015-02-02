@@ -100,7 +100,7 @@ public:
     void saveSettings();
     void emitSetupChanged();
 
-    KConfigGroup generalConfigGroup() const;
+    QString generalConfigGroupName() const;
 
     // -- MessageBox Notification ---------------------------------------------------
     
@@ -442,6 +442,8 @@ private:
 
     ApplicationSettings();
     ~ApplicationSettings();
+
+    KConfigGroup generalConfigGroup() const;
 
 private:
 

@@ -267,9 +267,6 @@ protected Q_SLOTS:
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();
 
-    void slotConfToolbars();
-    void slotNewToolbarConfig();
-
     void slotSelected(bool);
 
     void slotLoadingProgress(const QString& filePath, float progress);

@@ -32,10 +32,6 @@
 #include <QApplication>
 #include <QFontDatabase>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_config.h"
@@ -82,9 +78,14 @@ ApplicationSettings::~ApplicationSettings()
     delete d;
 }
 
+QString ApplicationSettings::generalConfigGroupName() const
+{
+    return d->configGroupGeneral;
+}
+    
 KConfigGroup ApplicationSettings::generalConfigGroup() const
 {
-    return d->config->group(d->configGroupGeneral);
+    return d->config->group(generalConfigGroupName());
 }
 
 void ApplicationSettings::emitSetupChanged()
