@@ -48,11 +48,11 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QApplication>
+#include <QFileDialog>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kfiledialog.h>
 #include <kurlrequester.h>
 
 // Local includes
@@ -527,8 +527,6 @@ void SetupCollectionModel::addCollection(int category)
         return;
     }
 
-    // Get path properlly under Windows. See bug #204480 for details.
-#ifdef _WIN32
     QString picturesPath;
 
     if (m_collections.count() > 0)
@@ -541,12 +539,9 @@ void SetupCollectionModel::addCollection(int category)
         picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
     }
 
-    QString path = KFileDialog::getExistingDirectory(QUrl::fromLocalFile(picturesPath), m_dialogParentWidget,
-                                                     i18n("Choose the folder containing your collection"));
-#else
-    QString path = KFileDialog::getExistingDirectory(QUrl("kfiledialog:///collectionlocation"), m_dialogParentWidget,
-                                                     i18n("Choose the folder containing your collection"));
-#endif
+    QString path = QFileDialog::getExistingDirectory(m_dialogParentWidget,
+                                                     i18n("Choose the folder containing your collection"),
+                                                     picturesPath);
 
     if (path.isEmpty())
     {
