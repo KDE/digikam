@@ -64,7 +64,7 @@ public:
     QButtonGroup* rawHandling;
 };
 
-RawPage::RawPage(KAssistantDialog* const dlg)
+RawPage::RawPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")),
       d(new Private)
 {

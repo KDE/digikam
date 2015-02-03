@@ -26,28 +26,27 @@
 
 // Qt includes
 
-#include <QScrollArea>
 #include <QString>
 #include <QPixmap>
+#include <QWizardPage>
 
-class KAssistantDialog;
-class KPageWidgetItem;
+// Local includes
+
+#include "assistantdlg.h"
 
 namespace Digikam
 {
 
-class AssistantDlgPage : public QScrollArea
+class AssistantDlgPage : public QWizardPage
 {
 
 public:
 
-    AssistantDlgPage(KAssistantDialog* const dlg, const QString& title);
+    AssistantDlgPage(AssistantDlg* const dlg, const QString& title);
     virtual ~AssistantDlgPage();
 
-    KPageWidgetItem* page() const;
-
     void setPageWidget(QWidget* const w);
-    void setLeftBottomPix(const QIcon &icon);
+    void setLeftBottomPix(const QIcon& icon);
 
 private:
 

@@ -66,7 +66,7 @@ public:
     QButtonGroup* metadataStorage;
 };
 
-MetadataPage::MetadataPage(KAssistantDialog* const dlg)
+MetadataPage::MetadataPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Metadata Storage to Files</b>")),
       d(new Private)
 {

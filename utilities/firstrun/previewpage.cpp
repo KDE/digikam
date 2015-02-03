@@ -64,7 +64,7 @@ public:
     QButtonGroup* previewBehavior;
 };
 
-PreviewPage::PreviewPage(KAssistantDialog* const dlg)
+PreviewPage::PreviewPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Preview Behavior</b>")),
       d(new Private)
 {

@@ -41,7 +41,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-StartScanPage::StartScanPage(KAssistantDialog* const dlg)
+StartScanPage::StartScanPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
 {
     RVBox* const vbox  = new RVBox(this);

@@ -37,7 +37,7 @@ class RawPage : public AssistantDlgPage
 
 public:
 
-    explicit RawPage(KAssistantDialog* const dlg);
+    explicit RawPage(AssistantDlg* const dlg);
     ~RawPage();
 
     void saveSettings();

@@ -37,7 +37,7 @@ class PreviewPage : public AssistantDlgPage
 
 public:
 
-    explicit PreviewPage(KAssistantDialog* const dlg);
+    explicit PreviewPage(AssistantDlg* const dlg);
     ~PreviewPage();
 
     void saveSettings();

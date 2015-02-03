@@ -44,7 +44,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-WelcomePage::WelcomePage(KAssistantDialog* const dlg)
+WelcomePage::WelcomePage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("Welcome to digiKam %1", QString(digikam_version_short)))
 {
     RVBox* const vbox   = new RVBox(this);

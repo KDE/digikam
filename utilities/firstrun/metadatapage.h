@@ -37,7 +37,7 @@ class MetadataPage : public AssistantDlgPage
 
 public:
 
-    explicit MetadataPage(KAssistantDialog* const dlg);
+    explicit MetadataPage(AssistantDlg* const dlg);
     ~MetadataPage();
 
     void saveSettings();

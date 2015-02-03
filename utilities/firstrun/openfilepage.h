@@ -37,7 +37,7 @@ class OpenFilePage : public AssistantDlgPage
 
 public:
 
-    explicit OpenFilePage(KAssistantDialog* const dlg);
+    explicit OpenFilePage(AssistantDlg* const dlg);
     ~OpenFilePage();
 
     void saveSettings();

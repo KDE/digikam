@@ -67,7 +67,7 @@ public:
     QButtonGroup* openFileBehavior;
 };
 
-OpenFilePage::OpenFilePage(KAssistantDialog* const dlg)
+OpenFilePage::OpenFilePage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Open File Behavior</b>")),
       d(new Private)
 {

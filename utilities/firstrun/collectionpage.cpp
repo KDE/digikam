@@ -72,7 +72,7 @@ public:
     KUrlRequester* dbPathRequester;
 };
 
-CollectionPage::CollectionPage(KAssistantDialog* const dlg)
+CollectionPage::CollectionPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure where you keep your images and you will store database</b>")),
       d(new Private)
 {

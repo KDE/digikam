@@ -64,7 +64,7 @@ public:
     QButtonGroup* tooltipsBehavior;
 };
 
-TooltipsPage::TooltipsPage(KAssistantDialog* const dlg)
+TooltipsPage::TooltipsPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Enabled Contextual Tooltips</b>")),
       d(new Private)
 {

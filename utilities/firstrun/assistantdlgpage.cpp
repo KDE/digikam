@@ -30,14 +30,15 @@
 #include <QApplication>
 #include <QStyle>
 #include <QStandardPaths>
-
-// KDE includes
-
-#include <kassistantdialog.h>
+#include <QScrollArea>
 
 // Libkdcraw includes
 
 #include <rwidgetutils.h>
+
+// Local includes
+
+#include "assistantdlg.h"
 
 using namespace KDcrawIface;
 
@@ -52,27 +53,29 @@ public:
         iconSize(qApp->style()->pixelMetric(QStyle::PM_MessageBoxIconSize,  0, qApp->activeWindow())),
         logo(0),
         leftBottomPix(0),
-        hlay(0),
-        page(0)
+        hlay(0)
     {
     }
 
-    int              iconSize;
+    int          iconSize;
 
-    QLabel*          logo;
-    QLabel*          leftBottomPix;
+    QLabel*      logo;
+    QLabel*      leftBottomPix;
 
-    QHBoxLayout*     hlay;
-
-    KPageWidgetItem* page;
+    QHBoxLayout* hlay;
 };
 
-AssistantDlgPage::AssistantDlgPage(KAssistantDialog* const dlg, const QString& title)
-    : QScrollArea(dlg), d(new Private)
+AssistantDlgPage::AssistantDlgPage(AssistantDlg* const dlg, const QString& title)
+    : QWizardPage(dlg),
+      d(new Private)
 {
-    QWidget* const panel = new QWidget(viewport());
-    setWidget(panel);
-    setWidgetResizable(true);
+    setTitle(title);
+
+    QScrollArea* const sv = new QScrollArea(this);
+    QWidget* const panel  = new QWidget(sv->viewport());
+    sv->setWidget(panel);
+    sv->setWidgetResizable(true);
+    sv->setWidget(panel);
 
     d->hlay           = new QHBoxLayout(panel);
     RVBox* const vbox = new RVBox(panel);
@@ -92,20 +95,19 @@ AssistantDlgPage::AssistantDlgPage(KAssistantDialog* const dlg, const QString& t
 
     d->hlay->addWidget(vbox);
     d->hlay->addWidget(line);
-    d->hlay->setMargin(0);
+    d->hlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-
-    d->page = dlg->addPage(this, title);
+    
+    QVBoxLayout* const layout = new QVBoxLayout;
+    layout->addWidget(sv);
+    setLayout(layout);
+     
+    dlg->addPage(this);
 }
 
 AssistantDlgPage::~AssistantDlgPage()
 {
     delete d;
-}
-
-KPageWidgetItem* AssistantDlgPage::page() const
-{
-    return d->page;
 }
 
 void AssistantDlgPage::setPageWidget(QWidget* const w)

@@ -28,17 +28,12 @@
 
 #include <QString>
 #include <QWidget>
-
-// KDE includes
-
-#include <kassistantdialog.h>
-
-class KPageWidgetItem;
+#include <QWizard>
 
 namespace Digikam
 {
 
-class AssistantDlg : public KAssistantDialog
+class AssistantDlg : public QWizard
 {
     Q_OBJECT
 
@@ -48,7 +43,7 @@ public:
     ~AssistantDlg();
 
     QString firstAlbumPath() const;
-    QString databasePath() const;
+    QString databasePath()   const;
 
 public Q_SLOTS:
 

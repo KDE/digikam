@@ -73,8 +73,13 @@ public:
 };
 
 AssistantDlg::AssistantDlg(QWidget* const parent)
-    : KAssistantDialog(parent), d(new Private)
+    : QWizard(parent),
+      d(new Private)
 {
+    setWizardStyle(QWizard::ClassicStyle);
+    setButtonLayout(QList<QWizard::WizardButton>() << QWizard::HelpButton << QWizard::BackButton << QWizard::CancelButton
+                                                   << QWizard::NextButton << QWizard::FinishButton);
+
     d->welcomePage    = new WelcomePage(this);    // First assistant page
     d->collectionPage = new CollectionPage(this);
     d->rawPage        = new RawPage(this);
@@ -87,12 +92,12 @@ AssistantDlg::AssistantDlg(QWidget* const parent)
 
     d->startScanPage  = new StartScanPage(this);  // Last assistant page
 
-    resize(600, 500);
+    resize(500, 500);
 
-    connect(finishButton(), SIGNAL(clicked()),
+    connect(button(QWizard::FinishButton), SIGNAL(clicked()),
             this, SLOT(slotFinishPressed()));
 
-    connect(buttonBox(), SIGNAL(helpRequested()),
+    connect(this, SIGNAL(helpRequested()),
             this, SLOT(slotHelp()));
 }
 
@@ -118,7 +123,7 @@ QString AssistantDlg::databasePath() const
 
 void AssistantDlg::next()
 {
-    if (currentPage() == d->collectionPage->page())
+    if (currentPage() == d->collectionPage)
     {
         if (!d->collectionPage->checkSettings())
         {
@@ -126,7 +131,7 @@ void AssistantDlg::next()
         }
     }
 
-    KAssistantDialog::next();
+    QWizard::next();
 }
 
 void AssistantDlg::slotFinishPressed()
