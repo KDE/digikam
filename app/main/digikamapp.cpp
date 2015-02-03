@@ -646,15 +646,15 @@ void DigikamApp::setupAccelerators()
     ac->addAction("last_image", lastImageAction);
     ac->setDefaultShortcuts(lastImageAction, KStandardShortcut::end());
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
-
-    d->cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
-    // need to remove shift+del from cut action,
-    // else the shortcut for Delete permanently collides with secondary shortcut of Cut
-#pragma message("PORT QT5")
-//    QKeySequence cutShortcut = d->cutItemsAction->shortcut();
-//    cutShortcut.remove(Qt::SHIFT | Qt::Key_Delete, QKeySequence::KeepEmpty);
-//    ac->setDefaultShortcut(d->cutItemsAction, cutShortcut);
+    
+    d->cutItemsAction = new QAction(i18n("Cu&t"), this); 
+    d->cutItemsAction->setIcon(QIcon::fromTheme("edit-cut"));
+    d->cutItemsAction->setWhatsThis(i18n("Cut selection to clipboard"));
     ac->addAction("cut_album_selection", d->cutItemsAction);
+    // NOTE: shift+del keyboard shortcut must not be assigned to Cut action
+    // else the shortcut for Delete permanently collides with secondary shortcut of Cut
+    ac->setDefaultShortcut(d->cutItemsAction, Qt::CTRL + Qt::Key_X);
+    connect(d->cutItemsAction, SIGNAL(triggered()), this, SIGNAL(signalCutAlbumItemsSelection()));
 
     d->copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
     ac->addAction("copy_album_selection", d->copyItemsAction);
