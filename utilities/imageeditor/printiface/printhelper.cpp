@@ -178,7 +178,7 @@ void PrintHelper::print(DImg& doc)
                                        QList<QWidget*>() << optionsPage,
                                        d->parent));
     dialog->setWindowTitle(i18n("Print Image"));
-    bool wantToPrint = dialog->exec();
+    bool wantToPrint = (dialog->exec() == QDialog::Accepted);
 
     optionsPage->saveConfig();
 
