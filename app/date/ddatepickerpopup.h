@@ -128,8 +128,8 @@ private:
 
 private:
 
-    class DDatePickerPopupPriv;
-    DDatePickerPopupPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( DDatePickerPopup::Items )

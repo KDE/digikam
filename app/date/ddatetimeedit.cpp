@@ -49,17 +49,20 @@ public:
     DDateEdit* datePopUp;
 };
 
-DDateTimeEdit::DDateTimeEdit(QWidget* parent, const char* const name)
-    : RHBox(parent), d(new Private)
+DDateTimeEdit::DDateTimeEdit(QWidget* const parent, const char* const name)
+    : RHBox(parent),
+      d(new Private)
 {
     setObjectName(name);
 
     d->datePopUp = new DDateEdit(this, "datepopup");
     d->timePopUp = new QTimeEdit(QTime::currentTime(), this);
 
-    connect(d->datePopUp, &DDateEdit::dateChanged, this, &DDateTimeEdit::slotDateTimeChanged);
+    connect(d->datePopUp, &DDateEdit::dateChanged,
+            this, &DDateTimeEdit::slotDateTimeChanged);
 
-    connect(d->timePopUp, &QTimeEdit::timeChanged, this, &DDateTimeEdit::slotDateTimeChanged);
+    connect(d->timePopUp, &QTimeEdit::timeChanged,
+            this, &DDateTimeEdit::slotDateTimeChanged);
 }
 
 DDateTimeEdit::~DDateTimeEdit()

@@ -42,28 +42,29 @@ class DDatePickerAction : public QWidgetAction
 {
 public:
 
-    DDatePickerAction( KDatePicker* widget, QObject* parent )
-        : QWidgetAction( parent ),
-          m_datePicker( widget ), m_originalParent( widget->parentWidget() )
+    DDatePickerAction(KDatePicker* const widget, QObject* const parent)
+        : QWidgetAction(parent),
+          m_datePicker(widget),
+          m_originalParent(widget->parentWidget())
     {
     }
 
 protected:
 
-    QWidget* createWidget( QWidget* parent )
+    QWidget* createWidget(QWidget* parent) 
     {
-        m_datePicker->setParent( parent );
+        m_datePicker->setParent(parent);
         return m_datePicker;
     }
 
-    void deleteWidget( QWidget* widget )
+    void deleteWidget(QWidget* const widget)
     {
-        if ( widget != m_datePicker )
+        if (widget != m_datePicker)
         {
             return;
         }
 
-        m_datePicker->setParent( m_originalParent );
+        m_datePicker->setParent(m_originalParent);
     }
 
 private:
@@ -74,11 +75,11 @@ private:
 
 // ---------------------------------------------------------------------------------------
 
-class DDatePickerPopup::DDatePickerPopupPriv
+class DDatePickerPopup::Private
 {
 public:
 
-    DDatePickerPopupPriv() :
+    Private() :
         datePicker(0)
     {
     }
@@ -87,18 +88,21 @@ public:
     Items        items;
 };
 
-DDatePickerPopup::DDatePickerPopup( Items items, const QDate& date, QWidget* parent )
-    : QMenu( parent ), d(new DDatePickerPopupPriv)
+DDatePickerPopup::DDatePickerPopup(Items items, const QDate& date, QWidget* const parent)
+    : QMenu(parent),
+      d(new Private)
 {
     d->items      = items;
-    d->datePicker = new KDatePicker( this );
-    d->datePicker->setCloseButton( false );
+    d->datePicker = new KDatePicker(this);
+    d->datePicker->setCloseButton(false);
 
-    connect(d->datePicker, &KDatePicker::dateEntered, this, &DDatePickerPopup::slotDateChanged);
+    connect(d->datePicker, &KDatePicker::dateEntered,
+            this, &DDatePickerPopup::slotDateChanged);
 
-    connect(d->datePicker, &KDatePicker::dateSelected, this, &DDatePickerPopup::slotDateChanged);
+    connect(d->datePicker, &KDatePicker::dateSelected,
+            this, &DDatePickerPopup::slotDateChanged);
 
-    d->datePicker->setDate( date );
+    d->datePicker->setDate(date);
 
     buildMenu();
 }
@@ -157,9 +161,9 @@ KDatePicker* DDatePickerPopup::datePicker() const
     return d->datePicker;
 }
 
-void DDatePickerPopup::setDate( const QDate& date )
+void DDatePickerPopup::setDate(const QDate& date)
 {
-    d->datePicker->setDate( date );
+    d->datePicker->setDate(date);
 }
 
 #if 0
@@ -214,7 +218,7 @@ void DDatePickerPopup::slotYesterday()
 void DDatePickerPopup::slotPrevFriday()
 {
     QDate date = QDate::currentDate();
-    int day = date.dayOfWeek();
+    int day    = date.dayOfWeek();
 
     if ( day < 6 )
     {

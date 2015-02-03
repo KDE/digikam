@@ -116,7 +116,8 @@ public:
 };
 
 TimeLineWidget::TimeLineWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setMouseTracking(true);
@@ -133,9 +134,11 @@ TimeLineWidget::TimeLineWidget(QWidget* const parent)
     d->slotNextTimer->setInterval(10);
     d->slotPreviousTimer->setInterval(10);
 
-    connect(d->slotNextTimer, &QTimer::timeout, this, &TimeLineWidget::slotNext);
+    connect(d->slotNextTimer, &QTimer::timeout,
+            this, &TimeLineWidget::slotNext);
 
-    connect(d->slotPreviousTimer, &QTimer::timeout, this, &TimeLineWidget::slotPrevious);
+    connect(d->slotPreviousTimer, &QTimer::timeout,
+            this, &TimeLineWidget::slotPrevious);
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));

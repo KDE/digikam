@@ -103,7 +103,8 @@ public:
 };
 
 MonthWidget::MonthWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     init();
 
@@ -116,7 +117,8 @@ MonthWidget::MonthWidget(QWidget* const parent)
     d->timer->setSingleShot(true);
     d->timer->setInterval(150);
 
-    connect(d->timer, &QTimer::timeout, this, &MonthWidget::updateDays);
+    connect(d->timer, &QTimer::timeout,
+            this, &MonthWidget::updateDays);
 }
 
 MonthWidget::~MonthWidget()
@@ -428,19 +430,24 @@ void MonthWidget::connectModel()
 {
     if (d->model)
     {
-        connect(d->model, &ImageFilterModel::destroyed, this, &MonthWidget::slotModelDestroyed);
+        connect(d->model, &ImageFilterModel::destroyed,
+                this, &MonthWidget::slotModelDestroyed);
 
-        connect(d->model, &ImageFilterModel::rowsInserted, this, &MonthWidget::triggerUpdateDays);
+        connect(d->model, &ImageFilterModel::rowsInserted,
+                this, &MonthWidget::triggerUpdateDays);
 
-        connect(d->model, &ImageFilterModel::rowsRemoved, this, &MonthWidget::triggerUpdateDays);
+        connect(d->model, &ImageFilterModel::rowsRemoved,
+                this, &MonthWidget::triggerUpdateDays);
 
-        connect(d->model, &ImageFilterModel::modelReset, this, &MonthWidget::triggerUpdateDays);
+        connect(d->model, &ImageFilterModel::modelReset,
+                this, &MonthWidget::triggerUpdateDays);
+/*
+        connect(d->model, SIGNAL(triggerUpdateDays()),
+                this, SLOT(triggerUpdateDays()));
 
-        //connect(d->model, SIGNAL(triggerUpdateDays()),
-        //        this, SLOT(triggerUpdateDays()));
-
-        //connect(d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-        //        this, SLOT(triggerUpdateDays()));
+        connect(d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                this, SLOT(triggerUpdateDays()));
+*/
     }
 }
 

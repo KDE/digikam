@@ -58,7 +58,7 @@ public:
      * @param parent the parent widget
      * @param name the name of the widget
      */
-    DDateTimeEdit(QWidget* parent, const char* const name);
+    DDateTimeEdit(QWidget* const parent, const char* const name);
 
     /**
      * destructor
