@@ -33,7 +33,6 @@
 
 #include <klocalizedstring.h>
 
-#include <kio/job.h>
 #include <kio/deletejob.h>
 #include <kio/jobuidelegate.h>
 

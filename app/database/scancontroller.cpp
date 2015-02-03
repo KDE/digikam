@@ -53,8 +53,6 @@
 #include "collectionlocation.h"
 #include "filereadwritelock.h"
 #include "databasewatch.h"
-#include "databasechangesets.h"
-#include "imageinfo.h"
 #include "dprogressdlg.h"
 #include "dmetadata.h"
 #include "applicationsettings.h"
