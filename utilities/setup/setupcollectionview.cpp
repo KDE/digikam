@@ -35,11 +35,7 @@
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QHBoxLayout>
-#include <QPushButton>
-#include <QSignalMapper>
-#include <QStyledItemDelegate>
 #include <QMessageBox>
-#include <QToolButton>
 #include <QStandardPaths>
 #include <QLineEdit>
 #include <QUrl>
@@ -53,7 +49,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurlrequester.h>
 
 // Local includes
 
@@ -65,50 +60,6 @@
 
 namespace Digikam
 {
-
-// ------------- Delegate ----------------- //
-
-class SetupCollectionDelegate : public KWidgetItemDelegate
-{
-    Q_OBJECT
-
-public:
-
-    SetupCollectionDelegate(QAbstractItemView* const view, QObject* const parent = 0);
-    ~SetupCollectionDelegate();
-
-    virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual bool     editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index);
-    virtual void     paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual void     setEditorData(QWidget* editor, const QModelIndex& index) const;
-    virtual void     setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
-    virtual QSize    sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual void     updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-
-    virtual QList<QWidget*> createItemWidgets(const QModelIndex& index) const;
-    virtual void            updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const;
-
-Q_SIGNALS:
-
-    void categoryButtonPressed(int mappedId);
-    void buttonPressed(int mappedId);
-
-protected:
-
-    QStyledItemDelegate* m_styledDelegate;
-
-    QPushButton*         m_samplePushButton;
-    QToolButton*         m_sampleToolButton;
-    int                  m_categoryMaxStyledWidth;
-
-    QSignalMapper*       m_categoryButtonMapper;
-    QSignalMapper*       m_buttonMapper;
-};
-
-// for delegate
-#include "setupcollectionview.h"
-
-// -----------------------------------------------------------------------
 
 SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* const view, QObject* const parent)
     : KWidgetItemDelegate(view, parent),
