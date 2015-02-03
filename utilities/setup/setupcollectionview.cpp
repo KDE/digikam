@@ -166,8 +166,8 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
 void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
                                                 const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const
 {
-    QPushButton* pushButton = static_cast<QPushButton*>(widgets.at(0));
-    QToolButton* toolButton = static_cast<QToolButton*>(widgets.at(1));
+    QPushButton* const pushButton = static_cast<QPushButton*>(widgets.at(0));
+    QToolButton* const toolButton = static_cast<QToolButton*>(widgets.at(1));
 
     if (index.data(SetupCollectionModel::IsCategoryRole).toBool())
     {
@@ -296,9 +296,9 @@ void SetupCollectionTreeView::modelLoadedCollections()
     // This is more difficult because we need to ignore the width of the category entries,
     // which are formally location in the first column (although spanning the whole line).
     // resizeColumnToContents fails therefore.
-    SetupCollectionModel* collectionModel = static_cast<SetupCollectionModel*>(model());
+    SetupCollectionModel* const collectionModel = static_cast<SetupCollectionModel*>(model());
     QModelIndex categoryIndex = collectionModel->indexForCategory(SetupCollectionModel::CategoryLocal);
-    QModelIndex firstChildOfFirstCategory = collectionModel->index(0, SetupCollectionModel::ColumnStatus, categoryIndex);
+    QModelIndex firstChildOfFirstCategory       = collectionModel->index(0, SetupCollectionModel::ColumnStatus, categoryIndex);
     QSize hint = sizeHintForIndex(firstChildOfFirstCategory);
     setColumnWidth(SetupCollectionModel::ColumnStatus, hint.width() + indentation());
 }
@@ -306,18 +306,23 @@ void SetupCollectionTreeView::modelLoadedCollections()
 // ------------- Model ----------------- //
 
 SetupCollectionModel::Item::Item()
-    : parentId(INTERNALID), deleted(false)
+    : parentId(INTERNALID),
+      deleted(false)
 {
 }
 
 SetupCollectionModel::Item::Item(const CollectionLocation& location)
-    : location(location), deleted(false)
+    : location(location),
+      deleted(false)
 {
     parentId = SetupCollectionModel::typeToCategory(location.type());
 }
 
 SetupCollectionModel::Item::Item(const QString& path, const QString& label, SetupCollectionModel::Category category)
-    : label(label), path(path), parentId(category), deleted(false)
+    : label(label),
+      path(path),
+      parentId(category),
+      deleted(false)
 {
 }
 
@@ -336,7 +341,8 @@ SetupCollectionModel::Item::Item(const QString& path, const QString& label, Setu
 */
 
 SetupCollectionModel::SetupCollectionModel(QObject* const parent)
-    : QAbstractItemModel(parent), m_dialogParentWidget(0)
+    : QAbstractItemModel(parent),
+      m_dialogParentWidget(0)
 {
 }
 
@@ -642,14 +648,16 @@ void SetupCollectionModel::addCollection(int category)
 //This code works, but is currently not used. Was intended as a workaround for 219876.
 void SetupCollectionModel::emitDataChangedForChildren(const QModelIndex& parent)
 {
-    int rows = rowCount(parent);
+    int rows    = rowCount(parent);
     int columns = columnCount(parent);
     emit dataChanged(index(0, 0, parent), index(rows, columns, parent));
+
     for (int r = 0; r < rows; ++r)
     {
         for (int c = 0; c < columns; ++c)
         {
             QModelIndex i = index(r, c, parent);
+
             if (i.isValid())
                 emitDataChangedForChildren(i);
         }
@@ -1041,7 +1049,7 @@ QList<QModelIndex> SetupCollectionModel::categoryIndexes() const
 
 QModelIndex SetupCollectionModel::indexForId(int id, int column) const
 {
-    int row = 0;
+    int   row             = 0;
     const Item& indexItem = m_collections.at(id);
 
     for (int i = 0; i < m_collections.count(); ++i)
@@ -1099,5 +1107,3 @@ int SetupCollectionModel::buttonMapId(const QModelIndex& index) const
 }
 
 } // namespace Digikam
-
-#include "setupcollectionview.moc"
