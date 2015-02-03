@@ -52,7 +52,6 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "filereadwritelock.h"
-#include "loadingcache.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
 #include "imageinfo.h"
@@ -246,29 +245,6 @@ public:
 };
 
 // ------------------------------------------------------------------------------
-
-class ScanControllerLoadingCacheFileWatch : public ClassicLoadingCacheFileWatch
-{
-    Q_OBJECT
-
-    /* This class is derived from the ClassicLoadingCacheFileWatch,
-       which means it has the full functionality of the class
-       and only extends it by listening to CollectionScanner information
-    */
-
-public:
-
-    ScanControllerLoadingCacheFileWatch();
-
-private Q_SLOTS:
-
-    void slotImageChanged(const ImageChangeset& changeset);
-};
-
-// ------------------------------------------------------------------------------
-
-// for ScanControllerLoadingCacheFileWatch
-#include "scancontroller.h"
 
 class ScanControllerCreator
 {
@@ -1162,5 +1138,3 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
 }
 
 }  // namespace Digikam
-
-#include "scancontroller.moc"
