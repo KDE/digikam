@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QObject>
+#include <QThread>
 
 // Local includes
 
@@ -36,12 +37,38 @@
 namespace Digikam
 {
 
-class DatabaseWatchPriv;
-
 class DIGIKAM_DATABASE_EXPORT DatabaseWatch : public QObject
 {
-
     Q_OBJECT
+
+public:
+
+    enum DatabaseMode
+    {
+        DatabaseMaster,
+        DatabaseSlave
+    };
+
+public:
+   
+    DatabaseWatch();
+
+    void initializeRemote(DatabaseMode mode);
+    void doAnyProcessing();
+    void setDatabaseIdentifier(const QString& identifier);
+    void setApplicationIdentifier(const QString& identifier);
+
+    // library-internal signal-trigger methods
+
+    void sendDatabaseChanged();
+
+    void sendImageChange(const ImageChangeset& changeset);
+    void sendImageTagChange(const ImageTagChangeset& changeset);
+    void sendCollectionImageChange(const CollectionImageChangeset& changeset);
+    void sendAlbumChange(const AlbumChangeset& changeset);
+    void sendTagChange(const TagChangeset& changeset);
+    void sendAlbumRootChange(const AlbumRootChangeset& changeset);
+    void sendSearchChange(const SearchChangeset& changeset);
 
 Q_SIGNALS:
 
@@ -127,38 +154,32 @@ Q_SIGNALS:
 
 public:
 
-    // library-internal initialization API
-
-    DatabaseWatch();
-
-    enum DatabaseMode
-    {
-        DatabaseMaster,
-        DatabaseSlave
-    };
-
-    void initializeRemote(DatabaseMode mode);
-    void doAnyProcessing();
-    void setDatabaseIdentifier(const QString& identifier);
-    void setApplicationIdentifier(const QString& identifier);
-
-    // library-internal signal-trigger methods
-
-    void sendDatabaseChanged();
-
-    void sendImageChange(const ImageChangeset& changeset);
-    void sendImageTagChange(const ImageTagChangeset& changeset);
-    void sendCollectionImageChange(const CollectionImageChangeset& changeset);
-    void sendAlbumChange(const AlbumChangeset& changeset);
-    void sendTagChange(const TagChangeset& changeset);
-    void sendAlbumRootChange(const AlbumRootChangeset& changeset);
-    void sendSearchChange(const SearchChangeset& changeset);
+    class Private;
 
 private:
 
-    DatabaseWatchPriv* const d;
+    Private* const d;
 };
 
+// ------------------------------------------------------------------------------------
+
+class DBusSignalListenerThread : public QThread
+{
+    Q_OBJECT
+
+public:
+
+    DBusSignalListenerThread(DatabaseWatch* const q, DatabaseWatch::Private* const d);
+    ~DBusSignalListenerThread();
+
+    virtual void run();
+
+private:
+
+    DatabaseWatch*          q;
+    DatabaseWatch::Private* d;
+};
+    
 } // namespace Digikam
 
 #endif // DATABASEATTRIBUTESWATCH_H

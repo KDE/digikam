@@ -32,7 +32,6 @@
 
 #include <QMetaType>
 #include <QtDBus>
-#include <QThread>
 
 // Local includes
 
@@ -45,24 +44,16 @@ namespace Digikam
 
 class DBusSignalListenerThread;
 
-class DatabaseWatchPriv
+class DatabaseWatch::Private
 {
 public:
 
-    DatabaseWatchPriv() :
+    Private() :
         mode(DatabaseWatch::DatabaseSlave),
         adaptor(0),
         slaveThread(0)
     {
     }
-
-    DatabaseWatch::DatabaseMode   mode;
-    QString                       databaseId;
-    QString                       applicationId;
-
-    Digikam_DatabaseWatchAdaptor* adaptor;
-
-    DBusSignalListenerThread*     slaveThread;
 
     void connectWithDBus(const char* dbusSignal, QObject* obj, const char* slot,
                          QDBusConnection connection = QDBusConnection::sessionBus())
@@ -78,53 +69,55 @@ public:
                            dbusSignal,
                            obj, slot);
     }
-};
-
-class DBusSignalListenerThread : public QThread
-{
-    Q_OBJECT
-
+    
 public:
 
-    DBusSignalListenerThread(DatabaseWatch* q, DatabaseWatchPriv* d)
-        : q(q), d(d)
-    {
-        start();
-    }
 
-    ~DBusSignalListenerThread()
-    {
-        quit();
-        wait();
-    }
+    DatabaseWatch::DatabaseMode   mode;
+    QString                       databaseId;
+    QString                       applicationId;
 
-    virtual void run()
-    {
-        // We cannot use sessionBus() here but need to connect on our own
-        QDBusConnection threadConnection = QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString("DigikamDatabaseSlaveConnection-%1").arg(getpid()));
+    Digikam_DatabaseWatchAdaptor* adaptor;
 
-        // DBus signals are received from within this thread and then sent with queued signals to the main thread
-        d->connectWithDBus("imageTagChange", q,
-                           SLOT(slotImageTagChangeDBus(QString,QString,Digikam::ImageTagChangeset)),
-                           threadConnection);
-        d->connectWithDBus("albumRootChange", q,
-                           SLOT(slotAlbumRootChangeDBus(QString,QString,Digikam::AlbumRootChangeset)),
-                           threadConnection);
-
-        // enter thread event loop
-        exec();
-    }
-
-private:
-
-    DatabaseWatch*     q;
-    DatabaseWatchPriv* d;
+    DBusSignalListenerThread*     slaveThread;
 };
 
 // ---------------------------------------------------------------------------------
 
+DBusSignalListenerThread::DBusSignalListenerThread(DatabaseWatch* const q, DatabaseWatch::Private* const d)
+    : q(q),
+      d(d)
+{
+    start();
+}
+
+DBusSignalListenerThread::~DBusSignalListenerThread()
+{
+    quit();
+    wait();
+}
+
+void DBusSignalListenerThread::run()
+{
+    // We cannot use sessionBus() here but need to connect on our own
+    QDBusConnection threadConnection = QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString("DigikamDatabaseSlaveConnection-%1").arg(getpid()));
+
+    // DBus signals are received from within this thread and then sent with queued signals to the main thread
+    d->connectWithDBus("imageTagChange", q,
+                        SLOT(slotImageTagChangeDBus(QString,QString,Digikam::ImageTagChangeset)),
+                        threadConnection);
+    d->connectWithDBus("albumRootChange", q,
+                        SLOT(slotAlbumRootChangeDBus(QString,QString,Digikam::AlbumRootChangeset)),
+                        threadConnection);
+
+    // enter thread event loop
+    exec();
+}
+
+// ---------------------------------------------------------------------------------
+
 DatabaseWatch::DatabaseWatch()
-    : d(new DatabaseWatchPriv)
+    : d(new Private)
 {
 }
 
@@ -285,8 +278,8 @@ void DatabaseWatch::slotImageChangeDBus(const QString& databaseIdentifier,
 }
 
 void DatabaseWatch::slotImageTagChangeDBus(const QString& databaseIdentifier,
-        const QString& applicationIdentifier,
-        const ImageTagChangeset& changeset)
+                                           const QString& applicationIdentifier,
+                                           const ImageTagChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier    == d->databaseId)
@@ -296,8 +289,8 @@ void DatabaseWatch::slotImageTagChangeDBus(const QString& databaseIdentifier,
 }
 
 void DatabaseWatch::slotCollectionImageChangeDBus(const QString& databaseIdentifier,
-        const QString& applicationIdentifier,
-        const CollectionImageChangeset& changeset)
+                                                  const QString& applicationIdentifier,
+                                                  const CollectionImageChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier    == d->databaseId)
@@ -340,8 +333,8 @@ void DatabaseWatch::slotAlbumRootChangeDBus(const QString& databaseIdentifier,
 }
 
 void DatabaseWatch::slotSearchChangeDBus(const QString& databaseIdentifier,
-        const QString& applicationIdentifier,
-        const SearchChangeset& changeset)
+                                         const QString& applicationIdentifier,
+                                         const SearchChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier    == d->databaseId)
@@ -351,5 +344,3 @@ void DatabaseWatch::slotSearchChangeDBus(const QString& databaseIdentifier,
 }
 
 } // namespace Digikam
-
-#include "databasewatch.moc"
