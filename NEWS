@@ -13,4 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 003 ==> 317599 - Port digiKam to KF5 and Qt5.
 004 ==> 342256 - digiKam Crash on Start.
 005 ==> 340933 - digiKam crash while tagging photos (Baloo database).
-006 ==> 
+006 ==> 343662 - Build Error regarding lensfuncameraselector.
+007 ==> 
