@@ -39,7 +39,6 @@
 
 // KDE includes
 
-#include <kpixmapsequence.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
@@ -57,6 +56,7 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "workflowmanager.h"
+#include "workingpixmap.h"
 
 namespace Digikam
 {
@@ -262,8 +262,6 @@ public:
         toolTip         = 0;
         toolTipItem     = 0;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
-#pragma message("PORT QT5")
-        progressPix     = KPixmapSequence("process-working", 22);
     }
 
     bool                 showTips;
@@ -283,7 +281,7 @@ public:
 
     QueueListViewItem*   toolTipItem;
 
-    KPixmapSequence      progressPix;
+    WorkingPixmap        progressPix;
 };
 
 QueueListView::QueueListView(QWidget* const parent)

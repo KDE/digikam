@@ -32,9 +32,9 @@
 #include <QPixmap>
 #include <QIcon>
 
-// KDE includes
+// Local includes
 
-#include <kpixmapsequence.h>
+#include "workingpixmap.h"
 
 namespace Digikam
 {
@@ -49,19 +49,14 @@ public:
         currentPixmap = 0;
     }
 
-    KPixmapSequence pixmaps;
-    int             currentPixmap;
-    QTimer          timer;
+    WorkingPixmap pixmaps;
+    int           currentPixmap;
+    QTimer        timer;
 };
 
 WorkingWidget::WorkingWidget(QWidget* const parent)
     : QLabel(parent), d(new Private)
 {
-    QPixmap pix = QIcon::fromTheme("process-working.png").pixmap(48);
-
-#pragma message("PORT QT5 (is this supposed to work?!)")
-    d->pixmaps = KPixmapSequence(pix);
-
     connect(&d->timer, SIGNAL(timeout()),
             this, SLOT(changeImage()));
 

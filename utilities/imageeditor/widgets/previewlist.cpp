@@ -34,7 +34,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kpixmapsequence.h>
 
 // Local includes
 
@@ -42,6 +41,7 @@
 #include "dimgthreadedfilter.h"
 #include "imageiface.h"
 #include "digikam_debug.h"
+#include "workingpixmap.h"
 
 namespace Digikam
 {
@@ -217,7 +217,6 @@ public:
     Private() :
         progressCount(0),
         progressTimer(0),
-        progressPix(KPixmapSequence("process-working", 22)),
         wrapper(0)
     {
     }
@@ -226,7 +225,7 @@ public:
 
     QTimer*               progressTimer;
 
-    KPixmapSequence       progressPix;
+    WorkingPixmap         progressPix;
 
     PreviewThreadWrapper* wrapper;
 };

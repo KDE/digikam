@@ -977,6 +977,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statesavingobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingpixmap.cpp
        )
 
     set(libnotificationmanager_SRCS

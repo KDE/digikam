@@ -54,7 +54,7 @@ public:
         if (host->objectName().isEmpty())
         {
             qCWarning(DIGIKAM_GENERAL_LOG) << "Object name for " << host
-                       << " is empty. Returning the default config group";
+                                           << " is empty. Returning the default config group";
         }
 
         return config->group(host->objectName());
