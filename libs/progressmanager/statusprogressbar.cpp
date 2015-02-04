@@ -75,7 +75,6 @@ public:
     bool                notify;
     QString             progressId;
     QString             title;
-#pragma message("avoid copying?")
     QIcon               icon;
 
     QWidget*            progressWidget;
@@ -86,7 +85,8 @@ public:
 };
 
 StatusProgressBar::StatusProgressBar(QWidget* const parent)
-    : QStackedWidget(parent), d(new Private)
+    : QStackedWidget(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
@@ -129,7 +129,7 @@ void StatusProgressBar::setNotify(bool b)
     d->notify = b;
 }
 
-void StatusProgressBar::setNotificationTitle(const QString& title, const QIcon &icon)
+void StatusProgressBar::setNotificationTitle(const QString& title, const QIcon& icon)
 {
     d->title = title;
     d->icon  = icon;
@@ -157,6 +157,7 @@ void StatusProgressBar::setProgressValue(int v)
     if (d->notify)
     {
         ProgressItem* const item = currentProgressItem();
+
         if (item)
         {
             item->setCompletedItems(v);
@@ -177,6 +178,7 @@ void StatusProgressBar::setProgressTotalSteps(int v)
     if (d->notify)
     {
         ProgressItem* const item = currentProgressItem();
+
         if (item)
             item->setTotalItems(v);
     }
@@ -190,6 +192,7 @@ void StatusProgressBar::setProgressText(const QString& text)
     if (d->notify)
     {
         ProgressItem* const item = currentProgressItem();
+
         if (item)
             item->setStatus(text);
     }
@@ -206,6 +209,7 @@ void StatusProgressBar::progressBarMode(int mode, const QString& text)
         if (d->notify)
         {
             ProgressItem* const item = currentProgressItem();
+
             if (item)
                 item->setComplete();
         }
@@ -218,7 +222,6 @@ void StatusProgressBar::progressBarMode(int mode, const QString& text)
 
         if (d->notify)
         {
-#pragma message("using isnull for checking whether there's a thumb or not may not be a good idea?")
             ProgressItem* const item = ProgressManager::createProgressItem(d->title, QString(), false, !d->icon.isNull());
             item->setTotalItems(d->progressBar->maximum());
             item->setCompletedItems(d->progressBar->value());
