@@ -59,7 +59,8 @@ public:
 };
 
 PreviewThreadWrapper::PreviewThreadWrapper(QObject* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
 }
 
@@ -165,7 +166,8 @@ public:
 };
 
 PreviewListItem::PreviewListItem(QListWidget* const parent)
-    : QListWidgetItem(parent), d(new Private)
+    : QListWidgetItem(parent),
+      d(new Private)
 {
 }
 
@@ -213,7 +215,7 @@ class PreviewList::Private
 {
 
 public:
-#pragma message("PORT QT5")
+
     Private() :
         progressCount(0),
         progressTimer(0),
@@ -231,7 +233,8 @@ public:
 };
 
 PreviewList::PreviewList(QObject* const /*parent*/)
-    : QListWidget(), d(new Private)
+    : QListWidget(),
+      d(new Private)
 {
     d->wrapper = new PreviewThreadWrapper(this);
 
