@@ -108,7 +108,7 @@ public:
     QRadioButton*  useTextRadioButton;
     QCheckBox*     useBackgroundCheckBox;
 
-    KUrlRequester* imageFileUrlRequester;
+    RFileSelector* imageFileUrlRequester;
     QLineEdit*     textEdit;
 
     QComboBox*     comboBox;
@@ -173,9 +173,9 @@ void WaterMark::registerSettingsWidget()
     imageSettingsGroupBoxLayout->addStretch(1);
     d->imageSettingsGroupBox->setLayout(imageSettingsGroupBoxLayout);
 
-    QLabel* const label = new QLabel();
-    d->imageFileUrlRequester = new KUrlRequester();
-    d->imageFileUrlRequester->setPlaceholderText(i18n("Click to select watermark image."));
+    QLabel* const label      = new QLabel();
+    d->imageFileUrlRequester = new RFileSelector();
+    d->imageFileUrlRequester->lineEdit()->setPlaceholderText(i18n("Click to select watermark image."));
     label->setText(i18n("Watermark image:"));
     imageSettingsGroupBoxLayout->addWidget(label);
     imageSettingsGroupBoxLayout->addWidget(d->imageFileUrlRequester);
@@ -289,7 +289,7 @@ void WaterMark::registerSettingsWidget()
     connect(d->useTextRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->imageFileUrlRequester, SIGNAL(textChanged(QString)),
+    connect(d->imageFileUrlRequester->lineEdit(), SIGNAL(textChanged(QString)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->fontChooserWidget, SIGNAL(currentFontChanged(QFont)),
@@ -353,7 +353,7 @@ void WaterMark::slotAssignSettings2Widget()
 {
     d->useImageRadioButton->setChecked(settings()["Use image"].toBool());
     d->useTextRadioButton->setChecked(!settings()["Use image"].toBool());
-    d->imageFileUrlRequester->setText(settings()["Watermark image"].toString());
+    d->imageFileUrlRequester->lineEdit()->setText(settings()["Watermark image"].toString());
     d->textEdit->setText(settings()["Text"].toString());
     d->fontChooserWidget->setFont(settings()["Font"].toString());
     d->fontColorButton->setColor(settings()["Color"].toString());
@@ -384,19 +384,19 @@ void WaterMark::slotSettingsChanged()
         d->textSettingsGroupBox->setVisible(true);
     }
 
-    settings.insert("Text",   d->textEdit->text());
-    settings.insert("Font",   d->fontChooserWidget->currentFont());
-    settings.insert("Color",  d->fontColorButton->color());
-    settings.insert("Text opacity", d->textOpacity->value());
-    settings.insert("Use background", d->useBackgroundCheckBox->isChecked());
-    settings.insert("Background color", d->backgroundColorButton->color());
+    settings.insert("Text",               d->textEdit->text());
+    settings.insert("Font",               d->fontChooserWidget->currentFont());
+    settings.insert("Color",              d->fontColorButton->color());
+    settings.insert("Text opacity",       d->textOpacity->value());
+    settings.insert("Use background",     d->useBackgroundCheckBox->isChecked());
+    settings.insert("Background color",   d->backgroundColorButton->color());
     settings.insert("Background opacity", d->backgroundOpacity->value());
 
-    settings.insert("Watermark image",   d->imageFileUrlRequester->text());
-    settings.insert("Placement", (int)d->comboBox->currentIndex());
-    settings.insert("Watermark size", (int)d->waterMarkSizePercent->value());
-    settings.insert("X margin", (int)d->xMarginInput->value());
-    settings.insert("Y margin", (int)d->yMarginInput->value());
+    settings.insert("Watermark image",    d->imageFileUrlRequester->lineEdit()->text());
+    settings.insert("Placement",          (int)d->comboBox->currentIndex());
+    settings.insert("Watermark size",     (int)d->waterMarkSizePercent->value());
+    settings.insert("X margin",           (int)d->xMarginInput->value());
+    settings.insert("Y margin",           (int)d->yMarginInput->value());
     BatchTool::slotSettingsChanged(settings);
 }
 
