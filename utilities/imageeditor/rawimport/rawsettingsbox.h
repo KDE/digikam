@@ -33,8 +33,6 @@
 #include "dimg.h"
 #include "digikam_export.h"
 
-class KUrlRequester;
-
 namespace Digikam
 {
 
@@ -75,7 +73,7 @@ private Q_SLOTS:
 
     void slotDemosaicingChanged();
     void slotResetCurve();
-    void slotFileDialogAboutToOpen(KUrlRequester* requester);
+    void slotFileDialogAboutToOpen();
 
 private:
 

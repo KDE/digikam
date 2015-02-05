@@ -44,6 +44,7 @@
 #include <dcrawsettingswidget.h>
 #include <rnuminput.h>
 #include <rexpanderbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -366,11 +367,11 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     connect(d->mainExposureInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalPostProcessingChanged()));
 
-    connect(d->decodingSettingsBox->inputProfileUrlEdit(), SIGNAL(openFileDialog(KUrlRequester*)),
-            this, SLOT(slotFileDialogAboutToOpen(KUrlRequester*)));
+    connect(d->decodingSettingsBox->inputProfileUrlEdit(), SIGNAL(signalOpenFileDialog()),
+            this, SLOT(slotFileDialogAboutToOpen()));
 
-    connect(d->decodingSettingsBox->outputProfileUrlEdit(), SIGNAL(openFileDialog(KUrlRequester*)),
-            this, SLOT(slotFileDialogAboutToOpen(KUrlRequester*)));
+    connect(d->decodingSettingsBox->outputProfileUrlEdit(), SIGNAL(signalOpenFileDialog()),
+            this, SLOT(slotFileDialogAboutToOpen()));
 }
 
 RawSettingsBox::~RawSettingsBox()
@@ -505,7 +506,7 @@ DRawDecoding RawSettingsBox::settings() const
     return settings;
 }
 
-void RawSettingsBox::slotFileDialogAboutToOpen(KUrlRequester* /*requester*/)
+void RawSettingsBox::slotFileDialogAboutToOpen()
 {
 #pragma message("PORT QT5")
     //requester->fileDialog()->setPreviewWidget(new ICCPreviewWidget(requester));
