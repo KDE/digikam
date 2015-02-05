@@ -46,13 +46,18 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurlrequester.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "digikam_config.h"
 #include "gpcamera.h"
 #include "dxmlguiwindow.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -96,7 +101,7 @@ public:
 
     QLineEdit*        titleEdit;
 
-    KUrlRequester*    umsMountURL;
+    RFileSelector*    umsMountURL;
 
     SearchTextBar*    searchBar;
 };
@@ -197,8 +202,9 @@ CameraSelection::CameraSelection(QWidget* const parent)
     QLabel* const umsMountLabel = new QLabel(umsMountBox);
     umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage cameras."));
 
-    d->umsMountURL = new KUrlRequester(QUrl::fromLocalFile("/mnt/camera"), umsMountBox);
-    d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
+    d->umsMountURL = new RFileSelector(umsMountBox);
+    d->umsMountURL->lineEdit()->setText(QLatin1String("/mnt/camera"));
+    d->umsMountURL->fileDialog()->setFileMode(QFileDialog::Directory);
     d->umsMountURL->setWhatsThis(i18n("<p>Set here the mount path to use on your computer. This "
                                       "option is only required if you use a <b>USB Mass Storage</b> "
                                       "camera.</p>"));
@@ -388,7 +394,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
             slotPortChanged();
         }
 
-        d->umsMountURL->setUrl(QUrl::fromLocalFile(path));
+        d->umsMountURL->lineEdit()->setText(path);
     }
 }
 
@@ -458,15 +464,15 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem* item, int)
         d->portPathComboBox->setEnabled(false);
 
         d->umsMountURL->setEnabled(true);
-        d->umsMountURL->clear();
-        d->umsMountURL->setUrl(QUrl::fromLocalFile("/mnt/camera"));
+        d->umsMountURL->lineEdit()->clear();
+        d->umsMountURL->lineEdit()->setText(QLatin1String("/mnt/camera"));
         return;
     }
     else
     {
         d->umsMountURL->setEnabled(true);
-        d->umsMountURL->clear();
-        d->umsMountURL->setUrl(QUrl::fromLocalFile("/"));
+        d->umsMountURL->lineEdit()->clear();
+        d->umsMountURL->lineEdit()->setText(QLatin1String("/"));
         d->umsMountURL->setEnabled(false);
     }
 
@@ -552,7 +558,7 @@ QString CameraSelection::currentPortPath() const
 
 QString CameraSelection::currentCameraPath() const
 {
-    return d->umsMountURL->url().toLocalFile();
+    return d->umsMountURL->lineEdit()->text();
 }
 
 void CameraSelection::slotOkClicked()
