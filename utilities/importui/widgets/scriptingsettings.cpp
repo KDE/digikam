@@ -35,7 +35,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurlrequester.h>
 #include <kconfiggroup.h>
 
 // Libkdcraw includes
@@ -65,7 +64,7 @@ public:
     }
 
     QLabel*        scriptLabel;
-    KUrlRequester* script;
+    RFileSelector* script;
     TooltipDialog* tooltipDialog;
     QToolButton*   tooltipToggleButton;
 };
@@ -87,10 +86,9 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
     QVBoxLayout* vlay      = new QVBoxLayout(this);
     d->scriptLabel         = new QLabel(i18n("Execute script for image:"), this);
     RHBox* hbox            = new RHBox(this);
-    d->script              = new KUrlRequester(hbox);
-    KFile::Modes mode      = KFile::File | KFile::ExistingOnly | KFile::LocalOnly;
-    d->script->setMode(mode);
-    d->script->setPlaceholderText(i18n("No script selected"));
+    d->script              = new RFileSelector(hbox);
+    d->script->fileDialog()->setFileMode(QFileDialog::ExistingFile);
+    d->script->lineEdit()->setPlaceholderText(i18n("No script selected"));
     d->tooltipToggleButton = new QToolButton(hbox);
     d->tooltipToggleButton->setIcon(QIcon::fromTheme("dialog-information"));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
@@ -116,17 +114,17 @@ ScriptingSettings::~ScriptingSettings()
 
 void ScriptingSettings::readSettings(KConfigGroup& group)
 {
-    d->script->setText(group.readEntry("Script", QString()));
+    d->script->lineEdit()->setText(group.readEntry("Script", QString()));
 }
 
 void ScriptingSettings::saveSettings(KConfigGroup& group)
 {
-    group.writeEntry("Script", d->script->text());
+    group.writeEntry("Script", d->script->lineEdit()->text());
 }
 
 void ScriptingSettings::settings(DownloadSettings* const settings) const
 {
-    settings->script = d->script->text();
+    settings->script = d->script->lineEdit()->text();
 }
 
 void ScriptingSettings::slotToolTipButtonToggled(bool /*checked*/)
