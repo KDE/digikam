@@ -149,7 +149,7 @@ void SetupDatabase::applySettings()
 
     if (d->databaseWidget->currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
-        QString newPath = d->databaseWidget->databasePathEdit->url().path();
+        QString newPath = d->databaseWidget->databasePathEdit->lineEdit()->text();
         QDir oldDir(d->databaseWidget->originalDbPath);
         QDir newDir(newPath);
 

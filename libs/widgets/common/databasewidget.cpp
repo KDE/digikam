@@ -95,8 +95,8 @@ void DatabaseWidget::setupMainArea()
                                             dbPathBox);
     d->databasePathLabel->setWordWrap(true);
 
-    databasePathEdit                                 = new KUrlRequester(dbPathBox);
-    databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
+    databasePathEdit                                 = new RFileSelector(dbPathBox);
+    databasePathEdit->fileDialog()->setFileMode(QFileDialog::Directory);
 
     QLabel* const databaseTypeLabel                  = new QLabel(i18n("Type"));
     databaseType                                     = new QComboBox();
@@ -227,18 +227,18 @@ void DatabaseWidget::slotDatabasePathEditedDelayed()
 
 void DatabaseWidget::slotDatabasePathEdited()
 {
-    QString newPath = databasePathEdit->text();
+    QString newPath = databasePathEdit->lineEdit()->text();
 
 #ifndef _WIN32
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
-        databasePathEdit->setUrl(QUrl::fromLocalFile(QDir::homePath() + QLatin1Char('/') + QDir::fromNativeSeparators(newPath)));
+        databasePathEdit->lineEdit()->setText(QDir::homePath() + QLatin1Char('/') + QDir::fromNativeSeparators(newPath));
     }
 
 #endif
 
-    databasePathEdit->setText(QDir::toNativeSeparators(newPath));
+    databasePathEdit->lineEdit()->setText(QDir::toNativeSeparators(newPath));
 
     checkDBPath();
 }
@@ -257,10 +257,10 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
         databasePathEdit->setVisible(true);
         d->expertSettings->setVisible(false);
 
-        connect(databasePathEdit, SIGNAL(urlSelected(QUrl)),
+        connect(databasePathEdit->fileDialog(), SIGNAL(urlSelected(QUrl)),
                 this, SLOT(slotChangeDatabasePath(QUrl)));
 
-        connect(databasePathEdit, SIGNAL(textChanged(QString)),
+        connect(databasePathEdit->lineEdit(), SIGNAL(textChanged(QString)),
                 this, SLOT(slotDatabasePathEditedDelayed()));
     }
     else
@@ -269,10 +269,10 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
         databasePathEdit->setVisible(false);
         d->expertSettings->setVisible(true);
         
-        disconnect(databasePathEdit, SIGNAL(urlSelected(QUrl)),
+        disconnect(databasePathEdit->fileDialog(), SIGNAL(urlSelected(QUrl)),
                    this, SLOT(slotChangeDatabasePath(QUrl)));
 
-        disconnect(databasePathEdit, SIGNAL(textChanged(QString)),
+        disconnect(databasePathEdit->lineEdit(), SIGNAL(textChanged(QString)),
                    this, SLOT(slotDatabasePathEditedDelayed()));
     }
 
@@ -329,9 +329,9 @@ void DatabaseWidget::checkDBPath()
 {
 //    bool dbOk          = false;
 //    bool pathUnchanged = true;
-    QString newPath    = databasePathEdit->url().toLocalFile();
+    QString newPath    = databasePathEdit->lineEdit()->text();
 
-    if (!databasePathEdit->url().path().isEmpty())
+    if (!databasePathEdit->lineEdit()->text().isEmpty())
     {
         QDir dbDir(newPath);
         QDir oldDir(originalDbPath);
@@ -347,7 +347,7 @@ void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const 
 {
     originalDbPath = settings->getDatabaseFilePath();
     originalDbType = settings->getDatabaseType();
-    databasePathEdit->setUrl(QUrl::fromLocalFile(settings->getDatabaseFilePath()));
+    databasePathEdit->lineEdit()->setText(settings->getDatabaseFilePath());
 
 #if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     internalServer->setChecked(settings->getInternalDatabaseServer());
@@ -393,7 +393,7 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
 
         if (parameters.databaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
         {
-            parameters.databaseName = QDir::cleanPath(databasePathEdit->url().toLocalFile() + '/' + "digikam4.db");
+            parameters.databaseName = QDir::cleanPath(databasePathEdit->lineEdit()->text() + '/' + "digikam4.db");
             parameters.databaseNameThumbnails = parameters.databaseName;
         }
         else

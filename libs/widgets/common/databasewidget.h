@@ -34,14 +34,16 @@
 #include <QUrl>
 #include <QCheckBox>
 
-// KDE includes
+// Libkdcraw includes
 
-#include <kurlrequester.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "applicationsettings.h"
 #include "databaseparameters.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -55,13 +57,10 @@ public:
     explicit DatabaseWidget(QWidget* const parent = 0);
     ~DatabaseWidget();
 
-public:
+public: 
 
     QString        originalDbPath;
     QString        originalDbType;
-    QComboBox*     databaseType;
-    QCheckBox*     internalServer;
-    QSpinBox*      hostPort;
 
     QLineEdit*     databaseName;
     QLineEdit*     databaseNameThumbnails;
@@ -69,8 +68,12 @@ public:
     QLineEdit*     connectionOptions;
     QLineEdit*     userName;
     QLineEdit*     password;
+    
+    QComboBox*     databaseType;
+    QSpinBox*      hostPort;
+    QCheckBox*     internalServer;
 
-    KUrlRequester* databasePathEdit;
+    RFileSelector* databasePathEdit;
 
 public:
 

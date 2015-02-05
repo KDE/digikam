@@ -78,7 +78,7 @@ public:
         return a;
     }
 
-    int findIndexAsChild(Album* const child)
+    int findIndexAsChild(Album* const child) const
     {
         // return index of child in the list of children of its parent
         Album* const parent = child->parent();
@@ -106,7 +106,7 @@ public:
         return i;
     }
 
-    int numberOfChildren(Album* const parent)
+    int numberOfChildren(Album* const parent) const
     {
         Album* a  = parent->firstChild();
         int count = 0;

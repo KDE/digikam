@@ -59,7 +59,7 @@ public:
     {
         /** The root album will be included as a single parent item
          *  with all top-level album as children
-	 */
+         */
         IncludeRootAlbum,
         /** The root album will not be included, but all top-level album
          *  are represented as top-level items in this view
