@@ -41,13 +41,18 @@
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kurlrequester.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "databaseparameters.h"
 #include "digikam_version.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -68,8 +73,8 @@ public:
     QString        rootAlbum;
     QString        dbPath;
 
-    KUrlRequester* rootAlbumPathRequester;
-    KUrlRequester* dbPathRequester;
+    RFileSelector* rootAlbumPathRequester;
+    RFileSelector* dbPathRequester;
 };
 
 CollectionPage::CollectionPage(AssistantDlg* const dlg)
@@ -105,9 +110,9 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
 
     textLabel1->setText(message);
 
-    d->rootAlbumPathRequester = new KUrlRequester(widget);
-    d->rootAlbumPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
-    d->rootAlbumPathRequester->setUrl(QUrl::fromLocalFile(picturesPath));
+    d->rootAlbumPathRequester = new RFileSelector(widget);
+    d->rootAlbumPathRequester->fileDialog()->setFileMode(QFileDialog::Directory);
+    d->rootAlbumPathRequester->lineEdit()->setText(picturesPath);
 
     QLabel* const textLabel3 = new QLabel(widget);
     textLabel3->setWordWrap(true);
@@ -117,9 +122,9 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
                              "and you cannot use a remote location on a networked server, "
                              "using NFS or Samba.</p>"));
 
-    d->dbPathRequester = new KUrlRequester(widget);
-    d->dbPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
-    d->dbPathRequester->setUrl(QUrl::fromLocalFile(picturesPath));
+    d->dbPathRequester = new RFileSelector(widget);
+    d->dbPathRequester->fileDialog()->setFileMode(QFileDialog::Directory);
+    d->dbPathRequester->lineEdit()->setText(picturesPath);
 
     vlayout->addWidget(textLabel1);
     vlayout->addWidget(d->rootAlbumPathRequester);
@@ -131,10 +136,10 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
     setPageWidget(widget);
     setLeftBottomPix(QIcon::fromTheme("server-database"));
 
-    connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(QUrl)),
+    connect(d->rootAlbumPathRequester->fileDialog(), SIGNAL(urlSelected(QUrl)),
             this, SLOT(slotAlbumRootChanged(QUrl)));
 
-    connect(d->dbPathRequester, SIGNAL(urlSelected(QUrl)),
+    connect(d->dbPathRequester->fileDialog(), SIGNAL(urlSelected(QUrl)),
             this, SLOT(slotDbPathChanged(QUrl)));
 }
 
@@ -189,7 +194,7 @@ bool CollectionPage::checkSettings()
 
 bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 {
-    rootAlbumFolder = d->rootAlbumPathRequester->url().toLocalFile();
+    rootAlbumFolder = d->rootAlbumPathRequester->lineEdit()->text();
     qCDebug(DIGIKAM_GENERAL_LOG) << "Root album is : " << rootAlbumFolder;
 
     if (rootAlbumFolder.isEmpty())
@@ -267,7 +272,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 
 bool CollectionPage::checkDatabase(QString& dbFolder)
 {
-    dbFolder = d->dbPathRequester->url().toLocalFile();
+    dbFolder = d->dbPathRequester->lineEdit()->text();
     qCDebug(DIGIKAM_GENERAL_LOG) << "DB folder is : " << dbFolder;
 
     if (dbFolder.isEmpty())
@@ -348,7 +353,7 @@ void CollectionPage::slotAlbumRootChanged(const QUrl& url)
 {
     if (!d->dbPathEdited)
     {
-        d->dbPathRequester->setUrl(url);
+        d->dbPathRequester->lineEdit()->setText(url.toLocalFile());
     }
 }
 

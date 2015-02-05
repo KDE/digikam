@@ -121,17 +121,17 @@ QString AssistantDlg::databasePath() const
     return d->collectionPage->databasePath();
 }
 
-void AssistantDlg::next()
+bool AssistantDlg::validateCurrentPage()
 {
     if (currentPage() == d->collectionPage)
     {
         if (!d->collectionPage->checkSettings())
         {
-            return;
+            return false;
         }
     }
 
-    QWizard::next();
+    return true;
 }
 
 void AssistantDlg::slotFinishPressed()

@@ -45,9 +45,9 @@ public:
     QString firstAlbumPath() const;
     QString databasePath()   const;
 
-public Q_SLOTS:
+private:
 
-    void next();
+    bool validateCurrentPage();
 
 private Q_SLOTS:
 
