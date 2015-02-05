@@ -155,7 +155,7 @@ public:
     QGroupBox*                  iccFolderGB;
     QGroupBox*                  advancedSettingsGB;
 
-    KUrlRequester*              defaultPathKU;
+    RFileSelector*              defaultPathKU;
 
     IccRenderingIntentComboBox* renderingIntentKC;
 
@@ -455,10 +455,10 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
                                                  "You can specify an additional folder:"));
     d->iccFolderLabel->setWordWrap(true);
 
-    d->defaultPathKU            = new KUrlRequester;
+    d->defaultPathKU            = new RFileSelector;
     d->iccFolderLabel->setBuddy(d->defaultPathKU);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
-    d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
+    d->defaultPathKU->fileDialog()->setFileMode(QFileDialog::Directory);
     d->defaultPathKU->setWhatsThis(i18n("<p>digiKam searches ICC profiles in default system folders "
                                         "and ships itself a few selected profiles. "
                                         "Store all your additional color profiles in the directory set here.</p>"));
@@ -525,10 +525,10 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     connect(d->infoWorkProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedWork()));
 
-    connect(d->defaultPathKU, SIGNAL(urlSelected(QUrl)),
+    connect(d->defaultPathKU->fileDialog(), SIGNAL(urlSelected(QUrl)),
             this, SLOT(slotUrlChanged()));
 
-    connect(d->defaultPathKU, SIGNAL(textChanged(QString)),
+    connect(d->defaultPathKU->lineEdit(), SIGNAL(textChanged(QString)),
             this, SLOT(slotUrlTextChanged()));
 
     connect(d->iccFolderLabel, SIGNAL(linkActivated(QString)),
@@ -614,7 +614,7 @@ void SetupICC::applySettings()
         settings.defaultUncalibratedBehavior = ICCSettingsContainer::AutomaticColors | ICCSettingsContainer::ConvertToWorkspace;
     }
 
-    settings.iccFolder           = d->defaultPathKU->url().toLocalFile();
+    settings.iccFolder           = d->defaultPathKU->lineEdit()->text();
     settings.useBPC              = d->bpcAlgorithm->isChecked();
     settings.renderingIntent     = d->renderingIntentKC->intent();
     settings.useManagedView      = d->managedView->isChecked();
@@ -689,7 +689,7 @@ void SetupICC::readSettings(bool restore)
         d->defaultGuessRaw->setChecked(true);
     }
 
-    d->defaultPathKU->setUrl(QUrl::fromLocalFile(settings.iccFolder));
+    d->defaultPathKU->lineEdit()->setText(settings.iccFolder);
     fillCombos(false);
 
     d->workProfilesKC->setCurrentProfile(settings.workspaceProfile);
@@ -709,13 +709,13 @@ void SetupICC::readSettings(bool restore)
 
 void SetupICC::slotUrlChanged()
 {
-    IccSettings::instance()->setIccPath(d->defaultPathKU->url().toLocalFile());
+    IccSettings::instance()->setIccPath(d->defaultPathKU->lineEdit()->text());
     fillCombos(true);
 }
 
 void SetupICC::slotUrlTextChanged()
 {
-    d->defaultPathKU->setText(QDir::toNativeSeparators(d->defaultPathKU->text()));
+    d->defaultPathKU->lineEdit()->setText(QDir::toNativeSeparators(d->defaultPathKU->lineEdit()->text()));
 }
 
 void SetupICC::fillCombos(bool report)
