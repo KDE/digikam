@@ -44,7 +44,7 @@
 #include "nrestimate.h"
 
 // To switch on/off log trace file.
-#define TRACE 1
+// #define TRACE 1
 
 using namespace cv;
 
@@ -76,6 +76,7 @@ public:
         pendingThreshold  = 0.0;
         rejectedThreshold = 0.0;
         label             = 0;
+        running           = true;
     }
 
     float*               fimg[3];
@@ -109,16 +110,13 @@ public:
     QString              path;             // Path to host result file
 
     PickLabel*           label;
+
+    bool                 running;
 };
 
 ImgQSort::ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label)
-    : DImgThreadedAnalyser(), d(new Private)
+    : d(new Private)
 {
-    // Commented out option to use only part of image for computation
-    //int w = (img->width()  > d->size) ? d->size : img->width();
-    //int h = (img->height() > d->size) ? d->size : img->height();
-    //setOriginalImage(img->copy(0, 0, w, h));
-
     // Reading settings from GUI
     d->imq.detectBlur        = imq.detectBlur;
     d->imq.detectNoise       = imq.detectNoise;
@@ -160,7 +158,7 @@ void ImgQSort::startAnalyse()
     int    exposurelevel     = 0;
 
     // If blur option is selected in settings, run the blur detection algorithms
-    if (d->imq.detectBlur)
+    if (runningFlag() && d->imq.detectBlur)
     {
         // Returns blur value between 0 and 1.
         // If NaN is returned just assign NoPickLabel
@@ -173,7 +171,7 @@ void ImgQSort::startAnalyse()
         qCDebug(DIGIKAM_GENERAL_LOG) << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
     }
 
-    if (d->imq.detectNoise)
+    if (runningFlag() && d->imq.detectNoise)
     {
         // Some images give very low noise value. Assign NoPickLabel in that case.
         // Returns noise value between 0 and 1.
@@ -181,14 +179,14 @@ void ImgQSort::startAnalyse()
         qCDebug(DIGIKAM_GENERAL_LOG) << "Amount of Noise present in image is : " << noise;
     }
 
-    if (d->imq.detectCompression)
+    if (runningFlag() && d->imq.detectCompression)
     {
         // Returns number of blocks in the image.
         compressionlevel = compressiondetector();
         qCDebug(DIGIKAM_GENERAL_LOG) << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
 
-    if (d->imq.detectOverexposure)
+    if (runningFlag() && d->imq.detectOverexposure)
     {
         // Returns if there is overexposure in the image
         exposurelevel = exposureamount();
@@ -231,38 +229,47 @@ void ImgQSort::startAnalyse()
     // Calculating finalquality
 
     // All the results to have a range of 1 to 100.
-
-    float finalblur        = (blur*100)  + ((blur2/32767)*100);
-    float finalnoise       = noise*100;
-    float finalcompression = (compressionlevel / 1024) * 100; // we are processing 1024 pixels size image
-
-    finalquality           = finalblur*d->imq.blurWeight   +
-                             finalnoise*d->imq.noiseWeight +
-                             finalcompression*d->imq.compressionWeight;
-
-    finalquality           = finalquality / 100;
-
-    // Assigning PickLabels
-
-    if (finalquality == 0.0)
+    if (runningFlag())
     {
-        // Algorithms have not been run. So return noPickLabel
-        *d->label = NoPickLabel;
-    }
-    else if (finalquality < d->imq.rejectedThreshold)
-    {
-        *d->label = RejectedLabel;
-    }
-    else if (finalquality > d->imq.rejectedThreshold && finalquality<d->imq.acceptedThreshold)
-    {
-        *d->label = PendingLabel;
+        float finalblur        = (blur*100)  + ((blur2/32767)*100);
+        float finalnoise       = noise*100;
+        float finalcompression = (compressionlevel / 1024) * 100; // we are processing 1024 pixels size image
+
+        finalquality           = finalblur*d->imq.blurWeight   +
+                                 finalnoise*d->imq.noiseWeight +
+                                 finalcompression*d->imq.compressionWeight;
+
+        finalquality           = finalquality / 100;
+
+        // Assigning PickLabels
+
+        if (finalquality == 0.0)
+        {
+            // Algorithms have not been run. So return noPickLabel
+            *d->label = NoPickLabel;
+        }
+        else if (finalquality < d->imq.rejectedThreshold)
+        {
+            *d->label = RejectedLabel;
+        }
+        else if (finalquality > d->imq.rejectedThreshold && finalquality < d->imq.acceptedThreshold)
+        {
+            *d->label = PendingLabel;
+        }
+        else
+        {
+            *d->label = AcceptedLabel;
+        }
     }
     else
     {
-        *d->label = AcceptedLabel;
+        *d->label = NoPickLabel;
     }
+}
 
-    *d->label = NoPickLabel;
+void ImgQSort::cancelAnalyse()
+{
+    d->running = false;
 }
 
 void ImgQSort::readImage() const
@@ -302,6 +309,11 @@ void ImgQSort::readImage() const
     }
 }
 
+bool ImgQSort::runningFlag() const volatile
+{
+    return d->running;
+}
+
 void ImgQSort::CannyThreshold(int, void*) const
 {
     // Reduce noise with a kernel 3x3.
@@ -319,7 +331,7 @@ double ImgQSort::blurdetector() const
     ImgQSort::CannyThreshold(0, 0);
 
     double average    = mean(d->detected_edges)[0];
-    int* const maxIdx = new int[sizeof(d->detected_edges)];  // FIXME: never free ==> memory leak ?
+    int* const maxIdx = new int[sizeof(d->detected_edges)];
     minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
     double blurresult = average / maxval;
@@ -328,6 +340,7 @@ double ImgQSort::blurdetector() const
     qCDebug(DIGIKAM_GENERAL_LOG) << "The maximum of the edge intensity is " << maxval;
     qCDebug(DIGIKAM_GENERAL_LOG) << "The result of the edge intensity is  " << blurresult;
 
+    delete maxIdx;
     return blurresult;
 }
 
@@ -649,7 +662,7 @@ int ImgQSort::compressiondetector() const
     // Go through 8 blocks at a time horizontally
     // iterating through columns.
 
-    for (int i = 0; i < d->src_gray.rows; i++)
+    for (int i = 0; runningFlag() && i < d->src_gray.rows; i++)
     {
         // Calculating intensity of top column.
 
@@ -715,7 +728,7 @@ int ImgQSort::compressiondetector() const
 
     // Iterating through rows.
 
-    for (int j = 0; j < d->src_gray.cols; j++)
+    for (int j = 0; runningFlag() && j < d->src_gray.cols; j++)
     {
         // Calculating intensity of top row.
 

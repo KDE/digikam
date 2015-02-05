@@ -364,7 +364,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
 #endif /* HAVE_KFACE */
 
     prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
-    prm.qualityScanMode                     = d->qualityScanMode->itemData(d->syncDirection->currentIndex()).toInt();
+    prm.qualityScanMode                     = d->qualityScanMode->itemData(d->qualityScanMode->currentIndex()).toInt();
     ImageQualitySettings imgq;
     imgq.readFromConfig();
     prm.quality                             = imgq;

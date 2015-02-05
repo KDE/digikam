@@ -30,12 +30,11 @@
 #include "dimg.h"
 #include "digikam_globals.h"
 #include "imagequalitysettings.h"
-#include "dimgthreadedanalyser.h"
 
 namespace Digikam
 {
 
-class ImgQSort : public DImgThreadedAnalyser
+class ImgQSort
 {
 public:
 
@@ -47,6 +46,7 @@ public:
     /** Perform  quality estimation and fill Pick Label value accordingly.
      */
     void startAnalyse();
+    void cancelAnalyse();
 
 private:
 
@@ -54,6 +54,7 @@ private:
      *  These ones will by used internally by ImgQSort through OpenCV API.
      */
     void readImage() const;
+    bool runningFlag() const volatile;
 
     /**
      * @function CannyThreshold
