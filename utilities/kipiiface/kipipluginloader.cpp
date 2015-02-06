@@ -36,7 +36,6 @@
 
 #include <kactioncategory.h>
 #include <kactioncollection.h>
-#include <kactionmenu.h>
 #include <kxmlguifactory.h>
 
 // Libkipi includes
