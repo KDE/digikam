@@ -98,7 +98,8 @@ public:
 };
 
 Setup::Setup(QWidget* const parent, Setup::Page page)
-    : KPageDialog(parent), d(new Private)
+    : KPageDialog(parent),
+      d(new Private)
 {
     setWindowTitle(i18n("Configure"));
     setStandardButtons(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -130,7 +131,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
                                   "<i>Customize default RAW decoding settings</i></qt>"));
     d->page_raw->setIcon(QIcon::fromTheme("kdcraw"));
 
-    d->iccPage        = new Digikam::SetupICC(0, this);
+    d->iccPage        = new Digikam::SetupICC(buttonBox(), this);
     d->page_icc       = addPage(d->iccPage, i18n("Color Management"));
     d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
                                 "<i>Customize color management settings</i></qt>"));
@@ -172,7 +173,8 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
         }
     }
 
-    connect(buttonBox()->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Setup::slotOkClicked);
+    connect(buttonBox()->button(QDialogButtonBox::Ok),
+            &QPushButton::clicked, this, &Setup::slotOkClicked);
 
     connect(buttonBox(), SIGNAL(helpRequested()),
             this, SLOT(slotHelp()));

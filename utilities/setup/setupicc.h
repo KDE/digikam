@@ -37,7 +37,7 @@
 
 #include "digikam_export.h"
 
-class KPageDialog;
+class QDialogButtonBox;
 
 namespace Digikam
 {
@@ -50,7 +50,7 @@ class SetupICC : public QScrollArea
 
 public:
 
-    explicit SetupICC(QWidget* const parent = 0, KPageDialog* const dialog = 0);
+    explicit SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent = 0);
     ~SetupICC();
 
     void applySettings();

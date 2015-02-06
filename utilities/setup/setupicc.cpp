@@ -48,13 +48,11 @@
 #include <QStandardPaths>
 #include <QIcon>
 #include <QMessageBox>
+#include <QDialogButtonBox>
 
 // KDE includes
 
-#include <klineedit.h>
 #include <klocalizedstring.h>
-#include <kpagedialog.h>
-#include <kurlrequester.h>
 
 // Libkdcraw includes
 
@@ -114,7 +112,7 @@ public:
         profilesPanel(0),
         advancedPanel(0),
         tab(0),
-        mainDialog(0),
+        dlgBtnBox(0),
         inProfilesKC(0),
         workProfilesKC(0),
         proofProfilesKC(0),
@@ -163,7 +161,7 @@ public:
     QWidget*                    profilesPanel;
     QWidget*                    advancedPanel;
     QTabWidget*                 tab;
-    KPageDialog*                mainDialog;
+    QDialogButtonBox*           dlgBtnBox;
 
     IccProfilesComboBox*        inProfilesKC;
     IccProfilesComboBox*        workProfilesKC;
@@ -171,10 +169,11 @@ public:
     IccProfilesComboBox*        monitorProfilesKC;
 };
 
-SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
-    : QScrollArea(parent), d(new Private)
+SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
+    : QScrollArea(parent),
+      d(new Private)
 {
-    d->mainDialog                  = dialog;
+    d->dlgBtnBox                   = dlgBtnBox;
     d->tab                         = new QTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
@@ -736,7 +735,7 @@ void SetupICC::fillCombos(bool report)
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "No ICC profile files found!!!";
-        d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(false);
+        d->dlgBtnBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         return;
     }
 
@@ -757,7 +756,7 @@ void SetupICC::fillCombos(bool report)
     }
     else
     {
-        d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(true);
+        d->dlgBtnBox->button(QDialogButtonBox::Ok)->setEnabled(true);
         d->managedPreviews->setEnabled(true);
     }
 
@@ -765,11 +764,11 @@ void SetupICC::fillCombos(bool report)
     {
         // If there is no workspace ICC profiles available,
         // the CM is broken and cannot be used.
-        d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(false);
+        d->dlgBtnBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         return;
     }
 
-    d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(true);
+    d->dlgBtnBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
 void SetupICC::setWidgetsEnabled(bool enabled)
@@ -796,7 +795,7 @@ void SetupICC::slotToggledEnabled()
     }
     else
     {
-        d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(true);
+        d->dlgBtnBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
 }
 
