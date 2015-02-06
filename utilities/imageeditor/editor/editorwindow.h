@@ -115,25 +115,25 @@ protected:
     SidebarSplitter*          m_splitter;
     QSplitter*                m_vSplitter;
 
-    QAction *                 m_openVersionAction;
+    QAction*                  m_openVersionAction;
     QAction*                  m_saveAction;
     QAction*                  m_saveAsAction;
     KToolBarPopupAction*      m_saveNewVersionAction;
-    QAction *                 m_saveCurrentVersionAction;
-    QAction *                 m_saveNewVersionAsAction;
+    QAction*                  m_saveCurrentVersionAction;
+    QAction*                  m_saveNewVersionAsAction;
     QMenu*                    m_saveNewVersionInFormatAction;
-    QAction *                 m_exportAction;
+    QAction*                  m_exportAction;
     QAction*                  m_revertAction;
-    QAction *                 m_discardChangesAction;
-    QAction *                 m_fileDeleteAction;
+    QAction*                  m_discardChangesAction;
+    QAction*                  m_fileDeleteAction;
     QAction*                  m_forwardAction;
     QAction*                  m_backwardAction;
 
-    QAction *                 m_lastAction;
-    QAction *                 m_firstAction;
+    QAction*                  m_lastAction;
+    QAction*                  m_firstAction;
 
-    QAction *                 m_applyToolAction;
-    QAction *                 m_closeToolAction;
+    QAction*                  m_applyToolAction;
+    QAction*                  m_closeToolAction;
 
     QAction*                  m_showBarAction;
 

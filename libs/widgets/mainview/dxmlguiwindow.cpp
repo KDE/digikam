@@ -639,6 +639,24 @@ QAction* DXmlGuiWindow::buildStdAction(StdActionType type, const QObject* const 
         case StdTipOfDayAction:
             return KStandardAction::tipOfDay(recvr, slot, parent);
             break;
+        case StdOpenAction:
+            return KStandardAction::open(recvr, slot, parent);
+            break;
+        case StdSaveAction:
+            return KStandardAction::save(recvr, slot, parent);
+            break;
+        case StdSaveAsAction:
+            return KStandardAction::saveAs(recvr, slot, parent);
+            break;
+        case StdRevertAction:
+            return KStandardAction::revert(recvr, slot, parent);
+            break;
+        case StdBackAction:
+            return KStandardAction::back(recvr, slot, parent);
+            break;
+        case StdForwardAction:
+            return KStandardAction::forward(recvr, slot, parent);
+            break;
         default:
             return 0;
             break;

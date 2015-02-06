@@ -417,8 +417,8 @@ void ShowFoto::setupActions()
 
     // Extra 'File' menu actions ---------------------------------------------
 
-    d->fileOpenAction = actionCollection()->addAction(KStandardAction::Open, "showfoto_open_file",
-                        this, SLOT(slotOpenFile()));
+    d->fileOpenAction = buildStdAction(StdOpenAction, this, SLOT(slotOpenFile()), this);
+    actionCollection()->addAction("showfoto_open_file", d->fileOpenAction);
 
     d->openFilesInFolderAction = new QAction(QIcon::fromTheme("folder-image"), i18n("Open folder"), this);
     actionCollection()->setDefaultShortcut(d->openFilesInFolderAction, Qt::CTRL+Qt::SHIFT+Qt::Key_O);

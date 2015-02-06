@@ -317,11 +317,11 @@ void EditorWindow::setupStandardActions()
 
     KActionCollection *ac = actionCollection();
 
-    m_backwardAction = KStandardAction::back(this, SLOT(slotBackward()), this);
+    m_backwardAction = buildStdAction(StdBackAction, this, SLOT(slotBackward()), this);
     ac->addAction("editorwindow_backward", m_backwardAction);
     ac->setDefaultShortcuts(m_backwardAction, QList<QKeySequence>() << Qt::Key_PageUp << Qt::Key_Backspace);
 
-    m_forwardAction = KStandardAction::forward(this, SLOT(slotForward()), this);
+    m_forwardAction = buildStdAction(StdForwardAction, this, SLOT(slotForward()), this);
     ac->addAction("editorwindow_forward", m_forwardAction);
     ac->setDefaultShortcuts(m_forwardAction, QList<QKeySequence>() << Qt::Key_PageDown << Qt::Key_Space);
 
@@ -341,9 +341,12 @@ void EditorWindow::setupStandardActions()
     ac->addAction("editorwindow_openversion", m_openVersionAction);
     ac->setDefaultShortcuts(m_openVersionAction, KStandardShortcut::end());
 
-    m_saveAction = KStandardAction::save(this, SLOT(save()), this);
+    m_saveAction = buildStdAction(StdSaveAction, this, SLOT(save()), this);
     ac->addAction("editorwindow_save", m_saveAction);
 
+    m_saveAsAction = buildStdAction(StdSaveAsAction, this, SLOT(saveAs()), this);
+    ac->addAction("editorwindow_saveas", m_saveAsAction);
+    
     m_saveCurrentVersionAction = new QAction(QIcon::fromTheme("dialog-ok-apply"),
                                              i18nc("@action Save changes to current version", "Save Changes"), this);
     m_saveCurrentVersionAction->setToolTip(i18nc("@info:tooltip", "Save the modifications to the current version of the file"));
@@ -356,7 +359,8 @@ void EditorWindow::setupStandardActions()
     connect(m_saveNewVersionAction, SIGNAL(triggered()), this, SLOT(saveNewVersion()));
     ac->addAction("editorwindow_savenewversion", m_saveNewVersionAction);
 
-    QAction * m_saveNewVersionAsAction = new QAction(QIcon::fromTheme("document-save-as"),
+#pragma "Check this action which is not plugged to action collection"
+    QAction* const m_saveNewVersionAsAction = new QAction(QIcon::fromTheme("document-save-as"),
                                                     i18nc("@action Save changes to a newly created version, specifying the filename and format",
                                                           "Save New Version As..."), this);
     m_saveNewVersionAsAction->setToolTip(i18nc("@info:tooltip", "Save the current modifications to a new version of the file, "
@@ -377,12 +381,6 @@ void EditorWindow::setupStandardActions()
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionAsAction);
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionInFormatAction->menuAction());
 
-    m_saveAction = KStandardAction::save(this, SLOT(save()), this);
-    ac->addAction("editorwindow_save", m_saveAction);
-
-    m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveAs()), this);
-    ac->addAction("editorwindow_saveas", m_saveAsAction);
-
     // This also triggers saveAs, but in the context of non-destructive we want a slightly different appearance
     m_exportAction = new QAction(QIcon::fromTheme("document-export"),
                                  i18nc("@action", "Export"), this);
@@ -391,7 +389,7 @@ void EditorWindow::setupStandardActions()
     ac->addAction("editorwindow_export", m_exportAction);
     ac->setDefaultShortcut(m_exportAction, Qt::CTRL + Qt::SHIFT + Qt::Key_E); // NOTE: Gimp shortcut
 
-    m_revertAction = KStandardAction::revert(this, SLOT(slotRevert()), this);
+    m_revertAction = buildStdAction(StdRevertAction, this, SLOT(slotRevert()), this);
     ac->addAction("editorwindow_revert", m_revertAction);
 
     m_discardChangesAction = new QAction(QIcon::fromTheme("task-reject"),

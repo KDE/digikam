@@ -444,13 +444,13 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    KActionCollection *ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
-    d->backwardAction = KStandardAction::back(this, SLOT(slotBackward()), this);
+    d->backwardAction = buildStdAction(StdBackAction, this, SLOT(slotBackward()), this);
     ac->addAction("lighttable_backward", d->backwardAction);
     ac->setDefaultShortcuts(d->backwardAction, QList<QKeySequence>() << Qt::Key_PageUp << Qt::Key_Backspace);
 
-    d->forwardAction = KStandardAction::forward(this, SLOT(slotForward()), this);
+    d->forwardAction = buildStdAction(StdForwardAction, this, SLOT(slotForward()), this);
     ac->addAction("lighttable_forward", d->forwardAction);
     ac->setDefaultShortcuts(d->forwardAction, QList<QKeySequence>() << Qt::Key_PageDown << Qt::Key_Space);
     d->forwardAction->setEnabled(false);

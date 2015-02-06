@@ -72,7 +72,13 @@ enum StdActionType
     StdCloseAction,
     StdZoomInAction,
     StdZoomOutAction,
-    StdTipOfDayAction
+    StdTipOfDayAction,
+    StdOpenAction,
+    StdSaveAction,
+    StdSaveAsAction,
+    StdRevertAction,
+    StdBackAction,
+    StdForwardAction
 };
 
 static const QString s_configFullScreenHideToolBarsEntry("FullScreen Hide ToolBars");
