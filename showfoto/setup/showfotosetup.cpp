@@ -131,7 +131,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
                                   "<i>Customize default RAW decoding settings</i></qt>"));
     d->page_raw->setIcon(QIcon::fromTheme("kdcraw"));
 
-    d->iccPage        = new Digikam::SetupICC(buttonBox(), this);
+    d->iccPage        = new Digikam::SetupICC(buttonBox());
     d->page_icc       = addPage(d->iccPage, i18n("Color Management"));
     d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
                                 "<i>Customize color management settings</i></qt>"));
