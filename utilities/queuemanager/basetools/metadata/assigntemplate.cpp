@@ -99,6 +99,7 @@ void AssignTemplate::slotAssignSettings2Widget()
     }
 
     m_templateSelector->setTemplate(t);
+    m_templateViewer->setTemplate(t);
 }
 
 void AssignTemplate::slotSettingsChanged()

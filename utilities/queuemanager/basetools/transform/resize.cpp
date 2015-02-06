@@ -70,7 +70,8 @@ public:
         labelPreset(0),
         useCustom(0),
         customLength(0),
-        comboBox(0)
+        comboBox(0),
+        changeSettings(true)
     {
     }
 
@@ -85,6 +86,8 @@ public:
     RIntNumInput* customLength;
 
     QComboBox*    comboBox;
+    
+    bool          changeSettings; 
 };
 
 int Resize::Private::presetLengthValue(WidthPreset preset)
@@ -182,9 +185,11 @@ BatchToolSettings Resize::defaultSettings()
 
 void Resize::slotAssignSettings2Widget()
 {
+    d->changeSettings = false;
     d->comboBox->setCurrentIndex(settings()["LengthPreset"].toInt());
     d->useCustom->setChecked(settings()["UseCustom"].toBool());
     d->customLength->setValue(settings()["LengthCustom"].toInt());
+    d->changeSettings = true;
 }
 
 void Resize::slotSettingsChanged()
@@ -193,11 +198,14 @@ void Resize::slotSettingsChanged()
     d->labelPreset->setEnabled(!d->useCustom->isChecked());
     d->comboBox->setEnabled(!d->useCustom->isChecked());
 
-    BatchToolSettings settings;
-    settings.insert("LengthPreset", d->comboBox->currentIndex());
-    settings.insert("UseCustom",    d->useCustom->isChecked());
-    settings.insert("LengthCustom", d->customLength->value());
-    BatchTool::slotSettingsChanged(settings);
+    if (d->changeSettings)
+    {
+        BatchToolSettings settings;
+        settings.insert("LengthPreset", d->comboBox->currentIndex());
+        settings.insert("UseCustom",    d->useCustom->isChecked());
+        settings.insert("LengthCustom", d->customLength->value());
+        BatchTool::slotSettingsChanged(settings);
+    }
 }
 
 bool Resize::toolOperations()

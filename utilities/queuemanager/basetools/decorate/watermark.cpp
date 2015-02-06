@@ -46,7 +46,6 @@
 // KDE includes
 
 #include <kcolorbutton.h>
-#include <kurlrequester.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -98,7 +97,8 @@ public:
         backgroundOpacity(0),
         xMarginInput(0),
         yMarginInput(0),
-        waterMarkSizePercent(0)
+        waterMarkSizePercent(0),
+        changeSettings(true)
     {
     }
 
@@ -122,6 +122,8 @@ public:
     RIntNumInput*  xMarginInput;
     RIntNumInput*  yMarginInput;
     RIntNumInput*  waterMarkSizePercent;
+    
+    bool           changeSettings;
 };
 
 WaterMark::WaterMark(QObject* const parent)
@@ -351,6 +353,7 @@ BatchToolSettings WaterMark::defaultSettings()
 
 void WaterMark::slotAssignSettings2Widget()
 {
+    d->changeSettings = false;
     d->useImageRadioButton->setChecked(settings()["Use image"].toBool());
     d->useTextRadioButton->setChecked(!settings()["Use image"].toBool());
     d->imageFileUrlRequester->lineEdit()->setText(settings()["Watermark image"].toString());
@@ -365,39 +368,40 @@ void WaterMark::slotAssignSettings2Widget()
     d->waterMarkSizePercent->setValue(settings()["Watermark size"].toInt());
     d->xMarginInput->setValue(settings()["X margin"].toInt());
     d->yMarginInput->setValue(settings()["Y margin"].toInt());
+    d->changeSettings = true;
 }
 
 void WaterMark::slotSettingsChanged()
 {
-    BatchToolSettings settings;
-
     if (d->useImageRadioButton->isChecked())
     {
-        settings.insert("Use image", true);
         d->textSettingsGroupBox->setVisible(false);
         d->imageSettingsGroupBox->setVisible(true);
     }
     else if (d->useTextRadioButton->isChecked())
     {
-        settings.insert("Use image", false);
         d->imageSettingsGroupBox->setVisible(false);
         d->textSettingsGroupBox->setVisible(true);
     }
 
-    settings.insert("Text",               d->textEdit->text());
-    settings.insert("Font",               d->fontChooserWidget->currentFont());
-    settings.insert("Color",              d->fontColorButton->color());
-    settings.insert("Text opacity",       d->textOpacity->value());
-    settings.insert("Use background",     d->useBackgroundCheckBox->isChecked());
-    settings.insert("Background color",   d->backgroundColorButton->color());
-    settings.insert("Background opacity", d->backgroundOpacity->value());
-
-    settings.insert("Watermark image",    d->imageFileUrlRequester->lineEdit()->text());
-    settings.insert("Placement",          (int)d->comboBox->currentIndex());
-    settings.insert("Watermark size",     (int)d->waterMarkSizePercent->value());
-    settings.insert("X margin",           (int)d->xMarginInput->value());
-    settings.insert("Y margin",           (int)d->yMarginInput->value());
-    BatchTool::slotSettingsChanged(settings);
+    if (d->changeSettings)
+    {
+        BatchToolSettings settings;
+        settings.insert("Use image",          d->useImageRadioButton->isChecked());
+        settings.insert("Watermark image",    d->imageFileUrlRequester->lineEdit()->text());
+        settings.insert("Text",               d->textEdit->text());
+        settings.insert("Font",               d->fontChooserWidget->currentFont());
+        settings.insert("Color",              d->fontColorButton->color());
+        settings.insert("Text opacity",       d->textOpacity->value());
+        settings.insert("Use background",     d->useBackgroundCheckBox->isChecked());
+        settings.insert("Background color",   d->backgroundColorButton->color());
+        settings.insert("Background opacity", d->backgroundOpacity->value());
+        settings.insert("Placement",          (int)d->comboBox->currentIndex());
+        settings.insert("Watermark size",     (int)d->waterMarkSizePercent->value());
+        settings.insert("X margin",           (int)d->xMarginInput->value());
+        settings.insert("Y margin",           (int)d->yMarginInput->value());
+        BatchTool::slotSettingsChanged(settings);
+    }
 }
 
 bool WaterMark::toolOperations()
