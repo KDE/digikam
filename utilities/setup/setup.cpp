@@ -267,7 +267,7 @@ Setup::Setup(QWidget* const parent)
                                     "<i>Set default configuration used to save images with the image editor</i></qt>"));
     d->page_iofiles->setIcon(KIcon("document-save-all"));
 
-    d->iccPage  = new SetupICC(0, this);
+    d->iccPage  = new SetupICC(this);
     d->page_icc = addPage(d->iccPage, i18n("Color Management"));
     d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
                                 "<i>Customize the color management settings</i></qt>"));
