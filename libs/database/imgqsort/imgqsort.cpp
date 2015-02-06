@@ -340,7 +340,7 @@ double ImgQSort::blurdetector() const
     qCDebug(DIGIKAM_GENERAL_LOG) << "The maximum of the edge intensity is " << maxval;
     qCDebug(DIGIKAM_GENERAL_LOG) << "The result of the edge intensity is  " << blurresult;
 
-    delete maxIdx;
+    delete [] maxIdx;
     return blurresult;
 }
 
