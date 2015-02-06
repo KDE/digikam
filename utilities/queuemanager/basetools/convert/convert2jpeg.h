@@ -61,6 +61,7 @@ private:
 private:
 
     JPEGSettings* m_settings;
+    bool          m_changeSettings;
 };
 
 }  // namespace Digikam

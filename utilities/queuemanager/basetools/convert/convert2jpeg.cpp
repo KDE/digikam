@@ -47,6 +47,7 @@ Convert2JPEG::Convert2JPEG(QObject* const parent)
     : BatchTool("Convert2JPEG", ConvertTool, parent)
 {
     m_settings = 0;
+    m_changeSettings = true;
 
     setToolTitle(i18n("Convert To JPEG"));
     setToolDescription(i18n("Convert images to JPEG format."));
@@ -82,16 +83,21 @@ BatchToolSettings Convert2JPEG::defaultSettings()
 
 void Convert2JPEG::slotAssignSettings2Widget()
 {
+    m_changeSettings = false;
     m_settings->setCompressionValue(settings()["Quality"].toInt());
     m_settings->setSubSamplingValue(settings()["SubSampling"].toInt());
+    m_changeSettings = true;
 }
 
 void Convert2JPEG::slotSettingsChanged()
 {
-    BatchToolSettings settings;
-    settings.insert("Quality",     m_settings->getCompressionValue());
-    settings.insert("SubSampling", m_settings->getSubSamplingValue());
-    BatchTool::slotSettingsChanged(settings);
+    if (m_changeSettings)
+    {
+        BatchToolSettings settings;
+        settings.insert("Quality",     m_settings->getCompressionValue());
+        settings.insert("SubSampling", m_settings->getSubSamplingValue());
+        BatchTool::slotSettingsChanged(settings);
+    }
 }
 
 QString Convert2JPEG::outputSuffix() const
