@@ -62,6 +62,7 @@ QueuePool::QueuePool(QWidget* const parent)
     connect(this, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotCloseQueueRequest(int)));
 
+#pragma "Port to Qt5"
     connect(this, SIGNAL(testCanDecode(const QDragMoveEvent*,bool&)),
             this, SLOT(slotTestCanDecode(const QDragMoveEvent*,bool&)));
 

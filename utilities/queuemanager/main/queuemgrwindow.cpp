@@ -383,8 +383,8 @@ void QueueMgrWindow::setupActions()
     ac->addAction("queuemgr_clearlist", d->clearQueueAction);
     ac->setDefaultShortcut(d->clearQueueAction, Qt::CTRL + Qt::SHIFT + Qt::Key_K);
 
-    ac->addAction(KStandardAction::Close, "queuemgr_close",
-                                  this, SLOT(close()));
+    QAction* const close = buildStdAction(StdCloseAction, this, SLOT(close()), this);
+    ac->addAction("queuemgr_close", close);
 
     // -- 'Tools' menu actions -----------------------------------------------------
 

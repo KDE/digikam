@@ -315,7 +315,7 @@ void ImportUI::setupActions()
 
     // -----------------------------------------------------------------
 
-    QAction* const closeAction = KStandardAction::close(this, SLOT(close()), this);
+    QAction* const closeAction = buildStdAction(StdCloseAction, this, SLOT(close()), this);
     ac->addAction("importui_close", closeAction);
 
     // -- Edit menu ----------------------------------------------------
@@ -564,13 +564,13 @@ void ImportUI::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->increaseThumbsAction = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
+    d->increaseThumbsAction = buildStdAction(StdZoomInAction, d->view, SLOT(slotZoomIn()), this);
     d->increaseThumbsAction->setEnabled(false);
     QKeySequence keysPlus(d->increaseThumbsAction->shortcut(), Qt::Key_Plus);
     ac->addAction("importui_zoomplus", d->increaseThumbsAction);
     ac->setDefaultShortcut(d->increaseThumbsAction, keysPlus);
 
-    d->decreaseThumbsAction = KStandardAction::zoomOut(d->view, SLOT(slotZoomOut()), this);
+    d->decreaseThumbsAction = buildStdAction(StdZoomOutAction, d->view, SLOT(slotZoomOut()), this);
     d->decreaseThumbsAction->setEnabled(false);
     QKeySequence keysMinus(d->decreaseThumbsAction->shortcut(), Qt::Key_Minus);
     ac->addAction("importui_zoomminus", d->decreaseThumbsAction);

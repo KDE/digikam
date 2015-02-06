@@ -428,7 +428,8 @@ void ShowFoto::setupActions()
 
     actionCollection()->addAction("showfoto_open_folder", d->openFilesInFolderAction);
 
-    actionCollection()->addAction(KStandardAction::Quit, "showfoto_quit", this, SLOT(close()));
+    QAction* const quit = buildStdAction(StdQuitAction, this, SLOT(close()), this);
+    actionCollection()->addAction("showfoto_quit", quit);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 

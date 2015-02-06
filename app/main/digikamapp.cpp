@@ -656,10 +656,10 @@ void DigikamApp::setupAccelerators()
     ac->setDefaultShortcut(d->cutItemsAction, Qt::CTRL + Qt::Key_X);
     connect(d->cutItemsAction, SIGNAL(triggered()), this, SIGNAL(signalCutAlbumItemsSelection()));
 
-    d->copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
+    d->copyItemsAction = buildStdAction(StdCopyAction, this, SIGNAL(signalCopyAlbumItemsSelection()), this);
     ac->addAction("copy_album_selection", d->copyItemsAction);
 
-    d->pasteItemsAction = KStandardAction::paste(this, SIGNAL(signalPasteAlbumItemsSelection()), this);
+    d->pasteItemsAction = buildStdAction(StdPasteAction, this, SIGNAL(signalPasteAlbumItemsSelection()), this);
     ac->addAction("paste_album_selection", d->pasteItemsAction);
 
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
@@ -1207,14 +1207,14 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->zoomPlusAction  = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
+    d->zoomPlusAction  = buildStdAction(StdZoomInAction, d->view, SLOT(slotZoomIn()), this);
     QKeySequence keysPlus(d->zoomPlusAction->shortcut(), Qt::Key_Plus);
     ac->addAction("album_zoomin", d->zoomPlusAction);
     ac->setDefaultShortcut(d->zoomPlusAction, keysPlus);
 
     // -----------------------------------------------------------
 
-    d->zoomMinusAction  = KStandardAction::zoomOut(d->view, SLOT(slotZoomOut()), this);
+    d->zoomMinusAction  = buildStdAction(StdZoomOutAction, d->view, SLOT(slotZoomOut()), this);
     QKeySequence keysMinus(d->zoomMinusAction->shortcut(), Qt::Key_Minus);
     ac->addAction("album_zoomout", d->zoomMinusAction);
     ac->setDefaultShortcut(d->zoomMinusAction, keysMinus);
@@ -1272,7 +1272,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->quitAction = KStandardAction::quit(this, SLOT(slotExit()), this);
+    d->quitAction = buildStdAction(StdQuitAction, this, SLOT(slotExit()), this);
     ac->addAction("app_exit", d->quitAction);
 
     // -----------------------------------------------------------
@@ -1287,8 +1287,8 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->tipAction = ac->addAction(KStandardAction::TipofDay, "help_tipofday",
-                                                 this, SLOT(slotShowTip()));
+    d->tipAction = buildStdAction(StdTipOfDayAction, this, SLOT(slotShowTip()), this);
+    ac->addAction("help_tipofday", d->tipAction);
 
     //------------------------------------------------------------
 

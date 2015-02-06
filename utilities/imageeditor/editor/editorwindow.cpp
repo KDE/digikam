@@ -424,12 +424,12 @@ void EditorWindow::setupStandardActions()
     ac->addAction("editorwindow_delete", m_fileDeleteAction);
     ac->setDefaultShortcut(m_fileDeleteAction, Qt::Key_Delete);
 
-    QAction* const closeAction = KStandardAction::close(this, SLOT(close()), this);
+    QAction* const closeAction = buildStdAction(StdCloseAction, this, SLOT(close()), this);
     ac->addAction("editorwindow_close", closeAction);
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
-    d->copyAction = KStandardAction::copy(m_canvas, SLOT(slotCopy()), this);
+    d->copyAction = buildStdAction(StdCopyAction, m_canvas, SLOT(slotCopy()), this);
     ac->addAction("editorwindow_copy", d->copyAction);
     d->copyAction->setEnabled(false);
 
@@ -480,12 +480,12 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->zoomPlusAction     = KStandardAction::zoomIn(this, SLOT(slotIncreaseZoom()), this);
+    d->zoomPlusAction     = buildStdAction(StdZoomInAction, this, SLOT(slotIncreaseZoom()), this);
     QKeySequence keysPlus(d->zoomPlusAction->shortcut(), Qt::Key_Plus);
     ac->addAction("editorwindow_zoomplus", d->zoomPlusAction);
     ac->setDefaultShortcut(d->zoomPlusAction, keysPlus);
 
-    d->zoomMinusAction  = KStandardAction::zoomOut(this, SLOT(slotDecreaseZoom()), this);
+    d->zoomMinusAction  = buildStdAction(StdZoomOutAction, this, SLOT(slotDecreaseZoom()), this);
     QKeySequence keysMinus(d->zoomMinusAction->shortcut(), Qt::Key_Minus);
     ac->addAction("editorwindow_zoomminus", d->zoomMinusAction);
     ac->setDefaultShortcut(d->zoomMinusAction, keysMinus);

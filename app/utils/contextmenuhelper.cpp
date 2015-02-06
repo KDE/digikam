@@ -41,7 +41,6 @@
 // KDE includes
 
 #include <kactioncollection.h>
-#include <kstandardaction.h>
 #include <klocalizedstring.h>
 #include <kopenwithdialog.h>
 #include <krun.h>
@@ -84,6 +83,7 @@
 #include "tagspopupmenu.h"
 #include "fileactionmngr.h"
 #include "dimg.h"
+#include "dxmlguiwindow.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -1115,19 +1115,19 @@ void ContextMenuHelper::slotCloseAllGroups()
 
 void ContextMenuHelper::addStandardActionCut(QObject* recv, const char* slot)
 {
-    QAction* const cut = KStandardAction::cut(recv, slot, d->parent);
+    QAction* const cut = DXmlGuiWindow::buildStdAction(StdCutAction, recv, slot, d->parent);
     addAction(cut);
 }
 
 void ContextMenuHelper::addStandardActionCopy(QObject* recv, const char* slot)
 {
-    QAction* const copy = KStandardAction::copy(recv, slot, d->parent);
+    QAction* const copy = DXmlGuiWindow::buildStdAction(StdCopyAction, recv, slot, d->parent);
     addAction(copy);
 }
 
 void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 {
-    QAction* const paste        = KStandardAction::paste(recv, slot, d->parent);
+    QAction* const paste        = DXmlGuiWindow::buildStdAction(StdPasteAction, recv, slot, d->parent);
     const QMimeData* const data = qApp->clipboard()->mimeData(QClipboard::Clipboard);
 
     if (!data || !data->hasUrls())

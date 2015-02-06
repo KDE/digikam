@@ -517,7 +517,7 @@ void LightTableWindow::setupActions()
     ac->addAction("lighttable_filefinaldelete", d->fileDeleteFinalAction);
     ac->setDefaultShortcut(d->fileDeleteFinalAction, Qt::SHIFT + Qt::Key_Delete);
 
-    QAction* const closeAction = KStandardAction::close(this, SLOT(close()), this);
+    QAction* const closeAction = buildStdAction(StdCloseAction, this, SLOT(close()), this);
     ac->addAction("lighttable_close", closeAction);
 
     // -- Standard 'View' menu actions ---------------------------------------------
@@ -559,13 +559,13 @@ void LightTableWindow::setupActions()
 
     // Left Panel Zoom Actions
 
-    d->leftZoomPlusAction  = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseLeftZoom()), this);
+    d->leftZoomPlusAction  = buildStdAction(StdZoomInAction, d->previewView, SLOT(slotIncreaseLeftZoom()), this);
     d->leftZoomPlusAction->setEnabled(false);
     QKeySequence leftKeysPlus(d->leftZoomPlusAction->shortcut(), Qt::Key_Plus);
     ac->addAction("lighttable_zoomplus_left", d->leftZoomPlusAction);
     ac->setDefaultShortcut(d->leftZoomPlusAction, leftKeysPlus);
 
-    d->leftZoomMinusAction  = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseLeftZoom()), this);
+    d->leftZoomMinusAction  = buildStdAction(StdZoomOutAction, d->previewView, SLOT(slotDecreaseLeftZoom()), this);
     d->leftZoomMinusAction->setEnabled(false);
     QKeySequence leftKeysMinus(d->leftZoomMinusAction->shortcut(), Qt::Key_Minus);
     ac->addAction("lighttable_zoomminus_left", d->leftZoomMinusAction);
@@ -583,13 +583,13 @@ void LightTableWindow::setupActions()
 
     // Right Panel Zoom Actions
 
-    d->rightZoomPlusAction  = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseRightZoom()), this);
+    d->rightZoomPlusAction  = buildStdAction(StdZoomInAction, d->previewView, SLOT(slotIncreaseRightZoom()), this);
     d->rightZoomPlusAction->setEnabled(false);
     QKeySequence rightKeysPlus(d->rightZoomPlusAction->shortcut(), Qt::SHIFT + Qt::CTRL + Qt::Key_Plus, Qt::SHIFT + Qt::Key_Plus);
     ac->addAction("lighttable_zoomplus_right", d->rightZoomPlusAction);
     ac->setDefaultShortcut(d->rightZoomPlusAction, rightKeysPlus);
 
-    d->rightZoomMinusAction  = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseRightZoom()), this);
+    d->rightZoomMinusAction  = buildStdAction(StdZoomOutAction, d->previewView, SLOT(slotDecreaseRightZoom()), this);
     d->rightZoomMinusAction->setEnabled(false);
     QKeySequence rightKeysMinus(d->rightZoomMinusAction->shortcut(), Qt::SHIFT + Qt::CTRL + Qt::Key_Minus, Qt::SHIFT + Qt::Key_Minus);
     ac->addAction("lighttable_zoomminus_right", d->rightZoomMinusAction);

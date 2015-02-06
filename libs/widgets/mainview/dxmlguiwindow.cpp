@@ -611,4 +611,38 @@ void DXmlGuiWindow::saveWindowSize(QWindow* const win, KConfigGroup& group)
     KWindowConfig::saveWindowSize(win, group);
 }
 
+QAction* DXmlGuiWindow::buildStdAction(StdActionType type, const QObject* const recvr, const char* const slot, QObject* const parent)
+{
+    switch(type)
+    {
+        case StdCopyAction:
+            return KStandardAction::copy(recvr, slot, parent);
+            break;
+        case StdPasteAction:
+            return KStandardAction::paste(recvr, slot, parent);
+            break;
+        case StdCutAction:
+            return KStandardAction::cut(recvr, slot, parent);
+            break;
+        case StdQuitAction:
+            return KStandardAction::quit(recvr, slot, parent);
+            break;
+        case StdCloseAction:
+            return KStandardAction::close(recvr, slot, parent);
+            break;
+        case StdZoomInAction:
+            return KStandardAction::zoomIn(recvr, slot, parent);
+            break;
+        case StdZoomOutAction:
+            return KStandardAction::zoomOut(recvr, slot, parent);
+            break;
+        case StdTipOfDayAction:
+            return KStandardAction::tipOfDay(recvr, slot, parent);
+            break;
+        default:
+            return 0;
+            break;
+    }
+}
+
 } // namespace Digikam

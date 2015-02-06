@@ -63,6 +63,18 @@ enum FullScreenOptions
     FS_IMPORTUI   = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS     /// Import UI Config.
 };
 
+enum StdActionType
+{
+    StdCopyAction = 0,
+    StdPasteAction,
+    StdCutAction,
+    StdQuitAction,
+    StdCloseAction,
+    StdZoomInAction,
+    StdZoomOutAction,
+    StdTipOfDayAction
+};
+
 static const QString s_configFullScreenHideToolBarsEntry("FullScreen Hide ToolBars");
 static const QString s_configFullScreenHideThumbBarEntry("FullScreen Hide ThumbBar");
 static const QString s_configFullScreenHideSideBarsEntry("FullScreen Hide SideBars");
@@ -116,6 +128,8 @@ public:
     static void openHandbook(const QString& anchor = QString(), const QString& appname = QString());
     static void restoreWindowSize(QWindow* const win, const KConfigGroup& group);
     static void saveWindowSize(QWindow* const win, KConfigGroup& group);
+
+    static QAction* buildStdAction(StdActionType type, const QObject* const recvr, const char* const slot, QObject* const parent);
 
 protected:
 
