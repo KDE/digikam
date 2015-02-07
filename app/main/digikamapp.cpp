@@ -2421,6 +2421,10 @@ void DigikamApp::slotSetupChanged()
 
 void DigikamApp::slotEditKeys()
 {
+    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
+                            KShortcutsEditor::LetterShortcutsAllowed, this);
+    dialog.addCollection(actionCollection(), i18nc("general keyboard shortcuts", "General"));
+
 #ifdef HAVE_KIPI
     editKeyboardShortcuts(KipiPluginLoader::instance()->pluginsActionCollection(),
                           i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
@@ -2960,7 +2964,6 @@ QMenu* DigikamApp::slideShowMenu() const
 void DigikamApp::rebuild()
 {
     QString file = xmlFile();
-
     if (!file.isEmpty())
     {
         setXMLGUIBuildDocument(QDomDocument());
@@ -3050,7 +3053,7 @@ void DigikamApp::customizedFullScreenMode(bool set)
 {
     statusBarMenuAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
-    showMenuBarAction()->setEnabled(!set);
+    d->showMenuBarAction->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toogleShowBar();
 

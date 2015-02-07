@@ -282,10 +282,6 @@ if(${KF5Kipi_FOUND})
     target_link_libraries(digikamgui KF5::Kipi)
 endif()
 
-if(KF5KGeoMap_FOUND) # fixme hackish
-    target_link_libraries(digikamgui gpssearch)
-endif()
-
 
 # digiKam binary progam #########################################################
 
@@ -299,6 +295,10 @@ kde4_add_app_icon(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 add_executable(digikam ${digikam_SRCS})
 
 add_dependencies(digikam digikam-gitversion)
+
+if(KF5KGeoMap_FOUND) # fixme hackish
+    target_link_libraries(digikam gpssearch)
+endif()
 
 # TO fill plist XML file for OSX #####################################################
 
@@ -322,6 +322,9 @@ target_link_libraries(digikam
                       
                       ${OpenCV_LIBRARIES}
 )
+if(ENABLE_MEDIAPLAYER)
+  target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
+endif()
 
 if(KDEPIMLIBS_FOUND)
   target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
