@@ -45,7 +45,7 @@
 
 // Libkdcraw includes
 
-#include <rwidgetutils.h>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 

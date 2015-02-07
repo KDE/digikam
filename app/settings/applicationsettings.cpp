@@ -40,8 +40,11 @@
 #include "mimefilter.h"
 #include "thumbnailsize.h"
 #include "thememanager.h"
-#include "baloowrap.h"
 #include "applicationsettings_p.h"
+
+#ifdef HAVE_BALOO
+#include "baloowrap.h"
+#endif
 
 namespace Digikam
 {

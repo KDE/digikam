@@ -14,6 +14,7 @@ set(libcommonwidgets_SRCS
     common/statesavingobject.cpp
     common/visibilitycontroller.cpp
     common/workingwidget.cpp
+    common/workingpixmap.cpp
     common/widgets_debug.cpp
     
     common/databasewidget.cpp # FIXME used to belong to separate target, check

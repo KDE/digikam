@@ -38,12 +38,12 @@ namespace Digikam
 {
 
 FilmContainer::FilmContainer() :
-    d(QSharedPointer<FilmContainerPriv>(new FilmContainerPriv))
+    d(QSharedPointer<Private>(new Private))
 {
 }
 
 FilmContainer::FilmContainer(CNFilmProfile profile, double gamma, bool sixteenBit)
-    : d(QSharedPointer<FilmContainerPriv>(new FilmContainerPriv))
+    : d(QSharedPointer<Private>(new Private))
 {
     d->gamma      = gamma;
     d->sixteenBit = sixteenBit;
@@ -331,7 +331,7 @@ const QMap<int, QString> FilmContainer::profileMap = FilmContainer::profileMapIn
 
 FilmFilter::FilmFilter(QObject* const parent)
     : DImgThreadedFilter(parent, "FilmFilter"),
-      d(new FilmFilterPriv())
+      d(new Private())
 {
     d->film = FilmContainer();
     initFilter();
@@ -339,7 +339,7 @@ FilmFilter::FilmFilter(QObject* const parent)
 
 FilmFilter::FilmFilter(DImg* const orgImage, QObject* const parent, const FilmContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "FilmFilter"),
-      d(new FilmFilterPriv())
+      d(new Private())
 {
     d->film = settings;
     initFilter();

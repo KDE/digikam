@@ -32,8 +32,8 @@
 
 // Libkdcraw includes
 
-#include <KDCraw/RNumInput>
-#include <KDCraw/RComboBox>
+#include <KDCRAW/RNumInput>
+#include <KDCRAW/RComboBox>
 
 namespace Digikam
 {

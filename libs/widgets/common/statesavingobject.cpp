@@ -205,7 +205,7 @@ KConfigGroup StateSavingObject::getConfigGroup() const
 
     if (!d->group.isValid())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "KConfigGroup set via setConfigGroup is invalid. "
+        qCWarning(LOG_WIDGETS) << "KConfigGroup set via setConfigGroup is invalid. "
                    << "Using object name based group.";
         return d->getGroupFromObjectName();
     }
