@@ -35,7 +35,7 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QStyle>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 
 // KDE includes
 
@@ -141,14 +141,14 @@ void CurvesBox::setup()
     QWidget* typeBox = new QWidget();
 
     d->curveFree = new QToolButton;
-    d->curveFree->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/curvefree.png")));
+    d->curveFree->setIcon(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/curvefree.png")));
     d->curveFree->setCheckable(true);
     d->curveFree->setToolTip(i18n("Curve free mode"));
     d->curveFree->setWhatsThis(i18n("With this button, you can draw your curve free-hand "
                                     "with the mouse."));
 
     d->curveSmooth = new QToolButton;
-    d->curveSmooth->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/curvemooth.png")));
+    d->curveSmooth->setIcon(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/curvemooth.png")));
     d->curveSmooth->setCheckable(true);
     d->curveSmooth->setToolTip(i18n("Curve smooth mode"));
     d->curveSmooth->setWhatsThis(i18n("With this button, the curve type is constrained to "

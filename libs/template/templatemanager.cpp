@@ -32,7 +32,7 @@
 #include <QMutex>
 #include <QTextStream>
 #include <QTextCodec>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 
 // KDE includes
 

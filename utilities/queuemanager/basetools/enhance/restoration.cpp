@@ -28,7 +28,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QComboBox>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 
 // KDE includes
 
@@ -66,7 +66,7 @@ void Restoration::registerSettingsWidget()
     RVBox* const vbox = new RVBox;
 
     RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
-                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"),
+                                                         QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"),
                                                          vbox);
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 

@@ -41,7 +41,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QDesktopServices>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QIcon>
 #include <QMessageBox>
 
@@ -317,7 +317,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     QSpacerItem* const spacer           = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
     RActiveLabel* const gphotoLogoLabel = new RActiveLabel(QUrl("http://www.gphoto.org"),
-                                                           QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-gphoto.png"),
+                                                           QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-gphoto.png"),
                                                            panel);
     gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));
 

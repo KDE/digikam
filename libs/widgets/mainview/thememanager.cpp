@@ -35,7 +35,7 @@
 #include <QPixmap>
 #include <QApplication>
 #include <QAction>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QDirIterator>
 #include <QMessageBox>
 #include <QMenu>
@@ -189,7 +189,7 @@ void ThemeManager::populateThemeMenu()
     d->themeMenuAction->addAction(action);
 
     QStringList schemeFiles;
-    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "color-schemes", QStandardPaths::LocateDirectory);
+    const QStringList dirs = QStandardPathsWrap::locateAll(QStandardPaths::GenericDataLocation, "color-schemes", QStandardPaths::LocateDirectory);
 
     Q_FOREACH (const QString& dir, dirs)
     {

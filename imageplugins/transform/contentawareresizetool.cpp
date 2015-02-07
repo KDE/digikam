@@ -37,7 +37,7 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QIcon>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 
 // KDE includes
 
@@ -277,7 +277,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     QLabel* labeRedMaskTool = new QLabel(i18n("Suppression weight mask:"), d->gboxSettings->plainPage());
     d->redMaskTool          = new QToolButton(d->gboxSettings->plainPage());
-    d->redMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-red.png")));
+    d->redMaskTool->setIcon(QIcon(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-red.png")));
     d->redMaskTool->setCheckable(true);
     d->redMaskTool->setChecked(true);
     d->redMaskTool->setToolTip(i18n("Draw a suppression mask"));
@@ -289,7 +289,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     QLabel* labeGreenMaskTool = new QLabel(i18n("Preservation weight mask:"), d->gboxSettings->plainPage());
     d->greenMaskTool          = new QToolButton(d->gboxSettings->plainPage());
-    d->greenMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-green.png")));
+    d->greenMaskTool->setIcon(QIcon(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-green.png")));
     d->greenMaskTool->setCheckable(true);
     d->greenMaskTool->setToolTip(i18n("Draw a preservation mask"));
     d->greenMaskTool->setWhatsThis(i18n("Click on this button to draw zones marking which areas of the "
@@ -299,7 +299,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     QLabel* labeEraseMaskTool = new QLabel(i18n("Erase mask:"), d->gboxSettings->plainPage());
     d->eraseMaskTool          = new QToolButton(d->gboxSettings->plainPage());
-    d->eraseMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-gray.png")));
+    d->eraseMaskTool->setIcon(QIcon(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-gray.png")));
     d->eraseMaskTool->setCheckable(true);
     d->eraseMaskTool->setToolTip(i18n("Erase mask"));
     d->eraseMaskTool->setWhatsThis(i18n("Click on this button to erase mask regions."));

@@ -45,7 +45,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QDesktopServices>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QIcon>
 #include <QMessageBox>
 #include <QDialogButtonBox>
@@ -193,7 +193,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
                                                 "disabled</li></ul>"));
 
     RActiveLabel* const lcmsLogoLabel = new RActiveLabel(QUrl("http://www.littlecms.com"),
-                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-lcms.png"),
+                                                         QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-lcms.png"),
                                                          colorPolicy);
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 

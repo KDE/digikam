@@ -36,7 +36,7 @@
 #include <QDir>
 #include <QFile>
 #include <QCryptographicHash>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 
 // KDE includes
 

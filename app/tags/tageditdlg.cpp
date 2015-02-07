@@ -32,7 +32,7 @@
 #include <QTreeWidget>
 #include <QApplication>
 #include <QStyle>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -131,7 +131,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
 
     QGridLayout* const grid = new QGridLayout(page);
     QLabel* const logo      = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->topLabel             = new QLabel(page);

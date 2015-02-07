@@ -31,7 +31,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QCheckBox>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QApplication>
 #include <QStyle>
 #include <QUrl>

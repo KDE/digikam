@@ -45,12 +45,12 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QIcon>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QApplication>
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QFileDialog>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QMessageBox>
 
 // KDE includes
@@ -178,7 +178,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
     QWidget* const firstPage = new QWidget(d->mainTab);
 
     RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
-                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"));
+                                                         QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     QLabel* const typeLabel = new QLabel(i18n("Filtering type:"));

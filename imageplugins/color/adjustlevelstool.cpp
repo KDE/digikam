@@ -40,7 +40,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QIcon>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QFileDialog>
 #include <QMessageBox>
 

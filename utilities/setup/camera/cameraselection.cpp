@@ -38,7 +38,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QLineEdit>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -220,7 +220,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     QGridLayout* gLayout5 = new QGridLayout(box2);
 
     QLabel* const logo = new QLabel(box2);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const link = new QLabel(box2);

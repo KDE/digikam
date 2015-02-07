@@ -36,7 +36,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QDesktopServices>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 
 // KDE includes
 
@@ -114,7 +114,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
     RActiveLabel* const exiv2LogoLabel = new RActiveLabel(QUrl("http://www.exiv2.org"),
-                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png"),
+                                                          QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png"),
                                                           box);
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 

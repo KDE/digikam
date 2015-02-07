@@ -28,7 +28,7 @@
 #include <QLabel>
 #include <QFrame>
 #include <QGridLayout>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QApplication>
 #include <QStyle>
 #include <QDialogButtonBox>
@@ -85,7 +85,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     QLabel* const logo      = new QLabel(page);
     QLabel* const message   = new QLabel(page);
 
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     message->setText(i18n("<p>Please select the camera folder "

@@ -35,7 +35,7 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QApplication>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 
 // KDE includes
 
@@ -69,7 +69,7 @@ public:
 UndoCache::UndoCache()
     : d(new Private)
 {
-    d->cacheDir    = QStandardPaths::locate(QStandardPaths::GenericCacheLocation, QChar('/') + QApplication::applicationName() + QChar('/'));
+    d->cacheDir    = QStandardPathsWrap::locate(QStandardPaths::GenericCacheLocation, QChar('/') + QApplication::applicationName() + QChar('/'));
 
     d->cachePrefix = QString("%1undocache-%2")
                      .arg(d->cacheDir)

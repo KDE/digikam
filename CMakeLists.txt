@@ -663,6 +663,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/camera
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/collections
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
+                        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/qtwrappers
 
                         # version.h, gitversion.h config-digikam.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/utils

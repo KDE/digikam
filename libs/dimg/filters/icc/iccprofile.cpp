@@ -32,7 +32,7 @@
 #include <QFile>
 #include <QMutex>
 #include <QCryptographicHash>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 
 // Local includes
 
@@ -153,7 +153,7 @@ IccProfile::IccProfile(const char* const location, const QString& relativePath)
 
     if (QString(location) == QString("data"))
     {
-         filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, relativePath);
+         filePath = QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, relativePath);
     }
     else
     {
@@ -182,7 +182,7 @@ IccProfile IccProfile::adobeRGB()
 
     if (path.isEmpty())
     {
-        path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "libkdcraw/profiles/compatibleWithAdobeRGB1998.icc");
+        path = QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "libkdcraw/profiles/compatibleWithAdobeRGB1998.icc");
     }
 
     return IccProfile(path);
@@ -490,7 +490,7 @@ QStringList IccProfile::defaultSearchPaths()
     QStringList paths;
     QStringList candidates;
 
-    paths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "color/icc", QStandardPaths::LocateDirectory);
+    paths << QStandardPathsWrap::locateAll(QStandardPaths::GenericDataLocation, "color/icc", QStandardPaths::LocateDirectory);
 
 #ifdef Q_OS_WIN
 

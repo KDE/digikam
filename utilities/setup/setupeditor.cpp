@@ -33,7 +33,7 @@
 #include <QPainter>
 #include <QApplication>
 #include <QStyle>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 
 // KDE includes
 
@@ -202,7 +202,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->expoPreview       = new QLabel(previewHBox);
     QLabel* space        = new QLabel(previewHBox);
     d->expoPreviewHisto  = new HistogramWidget(256, 128, previewHBox, false, false);
-    d->preview           = DImg(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/sample-aix.png"));
+    d->preview           = DImg(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/sample-aix.png"));
 
     if (!d->preview.isNull())
     {

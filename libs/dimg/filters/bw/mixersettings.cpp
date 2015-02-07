@@ -32,7 +32,7 @@
 #include <QTextStream>
 #include <QCheckBox>
 #include <QPushButton>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>

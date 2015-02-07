@@ -36,7 +36,7 @@
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QMessageBox>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QLineEdit>
 #include <QUrl>
 #include <QIcon>

@@ -45,11 +45,11 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QIcon>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QApplication>
 #include <QDesktopServices>
 #include <QFileDialog>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QMessageBox>
 
 // KDE includes
@@ -237,7 +237,7 @@ ResizeTool::ResizeTool(QObject* const parent)
     d->hpInput->setWhatsThis( i18n("New image height in percent (%)."));
 
     d->cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
-                                        QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"),
+                                        QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"),
                                         firstPage);
     d->cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 

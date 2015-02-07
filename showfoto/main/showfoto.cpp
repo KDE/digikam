@@ -57,7 +57,7 @@ extern "C"
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QLineEdit>
-#include <QStandardPaths>
+#include "qstandardpathwrap.h"
 #include <QStyle>
 #include <QKeySequence>
 #include <QApplication>
