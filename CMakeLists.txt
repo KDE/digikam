@@ -98,7 +98,7 @@ include(MacroJPEG)
 
 option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
 option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
-option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  OFF)
+option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                   ON)
 option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
 option(ENABLE_MEDIAPLAYER       "Build digiKam with QtMultimedia support (default=ON)"                            ON)
 
@@ -267,12 +267,6 @@ if(ENABLE_MYSQLSUPPORT AND ENABLE_INTERNALMYSQL)
                        ${MYSQL_TOOLS_PATH}
                  ENV MYSQL_TOOLS_PATH)
     message(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
-    set(DATABASESERVERDIR "${CMAKE_CURRENT_SOURCE_DIR}/databaseserver")
-
-else()
-
-    set(DATABASESERVERDIR "")
-
 endif()
 
 # ==================================================================================================

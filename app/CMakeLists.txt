@@ -213,8 +213,6 @@ endif()
 # TODO this should be turned from static to dynamic
 add_library(digikamgui STATIC ${libdigikamgui_SRCS})
 
-
-
 # TODO temporary ugly hack, the common utils used by other components (esp. utilities and libs) should be moved to libs..
 target_include_directories(digikamgui PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album> # move out
@@ -284,6 +282,10 @@ if(${KF5Kipi_FOUND})
     target_link_libraries(digikamgui KF5::Kipi)
 endif()
 
+if(KF5KGeoMap_FOUND) # fixme hackish
+    target_link_libraries(digikamgui gpssearch)
+endif()
+
 
 # digiKam binary progam #########################################################
 
@@ -297,10 +299,6 @@ kde4_add_app_icon(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 add_executable(digikam ${digikam_SRCS})
 
 add_dependencies(digikam digikam-gitversion)
-
-if(KF5KGeoMap_FOUND) # fixme hackish
-    target_link_libraries(digikam gpssearch)
-endif()
 
 # TO fill plist XML file for OSX #####################################################
 
@@ -341,11 +339,11 @@ endif()
 if(GPHOTO2_FOUND)
     # See bug #258931: libgphoto2 library must be the last arg for linker.
     target_link_libraries(digikam ${GPHOTO2_LIBRARIES})
-endif()
-
-if(NOT WIN32 AND GPHOTO2_FOUND)
-    # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
-    target_link_libraries(digikam ${LIBUSB_LIBRARIES})
+    
+    if(NOT WIN32)
+        # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
+        target_link_libraries(digikam ${LIBUSB_LIBRARIES})
+    endif()
 endif()
 
 install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
