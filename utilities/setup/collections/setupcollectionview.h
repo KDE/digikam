@@ -91,7 +91,7 @@ public:
     };
 
 public:
-    
+
     explicit SetupCollectionModel(QObject* const parent = 0);
     ~SetupCollectionModel();
 

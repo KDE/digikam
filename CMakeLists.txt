@@ -660,6 +660,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
+                        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/camera
+                        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/collections
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
 
                         # version.h, gitversion.h config-digikam.h
@@ -1158,8 +1160,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     set(libsetup_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollectionview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcategory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setup.cpp
@@ -1173,14 +1173,16 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuplighttable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupraw.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupversioning.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/importfilters.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupimagequalitysorter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/camera/setupcamera.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/camera/cameraselection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/camera/cameralist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/camera/cameratype.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/collections/setupcollections.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/collections/setupcollectionview.cpp
        )
 
     if(${KF5Kipi_FOUND})
