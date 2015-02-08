@@ -30,10 +30,6 @@
 #include <QString>
 #include <QAction>
 
-// KDE includes
-
-#include <kselectaction.h>
-
 // Local includes
 
 #include "actionthread.h"

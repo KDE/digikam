@@ -53,7 +53,6 @@
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <kselectaction.h>
 #include <kwindowsystem.h>
 
 #include <kio/job.h>

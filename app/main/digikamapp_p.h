@@ -38,7 +38,6 @@
 // KDE includes
 
 #include <kselectaction.h>
-#include <kstatusbar.h>
 
 // Libkdcraw includes
 

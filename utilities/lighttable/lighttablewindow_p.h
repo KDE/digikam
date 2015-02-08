@@ -29,10 +29,6 @@
 #include <QSplitter>
 #include <QAction>
 
-// KDE includes
-
-#include <kselectaction.h>
-
 // Libkdcraw includes
 
 #include <rwidgetutils.h>
