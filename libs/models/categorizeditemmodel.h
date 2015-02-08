@@ -37,7 +37,6 @@
 #include "digikam_export.h"
 
 class QAction;
-class KCategorizedSortFilterProxyModel;
 
 namespace Digikam
 {

@@ -459,7 +459,7 @@ void DigikamKCategorizedView::Private::drawNewCategory(const QModelIndex& index,
 
     QStyleOption optionCopy = option;
     const QString category  = proxyModel->data(index, KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
-    optionCopy.state        &= ~QStyle::State_Selected;
+    optionCopy.state       &= ~QStyle::State_Selected;
 
     if ((listView->selectionMode() != SingleSelection) && (listView->selectionMode() != NoSelection))
     {

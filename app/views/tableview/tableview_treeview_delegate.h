@@ -28,10 +28,6 @@
 #include <QItemDelegate>
 #include <QTreeView>
 
-// KDE includes
-
-#include <kcategorizedsortfilterproxymodel.h>
-
 // Local includes
 
 #include "digikam_export.h"
