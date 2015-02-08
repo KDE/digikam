@@ -1183,6 +1183,9 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/camera/cameratype.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/collections/setupcollections.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/collections/setupcollectionview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/collections/dwitemdelegate_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/collections/dwitemdelegatepool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/collections/dwitemdelegate.cpp
        )
 
     if(${KF5Kipi_FOUND})

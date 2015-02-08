@@ -36,13 +36,10 @@
 #include <QPushButton>
 #include <QToolButton>
 
-// KDE includes
-
-#include <kwidgetitemdelegate.h>
-
 // Local includes
 
 #include "collectionlocation.h"
+#include "dwitemdelegate.h"
 
 namespace Digikam
 {
@@ -206,7 +203,7 @@ private:
 
 // -----------------------------------------------------------------------
 
-class SetupCollectionDelegate : public KWidgetItemDelegate
+class SetupCollectionDelegate : public DWItemDelegate
 {
     Q_OBJECT
 

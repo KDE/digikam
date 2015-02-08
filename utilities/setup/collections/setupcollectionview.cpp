@@ -62,11 +62,11 @@ namespace Digikam
 {
 
 SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* const view, QObject* const parent)
-    : KWidgetItemDelegate(view, parent),
+    : DWItemDelegate(view, parent),
       m_categoryMaxStyledWidth(0)
 {
     // We keep a standard delegate that does all the normal drawing work for us
-    // KWidgetItemDelegate handles the widgets, for the rest of the work we act as a proxy to m_styledDelegate
+    // DWItemDelegate handles the widgets, for the rest of the work we act as a proxy to m_styledDelegate
     m_styledDelegate = new QStyledItemDelegate(parent);
 
     // forward all signals
@@ -615,10 +615,10 @@ void SetupCollectionModel::addCollection(int category)
 
     connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             dialog, SLOT(accept()));
-    
+
     connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
             dialog, SLOT(reject()));
-    
+
     // default to directory name as collection name
     QDir dir(path);
     nameEdit->setText(dir.dirName());
