@@ -149,7 +149,6 @@ QueueMgrWindow::QueueMgrWindow()
 
     populateToolsList();
     slotQueueContentsChanged();
-    slotAssignedToolsChanged(d->assignedList->assignedList());
 }
 
 QueueMgrWindow::~QueueMgrWindow()
@@ -634,7 +633,15 @@ void QueueMgrWindow::loadImageInfosToNewQueue(const ImageInfoList& list)
 
 void QueueMgrWindow::slotQueueContentsChanged()
 {
-    refreshStatusBar();
+    if (d->busy)
+    {
+        refreshStatusBar();
+    }
+    else
+    {
+        // refreshStatusBar() and actions in tools view
+        slotAssignedToolsChanged(d->assignedList->assignedList());
+    }
 }
 
 void QueueMgrWindow::slotItemSelectionChanged()
@@ -950,12 +957,16 @@ void QueueMgrWindow::slotStop()
 {
     d->thread->cancel();
     d->queuePool->currentQueue()->cancelItems();
-    d->currentQueueToProcess = 0;
     processingAborted();
 }
 
 void QueueMgrWindow::slotQueueProcessed()
 {
+    if (!d->busy)
+    {
+        return;
+    }
+
     d->currentQueueToProcess++;
 
     if (d->currentQueueToProcess == d->queuePool->count())
@@ -974,8 +985,6 @@ void QueueMgrWindow::slotQueueProcessed()
     }
 }
 
-// TODO assigning a workflow doesn't enable the actions in tools view
-// adding a tool (which causes signalAssignTools and slotAssignTools works fine
 void QueueMgrWindow::slotAssignQueueSettings(const QString& title)
 {
     if (!title.isEmpty())
