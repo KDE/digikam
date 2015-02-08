@@ -26,9 +26,8 @@
 // Qt includes
 
 #include <QPainter>
+#include <QStandardPaths>
 #include <QVector>
-
-#include "qstandardpathwrap.h"
 
 // Local includes
 
@@ -36,9 +35,9 @@
 
 WorkingPixmap::WorkingPixmap()
 {
-    QPixmap pix(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/process-working.png"));
+    QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/process-working.png"));
     QSize   size(22, 22);
-
+    
     if (pix.isNull())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Invalid pixmap specified.";
@@ -60,7 +59,7 @@ WorkingPixmap::WorkingPixmap()
     m_frames.resize(rowCount * colCount);
 
     int pos = 0;
-
+    
     for (int row = 0; row < rowCount; ++row)
     {
         for (int col = 0; col < colCount; ++col)

@@ -34,7 +34,7 @@
 #include <QStackedWidget>
 #include <QFileDialog>
 #include <QUrl>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
 #include <QMessageBox>

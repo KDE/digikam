@@ -34,7 +34,7 @@
 #include <QTime>
 #include <QTextDocument>
 #include <QFontDatabase>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -85,11 +85,11 @@ SplashScreen::SplashScreen()
 
     if (QApplication::applicationName() == QString("digikam"))
     {
-        splash = QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/splash-digikam.png");
+        splash = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/splash-digikam.png");
     }
     else
     {
-        splash = QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "showfoto/data/splash-showfoto.png");
+        splash = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/splash-showfoto.png");
     }
 
     // Under Linux, only test versions has Beta stage.
@@ -104,7 +104,7 @@ SplashScreen::SplashScreen()
     if (isBeta)
     {
         QPainter p(&splash);
-        p.drawPixmap(412, 27, QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-beta.png"));
+        p.drawPixmap(412, 27, QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-beta.png"));
         p.end();
     }
 

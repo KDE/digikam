@@ -34,7 +34,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -85,7 +85,7 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
 
     QWidget* const page    = new QWidget(this);
     QLabel* const logo     = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const topLabel = new QLabel(page);

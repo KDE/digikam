@@ -30,7 +30,7 @@
 #include <QImage>
 #include <QLabel>
 #include <QIcon>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -316,7 +316,7 @@ QString TextureTool::getTexturePath(int texture)
             break;
     }
 
-    return (QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, QString("digikam/data/") + pattern + QString(".png")));
+    return (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("digikam/data/") + pattern + QString(".png")));
 }
 
 }  // namespace DigikamDecorateImagePlugin

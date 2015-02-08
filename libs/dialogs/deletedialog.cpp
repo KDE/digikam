@@ -39,7 +39,7 @@
 #include <QHeaderView>
 #include <QApplication>
 #include <QStyle>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QIcon>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
@@ -270,7 +270,7 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
 
     d->checkBoxStack = new QStackedWidget(this);
     QLabel* logo     = new QLabel(this);
-    logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->warningIcon   = new QLabel(this);

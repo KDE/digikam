@@ -34,7 +34,7 @@
 #include <QUrl>
 #include <QApplication>
 #include <QStyle>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -541,7 +541,7 @@ QString BorderSettings::getBorderPath(int border)
             break;
     }
 
-    return (QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, QString("digikam/data/") + pattern + QString(".png")));
+    return (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("digikam/data/") + pattern + QString(".png")));
 }
 
 void BorderSettings::toggleBorderSlider(bool b)

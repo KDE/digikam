@@ -31,7 +31,7 @@
 #include <QGridLayout>
 #include <QPixmap>
 #include <QPointer>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
 #include <QDialogButtonBox>
@@ -86,7 +86,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* const parent, PAlbum* const albumT
     QWidget* const page     = new QWidget(this);
     QGridLayout* const grid = new QGridLayout(page);
     QLabel* const logo      = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const message   = new QLabel(page);

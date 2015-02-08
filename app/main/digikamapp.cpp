@@ -37,7 +37,7 @@
 #include <QSignalMapper>
 #include <QStringList>
 #include <QDomDocument>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QKeySequence>
 #include <QMenu>
 #include <QMenuBar>

@@ -32,7 +32,7 @@
 #include <QRadioButton>
 #include <QStackedLayout>
 #include <QVBoxLayout>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QIcon>
 
 // KDE includes
@@ -479,7 +479,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
     if (type == SearchGroup::FirstGroup)
     {
         QLabel* const logo = new QLabel;
-        logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                         .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
         d->optionsLabel = new RClickLabel;

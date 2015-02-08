@@ -30,7 +30,7 @@
 #include <QDBusConnectionInterface>
 #include <QProcess>
 #include <QApplication>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -103,12 +103,12 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     {
         if (QApplication::applicationName() == QString("digikam"))
         {
-            logoPixmap = QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                          .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         else
         {
-            logoPixmap = QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
+            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
                          .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
     }

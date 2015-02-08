@@ -33,7 +33,7 @@
 #include <QFile>
 #include <QIODevice>
 #include <QTextStream>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -207,7 +207,7 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
 
 bool DatabaseConfigElementLoader::readConfig()
 {
-    QString filepath = QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/database/dbconfig.xml");
+    QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/dbconfig.xml");
     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading SQL code from config file" << filepath;
     QFile file(filepath);
 

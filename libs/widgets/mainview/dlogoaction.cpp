@@ -36,7 +36,7 @@
 #include <QPainter>
 #include <QApplication>
 #include <QDesktopServices>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -86,12 +86,12 @@ DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
     if (QApplication::applicationName() == QString("digikam"))
     {
         setIcon(QIcon::fromTheme("digikam"));
-        d->progressPixmap = QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/banner-digikam.png"));
+        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/banner-digikam.png"));
     }
     else
     {
         setIcon(QIcon::fromTheme("showfoto"));
-        d->progressPixmap = QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "showfoto/data/banner-showfoto.png"));
+        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/banner-showfoto.png"));
     }
 
     d->alignOnright  = alignOnright;

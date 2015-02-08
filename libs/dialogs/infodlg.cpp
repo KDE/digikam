@@ -36,7 +36,7 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QStyle>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -87,12 +87,12 @@ InfoDlg::InfoDlg(QWidget* const parent)
 
     if (QApplication::applicationName() == QString("digikam"))
     {
-        logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                         .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
     else
     {
-        logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
+        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
                         .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 

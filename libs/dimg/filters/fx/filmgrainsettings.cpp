@@ -34,7 +34,7 @@
 #include <QUrl>
 #include <QApplication>
 #include <QStyle>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QIcon>
 
 // KDE includes
@@ -336,13 +336,13 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     d->expanderBox->addItem(commonPage, QIcon::fromTheme("system-run"),
                             i18n("Common Settings"),
                             QString("CommonSettingsContainer"), true);
-    d->expanderBox->addItem(firstPage, QIcon(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-luma.png")),
+    d->expanderBox->addItem(firstPage, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-luma.png")),
                             i18n("Luminance Noise"),
                             QString("LuminanceSettingsContainer"), true);
-    d->expanderBox->addItem(secondPage, QIcon(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromablue.png")),
+    d->expanderBox->addItem(secondPage, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromablue.png")),
                             i18n("Chrominance Blue Noise"),
                             QString("ChrominanceBlueSettingsContainer"), true);
-    d->expanderBox->addItem(thirdPage, QIcon(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromared.png")),
+    d->expanderBox->addItem(thirdPage, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromared.png")),
                             i18n("Chrominance Red Noise"),
                             QString("ChrominanceRedSettingsContainer"), true);
 

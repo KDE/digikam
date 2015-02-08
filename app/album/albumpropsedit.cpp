@@ -38,7 +38,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QLineEdit>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QMessageBox>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
@@ -130,7 +130,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     d->album            = album;
     QWidget* const page = new QWidget(this);
     QLabel* const logo  = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const topLabel = new QLabel(page);

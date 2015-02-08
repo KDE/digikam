@@ -28,7 +28,7 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QPalette>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
 
@@ -63,12 +63,12 @@ SlideEnd::SlideEnd(QWidget* const parent)
 
     if (QApplication::applicationName() == QString("digikam"))
     {
-        logo = QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                 .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
     else
     {
-        logo = QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
+        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
                 .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 

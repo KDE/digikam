@@ -37,7 +37,7 @@
 #include <QTextStream>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
 #include <QFileDialog>

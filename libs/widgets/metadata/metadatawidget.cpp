@@ -44,7 +44,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QActionGroup>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QMenu>
 #include <QApplication>
 #include <QStyle>

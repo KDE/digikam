@@ -40,7 +40,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QDesktopServices>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QIcon>
 #include <QMessageBox>
 
@@ -294,7 +294,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     infoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
     RActiveLabel* const exiv2LogoLabel = new RActiveLabel(QUrl("http://www.exiv2.org"),
-                                                          QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png"),
+                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png"),
                                                           infoBox);
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 

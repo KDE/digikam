@@ -34,7 +34,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QRadioButton>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QIcon>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
@@ -248,7 +248,7 @@ QLayout* ColorCorrectionDlg::createHeading() const
     message->setWordWrap(true);
 
     QLabel* const logo      = new QLabel;
-    logo->setPixmap(QPixmap(QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     RLineWidget* const line  = new RLineWidget(Qt::Horizontal);

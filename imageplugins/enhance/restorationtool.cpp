@@ -32,12 +32,12 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QIcon>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QApplication>
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QFileDialog>
-#include "qstandardpathwrap.h"
+#include <QStandardPaths>
 #include <QMessageBox>
 
 // KDE includes
@@ -153,7 +153,7 @@ RestorationTool::RestorationTool(QObject* const parent)
     d->mainTab->addTab( firstPage, i18n("Preset") );
 
     RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
-                                                         QStandardPathsWrap::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"));
+                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     QLabel* const typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
