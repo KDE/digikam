@@ -43,26 +43,16 @@ class DXmlGuiWindow;
 
 class DIGIKAM_EXPORT DAboutData : public QObject
 {
-    Q_OBJECT
-
 public:
 
     explicit DAboutData(DXmlGuiWindow* const parent);
     ~DAboutData();
-
-    void registerHelpActions();
 
     static const QString digiKamSloganFormated();
     static const QString digiKamSlogan();
     static const QString copyright();
     static const QUrl    webProjectUrl();
     static void          authorsRegistration(KAboutData& aboutData);
-
-private Q_SLOTS:
-
-    void slotRawCameraList();
-    void slotDonateMoney();
-    void slotContribute();
 };
 
 }  // namespace Digikam

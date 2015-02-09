@@ -183,6 +183,10 @@ private Q_SLOTS:
     void slotConfToolbars();
     void slotNewToolbarConfig();
 
+    void slotRawCameraList();
+    void slotDonateMoney();
+    void slotContribute();
+
     // Slots for common Help Actions
     virtual void slotComponentsInfo()          {};
     virtual void slotDBStat()                  {};

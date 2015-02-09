@@ -27,17 +27,14 @@
 
 #include <QString>
 #include <QIcon>
-#include <QDesktopServices>
 #include <QAction>
 
 // KDE includes
 
-#include <kactioncollection.h>
 #include <klocalizedstring.h>
 
 // Local includes
 
-#include "componentsinfo.h"
 #include "dxmlguiwindow.h"
 
 namespace Digikam
@@ -52,46 +49,14 @@ DAboutData::~DAboutData()
 {
 }
 
-void DAboutData::registerHelpActions()
-{
-    DXmlGuiWindow* const kwin          = dynamic_cast<DXmlGuiWindow*>(parent());
-
-    QAction * const rawCameraListAction = new QAction(QIcon::fromTheme("kdcraw"), i18n("Supported RAW Cameras"), kwin);
-    connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    kwin->actionCollection()->addAction("help_rawcameralist", rawCameraListAction);
-
-    QAction * const donateMoneyAction   = new QAction(QIcon::fromTheme("internet-web-browser"), i18n("Donate..."), kwin);
-    connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
-    kwin->actionCollection()->addAction("help_donatemoney", donateMoneyAction);
-
-    QAction * const contributeAction    = new QAction(QIcon::fromTheme("internet-web-browser"), i18n("Contribute..."), kwin);
-    connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
-    kwin->actionCollection()->addAction("help_contribute", contributeAction);
-}
-
-void DAboutData::slotRawCameraList()
-{
-    showRawCameraList();
-}
-
-void DAboutData::slotDonateMoney()
-{
-    QDesktopServices::openUrl(QUrl("http://www.digikam.org/?q=donation"));
-}
-
-void DAboutData::slotContribute()
-{
-    QDesktopServices::openUrl(QUrl("http://www.digikam.org/?q=contrib"));
-}
-
 const QString DAboutData::digiKamSloganFormated()
 {
     return i18nc("This is the slogan formated string displayed in splashscreen. "
-                  "Please translate using short words else the slogan can be truncated.",
-                  "<qt><font color=\"white\">"
-                  "<b>Manage</b> your <b>photographs</b> like <b>a professional</b> "
-                  "with the power of <b>open source</b>"
-                  "</font></qt>"
+                 "Please translate using short words else the slogan can be truncated.",
+                 "<qt><font color=\"white\">"
+                 "<b>Manage</b> your <b>photographs</b> like <b>a professional</b> "
+                 "with the power of <b>open source</b>"
+                 "</font></qt>"
                  );
 }
 

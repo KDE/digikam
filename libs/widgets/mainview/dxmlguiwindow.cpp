@@ -39,6 +39,7 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QMenu>
+#include <QDesktopServices>
 
 // KDE includes
 
@@ -60,6 +61,7 @@
 
 #include "digikam_debug.h"
 #include "daboutdata.h"
+#include "componentsinfo.h"
 
 namespace Digikam
 {
@@ -186,7 +188,18 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
     d->about = new DAboutData(this);
-    d->about->registerHelpActions();
+
+    QAction* const rawCameraListAction = new QAction(QIcon::fromTheme("kdcraw"), i18n("Supported RAW Cameras"), this);
+    connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
+    actionCollection()->addAction("help_rawcameralist", rawCameraListAction);
+
+    QAction* const donateMoneyAction   = new QAction(QIcon::fromTheme("internet-web-browser"), i18n("Donate..."), this);
+    connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
+    actionCollection()->addAction("help_donatemoney", donateMoneyAction);
+
+    QAction* const contributeAction    = new QAction(QIcon::fromTheme("internet-web-browser"), i18n("Contribute..."), this);
+    connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
+    actionCollection()->addAction("help_contribute", contributeAction);
 
     m_animLogo = new DLogoAction(this);
     actionCollection()->addAction("logo_action", m_animLogo);
@@ -661,6 +674,21 @@ QAction* DXmlGuiWindow::buildStdAction(StdActionType type, const QObject* const 
             return 0;
             break;
     }
+}
+
+void DXmlGuiWindow::slotRawCameraList()
+{
+    showRawCameraList();
+}
+
+void DXmlGuiWindow::slotDonateMoney()
+{
+    QDesktopServices::openUrl(QUrl("http://www.digikam.org/?q=donation"));
+}
+
+void DXmlGuiWindow::slotContribute()
+{
+    QDesktopServices::openUrl(QUrl("http://www.digikam.org/?q=contrib"));
 }
 
 } // namespace Digikam
