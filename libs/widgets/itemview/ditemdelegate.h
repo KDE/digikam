@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DCategorizedView;
+class ItemViewCategorized;
 
 class DIGIKAM_EXPORT DItemDelegate : public QAbstractItemDelegate
 {
@@ -67,7 +67,7 @@ public:
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
                                    const QModelIndex& index, QRect* activationRect = 0) const = 0;
 
-    // to be called by DCategorizedView only
+    // to be called by ItemViewCategorized only
     virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index) = 0;
 
     static QString squeezedText(const QFontMetrics& fm, int width, const QString& text);

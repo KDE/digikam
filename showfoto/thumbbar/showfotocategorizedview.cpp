@@ -92,7 +92,7 @@ public:
 };
 
 ShowfotoCategorizedView::ShowfotoCategorizedView(QWidget* const parent)
-    : DCategorizedView(parent), d(new Private)
+    : ItemViewCategorized(parent), d(new Private)
 {
     setToolTip(new ShowfotoItemViewToolTip(this));
 
@@ -202,7 +202,7 @@ void ShowfotoCategorizedView::setItemDelegate(ShowfotoDelegate* delegate)
         d->delegate->setSpacing(oldDelegate->spacing());
     }
 
-    DCategorizedView::setItemDelegate(d->delegate);
+    ItemViewCategorized::setItemDelegate(d->delegate);
     updateDelegateSizes();
 
     d->delegate->setViewOnAllOverlays(this);
@@ -284,7 +284,7 @@ QList<QUrl> ShowfotoCategorizedView::selectedUrls() const
 
 void ShowfotoCategorizedView::toIndex(const QUrl& url)
 {
-    DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
+    ItemViewCategorized::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
 
 ShowfotoItemInfo ShowfotoCategorizedView::nextInOrder(const ShowfotoItemInfo& startingPoint, int nth)
@@ -301,7 +301,7 @@ ShowfotoItemInfo ShowfotoCategorizedView::nextInOrder(const ShowfotoItemInfo& st
 
 QModelIndex ShowfotoCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
 {
-    QModelIndex hint      = DCategorizedView::nextIndexHint(anchor, removed);
+    QModelIndex hint      = ItemViewCategorized::nextIndexHint(anchor, removed);
     ShowfotoItemInfo info = d->filterModel->showfotoItemInfo(anchor);
 
     //qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForShowfotoItemInfo(info);
@@ -484,7 +484,7 @@ void ShowfotoCategorizedView::removeOverlay(ImageDelegateOverlay* overlay)
 
 void ShowfotoCategorizedView::updateGeometries()
 {
-    DCategorizedView::updateGeometries();
+    ItemViewCategorized::updateGeometries();
     d->delayedEnterTimer->start();
 }
 
@@ -495,7 +495,7 @@ void ShowfotoCategorizedView::slotDelayedEnter()
 
     if (mouseIndex.isValid())
     {
-        emit DigikamKCategorizedView::entered(mouseIndex);
+        emit DCategorizedView::entered(mouseIndex);
     }
 }
 
@@ -522,14 +522,14 @@ void ShowfotoCategorizedView::indexActivated(const QModelIndex& index, Qt::Keybo
 
 void ShowfotoCategorizedView::currentChanged(const QModelIndex& index, const QModelIndex& previous)
 {
-    DCategorizedView::currentChanged(index, previous);
+    ItemViewCategorized::currentChanged(index, previous);
 
     emit currentChanged(d->filterModel->showfotoItemInfo(index));
 }
 
 void ShowfotoCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
 {
-    DCategorizedView::selectionChanged(selectedItems, deselectedItems);
+    ItemViewCategorized::selectionChanged(selectedItems, deselectedItems);
 
     if (!selectedItems.isEmpty())
     {
@@ -560,7 +560,7 @@ void ShowfotoCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const Sh
 
 void ShowfotoCategorizedView::paintEvent(QPaintEvent* e)
 {
-    DCategorizedView::paintEvent(e);
+    ItemViewCategorized::paintEvent(e);
 }
 
 QItemSelectionModel* ShowfotoCategorizedView::getSelectionModel() const

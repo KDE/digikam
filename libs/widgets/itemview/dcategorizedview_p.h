@@ -1,25 +1,30 @@
-/**
-  * This file is part of the KDE project
-  * Copyright (C) 2007 Rafael Fernández López <ereslibre@kde.org>
-  *
-  * This library is free software; you can redistribute it and/or
-  * modify it under the terms of the GNU Library General Public
-  * License as published by the Free Software Foundation; either
-  * version 2 of the License, or (at your option) any later version.
-  *
-  * This library is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  * Library General Public License for more details.
-  *
-  * You should have received a copy of the GNU Library General Public License
-  * along with this library; see the file COPYING.LIB.  If not, write to
-  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  * Boston, MA 02110-1301, USA.
-  */
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2010-01-16
+ * Description : Item view for listing items in a categorized fashion optionally
+ *
+ * Copyright (C) 2007      by Rafael Fernández López <ereslibre at kde dot org>
+ * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
-#ifndef KCATEGORIZEDVIEW_P_H
-#define KCATEGORIZEDVIEW_P_H
+#ifndef DCATEGORIZED_VIEW_P_H
+#define DCATEGORIZED_VIEW_P_H
 
 // Qt includes
 
@@ -70,11 +75,11 @@ private:
 /**
   * @internal
   */
-class DigikamKCategorizedView::Private
+class DCategorizedView::Private
 {
 public:
 
-    explicit Private(DigikamKCategorizedView* const listView);
+    explicit Private(DCategorizedView* const listView);
     ~Private();
 
     // Methods
@@ -182,7 +187,7 @@ public:
     };
 
     // Basic data
-    DigikamKCategorizedView*          listView;
+    DCategorizedView*          listView;
     KCategoryDrawer*                  categoryDrawer;
     QSize                             biggestItemSize;
 
@@ -215,4 +220,4 @@ public:
 
 }  // namespace Digikam
 
-#endif // KCATEGORIZEDVIEW_P_H
+#endif // DCATEGORIZED_VIEW_P_H

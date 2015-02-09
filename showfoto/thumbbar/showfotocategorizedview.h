@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "dcategorizedview.h"
+#include "itemviewcategorized.h"
 #include "showfotoimagemodel.h"
 #include "showfotofiltermodel.h"
 #include "showfotothumbnailmodel.h"
@@ -38,7 +38,7 @@ namespace ShowFoto
 
 class ShowfotoDelegate;
 
-class ShowfotoCategorizedView : public DCategorizedView
+class ShowfotoCategorizedView : public ItemViewCategorized
 {
 public:
 

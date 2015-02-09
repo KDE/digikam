@@ -95,7 +95,7 @@ public:
 };
 
 ImportCategorizedView::ImportCategorizedView(QWidget* const parent)
-    : DCategorizedView(parent), d(new Private)
+    : ItemViewCategorized(parent), d(new Private)
 {
     setToolTip(new ImportItemViewToolTip(this));
 
@@ -220,7 +220,7 @@ void ImportCategorizedView::setItemDelegate(ImportDelegate* delegate)
         d->delegate->setSpacing(oldDelegate->spacing());
     }
 
-    DCategorizedView::setItemDelegate(d->delegate);
+    ItemViewCategorized::setItemDelegate(d->delegate);
     setCategoryDrawer(d->delegate->categoryDrawer());
     updateDelegateSizes();
 
@@ -305,7 +305,7 @@ QList<QUrl> ImportCategorizedView::selectedUrls() const
 
 void ImportCategorizedView::toIndex(const QUrl& url)
 {
-    DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
+    ItemViewCategorized::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
 
 CamItemInfo ImportCategorizedView::nextInOrder(const CamItemInfo& startingPoint, int nth)
@@ -322,7 +322,7 @@ CamItemInfo ImportCategorizedView::nextInOrder(const CamItemInfo& startingPoint,
 
 QModelIndex ImportCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
 {
-    QModelIndex hint = DCategorizedView::nextIndexHint(anchor, removed);
+    QModelIndex hint = ItemViewCategorized::nextIndexHint(anchor, removed);
     CamItemInfo info   = d->filterModel->camItemInfo(anchor);
 
     //qCDebug(LOG_IMPORTUI) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForCamItemInfo(info);
@@ -506,7 +506,7 @@ void ImportCategorizedView::removeOverlay(ImageDelegateOverlay* overlay)
 
 void ImportCategorizedView::updateGeometries()
 {
-    DCategorizedView::updateGeometries();
+    ItemViewCategorized::updateGeometries();
     d->delayedEnterTimer->start();
 }
 
@@ -517,7 +517,7 @@ void ImportCategorizedView::slotDelayedEnter()
 
     if (mouseIndex.isValid())
     {
-        emit DigikamKCategorizedView::entered(mouseIndex);
+        emit DCategorizedView::entered(mouseIndex);
     }
 }
 
@@ -571,14 +571,14 @@ void ImportCategorizedView::indexActivated(const QModelIndex& index, Qt::Keyboar
 
 void ImportCategorizedView::currentChanged(const QModelIndex& index, const QModelIndex& previous)
 {
-    DCategorizedView::currentChanged(index, previous);
+    ItemViewCategorized::currentChanged(index, previous);
 
     emit currentChanged(d->filterModel->camItemInfo(index));
 }
 
 void ImportCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
 {
-    DCategorizedView::selectionChanged(selectedItems, deselectedItems);
+    ItemViewCategorized::selectionChanged(selectedItems, deselectedItems);
 
     if (!selectedItems.isEmpty())
     {
@@ -609,7 +609,7 @@ void ImportCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const CamI
 
 void ImportCategorizedView::paintEvent(QPaintEvent* e)
 {
-    DCategorizedView::paintEvent(e);
+    ItemViewCategorized::paintEvent(e);
 }
 
 QItemSelectionModel* ImportCategorizedView::getSelectionModel() const

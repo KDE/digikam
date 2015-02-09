@@ -27,7 +27,7 @@
 // Local includes
 
 #include "imageinfo.h"
-#include "dcategorizedview.h"
+#include "itemviewcategorized.h"
 #include "thumbnailsize.h"
 #include "iccsettingscontainer.h"
 
@@ -44,7 +44,7 @@ class ImageDelegate;
 class ImageDelegateOverlay;
 class ImageThumbnailModel;
 
-class ImageCategorizedView : public DCategorizedView
+class ImageCategorizedView : public ItemViewCategorized
 {
     Q_OBJECT
 

@@ -4,8 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2010-01-16
- * Description : Qt item view for images
+ * Description : Item view for listing items in a categorized fashion optionally
  *
+ * Copyright (C) 2007      by Rafael Fernández López <ereslibre at kde dot org>
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -22,24 +23,33 @@
  *
  * ============================================================ */
 
-#ifndef DCATEGORIZEDVIEW_H
-#define DCATEGORIZEDVIEW_H
+#ifndef DCATEGORIZED_VIEW_H
+#define DCATEGORIZED_VIEW_H
+
+// Qt includes
+
+#include <QListView>
 
 // Local includes
 
 #include "digikam_export.h"
-#include "digikamkcategorizedview.h"
-#include "dragdropimplementations.h"
 
-class QSortFilterProxyModel;
+class KCategoryDrawer;
 
 namespace Digikam
 {
 
-class DItemDelegate;
-class ItemViewToolTip;
-
-class DIGIKAM_EXPORT DCategorizedView : public DigikamKCategorizedView, public DragDropViewImplementation
+/**
+ * @short Item view for listing items
+ *
+ * DCategorizedView allows you to use it as it were a QListView.
+ * Subclass KCategorizedSortFilterProxyModel to provide category information for items.
+ *
+ * @see KCategorizedSortFilterProxyModel
+ *
+ * @author Rafael Fernández López <ereslibre@kde.org>
+ */
+class DIGIKAM_EXPORT DCategorizedView : public QListView
 {
     Q_OBJECT
 
@@ -48,144 +58,96 @@ public:
     explicit DCategorizedView(QWidget* const parent = 0);
     ~DCategorizedView();
 
-    DItemDelegate* delegate()                const;
-    int            numberOfSelectedIndexes() const;
+    void setGridSize(const QSize& size);
 
-    /** Selects the index as current and scrolls to it */
-    void toFirstIndex();
-    void toLastIndex();
-    void toNextIndex();
-    void toPreviousIndex();
-    void toIndex(const QModelIndex& index);
-    void awayFromSelection();
+    void setCategoryDrawer(KCategoryDrawer* categoryDrawer);
+    KCategoryDrawer* categoryDrawer() const;
 
-    /** Like scrollTo, but only scrolls if the index is not visible, regardless of hint. */
-    void scrollToRelaxed(const QModelIndex& index, ScrollHint hint = EnsureVisible);
+    /**
+     * Switch on drawing of dragged items. Default: on.
+     * While dragging over the view, dragged items will be drawn transparently
+     * following the mouse cursor.
+     *
+     * @param drawDraggedItems if <code>true</code>, dragged items will be
+     *                         drawn
+     */
+    void setDrawDraggedItems(bool drawDraggedItems);
 
-    void invertSelection();
-    void setSelectedIndexes(const QList<QModelIndex>& indexes);
+    virtual void        setModel(QAbstractItemModel* model);
+    virtual QRect       visualRect(const QModelIndex& index) const;
+    virtual QModelIndex indexAt(const QPoint& point) const;
 
-    void setToolTipEnabled(bool enabled);
-    bool isToolTipEnabled() const;
+    /**
+     * This method will return all indexes whose visual rect intersects @p rect.
+     * @param rect rectangle to test intersection with
+     * @note Returns an empty list if the view is not categorized.
+     */
+    virtual QModelIndexList categorizedIndexesIn(const QRect& rect) const;
 
-    /** Sets the spacing. Does not use setSpacing()/spacing() from QListView */
-    void setSpacing(int spacing);
+    /**
+     * This method will return the visual rect of the header of the category
+     * in which @p index is sorted.
+     * @note Returns QRect() if the view is not categorized.
+     */
+    virtual QRect categoryVisualRect(const QModelIndex& index) const;
 
-    /** Set if the PointingHand Cursor should be shown over the activation area */
-    void setUsePointingHandCursor(bool useCursor);
+    /**
+     * This method will return the first index of the category
+     * in the region of which @p point is found.
+     * @note Returns QModelIndex() if the view is not categorized.
+     */
+    virtual QModelIndex categoryAt(const QPoint& point) const;
 
-    /** Determine a step size for scrolling: The larger this number,
-     *  the smaller and more precise is the scrolling. Default is 10. */
-    void setScrollStepGranularity(int factor);
-
-    virtual QSortFilterProxyModel* filterModel() const = 0;
+    /**
+     * This method returns the range of indexes contained
+     * in the category in which @p index is sorted.
+     * @note Returns an empty range if the view is no categorized.
+     */
+    virtual QItemSelectionRange categoryRange(const QModelIndex& index) const;
 
 public Q_SLOTS:
 
-    void showIndexNotification(const QModelIndex& index, const QString& message);
-    void hideIndexNotification();
-
-    virtual void cut()   { DragDropViewImplementation::cut();   }
-    virtual void copy()  { DragDropViewImplementation::copy();  }
-    virtual void paste() { DragDropViewImplementation::paste(); }
-
-Q_SIGNALS:
-
-    /// Emitted when any selection change occurs. Any of the signals below will be emitted before.
-    void selectionChanged();
-
-    /// Emitted when the selection is completely cleared.
-    void selectionCleared();
-
-    void zoomOutStep();
-    void zoomInStep();
-
-    /** For overlays: Like the respective parent class signals, but with additional info.
-     *  Do not change the mouse events.
-     */
-    void clicked(const QMouseEvent* e, const QModelIndex& index);
-    void entered(const QMouseEvent* e, const QModelIndex& index);
-
-    /// While clicked() is emitted with a valid index, this corresponds to clicking on empty space
-    void viewportClicked(const QMouseEvent* e);
-
-    /**  Remember you may want to check if the event is accepted or ignored.
-     *   This signal is emitted after being handled by this widget.
-     *   You can accept it if ignored. */
-    void keyPressed(QKeyEvent* e);
-
-
-protected Q_SLOTS:
-
-    void slotActivated(const QModelIndex& index);
-    void slotClicked(const QModelIndex& index);
-    void slotEntered(const QModelIndex& index);
-    void layoutAboutToBeChanged();
-    void layoutWasChanged();
-
-    virtual void slotThemeChanged();
-    virtual void slotSetupChanged();
+    virtual void reset();
 
 protected:
 
-    void encodeIsCutSelection(QMimeData* mime, bool isCutSelection);
-    bool decodeIsCutSelection(const QMimeData* mimeData);
+    virtual void paintEvent(QPaintEvent* event);
 
-    void setToolTip(ItemViewToolTip* tip);
-    void setItemDelegate(DItemDelegate* delegate);
-    void updateDelegateSizes();
-    void userInteraction();
+    virtual void resizeEvent(QResizeEvent* event);
 
-    /** Returns an index that is representative for the category at position pos */
-    QModelIndex indexForCategoryAt(const QPoint& pos) const;
+    virtual void setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags flags);
 
-    // reimplemented from parent class
-    void contextMenuEvent(QContextMenuEvent* event);
-    void keyPressEvent(QKeyEvent* event);
-    void leaveEvent(QEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
-    void resizeEvent(QResizeEvent* e);
-    void reset();
-    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-    void rowsInserted(const QModelIndex& parent, int start, int end);
-    void selectionChanged(const QItemSelection&, const QItemSelection&);
-    bool viewportEvent(QEvent* event);
-    void wheelEvent(QWheelEvent* event);
-    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
+    virtual void mouseMoveEvent(QMouseEvent* event);
 
-    /// Reimplement these in a subclass
-    virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
-    virtual void showContextMenu(QContextMenuEvent* event);
-    virtual void indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers);
+    virtual void mousePressEvent(QMouseEvent* event);
 
-    /** Provides default behavior, can reimplement in a subclass.
-     *  Returns true if a tooltip was shown.
-     *  The help event is optional.
-     */
-    virtual bool showToolTip(const QModelIndex& index, QStyleOptionViewItem& option, QHelpEvent* e = 0);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
 
-    DECLARE_VIEW_DRAG_DROP_METHODS(DigikamKCategorizedView)
+    virtual void leaveEvent(QEvent* event);
 
-    /// Note: pure virtual dragDropHandler() still open from DragDropViewImplementation
-    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
-    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
+    virtual void startDrag(Qt::DropActions supportedActions);
 
-    /**
-     * Assuming the given indexes would be removed (hypothetically!),
-     * return the index to be selected instead, starting from anchor.
-     * The default implementation returns the next remaining sibling.
-     */
-    virtual QModelIndex nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const;
+    virtual void dragMoveEvent(QDragMoveEvent* event);
 
-private Q_SLOTS:
+    virtual void dragLeaveEvent(QDragLeaveEvent* event);
 
-    void slotGridSizeChanged(const QSize&);
+    virtual void dropEvent(QDropEvent* event);
 
-private:
+    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
 
-    void ensureSelectionAfterChanges();
+protected Q_SLOTS:
+
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+
+    virtual void rowsInsertedArtifficial(const QModelIndex& parent, int start, int end);
+
+    virtual void rowsRemoved(const QModelIndex& parent, int start, int end);
+
+    virtual void updateGeometries();
+
+    virtual void slotLayoutChanged();
+
+    virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 
 private:
 
@@ -195,4 +157,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGECATEGORIZEDVIEW_H */
+#endif // DCATEGORIZED_VIEW_H

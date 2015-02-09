@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "dcategorizedview.h"
+#include "itemviewcategorized.h"
 #include "importimagemodel.h"
 #include "importfiltermodel.h"
 #include "importthumbnailmodel.h"
@@ -39,7 +39,7 @@ namespace Digikam
 class ImportDelegate;
 class ICCSettingsContainer;
 
-class ImportCategorizedView : public DCategorizedView
+class ImportCategorizedView : public ItemViewCategorized
 {
     Q_OBJECT
 

@@ -1010,13 +1010,13 @@ if(DIGIKAM_CAN_BE_COMPILED)
        )
 
     set(libitemview_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/digikamkcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/ditemdelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/imagedelegateoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewhoverbutton.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewtooltip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewcategorized.cpp
        )
 
     set(libgraphicsviewwidgets_SRCS

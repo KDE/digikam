@@ -1242,7 +1242,7 @@ void ImageWindow::slotFileMetadataChanged(const QUrl& url)
 }
 
 /*
- * Should all be done by DCategorizedView
+ * Should all be done by ItemViewCategorized
  *
 void ImageWindow::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {

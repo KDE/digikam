@@ -107,7 +107,7 @@ public:
 // -------------------------------------------------------------------------------
 
 ImageCategorizedView::ImageCategorizedView(QWidget* const parent)
-    : DCategorizedView(parent), d(new Private)
+    : ItemViewCategorized(parent), d(new Private)
 {
     setToolTip(new ImageItemViewToolTip(this));
 
@@ -258,7 +258,7 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate* delegate)
         d->delegate->setSpacing(oldDelegate->spacing());
     }
 
-    DCategorizedView::setItemDelegate(d->delegate);
+    ItemViewCategorized::setItemDelegate(d->delegate);
     setCategoryDrawer(d->delegate->categoryDrawer());
     updateDelegateSizes();
 
@@ -355,7 +355,7 @@ QList<QUrl> ImageCategorizedView::selectedUrls() const
 
 void ImageCategorizedView::toIndex(const QUrl& url)
 {
-    DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
+    ItemViewCategorized::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
 
 QModelIndex ImageCategorizedView::indexForInfo(const ImageInfo& info) const
@@ -377,7 +377,7 @@ ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo& startingPoint, int 
 
 QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
 {
-    QModelIndex hint = DCategorizedView::nextIndexHint(anchor, removed);
+    QModelIndex hint = ItemViewCategorized::nextIndexHint(anchor, removed);
     ImageInfo info   = d->filterModel->imageInfo(anchor);
 
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForImageInfo(info);
@@ -571,7 +571,7 @@ void ImageCategorizedView::removeOverlay(ImageDelegateOverlay* overlay)
 
 void ImageCategorizedView::updateGeometries()
 {
-    DCategorizedView::updateGeometries();
+    ItemViewCategorized::updateGeometries();
     d->delayedEnterTimer->start();
 }
 
@@ -582,7 +582,7 @@ void ImageCategorizedView::slotDelayedEnter()
 
     if (mouseIndex.isValid())
     {
-        emit DigikamKCategorizedView::entered(mouseIndex);
+        emit DCategorizedView::entered(mouseIndex);
     }
 }
 
@@ -636,14 +636,14 @@ void ImageCategorizedView::indexActivated(const QModelIndex& index, Qt::Keyboard
 
 void ImageCategorizedView::currentChanged(const QModelIndex& index, const QModelIndex& previous)
 {
-    DCategorizedView::currentChanged(index, previous);
+    ItemViewCategorized::currentChanged(index, previous);
 
     emit currentChanged(d->filterModel->imageInfo(index));
 }
 
 void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
 {
-    DCategorizedView::selectionChanged(selectedItems, deselectedItems);
+    ItemViewCategorized::selectionChanged(selectedItems, deselectedItems);
 
     if (!selectedItems.isEmpty())
     {
@@ -699,7 +699,7 @@ void ImageCategorizedView::paintEvent(QPaintEvent* e)
         d->delegate->prepareThumbnails(thumbModel, indexesToThumbnail);
     }
 
-    DCategorizedView::paintEvent(e);
+    ItemViewCategorized::paintEvent(e);
 }
 
 QItemSelectionModel* ImageCategorizedView::getSelectionModel() const
