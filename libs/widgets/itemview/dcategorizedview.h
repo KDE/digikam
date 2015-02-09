@@ -43,11 +43,7 @@ namespace Digikam
  * @short Item view for listing items
  *
  * DCategorizedView allows you to use it as it were a QListView.
- * Subclass KCategorizedSortFilterProxyModel to provide category information for items.
- *
- * @see KCategorizedSortFilterProxyModel
- *
- * @author Rafael Fernández López <ereslibre@kde.org>
+ * Subclass DCategorizedSortFilterProxyModel to provide category information for items.
  */
 class DIGIKAM_EXPORT DCategorizedView : public QListView
 {

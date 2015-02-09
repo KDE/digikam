@@ -34,12 +34,9 @@
 #include <kgeomap_primitives.h>
 #include <modelhelper.h>
 
-// KDE includes
-
-#include <kcategorizedsortfilterproxymodel.h>
-
 // Local includes
 
+#include "dcategorizedsortfilterproxymodel.h"
 #include "statesavingobject.h"
 #include "digikam_export.h"
 #include "imagealbummodel.h"
@@ -66,7 +63,7 @@ public:
     };
 
     MapWidgetView(QItemSelectionModel* const selectionModel,
-                  KCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, const Application application);
+                  DCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, const Application application);
     ~MapWidgetView();
 
     void openAlbum(Album* const album);
@@ -95,7 +92,7 @@ class MapViewModelHelper : public KGeoMap::ModelHelper
 
 public:
 
-    MapViewModelHelper(QItemSelectionModel* const selection, KCategorizedSortFilterProxyModel* const filterModel,
+    MapViewModelHelper(QItemSelectionModel* const selection, DCategorizedSortFilterProxyModel* const filterModel,
                        QObject* const parent, const MapWidgetView::Application application);
     virtual ~MapViewModelHelper();
 

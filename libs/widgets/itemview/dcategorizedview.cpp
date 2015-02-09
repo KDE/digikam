@@ -39,7 +39,10 @@
 // KDE includes
 
 #include <kcategorydrawer.h>
-#include <kcategorizedsortfilterproxymodel.h>
+
+// Local includes
+
+#include "dcategorizedsortfilterproxymodel.h"
 
 // By defining DOLPHIN_DRAGANDDROP the custom drag and drop implementation of
 // DCategorizedView is bypassed to have a consistent drag and drop look for all
@@ -460,7 +463,7 @@ void DCategorizedView::Private::drawNewCategory(const QModelIndex& index, int so
     }
 
     QStyleOption optionCopy = option;
-    const QString category  = proxyModel->data(index, KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+    const QString category  = proxyModel->data(index, DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
     optionCopy.state       &= ~QStyle::State_Selected;
 
     if ((listView->selectionMode() != SingleSelection) && (listView->selectionMode() != NoSelection))
@@ -590,7 +593,7 @@ void DCategorizedView::setModel(QAbstractItemModel* model)
 
     QListView::setModel(model);
 
-    d->proxyModel = dynamic_cast<KCategorizedSortFilterProxyModel*>(model);
+    d->proxyModel = dynamic_cast<DCategorizedSortFilterProxyModel*>(model);
 
     if (d->proxyModel)
     {
@@ -1708,7 +1711,7 @@ int DCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelI
 {
     int end            = modelIndexList.size();
     QString category   = proxyModel->data(modelIndexList[begin],
-                                          KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+                                          DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
 
     // First case: Small category with <10 entries
     const int smallEnd = qMin(end, begin + 10);
@@ -1716,7 +1719,7 @@ int DCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelI
     for (int k=begin; k < smallEnd; ++k)
     {
         if (category != proxyModel->data(modelIndexList[k],
-                                         KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
+                                         DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
         {
             return k;
         }
@@ -1726,7 +1729,7 @@ int DCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelI
 
     // Second case: only one category, test last value
     QString value = proxyModel->data(modelIndexList[end - 1],
-                                     KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+                                     DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
 
     if (value == category)
     {
@@ -1737,14 +1740,14 @@ int DCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelI
     if (averageSize && begin + averageSize < end)
     {
         if (category != proxyModel->data(modelIndexList[begin + averageSize],
-                                         KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
+                                         DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
         {
             end = begin + averageSize;
         }
         else if (begin + 2*averageSize < end)
         {
             if (category != proxyModel->data(modelIndexList[begin + 2*averageSize],
-                                             KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
+                                             DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
             {
                 end = begin + 2 * averageSize;
             }
@@ -1763,7 +1766,7 @@ int DCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelI
         middle = begin + half;
 
         if (category != proxyModel->data(modelIndexList[middle],
-                                         KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
+                                         DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
         {
             n = half;
         }
@@ -1802,7 +1805,7 @@ void DCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent, int st
     const int rowCount   = d->proxyModel->rowCount();
     const int sortColumn = d->proxyModel->sortColumn();
     QString lastCategory = d->proxyModel->data(d->proxyModel->index(0, sortColumn),
-                                               KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+                                               DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
     int offset           = -1;
 
     SparseModelIndexVector modelIndexList(rowCount, d->proxyModel, sortColumn);
@@ -1832,7 +1835,7 @@ void DCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent, int st
 
     for (int k = 0; k < rowCount; )
     {
-        lastCategory   = d->proxyModel->data(modelIndexList[k], KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+        lastCategory   = d->proxyModel->data(modelIndexList[k], DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
         int upperBound = d->categoryUpperBound(modelIndexList, k, categorySizes / ++categoryCounts);
         categorySizes  += upperBound - k;
         offset         = 0;

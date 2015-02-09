@@ -2717,7 +2717,7 @@ KCategorizedView* EditorWindow::createToolSelectionView()
     actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());
 
     // setup categorized view
-    KCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
+    DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
 
     d->selectToolsActionView = new ActionCategorizedView;
     d->selectToolsActionView->setupIconMode();

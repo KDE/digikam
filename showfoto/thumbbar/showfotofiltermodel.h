@@ -28,12 +28,9 @@
 
 #include <QObject>
 
-// KDE includes
-
-#include <kcategorizedsortfilterproxymodel.h>
-
 // Local includes
 
+#include "dcategorizedsortfilterproxymodel.h"
 #include "showfotoimagemodel.h"
 #include "showfotothumbnailmodel.h"
 #include "showfotoitemsortsettings.h"
@@ -43,7 +40,7 @@ namespace ShowFoto
 
 class ShowfotoFilterModel;
 
-class ShowfotoSortFilterModel : public KCategorizedSortFilterProxyModel
+class ShowfotoSortFilterModel : public DCategorizedSortFilterProxyModel
 {
     Q_OBJECT
 

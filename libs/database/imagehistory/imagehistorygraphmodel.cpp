@@ -31,11 +31,11 @@
 
 // KDE includes
 
-#include <kcategorizedsortfilterproxymodel.h>
 #include <klocalizedstring.h>
 
 // Local includes
 
+#include "dcategorizedsortfilterproxymodel.h"
 #include "dimgfiltermanager.h"
 #include "imagelistmodel.h"
 #include "imagehistorygraphdata.h"
@@ -822,7 +822,7 @@ QVariant ImageHistoryGraphModel::data(const QModelIndex& index, int role) const
             case IsCategoryItemRole:
                 return true;
             case Qt::DisplayRole:
-            case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
+            case DCategorizedSortFilterProxyModel::CategoryDisplayRole:
             //case Qt::ToolTipRole:
                 return categoryItem->title;
         }

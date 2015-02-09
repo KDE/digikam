@@ -67,7 +67,7 @@ public:
 
 TableView::TableView(
         QItemSelectionModel* const selectionModel,
-        KCategorizedSortFilterProxyModel* const imageFilterModel,
+        DCategorizedSortFilterProxyModel* const imageFilterModel,
         QWidget* const parent
     )
   : QWidget(parent),

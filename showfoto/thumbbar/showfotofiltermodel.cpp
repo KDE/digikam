@@ -31,7 +31,7 @@ namespace ShowFoto
 {
 
 ShowfotoSortFilterModel::ShowfotoSortFilterModel(QObject* const parent)
-    : KCategorizedSortFilterProxyModel(parent),
+    : DCategorizedSortFilterProxyModel(parent),
       m_chainedModel(0)
 {
 }
@@ -196,7 +196,7 @@ ShowfotoFilterModel* ShowfotoSortFilterModel::showfotoFilterModel() const
 
 void ShowfotoSortFilterModel::setSourceModel(QAbstractItemModel* sourceModel)
 {
-    KCategorizedSortFilterProxyModel::setSourceModel(sourceModel);
+    DCategorizedSortFilterProxyModel::setSourceModel(sourceModel);
 }
 
 void ShowfotoSortFilterModel::setDirectSourceShowfotoModel(ShowfotoImageModel* const sourceModel)
@@ -260,7 +260,7 @@ QVariant ShowfotoFilterModel::data(const QModelIndex& index, int role) const
 
     switch (role)
     {
-        case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
+        case DCategorizedSortFilterProxyModel::CategoryDisplayRole:
             return categoryIdentifier(d->showfotoImageModel->showfotoItemInfoRef(mapToSource(index)));
 
         case CategorizationModeRole:
@@ -276,7 +276,7 @@ QVariant ShowfotoFilterModel::data(const QModelIndex& index, int role) const
             return QVariant::fromValue(const_cast<ShowfotoFilterModel*>(this));
     }
 
-    return KCategorizedSortFilterProxyModel::data(index, role);
+    return DCategorizedSortFilterProxyModel::data(index, role);
 }
 
 ShowfotoFilterModel* ShowfotoFilterModel::showfotoFilterModel() const

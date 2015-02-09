@@ -27,12 +27,9 @@
 
 #include <QWidget>
 
-// KDE includes
-
-#include <kcategorizedsortfilterproxymodel.h>
-
 // Local includes
 
+#include "dcategorizedsortfilterproxymodel.h"
 #include "digikam_export.h"
 #include "imageviewutilities.h"
 #include "imageinfo.h"
@@ -58,7 +55,7 @@ class TableView : public QWidget, public StateSavingObject
 public:
 
     explicit TableView(QItemSelectionModel* const selectionModel,
-                       KCategorizedSortFilterProxyModel* const imageFilterModel,
+                       DCategorizedSortFilterProxyModel* const imageFilterModel,
                        QWidget* const parent);
 
     virtual ~TableView();

@@ -30,11 +30,12 @@
 
 #include <QVector>
 
-class KCategorizedSortFilterProxyModel;
 class KCategoryDrawer;
 
 namespace Digikam
 {
+
+class DCategorizedSortFilterProxyModel;
 
 class SparseModelIndexVector : public QVector<QModelIndex>
 {
@@ -215,7 +216,7 @@ public:
     QItemSelection                    lastSelection;
 
     // Attributes for speed reasons
-    KCategorizedSortFilterProxyModel* proxyModel;
+    DCategorizedSortFilterProxyModel* proxyModel;
 };
 
 }  // namespace Digikam

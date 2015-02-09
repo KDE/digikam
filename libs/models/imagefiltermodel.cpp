@@ -42,7 +42,7 @@ namespace Digikam
 {
 
 ImageSortFilterModel::ImageSortFilterModel(QObject* parent)
-    : KCategorizedSortFilterProxyModel(parent), m_chainedModel(0)
+    : DCategorizedSortFilterProxyModel(parent), m_chainedModel(0)
 {
 }
 
@@ -82,7 +82,7 @@ void ImageSortFilterModel::setDirectSourceImageModel(ImageModel* model)
 void ImageSortFilterModel::setSourceModel(QAbstractItemModel* model)
 {
     // made it protected, only setSourceImageModel is public
-    KCategorizedSortFilterProxyModel::setSourceModel(model);
+    DCategorizedSortFilterProxyModel::setSourceModel(model);
 }
 
 ImageModel* ImageSortFilterModel::sourceImageModel() const
@@ -306,7 +306,7 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
     {
             // Attention: This breaks should there ever be another filter model between this and the ImageModel
 
-        case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
+        case DCategorizedSortFilterProxyModel::CategoryDisplayRole:
             return categoryIdentifier(d->imageModel->imageInfoRef(mapToSource(index)));
         case CategorizationModeRole:
             return d->sorter.categorizationMode;
@@ -325,7 +325,7 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
             return QVariant::fromValue(const_cast<ImageFilterModel*>(this));
     }
 
-    return KCategorizedSortFilterProxyModel::data(index, role);
+    return DCategorizedSortFilterProxyModel::data(index, role);
 }
 
 ImageFilterModel* ImageFilterModel::imageFilterModel() const

@@ -28,13 +28,10 @@
 
 #include <QStandardItemModel>
 
-// KDE includes
-
-#include <kcategorizedsortfilterproxymodel.h>
-
 // Local includes
 
 #include "digikam_export.h"
+#include "dcategorizedsortfilterproxymodel.h"
 
 class QAction;
 
@@ -61,7 +58,7 @@ public:
     QStandardItem* addItem(const QString& text, const QIcon& decoration, const QVariant& category,
                            const QVariant& categorySorting = QVariant());
 
-    KCategorizedSortFilterProxyModel* createFilterModel();
+    DCategorizedSortFilterProxyModel* createFilterModel();
 };
 
 // -----------------------------------------------------------------------------------------------------------------------

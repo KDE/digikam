@@ -44,8 +44,8 @@ CategorizedItemModel::CategorizedItemModel(QObject* parent)
 QStandardItem* CategorizedItemModel::addItem(const QString& text, const QVariant& category, const QVariant& categorySorting)
 {
     QStandardItem* item = new QStandardItem(text);
-    item->setData(category, KCategorizedSortFilterProxyModel::CategoryDisplayRole);
-    item->setData(categorySorting.isNull() ? category : categorySorting, KCategorizedSortFilterProxyModel::CategorySortRole);
+    item->setData(category, DCategorizedSortFilterProxyModel::CategoryDisplayRole);
+    item->setData(categorySorting.isNull() ? category : categorySorting, DCategorizedSortFilterProxyModel::CategorySortRole);
     item->setData(rowCount(), ItemOrderRole);
     appendRow(item);
     return item;
@@ -59,9 +59,9 @@ QStandardItem* CategorizedItemModel::addItem(const QString& text, const QIcon& d
     return item;
 }
 
-KCategorizedSortFilterProxyModel* CategorizedItemModel::createFilterModel()
+DCategorizedSortFilterProxyModel* CategorizedItemModel::createFilterModel()
 {
-    KCategorizedSortFilterProxyModel* filterModel = new KCategorizedSortFilterProxyModel(this);
+    DCategorizedSortFilterProxyModel* filterModel = new DCategorizedSortFilterProxyModel(this);
     filterModel->setCategorizedModel(true);
     filterModel->setSortRole(ItemOrderRole);
     filterModel->setSourceModel(this);

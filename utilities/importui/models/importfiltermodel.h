@@ -28,12 +28,9 @@
 
 #include <QObject>
 
-// KDE includes
-
-#include <kcategorizedsortfilterproxymodel.h>
-
 // Local includes
 
+#include "dcategorizedsortfilterproxymodel.h"
 #include "camitemsortsettings.h"
 #include "importimagemodel.h"
 
@@ -42,7 +39,7 @@ namespace Digikam
 class Filter;
 class ImportFilterModel;
 
-class ImportSortFilterModel : public KCategorizedSortFilterProxyModel
+class ImportSortFilterModel : public DCategorizedSortFilterProxyModel
 {
     Q_OBJECT
 

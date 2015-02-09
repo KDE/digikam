@@ -28,12 +28,9 @@
 #ifndef IMAGEFILTERMODEL_H
 #define IMAGEFILTERMODEL_H
 
-// KDE includes
-
-#include <kcategorizedsortfilterproxymodel.h>
-
 // Local includes
 
+#include "dcategorizedsortfilterproxymodel.h"
 #include "textfilter.h"
 #include "imagefiltersettings.h"
 #include "imagemodel.h"
@@ -57,7 +54,7 @@ public:
 
 // -----------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageSortFilterModel : public KCategorizedSortFilterProxyModel
+class DIGIKAM_DATABASE_EXPORT ImageSortFilterModel : public DCategorizedSortFilterProxyModel
 {
     Q_OBJECT
 

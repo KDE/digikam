@@ -103,7 +103,7 @@ public:
  * @param parent Parent object
  */
 MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
-                             KCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, const MapWidgetView::Application application)
+                             DCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, const MapWidgetView::Application application)
     : QWidget(parent),
       StateSavingObject(this),
       d(new Private())
@@ -224,7 +224,7 @@ public:
 };
 
 MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
-                                       KCategorizedSortFilterProxyModel* const filterModel, QObject* const parent, const MapWidgetView::Application application)
+                                       DCategorizedSortFilterProxyModel* const filterModel, QObject* const parent, const MapWidgetView::Application application)
     : KGeoMap::ModelHelper(parent),
       d(new Private())
 {

@@ -24,7 +24,7 @@
 #ifndef IMPORTCATEGORIZEDVIEW_P_H
 #define IMPORTCATEGORIZEDVIEW_P_H
 
-class KCategorizedSortFilterProxyModel;
+class DCategorizedSortFilterProxyModel;
 class KCategoryDrawer;
 
 namespace Digikam
@@ -203,7 +203,7 @@ public:
     QItemSelection                    lastSelection;
 
     // Attributes for speed reasons
-    KCategorizedSortFilterProxyModel* proxyModel;
+    DCategorizedSortFilterProxyModel* proxyModel;
 };
 
 }  // namespace Digikam

@@ -31,7 +31,7 @@ namespace Digikam
 {
 
 ImportSortFilterModel::ImportSortFilterModel(QObject* const parent)
-    : KCategorizedSortFilterProxyModel(parent),
+    : DCategorizedSortFilterProxyModel(parent),
       m_chainedModel(0)
 {
 }
@@ -213,7 +213,7 @@ ImportFilterModel* ImportSortFilterModel::importFilterModel() const
 
 void ImportSortFilterModel::setSourceModel(QAbstractItemModel* sourceModel)
 {
-    KCategorizedSortFilterProxyModel::setSourceModel(sourceModel);
+    DCategorizedSortFilterProxyModel::setSourceModel(sourceModel);
 }
 
 void ImportSortFilterModel::setDirectSourceImportModel(ImportImageModel* const sourceModel)
@@ -279,7 +279,7 @@ QVariant ImportFilterModel::data(const QModelIndex& index, int role) const
 
     switch (role)
     {
-        case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
+        case DCategorizedSortFilterProxyModel::CategoryDisplayRole:
             return categoryIdentifier(d->importImageModel->camItemInfoRef(mapToSource(index)));
 
         case CategorizationModeRole:
@@ -295,7 +295,7 @@ QVariant ImportFilterModel::data(const QModelIndex& index, int role) const
             return QVariant::fromValue(const_cast<ImportFilterModel*>(this));
     }
 
-    return KCategorizedSortFilterProxyModel::data(index, role);
+    return DCategorizedSortFilterProxyModel::data(index, role);
 }
 
 ImportFilterModel* ImportFilterModel::importFilterModel() const
