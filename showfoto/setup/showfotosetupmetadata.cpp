@@ -37,10 +37,10 @@
 #include <QStyle>
 #include <QDesktopServices>
 #include <QStandardPaths>
+#include <QFontDatabase>
 
 // KDE includes
 
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
 // Libkexiv2 includes
@@ -138,7 +138,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     }
 
     explanation->setText(txt);
-    explanation->setFont(KGlobalSettings::smallestReadableFont());
+    explanation->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 
     grid->addWidget(exiv2LogoLabel, 0, 0, 1, 1);
     grid->addWidget(explanation,    0, 1, 1, 2);

@@ -39,11 +39,11 @@
 #include <QMessageBox>
 #include <QUrl>
 #include <QFileDialog>
+#include <QFontDatabase>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 
 // Libkdcraw includes
 
@@ -59,11 +59,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class MixerSettings::MixerSettingsPriv
+class MixerSettings::Private
 {
 public:
 
-    MixerSettingsPriv() :
+    Private() :
         currentChannel(RedChannel),
         monochromeTips(0),
         totalPercents(0),
@@ -112,28 +112,28 @@ public:
     RDoubleNumInput*      blueGain;
 };
 
-const QString MixerSettings::MixerSettingsPriv::configMonochromeEntry("Monochrome");
-const QString MixerSettings::MixerSettingsPriv::configPreserveLuminosityEntry("PreserveLuminosity");
-const QString MixerSettings::MixerSettingsPriv::configRedRedGainEntry("RedRedGain");
-const QString MixerSettings::MixerSettingsPriv::configRedGreenGainEntry("RedGreenGain");
-const QString MixerSettings::MixerSettingsPriv::configRedBlueGainEntry("RedBlueGain");
-const QString MixerSettings::MixerSettingsPriv::configGreenRedGainEntry("GreenRedGain");
-const QString MixerSettings::MixerSettingsPriv::configGreenGreenGainEntry("GreenGreenGain");
-const QString MixerSettings::MixerSettingsPriv::configGreenBlueGainEntry("GreenBlueGain");
-const QString MixerSettings::MixerSettingsPriv::configBlueRedGainEntry("BlueRedGain");
-const QString MixerSettings::MixerSettingsPriv::configBlueGreenGainEntry("BlueGreenGain");
-const QString MixerSettings::MixerSettingsPriv::configBlueBlueGainEntry("BlueBlueGain");
-const QString MixerSettings::MixerSettingsPriv::configBlackRedGainEntry("BlackRedGain");
-const QString MixerSettings::MixerSettingsPriv::configBlackGreenGainEntry("BlackGreenGain");
-const QString MixerSettings::MixerSettingsPriv::configBlackBlueGainEntry("BlackBlueGain");
+const QString MixerSettings::Private::configMonochromeEntry("Monochrome");
+const QString MixerSettings::Private::configPreserveLuminosityEntry("PreserveLuminosity");
+const QString MixerSettings::Private::configRedRedGainEntry("RedRedGain");
+const QString MixerSettings::Private::configRedGreenGainEntry("RedGreenGain");
+const QString MixerSettings::Private::configRedBlueGainEntry("RedBlueGain");
+const QString MixerSettings::Private::configGreenRedGainEntry("GreenRedGain");
+const QString MixerSettings::Private::configGreenGreenGainEntry("GreenGreenGain");
+const QString MixerSettings::Private::configGreenBlueGainEntry("GreenBlueGain");
+const QString MixerSettings::Private::configBlueRedGainEntry("BlueRedGain");
+const QString MixerSettings::Private::configBlueGreenGainEntry("BlueGreenGain");
+const QString MixerSettings::Private::configBlueBlueGainEntry("BlueBlueGain");
+const QString MixerSettings::Private::configBlackRedGainEntry("BlackRedGain");
+const QString MixerSettings::Private::configBlackGreenGainEntry("BlackGreenGain");
+const QString MixerSettings::Private::configBlackBlueGainEntry("BlackBlueGain");
 
 // --------------------------------------------------------
 
-MixerSettings::MixerSettings(QWidget* parent)
+MixerSettings::MixerSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new MixerSettingsPriv)
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     d->outChannelLabel = new QLabel(i18n("Output Channel:"));
     d->outChannelCB    = new QComboBox;
@@ -141,7 +141,7 @@ MixerSettings::MixerSettings(QWidget* parent)
     d->outChannelCB->addItem(i18n("Green"), QVariant(GreenChannel));
     d->outChannelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
 
-    QLabel* redLabel  = new QLabel(i18n("Red (%):"));
+    QLabel* const redLabel  = new QLabel(i18n("Red (%):"));
     d->redGain        = new RDoubleNumInput;
     d->redGain->setDecimals(1);
     d->redGain->setRange(-200.0, 200.0, 1);
@@ -149,7 +149,7 @@ MixerSettings::MixerSettings(QWidget* parent)
     d->redGain->setWhatsThis(i18n("Select the red color gain, as a percentage, "
                                   "for the current channel."));
 
-    QLabel* greenLabel = new QLabel(i18n("Green (%):"));
+    QLabel* const greenLabel = new QLabel(i18n("Green (%):"));
     d->greenGain       = new RDoubleNumInput;
     d->greenGain->setDecimals(1);
     d->greenGain->setRange(-200.0, 200.0, 1);
@@ -157,7 +157,7 @@ MixerSettings::MixerSettings(QWidget* parent)
     d->greenGain->setWhatsThis(i18n("Select the green color gain, as a percentage, "
                                     "for the current channel."));
 
-    QLabel* blueLabel = new QLabel(i18n("Blue (%):"));
+    QLabel* const blueLabel = new QLabel(i18n("Blue (%):"));
     d->blueGain       = new RDoubleNumInput;
     d->blueGain->setDecimals(1);
     d->blueGain->setRange(-200.0, 200.0, 1);
@@ -191,7 +191,7 @@ MixerSettings::MixerSettings(QWidget* parent)
                                         "<p><u>Note:</u> in this mode, the histogram will display only luminosity values.</p>"));
 
     d->monochromeTips->setEnabled(false);
-    d->monochromeTips->setFont(KGlobalSettings::smallestReadableFont());
+    d->monochromeTips->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     d->monochromeTips->setWordWrap(true);
     d->monochromeTips->setOpenExternalLinks(true);
     d->monochromeTips->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);

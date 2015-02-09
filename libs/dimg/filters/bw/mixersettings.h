@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT MixerSettings : public QWidget
 
 public:
 
-    explicit MixerSettings(QWidget* parent);
+    explicit MixerSettings(QWidget* const parent);
     ~MixerSettings();
 
     MixerContainer defaultSettings() const;
@@ -86,8 +86,8 @@ private Q_SLOTS:
 
 private:
 
-    class MixerSettingsPriv;
-    MixerSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

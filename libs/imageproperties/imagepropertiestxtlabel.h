@@ -34,10 +34,7 @@
 #include <QFontMetrics>
 #include <QTextBrowser>
 #include <QListWidget>
-
-// KDE includes
-
-#include <kglobalsettings.h>
+#include <QFontDatabase>
 
 // Libkdcraw includes
 
@@ -54,7 +51,7 @@ public:
         : QLabel(parent)
     {
         setText(name);
-        QFont fnt = KGlobalSettings::smallestReadableFont();
+        QFont fnt = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
         fnt.setItalic(true);
         setFont(fnt);
         setAlignment(Qt::AlignRight | Qt::AlignTop);
@@ -77,7 +74,7 @@ public:
         : RAdjustableLabel(parent)
     {
         setAdjustedText(value);
-        setFont(KGlobalSettings::smallestReadableFont());
+        setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
         setAlignment(Qt::AlignLeft | Qt::AlignTop);
         setWordWrap(false);
         setElideMode(Qt::ElideRight);
@@ -110,7 +107,7 @@ public:
 
     void setLinesNumber(int l)
     {
-        QFont fnt = KGlobalSettings::smallestReadableFont();
+        QFont fnt = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
         document()->setDefaultFont(fnt);
         int left, top, right, bottom;
         getContentsMargins(&left, &top, &right, &bottom);
@@ -139,7 +136,7 @@ public:
 
     void setLinesNumber(int l)
     {
-        QFont fnt = KGlobalSettings::smallestReadableFont();
+        QFont fnt = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
         setFont(fnt);
         int left, top, right, bottom;
         getContentsMargins(&left, &top, &right, &bottom);

@@ -30,10 +30,7 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QIcon>
-
-// KDE includes
-
-#include <kglobalsettings.h>
+#include <QFontDatabase>
 
 // kdcraw includes
 
@@ -460,14 +457,8 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "QLabel { "
                     "  color: white; background-color: transparent; border: none; "
                     " }"
-/*
-                    "KCompletionBox::item:hover, KCompletionBox::item:selected { "
-                    "  background-color: "
-                    "     qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(150,150,150,80%), "
-                    "                     stop:0.5 rgba(25,25,25,100%), stop:1 rgba(150,150,150,80%)); "
-                    " } "
-*/
-                ).arg(styleSheetFontDescriptor(KGlobalSettings::smallestReadableFont()))
+
+                ).arg(styleSheetFontDescriptor(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont)))
             );
             break;
         }
@@ -487,7 +478,7 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "  border: none; "
                     "  border-radius: 8px; "
                     "} "
-                ).arg(styleSheetFontDescriptor(KGlobalSettings::smallestReadableFont()))
+                ).arg(styleSheetFontDescriptor(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont)))
                  .arg(bg.red())
                  .arg(bg.green())
                  .arg(bg.blue())
@@ -544,7 +535,8 @@ void AssignNameWidget::Private::updateContents()
 // -------------------------------------------------------------------
 
 AssignNameWidget::AssignNameWidget(QWidget* const parent)
-    : QFrame(parent), d(new Private(this))
+    : QFrame(parent),
+      d(new Private(this))
 {
     setObjectName("assignNameWidget");
     setVisualStyle(StyledFrame);
