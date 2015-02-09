@@ -43,10 +43,6 @@
 #include <QInputDialog>
 #include <QIcon>
 
-// KDE includes
-
-#include <kglobalsettings.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -59,12 +55,12 @@
 namespace Digikam
 {
 
-class GPSSearchView::GPSSearchViewPriv
+class GPSSearchView::Private
 {
 
 public:
 
-    GPSSearchViewPriv() :
+    Private() :
         saveBtn(0),
         nameEdit(0),
         imageInfoJob(),
@@ -97,7 +93,8 @@ public:
     GPSImageInfoSorter*         sortOrderOptionsHelper;
     QString                     nonGeonlocatedItemsXml;
 };
-const QString GPSSearchView::GPSSearchViewPriv::configSplitterStateEntry("SplitterState");
+
+const QString GPSSearchView::Private::configSplitterStateEntry("SplitterState");
 
 /**
  * @brief Constructor
@@ -106,11 +103,14 @@ const QString GPSSearchView::GPSSearchViewPriv::configSplitterStateEntry("Splitt
  * @param imageFilterModel The image model used by displaying the selected images on map.
  * @param itemSelectionModel The selection model corresponding to the imageFilterModel.
  */
-GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
-                             SearchModificationHelper* searchModificationHelper,
-                             ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel)
-    : QWidget(parent), StateSavingObject(this),
-      d(new GPSSearchViewPriv)
+GPSSearchView::GPSSearchView(QWidget* const parent,
+                             SearchModel* const searchModel,
+                             SearchModificationHelper* const searchModificationHelper,
+                             ImageFilterModel* const imageFilterModel,
+                             QItemSelectionModel* const itemSelectionModel)
+    : QWidget(parent),
+      StateSavingObject(this),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -124,13 +124,13 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     // ---------------------------------------------------------------
 
-    QVBoxLayout* vlay  = new QVBoxLayout(this);
+    QVBoxLayout* const vlay  = new QVBoxLayout(this);
 
-    QFrame* mapPanel   = new QFrame(this);
+    QFrame* const mapPanel   = new QFrame(this);
     mapPanel->setMinimumWidth(256);
     mapPanel->setMinimumHeight(256);
-    QVBoxLayout* vlay2 = new QVBoxLayout(mapPanel);
-    d->mapSearchWidget = new KGeoMap::KGeoMapWidget(mapPanel);
+    QVBoxLayout* const vlay2 = new QVBoxLayout(mapPanel);
+    d->mapSearchWidget       = new KGeoMap::KGeoMapWidget(mapPanel);
     d->mapSearchWidget->setBackend("marble");
     d->mapSearchWidget->setShowThumbnails(true);
 
@@ -149,7 +149,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     // ---------------------------------------------------------------
 
-    RHBox* hbox = new RHBox(this);
+    RHBox* const hbox = new RHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -180,26 +180,23 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     // ---------------------------------------------------------------
 
     d->splitter = new QSplitter(Qt::Vertical, this);
-    d->splitter->setOpaqueResize(KGlobalSettings::opaqueResize());
 
     QFrame* const frameTop     = new QFrame(d->splitter);
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
-    d->mapSearchWidget->setAvailableMouseModes(
-        KGeoMap::MouseModePan |
-        KGeoMap::MouseModeRegionSelection |
-        KGeoMap::MouseModeZoomIntoGroup |
-        KGeoMap::MouseModeRegionSelectionFromIcon |
-        KGeoMap::MouseModeFilter |
-        KGeoMap::MouseModeSelectThumbnail
-    );
-    d->mapSearchWidget->setVisibleMouseModes(
-        KGeoMap::MouseModePan |
-        KGeoMap::MouseModeZoomIntoGroup |
-        KGeoMap::MouseModeFilter |
-        KGeoMap::MouseModeSelectThumbnail
-    );
+
+    d->mapSearchWidget->setAvailableMouseModes(KGeoMap::MouseModePan                     |
+                                               KGeoMap::MouseModeRegionSelection         |
+                                               KGeoMap::MouseModeZoomIntoGroup           |
+                                               KGeoMap::MouseModeRegionSelectionFromIcon |
+                                               KGeoMap::MouseModeFilter                  |
+                                               KGeoMap::MouseModeSelectThumbnail);
+
+    d->mapSearchWidget->setVisibleMouseModes(KGeoMap::MouseModePan           |
+                                             KGeoMap::MouseModeZoomIntoGroup |
+                                             KGeoMap::MouseModeFilter        |
+                                             KGeoMap::MouseModeSelectThumbnail);
 
     // construct a second row of control actions below the control widget
     /// @todo Should we still replace the icons of the actions with text as discussed during the sprint?
@@ -322,9 +319,7 @@ void GPSSearchView::doLoadState()
         }
     }
 
-    d->sortOrderOptionsHelper->setSortOptions(
-        GPSImageInfoSorter::SortOptions(group.readEntry(entryName("Sort Order"), int(d->sortOrderOptionsHelper->getSortOptions())))
-    );
+    d->sortOrderOptionsHelper->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(entryName("Sort Order"), int(d->sortOrderOptionsHelper->getSortOptions()))));
 
     const KConfigGroup groupMapWidget = KConfigGroup(&group, entryName("GPSSearch Map Widget"));
 
@@ -372,15 +367,14 @@ void GPSSearchView::setActive(bool state)
 
         if (d->searchTreeView->currentAlbum())
         {
-            AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
-                                                       << d->searchTreeView->currentAlbum());
+            AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << d->searchTreeView->currentAlbum());
         }
 
         slotClearImages();
     }
 }
 
-void GPSSearchView::changeAlbumFromHistory(SAlbum* album)
+void GPSSearchView::changeAlbumFromHistory(SAlbum* const album)
 {
     d->searchTreeView->setCurrentAlbums(QList<Album*>() << album);
 }

@@ -55,18 +55,21 @@ class GPSSearchView : public QWidget, public StateSavingObject
 
 public:
 
-    GPSSearchView(QWidget* parent, SearchModel* searchModel,
-                  SearchModificationHelper* searchModificationHelper,
-                  ImageFilterModel* imageFilterModel, QItemSelectionModel* itemSelectionModel);
+    GPSSearchView(QWidget* const parent,
+                  SearchModel* const searchModel,
+                  SearchModificationHelper* const searchModificationHelper,
+                  ImageFilterModel* const imageFilterModel,
+                  QItemSelectionModel* const itemSelectionModel);
     ~GPSSearchView();
 
     void setActive(bool state);
 
-    void changeAlbumFromHistory(SAlbum* album);
+    void changeAlbumFromHistory(SAlbum* const album);
 
-    virtual void setConfigGroup(const KConfigGroup& group);
     void doLoadState();
     void doSaveState();
+
+    virtual void setConfigGroup(const KConfigGroup& group);
 
 public Q_SLOTS:
 
@@ -99,8 +102,8 @@ Q_SIGNALS:
 
 private:
 
-    class GPSSearchViewPriv;
-    GPSSearchViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
