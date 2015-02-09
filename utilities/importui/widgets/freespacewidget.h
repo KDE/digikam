@@ -28,11 +28,6 @@
 
 #include <QString>
 #include <QWidget>
-#include <QAction>
-
-// KDE includes
-
-#include <kdiskfreespaceinfo.h>
 
 namespace Digikam
 {
@@ -84,7 +79,6 @@ protected:
 private Q_SLOTS:
 
     void slotTimeout();
-    void slotAvailableFreeSpace(const QString& mountPoint, quint64 kBSize, quint64 kBUsed, quint64 kBAvail);
 
 private:
 

@@ -68,6 +68,8 @@
 #include <kactioncollection.h>
 #include <kmessagewidget.h>
 
+#include <kio/global.h>
+
 // Libkdcraw includes
 
 #include <kdcraw.h>

@@ -36,10 +36,7 @@
 #include <QStringList>
 #include <QApplication>
 #include <QStandardPaths>
-
-// KDE includes
-
-#include <kdiskfreespaceinfo.h>
+#include <QStorageInfo>
 
 // Local includes
 
@@ -115,9 +112,9 @@ void UndoCache::clearFrom(int fromLevel)
 bool UndoCache::putData(int level, const DImg& img) const
 {
     QFile file(d->cacheFile(level));
-    KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(d->cacheDir);
+    QStorageInfo info(d->cacheDir);
 
-    unsigned long fspace = (unsigned long)(info.available()/1024.0/1024.0);
+    qint64 fspace = (info.bytesAvailable()/1024.0/1024.0);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes: " << fspace;
 
     if (file.exists() || 

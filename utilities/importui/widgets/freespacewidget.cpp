@@ -40,6 +40,7 @@
 #include <QUrl>
 #include <QIcon>
 #include <QStyle>
+#include <QStorageInfo>
 
 // KDE includes
 
@@ -117,7 +118,8 @@ public:
 };
 
 FreeSpaceWidget::FreeSpaceWidget(QWidget* const parent, int width)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedWidth(width);
@@ -386,25 +388,16 @@ void FreeSpaceWidget::slotTimeout()
 {
     foreach(const QString& path, d->paths)
     {
-        KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(path);
+        QStorageInfo info(path);
 
         if (info.isValid())
         {
-            addInformation((unsigned long)(info.size()      / 1024.0),
-                           (unsigned long)(info.used()      / 1024.0),
-                           (unsigned long)(info.available() / 1024.0),
-                           info.mountPoint());
+            addInformation((unsigned long)(info.bytesTotal()                         / 1024.0),
+                           (unsigned long)((info.bytesTotal()-info.bytesAvailable()) / 1024.0),
+                           (unsigned long)(info.bytesAvailable()                     / 1024.0),
+                           info.rootPath());
         }
     }
-}
-
-void FreeSpaceWidget::slotAvailableFreeSpace(const QString& mountPoint, quint64 kBSize,
-                                             quint64 kBUsed, quint64 kBAvail)
-{
-    Q_UNUSED(mountPoint);
-    Q_UNUSED(kBSize);
-    Q_UNUSED(kBUsed);
-    Q_UNUSED(kBAvail);
 }
 
 }  // namespace Digikam
