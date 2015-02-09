@@ -67,7 +67,7 @@ public:
 };
 
 ImageCategoryDrawer::ImageCategoryDrawer(ImageCategorizedView* const parent)
-    : KCategoryDrawer(0), d(new Private)
+    : DCategoryDrawer(0), d(new Private)
 {
     d->view = parent;
 }

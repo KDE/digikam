@@ -38,7 +38,6 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-//#include <kwindowsystem.h>
 
 // Libkdcraw includes
 

@@ -32,19 +32,16 @@
 #include <QApplication>
 #include <QStyle>
 
-// KDE includes
-
-#include <kcategorydrawer.h>
-
 // Local includes
 
 #include "digikam_debug.h"
+#include "dcategorydrawer.h"
 
 namespace Digikam
 {
 
 ActionCategorizedView::ActionCategorizedView(QWidget* const parent)
-    : KCategorizedView(parent)
+    : DCategorizedView(parent)
 {
     m_horizontalScrollAnimation = new QPropertyAnimation(horizontalScrollBar(), "value", this);
     m_verticalScrollAnimation   = new QPropertyAnimation(verticalScrollBar(),   "value", this);
@@ -58,7 +55,7 @@ void ActionCategorizedView::setupIconMode()
 {
     setViewMode(QListView::IconMode);
     setMovement(QListView::Static);
-    setCategoryDrawer(new KCategoryDrawer(this)); // deprecated, but needed for KDE 4.4 compatibility
+    setCategoryDrawer(new DCategoryDrawer(this)); // deprecated, but needed for KDE 4.4 compatibility
     setSelectionMode(QAbstractItemView::SingleSelection);
 
     setMouseTracking(true);
@@ -145,14 +142,14 @@ void ActionCategorizedView::autoScroll(float relativePos, QScrollBar* scrollBar,
 
 void ActionCategorizedView::mouseMoveEvent(QMouseEvent* e)
 {
-    KCategorizedView::mouseMoveEvent(e);
+    DCategorizedView::mouseMoveEvent(e);
     autoScroll(float(e->pos().x()) / viewport()->width(),  horizontalScrollBar(), m_horizontalScrollAnimation);
     autoScroll(float(e->pos().y()) / viewport()->height(), verticalScrollBar(),   m_verticalScrollAnimation);
 }
 
 void ActionCategorizedView::leaveEvent(QEvent* e)
 {
-    KCategorizedView::leaveEvent(e);
+    DCategorizedView::leaveEvent(e);
     m_horizontalScrollAnimation->stop();
     m_verticalScrollAnimation->stop();
 }

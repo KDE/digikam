@@ -30,7 +30,7 @@
 
 #include <QVector>
 
-class KCategoryDrawer;
+class DCategoryDrawer;
 
 namespace Digikam
 {
@@ -61,6 +61,7 @@ public:
     }
 
 private:
+    
     // not to be used
     const QModelIndex& operator[](int i) const
     {
@@ -73,9 +74,8 @@ private:
     int                 column;
 };
 
-/**
-  * @internal
-  */
+// ------------------------------------------------------------------------------------
+
 class DCategorizedView::Private
 {
 public:
@@ -187,9 +187,11 @@ public:
         int     relativeOffsetToCategory;
     };
 
+public:
+
     // Basic data
-    DCategorizedView*          listView;
-    KCategoryDrawer*                  categoryDrawer;
+    DCategorizedView*                 listView;
+    DCategoryDrawer*                  categoryDrawer;
     QSize                             biggestItemSize;
 
     // Behavior data

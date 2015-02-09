@@ -34,10 +34,10 @@
 
 #include "digikam_export.h"
 
-class KCategoryDrawer;
-
 namespace Digikam
 {
+
+class DCategoryDrawer;
 
 /**
  * @short Item view for listing items
@@ -56,8 +56,8 @@ public:
 
     void setGridSize(const QSize& size);
 
-    void setCategoryDrawer(KCategoryDrawer* categoryDrawer);
-    KCategoryDrawer* categoryDrawer() const;
+    void setCategoryDrawer(DCategoryDrawer* categoryDrawer);
+    DCategoryDrawer* categoryDrawer() const;
 
     /**
      * Switch on drawing of dragged items. Default: on.

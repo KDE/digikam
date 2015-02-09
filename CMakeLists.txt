@@ -1011,6 +1011,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     set(libitemview_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedsortfilterproxymodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/ditemdelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/imagedelegateoverlay.cpp

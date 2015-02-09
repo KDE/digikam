@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kcategorizedview.h>
+#include "dcategorizedview.h"
 
 class QWidget;
 class QEvent;
@@ -37,7 +37,7 @@ class QPropertyAnimation;
 namespace Digikam
 {
 
-class ActionCategorizedView : public KCategorizedView
+class ActionCategorizedView : public DCategorizedView
 {
 public:
 

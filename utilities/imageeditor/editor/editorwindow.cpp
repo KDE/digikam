@@ -2693,7 +2693,7 @@ VersionManager* EditorWindow::versionManager() const
     return &d->defaultVersionManager;
 }
 
-KCategorizedView* EditorWindow::createToolSelectionView()
+DCategorizedView* EditorWindow::createToolSelectionView()
 {
     if (d->selectToolsActionView)
     {

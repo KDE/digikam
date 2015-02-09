@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kcategorydrawer.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -44,6 +43,7 @@
 #include "imageversionsmodel.h"
 #include "thumbnailloadthread.h"
 #include "workingpixmap.h"
+#include "dcategorydrawer.h"
 
 namespace Digikam
 {
@@ -70,7 +70,7 @@ public:
     int                 animationState;
     QPropertyAnimation* animation;
     WorkingPixmap     workingPixmap;
-    KCategoryDrawer*    categoryDrawer;
+    DCategoryDrawer*    categoryDrawer;
     int                 thumbnailSize;
 
     int                 thumbsWaitingFor;
@@ -95,7 +95,7 @@ public:
 VersionsDelegate::VersionsDelegate(QObject* const parent)
     : QStyledItemDelegate(parent), d(new Private)
 {
-    d->categoryDrawer = new KCategoryDrawer(0);
+    d->categoryDrawer = new DCategoryDrawer(0);
     d->animation      = new QPropertyAnimation(this, "animationState", this);
     d->animation->setStartValue(0);
     d->animation->setEndValue(d->workingPixmap.frameCount() - 1);

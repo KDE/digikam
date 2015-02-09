@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-12-02
- * Description : Generic, standard item based model for KCategorizedView
+ * Description : Generic, standard item based model for DCategorizedView
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *

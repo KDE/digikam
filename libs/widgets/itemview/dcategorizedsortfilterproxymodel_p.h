@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-01-16
- * Description : categorize item  view based on DCategorizedView
+ * Description : categorize item view based on DCategorizedView
  *
  * Copyright (C) 2007      by Rafael Fernández López <ereslibre at kde dot org>
  * Copyright (C) 2007      by John Tapsell <tapsell at kde dot org>

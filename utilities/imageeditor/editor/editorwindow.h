@@ -54,7 +54,6 @@ class QSplitter;
 class QMenu;
 class QAction;
 
-class KCategorizedView;
 class KSelectAction;
 class KToolBarPopupAction;
 
@@ -63,6 +62,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
+class DCategorizedView;
 class Canvas;
 class DImageHistory;
 class EditorTool;
@@ -217,7 +217,7 @@ protected:
 
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
-    KCategorizedView*          createToolSelectionView();
+    DCategorizedView*          createToolSelectionView();
 
     VersionFileOperation saveVersionFileOperation(const QUrl& url, bool fork);
     VersionFileOperation saveAsVersionFileOperation(const QUrl& url, const QUrl& saveLocation, const QString& format);

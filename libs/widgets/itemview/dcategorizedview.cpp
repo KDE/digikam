@@ -36,13 +36,10 @@
 #include <QScrollBar>
 #include <QPaintEvent>
 
-// KDE includes
-
-#include <kcategorydrawer.h>
-
 // Local includes
 
 #include "dcategorizedsortfilterproxymodel.h"
+#include "dcategorydrawer.h"
 
 // By defining DOLPHIN_DRAGANDDROP the custom drag and drop implementation of
 // DCategorizedView is bypassed to have a consistent drag and drop look for all
@@ -693,12 +690,12 @@ QItemSelectionRange DCategorizedView::categoryRange(const QModelIndex& index) co
     return QItemSelectionRange(first, last);
 }
 
-KCategoryDrawer* DCategorizedView::categoryDrawer() const
+DCategoryDrawer* DCategorizedView::categoryDrawer() const
 {
     return d->categoryDrawer;
 }
 
-void DCategorizedView::setCategoryDrawer(KCategoryDrawer* categoryDrawer)
+void DCategorizedView::setCategoryDrawer(DCategoryDrawer* categoryDrawer)
 {
     d->lastSelection           = QItemSelection();
     d->forcedSelectionPosition = 0;

@@ -28,17 +28,16 @@
 
 #include <QStyleOptionViewItem>
 
-// KDE includes
+// Local includes
 
-#include <kcategorydrawer.h>
+#include "dcategorydrawer.h"
 
 namespace Digikam
 {
 
 class ImportCategorizedView;
 
-class ImportCategoryDrawer :
-    public KCategoryDrawer
+class ImportCategoryDrawer : public DCategoryDrawer
 {
 public:
 
