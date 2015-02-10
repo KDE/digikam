@@ -6,7 +6,7 @@
  * Date        : 2009-04-30
  * Description : rating icon view item at mouse hover
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -46,7 +46,7 @@ class ImageRatingOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    explicit ImageRatingOverlay(QObject* parent);
+    explicit ImageRatingOverlay(QObject* const parent);
 
     RatingWidget* ratingWidget() const;
 
@@ -61,6 +61,11 @@ protected Q_SLOTS:
 
 protected:
 
+    void updatePosition();
+    void updateRating();
+
+protected:
+
     virtual QWidget* createWidget();
     virtual void setActive(bool);
     virtual void visualChange();
@@ -69,8 +74,7 @@ protected:
     virtual void widgetEnterEvent();
     virtual void widgetLeaveEvent();
 
-    void updatePosition();
-    void updateRating();
+protected:
 
     QPersistentModelIndex m_index;
 };

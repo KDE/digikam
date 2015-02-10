@@ -6,8 +6,8 @@
  * Date        : 2009-04-30
  * Description : rating icon view item at mouse hover
  *
- * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008      by Peter Penz <peter.penz@gmx.at>
+ * Copyright (C) 2009      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -28,7 +28,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 
 // Local includes
 
@@ -40,7 +39,7 @@
 namespace Digikam
 {
 
-ImageRatingOverlay::ImageRatingOverlay(QObject* parent)
+ImageRatingOverlay::ImageRatingOverlay(QObject* const parent)
     : AbstractWidgetDelegateOverlay(parent)
 {
 }
@@ -52,9 +51,8 @@ RatingWidget* ImageRatingOverlay::ratingWidget() const
 
 QWidget* ImageRatingOverlay::createWidget()
 {
-    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
-    RatingWidget* w    = new RatingWidget(parentWidget());
-    w->setFading(animate);
+    RatingWidget* const w = new RatingWidget(parentWidget());
+    w->setFading(true);
     w->setTracking(false);
     return w;
 }
@@ -69,8 +67,10 @@ void ImageRatingOverlay::setActive(bool active)
                 this, SLOT(slotRatingChanged(int)));
 
         if (view()->model())
+        {
             connect(view()->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
                     this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
+        }
     }
     else
     {
@@ -85,7 +85,8 @@ void ImageRatingOverlay::setActive(bool active)
 
 void ImageRatingOverlay::visualChange()
 {
-    if (m_widget && m_widget->isVisible())
+    if (m_widget &&
+        m_widget->isVisible())
     {
         updatePosition();
     }
@@ -109,7 +110,7 @@ void ImageRatingOverlay::hide()
 
 void ImageRatingOverlay::updatePosition()
 {
-    if (!m_index.isValid() || ! m_widget)
+    if (!m_index.isValid() || !m_widget)
     {
         return;
     }
@@ -142,7 +143,9 @@ void ImageRatingOverlay::updateRating()
 
 void ImageRatingOverlay::slotRatingChanged(int rating)
 {
-    if (m_widget && m_widget->isVisible() && m_index.isValid())
+    if (m_widget              &&
+        m_widget->isVisible() &&
+        m_index.isValid())
     {
         emit ratingEdited(affectedIndexes(m_index), rating);
     }
@@ -152,8 +155,11 @@ void ImageRatingOverlay::slotEntered(const QModelIndex& index)
 {
     AbstractWidgetDelegateOverlay::slotEntered(index);
 
-    // see bug 228810, this is a small workaround
-    if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
+    // See bug 228810, this is a small workaround
+    if (m_widget              &&
+        m_widget->isVisible() &&
+        m_index.isValid()     &&
+        index == m_index)
     {
         ratingWidget()->setVisibleImmediately();
     }
@@ -169,7 +175,9 @@ void ImageRatingOverlay::slotEntered(const QModelIndex& index)
 
 void ImageRatingOverlay::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
-    if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
+    if (m_widget              &&
+        m_widget->isVisible() &&
+        QItemSelectionRange(topLeft, bottomRight).contains(m_index))
     {
         updateRating();
     }
