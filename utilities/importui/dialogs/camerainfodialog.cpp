@@ -27,6 +27,9 @@
 // Qt includes
 
 #include <QIcon>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QTabWidget>
 #include <QTextEdit>
 #include <QDialogButtonBox>
 
@@ -41,47 +44,52 @@
 namespace Digikam
 {
 
-CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary, const QString& manual,
+CameraInfoDialog::CameraInfoDialog(QWidget* const parent,
+                                   const QString& summary,
+                                   const QString& manual,
                                    const QString& about)
-    : KPageDialog(parent)
+    : QDialog(parent)
 {
-    setWindowTitle(i18nc("@title:window", "Device Information"));
-    setStandardButtons(QDialogButtonBox::Help | QDialogButtonBox::Ok);
-    setFaceType(KPageDialog::List);
     setModal(true);
+    setWindowTitle(i18nc("@title:window", "Device Information"));
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok, this);
+    buttons->button(QDialogButtonBox::Ok)->setDefault(true);
     resize(500, 400);
+
+    QTabWidget* const tab = new QTabWidget(this);
 
     // ----------------------------------------------------------
 
     QTextEdit* const summaryView = new QTextEdit(summary);
     summaryView->setWordWrapMode(QTextOption::WordWrap);
     summaryView->setReadOnly(true);
-
-    KPageWidgetItem* const p1    = addPage(summaryView, i18nc("Device information summary", "Summary"));
-    p1->setHeader(i18n("Device Summary"));
-    p1->setIcon(QIcon::fromTheme("dialog-information"));
+    tab->insertTab(0, summaryView, QIcon::fromTheme("dialog-information"), i18n("Device Summary"));
 
     // ----------------------------------------------------------
 
     QTextEdit* const manualView  = new QTextEdit(manual);
     manualView->setWordWrapMode(QTextOption::WordWrap);
     manualView->setReadOnly(true);
-
-    KPageWidgetItem* const p2    = addPage(manualView, i18nc("Manual of the device", "Manual"));
-    p2->setHeader(i18n("Device Manual"));
-    p2->setIcon(QIcon::fromTheme("help-contents"));
+    tab->insertTab(1, manualView, QIcon::fromTheme("help-contents"), i18n("Device Manual"));
 
     // ----------------------------------------------------------
 
     QTextEdit* const aboutView   = new QTextEdit(about);
     aboutView->setWordWrapMode(QTextOption::WordWrap);
     aboutView->setReadOnly(true);
+    tab->insertTab(2, aboutView, QIcon::fromTheme("camera-photo"), i18n("About Driver"));
 
-    KPageWidgetItem* const p3    = addPage(aboutView, i18nc("About device driver", "About"));
-    p3->setHeader(i18n("About Driver"));
-    p3->setIcon(QIcon::fromTheme("camera-photo"));
+    // ----------------------------------------------------------
 
-    connect(buttonBox(), SIGNAL(helpRequested()),
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(tab);
+    vbx->addWidget(buttons);
+    setLayout(vbx);
+
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
             this, SLOT(slotHelp()));
 }
 

@@ -28,21 +28,20 @@
 // Qt includes
 
 #include <QString>
-
-// KDE includes
-
-#include <kpagedialog.h>
+#include <QDialog>
 
 namespace Digikam
 {
 
-class CameraInfoDialog : public KPageDialog
+class CameraInfoDialog : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    CameraInfoDialog(QWidget* const parent, const QString& summary, const QString& manual,
+    CameraInfoDialog(QWidget* const parent,
+                     const QString& summary,
+                     const QString& manual,
                      const QString& about);
     ~CameraInfoDialog();
 
