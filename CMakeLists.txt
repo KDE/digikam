@@ -1058,6 +1058,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
        )
 
     set(libcolorchooserwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dpointselect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dcolorchoosermode.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dcolorvalueselector.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dhuesaturationselect.cpp

@@ -25,19 +25,16 @@
 #ifndef DHUESATURATIONSELECT_H
 #define DHUESATURATIONSELECT_H
 
-// KDE includes
-
-#include <kxyselector.h>
-
 // Local includes
 
 #include "digikam_export.h"
 #include "dcolorchoosermode.h"
+#include "dpointselect.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DHueSaturationSelector : public KXYSelector
+class DIGIKAM_EXPORT DHueSaturationSelector : public DPointSelect
 {
     Q_OBJECT
 
@@ -126,7 +123,7 @@ protected:
     virtual void resizeEvent(QResizeEvent*);
 
     /**
-     * Reimplemented from KXYSelector. This drawing is
+     * Reimplemented from DPointSelect. This drawing is
      * buffered in a pixmap here. As real drawing
      * routine, drawPalette() is used.
      */

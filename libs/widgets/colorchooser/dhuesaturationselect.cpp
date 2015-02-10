@@ -65,7 +65,7 @@ public:
 };
 
 DHueSaturationSelector::DHueSaturationSelector(QWidget* const parent)
-    : KXYSelector(parent),
+    : DPointSelect(parent),
       d(new Private(this))
 {
     setChooserMode(ChooserClassic);
