@@ -85,7 +85,6 @@ static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif
 #ifdef Q_OS_WIN
 #include <windows.h>
-//#include "win32.h"
 #endif
 
 

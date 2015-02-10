@@ -37,7 +37,6 @@
 #pragma clang diagnostic ignored "-Wunnamed-type-template-args"
 #endif
 
-//#include <boost/nondet_random.hpp>
 #include <boost/random/bernoulli_distribution.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_smallint.hpp>

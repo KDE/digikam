@@ -34,13 +34,9 @@
 
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
-/*
-#include <kio/job.h>
-#include <kio/netaccess.h>
-*/
+
 // Libkdcraw includes
 
-//#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes
@@ -55,6 +51,7 @@
 #include "imagequerybuilder.h"
 #include "collectionscannerobserver.h"
 #include "digikam_config.h"
+
 #ifdef HAVE_SQLITE2
 #include "upgradedb_sqlite2tosqlite3.h"
 #endif
