@@ -7,6 +7,9 @@
  * Description : a generic widget to display a panel to choose
  *               a rectangular image area.
  *
+ * Copyright (C) 1997      by Tim D. Gilman (tdgilman at best dot org)
+ * Copyright (C) 1998-2001 by Mirko Boehm (mirko at kde dot org)
+ * Copyright (C) 2007      by John Layt <john at layt dot net>
  * Copyright (C) 2004-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -40,6 +43,10 @@
 #include <QHideEvent>
 #include <QToolButton>
 #include <QIcon>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QEventLoop>
+#include <QKeyEvent>
 
 // KDE includes
 
@@ -48,6 +55,201 @@
 namespace Digikam
 {
 
+class PanIconFrame::Private
+{
+public:
+
+    Private(PanIconFrame* const q);
+    ~Private();
+
+public:
+
+    PanIconFrame*        q;
+
+    /**
+     * The result. It is returned from exec() when the popup window closes.
+     */
+    int                  result;
+
+    /**
+     * The only subwidget that uses the whole dialog window.
+     */
+    QWidget*             main;
+
+    class OutsideClickCatcher;
+    OutsideClickCatcher* outsideClickCatcher;
+};
+
+// -------------------------------------------------------------------
+
+class PanIconFrame::Private::OutsideClickCatcher
+    : public QObject
+{
+public:
+
+    OutsideClickCatcher(QObject* const parent = 0)
+        : QObject(parent),
+          m_popup(0)
+    {
+    }
+
+    ~OutsideClickCatcher()
+    {
+    }
+
+    void setPopupFrame(PanIconFrame* const popup)
+    {
+        m_popup = popup;
+        popup->installEventFilter(this);
+    }
+
+    bool eventFilter(QObject* object, QEvent* event)
+    {
+        Q_UNUSED(object);
+
+        // To catch outside clicks, it is sufficient to check for
+        // hide events on Qt::Popup type widgets
+        if (event->type() == QEvent::Hide && m_popup)
+        {
+            // do not set d->result here, because the popup
+            // hides itself after leaving the event loop.
+            emit m_popup->leaveModality();
+        }
+
+        return false;
+    }
+
+public:
+
+    PanIconFrame* m_popup;
+};
+
+// -------------------------------------------------------------------
+
+PanIconFrame::Private::Private(PanIconFrame* const q)
+    : q(q),
+      result(0), // rejected
+      main(0),
+      outsideClickCatcher(new OutsideClickCatcher)
+{
+    outsideClickCatcher->setPopupFrame(q);
+}
+
+PanIconFrame::Private::~Private()
+{
+    delete outsideClickCatcher;
+}
+
+// -------------------------------------------------------------------
+
+PanIconFrame::PanIconFrame(QWidget* const parent)
+    : QFrame(parent, Qt::Popup),
+      d(new Private(this))
+{
+    setFrameStyle(QFrame::Box | QFrame::Raised);
+    setMidLineWidth(2);
+}
+
+PanIconFrame::~PanIconFrame()
+{
+    delete d;
+}
+
+void PanIconFrame::keyPressEvent(QKeyEvent* e)
+{
+    if( e->key() == Qt::Key_Escape )
+    {
+        d->result = 0; // rejected
+        emit leaveModality();
+    }
+}
+
+void PanIconFrame::close(int r)
+{
+    d->result = r;
+    emit leaveModality();
+}
+
+void PanIconFrame::setMainWidget(QWidget* const main)
+{
+    d->main = main;
+
+    if( d->main )
+    {
+        resize( d->main->width() + 2 * frameWidth(), d->main->height() + 2 * frameWidth() );
+    }
+}
+
+void PanIconFrame::resizeEvent(QResizeEvent* e)
+{
+    Q_UNUSED( e );
+
+    if( d->main )
+    {
+        d->main->setGeometry(frameWidth(), frameWidth(),
+                             width() - 2 * frameWidth(), height() - 2 * frameWidth());
+    }
+}
+
+void PanIconFrame::popup(const QPoint& pos)
+{
+    // Make sure the whole popup is visible.
+    QRect desktopGeometry = QApplication::desktop()->screenGeometry( pos );
+
+    int x = pos.x();
+    int y = pos.y();
+    int w = width();
+    int h = height();
+
+    if ( x + w > desktopGeometry.x() + desktopGeometry.width() )
+    {
+        x = desktopGeometry.width() - w;
+    }
+
+    if ( y + h > desktopGeometry.y() + desktopGeometry.height() )
+    {
+        y = desktopGeometry.height() - h;
+    }
+
+    if ( x < desktopGeometry.x() )
+    {
+        x = 0;
+    }
+
+    if ( y < desktopGeometry.y() )
+    {
+        y = 0;
+    }
+
+    // Pop the thingy up.
+    move(x, y);
+    show();
+    d->main->setFocus();
+}
+
+int PanIconFrame::exec(const QPoint& pos)
+{
+    popup(pos);
+    repaint();
+    d->result = 0; // rejected
+    QEventLoop eventLoop;
+
+    connect(this, SIGNAL(leaveModality()),
+            &eventLoop, SLOT(quit()));
+
+    eventLoop.exec();
+    hide();
+
+    return d->result;
+}
+
+int PanIconFrame::exec(int x, int y)
+{
+    return exec(QPoint(x, y));
+}
+
+// -------------------------------------------------------------------
+    
 class PanIconWidget::Private
 {
 

@@ -32,10 +32,6 @@
 #include <QToolButton>
 #include <QStyle>
 
-// KDE includes
-
-#include <kpopupframe.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -68,7 +64,7 @@ public:
     SinglePhotoPreviewLayout* layout;
 
     QToolButton*              cornerButton;
-    KPopupFrame*              panIconPopup;
+    PanIconFrame*             panIconPopup;
 
     QPoint                    mousePressPos;
     QPoint                    panningScrollPos;
@@ -77,7 +73,8 @@ public:
 };
 
 GraphicsDImgView::GraphicsDImgView(QWidget* const parent)
-    : QGraphicsView(parent), d(new Private)
+    : QGraphicsView(parent),
+      d(new Private)
 {
     d->scene  = new QGraphicsScene(this);
     d->scene->setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -418,7 +415,7 @@ void GraphicsDImgView::slotCornerButtonPressed()
         d->panIconPopup = 0;
     }
 
-    d->panIconPopup          = new KPopupFrame(this);
+    d->panIconPopup          = new PanIconFrame(this);
     PanIconWidget* const pan = new PanIconWidget(d->panIconPopup);
 
     //connect(pan, SIGNAL(signalSelectionTakeFocus()),
