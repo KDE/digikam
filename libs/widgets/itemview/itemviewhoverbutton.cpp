@@ -35,22 +35,19 @@
 
 // KDE includes
 
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
 namespace Digikam
 {
 
-ItemViewHoverButton::ItemViewHoverButton(QAbstractItemView* view)
+ItemViewHoverButton::ItemViewHoverButton(QAbstractItemView* const view)
     : QAbstractButton(view->viewport()),
       m_isHovered(false),
       m_fadingValue(0),
       m_icon(),
       m_fadingTimeLine(0)
 {
-    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
-    const int duration = animate ? 600 : 1;
-    m_fadingTimeLine   = new QTimeLine(duration, this);
+    m_fadingTimeLine = new QTimeLine(600, this);
     m_fadingTimeLine->setFrameRange(0, 255);
 
     setCheckable(true);
@@ -60,9 +57,6 @@ ItemViewHoverButton::ItemViewHoverButton(QAbstractItemView* view)
             this, SLOT(setFadingValue(int)));
 
     connect(this, SIGNAL(toggled(bool)),
-            this, SLOT(refreshIcon()));
-
-    connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
             this, SLOT(refreshIcon()));
 }
 
@@ -116,7 +110,7 @@ void ItemViewHoverButton::enterEvent(QEvent* event)
 
     // if the mouse cursor is above the button, display
     // it immediately without fading timer
-    m_isHovered = true;
+    m_isHovered   = true;
     m_fadingTimeLine->stop();
     m_fadingValue = 255;
     updateToolTip();
