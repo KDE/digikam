@@ -27,6 +27,11 @@
 // Qt includes
 
 #include <QPainter>
+#include <QImage>
+#include <QPaintEvent>
+#include <QPixmap>
+#include <QStyle>
+#include <QStyleOption>
 
 // Local includes
 
@@ -34,6 +39,307 @@
 
 namespace Digikam
 {
+
+class DSelector::Private
+{
+public:
+    Private()
+      : arrowsize(5)
+    {
+        arrowPE  = QStyle::PE_IndicatorArrowLeft;
+        m_indent = true;
+    }
+
+    const int                arrowsize;
+    bool                     m_indent;
+    QStyle::PrimitiveElement arrowPE;
+};
+
+DSelector::DSelector(QWidget* const parent)
+    : QAbstractSlider(parent),
+      d(new Private)
+{
+    setOrientation(Qt::Horizontal);
+}
+
+DSelector::DSelector(Qt::Orientation o, QWidget* const parent)
+    : QAbstractSlider(parent),
+      d(new Private)
+{
+    setOrientation(o);
+
+    if (o == Qt::Horizontal)
+        setArrowDirection(Qt::UpArrow);
+}
+
+DSelector::~DSelector()
+{
+    delete d;
+}
+
+void DSelector::setIndent(bool i)
+{
+    d->m_indent = i;
+}
+
+bool DSelector::indent() const
+{
+    return d->m_indent;
+}
+
+QRect DSelector::contentsRect() const
+{
+    int w  = indent() ? style()->pixelMetric( QStyle::PM_DefaultFrameWidth ) : 0;
+    int iw = (w < d->arrowsize) ? d->arrowsize : w;
+
+    if (orientation() == Qt::Vertical)
+    {
+        if (arrowDirection() == Qt::RightArrow)
+        {
+            return QRect(w + d->arrowsize, iw,
+                         width() - w*2 - d->arrowsize,
+                         height() - iw*2);
+        }
+        else
+        {
+            return QRect(w, iw,
+                         width() - w*2 - d->arrowsize,
+                         height() - iw*2);
+        }
+    }
+    else
+    {
+        // Qt::Horizontal
+        
+        if (arrowDirection() == Qt::UpArrow)
+        {
+            return QRect(iw, w,
+                         width() - 2*iw,
+                         height() - w*2 - d->arrowsize);
+        }
+        else
+        {
+            return QRect(iw, w + d->arrowsize,
+                         width() - 2*iw,
+                         height() - w*2 - d->arrowsize);
+        }
+    }
+}
+
+void DSelector::paintEvent(QPaintEvent*)
+{
+    QPainter painter;
+    int w  = style()->pixelMetric( QStyle::PM_DefaultFrameWidth );
+    int iw = (w < d->arrowsize) ? d->arrowsize : w;
+
+    painter.begin(this);
+
+    drawContents(&painter);
+
+    QBrush brush;
+
+    QPoint pos = calcArrowPos(value());
+    drawArrow(&painter, pos);
+
+    if (indent())
+    {
+        QStyleOptionFrame opt;
+        opt.initFrom( this );
+        opt.state = QStyle::State_Sunken;
+
+        if (orientation() == Qt::Vertical)
+            opt.rect.adjust( 0, iw - w, -5, w - iw );
+        else
+            opt.rect.adjust(iw - w, 0, w - iw, -5);
+
+        QBrush oldBrush = painter.brush();
+        painter.setBrush( Qt::NoBrush );
+        style()->drawPrimitive( QStyle::PE_Frame, &opt, &painter, this );
+        painter.setBrush( oldBrush );
+    }
+
+
+    painter.end();
+}
+
+void DSelector::mousePressEvent(QMouseEvent* e)
+{
+    setSliderDown(true);
+    moveArrow( e->pos() );
+}
+
+void DSelector::mouseMoveEvent(QMouseEvent* e)
+{
+    moveArrow( e->pos() );
+}
+
+void DSelector::mouseReleaseEvent(QMouseEvent* e)
+{
+    moveArrow( e->pos() );
+    setSliderDown(false);
+}
+
+void DSelector::wheelEvent(QWheelEvent* e)
+{
+    int val = value() + e->delta()/120;
+    setSliderDown(true);
+    setValue(val);
+    setSliderDown(false);
+}
+
+void DSelector::moveArrow(const QPoint& pos)
+{
+    int val;
+    int w  = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    int iw = (w < d->arrowsize) ? d->arrowsize : w;
+
+    if ( orientation() == Qt::Vertical )
+    {
+        val = ( maximum() - minimum() ) * (height() - pos.y() - iw)
+            / (height() - iw * 2) + minimum();
+    }
+    else
+    {
+        val = ( maximum() - minimum() ) * ( pos.x() - iw)
+            / (width() - iw * 2) + minimum();
+    }
+
+    setValue( val );
+    update();
+}
+
+QPoint DSelector::calcArrowPos( int val )
+{
+    QPoint p;
+    int w  = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    int iw = (w < d->arrowsize) ? d->arrowsize : w;
+
+    if (orientation() == Qt::Vertical)
+    {
+        p.setY(height() - iw - 1 - (height() - 2 * iw - 1) * val  / ( maximum() - minimum() ));
+
+        if (d->arrowPE == QStyle::PE_IndicatorArrowRight)
+        {
+            p.setX( 0 );
+        }
+        else
+        {
+            p.setX(width() - 5);
+        }
+    }
+    else
+    {
+        p.setX(iw + (width() - 2 * iw - 1) * val  / ( maximum() - minimum() ));
+
+        if (d->arrowPE == QStyle::PE_IndicatorArrowDown)
+        {
+            p.setY(0);
+        }
+        else
+        {
+            p.setY(height() - 5);
+        }
+    }
+
+    return p;
+}
+
+void DSelector::setArrowDirection( Qt::ArrowType direction )
+{
+    switch ( direction )
+    {
+        case Qt::UpArrow:
+            if ( orientation() == Qt::Horizontal )
+            {
+                d->arrowPE = QStyle::PE_IndicatorArrowUp;
+            }
+            else
+            {
+                d->arrowPE = QStyle::PE_IndicatorArrowLeft;
+            }
+            break;
+
+        case Qt::DownArrow:
+            if ( orientation() == Qt::Horizontal )
+            {
+                d->arrowPE = QStyle::PE_IndicatorArrowDown;
+            }
+            else
+            {
+                d->arrowPE = QStyle::PE_IndicatorArrowRight;
+            }
+            break;
+
+        case Qt::LeftArrow:
+            if ( orientation() == Qt::Vertical )
+            {
+                d->arrowPE = QStyle::PE_IndicatorArrowLeft;
+            }
+            else
+            {
+                d->arrowPE = QStyle::PE_IndicatorArrowDown;
+            }
+            break;
+
+        case Qt::RightArrow:
+            if ( orientation() == Qt::Vertical )
+            {
+                d->arrowPE = QStyle::PE_IndicatorArrowRight;
+            }
+            else
+            {
+                d->arrowPE = QStyle::PE_IndicatorArrowUp;
+            }
+            break;
+
+        case Qt::NoArrow:
+            break;
+    }
+}
+
+Qt::ArrowType DSelector::arrowDirection() const
+{
+    switch (d->arrowPE)
+    {
+        case QStyle::PE_IndicatorArrowUp:
+            return Qt::UpArrow;
+            break;
+        case QStyle::PE_IndicatorArrowDown:
+            return Qt::DownArrow;
+            break;
+        case QStyle::PE_IndicatorArrowRight:
+            return Qt::RightArrow;
+            break;
+        case QStyle::PE_IndicatorArrowLeft:
+        default:
+            return Qt::LeftArrow;
+            break;
+    }
+}
+
+void DSelector::drawArrow(QPainter* painter, const QPoint& pos)
+{
+    painter->setPen(QPen());
+    painter->setBrush(QBrush( palette().color(QPalette::ButtonText) ));
+
+    QStyleOption o;
+
+    if ( orientation() == Qt::Vertical )
+    {
+        o.rect = QRect( pos.x(), pos.y() - d->arrowsize / 2,
+                        d->arrowsize, d->arrowsize );
+    }
+    else
+    {
+        o.rect = QRect( pos.x() - d->arrowsize / 2, pos.y(),
+                        d->arrowsize, d->arrowsize );
+
+    }
+    
+    style()->drawPrimitive(d->arrowPE, &o, painter, this);
+}
+
+// -------------------------------------------------------------------------------------
 
 class DColorValueSelector::Private
 {
@@ -57,14 +363,14 @@ public:
 };
 
 DColorValueSelector::DColorValueSelector(QWidget* const parent)
-    : KSelector(Qt::Vertical, parent),
+    : DSelector(Qt::Vertical, parent),
       d(new Private(this))
 {
     setRange(0, 255);
 }
 
 DColorValueSelector::DColorValueSelector(Qt::Orientation o, QWidget* const parent)
-    : KSelector(o, parent),
+    : DSelector(o, parent),
       d(new Private(this))
 {
     setRange(0, 255);
@@ -132,9 +438,6 @@ void DColorValueSelector::setChooserMode(DColorChooserMode c)
     }
 
     d->mode = c;
-
-    //really needed?
-    //emit modeChanged();
 }
 
 DColorChooserMode DColorValueSelector::chooserMode() const
