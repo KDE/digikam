@@ -166,6 +166,7 @@ public:
      *  linear steps are not applicable
      */
     explicit CustomStepsIntSpinBox(QWidget* const parent = 0);
+    ~CustomStepsIntSpinBox();
 
     /** Set a list of values that are usually applicable for the
      *  type of data of the combo box. The user can still type in
@@ -211,18 +212,12 @@ protected:
 
 private Q_SLOTS:
 
-    void slotValueChanged(int d);
+    void slotValueChanged(int val);
 
 private:
 
-    bool       m_beforeInitialValue;
-    QList<int> m_values;
-    int        m_initialValue;
-    int        m_smallerStep;
-    int        m_largerStep;
-    bool       m_invertStepping;
-    QString    m_fractionPrefix;
-    QString    m_fractionSpecialValueText;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
