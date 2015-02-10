@@ -6,7 +6,7 @@
  * Date        : 2009-04-30
  * Description : Qt item view mouse hover button
  *
- * Copyright (C) 2008      by Peter Penz <peter.penz@gmx.at>
+ * Copyright (C) 2008      by Peter Penz <peter dot penz at gmx dot at>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it

@@ -27,7 +27,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 
 // Local includes
 
@@ -268,7 +267,7 @@ void ImportDownloadOverlay::slotEntered(const QModelIndex& index)
 
 // -- Rating Overlay ------------------------------------------------------------------
 
-ImportRatingOverlay::ImportRatingOverlay(QObject* parent)
+ImportRatingOverlay::ImportRatingOverlay(QObject* const parent)
     : AbstractWidgetDelegateOverlay(parent)
 {
 }
@@ -280,9 +279,8 @@ RatingWidget* ImportRatingOverlay::ratingWidget() const
 
 QWidget* ImportRatingOverlay::createWidget()
 {
-    const bool animate    = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     RatingWidget* const w = new RatingWidget(parentWidget());
-    w->setFading(animate);
+    w->setFading(true);
     w->setTracking(false);
     return w;
 }
