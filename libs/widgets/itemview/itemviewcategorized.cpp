@@ -33,10 +33,6 @@
 #include <QStyle>
 #include <QApplication>
 
-// KDE includes
-
-#include <kglobalsettings.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -73,19 +69,19 @@ public:
 
 public:
 
-    DItemDelegate*          delegate;
-    ItemViewToolTip*        toolTip;
-    ItemViewToolTip*        notificationToolTip;
-    bool                    showToolTip;
-    bool                    usePointingHand;
-    int                     scrollStepFactor;
+    DItemDelegate*             delegate;
+    ItemViewToolTip*           toolTip;
+    ItemViewToolTip*           notificationToolTip;
+    bool                       showToolTip;
+    bool                       usePointingHand;
+    int                        scrollStepFactor;
 
-    QMouseEvent*            currentMouseEvent;
-    bool                    ensureOneSelectedItem;
-    bool                    ensureInitialSelectedItem;
-    QPersistentModelIndex   hintAtSelectionIndex;
-    int                     hintAtSelectionRow;
-    QPersistentModelIndex   hintAtScrollPosition;
+    QMouseEvent*               currentMouseEvent;
+    bool                       ensureOneSelectedItem;
+    bool                       ensureInitialSelectedItem;
+    QPersistentModelIndex      hintAtSelectionIndex;
+    int                        hintAtSelectionRow;
+    QPersistentModelIndex      hintAtScrollPosition;
 
     ItemViewCategorized* const q;
 };
@@ -346,7 +342,7 @@ void ItemViewCategorized::slotGridSizeChanged(const QSize& gridSize)
     if (!gridSize.isNull())
     {
         horizontalScrollBar()->setSingleStep(gridSize.width() / d->scrollStepFactor);
-        verticalScrollBar()->setSingleStep(gridSize.height() / d->scrollStepFactor);
+        verticalScrollBar()->setSingleStep(gridSize.height()  / d->scrollStepFactor);
     }
 }
 
@@ -355,16 +351,18 @@ void ItemViewCategorized::updateDelegateSizes()
     QStyleOptionViewItem option = viewOptions();
 /*
     int frameAroundContents = 0;
+
     if (style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents))
     {
         frameAroundContents = style()->pixelMetric(QStyle::PM_DefaultFrameWidth) * 2;
     }
+
     const int contentWidth  = viewport()->width() - 1
-                                - frameAroundContents
-                                - style()->pixelMetric(QStyle::PM_ScrollBarExtent, 0, verticalScrollBar());
+                              - frameAroundContents
+                              - style()->pixelMetric(QStyle::PM_ScrollBarExtent, 0, verticalScrollBar());
     const int contentHeight = viewport()->height() - 1
-                                - frameAroundContents
-                                - style()->pixelMetric(QStyle::PM_ScrollBarExtent, 0, horizontalScrollBar());
+                              - frameAroundContents
+                              - style()->pixelMetric(QStyle::PM_ScrollBarExtent, 0, horizontalScrollBar());
     option.rect             = QRect(0, 0, contentWidth, contentHeight);
 */
     option.rect = QRect(QPoint(0, 0), viewport()->size());
@@ -426,7 +424,8 @@ void ItemViewCategorized::reset()
 {
     DCategorizedView::reset();
 
-    // FIXME emiting this causes a crash importstackedview, because the model is not yet set. atm there's a check agaisnt null models though..
+    // FIXME : Emiting this causes a crash importstackedview, because the model is not yet set.
+    //         atm there's a check agaisnt null models though.
     emit selectionChanged();
     emit selectionCleared();
 
@@ -521,7 +520,7 @@ void ItemViewCategorized::layoutAboutToBeChanged()
         qCWarning(DIGIKAM_GENERAL_LOG) << "Called without selection model, check whether the models are ok..";
     }
 
-    QModelIndex current      = currentIndex();
+    QModelIndex current = currentIndex();
 
     // store some hints so that if all selected items were removed do not need to default to 0,0.
     if (d->ensureOneSelectedItem)
@@ -540,7 +539,7 @@ void ItemViewCategorized::layoutAboutToBeChanged()
 
         if (indexToAnchor.isValid())
         {
-            d->hintAtSelectionRow = indexToAnchor.row();
+            d->hintAtSelectionRow   = indexToAnchor.row();
             d->hintAtSelectionIndex = nextIndexHint(indexToAnchor, QItemSelectionRange(indexToAnchor));
         }
     }
@@ -643,7 +642,7 @@ void ItemViewCategorized::ensureSelectionAfterChanges()
                 index = model()->index(0,0);
             }
 
-            d->hintAtSelectionRow = -1;
+            d->hintAtSelectionRow   = -1;
             d->hintAtSelectionIndex = QModelIndex();
 
             if (index.isValid())
@@ -825,8 +824,7 @@ void ItemViewCategorized::mouseMoveEvent(QMouseEvent* event)
     {
         indexVisualRect = visualRect(index);
 
-        if (d->usePointingHand                      &&
-            KGlobalSettings::changeCursorOverIcon() &&
+        if (d->usePointingHand &&
             d->delegate->acceptsActivation(event->pos(), indexVisualRect, index))
         {
             setCursor(Qt::PointingHandCursor);
@@ -858,7 +856,7 @@ void ItemViewCategorized::wheelEvent(QWheelEvent* event)
 {
     // DCategorizedView updates the single step at some occasions in a private methody
     horizontalScrollBar()->setSingleStep(d->delegate->gridSize().height() / d->scrollStepFactor);
-    verticalScrollBar()->setSingleStep(d->delegate->gridSize().width() / d->scrollStepFactor);
+    verticalScrollBar()->setSingleStep(d->delegate->gridSize().width()    / d->scrollStepFactor);
 
     if (event->modifiers() & Qt::ControlModifier)
     {
@@ -962,7 +960,7 @@ bool ItemViewCategorized::viewportEvent(QEvent* event)
 
             QStyleOptionViewItem option =  viewOptions();
             option.rect                 =  visualRect(index);
-            option.state                |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
+            option.state               |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
             showToolTip(index, option, he);
             return true;
         }
@@ -976,6 +974,7 @@ bool ItemViewCategorized::viewportEvent(QEvent* event)
 void ItemViewCategorized::showIndexNotification(const QModelIndex& index, const QString& message)
 {
     hideIndexNotification();
+
     if (!index.isValid())
     {
         return;
@@ -990,7 +989,7 @@ void ItemViewCategorized::showIndexNotification(const QModelIndex& index, const 
 
     QStyleOptionViewItem option =  viewOptions();
     option.rect                 =  visualRect(index);
-    option.state                |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
+    option.state               |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
     d->notificationToolTip->show(option, index);
 }
 
@@ -1004,7 +1003,7 @@ void ItemViewCategorized::hideIndexNotification()
 
 /**
  * cut(), copy(), paste(), dragEnterEvent(), dragMoveEvent(), dropEvent(), startDrag()
- *  are implemented by DragDropViewImplementation
+ * are implemented by DragDropViewImplementation
  */
 QModelIndex ItemViewCategorized::mapIndexForDragDrop(const QModelIndex& index) const
 {
