@@ -691,4 +691,15 @@ void DXmlGuiWindow::slotContribute()
     QDesktopServices::openUrl(QUrl("http://www.digikam.org/?q=contrib"));
 }
 
+void DXmlGuiWindow::changeEvent(QEvent* ev)
+{
+    KXmlGuiWindow::changeEvent(ev);
+    
+    if (ev->type() == QEvent::PaletteChange)
+    {
+        emit signalDisplayPaletteChanged();
+    }
+    
+}
+
 } // namespace Digikam

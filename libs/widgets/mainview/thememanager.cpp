@@ -46,7 +46,6 @@
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
 #include <ktoolinvocation.h>
 
 // Local includes
@@ -90,8 +89,6 @@ public:
 ThemeManager::ThemeManager()
     : d(new Private)
 {
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 ThemeManager::~ThemeManager()
@@ -167,6 +164,9 @@ void ThemeManager::registerThemeActions(DXmlGuiWindow* const kwin)
         return;
 
     kwin->actionCollection()->addAction("theme_menu", d->themeMenuAction->menuAction());
+    
+    connect(kwin, SIGNAL(kdisplayPaletteChanged()),
+            this, SLOT(signalDisplayPaletteChanged()));
 }
 
 void ThemeManager::populateThemeMenu()
