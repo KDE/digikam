@@ -53,44 +53,42 @@ public:
         SubColumnLastModified = 3
     };
 
-private:
-    SubColumn subColumn;
+public:
+
+    explicit ColumnFileProperties(TableViewShared* const tableViewShared,
+                                  const TableViewColumnConfiguration& pConfiguration,
+                                  const SubColumn pSubColumn,
+                                  QObject* const parent = 0);
+    virtual ~ColumnFileProperties() {};
+
+    virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
+    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
+    virtual QString getTitle() const;
+    virtual ColumnFlags getColumnFlags() const;
+    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
+    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
 
 public:
 
-    explicit ColumnFileProperties(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            const SubColumn pSubColumn,
-            QObject* const parent = 0
-        );
-    virtual ~ColumnFileProperties() { }
-
     static TableViewColumnDescription getDescription();
-    static QStringList getSubColumns();
-    virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
-    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
+    static QStringList                getSubColumns();
 
-    virtual QString getTitle() const;
+private:
 
-    virtual ColumnFlags getColumnFlags() const;
-
-    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
-
-    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
-
+    SubColumn subColumn;
 };
+
+// ---------------------------------------------------------------------------------------
 
 class ColumnFileConfigurationWidget : public TableViewColumnConfigurationWidget
 {
     Q_OBJECT
 
 public:
-    explicit ColumnFileConfigurationWidget(
-            TableViewShared* const sharedObject,
-            const TableViewColumnConfiguration& columnConfiguration,
-            QWidget* const parentWidget
-        );
+    
+    explicit ColumnFileConfigurationWidget(TableViewShared* const sharedObject,
+                                           const TableViewColumnConfiguration& columnConfiguration,
+                                           QWidget* const parentWidget);
     virtual ~ColumnFileConfigurationWidget();
 
     virtual TableViewColumnConfiguration getNewConfiguration();
@@ -98,7 +96,7 @@ public:
 private:
 
     ColumnFileProperties::SubColumn subColumn;
-    QComboBox* selectorSizeType;
+    QComboBox*                      selectorSizeType;
 };
 
 } /* namespace TableViewColumns */
@@ -106,4 +104,3 @@ private:
 } /* namespace Digikam */
 
 #endif // TABLEVIEW_COLUMN_FILE_H
-

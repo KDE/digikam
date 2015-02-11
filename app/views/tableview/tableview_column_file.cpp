@@ -44,16 +44,13 @@ namespace Digikam
 namespace TableViewColumns
 {
 
-ColumnFileProperties::ColumnFileProperties(
-        TableViewShared* const tableViewShared,
-        const TableViewColumnConfiguration& pConfiguration,
-        const SubColumn pSubColumn,
-        QObject* const parent
-    )
+ColumnFileProperties::ColumnFileProperties(TableViewShared* const tableViewShared,
+                                           const TableViewColumnConfiguration& pConfiguration,
+                                           const SubColumn pSubColumn,
+                                           QObject* const parent)
   : TableViewColumn(tableViewShared, pConfiguration, parent),
     subColumn(pSubColumn)
 {
-
 }
 
 TableViewColumnDescription ColumnFileProperties::getDescription()
@@ -61,21 +58,10 @@ TableViewColumnDescription ColumnFileProperties::getDescription()
     TableViewColumnDescription description(QLatin1String("file-properties"), i18n("File properties"));
     description.setIcon("dialog-information");
 
-    description.addSubColumn(
-        TableViewColumnDescription("filename", i18n("Filename"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("filepath", i18n("Path"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("filesize", i18n("Size"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("filelastmodified", i18n("Last modified"))
-    );
+    description.addSubColumn(TableViewColumnDescription("filename", i18n("Filename")));
+    description.addSubColumn(TableViewColumnDescription("filepath", i18n("Path")));
+    description.addSubColumn(TableViewColumnDescription("filesize", i18n("Size")));
+    description.addSubColumn(TableViewColumnDescription("filelastmodified", i18n("Last modified")));
 
     return description;
 }
@@ -93,14 +79,14 @@ QString ColumnFileProperties::getTitle() const
 {
     switch (subColumn)
     {
-    case SubColumnName:
-        return i18n("Filename");
-    case SubColumnFilePath:
-        return i18n("Path");
-    case SubColumnSize:
-        return i18n("Size");
-    case SubColumnLastModified:
-        return i18n("Last modified");
+        case SubColumnName:
+            return i18n("Filename");
+        case SubColumnFilePath:
+            return i18n("Path");
+        case SubColumnSize:
+            return i18n("Size");
+        case SubColumnLastModified:
+            return i18n("Last modified");
     }
 
     return QString();
@@ -108,8 +94,8 @@ QString ColumnFileProperties::getTitle() const
 
 TableViewColumn::ColumnFlags ColumnFileProperties::getColumnFlags() const
 {
-    if (   (subColumn == SubColumnSize)
-        || (subColumn == SubColumnLastModified) )
+    if ((subColumn == SubColumnSize) ||
+        (subColumn == SubColumnLastModified))
     {
         return ColumnCustomSorting | ColumnHasConfigurationWidget;
     }
@@ -208,10 +194,11 @@ TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(TableViewMode
     }
 }
 
-ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(
-        TableViewShared* const sharedObject,
-        const TableViewColumnConfiguration& columnConfiguration,
-        QWidget* const parentWidget)
+// ---------------------------------------------------------------------------------------
+
+ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(TableViewShared* const sharedObject,
+                                                             const TableViewColumnConfiguration& columnConfiguration,
+                                                             QWidget* const parentWidget)
   : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
     subColumn(ColumnFileProperties::SubColumnName),
     selectorSizeType(0)
@@ -220,7 +207,7 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(
 
     switch (subColumn)
     {
-    case ColumnFileProperties::SubColumnSize:
+        case ColumnFileProperties::SubColumnSize:
         {
             QFormLayout* const box1 = new QFormLayout();
             selectorSizeType = new QComboBox(this);
@@ -235,14 +222,13 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(
             break;
         }
 
-    default:
-        break;
+        default:
+            break;
     }
 }
 
 ColumnFileConfigurationWidget::~ColumnFileConfigurationWidget()
 {
-
 }
 
 TableViewColumnConfiguration ColumnFileConfigurationWidget::getNewConfiguration()
