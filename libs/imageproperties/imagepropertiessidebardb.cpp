@@ -37,9 +37,10 @@
 
 // KDE includes
 
-#include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
+
+#include <kio/global.h>
 
 // Local includes
 
@@ -533,7 +534,6 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             QString str;
             QString unavailable(i18n("<i>unavailable</i>"));
             QFileInfo fileInfo(url.toLocalFile());
-            KFileItem fi(url);
             
             // -- File system information -----------------------------------------
 
@@ -550,7 +550,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
 
             //  These infos are not stored in DB
             m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
-            m_propertiesTab->setFilePermissions(fi.permissionsString());
+            m_propertiesTab->setFilePermissions(ImagePropertiesTab::permissionsString(fileInfo));
 
             // -- Image Properties --------------------------------------------------
 

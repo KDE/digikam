@@ -29,6 +29,7 @@
 #include <QString>
 #include <QColor>
 #include <QUrl>
+#include <QFileInfo>
 
 // Libkdcraw includes
 
@@ -111,6 +112,8 @@ public:
     /** Write a string with apect ratio information formated
      */
     static bool aspectRatioToString(int width, int height, QString& arString);
+    
+    static QString permissionsString(const QFileInfo& fi);
 
 private:
 

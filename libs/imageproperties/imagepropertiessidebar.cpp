@@ -37,9 +37,10 @@
 
 // KDE includes
 
-#include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
+
+#include <kio/global.h>
 
 // Libkdcraw includes
 
@@ -208,7 +209,6 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     QString unavailable(i18n("<i>unavailable</i>"));
     QFileInfo fileInfo(url.toLocalFile());
     DMetadata metaData(url.toLocalFile());
-    KFileItem fi(url);
 
     // -- File system information -----------------------------------------
 
@@ -220,7 +220,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
                             .arg(QLocale().toString(fileInfo.size()));
     m_propertiesTab->setFileSize(str);
     m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
-    m_propertiesTab->setFilePermissions(fi.permissionsString());
+    m_propertiesTab->setFilePermissions(ImagePropertiesTab::permissionsString(fileInfo));
 
     // -- Image Properties --------------------------------------------------
 

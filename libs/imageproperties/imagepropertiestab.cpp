@@ -963,4 +963,26 @@ bool ImagePropertiesTab::aspectRatioToString(int width, int height, QString& arS
     return true;
 }
 
+QString ImagePropertiesTab::permissionsString(const QFileInfo& fi)
+{
+    QString str;
+    QFile::Permissions perms = fi.permissions();
+
+    str.append(fi.isSymLink()                    ? "l" : "-");
+
+    str.append((perms & QFileDevice::ReadOwner)  ? "r" : "-");
+    str.append((perms & QFileDevice::WriteOwner) ? "w" : "-");
+    str.append((perms & QFileDevice::ExeOwner)   ? "x" : "-");
+
+    str.append((perms & QFileDevice::ReadGroup)  ? "r" : "-");
+    str.append((perms & QFileDevice::WriteGroup) ? "w" : "-");
+    str.append((perms & QFileDevice::ExeGroup)   ? "x" : "-");
+
+    str.append((perms & QFileDevice::ReadOther)  ? "r" : "-");
+    str.append((perms & QFileDevice::WriteOther) ? "w" : "-");
+    str.append((perms & QFileDevice::ExeOther)   ? "x" : "-");
+
+    return str;
+}
+
 }  // namespace Digikam
