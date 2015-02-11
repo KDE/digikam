@@ -35,7 +35,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurlmimedata.h>
 
 // Local includes
 
@@ -72,7 +71,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
     if (DAlbumDrag::canDecode(e->mimeData()))
     {
         QList<QUrl> urls;
-        int        albumId;
+        int         albumId = 0;
 
         if (!DAlbumDrag::decode(e->mimeData(), urls, albumId))
         {
@@ -109,8 +108,8 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
     else if (DItemDrag::canDecode(e->mimeData()))
     {
 
-        QList<QUrl>       urls;
-        QList<QUrl>       kioURLs;
+        QList<QUrl>      urls;
+        QList<QUrl>      kioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
@@ -277,9 +276,9 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
     // -- DnD from an external source ---------------------
     else if (e->mimeData()->hasUrls())
     {
-        QList<QUrl> srcURLs = KUrlMimeData::urlsFromMimeData(e->mimeData());
-        bool move          = false;
-        bool copy          = false;
+        QList<QUrl> srcURLs = e->mimeData()->urls();
+        bool move           = false;
+        bool copy           = false;
 
         // If shift key is pressed while dropping, move the drag object without
         // displaying popup menu -> move
@@ -351,7 +350,7 @@ Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent* e, const QModelIn
         }
 
         QList<QUrl> urls;
-        int        albumId;
+        int         albumId = 0;
 
         if (!DAlbumDrag::decode(e->mimeData(), urls, albumId))
         {
@@ -400,7 +399,7 @@ QStringList AlbumDragDropHandler::mimeTypes() const
     mimeTypes << DAlbumDrag::mimeTypes()
               << DItemDrag::mimeTypes()
               << DCameraItemListDrag::mimeTypes()
-              << KUrlMimeData::mimeDataTypes();
+              << QLatin1String("text/uri-list");
 
     return mimeTypes;
 }

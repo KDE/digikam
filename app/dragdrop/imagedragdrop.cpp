@@ -36,7 +36,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurlmimedata.h>
 
 // Local includes
 
@@ -263,8 +262,8 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     if (DItemDrag::canDecode(e->mimeData()))
     {
         // Drag & drop inside of digiKam
-        QList<QUrl>       urls;
-        QList<QUrl>       kioURLs;
+        QList<QUrl>      urls;
+        QList<QUrl>      kioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
@@ -427,7 +426,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         // Drag & drop outside of digiKam
 
-        QList<QUrl> srcURLs = KUrlMimeData::urlsFromMimeData(e->mimeData());
+        QList<QUrl> srcURLs = e->mimeData()->urls();
 
         if (m_readOnly)
         {
@@ -584,7 +583,7 @@ QStringList ImageDragDropHandler::mimeTypes() const
               << DTagListDrag::mimeTypes()
               << DCameraItemListDrag::mimeTypes()
               << DCameraDragObject::mimeTypes()
-              << KUrlMimeData::mimeDataTypes();
+              << QLatin1String("text/uri-list");
 
     return mimeTypes;
 }
