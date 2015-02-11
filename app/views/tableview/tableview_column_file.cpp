@@ -31,11 +31,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kformat.h>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "imagepropertiestab.h"
 #include "imageinfo.h"
 
 namespace Digikam
@@ -48,8 +48,8 @@ ColumnFileProperties::ColumnFileProperties(TableViewShared* const tableViewShare
                                            const TableViewColumnConfiguration& pConfiguration,
                                            const SubColumn pSubColumn,
                                            QObject* const parent)
-  : TableViewColumn(tableViewShared, pConfiguration, parent),
-    subColumn(pSubColumn)
+    : TableViewColumn(tableViewShared, pConfiguration, parent),
+      subColumn(pSubColumn)
 {
 }
 
@@ -58,9 +58,9 @@ TableViewColumnDescription ColumnFileProperties::getDescription()
     TableViewColumnDescription description(QLatin1String("file-properties"), i18n("File properties"));
     description.setIcon("dialog-information");
 
-    description.addSubColumn(TableViewColumnDescription("filename", i18n("Filename")));
-    description.addSubColumn(TableViewColumnDescription("filepath", i18n("Path")));
-    description.addSubColumn(TableViewColumnDescription("filesize", i18n("Size")));
+    description.addSubColumn(TableViewColumnDescription("filename",         i18n("Filename")));
+    description.addSubColumn(TableViewColumnDescription("filepath",         i18n("Path")));
+    description.addSubColumn(TableViewColumnDescription("filesize",         i18n("Size")));
     description.addSubColumn(TableViewColumnDescription("filelastmodified", i18n("Last modified")));
 
     return description;
@@ -111,7 +111,7 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
         return QVariant();
     }
 
-    if (role==Qt::TextAlignmentRole)
+    if (role == Qt::TextAlignmentRole)
     {
         switch (subColumn)
         {
@@ -143,7 +143,7 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
 
             if (formatKey == "kde")
             {
-                return KFormat().formatByteSize(info.fileSize());
+                return ImagePropertiesTab::humanReadableBytesCount(info.fileSize());
             }
             else
             {
@@ -188,9 +188,10 @@ TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(TableViewMode
         }
 
         default:
-
+        {
             qCWarning(DIGIKAM_GENERAL_LOG) << "file: unimplemented comparison, subColumn=" << subColumn;
             return CmpEqual;
+        }
     }
 }
 
@@ -199,9 +200,9 @@ TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(TableViewMode
 ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(TableViewShared* const sharedObject,
                                                              const TableViewColumnConfiguration& columnConfiguration,
                                                              QWidget* const parentWidget)
-  : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
-    subColumn(ColumnFileProperties::SubColumnName),
-    selectorSizeType(0)
+    : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
+      subColumn(ColumnFileProperties::SubColumnName),
+      selectorSizeType(0)
 {
     ColumnFileProperties::getSubColumnIndex<ColumnFileProperties>(configuration.columnId, &subColumn);
 
@@ -210,7 +211,7 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(TableViewShared* co
         case ColumnFileProperties::SubColumnSize:
         {
             QFormLayout* const box1 = new QFormLayout();
-            selectorSizeType = new QComboBox(this);
+            selectorSizeType        = new QComboBox(this);
             selectorSizeType->addItem(i18n("KDE default"), QString("kde"));
             selectorSizeType->addItem(i18n("Plain"), QString("plain"));
             box1->addRow(i18n("Display format"), selectorSizeType);

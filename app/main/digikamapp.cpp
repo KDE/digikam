@@ -54,7 +54,6 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
-#include <kformat.h>
 
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
@@ -99,6 +98,7 @@
 #include "iccsettings.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
+#include "imagepropertiestab.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
@@ -2277,8 +2277,10 @@ void DigikamApp::fillSolidMenus()
             }
 
             if (volume->size())
+            {
                 label += i18nc("device label etc... (<formatted byte size>)",
-                               " (%1)", KFormat().formatByteSize(volume->size()));
+                               " (%1)", ImagePropertiesTab::humanReadableBytesCount(volume->size()));
+            }
         }
 
         QString iconName;
