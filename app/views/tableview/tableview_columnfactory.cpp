@@ -32,14 +32,12 @@
 namespace Digikam
 {
 
-TableViewColumn::TableViewColumn(
-        TableViewShared* const tableViewShared,
-        const TableViewColumnConfiguration& pConfiguration,
-        QObject* const parent
-    )
-  : QObject(parent),
-    s(tableViewShared),
-    configuration(pConfiguration)
+TableViewColumn::TableViewColumn(TableViewShared* const tableViewShared,
+                                 const TableViewColumnConfiguration& pConfiguration,
+                                 QObject* const parent)
+    : QObject(parent),
+      s(tableViewShared),
+      configuration(pConfiguration)
 {
 }
 
@@ -47,53 +45,55 @@ TableViewColumn::~TableViewColumn()
 {
 }
 
-TableViewColumnFactory::TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* parent)
-  : QObject(parent),
-    s(tableViewShared)
+// ---------------------------------------------------------------------------------------------
+
+TableViewColumnFactory::TableViewColumnFactory(TableViewShared* const tableViewShared,
+                                               QObject* const parent)
+    : QObject(parent),
+      s(tableViewShared)
 {
 }
 
 TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColumnConfiguration& columnConfiguration)
 {
     TableViewColumn* newColumn = 0;
+
     if (TableViewColumns::ColumnThumbnail::CreateFromConfiguration(s, columnConfiguration, &newColumn, this))
     {
         return newColumn;
     }
+
     if (TableViewColumns::ColumnDigikamProperties::CreateFromConfiguration<TableViewColumns::ColumnDigikamProperties>(s, columnConfiguration, &newColumn, this))
     {
         return newColumn;
     }
+
     if (TableViewColumns::ColumnPhotoProperties::CreateFromConfiguration<TableViewColumns::ColumnPhotoProperties>(s, columnConfiguration, &newColumn, this))
     {
         return newColumn;
     }
+
     if (TableViewColumns::ColumnFileProperties::CreateFromConfiguration<TableViewColumns::ColumnFileProperties>(s, columnConfiguration, &newColumn, this))
     {
         return newColumn;
     }
+
     if (TableViewColumns::ColumnGeoProperties::CreateFromConfiguration<TableViewColumns::ColumnGeoProperties>(s, columnConfiguration, &newColumn, this))
     {
         return newColumn;
     }
+
     if (TableViewColumns::ColumnItemProperties::CreateFromConfiguration<TableViewColumns::ColumnItemProperties>(s, columnConfiguration, &newColumn, this))
     {
         return newColumn;
     }
+
     if (TableViewColumns::ColumnAudioVideoProperties::CreateFromConfiguration<TableViewColumns::ColumnAudioVideoProperties>(s, columnConfiguration, &newColumn, this))
     {
         return newColumn;
     }
 
     return 0;
-}
-
-QVariant TableViewColumn::data(TableViewModel::Item* const item, const int role) const
-{
-    Q_UNUSED(item)
-    Q_UNUSED(role)
-
-    return QVariant();
 }
 
 QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionList()
@@ -110,6 +110,8 @@ QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionLi
 
     return descriptionList;
 }
+
+// ---------------------------------------------------------------------------------------------
 
 bool TableViewColumn::paint(QPainter* const painter, const QStyleOptionViewItem& option, TableViewModel::Item* const item) const
 {
@@ -128,6 +130,84 @@ QSize TableViewColumn::sizeHint(const QStyleOptionViewItem& option, TableViewMod
     return QSize();
 }
 
+QVariant TableViewColumn::data(TableViewModel::Item* const item, const int role) const
+{
+    Q_UNUSED(item)
+    Q_UNUSED(role)
+
+    return QVariant();
+}
+
+TableViewColumn::ColumnFlags TableViewColumn::getColumnFlags() const
+{
+    return ColumnNoFlags;
+}
+
+TableViewColumnConfiguration TableViewColumn::getConfiguration() const
+{
+    return configuration;
+}
+
+/**
+ * This function should never be called, because subclasses have to do the comparison on their own. But it can not be
+ * pure, since then every subclass which does not do custom comparison would have to implement an empty stub.
+ */
+TableViewColumn::ColumnCompareResult TableViewColumn::compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
+{
+    Q_UNUSED(itemA)
+    Q_UNUSED(itemB)
+
+    qCWarning(DIGIKAM_GENERAL_LOG)<<"Unimplemented custom comparison. Make sure getColumnFlags() does not return ColumnCustomSorting.";
+
+    return CmpEqual;
+}
+
+TableViewColumnConfigurationWidget* TableViewColumn::getConfigurationWidget(QWidget* const parentWidget) const
+{
+    Q_UNUSED(parentWidget)
+
+    return 0;
+}
+
+void TableViewColumn::setConfiguration(const TableViewColumnConfiguration& newConfiguration)
+{
+    Q_UNUSED(newConfiguration)
+}
+
+void TableViewColumn::updateThumbnailSize()
+{
+}
+
+bool TableViewColumn::compareHelperBoolFailCheck(const bool okA, const bool okB, ColumnCompareResult* const result)
+{
+    if (okA&&okB)
+    {
+        return true;
+    }
+
+    if (okA && !okB)
+    {
+        *result = CmpABiggerB;
+        return false;
+    }
+
+    if (okB && !okA)
+    {
+        *result = CmpALessB;
+        return false;
+    }
+
+    *result = CmpEqual;
+    return false;
+}
+
+bool TableViewColumn::columnAffectedByChangeset(const ImageChangeset& /*imageChangeset*/) const
+{
+    return true;
+}
+
+// ---------------------------------------------------------------------------------------------
+
 TableViewColumnProfile::TableViewColumnProfile()
 {
 }
@@ -138,8 +218,8 @@ TableViewColumnProfile::~TableViewColumnProfile()
 
 void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
 {
-    name = configGroup.readEntry("Profile Name", QString());
-    headerState = configGroup.readEntry("Header State", QByteArray());
+    name               = configGroup.readEntry("Profile Name", QString());
+    headerState        = configGroup.readEntry("Header State", QByteArray());
     const int nColumns = configGroup.readEntry("Column Count", int(0));
 
     for (int i=0; i<nColumns; ++i)
@@ -162,6 +242,7 @@ void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
         TableViewColumnDescription::List allColumns = TableViewColumnFactory::getColumnDescriptionList();
 
         TableViewColumnDescription nextDesc;
+
         if (TableViewColumnDescription::FindInListById(allColumns, "thumbnail", &nextDesc))
         {
             columnConfigurationList << nextDesc.toConfiguration();
@@ -198,22 +279,23 @@ void TableViewColumnProfile::saveSettings(KConfigGroup& configGroup)
 
     for (int i=0; i<nColumns; ++i)
     {
-        const QString configSubGroupName = QString("Column %1").arg(i);
-        KConfigGroup subGroup = configGroup.group(configSubGroupName);
-
+        const QString configSubGroupName                        = QString("Column %1").arg(i);
+        KConfigGroup subGroup                                   = configGroup.group(configSubGroupName);
         const TableViewColumnConfiguration& columnConfiguration = columnConfigurationList.at(i);;
         columnConfiguration.saveSettings(subGroup);
     }
 }
 
+// ---------------------------------------------------------------------------------------------
+
 void TableViewColumnConfiguration::loadSettings(const KConfigGroup& configGroup)
 {
-    columnId = configGroup.readEntry("Column Id", QString());
-
+    columnId            = configGroup.readEntry("Column Id", QString());
     const int nSettings = configGroup.readEntry("NSettings", int(0));
+
     for (int i=0; i<nSettings; ++i)
     {
-        const QString& key = configGroup.readEntry(QString("Key %1").arg(i), QString());
+        const QString& key   = configGroup.readEntry(QString("Key %1").arg(i), QString());
         const QString& value = configGroup.readEntry(QString("Value %1").arg(i), QString());
 
         if (!key.isEmpty())
@@ -231,6 +313,7 @@ void TableViewColumnConfiguration::saveSettings(KConfigGroup& configGroup) const
     configGroup.writeEntry("NSettings", nSettings);
 
     QHashIterator<QString, QString> settingsIterator(columnSettings);
+
     for (int i=0; settingsIterator.hasNext(); ++i)
     {
         settingsIterator.next();
@@ -239,92 +322,19 @@ void TableViewColumnConfiguration::saveSettings(KConfigGroup& configGroup) const
     }
 }
 
-TableViewColumn::ColumnFlags TableViewColumn::getColumnFlags() const
+// ---------------------------------------------------------------------------------------------
+
+TableViewColumnConfigurationWidget::TableViewColumnConfigurationWidget(TableViewShared* const sharedObject,
+                                                                       const TableViewColumnConfiguration& currentConfiguration,
+                                                                       QWidget* const parent)
+    : QWidget(parent),
+      s(sharedObject),
+      configuration(currentConfiguration)
 {
-    return ColumnNoFlags;
-}
-
-TableViewColumnConfiguration TableViewColumn::getConfiguration() const
-{
-    return configuration;
-}
-
-/**
- * This function should never be called, because subclasses have to do the comparison on their own. But it can not be
- * pure, since then every subclass which does not do custom comparison would have to implement an empty stub.
- */
-TableViewColumn::ColumnCompareResult TableViewColumn::compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
-{
-    Q_UNUSED(itemA)
-    Q_UNUSED(itemB)
-
-    qCWarning(DIGIKAM_GENERAL_LOG)<<"Unimplemented custom comparison. Make sure getColumnFlags() does not return ColumnCustomSorting.";
-
-    return CmpEqual;
-}
-
-TableViewColumnConfigurationWidget* TableViewColumn::getConfigurationWidget(QWidget* const parentWidget) const
-{
-    Q_UNUSED(parentWidget)
-
-    return 0;
-}
-
-TableViewColumnConfigurationWidget::TableViewColumnConfigurationWidget(
-        TableViewShared* const sharedObject,
-        const TableViewColumnConfiguration& currentConfiguration,
-        QWidget* const parent
-    )
-  : QWidget(parent),
-    s(sharedObject),
-    configuration(currentConfiguration)
-{
-
 }
 
 TableViewColumnConfigurationWidget::~TableViewColumnConfigurationWidget()
 {
-
-}
-
-void TableViewColumn::setConfiguration(const TableViewColumnConfiguration& newConfiguration)
-{
-    Q_UNUSED(newConfiguration)
-}
-
-void TableViewColumn::updateThumbnailSize()
-{
-
-}
-
-bool TableViewColumn::compareHelperBoolFailCheck(const bool okA, const bool okB, ColumnCompareResult* const result)
-{
-    if (okA&&okB)
-    {
-        return true;
-    }
-
-    if (okA && !okB)
-    {
-        *result = CmpABiggerB;
-        return false;
-    }
-
-    if (okB && !okA)
-    {
-        *result = CmpALessB;
-        return false;
-    }
-
-    *result = CmpEqual;
-    return false;
-}
-
-bool TableViewColumn::columnAffectedByChangeset(const ImageChangeset& /*imageChangeset*/) const
-{
-    return true;
 }
 
 } /* namespace Digikam */
-
-
