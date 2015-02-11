@@ -32,7 +32,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurlmimedata.h>
 
 // Local includes
 
@@ -215,7 +214,7 @@ QStringList ImportDragDropHandler::mimeTypes() const
               << DTagListDrag::mimeTypes()
               << DCameraItemListDrag::mimeTypes()
               << DCameraDragObject::mimeTypes()
-              << KUrlMimeData::mimeDataTypes();
+              << QLatin1String("text/uri-list");
 
     return mimeTypes;
 }

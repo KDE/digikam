@@ -32,7 +32,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurlmimedata.h>
 
 // Local includes
 
@@ -89,7 +88,7 @@ Qt::DropAction ShowfotoDragDropHandler::accepts(const QDropEvent* e, const QMode
 QStringList ShowfotoDragDropHandler::mimeTypes() const
 {
     QStringList mimeTypes;
-    mimeTypes << KUrlMimeData::mimeDataTypes();
+    mimeTypes << QLatin1String("text/uri-list");
 
     return mimeTypes;
 }
@@ -98,8 +97,7 @@ QMimeData* ShowfotoDragDropHandler::createMimeData(const QList<QModelIndex>& ind
 {
     QList<ShowfotoItemInfo> infos = model()->showfotoItemInfos(indexes);
     QMimeData* const mimeData     = new QMimeData();
-
-    QList<QUrl>       urls;
+    QList<QUrl> urls;
 
     foreach(const ShowfotoItemInfo& info, infos)
     {
