@@ -37,7 +37,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kio/global.h>
 
 // Libkdcraw includes
 
@@ -447,7 +446,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         d->labelFileDate->setAdjustedText(unknown);
     }
 
-    str = i18n("%1 (%2)", KIO::convertSize(itemInfo.size), QLocale().toString(itemInfo.size));
+    str = i18n("%1 (%2)", ImagePropertiesTab::humanReadableBytesCount(itemInfo.size), QLocale().toString(itemInfo.size));
     d->labelFileSize->setAdjustedText(str);
 
     // -- Image Properties --------------------------------------------------

@@ -41,7 +41,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kio/global.h>
 
 // Local includes
 
@@ -405,7 +404,7 @@ void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong 
     Q_D(const ItemViewImageDelegate);
 
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));
+    p->drawText(r, Qt::AlignCenter, ImagePropertiesTab::humanReadableBytesCount(bytes));
 }
 
 void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,

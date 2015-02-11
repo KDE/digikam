@@ -31,12 +31,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kio/global.h>
 
 // Local includes
 
 #include "thememanager.h"
 #include "imagescanner.h"
+#include "imagepropertiestab.h"
 #include "showfotoiteminfo.h"
 #include "colorlabelwidget.h"
 #include "itemviewshowfotodelegatepriv.h"
@@ -334,7 +334,7 @@ void ItemViewShowfotoDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglo
 {
     Q_D(const ItemViewShowfotoDelegate);
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));//squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
+    p->drawText(r, Qt::AlignCenter, ImagePropertiesTab::humanReadableBytesCount(bytes));
 }
 
 void ItemViewShowfotoDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,

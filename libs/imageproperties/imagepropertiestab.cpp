@@ -38,6 +38,7 @@
 #include <QCollator>
 #include <QIcon>
 #include <QLocale>
+#include <QtMath>
 
 // KDE includes
 
@@ -983,6 +984,22 @@ QString ImagePropertiesTab::permissionsString(const QFileInfo& fi)
     str.append((perms & QFileDevice::ExeOther)   ? "x" : "-");
 
     return str;
+}
+
+QString ImagePropertiesTab::humanReadableBytesCount(qint64 bytes, bool si)
+{
+    int unit        = si ? 1000 : 1024;
+    QString byteStr = i18nc("unit file size in bytes", "B");
+    QString ret     = QString::number(bytes);
+    
+    if (bytes >= unit)
+    {
+        int exp     = (int)(qLn(bytes) / qLn(unit));
+        QString pre = QString(si ? "kMGTPEZY" : "KMGTPEZY").at(exp-1) + (si ? "" : "i");
+        ret.sprintf("%.1f %s", bytes / qPow(unit, exp), pre.toLatin1().constData());
+    }
+
+    return (QString("%1 %2").arg(ret).arg(byteStr));
 }
 
 }  // namespace Digikam

@@ -35,7 +35,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kio/global.h>
 
 // Local includes
 
@@ -43,6 +42,7 @@
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"
 #include "imagescanner.h"
+#include "imagepropertiestab.h"
 #include "camiteminfo.h"
 #include "colorlabelwidget.h"
 #include "ratingwidget.h"
@@ -377,7 +377,7 @@ void ItemViewImportDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong
     Q_D(const ItemViewImportDelegate);
 
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));//squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
+    p->drawText(r, Qt::AlignCenter, ImagePropertiesTab::humanReadableBytesCount(bytes));
 }
 
 void ItemViewImportDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,

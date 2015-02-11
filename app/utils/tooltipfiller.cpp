@@ -32,7 +32,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kio/global.h>
 
 // Local includes
 
@@ -97,7 +96,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         {
             tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             QString localeFileSize = QLocale().toString(commonInfo.fileSize);
-            str                    = i18n("%1 (%2)", KIO::convertSize(commonInfo.fileSize), localeFileSize);
+            str                    = i18n("%1 (%2)", ImagePropertiesTab::humanReadableBytesCount(commonInfo.fileSize), localeFileSize);
             tip                   += str + cnt.cellEnd;
         }
 

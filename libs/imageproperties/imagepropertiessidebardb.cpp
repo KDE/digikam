@@ -40,8 +40,6 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
-#include <kio/global.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -544,7 +542,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             str = QLocale().toString(commonInfo.fileModificationDate, QLocale::ShortFormat);
             m_propertiesTab->setFileModifiedDate(str);
 
-            str = QString("%1 (%2)").arg(KIO::convertSize(commonInfo.fileSize))
+            str = QString("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
                                     .arg(QLocale().toString(commonInfo.fileSize));
             m_propertiesTab->setFileSize(str);
 

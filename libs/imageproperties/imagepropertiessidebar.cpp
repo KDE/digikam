@@ -40,8 +40,6 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
-#include <kio/global.h>
-
 // Libkdcraw includes
 
 #include <kdcraw.h>
@@ -216,7 +214,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     str = QLocale().toString(modifiedDate, QLocale::ShortFormat);
     m_propertiesTab->setFileModifiedDate(str);
 
-    str = QString("%1 (%2)").arg(KIO::convertSize(fileInfo.size()))
+    str = QString("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
                             .arg(QLocale().toString(fileInfo.size()));
     m_propertiesTab->setFileSize(str);
     m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
