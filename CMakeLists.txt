@@ -507,8 +507,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
     add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
-    # TODO : obsolete ?
-    add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
+    add_definitions(-DQT_USE_QSTRINGBUILDER -DQT_USE_FAST_OPERATOR_PLUS)
 
     # surpress deprecated warning for glibc 2.20+
     add_definitions(-D_DEFAULT_SOURCE)
