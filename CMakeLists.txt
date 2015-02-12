@@ -505,7 +505,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     # TODO : port Qt5 : Remove later
     remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
-    add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
     add_definitions(-DQT_USE_QSTRINGBUILDER -DQT_USE_FAST_OPERATOR_PLUS)
 
