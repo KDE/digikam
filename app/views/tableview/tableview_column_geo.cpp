@@ -55,7 +55,7 @@ QString FormatAltitude(const qreal altitudeInMeters, const QLocale::MeasurementS
     }
 }
 
-}
+} // namespace
 
 namespace Digikam
 {
@@ -63,13 +63,12 @@ namespace Digikam
 namespace TableViewColumns
 {
 
-ColumnGeoProperties::ColumnGeoProperties(
-        TableViewShared* const tableViewShared,
-        const TableViewColumnConfiguration& pConfiguration,
-        const SubColumn pSubColumn,
-        QObject* const parent)
-  : TableViewColumn(tableViewShared, pConfiguration, parent),
-    subColumn(pSubColumn)
+ColumnGeoProperties::ColumnGeoProperties(TableViewShared* const tableViewShared,
+                                         const TableViewColumnConfiguration& pConfiguration,
+                                         const SubColumn pSubColumn,
+                                         QObject* const parent)
+    : TableViewColumn(tableViewShared, pConfiguration, parent),
+      subColumn(pSubColumn)
 {
 }
 
@@ -91,8 +90,8 @@ TableViewColumnDescription ColumnGeoProperties::getDescription()
     TableViewColumnDescription description(QLatin1String("geo-properties"), i18n("Geo properties"));
     description.setIcon("applications-internet");
     description.addSubColumn(TableViewColumnDescription("geohascoordinates", i18n("Geotagged")));
-    description.addSubColumn(TableViewColumnDescription("geocoordinates", i18n("Coordinates")));
-    description.addSubColumn(TableViewColumnDescription("geoaltitude", i18n("Altitude")));
+    description.addSubColumn(TableViewColumnDescription("geocoordinates",    i18n("Coordinates")));
+    description.addSubColumn(TableViewColumnDescription("geoaltitude",       i18n("Altitude")));
 
     return description;
 }
@@ -148,7 +147,9 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
     switch (subColumn)
     {
         case SubColumnHasCoordinates:
+        {
             return info.hasCoordinates() ? i18n("Yes") : i18n("No");
+        }
 
         case SubColumnCoordinates:
         {
@@ -191,8 +192,8 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
     return QVariant();
 }
 
-TableViewColumn::ColumnCompareResult ColumnGeoProperties::compare(
-    TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const
+TableViewColumn::ColumnCompareResult ColumnGeoProperties::compare(TableViewModel::Item* const itemA,
+                                                                  TableViewModel::Item* const itemB) const
 {
     const ImageInfo infoA = s->tableViewModel->infoFromItem(itemA);
     const ImageInfo infoB = s->tableViewModel->infoFromItem(itemB);
@@ -225,13 +226,14 @@ TableViewColumnConfigurationWidget* ColumnGeoProperties::getConfigurationWidget(
     return (new ColumnGeoConfigurationWidget(s, myConfiguration, parentWidget));
 }
 
-ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(
-        TableViewShared* const sharedObject,
-        const TableViewColumnConfiguration& columnConfiguration,
-        QWidget* const parentWidget)
-  : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
-    subColumn(ColumnGeoProperties::SubColumnHasCoordinates),
-    selectorAltitudeUnit(0)
+// ----------------------------------------------------------------------------------------------------------------
+
+ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(TableViewShared* const sharedObject,
+                                                           const TableViewColumnConfiguration& columnConfiguration,
+                                                           QWidget* const parentWidget)
+    : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
+      subColumn(ColumnGeoProperties::SubColumnHasCoordinates),
+      selectorAltitudeUnit(0)
 {
     ColumnGeoProperties::getSubColumnIndex<ColumnGeoProperties>(configuration.columnId, &subColumn);
 
@@ -280,4 +282,3 @@ void ColumnGeoProperties::setConfiguration(const TableViewColumnConfiguration& n
 } /* namespace TableViewColumns */
 
 } /* namespace Digikam */
-

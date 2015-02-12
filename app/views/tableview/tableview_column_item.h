@@ -57,28 +57,25 @@ public:
         SubColumnAspectRatio = 9
     };
 
-private:
-    SubColumn subColumn;
-
 public:
 
-    explicit ColumnItemProperties(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            const SubColumn pSubColumn,
-            QObject* const parent = 0
-        );
+    explicit ColumnItemProperties(TableViewShared* const tableViewShared,
+                                  const TableViewColumnConfiguration& pConfiguration,
+                                  const SubColumn pSubColumn,
+                                  QObject* const parent = 0);
     virtual ~ColumnItemProperties();
+
+    virtual QString getTitle() const;
+    virtual ColumnFlags getColumnFlags() const;
+    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
+    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
 
     static TableViewColumnDescription getDescription();
     static QStringList getSubColumns();
-    virtual QString getTitle() const;
 
-    virtual ColumnFlags getColumnFlags() const;
+private:
 
-    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
-
-    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
+    SubColumn subColumn;
 };
 
 } /* namespace TableViewColumns */
@@ -86,4 +83,3 @@ public:
 } /* namespace Digikam */
 
 #endif // TABLEVIEW_COLUMN_ITEM_H
-

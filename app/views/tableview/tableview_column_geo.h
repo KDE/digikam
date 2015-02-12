@@ -52,37 +52,35 @@ public:
         SubColumnAltitude = 2
     } subColumn;
 
-    explicit ColumnGeoProperties(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            const SubColumn pSubColumn,
-            QObject* const parent = 0
-        );
+public:
+
+    explicit ColumnGeoProperties(TableViewShared* const tableViewShared,
+                                 const TableViewColumnConfiguration& pConfiguration,
+                                 const SubColumn pSubColumn,
+                                 QObject* const parent = 0);
     virtual ~ColumnGeoProperties();
-    static TableViewColumnDescription getDescription();
 
     virtual QString getTitle() const;
-
     virtual ColumnFlags getColumnFlags() const;
-    static QStringList getSubColumns();
     virtual QVariant data(TableViewModel::Item* const item, const int role) const;
-
     virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
-
     virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
     virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
+
+    static QStringList getSubColumns();
+    static TableViewColumnDescription getDescription();
 };
+
+// -----------------------------------------------------------------------------------------------
 
 class ColumnGeoConfigurationWidget : public TableViewColumnConfigurationWidget
 {
     Q_OBJECT
 
 public:
-    explicit ColumnGeoConfigurationWidget(
-            TableViewShared* const sharedObject,
-            const TableViewColumnConfiguration& columnConfiguration,
-            QWidget* const parentWidget
-        );
+    explicit ColumnGeoConfigurationWidget(TableViewShared* const sharedObject,
+                                          const TableViewColumnConfiguration& columnConfiguration,
+                                          QWidget* const parentWidget);
     virtual ~ColumnGeoConfigurationWidget();
 
     virtual TableViewColumnConfiguration getNewConfiguration();
@@ -90,7 +88,7 @@ public:
 private:
 
     ColumnGeoProperties::SubColumn subColumn;
-    QComboBox* selectorAltitudeUnit;
+    QComboBox*                     selectorAltitudeUnit;
 };
 
 } /* namespace TableViewColumns */
