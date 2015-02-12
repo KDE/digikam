@@ -102,15 +102,12 @@ public:
     void aboutToEdit(const KUrl& url, KIPI::EditHints hints);
     void editingFinished(const KUrl& url, KIPI::EditHints hints);
     #endif
-    
-//Q_SIGNALS:
-    //void kipiSettingsChanged(QString pluginName,QMap<QString, QVariant> settings);
+
 
 public Q_SLOTS:
 
     void slotSelectionChanged(int count);
     void slotCurrentAlbumChanged(QList<Album*> albums);
-    //void settingsChanged(QString,QMap<QString, QVariant>);
 
 private Q_SLOTS:
 

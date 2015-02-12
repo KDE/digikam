@@ -61,7 +61,6 @@
 #include "kipiimageinfo.h"
 #include "kipiimagecollection.h"
 #include "progressmanager.h"
-//#include "dng.h"
 #include "batchtool.h"
 
 namespace Digikam
@@ -101,11 +100,6 @@ KipiInterface::KipiInterface(QObject* const parent, const char* name)
 KipiInterface::~KipiInterface()
 {
     delete d;
-}
-
-KipiInterface* KipiInterface::instance()
-{
-    return m_instance;  
 }
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
@@ -302,18 +296,6 @@ void KipiInterface::slotCurrentAlbumChanged(QList<Album*> albums)
     emit currentAlbumChanged(!(albums.isEmpty()));
 }
 
-//void KipiInterface::settingsChanged(QString pluginName,QMap<QString, QVariant> settings)
-//{
-    /*
-    if(pluginName == "DNGConverter")
-    {
-        DNG::instance()->BatchTool::slotSettingsChanged(settings);
-    }
-    */
-    //kDebug()<<"Is it here";
-    //emit kipiSettingsChanged(pluginName,settings);
-//}
-
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
@@ -486,6 +468,10 @@ void KipiInterface::editingFinished(const KUrl& url, KIPI::EditHints hints)
 }
 #endif
 
+KipiInterface* KipiInterface::instance()
+{
+    return m_instance;  
+}
 
 // ---------------------------------------------------------------------------------------
 

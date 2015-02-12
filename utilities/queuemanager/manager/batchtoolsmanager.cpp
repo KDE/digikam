@@ -23,10 +23,13 @@
 
 #include "batchtoolsmanager.moc"
 
+//Qt includes
+
+#include <QDebug>
+
 // KDE includes
 
 #include <kglobal.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -63,7 +66,6 @@
 #include "convert16to8.h"
 #include "border.h"
 #include "removemetadata.h"
-//#include "dng.h"
 #include "bqmkipiplugin.h"
 #include <kipipluginloader.h>
 
@@ -196,35 +198,6 @@ void BatchToolsManager::registerTool(BatchTool* const tool)
     d->toolsList.append(tool);
 }
 
-void BatchToolsManager::addKipiTools()
-{
-    KipiPluginLoader* loader = KipiPluginLoader::instance();
-    
-    PluginLoader::PluginList list = loader->listPlugins();
-    
-    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-    {
-        Plugin* const plugin = (*it)->plugin();
-        if(plugin == NULL) {
-            kWarning() << "got a null plugin from kipi..";
-            continue;
-        }
-	
-        if(plugin->hasFeature(Embeddable))
-        {
-            EmbeddablePlugin* const embeddable = qobject_cast<EmbeddablePlugin*>(plugin);
-            if(embeddable == NULL) {
-                kWarning() << "Unable to cast the plugin to embeddableplugin, incorrect features entry on a plugin?";
-                continue;
-            }
-
-            BatchTool* tool = new BqmKipiPlugin(embeddable, *it, this);
-            kDebug() << "registering " << plugin->objectName();
-            registerTool(tool);
-        }
-    }
-}
-
 BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchToolGroup group) const
 {
     foreach(BatchTool* const tool, d->toolsList)
@@ -236,6 +209,35 @@ BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchTool
     }
 
     return 0;
+}
+
+void BatchToolsManager::addKipiTools()
+{
+    KipiPluginLoader* loader = KipiPluginLoader::instance();
+    
+    PluginLoader::PluginList list = loader->listPlugins();
+    
+    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        Plugin* const plugin = (*it)->plugin();
+        if(plugin == NULL) {
+            qWarning() << "got a null plugin from kipi..";
+            continue;
+        }
+	
+        if(plugin->hasFeature(Embeddable))
+        {
+            EmbeddablePlugin* const embeddable = qobject_cast<EmbeddablePlugin*>(plugin);
+            if(embeddable == NULL) {
+                qWarning() << "Unable to cast the plugin to embeddableplugin, incorrect features entry on a plugin?";
+                continue;
+            }
+
+            BatchTool* tool = new BqmKipiPlugin(embeddable, *it, this);
+            qDebug() << "registering " << plugin->objectName();
+            registerTool(tool);
+        }
+    }
 }
 
 }  // namespace Digikam

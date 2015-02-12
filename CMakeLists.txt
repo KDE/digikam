@@ -1569,7 +1569,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform
-
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/kipi
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup

@@ -52,10 +52,6 @@ public:
     BatchTool*     findTool(const QString& name, BatchTool::BatchToolGroup group) const;
     BatchToolsList toolsList() const;
     void addKipiTools();
-    
-Q_SIGNALS:
-
-    void toolAdded(BatchTool* const tool);
 
 private:
 

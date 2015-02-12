@@ -38,7 +38,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kdebug.h>
 
 namespace Digikam
 {

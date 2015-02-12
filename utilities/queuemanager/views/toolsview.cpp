@@ -27,13 +27,13 @@
 
 #include <QList>
 #include <QWidget>
+#include <QDebug>
 
 // KDE includes
 
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -139,7 +139,7 @@ void ToolsView::addTool(BatchTool* const tool)
         return;
     }
     
-    kDebug()<<tool->toolGroup();
+    qDebug()<<tool->toolGroup();
 
     switch (tool->toolGroup())
     {
@@ -214,11 +214,6 @@ void ToolsView::slotHistoryEntryClicked(const QVariant& metadata)
 
         emit signalHistoryEntryClicked(queueId, itemId);
     }
-}
-
-void ToolsView::slotAddTool(BatchTool* tool)
-{
-    addTool(tool);  
 }
 
 }  // namespace Digikam

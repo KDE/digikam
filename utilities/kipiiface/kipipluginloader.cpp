@@ -213,7 +213,6 @@ KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const sp
     d->splashScreen = splash;
 
     d->loadPlugins();
-    //plugKipi();
 }
 
 KipiPluginLoader::~KipiPluginLoader()
@@ -222,21 +221,9 @@ KipiPluginLoader::~KipiPluginLoader()
     m_instance = 0;
 }
 
-//void KipiPluginLoader::plugKipi()
-//{
-//    BatchToolsManager* btm = BatchToolsManager::instance();
-//    btm->addKipiTool(new DNG(btm));
-//}
-
 KipiPluginLoader* KipiPluginLoader::instance()
 {
     return m_instance;
-}
-
-PluginLoader::PluginList KipiPluginLoader::listPlugins()
-{
-    PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
-    return list;
 }
 
 KActionCollection* KipiPluginLoader::pluginsActionCollection() const
@@ -366,6 +353,12 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
     // load KIPI actions settings
     d->kipipluginsActionCollection->readSettings();
+}
+
+PluginLoader::PluginList KipiPluginLoader::listPlugins()
+{
+    PluginLoader::PluginList list = d->kipiPluginLoader->pluginList();
+    return list;
 }
 
 } // namespace Digikam

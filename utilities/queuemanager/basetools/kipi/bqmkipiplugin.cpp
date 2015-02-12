@@ -30,21 +30,13 @@
 #include <QWidget>
 #include <QMap>
 
-// KDE includes
-
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kdebug.h>
+//local includes
 
 #include <kipiinterface.h>
 #include <kipipluginloader.h>
 
 namespace Digikam
 {
-  
-//BqmKipiPlugin* BqmKipiPlugin::m_instance = 0;
 
 BqmKipiPlugin::BqmKipiPlugin(EmbeddablePlugin* plugin, PluginLoader::Info* info, QObject* const parent)
     : BatchTool(plugin->objectName(), KipiTool, parent)
@@ -55,16 +47,11 @@ BqmKipiPlugin::BqmKipiPlugin(EmbeddablePlugin* plugin, PluginLoader::Info* info,
     setToolTitle(this->info->name());
     setToolDescription(this->info->comment());
     setToolIconName(this->info->icon().name());
-    //m_instance = this;
     
     m_settingsWidget = plugin->getWidget();
 	    
     connect(plugin, SIGNAL(kipiSettingsChanged(QString ,QMap<QString, QVariant>)),
             this, SLOT(slotKipiSettingsChanged(QString,QMap<QString, QVariant>)));
-    
-    //connect(KipiInterface::instance(), SIGNAL(kipiSettingsChanged(QString ,QMap<QString, QVariant>)),
-    //        this, SLOT(slotKipiSettingsChanged(QString,QMap<QString, QVariant>)));
-    //registerSettingsWidget();
 }
 
 BqmKipiPlugin::~BqmKipiPlugin()
@@ -75,11 +62,6 @@ BatchTool* BqmKipiPlugin::clone(QObject* const parent=0) const
 {
     return new BqmKipiPlugin(this->plugin, this->info, parent);
 }
-
-//BqmKipiPlugin* BqmKipiPlugin::instance()
-//{
-//    return m_instance;  
-//}
 
 void BqmKipiPlugin::registerSettingsWidget()
 {
