@@ -40,11 +40,9 @@ include_directories(
     database/
     date/
     dragdrop/
-    filters/
     items/
     items/overlays/
     fileaction/
-    settings/
     views/
     views/tableview/
     utils/
@@ -97,16 +95,6 @@ set(libdigikamgui_SRCS
     dragdrop/imagedragdrop.cpp
     dragdrop/tagdragdrop.cpp
 
-    filters/filterstatusbar.cpp
-    filters/filtersidebarwidget.cpp
-    filters/geolocationfilter.cpp
-    filters/textfilter.cpp
-    filters/mimefilter.cpp
-    filters/colorlabelfilter.cpp
-    filters/picklabelfilter.cpp
-    filters/ratingfilter.cpp
-    filters/tagfilterview.cpp
-
     items/digikamimageview.cpp
     items/digikamimageview_p.cpp
     items/digikamimagedelegate.cpp
@@ -122,15 +110,6 @@ set(libdigikamgui_SRCS
     items/overlays/imagerotationoverlay.cpp
     items/overlays/imagecoordinatesoverlay.cpp
     items/overlays/imageselectionoverlay.cpp
-
-    settings/applicationsettings.cpp
-    settings/applicationsettings_p.cpp
-    settings/applicationsettings_albums.cpp
-    settings/applicationsettings_database.cpp
-    settings/applicationsettings_iconview.cpp
-    settings/applicationsettings_mime.cpp
-    settings/applicationsettings_miscs.cpp
-    settings/applicationsettings_tooltips.cpp
 
     utils/contextmenuhelper.cpp
     utils/tooltipfiller.cpp
@@ -216,7 +195,6 @@ add_library(digikamgui STATIC ${libdigikamgui_SRCS})
 # TODO temporary ugly hack, the common utils used by other components (esp. utilities and libs) should be moved to libs..
 target_include_directories(digikamgui PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album> # move out
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/settings>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags>
@@ -224,7 +202,6 @@ target_include_directories(digikamgui PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items/overlays> # common too, move out
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/database>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/date> # belongs to libs/widgets?
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dragdrop>

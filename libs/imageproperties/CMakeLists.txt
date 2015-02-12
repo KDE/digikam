@@ -38,7 +38,6 @@ endif()
 #add_library(imageproperties STATIC ${libimageproperties_SRCS})
 
 target_link_libraries(imagepropertiesdigikam
-                      digikamgui # required for Album FIXME
                       digikamwidgets
                       
                       Qt5::Core
