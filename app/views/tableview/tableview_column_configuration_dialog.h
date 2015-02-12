@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-03-02
- * Description : Table view: Column configuration dialog
+ * Description : Table view: Column cpp dialog
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
  *

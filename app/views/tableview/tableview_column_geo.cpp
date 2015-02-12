@@ -171,7 +171,7 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
             }
 
             /// @todo Use an enum instead to avoid lots of string comparisons
-            const QString formatKey                  = configuration.getSetting("format", "kde");
+            const QString formatKey                  = configuration.getSetting("format", "metric");
             QLocale::MeasurementSystem measureSystem = QLocale().measurementSystem();
 
             if (formatKey == "metric")
@@ -243,14 +243,13 @@ ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(TableViewShared* cons
         {
             QFormLayout* const box1 = new QFormLayout();
             selectorAltitudeUnit    = new QComboBox(this);
-            selectorAltitudeUnit->addItem(i18n("KDE default"),    QString("kde"));
             selectorAltitudeUnit->addItem(i18n("Metric units"),   QString("metric"));
             selectorAltitudeUnit->addItem(i18n("Imperial units"), QString("imperial"));
             box1->addRow(i18n("Display format"), selectorAltitudeUnit);
 
             setLayout(box1);
 
-            const int index = selectorAltitudeUnit->findData(configuration.getSetting("format", "kde"));
+            const int index = selectorAltitudeUnit->findData(configuration.getSetting("format", "metric"));
             selectorAltitudeUnit->setCurrentIndex(index >= 0 ? index : 0);
             break;
         }

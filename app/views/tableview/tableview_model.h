@@ -90,7 +90,7 @@ public:
     virtual ~TableViewModel();
 
     void addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);
-    void addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn = -1);
+    void addColumnAt(const TableViewColumnConfiguration& cpp, const int targetColumn = -1);
     void removeColumnAt(const int columnIndex);
     TableViewColumn* getColumnObject(const int columnIndex);
     QList<TableViewColumn*> getColumnObjects();

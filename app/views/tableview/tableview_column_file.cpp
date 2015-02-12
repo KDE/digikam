@@ -139,15 +139,15 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
         {
             /// @todo Add configuration options for SI-prefixes
             /// @todo Use an enum instead to avoid lots of string comparisons
-            const QString formatKey = configuration.getSetting("format", "kde");
+            const QString formatKey = configuration.getSetting("format", "human");
 
-            if (formatKey == "kde")
+            if (formatKey == "human")
             {
                 return ImagePropertiesTab::humanReadableBytesCount(info.fileSize());
             }
             else
             {
-                // formatKey=="plain"
+                // formatKey == "plain"
                 return QLocale().toString(info.fileSize());
             }
             break;
@@ -212,13 +212,13 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(TableViewShared* co
         {
             QFormLayout* const box1 = new QFormLayout();
             selectorSizeType        = new QComboBox(this);
-            selectorSizeType->addItem(i18n("KDE default"), QString("kde"));
-            selectorSizeType->addItem(i18n("Plain"), QString("plain"));
+            selectorSizeType->addItem(i18n("Human readable"), QString("human"));
+            selectorSizeType->addItem(i18n("Plain"),          QString("plain"));
             box1->addRow(i18n("Display format"), selectorSizeType);
 
             setLayout(box1);
 
-            const int index = selectorSizeType->findData(configuration.getSetting("format", "kde"));
+            const int index = selectorSizeType->findData(configuration.getSetting("format", "human"));
             selectorSizeType->setCurrentIndex(index>=0 ? index : 0);
             break;
         }
