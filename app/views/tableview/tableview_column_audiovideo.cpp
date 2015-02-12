@@ -43,28 +43,25 @@ namespace Digikam
 namespace TableViewColumns
 {
 
-ColumnAudioVideoProperties::ColumnAudioVideoProperties(
-        TableViewShared* const tableViewShared,
-        const TableViewColumnConfiguration& pConfiguration,
-        const SubColumn pSubColumn,
-        QObject* const parent)
-  : TableViewColumn(tableViewShared, pConfiguration, parent),
-    subColumn(pSubColumn)
+ColumnAudioVideoProperties::ColumnAudioVideoProperties(TableViewShared* const tableViewShared,
+                                                       const TableViewColumnConfiguration& pConfiguration,
+                                                       const SubColumn pSubColumn,
+                                                       QObject* const parent)
+    : TableViewColumn(tableViewShared, pConfiguration, parent),
+      subColumn(pSubColumn)
 {
-
 }
 
 ColumnAudioVideoProperties::~ColumnAudioVideoProperties()
 {
-
 }
 
 QStringList ColumnAudioVideoProperties::getSubColumns()
 {
     QStringList columns;
-    columns << QLatin1String("audiobitrate") << QLatin1String("audiochanneltype")
+    columns << QLatin1String("audiobitrate")    << QLatin1String("audiochanneltype")
             << QLatin1String("audiocompressor") << QLatin1String("duration")
-            << QLatin1String("framerate") << QLatin1String("videocodec");
+            << QLatin1String("framerate")       << QLatin1String("videocodec");
 
     return columns;
 }
@@ -74,29 +71,12 @@ TableViewColumnDescription ColumnAudioVideoProperties::getDescription()
     TableViewColumnDescription description(QLatin1String("audiovideo-properties"), i18n("Audio/video properties"));
     description.setIcon("video-x-generic");
 
-    description.addSubColumn(
-        TableViewColumnDescription("audiobitrate", i18n("Audio bitrate"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("audiochanneltype", i18n("Audio channel type"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("audiocompressor", i18n("Audio compressor"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("duration", i18n("Duration"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("framerate", i18n("Frame rate"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("videocodec", i18n("Video codec"))
-    );
+    description.addSubColumn(TableViewColumnDescription("audiobitrate",     i18n("Audio bitrate")));
+    description.addSubColumn(TableViewColumnDescription("audiochanneltype", i18n("Audio channel type")));
+    description.addSubColumn(TableViewColumnDescription("audiocompressor",  i18n("Audio compressor")));
+    description.addSubColumn(TableViewColumnDescription("duration",         i18n("Duration")));
+    description.addSubColumn(TableViewColumnDescription("framerate",        i18n("Frame rate")));
+    description.addSubColumn(TableViewColumnDescription("videocodec",       i18n("Video codec")));
 
     return description;
 }
@@ -105,18 +85,18 @@ QString ColumnAudioVideoProperties::getTitle() const
 {
     switch (subColumn)
     {
-    case SubColumnAudioBitRate:
-        return i18n("Audio bitrate");
-    case SubColumnAudioChannelType:
-        return i18n("Audio channel type");
-    case SubColumnAudioCompressor:
-        return i18n("Audio compressor");
-    case SubColumnDuration:
-        return i18n("Duration");
-    case SubColumnFrameRate:
-        return i18n("Frame rate");
-    case SubColumnVideoCodec:
-        return i18n("Video codec");
+        case SubColumnAudioBitRate:
+            return i18n("Audio bitrate");
+        case SubColumnAudioChannelType:
+            return i18n("Audio channel type");
+        case SubColumnAudioCompressor:
+            return i18n("Audio compressor");
+        case SubColumnDuration:
+            return i18n("Duration");
+        case SubColumnFrameRate:
+            return i18n("Frame rate");
+        case SubColumnVideoCodec:
+            return i18n("Video codec");
     }
 
     return QString();
@@ -127,9 +107,9 @@ TableViewColumn::ColumnFlags ColumnAudioVideoProperties::getColumnFlags() const
     ColumnFlags flags(ColumnNoFlags);
 
     /// @todo AudioChannelType contains "Mono" or "2", have to check for custom sorting
-    if (   (subColumn==SubColumnAudioBitRate)
-        || (subColumn==SubColumnDuration)
-        || (subColumn==SubColumnFrameRate) )
+    if ((subColumn==SubColumnAudioBitRate) ||
+        (subColumn==SubColumnDuration)     ||
+        (subColumn==SubColumnFrameRate))
     {
         flags|=ColumnCustomSorting;
     }
@@ -146,7 +126,7 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
 
     switch (subColumn)
     {
-    case SubColumnAudioBitRate:
+        case SubColumnAudioBitRate:
         {
             bool ok;
             const int audioBitRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::AudioBitRate).toInt(&ok);
@@ -159,17 +139,17 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
             const QString audioBitRateString = QLocale().toString(audioBitRate);
             return audioBitRateString;
         }
-    case SubColumnAudioChannelType:
+        case SubColumnAudioChannelType:
         {
             const QString audioChannelType = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::AudioChannelType).toString();
             return audioChannelType;
         }
-    case SubColumnAudioCompressor:
+        case SubColumnAudioCompressor:
         {
             const QString audioCompressor = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::AudioCompressor).toString();
             return audioCompressor;
         }
-    case SubColumnDuration:
+        case SubColumnDuration:
         {
             bool ok;
             // duration is in milliseconds
@@ -184,7 +164,7 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
             const QString durationString = QLocale().toString(durationTime);
             return durationString;
         }
-    case SubColumnFrameRate:
+        case SubColumnFrameRate:
         {
             bool ok;
             const double frameRate = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::FrameRate).toDouble(&ok);
@@ -197,7 +177,7 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
             const QString frameRateString = QLocale().toString(frameRate);
             return frameRateString;
         }
-    case SubColumnVideoCodec:
+        case SubColumnVideoCodec:
         {
             const QString videoCodec = s->tableViewModel->itemDatabaseFieldRaw(item, DatabaseFields::VideoCodec).toString();
             return videoCodec;
@@ -270,9 +250,11 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
         }
 
         default:
+        {
             qCWarning(DIGIKAM_GENERAL_LOG) << "item: unimplemented comparison, subColumn=" << subColumn;
             return CmpEqual;
         }
+    }
 }
 
 void ColumnAudioVideoProperties::setConfiguration(const TableViewColumnConfiguration& newConfiguration)
@@ -285,4 +267,3 @@ void ColumnAudioVideoProperties::setConfiguration(const TableViewColumnConfigura
 } /* namespace TableViewColumns */
 
 } /* namespace Digikam */
-

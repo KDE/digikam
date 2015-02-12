@@ -49,8 +49,8 @@ namespace Digikam
 {
 
 TableViewItemDelegate::TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* parent)
-  : QItemDelegate(parent),
-    s(tableViewShared)
+    : QItemDelegate(parent),
+      s(tableViewShared)
 {
 }
 
@@ -84,9 +84,9 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     /// @todo Debug output to find OSX crash
     if (columnIndex>=s->tableViewModel->columnCount(QModelIndex()))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG)<<"------ CRASH AHEAD: tableViewModelIndex = " << tableViewModelIndex;
-        qCDebug(DIGIKAM_GENERAL_LOG)<<"------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = " << s->tableViewModel->columnCount(QModelIndex());
-        qCDebug(DIGIKAM_GENERAL_LOG)<<"------ CRASH AHEAD: columnIndex: " << columnIndex;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "------ CRASH AHEAD: tableViewModelIndex = " << tableViewModelIndex;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = " << s->tableViewModel->columnCount(QModelIndex());
+        qCDebug(DIGIKAM_GENERAL_LOG) << "------ CRASH AHEAD: columnIndex: " << columnIndex;
     }
 
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);

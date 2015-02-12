@@ -47,15 +47,15 @@ public:
 
     enum SubColumn
     {
-        SubColumnCameraMaker = 0,
-        SubColumnCameraModel = 1,
-        SubColumnLens = 2,
-        SubColumnAperture = 3,
-        SubColumnFocal = 4,
-        SubColumnExposure = 5,
-        SubColumnSensitivity = 6,
-        SubColumnModeProgram = 7,
-        SubColumnFlash = 8,
+        SubColumnCameraMaker  = 0,
+        SubColumnCameraModel  = 1,
+        SubColumnLens         = 2,
+        SubColumnAperture     = 3,
+        SubColumnFocal        = 4,
+        SubColumnExposure     = 5,
+        SubColumnSensitivity  = 6,
+        SubColumnModeProgram  = 7,
+        SubColumnFlash        = 8,
         SubColumnWhiteBalance = 9
     };
 
@@ -65,39 +65,34 @@ private:
 
 public:
 
-    explicit ColumnPhotoProperties(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            const SubColumn pSubColumn,
-            QObject* const parent = 0
-        );
-
+    explicit ColumnPhotoProperties(TableViewShared* const tableViewShared,
+                                   const TableViewColumnConfiguration& pConfiguration,
+                                   const SubColumn pSubColumn,
+                                   QObject* const parent = 0);
     virtual ~ColumnPhotoProperties();
+
+    virtual QString getTitle() const;
+    virtual ColumnFlags getColumnFlags() const;
+    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
+    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
+    virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
+    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
 
     static TableViewColumnDescription getDescription();
     static QStringList getSubColumns();
-    virtual QString getTitle() const;
-
-    virtual ColumnFlags getColumnFlags() const;
-
-    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
-
-    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
-
-    virtual TableViewColumnConfigurationWidget* getConfigurationWidget(QWidget* const parentWidget) const;
-    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
 };
+
+// ----------------------------------------------------------------------------------------------------------------------
 
 class ColumnPhotoConfigurationWidget : public TableViewColumnConfigurationWidget
 {
     Q_OBJECT
 
 public:
-    explicit ColumnPhotoConfigurationWidget(
-            TableViewShared* const sharedObject,
-            const TableViewColumnConfiguration& columnConfiguration,
-            QWidget* const parentWidget
-        );
+
+    explicit ColumnPhotoConfigurationWidget(TableViewShared* const sharedObject,
+                                            const TableViewColumnConfiguration& columnConfiguration,
+                                            QWidget* const parentWidget);
     virtual ~ColumnPhotoConfigurationWidget();
 
     virtual TableViewColumnConfiguration getNewConfiguration();
@@ -109,8 +104,8 @@ private Q_SLOTS:
 private:
 
     ColumnPhotoProperties::SubColumn subColumn;
-    QComboBox* selectorExposureTimeFormat;
-    QComboBox* selectorExposureTimeUnit;
+    QComboBox*                       selectorExposureTimeFormat;
+    QComboBox*                       selectorExposureTimeUnit;
 };
 
 } /* namespace TableViewColumns */
@@ -118,4 +113,3 @@ private:
 } /* namespace Digikam */
 
 #endif // TABLEVIEW_COLUMN_PHOTO_H
-

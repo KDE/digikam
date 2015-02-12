@@ -53,32 +53,26 @@ public:
         SubColumnVideoCodec = 5
     };
 
-private:
-
-    SubColumn subColumn;
-
 public:
 
-    explicit ColumnAudioVideoProperties(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            const SubColumn pSubColumn,
-            QObject* const parent = 0
-        );
-
+    explicit ColumnAudioVideoProperties(TableViewShared* const tableViewShared,
+                                        const TableViewColumnConfiguration& pConfiguration,
+                                        const SubColumn pSubColumn,
+                                        QObject* const parent = 0);
     virtual ~ColumnAudioVideoProperties();
+
+    virtual QString getTitle() const;
+    virtual ColumnFlags getColumnFlags() const;
+    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
+    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
+    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
 
     static TableViewColumnDescription getDescription();
     static QStringList getSubColumns();
-    virtual QString getTitle() const;
 
-    virtual ColumnFlags getColumnFlags() const;
+private:
 
-    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
-
-    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
-
-    virtual void setConfiguration(const TableViewColumnConfiguration& newConfiguration);
+    SubColumn subColumn;
 };
 
 } /* namespace TableViewColumns */
@@ -86,4 +80,3 @@ public:
 } /* namespace Digikam */
 
 #endif // TABLEVIEW_COLUMN_AUDIOVIDEO_H
-

@@ -27,8 +27,6 @@
 
 #include <QStringList>
 
-// KDE includes
-
 // Local includes
 
 #include "tableview_columnfactory.h"
@@ -54,9 +52,6 @@ public:
         SubColumnCaption = 4
     };
 
-private:
-    SubColumn subColumn;
-
 public:
 
     explicit ColumnDigikamProperties(
@@ -65,19 +60,21 @@ public:
             const SubColumn pSubColumn,
             QObject* const parent = 0
         );
-
     virtual ~ColumnDigikamProperties();
+
+    virtual QString getTitle() const;
+    virtual ColumnFlags getColumnFlags() const;
+    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
+    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
+    virtual bool columnAffectedByChangeset(const ImageChangeset& imageChangeset) const;
 
     static TableViewColumnDescription getDescription();
     static QStringList getSubColumns();
-    virtual QString getTitle() const;
 
-    virtual ColumnFlags getColumnFlags() const;
+private:
 
-    virtual QVariant data(TableViewModel::Item* const item, const int role) const;
+    SubColumn subColumn;
 
-    virtual ColumnCompareResult compare(TableViewModel::Item* const itemA, TableViewModel::Item* const itemB) const;
-    virtual bool columnAffectedByChangeset(const ImageChangeset& imageChangeset) const;
 };
 
 } /* namespace TableViewColumns */
@@ -85,4 +82,3 @@ public:
 } /* namespace Digikam */
 
 #endif // TABLEVIEW_COLUMN_DIGIKAM_H
-

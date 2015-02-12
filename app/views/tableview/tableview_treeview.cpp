@@ -49,6 +49,7 @@ namespace Digikam
 class TableViewTreeView::Private
 {
 public:
+
     Private()
       : headerContextMenuActiveColumn(-1),
         actionHeaderContextMenuRemoveColumn(0),
@@ -57,6 +58,8 @@ public:
     {
     }
 
+public:
+
     int           headerContextMenuActiveColumn;
     QAction*      actionHeaderContextMenuRemoveColumn;
     QAction*      actionHeaderContextMenuConfigureColumn;
@@ -64,9 +67,9 @@ public:
 };
 
 TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWidget* const parent)
-  : QTreeView(parent),
-    d(new Private()),
-    s(tableViewShared)
+    : QTreeView(parent),
+      d(new Private()),
+      s(tableViewShared)
 {
     s->itemDelegate = new TableViewItemDelegate(s, this);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -79,10 +82,12 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
 //     viewport()->setAcceptDrops(true);
 
     d->actionHeaderContextMenuRemoveColumn = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove this column"), this);
+
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuActionRemoveColumnTriggered()));
 
     d->actionHeaderContextMenuConfigureColumn = new QAction(QIcon::fromTheme("configure"), i18n("Configure this column"), this);
+
     connect(d->actionHeaderContextMenuConfigureColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuConfigureColumn()));
 
@@ -99,14 +104,13 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
 
 TableViewTreeView::~TableViewTreeView()
 {
-
 }
 
 bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
 {
     QHeaderView* const headerView = header();
 
-    if ( (watched==headerView) && (event->type()==QEvent::ContextMenu) )
+    if ( (watched == headerView) && (event->type() == QEvent::ContextMenu) )
     {
         showHeaderContextMenu(event);
 
@@ -149,9 +153,8 @@ void TableViewTreeView::addColumnDescriptionsToMenu(const QList<TableViewColumnD
 
 void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
 {
-    QContextMenuEvent* const e    = static_cast<QContextMenuEvent*>(event);
-    QHeaderView* const headerView = header();
-
+    QContextMenuEvent* const e                = static_cast<QContextMenuEvent*>(event);
+    QHeaderView* const headerView             = header();
     d->headerContextMenuActiveColumn          = headerView->logicalIndexAt(e->pos());
     const TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(d->headerContextMenuActiveColumn);
     QMenu* const menu                         = new QMenu(this);
@@ -175,6 +178,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
     QAction* const triggeredAction = qobject_cast<QAction*>(sender());
 
     const QVariant actionData = triggeredAction->data();
+
     if (!actionData.canConvert<TableViewColumnDescription>())
     {
         return;
@@ -182,7 +186,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
 
     const TableViewColumnDescription desc = actionData.value<TableViewColumnDescription>();
     qCDebug(DIGIKAM_GENERAL_LOG) << "clicked: " << desc.columnTitle;
-    const int newColumnLogicalIndex = d->headerContextMenuActiveColumn+1;
+    const int newColumnLogicalIndex       = d->headerContextMenuActiveColumn+1;
     s->tableViewModel->addColumnAt(desc, newColumnLogicalIndex);
 
     // since the header column order is not the same as the model's column order, we need
@@ -190,6 +194,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
     const int clickedVisualIndex = header()->visualIndex(d->headerContextMenuActiveColumn);
     const int newColumnVisualIndex = header()->visualIndex(newColumnLogicalIndex);
     int newColumnVisualTargetIndex = clickedVisualIndex + 1;
+
     // If the column is inserted before the clicked column, we have to
     // subtract one from the target index because it looks like QHeaderView first removes
     // the column and then inserts it.
@@ -197,6 +202,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
     {
         newColumnVisualTargetIndex--;
     }
+
     if (newColumnVisualIndex!=newColumnVisualTargetIndex)
     {
         header()->moveSection(newColumnVisualIndex, newColumnVisualTargetIndex);

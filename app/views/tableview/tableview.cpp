@@ -65,15 +65,13 @@ public:
     ImageViewUtilities*           imageViewUtilities;
 };
 
-TableView::TableView(
-        QItemSelectionModel* const selectionModel,
-        DCategorizedSortFilterProxyModel* const imageFilterModel,
-        QWidget* const parent
-    )
-  : QWidget(parent),
-    StateSavingObject(this),
-    d(new Private()),
-    s(new TableViewShared())
+TableView::TableView(QItemSelectionModel* const selectionModel,
+                     DCategorizedSortFilterProxyModel* const imageFilterModel,
+                     QWidget* const parent)
+    : QWidget(parent),
+      StateSavingObject(this),
+      d(new Private()),
+      s(new TableViewShared())
 {
     s->isActive                  = false;
     s->tableView                 = this;
@@ -83,8 +81,7 @@ TableView::TableView(
     s->imageFilterSelectionModel = selectionModel;
     s->columnFactory             = new TableViewColumnFactory(s.data(), this);
 
-    QVBoxLayout* const vbox1 = new QVBoxLayout();
-
+    QVBoxLayout* const vbox1         = new QVBoxLayout();
     s->tableViewModel                = new TableViewModel(s.data(), this);
     s->tableViewSelectionModel       = new QItemSelectionModel(s->tableViewModel);
     s->tableViewSelectionModelSyncer = new TableViewSelectionModelSyncer(s.data(), this);
@@ -124,7 +121,6 @@ TableView::TableView(
 
 TableView::~TableView()
 {
-
 }
 
 void TableView::doLoadState()
@@ -195,7 +191,7 @@ void TableView::showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const even
 {
     Album* const album = currentAlbum();
 
-    if (!album ||
+    if (!album          ||
         album->isRoot() ||
         (album->type() != Album::PHYSICAL && album->type() != Album::TAG) )
     {
@@ -726,15 +722,15 @@ void TableView::invertSelection()
 
     /// @todo Create a DeepRowIterator because there is a lot of overhead here
 
-    for (int i = 0; i<deepRowCount; ++i)
+    for (int i = 0; i < deepRowCount; ++i)
     {
         const QModelIndex iIndex = s->tableViewModel->deepRowIndex(i);
 
         if (s->tableViewSelectionModel->isSelected(iIndex))
         {
-            if (i-1>lastSelectedRow)
+            if (i-1 > lastSelectedRow)
             {
-                for (int j=lastSelectedRow+1; j<i; ++j)
+                for (int j = lastSelectedRow+1; j < i; ++j)
                 {
                     rowsToSelect << j;
                 }
@@ -746,7 +742,7 @@ void TableView::invertSelection()
 
     if (lastSelectedRow+1<deepRowCount)
     {
-        for (int j=lastSelectedRow+1; j<deepRowCount; ++j)
+        for (int j = lastSelectedRow+1; j < deepRowCount; ++j)
         {
             rowsToSelect << j;
         }

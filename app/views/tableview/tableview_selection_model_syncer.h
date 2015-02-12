@@ -80,4 +80,3 @@ private:
 } /* namespace Digikam */
 
 #endif // TABLEVIEW_SELECTION_MODEL_SYNCER_H
-

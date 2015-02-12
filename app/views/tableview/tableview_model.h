@@ -69,35 +69,25 @@ public:
     {
     public:
 
-        qlonglong imageId;
-        Item* parent;
-        QList<Item*> children;
+        explicit Item();
+        virtual ~Item();
+
+        void  addChild(Item* const newChild);
+        void  insertChild(const int pos, Item* const newChild);
+        void  takeChild(Item* const oldChild);
+        Item* findChildWithImageId(const qlonglong searchImageId);
 
     public:
 
-        explicit Item();
-        ~Item();
-
-        void addChild(Item* const newChild);
-        void insertChild(const int pos, Item* const newChild);
-        void takeChild(Item* const oldChild);
-        Item* findChildWithImageId(const qlonglong searchImageId);
-
+        qlonglong    imageId;
+        Item*        parent;
+        QList<Item*> children;
     };
 
 public:
 
     explicit TableViewModel(TableViewShared* const sharedObject, QObject* parent = 0);
     virtual ~TableViewModel();
-
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& childIndex) const;
-    virtual int rowCount(const QModelIndex& parent) const;
-    virtual int columnCount(const QModelIndex& i) const;
-    virtual QVariant data(const QModelIndex& i, int role) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
 
     void addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);
     void addColumnAt(const TableViewColumnConfiguration& configuration, const int targetColumn = -1);
@@ -136,15 +126,26 @@ public:
     bool lessThan(Item* const itemA, Item* const itemB);
     int findChildSortedPosition(Item* const parentItem, Item* const childItem);
 
+    void scheduleResort();
+    GroupingMode groupingMode() const;
+    void setGroupingMode(const GroupingMode newGroupingMode);
+
+public:
+
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex& childIndex) const;
+    virtual int rowCount(const QModelIndex& parent) const;
+    virtual int columnCount(const QModelIndex& i) const;
+    virtual QVariant data(const QModelIndex& i, int role) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
+
     // drag-and-drop related functions
     virtual Qt::DropActions supportedDropActions() const;
     virtual QStringList mimeTypes() const;
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
-
-    void scheduleResort();
-    GroupingMode groupingMode() const;
-    void setGroupingMode(const GroupingMode newGroupingMode);
 
 protected:
 
@@ -167,7 +168,7 @@ private Q_SLOTS:
     void slotSourceRowsAboutToBeMoved(const QModelIndex& sourceParent, int sourceStart, int sourceEnd,
                                       const QModelIndex& destinationParent, int destinationRow);
     void slotSourceRowsMoved(const QModelIndex& sourceParent, int sourceStart, int sourceEnd,
-                               const QModelIndex& destinationParent, int destinationRow);
+                             const QModelIndex& destinationParent, int destinationRow);
     void slotSourceLayoutAboutToBeChanged();
     void slotSourceLayoutChanged();
 

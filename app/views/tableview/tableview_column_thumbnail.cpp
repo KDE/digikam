@@ -53,7 +53,7 @@ ColumnThumbnail::ColumnThumbnail(TableViewShared* const tableViewShared,
                                  const TableViewColumnConfiguration& pConfiguration,
                                  QObject* const parent)
     : TableViewColumn(tableViewShared, pConfiguration, parent),
-        m_thumbnailSize(s->tableView->getThumbnailSize().size())
+      m_thumbnailSize(s->tableView->getThumbnailSize().size())
 {
     connect(s->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
@@ -61,7 +61,6 @@ ColumnThumbnail::ColumnThumbnail(TableViewShared* const tableViewShared,
 
 ColumnThumbnail::~ColumnThumbnail()
 {
-
 }
 
 bool ColumnThumbnail::CreateFromConfiguration(TableViewShared* const tableViewShared,
@@ -114,7 +113,7 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
 
     if (!info.isNull())
     {
-        const QSize imageSize = info.dimensions();
+        const QSize imageSize     = info.dimensions();
         const QSize availableSize = option.rect.size() - QSize(ThumbnailBorder, ThumbnailBorder);
         QSize size(m_thumbnailSize, m_thumbnailSize);
 
@@ -138,19 +137,19 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
         const int bestSize = qMax(size.width()/* + 2*/, size.height()/* + 2*/);
 
         // However, digiKam limits the thumbnail size, so we also do that here
-        const int maxSize = qMin(bestSize, (int)ThumbnailSize::maxThumbsSize());
+        const int maxSize  = qMin(bestSize, (int)ThumbnailSize::maxThumbsSize());
         QPixmap thumbnail;
 
         if (s->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, maxSize))
         {
             /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
             /// @todo Remove borders - but they actually look nice in the table
-            const QSize alignSize = option.rect.size();
+            const QSize alignSize  = option.rect.size();
 //                 thumbnail = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
-            const QSize pixmapSize    = thumbnail.size().boundedTo(availableSize);
+            const QSize pixmapSize = thumbnail.size().boundedTo(availableSize);
             QPoint startPoint((alignSize.width()  - pixmapSize.width())  / 2,
                               (alignSize.height() - pixmapSize.height()) / 2);
-            startPoint += option.rect.topLeft();
+            startPoint            += option.rect.topLeft();
             painter->drawPixmap(QRect(startPoint, pixmapSize), thumbnail, QRect(QPoint(0, 0), pixmapSize));
 
             return true;
