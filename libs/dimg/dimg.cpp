@@ -101,7 +101,7 @@ DImg::DImg(const QByteArray& filePath, DImgLoaderObserver* const observer,
            const DRawDecoding& rawDecodingSettings)
     : m_priv(new Private)
 {
-    load(filePath, observer, rawDecodingSettings);
+    load(QString::fromUtf8(filePath), observer, rawDecodingSettings);
 }
 
 DImg::DImg(const QString& filePath, DImgLoaderObserver* const observer,
@@ -407,8 +407,8 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
     FORMAT format = fileFormat(filePath);
     DImgLoader::LoadFlags loadFlags = (DImgLoader::LoadFlags)loadFlagsInt;
 
-    setAttribute("detectedFileFormat", format);
-    setAttribute("originalFilePath", filePath);
+    setAttribute(QLatin1String("detectedFileFormat"), format);
+    setAttribute(QLatin1String("originalFilePath"),   filePath);
 
     FileReadLocker lock(filePath);
 
@@ -431,7 +431,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute("isreadonly", loader.isReadOnly());
+                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
                 return true;
             }
 
@@ -449,7 +449,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute("isreadonly", loader.isReadOnly());
+                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
                 return true;
             }
 
@@ -467,7 +467,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute("isreadonly", loader.isReadOnly());
+                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
                 return true;
             }
 
@@ -485,7 +485,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute("isreadonly", loader.isReadOnly());
+                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
                 return true;
             }
 
@@ -503,7 +503,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute("isreadonly", loader.isReadOnly());
+                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
                 loader.postProcess(observer);
                 return true;
             }
@@ -523,7 +523,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute("isreadonly", loader.isReadOnly());
+                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
                 return true;
             }
 
@@ -542,7 +542,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute("isreadonly", loader.isReadOnly());
+                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
                 return true;
             }
 
@@ -560,7 +560,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute("isreadonly", loader.isReadOnly());
+                setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
                 return true;
             }
 
@@ -584,37 +584,37 @@ QString DImg::formatToMimeType(FORMAT frm)
 
         case (JPEG):
         {
-            format = QString("JPG");
+            format = QLatin1String("JPG");
             break;
         }
 
         case (TIFF):
         {
-            format = QString("TIF");
+            format = QLatin1String("TIF");
             break;
         }
 
         case (PNG):
         {
-            format = QString("PNG");
+            format = QLatin1String("PNG");
             break;
         }
 
         case (PPM):
         {
-            format = QString("PPM");
+            format = QLatin1String("PPM");
             break;
         }
 
         case (JP2K):
         {
-            format = QString("JP2");
+            format = QLatin1String("JP2");
             break;
         }
 
         case (PGF):
         {
-            format = QString("PGF");
+            format = QLatin1String("PGF");
             break;
         }
 
@@ -652,11 +652,11 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     }
 
     QString frm = format.toUpper();
-    setAttribute("savedFilePath", filePath);
+    setAttribute(QLatin1String("savedFilePath"), filePath);
 
     FileWriteLocker lock(filePath);
 
-    if (frm == "JPEG" || frm == "JPG" || frm == "JPE")
+    if (frm == QLatin1String("JPEG") || frm == QLatin1String("JPG") || frm == QLatin1String("JPE"))
     {
         // JPEG does not support transparency, so we shall provide an image without alpha channel.
         // This is only necessary if the image has an alpha channel, and there are actually transparent pixels
@@ -665,55 +665,55 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
             DImg alphaRemoved = copy();
             alphaRemoved.removeAlphaChannel();
             JPEGLoader loader(&alphaRemoved);
-            setAttribute("savedformat-isreadonly", loader.isReadOnly());
+            setAttribute(QLatin1String("savedformat-isreadonly"), loader.isReadOnly());
             return loader.save(filePath, observer);
         }
         else
         {
             JPEGLoader loader(this);
-            setAttribute("savedformat-isreadonly", loader.isReadOnly());
+            setAttribute(QLatin1String("savedformat-isreadonly"), loader.isReadOnly());
             return loader.save(filePath, observer);
         }
     }
-    else if (frm == "PNG")
+    else if (frm == QLatin1String("PNG"))
     {
         PNGLoader loader(this);
-        setAttribute("savedformat-isreadonly", loader.isReadOnly());
+        setAttribute(QLatin1String("savedformat-isreadonly"), loader.isReadOnly());
         return loader.save(filePath, observer);
     }
-    else if (frm == "TIFF" || frm == "TIF")
+    else if (frm == QLatin1String("TIFF") || frm == QLatin1String("TIF"))
     {
         TIFFLoader loader(this);
-        setAttribute("savedformat-isreadonly", loader.isReadOnly());
+        setAttribute(QLatin1String("savedformat-isreadonly"), loader.isReadOnly());
         return loader.save(filePath, observer);
     }
-    else if (frm == "PPM")
+    else if (frm == QLatin1String("PPM"))
     {
         PPMLoader loader(this);
-        setAttribute("savedformat-isreadonly", loader.isReadOnly());
+        setAttribute(QLatin1String("savedformat-isreadonly"), loader.isReadOnly());
         return loader.save(filePath, observer);
     }
 
 #ifdef HAVE_JASPER
-    else if (frm == "JP2" || frm == "J2K" || frm == "JPX" || frm == "JPC" || frm == "PGX")
+    else if (frm == QLatin1String("JP2") || frm == QLatin1String("J2K") || frm == QLatin1String("JPX") || frm == QLatin1String("JPC") || frm == QLatin1String("PGX"))
     {
         JP2KLoader loader(this);
-        setAttribute("savedformat-isreadonly", loader.isReadOnly());
+        setAttribute(QLatin1String("savedformat-isreadonly"), loader.isReadOnly());
         return loader.save(filePath, observer);
     }
 #endif // HAVE_JASPER
 
-    else if (frm == "PGF")
+    else if (frm == QLatin1String("PGF"))
     {
         PGFLoader loader(this);
-        setAttribute("savedformat-isreadonly", loader.isReadOnly());
+        setAttribute(QLatin1String("savedformat-isreadonly"), loader.isReadOnly());
         return loader.save(filePath, observer);
     }
     else
     {
-        setAttribute("format", format);
+        setAttribute(QLatin1String("format"), format);
         QImageLoader loader(this);
-        setAttribute("savedformat-isreadonly", loader.isReadOnly());
+        setAttribute(QLatin1String("savedformat-isreadonly"), loader.isReadOnly());
         return loader.save(filePath, observer);
     }
 
@@ -738,20 +738,20 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         return NONE;
     }
 
-    QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
-    QString ext = fileInfo.suffix().toUpper();
+    QString rawFilesExt = QLatin1String(KDcrawIface::KDcraw::rawFiles());
+    QString ext         = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty())
     {
-        if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+        if (ext == QLatin1String("JPEG") || ext == QLatin1String("JPG") || ext == QLatin1String("JPE"))
         {
             return JPEG;
         }
-        else if (ext == QString("PNG"))
+        else if (ext == QLatin1String("PNG"))
         {
             return PNG;
         }
-        else if (ext == QString("TIFF") || ext == QString("TIF"))
+        else if (ext == QLatin1String("TIFF") || ext == QLatin1String("TIF"))
         {
             return TIFF;
         }
@@ -760,13 +760,13 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
             return RAW;
         }
 
-        if (ext == QString("JP2") || ext == QString("JPX") || // JPEG2000 file format
-            ext == QString("JPC") || ext == QString("J2K") || // JPEG2000 code stream
-            ext == QString("PGX"))                            // JPEG2000 WM format
+        if (ext == QLatin1String("JP2") || ext == QLatin1String("JPX") || // JPEG2000 file format
+            ext == QLatin1String("JPC") || ext == QLatin1String("J2K") || // JPEG2000 code stream
+            ext == QLatin1String("PGX"))                                  // JPEG2000 WM format
         {
             return JP2K;
         }
-        else if (ext == QString("PGF"))
+        else if (ext == QLatin1String("PGF"))
         {
             return PGF;
         }
@@ -919,14 +919,14 @@ bool DImg::sixteenBit() const
 
 bool DImg::isReadOnly() const
 {
-    return attribute("isreadonly").toBool();
+    return attribute(QLatin1String("isreadonly")).toBool();
 }
 
 DImg::COLORMODEL DImg::originalColorModel() const
 {
-    if (m_priv->attributes.contains("originalColorModel"))
+    if (m_priv->attributes.contains(QLatin1String("originalColorModel")))
     {
-        return (COLORMODEL)m_priv->attributes.value("originalColorModel").toInt();
+        return (COLORMODEL)m_priv->attributes.value(QLatin1String("originalColorModel")).toInt();
     }
     else
     {
@@ -936,14 +936,14 @@ DImg::COLORMODEL DImg::originalColorModel() const
 
 int DImg::originalBitDepth() const
 {
-    return m_priv->attributes.value("originalBitDepth").toInt();
+    return m_priv->attributes.value(QLatin1String("originalBitDepth")).toInt();
 }
 
 QSize DImg::originalSize() const
 {
-    if (m_priv->attributes.contains("originalSize"))
+    if (m_priv->attributes.contains(QLatin1String("originalSize")))
     {
-        QSize size = m_priv->attributes.value("originalSize").toSize();
+        QSize size = m_priv->attributes.value(QLatin1String("originalSize")).toSize();
 
         if (size.isValid() && !size.isNull())
         {
@@ -956,9 +956,9 @@ QSize DImg::originalSize() const
 
 DImg::FORMAT DImg::detectedFormat() const
 {
-    if (m_priv->attributes.contains("detectedFileFormat"))
+    if (m_priv->attributes.contains(QLatin1String("detectedFileFormat")))
     {
-        return (FORMAT)m_priv->attributes.value("detectedFileFormat").toInt();
+        return (FORMAT)m_priv->attributes.value(QLatin1String("detectedFileFormat")).toInt();
     }
     else
     {
@@ -968,19 +968,19 @@ DImg::FORMAT DImg::detectedFormat() const
 
 QString DImg::format() const
 {
-    return m_priv->attributes.value("format").toString();
+    return m_priv->attributes.value(QLatin1String("format")).toString();
 }
 
 QString DImg::savedFormat() const
 {
-    return m_priv->attributes.value("savedformat").toString();
+    return m_priv->attributes.value(QLatin1String("savedformat")).toString();
 }
 
 DRawDecoding DImg::rawDecodingSettings() const
 {
-    if (m_priv->attributes.contains("rawDecodingSettings"))
+    if (m_priv->attributes.contains(QLatin1String("rawDecodingSettings")))
     {
-        return m_priv->attributes.value("rawDecodingSettings").value<DRawDecoding>();
+        return m_priv->attributes.value(QLatin1String("rawDecodingSettings")).value<DRawDecoding>();
     }
     else
     {
@@ -1080,18 +1080,18 @@ QString DImg::embeddedText(const QString& key) const
 
 void DImg::imageSavedAs(const QString& savePath)
 {
-    setAttribute("savedFilePath", savePath);
+    setAttribute(QLatin1String("savedFilePath"), savePath);
     addAsReferredImage(savePath);
 }
 
 QString DImg::originalFilePath() const
 {
-    return attribute("originalFilePath").toString();
+    return attribute(QLatin1String("originalFilePath")).toString();
 }
 
 QString DImg::lastSavedFilePath() const
 {
-    return attribute("savedFilePath").toString();
+    return attribute(QLatin1String("savedFilePath")).toString();
 }
 
 QVariant DImg::fileOriginData() const
@@ -1114,25 +1114,25 @@ QVariant DImg::fileOriginData() const
 QVariant DImg::lastSavedFileOriginData() const
 {
     QVariantMap map;
-    QVariant savedformat = attribute("savedformat");
+    QVariant savedformat = attribute(QLatin1String("savedformat"));
 
     if (!savedformat.isNull())
     {
-        map.insert("format", savedformat);
+        map.insert(QLatin1String("format"), savedformat);
     }
 
-    QVariant readonly = attribute("savedformat-isreadonly");
+    QVariant readonly = attribute(QLatin1String("savedformat-isreadonly"));
 
     if (!readonly.isNull())
     {
-        map.insert("isreadonly", readonly);
+        map.insert(QLatin1String("isreadonly"), readonly);
     }
 
-    QVariant filePath = attribute("savedFilePath");
+    QVariant filePath = attribute(QLatin1String("savedFilePath"));
 
     if (!filePath.isNull())
     {
-        map.insert("originalFilePath", filePath);
+        map.insert(QLatin1String("originalFilePath"), filePath);
     }
 
     DImageHistory history = m_priv->imageHistory;
@@ -1146,7 +1146,7 @@ QVariant DImg::lastSavedFileOriginData() const
             history.entries().last().referredImages.last().setType(HistoryImageId::Current);
         }
 
-        map.insert("originalImageHistory", QVariant::fromValue(history));
+        map.insert(QLatin1String("originalImageHistory"), QVariant::fromValue(history));
     }
 
     return map;
@@ -2469,7 +2469,7 @@ void DImg::rotate(ANGLE angle)
     if (switchDims)
     {
         setImageDimension(height(), width());
-        QMap<QString, QVariant>::iterator it = m_priv->attributes.find("originalSize");
+        QMap<QString, QVariant>::iterator it = m_priv->attributes.find(QLatin1String("originalSize"));
 
         if (it != m_priv->attributes.end())
         {
@@ -2839,18 +2839,18 @@ void DImg::fill(const DColor& color)
 
 QByteArray DImg::getUniqueHash() const
 {
-    if (m_priv->attributes.contains("uniqueHash"))
+    if (m_priv->attributes.contains(QLatin1String("uniqueHash")))
     {
-        return m_priv->attributes["uniqueHash"].toByteArray();
+        return m_priv->attributes[QLatin1String("uniqueHash")].toByteArray();
     }
 
-    if (!m_priv->attributes.contains("originalFilePath"))
+    if (!m_priv->attributes.contains(QLatin1String("originalFilePath")))
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 
-    QString filePath = m_priv->attributes.value("originalFilePath").toString();
+    QString filePath = m_priv->attributes.value(QLatin1String("originalFilePath")).toString();
 
     if (filePath.isEmpty())
     {
@@ -2872,18 +2872,18 @@ QByteArray DImg::getUniqueHash(const QString& filePath)
 
 QByteArray DImg::getUniqueHashV2() const
 {
-    if (m_priv->attributes.contains("uniqueHashV2"))
+    if (m_priv->attributes.contains(QLatin1String("uniqueHashV2")))
     {
-        return m_priv->attributes["uniqueHashV2"].toByteArray();
+        return m_priv->attributes[QLatin1String("uniqueHashV2")].toByteArray();
     }
 
-    if (!m_priv->attributes.contains("originalFilePath"))
+    if (!m_priv->attributes.contains(QLatin1String("originalFilePath")))
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 
-    QString filePath = m_priv->attributes.value("originalFilePath").toString();
+    QString filePath = m_priv->attributes.value(QLatin1String("originalFilePath")).toString();
 
     if (filePath.isEmpty())
     {
@@ -2945,11 +2945,11 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
 
         // Clear Tiff thumbnail
         // NOTE: when depending on a libkexiv2 > Nov 1 2011, consolidate this to meta.setTiffThumbnail(QImage())
-        KExiv2::MetaDataMap tiffThumbTags = meta.getExifTagsDataList(QStringList() << "SubImage1");
+        KExiv2::MetaDataMap tiffThumbTags = meta.getExifTagsDataList(QStringList() << QLatin1String("SubImage1"));
 
         for (KExiv2::MetaDataMap::iterator it = tiffThumbTags.begin(); it != tiffThumbTags.end(); ++it)
         {
-            meta.removeExifTag(it.key().toAscii().constData());
+            meta.removeExifTag(it.key().toLatin1().constData());
         }
     }
 
@@ -3017,15 +3017,15 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         // broken. Note that IPTC image preview tag is limited to 256K!!!
         // There is no limitation with TIFF and PNG about IPTC byte array size.
         // So for a JPEG file, we don't store the IPTC preview.
-        if ((destMimeType.toUpper() != QString("JPG") && destMimeType.toUpper() != QString("JPEG") &&
-             destMimeType.toUpper() != QString("JPE"))
+        if ((destMimeType.toUpper() != QLatin1String("JPG") && destMimeType.toUpper() != QLatin1String("JPEG") &&
+             destMimeType.toUpper() != QLatin1String("JPE"))
            )
         {
             // Non JPEG file, we update IPTC preview
             meta.setImagePreview(preview);
         }
 
-        if (destMimeType.toUpper() == QString("TIFF") || destMimeType.toUpper() == QString("TIF"))
+        if (destMimeType.toUpper() == QLatin1String("TIFF") || destMimeType.toUpper() == QLatin1String("TIF"))
         {
             // With TIFF file, we don't store JPEG thumbnail, we even need to erase it and store
             // a thumbnail at a special location. See bug #211758
@@ -3060,8 +3060,8 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         DImageHistory forSaving(m_priv->imageHistory);
         forSaving.adjustReferredImages();
 
-        QUrl url = QUrl::fromLocalFile(intendedDestPath);
-        QString filePath = url.adjusted(QUrl::RemoveFilename).path() + "/";
+        QUrl url         = QUrl::fromLocalFile(intendedDestPath);
+        QString filePath = url.adjusted(QUrl::RemoveFilename).path() + QLatin1String("/");
         QString fileName = url.fileName();
 
         if (!filePath.isEmpty() && !fileName.isEmpty())
@@ -3075,7 +3075,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
 
     if (flags & CreateNewImageHistoryUUID)
     {
-        meta.setImageUniqueId(createImageUniqueId());
+        meta.setImageUniqueId(QString::fromUtf8(createImageUniqueId()));
     }
 
     // Store new Exif/IPTC/XMP data into image.
@@ -3146,7 +3146,7 @@ bool DImg::hasImageHistory() const
 
 DImageHistory DImg::getOriginalImageHistory() const
 {
-    return attribute("originalImageHistory").value<DImageHistory>();
+    return attribute(QLatin1String("originalImageHistory")).value<DImageHistory>();
 }
 
 void DImg::setHistoryBranch(bool isBranch)

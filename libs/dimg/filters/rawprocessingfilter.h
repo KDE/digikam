@@ -24,6 +24,10 @@
 #ifndef RAWPROCESSINGFILTERS_H
 #define RAWPROCESSINGFILTERS_H
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -91,12 +95,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:RawConverter";
+        return QLatin1String("digikam:RawConverter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Raw Conversion");
+        return i18n(I18N_NOOP("Raw Conversion"));
     }
 
     static QList<int>       SupportedVersions()
@@ -120,7 +124,7 @@ public:
 
 protected:
 
-    void postProgress(int); // not virtual
+    void postProgress(int);     // not virtual
     bool continueQuery() const; // not virtual
 
     virtual void filterImage();

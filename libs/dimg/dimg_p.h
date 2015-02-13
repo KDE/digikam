@@ -91,15 +91,15 @@ public:
     static QStringList fileOriginAttributes()
     {
         QStringList list;
-        list << "format"
-             << "isreadonly"
-             << "originalFilePath"
-             << "originalSize"
-             << "originalImageHistory"
-             << "rawDecodingSettings"
-             << "rawDecodingFilterAction"
-             << "uniqueHash"
-             << "uniqueHashV2";
+        list << QLatin1String("format")
+             << QLatin1String("isreadonly")
+             << QLatin1String("originalFilePath")
+             << QLatin1String("originalSize")
+             << QLatin1String("originalImageHistory")
+             << QLatin1String("rawDecodingSettings")
+             << QLatin1String("rawDecodingFilterAction")
+             << QLatin1String("uniqueHash")
+             << QLatin1String("uniqueHashV2");
 
         return list;
     }

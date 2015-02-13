@@ -69,7 +69,7 @@ target_link_libraries(digikamcore
                       Qt5::Sql
                       Qt5::Concurrent
 
-                      KF5::KDELibs4Support
+#                      KF5::KDELibs4Support
                       KF5::KIOCore
                       KF5::NotifyConfig
 
@@ -163,7 +163,7 @@ target_link_libraries(digikamdatabase
                       Qt5::Sql
 
                       KF5::KIOCore
-                      KF5::KDELibs4Support
+#                      KF5::KDELibs4Support
 
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
@@ -248,7 +248,7 @@ target_link_libraries(digikam
                       Qt5::WebKitWidgets
 
                       KF5::NotifyConfig
-                      KF5::KDELibs4Support
+#                      KF5::KDELibs4Support
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
 
