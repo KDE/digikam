@@ -207,7 +207,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
 extern "C"
 {
-    KDE_EXPORT int kdemain(int argc, char** argv)
+    Q_DECL_EXPORT int kdemain(int argc, char** argv)
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);

@@ -648,7 +648,7 @@ void kio_digikamalbums::slotCanResume (KIO::Job* /*job*/, KIO::filesize_t offset
 
 extern "C"
 {
-    KDE_EXPORT int kdemain(int argc, char** argv)
+    Q_DECL_EXPORT int kdemain(int argc, char** argv)
     {
         QCoreApplication app(argc, argv);
         app.setApplicationName(QStringLiteral("kio_digikamalbums"));

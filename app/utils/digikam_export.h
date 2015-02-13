@@ -1,75 +1,134 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2007 David Faure <faure@kde.org>
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-    Boston, MA 02110-1301, USA.
-*/
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2009-08-03
+ * Description : digiKam config header
+ *
+ * Copyright (C) 2014-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #ifndef DIGIKAM_EXPORT_H
 #define DIGIKAM_EXPORT_H
 
-/* needed for KDE_EXPORT and KDE_IMPORT macros */
-#include <kdemacros.h>
+#ifdef DIGIKAM_STATIC_DEFINE
 
-// --------------------------------------------------------
+#  define DIGIKAM_EXPORT
+#  define DIGIKAM_NO_EXPORT
+#  define DIGIKAM_DATABASE_EXPORT
+#  define DIGIKAM_DATABASE_NO_EXPORT
+#  define DIGIKAM_DATABASECORE_EXPORT
+#  define DIGIKAM_DATABASECORE_NO_EXPORT
 
-#ifndef DIGIKAM_EXPORT
-# if defined(MAKE_DIGIKAMCORE_LIB)
-/* We are building this library */
-#  define DIGIKAM_EXPORT KDE_EXPORT
-# else
-/* We are using this library */
-#  define DIGIKAM_EXPORT KDE_IMPORT
-# endif
+#else
+
+#  ifndef DIGIKAM_EXPORT
+#    ifdef KF5digikam_EXPORTS
+        /* We are building this library */
+#      define DIGIKAM_EXPORT __attribute__((visibility("default")))
+#    else
+        /* We are using this library */
+#      define DIGIKAM_EXPORT __attribute__((visibility("default")))
+#    endif
+#  endif
+
+#  ifndef DIGIKAM_DATABASE_EXPORT
+#    ifdef KF5digikam_DATABASE_EXPORTS
+        /* We are building this library */
+#      define DIGIKAM_DATABASE_EXPORT __attribute__((visibility("default")))
+#    else
+        /* We are using this library */
+#      define DIGIKAM_DATABASE_EXPORT __attribute__((visibility("default")))
+#    endif
+#  endif
+
+#  ifndef DIGIKAM_DATABASECORE_EXPORT
+#    ifdef KF5digikam_DATABASECORE_EXPORTS
+        /* We are building this library */
+#      define DIGIKAM_DATABASECORE_EXPORT __attribute__((visibility("default")))
+#    else
+        /* We are using this library */
+#      define DIGIKAM_DATABASECORE_EXPORT __attribute__((visibility("default")))
+#    endif
+#  endif
+
+// ---------------------------------------------------------------------------------
+
+#  ifndef DIGIKAM_NO_EXPORT
+#    define DIGIKAM_NO_EXPORT __attribute__((visibility("hidden")))
+#  endif
+
+#  ifndef DIGIKAM_DATABASE_NO_EXPORT
+#    define DIGIKAM_DATABASE_NO_EXPORT __attribute__((visibility("hidden")))
+#  endif
+
+#  ifndef DIGIKAM_DATABASECORE_NO_EXPORT
+#    define DIGIKAM_DATABASECORE_NO_EXPORT __attribute__((visibility("hidden")))
+#  endif
 #endif
 
-// --------------------------------------------------------
+// ---------------------------------------------------------------------------------
 
-#ifndef DIGIKAM_DATABASE_EXPORT
-# if defined(MAKE_DIGIKAMDATABASE_LIB)
-/* We are building this library */
-#  define DIGIKAM_DATABASE_EXPORT KDE_EXPORT
-# else
-/* We are using this library */
-#  define DIGIKAM_DATABASE_EXPORT KDE_IMPORT
-# endif
+#ifndef DIGIKAM_DEPRECATED
+#  define DIGIKAM_DEPRECATED __attribute__ ((__deprecated__))
 #endif
 
-// --------------------------------------------------------
-
-#ifndef DIGIKAM_DATABASECORE_EXPORT
-# if defined(MAKE_DIGIKAMDATABASECORE_LIB)
-/* We are building this library */
-#  define DIGIKAM_DATABASECORE_EXPORT KDE_EXPORT
-# else
-/* We are using this library */
-#  define DIGIKAM_DATABASECORE_EXPORT KDE_IMPORT
-# endif
+#ifndef DIGIKAM_DATABASE_DEPRECATED
+#  define DIGIKAM_DATABASE_DEPRECATED __attribute__ ((__deprecated__))
 #endif
 
-// --------------------------------------------------------
-
-#ifndef DIGIKAM_BIN_EXPORT
-/* for now this is included in the binary and doesn't need exporting */
-#define DIGIKAM_BIN_EXPORT
+#ifndef DIGIKAM_DATABASECORE_DEPRECATED
+#  define DIGIKAM_DATABASECORE_DEPRECATED __attribute__ ((__deprecated__))
 #endif
 
-// --------------------------------------------------------
+// ---------------------------------------------------------------------------------
 
-# ifndef DIGIKAM_EXPORT_DEPRECATED
-#  define DIGIKAM_EXPORT_DEPRECATED KDE_DEPRECATED DIGIKAM_EXPORT
-# endif
+#ifndef DIGIKAM_DEPRECATED_EXPORT
+#  define DIGIKAM_DEPRECATED_EXPORT DIGIKAM_EXPORT DIGIKAM_DEPRECATED
+#endif
+
+#ifndef DIGIKAM_DATABASE_DEPRECATED_EXPORT
+#  define DIGIKAM_DATABASE_DEPRECATED_EXPORT DIGIKAM_DATABASE_EXPORT DIGIKAM_DATABASE_DEPRECATED
+#endif
+
+#ifndef DIGIKAM_DATABASECORE_DEPRECATED_EXPORT
+#  define DIGIKAM_DATABASECORE_DEPRECATED_EXPORT DIGIKAM_DATABASECORE_EXPORT DIGIKAM_DATABASECORE_DEPRECATED
+#endif
+
+// ---------------------------------------------------------------------------------
+
+#ifndef DIGIKAM_DEPRECATED_NO_EXPORT
+#  define DIGIKAM_DEPRECATED_NO_EXPORT DIGIKAM_NO_EXPORT DIGIKAM_DEPRECATED
+#endif
+
+#ifndef DIGIKAM_DATABASE_DEPRECATED_NO_EXPORT
+#  define DIGIKAM_DATABASE_DEPRECATED_NO_EXPORT DIGIKAM_DATABASE_NO_EXPORT DIGIKAM_DATABASE_DEPRECATED
+#endif
+
+#ifndef DIGIKAM_DATABASECORE_DEPRECATED_NO_EXPORT
+#  define DIGIKAM_DATABASECORE_DEPRECATED_NO_EXPORT DIGIKAM_DATABASECORE_NO_EXPORT DIGIKAM_DATABASECORE_DEPRECATED
+#endif
+
+// ---------------------------------------------------------------------------------
+
+#define DEFINE_NO_DEPRECATED 0
+#if DEFINE_NO_DEPRECATED
+# define DIGIKAM_NO_DEPRECATED
+# define DIGIKAM_DATABASE_NO_DEPRECATED
+# define DIGIKAM_DATABASECORE_NO_DEPRECATED
+#endif
 
 #endif // DIGIKAM_EXPORT_H
