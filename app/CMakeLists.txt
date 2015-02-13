@@ -36,8 +36,6 @@ install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 # Digikam GUI begins here
 
 include_directories(
-    album/
-    database/
     date/
     dragdrop/
     items/
@@ -45,6 +43,7 @@ include_directories(
     fileaction/
     views/
     views/tableview/
+    filters/
     utils/
     tags/
     tags/tagsmanager/
@@ -60,28 +59,6 @@ qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamap
 set(libdigikamgui_SRCS
     main/digikamapp.cpp
 
-    album/album.cpp
-    album/albumhistory.cpp
-    album/albummanager.cpp
-    album/albummodificationhelper.cpp
-    album/albumpropsedit.cpp
-    album/albumselectors.cpp
-    album/albumselectcombobox.cpp
-    album/albumselectdialog.cpp
-    album/albumselectiontreeview.cpp
-    album/albumselectwidget.cpp
-    album/albumthumbnailloader.cpp
-    album/albumtreeview.cpp
-    album/albumwatch.cpp
-    album/albumlabelstreeview.cpp
-
-    database/databaseguierrorhandler.cpp
-    database/dbstatdlg.cpp
-    database/scancontroller.cpp
-    database/dio.cpp
-    database/syncjob.cpp
-    database/imageattributeswatch.cpp
-
     date/ddateedit.cpp
     date/ddatetimeedit.cpp
     date/ddatepickerpopup.cpp
@@ -94,6 +71,9 @@ set(libdigikamgui_SRCS
     dragdrop/ddragobjects.cpp
     dragdrop/imagedragdrop.cpp
     dragdrop/tagdragdrop.cpp
+
+    filters/filtersidebarwidget.cpp
+    filters/tagfilterview.cpp
 
     items/digikamimageview.cpp
     items/digikamimageview_p.cpp

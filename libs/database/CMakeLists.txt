@@ -4,6 +4,7 @@ set(libdatabasecore_SRCS
     core/databasecorebackend.cpp
     core/databaseparameters.cpp
     core/databaseerrorhandler.cpp
+    core/databaseguierrorhandler.cpp # FIXME used to be part of app, ok here?
     core/thumbnaildatabaseaccess.cpp
     core/thumbnaildb.cpp
     core/thumbnailschemaupdater.cpp
@@ -11,6 +12,14 @@ set(libdatabasecore_SRCS
     core/sqlquery.cpp
     core/dbactiontype.cpp
     core/tagregion.cpp
+
+# FIXME moved from app, check
+    core/dbstatdlg.cpp
+    core/scancontroller.cpp
+    core/dio.cpp
+    core/syncjob.cpp
+    core/imageattributeswatch.cpp
+
 )
 
 set(libdatabase_SRCS

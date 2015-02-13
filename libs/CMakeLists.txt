@@ -17,6 +17,7 @@ add_subdirectory(3rdparty)
 add_subdirectory(fileactionmanager)
 add_subdirectory(filters)
 add_subdirectory(settings)
+add_subdirectory(album)
 
 if(${KF5KGeoMap_FOUND})
     add_subdirectory(kgeomaphelper)
