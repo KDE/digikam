@@ -495,8 +495,8 @@ QString DImageHistory::toXml() const
     QXmlStreamWriter stream(&xmlHistory);
     stream.setAutoFormatting(true);
     stream.writeStartDocument();
-    stream.writeStartElement("history");
-    stream.writeAttribute("version", QString::number(1));
+    stream.writeStartElement(QLatin1String("history"));
+    stream.writeAttribute(QLatin1String("version"), QString::number(1));
 
     for (int i = 0; i < entries().count(); ++i)
     {
@@ -504,30 +504,30 @@ QString DImageHistory::toXml() const
 
         if (!step.action.isNull())
         {
-            stream.writeStartElement("filter");
-            stream.writeAttribute("filterName", step.action.identifier());
-            stream.writeAttribute("filterDisplayName", step.action.displayableName());
-            stream.writeAttribute("filterVersion", QString::number(step.action.version()));
+            stream.writeStartElement(QLatin1String("filter"));
+            stream.writeAttribute(QLatin1String("filterName"), step.action.identifier());
+            stream.writeAttribute(QLatin1String("filterDisplayName"), step.action.displayableName());
+            stream.writeAttribute(QLatin1String("filterVersion"), QString::number(step.action.version()));
 
             switch (step.action.category())
             {
                 case FilterAction::ReproducibleFilter:
-                    stream.writeAttribute("filterCategory", "reproducible");
+                    stream.writeAttribute(QLatin1String("filterCategory"), QLatin1String("reproducible"));
                     break;
                 case FilterAction::ComplexFilter:
-                    stream.writeAttribute("filterCategory", "complex");
+                    stream.writeAttribute(QLatin1String("filterCategory"), QLatin1String("complex"));
                     break;
                 case FilterAction::DocumentedHistory:
-                    stream.writeAttribute("filterCategory", "documentedHistory");
+                    stream.writeAttribute(QLatin1String("filterCategory"), QLatin1String("documentedHistory"));
                     break;
             }
 
             if (step.action.flags() & FilterAction::ExplicitBranch)
             {
-                stream.writeAttribute("branch", "true");
+                stream.writeAttribute(QLatin1String("branch"), QLatin1String("true"));
             }
 
-            stream.writeStartElement("params");
+            stream.writeStartElement(QLatin1String("params"));
 
             const QHash<QString,QVariant>& params = step.action.parameters();
 
@@ -542,9 +542,9 @@ QString DImageHistory::toXml() const
 
                     for (it = params.find(key); it != params.end() && it.key() == key; ++it)
                     {
-                        stream.writeStartElement("param");
-                        stream.writeAttribute("name", key);
-                        stream.writeAttribute("value", it.value().toString());
+                        stream.writeStartElement(QLatin1String("param"));
+                        stream.writeAttribute(QLatin1String("name"), key);
+                        stream.writeAttribute(QLatin1String("value"), it.value().toString());
                         stream.writeEndElement(); //param
                     }
                 }
@@ -568,47 +568,47 @@ QString DImageHistory::toXml() const
                     continue;
                 }
 
-                stream.writeStartElement("file");
+                stream.writeStartElement(QLatin1String("file"));
 
                 if (!imageId.m_uuid.isNull())
                 {
-                    stream.writeAttribute("uuid", imageId.m_uuid);
+                    stream.writeAttribute(QLatin1String("uuid"), imageId.m_uuid);
                 }
 
                 if (imageId.isOriginalFile())
                 {
-                    stream.writeAttribute("type", "original");
+                    stream.writeAttribute(QLatin1String("type"), QLatin1String("original"));
                 }
                 else if (imageId.isSourceFile())
                 {
-                    stream.writeAttribute("type", "source");
+                    stream.writeAttribute(QLatin1String("type"), QLatin1String("source"));
                 }
 
-                stream.writeStartElement("fileParams");
+                stream.writeStartElement(QLatin1String("fileParams"));
 
                 if (!imageId.m_fileName.isNull())
                 {
-                    stream.writeAttribute("fileName", imageId.m_fileName);
+                    stream.writeAttribute(QLatin1String("fileName"), imageId.m_fileName);
                 }
 
                 if (!imageId.m_filePath.isNull())
                 {
-                    stream.writeAttribute("filePath", imageId.m_filePath);
+                    stream.writeAttribute(QLatin1String("filePath"), imageId.m_filePath);
                 }
 
                 if (!imageId.m_uniqueHash.isNull())
                 {
-                    stream.writeAttribute("fileHash", imageId.m_uniqueHash);
+                    stream.writeAttribute(QLatin1String("fileHash"), imageId.m_uniqueHash);
                 }
 
                 if (imageId.m_fileSize)
                 {
-                    stream.writeAttribute("fileSize", QString::number(imageId.m_fileSize));
+                    stream.writeAttribute(QLatin1String("fileSize"), QString::number(imageId.m_fileSize));
                 }
 
                 if (imageId.isOriginalFile() && !imageId.m_creationDate.isNull())
                 {
-                    stream.writeAttribute("creationDate", imageId.m_creationDate.toString(Qt::ISODate));
+                    stream.writeAttribute(QLatin1String("creationDate"), imageId.m_creationDate.toString(Qt::ISODate));
                 }
 
                 stream.writeEndElement(); //fileParams
@@ -644,7 +644,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
         return h;
     }
 
-    if (stream.name() != "history")
+    if (stream.name() != QLatin1String("history"))
     {
         return h;
     }
@@ -654,16 +654,16 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 
     while (stream.readNextStartElement())
     {
-        if (stream.name() == "file")
+        if (stream.name() == QLatin1String("file"))
         {
             //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing file tag";
-            HistoryImageId imageId(stream.attributes().value("uuid").toString());
+            HistoryImageId imageId(stream.attributes().value(QLatin1String("uuid")).toString());
 
-            if (stream.attributes().value("type") == "original")
+            if (stream.attributes().value(QLatin1String("type")) == QLatin1String("original"))
             {
                 imageId.m_type = HistoryImageId::Original;
             }
-            else if (stream.attributes().value("type") == "source")
+            else if (stream.attributes().value(QLatin1String("type")) == QLatin1String("source"))
             {
                 imageId.m_type = HistoryImageId::Source;
             }
@@ -675,22 +675,22 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 
             while (stream.readNextStartElement())
             {
-                if (stream.name() == "fileParams")
+                if (stream.name() == QLatin1String("fileParams"))
                 {
-                    imageId.setFileName(stream.attributes().value("fileName").toString());
-                    imageId.setPath(stream.attributes().value("filePath").toString());
-                    QString date = stream.attributes().value("creationDate").toString();
+                    imageId.setFileName(stream.attributes().value(QLatin1String("fileName")).toString());
+                    imageId.setPath(stream.attributes().value(QLatin1String("filePath")).toString());
+                    QString date = stream.attributes().value(QLatin1String("creationDate")).toString();
 
                     if (!date.isNull())
                     {
                         imageId.setCreationDate(QDateTime::fromString(date, Qt::ISODate));
                     }
 
-                    QString size = stream.attributes().value("fileSize").toString();
+                    QString size = stream.attributes().value(QLatin1String("fileSize")).toString();
 
-                    if (stream.attributes().hasAttribute("fileHash") && !size.isNull())
+                    if (stream.attributes().hasAttribute(QLatin1String("fileHash")) && !size.isNull())
                     {
-                        imageId.setUniqueHash(stream.attributes().value("fileHash").toString(), size.toInt());
+                        imageId.setUniqueHash(stream.attributes().value(QLatin1String("fileHash")).toString(), size.toInt());
                     }
 
                     stream.skipCurrentElement();
@@ -722,44 +722,44 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
             }
 
         }
-        else if (stream.name() == "filter")
+        else if (stream.name() == QLatin1String("filter"))
         {
             //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing filter tag";
             FilterAction::Category c = FilterAction::ComplexFilter;
-            QStringRef categoryString = stream.attributes().value("filterCategory");
+            QStringRef categoryString = stream.attributes().value(QLatin1String("filterCategory"));
 
-            if (categoryString == "reproducible")
+            if (categoryString == QLatin1String("reproducible"))
             {
                 c = FilterAction::ReproducibleFilter;
             }
-            else if (categoryString == "complex")
+            else if (categoryString == QLatin1String("complex"))
             {
                 c = FilterAction::ComplexFilter;
             }
-            else if (categoryString == "documentedHistory")
+            else if (categoryString == QLatin1String("documentedHistory"))
             {
                 c = FilterAction::DocumentedHistory;
             }
 
-            FilterAction action(stream.attributes().value("filterName").toString(),
-                                stream.attributes().value("filterVersion").toString().toInt(), c);
-            action.setDisplayableName(stream.attributes().value("filterDisplayName").toString());
+            FilterAction action(stream.attributes().value(QLatin1String("filterName")).toString(),
+                                stream.attributes().value(QLatin1String("filterVersion")).toString().toInt(), c);
+            action.setDisplayableName(stream.attributes().value(QLatin1String("filterDisplayName")).toString());
 
-            if (stream.attributes().value("branch") == "true")
+            if (stream.attributes().value(QLatin1String("branch")) == QLatin1String("true"))
             {
                 action.addFlag(FilterAction::ExplicitBranch);
             }
 
             while (stream.readNextStartElement())
             {
-                if (stream.name() == "params")
+                if (stream.name() == QLatin1String("params"))
                 {
                     while (stream.readNextStartElement())
                     {
-                        if (stream.name() == "param" && stream.attributes().hasAttribute("name"))
+                        if (stream.name() == QLatin1String("param") && stream.attributes().hasAttribute(QLatin1String("name")))
                         {
-                            action.addParameter(stream.attributes().value("name").toString(),
-                                                stream.attributes().value("value").toString());
+                            action.addParameter(stream.attributes().value(QLatin1String("name")).toString(),
+                                                stream.attributes().value(QLatin1String("value")).toString());
                             stream.skipCurrentElement();
                         }
                         else

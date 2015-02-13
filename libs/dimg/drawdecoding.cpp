@@ -69,14 +69,14 @@ public:
 
 #define AddParameterIfNotDefault(name) AddParameterIfNotDefaultWithValue(name, name)
 #define AddParameterIfNotDefaultWithValue(name, value) \
-        addParameterIfNotDefault(prefix + #name, settings.value, defaultSettings.value)
+        addParameterIfNotDefault(prefix + QLatin1String(#name), settings.value, defaultSettings.value)
 
 #define AddParameterIfNotDefaultEnum(name) AddParameterIfNotDefaultEnumWithValue(name, name)
 #define AddParameterIfNotDefaultEnumWithValue(name, value) \
-        addParameterIfNotDefault<int>(prefix + #name, settings.value, defaultSettings.value)
+        addParameterIfNotDefault<int>(prefix + QLatin1String(#name), settings.value, defaultSettings.value)
 
-#define AddParameter(name) action.addParameter(prefix + #name, settings.name)
-#define AddParameterEnum(name) action.addParameter(prefix + #name, static_cast<int>(settings.name))
+#define AddParameter(name) action.addParameter(prefix + QLatin1String(#name), settings.name)
+#define AddParameterEnum(name) action.addParameter(prefix + QLatin1String(#name), static_cast<int>(settings.name))
 
     void write();
 
@@ -92,17 +92,17 @@ public:
 
 void RawDecodingSettingsWriter::write()
 {
-    action.addParameter("kdcraw-version", KDcrawIface::KDcraw::version());
+    action.addParameter(QLatin1String("kdcraw-version"), KDcrawIface::KDcraw::version());
 
     if (settings == defaultSettings)
     {
-        action.addParameter("RawDefaultSettings", true);
+        action.addParameter(QLatin1String("RawDefaultSettings"), true);
         return;
     }
 
     if (settings == timeOptimizedSettings)
     {
-        action.addParameter("RawTimeOptimizedSettings", true);
+        action.addParameter(QLatin1String("RawTimeOptimizedSettings"), true);
         return;
     }
 
@@ -167,10 +167,10 @@ void RawDecodingSettingsWriter::write()
     {
         if (!settings.whiteBalanceArea.isNull())
         {
-            action.addParameter(prefix + "whiteBalanceAreaX",      settings.whiteBalanceArea.x());
-            action.addParameter(prefix + "whiteBalanceAreaY",      settings.whiteBalanceArea.y());
-            action.addParameter(prefix + "whiteBalanceAreaWidth",  settings.whiteBalanceArea.width());
-            action.addParameter(prefix + "whiteBalanceAreaHeight", settings.whiteBalanceArea.height());
+            action.addParameter(prefix + QLatin1String("whiteBalanceAreaX"),      settings.whiteBalanceArea.x());
+            action.addParameter(prefix + QLatin1String("whiteBalanceAreaY"),      settings.whiteBalanceArea.y());
+            action.addParameter(prefix + QLatin1String("whiteBalanceAreaWidth"),  settings.whiteBalanceArea.width());
+            action.addParameter(prefix + QLatin1String("whiteBalanceAreaHeight"), settings.whiteBalanceArea.height());
         }
     }
 
@@ -203,11 +203,11 @@ public:
 
 #define ReadParameter(name) ReadParameterWithValue(name, name)
 #define ReadParameterWithValue(name, value) \
-        settings.value = action.parameter(prefix + #name, settings.value)
+        settings.value = action.parameter(prefix + QLatin1String(#name), settings.value)
 
 #define ReadParameterEnum(name) ReadParameterEnumWithValue(name, name)
 #define ReadParameterEnumWithValue(name, value) \
-        readParameter(prefix + #name, settings.value, static_cast<int>(settings.value))
+        readParameter(prefix + QLatin1String(#name), settings.value, static_cast<int>(settings.value))
 
     void read();
 
@@ -220,12 +220,12 @@ public:
 
 void RawDecodingSettingsReader::read()
 {
-    if (action.parameter("RawDefaultSettings").toBool())
+    if (action.parameter(QLatin1String("RawDefaultSettings")).toBool())
     {
         return;
     }
 
-    if (action.parameter("RawTimeOptimizedSettings").toBool())
+    if (action.parameter(QLatin1String("RawTimeOptimizedSettings")).toBool())
     {
         settings.optimizeTimeLoading();
         return;
@@ -288,12 +288,12 @@ void RawDecodingSettingsReader::read()
 
     ReadParameter(deadPixelMap);
 
-    if (!action.hasParameter("whiteBalanceAreaX"))
+    if (!action.hasParameter(QLatin1String("whiteBalanceAreaX")))
     {
-        int x      = action.parameter(prefix + "whiteBalanceAreaX",      0);
-        int y      = action.parameter(prefix + "whiteBalanceAreaY",      0);
-        int width  = action.parameter(prefix + "whiteBalanceAreaWidth",  0);
-        int height = action.parameter(prefix + "whiteBalanceAreaHeight", 0);
+        int x      = action.parameter(prefix + QLatin1String("whiteBalanceAreaX"),      0);
+        int y      = action.parameter(prefix + QLatin1String("whiteBalanceAreaY"),      0);
+        int width  = action.parameter(prefix + QLatin1String("whiteBalanceAreaWidth"),  0);
+        int height = action.parameter(prefix + QLatin1String("whiteBalanceAreaHeight"), 0);
         QRect rect(x, y, width, height);
 
         if (rect.isValid())
@@ -572,159 +572,159 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, RawDecodingSe
         QString key        = echild.tagName();
         QString val        = echild.attribute(QString::fromLatin1("value"));
 
-        if (key == "autobrightness")
+        if (key == QLatin1String("autobrightness"))
         {
             prm.autoBrightness = (bool)val.toInt(&ok);
         }
-        else if (key == "fixcolorshighlights")
+        else if (key == QLatin1String("fixcolorshighlights"))
         {
             prm.fixColorsHighlights = (bool)val.toInt(&ok);
         }
-        else if (key == "sixteenbitsimage")
+        else if (key == QLatin1String("sixteenbitsimage"))
         {
             prm.sixteenBitsImage = (bool)val.toInt(&ok);
         }
-        else if (key == "brightness")
+        else if (key == QLatin1String("brightness"))
         {
             prm.brightness = val.toDouble(&ok);
         }
-        else if (key == "rawquality")
+        else if (key == QLatin1String("rawquality"))
         {
             prm.RAWQuality = (RawDecodingSettings::DecodingQuality)val.toInt(&ok);
         }
-        else if (key == "inputcolorspace")
+        else if (key == QLatin1String("inputcolorspace"))
         {
             prm.inputColorSpace = (RawDecodingSettings::InputColorSpace)val.toInt(&ok);
         }
-        else if (key == "outputcolorspace")
+        else if (key == QLatin1String("outputcolorspace"))
         {
             prm.outputColorSpace = (RawDecodingSettings::OutputColorSpace)val.toInt(&ok);
         }
-        else if (key == "rgbinterpolate4colors")
+        else if (key == QLatin1String("rgbinterpolate4colors"))
         {
             prm.RGBInterpolate4Colors = (bool)val.toInt(&ok);
         }
-        else if (key == "dontstretchpixels")
+        else if (key == QLatin1String("dontstretchpixels"))
         {
             prm.DontStretchPixels = (bool)val.toInt(&ok);
         }
-        else if (key == "unclipcolors")
+        else if (key == QLatin1String("unclipcolors"))
         {
             prm.unclipColors = (int)val.toInt(&ok);
         }
-        else if (key == "whitebalance")
+        else if (key == QLatin1String("whitebalance"))
         {
             prm.whiteBalance = (RawDecodingSettings::WhiteBalance)val.toInt(&ok);
         }
-        else if (key == "customwhitebalance")
+        else if (key == QLatin1String("customwhitebalance"))
         {
             prm.customWhiteBalance = val.toInt(&ok);
         }
-        else if (key == "customwhitebalancegreen")
+        else if (key == QLatin1String("customwhitebalancegreen"))
         {
             prm.customWhiteBalanceGreen = val.toDouble(&ok);
         }
-        else if (key == "halfsizecolorimage")
+        else if (key == QLatin1String("halfsizecolorimage"))
         {
             prm.halfSizeColorImage = (bool)val.toInt(&ok);
         }
-        else if (key == "enableblackpoint")
+        else if (key == QLatin1String("enableblackpoint"))
         {
             prm.enableBlackPoint = (bool)val.toInt(&ok);
         }
-        else if (key == "blackpoint")
+        else if (key == QLatin1String("blackpoint"))
         {
             prm.blackPoint = val.toInt(&ok);
         }
-        else if (key == "enablewhitepoint")
+        else if (key == QLatin1String("enablewhitepoint"))
         {
             prm.enableWhitePoint = (bool)val.toInt(&ok);
         }
-        else if (key == "whitepoint")
+        else if (key == QLatin1String("whitepoint"))
         {
             prm.whitePoint = val.toInt(&ok);
         }
-        else if (key == "noisereductiontype")
+        else if (key == QLatin1String("noisereductiontype"))
         {
             prm.NRType = (RawDecodingSettings::NoiseReduction)val.toInt(&ok);
         }
-        else if (key == "noisereductionthreshold")
+        else if (key == QLatin1String("noisereductionthreshold"))
         {
             prm.NRThreshold = val.toInt(&ok);
         }
-        else if (key == "enablecacorrection")
+        else if (key == QLatin1String("enablecacorrection"))
         {
             prm.enableCACorrection = (bool)val.toInt(&ok);
         }
-        else if (key == "redchromaticaberrationmultiplier")
+        else if (key == QLatin1String("redchromaticaberrationmultiplier"))
         {
             prm.caMultiplier[0] = val.toDouble(&ok);
         }
-        else if (key == "bluechromaticaberrationmultiplier")
+        else if (key == QLatin1String("bluechromaticaberrationmultiplier"))
         {
             prm.caMultiplier[1] = val.toDouble(&ok);
         }
-        else if (key == "medianfilterpasses")
+        else if (key == QLatin1String("medianfilterpasses"))
         {
             prm.medianFilterPasses = val.toInt(&ok);
         }
-        else if (key == "inputprofile")
+        else if (key == QLatin1String("inputprofile"))
         {
             prm.inputProfile = val;
         }
-        else if (key == "outputprofile")
+        else if (key == QLatin1String("outputprofile"))
         {
             prm.outputProfile = val;
         }
-        else if (key == "deadpixelmap")
+        else if (key == QLatin1String("deadpixelmap"))
         {
             prm.deadPixelMap = val;
         }
-        else if (key == "whitebalanceareax")
+        else if (key == QLatin1String("whitebalanceareax"))
         {
             prm.whiteBalanceArea.setX(val.toInt(&ok));
         }
-        else if (key == "whitebalanceareay")
+        else if (key == QLatin1String("whitebalanceareay"))
         {
             prm.whiteBalanceArea.setY(val.toInt(&ok));
         }
-        else if (key == "whitebalanceareawidth")
+        else if (key == QLatin1String("whitebalanceareawidth"))
         {
             prm.whiteBalanceArea.setWidth(val.toInt(&ok));
         }
-        else if (key == "whitebalanceareaheight")
+        else if (key == QLatin1String("whitebalanceareaheight"))
         {
             prm.whiteBalanceArea.setHeight(val.toInt(&ok));
         }
-        else if (key == "dcbiterations")
+        else if (key == QLatin1String("dcbiterations"))
         {
             prm.dcbIterations = val.toInt(&ok);
         }
-        else if (key == "dcbenhancefl")
+        else if (key == QLatin1String("dcbenhancefl"))
         {
             prm.dcbEnhanceFl = (bool)val.toInt(&ok);
         }
-        else if (key == "eecirefine")
+        else if (key == QLatin1String("eecirefine"))
         {
             prm.eeciRefine = (bool)val.toInt(&ok);
         }
-        else if (key == "esmedpasses")
+        else if (key == QLatin1String("esmedpasses"))
         {
             prm.esMedPasses = val.toInt(&ok);
         }
-        else if (key == "nrchrominancethreshold")
+        else if (key == QLatin1String("nrchrominancethreshold"))
         {
             prm.NRChroThreshold = val.toInt(&ok);
         }
-        else if (key == "expocorrection")
+        else if (key == QLatin1String("expocorrection"))
         {
             prm.expoCorrection = (bool)val.toInt(&ok);
         }
-        else if (key == "expocorrectionshift")
+        else if (key == QLatin1String("expocorrectionshift"))
         {
             prm.expoCorrectionShift = val.toDouble(&ok);
         }
-        else if (key == "expocorrectionhighlight")
+        else if (key == QLatin1String("expocorrectionhighlight"))
         {
             prm.expoCorrectionHighlight = val.toDouble(&ok);
         }

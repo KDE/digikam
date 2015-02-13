@@ -226,7 +226,7 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
         history << id;
 
         m_image->setImageHistory(history);
-        imageSetAttribute("originalImageHistory", QVariant::fromValue(history));
+        imageSetAttribute(QLatin1String("originalImageHistory"), QVariant::fromValue(history));
     }
 
     return true;
@@ -273,7 +273,7 @@ HistoryImageId DImgLoader::createHistoryImageId(const QString& filePath, const D
     id.setCreationDate(dt);
     id.setFileName(file.fileName());
     id.setPath(file.path());
-    id.setUniqueHash(uniqueHashV2(filePath, &image), file.size());
+    id.setUniqueHash(QString::fromUtf8(uniqueHashV2(filePath, &image)), file.size());
 
     return id;
 }
@@ -359,7 +359,7 @@ QByteArray DImgLoader::uniqueHashV2(const QString& filePath, const DImg* const i
 
     if (img && !hash.isNull())
     {
-        const_cast<DImg*>(img)->setAttribute("uniqueHashV2", hash);
+        const_cast<DImg*>(img)->setAttribute(QString::fromUtf8("uniqueHashV2"), hash);
     }
 
     return hash;
@@ -416,7 +416,7 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
 
     if (!hash.isNull())
     {
-        const_cast<DImg&>(img).setAttribute("uniqueHash", hash);
+        const_cast<DImg&>(img).setAttribute(QLatin1String("uniqueHash"), hash);
     }
 
     return hash;
