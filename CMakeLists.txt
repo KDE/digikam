@@ -134,7 +134,7 @@ else()
 endif()
 
 find_package(KF5 REQUIRED COMPONENTS
-#             KDELibs4Support
+             KDELibs4Support
              NotifyConfig
 )
 
