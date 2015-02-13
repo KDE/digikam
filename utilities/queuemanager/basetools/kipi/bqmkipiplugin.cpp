@@ -29,6 +29,7 @@
 #include <QFileInfo>
 #include <QWidget>
 #include <QMap>
+#include <QDebug>
 
 //local includes
 
