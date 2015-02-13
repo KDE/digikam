@@ -18,6 +18,7 @@ add_subdirectory(fileactionmanager)
 add_subdirectory(filters)
 add_subdirectory(settings)
 add_subdirectory(album)
+add_subdirectory(tags)
 
 if(${KF5KGeoMap_FOUND})
     add_subdirectory(kgeomaphelper)

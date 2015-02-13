@@ -14,7 +14,7 @@ add_library(slideshow STATIC ${libslideshow_SRCS})
 target_link_libraries(slideshow
                       digikamwidgets
                       digikamdatabase
-                      digikamgui # required for album*, refactor FIXME
+                      digikamalbum
                       
                       Qt5::Widgets
                       

@@ -116,32 +116,12 @@ set(libdigikamgui_SRCS
     views/tableview/tableview_columnfactory.cpp
     views/tableview/tableview_selection_model_syncer.cpp
     
-    tags/tagsmanager/tagsmanager.cpp
-    tags/tagsmanager/tagpropwidget.cpp
-    tags/tagsmanager/taglist.cpp
-    tags/tagsmanager/tagmngrtreeview.cpp
-    tags/tagsmanager/models/tagmngrlistview.cpp
-    tags/tagsmanager/models/tagmngrlistmodel.cpp
-    tags/tagsmanager/models/tagmngrlistitem.cpp
-
     views/imagepreviewviewitem.cpp
     views/imagepreviewview.cpp
     views/welcomepageview.cpp
     views/leftsidebarwidgets.cpp
     views/digikamview.cpp
     views/stackedview.cpp
-
-    tags/addtagscombobox.cpp
-    tags/addtagscompletionbox.cpp
-    tags/addtagslineedit.cpp
-    tags/tagcheckview.cpp
-    tags/tagfolderview.cpp
-    tags/taggingaction.cpp
-    tags/tagslineeditoverlay.cpp
-    tags/tagspopupmenu.cpp
-    tags/tageditdlg.cpp
-    tags/tagmodificationhelper.cpp
-    tags/tagsactionmngr.cpp
     
     ${digikamadaptor_SRCS}
 )
@@ -192,6 +172,7 @@ target_link_libraries(digikamgui
                       digikamwidgets
                       digikamdatabase
                       digikammodels
+                      digikamtags
                       dimg
                       dthread
                       threadimageio

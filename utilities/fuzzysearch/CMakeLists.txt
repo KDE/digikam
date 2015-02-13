@@ -11,7 +11,6 @@ target_include_directories(fuzzysearch PUBLIC
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 target_link_libraries(fuzzysearch
-                         digikamgui # for album..
-                         digikamwidgets
-                         Qt5::Widgets
+                      digikamalbum
+                      digikamwidgets
 )

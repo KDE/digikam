@@ -40,6 +40,7 @@ target_include_directories(maintenance PUBLIC
 
 
 target_link_libraries(maintenance
+                      digikamgui # for DigikamApp...
                       digikamdatabase
                       notificationmanager
                       progressmanager

@@ -45,7 +45,8 @@
 #include "graphicsdimgview.h"
 #include "imageinfo.h"
 #include "regionframeitem.h"
-#include "searchutilities.h"
+// TODO remove before commit if not really needed
+//#include "searchutilities.h"
 #include "taggingaction.h"
 #include "itemvisibilitycontroller.h"
 #include "digikam_debug.h"
