@@ -127,25 +127,25 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           "https://www.facebook.com/marcel.wiesweg"
                         );
 
+    aboutData.addAuthor ( ki18n("Teemu Rytilahti"),
+                          ki18n("Developer"),
+                          "tpr at iki dot fi",
+                          "https://plus.google.com/u/0/105136119348505864693"
+                        );
+
     aboutData.addAuthor ( ki18n("Michael G. Hansen"),
                           ki18n("Developer and Mentoring"),
                           "mike at mghansen dot de",
                           "http://www.mghansen.de"
                         );
 
-    aboutData.addAuthor ( ki18n("Andi Clemens"),
+    aboutData.addAuthor ( ki18n("Maik Qualmann"),
                           ki18n("Developer"),
-                          "andi dot clemens at gmail dot com",
-                          "https://plus.google.com/110531606986594589135"
+                          "metzpinguin at gmail dot com",
+                          "https://plus.google.com/u/0/107171232114475191915/posts"
                         );
 
     // -- Contributors -----------------------------------------------------------
-
-    aboutData.addAuthor ( ki18n("Teemu Rytilahti"),
-                          ki18n("Developer"),
-                          "tpr at iki dot fi",
-                          "https://plus.google.com/u/0/105136119348505864693"
-                        );
 
     aboutData.addAuthor ( ki18n("Matthias Welwarsky"),
                           ki18n("Developer"),
@@ -264,6 +264,12 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                         );
 
     // -- Former contributors ----------------------------------------------------
+
+    aboutData.addAuthor ( ki18n("Andi Clemens"),
+                          ki18n("Advance Rename tool and developer"),
+                          "andi dot clemens at gmail dot com",
+                          "https://plus.google.com/110531606986594589135"
+                        );
 
     aboutData.addAuthor ( ki18n("Patrick Spendrin"),
                           ki18n("Developer and Windows port"),
