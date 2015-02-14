@@ -1249,6 +1249,18 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
         return true;
     }
 
+    // Try to get Tags Path list from Exif Windows keywords.
+    QString keyWords = getExifTagString("Exif.Image.XPKeywords", false);
+    if (!keyWords.isEmpty())
+    {
+        tagsPath = keyWords.split(";");
+
+        if (!tagsPath.isEmpty())
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
