@@ -28,13 +28,6 @@
 
 #include <cstdarg>
 
-// libPNG includes
-
-extern "C"
-{
-#include <png.h>
-}
-
 // Local includes
 
 #include "dimgloader.h"

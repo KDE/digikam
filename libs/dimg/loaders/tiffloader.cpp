@@ -569,10 +569,10 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     imageWidth()  = w;
     imageHeight() = h;
     imageData()   = data.take();
-    imageSetAttribute("format", "TIFF");
-    imageSetAttribute("originalColorModel", colorModel);
-    imageSetAttribute("originalBitDepth", bits_per_sample);
-    imageSetAttribute("originalSize", QSize(w, h));
+    imageSetAttribute(QLatin1String("format"),             QLatin1String("TIFF"));
+    imageSetAttribute(QLatin1String("originalColorModel"), colorModel);
+    imageSetAttribute(QLatin1String("originalBitDepth"),   bits_per_sample);
+    imageSetAttribute(QLatin1String("originalSize"),       QSize(w, h));
 
     return true;
 }
@@ -612,7 +612,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_NONE);
 
     // Image must be compressed using deflate algorithm ?
-    QVariant compressAttr = imageGetAttribute("compress");
+    QVariant compressAttr = imageGetAttribute(QLatin1String("compress"));
     bool compress = compressAttr.isValid() ? compressAttr.toBool() : false;
 
     if (compress)
@@ -684,10 +684,10 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     tiffSetExifAsciiTag(tif, TIFFTAG_COPYRIGHT,               metaData, "Exif.Image.Copyright");
 
     QString soft = metaData.getExifTagString("Exif.Image.Software");
-    QString libtiffver(TIFFLIB_VERSION_STR);
-    libtiffver.replace('\n', ' ');
-    soft.append(QString(" ( %1 )").arg(libtiffver));
-    TIFFSetField(tif, TIFFTAG_SOFTWARE, (const char*)soft.toAscii().data());
+    QString libtiffver = QLatin1String(TIFFLIB_VERSION_STR);
+    libtiffver.replace(QLatin1Char('\n'), QLatin1Char(' '));
+    soft.append(QString::fromLatin1(" ( %1 )").arg(libtiffver));
+    TIFFSetField(tif, TIFFTAG_SOFTWARE, (const char*)soft.toLatin1().constData());
 
     // NOTE: All others Exif tags will be written by Exiv2 (<= 0.18)
 
@@ -889,7 +889,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         observer->progressInfo(m_image, 1.0);
     }
 
-    imageSetAttribute("savedformat", "TIFF");
+    imageSetAttribute(QLatin1String("savedformat"), QLatin1String("TIFF"));
 
     // Save metadata
 

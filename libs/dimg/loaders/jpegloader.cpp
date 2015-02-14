@@ -212,7 +212,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Find out if we do the fast-track loading with reduced size. Jpeg specific.
     int scaledLoadingSize = 0;
-    QVariant attribute    = imageGetAttribute("scaledLoadingSize");
+    QVariant attribute    = imageGetAttribute(QLatin1String("scaledLoadingSize"));
 
     if (attribute.isValid())
     {
@@ -621,10 +621,10 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     imageWidth()  = w;
     imageHeight() = h;
     imageData()   = dest;
-    imageSetAttribute("format", "JPG");
-    imageSetAttribute("originalColorModel", colorModel);
-    imageSetAttribute("originalBitDepth", 8);
-    imageSetAttribute("originalSize", originalSize);
+    imageSetAttribute(QLatin1String("format"),             QLatin1String("JPG"));
+    imageSetAttribute(QLatin1String("originalColorModel"), colorModel);
+    imageSetAttribute(QLatin1String("originalBitDepth"),   8);
+    imageSetAttribute(QLatin1String("originalSize"),       originalSize);
 
     return true;
 }
@@ -721,7 +721,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     cinfo.input_components = 3;
     cinfo.in_color_space   = JCS_RGB;
 
-    QVariant qualityAttr   = imageGetAttribute("quality");
+    QVariant qualityAttr   = imageGetAttribute(QLatin1String("quality"));
     int quality            = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     if (quality < 0)
@@ -734,7 +734,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         quality = 100;
     }
 
-    QVariant subSamplingAttr = imageGetAttribute("subsampling");
+    QVariant subSamplingAttr = imageGetAttribute(QLatin1String("subsampling"));
     int subsampling          = subSamplingAttr.isValid() ? subSamplingAttr.toInt() : 1;  // Medium
 
     jpeg_set_defaults(&cinfo);
@@ -899,7 +899,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     jpeg_destroy_compress(&cinfo);
     delete cleanupData;
 
-    imageSetAttribute("savedformat", "JPG");
+    imageSetAttribute(QLatin1String("savedformat"), QLatin1String("JPG"));
 
     saveMetadata(filePath);
 

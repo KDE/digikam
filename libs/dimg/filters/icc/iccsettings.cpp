@@ -26,16 +26,6 @@
 #include "iccsettings.h"
 #include "digikam_config.h"
 
-// X11 includes
-
-#ifdef HAVE_X11
-#   include <climits>
-#   include <X11/Xlib.h>
-#   include <X11/Xatom.h>
-#   include <fixx11h.h>
-#   include <QX11Info>
-#endif /* HAVE_X11 */
-
 // Qt includes
 
 #include <QApplication>
@@ -55,6 +45,16 @@
 #include "digikam_debug.h"
 #include "iccprofile.h"
 #include "icctransform.h"
+
+// X11 includes
+
+// Note must be after all other to prevent broken compilation
+#ifdef HAVE_X11
+#   include <climits>
+#   include <X11/Xlib.h>
+#   include <X11/Xatom.h>
+#   include <QX11Info>
+#endif /* HAVE_X11 */
 
 namespace Digikam
 {

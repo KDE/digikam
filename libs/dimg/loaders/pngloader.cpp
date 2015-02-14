@@ -55,6 +55,13 @@ extern "C"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 
+// libPNG includes
+
+extern "C"
+{
+#include <png.h>
+}
+
 #ifdef Q_CC_MSVC
 void _ReadProc(struct png_struct_def* png_ptr, unsigned char* data, unsigned int size)
 {
@@ -588,7 +595,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                 memcmp(text_ptr[i].key, "Raw profile type APP1", 21) != 0 ||
                 memcmp(text_ptr[i].key, "Raw profile type iptc", 21) != 0)
             {
-                imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
+                imageSetEmbbededText(QLatin1String(text_ptr[i].key), QLatin1String(text_ptr[i].text));
 
 #ifdef USE_IMGLOADERDEBUGMSG
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Reading PNG Embedded text: key=" << text_ptr[i].key
@@ -617,10 +624,10 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     imageWidth()  = width;
     imageHeight() = height;
     imageData()   = data;
-    imageSetAttribute("format", "PNG");
-    imageSetAttribute("originalColorModel", colorModel);
-    imageSetAttribute("originalBitDepth", bit_depth);
-    imageSetAttribute("originalSize", QSize(width, height));
+    imageSetAttribute(QLatin1String("format"),             QLatin1String("PNG"));
+    imageSetAttribute(QLatin1String("originalColorModel"), colorModel);
+    imageSetAttribute(QLatin1String("originalBitDepth"),   bit_depth);
+    imageSetAttribute(QLatin1String("originalSize"),       QSize(width, height));
 
     return true;
 }
@@ -774,7 +781,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     // -------------------------------------------------------------------
     // Quality to convert to compression
 
-    QVariant qualityAttr = imageGetAttribute("quality");
+    QVariant qualityAttr = imageGetAttribute(QLatin1String("quality"));
     quality              = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "DImg quality level: " << quality;
@@ -824,10 +831,10 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
     for (EmbeddedTextMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
-        if (it.key() != QString("Software") && it.key() != QString("Comment"))
+        if (it.key() != QLatin1String("Software") && it.key() != QLatin1String("Comment"))
         {
-            QByteArray key = it.key().toAscii();
-            QByteArray value = it.value().toAscii();
+            QByteArray key = it.key().toLatin1();
+            QByteArray value = it.value().toLatin1();
             png_text text;
             text.key  = key.data();
             text.text = value.data();
@@ -840,12 +847,12 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     }
 
     // Update 'Software' text tag.
-    QString software("digiKam ");
+    QString software = QLatin1String("digiKam ");
     software.append(digiKamVersion());
-    QString libpngver(PNG_HEADER_VERSION_STRING);
-    libpngver.replace('\n', ' ');
-    software.append(QString(" (%1)").arg(libpngver));
-    QByteArray softwareAsAscii = software.toAscii();
+    QString libpngver = QLatin1String(PNG_HEADER_VERSION_STRING);
+    libpngver.replace(QLatin1Char('\n'), QLatin1Char(' '));
+    software.append(QString::fromLatin1(" (%1)").arg(libpngver));
+    QByteArray softwareAsAscii = software.toLatin1();
     png_text text;
     text.key  = (png_charp)("Software");
     text.text = softwareAsAscii.data();
@@ -960,7 +967,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
     delete cleanupData;
 
-    imageSetAttribute("savedformat", "PNG");
+    imageSetAttribute(QLatin1String("savedformat"), QLatin1String("PNG"));
 
     saveMetadata(filePath);
 
