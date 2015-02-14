@@ -34,9 +34,6 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
-//#include <kio/job.h>
-//#include <kio/netaccess.h>
-
 // Local includes
 
 #include "digikam_debug.h"
