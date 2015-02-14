@@ -529,7 +529,7 @@ void PersistentWidgetDelegateOverlay::setPersistent(bool persistent)
         return;
     }
 
-    d->persistent   = persistent;
+    d->persistent = persistent;
 
     if (d->persistent && d->index.isValid())
     {
@@ -594,6 +594,7 @@ void PersistentWidgetDelegateOverlay::slotReset()
 void PersistentWidgetDelegateOverlay::slotViewportEntered()
 {
     d->enteredIndex = QModelIndex();
+
     if (!d->persistent)
     {
         AbstractWidgetDelegateOverlay::slotViewportEntered();
@@ -623,15 +624,16 @@ void PersistentWidgetDelegateOverlay::hide()
 {
     if (!d->restoreFocus && m_widget->isVisible())
     {
-        QWidget* f = QApplication::focusWidget();
-        d->restoreFocus = f && m_widget->isAncestorOf(f);
+        QWidget* const f = QApplication::focusWidget();
+        d->restoreFocus  = f && m_widget->isAncestorOf(f);
     }
+
     AbstractWidgetDelegateOverlay::hide();
 }
 
 void PersistentWidgetDelegateOverlay::showOnIndex(const QModelIndex& index)
 {
-    d->index = index;
+    d->index = QPersistentModelIndex(index);
     restoreFocus();
 }
 

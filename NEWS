@@ -13,4 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 005 ==> 342189 - BQM won't let me remove a tool unless i change it [patch].
 006 ==> 332314 - Lens Auto-Correction seems to prefer makernotes over Exif making fixing manual lenses impossible.
 007 ==> 343755 - Tags from Windows Photo Gallery sometimes ignored.
-008 ==> 
+008 ==> 341241 - digiKam crash during marking photos in Persons/Tags view [patch]
+009 ==> 
