@@ -42,8 +42,10 @@
 namespace Digikam
 {
 
-ImageDelegateOverlay::ImageDelegateOverlay(QObject* parent)
-    : QObject(parent), m_view(0), m_delegate(0)
+ImageDelegateOverlay::ImageDelegateOverlay(QObject* const parent)
+    : QObject(parent),
+      m_view(0),
+      m_delegate(0)
 {
 }
 
@@ -114,7 +116,7 @@ QAbstractItemDelegate* ImageDelegateOverlay::delegate() const
 bool ImageDelegateOverlay::affectsMultiple(const QModelIndex& index) const
 {
     // note how selectionModel->selectedIndexes().contains() can scale badly
-    QItemSelectionModel* selectionModel = view()->selectionModel();
+    QItemSelectionModel* const selectionModel = view()->selectionModel();
 
     if (!selectionModel->hasSelection())
     {
@@ -162,10 +164,12 @@ int ImageDelegateOverlay::numberOfAffectedIndexes(const QModelIndex& index) cons
 
     // scales better than selectedIndexes().count()
     int count = 0;
+
     foreach(const QItemSelectionRange& range, view()->selectionModel()->selection())
     {
         count += range.height();
     }
+
     return count;
 }
 
@@ -405,7 +409,7 @@ bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
 
 // ------------------------------------------------------------------------------------------
 
-HoverButtonDelegateOverlay::HoverButtonDelegateOverlay(QObject* parent)
+HoverButtonDelegateOverlay::HoverButtonDelegateOverlay(QObject* const parent)
     : AbstractWidgetDelegateOverlay(parent)
 {
 }
@@ -462,11 +466,11 @@ void HoverButtonDelegateOverlay::slotEntered(const QModelIndex& index)
 
 // -----------------------------------------------------------------------------------
 
-class PersistentWidgetDelegateOverlay::PersistentWidgetDelegateOverlayPriv
+class PersistentWidgetDelegateOverlay::Private
 {
 public:
 
-    PersistentWidgetDelegateOverlayPriv()
+    Private()
       : persistent(false),
         restoreFocus(false)
     {
@@ -479,9 +483,9 @@ public:
     QPersistentModelIndex enteredIndex;
 };
 
-PersistentWidgetDelegateOverlay::PersistentWidgetDelegateOverlay(QObject* parent)
+PersistentWidgetDelegateOverlay::PersistentWidgetDelegateOverlay(QObject* const parent)
     : AbstractWidgetDelegateOverlay(parent),
-      d(new PersistentWidgetDelegateOverlayPriv)
+      d(new Private)
 {
 }
 
@@ -529,7 +533,7 @@ void PersistentWidgetDelegateOverlay::setPersistent(bool persistent)
         return;
     }
 
-    d->persistent   = persistent;
+    d->persistent = persistent;
 
     if (d->persistent && d->index.isValid())
     {
@@ -594,6 +598,7 @@ void PersistentWidgetDelegateOverlay::slotReset()
 void PersistentWidgetDelegateOverlay::slotViewportEntered()
 {
     d->enteredIndex = QModelIndex();
+
     if (!d->persistent)
     {
         AbstractWidgetDelegateOverlay::slotViewportEntered();
@@ -623,15 +628,16 @@ void PersistentWidgetDelegateOverlay::hide()
 {
     if (!d->restoreFocus && m_widget->isVisible())
     {
-        QWidget* f = QApplication::focusWidget();
-        d->restoreFocus = f && m_widget->isAncestorOf(f);
+        QWidget* const f = QApplication::focusWidget();
+        d->restoreFocus  = f && m_widget->isAncestorOf(f);
     }
+
     AbstractWidgetDelegateOverlay::hide();
 }
 
 void PersistentWidgetDelegateOverlay::showOnIndex(const QModelIndex& index)
 {
-    d->index = index;
+    d->index = QPersistentModelIndex(index);
     restoreFocus();
 }
 
@@ -697,7 +703,7 @@ void ImageDelegateOverlayContainer::removeOverlay(ImageDelegateOverlay* overlay)
 
 void ImageDelegateOverlayContainer::setAllOverlaysActive(bool active)
 {
-    foreach(ImageDelegateOverlay* overlay, m_overlays)
+    foreach(ImageDelegateOverlay* const overlay, m_overlays)
     {
         overlay->setActive(active);
     }
@@ -705,7 +711,7 @@ void ImageDelegateOverlayContainer::setAllOverlaysActive(bool active)
 
 void ImageDelegateOverlayContainer::setViewOnAllOverlays(QAbstractItemView* view)
 {
-    foreach(ImageDelegateOverlay* overlay, m_overlays)
+    foreach(ImageDelegateOverlay* const overlay, m_overlays)
     {
         overlay->setView(view);
     }
@@ -713,18 +719,20 @@ void ImageDelegateOverlayContainer::setViewOnAllOverlays(QAbstractItemView* view
 
 void ImageDelegateOverlayContainer::removeAllOverlays()
 {
-    foreach(ImageDelegateOverlay* overlay, m_overlays)
+    foreach(ImageDelegateOverlay* const overlay, m_overlays)
     {
         overlay->setActive(false);
         overlay->setDelegate(0);
         overlay->setView(0);
     }
+
     m_overlays.clear();
 }
 
 void ImageDelegateOverlayContainer::overlayDestroyed(QObject* o)
 {
-    ImageDelegateOverlay* overlay = qobject_cast<ImageDelegateOverlay*>(o);
+    ImageDelegateOverlay* const overlay = qobject_cast<ImageDelegateOverlay*>(o);
+
     if (overlay)
     {
         removeOverlay(overlay);
@@ -733,7 +741,7 @@ void ImageDelegateOverlayContainer::overlayDestroyed(QObject* o)
 
 void ImageDelegateOverlayContainer::mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index)
 {
-    foreach(ImageDelegateOverlay* overlay, m_overlays)
+    foreach(ImageDelegateOverlay* const overlay, m_overlays)
     {
         overlay->mouseMoved(e, visualRect, index);
     }
@@ -742,7 +750,7 @@ void ImageDelegateOverlayContainer::mouseMoved(QMouseEvent* e, const QRect& visu
 void ImageDelegateOverlayContainer::drawOverlays(QPainter* p, const QStyleOptionViewItem& option,
                                                  const QModelIndex& index) const
 {
-    foreach(ImageDelegateOverlay* overlay, m_overlays)
+    foreach(ImageDelegateOverlay* const overlay, m_overlays)
     {
         overlay->paint(p, option, index);
     }

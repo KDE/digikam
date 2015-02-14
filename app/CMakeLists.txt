@@ -68,9 +68,11 @@ add_dependencies(digikamcore digikam-gitversion)
 target_link_libraries(digikamcore
                       Qt5::Sql
                       Qt5::Concurrent
+                      Qt5::PrintSupport
 
                       KF5::KIOCore
                       KF5::KIOWidgets
+                      KF5::Notifications
                       KF5::NotifyConfig
 
                       KF5::KDELibs4Support

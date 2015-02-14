@@ -119,6 +119,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Gui
              Sql
              Xml
+             PrintSupport
              Test
              WebKitWidgets
 )
@@ -966,7 +967,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dgradientslider.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/fullscreensettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/modelcompletion.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp
@@ -975,6 +975,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingpixmap.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
        )
 
     set(libnotificationmanager_SRCS
@@ -1145,10 +1146,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dbusydlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/filesaveoptionsdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/infodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
        )
 
     set(libdeletedialog_SRCS
