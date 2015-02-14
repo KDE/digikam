@@ -49,7 +49,7 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:AutoExpoFilter";
+        return QLatin1String("digikam:AutoExpoFilter");
     }
 
     static QList<int>       SupportedVersions()
@@ -64,7 +64,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Auto Exposure");
+        return i18n(I18N_NOOP("Auto Exposure"));
     }
 
     virtual QString         filterIdentifier() const

@@ -52,12 +52,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:UnsharpMaskFilter";
+        return QLatin1String("digikam:UnsharpMaskFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Unsharp Mask Tool");
+        return i18n(I18N_NOOP("Unsharp Mask Tool"));
     }
 
     static QList<int>       SupportedVersions()

@@ -70,7 +70,7 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
 #ifndef Q_OS_WIN
     {
         // Try urandom for UNIX platforms.
-        QFile urandom("/dev/urandom");
+        QFile urandom(QLatin1String("/dev/urandom"));
 
         if (urandom.exists() && urandom.open(QIODevice::ReadOnly))
         {
@@ -91,7 +91,7 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
 
         while (size() < s)
         {
-            append(QByteArray::fromHex(QUuid::createUuid().toString().remove('{').remove('}').remove('-').toLatin1()));
+            append(QByteArray::fromHex(QUuid::createUuid().toString().remove(QLatin1Char('{')).remove(QLatin1Char('}')).remove(QLatin1Char('-')).toLatin1()));
         }
 
         resize(s);

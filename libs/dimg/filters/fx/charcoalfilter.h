@@ -45,12 +45,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:CharcoalFilter";
+        return QLatin1String("digikam:CharcoalFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Charcoal Effect");
+        return i18n(I18N_NOOP("Charcoal Effect"));
     }
 
     static QList<int>       SupportedVersions()

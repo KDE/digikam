@@ -50,12 +50,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:RefocusFilter";
+        return QLatin1String("digikam:RefocusFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Refocus");
+        return i18n(I18N_NOOP("Refocus"));
     }
 
     static QList<int>       SupportedVersions()

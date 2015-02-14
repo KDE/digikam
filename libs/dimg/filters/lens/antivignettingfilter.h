@@ -88,12 +88,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:AntiVignettingFilter";
+        return QLatin1String("digikam:AntiVignettingFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Anti-Vignetting Tool");
+        return i18n(I18N_NOOP("Anti-Vignetting Tool"));
     }
 
     static QList<int>       SupportedVersions()

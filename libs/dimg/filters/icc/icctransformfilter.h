@@ -44,12 +44,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:IccTransformFilter";
+        return QLatin1String("digikam:IccTransformFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Color Profile Conversion");
+        return i18n(I18N_NOOP("Color Profile Conversion"));
     }
 
     static QList<int>       SupportedVersions()

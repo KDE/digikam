@@ -156,12 +156,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:BWSepiaFilter";
+        return QLatin1String("digikam:BWSepiaFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Black & White / Sepia Filter");
+        return i18n(I18N_NOOP("Black & White / Sepia Filter"));
     }
 
     static QList<int>       SupportedVersions()
@@ -195,8 +195,8 @@ private:
 
 private:
 
-    class BWSepiaFilterPriv;
-    BWSepiaFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -72,12 +72,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:InfraredFilter";
+        return QLatin1String("digikam:InfraredFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Infrared Filter");
+        return i18n(I18N_NOOP("Infrared Filter"));
     }
 
     static QList<int>       SupportedVersions()

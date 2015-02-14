@@ -47,7 +47,7 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:NormalizeFilter";
+        return QLatin1String("digikam:NormalizeFilter");
     }
 
     static QList<int>       SupportedVersions()
@@ -62,7 +62,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Auto Normalize");
+        return i18n(I18N_NOOP("Auto Normalize"));
     }
 
     virtual QString         filterIdentifier() const

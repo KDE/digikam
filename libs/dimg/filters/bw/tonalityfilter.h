@@ -72,12 +72,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:TonalityFilter";
+        return QLatin1String("digikam:TonalityFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Tonality Filter");
+        return i18n(I18N_NOOP("Tonality Filter"));
     }
 
     static QList<int>       SupportedVersions()

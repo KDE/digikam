@@ -42,8 +42,6 @@
 namespace Digikam
 {
 
-class BorderFilterPriv;
-
 class DIGIKAM_EXPORT BorderContainer
 {
 
@@ -136,11 +134,11 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:BorderFilter";
+        return QLatin1String("digikam:BorderFilter");
     }
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Border Tool");
+        return i18n(I18N_NOOP("Border Tool"));
     }
     static QList<int>       SupportedVersions()
     {
@@ -182,7 +180,8 @@ private:
 
 private:
 
-    BorderFilterPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

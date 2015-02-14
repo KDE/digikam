@@ -82,12 +82,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:LevelsFilter";
+        return QLatin1String("digikam:LevelsFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Levels Adjust Tool");
+        return i18n(I18N_NOOP("Levels Adjust Tool"));
     }
 
     static QList<int>       SupportedVersions()

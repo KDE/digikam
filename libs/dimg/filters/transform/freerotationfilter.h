@@ -99,12 +99,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:FreeRotationFilter";
+        return QLatin1String("digikam:FreeRotationFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Free Rotation");
+        return i18n(I18N_NOOP("Free Rotation"));
     }
 
     static QList<int>       SupportedVersions()

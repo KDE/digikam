@@ -50,12 +50,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:RainDropFilter";
+        return QLatin1String("digikam:RainDropFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Rain Drops Effect");
+        return i18n(I18N_NOOP("Rain Drops Effect"));
     }
 
     static QList<int>       SupportedVersions()

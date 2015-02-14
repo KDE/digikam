@@ -39,11 +39,11 @@
 namespace Digikam
 {
 
-class BWSepiaFilter::BWSepiaFilterPriv
+class BWSepiaFilter::Private
 {
 public:
 
-    BWSepiaFilterPriv() :
+    Private() :
         redAttn(0.0),
         greenAttn(0.0),
         blueAttn(0.0),
@@ -69,14 +69,14 @@ public:
 
 BWSepiaFilter::BWSepiaFilter(QObject* parent)
     : DImgThreadedFilter(parent),
-      d(new BWSepiaFilterPriv)
+      d(new Private)
 {
     initFilter();
 }
 
 BWSepiaFilter::BWSepiaFilter(DImg* orgImage, QObject* parent, const BWSepiaContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "BWSepiaFilter"),
-      d(new BWSepiaFilterPriv)
+      d(new Private)
 {
     d->settings = settings;
     initFilter();

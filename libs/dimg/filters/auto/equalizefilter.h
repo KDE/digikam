@@ -47,7 +47,7 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:EqualizeFilter";
+        return QLatin1String("digikam:EqualizeFilter");
     }
 
     static QList<int>       SupportedVersions()
@@ -62,7 +62,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Auto Equalize");
+        return i18n(I18N_NOOP("Auto Equalize"));
     }
 
     virtual QString         filterIdentifier() const

@@ -46,12 +46,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:OilPaintFilter";
+        return QLatin1String("digikam:OilPaintFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Oil Painter Effect");
+        return i18n(I18N_NOOP("Oil Painter Effect"));
     }
 
     static QList<int>       SupportedVersions()

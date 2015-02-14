@@ -52,12 +52,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:InvertFilter";
+        return QLatin1String("digikam:InvertFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Invert Effect");
+        return i18n(I18N_NOOP("Invert Effect"));
     }
 
     static QList<int>       SupportedVersions()

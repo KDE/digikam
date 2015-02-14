@@ -73,12 +73,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:HSLFilter";
+        return QLatin1String("digikam:HSLFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Hue / Saturation / Lightness Filter");
+        return i18n(I18N_NOOP("Hue / Saturation / Lightness Filter"));
     }
 
     static QList<int>       SupportedVersions()

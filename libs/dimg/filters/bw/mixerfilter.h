@@ -96,12 +96,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:MixerFilter";
+        return QLatin1String("digikam:MixerFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Channel Mixer Tool");
+        return i18n(I18N_NOOP("Channel Mixer Tool"));
     }
 
     static QList<int>       SupportedVersions()

@@ -47,7 +47,7 @@ TextureFilter::TextureFilter(QObject* const parent)
 }
 
 TextureFilter::TextureFilter(DImg* const orgImage, QObject* const parent, int blendGain, const QString& texturePath)
-    : DImgThreadedFilter(orgImage, parent, "Texture")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("Texture"))
 {
     m_blendGain   = blendGain;
     m_texturePath = texturePath;
@@ -217,16 +217,16 @@ FilterAction TextureFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("blendGain",   m_blendGain);
-    action.addParameter("texturePath", m_texturePath);
+    action.addParameter(QLatin1String("blendGain"),   m_blendGain);
+    action.addParameter(QLatin1String("texturePath"), m_texturePath);
 
     return action;
 }
 
 void TextureFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_blendGain   = action.parameter("blendGain").toInt();
-    m_texturePath = action.parameter("texturePath").toString();
+    m_blendGain   = action.parameter(QLatin1String("blendGain")).toInt();
+    m_texturePath = action.parameter(QLatin1String("texturePath")).toString();
 }
 
 }  // namespace Digikam

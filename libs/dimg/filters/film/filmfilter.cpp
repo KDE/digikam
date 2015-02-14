@@ -293,37 +293,37 @@ QMap<int, QString> FilmContainer::profileMapInitializer()
 {
     QMap<int, QString> profileMap;
 
-    profileMap[CNNeutral]                       = QString("Neutral");
-    profileMap[CNKodakGold100]                  = QString("Kodak Gold 100");
-    profileMap[CNKodakGold200]                  = QString("Kodak Gold 200");
-    profileMap[CNKodakProfessionalNewPortra160] = QString("Kodak Professional New Portra 160");
-    profileMap[CNKodakProfessionalNewPortra400] = QString("Kodak Professional New Portra 400");
-    profileMap[CNKodakEktar100]                 = QString("Kodak Ektar 100");
-    profileMap[CNKodakFarbwelt100]              = QString("Kodak Farbwelt 100");
-    profileMap[CNKodakFarbwelt200]              = QString("Kodak Farbwelt 200");
-    profileMap[CNKodakFarbwelt400]              = QString("Kodak Farbwelt 400");
-    profileMap[CNKodakProfessionalPortra160NC]  = QString("Kodak Professional Portra 160NC");
-    profileMap[CNKodakProfessionalPortra160VC]  = QString("Kodak Professional Portra 160VC");
-    profileMap[CNKodakProfessionalPortra400NC]  = QString("Kodak Professional Portra 400NC");
-    profileMap[CNKodakProfessionalPortra400VC]  = QString("Kodak Professional Portra 400VC");
-    profileMap[CNKodakProfessionalPortra800Box] = QString("Kodak Professional Portra 800 (Box Speed");
-    profileMap[CNKodakProfessionalPortra800P1]  = QString("Kodak Professional Portra 800 (Push 1 stop");
-    profileMap[CNKodakProfessionalPortra800P2]  = QString("Kodak Professional Portra 800 (Push 2 stop");
-    profileMap[CNKodakRoyalGold400]             = QString("Kodak Royal Gold 400");
-    profileMap[CNAgfaphotoVistaPlus200]         = QString("Agfaphoto Vista Plus 200");
-    profileMap[CNAgfaphotoVistaPlus400]         = QString("Agfaphoto Vista Plus 400");
-    profileMap[CNFujicolorPro160S]              = QString("Fujicolor Pro 160S");
-    profileMap[CNFujicolorPro160C]              = QString("Fujicolor Pro 160C");
-    profileMap[CNFujicolorNPL160]               = QString("Fujicolor NPL 160");
-    profileMap[CNFujicolorPro400H]              = QString("Fujicolor Pro 400H");
-    profileMap[CNFujicolorPro800Z]              = QString("Fujicolor Pro 800Z");
-    profileMap[CNFujicolorSuperiaReala]         = QString("Fujicolor Superia Reala");
-    profileMap[CNFujicolorSuperia100]           = QString("Fujicolor Superia 100");
-    profileMap[CNFujicolorSuperia200]           = QString("Fujicolor Superia 200");
-    profileMap[CNFujicolorSuperiaXtra400]       = QString("Fujicolor Superia X-Tra 400");
-    profileMap[CNFujicolorSuperiaXtra800]       = QString("Fujicolor Superia X-Tra 800");
-    profileMap[CNFujicolorTrueDefinition400]    = QString("Fujicolor Superia True Definition 400");
-    profileMap[CNFujicolorSuperia1600]          = QString("Fujicolor Superia 1600");
+    profileMap[CNNeutral]                       = QLatin1String("Neutral");
+    profileMap[CNKodakGold100]                  = QLatin1String("Kodak Gold 100");
+    profileMap[CNKodakGold200]                  = QLatin1String("Kodak Gold 200");
+    profileMap[CNKodakProfessionalNewPortra160] = QLatin1String("Kodak Professional New Portra 160");
+    profileMap[CNKodakProfessionalNewPortra400] = QLatin1String("Kodak Professional New Portra 400");
+    profileMap[CNKodakEktar100]                 = QLatin1String("Kodak Ektar 100");
+    profileMap[CNKodakFarbwelt100]              = QLatin1String("Kodak Farbwelt 100");
+    profileMap[CNKodakFarbwelt200]              = QLatin1String("Kodak Farbwelt 200");
+    profileMap[CNKodakFarbwelt400]              = QLatin1String("Kodak Farbwelt 400");
+    profileMap[CNKodakProfessionalPortra160NC]  = QLatin1String("Kodak Professional Portra 160NC");
+    profileMap[CNKodakProfessionalPortra160VC]  = QLatin1String("Kodak Professional Portra 160VC");
+    profileMap[CNKodakProfessionalPortra400NC]  = QLatin1String("Kodak Professional Portra 400NC");
+    profileMap[CNKodakProfessionalPortra400VC]  = QLatin1String("Kodak Professional Portra 400VC");
+    profileMap[CNKodakProfessionalPortra800Box] = QLatin1String("Kodak Professional Portra 800 (Box Speed");
+    profileMap[CNKodakProfessionalPortra800P1]  = QLatin1String("Kodak Professional Portra 800 (Push 1 stop");
+    profileMap[CNKodakProfessionalPortra800P2]  = QLatin1String("Kodak Professional Portra 800 (Push 2 stop");
+    profileMap[CNKodakRoyalGold400]             = QLatin1String("Kodak Royal Gold 400");
+    profileMap[CNAgfaphotoVistaPlus200]         = QLatin1String("Agfaphoto Vista Plus 200");
+    profileMap[CNAgfaphotoVistaPlus400]         = QLatin1String("Agfaphoto Vista Plus 400");
+    profileMap[CNFujicolorPro160S]              = QLatin1String("Fujicolor Pro 160S");
+    profileMap[CNFujicolorPro160C]              = QLatin1String("Fujicolor Pro 160C");
+    profileMap[CNFujicolorNPL160]               = QLatin1String("Fujicolor NPL 160");
+    profileMap[CNFujicolorPro400H]              = QLatin1String("Fujicolor Pro 400H");
+    profileMap[CNFujicolorPro800Z]              = QLatin1String("Fujicolor Pro 800Z");
+    profileMap[CNFujicolorSuperiaReala]         = QLatin1String("Fujicolor Superia Reala");
+    profileMap[CNFujicolorSuperia100]           = QLatin1String("Fujicolor Superia 100");
+    profileMap[CNFujicolorSuperia200]           = QLatin1String("Fujicolor Superia 200");
+    profileMap[CNFujicolorSuperiaXtra400]       = QLatin1String("Fujicolor Superia X-Tra 400");
+    profileMap[CNFujicolorSuperiaXtra800]       = QLatin1String("Fujicolor Superia X-Tra 800");
+    profileMap[CNFujicolorTrueDefinition400]    = QLatin1String("Fujicolor Superia True Definition 400");
+    profileMap[CNFujicolorSuperia1600]          = QLatin1String("Fujicolor Superia 1600");
 
     return profileMap;
 }
@@ -333,7 +333,7 @@ const QMap<int, QString> FilmContainer::profileMap = FilmContainer::profileMapIn
 // ------------------------------------------------------------------
 
 FilmFilter::FilmFilter(QObject* const parent)
-    : DImgThreadedFilter(parent, "FilmFilter"),
+    : DImgThreadedFilter(parent, QLatin1String("FilmFilter")),
       d(new Private())
 {
     d->film = FilmContainer();
@@ -341,7 +341,7 @@ FilmFilter::FilmFilter(QObject* const parent)
 }
 
 FilmFilter::FilmFilter(DImg* const orgImage, QObject* const parent, const FilmContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "FilmFilter"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("FilmFilter")),
       d(new Private())
 {
     d->film = settings;
@@ -387,33 +387,33 @@ FilterAction FilmFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter(QString("CNType"),               d->film.cnType());
-    action.addParameter(QString("ProfileName"),          FilmContainer::profileMap[d->film.cnType()]);
-    action.addParameter(QString("Exposure"),             d->film.exposure());
-    action.addParameter(QString("Gamma"),                d->film.gamma());
-    action.addParameter(QString("ApplyColorBalance"),    d->film.applyBalance());
-    action.addParameter(QString("WhitePointRed"),        d->film.whitePoint().red());
-    action.addParameter(QString("WhitePointGreen"),      d->film.whitePoint().green());
-    action.addParameter(QString("WhitePointBlue"),       d->film.whitePoint().blue());
-    action.addParameter(QString("WhitePointAlpha"),      d->film.whitePoint().alpha());
-    action.addParameter(QString("WhitePointSixteenBit"), d->film.whitePoint().sixteenBit());
+    action.addParameter(QLatin1String("CNType"),               d->film.cnType());
+    action.addParameter(QLatin1String("ProfileName"),          FilmContainer::profileMap[d->film.cnType()]);
+    action.addParameter(QLatin1String("Exposure"),             d->film.exposure());
+    action.addParameter(QLatin1String("Gamma"),                d->film.gamma());
+    action.addParameter(QLatin1String("ApplyColorBalance"),    d->film.applyBalance());
+    action.addParameter(QLatin1String("WhitePointRed"),        d->film.whitePoint().red());
+    action.addParameter(QLatin1String("WhitePointGreen"),      d->film.whitePoint().green());
+    action.addParameter(QLatin1String("WhitePointBlue"),       d->film.whitePoint().blue());
+    action.addParameter(QLatin1String("WhitePointAlpha"),      d->film.whitePoint().alpha());
+    action.addParameter(QLatin1String("WhitePointSixteenBit"), d->film.whitePoint().sixteenBit());
 
     return action;
 }
 
 void FilmFilter::readParameters(const FilterAction& action)
 {
-    double red   = action.parameter(QString("WhitePointRed")).toDouble();
-    double green = action.parameter(QString("WhitePointGreen")).toDouble();
-    double blue  = action.parameter(QString("WhitePointBlue")).toDouble();
-    double alpha = action.parameter(QString("WhitePointAlpha")).toDouble();
-    bool sb      = action.parameter(QString("WhitePointSixteenBit")).toBool();
-    bool balance = action.parameter(QString("ApplyColorBalance")).toBool();
+    double red   = action.parameter(QLatin1String("WhitePointRed")).toDouble();
+    double green = action.parameter(QLatin1String("WhitePointGreen")).toDouble();
+    double blue  = action.parameter(QLatin1String("WhitePointBlue")).toDouble();
+    double alpha = action.parameter(QLatin1String("WhitePointAlpha")).toDouble();
+    bool sb      = action.parameter(QLatin1String("WhitePointSixteenBit")).toBool();
+    bool balance = action.parameter(QLatin1String("ApplyColorBalance")).toBool();
 
     d->film.setWhitePoint(DColor(red, green, blue, alpha, sb));
-    d->film.setExposure(action.parameter(QString("Exposure")).toDouble());
-    d->film.setGamma(action.parameter(QString("Gamma")).toDouble());
-    d->film.setCNType((FilmContainer::CNFilmProfile)(action.parameter(QString("CNType")).toInt()));
+    d->film.setExposure(action.parameter(QLatin1String("Exposure")).toDouble());
+    d->film.setGamma(action.parameter(QLatin1String("Gamma")).toDouble());
+    d->film.setCNType((FilmContainer::CNFilmProfile)(action.parameter(QLatin1String("CNType")).toInt()));
     d->film.setApplyBalance(balance);
 }
 

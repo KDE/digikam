@@ -51,12 +51,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:BlurFilter";
+        return QLatin1String("digikam:BlurFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Blur Filter");
+        return i18n(I18N_NOOP("Blur Filter"));
     }
 
     static QList<int>       SupportedVersions()

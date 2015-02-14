@@ -86,12 +86,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:LensFunFilter";
+        return QLatin1String("digikam:LensFunFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Lens Auto-Correction Tool");
+        return i18n(I18N_NOOP("Lens Auto-Correction Tool"));
     }
 
     static QList<int>       SupportedVersions()

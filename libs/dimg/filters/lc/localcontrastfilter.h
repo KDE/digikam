@@ -54,12 +54,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:LocalContrastFilter";
+        return QLatin1String("digikam:LocalContrastFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Local Contrast Filter");
+        return i18n(I18N_NOOP("Local Contrast Filter"));
     }
 
     static QList<int>       SupportedVersions()

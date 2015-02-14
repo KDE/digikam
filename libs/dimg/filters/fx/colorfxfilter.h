@@ -88,12 +88,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:ColorFXFilter";
+        return QLatin1String("digikam:ColorFXFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Color FX Filter");
+        return i18n(I18N_NOOP("Color FX Filter"));
     }
 
     static QList<int>       SupportedVersions()

@@ -51,12 +51,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:TextureFilter";
+        return QLatin1String("digikam:TextureFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Texture Filter");
+        return i18n(I18N_NOOP("Texture Filter"));
     }
 
     static QList<int>       SupportedVersions()

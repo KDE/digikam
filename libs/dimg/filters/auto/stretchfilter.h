@@ -46,7 +46,7 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:StretchFilter";
+        return QLatin1String("digikam:StretchFilter");
     }
 
     static QList<int>       SupportedVersions()
@@ -61,7 +61,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Stretch Contrast");
+        return i18n(I18N_NOOP("Stretch Contrast"));
     }
 
     virtual QString         filterIdentifier() const

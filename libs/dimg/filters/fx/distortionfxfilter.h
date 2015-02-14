@@ -51,12 +51,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:DistortionFXFilter";
+        return QLatin1String("digikam:DistortionFXFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Distortion Effect");
+        return i18n(I18N_NOOP("Distortion Effect"));
     }
 
     static QList<int>       SupportedVersions()

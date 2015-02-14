@@ -47,7 +47,7 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:AutoLevelsFilter";
+        return QLatin1String("digikam:AutoLevelsFilter");
     }
 
     static QList<int>       SupportedVersions()
@@ -62,7 +62,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Auto Levels");
+        return i18n(I18N_NOOP("Auto Levels"));
     }
 
     virtual QString         filterIdentifier() const

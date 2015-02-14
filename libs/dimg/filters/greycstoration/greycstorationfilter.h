@@ -189,12 +189,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:GreycstorationFilter";
+        return QLatin1String("digikam:GreycstorationFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Greycstoration Filter");
+        return i18n(I18N_NOOP("Greycstoration Filter"));
     }
 
     static QList<int>       SupportedVersions()

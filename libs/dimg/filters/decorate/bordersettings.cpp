@@ -108,17 +108,17 @@ public:
     RIntNumInput*        borderPercent;
     RIntNumInput*        borderWidth;
 };
-const QString Private::configBorderTypeEntry("Border Type");
-const QString Private::configBorderPercentEntry("Border Percent");
-const QString Private::configBorderWidthEntry("Border Width");
-const QString Private::configPreserveAspectRatioEntry("Preserve Aspect Ratio");
-const QString Private::configSolidColorEntry("Solid Color");
-const QString Private::configNiepceBorderColorEntry("Niepce Border Color");
-const QString Private::configNiepceLineColorEntry("Niepce Line Color");
-const QString Private::configBevelUpperLeftColorEntry("Bevel Upper Left Color");
-const QString Private::configBevelLowerRightColorEntry("Bevel Lower Right Color");
-const QString Private::configDecorativeFirstColorEntry("Decorative First Color");
-const QString Private::configDecorativeSecondColorEntry("Decorative Second Color");
+const QString Private::configBorderTypeEntry(QLatin1String("Border Type"));
+const QString Private::configBorderPercentEntry(QLatin1String("Border Percent"));
+const QString Private::configBorderWidthEntry(QLatin1String("Border Width"));
+const QString Private::configPreserveAspectRatioEntry(QLatin1String("Preserve Aspect Ratio"));
+const QString Private::configSolidColorEntry(QLatin1String("Solid Color"));
+const QString Private::configNiepceBorderColorEntry(QLatin1String("Niepce Border Color"));
+const QString Private::configNiepceLineColorEntry(QLatin1String("Niepce Line Color"));
+const QString Private::configBevelUpperLeftColorEntry(QLatin1String("Bevel Upper Left Color"));
+const QString Private::configBevelLowerRightColorEntry(QLatin1String("Bevel Lower Right Color"));
+const QString Private::configDecorativeFirstColorEntry(QLatin1String("Decorative First Color"));
+const QString Private::configDecorativeSecondColorEntry(QLatin1String("Decorative Second Color"));
 
 // --------------------------------------------------------
 
@@ -132,7 +132,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->borderType  = new RComboBox();
     d->borderType->addItem(i18nc("solid border type", "Solid"));
     // NOTE: Niepce is a real name. This is the first guy in the world to have built a camera.
-    d->borderType->addItem("Niepce");
+    d->borderType->addItem(QLatin1String("Niepce"));
     d->borderType->addItem(i18nc("beveled border type", "Beveled"));
     d->borderType->addItem(i18n("Decorative Pine"));
     d->borderType->addItem(i18n("Decorative Wood"));
@@ -473,67 +473,67 @@ QString BorderSettings::getBorderPath(int border)
     switch (border)
     {
         case BorderContainer::PineBorder:
-            pattern = "pine-pattern";
+            pattern = QLatin1String("pine-pattern");
             break;
 
         case BorderContainer::WoodBorder:
-            pattern = "wood-pattern";
+            pattern = QLatin1String("wood-pattern");
             break;
 
         case BorderContainer::PaperBorder:
-            pattern = "paper-pattern";
+            pattern = QLatin1String("paper-pattern");
             break;
 
         case BorderContainer::ParqueBorder:
-            pattern = "parque-pattern";
+            pattern = QLatin1String("parque-pattern");
             break;
 
         case BorderContainer::IceBorder:
-            pattern = "ice-pattern";
+            pattern = QLatin1String("ice-pattern");
             break;
 
         case BorderContainer::LeafBorder:
-            pattern = "leaf-pattern";
+            pattern = QLatin1String("leaf-pattern");
             break;
 
         case BorderContainer::MarbleBorder:
-            pattern = "marble-pattern";
+            pattern = QLatin1String("marble-pattern");
             break;
 
         case BorderContainer::RainBorder:
-            pattern = "rain-pattern";
+            pattern = QLatin1String("rain-pattern");
             break;
 
         case BorderContainer::CratersBorder:
-            pattern = "craters-pattern";
+            pattern = QLatin1String("craters-pattern");
             break;
 
         case BorderContainer::DriedBorder:
-            pattern = "dried-pattern";
+            pattern = QLatin1String("dried-pattern");
             break;
 
         case BorderContainer::PinkBorder:
-            pattern = "pink-pattern";
+            pattern = QLatin1String("pink-pattern");
             break;
 
         case BorderContainer::StoneBorder:
-            pattern = "stone-pattern";
+            pattern = QLatin1String("stone-pattern");
             break;
 
         case BorderContainer::ChalkBorder:
-            pattern = "chalk-pattern";
+            pattern = QLatin1String("chalk-pattern");
             break;
 
         case BorderContainer::GraniteBorder:
-            pattern = "granit-pattern";
+            pattern = QLatin1String("granit-pattern");
             break;
 
         case BorderContainer::RockBorder:
-            pattern = "rock-pattern";
+            pattern = QLatin1String("rock-pattern");
             break;
 
         case BorderContainer::WallBorder:
-            pattern = "wall-pattern";
+            pattern = QLatin1String("wall-pattern");
             break;
 
         default:
@@ -541,7 +541,7 @@ QString BorderSettings::getBorderPath(int border)
             break;
     }
 
-    return (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("digikam/data/") + pattern + QString(".png")));
+    return (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/") + pattern + QLatin1String(".png")));
 }
 
 void BorderSettings::toggleBorderSlider(bool b)

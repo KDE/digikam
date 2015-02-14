@@ -140,12 +140,12 @@ public:
 
     static QString FilterIdentifier()
     {
-        return "digikam:FilmFilter";
+        return QLatin1String("digikam:FilmFilter");
     }
 
     static QString DisplayableName()
     {
-        return I18N_NOOP("Color Negative Inverter");
+        return i18n(I18N_NOOP("Color Negative Inverter"));
     }
 
     static QList<int> SupportedVersions()

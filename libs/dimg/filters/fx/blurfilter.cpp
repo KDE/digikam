@@ -62,7 +62,7 @@ BlurFilter::BlurFilter(QObject* const parent)
 }
 
 BlurFilter::BlurFilter(DImg* const orgImage, QObject* const parent, int radius)
-    : DImgThreadedFilter(orgImage, parent, "GaussianBlur"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("GaussianBlur")),
       d(new Private)
 {
     d->radius = radius;
@@ -73,7 +73,7 @@ BlurFilter::BlurFilter(DImgThreadedFilter* const parentFilter,
                        const DImg& orgImage, const DImg& destImage,
                        int progressBegin, int progressEnd, int radius)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                         parentFilter->filterName() + ": GaussianBlur"),
+                         parentFilter->filterName() + QLatin1String(": GaussianBlur")),
       d(new Private)
 {
     d->radius = radius;
@@ -250,14 +250,14 @@ FilterAction BlurFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("radius", d->radius);
+    action.addParameter(QLatin1String("radius"), d->radius);
 
     return action;
 }
 
 void BlurFilter::readParameters(const FilterAction& action)
 {
-    d->radius = action.parameter("radius").toInt();
+    d->radius = action.parameter(QLatin1String("radius")).toInt();
 }
 
 }  // namespace Digikam

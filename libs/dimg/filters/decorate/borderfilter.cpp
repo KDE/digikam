@@ -9,7 +9,7 @@
  * Copyright 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,11 +45,11 @@
 namespace Digikam
 {
 
-class BorderFilterPriv
+class BorderFilter::Private
 {
 public:
 
-    BorderFilterPriv() :
+    Private() :
         borderMainWidth(0),
         border2ndWidth(0),
         orgRatio(0.0f)
@@ -74,7 +74,7 @@ public:
     void setup(const DImg& m_orgImage);
 };
 
-void BorderFilterPriv::setup(const DImg& m_orgImage)
+void BorderFilter::Private::setup(const DImg& m_orgImage)
 {
     solidColor            = DColor(settings.solidColor,            m_orgImage.sixteenBit());
     niepceBorderColor     = DColor(settings.niepceBorderColor,     m_orgImage.sixteenBit());
@@ -101,14 +101,14 @@ void BorderFilterPriv::setup(const DImg& m_orgImage)
 
 BorderFilter::BorderFilter(QObject* parent)
     : DImgThreadedFilter(parent),
-      d(new BorderFilterPriv)
+      d(new Private)
 {
     initFilter();
 }
 
 BorderFilter::BorderFilter(DImg* image, QObject* parent, const BorderContainer& settings)
-    : DImgThreadedFilter(image, parent, "Border"),
-      d(new BorderFilterPriv)
+    : DImgThreadedFilter(image, parent, QLatin1String("Border")),
+      d(new Private)
 {
     d->settings = settings;
     initFilter();
@@ -481,27 +481,27 @@ static QString colorToString(const QColor& c)
 {
     if (c.alpha() != 255)
     {
-        return QString("rgb(%1,%2,%3)").arg(c.red()).arg(c.green()).arg(c.blue());
+        return QString::fromLatin1("rgb(%1,%2,%3)").arg(c.red()).arg(c.green()).arg(c.blue());
     }
     else
     {
-        return QString("rgba(%1,%2,%3,%4)").arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
+        return QString::fromLatin1("rgba(%1,%2,%3,%4)").arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
     }
 }
 
 static QColor stringToColor(const QString& s)
 {
-    QRegExp regexp("(rgb|rgba)\\s*\\((.+)\\)\\s*");
+    QRegExp regexp(QLatin1String("(rgb|rgba)\\s*\\((.+)\\)\\s*"));
 
     if (regexp.exactMatch(s))
     {
-        QStringList colors = regexp.cap(1).split(',', QString::SkipEmptyParts);
+        QStringList colors = regexp.cap(1).split(QLatin1Char(','), QString::SkipEmptyParts);
 
         if (colors.size() >= 3)
         {
             QColor c(colors.at(0).toInt(), colors.at(1).toInt(), colors.at(2).toInt());
 
-            if (regexp.cap(0) == "rgba" && colors.size() == 4)
+            if (regexp.cap(0) == QLatin1String("rgba") && colors.size() == 4)
             {
                 c.setAlpha(colors.at(4).toInt());
             }
@@ -518,50 +518,48 @@ FilterAction BorderFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.setParameter("borderPath", d->settings.borderPath);
-    action.setParameter("borderPercent", d->settings.borderPercent);
-    action.setParameter("borderType", d->settings.borderType);
-    action.setParameter("borderWidth1", d->settings.borderWidth1);
-    action.setParameter("borderWidth2", d->settings.borderWidth2);
-    action.setParameter("borderWidth3", d->settings.borderWidth3);
-    action.setParameter("borderWidth4", d->settings.borderWidth4);
-    action.setParameter("preserveAspectRatio", d->settings.preserveAspectRatio);
-    action.setParameter("orgHeight", d->settings.orgHeight);
-    action.setParameter("orgWidth", d->settings.orgWidth);
+    action.setParameter(QLatin1String("borderPath"),            d->settings.borderPath);
+    action.setParameter(QLatin1String("borderPercent"),         d->settings.borderPercent);
+    action.setParameter(QLatin1String("borderType"),            d->settings.borderType);
+    action.setParameter(QLatin1String("borderWidth1"),          d->settings.borderWidth1);
+    action.setParameter(QLatin1String("borderWidth2"),          d->settings.borderWidth2);
+    action.setParameter(QLatin1String("borderWidth3"),          d->settings.borderWidth3);
+    action.setParameter(QLatin1String("borderWidth4"),          d->settings.borderWidth4);
+    action.setParameter(QLatin1String("preserveAspectRatio"),   d->settings.preserveAspectRatio);
+    action.setParameter(QLatin1String("orgHeight"),             d->settings.orgHeight);
+    action.setParameter(QLatin1String("orgWidth"),              d->settings.orgWidth);
 
-    action.setParameter("solidColor", colorToString(d->settings.solidColor));
-    action.setParameter("niepceBorderColor", colorToString(d->settings.niepceBorderColor));
-    action.setParameter("niepceLineColor", colorToString(d->settings.niepceLineColor));
-    action.setParameter("bevelUpperLeftColor", colorToString(d->settings.bevelUpperLeftColor));
-    action.setParameter("bevelLowerRightColor", colorToString(d->settings.bevelLowerRightColor));
-    action.setParameter("decorativeFirstColor", colorToString(d->settings.decorativeFirstColor));
-    action.setParameter("decorativeSecondColor", colorToString(d->settings.decorativeSecondColor));
+    action.setParameter(QLatin1String("solidColor"),            colorToString(d->settings.solidColor));
+    action.setParameter(QLatin1String("niepceBorderColor"),     colorToString(d->settings.niepceBorderColor));
+    action.setParameter(QLatin1String("niepceLineColor"),       colorToString(d->settings.niepceLineColor));
+    action.setParameter(QLatin1String("bevelUpperLeftColor"),   colorToString(d->settings.bevelUpperLeftColor));
+    action.setParameter(QLatin1String("bevelLowerRightColor"),  colorToString(d->settings.bevelLowerRightColor));
+    action.setParameter(QLatin1String("decorativeFirstColor"),  colorToString(d->settings.decorativeFirstColor));
+    action.setParameter(QLatin1String("decorativeSecondColor"), colorToString(d->settings.decorativeSecondColor));
 
     return action;
 }
 
 void BorderFilter::readParameters(const FilterAction& action)
 {
-    d->settings.borderPath = action.parameter("borderPath").toString();
-    d->settings.borderPercent = action.parameter("borderPercent").toDouble();
-    d->settings.borderType = action.parameter("borderType").toInt();
-    d->settings.borderWidth1 = action.parameter("borderWidth1").toInt();
-    d->settings.borderWidth2 = action.parameter("borderWidth2").toInt();
-    d->settings.borderWidth3 = action.parameter("borderWidth3").toInt();
-    d->settings.borderWidth4 = action.parameter("borderWidth4").toInt();
-    d->settings.preserveAspectRatio = action.parameter("preserveAspectRatio").toBool();
-    d->settings.orgHeight = action.parameter("orgHeight").toInt();
-    d->settings.orgWidth = action.parameter("orgWidth").toInt();
+    d->settings.borderPath            = action.parameter(QLatin1String("borderPath")).toString();
+    d->settings.borderPercent         = action.parameter(QLatin1String("borderPercent")).toDouble();
+    d->settings.borderType            = action.parameter(QLatin1String("borderType")).toInt();
+    d->settings.borderWidth1          = action.parameter(QLatin1String("borderWidth1")).toInt();
+    d->settings.borderWidth2          = action.parameter(QLatin1String("borderWidth2")).toInt();
+    d->settings.borderWidth3          = action.parameter(QLatin1String("borderWidth3")).toInt();
+    d->settings.borderWidth4          = action.parameter(QLatin1String("borderWidth4")).toInt();
+    d->settings.preserveAspectRatio   = action.parameter(QLatin1String("preserveAspectRatio")).toBool();
+    d->settings.orgHeight             = action.parameter(QLatin1String("orgHeight")).toInt();
+    d->settings.orgWidth              = action.parameter(QLatin1String("orgWidth")).toInt();
 
-    d->settings.solidColor = stringToColor(action.parameter("solidColor").toString());
-    d->settings.niepceBorderColor = stringToColor(action.parameter("niepceBorderColor").toString());
-    d->settings.niepceLineColor = stringToColor(action.parameter("niepceLineColor").toString());
-    d->settings.bevelUpperLeftColor = stringToColor(action.parameter("bevelUpperLeftColor").toString());
-    d->settings.bevelLowerRightColor = stringToColor(action.parameter("bevelLowerRightColor").toString());
-    d->settings.decorativeFirstColor = stringToColor(action.parameter("decorativeFirstColor").toString());
-    d->settings.decorativeSecondColor = stringToColor(action.parameter("decorativeSecondColor").toString());
+    d->settings.solidColor            = stringToColor(action.parameter(QLatin1String("solidColor")).toString());
+    d->settings.niepceBorderColor     = stringToColor(action.parameter(QLatin1String("niepceBorderColor")).toString());
+    d->settings.niepceLineColor       = stringToColor(action.parameter(QLatin1String("niepceLineColor")).toString());
+    d->settings.bevelUpperLeftColor   = stringToColor(action.parameter(QLatin1String("bevelUpperLeftColor")).toString());
+    d->settings.bevelLowerRightColor  = stringToColor(action.parameter(QLatin1String("bevelLowerRightColor")).toString());
+    d->settings.decorativeFirstColor  = stringToColor(action.parameter(QLatin1String("decorativeFirstColor")).toString());
+    d->settings.decorativeSecondColor = stringToColor(action.parameter(QLatin1String("decorativeSecondColor")).toString());
 }
-
-
 
 }  // namespace Digikam

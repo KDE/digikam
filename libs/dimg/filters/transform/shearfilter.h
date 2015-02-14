@@ -53,12 +53,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:ShearFilter";
+        return QLatin1String("digikam:ShearFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Shear Tool");
+        return i18n(I18N_NOOP("Shear Tool"));
     }
 
     static QList<int>       SupportedVersions()

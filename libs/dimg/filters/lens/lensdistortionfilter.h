@@ -48,12 +48,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:LensDistortionFilter";
+        return QLatin1String("digikam:LensDistortionFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Lens Distortion Tool");
+        return i18n(I18N_NOOP("Lens Distortion Tool"));
     }
 
     static QList<int>       SupportedVersions()

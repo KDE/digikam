@@ -50,12 +50,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:SharpenFilter";
+        return QLatin1String("digikam:SharpenFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Sharpen");
+        return i18n(I18N_NOOP("Sharpen"));
     }
 
     static QList<int>       SupportedVersions()

@@ -78,12 +78,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:ColorBalanceFilter";
+        return QLatin1String("digikam:ColorBalanceFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Color Balance Tool");
+        return i18n(I18N_NOOP("Color Balance Tool"));
     }
 
     static QList<int>       SupportedVersions()
