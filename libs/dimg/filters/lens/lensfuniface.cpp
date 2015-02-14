@@ -4,7 +4,7 @@
  * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -146,7 +146,7 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
         DevicePtr cam = *cameras;
         //        kDebug() << "Query camera:" << cam->Maker << "-" << cam->Model;
 
-        if (QString::compare(cam->Maker, make, Qt::CaseInsensitive) == 0 && QString(cam->Model) == model)
+        if (QString(cam->Maker).toLower() == make.toLower() && QString(cam->Model).toLower() == model.toLower())
         {
             kDebug() << "Search for camera " << make << "-" << model << " ==> true";
             return cam;
