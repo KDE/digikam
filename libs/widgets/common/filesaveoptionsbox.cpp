@@ -40,6 +40,7 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
+#include <kurlcombobox.h>
 
 // Local includes
 
