@@ -69,9 +69,11 @@ target_link_libraries(digikamcore
                       Qt5::Sql
                       Qt5::Concurrent
 
-                      KF5::KDELibs4Support
                       KF5::KIOCore
+                      KF5::KIOWidgets
                       KF5::NotifyConfig
+
+                      KF5::KDELibs4Support
 
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
@@ -249,6 +251,7 @@ target_link_libraries(digikam
 
                       KF5::NotifyConfig
                       KF5::KDELibs4Support
+
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
 

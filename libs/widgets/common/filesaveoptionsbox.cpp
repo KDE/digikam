@@ -37,10 +37,9 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kfiledialog.h>
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
-#include <kurlcombobox.h>
+#include <kfiledialog.h>
 
 // Local includes
 

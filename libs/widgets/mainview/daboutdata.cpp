@@ -98,19 +98,19 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           "http://www.mghansen.de"
                         );
 
-    aboutData.addAuthor ( ki18n("Andi Clemens").toString(),
-                          ki18n("Developer").toString(),
-                          "andi dot clemens at gmail dot com",
-                          "https://plus.google.com/110531606986594589135"
-                        );
-
-    // -- Contributors -----------------------------------------------------------
-
     aboutData.addAuthor ( ki18n("Teemu Rytilahti").toString(),
                           ki18n("Developer").toString(),
                           "tpr at iki dot fi",
                           "https://plus.google.com/u/0/105136119348505864693"
                         );
+
+    aboutData.addAuthor ( ki18n("Maik Qualmann").toString(),
+                          ki18n("Developer").toString(),
+                          "metzpinguin at gmail dot com",
+                          "https://plus.google.com/u/0/107171232114475191915"
+                        );
+
+    // -- Contributors -----------------------------------------------------------
 
     aboutData.addAuthor ( ki18n("Matthias Welwarsky").toString(),
                           ki18n("Developer").toString(),
@@ -229,6 +229,12 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                         );
 
     // -- Former contributors ----------------------------------------------------
+
+    aboutData.addAuthor ( ki18n("Andi Clemens").toString(),
+                          ki18n("Developer").toString(),
+                          "andi dot clemens at gmail dot com",
+                          "https://plus.google.com/110531606986594589135"
+                        );
 
     aboutData.addAuthor ( ki18n("Patrick Spendrin").toString(),
                           ki18n("Developer and Windows port").toString(),
