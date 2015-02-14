@@ -34,8 +34,8 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
-#include <kio/job.h>
-#include <kio/netaccess.h>
+//#include <kio/job.h>
+//#include <kio/netaccess.h>
 
 // Local includes
 
