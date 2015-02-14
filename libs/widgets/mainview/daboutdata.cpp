@@ -142,7 +142,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
     aboutData.addAuthor ( ki18n("Maik Qualmann"),
                           ki18n("Developer"),
                           "metzpinguin at gmail dot com",
-                          "https://plus.google.com/u/0/107171232114475191915/posts"
+                          "https://plus.google.com/u/0/107171232114475191915"
                         );
 
     // -- Contributors -----------------------------------------------------------
