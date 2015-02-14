@@ -6,7 +6,7 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011      by Leif Huhn <leif at dkstat dot com>
  *
@@ -1247,6 +1247,18 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
         }
 
         return true;
+    }
+
+    // Try to get Tags Path list from Exif Windows keywords.
+    QString keyWords = getExifTagString("Exif.Image.XPKeywords", false);
+    if (!keyWords.isEmpty())
+    {
+        tagsPath = keyWords.split(";");
+
+        if (!tagsPath.isEmpty())
+        {
+            return true;
+        }
     }
 
     return false;
