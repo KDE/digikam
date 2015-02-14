@@ -51,12 +51,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:BCGFilter";
+        return QLatin1String("digikam:BCGFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Brightness / Contrast / Gamma Filter");
+        return i18n(I18N_NOOP("Brightness / Contrast / Gamma Filter"));
     }
 
     static QList<int>       SupportedVersions()

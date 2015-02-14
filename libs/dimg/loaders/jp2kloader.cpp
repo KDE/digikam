@@ -92,7 +92,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
     fclose(file);
 
-    imageSetAttribute("format", "JP2");
+    imageSetAttribute(QLatin1String("format"), QLatin1String("JP2"));
 
     if (!(m_loadFlags & LoadImageData) && !(m_loadFlags & LoadICCData))
     {
@@ -259,8 +259,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                jas_image_cmpthstep(jp2_image, components[i])) != (long)imageWidth()))  ||
             (((jas_image_cmptheight(jp2_image, components[i])*
                jas_image_cmptvstep(jp2_image, components[i])) != (long)imageHeight())) ||
-            (jas_image_cmpttlx(jp2_image, components[i]) != 0)                      ||
-            (jas_image_cmpttly(jp2_image, components[i]) != 0)                      ||
+            (jas_image_cmpttlx(jp2_image, components[i]) != 0)                         ||
+            (jas_image_cmpttly(jp2_image, components[i]) != 0)                         ||
             (jas_image_cmptsgnd(jp2_image, components[i]) != false))
         {
             jas_image_destroy(jp2_image);
@@ -538,10 +538,10 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     }
 
     imageData() = data.take();
-    imageSetAttribute("format", "JP2");
-    imageSetAttribute("originalColorModel", colorModel);
-    imageSetAttribute("originalBitDepth", maximum_component_depth);
-    imageSetAttribute("originalSize", QSize(imageWidth(), imageHeight()));
+    imageSetAttribute(QLatin1String("format"),             QLatin1String("JP2"));
+    imageSetAttribute(QLatin1String("originalColorModel"), colorModel);
+    imageSetAttribute(QLatin1String("originalBitDepth"),   maximum_component_depth);
+    imageSetAttribute(QLatin1String("originalSize"),       QSize(imageWidth(), imageHeight()));
 
     jas_image_destroy(jp2_image);
 
@@ -771,7 +771,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         }
     }
 
-    QVariant qualityAttr = imageGetAttribute("quality");
+    QVariant qualityAttr = imageGetAttribute(QLatin1String("quality"));
     int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     if (quality < 0)
@@ -829,7 +829,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     jas_cleanup();
 
-    imageSetAttribute("savedformat", "JP2");
+    imageSetAttribute(QLatin1String("savedformat"), QLatin1String("JP2"));
     saveMetadata(filePath);
 
     return true;

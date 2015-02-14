@@ -133,17 +133,17 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
     imageData()   = data;
 
     // We considering that PNG is the most representative format of an image loaded by Qt
-    imageSetAttribute("format", "PNG");
-    imageSetAttribute("originalColorModel", colorModel);
-    imageSetAttribute("originalBitDepth", originalDepth);
-    imageSetAttribute("originalSize", QSize(w, h));
+    imageSetAttribute(QLatin1String("format"),             QLatin1String("PNG"));
+    imageSetAttribute(QLatin1String("originalColorModel"), colorModel);
+    imageSetAttribute(QLatin1String("originalBitDepth"),   originalDepth);
+    imageSetAttribute(QLatin1String("originalSize"),       QSize(w, h));
 
     return true;
 }
 
 bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
-    QVariant qualityAttr = imageGetAttribute("quality");
+    QVariant qualityAttr = imageGetAttribute(QLatin1String("quality"));
     int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     if (quality < 0)
@@ -156,7 +156,7 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* const obser
         quality = 100;
     }
 
-    QVariant formatAttr = imageGetAttribute("format");
+    QVariant formatAttr = imageGetAttribute(QLatin1String("format"));
     QByteArray format   = formatAttr.toByteArray();
     QImage image        = m_image->copyQImage();
 
@@ -174,7 +174,7 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* const obser
         observer->progressInfo(m_image, 1.0F);
     }
 
-    imageSetAttribute("format", format.toUpper());
+    imageSetAttribute(QLatin1String("format"), format.toUpper());
 
     return success;
 }

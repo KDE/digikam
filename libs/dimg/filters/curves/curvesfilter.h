@@ -56,12 +56,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:CurvesFilter";
+        return QLatin1String("digikam:CurvesFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Adjust Curves");
+        return i18n(I18N_NOOP("Adjust Curves"));
     }
 
     static QList<int>       SupportedVersions()

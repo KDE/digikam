@@ -136,10 +136,10 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         imageHeight() = dcrawIdentify.imageSize.height();
     }
 
-    imageSetAttribute("format",             "RAW");
-    imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
-    imageSetAttribute("originalBitDepth",   16);
-    imageSetAttribute("originalSize",       dcrawIdentify.imageSize);
+    imageSetAttribute(QLatin1String("format"),             QLatin1String("RAW"));
+    imageSetAttribute(QLatin1String("originalColorModel"), DImg::COLORMODELRAW);
+    imageSetAttribute(QLatin1String("originalBitDepth"),   16);
+    imageSetAttribute(QLatin1String("originalSize"),       dcrawIdentify.imageSize);
 
     return true;
 }
@@ -307,7 +307,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
         case RawDecodingSettings::RAWCOLOR:
         {
             // No icc color-space profile to assign in RAW color mode.
-            imageSetAttribute("uncalibratedColor", true);
+            imageSetAttribute(QLatin1String("uncalibratedColor"), true);
             break;
         }
     }
@@ -319,8 +319,8 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
     imageWidth()        = width;
     imageHeight()       = height;
-    imageSetAttribute("rawDecodingSettings",     QVariant::fromValue(m_filter->settings()));
-    imageSetAttribute("rawDecodingFilterAction", QVariant::fromValue(action));
+    imageSetAttribute(QLatin1String("rawDecodingSettings"),     QVariant::fromValue(m_filter->settings()));
+    imageSetAttribute(QLatin1String("rawDecodingFilterAction"), QVariant::fromValue(action));
     // other attributes are set above
 
     return true;

@@ -63,12 +63,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:WhiteBalanceFilter";
+        return QLatin1String("digikam:WhiteBalanceFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("White Balance Tool");
+        return i18n(I18N_NOOP("White Balance Tool"));
     }
 
     static QList<int>       SupportedVersions()

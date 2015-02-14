@@ -249,7 +249,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             // -------------------------------------------------------------------
             // Find out if we do the fast-track loading with reduced size. PGF specific.
             int level          = 0;
-            QVariant attribute = imageGetAttribute("scaledLoadingSize");
+            QVariant attribute = imageGetAttribute(QLatin1String("scaledLoadingSize"));
 
             if (attribute.isValid() && pgf.Levels() > 0)
             {
@@ -273,8 +273,8 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     height = h;
                     level  = i;
                     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading PGF scaled version at level " << i
-                             << " (" << w << " x " << h << ") for size "
-                             << scaledLoadingSize;
+                                                 << " (" << w << " x " << h << ") for size "
+                                                 << scaledLoadingSize;
                 }
             }
 
@@ -315,10 +315,10 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         imageWidth()  = width;
         imageHeight() = height;
         imageData()   = data;
-        imageSetAttribute("format", "PGF");
-        imageSetAttribute("originalColorModel", colorModel);
-        imageSetAttribute("originalBitDepth", bitDepth);
-        imageSetAttribute("originalSize", originalSize);
+        imageSetAttribute(QLatin1String("format"),             QLatin1String("PGF"));
+        imageSetAttribute(QLatin1String("originalColorModel"), colorModel);
+        imageSetAttribute(QLatin1String("originalBitDepth"),   bitDepth);
+        imageSetAttribute(QLatin1String("originalSize"),       originalSize);
 
 #ifdef WIN32
         CloseHandle(fd);
@@ -394,7 +394,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
     try
     {
-        QVariant qualityAttr = imageGetAttribute("quality");
+        QVariant qualityAttr = imageGetAttribute(QLatin1String("quality"));
         int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 3;
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "PGF quality: " << quality;
@@ -490,7 +490,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
             observer->progressInfo(m_image, 1.0);
         }
 
-        imageSetAttribute("savedformat", "PGF");
+        imageSetAttribute(QLatin1String("savedformat"), QLatin1String("PGF"));
         saveMetadata(filePath);
 
         return true;

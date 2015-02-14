@@ -194,10 +194,10 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     imageWidth()  = width;
     imageHeight() = height;
     imageData()   = (uchar*)data.take();
-    imageSetAttribute("format",              "PPM");
-    imageSetAttribute("originalColorFormat", DImg::RGB);
-    imageSetAttribute("originalBitDepth",    8);
-    imageSetAttribute("originalSize",        QSize(width, height));
+    imageSetAttribute(QLatin1String("format"),              QLatin1String("PPM"));
+    imageSetAttribute(QLatin1String("originalColorFormat"), DImg::RGB);
+    imageSetAttribute(QLatin1String("originalBitDepth"),    8);
+    imageSetAttribute(QLatin1String("originalSize"),        QSize(width, height));
 
     return true;
 }
