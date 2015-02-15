@@ -73,7 +73,7 @@ OilPaintFilter::OilPaintFilter(QObject* const parent)
 }
 
 OilPaintFilter::OilPaintFilter(DImg* const orgImage, QObject* const parent, int brushSize, int smoothness)
-    : DImgThreadedFilter(orgImage, parent, "OilPaintFilter"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("OilPaintFilter")),
       d(new Private)
 {
     d->brushSize  = brushSize;
@@ -256,16 +256,16 @@ FilterAction OilPaintFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("brushSize",  d->brushSize);
-    action.addParameter("smoothness", d->smoothness);
+    action.addParameter(QLatin1String("brushSize"),  d->brushSize);
+    action.addParameter(QLatin1String("smoothness"), d->smoothness);
 
     return action;
 }
 
 void OilPaintFilter::readParameters(const Digikam::FilterAction& action)
 {
-    d->brushSize  = action.parameter("brushSize").toInt();
-    d->smoothness = action.parameter("smoothness").toInt();
+    d->brushSize  = action.parameter(QLatin1String("brushSize")).toInt();
+    d->smoothness = action.parameter(QLatin1String("smoothness")).toInt();
 }
 
 }  // namespace Digikam

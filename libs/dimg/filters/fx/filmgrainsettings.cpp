@@ -141,23 +141,23 @@ public:
     RExpanderBox*        expanderBox;
 };
 
-const QString FilmGrainSettings::Private::configGrainSizeEntry("GrainSizeEntry");
-const QString FilmGrainSettings::Private::configPhotoDistributionEntry("PhotoDistributionEntry");
-const QString FilmGrainSettings::Private::configAddLumNoiseEntry("AddLumNoiseEntry");
-const QString FilmGrainSettings::Private::configIntensityLumAdjustmentEntry("IntensityLumAdjustment");
-const QString FilmGrainSettings::Private::configShadowsLumAdjustmentEntry("ShadowsLumAdjustment");
-const QString FilmGrainSettings::Private::configMidtonesLumAdjustmentEntry("MidtonesLumAdjustment");
-const QString FilmGrainSettings::Private::configHighlightsLumAdjustmentEntry("HighlightsLumAdjustment");
-const QString FilmGrainSettings::Private::configAddChromaBlueNoiseEntry("AddChromaBlueNoiseEntry");
-const QString FilmGrainSettings::Private::configIntensityChromaBlueAdjustmentEntry("IntensityChromaBlueAdjustment");
-const QString FilmGrainSettings::Private::configShadowsChromaBlueAdjustmentEntry("ShadowsChromaBlueAdjustment");
-const QString FilmGrainSettings::Private::configMidtonesChromaBlueAdjustmentEntry("MidtonesChromaBlueAdjustment");
-const QString FilmGrainSettings::Private::configHighlightsChromaBlueAdjustmentEntry("HighlightsChromaBlueAdjustment");
-const QString FilmGrainSettings::Private::configAddChromaRedNoiseEntry("AddChromaRedNoiseEntry");
-const QString FilmGrainSettings::Private::configIntensityChromaRedAdjustmentEntry("IntensityChromaRedAdjustment");
-const QString FilmGrainSettings::Private::configShadowsChromaRedAdjustmentEntry("ShadowsChromaRedAdjustment");
-const QString FilmGrainSettings::Private::configMidtonesChromaRedAdjustmentEntry("MidtonesChromaRedAdjustment");
-const QString FilmGrainSettings::Private::configHighlightsChromaRedAdjustmentEntry("HighlightsChromaRedAdjustment");
+const QString FilmGrainSettings::Private::configGrainSizeEntry(QLatin1String("GrainSizeEntry"));
+const QString FilmGrainSettings::Private::configPhotoDistributionEntry(QLatin1String("PhotoDistributionEntry"));
+const QString FilmGrainSettings::Private::configAddLumNoiseEntry(QLatin1String("AddLumNoiseEntry"));
+const QString FilmGrainSettings::Private::configIntensityLumAdjustmentEntry(QLatin1String("IntensityLumAdjustment"));
+const QString FilmGrainSettings::Private::configShadowsLumAdjustmentEntry(QLatin1String("ShadowsLumAdjustment"));
+const QString FilmGrainSettings::Private::configMidtonesLumAdjustmentEntry(QLatin1String("MidtonesLumAdjustment"));
+const QString FilmGrainSettings::Private::configHighlightsLumAdjustmentEntry(QLatin1String("HighlightsLumAdjustment"));
+const QString FilmGrainSettings::Private::configAddChromaBlueNoiseEntry(QLatin1String("AddChromaBlueNoiseEntry"));
+const QString FilmGrainSettings::Private::configIntensityChromaBlueAdjustmentEntry(QLatin1String("IntensityChromaBlueAdjustment"));
+const QString FilmGrainSettings::Private::configShadowsChromaBlueAdjustmentEntry(QLatin1String("ShadowsChromaBlueAdjustment"));
+const QString FilmGrainSettings::Private::configMidtonesChromaBlueAdjustmentEntry(QLatin1String("MidtonesChromaBlueAdjustment"));
+const QString FilmGrainSettings::Private::configHighlightsChromaBlueAdjustmentEntry(QLatin1String("HighlightsChromaBlueAdjustment"));
+const QString FilmGrainSettings::Private::configAddChromaRedNoiseEntry(QLatin1String("AddChromaRedNoiseEntry"));
+const QString FilmGrainSettings::Private::configIntensityChromaRedAdjustmentEntry(QLatin1String("IntensityChromaRedAdjustment"));
+const QString FilmGrainSettings::Private::configShadowsChromaRedAdjustmentEntry(QLatin1String("ShadowsChromaRedAdjustment"));
+const QString FilmGrainSettings::Private::configMidtonesChromaRedAdjustmentEntry(QLatin1String("MidtonesChromaRedAdjustment"));
+const QString FilmGrainSettings::Private::configHighlightsChromaRedAdjustmentEntry(QLatin1String("HighlightsChromaRedAdjustment"));
 
 // --------------------------------------------------------
 
@@ -165,12 +165,12 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* const grid = new QGridLayout(parent);
 
     // -------------------------------------------------------------
 
-    QWidget* commonPage = new QWidget();
-    QGridLayout* grid0  = new QGridLayout(commonPage);
+    QWidget* const commonPage = new QWidget();
+    QGridLayout* const grid0  = new QGridLayout(commonPage);
 
     d->sizeLabel        = new QLabel(i18n("Grain Size:"), commonPage);
     d->grainSizeInput   = new RIntNumInput(commonPage);
@@ -189,8 +189,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* firstPage   = new QWidget();
-    QGridLayout* grid1   = new QGridLayout(firstPage);
+    QWidget* const firstPage   = new QWidget();
+    QGridLayout* const grid1   = new QGridLayout(firstPage);
 
     d->label1            = new QLabel(i18n("Intensity:"), firstPage);
     d->intensityLumInput = new RIntNumInput(firstPage);
@@ -236,8 +236,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* secondPage = new QWidget();
-    QGridLayout* grid2  = new QGridLayout(secondPage);
+    QWidget* const secondPage = new QWidget();
+    QGridLayout* const grid2  = new QGridLayout(secondPage);
 
     d->label5                   = new QLabel(i18n("Intensity:"), secondPage);
     d->intensityChromaBlueInput = new RIntNumInput(secondPage);
@@ -283,8 +283,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* thirdPage = new QWidget();
-    QGridLayout* grid3 = new QGridLayout(thirdPage);
+    QWidget* const thirdPage = new QWidget();
+    QGridLayout* const grid3 = new QGridLayout(thirdPage);
 
     d->label9                  = new QLabel(i18n("Intensity:"), thirdPage);
     d->intensityChromaRedInput = new RIntNumInput(thirdPage);
@@ -331,20 +331,20 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->expanderBox = new RExpanderBox();
-    d->expanderBox->setObjectName("Noise Expander");
+    d->expanderBox->setObjectName(QLatin1String("Noise Expander"));
 
-    d->expanderBox->addItem(commonPage, QIcon::fromTheme("system-run"),
+    d->expanderBox->addItem(commonPage, QIcon::fromTheme(QLatin1String("system-run")),
                             i18n("Common Settings"),
-                            QString("CommonSettingsContainer"), true);
-    d->expanderBox->addItem(firstPage, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-luma.png")),
+                            QLatin1String("CommonSettingsContainer"), true);
+    d->expanderBox->addItem(firstPage, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/colors-luma.png"))),
                             i18n("Luminance Noise"),
-                            QString("LuminanceSettingsContainer"), true);
-    d->expanderBox->addItem(secondPage, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromablue.png")),
+                            QLatin1String("LuminanceSettingsContainer"), true);
+    d->expanderBox->addItem(secondPage, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/colors-chromablue.png"))),
                             i18n("Chrominance Blue Noise"),
-                            QString("ChrominanceBlueSettingsContainer"), true);
-    d->expanderBox->addItem(thirdPage, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromared.png")),
+                            QLatin1String("ChrominanceBlueSettingsContainer"), true);
+    d->expanderBox->addItem(thirdPage, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/colors-chromared.png"))),
                             i18n("Chrominance Red Noise"),
-                            QString("ChrominanceRedSettingsContainer"), true);
+                            QLatin1String("ChrominanceRedSettingsContainer"), true);
 
     d->expanderBox->addStretch();
     d->expanderBox->setCheckBoxVisible(1, true);

@@ -54,7 +54,7 @@ EmbossFilter::EmbossFilter(QObject* const parent)
 }
 
 EmbossFilter::EmbossFilter(DImg* const orgImage, QObject* const parent, int depth)
-    : DImgThreadedFilter(orgImage, parent, "Emboss")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("Emboss"))
 {
     m_depth = depth;
     initFilter();
@@ -179,14 +179,14 @@ FilterAction EmbossFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("depth", m_depth);
+    action.addParameter(QLatin1String("depth"), m_depth);
 
     return action;
 }
 
 void EmbossFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_depth = action.parameter("depth").toInt();
+    m_depth = action.parameter(QLatin1String("depth")).toInt();
 }
 
 }  // namespace DigikamEmbossImagesPlugin

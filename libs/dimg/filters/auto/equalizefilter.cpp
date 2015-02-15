@@ -45,7 +45,7 @@ EqualizeFilter::EqualizeFilter(QObject* const parent)
 
 
 EqualizeFilter::EqualizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
-    : DImgThreadedFilter(orgImage, parent, "EqualizeFilter"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("EqualizeFilter")),
       m_refImage(*refImage)
 {
     initFilter();
@@ -252,7 +252,7 @@ FilterAction EqualizeFilter::filterAction()
 
 void EqualizeFilter::readParameters(const FilterAction& /*action*/)
 {
-    return; //Digikam::DImgThreadedFilter::readParameters(action);
+    return;
 }
 
 }  // namespace Digikam

@@ -45,7 +45,7 @@ ColorFXFilter::ColorFXFilter(QObject* const parent)
 }
 
 ColorFXFilter::ColorFXFilter(DImg* const orgImage, QObject* const parent, const ColorFXContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "ColorFX")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("ColorFX"))
 {
     m_settings = settings;
 
@@ -363,18 +363,18 @@ FilterAction ColorFXFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("type", m_settings.colorFXType);
-    action.addParameter("iteration", m_settings.iterations);
-    action.addParameter("level", m_settings.level);
+    action.addParameter(QLatin1String("type"),      m_settings.colorFXType);
+    action.addParameter(QLatin1String("iteration"), m_settings.iterations);
+    action.addParameter(QLatin1String("level"),     m_settings.level);
 
     return action;
 }
 
 void ColorFXFilter::readParameters(const FilterAction& action)
 {
-    m_settings.colorFXType = action.parameter("type").toInt();
-    m_settings.iterations  = action.parameter("iteration").toInt();
-    m_settings.level       = action.parameter("level").toInt();
+    m_settings.colorFXType = action.parameter(QLatin1String("type")).toInt();
+    m_settings.iterations  = action.parameter(QLatin1String("iteration")).toInt();
+    m_settings.level       = action.parameter(QLatin1String("level")).toInt();
 }
 
 }  // namespace Digikam

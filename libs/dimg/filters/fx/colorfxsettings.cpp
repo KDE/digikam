@@ -69,9 +69,9 @@ public:
     RIntNumInput*        iterationInput;
 };
 
-const QString ColorFXSettings::Private::configEffectTypeEntry("EffectType");
-const QString ColorFXSettings::Private::configLevelAdjustmentEntry("LevelAdjustment");
-const QString ColorFXSettings::Private::configIterationAdjustmentEntry("IterationAdjustment");
+const QString ColorFXSettings::Private::configEffectTypeEntry(QLatin1String("EffectType"));
+const QString ColorFXSettings::Private::configLevelAdjustmentEntry(QLatin1String("LevelAdjustment"));
+const QString ColorFXSettings::Private::configIterationAdjustmentEntry(QLatin1String("IterationAdjustment"));
 
 
 // --------------------------------------------------------
@@ -107,8 +107,8 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent)
     d->iterationInput = new RIntNumInput();
     d->iterationInput->setRange(0, 100, 1);
     d->iterationInput->setDefaultValue(0);
-    d->iterationInput->setWhatsThis( i18n("This value controls the number of iterations "
-                                          "to use with the Neon and Find Edges effects."));
+    d->iterationInput->setWhatsThis(i18n("This value controls the number of iterations "
+                                         "to use with the Neon and Find Edges effects."));
 
 
     grid->addWidget(d->effectTypeLabel, 0, 0, 1, 5);

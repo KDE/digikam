@@ -88,7 +88,7 @@ FilmGrainFilter::FilmGrainFilter(QObject* const parent)
 }
 
 FilmGrainFilter::FilmGrainFilter(DImg* const orgImage, QObject* const parent, const FilmGrainContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "FilmGrain"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("FilmGrain")),
       d(new Private)
 {
     d->settings = settings;
@@ -100,7 +100,7 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* const parentFilter,
                                  int progressBegin, int progressEnd,
                                  const FilmGrainContainer& settings)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                         parentFilter->filterName() + ": FilmGrain"),
+                         parentFilter->filterName() + QLatin1String(": FilmGrain")),
     d(new Private)
 {
     d->settings = settings;
@@ -393,52 +393,52 @@ FilterAction FilmGrainFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("grainSize",               d->settings.grainSize);
-    action.addParameter("photoDistribution",       d->settings.photoDistribution);
+    action.addParameter(QLatin1String("grainSize"),               d->settings.grainSize);
+    action.addParameter(QLatin1String("photoDistribution"),       d->settings.photoDistribution);
 
-    action.addParameter("addLuminanceNoise",       d->settings.addLuminanceNoise);
-    action.addParameter("lumaIntensity",           d->settings.lumaIntensity);
-    action.addParameter("lumaShadows",             d->settings.lumaShadows);
-    action.addParameter("lumaMidtones",            d->settings.lumaMidtones);
-    action.addParameter("lumaHighlights",          d->settings.lumaHighlights);
+    action.addParameter(QLatin1String("addLuminanceNoise"),       d->settings.addLuminanceNoise);
+    action.addParameter(QLatin1String("lumaIntensity"),           d->settings.lumaIntensity);
+    action.addParameter(QLatin1String("lumaShadows"),             d->settings.lumaShadows);
+    action.addParameter(QLatin1String("lumaMidtones"),            d->settings.lumaMidtones);
+    action.addParameter(QLatin1String("lumaHighlights"),          d->settings.lumaHighlights);
 
-    action.addParameter("addChrominanceBlueNoise", d->settings.addChrominanceBlueNoise);
-    action.addParameter("chromaBlueIntensity",     d->settings.chromaBlueIntensity);
-    action.addParameter("chromaBlueShadows",       d->settings.chromaBlueShadows);
-    action.addParameter("chromaBlueMidtones",      d->settings.chromaBlueMidtones);
-    action.addParameter("chromaBlueHighlights",    d->settings.chromaBlueHighlights);
+    action.addParameter(QLatin1String("addChrominanceBlueNoise"), d->settings.addChrominanceBlueNoise);
+    action.addParameter(QLatin1String("chromaBlueIntensity"),     d->settings.chromaBlueIntensity);
+    action.addParameter(QLatin1String("chromaBlueShadows"),       d->settings.chromaBlueShadows);
+    action.addParameter(QLatin1String("chromaBlueMidtones"),      d->settings.chromaBlueMidtones);
+    action.addParameter(QLatin1String("chromaBlueHighlights"),    d->settings.chromaBlueHighlights);
 
-    action.addParameter("addChrominanceRedNoise",  d->settings.addChrominanceRedNoise);
-    action.addParameter("chromaRedIntensity",      d->settings.chromaRedIntensity);
-    action.addParameter("chromaRedShadows",        d->settings.chromaRedShadows);
-    action.addParameter("chromaRedMidtones",       d->settings.chromaRedMidtones);
-    action.addParameter("chromaRedHighlights",     d->settings.chromaRedHighlights);
+    action.addParameter(QLatin1String("addChrominanceRedNoise"),  d->settings.addChrominanceRedNoise);
+    action.addParameter(QLatin1String("chromaRedIntensity"),      d->settings.chromaRedIntensity);
+    action.addParameter(QLatin1String("chromaRedShadows"),        d->settings.chromaRedShadows);
+    action.addParameter(QLatin1String("chromaRedMidtones"),       d->settings.chromaRedMidtones);
+    action.addParameter(QLatin1String("chromaRedHighlights"),     d->settings.chromaRedHighlights);
 
     return action;
 }
 
 void FilmGrainFilter::readParameters(const Digikam::FilterAction& action)
 {
-    d->settings.grainSize               = action.parameter("grainSize").toInt();
-    d->settings.photoDistribution       = action.parameter("photoDistribution").toBool();
+    d->settings.grainSize               = action.parameter(QLatin1String("grainSize")).toInt();
+    d->settings.photoDistribution       = action.parameter(QLatin1String("photoDistribution")).toBool();
 
-    d->settings.addLuminanceNoise       = action.parameter("addLuminanceNoise").toBool();
-    d->settings.lumaIntensity           = action.parameter("lumaIntensity").toInt();
-    d->settings.lumaShadows             = action.parameter("lumaShadows").toInt();
-    d->settings.lumaMidtones            = action.parameter("lumaMidtones").toInt();
-    d->settings.lumaHighlights          = action.parameter("lumaHighlights").toInt();
+    d->settings.addLuminanceNoise       = action.parameter(QLatin1String("addLuminanceNoise")).toBool();
+    d->settings.lumaIntensity           = action.parameter(QLatin1String("lumaIntensity")).toInt();
+    d->settings.lumaShadows             = action.parameter(QLatin1String("lumaShadows")).toInt();
+    d->settings.lumaMidtones            = action.parameter(QLatin1String("lumaMidtones")).toInt();
+    d->settings.lumaHighlights          = action.parameter(QLatin1String("lumaHighlights")).toInt();
 
-    d->settings.addChrominanceBlueNoise = action.parameter("addChrominanceBlueNoise").toBool();
-    d->settings.chromaBlueIntensity     = action.parameter("chromaBlueIntensity").toInt();
-    d->settings.chromaBlueShadows       = action.parameter("chromaBlueShadows").toInt();
-    d->settings.chromaBlueMidtones      = action.parameter("chromaBlueMidtones").toInt();
-    d->settings.chromaBlueHighlights    = action.parameter("chromaBlueHighlights").toInt();
+    d->settings.addChrominanceBlueNoise = action.parameter(QLatin1String("addChrominanceBlueNoise")).toBool();
+    d->settings.chromaBlueIntensity     = action.parameter(QLatin1String("chromaBlueIntensity")).toInt();
+    d->settings.chromaBlueShadows       = action.parameter(QLatin1String("chromaBlueShadows")).toInt();
+    d->settings.chromaBlueMidtones      = action.parameter(QLatin1String("chromaBlueMidtones")).toInt();
+    d->settings.chromaBlueHighlights    = action.parameter(QLatin1String("chromaBlueHighlights")).toInt();
 
-    d->settings.addChrominanceRedNoise  = action.parameter("addChrominanceRedNoise").toBool();
-    d->settings.chromaRedIntensity      = action.parameter("chromaRedIntensity").toInt();
-    d->settings.chromaRedShadows        = action.parameter("chromaRedShadows").toInt();
-    d->settings.chromaRedMidtones       = action.parameter("chromaRedMidtones").toInt();
-    d->settings.chromaRedHighlights     = action.parameter("chromaRedHighlights").toInt();
+    d->settings.addChrominanceRedNoise  = action.parameter(QLatin1String("addChrominanceRedNoise")).toBool();
+    d->settings.chromaRedIntensity      = action.parameter(QLatin1String("chromaRedIntensity")).toInt();
+    d->settings.chromaRedShadows        = action.parameter(QLatin1String("chromaRedShadows")).toInt();
+    d->settings.chromaRedMidtones       = action.parameter(QLatin1String("chromaRedMidtones")).toInt();
+    d->settings.chromaRedHighlights     = action.parameter(QLatin1String("chromaRedHighlights")).toInt();
 }
 
 }  // namespace Digikam

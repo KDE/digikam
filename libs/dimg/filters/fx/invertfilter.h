@@ -7,7 +7,7 @@
  * Description : An invert image threaded image filter.
  *
  * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,11 +38,11 @@ class DIGIKAM_EXPORT InvertFilter : public DImgThreadedFilter
 
 public:
 
-    explicit InvertFilter(QObject* parent = 0);
-    explicit InvertFilter(DImg* orgImage, QObject* parent=0);
+    explicit InvertFilter(QObject* const parent = 0);
+    explicit InvertFilter(DImg* const orgImage, QObject* const parent=0);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    explicit InvertFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, DImg& destImage,
+    explicit InvertFilter(DImgThreadedFilter* const parentFilter, const DImg& orgImage, DImg& destImage,
                           int progressBegin=0, int progressEnd=100);
 
     ~InvertFilter();

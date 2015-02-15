@@ -43,7 +43,7 @@ StretchFilter::StretchFilter(QObject* const parent)
 }
 
 StretchFilter::StretchFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
-    : DImgThreadedFilter(orgImage, parent, "StretchFilter"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("StretchFilter")),
       m_refImage(*refImage)
 {
     initFilter();
@@ -447,7 +447,7 @@ FilterAction StretchFilter::filterAction()
 
 void StretchFilter::readParameters(const FilterAction& /*action*/)
 {
-    return; //Digikam::DImgThreadedFilter::readParameters(action);
+    return;
 }
 
 }  // namespace Digikam

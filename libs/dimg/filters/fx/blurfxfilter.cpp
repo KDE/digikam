@@ -75,7 +75,7 @@ BlurFXFilter::BlurFXFilter(QObject* const parent)
 }
 
 BlurFXFilter::BlurFXFilter(DImg* const orgImage, QObject* const parent, int blurFXType, int distance, int level)
-    : DImgThreadedFilter(orgImage, parent, "BlurFX"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("BlurFX")),
       d(new Private)
 {
     d->blurFXType = blurFXType;
@@ -1924,13 +1924,13 @@ FilterAction BlurFXFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("type",     d->blurFXType);
-    action.addParameter("distance", d->distance);
-    action.addParameter("level",    d->level);
+    action.addParameter(QLatin1String("type"),     d->blurFXType);
+    action.addParameter(QLatin1String("distance"), d->distance);
+    action.addParameter(QLatin1String("level"),    d->level);
 
     if (d->blurFXType == FrostGlass)
     {
-        action.addParameter("randomSeed", d->randomSeed);
+        action.addParameter(QLatin1String("randomSeed"), d->randomSeed);
     }
 
     return action;
@@ -1938,13 +1938,13 @@ FilterAction BlurFXFilter::filterAction()
 
 void BlurFXFilter::readParameters(const FilterAction& action)
 {
-    d->blurFXType = action.parameter("type").toInt();
-    d->distance   = action.parameter("distance").toInt();
-    d->level      = action.parameter("level").toInt();
+    d->blurFXType = action.parameter(QLatin1String("type")).toInt();
+    d->distance   = action.parameter(QLatin1String("distance")).toInt();
+    d->level      = action.parameter(QLatin1String("level")).toInt();
 
     if (d->blurFXType == FrostGlass)
     {
-        d->randomSeed = action.parameter("randomSeed").toUInt();
+        d->randomSeed = action.parameter(QLatin1String("randomSeed")).toUInt();
     }
 }
 

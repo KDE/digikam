@@ -45,7 +45,7 @@ AutoLevelsFilter::AutoLevelsFilter(QObject* const parent)
 }
 
 AutoLevelsFilter::AutoLevelsFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
-    : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("AutoLevelsFilter")),
       m_refImage(*refImage)
 {
     initFilter();

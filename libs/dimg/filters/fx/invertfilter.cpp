@@ -7,7 +7,7 @@
  * Description : An invert image threaded image filter.
  *
  * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,23 +31,23 @@
 namespace Digikam
 {
 
-InvertFilter::InvertFilter(QObject* parent)
+InvertFilter::InvertFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-InvertFilter::InvertFilter(DImg* orgImage, QObject* parent)
-    : DImgThreadedFilter(orgImage, parent, "InvertFilter")
+InvertFilter::InvertFilter(DImg* const orgImage, QObject* const parent)
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("InvertFilter"))
 {
     initFilter();
 }
 
-InvertFilter::InvertFilter(DImgThreadedFilter* parentFilter,
+InvertFilter::InvertFilter(DImgThreadedFilter* const parentFilter,
                            const DImg& orgImage, DImg& destImage,
                            int progressBegin, int progressEnd)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                         parentFilter->filterName() + ": InvertFilter")
+                         parentFilter->filterName() + QLatin1String(": InvertFilter"))
 {
     initFilter();
     destImage = m_destImage;
@@ -101,7 +101,7 @@ FilterAction InvertFilter::filterAction()
     return action;
 }
 
-void InvertFilter::readParameters(const Digikam::FilterAction& /*action*/)
+void InvertFilter::readParameters(const FilterAction& /*action*/)
 {
 }
 

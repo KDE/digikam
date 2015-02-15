@@ -89,7 +89,7 @@ DistortionFXFilter::DistortionFXFilter(QObject* const parent)
 
 DistortionFXFilter::DistortionFXFilter(DImg* const orgImage, QObject* const parent, int effectType,
                                        int level, int iteration, bool antialiaqSing)
-    : DImgThreadedFilter(orgImage, parent, "DistortionFX"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("DistortionFX")),
       d(new Private)
 {
     d->effectType = effectType;
@@ -1250,14 +1250,14 @@ FilterAction DistortionFXFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("antiAlias", d->antiAlias);
-    action.addParameter("type",      d->effectType);
-    action.addParameter("iteration", d->iteration);
-    action.addParameter("level",     d->level);
+    action.addParameter(QLatin1String("antiAlias"), d->antiAlias);
+    action.addParameter(QLatin1String("type"),      d->effectType);
+    action.addParameter(QLatin1String("iteration"), d->iteration);
+    action.addParameter(QLatin1String("level"),     d->level);
 
     if (d->effectType == Tile)
     {
-        action.addParameter("randomSeed", d->randomSeed);
+        action.addParameter(QLatin1String("randomSeed"), d->randomSeed);
     }
 
     return action;
@@ -1265,14 +1265,14 @@ FilterAction DistortionFXFilter::filterAction()
 
 void DistortionFXFilter::readParameters(const FilterAction& action)
 {
-    d->antiAlias  = action.parameter("antiAlias").toBool();
-    d->effectType = action.parameter("type").toInt();
-    d->iteration  = action.parameter("iteration").toInt();
-    d->level      = action.parameter("level").toInt();
+    d->antiAlias  = action.parameter(QLatin1String("antiAlias")).toBool();
+    d->effectType = action.parameter(QLatin1String("type")).toInt();
+    d->iteration  = action.parameter(QLatin1String("iteration")).toInt();
+    d->level      = action.parameter(QLatin1String("level")).toInt();
 
     if (d->effectType == Tile)
     {
-        d->randomSeed = action.parameter("randomSeed").toUInt();
+        d->randomSeed = action.parameter(QLatin1String("randomSeed")).toUInt();
     }
 }
 

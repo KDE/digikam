@@ -74,7 +74,7 @@ CharcoalFilter::CharcoalFilter(QObject* const parent)
 }
 
 CharcoalFilter::CharcoalFilter(DImg* const orgImage, QObject* const parent, double pencil, double smooth)
-    : DImgThreadedFilter(orgImage, parent, "Charcoal"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("Charcoal")),
       d(new Private)
 {
     d->pencil = pencil;
@@ -349,16 +349,16 @@ FilterAction CharcoalFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("pencil", d->pencil);
-    action.addParameter("smooth", d->smooth);
+    action.addParameter(QLatin1String("pencil"), d->pencil);
+    action.addParameter(QLatin1String("smooth"), d->smooth);
 
     return action;
 }
 
 void CharcoalFilter::readParameters(const Digikam::FilterAction& action)
 {
-    d->pencil = action.parameter("pencil").toDouble();
-    d->smooth = action.parameter("smooth").toDouble();
+    d->pencil = action.parameter(QLatin1String("pencil")).toDouble();
+    d->smooth = action.parameter(QLatin1String("smooth")).toDouble();
 }
 
 }  // namespace Digikam
