@@ -31,6 +31,10 @@
 #include <QImageWriter>
 #include <QByteArray>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -69,8 +73,10 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode)
             break;
     }
 
-    Q_FOREACH(QByteArray frm, supported)
-        formats.append(QString("*.") + QString::fromLatin1(frm) + QString("|%1 Image").arg(QString::fromLatin1(frm).toUpper()));
+    Q_FOREACH(const QByteArray& frm, supported)
+    {
+        formats.append(QLatin1String("*.") + QLatin1String(frm) + i18n("|%1 Image").arg(QString::fromLatin1(frm).toUpper()));
+    }
 
     return formats;
 }
