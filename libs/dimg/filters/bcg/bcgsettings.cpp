@@ -53,15 +53,16 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class BCGSettings::BCGSettingsPriv
+class BCGSettings::Private
 {
 public:
 
-    BCGSettingsPriv() :
+    Private() :
         bInput(0),
         cInput(0),
         gInput(0)
-    {}
+    {
+    }
 
     static const QString configBrightnessAdjustmentEntry;
     static const QString configContrastAdjustmentEntry;
@@ -72,31 +73,32 @@ public:
 
     RDoubleNumInput*     gInput;
 };
-const QString BCGSettings::BCGSettingsPriv::configBrightnessAdjustmentEntry("BrightnessAdjustment");
-const QString BCGSettings::BCGSettingsPriv::configContrastAdjustmentEntry("ContrastAdjustment");
-const QString BCGSettings::BCGSettingsPriv::configGammaAdjustmentEntry("GammaAdjustment");
+
+const QString BCGSettings::Private::configBrightnessAdjustmentEntry(QLatin1String("BrightnessAdjustment"));
+const QString BCGSettings::Private::configContrastAdjustmentEntry(QLatin1String("ContrastAdjustment"));
+const QString BCGSettings::Private::configGammaAdjustmentEntry(QLatin1String("GammaAdjustment"));
 
 // --------------------------------------------------------
 
 BCGSettings::BCGSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new BCGSettingsPriv)
+      d(new Private)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
-    QLabel* label2 = new QLabel(i18n("Brightness:"));
+    QLabel* const label2 = new QLabel(i18n("Brightness:"));
     d->bInput      = new RIntNumInput();
     d->bInput->setRange(-100, 100, 1);
     d->bInput->setDefaultValue(0);
     d->bInput->setWhatsThis(i18n("Set here the brightness adjustment of the image."));
 
-    QLabel* label3 = new QLabel(i18n("Contrast:"));
+    QLabel* const label3 = new QLabel(i18n("Contrast:"));
     d->cInput      = new RIntNumInput();
     d->cInput->setRange(-100, 100, 1);
     d->cInput->setDefaultValue(0);
     d->cInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 
-    QLabel* label4 = new QLabel(i18n("Gamma:"));
+    QLabel* const label4 = new QLabel(i18n("Gamma:"));
     d->gInput      = new RDoubleNumInput();
     d->gInput->setDecimals(2);
     d->gInput->setRange(0.1, 3.0, 0.01);
@@ -165,7 +167,7 @@ BCGContainer BCGSettings::defaultSettings() const
 {
     BCGContainer prm;
 
-    prm.brightness = (double)d->bInput->defaultValue() / 250.0;
+    prm.brightness = (double)(d->bInput->defaultValue() / 250.0);
     prm.contrast   = (double)(d->cInput->defaultValue() / 100.0) + 1.00;
     prm.gamma      = d->gInput->defaultValue();
 

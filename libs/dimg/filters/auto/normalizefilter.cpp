@@ -43,7 +43,7 @@ NormalizeFilter::NormalizeFilter(QObject* const parent)
 }
 
 NormalizeFilter::NormalizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent)
-    : DImgThreadedFilter(orgImage, parent, "NormalizeFilter"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("NormalizeFilter")),
       m_refImage(*refImage)
 {
     initFilter();

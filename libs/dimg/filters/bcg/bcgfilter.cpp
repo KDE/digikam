@@ -61,19 +61,19 @@ bool BCGContainer::operator==(const BCGContainer& other) const
 
 void BCGContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
 {
-    action.addParameter(prefix + "channel",    channel);
-    action.addParameter(prefix + "brightness", brightness);
-    action.addParameter(prefix + "contrast",   contrast);
-    action.addParameter(prefix + "gamma",      gamma);
+    action.addParameter(prefix + QLatin1String("channel"),    channel);
+    action.addParameter(prefix + QLatin1String("brightness"), brightness);
+    action.addParameter(prefix + QLatin1String("contrast"),   contrast);
+    action.addParameter(prefix + QLatin1String("gamma"),      gamma);
 }
 
 BCGContainer BCGContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
 {
     BCGContainer settings;
-    settings.channel    = action.parameter(prefix + "channel",    settings.channel);
-    settings.brightness = action.parameter(prefix + "brightness", settings.brightness);
-    settings.contrast   = action.parameter(prefix + "contrast",   settings.contrast);
-    settings.gamma      = action.parameter(prefix + "gamma",      settings.gamma);
+    settings.channel    = action.parameter(prefix + QLatin1String("channel"),    settings.channel);
+    settings.brightness = action.parameter(prefix + QLatin1String("brightness"), settings.brightness);
+    settings.contrast   = action.parameter(prefix + QLatin1String("contrast"),   settings.contrast);
+    settings.gamma      = action.parameter(prefix + QLatin1String("gamma"),      settings.gamma);
     return settings;
 }
 
@@ -96,7 +96,7 @@ public:
 };
 
 BCGFilter::BCGFilter(QObject* const parent)
-    : DImgThreadedFilter(parent, "BCGFilter"),
+    : DImgThreadedFilter(parent, QLatin1String("BCGFilter")),
       d(new Private)
 {
     reset();
@@ -104,7 +104,7 @@ BCGFilter::BCGFilter(QObject* const parent)
 }
 
 BCGFilter::BCGFilter(DImg* const orgImage, QObject* const parent, const BCGContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "BCGFilter"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("BCGFilter")),
       d(new Private)
 {
     d->settings = settings;
@@ -114,7 +114,7 @@ BCGFilter::BCGFilter(DImg* const orgImage, QObject* const parent, const BCGConta
 
 BCGFilter::BCGFilter(const BCGContainer& settings, DImgThreadedFilter* const master,
                      const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
-    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "WBFilter"),
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, QLatin1String("WBFilter")),
       d(new Private)
 {
     d->settings = settings;

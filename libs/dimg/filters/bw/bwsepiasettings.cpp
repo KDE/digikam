@@ -115,13 +115,13 @@ public:
                              BWSepiaContainer::BlackWhiteConversionType type);
 };
 
-const QString BWSepiaSettings::Private::configSettingsTabEntry("Settings Tab");
-const QString BWSepiaSettings::Private::configBWFilterEntry("BW Filter");
-const QString BWSepiaSettings::Private::configBWFilmEntry("BW Film");
-const QString BWSepiaSettings::Private::configBWToneEntry("BW Tone");
-const QString BWSepiaSettings::Private::configContrastAdjustmentEntry("ContrastValueAdjustment");
-const QString BWSepiaSettings::Private::configStrengthAdjustmentEntry("StrengthAdjustment");
-const QString BWSepiaSettings::Private::configCurveEntry("BWSepiaCurve");
+const QString BWSepiaSettings::Private::configSettingsTabEntry(QLatin1String("Settings Tab"));
+const QString BWSepiaSettings::Private::configBWFilterEntry(QLatin1String("BW Filter"));
+const QString BWSepiaSettings::Private::configBWFilmEntry(QLatin1String("BW Film"));
+const QString BWSepiaSettings::Private::configBWToneEntry(QLatin1String("BW Tone"));
+const QString BWSepiaSettings::Private::configContrastAdjustmentEntry(QLatin1String("ContrastValueAdjustment"));
+const QString BWSepiaSettings::Private::configStrengthAdjustmentEntry(QLatin1String("StrengthAdjustment"));
+const QString BWSepiaSettings::Private::configCurveEntry(QLatin1String("BWSepiaCurve"));
 
 PreviewListItem* BWSepiaSettings::Private::addItem(PreviewList* const list,
                                                    const QString& name,
@@ -144,7 +144,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     }
     else
     {
-        d->thumbImage = DImg(QIcon::fromTheme("image-x-generic").pixmap(128).toImage());
+        d->thumbImage = DImg(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(128).toImage());
     }
 
     QGridLayout* const grid = new QGridLayout(parent);
@@ -371,14 +371,14 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     // -------------------------------------------------------------
 
     // Some new icons may be needed : a film roll, a lens filter and ?
-    d->tab->addItem(d->bwFilm, QIcon::fromTheme("filmgrain"),
-                    i18n("Film"), QString("Film"), true);
-    d->tab->addItem(vbox, QIcon::fromTheme("lensautofix"),
-                    i18n("Lens Filters"), QString("Lens Filters"), false);
-    d->tab->addItem(d->bwTone, QIcon::fromTheme("fill-color"),
-                    i18n("Tone"), QString("Tone"), false);
-    d->tab->addItem(lumBox, QIcon::fromTheme("adjustcurves"),
-                    i18n("Luminosity"), QString("Luminosity"), false);
+    d->tab->addItem(d->bwFilm, QIcon::fromTheme(QLatin1String("filmgrain")),
+                    i18n("Film"), QLatin1String("Film"), true);
+    d->tab->addItem(vbox, QIcon::fromTheme(QLatin1String("lensautofix")),
+                    i18n("Lens Filters"), QLatin1String("Lens Filters"), false);
+    d->tab->addItem(d->bwTone, QIcon::fromTheme(QLatin1String("fill-color")),
+                    i18n("Tone"), QLatin1String("Tone"), false);
+    d->tab->addItem(lumBox, QIcon::fromTheme(QLatin1String("adjustcurves")),
+                    i18n("Luminosity"), QLatin1String("Luminosity"), false);
     d->tab->addStretch();
 
     grid->addWidget(d->tab, 0, 0, 1, 10);
@@ -533,7 +533,7 @@ void BWSepiaSettings::loadSettings()
 {
     QUrl loadFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Load"),
                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                QString("*"));
+                                                QLatin1String("*"));
 
     if (loadFile.isEmpty())
     {
@@ -546,7 +546,7 @@ void BWSepiaSettings::loadSettings()
     {
         QTextStream stream(&file);
 
-        if (stream.readLine() != "# Black & White Configuration File")
+        if (stream.readLine() != QLatin1String("# Black & White Configuration File"))
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                   i18n("\"%1\" is not a Black & White settings text file.", loadFile.fileName()));
@@ -604,7 +604,7 @@ void BWSepiaSettings::saveAsSettings()
 {
     QUrl saveFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Save"), 
                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                QString("*"));
+                                                QLatin1String("*"));
 
     if (saveFile.isEmpty())
     {
@@ -616,7 +616,7 @@ void BWSepiaSettings::saveAsSettings()
     if (file.open(QIODevice::WriteOnly))
     {
         QTextStream stream(&file);
-        stream << "# Black & White Configuration File\n";
+        stream << QLatin1String("# Black & White Configuration File\n");
         stream << d->bwFilm->currentId() << "\n";
         stream << d->bwFilters->currentId() << "\n";
         stream << d->bwTone->currentId() << "\n";

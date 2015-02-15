@@ -53,15 +53,16 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class CBSettingsPriv
+class CBSettings::Private
 {
 public:
 
-    CBSettingsPriv() :
+    Private() :
         rInput(0),
         gInput(0),
         bInput(0)
-    {}
+    {
+    }
 
     static const QString configRedAdjustmentEntry;
     static const QString configGreenAdjustmentEntry;
@@ -71,19 +72,20 @@ public:
     RIntNumInput*        gInput;
     RIntNumInput*        bInput;
 };
-const QString CBSettingsPriv::configRedAdjustmentEntry("RedAdjustment");
-const QString CBSettingsPriv::configGreenAdjustmentEntry("GreenAdjustment");
-const QString CBSettingsPriv::configBlueAdjustmentEntry("BlueAdjustment");
+
+const QString CBSettings::Private::configRedAdjustmentEntry(QLatin1String("RedAdjustment"));
+const QString CBSettings::Private::configGreenAdjustmentEntry(QLatin1String("GreenAdjustment"));
+const QString CBSettings::Private::configBlueAdjustmentEntry(QLatin1String("BlueAdjustment"));
 
 // --------------------------------------------------------
 
-CBSettings::CBSettings(QWidget* parent)
+CBSettings::CBSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new CBSettingsPriv)
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* const grid = new QGridLayout(parent);
 
-    QLabel* labelCyan = new QLabel(i18n("Cyan"));
+    QLabel* const labelCyan = new QLabel(i18n("Cyan"));
     labelCyan->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     d->rInput = new RIntNumInput();
@@ -91,12 +93,12 @@ CBSettings::CBSettings(QWidget* parent)
     d->rInput->setDefaultValue(0);
     d->rInput->setWhatsThis(i18n("Set here the cyan/red color adjustment of the image."));
 
-    QLabel* labelRed = new QLabel(i18n("Red"));
+    QLabel* const labelRed = new QLabel(i18n("Red"));
     labelRed->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     // -------------------------------------------------------------
 
-    QLabel* labelMagenta = new QLabel(i18n("Magenta"));
+    QLabel* const labelMagenta = new QLabel(i18n("Magenta"));
     labelMagenta->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     d->gInput = new RIntNumInput();
@@ -104,15 +106,15 @@ CBSettings::CBSettings(QWidget* parent)
     d->gInput->setDefaultValue(0);
     d->gInput->setWhatsThis(i18n("Set here the magenta/green color adjustment of the image."));
 
-    QLabel* labelGreen = new QLabel(i18n("Green"));
+    QLabel* const labelGreen = new QLabel(i18n("Green"));
     labelGreen->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     // -------------------------------------------------------------
 
-    QLabel* labelYellow = new QLabel(i18n("Yellow"));
+    QLabel* const labelYellow = new QLabel(i18n("Yellow"));
     labelYellow->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    QLabel* labelBlue = new QLabel(i18n("Blue"));
+    QLabel* const labelBlue = new QLabel(i18n("Blue"));
     labelBlue->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     d->bInput = new RIntNumInput();

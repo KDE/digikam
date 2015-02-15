@@ -67,15 +67,15 @@ public:
     BWSepiaContainer settings;
 };
 
-BWSepiaFilter::BWSepiaFilter(QObject* parent)
+BWSepiaFilter::BWSepiaFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
       d(new Private)
 {
     initFilter();
 }
 
-BWSepiaFilter::BWSepiaFilter(DImg* orgImage, QObject* parent, const BWSepiaContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "BWSepiaFilter"),
+BWSepiaFilter::BWSepiaFilter(DImg* const orgImage, QObject* const parent, const BWSepiaContainer& settings)
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("BWSepiaFilter")),
       d(new Private)
 {
     d->settings = settings;
@@ -503,12 +503,12 @@ FilterAction BWSepiaFilter::filterAction()
     DefaultFilterAction<BWSepiaFilter> action(d->settings.curvesPrm.isStoredLosslessly());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("filmType", d->settings.filmType);
-    action.addParameter("filterType", d->settings.filterType);
-    action.addParameter("preview", d->settings.preview);
-    action.addParameter("previewType", d->settings.previewType);
-    action.addParameter("strength", d->settings.strength);
-    action.addParameter("toneType", d->settings.toneType);
+    action.addParameter(QLatin1String("filmType"),    d->settings.filmType);
+    action.addParameter(QLatin1String("filterType"),  d->settings.filterType);
+    action.addParameter(QLatin1String("preview"),     d->settings.preview);
+    action.addParameter(QLatin1String("previewType"), d->settings.previewType);
+    action.addParameter(QLatin1String("strength"),    d->settings.strength);
+    action.addParameter(QLatin1String("toneType"),    d->settings.toneType);
 
     // Version 2: BWKodakHIE added
     action.supportOlderVersionIf(1, d->settings.filmType < BWSepiaContainer::BWKodakHIE);
@@ -521,15 +521,15 @@ FilterAction BWSepiaFilter::filterAction()
 
 void BWSepiaFilter::readParameters(const FilterAction& action)
 {
-    d->settings.filmType = action.parameter("filmType").toInt();
-    d->settings.filterType = action.parameter("filterType").toInt();
-    d->settings.preview = action.parameter("preview").toBool();
-    d->settings.previewType = action.parameter("previewType").toInt();
-    d->settings.strength = action.parameter("strength").toDouble();
-    d->settings.toneType = action.parameter("toneType").toInt();
+    d->settings.filmType    = action.parameter(QLatin1String("filmType")).toInt();
+    d->settings.filterType  = action.parameter(QLatin1String("filterType")).toInt();
+    d->settings.preview     = action.parameter(QLatin1String("preview")).toBool();
+    d->settings.previewType = action.parameter(QLatin1String("previewType")).toInt();
+    d->settings.strength    = action.parameter(QLatin1String("strength")).toDouble();
+    d->settings.toneType    = action.parameter(QLatin1String("toneType")).toInt();
 
-    d->settings.curvesPrm = CurvesContainer::fromFilterAction(action);
-    d->settings.bcgPrm    = BCGContainer::fromFilterAction(action);
+    d->settings.curvesPrm   = CurvesContainer::fromFilterAction(action);
+    d->settings.bcgPrm      = BCGContainer::fromFilterAction(action);
 }
 
 

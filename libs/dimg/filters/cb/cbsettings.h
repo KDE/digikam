@@ -40,15 +40,13 @@
 namespace Digikam
 {
 
-class CBSettingsPriv;
-
 class DIGIKAM_EXPORT CBSettings : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit CBSettings(QWidget* parent);
+    explicit CBSettings(QWidget* const parent);
     ~CBSettings();
 
     CBContainer defaultSettings() const;
@@ -66,7 +64,8 @@ Q_SIGNALS:
 
 private:
 
-    CBSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -38,14 +38,14 @@
 namespace Digikam
 {
 
-TonalityFilter::TonalityFilter(QObject* parent)
+TonalityFilter::TonalityFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-TonalityFilter::TonalityFilter(DImg* orgImage, QObject* parent, const TonalityContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "TonalityFilter")
+TonalityFilter::TonalityFilter(DImg* const orgImage, QObject* const parent, const TonalityContainer& settings)
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("TonalityFilter"))
 {
     m_settings = settings;
     initFilter();
@@ -129,18 +129,18 @@ FilterAction TonalityFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("blueMask", m_settings.blueMask);
-    action.addParameter("greenMask", m_settings.greenMask);
-    action.addParameter("redMask", m_settings.redMask);
+    action.addParameter(QLatin1String("blueMask"), m_settings.blueMask);
+    action.addParameter(QLatin1String("greenMask"), m_settings.greenMask);
+    action.addParameter(QLatin1String("redMask"), m_settings.redMask);
 
     return action;
 }
 
 void TonalityFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_settings.blueMask  = action.parameter("blueMask").toInt();
-    m_settings.greenMask = action.parameter("greenMask").toInt();
-    m_settings.redMask   = action.parameter("redMask").toInt();
+    m_settings.blueMask  = action.parameter(QLatin1String("blueMask")).toInt();
+    m_settings.greenMask = action.parameter(QLatin1String("greenMask")).toInt();
+    m_settings.redMask   = action.parameter(QLatin1String("redMask")).toInt();
 }
 
 }  // namespace Digikam
