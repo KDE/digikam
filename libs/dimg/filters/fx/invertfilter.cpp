@@ -6,8 +6,8 @@
  * Date        : 2005-17-07
  * Description : An invert image threaded image filter.
  *
- * Copyright (C) 2005-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,19 +31,19 @@
 namespace Digikam
 {
 
-InvertFilter::InvertFilter(QObject* parent)
+InvertFilter::InvertFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-InvertFilter::InvertFilter(DImg* orgImage, QObject* parent)
+InvertFilter::InvertFilter(DImg* const orgImage, QObject* const parent)
     : DImgThreadedFilter(orgImage, parent, "InvertFilter")
 {
     initFilter();
 }
 
-InvertFilter::InvertFilter(DImgThreadedFilter* parentFilter,
+InvertFilter::InvertFilter(DImgThreadedFilter* const parentFilter,
                            const DImg& orgImage, DImg& destImage,
                            int progressBegin, int progressEnd)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
@@ -101,7 +101,7 @@ FilterAction InvertFilter::filterAction()
     return action;
 }
 
-void InvertFilter::readParameters(const Digikam::FilterAction& /*action*/)
+void InvertFilter::readParameters(const FilterAction& /*action*/)
 {
 }
 
