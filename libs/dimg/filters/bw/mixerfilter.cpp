@@ -38,14 +38,14 @@
 namespace Digikam
 {
 
-MixerFilter::MixerFilter(QObject* parent)
+MixerFilter::MixerFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-MixerFilter::MixerFilter(DImg* orgImage, QObject* parent, const MixerContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "MixerFilter")
+MixerFilter::MixerFilter(DImg* const orgImage, QObject* const parent, const MixerContainer& settings)
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("MixerFilter"))
 {
     m_settings = settings;
     initFilter();
@@ -193,40 +193,40 @@ FilterAction MixerFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("blackBlueGain", m_settings.blackBlueGain);
-    action.addParameter("blackGreenGain", m_settings.blackGreenGain);
-    action.addParameter("blackRedGain", m_settings.blackRedGain);
-    action.addParameter("blueBlueGain", m_settings.blueBlueGain);
-    action.addParameter("blueGreenGain", m_settings.blueGreenGain);
-    action.addParameter("blueRedGain", m_settings.blueRedGain);
-    action.addParameter("bMonochrome", m_settings.bMonochrome);
-    action.addParameter("bPreserveLum", m_settings.bPreserveLum);
-    action.addParameter("greenBlueGain", m_settings.greenBlueGain);
-    action.addParameter("greenGreenGain", m_settings.greenGreenGain);
-    action.addParameter("greenRedGain", m_settings.greenRedGain);
-    action.addParameter("redBlueGain", m_settings.redBlueGain);
-    action.addParameter("redGreenGain", m_settings.redGreenGain);
-    action.addParameter("redRedGain", m_settings.redRedGain);
+    action.addParameter(QLatin1String("blackBlueGain"),  m_settings.blackBlueGain);
+    action.addParameter(QLatin1String("blackGreenGain"), m_settings.blackGreenGain);
+    action.addParameter(QLatin1String("blackRedGain"),   m_settings.blackRedGain);
+    action.addParameter(QLatin1String("blueBlueGain"),   m_settings.blueBlueGain);
+    action.addParameter(QLatin1String("blueGreenGain"),  m_settings.blueGreenGain);
+    action.addParameter(QLatin1String("blueRedGain"),    m_settings.blueRedGain);
+    action.addParameter(QLatin1String("bMonochrome"),    m_settings.bMonochrome);
+    action.addParameter(QLatin1String("bPreserveLum"),   m_settings.bPreserveLum);
+    action.addParameter(QLatin1String("greenBlueGain"),  m_settings.greenBlueGain);
+    action.addParameter(QLatin1String("greenGreenGain"), m_settings.greenGreenGain);
+    action.addParameter(QLatin1String("greenRedGain"),   m_settings.greenRedGain);
+    action.addParameter(QLatin1String("redBlueGain"),    m_settings.redBlueGain);
+    action.addParameter(QLatin1String("redGreenGain"),   m_settings.redGreenGain);
+    action.addParameter(QLatin1String("redRedGain"),     m_settings.redRedGain);
 
     return action;
 }
 
 void MixerFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_settings.blackBlueGain = action.parameter("blackBlueGain").toDouble();
-    m_settings.blackGreenGain = action.parameter("blackGreenGain").toDouble();
-    m_settings.blackRedGain = action.parameter("blackRedGain").toDouble();
-    m_settings.blueBlueGain = action.parameter("blueBlueGain").toDouble();
-    m_settings.blueGreenGain = action.parameter("blueGreenGain").toDouble();
-    m_settings.blueRedGain = action.parameter("blueRedGain").toDouble();
-    m_settings.bMonochrome = action.parameter("bMonochrome").toBool();
-    m_settings.bPreserveLum = action.parameter("bPreserveLum").toBool();
-    m_settings.greenBlueGain = action.parameter("greenBlueGain").toDouble();
-    m_settings.greenGreenGain = action.parameter("greenGreenGain").toDouble();
-    m_settings.greenRedGain = action.parameter("greenRedGain").toDouble();
-    m_settings.redBlueGain = action.parameter("redBlueGain").toDouble();
-    m_settings.redGreenGain = action.parameter("redGreenGain").toDouble();
-    m_settings.redRedGain = action.parameter("redRedGain").toDouble();
+    m_settings.blackBlueGain = action.parameter(QLatin1String("blackBlueGain")).toDouble();
+    m_settings.blackGreenGain = action.parameter(QLatin1String("blackGreenGain")).toDouble();
+    m_settings.blackRedGain = action.parameter(QLatin1String("blackRedGain")).toDouble();
+    m_settings.blueBlueGain = action.parameter(QLatin1String("blueBlueGain")).toDouble();
+    m_settings.blueGreenGain = action.parameter(QLatin1String("blueGreenGain")).toDouble();
+    m_settings.blueRedGain = action.parameter(QLatin1String("blueRedGain")).toDouble();
+    m_settings.bMonochrome = action.parameter(QLatin1String("bMonochrome")).toBool();
+    m_settings.bPreserveLum = action.parameter(QLatin1String("bPreserveLum")).toBool();
+    m_settings.greenBlueGain = action.parameter(QLatin1String("greenBlueGain")).toDouble();
+    m_settings.greenGreenGain = action.parameter(QLatin1String("greenGreenGain")).toDouble();
+    m_settings.greenRedGain = action.parameter(QLatin1String("greenRedGain")).toDouble();
+    m_settings.redBlueGain = action.parameter(QLatin1String("redBlueGain")).toDouble();
+    m_settings.redGreenGain = action.parameter(QLatin1String("redGreenGain")).toDouble();
+    m_settings.redRedGain = action.parameter(QLatin1String("redRedGain")).toDouble();
 }
 
 }  // namespace Digikam

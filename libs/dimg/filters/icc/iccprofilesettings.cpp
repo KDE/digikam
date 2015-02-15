@@ -69,7 +69,7 @@ public:
     IccProfilesComboBox*  profilesBox;
 };
 
-const QString IccProfilesSettings::Private::configRecentlyUsedProfilesEntry("Recently Used Profiles");
+const QString IccProfilesSettings::Private::configRecentlyUsedProfilesEntry(QLatin1String("Recently Used Profiles"));
 
 // --------------------------------------------------------
 

@@ -85,7 +85,7 @@ IccManager::IccManager(DImg& image, const ICCSettingsContainer& settings)
     {
         // Treat as missing profile
         d->embeddedProfile = IccProfile();
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Encountered invalid embbeded color profile in file" << d->image.attribute("originalFilePath").toString();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Encountered invalid embbeded color profile in file" << d->image.attribute(QLatin1String("originalFilePath")).toString();
     }
 
     if (!d->embeddedProfile.isNull())
@@ -152,7 +152,7 @@ void IccManager::transformDefault()
 
 bool IccManager::isUncalibratedColor() const
 {
-    return d->image.hasAttribute("uncalibratedColor");
+    return d->image.hasAttribute(QLatin1String("uncalibratedColor"));
 }
 
 bool IccManager::isMissingProfile() const
@@ -202,15 +202,15 @@ void IccManager::transform(ICCSettingsContainer::Behavior behavior, const IccPro
     {
         if (isUncalibratedColor())
         {
-            d->image.setAttribute("uncalibratedColorAskUser", true);
+            d->image.setAttribute(QLatin1String("uncalibratedColorAskUser"), true);
         }
         else if (isMissingProfile())
         {
-            d->image.setAttribute("missingProfileAskUser", true);
+            d->image.setAttribute(QLatin1String("missingProfileAskUser"), true);
         }
         else if (isProfileMismatch())
         {
-            d->image.setAttribute("profileMismatchAskUser", true);
+            d->image.setAttribute(QLatin1String("profileMismatchAskUser"), true);
         }
 
         return;
@@ -232,9 +232,9 @@ void IccManager::transform(ICCSettingsContainer::Behavior behavior, const IccPro
 
 bool IccManager::needsPostLoadingManagement(const DImg& img)
 {
-    return (img.hasAttribute("missingProfileAskUser") ||
-            img.hasAttribute("profileMismatchAskUser") ||
-            img.hasAttribute("uncalibratedColorAskUser"));
+    return (img.hasAttribute(QLatin1String("missingProfileAskUser"))  ||
+            img.hasAttribute(QLatin1String("profileMismatchAskUser")) ||
+            img.hasAttribute(QLatin1String("uncalibratedColorAskUser")));
 }
 
 /*

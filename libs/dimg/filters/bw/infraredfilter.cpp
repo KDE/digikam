@@ -52,7 +52,7 @@ InfraredFilter::InfraredFilter(QObject* parent)
 }
 
 InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, const InfraredContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "Infrared")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("Infrared"))
 {
     m_settings = settings;
     initFilter();
@@ -213,20 +213,20 @@ FilterAction InfraredFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("blueGain", m_settings.blueGain);
-    action.addParameter("greenGain", m_settings.greenGain);
-    action.addParameter("redGain", m_settings.redGain);
-    action.addParameter("sensibility", m_settings.sensibility);
+    action.addParameter(QLatin1String("blueGain"),    m_settings.blueGain);
+    action.addParameter(QLatin1String("greenGain"),   m_settings.greenGain);
+    action.addParameter(QLatin1String("redGain"),     m_settings.redGain);
+    action.addParameter(QLatin1String("sensibility"), m_settings.sensibility);
 
     return action;
 }
 
 void InfraredFilter::readParameters(const FilterAction& action)
 {
-    m_settings.blueGain = action.parameter("blueGain").toDouble();
-    m_settings.greenGain = action.parameter("greenGain").toDouble();
-    m_settings.redGain = action.parameter("redGain").toDouble();
-    m_settings.sensibility = action.parameter("sensibility").toInt();
+    m_settings.blueGain = action.parameter(QLatin1String("blueGain")).toDouble();
+    m_settings.greenGain = action.parameter(QLatin1String("greenGain")).toDouble();
+    m_settings.redGain = action.parameter(QLatin1String("redGain")).toDouble();
+    m_settings.sensibility = action.parameter(QLatin1String("sensibility")).toInt();
 }
 
 

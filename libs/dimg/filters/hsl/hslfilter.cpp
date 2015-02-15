@@ -72,7 +72,7 @@ HSLFilter::HSLFilter(QObject* const parent)
 }
 
 HSLFilter::HSLFilter(DImg* const orgImage, QObject* const parent, const HSLContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "HSLFilter"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("HSLFilter")),
       d(new Private)
 {
     d->settings = settings;
@@ -308,20 +308,20 @@ FilterAction HSLFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("hue",        d->settings.hue);
-    action.addParameter("lightness",  d->settings.lightness);
-    action.addParameter("saturation", d->settings.saturation);
-    action.addParameter("vibrance",   d->settings.vibrance);
+    action.addParameter(QLatin1String("hue"),        d->settings.hue);
+    action.addParameter(QLatin1String("lightness"),  d->settings.lightness);
+    action.addParameter(QLatin1String("saturation"), d->settings.saturation);
+    action.addParameter(QLatin1String("vibrance"),   d->settings.vibrance);
 
     return action;
 }
 
 void HSLFilter::readParameters(const Digikam::FilterAction& action)
 {
-    d->settings.hue        = action.parameter("hue").toDouble();
-    d->settings.lightness  = action.parameter("lightness").toDouble();
-    d->settings.saturation = action.parameter("saturation").toDouble();
-    d->settings.vibrance   = action.parameter("vibrance").toDouble();
+    d->settings.hue        = action.parameter(QLatin1String("hue")).toDouble();
+    d->settings.lightness  = action.parameter(QLatin1String("lightness")).toDouble();
+    d->settings.saturation = action.parameter(QLatin1String("saturation")).toDouble();
+    d->settings.vibrance   = action.parameter(QLatin1String("vibrance")).toDouble();
 }
 
 }  // namespace Digikam

@@ -81,10 +81,10 @@ public:
     HSPreviewWidget*        HSPreview;
 };
 
-const QString HSLSettings::Private::configHueAdjustmentEntry("HueAdjustment");
-const QString HSLSettings::Private::configSaturationAdjustmentEntry("SaturationAdjustment");
-const QString HSLSettings::Private::configVibranceAdjustmentEntry("VibranceAdjustment");
-const QString HSLSettings::Private::configLighnessAdjustmentEntry("LighnessAdjustment");
+const QString HSLSettings::Private::configHueAdjustmentEntry(QLatin1String("HueAdjustment"));
+const QString HSLSettings::Private::configSaturationAdjustmentEntry(QLatin1String("SaturationAdjustment"));
+const QString HSLSettings::Private::configVibranceAdjustmentEntry(QLatin1String("VibranceAdjustment"));
+const QString HSLSettings::Private::configLighnessAdjustmentEntry(QLatin1String("LighnessAdjustment"));
 
 // --------------------------------------------------------
 

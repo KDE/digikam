@@ -75,7 +75,8 @@ public:
         redGain(0),
         greenGain(0),
         blueGain(0)
-    {}
+    {
+    }
 
     static const QString  configMonochromeEntry;
     static const QString  configPreserveLuminosityEntry;
@@ -112,20 +113,20 @@ public:
     RDoubleNumInput*      blueGain;
 };
 
-const QString MixerSettings::Private::configMonochromeEntry("Monochrome");
-const QString MixerSettings::Private::configPreserveLuminosityEntry("PreserveLuminosity");
-const QString MixerSettings::Private::configRedRedGainEntry("RedRedGain");
-const QString MixerSettings::Private::configRedGreenGainEntry("RedGreenGain");
-const QString MixerSettings::Private::configRedBlueGainEntry("RedBlueGain");
-const QString MixerSettings::Private::configGreenRedGainEntry("GreenRedGain");
-const QString MixerSettings::Private::configGreenGreenGainEntry("GreenGreenGain");
-const QString MixerSettings::Private::configGreenBlueGainEntry("GreenBlueGain");
-const QString MixerSettings::Private::configBlueRedGainEntry("BlueRedGain");
-const QString MixerSettings::Private::configBlueGreenGainEntry("BlueGreenGain");
-const QString MixerSettings::Private::configBlueBlueGainEntry("BlueBlueGain");
-const QString MixerSettings::Private::configBlackRedGainEntry("BlackRedGain");
-const QString MixerSettings::Private::configBlackGreenGainEntry("BlackGreenGain");
-const QString MixerSettings::Private::configBlackBlueGainEntry("BlackBlueGain");
+const QString MixerSettings::Private::configMonochromeEntry(QLatin1String("Monochrome"));
+const QString MixerSettings::Private::configPreserveLuminosityEntry(QLatin1String("PreserveLuminosity"));
+const QString MixerSettings::Private::configRedRedGainEntry(QLatin1String("RedRedGain"));
+const QString MixerSettings::Private::configRedGreenGainEntry(QLatin1String("RedGreenGain"));
+const QString MixerSettings::Private::configRedBlueGainEntry(QLatin1String("RedBlueGain"));
+const QString MixerSettings::Private::configGreenRedGainEntry(QLatin1String("GreenRedGain"));
+const QString MixerSettings::Private::configGreenGreenGainEntry(QLatin1String("GreenGreenGain"));
+const QString MixerSettings::Private::configGreenBlueGainEntry(QLatin1String("GreenBlueGain"));
+const QString MixerSettings::Private::configBlueRedGainEntry(QLatin1String("BlueRedGain"));
+const QString MixerSettings::Private::configBlueGreenGainEntry(QLatin1String("BlueGreenGain"));
+const QString MixerSettings::Private::configBlueBlueGainEntry(QLatin1String("BlueBlueGain"));
+const QString MixerSettings::Private::configBlackRedGainEntry(QLatin1String("BlackRedGain"));
+const QString MixerSettings::Private::configBlackGreenGainEntry(QLatin1String("BlackGreenGain"));
+const QString MixerSettings::Private::configBlackBlueGainEntry(QLatin1String("BlackBlueGain"));
 
 // --------------------------------------------------------
 
@@ -168,7 +169,7 @@ MixerSettings::MixerSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->resetButton = new QPushButton(i18n("&Reset"));
-    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->resetButton->setWhatsThis(i18n("Reset color channels' gains settings from "
                                       "the currently selected channel."));
 
@@ -550,7 +551,7 @@ void MixerSettings::loadSettings()
 
     loadGainsFileUrl = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Gains Mixer File to Load"), 
                                                    QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                   QString("*"));
+                                                   QLatin1String("*"));
 
     if (loadGainsFileUrl.isEmpty())
     {
@@ -658,7 +659,7 @@ void MixerSettings::saveAsSettings()
 
     saveGainsFileUrl = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Gains Mixer File to Save"), 
                                                    QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                   QString("*"));
+                                                   QLatin1String("*"));
 
     if (saveGainsFileUrl.isEmpty())
     {

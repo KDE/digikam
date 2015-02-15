@@ -59,7 +59,9 @@ public:
         blackBlueGain  = 0.0;
     };
 
-    ~MixerContainer() {};
+    ~MixerContainer()
+    {
+    };
 
 public:
 
@@ -90,8 +92,8 @@ class DIGIKAM_EXPORT MixerFilter : public DImgThreadedFilter
 
 public:
 
-    explicit MixerFilter(QObject* parent = 0);
-    explicit MixerFilter(DImg* orgImage, QObject* parent=0, const MixerContainer& settings=MixerContainer());
+    explicit MixerFilter(QObject* const parent = 0);
+    explicit MixerFilter(DImg* const orgImage, QObject* const parent=0, const MixerContainer& settings=MixerContainer());
     virtual ~MixerFilter();
 
     static QString          FilterIdentifier()

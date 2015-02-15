@@ -655,7 +655,7 @@ bool IccTransform::apply(DImg& image, DImgLoaderObserver* const observer)
     }
 
     // if this was a RAW color image, it is no more
-    image.removeAttribute("uncalibratedColor");
+    image.removeAttribute(QLatin1String("uncalibratedColor"));
 
     return true;
 }
