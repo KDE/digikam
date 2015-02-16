@@ -119,16 +119,16 @@ public:
 #endif // HAVE_EIGEN3
 };
 
-const QString SharpSettings::Private::configSharpenMethodEntry("SharpenMethod");
-const QString SharpSettings::Private::configSimpleSharpRadiusAdjustmentEntry("SimpleSharpRadiusAdjustment");
-const QString SharpSettings::Private::configUnsharpMaskRadiusAdjustmentEntry("UnsharpMaskRadiusAdjustment");
-const QString SharpSettings::Private::configUnsharpMaskAmountAdjustmentEntry("UnsharpMaskAmountAdjustment");
-const QString SharpSettings::Private::configUnsharpMaskThresholdAdjustmentEntry("UnsharpMaskThresholdAdjustment");
-const QString SharpSettings::Private::configRefocusRadiusAdjustmentEntry("RefocusRadiusAdjustment");
-const QString SharpSettings::Private::configRefocusCorrelationAdjustmentEntry("RefocusCorrelationAdjustment");
-const QString SharpSettings::Private::configRefocusNoiseAdjustmentEntry("RefocusNoiseAdjustment");
-const QString SharpSettings::Private::configRefocusGaussAdjustmentEntry("RefocusGaussAdjustment");
-const QString SharpSettings::Private::configRefocusMatrixSizeEntry("RefocusMatrixSize");
+const QString SharpSettings::Private::configSharpenMethodEntry(QLatin1String("SharpenMethod"));
+const QString SharpSettings::Private::configSimpleSharpRadiusAdjustmentEntry(QLatin1String("SimpleSharpRadiusAdjustment"));
+const QString SharpSettings::Private::configUnsharpMaskRadiusAdjustmentEntry(QLatin1String("UnsharpMaskRadiusAdjustment"));
+const QString SharpSettings::Private::configUnsharpMaskAmountAdjustmentEntry(QLatin1String("UnsharpMaskAmountAdjustment"));
+const QString SharpSettings::Private::configUnsharpMaskThresholdAdjustmentEntry(QLatin1String("UnsharpMaskThresholdAdjustment"));
+const QString SharpSettings::Private::configRefocusRadiusAdjustmentEntry(QLatin1String("RefocusRadiusAdjustment"));
+const QString SharpSettings::Private::configRefocusCorrelationAdjustmentEntry(QLatin1String("RefocusCorrelationAdjustment"));
+const QString SharpSettings::Private::configRefocusNoiseAdjustmentEntry(QLatin1String("RefocusNoiseAdjustment"));
+const QString SharpSettings::Private::configRefocusGaussAdjustmentEntry(QLatin1String("RefocusGaussAdjustment"));
+const QString SharpSettings::Private::configRefocusMatrixSizeEntry(QLatin1String("RefocusMatrixSize"));
 
 // --------------------------------------------------------
 
@@ -483,7 +483,7 @@ void SharpSettings::loadSettings()
 {
     QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Refocus Settings File to Load"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                           QString("*"));
+                                                           QLatin1String("*"));
 
     if (loadRestorationFile.isEmpty())
     {
@@ -496,7 +496,7 @@ void SharpSettings::loadSettings()
     {
         QTextStream stream(&file);
 
-        if (stream.readLine() != "# Photograph Refocus Configuration File")
+        if (stream.readLine() != QLatin1String("# Photograph Refocus Configuration File"))
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                   i18n("\"%1\" is not a Photograph Refocus settings text file.",
@@ -528,7 +528,7 @@ void SharpSettings::saveAsSettings()
 {
     QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Refocus Settings File to Save"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                           QString("*"));
+                                                           QLatin1String("*"));
 
     if (saveRestorationFile.isEmpty())
     {
@@ -540,13 +540,13 @@ void SharpSettings::saveAsSettings()
     if (file.open(QIODevice::WriteOnly))
     {
         QTextStream stream(&file);
-        stream << "# Photograph Refocus Configuration File\n";
+        stream << QLatin1String("# Photograph Refocus Configuration File\n");
 #ifdef HAVE_EIGEN3
-        stream << d->matrixSize->value() << "\n";
-        stream << d->radius->value() << "\n";
-        stream << d->gauss->value() << "\n";
-        stream << d->correlation->value() << "\n";
-        stream << d->noise->value() << "\n";
+        stream << d->matrixSize->value()  << QLatin1String("\n");
+        stream << d->radius->value()      << QLatin1String("\n");
+        stream << d->gauss->value()       << QLatin1String("\n");
+        stream << d->correlation->value() << QLatin1String("\n");
+        stream << d->noise->value()       << QLatin1String("\n");
 #endif // HAVE_EIGEN3
     }
     else

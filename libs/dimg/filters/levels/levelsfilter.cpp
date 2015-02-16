@@ -40,7 +40,7 @@ LevelsFilter::LevelsFilter(QObject* const parent)
 }
 
 LevelsFilter::LevelsFilter(DImg* const orgImage, QObject* const parent, const LevelsContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "LevelsFilter")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("LevelsFilter"))
 {
     m_settings = settings;
     initFilter();
@@ -48,7 +48,7 @@ LevelsFilter::LevelsFilter(DImg* const orgImage, QObject* const parent, const Le
 
 LevelsFilter::LevelsFilter(const LevelsContainer& settings, DImgThreadedFilter* const master,
                            const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
-    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "LevelsFilter")
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, QLatin1String("LevelsFilter"))
 {
     m_settings = settings;
     initFilter();
@@ -97,11 +97,11 @@ FilterAction LevelsFilter::filterAction()
 
     for (int i = 0; i < 5; ++i)
     {
-        action.addParameter(QString("gamma[%1]").arg(i),   m_settings.gamma[i]);
-        action.addParameter(QString("hInput[%1]").arg(i),  m_settings.hInput[i]);
-        action.addParameter(QString("hOutput[%1]").arg(i), m_settings.hOutput[i]);
-        action.addParameter(QString("lInput[%1]").arg(i),  m_settings.lInput[i]);
-        action.addParameter(QString("lOutput[%1]").arg(i), m_settings.lOutput[i]);
+        action.addParameter(QString::fromLatin1("gamma[%1]").arg(i),   m_settings.gamma[i]);
+        action.addParameter(QString::fromLatin1("hInput[%1]").arg(i),  m_settings.hInput[i]);
+        action.addParameter(QString::fromLatin1("hOutput[%1]").arg(i), m_settings.hOutput[i]);
+        action.addParameter(QString::fromLatin1("lInput[%1]").arg(i),  m_settings.lInput[i]);
+        action.addParameter(QString::fromLatin1("lOutput[%1]").arg(i), m_settings.lOutput[i]);
     }
 
     return action;
@@ -111,11 +111,11 @@ void LevelsFilter::readParameters(const Digikam::FilterAction& action)
 {
     for (int i = 0; i < 5; ++i)
     {
-        m_settings.gamma[i]   = action.parameter(QString("gamma[%1]").arg(i)).toDouble();
-        m_settings.hInput[i]  = action.parameter(QString("hInput[%1]").arg(i)).toInt();
-        m_settings.hOutput[i] = action.parameter(QString("hOutput[%1]").arg(i)).toInt();
-        m_settings.lInput[i]  = action.parameter(QString("lInput[%1]").arg(i)).toInt();
-        m_settings.lOutput[i] = action.parameter(QString("lOutput[%1]").arg(i)).toInt();
+        m_settings.gamma[i]   = action.parameter(QString::fromLatin1("gamma[%1]").arg(i)).toDouble();
+        m_settings.hInput[i]  = action.parameter(QString::fromLatin1("hInput[%1]").arg(i)).toInt();
+        m_settings.hOutput[i] = action.parameter(QString::fromLatin1("hOutput[%1]").arg(i)).toInt();
+        m_settings.lInput[i]  = action.parameter(QString::fromLatin1("lInput[%1]").arg(i)).toInt();
+        m_settings.lOutput[i] = action.parameter(QString::fromLatin1("lOutput[%1]").arg(i)).toInt();
     }
 }
 

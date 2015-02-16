@@ -64,12 +64,12 @@ class IccSettings::Private
 public:
 
     Private()
-        : configGroup("Color Management")
+        : configGroup(QLatin1String("Color Management"))
     {
     }
 
     QList<IccProfile>    scanDirectories(const QStringList& dirs);
-    void                 scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles);
+    void                 scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* const profiles);
 
     IccProfile           profileFromWindowSystem(QWidget* const widget);
 
@@ -218,12 +218,12 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
     if (desktop->isVirtualDesktop())
     {
         appRootWindow = QX11Info::appRootWindow(QX11Info::appScreen());
-        atomName      = QString("_ICC_PROFILE_%1").arg(screenNumber);
+        atomName      = QString::fromLatin1("_ICC_PROFILE_%1").arg(screenNumber);
     }
     else
     {
         appRootWindow = QX11Info::appRootWindow(screenNumber);
-        atomName      = "_ICC_PROFILE";
+        atomName      = QLatin1String("_ICC_PROFILE");
     }
 
     Atom          type;
@@ -409,7 +409,7 @@ QList<IccProfile> IccSettings::Private::scanDirectories(const QStringList& dirs)
 {
     QList<IccProfile> profiles;
     QStringList       filters;
-    filters << "*.icc" << "*.icm";
+    filters << QLatin1String("*.icc") << QLatin1String("*.icm");
     qCDebug(DIGIKAM_GENERAL_LOG) << dirs;
 
     foreach(const QString& dirPath, dirs)
@@ -427,7 +427,7 @@ QList<IccProfile> IccSettings::Private::scanDirectories(const QStringList& dirs)
     return profiles;
 }
 
-void IccSettings::Private::scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles)
+void IccSettings::Private::scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* const profiles)
 {
     QDir          dir(path);
     QFileInfoList infos;
@@ -445,7 +445,7 @@ void IccSettings::Private::scanDirectory(const QString& path, const QStringList&
             {
                 *profiles << profile;
 
-                if (info.fileName() == "AdobeRGB1998.icc")
+                if (info.fileName() == QLatin1String("AdobeRGB1998.icc"))
                 {
                     IccProfile::considerOriginalAdobeRGB(info.filePath());
                 }

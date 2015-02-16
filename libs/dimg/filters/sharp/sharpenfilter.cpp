@@ -56,7 +56,7 @@ SharpenFilter::SharpenFilter(QObject* const parent)
 }
 
 SharpenFilter::SharpenFilter(DImg* const orgImage, QObject* const parent, double radius, double sigma)
-    : DImgThreadedFilter(orgImage, parent, "Sharpen")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("Sharpen"))
 {
     m_radius = radius;
     m_sigma  = sigma;
@@ -67,7 +67,7 @@ SharpenFilter::SharpenFilter(DImgThreadedFilter* const parentFilter,
                              const DImg& orgImage, const DImg& destImage,
                              int progressBegin, int progressEnd, double radius, double sigma)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                         parentFilter->filterName() + ": Sharpen")
+                         parentFilter->filterName() + QLatin1String(": Sharpen"))
 {
     m_radius = radius;
     m_sigma  = sigma;
@@ -304,16 +304,16 @@ FilterAction SharpenFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("radius", m_radius);
-    action.addParameter("sigma", m_sigma);
+    action.addParameter(QLatin1String("radius"), m_radius);
+    action.addParameter(QLatin1String("sigma"),  m_sigma);
 
     return action;
 }
 
 void SharpenFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_radius = action.parameter("radius").toDouble();
-    m_sigma  = action.parameter("sigma").toDouble();
+    m_radius = action.parameter(QLatin1String("radius")).toDouble();
+    m_sigma  = action.parameter(QLatin1String("sigma")).toDouble();
 }
 
 }  // namespace Digikam

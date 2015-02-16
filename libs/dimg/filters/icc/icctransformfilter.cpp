@@ -42,7 +42,7 @@ IccTransformFilter::IccTransformFilter(QObject* const parent)
 }
 
 IccTransformFilter::IccTransformFilter(DImg* const orgImage, QObject* const parent, const IccTransform& transform)
-    : DImgThreadedFilter(orgImage, parent, "ICC Transform")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("ICC Transform"))
 {
     m_transform = transform;
     // initialize filter
@@ -71,10 +71,10 @@ FilterAction IccTransformFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.setParameter("renderingIntent",          m_transform.intent());
-    action.setParameter("blackPointCompensation",   m_transform.isUsingBlackPointCompensation());
-    action.setParameter("inputProfileDescription",  m_transform.effectiveInputProfile().description());
-    action.setParameter("outputProfileDescription", m_transform.outputProfile().description());
+    action.setParameter(QLatin1String("renderingIntent"),          m_transform.intent());
+    action.setParameter(QLatin1String("blackPointCompensation"),   m_transform.isUsingBlackPointCompensation());
+    action.setParameter(QLatin1String("inputProfileDescription"),  m_transform.effectiveInputProfile().description());
+    action.setParameter(QLatin1String("outputProfileDescription"), m_transform.outputProfile().description());
 
     return action;
 }
@@ -83,18 +83,18 @@ void IccTransformFilter::readParameters(const Digikam::FilterAction& action)
 {
     m_transform = IccTransform();
 
-    m_transform.setIntent((IccTransform::RenderingIntent)action.parameter("renderingIntent").toInt());
-    m_transform.setUseBlackPointCompensation(action.parameter("blackPointCompensation").toBool());
+    m_transform.setIntent((IccTransform::RenderingIntent)action.parameter(QLatin1String("renderingIntent")).toInt());
+    m_transform.setUseBlackPointCompensation(action.parameter(QLatin1String("blackPointCompensation")).toBool());
 
     QList<IccProfile> profiles;
-    profiles = IccSettings::instance()->profilesForDescription(action.parameter("inputProfileDescription").toString());
+    profiles = IccSettings::instance()->profilesForDescription(action.parameter(QLatin1String("inputProfileDescription")).toString());
 
     if (!profiles.isEmpty())
     {
         m_transform.setInputProfile(profiles.first());
     }
 
-    profiles = IccSettings::instance()->profilesForDescription(action.parameter("outputProfileDescription").toString());
+    profiles = IccSettings::instance()->profilesForDescription(action.parameter(QLatin1String("outputProfileDescription")).toString());
 
     if (!profiles.isEmpty())
     {
@@ -111,11 +111,11 @@ QString IccTransformFilter::readParametersError(const FilterAction& actionThatFa
 {
     if (m_transform.inputProfile().isNull())
         return i18n("Input color profile \"%1\" not available",
-                    actionThatFailed.parameter("inputProfileDescription").toString());
+                    actionThatFailed.parameter(QLatin1String("inputProfileDescription")).toString());
 
     if (m_transform.outputProfile().isNull())
         return i18n("Output color profile \"%1\" not available",
-                    actionThatFailed.parameter("outputProfileDescription").toString());
+                    actionThatFailed.parameter(QLatin1String("outputProfileDescription")).toString());
 
     return QString();
 }

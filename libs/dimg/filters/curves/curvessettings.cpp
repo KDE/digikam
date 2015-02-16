@@ -81,7 +81,7 @@ public:
     CurvesBox*           curvesBox;
 };
 
-const QString CurvesSettings::Private::configCurveEntry("AdjustCurves");
+const QString CurvesSettings::Private::configCurveEntry(QLatin1String("AdjustCurves"));
 
 // --------------------------------------------------------
 
@@ -250,7 +250,7 @@ void CurvesSettings::loadSettings()
 
     loadCurvesFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Curves File to Load"),
                                                  QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                 QString("*"));
+                                                 QLatin1String("*"));
 
     if (loadCurvesFile.isEmpty())
     {
@@ -271,7 +271,7 @@ void CurvesSettings::saveAsSettings()
 
     saveCurvesFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Curves File to Save"),
                                                  QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                 QString("*"));
+                                                 QLatin1String("*"));
 
     if (saveCurvesFile.isEmpty())
     {

@@ -99,13 +99,13 @@ public:
     RDoubleNumInput*     softCbInput;
 };
 
-const QString NRSettings::Private::configThrLumInputAdjustmentEntry("ThrLumAdjustment");
-const QString NRSettings::Private::configSoftLumInputAdjustmentEntry("SoftLumAdjustment");
-const QString NRSettings::Private::configThrCrInputAdjustmentEntry("ThrCrAdjustment");
-const QString NRSettings::Private::configSoftCrInputAdjustmentEntry("SoftCrAdjustment");
-const QString NRSettings::Private::configThrCbInputAdjustmentEntry("ThrCbAdjustment");
-const QString NRSettings::Private::configSoftCbInputAdjustmentEntry("SoftCbAdjustment");
-const QString NRSettings::Private::configCheckAutoEstimationEntry("AutoNRAdjustment");
+const QString NRSettings::Private::configThrLumInputAdjustmentEntry(QLatin1String("ThrLumAdjustment"));
+const QString NRSettings::Private::configSoftLumInputAdjustmentEntry(QLatin1String("SoftLumAdjustment"));
+const QString NRSettings::Private::configThrCrInputAdjustmentEntry(QLatin1String("ThrCrAdjustment"));
+const QString NRSettings::Private::configSoftCrInputAdjustmentEntry(QLatin1String("SoftCrAdjustment"));
+const QString NRSettings::Private::configThrCbInputAdjustmentEntry(QLatin1String("ThrCbAdjustment"));
+const QString NRSettings::Private::configSoftCbInputAdjustmentEntry(QLatin1String("SoftCbAdjustment"));
+const QString NRSettings::Private::configCheckAutoEstimationEntry(QLatin1String("AutoNRAdjustment"));
 
 // --------------------------------------------------------
 
@@ -113,7 +113,7 @@ NRSettings::NRSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* const grid = new QGridLayout(parent);
 
     QString thHelp = i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
                           "the image in a range from 0.0 (none) to 10.0. "
@@ -130,22 +130,22 @@ NRSettings::NRSettings(QWidget* const parent)
                                         "noise contained in image."));
 
     d->advExpanderBox   = new RExpanderBox;
-    d->advExpanderBox->setObjectName("Noise Reduction Settings Expander");
+    d->advExpanderBox->setObjectName(QLatin1String("Noise Reduction Settings Expander"));
 
     // -------------------------------------------------------------
 
-    d->luminanceBox     = new QWidget(d->advExpanderBox);
-    QGridLayout* lumLay = new QGridLayout(d->luminanceBox);
+    d->luminanceBox           = new QWidget(d->advExpanderBox);
+    QGridLayout* const lumLay = new QGridLayout(d->luminanceBox);
 
-    QLabel* label3      = new QLabel(i18n("Threshold:"), d->luminanceBox);
-    d->thrLumInput      = new RDoubleNumInput(d->luminanceBox);
+    QLabel* const label3      = new QLabel(i18n("Threshold:"), d->luminanceBox);
+    d->thrLumInput            = new RDoubleNumInput(d->luminanceBox);
     d->thrLumInput->setDecimals(2);
     d->thrLumInput->setRange(0.0, 10.0, 0.1);
     d->thrLumInput->setDefaultValue(1.2);
     d->thrLumInput->setWhatsThis(thHelp);
 
-    QLabel* label4      = new QLabel(i18n("Softness:"), d->luminanceBox);
-    d->softLumInput     = new RDoubleNumInput(d->luminanceBox);
+    QLabel* const label4      = new QLabel(i18n("Softness:"), d->luminanceBox);
+    d->softLumInput           = new RDoubleNumInput(d->luminanceBox);
     d->softLumInput->setDecimals(1);
     d->softLumInput->setRange(0.0, 1.0, 0.1);
     d->softLumInput->setDefaultValue(0.9);
@@ -161,18 +161,18 @@ NRSettings::NRSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    d->chrominanceRedBox = new QWidget(d->advExpanderBox);
-    QGridLayout* cRedLay = new QGridLayout(d->chrominanceRedBox);
+    d->chrominanceRedBox       = new QWidget(d->advExpanderBox);
+    QGridLayout* const cRedLay = new QGridLayout(d->chrominanceRedBox);
 
-    QLabel* label5       = new QLabel(i18n("Threshold:"), d->chrominanceRedBox);
-    d->thrCrInput        = new RDoubleNumInput(d->chrominanceRedBox);
+    QLabel* const label5       = new QLabel(i18n("Threshold:"), d->chrominanceRedBox);
+    d->thrCrInput              = new RDoubleNumInput(d->chrominanceRedBox);
     d->thrCrInput->setDecimals(2);
     d->thrCrInput->setRange(0.0, 10.0, 0.1);
     d->thrCrInput->setDefaultValue(1.2);
     d->thrCrInput->setWhatsThis(thHelp);
 
-    QLabel* label6       = new QLabel(i18n("Softness:"), d->chrominanceRedBox);
-    d->softCrInput       = new RDoubleNumInput(d->chrominanceRedBox);
+    QLabel* const label6       = new QLabel(i18n("Softness:"), d->chrominanceRedBox);
+    d->softCrInput             = new RDoubleNumInput(d->chrominanceRedBox);
     d->softCrInput->setDecimals(1);
     d->softCrInput->setRange(0.0, 1.0, 0.1);
     d->softCrInput->setDefaultValue(0.9);
@@ -188,18 +188,18 @@ NRSettings::NRSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    d->chrominanceBlueBox = new QWidget(d->advExpanderBox);
-    QGridLayout* cBlueLay = new QGridLayout(d->chrominanceBlueBox);
+    d->chrominanceBlueBox       = new QWidget(d->advExpanderBox);
+    QGridLayout* const cBlueLay = new QGridLayout(d->chrominanceBlueBox);
 
-    QLabel* label7        = new QLabel(i18n("Threshold:"), d->chrominanceBlueBox);
-    d->thrCbInput         = new RDoubleNumInput(d->chrominanceBlueBox);
+    QLabel* const label7        = new QLabel(i18n("Threshold:"), d->chrominanceBlueBox);
+    d->thrCbInput               = new RDoubleNumInput(d->chrominanceBlueBox);
     d->thrCbInput->setDecimals(2);
     d->thrCbInput->setRange(0.0, 10.0, 0.1);
     d->thrCbInput->setDefaultValue(1.2);
     d->thrCbInput->setWhatsThis(thHelp);
 
-    QLabel* label8        = new QLabel(i18n("Softness:"), d->chrominanceBlueBox);
-    d->softCbInput        = new RDoubleNumInput(d->chrominanceBlueBox);
+    QLabel* const label8        = new QLabel(i18n("Softness:"), d->chrominanceBlueBox);
+    d->softCbInput              = new RDoubleNumInput(d->chrominanceBlueBox);
     d->softCbInput->setDecimals(1);
     d->softCbInput->setRange(0.0, 1.0, 0.1);
     d->softCbInput->setDefaultValue(0.9);
@@ -215,15 +215,15 @@ NRSettings::NRSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    d->advExpanderBox->addItem(d->luminanceBox, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-luma.png")),
+    d->advExpanderBox->addItem(d->luminanceBox, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/colors-luma.png"))),
                                i18n("Luminance"),
-                               QString("Luminance"), true);
-    d->advExpanderBox->addItem(d->chrominanceBlueBox, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromablue.png")),
+                               QLatin1String("Luminance"), true);
+    d->advExpanderBox->addItem(d->chrominanceBlueBox, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/colors-chromablue.png"))),
                                i18n("Chrominance Blue"),
-                               QString("ChrominanceBlue"), true);
-    d->advExpanderBox->addItem(d->chrominanceRedBox, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromared.png")),
+                               QLatin1String("ChrominanceBlue"), true);
+    d->advExpanderBox->addItem(d->chrominanceRedBox, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/colors-chromared.png"))),
                                i18n("Chrominance Red"),
-                               QString("ChrominanceRed"), true);
+                               QLatin1String("ChrominanceRed"), true);
     d->advExpanderBox->addStretch();
 
     // -------------------------------------------------------------
@@ -376,7 +376,7 @@ void NRSettings::loadSettings()
 {
     QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Noise Reduction Settings File to Load"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                           QString("*"));
+                                                           QLatin1String("*"));
 
     if (loadRestorationFile.isEmpty())
     {
@@ -389,7 +389,7 @@ void NRSettings::loadSettings()
     {
         QTextStream stream(&file);
 
-        if (stream.readLine() != "# Photograph Wavelets Noise Reduction Configuration File V2")
+        if (stream.readLine() != QLatin1String("# Photograph Wavelets Noise Reduction Configuration File V2"))
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                   i18n("\"%1\" is not a Photograph Noise Reduction settings text file.",
@@ -422,7 +422,7 @@ void NRSettings::saveAsSettings()
 {
     QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Noise Reduction Settings File to Save"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                           QString("*"));
+                                                           QLatin1String("*"));
 
     if (saveRestorationFile.isEmpty())
     {
@@ -434,13 +434,13 @@ void NRSettings::saveAsSettings()
     if (file.open(QIODevice::WriteOnly))
     {
         QTextStream stream(&file);
-        stream << "# Photograph Wavelets Noise Reduction Configuration File V2\n";
-        stream << d->thrLumInput->value()  << "\n";
-        stream << d->softLumInput->value() << "\n";
-        stream << d->thrCrInput->value()   << "\n";
-        stream << d->softCrInput->value()  << "\n";
-        stream << d->thrCbInput->value()   << "\n";
-        stream << d->softCbInput->value()  << "\n";
+        stream << QLatin1String("# Photograph Wavelets Noise Reduction Configuration File V2\n");
+        stream << d->thrLumInput->value()  << QLatin1String("\n");
+        stream << d->softLumInput->value() << QLatin1String("\n");
+        stream << d->thrCrInput->value()   << QLatin1String("\n");
+        stream << d->softCrInput->value()  << QLatin1String("\n");
+        stream << d->thrCbInput->value()   << QLatin1String("\n");
+        stream << d->softCbInput->value()  << QLatin1String("\n");
     }
     else
     {

@@ -140,26 +140,26 @@ void CurvesContainer::writeToFilterAction(FilterAction& action, const QString& p
         curves = depthCurve;
     }
 
-    action.addParameter(prefix + "curveBitDepth", 8);
+    action.addParameter(prefix + QLatin1String("curveBitDepth"), 8);
 
     for (int i = 0; i < ColorChannels; ++i)
     {
-        action.addParameter(prefix + QString("curveData[%1]").arg(i), curves.channelToBinary(i).toBase64());
+        action.addParameter(prefix + QString::fromLatin1("curveData[%1]").arg(i), curves.channelToBinary(i).toBase64());
     }
 }
 
 CurvesContainer CurvesContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
 {
-    if (!action.hasParameter(prefix + "curveBitDepth"))
+    if (!action.hasParameter(prefix + QLatin1String("curveBitDepth")))
     {
         return CurvesContainer();
     }
 
-    ImageCurves curves(action.parameter(prefix + "curveBitDepth", 8) == 16);
+    ImageCurves curves(action.parameter(prefix + QLatin1String("curveBitDepth"), 8) == 16);
 
     for (int i = 0; i < ColorChannels; ++i)
     {
-        QByteArray base64 = action.parameter(prefix + QString("curveData[%1]").arg(i), QByteArray());
+        QByteArray base64 = action.parameter(prefix + QString::fromLatin1("curveData[%1]").arg(i), QByteArray());
         // check return value and set readParametersError?
         curves.setChannelFromBinary(i, QByteArray::fromBase64(base64));
     }

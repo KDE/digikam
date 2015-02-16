@@ -322,12 +322,12 @@ public:
 
     static QString getChannelTypeOption(const QString& prefix, int channel)
     {
-        return QString(prefix + "Channel%1Type").arg(channel);
+        return QString(prefix + QString::fromLatin1("Channel%1Type")).arg(channel);
     }
 
     static QString getPointOption(const QString& prefix, int channel, int point)
     {
-        return QString(prefix + "Channel%1Point%2").arg(channel).arg(point);
+        return QString(prefix + QString::fromLatin1("Channel%1Point%2")).arg(channel).arg(point);
     }
 
 private:

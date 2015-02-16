@@ -59,7 +59,7 @@ UnsharpMaskFilter::UnsharpMaskFilter(QObject* const parent)
 
 UnsharpMaskFilter::UnsharpMaskFilter(DImg* const orgImage, QObject* const parent, double radius,
                                      double amount, double threshold)
-    : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("UnsharpMask"))
 {
     m_radius    = radius;
     m_amount    = amount;
@@ -191,18 +191,18 @@ FilterAction UnsharpMaskFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("amount",    m_amount);
-    action.addParameter("radius",    m_radius);
-    action.addParameter("threshold", m_threshold);
+    action.addParameter(QLatin1String("amount"),    m_amount);
+    action.addParameter(QLatin1String("radius"),    m_radius);
+    action.addParameter(QLatin1String("threshold"), m_threshold);
 
     return action;
 }
 
 void UnsharpMaskFilter::readParameters(const FilterAction& action)
 {
-    m_amount    = action.parameter("amount").toDouble();
-    m_radius    = action.parameter("radius").toDouble();
-    m_threshold = action.parameter("threshold").toDouble();
+    m_amount    = action.parameter(QLatin1String("amount")).toDouble();
+    m_radius    = action.parameter(QLatin1String("radius")).toDouble();
+    m_threshold = action.parameter(QLatin1String("threshold")).toDouble();
 }
 
 } // namespace Digikam

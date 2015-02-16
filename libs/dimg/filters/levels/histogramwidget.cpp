@@ -565,7 +565,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     {
         DToolTipStyleSheet cnt;
         QString            tipText, value;
-        tipText = "<qt><table cellspacing=0 cellpadding=0>";
+        tipText = QLatin1String("<qt><table cellspacing=0 cellpadding=0>");
 
         tipText += cnt.cellBeg + i18n("Mean:") + cnt.cellMid;
         double mean = histogram->getMean(d->channelType, 0, histogram->getHistogramSegments() - 1);
@@ -591,7 +591,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
         double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
         tipText += value.setNum(percentile, 'f', 1) + cnt.cellEnd;
 
-        tipText += "</table></qt>";
+        tipText += QLatin1String("</table></qt>");
 
         setToolTip(tipText);
     }

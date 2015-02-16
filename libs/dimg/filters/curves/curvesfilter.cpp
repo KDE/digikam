@@ -39,7 +39,7 @@ CurvesFilter::CurvesFilter(QObject* const parent)
 }
 
 CurvesFilter::CurvesFilter(DImg* const orgImage, QObject* const parent, const CurvesContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "CurvesFilter")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("CurvesFilter"))
 {
     m_settings = settings;
     initFilter();
@@ -47,7 +47,7 @@ CurvesFilter::CurvesFilter(DImg* const orgImage, QObject* const parent, const Cu
 
 CurvesFilter::CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* const master,
                            const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
-    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "CurvesFilter")
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, QLatin1String("CurvesFilter"))
 {
     m_settings = settings;
 
