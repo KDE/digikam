@@ -210,16 +210,16 @@ QSqlDatabase DatabaseCoreBackendPrivate::createDatabaseConnection()
     {
         QStringList toAdd;
         // enable shared cache, especially useful with SQLite >= 3.5.0
-        toAdd << "QSQLITE_ENABLE_SHARED_CACHE";
+        toAdd << QLatin1String("QSQLITE_ENABLE_SHARED_CACHE");
         // We do our own waiting.
-        toAdd << "QSQLITE_BUSY_TIMEOUT=0";
+        toAdd << QLatin1String("QSQLITE_BUSY_TIMEOUT=0");
 
         if (!connectOptions.isEmpty())
         {
-            connectOptions += ';';
+            connectOptions += QLatin1Char(';');
         }
 
-        connectOptions += toAdd.join(";");
+        connectOptions += toAdd.join(QLatin1String(";"));
     }
 
     db.setDatabaseName(parameters.databaseName);
@@ -651,7 +651,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
     qCDebug(DIGIKAM_GENERAL_LOG) << "Executing DBAction ["<<  action.name  <<"]";
 #endif
 
-    bool wrapInTransaction = (action.mode == QString("transaction"));
+    bool wrapInTransaction = (action.mode == QLatin1String("transaction"));
 
     if (wrapInTransaction)
     {
@@ -662,7 +662,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
     {
         DatabaseCoreBackend::QueryState result;
 
-        if (actionElement.mode == QString("query"))
+        if (actionElement.mode == QLatin1String("query"))
         {
             result = execSql(actionElement.statement, bindingMap, values, lastInsertId);
         }
@@ -721,7 +721,7 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, c
 
     foreach(const DatabaseActionElement& actionElement, action.dbActionElements)
     {
-        if (actionElement.mode==QString("query"))
+        if (actionElement.mode == QLatin1String("query"))
         {
             result = execQuery(actionElement.statement, bindingMap);
         }
@@ -1111,7 +1111,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
         qCDebug(DIGIKAM_GENERAL_LOG)<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
 #endif
 
-        QRegExp identifierRegExp(":[A-Za-z0-9]+");
+        QRegExp identifierRegExp(QLatin1String(":[A-Za-z0-9]+"));
         int pos = 0;
 
         while ( (pos=identifierRegExp.indexIn(preparedString, pos)) != -1)
@@ -1145,13 +1145,13 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                         const QString& key    = iterator.key();
                         const QVariant& value = iterator.value();
                         replaceStr.append(key);
-                        replaceStr.append("= ?");
+                        replaceStr.append(QLatin1String("= ?"));
                         valuesToBind.append(value);
 
                         // Add a semicolon to the statement, if we are not on the last entry
                         if ((iterator+1) != placeHolderMap.constEnd())
                         {
-                            replaceStr.append(", ");
+                            replaceStr.append(QLatin1String(", "));
                         }
                     }
                 }
@@ -1166,7 +1166,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
                         if (isValue)
                         {
-                            replaceStr.append("?");
+                            replaceStr.append(QLatin1String("?"));
                             valuesToBind.append(entry);
                         }
                         else
@@ -1177,7 +1177,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                         // Add a semicolon to the statement, if we are not on the last entry
                         if ((iterator+1) != placeHolderList.constEnd())
                         {
-                            replaceStr.append(", ");
+                            replaceStr.append(QLatin1String(", "));
                         }
                     }
                 }
@@ -1192,7 +1192,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
                         if (isValue)
                         {
-                            replaceStr.append("?");
+                            replaceStr.append(QLatin1String("?"));
                             valuesToBind.append(entry);
                         }
                         else
@@ -1203,7 +1203,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                         // Add a semicolon to the statement, if we are not on the last entry
                         if ((iterator+1) != placeHolderList.constEnd())
                         {
-                            replaceStr.append(", ");
+                            replaceStr.append(QLatin1String(", "));
                         }
                     }
                 }
@@ -1211,7 +1211,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                 {
                     if (isValue)
                     {
-                        replaceStr = '?';
+                        replaceStr = QLatin1Char('?');
                         valuesToBind.append(value);
                     }
                     else
@@ -1223,11 +1223,11 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
             else
             {
 #ifdef DATABASCOREBACKEND_DEBUG
-                qCDebug(DIGIKAM_GENERAL_LOG)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Bind key ["<< namedPlaceholder << "] to value [" << bindingMap[namedPlaceholder] << "]";
 #endif
 
                 valuesToBind.append(placeHolderValue);
-                replaceStr = '?';
+                replaceStr = QLatin1Char('?');
             }
 
             preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), replaceStr);
@@ -1236,7 +1236,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
     }
 
 #ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_GENERAL_LOG)<<"Prepared statement ["<< preparedString <<"] values ["<< valuesToBind <<"]";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Prepared statement [" << preparedString << "] values [" << valuesToBind << "]";
 #endif
 
     SqlQuery query = prepareQuery(preparedString);
@@ -1265,10 +1265,10 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const Da
     DBActionType fieldList      = DBActionType::fieldEntry(fieldNames);
     DBActionType valueList      = DBActionType::value(values);
 
-    parameters.insert(":id",             id);
-    parameters.insert(":fieldValueList", qVariantFromValue(fieldValueList));
-    parameters.insert(":fieldList",      qVariantFromValue(fieldList));
-    parameters.insert(":valueList",      qVariantFromValue(valueList));
+    parameters.insert(QLatin1String(":id"),             id);
+    parameters.insert(QLatin1String(":fieldValueList"), qVariantFromValue(fieldValueList));
+    parameters.insert(QLatin1String(":fieldList"),      qVariantFromValue(fieldList));
+    parameters.insert(QLatin1String(":valueList"),      qVariantFromValue(valueList));
 
     return execDBAction(action, parameters);
 }

@@ -34,6 +34,7 @@
 // Qt includes
 
 #include <QDir>
+#include <QUrlQuery>
 #include <QFile>
 #include <QCryptographicHash>
 #include <QStandardPaths>
@@ -99,12 +100,12 @@ DatabaseParameters::DatabaseParameters(const QUrl& url)
     : port(-1),
       internalServer(false)
 {
-    databaseType           = QUrlQuery(url).queryItemValue("databaseType");
-    databaseName           = QUrlQuery(url).queryItemValue("databaseName");
-    databaseNameThumbnails = QUrlQuery(url).queryItemValue("databaseNameThumbnails");
-    connectOptions         = QUrlQuery(url).queryItemValue("connectOptions");
-    hostName               = QUrlQuery(url).queryItemValue("hostName");
-    QString queryPort      = QUrlQuery(url).queryItemValue("port");
+    databaseType           = QUrlQuery(url).queryItemValue(QLatin1String("databaseType"));
+    databaseName           = QUrlQuery(url).queryItemValue(QLatin1String("databaseName"));
+    databaseNameThumbnails = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameThumbnails"));
+    connectOptions         = QUrlQuery(url).queryItemValue(QLatin1String("connectOptions"));
+    hostName               = QUrlQuery(url).queryItemValue(QLatin1String("hostName"));
+    QString queryPort      = QUrlQuery(url).queryItemValue(QLatin1String("port"));
 
     if (!queryPort.isNull())
     {
@@ -112,18 +113,18 @@ DatabaseParameters::DatabaseParameters(const QUrl& url)
     }
 
 #if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
-    QString queryServer = QUrlQuery(url).queryItemValue("internalServer");
+    QString queryServer = QUrlQuery(url).queryItemValue(QLatin1String("internalServer"));
 
     if (!queryServer.isNull())
     {
-        internalServer = (queryServer == "true");
+        internalServer = (queryServer == QLatin1String("true"));
     }
 #else
     internalServer = false;
 #endif
 
-    userName       = QUrlQuery(url).queryItemValue("userName");
-    password       = QUrlQuery(url).queryItemValue("password");
+    userName       = QUrlQuery(url).queryItemValue(QLatin1String("userName"));
+    password       = QUrlQuery(url).queryItemValue(QLatin1String("password"));
 }
 
 bool DatabaseParameters::operator==(const DatabaseParameters& other) const
@@ -156,22 +157,22 @@ bool DatabaseParameters::isValid() const
 
 bool DatabaseParameters::isSQLite() const
 {
-    return (databaseType == "QSQLITE");
+    return (databaseType == QLatin1String("QSQLITE"));
 }
 
 bool DatabaseParameters::isMySQL() const
 {
-    return (databaseType == "QMYSQL");
+    return (databaseType == QLatin1String("QMYSQL"));
 }
 
 QString DatabaseParameters::SQLiteDatabaseType()
 {
-    return "QSQLITE";
+    return QLatin1String("QSQLITE");
 }
 
 QString DatabaseParameters::MySQLDatabaseType()
 {
-    return "QMYSQL";
+    return QLatin1String("QMYSQL");
 }
 
 QString DatabaseParameters::SQLiteDatabaseFile() const
@@ -301,16 +302,16 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 {
     // Additional semantic checks for the database section.
     // If the internal server should be started, then the connection options must be reset
-    if (databaseType == "QMYSQL" && internalServer)
+    if (databaseType == QLatin1String("QMYSQL") && internalServer)
     {
-        const QString miscDir  = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/db_misc");
-        databaseType           = "QMYSQL";
-        databaseName           = "digikam";
+        const QString miscDir  = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_misc");
+        databaseType           = QLatin1String("QMYSQL");
+        databaseName           = QLatin1String("digikam");
         internalServer         = true;
-        databaseNameThumbnails = "digikam";
+        databaseNameThumbnails = QLatin1String("digikam");
         hostName.clear();
         port                   = -1;
-        userName               = "root";
+        userName               = QLatin1String("root");
         password.clear();
         connectOptions         = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
     }
@@ -411,10 +412,10 @@ QString DatabaseParameters::getThumbsDatabaseNameOrDir() const
 
 QString DatabaseParameters::databaseDirectorySQLite(const QString& path)
 {
-    if (path.endsWith(digikam4db))
+    if (path.endsWith(QLatin1String(digikam4db)))
     {
         QString chopped(path);
-        chopped.chop(QString(digikam4db).length());
+        chopped.chop(QString(QLatin1String(digikam4db)).length());
         return chopped;
     }
 
@@ -423,10 +424,10 @@ QString DatabaseParameters::databaseDirectorySQLite(const QString& path)
 
 QString DatabaseParameters::thumbnailDatabaseDirectorySQLite(const QString& path)
 {
-    if (path.endsWith(thumbnails_digikamdb))
+    if (path.endsWith(QLatin1String(thumbnails_digikamdb)))
     {
         QString chopped(path);
-        chopped.chop(QString(thumbnails_digikamdb).length());
+        chopped.chop(QString(QLatin1String(thumbnails_digikamdb)).length());
         return chopped;
     }
 
@@ -445,9 +446,9 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     parameters.userName          = config.userName;
     parameters.password          = config.password;
     parameters.port              = config.port.toInt();
-    const QString miscDir        = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/db_misc");
+    const QString miscDir        = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_misc");
     QString connectOptions       = config.connectOptions;
-    connectOptions.replace(QString("$$DBMISCPATH$$"), miscDir);
+    connectOptions.replace(QLatin1String("$$DBMISCPATH$$"), miscDir);
 
     parameters.connectOptions   = connectOptions;
 
@@ -465,7 +466,7 @@ DatabaseParameters DatabaseParameters::thumbnailParameters() const
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
 {
     // only the database name is needed
-    DatabaseParameters params("QSQLITE", databaseFile);
+    DatabaseParameters params(QLatin1String("QSQLITE"), databaseFile);
     params.setDatabasePath(databaseFile);
     params.setThumbsDatabasePath(params.getDatabaseNameOrDir());
     return params;
