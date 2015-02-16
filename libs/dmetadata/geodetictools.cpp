@@ -10,7 +10,7 @@
  * Copyright (C) 2004-2006 by Daniele Franzoni
  * Copyright (C) 2004-2006 by Martin Desruisseaux
  * Copyright (C) 2003-2006 GeoTools Project Managment Committee (PMC), http://geotools.org
- * Copyright (C) 2001, Institut de Recherche pour le Developpement
+ * Copyright (C) 2001      Institut de Recherche pour le Developpement
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -616,27 +616,27 @@ public Shape getGeodeticCurve() {
 
 Ellipsoid Ellipsoid::WGS84()
 {
-    return createFlattenedSphere("WGS84", 6378137.0, 298.257223563);
+    return createFlattenedSphere(QLatin1String("WGS84"), 6378137.0, 298.257223563);
 }
 
 Ellipsoid Ellipsoid::GRS80()
 {
-    return createFlattenedSphere("GRS80", 6378137.0, 298.257222101);
+    return createFlattenedSphere(QLatin1String("GRS80"), 6378137.0, 298.257222101);
 }
 
 Ellipsoid Ellipsoid::INTERNATIONAL_1924()
 {
-    return createFlattenedSphere("International 1924", 6378388.0, 297.0);
+    return createFlattenedSphere(QLatin1String("International 1924"), 6378388.0, 297.0);
 }
 
 Ellipsoid Ellipsoid::CLARKE_1866()
 {
-    return createFlattenedSphere("Clarke 1866", 6378206.4, 294.9786982);
+    return createFlattenedSphere(QLatin1String("Clarke 1866"), 6378206.4, 294.9786982);
 }
 
 Ellipsoid Ellipsoid::SPHERE()
 {
-    return createEllipsoid("SPHERE", 6371000, 6371000);
+    return createEllipsoid(QLatin1String("SPHERE"), 6371000, 6371000);
 }
 
 Ellipsoid::Ellipsoid(const QString& name, double semiMajorAxis, double  semiMinorAxis,

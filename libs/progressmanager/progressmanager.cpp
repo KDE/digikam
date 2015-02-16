@@ -194,7 +194,7 @@ void ProgressItem::setThumbnail(const QIcon& icon)
     
     if (icon.isNull())
     {
-        emit progressItemThumbnail(this, QIcon::fromTheme("image-missing").pixmap(iconSize));
+        emit progressItemThumbnail(this, QIcon::fromTheme(QLatin1String("image-missing")).pixmap(iconSize));
         return;
     }
 

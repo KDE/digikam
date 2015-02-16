@@ -60,12 +60,12 @@ class TransactionItem;
 TransactionItemView::TransactionItemView(QWidget* const parent, const char* name)
     : QScrollArea( parent )
 {
-    setObjectName( name );
-    setFrameStyle( NoFrame );
-    m_bigBox = new RVBox( this );
-    setWidget( m_bigBox );
-    setWidgetResizable( true );
-    setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+    setObjectName(QLatin1String(name));
+    setFrameStyle(NoFrame);
+    m_bigBox = new RVBox(this);
+    setWidget(m_bigBox);
+    setWidgetResizable(true);
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
 
 TransactionItem* TransactionItemView::addTransactionItem(ProgressItem* const item, bool first)
@@ -131,7 +131,7 @@ void TransactionItemView::slotLayoutFirstItem()
         be the first item very shortly. That's the one we want to remove the
         hline for.
     */
-    TransactionItem* const ti = m_bigBox->findChild<TransactionItem*>("TransactionItem");
+    TransactionItem* const ti = m_bigBox->findChild<TransactionItem*>(QLatin1String("TransactionItem"));
 
     if (ti)
     {
@@ -211,7 +211,7 @@ TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item
 
     if (item->canBeCanceled())
     {
-        d->cancelButton = new QPushButton(QIcon::fromTheme("dialog-cancel"), QString(), h);
+        d->cancelButton = new QPushButton(QIcon::fromTheme(QLatin1String("dialog-cancel")), QString(), h);
         d->cancelButton->setToolTip( i18n("Cancel this operation."));
 
         connect(d->cancelButton, SIGNAL(clicked()),

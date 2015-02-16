@@ -93,7 +93,7 @@ public:
 
     static QString removeTemplateTitle()
     {
-        return QString("_REMOVE_TEMPLATE_");
+        return QLatin1String("_REMOVE_TEMPLATE_");
     };
 
 protected:

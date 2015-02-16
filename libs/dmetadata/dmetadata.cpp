@@ -140,17 +140,17 @@ bool DMetadata::loadUsingDcraw(const QString& filePath) const
 
         if (!identify.model.isNull())
         {
-            setExifTagString("Exif.Image.Model", identify.model.toLatin1().constData(), false);
+            setExifTagString("Exif.Image.Model", identify.model, false);
         }
 
         if (!identify.make.isNull())
         {
-            setExifTagString("Exif.Image.Make", identify.make.toLatin1().constData(), false);
+            setExifTagString("Exif.Image.Make", identify.make, false);
         }
 
         if (!identify.owner.isNull())
         {
-            setExifTagString("Exif.Image.Artist", identify.owner.toLatin1().constData(), false);
+            setExifTagString("Exif.Image.Artist", identify.owner, false);
         }
 
         if (identify.sensitivity != -1)
@@ -200,7 +200,7 @@ bool DMetadata::setProgramId(bool on) const
     if (on)
     {
         QString version(digiKamVersion());
-        QString software("digiKam");
+        QLatin1String software("digiKam");
         return setImageProgramId(software, version);
     }
 
@@ -233,7 +233,7 @@ bool DMetadata::mSecTimeStamp(const char* const exifTagName, int& ms) const
 
         if (ok)
         {
-            int _ms = (int)(QString("0.%1").arg(sub).toFloat(&ok) * 1000.0);
+            int _ms = (int)(QString::fromLatin1("0.%1").arg(sub).toFloat(&ok) * 1000.0);
 
             if (ok)
             {
@@ -291,7 +291,7 @@ CaptionsMap DMetadata::getImageComments() const
 
         if (!xmpComment.isEmpty())
         {
-            commentsMap.insert(QString("x-default"), xmpComment);
+            commentsMap.insert(QLatin1String("x-default"), xmpComment);
             captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
@@ -300,7 +300,7 @@ CaptionsMap DMetadata::getImageComments() const
 
         if (!xmpComment.isEmpty())
         {
-            commentsMap.insert(QString("x-default"), xmpComment);
+            commentsMap.insert(QLatin1String("x-default"), xmpComment);
             captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
@@ -314,7 +314,7 @@ CaptionsMap DMetadata::getImageComments() const
 
     if (!comment.isEmpty())
     {
-        commentsMap.insert(QString("x-default"), comment);
+        commentsMap.insert(QLatin1String("x-default"), comment);
         captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
         return captionsMap;
     }
@@ -327,7 +327,7 @@ CaptionsMap DMetadata::getImageComments() const
 
         if (!exifComment.isEmpty())
         {
-            commentsMap.insert(QString("x-default"), exifComment);
+            commentsMap.insert(QLatin1String("x-default"), exifComment);
             captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
@@ -341,7 +341,7 @@ CaptionsMap DMetadata::getImageComments() const
 
         if (!iptcComment.isEmpty() && !iptcComment.trimmed().isEmpty())
         {
-            commentsMap.insert(QString("x-default"), iptcComment);
+            commentsMap.insert(QLatin1String("x-default"), iptcComment);
             captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
@@ -375,7 +375,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
         }
     }
 
-    QString defaultComment = comments.value("x-default").caption;
+    QString defaultComment = comments.value(QLatin1String("x-default")).caption;
 
     // In first we set image comments, outside of Exif, XMP, and IPTC.
 
@@ -532,7 +532,7 @@ CaptionsMap DMetadata::getImageTitles() const
         QString iptcTitle = getIptcTagString("Iptc.Application2.ObjectName", false);
         if (!iptcTitle.isEmpty() && !iptcTitle.trimmed().isEmpty())
         {
-            titlesMap.insert(QString("x-default"), iptcTitle);
+            titlesMap.insert(QLatin1String("x-default"), iptcTitle);
             captionsMap.setData(titlesMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
@@ -545,7 +545,7 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
 {
     qCDebug(LOG_METADATA) << getFilePath() << " ==> Title: " << titles;
 
-    QString defaultTitle = titles[QString("x-default")].caption;
+    QString defaultTitle = titles[QLatin1String("x-default")].caption;
 
 
     // In First we write comments into XMP. Language Alternative rule is not yet used.
@@ -688,39 +688,39 @@ int DMetadata::getImageRating() const
 
     if (hasIptc())
     {
-        QString IptcUrgency(getIptcTagData("Iptc.Application2.Urgency"));
+        QString IptcUrgency = QString::fromUtf8(getIptcTagData("Iptc.Application2.Urgency"));
 
         if (!IptcUrgency.isEmpty())
         {
-            if (IptcUrgency == QString("1"))
+            if (IptcUrgency == QLatin1String("1"))
             {
                 return 5;
             }
-            else if (IptcUrgency == QString("2"))
+            else if (IptcUrgency == QLatin1String("2"))
             {
                 return 4;
             }
-            else if (IptcUrgency == QString("3"))
+            else if (IptcUrgency == QLatin1String("3"))
             {
                 return 4;
             }
-            else if (IptcUrgency == QString("4"))
+            else if (IptcUrgency == QLatin1String("4"))
             {
                 return 3;
             }
-            else if (IptcUrgency == QString("5"))
+            else if (IptcUrgency == QLatin1String("5"))
             {
                 return 2;
             }
-            else if (IptcUrgency == QString("6"))
+            else if (IptcUrgency == QLatin1String("6"))
             {
                 return 1;
             }
-            else if (IptcUrgency == QString("7"))
+            else if (IptcUrgency == QLatin1String("7"))
             {
                 return 1;
             }
-            else if (IptcUrgency == QString("8"))
+            else if (IptcUrgency == QLatin1String("8"))
             {
                 return 0;
             }
@@ -1084,30 +1084,30 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
 
         QStringList ISOSpeedTags;
 
-        ISOSpeedTags << "Exif.Photo.ISOSpeedRatings";
-        ISOSpeedTags << "Exif.Photo.ExposureIndex";
-        ISOSpeedTags << "Exif.Image.ISOSpeedRatings";
-        ISOSpeedTags << "Xmp.exif.ISOSpeedRatings";
-        ISOSpeedTags << "Xmp.exif.ExposureIndex";
-        ISOSpeedTags << "Exif.CanonSi.ISOSpeed";
-        ISOSpeedTags << "Exif.CanonCs.ISOSpeed";
-        ISOSpeedTags << "Exif.Nikon1.ISOSpeed";
-        ISOSpeedTags << "Exif.Nikon2.ISOSpeed";
-        ISOSpeedTags << "Exif.Nikon3.ISOSpeed";
-        ISOSpeedTags << "Exif.NikonIi.ISO";
-        ISOSpeedTags << "Exif.NikonIi.ISO2";
-        ISOSpeedTags << "Exif.MinoltaCsNew.ISOSetting";
-        ISOSpeedTags << "Exif.MinoltaCsOld.ISOSetting";
-        ISOSpeedTags << "Exif.MinoltaCs5D.ISOSpeed";
-        ISOSpeedTags << "Exif.MinoltaCs7D.ISOSpeed";
-        ISOSpeedTags << "Exif.Sony1Cs.ISOSetting";
-        ISOSpeedTags << "Exif.Sony2Cs.ISOSetting";
-        ISOSpeedTags << "Exif.Sony1Cs2.ISOSetting";
-        ISOSpeedTags << "Exif.Sony2Cs2.ISOSetting";
-        ISOSpeedTags << "Exif.Sony1MltCsA100.ISOSetting";
-        ISOSpeedTags << "Exif.Pentax.ISO";
-        ISOSpeedTags << "Exif.Olympus.ISOSpeed";
-        ISOSpeedTags << "Exif.Samsung2.ISO";
+        ISOSpeedTags << QLatin1String("Exif.Photo.ISOSpeedRatings");
+        ISOSpeedTags << QLatin1String("Exif.Photo.ExposureIndex");
+        ISOSpeedTags << QLatin1String("Exif.Image.ISOSpeedRatings");
+        ISOSpeedTags << QLatin1String("Xmp.exif.ISOSpeedRatings");
+        ISOSpeedTags << QLatin1String("Xmp.exif.ExposureIndex");
+        ISOSpeedTags << QLatin1String("Exif.CanonSi.ISOSpeed");
+        ISOSpeedTags << QLatin1String("Exif.CanonCs.ISOSpeed");
+        ISOSpeedTags << QLatin1String("Exif.Nikon1.ISOSpeed");
+        ISOSpeedTags << QLatin1String("Exif.Nikon2.ISOSpeed");
+        ISOSpeedTags << QLatin1String("Exif.Nikon3.ISOSpeed");
+        ISOSpeedTags << QLatin1String("Exif.NikonIi.ISO");
+        ISOSpeedTags << QLatin1String("Exif.NikonIi.ISO2");
+        ISOSpeedTags << QLatin1String("Exif.MinoltaCsNew.ISOSetting");
+        ISOSpeedTags << QLatin1String("Exif.MinoltaCsOld.ISOSetting");
+        ISOSpeedTags << QLatin1String("Exif.MinoltaCs5D.ISOSpeed");
+        ISOSpeedTags << QLatin1String("Exif.MinoltaCs7D.ISOSpeed");
+        ISOSpeedTags << QLatin1String("Exif.Sony1Cs.ISOSetting");
+        ISOSpeedTags << QLatin1String("Exif.Sony2Cs.ISOSetting");
+        ISOSpeedTags << QLatin1String("Exif.Sony1Cs2.ISOSetting");
+        ISOSpeedTags << QLatin1String("Exif.Sony2Cs2.ISOSetting");
+        ISOSpeedTags << QLatin1String("Exif.Sony1MltCsA100.ISOSetting");
+        ISOSpeedTags << QLatin1String("Exif.Pentax.ISO");
+        ISOSpeedTags << QLatin1String("Exif.Olympus.ISOSpeed");
+        ISOSpeedTags << QLatin1String("Exif.Samsung2.ISO");
 
         photoInfo.sensitivity = getExifTagStringFromTagsList(ISOSpeedTags);
 
@@ -1217,7 +1217,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     if (!tagsPath.isEmpty())
     {
         // See bug #197285: LightRoom use '|' as separator.
-        tagsPath = tagsPath.replaceInStrings("|", "/");
+        tagsPath = tagsPath.replaceInStrings(QLatin1String("|"), QLatin1String("/"));
         qCDebug(LOG_METADATA) << "Tags Path imported from LightRoom: " << tagsPath;
         return true;
     }
@@ -1238,7 +1238,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     if (!tagsPath.isEmpty())
     {
         // Work around to Imach tags path list hosted in IPTC with '.' as separator.
-        QStringList ntp = tagsPath.replaceInStrings(".", "/");
+        QStringList ntp = tagsPath.replaceInStrings(QLatin1String("."), QLatin1String("/"));
 
         if (ntp != tagsPath)
         {
@@ -1253,7 +1253,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     QString keyWords = getExifTagString("Exif.Image.XPKeywords", false);
     if (!keyWords.isEmpty())
     {
-        tagsPath = keyWords.split(";");
+        tagsPath = keyWords.split(QLatin1String(";"));
 
         if (!tagsPath.isEmpty())
         {
@@ -1285,7 +1285,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
         }
 
         QStringList LRtagsPath = tagsPath;
-        LRtagsPath             = LRtagsPath.replaceInStrings("/", "|");
+        LRtagsPath             = LRtagsPath.replaceInStrings(QLatin1String("/"), QLatin1String("|"));
 
         if (!setXmpTagStringBag("Xmp.lr.hierarchicalSubject", LRtagsPath))
         {
@@ -1305,8 +1305,8 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
     // > the key.
     // I think that means I have to iterate over the WLPG face tags in the clunky
     // way below (guess numbers and look them up as strings). (Leif)
-    const QString personPathTemplate = "Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:PersonDisplayName";
-    const QString rectPathTemplate   = "Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:Rectangle";
+    const QString personPathTemplate = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:PersonDisplayName");
+    const QString rectPathTemplate   = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:Rectangle");
 
     for (int i=1; ; i++)
     {
@@ -1322,7 +1322,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
         // Similarly the width and height of the face's box are
         // indicated by W.WW and H.HH.
         QString rectString = getXmpTagString(rectPathTemplate.arg(i).toLatin1().constData(), false);
-        QStringList list   = rectString.split(',');
+        QStringList list   = rectString.split(QLatin1Char(','));
 
         if (list.size() < 4)
         {
@@ -1343,11 +1343,11 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
 #if KEXIV2_VERSION >= 0x020301
     // Read face tags as saved by Picasa
     // http://www.exiv2.org/tags-xmp-mwg-rs.html
-    const QString mwg_personPathTemplate  = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Name";
-    const QString mwg_rect_x_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:x";
-    const QString mwg_rect_y_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:y";
-    const QString mwg_rect_w_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:w";
-    const QString mwg_rect_h_PathTemplate = "Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:h";
+    const QString mwg_personPathTemplate  = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Name");
+    const QString mwg_rect_x_PathTemplate = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:x");
+    const QString mwg_rect_y_PathTemplate = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:y");
+    const QString mwg_rect_w_PathTemplate = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:w");
+    const QString mwg_rect_h_PathTemplate = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:h");
 
     for (int i=1; ; i++)
     {
@@ -1377,19 +1377,19 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
 bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool write) const
 {
 #if KEXIV2_VERSION >= 0x020301
-    QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
-    QString nameTagKey = qxmpTagName + QString("[%1]/mwg-rs:Name");
-    QString typeTagKey = qxmpTagName + QString("[%1]/mwg-rs:Type");
-    QString areaTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area");
-    QString areaxTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:x");
-    QString areayTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:y");
-    QString areawTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:w");
-    QString areahTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:h");
-    QString areanormTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:unit");
+    QString qxmpTagName(QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList"));
+    QString nameTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Name");
+    QString typeTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Type");
+    QString areaTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area");
+    QString areaxTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:x");
+    QString areayTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:y");
+    QString areawTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:w");
+    QString areahTagKey    = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:h");
+    QString areanormTagKey = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area/stArea:unit");
 
-    QString winQxmpTagName("Xmp.MP.RegionInfo/MPRI:Regions");
-    QString winRectTagKey = winQxmpTagName + QString("[%1]/MPReg:Rectangle");
-    QString winNameTagKey = winQxmpTagName + QString("[%1]/MPReg:PersonDisplayName");
+    QString winQxmpTagName = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions");
+    QString winRectTagKey  = winQxmpTagName + QLatin1String("[%1]/MPReg:Rectangle");
+    QString winNameTagKey  = winQxmpTagName + QLatin1String("[%1]/MPReg:PersonDisplayName");
 
     if(!write)
     {
@@ -1400,10 +1400,10 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
     }
 
     setXmpTagString(qxmpTagName.toLatin1().constData(),
-                    QString(),KExiv2::XmpTagType(1),false);
+                    QString(), KExiv2::XmpTagType(1),false);
 
     setXmpTagString(winQxmpTagName.toLatin1().constData(),
-                    QString(),KExiv2::XmpTagType(1),false);
+                    QString(), KExiv2::XmpTagType(1),false);
 
     QMap<QString,QVariant>::const_iterator it = facesPath.constBegin();
     int i = 1;
@@ -1417,9 +1417,9 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
 
         QString rectString;
 
-        rectString.append(QString::number(x) + QString(", "));
-        rectString.append(QString::number(y) + QString(", "));
-        rectString.append(QString::number(w) + QString(", "));
+        rectString.append(QString::number(x) + QLatin1String(", "));
+        rectString.append(QString::number(y) + QLatin1String(", "));
+        rectString.append(QString::number(w) + QLatin1String(", "));
         rectString.append(QString::number(h));
 
         /** Set tag rect **/
@@ -1439,31 +1439,31 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
                               it.key(),KExiv2::XmpTagType(0),false);
         /** Set tag type as Face **/
         ok &= setXmpTagString(typeTagKey.arg(i).toLatin1().constData(),
-                              QString("Face"),KExiv2::XmpTagType(0),false);
+                              QLatin1String("Face"), KExiv2::XmpTagType(0),false);
 
         /** Set tag Area, with xmp type struct **/
         ok &= setXmpTagString(areaTagKey.arg(i).toLatin1().constData(),
-                              QString(),KExiv2::XmpTagType(2),false);
+                              QString(), KExiv2::XmpTagType(2),false);
 
         /** Set stArea:x inside Area structure **/
         ok &= setXmpTagString(areaxTagKey.arg(i).toLatin1().constData(),
-                              QString::number(x),KExiv2::XmpTagType(0),false);
+                              QString::number(x), KExiv2::XmpTagType(0),false);
 
         /** Set stArea:y inside Area structure **/
         ok &= setXmpTagString(areayTagKey.arg(i).toLatin1().constData(),
-                              QString::number(y),KExiv2::XmpTagType(0),false);
+                              QString::number(y), KExiv2::XmpTagType(0),false);
 
         /** Set stArea:w inside Area structure **/
         ok &= setXmpTagString(areawTagKey.arg(i).toLatin1().constData(),
-                              QString::number(w),KExiv2::XmpTagType(0),false);
+                              QString::number(w), KExiv2::XmpTagType(0),false);
 
         /** Set stArea:h inside Area structure **/
         ok &= setXmpTagString(areahTagKey.arg(i).toLatin1().constData(),
-                              QString::number(h),KExiv2::XmpTagType(0),false);
+                              QString::number(h), KExiv2::XmpTagType(0),false);
 
         /** Set stArea:unit inside Area structure  as normalized **/
         ok &= setXmpTagString(areanormTagKey.arg(i).toLatin1().constData(),
-                              QString("normalized"),KExiv2::XmpTagType(0),false);
+                              QLatin1String("normalized"), KExiv2::XmpTagType(0),false);
 
         ++it;
         ++i;
@@ -1578,7 +1578,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
         return false;
     }
 
-    if (!setIptcTag(copyright["x-default"], 128, "Copyright",     "Iptc.Application2.Copyright"))
+    if (!setIptcTag(copyright[QLatin1String("x-default")], 128, "Copyright",     "Iptc.Application2.Copyright"))
     {
         return false;
     }
@@ -1614,7 +1614,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     {
         if (str.startsWith(QLatin1String("XMP")))
         {
-            str.replace(0, 3, "IPTC");
+            str.replace(0, 3, QLatin1String("IPTC"));
         }
 
         newList.append(str);
@@ -1924,24 +1924,24 @@ QString DMetadata::getLensDescription() const
 
     // In first, try to get Lens information from makernotes.
 
-    lensExifTags.append("Exif.CanonCs.LensType");      // Canon Cameras Makernote.
-    lensExifTags.append("Exif.CanonCs.Lens");          // Canon Cameras Makernote.
-    lensExifTags.append("Exif.Canon.0x0095");          // Alternative Canon Cameras Makernote.
-    lensExifTags.append("Exif.NikonLd1.LensIDNumber"); // Nikon Cameras Makernote.
-    lensExifTags.append("Exif.NikonLd2.LensIDNumber"); // Nikon Cameras Makernote.
-    lensExifTags.append("Exif.NikonLd3.LensIDNumber"); // Nikon Cameras Makernote.
-    lensExifTags.append("Exif.Minolta.LensID");        // Minolta Cameras Makernote.
-    lensExifTags.append("Exif.Photo.LensModel");       // Sony Cameras Makernote (and others?).
-    lensExifTags.append("Exif.Sony1.LensID");          // Sony Cameras Makernote.
-    lensExifTags.append("Exif.Sony2.LensID");          // Sony Cameras Makernote.
-    lensExifTags.append("Exif.SonyMinolta.LensID");    // Sony Cameras Makernote.
-    lensExifTags.append("Exif.Pentax.LensType");       // Pentax Cameras Makernote.
-    lensExifTags.append("Exif.Panasonic.0x0051");      // Panasonic Cameras Makernote.
-    lensExifTags.append("Exif.Panasonic.0x0310");      // Panasonic Cameras Makernote.
-    lensExifTags.append("Exif.Sigma.LensRange");       // Sigma Cameras Makernote.
-    lensExifTags.append("Exif.Samsung2.LensType");     // Samsung Cameras Makernote.
-    lensExifTags.append("Exif.Photo.0xFDEA");          // Non-standard Exif tag set by Camera Raw.
-    lensExifTags.append("Exif.OlympusEq.LensModel");   // Olympus Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.CanonCs.LensType"));      // Canon Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.CanonCs.Lens"));          // Canon Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Canon.0x0095"));          // Alternative Canon Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.NikonLd1.LensIDNumber")); // Nikon Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.NikonLd2.LensIDNumber")); // Nikon Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.NikonLd3.LensIDNumber")); // Nikon Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Minolta.LensID"));        // Minolta Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Photo.LensModel"));       // Sony Cameras Makernote (and others?).
+    lensExifTags.append(QLatin1String("Exif.Sony1.LensID"));          // Sony Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Sony2.LensID"));          // Sony Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.SonyMinolta.LensID"));    // Sony Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Pentax.LensType"));       // Pentax Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Panasonic.0x0051"));      // Panasonic Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Panasonic.0x0310"));      // Panasonic Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Sigma.LensRange"));       // Sigma Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Samsung2.LensType"));     // Samsung Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.Photo.0xFDEA"));          // Non-standard Exif tag set by Camera Raw.
+    lensExifTags.append(QLatin1String("Exif.OlympusEq.LensModel"));   // Olympus Cameras Makernote.
     
     // Olympus Cameras Makernote. FIXME is this necessary? exiv2 returns complete name, which doesn't match with lensfun information, see bug #311295
     //lensExifTags.append("Exif.OlympusEq.LensType");    
@@ -1953,10 +1953,13 @@ QString DMetadata::getLensDescription() const
 
     for (QStringList::const_iterator it = lensExifTags.constBegin(); it != lensExifTags.constEnd(); ++it)
     {
-        lens = getExifTagString((*it).toAscii().constData());
+        lens = getExifTagString((*it).toLatin1().constData());
 
         if ( !lens.isEmpty() &&
-             !(lens.startsWith('(') && lens.endsWith(')')) )   // To prevent undecoded tag values from Exiv2 as "(65535)".
+             !(lens.startsWith(QLatin1Char('(')) && 
+               lens.endsWith(QLatin1Char(')'))
+              )
+           )   // To prevent undecoded tag values from Exiv2 as "(65535)".
         {
             return lens;
         }
@@ -1974,7 +1977,7 @@ QString DMetadata::getLensDescription() const
 
         if (!lens.isEmpty())
         {
-            lens.append(" ");
+            lens.append(QLatin1String(" "));
         }
 
         lens.append(getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
@@ -2122,7 +2125,7 @@ inline QVariant DMetadata::fromIptcEmulateLangAlt(const char* const iptcTagName)
     }
 
     QMap<QString, QVariant> map;
-    map["x-default"] = str;
+    map[QLatin1String("x-default")] = str;
     return map;
 }
 
@@ -2153,7 +2156,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
     switch (field)
     {
         case MetadataInfo::Comment:
-            return getImageComments()[QString("x-default")].caption;
+            return getImageComments()[QLatin1String("x-default")].caption;
         case MetadataInfo::CommentJfif:
             return getCommentsDecoded();
         case MetadataInfo::CommentExif:
@@ -2581,9 +2584,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
                 return QString();
             }
 
-            QString direction = (directionRef == 'W') ?
+            QString direction = (QLatin1Char(directionRef) == QLatin1Char('W')) ?
                                 i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate", "East");
-            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
+            return QString::fromLatin1("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
                    .arg(minutes).arg(QChar(0x2032))
                    .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);
         }
@@ -2594,9 +2597,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
             char   directionRef;
 
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
-            QString direction = (directionRef == 'W') ?
+            QString direction = (QLatin1Char(directionRef) == QLatin1Char('W')) ?
                                 i18nc("For use in longitude coordinate", "West") : i18nc("For use in longitude coordinate", "East");
-            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
+            return QString::fromLatin1("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
                    .arg(minutes).arg(QChar(0x2032))
                    .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);
         }
@@ -2611,9 +2614,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
                 return QString();
             }
 
-            QString direction = (directionRef == 'N') ?
+            QString direction = (QLatin1Char(directionRef) == QLatin1Char('N')) ?
                                 i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "South");
-            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
+            return QString::fromLatin1("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
                    .arg(minutes).arg(QChar(0x2032))
                    .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);
         }
@@ -2624,15 +2627,15 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
             char   directionRef;
 
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
-            QString direction = (directionRef == 'N') ?
+            QString direction = (QLatin1Char(directionRef) == QLatin1Char('N')) ?
                                 i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "North");
-            return QString("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
+            return QString::fromLatin1("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
                    .arg(minutes).arg(QChar(0x2032))
                    .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);
         }
         case MetadataInfo::Altitude:
         {
-            QString meters = QString("%L1").arg(value.toDouble(), 0, 'f', 2);
+            QString meters = QString::fromLatin1("%L1").arg(value.toDouble(), 0, 'f', 2);
             // xgettext: no-c-format
             return i18nc("Height in meters", "%L1m", meters); // krazy:exclude=i18ncheckarg
         }
@@ -2685,9 +2688,9 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
             }
 
             // return default
-            if (map.contains("x-default"))
+            if (map.contains(QLatin1String("x-default")))
             {
-                return map["x-default"].toString();
+                return map[QLatin1String("x-default")].toString();
             }
 
             // return first entry
@@ -2698,7 +2701,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         case MetadataInfo::IptcCoreCreator:
         case MetadataInfo::IptcCoreScene:
         case MetadataInfo::IptcCoreSubjectCode:
-            return value.toStringList().join(" ");
+            return value.toStringList().join(QLatin1String(" "));
 
             // Text
         case MetadataInfo::Comment:
@@ -2940,7 +2943,7 @@ KExiv2::AltLangMap DMetadata::toAltLangMap(const QVariant& var)
     switch (var.type())
     {
         case QVariant::String:
-            map.insert("x-default", var.toString());
+            map.insert(QLatin1String("x-default"), var.toString());
             break;
         case QVariant::Map:
         {
@@ -3144,7 +3147,7 @@ QString DMetadata::getExifTagStringFromTagsList(const QStringList& tagsList) con
 
     foreach(const QString& tag, tagsList)
     {
-        val = getExifTagString(tag.toAscii().constData());
+        val = getExifTagString(tag.toLatin1().constData());
         if (!val.isEmpty())
             return val;
     }

@@ -101,14 +101,14 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressVie
     d->progressView      = progressView;
     d->bShowButton       = button;
 
-    int w  = fontMetrics().width(" 999.9 kB/s 00:00:01 ") + 8;
+    int w  = fontMetrics().width(QLatin1String(" 999.9 kB/s 00:00:01 ")) + 8;
     d->box = new QHBoxLayout(this);
     d->box->setMargin(0);
     d->box->setSpacing(0);
 
     d->pButton        = new QPushButton(this);
     d->pButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    d->pButton->setIcon(QIcon::fromTheme("go-up"));
+    d->pButton->setIcon(QIcon::fromTheme(QLatin1String("go-up")));
     d->box->addWidget(d->pButton);
     d->stack          = new QStackedWidget(this);
     d->stack->setMaximumHeight(fontMetrics().height());
@@ -359,13 +359,13 @@ void StatusbarProgressWidget::slotProgressViewVisible(bool b)
     // Update the hide/show button when the detailed one is shown/hidden
     if (b)
     {
-        d->pButton->setIcon(QIcon::fromTheme("go-down"));
+        d->pButton->setIcon(QIcon::fromTheme(QLatin1String("go-down")));
         d->pButton->setToolTip(i18n("Hide detailed progress window"));
         setMode();
     }
     else
     {
-        d->pButton->setIcon(QIcon::fromTheme("go-up"));
+        d->pButton->setIcon(QIcon::fromTheme(QLatin1String("go-up")));
         d->pButton->setToolTip(i18n("Show detailed progress window"));
     }
 }

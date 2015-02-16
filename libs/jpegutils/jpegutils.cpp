@@ -256,7 +256,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
             break;
         case 1: // B&W image
             img = QImage(cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
-            img.setNumColors(256);
+            img.setColorCount(256);
 
             for (int i = 0 ; i < 256 ; ++i)
             {
@@ -408,7 +408,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
     for (int i=0; i<actions.size(); i++)
     {
-        SafeTemporaryFile* const temp = new SafeTemporaryFile(dir + "/JpegRotator-XXXXXX.digikamtempfile.jpg");
+        SafeTemporaryFile* const temp = new SafeTemporaryFile(dir + QLatin1String("/JpegRotator-XXXXXX.digikamtempfile.jpg"));
         temp->setAutoRemove(false);
         temp->open();
         QString tempFile = temp->fileName();
@@ -681,8 +681,8 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         // will be found into Exiv2.
         // Note : There is no limitation with TIFF and PNG about IPTC byte array size.
 
-        if (format.toUpper() != QString("JPG") && format.toUpper() != QString("JPEG") &&
-            format.toUpper() != QString("JPE"))
+        if (format.toUpper() != QLatin1String("JPG") && format.toUpper() != QLatin1String("JPEG") &&
+            format.toUpper() != QLatin1String("JPE"))
         {
             meta.setImagePreview(preview);
         }
@@ -699,26 +699,26 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
 
         // And now save the image to a new file format.
 
-        if ( format.toUpper() == QString("PNG") )
+        if ( format.toUpper() == QLatin1String("PNG") )
         {
-            image.setAttribute("quality", 9);
+            image.setAttribute(QLatin1String("quality"), 9);
         }
 
-        if ( format.toUpper() == QString("TIFF") || format.toUpper() == QString("TIF") )
+        if ( format.toUpper() == QLatin1String("TIFF") || format.toUpper() == QLatin1String("TIF") )
         {
-            image.setAttribute("compress", true);
+            image.setAttribute(QLatin1String("compress"), true);
         }
 
-        if ( format.toUpper() == QString("JP2") || format.toUpper() == QString("JPX") ||
-             format.toUpper() == QString("JPC") || format.toUpper() == QString("PGX") ||
-             format.toUpper() == QString("J2K") )
+        if ( format.toUpper() == QLatin1String("JP2") || format.toUpper() == QLatin1String("JPX") ||
+             format.toUpper() == QLatin1String("JPC") || format.toUpper() == QLatin1String("PGX") ||
+             format.toUpper() == QLatin1String("J2K") )
         {
-            image.setAttribute("quality", 100);    // LossLess
+            image.setAttribute(QLatin1String("quality"), 100);    // LossLess
         }
 
-        if ( format.toUpper() == QString("PGF") )
+        if ( format.toUpper() == QLatin1String("PGF") )
         {
-            image.setAttribute("quality", 0);    // LossLess
+            image.setAttribute(QLatin1String("quality"), 0);    // LossLess
         }
 
         return (image.save(dest, format));
@@ -732,13 +732,13 @@ bool isJpegImage(const QString& file)
     QFileInfo fileInfo(file);
 
     // Check if the file is an JPEG image
-    QString format = QString(QImageReader::imageFormat(file)).toUpper();
+    QString format = QString::fromUtf8(QImageReader::imageFormat(file)).toUpper();
     // Check if its not MPO format (See bug #307277).
     QString ext    = fileInfo.suffix().toUpper();
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "mimetype = " << format << " ext = " << ext;
 
-    if (format != "JPEG" || ext == "MPO")
+    if (format != QLatin1String("JPEG") || ext == QLatin1String("MPO"))
     {
         return false;
     }
