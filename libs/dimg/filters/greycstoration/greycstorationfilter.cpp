@@ -517,38 +517,38 @@ FilterAction GreycstorationFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("alpha",        d->settings.alpha);
-    action.addParameter("amplitude",    d->settings.amplitude);
-    action.addParameter("anisotropy",   d->settings.anisotropy);
-    action.addParameter("btile",        d->settings.btile);
-    action.addParameter("da",           d->settings.da);
-    action.addParameter("dl",           d->settings.dl);
-    action.addParameter("fastApprox",   d->settings.fastApprox);
-    action.addParameter("gaussPrec",    d->settings.gaussPrec);
-    action.addParameter("interp",       d->settings.interp);
-    action.addParameter("nbIter",       d->settings.nbIter);
-    action.addParameter("sharpness",    d->settings.sharpness);
-    action.addParameter("sigma",        d->settings.sigma);
-    action.addParameter("tile",         d->settings.tile);
+    action.addParameter(QLatin1String("alpha"),        d->settings.alpha);
+    action.addParameter(QLatin1String("amplitude"),    d->settings.amplitude);
+    action.addParameter(QLatin1String("anisotropy"),   d->settings.anisotropy);
+    action.addParameter(QLatin1String("btile"),        d->settings.btile);
+    action.addParameter(QLatin1String("da"),           d->settings.da);
+    action.addParameter(QLatin1String("dl"),           d->settings.dl);
+    action.addParameter(QLatin1String("fastApprox"),   d->settings.fastApprox);
+    action.addParameter(QLatin1String("gaussPrec"),    d->settings.gaussPrec);
+    action.addParameter(QLatin1String("interp"),       d->settings.interp);
+    action.addParameter(QLatin1String("nbIter"),       d->settings.nbIter);
+    action.addParameter(QLatin1String("sharpness"),    d->settings.sharpness);
+    action.addParameter(QLatin1String("sigma"),        d->settings.sigma);
+    action.addParameter(QLatin1String("tile"),         d->settings.tile);
 
     return action;
 }
 
 void GreycstorationFilter::readParameters(const FilterAction& action)
 {
-    d->settings.alpha       = action.parameter("alpha").toFloat();
-    d->settings.amplitude   = action.parameter("amplitude").toFloat();
-    d->settings.anisotropy  = action.parameter("anisotropy").toFloat();
-    d->settings.btile       = action.parameter("btile").toInt();
-    d->settings.da          = action.parameter("da").toFloat();
-    d->settings.dl          = action.parameter("dl").toFloat();
-    d->settings.fastApprox  = action.parameter("fastApprox").toBool();
-    d->settings.gaussPrec   = action.parameter("gaussPrec").toFloat();
-    d->settings.interp      = action.parameter("interp").toFloat();
-    d->settings.nbIter      = action.parameter("nbIter").toUInt();
-    d->settings.sharpness   = action.parameter("sharpness").toFloat();
-    d->settings.sigma       = action.parameter("sigma").toFloat();
-    d->settings.tile        = action.parameter("tile").toInt();
+    d->settings.alpha       = action.parameter(QLatin1String("alpha")).toFloat();
+    d->settings.amplitude   = action.parameter(QLatin1String("amplitude")).toFloat();
+    d->settings.anisotropy  = action.parameter(QLatin1String("anisotropy")).toFloat();
+    d->settings.btile       = action.parameter(QLatin1String("btile")).toInt();
+    d->settings.da          = action.parameter(QLatin1String("da")).toFloat();
+    d->settings.dl          = action.parameter(QLatin1String("dl")).toFloat();
+    d->settings.fastApprox  = action.parameter(QLatin1String("fastApprox")).toBool();
+    d->settings.gaussPrec   = action.parameter(QLatin1String("gaussPrec")).toFloat();
+    d->settings.interp      = action.parameter(QLatin1String("interp")).toFloat();
+    d->settings.nbIter      = action.parameter(QLatin1String("nbIter")).toUInt();
+    d->settings.sharpness   = action.parameter(QLatin1String("sharpness")).toFloat();
+    d->settings.sigma       = action.parameter(QLatin1String("sigma")).toFloat();
+    d->settings.tile        = action.parameter(QLatin1String("tile")).toInt();
 }
 
 }  // namespace Digikam

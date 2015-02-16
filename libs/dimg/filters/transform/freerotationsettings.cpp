@@ -77,8 +77,8 @@ public:
     RComboBox*       autoCropCB;
 };
 
-const QString FreeRotationSettings::Private::configAutoCropTypeEntry("Auto Crop Type");
-const QString FreeRotationSettings::Private::configAntiAliasingEntry("Anti Aliasing");
+const QString FreeRotationSettings::Private::configAutoCropTypeEntry(QLatin1String("Auto Crop Type"));
+const QString FreeRotationSettings::Private::configAntiAliasingEntry(QLatin1String("Anti Aliasing"));
 
 // --------------------------------------------------------
 
@@ -86,20 +86,20 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // --------------------------------------------------------
 
-    QLabel* label3    = new QLabel(i18n("Main angle:"));
-    d->angleInput     = new RIntNumInput;
+    QLabel* const label3 = new QLabel(i18n("Main angle:"));
+    d->angleInput        = new RIntNumInput;
     d->angleInput->setRange(-180, 180, 1);
     d->angleInput->setDefaultValue(0);
     d->angleInput->setWhatsThis(i18n("An angle in degrees by which to rotate the image. "
                                      "A positive angle rotates the image clockwise; "
                                      "a negative angle rotates it counter-clockwise."));
 
-    QLabel* label4    = new QLabel(i18n("Fine angle:"));
-    d->fineAngleInput = new RDoubleNumInput;
+    QLabel* const label4 = new QLabel(i18n("Fine angle:"));
+    d->fineAngleInput    = new RDoubleNumInput;
     d->fineAngleInput->setRange(-1.0, 1.0, 0.01);
     d->fineAngleInput->setDefaultValue(0);
     d->fineAngleInput->setWhatsThis(i18n("This value in degrees will be added to main angle value "
@@ -110,8 +110,8 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
                                          "to the rotated image. "
                                          "In order to smooth the target image, it will be blurred a little."));
 
-    QLabel* label5    = new QLabel(i18n("Auto-crop:"));
-    d->autoCropCB     = new RComboBox;
+    QLabel* const label5 = new QLabel(i18n("Auto-crop:"));
+    d->autoCropCB        = new RComboBox;
     d->autoCropCB->addItem(i18nc("no autocrop", "None"));
     d->autoCropCB->addItem(i18n("Widest Area"));
     d->autoCropCB->addItem(i18n("Largest Area"));

@@ -58,7 +58,7 @@ FreeRotationFilter::FreeRotationFilter(QObject* const parent)
 }
 
 FreeRotationFilter::FreeRotationFilter(DImg* const orgImage, QObject* const parent, const FreeRotationContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "FreeRotation"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("FreeRotation")),
       d(new Private)
 {
     d->settings = settings;
@@ -395,32 +395,32 @@ FilterAction FreeRotationFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("angle",            d->settings.angle);
-    action.addParameter("antiAlias",        d->settings.antiAlias);
-    action.addParameter("autoCrop",         d->settings.autoCrop);
-    action.addParameter("newSize",          d->settings.newSize);
-    action.addParameter("orgH",             d->settings.orgH);
-    action.addParameter("orgW",             d->settings.orgW);
-    action.addParameter("backgroundColorR", d->settings.backgroundColor.red());
-    action.addParameter("backgroundColorG", d->settings.backgroundColor.green());
-    action.addParameter("backgroundColorB", d->settings.backgroundColor.blue());
-    action.addParameter("backgroundColorA", d->settings.backgroundColor.alpha());
+    action.addParameter(QLatin1String("angle"),            d->settings.angle);
+    action.addParameter(QLatin1String("antiAlias"),        d->settings.antiAlias);
+    action.addParameter(QLatin1String("autoCrop"),         d->settings.autoCrop);
+    action.addParameter(QLatin1String("newSize"),          d->settings.newSize);
+    action.addParameter(QLatin1String("orgH"),             d->settings.orgH);
+    action.addParameter(QLatin1String("orgW"),             d->settings.orgW);
+    action.addParameter(QLatin1String("backgroundColorR"), d->settings.backgroundColor.red());
+    action.addParameter(QLatin1String("backgroundColorG"), d->settings.backgroundColor.green());
+    action.addParameter(QLatin1String("backgroundColorB"), d->settings.backgroundColor.blue());
+    action.addParameter(QLatin1String("backgroundColorA"), d->settings.backgroundColor.alpha());
 
     return action;
 }
 
 void FreeRotationFilter::readParameters(const FilterAction& action)
 {
-    d->settings.angle     = action.parameter("angle").toDouble();
-    d->settings.antiAlias = action.parameter("antiAlias").toBool();
-    d->settings.autoCrop  = action.parameter("autoCrop").toInt();
-    d->settings.newSize   = action.parameter("newSize").toSize();
-    d->settings.orgH      = action.parameter("orgH").toInt();
-    d->settings.orgW      = action.parameter("orgW").toInt();
-    d->settings.backgroundColor.setRed(action.parameter("backgroundColorR").toInt());
-    d->settings.backgroundColor.setGreen(action.parameter("backgroundColorG").toInt());
-    d->settings.backgroundColor.setBlue(action.parameter("backgroundColorB").toInt());
-    d->settings.backgroundColor.setAlpha(action.parameter("backgroundColorA").toInt());
+    d->settings.angle     = action.parameter(QLatin1String("angle")).toDouble();
+    d->settings.antiAlias = action.parameter(QLatin1String("antiAlias")).toBool();
+    d->settings.autoCrop  = action.parameter(QLatin1String("autoCrop")).toInt();
+    d->settings.newSize   = action.parameter(QLatin1String("newSize")).toSize();
+    d->settings.orgH      = action.parameter(QLatin1String("orgH")).toInt();
+    d->settings.orgW      = action.parameter(QLatin1String("orgW")).toInt();
+    d->settings.backgroundColor.setRed(action.parameter(QLatin1String("backgroundColorR")).toInt());
+    d->settings.backgroundColor.setGreen(action.parameter(QLatin1String("backgroundColorG")).toInt());
+    d->settings.backgroundColor.setBlue(action.parameter(QLatin1String("backgroundColorB")).toInt());
+    d->settings.backgroundColor.setAlpha(action.parameter(QLatin1String("backgroundColorA")).toInt());
 }
 
 }  // namespace Digikam

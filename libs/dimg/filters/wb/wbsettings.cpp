@@ -119,14 +119,14 @@ public:
     {
         int index        = temperaturePresetCB->combo()->findData((int)preset);
         QString itemText = temperaturePresetCB->combo()->itemText(index);
-        QString tempDesc = QString("<p><b>%1</b>: %2 (%3K).</p>")
+        QString tempDesc = QString::fromLatin1("<p><b>%1</b>: %2 (%3K).</p>")
                            .arg(itemText)
                            .arg(desc)
                            .arg((int)preset);
 
         if (preset == None)
         {
-            tempDesc.remove(QRegExp("\\(.*\\)"));
+            tempDesc.remove(QRegExp(QLatin1String("\\(.*\\)")));
         }
 
         return tempDesc;
@@ -172,14 +172,14 @@ public:
     RDoubleNumInput*        greenInput;
 };
 
-const QString WBSettings::Private::configDarkInputEntry("Dark");
-const QString WBSettings::Private::configBlackInputEntry("Black");
-const QString WBSettings::Private::configMainExposureEntry("MainExposure");
-const QString WBSettings::Private::configFineExposureEntry("FineExposure");
-const QString WBSettings::Private::configGammaInputEntry("Gamma");
-const QString WBSettings::Private::configSaturationInputEntry("Saturation");
-const QString WBSettings::Private::configGreenInputEntry("Green");
-const QString WBSettings::Private::configTemperatureInputEntry("Temperature");
+const QString WBSettings::Private::configDarkInputEntry(QLatin1String("Dark"));
+const QString WBSettings::Private::configBlackInputEntry(QLatin1String("Black"));
+const QString WBSettings::Private::configMainExposureEntry(QLatin1String("MainExposure"));
+const QString WBSettings::Private::configFineExposureEntry(QLatin1String("FineExposure"));
+const QString WBSettings::Private::configGammaInputEntry(QLatin1String("Gamma"));
+const QString WBSettings::Private::configSaturationInputEntry(QLatin1String("Saturation"));
+const QString WBSettings::Private::configGreenInputEntry(QLatin1String("Green"));
+const QString WBSettings::Private::configTemperatureInputEntry(QLatin1String("Temperature"));
 
 // --------------------------------------------------------
 
@@ -189,7 +189,7 @@ WBSettings::WBSettings(QWidget* const parent)
 {
     QGridLayout* const grid = new QGridLayout(parent);
     d->temperatureLabel     = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Color_temperature'>"
-                                          "Color Temperature</a> (K): "));
+                                              "Color Temperature</a> (K): "));
     d->temperatureLabel->setOpenExternalLinks(true);
 
     d->adjTemperatureLabel = new QLabel(i18n("Adjustment:"));
@@ -201,23 +201,23 @@ WBSettings::WBSettings(QWidget* const parent)
 
     d->temperaturePresetLabel = new QLabel(i18n("Preset:"));
     d->temperaturePresetCB    = new RComboBox;
-    d->temperaturePresetCB->combo()->addItem(i18n("Candle"),                         QVariant(d->Candle));
-    d->temperaturePresetCB->combo()->addItem(i18n("40W Lamp"),                       QVariant(d->Lamp40W));
-    d->temperaturePresetCB->combo()->addItem(i18n("100W Lamp"),                      QVariant(d->Lamp100W));
-    d->temperaturePresetCB->combo()->addItem(i18n("200W Lamp"),                      QVariant(d->Lamp200W));
-    d->temperaturePresetCB->combo()->addItem(i18n("Sunrise"),                        QVariant(d->Sunrise));
-    d->temperaturePresetCB->combo()->addItem(i18n("Studio Lamp"),                    QVariant(d->StudioLamp));
-    d->temperaturePresetCB->combo()->addItem(i18n("Moonlight"),                      QVariant(d->MoonLight));
-    d->temperaturePresetCB->combo()->addItem(i18n("Neutral"),                        QVariant(d->Neutral));
-    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D50"),                   QVariant(d->DaylightD50));
-    d->temperaturePresetCB->combo()->addItem(i18n("Photo Flash"),                    QVariant(d->Flash));
-    d->temperaturePresetCB->combo()->addItem(i18n("Sun"),                            QVariant(d->Sun));
-    d->temperaturePresetCB->combo()->addItem(i18n("Xenon Lamp"),                     QVariant(d->XenonLamp));
-    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D65"),                   QVariant(d->DaylightD65));
-    d->temperaturePresetCB->combo()->addItem(i18nc("no temperature preset", "None"), QVariant(d->None));
+    d->temperaturePresetCB->combo()->addItem(i18n("Candle"),                          QVariant(d->Candle));
+    d->temperaturePresetCB->combo()->addItem(i18n("40W Lamp"),                        QVariant(d->Lamp40W));
+    d->temperaturePresetCB->combo()->addItem(i18n("100W Lamp"),                       QVariant(d->Lamp100W));
+    d->temperaturePresetCB->combo()->addItem(i18n("200W Lamp"),                       QVariant(d->Lamp200W));
+    d->temperaturePresetCB->combo()->addItem(i18n("Sunrise"),                         QVariant(d->Sunrise));
+    d->temperaturePresetCB->combo()->addItem(i18n("Studio Lamp"),                     QVariant(d->StudioLamp));
+    d->temperaturePresetCB->combo()->addItem(i18n("Moonlight"),                       QVariant(d->MoonLight));
+    d->temperaturePresetCB->combo()->addItem(i18n("Neutral"),                         QVariant(d->Neutral));
+    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D50"),                    QVariant(d->DaylightD50));
+    d->temperaturePresetCB->combo()->addItem(i18n("Photo Flash"),                     QVariant(d->Flash));
+    d->temperaturePresetCB->combo()->addItem(i18n("Sun"),                             QVariant(d->Sun));
+    d->temperaturePresetCB->combo()->addItem(i18n("Xenon Lamp"),                      QVariant(d->XenonLamp));
+    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D65"),                    QVariant(d->DaylightD65));
+    d->temperaturePresetCB->combo()->addItem(i18nc("no temperature preset", "None"),  QVariant(d->None));
     d->temperaturePresetCB->setDefaultIndex(d->temperaturePresetCB->combo()->findData(QVariant(d->DefaultTemperature)));
 
-    QString toolTip = QString("<p>%1</p>").arg(i18n("Select the white balance color temperature preset to use."));
+    QString toolTip = QString::fromLatin1("<p>%1</p>").arg(i18n("Select the white balance color temperature preset to use."));
     toolTip += d->addTemperatureDescription(i18n("candle light"),                          d->Candle);
     toolTip += d->addTemperatureDescription(i18n("40 Watt incandescent lamp"),             d->Lamp40W);
     toolTip += d->addTemperatureDescription(i18n("100 Watt incandescent lamp"),            d->Lamp100W);
@@ -236,7 +236,7 @@ WBSettings::WBSettings(QWidget* const parent)
     d->temperaturePresetCB->setToolTip(toolTip);
 
     d->pickTemperature = new QToolButton;
-    d->pickTemperature->setIcon(QIcon::fromTheme("color-picker-grey"));
+    d->pickTemperature->setIcon(QIcon::fromTheme(QLatin1String("color-picker-grey")));
     d->pickTemperature->setCheckable(true);
     d->pickTemperature->setToolTip(i18n("Temperature tone color picker."));
     d->pickTemperature->setWhatsThis(i18n("With this button, you can pick the color from the original "
@@ -293,7 +293,7 @@ WBSettings::WBSettings(QWidget* const parent)
 
     d->mainExposureLabel  = new QLabel(i18nc("main exposure value", "Main:"));
     d->autoAdjustExposure = new QToolButton;
-    d->autoAdjustExposure->setIcon(QIcon::fromTheme("system-run"));
+    d->autoAdjustExposure->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
     d->autoAdjustExposure->setToolTip(i18n("Auto exposure adjustments"));
     d->autoAdjustExposure->setWhatsThis(i18n("With this button, you can automatically adjust Exposure "
                                              "and Black Point values."));
@@ -529,7 +529,7 @@ void WBSettings::loadSettings()
 {
     QUrl loadWhiteBalanceFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("White Color Balance Settings File to Load"),
                                                             QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                            QString("*"));
+                                                            QLatin1String("*"));
 
     if (loadWhiteBalanceFile.isEmpty())
     {
@@ -542,7 +542,7 @@ void WBSettings::loadSettings()
     {
         QTextStream stream(&file);
 
-        if (stream.readLine() != "# White Color Balance Configuration File V2")
+        if (stream.readLine() != QLatin1String("# White Color Balance Configuration File V2"))
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                   i18n("\"%1\" is not a White Color Balance settings text file.",
@@ -576,7 +576,7 @@ void WBSettings::saveAsSettings()
 {
     QUrl saveWhiteBalanceFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("White Color Balance Settings File to Save"),
                                                             QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                            QString("*"));
+                                                            QLatin1String("*"));
 
     if (saveWhiteBalanceFile.isEmpty())
     {
@@ -588,15 +588,15 @@ void WBSettings::saveAsSettings()
     if (file.open(QIODevice::WriteOnly))
     {
         QTextStream stream(&file);
-        stream << "# White Color Balance Configuration File V2\n";
-        stream << d->temperatureInput->value() << "\n";
-        stream << d->darkInput->value() << "\n";
-        stream << d->blackInput->value() << "\n";
-        stream << d->mainExposureInput->value() << "\n";
-        stream << d->fineExposureInput->value() << "\n";
-        stream << d->gammaInput->value() << "\n";
-        stream << d->saturationInput->value() << "\n";
-        stream << d->greenInput->value() << "\n";
+        stream << QLatin1String("# White Color Balance Configuration File V2\n");
+        stream << d->temperatureInput->value()  << QLatin1String("\n");
+        stream << d->darkInput->value()         << QLatin1String("\n");
+        stream << d->blackInput->value()        << QLatin1String("\n");
+        stream << d->mainExposureInput->value() << QLatin1String("\n");
+        stream << d->fineExposureInput->value() << QLatin1String("\n");
+        stream << d->gammaInput->value()        << QLatin1String("\n");
+        stream << d->saturationInput->value()   << QLatin1String("\n");
+        stream << d->greenInput->value()        << QLatin1String("\n");
     }
     else
     {

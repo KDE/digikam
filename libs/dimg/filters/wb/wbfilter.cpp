@@ -87,7 +87,7 @@ WBFilter::WBFilter(QObject* const parent)
 }
 
 WBFilter::WBFilter(DImg* const orgImage, QObject* const parent, const WBContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, "WBFilter"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("WBFilter")),
       d(new Private)
 {
     m_settings = settings;
@@ -96,7 +96,7 @@ WBFilter::WBFilter(DImg* const orgImage, QObject* const parent, const WBContaine
 
 WBFilter::WBFilter(const WBContainer& settings, DImgThreadedFilter* const master,
                    const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
-    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, "WBFilter"),
+    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, QLatin1String("WBFilter")),
       d(new Private)
 {
     m_settings = settings;

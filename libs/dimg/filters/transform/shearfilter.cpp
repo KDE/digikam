@@ -77,7 +77,7 @@ ShearFilter::ShearFilter(QObject* const parent)
 
 ShearFilter::ShearFilter(DImg* const orgImage, QObject* const parent, float hAngle, float vAngle,
                          bool antialiasing, const QColor& backgroundColor, int orgW, int orgH)
-    : DImgThreadedFilter(orgImage, parent, "sheartool"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("sheartool")),
       d(new Private)    
 {
     d->hAngle          = hAngle;
@@ -235,30 +235,30 @@ FilterAction ShearFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("antiAlias", d->antiAlias);
-    action.addParameter("hAngle", d->hAngle);
-    action.addParameter("orgH", d->orgH);
-    action.addParameter("orgW", d->orgW);
-    action.addParameter("vAngle", d->vAngle);
-    action.addParameter("backgroundColorR", d->backgroundColor.red());
-    action.addParameter("backgroundColorG", d->backgroundColor.green());
-    action.addParameter("backgroundColorB", d->backgroundColor.blue());
-    action.addParameter("backgroundColorA", d->backgroundColor.alpha());
+    action.addParameter(QLatin1String("antiAlias"),        d->antiAlias);
+    action.addParameter(QLatin1String("hAngle"),           d->hAngle);
+    action.addParameter(QLatin1String("orgH"),             d->orgH);
+    action.addParameter(QLatin1String("orgW"),             d->orgW);
+    action.addParameter(QLatin1String("vAngle"),           d->vAngle);
+    action.addParameter(QLatin1String("backgroundColorR"), d->backgroundColor.red());
+    action.addParameter(QLatin1String("backgroundColorG"), d->backgroundColor.green());
+    action.addParameter(QLatin1String("backgroundColorB"), d->backgroundColor.blue());
+    action.addParameter(QLatin1String("backgroundColorA"), d->backgroundColor.alpha());
 
     return action;
 }
 
 void ShearFilter::readParameters(const FilterAction& action)
 {
-    d->antiAlias = action.parameter("antiAlias").toBool();
-    d->hAngle = action.parameter("hAngle").toFloat();
-    d->orgH = action.parameter("orgH").toInt();
-    d->orgW = action.parameter("orgW").toInt();
-    d->vAngle = action.parameter("vAngle").toFloat();
-    d->backgroundColor.setRed(action.parameter("backgroundColorR").toInt());
-    d->backgroundColor.setGreen(action.parameter("backgroundColorG").toInt());
-    d->backgroundColor.setBlue(action.parameter("backgroundColorB").toInt());
-    d->backgroundColor.setAlpha(action.parameter("backgroundColorA").toInt());
+    d->antiAlias = action.parameter(QLatin1String("antiAlias")).toBool();
+    d->hAngle = action.parameter(QLatin1String("hAngle")).toFloat();
+    d->orgH = action.parameter(QLatin1String("orgH")).toInt();
+    d->orgW = action.parameter(QLatin1String("orgW")).toInt();
+    d->vAngle = action.parameter(QLatin1String("vAngle")).toFloat();
+    d->backgroundColor.setRed(action.parameter(QLatin1String("backgroundColorR")).toInt());
+    d->backgroundColor.setGreen(action.parameter(QLatin1String("backgroundColorG")).toInt());
+    d->backgroundColor.setBlue(action.parameter(QLatin1String("backgroundColorB")).toInt());
+    d->backgroundColor.setAlpha(action.parameter(QLatin1String("backgroundColorA")).toInt());
 }
 
 }  // namespace Digikam

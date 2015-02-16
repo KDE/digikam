@@ -60,7 +60,8 @@ public:
 };
 
 AutoCrop::AutoCrop(DImg* const img, QObject* const parent)
-    : DImgThreadedAnalyser(parent, "AutoCrop"), d(new Private)
+    : DImgThreadedAnalyser(parent, QLatin1String("AutoCrop")),
+      d(new Private)
 {
     setOriginalImage(*img);
 }
@@ -425,27 +426,27 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
             break;
     }
 
-//    qCDebug(DIGIKAM_GENERAL_LOG) << "Count     : "<<count;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Endupi    : "<<endupi;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Endupj    : "<<endupj;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Endrighti : "<<endrighti;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Endrightj : "<<endrightj;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Enddowni  : "<<enddowni;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Enddownj  : "<<enddownj;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Endlefti  : "<<endlefti;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Endleftj  : "<<endleftj;
+//    qCDebug(DIGIKAM_GENERAL_LOG) << "Count     : " << count;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Endupi    : " << endupi;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Endupj    : " << endupj;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Endrighti : " << endrighti;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Endrightj : " << endrightj;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Enddowni  : " << enddowni;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Enddownj  : " << enddownj;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Endlefti  : " << endlefti;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Endleftj  : " << endleftj;
     qCDebug(DIGIKAM_GENERAL_LOG) << "Done\n";
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Left   Margin   : "<<leftmargin;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Right  Margin   : "<<rightmargin;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Top    Margin   : "<<topmargin;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Bottom Margin   : "<<bottommargin;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Left   Margin   : " << leftmargin;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Right  Margin   : " << rightmargin;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Top    Margin   : " << topmargin;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Bottom Margin   : " << bottommargin;
     qCDebug(DIGIKAM_GENERAL_LOG) << "Done\n";
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Left Edge   : "<<leftEdge;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Right Edge  : "<<rightEdge;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Top Edge    : "<<topEdge;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Bottom Edge : "<<bottomEdge;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Left Edge   : " << leftEdge;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Right Edge  : " << rightEdge;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Top Edge    : " << topEdge;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Bottom Edge : " << bottomEdge;
     qCDebug(DIGIKAM_GENERAL_LOG) << "Done\n";
 
     if(bottomEdge)
@@ -634,23 +635,23 @@ void AutoCrop::startAnalyse()
     //------making the required output--------------------
 
     QString outercropParameters;
-    outercropParameters.append("TopMost Pixel : ( ");
+    outercropParameters.append(QLatin1String("TopMost Pixel : ( "));
     outercropParameters.append(QString::number(topRow));
-    outercropParameters.append(", ");
+    outercropParameters.append(QLatin1String(", "));
     outercropParameters.append(QString::number(topColumn));
-    outercropParameters.append(")\nBottomMost Pixel : ( ");
+    outercropParameters.append(QLatin1String(")\nBottomMost Pixel : ( "));
     outercropParameters.append(QString::number(bottomRow));
-    outercropParameters.append(", ");
+    outercropParameters.append(QLatin1String(", "));
     outercropParameters.append(QString::number(bottomColumn));
-    outercropParameters.append(")\nLeftMost Pixel : ( ");
+    outercropParameters.append(QLatin1String(")\nLeftMost Pixel : ( "));
     outercropParameters.append(QString::number(leftRow));
-    outercropParameters.append(", ");
+    outercropParameters.append(QLatin1String(", "));
     outercropParameters.append(QString::number(leftColumn));
-    outercropParameters.append(")\nRightMost Pixel : ( ");
+    outercropParameters.append(QLatin1String(")\nRightMost Pixel : ( "));
     outercropParameters.append(QString::number(rightRow));
-    outercropParameters.append(", ");
+    outercropParameters.append(QLatin1String(", "));
     outercropParameters.append(QString::number(rightColumn));
-    outercropParameters.append(")\nDONE");
+    outercropParameters.append(QLatin1String(")\nDONE"));
     qCDebug(DIGIKAM_GENERAL_LOG) << outercropParameters;
     postProgress(91);
 

@@ -54,7 +54,7 @@ LensDistortionFilter::LensDistortionFilter(QObject* const parent)
 LensDistortionFilter::LensDistortionFilter(DImg* const orgImage, QObject* const parent, double main,
                                            double edge, double rescale, double brighten,
                                            int center_x, int center_y)
-    : DImgThreadedFilter(orgImage, parent, "LensDistortionFilter")
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("LensDistortionFilter"))
 {
     m_main     = main;
     m_edge     = edge;
@@ -157,24 +157,24 @@ FilterAction LensDistortionFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("brighten", m_brighten);
-    action.addParameter("centre_x", m_centre_x);
-    action.addParameter("centre_y", m_centre_y);
-    action.addParameter("edge",     m_edge);
-    action.addParameter("main",     m_main);
-    action.addParameter("rescale",  m_rescale);
+    action.addParameter(QLatin1String("brighten"), m_brighten);
+    action.addParameter(QLatin1String("centre_x"), m_centre_x);
+    action.addParameter(QLatin1String("centre_y"), m_centre_y);
+    action.addParameter(QLatin1String("edge"),     m_edge);
+    action.addParameter(QLatin1String("main"),     m_main);
+    action.addParameter(QLatin1String("rescale"),  m_rescale);
 
     return action;
 }
 
 void LensDistortionFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_brighten = action.parameter("brighten").toDouble();
-    m_centre_x = action.parameter("centre_x").toInt();
-    m_centre_y = action.parameter("centre_y").toInt();
-    m_edge     = action.parameter("edge").toDouble();
-    m_main     = action.parameter("main").toDouble();
-    m_rescale  = action.parameter("rescale").toDouble();
+    m_brighten = action.parameter(QLatin1String("brighten")).toDouble();
+    m_centre_x = action.parameter(QLatin1String("centre_x")).toInt();
+    m_centre_y = action.parameter(QLatin1String("centre_y")).toInt();
+    m_edge     = action.parameter(QLatin1String("edge")).toDouble();
+    m_main     = action.parameter(QLatin1String("main")).toDouble();
+    m_rescale  = action.parameter(QLatin1String("rescale")).toDouble();
 }
 
 }  // namespace Digikam
