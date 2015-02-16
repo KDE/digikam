@@ -67,12 +67,12 @@ bool ThumbnailSchemaUpdater::update()
     // even on failure, try to set current version - it may have incremented
     if (m_currentVersion)
     {
-        m_access->db()->setSetting("DBThumbnailsVersion", QString::number(m_currentVersion));
+        m_access->db()->setSetting(QLatin1String("DBThumbnailsVersion"), QString::number(m_currentVersion));
     }
 
     if (m_currentRequiredVersion)
     {
-        m_access->db()->setSetting("DBThumbnailsVersionRequired", QString::number(m_currentRequiredVersion));
+        m_access->db()->setSetting(QLatin1String("DBThumbnailsVersionRequired"), QString::number(m_currentRequiredVersion));
     }
 
     return success;
@@ -88,17 +88,17 @@ bool ThumbnailSchemaUpdater::startUpdates()
     // First step: do we have an empty database?
     QStringList tables = m_access->backend()->tables();
 
-    if (tables.contains("Thumbnails", Qt::CaseInsensitive))
+    if (tables.contains(QLatin1String("Thumbnails"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
-        QString version = m_access->db()->getSetting("DBThumbnailsVersion");
-        QString versionRequired = m_access->db()->getSetting("DBThumbnailsVersionRequired");
+        QString version = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersion"));
+        QString versionRequired = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersionRequired"));
         qCDebug(DIGIKAM_GENERAL_LOG) << "Have a thumbnail database structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && m_access->parameters().isSQLite())
         {
-            version = m_access->db()->getSetting("DBVersion");
+            version = m_access->db()->getSetting(QLatin1String("DBVersion"));
         }
 
         // We absolutely require the DBThumbnailsVersion setting
@@ -111,7 +111,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
                                    "the \"DBThumbnailsVersion\" setting does not exist. "
                                    "The current database schema version cannot be verified. "
                                    "Try to start with an empty database. "
-                               );
+                                   );
             m_access->setLastError(errorMsg);
 
             if (m_observer)
@@ -197,7 +197,6 @@ bool ThumbnailSchemaUpdater::makeUpdates()
     return true;
 }
 
-
 bool ThumbnailSchemaUpdater::createDatabase()
 {
     if ( createTables()
@@ -216,28 +215,28 @@ bool ThumbnailSchemaUpdater::createDatabase()
 
 bool ThumbnailSchemaUpdater::createTables()
 {
-    return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB")));
+    return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("CreateThumbnailsDB")));
 }
 
 bool ThumbnailSchemaUpdater::createIndices()
 {
-    return m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateThumbnailsDBIndices"));
+    return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("CreateThumbnailsDBIndices")));
 }
 
 bool ThumbnailSchemaUpdater::createTriggers()
 {
-    return m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateThumbnailsDBTrigger"));
+    return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("CreateThumbnailsDBTrigger")));
 }
 
 bool ThumbnailSchemaUpdater::updateV1ToV2()
 {
-    if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction("UpdateThumbnailsDBSchemaFromV1ToV2")))
+    if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("UpdateThumbnailsDBSchemaFromV1ToV2"))))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Schema upgrade in ThumbnailDB from V1 to V2 failed!";
         return false;
     }
 
-    m_currentVersion = 2;
+    m_currentVersion         = 2;
     m_currentRequiredVersion = 1;
     return true;
 }

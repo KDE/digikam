@@ -179,7 +179,7 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseCoreBackend("thumbnailDatabase-", &d->lock);
+        d->backend = new DatabaseCoreBackend(QLatin1String("thumbnailDatabase-"), &d->lock);
         d->db = new ThumbnailDB(d->backend);
     }
 }
@@ -188,7 +188,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
-    if (!drivers.contains("QSQLITE"))
+    if (!drivers.contains(QLatin1String("QSQLITE")))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"

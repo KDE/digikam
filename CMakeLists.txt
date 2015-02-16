@@ -504,6 +504,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Definitions rules
 
+    #remove_definition(-DQT_DEPRECATED_SINCE(5,0))
+
     add_definitions(-DQT_USE_QSTRINGBUILDER -DQT_USE_FAST_OPERATOR_PLUS)
 
     # surpress deprecated warning for glibc 2.20+

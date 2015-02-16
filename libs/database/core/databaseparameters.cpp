@@ -280,7 +280,7 @@ QString DatabaseParameters::databaseFileSQLite(const QString& folderOrFile)
 
     if (fileInfo.isDir())
     {
-        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + digikam4db);
+        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + QLatin1String(digikam4db));
     }
 
     return QDir::cleanPath(folderOrFile);
@@ -292,7 +292,7 @@ QString DatabaseParameters::thumbnailDatabaseFileSQLite(const QString& folderOrF
 
     if (fileInfo.isDir())
     {
-        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + thumbnails_digikamdb);
+        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + QLatin1String(thumbnails_digikamdb));
     }
 
     return QDir::cleanPath(folderOrFile);
@@ -474,57 +474,62 @@ DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databa
 
 DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString& directory)
 {
-    return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + digikam4db));
+    return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + QLatin1String(digikam4db)));
 }
 
 void DatabaseParameters::insertInUrl(QUrl& url) const
 {
     removeFromUrl(url);
 
-    url.addQueryItem("databaseType", databaseType);
-    url.addQueryItem("databaseName", databaseName);
+    QUrlQuery q(url);
+    q.addQueryItem(QLatin1String("databaseType"), databaseType);
+    q.addQueryItem(QLatin1String("databaseName"), databaseName);
 
     if (!connectOptions.isNull())
     {
-        url.addQueryItem("connectOptions", connectOptions);
+        q.addQueryItem(QLatin1String("connectOptions"), connectOptions);
     }
 
     if (!hostName.isNull())
     {
-        url.addQueryItem("hostName", hostName);
+        q.addQueryItem(QLatin1String("hostName"), hostName);
     }
 
     if (port != -1)
     {
-        url.addQueryItem("port", QString::number(port));
+        q.addQueryItem(QLatin1String("port"), QString::number(port));
     }
 
     if (internalServer)
     {
-        url.addQueryItem("internalServer", "true");
+        q.addQueryItem(QLatin1String("internalServer"), QLatin1String("true"));
     }
 
     if (!userName.isNull())
     {
-        url.addQueryItem("userName", userName);
+        q.addQueryItem(QLatin1String("userName"), userName);
     }
 
     if (!password.isNull())
     {
-        url.addQueryItem("password", password);
+        q.addQueryItem(QLatin1String("password"), password);
     }
+    
+    url.setQuery(q);
 }
 
 void DatabaseParameters::removeFromUrl(QUrl& url)
 {
-    url.removeQueryItem("databaseType");
-    url.removeQueryItem("databaseName");
-    url.removeQueryItem("connectOptions");
-    url.removeQueryItem("hostName");
-    url.removeQueryItem("port");
-    url.removeQueryItem("internalServer");
-    url.removeQueryItem("userName");
-    url.removeQueryItem("password");
+    QUrlQuery q(url);
+    q.removeQueryItem(QLatin1String("databaseType"));
+    q.removeQueryItem(QLatin1String("databaseName"));
+    q.removeQueryItem(QLatin1String("connectOptions"));
+    q.removeQueryItem(QLatin1String("hostName"));
+    q.removeQueryItem(QLatin1String("port"));
+    q.removeQueryItem(QLatin1String("internalServer"));
+    q.removeQueryItem(QLatin1String("userName"));
+    q.removeQueryItem(QLatin1String("password"));
+    url.setQuery(q);
 }
 
 QDebug operator<<(QDebug dbg, const DatabaseParameters& p)

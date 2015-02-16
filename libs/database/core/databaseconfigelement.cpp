@@ -80,15 +80,15 @@ DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& databaseElement)
 {
     DatabaseConfigElement configElement;
-    configElement.databaseID = "Unidentified";
+    configElement.databaseID = QLatin1String("Unidentified");
 
-    if (!databaseElement.hasAttribute("name"))
+    if (!databaseElement.hasAttribute(QLatin1String("name")))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Missing statement attribute <name>.";
     }
 
-    configElement.databaseID = databaseElement.attribute("name");
-    QDomElement element      =  databaseElement.namedItem("databaseName").toElement();
+    configElement.databaseID = databaseElement.attribute(QLatin1String("name"));
+    QDomElement element      =  databaseElement.namedItem(QLatin1String("databaseName")).toElement();
 
     if (element.isNull())
     {
@@ -97,7 +97,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     configElement.databaseName = element.text();
 
-    element =  databaseElement.namedItem("userName").toElement();
+    element =  databaseElement.namedItem(QLatin1String("userName")).toElement();
 
     if (element.isNull())
     {
@@ -105,7 +105,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.userName = element.text();
-    element                = databaseElement.namedItem("password").toElement();
+    element                = databaseElement.namedItem(QLatin1String("password")).toElement();
 
     if (element.isNull())
     {
@@ -113,7 +113,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.password = element.text();
-    element                = databaseElement.namedItem("hostName").toElement();
+    element                = databaseElement.namedItem(QLatin1String("hostName")).toElement();
 
     if (element.isNull())
     {
@@ -121,7 +121,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.hostName = element.text();
-    element                = databaseElement.namedItem("port").toElement();
+    element                = databaseElement.namedItem(QLatin1String("port")).toElement();
 
     if (element.isNull())
     {
@@ -129,7 +129,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.port = element.text();
-    element            = databaseElement.namedItem("connectoptions").toElement();
+    element            = databaseElement.namedItem(QLatin1String("connectoptions")).toElement();
 
     if (element.isNull())
     {
@@ -137,7 +137,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.connectOptions = element.text();
-    element                      = databaseElement.namedItem("dbservercmd").toElement();
+    element                      = databaseElement.namedItem(QLatin1String("dbservercmd")).toElement();
 
     if (element.isNull())
     {
@@ -145,7 +145,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.dbServerCmd = element.text();
-    element                   = databaseElement.namedItem("dbinitcmd").toElement();
+    element                   = databaseElement.namedItem(QLatin1String("dbinitcmd")).toElement();
 
     if (element.isNull())
     {
@@ -153,7 +153,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.dbInitCmd = element.text();
-    element                 = databaseElement.namedItem("dbactions").toElement();
+    element                 = databaseElement.namedItem(QLatin1String("dbactions")).toElement();
 
     if (element.isNull())
     {
@@ -167,35 +167,35 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
 void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement)
 {
-    QDomElement dbActionElement =  sqlStatementElements.firstChildElement("dbaction");
+    QDomElement dbActionElement =  sqlStatementElements.firstChildElement(QLatin1String("dbaction"));
 
-    for ( ; !dbActionElement.isNull();  dbActionElement=dbActionElement.nextSiblingElement("dbaction"))
+    for ( ; !dbActionElement.isNull();  dbActionElement=dbActionElement.nextSiblingElement(QLatin1String("dbaction")))
     {
-        if (!dbActionElement.hasAttribute("name"))
+        if (!dbActionElement.hasAttribute(QLatin1String("name")))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Missing statement attribute <name>.";
         }
 
         DatabaseAction action;
-        action.name = dbActionElement.attribute("name");
+        action.name = dbActionElement.attribute(QLatin1String("name"));
         //qCDebug(DIGIKAM_GENERAL_LOG) << "Getting attribute " << dbActionElement.attribute("name");
 
-        if (dbActionElement.hasAttribute("mode"))
+        if (dbActionElement.hasAttribute(QLatin1String("mode")))
         {
-            action.mode = dbActionElement.attribute("mode");
+            action.mode = dbActionElement.attribute(QLatin1String("mode"));
         }
 
-        QDomElement databaseElement = dbActionElement.firstChildElement("statement");
+        QDomElement databaseElement = dbActionElement.firstChildElement(QLatin1String("statement"));
 
-        for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("statement"))
+        for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement(QLatin1String("statement")))
         {
-            if (!databaseElement.hasAttribute("mode"))
+            if (!databaseElement.hasAttribute(QLatin1String("mode")))
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Missing statement attribute <mode>.";
             }
 
             DatabaseActionElement actionElement;
-            actionElement.mode      = databaseElement.attribute("mode");
+            actionElement.mode      = databaseElement.attribute(QLatin1String("mode"));
             actionElement.statement = databaseElement.text();
 
             action.dbActionElements.append(actionElement);
@@ -207,7 +207,7 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
 
 bool DatabaseConfigElementLoader::readConfig()
 {
-    QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/dbconfig.xml");
+    QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/dbconfig.xml"));
     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading SQL code from config file" << filepath;
     QFile file(filepath);
 
@@ -226,7 +226,7 @@ bool DatabaseConfigElementLoader::readConfig()
         return false;
     }
 
-    QDomDocument doc("DBConfig");
+    QDomDocument doc(QLatin1String("DBConfig"));
 
     if (!doc.setContent(&file))
     {
@@ -237,7 +237,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     file.close();
 
-    QDomElement element = doc.namedItem("databaseconfig").toElement();
+    QDomElement element = doc.namedItem(QLatin1String("databaseconfig")).toElement();
 
     if (element.isNull())
     {
@@ -247,7 +247,7 @@ bool DatabaseConfigElementLoader::readConfig()
         return false;
     }
 
-    QDomElement defaultDB =  element.namedItem("defaultDB").toElement();
+    QDomElement defaultDB =  element.namedItem(QLatin1String("defaultDB")).toElement();
 
     if (defaultDB.isNull())
     {
@@ -257,7 +257,7 @@ bool DatabaseConfigElementLoader::readConfig()
         return false;
     }
 
-    QDomElement versionElement = element.namedItem("version").toElement();
+    QDomElement versionElement = element.namedItem(QLatin1String("version")).toElement();
     int version                = 0;
 
     qCDebug(DIGIKAM_GENERAL_LOG) << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
@@ -280,9 +280,9 @@ bool DatabaseConfigElementLoader::readConfig()
     qCDebug(DIGIKAM_GENERAL_LOG) << "Default DB Node contains: " << defaultDB.text();
 #endif
 
-    QDomElement databaseElement = element.firstChildElement("database");
+    QDomElement databaseElement = element.firstChildElement(QLatin1String("database"));
 
-    for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("database"))
+    for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement(QLatin1String("database")))
     {
         DatabaseConfigElement l_DBCfgElement = readDatabase(databaseElement);
         databaseConfigs.insert(l_DBCfgElement.databaseID, l_DBCfgElement);
