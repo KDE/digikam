@@ -523,6 +523,11 @@ bool PreviewLoadingTask::loadLibRawPreview(int sizeLimit)
 
 bool PreviewLoadingTask::loadHalfSizeRaw()
 {
+    if (!continueQuery())
+    {
+        return false;
+    }
+
     KDcrawIface::KDcraw::loadHalfPreview(m_qimage, m_loadingDescription.filePath);
     return !m_qimage.isNull();
 }
