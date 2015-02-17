@@ -1034,10 +1034,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
        )
 
     set(libiccprofileswidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccpreviewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/cietonguewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilescombobox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccpreviewwidget.cpp
        )
 
     set(libmetadatawidgets_SRCS

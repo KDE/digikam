@@ -31,12 +31,12 @@ set(digikamcore_LIB_SRCS
     ${libmainview_SRCS}
     ${libitemview_SRCS}
     ${libeditorwidgets_SRCS}
-    ${libiccprofileswidgets_SRCS}
     ${libmetadatawidgets_SRCS}
     ${libdialogs_SRCS}
     ${libimageproperties_SRCS}
     ${libgraphicsviewwidgets_SRCS}
     ${libgenericmodels_SRCS}
+    ${libiccprofileswidgets_SRCS}
     ${libcommonwidgets_SRCS}
 
     # utilities

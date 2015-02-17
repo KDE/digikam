@@ -129,7 +129,7 @@ void ImageRegionWidget::setCapturePointMode(bool b)
     {
         d_ptr->oldRenderingPreviewMode = d_ptr->renderingPreviewMode;
         slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
-        viewport()->setCursor(QCursor(QIcon::fromTheme("color-picker").pixmap(32), 1, 28));
+        viewport()->setCursor(QCursor(QIcon::fromTheme(QLatin1String("color-picker")).pixmap(32), 1, 28));
     }
     else
     {

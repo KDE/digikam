@@ -165,7 +165,9 @@ void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
     if(d->core->getImg())
+    {
         d->canvasItem->setImage(*d->core->getImg());
+    }
 
     // Note: in showFoto, we using a null filename to clear canvas.
     if (!success && !filePath.isEmpty())
@@ -639,6 +641,7 @@ void Canvas::slotAddItemMoving(const QRectF& rect)
     {
         delete d->rubber;
     }
+
     d->rubber = new RubberItem(d->canvasItem);
     d->rubber->setCanvas(this);
     d->rubber->setRectInSceneCoordinatesAdjusted(rect);
@@ -670,15 +673,16 @@ void Canvas::cancelAddItem()
 void Canvas::mousePressEvent(QMouseEvent* event)
 {
     GraphicsDImgView::mousePressEvent(event);
+
     if (event->button() == Qt::LeftButton)
     {
         GraphicsDImgItem* const item = dynamic_cast<GraphicsDImgItem*>(itemAt(event->pos()));
 
         if (item)
         {
-            QString className(item->metaObject()->className());
+            QLatin1String className(item->metaObject()->className());
 
-            if (!(className == "Digikam::RubberItem" || className == "Digikam::ClickDragReleaseItem"))
+            if (!(className == QLatin1String("Digikam::RubberItem") || className == QLatin1String("Digikam::ClickDragReleaseItem")))
             {
                 if (d->rubber && d->rubber->isVisible())
                 {

@@ -251,7 +251,7 @@ PreviewList::PreviewList(QObject* const /*parent*/)
     setResizeMode(QListView::Adjust);
     setTextElideMode(Qt::ElideRight);
     setCursor(Qt::PointingHandCursor);
-    setStyleSheet("QListWidget::item:selected:!active {show-decoration-selected: 0}");
+    setStyleSheet(QLatin1String("QListWidget::item:selected:!active {show-decoration-selected: 0}"));
 
     d->progressTimer = new QTimer(this);
     d->progressTimer->setInterval(300);

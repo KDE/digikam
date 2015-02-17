@@ -43,7 +43,8 @@ namespace Digikam
 
 MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem* const parent, const QString& key,
         const QString& title, const QString& value)
-    : QTreeWidgetItem(parent), m_key(key)
+    : QTreeWidgetItem(parent),
+      m_key(key)
 {
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     setText(0, title);
@@ -54,18 +55,19 @@ MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem* const parent, const 
     if (tagVal.length() > 512)
     {
         tagVal.truncate(512);
-        tagVal.append("...");
+        tagVal.append(QLatin1String("..."));
     }
 
     setText(1, tagVal);
 
     DToolTipStyleSheet cnt;
-    setToolTip(1, "<qt><p>" + cnt.breakString(tagVal) + "</p></qt>");
+    setToolTip(1, QLatin1String("<qt><p>") + cnt.breakString(tagVal) + QLatin1String("</p></qt>"));
 }
 
 MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem* const parent, const QString& key,
         const QString& title)
-    : QTreeWidgetItem(parent), m_key(key)
+    : QTreeWidgetItem(parent),
+      m_key(key)
 {
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     setText(0, title);

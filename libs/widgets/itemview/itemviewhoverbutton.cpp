@@ -161,7 +161,15 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
             QPixmap alphaMask(icon.width(), icon.height());
             const QColor color(m_fadingValue, m_fadingValue, m_fadingValue);
             alphaMask.fill(color);
-            icon.setAlphaChannel(alphaMask);
+            
+            /* NOTE : old Qt4 code ported to Qt5 due to deprecated QPixmap::setAlphaChannel()
+             *        clusterPixmap.setAlphaChannel(alphaPixmap);
+             */
+            QPainter p(&icon);
+            p.setOpacity(0.2);
+            p.drawPixmap(0, 0, alphaMask);
+            p.end();
+                        
             painter.drawPixmap(0, 0, icon);
         }
         else

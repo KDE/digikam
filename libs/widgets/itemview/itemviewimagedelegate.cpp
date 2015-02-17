@@ -470,15 +470,15 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
 
         if (pickId == RejectedLabel)
         {
-            icon = QIcon::fromTheme("flag-red");
+            icon = QIcon::fromTheme(QLatin1String("flag-red"));
         }
         else if (pickId == PendingLabel)
         {
-            icon = QIcon::fromTheme("flag-yellow");
+            icon = QIcon::fromTheme(QLatin1String("flag-yellow"));
         }
         else if (pickId == AcceptedLabel)
         {
-            icon = QIcon::fromTheme("flag-green");
+            icon = QIcon::fromTheme(QLatin1String("flag-green"));
         }
 
         icon.paint(p, r);
@@ -494,14 +494,14 @@ void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right
     if (left)
     {
         QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = QIcon::fromTheme("arrow-left");
+        QIcon icon = QIcon::fromTheme(QLatin1String("arrow-left"));
         icon.paint(p, r);
     }
 
     if (right)
     {
         QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = QIcon::fromTheme("arrow-right");
+        QIcon icon = QIcon::fromTheme(QLatin1String("arrow-right"));
         icon.paint(p, r);
     }
 }
@@ -510,7 +510,7 @@ void ItemViewImageDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r
 {
     if (!r.isNull())
     {
-        QIcon icon = QIcon::fromTheme("applications-internet");
+        QIcon icon = QIcon::fromTheme(QLatin1String("applications-internet"));
         qreal op   = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
@@ -527,11 +527,11 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
 
         if (open)
         {
-            icon = QIcon::fromTheme("image-stack-open");
+            icon = QIcon::fromTheme(QLatin1String("image-stack-open"));
         }
         else
         {
-            icon = QIcon::fromTheme("image-stack");
+            icon = QIcon::fromTheme(QLatin1String("image-stack"));
         }
 
         qreal op     = p->opacity();
@@ -601,15 +601,15 @@ void ItemViewImageDelegate::prepareMetrics(int maxWidth)
     QFontMetrics fm(d->fontReg);
     d->oneRowRegRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
                                        Qt::AlignTop | Qt::AlignHCenter,
-                                       "XXXXXXXXX");
+                                       QLatin1String("XXXXXXXXX"));
     fm = QFontMetrics(d->fontCom);
     d->oneRowComRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
                                        Qt::AlignTop | Qt::AlignHCenter,
-                                       "XXXXXXXXX");
+                                       QLatin1String("XXXXXXXXX"));
     fm = QFontMetrics(d->fontXtra);
     d->oneRowXtraRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
                                         Qt::AlignTop | Qt::AlignHCenter,
-                                        "XXXXXXXXX");
+                                        QLatin1String("XXXXXXXXX"));
 }
 
 void ItemViewImageDelegate::prepareBackground()

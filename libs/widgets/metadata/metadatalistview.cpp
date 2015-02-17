@@ -51,12 +51,12 @@ MetadataListView::MetadataListView(QWidget* const parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllColumnsShowFocus(true);
     setColumnCount(2);
-    header()->setResizeMode(QHeaderView::Stretch);
+    header()->setSectionResizeMode(QHeaderView::Stretch);
     header()->hide();
 
     QStringList labels;
-    labels.append( "Name" );        // no i18n here: hidden header
-    labels.append( "Value" );       // no i18n here: hidden header
+    labels.append(QLatin1String("Name"));        // no i18n here: hidden header
+    labels.append(QLatin1String("Value"));       // no i18n here: hidden header
     setHeaderLabels(labels);
 
     setSortingEnabled(true);
@@ -64,8 +64,8 @@ MetadataListView::MetadataListView(QWidget* const parent)
 
     m_parent = dynamic_cast<MetadataWidget*>(parent);
 
-    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
-            this, SLOT(slotSelectionChanged(QTreeWidgetItem*,int)));
+    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+            this, SLOT(slotSelectionChanged(QTreeWidgetItem*, int)));
 }
 
 MetadataListView::~MetadataListView()
@@ -134,13 +134,13 @@ void MetadataListView::slotSelectionChanged(QTreeWidgetItem* item, int)
     if (tagValue.length() > 128)
     {
         tagValue.truncate(128);
-        tagValue.append("...");
+        tagValue.append(QLatin1String("..."));
     }
 
-    this->setWhatsThis( i18n("<b>Title: </b><p>%1</p>"
-                             "<b>Value: </b><p>%2</p>"
-                             "<b>Description: </b><p>%3</p>",
-                             tagTitle, tagValue, tagDesc));
+    this->setWhatsThis(i18n("<b>Title: </b><p>%1</p>"
+                            "<b>Value: </b><p>%2</p>"
+                            "<b>Description: </b><p>%3</p>",
+                            tagTitle, tagValue, tagDesc));
 }
 
 void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& tagsFilter)
@@ -155,7 +155,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     for (DMetadata::MetaDataMap::const_iterator it = ifds.constBegin(); it != ifds.constEnd(); ++it)
     {
         // We checking if we have changed of ifDName
-        QString currentIfDName = it.key().section('.', 1, 1);
+        QString currentIfDName = it.key().section(QLatin1Char('.'), 1, 1);
 
         if ( currentIfDName != ifDItemName )
         {
@@ -177,11 +177,11 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
             new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
             ++subItems;
         }
-        else if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
+        else if (!it.key().section(QLatin1Char('.'), 2, 2).startsWith(QLatin1String("0x")))
         {
             // We ignore all unknown tags if necessary.
 
-            if (filters.contains("FULL"))
+            if (filters.contains(QLatin1String("FULL")))
             {
                 // We don't filter the output (Photo Mode)
 
@@ -194,7 +194,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                 // We using the filter to make a more user friendly output (Custom Mode)
 
                 // Filter is not a list of complete tag keys
-                if (!filters.at(0).contains(".") && filters.contains(it.key().section('.', 2, 2)))
+                if (!filters.at(0).contains(QLatin1String(".")) && filters.contains(it.key().section(QLatin1Char('.'), 2, 2)))
                 {
                     QString tagTitle = m_parent->getTagTitle(it.key());
                     new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
@@ -219,7 +219,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     }
 
     // Add not found tags from filter as grey items.
-    if (!filters.isEmpty() && filters.at(0) != QString("FULL") && filters.at(0).contains("."))
+    if (!filters.isEmpty() && filters.at(0) != QLatin1String("FULL") && filters.at(0).contains(QLatin1String(".")))
     {
         foreach(const QString& key, filters)
         {
@@ -227,7 +227,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
             if (!pitem)
             {
-                pitem = new MdKeyListViewItem(this, key.section('.', 1, 1));
+                pitem = new MdKeyListViewItem(this, key.section(QLatin1Char('.'), 1, 1));
             }
 
             QString tagTitle = m_parent->getTagTitle(key);
@@ -266,7 +266,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         {
             --it;
 
-            if ( *itKeysFilter == it.key().section('.', 1, 1) )
+            if ( *itKeysFilter == it.key().section(QLatin1Char('.'), 1, 1) )
             {
                 if (filters.isEmpty())
                 {
@@ -274,11 +274,11 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                     new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
                     ++subItems;
                 }
-                else if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
+                else if (!it.key().section(QLatin1Char('.'), 2, 2).startsWith(QLatin1String("0x")))
                 {
                     // We ignore all unknown tags if necessary.
 
-                    if (filters.contains("FULL"))
+                    if (filters.contains(QLatin1String("FULL")))
                     {
                         // We don't filter the output (Photo Mode)
 
@@ -291,7 +291,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                         // We using the filter to make a more user friendly output (Custom Mode)
 
                         // Filter is not a list of complete tag keys
-                        if (!filters.at(0).contains(".") && filters.contains(it.key().section('.', 2, 2)))
+                        if (!filters.at(0).contains(QLatin1String(".")) && filters.contains(it.key().section(QLatin1Char('.'), 2, 2)))
                         {
                             QString tagTitle = m_parent->getTagTitle(it.key());
                             new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
@@ -318,7 +318,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     }
 
     // Add not found tags from filter as grey items.
-    if (!filters.isEmpty() && filters.at(0) != QString("FULL") && filters.at(0).contains("."))
+    if (!filters.isEmpty() && filters.at(0) != QLatin1String("FULL") && filters.at(0).contains(QLatin1String(".")))
     {
         foreach(const QString& key, filters)
         {
@@ -326,7 +326,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
             if (!pitem)
             {
-                pitem = new MdKeyListViewItem(this, key.section('.', 1, 1));
+                pitem = new MdKeyListViewItem(this, key.section(QLatin1Char('.'), 1, 1));
             }
 
             QString tagTitle = m_parent->getTagTitle(key);
@@ -430,7 +430,7 @@ MdKeyListViewItem* MetadataListView::findMdKeyItem(const QString& key)
 
         if (item)
         {
-            if (key.section('.', 1, 1) == item->getKey())
+            if (key.section(QLatin1Char('.'), 1, 1) == item->getKey())
             {
                 return item;
             }
