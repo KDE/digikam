@@ -589,7 +589,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties
-                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper
+                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/geoiface
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
@@ -629,7 +629,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch
-                        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch
+                        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/geolocation
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/hotplug
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core
@@ -912,8 +912,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
        )
 
     if(${KF5KGeoMap_FOUND})
-        set(libkgeomaphelper_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper/digikam2kgeomap.cpp
+        set(libgeoiface_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/geoiface/digikam2kgeomap.cpp
            )
 
         set(libimageproperties_SRCS
@@ -1408,9 +1408,9 @@ if(DIGIKAM_CAN_BE_COMPILED)
        )
 
     if(${KF5KGeoMap_FOUND})
-        set(libgpssearch_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
+        set(libgeolocation_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/geolocation/gpssearchview.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/geolocation/gpsmarkertiler.cpp
            )
     endif()
 
@@ -1566,7 +1566,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mediaplayerview.cpp
            )
     endif()
-       
+
     if(${KF5KFace_FOUND})
         set(libdigikamgui_SRCS
             ${libdigikamgui_SRCS}

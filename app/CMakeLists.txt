@@ -50,7 +50,7 @@ set(digikamcore_LIB_SRCS
 )
 
 if(KF5KGeoMap_FOUND)
-    set(digikamcore_LIB_SRCS ${digikamcore_LIB_SRCS} ${libkgeomaphelper_SRCS})
+    set(digikamcore_LIB_SRCS ${digikamcore_LIB_SRCS} ${libgeoiface_SRCS})
 endif()
 
 ki18n_wrap_ui(digikamcore_LIB_SRCS
@@ -226,7 +226,7 @@ if(KF5KFace_FOUND)
 endif()
 
 if(KF5KGeoMap_FOUND)
-    set(digikam_SRCS ${digikam_SRCS} ${libkgeomaphelper_SRCS} ${libgpssearch_SRCS})
+    set(digikam_SRCS ${digikam_SRCS} ${libgeoiface_SRCS} ${libgeolocation_SRCS})
 endif()
 
 qt5_add_dbus_adaptor(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
