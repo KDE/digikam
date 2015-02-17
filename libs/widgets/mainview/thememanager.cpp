@@ -114,7 +114,7 @@ QString ThemeManager::currentThemeName() const
     QAction* const action = d->themeMenuActionGroup->checkedAction();
 
     return (!action ? defaultThemeName()
-                    : action->text().remove('&'));
+                    : action->text().remove(QLatin1Char('&')));
 }
 
 void ThemeManager::setCurrentTheme(const QString& name)
@@ -126,7 +126,7 @@ void ThemeManager::setCurrentTheme(const QString& name)
 
     foreach(QAction* const action, list)
     {
-        if (action->text().remove('&') == name)
+        if (action->text().remove(QLatin1Char('&')) == name)
         {
             action->setChecked(true);
             slotChangePalette();
@@ -163,7 +163,7 @@ void ThemeManager::registerThemeActions(DXmlGuiWindow* const kwin)
     if (!d->themeMenuAction)
         return;
 
-    kwin->actionCollection()->addAction("theme_menu", d->themeMenuAction->menuAction());
+    kwin->actionCollection()->addAction(QLatin1String("theme_menu"), d->themeMenuAction->menuAction());
     
     connect(kwin, SIGNAL(signalDisplayPaletteChanged()),
             this, SLOT(slotSettingsChanged()));
@@ -189,7 +189,7 @@ void ThemeManager::populateThemeMenu()
     d->themeMenuAction->addAction(action);
 
     QStringList schemeFiles;
-    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "color-schemes", QStandardPaths::LocateDirectory);
+    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("color-schemes"), QStandardPaths::LocateDirectory);
 
     Q_FOREACH (const QString& dir, dirs)
     {
@@ -232,7 +232,7 @@ void ThemeManager::populateThemeMenu()
 
     d->themeMenuAction->addSeparator();
     QAction* const config = new QAction(i18n("Configuration..."), d->themeMenuAction);
-    config->setIcon(QIcon::fromTheme("preferences-desktop-theme"));
+    config->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-theme")));
     d->themeMenuAction->addAction(config);
 
     connect(config, SIGNAL(triggered()),
@@ -241,7 +241,7 @@ void ThemeManager::populateThemeMenu()
 
 void ThemeManager::slotConfigColors()
 {
-    int ret = KToolInvocation::kdeinitExec("kcmshell5", QStringList() << "colors");
+    int ret = KToolInvocation::kdeinitExec(QLatin1String("kcmshell5"), QStringList() << QLatin1String("colors"));
 
     if (ret > 0)
     {
@@ -257,7 +257,7 @@ void ThemeManager::updateCurrentKDEdefaultThemePreview()
 
     foreach(QAction* const action, list)
     {
-        if (action->text().remove('&') == defaultThemeName())
+        if (action->text().remove(QLatin1Char('&')) == defaultThemeName())
         {
             KSharedConfigPtr config = KSharedConfig::openConfig(d->themeMap.value(currentKDEdefaultTheme()));
             QIcon icon              = createSchemePreviewIcon(config);
@@ -278,7 +278,7 @@ QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config) co
     QPixmap pixmap(23, 16);
     pixmap.fill(Qt::black); // FIXME use some color other than black for borders?
 
-    KConfigGroup group(config, "WM");
+    KConfigGroup group(config, QLatin1String("WM"));
     QPainter p(&pixmap);
     KColorScheme windowScheme(QPalette::Active, KColorScheme::Window, config);
     p.fillRect(1,  1, 7, 7, windowScheme.background());
@@ -288,8 +288,8 @@ QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config) co
     p.fillRect(8,  1, 7, 7, buttonScheme.background());
     p.fillRect(9,  2, 5, 2, QBrush(buttonScheme.foreground().color(), b1));
 
-    p.fillRect(15,  1, 7, 7, group.readEntry("activeBackground", QColor(96, 148, 207)));
-    p.fillRect(16,  2, 5, 2, QBrush(group.readEntry("activeForeground", QColor(255, 255, 255)), b1));
+    p.fillRect(15,  1, 7, 7, group.readEntry(QLatin1String("activeBackground"),        QColor(96, 148, 207)));
+    p.fillRect(16,  2, 5, 2, QBrush(group.readEntry(QLatin1String("activeForeground"), QColor(255, 255, 255)), b1));
 
     KColorScheme viewScheme(QPalette::Active, KColorScheme::View, config);
     p.fillRect(1,  8, 7, 7, viewScheme.background());
@@ -299,8 +299,8 @@ QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config) co
     p.fillRect(8,  8, 7, 7, selectionScheme.background());
     p.fillRect(9, 12, 5, 2, QBrush(selectionScheme.foreground().color(), b2));
 
-    p.fillRect(15,  8, 7, 7, group.readEntry("inactiveBackground", QColor(224, 223, 222)));
-    p.fillRect(16, 12, 5, 2, QBrush(group.readEntry("inactiveForeground", QColor(20, 19, 18)), b2));
+    p.fillRect(15,  8, 7, 7, group.readEntry(QLatin1String("inactiveBackground"),        QColor(224, 223, 222)));
+    p.fillRect(16, 12, 5, 2, QBrush(group.readEntry(QLatin1String("inactiveForeground"), QColor(20, 19, 18)), b2));
 
     p.end();
     return pixmap;
@@ -308,7 +308,7 @@ QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config) co
 
 QString ThemeManager::currentKDEdefaultTheme() const
 {
-    KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
+    KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("kdeglobals"));
     KConfigGroup group(config, "General");
     return group.readEntry("ColorScheme");
 }

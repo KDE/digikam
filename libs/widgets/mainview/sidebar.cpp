@@ -749,9 +749,9 @@ public:
         splitter(0),
         dragSwitchTimer(0),
         appendedTabsStateCache(),
-        optionActiveTabEntry("ActiveTab"),
-        optionMinimizedEntry("Minimized"),
-        optionRestoreSizeEntry("RestoreSize")
+        optionActiveTabEntry(QLatin1String("ActiveTab")),
+        optionMinimizedEntry(QLatin1String("Minimized")),
+        optionRestoreSizeEntry(QLatin1String("RestoreSize"))
     {
     }
 
@@ -1176,10 +1176,11 @@ void Sidebar::slotSplitterBtnClicked()
 
 // -----------------------------------------------------------------------------
 
-const QString SidebarSplitter::DEFAULT_CONFIG_KEY = "SplitterState";
+const QString SidebarSplitter::DEFAULT_CONFIG_KEY = QLatin1String("SplitterState");
 
 SidebarSplitter::SidebarSplitter(QWidget* const parent)
-    : QSplitter(parent), d(new Private)
+    : QSplitter(parent),
+      d(new Private)
 {
     connect(this, SIGNAL(splitterMoved(int,int)),
             this, SLOT(slotSplitterMoved(int,int)));

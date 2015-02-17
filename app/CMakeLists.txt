@@ -26,7 +26,6 @@ set(digikamcore_LIB_SRCS
     ${libkde3rdparty_SRCS}
 
     # widgets and dialogs
-    ${libcommonwidgets_SRCS}
     ${libcolorchooserwidgets_SRCS}
     ${libnotificationmanager_SRCS}
     ${libmainview_SRCS}
@@ -38,6 +37,7 @@ set(digikamcore_LIB_SRCS
     ${libimageproperties_SRCS}
     ${libgraphicsviewwidgets_SRCS}
     ${libgenericmodels_SRCS}
+    ${libcommonwidgets_SRCS}
 
     # utilities
     ${libslideshow_SRCS}

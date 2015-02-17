@@ -119,14 +119,14 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("LibKface support"), i18n("no"));
 #endif /* HAVE_KFACE */
 
-    list.insert(i18n("LibOpenCV"),    QString("%1").arg(CV_VERSION));
+    list.insert(i18n("LibOpenCV"),    QLatin1String(CV_VERSION));
 
     // Database Backend information
 
     QString dbBe = ApplicationSettings::instance()->getDatabaseType();
     list.insert(i18n("Database backend"), dbBe);
 
-    if (dbBe != QString("QSQLITE"))
+    if (dbBe != QLatin1String("QSQLITE"))
     {
         QString internal = ApplicationSettings::instance()->getInternalDatabaseServer() ? i18n("Yes") : i18n("No");
         list.insert(i18n("Database internal server"), internal);

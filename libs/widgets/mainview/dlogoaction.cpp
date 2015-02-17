@@ -81,17 +81,17 @@ public:
 DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
     : QWidgetAction(parent), d(new Private)
 {
-    setText("digikam.org");
+    setText(QLatin1String("digikam.org"));
 
-    if (QApplication::applicationName() == QString("digikam"))
+    if (QApplication::applicationName() == QLatin1String("digikam"))
     {
-        setIcon(QIcon::fromTheme("digikam"));
-        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/banner-digikam.png"));
+        setIcon(QIcon::fromTheme(QLatin1String("digikam")));
+        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/banner-digikam.png")));
     }
     else
     {
-        setIcon(QIcon::fromTheme("showfoto"));
-        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/banner-showfoto.png"));
+        setIcon(QIcon::fromTheme(QLatin1String("showfoto")));
+        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/banner-showfoto.png")));
     }
 
     d->alignOnright  = alignOnright;

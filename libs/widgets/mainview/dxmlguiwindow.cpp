@@ -183,33 +183,33 @@ void DXmlGuiWindow::setFullScreenOptions(int options)
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
 {
-    d->libsInfoAction = new QAction(QIcon::fromTheme("help-about"), i18n("Components Information"), this);
+    d->libsInfoAction = new QAction(QIcon::fromTheme(QLatin1String("help-about")), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
+    actionCollection()->addAction(QLatin1String("help_librariesinfo"), d->libsInfoAction);
 
     d->about = new DAboutData(this);
 
-    QAction* const rawCameraListAction = new QAction(QIcon::fromTheme("kdcraw"), i18n("Supported RAW Cameras"), this);
+    QAction* const rawCameraListAction = new QAction(QIcon::fromTheme(QLatin1String("kdcraw")), i18n("Supported RAW Cameras"), this);
     connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
-    actionCollection()->addAction("help_rawcameralist", rawCameraListAction);
+    actionCollection()->addAction(QLatin1String("help_rawcameralist"), rawCameraListAction);
 
-    QAction* const donateMoneyAction   = new QAction(QIcon::fromTheme("internet-web-browser"), i18n("Donate..."), this);
+    QAction* const donateMoneyAction   = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Donate..."), this);
     connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
-    actionCollection()->addAction("help_donatemoney", donateMoneyAction);
+    actionCollection()->addAction(QLatin1String("help_donatemoney"), donateMoneyAction);
 
-    QAction* const contributeAction    = new QAction(QIcon::fromTheme("internet-web-browser"), i18n("Contribute..."), this);
+    QAction* const contributeAction    = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Contribute..."), this);
     connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
-    actionCollection()->addAction("help_contribute", contributeAction);
+    actionCollection()->addAction(QLatin1String("help_contribute"), contributeAction);
 
     m_animLogo = new DLogoAction(this);
-    actionCollection()->addAction("logo_action", m_animLogo);
+    actionCollection()->addAction(QLatin1String("logo_action"), m_animLogo);
 
     // Add options only for core components (typically all excepted Showfoto)
     if (coreOptions)
     {
-        d->dbStatAction = new QAction(QIcon::fromTheme("network-server-database"), i18n("Database Statistics"), this);
+        d->dbStatAction = new QAction(QIcon::fromTheme(QLatin1String("network-server-database")), i18n("Database Statistics"), this);
         connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
-        actionCollection()->addAction("help_dbstat", d->dbStatAction);
+        actionCollection()->addAction(QLatin1String("help_dbstat"), d->dbStatAction);
     }
 }
 
@@ -218,32 +218,32 @@ void DXmlGuiWindow::createSidebarActions()
     KActionCollection* const ac = actionCollection();
     QAction* const tlsb = new QAction(i18n("Toggle Left Side-bar"), this);
     connect(tlsb, SIGNAL(triggered()), this, SLOT(slotToggleLeftSideBar()));
-    ac->addAction("toggle-left-sidebar", tlsb);
+    ac->addAction(QLatin1String("toggle-left-sidebar"), tlsb);
     ac->setDefaultShortcut(tlsb, Qt::CTRL + Qt::META + Qt::Key_Left);
 
     QAction* const trsb = new QAction(i18n("Toggle Right Side-bar"), this);
     connect(trsb, SIGNAL(triggered()), this, SLOT(slotToggleRightSideBar()));
-    ac->addAction("toggle-right-sidebar", trsb);
+    ac->addAction(QLatin1String("toggle-right-sidebar"), trsb);
     ac->setDefaultShortcut(trsb, Qt::CTRL + Qt::META + Qt::Key_Right);
 
     QAction* const plsb = new QAction(i18n("Previous Left Side-bar Tab"), this);
     connect(plsb, SIGNAL(triggered()), this, SLOT(slotPreviousLeftSideBarTab()));
-    ac->addAction("previous-left-sidebar-tab", plsb);
+    ac->addAction(QLatin1String("previous-left-sidebar-tab"), plsb);
     ac->setDefaultShortcut(plsb, Qt::CTRL + Qt::META + Qt::Key_Home);
 
     QAction* const nlsb = new QAction(i18n("Next Left Side-bar Tab"), this);
     connect(nlsb, SIGNAL(triggered()), this, SLOT(slotNextLeftSideBarTab()));
-    ac->addAction("next-left-sidebar-tab", nlsb);
+    ac->addAction(QLatin1String("next-left-sidebar-tab"), nlsb);
     ac->setDefaultShortcut(nlsb, Qt::CTRL + Qt::META + Qt::Key_End);
 
     QAction* const prsb = new QAction(i18n("Previous Right Side-bar Tab"), this);
     connect(prsb, SIGNAL(triggered()), this, SLOT(slotPreviousRightSideBarTab()));
-    ac->addAction("previous-right-sidebar-tab", prsb);
+    ac->addAction(QLatin1String("previous-right-sidebar-tab"), prsb);
     ac->setDefaultShortcut(prsb, Qt::CTRL + Qt::META + Qt::Key_PageUp);
 
     QAction* const nrsb = new QAction(i18n("Next Right Side-bar Tab"), this);
     connect(nrsb, SIGNAL(triggered()), this, SLOT(slotNextRightSideBarTab()));
-    ac->addAction("next-right-sidebar-tab", nrsb);
+    ac->addAction(QLatin1String("next-right-sidebar-tab"), nrsb);
     ac->setDefaultShortcut(nrsb, Qt::CTRL + Qt::META + Qt::Key_PageDown);
 }
 
@@ -517,7 +517,7 @@ KToolBar* DXmlGuiWindow::mainToolBar() const
 
     foreach(KToolBar* const toolbar, toolbars)
     {
-        if (toolbar && (toolbar->objectName() == "mainToolBar"))
+        if (toolbar && (toolbar->objectName() == QLatin1String("mainToolBar")))
         {
             mainToolbar = toolbar;
             break;
@@ -582,7 +582,7 @@ QAction* DXmlGuiWindow::statusBarMenuAction() const
 
     foreach(QAction* const act, lst)
     {
-        if (act && QString(act->objectName()) == QString("options_show_statusbar"))
+        if (act && QString(act->objectName()) == QLatin1String("options_show_statusbar"))
             return act;
     }
 
@@ -683,12 +683,12 @@ void DXmlGuiWindow::slotRawCameraList()
 
 void DXmlGuiWindow::slotDonateMoney()
 {
-    QDesktopServices::openUrl(QUrl("http://www.digikam.org/?q=donation"));
+    QDesktopServices::openUrl(QUrl(QLatin1String("http://www.digikam.org/?q=donation")));
 }
 
 void DXmlGuiWindow::slotContribute()
 {
-    QDesktopServices::openUrl(QUrl("http://www.digikam.org/?q=contrib"));
+    QDesktopServices::openUrl(QUrl(QLatin1String("http://www.digikam.org/?q=contrib")));
 }
 
 void DXmlGuiWindow::changeEvent(QEvent* ev)

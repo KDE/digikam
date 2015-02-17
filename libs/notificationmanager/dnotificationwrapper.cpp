@@ -101,14 +101,14 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
 
     if (logoPixmap.isNull())
     {
-        if (QApplication::applicationName() == QString("digikam"))
+        if (QApplication::applicationName() == QLatin1String("digikam"))
         {
-            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                          .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         else
         {
-            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
+            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/logo-showfoto.png")))
                          .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
     }
@@ -117,7 +117,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     //       But in a regular KDE session, KNotify should be running already.
 
     if (detectKDEDesktopIsRunning() &&
-        QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.knotify"))
+        QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String("org.kde.knotify")))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched to KDE desktop notifier";
 
@@ -145,10 +145,10 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
 
     // Other Linux Desktops
 
-    else if (QProcess::execute("notify-send",
+    else if (QProcess::execute(QLatin1String("notify-send"),
                                QStringList() << windowTitle
                                              << message
-                                             << "-a"
+                                             << QLatin1String("-a")
                                              << QApplication::applicationName())
              == 0)
     {

@@ -102,7 +102,7 @@ DZoomBar::DZoomBar(QWidget* const parent)
     d->zoomMinusButton->setFocusPolicy(Qt::NoFocus);
 
     d->zoomSlider  = new QSlider(Qt::Horizontal, this);
-    d->zoomTracker = new DCursorTracker(QString(""), d->zoomSlider);
+    d->zoomTracker = new DCursorTracker(QLatin1String(""), d->zoomSlider);
     d->zoomSlider->setRange(ThumbnailSize::Small, ThumbnailSize::maxThumbsSize());
     d->zoomSlider->setSingleStep(ThumbnailSize::Step);
     d->zoomSlider->setValue(ThumbnailSize::Medium);
@@ -136,7 +136,7 @@ DZoomBar::DZoomBar(QWidget* const parent)
 
     foreach(const double zoom, zoomLevels)
     {
-        d->zoomCombo->addItem(QString("%1%").arg((int)zoom), QVariant(zoom));
+        d->zoomCombo->addItem(QString::fromLatin1("%1%").arg((int)zoom), QVariant(zoom));
     }
 
     layout()->setMargin(0);
@@ -225,7 +225,7 @@ void DZoomBar::setZoom(double zoom, double zmin, double zmax)
     d->zoomSlider->setValue(size);
     d->zoomSlider->blockSignals(false);
 
-    QString ztxt = QString::number(lround(zoom*100.0)) + QString("%");
+    QString ztxt = QString::number(lround(zoom*100.0)) + QLatin1String("%");
     d->zoomCombo->blockSignals(true);
     d->zoomCombo->setCurrentIndex(-1);
     d->zoomCombo->setEditText(ztxt);

@@ -57,31 +57,31 @@ DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
 {
     unavailable = i18n("unavailable");
 
-    tipHeader   = QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">");
-    tipFooter   = QString("</table></qt>");
+    tipHeader   = QLatin1String("<qt><table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">");
+    tipFooter   = QLatin1String("</table></qt>");
 
-    headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
-                          "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
+    headBeg     = QString::fromLatin1("<tr bgcolor=\"%1\"><td colspan=\"2\">"
+                                      "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
                   .arg(qApp->palette().color(QPalette::Base).name())
                   .arg(qApp->palette().color(QPalette::Text).name())
                   .arg(font.family());
-    headEnd     = QString("</b></center></font></nobr></td></tr>");
+    headEnd     = QLatin1String("</b></center></font></nobr></td></tr>");
 
-    cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+    cellBeg     = QString::fromLatin1("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
                   .arg(qApp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
-    cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+    cellMid     = QString::fromLatin1("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
                   .arg(qApp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
-    cellEnd     = QString("</font></nobr></td></tr>");
+    cellEnd     = QLatin1String("</font></nobr></td></tr>");
 
-    cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+    cellSpecBeg = QString::fromLatin1("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
                   .arg(qApp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
-    cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
+    cellSpecMid = QString::fromLatin1("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
                   .arg(qApp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
-    cellSpecEnd = QString("</i></font></nobr></td></tr>");
+    cellSpecEnd = QLatin1String("</i></font></nobr></td></tr>");
 }
 
 QString DToolTipStyleSheet::breakString(const QString& input) const
@@ -104,7 +104,7 @@ QString DToolTipStyleSheet::breakString(const QString& input) const
         if (count >= maxStringLength && str.at(i).isSpace())
         {
             count = 0;
-            br.append("<br/>");
+            br.append(QLatin1String("<br/>"));
         }
         else
         {
@@ -128,11 +128,11 @@ QString DToolTipStyleSheet::elidedText(const QString& str, Qt::TextElideMode eli
     switch (elideMode)
     {
         case Qt::ElideLeft:
-            return "..." + str.right(maxStringLength-3);
+            return QLatin1String("...") + str.right(maxStringLength-3);
         case Qt::ElideRight:
-            return str.left(maxStringLength-3) + "...";
+            return str.left(maxStringLength-3) + QLatin1String("...");
         case Qt::ElideMiddle:
-            return str.left(maxStringLength / 2 - 2) + "..." + str.right(maxStringLength / 2 - 1);
+            return str.left(maxStringLength / 2 - 2) + QLatin1String("...") + str.right(maxStringLength / 2 - 1);
         case Qt::ElideNone:
             return str.left(maxStringLength);
         default:
@@ -146,7 +146,7 @@ QString DToolTipStyleSheet::imageAsBase64(const QImage& img) const
     QBuffer    buffer(&byteArray);
     img.save(&buffer, "PNG");
     QString    iconBase64 = QString::fromLatin1(byteArray.toBase64().data());
-    return QString("<img src=\"data:image/png;base64,%1\">").arg(iconBase64);
+    return QString::fromLatin1("<img src=\"data:image/png;base64,%1\">").arg(iconBase64);
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -167,7 +167,8 @@ public:
 };
 
 DItemToolTip::DItemToolTip(QWidget* const parent)
-    : QLabel(parent, Qt::ToolTip), d(new Private)
+    : QLabel(parent, Qt::ToolTip),
+      d(new Private)
 {
     hide();
 

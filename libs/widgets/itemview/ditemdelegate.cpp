@@ -82,7 +82,7 @@ void DItemDelegate::clearCaches()
 QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
 {
     const QColor borderColor = QColor(0, 0, 0, 128);
-    QString cacheKey         = QString::number(pixSize.width()) + '-' + QString::number(pixSize.height());
+    QString cacheKey         = QString::number(pixSize.width()) + QLatin1Char('-') + QString::number(pixSize.height());
     QPixmap* const cachePix  = d->thumbnailBorderCache.object(cacheKey);
 
     if (!cachePix)
@@ -106,7 +106,7 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
 
     if (icon.isNull())
     {
-        icon = QPixmap(QIcon::fromTheme("image-jp2").pixmap(32));
+        icon = QPixmap(QIcon::fromTheme(QLatin1String("image-jp2")).pixmap(32));
     }
 
     if (qMax(icon.width(), icon.height()) > 64)
@@ -201,7 +201,7 @@ QString DItemDelegate::squeezedTextCached(QPainter* const p, int width, const QS
 QString DItemDelegate::squeezedText(const QFontMetrics& fm, int width, const QString& text)
 {
     QString fullText(text);
-    fullText.replace('\n',' ');
+    fullText.replace(QLatin1Char('\n'), QLatin1Char(' '));
     return fm.elidedText(text, Qt::ElideRight, width);
 
 /*

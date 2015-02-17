@@ -56,28 +56,28 @@ public:
         switch (type)
         {
             case DHistoryView::StartingEntry:
-                setIcon(0, QIcon::fromTheme("system-run"));
+                setIcon(0, QIcon::fromTheme(QLatin1String("system-run")));
                 break;
             case DHistoryView::SuccessEntry:
-                setIcon(0, QIcon::fromTheme("dialog-ok"));
+                setIcon(0, QIcon::fromTheme(QLatin1String("dialog-ok")));
                 break;
             case DHistoryView::WarningEntry:
-                setIcon(0, QIcon::fromTheme("dialog-warning"));
+                setIcon(0, QIcon::fromTheme(QLatin1String("dialog-warning")));
                 setTextColor(2, Qt::darkYellow);
                 break;
             case DHistoryView::ErrorEntry:
-                setIcon(0, QIcon::fromTheme("dialog-error"));
+                setIcon(0, QIcon::fromTheme(QLatin1String("dialog-error")));
                 setTextColor(2, Qt::red);
                 break;
             case DHistoryView::ProgressEntry:
-                setIcon(0, QIcon::fromTheme("dialog-information"));
+                setIcon(0, QIcon::fromTheme(QLatin1String("dialog-information")));
                 break;
             case DHistoryView::CancelEntry:
-                setIcon(0, QIcon::fromTheme("dialog-cancel"));
+                setIcon(0, QIcon::fromTheme(QLatin1String("dialog-cancel")));
                 setTextColor(2, Qt::darkBlue);
                 break;
             default:
-                setIcon(0, QIcon::fromTheme("dialog-information"));
+                setIcon(0, QIcon::fromTheme(QLatin1String("dialog-information")));
                 break;
         }
 
@@ -113,9 +113,9 @@ DHistoryView::DHistoryView(QWidget* const parent)
     setRootIsDecorated(false);
     setDragEnabled(true);
     viewport()->setMouseTracking(true);
-    header()->setResizeMode(0, QHeaderView::ResizeToContents);  // Icon
-    header()->setResizeMode(1, QHeaderView::ResizeToContents);  // Time
-    header()->setResizeMode(2, QHeaderView::Stretch);           // Message
+    header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);  // Icon
+    header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);  // Time
+    header()->setSectionResizeMode(2, QHeaderView::Stretch);           // Message
 
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotItemDoubleClicked(QTreeWidgetItem*)));
@@ -131,7 +131,7 @@ DHistoryView::~DHistoryView()
 void DHistoryView::slotContextMenu()
 {
     QMenu popmenu(this);
-    QAction* const action = new QAction(QIcon::fromTheme("edit-copy"), i18n("Copy to Clipboard"), this);
+    QAction* const action = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Copy to Clipboard"), this);
 
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotCopy2ClipBoard()));
@@ -149,9 +149,9 @@ void DHistoryView::slotCopy2ClipBoard()
     while (*it)
     {
         textInfo.append((*it)->text(1));
-        textInfo.append(" :: ");
+        textInfo.append(QLatin1String(" :: "));
         textInfo.append((*it)->text(2));
-        textInfo.append("\n");
+        textInfo.append(QLatin1String("\n"));
         ++it;
     }
 

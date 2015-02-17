@@ -96,7 +96,7 @@ void DMessageBox::showInformationWidget(QMessageBox::Icon icon,
 
     QDialog* const dialog = new QDialog(parent, Qt::Dialog);
     dialog->setWindowTitle(caption);
-    dialog->setObjectName("showInformation");
+    dialog->setObjectName(QLatin1String("showInformation"));
     dialog->setModal(true);
 
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, dialog);
@@ -150,7 +150,7 @@ int DMessageBox::showContinueCancelWidget(QMessageBox::Icon icon,
 
     QDialog* const dialog = new QDialog(parent, Qt::Dialog);
     dialog->setWindowTitle(caption);
-    dialog->setObjectName("showContinueCancel");
+    dialog->setObjectName(QLatin1String("showContinueCancel"));
     dialog->setModal(true);
 
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::Cancel, dialog);
@@ -214,7 +214,7 @@ int DMessageBox::showYesNoWidget(QMessageBox::Icon icon,
 
     QDialog* const dialog = new QDialog(parent, Qt::Dialog);
     dialog->setWindowTitle(caption);
-    dialog->setObjectName("showYesNo");
+    dialog->setObjectName(QLatin1String("showYesNo"));
     dialog->setModal(true);
 
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::No, dialog);
