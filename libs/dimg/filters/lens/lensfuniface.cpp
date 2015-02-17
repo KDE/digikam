@@ -88,8 +88,8 @@ LensFunIface::DevicePtr LensFunIface::usedCamera() const
 void LensFunIface::setUsedCamera(DevicePtr cam)
 {
     d->usedCamera           = cam;
-    d->settings.cameraMake  = d->usedCamera ? d->usedCamera->Maker      : QString();
-    d->settings.cameraModel = d->usedCamera ? d->usedCamera->Model      : QString();
+    d->settings.cameraMake  = d->usedCamera ? QLatin1String(d->usedCamera->Maker)      : QString();
+    d->settings.cameraModel = d->usedCamera ? QLatin1String(d->usedCamera->Model)      : QString();
     d->settings.cropFactor  = d->usedCamera ? d->usedCamera->CropFactor : -1.0;
 }
 
@@ -101,7 +101,7 @@ LensFunIface::LensPtr LensFunIface::usedLens() const
 void LensFunIface::setUsedLens(LensPtr lens)
 {
     d->usedLens            = lens;
-    d->settings.lensModel  = d->usedLens ? d->usedLens->Model : QString();
+    d->settings.lensModel  = d->usedLens ? QLatin1String(d->usedLens->Model) : QString();
 }
 
 lfDatabase* LensFunIface::lensFunDataBase() const
@@ -146,7 +146,7 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
         DevicePtr cam = *cameras;
 //      qCDebug(DIGIKAM_GENERAL_LOG) << "Query camera:" << cam->Maker << "-" << cam->Model;
 
-        if (QString(cam->Maker).toLower() == make.toLower() && QString(cam->Model).toLower() == model.toLower())
+        if (QString::fromLatin1(cam->Maker).toLower() == make.toLower() && QString::fromLatin1(cam->Model).toLower() == model.toLower())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Search for camera " << make << "-" << model << " ==> true";
             return cam;
@@ -167,7 +167,7 @@ LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
     {
         LensPtr lens = *lenses;
 
-        if (QString(lens->Model) == model)
+        if (QString::fromLatin1(lens->Model) == model)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Search for lens " << model << " ==> true";
             return lens;
@@ -190,11 +190,11 @@ LensFunIface::LensList LensFunIface::findLenses(const lfCamera* const lfCamera, 
     {
         if (!lensMaker.isEmpty())
         {
-            lfLens = d->lfDb->FindLenses(lfCamera, lensMaker.toAscii().constData(), lensDesc.toAscii().constData());
+            lfLens = d->lfDb->FindLenses(lfCamera, lensMaker.toLatin1().constData(), lensDesc.toLatin1().constData());
         }
         else
         {
-            lfLens = d->lfDb->FindLenses(lfCamera, NULL, lensDesc.toAscii().constData());
+            lfLens = d->lfDb->FindLenses(lfCamera, NULL, lensDesc.toLatin1().constData());
         }
 
         while (lfLens && *lfLens)
@@ -235,16 +235,16 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     {
         // NOTE: see bug #184156:
         // Some rules to wrap unknown camera device from Lensfun database, which have equivalent in fact.
-        if (d->makeDescription == QString("Canon"))
+        if (d->makeDescription == QLatin1String("Canon"))
         {
-            if (d->modelDescription == QString("Canon EOS Kiss Digital X"))
+            if (d->modelDescription == QLatin1String("Canon EOS Kiss Digital X"))
             {
-                d->modelDescription = QString("Canon EOS 400D DIGITAL");
+                d->modelDescription = QLatin1String("Canon EOS 400D DIGITAL");
             }
 
-            if (d->modelDescription == QString("G1 X"))
+            if (d->modelDescription == QLatin1String("G1 X"))
             {
-                d->modelDescription = QString("G1X");
+                d->modelDescription = QLatin1String("G1X");
             }
         }
 
@@ -252,7 +252,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
         // ------------------------------------------------------------------------------------------------
 
-        DevicePtr lfCamera = findCamera(d->makeDescription.toAscii().constData(), d->modelDescription.toAscii().constData());
+        DevicePtr lfCamera = findCamera(d->makeDescription, d->modelDescription);
 
         if (lfCamera)
         {
@@ -278,11 +278,11 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
                 lensCutted = d->lensDescription;
 
-                if (lensCutted.contains("Nikon"))
+                if (lensCutted.contains(QLatin1String("Nikon")))
                 {
-                    lensCutted.remove("Nikon ");
-                    lensCutted.remove("Zoom-");
-                    lensCutted.replace("IF-ID", "ED-IF");
+                    lensCutted.remove(QLatin1String("Nikon "));
+                    lensCutted.remove(QLatin1String("Zoom-"));
+                    lensCutted.replace(QLatin1String("IF-ID"), QLatin1String("ED-IF"));
                     lensList = findLenses(d->usedCamera, lensCutted);
                     qCDebug(DIGIKAM_GENERAL_LOG) << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
                     lensMatches.append(lensList);
@@ -293,9 +293,9 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 // LAST STAGE, Adapt exiv2 strings to lensfun strings. Some lens description use something like that :
                 // "10.0 - 20.0 mm". This must be adapted like this : "10-20mm"
                 lensCutted = d->lensDescription;
-                lensCutted.replace(QRegExp("\\.[0-9]"), ""); //krazy:exclude=doublequote_chars
-                lensCutted.replace(" - ", "-");
-                lensCutted.replace(" mm", "mn");
+                lensCutted.replace(QRegExp(QLatin1String("\\.[0-9]")), QLatin1String("")); //krazy:exclude=doublequote_chars
+                lensCutted.replace(QLatin1String(" - "), QLatin1String("-"));
+                lensCutted.replace(QLatin1String(" mm"), QLatin1String("mn"));
                 lensList   = findLenses(d->usedCamera, lensCutted);
                 qCDebug(DIGIKAM_GENERAL_LOG) << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
                 lensMatches.append(lensList);
@@ -323,7 +323,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
                         Q_FOREACH(const lfLens* const l, lensMatches)
                         {
-                            if(l->Model == d->lensDescription)
+                            if(QLatin1String(l->Model) == d->lensDescription)
                             {
                                 qCDebug(DIGIKAM_GENERAL_LOG) << "found exact match from" << lensMatches.count() << "possitibilites:" << l->Model;
                                 exact = l;
@@ -426,7 +426,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     }
     else
     {
-        temp                        = temp.remove(" m");
+        temp                        = temp.remove(QLatin1String(" m"));
         bool ok;
         d->settings.subjectDistance = temp.toDouble(&ok);
 
@@ -454,15 +454,15 @@ QString LensFunIface::metadataMatchDebugStr(MetadataMatch val) const
     switch (val)
     {
         case MetadataNoMatch:
-            ret = QString("No Match");
+            ret = QLatin1String("No Match");
             break;
 
         case MetadataPartialMatch:
-            ret = QString("Partial Match");
+            ret = QLatin1String("Partial Match");
             break;
 
         default:
-            ret = QString("Exact Match");
+            ret = QLatin1String("Exact Match");
             break;
     }
 
@@ -514,7 +514,7 @@ bool LensFunIface::supportsGeometry() const
 
 QString LensFunIface::lensFunVersion()
 {
-    return QString("%1.%2.%3-%4").arg(LF_VERSION_MAJOR).arg(LF_VERSION_MINOR).arg(LF_VERSION_MICRO).arg(LF_VERSION_BUGFIX);
+    return QString::fromLatin1("%1.%2.%3-%4").arg(LF_VERSION_MAJOR).arg(LF_VERSION_MINOR).arg(LF_VERSION_MICRO).arg(LF_VERSION_BUGFIX);
 }
 
 }  // namespace Digikam

@@ -325,7 +325,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album* album) const
     if (m_filterBehavior == FullFiltering)
     {
         // check if any of the parents match the search
-        Album* const parent   = album->parent();
+        Album* parent         = album->parent();
         PAlbum* const pparent = palbum ? static_cast<PAlbum*>(parent) : 0;
 
         while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )

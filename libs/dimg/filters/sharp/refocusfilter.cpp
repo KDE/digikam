@@ -77,7 +77,7 @@ RefocusFilter::RefocusFilter(QObject* const parent)
 
 RefocusFilter::RefocusFilter(DImg* const orgImage, QObject* const parent, int matrixSize, double radius,
                              double gauss, double correlation, double noise)
-    : DImgThreadedFilter(orgImage, parent, "Refocus"),
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("Refocus")),
       d(new Private)
 {
     d->matrixSize  = matrixSize;
@@ -347,22 +347,22 @@ FilterAction RefocusFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("correlation", d->correlation);
-    action.addParameter("gauss", d->gauss);
-    action.addParameter("matrixSize", d->matrixSize);
-    action.addParameter("noise", d->noise);
-    action.addParameter("radius", d->radius);
+    action.addParameter(QLatin1String("correlation"), d->correlation);
+    action.addParameter(QLatin1String("gauss"),       d->gauss);
+    action.addParameter(QLatin1String("matrixSize"),  d->matrixSize);
+    action.addParameter(QLatin1String("noise"),       d->noise);
+    action.addParameter(QLatin1String("radius"),      d->radius);
 
     return action;
 }
 
 void RefocusFilter::readParameters(const Digikam::FilterAction& action)
 {
-    d->correlation = action.parameter("correlation").toDouble();
-    d->gauss       = action.parameter("gauss").toDouble();
-    d->matrixSize  = action.parameter("matrixSize").toInt();
-    d->noise       = action.parameter("noise").toDouble();
-    d->radius      = action.parameter("radius").toDouble();
+    d->correlation = action.parameter(QLatin1String("correlation")).toDouble();
+    d->gauss       = action.parameter(QLatin1String("gauss")).toDouble();
+    d->matrixSize  = action.parameter(QLatin1String("matrixSize")).toInt();
+    d->noise       = action.parameter(QLatin1String("noise")).toDouble();
+    d->radius      = action.parameter(QLatin1String("radius")).toDouble();
 }
 
 int RefocusFilter::maxMatrixSize()

@@ -50,7 +50,8 @@ public:
         filterVIG(0),
         filterDST(0),
         filterGEO(0)
-    {}
+    {
+    }
 
     static const QString configCCAEntry;
     static const QString configVignettingEntry;
@@ -63,10 +64,10 @@ public:
     QCheckBox*           filterGEO;
 };
 
-const QString LensFunSettings::Private::configCCAEntry("CCA");
-const QString LensFunSettings::Private::configVignettingEntry("Vignetting");
-const QString LensFunSettings::Private::configDistortionEntry("Distortion");
-const QString LensFunSettings::Private::configGeometryEntry("Geometry");
+const QString LensFunSettings::Private::configCCAEntry(QLatin1String("CCA"));
+const QString LensFunSettings::Private::configVignettingEntry(QLatin1String("Vignetting"));
+const QString LensFunSettings::Private::configDistortionEntry(QLatin1String("Distortion"));
+const QString LensFunSettings::Private::configGeometryEntry(QLatin1String("Geometry"));
 
 // --------------------------------------------------------
 

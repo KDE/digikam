@@ -54,10 +54,10 @@ class LensFunCameraSelector::Private
 public:
 
     Private()
-        : configUseMetadata("UseMetadata"),
-          redStyle("QLabel {color: red;}"),
-          orangeStyle("QLabel {color: orange;}"),
-          greenStyle("QLabel {color: green;}")
+        : configUseMetadata(QLatin1String("UseMetadata")),
+          redStyle(QLatin1String("QLabel {color: red;}")),
+          orangeStyle(QLatin1String("QLabel {color: orange;}")),
+          greenStyle(QLatin1String("QLabel {color: green;}"))
     {
         metadataUsage        = 0;
         make                 = 0;
@@ -405,7 +405,7 @@ void LensFunCameraSelector::refreshSettingsView()
 
     if (!d->passiveMetadataUsage)
     {
-        d->makeDescription->setAdjustedText(QString("<i>%1</i>").arg(d->iface->makeDescription()));
+        d->makeDescription->setAdjustedText(QString::fromLatin1("<i>%1</i>").arg(d->iface->makeDescription()));
     }
 
     int makerIdx = -1;
@@ -421,7 +421,7 @@ void LensFunCameraSelector::refreshSettingsView()
 
         if (i == -1)
         {
-            i = d->make->combo()->findText("Generic");
+            i = d->make->combo()->findText(QLatin1String("Generic"));
         }
 
         if (i >= 0)
@@ -453,7 +453,7 @@ void LensFunCameraSelector::refreshSettingsView()
 
     if (!d->passiveMetadataUsage)
     {
-        d->modelDescription->setAdjustedText(QString("<i>%1</i>").arg(d->iface->modelDescription()));
+        d->modelDescription->setAdjustedText(QString::fromLatin1("<i>%1</i>").arg(d->iface->modelDescription()));
     }
 
     int modelIdx = -1;
@@ -488,7 +488,7 @@ void LensFunCameraSelector::refreshSettingsView()
 
     if (!d->passiveMetadataUsage)
     {
-        d->lensDescription->setAdjustedText(QString("<i>%1</i>").arg(d->iface->lensDescription()));
+        d->lensDescription->setAdjustedText(QString::fromLatin1("<i>%1</i>").arg(d->iface->lensDescription()));
     }
 
     int lensIdx = -1;
@@ -603,7 +603,7 @@ void LensFunCameraSelector::populateDeviceCombos()
             // Maker DB does not change, so we fill it only once.
             if ((*it)->Maker)
             {
-                QString t((*it)->Maker);
+                QString t = QString::fromLatin1((*it)->Maker);
 
                 if (d->make->combo()->findText(t, Qt::MatchExactly) < 0)
                 {
@@ -613,17 +613,17 @@ void LensFunCameraSelector::populateDeviceCombos()
         }
 
         // Fill models for current selected maker
-        if ((*it)->Model && (*it)->Maker == d->make->combo()->currentText())
+        if ((*it)->Model && QString::fromLatin1((*it)->Maker) == d->make->combo()->currentText())
         {
             LensFunIface::DevicePtr dev = *it;
             QVariant b                  = qVariantFromValue(dev);
-            d->model->combo()->addItem(dev->Model, b);
+            d->model->combo()->addItem(QString::fromLatin1(dev->Model), b);
         }
 
         ++it;
     }
 
-    d->make->combo()->model()->sort(0, Qt::AscendingOrder);
+    d->make->combo()->model()->sort(0,  Qt::AscendingOrder);
     d->model->combo()->model()->sort(0, Qt::AscendingOrder);
 
     d->make->blockSignals(false);
@@ -666,7 +666,7 @@ void LensFunCameraSelector::populateLensCombo()
     {
         LensFunIface::LensPtr lens = *lenses;
         QVariant b                 = qVariantFromValue(lens);
-        d->lens->combo()->addItem(lens->Model, b);
+        d->lens->combo()->addItem(QString::fromLatin1(lens->Model), b);
         ++lenses;
     }
 
