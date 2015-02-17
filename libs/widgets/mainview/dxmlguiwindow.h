@@ -81,9 +81,9 @@ enum StdActionType
     StdForwardAction
 };
 
-static const QString s_configFullScreenHideToolBarsEntry("FullScreen Hide ToolBars");
-static const QString s_configFullScreenHideThumbBarEntry("FullScreen Hide ThumbBar");
-static const QString s_configFullScreenHideSideBarsEntry("FullScreen Hide SideBars");
+static const QString s_configFullScreenHideToolBarsEntry(QLatin1String("FullScreen Hide ToolBars"));
+static const QString s_configFullScreenHideThumbBarEntry(QLatin1String("FullScreen Hide ThumbBar"));
+static const QString s_configFullScreenHideSideBarsEntry(QLatin1String("FullScreen Hide SideBars"));
 
 /** Data container to use in managed window.
  */

@@ -59,7 +59,7 @@ public:
         progressBarSize = 3;
         state           = 0;
         messageAlign    = Qt::AlignLeft;
-        version         = QString(digikam_version_short);
+        version         = QLatin1String(digikam_version_short);
         versionColor    = Qt::white;
         messageColor    = Qt::white;
     }
@@ -83,17 +83,17 @@ SplashScreen::SplashScreen()
 {
     QPixmap splash;
 
-    if (QApplication::applicationName() == QString("digikam"))
+    if (QApplication::applicationName() == QLatin1String("digikam"))
     {
-        splash = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/splash-digikam.png");
+        splash = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/splash-digikam.png"));
     }
     else
     {
-        splash = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/splash-showfoto.png");
+        splash = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/splash-showfoto.png"));
     }
 
     // Under Linux, only test versions has Beta stage.
-    bool isBeta = !QString(digikam_version_suffix).isEmpty();
+    bool isBeta = !QString::fromUtf8(digikam_version_suffix).isEmpty();
 
 #if defined Q_OS_WIN
     isBeta = true;   // Windows version is always beta for the moment.
@@ -104,7 +104,7 @@ SplashScreen::SplashScreen()
     if (isBeta)
     {
         QPainter p(&splash);
-        p.drawPixmap(412, 27, QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-beta.png"));
+        p.drawPixmap(412, 27, QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-beta.png")));
         p.end();
     }
 

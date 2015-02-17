@@ -57,8 +57,8 @@ class SearchTextBar::Private
 public:
 
     Private() :
-        optionAutoCompletionModeEntry("AutoCompletionMode"),
-        optionCaseSensitiveEntry("CaseSensitive"),
+        optionAutoCompletionModeEntry(QLatin1String("AutoCompletionMode")),
+        optionCaseSensitiveEntry(QLatin1String("CaseSensitive")),
         textQueryCompletion(false),
         hasCaseSensitive(true),
         highlightOnResult(true),
@@ -87,13 +87,14 @@ public:
 };
 
 SearchTextBar::SearchTextBar(QWidget* const parent, const char* const name, const QString& msg)
-    : KLineEdit(parent), StateSavingObject(this),
+    : KLineEdit(parent),
+      StateSavingObject(this),
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setClearButtonShown(true);
     setPlaceholderText(msg);
-    setObjectName(name + QString(" Search Text Tool"));
+    setObjectName(QLatin1String(name) + QLatin1String(" Search Text Tool"));
 
     d->completion = new ModelCompletion;
     setCompletionObject(d->completion, true);

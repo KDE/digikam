@@ -323,7 +323,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // Q_OS_SOLARIS
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_CYGWIN)
-    data->platform = QString("LINUX");
+    data->platform = QLatin1String("LINUX");
 
     if ((f = fopen("/proc/meminfo", "r")) == NULL)
     {

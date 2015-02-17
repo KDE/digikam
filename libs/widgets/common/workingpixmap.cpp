@@ -35,7 +35,7 @@
 
 WorkingPixmap::WorkingPixmap()
 {
-    QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/process-working.png"));
+    QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/process-working.png")));
     QSize   size(22, 22);
     
     if (pix.isNull())

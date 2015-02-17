@@ -143,7 +143,7 @@ public:
         WatchEvents newMode = mode;
         WatchFlags newFlags = flags;
 
-        if( !q->filterWatch( path, newMode, newFlags ) )
+        if( !q->filterWatch( QString::fromUtf8(path), newMode, newFlags ) )
         {
             return true;
         }

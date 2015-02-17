@@ -97,11 +97,11 @@ public:
 
     void recurseOperation(const bool save)
     {
-        QString action("loading");
+        QString action = QLatin1String("loading");
 
         if (save)
         {
-            action = "saving";
+            action = QLatin1String("saving");
         }
 
         if (depth == StateSavingObject::DIRECT_CHILDREN)

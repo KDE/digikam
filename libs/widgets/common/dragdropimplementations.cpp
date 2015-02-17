@@ -255,7 +255,7 @@ void DragDropViewImplementation::dropEvent(QDropEvent* e)
     }
 }
 
-static const QString mimeTypeCutSelection("application/x-kde-cutselection");
+static const QString mimeTypeCutSelection(QLatin1String("application/x-kde-cutselection"));
 
 void DragDropViewImplementation::encodeIsCutSelection(QMimeData* mime, bool cut)
 {

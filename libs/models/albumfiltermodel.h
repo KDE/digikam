@@ -7,7 +7,7 @@
  * Description : Qt Model for Albums - filter model
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009      by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -75,7 +75,7 @@ public:
 
 public:
 
-    explicit AlbumFilterModel(QObject* parent = 0);
+    explicit AlbumFilterModel(QObject* const parent = 0);
 
     /**
      * Sets the source model.
@@ -264,7 +264,6 @@ private:
      *         the model
      */
     bool settingsFilter(const SearchTextSettings& settings) const;    
-
 };
 
 // -----------------------------------------------------------------------------------
@@ -279,7 +278,7 @@ class CheckableAlbumFilterModel : public AlbumFilterModel
 
 public:
 
-    explicit CheckableAlbumFilterModel(QObject* parent = 0);
+    explicit CheckableAlbumFilterModel(QObject* const parent = 0);
 
     void                         setSourceAlbumModel(AbstractCheckableAlbumModel* source);
     AbstractCheckableAlbumModel* sourceAlbumModel() const;
@@ -310,7 +309,7 @@ class SearchFilterModel : public CheckableAlbumFilterModel
 
 public:
 
-    explicit SearchFilterModel(QObject* parent = 0);
+    explicit SearchFilterModel(QObject* const parent = 0);
 
     void         setSourceSearchModel(SearchModel* source);
     SearchModel* sourceSearchModel() const;
@@ -355,7 +354,7 @@ class TagPropertiesFilterModel : public CheckableAlbumFilterModel
 
 public:
 
-    explicit TagPropertiesFilterModel(QObject* parent = 0);
+    explicit TagPropertiesFilterModel(QObject* const parent = 0);
 
     void      setSourceAlbumModel(TagModel* source);
     TagModel* sourceTagModel() const;
@@ -367,7 +366,7 @@ public:
 
     virtual bool isFiltering() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void tagPropertiesChanged(TAlbum*);
 
@@ -377,24 +376,29 @@ protected:
 
 protected:
 
-    QSet<QString>        m_propertiesBlackList;
-    QSet<QString>        m_propertiesWhiteList;
+    QSet<QString> m_propertiesBlackList;
+    QSet<QString> m_propertiesWhiteList;
 };
+
+// -----------------------------------------------------------------------------------
 
 class TagsManagerFilterModel : public TagPropertiesFilterModel
 {
     Q_OBJECT
 
 public:
-    explicit TagsManagerFilterModel(QObject* data = 0);
+
+    explicit TagsManagerFilterModel(QObject* const data = 0);
 
     void setQuickListTags(QList<int> tags);
+
 protected:
 
     virtual bool matches(Album* album) const;
 
-    QSet<int> m_keywords;
+protected:
 
+    QSet<int> m_keywords;
 };
 
 } // namespace Digikam
