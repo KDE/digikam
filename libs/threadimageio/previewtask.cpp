@@ -206,7 +206,7 @@ void PreviewLoadingTask::execute()
 
     // Preview is not in cache, we will load image from file.
 
-    DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
+    DImg::FORMAT format      = DImg::fileFormat(m_loadingDescription.filePath);
     m_fromRawEmbeddedPreview = false;
 
     if (format == DImg::RAW)
@@ -214,10 +214,12 @@ void PreviewLoadingTask::execute()
         KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
         // Check original image size using Exiv2.
         QSize originalSize  = previews.originalSize();
+
         // If not valid, get original size from LibRaw
         if (!originalSize.isValid())
         {
             DcrawInfoContainer container;
+
             if (KDcrawIface::KDcraw::rawFileIdentify(container, m_loadingDescription.filePath))
             {
                 originalSize = container.imageSize;
@@ -233,7 +235,8 @@ void PreviewLoadingTask::execute()
                 int sizeLimit = -1;
                 int bestSize  = qMax(originalSize.width(), originalSize.height());
                 // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
-                bestSize /= 2;
+                bestSize     /= 2;
+
                 if (m_loadingDescription.previewParameters.previewSettings.quality == PreviewSettings::FastButLargePreview)
                 {
                     sizeLimit = qMin(m_loadingDescription.previewParameters.size, bestSize);
@@ -243,10 +246,12 @@ void PreviewLoadingTask::execute()
                 {
                     break;
                 }
+
                 if (loadLibRawPreview(sizeLimit))
                 {
                     break;
                 }
+
                 loadHalfSizeRaw();
             }
             case PreviewSettings::HighQualityPreview:
@@ -257,30 +262,37 @@ void PreviewLoadingTask::execute()
                     {
                         // If we find a preview that is larger than half size (which is what we get from half-size original data), we take it
                         int acceptableSize = qMax(lround(originalSize.width()  * 0.48), lround(originalSize.height() * 0.48));
+
                         if (loadExiv2Preview(previews, acceptableSize))
                         {
                             break;
                         }
+
                         if (loadLibRawPreview(acceptableSize))
                         {
                             break;
                         }
+
                         loadHalfSizeRaw();
                         break;
                     }
+
                     case PreviewSettings::RawPreviewFromEmbeddedPreview:
                     {
                         if (loadExiv2Preview(previews))
                         {
                             break;
                         }
+                        
                         if (loadLibRawPreview())
                         {
                             break;
                         }
+
                         loadHalfSizeRaw();
                         break;
                     }
+
                     case PreviewSettings::RawPreviewFromRawHalfSize:
                     {
                         loadHalfSizeRaw();
@@ -295,7 +307,8 @@ void PreviewLoadingTask::execute()
     }
     else // Non-RAW images
     {
-        bool isFast = m_loadingDescription.previewParameters.previewSettings.quality == PreviewSettings::FastPreview;
+        bool isFast = (m_loadingDescription.previewParameters.previewSettings.quality == PreviewSettings::FastPreview);
+
         switch (m_loadingDescription.previewParameters.previewSettings.quality)
         {
             case PreviewSettings::FastPreview:
@@ -306,6 +319,7 @@ void PreviewLoadingTask::execute()
                     convertQImageToDImg();
                     break;
                 }
+
                 if (continueQuery())
                 {
                     // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
@@ -316,8 +330,10 @@ void PreviewLoadingTask::execute()
 
                     m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
                 }
+
                 break;
             }
+
             case PreviewSettings::HighQualityPreview:
             {
                 if (continueQuery())
@@ -333,8 +349,11 @@ void PreviewLoadingTask::execute()
                         cache->putImage(fullDescription.cacheKey(), new DImg(m_img.copy()), m_loadingDescription.filePath);
                     }
                 }
+
+                break;
             }
         }
+
         if (m_img.isNull() && continueQuery())
         {
             qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot extract preview for " << m_loadingDescription.filePath;
@@ -468,6 +487,7 @@ bool PreviewLoadingTask::needToScale()
                 return (maxSize >= acceptableUpperSize);
             }
             break;
+
         case PreviewSettings::FastButLargePreview:
         case PreviewSettings::HighQualityPreview:
             break;
@@ -494,6 +514,7 @@ bool PreviewLoadingTask::loadExiv2Preview(KExiv2Iface::KExiv2Previews& previews,
             return true;
         }
     }
+
     return false;
 }
 
@@ -514,13 +535,19 @@ bool PreviewLoadingTask::loadLibRawPreview(int sizeLimit)
         m_fromRawEmbeddedPreview = true;
         return true;
     }
+
     return false;
 }
 
 bool PreviewLoadingTask::loadHalfSizeRaw()
 {
+    if (!continueQuery())
+    {
+        return false;
+    }
+
     KDcrawIface::KDcraw::loadHalfPreview(m_qimage, m_loadingDescription.filePath);
-    return !m_qimage.isNull();
+    return (!m_qimage.isNull());
 }
 
 void PreviewLoadingTask::convertQImageToDImg()

@@ -33,7 +33,10 @@
 
 #include "loadsavetask.h"
 
-namespace KExiv2Iface { class KExiv2Previews; }
+namespace KExiv2Iface
+{
+    class KExiv2Previews;
+}
 
 namespace Digikam
 {
@@ -58,6 +61,8 @@ private:
     bool needToScale();
     bool loadImagePreview(int sizeLimit = -1);
     void convertQImageToDImg();
+
+private:
 
     QImage m_qimage;
     bool   m_fromRawEmbeddedPreview;
