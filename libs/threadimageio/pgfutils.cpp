@@ -453,7 +453,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 
 QString libPGFVersion()
 {
-    return (QString(PGFCodecVersion));
+    return (QLatin1String(PGFCodecVersion));
 }
 
 } // namespace PGFUtils

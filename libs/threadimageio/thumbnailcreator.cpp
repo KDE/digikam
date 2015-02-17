@@ -35,6 +35,7 @@
 #include <QIODevice>
 #include <QFile>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QTemporaryFile>
 
 // KDE includes
@@ -316,7 +317,7 @@ QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect
 
     if (!info.customIdentifier.isNull())
     {
-        image.qimage.setText("customIdentifier", info.customIdentifier);
+        image.qimage.setText(QLatin1String("customIdentifier"), info.customIdentifier);
     }
 
     return image.qimage;
@@ -343,7 +344,7 @@ QImage ThumbnailCreator::scaleForStorage(const QImage& qimage) const
 QString ThumbnailCreator::identifierForDetail(const ThumbnailInfo& info, const QRect& rect)
 {
     QUrl url;
-    url.setScheme("detail");
+    url.setScheme(QLatin1String("detail"));
     url.setPath(info.filePath);
 
 /*  A scheme to support loading by database id, but this is a hack. Solve cleanly later (schema update)
@@ -360,8 +361,10 @@ QString ThumbnailCreator::identifierForDetail(const ThumbnailInfo& info, const Q
         url.addQueryItem("path", identifier.filePath);
     }
 */
-    QString r = QString("%1,%2-%3x%4").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
-    url.addQueryItem("rect", r);
+    QString r = QString::fromLatin1("%1,%2-%3x%4").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
+    QUrlQuery q(url);
+    q.addQueryItem(QLatin1String("rect"), r);
+    url.setQuery(q);
 
     return url.toString();
 }
@@ -498,7 +501,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
 
         if (qimage.isNull() && !ext.isEmpty())
         {
-            if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+            if (ext == QLatin1String("JPEG") || ext == QLatin1String("JPG") || ext == QLatin1String("JPE"))
             {
                 if (colorManage)
                 {
@@ -512,14 +515,14 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
 
                 failedAtJPEGScaled = qimage.isNull();
             }
-            else if (ext == QString("PNG")  ||
-                     ext == QString("TIFF") ||
-                     ext == QString("TIF"))
+            else if (ext == QLatin1String("PNG")  ||
+                     ext == QLatin1String("TIFF") ||
+                     ext == QLatin1String("TIF"))
             {
                 qimage       = loadWithDImg(path, &profile);
                 failedAtDImg = qimage.isNull();
             }
-            else if (ext == QString("PGF"))
+            else if (ext == QLatin1String("PGF"))
             {
                 // use pgf library to extract reduced version
                 PGFUtils::loadPGFScaled(qimage, path, d->storageSize());
@@ -602,7 +605,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
 QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* const profile) const
 {
     DImg img;
-    img.setAttribute("scaledLoadingSize", d->storageSize());
+    img.setAttribute(QLatin1String("scaledLoadingSize"), d->storageSize());
     img.load(path, false, profile ? true : false, false, false, d->observer, d->rawSettings);
     *profile = img.getIccProfile();
     return img.copyQImage();
@@ -1070,8 +1073,8 @@ ThumbnailImage ThumbnailCreator::loadFreedesktop(const ThumbnailInfo& info) cons
     // force to recompute it, else we use it.
     if (!qimage.isNull())
     {
-        if (qimage.text("Thumb::MTime") == QString::number(info.modificationDate.toTime_t()) &&
-            qimage.text("Software")     == d->digiKamFingerPrint)
+        if (qimage.text(QLatin1String("Thumb::MTime")) == QString::number(info.modificationDate.toTime_t()) &&
+            qimage.text(QLatin1String("Software"))     == d->digiKamFingerPrint)
         {
             ThumbnailImage info;
             info.qimage = qimage;
@@ -1108,9 +1111,9 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
         qimage = qimage.convertToFormat(QImage::Format_ARGB32);
     }
 
-    qimage.setText(QString("Thumb::URI").toLatin1().constData(),   0, uri);
-    qimage.setText(QString("Thumb::MTime").toLatin1().constData(), 0, QString::number(info.modificationDate.toTime_t()));
-    qimage.setText(QString("Software").toLatin1().constData(),     0, d->digiKamFingerPrint);
+    qimage.setText(QLatin1String("Thumb::URI"),   uri);
+    qimage.setText(QLatin1String("Thumb::MTime"), QString::number(info.modificationDate.toTime_t()));
+    qimage.setText(QLatin1String("Software"),     d->digiKamFingerPrint);
 
     QTemporaryFile temp;
     temp.setFileTemplate(thumbPath + QLatin1String("-digikam-") + QLatin1String("XXXXXX") + QLatin1String(".png"));
@@ -1128,8 +1131,7 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
             temp.close();
 
 #ifndef Q_OS_WIN
-            ret = QFile::rename(QFile::encodeName(tempFileName).constData(),
-                                QFile::encodeName(thumbPath).constData());
+            ret = QFile::rename(QString::fromUtf8(QFile::encodeName(tempFileName)), QString::fromUtf8(QFile::encodeName(thumbPath)));
             if (ret != 0)
 #else
             if(::MoveFileEx(tempFileName.utf16(), thumbPath.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)

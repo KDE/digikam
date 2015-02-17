@@ -874,7 +874,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
 
     if (pix.isNull())
     {
-        pix = QIcon::fromTheme("image-missing").pixmap(128);
+        pix = QIcon::fromTheme(QLatin1String("image-missing")).pixmap(128);
     }
 
     if (pix.isNull())

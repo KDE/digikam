@@ -325,7 +325,7 @@ void PreviewLoadingTask::execute()
                     // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
                     if (isFast)
                     {
-                        m_img.setAttribute("scaledLoadingSize", m_loadingDescription.previewParameters.size);
+                        m_img.setAttribute(QLatin1String("scaledLoadingSize"), m_loadingDescription.previewParameters.size);
                     }
 
                     m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
@@ -560,18 +560,18 @@ void PreviewLoadingTask::convertQImageToDImg()
     // convert from QImage
     m_img               = DImg(m_qimage);
     DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
-    m_img.setAttribute("detectedFileFormat", format);
-    m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
+    m_img.setAttribute(QLatin1String("detectedFileFormat"), format);
+    m_img.setAttribute(QLatin1String("originalFilePath"),   m_loadingDescription.filePath);
 
     DMetadata metadata(m_loadingDescription.filePath);
-    m_img.setAttribute("originalSize", metadata.getPixelSize());
+    m_img.setAttribute(QLatin1String("originalSize"),       metadata.getPixelSize());
     m_img.setMetadata(metadata.data());
 
     // mark as embedded preview (for Exif rotation)
 
     if (m_fromRawEmbeddedPreview)
     {
-        m_img.setAttribute("fromRawEmbeddedPreview", true);
+        m_img.setAttribute(QLatin1String("fromRawEmbeddedPreview"), true);
 
         // If we loaded the embedded preview, the Exif of the RAW indicates
         // the color space of the preview (see bug 195950 for NEF files)

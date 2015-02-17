@@ -41,19 +41,20 @@ TagRegion::TagRegion()
 }
 
 TagRegion::TagRegion(const QString& descriptor)
-    : m_value(descriptor), m_type(Invalid)
+    : m_value(descriptor),
+      m_type(Invalid)
 {
-    QString xmlStartDocument = "<?xml version=\"1.0\"?>";
+    QString xmlStartDocument = QLatin1String("<?xml version=\"1.0\"?>");
     QXmlStreamReader reader(xmlStartDocument + descriptor);
 
     if (reader.readNextStartElement())
     {
-        if (reader.name() == "rect")
+        if (reader.name() == QLatin1String("rect"))
         {
-            QRect r(reader.attributes().value("x").toString().toInt(),
-                    reader.attributes().value("y").toString().toInt(),
-                    reader.attributes().value("width").toString().toInt(),
-                    reader.attributes().value("height").toString().toInt());
+            QRect r(reader.attributes().value(QLatin1String("x")).toString().toInt(),
+                    reader.attributes().value(QLatin1String("y")).toString().toInt(),
+                    reader.attributes().value(QLatin1String("width")).toString().toInt(),
+                    reader.attributes().value(QLatin1String("height")).toString().toInt());
 
             if (r.isValid())
             {
@@ -65,7 +66,8 @@ TagRegion::TagRegion(const QString& descriptor)
 }
 
 TagRegion::TagRegion(const QRect& rect)
-    : m_value(rect), m_type(Rect)
+    : m_value(rect),
+      m_type(Rect)
 {
 }
 
@@ -81,8 +83,8 @@ bool TagRegion::isValid() const
 
 bool TagRegion::operator==(const TagRegion& other) const
 {
-    return m_type  == other.m_type &&
-           m_value == other.m_value;
+    return ((m_type  == other.m_type) &&
+            (m_value == other.m_value));
 }
 
 QString TagRegion::toXml() const
@@ -100,11 +102,11 @@ QString TagRegion::toXml() const
     if (m_type == Rect)
     {
         QRect rect = m_value.toRect();
-        writer.writeStartElement("rect");
-        writer.writeAttribute("x", QString::number(rect.x()));
-        writer.writeAttribute("y", QString::number(rect.y()));
-        writer.writeAttribute("width", QString::number(rect.width()));
-        writer.writeAttribute("height", QString::number(rect.height()));
+        writer.writeStartElement(QLatin1String("rect"));
+        writer.writeAttribute(QLatin1String("x"),      QString::number(rect.x()));
+        writer.writeAttribute(QLatin1String("y"),      QString::number(rect.y()));
+        writer.writeAttribute(QLatin1String("width"),  QString::number(rect.width()));
+        writer.writeAttribute(QLatin1String("height"), QString::number(rect.height()));
         writer.writeEndElement();
     }
 
@@ -185,9 +187,9 @@ QRect TagRegion::mapToOriginalSize(const QSize& fullImageSize, const QSize& redu
     double ratioWidth  = double(fullImageSize.width())  / double(reducedImageSize.width());
     double ratioHeight = double(fullImageSize.height()) / double(reducedImageSize.height());
 
-    return QRectF(reducedSizeDetail.x() * ratioWidth,
-                  reducedSizeDetail.y() * ratioHeight,
-                  reducedSizeDetail.width() * ratioWidth,
+    return QRectF(reducedSizeDetail.x()      * ratioWidth,
+                  reducedSizeDetail.y()      * ratioHeight,
+                  reducedSizeDetail.width()  * ratioWidth,
                   reducedSizeDetail.height() * ratioHeight).toRect();
 }
 
@@ -240,11 +242,11 @@ QRectF TagRegion::absoluteToRelative(const QRect& region, const QSize& fullSize)
 
 QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, int rotation)
 {
-    int x,y,w,h;
-    region.getRect(&x,&y,&w,&h);
-    int newx,newy,neww,newh;
+    int x, y, w, h;
+    region.getRect(&x, &y, &w, &h);
+    int newx, newy, neww, newh;
 
-    if(rotation == 0) // Rotate right 90 degress
+    if (rotation == 0) // Rotate right 90 degress
     {
        newx = fullSize.height() - y -h;
        newy = x;
@@ -260,7 +262,7 @@ QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, i
         newh = w;
     }
 
-    return QRect(newx,newy,neww,newh);
+    return QRect(newx, newy, neww, newh);
 }
 
 QDebug operator<<(QDebug dbg, const TagRegion& r)

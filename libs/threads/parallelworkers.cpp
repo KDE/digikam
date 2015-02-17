@@ -30,6 +30,7 @@
 #include <QMetaMethod>
 #include <QMutex>
 #include <QThread>
+#include <QMetaType>
 #include <QWaitCondition>
 
 // Local includes
@@ -180,7 +181,7 @@ int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void *
             }
 
             // we use QMetaType to copy the data. _a[0] is reserved for a return parameter.
-            void* const data = QMetaType::construct(typeId, _a[i+1]);
+            void* const data = QMetaType(typeId).construct(_a[i+1]);
             args[i]          = QGenericArgument(types[i].constData(), data);
         }
 

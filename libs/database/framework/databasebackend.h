@@ -44,10 +44,11 @@ class DIGIKAM_DATABASE_EXPORT DatabaseBackend : public DatabaseCoreBackend
 
 public:
 
-    explicit DatabaseBackend(DatabaseLocking* locking, const QString& backendName="digikamDatabase-");
+    explicit DatabaseBackend(DatabaseLocking* locking, const QString& backendName = QLatin1String("digikamDatabase-"));
     ~DatabaseBackend();
 
-    /** Sets the global database watch */
+    /** Sets the global database watch
+     */
     void setDatabaseWatch(DatabaseWatch* watch);
 
     /**

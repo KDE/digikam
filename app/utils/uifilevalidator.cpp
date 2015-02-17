@@ -32,9 +32,9 @@
 
 namespace
 {
-static const QString TOOLBARKEY("ToolBar");
-static const QString TOOLBARATTRIBUTE("name");
-static const QString TOOLBARVALUE("mainToolBar");
+static const QString TOOLBARKEY(QLatin1String("ToolBar"));
+static const QString TOOLBARATTRIBUTE(QLatin1String("name"));
+static const QString TOOLBARVALUE(QLatin1String("mainToolBar"));
 }
 
 namespace Digikam

@@ -64,6 +64,8 @@ public:
     virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img) = 0;
 };
 
+// -------------------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT LoadSaveFileInfoProvider
 {
 public:
@@ -216,10 +218,10 @@ protected:
 
 private:
 
-    class LoadSaveThreadPriv;
-    LoadSaveThreadPriv* const d;
+    class Private;
+    Private* const d;
 };
 
-}      // namespace Digikam
+} // namespace Digikam
 
 #endif // LOAD_SAVE_THREAD_H

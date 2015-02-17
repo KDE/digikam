@@ -38,34 +38,34 @@
 namespace Digikam
 {
 
-class LoadSaveThread::LoadSaveThreadPriv
+class LoadSaveThread::Private
 {
 public:
 
-    LoadSaveThreadPriv()
+    Private()
     {
         running           = true;
         blockNotification = false;
         lastTask          = 0;
     }
 
-    bool          running;
-    bool          blockNotification;
+    bool                             running;
+    bool                             blockNotification;
 
-    QTime         notificationTime;
+    QTime                            notificationTime;
 
-    LoadSaveTask* lastTask;
+    LoadSaveTask*                    lastTask;
 
     static LoadSaveFileInfoProvider* infoProvider;
 };
 
-LoadSaveFileInfoProvider* LoadSaveThread::LoadSaveThreadPriv::infoProvider = 0;
+LoadSaveFileInfoProvider* LoadSaveThread::Private::infoProvider = 0;
 
 //---------------------------------------------------------------------------------------------------
 
 LoadSaveThread::LoadSaveThread(QObject* parent)
     : DynamicThread(parent),
-      d(new LoadSaveThreadPriv)
+      d(new Private)
 {
     m_currentTask        = 0;
     m_notificationPolicy = NotificationPolicyTimeLimited;
@@ -79,12 +79,12 @@ LoadSaveThread::~LoadSaveThread()
 
 void LoadSaveThread::setInfoProvider(LoadSaveFileInfoProvider* infoProvider)
 {
-    LoadSaveThreadPriv::infoProvider = infoProvider;
+    Private::infoProvider = infoProvider;
 }
 
 LoadSaveFileInfoProvider* LoadSaveThread::infoProvider()
 {
-    return LoadSaveThreadPriv::infoProvider;
+    return Private::infoProvider;
 }
 
 void LoadSaveThread::load(const LoadingDescription& description)
@@ -269,7 +269,7 @@ bool LoadSaveThread::querySendNotifyEvent()
 
 int LoadSaveThread::exifOrientation(const DImg& image, const QString& filePath)
 {
-    QVariant attribute = image.attribute("fromRawEmbeddedPreview");
+    QVariant attribute = image.attribute(QLatin1String("fromRawEmbeddedPreview"));
     return exifOrientation(filePath, DMetadata(image.getMetadata()),
                            image.detectedFormat() == DImg::RAW,
                            (attribute.isValid() && attribute.toBool()));
@@ -279,6 +279,7 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
                                     bool isRaw, bool fromRawEmbeddedPreview)
 {
     int dbOrientation = KExiv2::ORIENTATION_UNSPECIFIED;
+
     if (infoProvider())
     {
         dbOrientation = infoProvider()->orientationHint(filePath);
@@ -317,7 +318,7 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
 bool LoadSaveThread::wasExifRotated(DImg& image)
 {
     // Keep in sync with the variant in thumbnailcreator.cpp
-    QVariant attribute(image.attribute("exifRotated"));
+    QVariant attribute(image.attribute(QLatin1String("exifRotated")));
 
     return attribute.isValid() && attribute.toBool();
 }
@@ -333,7 +334,7 @@ bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
     // Rotate thumbnail based on metadata orientation information
 
     bool rotatedOrFlipped = image.rotateAndFlip(exifOrientation(image, filePath));
-    image.setAttribute("exifRotated", true);
+    image.setAttribute(QLatin1String("exifRotated"), true);
 
     return rotatedOrFlipped;
 }

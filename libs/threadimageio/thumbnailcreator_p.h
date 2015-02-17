@@ -73,7 +73,7 @@ public:
         onlyLargeThumbnails                       = false;
 
         // Used internaly as PNG metadata. Do not use i18n.
-        digiKamFingerPrint                        = QString("Digikam Thumbnail Generator");
+        digiKamFingerPrint                        = QLatin1String("Digikam Thumbnail Generator");
 
         fastRawSettings.optimizeTimeLoading();
         fastRawSettings.rawPrm.halfSizeColorImage = true;

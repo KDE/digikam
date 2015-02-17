@@ -273,7 +273,7 @@ bool LoadingCache::hasThumbnailPixmap(const QString& cacheKey) const
 
 void LoadingCache::putThumbnail(const QString& cacheKey, const QImage& thumb, const QString& filePath)
 {
-    int cost = thumb.numBytes();
+    int cost = thumb.byteCount();
 
     if (d->thumbnailImageCache.insert(cacheKey, new QImage(thumb), cost))
     {

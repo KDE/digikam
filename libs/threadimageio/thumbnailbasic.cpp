@@ -69,12 +69,12 @@ namespace Digikam
 
 QString ThumbnailCreator::normalThumbnailDir()
 {
-    return  QDir::homePath() + "/.thumbnails/normal/";
+    return  QDir::homePath() + QLatin1String("/.thumbnails/normal/");
 }
 
 QString ThumbnailCreator::largeThumbnailDir()
 {
-    return  QDir::homePath() + "/.thumbnails/large/";
+    return  QDir::homePath() + QLatin1String("/.thumbnails/large/");
 }
 
 QString ThumbnailCreator::thumbnailPath(const QString& filePath, const QString& basePath)
@@ -91,7 +91,7 @@ QString ThumbnailCreator::thumbnailPathFromUri(const QString& uri, const QString
 {
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData( QFile::encodeName(uri).constData() );
-    return ( basePath + QFile::encodeName( md5.result().toHex() ).constData() + QString(".png") );
+    return ( basePath + QString::fromUtf8(QFile::encodeName(QString::fromUtf8(md5.result().toHex()))) + QLatin1String(".png") );
 }
 
 // --- non-static methods ---
@@ -299,11 +299,11 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
 
     png_textp text_ptr;
     int num_text = 0;
-    png_get_text(png_ptr,info_ptr,&text_ptr,&num_text);
+    png_get_text(png_ptr,info_ptr, &text_ptr, &num_text);
 
     while (num_text--)
     {
-        qimage.setText(text_ptr->key,0,text_ptr->text);
+        qimage.setText(QString::fromUtf8(text_ptr->key), QString::fromUtf8(text_ptr->text));
         ++text_ptr;
     }
 
