@@ -99,7 +99,7 @@ DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
     d->label->setWordWrap(true);
     d->actionPix->setFixedSize(QSize(32, 32));
 
-    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                        .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     grid->addWidget(d->logo,        0, 0, 3, 1);
@@ -147,7 +147,7 @@ void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
 
     if (pix.isNull())
     {
-        pix = QIcon::fromTheme("image-missing").pixmap(32);
+        pix = QIcon::fromTheme(QLatin1String("image-missing")).pixmap(32);
     }
     else
     {

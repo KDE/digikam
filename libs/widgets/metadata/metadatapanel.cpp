@@ -187,9 +187,9 @@ public:
 
     void setDefaultFilter(const char** const list, QStringList& filter)
     {
-        for (int i=0 ; QString(list[i]) != QString("-1") ; ++i)
+        for (int i=0 ; QLatin1String(list[i]) != QLatin1String("-1") ; ++i)
         {
-            filter << QString(list[i]);
+            filter << QLatin1String(list[i]);
         }
     };
 
@@ -209,7 +209,8 @@ public:
 };
 
 MetadataPanel::MetadataPanel(QTabWidget* const tab)
-    : QObject(tab), d(new Private)
+    : QObject(tab),
+      d(new Private)
 {
     d->tab = tab;
 

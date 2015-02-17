@@ -79,7 +79,7 @@ ICCProfileInfoDlg::~ICCProfileInfoDlg()
 
 void ICCProfileInfoDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("iccprofile.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("iccprofile.anchor"), QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

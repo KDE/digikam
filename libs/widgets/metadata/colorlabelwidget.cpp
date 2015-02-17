@@ -100,7 +100,8 @@ public:
 };
 
 ColorLabelWidget::ColorLabelWidget(QWidget* const parent)
-    : RVBox(parent), d(new Private)
+    : RVBox(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
@@ -236,7 +237,7 @@ void ColorLabelWidget::updateDescription(ColorLabel label)
 
     if (app)
     {
-        QAction* const ac = app->actionCollection()->action(QString("colorshortcut-%1").arg(label));
+        QAction* const ac = app->actionCollection()->action(QString::fromLatin1("colorshortcut-%1").arg(label));
 
         if (ac)
         {
@@ -376,7 +377,7 @@ QIcon ColorLabelWidget::buildIcon(ColorLabel label, int size)
         return QIcon(pix);
     }
 
-    return QIcon::fromTheme("emblem-unmounted");
+    return QIcon::fromTheme(QLatin1String("emblem-unmounted"));
 }
 
 QColor ColorLabelWidget::labelColor(ColorLabel label)
@@ -476,7 +477,8 @@ public:
 };
 
 ColorLabelSelector::ColorLabelSelector(QWidget* parent)
-    : QPushButton(parent), d(new Private)
+    : QPushButton(parent),
+      d(new Private)
 {
     QMenu* const popup          = new QMenu(this);
     setMenu(popup);

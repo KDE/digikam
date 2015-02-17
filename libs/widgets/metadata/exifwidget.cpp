@@ -60,9 +60,9 @@ namespace Digikam
 ExifWidget::ExifWidget(QWidget* const parent, const char* name)
     : MetadataWidget(parent, name)
 {
-    for (int i=0 ; QString(StandardExifEntryList[i]) != QString("-1") ; ++i)
+    for (int i=0 ; QLatin1String(StandardExifEntryList[i]) != QLatin1String("-1") ; ++i)
     {
-        m_keysFilter << StandardExifEntryList[i];
+        m_keysFilter << QLatin1String(StandardExifEntryList[i]);
     }
 }
 
@@ -125,7 +125,7 @@ void ExifWidget::buildView()
             break;
 
         case PHOTO:
-            setIfdList(getMetadataMap(), m_keysFilter, QStringList() << QString("FULL"));
+            setIfdList(getMetadataMap(), m_keysFilter, QStringList() << QLatin1String("FULL"));
             break;
 
         default: // NONE
@@ -139,11 +139,11 @@ void ExifWidget::buildView()
 QString ExifWidget::getTagTitle(const QString& key)
 {
     DMetadata metadataIface;
-    QString title = metadataIface.getExifTagTitle(key.toAscii().constData());
+    QString title = metadataIface.getExifTagTitle(key.toLatin1().constData());
 
     if (title.isEmpty())
     {
-        return key.section('.', -1);
+        return key.section(QLatin1Char('.'), -1);
     }
 
     return title;
@@ -152,7 +152,7 @@ QString ExifWidget::getTagTitle(const QString& key)
 QString ExifWidget::getTagDescription(const QString& key)
 {
     DMetadata metadataIface;
-    QString desc = metadataIface.getExifTagDescription(key.toAscii().constData());
+    QString desc = metadataIface.getExifTagDescription(key.toLatin1().constData());
 
     if (desc.isEmpty())
     {
@@ -165,7 +165,7 @@ QString ExifWidget::getTagDescription(const QString& key)
 void ExifWidget::slotSaveMetadataToFile()
 {
     QUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
-                                  QString("*.exif|"+i18n("EXIF binary Files (*.exif)")));
+                                  QString(QLatin1String("*.exif|") + i18n("EXIF binary Files (*.exif)")));
 
 #if KEXIV2_VERSION >= 0x010000
     storeMetadataToFile(url, getMetadata().getExifEncoded());

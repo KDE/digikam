@@ -110,9 +110,10 @@ public:
 };
 
 MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    setObjectName(name);
+    setObjectName(QLatin1String(name));
 
     d->mainLayout = new QGridLayout(this);
 
@@ -120,7 +121,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 
     d->filterBtn  = new QToolButton(this);
     d->filterBtn->setToolTip(i18n("Tags filter options"));
-    d->filterBtn->setIcon(QIcon::fromTheme("view-filter"));
+    d->filterBtn->setIcon(QIcon::fromTheme(QLatin1String("view-filter")));
     d->filterBtn->setPopupMode(QToolButton::InstantPopup);
     d->filterBtn->setWhatsThis(i18n("Apply tags filter over metadata."));
 
@@ -147,7 +148,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 
     d->toolBtn = new QToolButton(this);
     d->toolBtn->setToolTip(i18n("Tools"));
-    d->toolBtn->setIcon(QIcon::fromTheme("system-run"));
+    d->toolBtn->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
     d->toolBtn->setPopupMode(QToolButton::InstantPopup);
     d->toolBtn->setWhatsThis(i18n("Run tool over metadata tags."));
 
@@ -159,8 +160,8 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 
     d->view         = new MetadataListView(this);
 
-    QString barName = QString(name) + "SearchBar";
-    d->searchBar    = new SearchTextBar(this, barName.toAscii().constData());
+    QString barName = QLatin1String(name) + QLatin1String("SearchBar");
+    d->searchBar    = new SearchTextBar(this, barName.toLatin1().constData());
 
     // -----------------------------------------------------------------
 
@@ -328,9 +329,9 @@ void MetadataWidget::slotCopy2Clipboard()
 
         if (lvItem)
         {
-            textmetadata.append("\n\n>>> ");
+            textmetadata.append(QLatin1String("\n\n>>> "));
             textmetadata.append(lvItem->getDecryptedKey());
-            textmetadata.append(" <<<\n\n");
+            textmetadata.append(QLatin1String(" <<<\n\n"));
 
             int j                  = 0;
             QTreeWidgetItem* item2 = 0;
@@ -343,9 +344,9 @@ void MetadataWidget::slotCopy2Clipboard()
                 if (lvItem2)
                 {
                     textmetadata.append(lvItem2->text(0));
-                    textmetadata.append(" : ");
+                    textmetadata.append(QLatin1String(" : "));
                     textmetadata.append(lvItem2->text(1));
-                    textmetadata.append("\n");
+                    textmetadata.append(QLatin1String("\n"));
                 }
 
                 ++j;
@@ -377,9 +378,9 @@ void MetadataWidget::slotPrintMetadata()
 
         if (lvItem)
         {
-            textmetadata.append("<br/><br/><b>");
+            textmetadata.append(QLatin1String("<br/><br/><b>"));
             textmetadata.append(lvItem->getDecryptedKey());
-            textmetadata.append("</b><br/><br/>");
+            textmetadata.append(QLatin1String("</b><br/><br/>"));
 
             int j                  = 0;
             QTreeWidgetItem* item2 = 0;
@@ -392,9 +393,9 @@ void MetadataWidget::slotPrintMetadata()
                 if (lvItem2)
                 {
                     textmetadata.append(lvItem2->text(0));
-                    textmetadata.append(" : <i>");
+                    textmetadata.append(QLatin1String(" : <i>"));
                     textmetadata.append(lvItem2->text(1));
-                    textmetadata.append("</i><br/>");
+                    textmetadata.append(QLatin1String("</i><br/>"));
                 }
 
                 ++j;
@@ -406,7 +407,7 @@ void MetadataWidget::slotPrintMetadata()
     }
     while (item);
 
-    textmetadata.append("</p>");
+    textmetadata.append(QLatin1String("</p>"));
 
     QPrinter printer;
     printer.setFullPage(true);

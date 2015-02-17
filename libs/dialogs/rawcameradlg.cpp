@@ -74,7 +74,7 @@ RawCameraDlg::RawCameraDlg(QWidget* const parent)
     updateHeader();
 
     listView()->setColumnCount(1);
-    listView()->setHeaderLabels(QStringList() << "Camera Model"); // Header is hidden. No i18n here.
+    listView()->setHeaderLabels(QStringList() << QLatin1String("Camera Model")); // Header is hidden. No i18n here.
     listView()->header()->hide();
 
     for (QStringList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)

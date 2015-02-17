@@ -85,14 +85,14 @@ InfoDlg::InfoDlg(QWidget* const parent)
 
     QLabel* const logo      = new QLabel(d->page);
 
-    if (QApplication::applicationName() == QString("digikam"))
+    if (QApplication::applicationName() == QLatin1String("digikam"))
     {
-        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                         .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
     else
     {
-        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
+        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/logo-showfoto.png")))
                         .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 
@@ -115,7 +115,7 @@ InfoDlg::InfoDlg(QWidget* const parent)
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setColumnCount(2);
-    d->listView->header()->setResizeMode(QHeaderView::Stretch);
+    d->listView->header()->setSectionResizeMode(QHeaderView::Stretch);
 
     // --------------------------------------------------------
 
@@ -175,18 +175,18 @@ void InfoDlg::slotCopy2ClipBoard()
     QString textInfo;
 
     textInfo.append(QApplication::applicationName());
-    textInfo.append(" version ");
+    textInfo.append(QLatin1String(" version "));
     textInfo.append(QApplication::applicationVersion());
-    textInfo.append("\n");
+    textInfo.append(QLatin1String("\n"));
 
     QTreeWidgetItemIterator it(d->listView);
 
     while (*it)
     {
         textInfo.append((*it)->text(0));
-        textInfo.append(": ");
+        textInfo.append(QLatin1String(": "));
         textInfo.append((*it)->text(1));
-        textInfo.append("\n");
+        textInfo.append(QLatin1String("\n"));
         ++it;
     }
 
@@ -197,7 +197,7 @@ void InfoDlg::slotCopy2ClipBoard()
 
 void InfoDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

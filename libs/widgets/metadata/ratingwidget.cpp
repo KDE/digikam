@@ -536,7 +536,7 @@ void RatingBox::slotUpdateDescription(int rating)
 
     if (app)
     {
-        QAction* const ac = app->actionCollection()->action(QString("rateshortcut-%1").arg(rating));
+        QAction* const ac = app->actionCollection()->action(QString::fromLatin1("rateshortcut-%1").arg(rating));
 
         if (ac)
         {

@@ -106,8 +106,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     static const QString SUPPORTED_NO  = i18nc("component is not available/supported", "No");
 
     QMap<QString, QString> list;
-    list.insert(i18nc(CONTEXT, "Qt"),                          qVersion());
-    list.insert(i18nc(CONTEXT, "KCoreAddons"),                 QString(KCOREADDONS_VERSION_STRING));
+    list.insert(i18nc(CONTEXT, "Qt"),                          QLatin1String(qVersion()));
+    list.insert(i18nc(CONTEXT, "KCoreAddons"),                 QLatin1String(KCOREADDONS_VERSION_STRING));
     list.insert(i18nc(CONTEXT, "KDcraw"),                      KDcraw::version());
     list.insert(i18nc(CONTEXT, "LibRaw"),                      KDcraw::librawVersion());
 
@@ -125,7 +125,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #endif
 
 #ifdef HAVE_EIGEN3
-    list.insert(i18nc(CONTEXT, "Eigen"),                       QString(EIGEN3_VERSION_STRING));
+    list.insert(i18nc(CONTEXT, "Eigen"),                       QLatin1String(EIGEN3_VERSION_STRING));
 #else
     list.insert(i18nc(CONTEXT, "Eigen support"),               SUPPORTED_NO);
 #endif // HAVE_EIGEN3
@@ -134,15 +134,15 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18nc(CONTEXT, "Exiv2"),                       KExiv2::Exiv2Version());
     list.insert(i18nc(CONTEXT, "Exiv2 supports XMP metadata"), KExiv2::supportXmp() ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jpeg"),     KExiv2::supportMetadataWritting("image/jpeg") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jpeg"),     KExiv2::supportMetadataWritting(QLatin1String("image/jpeg")) ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Tiff"),     KExiv2::supportMetadataWritting("image/tiff") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Tiff"),     KExiv2::supportMetadataWritting(QLatin1String("image/tiff")) ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Png"),      KExiv2::supportMetadataWritting("image/png") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Png"),      KExiv2::supportMetadataWritting(QLatin1String("image/png")) ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jp2"),      KExiv2::supportMetadataWritting("image/jp2") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jp2"),      KExiv2::supportMetadataWritting(QLatin1String("image/jp2")) ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Pgf"),      KExiv2::supportMetadataWritting("image/pgf") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Pgf"),      KExiv2::supportMetadataWritting(QLatin1String("image/pgf")) ?
                 i18n("Yes") : i18n("No"));
 
 #ifdef HAVE_LENSFUN
@@ -157,15 +157,15 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18nc(CONTEXT, "LibLqr support"),              SUPPORTED_NO);
 #endif // HAVE_LIBLQR_1
 
-    list.insert(i18nc(CONTEXT, "LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
-    list.insert(i18nc(CONTEXT, "LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
+    list.insert(i18nc(CONTEXT, "LibPNG"),                      QLatin1String(PNG_LIBPNG_VER_STRING));
+    list.insert(i18nc(CONTEXT, "LibTIFF"),                     QString::fromLatin1(TIFFLIB_VERSION_STR).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     list.insert(i18nc(CONTEXT, "LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
     list.insert(i18nc(CONTEXT, "LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18nc(CONTEXT, "LibLCMS"),                     QString::number(LCMS_VERSION));
     list.insert(i18nc(CONTEXT, "LibPGF"),                      PGFUtils::libPGFVersion());
 
 #ifdef HAVE_JASPER
-    list.insert(i18nc(CONTEXT, "LibJasper"),                   QString(jas_getversion()));
+    list.insert(i18nc(CONTEXT, "LibJasper"),                   QLatin1String(jas_getversion()));
 #else
     list.insert(i18nc(CONTEXT, "LibJasper support"),           SUPPORTED_NO);
 #endif // HAVE_JASPER
@@ -180,7 +180,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 // TODO add sqlite versions here? Could be useful for debugging sqlite problems..
 
     int nbcore = QThreadPool::globalInstance()->maxThreadCount();
-    list.insert(i18ncp(CONTEXT, "CPU core", "CPU cores", nbcore), QString("%1").arg(nbcore));
+    list.insert(i18ncp(CONTEXT, "CPU core", "CPU cores", nbcore), QString::fromLatin1("%1").arg(nbcore));
 
     listView()->setHeaderLabels(QStringList() << i18nc("Name of the component", "Component") << i18nc("Is supported / version of the component", "Info"));
     setInfoMap(list);

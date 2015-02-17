@@ -72,22 +72,23 @@ public:
         shortcut = 0;
     }
 
-    QButtonGroup*       pickBtns;
+    QButtonGroup*     pickBtns;
 
-    QLabel*             desc;
+    QLabel*           desc;
 
-    QToolButton*        btnNone;
-    QToolButton*        btnRej;
-    QToolButton*        btnPndg;
-    QToolButton*        btnAccpt;
+    QToolButton*      btnNone;
+    QToolButton*      btnRej;
+    QToolButton*      btnPndg;
+    QToolButton*      btnAccpt;
 
-    RHBox*              descBox;
+    RHBox*            descBox;
 
     RAdjustableLabel* shortcut;
 };
 
 PickLabelWidget::PickLabelWidget(QWidget* const parent)
-    : RVBox(parent), d(new Private)
+    : RVBox(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
@@ -181,7 +182,7 @@ void PickLabelWidget::updateDescription(PickLabel label)
 
     if (app)
     {
-        QAction* const ac = app->actionCollection()->action(QString("pickshortcut-%1").arg(label));
+        QAction* const ac = app->actionCollection()->action(QString::fromLatin1("pickshortcut-%1").arg(label));
 
         if (ac)
         {
@@ -260,20 +261,20 @@ QIcon PickLabelWidget::buildIcon(PickLabel label)
     switch(label)
     {
         case RejectedLabel:
-            return QIcon::fromTheme("flag-red");
+            return QIcon::fromTheme(QLatin1String("flag-red"));
             break;
         case PendingLabel:
-            return QIcon::fromTheme("flag-yellow");
+            return QIcon::fromTheme(QLatin1String("flag-yellow"));
             break;
         case AcceptedLabel:
-            return QIcon::fromTheme("flag-green");
+            return QIcon::fromTheme(QLatin1String("flag-green"));
             break;
         default:
             break;
     }
 
     // default : NoPickLabel
-    return QIcon::fromTheme("flag-black");
+    return QIcon::fromTheme(QLatin1String("flag-black"));
 }
 
 QString PickLabelWidget::labelPickName(PickLabel label)
@@ -315,7 +316,8 @@ public:
 };
 
 PickLabelSelector::PickLabelSelector(QWidget* const parent)
-    : QPushButton(parent), d(new Private)
+    : QPushButton(parent),
+      d(new Private)
 {
     QMenu* const popup = new QMenu(this);
     setMenu(popup);

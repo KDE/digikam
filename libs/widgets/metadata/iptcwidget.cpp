@@ -52,9 +52,9 @@ namespace Digikam
 IptcWidget::IptcWidget(QWidget* const parent, const char* name)
     : MetadataWidget(parent, name)
 {
-    for (int i=0 ; QString(StandardIptcEntryList[i]) != QString("-1") ; ++i)
+    for (int i=0 ; QLatin1String(StandardIptcEntryList[i]) != QLatin1String("-1") ; ++i)
     {
-        m_keysFilter << StandardIptcEntryList[i];
+        m_keysFilter << QLatin1String(StandardIptcEntryList[i]);
     }
 }
 
@@ -117,7 +117,7 @@ void IptcWidget::buildView()
             break;
 
         case PHOTO:
-            setIfdList(getMetadataMap(), m_keysFilter, QStringList() << QString("FULL"));
+            setIfdList(getMetadataMap(), m_keysFilter, QStringList() << QLatin1String("FULL"));
             break;
 
         default: // NONE
@@ -131,11 +131,11 @@ void IptcWidget::buildView()
 QString IptcWidget::getTagTitle(const QString& key)
 {
     DMetadata metadataIface;
-    QString title = metadataIface.getIptcTagTitle(key.toAscii().constData());
+    QString title = metadataIface.getIptcTagTitle(key.toLatin1().constData());
 
     if (title.isEmpty())
     {
-        return key.section('.', -1);
+        return key.section(QLatin1Char('.'), -1);
     }
 
     return title;
@@ -144,7 +144,7 @@ QString IptcWidget::getTagTitle(const QString& key)
 QString IptcWidget::getTagDescription(const QString& key)
 {
     DMetadata metadataIface;
-    QString desc = metadataIface.getIptcTagDescription(key.toAscii().constData());
+    QString desc = metadataIface.getIptcTagDescription(key.toLatin1().constData());
 
     if (desc.isEmpty())
     {
@@ -157,7 +157,7 @@ QString IptcWidget::getTagDescription(const QString& key)
 void IptcWidget::slotSaveMetadataToFile()
 {
     QUrl url = saveMetadataToFile(i18n("IPTC File to Save"),
-                                  QString("*.iptc|"+i18n("IPTC binary Files (*.iptc)")));
+                                  QString(QLatin1String("*.iptc|") + i18n("IPTC binary Files (*.iptc)")));
     storeMetadataToFile(url, getMetadata().getIptc());
 }
 
