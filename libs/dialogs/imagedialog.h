@@ -27,10 +27,10 @@
 // Qt includes
 
 #include <QUrl>
-
-// KDE includes
-
-#include <kpreviewwidgetbase.h>
+#include <QScrollArea>
+#include <QFileIconProvider>
+#include <QIcon>
+#include <QFileInfo>
 
 // Local includes
 
@@ -40,8 +40,9 @@ namespace Digikam
 {
 
 class LoadingDescription;
+class ThumbnailImageCatcher;
 
-class DIGIKAM_EXPORT ImageDialogPreview : public KPreviewWidgetBase
+class DIGIKAM_EXPORT ImageDialogPreview : public QScrollArea
 {
     Q_OBJECT
 
@@ -54,13 +55,13 @@ public:
 
 public Q_SLOTS:
 
-    void showPreview(const QUrl& url);
+    void slotShowPreview(const QUrl& url);
 
 private Q_SLOTS:
 
     void showPreview();
+    void slotClearPreview();
     void slotThumbnail(const LoadingDescription& desc, const QPixmap& pix);
-    void clearPreview();
 
 private:
 
@@ -74,6 +75,26 @@ private:
 
 // ------------------------------------------------------------------------
 
+class DIGIKAM_EXPORT DFileIconProvider : public QFileIconProvider
+{
+
+public:
+
+    explicit DFileIconProvider();
+    ~DFileIconProvider();
+
+private:
+
+    QIcon icon(IconType type) const;
+    QIcon icon(const QFileInfo& info) const;
+    
+private:
+    
+    ThumbnailImageCatcher* m_catcher;
+};
+
+// ------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT ImageDialog
 {
 
@@ -82,10 +103,10 @@ public:
     ImageDialog(QWidget* const parent, const QUrl& url, bool singleSelect=false, const QString& caption=QString());
     ~ImageDialog();
 
-    QUrl       url()          const;
+    QUrl        url()          const;
     QList<QUrl> urls()         const;
-    bool       singleSelect() const;
-    QString    fileFormats()  const;
+    bool        singleSelect() const;
+    QStringList fileFormats()  const;
 
     static QList<QUrl> getImageURLs(QWidget* const parent, const QUrl& url, const QString& caption=QString());
     static QUrl getImageURL(QWidget* const parent, const QUrl& url, const QString& caption=QString());

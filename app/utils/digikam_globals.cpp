@@ -75,7 +75,7 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode)
 
     Q_FOREACH(const QByteArray& frm, supported)
     {
-        formats.append(QLatin1String("*.") + QLatin1String(frm) + i18n("|%1 Image").arg(QString::fromLatin1(frm).toUpper()));
+        formats.append(i18n("%1 Image (%2)").arg(QString::fromLatin1(frm).toUpper()).arg(QLatin1String("*.") + QLatin1String(frm)));
     }
 
     return formats;

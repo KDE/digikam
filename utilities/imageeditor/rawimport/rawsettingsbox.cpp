@@ -300,7 +300,7 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     // - Image info view --------------------------------------------------------------
 
     d->infoBox = new ImageDialogPreview(d->postProcessSettingsBox);
-    d->infoBox->showPreview(url);
+    d->infoBox->slotShowPreview(url);
 
     // ---------------------------------------------------------------
 

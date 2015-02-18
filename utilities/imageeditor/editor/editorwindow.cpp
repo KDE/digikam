@@ -1834,8 +1834,6 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     QPointer<KFileDialog> imageFileSaveDialog = new KFileDialog(initialUrl, QString(), this, options);
     options->setDialog(imageFileSaveDialog);
 
-    ImageDialogPreview* const preview = new ImageDialogPreview(imageFileSaveDialog);
-    imageFileSaveDialog->setPreviewWidget(preview);
     imageFileSaveDialog->setOperationMode(KFileDialog::Saving);
     imageFileSaveDialog->setMode(KFile::File);
     imageFileSaveDialog->setWindowTitle(i18n("New Image File Name"));

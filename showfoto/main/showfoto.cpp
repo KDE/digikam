@@ -556,7 +556,6 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
             emit signalInfoList(d->infoList);
             slotOpenUrl(d->infoList.first());
         }
-
     }
 }
 

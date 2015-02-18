@@ -31,11 +31,13 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLocale>
+#include <QFileDialog>
+#include <QPixmap>
+#include <QImage>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kfiledialog.h>
 
 // Libkdcraw includes
 
@@ -50,7 +52,6 @@
 #include "dmetadata.h"
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
-
 
 namespace Digikam
 {
@@ -77,13 +78,13 @@ public:
 };
 
 ImageDialogPreview::ImageDialogPreview(QWidget* const parent)
-    : KPreviewWidgetBase(parent),
+    : QScrollArea(parent),
       d(new Private)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
-    QVBoxLayout* vlay  = new QVBoxLayout(this);
-    d->imageLabel      = new QLabel(this);
+    QVBoxLayout* const vlay  = new QVBoxLayout(this);
+    d->imageLabel            = new QLabel(this);
     d->imageLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     d->imageLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
@@ -95,8 +96,6 @@ ImageDialogPreview::ImageDialogPreview(QWidget* const parent)
     vlay->addWidget(d->imageLabel);
     vlay->addWidget(d->infoLabel);
     vlay->addStretch();
-
-    setSupportedMimeTypes(supportedImageMimeTypes(QIODevice::WriteOnly));
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
@@ -120,21 +119,21 @@ void ImageDialogPreview::resizeEvent(QResizeEvent*)
 void ImageDialogPreview::showPreview()
 {
     QUrl url(d->currentURL);
-    clearPreview();
-    showPreview(url);
+    slotClearPreview();
+    slotShowPreview(url);
 }
 
-void ImageDialogPreview::showPreview(const QUrl& url)
+void ImageDialogPreview::slotShowPreview(const QUrl& url)
 {
     if (!url.isValid())
     {
-        clearPreview();
+        slotClearPreview();
         return;
     }
 
     if (url != d->currentURL)
     {
-        clearPreview();
+        slotClearPreview();
         d->currentURL = url;
         d->thumbLoadThread->find(ThumbnailIdentifier(d->currentURL.toLocalFile()));
 
@@ -145,7 +144,7 @@ void ImageDialogPreview::showPreview(const QUrl& url)
         if (!info.isEmpty())
         {
             DToolTipStyleSheet cnt;
-            QString identify("<qt><center>");
+            QString identify = QString::fromLatin1("<qt><center>");
             QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
             QString aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec;
 
@@ -275,7 +274,7 @@ void ImageDialogPreview::showPreview(const QUrl& url)
                 videoCodec = videoInfo.videoCodec;
             }
 
-            identify += "<table cellspacing=0 cellpadding=0>";
+            identify += QString::fromLatin1("<table cellspacing=0 cellpadding=0>");
             identify += cnt.cellBeg + i18n("<i>Make:</i>")              + cnt.cellMid + make                + cnt.cellEnd;
             identify += cnt.cellBeg + i18n("<i>Model:</i>")             + cnt.cellMid + model               + cnt.cellEnd;
             identify += cnt.cellBeg + i18n("<i>Created:</i>")           + cnt.cellMid + dateTime            + cnt.cellEnd;
@@ -295,7 +294,7 @@ void ImageDialogPreview::showPreview(const QUrl& url)
                 identify += cnt.cellBeg + i18n("<i>VideoCodec:</i>")        + cnt.cellMid + videoCodec          + cnt.cellEnd;
             }
 
-            identify += "</table></center></qt>";
+            identify += QString::fromLatin1("</table></center></qt>");
 
             d->infoLabel->setText(identify);
         }
@@ -326,11 +325,43 @@ void ImageDialogPreview::slotThumbnail(const LoadingDescription& desc, const QPi
     }
 }
 
-void ImageDialogPreview::clearPreview()
+void ImageDialogPreview::slotClearPreview()
 {
     d->imageLabel->clear();
     d->infoLabel->clear();
     d->currentURL = QUrl();
+}
+
+// ------------------------------------------------------------------------
+
+DFileIconProvider::DFileIconProvider()
+    : QFileIconProvider()
+{
+    m_catcher = new ThumbnailImageCatcher(ThumbnailLoadThread::defaultThread());
+}
+
+DFileIconProvider::~DFileIconProvider()
+{
+}
+
+QIcon DFileIconProvider::icon(IconType type) const
+{
+    return QFileIconProvider::icon(type);
+}
+    
+QIcon DFileIconProvider::icon(const QFileInfo& info) const
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "request thumb icon for " << info.absoluteFilePath();
+    m_catcher->setActive(true);
+
+    m_catcher->thread()->find(ThumbnailIdentifier(info.absoluteFilePath()));
+    m_catcher->enqueue();
+    QList<QImage> images = m_catcher->waitForThumbnails();
+    QIcon icon(QPixmap::fromImage(images.first()));
+   
+    m_catcher->setActive(false);
+   
+    return icon;
 }
 
 // ------------------------------------------------------------------------
@@ -345,45 +376,33 @@ public:
     {
     }
 
-    bool       singleSelect;
+    bool        singleSelect;
 
-    QString    fileFormats;
+    QStringList fileFormats;
 
-    QUrl       url;
+    QUrl        url;
     QList<QUrl> urls;
 };
 
 ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSelect, const QString& caption)
     : d(new Private)
 {
-    d->singleSelect         = singleSelect;
-    QStringList patternList = supportedImageMimeTypes(QIODevice::ReadOnly);
-
-    // All Images from list must been always the first entry given by KDE API
-    QString allPictures     = patternList[0];
-
-    allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()) +
-                                                 QString(" *.JPE *.TIF *.PGF"));
-    patternList.removeAll(patternList[0]);
-    // Added RAW file formats supported by dcraw program like a type mime.
-    // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete
-    // or unavailable(see file #121242 in bug).
-    patternList.prepend(i18n("%1|Camera RAW files", QString(KDcrawIface::KDcraw::rawFiles())));
-    patternList.prepend(allPictures);
-    patternList.append(i18n("*.pgf|Progressive Graphics file"));
-
-    d->fileFormats = patternList.join("\n");
-
+    d->singleSelect = singleSelect;
+    d->fileFormats  = supportedImageMimeTypes(QIODevice::ReadOnly);
+    d->fileFormats << i18n("Progressive Graphics file (*.pgf)");
+    d->fileFormats << i18n("Raw Images (%1)").arg(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
+    
     qCDebug(DIGIKAM_GENERAL_LOG) << "file formats=" << d->fileFormats;
 
-    QPointer<KFileDialog> dlg   = new KFileDialog(url, d->fileFormats, parent);
-    ImageDialogPreview* preview = new ImageDialogPreview(dlg);
-    dlg->setPreviewWidget(preview);
-    dlg->setOperationMode(KFileDialog::Opening);
+    QFileDialog* const dlg = new QFileDialog(parent);
+    dlg->setDirectoryUrl(url);
+    dlg->setNameFilters(d->fileFormats);
+    dlg->setIconProvider(new DFileIconProvider());
+    dlg->setOption(QFileDialog::DontUseNativeDialog);
 
     if (d->singleSelect)
     {
-        dlg->setMode(KFile::File);
+        dlg->setFileMode(QFileDialog::ExistingFile);
 
         if (caption.isEmpty())
         {
@@ -395,11 +414,11 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
         }
 
         dlg->exec();
-        d->url = dlg->selectedUrl();
+        d->url = dlg->selectedUrls().first();
     }
     else
     {
-        dlg->setMode(KFile::Files);
+        dlg->setFileMode(QFileDialog::ExistingFiles);
 
         if (caption.isEmpty())
         {
@@ -427,7 +446,7 @@ bool ImageDialog::singleSelect() const
     return d->singleSelect;
 }
 
-QString ImageDialog::fileFormats() const
+QStringList ImageDialog::fileFormats() const
 {
     return d->fileFormats;
 }
