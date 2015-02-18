@@ -73,9 +73,12 @@ public:
      */
     void setNoProfileIfEmpty(const QString& message);
 
-    /// Retrieves the current profile, or a null profile if none is selected.
+    /** Retrieves the current profile, or a null profile if none is selected.
+     */
     IccProfile currentProfile() const;
-    /// Sets the current profile. If profile is not in the list, sets no current item (-1)
+
+    /** Sets the current profile. If profile is not in the list, sets no current item (-1)
+     */
     void setCurrentProfile(const IccProfile& profile);
 
     /// Use the signal currentIndexChanged(int) for change notification

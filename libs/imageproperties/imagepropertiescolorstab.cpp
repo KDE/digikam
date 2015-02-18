@@ -190,31 +190,31 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
     QGridLayout* grid       = new QGridLayout(gbox);
 
     DTextLabelName* label5  = new DTextLabelName(i18n("Pixels: "), gbox);
-    d->labelPixelsValue     = new DTextLabelValue(0, gbox);
+    d->labelPixelsValue     = new DTextLabelValue(QString(), gbox);
 
     DTextLabelName* label7  = new DTextLabelName(i18n("Count: "), gbox);
-    d->labelCountValue      = new DTextLabelValue(0, gbox);
+    d->labelCountValue      = new DTextLabelValue(QString(), gbox);
 
     DTextLabelName* label4  = new DTextLabelName(i18n("Mean: "), gbox);
-    d->labelMeanValue       = new DTextLabelValue(0, gbox);
+    d->labelMeanValue       = new DTextLabelValue(QString(), gbox);
 
     DTextLabelName* label6  = new DTextLabelName(i18n("Std. deviation: "), gbox);
-    d->labelStdDevValue     = new DTextLabelValue(0, gbox);
+    d->labelStdDevValue     = new DTextLabelValue(QString(), gbox);
 
     DTextLabelName* label8  = new DTextLabelName(i18n("Median: "), gbox);
-    d->labelMedianValue     = new DTextLabelValue(0, gbox);
+    d->labelMedianValue     = new DTextLabelValue(QString(), gbox);
 
     DTextLabelName* label9  = new DTextLabelName(i18n("Percentile: "), gbox);
-    d->labelPercentileValue = new DTextLabelValue(0, gbox);
+    d->labelPercentileValue = new DTextLabelValue(QString(), gbox);
 
     DTextLabelName* label10 = new DTextLabelName(i18n("Color depth: "), gbox);
-    d->labelColorDepth      = new DTextLabelValue(0, gbox);
+    d->labelColorDepth      = new DTextLabelValue(QString(), gbox);
 
     DTextLabelName* label11 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
-    d->labelAlphaChannel    = new DTextLabelValue(0, gbox);
+    d->labelAlphaChannel    = new DTextLabelValue(QString(), gbox);
 
     DTextLabelName* label12 = new DTextLabelName(i18n("Source: "), gbox);
-    d->labelImageRegion     = new DTextLabelValue(0, gbox);
+    d->labelImageRegion     = new DTextLabelValue(QString(), gbox);
 
     grid->addWidget(label5,                  0, 0, 1, 1);
     grid->addWidget(d->labelPixelsValue,     0, 1, 1, 1);

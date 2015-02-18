@@ -36,32 +36,33 @@
 namespace Digikam
 {
 
-CategorizedItemModel::CategorizedItemModel(QObject* parent)
+CategorizedItemModel::CategorizedItemModel(QObject* const parent)
     : QStandardItemModel(parent)
 {
 }
 
 QStandardItem* CategorizedItemModel::addItem(const QString& text, const QVariant& category, const QVariant& categorySorting)
 {
-    QStandardItem* item = new QStandardItem(text);
+    QStandardItem* const item = new QStandardItem(text);
     item->setData(category, DCategorizedSortFilterProxyModel::CategoryDisplayRole);
     item->setData(categorySorting.isNull() ? category : categorySorting, DCategorizedSortFilterProxyModel::CategorySortRole);
     item->setData(rowCount(), ItemOrderRole);
     appendRow(item);
+
     return item;
 }
 
 QStandardItem* CategorizedItemModel::addItem(const QString& text, const QIcon& decoration,
                                              const QVariant& category, const QVariant& categorySorting)
 {
-    QStandardItem* item = addItem(text, category, categorySorting);
+    QStandardItem* const item = addItem(text, category, categorySorting);
     item->setIcon(decoration);
     return item;
 }
 
 DCategorizedSortFilterProxyModel* CategorizedItemModel::createFilterModel()
 {
-    DCategorizedSortFilterProxyModel* filterModel = new DCategorizedSortFilterProxyModel(this);
+    DCategorizedSortFilterProxyModel* const filterModel = new DCategorizedSortFilterProxyModel(this);
     filterModel->setCategorizedModel(true);
     filterModel->setSortRole(ItemOrderRole);
     filterModel->setSourceModel(this);
@@ -70,14 +71,15 @@ DCategorizedSortFilterProxyModel* CategorizedItemModel::createFilterModel()
 
 // -------------------------------------------------------------------------------------------------------------------------
 
-static QString adjustedActionText(const QAction* action)
+static QString adjustedActionText(const QAction* const action)
 {
     QString text = action->text();
-    text.remove('&');
-    text.remove(" ...");
-    text.remove("...");
+    text.remove(QLatin1Char('&'));
+    text.remove(QLatin1String(" ..."));
+    text.remove(QLatin1String("..."));
     int slashPos = -1;
-    while ( (slashPos = text.indexOf('/', slashPos + 1)) != -1 )
+
+    while ( (slashPos = text.indexOf(QLatin1Char('/'), slashPos + 1)) != -1 )
     {
         if (slashPos == 0 || slashPos == text.length()-1)
             continue;
@@ -85,11 +87,10 @@ static QString adjustedActionText(const QAction* action)
         if (text.at(slashPos - 1).isSpace() || text.at(slashPos + 1).isSpace())
             continue;
 
-        //text.insert(slashPos, ' ');
-        //text.insert(slashPos + 2, ' ');
-        text.replace(slashPos, 1, ',');
-        text.insert(slashPos+1, ' ');
+        text.replace(slashPos, 1, QLatin1Char(','));
+        text.insert(slashPos+1, QLatin1Char(' '));
     }
+
     return text;
 }
 
@@ -102,19 +103,20 @@ public:
     {
     }
 
-    void enumerate(QWidget *w)
+    void enumerate(QWidget* const w)
     {
         // recurse
         enumerateActions(w, 0);
     }
 
-    void addTo(ActionItemModel* model, ActionItemModel::MenuCategoryMode mode)
+    void addTo(ActionItemModel* const model, ActionItemModel::MenuCategoryMode mode)
     {
         int categorySortStartIndex = model->rowCount();
 
-        foreach(QAction* a, actions)
+        foreach(QAction* const a, actions)
         {
             QAction* categoryAction = 0;
+
             if (mode & ActionItemModel::ToplevelMenuCategory)
             {
                 for (QAction* p = a; p; p = parents.value(p))
@@ -129,10 +131,12 @@ public:
                 continue;
 
             QVariant categorySortValue;
+
             if (mode & ActionItemModel::SortCategoriesByInsertionOrder)
             {
                 categorySortValue = categorySortStartIndex++;
             }
+
             model->addAction(a, adjustedActionText(categoryAction), categorySortValue);
         }
     }
@@ -144,9 +148,9 @@ protected:
     QMap<QAction*, QAction*> parents;
     QList<QAction*>          parentsInOrder;
 
-    void enumerateActions(const QWidget* w, QAction* widgetAction)
+    void enumerateActions(const QWidget* const w, QAction* const widgetAction)
     {
-        foreach(QAction *a, w->actions())
+        foreach(QAction* const a, w->actions())
         {
             if (a->menu())
             {
@@ -167,7 +171,7 @@ protected:
     }
 };
 
-ActionItemModel::ActionItemModel(QObject* parent)
+ActionItemModel::ActionItemModel(QObject* const parent)
     : CategorizedItemModel(parent),
       m_mode(ToplevelMenuCategory | SortCategoriesAlphabetically)
 {
@@ -185,7 +189,7 @@ ActionItemModel::MenuCategoryMode ActionItemModel::mode() const
 
 QStandardItem* ActionItemModel::addAction(QAction* action, const QString& category, const QVariant& categorySorting)
 {
-    QStandardItem* item = addItem(QString(), category, categorySorting);
+    QStandardItem* const item = addItem(QString(), category, categorySorting);
     item->setEditable(false);
     setPropertiesFromAction(item, action);
 
@@ -233,10 +237,12 @@ QStandardItem* ActionItemModel::itemForAction(QAction *action) const
 
     for (int i = 0; i<rowCount(); ++i)
     {
-        QStandardItem* it = item(i);
+        QStandardItem* const it = item(i);
+
         if (static_cast<QAction*>(it->data(ItemActionRole).value<QObject*>()) == action)
             return it;
     }
+
     return 0;
 }
 
@@ -247,29 +253,33 @@ QModelIndex ActionItemModel::indexForAction(QAction *action) const
 
 void ActionItemModel::hover(const QModelIndex& index)
 {
-    QAction* action = actionForIndex(index);
+    QAction* const action = actionForIndex(index);
+
     if (action)
         action->hover();
 }
 
 void ActionItemModel::toggle(const QModelIndex& index)
 {
-    QAction* action = actionForIndex(index);
+    QAction* const action = actionForIndex(index);
+
     if (action)
         action->toggle();
 }
 
 void ActionItemModel::trigger(const QModelIndex& index)
 {
-    QAction* action = actionForIndex(index);
+    QAction* const action = actionForIndex(index);
+
     if (action)
         action->trigger();
 }
 
 void ActionItemModel::slotActionChanged()
 {
-    QAction* action     = qobject_cast<QAction*>(sender());
-    QStandardItem* item = itemForAction(action);
+    QAction* const action     = qobject_cast<QAction*>(sender());
+    QStandardItem* const item = itemForAction(action);
+
     if (item)
     {
         setPropertiesFromAction(item, action);

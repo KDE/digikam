@@ -81,7 +81,7 @@ static QString profileUserString(const IccProfile& p)
 }
 
 // if needed outside this class, make it a public static method in a namespace
-static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProfile>* returnedProfiles, QStringList* userText)
+static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProfile>* const returnedProfiles, QStringList* const userText)
 {
     QList<IccProfile> profiles;
     QSet<QString>     filePaths;
@@ -170,7 +170,7 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
 
     const int size = count();
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0; i < size; ++i)
     {
         if (itemData(i).value<IccProfile>() == profile)
         {
@@ -253,7 +253,7 @@ void IccProfilesMenuAction::disableIfEmpty()
 void IccProfilesMenuAction::slotTriggered(QObject* obj)
 {
     QAction* const action = static_cast<QAction*>(obj);
-    IccProfile profile = action->data().value<IccProfile>();
+    IccProfile profile    = action->data().value<IccProfile>();
 
     if (!profile.isNull())
     {
@@ -266,10 +266,10 @@ void IccProfilesMenuAction::slotTriggered(QObject* obj)
 IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget* const parent)
     : QComboBox(parent)
 {
-    addItem("Perceptual", IccTransform::Perceptual);
-    addItem("Relative Colorimetric", IccTransform::RelativeColorimetric);
-    addItem("Absolute Colorimetric", IccTransform::AbsoluteColorimetric);
-    addItem("Saturation", IccTransform::Saturation);
+    addItem(QLatin1String("Perceptual"), IccTransform::Perceptual);
+    addItem(QLatin1String("Relative Colorimetric"), IccTransform::RelativeColorimetric);
+    addItem(QLatin1String("Absolute Colorimetric"), IccTransform::AbsoluteColorimetric);
+    addItem(QLatin1String("Saturation"), IccTransform::Saturation);
     setWhatsThis( i18n("<ul><li><p><b>Perceptual intent</b> causes the full gamut of the image to be "
                        "compressed or expanded to fill the gamut of the destination device, so that gray balance is "
                        "preserved but colorimetric accuracy may not be preserved.</p>"

@@ -315,7 +315,7 @@ QToolButton* PanIconWidget::button()
 {
     QToolButton* const btn = new QToolButton;
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btn->setIcon(QIcon::fromTheme("transform-move"));
+    btn->setIcon(QIcon::fromTheme(QLatin1String("transform-move")));
     btn->hide();
     btn->setToolTip( i18n("Pan the image to a region"));
 

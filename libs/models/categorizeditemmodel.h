@@ -52,7 +52,7 @@ public:
 
 public:
 
-    explicit CategorizedItemModel(QObject* parent = 0);
+    explicit CategorizedItemModel(QObject* const parent = 0);
 
     QStandardItem* addItem(const QString& text, const QVariant& category, const QVariant& categorySorting = QVariant());
     QStandardItem* addItem(const QString& text, const QIcon& decoration, const QVariant& category,
@@ -96,9 +96,9 @@ public:
      * It is possible to retrieve an action for an index, and to call the action's slots from
      * a given index.
      */
-    explicit ActionItemModel(QObject* parent = 0);
+    explicit ActionItemModel(QObject* const parent = 0);
 
-    QStandardItem* addAction(QAction *action, const QString& category, const QVariant& categorySorting = QVariant());
+    QStandardItem* addAction(QAction* action, const QString& category, const QVariant& categorySorting = QVariant());
 
     void             setMode(MenuCategoryMode mode);
     MenuCategoryMode mode() const;
@@ -110,8 +110,8 @@ public:
      * Returns the action for the given index.
      * Note: these methods perform O(n).
      */
-    QStandardItem* itemForAction(QAction *action) const;
-    QModelIndex    indexForAction(QAction *action) const;
+    QStandardItem* itemForAction(QAction* action) const;
+    QModelIndex    indexForAction(QAction* action) const;
 
     /**
      * Returns the action for the given index.
@@ -136,7 +136,7 @@ protected Q_SLOTS:
 
 protected:
 
-    void setPropertiesFromAction(QStandardItem *item, QAction* action);
+    void setPropertiesFromAction(QStandardItem* item, QAction* action);
 
 protected:
 

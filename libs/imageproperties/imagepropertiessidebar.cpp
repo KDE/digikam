@@ -80,16 +80,16 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     m_colorTab           = new ImagePropertiesColorsTab(parent);
 
     // NOTE: Special case with Showfoto which will only be able to load image, not video.
-    if (QApplication::applicationName() != QString("digikam"))
+    if (QApplication::applicationName() != QLatin1String("digikam"))
         m_propertiesTab->setVideoInfoDisable(true);
 
-    appendTab(m_propertiesTab, QIcon::fromTheme("document-properties"),   i18n("Properties"));
-    appendTab(m_metadataTab,   QIcon::fromTheme("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
-    appendTab(m_colorTab,      QIcon::fromTheme("format-fill-color"),     i18n("Colors"));
+    appendTab(m_propertiesTab, QIcon::fromTheme(QLatin1String("document-properties")),   i18n("Properties"));
+    appendTab(m_metadataTab,   QIcon::fromTheme(QLatin1String("exifinfo")),              i18n("Metadata")); // krazy:exclude=iconnames
+    appendTab(m_colorTab,      QIcon::fromTheme(QLatin1String("format-fill-color")),     i18n("Colors"));
 
 #ifdef HAVE_KGEOMAP
     m_gpsTab = new ImagePropertiesGPSTab(parent);
-    appendTab(m_gpsTab,        QIcon::fromTheme("applications-internet"), i18n("Geolocation"));
+    appendTab(m_gpsTab,        QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Geolocation"));
 #endif // HAVE_KGEOMAP
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
@@ -214,23 +214,23 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     str = QLocale().toString(modifiedDate, QLocale::ShortFormat);
     m_propertiesTab->setFileModifiedDate(str);
 
-    str = QString("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
-                            .arg(QLocale().toString(fileInfo.size()));
+    str = QString::fromUtf8("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
+                                      .arg(QLocale().toString(fileInfo.size()));
     m_propertiesTab->setFileSize(str);
-    m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
+    m_propertiesTab->setFileOwner(QString::fromUtf8("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
     m_propertiesTab->setFilePermissions(ImagePropertiesTab::permissionsString(fileInfo));
 
     // -- Image Properties --------------------------------------------------
 
     QSize   dims;
     QString bitDepth, colorMode;
-    QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
+    QString rawFilesExt(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
     QString ext = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))
     {
         m_propertiesTab->setImageMime(i18n("RAW Image"));
-        bitDepth    = "48";
+        bitDepth    = QLatin1String("48");
         dims        = metaData.getImageDimensions();
         colorMode   = i18n("Uncalibrated");
     }
@@ -309,7 +309,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     }
     else
     {
-        str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+        str = QString::fromUtf8("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
         m_propertiesTab->setPhotoExposureMode(str);
     }
 
@@ -335,8 +335,8 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     CaptionsMap captions = metaData.getImageComments();
     QString caption;
 
-    if (captions.contains("x-default"))
-        caption = captions.value("x-default").caption;
+    if (captions.contains(QLatin1String("x-default")))
+        caption = captions.value(QLatin1String("x-default")).caption;
     else if (!captions.isEmpty())
         caption = captions.begin().value().caption;
 
@@ -355,21 +355,21 @@ void ImagePropertiesSideBar::doLoadState()
     Sidebar::doLoadState();
 
     /// @todo m_propertiesTab should load its settings from our group
-    m_propertiesTab->setObjectName("Image Properties SideBar Expander");
+    m_propertiesTab->setObjectName(QLatin1String("Image Properties SideBar Expander"));
 
     KConfigGroup group = getConfigGroup();
 
     m_propertiesTab->readSettings(group);
 
 #ifdef HAVE_KGEOMAP
-    const KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    const KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName(QLatin1String("GPS Properties Tab")));
     m_gpsTab->readSettings(groupGPSTab);
 #endif // HAVE_KGEOMAP
 
-    const KConfigGroup groupColorTab    = KConfigGroup(&group, entryName("Color Properties Tab"));
+    const KConfigGroup groupColorTab    = KConfigGroup(&group, entryName(QLatin1String("Color Properties Tab")));
     m_colorTab->readSettings(groupColorTab);
 
-    const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName(QLatin1String("Metadata Properties Tab")));
     m_metadataTab->readSettings(groupMetadataTab);
 }
 
@@ -382,14 +382,14 @@ void ImagePropertiesSideBar::doSaveState()
     m_propertiesTab->writeSettings(group);
 
 #ifdef HAVE_KGEOMAP
-    KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName(QLatin1String("GPS Properties Tab")));
     m_gpsTab->writeSettings(groupGPSTab);
 #endif // HAVE_KGEOMAP
 
-    KConfigGroup groupColorTab    = KConfigGroup(&group, entryName("Color Properties Tab"));
+    KConfigGroup groupColorTab    = KConfigGroup(&group, entryName(QLatin1String("Color Properties Tab")));
     m_colorTab->writeSettings(groupColorTab);
 
-    KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName(QLatin1String("Metadata Properties Tab")));
     m_metadataTab->writeSettings(groupMetadataTab);
 }
 

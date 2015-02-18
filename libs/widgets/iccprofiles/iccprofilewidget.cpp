@@ -120,49 +120,37 @@ public:
 };
 
 ICCProfileWidget::ICCProfileWidget(QWidget* const parent, int w, int h)
-    : MetadataWidget(parent), d(new Private)
+    : MetadataWidget(parent),
+      d(new Private)
 {
     dkCmsErrorAction(LCMS_ERROR_SHOW);
 
     // Set the translated ICC tags titles/descriptions list
-    d->iccTagsDescription["Icc.Header.Name"]            = ICCTagInfo(i18n("Name"),
-            i18n("The ICC profile product name"));
-    d->iccTagsDescription["Icc.Header.Description"]     = ICCTagInfo(i18n("Description"),
-            i18n("The ICC profile product description"));
-    d->iccTagsDescription["Icc.Header.Information"]     = ICCTagInfo(i18n("Information"),
-            i18n("Additional ICC profile information"));
-    d->iccTagsDescription["Icc.Header.Manufacturer"]    = ICCTagInfo(i18n("Manufacturer"),
-            i18n("Raw information about the ICC profile manufacturer"));
-    d->iccTagsDescription["Icc.Header.Model"]           = ICCTagInfo(i18n("Model"),
-            i18n("Raw information about the ICC profile model"));
-    d->iccTagsDescription["Icc.Header.Copyright"]       = ICCTagInfo(i18n("Copyright"),
-            i18n("Raw information about the ICC profile copyright"));
-    d->iccTagsDescription["Icc.Header.ProfileID"]       = ICCTagInfo(i18n("Profile ID"),
-            i18n("The ICC profile ID number"));
-    d->iccTagsDescription["Icc.Header.ColorSpace"]      = ICCTagInfo(i18n("Color Space"),
-            i18n("The color space used by the ICC profile"));
-    d->iccTagsDescription["Icc.Header.ConnectionSpace"] = ICCTagInfo(i18n("Connection Space"),
-            i18n("The connection space used by the ICC profile"));
-    d->iccTagsDescription["Icc.Header.DeviceClass"]     = ICCTagInfo(i18n("Device Class"),
-            i18n("The ICC profile device class"));
-    d->iccTagsDescription["Icc.Header.RenderingIntent"] = ICCTagInfo(i18n("Rendering Intent"),
-            i18n("The ICC profile rendering intent"));
-    d->iccTagsDescription["Icc.Header.ProfileVersion"]  = ICCTagInfo(i18n("Profile Version"),
-            i18n("The ICC version used to record the profile"));
-    d->iccTagsDescription["Icc.Header.CMMFlags"]        = ICCTagInfo(i18n("CMM Flags"),
-            i18n("The ICC profile color management flags"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.Name")]            = ICCTagInfo(i18n("Name"),             i18n("The ICC profile product name"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.Description")]     = ICCTagInfo(i18n("Description"),      i18n("The ICC profile product description"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.Information")]     = ICCTagInfo(i18n("Information"),      i18n("Additional ICC profile information"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.Manufacturer")]    = ICCTagInfo(i18n("Manufacturer"),     i18n("Raw information about the ICC profile manufacturer"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.Model")]           = ICCTagInfo(i18n("Model"),            i18n("Raw information about the ICC profile model"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.Copyright")]       = ICCTagInfo(i18n("Copyright"),        i18n("Raw information about the ICC profile copyright"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.ProfileID")]       = ICCTagInfo(i18n("Profile ID"),       i18n("The ICC profile ID number"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.ColorSpace")]      = ICCTagInfo(i18n("Color Space"),      i18n("The color space used by the ICC profile"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.ConnectionSpace")] = ICCTagInfo(i18n("Connection Space"), i18n("The connection space used by the ICC profile"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.DeviceClass")]     = ICCTagInfo(i18n("Device Class"),     i18n("The ICC profile device class"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.RenderingIntent")] = ICCTagInfo(i18n("Rendering Intent"), i18n("The ICC profile rendering intent"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.ProfileVersion")]  = ICCTagInfo(i18n("Profile Version"),  i18n("The ICC version used to record the profile"));
+    d->iccTagsDescription[QLatin1String("Icc.Header.CMMFlags")]        = ICCTagInfo(i18n("CMM Flags"),        i18n("The ICC profile color management flags"));
 
     // Set the list of keys and tags filters.
-    for (int i=0 ; QString(ICCEntryList[i]) != QString("-1") ; ++i)
+    for (int i=0 ; QLatin1String(ICCEntryList[i]) != QLatin1String("-1") ; ++i)
     {
-        d->keysFilter << ICCEntryList[i];
+        d->keysFilter << QLatin1String(ICCEntryList[i]);
     }
 
     QStringList tagsFilter;
 
-    for (int i=0 ; QString(ICCHumanList[i]) != QString("-1") ; ++i)
+    for (int i=0 ; QLatin1String(ICCHumanList[i]) != QLatin1String("-1") ; ++i)
     {
-        tagsFilter << ICCHumanList[i];
+        tagsFilter << QLatin1String(ICCHumanList[i]);
     }
 
     setTagsFilter(tagsFilter);
@@ -300,37 +288,37 @@ bool ICCProfileWidget::decodeMetadata()
 
     if ( !QString(dkCmsTakeProductName(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Name", QString(dkCmsTakeProductName(hProfile)).replace('\n', ' '));
+        metaDataMap.insert(QLatin1String("Icc.Header.Name"), dkCmsTakeProductName(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
     if ( !QString(dkCmsTakeProductDesc(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Description", QString(dkCmsTakeProductDesc(hProfile)).replace('\n', ' '));
+        metaDataMap.insert(QLatin1String("Icc.Header.Description"), dkCmsTakeProductDesc(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
     if ( !QString(dkCmsTakeProductInfo(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Information", QString(dkCmsTakeProductInfo(hProfile)).replace('\n', ' '));
+        metaDataMap.insert(QLatin1String("Icc.Header.Information"), dkCmsTakeProductInfo(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
     if ( !QString(dkCmsTakeManufacturer(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Manufacturer", QString(dkCmsTakeManufacturer(hProfile)).replace('\n', ' '));
+        metaDataMap.insert(QLatin1String("Icc.Header.Manufacturer"), dkCmsTakeManufacturer(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
     if ( !QString(dkCmsTakeModel(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Model", QString(dkCmsTakeModel(hProfile)).replace('\n', ' '));
+        metaDataMap.insert(QLatin1String("Icc.Header.Model"), dkCmsTakeModel(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
     if ( !QString(dkCmsTakeCopyright(hProfile)).isEmpty() )
     {
-        metaDataMap.insert("Icc.Header.Copyright", QString(dkCmsTakeCopyright(hProfile)).replace('\n', ' '));
+        metaDataMap.insert(QLatin1String("Icc.Header.Copyright"), dkCmsTakeCopyright(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
-    metaDataMap.insert("Icc.Header.ProfileID",      QString::number((uint)*dkCmsTakeProfileID(hProfile)));
-    metaDataMap.insert("Icc.Header.ProfileVersion", QString::number((uint)dkCmsGetProfileICCversion(hProfile)));
-    metaDataMap.insert("Icc.Header.CMMFlags",       QString::number((uint)dkCmsTakeHeaderFlags(hProfile)));
+    metaDataMap.insert(QLatin1String("Icc.Header.ProfileID"),      QString::number((uint)*dkCmsTakeProfileID(hProfile)));
+    metaDataMap.insert(QLatin1String("Icc.Header.ProfileVersion"), QString::number((uint)dkCmsGetProfileICCversion(hProfile)));
+    metaDataMap.insert(QLatin1String("Icc.Header.CMMFlags"),       QString::number((uint)dkCmsTakeHeaderFlags(hProfile)));
 
     QString colorSpace;
 
@@ -365,7 +353,7 @@ bool ICCProfileWidget::decodeMetadata()
             break;
     }
 
-    metaDataMap.insert("Icc.Header.ColorSpace", colorSpace);
+    metaDataMap.insert(QLatin1String("Icc.Header.ColorSpace"), colorSpace);
 
     QString connectionSpace;
 
@@ -400,7 +388,7 @@ bool ICCProfileWidget::decodeMetadata()
             break;
     }
 
-    metaDataMap.insert("Icc.Header.ConnectionSpace", connectionSpace);
+    metaDataMap.insert(QLatin1String("Icc.Header.ConnectionSpace"), connectionSpace);
 
     QString device;
 
@@ -432,7 +420,7 @@ bool ICCProfileWidget::decodeMetadata()
             break;
     }
 
-    metaDataMap.insert("Icc.Header.DeviceClass", device);
+    metaDataMap.insert(QLatin1String("Icc.Header.DeviceClass"), device);
 
     QString intent;
 
@@ -455,7 +443,7 @@ bool ICCProfileWidget::decodeMetadata()
             break;
     }
 
-    metaDataMap.insert("Icc.Header.RenderingIntent", intent);
+    metaDataMap.insert(QLatin1String("Icc.Header.RenderingIntent"), intent);
 
     // Update all metadata contents.
     setMetadataMap(metaDataMap);
@@ -470,7 +458,7 @@ void ICCProfileWidget::buildView()
     }
     else
     {
-        setIfdList(getMetadataMap(), d->keysFilter, QStringList() << QString("FULL"));
+        setIfdList(getMetadataMap(), d->keysFilter, QStringList() << QLatin1String("FULL"));
     }
 
     MetadataWidget::buildView();
@@ -485,13 +473,13 @@ QString ICCProfileWidget::getTagTitle(const QString& key)
         return(it.value().title());
     }
 
-    return key.section('.', 2, 2);
+    return key.section(QLatin1Char('.'), 2, 2);
 }
 
 void ICCProfileWidget::slotSaveMetadataToFile()
 {
     QUrl url = saveMetadataToFile(i18n("ICC color profile File to Save"),
-                                  QString("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)")));
+                                  QString(QLatin1String("*.icc *.icm|") + i18n("ICC Files (*.icc; *.icm)")));
     storeMetadataToFile(url, d->profile.data());
 }
 
@@ -504,7 +492,7 @@ QString ICCProfileWidget::getTagDescription(const QString& key)
         return(it.value().description());
     }
 
-    return key.section('.', 2, 2);
+    return key.section(QLatin1Char('.'), 2, 2);
 }
 
 }  // namespace Digikam

@@ -174,14 +174,14 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
 
     d->detailsCombo = new QComboBox(box);
     d->detailsBtn   = new QToolButton(box);
-    d->detailsBtn->setIcon(QIcon::fromTheme("internet-web-browser"));
+    d->detailsBtn->setIcon(QIcon::fromTheme(QLatin1String("internet-web-browser")));
     d->detailsBtn->setToolTip(i18n("See more information on the Internet"));
-    d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
-    d->detailsCombo->insertItem(GoogleMaps,    QString("Google Maps"));
-    d->detailsCombo->insertItem(MsnMaps,       QString("MSN Maps"));
-    d->detailsCombo->insertItem(MultiMap,      QString("MultiMap"));
-    d->detailsCombo->insertItem(OpenStreetMap, QString("OpenStreetMap"));
-    d->detailsCombo->insertItem(LocAlizeMaps,  QString("loc.alize.us Maps"));
+    d->detailsCombo->insertItem(MapQuest,      QLatin1String("MapQuest"));
+    d->detailsCombo->insertItem(GoogleMaps,    QLatin1String("Google Maps"));
+    d->detailsCombo->insertItem(MsnMaps,       QLatin1String("MSN Maps"));
+    d->detailsCombo->insertItem(MultiMap,      QLatin1String("MultiMap"));
+    d->detailsCombo->insertItem(OpenStreetMap, QLatin1String("OpenStreetMap"));
+    d->detailsCombo->insertItem(LocAlizeMaps,  QLatin1String("loc.alize.us Maps"));
 
     // --------------------------------------------------------
 
@@ -215,20 +215,20 @@ ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
 void ImagePropertiesGPSTab::readSettings(const KConfigGroup& group)
 {
     d->gpsImageInfoSorter->setSortOptions(
-            GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions())))
+            GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"), int(d->gpsImageInfoSorter->getSortOptions())))
         );
-    setWebGPSLocator(group.readEntry("Web GPS Locator", getWebGPSLocator()));
+    setWebGPSLocator(group.readEntry(QLatin1String("Web GPS Locator"), getWebGPSLocator()));
 
-    KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
+    KConfigGroup groupMapWidget = KConfigGroup(&group, QLatin1String("Map Widget"));
     d->map->readSettingsFromGroup(&groupMapWidget);
 
 }
 void ImagePropertiesGPSTab::writeSettings(KConfigGroup& group)
 {
-    group.writeEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions()));
-    group.writeEntry("Web GPS Locator", getWebGPSLocator());
+    group.writeEntry(QLatin1String("Sort Order"),      int(d->gpsImageInfoSorter->getSortOptions()));
+    group.writeEntry(QLatin1String("Web GPS Locator"), getWebGPSLocator());
 
-    KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
+    KConfigGroup groupMapWidget = KConfigGroup(&group, QLatin1String("Map Widget"));
     d->map->saveSettingsToGroup(&groupMapWidget);
 }
 
@@ -257,68 +257,68 @@ void ImagePropertiesGPSTab::slotGPSDetails()
     {
         case MapQuest:
         {
-            url.append("http://www.mapquest.com/maps/map.adp?searchtype=address"
-                       "&formtype=address&latlongtype=decimal");
-            url.append("&latitude=");
+            url.append(QLatin1String("http://www.mapquest.com/maps/map.adp?searchtype=address"
+                       "&formtype=address&latlongtype=decimal"));
+            url.append(QLatin1String("&latitude="));
             url.append(val.setNum(info.coordinates.lat(), 'g', 12));
-            url.append("&longitude=");
+            url.append(QLatin1String("&longitude="));
             url.append(val.setNum(info.coordinates.lon(), 'g', 12));
             break;
         }
 
         case GoogleMaps:
         {
-            url.append("http://maps.google.com/?q=");
+            url.append(QLatin1String("http://maps.google.com/?q="));
             url.append(val.setNum(info.coordinates.lat(), 'g', 12));
-            url.append(",");
+            url.append(QLatin1String(","));
             url.append(val.setNum(info.coordinates.lon(), 'g', 12));
-            url.append("&spn=0.05,0.05&t=h&om=1");
+            url.append(QLatin1String("&spn=0.05,0.05&t=h&om=1"));
             break;
         }
 
         case LocAlizeMaps:
         {
-            url.append("http://loc.alize.us/#/geo:");
+            url.append(QLatin1String("http://loc.alize.us/#/geo:"));
             url.append(val.setNum(info.coordinates.lat(), 'g', 12));
-            url.append(",");
+            url.append(QLatin1String(","));
             url.append(val.setNum(info.coordinates.lon(), 'g', 12));
-            url.append(",4,k/");
+            url.append(QLatin1String(",4,k/"));
             break;
         }
 
         case MsnMaps:
         {
-            url.append("http://maps.msn.com/map.aspx?");
-            url.append("&lats1=");
+            url.append(QLatin1String("http://maps.msn.com/map.aspx?"));
+            url.append(QLatin1String("&lats1="));
             url.append(val.setNum(info.coordinates.lat(), 'g', 12));
-            url.append("&lons1=");
+            url.append(QLatin1String("&lons1="));
             url.append(val.setNum(info.coordinates.lon(), 'g', 12));
-            url.append("&name=HERE");
-            url.append("&alts1=7");
+            url.append(QLatin1String("&name=HERE"));
+            url.append(QLatin1String("&alts1=7"));
             break;
         }
 
         case MultiMap:
         {
-            url.append("http://www.multimap.com/map/browse.cgi?");
-            url.append("lat=");
+            url.append(QLatin1String("http://www.multimap.com/map/browse.cgi?"));
+            url.append(QLatin1String("lat="));
             url.append(val.setNum(info.coordinates.lat(), 'g', 12));
-            url.append("&lon=");
+            url.append(QLatin1String("&lon="));
             url.append(val.setNum(info.coordinates.lon(), 'g', 12));
-            url.append("&scale=10000");
-            url.append("&icon=x");
+            url.append(QLatin1String("&scale=10000"));
+            url.append(QLatin1String("&icon=x"));
             break;
         }
 
         case OpenStreetMap:
         {
             // lat and lon would also work, but wouldn't show a marker
-            url.append("http://www.openstreetmap.org/?");
-            url.append("mlat=");
+            url.append(QLatin1String("http://www.openstreetmap.org/?"));
+            url.append(QLatin1String("mlat="));
             url.append(val.setNum(info.coordinates.lat(), 'g', 12));
-            url.append("&mlon=");
+            url.append(QLatin1String("&mlon="));
             url.append(val.setNum(info.coordinates.lon(), 'g', 12));
-            url.append("&zoom=15");
+            url.append(QLatin1String("&zoom=15"));
             break;
         }
     }
@@ -409,7 +409,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
         }
         else
         {
-            d->altitude->setAdjustedText(QString("%1 m").arg(QString::number(coordinates.alt())));
+            d->altitude->setAdjustedText(QString::fromLatin1("%1 m").arg(QString::number(coordinates.alt())));
         }
 
         d->latitude->setAdjustedText(QString::number(coordinates.lat()));
