@@ -58,7 +58,6 @@
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "blurfilter.h"
-#include "imagedialog.h"
 
 using namespace KDcrawIface;
 

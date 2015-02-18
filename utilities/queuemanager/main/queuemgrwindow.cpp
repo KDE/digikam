@@ -71,7 +71,6 @@
 #include "dlogoaction.h"
 #include "albummanager.h"
 #include "imagewindow.h"
-#include "imagedialog.h"
 #include "thumbnailsize.h"
 #include "sidebar.h"
 #include "uifilevalidator.h"
