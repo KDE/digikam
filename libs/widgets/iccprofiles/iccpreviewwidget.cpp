@@ -28,9 +28,6 @@
 // Qt includes
 
 #include <QFileInfo>
-#include <QGroupBox>
-#include <QVBoxLayout>
-#include <QFrame>
 #include <QScrollArea>
 #include <QUrl>
 
@@ -43,24 +40,20 @@ namespace Digikam
 {
 
 ICCPreviewWidget::ICCPreviewWidget(QWidget* const parent)
-    : KPreviewWidgetBase( parent )
+    : QScrollArea(parent)
 {
-    QVBoxLayout* const mainLayout = new QVBoxLayout;
-    QScrollArea* const scrollArea = new QScrollArea;
-    m_iccProfileWidget            = new ICCProfileWidget(this);
-
-    scrollArea->setWidget(m_iccProfileWidget);
-    mainLayout->addWidget(scrollArea);
-    setLayout(mainLayout);
+    m_iccProfileWidget = new ICCProfileWidget(this);
+    setWidget(m_iccProfileWidget);
+    setWidgetResizable(true);
 }
 
 ICCPreviewWidget::~ICCPreviewWidget()
 {
 }
 
-void ICCPreviewWidget::showPreview( const QUrl& url)
+void ICCPreviewWidget::slotShowPreview(const QUrl& url)
 {
-    clearPreview();
+    slotClearPreview();
     QFileInfo fInfo(url.toLocalFile());
 
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
@@ -74,7 +67,7 @@ void ICCPreviewWidget::showPreview( const QUrl& url)
     }
 }
 
-void ICCPreviewWidget::clearPreview()
+void ICCPreviewWidget::slotClearPreview()
 {
     m_iccProfileWidget->loadFromURL(QUrl());
 }

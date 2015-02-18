@@ -26,9 +26,9 @@
 #ifndef ICCPREVIEWWIDGET_H
 #define ICCPREVIEWWIDGET_H
 
-// KDE includes
+// Qt includes
 
-#include <kpreviewwidgetbase.h>
+#include <QScrollArea>
 
 // Local includes
 
@@ -41,7 +41,7 @@ namespace Digikam
 
 class ICCProfileWidget;
 
-class DIGIKAM_EXPORT ICCPreviewWidget : public KPreviewWidgetBase
+class DIGIKAM_EXPORT ICCPreviewWidget : public QScrollArea
 {
     Q_OBJECT
 
@@ -52,14 +52,8 @@ public:
 
 public Q_SLOTS:
 
-    virtual void showPreview(const QUrl& url);
-    virtual void clearPreview();
-
-protected:
-
-    virtual void virtual_hook(int, void*)
-    {
-    };
+    void slotShowPreview(const QUrl& url);
+    void slotClearPreview();
 
 private :
 

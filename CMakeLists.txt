@@ -139,7 +139,7 @@ find_package(KF5 REQUIRED COMPONENTS
              Notifications
              KIO
 
-             KDELibs4Support
+#             KDELibs4Support
 )
 
 # ==================================================================================================
