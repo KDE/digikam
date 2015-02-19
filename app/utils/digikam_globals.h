@@ -150,10 +150,11 @@ enum ChannelType
  */
 DIGIKAM_EXPORT QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObject* receiver, const char* slot);
 
-/** Return list of supported image formats by Qt for reading or writing operations.
+/** Return list of supported image formats by Qt for reading or writing operations if suitable container used by QFileDialog.
+ *  For simple container of type mime, use 'allTypes' string.
  *  Supported modes are QIODevice::ReadOnly, QIODevice::WriteOnly, and QIODevice::ReadWrite.
  */
-DIGIKAM_EXPORT QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode);
+DIGIKAM_EXPORT QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTypes);
 
 } // namespace Digikam
 

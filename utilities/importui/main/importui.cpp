@@ -55,7 +55,6 @@
 #include <QKeySequence>
 #include <QDesktopServices>
 #include <QInputDialog>
-#include <QFileDialog>
 #include <QMenuBar>
 #include <QMenu>
 #include <QIcon>
@@ -106,6 +105,7 @@
 #include "imagepropertiessidebarcamgui.h"
 #include "importsettings.h"
 #include "importview.h"
+#include "imagedialog.h"
 #include "dnotificationwrapper.h"
 #include "newitemsfinder.h"
 #include "parsesettings.h"
@@ -1233,29 +1233,9 @@ void ImportUI::slotUpload()
         return;
     }
 
-    QString fileformats;
-
-    QStringList patternList = supportedImageMimeTypes(QIODevice::ReadOnly);
-
-    // All Images from list must been always the first entry given by Qt API
-    QString allPictures = patternList.at(0);
-
-    // Add RAW file format to All Images" type mime and replace current.
-    allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()));
-    patternList.removeAll(patternList.at(0));
-    patternList.prepend(allPictures);
-
-    // Added RAW file formats supported by dcraw program like a type mime.
-    // Note: we cannot use here "image/x-raw" type mime from KDE because it incomplete
-    // or unavailable(dcraw_0)(see file #121242 in bug).
-    patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
-    fileformats = patternList.join("\n");
-
-    //qCDebug(LOG_IMPORTUI) << "fileformats=" << fileformats;
-
-    QList<QUrl> urls = QFileDialog::getOpenFileUrls(this, i18nc("@title:window", "Select Image to Upload"),
-                                                    QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath()),
-                                                    fileformats);
+    QList<QUrl> urls = ImageDialog::getImageURLs(this,
+                                                 QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath()),
+                                                 i18nc("@title:window", "Select Image to Upload"));    
 
     if (!urls.isEmpty())
     {

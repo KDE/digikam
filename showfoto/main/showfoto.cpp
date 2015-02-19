@@ -1108,43 +1108,16 @@ void ShowFoto::openFolder(const QUrl& url)
         return;
     }
 
-    // Parse KDE image IO mime types registration to get files filter pattern.
-
-    QStringList mimeTypes = supportedImageMimeTypes(QIODevice::ReadOnly);
+    // Parse image IO mime types registration to get files filter pattern.
+    
     QString filter;
-
-    for (QStringList::ConstIterator it = mimeTypes.constBegin() ; it != mimeTypes.constEnd() ; ++it)
-    {
-        QString format = QMimeDatabase().mimeTypeForName(*it).name().toUpper();
-        filter.append ("*.");
-        filter.append (format);
-        filter.append (" ");
-    }
-
-    // Because KImageIO return only *.JPEG and *.TIFF mime types.
-    if ( filter.contains("*.TIFF") )
-    {
-        filter.append (" *.TIF");
-    }
-
-    if ( filter.contains("*.JPEG") )
-    {
-        filter.append (" *.JPG");
-        filter.append (" *.JPE");
-    }
-
-    // Added RAW files extensions supported by dcraw program and
-    // defines to digikam/libs/dcraw/rawfiles.h
-    filter.append (" ");
-    filter.append ( QString(KDcrawIface::KDcraw::rawFiles()) );
-    filter.append (" ");
+    QStringList mimeTypes = supportedImageMimeTypes(QIODevice::ReadOnly, filter);
 
     QString patterns = filter.toLower();
     patterns.append (" ");
     patterns.append (filter.toUpper());
 
     qCDebug(DIGIKAM_SHOWFOTO_LOG) << "patterns=" << patterns;
-
 
     // Get all image files from directory.
 

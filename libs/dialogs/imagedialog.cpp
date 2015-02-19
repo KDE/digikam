@@ -389,9 +389,6 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
 {
     d->singleSelect = singleSelect;
     d->fileFormats  = supportedImageMimeTypes(QIODevice::ReadOnly);
-    d->fileFormats << i18n("Progressive Graphics file (*.pgf)");
-    d->fileFormats << i18n("Raw Images (%1)").arg(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
-    
     qCDebug(DIGIKAM_GENERAL_LOG) << "file formats=" << d->fileFormats;
 
     QFileDialog* const dlg = new QFileDialog(parent);

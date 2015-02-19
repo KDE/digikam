@@ -35,6 +35,10 @@
 
 #include <klocalizedstring.h>
 
+// Libkdcraw includes
+
+#include <kdcraw.h>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -52,7 +56,7 @@ QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObje
     return s;
 }
 
-QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode)
+QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTypes)
 {
     QStringList       formats;
     QList<QByteArray> supported;
@@ -73,10 +77,50 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode)
             break;
     }
 
+    bool tiff=false, jpeg=false;
+    
     Q_FOREACH(const QByteArray& frm, supported)
     {
+        if (QString::fromLatin1(frm).contains(QLatin1String("tif"),  Qt::CaseInsensitive) ||
+            QString::fromLatin1(frm).contains(QLatin1String("tiff"), Qt::CaseInsensitive))
+        {
+            tiff = true;
+            continue;
+        }
+        
+        if (QString::fromLatin1(frm).contains(QLatin1String("jpg"),  Qt::CaseInsensitive) ||
+            QString::fromLatin1(frm).contains(QLatin1String("jpeg"), Qt::CaseInsensitive))
+        {
+            jpeg = true;
+            continue;
+        }
+        
         formats.append(i18n("%1 Image (%2)").arg(QString::fromLatin1(frm).toUpper()).arg(QLatin1String("*.") + QLatin1String(frm)));
+        allTypes.append(QString::fromLatin1("*.%1 ").arg(QLatin1String(frm)));
     }
+
+    if (tiff)
+    {
+        formats.append(i18n("TIFF Image (*.tiff *.tif)"));
+        allTypes.append(QLatin1String("*.tiff *.tif "));
+    }
+
+    if (jpeg)
+    {
+        formats.append(i18n("JPEG Image (*.jpg *.jpeg *.jpe)"));
+        allTypes.append(QLatin1String("*.jpg *.jpeg *.jpe "));
+    }
+
+    formats << i18n("Progressive Graphics file (*.pgf)");
+    allTypes.append(QLatin1String("*.pgf "));
+
+    if (mode)
+    {
+        formats << i18n("Raw Images (%1)").arg(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
+        allTypes.append(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
+    }
+
+    formats << i18n("All supported files (%1)").arg(allTypes);
 
     return formats;
 }
