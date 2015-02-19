@@ -27,6 +27,7 @@
 
 #include "icctransform.h"
 #include "thumbnailinfo.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -349,7 +350,7 @@ QStringList LoadingDescription::possibleCacheKeys(const QString& filePath)
     keys << filePath + "-customraw";
     keys << filePath + "-globalraw";
 
-    for (int i=1; i<=256; ++i)
+    for (int i = 1; i <= ThumbnailSize::HD; ++i)
     {
         keys << filePath + "-previewImage-" + QString::number(i);
     }
@@ -361,10 +362,10 @@ QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString& filePa
 {
     //FIXME: With details, there is an endless number of possible cache keys. Need different approach.
     QStringList keys;
-    // there are 256 possible keys...
+    // there are (ThumbnailSize::HD) possible keys...
     QString path = filePath + "-thumbnail-";
 
-    for (int i=1; i<=256; ++i)
+    for (int i = 1; i <= ThumbnailSize::HD; ++i)
     {
         keys << path + QString::number(i);
     }
