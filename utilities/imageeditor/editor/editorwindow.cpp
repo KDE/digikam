@@ -1970,7 +1970,8 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 QStringList EditorWindow::getWritingFilters()
 {
     // begin with the filters Qt supports
-    QStringList writablePattern = supportedImageMimeTypes(QIODevice::WriteOnly);
+    QString all;
+    QStringList writablePattern = supportedImageMimeTypes(QIODevice::WriteOnly, all);
     qCDebug(DIGIKAM_GENERAL_LOG) << "KImageIO offered pattern: " << writablePattern;
 
     // append custom file types
@@ -2056,7 +2057,8 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
              << filter << ", targetUrl = " << targetUrl << ", autoFilter" << autoFilter;
 
     // build a list of valid types
-    QStringList validTypes = supportedImageMimeTypes(QIODevice::WriteOnly);
+    QString all;
+    QStringList validTypes = supportedImageMimeTypes(QIODevice::WriteOnly, all);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Qt Offered types: " << validTypes;
 
     validTypes << "TIF";
