@@ -41,7 +41,7 @@ namespace PGFUtils
 {
 
 /** PGF image data to QImage using memory stream.
-    NOTE: Only use this method to manage PGF thumbnails stored in database (256x256 pixels image)
+    NOTE: Only use this method to manage PGF thumbnails stored in database.
  */
 bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose=false);
 
