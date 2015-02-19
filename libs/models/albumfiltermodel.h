@@ -7,7 +7,7 @@
  * Description : Qt Model for Albums - filter model
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009      by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -368,7 +368,7 @@ public:
 
     virtual bool isFiltering() const;
 
-protected slots:
+protected Q_SLOTS:
 
     void tagPropertiesChanged(TAlbum*);
 
@@ -378,9 +378,11 @@ protected:
 
 protected:
 
-    QSet<QString>        m_propertiesBlackList;
-    QSet<QString>        m_propertiesWhiteList;
+    QSet<QString> m_propertiesBlackList;
+    QSet<QString> m_propertiesWhiteList;
 };
+
+// -----------------------------------------------------------------------------------
 
 class TagsManagerFilterModel : public TagPropertiesFilterModel
 {
@@ -395,7 +397,6 @@ protected:
     virtual bool matches(Album* album) const;
 
     QSet<int> m_keywords;
-
 };
 
 } // namespace Digikam

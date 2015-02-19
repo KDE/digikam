@@ -14,4 +14,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 006 ==> 332314 - Lens Auto-Correction seems to prefer makernotes over Exif making fixing manual lenses impossible.
 007 ==> 343755 - Tags from Windows Photo Gallery sometimes ignored.
 008 ==> 341241 - digiKam crash during marking photos in Persons/Tags view [patch]
-009 ==> 
+009 ==> 344154 - digiKam sometimes shows the raw preview, sometimes the JPEG preview, depending on the position of the stars [patch].
+010 ==> 
