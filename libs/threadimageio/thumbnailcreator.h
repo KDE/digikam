@@ -97,8 +97,7 @@ public:
     /**
      * If you plan to load thumbnail from the context of the threadimageio framework,
      * you can specify the relevant parameters. They will be passed if a thumbnail
-     * is created by loading with DImg.        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailtask.cpp
-
+     * is created by loading with DImg.
      * Note that DImg is not used in most cases (Raw files, JPEG)
      */
     void setLoadingProperties(DImgLoaderObserver* const observer, const DRawDecoding& settings);
@@ -112,8 +111,8 @@ public:
     void setExifRotate(bool rotate);
 
     /**
-     * If you enable this property, the thumbnail creator will create only large (256x256)
-     * thumbnails on disk.
+     * If you enable this property, the thumbnail creator will create only large
+     * thumbnails on disk (256x256 as described in FreeDesktop paper).
      * Normally, for requested sizes below 128, thumbnails of 128x128 will be cached on disk.
      * Default value is false.
      */
