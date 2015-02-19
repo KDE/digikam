@@ -42,6 +42,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_config.h"
 
 namespace Digikam
 {
@@ -77,7 +78,7 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
             break;
     }
 
-    bool tiff=false, jpeg=false;
+    bool tiff=false, jpeg=false, jp2k=false;
     
     Q_FOREACH(const QByteArray& frm, supported)
     {
@@ -94,7 +95,14 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
             jpeg = true;
             continue;
         }
-        
+
+        if (QString::fromLatin1(frm).contains(QLatin1String("jp2"),  Qt::CaseInsensitive) ||
+            QString::fromLatin1(frm).contains(QLatin1String("j2k"),  Qt::CaseInsensitive))
+        {
+            jp2k = true;
+            continue;
+        }
+
         formats.append(i18n("%1 Image (%2)").arg(QString::fromLatin1(frm).toUpper()).arg(QLatin1String("*.") + QLatin1String(frm)));
         allTypes.append(QString::fromLatin1("*.%1 ").arg(QLatin1String(frm)));
     }
@@ -110,6 +118,14 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
         formats.append(i18n("JPEG Image (*.jpg *.jpeg *.jpe)"));
         allTypes.append(QLatin1String("*.jpg *.jpeg *.jpe "));
     }
+    
+#ifdef HAVE_JASPER
+    if (jp2k)
+    {
+        formats.append(i18n("JPEG2000 Image (*.jp2 *.j2k)"));
+        allTypes.append(QLatin1String("*.jp2 *.j2k "));
+    }
+#endif // HAVE_JASPER
 
     formats << i18n("Progressive Graphics file (*.pgf)");
     allTypes.append(QLatin1String("*.pgf "));
