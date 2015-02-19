@@ -52,7 +52,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose=false);
     3 =>
     4 => Same compression ratio near than JPEG quality=85. image quality is valid for thumbnails.
     >= 5 => provide artifacts due to down-sampling. Do not use it...
-    NOTE: Only use this method to manage PGF thumbnails stored in database (256x256 pixels image)
+    NOTE: Only use this method to manage PGF thumbnails stored in database.
  */
 bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool verbose=false);
 
