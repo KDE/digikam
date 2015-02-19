@@ -388,7 +388,8 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     : d(new Private)
 {
     d->singleSelect = singleSelect;
-    d->fileFormats  = supportedImageMimeTypes(QIODevice::ReadOnly);
+    QString all;
+    d->fileFormats  = supportedImageMimeTypes(QIODevice::ReadOnly, all);
     qCDebug(DIGIKAM_GENERAL_LOG) << "file formats=" << d->fileFormats;
 
     QFileDialog* const dlg = new QFileDialog(parent);
