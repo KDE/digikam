@@ -6,7 +6,7 @@
  * Date        : 2009-05-29
  * Description : PGF utils.
  *
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose=false);
     3 =>
     4 => Same compression ratio near than JPEG quality=85. image quality is valid for thumbnails.
     >= 5 => provide artifacts due to down-sampling. Do not use it...
-    NOTE: Only use this method to manage PGF thumbnails stored in database (256x256 pixels image)
+    NOTE: Only use this method to manage PGF thumbnails stored in database.
  */
 bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool verbose=false);
 
