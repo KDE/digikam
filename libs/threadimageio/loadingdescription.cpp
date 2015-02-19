@@ -27,6 +27,7 @@
 
 #include "icctransform.h"
 #include "thumbnailinfo.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -136,7 +137,7 @@ QString LoadingDescription::cacheKey() const
         QString fileRef    = filePath.isEmpty() ? (QLatin1String("id:/") + previewParameters.storageReference.toString()) : filePath;
         QRect rect         =  previewParameters.extraParameter.toRect();
         QString rectString = QString::fromLatin1("%1,%2-%3x%4-").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
-        
+
         return (fileRef + QLatin1String("-thumbnail-") + rectString + QString::number(previewParameters.size));
     }
 
@@ -352,7 +353,7 @@ QStringList LoadingDescription::possibleCacheKeys(const QString& filePath)
     keys << filePath + QLatin1String("-customraw");
     keys << filePath + QLatin1String("-globalraw");
 
-    for (int i=1; i<=256; ++i)
+    for (int i = 1; i <= ThumbnailSize::HD; ++i)
     {
         keys << filePath + QLatin1String("-previewImage-") + QString::number(i);
     }
@@ -364,10 +365,10 @@ QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString& filePa
 {
     //FIXME: With details, there is an endless number of possible cache keys. Need different approach.
     QStringList keys;
-    // there are 256 possible keys...
+    // there are (ThumbnailSize::HD) possible keys...
     QString path = filePath + QLatin1String("-thumbnail-");
 
-    for (int i=1; i<=256; ++i)
+    for (int i = 1; i <= ThumbnailSize::HD; ++i)
     {
         keys << path + QString::number(i);
     }
