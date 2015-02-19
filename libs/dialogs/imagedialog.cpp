@@ -371,65 +371,31 @@ class ImageDialog::Private
 
 public:
 
-    Private() :
-        singleSelect(false)
+    Private()
     {
     }
 
-    bool        singleSelect;
-
     QStringList fileFormats;
-
-    QUrl        url;
     QList<QUrl> urls;
 };
 
 ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSelect, const QString& caption)
     : d(new Private)
 {
-    d->singleSelect = singleSelect;
     QString all;
-    d->fileFormats  = supportedImageMimeTypes(QIODevice::ReadOnly, all);
+    d->fileFormats = supportedImageMimeTypes(QIODevice::ReadOnly, all);
     qCDebug(DIGIKAM_GENERAL_LOG) << "file formats=" << d->fileFormats;
 
     QFileDialog* const dlg = new QFileDialog(parent);
+    dlg->setWindowTitle(caption);
     dlg->setDirectoryUrl(url);
     dlg->setNameFilters(d->fileFormats);
     dlg->setIconProvider(new DFileIconProvider());
     dlg->setOption(QFileDialog::DontUseNativeDialog);
-
-    if (d->singleSelect)
-    {
-        dlg->setFileMode(QFileDialog::ExistingFile);
-
-        if (caption.isEmpty())
-        {
-            dlg->setWindowTitle(i18n("Select an Image"));
-        }
-        else
-        {
-            dlg->setWindowTitle(caption);
-        }
-
-        dlg->exec();
-        d->url = dlg->selectedUrls().first();
-    }
-    else
-    {
-        dlg->setFileMode(QFileDialog::ExistingFiles);
-
-        if (caption.isEmpty())
-        {
-            dlg->setWindowTitle(i18n("Select Images"));
-        }
-        else
-        {
-            dlg->setWindowTitle(caption);
-        }
-
-        dlg->exec();
-        d->urls = dlg->selectedUrls();
-    }
+    dlg->setFileMode(singleSelect ? QFileDialog::ExistingFile : QFileDialog::ExistingFiles);
+    
+    dlg->exec();
+    d->urls = dlg->selectedUrls();
 
     delete dlg;
 }
@@ -439,11 +405,6 @@ ImageDialog::~ImageDialog()
     delete d;
 }
 
-bool ImageDialog::singleSelect() const
-{
-    return d->singleSelect;
-}
-
 QStringList ImageDialog::fileFormats() const
 {
     return d->fileFormats;
@@ -451,7 +412,7 @@ QStringList ImageDialog::fileFormats() const
 
 QUrl ImageDialog::url() const
 {
-    return d->url;
+    return d->urls.first();
 }
 
 QList<QUrl> ImageDialog::urls() const
@@ -459,23 +420,9 @@ QList<QUrl> ImageDialog::urls() const
     return d->urls;
 }
 
-QList<QUrl> ImageDialog::getImageURLs(QWidget* const parent, const QUrl& url, const QString& caption)
-{
-    ImageDialog dlg(parent, url, false, caption);
-
-    if (!dlg.urls().isEmpty())
-    {
-        return dlg.urls();
-    }
-    else
-    {
-        return QList<QUrl>();
-    }
-}
-
 QUrl ImageDialog::getImageURL(QWidget* const parent, const QUrl& url, const QString& caption)
 {
-    ImageDialog dlg(parent, url, true, caption);
+    ImageDialog dlg(parent, url, false, caption.isEmpty() ? i18n("Select an Item") : caption);
 
     if (dlg.url() != QUrl())
     {
@@ -484,6 +431,20 @@ QUrl ImageDialog::getImageURL(QWidget* const parent, const QUrl& url, const QStr
     else
     {
         return QUrl();
+    }
+}
+
+QList<QUrl> ImageDialog::getImageURLs(QWidget* const parent, const QUrl& url, const QString& caption)
+{
+    ImageDialog dlg(parent, url, true, caption.isEmpty() ? i18n("Select Items") : caption);
+
+    if (!dlg.urls().isEmpty())
+    {
+        return dlg.urls();
+    }
+    else
+    {
+        return QList<QUrl>();
     }
 }
 

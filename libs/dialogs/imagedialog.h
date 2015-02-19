@@ -103,13 +103,12 @@ public:
     ImageDialog(QWidget* const parent, const QUrl& url, bool singleSelect=false, const QString& caption=QString());
     ~ImageDialog();
 
-    QUrl        url()          const;
-    QList<QUrl> urls()         const;
-    bool        singleSelect() const;
-    QStringList fileFormats()  const;
+    QUrl        url()         const;
+    QList<QUrl> urls()        const;
+    QStringList fileFormats() const;
 
-    static QList<QUrl> getImageURLs(QWidget* const parent, const QUrl& url, const QString& caption=QString());
     static QUrl getImageURL(QWidget* const parent, const QUrl& url, const QString& caption=QString());
+    static QList<QUrl> getImageURLs(QWidget* const parent, const QUrl& url, const QString& caption=QString());
 
 private:
 
