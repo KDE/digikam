@@ -1873,6 +1873,13 @@ void DCategorizedView::rowsRemoved(const QModelIndex& parent, int start, int end
         // Force the view to update all elements
         rowsInsertedArtifficial(QModelIndex(), 0, d->proxyModel->rowCount() - 1);
     }
+
+    // Workaround for bug 344156.
+    // TODO: This can be a possible bug in Qt4. Need to check if it still valid with Qt5.
+    if (currentIndex().isValid())
+    {
+        setCurrentIndex(currentIndex());
+    }
 }
 
 void DCategorizedView::updateGeometries()
