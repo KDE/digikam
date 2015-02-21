@@ -1187,7 +1187,7 @@ SidebarSplitter::SidebarSplitter(QWidget* const parent)
 }
 
 SidebarSplitter::SidebarSplitter(Qt::Orientation orientation, QWidget* const parent)
-    : QSplitter(orientation, parent)0,
+    : QSplitter(orientation, parent),
       d(new Private)
 {
     connect(this, SIGNAL(splitterMoved(int,int)),
