@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <kxmlguiclient.h>
+#include <klibloader.h>
 
 // Local includes
 
@@ -53,12 +54,12 @@ public:
     explicit ImagePlugin(QObject* const parent, const char* name = 0);
     virtual ~ImagePlugin();
 
-    virtual void setEnabledSelectionActions(bool enable);
-    virtual void setEnabledActions(bool enable);
-
     void loadTool(EditorTool* const tool);
 
     QString actionCategory() const;
+
+    virtual void setEnabledSelectionActions(bool enable);
+    virtual void setEnabledActions(bool enable);
 
 protected:
 

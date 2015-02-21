@@ -31,7 +31,6 @@
 // KDE includes
 
 #include <kactioncollection.h>
-#include <klibloader.h>
 #include <klocalizedstring.h>
 
 // Local includes

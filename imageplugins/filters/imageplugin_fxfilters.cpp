@@ -23,14 +23,16 @@
 
 #include "imageplugin_fxfilters.h"
 
+// Qt includes
+
+#include <QKeySequence>
+#include <QAction>
+#include <QApplication>
+
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kgenericfactory.h>
-#include <klibloader.h>
-#include <QAction>
 #include <kactioncollection.h>
-
 
 // Local includes
 

@@ -33,7 +33,6 @@
 
 #include <kpassivepopup.h>
 #include <klocalizedstring.h>
-#include <klibloader.h>
 #include <kactioncollection.h>
 
 // Local includes
