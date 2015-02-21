@@ -109,7 +109,7 @@ public:
      * @param id The ID of the tab to manipulate
      * @param state true == activated/raised, false == not active
      */
-    void setTab(int id ,bool state);
+    void setTab(int id, bool state);
 
     /**
      * return the state of a tab, identified by its ID
@@ -257,7 +257,7 @@ protected:
      */
     DMultiTabBarTab(const QPixmap& pic, const QString&, int id, QWidget* const parent,
                     Qt::Edge pos, DMultiTabBar::TextStyle style);
-    
+
     virtual void paintEvent(QPaintEvent*);
 
 private:
@@ -271,7 +271,7 @@ private:
 class DMultiTabBarFrame: public QFrame
 {
     Q_OBJECT
-    
+
 public:
 
     DMultiTabBarFrame(QWidget* const parent, Qt::Edge pos);

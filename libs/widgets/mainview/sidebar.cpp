@@ -363,7 +363,7 @@ QSize DMultiTabBarTab::computeSizeHint(bool withText) const
     {
         return QSize(size.height(), size.width());
     }
-    
+
     return size;
 }
 
@@ -460,7 +460,7 @@ void DMultiTabBarTab::paintEvent(QPaintEvent*)
 
     bool bottomIcon = false;
     bool rtl        = layoutDirection() == Qt::RightToLeft;
-    
+
     if (isVertical())
     {
         if (d->position == Qt::LeftEdge && !rtl)
@@ -525,7 +525,7 @@ void DMultiTabBarTab::paintEvent(QPaintEvent*)
             tr.translate(labelPaintArea.height() + labelArea.x(), labelArea.y());
             tr.rotate(90);
         }
-        
+
         painter.setTransform(tr);
     }
 
@@ -610,7 +610,7 @@ void DMultiTabBar::updateSeparator()
             break;
         }
     }
-    
+
     if (hideSep)
         d->btnTabSep->hide();
     else
@@ -630,7 +630,7 @@ DMultiTabBarButton* DMultiTabBar::button(int id) const
     while (it.hasNext())
     {
         DMultiTabBarButton* const button = it.next();
-    
+
         if (button->id() == id)
             return button;
     }
@@ -1187,7 +1187,8 @@ SidebarSplitter::SidebarSplitter(QWidget* const parent)
 }
 
 SidebarSplitter::SidebarSplitter(Qt::Orientation orientation, QWidget* const parent)
-    : QSplitter(orientation, parent), d(new Private)
+    : QSplitter(orientation, parent)0,
+      d(new Private)
 {
     connect(this, SIGNAL(splitterMoved(int,int)),
             this, SLOT(slotSplitterMoved(int,int)));
