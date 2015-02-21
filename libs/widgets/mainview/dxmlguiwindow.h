@@ -137,10 +137,6 @@ public:
 
     static QAction* buildStdAction(StdActionType type, const QObject* const recvr, const char* const slot, QObject* const parent);
 
-Q_SIGNALS:
-    
-    void signalDisplayPaletteChanged();
-    
 protected:
 
     DLogoAction* m_animLogo;
@@ -179,10 +175,6 @@ protected:
      */
     virtual bool thumbbarVisibility() const;
     
-    /** Re-implemented to handle palette change and to dispatch on ThemeManager.
-     */
-    virtual void changeEvent(QEvent* ev);
-
 private Q_SLOTS:
 
     void slotToggleFullScreen(bool);

@@ -164,9 +164,6 @@ void ThemeManager::registerThemeActions(DXmlGuiWindow* const kwin)
         return;
 
     kwin->actionCollection()->addAction(QLatin1String("theme_menu"), d->themeMenuAction->menuAction());
-    
-    connect(kwin, SIGNAL(signalDisplayPaletteChanged()),
-            this, SLOT(slotSettingsChanged()));
 }
 
 void ThemeManager::populateThemeMenu()
