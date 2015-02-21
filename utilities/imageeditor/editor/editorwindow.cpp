@@ -2736,7 +2736,6 @@ void EditorWindow::setupSelectToolsAction()
     viewAction->setDefaultWidget(createToolSelectionView());
     d->selectToolsActionView->setMinimumSize(QSize(400, 400));
     m_selectToolsAction->addAction(viewAction);
-    m_selectToolsAction->setVisible(true);
 
     connect(m_selectToolsAction, SIGNAL(aboutToShow()),
             this, SLOT(slotSelectToolsMenuAboutToShow()));
