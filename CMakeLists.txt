@@ -97,7 +97,7 @@ include(MacroJPEG)
 # ==================================================================================================
 
 option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
-option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
+option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           ON)
 option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  OFF)
 option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
 option(ENABLE_MEDIAPLAYER       "Build digiKam with QtMultimedia support (default=ON)"                            ON)
