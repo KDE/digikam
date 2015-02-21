@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Showfoto</name>
+  <name xml:lang="bs">Showfoto</name>
   <name xml:lang="ca">showFoto</name>
   <name xml:lang="cs">Showfoto</name>
   <name xml:lang="da">showFoto</name>
@@ -26,6 +27,7 @@
       Showfoto is a fast Image Editor with powerful image editing tools. You can use it to view your photographs and improve them.
       Showfoto is the standalone image editor of the digiKam project.
     </p>
+    <p xml:lang="bs">Showfoto je brz uređivač slika sa moćnim alatima za obradu slika. Možete ga koristiti da vidite svoje fotografije i poboljšati ih. Showfoto je samostalan urednik slika projekta digikam.</p>
     <p xml:lang="ca">El showFoto és un editor d'imatges ràpid amb potents eines per a l'edició d'imatges. El pot usar per a visualitzar i millorar les vostres fotografies. El showFoto és un editor d'imatges independent del projecte digiKam.</p>
     <p xml:lang="da">Showfoto er hurtig billedredigering med kraftfulde redigeringsværktøjer. Du kan bruge det til at fremvise dine fotos og forbedre dem. Showfoto er selvstændig billedredigering fra digiKam-projektet.</p>
     <p xml:lang="de">Showfoto ist eine schnelle Bildbearbeitung mit einigen mächtigen Basiswerkzeugen. Sie können es benutzen, um Ihre Fotos anzusehen und Korrekturen und Änderungen durchzuführen. Showfoto ist das eigenständige Bildbearbeitungsprogramm des Digikam-Projekts.</p>
@@ -53,6 +55,7 @@
   </screenshots>
   <project_group>KDE</project_group>
   <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="bs">digiKam Projekt</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>

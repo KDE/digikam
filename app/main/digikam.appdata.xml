@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>digiKam</name>
+  <name xml:lang="bs">digiKam</name>
   <name xml:lang="ca">digiKam</name>
   <name xml:lang="cs">digiKam</name>
   <name xml:lang="da">digiKam</name>
@@ -28,6 +29,7 @@
       a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom
       collections.
     </p>
+    <p xml:lang="bs">digiKam je napredna aplikacija za upravljanje digitalnim fotografijama, što čini uvoz i organizaciju digitalnih fotografija "klikom". Fotografije su organizovane u albumima koji mogu biti sortirani hronološki, po rasporedu foldera ili po korisničkim kolekcijama.</p>
     <p xml:lang="ca">El digiKam és una avançada aplicació per a gestionar les fotografies digitals, la qual fa que la importació i organització de les fotografies digitals sigui una «tasca fàcil». Les fotografies s'organitzen en àlbums, els quals es poden ordenar cronològicament, per disposició de la carpeta o per col·leccions personalitzades.</p>
     <p xml:lang="en-GB">digiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.</p>
     <p xml:lang="fr">digiKam est une application de gestion de photos avancée, qui rend l'import et l'organisation des photos comme un jeu d'enfant. Les photos sont organisées dans des albums qui peuvent être triés de manière chronologique, selon l'organisation des dossiers, ou par collections personnalisées.</p>
@@ -43,6 +45,7 @@
     <p xml:lang="uk">digiKam — програма з розширеними можливостями щодо керування цифровими фотографіями, яка робить імпортування і впорядкування цифрових фотографій зовсім простою справою". Програма впорядковує фотографії за альбомами, які можна розташовувати у вікні програму у хронологічному порядку, за теками або за нетиповими збірками.</p>
     <p xml:lang="x-test">xxdigiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.xx</p>
     <p>Features:</p>
+    <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="da">Funktioner:</p>
@@ -63,6 +66,7 @@
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Organization of photos in albums and sub-albums (with tags and comments support)</li>
+      <li xml:lang="bs">Organizacija fotografija u albume i podalbume (sa podrškom za označavanje i komentarisanje)</li>
       <li xml:lang="ca">Organització de les fotografies en àlbums i sub-àlbums (amb implementació per a les etiquetes i comentaris)</li>
       <li xml:lang="en-GB">Organisation of photos in albums and sub-albums (with tags and comments support)</li>
       <li xml:lang="fr">Organisation de photos en albums et sous-albums (avec prise en charge des étiquettes et des commentaires)</li>
@@ -78,6 +82,7 @@
       <li xml:lang="uk">упорядковування фотографій за альбомами і підальбомами з підтримкою міток та коментарів;</li>
       <li xml:lang="x-test">xxOrganization of photos in albums and sub-albums (with tags and comments support)xx</li>
       <li>Support for Exif, Iptc, Xmp, Makernotes</li>
+      <li xml:lang="bs">Podrška za Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="ca">Implementació per a notes Exif, Iptc, Xmp i del fabricant</li>
       <li xml:lang="de">Unterstützung für Exif, Iptc, Xmp und Herstellerbemerkungen</li>
       <li xml:lang="en-GB">Support for Exif, Iptc, Xmp, Makernotes</li>
@@ -94,6 +99,7 @@
       <li xml:lang="uk">підтримка Exif, Iptc, Xmp, Makernotes;</li>
       <li xml:lang="x-test">xxSupport for Exif, Iptc, Xmp, Makernotesxx</li>
       <li>SQLite powered storage for the albums and its metadata</li>
+      <li xml:lang="bs">SQLite skladište za albume i njegove metapodatke</li>
       <li xml:lang="ca">Emmagatzematge amb SQLite pels àlbums i les seves metadades</li>
       <li xml:lang="de">Speicherung der Alben und Metadaten in einer SQLite-Datenbank</li>
       <li xml:lang="en-GB">SQLite powered storage for the albums and its metadata</li>
@@ -110,6 +116,7 @@
       <li xml:lang="uk">сховище даних на основі SQLite для альбомів та метаданих;</li>
       <li xml:lang="x-test">xxSQLite powered storage for the albums and its metadataxx</li>
       <li>Support for filtering and sorting albums</li>
+      <li xml:lang="bs">Podrška za filtriranje i sortiranje albuma</li>
       <li xml:lang="ca">Implementació pel filtratge i classificació dels àlbums</li>
       <li xml:lang="de">Unterstützung für das Filtern und Sortieren von Alben</li>
       <li xml:lang="en-GB">Support for filtering and sorting albums</li>
@@ -126,6 +133,7 @@
       <li xml:lang="uk">підтримка фільтрування та упорядковування альбомів;</li>
       <li xml:lang="x-test">xxSupport for filtering and sorting albumsxx</li>
       <li>Import from more than 1100 digital camera devices</li>
+      <li xml:lang="bs">Uvoz iz više od 1100 digitalnih kamera uređaja</li>
       <li xml:lang="ca">Importa des de més de 1.100 dispositius de càmeres digitals</li>
       <li xml:lang="de">Import von mehr als 1100 digitalen Kameras</li>
       <li xml:lang="en-GB">Import from more than 1100 digital camera devices</li>
@@ -142,6 +150,7 @@
       <li xml:lang="uk">можливість імпортування даних з понад 1100 цифрових фотоапаратів;</li>
       <li xml:lang="x-test">xxImport from more than 1100 digital camera devicesxx</li>
       <li>Support for 300 RAW format pictures</li>
+      <li xml:lang="bs">Podrška za fotografije 300 RAW formata</li>
       <li xml:lang="ca">Implementació per a 300 formats d'imatges RAW</li>
       <li xml:lang="de">Unterstützung für 300 Bild-Rohformate</li>
       <li xml:lang="en-GB">Support for 300 RAW format pictures</li>
@@ -157,6 +166,7 @@
       <li xml:lang="uk">підтримка понад 300 форматів цифрових негативів (RAW);</li>
       <li xml:lang="x-test">xxSupport for 300 RAW format picturesxx</li>
       <li>Light Table feature</li>
+      <li xml:lang="bs">Light Table svojstvo</li>
       <li xml:lang="ca">La característica taula de llum</li>
       <li xml:lang="de">Leuchttischfunktion</li>
       <li xml:lang="en-GB">Light Table feature</li>
@@ -173,6 +183,7 @@
       <li xml:lang="uk">інструмент стола з підсвічуванням;</li>
       <li xml:lang="x-test">xxLight Table featurexx</li>
       <li>Plugins architectures: using Kipi-plugins</li>
+      <li xml:lang="bs">Arhitekture plugin-a: koristeći Kipi-plugin-e</li>
       <li xml:lang="ca">Arquitectura de connectors: usant els connectors Kipi</li>
       <li xml:lang="de">Modul-Architektur: Erweiterung durch KIPI-Module</li>
       <li xml:lang="en-GB">Plugins architectures: using Kipi-plugins</li>
@@ -189,6 +200,7 @@
       <li xml:lang="uk">архітектура на основі додатків, використовуються додатки KIPI;</li>
       <li xml:lang="x-test">xxPlugins architectures: using Kipi-pluginsxx</li>
       <li>Share your photos using HTML or publishing them to social web sites</li>
+      <li xml:lang="bs">Podijelite vaše fotografije koristeći HTML ili objavljujući ih na socijalne web stranice</li>
       <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
       <li xml:lang="en-GB">Share your photos using HTML or publishing them to social web sites</li>
       <li xml:lang="fr">Permet de partager vos photos avec des pages HTML ou publiez les sur des réseaux sociaux</li>
@@ -204,6 +216,7 @@
       <li xml:lang="uk">можливість оприлюднення фотографій за допомогою коду HTML або сайтів соціальних мереж;</li>
       <li xml:lang="x-test">xxShare your photos using HTML or publishing them to social web sitesxx</li>
       <li>Image editor included with advanced features</li>
+      <li xml:lang="bs">Uvršten uređivač slika sa naprednim svojstvima</li>
       <li xml:lang="ca">Inclou un editor d'imatges amb característiques avançades</li>
       <li xml:lang="en-GB">Image editor included with advanced features</li>
       <li xml:lang="fr">Éditeur d'images inclus, avec des fonctionnalités avancées</li>
@@ -229,6 +242,7 @@
     </screenshot>
   </screenshots>
   <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="bs">digiKam Projekt</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="de">digiKam-Projekt</developer_name>

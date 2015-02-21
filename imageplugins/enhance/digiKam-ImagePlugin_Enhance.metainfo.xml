@@ -5,6 +5,7 @@
   <id>digiKam-ImagePlugin_Enhance</id>
   <extends>digikam.desktop</extends>
   <name>ImagePlugin-Enhance</name>
+  <name xml:lang="bs">ImagePlugin-Enhance</name>
   <name xml:lang="ca">Connector d'imatge per a millores</name>
   <name xml:lang="da">ImagePlugin-Enhance</name>
   <name xml:lang="en-GB">ImagePlugin-Enhance</name>
@@ -20,6 +21,7 @@
   <name xml:lang="uk">ImagePlugin-Enhance</name>
   <name xml:lang="x-test">xxImagePlugin-Enhancexx</name>
   <summary>digiKam plugin to enhance photographs</summary>
+  <summary xml:lang="bs">dodatak digiKam-a za poboljšanje fotografija</summary>
   <summary xml:lang="ca">Connector d'imatge per a millorar les fotografies</summary>
   <summary xml:lang="cs">Modul digiKamu pro vylepšování fotografií</summary>
   <summary xml:lang="da">digiKam-plugin til at forbedre fotos</summary>
@@ -38,6 +40,7 @@
   <summary xml:lang="uk">Додаток до digiKam для покращення вигляду фотографій</summary>
   <summary xml:lang="x-test">xxdigiKam plugin to enhance photographsxx</summary>
   <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="bs">digiKam Projekt</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>

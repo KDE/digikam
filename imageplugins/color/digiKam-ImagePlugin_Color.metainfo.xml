@@ -5,6 +5,7 @@
   <id>digiKam-ImagePlugin_Color</id>
   <extends>digikam.desktop</extends>
   <name>ImagePlugin-Color</name>
+  <name xml:lang="bs">ImagePlugin-Color</name>
   <name xml:lang="ca">Connector d'imatge pel color</name>
   <name xml:lang="da">ImagePlugin-Color</name>
   <name xml:lang="en-GB">ImagePlugin-Color</name>
@@ -20,6 +21,7 @@
   <name xml:lang="uk">ImagePlugin-Color</name>
   <name xml:lang="x-test">xxImagePlugin-Colorxx</name>
   <summary>A tool to correct colors of image</summary>
+  <summary xml:lang="bs">Alat za ispravljanje boja na slici</summary>
   <summary xml:lang="ca">Una eina per a corregir els colors de la imatge</summary>
   <summary xml:lang="cs">Nástroj pro opravu barev obrázku</summary>
   <summary xml:lang="da">Et værktøj til at korrigere et billedes farver</summary>
@@ -38,6 +40,7 @@
   <summary xml:lang="uk">Інструмент для виправлення кольорів зображення</summary>
   <summary xml:lang="x-test">xxA tool to correct colors of imagexx</summary>
   <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="bs">digiKam Projekt</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>
