@@ -29,47 +29,47 @@
 
 #if defined(USE_LCMS_VERSION_1000)
 
-#ifndef LCMS_DLL
-#define LCMS_DLL
-#endif
+#    ifndef LCMS_DLL
+#        define LCMS_DLL
+#    endif
 
-#include <lcms.h>
-#if LCMS_VERSION < 114
-#define cmsTakeCopyright(profile) "Unknown"
+#    include <lcms.h>
 
-#endif // LCMS_VERSION < 114
+#    if LCMS_VERSION < 114
+#        define cmsTakeCopyright(profile) "Unknown"
+#    endif // LCMS_VERSION < 114
 
-#define dkCmsCloseProfile            cmsCloseProfile
-#define dkCmsCreateProofingTransform cmsCreateProofingTransform
-#define dkCmsCreateTransform         cmsCreateTransform
-#define dkCmsCreateXYZProfile        cmsCreateXYZProfile
-#define dkCmsCreate_sRGBProfile      cmsCreate_sRGBProfile
-#define dkCmsDeleteTransform         cmsDeleteTransform
-#define dkCmsDeltaE                  cmsDeltaE
-#define dkCmsDoTransform             cmsDoTransform
-#define dkCmsErrorAction             cmsErrorAction
-#define dkCmsFloat2XYZEncoded        cmsFloat2XYZEncoded
-#define dkCmsGetColorSpace           cmsGetColorSpace
-#define dkCmsGetDeviceClass          cmsGetDeviceClass
-#define dkCmsGetPCS                  cmsGetPCS
-#define dkCmsGetProfileICCversion    cmsGetProfileICCversion
-#define dkCmsIsTag                   cmsIsTag
-#define dkCmsOpenProfileFromFile     cmsOpenProfileFromFile
-#define dkCmsOpenProfileFromMem      cmsOpenProfileFromMem
-#define dkCmsSetAlarmCodes           cmsSetAlarmCodes
-#define dkCmsTakeCopyright           cmsTakeCopyright
-#define dkCmsTakeHeaderFlags         cmsTakeHeaderFlags
-#define dkCmsTakeManufacturer        cmsTakeManufacturer
-#define dkCmsTakeMediaWhitePoint     cmsTakeMediaWhitePoint
-#define dkCmsTakeModel               cmsTakeModel
-#define dkCmsTakeProductDesc         cmsTakeProductDesc
-#define dkCmsTakeProductInfo         cmsTakeProductInfo
-#define dkCmsTakeProductName         cmsTakeProductName
-#define dkCmsTakeProfileID           cmsTakeProfileID
-#define dkCmsTakeRenderingIntent     cmsTakeRenderingIntent
-#define dkCmsXYZ2xyY                 cmsXYZ2xyY
-#define dkCmsAdaptMatrixFromD50      cmsAdaptMatrixFromD50
-#define dkCmsReadICCMatrixRGB2XYZ    cmsReadICCMatrixRGB2XYZ
+#    define dkCmsCloseProfile            cmsCloseProfile
+#    define dkCmsCreateProofingTransform cmsCreateProofingTransform
+#    define dkCmsCreateTransform         cmsCreateTransform
+#    define dkCmsCreateXYZProfile        cmsCreateXYZProfile
+#    define dkCmsCreate_sRGBProfile      cmsCreate_sRGBProfile
+#    define dkCmsDeleteTransform         cmsDeleteTransform
+#    define dkCmsDeltaE                  cmsDeltaE
+#    define dkCmsDoTransform             cmsDoTransform
+#    define dkCmsErrorAction             cmsErrorAction
+#    define dkCmsFloat2XYZEncoded        cmsFloat2XYZEncoded
+#    define dkCmsGetColorSpace           cmsGetColorSpace
+#    define dkCmsGetDeviceClass          cmsGetDeviceClass
+#    define dkCmsGetPCS                  cmsGetPCS
+#    define dkCmsGetProfileICCversion    cmsGetProfileICCversion
+#    define dkCmsIsTag                   cmsIsTag
+#    define dkCmsOpenProfileFromFile     cmsOpenProfileFromFile
+#    define dkCmsOpenProfileFromMem      cmsOpenProfileFromMem
+#    define dkCmsSetAlarmCodes           cmsSetAlarmCodes
+#    define dkCmsTakeCopyright           cmsTakeCopyright
+#    define dkCmsTakeHeaderFlags         cmsTakeHeaderFlags
+#    define dkCmsTakeManufacturer        cmsTakeManufacturer
+#    define dkCmsTakeMediaWhitePoint     cmsTakeMediaWhitePoint
+#    define dkCmsTakeModel               cmsTakeModel
+#    define dkCmsTakeProductDesc         cmsTakeProductDesc
+#    define dkCmsTakeProductInfo         cmsTakeProductInfo
+#    define dkCmsTakeProductName         cmsTakeProductName
+#    define dkCmsTakeProfileID           cmsTakeProfileID
+#    define dkCmsTakeRenderingIntent     cmsTakeRenderingIntent
+#    define dkCmsXYZ2xyY                 cmsXYZ2xyY
+#    define dkCmsAdaptMatrixFromD50      cmsAdaptMatrixFromD50
+#    define dkCmsReadICCMatrixRGB2XYZ    cmsReadICCMatrixRGB2XYZ
 
 #endif // defined(USE_LCMS_VERSION_000)
 
