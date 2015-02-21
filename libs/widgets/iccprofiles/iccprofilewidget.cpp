@@ -288,32 +288,32 @@ bool ICCProfileWidget::decodeMetadata()
 
     if ( !QString(dkCmsTakeProductName(hProfile)).isEmpty() )
     {
-        metaDataMap.insert(QLatin1String("Icc.Header.Name"), QString(dkCmsTakeProductName(hProfile)).replace(QLatin1Char('\n'), QLatin1Char(' ')));
+        metaDataMap.insert(QLatin1String("Icc.Header.Name"), dkCmsTakeProductName(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
-    if ( !QString(dkCmsTakeProductDesc(hProfile)).isEmpty() )
+    if ( !dkCmsTakeProductDesc(hProfile).isEmpty() )
     {
-        metaDataMap.insert(QLatin1String("Icc.Header.Description"), QString(dkCmsTakeProductDesc(hProfile)).replace(QLatin1Char('\n'), QLatin1Char(' ')));
+        metaDataMap.insert(QLatin1String("Icc.Header.Description"), dkCmsTakeProductDesc(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
-    if ( !QString(dkCmsTakeProductInfo(hProfile)).isEmpty() )
+    if ( !dkCmsTakeProductInfo(hProfile).isEmpty() )
     {
-        metaDataMap.insert(QLatin1String("Icc.Header.Information"), QString(dkCmsTakeProductInfo(hProfile)).replace(QLatin1Char('\n'), QLatin1Char(' ')));
+        metaDataMap.insert(QLatin1String("Icc.Header.Information"), dkCmsTakeProductInfo(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
-    if ( !QString(dkCmsTakeManufacturer(hProfile)).isEmpty() )
+    if ( !dkCmsTakeManufacturer(hProfile).isEmpty() )
     {
-        metaDataMap.insert(QLatin1String("Icc.Header.Manufacturer"), QString(dkCmsTakeManufacturer(hProfile)).replace(QLatin1Char('\n'), QLatin1Char(' ')));
+        metaDataMap.insert(QLatin1String("Icc.Header.Manufacturer"), dkCmsTakeManufacturer(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
-    if ( !QString(dkCmsTakeModel(hProfile)).isEmpty() )
+    if ( !dkCmsTakeModel(hProfile).isEmpty() )
     {
-        metaDataMap.insert(QLatin1String("Icc.Header.Model"), QString(dkCmsTakeModel(hProfile)).replace(QLatin1Char('\n'), QLatin1Char(' ')));
+        metaDataMap.insert(QLatin1String("Icc.Header.Model"), dkCmsTakeModel(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
-    if ( !QString(dkCmsTakeCopyright(hProfile)).isEmpty() )
+    if ( !dkCmsTakeCopyright(hProfile).isEmpty() )
     {
-        metaDataMap.insert(QLatin1String("Icc.Header.Copyright"), QString(dkCmsTakeCopyright(hProfile)).replace(QLatin1Char('\n'), QLatin1Char(' ')));
+        metaDataMap.insert(QLatin1String("Icc.Header.Copyright"), dkCmsTakeCopyright(hProfile).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     }
 
     metaDataMap.insert(QLatin1String("Icc.Header.ProfileID"),      QString::number((uint)*dkCmsTakeProfileID(hProfile)));
