@@ -1884,14 +1884,19 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         d->currentWindowModalDialog = 0;
     }
 
-    if (result != QFileDialog::Accept || !imageFileSaveDialog)
+    if (result != QFileDialog::Accepted || !imageFileSaveDialog)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "File Save Dialog rejected";
         return false;
     }
 
     QList<QUrl> urls = imageFileSaveDialog->selectedUrls();
+
     if (urls.isEmpty())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "no target url";
         return false;
+    }
         
     newURL = urls.first();
     qCDebug(DIGIKAM_GENERAL_LOG) << "Writing file to " << newURL;
@@ -1921,7 +1926,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
             d->currentWindowModalDialog = 0;
         }
 
-        if (result != QFileDialog::Accept || !fileSaveOptionsDialog)
+        if (result != QDialog::Accepted || !fileSaveOptionsDialog)
         {
             return false;
         }
