@@ -25,6 +25,15 @@ set(digikamcore_LIB_SRCS
     ${libversionmanager_SRCS}
     ${libkde3rdparty_SRCS}
 
+    # utilities
+    ${libslideshow_SRCS}
+    ${libeditorcore_SRCS}
+    ${libeditordlg_SRCS}
+    ${libeditorprintiface_SRCS}
+    ${libeditorrawimport_SRCS}
+    ${libeditorplugin_SRCS}
+    ${libeditoriface_SRCS}
+    
     # widgets and dialogs
     ${libcolorchooserwidgets_SRCS}
     ${libnotificationmanager_SRCS}
@@ -38,15 +47,6 @@ set(digikamcore_LIB_SRCS
     ${libiccprofileswidgets_SRCS}
     ${libcommonwidgets_SRCS}
     ${libdialogs_SRCS}
-
-    # utilities
-    ${libslideshow_SRCS}
-    ${libeditorcore_SRCS}
-    ${libeditordlg_SRCS}
-    ${libeditorprintiface_SRCS}
-    ${libeditorrawimport_SRCS}
-    ${libeditoriface_SRCS}
-    ${libeditorplugin_SRCS}
 )
 
 if(KF5KGeoMap_FOUND)
@@ -74,6 +74,8 @@ target_link_libraries(digikamcore
                       KF5::KIOWidgets
                       KF5::Notifications
                       KF5::NotifyConfig
+                      KF5::CoreAddons
+                      KF5::WindowSystem
 
                       KF5::KDELibs4Support
 
