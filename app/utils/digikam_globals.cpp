@@ -139,9 +139,8 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
     {
         formats << i18n("Raw Images (%1)").arg(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
         allTypes.append(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
+        formats << i18n("All supported files (%1)").arg(allTypes);
     }
-
-    formats << i18n("All supported files (%1)").arg(allTypes);
 
     return formats;
 }

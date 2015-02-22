@@ -392,6 +392,7 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     dlg->setNameFilters(d->fileFormats);
     dlg->setIconProvider(new DFileIconProvider());
     dlg->setOption(QFileDialog::DontUseNativeDialog);
+    dlg->setAcceptMode(QFileDialog::AcceptOpen);
     dlg->setFileMode(singleSelect ? QFileDialog::ExistingFile : QFileDialog::ExistingFiles);
     
     dlg->exec();

@@ -1829,14 +1829,14 @@ void EditorWindow::startingSave(const QUrl& url)
 bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 {
     QString all;
-    QStringList list       = supportedImageMimeTypes(QIODevice::WriteOnly, all);
+    QStringList list                       = supportedImageMimeTypes(QIODevice::WriteOnly, all);
     QFileDialog* const imageFileSaveDialog = new QFileDialog(this);
     imageFileSaveDialog->setWindowTitle("New Image File Name");
     imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
     imageFileSaveDialog->setDirectoryUrl(initialUrl);
     imageFileSaveDialog->setNameFilters(list);
     imageFileSaveDialog->setOption(QFileDialog::DontUseNativeDialog);
-    imageFileSaveDialog->setFileMode(QFileDialog::ExistingFile);
+    imageFileSaveDialog->setFileMode(QFileDialog::AnyFile);
 
     // restore old settings for the dialog
     KSharedConfig::Ptr config         = KSharedConfig::openConfig();
