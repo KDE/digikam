@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2012-02-03
- * Description : wrapper to help on lcms2 porting
+ * Description : LCMS2 wrapper
  *
- * Copyright (C) 2012 by Francesco Riosa <francesco+kde at pnpitalia dot it>
+ * Copyright (C) 2012      by Francesco Riosa <francesco+kde at pnpitalia dot it>
+ * Copyright (C) 2012-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,11 +29,8 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikam_config.h"
 
 // LCMS includes
-
-#if defined(USE_LCMS_VERSION_2000)
 
 #include <lcms2.h>
 
@@ -647,5 +645,3 @@ void dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* const Source)
 {
     cmsXYZ2xyY(static_cast<cmsCIExyY*>(Dest), Source);
 }
-
-#endif // defined(USE_LCMS_VERSION_2000)

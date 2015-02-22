@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2012-02-03
- * Description : wrapper to help on lcms2 porting
+ * Description : LCMS2 wrapper
  *
- * Copyright (C) 2012 by Francesco Riosa <francesco+kde at pnpitalia dot it>
+ * Copyright (C) 2012      by Francesco Riosa <francesco+kde at pnpitalia dot it>
+ * Copyright (C) 2012-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,56 +25,7 @@
 #ifndef DIGIKAM_LCMS_H
 #define DIGIKAM_LCMS_H
 
-#include "digikam_config.h"
 #include "digikam_export.h"
-
-#if defined(USE_LCMS_VERSION_1000)
-
-#    ifndef LCMS_DLL
-#        define LCMS_DLL
-#    endif
-
-#    include <lcms.h>
-
-#    if LCMS_VERSION < 114
-#        define cmsTakeCopyright(profile) "Unknown"
-#    endif // LCMS_VERSION < 114
-
-#    define dkCmsCloseProfile            cmsCloseProfile
-#    define dkCmsCreateProofingTransform cmsCreateProofingTransform
-#    define dkCmsCreateTransform         cmsCreateTransform
-#    define dkCmsCreateXYZProfile        cmsCreateXYZProfile
-#    define dkCmsCreate_sRGBProfile      cmsCreate_sRGBProfile
-#    define dkCmsDeleteTransform         cmsDeleteTransform
-#    define dkCmsDeltaE                  cmsDeltaE
-#    define dkCmsDoTransform             cmsDoTransform
-#    define dkCmsErrorAction             cmsErrorAction
-#    define dkCmsFloat2XYZEncoded        cmsFloat2XYZEncoded
-#    define dkCmsGetColorSpace           cmsGetColorSpace
-#    define dkCmsGetDeviceClass          cmsGetDeviceClass
-#    define dkCmsGetPCS                  cmsGetPCS
-#    define dkCmsGetProfileICCversion    cmsGetProfileICCversion
-#    define dkCmsIsTag                   cmsIsTag
-#    define dkCmsOpenProfileFromFile     cmsOpenProfileFromFile
-#    define dkCmsOpenProfileFromMem      cmsOpenProfileFromMem
-#    define dkCmsSetAlarmCodes           cmsSetAlarmCodes
-#    define dkCmsTakeCopyright           cmsTakeCopyright
-#    define dkCmsTakeHeaderFlags         cmsTakeHeaderFlags
-#    define dkCmsTakeManufacturer        cmsTakeManufacturer
-#    define dkCmsTakeMediaWhitePoint     cmsTakeMediaWhitePoint
-#    define dkCmsTakeModel               cmsTakeModel
-#    define dkCmsTakeProductDesc         cmsTakeProductDesc
-#    define dkCmsTakeProductInfo         cmsTakeProductInfo
-#    define dkCmsTakeProductName         cmsTakeProductName
-#    define dkCmsTakeProfileID           cmsTakeProfileID
-#    define dkCmsTakeRenderingIntent     cmsTakeRenderingIntent
-#    define dkCmsXYZ2xyY                 cmsXYZ2xyY
-#    define dkCmsAdaptMatrixFromD50      cmsAdaptMatrixFromD50
-#    define dkCmsReadICCMatrixRGB2XYZ    cmsReadICCMatrixRGB2XYZ
-
-#endif // defined(USE_LCMS_VERSION_000)
-
-#if defined(USE_LCMS_VERSION_2000)
 
 #ifndef CMS_DLL
 #define CMS_DLL
@@ -81,15 +33,15 @@
 
 #include <lcms2.h>
 
-#define LCMS_DESC_MAX     512
+#define LCMS_DESC_MAX                    512
 
 #if !defined FAR 
 #  define FAR
 #endif
 
-#define LCMS_ERROR_SHOW     1
-#define cmsFLAGS_NOTPRECALC               0x0100
-#define cmsFLAGS_WHITEBLACKCOMPENSATION   0x2000
+#define LCMS_ERROR_SHOW                  1
+#define cmsFLAGS_NOTPRECALC              0x0100
+#define cmsFLAGS_WHITEBLACKCOMPENSATION  0x2000
 
 typedef int            LCMSBOOL;
 typedef unsigned char  BYTE,     *LPBYTE;
@@ -286,7 +238,5 @@ DIGIKAM_EXPORT LCMSBOOL                dkCmsIsTag(cmsHPROFILE hProfile, icTagSig
 DIGIKAM_EXPORT cmsHPROFILE             dkCmsOpenProfileFromFile(const char* const ICCProfile, const char* const sAccess);
 
 DIGIKAM_EXPORT void                    dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* const Source);
-
-#endif // defined(USE_LCMS_VERSION_2000)
 
 #endif // DIGIKAM_LCMS_H

@@ -69,7 +69,7 @@ target_link_libraries(showfoto
                       KF5::KIOCore
                       KF5::KDELibs4Support
 
-                      ${LCMS_LIBRARIES}
+                      ${LCMS2_LIBRARIES}
                       ${OpenCV_LIBRARIES}
 )
 

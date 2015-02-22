@@ -97,7 +97,6 @@ include(MacroJPEG)
 # ==================================================================================================
 
 option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
-option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           ON)
 option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  OFF)
 option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
 option(ENABLE_MEDIAPLAYER       "Build digiKam with QtMultimedia support (default=ON)"                            ON)
@@ -154,6 +153,7 @@ find_package(TIFF                   REQUIRED)
 find_package(PNG                    REQUIRED)
 find_package(PGF ${PGF_MIN_VERSION} REQUIRED)
 find_package(Boost                  REQUIRED)
+find_package(LCMS2                  REQUIRED)
 
 DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)
 DETECT_LIBKEXIV2(${KEXIV2_MIN_VERSION})
@@ -168,51 +168,6 @@ DETECT_LIBKGEOMAP(${KGEOMAP_MIN_VERSION})
 find_package(PkgConfig)
 find_package(Jasper)
 find_package(Eigen3)
-
-# -- LCMS version 1 and 2 library handling (See bug #294105) -------------------------------------
-# Note: if ENABLE_LCMS2 is on and no LCMS2 is available, build will fail, even if LCMS1 is present
-
-if(ENABLE_LCMS2)
-
-    message(STATUS "Check for LCMS2 availability...")
-    find_package(LCMS2)
-
-    if(LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
-
-        message(STATUS "Found LCMS2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
-        set(LCMS_FOUND ${LCMS2_FOUND})
-        set(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
-        set(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
-        set(USE_LCMS_VERSION_2000 1)
-
-    endif()
-
-else()
-
-    message(STATUS "Check for LCMS1 availability...")
-    find_package(LCMS)
-
-    if(LCMS_FOUND)
-
-        message(STATUS "Found LCMS1: ${LCMS_LIBRARIES} ${LCMS_INCLUDE_DIR}")
-        set(USE_LCMS_VERSION_1000 1)
-
-    else()
-
-        message(STATUS "Check for LCMS2 availability instead LCMS1...")
-        find_package(LCMS2)
-
-        if(LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
-            message(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
-            set(LCMS_FOUND ${LCMS2_FOUND})
-            set(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
-            set(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
-            set(USE_LCMS_VERSION_2000 1)
-        endif()
-
-    endif()
-
-endif()
 
 # For Monitor Profiles management with LCMS
 find_package(X11)
@@ -417,7 +372,7 @@ PRINT_LIBRARY_STATUS("libkde"                 "http://www.kde.org"              
 PRINT_LIBRARY_STATUS("libjpeg"                "http://www.ijg.org"                                               "(version >= 6b)"                    JPEG_FOUND)
 PRINT_LIBRARY_STATUS("libtiff"                "http://www.remotesensing.org/libtiff"                             "(version >= 3.8.2)"                 TIFF_FOUND)
 PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/libpng.html"                        "(version >= 1.2.7)"                 PNG_FOUND)
-PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                                         "(version >= 1.0.0)"                 LCMS_FOUND)
+PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                                         "(version >= 1.0.0)"                 LCMS2_FOUND)
 PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                                    "(version >= 1.43.0)"                Boost_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2" "(version >= ${KEXIV2_MIN_VERSION})" KF5KExiv2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw" "(version >= ${KDCRAW_MIN_VERSION})" KF5KDcraw_FOUND)
@@ -441,7 +396,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs" "http://pim.kde.org"              
 
 # ================================================================
 
-if(Qt5_FOUND AND KF5_FOUND AND JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS_FOUND AND Boost_FOUND AND KF5KExiv2_FOUND AND KF5KDcraw_FOUND AND PGF_FOUND AND OpenCV_FOUND)
+if(Qt5_FOUND AND KF5_FOUND AND JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS2_FOUND AND Boost_FOUND AND KF5KExiv2_FOUND AND KF5KDcraw_FOUND AND PGF_FOUND AND OpenCV_FOUND)
     message(STATUS " digiKam can be compiled.................. YES")
     set(DIGIKAM_CAN_BE_COMPILED true)
 else()
@@ -673,7 +628,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${JPEG_INCLUDE_DIR}
                         ${PNG_PNG_INCLUDE_DIR}
                         ${TIFF_INCLUDE_DIR}
-                        ${LCMS_INCLUDE_DIR}
+                        ${LCMS2_INCLUDE_DIR}
     )
 
     if(X11_FOUND)

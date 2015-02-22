@@ -92,7 +92,7 @@ kdelibs         >= 4.4.0                      http://www.kde.org
 libjpeg         >= 6b                         http://www.ijg.org
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng          >= 1.2.0                      http://www.libpng.org/pub/png/libpng.html
-liblcms         >= 1.0.0                      http://www.littlecms.com                                          liblcms >= 2.x compatible too.
+liblcms         >= 2.x                        http://www.littlecms.com
 libboostgraph   >= 1.43.0                     http://www.boost.org/doc/libs
 libkexiv2       >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
 libkdcraw       >= 2.2.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
@@ -119,7 +119,6 @@ Note: all library dependencies require development and binary packages installed
 
 CMake compilation options to custom digiKam:
 
-Use CMake "-DENABLE_LCMS2=on"             flag to compile digiKam source code using lcms2 instead lcms1                          (disabled by default).
 Use CMake "-DENABLE_BALOOSUPPORT=on"      flag to compile digiKam with Baloo support                                             (disabled by default).
 Use CMake "-DENABLE_KDEPIMLIBSSUPPORT=on" flag to compile digiKam with KdePimLibs support                                        (disabled by default).
 Use CMake "-DENABLE_MEDIAPLAYER"          flag to compile digiKam with QtMultimedia support                                      (enabled by default).

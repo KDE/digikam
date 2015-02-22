@@ -78,10 +78,6 @@
 /* Define to 1 if advanced image loader debug messages are enabled */
 #cmakedefine USE_IMGLOADERDEBUGMSG 1
 
-/* remember the lcms library version to use */
-#cmakedefine USE_LCMS_VERSION_1000 1
-#cmakedefine USE_LCMS_VERSION_2000 1
-
 /* Define to 1 if system use X11 */
 #cmakedefine HAVE_X11 1
 

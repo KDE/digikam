@@ -80,7 +80,7 @@ target_link_libraries(digikamcore
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}
-                      ${LCMS_LIBRARIES}
+                      ${LCMS2_LIBRARIES}
                       ${OpenCV_LIBRARIES}
                       ${PGF_LIBRARIES}
 
@@ -257,7 +257,7 @@ target_link_libraries(digikam
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
 
-                      ${LCMS_LIBRARIES}
+                      ${LCMS2_LIBRARIES}
 
                       digikamcore
                       digikamdatabase
