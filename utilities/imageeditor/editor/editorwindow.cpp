@@ -1971,6 +1971,7 @@ QString EditorWindow::selectValidSavingFormat(const QUrl& targetUrl)
     qCDebug(DIGIKAM_GENERAL_LOG) << "Qt Offered types: " << all;
 
     QStringList validTypes = all.split("*.", QString::SkipEmptyParts);
+    validTypes.replaceInStrings(QLatin1String(" "), QString());
     
     qCDebug(DIGIKAM_GENERAL_LOG) << "Writable formats: " << validTypes;
 
