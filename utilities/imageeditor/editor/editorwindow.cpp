@@ -2027,30 +2027,7 @@ bool EditorWindow::startingSaveAs(const QUrl& url)
 
     m_savingContext        = SavingContext();
     m_savingContext.srcURL = url;
-
-    // prepare the save dialog
-
-    QUrl suggested;
-
-    if (m_nonDestructive)
-    {
-        suggested = QUrl("kfiledialog:///digikam-image-export");
-        suggested = suggested.adjusted(QUrl::StripTrailingSlash);
-        suggested.setPath(suggested.path() + '/' + (url.fileName()));
-    }
-    else
-    {
-        if (m_savingContext.srcURL.isLocalFile())
-        {
-            suggested = m_savingContext.srcURL;
-        }
-        else
-        {
-            suggested = QUrl("kfiledialog:///digikam-image-saveas");
-            suggested = suggested.adjusted(QUrl::StripTrailingSlash);
-            suggested.setPath(suggested.path() + '/' + (url.fileName()));
-        }
-    }
+    QUrl suggested         = m_savingContext.srcURL;
 
     // Run dialog -------------------------------------------------------------------
 
