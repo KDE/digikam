@@ -68,8 +68,6 @@
 #include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
-#include <kfiledialog.h>
-#include <kfilefiltercombo.h>
 #include <kopenwithdialog.h>
 #include <kservice.h>
 #include <kservicetype.h>
@@ -1830,19 +1828,29 @@ void EditorWindow::startingSave(const QUrl& url)
 
 bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 {
-    FileSaveOptionsBox* const options         = new FileSaveOptionsBox();
-    QPointer<KFileDialog> imageFileSaveDialog = new KFileDialog(initialUrl, QString(), this, options);
-    options->setDialog(imageFileSaveDialog);
-
-    imageFileSaveDialog->setOperationMode(KFileDialog::Saving);
-    imageFileSaveDialog->setMode(KFile::File);
-    imageFileSaveDialog->setWindowTitle(i18n("New Image File Name"));
+    QString all;
+    QStringList list       = supportedImageMimeTypes(QIODevice::WriteOnly, all);
+    QFileDialog* const imageFileSaveDialog = new QFileDialog(this);
+    imageFileSaveDialog->setWindowTitle("New Image File Name");
+    imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
+    imageFileSaveDialog->setDirectoryUrl(initialUrl);
+    imageFileSaveDialog->setNameFilters(list);
+    imageFileSaveDialog->setOption(QFileDialog::DontUseNativeDialog);
+    imageFileSaveDialog->setFileMode(QFileDialog::ExistingFile);
 
     // restore old settings for the dialog
     KSharedConfig::Ptr config         = KSharedConfig::openConfig();
     KConfigGroup group                = config->group(configGroupName());
     const QString optionLastExtension = "LastSavedImageExtension";
     QString ext                       = group.readEntry(optionLastExtension, "png");
+    
+    Q_FOREACH(QString s, list)
+    {
+        if (s.contains(QString::fromLatin1("*.%1").arg(ext)))
+        {
+            imageFileSaveDialog->selectNameFilter(s);
+        }
+    }
 
     // adjust extension of proposed filename
     QString fileName                  = initialUrl.fileName();
@@ -1854,30 +1862,9 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         fileName                 = completeBaseName + QLatin1Char('.') + ext;
     }
 
-    QString autoFilter          = imageFileSaveDialog->filterWidget()->defaultFilter();
-    QStringList writablePattern = getWritingFilters();
-
-    if (writablePattern.first().count("*.") > 10) // try to verify it's the "All image files" filter
-    {
-        /*
-         * There is a problem with the All image files filter:
-         * The file dialog selects the first extension in the list, which is .xpm,
-         * and complete nonsense. So better live without that than default to .xpm!
-         */
-        writablePattern.removeFirst();
-    }
-
-    qSort(writablePattern);
-    writablePattern.prepend(autoFilter);
-    imageFileSaveDialog->setFilter(writablePattern.join(QChar('\n')));
-
-    // find the correct spelling of the auto filter
-    imageFileSaveDialog->filterWidget()->setCurrentFilter(autoFilter);
-    options->setAutoFilter(autoFilter);
-
     if (!fileName.isNull())
     {
-        imageFileSaveDialog->setSelection(fileName);
+        imageFileSaveDialog->selectFile(fileName);
     }
 
     // Start dialog and check if canceled.
@@ -1897,20 +1884,24 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         d->currentWindowModalDialog = 0;
     }
 
-    if (result != KFileDialog::Accepted || !imageFileSaveDialog)
+    if (result != QFileDialog::Accept || !imageFileSaveDialog)
     {
         return false;
     }
 
-    newURL = imageFileSaveDialog->selectedUrl();
+    QList<QUrl> urls = imageFileSaveDialog->selectedUrls();
+    if (urls.isEmpty())
+        return false;
+        
+    newURL = urls.first();
     qCDebug(DIGIKAM_GENERAL_LOG) << "Writing file to " << newURL;
 
-#ifdef _WIN32
     //-- Show Settings Dialog ----------------------------------------------
 
     const QString configShowImageSettingsDialog = "ShowImageSettingsDialog";
     bool showDialog                             = group.readEntry(configShowImageSettingsDialog, true);
-
+    FileSaveOptionsBox* const options           = new FileSaveOptionsBox();
+    
     if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE) != DImg::NONE)
     {
         FileSaveOptionsDlg* const fileSaveOptionsDialog = new FileSaveOptionsDlg(this, options);
@@ -1930,13 +1921,11 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
             d->currentWindowModalDialog = 0;
         }
 
-        if (result != KFileDialog::Accepted || !fileSaveOptionsDialog)
+        if (result != QFileDialog::Accept || !fileSaveOptionsDialog)
         {
             return false;
         }
     }
-
-#endif
 
     // write settings to config
     options->applySettings();
@@ -1944,7 +1933,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     applyIOSettings();
 
     // select the format to save the image with
-    m_savingContext.format = selectValidSavingFormat(imageFileSaveDialog->currentFilter(), newURL, autoFilter);
+    m_savingContext.format = selectValidSavingFormat(newURL);
 
     if (m_savingContext.format.isNull())
     {
@@ -1967,162 +1956,53 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     return true;
 }
 
-QStringList EditorWindow::getWritingFilters()
+QString EditorWindow::selectValidSavingFormat(const QUrl& targetUrl)
 {
-    // begin with the filters Qt supports
-    QString all;
-    QStringList writablePattern = supportedImageMimeTypes(QIODevice::WriteOnly, all);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "KImageIO offered pattern: " << writablePattern;
-
-    // append custom file types
-
-#ifdef HAVE_JASPER
-    if (!writablePattern.contains("*.jp2"))
-    {
-        writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
-    }
-#endif // HAVE_JASPER
-
-    if (!writablePattern.contains("*.pgf"))
-    {
-        writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
-    }
-
-    return writablePattern;
-}
-
-QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const QString& extension)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Searching for a filter with extension '" << extension
-             << "' in: " << allFilters;
-
-    const QString filterExtension = QString("*.%1").arg(extension.toLower());
-
-    foreach(const QString& filter, allFilters)
-    {
-
-        if (filter.contains(filterExtension))
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Found filter '" << filter << "'";
-            return filter;
-        }
-
-    }
-
-    // fall back to "all image types"
-    if (!allFilters.empty() && allFilters.first().contains(filterExtension))
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "using fall back all images filter: " << allFilters.first();
-        return allFilters.first();
-    }
-
-    return QString();
-}
-
-QString EditorWindow::getExtensionFromFilter(const QString& filter)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to extract format from filter: " << filter;
-
-    // find locations of interesting characters in the filter string
-    const int asteriskLocation = filter.indexOf('*');
-
-    if (asteriskLocation < 0)
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Could not find a * in the filter";
-        return QString();
-    }
-
-    int endLocation = filter.indexOf(QRegExp("[|\\* ]"), asteriskLocation + 1);
-
-    if (endLocation < 0)
-    {
-        endLocation = filter.length();
-    }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "astriskLocation = " << asteriskLocation
-             << ", endLocation = " << endLocation;
-
-    // extract extension with the locations found above
-    QString formatString = filter;
-    formatString.remove(0, asteriskLocation + 2);
-    formatString         = formatString.left(endLocation - asteriskLocation - 2);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Extracted format " << formatString;
-    return formatString;
-}
-
-QString EditorWindow::selectValidSavingFormat(const QString& filter,
-                                              const QUrl& targetUrl, const QString& autoFilter)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to find a saving format with filter = "
-             << filter << ", targetUrl = " << targetUrl << ", autoFilter" << autoFilter;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to find a saving format from targetUrl = " << targetUrl;
 
     // build a list of valid types
     QString all;
-    QStringList validTypes = supportedImageMimeTypes(QIODevice::WriteOnly, all);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Qt Offered types: " << validTypes;
+    supportedImageMimeTypes(QIODevice::WriteOnly, all);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Qt Offered types: " << all;
 
-    validTypes << "TIF";
-    validTypes << "TIFF";
-    validTypes << "JPG";
-    validTypes << "JPEG";
-    validTypes << "JPE";
-    validTypes << "PGF";
-#ifdef HAVE_JASPER
-    validTypes << "J2K";
-    validTypes << "JP2";
-#endif // HAVE_JASPER
+    QStringList validTypes = all.split("*.", QString::SkipEmptyParts);
+    
     qCDebug(DIGIKAM_GENERAL_LOG) << "Writable formats: " << validTypes;
 
-    // if the auto filter is used, use the format provided in the filename
-    if (filter == autoFilter || filter == autoFilter.section('|', 0, 0))
+    // determine the format to use the format provided in the filename
+
+    QString suffix;
+
+    if (targetUrl.isLocalFile())
     {
-        QString suffix;
-
-        if (targetUrl.isLocalFile())
-        {
-            // for local files QFileInfo can be used
-            QFileInfo fi(targetUrl.toLocalFile());
-            suffix = fi.suffix();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Possible format from local file: " << suffix;
-        }
-        else
-        {
-            // for remote files string manipulation is needed unfortunately
-            QString fileName = targetUrl.fileName();
-            const int periodLocation = fileName.lastIndexOf('.');
-
-            if (periodLocation >= 0)
-            {
-                suffix = fileName.right(fileName.size() - periodLocation - 1);
-            }
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Possible format from remote file: " << suffix;
-        }
-
-        if (!suffix.isEmpty() && validTypes.contains(suffix, Qt::CaseInsensitive))
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Using format from target url " << suffix;
-            return suffix;
-        }
+        // for local files QFileInfo can be used
+        QFileInfo fi(targetUrl.toLocalFile());
+        suffix = fi.suffix();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Possible format from local file: " << suffix;
     }
     else
     {
-        // use extension from the filter
+        // for remote files string manipulation is needed unfortunately
+        QString fileName         = targetUrl.fileName();
+        const int periodLocation = fileName.lastIndexOf('.');
 
-        QString filterExtension = getExtensionFromFilter(filter);
-
-        if (!filterExtension.isEmpty() &&
-            validTypes.contains(filterExtension, Qt::CaseInsensitive))
+        if (periodLocation >= 0)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Using format from filter extension: " << filterExtension;
-            return filterExtension;
+            suffix = fileName.right(fileName.size() - periodLocation - 1);
         }
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Possible format from remote file: " << suffix;
+    }
+
+    if (!suffix.isEmpty() && validTypes.contains(suffix, Qt::CaseInsensitive))
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Using format from target url " << suffix;
+        return suffix;
     }
 
     // another way to determine the format is to use the original file
     {
-        QString originalFormat(QImageReader::imageFormat(
-                                   m_savingContext.srcURL.toLocalFile()));
+        QString originalFormat(QImageReader::imageFormat(m_savingContext.srcURL.toLocalFile()));
 
         if (validTypes.contains(originalFormat, Qt::CaseInsensitive))
         {
@@ -2145,7 +2025,7 @@ bool EditorWindow::startingSaveAs(const QUrl& url)
         return false;
     }
 
-    m_savingContext = SavingContext();
+    m_savingContext        = SavingContext();
     m_savingContext.srcURL = url;
 
     // prepare the save dialog

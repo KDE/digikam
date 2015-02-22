@@ -135,7 +135,7 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
     formats << i18n("Progressive Graphics file (*.pgf)");
     allTypes.append(QLatin1String("*.pgf "));
 
-    if (mode)
+    if (mode != QIODevice::WriteOnly)
     {
         formats << i18n("Raw Images (%1)").arg(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
         allTypes.append(QLatin1String(KDcrawIface::KDcraw::rawFiles()));

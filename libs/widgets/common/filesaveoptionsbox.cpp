@@ -248,7 +248,7 @@ void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename, DImg::FORMAT fallback)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to discover format based on filename '" << filename
-             << "', fallback = " << fallback;
+                                 << "', fallback = " << fallback;
 
     QStringList splitParts = filename.split('.');
     QString ext;
@@ -256,7 +256,7 @@ DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename, DImg::F
     if (splitParts.size() < 2)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "filename '" << filename
-                 << "' does not contain an extension separated by a point.";
+                                     << "' does not contain an extension separated by a point.";
         ext = filename;
     }
     else

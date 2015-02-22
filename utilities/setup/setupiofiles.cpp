@@ -61,12 +61,8 @@ public:
 #ifdef HAVE_JASPER
         JPEG2000Options(0),
 #endif // HAVE_JASPER
-        PGFOptions(0)
-
-#ifdef _WIN32
-        ,
+        PGFOptions(0),
         showImageSettingsDialog(0)
-#endif
     {}
 
 
@@ -90,7 +86,8 @@ public:
     static const QString configJPEG2000LossLessEntry;
     static const QString configPGFCompressionEntry;
     static const QString configPGFLossLessEntry;
-
+    static const QString configShowImageSettingsDialog;
+    
     JPEGSettings*        JPEGOptions;
     PNGSettings*         PNGOptions;
     TIFFSettings*        TIFFOptions;
@@ -98,11 +95,8 @@ public:
     JP2KSettings*        JPEG2000Options;
 #endif // HAVE_JASPER
     PGFSettings*         PGFOptions;
-
-#ifdef _WIN32
-    static const QString configShowImageSettingsDialog;
+    
     QCheckBox*           showImageSettingsDialog;
-#endif
 };
 
 const QString SetupIOFiles::Private::configGroupName("ImageViewer Settings");
@@ -114,10 +108,7 @@ const QString SetupIOFiles::Private::configJPEG2000CompressionEntry("JPEG2000Com
 const QString SetupIOFiles::Private::configJPEG2000LossLessEntry("JPEG2000LossLess");
 const QString SetupIOFiles::Private::configPGFCompressionEntry("PGFCompression");
 const QString SetupIOFiles::Private::configPGFLossLessEntry("PGFLossLess");
-
-#ifdef _WIN32
 const QString SetupIOFiles::Private::configShowImageSettingsDialog("ShowImageSettingsDialog");
-#endif
 
 // --------------------------------------------------------
 
@@ -134,14 +125,12 @@ SetupIOFiles::SetupIOFiles(QWidget* const parent)
 #endif // HAVE_JASPER
     d->PGFOptions           = new PGFSettings;
 
-#ifdef _WIN32
     // Show Settings Dialog Option
 
     d->showImageSettingsDialog = new QCheckBox(panel);
     d->showImageSettingsDialog->setText(i18n("Show Settings Dialog when Saving Image Files"));
     d->showImageSettingsDialog->setWhatsThis(i18n("<ul><li>Checked: A dialog where settings can be changed when saving image files</li>"
                                                   "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
-#endif
 
     vbox->addWidget(d->createGroupBox(d->JPEGOptions));
     vbox->addWidget(d->createGroupBox(d->PNGOptions));
@@ -150,9 +139,7 @@ SetupIOFiles::SetupIOFiles(QWidget* const parent)
     vbox->addWidget(d->createGroupBox(d->JPEG2000Options));
 #endif // HAVE_JASPER
     vbox->addWidget(d->createGroupBox(d->PGFOptions));
-#ifdef _WIN32
     vbox->addWidget(d->createGroupBox(d->showImageSettingsDialog));
-#endif
     vbox->addStretch();
 
     panel->setLayout(vbox);
@@ -185,9 +172,7 @@ void SetupIOFiles::applySettings()
 #endif // HAVE_JASPER
     group.writeEntry(d->configPGFCompressionEntry,      d->PGFOptions->getCompressionValue());
     group.writeEntry(d->configPGFLossLessEntry,         d->PGFOptions->getLossLessCompression());
-#ifdef _WIN32
     group.writeEntry(d->configShowImageSettingsDialog,  d->showImageSettingsDialog->isChecked());
-#endif
     config->sync();
 }
 
@@ -205,9 +190,7 @@ void SetupIOFiles::readSettings()
 #endif // HAVE_JASPER
     d->PGFOptions->setCompressionValue(group.readEntry(d->configPGFCompressionEntry,           3));
     d->PGFOptions->setLossLessCompression(group.readEntry(d->configPGFLossLessEntry,           true));
-#ifdef _WIN32
     d->showImageSettingsDialog->setChecked(group.readEntry(d->configShowImageSettingsDialog,   true));
-#endif
 }
 
 }  // namespace Digikam

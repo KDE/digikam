@@ -368,44 +368,14 @@ private:
     void setupTempSaveFile(const QUrl& url);
 
     /**
-     * Returns a list of filters that can be passed to a QFileDialog for all
-     * writable image types.
-     *
-     * @return list of filters for QFileDialog
-     */
-    QStringList getWritingFilters();
-
-    /**
-     * Find the QFileDialog filter that belongs to an extension.
-     *
-     * @param allFilters list with all filters
-     * @param extension the extension to search for
-     * @return filter string or empty string if not found
-     */
-    QString findFilterByExtension(const QStringList& allFilters,
-                                  const QString& extension);
-
-    /**
-     * Tries to extract a file extension from a QFileDialog filter.
-     *
-     * @param filter to extract the file extension from
-     * @return file extension found in the filter or an empty string if no
-     *         extension was found
-     */
-    QString getExtensionFromFilter(const QString& filter);
-
-    /**
      * Sets the format to use in the saving context. Therefore multiple sources
      * are used starting with the extension found in the save dialog.
      *
      * @param filter filter selected in the dialog
      * @param targetUrl target url selected for the file to save
-     * @param autoFilter filter that indicates automatic format selection
      * @return The valid extension which could be found, or a null string
      */
-    QString selectValidSavingFormat(const QString& filter,
-                                    const QUrl& targetUrl,
-                                    const QString& autoFilter);
+    QString selectValidSavingFormat(const QUrl& targetUrl);
 
     void movingSaveFileFinished(bool successful);
 
