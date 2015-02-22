@@ -32,7 +32,6 @@
 // KDE includes
 
 #include <kxmlguiclient.h>
-#include <klibloader.h>
 
 // Local includes
 

@@ -32,7 +32,6 @@
 // KDE includes
 
 #include <kservicetypetrader.h>
-#include <klibloader.h>
 #include <klocalizedstring.h>
 #include <kxmlguiclient.h>
 
@@ -96,9 +95,9 @@ public:
     {
         splash = 0;
 
-        for (int i = 0 ; QString(ObsoleteImagePluginsList[i]) != QString("-1") ; ++i)
+        for (int i = 0 ; QLatin1String(ObsoleteImagePluginsList[i]) != QLatin1String("-1") ; ++i)
         {
-            obsoleteImagePluginsList << ObsoleteImagePluginsList[i];
+            obsoleteImagePluginsList << QLatin1String(ObsoleteImagePluginsList[i]);
         }
     }
 
@@ -130,7 +129,7 @@ ImagePluginLoader::ImagePluginLoader(QObject* const parent, SplashScreen* const 
 {
     m_instance                  = this;
     d->splash                   = splash;
-    const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
+    const KService::List offers = KServiceTypeTrader::self()->query(QLatin1String("Digikam/ImagePlugin"));
 
     foreach(const KService::Ptr& service, offers)
     {

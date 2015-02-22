@@ -35,7 +35,7 @@ namespace Digikam
 ImagePlugin::ImagePlugin(QObject* const parent, const char* name)
     : QObject(parent)
 {
-    setObjectName(name);
+    setObjectName(QLatin1String(name));
 }
 
 ImagePlugin::~ImagePlugin()
@@ -72,7 +72,7 @@ QString ImagePlugin::actionCategory() const
 
     if (val.isNull() || val.isEmpty())
     {
-        val = QString("__INVALID__");
+        val = QLatin1String("__INVALID__");
     }
 
     return val;
@@ -82,7 +82,7 @@ void ImagePlugin::setActionCategory(const QString& cat)
 {
     QString val = actionCategory();
 
-    if (val == QString("__INVALID__"))
+    if (val == QLatin1String("__INVALID__"))
     {
          setProperty("ActionCategory", cat);
     }
