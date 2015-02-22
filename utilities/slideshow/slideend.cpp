@@ -61,14 +61,14 @@ SlideEnd::SlideEnd(QWidget* const parent)
 
     QPixmap logo;
 
-    if (QApplication::applicationName() == QString("digikam"))
+    if (QApplication::applicationName() == QLatin1String("digikam"))
     {
-        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                 .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
     else
     {
-        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
+        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/logo-showfoto.png")))
                 .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 

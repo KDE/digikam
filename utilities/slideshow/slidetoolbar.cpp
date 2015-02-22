@@ -87,10 +87,10 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
     d->nextBtn->setFocusPolicy(Qt::NoFocus);
     d->stopBtn->setFocusPolicy(Qt::NoFocus);
 
-    d->playBtn->setIcon(QIcon::fromTheme("media-playback-pause"));
-    d->prevBtn->setIcon(QIcon::fromTheme("media-skip-backward"));
-    d->nextBtn->setIcon(QIcon::fromTheme("media-skip-forward"));
-    d->stopBtn->setIcon(QIcon::fromTheme("media-playback-stop"));
+    d->playBtn->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
+    d->prevBtn->setIcon(QIcon::fromTheme(QLatin1String("media-skip-backward")));
+    d->nextBtn->setIcon(QIcon::fromTheme(QLatin1String("media-skip-forward")));
+    d->stopBtn->setIcon(QIcon::fromTheme(QLatin1String("media-playback-stop")));
 
     int num = d->desktop->numScreens();
 
@@ -98,8 +98,8 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
     {
         d->screenSelectBtn      = new QToolButton(this);
         QMenu* const screenMenu = new QMenu(d->screenSelectBtn);
-        d->screenSelectBtn->setToolTip( i18n("Switch Screen"));
-        d->screenSelectBtn->setIcon(QIcon::fromTheme("video-display"));
+        d->screenSelectBtn->setToolTip(i18n("Switch Screen"));
+        d->screenSelectBtn->setIcon(QIcon::fromTheme(QLatin1String("video-display")));
         d->screenSelectBtn->setMenu(screenMenu);
         d->screenSelectBtn->setPopupMode(QToolButton::InstantPopup);
         d->screenSelectBtn->setFocusPolicy(Qt::NoFocus);
@@ -181,12 +181,12 @@ void SlideToolBar::slotPlayBtnToggled()
 {
     if (d->playBtn->isChecked())
     {
-        d->playBtn->setIcon(QIcon::fromTheme("media-playback-start"));
+        d->playBtn->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
         emit signalPause();
     }
     else
     {
-        d->playBtn->setIcon(QIcon::fromTheme("media-playback-pause"));
+        d->playBtn->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
         emit signalPlay();
     }
 }
@@ -196,7 +196,7 @@ void SlideToolBar::slotNexPrevClicked()
     if (!d->playBtn->isChecked())
     {
         d->playBtn->setChecked(true);
-        d->playBtn->setIcon(QIcon::fromTheme("media-playback-start"));
+        d->playBtn->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
         emit signalPause();
     }
 }

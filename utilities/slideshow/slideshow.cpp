@@ -376,9 +376,11 @@ void SlideShow::slotMouseMoveTimeOut()
 // TODO: Add OSX and Windows support
 void SlideShow::inhibitScreenSaver()
 {
-    QDBusMessage message = QDBusMessage::createMethodCall("org.freedesktop.ScreenSaver", "/ScreenSaver",
-                                                          "org.freedesktop.ScreenSaver", "Inhibit");
-    message << QString("digiKam");
+    QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.ScreenSaver"),
+                                                          QLatin1String("/ScreenSaver"),
+                                                          QLatin1String("org.freedesktop.ScreenSaver"),
+                                                          QLatin1String("Inhibit"));
+    message << QLatin1String("digiKam");
     message << i18nc("Reason for inhibiting the screensaver activation, when the presentation mode is active", "Giving a slideshow");
 
     QDBusReply<uint> reply = QDBusConnection::sessionBus().call(message);
@@ -393,8 +395,10 @@ void SlideShow::allowScreenSaver()
 {
     if (d->screenSaverCookie != -1)
     {
-        QDBusMessage message = QDBusMessage::createMethodCall("org.freedesktop.ScreenSaver", "/ScreenSaver",
-                                                              "org.freedesktop.ScreenSaver", "UnInhibit");
+        QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.ScreenSaver"),
+                                                              QLatin1String("/ScreenSaver"),
+                                                              QLatin1String("org.freedesktop.ScreenSaver"),
+                                                              QLatin1String("UnInhibit"));
         message << (uint)d->screenSaverCookie;
         QDBusConnection::sessionBus().send(message);
     }

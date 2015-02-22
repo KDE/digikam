@@ -48,41 +48,41 @@ SlideHelp::SlideHelp()
     // -------------------------------------------------------------------------------------------------------------------
 
     QLabel* const label = new QLabel(this);
-    label->setText("<qt>"
-                   "<table>"
-                        "<tr><td colspan=\"2\"><nobr><center><b>"
-                        "<h1>Image Access</h1>"
-                        "</b></center></nobr></td></tr>"
+    label->setText(i18n("<qt>"
+                        "<table>"
+                                "<tr><td colspan=\"2\"><nobr><center><b>"
+                                "<h1>Image Access</h1>"
+                                "</b></center></nobr></td></tr>"
 
-                            "<tr><td>Previous image:</td>"     "<td><i>Up</i> key</td></tr>"
-                            "<tr><td></td>"                    "<td><i>PgUp</i key</td>"
-                            "<tr><td></td>"                    "<td><i>Left</i> key</td>"
-                            "<tr><td></td>"                    "<td>Mouse wheel up</td>"
-                            "<tr><td></td>"                    "<td>Left mouse button</td>"
-                            "<tr><td>Next image:</td>"         "<td><i>Down</i> key</td></tr>"
-                            "<tr><td></td>"                    "<td><i>PgDown</i key</td>"
-                            "<tr><td></td>"                    "<td><i>Right</i> key</td>"
-                            "<tr><td></td>"                    "<td>Mouse wheel down</td>"
-                            "<tr><td></td>"                    "<td>Right mouse button</td>"
-                            "<tr><td>Pause/Start:</td>"        "<td><i>Space</i> key</td></tr>"
-                            "<tr><td>Quit:</td>"               "<td><i>Esc</i> key<td></tr>"
+                                    "<tr><td>Previous image:</td>"     "<td><i>Up</i> key</td></tr>"
+                                    "<tr><td></td>"                    "<td><i>PgUp</i key</td>"
+                                    "<tr><td></td>"                    "<td><i>Left</i> key</td>"
+                                    "<tr><td></td>"                    "<td>Mouse wheel up</td>"
+                                    "<tr><td></td>"                    "<td>Left mouse button</td>"
+                                    "<tr><td>Next image:</td>"         "<td><i>Down</i> key</td></tr>"
+                                    "<tr><td></td>"                    "<td><i>PgDown</i key</td>"
+                                    "<tr><td></td>"                    "<td><i>Right</i> key</td>"
+                                    "<tr><td></td>"                    "<td>Mouse wheel down</td>"
+                                    "<tr><td></td>"                    "<td>Right mouse button</td>"
+                                    "<tr><td>Pause/Start:</td>"        "<td><i>Space</i> key</td></tr>"
+                                    "<tr><td>Quit:</td>"               "<td><i>Esc</i> key<td></tr>"
 
-                        "<tr><td colspan=\"2\"><nobr><center><b>"
-                        "<h1>Image Properties</h1>"
-                        "</b></center></nobr></td></tr>"
+                                "<tr><td colspan=\"2\"><nobr><center><b>"
+                                "<h1>Image Properties</h1>"
+                                "</b></center></nobr></td></tr>"
 
-                            "<tr><td>Change Tags:</td>"        "<td>Use Tags keyboard shortcuts</td></tr>"
-                            "<tr><td>Change Rating:</td>"      "<td>Use Rating keyboard shortcuts</td></tr>"
-                            "<tr><td>Change Color Label:</td>" "<td>Use Color label keyboard shortcuts</td></tr>"
-                            "<tr><td>Change Pick Label:</td>"  "<td>Use Pick label keyboard shortcuts</td></tr>"
+                                    "<tr><td>Change Tags:</td>"        "<td>Use Tags keyboard shortcuts</td></tr>"
+                                    "<tr><td>Change Rating:</td>"      "<td>Use Rating keyboard shortcuts</td></tr>"
+                                    "<tr><td>Change Color Label:</td>" "<td>Use Color label keyboard shortcuts</td></tr>"
+                                    "<tr><td>Change Pick Label:</td>"  "<td>Use Pick label keyboard shortcuts</td></tr>"
 
-                        "<tr><td colspan=\"2\"><nobr><center><b>"
-                        "<h1>Others</h1>"
-                        "</b></center></nobr></td></tr>"
+                                "<tr><td colspan=\"2\"><nobr><center><b>"
+                                "<h1>Others</h1>"
+                                "</b></center></nobr></td></tr>"
 
-                            "<tr><td>Show this help:</td>"     "<td><i>F1</i> key</td></tr>"
-                   "</table>"
-                   "</qt>");
+                                    "<tr><td>Show this help:</td>"     "<td><i>F1</i> key</td></tr>"
+                        "</table>"
+                        "</qt>"));
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(label);

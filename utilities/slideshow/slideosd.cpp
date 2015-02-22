@@ -304,7 +304,7 @@ void SlideOSD::slotSlideTimer()
 
 void SlideOSD::slotProgressTimer()
 {
-    QString str = QString("(%1/%2)")
+    QString str = QString::fromUtf8("(%1/%2)")
                     .arg(QString::number(d->settings.fileList.indexOf(d->parent->currentItem()) + 1))
                     .arg(QString::number(d->settings.fileList.count()));
 

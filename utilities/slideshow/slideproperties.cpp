@@ -150,7 +150,7 @@ void SlideProperties::paintEvent(QPaintEvent*)
         {
             if (!photoInfo.make.isEmpty())
             {
-                str += QString(" / ");
+                str += QLatin1String(" / ");
             }
 
             ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
@@ -175,7 +175,7 @@ void SlideProperties::paintEvent(QPaintEvent*)
         {
             if (!photoInfo.exposureTime.isEmpty())
             {
-                str += QString(" / ");
+                str += QLatin1String(" / ");
             }
 
             str += i18n("%1 ISO", photoInfo.sensitivity);
@@ -201,7 +201,7 @@ void SlideProperties::paintEvent(QPaintEvent*)
             {
                 if (!photoInfo.aperture.isEmpty())
                 {
-                    str += QString(" / ");
+                    str += QLatin1String(" / ");
                 }
 
                 str += photoInfo.focalLength;
@@ -211,16 +211,16 @@ void SlideProperties::paintEvent(QPaintEvent*)
         {
             if (!photoInfo.aperture.isEmpty())
             {
-                str += QString(" / ");
+                str += QLatin1String(" / ");
             }
 
             if (!photoInfo.focalLength.isEmpty())
             {
-                str += QString("%1 (%2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
+                str += QString::fromUtf8("%1 (%2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
             }
             else
             {
-                str += QString("%1").arg(photoInfo.focalLength35mm);
+                str += QString::fromUtf8("%1").arg(photoInfo.focalLength35mm);
             }
         }
 
@@ -285,7 +285,7 @@ void SlideProperties::printComments(QPainter& p, int& offset, const QString& com
         for (currIndex = commentsIndex ;
              currIndex < (uint)comments.length() && !breakLine ; ++currIndex)
         {
-            if (comments.at(currIndex) == QChar('\n') || comments.at(currIndex).isSpace())
+            if (comments.at(currIndex) == QLatin1Char('\n') || comments.at(currIndex).isSpace())
             {
                 breakLine = true;
             }
@@ -303,11 +303,11 @@ void SlideProperties::printComments(QPainter& p, int& offset, const QString& com
              currIndex < (uint)comments.length() && !breakLine ;
              ++currIndex)
         {
-            breakLine = (comments.at(currIndex) == QChar('\n')) ? true : false;
+            breakLine = (comments.at(currIndex) == QLatin1Char('\n')) ? true : false;
 
             if (breakLine)
             {
-                newLine.append(QString(" "));
+                newLine.append(QLatin1String(" "));
             }
             else
             {
@@ -319,7 +319,7 @@ void SlideProperties::printComments(QPainter& p, int& offset, const QString& com
 
         if (commentsIndex != (uint)comments.length())
         {
-            while (!newLine.endsWith(' '))
+            while (!newLine.endsWith(QLatin1Char(' ')))
             {
                 newLine.truncate(newLine.length() - 1);
                 --commentsIndex;
@@ -339,7 +339,7 @@ void SlideProperties::printTags(QPainter& p, int& offset, QStringList& tags)
 {
     tags.sort();
 
-    QString str = tags.join(", ");
+    QString str = tags.join(QLatin1String(", "));
 
     if (!str.isEmpty())
     {
