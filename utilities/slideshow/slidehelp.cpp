@@ -6,7 +6,7 @@
  * Date        : 2014-10-05
  * Description : slideshow help dialog
  *
- * Copyright (C) 2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,8 @@ SlideHelp::SlideHelp()
     // -------------------------------------------------------------------------------------------------------------------
 
     QLabel* const label = new QLabel(this);
-    label->setText("<qt>"
+    label->setText(i18n(
+                   "<qt>"
                    "<table>"
                         "<tr><td colspan=\"2\"><nobr><center><b>"
                         "<h1>Image Access</h1>"
@@ -78,7 +79,7 @@ SlideHelp::SlideHelp()
 
                             "<tr><td>Show this help:</td>"     "<td><i>F1</i> key</td></tr>"
                    "</table>"
-                   "</qt>");
+                   "</qt>"));
 
     setMainWidget(label);
 
