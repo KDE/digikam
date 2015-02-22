@@ -78,17 +78,17 @@ public:
 public:
 
     Private() :
-        optionGroupName("RAW Import Settings"),
-        optionHistogramChannelEntry("Histogram Channel"),
-        optionHistogramScaleEntry("Histogram Scale"),
-        optionBrightnessEntry("Brightness"),
-        optionContrastEntry("Contrast"),
-        optionGammaEntry("Gamma"),
-        optionSaturationEntry("Saturation"),
-        optionMainExposureEntry("MainExposure"),
-        optionCurvePrefix("RawCurve"),
-        optionSettingsPageEntry("Settings Page"),
-        optionDecodingSettingsTabEntry("Decoding Settings Tab")
+        optionGroupName(QLatin1String("RAW Import Settings")),
+        optionHistogramChannelEntry(QLatin1String("Histogram Channel")),
+        optionHistogramScaleEntry(QLatin1String("Histogram Scale")),
+        optionBrightnessEntry(QLatin1String("Brightness")),
+        optionContrastEntry(QLatin1String("Contrast")),
+        optionGammaEntry(QLatin1String("Gamma")),
+        optionSaturationEntry(QLatin1String("Saturation")),
+        optionMainExposureEntry(QLatin1String("MainExposure")),
+        optionCurvePrefix(QLatin1String("RawCurve")),
+        optionSettingsPageEntry(QLatin1String("Settings Page")),
+        optionDecodingSettingsTabEntry(QLatin1String("Decoding Settings Tab"))
     {
         infoBox                = 0;
         advExposureBox         = 0;
@@ -173,7 +173,7 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     QGridLayout* const rawGrid      = new QGridLayout(d->rawdecodingBox);
     d->decodingSettingsBox          = new DcrawSettingsWidget(d->rawdecodingBox,
                                                               DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
-    d->decodingSettingsBox->setObjectName("RawSettingsBox Expander");
+    d->decodingSettingsBox->setObjectName(QLatin1String("RawSettingsBox Expander"));
 
     // Note: do not touch the url edit's fileDialog() here.
     // This creates the file dialog, which involved an event loop, which is evil.
@@ -181,13 +181,13 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     d->abortBtn  = new QPushButton(d->rawdecodingBox);
     d->abortBtn->setText(i18n("Abort"));
-    d->abortBtn->setIcon(QIcon::fromTheme("dialog-cancel"));
+    d->abortBtn->setIcon(QIcon::fromTheme(QLatin1String("dialog-cancel")));
     d->abortBtn->setEnabled(false);
     d->abortBtn->setToolTip(i18n("Abort the current Raw image preview."));
 
     d->updateBtn = new QPushButton(d->rawdecodingBox);
     d->updateBtn->setText(i18n("Update"));
-    d->updateBtn->setIcon(QIcon::fromTheme("view-refresh"));
+    d->updateBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
     d->updateBtn->setEnabled(false);
     d->updateBtn->setToolTip(i18n("Generate a Raw image preview using current settings."));
 
@@ -201,7 +201,7 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     // - Post-processing view --------------------------------------------------------------
 
     d->postProcessSettingsBox            = new RExpanderBox(d->tabView);
-    d->postProcessSettingsBox->setObjectName("PostProcessingSettingsBox Expander");
+    d->postProcessSettingsBox->setObjectName(QLatin1String("PostProcessingSettingsBox Expander"));
 
     d->advExposureBox                    = new QWidget(d->postProcessSettingsBox);
     QGridLayout* const advExposureLayout = new QGridLayout(d->advExposureBox);
@@ -269,7 +269,7 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     d->curveWidget->setWhatsThis(i18n("This is the curve adjustment of the image luminosity"));
 
     d->resetCurveBtn   = new QPushButton(i18n("Reset"), d->curveBox);
-    d->resetCurveBtn->setIcon(QIcon::fromTheme("document-revert"));
+    d->resetCurveBtn->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->resetCurveBtn->setToolTip(i18n("Reset curve to linear"));
 
     QLabel* const spaceh                 = new QLabel(d->curveBox);
@@ -291,10 +291,10 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"),         QString("exposure"), true);
-    d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Luminosity Curve"), QString("luminositycurve"), false);
-    d->postProcessSettingsBox->setItemIcon(0, QIcon::fromTheme("contrast"));
-    d->postProcessSettingsBox->setItemIcon(1, QIcon::fromTheme("adjustcurves"));
+    d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"),         QLatin1String("exposure"), true);
+    d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Luminosity Curve"), QLatin1String("luminositycurve"), false);
+    d->postProcessSettingsBox->setItemIcon(0, QIcon::fromTheme(QLatin1String("contrast")));
+    d->postProcessSettingsBox->setItemIcon(1, QIcon::fromTheme(QLatin1String("adjustcurves")));
     d->postProcessSettingsBox->addStretch();
 
     // - Image info view --------------------------------------------------------------
@@ -304,10 +304,10 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     QIcon::fromTheme("kdcraw"));
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::WHITEBALANCE,    QIcon::fromTheme("whitebalance"));
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::CORRECTIONS,     QIcon::fromTheme("lensdistortion"));
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::COLORMANAGEMENT, QIcon::fromTheme("colormanagement"));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     QIcon::fromTheme(QLatin1String("kdcraw")));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::WHITEBALANCE,    QIcon::fromTheme(QLatin1String("whitebalance")));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::CORRECTIONS,     QIcon::fromTheme(QLatin1String("lensdistortion")));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::COLORMANAGEMENT, QIcon::fromTheme(QLatin1String("colormanagement")));
     d->decodingSettingsBox->updateMinimumWidth();
 
     d->tabView->insertTab(0, d->rawdecodingBox,         i18n("Raw Decoding"));
@@ -317,15 +317,15 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     // ---------------------------------------------------------------
 
     button(Default)->setText(i18n("Reset"));
-    button(Default)->setIcon(QIcon::fromTheme("document-revert"));
+    button(Default)->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     button(Default)->setToolTip(i18n("Reset all settings to default values."));
 
     button(Ok)->setText(i18n("Import"));
-    button(Ok)->setIcon(QIcon::fromTheme("dialog-ok"));
+    button(Ok)->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok")));
     button(Ok)->setToolTip(i18n("Import image to editor using current settings."));
 
     button(Cancel)->setText(i18n("Use Default"));
-    button(Cancel)->setIcon(QIcon::fromTheme("go-home"));
+    button(Cancel)->setIcon(QIcon::fromTheme(QLatin1String("go-home")));
     button(Cancel)->setToolTip(i18n("Use general Raw decoding settings to load this image in editor."));
 
     // ---------------------------------------------------------------

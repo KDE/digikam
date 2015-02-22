@@ -143,7 +143,7 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWi
     foreach (const QUrl& url, urls)
     {
         const QString mimeType = QMimeDatabase().mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension).name();
-        KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
+        KService::List offers  = KMimeTypeTrader::self()->query(mimeType, QLatin1String("Application"));
 
         if (offers.isEmpty())
         {
@@ -193,7 +193,7 @@ KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
     {
         // Query trader
         const QString firstMimeType      = mimeTypes.takeFirst();
-        const QString constraintTemplate = "'%1' in ServiceTypes";
+        const QString constraintTemplate = QLatin1String("'%1' in ServiceTypes");
         QStringList constraints;
 
         foreach(const QString& mimeType, mimeTypes)
@@ -201,7 +201,7 @@ KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
             constraints << constraintTemplate.arg(mimeType);
         }
 
-        offers = KMimeTypeTrader::self()->query(firstMimeType, "Application", constraints.join(" and "));
+        offers = KMimeTypeTrader::self()->query(firstMimeType, QLatin1String("Application"), constraints.join(QLatin1String(" and ")));
 
         // remove duplicate service entries
         QSet<QString> seenApps;

@@ -55,7 +55,7 @@ public:
 
     QString cacheFile(int level) const
     {
-        return QString("%1-%2.bin").arg(cachePrefix).arg(level);
+        return QString::fromUtf8("%1-%2.bin").arg(cachePrefix).arg(level);
     }
 
     QString   cacheDir;
@@ -66,16 +66,16 @@ public:
 UndoCache::UndoCache()
     : d(new Private)
 {
-    d->cacheDir    = QStandardPaths::locate(QStandardPaths::GenericCacheLocation, QChar('/') + QApplication::applicationName() + QChar('/'));
+    d->cacheDir    = QStandardPaths::locate(QStandardPaths::GenericCacheLocation, QLatin1Char('/') + QApplication::applicationName() + QLatin1Char('/'));
 
-    d->cachePrefix = QString("%1undocache-%2")
+    d->cachePrefix = QString::fromUtf8("%1undocache-%2")
                      .arg(d->cacheDir)
                      .arg(QCoreApplication::applicationPid());
 
     // remove any remnants
     QDir dir(d->cacheDir);
 
-    foreach(const QFileInfo& info, dir.entryInfoList(QStringList() << (d->cachePrefix + '*')))
+    foreach(const QFileInfo& info, dir.entryInfoList(QStringList() << (d->cachePrefix + QLatin1Char('*'))))
     {
         QFile(info.filePath()).remove();
     }

@@ -142,7 +142,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     font.setBold(true);
     d->toolName->setFont(font);
 
-    QString frameStyle = QString("QFrame {"
+    QString frameStyle = QString::fromLatin1("QFrame {"
                                  "color: %1;"
                                  "border: 1px solid %2;"
                                  "border-radius: 5px;"
@@ -152,9 +152,9 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
                          .arg(QApplication::palette().color(QPalette::HighlightedText).name())
                          .arg(QApplication::palette().color(QPalette::Highlight).name());
 
-    QString noFrameStyle("QFrame {"
+    QString noFrameStyle(QLatin1String("QFrame {"
                          "border: none;"
-                         "}");
+                         "}"));
 
     toolDescriptor->setStyleSheet(frameStyle);
     d->toolName->setStyleSheet(noFrameStyle);
@@ -173,7 +173,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->guideColorBt      = new KColorButton(QColor(Qt::red), d->guideBox);
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
     d->guideSize         = new RIntNumInput(d->guideBox);
-    d->guideSize->setSuffix(QString("px"));
+    d->guideSize->setSuffix(QLatin1String("px"));
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setDefaultValue(1);
     d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw dashed guide lines."));
@@ -185,15 +185,15 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     // ---------------------------------------------------------------
 
     d->defaultBtn = new QPushButton(i18n("Defaults"));
-    d->defaultBtn->setIcon(QIcon::fromTheme("document-revert"));
+    d->defaultBtn->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
 
     d->okBtn = new QPushButton(i18n("Ok"));
-    d->okBtn->setIcon(QIcon::fromTheme("dialog-ok"));
+    d->okBtn->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok")));
     d->okBtn->setDefault(true);
 
     d->cancelBtn = new QPushButton(i18n("Cancel"));
-    d->cancelBtn->setIcon(QIcon::fromTheme("dialog-cancel"));
+    d->cancelBtn->setIcon(QIcon::fromTheme(QLatin1String("dialog-cancel")));
 
     QHBoxLayout* const hbox1 = new QHBoxLayout;
     hbox1->addWidget(d->defaultBtn);
@@ -204,15 +204,15 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     // ---------------------------------------------------------------
 
     d->loadBtn = new QPushButton(i18n("Load..."));
-    d->loadBtn->setIcon(QIcon::fromTheme("document-open"));
+    d->loadBtn->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
     d->loadBtn->setToolTip(i18n("Load all parameters from settings text file."));
 
     d->saveAsBtn = new QPushButton(i18n("Save As..."));
-    d->saveAsBtn->setIcon(QIcon::fromTheme("document-save-as"));
+    d->saveAsBtn->setIcon(QIcon::fromTheme(QLatin1String("document-save-as")));
     d->saveAsBtn->setToolTip(i18n("Save all parameters to settings text file."));
 
     d->tryBtn = new QPushButton(i18n("Try"));
-    d->tryBtn->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+    d->tryBtn->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
     d->tryBtn->setToolTip(i18n("Try all settings."));
 
     QHBoxLayout* const hbox2 = new QHBoxLayout;
@@ -357,7 +357,7 @@ QPushButton* EditorToolSettings::button(int buttonCode) const
 
 void EditorToolSettings::enableButton(int buttonCode, bool state)
 {
-    QPushButton* btn = button(buttonCode);
+    QPushButton* const btn = button(buttonCode);
 
     if (btn)
     {

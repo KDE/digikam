@@ -112,7 +112,7 @@ public:
 
     void initPositionFrame()
     {
-        mPositionFrame->setStyleSheet(
+        mPositionFrame->setStyleSheet(QLatin1String(
             "QFrame {"
             " background-color: palette(mid);"
             " border: 1px solid palette(dark);"
@@ -128,7 +128,7 @@ public:
             "QToolButton:checked {"
             " background-color: palette(highlight);"
             "}"
-        );
+        ));
 
         QGridLayout* const layout = new QGridLayout(mPositionFrame);
         layout->setMargin(0);
@@ -178,7 +178,8 @@ public:
 };
 
 PrintOptionsPage::PrintOptionsPage(QWidget* const parent, const QSize& imageSize)
-    : QWidget(), d(new Private)
+    : QWidget(),
+      d(new Private)
 {
     d->setupUi(this);
     d->mParent              = parent;

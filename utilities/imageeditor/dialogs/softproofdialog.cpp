@@ -112,7 +112,7 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
 
     QGridLayout* const profileGrid = new QGridLayout;
     QLabel* const proofIcon        = new QLabel;
-    proofIcon->setPixmap(QIcon::fromTheme("printer").pixmap(22));
+    proofIcon->setPixmap(QIcon::fromTheme(QLatin1String("printer")).pixmap(22));
     QLabel* const proofLabel       = new QLabel(i18n("Profile of the output device to simulate:"));
     d->deviceProfileBox            = new IccProfilesComboBox;
     proofLabel->setBuddy(d->deviceProfileBox);
@@ -121,7 +121,7 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
                                            "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles      = new QPushButton;
-    d->infoProofProfiles->setIcon(QIcon::fromTheme("dialog-information"));
+    d->infoProofProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoProofProfiles->setWhatsThis(i18n("Press this button to get detailed "
                                             "information about the selected proofing profile.</p>"));
 

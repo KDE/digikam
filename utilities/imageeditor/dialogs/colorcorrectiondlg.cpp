@@ -222,7 +222,7 @@ void ColorCorrectionDlg::slotOk()
 QLayout* ColorCorrectionDlg::createHeading() const
 {
     QLabel* const icon = new QLabel;
-    icon->setPixmap(QIcon::fromTheme("fill-color").pixmap(32));
+    icon->setPixmap(QIcon::fromTheme(QLatin1String("fill-color")).pixmap(32));
 
     QLabel* const message = new QLabel;
 
@@ -248,7 +248,7 @@ QLayout* ColorCorrectionDlg::createHeading() const
     message->setWordWrap(true);
 
     QLabel* const logo      = new QLabel;
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     RLineWidget* const line  = new RLineWidget(Qt::Horizontal);
@@ -295,7 +295,7 @@ QLayout* ColorCorrectionDlg::createProfilesInfo() const
     }
 
     QLabel* const workspaceProfileTitle  = new QLabel(i18n("Working Color Space:"));
-    QLabel* const workspaceProfileDesc   = new QLabel(QString("<b>%1</b>").arg(d->workspaceProfile.description()));
+    QLabel* const workspaceProfileDesc   = new QLabel(QString::fromUtf8("<b>%1</b>").arg(d->workspaceProfile.description()));
     QPushButton* const workspaceProfInfo = new QPushButton(i18n("Info..."));
     //workspaceProfileTitle->setWordWrap(true);
     workspaceProfileDesc->setWordWrap(true);
@@ -642,7 +642,7 @@ void ColorCorrectionDlg::updateInfo()
         }
         else
         {
-            d->imageProfileDesc->setText(QString("<b>%1</b>").arg(description));
+            d->imageProfileDesc->setText(QString::fromUtf8("<b>%1</b>").arg(description));
         }
     }
 
@@ -866,7 +866,7 @@ void ColorCorrectionDlg::setSettings()
 
 void ColorCorrectionDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("iccprofile.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("iccprofile.anchor"), QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

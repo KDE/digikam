@@ -74,18 +74,18 @@ VersioningPromptUserSaveDialog::VersioningPromptUserSaveDialog(QWidget* const pa
     d->buttons->button(QDialogButtonBox::Cancel)->setDefault(true);
 
     d->buttons->button(QDialogButtonBox::Ok)->setText(i18nc("@action:button", "Save Changes"));
-    d->buttons->button(QDialogButtonBox::Ok)->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+    d->buttons->button(QDialogButtonBox::Ok)->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
     d->buttons->button(QDialogButtonBox::Ok)->setToolTip(i18nc("@info:tooltip",
                                                                "Save the current changes. Note: The original image will never be overwritten."));
 
     d->buttons->button(QDialogButtonBox::Apply)->setText(i18nc("@action:button", "Save Changes as a New Version"));
-    d->buttons->button(QDialogButtonBox::Apply)->setIcon(QIcon::fromTheme("list-add"));
+    d->buttons->button(QDialogButtonBox::Apply)->setIcon(QIcon::fromTheme(QLatin1String("list-add")));
     d->buttons->button(QDialogButtonBox::Apply)->setToolTip(i18nc("@info:tooltip",
                                                                   "Save the current changes as a new version. "
                                                                   "The loaded file will remain unchanged, a new file will be created."));
 
     d->buttons->button(QDialogButtonBox::Discard)->setText(i18nc("@action:button", "Discard Changes"));
-    d->buttons->button(QDialogButtonBox::Discard)->setIcon(QIcon::fromTheme("task-reject"));
+    d->buttons->button(QDialogButtonBox::Discard)->setIcon(QIcon::fromTheme(QLatin1String("task-reject")));
     d->buttons->button(QDialogButtonBox::Discard)->setToolTip(i18nc("@info:tooltip",
                                                                     "Discard the changes applied to the image during this editing session."));
 
@@ -97,14 +97,14 @@ VersioningPromptUserSaveDialog::VersioningPromptUserSaveDialog(QWidget* const pa
     // -- Icon and Header --
 
     QLabel* const warningIcon = new QLabel;
-    warningIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, this)));
+    warningIcon->setPixmap(QIcon::fromTheme(QLatin1String("dialog-warning")).pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, this)));
     QLabel* const question    = new QLabel;
     question->setTextFormat(Qt::RichText);
     question->setText(i18nc("@label",
                             "<qt>The current image has been changed.<br>"
                             "Do you wish to save your changes?</qt>"));
     QLabel* const editIcon    = new QLabel;
-    editIcon->setPixmap(QIcon::fromTheme("document-edit").pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, this)));
+    editIcon->setPixmap(QIcon::fromTheme(QLatin1String("document-edit")).pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, this)));
 
     QHBoxLayout* const headerLayout = new QHBoxLayout;
     headerLayout->addWidget(warningIcon);

@@ -150,7 +150,7 @@ void EditorCore::Private::putImageData(uchar* const data, int w, int h, bool six
     }
 
     image.putImageData(w, h, sixteenBit, image.hasAlpha(), data);
-    image.setAttribute("originalSize", image.size());
+    image.setAttribute(QLatin1String("originalSize"), image.size());
 }
 
 void EditorCore::Private::resetValues()
@@ -219,7 +219,7 @@ void EditorCore::Private::applyBuiltinFilter(const DImgBuiltinFilter& filter, Un
     width      = origWidth;
     height     = origHeight;
 
-    image.setAttribute("originalSize", image.size());
+    image.setAttribute(QLatin1String("originalSize"), image.size());
     EditorCore::defaultInstance()->setModified();
 }
 
@@ -229,50 +229,50 @@ QMap<QString, QVariant> EditorCore::Private::ioAttributes(IOFileSettings* const 
     QMap<QString, QVariant> attributes;
 
     // JPEG file format.
-    if (mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
-        mimeType.toUpper() == QString("JPE"))
+    if (mimeType.toUpper() == QLatin1String("JPG") || mimeType.toUpper() == QLatin1String("JPEG") ||
+        mimeType.toUpper() == QLatin1String("JPE"))
     {
-        attributes.insert("quality",     iofileSettings->JPEGCompression);
-        attributes.insert("subsampling", iofileSettings->JPEGSubSampling);
+        attributes.insert(QLatin1String("quality"),     iofileSettings->JPEGCompression);
+        attributes.insert(QLatin1String("subsampling"), iofileSettings->JPEGSubSampling);
     }
 
     // PNG file format.
-    if (mimeType.toUpper() == QString("PNG"))
+    if (mimeType.toUpper() == QLatin1String("PNG"))
     {
-        attributes.insert("quality", iofileSettings->PNGCompression);
+        attributes.insert(QLatin1String("quality"), iofileSettings->PNGCompression);
     }
 
     // TIFF file format.
-    if (mimeType.toUpper() == QString("TIFF") || mimeType.toUpper() == QString("TIF"))
+    if (mimeType.toUpper() == QLatin1String("TIFF") || mimeType.toUpper() == QLatin1String("TIF"))
     {
-        attributes.insert("compress", iofileSettings->TIFFCompression);
+        attributes.insert(QLatin1String("compress"), iofileSettings->TIFFCompression);
     }
 
     // JPEG 2000 file format.
-    if (mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
-        mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX") ||
-        mimeType.toUpper() == QString("J2K"))
+    if (mimeType.toUpper() == QLatin1String("JP2") || mimeType.toUpper() == QLatin1String("JPX") ||
+        mimeType.toUpper() == QLatin1String("JPC") || mimeType.toUpper() == QLatin1String("PGX") ||
+        mimeType.toUpper() == QLatin1String("J2K"))
     {
         if (iofileSettings->JPEG2000LossLess)
         {
-            attributes.insert("quality", 100);    // LossLess compression
+            attributes.insert(QLatin1String("quality"), 100);    // LossLess compression
         }
         else
         {
-            attributes.insert("quality", iofileSettings->JPEG2000Compression);
+            attributes.insert(QLatin1String("quality"), iofileSettings->JPEG2000Compression);
         }
     }
 
     // PGF file format.
-    if (mimeType.toUpper() == QString("PGF"))
+    if (mimeType.toUpper() == QLatin1String("PGF"))
     {
         if (iofileSettings->PGFLossLess)
         {
-            attributes.insert("quality", 0);    // LossLess compression
+            attributes.insert(QLatin1String("quality"), 0);    // LossLess compression
         }
         else
         {
-            attributes.insert("quality", iofileSettings->PGFCompression);
+            attributes.insert(QLatin1String("quality"), iofileSettings->PGFCompression);
         }
     }
 

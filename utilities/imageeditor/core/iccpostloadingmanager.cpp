@@ -46,9 +46,9 @@ IccPostLoadingManager::IccPostLoadingManager(DImg& image, const QString& filePat
 
 IccTransform IccPostLoadingManager::postLoadingManage(QWidget* const parent)
 {
-    if (image().hasAttribute("missingProfileAskUser"))
+    if (image().hasAttribute(QLatin1String("missingProfileAskUser")))
     {
-        image().removeAttribute("missingProfileAskUser");
+        image().removeAttribute(QLatin1String("missingProfileAskUser"));
         DImg preview                     = image().smoothScale(240, 180, Qt::KeepAspectRatio);
         QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::MissingProfile, preview,
                                                                   m_filePath, parent);
@@ -59,9 +59,9 @@ IccTransform IccPostLoadingManager::postLoadingManage(QWidget* const parent)
         delete dlg;
         return trans;
     }
-    else if (image().hasAttribute("profileMismatchAskUser"))
+    else if (image().hasAttribute(QLatin1String("profileMismatchAskUser")))
     {
-        image().removeAttribute("profileMismatchAskUser");
+        image().removeAttribute(QLatin1String("profileMismatchAskUser"));
         DImg preview                     = image().smoothScale(240, 180, Qt::KeepAspectRatio);
         QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::ProfileMismatch, preview,
                                                                   m_filePath, parent);
@@ -72,9 +72,9 @@ IccTransform IccPostLoadingManager::postLoadingManage(QWidget* const parent)
         delete dlg;
         return trans;
     }
-    else if (image().hasAttribute("uncalibratedColorAskUser"))
+    else if (image().hasAttribute(QLatin1String("uncalibratedColorAskUser")))
     {
-        image().removeAttribute("uncalibratedColorAskUser");
+        image().removeAttribute(QLatin1String("uncalibratedColorAskUser"));
         DImg preview                     = image().smoothScale(240, 180, Qt::KeepAspectRatio);
         QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::UncalibratedColor, preview,
                                                                   m_filePath, parent);

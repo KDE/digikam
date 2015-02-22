@@ -96,12 +96,17 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
             continue;
         }
 
+#ifdef HAVE_JASPER
         if (QString::fromLatin1(frm).contains(QLatin1String("jp2"),  Qt::CaseInsensitive) ||
-            QString::fromLatin1(frm).contains(QLatin1String("j2k"),  Qt::CaseInsensitive))
+            QString::fromLatin1(frm).contains(QLatin1String("j2k"),  Qt::CaseInsensitive) ||
+            QString::fromLatin1(frm).contains(QLatin1String("jpx"),  Qt::CaseInsensitive) ||
+            QString::fromLatin1(frm).contains(QLatin1String("jpc"),  Qt::CaseInsensitive) ||
+            QString::fromLatin1(frm).contains(QLatin1String("pgx"),  Qt::CaseInsensitive))
         {
             jp2k = true;
             continue;
         }
+#endif // HAVE_JASPER
 
         formats.append(i18n("%1 Image (%2)").arg(QString::fromLatin1(frm).toUpper()).arg(QLatin1String("*.") + QLatin1String(frm)));
         allTypes.append(QString::fromLatin1("*.%1 ").arg(QLatin1String(frm)));
@@ -122,8 +127,8 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
 #ifdef HAVE_JASPER
     if (jp2k)
     {
-        formats.append(i18n("JPEG2000 Image (*.jp2 *.j2k)"));
-        allTypes.append(QLatin1String("*.jp2 *.j2k "));
+        formats.append(i18n("JPEG2000 Image (*.jp2 *.j2k *.jpx *.jpx *.pgx)"));
+        allTypes.append(QLatin1String("*.jp2 *.j2k *.jpx *.jpx *.pgx "));
     }
 #endif // HAVE_JASPER
 

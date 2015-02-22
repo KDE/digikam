@@ -280,7 +280,7 @@ void EditorCore::slotImageLoaded(const LoadingDescription& loadingDescription, c
         else if (d->exifOrient)
         {
             // Do not rotate twice if already rotated, e.g. for full size preview.
-            QVariant attribute(d->image.attribute("exifRotated"));
+            QVariant attribute(d->image.attribute(QLatin1String("exifRotated")));
 
             if (!attribute.isValid() || !attribute.toBool())
             {
@@ -293,7 +293,7 @@ void EditorCore::slotImageLoaded(const LoadingDescription& loadingDescription, c
         d->origHeight = d->image.height();
         d->width      = d->origWidth;
         d->height     = d->origHeight;
-        d->image.setAttribute("originalSize", d->image.size());
+        d->image.setAttribute(QLatin1String("originalSize"), d->image.size());
     }
     else
     {
@@ -458,7 +458,7 @@ QString EditorCore::ensureHasCurrentUuid() const
     if (!d->image.getImageHistory().currentReferredImage().hasUuid())
     {
         // if there is no uuid in the image, we create one.
-        QString uuid = d->image.createImageUniqueId();
+        QString uuid = QString::fromUtf8(d->image.createImageUniqueId());
         d->image.addCurrentUniqueImageId(uuid);
     }
 
@@ -649,13 +649,13 @@ void EditorCore::flipVert()
 
 void EditorCore::crop(const QRect& rect)
 {
-    d->applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Crop, rect), new UndoActionIrreversible(this, "Crop"));
+    d->applyBuiltinFilter(DImgBuiltinFilter(DImgBuiltinFilter::Crop, rect), new UndoActionIrreversible(this, QLatin1String("Crop")));
 }
 
 void EditorCore::convertDepth(int depth)
 {
     d->applyBuiltinFilter(DImgBuiltinFilter(depth == 32 ? DImgBuiltinFilter::ConvertTo8Bit : DImgBuiltinFilter::ConvertTo16Bit),
-                          new UndoActionIrreversible(this, "Convert Color Depth"));
+                          new UndoActionIrreversible(this, QLatin1String("Convert Color Depth")));
 }
 
 DImg* EditorCore::getImg() const
@@ -809,7 +809,7 @@ QString EditorCore::getImageFilePath() const
 
 QString EditorCore::getImageFileName() const
 {
-    return getImageFilePath().section('/', -1);
+    return getImageFilePath().section(QLatin1Char('/'), -1);
 }
 
 QString EditorCore::getImageFormat() const
@@ -825,7 +825,7 @@ QString EditorCore::getImageFormat() const
     if (mimeType.isEmpty())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "DImg object does not contain attribute \"format\"";
-        mimeType = QImageReader::imageFormat(getImageFilePath());
+        mimeType = QString::fromUtf8(QImageReader::imageFormat(getImageFilePath()));
     }
 
     return mimeType;

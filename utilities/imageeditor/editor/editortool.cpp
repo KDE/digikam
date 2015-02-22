@@ -234,7 +234,7 @@ QString EditorTool::toolHelp() const
 {
     if (d->helpAnchor.isEmpty())
     {
-        return (objectName() + QString(".anchor"));
+        return (objectName() + QLatin1String(".anchor"));
     }
 
     return d->helpAnchor;

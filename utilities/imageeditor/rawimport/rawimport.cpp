@@ -70,7 +70,7 @@ RawImport::RawImport(const QUrl& url, QObject* const parent)
     d->settingsBox   = new RawSettingsBox(url, 0);
 
     setToolName(i18n("Raw Import"));
-    setToolIcon(QIcon::fromTheme("kdcraw"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("kdcraw")));
     setProgressMessage(i18n("Post Processing"));
     setToolView(d->previewWidget);
     setToolSettings(d->settingsBox);
