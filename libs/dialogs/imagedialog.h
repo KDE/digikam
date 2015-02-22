@@ -107,7 +107,7 @@ public:
     QList<QUrl> urls()        const;
     QStringList fileFormats() const;
 
-    static QUrl getImageURL(QWidget* const parent, const QUrl& url, const QString& caption=QString());
+    static QUrl        getImageURL(QWidget* const parent, const QUrl& url, const QString& caption=QString());
     static QList<QUrl> getImageURLs(QWidget* const parent, const QUrl& url, const QString& caption=QString());
 
 private:

@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <kxmlguiclient.h>
+#include <kgenericfactory.h>
 
 // Local includes
 
