@@ -1,0 +1,19 @@
+*****************************************************************************************************
+digiKam 4.8.0 - Release date: 2015-02-22
+
+NEW FEATURES:
+
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 343031 - Digikam won't start: *** Error in `digikam': realloc(): invalid pointer: 0x0000000000c14260 ***
+002 ==> 343548 - Tag Manager crashes when adding a new tag.
+003 ==> 337011 - Image Quality Sorter doesn't apply labels [patch].
+004 ==> 318726 - Some BQM tools in a workflow don't restore (all) parameters properly [patch].
+005 ==> 342189 - BQM won't let me remove a tool unless i change it [patch].
+006 ==> 332314 - Lens Auto-Correction seems to prefer makernotes over Exif making fixing manual lenses impossible.
+007 ==> 343755 - Tags from Windows Photo Gallery sometimes ignored.
+008 ==> 341241 - digiKam crash during marking photos in Persons/Tags view [patch]
+009 ==> 344154 - digiKam sometimes shows the raw preview, sometimes the JPEG preview, depending on the position of the stars [patch].
+010 ==> 344156 - Use digiKam with your keyboard, delete the wrong photos [patch].
+011 ==> 344155 - Rotating raw image sometimes results in the preview showing the photo rotated in the opposite direction [patch].
