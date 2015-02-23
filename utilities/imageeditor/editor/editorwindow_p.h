@@ -205,28 +205,28 @@ public:
     QMap<QString, KService::Ptr> servicesMap;
 };
 
-const QString EditorWindow::Private::configAutoZoomEntry("AutoZoom");
-const QString EditorWindow::Private::configBackgroundColorEntry("BackgroundColor");
-const QString EditorWindow::Private::configJpeg2000CompressionEntry("JPEG2000Compression");
-const QString EditorWindow::Private::configJpeg2000LossLessEntry("JPEG2000LossLess");
-const QString EditorWindow::Private::configJpegCompressionEntry("JPEGCompression");
-const QString EditorWindow::Private::configJpegSubSamplingEntry("JPEGSubSampling");
-const QString EditorWindow::Private::configPgfCompressionEntry("PGFCompression");
-const QString EditorWindow::Private::configPgfLossLessEntry("PGFLossLess");
-const QString EditorWindow::Private::configPngCompressionEntry("PNGCompression");
-const QString EditorWindow::Private::configSplitterStateEntry("SplitterState");
-const QString EditorWindow::Private::configTiffCompressionEntry("TIFFCompression");
-const QString EditorWindow::Private::configUnderExposureColorEntry("UnderExposureColor");
-const QString EditorWindow::Private::configUnderExposureIndicatorEntry("UnderExposureIndicator");
-const QString EditorWindow::Private::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
-const QString EditorWindow::Private::configOverExposureColorEntry("OverExposureColor");
-const QString EditorWindow::Private::configOverExposureIndicatorEntry("OverExposureIndicator");
-const QString EditorWindow::Private::configOverExposurePercentsEntry("OverExposurePercentsEntry");
-const QString EditorWindow::Private::configExpoIndicatorModeEntry("ExpoIndicatorMode");
-const QString EditorWindow::Private::configUseRawImportToolEntry("UseRawImportTool");
-const QString EditorWindow::Private::configUseThemeBackgroundColorEntry("UseThemeBackgroundColor");
-const QString EditorWindow::Private::configVerticalSplitterSizesEntry("Vertical Splitter Sizes");
-const QString EditorWindow::Private::configVerticalSplitterStateEntry("Vertical Splitter State");
+const QString EditorWindow::Private::configAutoZoomEntry(QLatin1String("AutoZoom"));
+const QString EditorWindow::Private::configBackgroundColorEntry(QLatin1String("BackgroundColor"));
+const QString EditorWindow::Private::configJpeg2000CompressionEntry(QLatin1String("JPEG2000Compression"));
+const QString EditorWindow::Private::configJpeg2000LossLessEntry(QLatin1String("JPEG2000LossLess"));
+const QString EditorWindow::Private::configJpegCompressionEntry(QLatin1String("JPEGCompression"));
+const QString EditorWindow::Private::configJpegSubSamplingEntry(QLatin1String("JPEGSubSampling"));
+const QString EditorWindow::Private::configPgfCompressionEntry(QLatin1String("PGFCompression"));
+const QString EditorWindow::Private::configPgfLossLessEntry(QLatin1String("PGFLossLess"));
+const QString EditorWindow::Private::configPngCompressionEntry(QLatin1String("PNGCompression"));
+const QString EditorWindow::Private::configSplitterStateEntry(QLatin1String("SplitterState"));
+const QString EditorWindow::Private::configTiffCompressionEntry(QLatin1String("TIFFCompression"));
+const QString EditorWindow::Private::configUnderExposureColorEntry(QLatin1String("UnderExposureColor"));
+const QString EditorWindow::Private::configUnderExposureIndicatorEntry(QLatin1String("UnderExposureIndicator"));
+const QString EditorWindow::Private::configUnderExposurePercentsEntry(QLatin1String("UnderExposurePercentsEntry"));
+const QString EditorWindow::Private::configOverExposureColorEntry(QLatin1String("OverExposureColor"));
+const QString EditorWindow::Private::configOverExposureIndicatorEntry(QLatin1String("OverExposureIndicator"));
+const QString EditorWindow::Private::configOverExposurePercentsEntry(QLatin1String("OverExposurePercentsEntry"));
+const QString EditorWindow::Private::configExpoIndicatorModeEntry(QLatin1String("ExpoIndicatorMode"));
+const QString EditorWindow::Private::configUseRawImportToolEntry(QLatin1String("UseRawImportTool"));
+const QString EditorWindow::Private::configUseThemeBackgroundColorEntry(QLatin1String("UseThemeBackgroundColor"));
+const QString EditorWindow::Private::configVerticalSplitterSizesEntry(QLatin1String("Vertical Splitter Sizes"));
+const QString EditorWindow::Private::configVerticalSplitterStateEntry(QLatin1String("Vertical Splitter State"));
 
 void EditorWindow::Private::legacyUpdateSplitterState(KConfigGroup& group)
 {
