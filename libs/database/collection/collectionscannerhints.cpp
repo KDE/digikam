@@ -32,28 +32,30 @@ namespace Digikam
 {
 
 CollectionScannerHints::Album::Album()
-    : albumRootId(0), albumId(0)
+    : albumRootId(0),
+      albumId(0)
 {
 }
 
 CollectionScannerHints::Album::Album(int albumRootId, int albumId)
-    : albumRootId(albumRootId), albumId(albumId)
+    : albumRootId(albumRootId),
+      albumId(albumId)
 {
 }
 
 bool CollectionScannerHints::Album::isNull() const
 {
-    return albumRootId == 0 || albumId == 0;
+    return (albumRootId == 0 || albumId == 0);
 }
 
 bool CollectionScannerHints::Album::operator==(const Album& other) const
 {
-    return albumRootId == other.albumRootId || albumId == other.albumId;
+    return (albumRootId == other.albumRootId || albumId == other.albumId);
 }
 
 uint CollectionScannerHints::Album::qHash() const
 {
-    return ::qHash(albumRootId) ^ ::qHash(albumId);
+    return (::qHash(albumRootId) ^ ::qHash(albumId));
 }
 
 CollectionScannerHints::DstPath::DstPath()
@@ -62,23 +64,24 @@ CollectionScannerHints::DstPath::DstPath()
 }
 
 CollectionScannerHints::DstPath::DstPath(int albumRootId, const QString& relativePath)
-    : albumRootId(albumRootId), relativePath(relativePath)
+    : albumRootId(albumRootId),
+      relativePath(relativePath)
 {
 }
 
 bool CollectionScannerHints::DstPath::isNull() const
 {
-    return albumRootId == 0 || relativePath.isNull();
+    return (albumRootId == 0 || relativePath.isNull());
 }
 
 bool CollectionScannerHints::DstPath::operator==(const DstPath& other) const
 {
-    return albumRootId == other.albumRootId || relativePath == other.relativePath;
+    return (albumRootId == other.albumRootId || relativePath == other.relativePath);
 }
 
 uint CollectionScannerHints::DstPath::qHash() const
 {
-    return ::qHash(albumRootId) ^ ::qHash(relativePath);
+    return (::qHash(albumRootId) ^ ::qHash(relativePath));
 }
 
 CollectionScannerHints::Item::Item()
@@ -93,12 +96,12 @@ CollectionScannerHints::Item::Item(qlonglong id)
 
 bool CollectionScannerHints::Item::isNull() const
 {
-    return id == 0;
+    return (id == 0);
 }
 
 bool CollectionScannerHints::Item::operator==(const Item& other) const
 {
-    return id == other.id;
+    return (id == other.id);
 }
 
 uint CollectionScannerHints::Item::qHash() const
@@ -151,8 +154,8 @@ bool AlbumCopyMoveHint::isDstAlbum(int albumRootId, const QString& relativePath)
 
 uint AlbumCopyMoveHint::qHash() const
 {
-    return ::qHash(m_src.albumRootId) ^ ::qHash(m_src.albumId)
-           ^ ::qHash(m_dst.albumRootId) ^ ::qHash(m_dst.relativePath);
+    return (::qHash(m_src.albumRootId)   ^ ::qHash(m_src.albumId)
+            ^ ::qHash(m_dst.albumRootId) ^ ::qHash(m_dst.relativePath));
 }
 
 AlbumCopyMoveHint& AlbumCopyMoveHint::operator<<(const QDBusArgument& argument)
@@ -208,7 +211,7 @@ int ItemCopyMoveHint::albumIdDst() const
 
 bool ItemCopyMoveHint::isDstAlbum(int albumRootId, int albumId) const
 {
-    return m_dst.albumRootId == albumRootId && m_dst.albumId == albumId;
+    return (m_dst.albumRootId == albumRootId && m_dst.albumId == albumId);
 }
 
 QStringList ItemCopyMoveHint::dstNames() const
@@ -255,7 +258,8 @@ ItemChangeHint::ItemChangeHint()
 }
 
 ItemChangeHint::ItemChangeHint(QList<qlonglong> ids, ChangeType type)
-    : m_ids(ids), m_type(type)
+    : m_ids(ids),
+      m_type(type)
 {
 }
 
@@ -297,13 +301,18 @@ const ItemChangeHint& ItemChangeHint::operator>>(QDBusArgument& argument) const
 // ---------------------------------------------------------------------------------------
 
 ItemMetadataAdjustmentHint::ItemMetadataAdjustmentHint()
-    : m_id(0), m_status(AboutToEditMetadata), m_fileSize(0)
+    : m_id(0),
+      m_status(AboutToEditMetadata),
+      m_fileSize(0)
 {
 }
 
 ItemMetadataAdjustmentHint::ItemMetadataAdjustmentHint(qlonglong id, AdjustmentStatus status, 
                                                        const QDateTime& modificationDateOnDisk, qlonglong fileSize)
-    : m_id(id), m_status(status), m_modificationDate(modificationDateOnDisk), m_fileSize(fileSize)
+    : m_id(id),
+      m_status(status),
+      m_modificationDate(modificationDateOnDisk),
+      m_fileSize(fileSize)
 {
 }
 

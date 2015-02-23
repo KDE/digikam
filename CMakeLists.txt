@@ -138,7 +138,8 @@ find_package(KF5 REQUIRED COMPONENTS
              Notifications
              KIO
              CoreAddons
-             WindowSystem             
+             WindowSystem
+             Solid
                           
              KDELibs4Support
 )
@@ -1251,11 +1252,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
        )
 
     set(libdatabase_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/album/albumdb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionscanner.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionlocation.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionscannerhints.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasewatch.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasewatchadaptor.cpp
@@ -1293,6 +1289,11 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/schemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/tagproperties.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/tagscache.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionscanner.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionlocation.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionscannerhints.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/album/albumdb.cpp
        )
 
     set(libdatabaseui_SRCS

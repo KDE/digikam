@@ -560,7 +560,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
         CollectionLocation location = CollectionManager::instance()->locationForPath(path);
         QString album               = CollectionManager::instance()->album(path);
 
-        if (album == "/")
+        if (album == QLatin1String("/"))
         {
             scanAlbumRoot(location);
         }
@@ -679,7 +679,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
         return;
     }
 
-    if (album == "/")
+    if (album == QLatin1String("/"))
     {
         scanAlbumRoot(location);
     }
@@ -822,7 +822,7 @@ void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
 
     // scan album that covers the root directory of this album root,
     // all contained albums, and their subalbums recursively.
-    scanAlbum(location, "/");
+    scanAlbum(location, QLatin1String("/"));
 
     if (d->wantSignals)
     {
@@ -1075,7 +1075,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 scanFileNormal(*fi, scanInfos.at(index));
             }
             // ignore temp files we created ourselves
-            else if (fi->completeSuffix().contains("digikamtempfile."))
+            else if (fi->completeSuffix().contains(QLatin1String("digikamtempfile.")))
             {
                 continue;
             }
@@ -1097,13 +1097,13 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         {
             QString subalbum;
 
-            if (album == "/")
+            if (album == QLatin1String("/"))
             {
-                subalbum = '/' + fi->fileName();
+                subalbum = QLatin1Char('/') + fi->fileName();
             }
             else
             {
-                subalbum = album + '/' + fi->fileName();
+                subalbum = album + QLatin1Char('/') + fi->fileName();
             }
 
             scanAlbum( location, subalbum );
@@ -1512,8 +1512,8 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
         if ( fi->isDir()           &&
-             fi->fileName() != "." &&
-             fi->fileName() != "..")
+             fi->fileName() != QLatin1String(".") &&
+             fi->fileName() != QLatin1String(".."))
         {
             items += countItemsInFolder( fi->filePath() );
         }
@@ -1547,13 +1547,13 @@ DatabaseItem::Category CollectionScanner::category(const QFileInfo& info)
 void CollectionScanner::markDatabaseAsScanned()
 {
     DatabaseAccess access;
-    access.db()->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
+    access.db()->setSetting(QLatin1String("Scanned"), QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
 bool CollectionScanner::databaseInitialScanDone()
 {
     DatabaseAccess access;
-    return !access.db()->getSetting("Scanned").isEmpty();
+    return !access.db()->getSetting(QLatin1String("Scanned")).isEmpty();
 }
 
 void CollectionScanner::updateRemovedItemsTime()
@@ -1562,7 +1562,7 @@ void CollectionScanner::updateRemovedItemsTime()
     // held in d->removedItemsTime to the database
     if (!d->removedItemsTime.isNull())
     {
-        DatabaseAccess().db()->setSetting("RemovedItemsTime", d->removedItemsTime.toString(Qt::ISODate));
+        DatabaseAccess().db()->setSetting(QLatin1String("RemovedItemsTime"), d->removedItemsTime.toString(Qt::ISODate));
         d->removedItemsTime = QDateTime();
     }
 }
@@ -1570,16 +1570,16 @@ void CollectionScanner::updateRemovedItemsTime()
 void CollectionScanner::incrementDeleteRemovedCompleteScanCount()
 {
     DatabaseAccess access;
-    int count = access.db()->getSetting("DeleteRemovedCompleteScanCount").toInt();
+    int count = access.db()->getSetting(QLatin1String("DeleteRemovedCompleteScanCount")).toInt();
     ++count;
-    access.db()->setSetting("DeleteRemovedCompleteScanCount", QString::number(count));
+    access.db()->setSetting(QLatin1String("DeleteRemovedCompleteScanCount"), QString::number(count));
 }
 
 void CollectionScanner::resetDeleteRemovedSettings()
 {
-    DatabaseAccess().db()->setSetting("RemovedItemsTime", QString());
-    DatabaseAccess().db()->setSetting("DeleteRemovedTime", QDateTime::currentDateTime().toString(Qt::ISODate));
-    DatabaseAccess().db()->setSetting("DeleteRemovedCompleteScanCount", QString::number(0));
+    DatabaseAccess().db()->setSetting(QLatin1String("RemovedItemsTime"), QString());
+    DatabaseAccess().db()->setSetting(QLatin1String("DeleteRemovedTime"), QDateTime::currentDateTime().toString(Qt::ISODate));
+    DatabaseAccess().db()->setSetting(QLatin1String("DeleteRemovedCompleteScanCount"), QString::number(0));
 }
 
 bool CollectionScanner::checkDeleteRemoved()
@@ -1587,7 +1587,7 @@ bool CollectionScanner::checkDeleteRemoved()
     // returns true if removed items shall be deleted
     DatabaseAccess access;
     // retrieve last time an item was removed (not deleted, but set to status removed)
-    QString removedItemsTimeString = access.db()->getSetting("RemovedItemsTime");
+    QString removedItemsTimeString = access.db()->getSetting(QLatin1String("RemovedItemsTime"));
 
     if (removedItemsTimeString.isNull())
     {
@@ -1595,7 +1595,7 @@ bool CollectionScanner::checkDeleteRemoved()
     }
 
     // retrieve last time removed items were (definitely) deleted from db
-    QString deleteRemovedTimeString = access.db()->getSetting("DeleteRemovedTime");
+    QString deleteRemovedTimeString = access.db()->getSetting(QLatin1String("DeleteRemovedTime"));
     QDateTime removedItemsTime, deleteRemovedTime;
 
     if (!removedItemsTimeString.isNull())
@@ -1611,7 +1611,7 @@ bool CollectionScanner::checkDeleteRemoved()
     QDateTime now = QDateTime::currentDateTime();
 
     // retrieve number of complete collection scans since the last time that removed items were deleted
-    int completeScans = access.db()->getSetting("DeleteRemovedCompleteScanCount").toInt();
+    int completeScans = access.db()->getSetting(QLatin1String("DeleteRemovedCompleteScanCount")).toInt();
 
     // No removed items? No need to delete any
     if (!removedItemsTime.isValid())

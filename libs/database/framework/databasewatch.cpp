@@ -59,14 +59,14 @@ public:
                          QDBusConnection connection = QDBusConnection::sessionBus())
     {
         // connect to slave signals
-        connection.connect(QString(), "/ChangesetRelay",
-                           "org.kde.digikam.DatabaseChangesetRelay",
-                           dbusSignal,
+        connection.connect(QString(), QLatin1String("/ChangesetRelay"),
+                           QLatin1String("org.kde.digikam.DatabaseChangesetRelay"),
+                           QString::fromUtf8(dbusSignal),
                            obj, slot);
         // connect to master signals
-        connection.connect(QString(), "/ChangesetRelayForPeers",
-                           "org.kde.digikam.DatabaseChangesetRelay",
-                           dbusSignal,
+        connection.connect(QString(), QLatin1String("/ChangesetRelayForPeers"),
+                           QLatin1String("org.kde.digikam.DatabaseChangesetRelay"),
+                           QString::fromUtf8(dbusSignal),
                            obj, slot);
     }
     
@@ -100,7 +100,7 @@ DBusSignalListenerThread::~DBusSignalListenerThread()
 void DBusSignalListenerThread::run()
 {
     // We cannot use sessionBus() here but need to connect on our own
-    QDBusConnection threadConnection = QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString("DigikamDatabaseSlaveConnection-%1").arg(getpid()));
+    QDBusConnection threadConnection = QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString::fromUtf8("DigikamDatabaseSlaveConnection-%1").arg(getpid()));
 
     // DBus signals are received from within this thread and then sent with queued signals to the main thread
     d->connectWithDBus("imageTagChange", q,
@@ -158,7 +158,7 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
     if (d->mode == DatabaseSlave)
     {
         d->adaptor = new Digikam_DatabaseWatchAdaptor(this);
-        QDBusConnection::sessionBus().registerObject("/ChangesetRelay", this);
+        QDBusConnection::sessionBus().registerObject(QLatin1String("/ChangesetRelay"), this);
 
         // KIOSlave do not have an event loop which is needed for receiving DBus signals.
         // See also the event loop in DatabaseAccess::setParameters.
@@ -167,7 +167,7 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
     else
     {
         d->adaptor = new Digikam_DatabaseWatchAdaptor(this);
-        QDBusConnection::sessionBus().registerObject("/ChangesetRelayForPeers", this);
+        QDBusConnection::sessionBus().registerObject(QLatin1String("/ChangesetRelayForPeers"), this);
 
         // connect DBus signals from slave or peer to our application
         d->connectWithDBus("imageChange", this,

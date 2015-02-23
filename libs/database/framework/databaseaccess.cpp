@@ -245,7 +245,7 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
-    if (!drivers.contains("QSQLITE"))
+    if (!drivers.contains(QLatin1String("QSQLITE")))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
