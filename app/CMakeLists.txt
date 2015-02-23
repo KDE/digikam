@@ -77,8 +77,6 @@ target_link_libraries(digikamcore
                       KF5::CoreAddons
                       KF5::WindowSystem
 
-                      KF5::KDELibs4Support
-
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}

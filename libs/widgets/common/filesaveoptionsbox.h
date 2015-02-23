@@ -42,7 +42,6 @@ namespace Digikam
 
 class DIGIKAM_EXPORT FileSaveOptionsBox : public QStackedWidget
 {
-    Q_OBJECT
 
 public:
 
@@ -72,29 +71,7 @@ public:
      */
     DImg::FORMAT discoverFormat(const QString& filename, DImg::FORMAT fallback = DImg::NONE);
 
-    /**
-     * Call this method immediately after creation of the file dialog with this
-     * options widget to enable signal handling on the dialog.
-     *
-     * @param dialog the file dialog this options widget is used for.
-     */
-    void setDialog(KFileDialog* const dialog);
-
-    /**
-     * Sets a filter used for the dialog that is used to automatically select
-     * the format based on the filename provided by the user. If this is an
-     * empty string, no automatic discovering of the file type is used.
-     *
-     * @param autoFilter filter string like it is used in the filter drop down
-     *                   of the host dialog
-     */
-    void setAutoFilter(const QString& autoFilter);
-
-public Q_SLOTS:
-
-    void slotFilterChanged(const QString& newFilter);
-    void slotImageFileFormatChanged(const QString&);
-    void slotImageFileSelected(const QString&);
+    void setImageFileFormat(const QString&);
 
 private:
 

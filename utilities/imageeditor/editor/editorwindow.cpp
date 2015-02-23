@@ -313,7 +313,7 @@ void EditorWindow::setupStandardActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    KActionCollection *ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
     m_backwardAction = buildStdAction(StdBackAction, this, SLOT(slotBackward()), this);
     ac->addAction(QLatin1String("editorwindow_backward"), m_backwardAction);
@@ -1910,7 +1910,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE) != DImg::NONE)
     {
         FileSaveOptionsDlg* const fileSaveOptionsDialog = new FileSaveOptionsDlg(this, options);
-        options->slotImageFileFormatChanged(newURL.fileName());
+        options->setImageFileFormat(newURL.fileName());
 
         if (d->currentWindowModalDialog)
         {

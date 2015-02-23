@@ -640,12 +640,12 @@ void DigikamApp::setupAccelerators()
 
     QAction* const firstImageAction = new QAction(i18n("First Image"), this);
     ac->addAction("first_image", firstImageAction);
-    ac->setDefaultShortcuts(firstImageAction, KStandardShortcut::begin());
+    ac->setDefaultShortcuts(firstImageAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_Home);
     connect(firstImageAction, SIGNAL(triggered()), this, SIGNAL(signalFirstItem()));
 
     QAction* const lastImageAction = new QAction(i18n("Last Image"), this);
     ac->addAction("last_image", lastImageAction);
-    ac->setDefaultShortcuts(lastImageAction, KStandardShortcut::end());
+    ac->setDefaultShortcuts(lastImageAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_End);
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
     
     d->cutItemsAction = new QAction(i18n("Cu&t"), this); 
@@ -770,7 +770,7 @@ void DigikamApp::setupActions()
     d->newAction->setWhatsThis(i18n("Creates a new empty Album in the collection."));
     connect(d->newAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbum()));
     ac->addAction("album_new", d->newAction);
-    ac->setDefaultShortcuts(d->newAction, KStandardShortcut::openNew());
+    ac->setDefaultShortcuts(d->newAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_N);
 
     // -----------------------------------------------------------------
 
