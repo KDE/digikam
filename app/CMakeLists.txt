@@ -144,10 +144,10 @@ install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 # Shared libdigikamdatabase ########################################################
 
 set(digikamdatabase_LIB_SRCS
-        ${libdatabase_SRCS}
         ${libdatabasemodels_SRCS}
         ${libhaar_SRCS}
         ${pgfutils_SRCS}
+        ${libdatabase_SRCS}
 )
 
 if(Baloo_FOUND)
