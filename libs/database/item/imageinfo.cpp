@@ -638,7 +638,7 @@ QString ImageInfo::format() const
 {
     if (!m_data)
     {
-        return 0;
+        return QString();
     }
 
     RETURN_IF_CACHED(format)
@@ -792,13 +792,13 @@ QString ImageInfo::filePath() const
     QString album = ImageInfoStatic::cache()->albumRelativePath(m_data->albumId);
     ImageInfoReadLocker lock;
 
-    if (album == "/")
+    if (album == QLatin1String("/"))
     {
         return albumRoot + album + m_data->name;
     }
     else
     {
-        return albumRoot + album + '/' + m_data->name;
+        return albumRoot + album + QLatin1Char('/') + m_data->name;
     }
 }
 

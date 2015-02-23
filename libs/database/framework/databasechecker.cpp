@@ -53,41 +53,41 @@ bool DatabasePrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
 {
     bool result = true;
     DatabaseLocking fromLocking;
-    DatabaseBackend fromDBbackend(&fromLocking, "PrivilegesCheckDatabase");
+    DatabaseBackend fromDBbackend(&fromLocking, QLatin1String("PrivilegesCheckDatabase"));
 
     if (!fromDBbackend.open(m_parameters))
     {
         return false;
     }
 
-    if (!checkPriv(fromDBbackend, "CheckPriv_CREATE_TABLE"))
+    if (!checkPriv(fromDBbackend, QLatin1String("CheckPriv_CREATE_TABLE")))
     {
-        insufficientRights.append("CREATE TABLE");
+        insufficientRights.append(QLatin1String("CREATE TABLE"));
         result = false;
     }
-    else if (!checkPriv(fromDBbackend, "CheckPriv_ALTER_TABLE"))
+    else if (!checkPriv(fromDBbackend, QLatin1String("CheckPriv_ALTER_TABLE")))
     {
-        insufficientRights.append("ALTER TABLE");
+        insufficientRights.append(QLatin1String("ALTER TABLE"));
         result = false;
     }
-    else if (!checkPriv(fromDBbackend, "CheckPriv_CREATE_TRIGGER"))
+    else if (!checkPriv(fromDBbackend, QLatin1String("CheckPriv_CREATE_TRIGGER")))
     {
-        insufficientRights.append("CREATE TRIGGER");
+        insufficientRights.append(QLatin1String("CREATE TRIGGER"));
         result = false;
     }
-    else if (!checkPriv(fromDBbackend, "CheckPriv_DROP_TRIGGER"))
+    else if (!checkPriv(fromDBbackend, QLatin1String("CheckPriv_DROP_TRIGGER")))
     {
-        insufficientRights.append("DROP TRIGGER");
+        insufficientRights.append(QLatin1String("DROP TRIGGER"));
         result = false;
     }
-    else if (!checkPriv(fromDBbackend, "CheckPriv_DROP_TABLE"))
+    else if (!checkPriv(fromDBbackend, QLatin1String("CheckPriv_DROP_TABLE")))
     {
-        insufficientRights.append("DROP TABLE");
+        insufficientRights.append(QLatin1String("DROP TABLE"));
         result = false;
     }
 
     // Try to delete this table in any case
-    checkPriv(fromDBbackend, "CheckPriv_Cleanup");
+    checkPriv(fromDBbackend, QLatin1String("CheckPriv_Cleanup"));
 
     return result;
 }
@@ -97,8 +97,7 @@ bool DatabasePrivilegesChecker::checkPriv(DatabaseBackend& dbBackend, const QStr
     QMap<QString, QVariant> bindingMap;
     // now perform the copy action
     QList<QString> columnNames;
-    DatabaseCoreBackend::QueryState queryStateResult = dbBackend.execDBAction(dbBackend.getDBAction(dbActionName),
-            bindingMap);
+    DatabaseCoreBackend::QueryState queryStateResult = dbBackend.execDBAction(dbBackend.getDBAction(dbActionName), bindingMap);
 
     if (queryStateResult != DatabaseCoreBackend::NoErrors &&
         dbBackend.lastSQLError().isValid()                &&

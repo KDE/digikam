@@ -59,7 +59,7 @@ public:
         StartError
     };
 
-    explicit DatabaseServerError(DatabaseServerErrorEnum errorType=NoErrors, const QString& errorText="");
+    explicit DatabaseServerError(DatabaseServerErrorEnum errorType=NoErrors, const QString& errorText = QString());
     DatabaseServerError(const DatabaseServerError& dbServerError);
     ~DatabaseServerError();
 

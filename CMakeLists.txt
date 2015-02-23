@@ -1266,18 +1266,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasecopymanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databaseserverstarter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databaseservererror.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagecomments.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageextendedproperties.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageinfo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageinfolist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageinfocache.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagelister.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagelisterreceiver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageposition.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagecopyright.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagequerybuilder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagescanner.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagetagpair.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraph.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraphmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/databaseface.cpp
@@ -1285,14 +1273,26 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/facetagseditor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/downloadhistory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/namefilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/searchxml.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/schemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/tagproperties.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/tagscache.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/searchxml.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/schemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionscanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionlocation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionscannerhints.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagecomments.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageextendedproperties.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageinfo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageinfolist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageinfocache.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageposition.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagecopyright.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagetagpair.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagelisterreceiver.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagelister.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagescanner.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagequerybuilder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/album/albumdb.cpp
        )
 

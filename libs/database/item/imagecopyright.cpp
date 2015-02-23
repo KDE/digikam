@@ -463,7 +463,7 @@ void ImageCopyright::setLanguageProperty(const QString& property, const QString&
 
     if (language.isNull())
     {
-        language = "x-default";
+        language = QLatin1String("x-default");
     }
 
     DatabaseAccess().db()->setImageCopyrightProperty(m_id, property, value, language, uniqueness);
@@ -503,14 +503,14 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
         QString langCode = spec.left(spec.indexOf(QLatin1Char('_'))) + QLatin1Char('-');
         QString fullCode = spec.replace(QLatin1Char('_'), QLatin1Char('-'));        
     }
-    else if (languageCode == "x-default")
+    else if (languageCode == QLatin1String("x-default"))
     {
         langCode = languageCode;
     }
     else
     {
         // en-us => en-
-        langCode = languageCode.section('-', 0, 0, QString::SectionIncludeTrailingSep);
+        langCode = languageCode.section(QLatin1Char('-'), 0, 0, QString::SectionIncludeTrailingSep);
     }
 
     int fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch;

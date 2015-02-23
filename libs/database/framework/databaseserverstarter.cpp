@@ -108,12 +108,12 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
      * 3. If not, start the database server manager
      * 4. Release semaphore lock
      */
-    QSystemSemaphore sem("DigikamDBSrvAccess", 1, QSystemSemaphore::Open);
+    QSystemSemaphore sem(QLatin1String("DigikamDBSrvAccess"), 1, QSystemSemaphore::Open);
     sem.acquire();
 
     if (!isServerRegistered())
     {
-        const QString dbServerMgrPath(LIBEXEC_INSTALL_DIR "/digikamdatabaseserver");
+        const QString dbServerMgrPath = QString::fromUtf8(LIBEXEC_INSTALL_DIR) + QLatin1String("/digikamdatabaseserver");
 
         if ( dbServerMgrPath.isEmpty() )
         {
@@ -148,8 +148,8 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
         }
     }
 
-    QDBusInterface dbus_iface("org.kde.digikam.DatabaseServer", "/DatabaseServer");
-    QDBusMessage stateMsg = dbus_iface.call("isRunning");
+    QDBusInterface dbus_iface(QLatin1String("org.kde.digikam.DatabaseServer"), QLatin1String("/DatabaseServer"));
+    QDBusMessage stateMsg = dbus_iface.call(QLatin1String("isRunning"));
 
     if (!stateMsg.arguments().at(0).toBool())
     {
@@ -158,7 +158,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
         QList<QVariant> arguments;
         arguments.append(dbType);
 
-        QDBusMessage reply = dbus_iface.callWithArgumentList(QDBus::Block, "startDatabaseProcess", arguments);
+        QDBusMessage reply = dbus_iface.callWithArgumentList(QDBus::Block, QLatin1String("startDatabaseProcess"), arguments);
 
         if (QDBusMessage::ErrorMessage==reply.type())
         {
@@ -168,13 +168,12 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
         }
         else
         {
-            arguments = reply.arguments();
-
+            arguments                = reply.arguments();
             QDBusVariant dbusVariant = qvariant_cast<QDBusVariant>(arguments.at(1));
             // retrieve the actual value stored in the D-Bus variant
-            QVariant dbusArgument = dbusVariant.variant();
+            QVariant dbusArgument    = dbusVariant.variant();
             DatabaseServerError item = qdbus_cast<DatabaseServerError>(dbusArgument);
-            result = item;
+            result                   = item;
         }
     }
 
@@ -185,13 +184,13 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
 bool DatabaseServerStarter::isServerRegistered()
 {
-    QDBusConnectionInterface* interface = QDBusConnection::sessionBus().interface();
-    QDBusReply<QStringList> reply       = interface->registeredServiceNames();
+    QDBusConnectionInterface* const interface = QDBusConnection::sessionBus().interface();
+    QDBusReply<QStringList> reply             = interface->registeredServiceNames();
 
     if (reply.isValid())
     {
         QStringList serviceNames = reply.value();
-        return serviceNames.contains("org.kde.digikam.DatabaseServer");
+        return serviceNames.contains(QLatin1String("org.kde.digikam.DatabaseServer"));
     }
 
     return false;

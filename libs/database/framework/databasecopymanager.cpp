@@ -62,7 +62,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
 {
     m_isStopProcessing = false;
     DatabaseLocking fromLocking;
-    DatabaseBackend fromDBbackend(&fromLocking, "MigrationFromDatabase");
+    DatabaseBackend fromDBbackend(&fromLocking, QLatin1String("MigrationFromDatabase"));
 
     if (!fromDBbackend.open(fromDBParameters))
     {
@@ -71,7 +71,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     }
 
     DatabaseLocking toLocking;
-    DatabaseBackend toDBbackend(&toLocking, "MigrationToDatabase");
+    DatabaseBackend toDBbackend(&toLocking, QLatin1String("MigrationToDatabase"));
 
     if (!toDBbackend.open(toDBParameters))
     {
@@ -82,27 +82,27 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
 
     // order may be important, array class must _not_ be sorted
     const QStringList tables = QStringList()
-        << "AlbumRoots"
-        << "Albums"
-        << "Images"
-        << "ImageHaarMatrix"
-        << "ImageInformation"
-        << "ImageMetadata"
-        << "ImageTagProperties"
-        << "TagProperties"
-        << "ImagePositions"
-        << "ImageComments"
-        << "ImageCopyright"
-        << "Tags"
-        << "ImageTags"
-        << "ImageProperties"
-        << "ImageHistory"
-        << "ImageRelations"
-        << "Searches"
-        << "DownloadHistory"
-        << "VideoMetadata"
+        << QLatin1String("AlbumRoots")
+        << QLatin1String("Albums")
+        << QLatin1String("Images")
+        << QLatin1String("ImageHaarMatrix")
+        << QLatin1String("ImageInformation")
+        << QLatin1String("ImageMetadata")
+        << QLatin1String("ImageTagProperties")
+        << QLatin1String("TagProperties")
+        << QLatin1String("ImagePositions")
+        << QLatin1String("ImageComments")
+        << QLatin1String("ImageCopyright")
+        << QLatin1String("Tags")
+        << QLatin1String("ImageTags")
+        << QLatin1String("ImageProperties")
+        << QLatin1String("ImageHistory")
+        << QLatin1String("ImageRelations")
+        << QLatin1String("Searches")
+        << QLatin1String("DownloadHistory")
+        << QLatin1String("VideoMetadata")
         /*
-        << "Settings"
+        << QLatin1String("Settings")
         */
     ;
     const int tablesSize = tables.size();
@@ -112,7 +112,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     // Delete all tables
     for (int i=0; m_isStopProcessing || i < tablesSize; ++i)
     {
-        if (toDBbackend.execDirectSql(QString("DROP TABLE IF EXISTS %1;").arg(tables[i])) != DatabaseCoreBackend::NoErrors)
+        if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS %1;").arg(tables[i])) != DatabaseCoreBackend::NoErrors)
         {
             emit finished(DatabaseCopyManager::failed, i18n("Error while scrubbing the target database."));
             fromDBbackend.close();
@@ -120,7 +120,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
             return;
         }
     }
-    if (toDBbackend.execDirectSql(QString("DROP TABLE IF EXISTS Settings;")) != DatabaseCoreBackend::NoErrors)
+    if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS Settings;")) != DatabaseCoreBackend::NoErrors)
     {
         emit finished(DatabaseCopyManager::failed, i18n("Error while scrubbing the target database."));
         fromDBbackend.close();
@@ -147,12 +147,12 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
      */
     for (int i=0; m_isStopProcessing || i < tablesSize; ++i)
     {
-        emit stepStarted(i18n(QString("Copy %1...").arg(tables[i]).toLatin1().constData()));
+        emit stepStarted(i18n(QString::fromUtf8("Copy %1...").arg(tables[i]).toLatin1().constData()));
 
         // now perform the copy action
         if ( m_isStopProcessing ||
-             !copyTable(fromDBbackend, QString("Migrate_Read_%1").arg(tables[i]),
-                        toDBbackend, QString("Migrate_Write_%1").arg(tables[i]))
+             !copyTable(fromDBbackend, QString::fromUtf8("Migrate_Read_%1").arg(tables[i]),
+                        toDBbackend, QString::fromUtf8("Migrate_Write_%1").arg(tables[i]))
            )
         {
             handleClosing(m_isStopProcessing, fromDBbackend, toDBbackend);
@@ -161,7 +161,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     }
 
 /*
-    if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_Settings"), toDBbackend, QString("Migrate_Write_Settings")))
+    if (isStopThread || !copyTable(fromDBbackend, QLatin1String("Migrate_Read_Settings"), toDBbackend, QLatin1String("Migrate_Write_Settings")))
     {
         handleClosing(isStopThread, fromDBbackend, toDBbackend);
         return;
@@ -177,7 +177,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
                                     DatabaseBackend& toDBbackend, const QString& toActionName)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to copy contents from DB with ActionName: [" << fromActionName
-                  << "] to DB with ActionName [" << toActionName << "]";
+                                 << "] to DB with ActionName [" << toActionName << "]";
 
     QMap<QString, QVariant> bindingMap;
 
@@ -199,7 +199,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
          * Now get the current row. If this is not possible, a value lower than 0 will be returned.
          * To not confuse the log reading user, we reset this value to 0.
          */
-        resultSize = result.at()<0 ? 0 : result.at();
+        resultSize = (result.at() < 0) ? 0 : result.at();
         /*
         * avoid a misleading error message, query is redone if isForwardOnly
         */
@@ -235,7 +235,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
     while (result.next())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Query isOnValidRow [" << result.isValid() << "] isActive [" << result.isActive()
-                      << "] result size: [" << result.size() << "]";
+                                     << "] result size: [" << result.size() << "]";
 
         if (m_isStopProcessing == true)
         {
@@ -252,12 +252,12 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
         foreach(QString columnName, columnNames) // krazy:exclude=foreach
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Column: ["<< columnName << "] value ["<<result.value(i)<<"]";
-            tempBindingMap.insert(columnName.insert(0, ':'), result.value(i));
+            tempBindingMap.insert(columnName.insert(0, QLatin1Char(':')), result.value(i));
             ++i;
         }
 
         // insert the previous requested values to the toDB
-        DatabaseAction action = toDBbackend.getDBAction(toActionName);
+        DatabaseAction action                            = toDBbackend.getDBAction(toActionName);
         DatabaseCoreBackend::QueryState queryStateResult = toDBbackend.execDBAction(action, tempBindingMap);
 
         if (queryStateResult != DatabaseCoreBackend::NoErrors &&
@@ -265,7 +265,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
             toDBbackend.lastSQLError().number() != 0)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Error while converting table data. Details: " << toDBbackend.lastSQLError();
-            QString errorMsg = i18n("Error while converting the database. \n Details: %1", toDBbackend.lastSQLError().databaseText());
+            QString errorMsg = i18n("Error while converting the database.\n Details: %1", toDBbackend.lastSQLError().databaseText());
             emit finished(DatabaseCopyManager::failed, errorMsg);
             return false;
         }
@@ -278,7 +278,7 @@ void DatabaseCopyManager::handleClosing(bool isStopThread, DatabaseBackend& from
 {
     if (isStopThread)
     {
-        emit finished(DatabaseCopyManager::canceled, "");
+        emit finished(DatabaseCopyManager::canceled, QLatin1String(""));
     }
 
     fromDBbackend.close();

@@ -28,7 +28,6 @@
 
 #include <QStringList>
 
-
 namespace Digikam
 {
 
@@ -39,15 +38,15 @@ NameFilter::NameFilter(const QString& filter)
         return;
     }
 
-    QChar sep( ';' );
+    QLatin1Char sep(';');
     int i = filter.indexOf( sep );
 
-    if ( i == -1 && filter.indexOf( ' ') != -1 )
+    if ( i == -1 && filter.indexOf(QLatin1Char(' ')) != -1)
     {
-        sep = QChar( ' ' );
+        sep = QLatin1Char(' ');
     }
 
-    QStringList list = filter.split(sep, QString::SkipEmptyParts);
+    QStringList list               = filter.split(sep, QString::SkipEmptyParts);
     QStringList::const_iterator it = list.constBegin();
 
     while ( it != list.constEnd() )

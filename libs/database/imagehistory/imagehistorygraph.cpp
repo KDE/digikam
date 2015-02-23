@@ -802,7 +802,7 @@ QHash<ImageInfo, HistoryImageId::Types> ImageHistoryGraph::categorize() const
 static QString toString(const HistoryVertexProperties& props)
 {
     QString s;
-    s = "Ids: ";
+    s = QLatin1String("Ids: ");
     QStringList ids;
 
     foreach(const ImageInfo& info, props.infos)
@@ -814,22 +814,22 @@ static QString toString(const HistoryVertexProperties& props)
     {
         if (ids.size() == 1)
         {
-            return QString("Id: ") + ids.first();
+            return QLatin1String("Id: ") + ids.first();
         }
         else
         {
-            return QString("Ids: (") + ids.join(",") + ')';
+            return QLatin1String("Ids: (") + ids.join(QLatin1String(",")) + QLatin1Char(')');
         }
     }
     else
     {
         if (ids.size() == 1)
         {
-            return QString("Id: ") + ids.first() + " UUID: " + props.uuid.left(6) + "...";
+            return QLatin1String("Id: ") + ids.first() + QLatin1String(" UUID: ") + props.uuid.left(6) + QLatin1String("...");
         }
         else
         {
-            return QString("Ids: (") + ids.join(",") + ") UUID: " + props.uuid.left(6) + "...";
+            return QLatin1String("Ids: (") + ids.join(QLatin1String(",")) + QLatin1String(") UUID: ") + props.uuid.left(6) + QLatin1String("...");
         }
     }
 }
@@ -867,12 +867,12 @@ QDebug operator<<(QDebug dbg, const ImageHistoryGraph& g)
 
         if (!sourceVertexTexts.isEmpty())
         {
-            dbg.nospace() << QString("{ ") + targetString + " } "
-                          "-> { " + sourceVertexTexts.join(" }, { ") + " }" << endl;
+            dbg.nospace() << QLatin1String("{ ") + targetString + QLatin1String(" } ") +
+                          QLatin1String("-> { ") + sourceVertexTexts.join(QLatin1String(" }, { ")) + QLatin1String(" }") << endl;
         }
         else if (g.data().outDegree(target) == 0)
         {
-            dbg.nospace() << QString("Unconnected: { ") + targetString + " }" << endl;
+            dbg.nospace() << QLatin1String("Unconnected: { ") + targetString + QLatin1String(" }") << endl;
         }
     }
 

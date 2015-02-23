@@ -60,7 +60,7 @@ public:
 
             if (info.language.isNull())
             {
-                info.language = "x-default";
+                info.language = QLatin1String("x-default");
             }
         }
     }
@@ -250,13 +250,13 @@ QString ImageComments::commentForLanguage(const QString& languageCode, int* cons
     // en-us => en-
     QString firstPart;
 
-    if (languageCode == "x-default")
+    if (languageCode == QLatin1String("x-default"))
     {
         firstPart = languageCode;
     }
     else
     {
-        firstPart = languageCode.section('-', 0, 0, QString::SectionIncludeTrailingSep);
+        firstPart = languageCode.section(QLatin1Char('-'), 0, 0, QString::SectionIncludeTrailingSep);
     }
 
     d->languageMatch(languageCode, firstPart, fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch);
@@ -376,7 +376,7 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
 
     if (language.isEmpty())
     {
-        language = "x-default";
+        language = QLatin1String("x-default");
     }
 
     QString author = author_;

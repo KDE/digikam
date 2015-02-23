@@ -366,13 +366,13 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy) const
         }
         else
         {
-            path = it->name + '/' + path;
+            path = it->name + QLatin1Char('/') + path;
         }
     }
 
     if (slashPolicy == IncludeLeadingSlash)
     {
-        path.prepend("/");
+        path.prepend(QLatin1String("/"));
     }
 
     return path;
@@ -429,6 +429,7 @@ int TagsCache::tagForName(const QString& tagName, int parentId) const
     QReadLocker locker(&d->lock);
 
     QList<TagShortInfo>::const_iterator tag;
+
     foreach(int id, d->nameHash.values(tagName))
     {
         tag = d->find(id);
@@ -488,7 +489,7 @@ QList<int> TagsCache::parentTags(int id) const
 int TagsCache::tagForPath(const QString& tagPath) const
 {
     // split full tag "url" into list of single tag names
-    QStringList tagHierarchy = tagPath.split('/', QString::SkipEmptyParts);
+    QStringList tagHierarchy = tagPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
 
     if (tagHierarchy.isEmpty())
     {
@@ -498,7 +499,7 @@ int TagsCache::tagForPath(const QString& tagPath) const
     d->checkNameHash();
 
     // last entry in list is the actual tag name
-    int tagID = 0;
+    int tagID       = 0;
     QString tagName = tagHierarchy.back();
     tagHierarchy.pop_back();
     QList<TagShortInfo>::const_iterator tag, parentTag;
@@ -518,7 +519,7 @@ int TagsCache::tagForPath(const QString& tagPath) const
         int parentID = tag->pid;
 
         // Check hierarchy, from bottom to top
-        bool foundParentTag                 = true;
+        bool foundParentTag                       = true;
         QStringList::const_iterator parentTagName = tagHierarchy.constEnd();
 
         while (foundParentTag && parentTagName != tagHierarchy.constBegin())
@@ -572,7 +573,7 @@ QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths) const
 int TagsCache::createTag(const QString& tagPathToCreate)
 {
     // split full tag "url" into list of single tag names
-    QStringList tagHierarchy = tagPathToCreate.split('/', QString::SkipEmptyParts);
+    QStringList tagHierarchy = tagPathToCreate.split(QLatin1Char('/'), QString::SkipEmptyParts);
 
     if (tagHierarchy.isEmpty())
     {
@@ -581,11 +582,10 @@ int TagsCache::createTag(const QString& tagPathToCreate)
 
     d->checkNameHash();
 
-    int  tagID            = 0;
-    bool parentTagExisted = true;
-
-    QStringList tagsToCreate;
+    int  tagID                 = 0;
+    bool parentTagExisted      = true;
     int parentTagIDForCreation = 0;
+    QStringList tagsToCreate;
 
     {
         int  parentTagID = 0;
@@ -639,6 +639,7 @@ int TagsCache::createTag(const QString& tagPathToCreate)
 
     {
         DatabaseAccess access;
+
         foreach(const QString& tagName, tagsToCreate)
         {
             tagID = access.db()->addTag(parentTagIDForCreation, tagName, QString(), 0);
@@ -731,10 +732,12 @@ bool TagsCache::hasProperty(int tagId, const QString& property, const QString& v
     TagPropertiesRange range = d->findProperties(tagId);
 
     for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+    {
         if (d->compareProperty(it, property, value))
         {
             return true;
         }
+    }
 
     return false;
 }
@@ -746,10 +749,12 @@ QString TagsCache::propertyValue(int tagId, const QString& property) const
     TagPropertiesRange range = d->findProperties(tagId);
 
     for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+    {
         if (it->property == property)
         {
             return it->value;
         }
+    }
 
     return QString();
 }
@@ -928,7 +933,7 @@ int TagsCache::getOrCreateInternalTag(const QString& tagName)
     // ensure the parent tag exists, including the internal property
     getOrCreateTagWithProperty(tagPathOfDigikamInternalTags(IncludeLeadingSlash), propertyNameDigikamInternalTag());
 
-    QString tagPath = tagPathOfDigikamInternalTags(IncludeLeadingSlash) + '/' + tagName;
+    QString tagPath = tagPathOfDigikamInternalTags(IncludeLeadingSlash) + QLatin1Char('/') + tagName;
     return getOrCreateTagWithProperty(tagPath, propertyNameDigikamInternalTag());
 }
 
@@ -983,6 +988,7 @@ int TagsCache::colorLabelFromTags(QList<int> tagIds)
 {
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
+
     foreach(int tagId, tagIds)
     {
         for (int i=FirstColorLabel; i<=LastColorLabel; i++)
@@ -993,6 +999,7 @@ int TagsCache::colorLabelFromTags(QList<int> tagIds)
             }
         }
     }
+
     return -1;
 }
 
@@ -1024,6 +1031,7 @@ int TagsCache::pickLabelFromTags(QList<int> tagIds)
 {
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
+
     foreach(int tagId, tagIds)
     {
         for (int i=FirstPickLabel; i<=LastPickLabel; i++)
@@ -1034,11 +1042,12 @@ int TagsCache::pickLabelFromTags(QList<int> tagIds)
             }
         }
     }
+
     return -1;
 }
 
 QStringList TagsCache::shortenedTagPaths(const QList<int>& ids, QList<int>* sortedIds,
-                              LeadingSlashPolicy slashPolicy, HiddenTagsPolicy hiddenTagsPolicy) const
+                                         LeadingSlashPolicy slashPolicy, HiddenTagsPolicy hiddenTagsPolicy) const
 {
     QStringList paths;
     QList<QVariant> variantIds;
@@ -1069,6 +1078,5 @@ QStringList TagsCache::shortenedTagPaths(const QList<int>& ids,
 {
     return ImagePropertiesTab::shortenedTagPaths(tagPaths(ids, slashPolicy, hiddenTagsPolicy));
 }
-
 
 } // namespace Digikam
