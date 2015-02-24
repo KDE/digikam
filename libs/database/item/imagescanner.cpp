@@ -711,7 +711,7 @@ void ImageScanner::scanImageComments()
     // Title
     if (!metadataInfos.at(1).isNull())
     {
-        d->commit.title = metadataInfos.at(1).toMap()["x-default"].toString();
+        d->commit.title = metadataInfos.at(1).toMap()[QLatin1String("x-default")].toString();
     }
 }
 
@@ -833,10 +833,10 @@ void ImageScanner::scanTags()
 
             // _Digikam_root_tag_ is present in some photos tagged with older
             // version of digiKam, must be removed
-            if(keyword.contains(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)")))
+            if(keyword.contains(QRegExp(QLatin1String("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"))))
             {
-                keyword = keyword.replace(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"),
-                                          QString(""));
+                keyword = keyword.replace(QRegExp(QLatin1String("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)")),
+                                          QLatin1String(""));
             }
 
             filteredKeywords.append(keyword);
@@ -1553,16 +1553,16 @@ QString ImageScanner::uniqueHash() const
     if (d->scanInfo.category == DatabaseItem::Image)
     {
         if (DatabaseAccess().db()->isUniqueHashV2())
-            return QString(d->img.getUniqueHashV2());
+            return QString::fromUtf8(d->img.getUniqueHashV2());
         else
-            return QString(d->img.getUniqueHash());
+            return QString::fromUtf8(d->img.getUniqueHash());
     }
     else
     {
         if (DatabaseAccess().db()->isUniqueHashV2())
-            return QString(DImg::getUniqueHashV2(d->fileInfo.filePath()));
+            return QString::fromUtf8(DImg::getUniqueHashV2(d->fileInfo.filePath()));
         else
-            return QString(DImg::getUniqueHash(d->fileInfo.filePath()));
+            return QString::fromUtf8(DImg::getUniqueHash(d->fileInfo.filePath()));
     }
 }
 
@@ -1573,20 +1573,20 @@ QString ImageScanner::detectImageFormat() const
     switch (dimgFormat)
     {
         case DImg::JPEG:
-            return "JPG";
+            return QLatin1String("JPG");
         case DImg::PNG:
-            return "PNG";
+            return QLatin1String("PNG");
         case DImg::TIFF:
-            return "TIFF";
+            return QLatin1String("TIFF");
         case DImg::PPM:
-            return "PPM";
+            return QLatin1String("PPM");
         case DImg::JP2K:
-            return "JP2";
+            return QLatin1String("JP2");
         case DImg::PGF:
-            return "PGF";
+            return QLatin1String("PGF");
         case DImg::RAW:
         {
-            QString format = "RAW-";
+            QString format = QLatin1String("RAW-");
             format += d->fileInfo.suffix().toUpper();
             return format;
         }
@@ -1597,8 +1597,9 @@ QString ImageScanner::detectImageFormat() const
 
             if (!format.isEmpty())
             {
-                return QString(format).toUpper();
+                return QString::fromUtf8(format).toUpper();
             }
+
             break;
         }
     }
@@ -1611,34 +1612,34 @@ QString ImageScanner::detectVideoFormat() const
 {
     QString suffix = d->fileInfo.suffix().toUpper();
 
-    if (suffix == "MPEG" || suffix == "MPG" || suffix == "MPO" || suffix == "MPE")
+    if (suffix == QLatin1String("MPEG") || suffix == QLatin1String("MPG") || suffix == QLatin1String("MPO") || suffix == QLatin1String("MPE"))
     {
-        return "MPEG";
+        return QLatin1String("MPEG");
     }
 
-    if (suffix == "ASF" || suffix == "WMV")
+    if (suffix == QLatin1String("ASF") || suffix == QLatin1String("WMV"))
     {
-        return "WMV";
+        return QLatin1String("WMV");
     }
 
-    if (suffix == "AVI" || suffix == "DIVX" )
+    if (suffix == QLatin1String("AVI") || suffix == QLatin1String("DIVX") )
     {
-        return "AVI";
+        return QLatin1String("AVI");
     }
 
-    if (suffix == "MKV" || suffix == "MKS")
+    if (suffix == QLatin1String("MKV") || suffix == QLatin1String("MKS"))
     {
-        return "MKV";
+        return QLatin1String("MKV");
     }
 
-    if (suffix == "M4V" || suffix == "MOV" || suffix == "M2V" )
+    if (suffix == QLatin1String("M4V") || suffix == QLatin1String("MOV") || suffix == QLatin1String("M2V") )
     {
-        return "MOV";
+        return QLatin1String("MOV");
     }
 
-    if (suffix == "3GP" || suffix == "3G2" )
+    if (suffix == QLatin1String("3GP") || suffix == QLatin1String("3G2") )
     {
-        return "3GP";
+        return QLatin1String("3GP");
     }
 
     return suffix;
@@ -1671,25 +1672,26 @@ QDateTime ImageScanner::creationDateFromFilesystem(const QFileInfo& info)
 QString ImageScanner::formatToString(const QString& format)
 {
     // image -------------------------------------------------------------------
-    if (format == "JPG")
+
+    if (format == QLatin1String("JPG"))
     {
-        return "JPEG";
+        return QLatin1String("JPEG");
     }
-    else if (format == "PNG")
+    else if (format == QLatin1String("PNG"))
     {
         return format;
     }
-    else if (format == "TIFF")
+    else if (format == QLatin1String("TIFF"))
     {
         return format;
     }
-    else if (format == "PPM")
+    else if (format == QLatin1String("PPM"))
     {
         return format;
     }
-    else if (format == "JP2" || format == "JP2k" || format == "JP2K")
+    else if (format == QLatin1String("JP2") || format == QLatin1String("JP2k") || format == QLatin1String("JP2K"))
     {
-        return "JPEG 2000";
+        return QLatin1String("JPEG 2000");
     }
     else if (format.startsWith(QLatin1String("RAW-")))
     {
@@ -1697,51 +1699,55 @@ QString ImageScanner::formatToString(const QString& format)
                      "RAW image file (%1)",
                      format.mid(4));
     }
+
     // video -------------------------------------------------------------------
-    else if (format == "MPEG")
+
+    else if (format == QLatin1String("MPEG"))
     {
         return format;
     }
-    else if (format == "AVI")
+    else if (format == QLatin1String("AVI"))
     {
         return format;
     }
-    else if (format == "MOV")
+    else if (format == QLatin1String("MOV"))
     {
-        return "Quicktime";
+        return QLatin1String("Quicktime");
     }
-    else if (format == "WMF")
+    else if (format == QLatin1String("WMF"))
     {
-        return "Windows MetaFile";
+        return QLatin1String("Windows MetaFile");
     }
-    else if (format == "WMV")
+    else if (format == QLatin1String("WMV"))
     {
-        return "Windows Media Video";
+        return QLatin1String("Windows Media Video");
     }
-    else if (format == "MP4")
+    else if (format == QLatin1String("MP4"))
     {
-        return "MPEG-4";
+        return QLatin1String("MPEG-4");
     }
-    else if (format == "3GP")
+    else if (format == QLatin1String("3GP"))
     {
-        return "3GPP";
+        return QLatin1String("3GPP");
     }
+
     // audio -------------------------------------------------------------------
-    else if (format == "OGG")
+
+    else if (format == QLatin1String("OGG"))
     {
-        return "Ogg";
+        return QLatin1String("Ogg");
     }
-    else if (format == "MP3")
+    else if (format == QLatin1String("MP3"))
     {
         return format;
     }
-    else if (format == "WMA")
+    else if (format == QLatin1String("WMA"))
     {
-        return "Windows Media Audio";
+        return QLatin1String("Windows Media Audio");
     }
-    else if (format == "WAV")
+    else if (format == QLatin1String("WAV"))
     {
-        return "WAVE";
+        return QLatin1String("WAVE");
     }
     else
     {
@@ -1756,55 +1762,55 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
     {
             // copyright table
         case MetadataInfo::IptcCoreCopyrightNotice:
-            return "copyrightNotice";
+            return QLatin1String("copyrightNotice");
         case MetadataInfo::IptcCoreCreator:
-            return "creator";
+            return QLatin1String("creator");
         case MetadataInfo::IptcCoreProvider:
-            return "provider";
+            return QLatin1String("provider");
         case MetadataInfo::IptcCoreRightsUsageTerms:
-            return "rightsUsageTerms";
+            return QLatin1String("rightsUsageTerms");
         case MetadataInfo::IptcCoreSource:
-            return "source";
+            return QLatin1String("source");
         case MetadataInfo::IptcCoreCreatorJobTitle:
-            return "creatorJobTitle";
+            return QLatin1String("creatorJobTitle");
         case MetadataInfo::IptcCoreInstructions:
-            return "instructions";
+            return QLatin1String("instructions");
 
             // ImageProperties table
         case MetadataInfo::IptcCoreCountryCode:
-            return "countryCode";
+            return QLatin1String("countryCode");
         case MetadataInfo::IptcCoreCountry:
-            return "country";
+            return QLatin1String("country");
         case MetadataInfo::IptcCoreCity:
-            return "city";
+            return QLatin1String("city");
         case MetadataInfo::IptcCoreLocation:
-            return "location";
+            return QLatin1String("location");
         case MetadataInfo::IptcCoreProvinceState:
-            return "provinceState";
+            return QLatin1String("provinceState");
         case MetadataInfo::IptcCoreIntellectualGenre:
-            return "intellectualGenre";
+            return QLatin1String("intellectualGenre");
         case MetadataInfo::IptcCoreJobID:
-            return "jobId";
+            return QLatin1String("jobId");
         case MetadataInfo::IptcCoreScene:
-            return "scene";
+            return QLatin1String("scene");
         case MetadataInfo::IptcCoreSubjectCode:
-            return "subjectCode";
+            return QLatin1String("subjectCode");
         case MetadataInfo::IptcCoreContactInfoCity:
-            return "creatorContactInfo.city";
+            return QLatin1String("creatorContactInfo.city");
         case MetadataInfo::IptcCoreContactInfoCountry:
-            return "creatorContactInfo.country";
+            return QLatin1String("creatorContactInfo.country");
         case MetadataInfo::IptcCoreContactInfoAddress:
-            return "creatorContactInfo.address";
+            return QLatin1String("creatorContactInfo.address");
         case MetadataInfo::IptcCoreContactInfoPostalCode:
-            return "creatorContactInfo.postalCode";
+            return QLatin1String("creatorContactInfo.postalCode");
         case MetadataInfo::IptcCoreContactInfoProvinceState:
-            return "creatorContactInfo.provinceState";
+            return QLatin1String("creatorContactInfo.provinceState");
         case MetadataInfo::IptcCoreContactInfoEmail:
-            return "creatorContactInfo.email";
+            return QLatin1String("creatorContactInfo.email");
         case MetadataInfo::IptcCoreContactInfoPhone:
-            return "creatorContactInfo.phone";
+            return QLatin1String("creatorContactInfo.phone");
         case MetadataInfo::IptcCoreContactInfoWebUrl:
-            return "creatorContactInfo.webUrl";
+            return QLatin1String("creatorContactInfo.webUrl");
         default:
             return QString();
     }
@@ -1843,12 +1849,12 @@ void ImageScanner::scanBalooInfo()
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "+++++++++++++++++++++Comment " << bInfo.comment;
 
-        if(!d->commit.captions.contains("x-default"))
+        if(!d->commit.captions.contains(QLatin1String("x-default")))
         {
             CaptionValues val;
             val.caption                   = bInfo.comment;
             d->commit.commitImageComments = true;
-            d->commit.captions.insert(QString("x-default"), val);
+            d->commit.captions.insert(QLatin1String("x-default"), val);
         }
     }
 
