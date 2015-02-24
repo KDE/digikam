@@ -207,14 +207,14 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
 
     QList<QVariant> values;
 
-    QString query = "SELECT DISTINCT Images.id, Images.name, Images.album, "
+    QString query = QString::fromUtf8("SELECT DISTINCT Images.id, Images.name, Images.album, "
                     "       ImageInformation.rating, Images.category, "
                     "       ImageInformation.format, ImageInformation.creationDate, "
                     "       Images.modificationDate, Images.fileSize, "
                     "       ImageInformation.width, ImageInformation.height "
                     " FROM Images "
                     "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                    " WHERE Images.status=1 AND ";
+                    " WHERE Images.status=1 AND ");
 
     if (d->recursive)
     {
@@ -228,9 +228,9 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
 
             QList<QVariant> v;
             DatabaseAccess  access;
-            q += "Images.album IN (";
+            q += QString::fromUtf8("Images.album IN (");
             access.db()->addBoundValuePlaceholders(q, ids.size());
-            q += ");";
+            q += QString::fromUtf8(");");
             access.backend()->execSql(q, ids, &v);
 
             values += v;
@@ -239,7 +239,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
     else
     {
         DatabaseAccess access;
-        query += "Images.album = ?;";
+        query += QString::fromUtf8("Images.album = ?;");
         access.backend()->execSql(query, albumIds, &values);
     }
 
@@ -290,18 +290,18 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds
     {
         QList<QVariant>         values;
         QMap<QString, QVariant> parameters;
-        parameters.insert(":tagPID", *it);
-        parameters.insert(":tagID",  *it);
+        parameters.insert(QLatin1String(":tagPID"), *it);
+        parameters.insert(QLatin1String(":tagID"),  *it);
 
         DatabaseAccess access;
 
         if (d->recursive)
         {
-            access.backend()->execDBAction(access.backend()->getDBAction(QString("listTagRecursive")), parameters, &values);
+            access.backend()->execDBAction(access.backend()->getDBAction(QLatin1String("listTagRecursive")), parameters, &values);
         }
         else
         {
-            access.backend()->execDBAction(access.backend()->getDBAction(QString("listTag")), parameters, &values);
+            access.backend()->execDBAction(access.backend()->getDBAction(QLatin1String("listTag")), parameters, &values);
         }
 
         QSet<int> albumRoots = albumRootsToList();
@@ -363,24 +363,23 @@ void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)
     QList<QVariant>  values;
     DatabaseAccess   access;
 
-    access.backend()->execSql(QString("SELECT Images.id "
-                                      " FROM Images "
-                                      "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                                      "       INNER JOIN Albums ON Albums.id="+
-                                      QString::number(personId)+
-                                      " WHERE Images.status=1 "
-                                      " ORDER BY Albums.id;"),
+    access.backend()->execSql(QString::fromUtf8("SELECT Images.id "
+                                                " FROM Images "
+                                                "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                                "       INNER JOIN Albums ON Albums.id=")+
+                              QString::number(personId)+
+                              QString::fromUtf8(" WHERE Images.status=1 "
+                                                " ORDER BY Albums.id;"),
                               &values);
 
     QListIterator<QVariant> it(values);
 
     while (it.hasNext())
     {
-        TagsCache* cache;
-        cache = TagsCache::instance();
+        TagsCache* const cache = TagsCache::instance();
 
-        ImageTagPair pair(list.last(), cache->tagForPath("/People/Unknown"));
-        QList<QString> nameList = pair.values("face");
+        ImageTagPair pair(list.last(), cache->tagForPath(QLatin1String("/People/Unknown")));
+        QList<QString> nameList = pair.values(QLatin1String("face"));
 
         // push the image into the list every time a face with the name is found in the image
         int count = nameList.count(cache->tagName(personId));
@@ -400,7 +399,7 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
 
     {
         DatabaseAccess access;
-        access.backend()->execSql(QString("SELECT DISTINCT Images.id, Images.name, Images.album, "
+        access.backend()->execSql(QString::fromUtf8("SELECT DISTINCT Images.id, Images.name, Images.album, "
                                           "       Albums.albumRoot, "
                                           "       ImageInformation.rating, Images.category, "
                                           "       ImageInformation.format, ImageInformation.creationDate, "
@@ -473,7 +472,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1
 
     DatabaseAccess access;
 
-    access.backend()->execSql(QString("SELECT DISTINCT Images.id, "
+    access.backend()->execSql(QString::fromUtf8("SELECT DISTINCT Images.id, "
                                       "       Albums.albumRoot, ImageInformation.rating, ImageInformation.creationDate, "
                                       "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                                       " FROM Images "
@@ -534,7 +533,8 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
     QString errMsg;
 
     // query head
-    sqlQuery = "SELECT DISTINCT Images.id, Images.name, Images.album, "
+    sqlQuery = QString::fromUtf8(
+               "SELECT DISTINCT Images.id, Images.name, Images.album, "
                "       Albums.albumRoot, "
                "       ImageInformation.rating, Images.category, "
                "       ImageInformation.format, ImageInformation.creationDate, "
@@ -547,7 +547,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
                "       LEFT  JOIN VideoMetadata    ON Images.id=VideoMetadata.imageid "
                "       LEFT  JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
                "       INNER JOIN Albums           ON Albums.id=Images.album "
-               "WHERE Images.status=1 AND ( ";
+               "WHERE Images.status=1 AND ( ");
 
     // query body
     ImageQueryBuilder   builder;
@@ -557,11 +557,11 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
 
     if (limit > 0)
     {
-        sqlQuery += QString(" ) LIMIT %1; ").arg(limit);
+        sqlQuery += QString::fromUtf8(" ) LIMIT %1; ").arg(limit);
     }
     else
     {
-        sqlQuery += " );";
+        sqlQuery += QString::fromUtf8(" );");
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Search query:\n" << sqlQuery << "\n" << boundValues;
@@ -656,7 +656,8 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
     // ImageMetadata and ImagePositions are not joined and hooks are ignored.
 
     // query head
-    sqlQuery = "SELECT DISTINCT Images.id, Images.name, Images.album, "
+    sqlQuery = QString::fromUtf8(
+               "SELECT DISTINCT Images.id, Images.name, Images.album, "
                "       Albums.albumRoot, "
                "       ImageInformation.rating, Images.category, "
                "       ImageInformation.format, ImageInformation.creationDate, "
@@ -667,14 +668,14 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
                "       INNER JOIN ImageTagProperties ON ImageTagProperties.imageid=Images.id "
                "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                "       INNER JOIN Albums           ON Albums.id=Images.album "
-               "WHERE Images.status=1 AND ( ";
+               "WHERE Images.status=1 AND ( ");
 
     // query body
     ImageQueryBuilder builder;
     ImageQueryPostHooks hooks;
     builder.setImageTagPropertiesJoined(true); // ImageTagProperties added by INNER JOIN
     sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
-    sqlQuery += " );";
+    sqlQuery += QString::fromUtf8(" );");
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Search query:\n" << sqlQuery << "\n" << boundValues;
 
@@ -755,16 +756,16 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
     SearchXmlReader reader(xml);
     reader.readToFirstField();
 
-    if (reader.fieldName() != "similarity")
+    if (reader.fieldName() != QLatin1String("similarity"))
     {
-        receiver->error("Unsupported field name \"" + reader.fieldName() + "\" in Haar search");
+        receiver->error(QLatin1String("Unsupported field name \"") + reader.fieldName() + QLatin1String("\" in Haar search"));
         return;
     }
 
-    QStringRef type             = reader.attributes().value("type");
-    QStringRef numResultsString = reader.attributes().value("numberofresults");
-    QStringRef thresholdString  = reader.attributes().value("threshold");
-    QStringRef sketchTypeString = reader.attributes().value("sketchtype");
+    QStringRef type             = reader.attributes().value(QLatin1String("type"));
+    QStringRef numResultsString = reader.attributes().value(QLatin1String("numberofresults"));
+    QStringRef thresholdString  = reader.attributes().value(QLatin1String("threshold"));
+    QStringRef sketchTypeString = reader.attributes().value(QLatin1String("sketchtype"));
 
     double threshold                 = 0.9;
     int numberOfResults              = 20;
@@ -780,7 +781,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
         threshold = qMax(thresholdString.toString().toDouble(), 0.1);
     }
 
-    if (sketchTypeString == "handdrawn")
+    if (sketchTypeString == QLatin1String("handdrawn"))
     {
         sketchType = HaarIface::HanddrawnSketch;
     }
@@ -791,7 +792,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
 
     QList<qlonglong> list;
 
-    if (type == "signature")
+    if (type == QLatin1String("signature"))
     {
         QString sig = reader.value();
         HaarIface iface;
@@ -803,7 +804,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
 
         list = iface.bestMatchesForSignature(sig, numberOfResults, sketchType);
     }
-    else if (type == "imageid")
+    else if (type == QLatin1String("imageid"))
     {
         qlonglong id = reader.valueToLongLong();
         HaarIface iface;
@@ -826,30 +827,30 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
     bool            executionSuccess = true;
 
     {
-        /*
+/*
         // Unfortunately, we need to convert to QVariant
         QList<QVariant> variantIdList;
+
         foreach(const qlonglong& id, imageIds)
         {
             variantIdList << id;
         }
 
         DatabaseAccess access;
-        QSqlQuery query = access.backend()->prepareQuery(QString(
+        QSqlQuery query = access.backend()->prepareQuery(QString::fromUtf8(
                     "SELECT DISTINCT Images.id, Images.name, Images.album, "
                     "       ImageInformation.rating, ImageInformation.creationDate, "
                     "       Images.modificationDate, Images.fileSize, "
                     "       ImageInformation.width, ImageInformation.height "
                     " FROM Images "
                     "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                    " WHERE Images.id = ?;"
-                                                                ));
+                    " WHERE Images.id = ?;"));
 
         query.addBindValue(variantIdList);
         executionSuccess = query.execBatch
-        */
+*/
         DatabaseAccess access;
-        SqlQuery query = access.backend()->prepareQuery(QString(
+        SqlQuery query = access.backend()->prepareQuery(QString::fromUtf8(
                              "SELECT DISTINCT Images.id, Images.name, Images.album, "
                              "       Albums.albumRoot, "
                              "       ImageInformation.rating, Images.category, "
@@ -859,8 +860,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
                              " FROM Images "
                              "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                              "       LEFT JOIN Albums ON Albums.id=Images.album "
-                             " WHERE Images.status=1 AND Images.id = ?;"
-                         ));
+                             " WHERE Images.status=1 AND Images.id = ?;"));
 
         foreach(const qlonglong& id, imageIds)
         {
@@ -946,7 +946,7 @@ QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type, b
 {
     int tagId = url.tagId();
 
-    if (type == "faces")
+    if (type == QLatin1String("faces"))
     {
         SearchXmlWriter writer;
 
@@ -954,31 +954,30 @@ QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type, b
         writer.setDefaultFieldOperator(SearchXml::Or);
 
         QStringList properties;
-        properties << "autodetectedFace";
-        properties << "tagRegion";
+        properties << QLatin1String("autodetectedFace");
+        properties << QLatin1String("tagRegion");
 
         foreach(const QString& property, properties)
         {
-            writer.writeField("imagetagproperty", includeChildTags ? SearchXml::InTree : SearchXml::Equal);
+            writer.writeField(QLatin1String("imagetagproperty"), includeChildTags ? SearchXml::InTree : SearchXml::Equal);
 
             if (tagId != -1)
             {
-                writer.writeAttribute("tagid", QString::number(tagId));
+                writer.writeAttribute(QLatin1String("tagid"), QString::number(tagId));
             }
 
             writer.writeValue(property);
             writer.finishField();
         }
 
-
-        /*
+/*
         if (flags & TagAssigned && tagId)
         {
             writer.writeField("tagid", SearchXml::Equal);
             writer.writeValue(tagId);
             writer.finishField();
         }
-        */
+*/
 
         writer.finishGroup();
 
