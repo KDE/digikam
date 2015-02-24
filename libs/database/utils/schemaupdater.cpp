@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QDir>
 #include <QUrl>
+#include <QUrlQuery>
 
 // KDE includes
 
@@ -164,12 +165,12 @@ void SchemaUpdater::setVersionSettings()
 {
     if (d->currentVersion.isValid())
     {
-        d->albumDB->setSetting("DBVersion", QString::number(d->currentVersion.toInt()));
+        d->albumDB->setSetting(QLatin1String("DBVersion"), QString::number(d->currentVersion.toInt()));
     }
 
     if (d->currentRequiredVersion.isValid())
     {
-        d->albumDB->setSetting("DBVersionRequired", QString::number(d->currentRequiredVersion.toInt()));
+        d->albumDB->setSetting(QLatin1String("DBVersionRequired"), QString::number(d->currentRequiredVersion.toInt()));
     }
 }
 
@@ -187,8 +188,8 @@ static QVariant safeToVariant(const QString& s)
 
 void SchemaUpdater::readVersionSettings()
 {
-    d->currentVersion         = safeToVariant(d->albumDB->getSetting("DBVersion"));
-    d->currentRequiredVersion = safeToVariant(d->albumDB->getSetting("DBVersionRequired"));
+    d->currentVersion         = safeToVariant(d->albumDB->getSetting(QLatin1String("DBVersion")));
+    d->currentRequiredVersion = safeToVariant(d->albumDB->getSetting(QLatin1String("DBVersionRequired")));
 }
 
 void SchemaUpdater::setObserver(InitializationObserver* const observer)
@@ -211,7 +212,7 @@ bool SchemaUpdater::startUpdates()
                                 "You have insufficient privileges on the database.\n"
                                 "Following privileges are not assigned to you:\n %1"
                                 "\nCheck your privileges on the database and restart digiKam.",
-                                insufficientRights.join(",\n")
+                                insufficientRights.join(QLatin1String(",\n"))
                             );
 
             d->lastErrorMessage=errorMsg;
@@ -229,7 +230,7 @@ bool SchemaUpdater::startUpdates()
     // First step: do we have an empty database?
     QStringList tables = d->backend->tables();
 
-    if (tables.contains("Albums", Qt::CaseInsensitive))
+    if (tables.contains(QLatin1String("Albums"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
         readVersionSettings();
@@ -312,7 +313,7 @@ bool SchemaUpdater::startUpdates()
         if (d->parameters.isSQLite())
         {
             QFileInfo currentDBFile(d->parameters.databaseName);
-            QFileInfo digikam3DB(currentDBFile.dir(), "digikam3.db");
+            QFileInfo digikam3DB(currentDBFile.dir(), QLatin1String("digikam3.db"));
 
             if (digikam3DB.exists())
             {
@@ -414,7 +415,7 @@ bool SchemaUpdater::makeUpdates()
                                     "\"%1\" and \"%2\" from the directory \"%3\"). "
                                     "More probably you will want to report this error to the digikam-devel@kde.org "
                                     "mailing list. As well, please have a look at what digiKam prints on the console. ",
-                                    QString("digikam3.db"), QString("digikam4.db"), currentDBFile.dir().path());
+                                    QLatin1String("digikam3.db"), QLatin1String("digikam4.db"), currentDBFile.dir().path());
 
             if (!endWrapSchemaUpdateStep(updateV4toV7(), errorMsg))
             {
@@ -462,22 +463,22 @@ void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStri
     //NOTE for updating:
     //When changing anything here, just increment filterSettingsVersion() so that the changes take effect
 
-    defaultImageFilter << "jpg" << "jpeg" << "jpe"                    // JPEG
-                       << "jp2" << "j2k"  << "jpx"  << "jpc" << "pgx" // JPEG-2000
-                       << "tif" << "tiff"                             // TIFF
-                       << "png"                                       // PNG
-                       << "xpm" << "ppm"  << "pnm" << "pgf"
-                       << "gif" << "bmp"  << "xcf" << "pcx";
+    defaultImageFilter << QLatin1String("jpg") << QLatin1String("jpeg") << QLatin1String("jpe")                                                 // JPEG
+                       << QLatin1String("jp2") << QLatin1String("j2k")  << QLatin1String("jpx") << QLatin1String("jpc") << QLatin1String("pgx") // JPEG-2000
+                       << QLatin1String("tif") << QLatin1String("tiff")                                                                         // TIFF
+                       << QLatin1String("png")                                                                                                  // PNG
+                       << QLatin1String("xpm") << QLatin1String("ppm")  << QLatin1String("pnm") << QLatin1String("pgf")
+                       << QLatin1String("gif") << QLatin1String("bmp")  << QLatin1String("xcf") << QLatin1String("pcx");
 
     defaultImageFilter << KDcrawIface::KDcraw::rawFilesList();
 
-    defaultVideoFilter << "mpeg" << "mpg" << "mpo" << "mpe"                              // MPEG
-                       << "avi" << "divx"                                                // RIFF
-                       << "wmv" << "wmf" << "asf"                                        // ASF
-                       << "mp4" << "3gp" << "mov"  << "3g2" << "m4v" << "m2v"            // QuickTime
-                       << "mkv" << "webm";                                               // Matroska
+    defaultVideoFilter << QLatin1String("mpeg") << QLatin1String("mpg")  << QLatin1String("mpo") << QLatin1String("mpe")                                                    // MPEG
+                       << QLatin1String("avi")  << QLatin1String("divx")                                                                                                    // RIFF
+                       << QLatin1String("wmv")  << QLatin1String("wmf")  << QLatin1String("asf")                                                                            // ASF
+                       << QLatin1String("mp4")  << QLatin1String("3gp")  << QLatin1String("mov") << QLatin1String("3g2") << QLatin1String("m4v") << QLatin1String("m2v")    // QuickTime
+                       << QLatin1String("mkv")  << QLatin1String("webm");                                                                                                   // Matroska
 
-    defaultAudioFilter << "ogg" << "mp3" << "wma" << "wav";
+    defaultAudioFilter << QLatin1String("ogg") << QLatin1String("mp3") << QLatin1String("wma") << QLatin1String("wav");
 }
 
 bool SchemaUpdater::createFilterSettings()
@@ -486,16 +487,16 @@ bool SchemaUpdater::createFilterSettings()
     defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
 
     d->albumDB->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
-    d->albumDB->setSetting("FilterSettingsVersion", QString::number(filterSettingsVersion()));
-    d->albumDB->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::KDcraw::rawFilesVersion()));
+    d->albumDB->setSetting(QLatin1String("FilterSettingsVersion"),      QString::number(filterSettingsVersion()));
+    d->albumDB->setSetting(QLatin1String("DcrawFilterSettingsVersion"), QString::number(KDcrawIface::KDcraw::rawFilesVersion()));
 
     return true;
 }
 
 bool SchemaUpdater::updateFilterSettings()
 {
-    QString filterVersion = d->albumDB->getSetting("FilterSettingsVersion");
-    QString dcrawFilterVersion = d->albumDB->getSetting("DcrawFilterSettingsVersion");
+    QString filterVersion      = d->albumDB->getSetting(QLatin1String("FilterSettingsVersion"));
+    QString dcrawFilterVersion = d->albumDB->getSetting(QLatin1String("DcrawFilterSettingsVersion"));
 
     if (filterVersion.toInt() < filterSettingsVersion() ||
         dcrawFilterVersion.toInt() < KDcrawIface::KDcraw::rawFilesVersion())
@@ -531,19 +532,19 @@ bool SchemaUpdater::createDatabase()
 
 bool SchemaUpdater::createTables()
 {
-    return d->backend->execDBAction(d->backend->getDBAction("CreateDB"));
+    return d->backend->execDBAction(d->backend->getDBAction(QLatin1String("CreateDB")));
 }
 
 bool SchemaUpdater::createIndices()
 {
     // TODO: see which more indices are needed
     // create indices
-    return d->backend->execDBAction(d->backend->getDBAction("CreateIndices"));
+    return d->backend->execDBAction(d->backend->getDBAction(QLatin1String("CreateIndices")));
 }
 
 bool SchemaUpdater::createTriggers()
 {
-    return d->backend->execDBAction(d->backend->getDBAction(QString("CreateTriggers")));
+    return d->backend->execDBAction(d->backend->getDBAction(QLatin1String("CreateTriggers")));
 }
 
 bool SchemaUpdater::updateUniqueHash()
@@ -633,7 +634,7 @@ bool SchemaUpdater::updateToVersion(int targetVersion)
     if (d->currentVersion != targetVersion-1)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "updateToVersion performs only incremental updates. Called to update from"
-                 << d->currentVersion << "to" << targetVersion << ", aborting.";
+                                     << d->currentVersion << "to" << targetVersion << ", aborting.";
         return false;
     }
 
@@ -642,10 +643,10 @@ bool SchemaUpdater::updateToVersion(int targetVersion)
         case 6:
             // Digikam for database version 5 can work with version 6, though not using the new features
             // Note: We do not upgrade the uniqueHash
-            return performUpdateToVersion("UpdateSchemaFromV5ToV6", 6, 5);
+            return performUpdateToVersion(QLatin1String("UpdateSchemaFromV5ToV6"), 6, 5);
         case 7:
             // Digikam for database version 5 and 6 can work with version 7, though not using the support for video files.
-            return performUpdateToVersion("UpdateSchemaFromV6ToV7", 7, 5);
+            return performUpdateToVersion(QLatin1String("UpdateSchemaFromV6ToV7"), 7, 5);
         // NOTE: If you add a new update step, please check the d->currentVersion at the bottom of updateV4toV7
             // If the update already comes with createTables, createTriggers, we dont need the extra update here
         default:
@@ -728,15 +729,15 @@ static QStringList cleanUserFilterString(const QString& filterString)
     // splits by either ; or space, removes "*.", trims
     QStringList filterList;
 
-    QString wildcard("*.");
-    QChar dot('.');
+    QString wildcard(QLatin1String("*."));
+    QChar dot(QLatin1Char('.'));
 
-    QChar sep(';');
+    QChar sep(QLatin1Char(';'));
     int i = filterString.indexOf( sep );
 
-    if ( i == -1 && filterString.indexOf(' ') != -1 )
+    if ( i == -1 && filterString.indexOf(QLatin1Char(' ')) != -1 )
     {
-        sep = QChar(' ');
+        sep = QChar(QLatin1Char(' '));
     }
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
@@ -774,17 +775,17 @@ bool SchemaUpdater::updateV4toV7()
     // We operator on an SQLite3 database under a transaction (which will be rolled back on error)
 
     // --- Make space for new tables ---
-    if (!d->backend->execSql(QString("ALTER TABLE Albums RENAME TO AlbumsV3;")))
+    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE Albums RENAME TO AlbumsV3;")))
     {
         return false;
     }
 
-    if (!d->backend->execSql(QString("ALTER TABLE Images RENAME TO ImagesV3;")))
+    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE Images RENAME TO ImagesV3;")))
     {
         return false;
     }
 
-    if (!d->backend->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
+    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE Searches RENAME TO SearchesV3;")))
     {
         return false;
     }
@@ -793,14 +794,14 @@ bool SchemaUpdater::updateV4toV7()
     // --- Drop some triggers and indices ---
 
     // Don't check for errors here. The "IF EXISTS" clauses seem not supported in SQLite
-    d->backend->execSql(QString("DROP TRIGGER delete_album;"));
-    d->backend->execSql(QString("DROP TRIGGER delete_image;"));
-    d->backend->execSql(QString("DROP TRIGGER delete_tag;"));
-    d->backend->execSql(QString("DROP TRIGGER insert_tagstree;"));
-    d->backend->execSql(QString("DROP TRIGGER delete_tagstree;"));
-    d->backend->execSql(QString("DROP TRIGGER move_tagstree;"));
-    d->backend->execSql(QString("DROP INDEX dir_index;"));
-    d->backend->execSql(QString("DROP INDEX tag_index;"));
+    d->backend->execSql(QString::fromUtf8("DROP TRIGGER delete_album;"));
+    d->backend->execSql(QString::fromUtf8("DROP TRIGGER delete_image;"));
+    d->backend->execSql(QString::fromUtf8("DROP TRIGGER delete_tag;"));
+    d->backend->execSql(QString::fromUtf8("DROP TRIGGER insert_tagstree;"));
+    d->backend->execSql(QString::fromUtf8("DROP TRIGGER delete_tagstree;"));
+    d->backend->execSql(QString::fromUtf8("DROP TRIGGER move_tagstree;"));
+    d->backend->execSql(QString::fromUtf8("DROP INDEX dir_index;"));
+    d->backend->execSql(QString::fromUtf8("DROP INDEX tag_index;"));
 
     if (d->observer)
     {
@@ -834,8 +835,8 @@ bool SchemaUpdater::updateV4toV7()
     // --- Populate AlbumRoots (from config) ---
 
     KSharedConfigPtr config  = KSharedConfig::openConfig();
-    KConfigGroup group       = config->group("Album Settings");
-    QString albumLibraryPath = group.readEntry("Album Path", QString());
+    KConfigGroup group       = config->group(QLatin1String("Album Settings"));
+    QString albumLibraryPath = group.readEntry(QLatin1String("Album Path"), QString());
 
     if (albumLibraryPath.isEmpty())
     {
@@ -855,8 +856,7 @@ bool SchemaUpdater::updateV4toV7()
         return false;
     }
 
-    CollectionLocation location =
-        CollectionManager::instance()->addLocation(QUrl::fromLocalFile(albumLibraryPath));
+    CollectionLocation location = CollectionManager::instance()->addLocation(QUrl::fromLocalFile(albumLibraryPath));
 
     if (location.isNull())
     {
@@ -895,7 +895,7 @@ bool SchemaUpdater::updateV4toV7()
 
     // --- With the album root, populate albums ---
 
-    if (!d->backend->execSql(QString(
+    if (!d->backend->execSql(QString::fromUtf8(
                                 "REPLACE INTO Albums "
                                 " (id, albumRoot, relativePath, date, caption, collection, icon) "
                                 "SELECT id, ?, url, date, caption, collection, icon "
@@ -921,7 +921,7 @@ bool SchemaUpdater::updateV4toV7()
 
     // --- Add images ---
 
-    if (!d->backend->execSql(QString(
+    if (!d->backend->execSql(QString::fromUtf8(
                                 "REPLACE INTO Images "
                                 " (id, album, name, status, category, modificationDate, fileSize, uniqueHash) "
                                 "SELECT id, dirid, name, ?, ?, NULL, NULL, NULL"
@@ -933,7 +933,7 @@ bool SchemaUpdater::updateV4toV7()
         return false;
     }
 
-    if (!d->access->backend()->execSql(QString(
+    if (!d->access->backend()->execSql(QString::fromUtf8(
                                           "REPLACE INTO ImageInformation (imageId) SELECT id FROM Images;"))
        )
     {
@@ -941,7 +941,7 @@ bool SchemaUpdater::updateV4toV7()
     }
 
     // remove orphan images that would not be removed by CollectionScanner
-    d->backend->execSql(QString("DELETE FROM Images WHERE album NOT IN (SELECT id FROM Albums);"));
+    d->backend->execSql(QString::fromUtf8("DELETE FROM Images WHERE album NOT IN (SELECT id FROM Albums);"));
 
     if (d->observer)
     {
@@ -957,7 +957,7 @@ bool SchemaUpdater::updateV4toV7()
 
     // --- Port searches ---
 
-    if (!d->backend->execSql(QString(
+    if (!d->backend->execSql(QString::fromUtf8(
                                 "REPLACE INTO Searches "
                                 " (id, type, name, query) "
                                 "SELECT id, ?, name, url"
@@ -983,11 +983,11 @@ bool SchemaUpdater::updateV4toV7()
             name = i18n("Last Search (0.9)");
         }
 
-        if (QUrlQuery(url).queryItemValue("type") == QString("datesearch"))
+        if (QUrlQuery(url).queryItemValue(QLatin1String("type")) == QLatin1String("datesearch"))
         {
             d->albumDB->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, name, query);
         }
-        else if (QUrlQuery(url).queryItemValue("1.key") == "keyword")
+        else if (QUrlQuery(url).queryItemValue(QLatin1String("1.key")) == QLatin1String("keyword"))
         {
             d->albumDB->updateSearch((*it).id, DatabaseSearch::KeywordSearch, name, query);
         }
@@ -1017,10 +1017,10 @@ bool SchemaUpdater::updateV4toV7()
 
     QSet<QString> configImageFilter, configVideoFilter, configAudioFilter;
 
-    configImageFilter   = cleanUserFilterString(group.readEntry("File Filter", QString())).toSet();
-    configImageFilter  += cleanUserFilterString(group.readEntry("Raw File Filter", QString())).toSet();
-    configVideoFilter   = cleanUserFilterString(group.readEntry("Movie File Filter", QString())).toSet();
-    configAudioFilter   = cleanUserFilterString(group.readEntry("Audio File Filter", QString())).toSet();
+    configImageFilter   = cleanUserFilterString(group.readEntry(QLatin1String("File Filter"),       QString())).toSet();
+    configImageFilter  += cleanUserFilterString(group.readEntry(QLatin1String("Raw File Filter"),   QString())).toSet();
+    configVideoFilter   = cleanUserFilterString(group.readEntry(QLatin1String("Movie File Filter"), QString())).toSet();
+    configAudioFilter   = cleanUserFilterString(group.readEntry(QLatin1String("Audio File Filter"), QString())).toSet();
 
     // remove those that are included in the default filter
     configImageFilter.subtract(defaultImageFilter.toSet());
@@ -1065,7 +1065,7 @@ bool SchemaUpdater::updateV4toV7()
     // --- Port date, comment and rating (_after_ the scan) ---
 
     // Port ImagesV3.date -> ImageInformation.creationDate
-    if (!d->backend->execSql(QString(
+    if (!d->backend->execSql(QString::fromUtf8(
                                 "UPDATE ImageInformation SET "
                                 " creationDate=(SELECT datetime FROM ImagesV3 WHERE ImagesV3.id=ImageInformation.imageid) "
                                 "WHERE imageid IN (SELECT id FROM ImagesV3);")
@@ -1088,18 +1088,18 @@ bool SchemaUpdater::updateV4toV7()
     // Port ImagesV3.comment to ImageComments
 
     // An author of NULL will inhibt the UNIQUE restriction to take effect (but #189080). Work around.
-    d->backend->execSql(QString(
+    d->backend->execSql(QString::fromUtf8(
                            "DELETE FROM ImageComments WHERE "
                            "type=? AND language=? AND author IS NULL "
                            "AND imageid IN ( SELECT id FROM ImagesV3 ); "),
-                       (int)DatabaseComment::Comment, QString("x-default"));
+                       (int)DatabaseComment::Comment, QLatin1String("x-default"));
 
-    if (!d->backend->execSql(QString(
+    if (!d->backend->execSql(QString::fromUtf8(
                                 "REPLACE INTO ImageComments "
                                 " (imageid, type, language, comment) "
                                 "SELECT id, ?, ?, caption FROM ImagesV3;"
                             ),
-                            (int)DatabaseComment::Comment, QString("x-default"))
+                            (int)DatabaseComment::Comment, QLatin1String("x-default"))
        )
     {
         return false;
@@ -1116,20 +1116,20 @@ bool SchemaUpdater::updateV4toV7()
     }
 
     // Port rating storage in ImageProperties to ImageInformation
-    if (!d->backend->execSql(QString(
+    if (!d->backend->execSql(QString::fromUtf8(
                                 "UPDATE ImageInformation SET "
                                 " rating=(SELECT value FROM ImageProperties "
                                 "         WHERE ImageInformation.imageid=ImageProperties.imageid AND ImageProperties.property=?) "
                                 "WHERE imageid IN (SELECT imageid FROM ImageProperties WHERE property=?);"
                             ),
-                            QString("Rating"), QString("Rating"))
+                            QString::fromUtf8("Rating"), QString::fromUtf8("Rating"))
        )
     {
         return false;
     }
 
-    d->backend->execSql(QString("DELETE FROM ImageProperties WHERE property=?;"), QString("Rating"));
-    d->backend->execSql(QString("UPDATE ImageInformation SET rating=0 WHERE rating<0;"));
+    d->backend->execSql(QString::fromUtf8("DELETE FROM ImageProperties WHERE property=?;"), QString::fromUtf8("Rating"));
+    d->backend->execSql(QString::fromUtf8("UPDATE ImageInformation SET rating=0 WHERE rating<0;"));
 
     if (d->observer)
     {
@@ -1143,9 +1143,9 @@ bool SchemaUpdater::updateV4toV7()
 
     // --- Drop old tables ---
 
-    d->backend->execSql(QString("DROP TABLE ImagesV3;"));
-    d->backend->execSql(QString("DROP TABLE AlbumsV3;"));
-    d->backend->execSql(QString("DROP TABLE SearchesV3;"));
+    d->backend->execSql(QString::fromUtf8("DROP TABLE ImagesV3;"));
+    d->backend->execSql(QString::fromUtf8("DROP TABLE AlbumsV3;"));
+    d->backend->execSql(QString::fromUtf8("DROP TABLE SearchesV3;"));
 
     if (d->observer)
     {
@@ -1160,31 +1160,31 @@ bool SchemaUpdater::updateV4toV7()
 
 void SchemaUpdater::setLegacySettingEntries()
 {
-    d->albumDB->setSetting("preAlpha010Update1", "true");
-    d->albumDB->setSetting("preAlpha010Update2", "true");
-    d->albumDB->setSetting("preAlpha010Update3", "true");
-    d->albumDB->setSetting("beta010Update1",     "true");
-    d->albumDB->setSetting("beta010Update2",     "true");
+    d->albumDB->setSetting(QLatin1String("preAlpha010Update1"), QLatin1String("true"));
+    d->albumDB->setSetting(QLatin1String("preAlpha010Update2"), QLatin1String("true"));
+    d->albumDB->setSetting(QLatin1String("preAlpha010Update3"), QLatin1String("true"));
+    d->albumDB->setSetting(QLatin1String("beta010Update1"),     QLatin1String("true"));
+    d->albumDB->setSetting(QLatin1String("beta010Update2"),     QLatin1String("true"));
 }
 
 // ---------- Legacy code ------------
 
 void SchemaUpdater::preAlpha010Update1()
 {
-    QString hasUpdate = d->albumDB->getSetting("preAlpha010Update1");
+    QString hasUpdate = d->albumDB->getSetting(QLatin1String("preAlpha010Update1"));
 
     if (!hasUpdate.isNull())
     {
         return;
     }
 
-    if (!d->backend->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
+    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE Searches RENAME TO SearchesV3;")))
     {
         return;
     }
 
     if ( !d->backend->execSql(
-             QString( "CREATE TABLE IF NOT EXISTS Searches  \n"
+             QString::fromUtf8( "CREATE TABLE IF NOT EXISTS Searches  \n"
                       " (id INTEGER PRIMARY KEY, \n"
                       "  type INTEGER, \n"
                       "  name TEXT NOT NULL, \n"
@@ -1193,7 +1193,7 @@ void SchemaUpdater::preAlpha010Update1()
         return;
     }
 
-    if (!d->backend->execSql(QString(
+    if (!d->backend->execSql(QString::fromUtf8(
                                 "REPLACE INTO Searches "
                                 " (id, type, name, query) "
                                 "SELECT id, ?, name, url"
@@ -1213,11 +1213,11 @@ void SchemaUpdater::preAlpha010Update1()
         ImageQueryBuilder builder;
         QString query = builder.convertFromUrlToXml(url);
 
-        if (QUrlQuery(url).queryItemValue("type") == QString("datesearch"))
+        if (QUrlQuery(url).queryItemValue(QLatin1String("type")) == QLatin1String("datesearch"))
         {
             d->albumDB->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, (*it).name, query);
         }
-        else if (QUrlQuery(url).queryItemValue("1.key") == "keyword")
+        else if (QUrlQuery(url).queryItemValue(QLatin1String("1.key")) == QLatin1String("keyword"))
         {
             d->albumDB->updateSearch((*it).id, DatabaseSearch::KeywordSearch, (*it).name, query);
         }
@@ -1227,32 +1227,32 @@ void SchemaUpdater::preAlpha010Update1()
         }
     }
 
-    d->backend->execSql(QString("DROP TABLE SearchesV3;"));
+    d->backend->execSql(QString::fromUtf8("DROP TABLE SearchesV3;"));
 
-    d->albumDB->setSetting("preAlpha010Update1", "true");
+    d->albumDB->setSetting(QLatin1String("preAlpha010Update1"), QLatin1String("true"));
 }
 
 void SchemaUpdater::preAlpha010Update2()
 {
-    QString hasUpdate = d->albumDB->getSetting("preAlpha010Update2");
+    QString hasUpdate = d->albumDB->getSetting(QLatin1String("preAlpha010Update2"));
 
     if (!hasUpdate.isNull())
     {
         return;
     }
 
-    if (!d->backend->execSql(QString("ALTER TABLE ImagePositions RENAME TO ImagePositionsTemp;")))
+    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE ImagePositions RENAME TO ImagePositionsTemp;")))
     {
         return;
     }
 
-    if (!d->backend->execSql(QString("ALTER TABLE ImageMetadata RENAME TO ImageMetadataTemp;")))
+    if (!d->backend->execSql(QString::fromUtf8("ALTER TABLE ImageMetadata RENAME TO ImageMetadataTemp;")))
     {
         return;
     }
 
     d->backend->execSql(
-        QString("CREATE TABLE ImagePositions\n"
+        QString::fromUtf8("CREATE TABLE ImagePositions\n"
                 " (imageid INTEGER PRIMARY KEY,\n"
                 "  latitude TEXT,\n"
                 "  latitudeNumber REAL,\n"
@@ -1265,7 +1265,7 @@ void SchemaUpdater::preAlpha010Update2()
                 "  accuracy REAL,\n"
                 "  description TEXT);") );
 
-    d->backend->execSql(QString(
+    d->backend->execSql(QString::fromUtf8(
                            "REPLACE INTO ImagePositions "
                            " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
                            "  altitude, orientation, tilt, roll, accuracy, description) "
@@ -1274,7 +1274,7 @@ void SchemaUpdater::preAlpha010Update2()
                            " FROM ImagePositionsTemp;"));
 
     d->backend->execSql(
-        QString("CREATE TABLE ImageMetadata\n"
+        QString::fromUtf8("CREATE TABLE ImageMetadata\n"
                 " (imageid INTEGER PRIMARY KEY,\n"
                 "  make TEXT,\n"
                 "  model TEXT,\n"
@@ -1293,7 +1293,7 @@ void SchemaUpdater::preAlpha010Update2()
                 "  subjectDistance REAL,\n"
                 "  subjectDistanceCategory INTEGER);") );
 
-    d->backend->execSql( QString("INSERT INTO ImageMetadata "
+    d->backend->execSql( QString::fromUtf8("INSERT INTO ImageMetadata "
                                 " (imageid, make, model, lens, aperture, focalLength, focalLength35, "
                                 "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
                                 "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) "
@@ -1302,24 +1302,24 @@ void SchemaUpdater::preAlpha010Update2()
                                 "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
                                 "FROM ImageMetadataTemp;"));
 
-    d->backend->execSql(QString("DROP TABLE ImagePositionsTemp;"));
-    d->backend->execSql(QString("DROP TABLE ImageMetadataTemp;"));
+    d->backend->execSql(QString::fromUtf8("DROP TABLE ImagePositionsTemp;"));
+    d->backend->execSql(QString::fromUtf8("DROP TABLE ImageMetadataTemp;"));
 
-    d->albumDB->setSetting("preAlpha010Update2", "true");
+    d->albumDB->setSetting(QLatin1String("preAlpha010Update2"), QLatin1String("true"));
 }
 
 void SchemaUpdater::preAlpha010Update3()
 {
-    QString hasUpdate = d->albumDB->getSetting("preAlpha010Update3");
+    QString hasUpdate = d->albumDB->getSetting(QLatin1String("preAlpha010Update3"));
 
     if (!hasUpdate.isNull())
     {
         return;
     }
 
-    d->backend->execSql(QString("DROP TABLE ImageCopyright;"));
+    d->backend->execSql(QString::fromUtf8("DROP TABLE ImageCopyright;"));
     d->backend->execSql(
-        QString("CREATE TABLE ImageCopyright\n"
+        QString::fromUtf8("CREATE TABLE ImageCopyright\n"
                 " (imageid INTEGER,\n"
                 "  property TEXT,\n"
                 "  value TEXT,\n"
@@ -1327,12 +1327,12 @@ void SchemaUpdater::preAlpha010Update3()
                 "  UNIQUE(imageid, property, value, extraValue));")
     );
 
-    d->albumDB->setSetting("preAlpha010Update3", "true");
+    d->albumDB->setSetting(QLatin1String("preAlpha010Update3"), QLatin1String("true"));
 }
 
 void SchemaUpdater::beta010Update1()
 {
-    QString hasUpdate = d->albumDB->getSetting("beta010Update1");
+    QString hasUpdate = d->albumDB->getSetting(QLatin1String("beta010Update1"));
 
     if (!hasUpdate.isNull())
     {
@@ -1340,8 +1340,8 @@ void SchemaUpdater::beta010Update1()
     }
 
     // if Image has been deleted
-    d->backend->execSql("DROP TRIGGER delete_image;");
-    d->backend->execSql(
+    d->backend->execSql(QString::fromUtf8("DROP TRIGGER delete_image;"));
+    d->backend->execSql(QString::fromUtf8(
         "CREATE TRIGGER delete_image DELETE ON Images\n"
         "BEGIN\n"
         "  DELETE FROM ImageTags\n"
@@ -1364,15 +1364,15 @@ void SchemaUpdater::beta010Update1()
         "    WHERE icon=OLD.id;\n"
         "  UPDATE Tags SET icon=null \n "
         "    WHERE icon=OLD.id;\n"
-        "END;");
+        "END;"));
 
 
-    d->albumDB->setSetting("beta010Update1", "true");
+    d->albumDB->setSetting(QLatin1String("beta010Update1"), QLatin1String("true"));
 }
 
 void SchemaUpdater::beta010Update2()
 {
-    QString hasUpdate = d->albumDB->getSetting("beta010Update2");
+    QString hasUpdate = d->albumDB->getSetting(QLatin1String("beta010Update2"));
 
     if (!hasUpdate.isNull())
     {
@@ -1380,14 +1380,14 @@ void SchemaUpdater::beta010Update2()
     }
 
     // force rescan and creation of ImageInformation entry for videos and audio
-    d->backend->execSql("DELETE FROM Images WHERE category=2 OR category=3;");
+    d->backend->execSql(QString::fromUtf8("DELETE FROM Images WHERE category=2 OR category=3;"));
 
-    d->albumDB->setSetting("beta010Update2", "true");
+    d->albumDB->setSetting(QLatin1String("beta010Update2"), QLatin1String("true"));
 }
 
 bool SchemaUpdater::createTablesV3()
 {
-    if (!d->backend->execSql( QString("CREATE TABLE Albums\n"
+    if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE Albums\n"
                                      " (id INTEGER PRIMARY KEY,\n"
                                      "  url TEXT NOT NULL UNIQUE,\n"
                                      "  date DATE NOT NULL,\n"
@@ -1398,7 +1398,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if (!d->backend->execSql( QString("CREATE TABLE Tags\n"
+    if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE Tags\n"
                                      " (id INTEGER PRIMARY KEY,\n"
                                      "  pid INTEGER,\n"
                                      "  name TEXT NOT NULL,\n"
@@ -1409,7 +1409,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if (!d->backend->execSql( QString("CREATE TABLE TagsTree\n"
+    if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE TagsTree\n"
                                      " (id INTEGER NOT NULL,\n"
                                      "  pid INTEGER NOT NULL,\n"
                                      "  UNIQUE (id, pid));") ))
@@ -1417,7 +1417,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if (!d->backend->execSql( QString("CREATE TABLE Images\n"
+    if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE Images\n"
                                      " (id INTEGER PRIMARY KEY,\n"
                                      "  name TEXT NOT NULL,\n"
                                      "  dirid INTEGER NOT NULL,\n"
@@ -1429,7 +1429,7 @@ bool SchemaUpdater::createTablesV3()
     }
 
 
-    if (!d->backend->execSql( QString("CREATE TABLE ImageTags\n"
+    if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE ImageTags\n"
                                      " (imageid INTEGER NOT NULL,\n"
                                      "  tagid INTEGER NOT NULL,\n"
                                      "  UNIQUE (imageid, tagid));") ))
@@ -1437,7 +1437,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if (!d->backend->execSql( QString("CREATE TABLE ImageProperties\n"
+    if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE ImageProperties\n"
                                      " (imageid  INTEGER NOT NULL,\n"
                                      "  property TEXT    NOT NULL,\n"
                                      "  value    TEXT    NOT NULL,\n"
@@ -1446,15 +1446,15 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if ( !d->backend->execSql( QString( "CREATE TABLE Searches  \n"
+    if ( !d->backend->execSql( QString::fromUtf8("CREATE TABLE Searches  \n"
                                        " (id INTEGER PRIMARY KEY, \n"
                                        "  name TEXT NOT NULL UNIQUE, \n"
-                                       "  url  TEXT NOT NULL);" ) ) )
+                                       "  url  TEXT NOT NULL);") ) )
     {
         return false;
     }
 
-    if (!d->backend->execSql( QString("CREATE TABLE Settings         \n"
+    if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE Settings         \n"
                                      "(keyword TEXT NOT NULL UNIQUE,\n"
                                      " value TEXT);") ))
     {
@@ -1463,14 +1463,14 @@ bool SchemaUpdater::createTablesV3()
 
     // TODO: see which more indices are needed
     // create indices
-    d->backend->execSql("CREATE INDEX dir_index ON Images    (dirid);");
-    d->backend->execSql("CREATE INDEX tag_index ON ImageTags (tagid);");
+    d->backend->execSql(QString::fromUtf8("CREATE INDEX dir_index ON Images    (dirid);"));
+    d->backend->execSql(QString::fromUtf8("CREATE INDEX tag_index ON ImageTags (tagid);"));
 
     // create triggers
 
     // trigger: delete from Images/ImageTags/ImageProperties
     // if Album has been deleted
-    d->backend->execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
+    d->backend->execSql(QString::fromUtf8("CREATE TRIGGER delete_album DELETE ON Albums\n"
                        "BEGIN\n"
                        " DELETE FROM ImageTags\n"
                        "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
@@ -1478,11 +1478,11 @@ bool SchemaUpdater::createTablesV3()
                        "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
                        " DELETE FROM Images\n"
                        "   WHERE dirid = OLD.id;\n"
-                       "END;");
+                       "END;"));
 
     // trigger: delete from ImageTags/ImageProperties
     // if Image has been deleted
-    d->backend->execSql("CREATE TRIGGER delete_image DELETE ON Images\n"
+    d->backend->execSql(QString::fromUtf8("CREATE TRIGGER delete_image DELETE ON Images\n"
                        "BEGIN\n"
                        "  DELETE FROM ImageTags\n"
                        "    WHERE imageid=OLD.id;\n"
@@ -1492,25 +1492,25 @@ bool SchemaUpdater::createTablesV3()
                        "    WHERE icon=OLD.id;\n"
                        "  UPDATE Tags SET icon=null \n "
                        "    WHERE icon=OLD.id;\n"
-                       "END;");
+                       "END;"));
 
     // trigger: delete from ImageTags if Tag has been deleted
-    d->backend->execSql("CREATE TRIGGER delete_tag DELETE ON Tags\n"
+    d->backend->execSql(QString::fromUtf8("CREATE TRIGGER delete_tag DELETE ON Tags\n"
                        "BEGIN\n"
                        "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
-                       "END;");
+                       "END;"));
 
     // trigger: insert into TagsTree if Tag has been added
-    d->backend->execSql("CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
+    d->backend->execSql(QString::fromUtf8("CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
                        "BEGIN\n"
                        "  INSERT INTO TagsTree\n"
                        "    SELECT NEW.id, NEW.pid\n"
                        "    UNION\n"
                        "    SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid;\n"
-                       "END;");
+                       "END;"));
 
     // trigger: delete from TagsTree if Tag has been deleted
-    d->backend->execSql("CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
+    d->backend->execSql(QString::fromUtf8("CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
                        "BEGIN\n"
                        " DELETE FROM Tags\n"
                        "   WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
@@ -1518,10 +1518,10 @@ bool SchemaUpdater::createTablesV3()
                        "   WHERE id IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
                        " DELETE FROM TagsTree\n"
                        "    WHERE id=OLD.id;\n"
-                       "END;");
+                       "END;"));
 
     // trigger: delete from TagsTree if Tag has been deleted
-    d->backend->execSql("CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
+    d->backend->execSql(QString::fromUtf8("CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
                        "BEGIN\n"
                        "  DELETE FROM TagsTree\n"
                        "    WHERE\n"
@@ -1540,7 +1540,7 @@ bool SchemaUpdater::createTablesV3()
                        "     SELECT A.id, B.pid FROM TagsTree A, TagsTree B\n"
                        "        WHERE\n"
                        "        A.pid = NEW.id AND B.id = NEW.pid;\n"
-                       "END;");
+                       "END;"));
 
     return true;
 }
