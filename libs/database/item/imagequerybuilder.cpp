@@ -37,6 +37,7 @@
 #include <QRectF>
 #include <QUrl>
 #include <QLocale>
+#include <QUrlQuery>
 
 // Libkexiv2 includes
 
@@ -162,7 +163,7 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
 void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
                                    QList<QVariant> *boundValues, ImageQueryPostHooks* const hooks) const
 {
-    sql += " (";
+    sql += QLatin1String(" (");
 
     SearchXml::Operator mainGroupOp = reader.groupOperator();
 
@@ -215,7 +216,7 @@ void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
         addNoEffectContent(sql, mainGroupOp);
     }
 
-    sql += ") ";
+    sql += QLatin1String(") ");
 }
 
 // ---------------------------------------------------------------------------------------
@@ -248,7 +249,7 @@ public:
     {
         if (relation == SearchXml::Like || relation == SearchXml::NotLike)
         {
-            return '%' + str + '%';
+            return QLatin1Char('%') + str + QLatin1Char('%');
         }
         else
         {
@@ -268,21 +269,21 @@ public:
                 return;
             }
 
-            sql += " (" + name + ' ';
+            sql += QLatin1String(" (") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
-            sql += " ? AND " + name + ' ';
+            sql += QLatin1String(" ? AND ") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
-            sql += " ?) ";
+            sql += QLatin1String(" ?) ");
 
             *boundValues << values.first() << values.last();
         }
         else
         {
-            sql += " (" + name + ' ';
+            sql += QLatin1String(" (") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql, relation);
-            sql += " ?) ";
+            sql += QLatin1String(" ?) ");
             *boundValues << reader.valueToInt();
         }
     }
@@ -299,30 +300,30 @@ public:
                 return;
             }
 
-            sql += " (" + name + ' ';
+            sql += QLatin1String(" (") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
-            sql += " ? AND " + name + ' ';
+            sql += QLatin1String(" ? AND ") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
-            sql += " ?) ";
+            sql += QLatin1String(" ?) ");
 
             *boundValues << values.first() << values.last();
         }
         else
         {
-            sql += " (" + name + ' ';
+            sql += QLatin1String(" (") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql, relation);
-            sql += " ?) ";
+            sql += QLatin1String(" ?) ");
             *boundValues << reader.valueToDouble();
         }
     }
 
     void addStringField(const QString& name)
     {
-        sql += " (" + name + ' ';
+        sql += QLatin1String(" (") + name + QLatin1Char(' ');
         ImageQueryBuilder::addSqlRelation(sql, relation);
-        sql += " ?) ";
+        sql += QLatin1String(" ?) ");
         *boundValues << prepareForLike(reader.value());
     }
 
@@ -377,11 +378,11 @@ public:
                              << endDate.toString(Qt::ISODate);
             }
 
-            sql += " (" + name + ' ';
+            sql += QLatin1String(" (") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql, SearchXml::GreaterThan);
-            sql += " ? AND " + name + ' ';
+            sql += QLatin1String(" ? AND ") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql, SearchXml::LessThan);
-            sql += " ?) ";
+            sql += QLatin1String(" ?) ");
         }
         else if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
         {
@@ -393,21 +394,21 @@ public:
                 return;
             }
 
-            sql += " (" + name + ' ';
+            sql += QLatin1String(" (") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
-            sql += " ? AND " + name + ' ';
+            sql += QLatin1String(" ? AND ") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql,
                                               relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
-            sql += " ?) ";
+            sql += QLatin1String(" ?) ");
 
             *boundValues << values.first() << values.last();
         }
         else
         {
-            sql += " (" + name + ' ';
+            sql += QLatin1String(" (") + name + QLatin1Char(' ');
             ImageQueryBuilder::addSqlRelation(sql, relation);
-            sql += " ?) ";
+            sql += QLatin1String(" ?) ");
             *boundValues << reader.value();
         }
     }
@@ -416,18 +417,18 @@ public:
     {
         if (relation == SearchXml::OneOf)
         {
-            QList<int> values = reader.valueToIntList();
+            QList<int> values  = reader.valueToIntList();
             bool searchForNull = values.removeAll(-1);
-            sql += " (" + name + " IN (";
+            sql               += QLatin1String(" (") + name + QLatin1String(" IN (");
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
 
             if (searchForNull)
             {
-                sql += ") OR " + name + " IS NULL";
+                sql += QLatin1String(") OR ") + name + QLatin1String(" IS NULL");
             }
             else
             {
-                sql += ") ";
+                sql += QLatin1String(") ");
             }
 
             foreach(int v, values)
@@ -435,7 +436,7 @@ public:
                 *boundValues << v;
             }
 
-            sql += " ) ";
+            sql += QLatin1String(" ) ");
         }
         else
         {
@@ -448,16 +449,16 @@ public:
         if (relation == SearchXml::OneOf)
         {
             QList<qlonglong> values = reader.valueToLongLongList();
-            sql += " (" + name + " IN (";
+            sql += QLatin1String(" (") + name + QLatin1String(" IN (");
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
-            sql += ") ";
+            sql += QLatin1String(") ");
 
             foreach(const qlonglong& v, values)
             {
                 *boundValues << v;
             }
 
-            sql += " ) ";
+            sql += QLatin1String(" ) ");
         }
         else
         {
@@ -471,23 +472,23 @@ public:
         {
             QList<int> values = reader.valueToIntList();
             bool searchForNull = values.removeAll(-1);
-            sql += "( ";
+            sql += QLatin1String("( ");
             bool first = true;
 
             for (int i=0; i<values.size(); ++i)
             {
                 if (!first)
                 {
-                    sql += "OR ";
+                    sql += QLatin1String("OR ");
                 }
 
                 first = false;
-                sql += name + " & ? ";
+                sql += name + QLatin1String(" & ? ");
             }
 
             if (searchForNull)
             {
-                sql += "OR " + name + " IS NULL ";
+                sql += QLatin1String("OR ") + name + QLatin1String(" IS NULL ");
             }
 
             foreach(int v, values)
@@ -495,17 +496,17 @@ public:
                 *boundValues << v;
             }
 
-            sql += " ) ";
+            sql += QLatin1String(" ) ");
         }
         else
         {
             if (relation == SearchXml::Equal)
             {
-                sql += " (" + name + " & " + " ?) ";
+                sql += QLatin1String(" (") + name + QLatin1String(" & ") + QLatin1String(" ?) ");
             }
             else
             {
-                sql += " (NOT " + name + " & " + " ?) ";
+                sql += QLatin1String(" (NOT ") + name + QLatin1String(" & ") + QLatin1String(" ?) ");
             }
 
             *boundValues << reader.valueToDouble();
@@ -528,7 +529,7 @@ public:
 
             foreach(const QString& value, values)
             {
-                if (value.contains("*"))
+                if (value.contains(QLatin1String("*")))
                 {
                     wildcards << value;
                 }
@@ -539,12 +540,12 @@ public:
             }
 
             bool firstCondition =  true;
-            sql                 += " (";
+            sql                 += QLatin1String(" (");
 
             if (!simpleValues.isEmpty())
             {
                 firstCondition =  false;
-                sql            += name + " IN (";
+                sql            += name + QLatin1String(" IN (");
                 AlbumDB::addBoundValuePlaceholders(sql, simpleValues.size());
 
                 foreach(const QString& value, simpleValues)
@@ -552,7 +553,7 @@ public:
                     *boundValues << value;
                 }
 
-                sql += " ) ";
+                sql += QLatin1String(" ) ");
             }
 
             if (!wildcards.isEmpty())
@@ -561,29 +562,29 @@ public:
                 {
                     ImageQueryBuilder::addSqlOperator(sql, SearchXml::Or, firstCondition);
                     firstCondition = false;
-                    wildcard.replace('*', '%');
-                    sql += ' ' + name + ' ';
+                    wildcard.replace(QLatin1Char('*'), QLatin1Char('%'));
+                    sql           += QLatin1Char(' ') + name + QLatin1Char(' ');
                     ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
-                    sql += " ? ";
+                    sql           += QLatin1String(" ? ");
                     *boundValues << wildcard;
                 }
             }
 
-            sql += ") ";
+            sql += QLatin1String(") ");
         }
         else
         {
             QString value = reader.value();
 
-            if (relation == SearchXml::Like && value.contains("*"))
+            if (relation == SearchXml::Like && value.contains(QLatin1String("*")))
             {
                 // Handle special case: * denotes the place if the wildcard,
                 // Don't automatically prepend and append %
-                sql += " (" + name + ' ';
+                sql += QLatin1String(" (") + name + QLatin1Char(' ');
                 ImageQueryBuilder::addSqlRelation(sql, SearchXml::Like);
-                sql += " ?) ";
+                sql += QLatin1String(" ?) ");
                 QString wildcard = reader.value();
-                wildcard.replace('*', '%');
+                wildcard.replace(QLatin1Char('*'), QLatin1Char('%'));
                 *boundValues << wildcard;
             }
             else
@@ -598,8 +599,8 @@ public:
         if (relation == SearchXml::Near)
         {
             // First read attributes
-            QStringRef type           = reader.attributes().value("type");
-            QStringRef distanceString = reader.attributes().value("distance");
+            QStringRef type           = reader.attributes().value(QLatin1String("type"));
+            QStringRef distanceString = reader.attributes().value(QLatin1String("distance"));
             // Distance in meters
             double distance           = 100;
 
@@ -611,11 +612,11 @@ public:
             // Search type, "radius" or "rectangle"
             bool radiusSearch = true;
 
-            if (type == "radius")
+            if (type == QLatin1String("radius"))
             {
                 radiusSearch = true;
             }
-            else if (type == "rectangle")
+            else if (type == QLatin1String("rectangle"))
             {
                 radiusSearch = false;
             }
@@ -633,7 +634,7 @@ public:
             double lon = list.at(0);
             double lat = list.at(1);
 
-            sql += " ( ";
+            sql += QLatin1String(" ( ");
 
             // Part 1: Rectangle search.
             // Get the coordinates of the (spherical) rectangle enclosing
@@ -718,15 +719,15 @@ public:
                 hooks->addHook(new HaversinePostHook(lat, lon, R, distance));
             }
 
-            sql += " ) ";
+            sql += QLatin1String(" ) ");
         }
         else if (relation == SearchXml::Inside)
         {
             // First read attributes
-            QStringRef type = reader.attributes().value("type");
+            QStringRef type = reader.attributes().value(QLatin1String("type"));
 
             // Search type, currently only "rectangle"
-            if (type != "rectangle")
+            if (type != QLatin1String("rectangle"))
             {
                 qCWarning(DIGIKAM_GENERAL_LOG) << "Relation 'Inside' supports no other type than 'rectangle'";
                 return;
@@ -753,9 +754,9 @@ public:
             lon2 = list.at(2);
             lat2 = list.at(3);
 
-            sql += " ( ";
+            sql += QLatin1String(" ( ");
             addRectanglePositionSearch(lon1, lat1, lon2, lat2);
-            sql += " ) ";
+            sql += QLatin1String(" ) ");
         }
     }
 
@@ -764,16 +765,16 @@ public:
         // lon1 is always West of lon2. If the rectangle crosses 180 longitude, we have to treat a special case.
         if (lon1 <= lon2)
         {
-            sql += " ImagePositions.LongitudeNumber > ? AND ImagePositions.LatitudeNumber < ? "
-                   " AND ImagePositions.LongitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ";
+            sql += QString::fromUtf8(" ImagePositions.LongitudeNumber > ? AND ImagePositions.LatitudeNumber < ? "
+                   " AND ImagePositions.LongitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ");
             *boundValues << lon1 << lat1 << lon2 << lat2;
         }
         else
         {
             // this effectively means splitting the rectangle is two parts, one East, one West
             // to the 180 line. But no need to check for less/greater than -180/180.
-            sql += " (ImagePositions.LongitudeNumber > ? OR ImagePositions.LongitudeNumber < ?) "
-                   " AND ImagePositions.LatitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ";
+            sql += QString::fromUtf8(" (ImagePositions.LongitudeNumber > ? OR ImagePositions.LongitudeNumber < ?) "
+                   " AND ImagePositions.LatitudeNumber < ? AND ImagePositions.LatitudeNumber > ? ");
             *boundValues << lon1 << lon2 << lat1 << lat2;
         }
     }
@@ -787,11 +788,11 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     SearchXml::Relation relation = reader.fieldRelation();
     FieldQueryBuilder fieldQuery(sql, reader, boundValues, hooks, relation);
 
-    if (name == "albumid")
+    if (name == QLatin1String("albumid"))
     {
         if (relation == SearchXml::Equal || relation == SearchXml::Unequal)
         {
-            fieldQuery.addIntField("Images.album");
+            fieldQuery.addIntField(QLatin1String("Images.album"));
         }
         else if (relation == SearchXml::InTree)
         {
@@ -804,9 +805,9 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 return false;
             }
 
-            sql += "(Images.album IN "
+            sql += QString::fromUtf8("(Images.album IN "
                    "   (SELECT DISTINCT id "
-                   "    FROM Albums WHERE ";
+                   "    FROM Albums WHERE ");
             bool firstCondition = true;
 
             foreach(int albumID, ids)
@@ -820,48 +821,48 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
                 QString childrenWildcard;
 
-                if (relativePath == "/")
+                if (relativePath == QLatin1String("/"))
                 {
-                    childrenWildcard = "/%";
+                    childrenWildcard = QLatin1String("/%");
                 }
                 else
                 {
-                    childrenWildcard = relativePath + "/%";
+                    childrenWildcard = relativePath + QLatin1String("/%");
                 }
 
-                sql += " ( albumRoot=? AND (relativePath=? OR relativePath LIKE ?) ) ";
+                sql += QString::fromUtf8(" ( albumRoot=? AND (relativePath=? OR relativePath LIKE ?) ) ");
                 *boundValues << rootId << relativePath << childrenWildcard;
             }
 
-            sql += " ))";
+            sql += QLatin1String(" ))");
         }
     }
-    else if (name == "albumname")
+    else if (name == QLatin1String("albumname"))
     {
-        fieldQuery.addStringField("Albums.relativePath");
+        fieldQuery.addStringField(QLatin1String("Albums.relativePath"));
     }
-    else if (name == "albumcaption")
+    else if (name == QLatin1String("albumcaption"))
     {
-        fieldQuery.addStringField("Albums.caption");
+        fieldQuery.addStringField(QLatin1String("Albums.caption"));
     }
-    else if (name == "albumcollection")
+    else if (name == QLatin1String("albumcollection"))
     {
-        fieldQuery.addChoiceStringField("Albums.collection");
+        fieldQuery.addChoiceStringField(QLatin1String("Albums.collection"));
     }
-    else if (name == "tagid")
+    else if (name == QLatin1String("tagid"))
     {
         if (relation == SearchXml::Equal)
         {
-            sql += " (Images.id IN "
+            sql += QString::fromUtf8(" (Images.id IN "
                    "   (SELECT imageid FROM ImageTags "
-                   "    WHERE tagid = ?)) ";
+                   "    WHERE tagid = ?)) ");
             *boundValues << reader.valueToInt();
         }
         else if (relation == SearchXml::Unequal)
         {
-            sql += " (Images.id NOT IN "
+            sql += QString::fromUtf8(" (Images.id NOT IN "
                    "   (SELECT imageid FROM ImageTags "
-                   "    WHERE tagid = ?)) ";
+                   "    WHERE tagid = ?)) ");
             *boundValues << reader.valueToInt();
         }
         else if (relation == SearchXml::InTree || relation == SearchXml::NotInTree)
@@ -876,15 +877,15 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (relation == SearchXml::InTree)
             {
-                sql += " (Images.id IN ";
+                sql += QString::fromUtf8(" (Images.id IN ");
             }
             else
             {
-                sql += " (Images.id NOT IN ";
+                sql += QString::fromUtf8(" (Images.id NOT IN ");
             }
 
-            sql += "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                   "    WHERE ";
+            sql += QString::fromUtf8("   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                   "    WHERE ");
 
             bool firstCondition = true;
 
@@ -892,89 +893,89 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             {
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
                 firstCondition = false;
-                sql += " (TagsTree.pid = ? OR ImageTags.tagid = ? ) ";
+                sql += QString::fromUtf8(" (TagsTree.pid = ? OR ImageTags.tagid = ? ) ");
                 *boundValues << tagID << tagID;
             }
 
-            sql += " )) ";
+            sql += QString::fromUtf8(" )) ");
         }
     }
-    else if (name == "tagname")
+    else if (name == QLatin1String("tagname"))
     {
-        QString tagname = '%' + reader.value() + '%';
+        QString tagname = QLatin1Char('%') + reader.value() + QLatin1Char('%');
 
         if (relation == SearchXml::Equal || relation == SearchXml::Like)
         {
-            sql += " (Images.id IN "
+            sql += QString::fromUtf8(" (Images.id IN "
                    "   (SELECT imageid FROM ImageTags "
                    "    WHERE tagid IN "
-                   "   (SELECT id FROM Tags WHERE name LIKE ?))) ";
+                   "   (SELECT id FROM Tags WHERE name LIKE ?))) ");
             *boundValues << tagname;
         }
         else if (relation == SearchXml::Unequal || relation == SearchXml::NotLike)
         {
-            sql += " (Images.id NOT IN "
+            sql += QString::fromUtf8(" (Images.id NOT IN "
                    "   (SELECT imageid FROM ImageTags "
                    "    WHERE tagid IN "
-                   "   (SELECT id FROM Tags WHERE name LIKE ?))) ";
+                   "   (SELECT id FROM Tags WHERE name LIKE ?))) ");
             *boundValues << tagname;
         }
         else if (relation == SearchXml::InTree)
         {
-            sql += " (Images.id IN "
+            sql += QString::fromUtf8(" (Images.id IN "
                    "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                    "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
-                   "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
+                   "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ");
             *boundValues << tagname << tagname;
         }
         else if (relation == SearchXml::NotInTree)
         {
-            sql += " (Images.id NOT IN "
+            sql += QString::fromUtf8(" (Images.id NOT IN "
                    "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                    "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
-                   "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
+                   "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ");
             *boundValues << tagname << tagname;
         }
     }
-    else if (name == "notag")
+    else if (name == QLatin1String("notag"))
     {
         reader.readToEndOfElement();
-        sql += " (Images.id NOT IN "
-               "   (SELECT imageid FROM ImageTags)) ";
+        sql += QString::fromUtf8(" (Images.id NOT IN "
+               "   (SELECT imageid FROM ImageTags)) ");
     }
-    else if (name == "imageid")
+    else if (name == QLatin1String("imageid"))
     {
-        fieldQuery.addLongListField("Images.id");
+        fieldQuery.addLongListField(QLatin1String("Images.id"));
     }
-    else if (name == "filename")
+    else if (name == QLatin1String("filename"))
     {
-        fieldQuery.addStringField("Images.name");
+        fieldQuery.addStringField(QLatin1String("Images.name"));
     }
-    else if (name == "modificationdate")
+    else if (name == QLatin1String("modificationdate"))
     {
-        fieldQuery.addDateField("Images.modificationDate");
+        fieldQuery.addDateField(QLatin1String("Images.modificationDate"));
     }
-    else if (name == "filesize")
+    else if (name == QLatin1String("filesize"))
     {
-        fieldQuery.addIntField("Images.fileSize");
+        fieldQuery.addIntField(QLatin1String("Images.fileSize"));
     }
-    else if (name == "rating")
+    else if (name == QLatin1String("rating"))
     {
-        fieldQuery.addIntField("ImageInformation.rating");
+        fieldQuery.addIntField(QLatin1String("ImageInformation.rating"));
     }
-    else if (name == "creationdate")
+    else if (name == QLatin1String("creationdate"))
     {
-        fieldQuery.addDateField("ImageInformation.creationDate");
+        fieldQuery.addDateField(QLatin1String("ImageInformation.creationDate"));
     }
-    else if (name == "digitizationdate")
+    else if (name == QLatin1String("digitizationdate"))
     {
-        fieldQuery.addDateField("ImageInformation.digitizationDate");
+        fieldQuery.addDateField(QLatin1String("ImageInformation.digitizationDate"));
     }
-    else if (name == "orientation")
+    else if (name == QLatin1String("orientation"))
     {
-        fieldQuery.addChoiceIntField("ImageInformation.orientation");
+        fieldQuery.addChoiceIntField(QLatin1String("ImageInformation.orientation"));
     }
-    else if (name == "pageorientation")
+    else if (name == QLatin1String("pageorientation"))
     {
         if (relation == SearchXml::Equal)
         {
@@ -983,86 +984,87 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             // "1" is landscape, "2" is portrait, "3" is landscape regardless of Exif, "4" is portrait regardless of Exif
             if (pageOrientation == 1)
             {
-                sql += " ( (ImageInformation.orientation <= ? AND ImageInformation.width >= ImageInformation.height) "
-                       "  OR (ImageInformation.orientation >= ? AND ImageInformation.width <= ImageInformation.height) ) ";
+                sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ImageInformation.width >= ImageInformation.height) "
+                       "  OR (ImageInformation.orientation >= ? AND ImageInformation.width <= ImageInformation.height) ) ");
                 *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
             }
             else if (pageOrientation == 2)
             {
-                sql += " ( (ImageInformation.orientation <= ? AND ImageInformation.width < ImageInformation.height) "
-                       "  OR (ImageInformation.orientation >= ? AND ImageInformation.width > ImageInformation.height) ) ";
+                sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ImageInformation.width < ImageInformation.height) "
+                       "  OR (ImageInformation.orientation >= ? AND ImageInformation.width > ImageInformation.height) ) ");
                 *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
             }
             else if (pageOrientation == 3 || pageOrientation == 4)
             {
                 // ignoring Exif orientation
-                sql += " ( ImageInformation.width ";
+                sql += QString::fromUtf8(" ( ImageInformation.width ");
                 ImageQueryBuilder::addSqlRelation(sql, pageOrientation == 3 ? SearchXml::GreaterThanOrEqual : SearchXml::LessThanOrEqual);
-                sql += " ImageInformation.height) ";
+                sql += QString::fromUtf8(" ImageInformation.height) ");
             }
         }
     }
-    else if (name == "width")
+    else if (name == QLatin1String("width"))
     {
-        sql += " ( (ImageInformation.orientation <= ? AND ";
+        sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ");
         *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP;
-        fieldQuery.addIntField("ImageInformation.width");
-        sql += ") OR (ImageInformation.orientation >= ? AND ";
+        fieldQuery.addIntField(QLatin1String("ImageInformation.width"));
+        sql += QString::fromUtf8(") OR (ImageInformation.orientation >= ? AND ");
         *boundValues << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
-        fieldQuery.addIntField("ImageInformation.height");
-        sql += " ) ) ";
+        fieldQuery.addIntField(QLatin1String("ImageInformation.height"));
+        sql += QString::fromUtf8(" ) ) ");
     }
-    else if (name == "height")
+    else if (name == QLatin1String("height"))
     {
-        sql += " ( (ImageInformation.orientation <= ? AND ";
+        sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ");
         *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP;
-        fieldQuery.addIntField("ImageInformation.height");
-        sql += ") OR (ImageInformation.orientation >= ? AND ";
+        fieldQuery.addIntField(QLatin1String("ImageInformation.height"));
+        sql += QString::fromUtf8(") OR (ImageInformation.orientation >= ? AND ");
         *boundValues << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
-        fieldQuery.addIntField("ImageInformation.width");
-        sql += " ) ) ";
+        fieldQuery.addIntField(QLatin1String("ImageInformation.width"));
+        sql += QString::fromUtf8(" ) ) ");
     }
-    else if (name == "aspectratioimg")
+    else if (name == QLatin1String("aspectratioimg"))
     {
         QString query;
         QString readerString = (reader.valueToStringOrStringList()).at(0);
-        if(readerString.contains(QRegExp("^\\d+:\\d+$")))
+
+        if(readerString.contains(QRegExp(QLatin1String("^\\d+:\\d+$"))))
         {
-            QStringList ratioNum = readerString.split(":", QString::SkipEmptyParts);
-            int num = ratioNum.at(0).toInt();
+            QStringList ratioNum = readerString.split(QLatin1String(":"), QString::SkipEmptyParts);
+            int num              = ratioNum.at(0).toInt();
             int denominator = ratioNum.at(1).toInt();
-            query = "abs((ImageInformation.width/CAST(ImageInformation.height as REAL)) - ?)  < 0.1";
-            sql += " (" + query + ") ";
+            query                = QString::fromUtf8("abs((ImageInformation.width/CAST(ImageInformation.height as REAL)) - ?)  < 0.1");
+            sql                 += QString::fromUtf8(" (") + query + QString::fromUtf8(") ");
             *boundValues << (double)num/denominator;
         }
-        else if(readerString.contains(QRegExp("^\\d+(.\\d+)?$")))
+        else if(readerString.contains(QRegExp(QLatin1String("^\\d+(.\\d+)?$"))))
         {
-            query = "abs((ImageInformation.width/CAST(ImageInformation.height as REAL)) - ?)  < 0.1";
-            sql += " (" + query + ") ";
+            query = QString::fromUtf8("abs((ImageInformation.width/CAST(ImageInformation.height as REAL)) - ?)  < 0.1");
+            sql  += QString::fromUtf8(" (") + query + QString::fromUtf8(") ");
             *boundValues << readerString.toDouble();
         }
     }
-    else if (name == "pixelsize")
+    else if (name == QLatin1String("pixelsize"))
     {
-        fieldQuery.addIntField("(ImageInformation.width * ImageInformation.height)");
+        fieldQuery.addIntField(QLatin1String("(ImageInformation.width * ImageInformation.height)"));
     }
-    else if (name == "pixels")
+    else if (name == QLatin1String("pixels"))
     {
-        fieldQuery.addIntField("(ImageInformation.width * ImageInformation.height)");
+        fieldQuery.addIntField(QLatin1String("(ImageInformation.width * ImageInformation.height)"));
     }
-    else if (name == "format")
+    else if (name == QLatin1String("format"))
     {
-        fieldQuery.addChoiceStringField("ImageInformation.format");
+        fieldQuery.addChoiceStringField(QLatin1String("ImageInformation.format"));
     }
-    else if (name == "colordepth")
+    else if (name == QLatin1String("colordepth"))
     {
-        fieldQuery.addIntField("ImageInformation.colorDepth");
+        fieldQuery.addIntField(QLatin1String("ImageInformation.colorDepth"));
     }
-    else if (name == "colormodel")
+    else if (name == QLatin1String("colormodel"))
     {
-        fieldQuery.addIntField("ImageInformation.colorModel");
+        fieldQuery.addIntField(QLatin1String("ImageInformation.colorModel"));
     }
-    else if (name == "videoaspectratio")
+    else if (name == QLatin1String("videoaspectratio"))
     {
         if (relation == SearchXml::OneOf)
         {
@@ -1074,49 +1076,50 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             }
 
             QList<double> ratioValues;
+
             foreach(const QString& value, values)
             {
                  *boundValues << value;
 
-                 if (value.contains(":"))
+                 if (value.contains(QLatin1String(":")))
                  {
-                     QStringList ratioNum = value.split(":", QString::SkipEmptyParts);
-                     int num = ratioNum.at(0).toInt();
-                     int denominator = ratioNum.at(1).toInt();
+                     QStringList ratioNum = value.split(QLatin1String(":"), QString::SkipEmptyParts);
+                     int num              = ratioNum.at(0).toInt();
+                     int denominator      = ratioNum.at(1).toInt();
                      ratioValues << (double)num/denominator;
                  }
             }
 
-            sql += "(VideoMetadata.aspectRatio IN (";
+            sql += QString::fromUtf8("(VideoMetadata.aspectRatio IN (");
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
-            sql += ") ";
-            QString query = "abs((CAST(VideoMetadata.aspectRatio as REAL) - ?)  < 0.1) ";
+            sql += QString::fromUtf8(") ");
+            QString query = QString::fromUtf8("abs((CAST(VideoMetadata.aspectRatio as REAL) - ?)  < 0.1) ");
 
             foreach(double value, ratioValues)
             {
                 *boundValues << value;
-                sql +=  "OR " + query;
+                sql +=  QString::fromUtf8("OR ") + query;
             }
 
-            sql += ") ";
+            sql += QString::fromUtf8(") ");
         }
         else
         {
             QString value = reader.value();
             *boundValues << value;
 
-            if (value.contains(":"))
+            if (value.contains(QLatin1String(":")))
             {
-                QStringList ratioNum = value.split(":", QString::SkipEmptyParts);
-                int num = ratioNum.at(0).toInt();
-                int denominator = ratioNum.at(1).toInt();
+                QStringList ratioNum = value.split(QLatin1String(":"), QString::SkipEmptyParts);
+                int num              = ratioNum.at(0).toInt();
+                int denominator      = ratioNum.at(1).toInt();
                 *boundValues << (double)num/denominator;
             }
 
-            sql += "(VideoMetadata.aspectRatio=? OR abs((CAST(VideoMetadata.aspectRatio as REAL) - ?)  < 0.1 )) ";
+            sql += QString::fromUtf8("(VideoMetadata.aspectRatio=? OR abs((CAST(VideoMetadata.aspectRatio as REAL) - ?)  < 0.1 )) ");
         }
     }
-    else if (name == "videoaudiobitrate")
+    else if (name == QLatin1String("videoaudiobitrate"))
     {
         //fieldQuery.addIntField("VideoMetadata.audioBitRate");
         QList<int> values = reader.valueToIntList();
@@ -1126,17 +1129,17 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
         }
 
-        sql += " ( CAST(VideoMetadata.audioBitRate AS INTEGER)";
+        sql += QString::fromUtf8(" ( CAST(VideoMetadata.audioBitRate AS INTEGER)");
         ImageQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
-        sql += " ? AND CAST(VideoMetadata.audioBitRate AS INTEGER)";
+        sql += QString::fromUtf8(" ? AND CAST(VideoMetadata.audioBitRate AS INTEGER)");
         ImageQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
-        sql += " ?) ";
+        sql += QString::fromUtf8(" ?) ");
 
         *boundValues << values.first() << values.last();
     }
-    else if (name == "videoaudiochanneltype")
+    else if (name == QLatin1String("videoaudiochanneltype"))
     {
         if (relation == SearchXml::OneOf)
         {
@@ -1151,44 +1154,44 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             {
                  *boundValues << value;
 
-                 if (value=="1")
+                 if (value == QLatin1String("1"))
                  {
-                     *boundValues << "Mono";
+                     *boundValues << QLatin1String("Mono");
                  }
-                 else if (value == "2")
+                 else if (value == QLatin1String("2"))
                  {
-                     *boundValues << "Stereo";
+                     *boundValues << QLatin1String("Stereo");
                  }
             }
 
-            sql += "(VideoMetadata.audioChannelType IN (";
+            sql += QString::fromUtf8("(VideoMetadata.audioChannelType IN (");
             AlbumDB::addBoundValuePlaceholders(sql, boundValues->size());
-            sql += ")) ";
+            sql += QString::fromUtf8(")) ");
         }
         else
         {
             QString value = reader.value();
             *boundValues << value;
 
-            if (value=="1")
+            if (value == QLatin1String("1"))
             {
-                *boundValues << "Mono";
+                *boundValues << QLatin1String("Mono");
             }
-            else if (value == "2")
+            else if (value == QLatin1String("2"))
             {
-                *boundValues << "Stereo";
+                *boundValues << QLatin1String("Stereo");
             }
 
-            sql += "(VideoMetadata.audioChannelType IN (";
+            sql += QString::fromUtf8("(VideoMetadata.audioChannelType IN (");
             AlbumDB::addBoundValuePlaceholders(sql, boundValues->size());
-            sql += ")) ";
+            sql += QString::fromUtf8(")) ");
         }
     }
-    else if (name == "videoaudiocompressor")
+    else if (name == QLatin1String("videoaudiocompressor"))
     {
-        fieldQuery.addChoiceStringField("VideoMetadata.audioCompressor");
+        fieldQuery.addChoiceStringField(QLatin1String("VideoMetadata.audioCompressor"));
     }
-    else if (name == "videoduration")
+    else if (name == QLatin1String("videoduration"))
     {
         QList<int> values = reader.valueToIntList();
 
@@ -1197,17 +1200,17 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
         }
 
-        sql += " ( CAST(VideoMetadata.duration AS INTEGER)";
+        sql += QString::fromUtf8(" ( CAST(VideoMetadata.duration AS INTEGER)");
         ImageQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
-        sql += " ? AND CAST(VideoMetadata.duration AS INTEGER)";
+        sql += QString::fromUtf8(" ? AND CAST(VideoMetadata.duration AS INTEGER)");
         ImageQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
-        sql += " ?) ";
+        sql += QString::fromUtf8(" ?) ");
 
         *boundValues << values.first()*1000 << values.last()*1000;
     }
-    else if (name == "videoframerate")
+    else if (name == QLatin1String("videoframerate"))
     {
         //fieldQuery.addChoiceStringField("VideoMetadata.frameRate");
         QList<double> values = reader.valueToDoubleList();
@@ -1217,17 +1220,17 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
         }
 
-        sql += " ( CAST(VideoMetadata.frameRate AS REAL)";
+        sql += QString::fromUtf8(" ( CAST(VideoMetadata.frameRate AS REAL)");
         ImageQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
-        sql += " ? AND CAST(VideoMetadata.frameRate AS REAL)";
+        sql += QString::fromUtf8(" ? AND CAST(VideoMetadata.frameRate AS REAL)");
         ImageQueryBuilder::addSqlRelation(sql,
                                           relation == SearchXml::Interval ? SearchXml::LessThanOrEqual : SearchXml::LessThan);
-        sql += " ?) ";
+        sql += QString::fromUtf8(" ?) ");
 
         *boundValues << values.first() << values.last();
     }
-    else if (name == "videocodec")
+    else if (name == QLatin1String("videocodec"))
     {
         if (relation == SearchXml::OneOf)
         {
@@ -1240,159 +1243,160 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             foreach(const QString& value, values)
             {
-                sql += "( Upper(VideoMetadata.videoCodec) LIKE '%" + value.toUpper() + "%' ";
+                sql += QString::fromUtf8("( Upper(VideoMetadata.videoCodec) LIKE '%") + value.toUpper() + QString::fromUtf8("%' ");
+
                 if (value!=values.last())
                 {
-                    sql += "OR ";
+                    sql += QString::fromUtf8("OR ");
                 }
             }
-            sql += ") ";
+            sql += QString::fromUtf8(") ");
         }
         else
         {
             QString value = reader.value();
-            sql += "(Upper(VideoMetadata.videoCodec) LIKE '%" + value.toUpper() + "%') ";
+            sql += QString::fromUtf8("(Upper(VideoMetadata.videoCodec) LIKE '%") + value.toUpper() + QString::fromUtf8("%') ");
         }
     }
-    else if (name == "make")
+    else if (name == QLatin1String("make"))
     {
-        fieldQuery.addStringField("ImageMetadata.make");
+        fieldQuery.addStringField(QLatin1String("ImageMetadata.make"));
     }
-    else if (name == "model")
+    else if (name == QLatin1String("model"))
     {
-        fieldQuery.addStringField("ImageMetadata.model");
+        fieldQuery.addStringField(QLatin1String("ImageMetadata.model"));
     }
-    else if (name == "aperture")
+    else if (name == QLatin1String("aperture"))
     {
-        fieldQuery.addDoubleField("ImageMetadata.aperture");
+        fieldQuery.addDoubleField(QLatin1String("ImageMetadata.aperture"));
     }
-    else if (name == "focallength")
+    else if (name == QLatin1String("focallength"))
     {
-        fieldQuery.addDoubleField("ImageMetadata.focalLength");
+        fieldQuery.addDoubleField(QLatin1String("ImageMetadata.focalLength"));
     }
-    else if (name == "focallength35")
+    else if (name == QLatin1String("focallength35"))
     {
-        fieldQuery.addDoubleField("ImageMetadata.focalLength35");
+        fieldQuery.addDoubleField(QLatin1String("ImageMetadata.focalLength35"));
     }
-    else if (name == "exposuretime")
+    else if (name == QLatin1String("exposuretime"))
     {
-        fieldQuery.addDoubleField("ImageMetadata.exposureTime");
+        fieldQuery.addDoubleField(QLatin1String("ImageMetadata.exposureTime"));
     }
-    else if (name == "exposureprogram")
+    else if (name == QLatin1String("exposureprogram"))
     {
-        fieldQuery.addChoiceIntField("ImageMetadata.exposureProgram");
+        fieldQuery.addChoiceIntField(QLatin1String("ImageMetadata.exposureProgram"));
     }
-    else if (name == "exposuremode")
+    else if (name == QLatin1String("exposuremode"))
     {
-        fieldQuery.addChoiceIntField("ImageMetadata.exposureMode");
+        fieldQuery.addChoiceIntField(QLatin1String("ImageMetadata.exposureMode"));
     }
-    else if (name == "sensitivity")
+    else if (name == QLatin1String("sensitivity"))
     {
-        fieldQuery.addIntField("ImageMetadata.sensitivity");
+        fieldQuery.addIntField(QLatin1String("ImageMetadata.sensitivity"));
     }
-    else if (name == "flashmode")
+    else if (name == QLatin1String("flashmode"))
     {
-        fieldQuery.addIntBitmaskField("ImageMetadata.flash");
+        fieldQuery.addIntBitmaskField(QLatin1String("ImageMetadata.flash"));
     }
-    else if (name == "whitebalance")
+    else if (name == QLatin1String("whitebalance"))
     {
-        fieldQuery.addChoiceIntField("ImageMetadata.whiteBalance");
+        fieldQuery.addChoiceIntField(QLatin1String("ImageMetadata.whiteBalance"));
     }
-    else if (name == "whitebalancecolortemperature")
+    else if (name == QLatin1String("whitebalancecolortemperature"))
     {
-        fieldQuery.addIntField("ImageMetadata.whiteBalanceColorTemperature");
+        fieldQuery.addIntField(QLatin1String("ImageMetadata.whiteBalanceColorTemperature"));
     }
-    else if (name == "meteringmode")
+    else if (name == QLatin1String("meteringmode"))
     {
-        fieldQuery.addChoiceIntField("ImageMetadata.meteringMode");
+        fieldQuery.addChoiceIntField(QLatin1String("ImageMetadata.meteringMode"));
     }
-    else if (name == "subjectdistance")
+    else if (name == QLatin1String("subjectdistance"))
     {
-        fieldQuery.addDoubleField("ImageMetadata.subjectDistance");
+        fieldQuery.addDoubleField(QLatin1String("ImageMetadata.subjectDistance"));
     }
-    else if (name == "subjectdistancecategory")
+    else if (name == QLatin1String("subjectdistancecategory"))
     {
-        fieldQuery.addChoiceIntField("ImageMetadata.subjectDistanceCategory");
+        fieldQuery.addChoiceIntField(QLatin1String("ImageMetadata.subjectDistanceCategory"));
     }
-    else if (name == "position")
+    else if (name == QLatin1String("position"))
     {
         fieldQuery.addPosition();
     }
-    else if (name == "latitude")
+    else if (name == QLatin1String("latitude"))
     {
-        fieldQuery.addDoubleField("ImagePositions.latitudeNumber");
+        fieldQuery.addDoubleField(QLatin1String("ImagePositions.latitudeNumber"));
     }
-    else if (name == "longitude")
+    else if (name == QLatin1String("longitude"))
     {
-        fieldQuery.addDoubleField("ImagePositions.longitudeNumber");
+        fieldQuery.addDoubleField(QLatin1String("ImagePositions.longitudeNumber"));
     }
-    else if (name == "altitude")
+    else if (name == QLatin1String("altitude"))
     {
-        fieldQuery.addDoubleField("ImagePositions.altitude");
+        fieldQuery.addDoubleField(QLatin1String("ImagePositions.altitude"));
     }
-    else if (name == "positionorientation")
+    else if (name == QLatin1String("positionorientation"))
     {
-        fieldQuery.addDoubleField("ImagePositions.orientation");
+        fieldQuery.addDoubleField(QLatin1String("ImagePositions.orientation"));
     }
-    else if (name == "positiontilt")
+    else if (name == QLatin1String("positiontilt"))
     {
-        fieldQuery.addDoubleField("ImagePositions.tilt");
+        fieldQuery.addDoubleField(QLatin1String("ImagePositions.tilt"));
     }
-    else if (name == "positionroll")
+    else if (name == QLatin1String("positionroll"))
     {
-        fieldQuery.addDoubleField("ImagePositions.roll");
+        fieldQuery.addDoubleField(QLatin1String("ImagePositions.roll"));
     }
-    else if (name == "positiondescription")
+    else if (name == QLatin1String("positiondescription"))
     {
-        fieldQuery.addStringField("ImagePositions.description");
+        fieldQuery.addStringField(QLatin1String("ImagePositions.description"));
     }
-    else if (name == "nogps")
+    else if (name == QLatin1String("nogps"))
     {
-        sql += " (ImagePositions.latitudeNumber IS NULL AND ImagePositions.longitudeNumber IS NULL) ";
+        sql += QString::fromUtf8(" (ImagePositions.latitudeNumber IS NULL AND ImagePositions.longitudeNumber IS NULL) ");
     }
-    else if (name == "comment")
+    else if (name == QLatin1String("comment"))
     {
-        sql += " (Images.id IN "
+        sql += QString::fromUtf8(" (Images.id IN "
                " (SELECT imageid FROM ImageComments "
-               "  WHERE type=? AND comment ";
+               "  WHERE type=? AND comment ");
         ImageQueryBuilder::addSqlRelation(sql, relation);
-        sql += " ?)) ";
+        sql += QString::fromUtf8(" ?)) ");
         *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
     }
-    else if (name == "commentauthor")
+    else if (name == QLatin1String("commentauthor"))
     {
-        sql += " (Images.id IN "
+        sql += QString::fromUtf8(" (Images.id IN "
                " (SELECT imageid FROM ImageComments "
-               "  WHERE type=? AND author ";
+               "  WHERE type=? AND author ");
         ImageQueryBuilder::addSqlRelation(sql, relation);
-        sql += " ?)) ";
+        sql += QString::fromUtf8(" ?)) ");
         *boundValues << DatabaseComment::Comment << fieldQuery.prepareForLike(reader.value());
     }
-    else if (name == "headline")
+    else if (name == QLatin1String("headline"))
     {
-        sql += " (Images.id IN "
+        sql += QString::fromUtf8(" (Images.id IN "
                " (SELECT imageid FROM ImageComments "
-               "  WHERE type=? AND comment ";
+               "  WHERE type=? AND comment ");
         ImageQueryBuilder::addSqlRelation(sql, relation);
-        sql += " ?)) ";
+        sql += QString::fromUtf8(" ?)) ");
         *boundValues << DatabaseComment::Headline << fieldQuery.prepareForLike(reader.value());
     }
-    else if (name == "title")
+    else if (name == QLatin1String("title"))
     {
-        sql += " (Images.id IN "
+        sql += QString::fromUtf8(" (Images.id IN "
                " (SELECT imageid FROM ImageComments "
-               "  WHERE type=? AND comment ";
+               "  WHERE type=? AND comment ");
         ImageQueryBuilder::addSqlRelation(sql, relation);
-        sql += " ?)) ";
+        sql += QString::fromUtf8(" ?)) ");
         *boundValues << DatabaseComment::Title << fieldQuery.prepareForLike(reader.value());
     }
-    else if (name == "imagetagproperty")
+    else if (name == QLatin1String("imagetagproperty"))
     {
         if (relation == SearchXml::Equal || relation == SearchXml::InTree)
         {
             // First, read attributes
-            QStringRef tagAttribute = reader.attributes().value("tagid");
-            int tagId = 0;
+            QStringRef tagAttribute = reader.attributes().value(QLatin1String("tagid"));
+            int tagId               = 0;
 
             if (!tagAttribute.isEmpty())
             {
@@ -1414,26 +1418,26 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             {
                 if (relation == SearchXml::Equal)
                 {
-                    selectQuery += "%1tagid=? AND ";
+                    selectQuery += QString::fromUtf8("%1tagid=? AND ");
                     *boundValues << tagId;
                 }
                 else // InTree
                 {
-                    selectQuery += "(%1tagid=? OR %1tagid IN (SELECT id FROM TagsTree WHERE pid=?)) AND ";
+                    selectQuery += QString::fromUtf8("(%1tagid=? OR %1tagid IN (SELECT id FROM TagsTree WHERE pid=?)) AND ");
                     *boundValues << tagId << tagId;
                 }
             }
 
             if (values.size() == 1)
             {
-                selectQuery += "%1property=? ";
+                selectQuery += QString::fromUtf8("%1property=? ");
                 *boundValues << values.first();
             }
             else if (values.size() == 2)
             {
-                selectQuery += "%1property=? AND %1value ";
+                selectQuery += QString::fromUtf8("%1property=? AND %1value ");
                 ImageQueryBuilder::addSqlRelation(selectQuery, relation);
-                selectQuery += " ? ";
+                selectQuery += QString::fromUtf8(" ? ");
                 *boundValues << values.at(0) << fieldQuery.prepareForLike(values.at(1));
             }
 
@@ -1441,49 +1445,49 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             // so one entry is listed for each property entry (not for each image id)
             if (m_imageTagPropertiesJoined)
             {
-                sql += " ( ";
-                sql += selectQuery.arg("ImageTagProperties.");
-                sql += " ) ";
+                sql += QString::fromUtf8(" ( ");
+                sql += selectQuery.arg(QString::fromUtf8("ImageTagProperties."));
+                sql += QString::fromUtf8(" ) ");
             }
             else
             {
-                sql += " (Images.id IN "
-                       " (SELECT imageid FROM ImageTagProperties WHERE ";
+                sql += QString::fromUtf8(" (Images.id IN "
+                       " (SELECT imageid FROM ImageTagProperties WHERE ");
                 sql += selectQuery.arg(QString());
-                sql += " )) ";
+                sql += QString::fromUtf8(" )) ");
             }
         }
     }
-    else if (name == "keyword")
+    else if (name == QLatin1String("keyword"))
     {
         // keyword is the common search in the text fields
 
-        sql += " ( ";
+        sql += QLatin1String(" ( ");
 
         addSqlOperator(sql, SearchXml::Or, true);
-        buildField(sql, reader, "albumname", boundValues, hooks);
+        buildField(sql, reader, QLatin1String("albumname"), boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "filename", boundValues, hooks);
+        buildField(sql, reader, QLatin1String("filename"), boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "tagname", boundValues, hooks);
+        buildField(sql, reader, QLatin1String("tagname"), boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "albumcaption", boundValues, hooks);
+        buildField(sql, reader, QLatin1String("albumcaption"), boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "albumcollection", boundValues, hooks);
+        buildField(sql, reader, QLatin1String("albumcollection"), boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "comment", boundValues, hooks);
+        buildField(sql, reader, QLatin1String("comment"), boundValues, hooks);
 
         addSqlOperator(sql, SearchXml::Or, false);
-        buildField(sql, reader, "title", boundValues, hooks);
+        buildField(sql, reader, QLatin1String("title"), boundValues, hooks);
 
-        sql += " ) ";
+        sql += QLatin1String(" ) ");
     }
-    else if (name == "similarity")
+    else if (name == QLatin1String("similarity"))
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Search field \"similarity\" is not supported by ImageQueryBuilder";
     }
@@ -1502,7 +1506,7 @@ void ImageQueryBuilder::addSqlOperator(QString& sql, SearchXml::Operator op, boo
     {
         if (op == SearchXml::AndNot || op == SearchXml::OrNot)
         {
-            sql += "NOT";
+            sql += QLatin1String("NOT");
         }
 
         return;
@@ -1511,16 +1515,16 @@ void ImageQueryBuilder::addSqlOperator(QString& sql, SearchXml::Operator op, boo
     switch (op)
     {
         case SearchXml::And:
-            sql += "AND";
+            sql += QLatin1String("AND");
             break;
         case SearchXml::Or:
-            sql += "OR";
+            sql += QLatin1String("OR");
             break;
         case SearchXml::AndNot:
-            sql += "AND NOT";
+            sql += QLatin1String("AND NOT");
             break;
         case SearchXml::OrNot:
-            sql += "OR NOT";
+            sql += QLatin1String("OR NOT");
             break;
     }
 }
@@ -1531,31 +1535,31 @@ void ImageQueryBuilder::addSqlRelation(QString& sql, SearchXml::Relation rel)
     {
         default:
         case SearchXml::Equal:
-            sql += '=';
+            sql += QLatin1Char('=');
             break;
         case SearchXml::Unequal:
-            sql += "<>";
+            sql += QLatin1String("<>");
             break;
         case SearchXml::Like:
-            sql += "LIKE";
+            sql += QLatin1String("LIKE");
             break;
         case SearchXml::NotLike:
-            sql += "NOT LIKE";
+            sql += QLatin1String("NOT LIKE");
             break;
         case SearchXml::LessThan:
-            sql += '<';
+            sql += QLatin1Char('<');
             break;
         case SearchXml::GreaterThan:
-            sql += '>';
+            sql += QLatin1Char('>');
             break;
         case SearchXml::LessThanOrEqual:
-            sql += "<=";
+            sql += QLatin1String("<=");
             break;
         case SearchXml::GreaterThanOrEqual:
-            sql += ">=";
+            sql += QLatin1String(">=");
             break;
         case SearchXml::OneOf:
-            sql += "IN";
+            sql += QLatin1String("IN");
             break;
     }
 }
@@ -1567,11 +1571,11 @@ void ImageQueryBuilder::addNoEffectContent(QString& sql, SearchXml::Operator op)
     {
         case SearchXml::And:
         case SearchXml::Or:
-            sql += " 1 ";
+            sql += QLatin1String(" 1 ");
             break;
         case SearchXml::AndNot:
         case SearchXml::OrNot:
-            sql += " 0 ";
+            sql += QLatin1String(" 0 ");
             break;
     }
 }
@@ -1594,7 +1598,7 @@ public:
 
 QString ImageQueryBuilder::convertFromUrlToXml(const QUrl& url) const
 {
-    int  count = QUrlQuery(url).queryItemValue("count").toInt();
+    int  count = QUrlQuery(url).queryItemValue(QLatin1String("count")).toInt();
 
     if (count <= 0)
     {
@@ -1607,28 +1611,28 @@ QString ImageQueryBuilder::convertFromUrlToXml(const QUrl& url) const
     {
         RuleTypeForConversion rule;
 
-        QString key = QUrlQuery(url).queryItemValue(QString::number(i) + ".key").toLower();
-        QString op  = QUrlQuery(url).queryItemValue(QString::number(i) + ".op").toLower();
+        QString key = QUrlQuery(url).queryItemValue(QString::number(i) + QLatin1String(".key")).toLower();
+        QString op  = QUrlQuery(url).queryItemValue(QString::number(i) + QLatin1String(".op")).toLower();
 
-        if (key == "album")
+        if (key == QLatin1String("album"))
         {
-            rule.key = "albumid";
+            rule.key = QLatin1String("albumid");
         }
-        else if (key == "imagename")
+        else if (key == QLatin1String("imagename"))
         {
-            rule.key = "filename";
+            rule.key = QLatin1String("filename");
         }
-        else if (key == "imagecaption")
+        else if (key == QLatin1String("imagecaption"))
         {
-            rule.key = "comment";
+            rule.key = QLatin1String("comment");
         }
-        else if (key == "imagedate")
+        else if (key == QLatin1String("imagedate"))
         {
-            rule.key = "creationdate";
+            rule.key = QLatin1String("creationdate");
         }
-        else if (key == "tag")
+        else if (key == QLatin1String("tag"))
         {
-            rule.key = "tagid";
+            rule.key = QLatin1String("tagid");
         }
         else
         {
@@ -1637,33 +1641,33 @@ QString ImageQueryBuilder::convertFromUrlToXml(const QUrl& url) const
             rule.key = key;
         }
 
-        if (op == "eq")
+        if (op == QLatin1String("eq"))
         {
             rule.op = SearchXml::Equal;
         }
-        else if (op == "ne")
+        else if (op == QLatin1String("ne"))
         {
             rule.op = SearchXml::Unequal;
         }
-        else if (op == "lt")
+        else if (op == QLatin1String("lt"))
         {
             rule.op = SearchXml::LessThan;
         }
-        else if (op == "lte")
+        else if (op == QLatin1String("lte"))
         {
             rule.op = SearchXml::LessThanOrEqual;
         }
-        else if (op == "gt")
+        else if (op == QLatin1String("gt"))
         {
             rule.op = SearchXml::GreaterThan;
         }
-        else if (op == "gte")
+        else if (op == QLatin1String("gte"))
         {
             rule.op = SearchXml::GreaterThanOrEqual;
         }
-        else if (op == "like")
+        else if (op == QLatin1String("like"))
         {
-            if (key == "tag")
+            if (key == QLatin1String("tag"))
             {
                 rule.op = SearchXml::InTree;
             }
@@ -1672,9 +1676,9 @@ QString ImageQueryBuilder::convertFromUrlToXml(const QUrl& url) const
                 rule.op = SearchXml::Like;
             }
         }
-        else if (op == "nlike")
+        else if (op == QLatin1String("nlike"))
         {
-            if (key == "tag")
+            if (key == QLatin1String("tag"))
             {
                 rule.op = SearchXml::NotInTree;
             }
@@ -1684,7 +1688,7 @@ QString ImageQueryBuilder::convertFromUrlToXml(const QUrl& url) const
             }
         }
 
-        rule.val = QUrlQuery(url).queryItemValue(QString::number(i) + ".val");
+        rule.val = QUrlQuery(url).queryItemValue(QString::number(i) + QLatin1String(".val"));
 
         rulesMap.insert(i, rule);
     }
@@ -1692,10 +1696,10 @@ QString ImageQueryBuilder::convertFromUrlToXml(const QUrl& url) const
     SearchXmlWriter writer;
 
     // set an attribute marking this search as converted from 0.9 style search
-    writer.writeAttribute("convertedFrom09Url", "true");
+    writer.writeAttribute(QLatin1String("convertedFrom09Url"), QLatin1String("true"));
     writer.writeGroup();
 
-    QStringList strList = url.path().split(' ', QString::SkipEmptyParts);
+    QStringList strList = url.path().split(QLatin1Char(' '), QString::SkipEmptyParts);
 
     for ( QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); ++it )
     {
@@ -1713,23 +1717,23 @@ QString ImageQueryBuilder::convertFromUrlToXml(const QUrl& url) const
         {
             QString expr = (*it).trimmed();
 
-            if (expr == "AND")
+            if (expr == QLatin1String("AND"))
             {
                 // add another field
             }
-            else if (expr == "OR")
+            else if (expr == QLatin1String("OR"))
             {
                 // open a new group
                 writer.finishGroup();
                 writer.writeGroup();
                 writer.setGroupOperator(SearchXml::Or);
             }
-            else if (expr == "(")
+            else if (expr == QLatin1String("("))
             {
                 // open a subgroup
                 writer.writeGroup();
             }
-            else if (expr == ")")
+            else if (expr == QLatin1String(")"))
             {
                 writer.finishGroup();
             }
@@ -1796,7 +1800,7 @@ public:
 
 QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* boundValues) const
 {
-    int count = QUrlQuery(url).queryItemValue("count").toInt();
+    int count = QUrlQuery(url).queryItemValue(QLatin1String("count")).toInt();
 
     if (count <= 0)
     {
@@ -1809,50 +1813,50 @@ QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* b
     {
         RuleType rule;
 
-        QString key = QUrlQuery(url).queryItemValue(QString::number(i) + ".key").toLower();
-        QString op  = QUrlQuery(url).queryItemValue(QString::number(i) + ".op").toLower();
+        QString key = QUrlQuery(url).queryItemValue(QString::number(i) + QLatin1String(".key")).toLower();
+        QString op  = QUrlQuery(url).queryItemValue(QString::number(i) + QLatin1String(".op")).toLower();
 
-        if (key == "album")
+        if (key == QLatin1String("album"))
         {
             rule.key = ALBUM;
         }
-        else if (key == "albumname")
+        else if (key == QLatin1String("albumname"))
         {
             rule.key = ALBUMNAME;
         }
-        else if (key == "albumcaption")
+        else if (key == QLatin1String("albumcaption"))
         {
             rule.key = ALBUMCAPTION;
         }
-        else if (key == "albumcollection")
+        else if (key == QLatin1String("albumcollection"))
         {
             rule.key = ALBUMCOLLECTION;
         }
-        else if (key == "imagename")
+        else if (key == QLatin1String("imagename"))
         {
             rule.key = IMAGENAME;
         }
-        else if (key == "imagecaption")
+        else if (key == QLatin1String("imagecaption"))
         {
             rule.key = IMAGECAPTION;
         }
-        else if (key == "imagedate")
+        else if (key == QLatin1String("imagedate"))
         {
             rule.key = IMAGEDATE;
         }
-        else if (key == "tag")
+        else if (key == QLatin1String("tag"))
         {
             rule.key = TAG;
         }
-        else if (key == "tagname")
+        else if (key == QLatin1String("tagname"))
         {
             rule.key = TAGNAME;
         }
-        else if (key == "keyword")
+        else if (key == QLatin1String("keyword"))
         {
             rule.key = KEYWORD;
         }
-        else if (key == "rating")
+        else if (key == QLatin1String("rating"))
         {
             rule.key = RATING;
         }
@@ -1862,35 +1866,35 @@ QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* b
             continue;
         }
 
-        if (op == "eq")
+        if (op == QLatin1String("eq"))
         {
             rule.op = EQ;
         }
-        else if (op == "ne")
+        else if (op == QLatin1String("ne"))
         {
             rule.op = NE;
         }
-        else if (op == "lt")
+        else if (op == QLatin1String("lt"))
         {
             rule.op = LT;
         }
-        else if (op == "lte")
+        else if (op == QLatin1String("lte"))
         {
             rule.op = LTE;
         }
-        else if (op == "gt")
+        else if (op == QLatin1String("gt"))
         {
             rule.op = GT;
         }
-        else if (op == "gte")
+        else if (op == QLatin1String("gte"))
         {
             rule.op = GTE;
         }
-        else if (op == "like")
+        else if (op == QLatin1String("like"))
         {
             rule.op = LIKE;
         }
-        else if (op == "nlike")
+        else if (op == QLatin1String("nlike"))
         {
             rule.op = NLIKE;
         }
@@ -1900,14 +1904,14 @@ QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* b
             continue;
         }
 
-        rule.val = QUrlQuery(url).queryItemValue(QString::number(i) + ".val");
+        rule.val = QUrlQuery(url).queryItemValue(QString::number(i) + QLatin1String(".val"));
 
         rulesMap.insert(i, rule);
     }
 
     QString         sqlQuery;
     SubQueryBuilder subQuery;
-    QStringList     strList = url.path().split(' ', QString::SkipEmptyParts);
+    QStringList     strList = url.path().split(QLatin1Char(' '), QString::SkipEmptyParts);
 
     for ( QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); ++it )
     {
@@ -1950,7 +1954,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* b
                     todo.append( IMAGECAPTION );
                     todo.append( RATING );
 
-                    sqlQuery += '(';
+                    sqlQuery += QLatin1Char('(');
                     QList<SKey>::const_iterator it = todo.constBegin();
 
                     while ( it != todo.constEnd() )
@@ -1960,11 +1964,11 @@ QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* b
 
                         if ( it != todo.constEnd() )
                         {
-                            sqlQuery += " OR ";
+                            sqlQuery += QLatin1String(" OR ");
                         }
                     }
 
-                    sqlQuery += ')';
+                    sqlQuery += QLatin1Char(')');
                 }
             }
             else
@@ -1974,7 +1978,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* b
         }
         else
         {
-            sqlQuery += ' ' + *it + ' ';
+            sqlQuery += QLatin1Char(' ') + *it + QLatin1Char(' ');
         }
     }
 
@@ -1989,35 +1993,35 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
 
     if (op == LIKE || op == NLIKE)
     {
-        val = '%' + val + '%';
+        val = QLatin1Char('%') + val + QLatin1Char('%');
     }
 
     switch (key)
     {
         case(ALBUM):
         {
-            query = " (Images.dirid $$##$$ ?) ";
+            query = QString::fromUtf8(" (Images.dirid $$##$$ ?) ");
             *boundValues << val;
             break;
         }
         case(ALBUMNAME):
         {
-            query = " (Images.dirid IN "
-                    "  (SELECT id FROM Albums WHERE url $$##$$ ?)) ";
+            query = QString::fromUtf8(" (Images.dirid IN "
+                    "  (SELECT id FROM Albums WHERE url $$##$$ ?)) ");
             *boundValues << val;
             break;
         }
         case(ALBUMCAPTION):
         {
-            query = " (Images.dirid IN "
-                    "  (SELECT id FROM Albums WHERE caption $$##$$ ?)) ";
+            query = QString::fromUtf8(" (Images.dirid IN "
+                    "  (SELECT id FROM Albums WHERE caption $$##$$ ?)) ");
             *boundValues << val;
             break;
         }
         case(ALBUMCOLLECTION):
         {
-            query = " (Images.dirid IN "
-                    "  (SELECT id FROM Albums WHERE collection $$##$$ ?)) ";
+            query = QString::fromUtf8(" (Images.dirid IN "
+                    "  (SELECT id FROM Albums WHERE collection $$##$$ ?)) ");
             *boundValues << val;
             break;
         }
@@ -2025,63 +2029,63 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
         {
             if (op == EQ)
             {
-                query = " (Images.id IN "
+                query = QString::fromUtf8(" (Images.id IN "
                         "   (SELECT imageid FROM ImageTags "
-                        "    WHERE tagid = ?)) ";
+                        "    WHERE tagid = ?)) ");
                 *boundValues << val.toInt();
             }
             else if (op == NE)
             {
-                query = " (Images.id NOT IN "
+                query = QString::fromUtf8(" (Images.id NOT IN "
                         "   (SELECT imageid FROM ImageTags "
-                        "    WHERE tagid = ?)) ";
+                        "    WHERE tagid = ?)) ");
                 *boundValues << val.toInt();
             }
             else if (op == LIKE)
             {
-                query = " (Images.id IN "
+                query = QString::fromUtf8(" (Images.id IN "
                         "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
+                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ");
                 *boundValues << val.toInt() << val.toInt();
             }
             else // op == NLIKE
             {
-                query = " (Images.id NOT IN "
+                query = QString::fromUtf8(" (Images.id NOT IN "
                         "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
+                        "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ");
                 *boundValues << val.toInt() << val.toInt();
             }
 
-            //         query = " (Images.id IN "
+            //         query = QString::fromUtf8(" (Images.id IN "
             //                 "   (SELECT imageid FROM ImageTags "
-            //                 "    WHERE tagid $$##$$ ?)) ";
+            //                 "    WHERE tagid $$##$$ ?)) ");
 
             break;
         }
         case(TAGNAME):
         {
-            query = " (Images.id IN "
+            query = QString::fromUtf8(" (Images.id IN "
                     "  (SELECT imageid FROM ImageTags "
                     "   WHERE tagid IN "
-                    "   (SELECT id FROM Tags WHERE name $$##$$ ?))) ";
+                    "   (SELECT id FROM Tags WHERE name $$##$$ ?))) ");
             *boundValues << val;
             break;
         }
         case(IMAGENAME):
         {
-            query = " (Images.name $$##$$ ?) ";
+            query = QString::fromUtf8(" (Images.name $$##$$ ?) ");
             *boundValues << val;
             break;
         }
         case(IMAGECAPTION):
         {
-            query = " (Images.caption $$##$$ ?) ";
+            query = QString::fromUtf8(" (Images.caption $$##$$ ?) ");
             *boundValues << val;
             break;
         }
         case(IMAGEDATE):
         {
-            query = " (Images.datetime $$##$$ ?) ";
+            query = QString::fromUtf8(" (Images.datetime $$##$$ ?) ");
             *boundValues << val;
             break;
         }
@@ -2092,7 +2096,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
         }
         case(RATING):
         {
-            query = " (ImageProperties.value $$##$$ ? and ImageProperties.property='Rating') ";
+            query = QString::fromUtf8(" (ImageProperties.value $$##$$ ? and ImageProperties.property='Rating') ");
             *boundValues << val;
             break;
         }
@@ -2104,42 +2108,42 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
         {
             case(EQ):
             {
-                query.replace("$$##$$", "=");
+                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("="));
                 break;
             }
             case(NE):
             {
-                query.replace("$$##$$", "<>");
+                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("<>"));
                 break;
             }
             case(LT):
             {
-                query.replace("$$##$$", "<");
+                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("<"));
                 break;
             }
             case(GT):
             {
-                query.replace("$$##$$", ">");
+                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8(">"));
                 break;
             }
             case(LTE):
             {
-                query.replace("$$##$$", "<=");
+                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("<="));
                 break;
             }
             case(GTE):
             {
-                query.replace("$$##$$", ">=");
+                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8(">="));
                 break;
             }
             case(LIKE):
             {
-                query.replace("$$##$$", "LIKE");
+                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("LIKE"));
                 break;
             }
             case(NLIKE):
             {
-                query.replace("$$##$$", "NOT LIKE");
+                query.replace(QString::fromUtf8("$$##$$"), QString::fromUtf8("NOT LIKE"));
                 break;
             }
         }
@@ -2156,7 +2160,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
             return query;
         }
 
-        query = QString(" (Images.datetime > ? AND Images.datetime < ?) ");
+        query = QString::fromUtf8(" (Images.datetime > ? AND Images.datetime < ?) ");
         *boundValues << date.addDays(-1).toString(Qt::ISODate)
                      << date.addDays( 1).toString(Qt::ISODate);
     }
@@ -2184,7 +2188,7 @@ QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
         if (1970 <= num && num <= QDate::currentDate().year())
         {
             // very sure its a year
-            return QString("%1-%-%").arg(num);
+            return QString::fromUtf8("%1-%-%").arg(num);
         }
     }
     else
@@ -2197,7 +2201,7 @@ QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
             {
                 QString monGlob;
                 monGlob.sprintf("%.2d", i);
-                monGlob = "%-" + monGlob + "-%";
+                monGlob = QString::fromUtf8("%-") + monGlob + QString::fromUtf8("-%");
                 return monGlob;
             }
         }
