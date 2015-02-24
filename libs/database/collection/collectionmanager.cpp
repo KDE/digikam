@@ -1763,3 +1763,5 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
 }
 
 }  // namespace Digikam
+
+#include "moc_collectionmanager.cpp"

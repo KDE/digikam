@@ -101,13 +101,14 @@ public:
     LStyle               layoutStyle;
 };
 
-const QString AdvancedRenameWidget::Private::configGroupName("AdvancedRename Widget");
-const QString AdvancedRenameWidget::Private::configExpandedStateEntry("Options are expanded");
+const QString AdvancedRenameWidget::Private::configGroupName(QLatin1String("AdvancedRename Widget"));
+const QString AdvancedRenameWidget::Private::configExpandedStateEntry(QLatin1String("Options are expanded"));
 
 // --------------------------------------------------------
 
-AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
-    : QWidget(parent), d(new Private)
+AdvancedRenameWidget::AdvancedRenameWidget(QWidget* const parent)
+    : QWidget(parent),
+      d(new Private)
 {
     setupWidgets();
 }
@@ -345,13 +346,13 @@ void AdvancedRenameWidget::setupWidgets()
     // --------------------------------------------------------
 
     d->tooltipToggleButton = new QToolButton;
-    d->tooltipToggleButton->setIcon(QIcon::fromTheme("dialog-information"));
+    d->tooltipToggleButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
     // --------------------------------------------------------
 
     QString modifiersStr     = i18n("Modifiers");
-    QIcon   modifiersIcon    = QIcon::fromTheme("document-edit");
+    QIcon   modifiersIcon    = QIcon::fromTheme(QLatin1String("document-edit"));
     QString modifiersTooltip = i18n("<p>Add a modifier to a renaming option. "
                                     "To activate this button, place the cursor behind a renaming option "
                                     "or an already assigned modifier.</p>");
@@ -386,7 +387,7 @@ void AdvancedRenameWidget::setupWidgets()
     {
         d->optionsButton = new QPushButton;
         d->optionsButton->setText(i18n("Options"));
-        d->optionsButton->setIcon(QIcon::fromTheme("configure"));
+        d->optionsButton->setIcon(QIcon::fromTheme(QLatin1String("configure")));
         d->optionsButton->setToolTip(i18n("<p>Add renaming options to the parse string.</p>"));
 
         // --------------------------------------------------------

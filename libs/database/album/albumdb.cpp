@@ -89,8 +89,8 @@ public:
     QList<qlonglong> execRelatedImagesQuery(SqlQuery& query, qlonglong id, DatabaseRelation::Type type);
 };
 
-const QString AlbumDB::Private::configGroupName("AlbumDB Settings");
-const QString AlbumDB::Private::configRecentlyUsedTags("Recently Used Tags");
+const QString AlbumDB::Private::configGroupName(QLatin1String("AlbumDB Settings"));
+const QString AlbumDB::Private::configRecentlyUsedTags(QLatin1String("Recently Used Tags"));
 
 QString AlbumDB::Private::constructRelatedImagesSQL(bool fromOrTo, DatabaseRelation::Type type, bool boolean)
 {
@@ -98,20 +98,20 @@ QString AlbumDB::Private::constructRelatedImagesSQL(bool fromOrTo, DatabaseRelat
 
     if (fromOrTo)
     {
-        sql = "SELECT object FROM ImageRelations "
+        sql = QString::fromUtf8("SELECT object FROM ImageRelations "
               "INNER JOIN Images ON ImageRelations.object=Images.id "
-              "WHERE subject=? %1 AND status!=3 %2;";
+              "WHERE subject=? %1 AND status!=3 %2;");
     }
     else
     {
-        sql = "SELECT subject FROM ImageRelations "
+        sql = QString::fromUtf8("SELECT subject FROM ImageRelations "
               "INNER JOIN Images ON ImageRelations.subject=Images.id "
-              "WHERE object=? %1 AND status!=3 %2;";
+              "WHERE object=? %1 AND status!=3 %2;");
     }
 
     if (type != DatabaseRelation::UndefinedType)
     {
-        sql = sql.arg(QString("AND type=?"));
+        sql = sql.arg(QString::fromUtf8("AND type=?"));
     }
     else
     {
@@ -120,7 +120,7 @@ QString AlbumDB::Private::constructRelatedImagesSQL(bool fromOrTo, DatabaseRelat
 
     if (boolean)
     {
-        sql = sql.arg(QString("LIMIT 1"));
+        sql = sql.arg(QString::fromUtf8("LIMIT 1"));
     }
     else
     {
@@ -178,7 +178,7 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRoots()
     QList<AlbumRootInfo> list;
     QList<QVariant>      values;
 
-    d->db->execSql("SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;", &values);
+    d->db->execSql(QString::fromUtf8("SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;"), &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -205,7 +205,7 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRoots()
 int AlbumDB::addAlbumRoot(AlbumRoot::Type type, const QString& identifier, const QString& specificPath, const QString& label)
 {
     QVariant id;
-    d->db->execSql(QString("REPLACE INTO AlbumRoots (type, label, status, identifier, specificPath) "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO AlbumRoots (type, label, status, identifier, specificPath) "
                            "VALUES(?, ?, 0, ?, ?);"),
                    (int)type, label, identifier, specificPath, 0, &id);
 
@@ -215,12 +215,12 @@ int AlbumDB::addAlbumRoot(AlbumRoot::Type type, const QString& identifier, const
 
 void AlbumDB::deleteAlbumRoot(int rootId)
 {
-    d->db->execSql(QString("DELETE FROM AlbumRoots WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM AlbumRoots WHERE id=?;"),
                    rootId);
     QMap<QString, QVariant> parameters;
-    parameters.insert(":albumRoot", rootId);
+    parameters.insert(QLatin1String(":albumRoot"), rootId);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRoot")), parameters))
+    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRoot")), parameters))
     {
         return;
     }
@@ -230,21 +230,21 @@ void AlbumDB::deleteAlbumRoot(int rootId)
 
 void AlbumDB::migrateAlbumRoot(int rootId, const QString& identifier)
 {
-    d->db->execSql(QString("UPDATE AlbumRoots SET identifier=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE AlbumRoots SET identifier=? WHERE id=?;"),
                    identifier, rootId);
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::PropertiesChanged));
 }
 
 void AlbumDB::setAlbumRootLabel(int rootId, const QString& newLabel)
 {
-    d->db->execSql(QString("UPDATE AlbumRoots SET label=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE AlbumRoots SET label=? WHERE id=?;"),
                    newLabel, rootId);
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::PropertiesChanged));
 }
 
 void AlbumDB::changeAlbumRootType(int rootId, AlbumRoot::Type newType)
 {
-    d->db->execSql(QString("UPDATE AlbumRoots SET type=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE AlbumRoots SET type=? WHERE id=?;"),
                    (int)newType, rootId);
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::PropertiesChanged));
 }
@@ -254,8 +254,8 @@ AlbumInfo::List AlbumDB::scanAlbums()
     AlbumInfo::List aList;
 
     QList<QVariant> values;
-    d->db->execSql("SELECT albumRoot, id, relativePath, date, caption, collection, icon FROM Albums "
-                   " WHERE albumRoot != 0;", // exclude stale albums
+    d->db->execSql(QString::fromUtf8("SELECT albumRoot, id, relativePath, date, caption, collection, icon FROM Albums "
+                   " WHERE albumRoot != 0;"), // exclude stale albums
                    &values);
 
     QString iconAlbumUrl, iconName;
@@ -290,7 +290,7 @@ TagInfo::List AlbumDB::scanTags()
     TagInfo::List tList;
 
     QList<QVariant> values;
-    d->db->execSql("SELECT id, pid, name, icon, iconkde FROM Tags;", &values);
+    d->db->execSql(QString::fromUtf8("SELECT id, pid, name, icon, iconkde FROM Tags;"), &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -316,7 +316,7 @@ TagInfo::List AlbumDB::scanTags()
 TagInfo AlbumDB::getTagInfo(int tagId)
 {
     QList<QVariant> values;
-    d->db->execSql("SELECT id, pid, name, icon, iconkde WHERE id=? FROM Tags;", tagId, &values);
+    d->db->execSql(QString::fromUtf8("SELECT id, pid, name, icon, iconkde WHERE id=? FROM Tags;"), tagId, &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -344,7 +344,7 @@ SearchInfo::List AlbumDB::scanSearches()
     SearchInfo::List searchList;
     QList<QVariant>  values;
 
-    d->db->execSql("SELECT id, type, name, query FROM Searches;", &values);
+    d->db->execSql(QString::fromUtf8("SELECT id, type, name, query FROM Searches;"), &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -369,7 +369,7 @@ QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT Albums.id, Albums.relativePath, Albums.albumRoot from Albums ORDER BY Albums.id; "),
+    d->db->execSql(QString::fromUtf8("SELECT Albums.id, Albums.relativePath, Albums.albumRoot from Albums ORDER BY Albums.id; "),
                    &values);
 
     QList<AlbumShortInfo> albumList;
@@ -395,7 +395,7 @@ QList<TagShortInfo> AlbumDB::getTagShortInfos()
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT id, pid, name FROM Tags ORDER BY id;"), &values);
+    d->db->execSql(QString::fromUtf8("SELECT id, pid, name FROM Tags ORDER BY id;"), &values);
 
     QList<TagShortInfo> tagList;
 
@@ -422,36 +422,41 @@ QStringList AlbumDB::getSubalbumsForPath(const QString& albumRoot,
                                          bool onlyDirectSubalbums)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+
     if (location.isNull())
         return QStringList();
 
     QString subURL = path;
-    if (!path.endsWith("/"))
-        subURL += '/';
+
+    if (!path.endsWith(QLatin1String("/")))
+        subURL += QLatin1Char('/');
+
     subURL = (subURL);
 
     QList<QVariant> values;
 
     if (onlyDirectSubalbums)
     {
-        d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '") +
-                        subURL + QString("%' ") + QString("AND relativePath NOT LIKE '") +
-                        subURL + QString("%/%'; "),
+        d->db->execSql( QString::fromUtf8("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '") +
+                        subURL + QString::fromUtf8("%' ") + QString::fromUtf8("AND relativePath NOT LIKE '") +
+                        subURL + QString::fromUtf8("%/%'; "),
                         location.id(),
                         &values );
     }
     else
     {
-        d->db->execSql( QString("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '") +
-                        subURL + QString("%'; "),
+        d->db->execSql( QString::fromUtf8("SELECT relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE '") +
+                        subURL + QString::fromUtf8("%'; "),
                         location.id(),
                         &values );
     }
 
     QStringList subalbums;
     QString albumRootPath = location.albumRootPath();
+
     for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
         subalbums << albumRootPath + it->toString();
+
     return subalbums;
 }
 */
@@ -462,6 +467,7 @@ int AlbumDB::addAlbum(const QString& albumRoot, const QString& relativePath,
                       const QDate& date, const QString& collection)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
+
     if (location.isNull())
         return -1;
 
@@ -478,8 +484,8 @@ int AlbumDB::addAlbum(int albumRootId, const QString& relativePath,
 
     boundValues << albumRootId << relativePath << date.toString(Qt::ISODate) << caption << collection;
 
-    d->db->execSql(QString("REPLACE INTO Albums (albumRoot, relativePath, date, caption, collection) "
-                           "VALUES(?, ?, ?, ?, ?);"),
+    d->db->execSql(QString::fromUtf8("REPLACE INTO Albums (albumRoot, relativePath, date, caption, collection) "
+                                     "VALUES(?, ?, ?, ?, ?);"),
                    boundValues, 0, &id);
 
     d->db->recordChangeset(AlbumChangeset(id.toInt(), AlbumChangeset::Added));
@@ -488,7 +494,7 @@ int AlbumDB::addAlbum(int albumRootId, const QString& relativePath,
 
 void AlbumDB::setAlbumCaption(int albumID, const QString& caption)
 {
-    d->db->execSql(QString("UPDATE Albums SET caption=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Albums SET caption=? WHERE id=?;"),
                    caption, albumID);
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
@@ -496,14 +502,14 @@ void AlbumDB::setAlbumCaption(int albumID, const QString& caption)
 void AlbumDB::setAlbumCategory(int albumID, const QString& category)
 {
     // TODO : change "collection" propertie in DB ALbum table to "category"
-    d->db->execSql(QString("UPDATE Albums SET collection=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Albums SET collection=? WHERE id=?;"),
                    category, albumID);
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 
 void AlbumDB::setAlbumDate(int albumID, const QDate& date)
 {
-    d->db->execSql(QString("UPDATE Albums SET date=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Albums SET date=? WHERE id=?;"),
                    date.toString(Qt::ISODate),
                    albumID);
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
@@ -511,7 +517,7 @@ void AlbumDB::setAlbumDate(int albumID, const QDate& date)
 
 void AlbumDB::setAlbumIcon(int albumID, qlonglong iconID)
 {
-    d->db->execSql(QString("UPDATE Albums SET icon=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Albums SET icon=? WHERE id=?;"),
                    iconID,
                    albumID);
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
@@ -520,9 +526,9 @@ void AlbumDB::setAlbumIcon(int albumID, qlonglong iconID)
 void AlbumDB::deleteAlbum(int albumID)
 {
     QMap<QString, QVariant> parameters;
-    parameters.insert(":albumId", albumID);
+    parameters.insert(QLatin1String(":albumId"), albumID);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumID")), parameters))
+    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumID")), parameters))
     {
         return;
     }
@@ -537,7 +543,7 @@ void AlbumDB::makeStaleAlbum(int albumID)
     QList<QVariant> values;
 
     // retrieve information
-    d->db->execSql(QString("SELECT Albums.albumRoot, Albums.relativePath from Albums WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath from Albums WHERE id=?;"),
                    albumID, &values);
 
     if (values.isEmpty())
@@ -546,20 +552,20 @@ void AlbumDB::makeStaleAlbum(int albumID)
     }
 
     // prepend albumRootId to relativePath. relativePath is unused and officially undefined after this call.
-    QString newRelativePath = values.at(0).toString() + '-' + values.at(1).toString();
+    QString newRelativePath = values.at(0).toString() + QLatin1Char('-') + values.at(1).toString();
 
     // delete older stale albums
     QMap<QString, QVariant> parameters;
-    parameters.insert(":albumRoot", 0);
-    parameters.insert(":relativePath", newRelativePath);
+    parameters.insert(QLatin1String(":albumRoot"), 0);
+    parameters.insert(QLatin1String(":relativePath"), newRelativePath);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRootPath")), parameters))
+    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRootPath")), parameters))
     {
         return;
     }
 
     // now do our update
-    d->db->execSql(QString("UPDATE Albums SET albumRoot=0, relativePath=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Albums SET albumRoot=0, relativePath=? WHERE id=?;"),
                    newRelativePath, albumID);
 
     // for now, we make no distinction to deleteAlbums wrt to changeset
@@ -569,9 +575,9 @@ void AlbumDB::makeStaleAlbum(int albumID)
 void AlbumDB::deleteStaleAlbums()
 {
     QMap<QString, QVariant> parameters;
-    parameters.insert(":albumRoot", 0);
+    parameters.insert(QLatin1String(":albumRoot"), 0);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRoot")), parameters))
+    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRoot")), parameters))
     {
         return;
     }
@@ -585,23 +591,23 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
     QVariant                id;
     QMap<QString, QVariant> parameters;
 
-    parameters.insert(":tagPID", parentTagID);
-    parameters.insert(":tagname", name);
+    parameters.insert(QLatin1String(":tagPID"), parentTagID);
+    parameters.insert(QLatin1String(":tagname"), name);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QString("InsertTag")), parameters, 0 , &id))
+    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("InsertTag")), parameters, 0 , &id))
     {
         return -1;
     }
 
     if (!iconKDE.isEmpty())
     {
-        d->db->execSql(QString("UPDATE Tags SET iconkde=? WHERE id=?;"),
+        d->db->execSql(QString::fromUtf8("UPDATE Tags SET iconkde=? WHERE id=?;"),
                        iconKDE,
                        id.toInt());
     }
     else
     {
-        d->db->execSql(QString("UPDATE Tags SET icon=? WHERE id=?;"),
+        d->db->execSql(QString::fromUtf8("UPDATE Tags SET icon=? WHERE id=?;"),
                        iconID,
                        id.toInt());
     }
@@ -617,9 +623,9 @@ void AlbumDB::deleteTag(int tagID)
     */
 
     QMap<QString, QVariant> bindingMap;
-    bindingMap.insert(QString(":tagID"), tagID);
+    bindingMap.insert(QLatin1String(":tagID"), tagID);
 
-    d->db->execDBAction(d->db->getDBAction("DeleteTag"), bindingMap);
+    d->db->execDBAction(d->db->getDBAction(QLatin1String("DeleteTag")), bindingMap);
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Deleted));
 }
 
@@ -628,12 +634,12 @@ void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
     int     _iconID  = iconKDE.isEmpty() ? iconID : 0;
     QString _iconKDE = iconKDE;
 
-    if (iconKDE.isEmpty() || iconKDE.toLower() == QString("tag"))
+    if (iconKDE.isEmpty() || iconKDE.toLower() == QLatin1String("tag"))
     {
         _iconKDE.clear();
     }
 
-    d->db->execSql(QString("UPDATE Tags SET iconkde=?, icon=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Tags SET iconkde=?, icon=? WHERE id=?;"),
                    _iconKDE, _iconID, tagID);
 
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::IconChanged));
@@ -641,7 +647,7 @@ void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
 
 void AlbumDB::setTagParentID(int tagID, int newParentTagID)
 {
-    d->db->execSql(QString("UPDATE Tags SET pid=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Tags SET pid=? WHERE id=?;"),
                    newParentTagID, tagID);
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Reparented));
 }
@@ -650,7 +656,7 @@ QList<TagProperty> AlbumDB::getTagProperties(int tagId)
 {
     QList<QVariant> values;
 
-    d->db->execSql("SELECT property, value FROM TagProperties WHERE tagid=?;",
+    d->db->execSql(QString::fromUtf8("SELECT property, value FROM TagProperties WHERE tagid=?;"),
                    tagId, &values);
 
     QList<TagProperty> properties;
@@ -681,7 +687,7 @@ QList<TagProperty> AlbumDB::getTagProperties()
 {
     QList<QVariant> values;
 
-    d->db->execSql("SELECT tagid, property, value FROM TagProperties ORDER BY tagid, property;", &values);
+    d->db->execSql(QString::fromUtf8("SELECT tagid, property, value FROM TagProperties ORDER BY tagid, property;"), &values);
 
     QList<TagProperty> properties;
 
@@ -711,20 +717,22 @@ QList< int > AlbumDB::getTagsWithProperty(const QString& property)
 {
     QList<QVariant> values;
 
-    d->db->execSql("SELECT DISTINCT tagid FROM TagProperties WHERE property=?;",
+    d->db->execSql(QString::fromUtf8("SELECT DISTINCT tagid FROM TagProperties WHERE property=?;"),
                    property, &values);
 
     QList<int> tagIds;
-    foreach(const QVariant & var, values)
+
+    foreach(const QVariant& var, values)
     {
         tagIds << var.toInt();
     }
+
     return tagIds;
 }
 
 void AlbumDB::addTagProperty(int tagId, const QString& property, const QString& value)
 {
-    d->db->execSql("INSERT INTO TagProperties (tagid, property, value) VALUES(?, ?, ?);",
+    d->db->execSql(QString::fromUtf8("INSERT INTO TagProperties (tagid, property, value) VALUES(?, ?, ?);"),
                    tagId, property, value);
 
     d->db->recordChangeset(TagChangeset(tagId, TagChangeset::PropertiesChanged));
@@ -739,17 +747,17 @@ void AlbumDB::removeTagProperties(int tagId, const QString& property, const QStr
 {
     if (property.isNull())
     {
-        d->db->execSql("DELETE FROM TagProperties WHERE tagid=?;",
+        d->db->execSql(QString::fromUtf8("DELETE FROM TagProperties WHERE tagid=?;"),
                        tagId);
     }
     else if (value.isNull())
     {
-        d->db->execSql("DELETE FROM TagProperties WHERE tagid=? AND property=?;",
+        d->db->execSql(QString::fromUtf8("DELETE FROM TagProperties WHERE tagid=? AND property=?;"),
                        tagId, property);
     }
     else
     {
-        d->db->execSql("DELETE FROM TagProperties WHERE tagid=? AND property=? AND value=?;",
+        d->db->execSql(QString::fromUtf8("DELETE FROM TagProperties WHERE tagid=? AND property=? AND value=?;"),
                        tagId, property, value);
     }
 
@@ -760,7 +768,7 @@ int AlbumDB::addSearch(DatabaseSearch::Type type, const QString& name, const QSt
 {
     QVariant id;
 
-    if (!d->db->execSql(QString("INSERT INTO Searches (type, name, query) VALUES(?, ?, ?);"),
+    if (!d->db->execSql(QString::fromUtf8("INSERT INTO Searches (type, name, query) VALUES(?, ?, ?);"),
                         type, name, query, 0, &id))
     {
         return -1;
@@ -773,21 +781,21 @@ int AlbumDB::addSearch(DatabaseSearch::Type type, const QString& name, const QSt
 void AlbumDB::updateSearch(int searchID, DatabaseSearch::Type type,
                            const QString& name, const QString& query)
 {
-    d->db->execSql(QString("UPDATE Searches SET type=?, name=?, query=? WHERE id=?"),
+    d->db->execSql(QString::fromUtf8("UPDATE Searches SET type=?, name=?, query=? WHERE id=?"),
                    type, name, query, searchID);
     d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Changed));
 }
 
 void AlbumDB::deleteSearch(int searchID)
 {
-    d->db->execSql(QString("DELETE FROM Searches WHERE id=?"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE id=?"),
                    searchID);
     d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Deleted));
 }
 
 void AlbumDB::deleteSearches(DatabaseSearch::Type type)
 {
-    d->db->execSql(QString("DELETE FROM Searches WHERE type=?"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE type=?"),
                    type);
     d->db->recordChangeset(SearchChangeset(0, SearchChangeset::Deleted));
 }
@@ -795,7 +803,7 @@ void AlbumDB::deleteSearches(DatabaseSearch::Type type)
 QString AlbumDB::getSearchQuery(int searchId)
 {
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT query FROM Searches WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("SELECT query FROM Searches WHERE id=?;"),
                    searchId, &values);
 
     if (values.isEmpty())
@@ -813,7 +821,7 @@ SearchInfo AlbumDB::getSearchInfo(int searchId)
     SearchInfo info;
 
     QList<QVariant> values;
-    d->db->execSql("SELECT id, type, name, query FROM Searches WHERE id=?;",
+    d->db->execSql(QString::fromUtf8("SELECT id, type, name, query FROM Searches WHERE id=?;"),
                    searchId, &values);
 
     if (values.size() == 4)
@@ -835,14 +843,14 @@ SearchInfo AlbumDB::getSearchInfo(int searchId)
 void AlbumDB::setSetting(const QString& keyword,
                          const QString& value)
 {
-    d->db->execSql(QString("REPLACE into Settings VALUES (?,?);"),
+    d->db->execSql(QString::fromUtf8("REPLACE into Settings VALUES (?,?);"),
                    keyword, value);
 }
 
 QString AlbumDB::getSetting(const QString& keyword)
 {
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT value FROM Settings "
+    d->db->execSql(QString::fromUtf8("SELECT value FROM Settings "
                            "WHERE keyword=?;"),
                    keyword, &values);
 
@@ -863,12 +871,12 @@ static QStringList joinMainAndUserFilterString(const QString& filter, const QStr
     QStringList   userFilterList;
     QStringList   sortedList;
 
-    filterSet      = filter.split(';', QString::SkipEmptyParts).toSet();
-    userFilterList = userFilter.split(';', QString::SkipEmptyParts);
+    filterSet      = filter.split(QLatin1Char(';'), QString::SkipEmptyParts).toSet();
+    userFilterList = userFilter.split(QLatin1Char(';'), QString::SkipEmptyParts);
 
     foreach(const QString& userFormat, userFilterList)
     {
-        if (userFormat.startsWith('-'))
+        if (userFormat.startsWith(QLatin1Char('-')))
         {
             filterSet.remove(userFormat.mid(1));
         }
@@ -889,22 +897,22 @@ void AlbumDB::getFilterSettings(QStringList* imageFilter, QStringList* videoFilt
 
     if (imageFilter)
     {
-        imageFormats = getSetting("databaseImageFormats");
-        userImageFormats = getSetting("databaseUserImageFormats");
+        imageFormats = getSetting(QLatin1String("databaseImageFormats"));
+        userImageFormats = getSetting(QLatin1String("databaseUserImageFormats"));
         *imageFilter = joinMainAndUserFilterString(imageFormats, userImageFormats);
     }
 
     if (videoFilter)
     {
-        videoFormats = getSetting("databaseVideoFormats");
-        userVideoFormats = getSetting("databaseUserVideoFormats");
+        videoFormats = getSetting(QLatin1String("databaseVideoFormats"));
+        userVideoFormats = getSetting(QLatin1String("databaseUserVideoFormats"));
         *videoFilter = joinMainAndUserFilterString(videoFormats, userVideoFormats);
     }
 
     if (audioFilter)
     {
-        audioFormats = getSetting("databaseAudioFormats");
-        userAudioFormats = getSetting("databaseUserAudioFormats");
+        audioFormats = getSetting(QLatin1String("databaseAudioFormats"));
+        userAudioFormats = getSetting(QLatin1String("databaseUserAudioFormats"));
         *audioFilter = joinMainAndUserFilterString(audioFormats, userAudioFormats);
     }
 }
@@ -913,25 +921,25 @@ void AlbumDB::getUserFilterSettings(QString* imageFilterString, QString* videoFi
 {
     if (imageFilterString)
     {
-        *imageFilterString = getSetting("databaseUserImageFormats");
+        *imageFilterString = getSetting(QLatin1String("databaseUserImageFormats"));
     }
 
     if (videoFilterString)
     {
-        *videoFilterString = getSetting("databaseUserVideoFormats");
+        *videoFilterString = getSetting(QLatin1String("databaseUserVideoFormats"));
     }
 
     if (audioFilterString)
     {
-        *audioFilterString = getSetting("databaseUserAudioFormats");
+        *audioFilterString = getSetting(QLatin1String("databaseUserAudioFormats"));
     }
 }
 
 void AlbumDB::setFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter)
 {
-    setSetting("databaseImageFormats", imageFilter.join(";"));
-    setSetting("databaseVideoFormats", videoFilter.join(";"));
-    setSetting("databaseAudioFormats", audioFilter.join(";"));
+    setSetting(QLatin1String("databaseImageFormats"), imageFilter.join(QLatin1String(";")));
+    setSetting(QLatin1String("databaseVideoFormats"), videoFilter.join(QLatin1String(";")));
+    setSetting(QLatin1String("databaseAudioFormats"), audioFilter.join(QLatin1String(";")));
 }
 
 // helper method
@@ -940,16 +948,16 @@ static QStringList cleanUserFilterString(const QString& filterString)
     // splits by either ; or space, removes "*.", trims
     QStringList filterList;
 
-    QString wildcard("*.");
-    QString minusWildcard("-*.");
-    QChar dot('.');
-    QString minusDot("-.");
-    QChar sep(';');
+    QString wildcard(QLatin1String("*."));
+    QString minusWildcard(QLatin1String("-*."));
+    QChar dot(QLatin1Char('.'));
+    QString minusDot(QLatin1String("-."));
+    QChar sep(QLatin1Char(';'));
     int i = filterString.indexOf(sep);
 
-    if (i == -1 && filterString.indexOf(' ') != -1)
+    if (i == -1 && filterString.indexOf(QLatin1Char(' ')) != -1)
     {
-        sep = QChar(' ');
+        sep = QLatin1Char(' ');
     }
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
@@ -962,7 +970,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
         }
         else if (f.startsWith(minusWildcard))
         {
-            filterList << '-' + f.mid(3).trimmed().toLower();
+            filterList << QLatin1Char('-') + f.mid(3).trimmed().toLower();
         }
         else if (f.startsWith(dot))
         {
@@ -970,7 +978,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
         }
         else if (f.startsWith(minusDot))
         {
-            filterList << '-' + f.mid(2).trimmed().toLower();
+            filterList << QLatin1Char('-') + f.mid(2).trimmed().toLower();
         }
         else
         {
@@ -990,15 +998,15 @@ void AlbumDB::setUserFilterSettings(const QString& imageFilterString, const QStr
 
 void AlbumDB::setUserFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter)
 {
-    setSetting("databaseUserImageFormats", imageFilter.join(";"));
-    setSetting("databaseUserVideoFormats", videoFilter.join(";"));
-    setSetting("databaseUserAudioFormats", audioFilter.join(";"));
+    setSetting(QLatin1String("databaseUserImageFormats"), imageFilter.join(QLatin1String(";")));
+    setSetting(QLatin1String("databaseUserVideoFormats"), videoFilter.join(QLatin1String(";")));
+    setSetting(QLatin1String("databaseUserAudioFormats"), audioFilter.join(QLatin1String(";")));
 }
 
 void AlbumDB::addToUserImageFilterSettings(const QString& filterString)
 {
     QStringList addList     = cleanUserFilterString(filterString);
-    QStringList currentList = getSetting("databaseUserImageFormats").split(';', QString::SkipEmptyParts);
+    QStringList currentList = getSetting(QLatin1String("databaseUserImageFormats")).split(QLatin1Char(';'), QString::SkipEmptyParts);
 
     // merge lists
     foreach(const QString& addedFilter, addList)
@@ -1009,18 +1017,18 @@ void AlbumDB::addToUserImageFilterSettings(const QString& filterString)
         }
     }
 
-    setSetting("databaseUserImageFormats", currentList.join(";"));
+    setSetting(QLatin1String("databaseUserImageFormats"), currentList.join(QLatin1String(";")));
 }
 
 QUuid AlbumDB::databaseUuid()
 {
-    QString uuidString = getSetting("databaseUUID");
+    QString uuidString = getSetting(QLatin1String("databaseUUID"));
     QUuid uuid         = QUuid(uuidString);
 
     if (uuidString.isNull() || uuid.isNull())
     {
         uuid = QUuid::createUuid();
-        setSetting("databaseUUID", uuid.toString());
+        setSetting(QLatin1String("databaseUUID"), uuid.toString());
     }
 
     return uuid;
@@ -1030,7 +1038,7 @@ int AlbumDB::getUniqueHashVersion()
 {
     if (d->uniqueHashVersion == -1)
     {
-        QString v = getSetting("uniqueHashVersion");
+        QString v = getSetting(QLatin1String("uniqueHashVersion"));
 
         if (v.isEmpty())
         {
@@ -1053,7 +1061,7 @@ bool AlbumDB::isUniqueHashV2()
 void AlbumDB::setUniqueHashVersion(int version)
 {
     d->uniqueHashVersion = version;
-    setSetting("uniqueHashVersion", QString::number(d->uniqueHashVersion));
+    setSetting(QLatin1String("uniqueHashVersion"), QString::number(d->uniqueHashVersion));
 }
 
 /*
@@ -1061,7 +1069,7 @@ QString AlbumDB::getItemCaption(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT caption FROM Images "
+    d->db->execSql( QString::fromUtf8("SELECT caption FROM Images "
                             "WHERE id=?;"),
                     imageID, &values );
 
@@ -1075,7 +1083,7 @@ QString AlbumDB::getItemCaption(int albumID, const QString& name)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT caption FROM Images "
+    d->db->execSql( QString::fromUtf8("SELECT caption FROM Images "
                             "WHERE dirid=? AND name=?;"),
                     albumID,
                     name,
@@ -1092,7 +1100,7 @@ QDateTime AlbumDB::getItemDate(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT datetime FROM Images "
+    d->db->execSql( QString::fromUtf8("SELECT datetime FROM Images "
                             "WHERE id=?;"),
                     imageID,
                     &values );
@@ -1107,7 +1115,7 @@ QDateTime AlbumDB::getItemDate(int albumID, const QString& name)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT datetime FROM Images "
+    d->db->execSql( QString::fromUtf8("SELECT datetime FROM Images "
                             "WHERE dirid=? AND name=?;"),
                     albumID,
                     name,
@@ -1124,7 +1132,7 @@ qlonglong AlbumDB::getImageId(int albumID, const QString& name)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT id FROM Images "
+    d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
                            "WHERE album=? AND name=?;"),
                    albumID,
                    name,
@@ -1144,7 +1152,7 @@ QStringList AlbumDB::getItemTagNames(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT name FROM Tags \n "
+    d->db->execSql(QString::fromUtf8("SELECT name FROM Tags \n "
                            "WHERE id IN (SELECT tagid FROM ImageTags \n "
                            "             WHERE imageid=?) \n "
                            "ORDER BY name;"),
@@ -1165,7 +1173,7 @@ QList<int> AlbumDB::getItemTagIDs(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT tagid FROM ImageTags WHERE imageID=?;"),
+    d->db->execSql(QString::fromUtf8("SELECT tagid FROM ImageTags WHERE imageID=?;"),
                    imageID,
                    &values);
 
@@ -1192,7 +1200,7 @@ QVector<QList<int> > AlbumDB::getItemsTagIDs(const QList<qlonglong> imageIds)
     }
 
     QVector<QList<int> > results(imageIds.size());
-    SqlQuery             query = d->db->prepareQuery("SELECT tagid FROM ImageTags WHERE imageID=?;");
+    SqlQuery             query = d->db->prepareQuery(QString::fromUtf8("SELECT tagid FROM ImageTags WHERE imageID=?;"));
     QVariantList         values;
 
     for (int i = 0; i < imageIds.size(); i++)
@@ -1215,14 +1223,14 @@ QList<ImageTagProperty> AlbumDB::getImageTagProperties(qlonglong imageId, int ta
 
     if (tagId == -1)
     {
-        d->db->execSql(QString("SELECT tagid, property, value FROM ImageTagProperties "
+        d->db->execSql(QString::fromUtf8("SELECT tagid, property, value FROM ImageTagProperties "
                                "WHERE imageid=?;"),
                        imageId,
                        &values);
     }
     else
     {
-        d->db->execSql(QString("SELECT tagid, property, value FROM ImageTagProperties "
+        d->db->execSql(QString::fromUtf8("SELECT tagid, property, value FROM ImageTagProperties "
                                "WHERE imageid=? AND tagid=?;"),
                        imageId, tagId,
                        &values);
@@ -1258,7 +1266,7 @@ QList<int> AlbumDB::getTagIdsWithProperties(qlonglong imageId)
 {
     QList<QVariant> values;
 
-    d->db->execSql("SELECT DISTINCT tagid FROM ImageTagProperties WHERE imageid=?;",
+    d->db->execSql(QString::fromUtf8("SELECT DISTINCT tagid FROM ImageTagProperties WHERE imageid=?;"),
                    imageId,
                    &values);
 
@@ -1274,7 +1282,7 @@ QList<int> AlbumDB::getTagIdsWithProperties(qlonglong imageId)
 
 void AlbumDB::addImageTagProperty(qlonglong imageId, int tagId, const QString& property, const QString& value)
 {
-    d->db->execSql("INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES(?, ?, ?, ?);",
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES(?, ?, ?, ?);"),
                    imageId, tagId, property, value);
 
     d->db->recordChangeset(ImageTagChangeset(imageId, tagId, ImageTagChangeset::PropertiesChanged));
@@ -1290,22 +1298,22 @@ void AlbumDB::removeImageTagProperties(qlonglong imageId, int tagId, const QStri
 {
     if (tagId == -1)
     {
-        d->db->execSql("DELETE FROM ImageTagProperties WHERE imageid=?;",
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageTagProperties WHERE imageid=?;"),
                        imageId);
     }
     else if (property.isNull())
     {
-        d->db->execSql("DELETE FROM ImageTagProperties WHERE imageid=? AND tagid=?;",
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageTagProperties WHERE imageid=? AND tagid=?;"),
                        imageId, tagId);
     }
     else if (value.isNull())
     {
-        d->db->execSql("DELETE FROM ImageTagProperties WHERE imageid=? AND tagid=? AND property=?;",
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageTagProperties WHERE imageid=? AND tagid=? AND property=?;"),
                        imageId, tagId, property);
     }
     else
     {
-        d->db->execSql("DELETE FROM ImageTagProperties WHERE imageid=? AND tagid=? AND property=? AND value=?;",
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageTagProperties WHERE imageid=? AND tagid=? AND property=? AND value=?;"),
                        imageId, tagId, property, value);
     }
 
@@ -1316,7 +1324,7 @@ ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT Images.name, Albums.albumRoot, Albums.relativePath, Albums.id "
+    d->db->execSql(QString::fromUtf8("SELECT Images.name, Albums.albumRoot, Albums.relativePath, Albums.id "
                            "FROM Images "
                            "  LEFT JOIN Albums ON Albums.id=Images.album "
                            "WHERE Images.id=?;"),
@@ -1341,7 +1349,7 @@ ItemShortInfo AlbumDB::getItemShortInfo(int albumRootId, const QString& relative
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT Images.id, Albums.id "
+    d->db->execSql(QString::fromUtf8("SELECT Images.id, Albums.id "
                            " FROM Images INNER JOIN Albums "
                            "  ON Images.album=Albums.id "
                            " WHERE name=? AND albumRoot=? AND relativePath=?;"),
@@ -1374,7 +1382,7 @@ bool AlbumDB::hasTags(const QList<qlonglong>& imageIDList)
     QList<QVariant> values;
     QList<QVariant> boundValues;
 
-    QString sql = QString("SELECT count(tagid) FROM ImageTags "
+    QString sql = QString::fromUtf8("SELECT count(tagid) FROM ImageTags "
                           "WHERE imageid=? ");
     boundValues << imageIDList.first();
 
@@ -1383,11 +1391,11 @@ bool AlbumDB::hasTags(const QList<qlonglong>& imageIDList)
 
     for (; it != imageIDList.constEnd(); ++it)
     {
-        sql += QString(" OR imageid=? ");
+        sql += QString::fromUtf8(" OR imageid=? ");
         boundValues << (*it);
     }
 
-    sql += QString(";");
+    sql += QString::fromUtf8(";");
     d->db->execSql(sql, boundValues, &values);
 
     if (values.isEmpty() || values.first().toInt() == 0)
@@ -1412,7 +1420,7 @@ QList<int> AlbumDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
     QList<QVariant> values;
     QList<QVariant> boundValues;
 
-    QString sql = QString("SELECT DISTINCT tagid FROM ImageTags "
+    QString sql = QString::fromUtf8("SELECT DISTINCT tagid FROM ImageTags "
                           "WHERE imageid=? ");
     boundValues << imageIDList.first();
 
@@ -1421,11 +1429,11 @@ QList<int> AlbumDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
 
     for (; it != imageIDList.constEnd(); ++it)
     {
-        sql += QString(" OR imageid=? ");
+        sql += QString::fromUtf8(" OR imageid=? ");
         boundValues << (*it);
     }
 
-    sql += QString(";");
+    sql += QString::fromUtf8(";");
     d->db->execSql(sql, boundValues, &values);
 
     if (values.isEmpty())
@@ -1447,17 +1455,17 @@ QVariantList AlbumDB::getImagesFields(qlonglong imageID, DatabaseFields::Images 
 
     if (fields != DatabaseFields::ImagesNone)
     {
-        QString query("SELECT ");
+        QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = imagesFieldList(fields);
-        query += fieldNames.join(", ");
-        query += (" FROM Images WHERE id=?;");
+        query += fieldNames.join(QString::fromUtf8(", "));
+        query += QString::fromUtf8(" FROM Images WHERE id=?;");
 
         d->db->execSql(query, imageID, &values);
 
         // Convert date times to QDateTime, they come as QString
         if ((fields & DatabaseFields::ModificationDate) && !values.isEmpty())
         {
-            int index = fieldNames.indexOf("modificationDate");
+            int index     = fieldNames.indexOf(QLatin1String("modificationDate"));
             values[index] = (values.at(index).isNull() ? QDateTime()
                              : QDateTime::fromString(values.at(index).toString(), Qt::ISODate));
         }
@@ -1472,24 +1480,24 @@ QVariantList AlbumDB::getImageInformation(qlonglong imageID, DatabaseFields::Ima
 
     if (fields != DatabaseFields::ImageInformationNone)
     {
-        QString query("SELECT ");
+        QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = imageInformationFieldList(fields);
-        query += fieldNames.join(", ");
-        query += (" FROM ImageInformation WHERE imageid=?;");
+        query += fieldNames.join(QString::fromUtf8(", "));
+        query += QString::fromUtf8(" FROM ImageInformation WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
 
         // Convert date times to QDateTime, they come as QString
         if ((fields & DatabaseFields::CreationDate) && !values.isEmpty())
         {
-            int index = fieldNames.indexOf("creationDate");
+            int index = fieldNames.indexOf(QLatin1String("creationDate"));
             values[index] = (values.at(index).isNull() ? QDateTime()
                                                        : QDateTime::fromString(values.at(index).toString(), Qt::ISODate));
         }
 
         if ((fields & DatabaseFields::DigitizationDate) && !values.isEmpty())
         {
-            int index = fieldNames.indexOf("digitizationDate");
+            int index = fieldNames.indexOf(QLatin1String("digitizationDate"));
             values[index] = (values.at(index).isNull() ? QDateTime()
                                                        : QDateTime::fromString(values.at(index).toString(), Qt::ISODate));
         }
@@ -1504,10 +1512,10 @@ QVariantList AlbumDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageM
 
     if (fields != DatabaseFields::ImageMetadataNone)
     {
-        QString query("SELECT ");
+        QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = imageMetadataFieldList(fields);
-        query += fieldNames.join(", ");
-        query += (" FROM ImageMetadata WHERE imageid=?;");
+        query += fieldNames.join(QString::fromUtf8(", "));
+        query += QString::fromUtf8(" FROM ImageMetadata WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
 
@@ -1523,10 +1531,10 @@ QVariantList AlbumDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoM
 
     if (fields != DatabaseFields::VideoMetadataNone)
     {
-        QString query("SELECT ");
+        QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = videoMetadataFieldList(fields);
-        query += fieldNames.join(", ");
-        query += (" FROM VideoMetadata WHERE imageid=?;");
+        query += fieldNames.join(QString::fromUtf8(", "));
+        query += QString::fromUtf8(" FROM VideoMetadata WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
 
@@ -1542,11 +1550,11 @@ QVariantList AlbumDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoM
             for (int i = 0; i < values.size(); ++i)
             {
                 if (values.at(i).type() == QVariant::String &&
-                    (fieldNames.at(i) == "aperture" ||
-                     fieldNames.at(i) == "focalLength" ||
-                     fieldNames.at(i) == "focalLength35" ||
-                     fieldNames.at(i) == "exposureTime" ||
-                     fieldNames.at(i) == "subjectDistance")
+                    (fieldNames.at(i) == QLatin1String("aperture") ||
+                     fieldNames.at(i) == QLatin1String("focalLength") ||
+                     fieldNames.at(i) == QLatin1String("focalLength35") ||
+                     fieldNames.at(i) == QLatin1String("exposureTime") ||
+                     fieldNames.at(i) == QLatin1String("subjectDistance"))
                    )
                 {
                     values[i] = values.at(i).toDouble();
@@ -1564,10 +1572,10 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
 
     if (fields != DatabaseFields::ImagePositionsNone)
     {
-        QString query("SELECT ");
+        QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames =  imagePositionsFieldList(fields);
-        query                  += fieldNames.join(", ");
-        query                  += (" FROM ImagePositions WHERE imageid=?;");
+        query                  += fieldNames.join(QString::fromUtf8(", "));
+        query                  += QString::fromUtf8(" FROM ImagePositions WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
 
@@ -1585,13 +1593,13 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
             for (int i = 0; i < values.size(); ++i)
             {
                 if (values.at(i).type() == QVariant::String &&
-                    (fieldNames.at(i) == "latitudeNumber"  ||
-                     fieldNames.at(i) == "longitudeNumber" ||
-                     fieldNames.at(i) == "altitude"        ||
-                     fieldNames.at(i) == "orientation"     ||
-                     fieldNames.at(i) == "tilt"            ||
-                     fieldNames.at(i) == "roll"            ||
-                     fieldNames.at(i) == "accuracy")
+                    (fieldNames.at(i) == QLatin1String("latitudeNumber")  ||
+                     fieldNames.at(i) == QLatin1String("longitudeNumber") ||
+                     fieldNames.at(i) == QLatin1String("altitude")        ||
+                     fieldNames.at(i) == QLatin1String("orientation")     ||
+                     fieldNames.at(i) == QLatin1String("tilt")            ||
+                     fieldNames.at(i) == QLatin1String("roll")            ||
+                     fieldNames.at(i) == QLatin1String("accuracy"))
                    )
                 {
                     values[i] = values.at(i).toDouble();
@@ -1609,10 +1617,10 @@ QVariantList AlbumDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseField
 
     if (fields != DatabaseFields::ImagePositionsNone)
     {
-        QString sql("SELECT ");
+        QString sql(QString::fromUtf8("SELECT "));
         QStringList fieldNames =  imagePositionsFieldList(fields);
-        sql                    += fieldNames.join(", ");
-        sql                    += (" FROM ImagePositions WHERE imageid=?;");
+        sql                    += fieldNames.join(QString::fromUtf8(", "));
+        sql                    += QString::fromUtf8(" FROM ImagePositions WHERE imageid=?;");
 
         SqlQuery query = d->db->prepareQuery(sql);
 
@@ -1637,13 +1645,13 @@ QVariantList AlbumDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseField
             for (int i = 0; i < values.size(); ++i)
             {
                 if (values.at(i).type() == QVariant::String &&
-                    (fieldNames.at(i) == "latitudeNumber"  ||
-                     fieldNames.at(i) == "longitudeNumber" ||
-                     fieldNames.at(i) == "altitude"        ||
-                     fieldNames.at(i) == "orientation"     ||
-                     fieldNames.at(i) == "tilt"            ||
-                     fieldNames.at(i) == "roll"            ||
-                     fieldNames.at(i) == "accuracy")
+                    (fieldNames.at(i) == QLatin1String("latitudeNumber")  ||
+                     fieldNames.at(i) == QLatin1String("longitudeNumber") ||
+                     fieldNames.at(i) == QLatin1String("altitude")        ||
+                     fieldNames.at(i) == QLatin1String("orientation")     ||
+                     fieldNames.at(i) == QLatin1String("tilt")            ||
+                     fieldNames.at(i) == QLatin1String("roll")            ||
+                     fieldNames.at(i) == QLatin1String("accuracy"))
                    )
                 {
                     values[i] = values.at(i).toDouble();
@@ -1662,16 +1670,16 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList& infos, 
         return;
     }
 
-    QString query("REPLACE INTO ImageInformation ( imageid, ");
+    QString query(QString::fromUtf8("REPLACE INTO ImageInformation ( imageid, "));
 
     QStringList fieldNames = imageInformationFieldList(fields);
 
     Q_ASSERT(fieldNames.size() == infos.size());
 
-    query += fieldNames.join(", ");
-    query += " ) VALUES (";
+    query += fieldNames.join(QLatin1String(", "));
+    query += QString::fromUtf8(" ) VALUES (");
     addBoundValuePlaceholders(query, infos.size() + 1);
-    query += ");";
+    query += QString::fromUtf8(");");
 
     QVariantList boundValues;
     boundValues << imageID;
@@ -1724,7 +1732,7 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList& info
         }
     }
 
-    d->db->execUpsertDBAction("changeImageInformation", imageId, fieldNames, checkedValues);
+    d->db->execUpsertDBAction(QLatin1String("changeImageInformation"), imageId, fieldNames, checkedValues);
 
     d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
@@ -1736,15 +1744,15 @@ void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList& infos, Dat
         return;
     }
 
-    QString query("REPLACE INTO ImageMetadata ( imageid, ");
+    QString query(QString::fromUtf8("REPLACE INTO ImageMetadata ( imageid, "));
     QStringList fieldNames = imageMetadataFieldList(fields);
 
     Q_ASSERT(fieldNames.size() == infos.size());
 
-    query += fieldNames.join(", ");
-    query += " ) VALUES (";
+    query += fieldNames.join(QLatin1String(", "));
+    query += QString::fromUtf8(" ) VALUES (");
     addBoundValuePlaceholders(query, infos.size() + 1);
-    query += ");";
+    query += QString::fromUtf8(");");
 
     QVariantList boundValues;
     boundValues << imageID << infos;
@@ -1761,14 +1769,14 @@ void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList& infos,
         return;
     }
 
-    QString query("UPDATE ImageMetadata SET ");
+    QString query(QString::fromUtf8("UPDATE ImageMetadata SET "));
 
     QStringList fieldNames = imageMetadataFieldList(fields);
 
     Q_ASSERT(fieldNames.size() == infos.size());
 
-    query += fieldNames.join("=?,");
-    query += "=? WHERE imageid=?;";
+    query += fieldNames.join(QString::fromUtf8("=?,"));
+    query += QString::fromUtf8("=? WHERE imageid=?;");
 
     QVariantList boundValues;
     boundValues << infos << imageId;
@@ -1784,15 +1792,15 @@ void AlbumDB::addVideoMetadata(qlonglong imageID, const QVariantList& infos, Dat
         return;
     }
 
-    QString query("REPLACE INTO VideoMetadata ( imageid, "); //need to create this database
+    QString query(QString::fromUtf8("REPLACE INTO VideoMetadata ( imageid, ")); // need to create this database
     QStringList fieldNames = videoMetadataFieldList(fields);
 
     Q_ASSERT(fieldNames.size() == infos.size());
 
-    query += fieldNames.join(", ");
-    query += " ) VALUES (";
+    query += fieldNames.join(QLatin1String(", "));
+    query += QString::fromUtf8(" ) VALUES (");
     addBoundValuePlaceholders(query, infos.size() + 1);
-    query += ");";
+    query += QString::fromUtf8(");");
 
     QVariantList boundValues;
     boundValues << imageID << infos;
@@ -1809,13 +1817,13 @@ void AlbumDB::changeVideoMetadata(qlonglong imageId, const QVariantList& infos,
         return;
     }
 
-    QString query("UPDATE VideoMetadata SET ");
+    QString query(QString::fromUtf8("UPDATE VideoMetadata SET "));
     QStringList fieldNames = videoMetadataFieldList(fields);
 
     Q_ASSERT(fieldNames.size() == infos.size());
 
-    query += fieldNames.join("=?,");
-    query += "=? WHERE imageid=?;";
+    query += fieldNames.join(QString::fromUtf8("=?,"));
+    query += QString::fromUtf8("=? WHERE imageid=?;");
 
     QVariantList boundValues;
     boundValues << infos << imageId;
@@ -1831,15 +1839,15 @@ void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList& infos, Dat
         return;
     }
 
-    QString query("REPLACE INTO ImagePositions ( imageid, ");
+    QString query(QString::fromUtf8("REPLACE INTO ImagePositions ( imageid, "));
     QStringList fieldNames = imagePositionsFieldList(fields);
 
     Q_ASSERT(fieldNames.size() == infos.size());
 
-    query += fieldNames.join(", ");
-    query += " ) VALUES (";
+    query += fieldNames.join(QLatin1String(", "));
+    query += QString::fromUtf8(" ) VALUES (");
     addBoundValuePlaceholders(query, infos.size() + 1);
-    query += ");";
+    query += QString::fromUtf8(");");
 
     QVariantList boundValues;
     boundValues << imageID << infos;
@@ -1856,13 +1864,13 @@ void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList& infos,
         return;
     }
 
-    QString query("UPDATE ImagePositions SET ");
+    QString query(QString::fromUtf8("UPDATE ImagePositions SET "));
     QStringList fieldNames = imagePositionsFieldList(fields);
 
     Q_ASSERT(fieldNames.size() == infos.size());
 
-    query += fieldNames.join("=?,");
-    query += "=? WHERE imageid=?;";
+    query += fieldNames.join(QString::fromUtf8("=?,"));
+    query += QString::fromUtf8("=? WHERE imageid=?;");
 
     QVariantList boundValues;
     boundValues << infos << imageId;
@@ -1873,7 +1881,7 @@ void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList& infos,
 
 void AlbumDB::removeImagePosition(qlonglong imageid)
 {
-    d->db->execSql(QString("DELETE FROM ImagePositions WHERE imageid=?;"),
+    d->db->execSql(QString(QString::fromUtf8("DELETE FROM ImagePositions WHERE imageid=?;")),
                    imageid);
 
     d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImagePositionsAll));
@@ -1884,7 +1892,7 @@ QList<CommentInfo> AlbumDB::getImageComments(qlonglong imageID)
     QList<CommentInfo> list;
 
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT id, type, language, author, date, comment "
+    d->db->execSql(QString::fromUtf8("SELECT id, type, language, author, date, comment "
                            "FROM ImageComments WHERE imageid=?;"),
                    imageID, &values);
 
@@ -1919,7 +1927,7 @@ int AlbumDB::setImageComment(qlonglong imageID, const QString& comment, Database
     boundValues << imageID << (int)type << language << author << date << comment;
 
     QVariant id;
-    d->db->execSql(QString("REPLACE INTO ImageComments "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageComments "
                            "( imageid, type, language, author, date, comment ) "
                            " VALUES (?,?,?,?,?,?);"),
                    boundValues, 0, &id);
@@ -1935,13 +1943,13 @@ void AlbumDB::changeImageComment(int commentId, qlonglong imageID, const QVarian
         return;
     }
 
-    QString query("UPDATE ImageComments SET ");
+    QString query(QString::fromUtf8("UPDATE ImageComments SET "));
     QStringList fieldNames = imageCommentsFieldList(fields);
 
     Q_ASSERT(fieldNames.size() == infos.size());
 
-    query += fieldNames.join("=?,");
-    query += "=? WHERE id=?;";
+    query += fieldNames.join(QString::fromUtf8("=?,"));
+    query += QString::fromUtf8("=? WHERE id=?;");
 
     QVariantList boundValues;
     boundValues << infos << commentId;
@@ -1952,7 +1960,7 @@ void AlbumDB::changeImageComment(int commentId, qlonglong imageID, const QVarian
 
 void AlbumDB::removeImageComment(int commentid, qlonglong imageid)
 {
-    d->db->execSql(QString("DELETE FROM ImageComments WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageComments WHERE id=?;"),
                    commentid);
 
     d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImageCommentsAll));
@@ -1962,7 +1970,7 @@ QString AlbumDB::getImageProperty(qlonglong imageID, const QString& property)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT value FROM ImageProperties "
+    d->db->execSql(QString::fromUtf8("SELECT value FROM ImageProperties "
                            "WHERE imageid=? and property=?;"),
                    imageID, property,
                    &values);
@@ -1979,7 +1987,7 @@ QString AlbumDB::getImageProperty(qlonglong imageID, const QString& property)
 
 void AlbumDB::setImageProperty(qlonglong imageID, const QString& property, const QString& value)
 {
-    d->db->execSql(QString("REPLACE INTO ImageProperties "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageProperties "
                            "(imageid, property, value) "
                            "VALUES(?, ?, ?);"),
                    imageID, property, value);
@@ -1987,7 +1995,7 @@ void AlbumDB::setImageProperty(qlonglong imageID, const QString& property, const
 
 void AlbumDB::removeImageProperty(qlonglong imageID, const QString& property)
 {
-    d->db->execSql(QString("DELETE FROM ImageProperties WHERE imageid=? AND property=?;"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageProperties WHERE imageid=? AND property=?;"),
                    imageID, property);
 }
 
@@ -1998,13 +2006,13 @@ QList<CopyrightInfo> AlbumDB::getImageCopyright(qlonglong imageID, const QString
 
     if (property.isNull())
     {
-        d->db->execSql(QString("SELECT property, value, extraValue FROM ImageCopyright "
+        d->db->execSql(QString::fromUtf8("SELECT property, value, extraValue FROM ImageCopyright "
                                "WHERE imageid=?;"),
                        imageID, &values);
     }
     else
     {
-        d->db->execSql(QString("SELECT property, value, extraValue FROM ImageCopyright "
+        d->db->execSql(QString::fromUtf8("SELECT property, value, extraValue FROM ImageCopyright "
                                "WHERE imageid=? and property=?;"),
                        imageID, property, &values);
     }
@@ -2033,18 +2041,18 @@ void AlbumDB::setImageCopyrightProperty(qlonglong imageID, const QString& proper
 {
     if (uniqueness == PropertyUnique)
     {
-        d->db->execSql(QString("DELETE FROM ImageCopyright "
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
                                "WHERE imageid=? AND property=?;"),
                        imageID, property);
     }
     else if (uniqueness == PropertyExtraValueUnique)
     {
-        d->db->execSql(QString("DELETE FROM ImageCopyright "
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
                                "WHERE imageid=? AND property=? AND extraValue=?;"),
                        imageID, property, extraValue);
     }
 
-    d->db->execSql(QString("REPLACE INTO ImageCopyright "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageCopyright "
                            "(imageid, property, value, extraValue) "
                            "VALUES(?, ?, ?, ?);"),
                    imageID, property, value, extraValue);
@@ -2071,25 +2079,25 @@ void AlbumDB::removeImageCopyrightProperties(qlonglong imageID, const QString& p
     switch (removeBy)
     {
         case 0:
-            d->db->execSql(QString("DELETE FROM ImageCopyright "
+            d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
                                    "WHERE imageid=?;"),
                            imageID);
             break;
 
         case 1:
-            d->db->execSql(QString("DELETE FROM ImageCopyright "
+            d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
                                    "WHERE imageid=? AND property=?;"),
                            imageID, property);
             break;
 
         case 2:
-            d->db->execSql(QString("DELETE FROM ImageCopyright "
+            d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
                                    "WHERE imageid=? AND property=? AND extraValue=?;"),
                            imageID, property, extraValue);
             break;
 
         case 3:
-            d->db->execSql(QString("DELETE FROM ImageCopyright "
+            d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright "
                                    "WHERE imageid=? AND property=? AND extraValue=? AND value=?;"),
                            imageID, property, extraValue, value);
             break;
@@ -2100,16 +2108,18 @@ QList<qlonglong> AlbumDB::findByNameAndCreationDate(const QString& fileName, con
 {
     QList<QVariant> values;
 
-    d->db->execSql("SELECT id FROM Images "
+    d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
                    " INNER JOIN ImageInformation ON id=imageid "
-                   "WHERE name=? AND creationDate=? AND status!=3;",
+                   "WHERE name=? AND creationDate=? AND status!=3;"),
                    fileName, creationDate.toString(Qt::ISODate), &values);
 
     QList<qlonglong> ids;
+
     foreach(const QVariant& var, values)
     {
         ids << var.toLongLong();
     }
+
     return ids;
 }
 
@@ -2117,7 +2127,7 @@ bool AlbumDB::hasImageHistory(qlonglong imageId)
 {
     QList<QVariant> values;
 
-    d->db->execSql("SELECT history FROM ImageHistory WHERE imageid=?;",
+    d->db->execSql(QString::fromUtf8("SELECT history FROM ImageHistory WHERE imageid=?;"),
                    imageId, &values);
 
     return !values.isEmpty();
@@ -2127,7 +2137,7 @@ ImageHistoryEntry AlbumDB::getImageHistory(qlonglong imageId)
 {
     QList<QVariant> values;
 
-    d->db->execSql("SELECT uuid, history FROM ImageHistory WHERE imageid=?;",
+    d->db->execSql(QString::fromUtf8("SELECT uuid, history FROM ImageHistory WHERE imageid=?;"),
                    imageId, &values);
 
     ImageHistoryEntry entry;
@@ -2152,9 +2162,9 @@ QList<qlonglong> AlbumDB::getItemsForUuid(const QString& uuid)
 {
     QList<QVariant> values;
 
-    d->db->execSql("SELECT imageid FROM ImageHistory "
+    d->db->execSql(QString::fromUtf8("SELECT imageid FROM ImageHistory "
                    "INNER JOIN Images ON imageid=id "
-                   "WHERE uuid=? AND status!=3;",
+                   "WHERE uuid=? AND status!=3;"),
                    uuid, &values);
 
     QList<qlonglong> imageIds;
@@ -2176,7 +2186,7 @@ QString AlbumDB::getImageUuid(qlonglong imageId)
 {
     QList<QVariant> values;
 
-    d->db->execSql("SELECT uuid FROM ImageHistory WHERE imageid=?;",
+    d->db->execSql(QString::fromUtf8("SELECT uuid FROM ImageHistory WHERE imageid=?;"),
                    imageId, &values);
 
     if (values.isEmpty())
@@ -2196,26 +2206,26 @@ QString AlbumDB::getImageUuid(qlonglong imageId)
 
 void AlbumDB::setImageHistory(qlonglong imageId, const QString& history)
 {
-    d->db->execUpsertDBAction("changeImageHistory", imageId, QStringList() << "history", QVariantList() << history);
+    d->db->execUpsertDBAction(QLatin1String("changeImageHistory"), imageId, QStringList() << QLatin1String("history"), QVariantList() << history);
     d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::ImageHistory));
 }
 
 void AlbumDB::setImageUuid(qlonglong imageId, const QString& uuid)
 {
-    d->db->execUpsertDBAction("changeImageHistory", imageId, QStringList() << "uuid", QVariantList() << uuid);
+    d->db->execUpsertDBAction(QLatin1String("changeImageHistory"), imageId, QStringList() << QLatin1String("uuid"), QVariantList() << uuid);
     d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::ImageUUID));
 }
 
 void AlbumDB::addImageRelation(qlonglong subjectId, qlonglong objectId, DatabaseRelation::Type type)
 {
-    d->db->execSql("REPLACE INTO ImageRelations (subject, object, type) VALUES (?, ?, ?);",
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageRelations (subject, object, type) VALUES (?, ?, ?);"),
                    subjectId, objectId, type);
     d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << subjectId << objectId, DatabaseFields::ImageRelations));
 }
 
 void AlbumDB::addImageRelations(const QList<qlonglong>& subjectIds, const QList<qlonglong>& objectIds, DatabaseRelation::Type type)
 {
-    SqlQuery query = d->db->prepareQuery("REPLACE INTO ImageRelations (subject, object, type) VALUES (?, ?, ?);");
+    SqlQuery query = d->db->prepareQuery(QString::fromUtf8("REPLACE INTO ImageRelations (subject, object, type) VALUES (?, ?, ?);"));
 
     QVariantList subjects, objects, types;
 
@@ -2241,7 +2251,7 @@ void AlbumDB::addImageRelation(const ImageRelation& relation)
 
 void AlbumDB::removeImageRelation(qlonglong subjectId, qlonglong objectId, DatabaseRelation::Type type)
 {
-    d->db->execSql("DELETE FROM ImageRelations WHERE subject=? AND object=? AND type=?;",
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageRelations WHERE subject=? AND object=? AND type=?;"),
                    subjectId, objectId, type);
     d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << subjectId << objectId, DatabaseFields::ImageRelations));
 }
@@ -2260,7 +2270,7 @@ QList<qlonglong> AlbumDB::removeAllImageRelationsTo(qlonglong objectId, Database
         return affected;
     }
 
-    d->db->execSql("DELETE FROM ImageRelations WHERE object=? AND type=?;",
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageRelations WHERE object=? AND type=?;"),
                    objectId, type);
     d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << affected << objectId, DatabaseFields::ImageRelations));
 
@@ -2276,7 +2286,7 @@ QList<qlonglong> AlbumDB::removeAllImageRelationsFrom(qlonglong subjectId, Datab
         return affected;
     }
 
-    d->db->execSql("DELETE FROM ImageRelations WHERE subject=? AND type=?;",
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageRelations WHERE subject=? AND type=?;"),
                    subjectId, type);
     d->db->recordChangeset(ImageChangeset(QList<qlonglong>() << affected << subjectId, DatabaseFields::ImageRelations));
 
@@ -2349,10 +2359,11 @@ QList<QPair<qlonglong, qlonglong> > AlbumDB::getRelationCloud(qlonglong imageId,
     QSet<QPair<qlonglong, qlonglong> > pairs;
     todo << imageId;
 
-    QString sql = "SELECT subject, object FROM ImageRelations "
+    QString sql = QString::fromUtf8(
+                  "SELECT subject, object FROM ImageRelations "
                   "INNER JOIN Images AS SubjectImages ON ImageRelations.subject=SubjectImages.id "
                   "INNER JOIN Images AS ObjectImages  ON ImageRelations.object=ObjectImages.id "
-                  "WHERE (subject=? OR object=?) %1 AND SubjectImages.status!=3 AND ObjectImages.status!=3;";
+                  "WHERE (subject=? OR object=?) %1 AND SubjectImages.status!=3 AND ObjectImages.status!=3;");
 
     if (type == DatabaseRelation::UndefinedType)
     {
@@ -2360,7 +2371,7 @@ QList<QPair<qlonglong, qlonglong> > AlbumDB::getRelationCloud(qlonglong imageId,
     }
     else
     {
-        sql = sql.arg("AND type=?");
+        sql = sql.arg(QString::fromUtf8("AND type=?"));
     }
 
     SqlQuery query = d->db->prepareQuery(sql);
@@ -2409,12 +2420,13 @@ QList<QPair<qlonglong, qlonglong> > AlbumDB::getRelationCloud(qlonglong imageId,
 
 QList<qlonglong> AlbumDB::getOneRelatedImageEach(const QList<qlonglong>& ids, DatabaseRelation::Type type)
 {
-    QString sql = "SELECT subject, object FROM ImageRelations "
+    QString sql = QString::fromUtf8(
+                  "SELECT subject, object FROM ImageRelations "
                   "INNER JOIN Images AS SubjectImages ON ImageRelations.subject=SubjectImages.id "
                   "INNER JOIN Images AS ObjectImages  ON ImageRelations.object=ObjectImages.id "
                   "WHERE ( (subject=? AND ObjectImages.status!=3) "
                   "     OR (object=? AND SubjectImages.status!=3) ) "
-                  " %1 LIMIT 1;";
+                  " %1 LIMIT 1;");
 
     if (type == DatabaseRelation::UndefinedType)
     {
@@ -2422,7 +2434,7 @@ QList<qlonglong> AlbumDB::getOneRelatedImageEach(const QList<qlonglong>& ids, Da
     }
     else
     {
-        sql = sql.arg("AND type=?");
+        sql = sql.arg(QString::fromUtf8("AND type=?"));
     }
 
     SqlQuery        query = d->db->prepareQuery(sql);
@@ -2463,7 +2475,7 @@ bool AlbumDB::hasHaarFingerprints() const
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT imageid FROM ImageHaarMatrix "
+    d->db->execSql(QString::fromUtf8("SELECT imageid FROM ImageHaarMatrix "
                            "WHERE matrix IS NOT NULL LIMIT 1;"),
                    &values);
 
@@ -2476,7 +2488,7 @@ QList<qlonglong> AlbumDB::getDirtyOrMissingFingerprints()
     QList<qlonglong> itemIDs;
     QList<QVariant>  values;
 
-    d->db->execSql(QString("SELECT id FROM Images "
+    d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
                            "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
                            " WHERE Images.status=1 AND Images.category=1 AND "
                            " ( ImageHaarMatrix.imageid IS NULL "
@@ -2496,7 +2508,7 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
+    d->db->execSql(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
                            "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
                            "LEFT JOIN Albums ON Albums.id=Images.album "
                            " WHERE Images.status=1 AND Images.category=1 AND "
@@ -2517,13 +2529,13 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
         name = (*it).toString();
         ++it;
 
-        if (relativePath == "/")
+        if (relativePath == QLatin1String("/"))
         {
             urls << albumRootPath + relativePath + name;
         }
         else
         {
-            urls << albumRootPath + relativePath + '/' + name;
+            urls << albumRootPath + relativePath + QLatin1Char('/') + name;
         }
     }
 
@@ -2534,12 +2546,12 @@ QStringList AlbumDB::getItemsURLsWithTag(int tagId)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
-                           "LEFT JOIN ImageTags ON Images.id=ImageTags.imageid "
-                           "LEFT JOIN Albums ON Albums.id=Images.album "
-                           " WHERE Images.status=1 AND Images.category=1 AND ImageTags.tagid=?; "),
+    d->db->execSql(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
+                                     "LEFT JOIN ImageTags ON Images.id=ImageTags.imageid "
+                                     "LEFT JOIN Albums ON Albums.id=Images.album "
+                                     " WHERE Images.status=1 AND Images.category=1 AND ImageTags.tagid=?; "),
                    tagId, &values);
-    
+
     QStringList urls;
     QString     albumRootPath, relativePath, name;
 
@@ -2552,13 +2564,13 @@ QStringList AlbumDB::getItemsURLsWithTag(int tagId)
         name = (*it).toString();
         ++it;
 
-        if (relativePath == "/")
+        if (relativePath == QLatin1String("/"))
         {
             urls << albumRootPath + relativePath + name;
         }
         else
         {
-            urls << albumRootPath + relativePath + '/' + name;
+            urls << albumRootPath + relativePath + QLatin1Char('/') + name;
         }
     }
 
@@ -2569,13 +2581,13 @@ QStringList AlbumDB::getDirtyOrMissingFaceImageUrls()
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
-                           "LEFT JOIN ImageScannedMatrix ON Images.id=ImageScannedMatrix.imageid "
-                           "LEFT JOIN Albums ON Albums.id=Images.album "
-                           " WHERE Images.status=1 AND Images.category=1 AND "
-                           " ( ImageScannedMatrix.imageid IS NULL "
-                           "   OR Images.modificationDate != ImageScannedMatrix.modificationDate "
-                           "   OR Images.uniqueHash != ImageScannedMatrix.uniqueHash ); "),
+    d->db->execSql(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
+                                     "LEFT JOIN ImageScannedMatrix ON Images.id=ImageScannedMatrix.imageid "
+                                     "LEFT JOIN Albums ON Albums.id=Images.album "
+                                     " WHERE Images.status=1 AND Images.category=1 AND "
+                                     " ( ImageScannedMatrix.imageid IS NULL "
+                                     "   OR Images.modificationDate != ImageScannedMatrix.modificationDate "
+                                     "   OR Images.uniqueHash != ImageScannedMatrix.uniqueHash ); "),
                    &values);
 
     QStringList urls;
@@ -2590,13 +2602,13 @@ QStringList AlbumDB::getDirtyOrMissingFaceImageUrls()
         name = (*it).toString();
         ++it;
 
-        if (relativePath == "/")
+        if (relativePath == QLatin1String("/"))
         {
             urls << albumRootPath + relativePath + name;
         }
         else
         {
-            urls << albumRootPath + relativePath + '/' + name;
+            urls << albumRootPath + relativePath + QLatin1Char('/') + name;
         }
     }
 
@@ -2613,7 +2625,7 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(qlonglong id)
     QList<QVariant> values;
 
     // retrieve unique hash and file size
-    d->db->execSql(QString("SELECT uniqueHash, fileSize FROM Images WHERE id=?; "),
+    d->db->execSql(QString::fromUtf8("SELECT uniqueHash, fileSize FROM Images WHERE id=?; "),
                    id,
                    &values);
 
@@ -2639,7 +2651,7 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(const QString& uniqueHash, qlongl
     QList<QVariant> values;
 
     // find items with same fingerprint
-    d->db->execSql(QString("SELECT id, album, name, status, category, modificationDate, fileSize FROM Images "
+    d->db->execSql(QString::fromUtf8("SELECT id, album, name, status, category, modificationDate, fileSize FROM Images "
                            " WHERE fileSize=? AND uniqueHash=?; "),
                    fileSize, uniqueHash,
                    &values);
@@ -2688,37 +2700,37 @@ QStringList AlbumDB::imagesFieldList(DatabaseFields::Images fields)
 
     if (fields & DatabaseFields::Album)
     {
-        list << "album";
+        list << QLatin1String("album");
     }
 
     if (fields & DatabaseFields::Name)
     {
-        list << "name";
+        list << QLatin1String("name");
     }
 
     if (fields & DatabaseFields::Status)
     {
-        list << "status";
+        list << QLatin1String("status");
     }
 
     if (fields & DatabaseFields::Category)
     {
-        list << "category";
+        list << QLatin1String("category");
     }
 
     if (fields & DatabaseFields::ModificationDate)
     {
-        list << "modificationDate";
+        list << QLatin1String("modificationDate");
     }
 
     if (fields & DatabaseFields::FileSize)
     {
-        list << "fileSize";
+        list << QLatin1String("fileSize");
     }
 
     if (fields & DatabaseFields::UniqueHash)
     {
-        list << "uniqueHash";
+        list << QLatin1String("uniqueHash");
     }
 
     return list;
@@ -2731,47 +2743,47 @@ QStringList AlbumDB::imageInformationFieldList(DatabaseFields::ImageInformation 
 
     if (fields & DatabaseFields::Rating)
     {
-        list << "rating";
+        list << QLatin1String("rating");
     }
 
     if (fields & DatabaseFields::CreationDate)
     {
-        list << "creationDate";
+        list << QLatin1String("creationDate");
     }
 
     if (fields & DatabaseFields::DigitizationDate)
     {
-        list << "digitizationDate";
+        list << QLatin1String("digitizationDate");
     }
 
     if (fields & DatabaseFields::Orientation)
     {
-        list << "orientation";
+        list << QLatin1String("orientation");
     }
 
     if (fields & DatabaseFields::Width)
     {
-        list << "width";
+        list << QLatin1String("width");
     }
 
     if (fields & DatabaseFields::Height)
     {
-        list << "height";
+        list << QLatin1String("height");
     }
 
     if (fields & DatabaseFields::Format)
     {
-        list << "format";
+        list << QLatin1String("format");
     }
 
     if (fields & DatabaseFields::ColorDepth)
     {
-        list << "colorDepth";
+        list << QLatin1String("colorDepth");
     }
 
     if (fields & DatabaseFields::ColorModel)
     {
-        list << "colorModel";
+        list << QLatin1String("colorModel");
     }
 
     return list;
@@ -2784,37 +2796,37 @@ QStringList AlbumDB::videoMetadataFieldList(DatabaseFields::VideoMetadata fields
 
     if (fields & DatabaseFields::AspectRatio)
     {
-        list << "aspectRatio";
+        list << QLatin1String("aspectRatio");
     }
 
     if (fields & DatabaseFields::AudioBitRate)
     {
-        list << "audioBitRate";
+        list << QLatin1String("audioBitRate");
     }
 
     if (fields & DatabaseFields::AudioChannelType)
     {
-        list << "audioChannelType";
+        list << QLatin1String("audioChannelType");
     }
 
     if (fields & DatabaseFields::AudioCompressor)
     {
-        list << "audioCompressor";
+        list << QLatin1String("audioCompressor");
     }
 
     if (fields & DatabaseFields::Duration)
     {
-        list << "duration";
+        list << QLatin1String("duration");
     }
 
     if (fields & DatabaseFields::FrameRate)
     {
-        list << "frameRate";
+        list << QLatin1String("frameRate");
     }
 
     if (fields & DatabaseFields::VideoCodec)
     {
-        list << "videoCodec";
+        list << QLatin1String("videoCodec");
     }
 
     return list;
@@ -2827,82 +2839,82 @@ QStringList AlbumDB::imageMetadataFieldList(DatabaseFields::ImageMetadata fields
 
     if (fields & DatabaseFields::Make)
     {
-        list << "make";
+        list << QLatin1String("make");
     }
 
     if (fields & DatabaseFields::Model)
     {
-        list << "model";
+        list << QLatin1String("model");
     }
 
     if (fields & DatabaseFields::Lens)
     {
-        list << "lens";
+        list << QLatin1String("lens");
     }
 
     if (fields & DatabaseFields::Aperture)
     {
-        list << "aperture";
+        list << QLatin1String("aperture");
     }
 
     if (fields & DatabaseFields::FocalLength)
     {
-        list << "focalLength";
+        list << QLatin1String("focalLength");
     }
 
     if (fields & DatabaseFields::FocalLength35)
     {
-        list << "focalLength35";
+        list << QLatin1String("focalLength35");
     }
 
     if (fields & DatabaseFields::ExposureTime)
     {
-        list << "exposureTime";
+        list << QLatin1String("exposureTime");
     }
 
     if (fields & DatabaseFields::ExposureProgram)
     {
-        list << "exposureProgram";
+        list << QLatin1String("exposureProgram");
     }
 
     if (fields & DatabaseFields::ExposureMode)
     {
-        list << "exposureMode";
+        list << QLatin1String("exposureMode");
     }
 
     if (fields & DatabaseFields::Sensitivity)
     {
-        list << "sensitivity";
+        list << QLatin1String("sensitivity");
     }
 
     if (fields & DatabaseFields::FlashMode)
     {
-        list << "flash";
+        list << QLatin1String("flash");
     }
 
     if (fields & DatabaseFields::WhiteBalance)
     {
-        list << "whiteBalance";
+        list << QLatin1String("whiteBalance");
     }
 
     if (fields & DatabaseFields::WhiteBalanceColorTemperature)
     {
-        list << "whiteBalanceColorTemperature";
+        list << QLatin1String("whiteBalanceColorTemperature");
     }
 
     if (fields & DatabaseFields::MeteringMode)
     {
-        list << "meteringMode";
+        list << QLatin1String("meteringMode");
     }
 
     if (fields & DatabaseFields::SubjectDistance)
     {
-        list << "subjectDistance";
+        list << QLatin1String("subjectDistance");
     }
 
     if (fields & DatabaseFields::SubjectDistanceCategory)
     {
-        list << "subjectDistanceCategory";
+        list << QLatin1String("subjectDistanceCategory");
     }
 
     return list;
@@ -2915,52 +2927,52 @@ QStringList AlbumDB::imagePositionsFieldList(DatabaseFields::ImagePositions fiel
 
     if (fields & DatabaseFields::Latitude)
     {
-        list << "latitude";
+        list << QLatin1String("latitude");
     }
 
     if (fields & DatabaseFields::LatitudeNumber)
     {
-        list << "latitudeNumber";
+        list << QLatin1String("latitudeNumber");
     }
 
     if (fields & DatabaseFields::Longitude)
     {
-        list << "longitude";
+        list << QLatin1String("longitude");
     }
 
     if (fields & DatabaseFields::LongitudeNumber)
     {
-        list << "longitudeNumber";
+        list << QLatin1String("longitudeNumber");
     }
 
     if (fields & DatabaseFields::Altitude)
     {
-        list << "altitude";
+        list << QLatin1String("altitude");
     }
 
     if (fields & DatabaseFields::PositionOrientation)
     {
-        list << "orientation";
+        list << QLatin1String("orientation");
     }
 
     if (fields & DatabaseFields::PositionTilt)
     {
-        list << "tilt";
+        list << QLatin1String("tilt");
     }
 
     if (fields & DatabaseFields::PositionRoll)
     {
-        list << "roll";
+        list << QLatin1String("roll");
     }
 
     if (fields & DatabaseFields::PositionAccuracy)
     {
-        list << "accuracy";
+        list << QLatin1String("accuracy");
     }
 
     if (fields & DatabaseFields::PositionDescription)
     {
-        list << "description";
+        list << QLatin1String("description");
     }
 
     return list;
@@ -2973,27 +2985,27 @@ QStringList AlbumDB::imageCommentsFieldList(DatabaseFields::ImageComments fields
 
     if (fields & DatabaseFields::CommentType)
     {
-        list << "type";
+        list << QLatin1String("type");
     }
 
     if (fields & DatabaseFields::CommentLanguage)
     {
-        list << "language";
+        list << QLatin1String("language");
     }
 
     if (fields & DatabaseFields::CommentAuthor)
     {
-        list << "author";
+        list << QLatin1String("author");
     }
 
     if (fields & DatabaseFields::CommentDate)
     {
-        list << "date";
+        list << QLatin1String("date");
     }
 
     if (fields & DatabaseFields::Comment)
     {
-        list << "comment";
+        list << QLatin1String("comment");
     }
 
     return list;
@@ -3004,7 +3016,7 @@ void AlbumDB::addBoundValuePlaceholders(QString& query, int count)
     // adds no spaces at beginning or end
     QString questionMarks;
     questionMarks.reserve(count * 2);
-    QString questionMark("?,");
+    QString questionMark(QString::fromUtf8("?,"));
 
     for (int i = 0; i < count; ++i)
     {
@@ -3020,8 +3032,8 @@ void AlbumDB::addBoundValuePlaceholders(QString& query, int count)
 int AlbumDB::findInDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date)
 {
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT id FROM DownloadHistory WHERE "
-                           "identifier=? AND filename=? AND filesize=? AND filedate=?;"),
+    d->db->execSql(QString::fromUtf8("SELECT id FROM DownloadHistory WHERE "
+                                     "identifier=? AND filename=? AND filesize=? AND filedate=?;"),
                    identifier, name, fileSize, date.toString(Qt::ISODate), &values);
 
     if (values.isEmpty())
@@ -3035,7 +3047,7 @@ int AlbumDB::findInDownloadHistory(const QString& identifier, const QString& nam
 int AlbumDB::addToDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date)
 {
     QVariant id;
-    d->db->execSql(QString("REPLACE INTO DownloadHistory "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO DownloadHistory "
                            "(identifier, filename, filesize, filedate) "
                            "VALUES (?,?,?,?);"),
                    identifier, name, fileSize, date.toString(Qt::ISODate), 0, &id);
@@ -3048,7 +3060,7 @@ void AlbumDB::setItemCaption(qlonglong imageID,const QString& caption)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("UPDATE Images SET caption=? "
+    d->db->execSql( QString::fromUtf8("UPDATE Images SET caption=? "
                             "WHERE id=?;"),
                     caption,
                     imageID );
@@ -3063,7 +3075,7 @@ void AlbumDB::setItemCaption(int albumID, const QString& name, const QString& ca
     / *
     QList<QVariant> values;
 
-    d->db->execSql( QString("UPDATE Images SET caption=? "
+    d->db->execSql( QString::fromUtf8("UPDATE Images SET caption=? "
                      "WHERE dirid=? AND name=?;")
              .(caption,
                   QString::number(albumID),
@@ -3077,7 +3089,7 @@ void AlbumDB::setItemCaption(int albumID, const QString& name, const QString& ca
 
 void AlbumDB::addItemTag(qlonglong imageID, int tagID)
 {
-    d->db->execSql(QString("REPLACE INTO ImageTags (imageid, tagid) "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageTags (imageid, tagid) "
                            "VALUES(?, ?);"),
                    imageID,
                    tagID);
@@ -3103,14 +3115,14 @@ void AlbumDB::addItemTag(qlonglong imageID, int tagID)
 
 void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
 {
-    /*
-    d->db->execSql( QString("REPLACE INTO ImageTags (imageid, tagid) \n "
+/*
+    d->db->execSql( QString::fromUtf8("REPLACE INTO ImageTags (imageid, tagid) \n "
                      "(SELECT id, ? FROM Images \n "
                      " WHERE dirid=? AND name=?);")
              .tagID
              .albumID
              .(name) );
-    */
+*/
 
     // easier because of attributes watch
     return addItemTag(getImageId(albumID, name), tagID);
@@ -3123,7 +3135,7 @@ void AlbumDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
         return;
     }
 
-    SqlQuery     query = d->db->prepareQuery("REPLACE INTO ImageTags (imageid, tagid) VALUES(?, ?);");
+    SqlQuery     query = d->db->prepareQuery(QString::fromUtf8("REPLACE INTO ImageTags (imageid, tagid) VALUES(?, ?);"));
     QVariantList images;
     QVariantList tags;
 
@@ -3149,7 +3161,7 @@ QList<int> AlbumDB::getRecentlyAssignedTags() const
 
 void AlbumDB::removeItemTag(qlonglong imageID, int tagID)
 {
-    d->db->execSql(QString("DELETE FROM ImageTags "
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageTags "
                            "WHERE imageID=? AND tagid=?;"),
                    imageID,
                    tagID);
@@ -3159,7 +3171,7 @@ void AlbumDB::removeItemTag(qlonglong imageID, int tagID)
 
 void AlbumDB::removeItemAllTags(qlonglong imageID, const QList<int>& currentTagIds)
 {
-    d->db->execSql(QString("DELETE FROM ImageTags "
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageTags "
                            "WHERE imageID=?;"),
                    imageID);
 
@@ -3173,7 +3185,7 @@ void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, const QList<int>& t
         return;
     }
 
-    SqlQuery     query = d->db->prepareQuery("DELETE FROM ImageTags WHERE imageID=? AND tagid=?;");
+    SqlQuery     query = d->db->prepareQuery(QString::fromUtf8("DELETE FROM ImageTags WHERE imageID=? AND tagid=?;"));
     QVariantList images;
     QVariantList tags;
 
@@ -3200,15 +3212,16 @@ QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recursive)
     {
         int rootId = getAlbumRootId(albumID);
         QString path = getAlbumRelativePath(albumID);
-        d->db->execSql(QString("SELECT Images.name FROM Images WHERE Images.album IN "
+        d->db->execSql(QString::fromUtf8("SELECT Images.name FROM Images WHERE Images.album IN "
                                " (SELECT DISTINCT id FROM Albums "
                                "  WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?));"),
-                       rootId, path, path == "/" ? "/%" : QString(path + QLatin1String("/%")),
+                       rootId, path, path == QString::fromUtf8("/") ? QString::fromUtf8("/%")
+                                                                    : QString(path + QLatin1String("/%")),
                        &values);
     }
     else
     {
-        d->db->execSql(QString("SELECT Images.name "
+        d->db->execSql(QString::fromUtf8("SELECT Images.name "
                                "FROM Images "
                                "WHERE Images.album=?"),
                        albumID, &values);
@@ -3228,7 +3241,7 @@ QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recursive)
 QStringList AlbumDB::getAllItemURLsWithoutDate()
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
+    d->db->execSql( QString::fromUtf8("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
                             "FROM Images "
                             "  LEFT JOIN Albums ON Images.album=Albums.id "
                             "  LEFT JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
@@ -3237,6 +3250,7 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
                     &values );
 
     QStringList urls;
+
     for (QList<QVariant>::iterator it = values.begin(); it != values.end(); ++it)
         urls << it->toString();
 
@@ -3247,9 +3261,9 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
 QList<QDateTime> AlbumDB::getAllCreationDates()
 {
     QList<QVariant> values;
-    d->db->execSql("SELECT creationDate FROM ImageInformation "
+    d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ImageInformation "
                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
-                   " WHERE Images.status=1;", &values);
+                   " WHERE Images.status=1;"), &values);
 
     QList<QDateTime> list;
 
@@ -3260,15 +3274,16 @@ QList<QDateTime> AlbumDB::getAllCreationDates()
             list << QDateTime::fromString(value.toString(), Qt::ISODate);
         }
     }
+
     return list;
 }
 
 QMap<QDateTime, int> AlbumDB::getAllCreationDatesAndNumberOfImages()
 {
     QList<QVariant> values;
-    d->db->execSql("SELECT creationDate FROM ImageInformation "
+    d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ImageInformation "
                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
-                   " WHERE Images.status=1;", &values);
+                   " WHERE Images.status=1;"), &values);
 
     QMap<QDateTime, int> datesStatMap;
 
@@ -3306,7 +3321,7 @@ QMap<int, int> AlbumDB::getNumberOfImagesInAlbums()
 
     // initialize allAbumIDs with all existing albums from db to prevent
     // wrong album image counters
-    d->db->execSql("SELECT id from Albums", &allAbumIDs);
+    d->db->execSql(QString::fromUtf8("SELECT id from Albums"), &allAbumIDs);
 
     for (QList<QVariant>::const_iterator it = allAbumIDs.constBegin(); it != allAbumIDs.constEnd(); ++it)
     {
@@ -3314,7 +3329,7 @@ QMap<int, int> AlbumDB::getNumberOfImagesInAlbums()
         albumsStatMap.insert(albumID, 0);
     }
 
-    d->db->execSql("SELECT album FROM Images WHERE Images.status=1;", &values);
+    d->db->execSql(QString::fromUtf8("SELECT album FROM Images WHERE Images.status=1;"), &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -3344,7 +3359,7 @@ QMap<int, int> AlbumDB::getNumberOfImagesInTags()
 
     // initialize allTagIDs with all existing tags from db to prevent
     // wrong tag counters
-    d->db->execSql(QString("SELECT id from Tags"), &allTagIDs);
+    d->db->execSql(QString::fromUtf8("SELECT id from Tags"), &allTagIDs);
 
     for (QList<QVariant>::const_iterator it = allTagIDs.constBegin(); it != allTagIDs.constEnd(); ++it)
     {
@@ -3352,9 +3367,9 @@ QMap<int, int> AlbumDB::getNumberOfImagesInTags()
         tagsStatMap.insert(tagID, 0);
     }
 
-    d->db->execSql("SELECT tagid FROM ImageTags "
+    d->db->execSql(QString::fromUtf8("SELECT tagid FROM ImageTags "
                    " LEFT JOIN Images ON Images.id=ImageTags.imageid "
-                   " WHERE Images.status=1;", &values);
+                   " WHERE Images.status=1;"), &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -3382,10 +3397,10 @@ QMap<int, int> AlbumDB::getNumberOfImagesInTagProperties(const QString& property
     QMap<int, int>  tagsStatMap;
     int             tagID, count;
 
-    d->db->execSql("SELECT tagid, COUNT(*) FROM ImageTagProperties "
+    d->db->execSql(QString::fromUtf8("SELECT tagid, COUNT(*) FROM ImageTagProperties "
                    " LEFT JOIN Images ON Images.id=ImageTagProperties.imageid "
                    " WHERE ImageTagProperties.property=? AND Images.status=1 "
-                   " GROUP BY tagid;",
+                   " GROUP BY tagid;"),
                    property, &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
@@ -3410,17 +3425,18 @@ QMap<QString, int> AlbumDB::getFormatStatistics(DatabaseItem::Category category)
 {
     QMap<QString, int>  map;
 
-    QString queryString = "SELECT COUNT(*), II.format "
+    QString queryString = QString::fromUtf8(
+                          "SELECT COUNT(*), II.format "
                           "  FROM ImageInformation AS II "
                           "  INNER JOIN Images ON II.imageid=Images.id "
-                          "  WHERE Images.status=1 ";
+                          "  WHERE Images.status=1 ");
 
     if (category != DatabaseItem::UndefinedCategory)
     {
-        queryString.append(QString("AND Images.category=%1").arg(category));
+        queryString.append(QString::fromUtf8("AND Images.category=%1").arg(category));
     }
 
-    queryString.append(" GROUP BY II.format;");
+    queryString.append(QString::fromUtf8(" GROUP BY II.format;"));
     qCDebug(DIGIKAM_GENERAL_LOG) << queryString;
 
     SqlQuery query = d->db->prepareQuery(queryString);
@@ -3448,9 +3464,10 @@ QMap<QString, int> AlbumDB::getFormatStatistics(DatabaseItem::Category category)
 QList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 {
     QList<QVariant> values;
-    d->db->execSql( "SELECT Images.name, datetime FROM Images;", &values );
+    d->db->execSql( QString::fromUtf8("SELECT Images.name, datetime FROM Images;", &values ));
 
     QList<QPair<QString, QDateTime> > data;
+
     for ( QList<QVariant>::iterator it = values.begin(); it != values.end(); )
     {
         QPair<QString, QDateTime> pair;
@@ -3464,6 +3481,7 @@ QList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 
         data << pair;
     }
+
     return data;
 }
 */
@@ -3483,7 +3501,7 @@ int AlbumDB::getAlbumForPath(const QString& albumRoot, const QString& folder, bo
 int AlbumDB::getAlbumForPath(int albumRootId, const QString& folder, bool create)
 {
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT id FROM Albums WHERE albumRoot=? AND relativePath=?;"),
+    d->db->execSql(QString::fromUtf8("SELECT id FROM Albums WHERE albumRoot=? AND relativePath=?;"),
                    albumRootId, folder, &values);
 
     int albumID = -1;
@@ -3506,8 +3524,9 @@ int AlbumDB::getAlbumForPath(int albumRootId, const QString& folder, bool create
 QList<int> AlbumDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& relativePath)
 {
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT id, relativePath FROM Albums WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?);"),
-                   albumRootId, relativePath, (relativePath == "/" ? "/%" : QString(relativePath + QLatin1String("/%"))), &values);
+    d->db->execSql(QString::fromUtf8("SELECT id, relativePath FROM Albums WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?);"),
+                   albumRootId, relativePath, (relativePath == QLatin1String("/") ? QLatin1String("/%")
+                                                                                  : QString(relativePath + QLatin1String("/%"))), &values);
 
     QList<int> albumIds;
     int id;
@@ -3533,7 +3552,7 @@ QList<int> AlbumDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& 
 QList<int> AlbumDB::getAlbumsOnAlbumRoot(int albumRootId)
 {
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT id FROM Albums WHERE albumRoot=?;"),
+    d->db->execSql(QString::fromUtf8("SELECT id FROM Albums WHERE albumRoot=?;"),
                    albumRootId, &values);
 
     QList<int> albumIds;
@@ -3558,7 +3577,7 @@ qlonglong AlbumDB::addItem(int albumID, const QString& name,
                 << modificationDate.toString(Qt::ISODate) << fileSize << uniqueHash;
 
     QVariant id;
-    d->db->execSql(QString("REPLACE INTO Images "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO Images "
                            " ( album, name, status, category, modificationDate, fileSize, uniqueHash ) "
                            " VALUES (?,?,?,?,?,?,?);"),
                    boundValues,
@@ -3580,7 +3599,7 @@ void AlbumDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
 {
     QVariantList boundValues;
     boundValues << category << modificationDate << fileSize << uniqueHash << imageID;
-    d->db->execSql(QString("UPDATE Images SET category=?, modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET category=?, modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?;"),
                    boundValues);
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Category
                                           | DatabaseFields::ModificationDate
@@ -3592,7 +3611,7 @@ void AlbumDB::setItemStatus(qlonglong imageID, DatabaseItem::Status status)
 {
     QVariantList boundValues;
     boundValues << (int)status << imageID;
-    d->db->execSql(QString("UPDATE Images SET status=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET status=? WHERE id=?;"),
                    boundValues);
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Status));
 }
@@ -3775,7 +3794,7 @@ int AlbumDB::getItemAlbum(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT album FROM Images WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("SELECT album FROM Images WHERE id=?;"),
                    imageID, &values);
 
     if (!values.isEmpty())
@@ -3792,7 +3811,7 @@ QString AlbumDB::getItemName(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT name FROM Images WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("SELECT name FROM Images WHERE id=?;"),
                    imageID, &values);
 
     if (!values.isEmpty())
@@ -3809,7 +3828,7 @@ QString AlbumDB::getItemName(qlonglong imageID)
 bool AlbumDB::setItemDate(qlonglong imageID,
                           const QDateTime& datetime)
 {
-    d->db->execSql ( QString ("UPDATE Images SET datetime=?"
+    d->db->execSql ( QString::fromUtf8("UPDATE Images SET datetime=?"
                             "WHERE id=?;"),
                      datetime.toString(Qt::ISODate),
                      imageID );
@@ -3824,7 +3843,7 @@ bool AlbumDB::setItemDate(int albumID, const QString& name,
                           const QDateTime& datetime)
 {
     / *
-    d->db->execSql ( QString ("UPDATE Images SET datetime=?"
+    d->db->execSql ( QString::fromUtf8("UPDATE Images SET datetime=?"
                        "WHERE dirid=? AND name=?;")
               .datetime.toString(Qt::ISODate,
                    QString::number(albumID),
@@ -3839,7 +3858,7 @@ bool AlbumDB::setItemDate(int albumID, const QString& name,
 
 void AlbumDB::setItemRating(qlonglong imageID, int rating)
 {
-    d->db->execSql ( QString ("REPLACE INTO ImageProperties "
+    d->db->execSql ( QString::fromUtf8("REPLACE INTO ImageProperties "
                             "(imageid, property, value) "
                             "VALUES(?, ?, ?);"),
                      imageID,
@@ -3854,7 +3873,7 @@ int AlbumDB::getItemRating(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT value FROM ImageProperties "
+    d->db->execSql( QString::fromUtf8(SELECT value FROM ImageProperties "
                             "WHERE imageid=? and property=?;"),
                     imageID,
                     QString("Rating"),
@@ -3886,31 +3905,31 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     }
 
     QMap<QString, QVariant> bindingMap;
-    bindingMap.insert(QString(":albumID"), albumID);
+    bindingMap.insert(QString::fromUtf8(":albumID"), albumID);
 
     switch (sortOrder)
     {
         case ByItemName:
-            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemName")), bindingMap, &values);
+            d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("getItemURLsInAlbumByItemName")), bindingMap, &values);
             break;
 
         case ByItemPath:
             // Don't collate on the path - this is to maintain the same behavior
             // that happens when sort order is "By Path"
-            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemPath")), bindingMap, &values);
+            d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("getItemURLsInAlbumByItemPath")), bindingMap, &values);
             break;
 
         case ByItemDate:
-            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemDate")), bindingMap, &values);
+            d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("getItemURLsInAlbumByItemDate")), bindingMap, &values);
             break;
 
         case ByItemRating:
-            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemRating")), bindingMap, &values);
+            d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("getItemURLsInAlbumByItemRating")), bindingMap, &values);
             break;
 
         case NoItemSorting:
         default:
-            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumNoItemSorting")), bindingMap, &values);
+            d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("getItemURLsInAlbumNoItemSorting")), bindingMap, &values);
             break;
     }
 
@@ -3924,13 +3943,13 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
         name = (*it).toString();
         ++it;
 
-        if (relativePath == "/")
+        if (relativePath == QLatin1String("/"))
         {
             urls << albumRootPath + relativePath + name;
         }
         else
         {
-            urls << albumRootPath + relativePath + '/' + name;
+            urls << albumRootPath + relativePath + QLatin1Char('/') + name;
         }
     }
 
@@ -3942,7 +3961,7 @@ QList<qlonglong> AlbumDB::getItemIDsInAlbum(int albumID)
     QList<qlonglong> itemIDs;
     QList<QVariant>  values;
 
-    d->db->execSql(QString("SELECT id FROM Images WHERE album=?;"),
+    d->db->execSql(QString::fromUtf8("SELECT id FROM Images WHERE album=?;"),
                    albumID, &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
@@ -3972,7 +3991,7 @@ QMap<qlonglong, QString> AlbumDB::getItemIDsAndURLsInAlbum(int albumID)
     QMap<qlonglong, QString> itemsMap;
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT Images.id, Albums.relativePath, Images.name "
+    d->db->execSql(QString::fromUtf8("SELECT Images.id, Albums.relativePath, Images.name "
                            "FROM Images JOIN Albums ON Albums.id=Images.album "
                            "WHERE Albums.id=?;"),
                    albumID, &values);
@@ -3990,13 +4009,13 @@ QMap<qlonglong, QString> AlbumDB::getItemIDsAndURLsInAlbum(int albumID)
         name = (*it).toString();
         ++it;
 
-        if (relativePath == "/")
+        if (relativePath == QLatin1String("/"))
         {
             path = albumRootPath + relativePath + name;
         }
         else
         {
-            path = albumRootPath + relativePath + '/' + name;
+            path = albumRootPath + relativePath + QLatin1Char('/') + name;
         }
 
         itemsMap.insert(id, path);
@@ -4009,7 +4028,7 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash "
+    d->db->execSql(QString::fromUtf8("SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash "
                            "FROM Images WHERE album=?;"),
                    albumID,
                    &values);
@@ -4048,7 +4067,7 @@ ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString("SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash "
+    d->db->execSql(QString::fromUtf8("SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash "
                            "FROM Images WHERE id=?;"),
                    imageID,
                    &values);
@@ -4087,16 +4106,16 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
     QString                 imagesIdClause;
     QMap<QString, QVariant> bindingMap;
 
-    bindingMap.insert(QString(":tagID"), tagID);
-    bindingMap.insert(QString(":tagID2"), tagID);
+    bindingMap.insert(QString::fromUtf8(":tagID"), tagID);
+    bindingMap.insert(QString::fromUtf8(":tagID2"), tagID);
 
     if (recursive)
     {
-        d->db->execDBAction(d->db->getDBAction(QString("GetItemURLsInTagRecursive")), bindingMap, &values);
+        d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("GetItemURLsInTagRecursive")), bindingMap, &values);
     }
     else
     {
-        d->db->execDBAction(d->db->getDBAction(QString("GetItemURLsInTag")), bindingMap, &values);
+        d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("GetItemURLsInTag")), bindingMap, &values);
     }
 
     QStringList urls;
@@ -4111,13 +4130,13 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
         name = (*it).toString();
         ++it;
 
-        if (relativePath == "/")
+        if (relativePath == QLatin1String("/"))
         {
             urls << albumRootPath + relativePath + name;
         }
         else
         {
-            urls << albumRootPath + relativePath + '/' + name;
+            urls << albumRootPath + relativePath + QLatin1Char('/') + name;
         }
     }
 
@@ -4130,16 +4149,16 @@ QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
     QList<QVariant>         values;
     QMap<QString, QVariant> parameters;
 
-    parameters.insert(":tagPID", tagID);
-    parameters.insert(":tagID",  tagID);
+    parameters.insert(QString::fromUtf8(":tagPID"), tagID);
+    parameters.insert(QString::fromUtf8(":tagID"),  tagID);
 
     if (recursive)
     {
-        d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTagRecursive")), parameters, &values);
+        d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("getItemIDsInTagRecursive")), parameters, &values);
     }
     else
     {
-        d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTag")), parameters, &values);
+        d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("getItemIDsInTag")), parameters, &values);
     }
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
@@ -4154,7 +4173,7 @@ QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
 QString AlbumDB::getAlbumPath(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT AlbumRoots.absolutePath||Albums.relativePath "
+    d->db->execSql( QString::fromUtf8("SELECT AlbumRoots.absolutePath||Albums.relativePath "
                             "FROM Albums, AlbumRoots WHERE Albums.id=? AND AlbumRoots.id=Albums.albumRoot; "),
                     albumID, &values);
     if (!values.isEmpty())
@@ -4167,7 +4186,7 @@ QString AlbumDB::getAlbumPath(int albumID)
 QString AlbumDB::getAlbumRelativePath(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT relativePath from Albums WHERE id=?"),
+    d->db->execSql(QString::fromUtf8("SELECT relativePath from Albums WHERE id=?"),
                    albumID, &values);
 
     if (!values.isEmpty())
@@ -4183,7 +4202,7 @@ QString AlbumDB::getAlbumRelativePath(int albumID)
 int AlbumDB::getAlbumRootId(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT albumRoot FROM Albums WHERE id=?; "),
+    d->db->execSql(QString::fromUtf8("SELECT albumRoot FROM Albums WHERE id=?; "),
                    albumID, &values);
 
     if (!values.isEmpty())
@@ -4199,9 +4218,9 @@ int AlbumDB::getAlbumRootId(int albumID)
 QDate AlbumDB::getAlbumLowestDate(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql("SELECT MIN(creationDate) FROM ImageInformation "
+    d->db->execSql(QString::fromUtf8("SELECT MIN(creationDate) FROM ImageInformation "
                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
-                   " WHERE Images.album=? GROUP BY Images.album;",
+                   " WHERE Images.album=? GROUP BY Images.album;"),
                    albumID, &values);
 
     if (!values.isEmpty())
@@ -4217,9 +4236,9 @@ QDate AlbumDB::getAlbumLowestDate(int albumID)
 QDate AlbumDB::getAlbumHighestDate(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql("SELECT MAX(creationDate) FROM ImageInformation "
+    d->db->execSql(QString::fromUtf8("SELECT MAX(creationDate) FROM ImageInformation "
                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
-                   " WHERE Images.album=? GROUP BY Images.album;",
+                   " WHERE Images.album=? GROUP BY Images.album;"),
                    albumID , &values);
 
     if (!values.isEmpty())
@@ -4235,9 +4254,9 @@ QDate AlbumDB::getAlbumHighestDate(int albumID)
 QDate AlbumDB::getAlbumAverageDate(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql("SELECT creationDate FROM ImageInformation "
+    d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ImageInformation "
                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
-                   " WHERE Images.album=?;",
+                   " WHERE Images.album=?;"),
                    albumID , &values);
 
     QList<QDate> dates;
@@ -4272,7 +4291,7 @@ void AlbumDB::deleteItem(int albumID, const QString& file)
 {
     qlonglong imageId = getImageId(albumID, file);
 
-    d->db->execSql(QString("DELETE FROM Images WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM Images WHERE id=?;"),
                    imageId);
 
     d->db->recordChangeset(CollectionImageChangeset(imageId, albumID, CollectionImageChangeset::Deleted));
@@ -4280,7 +4299,7 @@ void AlbumDB::deleteItem(int albumID, const QString& file)
 
 void AlbumDB::removeItemsFromAlbum(int albumID, const QList<qlonglong>& ids_forInformation)
 {
-    d->db->execSql(QString("UPDATE Images SET status=?, album=NULL WHERE album=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET status=?, album=NULL WHERE album=?;"),
                    (int)DatabaseItem::Removed, albumID);
 
     d->db->recordChangeset(CollectionImageChangeset(ids_forInformation, albumID, CollectionImageChangeset::RemovedAll));
@@ -4288,7 +4307,7 @@ void AlbumDB::removeItemsFromAlbum(int albumID, const QList<qlonglong>& ids_forI
 
 void AlbumDB::removeItems(QList<qlonglong> itemIDs, const QList<int>& albumIDs)
 {
-    SqlQuery query = d->db->prepareQuery(QString("UPDATE Images SET status=?, album=NULL WHERE id=?;"));
+    SqlQuery query = d->db->prepareQuery(QString::fromUtf8("UPDATE Images SET status=?, album=NULL WHERE id=?;"));
 
     QVariantList imageIds;
     QVariantList status;
@@ -4308,7 +4327,7 @@ void AlbumDB::removeItems(QList<qlonglong> itemIDs, const QList<int>& albumIDs)
 
 void AlbumDB::deleteRemovedItems()
 {
-    d->db->execSql(QString("DELETE FROM Images WHERE status=?;"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM Images WHERE status=?;"),
                    (int)DatabaseItem::Removed);
 
     d->db->recordChangeset(CollectionImageChangeset(QList<qlonglong>(), QList<int>(), CollectionImageChangeset::RemovedDeleted));
@@ -4318,7 +4337,7 @@ void AlbumDB::deleteRemovedItems()
 // This method is probably nonsense because a remove image no longer has an associated album
 void AlbumDB::deleteRemovedItems(QList<int> albumIds)
 {
-    SqlQuery query = d->db->prepareQuery( QString("DELETE FROM Images WHERE status=? AND album=?;") );
+    SqlQuery query = d->db->prepareQuery( QString::fromUtf8("DELETE FROM Images WHERE status=? AND album=?;") );
 
     QVariantList albumBindIds;
     QVariantList status;
@@ -4348,29 +4367,30 @@ void AlbumDB::renameAlbum(int albumID, int newAlbumRoot, const QString& newRelat
 
     // first delete any stale albums left behind at the destination of renaming
     QMap<QString, QVariant> parameters;
-    parameters.insert(":albumRoot", newAlbumRoot);
-    parameters.insert(":relativePath", newRelativePath);
+    parameters.insert(QString::fromUtf8(":albumRoot"),    newAlbumRoot);
+    parameters.insert(QString::fromUtf8(":relativePath"), newRelativePath);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRootPath")), parameters))
+    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("deleteAlbumRootPath")), parameters))
     {
         return;
     }
 
     // now update the album
-    d->db->execSql(QString("UPDATE Albums SET albumRoot=?, relativePath=? WHERE id=? AND albumRoot=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Albums SET albumRoot=?, relativePath=? WHERE id=? AND albumRoot=?;"),
                    newAlbumRoot, newRelativePath, albumID, albumRoot);
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Renamed));
 
-    /*
+/*
     if (renameSubalbums)
     {
         // now find the list of all subalbums which need to be updated
         QList<QVariant> values;
-        d->db->execSql( QString("SELECT id, relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE ?;"),
+        d->db->execSql( QString::fromUtf8("SELECT id, relativePath FROM Albums WHERE albumRoot=? AND relativePath LIKE ?;"),
                         albumRoot, oldUrl + "/%", &values );
 
         // and update their url
         QString newChildURL;
+
         for (QList<QVariant>::iterator it = values.begin(); it != values.end(); )
         {
             int childAlbumId = (*it).toInt();
@@ -4378,17 +4398,17 @@ void AlbumDB::renameAlbum(int albumID, int newAlbumRoot, const QString& newRelat
             newChildURL = (*it).toString();
             ++it;
             newChildURL.replace(oldUrl, newRelativePath);
-            d->db->execSql(QString("UPDATE Albums SET albumRoot=?, relativePath=? WHERE albumRoot=? AND relativePath=?"),
+            d->db->execSql(QString::fromUtf8("UPDATE Albums SET albumRoot=?, relativePath=? WHERE albumRoot=? AND relativePath=?"),
                            newAlbumRoot, newChildURL, albumRoot, (*it) );
             d->db->recordChangeset(AlbumChangeset(childAlbumId, AlbumChangeset::Renamed));
         }
     }
-    */
+*/
 }
 
 void AlbumDB::setTagName(int tagID, const QString& name)
 {
-    d->db->execSql(QString("UPDATE Tags SET name=? WHERE id=?;"),
+    d->db->execSql(QString::fromUtf8("UPDATE Tags SET name=? WHERE id=?;"),
                    name, tagID);
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Renamed));
 }
@@ -4407,7 +4427,7 @@ void AlbumDB::moveItem(int srcAlbumID, const QString& srcName,
     // first delete any stale database entries (for destination) if any
     deleteItem(dstAlbumID, dstName);
 
-    d->db->execSql(QString("UPDATE Images SET album=?, name=? "
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET album=?, name=? "
                            "WHERE id=?;"),
                    dstAlbumID, dstName, imageId);
     d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Moved));
@@ -4437,7 +4457,7 @@ int AlbumDB::copyItem(int srcAlbumID, const QString& srcName,
 
     // copy entry in Images table
     QVariant id;
-    d->db->execSql(QString("INSERT INTO Images "
+    d->db->execSql(QString::fromUtf8("INSERT INTO Images "
                            " ( album, name, status, category, modificationDate, fileSize, uniqueHash ) "
                            " SELECT ?, ?, status, category, modificationDate, fileSize, uniqueHash "
                            "  FROM Images WHERE id=?;"),
@@ -4465,13 +4485,13 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
 
     DatabaseFields::Set fields;
 
-    d->db->execSql(QString("INSERT INTO ImageHaarMatrix "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageHaarMatrix "
                            " (imageid, modificationDate, uniqueHash, matrix) "
                            "SELECT ?, modificationDate, uniqueHash, matrix "
                            "FROM ImageHaarMatrix WHERE imageid=?;"),
                    dstId, srcId);
 
-    d->db->execSql(QString("INSERT INTO ImageInformation "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageInformation "
                            " (imageid, rating, creationDate, digitizationDate, orientation, "
                            "  width, height, format, colorDepth, colorModel) "
                            "SELECT ?, rating, creationDate, digitizationDate, orientation, "
@@ -4480,7 +4500,7 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
                    dstId, srcId);
     fields |= DatabaseFields::ImageInformationAll;
 
-    d->db->execSql(QString("INSERT INTO ImageMetadata "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageMetadata "
                            " (imageid, make, model, lens, aperture, focalLength, focalLength35, "
                            "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
                            "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) "
@@ -4491,7 +4511,7 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
                    dstId, srcId);
     fields |= DatabaseFields::ImageMetadataAll;
 
-    d->db->execSql(QString("INSERT INTO VideoMetadata "
+    d->db->execSql(QString::fromUtf8("INSERT INTO VideoMetadata "
                            " (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, "
                            "  videoCodec) "
                            "SELECT ?, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, "
@@ -4500,7 +4520,7 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
                    dstId, srcId);
     fields |= DatabaseFields::VideoMetadataAll;
 
-    d->db->execSql(QString("INSERT INTO ImagePositions "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImagePositions "
                            " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
                            "  altitude, orientation, tilt, roll, accuracy, description) "
                            "SELECT ?, latitude, latitudeNumber, longitude, longitudeNumber, "
@@ -4509,32 +4529,32 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
                    dstId, srcId);
     fields |= DatabaseFields::ImagePositionsAll;
 
-    d->db->execSql(QString("INSERT INTO ImageComments "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageComments "
                            " (imageid, type, language, author, date, comment) "
                            "SELECT ?, type, language, author, date, comment "
                            "FROM ImageComments WHERE imageid=?;"),
                    dstId, srcId);
     fields |= DatabaseFields::ImageCommentsAll;
 
-    d->db->execSql(QString("INSERT INTO ImageCopyright "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageCopyright "
                            " (imageid, property, value, extraValue) "
                            "SELECT ?, property, value, extraValue "
                            "FROM ImageCopyright WHERE imageid=?;"),
                    dstId, srcId);
 
-    d->db->execSql(QString("INSERT INTO ImageHistory "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageHistory "
                            " (imageid, uuid, history) "
                            "SELECT ?, uuid, history "
                            "FROM ImageHistory WHERE imageid=?;"),
                    dstId, srcId);
     fields |= DatabaseFields::ImageHistoryInfoAll;
 
-    d->db->execSql(QString("INSERT INTO ImageRelations "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageRelations "
                            " (subject, object, type) "
                            "SELECT ?, object, type "
                            "FROM ImageRelations WHERE subject=?;"),
                    dstId, srcId);
-    d->db->execSql(QString("INSERT INTO ImageRelations "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageRelations "
                            " (subject, object, type) "
                            "SELECT subject, ?, type "
                            "FROM ImageRelations WHERE object=?;"),
@@ -4549,7 +4569,7 @@ void AlbumDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
 
 void AlbumDB::copyImageProperties(qlonglong srcId, qlonglong dstId)
 {
-    d->db->execSql(QString("INSERT INTO ImageProperties "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageProperties "
                            " (imageid, property, value) "
                            "SELECT ?, property, value "
                            "FROM ImageProperties WHERE imageid=?;"),
@@ -4558,13 +4578,13 @@ void AlbumDB::copyImageProperties(qlonglong srcId, qlonglong dstId)
 
 void AlbumDB::copyImageTags(qlonglong srcId, qlonglong dstId)
 {
-    d->db->execSql(QString("INSERT INTO ImageTags "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageTags "
                            " (imageid, tagid) "
                            "SELECT ?, tagid "
                            "FROM ImageTags WHERE imageid=?;"),
                    dstId, srcId);
 
-    d->db->execSql(QString("INSERT INTO ImageTagProperties "
+    d->db->execSql(QString::fromUtf8("INSERT INTO ImageTagProperties "
                            " (imageid, tagid, property, value) "
                            "SELECT ?, tagid, property, value "
                            "FROM ImageTagProperties WHERE imageid=?;"),
@@ -4586,7 +4606,7 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
     }
 
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT date, caption, collection, icon "
+    d->db->execSql(QString::fromUtf8("SELECT date, caption, collection, icon "
                            "FROM Albums WHERE id=?;"),
                    srcAlbumID,
                    &values);
@@ -4602,7 +4622,7 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
     boundValues << dstAlbumID;
 
     //shouldn't we have a ; at the end of the query?
-    d->db->execSql(QString("UPDATE Albums SET date=?, caption=?, "
+    d->db->execSql(QString::fromUtf8("UPDATE Albums SET date=?, caption=?, "
                            "collection=?, icon=? WHERE id=?"),
                    boundValues);
     return true;
@@ -4617,7 +4637,7 @@ QList<QVariant> AlbumDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1,
 
     //DatabaseAccess access;
 
-    d->db->execSql(QString("Select ImageInformation.imageid, ImageInformation.rating, ImagePositions.latitudeNumber, ImagePositions.longitudeNumber"
+    d->db->execSql(QString::fromUtf8("Select ImageInformation.imageid, ImageInformation.rating, ImagePositions.latitudeNumber, ImagePositions.longitudeNumber"
                            " FROM ImageInformation INNER JOIN ImagePositions"
                            " ON ImageInformation.imageid = ImagePositions.imageid"
                            " WHERE (ImagePositions.latitudeNumber>? AND ImagePositions.latitudeNumber<?)"

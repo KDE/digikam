@@ -107,7 +107,7 @@ void Parser::reset()
 
 bool Parser::parseStringIsValid(const QString& str)
 {
-    QRegExp invalidString("^\\s*$");
+    QRegExp invalidString(QLatin1String("^\\s*$"));
     return (!str.isEmpty() && !invalidString.exactMatch(str));
 }
 
@@ -244,7 +244,7 @@ QString Parser::parse(ParseSettings& settings)
 
     if (settings.useOriginalFileExtension)
     {
-        newName.append('.').append(fi.suffix());
+        newName.append(QLatin1Char('.')).append(fi.suffix());
     }
 
     return newName;

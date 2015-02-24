@@ -254,12 +254,12 @@ QString Rule::escapeToken(const QString& token)
     QString escaped = token;
 
     // replace special characters for renaming options
-    escaped.replace('[', "\\[");
-    escaped.replace(']', "\\]");
+    escaped.replace(QLatin1Char('['), QLatin1String("\\["));
+    escaped.replace(QLatin1Char(']'), QLatin1String("\\]"));
 
     // replace special characters for modifiers
-    escaped.replace('{', "\\{");
-    escaped.replace('}', "\\}");
+    escaped.replace(QLatin1Char('{'), QLatin1String("\\{"));
+    escaped.replace(QLatin1Char('}'), QLatin1String("\\}"));
 
     return escaped;
 }

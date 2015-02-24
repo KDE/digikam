@@ -47,9 +47,6 @@ class AdvancedRenameWidget : public QWidget
 
 public:
 
-    explicit AdvancedRenameWidget(QWidget* parent = 0);
-    ~AdvancedRenameWidget();
-
     enum LayoutStyle
     {
         LayoutNormal,
@@ -65,6 +62,11 @@ public:
         DefaultControls    = TokenButtons | ToolTipButton | ModifierToolButton
     };
     Q_DECLARE_FLAGS(ControlWidgets, ControlWidget)
+
+public:
+
+    explicit AdvancedRenameWidget(QWidget* const parent = 0);
+    ~AdvancedRenameWidget();
 
     /**
      * returns the current parse string

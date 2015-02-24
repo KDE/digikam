@@ -47,7 +47,7 @@
 namespace
 {
 static const quint8 INVALID = -1;
-static const QString DUMMY_TEXT("DUMMY_TEXT_y_fjqp|");
+static const QString DUMMY_TEXT(QLatin1String("DUMMY_TEXT_y_fjqp|"));
 }
 
 namespace Digikam
@@ -62,7 +62,8 @@ public:
         verticalSliderPosition(INVALID),
         parseTimer(0),
         parser(0)
-    {}
+    {
+    }
 
     bool    allowDirectoryCreation;
     int     verticalSliderPosition;
@@ -70,8 +71,9 @@ public:
     Parser* parser;
 };
 
-AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
-    : QPlainTextEdit(parent), d(new Private)
+AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* const parent)
+    : QPlainTextEdit(parent),
+      d(new Private)
 {
     setupWidgets();
     setupConnections();
@@ -84,7 +86,7 @@ AdvancedRenameLineEdit::~AdvancedRenameLineEdit()
 
 void AdvancedRenameLineEdit::setupWidgets()
 {
-    setStyleSheet("background:transparent");
+    setStyleSheet(QLatin1String("background:transparent"));
     setLineWrapMode(QPlainTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -252,7 +254,8 @@ public:
         lineEdit(0),
         proxy(0),
         highlighter(0)
-    {}
+    {
+    }
 
     static const QString    configGroupName;
     static const QString    configPatternHistoryListEntry;
@@ -264,13 +267,15 @@ public:
     ProxyLineEdit*          proxy;
     Highlighter*            highlighter;
 };
-const QString AdvancedRenameInput::Private::configGroupName("AdvancedRename Input");
-const QString AdvancedRenameInput::Private::configPatternHistoryListEntry("Pattern History List");
+
+const QString AdvancedRenameInput::Private::configGroupName(QLatin1String("AdvancedRename Input"));
+const QString AdvancedRenameInput::Private::configPatternHistoryListEntry(QLatin1String("Pattern History List"));
 
 // --------------------------------------------------------
 
-AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
-    : QComboBox(parent), d(new Private)
+AdvancedRenameInput::AdvancedRenameInput(QWidget* const parent)
+    : QComboBox(parent),
+      d(new Private)
 {
     setupWidgets();
     setupConnections();
@@ -406,7 +411,7 @@ void AdvancedRenameInput::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     QStringList patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
-    patternHistory.removeAll(QString(""));
+    patternHistory.removeAll(QLatin1String(""));
     addItems(patternHistory);
     d->lineEdit->clear();
 }
@@ -421,7 +426,7 @@ void AdvancedRenameInput::writeSettings()
     // remove duplicate entries and save pattern history, omit empty strings
     QString pattern = d->lineEdit->toPlainText();
     patternHistory.removeAll(pattern);
-    patternHistory.removeAll(QString(""));
+    patternHistory.removeAll(QLatin1String(""));
     patternHistory.prepend(pattern);
     group.writeEntry(d->configPatternHistoryListEntry, patternHistory);
 }

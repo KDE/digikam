@@ -126,9 +126,9 @@ void RuleDialog::setDialogTitle(const QString& title)
 {
     // remove ellipsis and "&&" from the string
     QString _title = title;
-    _title.remove(QRegExp("\\.{3,}")).replace("&&", "&");
+    _title.remove(QRegExp(QLatin1String("\\.{3,}"))).replace(QLatin1String("&&"), QLatin1String("&"));
 
-    d->dialogTitle->setText(QString("<b>%1</b>").arg(_title));
+    d->dialogTitle->setText(QString::fromUtf8("<b>%1</b>").arg(_title));
     setWindowTitle(_title);
 }
 

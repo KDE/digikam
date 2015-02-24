@@ -41,6 +41,7 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QHeaderView>
 
 // KDE includes
 
@@ -188,9 +189,9 @@ public:
     NewNamesList           newNamesList;
 };
 
-const QString AdvancedRenameDialog::Private::configGroupName("AdvancedRename Dialog");
-const QString AdvancedRenameDialog::Private::configLastUsedRenamePatternEntry("Last Used Rename Pattern");
-const QString AdvancedRenameDialog::Private::configDialogSizeEntry("Dialog Size");
+const QString AdvancedRenameDialog::Private::configGroupName(QLatin1String("AdvancedRename Dialog"));
+const QString AdvancedRenameDialog::Private::configLastUsedRenamePatternEntry(QLatin1String("Last Used Rename Pattern"));
+const QString AdvancedRenameDialog::Private::configDialogSizeEntry(QLatin1String("Dialog Size"));
 
 // --------------------------------------------------------
 
@@ -263,8 +264,8 @@ void AdvancedRenameDialog::setupWidgets()
     d->listView->setColumnCount(2);
     d->listView->setHeaderLabels(QStringList() << i18n("Current Name") << i18n("New Name"));
     d->listView->setContextMenuPolicy(Qt::CustomContextMenu);
-    d->listView->header()->setResizeMode(0, QHeaderView::Stretch);
-    d->listView->header()->setResizeMode(1, QHeaderView::Stretch);
+    d->listView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    d->listView->header()->setSectionResizeMode(1, QHeaderView::Stretch);
     d->listView->setWhatsThis(i18n("This list shows the results for your renaming pattern. Red items indicate a "
                                    "name collision, either because the new name is equal to the current name, "
                                    "or because the name has already been assigned to another item."));
@@ -530,7 +531,7 @@ bool AdvancedRenameDialog::checkNewNames() const
             QFileInfo fi(item->imageUrl().toLocalFile());
 
             QString completeNewName = fi.path();
-            completeNewName.append('/');
+            completeNewName.append(QLatin1Char('/'));
             completeNewName.append(item->newName());
 
             bool invalid = tmpNewNames.contains(completeNewName);
@@ -573,7 +574,7 @@ NewNamesList AdvancedRenameDialog::filterNewNames() const
 
 void AdvancedRenameDialog::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("advancedrename.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("advancedrename.anchor"), QLatin1String("digikam"));
 }
     
 }  // namespace Digikam
