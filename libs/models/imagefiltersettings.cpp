@@ -493,7 +493,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         }
         case MimeFilter::JPGFiles:
         {
-            if (info.format() != "JPG")
+            if (info.format() != QLatin1String("JPG"))
             {
                 match = false;
             }
@@ -502,7 +502,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         }
         case MimeFilter::PNGFiles:
         {
-            if (info.format() != "PNG")
+            if (info.format() != QLatin1String("PNG"))
             {
                 match = false;
             }
@@ -511,7 +511,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         }
         case MimeFilter::TIFFiles:
         {
-            if (info.format() != "TIFF")
+            if (info.format() != QLatin1String("TIFF"))
             {
                 match = false;
             }
@@ -520,7 +520,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         }
         case MimeFilter::DNGFiles:
         {
-            if (info.format() != "RAW-DNG")
+            if (info.format() != QLatin1String("RAW-DNG"))
             {
                 match = false;
             }
@@ -565,11 +565,11 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         }
         case MimeFilter::RasterFiles:
         {
-            if (info.format() != "PSD" &&         // Adobe Photoshop Document
-                info.format() != "PSB" &&         // Adobe Photoshop Big
-                info.format() != "XCF" &&         // Gimp
-                info.format() != "KRA" &&         // Krita
-                info.format() != "ORA"            // Open Raster
+            if (info.format() != QLatin1String("PSD") &&         // Adobe Photoshop Document
+                info.format() != QLatin1String("PSB") &&         // Adobe Photoshop Big
+                info.format() != QLatin1String("XCF") &&         // Gimp
+                info.format() != QLatin1String("KRA") &&         // Krita
+                info.format() != QLatin1String("ORA")            // Open Raster
                )
             {
                 match = false;
@@ -651,13 +651,13 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         // Image Aspect Ratio
         if (m_textFilterSettings.textFields & SearchTextFilterSettings::ImageAspectRatio)
         {
-            QRegExp expRatio ("^\\d+:\\d+$");
-            QRegExp expFloat ("^\\d+(.\\d+)?$");
+            QRegExp expRatio (QLatin1String("^\\d+:\\d+$"));
+            QRegExp expFloat (QLatin1String("^\\d+(.\\d+)?$"));
 
-            if (expRatio.indexIn(m_textFilterSettings.text) > -1 && m_textFilterSettings.text.contains(QRegExp(":\\d+")))
+            if (expRatio.indexIn(m_textFilterSettings.text) > -1 && m_textFilterSettings.text.contains(QRegExp(QLatin1String(":\\d+"))))
             {
                 QString trimmedTextFilterSettingsText = m_textFilterSettings.text;
-                QStringList numberStringList          = trimmedTextFilterSettingsText.split(":", QString::SkipEmptyParts);
+                QStringList numberStringList          = trimmedTextFilterSettingsText.split(QLatin1String(":"), QString::SkipEmptyParts);
 
                 if (numberStringList.length() == 2)
                 {
@@ -696,15 +696,15 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             int pixelSize = size.height()*size.width();
             QString text  = m_textFilterSettings.text;
 
-            if(text.contains(QRegExp("^>\\d{1,15}$")) && pixelSize > (text.remove(0,1)).toInt())
+            if(text.contains(QRegExp(QLatin1String("^>\\d{1,15}$"))) && pixelSize > (text.remove(0,1)).toInt())
             {
                 textMatch = true;
             }
-            else if(text.contains(QRegExp("^<\\d{1,15}$")) && pixelSize < (text.remove(0,1)).toInt())
+            else if(text.contains(QRegExp(QLatin1String("^<\\d{1,15}$"))) && pixelSize < (text.remove(0,1)).toInt())
             {
                 textMatch = true;
             }
-            else if(text.contains(QRegExp("^\\d+$")) && pixelSize == text.toInt())
+            else if(text.contains(QRegExp(QLatin1String("^\\d+$"))) && pixelSize == text.toInt())
             {
                 textMatch = true;
             }

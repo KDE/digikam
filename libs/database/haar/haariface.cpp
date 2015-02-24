@@ -157,12 +157,12 @@ public:
         signatureCache             = 0;
         useSignatureCache          = false;
 
-        signatureQuery             = QString("SELECT M.imageid, 0, M.matrix "
+        signatureQuery             = QString::fromUtf8("SELECT M.imageid, 0, M.matrix "
                                              " FROM ImageHaarMatrix AS M "
                                              "    INNER JOIN Images ON Images.id=M.imageid "
                                              " WHERE Images.status=1; ");
 
-        signatureByAlbumRootsQuery = QString("SELECT M.imageid, Albums.albumRoot, M.matrix "
+        signatureByAlbumRootsQuery = QString::fromUtf8("SELECT M.imageid, Albums.albumRoot, M.matrix "
                                              " FROM ImageHaarMatrix AS M "
                                              "    INNER JOIN Images ON Images.id=M.imageid "
                                              "    INNER JOIN Albums ON Albums.id=Images.album"
@@ -372,7 +372,7 @@ bool HaarIface::indexImage(qlonglong imageid)
         DatabaseBlob blob;
         QByteArray array = blob.write(&sig);
 
-        access.backend()->execSql(QString("REPLACE INTO ImageHaarMatrix "
+        access.backend()->execSql(QString::fromUtf8("REPLACE INTO ImageHaarMatrix "
                                           " (imageid, modificationDate, uniqueHash, matrix) "
                                           " SELECT id, modificationDate, uniqueHash, ? "
                                           "  FROM Images WHERE id=?; "),
@@ -395,7 +395,7 @@ QString HaarIface::signatureAsText(const QImage& image)
     DatabaseBlob blob;
     QByteArray array = blob.write(&sig);
 
-    return array.toBase64();
+    return QString::fromUtf8(array.toBase64());
 }
 
 QList<qlonglong> HaarIface::bestMatchesForImage(const QImage& image, int numberOfResults, SketchType type)
@@ -460,7 +460,7 @@ QList<qlonglong> HaarIface::bestMatchesForFile(const QString& filename, int numb
 
 QList<qlonglong> HaarIface::bestMatchesForSignature(const QString& signature, int numberOfResults, SketchType type)
 {
-    QByteArray bytes = QByteArray::fromBase64(signature.toAscii());
+    QByteArray bytes = QByteArray::fromBase64(signature.toLatin1());
 
     DatabaseBlob blobReader;
     Haar::SignatureData sig;
@@ -558,7 +558,7 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData* const 
 
         for (QMultiMap<double, qlonglong>::const_iterator it = bestMatches.constBegin(); it != bestMatches.constEnd(); ++it)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << it.value() << QString::number(it.key() * 100)+QChar('%');
+            qCDebug(DIGIKAM_GENERAL_LOG) << it.value() << QString::number(it.key() * 100) + QLatin1Char('%');
         }
     }
 
@@ -698,7 +698,7 @@ QImage HaarIface::loadQImage(const QString& filename)
 bool HaarIface::retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData* const sig)
 {
     QList<QVariant> values;
-    DatabaseAccess().backend()->execSql(QString("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
+    DatabaseAccess().backend()->execSql(QString::fromUtf8("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
                                         imageid, &values);
 
     if (values.isEmpty())
@@ -750,9 +750,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QLi
                                         double requiredPercentage, HaarProgressObserver* const observer)
 {
     // Carry out search. This takes long.
-    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbumsAndTags(albums2Scan,
-            tags2Scan,
-            requiredPercentage, observer);
+    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbumsAndTags(albums2Scan, tags2Scan, requiredPercentage, observer);
 
     // Build search XML from the results. Store list of ids of similar images.
     QMap<QString, QString> queries;
@@ -761,7 +759,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QLi
     {
         SearchXmlWriter writer;
         writer.writeGroup();
-        writer.writeField("imageid", SearchXml::OneOf);
+        writer.writeField(QLatin1String("imageid"), SearchXml::OneOf);
         writer.writeValue(it.value());
         writer.finishField();
         writer.finishGroup();

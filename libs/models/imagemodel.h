@@ -86,19 +86,22 @@ public:
     ~ImageModel();
 
     /** If a cache is kept, lookup by file path is fast,
-     *  without a cache it is O(n). Default is false. */
+     *  without a cache it is O(n). Default is false.
+     */
     void setKeepsFilePathCache(bool keepCache);
     bool keepsFilePathCache() const;
 
     /** Set a set of database fields to watch.
      *  If either of these is changed, dataChanged() will be emitted.
-     *  Default is no flag (no signal will be emitted) */
+     *  Default is no flag (no signal will be emitted).
+     */
     void setWatchFlags(const DatabaseFields::Set& set);
 
     /** Returns the ImageInfo object, reference or image id from the underlying data
      *  pointed to by the index.
      *  If the index is not valid, imageInfo will return a null ImageInfo, imageId will
-     *  return 0, imageInfoRef must not be called with an invalid index. */
+     *  return 0, imageInfoRef must not be called with an invalid index.
+     */
     ImageInfo        imageInfo(const QModelIndex& index) const;
     ImageInfo&       imageInfoRef(const QModelIndex& index) const;
     qlonglong        imageId(const QModelIndex& index) const;
@@ -107,12 +110,14 @@ public:
 
     /** Returns the ImageInfo object, reference or image id from the underlying data
      *  of the given row (parent is the invalid QModelIndex, column is 0).
-     *  Note that imageInfoRef will crash if index is invalid. */
+     *  Note that imageInfoRef will crash if index is invalid.
+     */
     ImageInfo  imageInfo(int row) const;
     ImageInfo& imageInfoRef(int row) const;
     qlonglong  imageId(int row) const;
 
-    /** Return the index for the given ImageInfo or id, if contained in this model. */
+    /** Return the index for the given ImageInfo or id, if contained in this model.
+     */
     QModelIndex        indexForImageInfo(const ImageInfo& info) const;
     QModelIndex        indexForImageInfo(const ImageInfo& info, const QVariant& extraValue) const;
     QModelIndex        indexForImageId(qlonglong id) const;
@@ -127,7 +132,8 @@ public:
      *  for the given file path. This is fast if keepsFilePathCache is enabled.
      *  The file path is as returned by ImageInfo.filePath().
      *  In case of multiple occurrences of the same file, the simpler variants return
-     *  any one found first, use the QList methods to retrieve all occurrences. */
+     *  any one found first, use the QList methods to retrieve all occurrences.
+     */
     QModelIndex        indexForPath(const QString& filePath) const;
     ImageInfo          imageInfo(const QString& filePath) const;
     QList<QModelIndex> indexesForPath(const QString& filePath) const;
@@ -142,10 +148,12 @@ public:
     void addImageInfos(const QList<ImageInfo>& infos);
     void addImageInfos(const QList<ImageInfo>& infos, const QList<QVariant>& extraValues);
 
-    /** Clears image infos and resets model. */
+    /** Clears image infos and resets model.
+     */
     void clearImageInfos();
 
-    /** Clears and adds the infos */
+    /** Clears and adds the infos.
+     */
     void setImageInfos(const QList<ImageInfo>& infos);
 
     /**
@@ -238,11 +246,13 @@ public:
 Q_SIGNALS:
 
     /** Informs that ImageInfos will be added to the model.
-     *  This signal is sent before the model data is changed and views are informed. */
+     *  This signal is sent before the model data is changed and views are informed.
+     */
     void imageInfosAboutToBeAdded(const QList<ImageInfo>& infos);
 
     /** Informs that ImageInfos have been added to the model.
-     *  This signal is sent after the model data is changed and views are informed. */
+     *  This signal is sent after the model data is changed and views are informed.
+     */
     void imageInfosAdded(const QList<ImageInfo>& infos);
 
     /** Informs that ImageInfos will be removed from the model.
@@ -259,20 +269,24 @@ Q_SIGNALS:
      */
     void imageInfosRemoved(const QList<ImageInfo>& infos);
 
-    /** Connect to this signal only if you are the current preprocessor */
+    /** Connect to this signal only if you are the current preprocessor.
+     */
     void preprocess(const QList<ImageInfo>& infos, const QList<QVariant>&);
     void processAdded(const QList<ImageInfo>& infos, const QList<QVariant>&);
 
     /** If an ImageChangeset affected indexes of this model with changes as set in watchFlags(),
-     *  this signal contains the changeset and the affected indexes. */
+     *  this signal contains the changeset and the affected indexes.
+     */
     void imageChange(const ImageChangeset&, const QItemSelection&);
 
     /** If an ImageTagChangeset affected indexes of this model,
-     *  this signal contains the changeset and the affected indexes. */
+     *  this signal contains the changeset and the affected indexes.
+     */
     void imageTagChange(const ImageTagChangeset&, const QItemSelection&);
 
     /** Signals that the model is right now ready to start an incremental refresh.
-     *  This is guaranteed only for the scope of emitting this signal. */
+     *  This is guaranteed only for the scope of emitting this signal.
+     */
     void readyForIncrementalRefresh();
 
     /** Signals that the model has finished currently with all scheduled
@@ -298,13 +312,15 @@ protected:
 
     /** As soon as the model is ready to start an incremental refresh, the signal
      *  readyForIncrementalRefresh() will be emitted. The signal will be emitted inline
-     *  if the model is ready right now. */
+     *  if the model is ready right now.
+     */
     void requestIncrementalRefresh();
     bool hasIncrementalRefreshPending() const;
 
     /** Starts an incremental refresh operation. You shall only call this method from a slot
      *  connected to readyForIncrementalRefresh(). To initiate an incremental refresh,
-     *  call requestIncrementalRefresh() */
+     *  call requestIncrementalRefresh().
+     */
     void startIncrementalRefresh();
     void finishIncrementalRefresh();
 
@@ -334,11 +350,11 @@ private:
 public:
 
     // Declared public because it's used in ImageModelIncrementalUpdater class
-    class ImageModelPriv;
+    class Private;
 
 private:
 
-    ImageModelPriv* const d;
+    Private* const d;
 };
 
 } // namespace Digikam
