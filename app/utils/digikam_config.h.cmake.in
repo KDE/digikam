@@ -60,9 +60,6 @@
 /* Define to 1 if you have Baloo shared libraries installed */
 #cmakedefine HAVE_BALOO 1
 
-/* Define to 1 if an external SQLite v2 is installed */
-#cmakedefine HAVE_SQLITE2 1
-
 /* Define to 1 if we support mysql database */
 #cmakedefine HAVE_MYSQLSUPPORT 1
 

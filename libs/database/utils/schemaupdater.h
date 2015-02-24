@@ -81,7 +81,6 @@ private:
     bool performUpdateToVersion(const QString& actionName, int newVersion, int newRequiredVersion);
     bool updateToVersion(int targetVersion);
     bool updateV4toV7();
-    bool updateV2toV4(const QString& sqlite2DBPath);
     void setLegacySettingEntries();
     void readVersionSettings();
     void setVersionSettings();

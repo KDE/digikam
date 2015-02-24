@@ -52,10 +52,6 @@
 #include "collectionscannerobserver.h"
 #include "digikam_config.h"
 
-#ifdef HAVE_SQLITE2
-#include "upgradedb_sqlite2tosqlite3.h"
-#endif
-
 namespace Digikam
 {
 
@@ -317,7 +313,6 @@ bool SchemaUpdater::startUpdates()
         {
             QFileInfo currentDBFile(d->parameters.databaseName);
             QFileInfo digikam3DB(currentDBFile.dir(), "digikam3.db");
-            QFileInfo digikamDB(currentDBFile.dir(),  "digikam.db");
 
             if (digikam3DB.exists())
             {
@@ -329,18 +324,6 @@ bool SchemaUpdater::startUpdates()
                 // d->currentVersion is now 4;
                 return makeUpdates();
             }
-            else if (digikamDB.exists())
-            {
-                if (!updateV2toV4(digikamDB.path()))
-                {
-                    return false;
-                }
-
-                // d->currentVersion is now 4;
-                return makeUpdates();
-            }
-
-            // no else, fall through!
         }
 
         // No legacy handling: start with a fresh db
@@ -738,44 +721,6 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
 
     d->currentVersion = 4;
     return true;
-}
-
-bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
-{
-    if (d->observer)
-    {
-        d->observer->moreSchemaUpdateSteps(1);
-    }
-
-    bool ret = false;
-
-#ifdef HAVE_SQLITE2
-    if (upgradeDB_Sqlite2ToSqlite3(d->albumDB, d->backend, sqlite2DBPath))
-    {
-        d->currentVersion = 4;
-        ret = true;
-    }
-    else
-#endif
-    {
-        QString errorMsg    = i18n("Could not update from the old SQLite2 file (\"%1\"). "
-                                   "Please delete this file and try again, "
-                                   "starting with an empty database. ", sqlite2DBPath);
-        d->lastErrorMessage = errorMsg;
-
-        if (d->observer)
-        {
-            d->observer->error(errorMsg);
-            d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
-        }
-    }
-
-    if (d->observer)
-    {
-        d->observer->schemaUpdateProgress(i18n("Updated from 0.7 database"));
-    }
-
-    return ret;
 }
 
 static QStringList cleanUserFilterString(const QString& filterString)

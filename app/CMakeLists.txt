@@ -154,10 +154,6 @@ if(Baloo_FOUND)
     set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libbaloowrap_SRCS})
 endif()
 
-if(SQLITE2_FOUND)
-    set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libalbumsqlite2_SRCS})
-endif()
-
 add_library(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 
 target_link_libraries(digikamdatabase
@@ -186,10 +182,6 @@ endif()
 
 if(Baloo_FOUND)
     target_link_libraries(digikamdatabase KF5::BalooCore KF5::BalooFiles KF5::FileMetaData)
-endif()
-
-if(SQLITE2_FOUND)
-    target_link_libraries(digikamdatabase ${SQLITE2_LIBRARIES})
 endif()
 
 set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})

@@ -6,6 +6,7 @@ NEW FEATURES:
 General: Implementations ported to Qt5 libraries and KF5 library.
 General: Integer and double input value sliders use now PhotoShop/Krita/Gimp like widget.
 General: LCMS1 support removed.
+General: Sqlite2 support removed.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 

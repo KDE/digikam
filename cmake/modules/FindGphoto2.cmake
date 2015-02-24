@@ -24,9 +24,8 @@ else()
     # if gphoto2-port-config and gphoto2-config have been found
     if(GHOTO2PORTCONFIG_EXECUTABLE AND GHOTO2CONFIG_EXECUTABLE)
 
-        exec_program(${GHOTO2PORTCONFIG_EXECUTABLE} ARGS --libs RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2PORT_LIBRARY)
-        exec_program(${GHOTO2CONFIG_EXECUTABLE}     ARGS --libs RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_LIBRARY)
-        
+        exec_program(${GHOTO2PORTCONFIG_EXECUTABLE} ARGS --libs   RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2PORT_LIBRARY)
+        exec_program(${GHOTO2CONFIG_EXECUTABLE}     ARGS --libs   RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_LIBRARY)
         exec_program(${GHOTO2PORTCONFIG_EXECUTABLE} ARGS --cflags RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _GPHOTO2PORT_RESULT_INCLUDE_DIR)
         exec_program(${GHOTO2CONFIG_EXECUTABLE}     ARGS --cflags RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _GPHOTO2_RESULT_INCLUDE_DIR)
 
@@ -39,12 +38,12 @@ else()
             string(REGEX REPLACE "-I(.+)" "\\1" _includedir "${_includedir}")
             set(GPHOTO2_INCLUDE_DIR ${GPHOTO2_INCLUDE_DIR} ${_includedir})
         endforeach()
-        
+
         separate_arguments(_GPHOTO2PORT_RESULT_INCLUDE_DIR)
 
         foreach(_includedir ${_GPHOTO2PORT_RESULT_INCLUDE_DIR})
-                string(REGEX REPLACE "-I(.+)" "\\1" _includedir "${_includedir}")
-                set(GPHOTO2PORT_INCLUDE_DIR ${GPHOTO2PORT_INCLUDE_DIR} ${_includedir})
+            string(REGEX REPLACE "-I(.+)" "\\1" _includedir "${_includedir}")
+            set(GPHOTO2PORT_INCLUDE_DIR ${GPHOTO2PORT_INCLUDE_DIR} ${_includedir})
         endforeach()
 
         set(GPHOTO2_INCLUDE_DIRS ${GPHOTO2PORT_INCLUDE_DIR} ${GPHOTO2_INCLUDE_DIR} )

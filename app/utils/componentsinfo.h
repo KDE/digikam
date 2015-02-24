@@ -77,16 +77,10 @@ static inline void showDigikamComponentsInfo()
     QMap<QString, QString> list;
 
 #ifdef HAVE_GPHOTO2
-    list.insert(i18n("LibGphoto2"), QString(gp_library_version(GP_VERSION_SHORT)[0]));
+    list.insert(i18n("LibGphoto2"), QLatin1String(gp_library_version(GP_VERSION_SHORT)[0]));
 #else
     list.insert(i18n("LibGphoto2 support"), i18n("no"));
 #endif /* HAVE_GPHOTO2 */
-
-#ifdef HAVE_SQLITE2
-    list.insert(i18n("Sqlite2 support"), i18n("Yes"));
-#else
-    list.insert(i18n("Sqlite2 support"), i18n("no"));
-#endif /* HAVE_SQLITE2 */
 
 #ifdef HAVE_BALOO
     list.insert(i18n("Baloo support"), i18n("Yes"));

@@ -111,7 +111,6 @@ liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com         
 libeigen3       >= 3.0.0                      http://eigen.tuxfamily.org                                        To support Refocus tool.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras drivers.
 libusb          >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in bug #268267
-libsqlite2      >= 2.0.0                      http://www.sqlite.org                                             To support database version <= 0.7 importing.
 libbaloo        >= 4.12.0                     https://projects.kde.org/projects/kde/kdelibs/baloo               To support KDE files indexing support.
 doxygen         >= 1.8.0                      http://www.doxygen.org                                            To support API documentation building (This does not affect building digiKam in any way).
 
