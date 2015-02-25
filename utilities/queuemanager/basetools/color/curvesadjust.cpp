@@ -50,13 +50,13 @@ namespace Digikam
 {
 
 CurvesAdjust::CurvesAdjust(QObject* const parent)
-    : BatchTool("CurvesAdjust", ColorTool, parent),
+    : BatchTool(QLatin1String("CurvesAdjust"), ColorTool, parent),
       m_channelCB(0),
       m_settingsView(0)
 {
     setToolTitle(i18n("Curves Adjust"));
     setToolDescription(i18n("Perform curves adjustments."));
-    setToolIconName("adjustcurves");
+    setToolIconName(QLatin1String("adjustcurves"));
 }
 
 CurvesAdjust::~CurvesAdjust()
@@ -76,8 +76,8 @@ void CurvesAdjust::registerSettingsWidget()
     m_channelCB->addItem(i18n("Blue"),       QVariant(BlueChannel));
     m_channelCB->addItem(i18n("Alpha"),      QVariant(AlphaChannel));
 
-    m_settingsView = new CurvesSettings(vbox, &m_preview);
-    QLabel* space  = new QLabel(vbox);
+    m_settingsView      = new CurvesSettings(vbox, &m_preview);
+    QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     m_settingsWidget = vbox;
@@ -109,13 +109,13 @@ BatchToolSettings CurvesAdjust::defaultSettings()
 {
     BatchToolSettings prm;
     CurvesContainer defaultPrm = m_settingsView->defaultSettings();
-    prm.insert("curvesType", (int)defaultPrm.curvesType);
-    prm.insert("curvesDepth",               defaultPrm.sixteenBit);
-    prm.insert("values[LuminosityChannel]", defaultPrm.values[LuminosityChannel]);
-    prm.insert("values[RedChannel]",        defaultPrm.values[RedChannel]);
-    prm.insert("values[GreenChannel]",      defaultPrm.values[GreenChannel]);
-    prm.insert("values[BlueChannel]",       defaultPrm.values[BlueChannel]);
-    prm.insert("values[AlphaChannel]",      defaultPrm.values[AlphaChannel]);
+    prm.insert(QLatin1String("curvesType"),                (int)defaultPrm.curvesType);
+    prm.insert(QLatin1String("curvesDepth"),               defaultPrm.sixteenBit);
+    prm.insert(QLatin1String("values[LuminosityChannel]"), defaultPrm.values[LuminosityChannel]);
+    prm.insert(QLatin1String("values[RedChannel]"),        defaultPrm.values[RedChannel]);
+    prm.insert(QLatin1String("values[GreenChannel]"),      defaultPrm.values[GreenChannel]);
+    prm.insert(QLatin1String("values[BlueChannel]"),       defaultPrm.values[BlueChannel]);
+    prm.insert(QLatin1String("values[AlphaChannel]"),      defaultPrm.values[AlphaChannel]);
 
     return prm;
 }
@@ -124,13 +124,13 @@ void CurvesAdjust::slotAssignSettings2Widget()
 {
     CurvesContainer prm;
 
-    prm.curvesType                = (ImageCurves::CurveType)settings()["curvesType"].toInt();
-    prm.sixteenBit                = settings()["curvesDepth"].toBool();
-    prm.values[LuminosityChannel] = settings()["values[LuminosityChannel]"].value<QPolygon>();
-    prm.values[RedChannel]        = settings()["values[RedChannel]"].value<QPolygon>();
-    prm.values[GreenChannel]      = settings()["values[GreenChannel]"].value<QPolygon>();
-    prm.values[BlueChannel]       = settings()["values[BlueChannel]"].value<QPolygon>();
-    prm.values[AlphaChannel]      = settings()["values[AlphaChannel]"].value<QPolygon>();
+    prm.curvesType                = (ImageCurves::CurveType)settings()[QLatin1String("curvesType")].toInt();
+    prm.sixteenBit                = settings()[QLatin1String("curvesDepth")].toBool();
+    prm.values[LuminosityChannel] = settings()[QLatin1String("values[LuminosityChannel]")].value<QPolygon>();
+    prm.values[RedChannel]        = settings()[QLatin1String("values[RedChannel]")].value<QPolygon>();
+    prm.values[GreenChannel]      = settings()[QLatin1String("values[GreenChannel]")].value<QPolygon>();
+    prm.values[BlueChannel]       = settings()[QLatin1String("values[BlueChannel]")].value<QPolygon>();
+    prm.values[AlphaChannel]      = settings()[QLatin1String("values[AlphaChannel]")].value<QPolygon>();
 
     m_settingsView->setSettings(prm);
 }
@@ -140,13 +140,13 @@ void CurvesAdjust::slotSettingsChanged()
     BatchToolSettings prm;
     CurvesContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("curvesType", (int)currentPrm.curvesType);
-    prm.insert("curvesDepth",               currentPrm.sixteenBit);
-    prm.insert("values[LuminosityChannel]", currentPrm.values[LuminosityChannel]);
-    prm.insert("values[RedChannel]",        currentPrm.values[RedChannel]);
-    prm.insert("values[GreenChannel]",      currentPrm.values[GreenChannel]);
-    prm.insert("values[BlueChannel]",       currentPrm.values[BlueChannel]);
-    prm.insert("values[AlphaChannel]",      currentPrm.values[AlphaChannel]);
+    prm.insert(QLatin1String("curvesType"),                (int)currentPrm.curvesType);
+    prm.insert(QLatin1String("curvesDepth"),               currentPrm.sixteenBit);
+    prm.insert(QLatin1String("values[LuminosityChannel]"), currentPrm.values[LuminosityChannel]);
+    prm.insert(QLatin1String("values[RedChannel]"),        currentPrm.values[RedChannel]);
+    prm.insert(QLatin1String("values[GreenChannel]"),      currentPrm.values[GreenChannel]);
+    prm.insert(QLatin1String("values[BlueChannel]"),       currentPrm.values[BlueChannel]);
+    prm.insert(QLatin1String("values[AlphaChannel]"),      currentPrm.values[AlphaChannel]);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -158,14 +158,14 @@ bool CurvesAdjust::toolOperations()
         return false;
     }
 
-    CurvesContainer prm((ImageCurves::CurveType)settings()["curvesType"].toInt(),
-                        settings()["curvesDepth"].toBool());
+    CurvesContainer prm((ImageCurves::CurveType)settings()[QLatin1String("curvesType")].toInt(),
+                        settings()[QLatin1String("curvesDepth")].toBool());
     prm.initialize();
-    prm.values[LuminosityChannel] = settings()["values[LuminosityChannel]"].value<QPolygon>();
-    prm.values[RedChannel]        = settings()["values[RedChannel]"].value<QPolygon>();
-    prm.values[GreenChannel]      = settings()["values[GreenChannel]"].value<QPolygon>();
-    prm.values[BlueChannel]       = settings()["values[BlueChannel]"].value<QPolygon>();
-    prm.values[AlphaChannel]      = settings()["values[AlphaChannel]"].value<QPolygon>();
+    prm.values[LuminosityChannel] = settings()[QLatin1String("values[LuminosityChannel]")].value<QPolygon>();
+    prm.values[RedChannel]        = settings()[QLatin1String("values[RedChannel]")].value<QPolygon>();
+    prm.values[GreenChannel]      = settings()[QLatin1String("values[GreenChannel]")].value<QPolygon>();
+    prm.values[BlueChannel]       = settings()[QLatin1String("values[BlueChannel]")].value<QPolygon>();
+    prm.values[AlphaChannel]      = settings()[QLatin1String("values[AlphaChannel]")].value<QPolygon>();
 
     CurvesFilter curves(&image(), 0L, prm);
     applyFilter(&curves);

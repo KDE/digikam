@@ -43,13 +43,13 @@ namespace Digikam
 {
 
 Convert2TIFF::Convert2TIFF(QObject* const parent)
-    : BatchTool("Convert2TIFF", ConvertTool, parent)
+    : BatchTool(QLatin1String("Convert2TIFF"), ConvertTool, parent)
 {
     m_settings = 0;
 
     setToolTitle(i18n("Convert To TIFF"));
     setToolDescription(i18n("Convert images to TIFF format."));
-    setToolIconName("image-tiff");
+    setToolIconName(QLatin1String("image-tiff"));
 }
 
 Convert2TIFF::~Convert2TIFF()
@@ -70,28 +70,28 @@ void Convert2TIFF::registerSettingsWidget()
 BatchToolSettings Convert2TIFF::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("ImageViewer Settings");
-    bool compression          = group.readEntry("TIFFCompression", false);
+    KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
+    bool compression          = group.readEntry(QLatin1String("TIFFCompression"), false);
     BatchToolSettings settings;
-    settings.insert("Quality", compression);
+    settings.insert(QLatin1String("Quality"), compression);
     return settings;
 }
 
 void Convert2TIFF::slotAssignSettings2Widget()
 {
-    m_settings->setCompression(settings()["compress"].toBool());
+    m_settings->setCompression(settings()[QLatin1String("compress")].toBool());
 }
 
 void Convert2TIFF::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("compress", m_settings->getCompression());
+    settings.insert(QLatin1String("compress"), m_settings->getCompression());
     BatchTool::slotSettingsChanged(settings);
 }
 
 QString Convert2TIFF::outputSuffix() const
 {
-    return QString("tif");
+    return QLatin1String("tif");
 }
 
 bool Convert2TIFF::toolOperations()
@@ -101,7 +101,7 @@ bool Convert2TIFF::toolOperations()
         return false;
     }
 
-    image().setAttribute("compress", settings()["compress"].toBool());
+    image().setAttribute(QLatin1String("compress"), settings()[QLatin1String("compress")].toBool());
 
     return (savefromDImg());
 }

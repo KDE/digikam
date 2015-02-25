@@ -43,14 +43,14 @@ namespace Digikam
 {
 
 Convert2JPEG::Convert2JPEG(QObject* const parent)
-    : BatchTool("Convert2JPEG", ConvertTool, parent)
+    : BatchTool(QLatin1String("Convert2JPEG"), ConvertTool, parent)
 {
     m_settings = 0;
     m_changeSettings = true;
 
     setToolTitle(i18n("Convert To JPEG"));
     setToolDescription(i18n("Convert images to JPEG format."));
-    setToolIconName("image-jpeg");
+    setToolIconName(QLatin1String("image-jpeg"));
 }
 
 Convert2JPEG::~Convert2JPEG()
@@ -71,20 +71,20 @@ void Convert2JPEG::registerSettingsWidget()
 BatchToolSettings Convert2JPEG::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("ImageViewer Settings");
-    int compression           = group.readEntry("JPEGCompression", 75);
-    int subSampling           = group.readEntry("JPEGSubSampling", 1);  // Medium subsampling
+    KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
+    int compression           = group.readEntry(QLatin1String("JPEGCompression"), 75);
+    int subSampling           = group.readEntry(QLatin1String("JPEGSubSampling"), 1);  // Medium subsampling
     BatchToolSettings settings;
-    settings.insert("Quality",     compression);
-    settings.insert("SubSampling", subSampling);
+    settings.insert(QLatin1String("Quality"),     compression);
+    settings.insert(QLatin1String("SubSampling"), subSampling);
     return settings;
 }
 
 void Convert2JPEG::slotAssignSettings2Widget()
 {
     m_changeSettings = false;
-    m_settings->setCompressionValue(settings()["Quality"].toInt());
-    m_settings->setSubSamplingValue(settings()["SubSampling"].toInt());
+    m_settings->setCompressionValue(settings()[QLatin1String("Quality")].toInt());
+    m_settings->setSubSamplingValue(settings()[QLatin1String("SubSampling")].toInt());
     m_changeSettings = true;
 }
 
@@ -93,15 +93,15 @@ void Convert2JPEG::slotSettingsChanged()
     if (m_changeSettings)
     {
         BatchToolSettings settings;
-        settings.insert("Quality",     m_settings->getCompressionValue());
-        settings.insert("SubSampling", m_settings->getSubSamplingValue());
+        settings.insert(QLatin1String("Quality"),     m_settings->getCompressionValue());
+        settings.insert(QLatin1String("SubSampling"), m_settings->getSubSamplingValue());
         BatchTool::slotSettingsChanged(settings);
     }
 }
 
 QString Convert2JPEG::outputSuffix() const
 {
-    return QString("jpg");
+    return QLatin1String("jpg");
 }
 
 bool Convert2JPEG::toolOperations()
@@ -111,9 +111,9 @@ bool Convert2JPEG::toolOperations()
         return false;
     }
 
-    int JPEGCompression = JPEGSettings::convertCompressionForLibJpeg(settings()["Quality"].toInt());
-    image().setAttribute("quality",     JPEGCompression);
-    image().setAttribute("subsampling", settings()["SubSampling"].toInt());
+    int JPEGCompression = JPEGSettings::convertCompressionForLibJpeg(settings()[QLatin1String("Quality")].toInt());
+    image().setAttribute(QLatin1String("quality"),     JPEGCompression);
+    image().setAttribute(QLatin1String("subsampling"), settings()[QLatin1String("SubSampling")].toInt());
 
     return (savefromDImg());
 }

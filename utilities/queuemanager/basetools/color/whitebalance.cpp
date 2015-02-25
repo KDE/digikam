@@ -41,13 +41,13 @@ namespace Digikam
 {
 
 WhiteBalance::WhiteBalance(QObject* const parent)
-    : BatchTool("WhiteBalance", ColorTool, parent)
+    : BatchTool(QLatin1String("WhiteBalance"), ColorTool, parent)
 {
     m_settingsView = 0;
 
     setToolTitle(i18n("White Balance"));
     setToolDescription(i18n("Adjust White Balance."));
-    setToolIconName("whitebalance");
+    setToolIconName(QLatin1String("whitebalance"));
 }
 
 WhiteBalance::~WhiteBalance()
@@ -71,14 +71,14 @@ BatchToolSettings WhiteBalance::defaultSettings()
     BatchToolSettings prm;
     WBContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("black",          (double)defaultPrm.black);
-    prm.insert("temperature",    (double)defaultPrm.temperature);
-    prm.insert("green",          (double)defaultPrm.green);
-    prm.insert("dark",           (double)defaultPrm.dark);
-    prm.insert("gamma",          (double)defaultPrm.gamma);
-    prm.insert("saturation",     (double)defaultPrm.saturation);
-    prm.insert("expositionMain", (double)defaultPrm.expositionMain);
-    prm.insert("expositionFine", (double)defaultPrm.expositionFine);
+    prm.insert(QLatin1String("black"),          (double)defaultPrm.black);
+    prm.insert(QLatin1String("temperature"),    (double)defaultPrm.temperature);
+    prm.insert(QLatin1String("green"),          (double)defaultPrm.green);
+    prm.insert(QLatin1String("dark"),           (double)defaultPrm.dark);
+    prm.insert(QLatin1String("gamma"),          (double)defaultPrm.gamma);
+    prm.insert(QLatin1String("saturation"),     (double)defaultPrm.saturation);
+    prm.insert(QLatin1String("expositionMain"), (double)defaultPrm.expositionMain);
+    prm.insert(QLatin1String("expositionFine"), (double)defaultPrm.expositionFine);
 
     return prm;
 }
@@ -87,14 +87,14 @@ void WhiteBalance::slotAssignSettings2Widget()
 {
     WBContainer prm;
 
-    prm.black          = settings()["black"].toDouble();
-    prm.temperature    = settings()["temperature"].toDouble();
-    prm.green          = settings()["green"].toDouble();
-    prm.dark           = settings()["dark"].toDouble();
-    prm.gamma          = settings()["gamma"].toDouble();
-    prm.saturation     = settings()["saturation"].toDouble();
-    prm.expositionMain = settings()["expositionMain"].toDouble();
-    prm.expositionFine = settings()["expositionFine"].toDouble();
+    prm.black          = settings()[QLatin1String("black")].toDouble();
+    prm.temperature    = settings()[QLatin1String("temperature")].toDouble();
+    prm.green          = settings()[QLatin1String("green")].toDouble();
+    prm.dark           = settings()[QLatin1String("dark")].toDouble();
+    prm.gamma          = settings()[QLatin1String("gamma")].toDouble();
+    prm.saturation     = settings()[QLatin1String("saturation")].toDouble();
+    prm.expositionMain = settings()[QLatin1String("expositionMain")].toDouble();
+    prm.expositionFine = settings()[QLatin1String("expositionFine")].toDouble();
 
     m_settingsView->setSettings(prm);
 }
@@ -104,14 +104,14 @@ void WhiteBalance::slotSettingsChanged()
     BatchToolSettings prm;
     WBContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("black",          (double)currentPrm.black);
-    prm.insert("temperature",    (double)currentPrm.temperature);
-    prm.insert("green",          (double)currentPrm.green);
-    prm.insert("dark",           (double)currentPrm.dark);
-    prm.insert("gamma",          (double)currentPrm.gamma);
-    prm.insert("saturation",     (double)currentPrm.saturation);
-    prm.insert("expositionMain", (double)currentPrm.expositionMain);
-    prm.insert("expositionFine", (double)currentPrm.expositionFine);
+    prm.insert(QLatin1String("black"),          (double)currentPrm.black);
+    prm.insert(QLatin1String("temperature"),    (double)currentPrm.temperature);
+    prm.insert(QLatin1String("green"),          (double)currentPrm.green);
+    prm.insert(QLatin1String("dark"),           (double)currentPrm.dark);
+    prm.insert(QLatin1String("gamma"),          (double)currentPrm.gamma);
+    prm.insert(QLatin1String("saturation"),     (double)currentPrm.saturation);
+    prm.insert(QLatin1String("expositionMain"), (double)currentPrm.expositionMain);
+    prm.insert(QLatin1String("expositionFine"), (double)currentPrm.expositionFine);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -125,14 +125,14 @@ bool WhiteBalance::toolOperations()
 
     WBContainer prm;
 
-    prm.black          = settings()["black"].toDouble();
-    prm.temperature    = settings()["temperature"].toDouble();
-    prm.green          = settings()["green"].toDouble();
-    prm.dark           = settings()["dark"].toDouble();
-    prm.gamma          = settings()["gamma"].toDouble();
-    prm.saturation     = settings()["saturation"].toDouble();
-    prm.expositionMain = settings()["expositionMain"].toDouble();
-    prm.expositionFine = settings()["expositionFine"].toDouble();
+    prm.black          = settings()[QLatin1String("black")].toDouble();
+    prm.temperature    = settings()[QLatin1String("temperature")].toDouble();
+    prm.green          = settings()[QLatin1String("green")].toDouble();
+    prm.dark           = settings()[QLatin1String("dark")].toDouble();
+    prm.gamma          = settings()[QLatin1String("gamma")].toDouble();
+    prm.saturation     = settings()[QLatin1String("saturation")].toDouble();
+    prm.expositionMain = settings()[QLatin1String("expositionMain")].toDouble();
+    prm.expositionFine = settings()[QLatin1String("expositionFine")].toDouble();
 
     WBFilter wb(&image(), 0L, prm);
     applyFilter(&wb);

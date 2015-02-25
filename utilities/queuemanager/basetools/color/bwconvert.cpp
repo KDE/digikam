@@ -41,12 +41,12 @@ namespace Digikam
 {
 
 BWConvert::BWConvert(QObject* const parent)
-    : BatchTool("BWConvert", ColorTool, parent),
+    : BatchTool(QLatin1String("BWConvert"), ColorTool, parent),
       m_settingsView(0)
 {
     setToolTitle(i18n("B&W Convert"));
     setToolDescription(i18n("Convert to black and white."));
-    setToolIconName("bwtonal");
+    setToolIconName(QLatin1String("bwtonal"));
 }
 
 BWConvert::~BWConvert()
@@ -78,13 +78,13 @@ BatchToolSettings BWConvert::defaultSettings()
     BatchToolSettings prm;
     BWSepiaContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("filmType", (int)defaultPrm.filmType);
-    prm.insert("filterType", (int)defaultPrm.filterType);
-    prm.insert("toneType", (int)defaultPrm.toneType);
-    prm.insert("contrast", (double)defaultPrm.bcgPrm.contrast);
-    prm.insert("strength", (double)defaultPrm.strength);
-    prm.insert("curvesType", defaultPrm.curvesPrm.curvesType);
-    prm.insert("curves",     defaultPrm.curvesPrm.values[LuminosityChannel]);
+    prm.insert(QLatin1String("filmType"), (int)defaultPrm.filmType);
+    prm.insert(QLatin1String("filterType"), (int)defaultPrm.filterType);
+    prm.insert(QLatin1String("toneType"), (int)defaultPrm.toneType);
+    prm.insert(QLatin1String("contrast"), (double)defaultPrm.bcgPrm.contrast);
+    prm.insert(QLatin1String("strength"), (double)defaultPrm.strength);
+    prm.insert(QLatin1String("curvesType"), defaultPrm.curvesPrm.curvesType);
+    prm.insert(QLatin1String("curves"),     defaultPrm.curvesPrm.values[LuminosityChannel]);
 
     return prm;
 }
@@ -93,13 +93,13 @@ void BWConvert::slotAssignSettings2Widget()
 {
     BWSepiaContainer prm;
 
-    prm.filmType                            = settings()["filmType"].toInt();
-    prm.filterType                          = settings()["filterType"].toInt();
-    prm.toneType                            = settings()["toneType"].toInt();
-    prm.bcgPrm.contrast                     = settings()["contrast"].toDouble();
-    prm.strength                            = settings()["strength"].toDouble();
-    prm.curvesPrm.curvesType                = (ImageCurves::CurveType)settings()["curvesType"].toInt();
-    prm.curvesPrm.values[LuminosityChannel] = settings()["curves"].value<QPolygon>();
+    prm.filmType                            = settings()[QLatin1String("filmType")].toInt();
+    prm.filterType                          = settings()[QLatin1String("filterType")].toInt();
+    prm.toneType                            = settings()[QLatin1String("toneType")].toInt();
+    prm.bcgPrm.contrast                     = settings()[QLatin1String("contrast")].toDouble();
+    prm.strength                            = settings()[QLatin1String("strength")].toDouble();
+    prm.curvesPrm.curvesType                = (ImageCurves::CurveType)settings()[QLatin1String("curvesType")].toInt();
+    prm.curvesPrm.values[LuminosityChannel] = settings()[QLatin1String("curves")].value<QPolygon>();
 
     m_settingsView->setSettings(prm);
 }
@@ -109,13 +109,13 @@ void BWConvert::slotSettingsChanged()
     BatchToolSettings prm;
     BWSepiaContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("filmType", (int)currentPrm.filmType);
-    prm.insert("filterType", (int)currentPrm.filterType);
-    prm.insert("toneType", (int)currentPrm.toneType);
-    prm.insert("contrast", (double)currentPrm.bcgPrm.contrast);
-    prm.insert("strength", (double)currentPrm.strength);
-    prm.insert("curvesType", (int)currentPrm.curvesPrm.curvesType);
-    prm.insert("curves",     currentPrm.curvesPrm.values[LuminosityChannel]);
+    prm.insert(QLatin1String("filmType"),   (int)currentPrm.filmType);
+    prm.insert(QLatin1String("filterType"), (int)currentPrm.filterType);
+    prm.insert(QLatin1String("toneType"),   (int)currentPrm.toneType);
+    prm.insert(QLatin1String("contrast"),   (double)currentPrm.bcgPrm.contrast);
+    prm.insert(QLatin1String("strength"),   (double)currentPrm.strength);
+    prm.insert(QLatin1String("curvesType"), (int)currentPrm.curvesPrm.curvesType);
+    prm.insert(QLatin1String("curves"),     currentPrm.curvesPrm.values[LuminosityChannel]);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -129,23 +129,16 @@ bool BWConvert::toolOperations()
 
     BWSepiaContainer prm;
 
-    prm.filmType                     = settings()["filmType"].toInt();
-    prm.filterType                   = settings()["filterType"].toInt();
-    prm.toneType                     = settings()["toneType"].toInt();
-    prm.bcgPrm.contrast              = settings()["contrast"].toDouble();
-    prm.strength                     = settings()["strength"].toDouble();
+    prm.filmType                     = settings()[QLatin1String("filmType")].toInt();
+    prm.filterType                   = settings()[QLatin1String("filterType")].toInt();
+    prm.toneType                     = settings()[QLatin1String("toneType")].toInt();
+    prm.bcgPrm.contrast              = settings()[QLatin1String("contrast")].toDouble();
+    prm.strength                     = settings()[QLatin1String("strength")].toDouble();
 
-    CurvesContainer curves((ImageCurves::CurveType)settings()["curvesType"].toInt(), true);
+    CurvesContainer curves((ImageCurves::CurveType)settings()[QLatin1String("curvesType")].toInt(), true);
     curves.initialize();
-    curves.values[LuminosityChannel] = settings()["curves"].value<QPolygon>();
+    curves.values[LuminosityChannel] = settings()[QLatin1String("curves")].value<QPolygon>();
     prm.curvesPrm                    = curves;
-
-    /*
-        // NOTE: For testing
-        CurvesFilter bw(&image(), 0L, prm.curvesPrm);
-        bw.startFilterDirectly();
-        image().putImageData(bw.getTargetImage().bits());
-    */
 
     BWSepiaFilter bw(&image(), 0L, prm);
     applyFilter(&bw);

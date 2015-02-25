@@ -52,13 +52,13 @@ namespace Digikam
 {
 
 AutoCorrection::AutoCorrection(QObject* const parent)
-    : BatchTool("AutoCorrection", ColorTool, parent)
+    : BatchTool(QLatin1String("AutoCorrection"), ColorTool, parent)
 {
     m_comboBox = 0;
 
     setToolTitle(i18n("Color Auto-correction"));
     setToolDescription(i18n("Automatically correct image colors."));
-    setToolIconName("autocorrection");
+    setToolIconName(QLatin1String("autocorrection"));
 }
 
 AutoCorrection::~AutoCorrection()
@@ -90,19 +90,19 @@ void AutoCorrection::registerSettingsWidget()
 BatchToolSettings AutoCorrection::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("AutoCorrectionFilter", AutoLevelsCorrection);
+    settings.insert(QLatin1String("AutoCorrectionFilter"), AutoLevelsCorrection);
     return settings;
 }
 
 void AutoCorrection::slotAssignSettings2Widget()
 {
-    m_comboBox->setCurrentIndex(settings()["AutoCorrectionFilter"].toInt());
+    m_comboBox->setCurrentIndex(settings()[QLatin1String("AutoCorrectionFilter")].toInt());
 }
 
 void AutoCorrection::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("AutoCorrectionFilter", (int)m_comboBox->currentIndex());
+    settings.insert(QLatin1String("AutoCorrectionFilter"), (int)m_comboBox->currentIndex());
     BatchTool::slotSettingsChanged(settings);
 }
 
@@ -113,7 +113,7 @@ bool AutoCorrection::toolOperations()
         return false;
     }
 
-    int type = settings()["AutoCorrectionFilter"].toInt();
+    int type = settings()[QLatin1String("AutoCorrectionFilter")].toInt();
 
     switch (type)
     {

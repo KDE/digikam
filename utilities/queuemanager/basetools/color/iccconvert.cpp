@@ -46,12 +46,12 @@ namespace Digikam
 {
 
 IccConvert::IccConvert(QObject* const parent)
-    : BatchTool("IccConvert", ColorTool, parent),
+    : BatchTool(QLatin1String("IccConvert"), ColorTool, parent),
       m_settingsView(0)
 {
     setToolTitle(i18n("ICC Convert"));
     setToolDescription(i18n("Convert image to a color space."));
-    setToolIconName("colormanagement");
+    setToolIconName(QLatin1String("colormanagement"));
 }
 
 IccConvert::~IccConvert()
@@ -60,9 +60,9 @@ IccConvert::~IccConvert()
 
 void IccConvert::registerSettingsWidget()
 {
-    RVBox* vbox      = new RVBox;
-    m_settingsView   = new IccProfilesSettings(vbox);
-    QLabel* space    = new QLabel(vbox);
+    RVBox* const vbox   = new RVBox;
+    m_settingsView      = new IccProfilesSettings(vbox);
+    QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
     m_settingsWidget = vbox;
 
@@ -77,14 +77,14 @@ BatchToolSettings IccConvert::defaultSettings()
     BatchToolSettings prm;
     IccProfile defaultProf = m_settingsView->defaultProfile();
 
-    prm.insert("ProfilePath", defaultProf.filePath());
+    prm.insert(QLatin1String("ProfilePath"), defaultProf.filePath());
 
     return prm;
 }
 
 void IccConvert::slotAssignSettings2Widget()
 {
-    QString profPath = settings()["ProfilePath"].toString();
+    QString profPath = settings()[QLatin1String("ProfilePath")].toString();
     m_settingsView->setCurrentProfile(profPath);
 }
 
@@ -93,7 +93,7 @@ void IccConvert::slotSettingsChanged()
     BatchToolSettings prm;
     IccProfile currentProf = m_settingsView->currentProfile();
 
-    prm.insert("ProfilePath", currentProf.filePath());
+    prm.insert(QLatin1String("ProfilePath"), currentProf.filePath());
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -105,7 +105,7 @@ bool IccConvert::toolOperations()
         return false;
     }
 
-    QString              profPath = settings()["ProfilePath"].toString();
+    QString              profPath = settings()[QLatin1String("ProfilePath")].toString();
     IccProfile           in       = image().getIccProfile();
     IccProfile           out(profPath);
     ICCSettingsContainer settings = IccSettings::instance()->settings();

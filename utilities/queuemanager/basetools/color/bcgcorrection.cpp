@@ -41,12 +41,12 @@ namespace Digikam
 {
 
 BCGCorrection::BCGCorrection(QObject* const parent)
-    : BatchTool("BCGCorrection", ColorTool, parent)
+    : BatchTool(QLatin1String("BCGCorrection"), ColorTool, parent)
 {
     m_settingsView = 0;
     setToolTitle(i18n("BCG Correction"));
     setToolDescription(i18n("Fix Brightness/Contrast/Gamma."));
-    setToolIconName("contrast");
+    setToolIconName(QLatin1String("contrast"));
 }
 
 BCGCorrection::~BCGCorrection()
@@ -69,9 +69,9 @@ BatchToolSettings BCGCorrection::defaultSettings()
     BatchToolSettings prm;
     BCGContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("Brightness", (double)defaultPrm.brightness);
-    prm.insert("Contrast",   (double)defaultPrm.contrast);
-    prm.insert("Gamma",      (double)defaultPrm.gamma);
+    prm.insert(QLatin1String("Brightness"), (double)defaultPrm.brightness);
+    prm.insert(QLatin1String("Contrast"),   (double)defaultPrm.contrast);
+    prm.insert(QLatin1String("Gamma"),      (double)defaultPrm.gamma);
 
     return prm;
 }
@@ -79,9 +79,9 @@ BatchToolSettings BCGCorrection::defaultSettings()
 void BCGCorrection::slotAssignSettings2Widget()
 {
     BCGContainer prm;
-    prm.brightness = settings()["Brightness"].toDouble();
-    prm.contrast   = settings()["Contrast"].toDouble();
-    prm.gamma      = settings()["Gamma"].toDouble();
+    prm.brightness = settings()[QLatin1String("Brightness")].toDouble();
+    prm.contrast   = settings()[QLatin1String("Contrast")].toDouble();
+    prm.gamma      = settings()[QLatin1String("Gamma")].toDouble();
     m_settingsView->setSettings(prm);
 }
 
@@ -90,9 +90,9 @@ void BCGCorrection::slotSettingsChanged()
     BatchToolSettings prm;
     BCGContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("Brightness", (double)currentPrm.brightness);
-    prm.insert("Contrast", (double)currentPrm.contrast);
-    prm.insert("Gamma", (double)currentPrm.gamma);
+    prm.insert(QLatin1String("Brightness"), (double)currentPrm.brightness);
+    prm.insert(QLatin1String("Contrast"),   (double)currentPrm.contrast);
+    prm.insert(QLatin1String("Gamma"),      (double)currentPrm.gamma);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -105,9 +105,9 @@ bool BCGCorrection::toolOperations()
     }
 
     BCGContainer prm;
-    prm.brightness = settings()["Brightness"].toDouble();
-    prm.contrast   = settings()["Contrast"].toDouble();
-    prm.gamma      = settings()["Gamma"].toDouble();
+    prm.brightness = settings()[QLatin1String("Brightness")].toDouble();
+    prm.contrast   = settings()[QLatin1String("Contrast")].toDouble();
+    prm.gamma      = settings()[QLatin1String("Gamma")].toDouble();
 
     BCGFilter bcg(&image(), 0L, prm);
     applyFilter(&bcg);

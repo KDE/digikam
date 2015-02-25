@@ -47,12 +47,12 @@ namespace Digikam
 {
 
 ChannelMixer::ChannelMixer(QObject* const parent)
-    : BatchTool("ChannelMixer", ColorTool, parent)
+    : BatchTool(QLatin1String("ChannelMixer"), ColorTool, parent)
 {
     m_settingsView = 0;
     setToolTitle(i18n("Channel Mixer"));
     setToolDescription(i18n("Mix color channel."));
-    setToolIconName("channelmixer");
+    setToolIconName(QLatin1String("channelmixer"));
 }
 
 ChannelMixer::~ChannelMixer()
@@ -80,24 +80,24 @@ BatchToolSettings ChannelMixer::defaultSettings()
     BatchToolSettings prm;
     MixerContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("bPreserveLum", (bool)defaultPrm.bPreserveLum);
-    prm.insert("bMonochrome", (bool)defaultPrm.bMonochrome);
+    prm.insert(QLatin1String("bPreserveLum"), (bool)defaultPrm.bPreserveLum);
+    prm.insert(QLatin1String("bMonochrome"), (bool)defaultPrm.bMonochrome);
 
     // Standard settings.
-    prm.insert("redRedGain", (double)defaultPrm.redRedGain);
-    prm.insert("redGreenGain", (double)defaultPrm.redGreenGain);
-    prm.insert("redBlueGain", (double)defaultPrm.redBlueGain);
-    prm.insert("greenRedGain", (double)defaultPrm.greenRedGain);
-    prm.insert("greenGreenGain", (double)defaultPrm.greenGreenGain);
-    prm.insert("greenBlueGain", (double)defaultPrm.greenBlueGain);
-    prm.insert("blueRedGain", (double)defaultPrm.blueRedGain);
-    prm.insert("blueGreenGain", (double)defaultPrm.blueGreenGain);
-    prm.insert("blueBlueGain", (double)defaultPrm.blueBlueGain);
+    prm.insert(QLatin1String("redRedGain"), (double)defaultPrm.redRedGain);
+    prm.insert(QLatin1String("redGreenGain"), (double)defaultPrm.redGreenGain);
+    prm.insert(QLatin1String("redBlueGain"), (double)defaultPrm.redBlueGain);
+    prm.insert(QLatin1String("greenRedGain"), (double)defaultPrm.greenRedGain);
+    prm.insert(QLatin1String("greenGreenGain"), (double)defaultPrm.greenGreenGain);
+    prm.insert(QLatin1String("greenBlueGain"), (double)defaultPrm.greenBlueGain);
+    prm.insert(QLatin1String("blueRedGain"), (double)defaultPrm.blueRedGain);
+    prm.insert(QLatin1String("blueGreenGain"), (double)defaultPrm.blueGreenGain);
+    prm.insert(QLatin1String("blueBlueGain"), (double)defaultPrm.blueBlueGain);
 
     // Monochrome settings.
-    prm.insert("blackRedGain", (double)defaultPrm.blackRedGain);
-    prm.insert("blackGreenGain", (double)defaultPrm.blackGreenGain);
-    prm.insert("blackBlueGain", (double)defaultPrm.blackBlueGain);
+    prm.insert(QLatin1String("blackRedGain"), (double)defaultPrm.blackRedGain);
+    prm.insert(QLatin1String("blackGreenGain"), (double)defaultPrm.blackGreenGain);
+    prm.insert(QLatin1String("blackBlueGain"), (double)defaultPrm.blackBlueGain);
 
     return prm;
 }
@@ -106,24 +106,24 @@ void ChannelMixer::slotAssignSettings2Widget()
 {
     MixerContainer prm;
 
-    prm.bPreserveLum   = settings()["bPreserveLum"].toBool();
-    prm.bMonochrome    = settings()["bMonochrome"].toBool();
+    prm.bPreserveLum   = settings()[QLatin1String("bPreserveLum")].toBool();
+    prm.bMonochrome    = settings()[QLatin1String("bMonochrome")].toBool();
 
     // Standard settings.
-    prm.redRedGain     = settings()["redRedGain"].toDouble();
-    prm.redGreenGain   = settings()["redGreenGain"].toDouble();
-    prm.redBlueGain    = settings()["redBlueGain"].toDouble();
-    prm.greenRedGain   = settings()["greenRedGain"].toDouble();
-    prm.greenGreenGain = settings()["greenGreenGain"].toDouble();
-    prm.greenBlueGain  = settings()["greenBlueGain"].toDouble();
-    prm.blueRedGain    = settings()["blueRedGain"].toDouble();
-    prm.blueGreenGain  = settings()["blueGreenGain"].toDouble();
-    prm.blueBlueGain   = settings()["blueBlueGain"].toDouble();
+    prm.redRedGain     = settings()[QLatin1String("redRedGain")].toDouble();
+    prm.redGreenGain   = settings()[QLatin1String("redGreenGain")].toDouble();
+    prm.redBlueGain    = settings()[QLatin1String("redBlueGain")].toDouble();
+    prm.greenRedGain   = settings()[QLatin1String("greenRedGain")].toDouble();
+    prm.greenGreenGain = settings()[QLatin1String("greenGreenGain")].toDouble();
+    prm.greenBlueGain  = settings()[QLatin1String("greenBlueGain")].toDouble();
+    prm.blueRedGain    = settings()[QLatin1String("blueRedGain")].toDouble();
+    prm.blueGreenGain  = settings()[QLatin1String("blueGreenGain")].toDouble();
+    prm.blueBlueGain   = settings()[QLatin1String("blueBlueGain")].toDouble();
 
     // Monochrome settings.
-    prm.blackRedGain   = settings()["blackRedGain"].toDouble();
-    prm.blackGreenGain = settings()["blackGreenGain"].toDouble();
-    prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();
+    prm.blackRedGain   = settings()[QLatin1String("blackRedGain")].toDouble();
+    prm.blackGreenGain = settings()[QLatin1String("blackGreenGain")].toDouble();
+    prm.blackBlueGain  = settings()[QLatin1String("blackBlueGain")].toDouble();
 
     m_settingsView->setSettings(prm);
 }
@@ -133,24 +133,24 @@ void ChannelMixer::slotSettingsChanged()
     BatchToolSettings prm;
     MixerContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("bPreserveLum", (bool)currentPrm.bPreserveLum);
-    prm.insert("bMonochrome", (bool)currentPrm.bMonochrome);
+    prm.insert(QLatin1String("bPreserveLum"), (bool)currentPrm.bPreserveLum);
+    prm.insert(QLatin1String("bMonochrome"), (bool)currentPrm.bMonochrome);
 
     // Standard settings.
-    prm.insert("redRedGain", (double)currentPrm.redRedGain);
-    prm.insert("redGreenGain", (double)currentPrm.redGreenGain);
-    prm.insert("redBlueGain", (double)currentPrm.redBlueGain);
-    prm.insert("greenRedGain", (double)currentPrm.greenRedGain);
-    prm.insert("greenGreenGain", (double)currentPrm.greenGreenGain);
-    prm.insert("greenBlueGain", (double)currentPrm.greenBlueGain);
-    prm.insert("blueRedGain", (double)currentPrm.blueRedGain);
-    prm.insert("blueGreenGain", (double)currentPrm.blueGreenGain);
-    prm.insert("blueBlueGain", (double)currentPrm.blueBlueGain);
+    prm.insert(QLatin1String("redRedGain"), (double)currentPrm.redRedGain);
+    prm.insert(QLatin1String("redGreenGain"), (double)currentPrm.redGreenGain);
+    prm.insert(QLatin1String("redBlueGain"), (double)currentPrm.redBlueGain);
+    prm.insert(QLatin1String("greenRedGain"), (double)currentPrm.greenRedGain);
+    prm.insert(QLatin1String("greenGreenGain"), (double)currentPrm.greenGreenGain);
+    prm.insert(QLatin1String("greenBlueGain"), (double)currentPrm.greenBlueGain);
+    prm.insert(QLatin1String("blueRedGain"), (double)currentPrm.blueRedGain);
+    prm.insert(QLatin1String("blueGreenGain"), (double)currentPrm.blueGreenGain);
+    prm.insert(QLatin1String("blueBlueGain"), (double)currentPrm.blueBlueGain);
 
     // Monochrome settings.
-    prm.insert("blackRedGain", (double)currentPrm.blackRedGain);
-    prm.insert("blackGreenGain", (double)currentPrm.blackGreenGain);
-    prm.insert("blackBlueGain", (double)currentPrm.blackBlueGain);
+    prm.insert(QLatin1String("blackRedGain"), (double)currentPrm.blackRedGain);
+    prm.insert(QLatin1String("blackGreenGain"), (double)currentPrm.blackGreenGain);
+    prm.insert(QLatin1String("blackBlueGain"), (double)currentPrm.blackBlueGain);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -164,24 +164,24 @@ bool ChannelMixer::toolOperations()
 
     MixerContainer prm;
 
-    prm.bPreserveLum   = settings()["bPreserveLum"].toBool();
-    prm.bMonochrome    = settings()["bMonochrome"].toBool();
+    prm.bPreserveLum   = settings()[QLatin1String("bPreserveLum")].toBool();
+    prm.bMonochrome    = settings()[QLatin1String("bMonochrome")].toBool();
 
     // Standard settings.
-    prm.redRedGain     = settings()["redRedGain"].toDouble();
-    prm.redGreenGain   = settings()["redGreenGain"].toDouble();
-    prm.redBlueGain    = settings()["redBlueGain"].toDouble();
-    prm.greenRedGain   = settings()["greenRedGain"].toDouble();
-    prm.greenGreenGain = settings()["greenGreenGain"].toDouble();
-    prm.greenBlueGain  = settings()["greenBlueGain"].toDouble();
-    prm.blueRedGain    = settings()["blueRedGain"].toDouble();
-    prm.blueGreenGain  = settings()["blueGreenGain"].toDouble();
-    prm.blueBlueGain   = settings()["blueBlueGain"].toDouble();
+    prm.redRedGain     = settings()[QLatin1String("redRedGain")].toDouble();
+    prm.redGreenGain   = settings()[QLatin1String("redGreenGain")].toDouble();
+    prm.redBlueGain    = settings()[QLatin1String("redBlueGain")].toDouble();
+    prm.greenRedGain   = settings()[QLatin1String("greenRedGain")].toDouble();
+    prm.greenGreenGain = settings()[QLatin1String("greenGreenGain")].toDouble();
+    prm.greenBlueGain  = settings()[QLatin1String("greenBlueGain")].toDouble();
+    prm.blueRedGain    = settings()[QLatin1String("blueRedGain")].toDouble();
+    prm.blueGreenGain  = settings()[QLatin1String("blueGreenGain")].toDouble();
+    prm.blueBlueGain   = settings()[QLatin1String("blueBlueGain")].toDouble();
 
     // Monochrome settings.
-    prm.blackRedGain   = settings()["blackRedGain"].toDouble();
-    prm.blackGreenGain = settings()["blackGreenGain"].toDouble();
-    prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();
+    prm.blackRedGain   = settings()[QLatin1String("blackRedGain")].toDouble();
+    prm.blackGreenGain = settings()[QLatin1String("blackGreenGain")].toDouble();
+    prm.blackBlueGain  = settings()[QLatin1String("blackBlueGain")].toDouble();
 
     MixerFilter mixer(&image(), 0L, prm);
     applyFilter(&mixer);

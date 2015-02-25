@@ -41,13 +41,13 @@ namespace Digikam
 {
 
 ColorBalance::ColorBalance(QObject* const parent)
-    : BatchTool("ColorBalance", ColorTool, parent)
+    : BatchTool(QLatin1String("ColorBalance"), ColorTool, parent)
 {
     m_settingsView = 0;
 
     setToolTitle(i18n("Color Balance"));
     setToolDescription(i18n("Adjust color balance."));
-    setToolIconName("adjustrgb");
+    setToolIconName(QLatin1String("adjustrgb"));
 }
 
 ColorBalance::~ColorBalance()
@@ -70,9 +70,9 @@ BatchToolSettings ColorBalance::defaultSettings()
     BatchToolSettings prm;
     CBContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("Red", (double)defaultPrm.red);
-    prm.insert("Green", (double)defaultPrm.green);
-    prm.insert("Blue", (double)defaultPrm.blue);
+    prm.insert(QLatin1String("Red"), (double)defaultPrm.red);
+    prm.insert(QLatin1String("Green"), (double)defaultPrm.green);
+    prm.insert(QLatin1String("Blue"), (double)defaultPrm.blue);
 
     return prm;
 }
@@ -80,9 +80,9 @@ BatchToolSettings ColorBalance::defaultSettings()
 void ColorBalance::slotAssignSettings2Widget()
 {
     CBContainer prm;
-    prm.red   = settings()["Red"].toDouble();
-    prm.green = settings()["Green"].toDouble();
-    prm.blue  = settings()["Blue"].toDouble();
+    prm.red   = settings()[QLatin1String("Red")].toDouble();
+    prm.green = settings()[QLatin1String("Green")].toDouble();
+    prm.blue  = settings()[QLatin1String("Blue")].toDouble();
     m_settingsView->setSettings(prm);
 }
 
@@ -91,9 +91,9 @@ void ColorBalance::slotSettingsChanged()
     BatchToolSettings prm;
     CBContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("Red", (double)currentPrm.red);
-    prm.insert("Green", (double)currentPrm.green);
-    prm.insert("Blue", (double)currentPrm.blue);
+    prm.insert(QLatin1String("Red"), (double)currentPrm.red);
+    prm.insert(QLatin1String("Green"), (double)currentPrm.green);
+    prm.insert(QLatin1String("Blue"), (double)currentPrm.blue);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -106,9 +106,9 @@ bool ColorBalance::toolOperations()
     }
 
     CBContainer prm;
-    prm.red   = settings()["Red"].toDouble();
-    prm.green = settings()["Green"].toDouble();
-    prm.blue  = settings()["Blue"].toDouble();
+    prm.red   = settings()[QLatin1String("Red")].toDouble();
+    prm.green = settings()[QLatin1String("Green")].toDouble();
+    prm.blue  = settings()[QLatin1String("Blue")].toDouble();
 
     CBFilter cb(&image(), 0L, prm);
     applyFilter(&cb);

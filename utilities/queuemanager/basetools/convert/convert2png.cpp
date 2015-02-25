@@ -43,12 +43,12 @@ namespace Digikam
 {
 
 Convert2PNG::Convert2PNG(QObject* const parent)
-    : BatchTool("Convert2PNG", ConvertTool, parent)
+    : BatchTool(QLatin1String("Convert2PNG"), ConvertTool, parent)
 {
     m_settings = 0;
     setToolTitle(i18n("Convert To PNG"));
     setToolDescription(i18n("Convert images to PNG format."));
-    setToolIconName("image-png");
+    setToolIconName(QLatin1String("image-png"));
 }
 
 Convert2PNG::~Convert2PNG()
@@ -69,28 +69,28 @@ void Convert2PNG::registerSettingsWidget()
 BatchToolSettings Convert2PNG::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("ImageViewer Settings");
-    int compression           = group.readEntry("PNGCompression", 9);
+    KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
+    int compression           = group.readEntry(QLatin1String("PNGCompression"), 9);
     BatchToolSettings settings;
-    settings.insert("Quality", compression);
+    settings.insert(QLatin1String("Quality"), compression);
     return settings;
 }
 
 void Convert2PNG::slotAssignSettings2Widget()
 {
-    m_settings->setCompressionValue(settings()["Quality"].toInt());
+    m_settings->setCompressionValue(settings()[QLatin1String("Quality")].toInt());
 }
 
 void Convert2PNG::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("Quality", m_settings->getCompressionValue());
+    settings.insert(QLatin1String("Quality"), m_settings->getCompressionValue());
     BatchTool::slotSettingsChanged(settings);
 }
 
 QString Convert2PNG::outputSuffix() const
 {
-    return QString("png");
+    return QLatin1String("png");
 }
 
 bool Convert2PNG::toolOperations()
@@ -100,8 +100,8 @@ bool Convert2PNG::toolOperations()
         return false;
     }
 
-    int PNGCompression = PNGSettings::convertCompressionForLibPng(settings()["Quality"].toInt());
-    image().setAttribute("quality", PNGCompression);
+    int PNGCompression = PNGSettings::convertCompressionForLibPng(settings()[QLatin1String("Quality")].toInt());
+    image().setAttribute(QLatin1String("quality"), PNGCompression);
 
     return (savefromDImg());
 }

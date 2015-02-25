@@ -41,12 +41,12 @@ namespace Digikam
 {
 
 HSLCorrection::HSLCorrection(QObject* const parent)
-    : BatchTool("HSLCorrection", ColorTool, parent)
+    : BatchTool(QLatin1String("HSLCorrection"), ColorTool, parent)
 {
     m_settingsView = 0;
     setToolTitle(i18n("HSL Correction"));
     setToolDescription(i18n("Fix Hue/Saturation/Lightness."));
-    setToolIconName("adjusthsl");
+    setToolIconName(QLatin1String("adjusthsl"));
 }
 
 HSLCorrection::~HSLCorrection()
@@ -69,10 +69,10 @@ BatchToolSettings HSLCorrection::defaultSettings()
     BatchToolSettings prm;
     HSLContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("Hue", (double)defaultPrm.hue);
-    prm.insert("Saturation", (double)defaultPrm.saturation);
-    prm.insert("Lightness", (double)defaultPrm.lightness);
-    prm.insert("Vibrance", (double)defaultPrm.vibrance);
+    prm.insert(QLatin1String("Hue"),        (double)defaultPrm.hue);
+    prm.insert(QLatin1String("Saturation"), (double)defaultPrm.saturation);
+    prm.insert(QLatin1String("Lightness"),  (double)defaultPrm.lightness);
+    prm.insert(QLatin1String("Vibrance"),   (double)defaultPrm.vibrance);
 
     return prm;
 }
@@ -80,10 +80,10 @@ BatchToolSettings HSLCorrection::defaultSettings()
 void HSLCorrection::slotAssignSettings2Widget()
 {
     HSLContainer prm;
-    prm.hue        = settings()["Hue"].toDouble();
-    prm.saturation = settings()["Saturation"].toDouble();
-    prm.lightness  = settings()["Lightness"].toDouble();
-    prm.vibrance   = settings()["Vibrance"].toDouble();
+    prm.hue        = settings()[QLatin1String("Hue")].toDouble();
+    prm.saturation = settings()[QLatin1String("Saturation")].toDouble();
+    prm.lightness  = settings()[QLatin1String("Lightness")].toDouble();
+    prm.vibrance   = settings()[QLatin1String("Vibrance")].toDouble();
     m_settingsView->setSettings(prm);
 }
 
@@ -92,10 +92,10 @@ void HSLCorrection::slotSettingsChanged()
     BatchToolSettings prm;
     HSLContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("Hue", (double)currentPrm.hue);
-    prm.insert("Saturation", (double)currentPrm.saturation);
-    prm.insert("Lightness", (double)currentPrm.lightness);
-    prm.insert("Vibrance", (double)currentPrm.vibrance);
+    prm.insert(QLatin1String("Hue"),        (double)currentPrm.hue);
+    prm.insert(QLatin1String("Saturation"), (double)currentPrm.saturation);
+    prm.insert(QLatin1String("Lightness"),  (double)currentPrm.lightness);
+    prm.insert(QLatin1String("Vibrance"),   (double)currentPrm.vibrance);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -108,10 +108,10 @@ bool HSLCorrection::toolOperations()
     }
 
     HSLContainer prm;
-    prm.hue        = settings()["Hue"].toDouble();
-    prm.saturation = settings()["Saturation"].toDouble();
-    prm.lightness  = settings()["Lightness"].toDouble();
-    prm.vibrance   = settings()["Vibrance"].toDouble();
+    prm.hue        = settings()[QLatin1String("Hue")].toDouble();
+    prm.saturation = settings()[QLatin1String("Saturation")].toDouble();
+    prm.lightness  = settings()[QLatin1String("Lightness")].toDouble();
+    prm.vibrance   = settings()[QLatin1String("Vibrance")].toDouble();
 
     HSLFilter hsl(&image(), 0L, prm);
     applyFilter(&hsl);

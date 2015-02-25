@@ -40,11 +40,11 @@ namespace Digikam
 {
 
 Invert::Invert(QObject* const parent)
-    : BatchTool("Invert", ColorTool, parent)
+    : BatchTool(QLatin1String("Invert"), ColorTool, parent)
 {
     setToolTitle(i18n("Invert Colors"));
     setToolDescription(i18n("Invert image colors."));
-    setToolIconName("invertimage");
+    setToolIconName(QLatin1String("invertimage"));
 }
 
 Invert::~Invert()

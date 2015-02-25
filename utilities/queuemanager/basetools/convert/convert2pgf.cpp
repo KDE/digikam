@@ -43,13 +43,13 @@ namespace Digikam
 {
 
 Convert2PGF::Convert2PGF(QObject* const parent)
-    : BatchTool("Convert2PGF", ConvertTool, parent)
+    : BatchTool(QLatin1String("Convert2PGF"), ConvertTool, parent)
 {
     m_settings = 0;
 
     setToolTitle(i18n("Convert To PGF"));
     setToolDescription(i18n("Convert images to PGF format."));
-    setToolIconName("image-jp2");
+    setToolIconName(QLatin1String("image-jp2"));
 }
 
 Convert2PGF::~Convert2PGF()
@@ -70,32 +70,32 @@ void Convert2PGF::registerSettingsWidget()
 BatchToolSettings Convert2PGF::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("ImageViewer Settings");
-    int compression           = group.readEntry("PGFCompression", 3);
-    bool lossLessCompression  = group.readEntry("PGFLossLess",    true);
+    KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
+    int compression           = group.readEntry(QLatin1String("PGFCompression"), 3);
+    bool lossLessCompression  = group.readEntry(QLatin1String("PGFLossLess"),    true);
     BatchToolSettings settings;
-    settings.insert("quality",  compression);
-    settings.insert("lossless", lossLessCompression);
+    settings.insert(QLatin1String("quality"),  compression);
+    settings.insert(QLatin1String("lossless"), lossLessCompression);
     return settings;
 }
 
 void Convert2PGF::slotAssignSettings2Widget()
 {
-    m_settings->setCompressionValue(settings()["quality"].toInt());
-    m_settings->setLossLessCompression(settings()["lossless"].toBool());
+    m_settings->setCompressionValue(settings()[QLatin1String("quality")].toInt());
+    m_settings->setLossLessCompression(settings()[QLatin1String("lossless")].toBool());
 }
 
 void Convert2PGF::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("quality",  m_settings->getCompressionValue());
-    settings.insert("lossless", m_settings->getLossLessCompression());
+    settings.insert(QLatin1String("quality"),  m_settings->getCompressionValue());
+    settings.insert(QLatin1String("lossless"), m_settings->getLossLessCompression());
     BatchTool::slotSettingsChanged(settings);
 }
 
 QString Convert2PGF::outputSuffix() const
 {
-    return QString("pgf");
+    return QLatin1String("pgf");
 }
 
 bool Convert2PGF::toolOperations()
@@ -105,8 +105,8 @@ bool Convert2PGF::toolOperations()
         return false;
     }
 
-    bool lossless = settings()["lossless"].toBool();
-    image().setAttribute("quality", lossless ? 0 : settings()["quality"].toInt());
+    bool lossless = settings()[QLatin1String("lossless")].toBool();
+    image().setAttribute(QLatin1String("quality"), lossless ? 0 : settings()[QLatin1String("quality")].toInt());
 
     return (savefromDImg());
 }

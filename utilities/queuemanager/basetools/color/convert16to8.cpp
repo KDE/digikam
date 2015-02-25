@@ -36,11 +36,11 @@ namespace Digikam
 {
 
 Convert16to8::Convert16to8(QObject* const parent)
-    : BatchTool("Convert16to8", ColorTool, parent)
+    : BatchTool(QLatin1String("Convert16to8"), ColorTool, parent)
 {
     setToolTitle(i18n("Convert to 8 bits"));
     setToolDescription(i18n("Convert color depth from 16 to 8 bits."));
-    setToolIconName("depth16to8");
+    setToolIconName(QLatin1String("depth16to8"));
 }
 
 Convert16to8::~Convert16to8()
