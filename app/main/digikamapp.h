@@ -34,6 +34,10 @@
 #include <QString>
 #include <QMenu>
 
+// KDE includes
+
+#include <solid/solidnamespace.h>
+
 // Local includes
 
 #include "digikam_config.h"

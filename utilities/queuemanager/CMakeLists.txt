@@ -94,6 +94,7 @@ target_include_directories(queuemanager PUBLIC
 
 target_link_libraries(queuemanager
 
+
                       KF5::I18n # verify if needed
                       KF5::KExiv2
                       KF5::KDcraw
