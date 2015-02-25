@@ -58,7 +58,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
     if (image.isNull())
     {
-        qCDebug(LOG_DIMG) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
+        qCWarning(LOG_DIMG_QIMAGE) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
         loadingFailed();
         return false;
     }
@@ -105,7 +105,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
     if (!data)
     {
-        qCDebug(LOG_DIMG) << "Failed to allocate memory for loading" << filePath;
+        qCWarning(LOG_DIMG_QIMAGE) << "Failed to allocate memory for loading" << filePath;
         loadingFailed();
         return false;
     }

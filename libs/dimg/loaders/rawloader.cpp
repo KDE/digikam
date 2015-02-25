@@ -161,7 +161,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
         if (!image)
         {
-            qCDebug(LOG_DIMG) << "Failed to allocate memory for loading raw file";
+            qCWarning(LOG_DIMG_RAW) << "Failed to allocate memory for loading raw file";
             return false;
         }
 
@@ -217,7 +217,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
         if (!image)
         {
-            qCDebug(LOG_DIMG) << "Failed to allocate memory for loading raw file";
+            qCWarning(LOG_DIMG_RAW) << "Failed to allocate memory for loading raw file";
             return false;
         }
 

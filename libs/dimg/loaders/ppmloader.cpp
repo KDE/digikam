@@ -63,11 +63,13 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     int  width, height, rgbmax;
     char nl;
 
+    qCDebug(LOG_DIMG_PPM) << "Opening file" << filePath;
+
     FILE* const file = fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (!file)
     {
-        qCDebug(LOG_DIMG) << "Cannot open image file.";
+        qCWarning(LOG_DIMG_PPM) << "Cannot open image file.";
         loadingFailed();
         return false;
     }
@@ -76,7 +78,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (fread(&header, 2, 1, file) != 1)
     {
-        qCDebug(LOG_DIMG) << "Cannot read header of file.";
+        qCWarning(LOG_DIMG_PPM) << "Cannot read header of file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -86,7 +88,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (*c != 'P')
     {
-        qCDebug(LOG_DIMG) << "Not a PPM file.";
+        qCWarning(LOG_DIMG_PPM) << "Not a PPM file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -96,7 +98,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (*c != '6')
     {
-        qCDebug(LOG_DIMG) << "Not a PPM file.";
+        qCWarning(LOG_DIMG_PPM) << "Not a PPM file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -107,7 +109,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     // FIXME: scanf without field width limits can crash with huge input data
     if (fscanf(file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4)
     {
-        qCDebug(LOG_DIMG) << "Corrupted PPM file.";
+        qCWarning(LOG_DIMG_PPM) << "Corrupted PPM file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -115,7 +117,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (rgbmax <= 255)
     {
-        qCDebug(LOG_DIMG) << "Not a 16 bits per color per pixel PPM file.";
+        qCWarning(LOG_DIMG_PPM) << "Not a 16 bits per color per pixel PPM file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -134,7 +136,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
         if (data.isNull())
         {
-            qCDebug(LOG_DIMG) << "Failed to allocate memory for loading" << filePath;
+            qCWarning(LOG_DIMG_PPM) << "Failed to allocate memory for loading" << filePath;
             fclose(file);
             loadingFailed();
             return false;
@@ -145,9 +147,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         float fac = 65535.0 / rgbmax;
         int checkpoint = 0;
 
-#ifdef USE_IMGLOADERDEBUGMSG
-        qCDebug(LOG_DIMG) << "rgbmax=" << rgbmax << "  fac=" << fac;
-#endif
+        qCDebug(LOG_DIMG_PPM) << "rgbmax=" << rgbmax << "  fac=" << fac;
 
         for (int h = 0; h < height; ++h)
         {
@@ -171,7 +171,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
                 if (fread(src, 6 * sizeof(unsigned char), 1, file) != 1)
                 {
-                    qCDebug(LOG_DIMG) << "Premature end of PPM file";
+                    qCWarning(LOG_DIMG_PPM) << "Premature end of PPM file";
                     fclose(file);
                     loadingFailed();
                     return false;

@@ -61,9 +61,7 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef USE_IMGLOADERDEBUGMSG
-    qCDebug(LOG_DIMG) << buffer;
-#endif
+    qCDebug(LOG_DIMG_JPEG) << buffer;
 
     longjmp(myerr->setjmp_buffer, 1);
 }
@@ -73,11 +71,7 @@ void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef USE_IMGLOADERDEBUGMSG
-    qCDebug(LOG_DIMG) << buffer << " (" << msg_level << ")";
-#else
-    Q_UNUSED(msg_level);
-#endif
+    qCDebug(LOG_DIMG_JPEG) << buffer << " (" << msg_level << ")";
 }
 
 void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
@@ -85,9 +79,7 @@ void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef USE_IMGLOADERDEBUGMSG
-    qCDebug(LOG_DIMG) << buffer;
-#endif
+    qCDebug(LOG_DIMG_JPEG) << buffer;
 }
 
 JPEGLoader::JPEGLoader(DImg* const image)
@@ -352,7 +344,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         if (cinfo.rec_outbuf_height > 16)
         {
             jpeg_destroy_decompress(&cinfo);
-            qCDebug(LOG_DIMG) << "Height of JPEG scanline buffer out of range!";
+            qCWarning(LOG_DIMG_JPEG) << "Height of JPEG scanline buffer out of range!";
             delete cleanupData;
             loadingFailed();
             return false;
@@ -365,7 +357,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             ))
         {
             jpeg_destroy_decompress(&cinfo);
-            qCDebug(LOG_DIMG)
+            qCWarning(LOG_DIMG_JPEG)
                     << "JPEG colorspace ("
                     << cinfo.out_color_space
                     << ") or Number of JPEG color components ("
@@ -382,7 +374,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         if (!data)
         {
             jpeg_destroy_decompress(&cinfo);
-            qCDebug(LOG_DIMG) << "Cannot allocate memory!";
+            qCWarning(LOG_DIMG_JPEG) << "Cannot allocate memory!";
             delete cleanupData;
             loadingFailed();
             return false;
@@ -394,7 +386,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         if (!dest)
         {
             jpeg_destroy_decompress(&cinfo);
-            qCDebug(LOG_DIMG) << "Cannot allocate memory!";
+            qCWarning(LOG_DIMG_JPEG) << "Cannot allocate memory!";
             delete cleanupData;
             loadingFailed();
             return false;
@@ -746,7 +738,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     {
         case 1:  // 2x1, 1x1, 1x1 (4:2:2) : Medium
         {
-            qCDebug(LOG_DIMG) << "Using LibJPEG medium chroma-subsampling (4:2:2)";
+            qCDebug(LOG_DIMG_JPEG) << "Using LibJPEG medium chroma-subsampling (4:2:2)";
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -758,7 +750,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
         case 2:  // 2x2, 1x1, 1x1 (4:1:1) : High
         {
-            qCDebug(LOG_DIMG) << "Using LibJPEG high chroma-subsampling (4:1:1)";
+            qCDebug(LOG_DIMG_JPEG) << "Using LibJPEG high chroma-subsampling (4:1:1)";
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 2;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -770,7 +762,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
         default:  // 1x1 1x1 1x1 (4:4:4) : None
         {
-            qCDebug(LOG_DIMG) << "Using LibJPEG none chroma-subsampling (4:4:4)";
+            qCDebug(LOG_DIMG_JPEG) << "Using LibJPEG none chroma-subsampling (4:4:4)";
             cinfo.comp_info[0].h_samp_factor = 1;
             cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -784,7 +776,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     jpeg_set_quality(&cinfo, quality, true);
     jpeg_start_compress(&cinfo, true);
 
-    qCDebug(LOG_DIMG) << "Using LibJPEG quality compression value: " << quality;
+    qCDebug(LOG_DIMG_JPEG) << "Using LibJPEG quality compression value: " << quality;
 
     if (observer)
     {

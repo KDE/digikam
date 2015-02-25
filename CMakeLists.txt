@@ -107,7 +107,6 @@ option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server execut
 
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
-option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
 
 ############## Find Packages ###################
 
@@ -331,8 +330,6 @@ MACRO_BOOL_TO_01(Baloo_FOUND              HAVE_BALOO)
 # this, so disable. If other renderers switch to coarser logical
 # pixels, one probably needs this feature on these platforms as well.
 MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
-
-MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
 
 # Set config files accordingly with optional dependencies
 

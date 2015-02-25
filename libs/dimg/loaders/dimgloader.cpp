@@ -165,7 +165,7 @@ qint64 DImgLoader::checkAllocation(qint64 fullSize)
 {
     if (fullSize > std::numeric_limits<int>::max())
     {
-        qCDebug(LOG_DIMG) << "Cannot allocate buffer of size" << fullSize;
+        qCWarning(LOG_DIMG) << "Cannot allocate buffer of size" << fullSize;
         return 0;
     }
 
@@ -179,12 +179,12 @@ qint64 DImgLoader::checkAllocation(qint64 fullSize)
 
         if (res == -1)
         {
-            qCDebug(LOG_DIMG) << "Not a recognized platform to get memory information";
+            qCWarning(LOG_DIMG) << "Not a recognized platform to get memory information";
             return -1;
         }
         else if (res == 0)
         {
-            qCDebug(LOG_DIMG) << "Error to get physical memory information form a recognized platform";
+            qCWarning(LOG_DIMG) << "Error to get physical memory information form a recognized platform";
             return 0;
         }
 
@@ -192,8 +192,8 @@ qint64 DImgLoader::checkAllocation(qint64 fullSize)
 
         if (fullSize > available)
         {
-            qCDebug(LOG_DIMG) << "Not enough memory to allocate buffer of size " << fullSize;
-            qCDebug(LOG_DIMG) << "Available memory size is " << available;
+            qCWarning(LOG_DIMG) << "Not enough memory to allocate buffer of size " << fullSize;
+            qCWarning(LOG_DIMG) << "Available memory size is " << available;
             return 0;
         }
     }

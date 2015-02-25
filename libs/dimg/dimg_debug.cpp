@@ -19,4 +19,14 @@
 
 #include "dimg_debug.h"
 
-Q_LOGGING_CATEGORY(LOG_DIMG, "digikam.dimg")
+// note, per default only warnings and more severe messages are logged for other than general category
+Q_LOGGING_CATEGORY(LOG_DIMG,        "digikam.dimg")
+Q_LOGGING_CATEGORY(LOG_DIMG_JPEG,   "digikam.dimg.jpeg",   QtWarningMsg)
+Q_LOGGING_CATEGORY(LOG_DIMG_JP2K,   "digikam.dimg.jp2k",   QtWarningMsg)
+Q_LOGGING_CATEGORY(LOG_DIMG_PGF,    "digikam.dimg.pgf",    QtWarningMsg)
+Q_LOGGING_CATEGORY(LOG_DIMG_PNG,    "digikam.dimg.png",    QtWarningMsg)
+Q_LOGGING_CATEGORY(LOG_DIMG_PPM,    "digikam.dimg.ppm",    QtWarningMsg)
+Q_LOGGING_CATEGORY(LOG_DIMG_TIFF,   "digikam.dimg.tiff",   QtWarningMsg)
+Q_LOGGING_CATEGORY(LOG_DIMG_RAW,    "digikam.dimg.raw",    QtWarningMsg)
+Q_LOGGING_CATEGORY(LOG_DIMG_QIMAGE, "digikam.dimg.qimage", QtWarningMsg)
+

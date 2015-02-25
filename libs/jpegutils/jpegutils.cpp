@@ -131,9 +131,8 @@ static void jpegutils_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef USE_IMGLOADERDEBUGMSG
-    qCDebug(DIGIKAM_GENERAL_LOG) << buffer << " (" << msg_level << ")";
-#endif
+    // TODO this was behind the ifdef guard for dimg imageloaders, should this class be moved to dimg?
+    //qCDebug(DIGIKAM_GENERAL_LOG) << buffer << " (" << msg_level << ")";
 }
 
 static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
@@ -141,9 +140,8 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef USE_IMGLOADERDEBUGMSG
-    qCDebug(DIGIKAM_GENERAL_LOG) << buffer;
-#endif
+    // TODO this was behind the ifdef guard for dimg imageloaders, should this class be moved to dimg?
+    //qCDebug(DIGIKAM_GENERAL_LOG) << buffer;
 }
 
 bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
