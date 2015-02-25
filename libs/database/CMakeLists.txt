@@ -75,11 +75,6 @@ set(libhaar_SRCS
     haar/haariface.cpp
 )
 
-set(libalbumsqlite2_SRCS
-    album/albumdb_sqlite2.cpp
-    utils/upgradedb_sqlite2tosqlite3.cpp
-)
-
 set(libimgqsort_SRCS
     imgqsort/imgqsort.cpp
 )
@@ -95,10 +90,6 @@ set(digikamdatabase_LIB_SRCS
         ${pgfutils_SRCS}
         ${libimgqsort_SRCS}
 )
-
-if(SQLITE2_FOUND)
-    set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libalbumsqlite2_SRCS})
-endif()
 
 add_library(digikamdatabase STATIC ${digikamdatabase_LIB_SRCS})
 
@@ -142,10 +133,6 @@ endif()
 
 if(Baloo_FOUND) # circular linking, because we need baloowrap.h path.
     target_link_libraries(digikamdatabase baloowrap)
-endif()
-
-if(SQLITE2_FOUND)
-    target_link_libraries(digikamdatabase ${SQLITE2_LIBRARIES})
 endif()
 
 # for imgqsort, does it even belong to database?
