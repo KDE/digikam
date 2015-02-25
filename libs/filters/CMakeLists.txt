@@ -8,6 +8,8 @@ set(libfilters_SRCS
     ratingfilter.cpp
 )
 
+#TODO rename to digikamfilters?
+
 add_library(filters STATIC ${libfilters_SRCS})
 
 target_link_libraries(filters

@@ -28,6 +28,12 @@ include_directories(common/ parser/options/ parser/options/database/ parser/opti
 
 add_library(advancedrename STATIC ${libadvancedrename_SRCS})
 
+# TODO importui is not using partial paths, but direct one for from those
+target_include_directories(advancedrename PUBLIC
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/parser>
+)
+
 target_link_libraries(advancedrename
                       digikamdatabase
                         

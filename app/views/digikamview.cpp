@@ -38,6 +38,7 @@
 
 #include <ktoolinvocation.h>
 #include <krun.h>
+#include <kio/netaccess.h>
 
 // Local includes
 

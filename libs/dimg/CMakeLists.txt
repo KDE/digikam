@@ -278,7 +278,7 @@ target_link_libraries(dimg
                       # TODO is this necessary still?
                       ${CMAKE_THREAD_LIBS_INIT}
 
-                      ${LCMS_LIBRARIES} # filters
+                      ${LCMS2_LIBRARIES} # filters
                       
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}

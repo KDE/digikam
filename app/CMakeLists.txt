@@ -173,6 +173,7 @@ target_link_libraries(digikamgui
                       digikamdatabase
                       digikammodels
                       digikamtags
+                      filters
                       dimg
                       dthread
                       threadimageio
@@ -190,6 +191,8 @@ target_link_libraries(digikamgui
                       3rdparty
 
                       fileactionmanager
+
+                      KF5::KDELibs4Support # required for KIO::NetAccess in digikamview
                       
                       Qt5::Core
                       Qt5::Gui

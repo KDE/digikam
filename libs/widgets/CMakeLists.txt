@@ -50,13 +50,15 @@ set(libmainview_SRCS
    )
 
 set(libitemview_SRCS
-    itemview/digikamkcategorizedview.cpp
     itemview/dcategorizedview.cpp
+    itemview/dcategorizedsortfilterproxymodel.cpp
     itemview/ditemdelegate.cpp
+    itemview/dcategorydrawer.cpp
     itemview/imagedelegateoverlay.cpp
     itemview/itemviewhoverbutton.cpp
     itemview/itemviewimagedelegate.cpp
     itemview/itemviewtooltip.cpp
+    itemview/itemviewcategorized.cpp
 )
    
 set(libgraphicsviewwidgets_SRCS

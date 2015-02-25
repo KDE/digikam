@@ -40,6 +40,10 @@
 #include "digikam_export.h"
 #include "dxmlguiwindow.h"
 
+
+// Solid includes (required for ErrorType)
+#include <Solid/SolidNamespace>
+
 namespace Solid
 {
     class Device;

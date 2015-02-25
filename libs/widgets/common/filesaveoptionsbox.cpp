@@ -151,7 +151,7 @@ FileSaveOptionsBox::~FileSaveOptionsBox()
 
 void FileSaveOptionsBox::setImageFileFormat(const QString& ext)
 {
-    qCDebug(LOG_DIMG) << "Format selected: " << ext;
+    qCDebug(LOG_WIDGETS) << "Format selected: " << ext;
     setCurrentIndex(discoverFormat(ext, DImg::NONE));
 }
 
