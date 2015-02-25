@@ -35,19 +35,19 @@
 
 namespace
 {
-static const QString KEY_LATITUDE("Latitude");
-static const QString KEY_LONGITUDE("Longitude");
-static const QString KEY_LATTITUDENUMBER("LatitudeNumber");
-static const QString KEY_LONGITUDENUMBER("LongitudeNumber");
-static const QString KEY_LATITUDEFORMATTED("LatitudeFormatted");
-static const QString KEY_LONGITUDEFORMATTED("LongitudeFormatted");
-static const QString KEY_ALTITUDE("Altitude");
-static const QString KEY_ALTITUDEFORMATTED("AltitudeFormatted");
-static const QString KEY_ORIENTATION("Orientation");
-static const QString KEY_ROLL("Roll");
-static const QString KEY_TILT("Tilt");
-static const QString KEY_ACCURACY("Accuracy");
-static const QString KEY_DESCRIPTION("Description");
+static const QString KEY_LATITUDE(QLatin1String("Latitude"));
+static const QString KEY_LONGITUDE(QLatin1String("Longitude"));
+static const QString KEY_LATTITUDENUMBER(QLatin1String("LatitudeNumber"));
+static const QString KEY_LONGITUDENUMBER(QLatin1String("LongitudeNumber"));
+static const QString KEY_LATITUDEFORMATTED(QLatin1String("LatitudeFormatted"));
+static const QString KEY_LONGITUDEFORMATTED(QLatin1String("LongitudeFormatted"));
+static const QString KEY_ALTITUDE(QLatin1String("Altitude"));
+static const QString KEY_ALTITUDEFORMATTED(QLatin1String("AltitudeFormatted"));
+static const QString KEY_ORIENTATION(QLatin1String("Orientation"));
+static const QString KEY_ROLL(QLatin1String("Roll"));
+static const QString KEY_TILT(QLatin1String("Tilt"));
+static const QString KEY_ACCURACY(QLatin1String("Accuracy"));
+static const QString KEY_DESCRIPTION(QLatin1String("Description"));
 }
 
 namespace Digikam
@@ -73,7 +73,7 @@ PositionKeys::PositionKeys()
 
 QString PositionKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
-    ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
+    ImageInfo info         = ImageInfo::fromUrl(settings.fileUrl);
     ImagePosition position = info.imagePosition();
 
     QString result;

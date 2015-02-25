@@ -40,10 +40,11 @@
 namespace Digikam
 {
 
-ReplaceDialog::ReplaceDialog(Rule* parent)
-    : RuleDialog(parent), ui(new Ui::ReplaceModifierDialogWidget())
+ReplaceDialog::ReplaceDialog(Rule* const parent)
+    : RuleDialog(parent),
+      ui(new Ui::ReplaceModifierDialogWidget())
 {
-    QWidget* mainWidget = new QWidget(this);
+    QWidget* const mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
     setSettingsWidget(mainWidget);
     ui->source->setFocus();
@@ -58,12 +59,12 @@ ReplaceDialog::~ReplaceDialog()
 
 ReplaceModifier::ReplaceModifier()
     : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
-               "document-edit")
+               QLatin1String("document-edit"))
 {
-    addToken("{replace:\"||old||\", \"||new||\",||options||}",
+    addToken(QLatin1String("{replace:\"||old||\", \"||new||\",||options||}"),
              i18n("Replace text (||options||: ||r|| = regular expression, ||i|| = ignore case)"));
 
-    QRegExp reg("\\{replace(:\"(.*)\",\"(.*)\"(,(r|ri|ir|i))?)\\}");
+    QRegExp reg(QLatin1String("\\{replace(:\"(.*)\",\"(.*)\"(,(r|ri|ir|i))?)\\}"));
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -87,20 +88,20 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 
             if (dlg->ui->isRegExp->isChecked())
             {
-                options.append('r');
+                options.append(QLatin1Char('r'));
             }
 
             if (!dlg->ui->caseSensitive->isChecked())
             {
-                options.append('i');
+                options.append(QLatin1Char('i'));
             }
 
             if (!options.isEmpty())
             {
-                options.prepend(',');
+                options.prepend(QLatin1Char(','));
             }
 
-            result = QString("{replace:\"%1\",\"%2\"%3}").arg(oldStr).arg(newStr).arg(options);
+            result = QString::fromUtf8("{replace:\"%1\",\"%2\"%3}").arg(oldStr).arg(newStr).arg(options);
         }
     }
 
@@ -116,14 +117,14 @@ QString ReplaceModifier::parseOperation(ParseSettings& settings)
     QString replacement = reg.cap(3);
     QString result      = settings.str2Modify;
     QString options     = reg.cap(5);
-    Qt::CaseSensitivity caseType = (!options.isEmpty() && options.contains('i'))
+    Qt::CaseSensitivity caseType = (!options.isEmpty() && options.contains(QLatin1Char('i')))
                                    ? Qt::CaseInsensitive
                                    : Qt::CaseSensitive;
 
     QRegExp ro(original);
     ro.setCaseSensitivity(caseType);
 
-    if (!options.isEmpty() && options.contains('r'))
+    if (!options.isEmpty() && options.contains(QLatin1Char('r')))
     {
         result.replace(ro, replacement);
     }

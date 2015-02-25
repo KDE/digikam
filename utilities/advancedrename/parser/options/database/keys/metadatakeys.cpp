@@ -34,30 +34,30 @@
 
 namespace
 {
-static const QString KEY_MAKE("CameraMake");
-static const QString KEY_MODEL("CameraModel");
-static const QString KEY_LENS("CameraLens");
-static const QString KEY_APERTURE("Aperture");
-static const QString KEY_FOCALLENGTH("FocalLength");
-static const QString KEY_FOCALLENGTH35("FocalLength35");
-static const QString KEY_EXPOSURETIME("ExposureTime");
-static const QString KEY_EXPOSUREPROGRAM("ExposureProgram");
-static const QString KEY_EXPOSUREMODE("ExposureMode");
-static const QString KEY_SENSITIVITY("Sensitivity");
-static const QString KEY_FLASHMODE("FlashMode");
-static const QString KEY_WHITEBALANCE("WhiteBalance");
-static const QString KEY_WHITEBALANCECOLORTEMPERATURE("WhiteBalanceColorTemp");
-static const QString KEY_METERINGMODE("MeteringMode");
-static const QString KEY_SUBJECTDISTANCE("SubjectDistance");
-static const QString KEY_SUBJECTDISTANCECATEGORY("SubjectDistanceCategory");
+static const QString KEY_MAKE(QLatin1String("CameraMake"));
+static const QString KEY_MODEL(QLatin1String("CameraModel"));
+static const QString KEY_LENS(QLatin1String("CameraLens"));
+static const QString KEY_APERTURE(QLatin1String("Aperture"));
+static const QString KEY_FOCALLENGTH(QLatin1String("FocalLength"));
+static const QString KEY_FOCALLENGTH35(QLatin1String("FocalLength35"));
+static const QString KEY_EXPOSURETIME(QLatin1String("ExposureTime"));
+static const QString KEY_EXPOSUREPROGRAM(QLatin1String("ExposureProgram"));
+static const QString KEY_EXPOSUREMODE(QLatin1String("ExposureMode"));
+static const QString KEY_SENSITIVITY(QLatin1String("Sensitivity"));
+static const QString KEY_FLASHMODE(QLatin1String("FlashMode"));
+static const QString KEY_WHITEBALANCE(QLatin1String("WhiteBalance"));
+static const QString KEY_WHITEBALANCECOLORTEMPERATURE(QLatin1String("WhiteBalanceColorTemp"));
+static const QString KEY_METERINGMODE(QLatin1String("MeteringMode"));
+static const QString KEY_SUBJECTDISTANCE(QLatin1String("SubjectDistance"));
+static const QString KEY_SUBJECTDISTANCECATEGORY(QLatin1String("SubjectDistanceCategory"));
 
-static const QString KEY_ASPECTRATIO("AspectRatio");
-static const QString KEY_AUDIOBITRATE("AudioBitRate");
-static const QString KEY_AUDIOCHANNELTYPE("AudioChannelType");
-static const QString KEY_AUDIOCOMPRESSOR("AudioCompressor");
-static const QString KEY_DURATION("Duration");
-static const QString KEY_FRAMERATE("FrameRate");
-static const QString KEY_VIDEOCODEC("VideoCodec");
+static const QString KEY_ASPECTRATIO(QLatin1String("AspectRatio"));
+static const QString KEY_AUDIOBITRATE(QLatin1String("AudioBitRate"));
+static const QString KEY_AUDIOCHANNELTYPE(QLatin1String("AudioChannelType"));
+static const QString KEY_AUDIOCOMPRESSOR(QLatin1String("AudioCompressor"));
+static const QString KEY_DURATION(QLatin1String("Duration"));
+static const QString KEY_FRAMERATE(QLatin1String("FrameRate"));
+static const QString KEY_VIDEOCODEC(QLatin1String("VideoCodec"));
 }
 
 namespace Digikam
@@ -94,8 +94,8 @@ MetadataKeys::MetadataKeys()
 
 QString MetadataKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
-    ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
-    ImageMetadataContainer container = info.imageMetadataContainer();
+    ImageInfo info                        = ImageInfo::fromUrl(settings.fileUrl);
+    ImageMetadataContainer container      = info.imageMetadataContainer();
     VideoMetadataContainer videoContainer = info.videoMetadataContainer();
     QString result;
 

@@ -40,10 +40,11 @@
 namespace Digikam
 {
 
-RangeDialog::RangeDialog(Rule* parent)
-    : RuleDialog(parent), ui(new Ui::RangeModifierDialogWidget())
+RangeDialog::RangeDialog(Rule* const parent)
+    : RuleDialog(parent),
+      ui(new Ui::RangeModifierDialogWidget())
 {
-    QWidget* mainWidget = new QWidget(this);
+    QWidget* const mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
     setSettingsWidget(mainWidget);
     ui->startInput->setFocus();
@@ -67,11 +68,14 @@ void RangeDialog::slotToTheEndChecked(bool checked)
 // --------------------------------------------------------
 
 RangeModifier::RangeModifier()
-    : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"), "measure")
+    : Modifier(i18n("Range..."),
+               i18n("Add only a specific range of a renaming option"),
+               QLatin1String("measure"))
 {
-    addToken("{range:||from||,||to||}", i18n("Extract a specific range (if '||to||' is omitted, go to the end of string)"));
+    addToken(QLatin1String("{range:||from||,||to||}"),
+             i18n("Extract a specific range (if '||to||' is omitted, go to the end of string)"));
 
-    QRegExp reg("\\{range(:(-?\\d+)(,((-1|\\d+))?)?)\\}");
+    QRegExp reg(QLatin1String("\\{range(:(-?\\d+)(,((-1|\\d+))?)?)\\}"));
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -91,11 +95,11 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 
         if (dlg->ui->toTheEndCheckBox->isChecked())
         {
-            result = QString("{range:%1,}").arg(QString::number(start));
+            result = QString::fromUtf8("{range:%1,}").arg(QString::number(start));
         }
         else
         {
-            result = QString("{range:%1,%2}").arg(QString::number(start))
+            result = QString::fromUtf8("{range:%1,%2}").arg(QString::number(start))
                      .arg(QString::number(stop));
         }
     }

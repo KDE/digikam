@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-DatabaseOptionDialog::DatabaseOptionDialog(Rule* parent) :
+DatabaseOptionDialog::DatabaseOptionDialog(Rule* const parent) :
     RuleDialog(parent),
     dbkeySelectorView(0),
     separatorLineEdit(0)
@@ -55,7 +55,7 @@ DatabaseOptionDialog::DatabaseOptionDialog(Rule* parent) :
     dbkeySelectorView         = new DbKeySelectorView(this);
     QLabel* const customLabel = new QLabel(i18n("Keyword separator:"));
     separatorLineEdit         = new QLineEdit(this);
-    separatorLineEdit->setText("_");
+    separatorLineEdit->setText(QLatin1String("_"));
 
     // --------------------------------------------------------
 
@@ -78,10 +78,12 @@ DatabaseOptionDialog::~DatabaseOptionDialog()
 // --------------------------------------------------------
 
 DatabaseOption::DatabaseOption()
-    : Option(i18n("Database..."), i18n("Add information from the database"), "server-database")
+    : Option(i18n("Database..."),
+             i18n("Add information from the database"),
+             QLatin1String("server-database"))
 {
-    addToken("[db:||key||]", i18n("Add database information"));
-    QRegExp reg("\\[db(:(.*))\\]");
+    addToken(QLatin1String("[db:||key||]"), i18n("Add database information"));
+    QRegExp reg(QLatin1String("\\[db(:(.*))\\]"));
     reg.setMinimal(true);
     setRegExp(reg);
 
@@ -130,7 +132,7 @@ void DatabaseOption::slotTokenTriggered(const QString& token)
 
         foreach(const QString& key, checkedKeys)
         {
-            QString keyStr = QString("[db:%1]").arg(key);
+            QString keyStr = QString::fromUtf8("[db:%1]").arg(key);
             keys << keyStr;
         }
     }
@@ -159,8 +161,7 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
         return QString();
     }
 
-    DbKeysCollection* dbkey = 0;
-    dbkey                   = m_map.value(keyword);
+    DbKeysCollection* const dbkey = m_map.value(keyword);
 
     if (!dbkey)
     {

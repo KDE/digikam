@@ -44,7 +44,7 @@ namespace Digikam
 
 static QString getDateFormatLinkText()
 {
-    const QString dateFormatLink("<a href='http://qt-project.org/doc/qt-5.0/qtcore/qdatetime.html#toString'>%1</a>");
+    const QString dateFormatLink      = QString::fromUtf8("<a href='http://qt-project.org/doc/qt-5.0/qtcore/qdatetime.html#toString'>%1</a>");
     const QString dateFormatLinkDescr = i18nc("date format settings", "format settings");
 
     return dateFormatLink.arg(dateFormatLinkDescr);
@@ -54,13 +54,11 @@ static QString getDateFormatLinkText()
 
 DateFormat::DateFormat()
 {
-    m_map.insert(Standard,      DateFormatDescriptor(QString("Standard"),       QString("yyyyMMddThhmmss")));
-    m_map.insert(ISO,           DateFormatDescriptor(QString("ISO"),            Qt::ISODate));
-    m_map.insert(FullText,      DateFormatDescriptor(QString("Text"),           Qt::TextDate));
-#if QT_VERSION >= 0x040700
-    m_map.insert(UnixTimeStamp, DateFormatDescriptor(QString("UnixTimeStamp"),  QVariant()));
-#endif
-    m_map.insert(Custom,        DateFormatDescriptor(QString("Custom"),         QVariant()));
+    m_map.insert(Standard,      DateFormatDescriptor(QLatin1String("Standard"),       QLatin1String("yyyyMMddThhmmss")));
+    m_map.insert(ISO,           DateFormatDescriptor(QLatin1String("ISO"),            Qt::ISODate));
+    m_map.insert(FullText,      DateFormatDescriptor(QLatin1String("Text"),           Qt::TextDate));
+    m_map.insert(UnixTimeStamp, DateFormatDescriptor(QLatin1String("UnixTimeStamp"),  QVariant()));
+    m_map.insert(Custom,        DateFormatDescriptor(QLatin1String("Custom"),         QVariant()));
 }
 
 DateFormat::Type DateFormat::type(const QString& identifier)
@@ -111,9 +109,10 @@ QVariant DateFormat::format(const QString& identifier)
 // --------------------------------------------------------
 
 DateOptionDialog::DateOptionDialog(Rule* parent)
-    : RuleDialog(parent), ui(new Ui::DateOptionDialogWidget)
+    : RuleDialog(parent),
+      ui(new Ui::DateOptionDialogWidget)
 {
-    QWidget* mainWidget = new QWidget(this);
+    QWidget* const mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
 
     // --------------------------------------------------------
@@ -128,6 +127,7 @@ DateOptionDialog::DateOptionDialog(Rule* parent)
 
     // fill the date format combobox
     DateFormat df;
+
     foreach(const DateFormat::DateFormatDescriptor& desc, df.map())
     {
         ui->dateFormatPicker->addItem(desc.first);
@@ -142,8 +142,8 @@ DateOptionDialog::DateOptionDialog(Rule* parent)
     ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
     ui->dateFormatLink->setText(getDateFormatLinkText());
 
-    QRegExp validRegExp("[^/]+");
-    QValidator* validator = new QRegExpValidator(validRegExp, this);
+    QRegExp validRegExp(QLatin1String("[^/]+"));
+    QValidator* const validator = new QRegExpValidator(validRegExp, this);
     ui->customFormatInput->setValidator(validator);
     ui->customFormatInput->setPlaceholderText(i18n("Enter custom format"));
 
@@ -189,13 +189,9 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
         case DateFormat::Custom:
             return date.toString(ui->customFormatInput->text());
             break;
-#if QT_VERSION >= 0x040700
-
         case DateFormat::UnixTimeStamp:
-            return QString("%1").arg(date.toMSecsSinceEpoch());
+            return QString::fromUtf8("%1").arg(date.toMSecsSinceEpoch());
             break;
-#endif
-
         default:
             break;
     }
@@ -241,7 +237,7 @@ void DateOptionDialog::slotCustomFormatChanged(const QString&)
 
 void DateOptionDialog::updateExampleLabel()
 {
-    QString result = QString("example: %1").arg(formattedDateTime(QDateTime::currentDateTime()));
+    QString result = QString::fromUtf8("example: %1").arg(formattedDateTime(QDateTime::currentDateTime()));
     ui->exampleLabel->setText(result);
 }
 
@@ -250,17 +246,13 @@ void DateOptionDialog::updateExampleLabel()
 DateOption::DateOption()
     : Option(i18n("Date && Time..."),
              i18n("Add date and time information"),
-             "view-pim-calendar")
+             QLatin1String("view-pim-calendar"))
 {
-    addToken("[date]",            i18n("Date and time (standard format)"));
-#if QT_VERSION >= 0x040700
-    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|UnixTimeStamp|Text)"));
-#else
-    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text)"));
-#endif
-    addToken("[date:||format||]", i18n("Date and time") + " (" +  getDateFormatLinkText() + ')');
+    addToken(QLatin1String("[date]"),            i18n("Date and time (standard format)"));
+    addToken(QLatin1String("[date:||key||]"),    i18n("Date and time (||key|| = Standard|ISO|UnixTimeStamp|Text)"));
+    addToken(QLatin1String("[date:||format||]"), i18n("Date and time") + QLatin1String(" (") +  getDateFormatLinkText() + QLatin1Char(')'));
 
-    QRegExp reg("\\[date(:(.*))?\\]");
+    QRegExp reg(QLatin1String("\\[date(:(.*))?\\]"));
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -275,7 +267,7 @@ QString DateOption::parseOperation(ParseSettings& settings)
     const int MIN_TOKEN_SIZE = 2;
 
     if ((token.size() > MIN_TOKEN_SIZE) &&
-        (token.startsWith('"') && token.endsWith('"')))
+        (token.startsWith(QLatin1Char('"')) && token.endsWith(QLatin1Char('"'))))
     {
         token = token.remove(0, 1);
         token.chop(1);
@@ -321,13 +313,9 @@ QString DateOption::parseOperation(ParseSettings& settings)
         // we seem to use custom format settings or UnixTimeStamp here
         switch (df.type(token))
         {
-#if QT_VERSION >= 0x040700
-
             case DateFormat::UnixTimeStamp:
-                result = QString("%1").arg(dateTime.toMSecsSinceEpoch());
+                result = QString::fromUtf8("%1").arg(dateTime.toMSecsSinceEpoch());
                 break;
-#endif
-
             default:
                 result = dateTime.toString(token);
                 break;
@@ -377,13 +365,9 @@ void DateOption::slotTokenTriggered(const QString& token)
                 // we seem to use UnixTimeStamp here
                 switch (index)
                 {
-#if QT_VERSION >= 0x040700
-
                     case DateFormat::UnixTimeStamp:
-                        dateString = QString("%1").arg(date.toMSecsSinceEpoch());
+                        dateString = QString::fromUtf8("%1").arg(date.toMSecsSinceEpoch());
                         break;
-#endif
-
                     default:
                         break;
                 }
@@ -403,17 +387,17 @@ void DateOption::slotTokenTriggered(const QString& token)
         // use predefined keywords for date formatting
         else
         {
-            QString tokenStr = QString("[date:%1]");
+            QString tokenStr = QLatin1String("[date:%1]");
 
             switch (index)
             {
                 case DateFormat::Standard:
-                    dateString = tokenStr.arg(QString(""));
-                    dateString.remove(':');
+                    dateString = tokenStr.arg(QLatin1String(""));
+                    dateString.remove(QLatin1Char(':'));
                     break;
 
                 case DateFormat::Custom:
-                    dateString = tokenStr.arg(QString("\"%1\"").arg(dlg->ui->customFormatInput->text()));
+                    dateString = tokenStr.arg(QString::fromUtf8("\"%1\"").arg(dlg->ui->customFormatInput->text()));
                     break;
 
                 default:
@@ -425,6 +409,7 @@ void DateOption::slotTokenTriggered(const QString& token)
     }
 
     delete dlg;
+
     emit signalTokenTriggered(dateString);
 }
 

@@ -39,11 +39,11 @@ namespace Digikam
 RemoveDoublesModifier::RemoveDoublesModifier()
     : Modifier(i18n("Remove Doubles"),
                i18n("Remove duplicate words"),
-               "edit-copy")
+               QLatin1String("edit-copy"))
 {
-    addToken("{removedoubles}", description());
+    addToken(QLatin1String("{removedoubles}"), description());
 
-    QRegExp reg("\\{removedoubles\\}");
+    QRegExp reg(QLatin1String("\\{removedoubles\\}"));
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -53,8 +53,9 @@ QString RemoveDoublesModifier::parseOperation(ParseSettings& settings)
     QString result = settings.str2Modify;
 
     QSet<QString> knownWords;
-    QStringList words = result.split(QChar(' '));
+    QStringList words = result.split(QLatin1Char(' '));
     QStringList newString;
+
     foreach(const QString& word, words)
     {
         if (!knownWords.contains(word))
@@ -66,7 +67,7 @@ QString RemoveDoublesModifier::parseOperation(ParseSettings& settings)
 
     if (!newString.isEmpty())
     {
-        result = newString.join(QChar(' '));
+        result = newString.join(QLatin1Char(' '));
     }
 
     return result;

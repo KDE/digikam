@@ -31,7 +31,7 @@
 
 namespace Ui
 {
-class RangeModifierDialogWidget;
+    class RangeModifierDialogWidget;
 }
 
 namespace Digikam
@@ -43,7 +43,7 @@ class RangeDialog : public RuleDialog
 
 public:
 
-    explicit RangeDialog(Rule* parent);
+    explicit RangeDialog(Rule* const parent);
     ~RangeDialog();
 
     Ui::RangeModifierDialogWidget* const ui;
@@ -80,6 +80,5 @@ private:
 };
 
 } // namespace Digikam
-
 
 #endif /* RANGEMODIFIER_H */

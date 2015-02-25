@@ -35,19 +35,19 @@
 
 namespace
 {
-static const QString KEY_DEFAULTCOMMENT("DefaultComment");
-static const QString KEY_DIMENSION("Dimension");
-static const QString KEY_FILESIZE("FileSize");
-static const QString KEY_FORMAT("Format");
-static const QString KEY_MEDIATYPE("MediaType");
-static const QString KEY_RATING("Rating");
-static const QString KEY_HEIGHT("Height");
-static const QString KEY_WIDTH("Width");
-static const QString KEY_ORIENTATION("Orientation");
-static const QString KEY_COLORDEPTH("ColorDepth");
-static const QString KEY_COLORMODEL("ColorModel");
-static const QString KEY_DEFAULTAUTHOR("DefaultAuthor");
-static const QString KEY_AUTHORS("Authors");
+static const QString KEY_DEFAULTCOMMENT(QLatin1String("DefaultComment"));
+static const QString KEY_DIMENSION(QLatin1String("Dimension"));
+static const QString KEY_FILESIZE(QLatin1String("FileSize"));
+static const QString KEY_FORMAT(QLatin1String("Format"));
+static const QString KEY_MEDIATYPE(QLatin1String("MediaType"));
+static const QString KEY_RATING(QLatin1String("Rating"));
+static const QString KEY_HEIGHT(QLatin1String("Height"));
+static const QString KEY_WIDTH(QLatin1String("Width"));
+static const QString KEY_ORIENTATION(QLatin1String("Orientation"));
+static const QString KEY_COLORDEPTH(QLatin1String("ColorDepth"));
+static const QString KEY_COLORMODEL(QLatin1String("ColorModel"));
+static const QString KEY_DEFAULTAUTHOR(QLatin1String("DefaultAuthor"));
+static const QString KEY_AUTHORS(QLatin1String("Authors"));
 }
 
 namespace Digikam
@@ -99,11 +99,11 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
         {
             foreach(const QString& author, authors)
             {
-                result += author + ',';
+                result += author + QLatin1Char(',');
             }
         }
 
-        if (result.endsWith(','))
+        if (result.endsWith(QLatin1Char(',')))
         {
             result.chop(1);
         }
@@ -118,7 +118,7 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
             dimension.setHeight(0);
         }
 
-        result = QString("%1x%2").arg(dimension.width()).arg(dimension.height());
+        result = QString::fromUtf8("%1x%2").arg(dimension.width()).arg(dimension.height());
     }
     else if (key == KEY_HEIGHT)
     {
@@ -155,24 +155,24 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
         switch (info.category())
         {
             case DatabaseItem::UndefinedCategory:
-                result = QString("Undefined");
+                result = QLatin1String("Undefined");
                 break;
 
             case DatabaseItem::Image:
-                result = QString("Image");
+                result = QLatin1String("Image");
                 break;
 
             case DatabaseItem::Video:
-                result = QString("Video");
+                result = QLatin1String("Video");
                 break;
 
             case DatabaseItem::Audio:
-                result = QString("Audio");
+                result = QLatin1String("Audio");
                 break;
 
             case DatabaseItem::Other:
             default:
-                result = QString("Other");
+                result = QLatin1String("Other");
                 break;
         }
     }

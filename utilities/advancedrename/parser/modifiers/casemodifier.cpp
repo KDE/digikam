@@ -35,16 +35,16 @@ CaseModifier::CaseModifier()
 {
     setUseTokenMenu(true);
 
-    addToken("{upper}",      i18n("Convert to uppercase"),
+    addToken(QLatin1String("{upper}"),      i18n("Convert to uppercase"),
              i18n("Uppercase"));
 
-    addToken("{lower}",      i18n("Convert to lowercase"),
+    addToken(QLatin1String("{lower}"),      i18n("Convert to lowercase"),
              i18n("Lowercase"));
 
-    addToken("{firstupper}", i18n("Convert the first letter of each word to uppercase"),
+    addToken(QLatin1String("{firstupper}"), i18n("Convert the first letter of each word to uppercase"),
              i18n("First Letter of Each Word Uppercase"));
 
-    QRegExp reg("\\{(firstupper|lower|upper)\\}");
+    QRegExp reg(QLatin1String("\\{(firstupper|lower|upper)\\}"));
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -54,15 +54,15 @@ QString CaseModifier::parseOperation(ParseSettings& settings)
     const QRegExp& reg   = regExp();
     const QString& token = reg.cap(1);
 
-    if (token == QString("firstupper"))
+    if (token == QLatin1String("firstupper"))
     {
         return firstupper(settings.str2Modify);
     }
-    else if (token == QString("upper"))
+    else if (token == QLatin1String("upper"))
     {
         return settings.str2Modify.toUpper();
     }
-    else if (token == QString("lower"))
+    else if (token == QLatin1String("lower"))
     {
         return settings.str2Modify.toLower();
     }

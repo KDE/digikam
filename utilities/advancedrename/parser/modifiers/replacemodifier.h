@@ -46,7 +46,7 @@ class ReplaceDialog : public RuleDialog
 
 public:
 
-    explicit ReplaceDialog(Rule* parent);
+    explicit ReplaceDialog(Rule* const parent);
     ~ReplaceDialog();
 
     Ui::ReplaceModifierDialogWidget* const ui;
@@ -79,6 +79,5 @@ private:
 };
 
 } // namespace Digikam
-
 
 #endif /* REPLACEMODIFIER_H */

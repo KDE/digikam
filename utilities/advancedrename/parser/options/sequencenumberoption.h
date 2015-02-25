@@ -43,7 +43,7 @@ class SequenceNumberDialog : public RuleDialog
 
 public:
 
-    explicit SequenceNumberDialog(Rule* parent);
+    explicit SequenceNumberDialog(Rule* const parent);
     ~SequenceNumberDialog();
 
     Ui::SequenceNumberOptionDialogWidget* const ui;
@@ -63,7 +63,7 @@ class SequenceNumberOption : public Option
 public:
 
     SequenceNumberOption();
-    ~SequenceNumberOption() {};
+    ~SequenceNumberOption();
 
 protected:
 

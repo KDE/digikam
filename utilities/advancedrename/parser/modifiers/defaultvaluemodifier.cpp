@@ -45,7 +45,7 @@ DefaultValueDialog::DefaultValueDialog(Rule* parent)
 {
     QString defaultValueStr = i18n("Default Value");
 
-    QLabel* const srcLabel = new QLabel(defaultValueStr + ':');
+    QLabel* const srcLabel = new QLabel(defaultValueStr + QLatin1Char(':'));
     valueInput             = new QLineEdit(this);
     valueInput->setToolTip(i18n("<p>Set a default value for empty strings.<br/>"
                                 "When applied to a renaming option, "
@@ -74,11 +74,11 @@ DefaultValueDialog::~DefaultValueDialog()
 DefaultValueModifier::DefaultValueModifier()
     : Modifier(i18nc("default value for empty strings", "Default Value..."),
                i18n("Set a default value for empty strings"),
-               "edit-undo")
+               QLatin1String("edit-undo"))
 {
-    addToken("{default:\"||value||\"}", description());
+    addToken(QLatin1String("{default:\"||value||\"}"), description());
 
-    QRegExp reg("\\{default:\"(.+)\"\\}");
+    QRegExp reg(QLatin1String("\\{default:\"(.+)\"\\}"));
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -97,7 +97,7 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
 
         if (!valueStr.isEmpty())
         {
-            result = QString("{default:\"%1\"}").arg(valueStr);
+            result = QString::fromUtf8("{default:\"%1\"}").arg(valueStr);
         }
     }
 

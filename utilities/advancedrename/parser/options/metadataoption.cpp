@@ -55,7 +55,7 @@ MetadataOptionDialog::MetadataOptionDialog(Rule* const parent) :
     metadataPanel             = new MetadataPanel(tab);
     QLabel* const customLabel = new QLabel(i18n("Keyword separator:"));
     separatorLineEdit         = new QLineEdit(this);
-    separatorLineEdit->setText("_");
+    separatorLineEdit->setText(QLatin1String("_"));
 
     // --------------------------------------------------------
 
@@ -75,7 +75,7 @@ MetadataOptionDialog::MetadataOptionDialog(Rule* const parent) :
     for (int i = 0; i < tabs; ++i)
     {
         QString text = tab->tabText(i);
-        text.remove("viewer", Qt::CaseInsensitive);
+        text.remove(QLatin1String("viewer"), Qt::CaseInsensitive);
         tab->setTabText(i, text.simplified());
     }
 
@@ -100,25 +100,26 @@ MetadataOptionDialog::~MetadataOptionDialog()
 // --------------------------------------------------------
 
 MetadataOption::MetadataOption()
-    : Option(i18n("Metadata..."), i18n("Add metadata information"))
+    : Option(i18n("Metadata..."),
+             i18n("Add metadata information"))
 {
-    QString iconName("metadataedit");
+    QString iconName(QLatin1String("metadataedit"));
 
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
     QPixmap icon = QIcon::fromTheme(iconName).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize));
 
     if (icon.isNull())
     {
-        iconName = QString("editimage");
+        iconName = QLatin1String("editimage");
     }
 
     setIcon(iconName);
 
     // --------------------------------------------------------
 
-    addToken("[meta:||key||]", description());
+    addToken(QLatin1String("[meta:||key||]"), description());
 
-    QRegExp reg("\\[meta(:(.*))\\]");
+    QRegExp reg(QLatin1String("\\[meta(:(.*))\\]"));
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -137,7 +138,7 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 
         foreach(const QString& tag, checkedTags)
         {
-            tags << QString("[meta:%1]").arg(tag);
+            tags << QString::fromUtf8("[meta:%1]").arg(tag);
         }
     }
 

@@ -47,8 +47,10 @@
 namespace Digikam
 {
 
-DbKeySelectorItem::DbKeySelectorItem(DbHeaderListItem* parent, const QString& title, const QString& desc)
-    : QTreeWidgetItem(parent), m_key(title), m_description(desc)
+DbKeySelectorItem::DbKeySelectorItem(DbHeaderListItem* const parent, const QString& title, const QString& desc)
+    : QTreeWidgetItem(parent),
+      m_key(title),
+      m_description(desc)
 {
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
@@ -61,13 +63,13 @@ DbKeySelectorItem::DbKeySelectorItem(DbHeaderListItem* parent, const QString& ti
     if (descVal.length() > 512)
     {
         descVal.truncate(512);
-        descVal.append("...");
+        descVal.append(QLatin1String("..."));
     }
 
     setText(1, descVal);
 
     DToolTipStyleSheet cnt;
-    setToolTip(1, "<qt><p>" + cnt.breakString(descVal) + "</p></qt>");
+    setToolTip(1, QLatin1String("<qt><p>") + cnt.breakString(descVal) + QLatin1String("</p></qt>"));
 }
 
 DbKeySelectorItem::~DbKeySelectorItem()
@@ -86,7 +88,7 @@ QString DbKeySelectorItem::description() const
 
 // ------------------------------------------------------------------------------------
 
-DbKeySelector::DbKeySelector(QWidget* parent)
+DbKeySelector::DbKeySelector(QWidget* const parent)
     : QTreeWidget(parent)
 {
     setRootIsDecorated(false);
@@ -99,8 +101,8 @@ DbKeySelector::DbKeySelector(QWidget* parent)
     labels.append(i18n("Key"));
     labels.append(i18n("Description"));
     setHeaderLabels(labels);
-    header()->setResizeMode(0, QHeaderView::Stretch);
-    header()->setResizeMode(1, QHeaderView::Stretch);
+    header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    header()->setSectionResizeMode(1, QHeaderView::Stretch);
 }
 
 DbKeySelector::~DbKeySelector()
@@ -137,7 +139,7 @@ QStringList DbKeySelector::checkedKeysList()
 
     while (*it)
     {
-        DbKeySelectorItem* item = dynamic_cast<DbKeySelectorItem*>(*it);
+        DbKeySelectorItem* const item = dynamic_cast<DbKeySelectorItem*>(*it);
 
         if (item)
         {
@@ -166,12 +168,13 @@ public:
     SearchTextBar* searchBar;
 };
 
-DbKeySelectorView::DbKeySelectorView(QWidget* parent)
-    : QWidget(parent), d(new Private)
+DbKeySelectorView::DbKeySelectorView(QWidget* const parent)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
-    d->selector       = new DbKeySelector(this);
-    d->searchBar      = new SearchTextBar(this, "DbKeySelectorView");
+    QGridLayout* const grid = new QGridLayout(this);
+    d->selector             = new DbKeySelector(this);
+    d->searchBar            = new SearchTextBar(this, "DbKeySelectorView");
 
     grid->addWidget(d->selector,  0, 0, 1, 1);
     grid->addWidget(d->searchBar, 1, 0, 1, 1);
@@ -210,7 +213,7 @@ void DbKeySelectorView::slotSearchTextChanged(const SearchTextSettings& settings
 
     while (*it2)
     {
-        DbHeaderListItem* item = dynamic_cast<DbHeaderListItem*>(*it2);
+        DbHeaderListItem* const item = dynamic_cast<DbHeaderListItem*>(*it2);
 
         if (item)
         {
@@ -224,7 +227,7 @@ void DbKeySelectorView::slotSearchTextChanged(const SearchTextSettings& settings
 
     while (*it)
     {
-        DbKeySelectorItem* item = dynamic_cast<DbKeySelectorItem*>(*it);
+        DbKeySelectorItem* const item = dynamic_cast<DbKeySelectorItem*>(*it);
 
         if (item)
         {
@@ -256,7 +259,7 @@ void DbKeySelectorView::removeChildlessHeaders()
 
     while (*it)
     {
-        DbHeaderListItem* item = dynamic_cast<DbHeaderListItem*>(*it);
+        DbHeaderListItem* const item = dynamic_cast<DbHeaderListItem*>(*it);
 
         if (item)
         {
@@ -265,7 +268,7 @@ void DbKeySelectorView::removeChildlessHeaders()
 
             for (int i = 0 ; i < children; ++i)
             {
-                QTreeWidgetItem* citem = (*it)->child(i);
+                QTreeWidgetItem* const citem = (*it)->child(i);
 
                 if (!citem->isHidden())
                 {
@@ -282,6 +285,5 @@ void DbKeySelectorView::removeChildlessHeaders()
         ++it;
     }
 }
-
 
 }  // namespace Digikam

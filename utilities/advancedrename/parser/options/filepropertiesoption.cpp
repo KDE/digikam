@@ -33,17 +33,19 @@
 
 namespace
 {
-static const QString KEY_FILE("[file]");
-static const QString KEY_EXT("[ext]");
-static const QString KEY_USER("[user]");
-static const QString KEY_GROUP("[group]");
+static const QString KEY_FILE(QLatin1String("[file]"));
+static const QString KEY_EXT(QLatin1String("[ext]"));
+static const QString KEY_USER(QLatin1String("[user]"));
+static const QString KEY_GROUP(QLatin1String("[group]"));
 }
 
 namespace Digikam
 {
 
 FilePropertiesOption::FilePropertiesOption()
-    : Option(i18n("File"), i18n("Add file properties"), "folder-image")
+    : Option(i18n("File"),
+             i18n("Add file properties"),
+             QLatin1String("folder-image"))
 {
     setUseTokenMenu(true);
 
@@ -60,12 +62,12 @@ FilePropertiesOption::FilePropertiesOption()
              i18nc("Group of the file", "Group"));
 
     QString regExpStr;
-    regExpStr.append('(');
-    regExpStr.append(escapeToken(KEY_FILE)).append('|');
-    regExpStr.append(escapeToken(KEY_USER)).append('|');
-    regExpStr.append(escapeToken(KEY_GROUP)).append('|');
-    regExpStr.append("(\\.?)").append(escapeToken(KEY_EXT));
-    regExpStr.append(')');
+    regExpStr.append(QLatin1Char('('));
+    regExpStr.append(escapeToken(KEY_FILE)).append(QLatin1Char('|'));
+    regExpStr.append(escapeToken(KEY_USER)).append(QLatin1Char('|'));
+    regExpStr.append(escapeToken(KEY_GROUP)).append(QLatin1Char('|'));
+    regExpStr.append(QLatin1String("(\\.?)")).append(escapeToken(KEY_EXT));
+    regExpStr.append(QLatin1Char(')'));
 
     QRegExp reg(regExpStr);
     reg.setMinimal(true);
@@ -96,9 +98,9 @@ QString FilePropertiesOption::parseOperation(ParseSettings& settings)
     {
         result = fi.suffix();
     }
-    else if (token == QString('.' + KEY_EXT))
+    else if (token == (QLatin1Char('.') + KEY_EXT))
     {
-        result = '.' + fi.suffix();
+        result                            = QLatin1Char('.') + fi.suffix();
         settings.useOriginalFileExtension = false;
     }
 

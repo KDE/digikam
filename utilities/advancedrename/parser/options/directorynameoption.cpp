@@ -39,13 +39,13 @@ DirectoryNameOption::DirectoryNameOption()
     : Option(i18nc("renaming option for directory related information",
                    "Directory"),
              i18n("Add the directory name"),
-             "folder")
+             QLatin1String("folder"))
 {
-    addToken("[dir]",  i18n("Directory name"));
-    addToken("[dir.]", i18n("Name of the parent directory, additional '.' characters move up "
-                            "in the directory hierarchy"));
+    addToken(QLatin1String("[dir]"),  i18n("Directory name"));
+    addToken(QLatin1String("[dir.]"), i18n("Name of the parent directory, additional '.' characters move up "
+                                           "in the directory hierarchy"));
 
-    QRegExp reg("\\[dir(\\.*)\\]");
+    QRegExp reg(QLatin1String("\\[dir(\\.*)\\]"));
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -60,11 +60,10 @@ QString DirectoryNameOption::parseOperation(ParseSettings& settings)
         return result;
     }
 
-    QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
+    QStringList folders = fi.absolutePath().split(QLatin1Char('/'), QString::SkipEmptyParts);
     int folderCount     = folders.count();
     const QRegExp& reg  = regExp();
-
-    int matchedLength = reg.cap(1).length();
+    int matchedLength   = reg.cap(1).length();
 
     if (matchedLength == 0)
     {

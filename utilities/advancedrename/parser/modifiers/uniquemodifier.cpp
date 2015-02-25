@@ -37,12 +37,15 @@ namespace Digikam
 
 UniqueModifier::UniqueModifier()
     : Modifier(i18nc("unique value for duplicate strings", "Unique"),
-               i18n("Add a suffix number to have unique strings in duplicate values"), "button_more")
+               i18n("Add a suffix number to have unique strings in duplicate values"),
+               QLatin1String("button_more"))
 {
-    addToken("{unique}", description());
-    addToken("{unique:||n||}", i18n("Add a suffix number, ||n|| specifies the number of digits to use"));
+    addToken(QLatin1String("{unique}"),
+             description());
+    addToken(QLatin1String("{unique:||n||}"),
+             i18n("Add a suffix number, ||n|| specifies the number of digits to use"));
 
-    QRegExp reg("\\{unique(:(\\d+))?\\}");
+    QRegExp reg(QLatin1String("\\{unique(:(\\d+))?\\}"));
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -62,7 +65,7 @@ QString UniqueModifier::parseOperation(ParseSettings& settings)
         bool ok     = true;
         int slength = reg.cap(2).toInt(&ok);
         slength     = (slength == 0 || !ok) ? 1 : slength;
-        result     += QString("_%1").arg(index, slength, 10, QChar('0'));
+        result     += QString::fromUtf8("_%1").arg(index, slength, 10, QLatin1Char('0'));
         return result;
     }
 
