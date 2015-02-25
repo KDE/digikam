@@ -39,7 +39,6 @@
 
 #include "digikam_debug.h"
 #include "splashscreen.h"
-#include "uifilevalidator.h"
 
 namespace Digikam
 {
@@ -191,17 +190,6 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
                 qCDebug(DIGIKAM_GENERAL_LOG) << "ImagePluginLoader: Loaded plugin " << service->name();
 
                 ++cpt;
-
-                // --------------------------------------------------------
-
-                // fix old ui file layout
-                UiFileValidator validator(plugin->localXMLFile());
-
-                if (!validator.isValid())
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Old ui file layout detected: " << service->name();
-                    validator.fixConfigFile();
-                }
             }
             else
             {

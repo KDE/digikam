@@ -78,25 +78,6 @@ endif()
 
 #------------------------------------------------------------------------
 
-set(uifilevalidator_SRCS
-    uifilevalidatortest.cpp
-)
-
-add_executable(uifilevalidatortest ${uifilevalidator_SRCS})
-add_test(uifilevalidatortest uifilevalidatortest)
-ecm_mark_as_test(uifilevalidatortest)
-
-target_link_libraries(uifilevalidatortest
-                      Qt5::Test
-                      digikamdatabase
-)
-
-if(GPHOTO2_FOUND)
-    target_link_libraries(uifilevalidatortest ${GPHOTO2_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
 set(statesavingobject_SRCS
     statesavingobjecttest.cpp
 )

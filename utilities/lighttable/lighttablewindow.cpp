@@ -65,7 +65,6 @@
 #include "setup.h"
 #include "syncjob.h"
 #include "lighttablepreview.h"
-#include "uifilevalidator.h"
 #include "albummodel.h"
 #include "databasechangesets.h"
 #include "tagsactionmngr.h"
@@ -99,17 +98,6 @@ LightTableWindow::LightTableWindow()
 {
     setConfigGroupName(QLatin1String("LightTable Settings"));
     setXMLFile("lighttablewindowui.rc");
-
-    // --------------------------------------------------------
-
-    UiFileValidator validator(localXMLFile());
-
-    if (!validator.isValid())
-    {
-        validator.fixConfigFile();
-    }
-
-    // --------------------------------------------------------
 
     m_instance = this;
 

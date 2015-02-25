@@ -73,7 +73,6 @@
 #include "imagewindow.h"
 #include "thumbnailsize.h"
 #include "sidebar.h"
-#include "uifilevalidator.h"
 #include "dnotificationwrapper.h"
 #include "scancontroller.h"
 
@@ -103,17 +102,6 @@ QueueMgrWindow::QueueMgrWindow()
 {
     setConfigGroupName("Batch Queue Manager Settings");
     setXMLFile("queuemgrwindowui.rc");
-
-    // --------------------------------------------------------
-
-    UiFileValidator validator(localXMLFile());
-
-    if (!validator.isValid())
-    {
-        validator.fixConfigFile();
-    }
-
-    // --------------------------------------------------------
 
     qRegisterMetaType<BatchToolSettings>("BatchToolSettings");
     qRegisterMetaType<BatchToolSet>("BatchToolSet");

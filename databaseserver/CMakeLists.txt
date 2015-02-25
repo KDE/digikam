@@ -17,7 +17,6 @@ add_executable(digikamdatabaseserver ${digikamdatabaseserver_SRCS})
 
 target_link_libraries(digikamdatabaseserver
                       digikamdatabase
-                      digikamcore
 
                       Qt5::Sql
                       KF5::KDELibs4Support

@@ -120,7 +120,6 @@
 #include "thememanager.h"
 #include "thumbbardock.h"
 #include "thumbnailloadthread.h"
-#include "uifilevalidator.h"
 #include "undostate.h"
 #include "imagewindow_p.h"
 #include "digikam_debug.h"
@@ -149,17 +148,6 @@ ImageWindow::ImageWindow()
     : EditorWindow("Image Editor"), d(new Private)
 {
     setXMLFile("digikamimagewindowui.rc");
-
-    // --------------------------------------------------------
-
-    UiFileValidator validator(localXMLFile());
-
-    if (!validator.isValid())
-    {
-        validator.fixConfigFile();
-    }
-
-    // --------------------------------------------------------
 
     m_instance = this;
     // We don't want to be deleted on close

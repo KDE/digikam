@@ -113,7 +113,6 @@ extern "C"
 #include "thememanager.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
-#include "uifilevalidator.h"
 #include "dnotificationwrapper.h"
 #include "showfotodelegate.h"
 #include "showfotothumbnailmodel.h"
@@ -133,17 +132,6 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     setXMLFile("showfotoui.rc");
 
     m_nonDestructive = false;
-
-    // --------------------------------------------------------
-
-    Digikam::UiFileValidator validator(localXMLFile());
-
-    if (!validator.isValid())
-    {
-        validator.fixConfigFile();
-    }
-
-    // --------------------------------------------------------
 
     // Show splash-screen at start up.
 

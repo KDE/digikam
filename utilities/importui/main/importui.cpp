@@ -116,7 +116,6 @@
 #include "statusprogressbar.h"
 #include "thememanager.h"
 #include "thumbnailsize.h"
-#include "uifilevalidator.h"
 #include "importthumbnailmodel.h"
 
 using namespace KDcrawIface;
@@ -136,15 +135,6 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
 
     setXMLFile("importui.rc");
     setFullScreenOptions(FS_IMPORTUI);
-
-    // --------------------------------------------------------
-
-    UiFileValidator validator(localXMLFile());
-
-    if (!validator.isValid())
-    {
-        validator.fixConfigFile();
-    }
 
     m_instance = this;
 

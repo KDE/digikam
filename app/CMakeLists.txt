@@ -6,33 +6,6 @@
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in    ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
 
-# Shared libdigikamcore ################################################################
-
-# TODO clean up this..
-set(libdigikamhelpers_SRCS
-    utils/uifilevalidator.cpp
-)
-
-set(digikamcore_LIB_SRCS
-    ${libdigikamhelpers_SRCS}
-)
-# TODO this is now just a placeholder holding uifilevalidator.. to be changed later to expose a dynamic library for other apps to use?
-add_library(digikamcore STATIC ${digikamcore_LIB_SRCS})
-
-target_link_libraries(digikamcore
-                      Qt5::Core
-                      Qt5::Xml
-)
-
-set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
-
-if(WIN32)
-    set_target_properties(digikamcore PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
-    set_target_properties(digikamcore PROPERTIES OUTPUT_NAME   digikamlib)
-endif()
-
-install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
-
 # Digikam GUI begins here
 
 include_directories(
@@ -168,7 +141,6 @@ target_include_directories(digikamgui PUBLIC
 )
 
 target_link_libraries(digikamgui
-                      digikamcore
                       digikamwidgets
                       digikamdatabase
                       digikammodels
@@ -253,9 +225,7 @@ set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURREN
 
 
 target_link_libraries(digikam
-                      digikamcore
                       digikamgui
-
 
                       Qt5::Sql
                       Qt5::Test
@@ -275,6 +245,11 @@ if(NOT WIN32)
     # To link under Solaris (see bug #274484)
     target_link_libraries(digikam ${MATH_LIBRARY})
 endif()
+
+if(WIN32)
+    set_target_properties(digikam PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
+endif()
+
 
 if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     target_link_libraries(digikam ${KVM_LIBRARY})
