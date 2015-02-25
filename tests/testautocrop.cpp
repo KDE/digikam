@@ -27,6 +27,7 @@
 #include <QFileInfo>
 #include <QString>
 #include <QRect>
+#include <QDebug>
 
 // Libkexiv2 includes
 
@@ -34,7 +35,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
 #include "drawdecoding.h"
 #include "autocrop.h"
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
     ac.startFilterDirectly();
     QRect rect = ac.autoInnerCrop();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Cropped image area: " << rect;
+    qDebug() << "Cropped image area: " << rect;
 
     img.crop(rect);
     img.save(outFilePath, "PNG");

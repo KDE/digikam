@@ -24,10 +24,7 @@
 
 #include <QDateTime>
 #include <QSharedData>
-
-// KDE includes
-
-#include "digikam_debug.h"
+#include <QDebug>
 
 static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data);
 
@@ -122,7 +119,7 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
 
     if (details & TotalRam)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "TotalRam: " << d->totalRam;
+        qDebug() << "KMemoryInfo: TotalRam: " << d->totalRam;
 
         if (d->totalRam == -1)
             return -1;
@@ -131,7 +128,7 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
     }
     else if (details & AvailableRam)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "AvailableRam: " << d->freeRam << " (cache: " << d->cacheRam << ")";
+        qDebug() << "KMemoryInfo: AvailableRam: " << d->freeRam << " (cache: " << d->cacheRam << ")";
 
         if (d->freeRam == -1 || d->cacheRam == -1)
             return -1;
@@ -141,7 +138,7 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
 
     if (details & TotalSwap)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "TotalSwap: " << d->totalSwap;
+        qDebug() << "KMemoryInfo: TotalSwap: " << d->totalSwap;
 
         if (d->totalSwap == -1)
             return -1;
@@ -150,7 +147,7 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
     }
     else if (details & AvailableSwap)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "AvailableSwap: " << d->freeSwap;
+        qDebug() << "KMemoryInfo: AvailableSwap: " << d->freeSwap;
 
         if (d->freeSwap == -1)
             return -1;
@@ -190,7 +187,7 @@ int KMemoryInfo::update()
 {
     d->reset();
     const int res = fillMemoryInfo(d);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Platform identified : " << d->platform;
+    qDebug() << "KMemoryInfo: Platform identified : " << d->platform;
     d->lastUpdate = QDateTime::currentDateTime();
     return res;
 }

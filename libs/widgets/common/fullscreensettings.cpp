@@ -31,11 +31,14 @@
 
 // KDE includes
 
+#include <kglobalsettings.h>
+
 #include <klocalizedstring.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dxmlguiwindow.h"
 #include "fullscreensettings.h"
 

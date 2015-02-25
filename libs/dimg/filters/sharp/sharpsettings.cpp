@@ -45,14 +45,14 @@
 
 // Libkdcraw includes
 
-#include <rcombobox.h>
-#include <rnuminput.h>
-#include <rexpanderbox.h>
-#include <rwidgetutils.h>
+#include <KDCRAW/RComboBox>
+#include <KDCRAW/RNumInput>
+#include <KDCRAW/RExpanderBox>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "digikam_config.h"
 
 #ifdef HAVE_EIGEN3

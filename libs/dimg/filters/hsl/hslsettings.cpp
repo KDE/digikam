@@ -38,11 +38,11 @@
 
 // Libkdcraw includes
 
-#include <rnuminput.h>
+#include <KDCRAW/RNumInput>
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "colorgradientwidget.h"
 #include "hspreviewwidget.h"
 #include "dhuesaturationselect.h"

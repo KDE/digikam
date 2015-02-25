@@ -49,9 +49,9 @@ extern "C"
 
 // Local includes
 
-#include "digikam_debug.h"
-#include "dimg_p.h"
+#include "dimg_debug.h"
 #include "dimg.h"
+#include "dimg_p.h"
 
 typedef uint64_t ullong;
 typedef int64_t  llong;

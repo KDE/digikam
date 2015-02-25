@@ -32,7 +32,7 @@ macro(DETECT_LIBKIPI MIN_VERSION)
             set(KF5Kipi_FOUND TRUE)            
         endif()
 
-        set(KF5Kipi_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/extra/libkipi/src ${CMAKE_BINARY_DIR}/extra/libkipi/src ${CMAKE_BINARY_DIR}/extra/libkipi)
+        set(KF5Kipi_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkipi/src ${CMAKE_BINARY_DIR}/extra/libkipi)
         set(KF5Kipi_LIBRARIES KF5Kipi)
 
     endif()
@@ -88,7 +88,7 @@ macro(DETECT_LIBKDCRAW MIN_VERSION)
             set(KF5KDcraw_FOUND TRUE)            
         endif()
 
-        set(KF5KDcraw_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/extra/libkdcraw/src ${CMAKE_BINARY_DIR}/extra/libkdcraw/src ${CMAKE_BINARY_DIR}/extra/libkdcraw)
+        set(KF5KDcraw_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkdcraw/src ${CMAKE_BINARY_DIR}/extra/libkdcraw)
         set(KF5KDcraw_LIBRARIES KF5KDcraw)
 
     endif()
@@ -128,7 +128,7 @@ macro(DETECT_LIBKEXIV2 MIN_VERSION)
             set(KF5KExiv2_FOUND TRUE) 
         endif()
 
-        set(KF5KExiv2_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/extra/libkexiv2/src ${CMAKE_BINARY_DIR}/extra/libkexiv2/src ${CMAKE_BINARY_DIR}/extra/libkexiv2)
+        set(KF5KExiv2_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkexiv2/src ${CMAKE_BINARY_DIR}/extra/libkexiv2)
         set(KF5KExiv2_LIBRARIES KF5KExiv2)
 
     endif()
@@ -168,7 +168,7 @@ macro(DETECT_LIBKFACE MIN_VERSION)
             set(KF5KFace_FOUND TRUE) 
         endif()
 
-        set(KF5KFace_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/extra/libkface/src ${CMAKE_BINARY_DIR}/extra/libkface/src ${CMAKE_BINARY_DIR}/extra/libkface)
+        set(KF5KFace_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkface/src ${CMAKE_BINARY_DIR}/extra/libkface)
         set(KF5KFace_LIBRARIES KF5KFace)
 
     endif()
@@ -208,7 +208,7 @@ macro(DETECT_LIBKGEOMAP MIN_VERSION)
             set(KF5KGeoMap_FOUND TRUE) 
         endif()
 
-        set(KF5KGeoMap_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/extra/libkgeomap/src ${CMAKE_BINARY_DIR}/extra/libkgeomap/src ${CMAKE_BINARY_DIR}/extra/libkgeomap)
+        set(KF5KGeoMap_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkgeomap/src ${CMAKE_BINARY_DIR}/extra/libkgeomap)
         set(KF5KGeoMap_LIBRARIES KF5KGeoMap)
 
     endif()

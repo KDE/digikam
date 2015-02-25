@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "dimgpreviewitem.h"
 #include "imagezoomsettings.h"
 #include "paniconwidget.h"
@@ -453,7 +453,7 @@ void GraphicsDImgView::slotPanIconHidden()
 void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
 {
     QRectF zoomRect = item()->zoomSettings()->mapImageToZoom(imageRect);
-    qCDebug(DIGIKAM_GENERAL_LOG) << imageRect << zoomRect;
+    qCDebug(LOG_WIDGETS) << imageRect << zoomRect;
     centerOn(item()->mapToScene(zoomRect.center()));
 
     if (b)

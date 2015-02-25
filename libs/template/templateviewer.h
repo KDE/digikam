@@ -30,7 +30,7 @@
 
 // Libkdcraw includes
 
-#include <rexpanderbox.h>
+#include <KDCRAW/RExpanderBox>
 
 using namespace KDcrawIface;
 

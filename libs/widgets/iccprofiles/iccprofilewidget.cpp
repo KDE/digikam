@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "cietonguewidget.h"
 #include "metadatalistview.h"
 
@@ -280,7 +280,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     if (!hProfile)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot parse ICC profile tags using LCMS";
+        qCDebug(LOG_WIDGETS) << "Cannot parse ICC profile tags using LCMS";
         return false;
     }
 

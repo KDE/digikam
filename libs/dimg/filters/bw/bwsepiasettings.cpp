@@ -45,13 +45,13 @@
 
 // Libkdcraw includes
 
-#include <rexpanderbox.h>
-#include <rnuminput.h>
-#include <rwidgetutils.h>
+#include <KDCRAW/RExpanderBox>
+#include <KDCRAW/RNumInput>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "previewlist.h"
 #include "curvesbox.h"
 #include "curveswidget.h"

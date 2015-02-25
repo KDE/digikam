@@ -35,8 +35,8 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
+#include "dimg_debug.h"
 #include "digikam_globals.h"
 
 namespace Digikam
@@ -183,7 +183,7 @@ void ImageHistogram::calculate()
 
     if (!d->histogram)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!");
+        qCWarning(LOG_DIMG) << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!");
         emit calculationFinished(false);
         return;
     }

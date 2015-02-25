@@ -36,7 +36,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "mdkeylistviewitem.h"
 #include "metadatalistviewitem.h"
 

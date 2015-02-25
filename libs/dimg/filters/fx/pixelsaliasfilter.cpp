@@ -34,7 +34,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "imagehistogram.h"
 #include "dcolor.h"
 

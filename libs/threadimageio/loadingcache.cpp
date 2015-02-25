@@ -38,7 +38,7 @@
 
 #include "digikam_debug.h"
 #include "iccsettings.h"
-#include "kmemoryinfo.h"
+#include "kmemoryinfo/kmemoryinfo.h"
 #include "dmetadata.h"
 #include "thumbnailsize.h"
 

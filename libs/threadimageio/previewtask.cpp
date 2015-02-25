@@ -30,7 +30,6 @@
 
 // Qt includes
 
-#include <QApplication>
 #include <QImage>
 #include <QVariant>
 #include <QMatrix>
@@ -41,7 +40,7 @@
 
 // Libkdcraw includes
 
-#include <kdcraw.h>
+#include <KDCRAW/KDcraw>
 
 // Local includes
 

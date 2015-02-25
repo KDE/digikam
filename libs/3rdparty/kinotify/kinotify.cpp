@@ -44,10 +44,8 @@
 #include <QFile>
 #include <QQueue>
 #include <QScopedArrayPointer>
+#include <QDebug>
 
-// Local includes
-
-#include "digikam_debug.h"
 
 namespace
 {
@@ -153,7 +151,7 @@ public:
         int wd = inotify_add_watch( inotify(), path.data(), mask );
         if ( wd > 0 )
         {
-//          qCDebug(DIGIKAM_GENERAL_LOG) << "Successfully added watch for" << path << pathHash.count();
+//          qDebug() << "KInotify: Successfully added watch for" << path << pathHash.count();
             QByteArray normalized = stripTrailingSlash( path );
             watchPathHash.insert( wd, normalized );
             pathWatchHash.insert( normalized, wd );
@@ -161,12 +159,12 @@ public:
         }
         else
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create watch for" << path;
+            qDebug() << "KInotify: Failed to create watch for" << path;
             static bool userLimitReachedSignaled = false;
 
             if ( !userLimitReachedSignaled && errno == ENOSPC )
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "User limit reached. Please raise the inotify user watch limit.";
+                qDebug() << "KInotify: User limit reached. Please raise the inotify user watch limit.";
                 userLimitReachedSignaled = true;
                 emit q->watchUserLimitReached();
             }
@@ -231,14 +229,14 @@ public:
         }
         else
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Could not open dir" << path;
+            qDebug() << "KInotify: Could not open dir" << path;
             return false;
         }
     }
 
     void removeWatch( int wd )
     {
-        //qCDebug(DIGIKAM_GENERAL_LOG) << wd << watchPathHash[wd];
+        //qDebug() << wd << watchPathHash[wd];
         pathWatchHash.remove( watchPathHash.take( wd ) );
         inotify_rm_watch( inotify(), wd );
     }
@@ -262,7 +260,7 @@ public:
         }
         else
         {
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "All watches installed";
+            //qDebug() << "KInotify: All watches installed";
         }
     }
 
@@ -276,7 +274,7 @@ private:
         if ( m_inotifyFd > 0 )
         {
             fcntl( m_inotifyFd, F_SETFD, FD_CLOEXEC );
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Successfully opened connection to inotify:" << m_inotifyFd;
+            qDebug() << "KInotify: Successfully opened connection to inotify:" << m_inotifyFd;
             m_notifier = new QSocketNotifier( m_inotifyFd, QSocketNotifier::Read );
 
             connect( m_notifier, SIGNAL(activated(int)), 
@@ -323,7 +321,7 @@ bool KInotify::available()
         }
         else if( major * 1000000 + minor * 1000 + patch < 2006014 )  // < 2.6.14
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Can't use INotify, Linux kernel too old";
+            qDebug() << "KInotify: Can't use INotify, Linux kernel too old";
             return false;
         }
 
@@ -343,7 +341,7 @@ bool KInotify::watchingPath( const QString& path ) const
 
 bool KInotify::addWatch( const QString& path, WatchEvents mode, WatchFlags flags )
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << path;
+    //qDebug() << path;
 
     d->mode  = mode;
     d->flags = flags;
@@ -368,7 +366,7 @@ bool KInotify::watchDirectoryAndSubdirs(const QString& path)
 
 bool KInotify::removeWatch( const QString& path )
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << path;
+    //qDebug() << path;
     QByteArray encodedPath              = QFile::encodeName( path ).constData();
     QHash<int, QByteArray>::iterator it = d->watchPathHash.begin();
 
@@ -457,31 +455,31 @@ void KInotify::slotEvent( int socket )
         // now signal the event
         if ( event->mask & EventAccess)
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventAccess";
+//            qDebug() << path << "EventAccess";
             emit accessed(path);
         }
 
         if ( event->mask & EventAttributeChange )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventAttributeChange";
+//            qDebug() << path << "EventAttributeChange";
             emit attributeChanged(path);
         }
 
         if ( event->mask & EventCloseWrite )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventCloseWrite";
+//            qDebug() << path << "EventCloseWrite";
             emit closedWrite(path);
         }
 
         if ( event->mask & EventCloseRead )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventCloseRead";
+//            qDebug() << path << "EventCloseRead";
             emit closedRead(path);
         }
 
         if ( event->mask & EventCreate )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventCreate";
+//            qDebug() << path << "EventCreate";
             /* Disable auto-recursion
             if ( event->mask & IN_ISDIR )
             {
@@ -494,14 +492,14 @@ void KInotify::slotEvent( int socket )
 
         if ( event->mask & EventDeleteSelf )
         {
-            //qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventDeleteSelf";
+            //qDebug() << path << "EventDeleteSelf";
             d->removeWatch( event->wd );
             emit deleted(path, event->mask & IN_ISDIR );
         }
 
         if ( event->mask & EventDelete )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventDelete";
+//            qDebug() << path << "EventDelete";
             /* Disable auto-recursion
             // we watch all folders recursively. Thus, folder removing is reported in DeleteSelf.
             if( !(event->mask & IN_ISDIR) )
@@ -511,19 +509,19 @@ void KInotify::slotEvent( int socket )
 
         if ( event->mask & EventModify )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventModify";
+//            qDebug() << path << "EventModify";
             emit modified(path);
         }
 
         if ( event->mask & EventMoveSelf )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventMoveSelf";
-            qCWarning(DIGIKAM_GENERAL_LOG) << "EventMoveSelf: THIS CASE IS NOT HANDLED PROPERLY!";
+//            qDebug() << path << "EventMoveSelf";
+            qWarning() << "KInotify: EventMoveSelf: THIS CASE IS NOT HANDLED PROPERLY!";
         }
 
         if ( event->mask & EventMoveFrom )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventMoveFrom";
+//            qDebug() << path << "EventMoveFrom";
             d->cookies[event->cookie] = encodedPath;
             emit movedFrom(path);
         }
@@ -541,32 +539,32 @@ void KInotify::slotEvent( int socket )
                     QHash<QByteArray, int>::iterator it = d->pathWatchHash.find(oldPath);
                     if( it != d->pathWatchHash.end() )
                     {
-                        //qCDebug(DIGIKAM_GENERAL_LOG) << oldPath << path;
+                        //qDebug() << oldPath << path;
                         const int wd         = it.value();
                         d->watchPathHash[wd] = encodedPath;
                         d->pathWatchHash.erase(it);
                         d->pathWatchHash.insert(encodedPath, wd );
                     }
                 }
-//                qCDebug(DIGIKAM_GENERAL_LOG) << oldPath << "EventMoveTo" << path;
+//                qDebug() << oldPath << "EventMoveTo" << path;
                 emit moved(QFile::decodeName(oldPath), path);
             }
             /*else
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "No cookie for move information of" << path;
+                qDebug() << "No cookie for move information of" << path;
             }*/
             emit movedTo(path);
         }
 
         if ( event->mask & EventOpen )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventOpen";
+//            qDebug() << path << "EventOpen";
             emit opened(path);
         }
 
         if ( event->mask & EventUnmount )
         {
-//            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventUnmount. removing from path hash";
+//            qDebug() << path << "EventUnmount. removing from path hash";
             if ( event->mask & IN_ISDIR )
             {
                 d->removeWatch( event->wd );
@@ -577,19 +575,19 @@ void KInotify::slotEvent( int socket )
         if ( event->mask & EventQueueOverflow )
         {
             // This should not happen since we grab all events as soon as they arrive
-            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventQueueOverflow";
+            qDebug() << path << "EventQueueOverflow";
 //            emit queueOverflow();
         }
 
         if ( event->mask & EventIgnored )
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventIgnored";
+            qDebug() << path << "EventIgnored";
         }
     }
 
     if ( len < 0 )
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to read event.";
+        qDebug() << "KInotify: Failed to read event.";
     }
 }
 

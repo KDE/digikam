@@ -26,8 +26,6 @@
 
 // Qt includes
 
-#include <QApplication>
-
 // Local includes
 
 #include "digikam_debug.h"

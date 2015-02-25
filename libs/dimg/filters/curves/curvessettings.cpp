@@ -51,13 +51,13 @@
 
 // Libkdcraw includes
 
-#include <rcombobox.h>
-#include <rnuminput.h>
-#include <rexpanderbox.h>
+#include <KDCRAW/RComboBox>
+#include <KDCRAW/RNumInput>
+#include <KDCRAW/RExpanderBox>
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "colorgradientwidget.h"
 
 using namespace KDcrawIface;

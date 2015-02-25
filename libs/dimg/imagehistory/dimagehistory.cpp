@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 namespace Digikam
 {
@@ -196,7 +196,7 @@ DImageHistory& DImageHistory::operator<<(const FilterAction& action)
     Entry entry;
     entry.action = action;
     d->entries << entry;
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Entry added, total count " << d->entries.count();
+    //qCDebug(LOG_DIMG) << "Entry added, total count " << d->entries.count();
     return *this;
 }
 
@@ -215,7 +215,7 @@ void DImageHistory::insertReferredImage(int index, const HistoryImageId& id)
 {
     if (!id.isValid())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Attempt to add an invalid HistoryImageId";
+        qCWarning(LOG_DIMG) << "Attempt to add an invalid HistoryImageId";
         return;
     }
 
@@ -622,14 +622,14 @@ QString DImageHistory::toXml() const
 
     stream.writeEndDocument();
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << xmlHistory;
+    //qCDebug(LOG_DIMG) << xmlHistory;
 
     return xmlHistory;
 }
 
 DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing image history XML";
+    //qCDebug(LOG_DIMG) << "Parsing image history XML";
     DImageHistory h;
 
     if (xml.isEmpty())
@@ -656,7 +656,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
     {
         if (stream.name() == QLatin1String("file"))
         {
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing file tag";
+            //qCDebug(LOG_DIMG) << "Parsing file tag";
             HistoryImageId imageId(stream.attributes().value(QLatin1String("uuid")).toString());
 
             if (stream.attributes().value(QLatin1String("type")) == QLatin1String("original"))
@@ -724,7 +724,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
         }
         else if (stream.name() == QLatin1String("filter"))
         {
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing filter tag";
+            //qCDebug(LOG_DIMG) << "Parsing filter tag";
             FilterAction::Category c = FilterAction::ComplexFilter;
             QStringRef categoryString = stream.attributes().value(QLatin1String("filterCategory"));
 
@@ -786,10 +786,10 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
     if (stream.hasError())
     {
         //TODO: error handling
-        qCDebug(DIGIKAM_GENERAL_LOG) << "An error occurred during parsing: " << stream.errorString();
+        qCDebug(LOG_DIMG) << "An error occurred during parsing: " << stream.errorString();
     }
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing done";
+    //qCDebug(LOG_DIMG) << "Parsing done";
     return h;
 }
 

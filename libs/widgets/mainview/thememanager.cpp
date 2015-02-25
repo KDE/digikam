@@ -50,7 +50,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "dxmlguiwindow.h"
 
 namespace Digikam
@@ -147,7 +147,7 @@ void ThemeManager::slotChangePalette()
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
     qApp->setPalette(KColorScheme::createApplicationPalette(config));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << theme << " :: " << filename;
+    qCDebug(LOG_WIDGETS) << theme << " :: " << filename;
 
     emit signalThemeChanged();
 }

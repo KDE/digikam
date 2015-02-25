@@ -36,7 +36,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
 #include "blurfilter.h"
 #include "mixerfilter.h"

@@ -69,9 +69,8 @@
 
 // Libkdcraw includes
 
-#include <kdcraw.h>
-#include <libkdcraw_version.h>
-#include <rwidgetutils.h>
+#include <KDCRAW/KDcraw>
+#include <KDCRAW/RWidgetUtils>
 
 // Libkexiv2
 
@@ -2964,7 +2963,6 @@ QMenu* DigikamApp::slideShowMenu() const
 void DigikamApp::rebuild()
 {
     QString file = xmlFile();
-
     if (!file.isEmpty())
     {
         setXMLGUIBuildDocument(QDomDocument());

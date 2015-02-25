@@ -25,23 +25,18 @@
 
 // Qt includes
 
-#include <qstandarditemmodel.h>
-#include <qtest.h>
+#include <QStandardItemModel>
+#include <QTest>
 #include <qtestkeyboard.h>
-
-// KDE includes
-
-#include <qtest_kde.h>
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "searchtextbar.h"
 
 using namespace Digikam;
 using namespace QTest;
 
-QTEST_KDEMAIN(SearchTextBarTest, GUI)
+QTEST_MAIN(SearchTextBarTest)
 
 void SearchTextBarTest::testHighlighting()
 {

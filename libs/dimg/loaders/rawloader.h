@@ -28,15 +28,14 @@
 
 // Libkdcraw includes
 
-#include <kdcraw.h>
+#include <KDCRAW/KDcraw>
 
 // Local includes
 
 #include "dimgloader.h"
 #include "drawdecoding.h"
 #include "digikam_export.h"
-#include "iccprofile.h"
-#include "rawprocessingfilter.h"
+#include "filters/rawprocessingfilter.h"
 
 using namespace KDcrawIface;
 

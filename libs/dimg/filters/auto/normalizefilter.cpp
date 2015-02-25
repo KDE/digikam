@@ -30,8 +30,8 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
+#include "dimg_debug.h"
 
 namespace Digikam
 {
@@ -75,7 +75,7 @@ void NormalizeFilter::normalizeImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Ref. image and Org. has different bits depth";
+        qCDebug(LOG_DIMG) << "Ref. image and Org. has different bits depth";
         return;
     }
 

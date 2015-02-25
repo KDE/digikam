@@ -31,7 +31,7 @@
 
 // Libkdcraw includes
 
-#include "ractionjob.h"
+#include "KDCRAW/RActionJob"
 
 using namespace KDcrawIface;
 

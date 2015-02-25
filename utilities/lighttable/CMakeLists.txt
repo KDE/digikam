@@ -4,4 +4,18 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+set(liblighttable_SRCS
+    lighttablepreview.cpp
+    lighttableview.cpp
+    lighttablethumbbar.cpp
+    lighttablewindow.cpp
+)
+
+add_library(lighttable STATIC ${liblighttable_SRCS})
+target_link_libraries(lighttable
+                      Qt5::Gui
+                      
+                      kipiiface
+)
+# TODO link against kipi only if kipi found?
 install( FILES lighttablewindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )

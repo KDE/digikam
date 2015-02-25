@@ -36,6 +36,7 @@
 #include <QFontMetrics>
 #include <QFont>
 #include <QToolButton>
+#include <QMenu>
 
 // KDE includes
 
@@ -44,12 +45,11 @@
 
 // Libkdcraw includes
 
-#include <rwidgetutils.h>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
 #include "dxmlguiwindow.h"
-#include "digikam_debug.h"
 
 using namespace KDcrawIface;
 

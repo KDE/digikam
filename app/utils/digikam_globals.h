@@ -27,10 +27,8 @@
 
 // Qt includes
 
-#include <QShortcut>
 #include <QStringList>
 #include <QIODevice>
-#include <QKeySequence>
 
 // Local includes
 
@@ -38,6 +36,8 @@
 
 class QWidget;
 class QObject;
+class QShortcut;
+class QKeySequence;
 
 /** Macros for image filters.
  */

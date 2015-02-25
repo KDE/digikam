@@ -5,133 +5,24 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in    ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfigversion.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/database/dbconfigversion.h)
 
 # Shared libdigikamcore ################################################################
 
+# TODO clean up this..
+set(libdigikamhelpers_SRCS
+    utils/uifilevalidator.cpp
+)
+
 set(digikamcore_LIB_SRCS
-    # basic libs
-    ${libdimg_SRCS}
-    ${libdimgloaders_SRCS}
-    ${libdimgfilters_SRCS}
-    ${libdmetadata_SRCS}
-    ${libjpegutils_SRCS}
-    ${libprogressmanager_SRCS}
-    ${libdatabasecore_SRCS}
-    ${libthreadimageio_SRCS}
-    ${pgfutils_SRCS}
     ${libdigikamhelpers_SRCS}
-    ${libtthread_SRCS}
-    ${libversionmanager_SRCS}
-    ${libkde3rdparty_SRCS}
-
-    # utilities
-    ${libslideshow_SRCS}
-    ${libeditorcore_SRCS}
-    ${libeditordlg_SRCS}
-    ${libeditorprintiface_SRCS}
-    ${libeditorrawimport_SRCS}
-    ${libeditorplugin_SRCS}
-    ${libeditoriface_SRCS}
-    
-    # widgets and dialogs
-    ${libcolorchooserwidgets_SRCS}
-    ${libnotificationmanager_SRCS}
-    ${libmainview_SRCS}
-    ${libitemview_SRCS}
-    ${libeditorwidgets_SRCS}
-    ${libmetadatawidgets_SRCS}
-    ${libimageproperties_SRCS}
-    ${libgraphicsviewwidgets_SRCS}
-    ${libgenericmodels_SRCS}
-    ${libiccprofileswidgets_SRCS}
-    ${libcommonwidgets_SRCS}
-    ${libdialogs_SRCS}
 )
-
-if(KF5KGeoMap_FOUND)
-    set(digikamcore_LIB_SRCS ${digikamcore_LIB_SRCS} ${libgeoiface_SRCS})
-endif()
-
-ki18n_wrap_ui(digikamcore_LIB_SRCS
-              ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
-)
-
-kconfig_add_kcfg_files(digikamcore_LIB_SRCS
-                       ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/digikamconfig.kcfgc
-)
-
-add_library(digikamcore SHARED ${digikamcore_LIB_SRCS})
-
-add_dependencies(digikamcore digikam-gitversion)
+# TODO this is now just a placeholder holding uifilevalidator.. to be changed later to expose a dynamic library for other apps to use?
+add_library(digikamcore STATIC ${digikamcore_LIB_SRCS})
 
 target_link_libraries(digikamcore
-                      Qt5::Sql
-                      Qt5::Concurrent
-                      Qt5::PrintSupport
-
-                      KF5::KIOCore
-                      KF5::KIOWidgets
-                      KF5::Notifications
-                      KF5::NotifyConfig
-                      KF5::CoreAddons
-                      KF5::WindowSystem
-                      KF5::I18n
-
-                      ${JPEG_LIBRARIES}
-                      ${TIFF_LIBRARIES}
-                      ${PNG_LIBRARIES}
-                      ${LCMS2_LIBRARIES}
-                      ${OpenCV_LIBRARIES}
-                      ${PGF_LIBRARIES}
-
-                      # Required by CImg library which is using pthread internally.
-                      ${CMAKE_THREAD_LIBS_INIT}
-
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      Qt5::Core
+                      Qt5::Xml
 )
-
-if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamcore Qt5::Multimedia)
-endif()
-
-if(X11_FOUND)
-    target_link_libraries(digikamcore Qt5::X11Extras ${X11_LIBRARIES})
-endif()
-
-if(APPLE)
-    target_link_libraries(digikamcore /System/Library/Frameworks/AppKit.framework)
-endif()
-
-# For Contents Aware Resizer and Lens auto-correction tools.
-if(GLIB2_FOUND)
-    target_link_libraries(digikamcore ${GLIB2_LIBRARIES})
-endif()
-
-if(JASPER_FOUND)
-    target_link_libraries(digikamcore ${JASPER_LIBRARIES})
-endif()
-
-if(LENSFUN_FOUND)
-   target_link_libraries(digikamcore ${LENSFUN_LIBRARIES})
-endif()
-
-if(LQR-1_FOUND)
-   target_link_libraries(digikamcore ${liblqr_LIBS})
-endif()
-
-if(KF5Kipi_FOUND)
-   target_link_libraries(digikamcore ${KF5Kipi_LIBRARIES})
-endif()
-
-if(KF5KFace_FOUND)
-   target_link_libraries(digikamcore ${KF5KFace_LIBRARIES})
-endif()
-
-if(KF5KGeoMap_FOUND)
-   target_link_libraries(digikamcore ${KF5KGeoMap_LIBRARIES})
-endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
@@ -142,91 +33,210 @@ endif()
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-# Shared libdigikamdatabase ########################################################
+# Digikam GUI begins here
 
-set(digikamdatabase_LIB_SRCS
-        ${libdatabasemodels_SRCS}
-        ${libhaar_SRCS}
-        ${pgfutils_SRCS}
-        ${libdatabase_SRCS}
+include_directories(
+    date/
+    dragdrop/
+    items/
+    items/overlays/
+    fileaction/
+    views/
+    views/tableview/
+    filters/
+    utils/
+    tags/
+    tags/tagsmanager/
+    tags/tagsmanager/models/
+    main/
+    ${CMAKE_CURRENT_BINARY_DIR}/app/utils # for qt5_add_dbus_adaptor adaptor, TODO
 )
 
-if(Baloo_FOUND)
-    set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libbaloowrap_SRCS})
+qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
+
+# TODO split this target
+# TODO some parts could/should be their own libraries, like album access?
+set(libdigikamgui_SRCS
+    main/digikamapp.cpp
+
+    date/ddateedit.cpp
+    date/ddatetimeedit.cpp
+    date/ddatepickerpopup.cpp
+    date/datefolderview.cpp
+    date/monthwidget.cpp
+    date/timelinewidget.cpp
+
+    dragdrop/importdragdrop.cpp
+    dragdrop/albumdragdrop.cpp
+    dragdrop/ddragobjects.cpp
+    dragdrop/imagedragdrop.cpp
+    dragdrop/tagdragdrop.cpp
+
+    filters/filtersidebarwidget.cpp
+    filters/tagfilterview.cpp
+
+    items/digikamimageview.cpp
+    items/digikamimageview_p.cpp
+    items/digikamimagedelegate.cpp
+    items/imagecategorizedview.cpp
+    items/imagecategorydrawer.cpp
+    items/imagedelegate.cpp
+    items/imagethumbnailbar.cpp
+    items/imagethumbnaildelegate.cpp
+    items/imageviewutilities.cpp
+
+    items/overlays/groupindicatoroverlay.cpp
+    items/overlays/imageratingoverlay.cpp
+    items/overlays/imagerotationoverlay.cpp
+    items/overlays/imagecoordinatesoverlay.cpp
+    items/overlays/imageselectionoverlay.cpp
+
+    utils/contextmenuhelper.cpp
+    utils/tooltipfiller.cpp
+    utils/searchmodificationhelper.cpp
+    utils/editablesearchtreeview.cpp
+    utils/sidebarwidget.cpp
+    utils/slideshowbuilder.cpp
+    utils/digikammodelcollection.cpp
+    utils/digikam_debug.cpp # TODO should this be here or elsewhere?
+
+    views/tableview/tableview.cpp
+    views/tableview/tableview_treeview.cpp
+    views/tableview/tableview_treeview_delegate.cpp
+    views/tableview/tableview_column_configuration_dialog.cpp
+    views/tableview/tableview_model.cpp
+    views/tableview/tableview_columns.cpp
+    views/tableview/tableview_column_audiovideo.cpp
+    views/tableview/tableview_column_file.cpp
+    views/tableview/tableview_column_geo.cpp
+    views/tableview/tableview_column_digikam.cpp
+    views/tableview/tableview_column_item.cpp
+    views/tableview/tableview_column_photo.cpp
+    views/tableview/tableview_column_thumbnail.cpp
+    views/tableview/tableview_columnfactory.cpp
+    views/tableview/tableview_selection_model_syncer.cpp
+    
+    views/imagepreviewviewitem.cpp
+    views/imagepreviewview.cpp
+    views/welcomepageview.cpp
+    views/leftsidebarwidgets.cpp
+    views/digikamview.cpp
+    views/stackedview.cpp
+    
+    ${digikamadaptor_SRCS}
+)
+
+if(ENABLE_MEDIAPLAYER)
+    set(libdigikamgui_SRCS
+        ${libdigikamgui_SRCS}
+        views/mediaplayerview.cpp
+       )
 endif()
 
-add_library(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
+if(${KF5KFace_FOUND})
+    set(libdigikamgui_SRCS
+        ${libdigikamgui_SRCS}
+        items/digikamimagefacedelegate.cpp
+        items/overlays/assignnameoverlay.cpp
+        items/overlays/facerejectionoverlay.cpp
+       )
+endif()
 
-target_link_libraries(digikamdatabase
+if(${KF5KGeoMap_FOUND})
+    set(libdigikamgui_SRCS
+        ${libdigikamgui_SRCS}
+        views/mapwidgetview.cpp
+       )
+endif()
+
+# TODO this should be turned from static to dynamic
+add_library(digikamgui STATIC ${libdigikamgui_SRCS})
+
+# TODO temporary ugly hack, the common utils used by other components (esp. utilities and libs) should be moved to libs..
+target_include_directories(digikamgui PUBLIC
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album> # move out
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags/tagsmanager>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items/overlays> # common too, move out
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/database>
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/date> # belongs to libs/widgets?
+                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dragdrop>
+)
+
+target_link_libraries(digikamgui
                       digikamcore
+                      digikamwidgets
+                      digikamdatabase
+                      digikammodels
+                      digikamtags
+                      dimg
+                      dthread
+                      threadimageio
+                      setup
+                      imagepropertiesdigikam
+                      advancedrename
+                      queuemanager
+                      importui
+                      imageeditor
+                      searchwindow
+                      firstrun
+                      lighttable
+                      fuzzysearch
+                      maintenance
+                      3rdparty
+
+                      fileactionmanager
+                      
                       Qt5::Core
                       Qt5::Gui
+                      Qt5::Widgets
                       Qt5::Sql
-
-                      KF5::Solid
-                      KF5::I18n
-
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
-
-                      ${PGF_LIBRARIES}
+                      Qt5::WebKitWidgets
 )
 
-if(KF5KFace_FOUND)
-    target_link_libraries(digikamdatabase ${KF5KFace_LIBRARIES})
-endif()
-
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(digikamdatabase ${KF5KGeoMap_LIBRARIES})
-endif()
-
+# TODO check if these linkings are required?
 if(Baloo_FOUND)
-    target_link_libraries(digikamdatabase KF5::BalooCore KF5::BalooFiles KF5::FileMetaData)
+    target_link_libraries(digikamgui baloowrap)
 endif()
 
-set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
+if(ENABLE_MEDIAPLAYER)
+    target_link_libraries(digikamgui Qt5::Multimedia Qt5::MultimediaWidgets)
+endif()
 
-install(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
+# For Contents Aware Resizer and Lens auto-correction tools.
+if(GLIB2_FOUND)
+    target_link_libraries(digikamgui ${GLIB2_LIBRARIES})
+endif()
+
+if(APPLE)
+    target_link_libraries(digikamgui /System/Library/Frameworks/AppKit.framework)
+endif()
+
+if(${KF5Kipi_FOUND})
+    target_link_libraries(digikamgui KF5::Kipi)
+endif()
+
 
 # digiKam binary progam #########################################################
 
-set(digikam_SRCS ${libeditorgui_SRCS}
-                 ${libdeletedialog_SRCS}
-                 ${libimagepropertiesdigikam_SRCS}
-                 ${libimageversionssidebar_SRCS}
-                 ${libsetup_SRCS}
-                 ${libimportui_SRCS}
-                 ${liblighttable_SRCS}
-                 ${libmaintenance_SRCS}
-                 ${libsearchwindow_SRCS}
-                 ${libfuzzysearch_SRCS}
-                 ${libqueuemanager_SRCS}
-                 ${libalbummodels_SRCS}
-                 ${libfirstrun_SRCS}
-                 ${libtemplate_SRCS}
-                 ${libdatabaseui_SRCS}
-                 ${libimgqsort_SRCS}
-                 ${libdigikamgui_SRCS}
-                 main/main.cpp
+set(digikam_SRCS
+    main/main.cpp
 )
 
-if(KF5Kipi_FOUND)
-    set(digikam_SRCS ${digikam_SRCS} ${libkipiiface_SRCS})
-endif()
-
-if(KF5KFace_FOUND)
-    set(digikam_SRCS ${digikam_SRCS} ${libfacemanagement_SRCS})
-endif()
-
-if(KF5KGeoMap_FOUND)
-    set(digikam_SRCS ${digikam_SRCS} ${libgeoiface_SRCS} ${libgeolocation_SRCS})
-endif()
-
-qt5_add_dbus_adaptor(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
-
-KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
+# this is only required by Win & OSX
+kde4_add_app_icon(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 
 add_executable(digikam ${digikam_SRCS})
+
+add_dependencies(digikam digikam-gitversion)
+
+if(KF5KGeoMap_FOUND) # fixme hackish
+    target_link_libraries(digikam gpssearch)
+endif()
 
 # TO fill plist XML file for OSX #####################################################
 
@@ -240,28 +250,14 @@ set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURREN
 
 
 target_link_libraries(digikam
+                      digikamcore
+                      digikamgui
+
+
                       Qt5::Sql
                       Qt5::Test
                       Qt5::WebKitWidgets
-
-                      KF5::NotifyConfig
-                      KF5::Solid
-                      KF5::KIOCore
-                      KF5::I18n
-
-                      KF5::KDELibs4Support
-
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
-
-                      ${LCMS2_LIBRARIES}
-
-                      digikamcore
-                      digikamdatabase
-                      advancedrename
-                      queuemanager
-                      importui
-
+                      
                       ${OpenCV_LIBRARIES}
 )
 if(ENABLE_MEDIAPLAYER)
@@ -270,18 +266,6 @@ endif()
 
 if(KDEPIMLIBS_FOUND)
   target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
-endif()
-
-if(KF5Kipi_FOUND)
-   target_link_libraries(digikam ${KF5Kipi_LIBRARIES})
-endif()
-
-if(KF5KFace_FOUND)
-   target_link_libraries(digikam ${KF5KFace_LIBRARIES})
-endif()
-
-if(KF5KGeoMap_FOUND)
-   target_link_libraries(digikam ${KF5KGeoMap_LIBRARIES})
 endif()
 
 if(NOT WIN32)
@@ -296,11 +280,11 @@ endif()
 if(GPHOTO2_FOUND)
     # See bug #258931: libgphoto2 library must be the last arg for linker.
     target_link_libraries(digikam ${GPHOTO2_LIBRARIES})
-endif()
-
-if(NOT WIN32 AND GPHOTO2_FOUND)
-    # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
-    target_link_libraries(digikam ${LIBUSB_LIBRARIES})
+    
+    if(NOT WIN32)
+        # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
+        target_link_libraries(digikam ${LIBUSB_LIBRARIES})
+    endif()
 endif()
 
 install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})

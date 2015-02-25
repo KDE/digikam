@@ -43,7 +43,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "itemviewcategorized.h"
 #include "thememanager.h"
 #include "thumbbardock.h"

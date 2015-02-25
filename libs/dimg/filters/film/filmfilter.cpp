@@ -31,7 +31,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "filmfilter_p.h"
 #include "invertfilter.h"
 
@@ -208,12 +207,11 @@ int FilmContainer::whitePointForChannel(int ch) const
 {
     int max = d->sixteenBit ? 65535 : 255;
 
-    switch (ch)
-    {
-        case RedChannel:    return d->whitePoint.red();
-        case GreenChannel:  return d->whitePoint.green();
-        case BlueChannel:   return d->whitePoint.blue();
-        default:            return max;
+    switch (ch) {
+    case RedChannel:    return d->whitePoint.red();
+    case GreenChannel:  return d->whitePoint.green();
+    case BlueChannel:   return d->whitePoint.blue();
+    default:            return max;
     }
 
     /* not reached */
@@ -256,7 +254,6 @@ LevelsContainer FilmContainer::toLevels() const
         l.hInput[i]  = whitePointForChannel(i) * d->profile.wp(i);
         l.lOutput[i] = 0;
         l.hOutput[i] = max;
-
         if (d->applyBalance)
             l.gamma[i]   = gammaForChannel(i);
         else

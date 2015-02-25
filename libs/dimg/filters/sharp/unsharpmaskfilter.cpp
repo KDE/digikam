@@ -39,8 +39,8 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
+#include "dimg_debug.h"
 #include "dcolor.h"
 #include "blurfilter.h"
 
@@ -153,7 +153,7 @@ void UnsharpMaskFilter::filterImage()
 
     if (m_orgImage.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "No image data available!";
+        qCWarning(LOG_DIMG) << "No image data available!";
         return;
     }
 

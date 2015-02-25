@@ -35,17 +35,10 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
+#include "dimg_debug.h"
 #include "dimgloaderobserver.h"
-#include "icctransform.h"
-#include "imagehistogram.h"
-#include "imagelevels.h"
-#include "curvesfilter.h"
-#include "bcgfilter.h"
-#include "wbfilter.h"
 #include "digikam_globals.h"
-#include "dimagehistory.h"
 
 namespace Digikam
 {
@@ -168,7 +161,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
         if (!image)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory for loading raw file";
+            qCDebug(LOG_DIMG) << "Failed to allocate memory for loading raw file";
             return false;
         }
 
@@ -224,7 +217,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
         if (!image)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory for loading raw file";
+            qCDebug(LOG_DIMG) << "Failed to allocate memory for loading raw file";
             return false;
         }
 

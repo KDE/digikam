@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "itemviewimagedelegate.h"
 #include "itemviewhoverbutton.h"
 
@@ -670,7 +670,7 @@ void ImageDelegateOverlayContainer::installOverlay(ImageDelegateOverlay* overlay
 {
     if (!overlay->acceptsDelegate(asDelegate()))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot accept delegate" << asDelegate() << "for installing" << overlay;
+        qCDebug(LOG_WIDGETS) << "Cannot accept delegate" << asDelegate() << "for installing" << overlay;
         return;
     }
 

@@ -25,10 +25,10 @@
 #include <QFile>
 #include <QIODevice>
 #include <QImage>
+#include <QDebug>
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "pgfutils.h"
 
 using namespace Digikam;
@@ -37,12 +37,12 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "loadpgfdata - Load PGF data and save to PNG";
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Usage: <pgffile>";
+        qDebug() << "loadpgfdata - Load PGF data and save to PNG";
+        qDebug() << "Usage: <pgffile>";
         return -1;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Using LibPGF version: " << PGFUtils::libPGFVersion();
+    qDebug() << "Using LibPGF version: " << PGFUtils::libPGFVersion();
     QImage img;
 
     // Write PGF file.
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 
     if ( !file.open(QIODevice::ReadOnly) )
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open PGF file to read...";
+        qDebug() << "Cannot open PGF file to read...";
         return -1;
     }
 
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 
     if (!PGFUtils::readPGFImageData(data, img))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "loadPGFScaled failed...";
+        qDebug() << "loadPGFScaled failed...";
         return -1;
     }
 

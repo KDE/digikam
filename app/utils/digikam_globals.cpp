@@ -30,6 +30,7 @@
 #include <QImageReader>
 #include <QImageWriter>
 #include <QByteArray>
+#include <QShortcut>
 
 // KDE includes
 
@@ -47,6 +48,7 @@
 namespace Digikam
 {
 
+#pragma message("this should be moved to some common place instead of app/utils..")
 QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObject* receiver, const char* slot)
 {
     QShortcut* const s = new QShortcut(w);

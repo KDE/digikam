@@ -23,13 +23,19 @@ file(GLOB libadvancedrename_UI
 
 ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 
+# TODO for internal use, prefer complete include paths instead of this
+include_directories(common/ parser/options/ parser/options/database/ parser/options/database/keys/ parser/modifiers/)
+
 add_library(advancedrename STATIC ${libadvancedrename_SRCS})
 
 target_link_libraries(advancedrename
                       digikamdatabase
+                        
+                      Qt5::Widgets
+                      Qt5::Sql
 
-                      KF5::I18n
-
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
+                      KF5::I18n # TODO verify if needed
+                      
+                      KF5::KExiv2
+                      KF5::KDcraw
                      )

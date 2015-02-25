@@ -26,11 +26,11 @@
 
 #include <QFileInfo>
 #include <QDateTime>
+#include <QTest>
 
 // KDE includes
 
 #include <kurl.h>
-#include <qtest_kde.h>
 
 // Local includes
 
@@ -93,8 +93,7 @@ private Q_SLOTS:
 
 
 
-QTEST_KDEMAIN(RenameCustomizerTest, GUI)
-#include "renamecustomizertest.moc"
+QTEST_MAIN(RenameCustomizerTest)
 
 
 
@@ -174,3 +173,6 @@ void RenameCustomizerTest::setUseDefault_case_lower_should_deliver_lowercase_fil
     customizer.setChangeCase(RenameCustomizer::LOWER);
     QCOMPARE(customizer.newName("TeSt.pnG", QDateTime::currentDateTime()), QString("test.png"));
 }
+
+#include "renamecustomizertest.moc"
+

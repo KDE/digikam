@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "dimg.h"
 
 namespace Digikam
@@ -153,16 +153,17 @@ IccProfile::IccProfile(const char* const location, const QString& relativePath)
 
     if (QLatin1String(location) == QLatin1String("data"))
     {
+         qCDebug(LOG_DIMG) << "Searching ICC profile from data directory with relative path:" << relativePath;
          filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, relativePath);
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Data location " << location << " to handle bundled profile is not supported.";
+        qCDebug(LOG_DIMG) << "Data location " << location << " to handle bundled profile is not supported.";
     }
         
     if (filePath.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
+        qCDebug(LOG_DIMG) << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
         return;
     }
 
@@ -582,7 +583,7 @@ QStringList IccProfile::defaultSearchPaths()
             }
         }
     }
-    //qCDebug(DIGIKAM_GENERAL_LOG) << candidates << '\n' << paths;
+    //qCDebug(LOG_DIMG) << candidates << '\n' << paths;
 
     return paths;
 }
@@ -603,7 +604,7 @@ void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
 
         if (md5.result().toHex() == QByteArray("dea88382d899d5f6e573b432473ae138"))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "The original Adobe RGB (1998) profile has been found at" << filePath;
+            qCDebug(LOG_DIMG) << "The original Adobe RGB (1998) profile has been found at" << filePath;
             static_d->adobeRGBPath = filePath;
         }
     }

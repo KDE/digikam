@@ -30,17 +30,8 @@ endif()
 add_library(digikamimageplugin_enhance MODULE ${digikamimageplugin_enhance_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_enhance
-                      digikamcore
-
-                      Qt5::Core
-                      Qt5::Gui
-
-                      KF5::KDELibs4Support
-                      KF5::KIOCore
-
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
-                     )
+                      editorplugin
+)
 
 if(LENSFUN_FOUND)
    target_link_libraries(digikamimageplugin_enhance ${LENSFUN_LIBRARIES})

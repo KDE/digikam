@@ -26,8 +26,8 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
+#include "dimg_debug.h"
 
 namespace Digikam
 {
@@ -74,8 +74,8 @@ void CurvesFilter::filterImage()
         curves = depthCurve;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Image 16 bits: " << m_orgImage.sixteenBit();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Curve 16 bits: " << curves.isSixteenBits();
+    qCDebug(LOG_DIMG) << "Image 16 bits: " << m_orgImage.sixteenBit();
+    qCDebug(LOG_DIMG) << "Curve 16 bits: " << curves.isSixteenBits();
 
     postProgress(50);
 

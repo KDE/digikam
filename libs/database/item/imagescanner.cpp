@@ -45,13 +45,13 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
-#include "imagehistorygraph.h"
+#include "imagehistory/imagehistorygraph.h"
 #include "metadatasettings.h"
 #include "tagregion.h"
 #include "tagscache.h"
 #include "iostream"
 #include "dimagehistory.h"
-#include "imagehistorygraphdata.h"
+#include "imagehistory/imagehistorygraphdata.h"
 
 #ifdef HAVE_BALOO
 #include "baloowrap.h"

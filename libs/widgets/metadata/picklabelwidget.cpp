@@ -43,11 +43,10 @@
 
 // Libkdcraw includes
 
-#include <rwidgetutils.h>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dxmlguiwindow.h"
 
 using namespace KDcrawIface;

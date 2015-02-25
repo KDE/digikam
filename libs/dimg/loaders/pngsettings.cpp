@@ -38,7 +38,7 @@
 
 // Libkdcraw includes
 
-#include <rnuminput.h>
+#include <KDCRAW/RNumInput>
 
 using namespace KDcrawIface;
 

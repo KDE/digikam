@@ -42,7 +42,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "digikam_config.h"
 #include "jpegsettings.h"
 #include "pngsettings.h"
@@ -151,22 +151,22 @@ FileSaveOptionsBox::~FileSaveOptionsBox()
 
 void FileSaveOptionsBox::setImageFileFormat(const QString& ext)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Format selected: " << ext;
+    qCDebug(LOG_DIMG) << "Format selected: " << ext;
     setCurrentIndex(discoverFormat(ext, DImg::NONE));
 }
 
 DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename, DImg::FORMAT fallback)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to discover format based on filename '" << filename
-                                 << "', fallback = " << fallback;
+    qCDebug(LOG_WIDGETS) << "Trying to discover format based on filename '" << filename
+                         << "', fallback = " << fallback;
 
     QStringList splitParts = filename.split(QLatin1Char('.'));
     QString ext;
 
     if (splitParts.size() < 2)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "filename '" << filename
-                                     << "' does not contain an extension separated by a point.";
+        qCDebug(LOG_WIDGETS) << "filename '" << filename
+                             << "' does not contain an extension separated by a point.";
         ext = filename;
     }
     else
@@ -203,10 +203,10 @@ DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename, DImg::F
     }
     else
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Using fallback format " << fallback;
+        qCWarning(LOG_WIDGETS) << "Using fallback format " << fallback;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Discovered format: " << format;
+    qCDebug(LOG_WIDGETS) << "Discovered format: " << format;
 
     return format;
 }

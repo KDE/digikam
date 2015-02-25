@@ -29,7 +29,6 @@
 #include <QFile>
 #include <QDir>
 #include <QUrl>
-#include <QUrlQuery>
 
 // KDE includes
 
@@ -38,7 +37,7 @@
 
 // Libkdcraw includes
 
-#include <kdcraw.h>
+#include <KDCRAW/KDcraw>
 
 // Local includes
 

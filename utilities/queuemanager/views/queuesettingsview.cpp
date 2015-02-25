@@ -44,8 +44,8 @@
 
 // Libkdcraw includes
 
-#include <dcrawsettingswidget.h>
-#include <rwidgetutils.h>
+#include <KDCRAW/DcrawSettingsWidget>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
