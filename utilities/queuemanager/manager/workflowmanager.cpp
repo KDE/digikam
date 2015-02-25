@@ -83,7 +83,7 @@ WorkflowManager* WorkflowManager::instance()
 WorkflowManager::WorkflowManager()
     : d(new Private)
 {
-    d->file = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QString("/queue.xml");
+    d->file = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1String("/queue.xml");
 }
 
 WorkflowManager::~WorkflowManager()
@@ -198,8 +198,8 @@ bool WorkflowManager::save()
         return true;
     }
 
-    QDomDocument doc("queuelist");
-    doc.setContent(QString("<!DOCTYPE XMLQueueList><queuelist version=\"2.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
+    QDomDocument doc(QString::fromLatin1("queuelist"));
+    doc.setContent(QString::fromUtf8("<!DOCTYPE XMLQueueList><queuelist version=\"2.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
     QDomElement docElem = doc.documentElement();
 
     {
@@ -208,7 +208,7 @@ bool WorkflowManager::save()
         foreach(const Workflow& q, d->qList)
         {
 
-            QDomElement elm = doc.createElement("queue");
+            QDomElement elm = doc.createElement(QString::fromLatin1("queue"));
             QDomElement data;
 
             data = doc.createElement(QString::fromLatin1("queuetitle"));
@@ -257,7 +257,7 @@ bool WorkflowManager::save()
 
             foreach(const BatchToolSet& set, q.aTools)
             {
-                QDomElement batchtool = doc.createElement("tool");
+                QDomElement batchtool = doc.createElement(QString::fromLatin1("tool"));
                 elm.appendChild(batchtool);
 
                 data = doc.createElement(QString::fromLatin1("toolname"));
@@ -278,9 +278,9 @@ bool WorkflowManager::save()
 
                 for (BatchToolSettings::const_iterator it = set.settings.constBegin() ; it != set.settings.constEnd() ; ++it)
                 {
-                    data = doc.createElement("parameter");
+                    data = doc.createElement(QString::fromLatin1("parameter"));
                     data.setAttribute(QString::fromLatin1("name"),  it.key());
-                    data.setAttribute(QString::fromLatin1("type"),  it.value().typeName());
+                    data.setAttribute(QString::fromLatin1("type"),  QString::fromUtf8(it.value().typeName()));
                     data.setAttribute(QString::fromLatin1("value"), it.value().toString());
                     batchtool.appendChild(data);
                 }
@@ -319,7 +319,7 @@ bool WorkflowManager::load(QStringList& failed)
             return false;
         }
 
-        QDomDocument doc("queuelist");
+        QDomDocument doc(QString::fromLatin1("queuelist"));
 
         if (!doc.setContent(&file))
         {
@@ -329,7 +329,7 @@ bool WorkflowManager::load(QStringList& failed)
 
         QDomElement docElem = doc.documentElement();
 
-        if (docElem.tagName() != "queuelist")
+        if (docElem.tagName() != QString::fromLatin1("queuelist"))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Workflow XML file do not content Queue List data";
             return false;
@@ -344,7 +344,7 @@ bool WorkflowManager::load(QStringList& failed)
                 continue;
             }
 
-            if (e.tagName() != "queue")
+            if (e.tagName() != QString::fromLatin1("queue"))
             {
                 continue;
             }
@@ -364,47 +364,47 @@ bool WorkflowManager::load(QStringList& failed)
                 QString val2  = e2.attribute(QString::fromLatin1("value"));
                 bool ok       = true;
 
-                if (name2 == "queuetitle")
+                if (name2 == QString::fromLatin1("queuetitle"))
                 {
                     q.title = val2;
                 }
-                else if (name2 == "queuedesc")
+                else if (name2 == QString::fromLatin1("queuedesc"))
                 {
                     q.desc = val2;
                 }
-                else if (name2 == "renamingparser")
+                else if (name2 == QString::fromLatin1("renamingparser"))
                 {
                     q.qSettings.renamingParser = val2;
                 }
-                else if (name2 == "useoriginalalbum")
+                else if (name2 == QString::fromLatin1("useoriginalalbum"))
                 {
                     q.qSettings.useOrgAlbum = (bool)val2.toUInt(&ok);
                 }
-                else if (name2 == "usemulticorecpu")
+                else if (name2 == QString::fromLatin1("usemulticorecpu"))
                 {
                     q.qSettings.useMultiCoreCPU = (bool)val2.toUInt(&ok);
                 }
-                else if (name2 == "workingurl")
+                else if (name2 == QString::fromLatin1("workingurl"))
                 {
                     q.qSettings.workingUrl = QUrl::fromLocalFile(val2);
                 }
-                else if (name2 == "conflictrule")
+                else if (name2 == QString::fromLatin1("conflictrule"))
                 {
                     q.qSettings.conflictRule = (QueueSettings::ConflictRule)val2.toUInt(&ok);
                 }
-                else if (name2 == "renamingrule")
+                else if (name2 == QString::fromLatin1("renamingrule"))
                 {
                     q.qSettings.renamingRule = (QueueSettings::RenamingRule)val2.toUInt(&ok);
                 }
-                else if (name2 == "rawloadingrule")
+                else if (name2 == QString::fromLatin1("rawloadingrule"))
                 {
                     q.qSettings.rawLoadingRule = (QueueSettings::RawLoadingRule)val2.toUInt(&ok);
                 }
-                else if (name2 == "rawdecodingsettings")
+                else if (name2 == QString::fromLatin1("rawdecodingsettings"))
                 {
                     DRawDecoding::decodingSettingsFromXml(e2, q.qSettings.rawDecodingSettings);
                 }
-                else if (name2 == "tool")
+                else if (name2 == QString::fromLatin1("tool"))
                 {
                     BatchToolSet set;
 
@@ -419,32 +419,32 @@ bool WorkflowManager::load(QStringList& failed)
                         QString name3  = e3.tagName();
                         QString val3   = e3.attribute(QString::fromLatin1("value"));
 
-                        if (name3 == "toolname")
+                        if (name3 == QString::fromLatin1("toolname"))
                         {
                             set.name = val3;
                         }
-                        else if (name3 == "toolgroup")
+                        else if (name3 == QString::fromLatin1("toolgroup"))
                         {
                             set.group = (BatchTool::BatchToolGroup)val3.toInt(&ok);
                         }
-                        else if (name3 == "index")
+                        else if (name3 == QString::fromLatin1("index"))
                         {
                             set.index = val3.toInt(&ok);
                         }
-                        else if (name3 == "version")
+                        else if (name3 == QString::fromLatin1("version"))
                         {
                             set.version = val3.toInt(&ok);
                         }
-                        else if (name3 == "parameter")
+                        else if (name3 == QString::fromLatin1("parameter"))
                         {
                             QString pname = e3.attribute(QString::fromLatin1("name"));
                             QString type  = e3.attribute(QString::fromLatin1("type"));
                             QVariant var(val3);
-                            var.convert(QVariant::nameToType(type.toAscii().constData()));
-    /*
+                            var.convert(QVariant::nameToType(type.toLatin1().constData()));
+/*
                             qCDebug(DIGIKAM_GENERAL_LOG) << "name=" << pname << " :: " << "type=" << type << " :: " << "value=" << val3
                                     << " :: " << "QVariant=" << var;
-    */
+*/
                             set.settings.insert(pname, var);
                         }
                     }
@@ -473,7 +473,7 @@ bool WorkflowManager::load(QStringList& failed)
             }
             else
             {
-                failed.append(QString("%1 [%2]").arg(q.title).arg(q.desc));
+                failed.append(QString::fromUtf8("%1 [%2]").arg(q.title).arg(q.desc));
             }
         }
         return true;

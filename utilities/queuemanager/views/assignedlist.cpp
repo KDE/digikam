@@ -90,7 +90,7 @@ BatchToolSet AssignedListViewItem::toolSet()
 void AssignedListViewItem::setIndex(int index)
 {
     m_set.index = index;
-    setText(0, QString("%1").arg(m_set.index + 1));
+    setText(0, QString::fromUtf8("%1").arg(m_set.index + 1));
 }
 
 // ---------------------------------------------------------------------------
@@ -114,7 +114,7 @@ AssignedListView::AssignedListView(QWidget* const parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setColumnCount(2);
     setHeaderHidden(true);
-    header()->setResizeMode(QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     connect(this, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
@@ -319,7 +319,7 @@ Qt::DropActions AssignedListView::supportedDropActions() const
 QStringList AssignedListView::mimeTypes() const
 {
     QStringList types;
-    types << "digikam/assignedbatchtool";
+    types << QLatin1String("digikam/assignedbatchtool");
     return types;
 }
 
@@ -345,7 +345,7 @@ QMimeData* AssignedListView::mimeData(const QList<QTreeWidgetItem*> items) const
         }
     }
 
-    mimeData->setData("digikam/assignedbatchtool", encodedData);
+    mimeData->setData(QLatin1String("digikam/assignedbatchtool"), encodedData);
     return mimeData;
 }
 
@@ -357,8 +357,8 @@ void AssignedListView::dragEnterEvent(QDragEnterEvent* e)
 
 void AssignedListView::dragMoveEvent(QDragMoveEvent* e)
 {
-    if (e->mimeData()->formats().contains("digikam/batchtoolslist") ||
-        e->mimeData()->formats().contains("digikam/assignedbatchtool"))
+    if (e->mimeData()->formats().contains(QLatin1String("digikam/batchtoolslist")) ||
+        e->mimeData()->formats().contains(QLatin1String("digikam/assignedbatchtool")))
     {
         QTreeWidget::dragMoveEvent(e);
         e->accept();
@@ -370,9 +370,9 @@ void AssignedListView::dragMoveEvent(QDragMoveEvent* e)
 
 void AssignedListView::dropEvent(QDropEvent* e)
 {
-    if (e->mimeData()->formats().contains("digikam/batchtoolslist"))
+    if (e->mimeData()->formats().contains(QLatin1String("digikam/batchtoolslist")))
     {
-        QByteArray ba = e->mimeData()->data("digikam/batchtoolslist");
+        QByteArray ba = e->mimeData()->data(QLatin1String("digikam/batchtoolslist"));
 
         if (ba.size())
         {
@@ -386,9 +386,9 @@ void AssignedListView::dropEvent(QDropEvent* e)
 
         e->acceptProposedAction();
     }
-    else if (e->mimeData()->formats().contains("digikam/assignedbatchtool"))
+    else if (e->mimeData()->formats().contains(QLatin1String("digikam/assignedbatchtool")))
     {
-        QByteArray ba = e->mimeData()->data("digikam/assignedbatchtool");
+        QByteArray ba = e->mimeData()->data(QLatin1String("digikam/assignedbatchtool"));
 
         if (ba.size())
         {
@@ -522,12 +522,12 @@ void AssignedListView::slotContextMenu()
 
     KActionCollection* const acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
     QMenu popmenu(this);
-    popmenu.addAction(acol->action("queuemgr_toolup"));
-    popmenu.addAction(acol->action("queuemgr_tooldown"));
-    popmenu.addAction(acol->action("queuemgr_toolremove"));
+    popmenu.addAction(acol->action(QLatin1String("queuemgr_toolup")));
+    popmenu.addAction(acol->action(QLatin1String("queuemgr_tooldown")));
+    popmenu.addAction(acol->action(QLatin1String("queuemgr_toolremove")));
     popmenu.addSeparator();
-    popmenu.addAction(acol->action("queuemgr_savequeue"));
-    popmenu.addAction(acol->action("queuemgr_toolsclear"));
+    popmenu.addAction(acol->action(QLatin1String("queuemgr_savequeue")));
+    popmenu.addAction(acol->action(QLatin1String("queuemgr_toolsclear")));
     popmenu.exec(QCursor::pos());
 }
 

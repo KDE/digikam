@@ -110,10 +110,10 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
     d->settingsViewTitle->setFont(font);
 
     d->settingsViewReset = new QPushButton();
-    d->settingsViewReset->setIcon(QIcon::fromTheme("document-revert"));
+    d->settingsViewReset->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->settingsViewReset->setToolTip(i18n("Reset current tool settings to default values."));
 
-    QString frameStyle = QString("QFrame {"
+    QString frameStyle = QString::fromUtf8("QFrame {"
                                  "color: %1;"
                                  "border: 1px solid %2;"
                                  "border-radius: 5px;"
@@ -123,9 +123,9 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
                          .arg(qApp->palette().color(QPalette::HighlightedText).name())
                          .arg(qApp->palette().color(QPalette::Highlight).name());
 
-    QString noFrameStyle("QFrame {"
-                         "border: none;"
-                         "}");
+    QString noFrameStyle = QLatin1String("QFrame {"
+                                         "border: none;"
+                                         "}");
 
     d->settingsViewIcon->setStyleSheet(noFrameStyle);
     d->settingsViewTitle->setStyleSheet(noFrameStyle);
@@ -135,7 +135,7 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
     d->settingsViewIcon->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->settingsViewTitle->setAlignment(Qt::AlignCenter);
 
-    QGridLayout* descrLayout = new QGridLayout();
+    QGridLayout* const descrLayout = new QGridLayout();
     descrLayout->addWidget(d->settingsViewIcon,  0, 0, 1, 1);
     descrLayout->addWidget(d->settingsViewTitle, 0, 1, 1, 1);
     descrLayout->addWidget(d->settingsViewReset, 0, 2, 1, 1);

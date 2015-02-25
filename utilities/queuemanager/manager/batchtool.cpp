@@ -333,7 +333,7 @@ void BatchTool::setOutputUrlFromInputUrl()
         suffix = fi.completeSuffix();
     }
 
-    SafeTemporaryFile temp(workingUrl().toLocalFile() + "/BatchTool-XXXXXX.digikamtempfile." + suffix);
+    SafeTemporaryFile temp(workingUrl().toLocalFile() + QLatin1String("/BatchTool-XXXXXX.digikamtempfile.") + suffix);
     temp.setAutoRemove(false);
     temp.open();
     qCDebug(DIGIKAM_GENERAL_LOG) << "path: " << temp.fileName();
@@ -345,7 +345,7 @@ void BatchTool::setOutputUrlFromInputUrl()
 
 bool BatchTool::isRawFile(const QUrl& url) const
 {
-    QString   rawFilesExt(KDcraw::rawFiles());
+    QString   rawFilesExt(QLatin1String(KDcraw::rawFiles()));
     QFileInfo fileInfo(url.toLocalFile());
     return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
 }
@@ -423,15 +423,15 @@ bool BatchTool::apply()
             QPolygon pol = it.value().value<QPolygon>();
             int     size = (pol.size() > 20) ? 20 : pol.size();
             QString tmp;
-            tmp.append(QString("[%1 items] : ").arg(pol.size()));
+            tmp.append(QString::fromUtf8("[%1 items] : ").arg(pol.size()));
 
             for (int i = 0 ; i < size ; ++i)
             {
-                tmp.append("(");
+                tmp.append(QLatin1String("("));
                 tmp.append(QString::number(pol.point(i).x()));
-                tmp.append(", ");
+                tmp.append(QLatin1String(", "));
                 tmp.append(QString::number(pol.point(i).y()));
-                tmp.append(") ");
+                tmp.append(QLatin1String(") "));
             }
 
             //qCDebug(DIGIKAM_GENERAL_LOG) << "   " << it.key() << ": " << tmp;

@@ -140,6 +140,7 @@ find_package(KF5 REQUIRED COMPONENTS
              CoreAddons
              WindowSystem
              Solid
+             I18n
 
              KDELibs4Support
 )

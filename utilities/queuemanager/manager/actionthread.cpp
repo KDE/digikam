@@ -28,15 +28,11 @@
 
 #include <klocalizedstring.h>
 
-#include <solid/device.h>
-
 // Local includes
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
 #include "task.h"
-
-using namespace Solid;
 
 namespace Digikam
 {
@@ -82,7 +78,7 @@ void ActionThread::setSettings(const QueueSettings& settings)
     }
     else
     {
-        setMaximumNumberOfThreads(qMax(Device::listFromType(DeviceInterface::Processor).count(), 1));
+        defaultMaximumNumberOfThreads();
     }
 }
 

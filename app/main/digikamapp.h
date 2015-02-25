@@ -34,12 +34,6 @@
 #include <QString>
 #include <QMenu>
 
-// KDE includes
-
-#include <kio/global.h>
-#include <kio/netaccess.h>
-#include <solid/solidnamespace.h>
-
 // Local includes
 
 #include "digikam_config.h"
@@ -48,7 +42,7 @@
 
 namespace Solid
 {
-class Device;
+    class Device;
 }
 
 namespace Digikam

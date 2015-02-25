@@ -85,7 +85,7 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
 
     QWidget* const page    = new QWidget(this);
     QLabel* const logo     = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const topLabel = new QLabel(page);
@@ -106,7 +106,7 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
 
     // --------------------------------------------------------
 
-    QRegExp           reg("[^/]+");
+    QRegExp           reg(QLatin1String("[^/]+"));
     QValidator* const validator = new QRegExpValidator(reg, this);
 
     QLabel* const titleLabel = new QLabel(page);
@@ -227,7 +227,7 @@ void WorkflowDlg::slotTitleChanged(const QString& text)
 
 void WorkflowDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("workflowdlg.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("workflowdlg.anchor"), QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

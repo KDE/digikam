@@ -91,10 +91,11 @@ public:
 };
 
 QueueListViewItem::QueueListViewItem(QueueListView* const view, const ImageInfo& info)
-    : QTreeWidgetItem(view), d(new Private)
+    : QTreeWidgetItem(view),
+      d(new Private)
 {
     d->view = view;
-    setThumb(QIcon::fromTheme("image-x-generic").pixmap(48, QIcon::Disabled), false);
+    setThumb(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(48, QIcon::Disabled), false);
     setInfo(info);
 }
 
@@ -166,7 +167,7 @@ void QueueListViewItem::animProgress()
 void QueueListViewItem::setCanceled()
 {
     setPixmap(d->preview);
-    setIcon(1, QIcon::fromTheme("dialog-cancel"));
+    setIcon(1, QIcon::fromTheme(QLatin1String("dialog-cancel")));
     d->done          = false;
     d->isBusy        = false;
     d->progressIndex = 0;
@@ -175,7 +176,7 @@ void QueueListViewItem::setCanceled()
 void QueueListViewItem::setFailed()
 {
     setPixmap(d->preview);
-    setIcon(1, QIcon::fromTheme("dialog-error"));
+    setIcon(1, QIcon::fromTheme(QLatin1String("dialog-error")));
     d->done          = false;
     d->isBusy        = false;
     d->progressIndex = 0;
@@ -184,7 +185,7 @@ void QueueListViewItem::setFailed()
 void QueueListViewItem::setDone()
 {
     setPixmap(d->preview);
-    setIcon(1, QIcon::fromTheme("dialog-ok"));
+    setIcon(1, QIcon::fromTheme(QLatin1String("dialog-ok")));
     d->done          = true;
     d->isBusy        = false;
     d->progressIndex = 0;
@@ -285,7 +286,8 @@ public:
 };
 
 QueueListView::QueueListView(QWidget* const parent)
-    : QTreeWidget(parent), d(new Private)
+    : QTreeWidget(parent),
+      d(new Private)
 {
     setIconSize(QSize(d->iconSize, d->iconSize));
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -310,9 +312,9 @@ QueueListView::QueueListView(QWidget* const parent)
     titles.append(i18n("File Name"));
     titles.append(i18n("Target"));
     setHeaderLabels(titles);
-    header()->setResizeMode(0, QHeaderView::ResizeToContents);
-    header()->setResizeMode(1, QHeaderView::Stretch);
-    header()->setResizeMode(2, QHeaderView::Stretch);
+    header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(1, QHeaderView::Stretch);
+    header()->setSectionResizeMode(2, QHeaderView::Stretch);
 
     d->toolTip       = new QueueToolTip(this);
     d->toolTipTimer  = new QTimer(this);
@@ -389,7 +391,7 @@ void QueueListView::startDrag(Qt::DropActions /*supportedActions*/)
         return;
     }
 
-    QPixmap icon(QIcon::fromTheme("image-jp2").pixmap(48));
+    QPixmap icon(QIcon::fromTheme(QLatin1String("image-jp2")).pixmap(48));
     int w = icon.width();
     int h = icon.height();
 
@@ -459,7 +461,7 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
             }
         }
     }
-    else if (e->mimeData()->formats().contains("digikam/workflow"))
+    else if (e->mimeData()->formats().contains(QLatin1String("digikam/workflow")))
     {
         QTreeWidget::dragMoveEvent(e);
         e->accept();
@@ -559,9 +561,9 @@ void QueueListView::dropEvent(QDropEvent* e)
             e->acceptProposedAction();
         }
     }
-    else if (e->mimeData()->formats().contains("digikam/workflow"))
+    else if (e->mimeData()->formats().contains(QLatin1String("digikam/workflow")))
     {
-        QByteArray ba = e->mimeData()->data("digikam/workflow");
+        QByteArray ba = e->mimeData()->data(QLatin1String("digikam/workflow"));
 
         if (ba.size())
         {
@@ -742,7 +744,7 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
         {
             if (pix.isNull())
             {
-                item->setThumb(QIcon::fromTheme("image-x-generic").pixmap(d->iconSize, QIcon::Disabled));
+                item->setThumb(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(d->iconSize, QIcon::Disabled));
             }
             else
             {
@@ -1092,7 +1094,7 @@ void QueueListView::updateDestFileNames()
             bool extensionSet = false;
             tools.m_itemUrl   = item->info().fileUrl();
             QString newSuffix = tools.targetSuffix(&extensionSet);
-            QString newName   = QString("%1.%2").arg(fi.completeBaseName()).arg(newSuffix);
+            QString newName   = QString::fromUtf8("%1.%2").arg(fi.completeBaseName()).arg(newSuffix);
 
             if (settings().renamingRule == QueueSettings::CUSTOMIZE && !renamingResults.isEmpty())
             {
@@ -1100,7 +1102,7 @@ void QueueListView::updateDestFileNames()
 
                 if (extensionSet)
                 {
-                    newName = QString("%1.%2").arg(fi2.completeBaseName())
+                    newName = QString::fromUtf8("%1.%2").arg(fi2.completeBaseName())
                               .arg(newSuffix);
                 }
                 else
@@ -1125,9 +1127,9 @@ void QueueListView::slotContextMenu()
 
     KActionCollection* const acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
     QMenu popmenu(this);
-    popmenu.addAction(acol->action("queuemgr_removeitemssel"));
+    popmenu.addAction(acol->action(QLatin1String("queuemgr_removeitemssel")));
     popmenu.addSeparator();
-    popmenu.addAction(acol->action("queuemgr_clearlist"));
+    popmenu.addAction(acol->action(QLatin1String("queuemgr_clearlist")));
     popmenu.exec(QCursor::pos());
 }
 

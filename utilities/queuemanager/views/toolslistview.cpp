@@ -55,47 +55,47 @@ ToolListViewGroup::ToolListViewGroup(QTreeWidget* const parent, BatchTool::Batch
     switch (m_group)
     {
         case BatchTool::ColorTool:
-            setIcon(0, QIcon::fromTheme("digikam"));
+            setIcon(0, QIcon::fromTheme(QLatin1String("digikam")));
             setText(0, i18n("Color"));
             break;
 
         case BatchTool::EnhanceTool:
-            setIcon(0, QIcon::fromTheme("digikam"));
+            setIcon(0, QIcon::fromTheme(QLatin1String("digikam")));
             setText(0, i18n("Enhance"));
             break;
 
         case BatchTool::TransformTool:
-            setIcon(0, QIcon::fromTheme("digikam"));
+            setIcon(0, QIcon::fromTheme(QLatin1String("digikam")));
             setText(0, i18n("Transform"));
             break;
 
         case BatchTool::DecorateTool:
-            setIcon(0, QIcon::fromTheme("digikam"));
+            setIcon(0, QIcon::fromTheme(QLatin1String("digikam")));
             setText(0, i18n("Decorate"));
             break;
 
         case BatchTool::FiltersTool:
-            setIcon(0, QIcon::fromTheme("digikam"));
+            setIcon(0, QIcon::fromTheme(QLatin1String("digikam")));
             setText(0, i18n("Filters"));
             break;
 
         case BatchTool::ConvertTool:
-            setIcon(0, QIcon::fromTheme("digikam"));
+            setIcon(0, QIcon::fromTheme(QLatin1String("digikam")));
             setText(0, i18n("Convert"));
             break;
 
         case BatchTool::MetadataTool:
-            setIcon(0, QIcon::fromTheme("digikam"));
+            setIcon(0, QIcon::fromTheme(QLatin1String("digikam")));
             setText(0, i18n("Metadata"));
             break;
 
         case BatchTool::KipiTool:
-            setIcon(0, QIcon::fromTheme("kipi"));
+            setIcon(0, QIcon::fromTheme(QLatin1String("kipi")));
             setText(0, i18n("Kipi-plugins"));
             break;
 
         default:      // User customized tools.
-            setIcon(0, QIcon::fromTheme("user-properties"));
+            setIcon(0, QIcon::fromTheme(QLatin1String("user-properties")));
             setText(0, i18n("Custom Tools"));
             break;
     }
@@ -151,7 +151,7 @@ ToolsListView::ToolsListView(QWidget* const parent)
     setColumnCount(2);
     setHeaderHidden(true);
     setDragEnabled(true);
-    header()->setResizeMode(QHeaderView::Stretch);
+    header()->setSectionResizeMode(QHeaderView::Stretch);
 
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu()));
@@ -264,7 +264,7 @@ void ToolsListView::startDrag(Qt::DropActions /*supportedActions*/)
         return;
     }
 
-    QPixmap icon(QIcon::fromTheme("system-run").pixmap(48));
+    QPixmap icon(QIcon::fromTheme(QLatin1String("system-run")).pixmap(48));
     int w = icon.width();
     int h = icon.height();
 
@@ -296,7 +296,7 @@ void ToolsListView::startDrag(Qt::DropActions /*supportedActions*/)
 QStringList ToolsListView::mimeTypes() const
 {
     QStringList types;
-    types << "digikam/batchtoolslist";
+    types << QLatin1String("digikam/batchtoolslist");
     return types;
 }
 
@@ -330,7 +330,7 @@ QMimeData* ToolsListView::mimeData(const QList<QTreeWidgetItem*> items) const
     QMap<int, QString> map    = itemsToMap(items);
     stream << map;
 
-    mimeData->setData("digikam/batchtoolslist", encodedData);
+    mimeData->setData(QLatin1String("digikam/batchtoolslist"), encodedData);
     return mimeData;
 }
 
@@ -353,7 +353,7 @@ QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items
 void ToolsListView::slotContextMenu()
 {
     QMenu popmenu(this);
-    QAction* const action = new QAction(QIcon::fromTheme("bqm-add"), i18n("Assign tools"), this);
+    QAction* const action = new QAction(QIcon::fromTheme(QLatin1String("bqm-add")), i18n("Assign tools"), this);
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotAssignTools()));
 

@@ -217,7 +217,7 @@ void Task::run()
                 {
                     i++;
                     dest = dest.adjusted(QUrl::RemoveFilename);
-                    dest.setPath(dest.path() + fi.completeBaseName() + QString("_%1.").arg(i) + fi.completeSuffix());
+                    dest.setPath(dest.path() + fi.completeBaseName() + QString::fromUtf8("_%1.").arg(i) + fi.completeSuffix());
                     fileFound = true;
                 }
             }

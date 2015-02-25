@@ -149,7 +149,7 @@ QString QueuePool::queueTitle(int index) const
 {
     // NOTE: clean up tab title. With QTabWidget, it sound like mistake is added, as '&' and space.
     // NOTE update, & is an usability helper to allow keyboard access -teemu
-    return (tabText(index).remove('&').remove(' '));
+    return (tabText(index).remove(QLatin1Char('&')).remove(QLatin1Char(' ')));
 }
 
 void QueuePool::slotAddQueue()
@@ -159,7 +159,7 @@ void QueuePool::slotAddQueue()
     if (!queue)
         return;
 
-    int index = addTab(queue, QIcon::fromTheme("bqm-diff"), QString("#%1").arg(count() + 1));
+    int index = addTab(queue, QIcon::fromTheme(QLatin1String("bqm-diff")), QString::fromUtf8("#%1").arg(count() + 1));
 
     connect(queue, SIGNAL(signalQueueContentsChanged()),
             this, SIGNAL(signalQueueContentsChanged()));
@@ -242,7 +242,7 @@ void QueuePool::slotRemoveCurrentQueue()
     {
         for (int i = 0; i < count(); ++i)
         {
-            setTabText(i, QString("#%1").arg(i + 1));
+            setTabText(i, QString::fromUtf8("#%1").arg(i + 1));
         }
     }
 

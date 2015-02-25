@@ -137,7 +137,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     d->useOrgAlbum           = new QCheckBox(i18n("Use original Album"), vbox3);
     d->albumSel              = new AlbumSelectWidget(vbox3);
-    insertTab(Private::TARGET, sv3, QIcon::fromTheme("folder-image"), i18n("Target"));
+    insertTab(Private::TARGET, sv3, QIcon::fromTheme(QLatin1String("folder-image")), i18n("Target"));
 
     // --------------------------------------------------------
 
@@ -167,7 +167,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     vbox2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    insertTab(Private::RENAMING, sv2, QIcon::fromTheme("insert-image"), i18n("File Renaming"));
+    insertTab(Private::RENAMING, sv2, QIcon::fromTheme(QLatin1String("insert-image")), i18n("File Renaming"));
 
     // --------------------------------------------------------
 
@@ -227,16 +227,16 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->addStretch();
 
-    insertTab(Private::BEHAVIOR, sv, QIcon::fromTheme("dialog-information"), i18n("Behavior"));
+    insertTab(Private::BEHAVIOR, sv, QIcon::fromTheme(QLatin1String("dialog-information")), i18n("Behavior"));
 
     // --------------------------------------------------------
 
     d->rawSettings = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
-    d->rawSettings->setItemIcon(0, QIcon::fromTheme("kdcraw"));
-    d->rawSettings->setItemIcon(1, QIcon::fromTheme("whitebalance"));
-    d->rawSettings->setItemIcon(2, QIcon::fromTheme("lensdistortion"));
+    d->rawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("kdcraw")));
+    d->rawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("whitebalance")));
+    d->rawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));
 
-    insertTab(Private::RAW, d->rawSettings, QIcon::fromTheme("kdcraw"), i18n("Raw Decoding"));
+    insertTab(Private::RAW, d->rawSettings, QIcon::fromTheme(QLatin1String("kdcraw")), i18n("Raw Decoding"));
 
     // --------------------------------------------------------
 

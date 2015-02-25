@@ -72,7 +72,9 @@ add_library(queuemanager STATIC ${libqueuemanager_SRCS})
 
 target_link_libraries(queuemanager
                       digikamcore
-                      KF5::KDELibs4Support
+
+                      KF5::I18n                     
+                                            
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
                      )

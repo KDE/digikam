@@ -58,7 +58,7 @@ WorkflowItem::WorkflowItem(WorkflowList* const parent, const QString& title)
 
     Workflow q = WorkflowManager::instance()->findByTitle(title);
 
-    setIcon(0, QIcon::fromTheme("step"));
+    setIcon(0, QIcon::fromTheme(QLatin1String("step")));
     setText(0, title);
     setText(1, QString::number(q.aTools.count()));
     setText(2, q.desc);
@@ -100,9 +100,9 @@ WorkflowList::WorkflowList(QWidget* const parent)
     titles.append(i18n("Description"));
 
     setHeaderLabels(titles);
-    header()->setResizeMode(0, QHeaderView::ResizeToContents);
-    header()->setResizeMode(1, QHeaderView::ResizeToContents);
-    header()->setResizeMode(2, QHeaderView::Stretch);
+    header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(2, QHeaderView::Stretch);
 
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu()));
@@ -181,7 +181,7 @@ void WorkflowList::startDrag(Qt::DropActions /*supportedActions*/)
             return;
         }
 
-        QPixmap icon(QIcon::fromTheme("step").pixmap(48));
+        QPixmap icon(QIcon::fromTheme(QLatin1String("step")).pixmap(48));
         int w = icon.width();
         int h = icon.height();
 
@@ -213,7 +213,7 @@ void WorkflowList::startDrag(Qt::DropActions /*supportedActions*/)
 
 QStringList WorkflowList::mimeTypes() const
 {
-    return QStringList() << "digikam/workflow";
+    return QStringList() << QLatin1String("digikam/workflow");
 }
 
 void WorkflowList::mouseDoubleClickEvent(QMouseEvent*)
@@ -239,16 +239,16 @@ QMimeData* WorkflowList::mimeData(const QList<QTreeWidgetItem*> items) const
         }
     }
 
-    mimeData->setData("digikam/workflow", encodedData);
+    mimeData->setData(QLatin1String("digikam/workflow"), encodedData);
     return mimeData;
 }
 
 void WorkflowList::slotContextMenu()
 {
     QMenu popmenu(this);
-    QAction* const assignAction = new QAction(QIcon::fromTheme("bqm-add"),             i18n("Assign Workflow to current queue"), this);
-    QAction* const propAction   = new QAction(QIcon::fromTheme("document-properties"), i18n("Edit Workflow"),                    this);
-    QAction* const delAction    = new QAction(QIcon::fromTheme("edit-delete"),         i18n("Delete Workflow"),                  this);
+    QAction* const assignAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-add")),             i18n("Assign Workflow to current queue"), this);
+    QAction* const propAction   = new QAction(QIcon::fromTheme(QLatin1String("document-properties")), i18n("Edit Workflow"),                    this);
+    QAction* const delAction    = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")),         i18n("Delete Workflow"),                  this);
 
     popmenu.addAction(assignAction);
     popmenu.addAction(propAction);
@@ -314,6 +314,7 @@ void WorkflowList::slotContextMenu()
 void WorkflowList::slotAssignQueueSettings()
 {
     QList<QTreeWidgetItem*> list = selectedItems();
+
     if (!list.isEmpty())
     {
         WorkflowItem* const item = dynamic_cast<WorkflowItem*>(list.first());
