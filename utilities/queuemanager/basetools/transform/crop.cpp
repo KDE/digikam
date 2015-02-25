@@ -74,12 +74,12 @@ public:
 };
 
 Crop::Crop(QObject* const parent)
-    : BatchTool("Crop", TransformTool, parent),
+    : BatchTool(QLatin1String("Crop"), TransformTool, parent),
       d(new Private)
 {
     setToolTitle(i18n("Crop"));
     setToolDescription(i18n("Crop images to a region."));
-    setToolIconName("transform-crop");
+    setToolIconName(QLatin1String("transform-crop"));
 }
 
 Crop::~Crop()
@@ -177,41 +177,41 @@ void Crop::slotDisableParameters(bool b)
 BatchToolSettings Crop::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("xInput",      50);
-    settings.insert("yInput",      50);
-    settings.insert("widthInput",  800);
-    settings.insert("heightInput", 600);
-    settings.insert("AutoCrop",    false);
+    settings.insert(QLatin1String("xInput"),      50);
+    settings.insert(QLatin1String("yInput"),      50);
+    settings.insert(QLatin1String("widthInput"),  800);
+    settings.insert(QLatin1String("heightInput"), 600);
+    settings.insert(QLatin1String("AutoCrop"),    false);
     return settings;
 }
 
 void Crop::slotAssignSettings2Widget()
 {
-    d->xInput->setValue(settings()["xInput"].toInt());
-    d->yInput->setValue(settings()["yInput"].toInt());
-    d->widthInput->setValue(settings()["widthInput"].toInt());
-    d->heightInput->setValue(settings()["heightInput"].toInt());
-    d->autoCrop->setChecked(settings()["AutoCrop"].toBool());
+    d->xInput->setValue(settings()[QLatin1String("xInput")].toInt());
+    d->yInput->setValue(settings()[QLatin1String("yInput")].toInt());
+    d->widthInput->setValue(settings()[QLatin1String("widthInput")].toInt());
+    d->heightInput->setValue(settings()[QLatin1String("heightInput")].toInt());
+    d->autoCrop->setChecked(settings()[QLatin1String("AutoCrop")].toBool());
 }
 
 void Crop::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("xInput",      d->xInput->value());
-    settings.insert("yInput",      d->yInput->value());
-    settings.insert("widthInput",  d->widthInput->value());
-    settings.insert("heightInput", d->heightInput->value());
-    settings.insert("AutoCrop",    d->autoCrop->isChecked());
+    settings.insert(QLatin1String("xInput"),      d->xInput->value());
+    settings.insert(QLatin1String("yInput"),      d->yInput->value());
+    settings.insert(QLatin1String("widthInput"),  d->widthInput->value());
+    settings.insert(QLatin1String("heightInput"), d->heightInput->value());
+    settings.insert(QLatin1String("AutoCrop"),    d->autoCrop->isChecked());
     BatchTool::slotSettingsChanged(settings);
 }
 
 bool Crop::toolOperations()
 {
-    int xInput      = settings()["xInput"].toInt();
-    int yInput      = settings()["yInput"].toInt();
-    int widthInput  = settings()["widthInput"].toInt();
-    int heightInput = settings()["heightInput"].toInt();
-    bool autoCrop   = settings()["AutoCrop"].toBool();
+    int xInput      = settings()[QLatin1String("xInput")].toInt();
+    int yInput      = settings()[QLatin1String("yInput")].toInt();
+    int widthInput  = settings()[QLatin1String("widthInput")].toInt();
+    int heightInput = settings()[QLatin1String("heightInput")].toInt();
+    bool autoCrop   = settings()[QLatin1String("AutoCrop")].toBool();
 
     if (!loadToDImg())
     {

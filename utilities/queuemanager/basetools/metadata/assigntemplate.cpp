@@ -44,15 +44,15 @@
 namespace Digikam
 {
 
-AssignTemplate::AssignTemplate(QObject* parent)
-    : BatchTool("AssignTemplate", MetadataTool, parent)
+AssignTemplate::AssignTemplate(QObject* const parent)
+    : BatchTool(QLatin1String("AssignTemplate"), MetadataTool, parent)
 {
     m_templateSelector = 0;
     m_templateViewer   = 0;
 
     setToolTitle(i18n("Apply Metadata Template"));
     setToolDescription(i18n("Apply template metadata"));
-    setToolIconName("application-xml");
+    setToolIconName(QLatin1String("application-xml"));
 }
 
 AssignTemplate::~AssignTemplate()
@@ -75,13 +75,13 @@ void AssignTemplate::registerSettingsWidget()
 BatchToolSettings AssignTemplate::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("TemplateTitle", QString());
+    settings.insert(QLatin1String("TemplateTitle"), QString());
     return settings;
 }
 
 void AssignTemplate::slotAssignSettings2Widget()
 {
-    QString title = settings()["TemplateTitle"].toString();
+    QString title = settings()[QLatin1String("TemplateTitle")].toString();
 
     Template t;
 
@@ -106,7 +106,7 @@ void AssignTemplate::slotSettingsChanged()
 {
     m_templateViewer->setTemplate(m_templateSelector->getTemplate());
     BatchToolSettings settings;
-    settings.insert("TemplateTitle", m_templateSelector->getTemplate().templateTitle());
+    settings.insert(QLatin1String("TemplateTitle"), m_templateSelector->getTemplate().templateTitle());
     BatchTool::slotSettingsChanged(settings);
 }
 
@@ -117,7 +117,7 @@ bool AssignTemplate::toolOperations()
         return false;
     }
 
-    QString title = settings()["TemplateTitle"].toString();
+    QString title = settings()[QLatin1String("TemplateTitle")].toString();
 
     DMetadata meta(image().getMetadata());
 

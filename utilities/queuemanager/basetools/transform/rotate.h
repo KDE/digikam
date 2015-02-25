@@ -39,7 +39,7 @@ class Rotate : public BatchTool
 
 public:
 
-    explicit Rotate(QObject* parent = 0);
+    explicit Rotate(QObject* const parent = 0);
     ~Rotate();
 
     BatchToolSettings defaultSettings();
@@ -59,8 +59,8 @@ private Q_SLOTS:
 
 private:
 
-    class RotatePriv;
-    RotatePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

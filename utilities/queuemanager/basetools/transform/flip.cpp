@@ -50,13 +50,13 @@ namespace Digikam
 {
 
 Flip::Flip(QObject* parent)
-    : BatchTool("Flip", TransformTool, parent)
+    : BatchTool(QLatin1String("Flip"), TransformTool, parent)
 {
     m_comboBox = 0;
 
     setToolTitle(i18n("Flip"));
     setToolDescription(i18n("Flip images horizontally or vertically."));
-    setToolIconName("object-flip-vertical");
+    setToolIconName(QLatin1String("object-flip-vertical"));
 }
 
 void Flip::registerSettingsWidget()
@@ -87,25 +87,25 @@ Flip::~Flip()
 BatchToolSettings Flip::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("Flip", DImg::HORIZONTAL);
+    settings.insert(QLatin1String("Flip"), DImg::HORIZONTAL);
     return settings;
 }
 
 void Flip::slotAssignSettings2Widget()
 {
-    m_comboBox->setCurrentIndex(settings()["Flip"].toInt());
+    m_comboBox->setCurrentIndex(settings()[QLatin1String("Flip")].toInt());
 }
 
 void Flip::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("Flip", m_comboBox->currentIndex());
+    settings.insert(QLatin1String("Flip"), m_comboBox->currentIndex());
     BatchTool::slotSettingsChanged(settings);
 }
 
 bool Flip::toolOperations()
 {
-    DImg::FLIP flip = (DImg::FLIP)(settings()["Flip"].toInt());
+    DImg::FLIP flip = (DImg::FLIP)(settings()[QLatin1String("Flip")].toInt());
 
     if (JPEGUtils::isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {

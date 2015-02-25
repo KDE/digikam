@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 RemoveMetadata::RemoveMetadata(QObject* parent)
-    : BatchTool("RemoveMetadata", MetadataTool, parent)
+    : BatchTool(QLatin1String("RemoveMetadata"), MetadataTool, parent)
 {
     m_removeExif = 0;
     m_removeIptc = 0;
@@ -56,7 +56,7 @@ RemoveMetadata::RemoveMetadata(QObject* parent)
 
     setToolTitle(i18n("Remove Metadata"));
     setToolDescription(i18n("Remove Exif, Iptc, or Xmp metadata from images."));
-    setToolIconName("exifinfo");
+    setToolIconName(QLatin1String("exifinfo"));
 }
 
 RemoveMetadata::~RemoveMetadata()
@@ -89,33 +89,33 @@ void RemoveMetadata::registerSettingsWidget()
 BatchToolSettings RemoveMetadata::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("RemoveExif", false);
-    settings.insert("RemoveIptc", false);
-    settings.insert("RemoveXmp",  false);
+    settings.insert(QLatin1String("RemoveExif"), false);
+    settings.insert(QLatin1String("RemoveIptc"), false);
+    settings.insert(QLatin1String("RemoveXmp"),  false);
     return settings;
 }
 
 void RemoveMetadata::slotAssignSettings2Widget()
 {
-    m_removeExif->setChecked(settings()["RemoveExif"].toBool());
-    m_removeIptc->setChecked(settings()["RemoveIptc"].toBool());
-    m_removeXmp->setChecked(settings()["RemoveXmp"].toBool());
+    m_removeExif->setChecked(settings()[QLatin1String("RemoveExif")].toBool());
+    m_removeIptc->setChecked(settings()[QLatin1String("RemoveIptc")].toBool());
+    m_removeXmp->setChecked(settings()[QLatin1String("RemoveXmp")].toBool());
 }
 
 void RemoveMetadata::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("RemoveExif", m_removeExif->isChecked());
-    settings.insert("RemoveIptc", m_removeIptc->isChecked());
-    settings.insert("RemoveXmp",  m_removeXmp->isChecked());
+    settings.insert(QLatin1String("RemoveExif"), m_removeExif->isChecked());
+    settings.insert(QLatin1String("RemoveIptc"), m_removeIptc->isChecked());
+    settings.insert(QLatin1String("RemoveXmp"),  m_removeXmp->isChecked());
     BatchTool::slotSettingsChanged(settings);
 }
 
 bool RemoveMetadata::toolOperations()
 {
-    bool removeExif = settings()["RemoveExif"].toBool();
-    bool removeIptc = settings()["RemoveIptc"].toBool();
-    bool removeXmp  = settings()["RemoveXmp"].toBool();
+    bool removeExif = settings()[QLatin1String("RemoveExif")].toBool();
+    bool removeIptc = settings()[QLatin1String("RemoveIptc")].toBool();
+    bool removeXmp  = settings()[QLatin1String("RemoveXmp")].toBool();
 
     if (!loadToDImg())
     {

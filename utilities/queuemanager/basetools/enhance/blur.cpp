@@ -44,12 +44,12 @@ namespace Digikam
 {
 
 Blur::Blur(QObject* const parent)
-    : BatchTool("Blur", EnhanceTool, parent),
+    : BatchTool(QLatin1String("Blur"), EnhanceTool, parent),
       m_radiusInput(0)
 {
     setToolTitle(i18n("Blur Image"));
     setToolDescription(i18n("Blur images"));
-    setToolIconName("blurimage");
+    setToolIconName(QLatin1String("blurimage"));
 }
 
 Blur::~Blur()
@@ -84,21 +84,21 @@ BatchToolSettings Blur::defaultSettings()
 {
     BatchToolSettings settings;
 
-    settings.insert("Radius", (int)m_radiusInput->defaultValue());
+    settings.insert(QLatin1String("Radius"), (int)m_radiusInput->defaultValue());
 
     return settings;
 }
 
 void Blur::slotAssignSettings2Widget()
 {
-    m_radiusInput->setValue(settings()["Radius"].toInt());
+    m_radiusInput->setValue(settings()[QLatin1String("Radius")].toInt());
 }
 
 void Blur::slotSettingsChanged()
 {
     BatchToolSettings settings;
 
-    settings.insert("Radius", (int)m_radiusInput->value());
+    settings.insert(QLatin1String("Radius"), (int)m_radiusInput->value());
 
     BatchTool::slotSettingsChanged(settings);
 }
@@ -110,7 +110,7 @@ bool Blur::toolOperations()
         return false;
     }
 
-    double radius = settings()["Radius"].toInt();
+    double radius = settings()[QLatin1String("Radius")].toInt();
 
     BlurFilter blur(&image(), 0L, radius);
     applyFilter(&blur);

@@ -42,12 +42,12 @@ namespace Digikam
 {
 
 NoiseReduction::NoiseReduction(QObject* const parent)
-    : BatchTool("NoiseReduction", EnhanceTool, parent),
+    : BatchTool(QLatin1String("NoiseReduction"), EnhanceTool, parent),
       m_settingsView(0)
 {
     setToolTitle(i18n("Noise Reduction"));
     setToolDescription(i18n("Remove photograph noise using wavelets."));
-    setToolIconName("noisereduction");
+    setToolIconName(QLatin1String("noisereduction"));
 }
 
 NoiseReduction::~NoiseReduction()
@@ -73,13 +73,13 @@ BatchToolSettings NoiseReduction::defaultSettings()
     BatchToolSettings prm;
     NRContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("YThreshold",    (double)defaultPrm.thresholds[0]);
-    prm.insert("CrThreshold",   (double)defaultPrm.thresholds[1]);
-    prm.insert("CbThreshold",   (double)defaultPrm.thresholds[2]);
-    prm.insert("YSoftness",     (double)defaultPrm.softness[0]);
-    prm.insert("CrSoftness",    (double)defaultPrm.softness[1]);
-    prm.insert("CbSoftness",    (double)defaultPrm.softness[2]);
-    prm.insert("EstimateNoise", false);
+    prm.insert(QLatin1String("YThreshold"),    (double)defaultPrm.thresholds[0]);
+    prm.insert(QLatin1String("CrThreshold"),   (double)defaultPrm.thresholds[1]);
+    prm.insert(QLatin1String("CbThreshold"),   (double)defaultPrm.thresholds[2]);
+    prm.insert(QLatin1String("YSoftness"),     (double)defaultPrm.softness[0]);
+    prm.insert(QLatin1String("CrSoftness"),    (double)defaultPrm.softness[1]);
+    prm.insert(QLatin1String("CbSoftness"),    (double)defaultPrm.softness[2]);
+    prm.insert(QLatin1String("EstimateNoise"), false);
 
     return prm;
 }
@@ -87,14 +87,14 @@ BatchToolSettings NoiseReduction::defaultSettings()
 void NoiseReduction::slotAssignSettings2Widget()
 {
     NRContainer prm;
-    prm.thresholds[0] = settings()["YThreshold"].toDouble();
-    prm.thresholds[1] = settings()["CrThreshold"].toDouble();
-    prm.thresholds[2] = settings()["CbThreshold"].toDouble();
-    prm.softness[0]   = settings()["YSoftness"].toDouble();
-    prm.softness[1]   = settings()["CrSoftness"].toDouble();
-    prm.softness[2]   = settings()["CbSoftness"].toDouble();
+    prm.thresholds[0] = settings()[QLatin1String("YThreshold")].toDouble();
+    prm.thresholds[1] = settings()[QLatin1String("CrThreshold")].toDouble();
+    prm.thresholds[2] = settings()[QLatin1String("CbThreshold")].toDouble();
+    prm.softness[0]   = settings()[QLatin1String("YSoftness")].toDouble();
+    prm.softness[1]   = settings()[QLatin1String("CrSoftness")].toDouble();
+    prm.softness[2]   = settings()[QLatin1String("CbSoftness")].toDouble();
     m_settingsView->setSettings(prm);
-    m_settingsView->setEstimateNoise(settings()["EstimateNoise"].toBool());
+    m_settingsView->setEstimateNoise(settings()[QLatin1String("EstimateNoise")].toBool());
 }
 
 void NoiseReduction::slotSettingsChanged()
@@ -102,13 +102,13 @@ void NoiseReduction::slotSettingsChanged()
     BatchToolSettings prm;
     NRContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("YThreshold",    (double)currentPrm.thresholds[0]);
-    prm.insert("CrThreshold",   (double)currentPrm.thresholds[1]);
-    prm.insert("CbThreshold",   (double)currentPrm.thresholds[2]);
-    prm.insert("YSoftness",     (double)currentPrm.softness[0]);
-    prm.insert("CrSoftness",    (double)currentPrm.softness[1]);
-    prm.insert("CbSoftness",    (double)currentPrm.softness[2]);
-    prm.insert("EstimateNoise", m_settingsView->estimateNoise());
+    prm.insert(QLatin1String("YThreshold"),    (double)currentPrm.thresholds[0]);
+    prm.insert(QLatin1String("CrThreshold"),   (double)currentPrm.thresholds[1]);
+    prm.insert(QLatin1String("CbThreshold"),   (double)currentPrm.thresholds[2]);
+    prm.insert(QLatin1String("YSoftness"),     (double)currentPrm.softness[0]);
+    prm.insert(QLatin1String("CrSoftness"),    (double)currentPrm.softness[1]);
+    prm.insert(QLatin1String("CbSoftness"),    (double)currentPrm.softness[2]);
+    prm.insert(QLatin1String("EstimateNoise"), m_settingsView->estimateNoise());
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -122,7 +122,7 @@ bool NoiseReduction::toolOperations()
 
     NRContainer prm;
 
-    if (settings()["EstimateNoise"].toBool())
+    if (settings()[QLatin1String("EstimateNoise")].toBool())
     {
         NREstimate nre(&image());
         nre.startFilterDirectly();
@@ -130,12 +130,12 @@ bool NoiseReduction::toolOperations()
     }
     else
     {
-        prm.thresholds[0] = settings()["YThreshold"].toDouble();
-        prm.thresholds[1] = settings()["CrThreshold"].toDouble();
-        prm.thresholds[2] = settings()["CbThreshold"].toDouble();
-        prm.softness[0]   = settings()["YSoftness"].toDouble();
-        prm.softness[1]   = settings()["CrSoftness"].toDouble();
-        prm.softness[2]   = settings()["CbSoftness"].toDouble();
+        prm.thresholds[0] = settings()[QLatin1String("YThreshold")].toDouble();
+        prm.thresholds[1] = settings()[QLatin1String("CrThreshold")].toDouble();
+        prm.thresholds[2] = settings()[QLatin1String("CbThreshold")].toDouble();
+        prm.softness[0]   = settings()[QLatin1String("YSoftness")].toDouble();
+        prm.softness[1]   = settings()[QLatin1String("CrSoftness")].toDouble();
+        prm.softness[2]   = settings()[QLatin1String("CbSoftness")].toDouble();
     }
 
     NRFilter wnr(&image(), 0L, prm);

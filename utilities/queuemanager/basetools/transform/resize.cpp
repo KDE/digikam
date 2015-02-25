@@ -127,12 +127,12 @@ int Resize::Private::presetLengthValue(WidthPreset preset)
 // ------------------------------------------------------------------------------
 
 Resize::Resize(QObject* const parent)
-    : BatchTool("Resize", TransformTool, parent),
+    : BatchTool(QLatin1String("Resize"), TransformTool, parent),
       d(new Private)
 {
     setToolTitle(i18n("Resize"));
     setToolDescription(i18n("Resize images with a customized length."));
-    setToolIconName("transform-scale");
+    setToolIconName(QLatin1String("transform-scale"));
 }
 
 Resize::~Resize()
@@ -177,18 +177,18 @@ void Resize::registerSettingsWidget()
 BatchToolSettings Resize::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("UseCustom",    false);
-    settings.insert("LengthCustom", 1024);
-    settings.insert("LengthPreset", Private::Medium);
+    settings.insert(QLatin1String("UseCustom"),    false);
+    settings.insert(QLatin1String("LengthCustom"), 1024);
+    settings.insert(QLatin1String("LengthPreset"), Private::Medium);
     return settings;
 }
 
 void Resize::slotAssignSettings2Widget()
 {
     d->changeSettings = false;
-    d->comboBox->setCurrentIndex(settings()["LengthPreset"].toInt());
-    d->useCustom->setChecked(settings()["UseCustom"].toBool());
-    d->customLength->setValue(settings()["LengthCustom"].toInt());
+    d->comboBox->setCurrentIndex(settings()[QLatin1String("LengthPreset")].toInt());
+    d->useCustom->setChecked(settings()[QLatin1String("UseCustom")].toBool());
+    d->customLength->setValue(settings()[QLatin1String("LengthCustom")].toInt());
     d->changeSettings = true;
 }
 
@@ -201,18 +201,18 @@ void Resize::slotSettingsChanged()
     if (d->changeSettings)
     {
         BatchToolSettings settings;
-        settings.insert("LengthPreset", d->comboBox->currentIndex());
-        settings.insert("UseCustom",    d->useCustom->isChecked());
-        settings.insert("LengthCustom", d->customLength->value());
+        settings.insert(QLatin1String("LengthPreset"), d->comboBox->currentIndex());
+        settings.insert(QLatin1String("UseCustom"),    d->useCustom->isChecked());
+        settings.insert(QLatin1String("LengthCustom"), d->customLength->value());
         BatchTool::slotSettingsChanged(settings);
     }
 }
 
 bool Resize::toolOperations()
 {
-    bool useCustom              = settings()["UseCustom"].toBool();
-    Private::WidthPreset preset = (Private::WidthPreset)(settings()["LengthPreset"].toInt());
-    int length                  = settings()["LengthCustom"].toInt();
+    bool useCustom              = settings()[QLatin1String("UseCustom")].toBool();
+    Private::WidthPreset preset = (Private::WidthPreset)(settings()[QLatin1String("LengthPreset")].toInt());
+    int length                  = settings()[QLatin1String("LengthCustom")].toInt();
 
     if (!useCustom)
     {

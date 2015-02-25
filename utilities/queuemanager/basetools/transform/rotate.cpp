@@ -54,17 +54,18 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class Rotate::RotatePriv
+class Rotate::Private
 {
 public:
 
-    RotatePriv() :
+    Private() :
         CUSTOM_ANGLE(DImg::ROT270 + 1),
         label(0),
         useExif(0),
         comboBox(0),
         frSettings(0)
-    {}
+    {
+    }
 
     const int             CUSTOM_ANGLE;
 
@@ -77,13 +78,13 @@ public:
     FreeRotationSettings* frSettings;
 };
 
-Rotate::Rotate(QObject* parent)
-    : BatchTool("Rotate", TransformTool, parent),
-      d(new RotatePriv)
+Rotate::Rotate(QObject* const parent)
+    : BatchTool(QLatin1String("Rotate"), TransformTool, parent),
+      d(new Private)
 {
     setToolTitle(i18n("Rotate"));
     setToolDescription(i18n("Rotate images."));
-    setToolIconName("object-rotate-right");
+    setToolIconName(QLatin1String("object-rotate-right"));
 }
 
 Rotate::~Rotate()
@@ -134,22 +135,22 @@ BatchToolSettings Rotate::defaultSettings()
     BatchToolSettings settings;
     FreeRotationContainer defaultPrm = d->frSettings->defaultSettings();
 
-    settings.insert("useExif",   true);
-    settings.insert("rotation",  d->comboBox->defaultIndex());
-    settings.insert("angle",     defaultPrm.angle);
-    settings.insert("antiAlias", defaultPrm.antiAlias);
-    settings.insert("autoCrop",  defaultPrm.autoCrop);
+    settings.insert(QLatin1String("useExif"),   true);
+    settings.insert(QLatin1String("rotation"),  d->comboBox->defaultIndex());
+    settings.insert(QLatin1String("angle"),     defaultPrm.angle);
+    settings.insert(QLatin1String("antiAlias"), defaultPrm.antiAlias);
+    settings.insert(QLatin1String("autoCrop"),  defaultPrm.autoCrop);
     return settings;
 }
 
 void Rotate::slotAssignSettings2Widget()
 {
-    d->useExif->setChecked(settings()["useExif"].toBool());
-    d->comboBox->setCurrentIndex(settings()["rotation"].toInt());
+    d->useExif->setChecked(settings()[QLatin1String("useExif")].toBool());
+    d->comboBox->setCurrentIndex(settings()[QLatin1String("rotation")].toInt());
     FreeRotationContainer prm;
-    prm.angle     = settings()["angle"].toDouble();
-    prm.antiAlias = settings()["antiAlias"].toBool();
-    prm.autoCrop  = settings()["autoCrop"].toInt();
+    prm.angle     = settings()[QLatin1String("angle")].toDouble();
+    prm.antiAlias = settings()[QLatin1String("antiAlias")].toBool();
+    prm.autoCrop  = settings()[QLatin1String("autoCrop")].toInt();
     d->frSettings->setSettings(prm);
 }
 
@@ -162,11 +163,11 @@ void Rotate::slotSettingsChanged()
     BatchToolSettings settings;
     FreeRotationContainer currentPrm = d->frSettings->settings();
 
-    settings.insert("useExif",   d->useExif->isChecked());
-    settings.insert("rotation",  d->comboBox->currentIndex());
-    settings.insert("angle",     currentPrm.angle);
-    settings.insert("antiAlias", currentPrm.antiAlias);
-    settings.insert("autoCrop",  currentPrm.autoCrop);
+    settings.insert(QLatin1String("useExif"),   d->useExif->isChecked());
+    settings.insert(QLatin1String("rotation"),  d->comboBox->currentIndex());
+    settings.insert(QLatin1String("angle"),     currentPrm.angle);
+    settings.insert(QLatin1String("antiAlias"), currentPrm.antiAlias);
+    settings.insert(QLatin1String("autoCrop"),  currentPrm.autoCrop);
 
     BatchTool::slotSettingsChanged(settings);
 }
@@ -174,11 +175,11 @@ void Rotate::slotSettingsChanged()
 bool Rotate::toolOperations()
 {
     FreeRotationContainer prm;
-    bool useExif  = settings()["useExif"].toBool();
-    int rotation  = settings()["rotation"].toInt();
-    prm.angle     = settings()["angle"].toDouble();
-    prm.antiAlias = settings()["antiAlias"].toBool();
-    prm.autoCrop  = settings()["autoCrop"].toInt();
+    bool useExif  = settings()[QLatin1String("useExif")].toBool();
+    int rotation  = settings()[QLatin1String("rotation")].toInt();
+    prm.angle     = settings()[QLatin1String("angle")].toDouble();
+    prm.antiAlias = settings()[QLatin1String("antiAlias")].toBool();
+    prm.autoCrop  = settings()[QLatin1String("autoCrop")].toInt();
 
     // JPEG image : lossless method if non-custom rotation angle.
 

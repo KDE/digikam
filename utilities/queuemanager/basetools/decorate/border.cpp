@@ -42,13 +42,13 @@ namespace Digikam
 {
 
 Border::Border(QObject* const parent)
-    : BatchTool("Border", DecorateTool, parent)
+    : BatchTool(QLatin1String("Border"), DecorateTool, parent)
 {
     m_settingsView = 0;
 
     setToolTitle(i18n("Add Border"));
     setToolDescription(i18n("Add a border around images"));
-    setToolIconName("bordertool");
+    setToolIconName(QLatin1String("bordertool"));
 }
 
 Border::~Border()
@@ -72,23 +72,23 @@ BatchToolSettings Border::defaultSettings()
     BatchToolSettings prm;
     BorderContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("preserveAspectRatio",   defaultPrm.preserveAspectRatio);
-    prm.insert("orgWidth",              defaultPrm.orgWidth);
-    prm.insert("orgHeight",             defaultPrm.orgHeight);
-    prm.insert("borderType",            defaultPrm.borderType);
-    prm.insert("borderWidth1",          defaultPrm.borderWidth1);
-    prm.insert("borderWidth2",          defaultPrm.borderWidth2);
-    prm.insert("borderWidth3",          defaultPrm.borderWidth3);
-    prm.insert("borderWidth4",          defaultPrm.borderWidth4);
-    prm.insert("borderPercent",         defaultPrm.borderPercent);
-    prm.insert("borderPath",            defaultPrm.borderPath);
-    prm.insert("solidColor",            defaultPrm.solidColor);
-    prm.insert("niepceBorderColor",     defaultPrm.niepceBorderColor);
-    prm.insert("niepceLineColor",       defaultPrm.niepceLineColor);
-    prm.insert("bevelUpperLeftColor",   defaultPrm.bevelUpperLeftColor);
-    prm.insert("bevelLowerRightColor",  defaultPrm.bevelLowerRightColor);
-    prm.insert("decorativeFirstColor",  defaultPrm.decorativeFirstColor);
-    prm.insert("decorativeSecondColor", defaultPrm.decorativeSecondColor);
+    prm.insert(QLatin1String("preserveAspectRatio"),   defaultPrm.preserveAspectRatio);
+    prm.insert(QLatin1String("orgWidth"),              defaultPrm.orgWidth);
+    prm.insert(QLatin1String("orgHeight"),             defaultPrm.orgHeight);
+    prm.insert(QLatin1String("borderType"),            defaultPrm.borderType);
+    prm.insert(QLatin1String("borderWidth1"),          defaultPrm.borderWidth1);
+    prm.insert(QLatin1String("borderWidth2"),          defaultPrm.borderWidth2);
+    prm.insert(QLatin1String("borderWidth3"),          defaultPrm.borderWidth3);
+    prm.insert(QLatin1String("borderWidth4"),          defaultPrm.borderWidth4);
+    prm.insert(QLatin1String("borderPercent"),         defaultPrm.borderPercent);
+    prm.insert(QLatin1String("borderPath"),            defaultPrm.borderPath);
+    prm.insert(QLatin1String("solidColor"),            defaultPrm.solidColor);
+    prm.insert(QLatin1String("niepceBorderColor"),     defaultPrm.niepceBorderColor);
+    prm.insert(QLatin1String("niepceLineColor"),       defaultPrm.niepceLineColor);
+    prm.insert(QLatin1String("bevelUpperLeftColor"),   defaultPrm.bevelUpperLeftColor);
+    prm.insert(QLatin1String("bevelLowerRightColor"),  defaultPrm.bevelLowerRightColor);
+    prm.insert(QLatin1String("decorativeFirstColor"),  defaultPrm.decorativeFirstColor);
+    prm.insert(QLatin1String("decorativeSecondColor"), defaultPrm.decorativeSecondColor);
 
     return prm;
 }
@@ -97,21 +97,21 @@ void Border::slotAssignSettings2Widget()
 {
     BorderContainer prm;
 
-    prm.preserveAspectRatio   = settings()["preserveAspectRatio"].toBool();
-    prm.borderType            = settings()["borderType"].toInt();
-    prm.borderWidth1          = settings()["borderWidth1"].toInt();
-    prm.borderWidth2          = settings()["borderWidth2"].toInt();
-    prm.borderWidth3          = settings()["borderWidth3"].toInt();
-    prm.borderWidth4          = settings()["borderWidth4"].toInt();
-    prm.borderPercent         = settings()["borderPercent"].toDouble();
-    prm.borderPath            = settings()["borderPath"].toString();
-    prm.solidColor            = settings()["solidColor"].value<QColor>();
-    prm.niepceBorderColor     = settings()["niepceBorderColor"].value<QColor>();
-    prm.niepceLineColor       = settings()["niepceLineColor"].value<QColor>();
-    prm.bevelUpperLeftColor   = settings()["bevelUpperLeftColor"].value<QColor>();
-    prm.bevelLowerRightColor  = settings()["bevelLowerRightColor"].value<QColor>();
-    prm.decorativeFirstColor  = settings()["decorativeFirstColor"].value<QColor>();
-    prm.decorativeSecondColor = settings()["decorativeSecondColor"].value<QColor>();
+    prm.preserveAspectRatio   = settings()[QLatin1String("preserveAspectRatio")].toBool();
+    prm.borderType            = settings()[QLatin1String("borderType")].toInt();
+    prm.borderWidth1          = settings()[QLatin1String("borderWidth1")].toInt();
+    prm.borderWidth2          = settings()[QLatin1String("borderWidth2")].toInt();
+    prm.borderWidth3          = settings()[QLatin1String("borderWidth3")].toInt();
+    prm.borderWidth4          = settings()[QLatin1String("borderWidth4")].toInt();
+    prm.borderPercent         = settings()[QLatin1String("borderPercent")].toDouble();
+    prm.borderPath            = settings()[QLatin1String("borderPath")].toString();
+    prm.solidColor            = settings()[QLatin1String("solidColor")].value<QColor>();
+    prm.niepceBorderColor     = settings()[QLatin1String("niepceBorderColor")].value<QColor>();
+    prm.niepceLineColor       = settings()[QLatin1String("niepceLineColor")].value<QColor>();
+    prm.bevelUpperLeftColor   = settings()[QLatin1String("bevelUpperLeftColor")].value<QColor>();
+    prm.bevelLowerRightColor  = settings()[QLatin1String("bevelLowerRightColor")].value<QColor>();
+    prm.decorativeFirstColor  = settings()[QLatin1String("decorativeFirstColor")].value<QColor>();
+    prm.decorativeSecondColor = settings()[QLatin1String("decorativeSecondColor")].value<QColor>();
 
     m_settingsView->setSettings(prm);
 }
@@ -121,21 +121,21 @@ void Border::slotSettingsChanged()
     BatchToolSettings prm;
     BorderContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("preserveAspectRatio",   currentPrm.preserveAspectRatio);
-    prm.insert("borderType",            currentPrm.borderType);
-    prm.insert("borderWidth1",          currentPrm.borderWidth1);
-    prm.insert("borderWidth2",          currentPrm.borderWidth2);
-    prm.insert("borderWidth3",          currentPrm.borderWidth3);
-    prm.insert("borderWidth4",          currentPrm.borderWidth4);
-    prm.insert("borderPercent",         currentPrm.borderPercent);
-    prm.insert("borderPath",            currentPrm.borderPath);
-    prm.insert("solidColor",            currentPrm.solidColor);
-    prm.insert("niepceBorderColor",     currentPrm.niepceBorderColor);
-    prm.insert("niepceLineColor",       currentPrm.niepceLineColor);
-    prm.insert("bevelUpperLeftColor",   currentPrm.bevelUpperLeftColor);
-    prm.insert("bevelLowerRightColor",  currentPrm.bevelLowerRightColor);
-    prm.insert("decorativeFirstColor",  currentPrm.decorativeFirstColor);
-    prm.insert("decorativeSecondColor", currentPrm.decorativeSecondColor);
+    prm.insert(QLatin1String("preserveAspectRatio"),   currentPrm.preserveAspectRatio);
+    prm.insert(QLatin1String("borderType"),            currentPrm.borderType);
+    prm.insert(QLatin1String("borderWidth1"),          currentPrm.borderWidth1);
+    prm.insert(QLatin1String("borderWidth2"),          currentPrm.borderWidth2);
+    prm.insert(QLatin1String("borderWidth3"),          currentPrm.borderWidth3);
+    prm.insert(QLatin1String("borderWidth4"),          currentPrm.borderWidth4);
+    prm.insert(QLatin1String("borderPercent"),         currentPrm.borderPercent);
+    prm.insert(QLatin1String("borderPath"),            currentPrm.borderPath);
+    prm.insert(QLatin1String("solidColor"),            currentPrm.solidColor);
+    prm.insert(QLatin1String("niepceBorderColor"),     currentPrm.niepceBorderColor);
+    prm.insert(QLatin1String("niepceLineColor"),       currentPrm.niepceLineColor);
+    prm.insert(QLatin1String("bevelUpperLeftColor"),   currentPrm.bevelUpperLeftColor);
+    prm.insert(QLatin1String("bevelLowerRightColor"),  currentPrm.bevelLowerRightColor);
+    prm.insert(QLatin1String("decorativeFirstColor"),  currentPrm.decorativeFirstColor);
+    prm.insert(QLatin1String("decorativeSecondColor"), currentPrm.decorativeSecondColor);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -148,21 +148,21 @@ bool Border::toolOperations()
     }
 
     BorderContainer prm;
-    prm.preserveAspectRatio   = settings()["preserveAspectRatio"].toBool();
-    prm.borderType            = settings()["borderType"].toInt();
-    prm.borderWidth1          = settings()["borderWidth1"].toInt();
-    prm.borderWidth2          = settings()["borderWidth2"].toInt();
-    prm.borderWidth3          = settings()["borderWidth3"].toInt();
-    prm.borderWidth4          = settings()["borderWidth4"].toInt();
-    prm.borderPercent         = settings()["borderPercent"].toDouble();
-    prm.borderPath            = settings()["borderPath"].toString();
-    prm.solidColor            = settings()["solidColor"].value<QColor>();
-    prm.niepceBorderColor     = settings()["niepceBorderColor"].value<QColor>();
-    prm.niepceLineColor       = settings()["niepceLineColor"].value<QColor>();
-    prm.bevelUpperLeftColor   = settings()["bevelUpperLeftColor"].value<QColor>();
-    prm.bevelLowerRightColor  = settings()["bevelLowerRightColor"].value<QColor>();
-    prm.decorativeFirstColor  = settings()["decorativeFirstColor"].value<QColor>();
-    prm.decorativeSecondColor = settings()["decorativeSecondColor"].value<QColor>();
+    prm.preserveAspectRatio   = settings()[QLatin1String("preserveAspectRatio")].toBool();
+    prm.borderType            = settings()[QLatin1String("borderType")].toInt();
+    prm.borderWidth1          = settings()[QLatin1String("borderWidth1")].toInt();
+    prm.borderWidth2          = settings()[QLatin1String("borderWidth2")].toInt();
+    prm.borderWidth3          = settings()[QLatin1String("borderWidth3")].toInt();
+    prm.borderWidth4          = settings()[QLatin1String("borderWidth4")].toInt();
+    prm.borderPercent         = settings()[QLatin1String("borderPercent")].toDouble();
+    prm.borderPath            = settings()[QLatin1String("borderPath")].toString();
+    prm.solidColor            = settings()[QLatin1String("solidColor")].value<QColor>();
+    prm.niepceBorderColor     = settings()[QLatin1String("niepceBorderColor")].value<QColor>();
+    prm.niepceLineColor       = settings()[QLatin1String("niepceLineColor")].value<QColor>();
+    prm.bevelUpperLeftColor   = settings()[QLatin1String("bevelUpperLeftColor")].value<QColor>();
+    prm.bevelLowerRightColor  = settings()[QLatin1String("bevelLowerRightColor")].value<QColor>();
+    prm.decorativeFirstColor  = settings()[QLatin1String("decorativeFirstColor")].value<QColor>();
+    prm.decorativeSecondColor = settings()[QLatin1String("decorativeSecondColor")].value<QColor>();
     prm.orgWidth              = image().width();
     prm.orgHeight             = image().height();
 

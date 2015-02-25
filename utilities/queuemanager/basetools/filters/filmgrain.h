@@ -43,7 +43,7 @@ class FilmGrain : public BatchTool
 
 public:
 
-    explicit FilmGrain(QObject* parent = 0);
+    explicit FilmGrain(QObject* const parent = 0);
     ~FilmGrain();
 
     BatchToolSettings defaultSettings();

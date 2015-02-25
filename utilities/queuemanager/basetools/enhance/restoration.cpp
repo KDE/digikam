@@ -48,13 +48,13 @@ namespace Digikam
 {
 
 Restoration::Restoration(QObject* const parent)
-    : BatchTool("Restoration", EnhanceTool, parent),
+    : BatchTool(QLatin1String("Restoration"), EnhanceTool, parent),
       m_comboBox(0),
       m_cimgIface(0)
 {
     setToolTitle(i18n("Restoration"));
     setToolDescription(i18n("Restore photographs based on Greystoration."));
-    setToolIconName("restoration");
+    setToolIconName(QLatin1String("restoration"));
 }
 
 Restoration::~Restoration()
@@ -65,8 +65,8 @@ void Restoration::registerSettingsWidget()
 {
     RVBox* const vbox = new RVBox;
 
-    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
-                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"),
+    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
+                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-cimg.png")),
                                                          vbox);
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
@@ -96,19 +96,19 @@ void Restoration::registerSettingsWidget()
 BatchToolSettings Restoration::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("RestorationMethod", ReduceUniformNoise);
+    settings.insert(QLatin1String("RestorationMethod"), ReduceUniformNoise);
     return settings;
 }
 
 void Restoration::slotAssignSettings2Widget()
 {
-    m_comboBox->setCurrentIndex(settings()["RestorationMethod"].toInt());
+    m_comboBox->setCurrentIndex(settings()[QLatin1String("RestorationMethod")].toInt());
 }
 
 void Restoration::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("RestorationMethod", (int)m_comboBox->currentIndex());
+    settings.insert(QLatin1String("RestorationMethod"), (int)m_comboBox->currentIndex());
     BatchTool::slotSettingsChanged(settings);
 }
 
@@ -119,7 +119,7 @@ bool Restoration::toolOperations()
         return false;
     }
 
-    int type = settings()["RestorationMethod"].toInt();
+    int type = settings()[QLatin1String("RestorationMethod")].toInt();
 
     GreycstorationContainer settings;
     settings.setRestorationDefaultSettings();

@@ -126,12 +126,12 @@ public:
 };
 
 WaterMark::WaterMark(QObject* const parent)
-    : BatchTool("WaterMark", DecorateTool, parent),
+    : BatchTool(QLatin1String("WaterMark"), DecorateTool, parent),
       d(new Private)
 {
     setToolTitle(i18n("Add Watermark"));
     setToolDescription(i18n("Overlay an image or text as a visible watermark"));
-    setToolIconName("insert-text");
+    setToolIconName(QLatin1String("insert-text"));
 }
 
 WaterMark::~WaterMark()
@@ -333,19 +333,19 @@ BatchToolSettings WaterMark::defaultSettings()
 {
     BatchToolSettings settings;
 
-    settings.insert("Use image",          true);
-    settings.insert("Watermark image",    QString());
-    settings.insert("Text",               QString());
-    settings.insert("Font",               QFont());
-    settings.insert("Color",              QColor(Qt::black));
-    settings.insert("Text opacity",       100);
-    settings.insert("Use background",     true);
-    settings.insert("Background color",   QColor(0xCC, 0xCC, 0xCC));
-    settings.insert("Background opacity", 0xCC);
-    settings.insert("Placement",          Private::BottomRight);
-    settings.insert("Watermark size",     25);
-    settings.insert("X margin",           2);
-    settings.insert("Y margin",           2);
+    settings.insert(QLatin1String("Use image"),          true);
+    settings.insert(QLatin1String("Watermark image"),    QString());
+    settings.insert(QLatin1String("Text"),               QString());
+    settings.insert(QLatin1String("Font"),               QFont());
+    settings.insert(QLatin1String("Color"),              QColor(Qt::black));
+    settings.insert(QLatin1String("Text opacity"),       100);
+    settings.insert(QLatin1String("Use background"),     true);
+    settings.insert(QLatin1String("Background color"),   QColor(0xCC, 0xCC, 0xCC));
+    settings.insert(QLatin1String("Background opacity"), 0xCC);
+    settings.insert(QLatin1String("Placement"),          Private::BottomRight);
+    settings.insert(QLatin1String("Watermark size"),     25);
+    settings.insert(QLatin1String("X margin"),           2);
+    settings.insert(QLatin1String("Y margin"),           2);
 
     return settings;
 }
@@ -353,20 +353,20 @@ BatchToolSettings WaterMark::defaultSettings()
 void WaterMark::slotAssignSettings2Widget()
 {
     d->changeSettings = false;
-    d->useImageRadioButton->setChecked(settings()["Use image"].toBool());
-    d->useTextRadioButton->setChecked(!settings()["Use image"].toBool());
-    d->imageFileUrlRequester->lineEdit()->setText(settings()["Watermark image"].toString());
-    d->textEdit->setText(settings()["Text"].toString());
-    d->fontChooserWidget->setFont(settings()["Font"].toString());
-    d->fontColorButton->setColor(settings()["Color"].toString());
-    d->textOpacity->setValue(settings()["Text opacity"].toInt());
-    d->useBackgroundCheckBox->setChecked(settings()["Use background"].toBool());
-    d->backgroundColorButton->setColor(settings()["Background color"].toString());
-    d->backgroundOpacity->setValue(settings()["Background opacity"].toInt());
-    d->comboBox->setCurrentIndex(settings()["Placement"].toInt());
-    d->waterMarkSizePercent->setValue(settings()["Watermark size"].toInt());
-    d->xMarginInput->setValue(settings()["X margin"].toInt());
-    d->yMarginInput->setValue(settings()["Y margin"].toInt());
+    d->useImageRadioButton->setChecked(settings()[QLatin1String("Use image")].toBool());
+    d->useTextRadioButton->setChecked(!settings()[QLatin1String("Use image")].toBool());
+    d->imageFileUrlRequester->lineEdit()->setText(settings()[QLatin1String("Watermark image")].toString());
+    d->textEdit->setText(settings()[QLatin1String("Text")].toString());
+    d->fontChooserWidget->setFont(settings()[QLatin1String("Font")].toString());
+    d->fontColorButton->setColor(settings()[QLatin1String("Color")].toString());
+    d->textOpacity->setValue(settings()[QLatin1String("Text opacity")].toInt());
+    d->useBackgroundCheckBox->setChecked(settings()[QLatin1String("Use background")].toBool());
+    d->backgroundColorButton->setColor(settings()[QLatin1String("Background color")].toString());
+    d->backgroundOpacity->setValue(settings()[QLatin1String("Background opacity")].toInt());
+    d->comboBox->setCurrentIndex(settings()[QLatin1String("Placement")].toInt());
+    d->waterMarkSizePercent->setValue(settings()[QLatin1String("Watermark size")].toInt());
+    d->xMarginInput->setValue(settings()[QLatin1String("X margin")].toInt());
+    d->yMarginInput->setValue(settings()[QLatin1String("Y margin")].toInt());
     d->changeSettings = true;
 }
 
@@ -386,19 +386,19 @@ void WaterMark::slotSettingsChanged()
     if (d->changeSettings)
     {
         BatchToolSettings settings;
-        settings.insert("Use image",          d->useImageRadioButton->isChecked());
-        settings.insert("Watermark image",    d->imageFileUrlRequester->lineEdit()->text());
-        settings.insert("Text",               d->textEdit->text());
-        settings.insert("Font",               d->fontChooserWidget->currentFont());
-        settings.insert("Color",              d->fontColorButton->color());
-        settings.insert("Text opacity",       d->textOpacity->value());
-        settings.insert("Use background",     d->useBackgroundCheckBox->isChecked());
-        settings.insert("Background color",   d->backgroundColorButton->color());
-        settings.insert("Background opacity", d->backgroundOpacity->value());
-        settings.insert("Placement",          (int)d->comboBox->currentIndex());
-        settings.insert("Watermark size",     (int)d->waterMarkSizePercent->value());
-        settings.insert("X margin",           (int)d->xMarginInput->value());
-        settings.insert("Y margin",           (int)d->yMarginInput->value());
+        settings.insert(QLatin1String("Use image"),          d->useImageRadioButton->isChecked());
+        settings.insert(QLatin1String("Watermark image"),    d->imageFileUrlRequester->lineEdit()->text());
+        settings.insert(QLatin1String("Text"),               d->textEdit->text());
+        settings.insert(QLatin1String("Font"),               d->fontChooserWidget->currentFont());
+        settings.insert(QLatin1String("Color"),              d->fontColorButton->color());
+        settings.insert(QLatin1String("Text opacity"),       d->textOpacity->value());
+        settings.insert(QLatin1String("Use background"),     d->useBackgroundCheckBox->isChecked());
+        settings.insert(QLatin1String("Background color"),   d->backgroundColorButton->color());
+        settings.insert(QLatin1String("Background opacity"), d->backgroundOpacity->value());
+        settings.insert(QLatin1String("Placement"),          (int)d->comboBox->currentIndex());
+        settings.insert(QLatin1String("Watermark size"),     (int)d->waterMarkSizePercent->value());
+        settings.insert(QLatin1String("X margin"),           (int)d->xMarginInput->value());
+        settings.insert(QLatin1String("Y margin"),           (int)d->yMarginInput->value());
         BatchTool::slotSettingsChanged(settings);
     }
 }
@@ -411,20 +411,20 @@ bool WaterMark::toolOperations()
         return false;
     }
 
-    QString fileName        = settings()["Watermark image"].toString();
-    int placement           = settings()["Placement"].toInt();
-    int size                = settings()["Watermark size"].toInt();
-    int xMargin             = settings()["X margin"].toInt();
-    int yMargin             = settings()["Y margin"].toInt();
-    bool useImage           = settings()["Use image"].toBool();
+    QString fileName        = settings()[QLatin1String("Watermark image")].toString();
+    int placement           = settings()[QLatin1String("Placement")].toInt();
+    int size                = settings()[QLatin1String("Watermark size")].toInt();
+    int xMargin             = settings()[QLatin1String("X margin")].toInt();
+    int yMargin             = settings()[QLatin1String("Y margin")].toInt();
+    bool useImage           = settings()[QLatin1String("Use image")].toBool();
 
-    QString text            = settings()["Text"].toString();
-    QFont font              = settings()["Font"].toString();
-    QColor fontColor        = settings()["Color"].toString();
-    int textOpacity         = settings()["Text opacity"].toInt();
-    bool useBackground      = settings()["Use background"].toBool();
-    QColor backgroundColor  = settings()["Background color"].toString();
-    int backgroundOpacity   = settings()["Background opacity"].toInt();
+    QString text            = settings()[QLatin1String("Text")].toString();
+    QFont font              = settings()[QLatin1String("Font")].toString();
+    QColor fontColor        = settings()[QLatin1String("Color")].toString();
+    int textOpacity         = settings()[QLatin1String("Text opacity")].toInt();
+    bool useBackground      = settings()[QLatin1String("Use background")].toBool();
+    QColor backgroundColor  = settings()[QLatin1String("Background color")].toString();
+    int backgroundOpacity   = settings()[QLatin1String("Background opacity")].toInt();
 
 
     DImg watermarkImage;

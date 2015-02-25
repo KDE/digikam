@@ -34,13 +34,13 @@ namespace Digikam
 {
 
 ColorFX::ColorFX(QObject* const parent)
-    : BatchTool("ColorFX", FiltersTool, parent)
+    : BatchTool(QLatin1String("ColorFX"), FiltersTool, parent)
 {
     m_settingsView = 0;
 
     setToolTitle(i18n("Color Effects"));
     setToolDescription(i18n("Apply color effects"));
-    setToolIconName("colorfx");
+    setToolIconName(QLatin1String("colorfx"));
 }
 
 ColorFX::~ColorFX()
@@ -67,9 +67,9 @@ BatchToolSettings ColorFX::defaultSettings()
     BatchToolSettings prm;
     ColorFXContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("colorFXType", (int)defaultPrm.colorFXType);
-    prm.insert("level",       (int)defaultPrm.level);
-    prm.insert("iterations",  (int)defaultPrm.iterations);
+    prm.insert(QLatin1String("colorFXType"), (int)defaultPrm.colorFXType);
+    prm.insert(QLatin1String("level"),       (int)defaultPrm.level);
+    prm.insert(QLatin1String("iterations"),  (int)defaultPrm.iterations);
 
     return prm;
 }
@@ -77,9 +77,9 @@ BatchToolSettings ColorFX::defaultSettings()
 void ColorFX::slotAssignSettings2Widget()
 {
     ColorFXContainer prm;
-    prm.colorFXType = settings()["colorFXType"].toInt();
-    prm.level       = settings()["level"].toInt();
-    prm.iterations  = settings()["iterations"].toInt();
+    prm.colorFXType = settings()[QLatin1String("colorFXType")].toInt();
+    prm.level       = settings()[QLatin1String("level")].toInt();
+    prm.iterations  = settings()[QLatin1String("iterations")].toInt();
     m_settingsView->setSettings(prm);
 }
 
@@ -88,9 +88,9 @@ void ColorFX::slotSettingsChanged()
     BatchToolSettings prm;
     ColorFXContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("colorFXType", (int)currentPrm.colorFXType);
-    prm.insert("level",       (int)currentPrm.level);
-    prm.insert("iterations",  (int)currentPrm.iterations);
+    prm.insert(QLatin1String("colorFXType"), (int)currentPrm.colorFXType);
+    prm.insert(QLatin1String("level"),       (int)currentPrm.level);
+    prm.insert(QLatin1String("iterations"),  (int)currentPrm.iterations);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -103,9 +103,9 @@ bool ColorFX::toolOperations()
     }
 
     ColorFXContainer prm;
-    prm.colorFXType = settings()["colorFXType"].toInt();
-    prm.level       = settings()["level"].toInt();
-    prm.iterations  = settings()["iterations"].toInt();
+    prm.colorFXType = settings()[QLatin1String("colorFXType")].toInt();
+    prm.level       = settings()[QLatin1String("level")].toInt();
+    prm.iterations  = settings()[QLatin1String("iterations")].toInt();
 
     ColorFXFilter fg(&image(), 0L, prm);
     applyFilter(&fg);

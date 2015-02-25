@@ -42,12 +42,12 @@ namespace Digikam
 {
 
 LocalContrast::LocalContrast(QObject* const parent)
-    : BatchTool("LocalContrast", EnhanceTool, parent),
+    : BatchTool(QLatin1String("LocalContrast"), EnhanceTool, parent),
       m_settingsView(0)
 {
     setToolTitle(i18n("Local Contrast"));
     setToolDescription(i18n("Emulate tone mapping."));
-    setToolIconName("tonemap");
+    setToolIconName(QLatin1String("tonemap"));
 }
 
 LocalContrast::~LocalContrast()
@@ -70,26 +70,26 @@ BatchToolSettings LocalContrast::defaultSettings()
     BatchToolSettings prm;
     LocalContrastContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("stretchContrast", defaultPrm.stretchContrast);
-    prm.insert("lowSaturation",   defaultPrm.lowSaturation);
-    prm.insert("highSaturation",  defaultPrm.highSaturation);
-    prm.insert("functionId",      defaultPrm.functionId);
+    prm.insert(QLatin1String("stretchContrast"), defaultPrm.stretchContrast);
+    prm.insert(QLatin1String("lowSaturation"),   defaultPrm.lowSaturation);
+    prm.insert(QLatin1String("highSaturation"),  defaultPrm.highSaturation);
+    prm.insert(QLatin1String("functionId"),      defaultPrm.functionId);
 
-    prm.insert("stage1Enabled",   defaultPrm.stage[0].enabled);
-    prm.insert("stage1Power",     defaultPrm.stage[0].power);
-    prm.insert("stage1Blur",      defaultPrm.stage[0].blur);
+    prm.insert(QLatin1String("stage1Enabled"),   defaultPrm.stage[0].enabled);
+    prm.insert(QLatin1String("stage1Power"),     defaultPrm.stage[0].power);
+    prm.insert(QLatin1String("stage1Blur"),      defaultPrm.stage[0].blur);
 
-    prm.insert("stage2Enabled",   defaultPrm.stage[1].enabled);
-    prm.insert("stage2Power",     defaultPrm.stage[1].power);
-    prm.insert("stage2Blur",      defaultPrm.stage[1].blur);
+    prm.insert(QLatin1String("stage2Enabled"),   defaultPrm.stage[1].enabled);
+    prm.insert(QLatin1String("stage2Power"),     defaultPrm.stage[1].power);
+    prm.insert(QLatin1String("stage2Blur"),      defaultPrm.stage[1].blur);
 
-    prm.insert("stage3Enabled",   defaultPrm.stage[2].enabled);
-    prm.insert("stage3Power",     defaultPrm.stage[2].power);
-    prm.insert("stage3Blur",      defaultPrm.stage[2].blur);
+    prm.insert(QLatin1String("stage3Enabled"),   defaultPrm.stage[2].enabled);
+    prm.insert(QLatin1String("stage3Power"),     defaultPrm.stage[2].power);
+    prm.insert(QLatin1String("stage3Blur"),      defaultPrm.stage[2].blur);
 
-    prm.insert("stage4Enabled",   defaultPrm.stage[3].enabled);
-    prm.insert("stage4Power",     defaultPrm.stage[3].power);
-    prm.insert("stage4Blur",      defaultPrm.stage[3].blur);
+    prm.insert(QLatin1String("stage4Enabled"),   defaultPrm.stage[3].enabled);
+    prm.insert(QLatin1String("stage4Power"),     defaultPrm.stage[3].power);
+    prm.insert(QLatin1String("stage4Blur"),      defaultPrm.stage[3].blur);
 
     return prm;
 }
@@ -98,26 +98,26 @@ void LocalContrast::slotAssignSettings2Widget()
 {
     LocalContrastContainer prm;
 
-    prm.stretchContrast = settings()["stretchContrast"].toBool();
-    prm.lowSaturation   = settings()["lowSaturation"].toInt();
-    prm.highSaturation  = settings()["highSaturation"].toInt();
-    prm.functionId      = settings()["functionId"].toInt();
+    prm.stretchContrast = settings()[QLatin1String("stretchContrast")].toBool();
+    prm.lowSaturation   = settings()[QLatin1String("lowSaturation")].toInt();
+    prm.highSaturation  = settings()[QLatin1String("highSaturation")].toInt();
+    prm.functionId      = settings()[QLatin1String("functionId")].toInt();
 
-    prm.stage[0].enabled = settings()["stage1Enabled"].toBool();
-    prm.stage[0].power   = settings()["stage1Power"].toDouble();
-    prm.stage[0].blur    = settings()["stage1Blur"].toDouble();
+    prm.stage[0].enabled = settings()[QLatin1String("stage1Enabled")].toBool();
+    prm.stage[0].power   = settings()[QLatin1String("stage1Power")].toDouble();
+    prm.stage[0].blur    = settings()[QLatin1String("stage1Blur")].toDouble();
 
-    prm.stage[1].enabled = settings()["stage2Enabled"].toBool();
-    prm.stage[1].power   = settings()["stage2Power"].toDouble();
-    prm.stage[1].blur    = settings()["stage2Blur"].toDouble();
+    prm.stage[1].enabled = settings()[QLatin1String("stage2Enabled")].toBool();
+    prm.stage[1].power   = settings()[QLatin1String("stage2Power")].toDouble();
+    prm.stage[1].blur    = settings()[QLatin1String("stage2Blur")].toDouble();
 
-    prm.stage[2].enabled = settings()["stage3Enabled"].toBool();
-    prm.stage[2].power   = settings()["stage3Power"].toDouble();
-    prm.stage[2].blur    = settings()["stage3Blur"].toDouble();
+    prm.stage[2].enabled = settings()[QLatin1String("stage3Enabled")].toBool();
+    prm.stage[2].power   = settings()[QLatin1String("stage3Power")].toDouble();
+    prm.stage[2].blur    = settings()[QLatin1String("stage3Blur")].toDouble();
 
-    prm.stage[3].enabled = settings()["stage4Enabled"].toBool();
-    prm.stage[3].power   = settings()["stage4Power"].toDouble();
-    prm.stage[3].blur    = settings()["stage4Blur"].toDouble();
+    prm.stage[3].enabled = settings()[QLatin1String("stage4Enabled")].toBool();
+    prm.stage[3].power   = settings()[QLatin1String("stage4Power")].toDouble();
+    prm.stage[3].blur    = settings()[QLatin1String("stage4Blur")].toDouble();
 
     m_settingsView->setSettings(prm);
 }
@@ -127,26 +127,26 @@ void LocalContrast::slotSettingsChanged()
     BatchToolSettings prm;
     LocalContrastContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("stretchContrast", currentPrm.stretchContrast);
-    prm.insert("lowSaturation",   currentPrm.lowSaturation);
-    prm.insert("highSaturation",  currentPrm.highSaturation);
-    prm.insert("functionId",      currentPrm.functionId);
+    prm.insert(QLatin1String("stretchContrast"), currentPrm.stretchContrast);
+    prm.insert(QLatin1String("lowSaturation"),   currentPrm.lowSaturation);
+    prm.insert(QLatin1String("highSaturation"),  currentPrm.highSaturation);
+    prm.insert(QLatin1String("functionId"),      currentPrm.functionId);
 
-    prm.insert("stage1Enabled",   currentPrm.stage[0].enabled);
-    prm.insert("stage1Power",     currentPrm.stage[0].power);
-    prm.insert("stage1Blur",      currentPrm.stage[0].blur);
+    prm.insert(QLatin1String("stage1Enabled"),   currentPrm.stage[0].enabled);
+    prm.insert(QLatin1String("stage1Power"),     currentPrm.stage[0].power);
+    prm.insert(QLatin1String("stage1Blur"),      currentPrm.stage[0].blur);
 
-    prm.insert("stage2Enabled",   currentPrm.stage[1].enabled);
-    prm.insert("stage2Power",     currentPrm.stage[1].power);
-    prm.insert("stage2Blur",      currentPrm.stage[1].blur);
+    prm.insert(QLatin1String("stage2Enabled"),   currentPrm.stage[1].enabled);
+    prm.insert(QLatin1String("stage2Power"),     currentPrm.stage[1].power);
+    prm.insert(QLatin1String("stage2Blur"),      currentPrm.stage[1].blur);
 
-    prm.insert("stage3Enabled",   currentPrm.stage[2].enabled);
-    prm.insert("stage3Power",     currentPrm.stage[2].power);
-    prm.insert("stage3Blur",      currentPrm.stage[2].blur);
+    prm.insert(QLatin1String("stage3Enabled"),   currentPrm.stage[2].enabled);
+    prm.insert(QLatin1String("stage3Power"),     currentPrm.stage[2].power);
+    prm.insert(QLatin1String("stage3Blur"),      currentPrm.stage[2].blur);
 
-    prm.insert("stage4Enabled",   currentPrm.stage[3].enabled);
-    prm.insert("stage4Power",     currentPrm.stage[3].power);
-    prm.insert("stage4Blur",      currentPrm.stage[3].blur);
+    prm.insert(QLatin1String("stage4Enabled"),   currentPrm.stage[3].enabled);
+    prm.insert(QLatin1String("stage4Power"),     currentPrm.stage[3].power);
+    prm.insert(QLatin1String("stage4Blur"),      currentPrm.stage[3].blur);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -160,26 +160,26 @@ bool LocalContrast::toolOperations()
 
     LocalContrastContainer prm;
 
-    prm.stretchContrast = settings()["stretchContrast"].toBool();
-    prm.lowSaturation   = settings()["lowSaturation"].toInt();
-    prm.highSaturation  = settings()["highSaturation"].toInt();
-    prm.functionId      = settings()["functionId"].toInt();
+    prm.stretchContrast = settings()[QLatin1String("stretchContrast")].toBool();
+    prm.lowSaturation   = settings()[QLatin1String("lowSaturation")].toInt();
+    prm.highSaturation  = settings()[QLatin1String("highSaturation")].toInt();
+    prm.functionId      = settings()[QLatin1String("functionId")].toInt();
 
-    prm.stage[0].enabled = settings()["stage1Enabled"].toBool();
-    prm.stage[0].power   = settings()["stage1Power"].toDouble();
-    prm.stage[0].blur    = settings()["stage1Blur"].toDouble();
+    prm.stage[0].enabled = settings()[QLatin1String("stage1Enabled")].toBool();
+    prm.stage[0].power   = settings()[QLatin1String("stage1Power")].toDouble();
+    prm.stage[0].blur    = settings()[QLatin1String("stage1Blur")].toDouble();
 
-    prm.stage[1].enabled = settings()["stage2Enabled"].toBool();
-    prm.stage[1].power   = settings()["stage2Power"].toDouble();
-    prm.stage[1].blur    = settings()["stage2Blur"].toDouble();
+    prm.stage[1].enabled = settings()[QLatin1String("stage2Enabled")].toBool();
+    prm.stage[1].power   = settings()[QLatin1String("stage2Power")].toDouble();
+    prm.stage[1].blur    = settings()[QLatin1String("stage2Blur")].toDouble();
 
-    prm.stage[2].enabled = settings()["stage3Enabled"].toBool();
-    prm.stage[2].power   = settings()["stage3Power"].toDouble();
-    prm.stage[2].blur    = settings()["stage3Blur"].toDouble();
+    prm.stage[2].enabled = settings()[QLatin1String("stage3Enabled")].toBool();
+    prm.stage[2].power   = settings()[QLatin1String("stage3Power")].toDouble();
+    prm.stage[2].blur    = settings()[QLatin1String("stage3Blur")].toDouble();
 
-    prm.stage[3].enabled = settings()["stage4Enabled"].toBool();
-    prm.stage[3].power   = settings()["stage4Power"].toDouble();
-    prm.stage[3].blur    = settings()["stage4Blur"].toDouble();
+    prm.stage[3].enabled = settings()[QLatin1String("stage4Enabled")].toBool();
+    prm.stage[3].power   = settings()[QLatin1String("stage4Power")].toDouble();
+    prm.stage[3].blur    = settings()[QLatin1String("stage4Blur")].toDouble();
 
     LocalContrastFilter lc(&image(), 0L, prm);
     applyFilter(&lc);
