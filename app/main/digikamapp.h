@@ -36,17 +36,13 @@
 
 // KDE includes
 
-#include <solid/solidnamespace.h>
+#include <Solid/SolidNamespace>
 
 // Local includes
 
 #include "digikam_config.h"
 #include "digikam_export.h"
 #include "dxmlguiwindow.h"
-
-
-// Solid includes (required for ErrorType)
-#include <Solid/SolidNamespace>
 
 namespace Solid
 {
