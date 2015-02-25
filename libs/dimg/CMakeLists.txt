@@ -13,7 +13,7 @@ set(libdimg_SRCS
 )
 
 set(libdimgfilters_SRCS
-    ../dklcms/digikam-lcms.cpp
+    dklcms/digikam-lcms.cpp
     filters/dimgbuiltinfilter.cpp
     filters/dimgthreadedfilter.cpp
     filters/dimgthreadedanalyser.cpp
@@ -243,7 +243,7 @@ target_include_directories(dimg
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/transform>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/greycstoration>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lens>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dklcms> # ugly hack for dklcms.. librarify or move to dimg?
+                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dklcms>
 )
 
 # TODO ugly way to expose lensfun include dirs to users of dimg..
