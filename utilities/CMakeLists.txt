@@ -23,5 +23,5 @@ if(${KF5Kipi_FOUND})
 endif()
 
 if(${KF5KGeoMap_FOUND})
-    add_subdirectory(gpssearch)
+    add_subdirectory(geolocation)
 endif()
