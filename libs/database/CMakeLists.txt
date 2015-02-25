@@ -105,7 +105,6 @@ add_library(digikamdatabase STATIC ${digikamdatabase_LIB_SRCS})
 # TODO clean this up by changing the includes using database to use longer path?
 target_include_directories(digikamdatabase
                                PUBLIC
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
