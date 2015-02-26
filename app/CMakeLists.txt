@@ -174,7 +174,7 @@ target_link_libraries(digikamgui
 )
 
 # TODO check if these linkings are required?
-if(Baloo_FOUND)
+if(${Baloo_FOUND})
     target_link_libraries(digikamgui baloowrap)
 endif()
 
@@ -248,7 +248,6 @@ endif()
 if(WIN32)
     set_target_properties(digikam PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
 endif()
-
 
 if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     target_link_libraries(digikam ${KVM_LIBRARY})
