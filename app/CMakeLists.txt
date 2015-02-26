@@ -6,7 +6,7 @@
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in    ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
 
-# Digikam GUI begins here
+# digiKam GUI begins here
 
 include_directories(
     date/
@@ -88,14 +88,14 @@ set(libdigikamgui_SRCS
     views/tableview/tableview_column_thumbnail.cpp
     views/tableview/tableview_columnfactory.cpp
     views/tableview/tableview_selection_model_syncer.cpp
-    
+
     views/imagepreviewviewitem.cpp
     views/imagepreviewview.cpp
     views/welcomepageview.cpp
     views/leftsidebarwidgets.cpp
     views/digikamview.cpp
     views/stackedview.cpp
-    
+
     ${digikamadaptor_SRCS}
 )
 
@@ -165,7 +165,7 @@ target_link_libraries(digikamgui
                       fileactionmanager
 
                       KF5::KDELibs4Support # required for KIO::NetAccess in digikamview
-                      
+ 
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -196,7 +196,7 @@ if(${KF5Kipi_FOUND})
 endif()
 
 if(${KF5KGeoMap_FOUND}) # fixme hackish
-    target_link_libraries(digikamgui gpssearch)
+    target_link_libraries(digikamgui gpssearch kgeomaphelper)
 endif()
 
 # digiKam binary progam #########################################################
@@ -222,22 +222,22 @@ set(MACOSX_BUNDLE_BUNDLE_VERSION       ${DIGIKAM_VERSION_STRING})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 
-
 target_link_libraries(digikam
                       digikamgui
 
                       Qt5::Sql
                       Qt5::Test
                       Qt5::WebKitWidgets
-                      
+
                       ${OpenCV_LIBRARIES}
 )
+
 if(ENABLE_MEDIAPLAYER)
-  target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
+    target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(KDEPIMLIBS_FOUND)
-  target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
+    target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
 endif()
 
 if(NOT WIN32)
@@ -257,7 +257,7 @@ endif()
 if(GPHOTO2_FOUND)
     # See bug #258931: libgphoto2 library must be the last arg for linker.
     target_link_libraries(digikam ${GPHOTO2_LIBRARIES})
-    
+
     if(NOT WIN32)
         # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
         target_link_libraries(digikam ${LIBUSB_LIBRARIES})
