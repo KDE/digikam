@@ -44,12 +44,12 @@
 #include <QIcon>
 #include <QMessageBox>
 #include <QStatusBar>
+#include <QFileDialog>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kfiledialog.h>
 #include <ktip.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
@@ -2551,26 +2551,44 @@ void DigikamApp::slotZoomChanged(double zoom)
 
 void DigikamApp::slotImportAddImages()
 {
-    QString startingPath;
-    startingPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-    QString path = KFileDialog::getExistingDirectory(QUrl::fromLocalFile(startingPath), this,
-                                                     i18n("Select folder to parse"));
+    QString startingPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+    QUrl url             = QFileDialog::getExistingDirectoryUrl(this, i18n("Select folder to parse"),
+                                                                QUrl::fromLocalFile(startingPath));
 
-    if (path.isEmpty())
+    if (url.isEmpty() || !url.isLocalFile())
     {
         return;
     }
 
     // The folder contents will be parsed by Camera interface in "Directory Browse" mode.
-    downloadFrom(path);
+    downloadFrom(url.toLocalFile());
 }
 
 void DigikamApp::slotImportAddFolders()
 {
-    QPointer<KFileDialog> dlg = new KFileDialog(QUrl(), "inode/directory", this);
-    dlg->setWindowTitle(i18n("Select folders to import into album"));
-    dlg->setMode(KFile::Directory | KFile::Files);
+    // NOTE: QFileDialog don't have an option to permit multiple selection of directories.
+    // This work around is inspired from http://www.qtcentre.org/threads/34226-QFileDialog-select-multiple-directories
+    // Check Later Qt 5.4 if a new native Qt way have been introduced.
 
+    QPointer<QFileDialog> dlg = new QFileDialog(this);
+    dlg->setWindowTitle(i18n("Select folders to import into album"));
+    dlg->setFileMode(QFileDialog::DirectoryOnly);
+    dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+
+    QListView* const l = dlg->findChild<QListView*>("listView");
+
+    if (l)
+    {
+        l->setSelectionMode(QAbstractItemView::MultiSelection);
+    }
+
+    QTreeView* const t = dlg->findChild<QTreeView*>();
+
+    if (t)
+    {
+        t->setSelectionMode(QAbstractItemView::MultiSelection);
+    }
+    
     if (dlg->exec() != QDialog::Accepted)
     {
         delete dlg;
@@ -2588,7 +2606,7 @@ void DigikamApp::slotImportAddFolders()
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
     Album* album = 0;
 
-    if(!albumList.isEmpty())
+    if (!albumList.isEmpty())
     {
         album = albumList.first();
     }
