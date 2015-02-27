@@ -18,7 +18,6 @@ target_link_libraries(slideshow
                       
                       Qt5::Widgets
                       
-#                      KF5::KDELibs4Support
                       KF5::WidgetsAddons
                       KF5::KDcraw
                       KF5::KExiv2

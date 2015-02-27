@@ -130,8 +130,6 @@ target_link_libraries(digikamwidgets
                       Qt5::Gui
                       Qt5::Widgets
                       
-                      KF5::Kipi # about dialog requires kipi
+                      KF5::Kipi  # about dialog requires kipi
                       KF5::KFace # about dialog
-                      
-#                      KF5::KDELibs4Support # for KLineEdit
 )
