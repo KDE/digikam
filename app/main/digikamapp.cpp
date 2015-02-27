@@ -55,11 +55,6 @@
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
-#include <kio/global.h>
-//#include <kio/netaccess.h>
-
 #include <solid/camera.h>
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
@@ -136,10 +131,6 @@
 #ifdef HAVE_BALOO
 #include "baloowrap.h"
 #endif
-
-using KIO::Job;
-using KIO::UDSEntryList;
-using KIO::UDSEntry;
 
 using namespace KDcrawIface;
 
