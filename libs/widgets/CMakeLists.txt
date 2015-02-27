@@ -133,5 +133,5 @@ target_link_libraries(digikamwidgets
                       KF5::Kipi # about dialog requires kipi
                       KF5::KFace # about dialog
                       
-                      KF5::KDELibs4Support # for KLineEdit
+#                      KF5::KDELibs4Support # for KLineEdit
 )

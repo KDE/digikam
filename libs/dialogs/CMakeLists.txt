@@ -28,11 +28,10 @@ target_link_libraries(digikamdialogs
                       Qt5::Widgets
                       Qt5::Sql # for databaseurl
                       
-                      KF5::KDELibs4Support # # KSqueezedTextLabel
-                      
                       KF5::KDcraw
+
                       digikamdatabase # migrationdlg needs this
-                      versionmanager # migrationdlg needs this too
-                      threadimageio # loadingdescription for imagedialog
+                      versionmanager  # migrationdlg needs this too
+                      threadimageio   # loadingdescription for imagedialog
                       dmetadata
 )

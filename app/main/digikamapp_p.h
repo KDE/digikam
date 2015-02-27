@@ -39,9 +39,6 @@
 
 #include <kselectaction.h>
 
-#include <kio/global.h>
-#include <kio/netaccess.h>
-
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>

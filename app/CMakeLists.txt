@@ -141,6 +141,8 @@ target_include_directories(digikamgui PUBLIC
 )
 
 target_link_libraries(digikamgui
+
+                      3rdparty
                       digikamwidgets
                       digikamdatabase
                       digikammodels
@@ -160,17 +162,19 @@ target_link_libraries(digikamgui
                       lighttable
                       fuzzysearch
                       maintenance
-                      3rdparty
-
                       fileactionmanager
-
-                      KF5::KDELibs4Support # required for KIO::NetAccess in digikamview
- 
+                      
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
                       Qt5::Sql
                       Qt5::WebKitWidgets
+
+                      KF5::Solid
+                      KF5::KIOCore
+                      KF5::NotifyConfig
+
+                      KF5::KDELibs4Support # required for KIO::NetAccess in digikamview
 )
 
 # TODO check if these linkings are required?

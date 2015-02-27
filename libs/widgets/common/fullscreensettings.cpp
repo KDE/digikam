@@ -31,11 +31,7 @@
 
 // KDE includes
 
-#include <kglobalsettings.h>
-
 #include <klocalizedstring.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

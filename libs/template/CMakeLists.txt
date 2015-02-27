@@ -16,5 +16,4 @@ target_link_libraries(digikamtemplate
                       Qt5::Xml
                       
                       KF5::WidgetsAddons
-                      KF5::KDELibs4Support # KLineEdit
 )

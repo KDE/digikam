@@ -270,11 +270,8 @@ target_link_libraries(dimg
                       Qt5::Concurrent # filters
                       Qt5::Widgets
                       Qt5::Xml
-
-                      KF5::KDELibs4Support # required for KColorButton
-                      
+                     
                       # Required by CImg library which is using pthread internally.
-                      # TODO is this necessary still?
                       ${CMAKE_THREAD_LIBS_INIT}
 
                       ${LCMS2_LIBRARIES} # filters

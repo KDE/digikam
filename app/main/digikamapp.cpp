@@ -57,6 +57,8 @@
 
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
+#include <kio/global.h>
+//#include <kio/netaccess.h>
 
 #include <solid/camera.h>
 #include <solid/device.h>

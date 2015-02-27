@@ -32,7 +32,4 @@ target_link_libraries(digikammodels
                       Qt5::DBus
 
                       filters
-                      
-                      KF5::ItemViews # KCategorizedSortFilterModel
-                      KF5::KDELibs4Support # KLineEdit
 )

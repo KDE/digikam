@@ -449,7 +449,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # TODO digikam_export.h, version.h, git_version.h and config-digikam.h should be created to the main binarydir? or main sourcedir?
     include_directories(
                         app/utils/ # required for digikam_export.h
-                        
+
                         # version.h, gitversion.h config-digikam.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/utils
 
@@ -462,9 +462,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${TIFF_INCLUDE_DIR}
                         ${LCMS_INCLUDE_DIR}
     )
-    
+
     # libgphoto2 library rules
     message(INFO "gphoto2 includes are required only to display the version in the about data/component info, refactor")
+
     if(GPHOTO2_FOUND)
         include_directories(${GPHOTO2_INCLUDE_DIRS})
     endif()
@@ -472,13 +473,13 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Common targets parts
 
-    add_subdirectory(libs)
     add_subdirectory(data)
-    add_subdirectory(utilities)
-    add_subdirectory(app)
-    add_subdirectory(kioslave)
-    add_subdirectory(showfoto)
-    add_subdirectory(imageplugins)
+    add_subdirectory(libs)
+   add_subdirectory(utilities)
+   add_subdirectory(app)
+   add_subdirectory(kioslave)
+   add_subdirectory(showfoto)
+   add_subdirectory(imageplugins)
 
     if(ENABLE_INTERNALMYSQL)
         add_subdirectory(databaseserver)

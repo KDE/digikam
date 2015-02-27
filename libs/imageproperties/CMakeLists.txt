@@ -45,6 +45,5 @@ target_link_libraries(imagepropertiesdigikam
                       Qt5::Widgets
                       Qt5::Sql
                       
-                      KF5::KDELibs4Support # for KMultiTabBar
-                      KF5::ConfigCore # KConfigGroup?
+                      KF5::ConfigCore
 )

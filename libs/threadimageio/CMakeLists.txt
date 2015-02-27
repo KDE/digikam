@@ -32,5 +32,4 @@ target_link_libraries(threadimageio
                       Qt5::DBus
                       
                       KF5::KIOWidgets # for previewjob
-                      KF5::KDELibs4Support # for KSharedPtr
 )
