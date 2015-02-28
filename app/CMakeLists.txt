@@ -263,7 +263,7 @@ if(GPHOTO2_FOUND)
 
     if(NOT WIN32)
         # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
-        target_link_libraries(digikam ${LIBUSB_LIBRARIES})
+        target_link_libraries(digikam ${LibUSB1_LIBRARIES})
     endif()
 endif()
 
