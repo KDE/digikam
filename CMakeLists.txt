@@ -473,8 +473,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Common targets parts
 
-    add_subdirectory(data)
-    add_subdirectory(libs)
+   add_subdirectory(data)
+   add_subdirectory(libs)
    add_subdirectory(utilities)
    add_subdirectory(app)
    add_subdirectory(kioslave)
