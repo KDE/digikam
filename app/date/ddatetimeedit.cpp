@@ -53,7 +53,7 @@ DDateTimeEdit::DDateTimeEdit(QWidget* const parent, const char* const name)
     : RHBox(parent),
       d(new Private)
 {
-    setObjectName(name);
+    setObjectName(QLatin1String(name));
 
     d->datePopUp = new DDateEdit(this, "datepopup");
     d->timePopUp = new QTimeEdit(QTime::currentTime(), this);

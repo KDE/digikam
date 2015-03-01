@@ -75,9 +75,9 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             return false;
 
         QMenu popMenu(view);
-        QAction* const gotoAction = popMenu.addAction(QIcon::fromTheme("go-jump"), i18n("&Move Here"));
+        QAction* const gotoAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("go-jump")), i18n("&Move Here"));
         popMenu.addSeparator();
-        popMenu.addAction(QIcon::fromTheme("dialog-cancel"), i18n("C&ancel"));
+        popMenu.addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
         QAction* const choice     = popMenu.exec(QCursor::pos());
 
@@ -164,7 +164,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 }
 
                 popMenu.addSeparator();
-                popMenu.addAction( QIcon::fromTheme("dialog-cancel"), i18n("C&ancel") );
+                popMenu.addAction( QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel") );
 
                 popMenu.setMouseTracking(true);
                 QAction* const choice = popMenu.exec(QCursor::pos());
@@ -217,10 +217,10 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         else
         {
             QMenu popMenu(view);
-            QAction* const assignAction = popMenu.addAction(QIcon::fromTheme("tag"),
-                                                            i18n("Assign Tag(s) '%1' to Items", tagNames.join(", ")));
+            QAction* const assignAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")),
+                                                            i18n("Assign Tag(s) '%1' to Items", tagNames.join(QLatin1String(", "))));
             popMenu.addSeparator();
-            popMenu.addAction( QIcon::fromTheme("dialog-cancel"), i18n("C&ancel") );
+            popMenu.addAction( QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel") );
 
             popMenu.setMouseTracking(true);
             QAction* const choice = popMenu.exec(QCursor::pos());

@@ -117,9 +117,10 @@ public:
 };
 
 DDateEdit::DDateEdit(QWidget* const parent, const char* const name)
-    : QComboBox(parent), d(new Private)
+    : QComboBox(parent),
+      d(new Private)
 {
-    setObjectName(name);
+    setObjectName(QLatin1String(name));
     // need at least one entry for popup to work
     setMaxCount( 1 );
     setEditable( true );

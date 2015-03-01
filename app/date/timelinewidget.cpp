@@ -977,6 +977,7 @@ void TimeLineWidget::keyScroll(bool isScrollNext)
     {
         barRect.setTop(0);
         barRect.setBottom(height() - d->bottomMargin + 1);
+
         for (int i = 0; i < items; ++i)
         {
             barRect.setRight(d->startPos - i * d->barWidth);
@@ -997,7 +998,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
     QPainter p(this);
 
     d->bottomMargin = (int)(p.fontMetrics().height() * 1.5);
-    d->barWidth     = p.fontMetrics().width("00");
+    d->barWidth     = p.fontMetrics().width(QLatin1String("00"));
     d->nbItems      = (int)((width() / 2.0) / (float)d->barWidth);
     d->startPos     = (int)((width() / 2.0) - ((float)(d->barWidth) / 2.0));
     QDateTime     ref;

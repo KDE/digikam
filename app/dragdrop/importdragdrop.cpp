@@ -55,13 +55,13 @@ ImportDragDropHandler::ImportDragDropHandler(ImportImageModel* const model)
 
 QAction* ImportDragDropHandler::addGroupAction(QMenu* const menu)
 {
-    return menu->addAction(QIcon::fromTheme("arrow-down-double"),
+    return menu->addAction(QIcon::fromTheme(QLatin1String("arrow-down-double")),
                            i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
 QAction* ImportDragDropHandler::addCancelAction(QMenu* const menu)
 {
-    return menu->addAction(QIcon::fromTheme("dialog-cancel"), i18n("C&ancel"));
+    return menu->addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel"));
 }
 
 ImportDragDropHandler::DropAction ImportDragDropHandler::copyOrMove(const QDropEvent* e, QWidget* const view,
@@ -95,10 +95,10 @@ ImportDragDropHandler::DropAction ImportDragDropHandler::copyOrMove(const QDropE
 
     if (allowMove)
     {
-        moveAction = popMenu.addAction( QIcon::fromTheme("go-jump"), i18n("&Move Here"));
+        moveAction = popMenu.addAction( QIcon::fromTheme(QLatin1String("go-jump")), i18n("&Move Here"));
     }
 
-    QAction* const copyAction = popMenu.addAction( QIcon::fromTheme("edit-copy"), i18n("&Copy Here"));
+    QAction* const copyAction = popMenu.addAction( QIcon::fromTheme(QLatin1String("edit-copy")), i18n("&Copy Here"));
     popMenu.addSeparator();
 
     QAction* groupAction = 0;
@@ -154,11 +154,11 @@ bool ImportDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDr
         QList<QUrl> lst = DigikamApp::instance()->view()->selectedUrls();
 
         QMenu popMenu(view);
-        popMenu.addSection(QIcon::fromTheme("digikam"), i18n("Exporting"));
-        QAction* const upAction = popMenu.addAction(QIcon::fromTheme("media-flash-smart-media"),
+        popMenu.addSection(QIcon::fromTheme(QLatin1String("digikam")), i18n("Exporting"));
+        QAction* const upAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("media-flash-smart-media")),
                                                     i18n("Upload to Camera"));
         popMenu.addSeparator();
-        popMenu.addAction(QIcon::fromTheme("dialog-cancel"), i18n("C&ancel"));
+        popMenu.addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
         QAction* const choice = popMenu.exec(view->mapToGlobal(e->pos()));
 

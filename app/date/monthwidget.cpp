@@ -132,7 +132,7 @@ void MonthWidget::init()
     fn.setBold(true);
     fn.setPointSize(fn.pointSize()+1);
     QFontMetrics fm(fn);
-    QRect r(fm.boundingRect("XX"));
+    QRect r(fm.boundingRect(QLatin1String("XX")));
     r.setWidth(r.width() + 2);
     r.setHeight(r.height() + 4);
     d->width  = r.width();
@@ -283,7 +283,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
     fnBold.setPointSize(fnBold.pointSize()+2);
     p.setFont(fnBold);
 
-    p.drawText(r, Qt::AlignCenter, QString("%1 %2")
+    p.drawText(r, Qt::AlignCenter, QString::fromUtf8("%1 %2")
                .arg(QLocale().monthName(d->month, QLocale::LongFormat))
                .arg(QDate(d->year, d->month, 1).year()));
 
