@@ -203,7 +203,7 @@ void DigikamImageView::setFaceMode(bool on)
     {
 #ifdef HAVE_KFACE
         // See ImageLister, which creates a search the implements listing tag in the ioslave
-        imageAlbumModel()->setSpecialTagListing("faces");
+        imageAlbumModel()->setSpecialTagListing(QLatin1String("faces"));
         setItemDelegate(d->faceDelegate);
         // grouping is not very much compatible with faces
         imageFilterModel()->setAllGroupsOpen(true);
@@ -359,7 +359,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // Temporary actions --------------------------------------
 
-    QAction* const viewAction = new QAction(QIcon::fromTheme("viewimage"), i18nc("View the selected image", "Preview"), this);
+    QAction* const viewAction = new QAction(QIcon::fromTheme(QLatin1String("viewimage")), i18nc("View the selected image", "Preview"), this);
     viewAction->setEnabled(selectedImageIDs.count() == 1);
 
     // --------------------------------------------------------
@@ -702,7 +702,7 @@ void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 void DigikamImageView::slotInitProgressIndicator()
 {
 #ifdef HAVE_KFACE
-    if (!ProgressManager::instance()->findItembyId("FaceActionProgress"))
+    if (!ProgressManager::instance()->findItembyId(QLatin1String("FaceActionProgress")))
     {
         FileActionProgress* const item = new FileActionProgress("FaceActionProgress");
 

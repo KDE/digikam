@@ -111,45 +111,44 @@ public:
     RExpanderBox*                          expbox;
 };
 
-const QString FilterSideBarWidget::Private::configSearchTextFilterFieldsEntry("Search Text Filter Fields");
-const QString FilterSideBarWidget::Private::configLastShowUntaggedEntry("Show Untagged");
-const QString FilterSideBarWidget::Private::configMatchingConditionEntry("Matching Condition");
+const QString FilterSideBarWidget::Private::configSearchTextFilterFieldsEntry(QLatin1String("Search Text Filter Fields"));
+const QString FilterSideBarWidget::Private::configLastShowUntaggedEntry(QLatin1String("Show Untagged"));
+const QString FilterSideBarWidget::Private::configMatchingConditionEntry(QLatin1String("Matching Condition"));
 
 // ---------------------------------------------------------------------------------------------------
 
 FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const tagFilterModel)
     : RVBox(parent), StateSavingObject(this), d(new Private)
 {
-    setObjectName("TagFilter Sidebar");
+    setObjectName(QLatin1String("TagFilter Sidebar"));
 
     d->expbox = new RExpanderBox(this);
-    d->expbox->setObjectName("FilterSideBarWidget Expander");
+    d->expbox->setObjectName(QLatin1String("FilterSideBarWidget Expander"));
 
     // --------------------------------------------------------------------------------------------------------
 
     d->textFilter = new TextFilter(d->expbox);
-    d->expbox->addItem(d->textFilter, QIcon::fromTheme("text-field"),
-                       i18n("Text Filter"), QString("TextFilter"), true);
+    d->expbox->addItem(d->textFilter, QIcon::fromTheme(QLatin1String("text-field")),
+                       i18n("Text Filter"), QLatin1String("TextFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
     d->mimeFilter = new MimeFilter(d->expbox);
-    d->expbox->addItem(d->mimeFilter, QIcon::fromTheme("system-file-manager"),
-                       i18n("MIME Type Filter"), QString("TypeMimeFilter"), true);
+    d->expbox->addItem(d->mimeFilter, QIcon::fromTheme(QLatin1String("system-file-manager")),
+                       i18n("MIME Type Filter"), QLatin1String("TypeMimeFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
     d->geolocationFilter = new GeolocationFilter(d->expbox);
-    d->expbox->addItem(d->geolocationFilter, QIcon::fromTheme("applications-internet"),
-                       i18n("Geolocation Filter"), QString("TypeGeolocationFilter"), true);
+    d->expbox->addItem(d->geolocationFilter, QIcon::fromTheme(QLatin1String("applications-internet")),
+                       i18n("Geolocation Filter"), QLatin1String("TypeGeolocationFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
-
 
     QWidget* const box3   = new QWidget(d->expbox);
     d->tagFilterModel     = tagFilterModel;
     d->tagFilterView      = new TagFilterView(box3, tagFilterModel);
-    d->tagFilterView->setObjectName("DigikamViewTagFilterView");
+    d->tagFilterView->setObjectName(QLatin1String("DigikamViewTagFilterView"));
     d->tagFilterSearchBar = new SearchTextBar(box3, "DigikamViewTagFilterSearchBar");
     d->tagFilterSearchBar->setModel(d->tagFilterView->filteredModel(),
                                     AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -161,7 +160,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
 
     d->tagOptionsBtn = new QToolButton(box3);
     d->tagOptionsBtn->setToolTip( i18n("Tags Matching Condition"));
-    d->tagOptionsBtn->setIcon(QIcon::fromTheme("configure"));
+    d->tagOptionsBtn->setIcon(QIcon::fromTheme(QLatin1String("configure")));
     d->tagOptionsBtn->setPopupMode(QToolButton::InstantPopup);
     d->tagOptionsBtn->setWhatsThis(i18n("Defines in which way the selected tags are combined "
                                         "to filter the images. This also includes the '%1' check box.",
@@ -184,7 +183,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay3->setMargin(0);
     lay3->setSpacing(0);
 
-    d->expbox->addItem(box3, QIcon::fromTheme("tag-assigned"), i18n("Tags Filter"), QString("TagsFilter"), true);
+    d->expbox->addItem(box3, QIcon::fromTheme(QLatin1String("tag-assigned")), i18n("Tags Filter"), QLatin1String("TagsFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -202,7 +201,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay4->setMargin(0);
     lay4->setSpacing(0);
 
-    d->expbox->addItem(box4, QIcon::fromTheme("favorites"), i18n("Labels Filter"), QString("LabelsFilter"), true);
+    d->expbox->addItem(box4, QIcon::fromTheme(QLatin1String("favorites")), i18n("Labels Filter"), QLatin1String("LabelsFilter"), true);
 
     d->expanderVlay = dynamic_cast<QVBoxLayout*>(dynamic_cast<QScrollArea*>(d->expbox)->widget()->layout());
     d->space        = new QWidget();

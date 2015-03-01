@@ -56,12 +56,12 @@ ColumnFileProperties::ColumnFileProperties(TableViewShared* const tableViewShare
 TableViewColumnDescription ColumnFileProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("file-properties"), i18n("File properties"));
-    description.setIcon("dialog-information");
+    description.setIcon(QLatin1String("dialog-information"));
 
-    description.addSubColumn(TableViewColumnDescription("filename",         i18n("Filename")));
-    description.addSubColumn(TableViewColumnDescription("filepath",         i18n("Path")));
-    description.addSubColumn(TableViewColumnDescription("filesize",         i18n("Size")));
-    description.addSubColumn(TableViewColumnDescription("filelastmodified", i18n("Last modified")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("filename"),         i18n("Filename")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("filepath"),         i18n("Path")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("filesize"),         i18n("Size")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("filelastmodified"), i18n("Last modified")));
 
     return description;
 }
@@ -139,9 +139,9 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
         {
             /// @todo Add configuration options for SI-prefixes
             /// @todo Use an enum instead to avoid lots of string comparisons
-            const QString formatKey = configuration.getSetting("format", "human");
+            const QString formatKey = configuration.getSetting(QLatin1String("format"), QLatin1String("human"));
 
-            if (formatKey == "human")
+            if (formatKey == QLatin1String("human"))
             {
                 return ImagePropertiesTab::humanReadableBytesCount(info.fileSize());
             }
@@ -212,13 +212,13 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(TableViewShared* co
         {
             QFormLayout* const box1 = new QFormLayout();
             selectorSizeType        = new QComboBox(this);
-            selectorSizeType->addItem(i18n("Human readable"), QString("human"));
-            selectorSizeType->addItem(i18n("Plain"),          QString("plain"));
+            selectorSizeType->addItem(i18n("Human readable"), QLatin1String("human"));
+            selectorSizeType->addItem(i18n("Plain"),          QLatin1String("plain"));
             box1->addRow(i18n("Display format"), selectorSizeType);
 
             setLayout(box1);
 
-            const int index = selectorSizeType->findData(configuration.getSetting("format", "human"));
+            const int index = selectorSizeType->findData(configuration.getSetting(QLatin1String("format"), QLatin1String("human")));
             selectorSizeType->setCurrentIndex(index>=0 ? index : 0);
             break;
         }
@@ -235,7 +235,7 @@ ColumnFileConfigurationWidget::~ColumnFileConfigurationWidget()
 TableViewColumnConfiguration ColumnFileConfigurationWidget::getNewConfiguration()
 {
     const QString formatKey = selectorSizeType->itemData(selectorSizeType->currentIndex()).toString();
-    configuration.columnSettings.insert("format", formatKey);
+    configuration.columnSettings.insert(QLatin1String("format"), formatKey);
 
     return configuration;
 }

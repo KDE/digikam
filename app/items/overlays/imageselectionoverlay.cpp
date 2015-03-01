@@ -6,7 +6,7 @@
  * Date        : 2009-04-30
  * Description : selection icon view item at mouse hover
  *
- * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
+ * Copyright (C) 2008      by Peter Penz <peter.penz@gmx.at>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -48,7 +48,7 @@ QSize ImageSelectionOverlayButton::sizeHint() const
 
 QIcon ImageSelectionOverlayButton::icon()
 {
-    return QIcon::fromTheme(isChecked() ? "list-remove" : "list-add");
+    return QIcon::fromTheme(isChecked() ? QLatin1String("list-remove") : QLatin1String("list-add"));
 }
 
 void ImageSelectionOverlayButton::updateToolTip()
@@ -101,7 +101,7 @@ void ImageSelectionOverlay::updateButton(const QModelIndex& index)
     const int y      = rect.top() + gap;
     button()->move(QPoint(x, y));
 
-    QItemSelectionModel* selModel = m_view->selectionModel();
+    QItemSelectionModel* const selModel = m_view->selectionModel();
     button()->setChecked(selModel->isSelected(index));
 }
 
@@ -111,7 +111,7 @@ void ImageSelectionOverlay::slotClicked(bool checked)
 
     if (index.isValid())
     {
-        QItemSelectionModel* selModel = m_view->selectionModel();
+        QItemSelectionModel* const selModel = m_view->selectionModel();
 
         if (checked)
         {

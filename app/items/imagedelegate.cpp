@@ -338,7 +338,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     {
         QStringList tagsList = AlbumManager::instance()->tagNames(info.tagIds());
         tagsList.sort();
-        QString tags         = tagsList.join(", ");
+        QString tags         = tagsList.join(QLatin1String(", "));
         drawTags(p, d->tagRect, tags, isSelected);
     }
 
@@ -354,7 +354,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     if (d->drawImageFormat)
     {
         QString frm = info.format();
-        if (frm.contains("-")) frm = frm.section('-', -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
+        if (frm.contains(QLatin1String("-"))) frm = frm.section(QLatin1Char('-'), -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
         drawImageFormat(p, actualPixmapRect, frm);
     }
 

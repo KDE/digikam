@@ -81,12 +81,12 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
     setWordWrap(true);
 //     viewport()->setAcceptDrops(true);
 
-    d->actionHeaderContextMenuRemoveColumn = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove this column"), this);
+    d->actionHeaderContextMenuRemoveColumn = new QAction(QIcon::fromTheme(QLatin1String("edit-table-delete-column")), i18n("Remove this column"), this);
 
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuActionRemoveColumnTriggered()));
 
-    d->actionHeaderContextMenuConfigureColumn = new QAction(QIcon::fromTheme("configure"), i18n("Configure this column"), this);
+    d->actionHeaderContextMenuConfigureColumn = new QAction(QIcon::fromTheme(QLatin1String("configure")), i18n("Configure this column"), this);
 
     connect(d->actionHeaderContextMenuConfigureColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuConfigureColumn()));

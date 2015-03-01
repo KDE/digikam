@@ -158,12 +158,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
                 ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
 
-                str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
+                str = QString::fromUtf8("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
                       .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -177,7 +177,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                     if (str.length() > cnt.maxStringLength)
                     {
-                        str = str.left(cnt.maxStringLength-3) + "...";
+                        str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                     }
 
                     metaStr += cnt.cellBeg + i18nc("creation date of the image",
@@ -196,16 +196,16 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (photoInfo.focalLength35.isEmpty())
                 {
-                    str += QString(" / %1").arg(photoInfo.focalLength.isEmpty() ? cnt.unavailable : photoInfo.focalLength);
+                    str += QString::fromUtf8(" / %1").arg(photoInfo.focalLength.isEmpty() ? cnt.unavailable : photoInfo.focalLength);
                 }
                 else
                 {
-                    str += QString(" / %1").arg(i18n("%1 (%2)",photoInfo.focalLength,photoInfo.focalLength35));
+                    str += QString::fromUtf8(" / %1").arg(i18n("%1 (%2)",photoInfo.focalLength,photoInfo.focalLength35));
                 }
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -213,12 +213,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (settings->getToolTipsShowPhotoExpo())
             {
-                str = QString("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? cnt.unavailable : photoInfo.exposureTime)
+                str = QString::fromUtf8("%1 / %2").arg(photoInfo.exposureTime.isEmpty() ? cnt.unavailable : photoInfo.exposureTime)
                       .arg(photoInfo.sensitivity.isEmpty() ? cnt.unavailable : i18n("%1 ISO",photoInfo.sensitivity));
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -240,12 +240,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 }
                 else
                 {
-                    str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+                    str = QString::fromUtf8("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 }
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Mode/Program:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -257,7 +257,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18nc("camera flash settings",
@@ -270,7 +270,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -301,7 +301,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Aspect Ratio:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -323,7 +323,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Duration:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -344,7 +344,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Frame Rate:") + cnt.cellMid + str.toHtmlEscaped() + i18n("fps") + cnt.cellEnd;
@@ -356,7 +356,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Video Codec:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -377,7 +377,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Audio Bit Rate:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -389,7 +389,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Audio Channel Type:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -401,7 +401,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (str.length() > cnt.maxStringLength)
                 {
-                    str = str.left(cnt.maxStringLength-3) + "...";
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
                 metaStr += cnt.cellBeg + i18n("Audio Compressor:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
@@ -437,7 +437,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (str.isEmpty())
             {
-                str = QString("---");
+                str = QLatin1String("---");
             }
 
             tip += cnt.cellSpecBeg + i18nc("title of the file",
@@ -451,7 +451,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (str.isEmpty())
             {
-                str = QString("---");
+                str = QLatin1String("---");
             }
 
             tip += cnt.cellSpecBeg + i18nc("caption of the file",
@@ -471,7 +471,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (tagPaths.isEmpty())
             {
-                tip += cnt.cellSpecBeg + tags + cnt.cellSpecMid + "---" + cnt.cellSpecEnd;
+                tip += cnt.cellSpecBeg + tags + cnt.cellSpecMid + QLatin1String("---") + cnt.cellSpecEnd;
             }
             else
             {
@@ -501,10 +501,10 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         if (settings->getToolTipsShowLabelRating())
         {
             str        = PickLabelWidget::labelPickName((PickLabel)info.pickLabel());
-            str       += QString(" / ");
+            str       += QLatin1String(" / ");
 
             str       += ColorLabelWidget::labelColorName((ColorLabel)info.colorLabel());
-            str       += QString(" / ");
+            str       += QLatin1String(" / ");
 
             int rating = info.rating();
 
@@ -513,12 +513,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 for (int i=0; i<rating; ++i)
                 {
                     str += QChar(0x2730);
-                    str += ' ';
+                    str += QLatin1Char(' ');
                 }
             }
             else
             {
-                str += QString("---");
+                str += QLatin1String("---");
             }
 
             tip += cnt.cellSpecBeg + i18n("Labels:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
@@ -582,7 +582,7 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
 
             if (str.isEmpty())
             {
-                str = QString("---");
+                str = QLatin1String("---");
             }
 
             tip += cnt.cellSpecBeg + i18n("Category:") + cnt.cellSpecMid +
@@ -595,7 +595,7 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
 
             if (str.isEmpty())
             {
-                str = QString("---");
+                str = QLatin1String("---");
             }
 
             tip += cnt.cellSpecBeg + i18n("Caption:") + cnt.cellSpecMid +
@@ -635,7 +635,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
         + DImgFilterManager::instance()->i18nDisplayableName(action) + cnt.cellEnd;
 
     // Category
-    QString reproducible("---");
+    QString reproducible = QLatin1String("---");
 
     switch (action.category())
     {
@@ -661,7 +661,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
 
     if (str.isEmpty())
     {
-        str = QString("---");
+        str = QLatin1String("---");
     }
 
     tip += cnt.cellSpecBeg + i18nc("Image filter description", "Description:") + cnt.cellSpecMid
@@ -669,7 +669,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
 
     // Identifier + version
     tip += cnt.cellBeg + i18n("Identifier:") + cnt.cellMid
-        + action.identifier() + " (v" + QString::number(action.version()) + ") " + cnt.cellEnd;
+        + action.identifier() + QLatin1String(" (v") + QString::number(action.version()) + QLatin1String(") ") + cnt.cellEnd;
 
     if (action.hasParameters())
     {

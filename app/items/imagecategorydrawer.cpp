@@ -279,7 +279,7 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
     if (!album->caption().isEmpty())
     {
         QString caption = album->caption();
-        *subLine       += " - " + caption.replace('\n', ' ');
+        *subLine       += QLatin1String(" - ") + caption.replace(QLatin1Char('\n'), QLatin1Char(' '));
     }
 
     *header = album->prettyUrl();
@@ -343,7 +343,7 @@ void ImageCategoryDrawer::textForDAlbum(DAlbum* album, int count, QString* heade
     }
     else
     {
-        *header = QString("%1").arg(album->date().year());
+        *header = QString::fromUtf8("%1").arg(album->date().year());
     }
 
     *subLine = i18np("1 Item", "%1 Items", count);
@@ -375,7 +375,7 @@ void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
     QFontMetrics fm(fn);
     QRect tr = fm.boundingRect(0, 0, width,
                                0xFFFFFFFF, Qt::AlignLeft | Qt::AlignVCenter,
-                               "XXX");
+                               QLatin1String("XXX"));
     d->rect.setHeight(tr.height());
 
     if (usePointSize)
@@ -391,7 +391,7 @@ void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
     fm = QFontMetrics(fn);
     tr = fm.boundingRect(0, 0, width,
                          0xFFFFFFFF, Qt::AlignLeft | Qt::AlignVCenter,
-                         "XXX");
+                         QLatin1String("XXX"));
 
     d->rect.setHeight(d->rect.height() + tr.height() + 10);
     d->rect.setWidth(width);

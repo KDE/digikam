@@ -69,14 +69,14 @@ QStringList ColumnAudioVideoProperties::getSubColumns()
 TableViewColumnDescription ColumnAudioVideoProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("audiovideo-properties"), i18n("Audio/video properties"));
-    description.setIcon("video-x-generic");
+    description.setIcon(QLatin1String("video-x-generic"));
 
-    description.addSubColumn(TableViewColumnDescription("audiobitrate",     i18n("Audio bitrate")));
-    description.addSubColumn(TableViewColumnDescription("audiochanneltype", i18n("Audio channel type")));
-    description.addSubColumn(TableViewColumnDescription("audiocompressor",  i18n("Audio compressor")));
-    description.addSubColumn(TableViewColumnDescription("duration",         i18n("Duration")));
-    description.addSubColumn(TableViewColumnDescription("framerate",        i18n("Frame rate")));
-    description.addSubColumn(TableViewColumnDescription("videocodec",       i18n("Video codec")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("audiobitrate"),     i18n("Audio bitrate")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("audiochanneltype"), i18n("Audio channel type")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("audiocompressor"),  i18n("Audio compressor")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("duration"),         i18n("Duration")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("framerate"),        i18n("Frame rate")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("videocodec"),       i18n("Video codec")));
 
     return description;
 }

@@ -194,10 +194,10 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
     for (int i = 0; i < dateRanges.size(); ++i)
     {
         writer.writeGroup();
-        writer.writeField("creationdate", SearchXml::GreaterThan);
+        writer.writeField(QLatin1String("creationdate"), SearchXml::GreaterThan);
         writer.writeValue(dateRanges.at(i).first);
         writer.finishField();
-        writer.writeField("creationdate", SearchXml::LessThan);
+        writer.writeField(QLatin1String("creationdate"), SearchXml::LessThan);
         writer.writeValue(dateRanges.at(i).second);
         writer.finishField();
         writer.finishGroup();
@@ -238,10 +238,10 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
     SearchXmlWriter writer;
 
     writer.writeGroup();
-    writer.writeField("similarity", SearchXml::Like);
-    writer.writeAttribute("type", "signature");         // we pass a signature
-    writer.writeAttribute("numberofresults", QString::number(numberOfResults));
-    writer.writeAttribute("sketchtype", "handdrawn");
+    writer.writeField(QLatin1String("similarity"), SearchXml::Like);
+    writer.writeAttribute(QLatin1String("type"), QLatin1String("signature"));         // we pass a signature
+    writer.writeAttribute(QLatin1String("numberofresults"), QString::number(numberOfResults));
+    writer.writeAttribute(QLatin1String("sketchtype"), QLatin1String("handdrawn"));
     writer.writeValue(haarIface.signatureAsText(sketchWidget->sketchImage()));
     sketchWidget->sketchImageToXML(writer);
     writer.finishField();
@@ -286,10 +286,10 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
     SearchXmlWriter writer;
 
     writer.writeGroup();
-    writer.writeField("similarity", SearchXml::Like);
-    writer.writeAttribute("type", "imageid");
-    writer.writeAttribute("threshold", QString::number(threshold));
-    writer.writeAttribute("sketchtype", "scanned");
+    writer.writeField(QLatin1String("similarity"), SearchXml::Like);
+    writer.writeAttribute(QLatin1String("type"), QLatin1String("imageid"));
+    writer.writeAttribute(QLatin1String("threshold"), QString::number(threshold));
+    writer.writeAttribute(QLatin1String("sketchtype"), QLatin1String("scanned"));
     writer.writeValue(image.id());
     writer.finishField();
     writer.finishGroup();

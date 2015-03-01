@@ -59,7 +59,7 @@ public:
 };
 
 SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
-    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true),
+    : ProgressItem(0, QLatin1String("SlideShowBuilder"), QString(), QString(), true, true),
       d(new Private)
 {
     d->infoList = infoList;
@@ -70,7 +70,7 @@ SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
 }
 
 SlideShowBuilder::SlideShowBuilder(Album* const album)
-    : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true),
+    : ProgressItem(0, QLatin1String("SlideShowBuilder"), QString(), QString(), true, true),
       d(new Private)
 {
     d->album = album;
@@ -91,7 +91,7 @@ void SlideShowBuilder::slotRun()
             this, SLOT(slotCancel()));
 
     setLabel(i18n("Preparing slideshow"));
-    setThumbnail(QIcon::fromTheme("digikam"));
+    setThumbnail(QIcon::fromTheme(QLatin1String("digikam")));
 
     if (d->album)
     {

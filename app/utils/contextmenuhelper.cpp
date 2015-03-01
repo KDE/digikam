@@ -146,7 +146,7 @@ public:
 
     QAction* copyFromMainCollection(const char* name) const
     {
-        QAction* const mainAction = stdActionCollection->action(name);
+        QAction* const mainAction = stdActionCollection->action(QLatin1String(name));
 
         if (!mainAction)
         {
@@ -182,7 +182,7 @@ ContextMenuHelper::~ContextMenuHelper()
 
 void ContextMenuHelper::addAction(const char* name, bool addDisabled)
 {
-    QAction* const action = d->stdActionCollection->action(name);
+    QAction* const action = d->stdActionCollection->action(QLatin1String(name));
     addAction(action, addDisabled);
 }
 
@@ -224,8 +224,8 @@ void ContextMenuHelper::addStandardActionLightTable()
 {
     QAction* action = 0;
     QStringList ltActionNames;
-    ltActionNames << QString("image_add_to_lighttable")
-                  << QString("image_lighttable");
+    ltActionNames << QLatin1String("image_add_to_lighttable")
+                  << QLatin1String("image_lighttable");
 
     if (LightTableWindow::lightTableWindowCreated() && !LightTableWindow::lightTableWindow()->isEmpty())
     {
@@ -280,7 +280,7 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 
         foreach(const KService::Ptr& service, offers)
         {
-            QString name          = service->name().replace('&', "&&");
+            QString name          = service->name().replace(QLatin1Char('&'), QLatin1String("&&"));
             QAction* const action = servicesMenu->addAction(name);
             action->setIcon(QIcon::fromTheme(service->icon()));
             action->setData(service->name());
@@ -373,7 +373,7 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
 
 void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper, TAlbum* tag)
 {
-    QAction* const newTagAction = new QAction(QIcon::fromTheme("tag-new"), i18n("New Tag..."), this);
+    QAction* const newTagAction = new QAction(QIcon::fromTheme(QLatin1String("tag-new")), i18n("New Tag..."), this);
     addAction(newTagAction);
     helper->bindTag(newTagAction, tag);
 
@@ -383,7 +383,7 @@ void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper, TAlbum* t
 
 void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper, TAlbum* tag)
 {
-    QAction* const deleteTagAction = new QAction(QIcon::fromTheme("user-trash"), i18n("Delete Tag"), this);
+    QAction* const deleteTagAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18n("Delete Tag"), this);
     addAction(deleteTagAction);
     helper->bindTag(deleteTagAction, tag);
 
@@ -393,7 +393,7 @@ void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper, TAlbum
 
 void ContextMenuHelper::addActionDeleteTags(Digikam::TagModificationHelper* helper, QList< TAlbum* > tags)
 {
-    QAction* const deleteTagsAction = new QAction(QIcon::fromTheme("user-trash"), i18n("Delete Tags"), this);
+    QAction* const deleteTagsAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18n("Delete Tags"), this);
     addAction(deleteTagsAction);
     helper->bindMultipleTags(deleteTagsAction, tags);
 
@@ -403,7 +403,7 @@ void ContextMenuHelper::addActionDeleteTags(Digikam::TagModificationHelper* help
 
 void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper, TAlbum* tag)
 {
-    QAction* const editTagAction = new QAction(QIcon::fromTheme("tag-properties"), i18nc("Edit Tag Properties", "Properties..."), this);
+    QAction* const editTagAction = new QAction(QIcon::fromTheme(QLatin1String("tag-properties")), i18nc("Edit Tag Properties", "Properties..."), this);
     addAction(editTagAction);
     helper->bindTag(editTagAction, tag);
 
@@ -453,7 +453,7 @@ void ContextMenuHelper::addActionRenameAlbum(AlbumModificationHelper* helper, PA
 
 void ContextMenuHelper::addActionResetAlbumIcon(AlbumModificationHelper* helper, PAlbum* album)
 {
-    QAction* const action = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reset Album Icon"), this);
+    QAction* const action = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Reset Album Icon"), this);
     addAction(action, !album->isRoot());
     helper->bindAlbum(action, album);
 
@@ -467,7 +467,7 @@ void ContextMenuHelper::addAssignTagsMenu(const imageIds &ids)
 
     QMenu* const assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
-    assignTagsPopup->menuAction()->setIcon(QIcon::fromTheme("tag"));
+    assignTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
     d->parent->addMenu(assignTagsPopup);
 
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -483,7 +483,7 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
 
     QMenu* const removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
-    removeTagsPopup->menuAction()->setIcon(QIcon::fromTheme("tag"));
+    removeTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
     d->parent->addMenu(removeTagsPopup);
 
     // Performance: Only check for tags if there are <250 images selected
@@ -530,7 +530,7 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
     d->ABCmenu = new QMenu(d->parent);
 
     QAction* const abcAction = d->ABCmenu->menuAction();
-    abcAction->setIcon(QIcon::fromTheme("tag-addressbook"));
+    abcAction->setIcon(QIcon::fromTheme(QLatin1String("tag-addressbook")));
     abcAction->setText(i18n("Create Tag From Address Book"));
     d->parent->addMenu(d->ABCmenu);
 
@@ -605,7 +605,7 @@ void ContextMenuHelper::slotABCMenuTriggered(QAction* action)
 
 void ContextMenuHelper::slotDeselectAllAlbumItems()
 {
-    QAction* const selectNoneAction = d->stdActionCollection->action("selectNone");
+    QAction* const selectNoneAction = d->stdActionCollection->action(QLatin1String("selectNone"));
     QTimer::singleShot(75, selectNoneAction, SIGNAL(triggered()));
 }
 
@@ -730,15 +730,15 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
         return;
     }
 
-    d->gotoAlbumAction    = new QAction(QIcon::fromTheme("folder-image"),        i18n("Album"), this);
-    d->gotoDateAction     = new QAction(QIcon::fromTheme("view-calendar-month"), i18n("Date"),  this);
+    d->gotoAlbumAction    = new QAction(QIcon::fromTheme(QLatin1String("folder-image")),        i18n("Album"), this);
+    d->gotoDateAction     = new QAction(QIcon::fromTheme(QLatin1String("view-calendar-month")), i18n("Date"),  this);
     QMenu* const gotoMenu = new QMenu(d->parent);
     gotoMenu->addAction(d->gotoAlbumAction);
     gotoMenu->addAction(d->gotoDateAction);
 
     TagsPopupMenu* const gotoTagsPopup = new TagsPopupMenu(d->selectedIds, TagsPopupMenu::DISPLAY, gotoMenu);
     QAction* const gotoTag             = gotoMenu->addMenu(gotoTagsPopup);
-    gotoTag->setIcon(QIcon::fromTheme("tag"));
+    gotoTag->setIcon(QIcon::fromTheme(QLatin1String("tag")));
     gotoTag->setText(i18n("Tag"));
 
     // Disable the goto Tag popup menu, if there are no tags at all.
@@ -778,7 +778,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
     }
 
     QAction* const gotoMenuAction = gotoMenu->menuAction();
-    gotoMenuAction->setIcon(QIcon::fromTheme("go-jump"));
+    gotoMenuAction->setIcon(QIcon::fromTheme(QLatin1String("go-jump")));
     gotoMenuAction->setText(i18n("Go To"));
 
     connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -790,9 +790,9 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
 void ContextMenuHelper::addQueueManagerMenu()
 {
     QMenu* const bqmMenu = new QMenu(i18n("Batch Queue Manager"), d->parent);
-    bqmMenu->menuAction()->setIcon(QIcon::fromTheme("bqm-diff"));
-    bqmMenu->addAction(d->stdActionCollection->action("image_add_to_current_queue"));
-    bqmMenu->addAction(d->stdActionCollection->action("image_add_to_new_queue"));
+    bqmMenu->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("bqm-diff")));
+    bqmMenu->addAction(d->stdActionCollection->action(QLatin1String("image_add_to_current_queue")));
+    bqmMenu->addAction(d->stdActionCollection->action(QLatin1String("image_add_to_new_queue")));
 
     // if queue list is empty, do not display the queue submenu
     if (QueueMgrWindow::queueManagerWindowCreated() &&
@@ -1140,7 +1140,7 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 
 void ContextMenuHelper::addStandardActionItemDelete(QObject* recv, const char* slot, int quantity)
 {
-    QAction* const trashAction = new QAction(QIcon::fromTheme("user-trash"), i18ncp("@action:inmenu Pluralized",
+    QAction* const trashAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18ncp("@action:inmenu Pluralized",
                                              "Move to Trash", "Move %1 Files to Trash", quantity), d->parent);
     connect(trashAction, SIGNAL(triggered()),
             recv, slot);
