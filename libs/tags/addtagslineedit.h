@@ -26,7 +26,8 @@
 
 // KDE includes
 
-#include <klineedit.h>
+//#include <klineedit.h>
+#include <QLineEdit>
 
 // Local includes
 
@@ -41,8 +42,9 @@ class TAlbum;
 class TagModel;
 class TagPropertiesFilterModel;
 class TagTreeView;
+class TagModelCompletion;
 
-class AddTagsLineEdit : public KLineEdit
+class AddTagsLineEdit : public QLineEdit
 {
     Q_OBJECT
 
@@ -70,17 +72,22 @@ public:
      */
     void setCurrentTag(TAlbum* album);
 
-    void setCurrentTaggingAction(const TaggingAction& action);
-    TaggingAction currentTaggingAction() const;
+    //void setCurrentTaggingAction(const TaggingAction& action);
+    //TaggingAction currentTaggingAction() const;
 
     /// The custom completion box in use
-    AddTagsCompletionBox* tagCompletionBox() const;
+    //AddTagsCompletionBox* tagCompletionBox() const;
+    void setCompleter(TagModelCompletion *c);
+
+    void setAllowExceedBound(bool value);
 
 public Q_SLOTS:
 
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action.
      *  If you set a tag tree view, this is taken care for automatically.
      */
+    void setParentTag(QModelIndex &index);
+
     void setParentTag(TAlbum* album);
 
 Q_SIGNALS:
@@ -93,18 +100,21 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    virtual void makeCompletion(const QString&);
-    void setCompletedItems(const QStringList& items, bool autoSuggest=true);
-    void makeSubstringCompletion(const QString&);
-    void slotCompletionBoxTextChanged(const QString& text);
-    void slotCompletionBoxTaggingActionChanged(const TaggingAction& action);
-    void slotCompletionBoxCancelled();
-    void slotReturnPressed(const QString& text);
-    void slotTextChanged(const QString& text);
+    void completerActivated(QModelIndex index);
+    //virtual void makeCompletion(const QString&);
+    //void setCompletedItems(const QStringList& items, bool autoSuggest=true);
+    //void makeSubstringCompletion(const QString&);
+//    void slotCompletionBoxTextChanged(const QString& text);
+//    void slotCompletionBoxTaggingActionChanged(const TaggingAction& action);
+//    void slotCompletionBoxCancelled();
+//    void slotReturnPressed(const QString& text);
+//    void slotTextChanged(const QString& text);
 
 protected:
+        void focusInEvent(QFocusEvent *f);
+        void keyPressEvent(QKeyEvent* e);
 
-    void setCompletionObject(KCompletion* comp, bool dontuse=false);
+//    void setCompletionObject(KCompletion* comp, bool dontuse=false);
 
 private:
 

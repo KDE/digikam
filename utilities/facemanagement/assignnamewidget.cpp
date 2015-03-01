@@ -239,7 +239,7 @@ void AssignNameWidget::Private::checkWidgets()
                     if (!lineEdit)
                     {
                         lineEdit = new AddTagsLineEdit(q);
-                        lineEdit->setClearButtonShown(true);
+                        //lineEdit->setClearButtonShown(true);
                         setupAddTagsWidget(lineEdit);
                     }
 
@@ -287,11 +287,11 @@ void AssignNameWidget::Private::layoutAddTagsWidget(bool exceedBounds, int minim
     if (comboBox)
     {
         comboBox->setMinimumContentsLength(minimumContentsLength);
-        comboBox->completionBox()->setAllowExceedBounds(exceedBounds);
+        comboBox->lineEdit()->setAllowExceedBound(exceedBounds);
     }
     else
     {
-        lineEdit->tagCompletionBox()->setAllowExceedBounds(exceedBounds);
+        lineEdit->setAllowExceedBound(exceedBounds);
     }
 }
 
@@ -503,10 +503,11 @@ void AssignNameWidget::Private::setAddTagsWidgetContents(T* const widget)
         widget->setCurrentTag(currentTag);
         widget->setPlaceholderText((mode == UnconfirmedEditMode) ? i18n("Who is this?") : QString());
 
-        if (confirmButton)
-        {
-            confirmButton->setEnabled(widget->currentTaggingAction().isValid());
-        }
+#pragma message "QCompleter port"
+//        if (confirmButton)
+//        {
+//            confirmButton->setEnabled(widget->currentTaggingAction().isValid());
+//        }
     }
 }
 
@@ -710,14 +711,15 @@ void AssignNameWidget::setCurrentTag(TAlbum* album)
 
 void AssignNameWidget::slotConfirm()
 {
-    if (d->comboBox)
-    {
-        emit assigned(d->comboBox->currentTaggingAction(), d->info, d->faceIdentifier);
-    }
-    else if (d->lineEdit)
-    {
-        emit assigned(d->lineEdit->currentTaggingAction(), d->info, d->faceIdentifier);
-    }
+#pragma message "QCompleter port, check what this do"
+//    if (d->comboBox)
+//    {
+//        emit assigned(d->comboBox->currentTaggingAction(), d->info, d->faceIdentifier);
+//    }
+//    else if (d->lineEdit)
+//    {
+//        emit assigned(d->lineEdit->currentTaggingAction(), d->info, d->faceIdentifier);
+//    }
 }
 
 void AssignNameWidget::slotReject()

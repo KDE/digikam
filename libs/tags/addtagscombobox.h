@@ -77,7 +77,7 @@ public:
     void setText(const QString& text);
 
     AddTagsLineEdit* lineEdit()           const;
-    AddTagsCompletionBox* completionBox() const;
+    //AddTagsCompletionBox* completionBox() const;
 
 public Q_SLOTS:
 

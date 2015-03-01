@@ -29,6 +29,7 @@
 #include "addtagslineedit.h"
 
 // KDE includes
+#include <QKeyEvent>
 
 #include <klocalizedstring.h>
 
@@ -36,6 +37,7 @@
 
 #include "digikam_debug.h"
 #include "addtagscompletionbox.h"
+#include "tageditdlg.h"
 #include "album.h"
 #include "albummodel.h"
 #include "albumtreeview.h"
@@ -55,62 +57,83 @@ public:
         completion    = 0;
         completionBox = 0;
         tagView       = 0;
+        resetFromCompleter = false;
     }
 
     TagModelCompletion*   completion;
     AddTagsCompletionBox* completionBox;
     TagTreeView*          tagView;
     TaggingAction         currentTaggingAction;
+    bool                  resetFromCompleter;
+    TAlbum*               parentTag;
+    TAlbum*               currentTag;
+    TagModel*             tagModel;
 
-public:
+//public:
 
-    TaggingAction makeTaggingAction(const QString& userText);
+    //TaggingAction makeTaggingAction(const QString& userText);
 };
 
 // ---------------------------------------------------------------------------------------
 
 AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
-    : KLineEdit(parent), d(new Private)
+    : QLineEdit(parent), d(new Private)
 {
-    setEnableSignals(true);
-    setHandleSignals(false);
+//    setEnableSignals(true);
+//    setHandleSignals(false);
 
     d->completion = new TagModelCompletion;
-    setCompletionObject(d->completion);
-    setAutoDeleteCompletionObject(true);
+    //d->completionBox = new AddTagsCompletionBox(this);
+    //QLineEdit::setCompleter(d->completion);
+    setCompleter(d->completion);
 
-    d->completionBox = new AddTagsCompletionBox(this);
-    setCompletionBox(d->completionBox);
+    //setCompletionObject(d->completion);
+    //setAutoDeleteCompletionObject(true);
 
-    setCompletionMode(KCompletion::CompletionPopup);
-    setTrapReturnKey(true);
 
-    connect(d->completionBox, SIGNAL(currentCompletionTextChanged(QString)),
-            this, SLOT(slotCompletionBoxTextChanged(QString)));
 
-    connect(d->completionBox, SIGNAL(currentTaggingActionChanged(TaggingAction)),
-            this, SLOT(slotCompletionBoxTaggingActionChanged(TaggingAction)));
+    //setCompletionBox(d->completionBox);
 
-    connect(d->completionBox, SIGNAL(userCancelled(QString)),
-            this, SLOT(slotCompletionBoxCancelled()));
+    //setCompletionMode(KCompletion::CompletionPopup);
+    //d->completion->setCompletionMode(QCompleter::PopupCompletion);
+    //d->completion->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+//     //disconnect(d->completion, 0, this, 0);
+//    if(disconnect(d->completion, SIGNAL(activated(QString)), this, SLOT(QLineEdit::setText(QString))))
+//        qDebug() << "Successfully disconnected";
+//    else
+//        qDebug() << "Not disconnected";
+    //disconnect(d->completion, SIGNAL(activated(QString)),0, 0);
+   // connect(d->completion, SIGNAL(activated(QModelIndex)), this, SLOT(completerActivated(QModelIndex)));
 
-    connect(d->completionBox, SIGNAL(completionActivated(QString)),
-            this, SIGNAL(completionBoxActivated(QString)));
+    //connect(this, SIGNAL(textChanged(QString)), this, SLOT(slotTextChanged(QString)));
+    //setTrapReturnKey(true);
 
-    connect(this, SIGNAL(completion(QString)),
-            this, SLOT(makeCompletion(QString)));
+//    connect(d->completionBox, SIGNAL(currentCompletionTextChanged(QString)),
+//            this, SLOT(slotCompletionBoxTextChanged(QString)));
 
-    connect(this, SIGNAL(substringCompletion(QString)),
-            this, SLOT(makeSubstringCompletion(QString)));
+//    connect(d->completionBox, SIGNAL(currentTaggingActionChanged(TaggingAction)),
+//            this, SLOT(slotCompletionBoxTaggingActionChanged(TaggingAction)));
 
-    connect(this, SIGNAL(textRotation(KCompletionBase::KeyBindingType)),
-            this, SLOT(rotateText(KCompletionBase::KeyBindingType)));
+//    connect(d->completionBox, SIGNAL(userCancelled(QString)),
+//            this, SLOT(slotCompletionBoxCancelled()));
 
-    connect(this, SIGNAL(returnPressed(QString)),
-            this, SLOT(slotReturnPressed(QString)));
+//    connect(d->completionBox, SIGNAL(completionActivated(QString)),
+//            this, SIGNAL(completionBoxActivated(QString)));
 
-    connect(this, SIGNAL(textChanged(QString)),
-            this, SLOT(slotTextChanged(QString)));
+//    connect(this, SIGNAL(completion(QString)),
+//            this, SLOT(makeCompletion(QString)));
+
+//    connect(this, SIGNAL(substringCompletion(QString)),
+//            this, SLOT(makeSubstringCompletion(QString)));
+
+//    connect(this, SIGNAL(textRotation(KCompletionBase::KeyBindingType)),
+//            this, SLOT(rotateText(KCompletionBase::KeyBindingType)));
+
+//    connect(this, SIGNAL(returnPressed(QString)),
+//            this, SLOT(slotReturnPressed(QString)));
+
+//    connect(this, SIGNAL(textChanged(QString)),
+//            this, SLOT(slotTextChanged(QString)));
 }
 
 AddTagsLineEdit::~AddTagsLineEdit()
@@ -121,13 +144,15 @@ AddTagsLineEdit::~AddTagsLineEdit()
 void AddTagsLineEdit::setModel(TagModel* model)
 {
     d->completion->setModel(model);
-    d->completionBox->setTagModel(model);
+    d->tagModel = model;
+    //setCompleter(d->completion);
+   // d->completionBox->setTagModel(model);
 }
 
 void AddTagsLineEdit::setModel(AlbumFilterModel* model)
 {
     d->completion->setModel(model);
-    d->completionBox->setTagModel(model);
+    //d->completionBox->setTagModel(model);
 }
 
 void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, AlbumFilterModel* filterModel)
@@ -151,281 +176,397 @@ void AddTagsLineEdit::setTagTreeView(TagTreeView* view)
     if (d->tagView)
     {
         disconnect(d->tagView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                   d->completionBox, SLOT(setParentTag(QModelIndex)));
+                   this, SLOT(setParentTag(QModelIndex)));
     }
 
     d->tagView = view;
+    setParentTag(d->tagView->currentAlbum());
 
     if (d->tagView)
     {
-        d->completionBox->setParentTag(d->tagView->currentIndex());
+        //d->completionBox->setParentTag(d->tagView->currentIndex());
         connect(d->tagView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                d->completionBox, SLOT(setParentTag(QModelIndex)));
+                this, SLOT(setParentTag(QModelIndex)));
     }
 }
 
-void AddTagsLineEdit::setParentTag(TAlbum* album)
+void AddTagsLineEdit::setCurrentTag(TAlbum *album)
 {
-    d->completionBox->setParentTag(album);
+    d->parentTag = album;
 }
 
-void AddTagsLineEdit::setCurrentTag(TAlbum* album)
+void AddTagsLineEdit::setParentTag(QModelIndex& index)
 {
-    setCurrentTaggingAction(album ? TaggingAction(album->id()) : TaggingAction());
-    setText(album ? album->title() : QString());
+    if(index.isValid())
+        d->parentTag = dynamic_cast<TAlbum*>(d->tagModel->albumForIndex(index));
 }
 
-void AddTagsLineEdit::setCurrentTaggingAction(const TaggingAction& action)
+void AddTagsLineEdit::setParentTag(TAlbum *album)
 {
-    if (d->currentTaggingAction == action)
+    if(album != NULL)
+        d->parentTag = album;
+}
+
+void AddTagsLineEdit::completerActivated(QModelIndex index)
+{
+
+    //QLineEdit::clear();
+
+    int id = index.data(Qt::UserRole+5).toInt();
+
+    qDebug() << "Completer activated" << index.data() << id;
+    if(id == -5)
     {
+        QMap<QString, QString> errMap;
+        AlbumList al = TagEditDlg::createTAlbum(d->tagView->currentAlbum(),
+                                                index.data(Qt::UserRole+4).toString(),
+                                                "tag",QKeySequence(),errMap);
+        if(!al.isEmpty())
+        {
+            d->tagModel->setCheckState((TAlbum*)(al.first()),Qt::Checked);
+        }
+    }
+    else
+    {
+        TAlbum* tAlbum = AlbumManager::instance()->findTAlbum(id);
+        d->tagModel->setCheckState(tAlbum,Qt::Checked);
+    }
+    QLineEdit::clear();
+}
+
+void AddTagsLineEdit::setAllowExceedBound(bool value)
+{
+    Q_UNUSED(value);
+    // set maximum size of pop-up widget
+}
+
+void AddTagsLineEdit::setCompleter(TagModelCompletion *c)
+{
+    if (d->completion)
+        QObject::disconnect(d->completion, 0, this, 0);
+
+    d->completion = c;
+
+    if (!d->completion)
+    return;
+
+    d->completion->setWidget(this);
+    connect(d->completion, SIGNAL(activated(QModelIndex)), this, SLOT(completerActivated(QModelIndex)));
+}
+
+void AddTagsLineEdit::focusInEvent(QFocusEvent *f)
+{
+    QLineEdit::focusInEvent(f);
+    /** Need to disconnect completer from QLineEdit, otherwise
+     *  we won't be able to clear completion after tag was added
+     */
+    disconnect(d->completion, SIGNAL(activated(QString)), this, SLOT(setText(QString)));
+}
+
+void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
+{
+    if (d->completion && d->completion->popup()->isVisible())
+    {
+    // The following keys are forwarded by the completer to the widget
+        switch (e->key())
+        {
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+            case Qt::Key_Escape:
+            case Qt::Key_Tab:
+            case Qt::Key_Backtab:
+            e->ignore();
+        return; // Let the completer do default behavior
+        }
+    }
+
+    bool isShortcut = (e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_E;
+    if (!isShortcut)
+        QLineEdit::keyPressEvent(e); // Don't send the shortcut (CTRL-E) to the text edit.
+
+    if (!d->completion)
+        return;
+
+    bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+    if (!isShortcut && !ctrlOrShift && e->modifiers() != Qt::NoModifier)
+    {
+        d->completion->popup()->hide();
         return;
     }
-
-    d->currentTaggingAction = action;
-    emit taggingActionSelected(action);
+    d->completion->update(text());
+    d->completion->popup()->setCurrentIndex(d->completion->completionModel()->index(0, 0));
 }
 
-TaggingAction AddTagsLineEdit::currentTaggingAction() const
-{
-    if (d->currentTaggingAction.isValid())
-    {
-        return d->currentTaggingAction;
-    }
-    else if (!text().isEmpty())
-    {
-        return d->makeTaggingAction(text());
-    }
-    else
-    {
-        return TaggingAction();
-    }
-}
+//void AddTagsLineEdit::setCurrentTag(TAlbum* album)
+//{
+//    setCurrentTaggingAction(album ? TaggingAction(album->id()) : TaggingAction());
+//    setText(album ? album->title() : QString());
+//}
 
-void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
-{
-    if (compObj())
-    {
-        disconnect(compObj(), SIGNAL(matches(QStringList)),
-                   this, SLOT(setCompletedItems(QStringList)));
-    }
+//void AddTagsLineEdit::setCurrentTaggingAction(const TaggingAction& action)
+//{
+//    if (d->currentTaggingAction == action)
+//    {
+//        return;
+//    }
 
-    if (comp)
-    {
-        connect(comp, SIGNAL(matches(QStringList)),
-                this, SLOT(setCompletedItems(QStringList)));
-    }
+//    d->currentTaggingAction = action;
+//    emit taggingActionSelected(action);
+//}
 
-    KCompletionBase::setCompletionObject(comp, false);
-}
+//TaggingAction AddTagsLineEdit::currentTaggingAction() const
+//{
+//    if (d->currentTaggingAction.isValid())
+//    {
+//        return d->currentTaggingAction;
+//    }
+//    else if (!text().isEmpty())
+//    {
+//        return d->makeTaggingAction(text());
+//    }
+//    else
+//    {
+//        return TaggingAction();
+//    }
+//}
 
-AddTagsCompletionBox* AddTagsLineEdit::tagCompletionBox() const
-{
-    return d->completionBox;
-}
 
-void AddTagsLineEdit::makeSubstringCompletion(const QString&)
-{
-    setCompletedItems(compObj()->substringCompletion(text()));
-}
 
-void AddTagsLineEdit::makeCompletion(const QString& text)
-{
-    // Need to reimplement already because setCompletedItems is not virtual
-    KCompletion* const comp          = compObj();
-    KCompletion::CompletionMode mode = completionMode();
-    d->currentTaggingAction          = TaggingAction();
+//void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
+//{
+//    if (compObj())
+//    {
+//        disconnect(compObj(), SIGNAL(matches(QStringList)),
+//                   this, SLOT(setCompletedItems(QStringList)));
+//    }
 
-    if (text.isEmpty())
-    {
-        emit taggingActionSelected(TaggingAction());
-    }
+//    if (comp)
+//    {
+//        connect(comp, SIGNAL(matches(QStringList)),
+//                this, SLOT(setCompletedItems(QStringList)));
+//    }
 
-    if ( !comp || mode == KCompletion::CompletionNone )
-    {
-        return;    // No completion object...
-    }
+//    KCompletionBase::setCompletionObject(comp, false);
+//}
 
-    const QString match = comp->makeCompletion( text );
+//AddTagsCompletionBox* AddTagsLineEdit::tagCompletionBox() const
+//{
+//    return d->completionBox;
+//}
 
-    if ( mode == KCompletion::CompletionPopup ||
-         mode == KCompletion::CompletionPopupAuto )
-    {
-        if ( text.isEmpty() )
-        {
-            if (d->completionBox)
-            {
-                d->completionBox->hide();
-                d->completionBox->clear();
-            }
-        }
-        else
-        {
 
-            TagsCache* const tc     = TagsCache::instance();
-            QStringList allMatches  = comp->allMatches();
 
-            //get previously entered tags
-            QList<int> recentTagIDs = DatabaseAccess().db()->getRecentlyAssignedTags();
 
-            //reorder matches according to previously entered tags
-            QListIterator<int> id(recentTagIDs);
-            id.toBack();
+//void AddTagsLineEdit::makeSubstringCompletion(const QString&)
+//{
+//    setCompletedItems(compObj()->substringCompletion(text()));
+//}
 
-            while (id.hasPrevious())
-            {
-                QString tagName = tc->tagName(id.previous());
-                int pos         = allMatches.indexOf(tagName);
+//void AddTagsLineEdit::makeCompletion(const QString& text)
+//{
+//    // Need to reimplement already because setCompletedItems is not virtual
+//    KCompletion* const comp          = compObj();
+//    KCompletion::CompletionMode mode = completionMode();
+//    d->currentTaggingAction          = TaggingAction();
 
-                if (pos>0)
-                {
-                    allMatches.move(pos,0);
-                }
-            }
+//    if (text.isEmpty())
+//    {
+//        emit taggingActionSelected(TaggingAction());
+//    }
 
-            setCompletedItems(allMatches);
-        }
-    }
-    else // Auto,  ShortAuto (Man) and Shell
-    {
-        // all other completion modes
-        // If no match or the same match, simply return without completing.
-        if ( match.isEmpty() || match == text )
-        {
-            return;
-        }
+//    if ( !comp || mode == KCompletion::CompletionNone )
+//    {
+//        return;    // No completion object...
+//    }
 
-        if ( mode != KCompletion::CompletionShell )
-        {
-            setUserSelection(false);
-        }
+//    const QString match = comp->makeCompletion( text );
 
-        if ( autoSuggest() )
-        {
-            setCompletedText( match );
-        }
-    }
-}
+//    if ( mode == KCompletion::CompletionPopup ||
+//         mode == KCompletion::CompletionPopupAuto )
+//    {
+//        if ( text.isEmpty() )
+//        {
+//            if (d->completionBox)
+//            {
+//                d->completionBox->hide();
+//                d->completionBox->clear();
+//            }
+//        }
+//        else
+//        {
 
-void AddTagsLineEdit::setCompletedItems(const QStringList& items, bool doAutoSuggest)
-{
-    // Solution in kdelibs is suboptimal for our needs
-    QString txt;
+//            TagsCache* const tc     = TagsCache::instance();
+//            QStringList allMatches  = comp->allMatches();
 
-    if (d->completionBox->isVisible())
-    {
-        // The popup is visible already - do the matching on the initial string,
-        // not on the currently selected one.
-        txt = d->completionBox->cancelledText();
-    }
-    else
-    {
-        txt = text();
-    }
+//            //get previously entered tags
+//            QList<int> recentTagIDs = DatabaseAccess().db()->getRecentlyAssignedTags();
 
-    // The part commented out hides the popup when there is exactly one, full, hit
-    if (txt.isEmpty() /*|| (items.count() == 1 && txt == items.first())*/)
-    {
-        if (d->completionBox->isVisible())
-        {
-            d->completionBox->hide();
-        }
-    }
-    else
-    {
-        if ( d->completionBox->isVisible() )
-        {
-            //QString currentSelection = d->completionBox->currentCompletionText();
+//            //reorder matches according to previously entered tags
+//            QListIterator<int> id(recentTagIDs);
+//            id.toBack();
 
-            d->completionBox->setItems(txt, items);
+//            while (id.hasPrevious())
+//            {
+//                QString tagName = tc->tagName(id.previous());
+//                int pos         = allMatches.indexOf(tagName);
 
-/*
-            const bool blocked = d->completionBox->blockSignals( true );
-            d->completionBox->setCurrentCompletionText(currentSelection);
-            d->completionBox->blockSignals( blocked );
-*/
-        }
-        else // completion box not visible yet -> show it
-        {
-            if ( !txt.isEmpty() )
-            {
-                d->completionBox->setCancelledText( txt );
-            }
+//                if (pos>0)
+//                {
+//                    allMatches.move(pos,0);
+//                }
+//            }
 
-            d->completionBox->setItems(txt, items);
-            d->completionBox->popup();
-        }
+//            setCompletedItems(allMatches);
+//        }
+//    }
+//    else // Auto,  ShortAuto (Man) and Shell
+//    {
+//        // all other completion modes
+//        // If no match or the same match, simply return without completing.
+//        if ( match.isEmpty() || match == text )
+//        {
+//            return;
+//        }
 
-        if ( autoSuggest() && doAutoSuggest && !items.isEmpty())
-        {
-            const int index       = items.first().indexOf( txt );
-            const QString newText = items.first().mid( index );
-            setUserSelection(false); // can be removed? setCompletedText sets it anyway
-            setCompletedText(newText,true);
-        }
-    }
-}
+//        if ( mode != KCompletion::CompletionShell )
+//        {
+//            setUserSelection(false);
+//        }
 
-void AddTagsLineEdit::slotCompletionBoxTextChanged(const QString& t)
-{
-    if (!t.isEmpty() && t != text())
-    {
-        setText(t);
-        setModified(true);
-        emit textEdited(t);
-        end(false); // force cursor at end
-    }
-}
+//        if ( autoSuggest() )
+//        {
+//            setCompletedText( match );
+//        }
+//    }
+//}
 
-void AddTagsLineEdit::slotCompletionBoxTaggingActionChanged(const TaggingAction& action)
-{
-    setCurrentTaggingAction(action);
-}
+//void AddTagsLineEdit::setCompletedItems(const QStringList& items, bool doAutoSuggest)
+//{
+//    // Solution in kdelibs is suboptimal for our needs
+//    QString txt;
 
-void AddTagsLineEdit::slotCompletionBoxCancelled()
-{
-    if (text().isEmpty())
-    {
-        setCurrentTaggingAction(TaggingAction());
-    }
-    else
-    {
-        setCurrentTaggingAction(d->makeTaggingAction(text()));
-    }
-}
+//    if (d->completionBox->isVisible())
+//    {
+//        // The popup is visible already - do the matching on the initial string,
+//        // not on the currently selected one.
+//        txt = d->completionBox->cancelledText();
+//    }
+//    else
+//    {
+//        txt = text();
+//    }
 
-void AddTagsLineEdit::slotReturnPressed(const QString& text)
-{
-    if (text.isEmpty())
-    {
-      //focus back to mainview
-      emit taggingActionFinished();
-      return;
-    }
+//    // The part commented out hides the popup when there is exactly one, full, hit
+//    if (txt.isEmpty() /*|| (items.count() == 1 && txt == items.first())*/)
+//    {
+//        if (d->completionBox->isVisible())
+//        {
+//            d->completionBox->hide();
+//        }
+//    }
+//    else
+//    {
+//        if ( d->completionBox->isVisible() )
+//        {
+//            //QString currentSelection = d->completionBox->currentCompletionText();
 
-    //Q_UNUSED(text);
-    emit taggingActionActivated(currentTaggingAction());
-}
+//            d->completionBox->setItems(txt, items);
 
-void AddTagsLineEdit::slotTextChanged(const QString& text)
-{
-    if (text.isEmpty())
-    {
-        setCurrentTaggingAction(TaggingAction());
-    }
+///*
+//            const bool blocked = d->completionBox->blockSignals( true );
+//            d->completionBox->setCurrentCompletionText(currentSelection);
+//            d->completionBox->blockSignals( blocked );
+//*/
+//        }
+//        else // completion box not visible yet -> show it
+//        {
+//            if ( !txt.isEmpty() )
+//            {
+//                d->completionBox->setCancelledText( txt );
+//            }
 
-    // for cases like copy+paste where autocompletion does not activate
-    else if (!d->currentTaggingAction.isValid())
-    {
-        setCurrentTaggingAction(d->makeTaggingAction(text));
-    }
-}
+//            d->completionBox->setItems(txt, items);
+//            d->completionBox->popup();
+//        }
 
-TaggingAction AddTagsLineEdit::Private::makeTaggingAction(const QString& text)
-{
-    TAlbum* const parentTag = completionBox->parentTag();
-    int parentTagId         = parentTag ? parentTag->id() : 0;
-    return AddTagsCompletionBox::makeDefaultTaggingAction(text, parentTagId);
-}
+//        if ( autoSuggest() && doAutoSuggest && !items.isEmpty())
+//        {
+//            const int index       = items.first().indexOf( txt );
+//            const QString newText = items.first().mid( index );
+//            setUserSelection(false); // can be removed? setCompletedText sets it anyway
+//            setCompletedText(newText,true);
+//        }
+//    }
+//}
+
+//void AddTagsLineEdit::slotCompletionBoxTextChanged(const QString& t)
+//{
+//    if (!t.isEmpty() && t != text())
+//    {
+//        setText(t);
+//        setModified(true);
+//        emit textEdited(t);
+//        end(false); // force cursor at end
+//    }
+//}
+
+//void AddTagsLineEdit::slotCompletionBoxTaggingActionChanged(const TaggingAction& action)
+//{
+//    setCurrentTaggingAction(action);
+//}
+
+//void AddTagsLineEdit::slotCompletionBoxCancelled()
+//{
+//    if (text().isEmpty())
+//    {
+//        setCurrentTaggingAction(TaggingAction());
+//    }
+//    else
+//    {
+//        setCurrentTaggingAction(d->makeTaggingAction(text()));
+//    }
+//}
+
+//void AddTagsLineEdit::slotReturnPressed(const QString& text)
+//{
+//    if (text.isEmpty())
+//    {
+//      //focus back to mainview
+//      emit taggingActionFinished();
+//      return;
+//    }
+
+//    //Q_UNUSED(text);
+//    emit taggingActionActivated(currentTaggingAction());
+//}
+
+//void AddTagsLineEdit::slotTextChanged(const QString& text)
+//{
+//    qDebug() << "Text changed" << text;
+//    if(d->resetFromCompleter)
+//    {
+//        QLineEdit::clear();
+//        d->resetFromCompleter = false;
+//    }
+//    if (text.isEmpty())
+//    {
+//        setCurrentTaggingAction(TaggingAction());
+//    }
+
+//    // for cases like copy+paste where autocompletion does not activate
+//    else if (!d->currentTaggingAction.isValid())
+//    {
+//        setCurrentTaggingAction(d->makeTaggingAction(text));
+    //    }
+//}
+
+
+
+//TaggingAction AddTagsLineEdit::Private::makeTaggingAction(const QString& text)
+//{
+//    TAlbum* const parentTag = completionBox->parentTag();
+//    int parentTagId         = parentTag ? parentTag->id() : 0;
+//    return AddTagsCompletionBox::makeDefaultTaggingAction(text, parentTagId);
+//}
 
 } // namespace Digikam

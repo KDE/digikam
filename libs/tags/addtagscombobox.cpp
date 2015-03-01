@@ -76,7 +76,8 @@ AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
     connect(d->lineEdit, SIGNAL(taggingActionSelected(TaggingAction)),
             this, SLOT(slotLineEditActionSelected(TaggingAction)));
 
-    d->lineEdit->setClearButtonShown(true);
+    // NOTE: Veaceslav edit
+    //d->lineEdit->setClearButtonShown(true);
 
     TagTreeView::Flags flags;
     m_treeView = new TagTreeView(this, flags);
@@ -107,10 +108,10 @@ AddTagsLineEdit* AddTagsComboBox::lineEdit() const
     return d->lineEdit;
 }
 
-AddTagsCompletionBox* AddTagsComboBox::completionBox() const
-{
-    return d->lineEdit->tagCompletionBox();
-}
+//AddTagsCompletionBox* AddTagsComboBox::completionBox() const
+//{
+//    return d->lineEdit->tagCompletionBox();
+//}
 
 void AddTagsComboBox::setTagTreeView(TagTreeView* view)
 {
@@ -151,7 +152,9 @@ TaggingAction AddTagsComboBox::currentTaggingAction()
         return d->viewTaggingAction;
     }
 
-    return d->lineEdit->currentTaggingAction();
+#pragma message "KCompleter port, check what this do"
+    return TaggingAction();
+    //return d->lineEdit->currentTaggingAction();
 }
 
 void AddTagsComboBox::slotViewIndexActivated(const QModelIndex& index)
