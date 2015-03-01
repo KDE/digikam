@@ -946,50 +946,50 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->quickImportMenu->setTitle(i18nc("@action Import photos from camera", "Import"));
-    d->quickImportMenu->setIcon(QIcon::fromTheme("camera-photo"));
-    ac->addAction("import_auto", d->quickImportMenu->menuAction());
+    d->quickImportMenu->setIcon(QIcon::fromTheme(QLatin1String("camera-photo")));
+    ac->addAction(QLatin1String("import_auto"), d->quickImportMenu->menuAction());
 
     // -----------------------------------------------------------------
 
-    d->imageWriteMetadataAction = new QAction(QIcon::fromTheme("document-edit"), i18n("Write Metadata to Selected Images"), this);
+    d->imageWriteMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Write Metadata to Selected Images"), this);
     d->imageWriteMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
                                                    "album with the contents of digiKam database "
                                                    "(image metadata will be overwritten with data from "
                                                    "the database)."));
     connect(d->imageWriteMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageWriteMetadata()));
-    ac->addAction("image_write_metadata", d->imageWriteMetadataAction);
+    ac->addAction(QLatin1String("image_write_metadata"), d->imageWriteMetadataAction);
 
     // -----------------------------------------------------------------
 
-    d->imageReadMetadataAction = new QAction(QIcon::fromTheme("edit-redo"), i18n("Reread Metadata From Selected Images"), this);
+    d->imageReadMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("edit-redo")), i18n("Reread Metadata From Selected Images"), this);
     d->imageReadMetadataAction->setWhatsThis(i18n("Updates the digiKam database from the metadata "
                                                   "of the files in the current album "
                                                   "(information in the database will be overwritten with data from "
                                                   "the files' metadata)."));
     connect(d->imageReadMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageReadMetadata()));
-    ac->addAction("image_read_metadata", d->imageReadMetadataAction);
+    ac->addAction(QLatin1String("image_read_metadata"), d->imageReadMetadataAction);
 
     // -----------------------------------------------------------
 
-    d->imageFindSimilarAction = new QAction(QIcon::fromTheme("tools-wizard"), i18n("Find Similar..."), this);
+    d->imageFindSimilarAction = new QAction(QIcon::fromTheme(QLatin1String("tools-wizard")), i18n("Find Similar..."), this);
     d->imageFindSimilarAction->setWhatsThis(i18n("Find similar images using selected item as reference."));
     connect(d->imageFindSimilarAction, SIGNAL(triggered()), d->view, SLOT(slotImageFindSimilar()));
-    ac->addAction("image_find_similar", d->imageFindSimilarAction);
+    ac->addAction(QLatin1String("image_find_similar"), d->imageFindSimilarAction);
 
     // -----------------------------------------------------------
 
-    d->imageRenameAction = new QAction(QIcon::fromTheme("edit-rename"), i18n("Rename..."), this);
+    d->imageRenameAction = new QAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename..."), this);
     d->imageRenameAction->setWhatsThis(i18n("Change the filename of the currently selected item."));
     connect(d->imageRenameAction, SIGNAL(triggered()), d->view, SLOT(slotImageRename()));
-    ac->addAction("image_rename", d->imageRenameAction);
+    ac->addAction(QLatin1String("image_rename"), d->imageRenameAction);
     ac->setDefaultShortcut(d->imageRenameAction, Qt::Key_F2);
 
     // -----------------------------------------------------------
 
     // Pop up dialog to ask user whether to move to trash
-    d->imageDeleteAction = new QAction(QIcon::fromTheme("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
+    d->imageDeleteAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18nc("Non-pluralized", "Move to Trash"), this);
     connect(d->imageDeleteAction, SIGNAL(triggered()), d->view, SLOT(slotImageDelete()));
-    ac->addAction("image_delete", d->imageDeleteAction);
+    ac->addAction(QLatin1String("image_delete"), d->imageDeleteAction);
     ac->setDefaultShortcut(d->imageDeleteAction, Qt::Key_Delete);
 
     // -----------------------------------------------------------
@@ -999,35 +999,35 @@ void DigikamApp::setupActions()
     //        This is especially important when deleting from a different partiton or from a net source.
     //        Also note that we use the wrong icon for the default album delete action, which should have a thrashcan icon instead
     //        of a red cross, it confuses users.
-    d->imageDeletePermanentlyAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete Permanently"), this);
+    d->imageDeletePermanentlyAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete Permanently"), this);
     connect(d->imageDeletePermanentlyAction, SIGNAL(triggered()), d->view, SLOT(slotImageDeletePermanently()));
-    ac->addAction("image_delete_permanently", d->imageDeletePermanentlyAction);
+    ac->addAction(QLatin1String("image_delete_permanently"), d->imageDeletePermanentlyAction);
     ac->setDefaultShortcut(d->imageDeletePermanentlyAction, Qt::SHIFT+Qt::Key_Delete);
 
     // -----------------------------------------------------------
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
-    d->imageDeletePermanentlyDirectlyAction = new QAction(QIcon::fromTheme("edit-delete"),
+    d->imageDeletePermanentlyDirectlyAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")),
                                                           i18n("Delete permanently without confirmation"), this);
     connect(d->imageDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             d->view, SLOT(slotImageDeletePermanentlyDirectly()));
-    ac->addAction("image_delete_permanently_directly", d->imageDeletePermanentlyDirectlyAction);
+    ac->addAction(QLatin1String("image_delete_permanently_directly"), d->imageDeletePermanentlyDirectlyAction);
 
     // -----------------------------------------------------------
 
-    d->imageTrashDirectlyAction = new QAction(QIcon::fromTheme("user-trash"),
+    d->imageTrashDirectlyAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")),
                                               i18n("Move to trash without confirmation"), this);
     connect(d->imageTrashDirectlyAction, SIGNAL(triggered()),
             d->view, SLOT(slotImageTrashDirectly()));
-    ac->addAction("image_trash_directly", d->imageTrashDirectlyAction);
+    ac->addAction(QLatin1String("image_trash_directly"), d->imageTrashDirectlyAction);
 
     // -----------------------------------------------------------------
 
     d->albumSortAction = new KSelectAction(i18n("&Sort Albums"), this);
     d->albumSortAction->setWhatsThis(i18n("Sort Albums in tree-view."));
     connect(d->albumSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortAlbums(int)));
-    ac->addAction("album_sort", d->albumSortAction);
+    ac->addAction(QLatin1String("album_sort"), d->albumSortAction);
 
     // Use same list order as in applicationsettings enum
     QStringList sortActionList;
@@ -1043,14 +1043,14 @@ void DigikamApp::setupActions()
     d->recurseAlbumsAction->setWhatsThis(i18n("Activate this option to show all sub-albums below "
                                               "the current album."));
     connect(d->recurseAlbumsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseAlbums(bool)));
-    ac->addAction("albums_recursive", d->recurseAlbumsAction);
+    ac->addAction(QLatin1String("albums_recursive"), d->recurseAlbumsAction);
 
     d->recurseTagsAction = new QAction(i18n("Include Tag Sub-Tree"), this);
     d->recurseTagsAction->setCheckable(true);
     d->recurseTagsAction->setWhatsThis(i18n("Activate this option to show all images marked by the given tag "
                                             "and all its sub-tags."));
     connect(d->recurseTagsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseTags(bool)));
-    ac->addAction("tags_recursive", d->recurseTagsAction);
+    ac->addAction(QLatin1String("tags_recursive"), d->recurseTagsAction);
 
     // -----------------------------------------------------------
 
@@ -1058,7 +1058,7 @@ void DigikamApp::setupActions()
     d->imageSortAction->setWhatsThis(i18n("The value by which the images in one album are sorted in the thumbnail view"));
     QSignalMapper* const imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
-    ac->addAction("image_sort", d->imageSortAction);
+    ac->addAction(QLatin1String("image_sort"), d->imageSortAction);
 
     // map to ImageSortSettings enum
     QAction* const sortByNameAction        = d->imageSortAction->addAction(i18n("By Name"));
@@ -1091,10 +1091,10 @@ void DigikamApp::setupActions()
     d->imageSortOrderAction->setWhatsThis(i18n("Defines whether images are sorted in ascending or descending manner."));
     QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
-    ac->addAction("image_sort_order", d->imageSortOrderAction);
+    ac->addAction(QLatin1String("image_sort_order"), d->imageSortOrderAction);
 
-    QAction* const sortAscendingAction  = d->imageSortOrderAction->addAction(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
-    QAction* const sortDescendingAction = d->imageSortOrderAction->addAction(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
+    QAction* const sortAscendingAction  = d->imageSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")),  i18n("Ascending"));
+    QAction* const sortDescendingAction = d->imageSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")), i18n("Descending"));
 
     connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
@@ -1108,7 +1108,7 @@ void DigikamApp::setupActions()
     d->imageGroupAction->setWhatsThis(i18n("The categories in which the images in the thumbnail view are displayed"));
     QSignalMapper* const imageGroupMapper = new QSignalMapper(this);
     connect(imageGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
-    ac->addAction("image_group", d->imageGroupAction);
+    ac->addAction(QLatin1String("image_group"), d->imageGroupAction);
 
     // map to ImageSortSettings enum
     QAction* const noCategoriesAction  = d->imageGroupAction->addAction(i18n("Flat List"));
@@ -1129,10 +1129,10 @@ void DigikamApp::setupActions()
     d->imageGroupSortOrderAction->setWhatsThis(i18n("The sort order of images groups"));
     QSignalMapper* const imageGroupSortOrderMapper = new QSignalMapper(this);
     connect(imageGroupSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImageGroupOrder(int)));
-    ac->addAction("image_group_sort_order", d->imageGroupSortOrderAction);
+    ac->addAction(QLatin1String("image_group_sort_order"), d->imageGroupSortOrderAction);
 
-    QAction* const sortGroupsAscending  = d->imageGroupSortOrderAction->addAction(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
-    QAction* const sortGroupsDescending = d->imageGroupSortOrderAction->addAction(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
+    QAction* const sortGroupsAscending  = d->imageGroupSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")),  i18n("Ascending"));
+    QAction* const sortGroupsDescending = d->imageGroupSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")), i18n("Descending"));
 
     connect(sortGroupsAscending,  SIGNAL(triggered()), imageGroupSortOrderMapper, SLOT(map()));
     connect(sortGroupsDescending, SIGNAL(triggered()), imageGroupSortOrderMapper, SLOT(map()));
@@ -1149,29 +1149,29 @@ void DigikamApp::setupActions()
 
     d->selectAllAction = new QAction(i18n("Select All"), this);
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
-    ac->addAction("selectAll", d->selectAllAction);
+    ac->addAction(QLatin1String("selectAll"), d->selectAllAction);
     ac->setDefaultShortcut(d->selectAllAction, Qt::CTRL+Qt::Key_A);
 
     // -----------------------------------------------------------------
 
     d->selectNoneAction = new QAction(i18n("Select None"), this);
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
-    ac->addAction("selectNone", d->selectNoneAction);
+    ac->addAction(QLatin1String("selectNone"), d->selectNoneAction);
     ac->setDefaultShortcut(d->selectNoneAction, Qt::CTRL+Qt::SHIFT+Qt::Key_A);
 
     // -----------------------------------------------------------------
 
     d->selectInvertAction = new QAction(i18n("Invert Selection"), this);
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
-    ac->addAction("selectInvert", d->selectInvertAction);
+    ac->addAction(QLatin1String("selectInvert"), d->selectInvertAction);
     ac->setDefaultShortcut(d->selectInvertAction, Qt::CTRL+Qt::Key_I);
 
     // -----------------------------------------------------------
 
-    d->showBarAction = new QAction(QIcon::fromTheme("view-choose"), i18n("Show Thumbbar"), this);
+    d->showBarAction = new QAction(QIcon::fromTheme(QLatin1String("view-choose")), i18n("Show Thumbbar"), this);
     d->showBarAction->setCheckable(true);
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
-    ac->addAction("showthumbs", d->showBarAction);
+    ac->addAction(QLatin1String("showthumbs"), d->showBarAction);
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
 
     createSettingsActions();
@@ -1185,72 +1185,72 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->zoomPlusAction  = buildStdAction(StdZoomInAction, d->view, SLOT(slotZoomIn()), this);
-    QKeySequence keysPlus(d->zoomPlusAction->shortcut(), Qt::Key_Plus);
-    ac->addAction("album_zoomin", d->zoomPlusAction);
+    QKeySequence keysPlus(d->zoomPlusAction->shortcut()[0], Qt::Key_Plus);
+    ac->addAction(QLatin1String("album_zoomin"), d->zoomPlusAction);
     ac->setDefaultShortcut(d->zoomPlusAction, keysPlus);
 
     // -----------------------------------------------------------
 
     d->zoomMinusAction  = buildStdAction(StdZoomOutAction, d->view, SLOT(slotZoomOut()), this);
-    QKeySequence keysMinus(d->zoomMinusAction->shortcut(), Qt::Key_Minus);
-    ac->addAction("album_zoomout", d->zoomMinusAction);
+    QKeySequence keysMinus(d->zoomMinusAction->shortcut()[0], Qt::Key_Minus);
+    ac->addAction(QLatin1String("album_zoomout"), d->zoomMinusAction);
     ac->setDefaultShortcut(d->zoomMinusAction, keysMinus);
 
     // -----------------------------------------------------------
 
-    d->zoomTo100percents = new QAction(QIcon::fromTheme("zoom-original"), i18n("Zoom to 100%"), this);
+    d->zoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
-    ac->addAction("album_zoomto100percents", d->zoomTo100percents);
+    ac->addAction(QLatin1String("album_zoomto100percents"), d->zoomTo100percents);
     ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Comma);
 
     // -----------------------------------------------------------
 
-    d->zoomFitToWindowAction = new QAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18n("Fit to &Window"), this);
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
-    ac->addAction("album_zoomfit2window", d->zoomFitToWindowAction);
+    ac->addAction(QLatin1String("album_zoomfit2window"), d->zoomFitToWindowAction);
     ac->setDefaultShortcut(d->zoomFitToWindowAction, Qt::ALT + Qt::CTRL + Qt::Key_E);
 
     // -----------------------------------------------------------
 
-    createFullScreenAction("full_screen");
+    createFullScreenAction(QLatin1String("full_screen"));
     createSidebarActions();
 
     // -----------------------------------------------------------
 
     d->slideShowAction = new QMenu(i18n("Slideshow"), this);
-    d->slideShowAction->setIcon(QIcon::fromTheme("view-presentation"));
-    ac->addAction("slideshow", d->slideShowAction->menuAction());
+    d->slideShowAction->setIcon(QIcon::fromTheme(QLatin1String("view-presentation")));
+    ac->addAction(QLatin1String("slideshow"), d->slideShowAction->menuAction());
 
     d->slideShowAllAction = new QAction(i18n("All"), this);
     connect(d->slideShowAllAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowAll()));
-    ac->addAction("slideshow_all", d->slideShowAllAction);
+    ac->addAction(QLatin1String("slideshow_all"), d->slideShowAllAction);
     ac->setDefaultShortcut(d->slideShowAllAction, Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowAllAction);
 
     d->slideShowSelectionAction = new QAction(i18n("Selection"), this);
     connect(d->slideShowSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowSelection()));
-    ac->addAction("slideshow_selected", d->slideShowSelectionAction);
+    ac->addAction(QLatin1String("slideshow_selected"), d->slideShowSelectionAction);
     ac->setDefaultShortcut(d->slideShowSelectionAction, Qt::ALT+Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowSelectionAction);
 
     d->slideShowRecursiveAction = new QAction(i18n("With All Sub-Albums"), this);
     connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
-    ac->addAction("slideshow_recursive", d->slideShowRecursiveAction);
+    ac->addAction(QLatin1String("slideshow_recursive"), d->slideShowRecursiveAction);
     ac->setDefaultShortcut(d->slideShowRecursiveAction, Qt::SHIFT+Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
     // -----------------------------------------------------------
 
-    d->viewCMViewAction = new QAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction = new QAction(QIcon::fromTheme(QLatin1String("video-display")), i18n("Color-Managed View"), this);
     d->viewCMViewAction->setCheckable(true);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
-    ac->addAction("color_managed_view", d->viewCMViewAction);
+    ac->addAction(QLatin1String("color_managed_view"), d->viewCMViewAction);
     ac->setDefaultShortcut(d->viewCMViewAction, Qt::Key_F12);
 
     // -----------------------------------------------------------
 
     d->quitAction = buildStdAction(StdQuitAction, this, SLOT(slotExit()), this);
-    ac->addAction("app_exit", d->quitAction);
+    ac->addAction(QLatin1String("app_exit"), d->quitAction);
 
     // -----------------------------------------------------------
 
@@ -1258,55 +1258,55 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->kipiHelpAction = new QAction(QIcon::fromTheme("kipi"), i18n("Kipi Plugins Handbook"), this);
+    d->kipiHelpAction = new QAction(QIcon::fromTheme(QLatin1String("kipi")), i18n("Kipi Plugins Handbook"), this);
     connect(d->kipiHelpAction, SIGNAL(triggered()), this, SLOT(slotShowKipiHelp()));
-    ac->addAction("help_kipi", d->kipiHelpAction);
+    ac->addAction(QLatin1String("help_kipi"), d->kipiHelpAction);
 
     // -----------------------------------------------------------
 
     d->tipAction = buildStdAction(StdTipOfDayAction, this, SLOT(slotShowTip()), this);
-    ac->addAction("help_tipofday", d->tipAction);
+    ac->addAction(QLatin1String("help_tipofday"), d->tipAction);
 
     //------------------------------------------------------------
 
-    QAction* const findAction = new QAction(QIcon::fromTheme("system-search"), i18n("Search..."), this);
+    QAction* const findAction = new QAction(QIcon::fromTheme(QLatin1String("system-search")), i18n("Search..."), this);
     connect(findAction, SIGNAL(triggered()), d->view, SLOT(slotNewKeywordSearch()));
-    ac->addAction("search_quick", findAction);
+    ac->addAction(QLatin1String("search_quick"), findAction);
     ac->setDefaultShortcut(findAction, Qt::CTRL+Qt::Key_F);
 
     // -----------------------------------------------------------
 
-    QAction* const advFindAction = new QAction(QIcon::fromTheme("system-search"), i18n("Advanced Search..."), this);
+    QAction* const advFindAction = new QAction(QIcon::fromTheme(QLatin1String("system-search")), i18n("Advanced Search..."), this);
     connect(advFindAction, SIGNAL(triggered()), d->view, SLOT(slotNewAdvancedSearch()));
-    ac->addAction("search_advanced", advFindAction);
+    ac->addAction(QLatin1String("search_advanced"), advFindAction);
     ac->setDefaultShortcut(advFindAction, Qt::CTRL+Qt::ALT+Qt::Key_F);
 
     // -----------------------------------------------------------
 
-    QAction* const duplicatesAction = new QAction(QIcon::fromTheme("tools-wizard"), i18n("Find Duplicates..."), this);
+    QAction* const duplicatesAction = new QAction(QIcon::fromTheme(QLatin1String("tools-wizard")), i18n("Find Duplicates..."), this);
     connect(duplicatesAction, SIGNAL(triggered()), d->view, SLOT(slotNewDuplicatesSearch()));
-    ac->addAction("find_duplicates", duplicatesAction);
+    ac->addAction(QLatin1String("find_duplicates"), duplicatesAction);
     ac->setDefaultShortcut(duplicatesAction, Qt::CTRL+Qt::Key_D);
 
     // -----------------------------------------------------------
 
 #ifdef HAVE_MYSQLSUPPORT
-    QAction* const databaseMigrationAction = new QAction(QIcon::fromTheme("server-database"), i18n("Database Migration..."), this);
+    QAction* const databaseMigrationAction = new QAction(QIcon::fromTheme(QLatin1String("server-database")), i18n("Database Migration..."), this);
     connect(databaseMigrationAction, SIGNAL(triggered()), this, SLOT(slotDatabaseMigration()));
-    ac->addAction("database_migration", databaseMigrationAction);
+    ac->addAction(QLatin1String("database_migration"), databaseMigrationAction);
 #endif
 
     // -----------------------------------------------------------
 
-    d->maintenanceAction = new QAction(QIcon::fromTheme("run-build-prune"), i18n("Maintenance..."), this);
+    d->maintenanceAction = new QAction(QIcon::fromTheme(QLatin1String("run-build-prune")), i18n("Maintenance..."), this);
     connect(d->maintenanceAction, SIGNAL(triggered()), this, SLOT(slotMaintenance()));
-    ac->addAction("maintenance", d->maintenanceAction);
+    ac->addAction(QLatin1String("maintenance"), d->maintenanceAction);
 
     // -----------------------------------------------------------
 
     QAction* const cameraAction = new QAction(i18n("Add Camera Manually..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
-    ac->addAction("camera_add", cameraAction);
+    ac->addAction(QLatin1String("camera_add"), cameraAction);
 
     // -----------------------------------------------------------
 
@@ -1590,30 +1590,30 @@ void DigikamApp::loadCameras()
     KActionCollection *ac = actionCollection();
 
     d->cameraMenu->setTitle(i18n("Cameras"));
-    d->cameraMenu->setIcon(QIcon::fromTheme("camera-photo"));
+    d->cameraMenu->setIcon(QIcon::fromTheme(QLatin1String("camera-photo")));
     d->usbMediaMenu->setTitle(i18n("USB Storage Devices"));
-    d->usbMediaMenu->setIcon(QIcon::fromTheme("drive-removable-media-usb"));
+    d->usbMediaMenu->setIcon(QIcon::fromTheme(QLatin1String("drive-removable-media-usb")));
     d->cardReaderMenu->setTitle(i18n("Card Readers"));
-    d->cardReaderMenu->setIcon(QIcon::fromTheme("media-flash-smart-media"));
+    d->cardReaderMenu->setIcon(QIcon::fromTheme(QLatin1String("media-flash-smart-media")));
 
-    ac->addAction("cameras",     d->cameraMenu->menuAction());
-    ac->addAction("usb_media",   d->usbMediaMenu->menuAction());
-    ac->addAction("card_reader", d->cardReaderMenu->menuAction());
+    ac->addAction(QLatin1String("cameras"),     d->cameraMenu->menuAction());
+    ac->addAction(QLatin1String("usb_media"),   d->usbMediaMenu->menuAction());
+    ac->addAction(QLatin1String("card_reader"), d->cardReaderMenu->menuAction());
 
     // -----------------------------------------------------------------
 
-    d->addImagesAction = new QAction(QIcon::fromTheme("albumfolder-importimages"), i18n("Add Images..."), this);
+    d->addImagesAction = new QAction(QIcon::fromTheme(QLatin1String("albumfolder-importimages")), i18n("Add Images..."), this);
     d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
     connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
-    ac->addAction("import_addImages", d->addImagesAction);
+    ac->addAction(QLatin1String("import_addImages"), d->addImagesAction);
     ac->setDefaultShortcut(d->addImagesAction, Qt::CTRL+Qt::ALT+Qt::Key_I);
 
     // -----------------------------------------------------------------
 
-    d->addFoldersAction = new QAction(QIcon::fromTheme("albumfolder-importdir"), i18n("Add Folders..."), this);
+    d->addFoldersAction = new QAction(QIcon::fromTheme(QLatin1String("albumfolder-importdir")), i18n("Add Folders..."), this);
     d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Album library."));
     connect(d->addFoldersAction, SIGNAL(triggered()), this, SLOT(slotImportAddFolders()));
-    ac->addAction("import_addFolders", d->addFoldersAction);
+    ac->addAction(QLatin1String("import_addFolders"), d->addFoldersAction);
 
     // -- fill manually added cameras ----------------------------------
 
@@ -1647,9 +1647,9 @@ void DigikamApp::slotCameraAdded(CameraType* ctype)
         return;
     }
 
-    QAction* const cAction = new QAction(QIcon::fromTheme("camera-photo"), ctype->title(), d->manualCameraActionGroup);
+    QAction* const cAction = new QAction(QIcon::fromTheme(QLatin1String("camera-photo")), ctype->title(), d->manualCameraActionGroup);
     cAction->setData(ctype->title());
-    actionCollection()->addAction(ctype->title().toUtf8(), cAction);
+    actionCollection()->addAction(ctype->title(), cAction);
 
     ctype->setAction(cAction);
     updateCameraMenu();
@@ -1694,7 +1694,7 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
 
     // the ImportUI will delete itself when it has finished
     ImportUI* const cgui = new ImportUI(this, i18n("Images found in %1", path),
-                                                   "directory browse", "Fixed", path, 1);
+                                        QLatin1String("directory browse"), QLatin1String("Fixed"), path, 1);
     cgui->show();
 
     connect(cgui, SIGNAL(signalLastDestination(QUrl)),
@@ -1798,7 +1798,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         }
 
         Solid::Camera* const camera = device.as<Solid::Camera>();
-        QList<QVariant> list = camera->driverHandle("gphoto").toList();
+        QList<QVariant> list = camera->driverHandle(QLatin1String(QLatin1String("gphoto"))).toList();
 
         // all sanity checks have already been done when creating the action
         if (list.size() < 3)
@@ -1816,10 +1816,10 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Found camera from ids " << vendorId << " " << productId
-                     << " camera is: " << model << " at " << port;
+                                         << " camera is: " << model << " at " << port;
 
             // the ImportUI will delete itself when it has finished
-            ImportUI* const cgui = new ImportUI(this, cameraLabel, model, port, "/", 1);
+            ImportUI* const cgui = new ImportUI(this, cameraLabel, model, port, QLatin1String("/"), 1);
             d->cameraUIMap[udi]  = cgui;
 
             cgui->show();
@@ -1911,7 +1911,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 
         // the ImportUI will delete itself when it has finished
         ImportUI* const cgui = new ImportUI(this, i18n("Images on %1", mediaLabel),
-                                                      "directory browse", "Fixed", path, 1);
+                                            QLatin1String("directory browse"), QLatin1String("Fixed"), path, 1);
         d->cameraUIMap[udi]  = cgui;
 
         cgui->show();
@@ -1957,15 +1957,18 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     QStringList drivers = camera->supportedDrivers();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp");
+    qCDebug(DIGIKAM_GENERAL_LOG) << "fillSolidMenus: Found Camera "
+                                 << QString::fromUtf8("%1 %1").arg(cameraDevice.vendor()).arg(cameraDevice.product())
+                                 << " protocols " << camera->supportedProtocols() 
+                                 << " drivers " << camera->supportedDrivers(QLatin1String("ptp"));
 
     // We handle gphoto2 cameras in this loop
-    if (! (camera->supportedDrivers().contains("gphoto") || camera->supportedProtocols().contains("ptp")) )
+    if (! (camera->supportedDrivers().contains(QLatin1String("gphoto")) || camera->supportedProtocols().contains(QLatin1String("ptp"))) )
     {
         return false;
     }
 
-    QVariant driverHandle = camera->driverHandle("gphoto");
+    QVariant driverHandle = camera->driverHandle(QLatin1String("gphoto"));
 
     if (!driverHandle.canConvert(QVariant::List))
     {
@@ -1975,7 +1978,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     QList<QVariant> driverHandleList = driverHandle.toList();
 
-    if (driverHandleList.size() < 3 || driverHandleList.at(0).toString() != "usb"
+    if (driverHandleList.size() < 3 || driverHandleList.at(0).toString() != QLatin1String("usb")
         || !driverHandleList.at(1).canConvert(QVariant::Int)
         || !driverHandleList.at(2).canConvert(QVariant::Int)
        )
@@ -1992,7 +1995,7 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
     QString vendor  = cameraDevice.vendor();
     QString product = cameraDevice.product();
 
-    if (product == "USB Imaging Interface" || product == "USB Vendor Specific Interface")
+    if (product == QLatin1String("USB Imaging Interface") || product == QLatin1String("USB Vendor Specific Interface"))
     {
         Solid::Device parentUsbDevice = cameraDevice.parent();
 
@@ -2003,9 +2006,9 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 
             if (!vendor.isEmpty() && !product.isEmpty())
             {
-                if (vendor == "Canon, Inc.")
+                if (vendor == QLatin1String("Canon, Inc."))
                 {
-                    vendor = "Canon";
+                    vendor = QLatin1String("Canon");
 
                     if (product.startsWith(QLatin1String("Canon ")))
                     {
@@ -2014,16 +2017,16 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 
                     if (product.endsWith(QLatin1String(" (ptp)")))
                     {
-                        product.chop(6);    // cut off " (ptp)"
+                        product.chop(6);             // cut off " (ptp)"
                     }
                 }
-                else if (vendor == "Fuji Photo Film Co., Ltd")
+                else if (vendor == QLatin1String("Fuji Photo Film Co., Ltd"))
                 {
-                    vendor = "Fuji";
+                    vendor = QLatin1String("Fuji");
                 }
-                else if (vendor == "Nikon Corp.")
+                else if (vendor == QLatin1String("Nikon Corp."))
                 {
-                    vendor = "Nikon";
+                    vendor = QLatin1String("Nikon");
 
                     if (product.startsWith(QLatin1String("NIKON ")))
                     {
@@ -2034,7 +2037,7 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
         }
     }
 
-    return vendor + ' ' + product;
+    return vendor + QLatin1Char(' ') + product;
 }
 
 void DigikamApp::fillSolidMenus()
@@ -2083,7 +2086,7 @@ void DigikamApp::fillSolidMenus()
 
         if (iconName.isEmpty())
         {
-            iconName = "camera-photo";
+            iconName = QLatin1String("camera-photo");
         }
 
         QAction* const action = new QAction(label, d->solidCameraActionGroup);
@@ -2209,7 +2212,7 @@ void DigikamApp::fillSolidMenus()
 
         if (isCamera)
         {
-            label = accessDevice.vendor() + ' ' + accessDevice.product();
+            label = accessDevice.vendor() + QLatin1Char(' ') + accessDevice.product();
         }
         else
         {
@@ -2412,14 +2415,14 @@ void DigikamApp::slotEditKeys()
 void DigikamApp::slotShowTip()
 {
     QStringList tipsFiles;
-    tipsFiles.append("digikam/tips");
-    tipsFiles.append("kipi/tips");
+    tipsFiles.append(QLatin1String("digikam/tips"));
+    tipsFiles.append(QLatin1String("kipi/tips"));
     KTipDialog::showMultiTip(this, tipsFiles, true);
 }
 
 void DigikamApp::slotShowKipiHelp()
 {
-    DXmlGuiWindow::openHandbook( QString(), "kipi-plugins" );
+    DXmlGuiWindow::openHandbook( QString(), QLatin1String("kipi-plugins") );
 }
 
 void DigikamApp::slotDBStat()
@@ -2579,7 +2582,7 @@ void DigikamApp::slotImportAddFolders()
     dlg->setFileMode(QFileDialog::DirectoryOnly);
     dlg->setOption(QFileDialog::DontUseNativeDialog, true);
 
-    QListView* const l = dlg->findChild<QListView*>("listView");
+    QListView* const l = dlg->findChild<QListView*>(QLatin1String("listView"));
 
     if (l)
     {
@@ -2677,7 +2680,7 @@ void DigikamApp::updateCameraMenu()
     }
 
     d->cameraMenu->addSeparator();
-    d->cameraMenu->addAction(actionCollection()->action("camera_add"));
+    d->cameraMenu->addAction(actionCollection()->action(QLatin1String("camera_add")));
 }
 
 void DigikamApp::updateQuickImportAction()
@@ -2740,7 +2743,7 @@ void DigikamApp::setupExifOrientationActions()
             d->view, SLOT(slotImageExifOrientation(int)));
 
     d->imageExifOrientationActionMenu = new QMenu(i18n("Adjust Exif Orientation Tag"), this);
-    ac->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu->menuAction());
+    ac->addAction(QLatin1String("image_set_exif_orientation"), d->imageExifOrientationActionMenu->menuAction());
 
     d->imageSetExifOrientation1Action = new QAction(i18nc("normal exif orientation", "Normal"), this);
     d->imageSetExifOrientation1Action->setCheckable(true);
@@ -2770,14 +2773,14 @@ void DigikamApp::setupExifOrientationActions()
     d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation8Action);
     d->imageSetExifOrientation1Action->setChecked(true);
 
-    ac->addAction("image_set_exif_orientation_normal",                    d->imageSetExifOrientation1Action);
-    ac->addAction("image_set_exif_orientation_flipped_horizontal",        d->imageSetExifOrientation2Action);
-    ac->addAction("image_set_exif_orientation_rotated_upside_down",       d->imageSetExifOrientation3Action);
-    ac->addAction("image_set_exif_orientation_flipped_vertically",        d->imageSetExifOrientation4Action);
-    ac->addAction("image_set_exif_orientation_rotated_right_hor_flipped", d->imageSetExifOrientation5Action);
-    ac->addAction("image_set_exif_orientation_rotated_right",             d->imageSetExifOrientation6Action);
-    ac->addAction("image_set_exif_orientation_rotated_right_ver_flipped", d->imageSetExifOrientation7Action);
-    ac->addAction("image_set_exif_orientation_rotated_left",              d->imageSetExifOrientation8Action);
+    ac->addAction(QLatin1String("image_set_exif_orientation_normal"),                    d->imageSetExifOrientation1Action);
+    ac->addAction(QLatin1String("image_set_exif_orientation_flipped_horizontal"),        d->imageSetExifOrientation2Action);
+    ac->addAction(QLatin1String("image_set_exif_orientation_rotated_upside_down"),       d->imageSetExifOrientation3Action);
+    ac->addAction(QLatin1String("image_set_exif_orientation_flipped_vertically"),        d->imageSetExifOrientation4Action);
+    ac->addAction(QLatin1String("image_set_exif_orientation_rotated_right_hor_flipped"), d->imageSetExifOrientation5Action);
+    ac->addAction(QLatin1String("image_set_exif_orientation_rotated_right"),             d->imageSetExifOrientation6Action);
+    ac->addAction(QLatin1String("image_set_exif_orientation_rotated_right_ver_flipped"), d->imageSetExifOrientation7Action);
+    ac->addAction(QLatin1String("image_set_exif_orientation_rotated_left"),              d->imageSetExifOrientation8Action);
 
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation1Action);
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation2Action);
@@ -2877,44 +2880,44 @@ void DigikamApp::setupImageTransformActions()
     KActionCollection* const ac = actionCollection();
 
     d->imageRotateActionMenu = new QMenu(i18n("Rotate"), this);
-    d->imageRotateActionMenu->setIcon(QIcon::fromTheme("object-rotate-right"));
+    d->imageRotateActionMenu->setIcon(QIcon::fromTheme(QLatin1String("object-rotate-right")));
 
-    QAction* const left = ac->addAction("rotate_ccw");
+    QAction* const left = ac->addAction(QLatin1String("rotate_ccw"));
     left->setText(i18nc("rotate image left", "Left"));
     ac->setDefaultShortcut(left, Qt::SHIFT+Qt::CTRL+Qt::Key_Left);
     connect(left, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(left);
 
-    QAction* const right = ac->addAction("rotate_cw");
+    QAction* const right = ac->addAction(QLatin1String("rotate_cw"));
     right->setText(i18nc("rotate image right", "Right"));
     ac->setDefaultShortcut(right, Qt::SHIFT+Qt::CTRL+Qt::Key_Right);
     connect(right, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(right);
 
-    ac->addAction("image_rotate", d->imageRotateActionMenu->menuAction());
+    ac->addAction(QLatin1String("image_rotate"), d->imageRotateActionMenu->menuAction());
 
     // -----------------------------------------------------------------------------------
 
     d->imageFlipActionMenu = new QMenu(i18n("Flip"), this);
-    d->imageFlipActionMenu->setIcon(QIcon::fromTheme("flip-horizontal"));
+    d->imageFlipActionMenu->setIcon(QIcon::fromTheme(QLatin1String("flip-horizontal")));
     
-    QAction* const hori = ac->addAction("flip_horizontal");
+    QAction* const hori = ac->addAction(QLatin1String("flip_horizontal"));
     hori->setText(i18n("Horizontally"));
     ac->setDefaultShortcut(hori, Qt::CTRL+Qt::Key_Asterisk);
     connect(hori, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageFlipActionMenu->addAction(hori);
 
-    QAction* const verti = ac->addAction("flip_vertical");
+    QAction* const verti = ac->addAction(QLatin1String("flip_vertical"));
     verti->setText(i18n("Vertically"));
     ac->setDefaultShortcut(verti, Qt::CTRL+Qt::Key_Slash);
     connect(verti, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageFlipActionMenu->addAction(verti);
 
-    ac->addAction("image_flip", d->imageFlipActionMenu->menuAction());
+    ac->addAction(QLatin1String("image_flip"), d->imageFlipActionMenu->menuAction());
 
     // -----------------------------------------------------------------------------------
 
@@ -2922,28 +2925,28 @@ void DigikamApp::setupImageTransformActions()
     connect(d->imageAutoExifActionMenu, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
 
-    ac->addAction("image_transform_exif", d->imageAutoExifActionMenu);
+    ac->addAction(QLatin1String("image_transform_exif"), d->imageAutoExifActionMenu);
 }
 
 void DigikamApp::slotTransformAction()
 {
-    if (sender()->objectName() == "rotate_ccw")
+    if (sender()->objectName() == QLatin1String("rotate_ccw"))
     {
         d->view->imageTransform(KExiv2Iface::RotationMatrix::Rotate270);
     }
-    else if (sender()->objectName() == "rotate_cw")
+    else if (sender()->objectName() == QLatin1String("rotate_cw"))
     {
         d->view->imageTransform(KExiv2Iface::RotationMatrix::Rotate90);
     }
-    else if (sender()->objectName() == "flip_horizontal")
+    else if (sender()->objectName() == QLatin1String("flip_horizontal"))
     {
         d->view->imageTransform(KExiv2Iface::RotationMatrix::FlipHorizontal);
     }
-    else if (sender()->objectName() == "flip_vertical")
+    else if (sender()->objectName() == QLatin1String("flip_vertical"))
     {
         d->view->imageTransform(KExiv2Iface::RotationMatrix::FlipVertical);
     }
-    else if (sender()->objectName() == "image_transform_exif")
+    else if (sender()->objectName() == QLatin1String("image_transform_exif"))
     {
         // special value for FileActionMngr
         d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
