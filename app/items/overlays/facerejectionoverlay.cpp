@@ -51,7 +51,7 @@ QSize FaceRejectionOverlayButton::sizeHint() const
 
 QIcon FaceRejectionOverlayButton::icon()
 {
-    return QIcon::fromTheme("dialog-close");
+    return QIcon::fromTheme(QLatin1String("dialog-close"));
 }
 
 void FaceRejectionOverlayButton::updateToolTip()

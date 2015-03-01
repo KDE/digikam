@@ -132,7 +132,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     d->mapWidget->setVisibleMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup|KGeoMap::MouseModeSelectThumbnail);
     KGeoMap::ItemMarkerTiler* const kgeomapMarkerModel = new KGeoMap::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kgeomapMarkerModel);
-    d->mapWidget->setBackend("marble");
+    d->mapWidget->setBackend(QLatin1String("marble"));
 
     d->gpsImageInfoSorter         = new GPSImageInfoSorter(this);
     d->gpsImageInfoSorter->addToKGeoMapWidget(d->mapWidget);
@@ -153,10 +153,10 @@ void MapWidgetView::doLoadState()
     KConfigGroup group = getConfigGroup();
 
     d->gpsImageInfoSorter->setSortOptions(
-        GPSImageInfoSorter::SortOptions(group.readEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions())))
+        GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"), int(d->gpsImageInfoSorter->getSortOptions())))
     );
 
-    const KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
+    const KConfigGroup groupCentralMap = KConfigGroup(&group, QLatin1String("Central Map Widget"));
     d->mapWidget->readSettingsFromGroup(&groupCentralMap);
 }
 
@@ -164,9 +164,9 @@ void MapWidgetView::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
 
-    group.writeEntry("Sort Order", int(d->gpsImageInfoSorter->getSortOptions()));
+    group.writeEntry(QLatin1String("Sort Order"), int(d->gpsImageInfoSorter->getSortOptions()));
 
-    KConfigGroup groupCentralMap = KConfigGroup(&group, "Central Map Widget");
+    KConfigGroup groupCentralMap = KConfigGroup(&group, QLatin1String("Central Map Widget"));
     d->mapWidget->saveSettingsToGroup(&groupCentralMap);
 
     group.sync();
@@ -224,7 +224,9 @@ public:
 };
 
 MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
-                                       DCategorizedSortFilterProxyModel* const filterModel, QObject* const parent, const MapWidgetView::Application application)
+                                       DCategorizedSortFilterProxyModel* const filterModel,
+                                       QObject* const parent,
+                                       const MapWidgetView::Application application)
     : KGeoMap::ModelHelper(parent),
       d(new Private())
 {

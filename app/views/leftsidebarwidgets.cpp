@@ -97,14 +97,14 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent
                                                            AlbumModificationHelper* const albumModificationHelper)
     : SidebarWidget(parent), d(new Private)
 {
-    setObjectName("AlbumFolderView Sidebar");
+    setObjectName(QLatin1String("AlbumFolderView Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F1);
     d->albumModificationHelper = albumModificationHelper;
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     d->albumFolderView = new AlbumSelectionTreeView(this, model, d->albumModificationHelper);
-    d->albumFolderView->setObjectName("AlbumFolderView");
+    d->albumFolderView->setObjectName(QLatin1String("AlbumFolderView"));
     d->albumFolderView->setConfigGroup(getConfigGroup());
     d->albumFolderView->setExpandNewCurrentItem(true);
     d->albumFolderView->setAlbumManagerCurrentAlbum(true);
@@ -168,7 +168,7 @@ void AlbumFolderViewSideBarWidget::setCurrentAlbum(PAlbum* album)
 
 const QIcon AlbumFolderViewSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("folder-image");
+    return QIcon::fromTheme(QLatin1String("folder-image"));
 }
 
 const QString AlbumFolderViewSideBarWidget::getCaption()
@@ -215,21 +215,21 @@ public:
     static const QString configTagsSourceEntry;
 };
 
-const QString TagViewSideBarWidget::Private::configTagsSourceEntry("TagsSource");
+const QString TagViewSideBarWidget::Private::configTagsSourceEntry(QLatin1String("TagsSource"));
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
-    : SidebarWidget(parent), d(new Private)
+    : SidebarWidget(parent),
+      d(new Private)
 {
-    setObjectName("TagView Sidebar");
+    setObjectName(QLatin1String("TagView Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F2);
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
-    d->openTagMngr   = new QPushButton( i18n("Open Tag Manager"));
-
-    d->noTagsBtn = new QRadioButton(i18n("No Tags"), this);
-    d->tagsBtn   = new QRadioButton(i18n("Existing Tags"), this);
-    d->btnGroup  = new QButtonGroup(this);
+    d->openTagMngr = new QPushButton( i18n("Open Tag Manager"));
+    d->noTagsBtn   = new QRadioButton(i18n("No Tags"), this);
+    d->tagsBtn     = new QRadioButton(i18n("Existing Tags"), this);
+    d->btnGroup    = new QButtonGroup(this);
     d->btnGroup->addButton(d->noTagsBtn);
     d->btnGroup->addButton(d->tagsBtn);
     d->btnGroup->setId(d->noTagsBtn, 0);
@@ -342,7 +342,7 @@ void TagViewSideBarWidget::setNoTagsAlbum()
         SearchXmlWriter writer;
         writer.setFieldOperator((SearchXml::standardFieldOperator()));
         writer.writeGroup();
-        writer.writeField("notag", SearchXml::Equal);
+        writer.writeField(QLatin1String("notag"), SearchXml::Equal);
         writer.finishField();
         writer.finishGroup();
         writer.finish();
@@ -376,7 +376,7 @@ void TagViewSideBarWidget::setNoTagsAlbum()
 
 const QIcon TagViewSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("tag");
+    return QIcon::fromTheme(QLatin1String("tag"));
 }
 
 const QString TagViewSideBarWidget::getCaption()
@@ -435,15 +435,17 @@ public:
 
     Private() :
         labelsTree(0)
-    {}
+    {
+    }
 
     AlbumLabelsTreeView* labelsTree;
 };
 
 LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent) :
-    SidebarWidget(parent), d(new Private)
+    SidebarWidget(parent),
+    d(new Private)
 {
-    setObjectName("Labels Sidebar");
+    setObjectName(QLatin1String("Labels Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F3);
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
@@ -493,7 +495,7 @@ void LabelsSideBarWidget::doSaveState()
 
 const QIcon LabelsSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("favorites");
+    return QIcon::fromTheme(QLatin1String("favorites"));
 }
 
 const QString LabelsSideBarWidget::getCaption()
@@ -522,9 +524,10 @@ public:
 
 DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent, DateAlbumModel* const model,
                                                          ImageAlbumFilterModel* const imageFilterModel)
-    : SidebarWidget(parent), d(new Private)
+    : SidebarWidget(parent),
+      d(new Private)
 {
-    setObjectName("DateFolderView Sidebar");
+    setObjectName(QLatin1String("DateFolderView Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F4);
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
@@ -577,7 +580,7 @@ void DateFolderViewSideBarWidget::gotoDate(const QDate& date)
 
 const QIcon DateFolderViewSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("view-calendar-list");
+    return QIcon::fromTheme(QLatin1String("view-calendar-list"));
 }
 
 const QString DateFolderViewSideBarWidget::getCaption()
@@ -632,9 +635,9 @@ public:
     AlbumPointer<SAlbum>      currentTimelineSearch;
 };
 
-const QString TimelineSideBarWidget::Private::configHistogramTimeUnitEntry("Histogram TimeUnit");
-const QString TimelineSideBarWidget::Private::configHistogramScaleEntry("Histogram Scale");
-const QString TimelineSideBarWidget::Private::configCursorPositionEntry("Cursor Position");
+const QString TimelineSideBarWidget::Private::configHistogramTimeUnitEntry(QLatin1String("Histogram TimeUnit"));
+const QString TimelineSideBarWidget::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
+const QString TimelineSideBarWidget::Private::configCursorPositionEntry(QLatin1String("Cursor Position"));
 
 // --------------------------------------------------------
 
@@ -642,7 +645,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
                                              SearchModificationHelper* const searchModificationHelper)
     : SidebarWidget(parent), d(new Private)
 {
-    setObjectName("TimeLine Sidebar");
+    setObjectName(QLatin1String("TimeLine Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F5);
 
     d->searchModificationHelper = searchModificationHelper;
@@ -684,13 +687,13 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
 
     QToolButton* const linHistoButton = new QToolButton(scaleBox);
     linHistoButton->setToolTip( i18n( "Linear" ) );
-    linHistoButton->setIcon(QIcon::fromTheme("view-object-histogram-linear"));
+    linHistoButton->setIcon(QIcon::fromTheme(QLatin1String("view-object-histogram-linear")));
     linHistoButton->setCheckable(true);
     d->scaleBG->addButton(linHistoButton, TimeLineWidget::LinScale);
 
     QToolButton* const logHistoButton = new QToolButton(scaleBox);
     logHistoButton->setToolTip( i18n( "Logarithmic" ) );
-    logHistoButton->setIcon(QIcon::fromTheme("view-object-histogram-logarithmic"));
+    logHistoButton->setIcon(QIcon::fromTheme(QLatin1String("view-object-histogram-logarithmic")));
     logHistoButton->setCheckable(true);
     d->scaleBG->addButton(logHistoButton, TimeLineWidget::LogScale);
 
@@ -725,7 +728,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     hbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(hbox2);
-    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->resetButton->setToolTip(i18n("Clear current selection"));
     d->resetButton->setWhatsThis(i18n("If you press this button, the current date selection on the time-line will be cleared."));
     d->nameEdit    = new QLineEdit(hbox2);
@@ -734,7 +737,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
                                    "\"Searches\" view"));
 
     d->saveButton  = new QToolButton(hbox2);
-    d->saveButton->setIcon(QIcon::fromTheme("document-save"));
+    d->saveButton->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
     d->saveButton->setEnabled(false);
     d->saveButton->setToolTip(i18n("Save current selection to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("If you press this button, the dates selected on the time-line will be "
@@ -906,7 +909,7 @@ void TimelineSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 const QIcon TimelineSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("player-time");
+    return QIcon::fromTheme(QLatin1String("player-time"));
 }
 
 const QString TimelineSideBarWidget::getCaption()
@@ -1083,9 +1086,10 @@ public:
 
 SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
                                          SearchModificationHelper* const searchModificationHelper)
-    : SidebarWidget(parent), d(new Private)
+    : SidebarWidget(parent),
+      d(new Private)
 {
-    setObjectName("Search Sidebar");
+    setObjectName(QLatin1String("Search Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F6);
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
@@ -1153,7 +1157,7 @@ void SearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 const QIcon SearchSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("edit-find");
+    return QIcon::fromTheme(QLatin1String("edit-find"));
 }
 
 const QString SearchSideBarWidget::getCaption()
@@ -1188,9 +1192,10 @@ public:
 
 FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
                                                    SearchModificationHelper* const searchModificationHelper)
-    : SidebarWidget(parent), d(new Private)
+    : SidebarWidget(parent),
+      d(new Private)
 {
-    setObjectName("Fuzzy Search Sidebar");
+    setObjectName(QLatin1String("Fuzzy Search Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F7);
 
     d->fuzzySearchView        = new FuzzySearchView(searchModel, searchModificationHelper, this);
@@ -1238,7 +1243,7 @@ void FuzzySearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 const QIcon FuzzySearchSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("tools-wizard");
+    return QIcon::fromTheme(QLatin1String("tools-wizard"));
 }
 
 const QString FuzzySearchSideBarWidget::getCaption()
@@ -1279,9 +1284,10 @@ public:
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
                                                SearchModificationHelper* const searchModificationHelper,
                                                ImageFilterModel* const imageFilterModel,  QItemSelectionModel* const itemSelectionModel)
-    : SidebarWidget(parent), d(new Private)
+    : SidebarWidget(parent),
+      d(new Private)
 {
-    setObjectName("GPS Search Sidebar");
+    setObjectName(QLatin1String("GPS Search Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F8);
 
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
@@ -1329,7 +1335,7 @@ void GPSSearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 const QIcon GPSSearchSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("applications-internet");
+    return QIcon::fromTheme(QLatin1String("applications-internet"));
 }
 
 const QString GPSSearchSideBarWidget::getCaption()
@@ -1364,9 +1370,10 @@ public:
 
 PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const model,
                                          SearchModificationHelper* const searchModificationHelper)
-    : SidebarWidget(parent), d(new Private)
+    : SidebarWidget(parent),
+      d(new Private)
 {
-    setObjectName("People Sidebar");
+    setObjectName(QLatin1String("People Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F9);
 
     d->searchModificationHelper = searchModificationHelper;
@@ -1377,7 +1384,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
 
-    d->tagFolderView->filteredModel()->listOnlyTagsWithProperty("person");
+    d->tagFolderView->filteredModel()->listOnlyTagsWithProperty(QLatin1String("person"));
     d->tagFolderView->filteredModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);
 
     d->tagSearchBar   = new SearchTextBar(this, "DigikamViewPeopleSearchBar");
@@ -1390,7 +1397,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
     d->rescanButton->setText(i18n("Scan collection for faces"));
 
     d->personIcon     = new QLabel;
-    d->personIcon->setPixmap(QIcon::fromTheme("edit-image-face-show").pixmap(48));
+    d->personIcon->setPixmap(QIcon::fromTheme(QLatin1String("edit-image-face-show")).pixmap(48));
 
     d->textLabel      = new QLabel(i18n("People Tags"));
 
@@ -1463,7 +1470,7 @@ void PeopleSideBarWidget::slotScanForFaces()
 
 const QIcon PeopleSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("edit-image-face-show");
+    return QIcon::fromTheme(QLatin1String("edit-image-face-show"));
 }
 
 const QString PeopleSideBarWidget::getCaption()

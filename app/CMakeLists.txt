@@ -174,7 +174,7 @@ target_link_libraries(digikamgui
                       KF5::KIOCore
                       KF5::NotifyConfig
 
-                      KF5::KDELibs4Support # required for KIO::NetAccess in digikamview
+                      KF5::KDELibs4Support
 )
 
 # TODO check if these linkings are required?

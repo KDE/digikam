@@ -71,18 +71,18 @@ QStringList ColumnItemProperties::getSubColumns()
 TableViewColumnDescription ColumnItemProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("item-properties"), i18n("Item properties"));
-    description.setIcon("image-x-generic");
+    description.setIcon(QLatin1String("image-x-generic"));
 
-    description.addSubColumn(TableViewColumnDescription("width",                i18n("Width")));
-    description.addSubColumn(TableViewColumnDescription("height",               i18n("Height")));
-    description.addSubColumn(TableViewColumnDescription("dimensions",           i18n("Dimensions")));
-    description.addSubColumn(TableViewColumnDescription("pixelcount",           i18n("Pixel count")));
-    description.addSubColumn(TableViewColumnDescription("bitdepth",             i18n("Bit depth")));
-    description.addSubColumn(TableViewColumnDescription("colormode",            i18n("Color mode")));
-    description.addSubColumn(TableViewColumnDescription("itemtype",             i18n("Type")));
-    description.addSubColumn(TableViewColumnDescription("itemcreationdatetime", i18n("Creation date/time")));
-    description.addSubColumn(TableViewColumnDescription("itemdigitizationtime", i18n("Digitization date/time")));
-    description.addSubColumn(TableViewColumnDescription("itemaspectratio",      i18n("Aspect ratio")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("width"),                i18n("Width")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("height"),               i18n("Height")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("dimensions"),           i18n("Dimensions")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("pixelcount"),           i18n("Pixel count")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("bitdepth"),             i18n("Bit depth")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("colormode"),            i18n("Color mode")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("itemtype"),             i18n("Type")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("itemcreationdatetime"), i18n("Creation date/time")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("itemdigitizationtime"), i18n("Digitization date/time")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("itemaspectratio"),      i18n("Aspect ratio")));
 
     return description;
 }
@@ -183,7 +183,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             const QString widthString  = QLocale().toString(imgSize.width());
             const QString heightString = QLocale().toString(imgSize.height());
 
-            return QString("%1x%2").arg(widthString).arg(heightString);
+            return QString::fromUtf8("%1x%2").arg(widthString).arg(heightString);
         }
 
         case SubColumnPixelCount:
@@ -218,7 +218,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             const ImageCommonContainer commonInfo = info.imageCommonContainer();
             const int bitDepth                    = commonInfo.colorDepth;
 
-            return QString("%1 bpp").arg(bitDepth);
+            return QString::fromUtf8("%1 bpp").arg(bitDepth);
         }
 
         case SubColumnColorMode:

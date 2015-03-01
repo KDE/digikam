@@ -69,15 +69,15 @@ QStringList ColumnDigikamProperties::getSubColumns()
 TableViewColumnDescription ColumnDigikamProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("digikam-properties"), i18n("digiKam properties"));
-    description.setIcon("imagecomment");
+    description.setIcon(QLatin1String("imagecomment"));
 
-    description.addSubColumn(TableViewColumnDescription("digikam-rating",     i18n("Rating")).setIcon("draw-star"));
-    description.addSubColumn(TableViewColumnDescription("digikam-picklabel",  i18n("Pick label")).setIcon("flag-red"));
-    description.addSubColumn(TableViewColumnDescription("digikam-colorlabel", i18n("Color label")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-rating"),     i18n("Rating")).setIcon(QLatin1String("draw-star")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-picklabel"),  i18n("Pick label")).setIcon(QLatin1String("flag-red")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-colorlabel"), i18n("Color label")));
     /// @todo This column will show the 'default' title. Add a configuration dialog to choose different languages.
-    description.addSubColumn(TableViewColumnDescription("digikam-title",      i18n("Title")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-title"),      i18n("Title")));
     /// @todo This column will show the 'default' caption. Add a configuration dialog to choose different languages.
-    description.addSubColumn(TableViewColumnDescription("digikam-caption",    i18n("Caption")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-caption"),    i18n("Caption")));
 
     return description;
 }
@@ -136,7 +136,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
         }
     }
 
-    if (role==Qt::ForegroundRole)
+    if (role == Qt::ForegroundRole)
     {
         switch (subColumn)
         {

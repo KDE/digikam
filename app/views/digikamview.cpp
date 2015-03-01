@@ -38,7 +38,8 @@
 
 #include <ktoolinvocation.h>
 #include <krun.h>
-#include <kio/netaccess.h>
+
+#include <kio/statjob.h>
 
 // Local includes
 
@@ -139,7 +140,7 @@ public:
         leftSideBar(0),
         rightSideBar(0),
         filterWidget(0),
-        optionAlbumViewPrefix("AlbumView"),
+        optionAlbumViewPrefix(QLatin1String("AlbumView")),
         modelCollection(0),
         labelsSearchHandler(0)
     {
@@ -266,7 +267,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->splitter->setOpaqueResize(false);
 
     d->leftSideBar = new Sidebar(this, d->splitter, Qt::LeftEdge);
-    d->leftSideBar->setObjectName("Digikam Left Sidebar");
+    d->leftSideBar->setObjectName(QLatin1String("Digikam Left Sidebar"));
     d->splitter->setParent(this);
 
     // The dock area where the thumbnail bar is allowed to go.
@@ -292,7 +293,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 #endif //HAVE_VIDEOPLAYER
 
     d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, Qt::RightEdge, true);
-    d->rightSideBar->setObjectName("Digikam Right Sidebar");
+    d->rightSideBar->setObjectName(QLatin1String("Digikam Right Sidebar"));
 
     // album folder view
     d->albumFolderSideBar = new AlbumFolderViewSideBarWidget(d->leftSideBar,
@@ -376,7 +377,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     // Tags Filter sidebar tab contents.
     d->filterWidget   = new FilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
-    d->rightSideBar->appendTab(d->filterWidget, QIcon::fromTheme("view-filter"), i18n("Filters"));
+    d->rightSideBar->appendTab(d->filterWidget, QIcon::fromTheme(QLatin1String("view-filter")), i18n("Filters"));
 
     // Versions sidebar overlays
     d->rightSideBar->getFiltersHistoryTab()->addOpenAlbumAction(d->iconView->imageModel());
@@ -720,17 +721,17 @@ void DigikamView::loadViewState()
     d->filterWidget->loadState();
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("MainWindow");
+    KConfigGroup group        = config->group(QLatin1String("MainWindow"));
 
     // Restore the splitter
     d->splitter->restoreState(group);
 
     // Restore the thumbnail bar dock.
     QByteArray thumbbarState;
-    thumbbarState     = group.readEntry("ThumbbarState", thumbbarState);
+    thumbbarState     = group.readEntry(QLatin1String("ThumbbarState"), thumbbarState);
     d->dockArea->restoreState(QByteArray::fromBase64(thumbbarState));
 
-    d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
+    d->initialAlbumID = group.readEntry(QLatin1String("InitialAlbumID"), 0);
 
 #ifdef HAVE_KGEOMAP
     d->mapView->loadState();
@@ -743,7 +744,7 @@ void DigikamView::loadViewState()
 void DigikamView::saveViewState()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("MainWindow");
+    KConfigGroup group        = config->group(QLatin1String("MainWindow"));
 
     foreach(SidebarWidget* const widget, d->leftSideBarWidgets)
     {
@@ -760,7 +761,7 @@ void DigikamView::saveViewState()
     // (when the user is in image preview mode) when the layout is saved, it
     // also reappears when restoring the view, while it should always be hidden.
     d->stackedview->thumbBarDock()->close();
-    group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
+    group.writeEntry(QLatin1String("ThumbbarState"), d->dockArea->saveState().toBase64());
 
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
     Album* album            = 0;
@@ -772,11 +773,11 @@ void DigikamView::saveViewState()
 
     if (album)
     {
-        group.writeEntry("InitialAlbumID", album->globalID());
+        group.writeEntry(QLatin1String("InitialAlbumID"), album->globalID());
     }
     else
     {
-        group.writeEntry("InitialAlbumID", 0);
+        group.writeEntry(QLatin1String("InitialAlbumID"), 0);
     }
 
 #ifdef HAVE_KGEOMAP
@@ -1308,7 +1309,9 @@ void DigikamView::slotAlbumOpenInTerminal()
 
     // If the given directory is not local, it can still be the URL of an
     // ioslave using UDS_LOCAL_PATH which to be converted first.
-    QUrl url = KIO::NetAccess::mostLocalUrl(QUrl::fromLocalFile(dir), this);
+    KIO::StatJob* const job = KIO::mostLocalUrl(QUrl::fromLocalFile(dir), KIO::HideProgressInfo);
+    job->exec();
+    QUrl url = job->mostLocalUrl();
 
     //If the URL is local after the above conversion, set the directory.
     if (url.isLocalFile())

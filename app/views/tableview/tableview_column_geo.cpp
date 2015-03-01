@@ -45,13 +45,13 @@ QString FormatAltitude(const qreal altitudeInMeters, const QLocale::MeasurementS
     if (measureSystem == QLocale::MetricSystem)
     {
         const QString altitudeInMetersString = QLocale().toString(altitudeInMeters);
-        return QString("%1 m").arg(altitudeInMetersString);
+        return QString::fromUtf8("%1 m").arg(altitudeInMetersString);
     }
     else
     {
         const qreal altitudeInFeet         = altitudeInMeters /* m */ / ( 0.3048 /* m/foot */ );
         const QString altitudeInFeetString = QLocale().toString(altitudeInFeet, 'g', 2);
-        return QString("%1 ft").arg(altitudeInFeetString);
+        return QString::fromUtf8("%1 ft").arg(altitudeInFeetString);
     }
 }
 
@@ -88,10 +88,10 @@ QStringList ColumnGeoProperties::getSubColumns()
 TableViewColumnDescription ColumnGeoProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("geo-properties"), i18n("Geo properties"));
-    description.setIcon("applications-internet");
-    description.addSubColumn(TableViewColumnDescription("geohascoordinates", i18n("Geotagged")));
-    description.addSubColumn(TableViewColumnDescription("geocoordinates",    i18n("Coordinates")));
-    description.addSubColumn(TableViewColumnDescription("geoaltitude",       i18n("Altitude")));
+    description.setIcon(QLatin1String("applications-internet"));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("geohascoordinates"), i18n("Geotagged")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("geocoordinates"),    i18n("Coordinates")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("geoaltitude"),       i18n("Altitude")));
 
     return description;
 }
@@ -158,8 +158,8 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
                 return QString();
             }
 
-            return QString("%1,%2").arg(QLocale().toString(info.latitudeNumber(),  'g', 7))
-                                   .arg(QLocale().toString(info.longitudeNumber(), 'g', 7));
+            return QString::fromUtf8("%1,%2").arg(QLocale().toString(info.latitudeNumber(),  'g', 7))
+                                             .arg(QLocale().toString(info.longitudeNumber(), 'g', 7));
         }
 
         case SubColumnAltitude:
@@ -171,14 +171,14 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
             }
 
             /// @todo Use an enum instead to avoid lots of string comparisons
-            const QString formatKey                  = configuration.getSetting("format", "metric");
+            const QString formatKey                  = configuration.getSetting(QLatin1String("format"), QLatin1String("metric"));
             QLocale::MeasurementSystem measureSystem = QLocale().measurementSystem();
 
-            if (formatKey == "metric")
+            if (formatKey == QLatin1String("metric"))
             {
                 measureSystem = QLocale::MetricSystem;
             }
-            else if (formatKey == "imperial")
+            else if (formatKey == QLatin1String("imperial"))
             {
                 measureSystem = QLocale::ImperialSystem;
             }
@@ -243,13 +243,13 @@ ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(TableViewShared* cons
         {
             QFormLayout* const box1 = new QFormLayout();
             selectorAltitudeUnit    = new QComboBox(this);
-            selectorAltitudeUnit->addItem(i18n("Metric units"),   QString("metric"));
-            selectorAltitudeUnit->addItem(i18n("Imperial units"), QString("imperial"));
+            selectorAltitudeUnit->addItem(i18n("Metric units"),   QLatin1String("metric"));
+            selectorAltitudeUnit->addItem(i18n("Imperial units"), QLatin1String("imperial"));
             box1->addRow(i18n("Display format"), selectorAltitudeUnit);
 
             setLayout(box1);
 
-            const int index = selectorAltitudeUnit->findData(configuration.getSetting("format", "metric"));
+            const int index = selectorAltitudeUnit->findData(configuration.getSetting(QLatin1String("format"), QLatin1String("metric")));
             selectorAltitudeUnit->setCurrentIndex(index >= 0 ? index : 0);
             break;
         }
@@ -266,7 +266,7 @@ ColumnGeoConfigurationWidget::~ColumnGeoConfigurationWidget()
 TableViewColumnConfiguration ColumnGeoConfigurationWidget::getNewConfiguration()
 {
     const QString formatKey = selectorAltitudeUnit->itemData(selectorAltitudeUnit->currentIndex()).toString();
-    configuration.columnSettings.insert("format", formatKey);
+    configuration.columnSettings.insert(QLatin1String("format"), formatKey);
 
     return configuration;
 }

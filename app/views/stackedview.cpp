@@ -34,7 +34,6 @@
 
 #include <kconfiggroup.h>
 
-
 // Local includes
 
 #include "digikam_config.h"
@@ -108,7 +107,8 @@ public:
 };
 
 StackedView::StackedView(QWidget* const parent)
-    : QStackedWidget(parent), d(new Private)
+    : QStackedWidget(parent),
+      d(new Private)
 {
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
@@ -117,7 +117,7 @@ StackedView::StackedView(QWidget* const parent)
     d->thumbBar->setModelsFiltered(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
-    d->thumbBarDock->setObjectName("mainwindow_thumbbar");
+    d->thumbBarDock->setObjectName(QLatin1String("mainwindow_thumbbar"));
 
     d->welcomePageView = new WelcomePageView(this);
 #ifdef HAVE_VIDEOPLAYER
@@ -126,14 +126,14 @@ StackedView::StackedView(QWidget* const parent)
     d->tableView       = new TableView(d->imageIconView->getSelectionModel(),
                                        d->imageIconView->imageFilterModel(),
                                        this);
-    d->tableView->setObjectName("mainwindow_tableview");
+    d->tableView->setObjectName(QLatin1String("mainwindow_tableview"));
 
 #ifdef HAVE_KGEOMAP
     d->mapWidgetView   = new MapWidgetView(d->imageIconView->getSelectionModel(),
                                            d->imageIconView->imageFilterModel(), this,
                                            MapWidgetView::ApplicationDigikam
                                           );
-    d->mapWidgetView->setObjectName("mainwindow_mapwidgetview");
+    d->mapWidgetView->setObjectName(QLatin1String("mainwindow_mapwidgetview"));
 #endif // HAVE_KGEOMAP
 
     insertWidget(IconViewMode,     d->imageIconView);

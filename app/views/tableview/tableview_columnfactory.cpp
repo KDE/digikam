@@ -225,7 +225,7 @@ void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
     for (int i=0; i<nColumns; ++i)
     {
         /// @todo check for invalid column configurations
-        const QString configSubGroupName = QString("Column %1").arg(i);
+        const QString configSubGroupName = QString::fromUtf8("Column %1").arg(i);
         const KConfigGroup subGroup = configGroup.group(configSubGroupName);
 
         /// @todo move loading into TableViewColumnConfiguration
@@ -243,27 +243,27 @@ void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
 
         TableViewColumnDescription nextDesc;
 
-        if (TableViewColumnDescription::FindInListById(allColumns, "thumbnail", &nextDesc))
+        if (TableViewColumnDescription::FindInListById(allColumns, QLatin1String("thumbnail"), &nextDesc))
         {
             columnConfigurationList << nextDesc.toConfiguration();
         }
 
-        if (TableViewColumnDescription::FindInListById(allColumns, "filename", &nextDesc))
+        if (TableViewColumnDescription::FindInListById(allColumns, QLatin1String("filename"), &nextDesc))
         {
             columnConfigurationList << nextDesc.toConfiguration();
         }
 
-        if (TableViewColumnDescription::FindInListById(allColumns, "digikam-rating", &nextDesc))
+        if (TableViewColumnDescription::FindInListById(allColumns, QLatin1String("digikam-rating"), &nextDesc))
         {
             columnConfigurationList << nextDesc.toConfiguration();
         }
 
-        if (TableViewColumnDescription::FindInListById(allColumns, "itemcreationdatetime", &nextDesc))
+        if (TableViewColumnDescription::FindInListById(allColumns, QLatin1String("itemcreationdatetime"), &nextDesc))
         {
             columnConfigurationList << nextDesc.toConfiguration();
         }
 
-        if (TableViewColumnDescription::FindInListById(allColumns, "digikam-title", &nextDesc))
+        if (TableViewColumnDescription::FindInListById(allColumns, QLatin1String("digikam-title"), &nextDesc))
         {
             columnConfigurationList << nextDesc.toConfiguration();
         }
@@ -272,14 +272,14 @@ void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
 
 void TableViewColumnProfile::saveSettings(KConfigGroup& configGroup)
 {
-    configGroup.writeEntry("Profile Name", name);
+    configGroup.writeEntry(QLatin1String("Profile Name"), name);
     const int nColumns = columnConfigurationList.count();
-    configGroup.writeEntry("Column Count", nColumns);
-    configGroup.writeEntry("Header State", headerState);
+    configGroup.writeEntry(QLatin1String("Column Count"), nColumns);
+    configGroup.writeEntry(QLatin1String("Header State"), headerState);
 
     for (int i=0; i<nColumns; ++i)
     {
-        const QString configSubGroupName                        = QString("Column %1").arg(i);
+        const QString configSubGroupName                        = QString::fromUtf8("Column %1").arg(i);
         KConfigGroup subGroup                                   = configGroup.group(configSubGroupName);
         const TableViewColumnConfiguration& columnConfiguration = columnConfigurationList.at(i);;
         columnConfiguration.saveSettings(subGroup);
@@ -290,13 +290,13 @@ void TableViewColumnProfile::saveSettings(KConfigGroup& configGroup)
 
 void TableViewColumnConfiguration::loadSettings(const KConfigGroup& configGroup)
 {
-    columnId            = configGroup.readEntry("Column Id", QString());
-    const int nSettings = configGroup.readEntry("NSettings", int(0));
+    columnId            = configGroup.readEntry(QLatin1String("Column Id"), QString());
+    const int nSettings = configGroup.readEntry(QLatin1String("NSettings"), int(0));
 
     for (int i=0; i<nSettings; ++i)
     {
-        const QString& key   = configGroup.readEntry(QString("Key %1").arg(i), QString());
-        const QString& value = configGroup.readEntry(QString("Value %1").arg(i), QString());
+        const QString& key   = configGroup.readEntry(QString::fromUtf8("Key %1").arg(i),   QString());
+        const QString& value = configGroup.readEntry(QString::fromUtf8("Value %1").arg(i), QString());
 
         if (!key.isEmpty())
         {
@@ -307,18 +307,18 @@ void TableViewColumnConfiguration::loadSettings(const KConfigGroup& configGroup)
 
 void TableViewColumnConfiguration::saveSettings(KConfigGroup& configGroup) const
 {
-    configGroup.writeEntry("Column Id", columnId);
+    configGroup.writeEntry(QLatin1String("Column Id"), columnId);
 
     const int nSettings = columnSettings.count();
-    configGroup.writeEntry("NSettings", nSettings);
+    configGroup.writeEntry(QLatin1String("NSettings"), nSettings);
 
     QHashIterator<QString, QString> settingsIterator(columnSettings);
 
     for (int i=0; settingsIterator.hasNext(); ++i)
     {
         settingsIterator.next();
-        configGroup.writeEntry(QString("Key %1").arg(i), settingsIterator.key());
-        configGroup.writeEntry(QString("Value %1").arg(i), settingsIterator.value());
+        configGroup.writeEntry(QString::fromUtf8("Key %1").arg(i),   settingsIterator.key());
+        configGroup.writeEntry(QString::fromUtf8("Value %1").arg(i), settingsIterator.value());
     }
 }
 

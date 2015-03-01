@@ -149,13 +149,13 @@ QString WelcomePageView::infoPage() const
 
             "<p style='margin-bottom: 0px; margin-left:20px;'>The digiKam team</p>",
 
-            QString(digikam_version),            // %1 : current digiKam version
-            "help:/digikam/index.html",          // %2 : digiKam help:// Url
-            DAboutData::webProjectUrl().url(),   // %3 : digiKam homepage Url
-            "4.x",                               // %4 : prior digiKam version
-            featureItems,                        // %5 : prior KDE version
-            QString(),                           // %6 : generated list of new features
-            QString());                          // %7 : previous digiKam release.
+            QLatin1String(digikam_version),             // %1 : current digiKam version
+            QLatin1String("help:/digikam/index.html"),  // %2 : digiKam help:// Url
+            DAboutData::webProjectUrl().url(),          // %3 : digiKam homepage Url
+            QLatin1String("4.x"),                       // %4 : prior digiKam version
+            featureItems,                               // %5 : prior KDE version
+            QString(),                                  // %6 : generated list of new features
+            QString());                                 // %7 : previous digiKam release.
 
     return info;
 }
@@ -196,17 +196,17 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName) const
 
 void WelcomePageView::slotThemeChanged()
 {
-    QString infoPageCss      = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css");
-    QString digikamCss       = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/about/digikam.css");
+    QString infoPageCss      = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kf5/infopage/kde_infopage.css"));
+    QString digikamCss       = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/about/digikam.css"));
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString slogan           = DAboutData::digiKamSlogan();
-    QString locationHtml     = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/about/main.html");
-    QString locationRtl      = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage_rtl.css" );
-    QString rtl              = qApp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
+    QString locationHtml     = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/about/main.html"));
+    QString locationRtl      = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kf5/infopage/kde_infopage_rtl.css"));
+    QString rtl              = qApp->isRightToLeft() ? QString::fromUtf8("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
 
-    QString content = fileToString(locationHtml);
+    QString content = QString::fromUtf8(fileToString(locationHtml));
     content         = content.arg(infoPageCss) // %1
                       .arg(rtl)                // %2
                       .arg(fontSize)           // %3
