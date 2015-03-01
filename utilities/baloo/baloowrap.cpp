@@ -26,32 +26,22 @@
 // Qt includes
 
 #include <QUrl>
+#include <QDebug>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 
+
 // Baloo includes
 
 #include <Baloo/baloo/file.h>
-#include <Baloo/baloo/filefetchjob.h>
-#include <Baloo/baloo/filemodifyjob.h>
-#include <Baloo/baloo/taglistjob.h>
+#include <kfilemetadata/usermetadata.h>
 
 // Local includes
 
 #include "digikam_debug.h"
-#include "tagscache.h"
-#include "albumdb.h"
-#include "databaseaccess.h"
-#include "databasechangesets.h"
-#include "databaseparameters.h"
-#include "databasetransaction.h"
-#include "databasewatch.h"
-#include "imagecomments.h"
-#include "imageinfo.h"
-#include "imagelister.h"
-#include "tagscache.h"
+
 
 namespace Digikam
 {
@@ -75,10 +65,12 @@ QPointer<BalooWrap> BalooWrap::internalPtr = QPointer<BalooWrap>();
 BalooWrap::BalooWrap(QObject* const parent)
     : QObject(parent), d(new BalooWrap::Private)
 {
+
 }
 
 BalooWrap::~BalooWrap()
 {
+
     delete d;
 }
 
@@ -115,39 +107,31 @@ void BalooWrap::setRating(const QUrl& url, int rating)
 
 void BalooWrap::setAllData(const QUrl& url, QStringList* const tags, QString* const comment, int rating)
 {
+
     if(!d->syncFromDigikamToBaloo)
     {
         return;
     }
 
-    bool write = false;
-    Baloo::File file(url.toLocalFile());
+    KFileMetaData::UserMetaData md(url.path());
 
     if(tags != NULL)
     {
-        file.setTags(*tags);
-        write = true;
+        md.setTags(*tags);
     }
 
     if(comment != NULL)
     {
-        file.setUserComment(*comment);
-        write = true;
+        md.setUserComment(*comment);
     }
 
     if(rating != -1)
     {
         // digiKam store rating as value form 0 to 5
         // while baloo store it as value from 0 to 10
-        file.setRating(rating*2);
-        write = true;
+        md.setRating(rating*2);
     }
 
-    if(write)
-    {
-        Baloo::FileModifyJob* const job = new Baloo::FileModifyJob(file);
-        job->start();
-    }
 }
 
 BalooInfo BalooWrap::getSemanticInfo(const QUrl& url)
@@ -157,20 +141,21 @@ BalooInfo BalooWrap::getSemanticInfo(const QUrl& url)
         return BalooInfo();
     }
 
-    Baloo::FileFetchJob* const job = new Baloo::FileFetchJob(url.toLocalFile());
+    //Baloo::FileFetchJob* const job = new Baloo::FileFetchJob(url.toLocalFile());
 
-    job->exec();
+    //job->exec();
+    KFileMetaData::UserMetaData md(url.path());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Job started";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Job started";
 
-    Baloo::File file = job->file();
+    //Baloo::File file = job->file();
     BalooInfo bInfo;
 
     // Baloo have rating from 0 to 10, while digikam have only from 0 to 5
-    bInfo.rating     = file.rating()/2;
-    bInfo.comment    = file.userComment();
+    bInfo.rating     = md.rating()/2;
+    bInfo.comment    = md.userComment();
 
-    Q_FOREACH(QString tag, file.tags().toSet())
+    Q_FOREACH(QString tag, md.tags().toSet())
     {
         bInfo.tags.append(i18n("BalooTags/") + tag);
     }
@@ -178,112 +163,6 @@ BalooInfo BalooWrap::getSemanticInfo(const QUrl& url)
     return bInfo;
 }
 
-void BalooWrap::slotFetchFinished(KJob* job)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Job finished";
-
-    Baloo::FileFetchJob* const fjob = static_cast<Baloo::FileFetchJob*>(job);
-    Baloo::File file                = fjob->file();
-
-    BalooInfo bInfo;
-    bInfo.rating  = file.rating();
-    bInfo.comment = file.userComment();
-    bInfo.tags    = file.tags().toSet().toList();
-
-    QUrl url = QUrl::fromLocalFile(file.url());
-    addInfoToDigikam(bInfo, url);
-}
-
-int BalooWrap::bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname) const
-{
-    if (tagname.isEmpty())
-    {
-        return 0;
-    }
-
-    QList<int> candidates = TagsCache::instance()->tagsForName(tagname);
-
-    if (candidates.isEmpty())
-    {
-        // add top-level tag
-        return DatabaseAccess().db()->addTag(0, tagname, QString(), 0);
-    }
-    else if (candidates.size() == 1)
-    {
-        return candidates.first();
-    }
-    else
-    {
-        int currentCandidate    = 0;
-        int currentMinimumScore = 0;
-        QList<int> assignedTags = info.tagIds();
-
-        foreach(int tagId, candidates)
-        {
-            // already assigned one of the candidates?
-            if (assignedTags.contains(tagId))
-            {
-                return 0;
-            }
-
-            int id    = tagId;
-            int score = 0;
-
-            do
-            {
-                id = TagsCache::instance()->parentTag(id);
-                score++;
-            }
-            while (id);
-
-            if (!currentMinimumScore || score < currentMinimumScore)
-            {
-                currentCandidate = tagId;
-            }
-        }
-
-        return currentCandidate;
-    }
-}
-
-void BalooWrap::addInfoToDigikam(const BalooInfo& bInfo, const QUrl& fileUrl)
-{
-    QStringList tags = bInfo.tags;
-    QList<int> tagIdsForInfo;
-    ImageInfo info   = ImageInfo::fromUrl(fileUrl);
-
-    // If the path is not in digikam collections, info will be null.
-    // It does the same check first that we would be doing here
-
-    if(info.isNull())
-    {
-        return;
-    }
-
-    const int size = tags.size();
-
-    for (int i = 0; i < size; ++i)
-    {
-        int tagId = bestDigikamTagForTagName(info, tags.at(i));
-
-        if (tagId)
-        {
-            tagIdsForInfo << tagId;
-        }
-    }
-
-    if (!tagIdsForInfo.isEmpty())
-    {
-        DatabaseAccess access;
-        DatabaseTransaction transaction(&access);
-        const int infosSize = tagIdsForInfo.size();
-
-        for (int i = 0; i < infosSize; ++i)
-        {
-            info.setTag(tagIdsForInfo.at(i));
-        }
-    }
-}
 
 void BalooWrap::setSyncToBaloo(bool value)
 {
@@ -306,6 +185,98 @@ void BalooWrap::setSyncToDigikam(bool value)
 }
 
 // NOTE: useful code to extend functionality in the future
+
+//int BalooWrap::bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname) const
+//{
+//    if (tagname.isEmpty())
+//    {
+//        return 0;
+//    }
+
+//    QList<int> candidates = TagsCache::instance()->tagsForName(tagname);
+
+//    if (candidates.isEmpty())
+//    {
+//        // add top-level tag
+//        return DatabaseAccess().db()->addTag(0, tagname, QString(), 0);
+//    }
+//    else if (candidates.size() == 1)
+//    {
+//        return candidates.first();
+//    }
+//    else
+//    {
+//        int currentCandidate    = 0;
+//        int currentMinimumScore = 0;
+//        QList<int> assignedTags = info.tagIds();
+
+//        foreach(int tagId, candidates)
+//        {
+//            // already assigned one of the candidates?
+//            if (assignedTags.contains(tagId))
+//            {
+//                return 0;
+//            }
+
+//            int id    = tagId;
+//            int score = 0;
+
+//            do
+//            {
+//                id = TagsCache::instance()->parentTag(id);
+//                score++;
+//            }
+//            while (id);
+
+//            if (!currentMinimumScore || score < currentMinimumScore)
+//            {
+//                currentCandidate = tagId;
+//            }
+//        }
+
+//        return currentCandidate;
+//    }
+//}
+
+//void BalooWrap::addInfoToDigikam(const BalooInfo& bInfo, const QUrl& fileUrl)
+//{
+//    QStringList tags = bInfo.tags;
+//    QList<int> tagIdsForInfo;
+//    ImageInfo info   = ImageInfo::fromUrl(fileUrl);
+
+//    // If the path is not in digikam collections, info will be null.
+//    // It does the same check first that we would be doing here
+
+//    if(info.isNull())
+//    {
+//        return;
+//    }
+
+//    const int size = tags.size();
+
+//    for (int i = 0; i < size; ++i)
+//    {
+//        int tagId = bestDigikamTagForTagName(info, tags.at(i));
+
+//        if (tagId)
+//        {
+//            tagIdsForInfo << tagId;
+//        }
+//    }
+
+//    if (!tagIdsForInfo.isEmpty())
+//    {
+//        DatabaseAccess access;
+//        DatabaseTransaction transaction(&access);
+//        const int infosSize = tagIdsForInfo.size();
+
+//        for (int i = 0; i < infosSize; ++i)
+//        {
+//            info.setTag(tagIdsForInfo.at(i));
+//        }
+//    }
+//}
+
 //TagSet BalooWrap::allTags() const
 //{
 //    if (d->mAllTags.empty())

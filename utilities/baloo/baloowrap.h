@@ -105,22 +105,23 @@ public:
      */
     BalooInfo getSemanticInfo(const QUrl& url);
 
-    /**
-     * @brief bestDigikamTagForTagName - used in previous Nepomuk implementation,
-     *                                   searches for the best match for tag name
-     * @param info
-     * @param tagname                  - tagname to be searched
-     * @return                         - tagId of the new or existing tag
-     */
-    int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname) const;
+    // NOTE: libbaloowrap is now shared and cannot link to database
+//    /**
+//     * @brief bestDigikamTagForTagName - used in previous Nepomuk implementation,
+//     *                                   searches for the best match for tag name
+//     * @param info
+//     * @param tagname                  - tagname to be searched
+//     * @return                         - tagId of the new or existing tag
+//     */
+//    int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname) const;
 
-    /**
-     * @brief addInfoToDigikam  - alternative way to add info in digiKam, using
-     *                            Database acess, not used now.
-     * @param info
-     * @param url
-     */
-    void addInfoToDigikam(const BalooInfo& info, const QUrl& fileUrl);
+//    /**
+//     * @brief addInfoToDigikam  - alternative way to add info in digiKam, using
+//     *                            Database acess, not used now.
+//     * @param info
+//     * @param url
+//     */
+//    void addInfoToDigikam(const BalooInfo& info, const QUrl& fileUrl);
 
     void setSyncToBaloo(bool value);
 
@@ -130,14 +131,6 @@ public:
 
     bool getSyncToDigikam() const;
 
-public Q_SLOTS:
-
-    /**
-     * @brief slotFetchFinished - used for asyncronous information retrieval
-     *                            does not work now
-     * @param job               - KJob for retrieving Baloo info
-     */
-    void slotFetchFinished(KJob* job);
 
 private:
 
