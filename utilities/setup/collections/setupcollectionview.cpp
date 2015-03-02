@@ -284,12 +284,12 @@ void SetupCollectionTreeView::modelLoadedCollections()
     expandAll();
 
     // Resize name and path column
-    header()->setResizeMode(SetupCollectionModel::ColumnName, QHeaderView::Stretch);
-    header()->setResizeMode(SetupCollectionModel::ColumnPath, QHeaderView::Stretch);
+    header()->setSectionResizeMode(SetupCollectionModel::ColumnName, QHeaderView::Stretch);
+    header()->setSectionResizeMode(SetupCollectionModel::ColumnPath, QHeaderView::Stretch);
 
     // Resize last column, so that delete button is always rightbound
     header()->setStretchLastSection(false); // defaults to true
-    header()->setResizeMode(SetupCollectionModel::ColumnDeleteButton, QHeaderView::Fixed);
+    header()->setSectionResizeMode(SetupCollectionModel::ColumnDeleteButton, QHeaderView::Fixed);
     resizeColumnToContents(SetupCollectionModel::ColumnDeleteButton);
 
     // Resize first column

@@ -58,7 +58,8 @@ public:
 };
 
 FindDuplicatesAlbum::FindDuplicatesAlbum(QWidget* const parent)
-    : QTreeWidget(parent), d(new Private)
+    : QTreeWidget(parent),
+      d(new Private)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
@@ -70,8 +71,8 @@ FindDuplicatesAlbum::FindDuplicatesAlbum(QWidget* const parent)
     setSortingEnabled(true);
     setColumnCount(2);
     setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
-    header()->setResizeMode(0, QHeaderView::Stretch);
-    header()->setResizeMode(1, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     setWhatsThis(i18n("This shows all found duplicate items."));
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),

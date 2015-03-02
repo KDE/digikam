@@ -59,7 +59,8 @@ public:
 };
 
 FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlbum* const album)
-    : QTreeWidgetItem(parent), d(new Private)
+    : QTreeWidgetItem(parent),
+      d(new Private)
 {
     d->album = album;
 
@@ -75,7 +76,7 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlb
         setText(1, QString::number(list.count()));
     }
 
-    setThumb(QIcon::fromTheme("image-x-generic").pixmap(parent->iconSize().width(), QIcon::Disabled), false);
+    setThumb(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(parent->iconSize().width(), QIcon::Disabled), false);
 }
 
 FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
@@ -94,7 +95,7 @@ void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix, bool hasThumb)
     QPixmap pixmap(iconSize + 2, iconSize + 2);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
-    p.drawPixmap((pixmap.width() / 2)  - (pix.width() / 2),
+    p.drawPixmap((pixmap.width()  / 2) - (pix.width()  / 2),
                  (pixmap.height() / 2) - (pix.height() / 2), pix);
 
     QIcon icon = QIcon(pixmap);

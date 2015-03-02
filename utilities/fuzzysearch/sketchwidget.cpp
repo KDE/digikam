@@ -255,16 +255,16 @@ void SketchWidget::replayEvents(int index)
 
 void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
 {
-    writer.writeStartElement("SketchImage");
+    writer.writeStartElement(QLatin1String("SketchImage"));
 
     for (int i = 0; i <= d->eventIndex; ++i)
     {
         const DrawEvent& event = d->drawEventList.at(i);
 
         // Write the pen size and color
-        writer.writeStartElement("Path");
-        writer.writeAttribute("Size", QString::number(event.penWidth));
-        writer.writeAttribute("Color", event.penColor.name());
+        writer.writeStartElement(QLatin1String("Path"));
+        writer.writeAttribute(QLatin1String("Size"), QString::number(event.penWidth));
+        writer.writeAttribute(QLatin1String("Color"), event.penColor.name());
 
         // Write the lines contained in the QPainterPath
 
@@ -280,11 +280,11 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
             {
                 QPoint begin = pos.toPoint();
                 QPoint end = ((QPointF)element).toPoint();
-                writer.writeStartElement("Line");
-                writer.writeAttribute("x1", QString::number(begin.x()));
-                writer.writeAttribute("y1", QString::number(begin.y()));
-                writer.writeAttribute("x2", QString::number(end.x()));
-                writer.writeAttribute("y2", QString::number(end.y()));
+                writer.writeStartElement(QLatin1String("Line"));
+                writer.writeAttribute(QLatin1String("x1"), QString::number(begin.x()));
+                writer.writeAttribute(QLatin1String("y1"), QString::number(begin.y()));
+                writer.writeAttribute(QLatin1String("x2"), QString::number(end.x()));
+                writer.writeAttribute(QLatin1String("y2"), QString::number(end.y()));
                 writer.writeEndElement();
             }
 
@@ -319,7 +319,7 @@ bool SketchWidget::setSketchImageFromXML(const QString& xml)
     {
         element = reader.readNext();
 
-        if (element == QXmlStreamReader::StartElement && reader.name() == "SketchImage")
+        if (element == QXmlStreamReader::StartElement && reader.name() == QLatin1String("SketchImage"))
         {
             return setSketchImageFromXML(reader);
         }
@@ -333,7 +333,7 @@ bool SketchWidget::setSketchImageFromXML(QXmlStreamReader& reader)
     QXmlStreamReader::TokenType element;
 
     // We assume that the reader is positioned at the start element for our XML
-    if (!reader.isStartElement() || reader.name() != "SketchImage")
+    if (!reader.isStartElement() || reader.name() != QLatin1String("SketchImage"))
     {
         return false;
     }
@@ -349,7 +349,7 @@ bool SketchWidget::setSketchImageFromXML(QXmlStreamReader& reader)
         if (element == QXmlStreamReader::StartElement)
         {
             // every chunk (DrawEvent) is stored as a vector path
-            if (reader.name() == "Path")
+            if (reader.name() == QLatin1String("Path"))
             {
                 addPath(reader);    // recurse
             }
@@ -357,7 +357,7 @@ bool SketchWidget::setSketchImageFromXML(QXmlStreamReader& reader)
         else if (element == QXmlStreamReader::EndElement)
         {
             // we have finished
-            if (reader.name() == "SketchImage")
+            if (reader.name() == QLatin1String("SketchImage"))
             {
                 break;
             }
@@ -380,8 +380,8 @@ void SketchWidget::addPath(QXmlStreamReader& reader)
     DrawEvent event;
 
     // Retrieve pen color and size
-    QStringRef size  = reader.attributes().value("Size");
-    QStringRef color = reader.attributes().value("Color");
+    QStringRef size  = reader.attributes().value(QLatin1String("Size"));
+    QStringRef color = reader.attributes().value(QLatin1String("Color"));
 
     if (!size.isEmpty())
     {
@@ -402,12 +402,12 @@ void SketchWidget::addPath(QXmlStreamReader& reader)
         if (element == QXmlStreamReader::StartElement)
         {
             // The line element has four attributes, x1,y1,x2,y2
-            if (reader.name() == "Line")
+            if (reader.name() == QLatin1String("Line"))
             {
-                QStringRef x1 = reader.attributes().value("x1");
-                QStringRef y1 = reader.attributes().value("y1");
-                QStringRef x2 = reader.attributes().value("x2");
-                QStringRef y2 = reader.attributes().value("y2");
+                QStringRef x1 = reader.attributes().value(QLatin1String("x1"));
+                QStringRef y1 = reader.attributes().value(QLatin1String("y1"));
+                QStringRef x2 = reader.attributes().value(QLatin1String("x2"));
+                QStringRef y2 = reader.attributes().value(QLatin1String("y2"));
 
                 if (!x1.isEmpty() && !y1.isEmpty())
                 {
@@ -434,7 +434,7 @@ void SketchWidget::addPath(QXmlStreamReader& reader)
         else if (element == QXmlStreamReader::EndElement)
         {
             // we have finished
-            if (reader.name() == "Path")
+            if (reader.name() == QLatin1String("Path"))
             {
                 break;
             }

@@ -192,20 +192,21 @@ public:
     SearchModificationHelper* searchModificationHelper;
 };
 
-const QString FuzzySearchView::Private::configTabEntry("FuzzySearch Tab");
-const QString FuzzySearchView::Private::configPenSketchSizeEntry("Pen Sketch Size");
-const QString FuzzySearchView::Private::configResultSketchItemsEntry("Result Sketch items");
-const QString FuzzySearchView::Private::configPenSketchHueEntry("Pen Sketch Hue");
-const QString FuzzySearchView::Private::configPenSketchSaturationEntry("Pen Sketch Saturation");
-const QString FuzzySearchView::Private::configPenSkethValueEntry("Pen Sketch Value");
-const QString FuzzySearchView::Private::configSimilarsThresholdEntry("Similars Threshold");
+const QString FuzzySearchView::Private::configTabEntry(QLatin1String("FuzzySearch Tab"));
+const QString FuzzySearchView::Private::configPenSketchSizeEntry(QLatin1String("Pen Sketch Size"));
+const QString FuzzySearchView::Private::configResultSketchItemsEntry(QLatin1String("Result Sketch items"));
+const QString FuzzySearchView::Private::configPenSketchHueEntry(QLatin1String("Pen Sketch Hue"));
+const QString FuzzySearchView::Private::configPenSketchSaturationEntry(QLatin1String("Pen Sketch Saturation"));
+const QString FuzzySearchView::Private::configPenSkethValueEntry(QLatin1String("Pen Sketch Value"));
+const QString FuzzySearchView::Private::configSimilarsThresholdEntry(QLatin1String("Similars Threshold"));
 
 // --------------------------------------------------------
 
 FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
                                  SearchModificationHelper* const searchModificationHelper,
                                  QWidget* const parent)
-    : QScrollArea(parent), StateSavingObject(this), d(new Private)
+    : QScrollArea(parent), StateSavingObject(this),
+      d(new Private)
 {
     d->thumbLoadThread          = ThumbnailLoadThread::defaultThread();
     d->searchModel              = searchModel;
@@ -291,7 +292,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     QLabel* const resultsLabel = new QLabel(i18n("Threshold:"));
     d->levelImage              = new QSpinBox();
-    d->levelImage->setSuffix(QChar('%'));
+    d->levelImage->setSuffix(QLatin1String("%"));
     d->levelImage->setRange(1, 100);
     d->levelImage->setSingleStep(1);
     d->levelImage->setValue(90);
@@ -312,7 +313,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
                                         "\"Fuzzy Searches\" view."));
 
     d->saveBtnImage  = new QToolButton(saveBox);
-    d->saveBtnImage->setIcon(QIcon::fromTheme("document-save"));
+    d->saveBtnImage->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
     d->saveBtnImage->setEnabled(false);
     d->saveBtnImage->setToolTip(i18n("Save current similar image search to a new virtual Album"));
     d->saveBtnImage->setWhatsThis(i18n("If you press this button, the current "
@@ -368,14 +369,14 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     d->undoBtnSketch   = new QToolButton();
     d->undoBtnSketch->setAutoRepeat(true);
-    d->undoBtnSketch->setIcon(QIcon::fromTheme("edit-undo"));
+    d->undoBtnSketch->setIcon(QIcon::fromTheme(QLatin1String("edit-undo")));
     d->undoBtnSketch->setToolTip(i18n("Undo last draw on sketch"));
     d->undoBtnSketch->setWhatsThis(i18n("Use this button to undo last drawing action on sketch."));
     d->undoBtnSketch->setEnabled(false);
 
     d->redoBtnSketch   = new QToolButton();
     d->redoBtnSketch->setAutoRepeat(true);
-    d->redoBtnSketch->setIcon(QIcon::fromTheme("edit-redo"));
+    d->redoBtnSketch->setIcon(QIcon::fromTheme(QLatin1String("edit-redo")));
     d->redoBtnSketch->setToolTip(i18n("Redo last draw on sketch"));
     d->redoBtnSketch->setWhatsThis(i18n("Use this button to redo last drawing action on sketch."));
     d->redoBtnSketch->setEnabled(false);
@@ -412,7 +413,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(saveBox);
-    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->resetButton->setToolTip(i18n("Clear sketch"));
     d->resetButton->setWhatsThis(i18n("Use this button to clear sketch contents."));
 
@@ -422,7 +423,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
                                          "\"Fuzzy Searches\" view."));
 
     d->saveBtnSketch = new QToolButton(saveBox);
-    d->saveBtnSketch->setIcon(QIcon::fromTheme("document-save"));
+    d->saveBtnSketch->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
     d->saveBtnSketch->setEnabled(false);
     d->saveBtnSketch->setToolTip(i18n("Save current sketch search to a new virtual Album"));
     d->saveBtnSketch->setWhatsThis(i18n("If you press this button, the current sketch "
@@ -687,23 +688,23 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
 
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
-    QStringRef type             = reader.attributes().value("type");
-    QStringRef numResultsString = reader.attributes().value("numberofresults");
-    QStringRef thresholdString  = reader.attributes().value("threshold");
-    QStringRef sketchTypeString = reader.attributes().value("sketchtype");
+    QStringRef type             = reader.attributes().value(QLatin1String("type"));
+    QStringRef numResultsString = reader.attributes().value(QLatin1String("numberofresults"));
+    QStringRef thresholdString  = reader.attributes().value(QLatin1String("threshold"));
+    QStringRef sketchTypeString = reader.attributes().value(QLatin1String("sketchtype"));
 
-    if (type == "imageid")
+    if (type == QLatin1String("imageid"))
     {
         setCurrentImage(reader.valueToLongLong());
         d->imageSAlbum = salbum;
         d->tabWidget->setCurrentIndex((int)Private::SIMILARS);
     }
-    else if (type == "signature")
+    else if (type == QLatin1String("signature"))
     {
         d->sketchSAlbum = salbum;
         d->tabWidget->setCurrentIndex((int)Private::SKETCH);
 
-        if (reader.readToStartOfElement("SketchImage"))
+        if (reader.readToStartOfElement(QLatin1String("SketchImage")))
         {
             d->sketchWidget->setSketchImageFromXML(reader);
         }

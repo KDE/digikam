@@ -97,17 +97,17 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->listView           = new FindDuplicatesAlbum();
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update fingerprints"));
-    d->updateFingerPrtBtn->setIcon(QIcon::fromTheme("run-build"));
+    d->updateFingerPrtBtn->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
     d->updateFingerPrtBtn->setWhatsThis(i18n("Use this button to update all image fingerprints."));
 
     d->scanDuplicatesBtn  = new QPushButton(i18n("Find duplicates"));
-    d->scanDuplicatesBtn->setIcon(QIcon::fromTheme("system-search"));
+    d->scanDuplicatesBtn->setIcon(QIcon::fromTheme(QLatin1String("system-search")));
     d->scanDuplicatesBtn->setWhatsThis(i18n("Use this button to scan the selected albums for "
                                             "duplicate items."));
 
     // ---------------------------------------------------------------
 
-    d->albumSelectors = new AlbumSelectors(i18nc("@label", "Search in:"), "Find Duplicates View");
+    d->albumSelectors = new AlbumSelectors(i18nc("@label", "Search in:"), QLatin1String("Find Duplicates View"));
 
     // ---------------------------------------------------------------
 
@@ -115,7 +115,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->similarity->setRange(0, 100);
     d->similarity->setValue(90);
     d->similarity->setSingleStep(1);
-    d->similarity->setSuffix(QChar('%'));
+    d->similarity->setSuffix(QLatin1String("%"));
 
     d->similarityLabel = new QLabel(i18n("Similarity:"));
     d->similarityLabel->setBuddy(d->similarity);

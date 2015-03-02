@@ -179,8 +179,8 @@ DeleteItemList::DeleteItemList(QWidget* const parent)
     setIconSize(QSize(d->iconSize, d->iconSize));
     setColumnCount(2);
     setHeaderLabels(QStringList() << i18n("Thumb") << i18n("Path"));
-    header()->setResizeMode(0, QHeaderView::ResizeToContents);
-    header()->setResizeMode(1, QHeaderView::Stretch);
+    header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(1, QHeaderView::Stretch);
     setToolTip(i18n("List of items that are about to be deleted."));
     setWhatsThis(i18n("This is the list of items that are about to be deleted."));
 

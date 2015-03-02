@@ -83,8 +83,8 @@ TemplateList::TemplateList(QWidget* const parent)
     labels.append(i18n("Title"));
     labels.append(i18n("Authors"));
     setHeaderLabels(labels);
-    header()->setResizeMode(0, QHeaderView::ResizeToContents);
-    header()->setResizeMode(1, QHeaderView::Stretch);
+    header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(1, QHeaderView::Stretch);
 }
 
 TemplateList::~TemplateList()

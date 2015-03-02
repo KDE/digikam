@@ -141,8 +141,8 @@ CameraItemList::CameraItemList(QWidget* const parent)
     setIconSize(QSize(d->iconSize, d->iconSize));
     setColumnCount(2);
     setHeaderLabels(QStringList() << i18n("Thumb") << i18n("File Name"));
-    header()->setResizeMode(0, QHeaderView::ResizeToContents);
-    header()->setResizeMode(1, QHeaderView::Stretch);
+    header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(1, QHeaderView::Stretch);
 }
 
 CameraItemList::~CameraItemList()

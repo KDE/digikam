@@ -290,10 +290,10 @@ SetupCamera::SetupCamera(QWidget* const parent)
     labels.append(i18n("Port"));
     labels.append(i18n("Path"));
     d->listView->setHeaderLabels(labels);
-    d->listView->header()->setResizeMode(0, QHeaderView::ResizeToContents);
-    d->listView->header()->setResizeMode(1, QHeaderView::Stretch);
-    d->listView->header()->setResizeMode(2, QHeaderView::Stretch);
-    d->listView->header()->setResizeMode(3, QHeaderView::Stretch);
+    d->listView->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    d->listView->header()->setSectionResizeMode(1, QHeaderView::Stretch);
+    d->listView->header()->setSectionResizeMode(2, QHeaderView::Stretch);
+    d->listView->header()->setSectionResizeMode(3, QHeaderView::Stretch);
 
     // -------------------------------------------------------------
 
