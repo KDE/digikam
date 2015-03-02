@@ -70,7 +70,7 @@ public:
 };
 
 MetadataSynchronizer::MetadataSynchronizer(const AlbumList& list, SyncDirection direction, ProgressItem* const parent)
-    : MaintenanceTool("MetadataSynchronizer", parent),
+    : MaintenanceTool(QLatin1String("MetadataSynchronizer"), parent),
       d(new Private)
 {
     if (list.isEmpty())
@@ -82,7 +82,7 @@ MetadataSynchronizer::MetadataSynchronizer(const AlbumList& list, SyncDirection 
 }
 
 MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirection direction, ProgressItem* const parent)
-    : MaintenanceTool("MetadataSynchronizer", parent),
+    : MaintenanceTool(QLatin1String("MetadataSynchronizer"), parent),
       d(new Private)
 {
     d->imageInfoList = list;
@@ -191,12 +191,12 @@ void MetadataSynchronizer::parseList()
     if (d->direction == WriteFromDatabaseToFile)
     {
         setLabel(i18n("Synchronizing image metadata with database"));
-        setThumbnail(QIcon::fromTheme("document-edit").pixmap(22));
+        setThumbnail(QIcon::fromTheme(QLatin1String("document-edit")).pixmap(22));
     }
     else
     {
         setLabel(i18n("Updating database from image metadata"));
-        setThumbnail(QIcon::fromTheme("edit-redo").pixmap(22));
+        setThumbnail(QIcon::fromTheme(QLatin1String("edit-redo")).pixmap(22));
     }
 
     setTotalItems(d->imageInfoList.count());

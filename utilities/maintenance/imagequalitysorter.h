@@ -24,6 +24,10 @@
 #ifndef IMAGEQUALITYSORTER_H
 #define IMAGEQUALITYSORTER_H
 
+// Qt includes
+
+#include <QObject>
+
 // Local includes
 
 #include "album.h"

@@ -24,6 +24,10 @@
 #ifndef METADATASYNCHRONIZER_H
 #define METADATASYNCHRONIZER_H
 
+// Qt includes
+
+#include <QObject>
+
 // Local includes
 
 #include "album.h"

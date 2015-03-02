@@ -63,7 +63,7 @@ public:
 };
 
 DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int similarity, ProgressItem* const parent)
-    : MaintenanceTool("DuplicatesFinder", parent),
+    : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
     d->similarity   = similarity;
@@ -76,7 +76,7 @@ DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tag
 }
 
 DuplicatesFinder::DuplicatesFinder(const int similarity, ProgressItem* const parent)
-    : MaintenanceTool("DuplicatesFinder", parent),
+    : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
     d->similarity = similarity;
@@ -94,18 +94,18 @@ void DuplicatesFinder::slotStart()
 {
     MaintenanceTool::slotStart();
     setLabel(i18n("Find duplicates items"));
-    setThumbnail(QIcon::fromTheme("tools-wizard").pixmap(22));
+    setThumbnail(QIcon::fromTheme(QLatin1String("tools-wizard")).pixmap(22));
     ProgressManager::addProgressItem(this);
 
     double thresh = d->similarity / 100.0;
     d->job        = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
-    d->job->addMetaData("albumids",   d->albumsIdList.join(","));
+    d->job->addMetaData(QLatin1String("albumids"),   d->albumsIdList.join(QLatin1String(",")));
 
     if (!d->tagsIdList.isEmpty())
-        d->job->addMetaData("tagids", d->tagsIdList.join(","));
+        d->job->addMetaData(QLatin1String("tagids"), d->tagsIdList.join(QLatin1String(",")));
 
-    d->job->addMetaData("duplicates", "normal");
-    d->job->addMetaData("threshold",  QString::number(thresh));
+    d->job->addMetaData(QLatin1String("duplicates"), QLatin1String("normal"));
+    d->job->addMetaData(QLatin1String("threshold"),  QString::number(thresh));
 
     connect(d->job, SIGNAL(result(KJob*)),
             this, SLOT(slotDone()));

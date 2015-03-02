@@ -29,13 +29,16 @@ endif()
 
 add_library(maintenance STATIC ${libmaintenance_SRCS})
 
-if(${KF5KFace_FOUND})
-    target_link_libraries(maintenance facemanagement)
-endif()
-
 target_link_libraries(maintenance
-                      digikamgui # for DigikamApp...
                       digikamdatabase
                       notificationmanager
                       progressmanager
+                      digikamgui # for DigikamApp...
+                      
+                      KF5::KExiv2
+                      KF5::KDcraw
 )
+
+if(${KF5KFace_FOUND})
+    target_link_libraries(maintenance facemanagement)
+endif()

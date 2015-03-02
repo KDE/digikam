@@ -57,10 +57,11 @@ public:
 };
 
 NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& foldersToScan, ProgressItem* const parent)
-    : MaintenanceTool("NewItemsFinder", parent), d(new Private)
+    : MaintenanceTool(QLatin1String("NewItemsFinder"), parent),
+      d(new Private)
 {
     setLabel(i18n("Find new items"));
-    setThumbnail(QIcon::fromTheme("view-refresh").pixmap(22));
+    setThumbnail(QIcon::fromTheme(QLatin1String("view-refresh")).pixmap(22));
     ProgressManager::addProgressItem(this);
 
     d->mode = mode;

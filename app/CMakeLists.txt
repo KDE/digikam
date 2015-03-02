@@ -161,8 +161,8 @@ target_link_libraries(digikamgui
                       firstrun
                       lighttable
                       fuzzysearch
-                      maintenance
                       fileactionmanager
+                      maintenance
 
                       Qt5::Core
                       Qt5::Gui

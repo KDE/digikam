@@ -25,6 +25,10 @@
 #ifndef BATCHFACESDETECTOR_H
 #define BATCHFACESDETECTOR_H
 
+// Qt includes
+
+#include <QObject>
+
 // Local includes
 
 #include "maintenancetool.h"

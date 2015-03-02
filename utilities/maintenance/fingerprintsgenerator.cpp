@@ -64,7 +64,7 @@ public:
 };
 
 FingerPrintsGenerator::FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list, ProgressItem* const parent)
-    : MaintenanceTool("FingerPrintsGenerator", parent),
+    : MaintenanceTool(QLatin1String("FingerPrintsGenerator"), parent),
       d(new Private)
 {
     setLabel(i18n("Finger-prints"));
@@ -152,7 +152,7 @@ void FingerPrintsGenerator::slotAdvance(const QImage& img)
 void FingerPrintsGenerator::slotDone()
 {
     // Switch on scanned for finger-prints flag on digiKam config file.
-    KSharedConfig::openConfig()->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
+    KSharedConfig::openConfig()->group(QLatin1String("General Settings")).writeEntry(QLatin1String("Finger Prints Generator First Run"), true);
 
     MaintenanceTool::slotDone();
 }

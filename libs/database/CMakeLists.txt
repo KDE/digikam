@@ -79,7 +79,6 @@ set(libimgqsort_SRCS
     imgqsort/imgqsort.cpp
 )
 
-
 # Shared libdigikamdatabase ########################################################
 
 set(digikamdatabase_LIB_SRCS
@@ -112,6 +111,7 @@ target_link_libraries(digikamdatabase
                       dmetadata
                       digikamwidgets
                       
+                      Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
 

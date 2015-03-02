@@ -24,6 +24,10 @@
 #ifndef FINGERPRINTSGENERATOR_H
 #define FINGERPRINTSGENERATOR_H
 
+// Qt includes
+
+#include <QObject>
+
 // Local includes
 
 #include "album.h"
