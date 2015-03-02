@@ -505,8 +505,8 @@ QImage DetectionWorker::scaleForDetection(const DImg& image) const
 void DetectionWorker::setAccuracy(double accuracy)
 {
     QVariantMap params;
-    params["accuracy"]    = accuracy;
-    params["specificity"] = 0.8; //TODO: add UI for sensitivity - specificity
+    params[QLatin1String("accuracy")]    = accuracy;
+    params[QLatin1String("specificity")] = 0.8; //TODO: add UI for sensitivity - specificity
     detector.setParameters(params);
 }
 
@@ -602,7 +602,7 @@ void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 
 void RecognitionWorker::setThreshold(double threshold)
 {
-    database.setParameter("threshold", threshold);
+    database.setParameter(QLatin1String("threshold"), threshold);
 }
 
 void RecognitionWorker::aboutToDeactivate()
@@ -827,6 +827,7 @@ void DetectionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
     emit processed(package);
 }
 
+// NOTE: Bench performance code. No need i18n here
 QString DetectionBenchmarker::result() const
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Per-image:" << trueNegativeImages << falsePositiveFaces;
@@ -837,7 +838,7 @@ QString DetectionBenchmarker::result() const
 
     if (negativeImages < 0.2 * totalImages)
     {
-        specificityWarning = QString("<p><b>Note:</b><br/> "
+        specificityWarning = QString::fromUtf8("<p><b>Note:</b><br/> "
                                      "Only %1 of the %2 test images have <i>no</i> depicted faces. "
                                      "This means the result is cannot be representative; "
                                      "it can only be used to compare preselected collections, "
@@ -848,7 +849,7 @@ QString DetectionBenchmarker::result() const
 
     if (trueFaces == 0)
     {
-        sensitivityWarning = QString("<p><b>Note:</b><br/> "
+        sensitivityWarning = QString::fromUtf8("<p><b>Note:</b><br/> "
                                      "No picture in the test collection contained a face. "
                                      "This means that sensitivity and PPV have no meaning and will be zero. </p>");
         trueFaces          = 1;
@@ -863,7 +864,7 @@ QString DetectionBenchmarker::result() const
     double sensitivity       = double(truePositiveFaces) / trueFaces;
     double ppv               = double(truePositiveFaces) / (truePositiveFaces + falsePositiveFaces);
 
-    return QString("<p>"
+    return QString::fromUtf8("<p>"
                    "<u>Collection Properties:</u><br/>"
                    "%1 Images <br/>"
                    "%2 Faces <br/>"
@@ -906,6 +907,7 @@ RecognitionBenchmarker::RecognitionBenchmarker(FacePipeline::Private* const d)
     database = KFaceIface::RecognitionDatabase::addDatabase();
 }
 
+// NOTE: Bench performance code. No need i18n here
 QString RecognitionBenchmarker::result() const
 {
     int totalImages = 0;
@@ -915,7 +917,7 @@ QString RecognitionBenchmarker::result() const
         totalImages += stat.knownFaces;
     }
 
-    QString s = QString("<p>"
+    QString s = QString::fromUtf8("<p>"
                         "<u>Collection Properties:</u><br/>"
                         "%1 Images <br/>"
                         "%2 Identities <br/>"
@@ -926,11 +928,11 @@ QString RecognitionBenchmarker::result() const
         const Statistics& stat = it.value();
         double correctRate = double(stat.correctlyRecognized) / stat.knownFaces;
         s += TagsCache::instance()->tagName(it.key());
-        s += QString(": %1 faces, %2 (%3%) correctly recognized<br/>")
+        s += QString::fromUtf8(": %1 faces, %2 (%3%) correctly recognized<br/>")
             .arg(stat.knownFaces).arg(stat.correctlyRecognized).arg(correctRate * 100);
     }
 
-    s += "</p>";
+    s += QLatin1String("</p>");
     return s;
 }
 
@@ -941,8 +943,9 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
     for (int i=0; i<package->databaseFaces.size(); i++)
     {
         KFaceIface::Identity identity = utils.identityForTag(package->databaseFaces[i].tagId(), database);
-        Statistics& result = results[package->databaseFaces[i].tagId()];
+        Statistics& result            = results[package->databaseFaces[i].tagId()];
         result.knownFaces++;
+
         if (identity == package->recognitionResults[i])
         {
             result.correctlyRecognized++;
@@ -981,10 +984,11 @@ public:
         return &empty;
     }
 
+public:
+
     KFaceIface::EmptyImageListProvider            empty;
     QMap<int, KFaceIface::QListImageListProvider> imagesToTrain;
 };
-
 
 Trainer::Trainer(FacePipeline::Private* const d)
     : imageRetriever(d),
@@ -1043,7 +1047,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             provider.imagesToTrain[identities[i]].list << images[i];
         }
 
-        database.train(identitySet, &provider, "digikam");
+        database.train(identitySet, &provider, QLatin1String("digikam"));
     }
 
     utils.removeFaces(toTrain);
@@ -1263,7 +1267,7 @@ void FacePipeline::Private::stop()
         previewThread->cancel();
     }
 
-    foreach (ThumbnailLoadThread* thread, thumbnailLoadThreads)
+    foreach (ThumbnailLoadThread* const thread, thumbnailLoadThreads)
     {
         thread->stopAllTasks();
     }
@@ -1303,7 +1307,7 @@ void FacePipeline::Private::wait()
         previewThread->wait();
     }
 
-    foreach (ThumbnailLoadThread* thread, thumbnailLoadThreads)
+    foreach (ThumbnailLoadThread* const thread, thumbnailLoadThreads)
     {
         thread->wait();
     }
@@ -1348,7 +1352,7 @@ void FacePipeline::Private::applyPriority()
         }
     }
 
-    foreach (ThumbnailLoadThread* thread, thumbnailLoadThreads)
+    foreach (ThumbnailLoadThread* const thread, thumbnailLoadThreads)
     {
         thread->setPriority(priority);
     }
@@ -1356,7 +1360,7 @@ void FacePipeline::Private::applyPriority()
 
 ThumbnailLoadThread* FacePipeline::Private::createThumbnailLoadThread()
 {
-    ThumbnailLoadThread* thumbnailLoadThread = new ThumbnailLoadThread;
+    ThumbnailLoadThread* const thumbnailLoadThread = new ThumbnailLoadThread;
     thumbnailLoadThread->setPixmapRequested(false);
     thumbnailLoadThread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
     // KFaceIface::Image::recommendedSizeForRecognition()
@@ -1408,10 +1412,12 @@ QString FacePipeline::benchmarkResult() const
     {
         return d->detectionBenchmarker->result();
     }
+
     if (d->recognitionBenchmarker)
     {
         return d->recognitionBenchmarker->result();
     }
+
     return QString();
 }
 

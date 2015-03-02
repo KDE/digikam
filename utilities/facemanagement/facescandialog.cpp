@@ -105,27 +105,27 @@ class FaceScanDialog::Private
 public:
 
     Private()
-        : configName("Face Detection Dialog"),
-          configMainTask("Face Scan Main Task"),
-          configValueDetect("Detect"),
-          configValueDetectAndRecognize("Detect and Recognize Faces"),
-          configValueRecognizedMarkedFaces("Recognize Marked Faces"),
-          configAlreadyScannedHandling("Already Scanned Handling"),
-          configUseFullCpu("Use Full CPU"),
-          configSettingsVisible("Settings Widget Visible")
+        : configName(QLatin1String("Face Detection Dialog")),
+          configMainTask(QLatin1String("Face Scan Main Task")),
+          configValueDetect(QLatin1String("Detect")),
+          configValueDetectAndRecognize(QLatin1String("Detect and Recognize Faces")),
+          configValueRecognizedMarkedFaces(QLatin1String("Recognize Marked Faces")),
+          configAlreadyScannedHandling(QLatin1String("Already Scanned Handling")),
+          configUseFullCpu(QLatin1String("Use Full CPU")),
+          configSettingsVisible(QLatin1String("Settings Widget Visible"))
     {
-        buttons                  = 0;
-        optionGroupBox           = 0;
-        detectAndRecognizeButton = 0;
-        detectButton             = 0;
-        alreadyScannedBox        = 0;
-        reRecognizeButton        = 0;
-        tabWidget                = 0;
-        parametersResetButton    = 0;
-        albumSelectors           = 0;
-        accuracyInput            = 0;
-        useFullCpuButton         = 0;
-        retrainAllButton         = 0;
+        buttons                    = 0;
+        optionGroupBox             = 0;
+        detectAndRecognizeButton   = 0;
+        detectButton               = 0;
+        alreadyScannedBox          = 0;
+        reRecognizeButton          = 0;
+        tabWidget                  = 0;
+        parametersResetButton      = 0;
+        albumSelectors             = 0;
+        accuracyInput              = 0;
+        useFullCpuButton           = 0;
+        retrainAllButton           = 0;
         benchmarkDetectionButton   = 0;
         benchmarkRecognitionButton = 0;
     }
@@ -192,7 +192,8 @@ void FaceScanDialog::doLoadState()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << getConfigGroup().name();
     KConfigGroup group = getConfigGroup();
-    QString mainTask   = group.readEntry(entryName(d->configMainTask), d->configValueDetectAndRecognize);
+    QString mainTask   = group.readEntry(entryName(d->configMainTask),
+                                         d->configValueDetectAndRecognize);
 
     if (mainTask == d->configValueRecognizedMarkedFaces)
     {
@@ -208,13 +209,14 @@ void FaceScanDialog::doLoadState()
     }
 
     FaceScanSettings::AlreadyScannedHandling handling;
-    QString skipHandling = group.readEntry(entryName(d->configAlreadyScannedHandling), "Skip");
+    QString skipHandling = group.readEntry(entryName(d->configAlreadyScannedHandling),
+                                           QString::fromLatin1("Skip"));
 
-    if (skipHandling == "Rescan")
+    if (skipHandling == QLatin1String("Rescan"))
     {
         handling = FaceScanSettings::Rescan;
     }
-    else if (skipHandling == "Merge")
+    else if (skipHandling == QLatin1String("Merge"))
     {
         handling = FaceScanSettings::Merge;
     }
@@ -261,15 +263,15 @@ void FaceScanDialog::doSaveState()
             d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt())
     {
         case FaceScanSettings::Skip:
-            handling = "Skip";
+            handling = QLatin1String("Skip");
             break;
 
         case FaceScanSettings::Rescan:
-            handling = "Rescan";
+            handling = QLatin1String("Rescan");
             break;
 
         case FaceScanSettings::Merge:
-            handling = "Merge";
+            handling = QLatin1String("Merge");
             break;
     }
 
@@ -293,7 +295,7 @@ void FaceScanDialog::setupUi()
     // ---- Introductory labels ----
 
     QLabel* const personIcon   = new QLabel;
-    personIcon->setPixmap(QIcon::fromTheme("edit-image-face-show").pixmap(48));
+    personIcon->setPixmap(QIcon::fromTheme(QLatin1String("edit-image-face-show")).pixmap(48));
 
     QLabel* const introduction = new QLabel;
     introduction->setTextFormat(Qt::RichText);
@@ -321,7 +323,7 @@ void FaceScanDialog::setupUi()
     detectAndRecognizeLabel->setButton(d->detectAndRecognizeButton);
     ButtonExtendedLabel* const detectAndRecognizeIcon  = new ButtonExtendedLabel;
     ButtonExtendedLabel* const detectIcon              = new ButtonExtendedLabel;
-    detectAndRecognizeIcon->setPixmap(QIcon::fromTheme("edit-image-face-detect").pixmap(48));
+    detectAndRecognizeIcon->setPixmap(QIcon::fromTheme(QLatin1String("edit-image-face-detect")).pixmap(48));
     detectIcon->setButton(d->detectButton);
     detectAndRecognizeIcon->setButton(d->detectAndRecognizeButton);
     detectAndRecognizeIcon->setAlignment(Qt::AlignCenter);
@@ -343,7 +345,7 @@ void FaceScanDialog::setupUi()
     //reRecognizeLabel->setWordWrap(true);
     reRecognizeLabel->setButton(d->reRecognizeButton);
     ButtonExtendedLabel* const reRecognizeIcon = new ButtonExtendedLabel;
-    reRecognizeIcon->setPixmap(QIcon::fromTheme("edit-image-face-recognize").pixmap(48));
+    reRecognizeIcon->setPixmap(QIcon::fromTheme(QLatin1String("edit-image-face-recognize")).pixmap(48));
     reRecognizeIcon->setButton(d->reRecognizeButton);
     reRecognizeIcon->setAlignment(Qt::AlignCenter);
 
@@ -392,7 +394,7 @@ void FaceScanDialog::setupUi()
     d->parametersResetButton            = new QToolButton(parametersTab);
     d->parametersResetButton->setAutoRaise(true);
     d->parametersResetButton->setFocusPolicy(Qt::NoFocus);
-    d->parametersResetButton->setIcon(QIcon::fromTheme("document-revert"));
+    d->parametersResetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->parametersResetButton->setToolTip(i18nc("@action:button", "Reset to default values"));
 
     RHBox* const hbox                   = new RHBox(parametersTab);

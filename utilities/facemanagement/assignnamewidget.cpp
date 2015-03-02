@@ -248,7 +248,7 @@ void AssignNameWidget::Private::checkWidgets()
 
             if (!confirmButton)
             {
-                confirmButton = createToolButton(QIcon::fromTheme("dialog-ok"), i18n("Ok"));
+                confirmButton = createToolButton(QIcon::fromTheme(QLatin1String("dialog-ok")), i18n("Ok"));
 
                 if (mode == UnconfirmedEditMode)
                 {
@@ -262,7 +262,7 @@ void AssignNameWidget::Private::checkWidgets()
 
             if (!rejectButton)
             {
-                rejectButton = createToolButton(QIcon::fromTheme("list-remove"), i18n("Remove"));
+                rejectButton = createToolButton(QIcon::fromTheme(QLatin1String("list-remove")), i18n("Remove"));
 
                 q->connect(rejectButton, SIGNAL(clicked()),
                            q, SLOT(slotReject()));
@@ -385,9 +385,9 @@ void AssignNameWidget::Private::updateLayout()
 static QString styleSheetFontDescriptor(const QFont& font)
 {
     QString s;
-    s += (font.pointSize() == -1) ? QString("font-size: %1px; ").arg(font.pixelSize())
-                                  : QString("font-size: %1pt; ").arg(font.pointSize());
-    s += QString("font-family: \"%1\"; ").arg(font.family());
+    s += (font.pointSize() == -1) ? QString::fromUtf8("font-size: %1px; ").arg(font.pixelSize())
+                                  : QString::fromUtf8("font-size: %1pt; ").arg(font.pointSize());
+    s += QString::fromUtf8("font-family: \"%1\"; ").arg(font.family());
     return s;
 }
 
@@ -406,7 +406,7 @@ void AssignNameWidget::Private::updateVisualStyle()
         case TranslucentDarkRound:
         {
             q->setStyleSheet(
-                QString(
+                QString::fromUtf8(
                     "QWidget { "
                     " %1 "
                     "} "
@@ -457,7 +457,6 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "QLabel { "
                     "  color: white; background-color: transparent; border: none; "
                     " }"
-
                 ).arg(styleSheetFontDescriptor(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont)))
             );
             break;
@@ -467,7 +466,7 @@ void AssignNameWidget::Private::updateVisualStyle()
         {
             QColor bg = qApp->palette().color(QPalette::Base);
             q->setStyleSheet(
-                QString(
+                QString::fromUtf8(
                     "QWidget { "
                     " %1 "
                     "} "
@@ -539,7 +538,7 @@ AssignNameWidget::AssignNameWidget(QWidget* const parent)
     : QFrame(parent),
       d(new Private(this))
 {
-    setObjectName("assignNameWidget");
+    setObjectName(QLatin1String("assignNameWidget"));
     setVisualStyle(StyledFrame);
 }
 
