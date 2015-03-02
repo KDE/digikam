@@ -123,17 +123,17 @@ TableViewColumn::ColumnFlags ColumnPhotoProperties::getColumnFlags() const
 {
     ColumnFlags flags(ColumnNoFlags);
 
-    if ((subColumn==SubColumnAperture)  ||
-        (subColumn==SubColumnFocal)     ||
-        (subColumn==SubColumnExposure)  ||
-        (subColumn==SubColumnSensitivity) )
+    if ((subColumn == SubColumnAperture)  ||
+        (subColumn == SubColumnFocal)     ||
+        (subColumn == SubColumnExposure)  ||
+        (subColumn == SubColumnSensitivity) )
     {
-        flags|=ColumnCustomSorting;
+        flags |= ColumnCustomSorting;
     }
 
-    if (subColumn==SubColumnExposure)
+    if (subColumn == SubColumnExposure)
     {
-        flags|=ColumnHasConfigurationWidget;
+        flags |= ColumnHasConfigurationWidget;
     }
 
     return flags;
