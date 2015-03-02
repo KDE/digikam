@@ -101,11 +101,6 @@ if(APPLE)
     target_link_libraries(digikamcore /System/Library/Frameworks/AppKit.framework)
 endif()
 
-# For Contents Aware Resizer and Lens auto-correction tools.
-if(GLIB2_FOUND)
-    target_link_libraries(digikamcore ${GLIB2_LIBRARIES})
-endif()
-
 if(JASPER_FOUND)
     target_link_libraries(digikamcore ${JASPER_LIBRARIES})
 endif()

@@ -18,7 +18,7 @@ set(digikamimageplugin_transform_PART_SRCS imageplugin_transform.cpp
                                            ratiocroptool.cpp
    )
 
-if(GLIB2_FOUND)
+if(LQR-1_FOUND)
     set(digikamimageplugin_transform_PART_SRCS ${digikamimageplugin_transform_PART_SRCS}
         contentawareresizetool.cpp
        )

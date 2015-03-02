@@ -75,9 +75,6 @@ set(AREA_CODE_DATABASESERVER "50007")
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
-# surpress deprecated warning for glibc 2.20+
-add_definitions(-D_DEFAULT_SOURCE)
-
 macro(SET_DEBUG_AREA_CODE _areacode)
     remove_definitions(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
     add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
