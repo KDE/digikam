@@ -31,7 +31,7 @@
 #include <QLabel>
 #include <QDir>
 #include <QUrl>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QFileInfo>
 #include <QVBoxLayout>
 #include <QTemporaryFile>
@@ -84,7 +84,7 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
     QWidget* const widget      = new QWidget(this);
     QVBoxLayout* const vlayout = new QVBoxLayout(widget);
 
-    QString picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+    QString picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << picturesPath;
 
@@ -134,7 +134,7 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
     vlayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(widget);
-    setLeftBottomPix(QIcon::fromTheme("server-database"));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("server-database")));
 
     connect(d->rootAlbumPathRequester->fileDialog(), SIGNAL(urlSelected(QUrl)),
             this, SLOT(slotAlbumRootChanged(QUrl)));

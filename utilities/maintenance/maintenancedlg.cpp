@@ -152,24 +152,25 @@ public:
     AlbumSelectors*      albumSelectors;
 };
 
-const QString MaintenanceDlg::Private::configGroupName("MaintenanceDlg Settings");
-const QString MaintenanceDlg::Private::configUseMutiCoreCPU("UseMutiCoreCPU");
-const QString MaintenanceDlg::Private::configNewItems("NewItems");
-const QString MaintenanceDlg::Private::configThumbnails("Thumbnails");
-const QString MaintenanceDlg::Private::configScanThumbs("ScanThumbs");
-const QString MaintenanceDlg::Private::configFingerPrints("FingerPrints");
-const QString MaintenanceDlg::Private::configScanFingerPrints("ScanFingerPrints");
-const QString MaintenanceDlg::Private::configDuplicates("Duplicates");
-const QString MaintenanceDlg::Private::configSimilarity("Similarity");
-const QString MaintenanceDlg::Private::configFaceManagement("FaceManagement");
-const QString MaintenanceDlg::Private::configFaceScannedHandling("FaceScannedHandling");
-const QString MaintenanceDlg::Private::configImageQualitySorter("ImageQualitySorter");
-const QString MaintenanceDlg::Private::configQualityScanMode("QualityScanMode");
-const QString MaintenanceDlg::Private::configMetadataSync("MetadataSync");
-const QString MaintenanceDlg::Private::configSyncDirection("SyncDirection");
+const QString MaintenanceDlg::Private::configGroupName(QLatin1String("MaintenanceDlg Settings"));
+const QString MaintenanceDlg::Private::configUseMutiCoreCPU(QLatin1String("UseMutiCoreCPU"));
+const QString MaintenanceDlg::Private::configNewItems(QLatin1String("NewItems"));
+const QString MaintenanceDlg::Private::configThumbnails(QLatin1String("Thumbnails"));
+const QString MaintenanceDlg::Private::configScanThumbs(QLatin1String("ScanThumbs"));
+const QString MaintenanceDlg::Private::configFingerPrints(QLatin1String("FingerPrints"));
+const QString MaintenanceDlg::Private::configScanFingerPrints(QLatin1String("ScanFingerPrints"));
+const QString MaintenanceDlg::Private::configDuplicates(QLatin1String("Duplicates"));
+const QString MaintenanceDlg::Private::configSimilarity(QLatin1String("Similarity"));
+const QString MaintenanceDlg::Private::configFaceManagement(QLatin1String("FaceManagement"));
+const QString MaintenanceDlg::Private::configFaceScannedHandling(QLatin1String("FaceScannedHandling"));
+const QString MaintenanceDlg::Private::configImageQualitySorter(QLatin1String("ImageQualitySorter"));
+const QString MaintenanceDlg::Private::configQualityScanMode(QLatin1String("QualityScanMode"));
+const QString MaintenanceDlg::Private::configMetadataSync(QLatin1String("MetadataSync"));
+const QString MaintenanceDlg::Private::configSyncDirection(QLatin1String("SyncDirection"));
 
 MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     setWindowTitle(i18n("Maintenance"));
 
@@ -184,7 +185,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QGridLayout* const grid = new QGridLayout(page);
 
     d->logo                 = new QLabel(page);
-    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                        .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
     d->expanderBox          = new RExpanderBox(page);
@@ -194,27 +195,27 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     RVBox* const options    = new RVBox;
     d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, options);
     d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), options);
-    d->expanderBox->insertItem(Private::Options, options, QIcon::fromTheme("configure"), i18n("Common Options"), "Options", true);
+    d->expanderBox->insertItem(Private::Options, options, QIcon::fromTheme(QLatin1String("configure")), i18n("Common Options"), QLatin1String("Options"), true);
 
     // --------------------------------------------------------------------------------------
 
     d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt>No option<br>"
                                "<i>Note: only Albums Collection are processed by this tool.</i></qt>")),
-                               QIcon::fromTheme("view-refresh"), i18n("Scan for new items"), "NewItems", false);
+                               QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Scan for new items"), QLatin1String("NewItems"), false);
     d->expanderBox->setCheckBoxVisible(Private::NewItems, true);
 
     // --------------------------------------------------------------------------------------
 
     d->scanThumbs        = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
-    d->expanderBox->insertItem(Private::Thumbnails, d->scanThumbs, QIcon::fromTheme("view-process-all"),
-                               i18n("Rebuild Thumbnails"), "Thumbnails", false);
+    d->expanderBox->insertItem(Private::Thumbnails, d->scanThumbs, QIcon::fromTheme(QLatin1String("view-process-all")),
+                               i18n("Rebuild Thumbnails"), QLatin1String("Thumbnails"), false);
     d->expanderBox->setCheckBoxVisible(Private::Thumbnails, true);
 
     // --------------------------------------------------------------------------------------
 
     d->scanFingerPrints  = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
-    d->expanderBox->insertItem(Private::FingerPrints, d->scanFingerPrints, QIcon::fromTheme("run-build"),
-                               i18n("Rebuild Finger-prints"), "Fingerprints", false);
+    d->expanderBox->insertItem(Private::FingerPrints, d->scanFingerPrints, QIcon::fromTheme(QLatin1String("run-build")),
+                               i18n("Rebuild Finger-prints"), QLatin1String("Fingerprints"), false);
     d->expanderBox->setCheckBoxVisible(Private::FingerPrints, true);
 
     // --------------------------------------------------------------------------------------
@@ -226,8 +227,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->similarity        = new RIntNumInput(d->hbox);
     d->similarity->setDefaultValue(90);
     d->similarity->setRange(0, 100, 1);
-    d->expanderBox->insertItem(Private::Duplicates, d->hbox, QIcon::fromTheme("tools-wizard"),
-                               i18n("Find Duplicates Items"), "Duplicates", false);
+    d->expanderBox->insertItem(Private::Duplicates, d->hbox, QIcon::fromTheme(QLatin1String("tools-wizard")),
+                               i18n("Find Duplicates Items"), QLatin1String("Duplicates"), false);
     d->expanderBox->setCheckBoxVisible(Private::Duplicates, true);
 
     // --------------------------------------------------------------------------------------
@@ -242,8 +243,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->faceScannedHandling->addItem(i18n("Skip images already scanned"),          FaceScanSettings::Skip);
     d->faceScannedHandling->addItem(i18n("Scan again and merge results"),         FaceScanSettings::Merge);
     d->faceScannedHandling->addItem(i18n("Clear unconfirmed results and rescan"), FaceScanSettings::Rescan);
-    d->expanderBox->insertItem(Private::FaceManagement, d->hbox3, QIcon::fromTheme("edit-image-face-detect"),
-                               i18n("Detect and recognize Faces (experimental)"), "FaceManagement", false);
+    d->expanderBox->insertItem(Private::FaceManagement, d->hbox3, QIcon::fromTheme(QLatin1String("edit-image-face-detect")),
+                               i18n("Detect and recognize Faces (experimental)"), QLatin1String("FaceManagement"), false);
     d->expanderBox->setCheckBoxVisible(Private::FaceManagement, true);
 
 #endif /* HAVE_KFACE */
@@ -265,8 +266,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QWidget* const space2 = new QWidget(hbox12);
     hbox12->setStretchFactor(space2, 10);
     d->qualitySetup       = new QPushButton(i18n("Settings..."), hbox12);
-    d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, QIcon::fromTheme("flag-green"),
-                               i18n("Image Quality Sorter"), "ImageQualitySorter", false);
+    d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, QIcon::fromTheme(QLatin1String("flag-green")),
+                               i18n("Image Quality Sorter"), QLatin1String("ImageQualitySorter"), false);
     d->expanderBox->setCheckBoxVisible(Private::ImageQualitySorter, true);
 
     // --------------------------------------------------------------------------------------
@@ -285,8 +286,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QWidget* const space6 = new QWidget(hbox22);
     hbox22->setStretchFactor(space6, 10);
     d->metadataSetup      = new QPushButton(i18n("Settings..."), hbox22);
-    d->expanderBox->insertItem(Private::MetadataSync, d->vbox2, QIcon::fromTheme("run-build-file"),
-                               i18n("Sync Metadata and Database"), "MetadataSync", false);
+    d->expanderBox->insertItem(Private::MetadataSync, d->vbox2, QIcon::fromTheme(QLatin1String("run-build-file")),
+                               i18n("Sync Metadata and Database"), QLatin1String("MetadataSync"), false);
     d->expanderBox->setCheckBoxVisible(Private::MetadataSync, true);
     d->expanderBox->insertStretch(Private::Stretch);
 
@@ -489,7 +490,7 @@ void MaintenanceDlg::slotQualitySetup()
 
 void MaintenanceDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

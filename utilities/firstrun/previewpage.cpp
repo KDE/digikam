@@ -104,7 +104,7 @@ PreviewPage::PreviewPage(AssistantDlg* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("viewimage"));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("viewimage")));
 }
 
 PreviewPage::~PreviewPage()
@@ -116,11 +116,11 @@ void PreviewPage::saveSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
 
-    KConfigGroup group        = config->group("Album Settings");
-    group.writeEntry("Preview Load Full Image Size", d->loadimage->isChecked());
+    KConfigGroup group        = config->group(QLatin1String("Album Settings"));
+    group.writeEntry(QLatin1String("Preview Load Full Image Size"), d->loadimage->isChecked());
 
-    group                     = config->group(QString("LightTable Settings"));
-    group.writeEntry("Load Full Image size", d->loadimage->isChecked());
+    group                     = config->group(QLatin1String("LightTable Settings"));
+    group.writeEntry(QLatin1String("Load Full Image size"), d->loadimage->isChecked());
 
     config->sync();
 }

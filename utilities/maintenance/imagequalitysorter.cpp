@@ -68,7 +68,7 @@ public:
 
 ImageQualitySorter::ImageQualitySorter(QualityScanMode mode, const AlbumList& list,
                                        const ImageQualitySettings& quality, ProgressItem* const parent)
-    : MaintenanceTool("ImageQualitySorter", parent),
+    : MaintenanceTool(QLatin1String("ImageQualitySorter"), parent),
       d(new Private)
 {
     setLabel(i18n("Image Quality Sorter"));

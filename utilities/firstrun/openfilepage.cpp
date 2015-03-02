@@ -107,7 +107,7 @@ OpenFilePage::OpenFilePage(AssistantDlg* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("editimage"));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("editimage")));
 }
 
 OpenFilePage::~OpenFilePage()
@@ -118,9 +118,9 @@ OpenFilePage::~OpenFilePage()
 void OpenFilePage::saveSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("Album Settings");
-    group.writeEntry("Item Left Click Action", (int)(d->openInEditor->isChecked() ?
-                                                     ApplicationSettings::StartEditor : ApplicationSettings::ShowPreview));
+    KConfigGroup group        = config->group(QLatin1String("Album Settings"));
+    group.writeEntry(QLatin1String("Item Left Click Action"), (int)(d->openInEditor->isChecked() ?
+                     ApplicationSettings::StartEditor : ApplicationSettings::ShowPreview));
 
     config->sync();
 }

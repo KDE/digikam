@@ -117,7 +117,7 @@ public:
 };
 
 FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* const parent)
-    : MaintenanceTool("FacesDetector", parent),
+    : MaintenanceTool(QLatin1String("FacesDetector"), parent),
       d(new Private)
 {
     setLabel(i18n("Updating faces database."));
@@ -244,7 +244,7 @@ void FacesDetector::slotStart()
 {
     MaintenanceTool::slotStart();
 
-    setThumbnail(QIcon::fromTheme("edit-image-face-show").pixmap(22));
+    setThumbnail(QIcon::fromTheme(QLatin1String("edit-image-face-show")).pixmap(22));
     setUsesBusyIndicator(true);
 
     // get total count, cached by AlbumManager

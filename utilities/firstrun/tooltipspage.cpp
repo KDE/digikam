@@ -105,7 +105,7 @@ TooltipsPage::TooltipsPage(AssistantDlg* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("dialog-information"));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("dialog-information")));
 }
 
 TooltipsPage::~TooltipsPage()
@@ -116,10 +116,10 @@ TooltipsPage::~TooltipsPage()
 void TooltipsPage::saveSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("Album Settings");
+    KConfigGroup group        = config->group(QLatin1String("Album Settings"));
 
-    group.writeEntry("Show ToolTips",       d->showTooltips->isChecked());
-    group.writeEntry("Show Album ToolTips", d->showTooltips->isChecked());
+    group.writeEntry(QLatin1String("Show ToolTips"),       d->showTooltips->isChecked());
+    group.writeEntry(QLatin1String("Show Album ToolTips"), d->showTooltips->isChecked());
 
     config->sync();
 }

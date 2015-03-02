@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 WelcomePage::WelcomePage(AssistantDlg* const dlg)
-    : AssistantDlgPage(dlg, i18n("Welcome to digiKam %1", QString(digikam_version_short)))
+    : AssistantDlgPage(dlg, i18n("Welcome to digiKam %1", QLatin1String(digikam_version_short)))
 {
     RVBox* const vbox   = new RVBox(this);
     QLabel* const title = new QLabel(vbox);
@@ -56,7 +56,7 @@ WelcomePage::WelcomePage(AssistantDlg* const dlg)
                         "as open-source.</p>"
                         "<p>This assistant will help you to configure first run settings to be able to "
                         "use digiKam quickly.</p>"
-                        "</qt>", QString(digikam_version_short)));
+                        "</qt>", QLatin1String(digikam_version_short)));
 
     setPageWidget(vbox);
 }

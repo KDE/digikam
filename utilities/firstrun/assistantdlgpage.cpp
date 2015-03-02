@@ -81,7 +81,7 @@ AssistantDlgPage::AssistantDlgPage(AssistantDlg* const dlg, const QString& title
     RVBox* const vbox = new RVBox(panel);
     d->logo           = new QLabel(vbox);
     d->logo->setAlignment(Qt::AlignCenter);
-    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                        .scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const space = new QLabel(vbox);

@@ -66,7 +66,7 @@ StartScanPage::StartScanPage(AssistantDlg* const dlg)
                        "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("system-search"));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("system-search")));
 }
 
 StartScanPage::~StartScanPage()

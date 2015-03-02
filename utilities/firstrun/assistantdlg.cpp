@@ -108,7 +108,7 @@ AssistantDlg::~AssistantDlg()
 
 void AssistantDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("firstrundialog.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("firstrundialog.anchor"), QLatin1String("digikam"));
 }
 
 QString AssistantDlg::firstAlbumPath() const

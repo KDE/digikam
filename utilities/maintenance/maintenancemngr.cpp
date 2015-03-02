@@ -174,7 +174,7 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
 #ifdef HAVE_KFACE
-        tool == dynamic_cast<ProgressItem*>(d->facesDetector)          ||
+        tool == dynamic_cast<ProgressItem*>(d->facesDetector)         ||
 #endif /* HAVE_KFACE */
         tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter)    ||
         tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
@@ -344,7 +344,7 @@ void MaintenanceMngr::done()
     QTime now, t = now.addMSecs(d->duration.elapsed());
 
     // Pop-up a message to bring user when all is done.
-    DNotificationWrapper("digiKam Maintenance", // not i18n
+    DNotificationWrapper(QLatin1String("digiKam Maintenance"), // not i18n
                          i18n("All operations are done.\nDuration: %1", t.toString()),
                          qApp->activeWindow(), i18n("digiKam Maintenance"));
 

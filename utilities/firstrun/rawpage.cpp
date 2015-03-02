@@ -102,7 +102,7 @@ RawPage::RawPage(AssistantDlg* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("kdcraw"));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("kdcraw")));
 }
 
 RawPage::~RawPage()
@@ -113,8 +113,8 @@ RawPage::~RawPage()
 void RawPage::saveSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
-    group.writeEntry("UseRawImportTool", d->useRawImport->isChecked());
+    KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
+    group.writeEntry(QLatin1String("UseRawImportTool"), d->useRawImport->isChecked());
     config->sync();
 }
 
