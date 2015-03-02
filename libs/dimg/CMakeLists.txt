@@ -246,7 +246,7 @@ target_include_directories(dimg
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dklcms>
 )
 
-# TODO ugly way to expose lensfun include dirs to users of dimg..
+# TODO ugly way to expose lensfun include dirs to users of dimg.
 if(LENSFUN_FOUND)
     target_include_directories(dimg PUBLIC ${LENSFUN_INCLUDE_DIRS})
     target_link_libraries(dimg ${LENSFUN_LIBRARIES})

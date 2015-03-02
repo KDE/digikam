@@ -163,7 +163,7 @@ target_link_libraries(digikamgui
                       fuzzysearch
                       maintenance
                       fileactionmanager
-                      
+
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -184,11 +184,6 @@ endif()
 
 if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamgui Qt5::Multimedia Qt5::MultimediaWidgets)
-endif()
-
-# For Contents Aware Resizer and Lens auto-correction tools.
-if(GLIB2_FOUND)
-    target_link_libraries(digikamgui ${GLIB2_LIBRARIES})
 endif()
 
 if(APPLE)

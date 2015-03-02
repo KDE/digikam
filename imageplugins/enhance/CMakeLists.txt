@@ -19,7 +19,7 @@ set(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          hotpixels/blackframelistview.cpp
                                          hotpixels/hotpixelfixer.cpp
                                          hotpixels/hotpixelstool.cpp
-   )
+)
 
 if(LENSFUN_FOUND)
     set(digikamimageplugin_enhance_PART_SRCS ${digikamimageplugin_enhance_PART_SRCS}
@@ -29,13 +29,9 @@ endif()
 
 add_library(digikamimageplugin_enhance MODULE ${digikamimageplugin_enhance_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_enhance
-                      editorplugin
-)
+# NOTE: no need to link with lensfun library here. DImg is already linked in core.
 
-if(LENSFUN_FOUND)
-   target_link_libraries(digikamimageplugin_enhance ${LENSFUN_LIBRARIES})
-endif()
+target_link_libraries(digikamimageplugin_enhance editorplugin)
 
 install(TARGETS digikamimageplugin_enhance             DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES digikamimageplugin_enhance_ui.rc         DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
