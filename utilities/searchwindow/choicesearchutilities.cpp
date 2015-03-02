@@ -65,8 +65,9 @@ void ChoiceSearchModel::setChoice(const QMap<int, QString>& data)
 {
     if (m_entries.size())
     {
+        beginResetModel();
         m_entries.clear();
-        reset();
+        endResetModel();
     }
 
     for (QMap<int, QString>::const_iterator it = data.constBegin(); it != data.constEnd(); ++it)
@@ -79,8 +80,9 @@ void ChoiceSearchModel::setChoice(const QVariantList& data)
 {
     if (m_entries.size())
     {
+        beginResetModel();
         m_entries.clear();
-        reset();
+        endResetModel();
     }
 
     Q_ASSERT(data.size() % 2 == 0);
@@ -99,8 +101,9 @@ void ChoiceSearchModel::setChoice(const QStringList& data)
 {
     if (m_entries.size())
     {
+        beginResetModel();
         m_entries.clear();
-        reset();
+        endResetModel();
     }
 
     Q_ASSERT(data.size() % 2 == 0);
@@ -228,7 +231,8 @@ bool ChoiceSearchModel::setData(const QModelIndex& index, const QVariant& value,
 // --------------------------------------------------------------------------------------
 
 ChoiceSearchComboBox::ChoiceSearchComboBox(QWidget* const parent)
-    : ListViewComboBox(parent), m_label(0)
+    : ListViewComboBox(parent),
+      m_label(0)
 {
 }
 
@@ -272,7 +276,7 @@ void ChoiceSearchComboBox::installView(QAbstractItemView* v)
     m_label->setElideMode(Qt::ElideRight);
 
     // set a line edit that carries the label
-    ProxyClickLineEdit* lineEdit = new ProxyClickLineEdit;
+    ProxyClickLineEdit* const lineEdit = new ProxyClickLineEdit;
     lineEdit->setCursor(m_label->cursor());
     lineEdit->setWidget(m_label);
     setLineEdit(lineEdit);

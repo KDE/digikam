@@ -70,7 +70,8 @@ class AnimatedClearButton::Private : public AnimatedVisibility
 {
 public:
 
-    explicit Private(QObject* const parent) : AnimatedVisibility(parent)
+    explicit Private(QObject* const parent)
+        : AnimatedVisibility(parent)
     {
         stayAlwaysVisible = false;
     }
@@ -620,7 +621,8 @@ void CustomStepsIntSpinBox::slotValueChanged(int val)
 // ------------------------------------------------------------------------
 
 StyleSheetDebugger::StyleSheetDebugger(QWidget* const object)
-    : QWidget(0), m_widget(object)
+    : QWidget(0),
+      m_widget(object)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -628,7 +630,7 @@ StyleSheetDebugger::StyleSheetDebugger(QWidget* const object)
     m_edit                  = new QTextEdit;
 
     m_okButton = new QPushButton(i18n("Ok"));
-    m_okButton->setIcon(QIcon::fromTheme("dialog-ok"));
+    m_okButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok")));
 
     vbox->addWidget(m_edit,     1);
     vbox->addWidget(m_okButton, 0, Qt::AlignRight);

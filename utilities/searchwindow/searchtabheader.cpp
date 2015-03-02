@@ -185,7 +185,8 @@ public:
 };
 
 SearchTabHeader::SearchTabHeader(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
@@ -238,7 +239,7 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
                                        "\"Searches\" view"));
 
     d->saveButton            = new QToolButton(this);
-    d->saveButton->setIcon(QIcon::fromTheme("document-save"));
+    d->saveButton->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
     d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("If you press this button, the current search "
                                      "will be saved to a new virtual Search Album using the name "
