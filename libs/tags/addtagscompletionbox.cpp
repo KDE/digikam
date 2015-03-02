@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-06-12
- * Description : KCompletionBox for tags
+ * Description : Completion Box for tags
  *
  * Copyright (C) 2010       by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 1997       by Sven Radej (sven.radej@iname.com)
@@ -57,25 +57,27 @@
 namespace Digikam
 {
 
-class TagModelCompletion::TagModelCompletionPriv
+class TagModelCompletion::Private
 {
 public:
-    TagModelCompletionPriv()
+
+    Private()
     {
         model = 0;
         rootItem = 0;
         parentModel = 0;
     }
-    QStandardItemModel* model;
-    QStandardItem* rootItem;
+
+    QStandardItemModel*   model;
+    QStandardItem*        rootItem;
     QList<QStandardItem*> allItems;
-    TagModel* parentModel;
+    TagModel*             parentModel;
 };
 
 TagModelCompletion::TagModelCompletion()
-    :QCompleter()
+    : QCompleter(),
+      d(new Private)
 {
-    d = new TagModelCompletionPriv();
     d->model = new QStandardItemModel();
     //QCompleter::setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     //QCompleter::setCaseSensitivity(Qt::CaseInsensitive);
@@ -87,10 +89,11 @@ TagModelCompletion::TagModelCompletion()
 void TagModelCompletion::setModel(TagModel* model)
 {
     d->parentModel = model;
+
     connect(d->parentModel,SIGNAL(rowsInserted(QModelIndex, int, int)),
             this, SLOT(slotInsertRows(QModelIndex, int, int)));
-    //QStandardItem* root = d->model->invisibleRootItem();
 
+    //QStandardItem* root = d->model->invisibleRootItem();
 
     int i = 0;
     QQueue<QModelIndex> q;
@@ -102,22 +105,26 @@ void TagModelCompletion::setModel(TagModel* model)
     {
         QModelIndex current = q.dequeue();
         //Album* a = model->albumForIndex(current);
-        TAlbum* t = dynamic_cast<TAlbum*>(model->albumForIndex(current));
-        if(t != NULL && !t->isInternalTag())
+        TAlbum* const t = dynamic_cast<TAlbum*>(model->albumForIndex(current));
+
+        if (t != NULL && !t->isInternalTag())
         {
             i++;
             QIcon icon;
+
             if(t->icon().isEmpty())
                 icon = QIcon::fromTheme("tag");
             else
                 icon = QIcon::fromTheme(t->icon());
+
             //itemList.append(new QStandardItem(icon,t->title()));
-            QStandardItem* item = new QStandardItem(icon,t->title());
+            QStandardItem* const item = new QStandardItem(icon,t->title());
             item->setData(QVariant(t->id()),Qt::UserRole+5);
             d->allItems.append(item);
         }
         int index = 0;
         QModelIndex child = current.child(index++,0);
+
         while(child.isValid())
         {
             q.append(child);
@@ -125,10 +132,7 @@ void TagModelCompletion::setModel(TagModel* model)
         }
     }
 
-
     QCompleter::setModel(d->model);
-
-
 }
 
 void TagModelCompletion::setModel(AlbumFilterModel* model)
@@ -154,9 +158,9 @@ TagModel* TagModelCompletion::model() const
 
 void TagModelCompletion::update(QString word)
 {
-
     d->model->clear();
     QList<QStandardItem*> filtered;
+
     if(word.isEmpty())
         return;
 
@@ -169,7 +173,7 @@ void TagModelCompletion::update(QString word)
     }
     // Do any filtering you like.
     // Here we just include all items that contain word.
-    QStandardItem* insert = new QStandardItem(QIcon::fromTheme("tag"), i18n("Insert (") + word + ")");
+    QStandardItem* const insert = new QStandardItem(QIcon::fromTheme("tag"), i18n("Insert (") + word + ")");
     insert->setData(-5, Qt::UserRole+5);
     insert->setData(word, Qt::UserRole+4);
     filtered.append(insert);
@@ -189,16 +193,16 @@ void TagModelCompletion::complete(const QRect &rect)
 
 void TagModelCompletion::slotInsertRows(QModelIndex index, int start, int end)
 {
-
     //QStandardItem* root = d->model->invisibleRootItem();
     for(int i = start; i <= end; i++)
     {
         //    qDebug() << "Row inserted +++" << d->model->children().count();
-        TAlbum* t = dynamic_cast<TAlbum*>(d->parentModel->albumForIndex(index.child(i,0)));
-        if(t != NULL && !t->isInternalTag())
+        TAlbum* const t = dynamic_cast<TAlbum*>(d->parentModel->albumForIndex(index.child(i,0)));
+        
+        if (t != NULL && !t->isInternalTag())
         {
             QIcon icon(index.child(i,0).data(Qt::DecorationRole).value<QPixmap>());
-            QStandardItem* item = new QStandardItem(icon,t->title());
+            QStandardItem* const item = new QStandardItem(icon,t->title());
             item->setData(QVariant(t->id()),Qt::UserRole+5);
             //root->appendRow(item);
             d->allItems.append(item);
@@ -206,6 +210,7 @@ void TagModelCompletion::slotInsertRows(QModelIndex index, int start, int end)
 //                    //qDebug() << "+++ " << str;
         }
     }
+
     QCompleter::setModel(d->model);
 }
 

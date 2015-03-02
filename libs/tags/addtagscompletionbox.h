@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-06-12
- * Description : KCompletionBox for tags
+ * Description : Completion Box for tags
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -24,10 +24,13 @@
 #ifndef ADDTAGSCOMPLETIONBOX_H
 #define ADDTAGSCOMPLETIONBOX_H
 
+// Qt includes
+
+#include <QCompleter>
+
 // KDE includes
 
-#include <kcompletionbox.h>
-#include <QCompleter>
+//#include <kcompletionbox.h>
 
 // Local includes
 
@@ -44,6 +47,7 @@ class TagModel;
 class TagModelCompletion : public QCompleter
 {
     Q_OBJECT
+
 public:
 
     /** A KCompletion object operating on a TagModel
@@ -55,15 +59,19 @@ public:
     TagModel* model() const;
 
     void update(QString word);
-public slots:
+
+public Q_SLOTS:
+
     void complete(const QRect &rect);
 
-private slots:
+private Q_SLOTS:
+
     void slotInsertRows(QModelIndex index, int start, int end);
 
 private:
-    class TagModelCompletionPriv;
-    TagModelCompletionPriv *d;
+
+    class Private;
+    Private *d;
 };
 
 // -------------------------------------------------------------------------------------------
