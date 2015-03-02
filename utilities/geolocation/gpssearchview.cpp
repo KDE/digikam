@@ -94,7 +94,7 @@ public:
     QString                     nonGeonlocatedItemsXml;
 };
 
-const QString GPSSearchView::Private::configSplitterStateEntry("SplitterState");
+const QString GPSSearchView::Private::configSplitterStateEntry(QLatin1String("SplitterState"));
 
 /**
  * @brief Constructor
@@ -131,7 +131,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     mapPanel->setMinimumHeight(256);
     QVBoxLayout* const vlay2 = new QVBoxLayout(mapPanel);
     d->mapSearchWidget       = new KGeoMap::KGeoMapWidget(mapPanel);
-    d->mapSearchWidget->setBackend("marble");
+    d->mapSearchWidget->setBackend(QLatin1String("marble"));
     d->mapSearchWidget->setShowThumbnails(true);
 
     d->gpsMarkerTiler = new GPSMarkerTiler(this, d->imageFilterModel, d->selectionModel);
@@ -159,7 +159,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
                                    "\"Map Searches\" view."));
 
     d->saveBtn  = new QToolButton(hbox);
-    d->saveBtn->setIcon(QIcon::fromTheme("document-save"));
+    d->saveBtn->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
     d->saveBtn->setEnabled(false);
     d->saveBtn->setToolTip(i18n("Save current map search to a new virtual album."));
     d->saveBtn->setWhatsThis(i18n("If this button is pressed, the current map search "
@@ -209,15 +209,15 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     secondActionRowHBox->addWidget(secondActionRowLabel);
 
     QToolButton* const tbRegionSelection = new QToolButton(secondActionRow);
-    tbRegionSelection->setDefaultAction(d->mapSearchWidget->getControlAction("mousemode-regionselectionmode"));
+    tbRegionSelection->setDefaultAction(d->mapSearchWidget->getControlAction(QLatin1String("mousemode-regionselectionmode")));
     secondActionRowHBox->addWidget(tbRegionSelection);
 
     QToolButton* const tbRegionFromIcon = new QToolButton(secondActionRow);
-    tbRegionFromIcon->setDefaultAction(d->mapSearchWidget->getControlAction("mousemode-regionselectionfromiconmode"));
+    tbRegionFromIcon->setDefaultAction(d->mapSearchWidget->getControlAction(QLatin1String("mousemode-regionselectionfromiconmode")));
     secondActionRowHBox->addWidget(tbRegionFromIcon);
 
     QToolButton* const tbClearRegionSelection = new QToolButton(secondActionRow);
-    tbClearRegionSelection->setDefaultAction(d->mapSearchWidget->getControlAction("mousemode-removecurrentregionselection"));
+    tbClearRegionSelection->setDefaultAction(d->mapSearchWidget->getControlAction(QLatin1String("mousemode-removecurrentregionselection")));
     secondActionRowHBox->addWidget(tbClearRegionSelection);
 
     secondActionRowHBox->addStretch(10);
@@ -234,7 +234,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
 
     QPushButton* const nonGeolocatedBtn = new QPushButton(nonGeolocatedActionRow);
     nonGeolocatedBtn->setText(i18n("Show Non-Geolocated Items"));
-    nonGeolocatedBtn->setIcon(QIcon::fromTheme("emblem-unmounted"));
+    nonGeolocatedBtn->setIcon(QIcon::fromTheme(QLatin1String("emblem-unmounted")));
     thirdActionRowVBox->addWidget(nonGeolocatedBtn);
 
     thirdActionRowVBox->addStretch(10);
@@ -284,7 +284,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
             this, SLOT(slotRemoveCurrentFilter()));
 
     connect(nonGeolocatedBtn, SIGNAL(clicked()),
-            d->mapSearchWidget->getControlAction("mousemode-removecurrentregionselection"), SIGNAL(triggered()));
+            d->mapSearchWidget->getControlAction(QLatin1String("mousemode-removecurrentregionselection")), SIGNAL(triggered()));
 
     connect(nonGeolocatedBtn, SIGNAL(clicked()),
             this, SLOT(showNonGeolocatedItems()));
@@ -319,9 +319,9 @@ void GPSSearchView::doLoadState()
         }
     }
 
-    d->sortOrderOptionsHelper->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(entryName("Sort Order"), int(d->sortOrderOptionsHelper->getSortOptions()))));
+    d->sortOrderOptionsHelper->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(entryName(QLatin1String("Sort Order")), int(d->sortOrderOptionsHelper->getSortOptions()))));
 
-    const KConfigGroup groupMapWidget = KConfigGroup(&group, entryName("GPSSearch Map Widget"));
+    const KConfigGroup groupMapWidget = KConfigGroup(&group, entryName(QLatin1String("GPSSearch Map Widget")));
 
     d->mapSearchWidget->readSettingsFromGroup(&groupMapWidget);
 
@@ -337,9 +337,9 @@ void GPSSearchView::doSaveState()
     KConfigGroup group = getConfigGroup();
 
     group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
-    group.writeEntry(entryName("Sort Order"), int(d->sortOrderOptionsHelper->getSortOptions()));
+    group.writeEntry(entryName(QLatin1String("Sort Order")), int(d->sortOrderOptionsHelper->getSortOptions()));
 
-    KConfigGroup groupMapWidget = KConfigGroup(&group, entryName("GPSSearch Map Widget"));
+    KConfigGroup groupMapWidget = KConfigGroup(&group, entryName(QLatin1String("GPSSearch Map Widget")));
     d->mapSearchWidget->saveSettingsToGroup(&groupMapWidget);
     d->searchTreeView->saveState();
 
@@ -358,7 +358,7 @@ void GPSSearchView::setActive(bool state)
     if (!state)
     {
         // make sure we reset the custom filters set by the map:
-        emit(signalMapSoloItems(QList<qlonglong>(), "gpssearch"));
+        emit(signalMapSoloItems(QList<qlonglong>(), QLatin1String("gpssearch")));
         d->mapSearchWidget->setActive(false);
     }
     else
@@ -457,8 +457,8 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 
     SearchXmlWriter writer;
     writer.writeGroup();
-    writer.writeField("position", SearchXml::Inside);
-    writer.writeAttribute("type", "rectangle");
+    writer.writeField(QLatin1String("position"), SearchXml::Inside);
+    writer.writeAttribute(QLatin1String("type"), QLatin1String("rectangle"));
     writer.writeValue(coordinatesList);
     writer.finishField();
     writer.finishGroup();
@@ -487,9 +487,9 @@ void GPSSearchView::slotAlbumSelected(Album* a)
 
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
-    QStringRef type = reader.attributes().value("type");
+    QStringRef type = reader.attributes().value(QLatin1String("type"));
 
-    if (type == "rectangle")
+    if (type == QLatin1String("rectangle"))
     {
         const QList<double> list = reader.valueToDoubleList();
 
@@ -576,7 +576,7 @@ void GPSSearchView::slotRemoveCurrentFilter()
 {
     d->gpsMarkerTiler->setPositiveFilterIsActive(false);
     const QList<qlonglong> emptyIdList;
-    emit signalMapSoloItems(emptyIdList, "gpssearch");
+    emit signalMapSoloItems(emptyIdList, QLatin1String("gpssearch"));
     slotRefreshMap();
     d->mapSearchWidget->slotUpdateActionsEnabled();
 }
@@ -608,7 +608,7 @@ void GPSSearchView::slotCheckNameEditGPSConditions()
  */
 void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
 {
-    emit(signalMapSoloItems(idList, "gpssearch"));
+    emit(signalMapSoloItems(idList, QLatin1String("gpssearch")));
     d->mapSearchWidget->slotUpdateActionsEnabled();
 }
 
@@ -619,7 +619,7 @@ void GPSSearchView::showNonGeolocatedItems()
         SearchXmlWriter writer;
         writer.setFieldOperator((SearchXml::standardFieldOperator()));
         writer.writeGroup();
-        writer.writeField("nogps", SearchXml::Equal);
+        writer.writeField(QLatin1String("nogps"), SearchXml::Equal);
         writer.finishField();
         writer.finishGroup();
         writer.finish();

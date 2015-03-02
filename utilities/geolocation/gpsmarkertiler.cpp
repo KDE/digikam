@@ -248,7 +248,7 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
     DatabaseUrl u              = DatabaseUrl::fromAreaRange(lat1, lat2, lng1, lng2);
     KIO::Job* const currentJob = ImageLister::startListJob(u);
 
-    currentJob->addMetaData("wantDirectQuery", "false");
+    currentJob->addMetaData(QLatin1String("wantDirectQuery"), QLatin1String("false"));
 
     Private::InternalJobs currentJobInfo;
 
