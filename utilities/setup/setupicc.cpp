@@ -192,8 +192,8 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
                                                 "<li>Unchecked: Color Management is "
                                                 "disabled</li></ul>"));
 
-    RActiveLabel* const lcmsLogoLabel = new RActiveLabel(QUrl("http://www.littlecms.com"),
-                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-lcms.png"),
+    RActiveLabel* const lcmsLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://www.littlecms.com")),
+                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-lcms.png")),
                                                          colorPolicy);
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
@@ -209,14 +209,14 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QHBoxLayout* const hboxWS  = new QHBoxLayout(d->workspaceGB);
 
     QLabel* const workIcon     = new QLabel;
-    workIcon->setPixmap(QIcon::fromTheme("input-tablet").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
+    workIcon->setPixmap(QIcon::fromTheme(QLatin1String("input-tablet")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
     d->workProfilesKC    = new IccProfilesComboBox;
     d->workProfilesKC->setWhatsThis(i18n("<p>This is the color space all the images will be converted to when opened "
                                          "(if you choose to convert) and the profile that will be embedded when saving. "
                                          "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b>"));
 
     d->infoWorkProfiles = new QPushButton;
-    d->infoWorkProfiles->setIcon(QIcon::fromTheme("dialog-information"));
+    d->infoWorkProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoWorkProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                            "information about the selected workspace profile.</p>"));
 
@@ -230,7 +230,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QVBoxLayout* const vlayMismatch = new QVBoxLayout(d->mismatchGB);
 
     QLabel* const behaviorIcon  = new QLabel;
-    behaviorIcon->setPixmap(QIcon::fromTheme("image-loading").pixmap(32));
+    behaviorIcon->setPixmap(QIcon::fromTheme(QLatin1String("image-loading")).pixmap(32));
     QLabel* const behaviorLabel = new QLabel(i18n("When the profile of an image does not match the working color space"));
     behaviorLabel->setWordWrap(true);
 
@@ -262,7 +262,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QVBoxLayout* const vlayMissing = new QVBoxLayout(d->missingGB);
 
     QLabel* const  missingIcon  = new QLabel;
-    missingIcon->setPixmap(QIcon::fromTheme("image-missing").pixmap(32));
+    missingIcon->setPixmap(QIcon::fromTheme(QLatin1String("image-missing")).pixmap(32));
     QLabel* const missingLabel = new QLabel(i18n("When an image has no color profile information"));
     missingLabel->setWordWrap(true);
 
@@ -284,6 +284,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     /**
      * @todo d->defaultSRGBConvert->setWhatsThis( i18n("<p></p>"));
      */
+
     d->defaultSRGBConvert->setChecked(true);
 
     QGridLayout* const gridRgb = new QGridLayout;
@@ -309,11 +310,11 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->rawGB                 = new QGroupBox;//(i18n("Raw File Behavior"));
+    d->rawGB                       = new QGroupBox;//(i18n("Raw File Behavior"));
     QVBoxLayout* const vlayRaw     = new QVBoxLayout(d->rawGB);
 
     QLabel* const rawBehaviorIcon  = new QLabel;
-    rawBehaviorIcon->setPixmap(QIcon::fromTheme("kdcraw").pixmap(32));
+    rawBehaviorIcon->setPixmap(QIcon::fromTheme(QLatin1String("kdcraw")).pixmap(32));
     QLabel* const rawBehaviorLabel = new QLabel(i18n("When loading a RAW file with uncalibrated colors"));
     rawBehaviorLabel->setWordWrap(true);
 
@@ -353,13 +354,13 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->profilesPanel         = new QWidget;
+    d->profilesPanel               = new QWidget;
     QVBoxLayout* const vboxDisplay = new QVBoxLayout(d->profilesPanel);
-    d->viewGB                = new QGroupBox(i18n("Color Managed View"));
+    d->viewGB                      = new QGroupBox(i18n("Color Managed View"));
     QGridLayout* const gridView    = new QGridLayout(d->viewGB);
 
     QLabel* const monitorIcon      = new QLabel;
-    monitorIcon->setPixmap(QIcon::fromTheme("video-display").pixmap(32));
+    monitorIcon->setPixmap(QIcon::fromTheme(QLatin1String("video-display")).pixmap(32));
     QLabel* const monitorProfiles  = new QLabel(i18n("Monitor profile:"));
 
     d->monitorProfilesKC     = new IccProfilesComboBox;
@@ -367,7 +368,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     d->monitorProfilesKC->setWhatsThis(i18n("<p>Select the color profile for your monitor here.</p>"));
 
     d->infoMonitorProfiles   = new QPushButton;
-    d->infoMonitorProfiles->setIcon(QIcon::fromTheme("dialog-information"));
+    d->infoMonitorProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoMonitorProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                               "information about the selected monitor profile.</p>"));
 
@@ -399,7 +400,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QGridLayout* const gridIP  = new QGridLayout(d->inputGB);
 
     QLabel* const inputIcon    = new QLabel;
-    inputIcon->setPixmap(QIcon::fromTheme("input-tablet").pixmap(32));
+    inputIcon->setPixmap(QIcon::fromTheme(QLatin1String("input-tablet")).pixmap(32));
     QLabel* const inputLabel   = new QLabel(i18n("Default input color profile:"));
     d->inProfilesKC            = new IccProfilesComboBox;
     d->inProfilesKC->setWhatsThis(i18n("<p>This is the default color profile for your input device "
@@ -408,7 +409,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
                                        "Some of the options about loading behavior above refer to this profile.</p>"));
 
     d->infoInProfiles = new QPushButton;
-    d->infoInProfiles->setIcon(QIcon::fromTheme("dialog-information"));
+    d->infoInProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoInProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                          "information about the selected input profile.</p>"));
 
@@ -424,7 +425,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QGridLayout* const gridProof = new QGridLayout(d->proofGB);
 
     QLabel* const proofIcon      = new QLabel;
-    proofIcon->setPixmap(QIcon::fromTheme("printer").pixmap(32));
+    proofIcon->setPixmap(QIcon::fromTheme(QLatin1String("printer")).pixmap(32));
     QLabel* const proofLabel     = new QLabel(i18n("Output device profile:"));
     d->proofProfilesKC           = new IccProfilesComboBox;
     proofLabel->setBuddy(d->proofProfilesKC);
@@ -433,7 +434,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
                                           "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles   = new QPushButton;
-    d->infoProofProfiles->setIcon(QIcon::fromTheme("dialog-information"));
+    d->infoProofProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoProofProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                             "information about the selected proofing profile.</p>"));
 
@@ -449,7 +450,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QGridLayout* const gridIccFolder = new QGridLayout(d->iccFolderGB);
 
     QLabel* const iccFolderIcon = new QLabel;
-    iccFolderIcon->setPixmap(QIcon::fromTheme("folder-downloads").pixmap(32));
+    iccFolderIcon->setPixmap(QIcon::fromTheme(QLatin1String("folder-downloads")).pixmap(32));
     d->iccFolderLabel           = new QLabel(i18n("digiKam looks for ICC profiles in a number of <a href='default'>default locations</a>. "
                                                  "You can specify an additional folder:"));
     d->iccFolderLabel->setWordWrap(true);
@@ -881,7 +882,7 @@ void SetupICC::slotShowDefaultSearchPaths()
     }
     else
     {
-        existingPaths = defaultSearchPaths.join("</li><li>");
+        existingPaths = defaultSearchPaths.join(QLatin1String("</li><li>"));
     }
 
 #ifdef Q_OS_WIN
@@ -937,10 +938,10 @@ void SetupICC::slotShowDefaultSearchPaths()
 bool SetupICC::iccRepositoryIsValid()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(QString("Color Management"));
+    KConfigGroup group        = config->group(QLatin1String("Color Management"));
 
     // If color management is disable, no need to check anymore.
-    if (!group.readEntry("EnableCM", false))
+    if (!group.readEntry(QLatin1String("EnableCM"), false))
     {
         return true;
     }
@@ -952,7 +953,7 @@ bool SetupICC::iccRepositoryIsValid()
     }
 
     // To be valid, the ICC profiles repository must exist and be readable.
-    QString extraPath = group.readEntry("DefaultPath", QString());
+    QString extraPath = group.readEntry(QLatin1String("DefaultPath"), QString());
     QFileInfo info(extraPath);
 
     if (info.isDir() && info.exists() && info.isReadable())

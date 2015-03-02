@@ -77,13 +77,14 @@ public:
 };
 
 SetupCategory::SetupCategory(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
-    QWidget* panel    = new QWidget(viewport());
+    QWidget* const panel    = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QGridLayout* grid = new QGridLayout(panel);
+    QGridLayout* const grid = new QGridLayout(panel);
 
     // --------------------------------------------------------
 
@@ -101,9 +102,9 @@ SetupCategory::SetupCategory(QWidget* const parent)
     d->delCategoryButton = new QPushButton(i18n("&Remove"), panel);
     d->repCategoryButton = new QPushButton(i18n("&Replace"), panel);
 
-    d->addCategoryButton->setIcon(QIcon::fromTheme("list-add"));
-    d->delCategoryButton->setIcon(QIcon::fromTheme("list-remove"));
-    d->repCategoryButton->setIcon(QIcon::fromTheme("view-refresh"));
+    d->addCategoryButton->setIcon(QIcon::fromTheme(QLatin1String("list-add")));
+    d->delCategoryButton->setIcon(QIcon::fromTheme(QLatin1String("list-remove")));
+    d->repCategoryButton->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
     d->delCategoryButton->setEnabled(false);
     d->repCategoryButton->setEnabled(false);
 

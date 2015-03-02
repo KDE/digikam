@@ -126,7 +126,8 @@ public:
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     QWidget* const panel      = new QWidget(viewport());
     setWidget(panel);
@@ -136,8 +137,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel);
-    QGridLayout* grid        = new QGridLayout(iconViewGroup);
+    QGroupBox* const iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel);
+    QGridLayout* const grid        = new QGridLayout(iconViewGroup);
 
     d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iconViewGroup);
     d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the filename below the image thumbnail."));
@@ -234,10 +235,10 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     d->iconTreeThumbLabel = new QLabel(i18n("Tree View thumbnail size:"), folderViewGroup);
     d->iconTreeThumbSize  = new QComboBox(folderViewGroup);
-    d->iconTreeThumbSize->addItem(QString("16"));
-    d->iconTreeThumbSize->addItem(QString("22"));
-    d->iconTreeThumbSize->addItem(QString("32"));
-    d->iconTreeThumbSize->addItem(QString("48"));
+    d->iconTreeThumbSize->addItem(QLatin1String("16"));
+    d->iconTreeThumbSize->addItem(QLatin1String("22"));
+    d->iconTreeThumbSize->addItem(QLatin1String("32"));
+    d->iconTreeThumbSize->addItem(QLatin1String("48"));
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
                                           "the Tree View thumbnails in digiKam's sidebars."));
 
@@ -262,7 +263,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
                                                      "Embedded view shows a small, quick preview"));
     d->previewFullView      = new QRadioButton(i18nc("@option:radio",
                                                      "Embedded view shows the full image"));
-    QLabel* rawPreviewLabel = new QLabel(i18nc("@label:listbox Mode of RAW preview decoding:",
+    QLabel* const rawPreviewLabel = new QLabel(i18nc("@label:listbox Mode of RAW preview decoding:",
                                                "Raw images:"));
     d->previewRawMode       = new QComboBox;
     d->previewRawMode->addItem(i18nc("@option:inlistbox Automatic choice of RAW image preview source",

@@ -124,11 +124,11 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     d->repButton = new QPushButton(panel);
 
     d->addButton->setText(i18n("&Add..."));
-    d->addButton->setIcon(QIcon::fromTheme("list-add"));
+    d->addButton->setIcon(QIcon::fromTheme(QLatin1String("list-add")));
     d->delButton->setText(i18n("&Remove"));
-    d->delButton->setIcon(QIcon::fromTheme("list-remove"));
+    d->delButton->setIcon(QIcon::fromTheme(QLatin1String("list-remove")));
     d->repButton->setText(i18n("&Replace..."));
-    d->repButton->setIcon(QIcon::fromTheme("view-refresh"));
+    d->repButton->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
     d->delButton->setEnabled(false);
     d->repButton->setEnabled(false);
 
@@ -186,8 +186,8 @@ void SetupTemplate::applySettings()
     d->listView->applySettings();
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(QString("Setup Dialog"));
-    group.writeEntry("Template Tab", (int)(d->tview->currentIndex()));
+    KConfigGroup group        = config->group(QLatin1String("Setup Dialog"));
+    group.writeEntry(QLatin1String("Template Tab"), (int)(d->tview->currentIndex()));
     config->sync();
 }
 
@@ -196,8 +196,8 @@ void SetupTemplate::readSettings()
     d->listView->readSettings();
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(QString("Setup Dialog"));
-    d->tview->setCurrentIndex((TemplatePanel::TemplateTab)group.readEntry("Template Tab", (int)TemplatePanel::RIGHTS));
+    KConfigGroup group        = config->group(QLatin1String("Setup Dialog"));
+    d->tview->setCurrentIndex((TemplatePanel::TemplateTab)group.readEntry(QLatin1String("Template Tab"), (int)TemplatePanel::RIGHTS));
 }
 
 void SetupTemplate::setTemplate(const Template& t)

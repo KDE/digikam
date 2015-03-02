@@ -46,7 +46,7 @@ public:
 
     void applySettings();
 
-public slots:
+public Q_SLOTS:
 
     void slotSetUnchecked(int);
 
