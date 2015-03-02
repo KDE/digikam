@@ -88,7 +88,7 @@ public:
 
 void KipiPluginLoader::Private::loadPlugins()
 {
-    kipipluginsActionCollection = new KActionCollection(app, "Digikam_KIPI_action_collection");
+    kipipluginsActionCollection = new KActionCollection(app, QLatin1String("Digikam_KIPI_action_collection"));
 
     if (splashScreen)
     {
@@ -100,37 +100,37 @@ void KipiPluginLoader::Private::loadPlugins()
 
     // List of obsoletes plugins to not load
 
-    ignores.append("HelloWorld");
-    ignores.append("KameraKlient");
+    ignores.append(QLatin1String("HelloWorld"));
+    ignores.append(QLatin1String("KameraKlient"));
 
     // These plugins have been renamed with 0.2.0-rc1
-    ignores.append("Facebook Exporter");
-    ignores.append("SmugMug Exporter");
-    ignores.append("SlideShow");
-    ignores.append("PrintWizard");
-    ignores.append("SimpleViewer");
-    ignores.append("KioExport");
+    ignores.append(QLatin1String("Facebook Exporter"));
+    ignores.append(QLatin1String("SmugMug Exporter"));
+    ignores.append(QLatin1String("SlideShow"));
+    ignores.append(QLatin1String("PrintWizard"));
+    ignores.append(QLatin1String("SimpleViewer"));
+    ignores.append(QLatin1String("KioExport"));
 
     // These plugins have been replaced by digiKam core solution with 2.6.0
-    ignores.append("JPEGLossless");
+    ignores.append(QLatin1String("JPEGLossless"));
 
     // Test plugin introduced with libkipi 2.0.0
-    ignores.append("KXMLHelloWorld");
+    ignores.append(QLatin1String("KXMLHelloWorld"));
 
     // Raw converter single dialog is obsolete since 0.9.5 with new Raw Import tool for Image Editor.
     // Raw converter batch dialog is obsolete since 3.0.0 with new Raw decoding settings include in Batch Queue Manager.
-    ignores.append("RawConverter");
+    ignores.append(QLatin1String("RawConverter"));
 
     // List of obsolete tool actions to not load
 
     QStringList pluginActionsDisabled;
-    pluginActionsDisabled << QString("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
-    pluginActionsDisabled << QString("batch_rename_images");            // Obsolete since 1.0.0, replaced by AdvancedRename.
-    pluginActionsDisabled << QString("batch_border_images");            // Obsolete since 1.2.0, replaced by BQM border tool.
-    pluginActionsDisabled << QString("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
-    pluginActionsDisabled << QString("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
-    pluginActionsDisabled << QString("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
-    pluginActionsDisabled << QString("batch_recompress_images");        // Obsolete since 3.0.0, replaced by BQM enhance tool.
+    pluginActionsDisabled << QLatin1String("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
+    pluginActionsDisabled << QLatin1String("batch_rename_images");            // Obsolete since 1.0.0, replaced by AdvancedRename.
+    pluginActionsDisabled << QLatin1String("batch_border_images");            // Obsolete since 1.2.0, replaced by BQM border tool.
+    pluginActionsDisabled << QLatin1String("batch_convert_images");           // Obsolete since 1.2.0, replaced by BQM convert tool.
+    pluginActionsDisabled << QLatin1String("batch_color_images");             // Obsolete since 1.2.0, replaced by BQM color tool.
+    pluginActionsDisabled << QLatin1String("batch_filter_images");            // Obsolete since 1.2.0, replaced by BQM enhance tool.
+    pluginActionsDisabled << QLatin1String("batch_recompress_images");        // Obsolete since 3.0.0, replaced by BQM enhance tool.
 
     kipiPluginLoader = new PluginLoader(app);
     kipiPluginLoader->setInterface(kipiInterface);
@@ -245,7 +245,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
     // Ugly hack. Remove "advancedslideshow" action from Slideshow menu
     foreach(QAction* const action, d->app->slideShowMenu()->actions())
     {
-        if (action->objectName() == "advancedslideshow")
+        if (action->objectName() == QLatin1String("advancedslideshow"))
             d->app->slideShowMenu()->removeAction(action);
     }
 
@@ -336,9 +336,9 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
         // Ugly hack. Remove "advancedslideshow action from AdvancedSlideshow plugin
         // actionCollection() and add it to the Slideshow menu
-        if (plugin->objectName() == QString("AdvancedSlideshow"))
+        if (plugin->objectName() == QLatin1String("AdvancedSlideshow"))
         {
-            QAction* const action = plugin->actionCollection()->action("advancedslideshow");
+            QAction* const action = plugin->actionCollection()->action(QLatin1String("advancedslideshow"));
             if (action)
             {
                 QAction* const _action = plugin->actionCollection()->takeAction(action);

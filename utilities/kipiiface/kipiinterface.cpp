@@ -112,7 +112,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
                                                              currAlbum,
-                                                             hostSetting("FileExtensions").toString()));
+                                                             hostSetting(QLatin1String("FileExtensions")).toString()));
     }
     else
     {
@@ -133,7 +133,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
                                                              currAlbum,
-                                                             hostSetting("FileExtensions").toString()));
+                                                             hostSetting(QLatin1String("FileExtensions")).toString()));
     }
     else
     {
@@ -144,7 +144,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
 QList<KIPI::ImageCollection> KipiInterface::allAlbums()
 {
     QList<KIPI::ImageCollection> result;
-    QString fileFilter(hostSetting("FileExtensions").toString());
+    QString fileFilter(hostSetting(QLatin1String("FileExtensions")).toString());
 
     const AlbumList palbumList = d->albumManager->allPAlbums();
 
@@ -345,47 +345,47 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
 
     MetadataSettingsContainer set = mSettings->settings();
 
-    if (settingName == QString("WriteMetadataUpdateFiletimeStamp"))
+    if (settingName == QLatin1String("WriteMetadataUpdateFiletimeStamp"))
     {
         return (set.updateFileTimeStamp);
     }
-    else if (settingName == QString("WriteMetadataToRAW"))
+    else if (settingName == QLatin1String("WriteMetadataToRAW"))
     {
         return (set.writeRawFiles);
     }
-    else if (settingName == QString("UseXMPSidecar4Reading"))
+    else if (settingName == QLatin1String("UseXMPSidecar4Reading"))
     {
         return (set.useXMPSidecar4Reading);
     }
-    else if (settingName == QString("MetadataWritingMode"))
+    else if (settingName == QLatin1String("MetadataWritingMode"))
     {
         return (set.metadataWritingMode);
     }
-    else if (settingName == QString("FileExtensions"))
+    else if (settingName == QLatin1String("FileExtensions"))
     {
         // NOTE : do not save type mime settings into a local variable, as this
         // might change in the main app
 
-        return QString(aSettings->getImageFileFilter() + ' ' +
-                       aSettings->getMovieFileFilter() + ' ' +
-                       aSettings->getAudioFileFilter() + ' ' +
-                       aSettings->getRawFileFilter());
+        return QString((aSettings->getImageFileFilter()) + QLatin1Char(' ') +
+                       (aSettings->getMovieFileFilter()) + QLatin1Char(' ') +
+                       (aSettings->getAudioFileFilter()) + QLatin1Char(' ') +
+                       (aSettings->getRawFileFilter()));
     }
-    else if (settingName == QString("ImagesExtensions"))
+    else if (settingName == QLatin1String("ImagesExtensions"))
     {
-        return QString(aSettings->getImageFileFilter());
+        return aSettings->getImageFileFilter();
     }
-    else if (settingName == QString("RawExtensions"))
+    else if (settingName == QLatin1String("RawExtensions"))
     {
-        return QString(aSettings->getRawFileFilter());
+        return aSettings->getRawFileFilter();
     }
-    else if (settingName == QString("VideoExtensions"))
+    else if (settingName == QLatin1String("VideoExtensions"))
     {
-        return QString(aSettings->getMovieFileFilter());
+        return aSettings->getMovieFileFilter();
     }
-    else if (settingName == QString("AudioExtensions"))
+    else if (settingName == QLatin1String("AudioExtensions"))
     {
-        return QString(aSettings->getAudioFileFilter());
+        return aSettings->getAudioFileFilter();
     }
 
     return QVariant();

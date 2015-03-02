@@ -69,7 +69,8 @@ public:
 };
 
 KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter, QList<QUrl> imagesUrlList)
-    : ImageCollectionShared(), d(new Private)
+    : ImageCollectionShared(),
+      d(new Private)
 {
     d->type      = type;
     d->album     = album;
@@ -297,7 +298,7 @@ QUrl KipiImageCollection::uploadPath()
 
 QUrl KipiImageCollection::uploadRoot()
 {
-    return QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath() + '/');
+    return QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath() + QLatin1Char('/'));
 }
 
 QString KipiImageCollection::uploadRootName()

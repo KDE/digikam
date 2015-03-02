@@ -69,9 +69,9 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* const iface, QWidget* const pa
     : KIPI::UploadWidget(parent),
       d(new Private)
 {
-    d->iface          = iface;
-    QVBoxLayout* vlay = new QVBoxLayout(this);
-    d->albumSel       = new AlbumSelectWidget(this);
+    d->iface                = iface;
+    QVBoxLayout* const vlay = new QVBoxLayout(this);
+    d->albumSel             = new AlbumSelectWidget(this);
     vlay->addWidget(d->albumSel);
     vlay->setMargin(0);
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -91,8 +91,8 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 
     if (d->iface)
     {
-        QString ext          = d->iface->hostSetting("FileExtensions").toString();
-        PAlbum* currentAlbum = d->albumSel->currentAlbum();
+        QString ext                = d->iface->hostSetting(QLatin1String("FileExtensions")).toString();
+        PAlbum* const currentAlbum = d->albumSel->currentAlbum();
 
         if (currentAlbum)
         {
@@ -105,7 +105,7 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 
 void KipiUploadWidget::slotSelectionChanged()
 {
-    PAlbum* currentAlbum = d->albumSel->currentAlbum();
+    PAlbum* const currentAlbum = d->albumSel->currentAlbum();
 
     // TODO is this the desired semantic?
     if (!currentAlbum || (currentAlbum->isRoot()))
