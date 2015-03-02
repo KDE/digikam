@@ -173,6 +173,7 @@ target_link_libraries(digikamgui
                       KF5::Solid
                       KF5::KIOCore
                       KF5::NotifyConfig
+                      KF5::WindowSystem
 
                       KF5::KDELibs4Support
 )
