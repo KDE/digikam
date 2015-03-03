@@ -79,7 +79,8 @@ public:
 // ----------------------------------------------------------------------------------------
 
 ImportFilters::ImportFilters(QWidget* const parent)
-    : KDialog(parent), d(new Private)
+    : KDialog(parent),
+      d(new Private)
 {
     setButtons(KDialog::Cancel | KDialog::Ok);
     setDefaultButton(KDialog::Ok);
@@ -106,7 +107,7 @@ ImportFilters::ImportFilters(QWidget* const parent)
     d->mimeLabel     = new KSqueezedTextLabel(this);
     horizontalLayout->addWidget(d->mimeLabel);
     d->mimeButton    = new QToolButton(this);
-    d->mimeButton->setText("Select Type Mime...");
+    d->mimeButton->setText(i18n("Select Type Mime..."));
     horizontalLayout->addWidget(d->mimeButton);
     verticalLayout->addLayout(horizontalLayout);
 
