@@ -441,63 +441,63 @@ void LightTableWindow::setupActions()
     ac->setDefaultShortcuts(d->forwardAction, QList<QKeySequence>() << Qt::Key_PageDown << Qt::Key_Space);
     d->forwardAction->setEnabled(false);
 
-    d->firstAction = new QAction(QIcon::fromTheme("go-first"), i18n("&First"), this);
+    d->firstAction = new QAction(QIcon::fromTheme(QLatin1String("go-first")), i18n("&First"), this);
     d->firstAction->setEnabled(false);
     connect(d->firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
     ac->addAction("lighttable_first", d->firstAction);
     ac->setDefaultShortcuts(d->firstAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_Home);
 
-    d->lastAction = new QAction(QIcon::fromTheme("go-last"), i18n("&Last"), this);
+    d->lastAction = new QAction(QIcon::fromTheme(QLatin1String("go-last")), i18n("&Last"), this);
     d->lastAction->setEnabled(false);
     connect(d->lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     ac->addAction("lighttable_last", d->lastAction);
     ac->setDefaultShortcuts(d->lastAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_End);
 
-    d->setItemLeftAction = new QAction(QIcon::fromTheme("arrow-left"), i18n("On left"), this);
+    d->setItemLeftAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-left")), i18n("On left"), this);
     d->setItemLeftAction->setEnabled(false);
     d->setItemLeftAction->setWhatsThis(i18n("Show item on left panel"));
     connect(d->setItemLeftAction, SIGNAL(triggered()), this, SLOT(slotSetItemLeft()));
     ac->addAction("lighttable_setitemleft", d->setItemLeftAction);
     ac->setDefaultShortcut(d->setItemLeftAction, Qt::CTRL + Qt::Key_L);
 
-    d->setItemRightAction = new QAction(QIcon::fromTheme("arrow-right"), i18n("On right"), this);
+    d->setItemRightAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right")), i18n("On right"), this);
     d->setItemRightAction->setEnabled(false);
     d->setItemRightAction->setWhatsThis(i18n("Show item on right panel"));
     connect(d->setItemRightAction, SIGNAL(triggered()), this, SLOT(slotSetItemRight()));
     ac->addAction("lighttable_setitemright", d->setItemRightAction);
     ac->setDefaultShortcut(d->setItemRightAction, Qt::CTRL + Qt::Key_R);
 
-    d->editItemAction = new QAction(QIcon::fromTheme("editimage"), i18n("Edit"), this);
+    d->editItemAction = new QAction(QIcon::fromTheme(QLatin1String("editimage")), i18n("Edit"), this);
     d->editItemAction->setEnabled(false);
     connect(d->editItemAction, SIGNAL(triggered()), this, SLOT(slotEditItem()));
     ac->addAction("lighttable_edititem", d->editItemAction);
     ac->setDefaultShortcut(d->editItemAction, Qt::Key_F4);
 
-    QAction* const openWithAction = new QAction(QIcon::fromTheme("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
+    QAction* const openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
     openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
     connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
     ac->addAction("open_with_default_application", openWithAction);
     ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
 
-    d->removeItemAction = new QAction(QIcon::fromTheme("list-remove"), i18n("Remove item from LightTable"), this);
+    d->removeItemAction = new QAction(QIcon::fromTheme(QLatin1String("list-remove")), i18n("Remove item from LightTable"), this);
     d->removeItemAction->setEnabled(false);
     connect(d->removeItemAction, SIGNAL(triggered()), this, SLOT(slotRemoveItem()));
     ac->addAction("lighttable_removeitem", d->removeItemAction);
     ac->setDefaultShortcut(d->removeItemAction, Qt::CTRL + Qt::Key_K);
 
-    d->clearListAction = new QAction(QIcon::fromTheme("edit-clear"), i18n("Remove all items from LightTable"), this);
+    d->clearListAction = new QAction(QIcon::fromTheme(QLatin1String("edit-clear")), i18n("Remove all items from LightTable"), this);
     d->clearListAction->setEnabled(false);
     connect(d->clearListAction, SIGNAL(triggered()), this, SLOT(slotClearItemsList()));
     ac->addAction("lighttable_clearlist", d->clearListAction);
     ac->setDefaultShortcut(d->clearListAction, Qt::CTRL + Qt::SHIFT + Qt::Key_K);
 
-    d->fileDeleteAction = new QAction(QIcon::fromTheme("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
+    d->fileDeleteAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18nc("Non-pluralized", "Move to Trash"), this);
     d->fileDeleteAction->setEnabled(false);
     connect(d->fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteItem()));
     ac->addAction("lighttable_filedelete", d->fileDeleteAction);
     ac->setDefaultShortcut(d->fileDeleteAction, Qt::Key_Delete);
 
-    d->fileDeleteFinalAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete immediately"), this);
+    d->fileDeleteFinalAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete immediately"), this);
     d->fileDeleteFinalAction->setEnabled(false);
     connect(d->fileDeleteFinalAction, SIGNAL(triggered()), this, SLOT(slotDeleteFinalItem()));
     ac->addAction("lighttable_filefinaldelete", d->fileDeleteFinalAction);
@@ -508,7 +508,7 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->syncPreviewAction = new QAction(QIcon::fromTheme("view-split-left-right"), i18n("Synchronize"), this);
+    d->syncPreviewAction = new QAction(QIcon::fromTheme(QLatin1String("view-split-left-right")), i18n("Synchronize"), this);
     d->syncPreviewAction->setEnabled(false);
     d->syncPreviewAction->setCheckable(true);
     d->syncPreviewAction->setWhatsThis(i18n("Synchronize preview from left and right panels"));
@@ -516,7 +516,7 @@ void LightTableWindow::setupActions()
     ac->addAction("lighttable_syncpreview", d->syncPreviewAction);
     ac->setDefaultShortcut(d->syncPreviewAction, Qt::CTRL + Qt::SHIFT + Qt::Key_Y);
 
-    d->navigateByPairAction = new QAction(QIcon::fromTheme("system-run"), i18n("By Pair"), this);
+    d->navigateByPairAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("By Pair"), this);
     d->navigateByPairAction->setEnabled(false);
     d->navigateByPairAction->setCheckable(true);
     d->navigateByPairAction->setWhatsThis(i18n("Navigate by pairs with all items"));
@@ -524,7 +524,7 @@ void LightTableWindow::setupActions()
     ac->addAction("lighttable_navigatebypair", d->navigateByPairAction);
     ac->setDefaultShortcut(d->navigateByPairAction, Qt::CTRL + Qt::SHIFT + Qt::Key_P);
 
-    d->clearOnCloseAction = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear On Close"), this);
+    d->clearOnCloseAction = new QAction(QIcon::fromTheme(QLatin1String("edit-clear")), i18n("Clear On Close"), this);
     d->clearOnCloseAction->setEnabled(true);
     d->clearOnCloseAction->setCheckable(true);
     d->clearOnCloseAction->setToolTip(i18n("Clear light table when it is closed"));
@@ -538,7 +538,7 @@ void LightTableWindow::setupActions()
     createFullScreenAction("lighttable_fullscreen");
     createSidebarActions();
 
-    d->slideShowAction = new QAction(QIcon::fromTheme("view-presentation"), i18n("Slideshow"), this);
+    d->slideShowAction = new QAction(QIcon::fromTheme(QLatin1String("view-presentation")), i18n("Slideshow"), this);
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     ac->addAction("lighttable_slideshow", d->slideShowAction);
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
@@ -557,12 +557,12 @@ void LightTableWindow::setupActions()
     ac->addAction("lighttable_zoomminus_left", d->leftZoomMinusAction);
     ac->setDefaultShortcut(d->leftZoomMinusAction, leftKeysMinus);
 
-    d->leftZoomTo100percents = new QAction(QIcon::fromTheme("zoom-original"), i18n("Zoom to 100%"), this);
+    d->leftZoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->leftZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotLeftZoomTo100()));
     ac->addAction("lighttable_zoomto100percents_left", d->leftZoomTo100percents);
     ac->setDefaultShortcut(d->leftZoomTo100percents, Qt::CTRL + Qt::Key_Comma);
 
-    d->leftZoomFitToWindowAction = new QAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->leftZoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18n("Fit to &Window"), this);
     connect(d->leftZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotLeftFitToWindow()));
     ac->addAction("lighttable_zoomfit2window_left", d->leftZoomFitToWindowAction);
     ac->setDefaultShortcut(d->leftZoomFitToWindowAction, Qt::ALT + Qt::CTRL + Qt::Key_E);
@@ -581,19 +581,19 @@ void LightTableWindow::setupActions()
     ac->addAction("lighttable_zoomminus_right", d->rightZoomMinusAction);
     ac->setDefaultShortcut(d->rightZoomMinusAction, rightKeysMinus);
 
-    d->rightZoomTo100percents = new QAction(QIcon::fromTheme("zoom-original"), i18n("Zoom to 100%"), this);
+    d->rightZoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->rightZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotRightZoomTo100()));
     ac->addAction("lighttable_zoomto100percents_right", d->rightZoomTo100percents);
     ac->setDefaultShortcut(d->rightZoomTo100percents, Qt::SHIFT + Qt::CTRL + Qt::Key_Comma);
 
-    d->rightZoomFitToWindowAction = new QAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->rightZoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18n("Fit to &Window"), this);
     connect(d->rightZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotRightFitToWindow()));
     ac->addAction("lighttable_zoomfit2window_right", d->rightZoomFitToWindowAction);
     ac->setDefaultShortcut(d->rightZoomFitToWindowAction, Qt::SHIFT + Qt::CTRL + Qt::Key_E);
 
     // -----------------------------------------------------------
 
-    d->viewCMViewAction = new QAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction = new QAction(QIcon::fromTheme(QLatin1String("video-display")), i18n("Color-Managed View"), this);
     d->viewCMViewAction->setCheckable(true);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     ac->addAction("color_managed_view", d->viewCMViewAction);

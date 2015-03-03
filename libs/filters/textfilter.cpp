@@ -84,7 +84,7 @@ TextFilter::TextFilter(QWidget* const parent)
 
     d->optionsBtn = new QToolButton(this);
     d->optionsBtn->setToolTip( i18n("Text Search Fields"));
-    d->optionsBtn->setIcon(QIcon::fromTheme("configure"));
+    d->optionsBtn->setIcon(QIcon::fromTheme(QLatin1String("configure")));
     d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
     d->optionsBtn->setWhatsThis(i18n("Defines which fields to search for the text in."));
 

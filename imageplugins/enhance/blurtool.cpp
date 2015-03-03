@@ -80,7 +80,7 @@ BlurTool::BlurTool(QObject* const parent)
 {
     setObjectName("gaussianblur");
     setToolName(i18n("Blur"));
-    setToolIcon(QIcon::fromTheme("blurimage"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("blurimage")));
     setToolHelp("blursharpentool.anchor");
 
     d->gboxSettings  = new EditorToolSettings;

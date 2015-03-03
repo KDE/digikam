@@ -243,7 +243,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     grid1->addWidget(label7,                 6, 0, 1, 1);
     grid1->addWidget(d->instructionsEdit,    6, 1, 1, 2);
 
-    insertTab(RIGHTS, page1, QIcon::fromTheme("flag-red"), i18n("Rights"));
+    insertTab(RIGHTS, page1, QIcon::fromTheme(QLatin1String("flag-red")), i18n("Rights"));
 
     // -- Location Template information panel -------------------------------------------------------------
 
@@ -309,7 +309,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     page2->setTabOrder(d->locationSublocationEdit, d->locationProvinceStateEdit);
     page2->setTabOrder(d->locationProvinceStateEdit, d->locationCountryCodeEdit);
 
-    insertTab(LOCATION, page2, QIcon::fromTheme("applications-internet"), i18n("Location"));
+    insertTab(LOCATION, page2, QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Location"));
 
     // -- Contact Template information panel -------------------------------------------------------------
 
@@ -427,7 +427,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     page3->setTabOrder(d->contactPhoneEdit, d->contactEmailEdit);
     page3->setTabOrder(d->contactEmailEdit, d->contactWebUrlEdit);
 
-    insertTab(CONTACT, page3, QIcon::fromTheme("view-pim-contacts"), i18n("Contact"));
+    insertTab(CONTACT, page3, QIcon::fromTheme(QLatin1String("view-pim-contacts")), i18n("Contact"));
 
     // -- Subjects Template information panel -------------------------------------------------------------
 
@@ -441,7 +441,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     grid4->addWidget(d->subjects, 0, 0, 1, 1);
     grid4->setRowStretch(1, 10);
 
-    insertTab(SUBJECTS, page4, QIcon::fromTheme("feed-subscribe"), i18n("Subjects"));
+    insertTab(SUBJECTS, page4, QIcon::fromTheme(QLatin1String("feed-subscribe")), i18n("Subjects"));
 }
 
 TemplatePanel::~TemplatePanel()

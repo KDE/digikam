@@ -407,7 +407,7 @@ void ShowFoto::setupActions()
     d->fileOpenAction = buildStdAction(StdOpenAction, this, SLOT(slotOpenFile()), this);
     actionCollection()->addAction("showfoto_open_file", d->fileOpenAction);
 
-    d->openFilesInFolderAction = new QAction(QIcon::fromTheme("folder-image"), i18n("Open folder"), this);
+    d->openFilesInFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-image")), i18n("Open folder"), this);
     actionCollection()->setDefaultShortcut(d->openFilesInFolderAction, Qt::CTRL+Qt::SHIFT+Qt::Key_O);
 
     connect(d->openFilesInFolderAction, &QAction::triggered,
@@ -478,12 +478,12 @@ void ShowFoto::applySettings()
 
     if (d->deleteItem2Trash)
     {
-        m_fileDeleteAction->setIcon(QIcon::fromTheme("user-trash"));
+        m_fileDeleteAction->setIcon(QIcon::fromTheme(QLatin1String("user-trash")));
         m_fileDeleteAction->setText(i18nc("Non-pluralized", "Move to Trash"));
     }
     else
     {
-        m_fileDeleteAction->setIcon(QIcon::fromTheme("edit-delete"));
+        m_fileDeleteAction->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 

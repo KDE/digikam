@@ -473,9 +473,9 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
                                qApp->activeWindow());
             
             msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
-            msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("view-refresh"));
+            msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
             msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
-            msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("document-new"));
+            msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
             msgBox.setDefaultButton(QMessageBox::Yes);
             
             int result = msgBox.exec();
@@ -531,11 +531,11 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                                        qApp->activeWindow());
             
                     msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
-                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("view-refresh"));
+                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
                     msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
-                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("document-new"));
+                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
                     msgBox.button(QMessageBox::Cancel)->setText(i18n("Copy Current Database"));
-                    msgBox.button(QMessageBox::Cancel)->setIcon(QIcon::fromTheme("edit-copy"));
+                    msgBox.button(QMessageBox::Cancel)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
                     msgBox.setDefaultButton(QMessageBox::Yes);
                     
                     result = msgBox.exec();
@@ -552,9 +552,9 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                                        qApp->activeWindow());
             
                     msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
-                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("view-refresh"));
+                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
                     msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
-                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("document-new"));
+                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
                     msgBox.setDefaultButton(QMessageBox::Yes);
                     
                     result = msgBox.exec();
@@ -601,9 +601,9 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                                        qApp->activeWindow());
             
                     msgBox.button(QMessageBox::Yes)->setText(i18n("Create New Database"));
-                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("document-new"));
+                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
                     msgBox.button(QMessageBox::No)->setText(i18n("Copy Current Database"));
-                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("edit-copy"));
+                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
                     msgBox.setDefaultButton(QMessageBox::Yes);
                     
                     result = msgBox.exec();
@@ -634,9 +634,9 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                                    qApp->activeWindow());
         
                 msgBox.button(QMessageBox::Yes)->setText(i18n("Copy Current Database"));
-                msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("edit-copy"));
+                msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
                 msgBox.button(QMessageBox::No)->setText(i18n("Use Existing File"));
-                msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("document-open"));
+                msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
                 msgBox.setDefaultButton(QMessageBox::Yes);
                 
                 result = msgBox.exec();
@@ -899,7 +899,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         mainLayout->setColumnStretch(1, 1);
 
         QLabel* const deviceIconLabel = new QLabel;
-        deviceIconLabel->setPixmap(QIcon::fromTheme("drive-harddisk").pixmap(64));
+        deviceIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("drive-harddisk")).pixmap(64));
         mainLayout->addWidget(deviceIconLabel, 0, 0);
 
         QLabel* const mainLabel = new QLabel(i18n("<p>The collection </p><p><b>%1</b><br/>(%2)</p><p> is currently not found on your system.<br/> "

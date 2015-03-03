@@ -110,7 +110,7 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 {
     setObjectName("perspective");
     setToolName(i18n("Perspective"));
-    setToolIcon(QIcon::fromTheme("perspective"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("perspective")));
 
     // -------------------------------------------------------------
 

@@ -160,7 +160,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 {
     setObjectName("inpainting");
     setToolName(i18n("In-painting"));
-    setToolIcon(QIcon::fromTheme("inpainting"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("inpainting")));
 
     // -------------------------------------------------------------
 

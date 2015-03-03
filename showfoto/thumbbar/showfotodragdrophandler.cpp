@@ -50,13 +50,13 @@ ShowfotoDragDropHandler::ShowfotoDragDropHandler(ShowfotoImageModel* const model
 
 QAction* ShowfotoDragDropHandler::addGroupAction(QMenu* const menu)
 {
-    return menu->addAction(QIcon::fromTheme("arrow-down-double"),
+    return menu->addAction(QIcon::fromTheme(QLatin1String("arrow-down-double")),
                            i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
 QAction* ShowfotoDragDropHandler::addCancelAction(QMenu* const menu)
 {
-    return menu->addAction(QIcon::fromTheme("dialog-cancel"), i18n("C&ancel"));
+    return menu->addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel"));
 }
 
 bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)

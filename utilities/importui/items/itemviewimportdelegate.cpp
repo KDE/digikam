@@ -401,15 +401,15 @@ void ItemViewImportDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int 
 
         if (pickId == RejectedLabel)
         {
-            icon = QIcon::fromTheme("flag-red");
+            icon = QIcon::fromTheme(QLatin1String("flag-red"));
         }
         else if (pickId == PendingLabel)
         {
-            icon = QIcon::fromTheme("flag-yellow");
+            icon = QIcon::fromTheme(QLatin1String("flag-yellow"));
         }
         else if (pickId == AcceptedLabel)
         {
-            icon = QIcon::fromTheme("flag-green");
+            icon = QIcon::fromTheme(QLatin1String("flag-green"));
         }
 
         icon.paint(p, r);
@@ -435,7 +435,7 @@ void ItemViewImportDelegate::drawGeolocationIndicator(QPainter* p, const QRect& 
 {
     if (!r.isNull())
     {
-        QIcon icon = QIcon::fromTheme("applications-internet");
+        QIcon icon = QIcon::fromTheme(QLatin1String("applications-internet"));
         qreal op   = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
@@ -449,17 +449,17 @@ void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, 
 
     if (itemType == CamItemInfo::DownloadUnknown)
     {
-        icon = QIcon::fromTheme("dialog-information");
+        icon = QIcon::fromTheme(QLatin1String("dialog-information"));
     }
 
     if (itemType == CamItemInfo::DownloadedNo) // TODO: CamItemInfo::NewPicture
     {
-        icon = QIcon::fromTheme("favorites");
+        icon = QIcon::fromTheme(QLatin1String("favorites"));
     }
 
     if (itemType == CamItemInfo::DownloadedYes)
     {
-        icon = QIcon::fromTheme("dialog-ok");
+        icon = QIcon::fromTheme(QLatin1String("dialog-ok"));
     }
 
     qreal op = p->opacity();
@@ -475,12 +475,12 @@ void ItemViewImportDelegate::drawLockIndicator(QPainter* p, const QRect& r, int 
     if (lockStatus == 1)
     {
         return; // draw lock only when image is locked
-        //icon = QIcon::fromTheme("object-unlocked");
+        //icon = QIcon::fromTheme(QLatin1String("object-unlocked"));
     }
 
     if (lockStatus == 0)
     {
-        icon = QIcon::fromTheme("object-locked");
+        icon = QIcon::fromTheme(QLatin1String("object-locked"));
     }
 
     qreal op = p->opacity();
@@ -512,11 +512,11 @@ void ItemViewImportDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
 
         if (open)
         {
-            icon = QIcon::fromTheme("document-import");
+            icon = QIcon::fromTheme(QLatin1String("document-import"));
         }
         else
         {
-            icon = QIcon::fromTheme("document-multiple");
+            icon = QIcon::fromTheme(QLatin1String("document-multiple"));
         }
 
         qreal op = p->opacity();

@@ -256,11 +256,11 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
 
     QAction* leftPanelAction = 0, *rightPanelAction = 0, *editAction = 0, *removeAction = 0, *clearAllAction = 0;
 
-    leftPanelAction  = new QAction(QIcon::fromTheme("arrow-left"),        i18n("Show on left panel"),  this);
-    rightPanelAction = new QAction(QIcon::fromTheme("arrow-right"),       i18n("Show on right panel"), this);
-    editAction       = new QAction(QIcon::fromTheme("editimage"),         i18n("Edit"),                this);
-    removeAction     = new QAction(QIcon::fromTheme("dialog-close"),      i18n("Remove item"),         this);
-    clearAllAction   = new QAction(QIcon::fromTheme("edit-delete-shred"), i18n("Clear all"),           this);
+    leftPanelAction  = new QAction(QIcon::fromTheme(QLatin1String("arrow-left")),        i18n("Show on left panel"),  this);
+    rightPanelAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right")),       i18n("Show on right panel"), this);
+    editAction       = new QAction(QIcon::fromTheme(QLatin1String("editimage")),         i18n("Edit"),                this);
+    removeAction     = new QAction(QIcon::fromTheme(QLatin1String("dialog-close")),      i18n("Remove item"),         this);
+    clearAllAction   = new QAction(QIcon::fromTheme(QLatin1String("edit-delete-shred")), i18n("Clear all"),           this);
 
     leftPanelAction->setEnabled(d->navigateByPair  ? false : true);
     rightPanelAction->setEnabled(d->navigateByPair ? false : true);

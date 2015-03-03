@@ -88,7 +88,7 @@ CharcoalTool::CharcoalTool(QObject* const parent)
 {
     setObjectName("charcoal");
     setToolName(i18n("Charcoal"));
-    setToolIcon(QIcon::fromTheme("charcoaltool"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("charcoaltool")));
 
     // -------------------------------------------------------------
 

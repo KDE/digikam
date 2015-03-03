@@ -79,7 +79,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* const parent)
 {
     setObjectName("antivignetting");
     setToolName(i18n("Vignetting Correction"));
-    setToolIcon(QIcon::fromTheme("antivignetting"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("antivignetting")));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);

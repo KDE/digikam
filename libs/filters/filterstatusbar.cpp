@@ -93,13 +93,13 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
                                "Press the Settings button from the right side to open the filters panel."));
 
     d->resetBtn    = new QToolButton(this);
-    d->resetBtn->setIcon(QIcon::fromTheme("edit-delete"));
+    d->resetBtn->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
     d->resetBtn->setToolTip(i18n("Reset all active filters"));
     d->resetBtn->setFocusPolicy(Qt::NoFocus);
     d->resetBtn->setAutoRaise(true);
 
     d->settingsBtn = new QToolButton(this);
-    d->settingsBtn->setIcon(QIcon::fromTheme("view-filter"));
+    d->settingsBtn->setIcon(QIcon::fromTheme(QLatin1String("view-filter")));
     d->settingsBtn->setToolTip(i18n("Open filter settings panel"));
     d->settingsBtn->setFocusPolicy(Qt::NoFocus);
     d->settingsBtn->setAutoRaise(true);

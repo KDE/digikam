@@ -95,7 +95,7 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 {
     setObjectName("coloreffects");
     setToolName(i18n("Color Effects"));
-    setToolIcon(QIcon::fromTheme("colorfx"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("colorfx")));
 
     // -------------------------------------------------------------
 

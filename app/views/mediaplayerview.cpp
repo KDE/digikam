@@ -137,8 +137,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->prevAction          = new QAction(QIcon::fromTheme("go-previous"),  i18nc("go to previous image", "Back"), this);
-    d->nextAction          = new QAction(QIcon::fromTheme("go-next"),      i18nc("go to next image", "Forward"),  this);
+    d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")),  i18nc("go to previous image", "Back"), this);
+    d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),      i18nc("go to next image", "Forward"),  this);
 
     d->errorView           = new QFrame(this);
     QLabel* const errorMsg = new QLabel(i18n("An error has occurred with the media player...."), this);

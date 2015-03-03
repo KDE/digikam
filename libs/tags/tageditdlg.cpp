@@ -190,7 +190,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
 
     d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
 
-    d->resetIconButton = new QPushButton(QIcon::fromTheme("view-refresh"), i18n("Reset"), page);
+    d->resetIconButton = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Reset"), page);
 
     if (create)
     {

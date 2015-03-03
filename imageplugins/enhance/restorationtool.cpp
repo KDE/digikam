@@ -133,7 +133,7 @@ RestorationTool::RestorationTool(QObject* const parent)
 {
     setObjectName("restoration");
     setToolName(i18n("Restoration"));
-    setToolIcon(QIcon::fromTheme("restoration"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("restoration")));
 
     // -------------------------------------------------------------
 

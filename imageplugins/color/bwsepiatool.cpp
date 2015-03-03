@@ -87,7 +87,7 @@ BWSepiaTool::BWSepiaTool(QObject* const parent)
 {
     setObjectName("convertbw");
     setToolName(i18n("Black and White"));
-    setToolIcon(QIcon::fromTheme("bwtonal"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("bwtonal")));
     setToolHelp("blackandwhitetool.anchor");
     setInitPreview(true);
 

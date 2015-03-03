@@ -412,7 +412,7 @@ void ImageWindow::setupActions()
 
     KActionCollection *ac = actionCollection();
 
-    d->toMainWindowAction = new QAction(QIcon::fromTheme("view-list-icons"),
+    d->toMainWindowAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-icons")),
                                         i18nc("@action Finish editing, close editor, back to main window", "Close Editor"), this);
     connect(d->toMainWindowAction, SIGNAL(triggered()), this, SLOT(slotToMainWindow()));
     ac->addAction("imageview_tomainwindow", d->toMainWindowAction);
@@ -422,7 +422,7 @@ void ImageWindow::setupActions()
 
     // Pop up dialog to ask user whether to permanently delete
 
-    d->fileDeletePermanentlyAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete File Permanently"), this);
+    d->fileDeletePermanentlyAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete File Permanently"), this);
     connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanently()));
     ac->addAction("image_delete_permanently", d->fileDeletePermanentlyAction);
@@ -431,14 +431,14 @@ void ImageWindow::setupActions()
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
 
-    d->fileDeletePermanentlyDirectlyAction = new QAction(QIcon::fromTheme("edit-delete"),
+    d->fileDeletePermanentlyDirectlyAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")),
                                                          i18n("Delete Permanently without Confirmation"), this);
     connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanentlyDirectly()));
     ac->addAction("image_delete_permanently_directly",
                                   d->fileDeletePermanentlyDirectlyAction);
 
-    d->fileTrashDirectlyAction = new QAction(QIcon::fromTheme("user-trash"),
+    d->fileTrashDirectlyAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")),
                                              i18n("Move to Trash without Confirmation"), this);
     connect(d->fileTrashDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotTrashCurrentItemDirectly()));

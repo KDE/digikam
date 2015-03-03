@@ -111,49 +111,49 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     d->page_editor    = addPage(d->editorPage, i18n("Image Editor"));
     d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
                                    "<i>Customize image editor behavior</i></qt>"));
-    d->page_editor->setIcon(QIcon::fromTheme("editimage"));
+    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("editimage")));
 
     d->metadataPage   = new SetupMetadata();
     d->page_metadata  = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
                                      "<i>Setup relations between images and metadata</i></qt>"));
-    d->page_metadata->setIcon(QIcon::fromTheme("exifinfo")); // krazy:exclude=iconnames
+    d->page_metadata->setIcon(QIcon::fromTheme(QLatin1String("exifinfo"))); // krazy:exclude=iconnames
 
     d->toolTipPage    = new SetupToolTip();
     d->page_tooltip   = addPage(d->toolTipPage, i18n("Tool Tip"));
     d->page_tooltip->setHeader(i18n("<qt>Thumbbar Items Tool-Tip Settings<br/>"
                                     "<i>Customize information in tool-tips</i></qt>"));
-    d->page_tooltip->setIcon(QIcon::fromTheme("dialog-information"));
+    d->page_tooltip->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
 
     d->rawPage        = new Digikam::SetupRaw();
     d->page_raw       = addPage(d->rawPage, i18n("RAW Decoding"));
     d->page_raw->setHeader(i18n("<qt>RAW Files Decoding Settings<br/>"
                                   "<i>Customize default RAW decoding settings</i></qt>"));
-    d->page_raw->setIcon(QIcon::fromTheme("kdcraw"));
+    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("kdcraw")));
 
     d->iccPage        = new Digikam::SetupICC(buttonBox());
     d->page_icc       = addPage(d->iccPage, i18n("Color Management"));
     d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
                                 "<i>Customize color management settings</i></qt>"));
-    d->page_icc->setIcon(QIcon::fromTheme("colormanagement"));
+    d->page_icc->setIcon(QIcon::fromTheme(QLatin1String("colormanagement")));
 
     d->iofilesPage    = new Digikam::SetupIOFiles();
     d->page_iofiles   = addPage(d->iofilesPage, i18n("Save Images"));
     d->page_iofiles->setHeader(i18n("<qt>Settings for Saving Image Files<br/>"
                                     "<i>Set default configuration used to save images</i></qt>"));
-    d->page_iofiles->setIcon(QIcon::fromTheme("document-save-all"));
+    d->page_iofiles->setIcon(QIcon::fromTheme(QLatin1String("document-save-all")));
 
     d->slideshowPage  = new Digikam::SetupSlideShow();
     d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));
     d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
                                       "<i>Customize slideshow settings</i></qt>"));
-    d->page_slideshow->setIcon(QIcon::fromTheme("view-presentation"));
+    d->page_slideshow->setIcon(QIcon::fromTheme(QLatin1String("view-presentation")));
 
     d->miscPage       = new SetupMisc();
     d->page_misc      = addPage(d->miscPage, i18n("Miscellaneous"));
     d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
                                  "<i>Customize behavior of the other parts of Showfoto</i></qt>"));
-    d->page_misc->setIcon(QIcon::fromTheme("preferences-other"));
+    d->page_misc->setIcon(QIcon::fromTheme(QLatin1String("preferences-other")));
 
     for (int i = 0; i != SetupPageEnumLast; ++i)
     {

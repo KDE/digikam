@@ -132,26 +132,26 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
     else
     {
         /** This is a dummy action, delete is disable for root tag **/
-        QAction* deleteTagsAction = new QAction(QIcon::fromTheme("user-trash"),
+        QAction* deleteTagsAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")),
                                                 i18n("Delete Tags"), this);
         cmh.addAction(deleteTagsAction);
         deleteTagsAction->setEnabled(false);
     }
     cmh.addSeparator();
 
-    QAction* const resetIcon     = new QAction(QIcon::fromTheme("view-refresh"),
+    QAction* const resetIcon     = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")),
                                                i18n("Reset tag Icon"), this);
 
-    QAction* const invSel        = new QAction(QIcon::fromTheme("tag-reset"),
+    QAction* const invSel        = new QAction(QIcon::fromTheme(QLatin1String("tag-reset")),
                                                i18n("Invert Selection"), this);
 
-    QAction* const expandTree    = new QAction(QIcon::fromTheme("format-indent-more"),
+    QAction* const expandTree    = new QAction(QIcon::fromTheme(QLatin1String("format-indent-more")),
                                                i18n("Expand Tag Tree"), this);
 
-    QAction* const expandSel     = new QAction(QIcon::fromTheme("format-indent-more"),
+    QAction* const expandSel     = new QAction(QIcon::fromTheme(QLatin1String("format-indent-more")),
                                                i18n("Expand Selected Nodes"), this);
 
-    QAction* const delTagFromImg = new QAction(QIcon::fromTheme("tag-delete"),
+    QAction* const delTagFromImg = new QAction(QIcon::fromTheme(QLatin1String("tag-delete")),
                                                i18n("Remove Tag from Images"), this);
 
     cmh.addAction(resetIcon,     d->tagMngr, SLOT(slotResetTagIcon()),       false);

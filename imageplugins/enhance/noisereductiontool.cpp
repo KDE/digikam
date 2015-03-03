@@ -71,7 +71,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* const parent)
 {
     setObjectName("noisereduction");
     setToolName(i18n("Noise Reduction"));
-    setToolIcon(QIcon::fromTheme("noisereduction"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("noisereduction")));
 
     // -------------------------------------------------------------
 

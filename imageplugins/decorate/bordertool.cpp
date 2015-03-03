@@ -72,7 +72,7 @@ BorderTool::BorderTool(QObject* const parent)
 {
     setObjectName("border");
     setToolName(i18n("Add Border"));
-    setToolIcon(QIcon::fromTheme("bordertool"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("bordertool")));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);

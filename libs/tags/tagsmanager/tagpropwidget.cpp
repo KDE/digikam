@@ -94,7 +94,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QGridLayout* const grid = new QGridLayout(this);
     QLabel* const logo      = new QLabel(this);
 
-    logo->setPixmap(QIcon::fromTheme("tag-properties").pixmap(30,30));
+    logo->setPixmap(QIcon::fromTheme(QLatin1String("tag-properties")).pixmap(30,30));
     d->topLabel = new QLabel(this);
     d->topLabel->setText(i18n("Tag Properties"));
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -129,7 +129,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
 
-    d->resetIconButton = new QPushButton(QIcon::fromTheme("view-refresh"), i18n("Reset"), this);
+    d->resetIconButton = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Reset"), this);
 
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));

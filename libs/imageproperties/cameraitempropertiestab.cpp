@@ -244,7 +244,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     glay1->setSpacing(0);
 
-    addItem(w1, QIcon::fromTheme("dialog-information"),
+    addItem(w1, QIcon::fromTheme(QLatin1String("dialog-information")),
             i18n("Camera File Properties"), QString("FileProperties"), true);
 
     // --------------------------------------------------
@@ -302,7 +302,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     glay2->setSpacing(0);
 
-    addItem(w2, QIcon::fromTheme("camera-photo"),
+    addItem(w2, QIcon::fromTheme(QLatin1String("camera-photo")),
             i18n("Photograph Properties"), QString("PhotographProperties"), true);
 
     // -------------------------------------------------- 
@@ -344,7 +344,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay3->setSpacing(0);
     glay3->setColumnStretch(1, 10);
 
-    addItem(w3, QIcon::fromTheme("video-x-generic"),
+    addItem(w3, QIcon::fromTheme(QLatin1String("video-x-generic")),
             i18n("Video Properties"), QString("VideoProperties"), true);
 
     // --------------------------------------------------

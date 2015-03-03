@@ -70,8 +70,8 @@ TagFolderView::TagFolderView(QWidget* const parent, TagModel* const model)
 {
     setAlbumModel(model);
 
-    d->resetIconAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reset Tag Icon"),     this);
-    d->findDuplAction  = new QAction(QIcon::fromTheme("tools-wizard"), i18n("Find Duplicates..."), this);
+    d->resetIconAction = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Reset Tag Icon"),     this);
+    d->findDuplAction  = new QAction(QIcon::fromTheme(QLatin1String("tools-wizard")), i18n("Find Duplicates..."), this);
 
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
@@ -107,12 +107,12 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     cmh.addAction(d->resetIconAction);
     cmh.addSeparator();
 
-    QAction* const expandSel   = new QAction(QIcon::fromTheme("format-indent-more"),
+    QAction* const expandSel   = new QAction(QIcon::fromTheme(QLatin1String("format-indent-more")),
                                              i18n("Expand Selected Nodes"), this);
 
     cmh.addAction(expandSel, this, SLOT(slotExpandNode()), false);
 
-    QAction* const collapseSel = new QAction(QIcon::fromTheme("format-indent-more"),
+    QAction* const collapseSel = new QAction(QIcon::fromTheme(QLatin1String("format-indent-more")),
                                              i18n("Collapse Selected Recursively"), this);
 
     cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);
@@ -258,12 +258,12 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
         cmh.addAction(d->findDuplAction);
     }
 
-    QAction* const expandSel   = new QAction(QIcon::fromTheme("format-indent-more"),
+    QAction* const expandSel   = new QAction(QIcon::fromTheme(QLatin1String("format-indent-more")),
                                              i18n("Expand Selected Recursively"), this);
 
     cmh.addAction(expandSel, this, SLOT(slotExpandNode()), false);
 
-    QAction* const collapseSel = new QAction(QIcon::fromTheme("format-indent-more"),
+    QAction* const collapseSel = new QAction(QIcon::fromTheme(QLatin1String("format-indent-more")),
                                              i18n("Collapse Selected Recursively"), this);
 
     cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);

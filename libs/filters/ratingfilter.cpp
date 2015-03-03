@@ -223,7 +223,7 @@ RatingFilter::RatingFilter(QWidget* const parent)
 
     d->optionsBtn   = new QToolButton(this);
     d->optionsBtn->setToolTip( i18n("Rating Filter Options"));
-    d->optionsBtn->setIcon(QIcon::fromTheme("configure"));
+    d->optionsBtn->setIcon(QIcon::fromTheme(QLatin1String("configure")));
     d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
 
     d->optionsMenu  = new QMenu(d->optionsBtn);

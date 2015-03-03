@@ -69,18 +69,18 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* const parent, const QVariant
     // to load the rc file from digikam's installation path
     setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Decoration plugins"));
 
-    d->insertTextAction = new QAction(QIcon::fromTheme("insert-text"), i18n("Insert Text..."), this);
+    d->insertTextAction = new QAction(QIcon::fromTheme(QLatin1String("insert-text")), i18n("Insert Text..."), this);
     actionCollection()->addAction("imageplugin_inserttext", d->insertTextAction );
     actionCollection()->setDefaultShortcut(d->insertTextAction, Qt::SHIFT+Qt::CTRL+Qt::Key_T);
     connect(d->insertTextAction, SIGNAL(triggered(bool)),
             this, SLOT(slotInsertText()));
 
-    d->borderAction = new QAction(QIcon::fromTheme("bordertool"), i18n("Add Border..."), this);
+    d->borderAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("Add Border..."), this);
     actionCollection()->addAction("imageplugin_border", d->borderAction );
     connect(d->borderAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBorder()));
 
-    d->textureAction = new QAction(QIcon::fromTheme("texture"), i18n("Apply Texture..."), this);
+    d->textureAction = new QAction(QIcon::fromTheme(QLatin1String("texture")), i18n("Apply Texture..."), this);
     actionCollection()->addAction("imageplugin_texture", d->textureAction );
     connect(d->textureAction, SIGNAL(triggered(bool)),
             this, SLOT(slotTexture()));

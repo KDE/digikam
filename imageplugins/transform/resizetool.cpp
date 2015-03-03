@@ -172,7 +172,7 @@ ResizeTool::ResizeTool(QObject* const parent)
 {
     setObjectName("resizeimage");
     setToolName(i18n("Resize Image"));
-    setToolIcon(QIcon::fromTheme("transform-scale"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("transform-scale")));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false);
     setToolView(d->previewWidget);

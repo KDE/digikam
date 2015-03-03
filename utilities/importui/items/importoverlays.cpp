@@ -420,11 +420,11 @@ QIcon ImportRotateOverlayButton::icon()
 {
     if (m_direction == ImportRotateOverlayLeft)
     {
-        return QIcon::fromTheme("object-rotate-left");
+        return QIcon::fromTheme(QLatin1String("object-rotate-left"));
     }
     else
     {
-        return QIcon::fromTheme("object-rotate-right");
+        return QIcon::fromTheme(QLatin1String("object-rotate-right"));
     }
 }
 

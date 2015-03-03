@@ -94,7 +94,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* const parent)
 {
     setObjectName("lensautocorrection");
     setToolName(i18n("Lens Auto-Correction"));
-    setToolIcon(QIcon::fromTheme("lensautofix"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("lensautofix")));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);

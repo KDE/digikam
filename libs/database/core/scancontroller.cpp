@@ -172,7 +172,7 @@ public:
     {
         if (albumPix.isNull())
         {
-            albumPix = QIcon::fromTheme("folder-image").pixmap(32);
+            albumPix = QIcon::fromTheme(QLatin1String("folder-image")).pixmap(32);
         }
 
         return albumPix;
@@ -182,7 +182,7 @@ public:
     {
         if (rootPix.isNull())
         {
-            rootPix = QIcon::fromTheme("folder-open").pixmap(32);
+            rootPix = QIcon::fromTheme(QLatin1String("folder-open")).pixmap(32);
         }
 
         return rootPix;
@@ -192,7 +192,7 @@ public:
     {
         if (actionPix.isNull())
         {
-            actionPix = QIcon::fromTheme("system-run").pixmap(32);
+            actionPix = QIcon::fromTheme(QLatin1String("system-run")).pixmap(32);
         }
 
         return actionPix;
@@ -202,7 +202,7 @@ public:
     {
         if (errorPix.isNull())
         {
-            errorPix = QIcon::fromTheme("dialog-error").pixmap(32);
+            errorPix = QIcon::fromTheme(QLatin1String("dialog-error")).pixmap(32);
         }
 
         return errorPix;
@@ -212,7 +212,7 @@ public:
     {
         if (errorPix.isNull())
         {
-            errorPix = QIcon::fromTheme("view-refresh").pixmap(32);
+            errorPix = QIcon::fromTheme(QLatin1String("view-refresh")).pixmap(32);
         }
 
         return errorPix;

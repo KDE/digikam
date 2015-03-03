@@ -85,7 +85,7 @@ LocalContrastTool::LocalContrastTool(QObject* const parent)
 {
     setObjectName("localcontrast");
     setToolName(i18n("Local Contrast"));
-    setToolIcon(QIcon::fromTheme("tonemap"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("tonemap")));
 
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);

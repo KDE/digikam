@@ -80,7 +80,7 @@ SharpenTool::SharpenTool(QObject* const parent)
 {
     setObjectName("sharpen");
     setToolName(i18n("Sharpen"));
-    setToolIcon(QIcon::fromTheme("sharpenimage"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("sharpenimage")));
     setToolHelp("blursharpentool.anchor");
 
     // -------------------------------------------------------------

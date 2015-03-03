@@ -216,7 +216,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 {
     setObjectName("aspectratiocrop");
     setToolName(i18n("Aspect Ratio Crop"));
-    setToolIcon(QIcon::fromTheme("ratiocrop"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("ratiocrop")));
     setToolHelp("ratiocroptool.anchor");
 
     // -------------------------------------------------------------
@@ -273,7 +273,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     grid3->setMargin(d->gboxSettings->spacingHint());
     grid3->setSpacing(d->gboxSettings->spacingHint());
 
-    d->expbox->addItem(cropInfo, QIcon::fromTheme("help-about").pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
+    d->expbox->addItem(cropInfo, QIcon::fromTheme(QLatin1String("help-about")).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
                        i18n("Crop Information"), QString("CropInformation"), true);
 
     // -------------------------------------------------------------
@@ -415,7 +415,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
 
-    d->expbox->addItem(cropSelection, QIcon::fromTheme("transform-crop-and-resize").pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
+    d->expbox->addItem(cropSelection, QIcon::fromTheme(QLatin1String("transform-crop-and-resize")).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
                        i18n("Crop Settings"), QString("CropSelection"), true);
 
     // -------------------------------------------------------------
@@ -477,7 +477,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     grid2->setMargin(d->gboxSettings->spacingHint());
     grid2->setSpacing(d->gboxSettings->spacingHint());
 
-    d->expbox->addItem(compositionGuide, QIcon::fromTheme("tools-wizard").pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
+    d->expbox->addItem(compositionGuide, QIcon::fromTheme(QLatin1String("tools-wizard")).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
                        i18n("Composition Guides"), QString("CompositionGuide"), true);
 
     d->expbox->addStretch();

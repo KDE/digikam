@@ -92,12 +92,12 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
     d->cameraItemTab = new CameraItemPropertiesTab(parent);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
 
-    appendTab(d->cameraItemTab, QIcon::fromTheme("document-properties"),   i18n("Properties"));
-    appendTab(d->metadataTab,   QIcon::fromTheme("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
+    appendTab(d->cameraItemTab, QIcon::fromTheme(QLatin1String("document-properties")),   i18n("Properties"));
+    appendTab(d->metadataTab,   QIcon::fromTheme(QLatin1String("exifinfo")),              i18n("Metadata")); // krazy:exclude=iconnames
 
 #ifdef HAVE_KGEOMAP
     d->gpsTab        = new ImagePropertiesGPSTab(parent);
-    appendTab(d->gpsTab,        QIcon::fromTheme("applications-internet"), i18n("Geolocation"));
+    appendTab(d->gpsTab,        QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Geolocation"));
 #endif // HAVE_KGEOMAP
 
     // ----------------------------------------------------------

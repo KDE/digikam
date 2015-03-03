@@ -88,7 +88,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* const parent)
 {
     setObjectName("whitebalance");
     setToolName(i18n("White Balance"));
-    setToolIcon(QIcon::fromTheme("whitebalance"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("whitebalance")));
     setInitPreview(true);
 
     // -------------------------------------------------------------

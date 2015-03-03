@@ -155,7 +155,7 @@ void ImagePropertiesVersionsTab::addShowHideOverlay()
 
 void ImagePropertiesVersionsTab::addOpenImageAction()
 {
-    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme("document-open"),
+    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme(QLatin1String("document-open")),
                                                                                i18n("Open"),
                                                                                i18n("Open file"));
 
@@ -165,7 +165,7 @@ void ImagePropertiesVersionsTab::addOpenImageAction()
 
 void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceModel)
 {
-    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme("folder-image"),
+    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme(QLatin1String("folder-image")),
                                                                                i18n("Go To Albums"),
                                                                                i18nc("@info:tooltip", "Go to the album of this image"));
     overlay->setReferenceModel(referenceModel);

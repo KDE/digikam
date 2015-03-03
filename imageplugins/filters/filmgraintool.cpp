@@ -79,7 +79,7 @@ FilmGrainTool::FilmGrainTool(QObject* const parent)
 {
     setObjectName("filmgrain");
     setToolName(i18n("Film Grain"));
-    setToolIcon(QIcon::fromTheme("filmgrain"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("filmgrain")));
     setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;

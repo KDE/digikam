@@ -108,7 +108,7 @@ ShearTool::ShearTool(QObject* const parent)
 {
     setObjectName("sheartool");
     setToolName(i18n("Shear Tool"));
-    setToolIcon(QIcon::fromTheme("shear"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("shear")));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the shear operation preview. "

@@ -82,7 +82,7 @@ EmbossTool::EmbossTool(QObject* const parent)
 {
     setObjectName("emboss");
     setToolName(i18n("Emboss"));
-    setToolIcon(QIcon::fromTheme("embosstool"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("embosstool")));
     setInitPreview(true);
 
     // -------------------------------------------------------------

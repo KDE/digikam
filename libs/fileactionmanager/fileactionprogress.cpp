@@ -43,7 +43,7 @@ FileActionProgress::FileActionProgress(const char* name)
 {
     ProgressManager::addProgressItem(this);
     setLabel(i18n("Process Items"));
-    setThumbnail(QIcon::fromTheme("digikam"));
+    setThumbnail(QIcon::fromTheme(QLatin1String("digikam")));
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));

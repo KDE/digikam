@@ -229,7 +229,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     applyButtonBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->applyBtn           = new QPushButton(i18n("Apply"), applyButtonBox);
-    d->applyBtn->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+    d->applyBtn->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     //buttonsBox->setStretchFactor(d->applyBtn, 10);
@@ -238,12 +238,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     buttonsBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->revertBtn          = new QToolButton(buttonsBox);
-    d->revertBtn->setIcon(QIcon::fromTheme("document-revert"));
+    d->revertBtn->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
 
     d->applyToAllVersionsButton = new QPushButton(i18n("Apply to all versions"), buttonsBox);
-    d->applyToAllVersionsButton->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+    d->applyToAllVersionsButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
     d->applyToAllVersionsButton->setEnabled(false);
     d->applyToAllVersionsButton->setToolTip(i18n("Apply all changes to all versions of this image"));
 
@@ -303,13 +303,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
     d->assignedTagsBtn->setToolTip( i18n("Tags already assigned"));
-    d->assignedTagsBtn->setIcon(QIcon::fromTheme("tag-assigned"));
+    d->assignedTagsBtn->setIcon(QIcon::fromTheme(QLatin1String("tag-assigned")));
     d->assignedTagsBtn->setCheckable(true);
 
     d->recentTagsBtn            = new QToolButton(tagsSearch);
     QMenu* const recentTagsMenu = new QMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
-    d->recentTagsBtn->setIcon(QIcon::fromTheme("tag-recents"));
+    d->recentTagsBtn->setIcon(QIcon::fromTheme(QLatin1String("tag-recents")));
     d->recentTagsBtn->setIconSize(QSize(16, 16));
     d->recentTagsBtn->setMenu(recentTagsMenu);
     d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);

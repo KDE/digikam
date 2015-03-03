@@ -88,7 +88,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* const parent)
 {
     setObjectName("adjustcurves");
     setToolName(i18n("Adjust Curves"));
-    setToolIcon(QIcon::fromTheme("adjustcurves"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("adjustcurves")));
 
     // -------------------------------------------------------------
 

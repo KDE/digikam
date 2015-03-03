@@ -395,7 +395,7 @@ void AlbumLabelsTreeView::initColorsTree()
     QTreeWidgetItem* noColor = new QTreeWidgetItem(d->colors);
     noColor->setText(0, i18n("No Color"));
     noColor->setFont(0, d->regularFont);
-    noColor->setIcon(0, QIcon::fromTheme("emblem-unmounted"));
+    noColor->setIcon(0, QIcon::fromTheme(QLatin1String("emblem-unmounted")));
 
     QStringList colorSet;
     colorSet << "red"      << "orange"

@@ -158,7 +158,7 @@ FilmTool::FilmTool(QObject* const parent)
 {
     setObjectName("film");
     setToolName(i18n("Color Negative Film"));
-    setToolIcon(QIcon::fromTheme("colorneg"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("colorneg")));
     setInitPreview(true);
 
     ImageIface iface;
@@ -238,7 +238,7 @@ FilmTool::FilmTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->pickWhitePoint = new QToolButton();
-    d->pickWhitePoint->setIcon(QIcon::fromTheme("color-picker-white"));
+    d->pickWhitePoint->setIcon(QIcon::fromTheme(QLatin1String("color-picker-white")));
     d->pickWhitePoint->setCheckable(true);
     d->pickWhitePoint->setToolTip( i18n( "White point color picker" ) );
     d->pickWhitePoint->setWhatsThis(i18n("With this button, you can pick the color of the orange mask "
@@ -247,13 +247,13 @@ FilmTool::FilmTool(QObject* const parent)
             "after inversion. It is also the reference point for applying the film profile."));
 
     d->resetButton = new QPushButton(i18n("&Reset"));
-    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->resetButton->setToolTip( i18n( "Reset white point." ) );
     d->resetButton->setWhatsThis(i18n("If you press this button, the white point is "
                                       "reset to pure white."));
 
     d->autoButton = new QToolButton();
-    d->autoButton->setIcon(QIcon::fromTheme("system-run"));
+    d->autoButton->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
     d->autoButton->setToolTip( i18n( "Adjust white point automatically." ) );
     d->autoButton->setWhatsThis(i18n("If you press this button, the white point is calculated "
             "from the image data automatically. This function requires to have some residual "

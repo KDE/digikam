@@ -168,7 +168,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 {
     setObjectName("adjustlevels");
     setToolName(i18n("Adjust Levels"));
-    setToolIcon(QIcon::fromTheme("adjustlevels"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("adjustlevels")));
     setInitPreview(true);
 
     ImageIface iface;
@@ -258,7 +258,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     d->pickerBox = new QWidget();
 
     d->pickBlack = new QToolButton();
-    d->pickBlack->setIcon(QIcon::fromTheme("color-picker-black"));
+    d->pickBlack->setIcon(QIcon::fromTheme(QLatin1String("color-picker-black")));
     d->pickBlack->setCheckable(true);
     d->pickBlack->setToolTip( i18n( "All channels shadow tone color picker" ) );
     d->pickBlack->setWhatsThis(i18n("With this button, you can pick the color from the original "
@@ -266,7 +266,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
                                     "input levels on the Red, Green, Blue, and Luminosity channels."));
 
     d->pickGray  = new QToolButton();
-    d->pickGray->setIcon(QIcon::fromTheme("color-picker-grey"));
+    d->pickGray->setIcon(QIcon::fromTheme(QLatin1String("color-picker-grey")));
     d->pickGray->setCheckable(true);
     d->pickGray->setToolTip( i18n( "All channels middle tone color picker" ) );
     d->pickGray->setWhatsThis(i18n("With this button, you can pick the color from the original "
@@ -274,7 +274,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
                                    "input levels on the Red, Green, Blue, and Luminosity channels."));
 
     d->pickWhite = new QToolButton();
-    d->pickWhite->setIcon(QIcon::fromTheme("color-picker-white"));
+    d->pickWhite->setIcon(QIcon::fromTheme(QLatin1String("color-picker-white")));
     d->pickWhite->setCheckable(true);
     d->pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
     d->pickWhite->setWhatsThis(i18n("With this button, you can pick the color from the original "
@@ -299,13 +299,13 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->autoButton = new QToolButton();
-    d->autoButton->setIcon(QIcon::fromTheme("system-run"));
+    d->autoButton->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
     d->autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
     d->autoButton->setWhatsThis(i18n("If you press this button, all channel levels will be adjusted "
                                      "automatically."));
 
     d->resetButton = new QPushButton(i18n("&Reset"));
-    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->resetButton->setToolTip( i18n( "Reset current channel levels' values." ) );
     d->resetButton->setWhatsThis(i18n("If you press this button, all levels' values "
                                       "from the currently selected channel "

@@ -172,7 +172,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 {
     setObjectName("liquidrescale");
     setToolName(i18n("Liquid Rescale"));
-    setToolIcon(QIcon::fromTheme("transform-scale"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("transform-scale")));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     d->previewWidget->installEventFilter(this);
@@ -423,16 +423,16 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     d->expanderBox = new RExpanderBox;
     d->expanderBox->setObjectName("ContentAwareResizeTool Expander");
-    d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme("transform-scale"), i18n("Target size"),
+    d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Target size"),
                             QString("SizeSettingsContainer"), true);
-    d->expanderBox->addItem(mixedRescaleContainer, QIcon::fromTheme("transform-scale"),
+    d->expanderBox->addItem(mixedRescaleContainer, QIcon::fromTheme(QLatin1String("transform-scale")),
                             i18n("Content-aware rescale percentage"),
                             QString("MixedRescaleContainer"), true);
-    d->expanderBox->addItem(maskSettingsContainer, QIcon::fromTheme("transform-scale"), i18n("Mask Settings"),
+    d->expanderBox->addItem(maskSettingsContainer, QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Mask Settings"),
                             QString("MaskSettingsContainer"), true);
-    d->expanderBox->addItem(energyFunctionsContainer, QIcon::fromTheme("transform-scale"), i18n("Energy function"),
+    d->expanderBox->addItem(energyFunctionsContainer, QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Energy function"),
                             QString("EnergyFunctionsContainer"), true);
-    d->expanderBox->addItem(advancedSettingsContainer, QIcon::fromTheme("system-run"), i18n("Advanced Settings"),
+    d->expanderBox->addItem(advancedSettingsContainer, QIcon::fromTheme(QLatin1String("system-run")), i18n("Advanced Settings"),
                             QString("AdvancedSettingsContainer"), true);
     d->expanderBox->addStretch();
 

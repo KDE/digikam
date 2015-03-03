@@ -98,7 +98,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
     setObjectName("autocorrection");
     setToolName(i18n("Auto Correction"));
     setToolVersion(1);
-    setToolIcon(QIcon::fromTheme("autocorrection"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("autocorrection")));
     setToolHelp("autocolorcorrectiontool.anchor");
     setToolCategory(FilterAction::ReproducibleFilter);
 

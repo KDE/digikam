@@ -139,7 +139,7 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     {
         //infoIcon.setToolTip(i18n("This filter's name is unknown, so you see only its identifier"));    //FIXME: better string?
         painter->drawPixmap(option.rect.right() - 22, option.rect.top() + 8,
-                            QIcon::fromTheme("dialog-information").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
+                            QIcon::fromTheme(QLatin1String("dialog-information")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
         painter->drawText(textRect, Qt::AlignVCenter, index.data(Qt::DecorationRole).toString());
     }
 

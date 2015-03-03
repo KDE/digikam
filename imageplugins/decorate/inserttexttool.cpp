@@ -126,7 +126,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 {
     setObjectName("inserttext");
     setToolName(i18n("Insert Text"));
-    setToolIcon(QIcon::fromTheme("insert-text"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("insert-text")));
 
     // -------------------------------------------------------------
 
@@ -163,25 +163,25 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     QToolButton* alignLeft = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignLeft, InsertTextWidget::ALIGN_LEFT);
-    alignLeft->setIcon(QIcon::fromTheme("format-justify-left"));
+    alignLeft->setIcon(QIcon::fromTheme(QLatin1String("format-justify-left")));
     alignLeft->setCheckable(true);
     alignLeft->setToolTip(i18n("Align text to the left"));
 
     QToolButton* alignRight = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignRight, InsertTextWidget::ALIGN_RIGHT);
-    alignRight->setIcon(QIcon::fromTheme("format-justify-right"));
+    alignRight->setIcon(QIcon::fromTheme(QLatin1String("format-justify-right")));
     alignRight->setCheckable(true);
     alignRight->setToolTip(i18n("Align text to the right"));
 
     QToolButton* alignCenter = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignCenter, InsertTextWidget::ALIGN_CENTER);
-    alignCenter->setIcon(QIcon::fromTheme("format-justify-center"));
+    alignCenter->setIcon(QIcon::fromTheme(QLatin1String("format-justify-center")));
     alignCenter->setCheckable(true);
     alignCenter->setToolTip(i18n("Align text to center"));
 
     QToolButton* alignBlock = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignBlock, InsertTextWidget::ALIGN_BLOCK);
-    alignBlock->setIcon(QIcon::fromTheme("format-justify-fill"));
+    alignBlock->setIcon(QIcon::fromTheme(QLatin1String("format-justify-fill")));
     alignBlock->setCheckable(true);
     alignBlock->setToolTip(i18n("Align text to a block"));
 

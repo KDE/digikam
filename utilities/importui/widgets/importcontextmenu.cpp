@@ -298,7 +298,7 @@ void ImportContextMenuHelper::addRotateMenu(itemIds& /*ids*/)
 //    setSelectedIds(ids);
 
 //    QMenu* const imageRotateMenu = new QMenu(i18n("Rotate"), d->parent);
-//    imageRotateMenu->setIcon(QIcon::fromTheme("object-rotate-right"));
+//    imageRotateMenu->setIcon(QIcon::fromTheme(QLatin1String("object-rotate-right")));
 
 //    QAction* const left = new QAction(this);
 //    left->setObjectName("rotate_ccw");
@@ -336,7 +336,7 @@ void ImportContextMenuHelper::addAssignTagsMenu(itemIds& ids)
 
     QMenu* const assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
-    assignTagsPopup->menuAction()->setIcon(QIcon::fromTheme("tag"));
+    assignTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
     d->parent->addMenu(assignTagsPopup);
 
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -352,7 +352,7 @@ void ImportContextMenuHelper::addRemoveTagsMenu(itemIds& ids)
 
     QMenu* const removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
-    removeTagsPopup->menuAction()->setIcon(QIcon::fromTheme("tag"));
+    removeTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
     d->parent->addMenu(removeTagsPopup);
 
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
