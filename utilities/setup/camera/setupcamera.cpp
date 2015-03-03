@@ -257,15 +257,16 @@ public:
     FullScreenSettings*  fullScreenSettings;
 };
 
-const QString SetupCamera::Private::configGroupName("Camera Settings");
-const QString SetupCamera::Private::configUseFileMetadata("UseFileMetadata");
-const QString SetupCamera::Private::configTrunHighQualityThumbs("TurnHighQualityThumbs");
-const QString SetupCamera::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
-const QString SetupCamera::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
-const QString SetupCamera::Private::importFiltersConfigGroupName("Import Filters");
+const QString SetupCamera::Private::configGroupName(QLatin1String("Camera Settings"));
+const QString SetupCamera::Private::configUseFileMetadata(QLatin1String("UseFileMetadata"));
+const QString SetupCamera::Private::configTrunHighQualityThumbs(QLatin1String("TurnHighQualityThumbs"));
+const QString SetupCamera::Private::configUseDefaultTargetAlbum(QLatin1String("UseDefaultTargetAlbum"));
+const QString SetupCamera::Private::configDefaultTargetAlbumId(QLatin1String("DefaultTargetAlbumId"));
+const QString SetupCamera::Private::importFiltersConfigGroupName(QLatin1String("Import Filters"));
 
 SetupCamera::SetupCamera(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     d->tab               = new QTabWidget(viewport());
     setWidget(d->tab);
@@ -303,21 +304,21 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->autoDetectButton = new QPushButton(panel);
 
     d->addButton->setText(i18n("&Add..."));
-    d->addButton->setIcon(QIcon::fromTheme("list-add"));
+    d->addButton->setIcon(QIcon::fromTheme(QLatin1String("list-add")));
     d->removeButton->setText(i18n("&Remove"));
-    d->removeButton->setIcon(QIcon::fromTheme("list-remove"));
+    d->removeButton->setIcon(QIcon::fromTheme(QLatin1String("list-remove")));
     d->editButton->setText(i18n("&Edit..."));
-    d->editButton->setIcon(QIcon::fromTheme("configure"));
+    d->editButton->setIcon(QIcon::fromTheme(QLatin1String("configure")));
     d->autoDetectButton->setText(i18n("Auto-&Detect"));
-    d->autoDetectButton->setIcon(QIcon::fromTheme("system-search"));
+    d->autoDetectButton->setIcon(QIcon::fromTheme(QLatin1String("system-search")));
     d->removeButton->setEnabled(false);
     d->editButton->setEnabled(false);
 
     // -------------------------------------------------------------
 
     QSpacerItem* const spacer           = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    RActiveLabel* const gphotoLogoLabel = new RActiveLabel(QUrl("http://www.gphoto.org"),
-                                                           QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-gphoto.png"),
+    RActiveLabel* const gphotoLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://www.gphoto.org")),
+                                                           QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-gphoto.png")),
                                                            panel);
     gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));
 
@@ -393,11 +394,11 @@ SetupCamera::SetupCamera(QWidget* const parent)
     label->setText(i18n("Ignored file names:"));
     label2->setText(i18n("Ignored file extensions:"));
     d->importAddButton->setText(i18n("&Add..."));
-    d->importAddButton->setIcon(QIcon::fromTheme("list-add"));
+    d->importAddButton->setIcon(QIcon::fromTheme(QLatin1String("list-add")));
     d->importRemoveButton->setText(i18n("&Remove"));
-    d->importRemoveButton->setIcon(QIcon::fromTheme("list-remove"));
+    d->importRemoveButton->setIcon(QIcon::fromTheme(QLatin1String("list-remove")));
     d->importEditButton->setText(i18n("&Edit..."));
-    d->importEditButton->setIcon(QIcon::fromTheme("configure"));
+    d->importEditButton->setIcon(QIcon::fromTheme(QLatin1String("configure")));
     d->importRemoveButton->setEnabled(false);
     d->importEditButton->setEnabled(false);
 
@@ -622,7 +623,7 @@ void SetupCamera::readSettings()
 
     for (int i = 0; true; ++i)
     {
-        QString filter = importGroup.readEntry(QString("Filter%1").arg(i), QString());
+        QString filter = importGroup.readEntry(QString::fromUtf8("Filter%1").arg(i), QString());
 
         if (filter.isEmpty())
         {
@@ -641,8 +642,8 @@ void SetupCamera::readSettings()
         new QListWidgetItem(f->name, d->importListView);
     }
 
-    d->ignoreNamesEdit->setText(importGroup.readEntry("IgnoreNames", FilterComboBox::defaultIgnoreNames));
-    d->ignoreExtensionsEdit->setText(importGroup.readEntry("IgnoreExtensions", FilterComboBox::defaultIgnoreExtensions));
+    d->ignoreNamesEdit->setText(importGroup.readEntry(QLatin1String("IgnoreNames"), FilterComboBox::defaultIgnoreNames));
+    d->ignoreExtensionsEdit->setText(importGroup.readEntry(QLatin1String("IgnoreExtensions"), FilterComboBox::defaultIgnoreExtensions));
 
     ImportSettings* const settings = ImportSettings::instance();
 
@@ -724,11 +725,11 @@ void SetupCamera::applySettings()
 
     for (int i = 0; i < d->filters.count(); ++i)
     {
-        importGroup.writeEntry(QString("Filter%1").arg(i), d->filters[i]->toString());
+        importGroup.writeEntry(QString::fromUtf8("Filter%1").arg(i), d->filters[i]->toString());
     }
 
-    importGroup.writeEntry("IgnoreNames", d->ignoreNamesEdit->text());
-    importGroup.writeEntry("IgnoreExtensions", d->ignoreExtensionsEdit->text());
+    importGroup.writeEntry(QLatin1String("IgnoreNames"), d->ignoreNamesEdit->text());
+    importGroup.writeEntry(QLatin1String("IgnoreExtensions"), d->ignoreExtensionsEdit->text());
     importGroup.sync();
 
     ImportSettings* const settings = ImportSettings::instance();
@@ -871,7 +872,7 @@ void SetupCamera::slotAutoDetectCamera()
     // NOTE: See note in digikam/digikam/cameralist.cpp
     if (port.startsWith(QLatin1String("usb:")))
     {
-        port = "usb:";
+        port = QLatin1String("usb:");
     }
 
     if (!d->listView->findItems(model, Qt::MatchExactly, 1).isEmpty())
@@ -881,7 +882,7 @@ void SetupCamera::slotAutoDetectCamera()
     else
     {
         QMessageBox::information(this, qApp->applicationName(), i18n("Found camera '%1' (%2) and added it to the list.", model, port));
-        slotAddedCamera(model, model, port, QString("/"));
+        slotAddedCamera(model, model, port, QLatin1String("/"));
     }
 }
 

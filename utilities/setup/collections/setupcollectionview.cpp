@@ -360,7 +360,8 @@ void SetupCollectionModel::loadCollections()
         m_collections << Item(location);
     }
 
-    reset();
+    beginResetModel();
+    endResetModel();
     emit collectionsLoaded();
 }
 
@@ -535,7 +536,7 @@ void SetupCollectionModel::addCollection(int category)
         {
             if (!item.path.isEmpty() && path.startsWith(item.path))
             {
-                if (path == item.path || path.startsWith(item.path + '/'))
+                if (path == item.path || path.startsWith(item.path + QLatin1Char('/')))
                 {
                     messageFromManager = i18n("You have previously added a collection "
                                               "that contains the path \"%1\".", QDir::toNativeSeparators(path));
@@ -552,11 +553,11 @@ void SetupCollectionModel::addCollection(int category)
     switch (result)
     {
         case CollectionManager::LocationAllRight:
-            iconName = "dialog-ok-apply";
+            iconName = QLatin1String("dialog-ok-apply");
             break;
 
         case CollectionManager::LocationHasProblems:
-            iconName = "dialog-information";
+            iconName = QLatin1String("dialog-information");
             break;
 
         case CollectionManager::LocationNotAllowed:
@@ -730,13 +731,13 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                     switch (index.row())
                     {
                         case CategoryLocal:
-                            return QIcon::fromTheme("drive-harddisk");
+                            return QIcon::fromTheme(QLatin1String("drive-harddisk"));
 
                         case CategoryRemovable:
-                            return QIcon::fromTheme("drive-removable-media-usb");
+                            return QIcon::fromTheme(QLatin1String("drive-removable-media-usb"));
 
                         case CategoryRemote:
-                            return QIcon::fromTheme("network-wired");
+                            return QIcon::fromTheme(QLatin1String("network-wired"));
                     }
 
                     break;
@@ -802,39 +803,39 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                 {
                     if (item.deleted)
                     {
-                        return QIcon::fromTheme("edit-delete");
+                        return QIcon::fromTheme(QLatin1String("edit-delete"));
                     }
 
                     if (item.location.isNull())
                     {
-                        return QIcon::fromTheme("folder-new");
+                        return QIcon::fromTheme(QLatin1String("folder-new"));
                     }
 
                     switch (item.location.status())
                     {
                         case CollectionLocation::LocationAvailable:
-                            return QIcon::fromTheme("dialog-ok-apply");
+                            return QIcon::fromTheme(QLatin1String("dialog-ok-apply"));
 
                         case CollectionLocation::LocationHidden:
-                            return QIcon::fromTheme("object-locked");
+                            return QIcon::fromTheme(QLatin1String("object-locked"));
 
                         case CollectionLocation::LocationUnavailable:
 
                             switch (item.parentId)
                             {
                                 case CategoryLocal:
-                                    return QIcon::fromTheme("drive-harddisk").pixmap(16, QIcon::Disabled);
+                                    return QIcon::fromTheme(QLatin1String("drive-harddisk")).pixmap(16, QIcon::Disabled);
 
                                 case CategoryRemovable:
-                                    return QIcon::fromTheme("drive-removable-media-usb").pixmap(16, QIcon::Disabled);
+                                    return QIcon::fromTheme(QLatin1String("drive-removable-media-usb")).pixmap(16, QIcon::Disabled);
 
                                 case CategoryRemote:
-                                    return QIcon::fromTheme("network-wired").pixmap(16, QIcon::Disabled);
+                                    return QIcon::fromTheme(QLatin1String("network-wired")).pixmap(16, QIcon::Disabled);
                             }
 
                         case CollectionLocation::LocationNull:
                         case CollectionLocation::LocationDeleted:
-                            return QIcon::fromTheme("edit-delete");
+                            return QIcon::fromTheme(QLatin1String("edit-delete"));
                     }
                 }
                 else if (role == Qt::ToolTipRole)
@@ -868,7 +869,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                         return true;
 
                     case ButtonDecorationRole:
-                        return QIcon::fromTheme("edit-delete");
+                        return QIcon::fromTheme(QLatin1String("edit-delete"));
 
                     case ButtonMapId:
                         return buttonMapId(index);

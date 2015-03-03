@@ -117,9 +117,9 @@ CameraSelection::CameraSelection(QWidget* const parent)
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
-    d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
+    d->UMSCameraNameActual = QLatin1String("Directory Browse");   // Don't be i18n!
     d->UMSCameraNameShown  = i18n("Mounted Camera");
-    d->PTPCameraNameShown  = QString("USB PTP Class Camera");
+    d->PTPCameraNameShown  = QLatin1String("USB PTP Class Camera");
 
     QWidget* const page        = new QWidget(this);
     QGridLayout* mainBoxLayout = new QGridLayout(page);
@@ -220,7 +220,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     QGridLayout* gLayout5 = new QGridLayout(box2);
 
     QLabel* const logo = new QLabel(box2);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const link = new QLabel(box2);
@@ -373,12 +373,12 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
 
         d->titleEdit->setText(title);
 
-        if (port.contains("usb"))
+        if (port.contains(QLatin1String("usb")))
         {
             d->usbButton->setChecked(true);
             slotPortChanged();
         }
-        else if (port.contains("serial"))
+        else if (port.contains(QLatin1String("serial")))
         {
             d->serialButton->setChecked(true);
 
@@ -460,7 +460,7 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem* item, int)
         d->usbButton->setChecked(false);
         d->usbButton->setEnabled(false);
         d->portPathComboBox->setEnabled(true);
-        d->portPathComboBox->insertItem(0, QString("NONE"));
+        d->portPathComboBox->insertItem(0, QLatin1String("NONE"));
         d->portPathComboBox->setEnabled(false);
 
         d->umsMountURL->setEnabled(true);
@@ -481,7 +481,7 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem* item, int)
     QStringList plist;
     GPCamera::getCameraSupportedPorts(model, plist);
 
-    if (plist.contains("serial"))
+    if (plist.contains(QLatin1String("serial")))
     {
         d->serialButton->setEnabled(true);
         d->serialButton->setChecked(true);
@@ -493,7 +493,7 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem* item, int)
         d->serialButton->setEnabled(false);
     }
 
-    if (plist.contains("usb"))
+    if (plist.contains(QLatin1String("usb")))
     {
         d->usbButton->setEnabled(true);
         d->usbButton->setChecked(true);
@@ -514,7 +514,7 @@ void CameraSelection::slotPortChanged()
     {
         d->portPathComboBox->setEnabled(true);
         d->portPathComboBox->clear();
-        d->portPathComboBox->insertItem(0, QString("usb:"));
+        d->portPathComboBox->insertItem(0, QLatin1String("usb:"));
         d->portPathComboBox->setEnabled(false);
         return;
     }
@@ -597,7 +597,7 @@ void CameraSelection::slotSearchTextChanged(const SearchTextSettings& settings)
 
 void CameraSelection::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("cameraselection.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("cameraselection.anchor"), QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

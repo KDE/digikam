@@ -118,7 +118,7 @@ ImportFilters::ImportFilters(QWidget* const parent)
     d->mimeLabel     = new RAdjustableLabel(page);
     horizontalLayout->addWidget(d->mimeLabel);
     d->mimeButton    = new QToolButton(page);
-    d->mimeButton->setText("Select Type Mime...");
+    d->mimeButton->setText(i18n("Select Type Mime..."));
     horizontalLayout->addWidget(d->mimeButton);
     verticalLayout->addLayout(horizontalLayout);
 
@@ -215,12 +215,12 @@ void ImportFilters::mimeCheckBoxClicked()
 void ImportFilters::mimeButtonClicked()
 {
     QString text     = i18n("Select the MimeTypes you want for this filter.");
-    QStringList list = d->mimeLabel->adjustedText().split(';', QString::SkipEmptyParts);
-    KMimeTypeChooserDialog dlg(i18n("Select Mime Types"), text, list, "image", this);
+    QStringList list = d->mimeLabel->adjustedText().split(QLatin1Char(';'), QString::SkipEmptyParts);
+    KMimeTypeChooserDialog dlg(i18n("Select Mime Types"), text, list, QLatin1String("image"), this);
 
     if (dlg.exec() == QDialog::Accepted)
     {
-        d->mimeLabel->setAdjustedText(dlg.chooser()->mimeTypes().join(";"));
+        d->mimeLabel->setAdjustedText(dlg.chooser()->mimeTypes().join(QLatin1String(";")));
     }
 }
 
@@ -231,10 +231,10 @@ void ImportFilters::setData(const Filter& filter)
     d->mimeLabel->setAdjustedText(filter.mimeFilter);
     d->mimeButton->setEnabled(!filter.mimeFilter.isEmpty());
     d->fileNameCheckBox->setChecked(!filter.fileFilter.isEmpty());
-    d->fileNameEdit->setText(filter.fileFilter.join(";"));
+    d->fileNameEdit->setText(filter.fileFilter.join(QLatin1String(";")));
     d->fileNameEdit->setEnabled(!filter.fileFilter.isEmpty());
     d->pathCheckBox->setChecked(!filter.pathFilter.isEmpty());
-    d->pathEdit->setText(filter.pathFilter.join(";"));
+    d->pathEdit->setText(filter.pathFilter.join(QLatin1String(";")));
     d->pathEdit->setEnabled(!filter.pathFilter.isEmpty());
     d->newFilesCheckBox->setChecked(filter.onlyNew);
 }
@@ -243,8 +243,8 @@ void ImportFilters::getData(Filter* const filter)
 {
     filter->name       = d->filterName->text();
     filter->mimeFilter = d->mimeLabel->adjustedText();
-    filter->fileFilter = d->fileNameEdit->text().split(';', QString::SkipEmptyParts);
-    filter->pathFilter = d->pathEdit->text().split(';', QString::SkipEmptyParts);
+    filter->fileFilter = d->fileNameEdit->text().split(QLatin1Char(';'), QString::SkipEmptyParts);
+    filter->pathFilter = d->pathEdit->text().split(QLatin1Char(';'), QString::SkipEmptyParts);
     filter->onlyNew    = d->newFilesCheckBox->isChecked();
 }
 
