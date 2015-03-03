@@ -89,11 +89,11 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
     RHBox* const hbox2           = new RHBox(this);
     d->formatLabel               = new QLabel(i18n("New image format:"), hbox2);
     d->losslessFormat            = new QComboBox(hbox2);
-    d->losslessFormat->insertItem(0, "PNG");
-    d->losslessFormat->insertItem(1, "TIF");
-    d->losslessFormat->insertItem(2, "PGF");
+    d->losslessFormat->insertItem(0, QLatin1String("PNG"));
+    d->losslessFormat->insertItem(1, QLatin1String("TIF"));
+    d->losslessFormat->insertItem(2, QLatin1String("PGF"));
 #ifdef HAVE_JASPER
-    d->losslessFormat->insertItem(3, "JP2");
+    d->losslessFormat->insertItem(3, QLatin1String("JP2"));
 #endif // HAVE_JASPER
 
     onFlyVlay->addWidget(d->templateSelector);
@@ -147,11 +147,11 @@ AdvancedSettings::~AdvancedSettings()
 
 void AdvancedSettings::readSettings(KConfigGroup& group)
 {
-    d->autoRotateCheck->setChecked(group.readEntry("AutoRotate",         true));
-    d->fixDateTimeCheck->setChecked(group.readEntry("FixDateTime",       false));
-    d->templateSelector->setTemplateIndex(group.readEntry("Template",    0));
-    d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg",       false));
-    d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat", 0));      // PNG by default
+    d->autoRotateCheck->setChecked(group.readEntry(QLatin1String("AutoRotate"),         true));
+    d->fixDateTimeCheck->setChecked(group.readEntry(QLatin1String("FixDateTime"),       false));
+    d->templateSelector->setTemplateIndex(group.readEntry(QLatin1String("Template"),    0));
+    d->convertJpegCheck->setChecked(group.readEntry(QLatin1String("ConvertJpeg"),       false));
+    d->losslessFormat->setCurrentIndex(group.readEntry(QLatin1String("LossLessFormat"), 0));      // PNG by default
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
     d->losslessFormat->setEnabled(d->convertJpegCheck->isChecked());
@@ -160,11 +160,11 @@ void AdvancedSettings::readSettings(KConfigGroup& group)
 
 void AdvancedSettings::saveSettings(KConfigGroup& group)
 {
-    group.writeEntry("AutoRotate",     d->autoRotateCheck->isChecked());
-    group.writeEntry("FixDateTime",    d->fixDateTimeCheck->isChecked());
-    group.writeEntry("Template",       d->templateSelector->getTemplateIndex());
-    group.writeEntry("ConvertJpeg",    d->convertJpegCheck->isChecked());
-    group.writeEntry("LossLessFormat", d->losslessFormat->currentIndex());
+    group.writeEntry(QLatin1String("AutoRotate"),     d->autoRotateCheck->isChecked());
+    group.writeEntry(QLatin1String("FixDateTime"),    d->fixDateTimeCheck->isChecked());
+    group.writeEntry(QLatin1String("Template"),       d->templateSelector->getTemplateIndex());
+    group.writeEntry(QLatin1String("ConvertJpeg"),    d->convertJpegCheck->isChecked());
+    group.writeEntry(QLatin1String("LossLessFormat"), d->losslessFormat->currentIndex());
 }
 
 DownloadSettings AdvancedSettings::settings() const

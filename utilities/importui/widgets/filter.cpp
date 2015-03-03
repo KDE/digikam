@@ -46,28 +46,28 @@ Filter::~Filter()
 
 QString Filter::toString()
 {
-    return QString("%1|%2|%3|%4|%5")
+    return QString::fromUtf8("%1|%2|%3|%4|%5")
            .arg(name)
-           .arg(onlyNew ? "true" : "false")
-           .arg(fileFilter.join(";"))
-           .arg(pathFilter.join(";"))
+           .arg(onlyNew ? QLatin1String("true") : QLatin1String("false"))
+           .arg(fileFilter.join(QLatin1String(";")))
+           .arg(pathFilter.join(QLatin1String(";")))
            .arg(mimeFilter);
 }
 
 void Filter::fromString(const QString& filter)
 {
-    QStringList s = filter.split('|');
+    QStringList s = filter.split(QLatin1Char('|'));
     name          = s.value(0);
-    onlyNew       = (s.value(1) == "true");
+    onlyNew       = (s.value(1) == QLatin1String("true"));
 
     if (!s.value(2).isEmpty())
     {
-        fileFilter = s.value(2).split(';');
+        fileFilter = s.value(2).split(QLatin1Char(';'));
     }
 
     if (!s.value(3).isEmpty())
     {
-        pathFilter = s.value(3).split(';');
+        pathFilter = s.value(3).split(QLatin1Char(';'));
     }
 
     if (!s.value(4).isEmpty())
@@ -111,7 +111,7 @@ const QStringList& Filter::mimeWildcards(const QString& mime)
     if (!mimeHash.contains(mime))
     {
         QStringList& wc  = mimeHash[mime];
-        QStringList list = mime.split(';');
+        QStringList list = mime.split(QLatin1Char(';'));
 
         foreach(const QString& m, list)
         {

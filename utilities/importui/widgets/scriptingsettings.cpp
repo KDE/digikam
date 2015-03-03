@@ -70,7 +70,8 @@ public:
 };
 
 ScriptingSettings::ScriptingSettings(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->tooltipDialog = new TooltipDialog(this);
     d->tooltipDialog->setTooltip(i18n("<p>These expressions may be used to customize the command line:</p>"
@@ -90,7 +91,7 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
     d->script->fileDialog()->setFileMode(QFileDialog::ExistingFile);
     d->script->lineEdit()->setPlaceholderText(i18n("No script selected"));
     d->tooltipToggleButton = new QToolButton(hbox);
-    d->tooltipToggleButton->setIcon(QIcon::fromTheme("dialog-information"));
+    d->tooltipToggleButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
     vlay->addWidget(d->scriptLabel);

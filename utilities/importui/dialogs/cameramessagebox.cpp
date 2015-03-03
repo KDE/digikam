@@ -69,10 +69,11 @@ public:
 };
 
 CameraItem::CameraItem(QTreeWidget* const parent, const CamItemInfo& info)
-    : QTreeWidgetItem(parent), d(new Private)
+    : QTreeWidgetItem(parent),
+      d(new Private)
 {
     d->info = info;
-    setThumb(QIcon::fromTheme("image-x-generic").pixmap(parent->iconSize().width(), QIcon::Disabled), false);
+    setThumb(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(parent->iconSize().width(), QIcon::Disabled), false);
     setText(1, d->info.name);
 }
 
@@ -132,7 +133,8 @@ public:
 };
 
 CameraItemList::CameraItemList(QWidget* const parent)
-    : QTreeWidget(parent), d(new Private)
+    : QTreeWidget(parent),
+      d(new Private)
 {
     setRootIsDecorated(false);
     setSelectionMode(QAbstractItemView::SingleSelection);

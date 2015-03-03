@@ -45,6 +45,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+
 #include <kio/global.h>
 
 // Local includes
@@ -145,11 +146,11 @@ void FreeSpaceWidget::setMode(FreeSpaceMode mode)
 
     if (d->mode == FreeSpaceWidget::AlbumLibrary)
     {
-        d->iconPix = QIcon::fromTheme("folder-image").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
+        d->iconPix = QIcon::fromTheme(QLatin1String("folder-image")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
     }
     else 
     {
-        d->iconPix = QIcon::fromTheme("camera-photo").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
+        d->iconPix = QIcon::fromTheme(QLatin1String("camera-photo")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
     }
 
     update();
@@ -316,7 +317,7 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         p.drawRect(gRect);
 
         QRect tRect(d->iconPix.height() + 3, 2, width() - 3 - d->iconPix.width() - 2, height() - 5);
-        QString text        = QString("%1%").arg(peUsed);
+        QString text        = QString::fromUtf8("%1%").arg(peUsed);
         QFontMetrics fontMt = p.fontMetrics();
         //        QRect fontRect      = fontMt.boundingRect(tRect.x(), tRect.y(),
         //                                                  tRect.width(), tRect.height(), 0, text);

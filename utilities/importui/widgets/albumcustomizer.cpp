@@ -80,7 +80,7 @@ public:
 
     QToolButton*        tooltipToggleButton;
 
-    RAdjustableLabel* customExample;
+    RAdjustableLabel*   customExample;
 
     QComboBox*          folderDateFormat;
 
@@ -126,7 +126,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     RHBox* const hbox2     = new RHBox(this);
     d->customizer          = new QLineEdit(hbox2);
     d->tooltipToggleButton = new QToolButton(hbox2);
-    d->tooltipToggleButton->setIcon(QIcon::fromTheme("dialog-information"));
+    d->tooltipToggleButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
     d->customExample       = new RAdjustableLabel(this);
