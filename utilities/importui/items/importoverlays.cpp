@@ -486,7 +486,7 @@ void ImportRotateOverlay::slotClicked()
 bool ImportRotateOverlay::checkIndex(const QModelIndex& index) const
 {
     CamItemInfo info = ImportImageModel::retrieveCamItemInfo(index);
-    return (info.mime.contains("image/"));
+    return (info.mime.contains(QLatin1String("image/")));
 }
 
 void ImportRotateOverlay::widgetEnterEvent()

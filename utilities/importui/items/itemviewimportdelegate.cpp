@@ -323,7 +323,7 @@ void ItemViewImportDelegate::drawImageFormat(QPainter* p, const QRect& r, const 
 
     if (!mime.isEmpty() && !r.isNull())
     {
-        QString type = mime.split('/').at(1);
+        QString type = mime.split(QLatin1Char('/')).at(1);
         type         = ImageScanner::formatToString(type);
 
         p->save();
@@ -571,15 +571,15 @@ void ItemViewImportDelegate::prepareMetrics(int maxWidth)
     QFontMetrics fm(d->fontReg);
     d->oneRowRegRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
                                        Qt::AlignTop | Qt::AlignHCenter,
-                                       "XXXXXXXXX");
+                                       QLatin1String("XXXXXXXXX"));
     fm = QFontMetrics(d->fontCom);
     d->oneRowComRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
                                        Qt::AlignTop | Qt::AlignHCenter,
-                                       "XXXXXXXXX");
+                                       QLatin1String("XXXXXXXXX"));
     fm = QFontMetrics(d->fontXtra);
     d->oneRowXtraRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
                                         Qt::AlignTop | Qt::AlignHCenter,
-                                        "XXXXXXXXX");
+                                        QLatin1String("XXXXXXXXX"));
 }
 
 void ItemViewImportDelegate::prepareBackground()

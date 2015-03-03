@@ -46,7 +46,8 @@ public:
 };
 
 CameraFolderItem::CameraFolderItem(QTreeWidget* const parent, const QString& name, const QIcon& icon)
-    : QTreeWidgetItem(parent), d(new Private)
+    : QTreeWidgetItem(parent),
+      d(new Private)
 {
     d->name = name;
     setIcon(0, icon);
@@ -55,7 +56,8 @@ CameraFolderItem::CameraFolderItem(QTreeWidget* const parent, const QString& nam
 
 CameraFolderItem::CameraFolderItem(QTreeWidgetItem* const parent, const QString& folderName,
                                    const QString& folderPath, const QIcon &icon)
-    : QTreeWidgetItem(parent), d(new Private)
+    : QTreeWidgetItem(parent),
+      d(new Private)
 {
     d->folderName    = folderName;
     d->folderPath    = folderPath;
@@ -88,13 +90,13 @@ QString CameraFolderItem::folderPath() const
 void CameraFolderItem::changeCount(int val)
 {
     d->count += val;
-    setText(0, QString("%1 (%2)").arg(d->name).arg(QString::number(d->count)));
+    setText(0, QString::fromUtf8("%1 (%2)").arg(d->name).arg(QString::number(d->count)));
 }
 
 void CameraFolderItem::setCount(int val)
 {
     d->count = val;
-    setText(0, QString("%1 (%2)").arg(d->name).arg(QString::number(d->count)));
+    setText(0, QString::fromUtf8("%1 (%2)").arg(d->name).arg(QString::number(d->count)));
 }
 
 int CameraFolderItem::count() const

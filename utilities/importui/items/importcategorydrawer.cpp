@@ -60,7 +60,8 @@ public:
 };
 
 ImportCategoryDrawer::ImportCategoryDrawer(ImportCategorizedView* const parent)
-    : DCategoryDrawer(0), d(new Private)
+    : DCategoryDrawer(0),
+      d(new Private)
 {
     d->view = parent;
 }
@@ -186,7 +187,7 @@ void ImportCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* hea
     if(!info.isNull())
     {
         int count            = d->view->categoryRange(index).height();
-        QStringList splitted = info.url().toDisplayString().split('/');
+        QStringList splitted = info.url().toDisplayString().split(QLatin1Char('/'));
         *header              = splitted.value(splitted.length() - 2);
 
         *subLine             = i18np("1 Item", "%1 Items", count);
@@ -199,7 +200,7 @@ void ImportCategoryDrawer::textForFormat(const QModelIndex& index, QString* head
 
     if(!format.isEmpty())
     {
-        format         = format.split('/').at(1);
+        format         = format.split(QLatin1Char('/')).at(1);
         format         = ImageScanner::formatToString(format);
         *header        = format;
     }
@@ -239,7 +240,7 @@ void ImportCategoryDrawer::updateRectsAndPixmaps(int width)
     QFontMetrics fm(fn);
     QRect tr = fm.boundingRect(0, 0, width,
                                0xFFFFFFFF, Qt::AlignLeft | Qt::AlignVCenter,
-                               "XXX");
+                               QLatin1String("XXX"));
     d->rect.setHeight(tr.height());
 
     if (usePointSize)
@@ -255,7 +256,7 @@ void ImportCategoryDrawer::updateRectsAndPixmaps(int width)
     fm = QFontMetrics(fn);
     tr = fm.boundingRect(0, 0, width,
                          0xFFFFFFFF, Qt::AlignLeft | Qt::AlignVCenter,
-                         "XXX");
+                         QLatin1String("XXX"));
 
     d->rect.setHeight(d->rect.height() + tr.height() + 10);
     d->rect.setWidth(width);

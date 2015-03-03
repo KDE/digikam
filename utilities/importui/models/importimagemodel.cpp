@@ -465,8 +465,9 @@ void ImportImageModel::clearCamItemInfos()
     d->refreshing                  = false;
     d->incrementalRefreshRequested = false;
 
-    reset();
+    beginResetModel();
     camItemInfosCleared();
+    endResetModel();
 }
 
 // TODO unused
@@ -629,7 +630,7 @@ void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
         // TODO move this to a separate thread, see CameraHistoryUpdater
         // TODO this is ugly, using different enums to point the similar status..
         // TODO can we/do we want to differentiate at all between whether the status is unknown and not downloaded?
-        DownloadHistory::Status status = DownloadHistory::status(d->controller->cameraMD5ID(), info.name, info.size, info.ctime);
+        DownloadHistory::Status status = DownloadHistory::status(QString::fromUtf8(d->controller->cameraMD5ID()), info.name, info.size, info.ctime);
         info.downloaded  = status;
         // TODO is this safe? if so, is there a need to store this inside idHash separately?
         info.id = i;

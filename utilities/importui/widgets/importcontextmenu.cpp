@@ -80,9 +80,9 @@ public:
 
 public:
 
-    QAction* copyFromMainCollection(const char* name)
+    QAction* copyFromMainCollection(const char* name) const
     {
-        QAction* const mainAction = stdActionCollection->action(name);
+        QAction* const mainAction = stdActionCollection->action(QString::fromUtf8(name));
 
         if (!mainAction)
         {
@@ -96,7 +96,8 @@ public:
 };
 
 ImportContextMenuHelper::ImportContextMenuHelper(QMenu* const parent, KActionCollection* const actionCollection)
-    : QObject(parent), d(new Private(this))
+    : QObject(parent),
+      d(new Private(this))
 {
     d->parent = parent;
 
@@ -117,7 +118,7 @@ ImportContextMenuHelper::~ImportContextMenuHelper()
 
 void ImportContextMenuHelper::addAction(const char* name, bool addDisabled)
 {
-    QAction* const action = d->stdActionCollection->action(name);
+    QAction* const action = d->stdActionCollection->action(QString::fromUtf8(name));
     addAction(action, addDisabled);
 }
 
@@ -182,7 +183,7 @@ void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
     {
         // Query trader
         const QString firstMimeType      = mimeTypes.takeFirst();
-        const QString constraintTemplate = "'%1' in ServiceTypes";
+        const QString constraintTemplate = QString::fromUtf8("'%1' in ServiceTypes");
         QStringList   constraints;
 
         foreach(const QString& mimeType, mimeTypes)
@@ -190,7 +191,7 @@ void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
             constraints << constraintTemplate.arg(mimeType);
         }
 
-        offers = KMimeTypeTrader::self()->query(firstMimeType, "Application", constraints.join(" and "));
+        offers = KMimeTypeTrader::self()->query(firstMimeType, QLatin1String("Application"), constraints.join(QLatin1String(" and ")));
 
         // remove duplicate service entries
         QSet<QString> seenApps;
@@ -221,7 +222,7 @@ void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 
         foreach(KService::Ptr service, offers)
         {
-            QString name          = service->name().replace('&', "&&");
+            QString name          = service->name().replace(QLatin1Char('&'), QLatin1String("&&"));
             QAction* const action = servicesMenu->addAction(name);
             action->setIcon(QIcon::fromTheme(service->icon()));
             action->setData(service->name());
