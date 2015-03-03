@@ -85,7 +85,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     QLabel* const logo      = new QLabel(page);
     QLabel* const message   = new QLabel(page);
 
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                     .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     message->setText(i18n("<p>Please select the camera folder "
@@ -105,29 +105,29 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     setLayout(vbx);
 
     d->folderView->addVirtualFolder(cameraName);
-    d->folderView->addRootFolder(QString("/"));
+    d->folderView->addRootFolder(QLatin1String("/"));
 
     for (QMap<QString, int>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
         QString folder(it.key());
 
-        if (folder != QString("/"))
+        if (folder != QLatin1String("/"))
         {
-            if (folder.startsWith(rootPath) && rootPath != QString("/"))
+            if (folder.startsWith(rootPath) && rootPath != QLatin1String("/"))
             {
                 folder.remove(0, rootPath.length());
             }
 
-            if (folder != QString("/") && !folder.isEmpty())
+            if (folder != QLatin1String("/") && !folder.isEmpty())
             {
-                QString root = folder.section('/', 0, -2);
+                QString root = folder.section(QLatin1Char('/'), 0, -2);
 
                 if (root.isEmpty())
                 {
-                    root = QString("/");
+                    root = QLatin1String("/");
                 }
 
-                QString sub = folder.section('/', -1);
+                QString sub = folder.section(QLatin1Char('/'), -1);
                 qCDebug(LOG_IMPORTUI) << "Camera folder: '" << folder << "' (root='" << root << "', sub='" << sub << "')";
                 d->folderView->addFolder(root, sub, it.value());
             }
@@ -179,7 +179,7 @@ QString CameraFolderDialog::selectedFolderPath() const
     }
 
     // Case of Gphoto2 cameras. No need to duplicate root '/'.
-    if (d->rootPath == QString("/"))
+    if (d->rootPath == QLatin1String("/"))
     {
         return(folderItem->folderPath());
     }
@@ -202,7 +202,7 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
 
 void CameraFolderDialog::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("camerainterface.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("camerainterface.anchor"), QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

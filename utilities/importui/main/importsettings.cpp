@@ -168,44 +168,44 @@ public:
     KSharedConfigPtr                    config;
  };
 
-const QString ImportSettings::Private::configGroupDefault("Import Settings");
-const QString ImportSettings::Private::configImageSortOrderEntry("Image Sort Order");
-const QString ImportSettings::Private::configImageSortByEntry("Image Sorting"); // TODO not changed due to backwards compatibility
-const QString ImportSettings::Private::configImageGroupModeEntry("Image Group Mode");
-const QString ImportSettings::Private::configItemLeftClickActionEntry("Item Left Click Action");
-const QString ImportSettings::Private::configDefaultIconSizeEntry("Default Icon Size");
-//const QString ImportSettings::Private::configRatingFilterConditionEntry("Rating Filter Condition");
-const QString ImportSettings::Private::configIconShowNameEntry("Icon Show Name");
-//const QString ImportSettings::Private::configIconShowResolutionEntry("Icon Show Resolution");
-const QString ImportSettings::Private::configIconShowSizeEntry("Icon Show Size");
-const QString ImportSettings::Private::configIconShowDateEntry("Icon Show Date");
-const QString ImportSettings::Private::configIconShowTitleEntry("Icon Show Title");
-const QString ImportSettings::Private::configIconShowTagsEntry("Icon Show Tags");
-const QString ImportSettings::Private::configIconShowRatingEntry("Icon Show Rating");
-const QString ImportSettings::Private::configIconShowImageFormatEntry("Icon Show Image Format");
-const QString ImportSettings::Private::configIconShowCoordinatesEntry("Icon Show Coordinates");
-const QString ImportSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
-const QString ImportSettings::Private::configIconViewFontEntry("IconView Font");
-const QString ImportSettings::Private::configToolTipsFontEntry("ToolTips Font");
-const QString ImportSettings::Private::configShowToolTipsEntry("Show ToolTips");
-const QString ImportSettings::Private::configToolTipsShowFileNameEntry("ToolTips Show File Name");
-const QString ImportSettings::Private::configToolTipsShowFileDateEntry("ToolTips Show File Date");
-const QString ImportSettings::Private::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
-const QString ImportSettings::Private::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
-const QString ImportSettings::Private::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
-const QString ImportSettings::Private::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
-const QString ImportSettings::Private::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
-const QString ImportSettings::Private::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
-const QString ImportSettings::Private::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
-const QString ImportSettings::Private::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
-const QString ImportSettings::Private::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
-const QString ImportSettings::Private::configToolTipsShowFolderNameEntry("ToolTips Show Folder Name");
-const QString ImportSettings::Private::configToolTipsShowTagsEntry("ToolTips Show Tags");
-const QString ImportSettings::Private::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
-const QString ImportSettings::Private::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
-const QString ImportSettings::Private::configPreviewItemsWhileDownloadEntry("Preview Each Item While Downloading it");
-const QString ImportSettings::Private::configPreviewShowIconsEntry("Preview Show Icons");
-const QString ImportSettings::Private::configShowThumbbarEntry("Show Thumbbar");
+const QString ImportSettings::Private::configGroupDefault(QLatin1String("Import Settings"));
+const QString ImportSettings::Private::configImageSortOrderEntry(QLatin1String("Image Sort Order"));
+const QString ImportSettings::Private::configImageSortByEntry(QLatin1String("Image Sorting")); // TODO not changed due to backwards compatibility
+const QString ImportSettings::Private::configImageGroupModeEntry(QLatin1String("Image Group Mode"));
+const QString ImportSettings::Private::configItemLeftClickActionEntry(QLatin1String("Item Left Click Action"));
+const QString ImportSettings::Private::configDefaultIconSizeEntry(QLatin1String("Default Icon Size"));
+//const QString ImportSettings::Private::configRatingFilterConditionEntry(QLatin1String("Rating Filter Condition"));
+const QString ImportSettings::Private::configIconShowNameEntry(QLatin1String("Icon Show Name"));
+//const QString ImportSettings::Private::configIconShowResolutionEntry(QLatin1String("Icon Show Resolution"));
+const QString ImportSettings::Private::configIconShowSizeEntry(QLatin1String("Icon Show Size"));
+const QString ImportSettings::Private::configIconShowDateEntry(QLatin1String("Icon Show Date"));
+const QString ImportSettings::Private::configIconShowTitleEntry(QLatin1String("Icon Show Title"));
+const QString ImportSettings::Private::configIconShowTagsEntry(QLatin1String("Icon Show Tags"));
+const QString ImportSettings::Private::configIconShowRatingEntry(QLatin1String("Icon Show Rating"));
+const QString ImportSettings::Private::configIconShowImageFormatEntry(QLatin1String("Icon Show Image Format"));
+const QString ImportSettings::Private::configIconShowCoordinatesEntry(QLatin1String("Icon Show Coordinates"));
+const QString ImportSettings::Private::configIconShowOverlaysEntry(QLatin1String("Icon Show Overlays"));
+const QString ImportSettings::Private::configIconViewFontEntry(QLatin1String("IconView Font"));
+const QString ImportSettings::Private::configToolTipsFontEntry(QLatin1String("ToolTips Font"));
+const QString ImportSettings::Private::configShowToolTipsEntry(QLatin1String("Show ToolTips"));
+const QString ImportSettings::Private::configToolTipsShowFileNameEntry(QLatin1String("ToolTips Show File Name"));
+const QString ImportSettings::Private::configToolTipsShowFileDateEntry(QLatin1String("ToolTips Show File Date"));
+const QString ImportSettings::Private::configToolTipsShowFileSizeEntry(QLatin1String("ToolTips Show File Size"));
+const QString ImportSettings::Private::configToolTipsShowImageTypeEntry(QLatin1String("ToolTips Show Image Type"));
+const QString ImportSettings::Private::configToolTipsShowImageDimEntry(QLatin1String("ToolTips Show Image Dim"));
+const QString ImportSettings::Private::configToolTipsShowPhotoMakeEntry(QLatin1String("ToolTips Show Photo Make"));
+const QString ImportSettings::Private::configToolTipsShowPhotoDateEntry(QLatin1String("ToolTips Show Photo Date"));
+const QString ImportSettings::Private::configToolTipsShowPhotoFocalEntry(QLatin1String("ToolTips Show Photo Focal"));
+const QString ImportSettings::Private::configToolTipsShowPhotoExpoEntry(QLatin1String("ToolTips Show Photo Expo"));
+const QString ImportSettings::Private::configToolTipsShowPhotoFlashEntry(QLatin1String("ToolTips Show Photo Flash"));
+const QString ImportSettings::Private::configToolTipsShowPhotoWBEntry(QLatin1String("ToolTips Show Photo WB"));
+const QString ImportSettings::Private::configToolTipsShowFolderNameEntry(QLatin1String("ToolTips Show Folder Name"));
+const QString ImportSettings::Private::configToolTipsShowTagsEntry(QLatin1String("ToolTips Show Tags"));
+const QString ImportSettings::Private::configToolTipsShowLabelRatingEntry(QLatin1String("ToolTips Show Label Rating"));
+const QString ImportSettings::Private::configPreviewLoadFullImageSizeEntry(QLatin1String("Preview Load Full Image Size"));
+const QString ImportSettings::Private::configPreviewItemsWhileDownloadEntry(QLatin1String("Preview Each Item While Downloading it"));
+const QString ImportSettings::Private::configPreviewShowIconsEntry(QLatin1String("Preview Show Icons"));
+const QString ImportSettings::Private::configShowThumbbarEntry(QLatin1String("Show Thumbbar"));
 
 // -------------------------------------------------------------------------------------------------
 
@@ -226,7 +226,8 @@ ImportSettings* ImportSettings::instance()
 }
 
 ImportSettings::ImportSettings()
-    : QObject(), d(new Private)
+    : QObject(),
+      d(new Private)
 {
     d->config = KSharedConfig::openConfig();
     init();

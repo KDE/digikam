@@ -175,12 +175,12 @@ bool UMSCamera::getFolders(const QString& folder)
 
     for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
-        if (fi->fileName() == "." || fi->fileName() == "..")
+        if (fi->fileName() == QLatin1String(".") || fi->fileName() == QLatin1String(".."))
         {
             continue;
         }
 
-        QString subFolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
+        QString subFolder = folder + QString(folder.endsWith(QLatin1Char('/')) ? QLatin1String("") : QLatin1String("/")) + fi->fileName();
         subFolderList.append(subFolder);
     }
 
@@ -226,7 +226,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamIte
 
 void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata)
 {
-    info.folder           = !folder.endsWith('/') ? folder + QString('/') : folder;
+    info.folder           = !folder.endsWith(QLatin1Char('/')) ? folder + QLatin1Char('/') : folder;
     info.name             = itemName;
 
     QFileInfo fi(info.folder + info.name);
@@ -259,7 +259,7 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
 
     // if we have an image, allow previews
     // TODO allow video previews at some point?
-    if(info.mime.startsWith("image/"))
+    if(info.mime.startsWith(QLatin1String("image/")))
     {
         info.previewPossible = true;
     }
@@ -268,7 +268,7 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
 bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
     m_cancel     = false;
-    QString path = folder + QString("/") + itemName;
+    QString path = folder + QLatin1String("/") + itemName;
 
     // Try to get preview from Exif data (good quality). Can work with Raw files
 
@@ -290,8 +290,8 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     }
 
     KSharedConfig::Ptr config  = KSharedConfig::openConfig();
-    KConfigGroup group         = config->group("Camera Settings");
-    bool turnHighQualityThumbs = group.readEntry("TurnHighQualityThumbs", false);
+    KConfigGroup group         = config->group(QLatin1String("Camera Settings"));
+    bool turnHighQualityThumbs = group.readEntry(QLatin1String("TurnHighQualityThumbs"), false);
 
     // Try to get thumbnail from Exif data (poor quality).
     if(!turnHighQualityThumbs)
@@ -312,14 +312,14 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     QFileInfo fi(path);
 
-    if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".thm")))        // Lowercase
+    if (thumbnail.load(folder + QLatin1String("/") + fi.baseName() + QLatin1String(".thm")))        // Lowercase
     {
         if (!thumbnail.isNull())
         {
             return true;
         }
     }
-    else if (thumbnail.load(folder + QString("/") + fi.baseName() + QString(".THM")))   // Uppercase
+    else if (thumbnail.load(folder + QLatin1String("/") + fi.baseName() + QLatin1String(".THM")))   // Uppercase
     {
         if (!thumbnail.isNull())
         {
@@ -349,9 +349,9 @@ bool UMSCamera::getMetadata(const QString& folder, const QString& itemName, DMet
     QFileInfo fi, thmlo, thmup;
     bool ret = false;
 
-    fi.setFile(folder    + QString("/") + itemName);
-    thmlo.setFile(folder + QString("/") + fi.baseName() + QString(".thm"));
-    thmup.setFile(folder + QString("/") + fi.baseName() + QString(".THM"));
+    fi.setFile(folder    + QLatin1String("/") + itemName);
+    thmlo.setFile(folder + QLatin1String("/") + fi.baseName() + QLatin1String(".thm"));
+    thmup.setFile(folder + QLatin1String("/") + fi.baseName() + QLatin1String(".THM"));
 
     if (thmlo.exists())
     {
@@ -375,7 +375,7 @@ bool UMSCamera::getMetadata(const QString& folder, const QString& itemName, DMet
 bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, const QString& saveFile)
 {
     m_cancel     = false;
-    QString src  = folder + QString("/") + itemName;
+    QString src  = folder + QLatin1String("/") + itemName;
     QString dest = saveFile;
 
     QFile sFile(src);
@@ -429,7 +429,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
 bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool lock)
 {
-    QString src = folder + QString("/") + itemName;
+    QString src = folder + QLatin1String("/") + itemName;
 
     if (lock)
     {
@@ -457,16 +457,16 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
 
     // Any camera provide THM (thumbnail) file with real image. We need to remove it also.
 
-    QFileInfo fi(folder + QString("/") + itemName);
+    QFileInfo fi(folder + QLatin1String("/") + itemName);
 
-    QFileInfo thmLo(folder + QString("/") + fi.baseName() + ".thm");          // Lowercase
+    QFileInfo thmLo(folder + QLatin1String("/") + fi.baseName() + QLatin1String(".thm"));          // Lowercase
 
     if (thmLo.exists())
     {
         ::unlink(QFile::encodeName(thmLo.filePath()).constData());
     }
 
-    QFileInfo thmUp(folder + QString("/") + fi.baseName() + ".THM");          // Uppercase
+    QFileInfo thmUp(folder + QLatin1String("/") + fi.baseName() + QLatin1String(".THM"));          // Uppercase
 
     if (thmUp.exists())
     {
@@ -474,13 +474,13 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
     }
 
     // Remove the real image.
-    return (::unlink(QFile::encodeName(folder + QString("/") + itemName).constData()) == 0);
+    return (::unlink(QFile::encodeName(folder + QLatin1String("/") + itemName).constData()) == 0);
 }
 
 bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& info)
 {
     m_cancel     = false;
-    QString dest = folder + QString("/") + itemName;
+    QString dest = folder + QLatin1String("/") + itemName;
     QString src  = localFile;
 
     QFile sFile(src);
@@ -555,7 +555,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         }
 
         info.name             = fi.fileName();
-        info.folder           = !folder.endsWith('/') ? folder + QString("/") : folder;
+        info.folder           = !folder.endsWith(QLatin1Char('/')) ? folder + QLatin1String("/") : folder;
         info.mime             = mime;
         info.ctime            = dt;
         info.size             = fi.size();

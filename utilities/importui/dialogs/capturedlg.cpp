@@ -69,7 +69,8 @@ public:
 
 CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller,
                        const QString& cameraTitle)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     d->controller = controller;
 
@@ -134,7 +135,7 @@ void CaptureDlg::closeEvent(QCloseEvent* e)
         d->timer->stop();
     }
 
-    KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
+    KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Capture Tool Dialog"));
     DXmlGuiWindow::saveWindowSize(windowHandle(), group);
 
     e->accept();
@@ -149,7 +150,7 @@ void CaptureDlg::slotCancel()
         d->timer->stop();
     }
 
-    KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
+    KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Capture Tool Dialog"));
     DXmlGuiWindow::saveWindowSize(windowHandle(), group);
 
     reject();
@@ -191,7 +192,7 @@ void CaptureDlg::slotPreviewDone(const QImage& preview)
 
 void CaptureDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("camerainterface.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("camerainterface.anchor"), QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

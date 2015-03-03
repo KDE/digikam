@@ -63,21 +63,21 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent,
     QTextEdit* const summaryView = new QTextEdit(summary);
     summaryView->setWordWrapMode(QTextOption::WordWrap);
     summaryView->setReadOnly(true);
-    tab->insertTab(0, summaryView, QIcon::fromTheme("dialog-information"), i18n("Device Summary"));
+    tab->insertTab(0, summaryView, QIcon::fromTheme(QLatin1String("dialog-information")), i18n("Device Summary"));
 
     // ----------------------------------------------------------
 
     QTextEdit* const manualView  = new QTextEdit(manual);
     manualView->setWordWrapMode(QTextOption::WordWrap);
     manualView->setReadOnly(true);
-    tab->insertTab(1, manualView, QIcon::fromTheme("help-contents"), i18n("Device Manual"));
+    tab->insertTab(1, manualView, QIcon::fromTheme(QLatin1String("help-contents")), i18n("Device Manual"));
 
     // ----------------------------------------------------------
 
     QTextEdit* const aboutView   = new QTextEdit(about);
     aboutView->setWordWrapMode(QTextOption::WordWrap);
     aboutView->setReadOnly(true);
-    tab->insertTab(2, aboutView, QIcon::fromTheme("camera-photo"), i18n("About Driver"));
+    tab->insertTab(2, aboutView, QIcon::fromTheme(QLatin1String("camera-photo")), i18n("About Driver"));
 
     // ----------------------------------------------------------
 
@@ -99,7 +99,7 @@ CameraInfoDialog::~CameraInfoDialog()
 
 void CameraInfoDialog::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("digitalstillcamera.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("digitalstillcamera.anchor"), QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

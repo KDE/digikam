@@ -41,11 +41,11 @@ class CameraFolderItem : public QTreeWidgetItem
 public:
 
     CameraFolderItem(QTreeWidget* const parent, const QString& name,
-                     const QIcon &icon = QIcon::fromTheme("folder"));
+                     const QIcon &icon = QIcon::fromTheme(QLatin1String("folder")));
 
     CameraFolderItem(QTreeWidgetItem* const parent, const QString& folderName,
                      const QString& folderPath,
-                     const QIcon& icon = QIcon::fromTheme("folder"));
+                     const QIcon& icon = QIcon::fromTheme(QLatin1String("folder")));
 
     ~CameraFolderItem();
 

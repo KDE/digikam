@@ -75,9 +75,9 @@ QUrl CamItemInfo::url() const
 {
     QUrl url;
     url = url.adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + '/' + (folder));
+    url.setPath(url.path() + QLatin1Char('/') + (folder));
 
-    if (!url.path().endsWith('/')) url.setPath(url.path() + '/');
+    if (!url.path().endsWith(QLatin1Char('/'))) url.setPath(url.path() + QLatin1Char('/'));
 
     url = url.adjusted(QUrl::RemoveFilename);
     url.setPath(url.path() + name);

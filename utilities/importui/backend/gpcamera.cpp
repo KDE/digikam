@@ -271,7 +271,7 @@ bool GPCamera::doConnect()
         return false;
     }
 
-    if (m_model != "Directory Browse")
+    if (m_model != QLatin1String("Directory Browse"))
     {
         gp_port_info_list_get_info(infoList, portNum, &info);
         errorCode = gp_camera_set_port_info(d->camera, info);
@@ -408,25 +408,26 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 
         if (sinfos[i].fields & GP_STORAGEINFO_LABEL)
         {
-            qCDebug(LOG_IMPORTUI) << "Storage label: " << QString(sinfos[i].label);
+            qCDebug(LOG_IMPORTUI) << "Storage label: " << QString::fromUtf8(sinfos[i].label);
         }
 
         if (sinfos[i].fields & GP_STORAGEINFO_DESCRIPTION)
         {
-            qCDebug(LOG_IMPORTUI) << "Storage description: " << QString(sinfos[i].description);
+            qCDebug(LOG_IMPORTUI) << "Storage description: " << QString::fromUtf8(sinfos[i].description);
         }
 
         if (sinfos[i].fields & GP_STORAGEINFO_BASE)
         {
-            qCDebug(LOG_IMPORTUI) << "Storage base-dir: " << QString(sinfos[i].basedir);
+            qCDebug(LOG_IMPORTUI) << "Storage base-dir: " << QString::fromUtf8(sinfos[i].basedir);
+
             // TODO in order for this to work, the upload dialog needs to be fixed.
-            /*
+/*
             if(nrofsinfos == 1)
             {
                 qCDebug(LOG_IMPORTUI) << "Only one storage, so setting storage directory to" << sinfos[i].basedir;
                 m_path = QString(sinfos[i].basedir);
             }
-            */
+*/
         }
 
         if (sinfos[i].fields & GP_STORAGEINFO_ACCESS)
@@ -558,8 +559,8 @@ bool GPCamera::capture(CamItemInfo& itemInfo)
 
     // Get new camera item information.
 
-    itemInfo.folder = QString(path.folder);
-    itemInfo.name   = QString(path.name);
+    itemInfo.folder = QString::fromUtf8(path.folder);
+    itemInfo.name   = QString::fromUtf8(path.name);
 
     CameraFileInfo info;
     errorCode       = gp_camera_file_get_info(d->camera, QFile::encodeName(itemInfo.folder).constData(),
@@ -574,7 +575,7 @@ bool GPCamera::capture(CamItemInfo& itemInfo)
     }
 
     itemInfo.ctime            = QDateTime();
-    itemInfo.mime             = "";
+    itemInfo.mime             = QString();
     itemInfo.size             = -1;
     itemInfo.width            = -1;
     itemInfo.height           = -1;
@@ -586,7 +587,7 @@ bool GPCamera::capture(CamItemInfo& itemInfo)
     if (info.file.fields & GP_FILE_INFO_TYPE)
         itemInfo.mime = info.file.type;*/
 
-    itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
+    itemInfo.mime = mimeType(itemInfo.name.section(QLatin1Char('.'), -1).toLower());
 
     if (info.file.fields & GP_FILE_INFO_MTIME)
     {
@@ -687,7 +688,7 @@ bool GPCamera::getFolders(const QString& folder)
             return false;
         }
 
-        subFolderList.append(folder + QFile::decodeName(subFolder) + '/');
+        subFolderList.append(folder + QFile::decodeName(subFolder) + QLatin1Char('/'));
     }
 
     gp_list_unref(clist);
@@ -869,7 +870,7 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
             info.mime = cfinfo.file.type;
     */
 
-    info.mime = mimeType(info.name.section('.', -1).toLower());
+    info.mime = mimeType(info.name.section(QLatin1Char('.'), -1).toLower());
 
     if (!info.mime.isEmpty())
     {
@@ -1279,7 +1280,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     }
 
     itemInfo.ctime            = QDateTime();
-    itemInfo.mime             = "";
+    itemInfo.mime             = QString();
     itemInfo.size             = -1;
     itemInfo.width            = -1;
     itemInfo.height           = -1;
@@ -1292,7 +1293,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
         itemInfo.mime = info.file.type;
     */
 
-    itemInfo.mime = mimeType(itemInfo.name.section('.', -1).toLower());
+    itemInfo.mime = mimeType(itemInfo.name.section(QLatin1Char('.'), -1).toLower());
 
     if (info.file.fields & GP_FILE_INFO_MTIME)
     {
@@ -1457,8 +1458,8 @@ bool GPCamera::cameraAbout(QString& about)
     // here we need to make sure whitespace and newlines
     // are converted to HTML properly
     about = Qt::convertFromPlainText(QString::fromLocal8Bit(abt.text), Qt::WhiteSpacePre);
-    about.append("<br/><br/>To report problems about this driver, please contact "
-                 "the gphoto2 team at:<br/><br/>http://gphoto.org/bugs");
+    about.append(QString::fromUtf8("<br/><br/>To report problems about this driver, please contact "
+                 "the gphoto2 team at:<br/><br/>http://gphoto.org/bugs"));
 
     return true;
 #else
@@ -1473,7 +1474,7 @@ void GPCamera::printGphotoErrorDescription(int errorCode)
 {
 #ifdef HAVE_GPHOTO2
     qCDebug(LOG_IMPORTUI) << "Libgphoto2 error: " << gp_result_as_string(errorCode)
-             << " (" << errorCode << ")";
+                          << " (" << errorCode << ")";
 #else
     Q_UNUSED(errorCode);
 #endif /* HAVE_GPHOTO2 */
@@ -1548,7 +1549,7 @@ void GPCamera::getSupportedPorts(QStringList& plist)
 #ifdef HAVE_GPHOTO25
             char* xpath = 0;
             gp_port_info_get_name (info, &xpath);
-            plist.append(xpath);
+            plist.append(QString::fromUtf8(xpath));
 #else
             plist.append(info.path);
 #endif
@@ -1580,12 +1581,12 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
 
     if (abilities.port & GP_PORT_SERIAL)
     {
-        plist.append("serial");
+        plist.append(QLatin1String("serial"));
     }
 
     if (abilities.port & GP_PORT_USB)
     {
-        plist.append("usb");
+        plist.append(QLatin1String("usb"));
     }
 
     gp_context_unref(context);
@@ -1722,7 +1723,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
             if (ret < GP_OK) /* should not happen */
                 continue;
 
-            /* get the lowlevel port info  for the path */
+            /* get the lowlevel port info  for the path
+             */
             gp_port_info_list_get_info(list, ret, &info);
 
             /* open lowlevel driver interface briefly to search */
@@ -1730,7 +1732,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
             gp_port_set_info(gpport, info);
 
             /* And now call into the lowlevel usb driver to see if the bus position
-                * has that specific vendor/product id */
+             * has that specific vendor/product id
+             */
             if (gp_port_usb_find_device(gpport, vendorId, productId) == GP_OK)
             {
                 ab.usb_vendor  = vendorId;
@@ -1746,7 +1749,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
         if (ab.usb_product != productId)
             continue;
 
-        /* keep it, and continue iterating, in case we find another one */
+        /* keep it, and continue iterating, in case we find another one
+         */
         gp_list_get_name (camList, i, &model_str);
         gp_list_get_value(camList, i, &port_str);
 
@@ -1761,8 +1765,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
        if (cnt > 1)
        {
           qCWarning(LOG_IMPORTUI) << "More than one camera detected on port " << port
-                     << ". Due to restrictions in the GPhoto2 API, "
-                     << "only the first camera is used.";
+                                  << ". Due to restrictions in the GPhoto2 API, "
+                                  << "only the first camera is used.";
        }
 
        model   = QString::fromLatin1(model_str);

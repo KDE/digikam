@@ -33,7 +33,8 @@
 namespace Digikam
 {
 
-DKCamera::DKCamera(const QString& title, const QString& model, const QString& port, const QString& path) : QObject()
+DKCamera::DKCamera(const QString& title, const QString& model, const QString& port, const QString& path)
+    : QObject()
 {
     m_title                       = title;
     m_model                       = model;
@@ -133,30 +134,30 @@ QString DKCamera::mimeType(const QString& fileext) const
     QString mime;
 
     // Massage known variations of known mimetypes into KDE specific ones
-    if (ext == "jpg" || ext == "jpe")
+    if (ext == QLatin1String("jpg") || ext == QLatin1String("jpe"))
     {
-        ext = "jpeg";
+        ext = QLatin1String("jpeg");
     }
-    else if (ext == "tif")
+    else if (ext == QLatin1String("tif"))
     {
-        ext = "tiff";
+        ext = QLatin1String("tiff");
     }
 
     if (m_rawFilter.contains(ext))
     {
-        mime = QString("image/x-raw");
+        mime = QLatin1String("image/x-raw");
     }
     else if (m_imageFilter.contains(ext))
     {
-        mime = QString("image/") + ext;
+        mime = QLatin1String("image/") + ext;
     }
     else if (m_movieFilter.contains(ext))
     {
-        mime = QString("video/") + ext;
+        mime = QLatin1String("video/") + ext;
     }
     else if (m_audioFilter.contains(ext))
     {
-        mime = QString("audio/") + ext;
+        mime = QLatin1String("audio/") + ext;
     }
 
     return mime;
@@ -173,7 +174,8 @@ void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta
     info.photoInfo = meta.getPhotographInformation();
 }
 
-void DKCamera::printSupportedFeatures() {
+void DKCamera::printSupportedFeatures()
+{
     qCDebug(LOG_IMPORTUI) << "Supported features for" << title();
     qCDebug(LOG_IMPORTUI) << "  Thumbnails:" << thumbnailSupport();
     qCDebug(LOG_IMPORTUI) << "  Delete:" << deleteSupport();

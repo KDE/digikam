@@ -88,7 +88,8 @@ public:
 // --------------------------------------------------------
 
 CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QWidget* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
     d->controller     = ctrl;
     static_d->profile = IccManager::displayProfile(parent);
@@ -247,7 +248,7 @@ void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& 
     }
 
     QString file   = item.url().fileName();
-    QString folder = item.url().toLocalFile().remove(QString("/") + file);
+    QString folder = item.url().toLocalFile().remove(QLatin1String("/") + file);
     QPixmap thumb;
 
     if (pix.isNull())

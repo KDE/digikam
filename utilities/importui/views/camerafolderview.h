@@ -46,11 +46,11 @@ public:
     explicit CameraFolderView(QWidget* const parent);
     ~CameraFolderView();
 
-    void addVirtualFolder(const QString& name, const QIcon &icon = QIcon::fromTheme("camera-photo"));
-    void addRootFolder(const QString& folder, int nbItems = -1, const QIcon& icon = QIcon::fromTheme("folder"));
+    void addVirtualFolder(const QString& name, const QIcon &icon = QIcon::fromTheme(QLatin1String("camera-photo")));
+    void addRootFolder(const QString& folder, int nbItems = -1, const QIcon& icon = QIcon::fromTheme(QLatin1String("folder")));
 
     CameraFolderItem* addFolder(const QString& folder, const QString& subFolder, int nbItems,
-                                const QIcon& icon = QIcon::fromTheme("folder"));
+                                const QIcon& icon = QIcon::fromTheme(QLatin1String("folder")));
 
     CameraFolderItem* findFolder(const QString& folderPath);
 
