@@ -23,7 +23,6 @@ set(libsetup_SRCS
     setupraw.cpp
     setupdatabase.cpp
     setupversioning.cpp
-    importfilters.cpp
     setupimagequalitysorter.cpp
 
     collections/setupcollections.cpp
@@ -32,6 +31,7 @@ set(libsetup_SRCS
     collections/dwitemdelegate_p.cpp
     collections/dwitemdelegatepool.cpp
 
+    camera/importfilters.cpp
     camera/setupcamera.cpp
     camera/cameraselection.cpp
     camera/cameralist.cpp
