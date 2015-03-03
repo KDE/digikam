@@ -86,32 +86,32 @@ Name            Version                       URL                               
 
 Required:
 
-CMake           >= 2.8.0                      http://www.cmake.org
-libqt           >= 4.6.0                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
-kdelibs         >= 4.4.0                      http://www.kde.org
+CMake           >= 3.0.0                      http://www.cmake.org
+libqt           >= 5.1.0                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
+kdelibs         >= 5.1.0                      http://www.kde.org
 libjpeg         >= 6b                         http://www.ijg.org
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng          >= 1.2.0                      http://www.libpng.org/pub/png/libpng.html
 liblcms         >= 2.x                        http://www.littlecms.com
 libboostgraph   >= 1.43.0                     http://www.boost.org/doc/libs
-libkexiv2       >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
-libkdcraw       >= 2.2.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
+libkexiv2       >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
+libkdcraw       >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
 libpgf          >= 6.11.24                    http://www.libpgf.org
 libopencv       >= 2.4.9                      http://opencv.willowgarage.com
 
 Optional:
 
-libkipi         >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
-libkface        >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkface         To support faces detection and recognition.
-libkgeomap      >= 3.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap       To support geolocation maps.
-libkdepimlibs   >= 4.4.0                      http://pim.kde.org                                                To support KAddressBook entries.
+libkipi         >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
+libkface        >= 5.0.0                      https://projects.kde.org/projects/extragear/libs/libkface         To support faces detection and recognition.
+libkgeomap      >= 5.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap       To support geolocation maps.
+libkdepimlibs   >= 5.x                        http://pim.kde.org                                                To support KAddressBook entries.
 libjasper       >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.
 liblensfun      >= 0.2.6                      http://lensfun.sourceforge.net                                    To support LensCorrection tool.
 liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                                         To support Liquid Rescale tool.
 libeigen3       >= 3.0.0                      http://eigen.tuxfamily.org                                        To support Refocus tool.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras drivers.
-libusb          >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in bug #268267
-libbaloo        >= 4.12.0                     https://projects.kde.org/projects/kde/kdelibs/baloo               To support KDE files indexing support.
+libusb          >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in bug #268267.
+libbaloo        >= 5.x                        https://projects.kde.org/projects/kde/kdelibs/baloo               To support KDE files indexing support.
 doxygen         >= 1.8.0                      http://www.doxygen.org                                            To support API documentation building (This does not affect building digiKam in any way).
 
 Note: all library dependencies require development and binary packages installed on your computer to compile digiKam.
