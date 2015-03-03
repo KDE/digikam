@@ -115,21 +115,6 @@ void DImgPreviewItem::setPreviewSettings(const PreviewSettings& settings)
     reload();
 }
 
-/*
-void DImgPreviewItem::setLoadFullImageSize(bool b)
-{
-    Q_D(DImgPreviewItem);
-
-    if (d->loadFullImageSize == b)
-    {
-        return;
-    }
-
-    d->loadFullImageSize = b;
-    reload();
-}
-*/
-
 QString DImgPreviewItem::path() const
 {
     Q_D(const DImgPreviewItem);

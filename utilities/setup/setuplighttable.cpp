@@ -53,7 +53,6 @@ public:
     Private() :
         autoSyncPreview(0),
         autoLoadOnRightPanel(0),
-        loadFullImageSize(0),
         clearOnClose(0),
         fullScreenSettings(0)
     {}
@@ -66,33 +65,32 @@ public:
 
     QCheckBox*           autoSyncPreview;
     QCheckBox*           autoLoadOnRightPanel;
-    QCheckBox*           loadFullImageSize;
     QCheckBox*           clearOnClose;
 
     FullScreenSettings*  fullScreenSettings;
 };
 
-const QString SetupLightTable::Private::configGroupName("LightTable Settings");
-const QString SetupLightTable::Private::configAutoSyncPreviewEntry("Auto Sync Preview");
-const QString SetupLightTable::Private::configAutoLoadRightPanelEntry("Auto Load Right Panel");
-const QString SetupLightTable::Private::configLoadFullImagesizeEntry("Load Full Image size");
-const QString SetupLightTable::Private::configClearOnCloseEntry("Clear On Close");
+const QString SetupLightTable::Private::configGroupName(QLatin1String("LightTable Settings"));
+const QString SetupLightTable::Private::configAutoSyncPreviewEntry(QLatin1String("Auto Sync Preview"));
+const QString SetupLightTable::Private::configAutoLoadRightPanelEntry(QLatin1String("Auto Load Right Panel"));
+const QString SetupLightTable::Private::configClearOnCloseEntry(QLatin1String("Clear On Close"));
 
 // --------------------------------------------------------
 
 SetupLightTable::SetupLightTable(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
-    QVBoxLayout* gLayout             = new QVBoxLayout(interfaceOptionsGroup);
+    QGroupBox* const interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
+    QVBoxLayout* const gLayout             = new QVBoxLayout(interfaceOptionsGroup);
 
     d->autoSyncPreview = new QCheckBox(i18n("Synchronize panels automatically"), interfaceOptionsGroup);
     d->autoSyncPreview->setWhatsThis(i18n("Set this option to automatically synchronize "
@@ -103,14 +101,6 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
                                             interfaceOptionsGroup);
     d->autoLoadOnRightPanel->setWhatsThis(i18n("Set this option to automatically load an image "
                                                "into the right panel when the corresponding item is selected on the thumbbar."));
-/*
-    d->loadFullImageSize = new QCheckBox(i18n("Load full-sized image"), interfaceOptionsGroup);
-    d->loadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
-                                            "for preview, rather than at a reduced size. As this option "
-                                            "will make it take longer to load images, only use it if you have "
-                                            "a fast computer.</p>"
-                                            "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
-                                            "is used instead of the embedded JPEG preview.</p>"));*/
 
     d->clearOnClose = new QCheckBox(i18n("Clear the light table on close"));
     d->clearOnClose->setWhatsThis(i18n("Set this option to remove all images "
@@ -120,7 +110,6 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
 
     gLayout->addWidget(d->autoSyncPreview);
     gLayout->addWidget(d->autoLoadOnRightPanel);
-    //gLayout->addWidget(d->loadFullImageSize);
     gLayout->addWidget(d->clearOnClose);
     gLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gLayout->setSpacing(0);
@@ -159,7 +148,6 @@ void SetupLightTable::readSettings()
     d->fullScreenSettings->readSettings(group);
     d->autoSyncPreview->setChecked(group.readEntry(d->configAutoSyncPreviewEntry,         true));
     d->autoLoadOnRightPanel->setChecked(group.readEntry(d->configAutoLoadRightPanelEntry, true));
-    //d->loadFullImageSize->setChecked(group.readEntry(d->configLoadFullImagesizeEntry,     false));
     d->clearOnClose->setChecked(group.readEntry(d->configClearOnCloseEntry,               false));
 }
 
@@ -170,7 +158,6 @@ void SetupLightTable::applySettings()
     d->fullScreenSettings->saveSettings(group);
     group.writeEntry(d->configAutoSyncPreviewEntry,       d->autoSyncPreview->isChecked());
     group.writeEntry(d->configAutoLoadRightPanelEntry,    d->autoLoadOnRightPanel->isChecked());
-    //group.writeEntry(d->configLoadFullImagesizeEntry,     d->loadFullImageSize->isChecked());
     group.writeEntry(d->configClearOnCloseEntry,          d->clearOnClose->isChecked());
     config->sync();
 }

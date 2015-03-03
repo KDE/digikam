@@ -81,7 +81,8 @@ public:
 };
 
 SetupDatabase::SetupDatabase(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     QWidget* const page     = new QWidget;
     QVBoxLayout* mainLayout = new QVBoxLayout;
@@ -104,7 +105,7 @@ SetupDatabase::SetupDatabase(QWidget* const parent)
                                             "prior to 2.0.</qt>"));
 
         QPushButton* const infoHash     = new QPushButton;
-        infoHash->setIcon(QIcon::fromTheme("dialog-information"));
+        infoHash->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
         infoHash->setToolTip(i18nc("@info:tooltip", "Get information about <interface>Update File Hashes</interface>"));
 
         updateLayout->addWidget(d->hashesButton, 0, 0);

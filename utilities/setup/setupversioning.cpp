@@ -120,7 +120,8 @@ public:
 };
 
 SetupVersioning::SetupVersioning(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     d->nonDestructivePanel            = new QWidget;
     QVBoxLayout* const nonDestructiveLayout = new QVBoxLayout;
@@ -140,10 +141,10 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
                                                 "<para> All steps of the editing history are recorded and can be accessed later.</para>"));
 
     QLabel* const iconLabel = new QLabel;
-    iconLabel->setPixmap(QIcon::fromTheme("view-catalog").pixmap(32));
+    iconLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-catalog")).pixmap(32));
 
     d->infoNonDestructive   = new QPushButton;
-    d->infoNonDestructive->setIcon(QIcon::fromTheme("dialog-information"));
+    d->infoNonDestructive->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoNonDestructive->setToolTip(i18nc("@info:tooltip", "Get information on non-destructive editing and file versioning"));
 
     gridHeader->addWidget(iconLabel,               0, 0);
@@ -157,16 +158,16 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     QGridLayout* const wsLayout = new QGridLayout;
 
     QLabel* const workIcon      = new QLabel;
-    workIcon->setPixmap(QIcon::fromTheme("document-save-as").pixmap(32));
+    workIcon->setPixmap(QIcon::fromTheme(QLatin1String("document-save-as")).pixmap(32));
     QLabel* const formatLabel   = new QLabel(i18nc("@label", "Save files as"));
 
     // keep in sync with VersionManager::workspaceFileFormats()
     d->formatBox           = new QComboBox;
-    d->formatBox->addItem(i18nc("@label:listbox", "JPEG"), "JPG");
-    d->formatBox->addItem(i18nc("@label:listbox", "TIFF"), "TIFF");
-    d->formatBox->addItem(i18nc("@label:listbox", "PNG"), "PNG");
-    d->formatBox->addItem(i18nc("@label:listbox", "PGF"), "PGF");
-    d->formatBox->addItem(i18nc("@label:listbox", "JPEG 2000"), "JP2");
+    d->formatBox->addItem(i18nc("@label:listbox", "JPEG"),      QLatin1String("JPG"));
+    d->formatBox->addItem(i18nc("@label:listbox", "TIFF"),      QLatin1String("TIFF"));
+    d->formatBox->addItem(i18nc("@label:listbox", "PNG"),       QLatin1String("PNG"));
+    d->formatBox->addItem(i18nc("@label:listbox", "PGF"),       QLatin1String("PGF"));
+    d->formatBox->addItem(i18nc("@label:listbox", "JPEG 2000"), QLatin1String("JP2"));
     d->formatBox->insertSeparator(1);
     d->formatBox->insertSeparator(4);
 
@@ -222,7 +223,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 */
 
     d->infoFormat = new QPushButton;
-    d->infoFormat->setIcon(QIcon::fromTheme("dialog-information"));
+    d->infoFormat->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoFormat->setToolTip(i18nc("@info:tooltip", "Get information on available image file formats"));
 
     wsLayout->addWidget(workIcon,           0, 0);
@@ -242,7 +243,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 
     QLabel* const closingExplanation = new QLabel(i18nc("@label", "When closing the editor"));
     QLabel* const closingIcon        = new QLabel;
-    closingIcon->setPixmap(QIcon::fromTheme("dialog-ok-apply").pixmap(32));
+    closingIcon->setPixmap(QIcon::fromTheme(QLatin1String("dialog-ok-apply")).pixmap(32));
     d->askToSave                     = new QRadioButton(i18nc("@option:radio", "Always ask to save changes"));
     d->autoSave                      = new QRadioButton(i18nc("@option:radio", "Save changes automatically"));
 
@@ -264,7 +265,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     QLabel* const snapshotExplanation = new QLabel;
     snapshotExplanation->setText(i18nc("@label",
                                        "For an edited image, there is at least one file representing the current version."
-                                       "DigiKam can take and keep additional, intermediate snapshots during editing."));
+                                       "digiKam can take and keep additional, intermediate snapshots during editing."));
     snapshotExplanation->setWordWrap(true);
 
 
@@ -289,12 +290,12 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->snapshotGB->setWhatsThis(snapshotWhatsThis);
 
     QLabel* const snapshotIconLabel = new QLabel;
-    snapshotIconLabel->setPixmap(QIcon::fromTheme("insert-image").pixmap(32));
+    snapshotIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("insert-image")).pixmap(32));
 
     QLabel* const snapshotLabel     = new QLabel(i18nc("@label", "Keep a snapshot of an edited image"));
 
     d->infoSnapshot           = new QPushButton;
-    d->infoSnapshot->setIcon(QIcon::fromTheme("dialog-information"));
+    d->infoSnapshot->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoSnapshot->setToolTip(i18nc("@info:tooltip", "Get an explanation for these options"));
 
     d->snapshotAfterRaw       = new QCheckBox(i18nc("@option:check", "After converting from a RAW image"));
@@ -356,10 +357,10 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     QLabel* const viewLabel     =  new QLabel(i18nc("@label", "In main view"));
 
     QLabel* const viewIconLabel = new QLabel;
-    viewIconLabel->setPixmap(QIcon::fromTheme("view-list-icons").pixmap(32));
+    viewIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-list-icons")).pixmap(32));
 
     d->infoView           = new QPushButton;
-    d->infoView->setIcon(QIcon::fromTheme("dialog-information"));
+    d->infoView->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoView->setToolTip(i18nc("@info:tooltip", "Get an explanation for these options"));
 
     d->viewShowOriginal   = new QCheckBox(i18nc("@option:check", "Always show original images"));
@@ -418,8 +419,6 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     readSettings();
 
     enableToggled(d->enableNonDestructive->isChecked());
-
-    // --------------------------------------------------------
 }
 
 SetupVersioning::~SetupVersioning()

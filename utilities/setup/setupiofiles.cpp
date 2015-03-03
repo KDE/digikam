@@ -99,21 +99,22 @@ public:
     QCheckBox*           showImageSettingsDialog;
 };
 
-const QString SetupIOFiles::Private::configGroupName("ImageViewer Settings");
-const QString SetupIOFiles::Private::configJPEGCompressionEntry("JPEGCompression");
-const QString SetupIOFiles::Private::configJPEGSubSamplingEntry("JPEGSubSampling");
-const QString SetupIOFiles::Private::configPNGCompressionEntry("PNGCompression");
-const QString SetupIOFiles::Private::configTIFFCompressionEntry("TIFFCompression");
-const QString SetupIOFiles::Private::configJPEG2000CompressionEntry("JPEG2000Compression");
-const QString SetupIOFiles::Private::configJPEG2000LossLessEntry("JPEG2000LossLess");
-const QString SetupIOFiles::Private::configPGFCompressionEntry("PGFCompression");
-const QString SetupIOFiles::Private::configPGFLossLessEntry("PGFLossLess");
-const QString SetupIOFiles::Private::configShowImageSettingsDialog("ShowImageSettingsDialog");
+const QString SetupIOFiles::Private::configGroupName(QLatin1String("ImageViewer Settings"));
+const QString SetupIOFiles::Private::configJPEGCompressionEntry(QLatin1String("JPEGCompression"));
+const QString SetupIOFiles::Private::configJPEGSubSamplingEntry(QLatin1String("JPEGSubSampling"));
+const QString SetupIOFiles::Private::configPNGCompressionEntry(QLatin1String("PNGCompression"));
+const QString SetupIOFiles::Private::configTIFFCompressionEntry(QLatin1String("TIFFCompression"));
+const QString SetupIOFiles::Private::configJPEG2000CompressionEntry(QLatin1String("JPEG2000Compression"));
+const QString SetupIOFiles::Private::configJPEG2000LossLessEntry(QLatin1String("JPEG2000LossLess"));
+const QString SetupIOFiles::Private::configPGFCompressionEntry(QLatin1String("PGFCompression"));
+const QString SetupIOFiles::Private::configPGFLossLessEntry(QLatin1String("PGFLossLess"));
+const QString SetupIOFiles::Private::configShowImageSettingsDialog(QLatin1String("ShowImageSettingsDialog"));
 
 // --------------------------------------------------------
 
 SetupIOFiles::SetupIOFiles(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     QWidget* const panel    = new QWidget;
     QVBoxLayout* const vbox = new QVBoxLayout;
@@ -149,8 +150,6 @@ SetupIOFiles::SetupIOFiles(QWidget* const parent)
     // --------------------------------------------------------
 
     readSettings();
-
-    // --------------------------------------------------------
 }
 
 SetupIOFiles::~SetupIOFiles()

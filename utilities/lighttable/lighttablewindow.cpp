@@ -179,7 +179,6 @@ void LightTableWindow::applySettings()
     d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel", true);
     d->autoSyncPreview        = group.readEntry("Auto Sync Preview",     true);
     d->clearOnCloseAction->setChecked(group.readEntry("Clear On Close", false));
-    //d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
     slotApplicationSettingsChanged();
 
     // Restore full screen Mode

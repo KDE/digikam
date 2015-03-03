@@ -87,7 +87,8 @@ public:
 };
 
 SetupMime::SetupMime(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
@@ -110,7 +111,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid1            = new QGridLayout(imageFileFilterBox);
 
     QLabel* const logoLabel1 = new QLabel(imageFileFilterBox);
-    logoLabel1->setPixmap(QIcon::fromTheme("image-jp2").pixmap(48));
+    logoLabel1->setPixmap(QIcon::fromTheme(QLatin1String("image-jp2")).pixmap(48));
 
     d->imageFileFilterLabel  = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
@@ -130,7 +131,7 @@ SetupMime::SetupMime(QWidget* const parent)
     hbox1->setStretchFactor(d->imageFileFilterEdit, 10);
 
     d->revertImageFileFilterBtn = new QToolButton(hbox1);
-    d->revertImageFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh"));
+    d->revertImageFileFilterBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
     d->revertImageFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid1->addWidget(logoLabel1,              0, 0, 2, 1);
@@ -146,7 +147,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid2            = new QGridLayout(movieFileFilterBox);
 
     QLabel* const logoLabel2 = new QLabel(movieFileFilterBox);
-    logoLabel2->setPixmap(QIcon::fromTheme("video-mpeg").pixmap(48));
+    logoLabel2->setPixmap(QIcon::fromTheme(QLatin1String("video-mpeg")).pixmap(48));
 
     d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
@@ -168,7 +169,7 @@ SetupMime::SetupMime(QWidget* const parent)
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
 
     d->revertMovieFileFilterBtn = new QToolButton(hbox2);
-    d->revertMovieFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh"));
+    d->revertMovieFileFilterBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
     d->revertMovieFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid2->addWidget(logoLabel2,                0, 0, 2, 1);
@@ -184,7 +185,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid3            = new QGridLayout(audioFileFilterBox);
 
     QLabel* const logoLabel3 = new QLabel(audioFileFilterBox);
-    logoLabel3->setPixmap(QIcon::fromTheme("audio-basic").pixmap(48));
+    logoLabel3->setPixmap(QIcon::fromTheme(QLatin1String("audio-basic")).pixmap(48));
 
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
@@ -206,7 +207,7 @@ SetupMime::SetupMime(QWidget* const parent)
     hbox3->setStretchFactor(d->audioFileFilterEdit, 10);
 
     d->revertAudioFileFilterBtn = new QToolButton(hbox3);
-    d->revertAudioFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh"));
+    d->revertAudioFileFilterBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
     d->revertAudioFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid3->addWidget(logoLabel3,              0, 0, 2, 1);
@@ -260,16 +261,16 @@ void SetupMime::applySettings()
 {
     // Display warning if user removes a core format
     QStringList coreImageFormats, removedImageFormats;
-    coreImageFormats << "jpg" << "jpeg" << "jpe"               // JPEG
-                     << "tif" << "tiff"                        // TIFF
-                     << "png";                                 // PNG
+    coreImageFormats << QLatin1String("jpg") << QLatin1String("jpeg") << QLatin1String("jpe") // JPEG
+                     << QLatin1String("tif") << QLatin1String("tiff")                         // TIFF
+                     << QLatin1String("png");                                                 // PNG
 
     QString imageFilter = d->imageFileFilterEdit->text();
 
     foreach(const QString& format, coreImageFormats)
     {
-        if (imageFilter.contains('-'   + format) ||
-            imageFilter.contains("-*." + format))
+        if (imageFilter.contains(QLatin1Char('-')     + format) ||
+            imageFilter.contains(QLatin1String("-*.") + format))
         {
             removedImageFormats << format;
         }
@@ -284,7 +285,7 @@ void SetupMime::applySettings()
                                                "with these formats, they will be removed from the database and you will "
                                                "lose all information about them, including rating and tags.</p>"
                                                "<p>Are you sure you want to apply your changes and lose the support for these formats?</p>",
-                                               removedImageFormats.join(" ")),
+                                               removedImageFormats.join(QLatin1String(" "))),
                                           QMessageBox::Yes | QMessageBox::No);
 
         if (result != QMessageBox::Yes)
@@ -329,7 +330,7 @@ void SetupMime::slotShowCurrentImageSettings()
     DatabaseAccess().db()->getFilterSettings(&imageList, 0, 0);
     QString text = i18n("<p>Files with these extensions will be recognized as images "
                         "and included into the database:<br/> <code>%1</code></p>",
-                        imageList.join(" "));
+                        imageList.join(QLatin1String(" ")));
     QWhatsThis::showText(d->imageFileFilterLabel->mapToGlobal(QPoint(0, 0)), text, d->imageFileFilterLabel);
 }
 
@@ -339,7 +340,7 @@ void SetupMime::slotShowCurrentMovieSettings()
     DatabaseAccess().db()->getFilterSettings(0, &movieList, 0);
     QString text = i18n("<p>Files with these extensions will be recognized as movie files "
                         "and included into the database:<br/> <code>%1</code></p>",
-                        movieList.join(" "));
+                        movieList.join(QLatin1String(" ")));
     QWhatsThis::showText(d->movieFileFilterLabel->mapToGlobal(QPoint(0, 0)), text, d->movieFileFilterLabel);
 }
 
@@ -349,7 +350,7 @@ void SetupMime::slotShowCurrentAudioSettings()
     DatabaseAccess().db()->getFilterSettings(0, 0, &audioList);
     QString text = i18n("<p>Files with these extensions will be recognized as audio files "
                         "and included into the database:<br/> <code>%1</code></p>",
-                        audioList.join(" "));
+                        audioList.join(QLatin1String(" ")));
     QWhatsThis::showText(d->audioFileFilterLabel->mapToGlobal(QPoint(0, 0)), text, d->audioFileFilterLabel);
 }
 

@@ -106,39 +106,40 @@ public:
     RDoubleNumInput*    overExposurePcents;
 };
 
-const QString SetupEditor::Private::configGroupName("ImageViewer Settings");
-const QString SetupEditor::Private::configUseThemeBackgroundColorEntry("UseThemeBackgroundColor");
-const QString SetupEditor::Private::configBackgroundColorEntry("BackgroundColor");
-const QString SetupEditor::Private::configUnderExposureColorEntry("UnderExposureColor");
-const QString SetupEditor::Private::configOverExposureColorEntry("OverExposureColor");
-const QString SetupEditor::Private::configUnderExposurePercentsEntry("UnderExposurePercentsEntry");
-const QString SetupEditor::Private::configOverExposurePercentsEntry("OverExposurePercentsEntry");
-const QString SetupEditor::Private::configExpoIndicatorModeEntry("ExpoIndicatorMode");
+const QString SetupEditor::Private::configGroupName(QLatin1String("ImageViewer Settings"));
+const QString SetupEditor::Private::configUseThemeBackgroundColorEntry(QLatin1String("UseThemeBackgroundColor"));
+const QString SetupEditor::Private::configBackgroundColorEntry(QLatin1String("BackgroundColor"));
+const QString SetupEditor::Private::configUnderExposureColorEntry(QLatin1String("UnderExposureColor"));
+const QString SetupEditor::Private::configOverExposureColorEntry(QLatin1String("OverExposureColor"));
+const QString SetupEditor::Private::configUnderExposurePercentsEntry(QLatin1String("UnderExposurePercentsEntry"));
+const QString SetupEditor::Private::configOverExposurePercentsEntry(QLatin1String("OverExposurePercentsEntry"));
+const QString SetupEditor::Private::configExpoIndicatorModeEntry(QLatin1String("ExpoIndicatorMode"));
 
 // --------------------------------------------------------
 
 SetupEditor::SetupEditor(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
-    QVBoxLayout* gLayout1            = new QVBoxLayout(interfaceOptionsGroup);
+    QGroupBox* const interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
+    QVBoxLayout* const gLayout1            = new QVBoxLayout(interfaceOptionsGroup);
 
-    d->themebackgroundColor          = new QCheckBox(i18n("&Use theme background color"), interfaceOptionsGroup);
+    d->themebackgroundColor                = new QCheckBox(i18n("&Use theme background color"), interfaceOptionsGroup);
 
     d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use the background theme "
                                                "color in the image editor area."));
 
-    d->colorBox                      = new RHBox(interfaceOptionsGroup);
-    QLabel* backgroundColorlabel     = new QLabel(i18n("&Background color:"), d->colorBox);
-    d->backgroundColor               = new KColorButton(d->colorBox);
+    d->colorBox                       = new RHBox(interfaceOptionsGroup);
+    QLabel*const backgroundColorlabel = new QLabel(i18n("&Background color:"), d->colorBox);
+    d->backgroundColor                = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     d->backgroundColor->setWhatsThis(i18n("Customize the background color to use "
                                           "in the image editor area."));
@@ -154,19 +155,19 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* exposureOptionsGroup  = new QGroupBox(i18n("Exposure Indicators"), panel);
-    QVBoxLayout* gLayout2            = new QVBoxLayout(exposureOptionsGroup);
+    QGroupBox* const exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
+    QVBoxLayout* const gLayout2           = new QVBoxLayout(exposureOptionsGroup);
 
-    RHBox* underExpoBox              = new RHBox(exposureOptionsGroup);
-    QLabel* underExpoColorlabel      = new QLabel(i18n("&Under-exposure color: "), underExpoBox);
-    d->underExposureColor            = new KColorButton(underExpoBox);
+    RHBox* const underExpoBox             = new RHBox(exposureOptionsGroup);
+    QLabel* const underExpoColorlabel     = new QLabel(i18n("&Under-exposure color: "), underExpoBox);
+    d->underExposureColor                 = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                              "under-exposed pixels."));
 
-    RHBox* underPcentBox             = new RHBox(exposureOptionsGroup);
-    QLabel* underExpoPcentlabel      = new QLabel(i18n("Under-exposure percents: "), underPcentBox);
-    d->underExposurePcents           = new RDoubleNumInput(underPcentBox);
+    RHBox* const underPcentBox        = new RHBox(exposureOptionsGroup);
+    QLabel* const underExpoPcentlabel = new QLabel(i18n("Under-exposure percents: "), underPcentBox);
+    d->underExposurePcents            = new RDoubleNumInput(underPcentBox);
     d->underExposurePcents->setDecimals(1);
     d->underExposurePcents->setRange(0.1, 5.0, 0.1);
     d->underExposurePcents->setDefaultValue(1.0);
@@ -174,15 +175,15 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->underExposurePcents->setWhatsThis(i18n("Adjust the percents of the bottom of image histogram "
                                               "which will be used to check under exposed pixels."));
 
-    RHBox* overExpoBox               = new RHBox(exposureOptionsGroup);
-    QLabel* overExpoColorlabel       = new QLabel(i18n("&Over-exposure color: "), overExpoBox);
+    RHBox* const overExpoBox         = new RHBox(exposureOptionsGroup);
+    QLabel* const overExpoColorlabel = new QLabel(i18n("&Over-exposure color: "), overExpoBox);
     d->overExposureColor             = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                             "over-exposed pixels."));
 
-    RHBox* overPcentBox              = new RHBox(exposureOptionsGroup);
-    QLabel* overExpoPcentlabel       = new QLabel(i18n("Over-exposure percents: "), overPcentBox);
+    RHBox* const overPcentBox        = new RHBox(exposureOptionsGroup);
+    QLabel* const overExpoPcentlabel = new QLabel(i18n("Over-exposure percents: "), overPcentBox);
     d->overExposurePcents            = new RDoubleNumInput(overPcentBox);
     d->overExposurePcents->setDecimals(1);
     d->overExposurePcents->setRange(0.1, 5.0, 0.1);
@@ -197,12 +198,12 @@ SetupEditor::SetupEditor(QWidget* const parent)
                                             "the condition in the same time. "
                                             "Otherwise, indicators are turned on when one of the color components matches the condition."));
 
-    QLabel* exampleLabel = new QLabel(i18n("Example:"), exposureOptionsGroup);
-    RHBox* previewHBox   = new RHBox(exposureOptionsGroup);
-    d->expoPreview       = new QLabel(previewHBox);
-    QLabel* space        = new QLabel(previewHBox);
-    d->expoPreviewHisto  = new HistogramWidget(256, 128, previewHBox, false, false);
-    d->preview           = DImg(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/sample-aix.png"));
+    QLabel* const exampleLabel = new QLabel(i18n("Example:"), exposureOptionsGroup);
+    RHBox* const previewHBox   = new RHBox(exposureOptionsGroup);
+    d->expoPreview             = new QLabel(previewHBox);
+    QLabel* const space        = new QLabel(previewHBox);
+    d->expoPreviewHisto        = new HistogramWidget(256, 128, previewHBox, false, false);
+    d->preview                 = DImg(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/sample-aix.png")));
 
     if (!d->preview.isNull())
     {

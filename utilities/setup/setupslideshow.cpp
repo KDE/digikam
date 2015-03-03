@@ -96,7 +96,8 @@ public:
 // --------------------------------------------------------
 
 SetupSlideShow::SetupSlideShow(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     QWidget* const panel      = new QWidget(viewport());
     setWidget(panel);
@@ -176,7 +177,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
             d->showCapIfNoTitle, SLOT(setDisabled(bool)));
 
     // Only digiKam support this feature, showFoto do not support digiKam database information.
-    if (qApp->applicationName() == "showfoto")
+    if (qApp->applicationName() == QLatin1String("showfoto"))
     {
         d->showTitle->hide();
         d->showCapIfNoTitle->hide();

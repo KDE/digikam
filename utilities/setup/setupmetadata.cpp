@@ -150,7 +150,8 @@ public:
 };
 
 SetupMetadata::SetupMetadata(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     d->tab = new QTabWidget(viewport());
     setWidget(d->tab);
@@ -173,7 +174,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                        "when moving or sending the files to different systems.</para>"));
 
     QLabel* const fieldsIconLabel = new QLabel;
-    fieldsIconLabel->setPixmap(QIcon::fromTheme("format-list-unordered").pixmap(32));
+    fieldsIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("format-list-unordered")).pixmap(32));
 
     QLabel* const fieldsLabel     = new QLabel(i18nc("@label", "Write This Information to the Metadata"));
 
@@ -237,7 +238,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QGridLayout* const readWriteLayout = new QGridLayout;
 
     QLabel* const readWriteIconLabel   = new QLabel;
-    readWriteIconLabel->setPixmap(QIcon::fromTheme("document-open").pixmap(32));
+    readWriteIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("document-open")).pixmap(32));
 
     QLabel* const readWriteLabel       = new QLabel(i18nc("@label", "Reading and Writing Metadata"));
 
@@ -268,7 +269,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->writeRawFilesBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to write metadata into RAW TIFF/EP files. "
                                             "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
                                             "experimental, and is disabled by default."));
-    d->writeRawFilesBox->setEnabled(KExiv2::supportMetadataWritting("image/x-raw"));
+    d->writeRawFilesBox->setEnabled(KExiv2::supportMetadataWritting(QLatin1String("image/x-raw")));
 
     d->updateFileTimeStampBox = new QCheckBox;
     d->updateFileTimeStampBox->setText(i18nc("@option:check", "&Update file timestamp when files are modified"));
@@ -293,8 +294,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QGridLayout* const infoBoxGrid  = new QGridLayout;
     infoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    RActiveLabel* const exiv2LogoLabel = new RActiveLabel(QUrl("http://www.exiv2.org"),
-                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png"),
+    RActiveLabel* const exiv2LogoLabel = new RActiveLabel(QUrl(QLatin1String("http://www.exiv2.org")),
+                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-exiv2.png")),
                                                           infoBox);
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
@@ -344,7 +345,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     QLabel* const rotationExplanation = new QLabel(i18nc("@label", "When rotating a file"));
     QLabel* const rotationIcon        = new QLabel;
-    rotationIcon->setPixmap(QIcon::fromTheme("transform-rotate").pixmap(32));
+    rotationIcon->setPixmap(QIcon::fromTheme(QLatin1String("transform-rotate")).pixmap(32));
 
     d->rotateByFlag             = new QRadioButton(i18nc("@option:radio", "Rotate by only setting a flag"));
     d->rotateByContents         = new QRadioButton(i18nc("@option:radio", "Rotate by changing the content if possible"));
@@ -415,7 +416,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced Settings"));
     QLabel* const rotationAdvIcon  = new QLabel;
-    rotationAdvIcon->setPixmap(QIcon::fromTheme("configure").pixmap(32));
+    rotationAdvIcon->setPixmap(QIcon::fromTheme(QLatin1String("configure")).pixmap(32));
 
     d->exifRotateBox         = new QCheckBox;
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
@@ -446,7 +447,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QLabel* const displayLabel       = new QLabel(i18nc("@info:label", "Select Metadata Fields to Be Displayed"));
 
     QLabel* const displayIcon        = new QLabel;
-    displayIcon->setPixmap(QIcon::fromTheme("view-list-tree").pixmap(32));
+    displayIcon->setPixmap(QIcon::fromTheme(QLatin1String("view-list-tree")).pixmap(32));
 
     d->displaySubTab                 = new QTabWidget;
     d->tagsCfgPanel                  = new MetadataPanel(d->displaySubTab);
@@ -492,7 +493,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     balooBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
     QLabel* const balooLogoLabel   = new QLabel;
-    balooLogoLabel->setPixmap(QIcon::fromTheme("baloo").pixmap(48));
+    balooLogoLabel->setPixmap(QIcon::fromTheme(QLatin1String("baloo").pixmap(48));
 
     QLabel* const balooExplanation = new QLabel(balooBox);
     balooExplanation->setOpenExternalLinks(true);

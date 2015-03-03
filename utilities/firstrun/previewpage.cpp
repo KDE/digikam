@@ -119,9 +119,6 @@ void PreviewPage::saveSettings()
     KConfigGroup group        = config->group(QLatin1String("Album Settings"));
     group.writeEntry(QLatin1String("Preview Load Full Image Size"), d->loadimage->isChecked());
 
-    group                     = config->group(QLatin1String("LightTable Settings"));
-    group.writeEntry(QLatin1String("Load Full Image size"), d->loadimage->isChecked());
-
     config->sync();
 }
 

@@ -82,11 +82,12 @@ public:
     DcrawSettingsWidget*  dcrawSettings;
 };
 
-const QString SetupRaw::Private::configGroupName("ImageViewer Settings");
-const QString SetupRaw::Private::configUseRawImportToolEntry("UseRawImportTool");
+const QString SetupRaw::Private::configGroupName(QLatin1String("ImageViewer Settings"));
+const QString SetupRaw::Private::configUseRawImportToolEntry(QLatin1String("UseRawImportTool"));
 
 SetupRaw::SetupRaw(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     d->tab = new QTabWidget;
 
@@ -102,7 +103,7 @@ SetupRaw::SetupRaw(QWidget* const parent)
                                   "<p>Opening a raw file requires extensive data interpretation and processing.</p>"));
     rawExplanation->setWordWrap(true);
     QLabel* const rawIcon        = new QLabel;
-    rawIcon->setPixmap(QIcon::fromTheme("camera-photo").pixmap(48));
+    rawIcon->setPixmap(QIcon::fromTheme(QLatin1String("camera-photo")).pixmap(48));
     QHBoxLayout* const header    = new QHBoxLayout;
     header->addWidget(rawIcon);
     header->addWidget(rawExplanation);
@@ -113,7 +114,7 @@ SetupRaw::SetupRaw(QWidget* const parent)
     QGridLayout* const boxLayout = new QGridLayout;
 
     QLabel* const openIcon       = new QLabel;
-    openIcon->setPixmap(QIcon::fromTheme("document-open").pixmap(32));
+    openIcon->setPixmap(QIcon::fromTheme(QLatin1String("document-open")).pixmap(32));
 
     QLabel* const openIntro      = new QLabel(i18nc("@label", "Open raw files in the image editor"));
 
@@ -143,9 +144,9 @@ SetupRaw::SetupRaw(QWidget* const parent)
     QVBoxLayout* const settingsLayout = new QVBoxLayout;
 
     d->dcrawSettings = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
-    d->dcrawSettings->setItemIcon(0, QIcon::fromTheme("kdcraw"));
-    d->dcrawSettings->setItemIcon(1, QIcon::fromTheme("whitebalance"));
-    d->dcrawSettings->setItemIcon(2, QIcon::fromTheme("lensdistortion"));
+    d->dcrawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("kdcraw")));
+    d->dcrawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("whitebalance")));
+    d->dcrawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));
 
     settingsLayout->addWidget(d->dcrawSettings);
     d->settingsPanel->setLayout(settingsLayout);
