@@ -413,7 +413,7 @@ void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper, TAlbum* 
 
 void ContextMenuHelper::addActionNewAlbum(AlbumModificationHelper* helper, PAlbum* parentAlbum)
 {
-    QAction* const action = d->copyFromMainCollection("album_new");
+    QAction* const action = d->copyFromMainCollection(QLatin1String("album_new"));
     addAction(action);
     helper->bindAlbum(action, parentAlbum);
 
@@ -423,7 +423,7 @@ void ContextMenuHelper::addActionNewAlbum(AlbumModificationHelper* helper, PAlbu
 
 void ContextMenuHelper::addActionDeleteAlbum(AlbumModificationHelper* helper, PAlbum* album)
 {
-    QAction* const action = d->copyFromMainCollection("album_delete");
+    QAction* const action = d->copyFromMainCollection(QLatin1String("album_delete"));
     addAction(action, !(album->isRoot() || album->isAlbumRoot()));
     helper->bindAlbum(action, album);
 
@@ -433,7 +433,7 @@ void ContextMenuHelper::addActionDeleteAlbum(AlbumModificationHelper* helper, PA
 
 void ContextMenuHelper::addActionEditAlbum(AlbumModificationHelper* helper, PAlbum* album)
 {
-    QAction* const action = d->copyFromMainCollection("album_propsEdit");
+    QAction* const action = d->copyFromMainCollection(QLatin1String("album_propsEdit"));
     addAction(action, !album->isRoot());
     helper->bindAlbum(action, album);
 
@@ -443,7 +443,7 @@ void ContextMenuHelper::addActionEditAlbum(AlbumModificationHelper* helper, PAlb
 
 void ContextMenuHelper::addActionRenameAlbum(AlbumModificationHelper* helper, PAlbum* album)
 {
-    QAction* const action = d->copyFromMainCollection("album_rename");
+    QAction* const action = d->copyFromMainCollection(QLatin1String("album_rename"));
     addAction(action, !(album->isRoot() || album->isAlbumRoot()));
     helper->bindAlbum(action, album);
 
