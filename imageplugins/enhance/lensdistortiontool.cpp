@@ -105,7 +105,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("lensdistortion");
+    setObjectName(QLatin1String("lensdistortion"));
     setToolName(i18n("Lens Distortion"));
     setToolIcon(QIcon::fromTheme(QLatin1String("lensdistortion")));
 

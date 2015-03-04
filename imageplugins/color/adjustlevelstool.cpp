@@ -166,7 +166,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("adjustlevels");
+    setObjectName(QLatin1String("adjustlevels"));
     setToolName(i18n("Adjust Levels"));
     setToolIcon(QIcon::fromTheme(QLatin1String("adjustlevels")));
     setInitPreview(true);

@@ -104,7 +104,7 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("distortionfx");
+    setObjectName(QLatin1String("distortionfx"));
     setToolName(i18n("Distortion Effects"));
     setToolIcon(QIcon::fromTheme(QLatin1String("distortionfx")));
 

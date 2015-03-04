@@ -106,7 +106,7 @@ ShearTool::ShearTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("sheartool");
+    setObjectName(QLatin1String("sheartool"));
     setToolName(i18n("Shear Tool"));
     setToolIcon(QIcon::fromTheme(QLatin1String("shear")));
 

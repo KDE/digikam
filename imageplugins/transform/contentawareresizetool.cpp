@@ -170,7 +170,7 @@ const QString ContentAwareResizeTool::Private::configPreserveTonesEntry("Preserv
 ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     : EditorToolThreaded(parent), d(new Private)
 {
-    setObjectName("liquidrescale");
+    setObjectName(QLatin1String("liquidrescale"));
     setToolName(i18n("Liquid Rescale"));
     setToolIcon(QIcon::fromTheme(QLatin1String("transform-scale")));
 
@@ -211,28 +211,28 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->wInput          = new RIntNumInput(d->gboxSettings->plainPage());
     d->wInput->setRange(1, 2*d->orgWidth, 1);
     d->wInput->setDefaultValue(d->orgWidth);
-    d->wInput->setObjectName("wInput");
+    d->wInput->setObjectName(QLatin1String("wInput"));
     d->wInput->setWhatsThis(i18n("Set here the new image width in pixels."));
 
     QLabel* labelHeight = new QLabel(i18n("Height (px):"), d->gboxSettings->plainPage());
     d->hInput           = new RIntNumInput(d->gboxSettings->plainPage());
     d->hInput->setRange(1, 2*d->orgHeight, 1);
     d->hInput->setDefaultValue(d->orgHeight);
-    d->hInput->setObjectName("hInput");
+    d->hInput->setObjectName(QLatin1String("hInput"));
     d->hInput->setWhatsThis(i18n("Set here the new image height in pixels."));
 
     QLabel* labelWidthP = new QLabel(i18n("Width (%):"), d->gboxSettings->plainPage());
     d->wpInput          = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->wpInput->setRange(1.0, 200.0, 1.0);
     d->wpInput->setDefaultValue(100.0);
-    d->wpInput->setObjectName("wpInput");
+    d->wpInput->setObjectName(QLatin1String("wpInput"));
     d->wpInput->setWhatsThis(i18n("New image width, as a percentage (%)."));
 
     QLabel* labelHeightP = new QLabel(i18n("Height (%):"), d->gboxSettings->plainPage());
     d->hpInput           = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->hpInput->setRange(1.0, 200.0, 1.0);
     d->hpInput->setDefaultValue(100.0);
-    d->hpInput->setObjectName("hpInput");
+    d->hpInput->setObjectName(QLatin1String("hpInput"));
     d->hpInput->setWhatsThis(i18n("New image height, as a percentage (%)."));
 
     sizeSettingsLayout->addWidget(d->preserveRatioBox, 0, 0, 1, 3);
@@ -255,7 +255,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->mixedRescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->mixedRescaleInput->setRange(0.0, 100.0, 1.0);
     d->mixedRescaleInput->setDefaultValue(100.0);
-    d->mixedRescaleInput->setObjectName("mixedRescaleInput");
+    d->mixedRescaleInput->setObjectName(QLatin1String("mixedRescaleInput"));
     d->mixedRescaleInput->setWhatsThis(i18n("Specify here your desired content-aware rescaling percentage."));
     d->mixedRescaleInput->setEnabled(true);
 
@@ -310,7 +310,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
     d->maskPenSize->setRange(3, 64, 1);
     d->maskPenSize->setDefaultValue(10);
-    d->maskPenSize->setObjectName("maskPenSize");
+    d->maskPenSize->setObjectName(QLatin1String("maskPenSize"));
     d->maskPenSize->setWhatsThis(i18n("Specify here the size of the brush used to paint masks."));
 
     maskSettingsLayout->addWidget(d->weightMaskBox,  1, 0, 1, -1);
@@ -422,7 +422,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->expanderBox = new RExpanderBox;
-    d->expanderBox->setObjectName("ContentAwareResizeTool Expander");
+    d->expanderBox->setObjectName(QLatin1String("ContentAwareResizeTool Expander"));
     d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Target size"),
                             QString("SizeSettingsContainer"), true);
     d->expanderBox->addItem(mixedRescaleContainer, QIcon::fromTheme(QLatin1String("transform-scale")),

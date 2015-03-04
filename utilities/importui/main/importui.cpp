@@ -133,7 +133,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
 {
     setConfigGroupName(QLatin1String("Camera Settings"));
 
-    setXMLFile("importui.rc");
+    setXMLFile(QLatin1String("importui.rc"));
     setFullScreenOptions(FS_IMPORTUI);
 
     m_instance = this;
@@ -224,7 +224,7 @@ void ImportUI::setupUserArea()
     d->view->importFilterModel()->setCameraThumbsController(d->camThumbsCtrl);
     d->historyView      = new DHistoryView(vbox);
     d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, Qt::RightEdge, true);
-    d->rightSideBar->setObjectName("CameraGui Sidebar Right");
+    d->rightSideBar->setObjectName(QLatin1String("CameraGui Sidebar Right"));
     d->splitter->setFrameStyle(QFrame::NoFrame);
     d->splitter->setFrameShadow(QFrame::Plain);
     d->splitter->setFrameShape(QFrame::NoFrame);
@@ -244,31 +244,31 @@ void ImportUI::setupUserArea()
     // -------------------------------------------------------------------------
 
     d->advBox = new RExpanderBox(d->rightSideBar);
-    d->advBox->setObjectName("Camera Settings Expander");
+    d->advBox->setObjectName(QLatin1String("Camera Settings Expander"));
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis(i18n("Set how digiKam will rename files as they are downloaded."));
     //d->view->setRenameCustomizer(d->renameCustomizer);
     d->advBox->addItem(d->renameCustomizer, QIcon::fromTheme(QLatin1String("insert-image")), i18n("File Renaming Options"),
-                       QString("RenameCustomizer"), true);
+                       QLatin1String("RenameCustomizer"), true);
 
     // -- Albums Auto-creation options -----------------------------------------
 
     d->albumCustomizer = new AlbumCustomizer(d->advBox);
     d->advBox->addItem(d->albumCustomizer, QIcon::fromTheme(QLatin1String("folder-new")), i18n("Auto-creation of Albums"),
-                       QString("AlbumBox"), false);
+                       QLatin1String("AlbumBox"), false);
 
     // -- On the Fly options ---------------------------------------------------
 
     d->advancedSettings = new AdvancedSettings(d->advBox);
     d->advBox->addItem(d->advancedSettings, QIcon::fromTheme(QLatin1String("system-run")), i18n("On the Fly Operations (JPEG only)"),
-                       QString("OnFlyBox"), true);
+                       QLatin1String("OnFlyBox"), true);
 
     // -- Scripting options ---------------------------------------------------
 
     d->scriptingSettings = new ScriptingSettings(d->advBox);
     d->advBox->addItem(d->scriptingSettings, QIcon::fromTheme(QLatin1String("utilities-terminal")), i18n("Scripting"),
-                       QString("ScriptingBox"), true);
+                       QLatin1String("ScriptingBox"), true);
     d->advBox->addStretch();
 
     d->rightSideBar->appendTab(d->advBox, QIcon::fromTheme(QLatin1String("configure")), i18n("Settings"));
@@ -288,33 +288,33 @@ void ImportUI::setupActions()
 
     d->cameraCancelAction = new QAction(QIcon::fromTheme(QLatin1String("process-stop")), i18nc("@action Cancel process", "Cancel"), this);
     connect(d->cameraCancelAction, SIGNAL(triggered()), this, SLOT(slotCancelButton()));
-    ac->addAction("importui_cancelprocess", d->cameraCancelAction);
+    ac->addAction(QLatin1String("importui_cancelprocess"), d->cameraCancelAction);
     d->cameraCancelAction->setEnabled(false);
     
     // -----------------------------------------------------------------
 
     d->cameraInfoAction = new QAction(QIcon::fromTheme(QLatin1String("camera-photo")), i18nc("@action Information about camera", "Information"), this);
     connect(d->cameraInfoAction, SIGNAL(triggered()), this, SLOT(slotInformation()));
-    ac->addAction("importui_info", d->cameraInfoAction);
+    ac->addAction(QLatin1String("importui_info"), d->cameraInfoAction);
     d->cameraActions->addAction(d->cameraInfoAction);
 
     // -----------------------------------------------------------------
 
     d->cameraCaptureAction = new QAction(QIcon::fromTheme(QLatin1String("webcamreceive")), i18nc("@action Capture photo from camera", "Capture"), this);
     connect(d->cameraCaptureAction, SIGNAL(triggered()), this, SLOT(slotCapture()));
-    ac->addAction("importui_capture", d->cameraCaptureAction);
+    ac->addAction(QLatin1String("importui_capture"), d->cameraCaptureAction);
     d->cameraActions->addAction(d->cameraCaptureAction);
 
     // -----------------------------------------------------------------
 
     QAction* const closeAction = buildStdAction(StdCloseAction, this, SLOT(close()), this);
-    ac->addAction("importui_close", closeAction);
+    ac->addAction(QLatin1String("importui_close"), closeAction);
 
     // -- Edit menu ----------------------------------------------------
 
     d->selectAllAction = new QAction(i18nc("@action:inmenu", "Select All"), this);
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
-    ac->addAction("importui_selectall", d->selectAllAction);
+    ac->addAction(QLatin1String("importui_selectall"), d->selectAllAction);
     ac->setDefaultShortcut(d->selectAllAction, Qt::CTRL + Qt::Key_A);
     d->cameraActions->addAction(d->selectAllAction);
 
@@ -322,7 +322,7 @@ void ImportUI::setupActions()
 
     d->selectNoneAction = new QAction(i18nc("@action:inmenu", "Select None"), this);
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
-    ac->addAction("importui_selectnone", d->selectNoneAction);
+    ac->addAction(QLatin1String("importui_selectnone"), d->selectNoneAction);
     ac->setDefaultShortcut(d->selectNoneAction, Qt::CTRL + Qt::SHIFT + Qt::Key_A);
     d->cameraActions->addAction(d->selectNoneAction);
 
@@ -330,7 +330,7 @@ void ImportUI::setupActions()
 
     d->selectInvertAction = new QAction(i18nc("@action:inmenu", "Invert Selection"), this);
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
-    ac->addAction("importui_selectinvert", d->selectInvertAction);
+    ac->addAction(QLatin1String("importui_selectinvert"), d->selectInvertAction);
     ac->setDefaultShortcut(d->selectInvertAction, Qt::CTRL + Qt::Key_Asterisk);
     d->cameraActions->addAction(d->selectInvertAction);
 
@@ -338,14 +338,14 @@ void ImportUI::setupActions()
 
     d->selectNewItemsAction = new QAction(QIcon::fromTheme(QLatin1String("favorites")), i18nc("@action:inmenu", "Select New Items"), this);
     connect(d->selectNewItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectNew()));
-    ac->addAction("importui_selectnewitems", d->selectNewItemsAction);
+    ac->addAction(QLatin1String("importui_selectnewitems"), d->selectNewItemsAction);
     d->cameraActions->addAction(d->selectNewItemsAction);
 
     // -----------------------------------------------------------
 
     d->selectLockedItemsAction = new QAction(QIcon::fromTheme(QLatin1String("object-locked")), i18nc("@action:inmenu", "Select Locked Items"), this);
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectLocked()));
-    ac->addAction("importui_selectlockeditems", d->selectLockedItemsAction);
+    ac->addAction(QLatin1String("importui_selectlockeditems"), d->selectLockedItemsAction);
     ac->setDefaultShortcut(d->selectLockedItemsAction, Qt::CTRL + Qt::Key_L);
     d->cameraActions->addAction(d->selectLockedItemsAction);
 
@@ -353,26 +353,26 @@ void ImportUI::setupActions()
 
     d->downloadAction = new QMenu(i18nc("@title:menu", "Download"), this);
     d->downloadAction->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
-    ac->addAction("importui_imagedownload", d->downloadAction->menuAction());
+    ac->addAction(QLatin1String("importui_imagedownload"), d->downloadAction->menuAction());
     d->cameraActions->addAction(d->downloadAction->menuAction());
 
     d->downloadNewAction = new QAction(QIcon::fromTheme(QLatin1String("favorites")), i18nc("@action", "Download New"), this);
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
-    ac->addAction("importui_imagedownloadnew", d->downloadNewAction);
+    ac->addAction(QLatin1String("importui_imagedownloadnew"), d->downloadNewAction);
     ac->setDefaultShortcut(d->downloadNewAction, Qt::CTRL + Qt::Key_N);
     d->downloadAction->addAction(d->downloadNewAction);
     d->cameraActions->addAction(d->downloadNewAction);
 
     d->downloadSelectedAction = new QAction(QIcon::fromTheme(QLatin1String("document-save")), i18nc("@action", "Download Selected"), this);
     connect(d->downloadSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadSelected()));
-    ac->addAction("importui_imagedownloadselected", d->downloadSelectedAction);
+    ac->addAction(QLatin1String("importui_imagedownloadselected"), d->downloadSelectedAction);
     d->downloadSelectedAction->setEnabled(false);
     d->downloadAction->addAction(d->downloadSelectedAction);
     d->cameraActions->addAction(d->downloadSelectedAction);
 
     d->downloadAllAction = new QAction(QIcon::fromTheme(QLatin1String("document-save")), i18nc("@action", "Download All"), this);
     connect(d->downloadAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAll()));
-    ac->addAction("importui_imagedownloadall", d->downloadAllAction);
+    ac->addAction(QLatin1String("importui_imagedownloadall"), d->downloadAllAction);
     d->downloadAction->addAction(d->downloadAllAction);
     d->cameraActions->addAction(d->downloadAllAction);
 
@@ -380,7 +380,7 @@ void ImportUI::setupActions()
 
     d->downloadDelNewAction = new QAction(i18nc("@action", "Download && Delete New"), this);
     connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
-    ac->addAction("importui_imagedownloaddeletenew", d->downloadDelNewAction);
+    ac->addAction(QLatin1String("importui_imagedownloaddeletenew"), d->downloadDelNewAction);
     ac->setDefaultShortcut(d->downloadDelNewAction, Qt::CTRL + Qt::SHIFT + Qt::Key_N);
     d->cameraActions->addAction(d->downloadDelNewAction);
 
@@ -388,7 +388,7 @@ void ImportUI::setupActions()
 
     d->downloadDelSelectedAction = new QAction(i18nc("@action", "Download && Delete Selected"), this);
     connect(d->downloadDelSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteSelected()));
-    ac->addAction("importui_imagedownloaddeleteselected", d->downloadDelSelectedAction);
+    ac->addAction(QLatin1String("importui_imagedownloaddeleteselected"), d->downloadDelSelectedAction);
     d->downloadDelSelectedAction->setEnabled(false);
     d->cameraActions->addAction(d->downloadDelSelectedAction);
 
@@ -396,14 +396,14 @@ void ImportUI::setupActions()
 
     d->downloadDelAllAction = new QAction(i18nc("@action", "Download && Delete All"), this);
     connect(d->downloadDelAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteAll()));
-    ac->addAction("importui_imagedownloaddeleteall", d->downloadDelAllAction);
+    ac->addAction(QLatin1String("importui_imagedownloaddeleteall"), d->downloadDelAllAction);
     d->cameraActions->addAction(d->downloadDelAllAction);
 
     // -------------------------------------------------------------------------
 
     d->uploadAction = new QAction(QIcon::fromTheme(QLatin1String("media-flash-smart-media")), i18nc("@action", "Upload..."), this);
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
-    ac->addAction("importui_imageupload", d->uploadAction);
+    ac->addAction(QLatin1String("importui_imageupload"), d->uploadAction);
     ac->setDefaultShortcut(d->uploadAction, Qt::CTRL + Qt::Key_U);
     d->cameraActions->addAction(d->uploadAction);
 
@@ -411,7 +411,7 @@ void ImportUI::setupActions()
 
     d->lockAction = new QAction(QIcon::fromTheme(QLatin1String("object-locked")), i18nc("@action", "Toggle Lock"), this);
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
-    ac->addAction("importui_imagelock", d->lockAction);
+    ac->addAction(QLatin1String("importui_imagelock"), d->lockAction);
     ac->setDefaultShortcut(d->lockAction, Qt::CTRL + Qt::Key_L);
     d->cameraActions->addAction(d->lockAction);
 
@@ -419,19 +419,19 @@ void ImportUI::setupActions()
 
     d->markAsDownloadedAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok")), i18nc("@action", "Mark as downloaded"), this);
     connect(d->markAsDownloadedAction, SIGNAL(triggered()), this, SLOT(slotMarkAsDownloaded()));
-    ac->addAction("importui_imagemarkasdownloaded", d->markAsDownloadedAction);
+    ac->addAction(QLatin1String("importui_imagemarkasdownloaded"), d->markAsDownloadedAction);
     d->cameraActions->addAction(d->markAsDownloadedAction);
 
     // --- Delete actions ------------------------------------------------------
 
     d->deleteAction = new QMenu(i18nc("@title:menu", "Delete"), this);
     d->deleteAction->setIcon(QIcon::fromTheme(QLatin1String("user-trash")));
-    ac->addAction("importui_delete", d->deleteAction->menuAction());
+    ac->addAction(QLatin1String("importui_delete"), d->deleteAction->menuAction());
     d->cameraActions->addAction(d->deleteAction->menuAction());
 
     d->deleteSelectedAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18nc("@action", "Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));
-    ac->addAction("importui_imagedeleteselected", d->deleteSelectedAction);
+    ac->addAction(QLatin1String("importui_imagedeleteselected"), d->deleteSelectedAction);
     ac->setDefaultShortcut(d->deleteSelectedAction, Qt::Key_Delete);
     d->deleteSelectedAction->setEnabled(false);
     d->deleteAction->addAction(d->deleteSelectedAction);
@@ -439,32 +439,32 @@ void ImportUI::setupActions()
 
     d->deleteAllAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18nc("@action", "Delete All"), this);
     connect(d->deleteAllAction, SIGNAL(triggered()), this, SLOT(slotDeleteAll()));
-    ac->addAction("importui_imagedeleteall", d->deleteAllAction);
+    ac->addAction(QLatin1String("importui_imagedeleteall"), d->deleteAllAction);
     d->deleteAction->addAction(d->deleteAllAction);
     d->cameraActions->addAction(d->deleteAllAction);
 
     d->deleteNewAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18nc("@action", "Delete New"), this);
     connect(d->deleteNewAction, SIGNAL(triggered()), this, SLOT(slotDeleteNew()));
-    ac->addAction("importui_imagedeletenew", d->deleteNewAction);
+    ac->addAction(QLatin1String("importui_imagedeletenew"), d->deleteNewAction);
     d->deleteAction->addAction(d->deleteNewAction);
     d->cameraActions->addAction(d->deleteNewAction);
 
     // --- Icon view, items preview, and map actions ------------------------------------------------------
 
     d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme(QLatin1String("viewimage")), i18nc("@title:group", "Views"), this);
-    ac->addAction("importui_view_selection", d->imageViewSelectionAction);
+    ac->addAction(QLatin1String("importui_view_selection"), d->imageViewSelectionAction);
 
     d->iconViewAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-icons")),
                                     i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
     d->iconViewAction->setCheckable(true);
-    ac->addAction("importui_icon_view", d->iconViewAction);
+    ac->addAction(QLatin1String("importui_icon_view"), d->iconViewAction);
     connect(d->iconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->iconViewAction);
 
     d->camItemPreviewAction = new QAction(QIcon::fromTheme(QLatin1String("viewimage")),
                                                 i18nc("@action View the selected image", "Preview Item"), this);
     d->camItemPreviewAction->setCheckable(true);
-    ac->addAction("importui_item_view", d->camItemPreviewAction);
+    ac->addAction(QLatin1String("importui_item_view"), d->camItemPreviewAction);
     ac->setDefaultShortcut(d->camItemPreviewAction, Qt::Key_F3);
     connect(d->camItemPreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
@@ -473,7 +473,7 @@ void ImportUI::setupActions()
     d->mapViewAction = new QAction(QIcon::fromTheme(QLatin1String("applications-internet")),
                                    i18nc("@action Switch to map view", "Map"), this);
     d->mapViewAction->setCheckable(true);
-    ac->addAction("importui_map_view", d->mapViewAction);
+    ac->addAction(QLatin1String("importui_map_view"), d->mapViewAction);
     connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->mapViewAction);
 #endif // HAVE_KGEOMAP
@@ -486,7 +486,7 @@ void ImportUI::setupActions()
     d->itemSortAction->setWhatsThis(i18nc("@info:whatsthis", "The value by which the items are sorted in the thumbnail view"));
     QSignalMapper* const imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesBy(int)));
-    ac->addAction("item_sort", d->itemSortAction);
+    ac->addAction(QLatin1String("item_sort"), d->itemSortAction);
 
     // map to CamItemSortSettings enum
     QAction* const sortByNameAction     = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Name"));
@@ -518,7 +518,7 @@ void ImportUI::setupActions()
     d->itemSortOrderAction->setWhatsThis(i18nc("@info:whatsthis", "Defines whether items are sorted in ascending or descending manner."));
     QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
-    ac->addAction("item_sort_order", d->itemSortOrderAction);
+    ac->addAction(QLatin1String("item_sort_order"), d->itemSortOrderAction);
 
     QAction* const sortAscendingAction = d->itemSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")), i18nc("@item:inmenu Sorting Order", "Ascending"));
     QAction* const sortDescendingAction = d->itemSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")), i18nc("@item:inmenu Sorting Order", "Descending"));
@@ -537,7 +537,7 @@ void ImportUI::setupActions()
     d->itemsGroupAction->setWhatsThis(i18nc("@info:whatsthis", "The categories in which the items in the thumbnail view are displayed"));
     QSignalMapper* const itemGroupMapper = new QSignalMapper(this);
     connect(itemGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
-    ac->addAction("item_group", d->itemsGroupAction);
+    ac->addAction(QLatin1String("item_group"), d->itemsGroupAction);
 
     // map to CamItemSortSettings enum
     QAction* const noCategoriesAction  = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "Flat List"));
@@ -559,23 +559,23 @@ void ImportUI::setupActions()
     d->increaseThumbsAction = buildStdAction(StdZoomInAction, d->view, SLOT(slotZoomIn()), this);
     d->increaseThumbsAction->setEnabled(false);
     QKeySequence keysPlus(d->increaseThumbsAction->shortcut(), Qt::Key_Plus);
-    ac->addAction("importui_zoomplus", d->increaseThumbsAction);
+    ac->addAction(QLatin1String("importui_zoomplus"), d->increaseThumbsAction);
     ac->setDefaultShortcut(d->increaseThumbsAction, keysPlus);
 
     d->decreaseThumbsAction = buildStdAction(StdZoomOutAction, d->view, SLOT(slotZoomOut()), this);
     d->decreaseThumbsAction->setEnabled(false);
     QKeySequence keysMinus(d->decreaseThumbsAction->shortcut(), Qt::Key_Minus);
-    ac->addAction("importui_zoomminus", d->decreaseThumbsAction);
+    ac->addAction(QLatin1String("importui_zoomminus"), d->decreaseThumbsAction);
     ac->setDefaultShortcut(d->decreaseThumbsAction, keysMinus);
 
     d->zoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18nc("@action:inmenu", "Fit to &Window"), this);
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
-    ac->addAction("import_zoomfit2window", d->zoomFitToWindowAction);
+    ac->addAction(QLatin1String("import_zoomfit2window"), d->zoomFitToWindowAction);
     ac->setDefaultShortcut(d->zoomFitToWindowAction, Qt::ALT + Qt::CTRL + Qt::Key_E);
 
     d->zoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18nc("@action:inmenu", "Zoom to 100%"), this);
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
-    ac->addAction("import_zoomto100percents", d->zoomTo100percents);
+    ac->addAction(QLatin1String("import_zoomto100percents"), d->zoomTo100percents);
     ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Comma);
 
     // ------------------------------------------------------------------------------------------------
@@ -583,7 +583,7 @@ void ImportUI::setupActions()
     d->viewCMViewAction = new QAction(QIcon::fromTheme(QLatin1String("video-display")), i18n("Color-Managed View"), this);
     d->viewCMViewAction->setCheckable(true);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
-    ac->addAction("color_managed_view", d->viewCMViewAction);
+    ac->addAction(QLatin1String("color_managed_view"), d->viewCMViewAction);
     ac->setDefaultShortcut(d->viewCMViewAction, Qt::Key_F12);
 
     // ------------------------------------------------------------------------------------------------
@@ -594,13 +594,13 @@ void ImportUI::setupActions()
     d->showLogAction = new QAction(QIcon::fromTheme(QLatin1String("view-history")), i18nc("@option:check", "Show History"), this);
     d->showLogAction->setCheckable(true);
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
-    ac->addAction("importui_showlog", d->showLogAction);
+    ac->addAction(QLatin1String("importui_showlog"), d->showLogAction);
     ac->setDefaultShortcut(d->showLogAction, Qt::CTRL + Qt::Key_H);
 
     d->showBarAction = new QAction(QIcon::fromTheme(QLatin1String("view-choose")), i18nc("@option:check", "Show Thumbbar"), this);
     d->showBarAction->setCheckable(true);
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
-    ac->addAction("showthumbs", d->showBarAction);
+    ac->addAction(QLatin1String("showthumbs"), d->showBarAction);
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
     d->showBarAction->setEnabled(false);
 
@@ -625,7 +625,7 @@ void ImportUI::setupActions()
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
     QAction* const altBackwardAction = new QAction(i18nc("@action", "Previous Image"), this);
-    ac->addAction("importui_backward_shift_space", altBackwardAction);
+    ac->addAction(QLatin1String("importui_backward_shift_space"), altBackwardAction);
     ac->setDefaultShortcut(altBackwardAction, Qt::SHIFT + Qt::Key_Space);
     connect(altBackwardAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
@@ -808,29 +808,29 @@ void ImportUI::setupAccelerators()
     KActionCollection *ac = actionCollection();
 
     QAction* const escapeAction = new QAction(i18nc("@action", "Exit Preview Mode"), this);
-    ac->addAction("exit_preview_mode", escapeAction);
+    ac->addAction(QLatin1String("exit_preview_mode"), escapeAction);
     ac->setDefaultShortcut(escapeAction, Qt::Key_Escape);
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
 
     QAction* const nextImageAction = new QAction(i18nc("@action","Next Image"), this);
     nextImageAction->setIcon(QIcon::fromTheme(QLatin1String("go-next")));
-    ac->addAction("next_image", nextImageAction);
+    ac->addAction(QLatin1String("next_image"), nextImageAction);
     ac->setDefaultShortcut(nextImageAction, Qt::Key_Space);
     connect(nextImageAction, SIGNAL(triggered()), d->view, SLOT(slotNextItem()));
 
     QAction* const previousImageAction = new QAction(i18nc("@action", "Previous Image"), this);
     previousImageAction->setIcon(QIcon::fromTheme(QLatin1String("go-previous")));
-    ac->addAction("previous_image", previousImageAction);
+    ac->addAction(QLatin1String("previous_image"), previousImageAction);
     ac->setDefaultShortcuts(previousImageAction, QList<QKeySequence>() << Qt::Key_Backspace << Qt::SHIFT+Qt::Key_Space);
     connect(previousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     QAction* const firstImageAction = new QAction(i18nc("@action Go to first image", "First Image"), this);
-    ac->addAction("first_image", firstImageAction);
+    ac->addAction(QLatin1String("first_image"), firstImageAction);
     ac->setDefaultShortcut(firstImageAction, Qt::Key_Home);
     connect(firstImageAction, SIGNAL(triggered()), d->view, SLOT(slotFirstItem()));
 
     QAction* const lastImageAction = new QAction(i18nc("@action Go to last image", "Last Image"), this);
-    ac->addAction("last_image", lastImageAction);
+    ac->addAction(QLatin1String("last_image"), lastImageAction);
     ac->setDefaultShortcut(lastImageAction, Qt::Key_End);
     connect(lastImageAction, SIGNAL(triggered()), d->view, SLOT(slotLastItem()));
 }
@@ -843,7 +843,7 @@ void ImportUI::readSettings()
     readFullScreenSettings(group);
 
     d->showBarAction->setChecked(ImportSettings::instance()->getShowThumbbar());
-    d->showLogAction->setChecked(group.readEntry("ShowLog",               false));
+    d->showLogAction->setChecked(group.readEntry(QLatin1String("ShowLog"), false));
     d->albumCustomizer->readSettings(group);
     d->advancedSettings->readSettings(group);
     d->scriptingSettings->readSettings(group);
@@ -862,7 +862,7 @@ void ImportUI::saveSettings()
 
     ImportSettings::instance()->setShowThumbbar(d->showBarAction->isChecked());
     ImportSettings::instance()->saveSettings();
-    group.writeEntry("ShowLog",        d->showLogAction->isChecked());
+    group.writeEntry(QLatin1String("ShowLog"), d->showLogAction->isChecked());
     d->albumCustomizer->saveSettings(group);
     d->advancedSettings->saveSettings(group);
     d->scriptingSettings->saveSettings(group);

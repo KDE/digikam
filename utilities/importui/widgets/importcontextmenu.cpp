@@ -80,9 +80,9 @@ public:
 
 public:
 
-    QAction* copyFromMainCollection(const char* name) const
+    QAction* copyFromMainCollection(const QString& name) const
     {
-        QAction* const mainAction = stdActionCollection->action(QString::fromUtf8(name));
+        QAction* const mainAction = stdActionCollection->action(name);
 
         if (!mainAction)
         {
@@ -116,9 +116,9 @@ ImportContextMenuHelper::~ImportContextMenuHelper()
     delete d;
 }
 
-void ImportContextMenuHelper::addAction(const char* name, bool addDisabled)
+void ImportContextMenuHelper::addAction(const QString& name, bool addDisabled)
 {
-    QAction* const action = d->stdActionCollection->action(QString::fromUtf8(name));
+    QAction* const action = d->stdActionCollection->action(name);
     addAction(action, addDisabled);
 }
 
@@ -302,15 +302,15 @@ void ImportContextMenuHelper::addRotateMenu(itemIds& /*ids*/)
 //    imageRotateMenu->setIcon(QIcon::fromTheme(QLatin1String("object-rotate-right")));
 
 //    QAction* const left = new QAction(this);
-//    left->setObjectName("rotate_ccw");
+//    left->setObjectName(QLatin1String("rotate_ccw"));
 //    left->setText(i18nc("rotate image left", "Left"));
 //    connect(left, SIGNAL(triggered(bool)),
 //            this, SLOT(slotRotate()));
 //    imageRotateMenu->addAction(left);
 
 //    QAction* const right = new QAction(this);
-//    right->setObjectName("rotate_cw");
-//    right->setText(i18nc("rotate image right", "Right"));
+//    right->setObjectName(QLatin1String("rotate_cw");
+//    right->setText(i18nc("rotate image right", "Right")));
 //    connect(right, SIGNAL(triggered(bool)),
 //            this, SLOT(slotRotate()));
 //    imageRotateMenu->addAction(right);

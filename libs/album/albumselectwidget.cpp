@@ -138,7 +138,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumT
     : QWidget(parent),
       d(new Private)
 {
-    setObjectName("AlbumSelectWidget");
+    setObjectName(QLatin1String("AlbumSelectWidget"));
 
     d->albumModificationHelper = new AlbumModificationHelper(this, this);
 

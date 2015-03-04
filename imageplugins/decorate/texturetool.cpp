@@ -108,7 +108,7 @@ TextureTool::TextureTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("texture");
+    setObjectName(QLatin1String("texture"));
     setToolName(i18n("Texture"));
     setToolIcon(QIcon::fromTheme(QLatin1String("texture")));
 

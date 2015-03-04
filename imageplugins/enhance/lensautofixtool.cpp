@@ -92,7 +92,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("lensautocorrection");
+    setObjectName(QLatin1String("lensautocorrection"));
     setToolName(i18n("Lens Auto-Correction"));
     setToolIcon(QIcon::fromTheme(QLatin1String("lensautofix")));
 

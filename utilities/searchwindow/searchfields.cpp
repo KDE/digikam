@@ -2051,7 +2051,7 @@ SearchFieldChoice::SearchFieldChoice(SearchFieldGroup *parent)
 {
     m_anyText = i18n("Any");
     m_label = new SqueezedClickLabel;
-    m_label->setObjectName("SearchFieldChoice_ClickLabel");
+    m_label->setObjectName(QLatin1String("SearchFieldChoice_ClickLabel"));
     m_controller = new VisibilityController(this);
     m_controller->setContainerWidget(parent);
 }

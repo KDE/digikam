@@ -122,7 +122,7 @@ void StateSavingObjectTest::testGroupName()
     QCOMPARE(saver.getGroup().name(), group.name());
 
     // setting object name must not change returned group
-    saver.setObjectName("new Name");
+    saver.setObjectName(QLatin1String("new Name"));
     QCOMPARE(saver.getGroup().name(), group.name());
 
     // resetting group must work

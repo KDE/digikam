@@ -156,7 +156,7 @@ FilmTool::FilmTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("film");
+    setObjectName(QLatin1String("film"));
     setToolName(i18n("Color Negative Film"));
     setToolIcon(QIcon::fromTheme(QLatin1String("colorneg")));
     setInitPreview(true);

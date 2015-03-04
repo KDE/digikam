@@ -263,7 +263,7 @@ public:
 DeleteWidget::DeleteWidget(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
-    setObjectName("DeleteDialogBase");
+    setObjectName(QLatin1String("DeleteDialogBase"));
 
     resize(540, 370);
     setMinimumSize(QSize(420, 320));

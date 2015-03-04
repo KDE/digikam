@@ -344,7 +344,7 @@ void ShowFoto::setupUserArea()
     m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
     d->rightSideBar = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Qt::RightEdge);
-    d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
+    d->rightSideBar->setObjectName(QLatin1String("ShowFoto Sidebar Right"));
 
     hlay->addWidget(m_splitter);
     hlay->addWidget(d->rightSideBar);
@@ -366,7 +366,7 @@ void ShowFoto::setupUserArea()
     Qt::DockWidgetArea dockArea = Qt::LeftDockWidgetArea;
 
     d->thumbBarDock = new Digikam::ThumbBarDock(viewContainer, Qt::Tool);
-    d->thumbBarDock->setObjectName("editor_thumbbar");
+    d->thumbBarDock->setObjectName(QLatin1String("editor_thumbbar"));
     d->thumbBarDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea  | Qt::BottomDockWidgetArea);
     d->thumbBar     = new ShowfotoThumbnailBar(d->thumbBarDock);
 
@@ -405,7 +405,7 @@ void ShowFoto::setupActions()
     // Extra 'File' menu actions ---------------------------------------------
 
     d->fileOpenAction = buildStdAction(StdOpenAction, this, SLOT(slotOpenFile()), this);
-    actionCollection()->addAction("showfoto_open_file", d->fileOpenAction);
+    actionCollection()->addAction(QLatin1String("showfoto_open_file"), d->fileOpenAction);
 
     d->openFilesInFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-image")), i18n("Open folder"), this);
     actionCollection()->setDefaultShortcut(d->openFilesInFolderAction, Qt::CTRL+Qt::SHIFT+Qt::Key_O);
@@ -413,10 +413,10 @@ void ShowFoto::setupActions()
     connect(d->openFilesInFolderAction, &QAction::triggered,
             this, &ShowFoto::slotOpenFilesInFolder);
 
-    actionCollection()->addAction("showfoto_open_folder", d->openFilesInFolderAction);
+    actionCollection()->addAction(QLatin1String("showfoto_open_folder"), d->openFilesInFolderAction);
 
     QAction* const quit = buildStdAction(StdQuitAction, this, SLOT(close()), this);
-    actionCollection()->addAction("showfoto_quit", quit);
+    actionCollection()->addAction(QLatin1String("showfoto_quit"), quit);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 

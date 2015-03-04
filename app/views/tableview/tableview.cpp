@@ -201,8 +201,8 @@ void TableView::showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const even
     QMenu menu(this);
     ContextMenuHelper cmHelper(&menu);
 
-    cmHelper.addAction("full_screen");
-    cmHelper.addAction("options_show_menubar");
+    cmHelper.addAction(QLatin1String("full_screen"));
+    cmHelper.addAction(QLatin1String("options_show_menubar"));
     cmHelper.addSeparator();
     cmHelper.addStandardActionPaste(this, SLOT(slotPaste()));
     cmHelper.addSeparator();
@@ -226,28 +226,28 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     QMenu menu(this);
     ContextMenuHelper cmHelper(&menu);
 
-    cmHelper.addAction("full_screen");
-    cmHelper.addAction("options_show_menubar");
+    cmHelper.addAction(QLatin1String("full_screen"));
+    cmHelper.addAction(QLatin1String("options_show_menubar"));
     cmHelper.addSeparator();
     // ---
-    cmHelper.addAction("move_selection_to_album");
+    cmHelper.addAction(QLatin1String("move_selection_to_album"));
     cmHelper.addAction(viewAction);
     /// @todo image_edit is grayed out on first invocation of the menu for some reason
-    cmHelper.addAction("image_edit");
+    cmHelper.addAction(QLatin1String("image_edit"));
     cmHelper.addServicesMenu(s->tableViewModel->selectedUrls());
     cmHelper.addGotoMenu(selectedImageIds);
-    cmHelper.addAction("image_rotate");
+    cmHelper.addAction(QLatin1String("image_rotate"));
     cmHelper.addSeparator();
     // ---
-    cmHelper.addAction("image_find_similar");
+    cmHelper.addAction(QLatin1String("image_find_similar"));
     cmHelper.addStandardActionLightTable();
     cmHelper.addQueueManagerMenu();
     cmHelper.addSeparator();
     // ---
-    cmHelper.addAction("image_rename");
-    cmHelper.addAction("cut_album_selection");
-    cmHelper.addAction("copy_album_selection");
-    cmHelper.addAction("paste_album_selection");
+    cmHelper.addAction(QLatin1String("image_rename"));
+    cmHelper.addAction(QLatin1String("cut_album_selection"));
+    cmHelper.addAction(QLatin1String("copy_album_selection"));
+    cmHelper.addAction(QLatin1String("paste_album_selection"));
     cmHelper.addStandardActionItemDelete(this, SLOT(slotDeleteSelected()), selectedImageIds.count());
     cmHelper.addSeparator();
     // ---

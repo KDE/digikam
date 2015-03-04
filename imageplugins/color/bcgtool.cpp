@@ -82,7 +82,7 @@ BCGTool::BCGTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("bcgadjust");
+    setObjectName(QLatin1String("bcgadjust"));
     setToolName(i18n("Brightness / Contrast / Gamma"));
     setToolVersion(1);
     setToolIcon(QIcon::fromTheme(QLatin1String("contrast")));

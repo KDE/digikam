@@ -128,15 +128,15 @@ public:
         if (album->isAlbumRoot())
         {
             cmh.addActionNewAlbum(d->albumModificationHelper, album);
-            cmh.addAction("album_openinfilemanager");
-            cmh.addAction("album_openinterminal");
+            cmh.addAction(QLatin1String("album_openinfilemanager"));
+            cmh.addAction(QLatin1String("album_openinterminal"));
             return;
         } 
 
         // --------------------------------------------------------
         cmh.addActionNewAlbum(d->albumModificationHelper, album);
-        cmh.addAction("album_openinfilemanager");
-        cmh.addAction("album_openinterminal");
+        cmh.addAction(QLatin1String("album_openinfilemanager"));
+        cmh.addAction(QLatin1String("album_openinterminal"));
         cmh.addSeparator();
         // --------------------------------------------------------
         cmh.addActionRenameAlbum(d->albumModificationHelper, album);

@@ -70,7 +70,7 @@ BorderTool::BorderTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("border");
+    setObjectName(QLatin1String("border"));
     setToolName(i18n("Add Border"));
     setToolIcon(QIcon::fromTheme(QLatin1String("bordertool")));
 

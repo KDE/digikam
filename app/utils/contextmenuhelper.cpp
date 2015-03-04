@@ -144,9 +144,9 @@ public:
         return QModelIndex();
     }
 
-    QAction* copyFromMainCollection(const char* name) const
+    QAction* copyFromMainCollection(const QString& name) const
     {
-        QAction* const mainAction = stdActionCollection->action(QLatin1String(name));
+        QAction* const mainAction = stdActionCollection->action(name);
 
         if (!mainAction)
         {
@@ -180,9 +180,9 @@ ContextMenuHelper::~ContextMenuHelper()
     delete d;
 }
 
-void ContextMenuHelper::addAction(const char* name, bool addDisabled)
+void ContextMenuHelper::addAction(const QString& name, bool addDisabled)
 {
-    QAction* const action = d->stdActionCollection->action(QLatin1String(name));
+    QAction* const action = d->stdActionCollection->action(name);
     addAction(action, addDisabled);
 }
 

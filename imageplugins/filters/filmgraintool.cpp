@@ -77,7 +77,7 @@ FilmGrainTool::FilmGrainTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("filmgrain");
+    setObjectName(QLatin1String("filmgrain"));
     setToolName(i18n("Film Grain"));
     setToolIcon(QIcon::fromTheme(QLatin1String("filmgrain")));
     setInitPreview(true);

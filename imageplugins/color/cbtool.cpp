@@ -78,7 +78,7 @@ CBTool::CBTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("colorbalance");
+    setObjectName(QLatin1String("colorbalance"));
     setToolName(i18n("Color Balance"));
     setToolIcon(QIcon::fromTheme(QLatin1String("adjustrgb")));
     setInitPreview(true);

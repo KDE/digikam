@@ -354,8 +354,8 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
     QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction("full_screen");
-    cmhelper.addAction("options_show_menubar");
+    cmhelper.addAction(QLatin1String("full_screen"));
+    cmhelper.addAction(QLatin1String("options_show_menubar"));
     cmhelper.addSeparator();
 
     // --------------------------------------------------------
@@ -379,14 +379,14 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
 
     // --------------------------------------------------------
 
-    cmhelper.addAction("image_edit");
+    cmhelper.addAction(QLatin1String("image_edit"));
     cmhelper.addServicesMenu(selectedItems);
-    cmhelper.addAction("image_rotate");
+    cmhelper.addAction(QLatin1String("image_rotate"));
     cmhelper.addSeparator();
 
     // --------------------------------------------------------
 
-    cmhelper.addAction("image_find_similar");
+    cmhelper.addAction(QLatin1String("image_find_similar"));
 
     if (d->mode == IconViewPreview)
     {

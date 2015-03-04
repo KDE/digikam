@@ -286,7 +286,7 @@ void ImageWindow::setupUserArea()
     m_splitter->setStretchFactor(0, 10);      // set Canvas default size to max.
 
     d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, Qt::RightEdge, true);
-    d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
+    d->rightSideBar->setObjectName(QLatin1String("ImageEditor Right Sidebar"));
     d->rightSideBar->getFiltersHistoryTab()->addOpenImageAction();
 
     hlay->addWidget(m_splitter);
@@ -339,7 +339,7 @@ void ImageWindow::setupUserArea()
 
     // The thumb bar is placed in a detachable/dockable widget.
     d->thumbBarDock     = new ThumbBarDock(d->viewContainer, Qt::Tool);
-    d->thumbBarDock->setObjectName("editor_thumbbar");
+    d->thumbBarDock->setObjectName(QLatin1String("editor_thumbbar"));
 
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModels(d->imageInfoModel, d->imageFilterModel);
@@ -415,7 +415,7 @@ void ImageWindow::setupActions()
     d->toMainWindowAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-icons")),
                                         i18nc("@action Finish editing, close editor, back to main window", "Close Editor"), this);
     connect(d->toMainWindowAction, SIGNAL(triggered()), this, SLOT(slotToMainWindow()));
-    ac->addAction("imageview_tomainwindow", d->toMainWindowAction);
+    ac->addAction(QLatin1String("imageview_tomainwindow"), d->toMainWindowAction);
 
 
     // -- Special Delete actions ---------------------------------------------------------------
@@ -425,7 +425,7 @@ void ImageWindow::setupActions()
     d->fileDeletePermanentlyAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete File Permanently"), this);
     connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanently()));
-    ac->addAction("image_delete_permanently", d->fileDeletePermanentlyAction);
+    ac->addAction(QLatin1String("image_delete_permanently"), d->fileDeletePermanentlyAction);
     ac->setDefaultShortcut(d->fileDeletePermanentlyAction, Qt::SHIFT + Qt::Key_Delete);
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
@@ -435,14 +435,14 @@ void ImageWindow::setupActions()
                                                          i18n("Delete Permanently without Confirmation"), this);
     connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanentlyDirectly()));
-    ac->addAction("image_delete_permanently_directly",
+    ac->addAction(QLatin1String("image_delete_permanently_directly"),
                                   d->fileDeletePermanentlyDirectlyAction);
 
     d->fileTrashDirectlyAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")),
                                              i18n("Move to Trash without Confirmation"), this);
     connect(d->fileTrashDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotTrashCurrentItemDirectly()));
-    ac->addAction("image_trash_directly", d->fileTrashDirectlyAction);
+    ac->addAction(QLatin1String("image_trash_directly"), d->fileTrashDirectlyAction);
 
     // ---------------------------------------------------------------------------------
 
@@ -452,17 +452,17 @@ void ImageWindow::setupActions()
     TagsActionMngr::defaultManager()->registerLabelsActions(ac);
 
     QAction* const editTitles = new QAction(i18n("Edit Titles"), this);
-    ac->addAction("edit_titles", editTitles);
+    ac->addAction(QLatin1String("edit_titles"), editTitles);
     ac->setDefaultShortcut(editTitles, Qt::META + Qt::Key_T);
     connect(editTitles, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
 
     QAction* const editComments = new QAction(i18n("Edit Comments"), this);
-    ac->addAction("edit_comments", editComments);
+    ac->addAction(QLatin1String("edit_comments"), editComments);
     ac->setDefaultShortcut(editComments, Qt::META + Qt::Key_C);
     connect(editComments, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
 
     QAction* const assignedTags = new QAction(i18n("Show Assigned Tags"), this);
-    ac->addAction("assigned _tags", assignedTags);
+    ac->addAction(QLatin1String("assigned _tags"), assignedTags);
     ac->setDefaultShortcut(assignedTags, Qt::META + Qt::Key_A);
     connect(assignedTags, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
 }

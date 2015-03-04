@@ -125,39 +125,39 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
     KActionCollection *ac = actionCollection();
 
     d->restorationAction = new QAction(QIcon::fromTheme(QLatin1String("restoration")), i18n("Restoration..."), this);
-    ac->addAction("imageplugin_restoration", d->restorationAction);
+    ac->addAction(QLatin1String("imageplugin_restoration"), d->restorationAction);
     connect(d->restorationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRestoration()));
 
     d->sharpenAction = new QAction(QIcon::fromTheme(QLatin1String("sharpenimage")), i18n("Sharpen..."), this);
-    ac->addAction("imageplugin_sharpen", d->sharpenAction);
+    ac->addAction(QLatin1String("imageplugin_sharpen"), d->sharpenAction);
     connect(d->sharpenAction, SIGNAL(triggered(bool)),
             this, SLOT(slotSharpen()));
 
     d->blurAction = new QAction(QIcon::fromTheme(QLatin1String("blurimage")), i18n("Blur..."), this);
-    ac->addAction("imageplugin_blur", d->blurAction);
+    ac->addAction(QLatin1String("imageplugin_blur"), d->blurAction);
     connect(d->blurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlur()));
 
     d->noiseReductionAction = new QAction(QIcon::fromTheme(QLatin1String("noisereduction")), i18n("Noise Reduction..."), this);
-    ac->addAction("imageplugin_noisereduction", d->noiseReductionAction);
+    ac->addAction(QLatin1String("imageplugin_noisereduction"), d->noiseReductionAction);
     connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotNoiseReduction()));
 
     d->localContrastAction = new QAction(QIcon::fromTheme(QLatin1String("contrast")), i18n("Local Contrast..."), this);
-    ac->addAction("imageplugin_localcontrast", d->localContrastAction);
+    ac->addAction(QLatin1String("imageplugin_localcontrast"), d->localContrastAction);
     connect(d->localContrastAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLocalContrast()));
 
     d->redeyeAction = new QAction(QIcon::fromTheme(QLatin1String("redeyes")), i18n("Red Eye..."), this);
     d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
                                        "Select a region including the eyes to use this option."));
-    ac->addAction("imageplugin_redeye", d->redeyeAction);
+    ac->addAction(QLatin1String("imageplugin_redeye"), d->redeyeAction);
     connect(d->redeyeAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRedEye()));
 
     d->inPaintingAction = new QAction(QIcon::fromTheme(QLatin1String("inpainting")), i18n("In-painting..."), this);
-    ac->addAction("imageplugin_inpainting", d->inPaintingAction);
+    ac->addAction(QLatin1String("imageplugin_inpainting"), d->inPaintingAction);
     ac->setDefaultShortcut(d->inPaintingAction, Qt::CTRL+Qt::Key_E);
     d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
                                        "To use this option, select a region to in-paint.") );
@@ -165,24 +165,24 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
             this, SLOT(slotInPainting()));
 
     d->antivignettingAction = new QAction(QIcon::fromTheme(QLatin1String("antivignetting")), i18n("Vignetting Correction..."), this);
-    ac->addAction("imageplugin_antivignetting", d->antivignettingAction);
+    ac->addAction(QLatin1String("imageplugin_antivignetting"), d->antivignettingAction);
     connect(d->antivignettingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotAntiVignetting()));
 
     d->lensdistortionAction = new QAction(QIcon::fromTheme(QLatin1String("lensdistortion")), i18n("Distortion..."), this);
-    ac->addAction("imageplugin_lensdistortion", d->lensdistortionAction);
+    ac->addAction(QLatin1String("imageplugin_lensdistortion"), d->lensdistortionAction);
     connect(d->lensdistortionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLensDistortion()));
 
     d->hotpixelsAction  = new QAction(QIcon::fromTheme(QLatin1String("hotpixels")), i18n("Hot Pixels..."), this);
-    ac->addAction("imageplugin_hotpixels", d->hotpixelsAction);
+    ac->addAction(QLatin1String("imageplugin_hotpixels"), d->hotpixelsAction);
     connect(d->hotpixelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHotPixels()));
 
 #ifdef HAVE_LENSFUN
 
     d->lensAutoFixAction = new QAction(QIcon::fromTheme(QLatin1String("lensautofix")), i18n("Auto-Correction..."), this);
-    ac->addAction("imageplugin_lensautofix", d->lensAutoFixAction );
+    ac->addAction(QLatin1String("imageplugin_lensautofix"), d->lensAutoFixAction );
     connect(d->lensAutoFixAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLensAutoFix()));
 

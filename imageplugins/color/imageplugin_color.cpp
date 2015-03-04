@@ -114,50 +114,50 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     KActionCollection* const ac = actionCollection();
 
     d->BCGAction = new QAction(QIcon::fromTheme(QLatin1String("contrast")), i18n("Brightness/Contrast/Gamma..."), this);
-    ac->addAction("imageplugin_bcg", d->BCGAction );
+    ac->addAction(QLatin1String("imageplugin_bcg"), d->BCGAction);
     connect(d->BCGAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBCG()));
 
     // NOTE: Photoshop 7 use CTRL+U.
     d->HSLAction = new QAction(QIcon::fromTheme(QLatin1String("adjusthsl")), i18n("Hue/Saturation/Lightness..."), this);
-    ac->addAction("imageplugin_hsl", d->HSLAction );
+    ac->addAction(QLatin1String("imageplugin_hsl"), d->HSLAction);
     ac->setDefaultShortcut(d->HSLAction, Qt::CTRL+Qt::Key_U);
     connect(d->HSLAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHSL()));
 
     // NOTE: Photoshop 7 use CTRL+B.
     d->CBAction = new QAction(QIcon::fromTheme(QLatin1String("adjustrgb")), i18n("Color Balance..."), this);
-    ac->addAction("imageplugin_rgb", d->CBAction );
+    ac->addAction(QLatin1String("imageplugin_rgb"), d->CBAction);
     ac->setDefaultShortcut(d->CBAction, Qt::CTRL+Qt::Key_B);
     connect(d->CBAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCB()));
 
     // NOTE: Photoshop 7 use CTRL+SHIFT+B with
     d->autoCorrectionAction = new QAction(QIcon::fromTheme(QLatin1String("autocorrection")), i18n("Auto-Correction..."), this);
-    ac->addAction("imageplugin_autocorrection", d->autoCorrectionAction );
+    ac->addAction(QLatin1String("imageplugin_autocorrection"), d->autoCorrectionAction);
     ac->setDefaultShortcut(d->autoCorrectionAction, Qt::CTRL+Qt::SHIFT+Qt::Key_B);
     connect(d->autoCorrectionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotAutoCorrection()));
 
     // NOTE: Photoshop 7 use CTRL+I.
     d->invertAction = new QAction(QIcon::fromTheme(QLatin1String("invertimage")), i18n("Invert"), this);
-    ac->addAction("imageplugin_invert", d->invertAction );
+    ac->addAction(QLatin1String("imageplugin_invert"), d->invertAction);
     ac->setDefaultShortcut(d->invertAction, Qt::CTRL+Qt::Key_I);
     connect(d->invertAction, SIGNAL(triggered(bool)),
             this, SLOT(slotInvert()));
 
     d->convertTo8Bits = new QAction(QIcon::fromTheme(QLatin1String("depth16to8")), i18n("8 bits"), this);
-    ac->addAction("imageplugin_convertto8bits", d->convertTo8Bits );
+    ac->addAction(QLatin1String("imageplugin_convertto8bits"), d->convertTo8Bits);
     connect(d->convertTo8Bits, SIGNAL(triggered(bool)),
             this, SLOT(slotConvertTo8Bits()));
 
     d->convertTo16Bits = new QAction(QIcon::fromTheme(QLatin1String("depth8to16")), i18n("16 bits"), this);
-    ac->addAction("imageplugin_convertto16bits", d->convertTo16Bits );
+    ac->addAction(QLatin1String("imageplugin_convertto16bits"), d->convertTo16Bits);
     connect(d->convertTo16Bits, SIGNAL(triggered(bool)),
             this, SLOT(slotConvertTo16Bits()));
 
     d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme(QLatin1String("colormanagement")), i18n("Color Space Conversion"), this);
-    ac->addAction("imageplugin_colormanagement", d->profileMenuAction );
+    ac->addAction(QLatin1String("imageplugin_colormanagement"), d->profileMenuAction);
     connect(d->profileMenuAction, SIGNAL(triggered(IccProfile)),
             this, SLOT(slotConvertToColorSpace(IccProfile)));
 
@@ -167,37 +167,37 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     slotUpdateColorSpaceMenu();
 
     d->BWAction = new QAction(QIcon::fromTheme(QLatin1String("bwtonal")), i18n("Black && White..."), this);
-    ac->addAction("imageplugin_blackwhite", d->BWAction );
+    ac->addAction(QLatin1String("imageplugin_blackwhite"), d->BWAction);
     connect(d->BWAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBW()));
 
     d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("whitebalance")), i18n("White Balance..."), this);
-    ac->addAction("imageplugin_whitebalance", d->whitebalanceAction );
+    ac->addAction(QLatin1String("imageplugin_whitebalance"), d->whitebalanceAction);
     ac->setDefaultShortcut(d->whitebalanceAction, Qt::CTRL+Qt::SHIFT+Qt::Key_W);
     connect(d->whitebalanceAction, SIGNAL(triggered(bool)),
             this, SLOT(slotWhiteBalance()));
 
     d->channelMixerAction = new QAction(QIcon::fromTheme(QLatin1String("channelmixer")), i18n("Channel Mixer..."), this);
-    ac->addAction("imageplugin_channelmixer", d->channelMixerAction );
+    ac->addAction(QLatin1String("imageplugin_channelmixer"), d->channelMixerAction);
     ac->setDefaultShortcut(d->channelMixerAction, Qt::CTRL+Qt::Key_H);
     connect(d->channelMixerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotChannelMixer()));
 
     d->curvesAction = new QAction(QIcon::fromTheme(QLatin1String("adjustcurves")), i18n("Curves Adjust..."), this);
     // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
-    ac->addAction("imageplugin_adjustcurves", d->curvesAction);
+    ac->addAction(QLatin1String("imageplugin_adjustcurves"), d->curvesAction);
     ac->setDefaultShortcut(d->curvesAction, Qt::CTRL+Qt::SHIFT+Qt::Key_C);
     connect(d->curvesAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCurvesAdjust()));
 
     d->levelsAction  = new QAction(QIcon::fromTheme(QLatin1String("adjustlevels")), i18n("Levels Adjust..."), this);
-    ac->addAction("imageplugin_adjustlevels", d->levelsAction );
+    ac->addAction(QLatin1String("imageplugin_adjustlevels"), d->levelsAction);
     ac->setDefaultShortcut(d->levelsAction, Qt::CTRL+Qt::Key_L);
     connect(d->levelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLevelsAdjust()));
 
     d->filmAction = new QAction(QIcon::fromTheme(QLatin1String("colorneg")), i18n("Color Negative..."), this);
-    ac->addAction("imageplugin_film", d->filmAction);
+    ac->addAction(QLatin1String("imageplugin_film"), d->filmAction);
     ac->setDefaultShortcut(d->filmAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
     connect(d->filmAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFilm()));

@@ -102,7 +102,7 @@ BlurFXTool::BlurFXTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("blurfx");
+    setObjectName(QLatin1String("blurfx"));
     setToolName(i18n("Blur Effects"));
     setToolIcon(QIcon::fromTheme(QLatin1String("blurfx")));
 

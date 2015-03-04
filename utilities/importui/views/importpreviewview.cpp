@@ -365,8 +365,8 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
     QMenu popmenu(this);
     ImportContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction("importui_fullscreen");
-    cmhelper.addAction("options_show_menubar");
+    cmhelper.addAction(QLatin1String("importui_fullscreen"));
+    cmhelper.addAction(QLatin1String("options_show_menubar"));
     cmhelper.addSeparator();
 
     // --------------------------------------------------------
@@ -375,7 +375,7 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
     {
         cmhelper.addAction(d->prevAction, true);
         cmhelper.addAction(d->nextAction, true);
-        cmhelper.addAction("importui_icon_view");
+        cmhelper.addAction(QLatin1String("importui_icon_view"));
         //cmhelper.addGotoMenu(idList);
         cmhelper.addSeparator();
     }
@@ -395,7 +395,7 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
 
     // --------------------------------------------------------
 
-    cmhelper.addAction("importui_delete");
+    cmhelper.addAction(QLatin1String("importui_delete"));
     cmhelper.addSeparator();
 
     // --------------------------------------------------------

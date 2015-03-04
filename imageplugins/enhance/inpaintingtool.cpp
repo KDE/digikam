@@ -158,7 +158,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("inpainting");
+    setObjectName(QLatin1String("inpainting"));
     setToolName(i18n("In-painting"));
     setToolIcon(QIcon::fromTheme(QLatin1String("inpainting")));
 

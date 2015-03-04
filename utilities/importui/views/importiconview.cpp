@@ -323,24 +323,24 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     QMenu popmenu(this);
     ImportContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction("importui_fullscreen");
-    cmhelper.addAction("options_show_menubar");
-    cmhelper.addAction("import_zoomfit2window");
+    cmhelper.addAction(QLatin1String("importui_fullscreen"));
+    cmhelper.addAction(QLatin1String("options_show_menubar"));
+    cmhelper.addAction(QLatin1String("import_zoomfit2window"));
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addAction("importui_imagedownload");
-    cmhelper.addAction("importui_imagemarkasdownloaded");
-    cmhelper.addAction("importui_imagelock");
-    cmhelper.addAction("importui_delete");
+    cmhelper.addAction(QLatin1String("importui_imagedownload"));
+    cmhelper.addAction(QLatin1String("importui_imagemarkasdownloaded"));
+    cmhelper.addAction(QLatin1String("importui_imagelock"));
+    cmhelper.addAction(QLatin1String("importui_delete"));
     cmhelper.addSeparator();
-    cmhelper.addAction("importui_item_view");
+    cmhelper.addAction(QLatin1String("importui_item_view"));
     cmhelper.addServicesMenu(selectedUrls());
     //TODO: cmhelper.addRotateMenu(selectedItemIDs);
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addAction("importui_selectall");
-    cmhelper.addAction("importui_selectnone");
-    cmhelper.addAction("importui_selectinvert");
+    cmhelper.addAction(QLatin1String("importui_selectall"));
+    cmhelper.addAction(QLatin1String("importui_selectnone"));
+    cmhelper.addAction(QLatin1String("importui_selectinvert"));
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAssignTagsMenu(selectedItemIDs);
@@ -399,10 +399,10 @@ void ImportIconView::showContextMenu(QContextMenuEvent* event)
     QMenu popmenu(this);
     ImportContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction("importui_fullscreen");
-    cmhelper.addAction("options_show_menubar");
+    cmhelper.addAction(QLatin1String("importui_fullscreen"));
+    cmhelper.addAction(QLatin1String("options_show_menubar"));
     cmhelper.addSeparator();
-    cmhelper.addAction("importui_close");
+    cmhelper.addAction(QLatin1String("importui_close"));
 
     // --------------------------------------------------------
 

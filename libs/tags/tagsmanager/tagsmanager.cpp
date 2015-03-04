@@ -116,7 +116,7 @@ TagsManager::TagsManager()
       StateSavingObject(this),
       d(new Private())
 {
-    setObjectName("Tags Manager");
+    setObjectName(QLatin1String("Tags Manager"));
     d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);;
     d->tagModel->setCheckable(false);
     setupUi(this);

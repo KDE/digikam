@@ -214,7 +214,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     : EditorTool(parent),
       d(new Private)
 {
-    setObjectName("aspectratiocrop");
+    setObjectName(QLatin1String("aspectratiocrop"));
     setToolName(i18n("Aspect Ratio Crop"));
     setToolIcon(QIcon::fromTheme(QLatin1String("ratiocrop")));
     setToolHelp("ratiocroptool.anchor");
@@ -254,7 +254,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     QVBoxLayout* const vlay = new QVBoxLayout(d->gboxSettings->plainPage());
     d->expbox               = new RExpanderBox(d->gboxSettings->plainPage());
-    d->expbox->setObjectName("RatioCropTool Expander");
+    d->expbox->setObjectName(QLatin1String("RatioCropTool Expander"));
 
     // -------------------------------------------------------------
 

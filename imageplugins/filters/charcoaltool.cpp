@@ -86,7 +86,7 @@ CharcoalTool::CharcoalTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("charcoal");
+    setObjectName(QLatin1String("charcoal"));
     setToolName(i18n("Charcoal"));
     setToolIcon(QIcon::fromTheme(QLatin1String("charcoaltool")));
 

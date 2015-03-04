@@ -104,7 +104,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("profile conversion");
+    setObjectName(QLatin1String("profile conversion"));
     setToolName(i18n("Color Profile Conversion"));
     setToolIcon(QIcon::fromTheme(QLatin1String("colormanagement")));
     //TODO setToolHelp("colormanagement.anchor");

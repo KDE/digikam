@@ -86,7 +86,7 @@ const QString WhiteBalanceTool::Private::configHistogramScaleEntry("Histogram Sc
 WhiteBalanceTool::WhiteBalanceTool(QObject* const parent)
     : EditorToolThreaded(parent), d(new Private)
 {
-    setObjectName("whitebalance");
+    setObjectName(QLatin1String("whitebalance"));
     setToolName(i18n("White Balance"));
     setToolIcon(QIcon::fromTheme(QLatin1String("whitebalance")));
     setInitPreview(true);

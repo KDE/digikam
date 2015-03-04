@@ -131,7 +131,7 @@ RestorationTool::RestorationTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("restoration");
+    setObjectName(QLatin1String("restoration"));
     setToolName(i18n("Restoration"));
     setToolIcon(QIcon::fromTheme(QLatin1String("restoration")));
 

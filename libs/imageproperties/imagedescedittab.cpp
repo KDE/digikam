@@ -335,7 +335,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->templateSelector = new TemplateSelector(infoArea);
     d->templateViewer   = new TemplateViewer(infoArea);
-    d->templateViewer->setObjectName("ImageDescEditTab Expander");
+    d->templateViewer->setObjectName(QLatin1String("ImageDescEditTab Expander"));
 
     grid2->addWidget(d->templateSelector, 0, 0, 1, 2);
     grid2->addWidget(d->templateViewer,   1, 0, 1, 2);

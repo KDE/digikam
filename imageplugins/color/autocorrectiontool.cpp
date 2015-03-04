@@ -95,7 +95,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("autocorrection");
+    setObjectName(QLatin1String("autocorrection"));
     setToolName(i18n("Auto Correction"));
     setToolVersion(1);
     setToolIcon(QIcon::fromTheme(QLatin1String("autocorrection")));

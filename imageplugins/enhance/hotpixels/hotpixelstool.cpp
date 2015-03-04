@@ -108,7 +108,7 @@ HotPixelsTool::HotPixelsTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("hotpixels");
+    setObjectName(QLatin1String("hotpixels"));
     setToolName(i18n("Hot Pixels"));
     setToolIcon(QIcon::fromTheme(QLatin1String("hotpixels")));
 

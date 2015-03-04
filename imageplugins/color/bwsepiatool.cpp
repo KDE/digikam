@@ -85,7 +85,7 @@ const QString BWSepiaTool::Private::configHistogramScaleEntry("Histogram Scale")
 BWSepiaTool::BWSepiaTool(QObject* const parent)
     : EditorToolThreaded(parent), d(new Private)
 {
-    setObjectName("convertbw");
+    setObjectName(QLatin1String("convertbw"));
     setToolName(i18n("Black and White"));
     setToolIcon(QIcon::fromTheme(QLatin1String("bwtonal")));
     setToolHelp("blackandwhitetool.anchor");

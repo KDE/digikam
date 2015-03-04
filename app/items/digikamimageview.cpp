@@ -368,27 +368,27 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
 
-    cmhelper.addAction("full_screen");
-    cmhelper.addAction("options_show_menubar");
+    cmhelper.addAction(QLatin1String("full_screen"));
+    cmhelper.addAction(QLatin1String("options_show_menubar"));
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addAction("move_selection_to_album");
+    cmhelper.addAction(QLatin1String("move_selection_to_album"));
     cmhelper.addAction(viewAction);
-    cmhelper.addAction("image_edit");
+    cmhelper.addAction(QLatin1String("image_edit"));
     cmhelper.addServicesMenu(selectedUrls());
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addAction("image_rotate");
+    cmhelper.addAction(QLatin1String("image_rotate"));
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addAction("image_find_similar");
+    cmhelper.addAction(QLatin1String("image_find_similar"));
     cmhelper.addStandardActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addSeparator();
     // --------------------------------------------------------
-    cmhelper.addAction("image_rename");
-    cmhelper.addAction("cut_album_selection");
-    cmhelper.addAction("copy_album_selection");
-    cmhelper.addAction("paste_album_selection");
+    cmhelper.addAction(QLatin1String("image_rename"));
+    cmhelper.addAction(QLatin1String("cut_album_selection"));
+    cmhelper.addAction(QLatin1String("copy_album_selection"));
+    cmhelper.addAction(QLatin1String("paste_album_selection"));
     cmhelper.addStandardActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
     cmhelper.addSeparator();
     // --------------------------------------------------------
@@ -511,8 +511,8 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
 
-    cmhelper.addAction("full_screen");
-    cmhelper.addAction("options_show_menubar");
+    cmhelper.addAction(QLatin1String("full_screen"));
+    cmhelper.addAction(QLatin1String("options_show_menubar"));
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addStandardActionPaste(this, SLOT(paste()));

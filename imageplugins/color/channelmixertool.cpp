@@ -93,7 +93,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("channelmixer");
+    setObjectName(QLatin1String("channelmixer"));
     setToolName(i18n("Channel Mixer"));
     setToolIcon(QIcon::fromTheme(QLatin1String("channelmixer")));
 

@@ -83,7 +83,7 @@ LocalContrastTool::LocalContrastTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("localcontrast");
+    setObjectName(QLatin1String("localcontrast"));
     setToolName(i18n("Local Contrast"));
     setToolIcon(QIcon::fromTheme(QLatin1String("tonemap")));
 

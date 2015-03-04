@@ -77,7 +77,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("antivignetting");
+    setObjectName(QLatin1String("antivignetting"));
     setToolName(i18n("Vignetting Correction"));
     setToolIcon(QIcon::fromTheme(QLatin1String("antivignetting")));
 

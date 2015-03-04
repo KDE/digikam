@@ -90,7 +90,7 @@ RainDropTool::RainDropTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("raindrops");
+    setObjectName(QLatin1String("raindrops"));
     setToolName(i18n("Raindrops"));
     setToolIcon(QIcon::fromTheme(QLatin1String("raindrop")));
 

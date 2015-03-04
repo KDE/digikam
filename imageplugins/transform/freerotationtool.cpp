@@ -105,7 +105,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("freerotation");
+    setObjectName(QLatin1String("freerotation"));
     setToolName(i18n("Free Rotation"));
     setToolIcon(QIcon::fromTheme(QLatin1String("freerotation")));
 
@@ -213,7 +213,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     RLineWidget* const line  = new RLineWidget(Qt::Horizontal);
     d->settingsView          = new FreeRotationSettings(d->gboxSettings->plainPage());
     d->expanderBox           = new RExpanderBox;
-    d->expanderBox->setObjectName("FreeRotationTool Expander");
+    d->expanderBox->setObjectName(QLatin1String("FreeRotationTool Expander"));
     d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme(QLatin1String("freerotation")), i18n("Automatic Adjustment"),
                             QString("AutoAdjustContainer"), true);
     d->expanderBox->addItem(d->settingsView, QIcon::fromTheme(QLatin1String("freerotation")), i18n("Settings"),

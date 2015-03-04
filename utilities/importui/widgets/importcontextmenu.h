@@ -84,7 +84,7 @@ public:
      * @param name the name of the action in the actionCollection
      * @param addDisabled if set, disabled actions are added to the menu
      */
-    void addAction(const char* name, bool addDisabled = false);
+    void addAction(const QString& name, bool addDisabled = false);
 
     /**
      * Add a temporary action.

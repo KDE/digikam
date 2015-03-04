@@ -125,7 +125,7 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     : EditorTool(parent),
       d(new Private)
 {
-    setObjectName("redeye");
+    setObjectName(QLatin1String("redeye"));
     setToolName(i18n("Red Eye"));
     setToolIcon(QIcon::fromTheme(QLatin1String("redeyes")));
     setToolHelp("redeyecorrectiontool.anchor");

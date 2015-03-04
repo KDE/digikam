@@ -108,7 +108,7 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
     : EditorTool(parent),
       d(new Private)
 {
-    setObjectName("perspective");
+    setObjectName(QLatin1String("perspective"));
     setToolName(i18n("Perspective"));
     setToolIcon(QIcon::fromTheme(QLatin1String("perspective")));
 

@@ -86,7 +86,7 @@ OilPaintTool::OilPaintTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName("oilpaint");
+    setObjectName(QLatin1String("oilpaint"));
     setToolName(i18n("Oil Paint"));
     setToolIcon(QIcon::fromTheme(QLatin1String("oilpaint"))); // krazy:exclude=iconnames
 
