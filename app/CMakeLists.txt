@@ -146,7 +146,6 @@ target_link_libraries(digikamgui
                       digikamwidgets
                       digikamdatabase
                       digikammodels
-                      digikamtags
                       filters
                       dimg
                       dthread
@@ -163,6 +162,7 @@ target_link_libraries(digikamgui
                       fuzzysearch
                       fileactionmanager
                       maintenance
+                      digikamtags
 
                       Qt5::Core
                       Qt5::Gui
