@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "slideend.h"
+#include "slideend.moc"
 
 // Qt includes
 

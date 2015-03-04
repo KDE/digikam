@@ -325,7 +325,7 @@ public:
      * addGroupActions will add the actions as a flat list, not in a submenu.
      * Note: Call setImageFilterModel before to have Open/Close group actions.
      */
-    void addGroupMenu(const Digikam::ContextMenuHelper::imageIds& ids, const QList<QAction*>& extraMenuItems = QList<QAction*>());
+    void addGroupMenu(const imageIds& ids, const QList<QAction*>& extraMenuItems = QList<QAction*>());
     void addGroupActions(const imageIds& ids);
 
     /**

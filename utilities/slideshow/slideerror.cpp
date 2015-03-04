@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "slideerror.h"
+#include "slideerror.moc"
 
 // Qt includes
 
