@@ -53,7 +53,8 @@ namespace Digikam
 {
 
 ImportIconView::ImportIconView(QWidget* const parent)
-    : ImportCategorizedView(parent), d(new Private(this))
+    : ImportCategorizedView(parent),
+      d(new Private(this))
 {
 }
 
@@ -139,7 +140,7 @@ int ImportIconView::fitToWidthIcons()
 
 CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& file)
 {
-    QUrl url = QUrl::fromLocalFile(folder + "/");
+    QUrl url = QUrl::fromLocalFile(folder + QLatin1String("/"));
     url      = url.adjusted(QUrl::RemoveFilename);
     url.setPath(url.path() + file);
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
@@ -154,7 +155,7 @@ CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& fi
 
 CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString& file)
 {
-    QUrl url = QUrl::fromLocalFile(folder + "/");
+    QUrl url = QUrl::fromLocalFile(folder + QLatin1String("/"));
     url = url.adjusted(QUrl::RemoveFilename);
     url.setPath(url.path() + file);
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
@@ -200,10 +201,12 @@ void ImportIconView::deleteSelected(bool /*permanently*/)
     CamItemInfoList camItemInfoList = selectedCamItemInfos();
 
     //FIXME: This way of deletion may not working with camera items.
-    //if (d->utilities->deleteImages(camItemInfoList, permanently))
-    //{
-    //    awayFromSelection();
-    //}
+/*
+    if (d->utilities->deleteImages(camItemInfoList, permanently))
+    {
+       awayFromSelection();
+    }
+*/
 }
 
 void ImportIconView::deleteSelectedDirectly(bool /*permanently*/)
@@ -217,29 +220,33 @@ void ImportIconView::deleteSelectedDirectly(bool /*permanently*/)
 void ImportIconView::createGroupFromSelection()
 {
     //TODO: Impelemnt grouping in import tool.
-    //QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
-    //CamItemInfo groupLeader          = selectedInfos.takeFirst();
-    //FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
+/*
+    QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
+    CamItemInfo groupLeader          = selectedInfos.takeFirst();
+    FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
+*/
 }
 
 void ImportIconView::createGroupByTimeFromSelection()
 {
     //TODO: Impelemnt grouping in import tool.
-    //QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
+/*
+    QList<CamItemInfo> selectedInfos = selectedCamItemInfosCurrentFirst();
 
-    //while (selectedInfos.size() > 0)
-    //{
-        //QList<CamItemInfo> group;
-        //CamItemInfo groupLeader = selectedInfos.takeFirst();
-        //QDateTime dateTime    = groupLeader.dateTime();
+    while (selectedInfos.size() > 0)
+    {
+        QList<CamItemInfo> group;
+        CamItemInfo groupLeader = selectedInfos.takeFirst();
+        QDateTime dateTime    = groupLeader.dateTime();
 
-        //while (selectedInfos.size() > 0 && abs(dateTime.secsTo(selectedInfos.first().dateTime())) < 2)
-        //{
-        //    group.push_back(selectedInfos.takeFirst());
-        //}
+        while (selectedInfos.size() > 0 && abs(dateTime.secsTo(selectedInfos.first().dateTime())) < 2)
+        {
+           group.push_back(selectedInfos.takeFirst());
+        }
 
-        //FileActionMngr::instance()->addToGroup(groupLeader, group);
-    //}
+        FileActionMngr::instance()->addToGroup(groupLeader, group);
+    }
+*/
 }
 
 void ImportIconView::ungroupSelected()
@@ -256,7 +263,7 @@ void ImportIconView::removeSelectedFromGroup()
 
 void ImportIconView::slotRotateLeft(const QList<QModelIndex>& /*indexes*/)
 {
-    /*
+/*
     QList<ImageInfo> imageInfos;
 
     foreach(const QModelIndex& index, indexes)
@@ -266,12 +273,12 @@ void ImportIconView::slotRotateLeft(const QList<QModelIndex>& /*indexes*/)
     }
 
     FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate270);
-    */
+*/
 }
 
 void ImportIconView::slotRotateRight(const QList<QModelIndex>& /*indexes*/)
 {
-    /*
+/*
     QList<ImageInfo> imageInfos;
 
     foreach(const QModelIndex& index, indexes)
@@ -281,7 +288,7 @@ void ImportIconView::slotRotateRight(const QList<QModelIndex>& /*indexes*/)
     }
 
     FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate90);
-    */
+*/
 }
 
 void ImportIconView::activated(const CamItemInfo& info, Qt::KeyboardModifiers)

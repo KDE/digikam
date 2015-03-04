@@ -79,26 +79,9 @@ public:
 #endif // HAVE_KGEOMAP
 };
 
-void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* filterModel)
-{
-    d->importIconView->setModels(model, filterModel);
-    d->thumbBar->setModelsFiltered(model, filterModel);
-
-    // TODO this is currently here because the code structure, waiting for restructuring..
-    d->importIconView->init();
-
-#ifdef HAVE_KGEOMAP
-    // TODO refactor MapWidgetView not to require the models on startup?
-    d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
-                                           d->importIconView->importFilterModel(), this,
-                                           MapWidgetView::ApplicationImportUI);
-    d->mapWidgetView->setObjectName("import_mapwidgetview");
-    insertWidget(MapWidgetMode,     d->mapWidgetView);
-#endif // HAVE_KGEOMAP
-}
-
 ImportStackedView::ImportStackedView(QWidget* const parent)
-    : QStackedWidget(parent), d(new Private)
+    : QStackedWidget(parent),
+      d(new Private)
 {
     d->importIconView    = new ImportIconView(this);
     d->importPreviewView = new ImportPreviewView(this);
@@ -107,7 +90,7 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
 
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
-    d->thumbBarDock->setObjectName("import_thumbbar");
+    d->thumbBarDock->setObjectName(QLatin1String("import_thumbbar"));
 
 #ifdef HAVE_VIDEOPLAYER
     d->mediaPlayerView   = new MediaPlayerView(this);
@@ -207,6 +190,24 @@ ImportStackedView::~ImportStackedView()
     delete d;
 }
 
+void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* filterModel)
+{
+    d->importIconView->setModels(model, filterModel);
+    d->thumbBar->setModelsFiltered(model, filterModel);
+
+    // TODO this is currently here because the code structure, waiting for restructuring..
+    d->importIconView->init();
+
+#ifdef HAVE_KGEOMAP
+    // TODO refactor MapWidgetView not to require the models on startup?
+    d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
+                                           d->importIconView->importFilterModel(), this,
+                                           MapWidgetView::ApplicationImportUI);
+    d->mapWidgetView->setObjectName(QLatin1String("import_mapwidgetview"));
+    insertWidget(MapWidgetMode,     d->mapWidgetView);
+#endif // HAVE_KGEOMAP
+}
+
 void ImportStackedView::readSettings()
 {
     ImportSettings* const settings = ImportSettings::instance();
@@ -294,7 +295,7 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
     }
     else
     {
-        if (identifyCategoryforMime(info.mime) == "audio" || identifyCategoryforMime(info.mime) == "video")
+        if (identifyCategoryforMime(info.mime) == QLatin1String("audio") || identifyCategoryforMime(info.mime) == QLatin1String("video"))
         {
             // Stop image viewer
             if (viewMode() == PreviewImageMode)
@@ -331,7 +332,7 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
 
 QString ImportStackedView::identifyCategoryforMime(const QString& mime) const
 {
-    return mime.split('/').at(0);
+    return mime.split(QLatin1Char('/')).at(0);
 }
 
 ImportStackedView::StackedViewMode ImportStackedView::viewMode() const

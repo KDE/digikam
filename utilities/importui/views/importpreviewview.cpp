@@ -59,10 +59,12 @@ public:
         setAcceptHoverEvents(true);
     }
 
-    //void setFaceGroup(FaceGroup* group)
-    //{
-    //    m_group = group;
-    //}
+/*
+    void setFaceGroup(FaceGroup* group)
+    {
+       m_group = group;
+    }
+*/
 
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     {
@@ -292,12 +294,12 @@ void ImportPreviewView::setCamItemInfo(const CamItemInfo& info, const CamItemInf
 
     QStringList previewPaths;
 
-    if (identifyCategoryforMime(next.mime) == "image")
+    if (identifyCategoryforMime(next.mime) == QLatin1String("image"))
     {
         previewPaths << next.url().toLocalFile();
     }
 
-    if (identifyCategoryforMime(previous.mime) == "image")
+    if (identifyCategoryforMime(previous.mime) == QLatin1String("image"))
     {
         previewPaths << previous.url().toLocalFile();
     }
@@ -307,7 +309,7 @@ void ImportPreviewView::setCamItemInfo(const CamItemInfo& info, const CamItemInf
 
 QString ImportPreviewView::identifyCategoryforMime(QString mime)
 {
-    return mime.split('/').at(0);
+    return mime.split(QLatin1Char('/')).at(0);
 }
 
 CamItemInfo ImportPreviewView::getCamItemInfo() const
@@ -441,15 +443,17 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
     cmhelper.exec(event->screenPos());
 }
 
-//void ImportPreviewView::slotAssignTag(int tagID)
-//{
-//    FileActionMngr::instance()->assignTag(d->item->camItemInfo(), tagID);
-//}
+/*
+void ImportPreviewView::slotAssignTag(int tagID)
+{
+   FileActionMngr::instance()->assignTag(d->item->camItemInfo(), tagID);
+}
 
-//void ImportPreviewView::slotRemoveTag(int tagID)
-//{
-//    FileActionMngr::instance()->removeTag(d->item->camItemInfo(), tagID);
-//}
+void ImportPreviewView::slotRemoveTag(int tagID)
+{
+   FileActionMngr::instance()->removeTag(d->item->camItemInfo(), tagID);
+}
+*/
 
 void ImportPreviewView::slotThemeChanged()
 {
@@ -461,7 +465,8 @@ void ImportPreviewView::slotThemeChanged()
 void ImportPreviewView::slotSetupChanged()
 {
     PreviewSettings settings;
-    settings.quality = ImportSettings::instance()->getPreviewLoadFullImageSize() ? PreviewSettings::HighQualityPreview : PreviewSettings::FastPreview;
+    settings.quality = ImportSettings::instance()->getPreviewLoadFullImageSize() ? PreviewSettings::HighQualityPreview
+                                                                                 : PreviewSettings::FastPreview;
     previewItem()->setPreviewSettings(settings);
 
     d->toolBar->setVisible(ImportSettings::instance()->getPreviewShowIcons());
@@ -472,20 +477,20 @@ void ImportPreviewView::slotSetupChanged()
 
 void ImportPreviewView::slotRotateLeft()
 {
-    /*
+/*
     ImageInfo info(d->item->camItemInfo().url().toLocalFile());
 
     FileActionMngr::instance()->transform(QList<ImageInfo>() << info, KExiv2Iface::RotationMatrix::Rotate270);
-    */
+*/
 }
 
 void ImportPreviewView::slotRotateRight()
 {
-    /*
+/*
     ImageInfo info(d->item->camItemInfo().url().toLocalFile());
 
     FileActionMngr::instance()->transform(QList<ImageInfo>() << info, KExiv2Iface::RotationMatrix::Rotate90);
-    */
+*/
 }
 
 void ImportPreviewView::slotDeleteItem()

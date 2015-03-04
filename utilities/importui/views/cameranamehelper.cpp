@@ -34,11 +34,11 @@
 
 namespace
 {
-static const QString STR_AUTO_DETECTED("auto-detected");
+static const QString STR_AUTO_DETECTED(QLatin1String("auto-detected"));
 
-static QRegExp REGEXP_CAMERA_NAME("^(.*)\\s*\\((.*)\\)\\s*$", Qt::CaseInsensitive);
-static QRegExp REGEXP_MODES("^(ptp|normal|mtp)(\\s+mode)?$", Qt::CaseInsensitive);
-static QRegExp REGEXP_AUTODETECTED(QString("(%1|, %1)").arg(STR_AUTO_DETECTED));
+static QRegExp REGEXP_CAMERA_NAME(QLatin1String("^(.*)\\s*\\((.*)\\)\\s*$"), Qt::CaseInsensitive);
+static QRegExp REGEXP_MODES(QLatin1String("^(ptp|normal|mtp)(\\s+mode)?$"), Qt::CaseInsensitive);
+static QRegExp REGEXP_AUTODETECTED(QString::fromUtf8("(%1|, %1)").arg(STR_AUTO_DETECTED));
 }
 
 namespace Digikam
@@ -55,21 +55,21 @@ QString CameraNameHelper::createCameraName(const QString& vendor, const QString&
     QString tmp;
     QString _vendor  = vendor.simplified();
     QString _product = product.simplified();
-    QString _mode    = mode.simplified().remove(QChar('(')).remove(QChar(')'));
+    QString _mode    = mode.simplified().remove(QLatin1Char('(')).remove(QLatin1Char(')'));
 
-    tmp = QString("%1 %2").arg(_vendor).arg(_product);
+    tmp = QString::fromUtf8("%1 %2").arg(_vendor).arg(_product);
 
     if (!mode.isEmpty() && mode != STR_AUTO_DETECTED)
     {
-        tmp.append(" (");
+        tmp.append(QLatin1String(" ("));
         tmp.append(_mode);
         tmp.append(autoDetected
-                   ? QString(", %1)").arg(STR_AUTO_DETECTED)
-                   : QString(')'));
+                   ? QString::fromUtf8(", %1)").arg(STR_AUTO_DETECTED)
+                   : QLatin1String(")"));
     }
     else if (autoDetected)
     {
-        tmp.append(QString(" (%1)").arg(STR_AUTO_DETECTED));
+        tmp.append(QString::fromUtf8(" (%1)").arg(STR_AUTO_DETECTED));
     }
 
     return tmp.simplified();
@@ -127,7 +127,7 @@ QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, Toke
         {
             mode = REGEXP_MODES.exactMatch(clearedTmpMode)
                    ? clearedTmpMode
-                   : "";
+                   : QLatin1String("");
         }
 
         if (tokenID == VendorAndProduct)
@@ -143,7 +143,7 @@ QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, Toke
     }
     return (tokenID == VendorAndProduct)
            ? cameraName.simplified()
-           : "";
+           : QLatin1String("");
 }
 
 bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& deviceB)
@@ -174,9 +174,9 @@ bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& device
     QString modeA       = extractCameraNameToken(deviceA, Mode);
     QString modeB       = extractCameraNameToken(deviceB, Mode);
     bool isModeAValid   = REGEXP_MODES.exactMatch(modeA);
-    modeA               = isModeAValid ? REGEXP_MODES.cap(1).simplified().toLower() : "";
+    modeA               = isModeAValid ? REGEXP_MODES.cap(1).simplified().toLower() : QLatin1String("");
     bool isModeBValid   = REGEXP_MODES.exactMatch(modeB);
-    modeB               = isModeBValid ? REGEXP_MODES.cap(1).simplified().toLower() : "";
+    modeB               = isModeBValid ? REGEXP_MODES.cap(1).simplified().toLower() : QLatin1String("");
 
     if ((isModeAValid != isModeBValid) || (modeA != modeB))
     {
