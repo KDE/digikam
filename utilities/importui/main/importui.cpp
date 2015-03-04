@@ -558,13 +558,13 @@ void ImportUI::setupActions()
 
     d->increaseThumbsAction = buildStdAction(StdZoomInAction, d->view, SLOT(slotZoomIn()), this);
     d->increaseThumbsAction->setEnabled(false);
-    QKeySequence keysPlus(d->increaseThumbsAction->shortcut(), Qt::Key_Plus);
+    QKeySequence keysPlus(d->increaseThumbsAction->shortcut()[0], Qt::Key_Plus);
     ac->addAction(QLatin1String("importui_zoomplus"), d->increaseThumbsAction);
     ac->setDefaultShortcut(d->increaseThumbsAction, keysPlus);
 
     d->decreaseThumbsAction = buildStdAction(StdZoomOutAction, d->view, SLOT(slotZoomOut()), this);
     d->decreaseThumbsAction->setEnabled(false);
-    QKeySequence keysMinus(d->decreaseThumbsAction->shortcut(), Qt::Key_Minus);
+    QKeySequence keysMinus(d->decreaseThumbsAction->shortcut()[0], Qt::Key_Minus);
     ac->addAction(QLatin1String("importui_zoomminus"), d->decreaseThumbsAction);
     ac->setDefaultShortcut(d->decreaseThumbsAction, keysMinus);
 
@@ -588,7 +588,7 @@ void ImportUI::setupActions()
 
     // ------------------------------------------------------------------------------------------------
 
-    createFullScreenAction("importui_fullscreen");
+    createFullScreenAction(QLatin1String("importui_fullscreen"));
     createSidebarActions();
 
     d->showLogAction = new QAction(QIcon::fromTheme(QLatin1String("view-history")), i18nc("@option:check", "Show History"), this);
@@ -1301,7 +1301,7 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
             continue;
         }
 
-        QString ext  = QString(".") + fi.completeSuffix();
+        QString ext  = QLatin1String(".") + fi.completeSuffix();
         QString name = fi.fileName();
         name.truncate(fi.fileName().length() - ext.length());
 
@@ -1526,7 +1526,7 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
 
             d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
-            DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+            DownloadHistory::setDownloaded(QString::fromUtf8(d->controller->cameraMD5ID()),
                                            info.name,
                                            info.size,
                                            info.ctime);
@@ -1546,11 +1546,11 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             // Pop-up a notification to inform user when all is done, and inform if auto-rotation will take place.
             if (autoRotate)
             {
-                DNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
+                DNotificationWrapper(QLatin1String("cameradownloaded"), i18nc("@info Popup notification", "Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
             }
             else
             {
-                DNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished"), this, windowTitle());
+                DNotificationWrapper(QLatin1String("cameradownloaded"), i18nc("@info Popup notification", "Images download finished"), this, windowTitle());
             }
         }
     }
@@ -1584,7 +1584,7 @@ void ImportUI::slotMarkAsDownloaded()
     {
         setDownloaded(d->view->camItemInfoRef(info.folder, info.name), CamItemInfo::DownloadedYes);
 
-        DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+        DownloadHistory::setDownloaded(QString::fromUtf8(d->controller->cameraMD5ID()),
                                        info.name,
                                        info.size,
                                        info.ctime);
@@ -1664,7 +1664,7 @@ void ImportUI::slotUpdateDownloadName()
         // Renaming files for the converting jpg to a lossless format
         // is from cameracontroller.cpp moved here.
 
-        if (settings.convertJpeg && info.mime == QString("image/jpeg") &&
+        if (settings.convertJpeg && info.mime == QLatin1String("image/jpeg") &&
            (noSelection || d->view->isSelected(info.url())))
         {
             QFileInfo     fi(newName);
@@ -1672,11 +1672,11 @@ void ImportUI::slotUpdateDownloadName()
 
             if (!ext.isEmpty())
             {
-                if (ext == "JPG" || ext == "JPE" || ext == "JPEG")
+                if (ext == QLatin1String("JPG") || ext == QLatin1String("JPE") || ext == QLatin1String("JPEG"))
                 {
                     ext = settings.losslessFormat.toUpper();
                 }
-                else if (ext == "Jpg" || ext == "Jpe" || ext == "Jpeg")
+                else if (ext == QLatin1String("Jpg") || ext == QLatin1String("Jpe") || ext == QLatin1String("Jpeg"))
                 {
                     ext    = settings.losslessFormat.toLower();
                     ext[0] = ext[0].toUpper();
@@ -1686,11 +1686,11 @@ void ImportUI::slotUpdateDownloadName()
                    ext = settings.losslessFormat.toLower();
                 }
 
-                newName = fi.completeBaseName() + '.' + ext;
+                newName = fi.completeBaseName() + QLatin1Char('.') + ext;
             }
             else
             {
-                newName = newName + '.' + settings.losslessFormat.toLower();
+                newName = newName + QLatin1Char('.') + settings.losslessFormat.toLower();
             }
         }
 
@@ -1766,7 +1766,7 @@ QMap<QString, int> ImportUI::countItemsByFolders() const
     {
         path = info.folder;
 
-        if (!path.isEmpty() && path.endsWith('/'))
+        if (!path.isEmpty() && path.endsWith(QLatin1Char('/')))
         {
             path.truncate(path.length() - 1);
         }
@@ -1827,7 +1827,7 @@ void ImportUI::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSi
 
             fSize += size;
 
-            if (info.mime == QString("image/jpeg"))
+            if (info.mime == QLatin1String("image/jpeg"))
             {
                 if (settings.convertJpeg)
                 {
@@ -1924,7 +1924,7 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                                                     i18n("Warning"),
                                                     warnMsg,
                                                     deleteList,
-                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
+                                                    QLatin1String("DontAskAgainToDeleteItemsFromCamera"))
         ==  QMessageBox::Yes)
     {
         QStringList::const_iterator itFolder = folders.constBegin();
@@ -2021,20 +2021,20 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         if (downloadName.isEmpty())
         {
             downloadUrl = downloadUrl.adjusted(QUrl::StripTrailingSlash);
-            downloadUrl.setPath(downloadUrl.path() + '/' + (settings.file));
+            downloadUrl.setPath(downloadUrl.path() + QLatin1Char('/') + (settings.file));
         }
         else
         {
             // when using custom renaming (e.g. by date, see bug 179902)
             // make sure that we create unique names
             downloadUrl = downloadUrl.adjusted(QUrl::StripTrailingSlash);
-            downloadUrl.setPath(downloadUrl.path() + '/' + (downloadName));
+            downloadUrl.setPath(downloadUrl.path() + QLatin1Char('/') + (downloadName));
             QString suggestedPath = downloadUrl.toLocalFile();
 
             if (usedDownloadPaths.contains(suggestedPath))
             {
                 QFileInfo fi(downloadName);
-                QString suffix = '.' + fi.suffix();
+                QString suffix = QLatin1Char('.') + fi.suffix();
                 QString pathWithoutSuffix(suggestedPath);
                 pathWithoutSuffix.chop(suffix.length());
                 QString currentVariant;
@@ -2042,7 +2042,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
 
                 do
                 {
-                    currentVariant = pathWithoutSuffix + '-' + QString::number(counter++) + suffix;
+                    currentVariant = pathWithoutSuffix + QLatin1Char('-') + QString::number(counter++) + suffix;
                 }
                 while (usedDownloadPaths.contains(currentVariant));
 
@@ -2116,7 +2116,7 @@ bool ImportUI::createSubAlbum(QUrl& downloadUrl, const QString& subalbum, const 
     }
 
     downloadUrl = downloadUrl.adjusted(QUrl::StripTrailingSlash);
-    downloadUrl.setPath(downloadUrl.path() + '/' + (subalbum));
+    downloadUrl.setPath(downloadUrl.path() + QLatin1Char('/') + (subalbum));
     return true;
 }
 
@@ -2161,22 +2161,22 @@ bool ImportUI::createExtBasedSubAlbum(QUrl& downloadUrl, const CamItemInfo& info
 
     QString subAlbum = fi.suffix().toUpper();
 
-    if (fi.suffix().toUpper() == QString("JPEG") ||
-        fi.suffix().toUpper() == QString("JPE"))
+    if (fi.suffix().toUpper() == QLatin1String("JPEG") ||
+        fi.suffix().toUpper() == QLatin1String("JPE"))
     {
-        subAlbum = QString("JPG");
+        subAlbum = QLatin1String("JPG");
     }
 
-    if (fi.suffix().toUpper() == QString("TIFF"))
+    if (fi.suffix().toUpper() == QLatin1String("TIFF"))
     {
-        subAlbum = QString("TIF");
+        subAlbum = QLatin1String("TIF");
     }
 
-    if (fi.suffix().toUpper() == QString("MPEG") ||
-        fi.suffix().toUpper() == QString("MPE") ||
-        fi.suffix().toUpper() == QString("MPO"))
+    if (fi.suffix().toUpper() == QLatin1String("MPEG") ||
+        fi.suffix().toUpper() == QLatin1String("MPE") ||
+        fi.suffix().toUpper() == QLatin1String("MPO"))
     {
-        subAlbum = QString("MPG");
+        subAlbum = QLatin1String("MPG");
     }
 
     // See bug #136927 : we need to support file system which do not
@@ -2373,7 +2373,7 @@ void ImportUI::slotItemsSelected(const CamItemInfo& info, bool selected)
 
 QString ImportUI::identifyCategoryforMime(const QString& mime)
 {
-    return mime.split('/').at(0);
+    return mime.split(QLatin1Char('/')).at(0);
 }
 
 void ImportUI::autoRotateItems()
@@ -2414,7 +2414,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
 {
     QUrl u(parentURL);
     u = u.adjusted(QUrl::StripTrailingSlash);
-    u.setPath(u.path() + '/' + (sub));
+    u.setPath(u.path() + QLatin1Char('/') + (sub));
 
     // first stat to see if the album exists
     QFileInfo info(u.toLocalFile());
@@ -2447,7 +2447,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
     // Create the album, with any parent albums required for the structure
     QDir albumDir(parentURL.path());
 
-    foreach (const QString& folder, sub.split(QChar('/'), QString::SkipEmptyParts))
+    foreach (const QString& folder, sub.split(QLatin1Char('/'), QString::SkipEmptyParts))
     {
         albumDir.cd(folder);
 

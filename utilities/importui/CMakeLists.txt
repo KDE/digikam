@@ -21,7 +21,7 @@ set(libimportuibackend_SRCS
     backend/camiteminfo.cpp
     backend/umscamera.cpp
 
-    main/importsettings.cpp # TODO main / backend?
+    main/importsettings.cpp
 )
 
 set(libimportui_SRCS
@@ -82,14 +82,14 @@ include_directories(
 add_library(importuibackend STATIC ${libimportuibackend_SRCS})
 
 target_link_libraries(importuibackend
-                         dmetadata
-                         advancedrename
-                         Qt5::Core
-                         Qt5::Gui
-                         Qt5::Widgets
-                         Qt5::Concurrent
-                         Qt5::Sql
-                         KF5::KDELibs4Support
+                      dmetadata
+                      advancedrename
+
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Widgets
+                      Qt5::Concurrent
+                      Qt5::Sql
 )
 
 if(GPHOTO2_FOUND)
