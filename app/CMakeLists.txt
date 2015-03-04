@@ -192,7 +192,7 @@ if(APPLE)
 endif()
 
 if(${KF5Kipi_FOUND})
-    target_link_libraries(digikamgui KF5::Kipi)
+    target_link_libraries(digikamgui kipiiface)
 endif()
 
 if(${KF5KGeoMap_FOUND}) # fixme hackish

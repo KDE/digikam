@@ -97,7 +97,7 @@ LightTableWindow::LightTableWindow()
       d(new Private)
 {
     setConfigGroupName(QLatin1String("LightTable Settings"));
-    setXMLFile("lighttablewindowui.rc");
+    setXMLFile(QLatin1String("lighttablewindowui.rc"));
 
     m_instance = this;
 
@@ -142,14 +142,14 @@ void LightTableWindow::readSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroupName());
 
-    d->hSplitter->restoreState(group, "Horizontal Splitter State");
-    d->barViewDock->setShouldBeVisible(group.readEntry("Show Thumbbar", true));
-    d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
+    d->hSplitter->restoreState(group, QLatin1String("Horizontal Splitter State"));
+    d->barViewDock->setShouldBeVisible(group.readEntry(QLatin1String("Show Thumbbar"), true));
+    d->navigateByPairAction->setChecked(group.readEntry(QLatin1String("Navigate By Pair"), false));
     slotToggleNavigateByPair();
 
-    d->leftSideBar->setConfigGroup(KConfigGroup(&group, "Left Sidebar"));
+    d->leftSideBar->setConfigGroup(KConfigGroup(&group, QLatin1String("Left Sidebar")));
     d->leftSideBar->loadState();
-    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, QLatin1String("Right Sidebar")));
     d->rightSideBar->loadState();
 
     readFullScreenSettings(group);
@@ -159,14 +159,14 @@ void LightTableWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroupName());
-    d->hSplitter->saveState(group, "Horizontal Splitter State");
-    group.writeEntry("Show Thumbbar", d->barViewDock->shouldBeVisible());
-    group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
-    group.writeEntry("Clear On Close", d->clearOnCloseAction->isChecked());
+    d->hSplitter->saveState(group, QLatin1String("Horizontal Splitter State"));
+    group.writeEntry(QLatin1String("Show Thumbbar"),    d->barViewDock->shouldBeVisible());
+    group.writeEntry(QLatin1String("Navigate By Pair"), d->navigateByPairAction->isChecked());
+    group.writeEntry(QLatin1String("Clear On Close"),   d->clearOnCloseAction->isChecked());
 
-    d->leftSideBar->setConfigGroup(KConfigGroup(&group, "Left Sidebar"));
+    d->leftSideBar->setConfigGroup(KConfigGroup(&group, QLatin1String("Left Sidebar")));
     d->leftSideBar->saveState();
-    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, QLatin1String("Right Sidebar")));
     d->rightSideBar->saveState();
 
     config->sync();
@@ -176,9 +176,9 @@ void LightTableWindow::applySettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroupName());
-    d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel", true);
-    d->autoSyncPreview        = group.readEntry("Auto Sync Preview",     true);
-    d->clearOnCloseAction->setChecked(group.readEntry("Clear On Close", false));
+    d->autoLoadOnRightPanel   = group.readEntry(QLatin1String("Auto Load Right Panel"), true);
+    d->autoSyncPreview        = group.readEntry(QLatin1String("Auto Sync Preview"),     true);
+    d->clearOnCloseAction->setChecked(group.readEntry(QLatin1String("Clear On Close"), false));
     slotApplicationSettingsChanged();
 
     // Restore full screen Mode
@@ -274,7 +274,7 @@ void LightTableWindow::setupUserArea()
 
     // Restore the previous state. This doesn't emit the proper signals to the
     // dock widget, so it has to be manually reinitialized.
-    viewContainer->setAutoSaveSettings("LightTable Thumbbar", true);
+    viewContainer->setAutoSaveSettings(QLatin1String("LightTable Thumbbar"), true);
 
     connect(d->barViewDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbView, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
@@ -535,7 +535,7 @@ void LightTableWindow::setupActions()
     d->showBarAction = d->barViewDock->getToggleAction(this);
     ac->addAction(QLatin1String("lighttable_showthumbbar"), d->showBarAction);
 
-    createFullScreenAction("lighttable_fullscreen");
+    createFullScreenAction(QLatin1String("lighttable_fullscreen"));
     createSidebarActions();
 
     d->slideShowAction = new QAction(QIcon::fromTheme(QLatin1String("view-presentation")), i18n("Slideshow"), this);
@@ -547,13 +547,13 @@ void LightTableWindow::setupActions()
 
     d->leftZoomPlusAction  = buildStdAction(StdZoomInAction, d->previewView, SLOT(slotIncreaseLeftZoom()), this);
     d->leftZoomPlusAction->setEnabled(false);
-    QKeySequence leftKeysPlus(d->leftZoomPlusAction->shortcut(), Qt::Key_Plus);
+    QKeySequence leftKeysPlus(d->leftZoomPlusAction->shortcut()[0], Qt::Key_Plus);
     ac->addAction(QLatin1String("lighttable_zoomplus_left"), d->leftZoomPlusAction);
     ac->setDefaultShortcut(d->leftZoomPlusAction, leftKeysPlus);
 
     d->leftZoomMinusAction  = buildStdAction(StdZoomOutAction, d->previewView, SLOT(slotDecreaseLeftZoom()), this);
     d->leftZoomMinusAction->setEnabled(false);
-    QKeySequence leftKeysMinus(d->leftZoomMinusAction->shortcut(), Qt::Key_Minus);
+    QKeySequence leftKeysMinus(d->leftZoomMinusAction->shortcut()[0], Qt::Key_Minus);
     ac->addAction(QLatin1String("lighttable_zoomminus_left"), d->leftZoomMinusAction);
     ac->setDefaultShortcut(d->leftZoomMinusAction, leftKeysMinus);
 
@@ -571,13 +571,13 @@ void LightTableWindow::setupActions()
 
     d->rightZoomPlusAction  = buildStdAction(StdZoomInAction, d->previewView, SLOT(slotIncreaseRightZoom()), this);
     d->rightZoomPlusAction->setEnabled(false);
-    QKeySequence rightKeysPlus(d->rightZoomPlusAction->shortcut(), Qt::SHIFT + Qt::CTRL + Qt::Key_Plus, Qt::SHIFT + Qt::Key_Plus);
+    QKeySequence rightKeysPlus(d->rightZoomPlusAction->shortcut()[0], Qt::SHIFT + Qt::CTRL + Qt::Key_Plus, Qt::SHIFT + Qt::Key_Plus);
     ac->addAction(QLatin1String("lighttable_zoomplus_right"), d->rightZoomPlusAction);
     ac->setDefaultShortcut(d->rightZoomPlusAction, rightKeysPlus);
 
     d->rightZoomMinusAction  = buildStdAction(StdZoomOutAction, d->previewView, SLOT(slotDecreaseRightZoom()), this);
     d->rightZoomMinusAction->setEnabled(false);
-    QKeySequence rightKeysMinus(d->rightZoomMinusAction->shortcut(), Qt::SHIFT + Qt::CTRL + Qt::Key_Minus, Qt::SHIFT + Qt::Key_Minus);
+    QKeySequence rightKeysMinus(d->rightZoomMinusAction->shortcut()[0], Qt::SHIFT + Qt::CTRL + Qt::Key_Minus, Qt::SHIFT + Qt::Key_Minus);
     ac->addAction(QLatin1String("lighttable_zoomminus_right"), d->rightZoomMinusAction);
     ac->setDefaultShortcut(d->rightZoomMinusAction, rightKeysMinus);
 

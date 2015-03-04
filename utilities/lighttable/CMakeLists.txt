@@ -12,10 +12,12 @@ set(liblighttable_SRCS
 )
 
 add_library(lighttable STATIC ${liblighttable_SRCS})
+
 target_link_libraries(lighttable
+
+                      digikamdatabase
+
                       Qt5::Gui
-                      
-                      kipiiface
 )
-# TODO link against kipi only if kipi found?
+
 install( FILES lighttablewindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )

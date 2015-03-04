@@ -54,7 +54,7 @@ set(libqueuemanager_SRCS
     views/toolsview.cpp
     views/workflowlist.cpp
     main/queuemgrwindow.cpp
-   )
+)
 
 if(JASPER_FOUND)
     set(libqueuemanager_SRCS ${libqueuemanager_SRCS}
@@ -87,14 +87,14 @@ include_directories(
 )
 
 target_include_directories(queuemanager PUBLIC
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/manager>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/manager>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
 )
 
 target_link_libraries(queuemanager
+                      Qt5::Gui
 
-                      KF5::I18n # verify if needed
                       KF5::KExiv2
                       KF5::KDcraw
 )
