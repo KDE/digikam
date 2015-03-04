@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 # Enable C++ Exceptions support, required by pgfutils
 kde_source_files_enable_exceptions(pgfutils.cpp)
 
@@ -11,6 +17,8 @@ add_library(pgfutils STATIC ${libpgfutils_SRCS})
 target_include_directories(pgfutils PUBLIC ${PGF_INCLUDE_DIRS})
 
 target_link_libraries(pgfutils
-                         Qt5::Gui
-                         ${PGF_LIBRARIES}
+                      
+                      Qt5::Gui
+                      
+                      ${PGF_LIBRARIES}
 )

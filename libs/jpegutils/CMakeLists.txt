@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 # Define libjpeg_EXPORTS: kde-win emerged libjpeg uses this define to
 # decide wether to make dllimport (by default) or dllexport. So, we need to export.
 add_definitions(-Dlibjpeg_EXPORTS)
@@ -18,16 +24,18 @@ endif()
 add_library(jpegutils STATIC ${libjpegutils_SRCS})
 
 target_include_directories(jpegutils
-                              PUBLIC
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${DIGIKAM_LIBJPEG_DIR}>
+                           PUBLIC
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${DIGIKAM_LIBJPEG_DIR}>
 )
 
 target_link_libraries(jpegutils
+
                       dimg
                       dmetadata
                       
                       Qt5::Core
                       Qt5::Gui
+
                       ${JPEG_LIBRARIES}
 )

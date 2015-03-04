@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 configure_file(dbconfigversion.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/dbconfigversion.h)
 
 set(libdatabasecore_SRCS
@@ -13,7 +19,7 @@ set(libdatabasecore_SRCS
     core/dbactiontype.cpp
     core/tagregion.cpp
 
-# FIXME moved from app, check
+    # FIXME moved from app, check
     core/dbstatdlg.cpp
     core/scancontroller.cpp
     core/dio.cpp
@@ -94,20 +100,21 @@ add_library(digikamdatabase STATIC ${digikamdatabase_LIB_SRCS})
 
 # TODO clean this up by changing the includes using database to use longer path?
 target_include_directories(digikamdatabase
-                               PUBLIC
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
-                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
+                           PUBLIC
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
 )
 
 target_link_libraries(digikamdatabase
+
                       dmetadata
                       digikamwidgets
                       

@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 set(libdialogs_SRCS
     dprogressdlg.cpp
     dbusydlg.cpp
@@ -22,16 +28,16 @@ endif()
 add_library(digikamdialogs STATIC ${libdialogs_SRCS} ${libdeletedialog_SRCS})
 
 target_link_libraries(digikamdialogs
-                      
+
+                      digikamdatabase # migrationdlg needs this
+                      versionmanager  # migrationdlg needs this too
+                      threadimageio   # loadingdescription for imagedialog
+                      dmetadata
+
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
                       Qt5::Sql # for databaseurl
                       
                       KF5::KDcraw
-
-                      digikamdatabase # migrationdlg needs this
-                      versionmanager  # migrationdlg needs this too
-                      threadimageio   # loadingdescription for imagedialog
-                      dmetadata
 )

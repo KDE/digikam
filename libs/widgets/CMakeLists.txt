@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 set(libcommonwidgets_SRCS
     common/abstractitemdragdrophandler.cpp
     common/buttonicondisabler.cpp
@@ -111,17 +117,18 @@ add_library(digikamwidgets STATIC
 add_dependencies(digikamwidgets digikam-gitversion) # splashscreen shows version
 
 target_include_directories(digikamwidgets
-                              PUBLIC
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/colorchooser>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/mainview>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/itemview>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/graphicsview>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/iccprofiles>
+                           PUBLIC
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/colorchooser>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/mainview>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/itemview>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/graphicsview>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/iccprofiles>
 )
 
 target_link_libraries(digikamwidgets
+
                       digikamdialogs # for libsinfodlg
                       dimg
                       digikammodels

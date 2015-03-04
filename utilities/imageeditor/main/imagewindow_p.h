@@ -45,7 +45,7 @@ public:
             return loc.albumRootPath();
         }
 
-        return "/";
+        return QLatin1String("/");
     }
 };
 
@@ -166,8 +166,8 @@ public:
     DatabaseVersionManager    versionManager;
 };
 
-const QString ImageWindow::Private::configShowThumbbarEntry("Show Thumbbar");
-const QString ImageWindow::Private::configHorizontalThumbbarEntry("HorizontalThumbbar");
+const QString ImageWindow::Private::configShowThumbbarEntry(QLatin1String("Show Thumbbar"));
+const QString ImageWindow::Private::configHorizontalThumbbarEntry(QLatin1String("HorizontalThumbbar"));
 
 }  // namespace Digikam
 

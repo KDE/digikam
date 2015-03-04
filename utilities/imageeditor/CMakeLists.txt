@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 set(libeditorplugin_SRCS
     plugin/imageiface.cpp
     plugin/imageplugin.cpp
@@ -5,11 +11,13 @@ set(libeditorplugin_SRCS
 )
 
 add_library(editorplugin STATIC ${libeditorplugin_SRCS})
+
 target_link_libraries(editorplugin
-                         dimg
+                      dimg
 )
+
 target_include_directories(editorplugin INTERFACE
-                               "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plugin>"
+                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plugin>"
 )
 
 install(FILES plugin/digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

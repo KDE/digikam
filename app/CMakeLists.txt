@@ -169,6 +169,7 @@ target_link_libraries(digikamgui
                       Qt5::Widgets
                       Qt5::Sql
                       Qt5::WebKitWidgets
+                      Qt5::PrintSupport
 
                       KF5::Solid
                       KF5::KIOCore

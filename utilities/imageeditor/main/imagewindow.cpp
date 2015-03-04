@@ -145,9 +145,10 @@ bool ImageWindow::imageWindowCreated()
 }
 
 ImageWindow::ImageWindow()
-    : EditorWindow("Image Editor"), d(new Private)
+    : EditorWindow("Image Editor"),
+      d(new Private)
 {
-    setXMLFile("digikamimagewindowui.rc");
+    setXMLFile(QLatin1String("digikamimagewindowui.rc"));
 
     m_instance = this;
     // We don't want to be deleted on close
@@ -188,11 +189,11 @@ ImageWindow::ImageWindow()
     applyMainWindowSettings(group);
     d->thumbBarDock->setShouldBeVisible(group.readEntry(d->configShowThumbbarEntry, false));
     setAutoSaveSettings(configGroupName(), true);
-    d->viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
+    d->viewContainer->setAutoSaveSettings(QLatin1String("ImageViewer Thumbbar"), true);
 
     //-------------------------------------------------------------
 
-    d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
+    d->rightSideBar->setConfigGroup(KConfigGroup(&group, QLatin1String("Right Sidebar")));
     d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
 
@@ -958,7 +959,7 @@ void ImageWindow::saveIsComplete()
     d->currentImageInfo.setOrientation(meta.getImageOrientation());
 
     // Pop-up a message to bring user when save is done.
-    DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+    DNotificationWrapper(QLatin1String("editorsavefilecompleted"), i18n("Image saved successfully"),
                          this, windowTitle());
 
     resetOrigin();
@@ -1056,7 +1057,7 @@ void ImageWindow::saveAsIsComplete()
     slotUpdateItemInfo();
 
     // Pop-up a message to bring user when save is done.
-    DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+    DNotificationWrapper(QLatin1String("editorsavefilecompleted"), i18n("Image saved successfully"),
                          this, windowTitle());
 }
 
@@ -1579,9 +1580,9 @@ void ImageWindow::slotOpenOriginal()
     {
         QUrl url;
         url = url.adjusted(QUrl::StripTrailingSlash);
-        url.setPath(url.path() + '/' + (id.m_filePath));
+        url.setPath(url.path() + QLatin1Char('/') + (id.m_filePath));
         url = url.adjusted(QUrl::StripTrailingSlash);
-        url.setPath(url.path() + '/' + (id.m_fileName));
+        url.setPath(url.path() + QLatin1Char('/') + (id.m_fileName));
         imageInfos << ImageInfo::fromUrl(url);
     }
 
