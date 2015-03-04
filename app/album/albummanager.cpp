@@ -2524,7 +2524,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
 
     if (!newParent)
     {
-        errMsg = "Attempt to move TAlbum to nowhere";
+        errMsg = i18n("Attempt to move TAlbum to nowhere");
         return false;
     }
 
