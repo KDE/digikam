@@ -26,7 +26,9 @@ set(libtags_SRCS
     tagsmanager/models/tagmngrlistitem.cpp
 )
 
-include_directories(tagsmanager/ tagsmanager/models/)
+include_directories(tagsmanager/
+                    tagsmanager/models/
+)
 
 add_library(digikamtags STATIC ${libtags_SRCS})
 

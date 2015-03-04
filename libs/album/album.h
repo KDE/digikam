@@ -30,11 +30,12 @@
 
 // Qt includes
 
-#include <QtGlobal>
+#include <QMetaType>
 #include <QList>
 #include <QString>
 #include <QMap>
 #include <QUrl>
+#include <QObject>
 
 // Local includes
 

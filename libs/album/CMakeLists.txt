@@ -5,9 +5,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 set(libalbum_SRCS
-    album.cpp
     albumhistory.cpp
-    albummanager.cpp
     albummodificationhelper.cpp
     albumpropsedit.cpp
     albumselectors.cpp
@@ -19,6 +17,8 @@ set(libalbum_SRCS
     albumtreeview.cpp
     albumwatch.cpp
     albumlabelstreeview.cpp
+    album.cpp
+    albummanager.cpp
 )
 
 add_library(digikamalbum STATIC ${libalbum_SRCS})
@@ -28,8 +28,4 @@ target_link_libraries(digikamalbum
                       digikamdatabase
                       setup            # for setupcollections.h, FIXME
                       digikamwidgets   # for fullscreensettings
-
-                      Qt5::Core
-
-                      KF5::I18n
 )

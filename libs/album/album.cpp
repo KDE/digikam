@@ -27,7 +27,7 @@
 
 // KDE includes
 
-//#include <klocalizedstring.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
@@ -336,7 +336,7 @@ PAlbum::PAlbum(const QString& title)
     setTitle(title);
     m_isAlbumRootAlbum = false;
     m_albumRootId      = -1;
-    m_parentPath       = '/';
+    m_parentPath       = QLatin1Char('/');
     m_path.clear();
 }
 
@@ -348,7 +348,7 @@ PAlbum::PAlbum(int albumRoot, const QString& label)
     setTitle(label);
     m_albumRootId      = albumRoot;
     m_isAlbumRootAlbum = true;
-    m_parentPath       = '/';
+    m_parentPath       = QLatin1Char('/');
     m_path.clear();
 }
 
@@ -360,7 +360,7 @@ PAlbum::PAlbum(int albumRoot, const QString& parentPath, const QString& title, i
     setTitle(title);
     m_albumRootId      = albumRoot;
     m_isAlbumRootAlbum = false;
-    m_parentPath       = parentPath + '/';
+    m_parentPath       = parentPath + QLatin1Char('/');
     m_path             = title;
     m_date             = QDate::currentDate();
 }
@@ -435,9 +435,9 @@ DatabaseUrl PAlbum::databaseUrl() const
 
 QString PAlbum::prettyUrl() const
 {
-    QString u = i18n("Albums") + albumRootPath().section('/', -1, -1, QString::SectionIncludeLeadingSep) + albumPath();
+    QString u = i18n("Albums") + albumRootPath().section(QLatin1Char('/'), -1, -1, QString::SectionIncludeLeadingSep) + albumPath();
 
-    if (u.endsWith('/'))
+    if (u.endsWith(QLatin1Char('/')))
         u.truncate(u.length() - 1);
 
     return u;
@@ -475,7 +475,7 @@ QString TAlbum::tagPath(bool leadingSlash) const
 {
     if (isRoot())
     {
-        return leadingSlash ? "/" : "";
+        return leadingSlash ? QLatin1String("/") : QLatin1String("");
     }
 
     QString u;
@@ -486,7 +486,7 @@ QString TAlbum::tagPath(bool leadingSlash) const
 
         if (!parent()->isRoot())
         {
-            u += '/';
+            u += QLatin1Char('/');
         }
     }
 
@@ -566,11 +566,11 @@ DAlbum::DAlbum(const QDate& date, bool root, Range range)
 
     if (m_range == Month)
     {
-        dateTitle = m_date.toString("MMMM yyyy");
+        dateTitle = m_date.toString(QLatin1String("MMMM yyyy"));
     }
     else
     {
-        dateTitle = m_date.toString("yyyy");
+        dateTitle = m_date.toString(QLatin1String("yyyy"));
     }
 
     setTitle(dateTitle);
@@ -737,25 +737,25 @@ QString SAlbum::getTemporaryTitle(DatabaseSearch::Type type, DatabaseSearch::Haa
     switch (type)
     {
         case DatabaseSearch::TimeLineSearch:
-            return "_Current_Time_Line_Search_";
+            return QLatin1String("_Current_Time_Line_Search_");
 
         case DatabaseSearch::HaarSearch:
             return getTemporaryHaarTitle(haarType);
 
         case DatabaseSearch::MapSearch:
-            return "_Current_Map_Search_";
+            return QLatin1String("_Current_Map_Search_");
 
         case DatabaseSearch::KeywordSearch:
         case DatabaseSearch::AdvancedSearch:
         case DatabaseSearch::LegacyUrlSearch:
-            return "_Current_Search_View_Search_";
+            return QLatin1String("_Current_Search_View_Search_");
 
         case DatabaseSearch::DuplicatesSearch:
-            return "_Current_Duplicates_Search_";
+            return QLatin1String("_Current_Duplicates_Search_");
 
         default:
             qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated temporary search type " << type;
-            return "_Current_Unknown_Search_";
+            return QLatin1String("_Current_Unknown_Search_");
     }
 }
 
@@ -764,14 +764,14 @@ QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
     switch (haarType)
     {
         case DatabaseSearch::HaarImageSearch:
-            return "_Current_Fuzzy_Image_Search_";
+            return QLatin1String("_Current_Fuzzy_Image_Search_");
 
         case DatabaseSearch::HaarSketchSearch:
-            return "_Current_Fuzzy_Sketch_Search_";
+            return QLatin1String("_Current_Fuzzy_Sketch_Search_");
 
         default:
             qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated temporary haar search type " << haarType;
-            return "_Current_Unknown_Haar_Search_";
+            return QLatin1String("_Current_Unknown_Haar_Search_");
     }
 }
 
