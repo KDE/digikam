@@ -156,7 +156,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumT
     d->albumTreeView->setEnableContextMenu(true);
     d->albumTreeView->setSortingEnabled(true);
     d->albumTreeView->setConfigGroup(group);
-    d->albumTreeView->setEntryPrefix("AlbumTreeView");
+    d->albumTreeView->setEntryPrefix(QLatin1String("AlbumTreeView"));
 
     d->searchBar   = new SearchTextBar(this, QLatin1String("AlbumSelectWidgetSearchBar"));
     d->searchBar->setModel(d->albumModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);

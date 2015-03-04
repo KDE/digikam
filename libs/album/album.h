@@ -30,6 +30,7 @@
 
 // Qt includes
 
+#include <QtGlobal>
 #include <QList>
 #include <QString>
 #include <QMap>

@@ -74,7 +74,8 @@ public:
 };
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* const parent, PAlbum* const albumToSelect, const QString& header)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     setWindowTitle(i18n("Select Album"));
 
@@ -86,7 +87,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* const parent, PAlbum* const albumT
     QWidget* const page     = new QWidget(this);
     QGridLayout* const grid = new QGridLayout(page);
     QLabel* const logo      = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                     .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const message   = new QLabel(page);
@@ -175,7 +176,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* const parent, PAlbum* const albu
 
 void AlbumSelectDialog::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("targetalbumdialog.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("targetalbumdialog.anchor"), QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

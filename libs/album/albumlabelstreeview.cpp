@@ -87,10 +87,10 @@ public:
     static const QString       configExpansionEntry;
 };
 
-const QString AlbumLabelsTreeView::Private::configRatingSelectionEntry("RatingSelection");
-const QString AlbumLabelsTreeView::Private::configPickSelectionEntry("PickSelection");
-const QString AlbumLabelsTreeView::Private::configColorSelectionEntry("ColorSelection");
-const QString AlbumLabelsTreeView::Private::configExpansionEntry("Expansion");
+const QString AlbumLabelsTreeView::Private::configRatingSelectionEntry(QLatin1String("RatingSelection"));
+const QString AlbumLabelsTreeView::Private::configPickSelectionEntry(QLatin1String("PickSelection"));
+const QString AlbumLabelsTreeView::Private::configColorSelectionEntry(QLatin1String("ColorSelection"));
+const QString AlbumLabelsTreeView::Private::configExpansionEntry(QLatin1String("Expansion"));
 
 AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckable) :
     QTreeWidget(parent), StateSavingObject(this), d(new Private)
@@ -104,13 +104,13 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckabl
     setUniformRowHeights(false);
     initTreeView();
 
-    if(d->isCheckableTreeView)
+    if (d->isCheckableTreeView)
     {
         QTreeWidgetItemIterator it(this);
 
-        while(*it)
+        while (*it)
         {
-            if((*it)->parent())
+            if ((*it)->parent())
             {
                 (*it)->setFlags((*it)->flags()|Qt::ItemIsUserCheckable);
                 (*it)->setCheckState(0, Qt::Unchecked);
@@ -371,10 +371,10 @@ void AlbumLabelsTreeView::initPicksTree()
                  << i18n("Accepted Item");
 
     QStringList pickSetIcons;
-    pickSetIcons << "flag-black"
-                 << "flag-red"
-                 << "flag-yellow"
-                 << "flag-green";
+    pickSetIcons << QLatin1String("flag-black")
+                 << QLatin1String("flag-red")
+                 << QLatin1String("flag-yellow")
+                 << QLatin1String("flag-green");
 
     foreach (QString pick, pickSetNames)
     {
@@ -398,11 +398,11 @@ void AlbumLabelsTreeView::initColorsTree()
     noColor->setIcon(0, QIcon::fromTheme(QLatin1String("emblem-unmounted")));
 
     QStringList colorSet;
-    colorSet << "red"      << "orange"
-             << "yellow"   << "darkgreen"
-             << "darkblue" << "magenta"
-             << "darkgray" << "black"
-             << "white";
+    colorSet << QLatin1String("red")      << QLatin1String("orange")
+             << QLatin1String("yellow")   << QLatin1String("darkgreen")
+             << QLatin1String("darkblue") << QLatin1String("magenta")
+             << QLatin1String("darkgray") << QLatin1String("black")
+             << QLatin1String("white");
 
     QStringList colorSetNames;
     colorSetNames << i18n("Red")    << i18n("Orange")
@@ -496,8 +496,8 @@ public:
         restoringSelectionFromHistory(0),
         currentXmlIsEmpty(0),
         albumForSelectedItems(0)
-    {}
-
+    {  
+    }
 
     AlbumLabelsTreeView* treeWidget;
     bool                 restoringSelectionFromHistory;
@@ -508,8 +508,8 @@ public:
     QList<QUrl>           urlListForSelectedAlbum;
 };
 
-AlbumLabelsSearchHandler::AlbumLabelsSearchHandler(AlbumLabelsTreeView* const treeWidget) :
-    d(new Private)
+AlbumLabelsSearchHandler::AlbumLabelsSearchHandler(AlbumLabelsTreeView* const treeWidget)
+    : d(new Private)
 {
     d->treeWidget = treeWidget;
 
@@ -594,11 +594,11 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<Album
         foreach (int val, ratings)
         {
             writer.writeGroup();
-            writer.writeField("rating", SearchXml::Equal);
+            writer.writeField(QLatin1String("rating"), SearchXml::Equal);
             writer.writeValue(val);
             writer.finishField();
 
-            writer.writeField("tagid",SearchXml::InTree);
+            writer.writeField(QLatin1String("tagid"), SearchXml::InTree);
             writer.writeValue(colorsAndPicks);
             writer.finishField();
 
@@ -610,7 +610,7 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<Album
         foreach (int rate, ratings)
         {
             writer.writeGroup();
-            writer.writeField("rating", SearchXml::Equal);
+            writer.writeField(QLatin1String("rating"), SearchXml::Equal);
             writer.writeValue(rate);
             writer.finishField();
             writer.finishGroup();
@@ -619,7 +619,7 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<Album
     else if(!colorsAndPicks.isEmpty())
     {
         writer.writeGroup();
-        writer.writeField("tagid",SearchXml::InTree);
+        writer.writeField(QLatin1String("tagid"), SearchXml::InTree);
         writer.writeValue(colorsAndPicks);
         writer.finishField();
         writer.finishGroup();
@@ -713,7 +713,7 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& r
 
             if(it.hasNext())
             {
-                ratingsString +=", ";
+                ratingsString += QLatin1String(", ");
             }
         }
     }
@@ -764,7 +764,7 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& r
 
             if(it.hasNext())
             {
-                colorsString +=", ";
+                colorsString += QLatin1String(", ");
             }
         }
     }
@@ -797,11 +797,10 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& r
 
             if(it.hasNext())
             {
-                picksString +=", ";
+                picksString += QLatin1String(", ");
             }
         }
     }
-
 
     if(ratingsString.isEmpty() && picksString.isEmpty())
     {
@@ -817,19 +816,19 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& r
     }
     else if(ratingsString.isEmpty())
     {
-        name = picksString + " | " + colorsString;
+        name = picksString + QLatin1String(" | ") + colorsString;
     }
     else if(picksString.isEmpty())
     {
-        name = ratingsString + " | " + colorsString;
+        name = ratingsString + QLatin1String(" | ") + colorsString;
     }
     else if(colorsString.isEmpty())
     {
-        name = ratingsString + " | " + picksString;
+        name = ratingsString + QLatin1String(" | ") + picksString;
     }
     else
     {
-        name = ratingsString + " | " + picksString + " | " + colorsString;
+        name = ratingsString + QLatin1String(" | ") + picksString + QLatin1String(" | ") + colorsString;
     }
 
     d->generatedAlbumName = name;
@@ -840,7 +839,7 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
 {
     QUrl url = d->albumForSelectedItems->databaseUrl();
     KIO::TransferJob* const job = ImageLister::startListJob(url);
-    job->addMetaData("listAlbumsRecursively", "true");
+    job->addMetaData(QLatin1String("listAlbumsRecursively"), QLatin1String("true"));
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotResult(KJob*)));

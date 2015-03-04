@@ -71,7 +71,8 @@ public:
 };
 
 AlbumSelectComboBox::AlbumSelectComboBox(QWidget* const parent)
-    : TreeViewLineEditComboBox(parent), d(new Private(this))
+    : TreeViewLineEditComboBox(parent),
+      d(new Private(this))
 {
     d->noSelectionText = i18n("No Album Selected");
 }
@@ -279,14 +280,15 @@ void AlbumSelectComboBox::updateText()
     }
     else
     {
-        setLineEditText(newIncludeText + ", " + newExcludeText);
+        setLineEditText(newIncludeText + QLatin1String(", ") + newExcludeText);
     }
 }
 
 // ---------------------------------------------------------------------------------------------------
 
 AbstractAlbumTreeViewSelectComboBox::AbstractAlbumTreeViewSelectComboBox(QWidget* const parent)
-    : AlbumSelectComboBox(parent), m_treeView(0)
+    : AlbumSelectComboBox(parent),
+      m_treeView(0)
 {
 }
 

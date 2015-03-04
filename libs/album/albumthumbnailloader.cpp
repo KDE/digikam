@@ -47,8 +47,8 @@
 namespace Digikam
 {
 
-typedef QMap<qlonglong, QList<int> >           IdAlbumMap;
-typedef QMap<int, QPixmap>                     AlbumThumbnailMap;
+typedef QMap<qlonglong, QList<int> > IdAlbumMap;
+typedef QMap<int, QPixmap>           AlbumThumbnailMap;
 
 class AlbumThumbnailLoaderCreator
 {
@@ -134,12 +134,12 @@ void AlbumThumbnailLoader::cleanUp()
 
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(RelativeSize relativeSize)
 {
-    return loadIcon("tag", computeIconSize(relativeSize));
+    return loadIcon(QLatin1String("tag"), computeIconSize(relativeSize));
 }
 
 QPixmap AlbumThumbnailLoader::getStandardTagRootIcon(RelativeSize relativeSize)
 {
-    return loadIcon("tag-folder", computeIconSize(relativeSize));
+    return loadIcon(QLatin1String("tag-folder"), computeIconSize(relativeSize));
 }
 
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum* const album, RelativeSize relativeSize)
@@ -156,17 +156,17 @@ QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum* const album, RelativeSi
 
 QPixmap AlbumThumbnailLoader::getNewTagIcon(RelativeSize relativeSize)
 {
-    return loadIcon("tag-new", computeIconSize(relativeSize));
+    return loadIcon(QLatin1String("tag-new"), computeIconSize(relativeSize));
 }
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(RelativeSize relativeSize)
 {
-    return loadIcon("folder", computeIconSize(relativeSize));
+    return loadIcon(QLatin1String("folder"), computeIconSize(relativeSize));
 }
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(RelativeSize relativeSize)
 {
-    return loadIcon("folder-image", computeIconSize(relativeSize));
+    return loadIcon(QLatin1String("folder-image"), computeIconSize(relativeSize));
 }
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum* const album, RelativeSize relativeSize)

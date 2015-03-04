@@ -55,7 +55,8 @@ public:
 
     explicit ModelClearButton(AbstractCheckableAlbumModel* const model)
     {
-        setPixmap(QIcon::fromTheme(qApp->isLeftToRight() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
+        setPixmap(QIcon::fromTheme(qApp->isLeftToRight() ? QLatin1String("edit-clear-locationbar-rtl")
+                                                         : QLatin1String("edit-clear-locationbar-ltr")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
         stayVisibleWhenAnimatedOut(true);
 
         connect(this, SIGNAL(clicked()),
@@ -94,8 +95,8 @@ public:
     ModelClearButton*            tagClearButton;
 };
 
-const QString AlbumSelectors::Private::configUseWholePAlbumsEntry("UseWholePAlbumsEntry");
-const QString AlbumSelectors::Private::configUseWholeTAlbumsEntry("UseWholeTAlbumsEntry");
+const QString AlbumSelectors::Private::configUseWholePAlbumsEntry(QLatin1String("UseWholePAlbumsEntry"));
+const QString AlbumSelectors::Private::configUseWholeTAlbumsEntry(QLatin1String("UseWholeTAlbumsEntry"));
 
 AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent)
     : QWidget(parent), d(new Private)
@@ -149,10 +150,10 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
 
     setObjectName(d->configName);
     d->albumSelectCB->view()->setObjectName(d->configName);
-    d->albumSelectCB->view()->setEntryPrefix("AlbumComboBox-");
+    d->albumSelectCB->view()->setEntryPrefix(QLatin1String("AlbumComboBox-"));
     d->albumSelectCB->view()->setRestoreCheckState(true);
     d->tagSelectCB->view()->setObjectName(d->configName);
-    d->tagSelectCB->view()->setEntryPrefix("TagComboBox-");
+    d->tagSelectCB->view()->setEntryPrefix(QLatin1String("TagComboBox-"));
     d->tagSelectCB->view()->setRestoreCheckState(true);
 }
 

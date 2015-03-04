@@ -190,16 +190,17 @@ public:
     static const QString      configSortOrderEntry;
 };
 
-const QString AbstractAlbumTreeView::Private::configSelectionEntry("Selection");
-const QString AbstractAlbumTreeView::Private::configExpansionEntry("Expansion");
-const QString AbstractAlbumTreeView::Private::configCurrentIndexEntry("CurrentIndex");
-const QString AbstractAlbumTreeView::Private::configSortColumnEntry("SortColumn");
-const QString AbstractAlbumTreeView::Private::configSortOrderEntry("SortOrder");
+const QString AbstractAlbumTreeView::Private::configSelectionEntry(QLatin1String("Selection"));
+const QString AbstractAlbumTreeView::Private::configExpansionEntry(QLatin1String("Expansion"));
+const QString AbstractAlbumTreeView::Private::configCurrentIndexEntry(QLatin1String("CurrentIndex"));
+const QString AbstractAlbumTreeView::Private::configSortColumnEntry(QLatin1String("SortColumn"));
+const QString AbstractAlbumTreeView::Private::configSortOrderEntry(QLatin1String("SortOrder"));
 
 // --------------------------------------------------------
 
 AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* const parent, Flags flags)
-    : QTreeView(parent), StateSavingObject(this),
+    : QTreeView(parent),
+      StateSavingObject(this),
       m_albumModel(0),
       m_albumFilterModel(0),
       m_dragDropHandler(0),
@@ -1254,9 +1255,9 @@ public:
     QList<int>           partiallyCheckedAlbumIds;
 };
 
-const QString AbstractCheckableAlbumTreeView::Private::configCheckedAlbumsEntry("Checked");
-const QString AbstractCheckableAlbumTreeView::Private::configPartiallyCheckedAlbumsEntry("PartiallyChecked");
-const QString AbstractCheckableAlbumTreeView::Private::configRestoreCheckedEntry("RestoreChecked");
+const QString AbstractCheckableAlbumTreeView::Private::configCheckedAlbumsEntry(QLatin1String("Checked"));
+const QString AbstractCheckableAlbumTreeView::Private::configPartiallyCheckedAlbumsEntry(QLatin1String("PartiallyChecked"));
+const QString AbstractCheckableAlbumTreeView::Private::configRestoreCheckedEntry(QLatin1String("RestoreChecked"));
 
 // --------------------------------------------------------
 
@@ -1546,7 +1547,8 @@ void AlbumTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
 // -------------------------------------------------------------------------------------------------------
 
 TagTreeView::TagTreeView(QWidget* const parent, Flags flags)
-    : AbstractCheckableAlbumTreeView(parent, flags), m_filteredModel(0)
+    : AbstractCheckableAlbumTreeView(parent, flags),
+      m_filteredModel(0)
 {
     m_modificationHelper = new TagModificationHelper(this, this);
     setRootIsDecorated(true);
@@ -1660,7 +1662,8 @@ void TagTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
 // --------------------------------------------------------------------------------------
 
 SearchTreeView::SearchTreeView(QWidget* const parent, Flags flags)
-    : AbstractCheckableAlbumTreeView(parent, flags), m_filteredModel(0)
+    : AbstractCheckableAlbumTreeView(parent, flags),
+      m_filteredModel(0)
 {
     setRootIsDecorated(false);
 

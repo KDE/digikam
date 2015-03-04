@@ -119,7 +119,8 @@ public:
 };
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
-    : QDialog(0), d(new Private)
+    : QDialog(0),
+      d(new Private)
 {
     setModal(true);
     setWindowTitle(create ? i18n("New Album") : i18n("Edit Album"));
@@ -130,7 +131,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     d->album            = album;
     QWidget* const page = new QWidget(this);
     QLabel* const logo  = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const topLabel = new QLabel(page);
@@ -158,7 +159,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     d->titleEdit->setClearButtonEnabled(true);
     titleLabel->setBuddy(d->titleEdit);
 
-    QRegExp titleRx("[^/]+");
+    QRegExp titleRx(QLatin1String("[^/]+"));
     QValidator* const titleValidator = new QRegExpValidator(titleRx, this);
     d->titleEdit->setValidator(titleValidator);
 
@@ -411,7 +412,7 @@ bool AlbumPropsEdit::createNew(PAlbum* const parent, QString& title, QString& co
 
 void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
 {
-    QRegExp emptyTitle = QRegExp("^\\s*$");
+    QRegExp emptyTitle = QRegExp(QLatin1String("^\\s*$"));
     bool enable        = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
     d->buttons->button(QDialogButtonBox::Ok)->setEnabled(enable);
 }
@@ -460,13 +461,12 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
     {
         QMessageBox::critical(this, i18n("Could Not Calculate Average"),
                                     i18n("Could not calculate date average for this album."));
-
     }
 }
 
 void AlbumPropsEdit::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("albumpropsedit.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("albumpropsedit.anchor"), QLatin1String("digikam"));
 }
 
 }  // namespace Digikam

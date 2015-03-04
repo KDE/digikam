@@ -208,9 +208,9 @@ void AlbumWatch::clear()
 
     if (d->connectedToKIO)
     {
-        QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FileMoved",    0, 0);
-        QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded",   0, 0);
-        QDBusConnection::sessionBus().disconnect(QString(), QString(), "org.kde.KDirNotify", "FilesRemoved", 0, 0);
+        QDBusConnection::sessionBus().disconnect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FileMoved"),    0, 0);
+        QDBusConnection::sessionBus().disconnect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesAdded"),   0, 0);
+        QDBusConnection::sessionBus().disconnect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesRemoved"), 0, 0);
 
         d->connectedToKIO = false;
     }
@@ -226,13 +226,14 @@ void AlbumWatch::setDatabaseParameters(const DatabaseParameters& params)
     d->params = params;
 
     d->fileNameBlackList.clear();
+
     // filter out notifications caused by database operations
     if (params.isSQLite())
     {
-        d->fileNameBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+        d->fileNameBlackList << QLatin1String("thumbnails-digikam.db") << QLatin1String("thumbnails-digikam.db-journal");
 
         QFileInfo dbFile(params.SQLiteDatabaseFile());
-        d->fileNameBlackList << dbFile.fileName() << dbFile.fileName() + "-journal";
+        d->fileNameBlackList << dbFile.fileName() << dbFile.fileName() + QLatin1String("-journal");
 
         // ensure this is done after setting up the black list
         d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
@@ -246,14 +247,16 @@ void AlbumWatch::slotAlbumAdded(Album* a)
         return;
     }
 
-    PAlbum* album = static_cast<PAlbum*>(a);
-
+    PAlbum* const album         = static_cast<PAlbum*>(a);
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootId(album->albumRootId());
+
     if (!location.isAvailable())
     {
         return;
     }
+
     QString dir = album->folderPath();
+
     if (dir.isEmpty())
     {
         return;
@@ -294,8 +297,9 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
         return;
     }
 
-    PAlbum* album = static_cast<PAlbum*>(a);
-    QString dir = album->folderPath();
+    PAlbum* const album = static_cast<PAlbum*>(a);
+    QString dir         = album->folderPath();
+
     if (dir.isEmpty())
     {
         return;
@@ -399,6 +403,7 @@ void AlbumWatch::rescanPath(const QString& path)
     {
         return;
     }
+
     QUrl url(path);
     rescanDirectory(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
 }
@@ -420,6 +425,7 @@ QList<QDateTime> AlbumWatch::Private::buildDirectoryModList(const QFileInfo& dbF
             modList << info.lastModified();
         }
     }
+
     return modList;
 }
 
@@ -458,19 +464,19 @@ void AlbumWatch::connectToKDirWatch()
     d->dirWatch = new KDirWatch(this);
 
     KDirWatch::Method m = d->dirWatch->internalMethod();
-    QString           mName("FAM");
+    QString mName     = QLatin1String("FAM");
 
     if (m == KDirWatch::QFSWatch)
     {
-        mName = QString("QFSWatch");
+        mName = QLatin1String("QFSWatch");
     }
     else if (m == KDirWatch::Stat)
     {
-        mName = QString("Stat");
+        mName = QLatin1String("Stat");
     }
     else if (m == KDirWatch::INotify)
     {
-        mName = QString("INotify");
+        mName = QLatin1String("INotify");
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "KDirWatch method = " << mName;
@@ -489,11 +495,11 @@ void AlbumWatch::connectToKIO()
         return;
     }
 
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FileMoved",
+    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FileMoved"),
                                           this, SLOT(slotKioFileMoved(QString,QString)));
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FilesAdded",
+    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesAdded"),
                                           this, SLOT(slotKioFilesAdded(QString)));
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify", "FilesRemoved",
+    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesRemoved"),
                                           this, SLOT(slotKioFilesDeleted(QStringList)));
 
     d->connectedToKIO = true;
