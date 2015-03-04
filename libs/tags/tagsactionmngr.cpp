@@ -75,10 +75,10 @@ class TagsActionMngr::Private
 public:
 
     Private()
-        : ratingShortcutPrefix("rateshortcut"),
-          tagShortcutPrefix("tagshortcut"),
-          pickShortcutPrefix("pickshortcut"),
-          colorShortcutPrefix("colorshortcut")
+        : ratingShortcutPrefix(QLatin1String("rateshortcut")),
+          tagShortcutPrefix(QLatin1String("tagshortcut")),
+          pickShortcutPrefix(QLatin1String("pickshortcut")),
+          colorShortcutPrefix(QLatin1String("colorshortcut"))
     {
     }
 
@@ -94,7 +94,8 @@ public:
 // -------------------------------------------------------------------------------------------------
 
 TagsActionMngr::TagsActionMngr(QWidget* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
     if (!m_defaultManager)
     {
@@ -206,9 +207,9 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* const ac, int
 {
     if (ac)
     {
-        QAction* const action = ac->addAction(QString("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
+        QAction* const action = ac->addAction(QString::fromUtf8("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
         action->setText(i18n("Assign Rating \"%1 Star\"", rating));
-        ac->setDefaultShortcut(action, QKeySequence(QString("CTRL+%1").arg(rating)));
+        ac->setDefaultShortcut(action, QKeySequence(QString::fromUtf8("CTRL+%1").arg(rating)));
 #pragma message("PORT QT5")
 /*
         action->forgetGlobalShortcut();
@@ -229,9 +230,9 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* const ac, 
 {
     if (ac)
     {
-        QAction* const action = ac->addAction(QString("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
+        QAction* const action = ac->addAction(QString::fromUtf8("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
         action->setText(i18n("Assign Pick Label \"%1\"", PickLabelWidget::labelPickName((PickLabel)pickId)));
-        ac->setDefaultShortcut(action, QKeySequence(QString("ALT+%1").arg(pickId)));
+        ac->setDefaultShortcut(action, QKeySequence(QString::fromUtf8("ALT+%1").arg(pickId)));
 #pragma message("PORT QT5")
 /*
         action->forgetGlobalShortcut();
@@ -252,9 +253,9 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* const ac,
 {
     if (ac)
     {
-        QAction* const action = ac->addAction(QString("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
+        QAction* const action = ac->addAction(QString::fromUtf8("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
         action->setText(i18n("Assign Color Label \"%1\"", ColorLabelWidget::labelColorName((ColorLabel)colorId)));
-        ac->setDefaultShortcut(action, QKeySequence(QString("ALT+CTRL+%1").arg(colorId)));
+        ac->setDefaultShortcut(action, QKeySequence(QString::fromUtf8("ALT+CTRL+%1").arg(colorId)));
 #pragma message("PORT QT5")
 /*
         action->forgetGlobalShortcut();
@@ -302,7 +303,7 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
 
     foreach(KActionCollection* const ac, d->actionCollectionList)
     {
-        QAction* const action = ac->addAction(QString("%1-%2").arg(d->tagShortcutPrefix).arg(tagId));
+        QAction* const action = ac->addAction(QString::fromUtf8("%1-%2").arg(d->tagShortcutPrefix).arg(tagId));
         action->setText(i18n("Assign Tag \"%1\"", talbum->title()));
         action->setParent(this);
         ac->setDefaultShortcut(action, ks);

@@ -42,6 +42,7 @@ public:
 
     explicit TagMngrListView(QWidget* const parent = 0);
     QModelIndexList mySelectedIndexes();
+
 protected:
 
     /**
@@ -59,7 +60,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent* event);
 
 
-public slots:
+public Q_SLOTS:
 
     /**
      * @brief slotDeleteSelected - delete selected item from Quick Access List

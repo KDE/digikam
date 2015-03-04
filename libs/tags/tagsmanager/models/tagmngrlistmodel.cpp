@@ -56,10 +56,11 @@ public:
 };
 
 TagMngrListModel::TagMngrListModel(QObject* const parent)
-    : QAbstractItemModel(parent), d(new Private())
+    : QAbstractItemModel(parent),
+      d(new Private())
 {
     QList<QVariant> rootData;
-    rootData << "Quick List";
+    rootData << QLatin1String("Quick List");
     d->rootItem = new ListItem(rootData);
 }
 
@@ -127,7 +128,7 @@ Qt::DropActions TagMngrListModel::supportedDropActions() const
 QStringList TagMngrListModel::mimeTypes() const
 {
     QStringList types;
-    types << "application/vnd.text.list";
+    types << QLatin1String("application/vnd.text.list");
     return types;
 }
 
@@ -164,7 +165,7 @@ QMimeData* TagMngrListModel::mimeData(const QModelIndexList& indexes) const
         }
     }
 
-    mimeData->setData("application/vnd.text.list",encodedData);
+    mimeData->setData(QLatin1String("application/vnd.text.list"), encodedData);
     return mimeData;
 }
 
@@ -177,10 +178,10 @@ bool TagMngrListModel::dropMimeData(const QMimeData* data, Qt::DropAction action
     if(action == Qt::IgnoreAction)
         return true;
 
-    if(!(data->hasFormat("application/vnd.text.list")))
+    if(!(data->hasFormat(QLatin1String("application/vnd.text.list"))))
         return false;
 
-    QByteArray       encodedData = data->data("application/vnd.text.list");
+    QByteArray       encodedData = data->data(QLatin1String("application/vnd.text.list"));
     QDataStream      stream(&encodedData, QIODevice::ReadOnly);
     QList<ListItem*> newItems;
     QList<ListItem*> finalItems;

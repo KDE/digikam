@@ -161,7 +161,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
     d->view         = new MetadataListView(this);
 
     QString barName = QLatin1String(name) + QLatin1String("SearchBar");
-    d->searchBar    = new SearchTextBar(this, barName.toLatin1().constData());
+    d->searchBar    = new SearchTextBar(this, barName);
 
     // -----------------------------------------------------------------
 

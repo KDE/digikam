@@ -71,7 +71,7 @@ public:
     QAction*                     toggleBothAction;
 };
 
-const QString TagCheckView::Private::configToggleAutoTagsEntry("Toggle Auto Tags");
+const QString TagCheckView::Private::configToggleAutoTagsEntry(QLatin1String("Toggle Auto Tags"));
 
 // --------------------------------------------------------
 

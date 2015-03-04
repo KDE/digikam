@@ -43,13 +43,13 @@ namespace Digikam
 {
 
 Convert2JP2::Convert2JP2(QObject* const parent)
-    : BatchTool("Convert2JP2", ConvertTool, parent)
+    : BatchTool(QLatin1String("Convert2JP2"), ConvertTool, parent)
 {
     m_settings = 0;
 
     setToolTitle(i18n("Convert To JP2"));
     setToolDescription(i18n("Convert images to JPEG-2000 format."));
-    setToolIconName("image-jp2");
+    setToolIconName(QLatin1String("image-jp2"));
 }
 
 Convert2JP2::~Convert2JP2()
@@ -70,32 +70,32 @@ void Convert2JP2::registerSettingsWidget()
 BatchToolSettings Convert2JP2::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("ImageViewer Settings");
-    int compression           = group.readEntry("JPEG2000Compression", 75);
-    bool lossLessCompression  = group.readEntry("JPEG2000LossLess",    true);
+    KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
+    int compression           = group.readEntry(QLatin1String("JPEG2000Compression"), 75);
+    bool lossLessCompression  = group.readEntry(QLatin1String("JPEG2000LossLess"),    true);
     BatchToolSettings settings;
-    settings.insert("quality",  compression);
-    settings.insert("lossless", lossLessCompression);
+    settings.insert(QLatin1String("quality"),  compression);
+    settings.insert(QLatin1String("lossless"), lossLessCompression);
     return settings;
 }
 
 void Convert2JP2::slotAssignSettings2Widget()
 {
-    m_settings->setCompressionValue(settings()["quality"].toInt());
-    m_settings->setLossLessCompression(settings()["lossless"].toBool());
+    m_settings->setCompressionValue(settings()[QLatin1String("quality")].toInt());
+    m_settings->setLossLessCompression(settings()[QLatin1String("lossless")].toBool());
 }
 
 void Convert2JP2::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("quality",  m_settings->getCompressionValue());
-    settings.insert("lossless", m_settings->getLossLessCompression());
+    settings.insert(QLatin1String("quality"),  m_settings->getCompressionValue());
+    settings.insert(QLatin1String("lossless"), m_settings->getLossLessCompression());
     BatchTool::slotSettingsChanged(settings);
 }
 
 QString Convert2JP2::outputSuffix() const
 {
-    return QString("jp2");
+    return QLatin1String("jp2");
 }
 
 bool Convert2JP2::toolOperations()
@@ -105,8 +105,8 @@ bool Convert2JP2::toolOperations()
         return false;
     }
 
-    bool lossless = settings()["lossless"].toBool();
-    image().setAttribute("quality", lossless ? 100 : settings()["quality"].toInt());
+    bool lossless = settings()[QLatin1String("lossless")].toBool();
+    image().setAttribute(QLatin1String("quality"), lossless ? 100 : settings()[QLatin1String("quality")].toInt());
 
     return (savefromDImg());
 }

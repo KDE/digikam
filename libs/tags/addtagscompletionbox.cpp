@@ -173,7 +173,7 @@ void TagModelCompletion::update(QString word)
     }
     // Do any filtering you like.
     // Here we just include all items that contain word.
-    QStandardItem* const insert = new QStandardItem(QIcon::fromTheme(QLatin1String("tag")), i18n("Insert (") + word + ")");
+    QStandardItem* const insert = new QStandardItem(QIcon::fromTheme(QLatin1String("tag")), i18n("Insert (") + word + QLatin1String(")"));
     insert->setData(-5, Qt::UserRole+5);
     insert->setData(word, Qt::UserRole+4);
     filtered.append(insert);

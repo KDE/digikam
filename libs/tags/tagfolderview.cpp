@@ -146,7 +146,7 @@ void TagFolderView::slotTagNewFromABCMenu(const QString& personName)
         return;
     }
 
-    tagModificationHelper()->slotTagNew(parent, personName, "tag-people");
+    tagModificationHelper()->slotTagNew(parent, personName, QLatin1String("tag-people"));
 }
 
 void TagFolderView::slotExpandNode()
@@ -236,7 +236,7 @@ void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
     if (action == d->resetIconAction)
     {
         QString errMsg;
-        AlbumManager::instance()->updateTAlbumIcon(tag, "tag", 0, errMsg);
+        AlbumManager::instance()->updateTAlbumIcon(tag, QLatin1String("tag"), 0, errMsg);
     }
     else if (action == d->findDuplAction)
     {

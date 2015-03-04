@@ -104,13 +104,13 @@ TagList::~TagList()
 
 void TagList::saveSettings()
 {
-    KConfig conf("digikam_tagsmanagerrc");
-    conf.deleteGroup("List Content");
+    KConfig conf(QLatin1String("digikam_tagsmanagerrc"));
+    conf.deleteGroup(QLatin1String("List Content"));
 
-    KConfigGroup group = conf.group("List Content");
+    KConfigGroup group = conf.group(QLatin1String("List Content"));
 
     QList<ListItem*> currentItems = d->tagListModel->allItems();
-    group.writeEntry("Size", currentItems.count()-1);
+    group.writeEntry(QLatin1String("Size"), currentItems.count()-1);
 
     for(int it = 1; it < currentItems.size(); it++)
     {
@@ -119,20 +119,20 @@ void TagList::saveSettings()
 
         for(int jt = 0; jt < ids.size(); jt++)
         {
-            saveData.append(QString::number(ids.at(jt)) + " ");
+            saveData.append(QString::number(ids.at(jt)) + QLatin1String(" "));
         }
 
-        group.writeEntry(QString("item%1").arg(it-1), saveData);
+        group.writeEntry(QString::fromUtf8("item%1").arg(it-1), saveData);
     }
 }
 
 void TagList::restoreSettings()
 {
-    KConfig conf("digikam_tagsmanagerrc");
-    KConfigGroup group = conf.group("List Content");
+    KConfig conf(QLatin1String("digikam_tagsmanagerrc"));
+    KConfigGroup group = conf.group(QLatin1String("List Content"));
     QStringList items;
 
-    int size = group.readEntry("Size", -1);
+    int size = group.readEntry(QLatin1String("Size"), -1);
 
     /**
      * If config is empty add generic All Tags
@@ -146,12 +146,12 @@ void TagList::restoreSettings()
 
     for(int it = 0; it < size; it++)
     {
-        QString data = group.readEntry(QString("item%1").arg(it), "");
+        QString data = group.readEntry(QString::fromUtf8("item%1").arg(it), "");
 
         if(data.isEmpty())
             continue;
 
-        QStringList ids = data.split(" ", QString::SkipEmptyParts);
+        QStringList ids = data.split(QLatin1String(" "), QString::SkipEmptyParts);
         QList<QVariant> itemData;
         itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
 
@@ -211,19 +211,23 @@ void TagList::slotSelectionChanged()
 {
     QModelIndexList indexList= d->tagList->mySelectedIndexes();
     QSet<int> mySet;
+
     Q_FOREACH(QModelIndex index, indexList)
     {
-        ListItem* const item                      = static_cast<ListItem*>(index.internalPointer());
+        ListItem* const item = static_cast<ListItem*>(index.internalPointer());
+
         if(item->getTagIds().isEmpty())
         {
             mySet.clear();
             break;
         }
+
         Q_FOREACH(int tagId, item->getTagIds())
         {
             mySet.insert(tagId);
         }
     }
+
     TagsManagerFilterModel* const filterModel = d->treeView->getFilterModel();
     filterModel->setQuickListTags(QList<int>::fromSet(mySet));
 }

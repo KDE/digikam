@@ -53,9 +53,9 @@ class QueueMgrWindow::Private
 public:
 
     Private() :
-        TOP_SPLITTER_CONFIG_KEY("BqmTopSplitter"),
-        BOTTOM_SPLITTER_CONFIG_KEY("BqmBottomSplitter"),
-        VERTICAL_SPLITTER_CONFIG_KEY("BqmVerticalSplitter")
+        TOP_SPLITTER_CONFIG_KEY(QLatin1String("BqmTopSplitter")),
+        BOTTOM_SPLITTER_CONFIG_KEY(QLatin1String("BqmBottomSplitter")),
+        VERTICAL_SPLITTER_CONFIG_KEY(QLatin1String("BqmVerticalSplitter"))
     {
         busy                   = false;
         clearQueueAction       = 0;

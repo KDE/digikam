@@ -35,11 +35,9 @@
 #include <QMap>
 #include <QUrl>
 
-
 // Local includes
 
 #include "albuminfo.h"
-//#include "databaseurl.h"
 
 namespace Digikam
 {

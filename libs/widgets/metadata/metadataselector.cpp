@@ -270,7 +270,7 @@ MetadataSelectorView::MetadataSelectorView(QWidget* const parent)
 {
     QGridLayout* const grid = new QGridLayout(this);
     d->selector             = new MetadataSelector(this);
-    d->searchBar            = new SearchTextBar(this, "MetadataSelectorView");
+    d->searchBar            = new SearchTextBar(this, QLatin1String("MetadataSelectorView"));
     d->selectAllBtn         = new QPushButton(i18n("Select All"),this);
     d->clearSelectionBtn    = new QPushButton(i18n("Clear"),this);
     d->defaultSelectionBtn  = new QPushButton(i18n("Default"),this);

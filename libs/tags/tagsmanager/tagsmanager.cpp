@@ -168,14 +168,14 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      QHBoxLayout* const mainLayout = new QHBoxLayout();
 
      d->tagPixmap = new QLabel();
-     d->tagPixmap->setText("Tag Pixmap");
+     d->tagPixmap->setText(QLatin1String("Tag Pixmap"));
      d->tagPixmap->setMaximumWidth(40);
      d->tagPixmap->setPixmap(QIcon::fromTheme(QLatin1String("tag")).pixmap(30,30));
 
      d->tagMngrView = new TagMngrTreeView(this,d->tagModel);
      d->tagMngrView->setConfigGroup(getConfigGroup());
 
-     d->searchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
+     d->searchBar  = new SearchTextBar(this, QLatin1String("DigikamViewTagSearchBar"));
      d->searchBar->setHighlightOnResult(true);
      d->searchBar->setModel(d->tagModel,
                             AbstractAlbumModel::AlbumIdRole,
@@ -269,8 +269,8 @@ namespace
 
 QString JoinTagNamesToList(const QStringList& stringList)
 {
-    const QString joinedStringList = stringList.join(QString("', '"));
-    return QChar('\'') + joinedStringList + QChar('\'');
+    const QString joinedStringList = stringList.join(QLatin1String("', '"));
+    return QLatin1Char('\'') + joinedStringList + QLatin1Char('\'');
 }
 
 } // namespace
@@ -292,6 +292,7 @@ void TagsManager::slotDeleteAction()
         }
 
         TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
+
         if (!t || t->isRoot())
         {
             return;
@@ -414,7 +415,7 @@ void TagsManager::slotResetTagIcon()
     QString errMsg;
 
     const QList<Album*> selected = d->tagMngrView->selectedTags();
-    const QString icon = QString("tag");
+    const QString icon = QLatin1String("tag");
 
     for (QList<Album*>::const_iterator it = selected.constBegin(); it != selected.constEnd(); ++it )
     {
@@ -652,9 +653,9 @@ void TagsManager::setupActions()
 
     d->mainToolbar->addSeparator();
 
-    d->addAction = new QAction(QIcon::fromTheme(QLatin1String("list-add")),"",d->treeWindow);
+    d->addAction = new QAction(QIcon::fromTheme(QLatin1String("list-add")), QLatin1String(""), d->treeWindow);
 
-    d->delAction = new QAction(QIcon::fromTheme(QLatin1String("list-remove")),"",d->treeWindow);
+    d->delAction = new QAction(QIcon::fromTheme(QLatin1String("list-remove")), QLatin1String(""), d->treeWindow);
 
     /** organize group **/
     d->organizeAction            = new QMenu(i18nc("@title:menu", "Organize"),this);

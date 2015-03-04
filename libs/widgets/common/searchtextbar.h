@@ -101,7 +101,7 @@ public:
 
 public:
 
-    SearchTextBar(QWidget* const parent, const char* const name, const QString& msg=i18n("Search..."));
+    SearchTextBar(QWidget* const parent, const QString& name, const QString& msg=i18n("Search..."));
     ~SearchTextBar();
 
     void setTextQueryCompletion(bool b);

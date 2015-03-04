@@ -296,7 +296,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     RHBox* const tagsSearch = new RHBox(tagsArea);
     tagsSearch->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
+    d->tagsSearchBar   = new SearchTextBar(tagsSearch, QLatin1String("ImageDescEditTabTagsSearchBar"));
     d->tagsSearchBar->setModel(d->tagCheckView->filteredModel(),
                                AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagsSearchBar->setFilterModel(d->tagCheckView->albumFilterModel());

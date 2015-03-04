@@ -100,8 +100,8 @@ QueueMgrWindow::QueueMgrWindow()
     : DXmlGuiWindow(0),
       d(new Private)
 {
-    setConfigGroupName("Batch Queue Manager Settings");
-    setXMLFile("queuemgrwindowui.rc");
+    setConfigGroupName(QLatin1String("Batch Queue Manager Settings"));
+    setXMLFile(QLatin1String("queuemgrwindowui.rc"));
 
     qRegisterMetaType<BatchToolSettings>("BatchToolSettings");
     qRegisterMetaType<BatchToolSet>("BatchToolSet");
@@ -324,7 +324,7 @@ void QueueMgrWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    KActionCollection *ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
     d->runAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18n("Run"), this);
     d->runAction->setEnabled(false);
@@ -483,7 +483,7 @@ void QueueMgrWindow::refreshStatusBar()
             break;
     }
 
-    message.append(" / ");
+    message.append(QLatin1String(" / "));
 
     switch (tasks)
     {
@@ -496,7 +496,7 @@ void QueueMgrWindow::refreshStatusBar()
             break;
     }
 
-    message.append(" - Total: ");
+    message.append(i18n(" - Total: "));
 
     switch (totalItems)
     {
@@ -509,7 +509,7 @@ void QueueMgrWindow::refreshStatusBar()
             break;
     }
 
-    message.append(" / ");
+    message.append(QLatin1String(" / "));
 
     switch (totalTasks)
     {
@@ -958,7 +958,7 @@ void QueueMgrWindow::slotQueueProcessed()
     if (d->currentQueueToProcess == d->queuePool->count())
     {
         // Pop-up a message to bring user when all is done.
-        DNotificationWrapper("batchqueuecompleted", i18n("Batch queue finished"),
+        DNotificationWrapper(QLatin1String("batchqueuecompleted"), i18n("Batch queue finished"),
                              this, windowTitle());
 
         processingAborted();
@@ -977,6 +977,7 @@ void QueueMgrWindow::slotAssignQueueSettings(const QString& title)
     {
         Workflow q                 = WorkflowManager::instance()->findByTitle(title);
         QueueListView* const queue = d->queuePool->currentQueue();
+
         if (queue)
         {
             queue->setSettings(q.qSettings);

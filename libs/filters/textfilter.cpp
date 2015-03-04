@@ -76,7 +76,7 @@ public:
 TextFilter::TextFilter(QWidget* const parent)
     : RHBox(parent), d(new Private)
 {
-    d->searchTextBar = new SearchTextBar(this, "AlbumIconViewFilterSearchTextBar");
+    d->searchTextBar = new SearchTextBar(this, QLatin1String("AlbumIconViewFilterSearchTextBar"));
     d->searchTextBar->setTextQueryCompletion(true);
     d->searchTextBar->setToolTip(i18n("Text quick filter (search)"));
     d->searchTextBar->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "

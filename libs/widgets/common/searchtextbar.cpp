@@ -86,7 +86,7 @@ public:
     SearchTextSettings         settings;
 };
 
-SearchTextBar::SearchTextBar(QWidget* const parent, const char* const name, const QString& msg)
+SearchTextBar::SearchTextBar(QWidget* const parent, const QString& name, const QString& msg)
     : KLineEdit(parent),
       StateSavingObject(this),
       d(new Private)
@@ -94,7 +94,7 @@ SearchTextBar::SearchTextBar(QWidget* const parent, const char* const name, cons
     setAttribute(Qt::WA_DeleteOnClose);
     setClearButtonShown(true);
     setPlaceholderText(msg);
-    setObjectName(QLatin1String(name) + QLatin1String(" Search Text Tool"));
+    setObjectName(name + QLatin1String(" Search Text Tool"));
 
     d->completion = new ModelCompletion;
     setCompletionObject(d->completion, true);

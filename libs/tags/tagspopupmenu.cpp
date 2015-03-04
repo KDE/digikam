@@ -536,8 +536,8 @@ void TagsPopupMenu::slotAboutToShow()
 
                     if (parent)
                     {
-                        QString t               = album->title() + " (" + parent->prettyUrl() + ')';
-                        t.replace('&', "&&");
+                        QString t               = album->title() + QLatin1String(" (") + parent->prettyUrl() + QLatin1Char(')');
+                        t.replace(QLatin1Char('&'), QLatin1String("&&"));
                         TagToggleAction* action = new TagToggleAction(t, d->toggleTagActions);
                         action->setData(album->id());
                         action->setCheckBoxHidden(true);
@@ -625,7 +625,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu* menu, TAlbum* album)
         }
 
         QString t = a->title();
-        t.replace('&', "&&");
+        t.replace(QLatin1Char('&'), QLatin1String("&&"));
 
         TagToggleAction* action = 0;
 
@@ -728,7 +728,7 @@ void TagsPopupMenu::buildFlatMenu(QMenu* menu)
     for (int i=0; i<shortenedPaths.size(); ++i)
     {
         QString t       = shortenedPaths.at(i);
-        t.replace('&', "&&");
+        t.replace(QLatin1Char('&'), QLatin1String("&&"));
         TAlbum* const a = AlbumManager::instance()->findTAlbum(ids.at(i));
 
         if (!a)

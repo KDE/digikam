@@ -158,11 +158,11 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumT
     d->albumTreeView->setConfigGroup(group);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
 
-    d->searchBar   = new SearchTextBar(this, "AlbumSelectWidgetSearchBar");
+    d->searchBar   = new SearchTextBar(this, QLatin1String("AlbumSelectWidgetSearchBar"));
     d->searchBar->setModel(d->albumModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->searchBar->setFilterModel(d->albumTreeView->albumFilterModel());
     d->searchBar->setConfigGroup(group);
-    d->albumTreeView->setEntryPrefix("AlbumTreeView");
+    d->albumTreeView->setEntryPrefix(QLatin1String("AlbumTreeView"));
 
     d->newAlbumBtn = new QPushButton(i18n("&New Album"), this);
     d->newAlbumBtn->setToolTip(i18n("Create new album"));

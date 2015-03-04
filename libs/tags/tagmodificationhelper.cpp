@@ -65,7 +65,8 @@ public:
 };
 
 TagModificationHelper::TagModificationHelper(QObject* const parent, QWidget* const dialogParent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
     d->dialogParent = dialogParent;
 }
@@ -318,12 +319,12 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
         }
 
         if(children)
-            tagWithChildrens.append(tag->title() + QString(" "));
+            tagWithChildrens.append(tag->title() + QLatin1String(" "));
 
         QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
 
         if(!assignedItems.isEmpty())
-            tagWithImages.append(tag->title() + QString(" "));
+            tagWithImages.append(tag->title() + QLatin1String(" "));
 
         /**
          * Tags must be deleted from children to parents, if we don't want
@@ -332,7 +333,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
          */
 
         Album* parent = t;
-        int depth = 0;
+        int depth     = 0;
 
         while(!parent->isRoot())
         {

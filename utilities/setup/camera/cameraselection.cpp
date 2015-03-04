@@ -139,7 +139,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
                                    "will be set automatically.</p><p>This list has been generated "
                                    "using the gphoto2 library installed on your computer.</p>"));
 
-    d->searchBar = new SearchTextBar(page, "CameraSelectionSearchBar");
+    d->searchBar = new SearchTextBar(page, QLatin1String("CameraSelectionSearchBar"));
 
     // --------------------------------------------------------------
 

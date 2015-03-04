@@ -109,8 +109,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     titleLabel->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     titleLabel->setIndent(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    d->titleEdit = new SearchTextBar(this, "TagEditDlgTitleEdit",
-                                     i18n("Enter tag name here"));
+    d->titleEdit = new SearchTextBar(this, QLatin1String("TagEditDlgTitleEdit"), i18n("Enter tag name here"));
     d->titleEdit->setCaseSensitive(false);
     titleLabel->setBuddy(d->titleEdit);
 
@@ -279,13 +278,13 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
 
 void TagPropWidget::slotIconResetClicked()
 {
-    if(d->icon.isEmpty() || d->icon == QString("tag"))
+    if(d->icon.isEmpty() || d->icon == QLatin1String("tag"))
     {
         return;
     }
 
     d->changed = true;
-    d->icon    = QString("tag");
+    d->icon    = QLatin1String("tag");
     d->iconButton->setIcon(QIcon::fromTheme(d->icon));
 }
 

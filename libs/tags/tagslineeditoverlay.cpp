@@ -57,7 +57,7 @@ AddTagsLineEdit* TagsLineEditOverlay::addTagsLineEdit() const
 QWidget* TagsLineEditOverlay::createWidget()
 {
     AddTagsLineEdit* const lineEdit = new AddTagsLineEdit(parentWidget());
-    lineEdit->setPlaceholderText("Name");
+    lineEdit->setPlaceholderText(QLatin1String("Name"));
     lineEdit->setReadOnly(false);
 
     TagModel* const model           = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);

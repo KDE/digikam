@@ -173,7 +173,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     d->searchTreeView->filteredModel()->setFilterSearchType(DatabaseSearch::MapSearch);
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
     d->searchTreeView->setAlbumManagerCurrentAlbum(true);
-    d->searchGPSBar   = new SearchTextBar(this, "GPSSearchViewSearchGPSBar");
+    d->searchGPSBar   = new SearchTextBar(this, QLatin1String("GPSSearchViewSearchGPSBar"));
     d->searchGPSBar->setModel(d->searchTreeView->filteredModel(), AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->searchGPSBar->setFilterModel(d->searchTreeView->albumFilterModel());
 

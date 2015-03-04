@@ -131,7 +131,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
 
     QGridLayout* const grid = new QGridLayout(page);
     QLabel* const logo      = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->topLabel             = new QLabel(page);
@@ -145,7 +145,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     QLabel* const titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit             = new SearchTextBar(page, "TagEditDlgTitleEdit", i18n("Enter tag name here..."));
+    d->titleEdit             = new SearchTextBar(page, QLatin1String("TagEditDlgTitleEdit"), i18n("Enter tag name here..."));
     d->titleEdit->setCaseSensitive(false);
     titleLabel->setBuddy(d->titleEdit);
 
@@ -294,7 +294,7 @@ QKeySequence TagEditDlg::shortcut() const
 
 void TagEditDlg::slotIconResetClicked()
 {
-    d->icon = QString("tag");
+    d->icon = QLatin1String("tag");
     d->iconButton->setIcon(QIcon::fromTheme(d->icon));
 }
 
@@ -317,14 +317,14 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
 {
     QString tagName = d->mainRootAlbum->tagPath();
 
-    if (tagName.endsWith('/') && !d->mainRootAlbum->isRoot())
+    if (tagName.endsWith(QLatin1Char('/')) && !d->mainRootAlbum->isRoot())
     {
         tagName.truncate(tagName.length()-1);
     }
 
     if (d->create)
     {
-        if (d->titleEdit->text().startsWith('/'))
+        if (d->titleEdit->text().startsWith(QLatin1Char('/')))
         {
             d->topLabel->setText(i18n("<b>Create New Tag</b>"));
         }
@@ -340,7 +340,7 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
                                   "\"%1\"</b>", tagName));
     }
 
-    QRegExp emptyTitle = QRegExp("^\\s*$");
+    QRegExp emptyTitle = QRegExp(QLatin1String("^\\s*$"));
     bool enable        = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
     d->buttons->button(QDialogButtonBox::Ok)->setEnabled(enable);
 }
@@ -389,7 +389,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* const mainRootAlbum, const QString& t
     // Check if new tags are include in a list of tags hierarchy separated by ','.
     // Ex: /Country/France/people,/City/France/Paris
 
-    const QStringList tagsHierarchies = tagStr.split(',', QString::SkipEmptyParts);
+    const QStringList tagsHierarchies = tagStr.split(QLatin1Char(','), QString::SkipEmptyParts);
 
     if (tagsHierarchies.isEmpty())
     {
@@ -407,7 +407,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* const mainRootAlbum, const QString& t
 
             root = 0;
 
-            if (hierarchy.startsWith('/') || !mainRootAlbum)
+            if (hierarchy.startsWith(QLatin1Char('/')) || !mainRootAlbum)
             {
                 root = AlbumManager::instance()->findTAlbum(0);
             }
@@ -416,7 +416,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* const mainRootAlbum, const QString& t
                 root = mainRootAlbum;
             }
 
-            QStringList tagsList = hierarchy.split('/', QString::SkipEmptyParts);
+            QStringList tagsList = hierarchy.split(QLatin1Char('/'), QString::SkipEmptyParts);
             qCDebug(DIGIKAM_GENERAL_LOG) << tagsList;
 
             if (!tagsList.isEmpty())
@@ -429,11 +429,11 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* const mainRootAlbum, const QString& t
 
                     if (root->isRoot())
                     {
-                        tagPath = QString("/%1").arg(tag);
+                        tagPath = QString::fromUtf8("/%1").arg(tag);
                     }
                     else
                     {
-                        tagPath = QString("%1/%2").arg(root->tagPath()).arg(tag);
+                        tagPath = QString::fromUtf8("%1/%2").arg(root->tagPath()).arg(tag);
                     }
 
                     qCDebug(DIGIKAM_GENERAL_LOG) << tag << " :: " << tagPath;
@@ -495,7 +495,7 @@ void TagEditDlg::showtagsListCreationError(QWidget* const parent, const QMap<QSt
 
 void TagEditDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook("tagscreation.anchor", "digikam");
+    DXmlGuiWindow::openHandbook(QLatin1String("tagscreation.anchor"), QLatin1String("digikam"));
 }
 
 // ------------------------------------------------------------------------------

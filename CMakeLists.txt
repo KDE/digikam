@@ -139,6 +139,7 @@ find_package(KF5 REQUIRED COMPONENTS
              CoreAddons
              WindowSystem
              Solid
+             IconThemes
              I18n
 
              KDELibs4Support

@@ -149,7 +149,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     d->tagFilterModel     = tagFilterModel;
     d->tagFilterView      = new TagFilterView(box3, tagFilterModel);
     d->tagFilterView->setObjectName(QLatin1String("DigikamViewTagFilterView"));
-    d->tagFilterSearchBar = new SearchTextBar(box3, "DigikamViewTagFilterSearchBar");
+    d->tagFilterSearchBar = new SearchTextBar(box3, QLatin1String("DigikamViewTagFilterSearchBar"));
     d->tagFilterSearchBar->setModel(d->tagFilterView->filteredModel(),
                                     AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());

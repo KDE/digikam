@@ -70,7 +70,7 @@ RawCameraDlg::RawCameraDlg(QWidget* const parent)
     // --------------------------------------------------------
 
     d->header    = new QLabel(this);
-    d->searchBar = new SearchTextBar(this, "RawCameraDlgSearchBar");
+    d->searchBar = new SearchTextBar(this, QLatin1String("RawCameraDlgSearchBar"));
     updateHeader();
 
     listView()->setColumnCount(1);

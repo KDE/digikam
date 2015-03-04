@@ -174,7 +174,7 @@ DbKeySelectorView::DbKeySelectorView(QWidget* const parent)
 {
     QGridLayout* const grid = new QGridLayout(this);
     d->selector             = new DbKeySelector(this);
-    d->searchBar            = new SearchTextBar(this, "DbKeySelectorView");
+    d->searchBar            = new SearchTextBar(this, QLatin1String("DbKeySelectorView"));
 
     grid->addWidget(d->selector,  0, 0, 1, 1);
     grid->addWidget(d->searchBar, 1, 0, 1, 1);

@@ -304,7 +304,7 @@ Setup::Setup(QWidget* const parent)
 
 #ifdef HAVE_KIPI
     d->pluginsPage  = new ConfigWidget();
-    d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
+    d->pluginFilter = new SearchTextBar(d->pluginsPage, QLatin1String("PluginsSearchBar"));
     d->pluginsPage->setFilterWidget(d->pluginFilter);
     d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
     d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"

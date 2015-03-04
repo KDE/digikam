@@ -162,7 +162,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->albumTreeView->setConfigGroup(configGroup);
     d->prepareTreeView(d->albumTreeView);
 
-    d->albumSearchBar = new SearchTextBar(albumBox, "KipiImageCollectionSelectorAlbumSearchBar");
+    d->albumSearchBar = new SearchTextBar(albumBox, QLatin1String("KipiImageCollectionSelectorAlbumSearchBar"));
     d->albumSearchBar->setEntryPrefix(QLatin1String("AlbumSearchBar"));
     d->albumSearchBar->setConfigGroup(configGroup);
     d->albumSearchBar->setModel(d->albumModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -183,7 +183,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->tagTreeView->setConfigGroup(configGroup);
     d->prepareTreeView(d->tagTreeView);
 
-    d->tagSearchBar = new SearchTextBar(tagBox, "KipiImageCollectionSelectorTagSearchBar");
+    d->tagSearchBar = new SearchTextBar(tagBox, QLatin1String("KipiImageCollectionSelectorTagSearchBar"));
     d->tagSearchBar->setEntryPrefix(QLatin1String("TagSearchBar"));
     d->tagSearchBar->setConfigGroup(configGroup);
     d->tagSearchBar->setModel(d->tagTreeView->filteredModel(),
@@ -206,7 +206,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->searchTreeView->filteredModel()->listAllSearches();
     d->prepareTreeView(d->searchTreeView);
 
-    d->searchSearchBar = new SearchTextBar(searchBox, "KipiImageCollectionSelectorSearchSearchBar");
+    d->searchSearchBar = new SearchTextBar(searchBox, QLatin1String("KipiImageCollectionSelectorSearchSearchBar"));
     d->searchSearchBar->setEntryPrefix(QLatin1String("SearchSearchBar"));
     d->searchSearchBar->setConfigGroup(configGroup);
     d->searchSearchBar->setModel(d->searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);

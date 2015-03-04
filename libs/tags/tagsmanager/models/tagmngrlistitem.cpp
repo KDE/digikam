@@ -145,7 +145,7 @@ QVariant ListItem::data(int role) const
                     continue;
                 }
 
-                display.append(album->title()+ ", ");
+                display.append(album->title()+ QLatin1String(", "));
 
                 if(role == Qt::DisplayRole && display.size() > 30)
                     break;

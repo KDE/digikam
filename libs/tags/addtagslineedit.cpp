@@ -28,8 +28,11 @@
 
 #include "addtagslineedit.h"
 
-// KDE includes
+// Qt includes
+
 #include <QKeyEvent>
+
+// KDE includes
 
 #include <klocalizedstring.h>
 
@@ -77,7 +80,8 @@ public:
 // ---------------------------------------------------------------------------------------
 
 AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
-    : QLineEdit(parent), d(new Private)
+    : QLineEdit(parent),
+      d(new Private)
 {
 //    setEnableSignals(true);
 //    setHandleSignals(false);
@@ -215,12 +219,14 @@ void AddTagsLineEdit::completerActivated(QModelIndex index)
     int id = index.data(Qt::UserRole+5).toInt();
 
     qDebug() << "Completer activated" << index.data() << id;
+
     if(id == -5)
     {
         QMap<QString, QString> errMap;
         AlbumList al = TagEditDlg::createTAlbum(d->tagView->currentAlbum(),
                                                 index.data(Qt::UserRole+4).toString(),
-                                                "tag",QKeySequence(),errMap);
+                                                QLatin1String("tag"),
+                                                QKeySequence(),errMap);
         if(!al.isEmpty())
         {
             d->tagModel->setCheckState((TAlbum*)(al.first()),Qt::Checked);
@@ -228,9 +234,10 @@ void AddTagsLineEdit::completerActivated(QModelIndex index)
     }
     else
     {
-        TAlbum* tAlbum = AlbumManager::instance()->findTAlbum(id);
+        TAlbum* const tAlbum = AlbumManager::instance()->findTAlbum(id);
         d->tagModel->setCheckState(tAlbum,Qt::Checked);
     }
+
     QLineEdit::clear();
 }
 
@@ -248,19 +255,22 @@ void AddTagsLineEdit::setCompleter(TagModelCompletion *c)
     d->completion = c;
 
     if (!d->completion)
-    return;
+        return;
 
     d->completion->setWidget(this);
-    connect(d->completion, SIGNAL(activated(QModelIndex)), this, SLOT(completerActivated(QModelIndex)));
+
+    connect(d->completion, SIGNAL(activated(QModelIndex)),
+            this, SLOT(completerActivated(QModelIndex)));
 }
 
-void AddTagsLineEdit::focusInEvent(QFocusEvent *f)
+void AddTagsLineEdit::focusInEvent(QFocusEvent* f)
 {
     QLineEdit::focusInEvent(f);
     /** Need to disconnect completer from QLineEdit, otherwise
      *  we won't be able to clear completion after tag was added
      */
-    disconnect(d->completion, SIGNAL(activated(QString)), this, SLOT(setText(QString)));
+    disconnect(d->completion, SIGNAL(activated(QString)),
+               this, SLOT(setText(QString)));
 }
 
 void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
@@ -275,12 +285,13 @@ void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
             case Qt::Key_Escape:
             case Qt::Key_Tab:
             case Qt::Key_Backtab:
-            e->ignore();
-        return; // Let the completer do default behavior
+                e->ignore();
+                return; // Let the completer do default behavior
         }
     }
 
     bool isShortcut = (e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_E;
+
     if (!isShortcut)
         QLineEdit::keyPressEvent(e); // Don't send the shortcut (CTRL-E) to the text edit.
 
@@ -288,11 +299,13 @@ void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
         return;
 
     bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+
     if (!isShortcut && !ctrlOrShift && e->modifiers() != Qt::NoModifier)
     {
         d->completion->popup()->hide();
         return;
     }
+
     d->completion->update(text());
     d->completion->popup()->setCurrentIndex(d->completion->completionModel()->index(0, 0));
 }
