@@ -2137,7 +2137,7 @@ PAlbum* AlbumManager::createPAlbum(const CollectionLocation& location, const QSt
 
     if (!album)
     {
-        errMsg = "No album for collection location: Internal error";
+        errMsg = i18n("No album for collection location: Internal error");
         return 0;
     }
 
