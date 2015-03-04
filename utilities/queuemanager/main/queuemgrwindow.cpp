@@ -524,7 +524,7 @@ void QueueMgrWindow::refreshStatusBar()
             break;
     }
 
-    message.append(" - Total: ");
+    message.append(i18n(" - Total: "));
 
     switch (totalItems)
     {
