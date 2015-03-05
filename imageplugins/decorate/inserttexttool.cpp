@@ -108,15 +108,15 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString InsertTextTool::Private::configGroupName("inserttext Tool");
-const QString InsertTextTool::Private::configTextRotationEntry("Text Rotation");
-const QString InsertTextTool::Private::configFontColorEntry("Font Color");
-const QString InsertTextTool::Private::configTextStringEntry("Enter your text here.");
-const QString InsertTextTool::Private::configFontPropertiesEntry("Font Properties");
-const QString InsertTextTool::Private::configTextAlignmentEntry("Text Alignment");
-const QString InsertTextTool::Private::configBorderTextEntry("Border Text");
-const QString InsertTextTool::Private::configTransparentTextEntry("Transparent Text");
-const QString InsertTextTool::Private::configPositionHintEntry("Position Hint");
+const QString InsertTextTool::Private::configGroupName(QLatin1String("inserttext Tool"));
+const QString InsertTextTool::Private::configTextRotationEntry(QLatin1String("Text Rotation"));
+const QString InsertTextTool::Private::configFontColorEntry(QLatin1String("Font Color"));
+const QString InsertTextTool::Private::configTextStringEntry(QLatin1String("Enter your text here."));
+const QString InsertTextTool::Private::configFontPropertiesEntry(QLatin1String("Font Properties"));
+const QString InsertTextTool::Private::configTextAlignmentEntry(QLatin1String("Text Alignment"));
+const QString InsertTextTool::Private::configBorderTextEntry(QLatin1String("Border Text"));
+const QString InsertTextTool::Private::configTransparentTextEntry(QLatin1String("Transparent Text"));
+const QString InsertTextTool::Private::configPositionHintEntry(QLatin1String("Position Hint"));
 
 // --------------------------------------------------------
 
@@ -130,11 +130,11 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QFrame* frame    = new QFrame(0);
+    QFrame* const frame  = new QFrame(0);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
-    QVBoxLayout* l   = new QVBoxLayout(frame);
-    d->previewWidget = new InsertTextWidget(480, 320, frame);
+    QVBoxLayout* const l = new QVBoxLayout(frame);
+    d->previewWidget     = new InsertTextWidget(480, 320, frame);
     l->addWidget(d->previewWidget);
     d->previewWidget->setWhatsThis(i18n("This previews the text inserted in the image. "
                                         "You can use the mouse to move the text to the right location."));
@@ -156,24 +156,24 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* alignBox   = new QWidget();
-    QHBoxLayout* hlay   = new QHBoxLayout(alignBox);
-    d->alignButtonGroup = new QButtonGroup(alignBox);
+    QWidget* const alignBox   = new QWidget();
+    QHBoxLayout* const hlay   = new QHBoxLayout(alignBox);
+    d->alignButtonGroup       = new QButtonGroup(alignBox);
     d->alignButtonGroup->setExclusive(true);
 
-    QToolButton* alignLeft = new QToolButton(alignBox);
+    QToolButton* const alignLeft = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignLeft, InsertTextWidget::ALIGN_LEFT);
     alignLeft->setIcon(QIcon::fromTheme(QLatin1String("format-justify-left")));
     alignLeft->setCheckable(true);
     alignLeft->setToolTip(i18n("Align text to the left"));
 
-    QToolButton* alignRight = new QToolButton(alignBox);
+    QToolButton* const alignRight = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignRight, InsertTextWidget::ALIGN_RIGHT);
     alignRight->setIcon(QIcon::fromTheme(QLatin1String("format-justify-right")));
     alignRight->setCheckable(true);
     alignRight->setToolTip(i18n("Align text to the right"));
 
-    QToolButton* alignCenter = new QToolButton(alignBox);
+    QToolButton* const alignCenter = new QToolButton(alignBox);
     d->alignButtonGroup->addButton(alignCenter, InsertTextWidget::ALIGN_CENTER);
     alignCenter->setIcon(QIcon::fromTheme(QLatin1String("format-justify-center")));
     alignCenter->setCheckable(true);
@@ -196,8 +196,8 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label1  = new QLabel(i18n("Rotation:"));
-    d->textRotation = new QComboBox();
+    QLabel* const label1 = new QLabel(i18n("Rotation:"));
+    d->textRotation      = new QComboBox();
     d->textRotation->addItem(i18nc("no rotation", "None"));
     d->textRotation->addItem(i18n("90 Degrees"));
     d->textRotation->addItem(i18n("180 Degrees"));
@@ -206,8 +206,8 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label2     = new QLabel(i18nc("font color", "Color:"));
-    d->fontColorButton = new KColorButton(Qt::black);
+    QLabel* const label2 = new QLabel(i18nc("font color", "Color:"));
+    d->fontColorButton   = new KColorButton(Qt::black);
     d->fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
 
     // -------------------------------------------------------------
@@ -220,7 +220,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout();
+    QGridLayout* const mainLayout = new QGridLayout();
     mainLayout->addWidget(d->textEdit,             0, 0, 3,-1);
     mainLayout->addWidget(d->fontChooserWidget,    3, 0, 1,-1);
     mainLayout->addWidget(alignBox,                4, 0, 1,-1);
@@ -405,18 +405,18 @@ void InsertTextTool::finalRendering()
     ImageIface iface;
     DImg dest = d->previewWidget->makeInsertText();
 
-    FilterAction action("digikam:insertTextTool", 1);
+    FilterAction action(QLatin1String("digikam:insertTextTool"), 1);
     action.setDisplayableName(i18n("Insert Text Tool"));
 
-    action.addParameter("text", d->textEdit->toPlainText());
-    action.addParameter("textRotationIndex", d->textRotation->currentIndex());
-    //action.addParameter("textFont", d->textFont); FIXME: figure out how to store QFont
-    action.addParameter("colorR", d->fontColorButton->color().red());
-    action.addParameter("colorG", d->fontColorButton->color().green());
-    action.addParameter("colorB", d->fontColorButton->color().blue());
-    action.addParameter("colorA", d->fontColorButton->color().alpha());
-    action.addParameter("borderText", d->borderText->isChecked());
-    action.addParameter("transparentText", d->transparentText->isChecked());
+    action.addParameter(QLatin1String("text"),              d->textEdit->toPlainText());
+    action.addParameter(QLatin1String("textRotationIndex"), d->textRotation->currentIndex());
+    //action.addParameter(QLatin1String("textFont",           d->textFont); FIXME: figure out how to store QFont
+    action.addParameter(QLatin1String("colorR"),            d->fontColorButton->color().red());
+    action.addParameter(QLatin1String("colorG"),            d->fontColorButton->color().green());
+    action.addParameter(QLatin1String("colorB"),            d->fontColorButton->color().blue());
+    action.addParameter(QLatin1String("colorA"),            d->fontColorButton->color().alpha());
+    action.addParameter(QLatin1String("borderText"),        d->borderText->isChecked());
+    action.addParameter(QLatin1String("transparentText"),   d->transparentText->isChecked());
 
     iface.setOriginal(i18n("Insert Text"), action, dest);
 

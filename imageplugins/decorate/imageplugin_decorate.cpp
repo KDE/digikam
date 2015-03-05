@@ -63,11 +63,11 @@ public:
 };
 
 ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* const parent, const QVariantList&)
-    : ImagePlugin(parent, "ImagePlugin_Decorate"),
+    : ImagePlugin(parent, QLatin1String("ImagePlugin_Decorate")),
       d(new Private)
 {
     // to load the rc file from digikam's installation path
-    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Decoration plugins"));
+    setComponentName(QLatin1String("digikam"), i18nc("to be displayed in shortcuts dialog", "Decoration plugins"));
 
     d->insertTextAction = new QAction(QIcon::fromTheme(QLatin1String("insert-text")), i18n("Insert Text..."), this);
     actionCollection()->addAction(QLatin1String("imageplugin_inserttext"), d->insertTextAction );
@@ -86,7 +86,7 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* const parent, const QVariant
             this, SLOT(slotTexture()));
 
     setActionCategory(i18n("Decorate"));
-    setXMLFile("digikamimageplugin_decorate_ui.rc");
+    setXMLFile(QLatin1String("digikamimageplugin_decorate_ui.rc"));
 
     qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_Decorate plugin loaded";
 }

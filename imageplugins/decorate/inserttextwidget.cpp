@@ -39,12 +39,6 @@
 #include <QPixmap>
 #include <QResizeEvent>
 
-// KDE includes
-
-
-
-
-
 // Local includes
 
 #include "imageiface.h"

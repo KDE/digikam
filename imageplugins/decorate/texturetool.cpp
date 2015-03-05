@@ -98,9 +98,9 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString TextureTool::Private::configGroupName("texture Tool");
-const QString TextureTool::Private::configTextureTypeEntry("TextureType");
-const QString TextureTool::Private::configBlendGainEntry("BlendGain");
+const QString TextureTool::Private::configGroupName(QLatin1String("texture Tool"));
+const QString TextureTool::Private::configTextureTypeEntry(QLatin1String("TextureType"));
+const QString TextureTool::Private::configBlendGainEntry(QLatin1String("BlendGain"));
 
 // --------------------------------------------------------
 
@@ -252,71 +252,71 @@ QString TextureTool::getTexturePath(int texture)
     switch (texture)
     {
         case Private::PaperTexture:
-            pattern = "paper-texture";
+            pattern = QLatin1String("paper-texture");
             break;
 
         case Private::Paper2Texture:
-            pattern = "paper2-texture";
+            pattern = QLatin1String("paper2-texture");
             break;
 
         case Private::FabricTexture:
-            pattern = "fabric-texture";
+            pattern = QLatin1String("fabric-texture");
             break;
 
         case Private::BurlapTexture:
-            pattern = "burlap-texture";
+            pattern = QLatin1String("burlap-texture");
             break;
 
         case Private::BricksTexture:
-            pattern = "bricks-texture";
+            pattern = QLatin1String("bricks-texture");
             break;
 
         case Private::Bricks2Texture:
-            pattern = "bricks2-texture";
+            pattern = QLatin1String("bricks2-texture");
             break;
 
         case Private::CanvasTexture:
-            pattern = "canvas-texture";
+            pattern = QLatin1String("canvas-texture");
             break;
 
         case Private::MarbleTexture:
-            pattern = "marble-texture";
+            pattern = QLatin1String("marble-texture");
             break;
 
         case Private::Marble2Texture:
-            pattern = "marble2-texture";
+            pattern = QLatin1String("marble2-texture");
             break;
 
         case Private::BlueJeanTexture:
-            pattern = "bluejean-texture";
+            pattern = QLatin1String("bluejean-texture");
             break;
 
         case Private::CellWoodTexture:
-            pattern = "cellwood-texture";
+            pattern = QLatin1String("cellwood-texture");
             break;
 
         case Private::MetalWireTexture:
-            pattern = "metalwire-texture";
+            pattern = QLatin1String("metalwire-texture");
             break;
 
         case Private::ModernTexture:
-            pattern = "modern-texture";
+            pattern = QLatin1String("modern-texture");
             break;
 
         case Private::WallTexture:
-            pattern = "wall-texture";
+            pattern = QLatin1String("wall-texture");
             break;
 
         case Private::MossTexture:
-            pattern = "moss-texture";
+            pattern = QLatin1String("moss-texture");
             break;
 
         case Private::StoneTexture:
-            pattern = "stone-texture";
+            pattern = QLatin1String("stone-texture");
             break;
     }
 
-    return (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("digikam/data/") + pattern + QString(".png")));
+    return (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/") + pattern + QLatin1String(".png")));
 }
 
 }  // namespace DigikamDecorateImagePlugin
