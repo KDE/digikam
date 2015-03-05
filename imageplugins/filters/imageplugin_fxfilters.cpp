@@ -78,11 +78,11 @@ public:
 };
 
 ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* const parent, const QVariantList&)
-    : ImagePlugin(parent, "ImagePlugin_FxFilters"),
+    : ImagePlugin(parent, QLatin1String("ImagePlugin_FxFilters")),
       d(new Private)
 {
     // to load the rc file from digikam's installation path
-    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Filter plugins"));
+    setComponentName(QLatin1String("digikam"), i18nc("to be displayed in shortcuts dialog", "Filter plugins"));
 
     d->colorEffectsAction = new QAction(QIcon::fromTheme(QLatin1String("colorfx")), i18n("Color Effects..."), this);
     actionCollection()->addAction(QLatin1String("imageplugin_colorfx"), d->colorEffectsAction);
@@ -125,7 +125,7 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* const parent, const QVaria
             this, SLOT(slotFilmGrain()));
 
     setActionCategory(i18n("Effects"));
-    setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
+    setXMLFile(QLatin1String("digikamimageplugin_fxfilters_ui.rc"));
 
     qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_FxFilters plugin loaded";
 }

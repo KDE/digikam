@@ -79,10 +79,10 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString RainDropTool::Private::configGroupName("raindrops Tool");
-const QString RainDropTool::Private::configDropAdjustmentEntry("DropAdjustment");
-const QString RainDropTool::Private::configAmountAdjustmentEntry("AmountAdjustment");
-const QString RainDropTool::Private::configCoeffAdjustmentEntry("CoeffAdjustment");
+const QString RainDropTool::Private::configGroupName(QLatin1String("raindrops Tool"));
+const QString RainDropTool::Private::configDropAdjustmentEntry(QLatin1String("DropAdjustment"));
+const QString RainDropTool::Private::configAmountAdjustmentEntry(QLatin1String("AmountAdjustment"));
+const QString RainDropTool::Private::configCoeffAdjustmentEntry(QLatin1String("CoeffAdjustment"));
 
 // --------------------------------------------------------
 

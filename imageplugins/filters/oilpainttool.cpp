@@ -76,9 +76,9 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString OilPaintTool::Private::configGroupName("oilpaint Tool");
-const QString OilPaintTool::Private::configBrushSizeEntry("BrushSize");
-const QString OilPaintTool::Private::configSmoothAdjustmentEntry("SmoothAdjustment");
+const QString OilPaintTool::Private::configGroupName(QLatin1String("oilpaint Tool"));
+const QString OilPaintTool::Private::configBrushSizeEntry(QLatin1String("BrushSize"));
+const QString OilPaintTool::Private::configSmoothAdjustmentEntry(QLatin1String("SmoothAdjustment"));
 
 // --------------------------------------------------------
 

@@ -59,7 +59,7 @@ class FilmGrainTool::Private
 public:
 
     Private() :
-        configGroupName("filmgrain Tool"),
+        configGroupName(QLatin1String("filmgrain Tool")),
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)

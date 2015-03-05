@@ -83,9 +83,9 @@ public:
     ColorFXSettings*     settingsView;
 };
 
-const QString ColorFxTool::Private::configGroupName("coloreffect Tool");
-const QString ColorFxTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString ColorFxTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString ColorFxTool::Private::configGroupName(QLatin1String("coloreffect Tool"));
+const QString ColorFxTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString ColorFxTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 

@@ -71,8 +71,8 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString EmbossTool::Private::configGroupName("emboss Tool");
-const QString EmbossTool::Private::configDepthAdjustmentEntry("DepthAdjustment");
+const QString EmbossTool::Private::configGroupName(QLatin1String("emboss Tool"));
+const QString EmbossTool::Private::configDepthAdjustmentEntry(QLatin1String("DepthAdjustment"));
 
 // --------------------------------------------------------
 
