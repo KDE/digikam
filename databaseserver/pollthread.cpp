@@ -50,7 +50,9 @@ namespace Digikam
 {
 
 PollThread::PollThread(QObject* const parent)
-    : QThread(parent), stop(false), waitTime(10)
+    : QThread(parent),
+      stop(false),
+      waitTime(10)
 {
 }
 
@@ -69,7 +71,7 @@ void PollThread::run()
 
 bool PollThread::checkDigikamInstancesRunning()
 {
-    QSystemSemaphore sem("DigikamDBSrvAccess", 1, QSystemSemaphore::Open);
+    QSystemSemaphore sem(QLatin1String("DigikamDBSrvAccess"), 1, QSystemSemaphore::Open);
     sem.acquire();
     QDBusConnectionInterface* interface = QDBusConnection::sessionBus().interface();
     QDBusReply<QStringList> reply       = interface->registeredServiceNames();
@@ -80,6 +82,7 @@ bool PollThread::checkDigikamInstancesRunning()
         QLatin1String digikamStartupService("org.kde.digikam.startup-");
         QLatin1String digikamService("org.kde.digikam-");
         QLatin1String digikamKioService("org.kde.digikam.KIO-");
+
         foreach(const QString& service, serviceNames)
         {
             if (service.startsWith(digikamStartupService) ||

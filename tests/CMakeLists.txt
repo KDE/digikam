@@ -42,7 +42,6 @@ ecm_mark_as_test(renamecustomizertest)
 target_link_libraries(renamecustomizertest
                       Qt5::Gui
                       Qt5::Test
-                      KF5::KDELibs4Support
                       digikamdatabase
                       importui
                       advancedrename
@@ -65,7 +64,6 @@ target_link_libraries(cameranamehelpertest
                       #Qt5::Gui
                       #Qt5::Widgets
                       Qt5::Test
-                      #KF5::KDELibs4Support
                       digikamdatabase
                       #KF5::KDcraw
                       #KF5::KExiv2
@@ -154,7 +152,6 @@ target_link_libraries(filesaveoptionsboxtest
 #target_link_libraries(albummodeltest
 #                      Qt5::Test
 #                      KF5::KIOCore
-#                      KF5::KDELibs4Support
 
 #                      digikamdatabase
 #)
@@ -225,7 +222,6 @@ target_link_libraries(dimagefilteractiontest
 #                      digikamdatabase
 #                      Qt5::Gui
 #                      Qt5::Test
-#                      KF5::KDELibs4Support
 #                      KF5::KExiv2
 #)
 

@@ -19,7 +19,6 @@ target_link_libraries(digikamdatabaseserver
                       digikamdatabase
 
                       Qt5::Sql
-                      KF5::KDELibs4Support
 )
 
 if(NOT WIN32)

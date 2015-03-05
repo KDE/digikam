@@ -64,7 +64,7 @@ public:
         databaseProcess = 0;
         app             = 0;
         pollThread      = 0;
-        internalDBName  = QString("digikam");
+        internalDBName  = QLatin1String("digikam");
     }
 
     QProcess*         databaseProcess;
@@ -74,7 +74,8 @@ public:
 };
 
 DatabaseServer::DatabaseServer(QCoreApplication* const application)
-    : QObject(application), d(new DatabaseServerPriv)
+    : QObject(application),
+      d(new DatabaseServerPriv)
 {
     d->app = application;
 
@@ -92,8 +93,8 @@ DatabaseServer::~DatabaseServer()
 void DatabaseServer::registerOnDBus()
 {
     new DatabaseServerAdaptor(this);
-    QDBusConnection::sessionBus().registerObject("/DatabaseServer", this);
-    QDBusConnection::sessionBus().registerService("org.kde.digikam.DatabaseServer");
+    QDBusConnection::sessionBus().registerObject(QLatin1String("/DatabaseServer"), this);
+    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam.DatabaseServer"));
 }
 
 void DatabaseServer::startPolling()
@@ -131,7 +132,7 @@ bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& e
     else
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "DBType ["<< dbType <<"] is not supported.";
-        DatabaseServerError errorDetails(DatabaseServerError::NotSupported, QString("DBType [%0] is not supported.").arg(dbType));
+        DatabaseServerError errorDetails(DatabaseServerError::NotSupported, QString::fromUtf8("DBType [%0] is not supported.").arg(dbType));
         error = QDBusVariant(QVariant::fromValue(errorDetails));
         return false;
     }
@@ -157,7 +158,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     const QString mysqldPath(DatabaseConfigElement::element(dbType).dbServerCmd);
     //const QString mysqldPath("/usr/sbin/mysqld");
 
-    if ( mysqldPath.isEmpty() || (mysqldPath.compare( QLatin1String( "SERVERCMD_MYSQL-NOTFOUND" )) == 0))
+    if ( mysqldPath.isEmpty() || (mysqldPath.compare(QLatin1String( "SERVERCMD_MYSQL-NOTFOUND" )) == 0))
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysqld set in server configuration!";
         return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysqld set in server configuration."));
@@ -169,10 +170,10 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     //  const QString miscDir     = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam/db_misc" ) );
     //  const QString fileDataDir = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam/file_db_data" ) );
 
-    const QString akDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/");
-    const QString dataDir     = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/db_data");
-    const QString miscDir     = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/db_misc");
-    const QString fileDataDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/file_db_data");
+    const QString akDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/");
+    const QString dataDir     = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_data");
+    const QString miscDir     = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_misc");
+    const QString fileDataDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/file_db_data");
 
     /*
     * TODO Move the database command outside of the code to the dbconfig.xml file.
@@ -200,8 +201,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         QDir().mkpath(miscDir);
     }
 
-    const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/mysql-global.conf");
-    const QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/mysql-local.conf");
+    const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-global.conf"));
+    const QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-local.conf"));
     const QString actualConfig = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/digikam/mysql.conf");
 
     if ( globalConfig.isEmpty() )
@@ -314,7 +315,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     arguments << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
 
     // init db
-    if (!QFile(dataDir + QDir::separator() + QString("mysql")).exists())
+    if (!QFile(dataDir + QDir::separator() + QLatin1String("mysql")).exists())
     {
         QProcess initProcess;
         initProcess.start( mysqlInitCmd );
@@ -334,7 +335,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     if ( !d->databaseProcess->waitForStarted() )
     {
-        QString argumentStr =  arguments.join(", ");
+        QString argumentStr =  arguments.join(QLatin1String(", "));
         QString  str        =  i18n("Could not start database server.");
         str                 += i18n("<p>Executable: %1</p>", mysqldPath);
         str                 += i18n("<p>Arguments: %1</p>", argumentStr);
@@ -352,7 +353,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     {
         QSqlDatabase db = QSqlDatabase::addDatabase( DatabaseParameters::MySQLDatabaseType(), initCon );
         db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir));
-        db.setUserName(QString("root"));
+        db.setUserName(QLatin1String("root"));
         db.setDatabaseName( QString() ); // might not exist yet, then connecting to the actual db will fail
 
         if ( !db.isValid() )
@@ -430,8 +431,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
  */
 DatabaseServerError DatabaseServer::createDatabase()
 {
-    const QLatin1String initCon( "initConnection" );
-    QSqlDatabase db = QSqlDatabase::addDatabase( "MYSQL", initCon );
+    const QLatin1String initCon("initConnection");
+    QSqlDatabase db = QSqlDatabase::addDatabase( QLatin1String("MYSQL"), initCon );
 
     // Might not exist yet, then connecting to the actual db will fail.
     db.setDatabaseName( QString() );
