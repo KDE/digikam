@@ -49,7 +49,7 @@ class ImageAlbumModel : public ImageThumbnailModel
 
 public:
 
-    explicit ImageAlbumModel(QObject* parent = 0);
+    explicit ImageAlbumModel(QObject* const parent = 0);
     ~ImageAlbumModel();
 
     QList<Album*> currentAlbums() const;
@@ -110,8 +110,8 @@ protected:
 
 private:
 
-    class ImageAlbumModelPriv;
-    ImageAlbumModelPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

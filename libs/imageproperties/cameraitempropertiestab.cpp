@@ -184,7 +184,8 @@ public:
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
-    : RExpanderBox(parent), d(new Private)
+    : RExpanderBox(parent),
+      d(new Private)
 {
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
@@ -206,17 +207,17 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     d->newFileName            = new DTextLabelName(i18n("New Name: "),     w1);
     d->downloaded             = new DTextLabelName(i18n("Downloaded: "),   w1);
 
-    d->labelFile              = new DTextLabelValue(0, w1);
-    d->labelFolder            = new DTextLabelValue(0, w1);
-    d->labelFileDate          = new DTextLabelValue(0, w1);
-    d->labelFileSize          = new DTextLabelValue(0, w1);
-    d->labelFileIsReadable    = new DTextLabelValue(0, w1);
-    d->labelFileIsWritable    = new DTextLabelValue(0, w1);
-    d->labelImageMime         = new DTextLabelValue(0, w1);
-    d->labelImageDimensions   = new DTextLabelValue(0, w1);
-    d->labelImageRatio        = new DTextLabelValue(0, w1);
-    d->labelNewFileName       = new DTextLabelValue(0, w1);
-    d->labelAlreadyDownloaded = new DTextLabelValue(0, w1);
+    d->labelFile              = new DTextLabelValue(QString(), w1);
+    d->labelFolder            = new DTextLabelValue(QString(), w1);
+    d->labelFileDate          = new DTextLabelValue(QString(), w1);
+    d->labelFileSize          = new DTextLabelValue(QString(), w1);
+    d->labelFileIsReadable    = new DTextLabelValue(QString(), w1);
+    d->labelFileIsWritable    = new DTextLabelValue(QString(), w1);
+    d->labelImageMime         = new DTextLabelValue(QString(), w1);
+    d->labelImageDimensions   = new DTextLabelValue(QString(), w1);
+    d->labelImageRatio        = new DTextLabelValue(QString(), w1);
+    d->labelNewFileName       = new DTextLabelValue(QString(), w1);
+    d->labelAlreadyDownloaded = new DTextLabelValue(QString(), w1);
 
     glay1->addWidget(d->file,                   0,  0, 1, 1);
     glay1->addWidget(d->labelFile,              0,  1, 1, 1);
@@ -245,7 +246,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay1->setSpacing(0);
 
     addItem(w1, QIcon::fromTheme(QLatin1String("dialog-information")),
-            i18n("Camera File Properties"), QString("FileProperties"), true);
+            i18n("Camera File Properties"), QLatin1String("FileProperties"), true);
 
     // --------------------------------------------------
 
@@ -264,17 +265,17 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     d->flash                  = new DTextLabelName(i18n("Flash: "),         w2);
     d->whiteBalance           = new DTextLabelName(i18n("White balance: "), w2);
 
-    d->labelPhotoMake         = new DTextLabelValue(0, w2);
-    d->labelPhotoModel        = new DTextLabelValue(0, w2);
-    d->labelPhotoDateTime     = new DTextLabelValue(0, w2);
-    d->labelPhotoLens         = new DTextLabelValue(0, w2);
-    d->labelPhotoAperture     = new DTextLabelValue(0, w2);
-    d->labelPhotoFocalLength  = new DTextLabelValue(0, w2);
-    d->labelPhotoExposureTime = new DTextLabelValue(0, w2);
-    d->labelPhotoSensitivity  = new DTextLabelValue(0, w2);
-    d->labelPhotoExposureMode = new DTextLabelValue(0, w2);
-    d->labelPhotoFlash        = new DTextLabelValue(0, w2);
-    d->labelPhotoWhiteBalance = new DTextLabelValue(0, w2);
+    d->labelPhotoMake         = new DTextLabelValue(QString(), w2);
+    d->labelPhotoModel        = new DTextLabelValue(QString(), w2);
+    d->labelPhotoDateTime     = new DTextLabelValue(QString(), w2);
+    d->labelPhotoLens         = new DTextLabelValue(QString(), w2);
+    d->labelPhotoAperture     = new DTextLabelValue(QString(), w2);
+    d->labelPhotoFocalLength  = new DTextLabelValue(QString(), w2);
+    d->labelPhotoExposureTime = new DTextLabelValue(QString(), w2);
+    d->labelPhotoSensitivity  = new DTextLabelValue(QString(), w2);
+    d->labelPhotoExposureMode = new DTextLabelValue(QString(), w2);
+    d->labelPhotoFlash        = new DTextLabelValue(QString(), w2);
+    d->labelPhotoWhiteBalance = new DTextLabelValue(QString(), w2);
 
     glay2->addWidget(d->make,                    0, 0, 1, 1);
     glay2->addWidget(d->labelPhotoMake,          0, 1, 1, 1);
@@ -303,7 +304,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay2->setSpacing(0);
 
     addItem(w2, QIcon::fromTheme(QLatin1String("camera-photo")),
-            i18n("Photograph Properties"), QString("PhotographProperties"), true);
+            i18n("Photograph Properties"), QLatin1String("PhotographProperties"), true);
 
     // -------------------------------------------------- 
 
@@ -318,13 +319,13 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     d->frameRate                  = new DTextLabelName(i18n("Frame Rate: "),         w3);
     d->videoCodec                 = new DTextLabelName(i18n("Video Codec: "),        w3);
 
-    d->labelVideoAspectRatio      = new DTextLabelValue(0, w3);
-    d->labelVideoAudioBitRate     = new DTextLabelValue(0, w3);
-    d->labelVideoAudioChannelType = new DTextLabelValue(0, w3);
-    d->labelVideoAudioCompressor  = new DTextLabelValue(0, w3);
-    d->labelVideoDuration         = new DTextLabelValue(0, w3);
-    d->labelVideoFrameRate        = new DTextLabelValue(0, w3);
-    d->labelVideoVideoCodec       = new DTextLabelValue(0, w3);
+    d->labelVideoAspectRatio      = new DTextLabelValue(QString(), w3);
+    d->labelVideoAudioBitRate     = new DTextLabelValue(QString(), w3);
+    d->labelVideoAudioChannelType = new DTextLabelValue(QString(), w3);
+    d->labelVideoAudioCompressor  = new DTextLabelValue(QString(), w3);
+    d->labelVideoDuration         = new DTextLabelValue(QString(), w3);
+    d->labelVideoFrameRate        = new DTextLabelValue(QString(), w3);
+    d->labelVideoVideoCodec       = new DTextLabelValue(QString(), w3);
 
     glay3->addWidget(d->aspectRatio,                0, 0, 1, 1);
     glay3->addWidget(d->labelVideoAspectRatio,      0, 1, 1, 1);
@@ -345,7 +346,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay3->setColumnStretch(1, 10);
 
     addItem(w3, QIcon::fromTheme(QLatin1String("video-x-generic")),
-            i18n("Video Properties"), QString("VideoProperties"), true);
+            i18n("Video Properties"), QLatin1String("VideoProperties"), true);
 
     // --------------------------------------------------
 
@@ -451,7 +452,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
 
     // -- Image Properties --------------------------------------------------
 
-    if (itemInfo.mime == "image/x-raw")
+    if (itemInfo.mime == QLatin1String("image/x-raw"))
     {
         d->labelImageMime->setAdjustedText(i18n("RAW Image"));
     }
@@ -475,7 +476,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
     if (itemInfo.width == -1 && itemInfo.height == -1)
     {
         // delayed loading to list faster from UMSCamera
-        if (itemInfo.mime == "image/x-raw")
+        if (itemInfo.mime == QLatin1String("image/x-raw"))
         {
             dims = meta.getImageDimensions();
         }
@@ -579,7 +580,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
     }
     else
     {
-        str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+        str = QString::fromUtf8("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
         d->labelPhotoExposureMode->setAdjustedText(str);
     }
 

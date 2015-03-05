@@ -197,15 +197,15 @@ void ImagePropertiesSideBarCamGui::doLoadState()
 
     KConfigGroup group = getConfigGroup();
 
-    KConfigGroup groupCameraItemTab    = KConfigGroup(&group, entryName("Camera Item Properties Tab"));
+    KConfigGroup groupCameraItemTab    = KConfigGroup(&group, entryName(QLatin1String("Camera Item Properties Tab")));
     d->cameraItemTab->readSettings(groupCameraItemTab);
 
 #ifdef HAVE_KGEOMAP
-    KConfigGroup groupGPSTab            = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    KConfigGroup groupGPSTab            = KConfigGroup(&group, entryName(QLatin1String("GPS Properties Tab")));
     d->gpsTab->readSettings(groupGPSTab);
 #endif // HAVE_KGEOMAP
 
-    const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName(QLatin1String("Metadata Properties Tab")));
     d->metadataTab->readSettings(groupMetadataTab);
 }
 
@@ -219,15 +219,15 @@ void ImagePropertiesSideBarCamGui::doSaveState()
 
     KConfigGroup group = getConfigGroup();
 
-    KConfigGroup groupCameraItemTab = KConfigGroup(&group, entryName("Camera Item Properties Tab"));
+    KConfigGroup groupCameraItemTab = KConfigGroup(&group, entryName(QLatin1String("Camera Item Properties Tab")));
     d->cameraItemTab->writeSettings(groupCameraItemTab);
 
 #ifdef HAVE_KGEOMAP
-    KConfigGroup groupGPSTab        = KConfigGroup(&group, entryName("GPS Properties Tab"));
+    KConfigGroup groupGPSTab        = KConfigGroup(&group, entryName(QLatin1String("GPS Properties Tab")));
     d->gpsTab->writeSettings(groupGPSTab);
 #endif // HAVE_KGEOMAP
 
-    KConfigGroup groupMetadataTab   = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    KConfigGroup groupMetadataTab   = KConfigGroup(&group, entryName(QLatin1String("Metadata Properties Tab")));
     d->metadataTab->writeSettings(groupMetadataTab);
 }
 

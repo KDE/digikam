@@ -77,7 +77,7 @@ DBStatDlg::DBStatDlg(QWidget* const parent)
     QString dbBe = ApplicationSettings::instance()->getDatabaseType();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Database backend") << dbBe);
 
-    if (dbBe != QString("QSQLITE"))
+    if (dbBe != QLatin1String("QSQLITE"))
     {
         QString internal = ApplicationSettings::instance()->getInternalDatabaseServer() ? i18n("Yes") : i18n("No");
         new QTreeWidgetItem(listView(), QStringList() << i18n("Database internal server") << internal);

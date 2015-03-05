@@ -156,7 +156,8 @@ public:
 };
 
 TemplateViewer::TemplateViewer(QWidget* const parent)
-    : RExpanderBox(parent), d(new Private)
+    : RExpanderBox(parent),
+      d(new Private)
 {
     setFrameStyle(QFrame::NoFrame);
 
@@ -186,7 +187,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->instructions->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     addItem(w1, QIcon::fromTheme(QLatin1String("flag-red")),
-            i18n("Rights"), QString("Rights"), true);
+            i18n("Rights"), QLatin1String("Rights"), true);
 
     // ------------------------------------------------------------------
 
@@ -206,7 +207,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->locationCountry->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     addItem(w2, QIcon::fromTheme(QLatin1String("applications-internet")),
-            i18n("Location"), QString("Location"), true);
+            i18n("Location"), QLatin1String("Location"), true);
 
     // ------------------------------------------------------------------
 
@@ -246,7 +247,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->contactWebUrl->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     addItem(w3, QIcon::fromTheme(QLatin1String("view-pim-contacts")),
-            i18n("Contact"), QString("Contact"), true);
+            i18n("Contact"), QLatin1String("Contact"), true);
 
     // ------------------------------------------------------------------
 
@@ -254,7 +255,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->subjectsList = new DTextList(QStringList(), w4);
 
     addItem(w4, QIcon::fromTheme(QLatin1String("feed-subscribe")),
-            i18n("Subjects"), QString("Subjects"), true);
+            i18n("Subjects"), QLatin1String("Subjects"), true);
 
     addStretch();
 }
@@ -270,8 +271,8 @@ void TemplateViewer::setTemplate(const Template& t)
     d->namesList->addItems(t.authors());
     d->labelPosition->setText(t.authorsPosition());
     d->labelCredit->setText(t.credit());
-    d->labelCopyright->setText(t.copyright()["x-default"]);
-    d->labelUsages->setText(t.rightUsageTerms()["x-default"]);
+    d->labelCopyright->setText(t.copyright()[QLatin1String("x-default")]);
+    d->labelUsages->setText(t.rightUsageTerms()[QLatin1String("x-default")]);
     d->labelSource->setText(t.source());
     d->labelInstructions->setText(t.instructions());
 
@@ -286,8 +287,8 @@ void TemplateViewer::setTemplate(const Template& t)
     d->labelContactCity->setText(t.contactInfo().city);
     d->labelContactCountry->setText(t.contactInfo().country);
     d->labelContactPhone->setText(t.contactInfo().phone);
-    d->labelContactEmail->setAdjustedText(QString("<a href=\"mailto:%1\">%2</a>").arg(t.contactInfo().email).arg(t.contactInfo().email));
-    d->labelContactWebUrl->setAdjustedText(QString("<a href=\"%1\">%2</a>").arg(t.contactInfo().webUrl).arg(t.contactInfo().webUrl));
+    d->labelContactEmail->setAdjustedText(QString::fromUtf8("<a href=\"mailto:%1\">%2</a>").arg(t.contactInfo().email).arg(t.contactInfo().email));
+    d->labelContactWebUrl->setAdjustedText(QString::fromUtf8("<a href=\"%1\">%2</a>").arg(t.contactInfo().webUrl).arg(t.contactInfo().webUrl));
 
     d->subjectsList->clear();
     d->subjectsList->addItems(t.IptcSubjects());

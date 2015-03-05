@@ -42,12 +42,12 @@ SubjectEdit::SubjectEdit(QWidget* const parent)
     // - '*' (\x2A)
     // - ':' (\x3A)
     // - '?' (\x3F)
-    QRegExp subjectRx("[^*:?]+$");
-    QValidator* subjectValidator = new QRegExpValidator(subjectRx, this);
+    QRegExp subjectRx(QLatin1String("[^*:?]+$"));
+    QValidator* const subjectValidator = new QRegExpValidator(subjectRx, this);
 
     // --------------------------------------------------------
 
-    m_iprEdit->setText(QString("XMP"));
+    m_iprEdit->setText(QLatin1String("XMP"));
     m_iprEdit->setValidator(subjectValidator);
     m_iprEdit->setWhatsThis(i18n("Enter the Informative Provider Reference here. "
                                  "I.P.R is a name registered with the XMP/NAA, identifying the "
@@ -93,7 +93,7 @@ SubjectEdit::~SubjectEdit()
 void SubjectEdit::slotRefChanged()
 {
     SubjectWidget::slotRefChanged();
-    m_iprEdit->setText(QString("XMP"));
+    m_iprEdit->setText(QLatin1String("XMP"));
 }
 
 }  // namespace Digikam

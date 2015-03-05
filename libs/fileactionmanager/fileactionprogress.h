@@ -41,7 +41,7 @@ class FileActionProgress : public ProgressItem
 
 public:
 
-    explicit FileActionProgress(const char* name);
+    explicit FileActionProgress(const QString& name);
     ~FileActionProgress();
 
 Q_SIGNALS:

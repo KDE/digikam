@@ -115,15 +115,16 @@ public:
 };
 
 TemplatePanel::TemplatePanel(QWidget* const parent)
-    : QTabWidget(parent), d(new Private)
+    : QTabWidget(parent),
+      d(new Private)
 {
     // -- Rights Template information panel -------------------------------------------------------------
 
-    QWidget* page1     = new QWidget(this);
-    QGridLayout* grid1 = new QGridLayout(page1);
+    QWidget* const page1     = new QWidget(this);
+    QGridLayout* const grid1 = new QGridLayout(page1);
 
-    QLabel* label1     = new QLabel(i18n("Author Names:"), page1);
-    d->authorsEdit     = new QLineEdit(page1);
+    QLabel* const label1 = new QLabel(i18n("Author Names:"), page1);
+    d->authorsEdit       = new QLineEdit(page1);
     d->authorsEdit->setClearButtonEnabled(true);
     d->authorsEdit->setPlaceholderText(i18n("Enter the names of the photograph's creators. Use semi-colons as separator here."));
     label1->setBuddy(d->authorsEdit);
@@ -136,7 +137,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label2         = new QLabel(i18n("Authors' Positions:"), page1);
+    QLabel* const label2   = new QLabel(i18n("Authors' Positions:"), page1);
     d->authorsPositionEdit = new QLineEdit(page1);
     d->authorsPositionEdit->setClearButtonEnabled(true);
     d->authorsPositionEdit->setPlaceholderText(i18n("Enter the job titles of the authors here."));
@@ -149,8 +150,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label3 = new QLabel(i18n("Credit:"), page1);
-    d->creditEdit  = new QLineEdit(page1);
+    QLabel* const label3 = new QLabel(i18n("Credit:"), page1);
+    d->creditEdit        = new QLineEdit(page1);
     d->creditEdit->setClearButtonEnabled(true);
     d->creditEdit->setPlaceholderText(i18n("Enter the photograph credit here."));
     label3->setBuddy(d->creditEdit);
@@ -198,8 +199,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label6 = new QLabel(i18n("Source:"), page1);
-    d->sourceEdit  = new QLineEdit(page1);
+    QLabel* const label6 = new QLabel(i18n("Source:"), page1);
+    d->sourceEdit        = new QLineEdit(page1);
     d->sourceEdit->setClearButtonEnabled(true);
     d->sourceEdit->setPlaceholderText(i18n("Enter the original owner of the photograph here."));
     label6->setBuddy(d->sourceEdit);
@@ -215,8 +216,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label7      = new QLabel(i18n("Instructions:"), page1);
-    d->instructionsEdit = new QLineEdit(page1);
+    QLabel* const label7 = new QLabel(i18n("Instructions:"), page1);
+    d->instructionsEdit  = new QLineEdit(page1);
     d->instructionsEdit->setClearButtonEnabled(true);
     d->instructionsEdit->setPlaceholderText(i18n("Enter the editorial notice here."));
     label7->setBuddy(d->instructionsEdit);
@@ -247,12 +248,12 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // -- Location Template information panel -------------------------------------------------------------
 
-    QWidget* page2 = new QWidget(this);
+    QWidget* const page2 = new QWidget(this);
 
     // --------------------------------------------------------
 
-    QLabel* label9      = new QLabel(i18n("City:"));
-    d->locationCityEdit = new QLineEdit;
+    QLabel* const label9 = new QLabel(i18n("City:"));
+    d->locationCityEdit  = new QLineEdit;
     d->locationCityEdit->setClearButtonEnabled(true);
     d->locationCityEdit->setPlaceholderText(i18n("Enter the city of contents here."));
     label9->setBuddy(d->locationCityEdit);
@@ -261,7 +262,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label10            = new QLabel(i18n("Supplication:"));
+    QLabel* const label10      = new QLabel(i18n("Supplication:"));
     d->locationSublocationEdit = new QLineEdit;
     d->locationSublocationEdit->setClearButtonEnabled(true);
     d->locationSublocationEdit->setPlaceholderText(i18n("Enter the city sublocation of contents here."));
@@ -271,7 +272,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label11              = new QLabel(i18n("Province/State:"));
+    QLabel* const label11        = new QLabel(i18n("Province/State:"));
     d->locationProvinceStateEdit = new QLineEdit;
     d->locationProvinceStateEdit->setClearButtonEnabled(true);
     d->locationProvinceStateEdit->setPlaceholderText(i18n("Enter the province or state of contents here."));
@@ -281,7 +282,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label12            = new QLabel(i18n("Country:"));
+    QLabel* const label12      = new QLabel(i18n("Country:"));
     d->locationCountryCodeEdit = new CountrySelector(page2);
     label12->setBuddy(d->locationCountryCodeEdit);
     d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country "
@@ -313,10 +314,10 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // -- Contact Template information panel -------------------------------------------------------------
 
-    QWidget* page3     = new QWidget(this);
+    QWidget* const page3  = new QWidget(this);
 
-    QLabel* label13    = new QLabel(i18n("City:"), page3);
-    d->contactCityEdit = new QLineEdit(page3);
+    QLabel* const label13 = new QLabel(i18n("City:"), page3);
+    d->contactCityEdit    = new QLineEdit(page3);
     d->contactCityEdit->setClearButtonEnabled(true);
     d->contactCityEdit->setPlaceholderText(i18n("Enter the city name of the lead author here."));
     label13->setBuddy(d->contactCityEdit);
@@ -325,7 +326,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label14       = new QLabel(i18n("Country:"), page3);
+    QLabel* const label14 = new QLabel(i18n("Country:"), page3);
     d->contactCountryEdit = new QLineEdit(page3);
     d->contactCountryEdit->setClearButtonEnabled(true);
     d->contactCountryEdit->setPlaceholderText(i18n("Enter the country name of the lead author here."));
@@ -335,7 +336,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label15       = new QLabel(i18n("Address:"), page3);
+    QLabel* const label15 = new QLabel(i18n("Address:"), page3);
     d->contactAddressEdit = new QLineEdit(page3);
     d->contactAddressEdit->setClearButtonEnabled(true);
     d->contactAddressEdit->setPlaceholderText(i18n("Enter the address of the lead author here."));
@@ -345,7 +346,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label16          = new QLabel(i18n("Postal Code:"), page3);
+    QLabel* const label16    = new QLabel(i18n("Postal Code:"), page3);
     d->contactPostalCodeEdit = new QLineEdit(page3);
     d->contactPostalCodeEdit->setClearButtonEnabled(true);
     d->contactPostalCodeEdit->setPlaceholderText(i18n("Enter the postal code of the lead author here."));
@@ -355,7 +356,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label17             = new QLabel(i18n("Province:"), page3);
+    QLabel* const label17       = new QLabel(i18n("Province:"), page3);
     d->contactProvinceStateEdit = new QLineEdit(page3);
     d->contactProvinceStateEdit->setClearButtonEnabled(true);
     d->contactProvinceStateEdit->setPlaceholderText(i18n("Enter the province of the lead author here."));
@@ -365,8 +366,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label18     = new QLabel(i18n("Email:"), page3);
-    d->contactEmailEdit = new QLineEdit(page3);
+    QLabel* const label18 = new QLabel(i18n("Email:"), page3);
+    d->contactEmailEdit   = new QLineEdit(page3);
     d->contactEmailEdit->setClearButtonEnabled(true);
     d->contactEmailEdit->setPlaceholderText(i18n("Enter the email of the lead author here."));
     label18->setBuddy(d->contactEmailEdit);
@@ -375,8 +376,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label19     = new QLabel(i18n("Phone:"), page3);
-    d->contactPhoneEdit = new QLineEdit(page3);
+    QLabel* const label19 = new QLabel(i18n("Phone:"), page3);
+    d->contactPhoneEdit   = new QLineEdit(page3);
     d->contactPhoneEdit->setClearButtonEnabled(true);
     d->contactPhoneEdit->setPlaceholderText(i18n("Enter the phone number of the lead author here."));
     label19->setBuddy(d->contactPhoneEdit);
@@ -385,8 +386,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label20      = new QLabel(i18n("URL:"), page3);
-    d->contactWebUrlEdit = new QLineEdit(page3);
+    QLabel* const label20 = new QLabel(i18n("URL:"), page3);
+    d->contactWebUrlEdit  = new QLineEdit(page3);
     d->contactWebUrlEdit->setClearButtonEnabled(true);
     d->contactWebUrlEdit->setPlaceholderText(i18n("Enter the web site URL of the lead author here."));
     label20->setBuddy(d->contactWebUrlEdit);
@@ -395,7 +396,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGridLayout* grid3 = new QGridLayout;
+    QGridLayout* const grid3 = new QGridLayout;
     grid3->addWidget(label15,                     0, 0, 1, 1);
     grid3->addWidget(d->contactAddressEdit,       0, 1, 1, 2);
     grid3->addWidget(label16,                     1, 0, 1, 1);
@@ -431,9 +432,9 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // -- Subjects Template information panel -------------------------------------------------------------
 
-    QWidget* page4     = new QWidget(this);
-    QGridLayout* grid4 = new QGridLayout(page4);
-    d->subjects        = new SubjectEdit(page4);
+    QWidget* const page4     = new QWidget(this);
+    QGridLayout* const grid4 = new QGridLayout(page4);
+    d->subjects              = new SubjectEdit(page4);
 
     grid4->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid4->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -451,7 +452,7 @@ TemplatePanel::~TemplatePanel()
 
 void TemplatePanel::setTemplate(const Template& t)
 {
-    d->authorsEdit->setText(t.authors().join(";"));
+    d->authorsEdit->setText(t.authors().join(QLatin1String(";")));
     d->authorsPositionEdit->setText(t.authorsPosition());
     d->creditEdit->setText(t.credit());
     d->copyrightEdit->setValues(t.copyright());
@@ -479,7 +480,7 @@ void TemplatePanel::setTemplate(const Template& t)
 Template TemplatePanel::getTemplate() const
 {
     Template t;
-    t.setAuthors(d->authorsEdit->text().split(';', QString::SkipEmptyParts));
+    t.setAuthors(d->authorsEdit->text().split(QLatin1Char(';'), QString::SkipEmptyParts));
     t.setAuthorsPosition(d->authorsPositionEdit->text());
     t.setCredit(d->creditEdit->text());
     t.setCopyright(d->copyrightEdit->values());

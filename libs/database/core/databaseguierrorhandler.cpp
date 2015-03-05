@@ -81,7 +81,7 @@ DatabaseConnectionChecker::~DatabaseConnectionChecker()
 
 void DatabaseConnectionChecker::run()
 {
-    QString databaseID("ConnectionTest");
+    QString databaseID(QLatin1String("ConnectionTest"));
 
     // NOTE: wrap this code into bracket to prevent QtQSL plugin warning. See bug #339074 for details.
     {
@@ -115,7 +115,7 @@ void DatabaseConnectionChecker::run()
 
                 if (!d->stop)
                 {
-                    int waitingTime = qMin(2000, iteration++*200);
+                    int waitingTime = qMin(2000, iteration++ * 200);
                     d->condVar.wait(&d->mutex, waitingTime);
                 }
             }

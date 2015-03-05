@@ -79,7 +79,7 @@ DeleteItem::DeleteItem(QTreeWidget* const parent, const QUrl& url)
 {
     d->url = url;
 
-    if (d->url.scheme() == "digikamalbums")
+    if (d->url.scheme() == QLatin1String("digikamalbums"))
     {
         if (DatabaseUrl(d->url).isAlbumUrl())
         {
@@ -119,7 +119,7 @@ QString DeleteItem::fileUrl() const
     {
         return (d->url.toLocalFile());
     }
-    else if (d->url.scheme() == "digikamalbums")
+    else if (d->url.scheme() == QLatin1String("digikamalbums"))
     {
         return (DatabaseUrl(d->url).fileUrl().toLocalFile());
     }
@@ -168,7 +168,8 @@ public:
 };
 
 DeleteItemList::DeleteItemList(QWidget* const parent)
-    : QTreeWidget(parent), d(new Private)
+    : QTreeWidget(parent),
+      d(new Private)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
@@ -199,7 +200,7 @@ void DeleteItemList::slotThumbnailLoaded(const LoadingDescription& desc, const Q
 
     while (*it)
     {
-        DeleteItem* item = dynamic_cast<DeleteItem*>(*it);
+        DeleteItem* const item = dynamic_cast<DeleteItem*>(*it);
 
         if (item && item->fileUrl() == desc.filePath)
         {
@@ -216,7 +217,7 @@ void DeleteItemList::slotThumbnailLoaded(const LoadingDescription& desc, const Q
 
 void DeleteItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
-    DeleteItem* item = dynamic_cast<DeleteItem*>(itemFromIndex(index));
+    DeleteItem* const item = dynamic_cast<DeleteItem*>(itemFromIndex(index));
 
     if (item && !item->hasValidThumbnail())
     {
@@ -261,7 +262,8 @@ public:
 };
 
 DeleteWidget::DeleteWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setObjectName(QLatin1String("DeleteDialogBase"));
 
@@ -270,7 +272,7 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
 
     d->checkBoxStack = new QStackedWidget(this);
     QLabel* logo     = new QLabel(this);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->warningIcon   = new QLabel(this);
@@ -317,7 +319,7 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
     d->doNotShowAgain->setGeometry(QRect(0, 0, 100, 30));
     d->doNotShowAgain->setText(i18n("Do not &ask again"));
 
-    QVBoxLayout* vbox = new QVBoxLayout(this);
+    QVBoxLayout* const vbox = new QVBoxLayout(this);
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox->setContentsMargins(0, 0, 0, 0);
@@ -483,7 +485,8 @@ public:
 };
 
 DeleteDialog::DeleteDialog(QWidget* const parent)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     setModal(true);
     

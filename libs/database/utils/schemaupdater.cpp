@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QDir>
 #include <QUrl>
+#include <QUrlQuery>
 
 // KDE includes
 

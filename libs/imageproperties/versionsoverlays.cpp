@@ -66,8 +66,7 @@ QSize ShowHideVersionsOverlay::Button::sizeHint() const
 
 QIcon ShowHideVersionsOverlay::Button::icon()
 {
-    QString icon = isChecked() ? "edit-bomb" : "edit-clear-history";
-    //const char* icon = isChecked() ? "layer-visible-off" : "layer-visible-on";
+    QString icon = isChecked() ? QLatin1String("edit-bomb") : QLatin1String("edit-clear-history");
     return QIcon::fromTheme(icon);
 }
 

@@ -141,8 +141,6 @@ find_package(KF5 REQUIRED COMPONENTS
              Solid
              IconThemes
              I18n
-
-             KDELibs4Support
 )
 
 # ==================================================================================================

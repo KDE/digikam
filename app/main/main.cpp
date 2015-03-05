@@ -132,9 +132,9 @@ int main(int argc, char* argv[])
 
     QString commandLineDBPath;
 
-    if (parser.isSet("database-directory"))
+    if (parser.isSet(QLatin1String("database-directory")))
     {
-        QFileInfo commandLineDBDir(parser.value("database-directory"));
+        QFileInfo commandLineDBDir(parser.value(QLatin1String("database-directory")));
 
         if (!commandLineDBDir.exists() || !commandLineDBDir.isDir())
         {
@@ -147,9 +147,9 @@ int main(int argc, char* argv[])
     }
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("General Settings");
-    QString version           = group.readEntry("Version", QString());
-    KConfigGroup mainConfig   = config->group("Album Settings");
+    KConfigGroup group        = config->group(QLatin1String("General Settings"));
+    QString version           = group.readEntry(QLatin1String("Version"), QString());
+    KConfigGroup mainConfig   = config->group(QLatin1String("Album Settings"));
 
     QString            firstAlbumPath;
     DatabaseParameters params;
@@ -190,7 +190,7 @@ int main(int argc, char* argv[])
      * The first real dbus instance is registered within the DigikamApp() constructor,
      * so we create a service on dbus which is unregistered after initialization the application.
      */
-    QDBusConnection::sessionBus().registerService("org.kde.digikam.startup-" +
+    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam.startup-") +
                      QString::number(QCoreApplication::instance()->applicationPid()));
 
     // initialize database
@@ -209,28 +209,28 @@ int main(int argc, char* argv[])
                      &app, SLOT(quit()));
 
     // Unregister the dummy service
-    QDBusConnection::sessionBus().unregisterService("org.kde.digikam.startup-" +
+    QDBusConnection::sessionBus().unregisterService(QLatin1String("org.kde.digikam.startup-") +
                      QString::number(QCoreApplication::instance()->applicationPid()));
 
     digikam->restoreSession();
     digikam->show();
 
-    if (parser.isSet("download-from"))
+    if (parser.isSet(QLatin1String("download-from")))
     {
-        digikam->downloadFrom(parser.value("download-from"));
+        digikam->downloadFrom(parser.value(QLatin1String("download-from")));
     }
-    else if (parser.isSet("download-from-udi"))
+    else if (parser.isSet(QLatin1String("download-from-udi")))
     {
-        digikam->downloadFromUdi(parser.value("download-from-udi"));
+        digikam->downloadFromUdi(parser.value(QLatin1String("download-from-udi")));
     }
-    else if (parser.isSet("detect-camera"))
+    else if (parser.isSet(QLatin1String("detect-camera")))
     {
         digikam->autoDetect();
     }
 
     QStringList tipsFiles;
-    tipsFiles.append("digikam/tips");
-    tipsFiles.append("kipi/tips");
+    tipsFiles.append(QLatin1String("digikam/tips"));
+    tipsFiles.append(QLatin1String("kipi/tips"));
 
     if (!app.isSessionRestored())
     {

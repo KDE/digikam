@@ -66,7 +66,8 @@ public:
 };
 
 CaptionEdit::CaptionEdit(QWidget* const parent)
-    : RVBox(parent), d(new Private)
+    : RVBox(parent),
+      d(new Private)
 {
 
     d->altLangStrEdit = new AltLangStrEdit(this);
@@ -121,7 +122,7 @@ void CaptionEdit::setCurrentLanguageCode(const QString& lang)
 {
     if(d->altLangStrEdit->currentLanguageCode().isEmpty())
     {
-        d->altLangStrEdit->setCurrentLanguageCode("x-default");
+        d->altLangStrEdit->setCurrentLanguageCode(QLatin1String("x-default"));
     }
     else
     {

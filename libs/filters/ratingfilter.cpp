@@ -65,9 +65,10 @@ public:
 };
 
 RatingFilterWidget::RatingFilterWidget(QWidget* const parent)
-    : RatingWidget(parent), d(new Private)
+    : RatingWidget(parent),
+      d(new Private)
 {
-    d->ratingTracker = new DCursorTracker("", this);
+    d->ratingTracker = new DCursorTracker(QLatin1String(""), this);
     updateRatingTooltip();
     setMouseTracking(true);
 
@@ -217,7 +218,8 @@ public:
 };
 
 RatingFilter::RatingFilter(QWidget* const parent)
-    : RHBox(parent), d(new Private)
+    : RHBox(parent),
+      d(new Private)
 {
     d->ratingWidget = new RatingFilterWidget(this);
 

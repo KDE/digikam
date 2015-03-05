@@ -86,11 +86,12 @@ public:
 
     static const QString     configCurrentMode;
 };
-const QString VersionsWidget::Private::configCurrentMode("Version Properties View Mode");
 
+const QString VersionsWidget::Private::configCurrentMode(QLatin1String("Version Properties View Mode"));
 
 VersionsWidget::VersionsWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QGridLayout* const layout = new QGridLayout;
 
@@ -233,6 +234,7 @@ void VersionsWidget::slotViewCurrentChanged(const QModelIndex& current, const QM
             {
                 d->view->expand(current);
             }
+
             if (previous.isValid() && d->model->isImage(previous) && !previous.parent().isValid())
             {
                 d->view->collapse(previous);

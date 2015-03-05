@@ -463,7 +463,7 @@ double ImgQSort::noisedetector() const
     QString maxString;
     maxString.append(QString::number(max));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << QString("maximum declared = %1").arg(maxString);
+    qCDebug(DIGIKAM_GENERAL_LOG) << QString::fromUtf8("maximum declared = %1").arg(maxString);
 
     //-- Divide and conquer ---------------------------------------------------------------------------------
 
@@ -604,11 +604,11 @@ double ImgQSort::noisedetector() const
         weightedStd  = weightedStd  / (d->neimage.numPixels());
         datasd[j]    = weightedStd;
 
-        info.append("\n\nChannel: ");
+        info.append(QLatin1String("\n\nChannel: "));
         info.append(QString::number(j));
-        info.append("\nWeighted Mean: ");
+        info.append(QLatin1String("\nWeighted Mean: "));
         info.append(QString::number(weightedMean));
-        info.append("\nWeighted Standard Deviation: ");
+        info.append(QLatin1String("\nWeighted Standard Deviation: "));
         info.append(QString::number(weightedStd));
     }
 

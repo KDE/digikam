@@ -55,10 +55,10 @@ QString ApplicationSettings::getImageFileFilter() const
 
     foreach(const QString& suffix, imageSettings)
     {
-        wildcards << "*." + suffix;
+        wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(" ");
+    return wildcards.join(QLatin1String(" "));
 }
 
 QString ApplicationSettings::getMovieFileFilter() const
@@ -69,10 +69,10 @@ QString ApplicationSettings::getMovieFileFilter() const
 
     foreach(const QString& suffix, movieSettings)
     {
-        wildcards << "*." + suffix;
+        wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(" ");
+    return wildcards.join(QLatin1String(" "));
 }
 
 QString ApplicationSettings::getAudioFileFilter() const
@@ -83,10 +83,10 @@ QString ApplicationSettings::getAudioFileFilter() const
 
     foreach(const QString& suffix, audioSettings)
     {
-        wildcards << "*." + suffix;
+        wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(" ");
+    return wildcards.join(QLatin1String(" "));
 }
 
 QString ApplicationSettings::getRawFileFilter() const
@@ -112,10 +112,10 @@ QString ApplicationSettings::getRawFileFilter() const
 
     foreach(const QString& suffix, supportedRaws)
     {
-        wildcards << "*." + suffix;
+        wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(" ");
+    return wildcards.join(QLatin1String(" "));
 }
 
 QString ApplicationSettings::getAllFileFilter() const
@@ -126,20 +126,20 @@ QString ApplicationSettings::getAllFileFilter() const
 
     foreach(const QString& suffix, imageFilter)
     {
-        wildcards << "*." + suffix;
+        wildcards << QLatin1String("*.") + suffix;
     }
 
     foreach(const QString& suffix, audioFilter)
     {
-        wildcards << "*." + suffix;
+        wildcards << QLatin1String("*.") + suffix;
     }
 
     foreach(const QString& suffix, videoFilter)
     {
-        wildcards << "*." + suffix;
+        wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(" ");
+    return wildcards.join(QLatin1String(" "));
 }
 
 }  // namespace Digikam

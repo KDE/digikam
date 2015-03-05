@@ -152,7 +152,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         // We'll later check again if it was successful
         if (behavior & MetadataSettingsContainer::RotatingPixels)
         {
-            if (format == "JPG" && JPEGUtils::isJpegImage(path))
+            if (format == QLatin1String("JPG") && JPEGUtils::isJpegImage(path))
             {
                 rotateAsJpeg = true;
             }
@@ -327,8 +327,9 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
         FaceTagsEditor().add(info.id(), tagId, region, false);
     }
 
-    /** Write medatada **/
-
+    /**
+     * Write medatada
+     */
     MetadataHub hub;
     hub.load(info);
     QSize tempS = info.dimensions ();

@@ -542,12 +542,12 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             str = QLocale().toString(commonInfo.fileModificationDate, QLocale::ShortFormat);
             m_propertiesTab->setFileModifiedDate(str);
 
-            str = QString("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
+            str = QString::fromUtf8("%1 (%2)").arg(ImagePropertiesTab::humanReadableBytesCount(fileInfo.size()))
                                     .arg(QLocale().toString(commonInfo.fileSize));
             m_propertiesTab->setFileSize(str);
 
             //  These infos are not stored in DB
-            m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
+            m_propertiesTab->setFileOwner(QString::fromUtf8("%1 - %2").arg(fileInfo.owner()).arg(fileInfo.group()));
             m_propertiesTab->setFilePermissions(ImagePropertiesTab::permissionsString(fileInfo));
 
             // -- Image Properties --------------------------------------------------
@@ -628,7 +628,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             }
             else
             {
-                str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+                str = QString::fromUtf8("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
                 m_propertiesTab->setPhotoExposureMode(str);
             }
 
@@ -678,10 +678,10 @@ void ImagePropertiesSideBarDB::doLoadState()
     ImagePropertiesSideBar::doLoadState();
 
     KConfigGroup group                = getConfigGroup();
-    KConfigGroup groupVersionTab      = KConfigGroup(&group, entryName("Version Properties Tab"));
+    KConfigGroup groupVersionTab      = KConfigGroup(&group, entryName(QLatin1String("Version Properties Tab")));
     d->versionsHistoryTab->readSettings(groupVersionTab);
 
-    KConfigGroup groupCaptionsTagsTab = KConfigGroup(&group, entryName("Captions Tags Properties Tab"));
+    KConfigGroup groupCaptionsTagsTab = KConfigGroup(&group, entryName(QLatin1String("Captions Tags Properties Tab")));
     d->desceditTab->readSettings(groupCaptionsTagsTab);
 }
 
@@ -690,10 +690,10 @@ void ImagePropertiesSideBarDB::doSaveState()
     ImagePropertiesSideBar::doSaveState();
 
     KConfigGroup group           = getConfigGroup();
-    KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
+    KConfigGroup groupVersionTab = KConfigGroup(&group, entryName(QLatin1String("Version Properties Tab")));
     d->versionsHistoryTab->writeSettings(groupVersionTab);
 
-    KConfigGroup groupCaptionsTagsTab = KConfigGroup(&group, entryName("Captions Tags Properties Tab"));
+    KConfigGroup groupCaptionsTagsTab = KConfigGroup(&group, entryName(QLatin1String("Captions Tags Properties Tab")));
     d->desceditTab->writeSettings(groupCaptionsTagsTab);
 }
 

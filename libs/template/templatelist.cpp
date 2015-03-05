@@ -58,7 +58,7 @@ void TemplateListItem::setTemplate(const Template& t)
     if (!m_template.isNull())
     {
         setText(0, m_template.templateTitle());
-        setText(1, m_template.authors().join(";"));
+        setText(1, m_template.authors().join(QLatin1String(";")));
     }
 }
 
@@ -93,11 +93,12 @@ TemplateList::~TemplateList()
 
 void TemplateList::readSettings()
 {
-    TemplateManager* tm = TemplateManager::defaultManager();
+    TemplateManager* const tm = TemplateManager::defaultManager();
 
     if (tm)
     {
         QList<Template> list = tm->templateList();
+
         foreach(const Template& t, list)
         {
             new TemplateListItem(this, t);
@@ -107,7 +108,7 @@ void TemplateList::readSettings()
 
 void TemplateList::applySettings()
 {
-    TemplateManager* tm = TemplateManager::defaultManager();
+    TemplateManager* const tm = TemplateManager::defaultManager();
 
     if (tm)
     {
@@ -117,7 +118,7 @@ void TemplateList::applySettings()
 
         while (*it)
         {
-            TemplateListItem* item = dynamic_cast<TemplateListItem*>(*it);
+            TemplateListItem* const item = dynamic_cast<TemplateListItem*>(*it);
 
             if (item)
             {
@@ -142,7 +143,7 @@ TemplateListItem* TemplateList::find(const QString& title)
 
     while (*it)
     {
-        TemplateListItem* item = dynamic_cast<TemplateListItem*>(*it);
+        TemplateListItem* const item = dynamic_cast<TemplateListItem*>(*it);
 
         if (item)
         {

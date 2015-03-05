@@ -500,8 +500,9 @@ void AbstractAlbumModel::slotAlbumHasBeenDeleted(void* p)
 void AbstractAlbumModel::slotAlbumsCleared()
 {
     d->rootAlbum = 0;
-    reset();
+    beginResetModel();
     allAlbumsCleared();
+    endResetModel();
 }
 
 void AbstractAlbumModel::slotAlbumIconChanged(Album* album)
@@ -786,7 +787,7 @@ QVariant AbstractCountingAlbumModel::albumData(Album* album, int role) const
 
         if (it != d->countHashReady.constEnd())
         {
-            return QString("%1 (%2)").arg(albumName(album)).arg(it.value());
+            return QString::fromUtf8("%1 (%2)").arg(albumName(album)).arg(it.value());
         }
     }
 
@@ -1096,7 +1097,8 @@ void AbstractCheckableAlbumModel::prepareAddExcludeDecoration(Album* a, QPixmap&
         QPainter p(&icon);
         p.drawPixmap((icon.width()  - overlay_size) / 2,
                      (icon.height() - overlay_size) / 2,
-                     QIcon::fromTheme(state == Qt::PartiallyChecked ? "list-remove" : "list-add").pixmap(overlay_size, overlay_size));
+                     QIcon::fromTheme(state == Qt::PartiallyChecked ? QLatin1String("list-remove")
+                                                                    : QLatin1String("list-add")).pixmap(overlay_size, overlay_size));
     }
 }
 

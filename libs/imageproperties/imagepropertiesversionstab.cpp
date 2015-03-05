@@ -31,6 +31,7 @@
 #include <QModelIndex>
 #include <QUrl>
 #include <QIcon>
+#include <QString>
 
 // KDE includes
 
@@ -71,10 +72,11 @@ public:
     static const QString  configActiveTab;
 };
 
-const QString ImagePropertiesVersionsTab::Private::configActiveTab("Version Properties Tab");
+const QString ImagePropertiesVersionsTab::Private::configActiveTab(QLatin1String("Version Properties Tab"));
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* const parent)
-    : QTabWidget(parent), d(new Private)
+    : QTabWidget(parent),
+      d(new Private)
 {
     d->versionsWidget       = new VersionsWidget(this);
     insertTab(0, d->versionsWidget, i18n("Versions"));
@@ -95,7 +97,7 @@ void ImagePropertiesVersionsTab::readSettings(KConfigGroup& group)
 {
     QString tab = group.readEntry(d->configActiveTab, "versions");
 
-    if (tab == "versions")
+    if (tab == QLatin1String("versions"))
         setCurrentWidget(d->versionsWidget);
     else
         setCurrentWidget(d->filtersHistoryWidget);

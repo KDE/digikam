@@ -177,8 +177,6 @@ target_link_libraries(digikamgui
                       KF5::WindowSystem
                       KF5::IconThemes
                       KF5::I18n
-
-                      KF5::KDELibs4Support
 )
 
 # TODO check if these linkings are required?

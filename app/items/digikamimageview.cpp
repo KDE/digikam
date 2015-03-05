@@ -704,7 +704,7 @@ void DigikamImageView::slotInitProgressIndicator()
 #ifdef HAVE_KFACE
     if (!ProgressManager::instance()->findItembyId(QLatin1String("FaceActionProgress")))
     {
-        FileActionProgress* const item = new FileActionProgress("FaceActionProgress");
+        FileActionProgress* const item = new FileActionProgress(QLatin1String("FaceActionProgress"));
 
         connect(&d->editPipeline, SIGNAL(started(QString)),
                 item, SLOT(slotProgressStatus(QString)));

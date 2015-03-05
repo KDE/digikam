@@ -69,7 +69,8 @@ public:
 };
 
 DatabaseWidget::DatabaseWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setupMainArea();
 }
@@ -163,9 +164,11 @@ void DatabaseWidget::setupMainArea()
     // --------- fill with default values ---------------------
 
     databaseType->addItem(i18n("SQLite"),               DatabaseParameters::SQLiteDatabaseType());
+
 #ifdef HAVE_MYSQLSUPPORT
     databaseType->addItem(i18n("MySQL (experimental)"), DatabaseParameters::MySQLDatabaseType());
 #endif
+
     databaseType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
                                   "<p><b>SQlite</b> backend is for local database storage with a small and medium collection sizes. "
                                   "It is the default and recommended backend.</p>"
@@ -296,7 +299,7 @@ void DatabaseWidget::checkDatabaseConnection()
 
     qApp->setOverrideCursor(Qt::WaitCursor);
 
-    QString databaseID("ConnectionTest");
+    QString databaseID(QLatin1String("ConnectionTest"));
     QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(currentDatabaseType(), databaseID);
     DatabaseParameters parameters = getDatabaseParameters();
     testDatabase.setHostName(parameters.hostName);
@@ -393,7 +396,7 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
 
         if (parameters.databaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
         {
-            parameters.databaseName = QDir::cleanPath(databasePathEdit->lineEdit()->text() + '/' + "digikam4.db");
+            parameters.databaseName = QDir::cleanPath(databasePathEdit->lineEdit()->text() + QLatin1Char('/') + QLatin1String("digikam4.db"));
             parameters.databaseNameThumbnails = parameters.databaseName;
         }
         else

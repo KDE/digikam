@@ -80,6 +80,8 @@ public:
         return *m_continue;
     }
 
+public:
+
     bool* m_continue;
 };
 
@@ -226,12 +228,12 @@ public:
             lastHintAdded.isValid() &&
             lastHintAdded.secsTo(current) > (5*60))
         {
-            /*
+/*
             itemHints.clear();
             albumHints.clear();
             itemChangeHints.clear();
             itemMetadataAdjustmentHints.clear();
-            */
+*/
             hints->clear();
         }
 
@@ -276,21 +278,26 @@ ScanController::ScanController()
     d->showTimer = new QTimer(this);
     d->showTimer->setSingleShot(true);
 
-    connect(d->showTimer, &QTimer::timeout, this, &ScanController::slotShowProgressDialog);
+    connect(d->showTimer, &QTimer::timeout,
+            this, &ScanController::slotShowProgressDialog);
 
-    connect(this, &ScanController::triggerShowProgressDialog, this, &ScanController::slotTriggerShowProgressDialog);
+    connect(this, &ScanController::triggerShowProgressDialog,
+            this, &ScanController::slotTriggerShowProgressDialog);
 
     // create timer for relaxed scheduling
     d->relaxedTimer = new QTimer(this);
     d->relaxedTimer->setSingleShot(true);
     d->relaxedTimer->setInterval(250);
 
-    connect(d->relaxedTimer, &QTimer::timeout, this, &ScanController::slotRelaxedScanning);
+    connect(d->relaxedTimer, &QTimer::timeout,
+            this, &ScanController::slotRelaxedScanning);
 
     // interthread connections
-    connect(this, &ScanController::errorFromInitialization, this, &ScanController::slotErrorFromInitialization);
+    connect(this, &ScanController::errorFromInitialization,
+            this, &ScanController::slotErrorFromInitialization);
 
-    connect(this, &ScanController::progressFromInitialization, this, &ScanController::slotProgressFromInitialization);
+    connect(this, &ScanController::progressFromInitialization,
+            this, &ScanController::slotProgressFromInitialization);
 
     // start thread
     d->running = true;
@@ -527,7 +534,8 @@ ImageInfo ScanController::scannedInfo(const QString& filePath)
 }
 
 ScanController::FileMetadataWrite::FileMetadataWrite(const ImageInfo& info)
-    : m_info(info), m_changed(false)
+    : m_info(info),
+      m_changed(false)
 {
     ScanController::instance()->beginFileMetadataWrite(info);
 }
@@ -562,10 +570,8 @@ void ScanController::scanFileDirectlyNormal(const ImageInfo& info)
 
 /*
 
-    / **
-     * This variant shall be used when a new file is created which is a version
-     * of another image, and all relevant attributes shall be copied.
-     * /
+    /// This variant shall be used when a new file is created which is a version
+    /// of another image, and all relevant attributes shall be copied.
     void scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion);
 
 void ScanController::scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion)
@@ -779,19 +785,26 @@ void ScanController::connectCollectionScanner(CollectionScanner* const scanner)
 {
     scanner->setSignalsEnabled(true);
 
-    connect(scanner, &CollectionScanner::startCompleteScan, this, &ScanController::slotStartCompleteScan);
+    connect(scanner, &CollectionScanner::startCompleteScan,
+            this, &ScanController::slotStartCompleteScan);
 
-    connect(scanner, &CollectionScanner::totalFilesToScan, this, &ScanController::slotTotalFilesToScan);
+    connect(scanner, &CollectionScanner::totalFilesToScan,
+            this, &ScanController::slotTotalFilesToScan);
 
-    connect(scanner, &CollectionScanner::startScanningAlbum, this, &ScanController::slotStartScanningAlbum);
+    connect(scanner, &CollectionScanner::startScanningAlbum,
+            this, &ScanController::slotStartScanningAlbum);
 
-    connect(scanner, &CollectionScanner::scannedFiles, this, &ScanController::slotScannedFiles);
+    connect(scanner, &CollectionScanner::scannedFiles,
+            this, &ScanController::slotScannedFiles);
 
-    connect(scanner, &CollectionScanner::startScanningAlbumRoot, this, &ScanController::slotStartScanningAlbumRoot);
+    connect(scanner, &CollectionScanner::startScanningAlbumRoot,
+            this, &ScanController::slotStartScanningAlbumRoot);
 
-    connect(scanner, &CollectionScanner::startScanningForStaleAlbums, this, &ScanController::slotStartScanningForStaleAlbums);
+    connect(scanner, &CollectionScanner::startScanningForStaleAlbums,
+            this, &ScanController::slotStartScanningForStaleAlbums);
 
-    connect(scanner, &CollectionScanner::startScanningAlbumRoots, this, &ScanController::slotStartScanningAlbumRoots);
+    connect(scanner, &CollectionScanner::startScanningAlbumRoots,
+            this, &ScanController::slotStartScanningAlbumRoots);
 }
 
 void ScanController::slotTotalFilesToScan(int count)
@@ -829,7 +842,7 @@ void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QStr
 
     if (d->progressDialog)
     {
-        d->progressDialog->addedAction(d->albumPixmap(), ' ' + album);
+        d->progressDialog->addedAction(d->albumPixmap(), QLatin1Char(' ') + album);
     }
 }
 
@@ -982,13 +995,13 @@ static AlbumCopyMoveHint hintForAlbum(const PAlbum* const album, int dstAlbumRoo
 {
     QString dstAlbumPath;
 
-    if (relativeDstPath == "/")
+    if (relativeDstPath == QLatin1String("/"))
     {
         dstAlbumPath = relativeDstPath + albumName;
     }
     else
     {
-        dstAlbumPath = relativeDstPath + '/' + albumName;
+        dstAlbumPath = relativeDstPath + QLatin1Char('/') + albumName;
     }
 
     return AlbumCopyMoveHint(album->albumRootId(), album->id(),
@@ -1003,14 +1016,14 @@ static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum* const album, int dst
     newHints << hintForAlbum(album, dstAlbumRootId, relativeDstPath, albumName);
     QString parentAlbumPath = album->albumPath();
 
-    if (parentAlbumPath == "/")
+    if (parentAlbumPath == QLatin1String("/"))
     {
         parentAlbumPath.clear();    // do not cut away a "/" in mid() below
     }
 
     for (AlbumIterator it(const_cast<PAlbum*>(album)); *it; ++it)
     {
-        PAlbum* const a = (PAlbum*)*it;
+        PAlbum* const a        = (PAlbum*)*it;
         QString childAlbumPath = a->albumPath();
         newHints << hintForAlbum(a, dstAlbumRootId, relativeDstPath, albumName + childAlbumPath.mid(parentAlbumPath.length()));
     }

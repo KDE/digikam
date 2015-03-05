@@ -55,8 +55,8 @@ namespace Digikam
 
 namespace
 {
-    const QString renameFileProperty("DIO Rename source file");
-    const QString noErrorMessageProperty("DIO Ignore Error Message");
+    const QString renameFileProperty(QLatin1String("DIO Rename source file"));
+    const QString noErrorMessageProperty(QLatin1String("DIO Ignore Error Message"));
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -209,7 +209,7 @@ void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
 {
     QUrl oldUrl = info.fileUrl();
     QUrl newUrl = oldUrl;
-    newUrl = newUrl.adjusted(QUrl::RemoveFilename);
+    newUrl      = newUrl.adjusted(QUrl::RemoveFilename);
     newUrl.setPath(newUrl.path() + newName);
 
     PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
@@ -299,7 +299,7 @@ KIO::Job* DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest
         }
 
         job = KIO::move(src.first(), dest, KIO::HideProgressInfo);
-        job->setProperty(renameFileProperty.toAscii().constData(), src.first().toLocalFile());
+        job->setProperty(renameFileProperty.toLatin1().constData(), src.first().toLocalFile());
 
         connect(job, SIGNAL(copyingDone(KIO::Job*,QUrl,QUrl,time_t,bool,bool)),
                 this, SLOT(slotRenamed(KIO::Job*,QUrl,QUrl)));
@@ -315,7 +315,7 @@ KIO::Job* DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest
 
     if (flags & SourceStatusUnknown)
     {
-        job->setProperty(noErrorMessageProperty.toAscii().constData(), true);
+        job->setProperty(noErrorMessageProperty.toLatin1().constData(), true);
     }
 
     connect(job, SIGNAL(result(KJob*)),
@@ -332,7 +332,7 @@ void DIO::slotResult(KJob* kjob)
     {
         // this slot can be used by others, too.
         // check if image renaming property is set.
-        QVariant v = job->property(renameFileProperty.toAscii().constData());
+        QVariant v = job->property(renameFileProperty.toLatin1().constData());
 
         if (!v.isNull())
         {
@@ -348,7 +348,7 @@ void DIO::slotResult(KJob* kjob)
             }
         }
 
-        if (job->property(noErrorMessageProperty.toAscii().constData()).isValid())
+        if (job->property(noErrorMessageProperty.toLatin1().constData()).isValid())
         {
             return;
         }
@@ -363,14 +363,14 @@ void DIO::slotRenamed(KIO::Job* job, const QUrl& , const QUrl& newURL)
     QUrl fileURL;
     fileURL.setPath(newURL.userName());
     fileURL = fileURL.adjusted(QUrl::StripTrailingSlash);
-    fileURL.setPath(fileURL.path() + '/' + (newURL.path()));
+    fileURL.setPath(fileURL.path() + QLatin1Char('/') + (newURL.path()));
 
     // refresh thumbnail
     ThumbnailLoadThread::deleteThumbnail(fileURL.toLocalFile());
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
 
-    QUrl url(job->property(renameFileProperty.toAscii().constData()).toString());
+    QUrl url(job->property(renameFileProperty.toLatin1().constData()).toString());
     emit imageRenameSucceeded(url);
 }
 

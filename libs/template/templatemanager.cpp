@@ -80,7 +80,7 @@ TemplateManager* TemplateManager::defaultManager()
 TemplateManager::TemplateManager()
     : d(new Private)
 {
-    d->file = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QString("/template.xml");
+    d->file = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1String("/template.xml");
 
     load();
 }
@@ -103,7 +103,7 @@ bool TemplateManager::load()
         return false;
     }
 
-    QDomDocument doc("templatelist");
+    QDomDocument doc(QLatin1String("templatelist"));
 
     if (!doc.setContent(&file))
     {
@@ -112,7 +112,7 @@ bool TemplateManager::load()
 
     QDomElement docElem = doc.documentElement();
 
-    if (docElem.tagName() != "templatelist")
+    if (docElem.tagName() != QLatin1String("templatelist"))
     {
         return false;
     }
@@ -126,7 +126,7 @@ bool TemplateManager::load()
             continue;
         }
 
-        if (e.tagName() != "template")
+        if (e.tagName() != QLatin1String("template"))
         {
             continue;
         }
@@ -311,8 +311,8 @@ bool TemplateManager::save()
         return true;
     }
 
-    QDomDocument doc("templatelist");
-    doc.setContent(QString("<!DOCTYPE XMLTemplateList><templatelist version=\"2.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
+    QDomDocument doc(QLatin1String("templatelist"));
+    doc.setContent(QLatin1String("<!DOCTYPE XMLTemplateList><templatelist version=\"2.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
     QDomElement docElem = doc.documentElement();
 
     {
@@ -320,7 +320,7 @@ bool TemplateManager::save()
 
         foreach(const Template& t, d->pList)
         {
-            QDomElement elem = doc.createElement("template");
+            QDomElement elem = doc.createElement(QLatin1String("template"));
 
             QDomElement templatetitle = doc.createElement(QString::fromLatin1("templatetitle"));
             templatetitle.setAttribute(QString::fromLatin1("value"), t.templateTitle());

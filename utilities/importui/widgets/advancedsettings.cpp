@@ -83,7 +83,7 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
     QVBoxLayout* const onFlyVlay = new QVBoxLayout(this);
     d->templateSelector          = new TemplateSelector(this);
     d->fixDateTimeCheck          = new QCheckBox(i18nc("@option:check", "Fix internal date && time"), this);
-    d->dateTimeEdit              = new DDateTimeEdit(this, "datepicker");
+    d->dateTimeEdit              = new DDateTimeEdit(this, QLatin1String("datepicker"));
     d->autoRotateCheck           = new QCheckBox(i18nc("@option:check", "Auto-rotate/flip image"), this);
     d->convertJpegCheck          = new QCheckBox(i18nc("@option:check", "Convert to lossless file format"), this);
     RHBox* const hbox2           = new RHBox(this);

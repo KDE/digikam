@@ -58,13 +58,14 @@ public:
 };
 
 ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* const parent, const QUrl& url)
-    : QAbstractItemModel(parent), d(new Private)
+    : QAbstractItemModel(parent),
+      d(new Private)
 {
     if (!url.isEmpty())
     {
         //qCDebug(LOG_WIDGETS) << "Creating model with url" << url.toLocalFile();
         d->rootItem = new ImageFiltersHistoryTreeItem(url.fileName());
-        d->lastUrl = url;
+        d->lastUrl  = url;
 
         DMetadata metadata(url.toLocalFile());
         QString xml     = metadata.getImageHistory();
@@ -74,7 +75,7 @@ ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* const parent, const 
     else
     {
         //qCDebug(LOG_WIDGETS) << "Creating empty model";
-        d->rootItem = new ImageFiltersHistoryTreeItem("Generic");
+        d->rootItem = new ImageFiltersHistoryTreeItem(QLatin1String("Generic"));
     }
 }
 
