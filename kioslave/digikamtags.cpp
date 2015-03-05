@@ -64,13 +64,13 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     ds >> url;
 
     Digikam::DatabaseParameters dbParameters(url);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-%1")
+    QDBusConnection::sessionBus().registerService(QString::fromUtf8("org.kde.digikam.KIO-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbParameters);
 
-    bool folders     = (metaData("folders") == "true");
-    bool facefolders = (metaData("facefolders") == "true");
-    QString special  = metaData("specialTagListing");
+    bool folders     = (metaData(QLatin1String("folders")) == QLatin1String("true"));
+    bool facefolders = (metaData(QLatin1String("facefolders")) == QLatin1String("true"));
+    QString special  = metaData(QLatin1String("specialTagListing"));
 
     if (folders)
     {
@@ -96,8 +96,8 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     }
     else
     {
-        bool recursive               = (metaData("listTagsRecursively")     == "true");
-        bool listOnlyAvailableImages = (metaData("listOnlyAvailableImages") == "true");
+        bool recursive               = (metaData(QLatin1String("listTagsRecursively"))     == QLatin1String("true"));
+        bool listOnlyAvailableImages = (metaData(QLatin1String("listOnlyAvailableImages")) == QLatin1String("true"));
 
         Digikam::ImageLister lister;
         lister.setRecursive(recursive);

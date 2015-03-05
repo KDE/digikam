@@ -81,7 +81,7 @@ kio_digikamsearch::~kio_digikamsearch()
 
 void kio_digikamsearch::special(const QByteArray& data)
 {
-    bool        duplicates = !metaData("duplicates").isEmpty();
+    bool        duplicates = !metaData(QLatin1String("duplicates")).isEmpty();
     QUrl        url;
     int         listingType = 0;
     QDataStream ds(data);
@@ -95,7 +95,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << "kio_digikamsearch::special " << url;
 
     Digikam::DatabaseUrl dbUrl(url);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
+    QDBusConnection::sessionBus().registerService(QString::fromUtf8("org.kde.digikam.KIO-digikamtags-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrl);
 
@@ -105,7 +105,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         Digikam::SearchInfo info = Digikam::DatabaseAccess().db()->getSearchInfo(id);
 
         Digikam::ImageLister lister;
-        lister.setListOnlyAvailable(metaData("listOnlyAvailableImages") == "true");
+        lister.setListOnlyAvailable(metaData(QLatin1String("listOnlyAvailableImages")) == QLatin1String("true"));
 
         if (listingType == 0)
         {
@@ -140,13 +140,13 @@ void kio_digikamsearch::special(const QByteArray& data)
     }
     else
     {
-        QString albumIdsString         = metaData("albumids");
-        QString tagIdsString           = metaData("tagids");
-        QString thresholdString        = metaData("threshold");
+        QString albumIdsString         = metaData(QLatin1String("albumids"));
+        QString tagIdsString           = metaData(QLatin1String("tagids"));
+        QString thresholdString        = metaData(QLatin1String("threshold"));
 
         // get albums to scan
-        QStringList albumIdsStringList = albumIdsString.split(',');
-        QStringList tagIdsStringList   = tagIdsString.split(',');
+        QStringList albumIdsStringList = albumIdsString.split(QLatin1Char(','));
+        QStringList tagIdsStringList   = tagIdsString.split(QLatin1Char(','));
         QList<int>  albumIds;
         QList<int>  tagIds;
 

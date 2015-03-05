@@ -56,7 +56,7 @@ kio_digikamdates::~kio_digikamdates()
 
 void kio_digikamdates::special(const QByteArray& data)
 {
-    bool        folders = (metaData("folders") == "true");
+    bool        folders = (metaData(QLatin1String("folders")) == QLatin1String("true"));
     QUrl        url;
     QString     filter;
     QDataStream ds(data);
@@ -65,7 +65,7 @@ void kio_digikamdates::special(const QByteArray& data)
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Entered kio_digikamdates::special";
 
     Digikam::DatabaseParameters dbParameters(url);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
+    QDBusConnection::sessionBus().registerService(QString::fromUtf8("org.kde.digikam.KIO-digikamtags-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbParameters);
 
@@ -81,7 +81,7 @@ void kio_digikamdates::special(const QByteArray& data)
     else
     {
         Digikam::ImageLister lister;
-        lister.setListOnlyAvailable(metaData("listOnlyAvailableImages") == "true");
+        lister.setListOnlyAvailable(metaData(QLatin1String("listOnlyAvailableImages")) == QLatin1String("true"));
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
         lister.list(&receiver, url);

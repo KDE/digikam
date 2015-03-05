@@ -78,10 +78,10 @@ void kio_digikamalbums::special(const QByteArray& data)
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << "kio_digikamalbums::special " << url;
 
     Digikam::DatabaseParameters dbParameters(url);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
+    QDBusConnection::sessionBus().registerService(QString::fromUtf8("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbParameters);
 
-    bool folders = (metaData("folders") == "true");
+    bool folders = (metaData(QLatin1String("folders")) == QLatin1String("true"));
 
     if (folders)
     {
@@ -94,8 +94,8 @@ void kio_digikamalbums::special(const QByteArray& data)
     }
     else
     {
-        bool recursive               = (metaData("listAlbumsRecursively") == "true");
-        bool listOnlyAvailableImages = (metaData("listOnlyAvailableImages") == "true");
+        bool recursive               = (metaData(QLatin1String("listAlbumsRecursively")) == QLatin1String("true"));
+        bool listOnlyAvailableImages = (metaData(QLatin1String("listOnlyAvailableImages")) == QLatin1String("true"));
 
         Digikam::ImageLister lister;
         lister.setRecursive(recursive);
@@ -239,7 +239,7 @@ void kio_digikamalbums::rename(const QUrl& src, const QUrl& dst, KIO::JobFlags f
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Src: " << src << ", Dst: " << dst;
 
     // if the filename is .digikam_properties ignore it
-    if (src.fileName() == ".digikam_properties")
+    if (src.fileName() == QLatin1String(".digikam_properties"))
     {
         finished();
         return;
@@ -292,7 +292,7 @@ void kio_digikamalbums::rename(const QUrl& src, const QUrl& dst, KIO::JobFlags f
         }
     }
 
-    KIO::Job* job = KIO::rename(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), flags);
+    KIO::Job* const job = KIO::rename(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), flags);
     connectJob(job);
 
     if (m_eventLoop->exec() != 0)
@@ -323,7 +323,7 @@ void kio_digikamalbums::mkdir(const QUrl& url, int permissions)
 
     Digikam::DatabaseUrl dbUrl(url);
     // DatabaseUrl has a strong opinion there should be a slash, KDE does not
-    dbUrl.setPath(dbUrl.path() + '/');
+    dbUrl.setPath(dbUrl.path() + QLatin1Char('/'));
     Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrl);
     Digikam::DatabaseAccess access;
 
@@ -364,7 +364,7 @@ void kio_digikamalbums::del(const QUrl& url, bool isFile)
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << " : " << url.url();
 
     // if the filename is .digikam_properties ignore it
-    if (isFile && url.fileName() == ".digikam_properties")
+    if (isFile && url.fileName() == QLatin1String(".digikam_properties"))
     {
         finished();
         return;

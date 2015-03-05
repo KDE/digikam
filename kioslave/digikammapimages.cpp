@@ -57,29 +57,29 @@ kio_digikammapimages::~kio_digikammapimages()
 
 void kio_digikammapimages::special(const QByteArray& data)
 {
-    bool        wantDirectQuery = (metaData("wantDirectQuery") == "true");
+    bool        wantDirectQuery = (metaData(QLatin1String("wantDirectQuery")) == QLatin1String("true"));
     QUrl        url;
     QString     filter;
     QDataStream ds(data);
     ds >> url;
 
     Digikam::DatabaseParameters dbParameters(url);
-    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikammapimages-%1")
+    QDBusConnection::sessionBus().registerService(QString::fromUtf8("org.kde.digikam.KIO-digikammapimages-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbParameters);
 
     if (wantDirectQuery)
     {
-        QString strLat1 = metaData("lat1");
-        QString strLng1 = metaData("lng1");
-        QString strLat2 = metaData("lat2");
-        QString strLng2 = metaData("lng2");
+        QString strLat1 = metaData(QLatin1String("lat1"));
+        QString strLng1 = metaData(QLatin1String("lng1"));
+        QString strLat2 = metaData(QLatin1String("lat2"));
+        QString strLng2 = metaData(QLatin1String("lng2"));
         qreal lat1      = strLat1.toDouble();
         qreal lng1      = strLng1.toDouble();
         qreal lat2      = strLat2.toDouble();
         qreal lng2      = strLng2.toDouble();
 
-        QList<QVariant> imagesInfoFromArea = Digikam::DatabaseAccess().db()->getImageIdsFromArea(lat1, lat2, lng1, lng2, 0, QString("rating"));
+        QList<QVariant> imagesInfoFromArea = Digikam::DatabaseAccess().db()->getImageIdsFromArea(lat1, lat2, lng1, lng2, 0, QLatin1String("rating"));
         // qCDebug(DIGIKAM_KIOSLAVES_LOG) << "IMAGE IDS:" << imageIds;
 
         QByteArray  ba;
@@ -91,7 +91,7 @@ void kio_digikammapimages::special(const QByteArray& data)
     {
         Digikam::ImageLister lister;
         lister.setAllowExtraValues(true);
-        lister.setListOnlyAvailable(metaData("listOnlyAvailableImages") == "true");
+        lister.setListOnlyAvailable(metaData(QLatin1String("listOnlyAvailableImages")) == QLatin1String("true"));
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
         lister.list(&receiver, url);
