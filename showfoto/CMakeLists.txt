@@ -60,7 +60,7 @@ target_link_libraries(showfoto
 )
 
 if(${KF5KGeoMap_FOUND})
-   target_link_libraries(showfoto ${KGEOMAP_LIBRARIES})
+    target_link_libraries(showfoto ${KGEOMAP_LIBRARIES})
 endif()
 
 if(NOT WIN32)
@@ -72,8 +72,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     target_link_libraries(showfoto ${KVM_LIBRARY})
 endif()
 
-install(TARGETS  showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})
-
+install(TARGETS  showfoto                  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS main/showfoto.desktop     DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES    main/showfoto.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)
 install(FILES    main/showfotoui.rc        DESTINATION ${KXMLGUI_INSTALL_DIR}/showfoto)

@@ -72,7 +72,8 @@ void ItemViewShowfotoDelegatePrivate::clearRects()
 // ---- ItemViewShowfotoDelegate -----------------------------------------------
 
 ItemViewShowfotoDelegate::ItemViewShowfotoDelegate(QObject* const parent)
-    : DItemDelegate(parent), d_ptr(new ItemViewShowfotoDelegatePrivate)
+    : DItemDelegate(parent),
+      d_ptr(new ItemViewShowfotoDelegatePrivate)
 {
     d_ptr->init(this);
 }
@@ -393,15 +394,15 @@ void ItemViewShowfotoDelegate::prepareMetrics(int maxWidth)
     QFontMetrics fm(d->fontReg);
     d->oneRowRegRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
                                        Qt::AlignTop | Qt::AlignHCenter,
-                                       "XXXXXXXXX");
+                                       QLatin1String("XXXXXXXXX"));
     fm = QFontMetrics(d->fontCom);
     d->oneRowComRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
                                        Qt::AlignTop | Qt::AlignHCenter,
-                                       "XXXXXXXXX");
+                                       QLatin1String("XXXXXXXXX"));
     fm = QFontMetrics(d->fontXtra);
     d->oneRowXtraRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
                                         Qt::AlignTop | Qt::AlignHCenter,
-                                        "XXXXXXXXX");
+                                        QLatin1String("XXXXXXXXX"));
 }
 
 void ItemViewShowfotoDelegate::prepareBackground()

@@ -83,6 +83,8 @@ public:
     QAction*                         fileOpenAction;
 
     QUrl                             lastOpenedDirectory;
+    
+    QString                          tempFilePath;
 
     QAction*                         openFilesInFolderAction;
     QAction*                         first;

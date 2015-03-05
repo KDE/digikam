@@ -272,8 +272,9 @@ void ShowfotoImageModel::clearShowfotoItemInfos()
     d->refreshing                  = false;
     d->incrementalRefreshRequested = false;
 
-    reset();
+    beginResetModel();
     showfotoItemInfosCleared();
+    endResetModel();
 }
 
 void ShowfotoImageModel::setShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos)

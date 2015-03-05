@@ -142,7 +142,7 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
         QPixmap   pixmap;
         ShowfotoItemInfo info = showfotoItemInfo(index);
         QString url           = info.url.toDisplayString();
-        QString path          = info.folder + QString("/") + info.name;
+        QString path          = info.folder + QLatin1String("/") + info.name;
 
         if (info.isNull() || url.isEmpty())
         {
@@ -239,7 +239,7 @@ void ShowfotoThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadi
 
 bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QImage& thumbnail) const
 {
-    QString path = itemInfo.folder + QString("/") + itemInfo.name;
+    QString path = itemInfo.folder + QLatin1String("/") + itemInfo.name;
 
     // Try to get preview from Exif data (good quality). Can work with Raw files
 
@@ -261,8 +261,8 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
     }
 
     KSharedConfig::Ptr config  = KSharedConfig::openConfig();
-    KConfigGroup group         = config->group("Camera Settings");
-    bool turnHighQualityThumbs = group.readEntry("TurnHighQualityThumbs", false);
+    KConfigGroup group         = config->group(QLatin1String("Camera Settings"));
+    bool turnHighQualityThumbs = group.readEntry(QLatin1String("TurnHighQualityThumbs"), false);
 
     // Try to get thumbnail from Exif data (poor quality).
     if(!turnHighQualityThumbs)
@@ -283,14 +283,14 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
 
     QFileInfo fi(path);
 
-    if (thumbnail.load(itemInfo.folder + QString("/") + fi.baseName() + QString(".thm")))        // Lowercase
+    if (thumbnail.load(itemInfo.folder + QLatin1String("/") + fi.baseName() + QLatin1String(".thm")))        // Lowercase
     {
         if (!thumbnail.isNull())
         {
             return true;
         }
     }
-    else if (thumbnail.load(itemInfo.folder + QString("/") + fi.baseName() + QString(".THM")))   // Uppercase
+    else if (thumbnail.load(itemInfo.folder + QLatin1String("/") + fi.baseName() + QLatin1String(".THM")))   // Uppercase
     {
         if (!thumbnail.isNull())
         {
@@ -325,8 +325,8 @@ bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
         {
 
             qCWarning(DIGIKAM_GENERAL_LOG) << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
-                       << "is larger than the maximum thumbnail size" << d->maxThumbSize
-                       << ". Returning a scaled-up image.";
+                                           << "is larger than the maximum thumbnail size" << d->maxThumbSize
+                                           << ". Returning a scaled-up image.";
 
             pix = pix.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 

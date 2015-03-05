@@ -82,7 +82,8 @@ public:
 };
 
 SetupMetadata::SetupMetadata(QWidget* const parent )
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     d->tab = new QTabWidget(viewport());
     setWidget(d->tab);
@@ -113,8 +114,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     QGridLayout* const grid = new QGridLayout(box);
     box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    RActiveLabel* const exiv2LogoLabel = new RActiveLabel(QUrl("http://www.exiv2.org"),
-                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png"),
+    RActiveLabel* const exiv2LogoLabel = new RActiveLabel(QUrl(QLatin1String("http://www.exiv2.org")),
+                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-exiv2.png")),
                                                           box);
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 

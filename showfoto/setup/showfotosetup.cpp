@@ -180,7 +180,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
             this, SLOT(slotHelp()));
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(QString("Setup Dialog"));
+    KConfigGroup group        = config->group(QLatin1String("Setup Dialog"));
 
     if (page != LastPageUsed)
     {
@@ -188,7 +188,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     }
     else
     {
-        showPage((Page)group.readEntry("Setup Page", (int)EditorPage));
+        showPage((Page)group.readEntry(QLatin1String("Setup Page"), (int)EditorPage));
     }
 
     Digikam::DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
@@ -199,8 +199,8 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
 Setup::~Setup()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(QString("Setup Dialog"));
-    group.writeEntry("Setup Page", (int)activePageIndex());
+    KConfigGroup group        = config->group(QLatin1String("Setup Dialog"));
+    group.writeEntry(QLatin1String("Setup Page"), (int)activePageIndex());
     Digikam::DXmlGuiWindow::saveWindowSize(windowHandle(), group);
     config->sync();
     delete d;
@@ -208,7 +208,7 @@ Setup::~Setup()
 
 void Setup::slotHelp()
 {
-    Digikam::DXmlGuiWindow::openHandbook("setupdialog.anchor", "showfoto");
+    Digikam::DXmlGuiWindow::openHandbook(QLatin1String("setupdialog.anchor"), QLatin1String("showfoto"));
 }
 
 void Setup::slotOkClicked()

@@ -145,7 +145,7 @@ bool ImageWindow::imageWindowCreated()
 }
 
 ImageWindow::ImageWindow()
-    : EditorWindow("Image Editor"),
+    : EditorWindow(QLatin1String("Image Editor")),
       d(new Private)
 {
     setXMLFile(QLatin1String("digikamimagewindowui.rc"));

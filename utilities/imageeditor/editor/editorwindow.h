@@ -84,7 +84,7 @@ class DIGIKAM_EXPORT EditorWindow : public DXmlGuiWindow
 
 public:
 
-    explicit EditorWindow(const char* const name);
+    explicit EditorWindow(const QString& name);
     ~EditorWindow();
 
     const static QString CONFIG_GROUP_NAME;
