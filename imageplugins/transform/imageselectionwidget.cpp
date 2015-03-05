@@ -157,7 +157,8 @@ public:
 };
 
 ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->isDrawingSelection = true;
     d->bgColor            = palette().color(QPalette::Background);

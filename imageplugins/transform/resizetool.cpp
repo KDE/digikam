@@ -150,25 +150,26 @@ public:
     GreycstorationSettings* settingsWidget;
 };
 
-const QString ResizeTool::Private::configGroupName("resize Tool");
-const QString ResizeTool::Private::configFastApproxEntry("FastApprox");
-const QString ResizeTool::Private::configInterpolationEntry("Interpolation");
-const QString ResizeTool::Private::configAmplitudeEntry("Amplitude");
-const QString ResizeTool::Private::configSharpnessEntry("Sharpness");
-const QString ResizeTool::Private::configAnisotropyEntry("Anisotropy");
-const QString ResizeTool::Private::configAlphaEntry("Alpha");
-const QString ResizeTool::Private::configSigmaEntry("Sigma");
-const QString ResizeTool::Private::configGaussPrecEntry("GaussPrec");
-const QString ResizeTool::Private::configDlEntry("Dl");
-const QString ResizeTool::Private::configDaEntry("Da");
-const QString ResizeTool::Private::configIterationEntry("Iteration");
-const QString ResizeTool::Private::configTileEntry("Tile");
-const QString ResizeTool::Private::configBTileEntry("BTile");
+const QString ResizeTool::Private::configGroupName(QLatin1String("resize Tool"));
+const QString ResizeTool::Private::configFastApproxEntry(QLatin1String("FastApprox"));
+const QString ResizeTool::Private::configInterpolationEntry(QLatin1String("Interpolation"));
+const QString ResizeTool::Private::configAmplitudeEntry(QLatin1String("Amplitude"));
+const QString ResizeTool::Private::configSharpnessEntry(QLatin1String("Sharpness"));
+const QString ResizeTool::Private::configAnisotropyEntry(QLatin1String("Anisotropy"));
+const QString ResizeTool::Private::configAlphaEntry(QLatin1String("Alpha"));
+const QString ResizeTool::Private::configSigmaEntry(QLatin1String("Sigma"));
+const QString ResizeTool::Private::configGaussPrecEntry(QLatin1String("GaussPrec"));
+const QString ResizeTool::Private::configDlEntry(QLatin1String("Dl"));
+const QString ResizeTool::Private::configDaEntry(QLatin1String("Da"));
+const QString ResizeTool::Private::configIterationEntry(QLatin1String("Iteration"));
+const QString ResizeTool::Private::configTileEntry(QLatin1String("Tile"));
+const QString ResizeTool::Private::configBTileEntry(QLatin1String("BTile"));
 
 // -------------------------------------------------------------
 
 ResizeTool::ResizeTool(QObject* const parent)
-    : EditorToolThreaded(parent), d(new Private)
+    : EditorToolThreaded(parent),
+      d(new Private)
 {
     setObjectName(QLatin1String("resizeimage"));
     setToolName(i18n("Resize Image"));
@@ -236,8 +237,8 @@ ResizeTool::ResizeTool(QObject* const parent)
     d->hpInput->setObjectName(QLatin1String("hpInput"));
     d->hpInput->setWhatsThis( i18n("New image height in percent (%)."));
 
-    d->cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
-                                        QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"),
+    d->cimgLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
+                                        QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-cimg.png")),
                                         firstPage);
     d->cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
@@ -385,7 +386,7 @@ void ResizeTool::slotValuesChanged()
 
     QString s(sender()->objectName());
 
-    if (s == "wInput")
+    if (s == QLatin1String("wInput"))
     {
         double val  = d->wInput->value();
         double pval = val / (double)(d->orgWidth) * 100.0;
@@ -400,7 +401,7 @@ void ResizeTool::slotValuesChanged()
             d->hInput->setValue(h);
         }
     }
-    else if (s == "hInput")
+    else if (s == QLatin1String("hInput"))
     {
         double val  = d->hInput->value();
         double pval = val / (double)(d->orgHeight) * 100.0;
@@ -415,7 +416,7 @@ void ResizeTool::slotValuesChanged()
             d->wInput->setValue(w);
         }
     }
-    else if (s == "wpInput")
+    else if (s == QLatin1String("wpInput"))
     {
         double val = d->wpInput->value();
         int w      = (int)(val * d->orgWidth / 100);
@@ -430,7 +431,7 @@ void ResizeTool::slotValuesChanged()
             d->hInput->setValue(h);
         }
     }
-    else if (s == "hpInput")
+    else if (s == QLatin1String("hpInput"))
     {
         double val = d->hpInput->value();
         int h = (int)(val * d->orgHeight / 100);
@@ -565,7 +566,7 @@ void ResizeTool::slotLoadSettings()
 {
     QUrl loadBlowupFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Resizing Settings File to Load"),
                                                       QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                      QString("*"));
+                                                      QLatin1String("*"));
 
     if ( loadBlowupFile.isEmpty() )
     {
@@ -576,7 +577,7 @@ void ResizeTool::slotLoadSettings()
 
     if ( file.open(QIODevice::ReadOnly) )
     {
-        if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
+        if (!d->settingsWidget->loadSettings(file, QLatin1String("# Photograph Resizing Configuration File")))
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                   i18n("\"%1\" is not a Photograph Resizing settings text file.",
@@ -598,7 +599,7 @@ void ResizeTool::slotSaveAsSettings()
 {
     QUrl saveBlowupFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Resizing Settings File to Save"),
                                                       QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                      QString("*"));
+                                                      QLatin1String("*"));
 
     if ( saveBlowupFile.isEmpty() )
     {
@@ -609,7 +610,7 @@ void ResizeTool::slotSaveAsSettings()
 
     if ( file.open(QIODevice::WriteOnly) )
     {
-        d->settingsWidget->saveSettings(file, QString("# Photograph Resizing Configuration File"));
+        d->settingsWidget->saveSettings(file, QLatin1String("# Photograph Resizing Configuration File"));
     }
     else
     {

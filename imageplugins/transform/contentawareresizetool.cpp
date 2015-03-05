@@ -155,20 +155,21 @@ public:
     QButtonGroup*        maskGroup;
 };
 
-const QString ContentAwareResizeTool::Private::configGroupName("liquidrescale Tool");
-const QString ContentAwareResizeTool::Private::configStepEntry("Step");
-const QString ContentAwareResizeTool::Private::configSideSwitchEntry("SideSwitch");
-const QString ContentAwareResizeTool::Private::configRigidityEntry("Rigidity");
-const QString ContentAwareResizeTool::Private::configFunctionEntry("Function");
-const QString ContentAwareResizeTool::Private::configOrderEntry("Order");
-const QString ContentAwareResizeTool::Private::configMixedRescaleValueEntry("MixedRescaleValue");
-const QString ContentAwareResizeTool::Private::configBrushSizeEntry("BrushSize");
-const QString ContentAwareResizeTool::Private::configPreserveTonesEntry("PreserveTones");
+const QString ContentAwareResizeTool::Private::configGroupName(QLatin1String("liquidrescale Tool"));
+const QString ContentAwareResizeTool::Private::configStepEntry(QLatin1String("Step"));
+const QString ContentAwareResizeTool::Private::configSideSwitchEntry(QLatin1String("SideSwitch"));
+const QString ContentAwareResizeTool::Private::configRigidityEntry(QLatin1String("Rigidity"));
+const QString ContentAwareResizeTool::Private::configFunctionEntry(QLatin1String("Function"));
+const QString ContentAwareResizeTool::Private::configOrderEntry(QLatin1String("Order"));
+const QString ContentAwareResizeTool::Private::configMixedRescaleValueEntry(QLatin1String("MixedRescaleValue"));
+const QString ContentAwareResizeTool::Private::configBrushSizeEntry(QLatin1String("BrushSize"));
+const QString ContentAwareResizeTool::Private::configPreserveTonesEntry(QLatin1String("PreserveTones"));
 
 // --------------------------------------------------------
 
 ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
-    : EditorToolThreaded(parent), d(new Private)
+    : EditorToolThreaded(parent),
+      d(new Private)
 {
     setObjectName(QLatin1String("liquidrescale"));
     setToolName(i18n("Liquid Rescale"));
@@ -187,7 +188,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
                                 EditorToolSettings::Try|
                                 EditorToolSettings::Cancel);
 
-    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
+    QGridLayout* const grid = new QGridLayout(d->gboxSettings->plainPage());
 
     // Initialize data
     ImageIface iface;
@@ -200,36 +201,36 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* sizeSettingsContainer  = new QWidget;
-    QGridLayout* sizeSettingsLayout = new QGridLayout;
+    QWidget* const sizeSettingsContainer  = new QWidget;
+    QGridLayout* const sizeSettingsLayout = new QGridLayout;
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), d->gboxSettings->plainPage());
     d->preserveRatioBox->setWhatsThis(i18n("Enable this option to maintain aspect ratio with new image sizes."));
     d->preserveRatioBox->setChecked(true);
 
-    QLabel* labelWidth = new QLabel(i18n("Width (px):"), d->gboxSettings->plainPage());
-    d->wInput          = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel* const labelWidth = new QLabel(i18n("Width (px):"), d->gboxSettings->plainPage());
+    d->wInput                = new RIntNumInput(d->gboxSettings->plainPage());
     d->wInput->setRange(1, 2*d->orgWidth, 1);
     d->wInput->setDefaultValue(d->orgWidth);
     d->wInput->setObjectName(QLatin1String("wInput"));
     d->wInput->setWhatsThis(i18n("Set here the new image width in pixels."));
 
-    QLabel* labelHeight = new QLabel(i18n("Height (px):"), d->gboxSettings->plainPage());
-    d->hInput           = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel* const labelHeight = new QLabel(i18n("Height (px):"), d->gboxSettings->plainPage());
+    d->hInput                 = new RIntNumInput(d->gboxSettings->plainPage());
     d->hInput->setRange(1, 2*d->orgHeight, 1);
     d->hInput->setDefaultValue(d->orgHeight);
     d->hInput->setObjectName(QLatin1String("hInput"));
     d->hInput->setWhatsThis(i18n("Set here the new image height in pixels."));
 
-    QLabel* labelWidthP = new QLabel(i18n("Width (%):"), d->gboxSettings->plainPage());
-    d->wpInput          = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel* const labelWidthP = new QLabel(i18n("Width (%):"), d->gboxSettings->plainPage());
+    d->wpInput                = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->wpInput->setRange(1.0, 200.0, 1.0);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName(QLatin1String("wpInput"));
     d->wpInput->setWhatsThis(i18n("New image width, as a percentage (%)."));
 
-    QLabel* labelHeightP = new QLabel(i18n("Height (%):"), d->gboxSettings->plainPage());
-    d->hpInput           = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel* const labelHeightP = new QLabel(i18n("Height (%):"), d->gboxSettings->plainPage());
+    d->hpInput                 = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->hpInput->setRange(1.0, 200.0, 1.0);
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName(QLatin1String("hpInput"));
@@ -249,8 +250,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* mixedRescaleContainer  = new QWidget;
-    QGridLayout* mixedRescaleLayout = new QGridLayout;
+    QWidget* const mixedRescaleContainer  = new QWidget;
+    QGridLayout* const mixedRescaleLayout = new QGridLayout;
 
     d->mixedRescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->mixedRescaleInput->setRange(0.0, 100.0, 1.0);
@@ -265,8 +266,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* maskSettingsContainer  = new QWidget;
-    QGridLayout* maskSettingsLayout = new QGridLayout;
+    QWidget* const maskSettingsContainer  = new QWidget;
+    QGridLayout* const maskSettingsLayout = new QGridLayout;
 
     d->weightMaskBox  = new QCheckBox(i18n("Add weight masks"), d->gboxSettings->plainPage());
     d->weightMaskBox->setWhatsThis(i18n("Enable this option to add suppression and preservation masks."));
@@ -275,9 +276,9 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->maskGroup = new QButtonGroup(d->gboxSettings->plainPage());
     d->maskGroup->setExclusive(true);
 
-    QLabel* labeRedMaskTool = new QLabel(i18n("Suppression weight mask:"), d->gboxSettings->plainPage());
+    QLabel* const labeRedMaskTool = new QLabel(i18n("Suppression weight mask:"), d->gboxSettings->plainPage());
     d->redMaskTool          = new QToolButton(d->gboxSettings->plainPage());
-    d->redMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-red.png")));
+    d->redMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/indicator-red.png"))));
     d->redMaskTool->setCheckable(true);
     d->redMaskTool->setChecked(true);
     d->redMaskTool->setToolTip(i18n("Draw a suppression mask"));
@@ -287,9 +288,9 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->redMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->redMaskTool, Private::redMask);
 
-    QLabel* labeGreenMaskTool = new QLabel(i18n("Preservation weight mask:"), d->gboxSettings->plainPage());
+    QLabel* const labeGreenMaskTool = new QLabel(i18n("Preservation weight mask:"), d->gboxSettings->plainPage());
     d->greenMaskTool          = new QToolButton(d->gboxSettings->plainPage());
-    d->greenMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-green.png")));
+    d->greenMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/indicator-green.png"))));
     d->greenMaskTool->setCheckable(true);
     d->greenMaskTool->setToolTip(i18n("Draw a preservation mask"));
     d->greenMaskTool->setWhatsThis(i18n("Click on this button to draw zones marking which areas of the "
@@ -297,16 +298,16 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->greenMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->greenMaskTool, Private::greenMask);
 
-    QLabel* labeEraseMaskTool = new QLabel(i18n("Erase mask:"), d->gboxSettings->plainPage());
+    QLabel* const labeEraseMaskTool = new QLabel(i18n("Erase mask:"), d->gboxSettings->plainPage());
     d->eraseMaskTool          = new QToolButton(d->gboxSettings->plainPage());
-    d->eraseMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-gray.png")));
+    d->eraseMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/indicator-gray.png"))));
     d->eraseMaskTool->setCheckable(true);
     d->eraseMaskTool->setToolTip(i18n("Erase mask"));
     d->eraseMaskTool->setWhatsThis(i18n("Click on this button to erase mask regions."));
     d->eraseMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->eraseMaskTool, Private::eraseMask);
 
-    QLabel* labelMaskPenSize = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
+    QLabel* const labelMaskPenSize = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
     d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
     d->maskPenSize->setRange(3, 64, 1);
     d->maskPenSize->setDefaultValue(10);
@@ -327,8 +328,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* energyFunctionsContainer  = new QWidget;
-    QGridLayout* energyFunctionsLayout = new QGridLayout;
+    QWidget* const energyFunctionsContainer  = new QWidget;
+    QGridLayout* const energyFunctionsLayout = new QGridLayout;
 
     d->funcInput = new RComboBox(d->gboxSettings->plainPage());
     d->funcInput->addItem(i18n("Norm of brightness gradient"));
@@ -354,11 +355,11 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* advancedSettingsContainer  = new QWidget;
-    QGridLayout* advancedSettingsLayout = new QGridLayout;
+    QWidget* const advancedSettingsContainer  = new QWidget;
+    QGridLayout* const advancedSettingsLayout = new QGridLayout;
 
-    QLabel* labelRigidity = new QLabel(i18n("Overall rigidity of the seams:"), d->gboxSettings->plainPage());
-    d->rigidityInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel* const labelRigidity = new QLabel(i18n("Overall rigidity of the seams:"), d->gboxSettings->plainPage());
+    d->rigidityInput            = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->rigidityInput->setRange(0.0, 10.0, 1.0);
     d->rigidityInput->setDefaultValue(0.0);
     d->rigidityInput->setWhatsThis(i18n("Use this value to give a negative bias to the seams which "
@@ -370,8 +371,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
                                         "coordinate between each two successive points, elevated to the power "
                                         "of 1.5, and summed up for the whole seam."));
 
-    QLabel* labelSteps = new QLabel(i18n("Maximum number of transversal steps:"),d->gboxSettings->plainPage());
-    d->stepInput       = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel* const labelSteps = new QLabel(i18n("Maximum number of transversal steps:"),d->gboxSettings->plainPage());
+    d->stepInput             = new RIntNumInput(d->gboxSettings->plainPage());
     d->stepInput->setRange(1, 5, 1);
     d->stepInput->setDefaultValue(1);
     d->stepInput->setWhatsThis(i18n("This option lets you choose the maximum transversal step "
@@ -384,8 +385,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
                                     "limit, but may lead to the introduction of artifacts. In order "
                                     "to balance the situation, you can use the rigidity setting."));
 
-    QLabel* labelSideSwitch = new QLabel(i18n("Side switch frequency:"),d->gboxSettings->plainPage());
-    d->sideSwitchInput      = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel* const labelSideSwitch = new QLabel(i18n("Side switch frequency:"),d->gboxSettings->plainPage());
+    d->sideSwitchInput            = new RIntNumInput(d->gboxSettings->plainPage());
     d->sideSwitchInput->setRange(1, 20, 1);
     d->sideSwitchInput->setDefaultValue(4);
     d->sideSwitchInput->setWhatsThis(i18n("During the carving process, at each step "
@@ -400,8 +401,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
                                           "automatically during rescaling, at the cost of slightly "
                                           "worse performance."));
 
-    QLabel* labelResizeOrder = new QLabel(i18n("Resize Order:"),d->gboxSettings->plainPage());
-    d->resizeOrderInput      = new RComboBox(d->gboxSettings->plainPage());
+    QLabel* const labelResizeOrder = new QLabel(i18n("Resize Order:"),d->gboxSettings->plainPage());
+    d->resizeOrderInput            = new RComboBox(d->gboxSettings->plainPage());
     d->resizeOrderInput->addItem(i18n("Horizontally first"));
     d->resizeOrderInput->addItem(i18n("Vertically first"));
     d->resizeOrderInput->setDefaultIndex(0);
@@ -424,16 +425,16 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->expanderBox = new RExpanderBox;
     d->expanderBox->setObjectName(QLatin1String("ContentAwareResizeTool Expander"));
     d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Target size"),
-                            QString("SizeSettingsContainer"), true);
+                            QLatin1String("SizeSettingsContainer"), true);
     d->expanderBox->addItem(mixedRescaleContainer, QIcon::fromTheme(QLatin1String("transform-scale")),
                             i18n("Content-aware rescale percentage"),
-                            QString("MixedRescaleContainer"), true);
+                            QLatin1String("MixedRescaleContainer"), true);
     d->expanderBox->addItem(maskSettingsContainer, QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Mask Settings"),
-                            QString("MaskSettingsContainer"), true);
+                            QLatin1String("MaskSettingsContainer"), true);
     d->expanderBox->addItem(energyFunctionsContainer, QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Energy function"),
-                            QString("EnergyFunctionsContainer"), true);
+                            QLatin1String("EnergyFunctionsContainer"), true);
     d->expanderBox->addItem(advancedSettingsContainer, QIcon::fromTheme(QLatin1String("system-run")), i18n("Advanced Settings"),
-                            QString("AdvancedSettingsContainer"), true);
+                            QLatin1String("AdvancedSettingsContainer"), true);
     d->expanderBox->addStretch();
 
     grid->addWidget(d->expanderBox, 0, 0, 1, -1);
@@ -539,7 +540,7 @@ void ContentAwareResizeTool::slotValuesChanged()
 
     QString s(sender()->objectName());
 
-    if (s == "wInput")
+    if (s == QLatin1String("wInput"))
     {
         double val  = d->wInput->value();
         double pval = val / (double)(d->orgWidth) * 100.0;
@@ -554,7 +555,7 @@ void ContentAwareResizeTool::slotValuesChanged()
             d->hInput->setValue(h);
         }
     }
-    else if (s == "hInput")
+    else if (s == QLatin1String("hInput"))
     {
         double val  = d->hInput->value();
         double pval = val / (double)(d->orgHeight) * 100.0;
@@ -569,7 +570,7 @@ void ContentAwareResizeTool::slotValuesChanged()
             d->wInput->setValue(w);
         }
     }
-    else if (s == "wpInput")
+    else if (s == QLatin1String("wpInput"))
     {
         double val = d->wpInput->value();
         int w      = (int)(val * d->orgWidth / 100);
@@ -584,7 +585,7 @@ void ContentAwareResizeTool::slotValuesChanged()
             d->hInput->setValue(h);
         }
     }
-    else if (s == "hpInput")
+    else if (s == QLatin1String("hpInput"))
     {
         double val = d->hpInput->value();
         int h      = (int)(val * d->orgHeight / 100);
@@ -848,7 +849,7 @@ bool ContentAwareResizeTool::eventFilter(QObject* obj, QEvent* ev)
         {
             if (ev->type() == QEvent::Wheel)
             {
-                QWheelEvent* wheel = static_cast<QWheelEvent *>(ev);
+                QWheelEvent* const wheel = static_cast<QWheelEvent *>(ev);
 
                 if (wheel->delta() >= 0)
                     d->maskPenSize->setValue(d->maskPenSize->value() + (wheel->delta()/8/15)*(wheel->delta()/8/15));

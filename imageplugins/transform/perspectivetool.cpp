@@ -97,10 +97,10 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString PerspectiveTool::Private::configGroupName("perspective Tool");
-const QString PerspectiveTool::Private::configDrawWhileMovingEntry("Draw While Moving");
-const QString PerspectiveTool::Private::configDrawGridEntry("Draw Grid");
-const QString PerspectiveTool::Private::configInverseTransformationEntry("Inverse Transformation");
+const QString PerspectiveTool::Private::configGroupName(QLatin1String("perspective Tool"));
+const QString PerspectiveTool::Private::configDrawWhileMovingEntry(QLatin1String("Draw While Moving"));
+const QString PerspectiveTool::Private::configDrawGridEntry(QLatin1String("Draw Grid"));
+const QString PerspectiveTool::Private::configInverseTransformationEntry(QLatin1String("Inverse Transformation"));
 
 // --------------------------------------------------------
 
@@ -114,10 +114,10 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QFrame* frame    = new QFrame(0);
+    QFrame* const frame  = new QFrame(0);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l   = new QVBoxLayout(frame);
-    d->previewWidget = new PerspectiveWidget(525, 350, frame);
+    QVBoxLayout* const l = new QVBoxLayout(frame);
+    d->previewWidget     = new PerspectiveWidget(525, 350, frame);
     l->addWidget(d->previewWidget);
     d->previewWidget->setWhatsThis(i18n("This is the perspective transformation operation preview. "
                                         "You can use the mouse for dragging the corner to adjust the "
@@ -134,37 +134,37 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label1   = new QLabel(i18n("New width:"));
-    d->newWidthLabel = new QLabel(temp.setNum( iface.originalSize().width()) + i18n(" px"));
+    QLabel* const label1 = new QLabel(i18n("New width:"));
+    d->newWidthLabel     = new QLabel(temp.setNum( iface.originalSize().width()) + i18n(" px"));
     d->newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    QLabel* label2    = new QLabel(i18n("New height:"));
-    d->newHeightLabel = new QLabel(temp.setNum( iface.originalSize().height()) + i18n(" px"));
+    QLabel* const label2 = new QLabel(i18n("New height:"));
+    d->newHeightLabel    = new QLabel(temp.setNum( iface.originalSize().height()) + i18n(" px"));
     d->newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     // -------------------------------------------------------------
 
-    RLineWidget* line        = new RLineWidget (Qt::Horizontal);
-    QLabel* angleLabel       = new QLabel(i18n("Angles (in degrees):"));
-    QLabel* label3           = new QLabel(i18n("  Top left:"));
+    RLineWidget* const line  = new RLineWidget (Qt::Horizontal);
+    QLabel* const angleLabel = new QLabel(i18n("Angles (in degrees):"));
+    QLabel* const label3     = new QLabel(i18n("  Top left:"));
     d->topLeftAngleLabel     = new QLabel;
-    QLabel* label4           = new QLabel(i18n("  Top right:"));
+    QLabel* const label4     = new QLabel(i18n("  Top right:"));
     d->topRightAngleLabel    = new QLabel;
-    QLabel* label5           = new QLabel(i18n("  Bottom left:"));
+    QLabel* const label5     = new QLabel(i18n("  Bottom left:"));
     d->bottomLeftAngleLabel  = new QLabel;
-    QLabel* label6           = new QLabel(i18n("  Bottom right:"));
+    QLabel* const label6     = new QLabel(i18n("  Bottom right:"));
     d->bottomRightAngleLabel = new QLabel;
 
     // -------------------------------------------------------------
 
-    RLineWidget* line2         = new RLineWidget (Qt::Horizontal);
+    RLineWidget* const line2   = new RLineWidget (Qt::Horizontal);
     d->drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"));
     d->drawGridCheckBox        = new QCheckBox(i18n("Draw grid"));
     d->inverseTransformation   = new QCheckBox(i18n("Inverse transformation"));
 
     // -------------------------------------------------------------
 
-    QGridLayout* grid = new QGridLayout;
+    QGridLayout* const grid = new QGridLayout;
     grid->addWidget(label1,                       0, 0, 1, 1);
     grid->addWidget(d->newWidthLabel,             0, 1, 1, 2);
     grid->addWidget(label2,                       1, 0, 1, 1);

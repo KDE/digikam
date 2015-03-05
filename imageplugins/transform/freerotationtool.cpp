@@ -69,7 +69,7 @@ class FreeRotationTool::Private
 public:
 
     Private() :
-        configGroupName("freerotation Tool"),
+        configGroupName(QLatin1String("freerotation Tool")),
 
         newHeightLabel(0),
         newWidthLabel(0),
@@ -125,15 +125,15 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     QString temp;
     ImageIface iface;
 
-    d->gboxSettings   = new EditorToolSettings;
+    d->gboxSettings      = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
-    QLabel* label1    = new QLabel(i18n("New width:"));
-    d->newWidthLabel  = new QLabel(temp.setNum( iface.originalSize().width()) + i18n(" px"));
+    QLabel* const label1 = new QLabel(i18n("New width:"));
+    d->newWidthLabel     = new QLabel(temp.setNum( iface.originalSize().width()) + i18n(" px"));
     d->newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    QLabel* label2    = new QLabel(i18n("New height:"));
-    d->newHeightLabel = new QLabel(temp.setNum( iface.originalSize().height()) + i18n(" px"));
+    QLabel* const label2 = new QLabel(i18n("New height:"));
+    d->newHeightLabel    = new QLabel(temp.setNum( iface.originalSize().height()) + i18n(" px"));
     d->newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     // -------------------------------------------------------------
@@ -141,13 +141,13 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     QString btnWhatsThis = i18n("Select a point in the preview widget, "
                                 "then click this button to assign the point for auto-correction.");
 
-    QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
+    QPixmap pm1 = generateBtnPixmap(QLatin1String("1"), Qt::black);
     d->autoAdjustPoint1Btn = new QPushButton;
     d->autoAdjustPoint1Btn->setIcon(pm1);
     d->autoAdjustPoint1Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                           QSizePolicy::MinimumExpanding);
 
-    QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::black);
+    QPixmap pm2 = generateBtnPixmap(QLatin1String("2"), Qt::black);
     d->autoAdjustPoint2Btn = new QPushButton;
     d->autoAdjustPoint2Btn->setIcon(pm2);
     d->autoAdjustPoint2Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
@@ -215,9 +215,9 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     d->expanderBox           = new RExpanderBox;
     d->expanderBox->setObjectName(QLatin1String("FreeRotationTool Expander"));
     d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme(QLatin1String("freerotation")), i18n("Automatic Adjustment"),
-                            QString("AutoAdjustContainer"), true);
+                            QLatin1String("AutoAdjustContainer"), true);
     d->expanderBox->addItem(d->settingsView, QIcon::fromTheme(QLatin1String("freerotation")), i18n("Settings"),
-                            QString("SettingsContainer"), true);
+                            QLatin1String("SettingsContainer"), true);
     d->expanderBox->addStretch();
 
     // -------------------------------------------------------------
@@ -383,7 +383,7 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength) const
 
     if (diff > 0)
     {
-        QString delimiter(" ");
+        QString delimiter = QLatin1String(" ");
         int times = (diff / 2);
 
         tmp.prepend(delimiter.repeated(times));
@@ -493,7 +493,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
 
     // convert the angle to a string so we can easily split it up
     QString angleStr       = QString::number(angle, 'f', 2);
-    QStringList anglesList = angleStr.split('.');
+    QStringList anglesList = angleStr.split(QLatin1Char('.'));
 
     // try to set the angle widgets with the extracted values
     if (anglesList.count() == 2)
@@ -506,7 +506,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
             mainAngle = 0;
         }
 
-        double fineAngle = QString(QString("0.") + anglesList.at(1)).toDouble(&ok);
+        double fineAngle = QString(QLatin1String("0.") + anglesList.at(1)).toDouble(&ok);
         fineAngle        = (angle < 0.0) ? -fineAngle : fineAngle;
 
         if (!ok)

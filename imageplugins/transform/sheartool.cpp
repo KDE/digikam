@@ -93,12 +93,12 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString ShearTool::Private::configGroupName("shear Tool");
-const QString ShearTool::Private::configAntiAliasingEntry("Anti Aliasing");
-const QString ShearTool::Private::configMainHAngleEntry("Main HAngle");
-const QString ShearTool::Private::configMainVAngleEntry("Main VAngle");
-const QString ShearTool::Private::configFineHAngleEntry("Fine HAngle");
-const QString ShearTool::Private::configFineVAngleEntry("Fine VAngle");
+const QString ShearTool::Private::configGroupName(QLatin1String("shear Tool"));
+const QString ShearTool::Private::configAntiAliasingEntry(QLatin1String("Anti Aliasing"));
+const QString ShearTool::Private::configMainHAngleEntry(QLatin1String("Main HAngle"));
+const QString ShearTool::Private::configMainVAngleEntry(QLatin1String("Main VAngle"));
+const QString ShearTool::Private::configFineHAngleEntry(QLatin1String("Fine HAngle"));
+const QString ShearTool::Private::configFineVAngleEntry(QLatin1String("Fine VAngle"));
 
 // --------------------------------------------------------
 

@@ -75,11 +75,11 @@ public:
 };
 
 ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVariantList&)
-    : ImagePlugin(parent, "ImagePlugin_Transform"),
+    : ImagePlugin(parent, QLatin1String("ImagePlugin_Transform")),
       d(new Private)
 {
     // to load the rc file from digikam's installation path
-    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Transformation plugins"));
+    setComponentName(QLatin1String("digikam"), i18nc("to be displayed in shortcuts dialog", "Transformation plugins"));
 
     KActionCollection *ac = actionCollection();
 
@@ -139,7 +139,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
             this, SIGNAL(signalAutoAdjustAction()));
 
     setActionCategory(i18n("Transform"));
-    setXMLFile("digikamimageplugin_transform_ui.rc");
+    setXMLFile(QLatin1String("digikamimageplugin_transform_ui.rc"));
 
     qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_Transform plugin loaded";
 }

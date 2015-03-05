@@ -274,7 +274,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     grid3->setSpacing(d->gboxSettings->spacingHint());
 
     d->expbox->addItem(cropInfo, QIcon::fromTheme(QLatin1String("help-about")).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
-                       i18n("Crop Information"), QString("CropInformation"), true);
+                       i18n("Crop Information"), QLatin1String("CropInformation"), true);
 
     // -------------------------------------------------------------
 
@@ -284,8 +284,8 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->ratioCB          = new RComboBox(cropSelection);
     d->ratioCB->addItem(i18nc("custom aspect ratio crop settings", "Custom"));
     // NOTE: Order is important there. Look ImageSelectionWidget::RatioAspect for details.
-    d->ratioCB->addItem(QLatin1String("1:1")));
-    d->ratioCB->addItem(QLatin1String("2:1");
+    d->ratioCB->addItem(QLatin1String("1:1"));
+    d->ratioCB->addItem(QLatin1String("2:1"));
     d->ratioCB->addItem(QLatin1String("2:3"));
     d->ratioCB->addItem(QLatin1String("3:1"));
     d->ratioCB->addItem(QLatin1String("3:4"));
@@ -378,7 +378,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->widthInput->setDefaultValue(800);
 
     d->centerWidth = new QToolButton(cropSelection);
-    d->centerWidth->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/centerwidth.png")));
+    d->centerWidth->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/centerwidth.png"))));
     d->centerWidth->setWhatsThis( i18n("Set width position to center."));
 
     d->heightInput = new RIntNumInput(cropSelection);
@@ -389,7 +389,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->heightInput->setDefaultValue(600);
 
     d->centerHeight = new QToolButton(cropSelection);
-    d->centerHeight->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/centerheight.png")));
+    d->centerHeight->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/centerheight.png"))));
     d->centerHeight->setWhatsThis( i18n("Set height position to center."));
 
     // -------------------------------------------------------------
@@ -416,7 +416,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
 
     d->expbox->addItem(cropSelection, QIcon::fromTheme(QLatin1String("transform-crop-and-resize")).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
-                       i18n("Crop Settings"), QString("CropSelection"), true);
+                       i18n("Crop Settings"), QLatin1String("CropSelection"), true);
 
     // -------------------------------------------------------------
 
@@ -478,7 +478,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     grid2->setSpacing(d->gboxSettings->spacingHint());
 
     d->expbox->addItem(compositionGuide, QIcon::fromTheme(QLatin1String("tools-wizard")).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
-                       i18n("Composition Guides"), QString("CompositionGuide"), true);
+                       i18n("Composition Guides"), QLatin1String("CompositionGuide"), true);
 
     d->expbox->addStretch();
 
@@ -772,33 +772,33 @@ void RatioCropTool::setRatioCBText(int orientation)
     d->ratioCB->blockSignals(true);
     d->ratioCB->combo()->clear();
     d->ratioCB->addItem(i18nc("custom ratio crop settings", "Custom"));
-    d->ratioCB->addItem("1:1");
+    d->ratioCB->addItem(QLatin1String("1:1"));
 
     if (orientation == ImageSelectionWidget::Landscape)
     {
-        d->ratioCB->addItem("1:2");
-        d->ratioCB->addItem("3:2");
-        d->ratioCB->addItem("1:3");
-        d->ratioCB->addItem("4:3");
-        d->ratioCB->addItem("1:4");
-        d->ratioCB->addItem("5:4");
-        d->ratioCB->addItem("7:5");
-        d->ratioCB->addItem("10:7");
-        d->ratioCB->addItem("5:8");
-        d->ratioCB->addItem("9:16");
+        d->ratioCB->addItem(QLatin1String("1:2"));
+        d->ratioCB->addItem(QLatin1String("3:2"));
+        d->ratioCB->addItem(QLatin1String("1:3"));
+        d->ratioCB->addItem(QLatin1String("4:3"));
+        d->ratioCB->addItem(QLatin1String("1:4"));
+        d->ratioCB->addItem(QLatin1String("5:4"));
+        d->ratioCB->addItem(QLatin1String("7:5"));
+        d->ratioCB->addItem(QLatin1String("10:7"));
+        d->ratioCB->addItem(QLatin1String("5:8"));
+        d->ratioCB->addItem(QLatin1String("9:16"));
     }
     else
     {
-        d->ratioCB->addItem("2:1");
-        d->ratioCB->addItem("2:3");
-        d->ratioCB->addItem("3:1");
-        d->ratioCB->addItem("3:4");
-        d->ratioCB->addItem("4:1");
-        d->ratioCB->addItem("4:5");
-        d->ratioCB->addItem("5:7");
-        d->ratioCB->addItem("7:10");
-        d->ratioCB->addItem("8:5");
-        d->ratioCB->addItem("16:9");
+        d->ratioCB->addItem(QLatin1String("2:1"));
+        d->ratioCB->addItem(QLatin1String("2:3"));
+        d->ratioCB->addItem(QLatin1String("3:1"));
+        d->ratioCB->addItem(QLatin1String("3:4"));
+        d->ratioCB->addItem(QLatin1String("4:1"));
+        d->ratioCB->addItem(QLatin1String("4:5"));
+        d->ratioCB->addItem(QLatin1String("5:7"));
+        d->ratioCB->addItem(QLatin1String("7:10"));
+        d->ratioCB->addItem(QLatin1String("8:5"));
+        d->ratioCB->addItem(QLatin1String("16:9"));
     }
 
     d->ratioCB->addItem(i18n("Golden Ratio"));
@@ -1053,13 +1053,13 @@ void RatioCropTool::finalRendering()
     DImg imOrg              = iface->original()->copy();
 
     imOrg.crop(normalizedRegion);
-    FilterAction action("digikam:RatioCrop", 1);
+    FilterAction action(QLatin1String("digikam:RatioCrop"), 1);
 
     action.setDisplayableName(i18n("Aspect Ratio Crop"));
-    action.addParameter("x",      currentRegion.x());
-    action.addParameter("y",      currentRegion.y());
-    action.addParameter("width",  currentRegion.width());
-    action.addParameter("height", currentRegion.height());
+    action.addParameter(QLatin1String("x"),      currentRegion.x());
+    action.addParameter(QLatin1String("y"),      currentRegion.y());
+    action.addParameter(QLatin1String("width"),  currentRegion.width());
+    action.addParameter(QLatin1String("height"), currentRegion.height());
 
     iface->setOriginal(i18n("Aspect Ratio Crop"), action, imOrg);
 

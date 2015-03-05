@@ -309,23 +309,23 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
 
     DImg targetImg = destImage.copy(getTargetSize());
 
-    FilterAction action("digikam:PerspectiveAdjustment", 1);
+    FilterAction action(QLatin1String("digikam:PerspectiveAdjustment"), 1);
     action.setDisplayableName(i18n("Perspective Adjustment Tool"));
 
-    action.addParameter("topLeftPointX",     d->topLeftPoint.x());
-    action.addParameter("topLeftPointY",     d->topLeftPoint.y());
-    action.addParameter("topRightPointX",    d->topRightPoint.x());
-    action.addParameter("topRightPointY",    d->topRightPoint.y());
+    action.addParameter(QLatin1String("topLeftPointX"),     d->topLeftPoint.x());
+    action.addParameter(QLatin1String("topLeftPointY"),     d->topLeftPoint.y());
+    action.addParameter(QLatin1String("topRightPointX"),    d->topRightPoint.x());
+    action.addParameter(QLatin1String("topRightPointY"),    d->topRightPoint.y());
 
-    action.addParameter("bottomLeftPointX",  d->bottomLeftPoint.x());
-    action.addParameter("bottomLeftPointY",  d->bottomLeftPoint.y());
-    action.addParameter("bottomRightPointX", d->bottomRightPoint.x());
-    action.addParameter("bottomRightPointY", d->bottomRightPoint.y());
+    action.addParameter(QLatin1String("bottomLeftPointX"),  d->bottomLeftPoint.x());
+    action.addParameter(QLatin1String("bottomLeftPointY"),  d->bottomLeftPoint.y());
+    action.addParameter(QLatin1String("bottomRightPointX"), d->bottomRightPoint.x());
+    action.addParameter(QLatin1String("bottomRightPointY"), d->bottomRightPoint.y());
 
-    action.addParameter("spotX",             d->spot.x());
-    action.addParameter("spotY",             d->spot.y());
+    action.addParameter(QLatin1String("spotX"),             d->spot.x());
+    action.addParameter(QLatin1String("spotY"),             d->spot.y());
 
-    action.addParameter("antiAliasing",      d->antiAliasing);
+    action.addParameter(QLatin1String("antiAliasing"),      d->antiAliasing);
     // Update target image.
     d->iface->setOriginal(i18n("Perspective Adjustment"), action, targetImg);
 }
