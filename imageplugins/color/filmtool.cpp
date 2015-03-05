@@ -140,15 +140,15 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString FilmTool::Private::configGroupName("film Tool");
-const QString FilmTool::Private::configGammaInputEntry("GammaInput");
-const QString FilmTool::Private::configExposureEntry("Exposure");
-const QString FilmTool::Private::configFilmProfileEntry("FilmProfile");
-const QString FilmTool::Private::configFilmProfileName("FilmProfileName");
-const QString FilmTool::Private::configWhitePointEntry("WhitePoint_%1");
-const QString FilmTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString FilmTool::Private::configHistogramScaleEntry("Histogram Scale");
-const QString FilmTool::Private::configApplyColorBalance("Apply Color Balance");
+const QString FilmTool::Private::configGroupName(QLatin1String("film Tool"));
+const QString FilmTool::Private::configGammaInputEntry(QLatin1String("GammaInput"));
+const QString FilmTool::Private::configExposureEntry(QLatin1String("Exposure"));
+const QString FilmTool::Private::configFilmProfileEntry(QLatin1String("FilmProfile"));
+const QString FilmTool::Private::configFilmProfileName(QLatin1String("FilmProfileName"));
+const QString FilmTool::Private::configWhitePointEntry(QLatin1String("WhitePoint_%1"));
+const QString FilmTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString FilmTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
+const QString FilmTool::Private::configApplyColorBalance(QLatin1String("Apply Color Balance"));
 
 // --------------------------------------------------------
 
@@ -195,7 +195,7 @@ FilmTool::FilmTool(QObject* const parent)
     d->levelsHistogramWidget->setWhatsThis(i18n("This is the histogram drawing of the selected channel "
                                            "from the original image."));
     d->levelsHistogramWidget->setChannelType(ColorChannels);
-    QHBoxLayout* inputLevelsLayout = new QHBoxLayout;
+    QHBoxLayout* const inputLevelsLayout = new QHBoxLayout;
     inputLevelsLayout->addWidget(d->levelsHistogramWidget);
 
     // -------------------------------------------------------------
@@ -225,6 +225,7 @@ FilmTool::FilmTool(QObject* const parent)
     d->cnType = new QListWidget();
     QList<FilmContainer::ListItem*> profiles = d->filmContainer.profileItemList(d->cnType);
     QList<FilmContainer::ListItem*>::ConstIterator it;
+
     for (it = profiles.constBegin(); it != profiles.constEnd(); it++)
         d->cnType->addItem(*it);
 
@@ -259,10 +260,10 @@ FilmTool::FilmTool(QObject* const parent)
             "from the image data automatically. This function requires to have some residual "
             "orange mask around the exposed area of the negative."));
 
-    QLabel* space = new QLabel();
+    QLabel* const space = new QLabel();
     space->setFixedWidth(d->gboxSettings->spacingHint());
 
-    QHBoxLayout* l3 = new QHBoxLayout();
+    QHBoxLayout* const l3 = new QHBoxLayout();
     l3->addWidget(d->pickWhitePoint);
     l3->addWidget(d->autoButton);
     l3->addWidget(space);
@@ -276,20 +277,20 @@ FilmTool::FilmTool(QObject* const parent)
     d->exposureInput->setRange(0.0, 40.0, 0.01);
     d->exposureInput->setDefaultValue(1.0);
     d->exposureInput->setToolTip( i18n( "Exposure correction." ) );
-    d->exposureInput->setWhatsThis( i18n("Move the slider to higher values until maximum brightness is achieved "
-                            "without clipping any color channel. Use the output histogram to evaluate each channel."));
+    d->exposureInput->setWhatsThis(i18n("Move the slider to higher values until maximum brightness is achieved "
+                                        "without clipping any color channel. Use the output histogram to evaluate each channel."));
 
     d->gammaInput = new RDoubleNumInput();
     d->gammaInput->setDecimals(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.8);
-    d->gammaInput->setToolTip( i18n( "Gamma input value." ) );
-    d->gammaInput->setWhatsThis( i18n("Linear raw scans of film negatives require application of a gamma curve. "
-            "Standard values are 1.8 or 2.2."));
+    d->gammaInput->setToolTip(i18n( "Gamma input value." ));
+    d->gammaInput->setWhatsThis(i18n("Linear raw scans of film negatives require application of a gamma curve. "
+                                     "Standard values are 1.8 or 2.2."));
 
     // -------------------------------------------------------------
 
-    QGridLayout* grid = new QGridLayout();
+    QGridLayout* const grid = new QGridLayout();
     grid->addLayout(inputLevelsLayout,    0, 0, 1, 4);
     grid->addWidget(d->redInputLevels,    1, 0, 1, 4);
     grid->addWidget(d->greenInputLevels,  2, 0, 1, 4);
@@ -312,7 +313,7 @@ FilmTool::FilmTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->filmContainer.setSixteenBit(d->originalImage->sixteenBit());
-    d->filmContainer.setWhitePoint(DColor(QColor("white"), d->originalImage->sixteenBit()));
+    d->filmContainer.setWhitePoint(DColor(QColor(QLatin1String("white")), d->originalImage->sixteenBit()));
 
     // -------------------------------------------------------------
 
@@ -360,7 +361,7 @@ void FilmTool::slotResetSettings()
 
     FilmContainer::CNFilmProfile cnType = FilmContainer::CNNeutral;
 
-    QString profileName                   = QString("Neutral");
+    QString profileName                   = QLatin1String("Neutral");
     QList<QListWidgetItem*> matchingItems = d->cnType->findItems(profileName, Qt::MatchExactly);
     d->cnType->setCurrentItem(matchingItems.first());
 
@@ -543,7 +544,7 @@ void FilmTool::slotAutoWhitePoint()
 void FilmTool::slotResetWhitePoint()
 {
     d->filmContainer.setSixteenBit(d->originalImage->sixteenBit());
-    d->filmContainer.setWhitePoint(DColor(QColor("white"), d->originalImage->sixteenBit()));
+    d->filmContainer.setWhitePoint(DColor(QColor(QLatin1String("white")), d->originalImage->sixteenBit()));
 
     setLevelsFromFilm();
     slotPreview();
@@ -551,7 +552,7 @@ void FilmTool::slotResetWhitePoint()
 
 void FilmTool::slotColorBalanceStateChanged(int state)
 {
-    bool apply = state == Qt::Checked;
+    bool apply = (state == Qt::Checked);
     d->filmContainer.setApplyBalance(apply);
 
     slotPreview();
@@ -568,7 +569,7 @@ void FilmTool::readSettings()
     FilmContainer::CNFilmProfile cnType   = (FilmContainer::CNFilmProfile)
                                             group.readEntry(d->configFilmProfileEntry, (int)FilmContainer::CNNeutral);
 
-    QString profileName                   = group.readEntry(d->configFilmProfileName, QString("Neutral"));
+    QString profileName                   = group.readEntry(d->configFilmProfileName, "Neutral");
     QList<QListWidgetItem*> matchingItems = d->cnType->findItems(profileName, Qt::MatchExactly);
     d->cnType->setCurrentItem(matchingItems.first());
 
@@ -682,9 +683,9 @@ bool FilmTool::eventFilter(QObject* obj, QEvent* ev)
     // swallow mouse evens for level sliders to make them immutable
     if (obj == d->redInputLevels || obj == d->greenInputLevels || obj == d->blueInputLevels)
     {
-        if (ev->type() == QEvent::MouseButtonPress ||
+        if (ev->type() == QEvent::MouseButtonPress   ||
             ev->type() == QEvent::MouseButtonRelease ||
-            ev->type() == QEvent::MouseMove ||
+            ev->type() == QEvent::MouseMove          ||
             ev->type() == QEvent::MouseButtonDblClick)
             return true;
     }

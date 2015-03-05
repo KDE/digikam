@@ -76,9 +76,9 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString BWSepiaTool::Private::configGroupName("convertbw Tool");
-const QString BWSepiaTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString BWSepiaTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString BWSepiaTool::Private::configGroupName(QLatin1String("convertbw Tool"));
+const QString BWSepiaTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString BWSepiaTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // -----------------------------------------------------------------------------------
 
@@ -88,7 +88,7 @@ BWSepiaTool::BWSepiaTool(QObject* const parent)
     setObjectName(QLatin1String("convertbw"));
     setToolName(i18n("Black and White"));
     setToolIcon(QIcon::fromTheme(QLatin1String("bwtonal")));
-    setToolHelp("blackandwhitetool.anchor");
+    setToolHelp(QLatin1String("blackandwhitetool.anchor"));
     setInitPreview(true);
 
     // -------------------------------------------------------------

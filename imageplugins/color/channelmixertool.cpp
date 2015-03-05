@@ -83,9 +83,9 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString ChannelMixerTool::Private::configGroupName("channelmixer Tool");
-const QString ChannelMixerTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString ChannelMixerTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString ChannelMixerTool::Private::configGroupName(QLatin1String("channelmixer Tool"));
+const QString ChannelMixerTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString ChannelMixerTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 

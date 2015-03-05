@@ -81,8 +81,8 @@ public:
     static IccTransform getTransform(const IccProfile& in, const IccProfile& out);
 };
 
-const QString ProfileConversionTool::Private::configGroupName("Profile Conversion Tool");
-const QString ProfileConversionTool::Private::configProfileEntry("Profile");
+const QString ProfileConversionTool::Private::configGroupName(QLatin1String("Profile Conversion Tool"));
+const QString ProfileConversionTool::Private::configProfileEntry(QLatin1String("Profile"));
 
 IccTransform ProfileConversionTool::Private::getTransform(const IccProfile& in, const IccProfile& out)
 {
@@ -107,7 +107,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
     setObjectName(QLatin1String("profile conversion"));
     setToolName(i18n("Color Profile Conversion"));
     setToolIcon(QIcon::fromTheme(QLatin1String("colormanagement")));
-    //TODO setToolHelp("colormanagement.anchor");
+    //TODO setToolHelp(QLatin1String("colormanagement.anchor"));
 
     // -------------------------------------------------------------
 
@@ -130,7 +130,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
     d->profilesBox               = new IccProfilesSettings;
 
     currentProfileTitle->setText(i18n("Current Color Space:"));
-    currentProfileDesc->setText(QString("<b>%1</b>").arg(d->currentProfile.description()));
+    currentProfileDesc->setText(QString::fromUtf8("<b>%1</b>").arg(d->currentProfile.description()));
     currentProfileDesc->setWordWrap(true);
 
     grid->addWidget(currentProfileTitle, 0, 0, 1, 5);

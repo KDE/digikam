@@ -177,36 +177,36 @@ public:
     DImg                  imageSelection;
 };
 
-const QString RatioCropTool::Private::configGroupName("aspectratiocrop Tool");
-const QString RatioCropTool::Private::configHorOrientedAspectRatioEntry("Hor.Oriented Aspect Ratio");
-const QString RatioCropTool::Private::configHorOrientedAspectRatioOrientationEntry("Hor.Oriented Aspect Ratio Orientation");
-const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioNumEntry("Hor.Oriented Custom Aspect Ratio Num");
-const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioDenEntry("Hor.Oriented Custom Aspect Ratio Den");
-const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioXposEntry("Hor.Oriented Custom Aspect Ratio Xpos");
-const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioYposEntry("Hor.Oriented Custom Aspect Ratio Ypos");
-const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioWidthEntry("Hor.Oriented Custom Aspect Ratio Width");
-const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioHeightEntry("Hor.Oriented Custom Aspect Ratio Height");
-const QString RatioCropTool::Private::configVerOrientedAspectRatioEntry("Ver.Oriented Aspect Ratio");
-const QString RatioCropTool::Private::configVerOrientedAspectRatioOrientationEntry("Ver.Oriented Aspect Ratio Orientation");
-const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioNumEntry("Ver.Oriented Custom Aspect Ratio Num");
-const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioDenEntry("Ver.Oriented Custom Aspect Ratio Den");
-const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioXposEntry("Ver.Oriented Custom Aspect Ratio Xpos");
-const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioYposEntry("Ver.Oriented Custom Aspect Ratio Ypos");
-const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioWidthEntry("Ver.Oriented Custom Aspect Ratio Width");
-const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioHeightEntry("Ver.Oriented Custom Aspect Ratio Height");
-const QString RatioCropTool::Private::configPreciseAspectRatioCropEntry("Precise Aspect Ratio Crop");
-const QString RatioCropTool::Private::configAutoOrientationEntry("Auto Orientation");
-const QString RatioCropTool::Private::configGuideLinesTypeEntry("Guide Lines Type");
-const QString RatioCropTool::Private::configGoldenSectionEntry("Golden Section");
-const QString RatioCropTool::Private::configGoldenSpiralSectionEntry("Golden Spiral Section");
-const QString RatioCropTool::Private::configGoldenSpiralEntry("Golden Spiral");
-const QString RatioCropTool::Private::configGoldenTriangleEntry("Golden Triangle");
-const QString RatioCropTool::Private::configGoldenFlipHorizontalEntry("Golden Flip Horizontal");
-const QString RatioCropTool::Private::configGoldenFlipVerticalEntry("Golden Flip Vertical");
-const QString RatioCropTool::Private::configGuideColorEntry("Guide Color");
-const QString RatioCropTool::Private::configGuideWidthEntry("Guide Width");
-const QString RatioCropTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString RatioCropTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString RatioCropTool::Private::configGroupName(QLatin1String("aspectratiocrop Tool"));
+const QString RatioCropTool::Private::configHorOrientedAspectRatioEntry(QLatin1String("Hor.Oriented Aspect Ratio"));
+const QString RatioCropTool::Private::configHorOrientedAspectRatioOrientationEntry(QLatin1String("Hor.Oriented Aspect Ratio Orientation"));
+const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioNumEntry(QLatin1String("Hor.Oriented Custom Aspect Ratio Num"));
+const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioDenEntry(QLatin1String("Hor.Oriented Custom Aspect Ratio Den"));
+const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioXposEntry(QLatin1String("Hor.Oriented Custom Aspect Ratio Xpos"));
+const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioYposEntry(QLatin1String("Hor.Oriented Custom Aspect Ratio Ypos"));
+const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioWidthEntry(QLatin1String("Hor.Oriented Custom Aspect Ratio Width"));
+const QString RatioCropTool::Private::configHorOrientedCustomAspectRatioHeightEntry(QLatin1String("Hor.Oriented Custom Aspect Ratio Height"));
+const QString RatioCropTool::Private::configVerOrientedAspectRatioEntry(QLatin1String("Ver.Oriented Aspect Ratio"));
+const QString RatioCropTool::Private::configVerOrientedAspectRatioOrientationEntry(QLatin1String("Ver.Oriented Aspect Ratio Orientation"));
+const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioNumEntry(QLatin1String("Ver.Oriented Custom Aspect Ratio Num"));
+const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioDenEntry(QLatin1String("Ver.Oriented Custom Aspect Ratio Den"));
+const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioXposEntry(QLatin1String("Ver.Oriented Custom Aspect Ratio Xpos"));
+const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioYposEntry(QLatin1String("Ver.Oriented Custom Aspect Ratio Ypos"));
+const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioWidthEntry(QLatin1String("Ver.Oriented Custom Aspect Ratio Width"));
+const QString RatioCropTool::Private::configVerOrientedCustomAspectRatioHeightEntry(QLatin1String("Ver.Oriented Custom Aspect Ratio Height"));
+const QString RatioCropTool::Private::configPreciseAspectRatioCropEntry(QLatin1String("Precise Aspect Ratio Crop"));
+const QString RatioCropTool::Private::configAutoOrientationEntry(QLatin1String("Auto Orientation"));
+const QString RatioCropTool::Private::configGuideLinesTypeEntry(QLatin1String("Guide Lines Type"));
+const QString RatioCropTool::Private::configGoldenSectionEntry(QLatin1String("Golden Section"));
+const QString RatioCropTool::Private::configGoldenSpiralSectionEntry(QLatin1String("Golden Spiral Section"));
+const QString RatioCropTool::Private::configGoldenSpiralEntry(QLatin1String("Golden Spiral"));
+const QString RatioCropTool::Private::configGoldenTriangleEntry(QLatin1String("Golden Triangle"));
+const QString RatioCropTool::Private::configGoldenFlipHorizontalEntry(QLatin1String("Golden Flip Horizontal"));
+const QString RatioCropTool::Private::configGoldenFlipVerticalEntry(QLatin1String("Golden Flip Vertical"));
+const QString RatioCropTool::Private::configGuideColorEntry(QLatin1String("Guide Color"));
+const QString RatioCropTool::Private::configGuideWidthEntry(QLatin1String("Guide Width"));
+const QString RatioCropTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString RatioCropTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 
@@ -217,7 +217,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     setObjectName(QLatin1String("aspectratiocrop"));
     setToolName(i18n("Aspect Ratio Crop"));
     setToolIcon(QIcon::fromTheme(QLatin1String("ratiocrop")));
-    setToolHelp("ratiocroptool.anchor");
+    setToolHelp(QLatin1String("ratiocroptool.anchor"));
 
     // -------------------------------------------------------------
 
@@ -284,17 +284,17 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->ratioCB          = new RComboBox(cropSelection);
     d->ratioCB->addItem(i18nc("custom aspect ratio crop settings", "Custom"));
     // NOTE: Order is important there. Look ImageSelectionWidget::RatioAspect for details.
-    d->ratioCB->addItem("1:1");
-    d->ratioCB->addItem("2:1");
-    d->ratioCB->addItem("2:3");
-    d->ratioCB->addItem("3:1");
-    d->ratioCB->addItem("3:4");
-    d->ratioCB->addItem("4:1");
-    d->ratioCB->addItem("4:5");
-    d->ratioCB->addItem("5:7");
-    d->ratioCB->addItem("7:10");
-    d->ratioCB->addItem("8:5");
-    d->ratioCB->addItem("16:9");
+    d->ratioCB->addItem(QLatin1String("1:1")));
+    d->ratioCB->addItem(QLatin1String("2:1");
+    d->ratioCB->addItem(QLatin1String("2:3"));
+    d->ratioCB->addItem(QLatin1String("3:1"));
+    d->ratioCB->addItem(QLatin1String("3:4"));
+    d->ratioCB->addItem(QLatin1String("4:1"));
+    d->ratioCB->addItem(QLatin1String("4:5"));
+    d->ratioCB->addItem(QLatin1String("5:7"));
+    d->ratioCB->addItem(QLatin1String("7:10"));
+    d->ratioCB->addItem(QLatin1String("8:5"));
+    d->ratioCB->addItem(QLatin1String("16:9"));
     d->ratioCB->addItem(i18n("Golden Ratio"));
     d->ratioCB->addItem(i18n("Current Image Aspect Ratio"));
     d->ratioCB->addItem(i18nc("no crop mode", "None"));

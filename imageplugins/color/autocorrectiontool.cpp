@@ -84,10 +84,10 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString AutoCorrectionTool::Private::configGroupName("autocorrection Tool");
-const QString AutoCorrectionTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString AutoCorrectionTool::Private::configHistogramScaleEntry("Histogram Scale");
-const QString AutoCorrectionTool::Private::configAutoCorrectionFilterEntry("Auto Correction Filter");
+const QString AutoCorrectionTool::Private::configGroupName(QLatin1String("autocorrection Tool"));
+const QString AutoCorrectionTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString AutoCorrectionTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
+const QString AutoCorrectionTool::Private::configAutoCorrectionFilterEntry(QLatin1String("Auto Correction Filter"));
 
 // --------------------------------------------------------
 
@@ -99,7 +99,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
     setToolName(i18n("Auto Correction"));
     setToolVersion(1);
     setToolIcon(QIcon::fromTheme(QLatin1String("autocorrection")));
-    setToolHelp("autocolorcorrectiontool.anchor");
+    setToolHelp(QLatin1String("autocolorcorrectiontool.anchor"));
     setToolCategory(FilterAction::ReproducibleFilter);
 
     // -------------------------------------------------------------

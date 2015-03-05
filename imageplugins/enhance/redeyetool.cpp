@@ -128,7 +128,7 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     setObjectName(QLatin1String("redeye"));
     setToolName(i18n("Red Eye"));
     setToolIcon(QIcon::fromTheme(QLatin1String("redeyes")));
-    setToolHelp("redeyecorrectiontool.anchor");
+    setToolHelp(QLatin1String("redeyecorrectiontool.anchor"));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red, 1, false, ImageIface::ImageSelection);
     d->previewWidget->setToolTip(i18n("Here you can see the image selection preview with "

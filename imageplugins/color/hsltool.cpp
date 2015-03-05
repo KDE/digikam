@@ -69,9 +69,9 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString HSLTool::Private::configGroupName("hsladjust Tool");
-const QString HSLTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString HSLTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString HSLTool::Private::configGroupName(QLatin1String("hsladjust Tool"));
+const QString HSLTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString HSLTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 
@@ -82,7 +82,7 @@ HSLTool::HSLTool(QObject* const parent)
     setObjectName(QLatin1String("adjusthsl"));
     setToolName(i18n("Hue / Saturation / Lightness"));
     setToolIcon(QIcon::fromTheme(QLatin1String("adjusthsl")));
-    setToolHelp("hsladjusttool.anchor");
+    setToolHelp(QLatin1String("hsladjusttool.anchor"));
     setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;

@@ -102,11 +102,11 @@ public:
 };
 
 ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
-    : ImagePlugin(parent, "ImagePlugin_Color"),
+    : ImagePlugin(parent, QLatin1String("ImagePlugin_Color")),
       d(new Private)
 {
     // to load the rc file from digikam's installation path
-    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Color adjustment plugins"));
+    setComponentName(QLatin1String("digikam"), i18nc("to be displayed in shortcuts dialog", "Color adjustment plugins"));
 
     //-------------------------------
     // Colors menu actions
@@ -203,7 +203,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
             this, SLOT(slotFilm()));
 
     setActionCategory(i18n("Colors"));
-    setXMLFile("digikamimageplugin_color_ui.rc");
+    setXMLFile(QLatin1String("digikamimageplugin_color_ui.rc"));
 
     qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_Color plugin loaded";
 }
@@ -265,7 +265,7 @@ void ImagePlugin_Color::slotConvertTo8Bits()
                                             qApp->applicationName(),
                                             i18n("Performing this operation will reduce image color quality. "
                                             "Do you want to continue?"),
-                                            QString("ImagePluginColor16To8Bits"))
+                                            QLatin1String("ImagePluginColor16To8Bits"))
             == QMessageBox::Cancel)
         {
             return;

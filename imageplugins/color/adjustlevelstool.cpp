@@ -151,14 +151,14 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString AdjustLevelsTool::Private::configGroupName("adjustlevels Tool");
-const QString AdjustLevelsTool::Private::configGammaChannelEntry("GammaChannel%1");
-const QString AdjustLevelsTool::Private::configLowInputChannelEntry("LowInputChannel%1");
-const QString AdjustLevelsTool::Private::configLowOutputChannelEntry("LowOutputChannel%1");
-const QString AdjustLevelsTool::Private::configHighInputChannelEntry("HighInputChannel%1");
-const QString AdjustLevelsTool::Private::configHighOutputChannelEntry("HighOutputChannel%1");
-const QString AdjustLevelsTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString AdjustLevelsTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString AdjustLevelsTool::Private::configGroupName(QLatin1String("adjustlevels Tool"));
+const QString AdjustLevelsTool::Private::configGammaChannelEntry(QLatin1String("GammaChannel%1"));
+const QString AdjustLevelsTool::Private::configLowInputChannelEntry(QLatin1String("LowInputChannel%1"));
+const QString AdjustLevelsTool::Private::configLowOutputChannelEntry(QLatin1String("LowOutputChannel%1"));
+const QString AdjustLevelsTool::Private::configHighInputChannelEntry(QLatin1String("HighInputChannel%1"));
+const QString AdjustLevelsTool::Private::configHighOutputChannelEntry(QLatin1String("HighOutputChannel%1"));
+const QString AdjustLevelsTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString AdjustLevelsTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 
@@ -895,7 +895,7 @@ void AdjustLevelsTool::slotLoadSettings()
 
     loadLevelsFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Levels File to Load"),
                                                  QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                 QString("*"));
+                                                 QLatin1String("*"));
 
     if ( loadLevelsFile.isEmpty() )
     {
@@ -921,7 +921,7 @@ void AdjustLevelsTool::slotSaveAsSettings()
 
     saveLevelsFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Levels File to Save"),
                                                  QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                 QString("*"));
+                                                 QLatin1String("*"));
 
     if ( saveLevelsFile.isEmpty() )
     {

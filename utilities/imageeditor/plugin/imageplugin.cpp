@@ -32,10 +32,10 @@
 namespace Digikam
 {
 
-ImagePlugin::ImagePlugin(QObject* const parent, const char* name)
+ImagePlugin::ImagePlugin(QObject* const parent, const QString& name)
     : QObject(parent)
 {
-    setObjectName(QLatin1String(name));
+    setObjectName(name);
 }
 
 ImagePlugin::~ImagePlugin()

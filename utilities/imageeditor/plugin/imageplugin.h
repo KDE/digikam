@@ -51,7 +51,7 @@ class DIGIKAM_EXPORT ImagePlugin : public QObject, public KXMLGUIClient
 
 public:
 
-    explicit ImagePlugin(QObject* const parent, const char* name = 0);
+    explicit ImagePlugin(QObject* const parent, const QString& name);
     virtual ~ImagePlugin();
 
     void loadTool(EditorTool* const tool);

@@ -72,9 +72,9 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString BCGTool::Private::configGroupName("bcgadjust Tool");
-const QString BCGTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString BCGTool::Private::configHistogramScaleEntry("Histogram Scale");
+const QString BCGTool::Private::configGroupName(QLatin1String("bcgadjust Tool"));
+const QString BCGTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString BCGTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 
@@ -86,7 +86,7 @@ BCGTool::BCGTool(QObject* const parent)
     setToolName(i18n("Brightness / Contrast / Gamma"));
     setToolVersion(1);
     setToolIcon(QIcon::fromTheme(QLatin1String("contrast")));
-    setToolHelp("bcgadjusttool.anchor");
+    setToolHelp(QLatin1String("bcgadjusttool.anchor"));
     setToolCategory(FilterAction::ReproducibleFilter);
     setInitPreview(true);
 
