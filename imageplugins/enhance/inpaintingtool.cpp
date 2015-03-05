@@ -136,21 +136,21 @@ public:
     EditorToolSettings*     gboxSettings;
 };
 
-const QString InPaintingTool::Private::configGroupName("inpainting Tool");
-const QString InPaintingTool::Private::configFastApproxEntry("FastApprox");
-const QString InPaintingTool::Private::configInterpolationEntry("Interpolation");
-const QString InPaintingTool::Private::configAmplitudeEntry("Amplitude");
-const QString InPaintingTool::Private::configSharpnessEntry("Sharpness");
-const QString InPaintingTool::Private::configAnisotropyEntry("Anisotropy");
-const QString InPaintingTool::Private::configAlphaEntry("Alpha");
-const QString InPaintingTool::Private::configSigmaEntry("Sigma");
-const QString InPaintingTool::Private::configGaussPrecEntry("GaussPrec");
-const QString InPaintingTool::Private::configDlEntry("Dl");
-const QString InPaintingTool::Private::configDaEntry("Da");
-const QString InPaintingTool::Private::configIterationEntry("Iteration");
-const QString InPaintingTool::Private::configTileEntry("Tile");
-const QString InPaintingTool::Private::configBTileEntry("BTile");
-const QString InPaintingTool::Private::configPresetEntry("Preset");
+const QString InPaintingTool::Private::configGroupName(QLatin1String("inpainting Tool"));
+const QString InPaintingTool::Private::configFastApproxEntry(QLatin1String("FastApprox"));
+const QString InPaintingTool::Private::configInterpolationEntry(QLatin1String("Interpolation"));
+const QString InPaintingTool::Private::configAmplitudeEntry(QLatin1String("Amplitude"));
+const QString InPaintingTool::Private::configSharpnessEntry(QLatin1String("Sharpness"));
+const QString InPaintingTool::Private::configAnisotropyEntry(QLatin1String("Anisotropy"));
+const QString InPaintingTool::Private::configAlphaEntry(QLatin1String("Alpha"));
+const QString InPaintingTool::Private::configSigmaEntry(QLatin1String("Sigma"));
+const QString InPaintingTool::Private::configGaussPrecEntry(QLatin1String("GaussPrec"));
+const QString InPaintingTool::Private::configDlEntry(QLatin1String("Dl"));
+const QString InPaintingTool::Private::configDaEntry(QLatin1String("Da"));
+const QString InPaintingTool::Private::configIterationEntry(QLatin1String("Iteration"));
+const QString InPaintingTool::Private::configTileEntry(QLatin1String("Tile"));
+const QString InPaintingTool::Private::configBTileEntry(QLatin1String("BTile"));
+const QString InPaintingTool::Private::configPresetEntry(QLatin1String("Preset"));
 
 // --------------------------------------------------------
 
@@ -177,8 +177,8 @@ InPaintingTool::InPaintingTool(QObject* const parent)
     d->mainTab               = new QTabWidget(d->gboxSettings->plainPage());
     QWidget* const firstPage = new QWidget(d->mainTab);
 
-    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
-                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"));
+    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
+                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     QLabel* const typeLabel = new QLabel(i18n("Filtering type:"));
@@ -209,8 +209,8 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* spacer    = new QLabel();
-    d->settingsWidget = new GreycstorationSettings(d->mainTab);
+    QLabel* const spacer = new QLabel();
+    d->settingsWidget    = new GreycstorationSettings(d->mainTab);
 
     // -------------------------------------------------------------
 
@@ -470,7 +470,7 @@ void InPaintingTool::slotLoadSettings()
 {
     QUrl loadInpaintingFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph In-Painting Settings File to Load"),
                                                           QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                          QString("*"));
+                                                          QLatin1String("*"));
 
     if (loadInpaintingFile.isEmpty())
     {
@@ -481,7 +481,7 @@ void InPaintingTool::slotLoadSettings()
 
     if (file.open(QIODevice::ReadOnly))
     {
-        if (!d->settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
+        if (!d->settingsWidget->loadSettings(file, QLatin1String("# Photograph Inpainting Configuration File V2")))
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                   i18n("\"%1\" is not a Photograph In-Painting settings text file.",
@@ -507,7 +507,7 @@ void InPaintingTool::slotSaveAsSettings()
 {
     QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph In-Painting Settings File to Save"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                           QString("*"));
+                                                           QLatin1String("*"));
 
     if (saveRestorationFile.isEmpty())
     {
@@ -518,7 +518,7 @@ void InPaintingTool::slotSaveAsSettings()
 
     if (file.open(QIODevice::WriteOnly))
     {
-        d->settingsWidget->saveSettings(file, QString("# Photograph Inpainting Configuration File V2"));
+        d->settingsWidget->saveSettings(file, QLatin1String("# Photograph Inpainting Configuration File V2"));
     }
     else
     {

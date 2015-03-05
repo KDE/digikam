@@ -100,7 +100,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Raw Conversion"));
+        return QString::fromUtf8(I18N_NOOP("Raw Conversion"));
     }
 
     static QList<int>       SupportedVersions()

@@ -122,7 +122,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Film Grain Effect"));
+        return QString::fromUtf8(I18N_NOOP("Film Grain Effect"));
     }
 
     static QList<int>       SupportedVersions()

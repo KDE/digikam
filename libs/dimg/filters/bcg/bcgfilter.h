@@ -56,7 +56,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Brightness / Contrast / Gamma Filter"));
+        return QString::fromUtf8(I18N_NOOP("Brightness / Contrast / Gamma Filter"));
     }
 
     static QList<int>       SupportedVersions()

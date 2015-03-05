@@ -60,7 +60,7 @@ class AntiVignettingTool::Private
 public:
 
     Private() :
-        configGroupName("antivignetting Tool"),
+        configGroupName(QLatin1String("antivignetting Tool")),
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)

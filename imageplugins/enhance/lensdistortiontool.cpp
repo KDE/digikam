@@ -93,11 +93,11 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString LensDistortionTool::Private::configGroupName("lensdistortion Tool");
-const QString LensDistortionTool::Private::config2ndOrderDistortionEntry("2nd Order Distortion");
-const QString LensDistortionTool::Private::config4thOrderDistortionEntry("4th Order Distortion");
-const QString LensDistortionTool::Private::configZoomFactorEntry("Zoom Factor");
-const QString LensDistortionTool::Private::configBrightenEntry("Brighten");
+const QString LensDistortionTool::Private::configGroupName(QLatin1String("lensdistortion Tool"));
+const QString LensDistortionTool::Private::config2ndOrderDistortionEntry(QLatin1String("2nd Order Distortion"));
+const QString LensDistortionTool::Private::config4thOrderDistortionEntry(QLatin1String("4th Order Distortion"));
+const QString LensDistortionTool::Private::configZoomFactorEntry(QLatin1String("Zoom Factor"));
+const QString LensDistortionTool::Private::configBrightenEntry(QLatin1String("Brighten"));
 
 // --------------------------------------------------------
 
@@ -117,7 +117,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
+    QGridLayout* const gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
     d->maskPreviewLabel = new QLabel(d->gboxSettings->plainPage());
     d->maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
@@ -126,7 +126,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label1 = new QLabel(i18nc("value for amount of distortion", "Main:"), d->gboxSettings->plainPage());
+    QLabel* const label1 = new QLabel(i18nc("value for amount of distortion", "Main:"), d->gboxSettings->plainPage());
 
     d->mainInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->mainInput->setDecimals(1);
@@ -138,7 +138,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label2 = new QLabel(i18n("Edge:"), d->gboxSettings->plainPage());
+    QLabel* const label2 = new QLabel(i18n("Edge:"), d->gboxSettings->plainPage());
 
     d->edgeInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->edgeInput->setDecimals(1);
@@ -149,7 +149,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label3 = new QLabel(i18n("Zoom:"), d->gboxSettings->plainPage());
+    QLabel* const label3 = new QLabel(i18n("Zoom:"), d->gboxSettings->plainPage());
 
     d->rescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->rescaleInput->setDecimals(1);
@@ -159,7 +159,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label4 = new QLabel(i18n("Brighten:"), d->gboxSettings->plainPage());
+    QLabel* const label4 = new QLabel(i18n("Brighten:"), d->gboxSettings->plainPage());
 
     d->brightenInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->brightenInput->setDecimals(1);

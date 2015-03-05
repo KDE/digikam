@@ -145,7 +145,7 @@ public:
 
     static QString DisplayableName()
     {
-        return i18n(I18N_NOOP("Color Negative Inverter"));
+        return QString::fromUtf8(I18N_NOOP("Color Negative Inverter"));
     }
 
     static QList<int> SupportedVersions()

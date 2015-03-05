@@ -79,7 +79,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Tonality Filter"));
+        return QString::fromUtf8(I18N_NOOP("Tonality Filter"));
     }
 
     static QList<int>       SupportedVersions()

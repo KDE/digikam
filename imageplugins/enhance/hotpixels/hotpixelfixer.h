@@ -71,12 +71,12 @@ public:
 
     static QString          FilterIdentifier()
     {
-        return "digikam:HotPixelFilter";
+        return QLatin1String("digikam:HotPixelFilter");
     }
 
     static QString          DisplayableName()
     {
-        return I18N_NOOP("Hot Pixels Tool");
+        return QString::fromUtf8(I18N_NOOP("Hot Pixels Tool"));
     }
 
     static QList<int>       SupportedVersions()

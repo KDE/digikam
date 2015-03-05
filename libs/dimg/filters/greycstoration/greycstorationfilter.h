@@ -194,7 +194,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Greycstoration Filter"));
+        return QString::fromUtf8(I18N_NOOP("Greycstoration Filter"));
     }
 
     static QList<int>       SupportedVersions()

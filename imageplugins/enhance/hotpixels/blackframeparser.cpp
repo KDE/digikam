@@ -43,10 +43,13 @@
 #include <QImage>
 #include <QStringList>
 #include <QApplication>
+#include <QTemporaryFile>
 
 // KDE includes
 
-#include <kio/netaccess.h>
+#include <kjobwidgets.h>
+#include <kio/job.h>
+#include <kio/copyjob.h>
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -59,6 +62,11 @@ BlackFrameParser::BlackFrameParser(QObject* const parent)
 
 BlackFrameParser::~BlackFrameParser()
 {
+    if (!m_tempFilePath.isEmpty())
+    {
+        QFile::remove(m_tempFilePath);
+    }
+
     delete m_imageLoaderThread;
 }
 
@@ -69,7 +77,32 @@ void BlackFrameParser::parseHotPixels(const QString& file)
 
 void BlackFrameParser::parseBlackFrame(const QUrl& url)
 {
-    KIO::NetAccess::download(url, m_localFile, qApp->activeWindow());
+    QString localFile;
+    
+    if (url.isLocalFile())
+    {
+        // file protocol. We do not need the network
+        localFile = url.toLocalFile();
+    }
+    else
+    {
+        if (!m_tempFilePath.isEmpty())
+        {
+            QFile::remove(m_tempFilePath);
+        }
+
+        QTemporaryFile tmpFile;
+        tmpFile.setAutoRemove(false);
+        tmpFile.open();
+
+        localFile      = tmpFile.fileName();
+        m_tempFilePath = localFile;
+
+        KIO::FileCopyJob* const fileCopyJob = KIO::file_copy(url, QUrl::fromLocalFile(localFile), -1, KIO::Overwrite);
+        KJobWidgets::setWindow(fileCopyJob, qApp->activeWindow());
+
+        fileCopyJob->exec();
+    }
 
     if (!m_imageLoaderThread)
     {
@@ -82,7 +115,7 @@ void BlackFrameParser::parseBlackFrame(const QUrl& url)
                 this, SLOT(slotLoadImageFromUrlComplete(LoadingDescription,DImg)));
     }
 
-    LoadingDescription desc = LoadingDescription(m_localFile, DRawDecoding());
+    LoadingDescription desc = LoadingDescription(localFile, DRawDecoding());
     m_imageLoaderThread->load(desc);
 }
 

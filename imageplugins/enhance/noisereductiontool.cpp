@@ -52,7 +52,7 @@ class NoiseReductionTool::Private
 public:
 
     Private() :
-        configGroupName("noisereduction Tool"),
+        configGroupName(QLatin1String("noisereduction Tool")),
         nrSettings(0),
         previewWidget(0),
         gboxSettings(0)

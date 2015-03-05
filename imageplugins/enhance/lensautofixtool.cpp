@@ -64,8 +64,8 @@ class LensAutoFixTool::Private
 public:
 
     Private() :
-        configGroupName("Lens Auto-Correction Tool"),
-        configShowGrid("Show Grid"),
+        configGroupName(QLatin1String("Lens Auto-Correction Tool")),
+        configShowGrid(QLatin1String("Show Grid")),
         maskPreviewLabel(0),
         showGrid(0),
         settingsView(0),

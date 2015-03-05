@@ -69,8 +69,8 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString BlurTool::Private::configGroupName("gaussianblur Tool");
-const QString BlurTool::Private::configRadiusAdjustmentEntry("RadiusAdjustment");
+const QString BlurTool::Private::configGroupName(QLatin1String("gaussianblur Tool"));
+const QString BlurTool::Private::configRadiusAdjustmentEntry(QLatin1String("RadiusAdjustment"));
 
 // --------------------------------------------------------
 
@@ -88,7 +88,7 @@ BlurTool::BlurTool(QObject* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* label  = new QLabel(i18n("Smoothness:"));
+    QLabel* const label  = new QLabel(i18n("Smoothness:"));
     d->radiusInput = new RIntNumInput();
     d->radiusInput->setRange(0, 100, 1);
     d->radiusInput->setDefaultValue(0);
@@ -98,7 +98,7 @@ BlurTool::BlurTool(QObject* const parent)
 
     // --------------------------------------------------------
 
-    QGridLayout* grid = new QGridLayout( );
+    QGridLayout* const grid = new QGridLayout( );
     grid->addWidget(label,          0, 0, 1, 2);
     grid->addWidget(d->radiusInput, 1, 0, 1, 2);
     grid->setRowStretch(2, 10);

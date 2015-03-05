@@ -61,7 +61,7 @@ class SharpenTool::Private
 public:
 
     Private() :
-        configGroupName("sharpen Tool"),
+        configGroupName(QLatin1String("sharpen Tool")),
         sharpSettings(0),
         previewWidget(0),
         gboxSettings(0)

@@ -71,6 +71,7 @@ extern "C"
 #include <QApplication>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QTemporaryFile>
 
 // KDE includes
 
@@ -537,7 +538,7 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
             i++;
         }
 
-        if(d->droppedUrls)
+        if (d->droppedUrls)
         {
             //replace the equal sign with "<<" to keep the previous pics in the list
             d->infoList << infos;
@@ -569,9 +570,7 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 
     QString localFile;
     
-    //KIO::NetAccess::download(info.url, localFile, this);
-
-    if(info.url.isLocalFile())
+    if (info.url.isLocalFile())
     {
         // file protocol. We do not need the network
         localFile = info.url.toLocalFile();

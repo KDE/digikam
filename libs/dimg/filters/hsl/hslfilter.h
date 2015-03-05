@@ -78,7 +78,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Hue / Saturation / Lightness Filter"));
+        return QString::fromUtf8(I18N_NOOP("Hue / Saturation / Lightness Filter"));
     }
 
     static QList<int>       SupportedVersions()

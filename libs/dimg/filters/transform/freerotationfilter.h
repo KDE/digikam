@@ -104,7 +104,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Free Rotation"));
+        return QString::fromUtf8(I18N_NOOP("Free Rotation"));
     }
 
     static QList<int>       SupportedVersions()

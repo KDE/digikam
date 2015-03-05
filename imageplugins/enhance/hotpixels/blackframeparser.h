@@ -86,8 +86,7 @@ private:
 
 private:
 
-    QString         m_OutputString;
-    QString         m_localFile;
+    QString         m_tempFilePath;
 
     QImage          m_Image;
 

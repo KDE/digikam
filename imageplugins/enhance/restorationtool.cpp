@@ -109,21 +109,21 @@ public:
     EditorToolSettings*     gboxSettings;
 };
 
-const QString RestorationTool::Private::configGroupName("restoration Tool");
-const QString RestorationTool::Private::configPresetEntry("Preset");
-const QString RestorationTool::Private::configFastApproxEntry("FastApprox");
-const QString RestorationTool::Private::configInterpolationEntry("Interpolation");
-const QString RestorationTool::Private::configAmplitudeEntry("Amplitude");
-const QString RestorationTool::Private::configSharpnessEntry("Sharpness");
-const QString RestorationTool::Private::configAnisotropyEntry("Anisotropy");
-const QString RestorationTool::Private::configAlphaEntry("Alpha");
-const QString RestorationTool::Private::configSigmaEntry("Sigma");
-const QString RestorationTool::Private::configGaussPrecEntry("GaussPrec");
-const QString RestorationTool::Private::configDlEntry("Dl");
-const QString RestorationTool::Private::configDaEntry("Da");
-const QString RestorationTool::Private::configIterationEntry("Iteration");
-const QString RestorationTool::Private::configTileEntry("Tile");
-const QString RestorationTool::Private::configBTileEntry("BTile");
+const QString RestorationTool::Private::configGroupName(QLatin1String("restoration Tool"));
+const QString RestorationTool::Private::configPresetEntry(QLatin1String("Preset"));
+const QString RestorationTool::Private::configFastApproxEntry(QLatin1String("FastApprox"));
+const QString RestorationTool::Private::configInterpolationEntry(QLatin1String("Interpolation"));
+const QString RestorationTool::Private::configAmplitudeEntry(QLatin1String("Amplitude"));
+const QString RestorationTool::Private::configSharpnessEntry(QLatin1String("Sharpness"));
+const QString RestorationTool::Private::configAnisotropyEntry(QLatin1String("Anisotropy"));
+const QString RestorationTool::Private::configAlphaEntry(QLatin1String("Alpha"));
+const QString RestorationTool::Private::configSigmaEntry(QLatin1String("Sigma"));
+const QString RestorationTool::Private::configGaussPrecEntry(QLatin1String("GaussPrec"));
+const QString RestorationTool::Private::configDlEntry(QLatin1String("Dl"));
+const QString RestorationTool::Private::configDaEntry(QLatin1String("Da"));
+const QString RestorationTool::Private::configIterationEntry(QLatin1String("Iteration"));
+const QString RestorationTool::Private::configTileEntry(QLatin1String("Tile"));
+const QString RestorationTool::Private::configBTileEntry(QLatin1String("BTile"));
 
 // --------------------------------------------------------
 
@@ -152,8 +152,8 @@ RestorationTool::RestorationTool(QObject* const parent)
     QGridLayout* const grid  = new QGridLayout(firstPage);
     d->mainTab->addTab( firstPage, i18n("Preset") );
 
-    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl("http://cimg.sourceforge.net"),
-                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png"));
+    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
+                                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     QLabel* const typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
@@ -357,7 +357,7 @@ void RestorationTool::slotLoadSettings()
 {
     QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Load"), 
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                           QString("*"));
+                                                           QLatin1String("*"));
 
     if ( loadRestorationFile.isEmpty() )
     {
@@ -368,7 +368,7 @@ void RestorationTool::slotLoadSettings()
 
     if ( file.open(QIODevice::ReadOnly) )
     {
-        if (!d->settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
+        if (!d->settingsWidget->loadSettings(file, QLatin1String("# Photograph Restoration Configuration File V2")))
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                   i18n("\"%1\" is not a Photograph Restoration settings text file.",
@@ -396,7 +396,7 @@ void RestorationTool::slotSaveAsSettings()
 {
     QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Save"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                           QString("*"));
+                                                           QLatin1String("*"));
 
     if ( saveRestorationFile.isEmpty() )
     {
@@ -407,7 +407,7 @@ void RestorationTool::slotSaveAsSettings()
 
     if ( file.open(QIODevice::WriteOnly) )
     {
-        d->settingsWidget->saveSettings(file, QString("# Photograph Restoration Configuration File V2"));
+        d->settingsWidget->saveSettings(file, QLatin1String("# Photograph Restoration Configuration File V2"));
     }
     else
     {

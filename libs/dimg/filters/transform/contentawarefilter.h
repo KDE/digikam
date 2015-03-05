@@ -109,7 +109,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Content-Aware Filter"));
+        return QString::fromUtf8(I18N_NOOP("Content-Aware Filter"));
     }
 
     static QList<int>       SupportedVersions()

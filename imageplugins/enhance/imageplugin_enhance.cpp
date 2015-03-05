@@ -116,11 +116,11 @@ public:
 };
 
 ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantList&)
-    : ImagePlugin(parent, "ImagePlugin_Enhance"),
+    : ImagePlugin(parent, QLatin1String("ImagePlugin_Enhance")),
       d(new Private)
 {
     // to load the rc file from digikam's installation path
-    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Enchance plugins"));
+    setComponentName(QLatin1String("digikam"), i18nc("to be displayed in shortcuts dialog", "Enchance plugins"));
 
     KActionCollection *ac = actionCollection();
 
@@ -191,7 +191,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
     HotPixelsTool::registerFilter();
 
     setActionCategory(i18n("Enhance"));
-    setXMLFile( "digikamimageplugin_enhance_ui.rc" );
+    setXMLFile(QLatin1String("digikamimageplugin_enhance_ui.rc"));
 
     qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_Enhance plugin loaded";
 }

@@ -91,7 +91,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Lens Auto-Correction Tool"));
+        return QString::fromUtf8(I18N_NOOP("Lens Auto-Correction Tool"));
     }
 
     static QList<int>       SupportedVersions()

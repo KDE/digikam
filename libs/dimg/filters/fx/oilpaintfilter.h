@@ -51,7 +51,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Oil Painter Effect"));
+        return QString::fromUtf8(I18N_NOOP("Oil Painter Effect"));
     }
 
     static QList<int>       SupportedVersions()

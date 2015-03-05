@@ -49,7 +49,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Color Profile Conversion"));
+        return QString::fromUtf8(I18N_NOOP("Color Profile Conversion"));
     }
 
     static QList<int>       SupportedVersions()

@@ -65,7 +65,7 @@ HotPixelFixer::HotPixelFixer(QObject* const parent)
 
 HotPixelFixer::HotPixelFixer(Digikam::DImg* const orgImage, QObject* const parent, const QList<HotPixel>& hpList,
                              int interpolationMethod)
-    : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
+    : Digikam::DImgThreadedFilter(orgImage, parent, QLatin1String("HotPixels"))
 {
     m_hpList              = hpList;
     m_interpolationMethod = interpolationMethod;
@@ -81,15 +81,14 @@ HotPixelFixer::~HotPixelFixer()
 Digikam::FilterAction HotPixelFixer::filterAction()
 {
     DefaultFilterAction<HotPixelFixer> action;
-    action.addParameter("interpolationMethod", m_interpolationMethod);
+    action.addParameter(QLatin1String("interpolationMethod"), m_interpolationMethod);
 
     foreach(const HotPixel& hp, m_hpList)
     {
-        QString hpString("%1-%2x%3-%4x%5");
-        hpString = hpString.arg(hp.luminosity)
-                   .arg(hp.rect.x()).arg(hp.rect.y())
-                   .arg(hp.rect.width()).arg(hp.rect.height());
-        action.addParameter("hotPixel", hpString);
+        QString hpString = QString::fromUtf8("%1-%2x%3-%4x%5").arg(hp.luminosity)
+                                                              .arg(hp.rect.x()).arg(hp.rect.y())
+                                                              .arg(hp.rect.width()).arg(hp.rect.height());
+        action.addParameter(QLatin1String("hotPixel"), hpString);
     }
 
     return action;
@@ -97,10 +96,10 @@ Digikam::FilterAction HotPixelFixer::filterAction()
 
 void HotPixelFixer::readParameters(const Digikam::FilterAction& action)
 {
-    m_interpolationMethod = action.parameter("interpolationMethod").toInt();
-    QRegExp exp("(\\d+)-(\\d+)x(\\d+)-(\\d+)x(\\d+)");
+    m_interpolationMethod = action.parameter(QLatin1String("interpolationMethod")).toInt();
+    QRegExp exp(QLatin1String("(\\d+)-(\\d+)x(\\d+)-(\\d+)x(\\d+)"));
 
-    foreach(const QVariant& var, action.parameters().values("hotPixel"))
+    foreach(const QVariant& var, action.parameters().values(QLatin1String("hotPixel")))
     {
         if (exp.exactMatch(var.toString()))
         {

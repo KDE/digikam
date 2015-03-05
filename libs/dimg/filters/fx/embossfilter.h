@@ -54,7 +54,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Emboss Effect"));
+        return QString::fromUtf8(I18N_NOOP("Emboss Effect"));
     }
 
     static QList<int>       SupportedVersions()

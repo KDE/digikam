@@ -151,7 +151,7 @@ QString NRFilter::FilterIdentifier()
 
 QString NRFilter::DisplayableName()
 {
-    return i18n(I18N_NOOP("Noise Reduction Filter"));
+    return QString::fromUtf8(I18N_NOOP("Noise Reduction Filter"));
 }
 
 QList<int> NRFilter::SupportedVersions()

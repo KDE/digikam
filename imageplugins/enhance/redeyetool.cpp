@@ -109,15 +109,15 @@ public:
     EditorToolSettings*     gboxSettings;
 };
 
-const QString RedEyeTool::Private::configGroupName("redeye Tool");
-const QString RedEyeTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString RedEyeTool::Private::configHistogramScaleEntry("Histogram Scale");
-const QString RedEyeTool::Private::configRedThresholdEntry("RedThreshold");
-const QString RedEyeTool::Private::configSmoothLevelEntry("SmoothLevel");
-const QString RedEyeTool::Private::configHueColoringTintEntry("HueColoringTint");
-const QString RedEyeTool::Private::configSatColoringTintEntry("SatColoringTint");
-const QString RedEyeTool::Private::configValColoringTintEntry("ValColoringTint");
-const QString RedEyeTool::Private::configTintLevelEntry("TintLevel");
+const QString RedEyeTool::Private::configGroupName(QLatin1String("redeye Tool"));
+const QString RedEyeTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString RedEyeTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
+const QString RedEyeTool::Private::configRedThresholdEntry(QLatin1String("RedThreshold"));
+const QString RedEyeTool::Private::configSmoothLevelEntry(QLatin1String("SmoothLevel"));
+const QString RedEyeTool::Private::configHueColoringTintEntry(QLatin1String("HueColoringTint"));
+const QString RedEyeTool::Private::configSatColoringTintEntry(QLatin1String("SatColoringTint"));
+const QString RedEyeTool::Private::configValColoringTintEntry(QLatin1String("ValColoringTint"));
+const QString RedEyeTool::Private::configTintLevelEntry(QLatin1String("TintLevel"));
 
 // --------------------------------------------------------
 
@@ -161,21 +161,20 @@ RedEyeTool::RedEyeTool(QObject* const parent)
                                       "of the changed pixels. "
                                       "This leads to a more naturally looking pupil."));
 
-    QLabel* label3 = new QLabel(i18n("Coloring Tint:"));
-
-    d->HSSelector  = new DHueSaturationSelector();
+    QLabel* const label3 = new QLabel(i18n("Coloring Tint:"));
+    d->HSSelector        = new DHueSaturationSelector();
     d->HSSelector->setWhatsThis(i18n("Sets a custom color when re-colorizing the eyes."));
     d->HSSelector->setMinimumSize(200, 142);
     d->HSSelector->setChooserMode(ChooserValue);
     d->HSSelector->setColorValue(255);
 
-    d->VSelector   = new DColorValueSelector();
+    d->VSelector          = new DColorValueSelector();
     d->VSelector->setChooserMode(ChooserValue);
     d->VSelector->setMinimumSize(26, 142);
     d->VSelector->setIndent(false);
 
-    QLabel* label4 = new QLabel(i18n("Tint Level:"));
-    d->tintLevel   = new RIntNumInput();
+    QLabel* const label4 = new QLabel(i18n("Tint Level:"));
+    d->tintLevel         = new RIntNumInput();
     d->tintLevel->setRange(1, 200, 1);
     d->tintLevel->setDefaultValue(128);
     d->tintLevel->setWhatsThis(i18n("Set the tint level to adjust the luminosity of "
@@ -183,7 +182,7 @@ RedEyeTool::RedEyeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout();
+    QGridLayout* const mainLayout = new QGridLayout();
     mainLayout->addWidget(d->thresholdLabel, 0, 0, 1, 5);
     mainLayout->addWidget(d->redThreshold,   1, 0, 1, 5);
     mainLayout->addWidget(d->smoothLabel,    2, 0, 1, 5);
@@ -385,7 +384,7 @@ void RedEyeTool::finalRendering()
 
     redEyeFilter(selection);
 
-    FilterAction action("digikam:redEyeFilter", 1);
+    FilterAction action(QLatin1String("digikam:redEyeFilter"), 1);
     action.setDisplayableName(i18n("Red Eye Filter"));
 
     iface->setSelection(i18n("Red Eyes Correction"), action, selection);

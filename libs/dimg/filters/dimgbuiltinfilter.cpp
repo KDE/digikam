@@ -332,31 +332,31 @@ QString DImgBuiltinFilter::displayableName() const
             break;
 
         case Rotate90:
-            return i18n(I18N_NOOP("Rotate Right"));
+            return QString::fromUtf8(I18N_NOOP("Rotate Right"));
 
         case Rotate180:
-            return i18n(I18N_NOOP("Rotate 180°"));
+            return QString::fromUtf8(I18N_NOOP("Rotate 180°"));
 
         case Rotate270:
-            return i18n(I18N_NOOP("Rotate Left"));
+            return QString::fromUtf8(I18N_NOOP("Rotate Left"));
 
         case FlipHorizontally:
-            return i18n(I18N_NOOP("Flip Horizontally"));
+            return QString::fromUtf8(I18N_NOOP("Flip Horizontally"));
 
         case FlipVertically:
-            return i18n(I18N_NOOP("Flip Vertically"));
+            return QString::fromUtf8(I18N_NOOP("Flip Vertically"));
 
         case Crop:
-            return i18n(I18N_NOOP("Crop"));
+            return QString::fromUtf8(I18N_NOOP("Crop"));
 
         case Resize:
-            return i18n(I18N_NOOP("Resize"));
+            return QString::fromUtf8(I18N_NOOP("Resize"));
 
         case ConvertTo8Bit:
-            return i18n(I18N_NOOP("Convert to 8 Bit"));
+            return QString::fromUtf8(I18N_NOOP("Convert to 8 Bit"));
 
         case ConvertTo16Bit:
-            return i18n(I18N_NOOP("Convert to 16 Bit"));
+            return QString::fromUtf8(I18N_NOOP("Convert to 16 Bit"));
     }
 
     return QString();

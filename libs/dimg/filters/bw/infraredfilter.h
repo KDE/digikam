@@ -77,7 +77,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Infrared Filter"));
+        return QString::fromUtf8(I18N_NOOP("Infrared Filter"));
     }
 
     static QList<int>       SupportedVersions()

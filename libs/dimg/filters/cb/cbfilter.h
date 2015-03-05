@@ -83,7 +83,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Color Balance Tool"));
+        return QString::fromUtf8(I18N_NOOP("Color Balance Tool"));
     }
 
     static QList<int>       SupportedVersions()

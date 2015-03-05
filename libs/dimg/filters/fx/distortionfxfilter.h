@@ -56,7 +56,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Distortion Effect"));
+        return QString::fromUtf8(I18N_NOOP("Distortion Effect"));
     }
 
     static QList<int>       SupportedVersions()

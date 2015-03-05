@@ -73,9 +73,10 @@ public:
     ImageRegionWidget*     previewWidget;
     EditorToolSettings*    gboxSettings;
 };
-const QString LocalContrastTool::Private::configGroupName("localcontrast Tool");
-const QString LocalContrastTool::Private::configHistogramChannelEntry("Histogram Channel");
-const QString LocalContrastTool::Private::configHistogramScaleEntry("Histogram Scale");
+
+const QString LocalContrastTool::Private::configGroupName(QLatin1String("localcontrast Tool"));
+const QString LocalContrastTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString LocalContrastTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 

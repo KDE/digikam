@@ -103,7 +103,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Channel Mixer Tool"));
+        return QString::fromUtf8(I18N_NOOP("Channel Mixer Tool"));
     }
 
     static QList<int>       SupportedVersions()

@@ -93,9 +93,9 @@ public:
     EditorToolSettings*  gboxSettings;
 };
 
-const QString HotPixelsTool::Private::configGroupName("hotpixels Tool");
-const QString HotPixelsTool::Private::configLastBlackFrameFileEntry("Last Black Frame File");
-const QString HotPixelsTool::Private::configFilterMethodEntry("Filter Method");
+const QString HotPixelsTool::Private::configGroupName(QLatin1String("hotpixels Tool"));
+const QString HotPixelsTool::Private::configLastBlackFrameFileEntry(QLatin1String("Last Black Frame File"));
+const QString HotPixelsTool::Private::configFilterMethodEntry(QLatin1String("Filter Method"));
 
 // --------------------------------------------------------
 

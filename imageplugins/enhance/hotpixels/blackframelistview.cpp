@@ -60,7 +60,8 @@ BlackFrameListView::BlackFrameListView(QWidget* const parent)
 // ----------------------------------------------------------------------------
 
 BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* const parent, const QUrl& url)
-    : QObject(parent), QTreeWidgetItem(parent)
+    : QObject(parent),
+      QTreeWidgetItem(parent)
 {
     m_parent        = parent;
     m_blackFrameURL = url;
@@ -96,16 +97,16 @@ void BlackFrameListViewItem::slotParsed(const QList<HotPixel>& hotPixels)
 
     if (!m_imageSize.isEmpty())
     {
-        setText(1, QString("%1x%2").arg(m_imageSize.width()).arg(m_imageSize.height()));
+        setText(1, QString::fromUtf8("%1x%2").arg(m_imageSize.width()).arg(m_imageSize.height()));
     }
 
     setText(2, QString::number(m_hotPixels.count()));
 
-    m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");
+    m_blackFrameDesc = QString::fromUtf8("<p><b>%1</b>:<p>").arg(m_blackFrameURL.fileName());
 
     for (QList <HotPixel>::const_iterator it = m_hotPixels.constBegin() ; it != m_hotPixels.constEnd() ; ++it)
     {
-        m_blackFrameDesc.append( QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
+        m_blackFrameDesc.append( QString::fromUtf8("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
     }
 
     emit signalParsed(m_hotPixels, m_blackFrameURL);
@@ -132,13 +133,13 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
 
     for (it = m_hotPixels.constBegin(); it != m_hotPixels.constEnd(); ++it)
     {
-        hpRect = (*it).rect;
-        hpThumbX = (hpRect.x() + hpRect.width() / 2) * xRatio;
+        hpRect   = (*it).rect;
+        hpThumbX = (hpRect.x() + hpRect.width()  / 2) * xRatio;
         hpThumbY = (hpRect.y() + hpRect.height() / 2) * yRatio;
 
         p.setPen(QPen(Qt::black));
-        p.drawLine((int) hpThumbX,     (int) hpThumbY - 1, (int) hpThumbX, (int) hpThumbY + 1);
-        p.drawLine((int) hpThumbX - 1, (int) hpThumbY, (int) hpThumbX + 1, (int) hpThumbY);
+        p.drawLine((int) hpThumbX,      (int) hpThumbY - 1, (int) hpThumbX, (int) hpThumbY + 1);
+        p.drawLine((int) hpThumbX  - 1, (int) hpThumbY, (int) hpThumbX + 1, (int) hpThumbY);
         p.setPen(QPen(Qt::white));
         p.drawPoint((int) hpThumbX - 1, (int) hpThumbY - 1);
         p.drawPoint((int) hpThumbX + 1, (int) hpThumbY + 1);

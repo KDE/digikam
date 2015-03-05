@@ -138,7 +138,7 @@ public:
     }
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Border Tool"));
+        return QString::fromUtf8(I18N_NOOP("Border Tool"));
     }
     static QList<int>       SupportedVersions()
     {

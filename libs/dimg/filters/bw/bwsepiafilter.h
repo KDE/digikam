@@ -161,7 +161,7 @@ public:
 
     static QString          DisplayableName()
     {
-        return i18n(I18N_NOOP("Black & White / Sepia Filter"));
+        return QString::fromUtf8(I18N_NOOP("Black & White / Sepia Filter"));
     }
 
     static QList<int>       SupportedVersions()
