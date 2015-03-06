@@ -13,26 +13,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 #------------------------------------------------------------------------
 
-set(renamecustomizertest_SRCS
-    renamecustomizertest.cpp
-)
-
-add_executable(renamecustomizertest ${renamecustomizertest_SRCS})
-add_test(renamecustomizertest renamecustomizertest)
-ecm_mark_as_test(renamecustomizertest)
-
-target_link_libraries(renamecustomizertest
-                      
-                      digikamdatabase
-                      importui
-                      advancedrename
-                      
-                      Qt5::Gui
-                      Qt5::Test
-)
-
-#------------------------------------------------------------------------
-
 set(dimagefilteractiontest_SRCS
     dimagefilteractiontest.cpp
 )
@@ -86,6 +66,102 @@ target_link_libraries(dimagehistorytest
                       Qt5::Test
 )
 
+#------------------------------------------------------------------------
+
+# NOTE: code ported to Qt5 but do not link yet.
+#
+# set(filesaveoptionsboxtest_SRCS
+#     filesaveoptionsboxtest.cpp
+# )
+# 
+# add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
+# add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
+# ecm_mark_as_test(filesaveoptionsboxtest)
+# 
+# target_link_libraries(filesaveoptionsboxtest
+#                       
+#                       dimg
+#                       filters
+#                       digikamgui
+#                       digikamwidgets
+#                       
+#                       Qt5::Test
+# )
+
+#------------------------------------------------------------------------
+
+set(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
+add_executable(loadpgfdata ${loadpgfdata_SRCS})
+ecm_mark_nongui_executable(loadpgfdata)
+
+target_link_libraries(loadpgfdata
+                      threadimageio # for PGFUtils
+)
+
+#------------------------------------------------------------------------
+
+set(loadsavethreadtest_SRCS loadsavethreadtest.cpp)
+add_executable(loadsavethreadtest ${loadsavethreadtest_SRCS})
+ecm_mark_nongui_executable(loadsavethreadtest)
+
+target_link_libraries(loadsavethreadtest
+                      dimg
+)
+
+#------------------------------------------------------------------------
+
+set(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
+add_executable(pgfscaled ${pgfscaled_SRCS})
+ecm_mark_nongui_executable(pgfscaled)
+
+target_link_libraries(pgfscaled
+                      threadimageio # for PGFUtils
+)
+
+#------------------------------------------------------------------------
+
+set(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
+add_executable(qtpgftest ${qtpgftest_SRCS})
+ecm_mark_nongui_executable(qtpgftest)
+
+target_link_libraries(qtpgftest
+                      threadimageio # for PGFUtils
+)
+
+#------------------------------------------------------------------------
+
+set(renamecustomizertest_SRCS
+    renamecustomizertest.cpp
+)
+
+add_executable(renamecustomizertest ${renamecustomizertest_SRCS})
+add_test(renamecustomizertest renamecustomizertest)
+ecm_mark_as_test(renamecustomizertest)
+
+target_link_libraries(renamecustomizertest
+                      
+                      digikamdatabase
+                      importui
+                      advancedrename
+                      
+                      Qt5::Gui
+                      Qt5::Test
+)
+
+#------------------------------------------------------------------------
+
+set(searchtextbartest_SRCS
+    searchtextbartest.cpp
+)
+
+add_executable(searchtextbartest ${searchtextbartest_SRCS})
+add_test(searchtextbartest searchtextbartest)
+ecm_mark_as_test(searchtextbartest)
+
+target_link_libraries(searchtextbartest
+                      digikamwidgets
+                      Qt5::Test
+)
 
 ###########################################################################################
 
@@ -150,88 +226,10 @@ target_link_libraries(freerotationtest
 
 #------------------------------------------------------------------------
 
-set(searchtextbartest_SRCS
-    searchtextbartest.cpp
-)
-
-add_executable(searchtextbartest ${searchtextbartest_SRCS})
-add_test(searchtextbartest searchtextbartest)
-ecm_mark_as_test(searchtextbartest)
-
-target_link_libraries(searchtextbartest
-                      digikamwidgets
-                      Qt5::Test
-)
-
-#------------------------------------------------------------------------
-
-set(filesaveoptionsboxtest_SRCS
-    filesaveoptionsboxtest.cpp
-)
-
-add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
-add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
-ecm_mark_as_test(filesaveoptionsboxtest)
-
-target_link_libraries(filesaveoptionsboxtest
-                      digikamwidgets
-                      Qt5::Test
-)
-
-#------------------------------------------------------------------------
-
-#set(albummodeltest_SRCS
-#    albummodeltest.cpp
-#    modeltest/modeltest.cpp
-#)
-
-#add_executable(albummodeltest ${albummodeltest_SRCS})
-#add_test(albummodeltest albummodeltest)
-#ecm_mark_as_test(albummodeltest)
-
-#target_link_libraries(albummodeltest
-#                      Qt5::Test
-#                      KF5::KIOCore
-
-#                      digikamdatabase
-#)
-
-#------------------------------------------------------------------------
-
-set(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
-add_executable(qtpgftest ${qtpgftest_SRCS})
-ecm_mark_nongui_executable(qtpgftest)
-target_link_libraries(qtpgftest
-                      threadimageio # for PGFUtils
-)
-
-set(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
-add_executable(pgfscaled ${pgfscaled_SRCS})
-ecm_mark_nongui_executable(pgfscaled)
-target_link_libraries(pgfscaled
-                      threadimageio # for PGFUtils
-)
-
-set(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
-add_executable(loadpgfdata ${loadpgfdata_SRCS})
-ecm_mark_nongui_executable(loadpgfdata)
-target_link_libraries(loadpgfdata
-                      threadimageio # for PGFUtils
-)
-
-#------------------------------------------------------------------------
-
 set(testdimgloader_SRCS testdimgloader.cpp)
 add_executable(testdimgloader ${testdimgloader_SRCS})
 ecm_mark_nongui_executable(testdimgloader)
 target_link_libraries(testdimgloader
-                      dimg
-)
-
-set(loadsavethreadtest_SRCS loadsavethreadtest.cpp)
-add_executable(loadsavethreadtest ${loadsavethreadtest_SRCS})
-ecm_mark_nongui_executable(loadsavethreadtest)
-target_link_libraries(loadsavethreadtest
                       dimg
 )
 
@@ -257,7 +255,7 @@ endif()
 
 #------------------------------------------------------------------------
 
-set (testnrestimate_SRCS testnrestimate.cpp)
+set(testnrestimate_SRCS testnrestimate.cpp)
 add_executable (testnrestimate ${testnrestimate_SRCS})
 ecm_mark_nongui_executable(testnrestimate)
 target_link_libraries(testnrestimate
@@ -292,8 +290,8 @@ if(ENABLE_DIGIKAM_MODELTEST)
 endif()
 
 #------------------------------------------------------------------------
-
 # TODO
+
 # set(advancedrenametest_SRCS
 #     advancedrenametest.cpp
 # )
@@ -327,4 +325,23 @@ endif()
 #                      Qt5::Gui
 #                      Qt5::Test
 #                      KF5::KExiv2
+#)
+
+
+#------------------------------------------------------------------------
+
+#set(albummodeltest_SRCS
+#    albummodeltest.cpp
+#    modeltest/modeltest.cpp
+#)
+#
+#add_executable(albummodeltest ${albummodeltest_SRCS})
+#add_test(albummodeltest albummodeltest)
+#ecm_mark_as_test(albummodeltest)
+#
+#target_link_libraries(albummodeltest
+#                      Qt5::Test
+#                      KF5::KIOCore
+#
+#                      digikamdatabase
 #)

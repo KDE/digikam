@@ -67,7 +67,7 @@ LoadSaveThreadTest::LoadSaveThreadTest(int& argc, char** argv)
     settings.RGBInterpolate4Colors = false;
     settings.RAWQuality            = RawDecodingSettings::BILINEAR;
 
-    LoadingDescription desc(argv[1], DRawDecoding(settings));
+    LoadingDescription desc(QString::fromUtf8(argv[1]), DRawDecoding(settings));
 
     m_thread->load(desc);
 }
@@ -83,9 +83,9 @@ void LoadSaveThreadTest::slotImageLoaded(const LoadingDescription& desc, const D
     QFileInfo fi(desc.filePath);
     qDebug() << "Image " << fi.baseName() << " loaded";
 
-    QString outFilePath(fi.baseName() + QString(".out.png"));
+    QString outFilePath(fi.baseName() + QString::fromUtf8(".out.png"));
     DImg image = img;
-    m_thread->save(image, outFilePath, "PNG");
+    m_thread->save(image, outFilePath, QLatin1String("PNG"));
 }
 
 void LoadSaveThreadTest::slotSavingProgress(const QString& filePath, float p)

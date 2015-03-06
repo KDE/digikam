@@ -43,24 +43,24 @@
 
 using namespace Digikam;
 
-const QString imagesDir("advancedrenameimages/");
+const QString imagesDir = QLatin1String("advancedrenameimages/");
 
 QString createFilePath(const QString& file)
 {
     return QString(QFINDTESTDATA(imagesDir) + file);
 }
 
-const QString fileName  = "advancedrename_testimage.jpg";
-const QString fileName2 = "advancedrename_testimage2.jpg";
-const QString fileName3 = "001a.jpg";
-const QString fileName4 = "test.png";
-const QString fileName5 = "myfile.jpg";
-const QString fileName6 = "my_file.jpg";
-const QString fileName7 = "holiday_spain_2011_img001.jpg";
-const QString fileName8 = "my images.jpg";
-const QString fileName9 = "holiday_spain_2011_001img.jpg";
+const QString fileName  = QLatin1String("advancedrename_testimage.jpg");
+const QString fileName2 = QLatin1String("advancedrename_testimage2.jpg");
+const QString fileName3 = QLatin1String("001a.jpg");
+const QString fileName4 = QLatin1String("test.png");
+const QString fileName5 = QLatin1String("myfile.jpg");
+const QString fileName6 = QLatin1String("my_file.jpg");
+const QString fileName7 = QLatin1String("holiday_spain_2011_img001.jpg");
+const QString fileName8 = QLatin1String("my images.jpg");
+const QString fileName9 = QLatin1String("holiday_spain_2011_001img.jpg");
 
-const QString filePath = createFilePath(fileName);
+const QString filePath  = createFilePath(fileName);
 const QString filePath2 = createFilePath(fileName2);
 const QString filePath3 = createFilePath(fileName3);
 const QString filePath4 = createFilePath(fileName4);
@@ -102,8 +102,8 @@ void RenameCustomizerTest::newName_should_return_empty_string_with_empty_filenam
     QTest::addColumn<QString>("filename");
     QTest::addColumn<QString>("result");
 
-    QTest::newRow("empty")          << QString("")      << QString("");
-    QTest::newRow("whitespaces")    << QString("    ")  << QString("");
+    QTest::newRow("empty")          << QString::fromUtf8("")      << QString::fromUtf8("");
+    QTest::newRow("whitespaces")    << QString::fromUtf8("    ")  << QString::fromUtf8("");
 }
 
 void RenameCustomizerTest::newName_should_return_empty_string_with_empty_filename()
@@ -111,68 +111,67 @@ void RenameCustomizerTest::newName_should_return_empty_string_with_empty_filenam
     QFETCH(QString, filename);
     QFETCH(QString, result);
 
-    RenameCustomizer customizer(0, "Unit Tests");
+    RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     QCOMPARE(customizer.newName(filename, QDateTime::currentDateTime()), result);
 }
 
 void RenameCustomizerTest::setCaseType_set_to_none()
 {
-    RenameCustomizer customizer(0, "Unit Tests");
+    RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setChangeCase(RenameCustomizer::NONE);
     QCOMPARE(customizer.changeCase(), RenameCustomizer::NONE);
 }
 
 void RenameCustomizerTest::setCaseType_set_to_upper()
 {
-    RenameCustomizer customizer(0, "Unit Tests");
+    RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setChangeCase(RenameCustomizer::UPPER);
     QCOMPARE(customizer.changeCase(), RenameCustomizer::UPPER);
 }
 
 void RenameCustomizerTest::setCaseType_set_to_lower()
 {
-    RenameCustomizer customizer(0, "Unit Tests");
+    RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setChangeCase(RenameCustomizer::LOWER);
     QCOMPARE(customizer.changeCase(), RenameCustomizer::LOWER);
 }
 
 void RenameCustomizerTest::setUseDefault_true()
 {
-    RenameCustomizer customizer(0, "Unit Tests");
+    RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setUseDefault(true);
     QVERIFY(customizer.useDefault());
 }
 
 void RenameCustomizerTest::setUseDefault_false()
 {
-    RenameCustomizer customizer(0, "Unit Tests");
+    RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setUseDefault(false);
     QVERIFY(customizer.useDefault() == false);
 }
 
 void RenameCustomizerTest::setUseDefault_case_none_should_deliver_original_filename()
 {
-    RenameCustomizer customizer(0, "Unit Tests");
+    RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setUseDefault(true);
     customizer.setChangeCase(RenameCustomizer::NONE);
-    QCOMPARE(customizer.newName("TeSt.png", QDateTime::currentDateTime()), QString("TeSt.png"));
+    QCOMPARE(customizer.newName(QLatin1String("TeSt.png"), QDateTime::currentDateTime()), QLatin1String("TeSt.png"));
 }
 
 void RenameCustomizerTest::setUseDefault_case_upper_should_deliver_uppercase_filename()
 {
-    RenameCustomizer customizer(0, "Unit Tests");
+    RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setUseDefault(true);
     customizer.setChangeCase(RenameCustomizer::UPPER);
-    QCOMPARE(customizer.newName("TeSt.png", QDateTime::currentDateTime()), QString("TEST.PNG"));
+    QCOMPARE(customizer.newName(QLatin1String("TeSt.png"), QDateTime::currentDateTime()), QLatin1String("TEST.PNG"));
 }
 
 void RenameCustomizerTest::setUseDefault_case_lower_should_deliver_lowercase_filename()
 {
-    RenameCustomizer customizer(0, "Unit Tests");
+    RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setUseDefault(true);
     customizer.setChangeCase(RenameCustomizer::LOWER);
-    QCOMPARE(customizer.newName("TeSt.pnG", QDateTime::currentDateTime()), QString("test.png"));
+    QCOMPARE(customizer.newName(QLatin1String("TeSt.pnG"), QDateTime::currentDateTime()), QLatin1String("test.png"));
 }
 
 #include "renamecustomizertest.moc"
-

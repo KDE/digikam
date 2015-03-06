@@ -51,12 +51,12 @@ int main(int /*argc*/, char** /*argv*/)
 
     qDebug() << "Using LibPGF version: " << PGFUtils::libPGFVersion();
 
-    img.load("test.png");
+    img.load(QLatin1String("test.png"));
 
     qDebug() << "Generate PGF file using file stream";
 
     // First, write QImage as PGF file using file stream
-    if (!PGFUtils::writePGFImageFile(img, "test-filestream.pgf", 0, true))
+    if (!PGFUtils::writePGFImageFile(img, QLatin1String("test-filestream.pgf"), 0, true))
     {
         qDebug() << "writePGFImageData failed...";
         return -1;
@@ -79,7 +79,7 @@ int main(int /*argc*/, char** /*argv*/)
 
     // Write PGF file.
 
-    QFile file("test-datastream.pgf");
+    QFile file(QLatin1String("test-datastream.pgf"));
 
     if ( !file.open(QIODevice::WriteOnly) )
     {
@@ -105,13 +105,13 @@ int main(int /*argc*/, char** /*argv*/)
 
     end   = clock();
 
-    img.save("test2.png", "PNG");
+    img.save(QLatin1String("test2.png"), "PNG");
 
     qDebug() << "PGF Decoding time: " << double(end - start)/CLOCKS_PER_SEC << " s";
 
     // JPEG tests for comparisons.
 
-    img.load("test.png");
+    img.load(QLatin1String("test.png"));
 
     qDebug() << "Generate JPG file to compare performances";
 
@@ -148,7 +148,7 @@ int main(int /*argc*/, char** /*argv*/)
 
     // PNG tests for comparisons.
 
-    img.load("test.png");
+    img.load(QLatin1String("test.png"));
 
     qDebug() << "Generate PNG file to compare performances";
 

@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 
     // Write PGF file.
 
-    QString fname(argv[1]);
+    QString fname(QString::fromUtf8(argv[1]));
     QFile   file(fname);
 
     if ( !file.open(QIODevice::ReadOnly) )
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    img.save(file.fileName() + QString("-converted.png"), "PNG");
+    img.save(file.fileName() + QString::fromUtf8("-converted.png"), "PNG");
 
     return 0;
 }

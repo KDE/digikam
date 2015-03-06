@@ -71,6 +71,6 @@ void FileSaveOptionsBoxTest::testDiscoverFormat()
 void FileSaveOptionsBoxTest::testDiscoverFormatDefault()
 {
     FileSaveOptionsBox box;
-    QCOMPARE(box.discoverFormat("unknown"), DImg::NONE);
-    QCOMPARE(box.discoverFormat("unknown", DImg::PGF), DImg::PGF);
+    QCOMPARE(box.discoverFormat(QLatin1String("unknown")), DImg::NONE);
+    QCOMPARE(box.discoverFormat(QLatin1String("unknown"), DImg::PGF), DImg::PGF);
 }
