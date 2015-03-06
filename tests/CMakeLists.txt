@@ -13,24 +13,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 #------------------------------------------------------------------------
 
-# TODO
-# set(advancedrenametest_SRCS
-#     advancedrenametest.cpp
-# )
-# 
-# add_executable(advancedrenametest ${advancedrenametest_SRCS})
-# add_test(advancedrenametest advancedrenametest)
-# ecm_mark_as_test(advancedrenametest)
-# 
-# target_link_libraries(advancedrenametest
-#                       Qt5::Test
-# 
-#                       digikamdatabase
-#                       advancedrename
-# )
-
-#------------------------------------------------------------------------
-
 set(renamecustomizertest_SRCS
     renamecustomizertest.cpp
 )
@@ -39,16 +21,49 @@ add_executable(renamecustomizertest ${renamecustomizertest_SRCS})
 add_test(renamecustomizertest renamecustomizertest)
 ecm_mark_as_test(renamecustomizertest)
 
-# TODO clean this, requires some weird libs atm
 target_link_libraries(renamecustomizertest
-                      Qt5::Gui
-                      Qt5::Test
+                      
                       digikamdatabase
                       importui
                       advancedrename
-                      #KF5::KExiv2
-                      #KF5::KDcraw
-                      #${OpenCV_LIBRARIES}
+                      
+                      Qt5::Gui
+                      Qt5::Test
+)
+
+#------------------------------------------------------------------------
+
+set(dimagefilteractiontest_SRCS
+    dimagefilteractiontest.cpp
+)
+
+add_executable(dimagefilteractiontest ${dimagefilteractiontest_SRCS})
+add_test(dimagefilteractiontest dimagefilteractiontest)
+ecm_mark_as_test(dimagefilteractiontest)
+
+target_link_libraries(dimagefilteractiontest
+
+                      dimg
+
+                      Qt5::Test
+)
+
+#------------------------------------------------------------------------
+
+set(dimagehistorytest_SRCS
+    abstractdimagehistorytest.cpp
+    dimagehistorytest.cpp
+)
+
+add_executable(dimagehistorytest ${dimagehistorytest_SRCS})
+add_test(dimagehistorytest dimagehistorytest)
+ecm_mark_as_test(dimagehistorytest)
+
+target_link_libraries(dimagehistorytest
+
+                      dimg
+
+                      Qt5::Test
 )
 
 #------------------------------------------------------------------------
@@ -159,22 +174,6 @@ target_link_libraries(filesaveoptionsboxtest
 
 #------------------------------------------------------------------------
 
-set(dimagehistorytest_SRCS
-    abstractdimagehistorytest.cpp
-    dimagehistorytest.cpp
-)
-
-add_executable(dimagehistorytest ${dimagehistorytest_SRCS})
-add_test(dimagehistorytest dimagehistorytest)
-ecm_mark_as_test(dimagehistorytest)
-
-target_link_libraries(dimagehistorytest
-                      dimg
-                      Qt5::Test
-)
-
-#------------------------------------------------------------------------
-
 set(dimagehistorygraphtest_SRCS
     abstractdimagehistorytest.cpp
     dimagehistorygraphtest.cpp
@@ -191,40 +190,6 @@ target_link_libraries(dimagehistorygraphtest
                       Qt5::Test
                       digikamdatabase
 )
-
-#------------------------------------------------------------------------
-
-set(dimagefilteractiontest_SRCS
-    dimagefilteractiontest.cpp
-)
-
-add_executable(dimagefilteractiontest ${dimagefilteractiontest_SRCS})
-add_test(dimagefilteractiontest dimagefilteractiontest)
-ecm_mark_as_test(dimagefilteractiontest)
-
-target_link_libraries(dimagefilteractiontest
-                      dimg
-                      Qt5::Test
-)
-
-#------------------------------------------------------------------------
-
-# undefined reference to `Digikam::DatabaseFields::FieldMetaInfo<QFlags<Digikam::DatabaseFields::ImagesField> >::Last'
-# happens even though file defining those libs/database/framework/databasefields.h is included and linking against digikamdatabase..
-#set(databasefieldstest_SRCS
-#    databasefieldstest.cpp
-#)
-
-#add_executable(databasefieldstest ${databasefieldstest_SRCS})
-#add_test(databasefieldstest databasefieldstest)
-#ecm_mark_as_test(databasefieldstest)
-
-#target_link_libraries(databasefieldstest
-#                      digikamdatabase
-#                      Qt5::Gui
-#                      Qt5::Test
-#                      KF5::KExiv2
-#)
 
 #------------------------------------------------------------------------
 
@@ -320,3 +285,41 @@ if(ENABLE_DIGIKAM_MODELTEST)
        )
     add_definitions(-DENABLE_DIGIKAM_MODELTEST)
 endif()
+
+#------------------------------------------------------------------------
+
+# TODO
+# set(advancedrenametest_SRCS
+#     advancedrenametest.cpp
+# )
+# 
+# add_executable(advancedrenametest ${advancedrenametest_SRCS})
+# add_test(advancedrenametest advancedrenametest)
+# ecm_mark_as_test(advancedrenametest)
+# 
+# target_link_libraries(advancedrenametest
+#                       Qt5::Test
+# 
+#                       digikamdatabase
+#                       advancedrename
+# )
+
+
+#------------------------------------------------------------------------
+
+# undefined reference to `Digikam::DatabaseFields::FieldMetaInfo<QFlags<Digikam::DatabaseFields::ImagesField> >::Last'
+# happens even though file defining those libs/database/framework/databasefields.h is included and linking against digikamdatabase..
+#set(databasefieldstest_SRCS
+#    databasefieldstest.cpp
+#)
+#
+#add_executable(databasefieldstest ${databasefieldstest_SRCS})
+#add_test(databasefieldstest databasefieldstest)
+#ecm_mark_as_test(databasefieldstest)
+#
+#target_link_libraries(databasefieldstest
+#                      digikamdatabase
+#                      Qt5::Gui
+#                      Qt5::Test
+#                      KF5::KExiv2
+#)

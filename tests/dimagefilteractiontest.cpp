@@ -51,13 +51,13 @@ void DImageFilterActionTest::testDRawDecoding()
 {
     DRawDecoding params;
 
-    params.rawPrm.sixteenBitsImage = true;
-    params.rawPrm.autoBrightness  = true;
-    params.rawPrm.whiteBalance = KDcrawIface::RawDecodingSettings::AERA;
+    params.rawPrm.sixteenBitsImage      = true;
+    params.rawPrm.autoBrightness        = true;
+    params.rawPrm.whiteBalance          = KDcrawIface::RawDecodingSettings::AERA;
     params.rawPrm.RGBInterpolate4Colors = true;
-    params.rawPrm.RAWQuality = KDcrawIface::RawDecodingSettings::AMAZE;
-    params.rawPrm.NRType = KDcrawIface::RawDecodingSettings::WAVELETSNR;
-    params.rawPrm.outputColorSpace = KDcrawIface::RawDecodingSettings::ADOBERGB;
+    params.rawPrm.RAWQuality            = KDcrawIface::RawDecodingSettings::AMAZE;
+    params.rawPrm.NRType                = KDcrawIface::RawDecodingSettings::WAVELETSNR;
+    params.rawPrm.outputColorSpace      = KDcrawIface::RawDecodingSettings::ADOBERGB;
 
     FilterAction action;
     params.writeToFilterAction(action);
@@ -156,11 +156,10 @@ void DImageFilterActionTest::cleanupTestCase()
 QString DImageFilterActionTest::originalImage()
 {
     // picture taken by me, downscaled to 100x66 and metadata stripped off
-    return "DSC00636.JPG";
+    return QString::fromUtf8("DSC00636.JPG");
 }
 
 QString DImageFilterActionTest::imagePath()
 {
     return QFINDTESTDATA("filteractiontestimages");
 }
-

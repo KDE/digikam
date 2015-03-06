@@ -76,57 +76,57 @@ QDebug operator<<(QDebug dbg, const HistoryImageId& id)
 
 HistoryImageId AbstractDImageHistoryTest::id1() const
 {
-    HistoryImageId id("abc123");
+    HistoryImageId id(QLatin1String("abc123"));
     id.setCreationDate(QDateTime(QDate(1984, 7, 14), QTime(13, 0, 0)));
-    id.setFileName("file1.jpg");
-    id.setPathOnDisk("/home/user/file1.jpg");
-    id.setUniqueHash("cde567", 987654);
+    id.setFileName(QLatin1String("file1.jpg"));
+    id.setPathOnDisk(QLatin1String("/home/user/file1.jpg"));
+    id.setUniqueHash(QLatin1String("cde567"), 987654);
     return id;
 }
 
 HistoryImageId AbstractDImageHistoryTest::id2() const
 {
-    HistoryImageId id("12345");
+    HistoryImageId id(QLatin1String("12345"));
     id.setCreationDate(QDateTime(QDate(1984, 7, 14), QTime(13, 0, 0)));
-    id.setFileName("file2.jpg");
-    id.setPathOnDisk("/home/user/file2.jpg");
-    id.setUniqueHash("abc654", 876549);
+    id.setFileName(QLatin1String("file2.jpg"));
+    id.setPathOnDisk(QLatin1String("/home/user/file2.jpg"));
+    id.setUniqueHash(QLatin1String("abc654"), 876549);
     return id;
 }
 
 HistoryImageId AbstractDImageHistoryTest::id3() const
 {
-    HistoryImageId id("abcdef");
+    HistoryImageId id(QLatin1String("abcdef"));
     id.setCreationDate(QDateTime(QDate(1984, 7, 14), QTime(13, 0, 0)));
-    id.setFileName("file3.jpg");
-    id.setPathOnDisk("/home/user/file3.jpg");
-    id.setUniqueHash("c76543", 765489);
+    id.setFileName(QLatin1String("file3.jpg"));
+    id.setPathOnDisk(QLatin1String("/home/user/file3.jpg"));
+    id.setUniqueHash(QLatin1String("c76543"), 765489);
     return id;
 }
 
 HistoryImageId AbstractDImageHistoryTest::id4() const
 {
-    HistoryImageId id("aaabbb");
+    HistoryImageId id(QLatin1String("aaabbb"));
     id.setCreationDate(QDateTime(QDate(1984, 7, 14), QTime(13, 0, 0)));
-    id.setFileName("file4.jpg");
-    id.setPathOnDisk("/home/user/file4.jpg");
-    id.setUniqueHash("c96542", 654987);
+    id.setFileName(QLatin1String("file4.jpg"));
+    id.setPathOnDisk(QLatin1String("/home/user/file4.jpg"));
+    id.setUniqueHash(QLatin1String("c96542"), 654987);
     return id;
 }
 
 FilterAction AbstractDImageHistoryTest::action1() const
 {
-    FilterAction fa("digikam:BCGFilter", 1);
-    fa.addParameter("contrast", 1);
-    fa.addParameter("channel", 1);
-    fa.addParameter("brightness", 1);
-    fa.addParameter("gamma", 1.2);
+    FilterAction fa(QLatin1String("digikam:BCGFilter"), 1);
+    fa.addParameter(QLatin1String("contrast"), 1);
+    fa.addParameter(QLatin1String("channel"), 1);
+    fa.addParameter(QLatin1String("brightness"), 1);
+    fa.addParameter(QLatin1String("gamma"), 1.2);
     return fa;
 }
 
 FilterAction AbstractDImageHistoryTest::action2() const
 {
-    FilterAction fa("digikam:SomeComplexFilter", 1, FilterAction::ComplexFilter);
+    FilterAction fa(QLatin1String("digikam:SomeComplexFilter"), 1, FilterAction::ComplexFilter);
     return fa;
 }
 
@@ -157,7 +157,7 @@ void AbstractDImageHistoryTest::applyFilters1()
 
     CurvesFilter filter2(iface.original(), this);
     filter2.startFilterDirectly();
-    iface.setOriginal("Curves", filter2.filterAction(), filter2.getTargetImage());
+    iface.setOriginal(QLatin1String("Curves"), filter2.filterAction(), filter2.getTargetImage());
 }
 
 void AbstractDImageHistoryTest::applyFilters2()
@@ -166,7 +166,7 @@ void AbstractDImageHistoryTest::applyFilters2()
 
     AutoLevelsFilter filter(iface.original(), iface.original(), this);
     filter.startFilterDirectly();
-    iface.setOriginal("", filter.filterAction(), filter.getTargetImage());
+    iface.setOriginal(QLatin1String(""), filter.filterAction(), filter.getTargetImage());
 }
 
 void AbstractDImageHistoryTest::applyFilters3()
@@ -175,7 +175,7 @@ void AbstractDImageHistoryTest::applyFilters3()
 
     InfraredFilter filter(iface.original(), this);
     filter.startFilterDirectly();
-    iface.setOriginal("", filter.filterAction(), filter.getTargetImage());
+    iface.setOriginal(QLatin1String(""), filter.filterAction(), filter.getTargetImage());
 }
 
 void AbstractDImageHistoryTest::applyFilters4()
@@ -184,17 +184,17 @@ void AbstractDImageHistoryTest::applyFilters4()
 
     BlurFilter filter(iface.original(), this);
     filter.startFilterDirectly();
-    iface.setOriginal("", filter.filterAction(), filter.getTargetImage());
+    iface.setOriginal(QLatin1String(""), filter.filterAction(), filter.getTargetImage());
 }
 
 QString AbstractDImageHistoryTest::tempFileName(const QString& purpose) const
 {
-    return QString("digikamtests-") + metaObject()->className() + '-' + purpose + '-' + QTime::currentTime().toString();
+    return QString::fromUtf8("digikamtests-") + QLatin1String(metaObject()->className()) + QLatin1Char('-') + purpose + QLatin1Char('-') + QTime::currentTime().toString();
 }
 
 QString AbstractDImageHistoryTest::tempFilePath(const QString& purpose) const
 {
-    return QDir::tempPath() + '/' + tempFileName(purpose);
+    return QDir::tempPath() + QLatin1Char('/') + tempFileName(purpose);
 }
 
 void AbstractDImageHistoryTest::initBaseTestCase()
@@ -215,7 +215,7 @@ void AbstractDImageHistoryTest::initBaseTestCase()
     connect(m_im, SIGNAL(signalImageSaved(QString,bool)),
             this, SLOT(slotImageSaved(QString,bool)));
 
-    m_tempFile = tempFilePath("tempfile");
+    m_tempFile = tempFilePath(QLatin1String("tempfile"));
 }
 
 void AbstractDImageHistoryTest::cleanupBaseTestCase()
@@ -231,7 +231,7 @@ void AbstractDImageHistoryTest::cleanupBaseTestCase()
 void AbstractDImageHistoryTest::slotImageLoaded(const QString&, bool)
 {
 }
+
 void AbstractDImageHistoryTest::slotImageSaved(const QString&, bool)
 {
 }
-
