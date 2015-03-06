@@ -52,54 +52,35 @@
 #include "thumbnaildatabaseaccess.h"
 #include "digikam_version.h"
 
-namespace Digikam
-{
-
-#pragma message("should real setup allow overloading of this?!")
-/*
-bool Setup::execSinglePage(Page)
-{
-    return true;
-}
-*/
-
-}
-
 using namespace Digikam;
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("digikam",
-                         i18n("digiKam"),
-                         digiKamVersion().toAscii(),
-                         DAboutData::digiKamSlogan(),
-                         KAboutLicense::GPL,
-                         DAboutData::copyright(),
-                         additionalInformation(),
-                         DAboutData::webProjectUrl().url().toUtf8());
-
+    KAboutData aboutData(QString::fromLatin1("digikam"), // component name
+                         i18n("digiKam"),                // display name
+                         digiKamVersion());
+    
     QApplication app(argc, argv);
     QCommandLineParser parser;
     KAboutData::setApplicationData(aboutData);
     parser.addVersionOption();
     parser.addHelpOption();
-    //PORTING SCRIPT: adapt aboutdata variable if necessary
     aboutData.setupCommandLine(&parser);
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
     DatabaseParameters params;
     params.databaseType = DatabaseParameters::SQLiteDatabaseType();
-    params.setDatabasePath(QDir::currentPath() + "/digikam-test.db");
-    params.setThumbsDatabasePath(QDir::currentPath() + "/digikam-thumbs-test.db");
+    params.setDatabasePath(QDir::currentPath() + QLatin1String("/digikam-test.db"));
+    params.setThumbsDatabasePath(QDir::currentPath() + QLatin1String("/digikam-thumbs-test.db"));
 
     params.legacyAndDefaultChecks();
 
-    QDBusConnection::sessionBus().registerService("org.kde.digikam.startup-" +
+    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam.startup-") +
                      QString::number(QCoreApplication::instance()->applicationPid()));
 
     // initialize database
-    bool b = AlbumManager::instance()->setDatabase(params, false, "/media/fotos/Digikam Sample/");
+    bool b = AlbumManager::instance()->setDatabase(params, false, QLatin1String("/media/fotos/Digikam Sample/"));
 
     qDebug() << "Database initialization done: " << b;
 

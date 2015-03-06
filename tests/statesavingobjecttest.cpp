@@ -25,12 +25,11 @@
 
 // Qt includes
 
-#include <qbuffer.h>
+#include <QBuffer>
 
 // KDE includes
 
 #include <kconfiggroup.h>
-
 #include <ksharedconfig.h>
 
 // Local includes
@@ -56,7 +55,9 @@ public:
 };
 
 StubStateSaver::StubStateSaver(QObject* parent)
-    : QObject(parent), StateSavingObject(this), d(new StubStateSaverPriv)
+    : QObject(parent),
+      StateSavingObject(this),
+      d(new StubStateSaverPriv)
 {
 }
 
@@ -109,15 +110,14 @@ unsigned int StubStateSaver::numSaveCalls()
 
 void StateSavingObjectTest::testGroupName()
 {
-
     StubStateSaver saver;
-    QCOMPARE(saver.getGroup().name(), QString("<default>"));
+    QCOMPARE(saver.getGroup().name(), QLatin1String("<default>"));
 
-    const QString name = "testName 2";
+    const QString name = QLatin1String("testName 2");
     saver.setObjectName(name);
     QCOMPARE(saver.getGroup().name(), name);
 
-    KConfigGroup group = KSharedConfig::openConfig()->group("SimpleTest Group");
+    KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("SimpleTest Group"));
     saver.setConfigGroup(group);
     QCOMPARE(saver.getGroup().name(), group.name());
 
@@ -126,31 +126,27 @@ void StateSavingObjectTest::testGroupName()
     QCOMPARE(saver.getGroup().name(), group.name());
 
     // resetting group must work
-    KConfigGroup group2 = KSharedConfig::openConfig()->group("Another SimpleTest Group");
+    KConfigGroup group2 = KSharedConfig::openConfig()->group(QLatin1String("Another SimpleTest Group"));
     saver.setConfigGroup(group2);
     QCOMPARE(saver.getGroup().name(), group2.name());
-
 }
 
 void StateSavingObjectTest::testPrefixUsage()
 {
-
     // default, empty prefix
     StubStateSaver saver;
-    QCOMPARE(saver.getEntryKey(""), QString(""));
-    QCOMPARE(saver.getEntryKey("test"), QString("test"));
+    QCOMPARE(saver.getEntryKey(QLatin1String("")), QLatin1String(""));
+    QCOMPARE(saver.getEntryKey(QLatin1String("test")), QLatin1String("test"));
 
-    const QString prefix = " _Pr efix_ ";
+    const QString prefix = QLatin1String(" _Pr efix_ ");
     saver.setEntryPrefix(prefix);
-    QCOMPARE(saver.getEntryKey(""), prefix);
-    QString tmp = prefix + QString("test");
-    QCOMPARE(saver.getEntryKey("test"), tmp);
-
+    QCOMPARE(saver.getEntryKey(QLatin1String("")), prefix);
+    QString tmp = prefix + QLatin1String("test");
+    QCOMPARE(saver.getEntryKey(QLatin1String("test")), tmp);
 }
 
 void StateSavingObjectTest::testDirectCalling()
 {
-
     StubStateSaver loader;
     QVERIFY(!loader.loadCalled());
     loader.loadState();
@@ -162,12 +158,10 @@ void StateSavingObjectTest::testDirectCalling()
     saver.saveState();
     QVERIFY(saver.saveCalled());
     QVERIFY(!saver.loadCalled());
-
 }
 
 void StateSavingObjectTest::testDirectChildrenLoading()
 {
-
     StubStateSaver* parentSaver = new StubStateSaver(0);
     StubStateSaver* directChild1 = new StubStateSaver(parentSaver);
     StubStateSaver* directChild2 = new StubStateSaver(parentSaver);
@@ -188,12 +182,10 @@ void StateSavingObjectTest::testDirectChildrenLoading()
     QVERIFY(!indirectChild->saveCalled());
 
     delete parentSaver;
-
 }
 
 void StateSavingObjectTest::testDirectChildrenSaving()
 {
-
     StubStateSaver* parentSaver = new StubStateSaver(0);
     StubStateSaver* directChild1 = new StubStateSaver(parentSaver);
     StubStateSaver* directChild2 = new StubStateSaver(parentSaver);
@@ -214,12 +206,10 @@ void StateSavingObjectTest::testDirectChildrenSaving()
     QVERIFY(!indirectChild->loadCalled());
 
     delete parentSaver;
-
 }
 
 void StateSavingObjectTest::testRecursiveChildrenLoading()
 {
-
     StubStateSaver* parentSaver = new StubStateSaver(0);
     StubStateSaver* directChild1 = new StubStateSaver(parentSaver);
     StubStateSaver* directChild2 = new StubStateSaver(parentSaver);
@@ -254,12 +244,10 @@ void StateSavingObjectTest::testRecursiveChildrenLoading()
     QCOMPARE(directChild1->getStateSavingDepth(), StateSavingObject::RECURSIVE);
 
     delete parentSaver;
-
 }
 
 void StateSavingObjectTest::testRecursiveChildrenSaving()
 {
-
     StubStateSaver* parentSaver = new StubStateSaver(0);
     StubStateSaver* directChild1 = new StubStateSaver(parentSaver);
     StubStateSaver* directChild2 = new StubStateSaver(parentSaver);
@@ -294,5 +282,4 @@ void StateSavingObjectTest::testRecursiveChildrenSaving()
     QCOMPARE(directChild1->getStateSavingDepth(), StateSavingObject::RECURSIVE);
 
     delete parentSaver;
-
 }

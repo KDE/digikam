@@ -55,8 +55,8 @@ int main(int argc, char** argv)
 
     KExiv2::initializeExiv2();
 
-    QFileInfo input(argv[1]);
-    QString   outFilePath(input.baseName() + QString(".denoise.png"));
+    QFileInfo input(QString::fromUtf8(argv[1]));
+    QString   outFilePath(input.baseName() + QLatin1String(".denoise.png"));
 
     RawDecodingSettings settings;
     settings.halfSizeColorImage    = false;
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
     NRFilter nrf(&img, 0, prm);
     nrf.startFilterDirectly();
     img.putImageData(nrf.getTargetImage().bits());
-    img.save(outFilePath, "PNG");
+    img.save(outFilePath, QLatin1String("PNG"));
 
     KExiv2::cleanupExiv2();
 

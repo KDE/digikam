@@ -49,8 +49,8 @@ int main(int argc, char** argv)
 
     KExiv2::initializeExiv2();
 
-    QFileInfo input(argv[1]);
-    QString   outFilePath(input.baseName() + QString(".out.png"));
+    QFileInfo input(QString::fromUtf8(argv[1]));
+    QString   outFilePath(input.baseName() + QLatin1String(".out.png"));
 
     RawDecodingSettings settings;
     settings.halfSizeColorImage    = false;
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
     settings.RAWQuality            = RawDecodingSettings::BILINEAR;
 
     DImg img(input.filePath(), 0, DRawDecoding(settings));
-    img.save(outFilePath, "PNG");
+    img.save(outFilePath, QLatin1String("PNG"));
 
     KExiv2::cleanupExiv2();
 

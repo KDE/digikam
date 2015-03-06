@@ -55,8 +55,8 @@ int main(int argc, char** argv)
 
     KExiv2::initializeExiv2();
 
-    QFileInfo input(argv[1]);
-    QString   outFilePath(input.baseName() + QString(".cropped.png"));
+    QFileInfo input(QString::fromUtf8(argv[1]));
+    QString   outFilePath(input.baseName() + QLatin1String(".cropped.png"));
 
     RawDecodingSettings settings;
     settings.halfSizeColorImage    = false;
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
     qDebug() << "Cropped image area: " << rect;
 
     img.crop(rect);
-    img.save(outFilePath, "PNG");
+    img.save(outFilePath, QLatin1String("PNG"));
 
     KExiv2::cleanupExiv2();
 

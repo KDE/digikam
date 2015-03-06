@@ -40,14 +40,14 @@ QTEST_MAIN(SearchTextBarTest)
 
 void SearchTextBarTest::testHighlighting()
 {
-    SearchTextBar textBar(0, "test");
+    SearchTextBar textBar(0, QLatin1String("test"));
     QCOMPARE(textBar.getCurrentHighlightState(), SearchTextBar::NEUTRAL);
 
     // highlighting shall only occur if text is entered
     textBar.slotSearchResult(true);
     QCOMPARE(textBar.getCurrentHighlightState(), SearchTextBar::NEUTRAL);
 
-    textBar.setText("test");
+    textBar.setText(QLatin1String("test"));
 
     textBar.slotSearchResult(true);
     QCOMPARE(textBar.getCurrentHighlightState(), SearchTextBar::HAS_RESULT);
@@ -75,7 +75,7 @@ void SearchTextBarTest::testHighlighting()
 
 void SearchTextBarTest::testSearchTextSettings()
 {
-    SearchTextBar textBar(0, "test");
+    SearchTextBar textBar(0, QLatin1String("test"));
 
     SearchTextSettings defaultSettings;
     QCOMPARE(textBar.searchTextSettings(), defaultSettings);
@@ -85,7 +85,7 @@ void SearchTextBarTest::testSearchTextSettings()
     connect(&textBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
             this, SLOT(newSearchTextSettings(SearchTextSettings)));
 
-    const QString textEntered = "hello world";
+    const QString textEntered = QLatin1String("hello world");
     keyClicks(&textBar, textEntered);
 
     QCOMPARE(textBar.searchTextSettings().caseSensitive, defaultSettings.caseSensitive);
@@ -106,18 +106,18 @@ void SearchTextBarTest::newSearchTextSettings(const SearchTextSettings& settings
 
 void SearchTextBarTest::testModelParsing()
 {
-    SearchTextBar textBar(0, "test");
+    SearchTextBar textBar(0, QLatin1String("test"));
 
     // create a simple test model
     QStandardItemModel model(4, 1);
 
     const int idRole = 120;
 
-    const QString parent0("test row 0");
-    const QString parent1("test row 1");
-    const QString parent2("test row 2");
-    const QString parent3("test row 3");
-    const QString firstChild("first child");
+    const QString parent0    = QLatin1String("test row 0");
+    const QString parent1    = QLatin1String("test row 1");
+    const QString parent2    = QLatin1String("test row 2");
+    const QString parent3    = QLatin1String("test row 3");
+    const QString firstChild = QLatin1String("first child");
 
     QModelIndex index = model.index(0, 0, QModelIndex());
     model.setData(index, QVariant(parent0), Qt::DisplayRole);
@@ -165,15 +165,15 @@ void SearchTextBarTest::testModelParsing()
     QStandardItemModel newModel(2, 1);
     // use the same ids by purpose
     index = newModel.index(0, 0, QModelIndex());
-    newModel.setData(index, QVariant(parent0 + 'x'), Qt::DisplayRole);
+    newModel.setData(index, QVariant(parent0 + QLatin1Char('x')), Qt::DisplayRole);
     newModel.setData(index, QVariant(0), idRole);
     index = newModel.index(1, 0, QModelIndex());
-    newModel.setData(index, QVariant(parent1 + 'x'), Qt::DisplayRole);
+    newModel.setData(index, QVariant(parent1 + QLatin1Char('x')), Qt::DisplayRole);
     newModel.setData(index, QVariant(1), idRole);
 
     textBar.setModel(&newModel, idRole, Qt::DisplayRole);
 
     QCOMPARE(textBar.completionObject()->items().size(), 2);
-    QVERIFY(textBar.completionObject()->items().contains(parent0 + 'x'));
-    QVERIFY(textBar.completionObject()->items().contains(parent1 + 'x'));
+    QVERIFY(textBar.completionObject()->items().contains(parent0 + QLatin1Char('x')));
+    QVERIFY(textBar.completionObject()->items().contains(parent1 + QLatin1Char('x')));
 }
