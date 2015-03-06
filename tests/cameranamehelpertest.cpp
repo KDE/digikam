@@ -24,6 +24,7 @@
 #include "cameranamehelpertest.h"
 
 // Qt includes
+
 #include <QTest>
 
 // Local includes
@@ -43,20 +44,43 @@ void CameraNameHelperTest::testCreateCameraName_data()
     QTest::addColumn<bool>("autoDetect");
     QTest::addColumn<QString>("result");
 
-    QString autoString("auto-detected");
+    QString autoString = QLatin1String("auto-detected");
 
-    QTest::newRow("01") << "Nikon" << "D50" << "PTP Mode" << true
-                        << QString("Nikon D50 (PTP Mode, %1)").arg(autoString);
-    QTest::newRow("02") << "  Canon   " << "Powershot A80" << "" << false
-                        << QString("Canon Powershot A80");
-    QTest::newRow("03") << "  Canon   " << "Powershot A80" << "" << true
-                        << QString("Canon Powershot A80 (%1)").arg(autoString);
-    QTest::newRow("04") << "  Canon   " << "" << "PTP" << true
-                        << "Canon (PTP, auto-detected)";
-    QTest::newRow("05") << "" << "D50" << "PTP Mode" << true
-                        << "";
-    QTest::newRow("06") << "Nikon" << "D50" << "(PTP Mode)" << true
-                        << QString("Nikon D50 (PTP Mode, %1)").arg(autoString);
+    QTest::newRow("01") << "Nikon"
+                        << "D50"
+                        << "PTP Mode"
+                        << true
+                        << QString::fromUtf8("Nikon D50 (PTP Mode, %1)").arg(autoString);
+
+    QTest::newRow("02") << "  Canon   "
+                        << "Powershot A80"
+                        << ""
+                        << false
+                        << QString::fromUtf8("Canon Powershot A80");
+
+    QTest::newRow("03") << "  Canon   "
+                        << "Powershot A80"
+                        << ""
+                        << true
+                        << QString::fromUtf8("Canon Powershot A80 (%1)").arg(autoString);
+
+    QTest::newRow("04") << "  Canon   "
+                        << ""
+                        << "PTP"
+                        << true
+                        << QString::fromUtf8("Canon (PTP, auto-detected)");
+
+    QTest::newRow("05") << ""
+                        << "D50"
+                        << "PTP Mode"
+                        << true
+                        << QString::fromUtf8("");
+
+    QTest::newRow("06") << "Nikon"
+                        << "D50"
+                        << "(PTP Mode)"
+                        << true
+                        << QString::fromUtf8("Nikon D50 (PTP Mode, %1)").arg(autoString);
 }
 
 void CameraNameHelperTest::testCreateCameraName()
@@ -77,10 +101,10 @@ void CameraNameHelperTest::testSameDevices_data()
     QTest::addColumn<bool>("result");
 
     QTest::newRow("01") << "Nikon D50 (ptp, auto-detected)" << "Nikon D50 (PTP Mode)" << true;
-    QTest::newRow("02") << "Nikon D50 (ptp mode)" << "Nikon D50 (PTP)" << true;
-    QTest::newRow("03") << "Nikon D50 (auto-detected)" << "Nikon D50" << true;
-    QTest::newRow("04") << "Nikon D50 (ptp mode)" << "Nikon D50 (mtp mode)" << false;
-    QTest::newRow("05") << "Nikon D50 (ptp mode)" << "Nikon D50" << false;
+    QTest::newRow("02") << "Nikon D50 (ptp mode)"           << "Nikon D50 (PTP)"      << true;
+    QTest::newRow("03") << "Nikon D50 (auto-detected)"      << "Nikon D50"            << true;
+    QTest::newRow("04") << "Nikon D50 (ptp mode)"           << "Nikon D50 (mtp mode)" << false;
+    QTest::newRow("05") << "Nikon D50 (ptp mode)"           << "Nikon D50"            << false;
 }
 
 void CameraNameHelperTest::testCameraName_data()
@@ -89,10 +113,10 @@ void CameraNameHelperTest::testCameraName_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("01") << "Nikon D50 (ptp, auto-detected)" << "Nikon D50";
-    QTest::newRow("02") << "Nikon D50 (auto-detected)" << "Nikon D50";
-    QTest::newRow("03") << "Nikon D50 (ptp)" << "Nikon D50";
-    QTest::newRow("04") << "Nikon D50 (something else)" << "Nikon D50 (something else)";
-    QTest::newRow("05") << "Nikon D50 (huhu) blubber" << "Nikon D50 (huhu) blubber";
+    QTest::newRow("02") << "Nikon D50 (auto-detected)"      << "Nikon D50";
+    QTest::newRow("03") << "Nikon D50 (ptp)"                << "Nikon D50";
+    QTest::newRow("04") << "Nikon D50 (something else)"     << "Nikon D50 (something else)";
+    QTest::newRow("05") << "Nikon D50 (huhu) blubber"       << "Nikon D50 (huhu) blubber";
 }
 
 void CameraNameHelperTest::testCameraName()
@@ -109,10 +133,10 @@ void CameraNameHelperTest::testCameraNameAutoDetected_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("01") << "Nikon D50 (ptp, auto-detected)" << "Nikon D50 (ptp, auto-detected)";
-    QTest::newRow("02") << "Nikon D50 (auto-detected)" << "Nikon D50 (auto-detected)";
-    QTest::newRow("03") << "Nikon D50 (ptp)" << "Nikon D50 (ptp, auto-detected)";
-    QTest::newRow("04") << "Nikon D50 (something else)" << "Nikon D50 (something else) (auto-detected)";
-    QTest::newRow("05") << "Nikon D50 (huhu) blubber" << "Nikon D50 (huhu) blubber (auto-detected)";
+    QTest::newRow("02") << "Nikon D50 (auto-detected)"      << "Nikon D50 (auto-detected)";
+    QTest::newRow("03") << "Nikon D50 (ptp)"                << "Nikon D50 (ptp, auto-detected)";
+    QTest::newRow("04") << "Nikon D50 (something else)"     << "Nikon D50 (something else) (auto-detected)";
+    QTest::newRow("05") << "Nikon D50 (huhu) blubber"       << "Nikon D50 (huhu) blubber (auto-detected)";
 }
 
 void CameraNameHelperTest::testCameraNameAutoDetected()

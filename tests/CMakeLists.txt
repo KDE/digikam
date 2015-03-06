@@ -13,20 +13,21 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 #------------------------------------------------------------------------
 
-set(advancedrenametest_SRCS
-    advancedrenametest.cpp
-)
-
-add_executable(advancedrenametest ${advancedrenametest_SRCS})
-add_test(advancedrenametest advancedrenametest)
-ecm_mark_as_test(advancedrenametest)
-
-target_link_libraries(advancedrenametest
-                      Qt5::Test
-
-                      digikamdatabase
-                      advancedrename
-)
+# TODO
+# set(advancedrenametest_SRCS
+#     advancedrenametest.cpp
+# )
+# 
+# add_executable(advancedrenametest ${advancedrenametest_SRCS})
+# add_test(advancedrenametest advancedrenametest)
+# ecm_mark_as_test(advancedrenametest)
+# 
+# target_link_libraries(advancedrenametest
+#                       Qt5::Test
+# 
+#                       digikamdatabase
+#                       advancedrename
+# )
 
 #------------------------------------------------------------------------
 
