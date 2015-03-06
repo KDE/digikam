@@ -72,7 +72,7 @@ void DImageHistoryTest::testXml()
 void DImageHistoryTest::testDImg()
 {
     QDir imageDir(imagePath());
-    imageDir.setNameFilters(QStringList("*.jpg"));
+    imageDir.setNameFilters(QStringList() << QLatin1String("*.jpg"));
     QList<QFileInfo> imageFiles = imageDir.entryInfoList();
 
     IOFileSettings container;
@@ -154,5 +154,3 @@ void DImageHistoryTest::slotImageSaved(const QString& fileName, bool success)
 
     m_loop.quit();
 }
-
-

@@ -32,11 +32,12 @@
 #include <QTreeView>
 #include <QDebug>
 #include <QTest>
+#include <QUrl>
 
 // KDE includes
 
-#include <kio/netaccess.h>
-#include <KUrl> // TODO port
+#include <kio/job.h>
+#include <kio/deletejob.h>
 
 // Local includes
 
@@ -62,17 +63,17 @@ void DImageHistoryGraphTest::initTestCase()
 {
     initBaseTestCase();
 
-    QString name = tempFileName("collection");
+    QString name = tempFileName(QLatin1String("collection"));
     collectionDir = QDir::temp();
     collectionDir.mkdir(name);
     collectionDir.cd(name);
     QVERIFY(collectionDir.exists());
 
-    dbFile = tempFilePath("database");
+    dbFile = tempFilePath(QLatin1String("database"));
 
     qDebug() << "Using database path for test: " << dbFile;
 
-    DatabaseParameters params("QSQLITE", dbFile, "QSQLITE", dbFile);
+    DatabaseParameters params(QLatin1String("QSQLITE"), dbFile, QLatin1String("QSQLITE"), dbFile);
     DatabaseAccess::setParameters(params, DatabaseAccess::MainApplication);
     QVERIFY(DatabaseAccess::checkReadyForUse(0));
     QVERIFY(QFile(dbFile).exists());
@@ -85,6 +86,7 @@ void DImageHistoryGraphTest::initTestCase()
 
     QList<AlbumShortInfo> albums = DatabaseAccess().db()->getAlbumShortInfos();
     QVERIFY(albums.size() >= 2);
+
     foreach(const AlbumShortInfo& album, albums)
     {
         //qDebug() << album.relativePath << album.id;
@@ -97,6 +99,7 @@ void DImageHistoryGraphTest::initTestCase()
     {
         ids << ImageInfo::fromLocalFile(file).id();
     }
+
     QVERIFY(!ids.contains(-1));
     QVERIFY(ids.size() >= 24);
 }
@@ -107,8 +110,10 @@ void DImageHistoryGraphTest::cleanupTestCase()
 
     QFile(dbFile).remove();
 
-    KUrl deleteUrl = QUrl::fromLocalFile(collectionDir.path());
-    KIO::NetAccess::del(deleteUrl, 0);
+    QUrl deleteUrl = QUrl::fromLocalFile(collectionDir.path());
+    auto deleteJob = KIO::file_delete(deleteUrl);
+    deleteJob->exec();
+
     qDebug() << "deleted test folder " << deleteUrl;
 }
 
@@ -121,10 +126,12 @@ template <typename from, typename to>
 QList<to> mapList(const QList<from>& l, const QMap<from,to> map)
 {
     QList<to> r;
+
     foreach(const from& f, l)
     {
         r << map.value(f);
     }
+
     return r;
 }
 
@@ -145,31 +152,31 @@ void DImageHistoryGraphTest::testEditing()
     m_loop.exec();
 
     applyFilters1();
-    m_im->saveAs(collectionDir.filePath("1.jpg"), &container, true, QString(), QString());
+    m_im->saveAs(collectionDir.filePath(QLatin1String("1.jpg")), &container, true, QString(), QString());
     m_loop.exec();
 
     applyFilters2();
-    m_im->saveAs(collectionDir.filePath("2.jpg"), &container, true, QString(), QString());
+    m_im->saveAs(collectionDir.filePath(QLatin1String("2.jpg")), &container, true, QString(), QString());
     m_loop.exec();
 
     applyFilters3();
-    m_im->saveAs(collectionDir.filePath("3.jpg"), &container, true, QString(), QString());
+    m_im->saveAs(collectionDir.filePath(QLatin1String("3.jpg")), &container, true, QString(), QString());
     m_loop.exec();
 
-    m_im->load(collectionDir.filePath("2.jpg"), &container);
+    m_im->load(collectionDir.filePath(QLatin1String("2.jpg")), &container);
     m_loop.exec();
 
     applyFilters4();
-    m_im->saveAs(collectionDir.filePath("4.jpg"), &container, true, QString(), QString());
+    m_im->saveAs(collectionDir.filePath(QLatin1String("4.jpg")), &container, true, QString(), QString());
     m_loop.exec();
 
     CollectionScanner().completeScan();
 
     ImageInfo orig  = ImageInfo::fromLocalFile(readOnlyImages.first());
-    ImageInfo one   = ImageInfo::fromLocalFile(collectionDir.filePath("1.jpg")),
-              two   = ImageInfo::fromLocalFile(collectionDir.filePath("2.jpg")),
-              three = ImageInfo::fromLocalFile(collectionDir.filePath("3.jpg")),
-              four  = ImageInfo::fromLocalFile(collectionDir.filePath("4.jpg"));
+    ImageInfo one   = ImageInfo::fromLocalFile(collectionDir.filePath(QLatin1String("1.jpg"))),
+              two   = ImageInfo::fromLocalFile(collectionDir.filePath(QLatin1String("2.jpg"))),
+              three = ImageInfo::fromLocalFile(collectionDir.filePath(QLatin1String("3.jpg"))),
+              four  = ImageInfo::fromLocalFile(collectionDir.filePath(QLatin1String("4.jpg")));
 
     typedef QPair<qlonglong, qlonglong> IdPair;
     QList<IdPair> controlCloud;
@@ -251,6 +258,7 @@ void DImageHistoryGraphTest::testHistory()
 class lessThanById
 {
 public:
+
     lessThanById(const QMap<HistoryGraph::Vertex, qlonglong>& vertexToId)
         : vertexToId(vertexToId)
     {
@@ -260,6 +268,8 @@ public:
     {
         return vertexToId.value(a) < vertexToId.value(b);
     }
+
+public:
 
     QMap<HistoryGraph::Vertex, qlonglong> vertexToId;
 };
@@ -416,6 +426,7 @@ void DImageHistoryGraphTest::testGraph()
 
     QMap<qlonglong,HistoryGraph::Vertex> idToVertex;
     QMap<HistoryGraph::Vertex, qlonglong> vertexToId;
+
     foreach(const HistoryGraph::Vertex& v, graph.data().vertices())
     {
         HistoryVertexProperties props = graph.data().properties(v);
@@ -478,7 +489,7 @@ void DImageHistoryGraphTest::testGraph()
     QTreeView view;
     view.setModel(&model);
     view.show();
-    QTest::qWaitForWindowShown(&view);
+    QTest::qWaitForWindowExposed(&view);
     QTest::qWait(25000);
 }
 
@@ -496,5 +507,3 @@ void DImageHistoryGraphTest::slotImageSaved(const QString& fileName, bool succes
     qDebug() << "Saved to" << fileName;
     m_loop.quit();
 }
-
-

@@ -50,6 +50,26 @@ target_link_libraries(dimagefilteractiontest
 
 #------------------------------------------------------------------------
 
+set(dimagehistorygraphtest_SRCS
+    abstractdimagehistorytest.cpp
+    dimagehistorygraphtest.cpp
+    modeltest/modeltest.cpp
+)
+
+add_executable(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
+add_test(dimagehistorygraphtest dimagehistorygraphtest)
+ecm_mark_as_test(dimagehistorygraphtest)
+
+target_link_libraries(dimagehistorygraphtest
+
+                      dimg
+                      digikamdatabase
+                      
+                      Qt5::Test
+)
+
+#------------------------------------------------------------------------
+
 set(dimagehistorytest_SRCS
     abstractdimagehistorytest.cpp
     dimagehistorytest.cpp
@@ -65,6 +85,10 @@ target_link_libraries(dimagehistorytest
 
                       Qt5::Test
 )
+
+
+###########################################################################################
+
 
 #------------------------------------------------------------------------
 
@@ -171,25 +195,6 @@ target_link_libraries(filesaveoptionsboxtest
 
 #                      digikamdatabase
 #)
-
-#------------------------------------------------------------------------
-
-set(dimagehistorygraphtest_SRCS
-    abstractdimagehistorytest.cpp
-    dimagehistorygraphtest.cpp
-    modeltest/modeltest.cpp
-)
-
-
-add_executable(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
-add_test(dimagehistorygraphtest dimagehistorygraphtest)
-ecm_mark_as_test(dimagehistorygraphtest)
-
-target_link_libraries(dimagehistorygraphtest
-                      dimg
-                      Qt5::Test
-                      digikamdatabase
-)
 
 #------------------------------------------------------------------------
 
