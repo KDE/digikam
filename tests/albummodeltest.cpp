@@ -32,7 +32,8 @@
 
 // KDE includes
 
-#include <kio/netaccess.h>
+#include <kio/job.h>
+#include <kio/deletejob.h>
 
 // Local includes
 
@@ -54,8 +55,8 @@ const QString IMAGE_PATH(QFINDTESTDATA("albummodeltestimages"));
 
 QTEST_MAIN(AlbumModelTest)
 
-AlbumModelTest::AlbumModelTest() :
-    albumCategory("DummyCategory")
+AlbumModelTest::AlbumModelTest()
+    : albumCategory(QLatin1String("DummyCategory"))
 {
 }
 
@@ -65,14 +66,13 @@ AlbumModelTest::~AlbumModelTest()
 
 void AlbumModelTest::initTestCase()
 {
-
-    tempSuffix = "albummodeltest-" + QTime::currentTime().toString();
-    dbPath = QDir::temp().absolutePath() + QString("/") + tempSuffix;
+    tempSuffix = QLatin1String("albummodeltest-") + QTime::currentTime().toString();
+    dbPath = QDir::temp().absolutePath() + QLatin1String("/") + tempSuffix;
 
     if (QDir::temp().exists(tempSuffix))
     {
-        QString msg = QString("Error creating temp path") + dbPath;
-        QVERIFY2(false, msg);
+        QString msg = QLatin1String("Error creating temp path") + dbPath;
+        QVERIFY2(false, msg.toLatin1().constData());
     }
 
     QDir::temp().mkdir(tempSuffix);
@@ -90,13 +90,12 @@ void AlbumModelTest::initTestCase()
 
     AlbumManager::checkDatabaseDirsAfterFirstRun(QDir::temp().absoluteFilePath(
                 tempSuffix), QDir::temp().absoluteFilePath(tempSuffix));
-    DatabaseParameters params("QSQLITE", QDir::temp().absoluteFilePath(tempSuffix),
+    DatabaseParameters params(QLatin1String("QSQLITE"), QDir::temp().absoluteFilePath(tempSuffix),
                               QString(), QString(), -1, false, QString(), QString());
     bool dbChangeGood = AlbumManager::instance()->setDatabase(params, false,
                         QDir::temp().absoluteFilePath(tempSuffix));
     QVERIFY2(dbChangeGood, "Could not set temp album db");
-    QList<CollectionLocation> locs =
-        CollectionManager::instance()->allAvailableLocations();
+    QList<CollectionLocation> locs = CollectionManager::instance()->allAvailableLocations();
     QVERIFY2(locs.size(), "Failed to auto-create one collection in setDatabase");
 
     ScanController::instance()->completeCollectionScan();
@@ -108,7 +107,6 @@ void AlbumModelTest::initTestCase()
 
 void AlbumModelTest::cleanupTestCase()
 {
-
     ScanController::instance()->shutDown();
     AlbumManager::instance()->cleanUp();
     ThumbnailLoadThread::cleanUp();
@@ -116,9 +114,11 @@ void AlbumModelTest::cleanupTestCase()
     LoadingCacheInterface::cleanUp();
 
     QUrl deleteUrl = QUrl::fromLocalFile(dbPath);
-    KIO::NetAccess::del(deleteUrl, 0);
+    
+    auto deleteJob = KIO::file_delete(deleteUrl);
+    deleteJob->exec();
+    
     qDebug() << "deleted test folder " << deleteUrl;
-
 }
 
 // Qt test doesn't use exceptions, so using assertion macros in methods called
@@ -130,19 +130,18 @@ void AlbumModelTest::cleanupTestCase()
     QString error; \
     result = AlbumManager::instance()->createPAlbum(parent, name, name, \
                     QDate::currentDate(), albumCategory, error); \
-    QVERIFY2(result, "Error creating PAlbum for test: " + error); \
+    QVERIFY2(result, QString::fromUtf8("Error creating PAlbum for test: %1").arg(error).toLatin1().constData()); \
 }
 
 #define safeCreateTAlbum(parent, name, result) \
 { \
     QString error; \
-    result = AlbumManager::instance()->createTAlbum(parent, name, "", error); \
-    QVERIFY2(result, "Error creating TAlbum for test: ") + error); \
+    result = AlbumManager::instance()->createTAlbum(parent, name, QLatin1String(""), error); \
+    QVERIFY2(result, QString::fromUtf8("Error creating TAlbum for test: %1").arg(error).toLatin1().constData()); \
 }
 
 void AlbumModelTest::init()
 {
-
     palbumCountMap.clear();
 
     // create a model to check that model work is done correctly while scanning
@@ -169,8 +168,8 @@ void AlbumModelTest::init()
 
     // create two of them by creating directories and scanning
     QDir dir(dbPath);
-    dir.mkdir("root0");
-    dir.mkdir("root1");
+    dir.mkdir(QLatin1String("root0"));
+    dir.mkdir(QLatin1String("root1"));
 
     ScanController::instance()->completeCollectionScan();
     AlbumManager::instance()->refresh();
@@ -178,26 +177,25 @@ void AlbumModelTest::init()
     QCOMPARE(AlbumManager::instance()->allPAlbums().size(), 4);
 
     QString error;
-    palbumRoot0 = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(dbPath
-                  + "/root0"));
+    palbumRoot0 = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(dbPath + QLatin1String("/root0")));
     QVERIFY2(palbumRoot0, "Error having PAlbum root0 in AlbumManager");
-    palbumRoot1 = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(dbPath
-                  + "/root1"));
+    palbumRoot1 = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(dbPath + QLatin1String("/root1")));
     QVERIFY2(palbumRoot1, "Error having PAlbum root1 in AlbumManager");
 
     // Create some more through AlbumManager
-    palbumRoot2 = AlbumManager::instance()->createPAlbum(dbPath, "root2",
-                  "root album 2", QDate::currentDate(), albumCategory, error);
-    QVERIFY2(palbumRoot2, "Error creating PAlbum for test: " + error);
+    palbumRoot2 = AlbumManager::instance()->createPAlbum(dbPath, QLatin1String("root2"),
+                  QLatin1String("root album 2"), QDate::currentDate(), albumCategory, error);
+    QVERIFY2(palbumRoot2, QString::fromUtf8("Error creating PAlbum for test: %1").arg(error).toLatin1().constData());
 
-    safeCreatePAlbum(palbumRoot0, "root0child0", palbumChild0Root0);
-    safeCreatePAlbum(palbumRoot0, "root0child1", palbumChild1Root0);
-    const QString sameName = "sameName Album";
+    safeCreatePAlbum(palbumRoot0, QLatin1String("root0child0"), palbumChild0Root0);
+    safeCreatePAlbum(palbumRoot0, QLatin1String("root0child1"), palbumChild1Root0);
+    const QString sameName = QLatin1String("sameName Album");
     safeCreatePAlbum(palbumRoot0, sameName, palbumChild2Root0);
 
     safeCreatePAlbum(palbumRoot1, sameName, palbumChild0Root1);
 
     qDebug() << "AlbumManager now knows these PAlbums:";
+    
     foreach(Album* a, AlbumManager::instance()->allPAlbums())
     {
         qDebug() << "\t" << a->title();
@@ -208,11 +206,11 @@ void AlbumModelTest::init()
     rootTag = AlbumManager::instance()->findTAlbum(0);
     QVERIFY(rootTag);
 
-    safeCreateTAlbum(rootTag, "root0", talbumRoot0);
-    safeCreateTAlbum(rootTag, "root1", talbumRoot1);
+    safeCreateTAlbum(rootTag, QLatin1String("root0"), talbumRoot0);
+    safeCreateTAlbum(rootTag, QLatin1String("root1"), talbumRoot1);
 
-    safeCreateTAlbum(talbumRoot0, "child0 root 0", talbumChild0Root0);
-    safeCreateTAlbum(talbumRoot0, "child1 root 0", talbumChild1Root0);
+    safeCreateTAlbum(talbumRoot0, QLatin1String("child0 root 0"), talbumChild0Root0);
+    safeCreateTAlbum(talbumRoot0, QLatin1String("child1 root 0"), talbumChild1Root0);
 
     safeCreateTAlbum(talbumChild1Root0, sameName, talbumChild0Child1Root0);
 
@@ -223,7 +221,7 @@ void AlbumModelTest::init()
     // add some images for having date albums
 
     QDir imageDir(IMAGE_PATH);
-    imageDir.setNameFilters(QStringList("*.jpg"));
+    imageDir.setNameFilters(QStringList() << QLatin1String("*.jpg"));
     QStringList imageFiles = imageDir.entryList();
 
     qDebug() << "copying images " << imageFiles << " to "
@@ -231,8 +229,8 @@ void AlbumModelTest::init()
 
     foreach(const QString& imageFile, imageFiles)
     {
-        QString src = IMAGE_PATH + '/' + imageFile;
-        QString dst = palbumChild0Root0->fileUrl().toLocalFile() + '/' + imageFile;
+        QString src = IMAGE_PATH + QLatin1Char('/') + imageFile;
+        QString dst = palbumChild0Root0->fileUrl().toLocalFile() + QLatin1Char('/') + imageFile;
         bool copied = QFile::copy(src, dst);
         QVERIFY2(copied, "Test images must be copied");
     }
@@ -252,6 +250,7 @@ void AlbumModelTest::init()
     DAlbum* rootFromAlbumManager = AlbumManager::instance()->findDAlbum(0);
     QVERIFY(rootFromAlbumManager);
     DAlbum* rootFromList = 0;
+
     foreach(Album* album, AlbumManager::instance()->allDAlbums())
     {
         DAlbum* dAlbum = dynamic_cast<DAlbum*> (album);
@@ -262,14 +261,13 @@ void AlbumModelTest::init()
             rootFromList = dAlbum;
         }
     }
+
     QVERIFY(rootFromList);
     QVERIFY(rootFromList == rootFromAlbumManager);
-
 }
 
 void AlbumModelTest::testStartAlbumModel()
 {
-
     // verify that the start album model got all these changes
 
     // one root
@@ -285,7 +283,6 @@ void AlbumModelTest::testStartAlbumModel()
     // We must have received an added notation for everything except album root
     // and collection
     QCOMPARE(addedIds.size(), 7);
-
 }
 
 void AlbumModelTest::ensureItemCounts()
@@ -310,7 +307,6 @@ void AlbumModelTest::ensureItemCounts()
     }
 }
 
-
 void AlbumModelTest::slotStartModelRowsInserted(const QModelIndex& parent, int start, int end)
 {
     qDebug() << "called, parent:" << parent << ", start:" << start << ", end:" << end;
@@ -333,7 +329,6 @@ void AlbumModelTest::slotStartModelDataChanged(const QModelIndex& topLeft, const
 {
     for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
     {
-
         QModelIndex index = startModel->index(row, topLeft.column(), topLeft.parent());
 
         if (!index.isValid())
@@ -346,22 +341,22 @@ void AlbumModelTest::slotStartModelDataChanged(const QModelIndex& topLeft, const
 
         if (!addedIds.contains(albumId))
         {
-            QString message = "Album id " + QString::number(albumId)
-                              + " was changed before adding signal was received";
-            QFAIL(message);
+            QString message = QLatin1String("Album id ") + QString::number(albumId)
+                              + QLatin1String(" was changed before adding signal was received");
+            QFAIL(message.toLatin1().constData());
             qDebug() << message;
         }
-
     }
-
 }
 
 void AlbumModelTest::deletePAlbum(PAlbum* album)
 {
     QUrl u;
-    u.setProtocol("file");
+    u.setScheme(QLatin1String("file"));
     u.setPath(album->folderPath());
-    KIO::NetAccess::del(u, 0);
+    
+    auto deleteJob = KIO::file_delete(u);
+    deleteJob->exec();
 }
 
 void AlbumModelTest::setLastPAlbumCountMap(const QMap<int, int> &map)
@@ -372,7 +367,6 @@ void AlbumModelTest::setLastPAlbumCountMap(const QMap<int, int> &map)
 
 void AlbumModelTest::cleanup()
 {
-
     if (startModel)
     {
         disconnect(startModel);
@@ -403,17 +397,15 @@ void AlbumModelTest::cleanup()
 
     QString error;
     bool removed = AlbumManager::instance()->deleteTAlbum(talbumRoot0, error);
-    QVERIFY2(removed, "Error removing a tag: " + error);
+    QVERIFY2(removed, QString::fromUtf8("Error removing a tag: %1").arg(error).toLatin1().constData());
     removed = AlbumManager::instance()->deleteTAlbum(talbumRoot1, error);
-    QVERIFY2(removed, "Error removing a tag: " + error);
+    QVERIFY2(removed, QString::fromUtf8("Error removing a tag: %1").arg(error).toLatin1().constData());
 
     QCOMPARE(AlbumManager::instance()->allTAlbums().size(), 1);
-
 }
 
 void AlbumModelTest::testPAlbumModel()
 {
-
     AlbumModel* albumModel = new AlbumModel();
     ModelTest* test = new ModelTest(albumModel, 0);
     delete test;
@@ -423,24 +415,22 @@ void AlbumModelTest::testPAlbumModel()
     test = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
-
 }
 
 void AlbumModelTest::testDisablePAlbumCount()
 {
-
     AlbumModel albumModel;
     albumModel.setCountMap(palbumCountMap);
     albumModel.setShowCount(true);
 
-    QRegExp countRegEx(".+ \\(\\d+\\)");
+    QRegExp countRegEx(QLatin1String(".+ \\(\\d+\\)"));
     countRegEx.setMinimal(true);
-    QVERIFY(countRegEx.exactMatch("test (10)"));
-    QVERIFY(countRegEx.exactMatch("te st (10)"));
-    QVERIFY(countRegEx.exactMatch("te st (0)"));
-    QVERIFY(!countRegEx.exactMatch("te st ()"));
-    QVERIFY(!countRegEx.exactMatch("te st"));
-    QVERIFY(!countRegEx.exactMatch("te st (10) bla"));
+    QVERIFY(countRegEx.exactMatch(QLatin1String("test (10)")));
+    QVERIFY(countRegEx.exactMatch(QLatin1String("te st (10)")));
+    QVERIFY(countRegEx.exactMatch(QLatin1String("te st (0)")));
+    QVERIFY(!countRegEx.exactMatch(QLatin1String("te st ()")));
+    QVERIFY(!countRegEx.exactMatch(QLatin1String("te st")));
+    QVERIFY(!countRegEx.exactMatch(QLatin1String("te st (10) bla")));
 
     // ensure that all albums except the root album have a count attached
     QModelIndex rootIndex = albumModel.index(0, 0, QModelIndex());
@@ -451,13 +441,13 @@ void AlbumModelTest::testDisablePAlbumCount()
     {
         QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
         QString collectionTitle = albumModel.data(collectionIndex, Qt::DisplayRole).toString();
-        QVERIFY2(countRegEx.exactMatch(collectionTitle), collectionTitle + " matching error");
+        QVERIFY2(countRegEx.exactMatch(collectionTitle), QString::fromUtf8("%1 matching error").arg(collectionTitle).toLatin1().constData());
 
         for (int albumRow = 0; albumRow < albumModel.rowCount(collectionIndex); ++albumRow)
         {
             QModelIndex albumIndex = albumModel.index(albumRow, 0, collectionIndex);
             QString albumTitle = albumModel.data(albumIndex, Qt::DisplayRole).toString();
-            QVERIFY2(countRegEx.exactMatch(albumTitle), albumTitle + " matching error");
+            QVERIFY2(countRegEx.exactMatch(albumTitle), QString::fromUtf8("%1 matching error").arg(albumTitle).toLatin1().constData());
         }
 
     }
@@ -473,17 +463,15 @@ void AlbumModelTest::testDisablePAlbumCount()
     {
         QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
         QString collectionTitle = albumModel.data(collectionIndex, Qt::DisplayRole).toString();
-        QVERIFY2(!countRegEx.exactMatch(collectionTitle), collectionTitle + "' matching error");
+        QVERIFY2(!countRegEx.exactMatch(collectionTitle), QString::fromUtf8("%1 matching error").arg(collectionTitle).toLatin1().constData());
 
         for (int albumRow = 0; albumRow < albumModel.rowCount(collectionIndex); ++albumRow)
         {
             QModelIndex albumIndex = albumModel.index(albumRow, 0, collectionIndex);
             QString albumTitle = albumModel.data(albumIndex, Qt::DisplayRole).toString();
-            QVERIFY2(!countRegEx.exactMatch(albumTitle), albumTitle + " matching error");
+            QVERIFY2(!countRegEx.exactMatch(albumTitle), QString::fromUtf8("%1 matching error").arg(albumTitle).toLatin1().constData());
         }
-
     }
-
 }
 
 void AlbumModelTest::testDAlbumModel()
@@ -497,7 +485,6 @@ void AlbumModelTest::testDAlbumModel()
 
 void AlbumModelTest::testDAlbumContainsAlbums()
 {
-
     DateAlbumModel* albumModel = new DateAlbumModel();
     ensureItemCounts();
 
@@ -505,7 +492,6 @@ void AlbumModelTest::testDAlbumContainsAlbums()
 
     foreach(Album* album, AlbumManager::instance()->allDAlbums())
     {
-
         DAlbum* dAlbum = dynamic_cast<DAlbum*> (album);
         QVERIFY(dAlbum);
 
@@ -562,16 +548,13 @@ void AlbumModelTest::testDAlbumContainsAlbums()
             qDebug() << "Unexpected album: " << dAlbum->title();
             QFAIL("Unexpected album returned from model");
         }
-
     }
 
     delete albumModel;
-
 }
 
 void AlbumModelTest::testDAlbumSorting()
 {
-
     DateAlbumModel dateAlbumModel;
     AlbumFilterModel albumModel;
     albumModel.setSourceAlbumModel(&dateAlbumModel);
@@ -582,7 +565,6 @@ void AlbumModelTest::testDAlbumSorting()
 
     for (int yearRow = 0; yearRow < albumModel.rowCount(); ++yearRow)
     {
-
         QModelIndex yearIndex = albumModel.index(yearRow, 0);
         DAlbum* yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
         QVERIFY(yearAlbum);
@@ -594,16 +576,13 @@ void AlbumModelTest::testDAlbumSorting()
 
         for (int monthRow = 0; monthRow < albumModel.rowCount(yearIndex); ++monthRow)
         {
-
             QModelIndex monthIndex = albumModel.index(monthRow, 0, yearIndex);
             DAlbum* monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
             QVERIFY(monthAlbum);
 
             QVERIFY(monthAlbum->date().month() > previousMonth);
             previousMonth = monthAlbum->date().month();
-
         }
-
     }
 
     // then check descending order
@@ -612,7 +591,6 @@ void AlbumModelTest::testDAlbumSorting()
 
     for (int yearRow = 0; yearRow < albumModel.rowCount(); ++yearRow)
     {
-
         QModelIndex yearIndex = albumModel.index(yearRow, 0);
         DAlbum* yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
         QVERIFY(yearAlbum);
@@ -624,18 +602,14 @@ void AlbumModelTest::testDAlbumSorting()
 
         for (int monthRow = 0; monthRow < albumModel.rowCount(yearIndex); ++monthRow)
         {
-
             QModelIndex monthIndex = albumModel.index(monthRow, 0, yearIndex);
             DAlbum* monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
             QVERIFY(monthAlbum);
 
             QVERIFY(monthAlbum->date().month() < previousMonth);
             previousMonth = monthAlbum->date().month();
-
         }
-
     }
-
 }
 
 void AlbumModelTest::testDAlbumCount()
@@ -649,7 +623,6 @@ void AlbumModelTest::testDAlbumCount()
     // check year albums
     for (int yearRow = 0; yearRow < albumModel->rowCount(albumModel->rootAlbumIndex()); ++yearRow)
     {
-
         QModelIndex yearIndex = albumModel->index(yearRow, 0);
         DAlbum* yearDAlbum = albumModel->albumForIndex(yearIndex);
         QVERIFY(yearDAlbum);
@@ -658,7 +631,6 @@ void AlbumModelTest::testDAlbumCount()
 
         if (yearDAlbum->date().year() == 2007)
         {
-
             const int imagesInYear = 7;
             albumModel->includeChildrenCount(yearIndex);
             QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInYear);
@@ -669,7 +641,6 @@ void AlbumModelTest::testDAlbumCount()
 
             for (int monthRow = 0; monthRow < albumModel->rowCount(yearIndex); ++monthRow)
             {
-
                 QModelIndex monthIndex = albumModel->index(monthRow, 0, yearIndex);
                 DAlbum* monthDAlbum = albumModel->albumForIndex(monthIndex);
                 QVERIFY(monthDAlbum);
@@ -701,13 +672,10 @@ void AlbumModelTest::testDAlbumCount()
                 {
                     QFAIL("unexpected month album in 2007");
                 }
-
             }
-
         }
         else if (yearDAlbum->date().year() == 2009)
         {
-
             const int imagesInYear = 5;
             albumModel->includeChildrenCount(yearIndex);
             QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInYear);
@@ -718,7 +686,6 @@ void AlbumModelTest::testDAlbumCount()
 
             for (int monthRow = 0; monthRow < albumModel->rowCount(yearIndex); ++monthRow)
             {
-
                 QModelIndex monthIndex = albumModel->index(monthRow, 0, yearIndex);
                 DAlbum* monthDAlbum = albumModel->albumForIndex(monthIndex);
                 QVERIFY(monthDAlbum);
@@ -760,9 +727,7 @@ void AlbumModelTest::testDAlbumCount()
                 {
                     QFAIL("unexpected month album in 2009");
                 }
-
             }
-
         }
         else if (yearDAlbum->date().year() == 1997)
         {
@@ -772,7 +737,6 @@ void AlbumModelTest::testDAlbumCount()
         {
             QFAIL("Received unexpected album from model");
         }
-
     }
 
     delete albumModel;
@@ -790,7 +754,6 @@ void AlbumModelTest::testTAlbumModel()
     test = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
-
 }
 
 void AlbumModelTest::testSAlbumModel()

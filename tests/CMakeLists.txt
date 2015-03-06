@@ -77,28 +77,6 @@ target_link_libraries(dimagehistorytest
 
 #------------------------------------------------------------------------
 
-# NOTE: code ported to Qt5 but do not link yet.
-#
-# set(filesaveoptionsboxtest_SRCS
-#     filesaveoptionsboxtest.cpp
-# )
-# 
-# add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
-# add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
-# ecm_mark_as_test(filesaveoptionsboxtest)
-# 
-# target_link_libraries(filesaveoptionsboxtest
-#                       
-#                       dimg
-#                       filters
-#                       digikamgui
-#                       digikamwidgets
-#                       
-#                       Qt5::Test
-# )
-
-#------------------------------------------------------------------------
-
 set(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
 add_executable(loadpgfdata ${loadpgfdata_SRCS})
 ecm_mark_nongui_executable(loadpgfdata)
@@ -216,7 +194,6 @@ if(GPHOTO2_FOUND)
     target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
 endif()
 
-
 #------------------------------------------------------------------------
 
 set(testautocrop_SRCS testautocrop.cpp)
@@ -284,33 +261,46 @@ target_link_libraries(testnrestimate
                       dimg
 )
 
+#------------------------------------------------------------------------
 
-###########################################################################################
-# TODO
+set(cameranamehelper_SRCS
+    cameranamehelpertest.cpp
+)
+
+add_executable(cameranamehelpertest ${cameranamehelper_SRCS})
+add_test(cameranamehelpertest cameranamehelpertest)
+ecm_mark_as_test(cameranamehelpertest)
+
+target_link_libraries(cameranamehelpertest
+
+                      digikamdatabase
+
+                      Qt5::Test
+)
+
+if(GPHOTO2_FOUND)
+    target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 
-# set(cameranamehelper_SRCS
-#     cameranamehelpertest.cpp
-# )
-# 
-# add_executable(cameranamehelpertest ${cameranamehelper_SRCS})
-# add_test(cameranamehelpertest cameranamehelpertest)
-# ecm_mark_as_test(cameranamehelpertest)
-# 
-# target_link_libraries(cameranamehelpertest
-#                       #Qt5::Gui
-#                       #Qt5::Widgets
-#                       Qt5::Test
-#                       digikamdatabase
-#                       #KF5::KDcraw
-#                       #KF5::KExiv2
-#                       #${OpenCV_LIBRARIES}
-# )
-# 
-# if(GPHOTO2_FOUND)
-#     target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
-# endif()
+set(albummodeltest_SRCS
+    albummodeltest.cpp
+    modeltest/modeltest.cpp
+)
+
+add_executable(albummodeltest ${albummodeltest_SRCS})
+add_test(albummodeltest albummodeltest)
+ecm_mark_as_test(albummodeltest)
+
+target_link_libraries(albummodeltest
+
+                      digikamdatabase
+
+                      Qt5::Test
+
+                      KF5::KIOCore
+)
 
 #------------------------------------------------------------------------
 
@@ -326,51 +316,52 @@ target_link_libraries(testnrestimate
 # 
 #                       digikamdatabase
 #                       advancedrename
-#
+# 
 #                       Qt5::Test
 # )
 
-
 #------------------------------------------------------------------------
 
+# NOTE: code ported to Qt5 but do not link yet.
 # undefined reference to `Digikam::DatabaseFields::FieldMetaInfo<QFlags<Digikam::DatabaseFields::ImagesField> >::Last'
 # happens even though file defining those libs/database/framework/databasefields.h is included and linking against digikamdatabase.
-#
+# 
 # set(databasefieldstest_SRCS
 #     databasefieldstest.cpp
 # )
-#
+# 
 # add_executable(databasefieldstest ${databasefieldstest_SRCS})
 # add_test(databasefieldstest databasefieldstest)
 # ecm_mark_as_test(databasefieldstest)
-#
+# 
 # target_link_libraries(databasefieldstest
-#
+# 
 #                       digikamdatabase
-#
+# 
 #                       Qt5::Gui
 #                       Qt5::Test
-#
+# 
 #                       KF5::KExiv2
 # )
 
-
 #------------------------------------------------------------------------
 
-# set(albummodeltest_SRCS
-#     albummodeltest.cpp
-#     modeltest/modeltest.cpp
+# NOTE: code ported to Qt5 but do not link yet.
+#
+# set(filesaveoptionsboxtest_SRCS
+#     filesaveoptionsboxtest.cpp
 # )
-#
-# add_executable(albummodeltest ${albummodeltest_SRCS})
-# add_test(albummodeltest albummodeltest)
-# ecm_mark_as_test(albummodeltest)
-#
-# target_link_libraries(albummodeltest
-#
-#                       digikamdatabase
-#
+# 
+# add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
+# add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
+# ecm_mark_as_test(filesaveoptionsboxtest)
+# 
+# target_link_libraries(filesaveoptionsboxtest
+#                       
+#                       dimg
+#                       filters
+#                       digikamgui
+#                       digikamwidgets
+#                       
 #                       Qt5::Test
-#
-#                       KF5::KIOCore
 # )
