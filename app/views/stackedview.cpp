@@ -124,11 +124,6 @@ StackedView::StackedView(QWidget* const parent)
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName(QLatin1String("mainwindow_thumbbar"));
     d->welcomePageView = new WelcomePageView(this);
-
-#ifdef HAVE_VIDEOPLAYER
-    d->mediaPlayerView = new MediaPlayerView(this);
-#endif //HAVE_VIDEOPLAYER
-
     d->tableView       = new TableView(d->imageIconView->getSelectionModel(),
                                        d->imageIconView->imageFilterModel(),
                                        this);
@@ -142,19 +137,22 @@ StackedView::StackedView(QWidget* const parent)
     d->mapWidgetView->setObjectName(QLatin1String("mainwindow_mapwidgetview"));
 #endif // HAVE_KGEOMAP
 
+#ifdef HAVE_VIDEOPLAYER
+    d->mediaPlayerView = new MediaPlayerView(this);
+#endif //HAVE_VIDEOPLAYER
+
     insertWidget(IconViewMode,     d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
     insertWidget(WelcomePageMode,  d->welcomePageView);
-
-#ifdef HAVE_VIDEOPLAYER
-    insertWidget(MediaPlayerMode,  d->mediaPlayerView);
-#endif //HAVE_VIDEOPLAYER
-
     insertWidget(TableViewMode,    d->tableView);
 
 #ifdef HAVE_KGEOMAP
     insertWidget(MapWidgetMode,    d->mapWidgetView);
 #endif // HAVE_KGEOMAP
+
+#ifdef HAVE_VIDEOPLAYER
+    insertWidget(MediaPlayerMode,  d->mediaPlayerView);
+#endif //HAVE_VIDEOPLAYER
 
     setViewMode(IconViewMode);
     setAttribute(Qt::WA_DeleteOnClose);
