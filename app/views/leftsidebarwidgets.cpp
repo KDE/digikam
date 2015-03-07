@@ -95,15 +95,15 @@ public:
 
 AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent, AlbumModel* const model,
                                                            AlbumModificationHelper* const albumModificationHelper)
-    : SidebarWidget(parent), d(new Private)
+    : SidebarWidget(parent),
+      d(new Private)
 {
     setObjectName(QLatin1String("AlbumFolderView Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F1);
     d->albumModificationHelper = albumModificationHelper;
 
-    QVBoxLayout* const layout = new QVBoxLayout(this);
-
-    d->albumFolderView = new AlbumSelectionTreeView(this, model, d->albumModificationHelper);
+    QVBoxLayout* const layout  = new QVBoxLayout(this);
+    d->albumFolderView         = new AlbumSelectionTreeView(this, model, d->albumModificationHelper);
     d->albumFolderView->setObjectName(QLatin1String("AlbumFolderView"));
     d->albumFolderView->setConfigGroup(getConfigGroup());
     d->albumFolderView->setExpandNewCurrentItem(true);

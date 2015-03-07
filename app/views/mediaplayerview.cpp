@@ -52,7 +52,8 @@ namespace Digikam
 {
 
 MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* const parent)
-    : QObject(parent), m_parent(parent)
+    : QObject(parent),
+      m_parent(parent)
 {
 }
 
@@ -133,7 +134,8 @@ public:
 };
 
 MediaPlayerView::MediaPlayerView(QWidget* const parent)
-    : QStackedWidget(parent), d(new Private)
+    : QStackedWidget(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 

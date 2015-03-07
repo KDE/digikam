@@ -37,6 +37,7 @@
 // Local includes
 
 #include "digikam_config.h"
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "digikamimageview.h"
 #include "digikamview.h"
@@ -75,12 +76,14 @@ public:
         imageIconView      = 0;
         imagePreviewView   = 0;
         welcomePageView    = 0;
-#ifdef HAVE_VIDEOPLAYER
-        mediaPlayerView    = 0;
-#endif //HAVE_VIDEOPLAYER
         needUpdateBar      = false;
         syncingSelection   = false;
         tableView          = 0;
+
+#ifdef HAVE_VIDEOPLAYER
+        mediaPlayerView    = 0;
+#endif //HAVE_VIDEOPLAYER
+
 #ifdef HAVE_KGEOMAP
         mapWidgetView      = 0;
 #endif // HAVE_KGEOMAP
@@ -95,12 +98,14 @@ public:
     DigikamImageView*  imageIconView;
     ImageThumbnailBar* thumbBar;
     ImagePreviewView*  imagePreviewView;
-#ifdef HAVE_VIDEOPLAYER
-    MediaPlayerView*   mediaPlayerView;
-#endif //HAVE_VIDEOPLAYER
     ThumbBarDock*      thumbBarDock;
     WelcomePageView*   welcomePageView;
     TableView*         tableView;
+
+#ifdef HAVE_VIDEOPLAYER
+    MediaPlayerView*   mediaPlayerView;
+#endif //HAVE_VIDEOPLAYER
+
 #ifdef HAVE_KGEOMAP
     MapWidgetView*     mapWidgetView;
 #endif // HAVE_KGEOMAP
@@ -118,11 +123,12 @@ StackedView::StackedView(QWidget* const parent)
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName(QLatin1String("mainwindow_thumbbar"));
-
     d->welcomePageView = new WelcomePageView(this);
+
 #ifdef HAVE_VIDEOPLAYER
     d->mediaPlayerView = new MediaPlayerView(this);
 #endif //HAVE_VIDEOPLAYER
+
     d->tableView       = new TableView(d->imageIconView->getSelectionModel(),
                                        d->imageIconView->imageFilterModel(),
                                        this);
@@ -139,9 +145,11 @@ StackedView::StackedView(QWidget* const parent)
     insertWidget(IconViewMode,     d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
     insertWidget(WelcomePageMode,  d->welcomePageView);
+
 #ifdef HAVE_VIDEOPLAYER
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
 #endif //HAVE_VIDEOPLAYER
+
     insertWidget(TableViewMode,    d->tableView);
 
 #ifdef HAVE_KGEOMAP
@@ -370,7 +378,9 @@ StackedView::StackedViewMode StackedView::viewMode() const
 
 void StackedView::setViewMode(const StackedViewMode mode)
 {
-    if ((mode<StackedViewModeFirst)||(mode>StackedViewModeLast))
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Stacked View Mode : " << mode;
+
+    if ((mode < StackedViewModeFirst) || (mode > StackedViewModeLast))
     {
         return;
     }
@@ -405,12 +415,14 @@ void StackedView::setViewMode(const StackedViewMode mode)
     {
         d->imageIconView->setFocus();
     }
+
 #ifdef HAVE_KGEOMAP
     else if (mode == MapWidgetMode)
     {
         d->mapWidgetView->setFocus();
     }
 #endif // HAVE_KGEOMAP
+
     else if (mode == TableViewMode)
     {
         d->tableView->setFocus();
