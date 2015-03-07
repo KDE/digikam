@@ -27,19 +27,14 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QTest>
-
-// KDE includes
-
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
 #include "advancedrenamemanager.h"
 #include "defaultrenameparser.h"
 #include "parsesettings.h"
-
 #include "renamecustomizer.h"
-
 
 using namespace Digikam;
 

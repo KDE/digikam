@@ -34,11 +34,6 @@
 #include <QCommandLineParser>
 #include <QDebug>
 
-// KDE includes
-
-#include <kaboutdata.h>
-#include <klocalizedstring.h>
-
 // digiKam includes
 
 #include "daboutdata.h"
@@ -56,8 +51,8 @@ using namespace Digikam;
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData(QString::fromLatin1("digikam"), // component name
-                         i18n("digiKam"),                // display name
+    KAboutData aboutData(QString::fromLatin1("digikam"),
+                         QString::fromLatin1("digiKam"), // No need i18n here.
                          digiKamVersion());
     
     QApplication app(argc, argv);

@@ -26,9 +26,9 @@
 
 // Qt includes
 
-#include <qobject.h>
-#include <qmap.h>
-#include <qabstractitemmodel.h>
+#include <QObject>
+#include <QMap>
+#include <QAbstractItemModel>
 
 namespace Digikam
 {

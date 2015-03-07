@@ -24,7 +24,11 @@
 #ifndef ABSTRACTDIMAGEHISTORYTEST_H
 #define ABSTRACTDIMAGEHISTORYTEST_H
 
+// Qt includes
+
 #include <QEventLoop>
+
+// Local includes
 
 #include "dimagehistory.h"
 #include "editorcore.h"
