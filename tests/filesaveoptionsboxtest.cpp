@@ -54,18 +54,15 @@ void FileSaveOptionsBoxTest::testDiscoverFormat_data()
     QTest::newRow("pgf") << "PGF" << (int) DImg::PGF;
 
     QTest::newRow("unknwon") << "i.dont.know" << (int) DImg::NONE; // krazy:exclude=spelling
-
 }
 
 void FileSaveOptionsBoxTest::testDiscoverFormat()
 {
-
     QFETCH(QString, filename);
     QFETCH(int, format);
 
     FileSaveOptionsBox box;
     QCOMPARE((int) box.discoverFormat(filename), format);
-
 }
 
 void FileSaveOptionsBoxTest::testDiscoverFormatDefault()
