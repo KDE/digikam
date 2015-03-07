@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="13" name="digikamimageplugin_decorate" >
+<gui version="50" name="digikamimageplugin_decorate" >
 
  <MenuBar>
 
