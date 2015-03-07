@@ -87,7 +87,7 @@ QString WelcomePageView::infoPage() const
 
     for (int i = 0 ; i < newFeatures.count() ; ++i)
     {
-        featureItems += i18n("<li>%1</li>\n", newFeatures.at(i) );
+        featureItems += i18n("<li>%1</li>\n", newFeatures.at(i));
     }
 
     QString info =
@@ -178,7 +178,7 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName) const
     result.resize(len + 2);
     readLen = file.read(result.data(), len);
 
-    if (1 && result[len-1]!='\n')
+    if (1 && result[len-1] != '\n')
     {
         result[len++] = '\n';
         ++readLen;
