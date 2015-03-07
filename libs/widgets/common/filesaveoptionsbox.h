@@ -35,8 +35,6 @@
 #include "dimg.h"
 #include "digikam_export.h"
 
-class KFileDialog;
-
 namespace Digikam
 {
 
