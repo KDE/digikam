@@ -8,4 +8,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
 001 ==> 344484 - digiKam 4.8.0 compilation error : undefined reference to `cv::Exception::Exception.
 002 ==> 203733 - Syncing EXIF Artist and Copyright fields with IPTC/XMP.
-003 ==> 
+003 ==> 338753 - Exif ImageDescription field is being used incorrectly.
+004 ==> 
+
