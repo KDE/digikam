@@ -60,7 +60,7 @@ class DDateEdit : public QComboBox
 
 public:
 
-    explicit DDateEdit(QWidget* const parent=0, const char* const name=0);
+    explicit DDateEdit(QWidget* const parent=0, const QString& name=QString());
     virtual ~DDateEdit();
 
     /**

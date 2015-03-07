@@ -55,7 +55,8 @@ class DateValidator : public QValidator
 public:
 
     DateValidator( const QStringList& keywords, QWidget* const parent )
-        : QValidator( parent ), mKeywords( keywords )
+        : QValidator( parent ),
+          mKeywords( keywords )
     {
     }
 
@@ -116,11 +117,11 @@ public:
     DDatePickerPopup*   popup;
 };
 
-DDateEdit::DDateEdit(QWidget* const parent, const char* const name)
+DDateEdit::DDateEdit(QWidget* const parent, const QString& name)
     : QComboBox(parent),
       d(new Private)
 {
-    setObjectName(QLatin1String(name));
+    setObjectName(name);
     // need at least one entry for popup to work
     setMaxCount( 1 );
     setEditable( true );
