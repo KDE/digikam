@@ -325,6 +325,28 @@ target_link_libraries(advancedrenametest
 #------------------------------------------------------------------------
 
 # NOTE: code ported to Qt5 but do not link yet.
+#
+# set(filesaveoptionsboxtest_SRCS
+#     filesaveoptionsboxtest.cpp
+# )
+# 
+# add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
+# add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
+# ecm_mark_as_test(filesaveoptionsboxtest)
+# 
+# target_link_libraries(filesaveoptionsboxtest
+#                       
+#                       dimg
+#                       filters
+#                       digikamgui
+#                       digikamwidgets
+#                       
+#                       Qt5::Test
+# )
+
+#------------------------------------------------------------------------
+
+# NOTE: code ported to Qt5 but do not link yet.
 # undefined reference to `Digikam::DatabaseFields::FieldMetaInfo<QFlags<Digikam::DatabaseFields::ImagesField> >::Last'
 # happens even though file defining those libs/database/framework/databasefields.h is included and linking against digikamdatabase.
 # 
@@ -344,26 +366,4 @@ target_link_libraries(advancedrenametest
 #                       Qt5::Test
 # 
 #                       KF5::KExiv2
-# )
-
-#------------------------------------------------------------------------
-
-# NOTE: code ported to Qt5 but do not link yet.
-#
-# set(filesaveoptionsboxtest_SRCS
-#     filesaveoptionsboxtest.cpp
-# )
-# 
-# add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
-# add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
-# ecm_mark_as_test(filesaveoptionsboxtest)
-# 
-# target_link_libraries(filesaveoptionsboxtest
-#                       
-#                       dimg
-#                       filters
-#                       digikamgui
-#                       digikamwidgets
-#                       
-#                       Qt5::Test
 # )
