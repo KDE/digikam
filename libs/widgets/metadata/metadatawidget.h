@@ -55,7 +55,7 @@ public:
 
 public:
 
-    explicit MetadataWidget(QWidget* const parent, const char* name=0);
+    explicit MetadataWidget(QWidget* const parent, const QString& name=QString());
     ~MetadataWidget();
 
     int     getMode() const;

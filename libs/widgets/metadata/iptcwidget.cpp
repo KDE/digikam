@@ -49,7 +49,7 @@ static const char* StandardIptcEntryList[] =
 namespace Digikam
 {
 
-IptcWidget::IptcWidget(QWidget* const parent, const char* name)
+IptcWidget::IptcWidget(QWidget* const parent, const QString& name)
     : MetadataWidget(parent, name)
 {
     for (int i=0 ; QLatin1String(StandardIptcEntryList[i]) != QLatin1String("-1") ; ++i)

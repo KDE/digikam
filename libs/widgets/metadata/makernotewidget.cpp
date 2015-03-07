@@ -52,7 +52,7 @@ static const char* ExifEntryListToIgnore[] =
     "-1"
 };
 
-MakerNoteWidget::MakerNoteWidget(QWidget* const parent, const char* name)
+MakerNoteWidget::MakerNoteWidget(QWidget* const parent, const QString& name)
     : MetadataWidget(parent, name)
 {
     for (int i=0 ; QLatin1String(ExifEntryListToIgnore[i]) != QLatin1String("-1") ; ++i)

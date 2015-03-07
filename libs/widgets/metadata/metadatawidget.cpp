@@ -109,11 +109,11 @@ public:
     DMetadata::MetaDataMap metaDataMap;
 };
 
-MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
+MetadataWidget::MetadataWidget(QWidget* const parent, const QString& name)
     : QWidget(parent),
       d(new Private)
 {
-    setObjectName(QLatin1String(name));
+    setObjectName(name);
 
     d->mainLayout = new QGridLayout(this);
 
@@ -160,7 +160,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 
     d->view         = new MetadataListView(this);
 
-    QString barName = QLatin1String(name) + QLatin1String("SearchBar");
+    QString barName = name + QLatin1String("SearchBar");
     d->searchBar    = new SearchTextBar(this, barName);
 
     // -----------------------------------------------------------------

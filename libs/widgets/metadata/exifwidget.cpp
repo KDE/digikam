@@ -56,7 +56,7 @@ static const char* StandardExifEntryList[] =
 namespace Digikam
 {
 
-ExifWidget::ExifWidget(QWidget* const parent, const char* name)
+ExifWidget::ExifWidget(QWidget* const parent, const QString& name)
     : MetadataWidget(parent, name)
 {
     for (int i=0 ; QLatin1String(StandardExifEntryList[i]) != QLatin1String("-1") ; ++i)

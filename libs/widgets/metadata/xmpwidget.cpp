@@ -67,7 +67,7 @@ static const char* StandardXmpEntryList[] =
     "-1"
 };
 
-XmpWidget::XmpWidget(QWidget* const parent, const char* name)
+XmpWidget::XmpWidget(QWidget* const parent, const QString& name)
     : MetadataWidget(parent, name)
 {
     for (int i=0 ; QLatin1String(StandardXmpEntryList[i]) != QLatin1String("-1") ; ++i)

@@ -96,7 +96,7 @@ void KipiPluginLoader::Private::loadPlugins()
     }
 
     QStringList ignores;
-    kipiInterface = new KipiInterface(app, "Digikam_KIPI_interface");
+    kipiInterface = new KipiInterface(app, QLatin1String("Digikam_KIPI_interface"));
 
     // List of obsoletes plugins to not load
 

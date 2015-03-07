@@ -80,7 +80,7 @@ public:
     QAbstractItemModel*  tagModel;
 };
 
-KipiInterface::KipiInterface(QObject* const parent, const char* name)
+KipiInterface::KipiInterface(QObject* const parent, const QString& name)
     : KIPI::Interface(parent, name),
       d(new Private())
 {
