@@ -304,21 +304,23 @@ target_link_libraries(albummodeltest
 
 #------------------------------------------------------------------------
 
-# set(advancedrenametest_SRCS
-#     advancedrenametest.cpp
-# )
-# 
-# add_executable(advancedrenametest ${advancedrenametest_SRCS})
-# add_test(advancedrenametest advancedrenametest)
-# ecm_mark_as_test(advancedrenametest)
-# 
-# target_link_libraries(advancedrenametest
-# 
-#                       digikamdatabase
-#                       advancedrename
-# 
-#                       Qt5::Test
-# )
+set(advancedrenametest_SRCS
+    advancedrenametest.cpp
+)
+
+add_executable(advancedrenametest ${advancedrenametest_SRCS})
+add_test(advancedrenametest advancedrenametest)
+ecm_mark_as_test(advancedrenametest)
+
+target_link_libraries(advancedrenametest
+
+                      digikamdatabase
+                      advancedrename
+
+                      Qt5::Test
+                      
+                      KF5::KIOCore
+)
 
 #------------------------------------------------------------------------
 

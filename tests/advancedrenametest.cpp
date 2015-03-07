@@ -35,14 +35,13 @@
 
 // KDE includes
 
-#include <KUrl>
 #include <kio/global.h>
 
 using namespace Digikam;
 
 QTEST_MAIN(AdvancedRenameTest)
 
-const QString imagesDir("advancedrenameimages/");
+const QString imagesDir = QLatin1String("advancedrenameimages/");
 
 QString createFilePath(const QString& file)
 {
@@ -51,17 +50,17 @@ QString createFilePath(const QString& file)
 
 Q_DECLARE_METATYPE(QList<int>)
 
-const QString fileName  = "advancedrename_testimage.jpg";
-const QString fileName2 = "advancedrename_testimage2.jpg";
-const QString fileName3 = "001a.jpg";
-const QString fileName4 = "test.png";
-const QString fileName5 = "myfile.jpg";
-const QString fileName6 = "my_file.jpg";
-const QString fileName7 = "holiday_spain_2011_img001.jpg";
-const QString fileName8 = "my images.jpg";
-const QString fileName9 = "holiday_spain_2011_001img.jpg";
+const QString fileName  = QLatin1String("advancedrename_testimage.jpg");
+const QString fileName2 = QLatin1String("advancedrename_testimage2.jpg");
+const QString fileName3 = QLatin1String("001a.jpg");
+const QString fileName4 = QLatin1String("test.png");
+const QString fileName5 = QLatin1String("myfile.jpg");
+const QString fileName6 = QLatin1String("my_file.jpg");
+const QString fileName7 = QLatin1String("holiday_spain_2011_img001.jpg");
+const QString fileName8 = QLatin1String("my images.jpg");
+const QString fileName9 = QLatin1String("holiday_spain_2011_001img.jpg");
 
-const QString filePath = createFilePath(fileName);
+const QString filePath  = createFilePath(fileName);
 const QString filePath2 = createFilePath(fileName2);
 const QString filePath3 = createFilePath(fileName3);
 const QString filePath4 = createFilePath(fileName4);
@@ -78,7 +77,7 @@ void AdvancedRenameTest::testFileNameToken()
     ps.fileUrl = QUrl::fromLocalFile(filePath);
     files << ps;
     AdvancedRenameManager manager(files);
-    manager.parseFiles("[file]");
+    manager.parseFiles(QLatin1String("[file]"));
 
     QString parsed = manager.newName(filePath);
     QCOMPARE(parsed, fileName);
@@ -90,44 +89,44 @@ void AdvancedRenameTest::testFileExtensionToken_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("[ext]")
-            << QString("[ext]")
-            << QString("jpg.jpg");
+               << "[ext]"
+               << "jpg.jpg";
 
     QTest::newRow(".[ext]")
-            << QString(".[ext]")
-            << QString(".jpg");
+               << ".[ext]"
+               << ".jpg";
 
     QTest::newRow("[ext].[ext]")
-            << QString("[ext].[ext]")
-            << QString("jpg.jpg");
+               << "[ext].[ext]"
+               << "jpg.jpg";
 
     QTest::newRow("[ext].[ext]{upper}")
-            << QString("[ext].[ext]{upper}")
-            << QString("jpg.JPG");
+               << "[ext].[ext]{upper}"
+               << "jpg.JPG";
 
     QTest::newRow("[ext]{upper}.[ext]{upper}")
-            << QString("[ext]{upper}.[ext]{upper}")
-            << QString("JPG.JPG");
+               << "[ext]{upper}.[ext]{upper}"
+               << "JPG.JPG";
 
     QTest::newRow("[ext]_lala_####")
-            << QString("[ext]_lala_####")
-            << QString("jpg_lala_0001.jpg");
+               << "[ext]_lala_####"
+               << "jpg_lala_0001.jpg";
 
     QTest::newRow("[ext]_lala_####[ext]")
-            << QString("[ext]_lala_####[ext]")
-            << QString("jpg_lala_0001jpg.jpg");
+               << "[ext]_lala_####[ext]"
+               << "jpg_lala_0001jpg.jpg";
 
     QTest::newRow("[ext]_lala_####.[ext]")
-            << QString("[ext]_lala_####.[ext]")
-            << QString("jpg_lala_0001.jpg");
+               << "[ext]_lala_####.[ext]"
+               << "jpg_lala_0001.jpg";
 
     QTest::newRow("[ext]_lala_####.[ext]{upper}")
-            << QString("[ext]_lala_####.[ext]{upper}")
-            << QString("jpg_lala_0001.JPG");
+               << "[ext]_lala_####.[ext]{upper}"
+               << "jpg_lala_0001.JPG";
 
     QTest::newRow("[ext]_lala_####[ext]{upper}")
-            << QString("[ext]_lala_####[ext]{upper}")
-            << QString("jpg_lala_0001JPG.jpg");
+               << "[ext]_lala_####[ext]{upper}"
+               << "jpg_lala_0001JPG.jpg";
 }
 
 void AdvancedRenameTest::testFileExtensionToken()
@@ -153,7 +152,7 @@ void AdvancedRenameTest::testFileOwnerToken()
     ps.fileUrl = QUrl::fromLocalFile(filePath4);
     files << ps;
     AdvancedRenameManager manager(files);
-    manager.parseFiles("[user]");
+    manager.parseFiles(QLatin1String("[user]"));
 
     QFileInfo fi(ps.fileUrl.toLocalFile());
     QVERIFY(fi.exists());
@@ -162,7 +161,7 @@ void AdvancedRenameTest::testFileOwnerToken()
     QString userName = fi.owner();
     QVERIFY(!userName.isEmpty());
 
-    QString result = userName + ".png";
+    QString result = userName + QLatin1String(".png");
     QString parsed = manager.newName(filePath4);
 
     QCOMPARE(parsed, result);
@@ -175,7 +174,7 @@ void AdvancedRenameTest::testFileGroupToken()
     ps.fileUrl = QUrl::fromLocalFile(filePath4);
     files << ps;
     AdvancedRenameManager manager(files);
-    manager.parseFiles("[group]");
+    manager.parseFiles(QLatin1String("[group]"));
 
     QFileInfo fi(ps.fileUrl.toLocalFile());
     QVERIFY(fi.exists());
@@ -184,7 +183,7 @@ void AdvancedRenameTest::testFileGroupToken()
     QString groupName = fi.group();
     QVERIFY(!groupName.isEmpty());
 
-    QString result = groupName + ".png";
+    QString result = groupName + QLatin1String(".png");
     QString parsed = manager.newName(filePath4);
 
     QCOMPARE(parsed, result);
@@ -197,25 +196,25 @@ void AdvancedRenameTest::testDirectoryNameToken_data()
 
     // The main directory of digikam can have different names, depending on how the
     // user named it. Therefore we have to detect the name here:
-    const KUrl dir2up = KIO::upUrl(QUrl::fromLocalFile(QFINDTESTDATA(imagesDir)));
+    const QUrl dir2up          = KIO::upUrl(QUrl::fromLocalFile(QFINDTESTDATA(imagesDir)));
     const QString dir2upString = dir2up.url();
-    QString digikamDir = dir2upString.right(dir2upString.size() - dir2up.upUrl().url().size());
+    QString digikamDir         = dir2upString.right(dir2upString.size() - KIO::upUrl(dir2up).url().size());
     digikamDir.chop(1);
 
     QTest::newRow("[dir]")
-            << QString("[dir]")
-            << QString("advancedrenameimages.jpg");
+            << "[dir]"
+            << "advancedrenameimages.jpg";
 
     QTest::newRow("[dir.]")
-            << QString("[dir.]")
-            << QString("%1.jpg").arg(digikamDir);
+            << "[dir.]"
+            << QString::fromUtf8("%1.jpg").arg(digikamDir).toLatin1().constData();
 
     QTest::newRow("[dir.]_[dir]")
-            << QString("[dir.]_[dir]")
-            << QString("%1_advancedrenameimages.jpg").arg(digikamDir);
+            << "[dir.]_[dir]"
+            << QString::fromUtf8("%1_advancedrenameimages.jpg").arg(digikamDir).toLatin1().constData();
 
     QTest::newRow("[dir......................................................................]")
-            << QString("[dir......................................................................]")
+            << "[dir......................................................................]"
             << fileName;
 }
 
@@ -241,32 +240,32 @@ void AdvancedRenameTest::testNumberToken_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("#")
-            << QString("#")
-            << QString("1.jpg");
+            << "#"
+            << "1.jpg";
 
     QTest::newRow("####[2,3]")
-            << QString("####[2,3]")
-            << QString("0002.jpg");
+            << "####[2,3]"
+            << "0002.jpg";
 
     QTest::newRow("####[2,3]_bla_## ###")
-            << QString("####[2,3]_bla_## ###")
-            << QString("0002_bla_01 001.jpg");
+            << "####[2,3]_bla_## ###"
+            << "0002_bla_01 001.jpg";
 
     QTest::newRow("####[2,3]_bla_## ###")
-            << QString("####[2,3]_bla_## ###")
-            << QString("0002_bla_01 001.jpg");
+            << "####[2,3]_bla_## ###"
+            << "0002_bla_01 001.jpg";
 
     QTest::newRow("####[2,3]_bla_## ###")
-            << QString("####[2,3]_bla_## ###")
-            << QString("0002_bla_01 001.jpg");
+            << "####[2,3]_bla_## ###"
+            << "0002_bla_01 001.jpg";
 
     QTest::newRow("###[100]_bla")
-            << QString("###[100]_bla")
-            << QString("100_bla.jpg");
+            << "###[100]_bla"
+            << "100_bla.jpg";
 
     QTest::newRow("###[e,1,100]_bla")
-            << QString("###[e,1,100]_bla")
-            << QString("001_bla.jpg");
+            << "###[e,1,100]_bla"
+            << "001_bla.jpg";
 }
 
 void AdvancedRenameTest::testNumberToken()
@@ -292,44 +291,44 @@ void AdvancedRenameTest::testFirstLetterOfEachWordUppercaseModifier_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("myfile")
-            << QString("[file]{firstupper}")
+            << "[file]{firstupper}"
             << filePath5
-            << QString("Myfile.jpg");
+            << "Myfile.jpg";
 
     QTest::newRow("my_file")
-            << QString("[file]{firstupper}")
+            << "[file]{firstupper}"
             << filePath6
-            << QString("My_File.jpg");
+            << "My_File.jpg";
 
     QTest::newRow("holiday_spain_2011_img001")
-            << QString("[file]{firstupper}")
+            << "[file]{firstupper}"
             << filePath7
-            << QString("Holiday_Spain_2011_Img001.jpg");
+            << "Holiday_Spain_2011_Img001.jpg";
 
     QTest::newRow("holiday_spain_2011_001img")
-            << QString("[file]{firstupper}")
+            << "[file]{firstupper}"
             << filePath9
-            << QString("Holiday_Spain_2011_001Img.jpg");
+            << "Holiday_Spain_2011_001Img.jpg";
 
     QTest::newRow("001a")
-            << QString("[file]{firstupper}")
+            << "[file]{firstupper}"
             << filePath3
-            << QString("001A.jpg");
+            << "001A.jpg";
 
     QTest::newRow("my images")
-            << QString("[file]{firstupper}")
+            << "[file]{firstupper}"
             << filePath8
-            << QString("My Images.jpg");
+            << "My Images.jpg";
 
     QTest::newRow("<empty>")
-            << QString("[file]{firstupper}")
-            << QString("")
-            << QString("");
+            << "[file]{firstupper}"
+            << ""
+            << "";
 
-    QTest::newRow(fileName.toAscii().constData())
-            << QString("[file]{firstupper}")
+    QTest::newRow(fileName.toLatin1().constData())
+            << "[file]{firstupper}"
             << filePath
-            << QString("Advancedrename_Testimage.jpg");
+            << "Advancedrename_Testimage.jpg";
 }
 
 void AdvancedRenameTest::testFirstLetterOfEachWordUppercaseModifier()
@@ -355,16 +354,16 @@ void AdvancedRenameTest::testChainedModifiers_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("[file]*{upper}")
-            << QString("[file]{firstupper}{upper}")
-            << QString("ADVANCEDRENAME_TESTIMAGE.jpg");
+            << "[file]{firstupper}{upper}"
+            << "ADVANCEDRENAME_TESTIMAGE.jpg";
 
     QTest::newRow("[file]{range:3,}*")
-            << QString("[file]{range:3,}{firstupper}")
-            << QString("Vancedrename_Testimage.jpg");
+            << "[file]{range:3,}{firstupper}"
+            << "Vancedrename_Testimage.jpg";
 
     QTest::newRow("[file]{range:3,}{replace:\"name\",\"age\"}{firstupper}")
-            << QString("[file]{range:3,}{replace:\"name\",\"age\"}{firstupper}")
-            << QString("Vancedreage_Testimage.jpg");
+            << "[file]{range:3,}{replace:\"name\",\"age\"}{firstupper}"
+            << "Vancedreage_Testimage.jpg";
 }
 
 void AdvancedRenameTest::testChainedModifiers()
@@ -390,11 +389,11 @@ void AdvancedRenameTest::testUppercaseModifier()
     ps.fileUrl = QUrl::fromLocalFile(filePath);
     files << ps;
     AdvancedRenameManager manager(files);
-    manager.parseFiles("[file]{upper}");
+    manager.parseFiles(QLatin1String("[file]{upper}"));
 
     QString parsed = manager.newName(filePath);
     QFileInfo fi(filePath);
-    QString tmp = fi.baseName().toUpper() + '.' + fi.suffix();
+    QString tmp = fi.baseName().toUpper() + QLatin1Char('.') + fi.suffix();
     QCOMPARE(parsed, tmp);
 }
 
@@ -407,13 +406,13 @@ void AdvancedRenameTest::testUniqueModifier()
     ps.fileUrl = QUrl::fromLocalFile(filePath2);
     files << ps;
     AdvancedRenameManager manager(files);
-    manager.parseFiles("[file]_[dir]{unique}");
+    manager.parseFiles(QLatin1String("[file]_[dir]{unique}"));
 
     QString parsed = manager.newName(filePath);
     QString parsed2 = manager.newName(filePath2);
 
     // parse again, unique tokens should not be modified
-    manager.parseFiles("[file]_[dir]{unique}");
+    manager.parseFiles(QLatin1String("[file]_[dir]{unique}"));
 
     QString parsed3 = manager.newName(filePath);
     QString parsed4 = manager.newName(filePath2);
@@ -520,9 +519,9 @@ void AdvancedRenameTest::setStartIndex_invalid_index()
     files << ps;
     AdvancedRenameManager manager(files);
     manager.setStartIndex(-1);
-    manager.parseFiles("####");
+    manager.parseFiles(QLatin1String("####"));
 
-    QCOMPARE(manager.newName(filePath), QString("0001.jpg"));
+    QCOMPARE(manager.newName(filePath), QLatin1String("0001.jpg"));
 }
 
 void AdvancedRenameTest::setStartIndex_sequencenumber_no_custom_start()
@@ -532,20 +531,20 @@ void AdvancedRenameTest::setStartIndex_sequencenumber_no_custom_start()
     ps.fileUrl = QUrl::fromLocalFile(filePath);
     files << ps;
 
-    QString parseString("####");
+    QString parseString(QLatin1String("####"));
 
     AdvancedRenameManager manager(files);
     manager.parseFiles(parseString);
 
-    QCOMPARE(manager.newName(filePath), QString("0001.jpg"));
+    QCOMPARE(manager.newName(filePath), QLatin1String("0001.jpg"));
 
     manager.setStartIndex(12);
     manager.parseFiles(parseString);
-    QCOMPARE(manager.newName(filePath), QString("0012.jpg"));
+    QCOMPARE(manager.newName(filePath), QLatin1String("0012.jpg"));
 
     manager.setStartIndex(-1000);
     manager.parseFiles(parseString);
-    QCOMPARE(manager.newName(filePath), QString("0001.jpg"));
+    QCOMPARE(manager.newName(filePath), QLatin1String("0001.jpg"));
 }
 
 void AdvancedRenameTest::setStartIndex_sequencenumber_with_custom_start()
@@ -555,20 +554,20 @@ void AdvancedRenameTest::setStartIndex_sequencenumber_with_custom_start()
     ps.fileUrl = QUrl::fromLocalFile(filePath);
     files << ps;
 
-    QString parseString("####[666]");
+    QString parseString(QLatin1String("####[666]"));
 
     AdvancedRenameManager manager(files);
     manager.parseFiles(parseString);
 
-    QCOMPARE(manager.newName(filePath), QString("0666.jpg"));
+    QCOMPARE(manager.newName(filePath), QLatin1String("0666.jpg"));
 
     manager.setStartIndex(12);
     manager.parseFiles(parseString);
-    QCOMPARE(manager.newName(filePath), QString("0666.jpg"));
+    QCOMPARE(manager.newName(filePath), QLatin1String("0666.jpg"));
 
     manager.setStartIndex(-1000);
     manager.parseFiles(parseString);
-    QCOMPARE(manager.newName(filePath), QString("0666.jpg"));
+    QCOMPARE(manager.newName(filePath), QLatin1String("0666.jpg"));
 }
 
 void AdvancedRenameTest::sequencenumber_tests_data()
@@ -581,34 +580,34 @@ void AdvancedRenameTest::sequencenumber_tests_data()
     QTest::addColumn<QStringList>("results");
 
     QTest::newRow("####")
-            << QString("####")
+            << "####"
             << files
-            << (QStringList() << "0001.jpg" << "0002.jpg" << "0003.jpg");
+            << (QStringList() << QLatin1String("0001.jpg") << QLatin1String("0002.jpg") << QLatin1String("0003.jpg"));
 
     QTest::newRow("###[-2]")
-            << QString("###[-2]")
+            << "###[-2]"
             << files
-            << (QStringList() << "001.jpg" << "002.jpg" << "003.jpg");
+            << (QStringList() << QLatin1String("001.jpg") << QLatin1String("002.jpg") << QLatin1String("003.jpg"));
 
     QTest::newRow("###[2]")
-            << QString("###[2]")
+            << "###[2]"
             << files
-            << (QStringList() << "002.jpg" << "003.jpg" << "004.jpg");
+            << (QStringList() << QLatin1String("002.jpg") << QLatin1String("003.jpg") << QLatin1String("004.jpg"));
 
     QTest::newRow("##[3,3]")
-            << QString("##[3,3]")
+            << "##[3,3]"
             << files
-            << (QStringList() << "03.jpg" << "06.jpg" << "09.jpg");
+            << (QStringList() << QLatin1String("03.jpg") << QLatin1String("06.jpg") << QLatin1String("09.jpg"));
 
     QTest::newRow("#[4,4]")
-            << QString("#[4,4]")
+            << "#[4,4]"
             << files
-            << (QStringList() << "4.jpg" << "8.jpg" << "12.jpg");
+            << (QStringList() << QLatin1String("4.jpg") << QLatin1String("8.jpg") << QLatin1String("12.jpg"));
 
     QTest::newRow("#[4,-4]")
-            << QString("#[4,-4]")
+            << "#[4,-4]"
             << files
-            << (QStringList() << "4.jpg" << "5.jpg" << "6.jpg");
+            << (QStringList() << QLatin1String("4.jpg") << QLatin1String("5.jpg") << QLatin1String("6.jpg"));
 }
 
 void AdvancedRenameTest::sequencenumber_tests()
@@ -647,34 +646,34 @@ void AdvancedRenameTest::newFileList_tests_data()
     QTest::addColumn<QStringList>("results");
 
     QTest::newRow("####")
-            << QString("####")
+            << "####"
             << files
-            << (QStringList() << "0001.jpg" << "0002.jpg" << "0003.jpg");
+            << (QStringList() << QLatin1String("0001.jpg") << QLatin1String("0002.jpg") << QLatin1String("0003.jpg"));
 
     QTest::newRow("###[-2]")
-            << QString("###[-2]")
+            << "###[-2]"
             << files
-            << (QStringList() << "001.jpg" << "002.jpg" << "003.jpg");
+            << (QStringList() << QLatin1String("001.jpg") << QLatin1String("002.jpg") << QLatin1String("003.jpg"));
 
     QTest::newRow("###[2]")
-            << QString("###[2]")
+            << "###[2]"
             << files
-            << (QStringList() << "002.jpg" << "003.jpg" << "004.jpg");
+            << (QStringList() << QLatin1String("002.jpg") << QLatin1String("003.jpg") << QLatin1String("004.jpg"));
 
     QTest::newRow("##[3,3]")
-            << QString("##[3,3]")
+            << "##[3,3]"
             << files
-            << (QStringList() << "03.jpg" << "06.jpg" << "09.jpg");
+            << (QStringList() << QLatin1String("03.jpg") << QLatin1String("06.jpg") << QLatin1String("09.jpg"));
 
     QTest::newRow("#[4,4]")
-            << QString("#[4,4]")
+            << "#[4,4]"
             << files
-            << (QStringList() << "4.jpg" << "8.jpg" << "12.jpg");
+            << (QStringList() << QLatin1String("4.jpg") << QLatin1String("8.jpg") << QLatin1String("12.jpg"));
 
     QTest::newRow("#[4,-4]")
-            << QString("#[4,-4]")
+            << "#[4,-4]"
             << files
-            << (QStringList() << "4.jpg" << "5.jpg" << "6.jpg");
+            << (QStringList() << QLatin1String("4.jpg") << QLatin1String("5.jpg") << QLatin1String("6.jpg"));
 }
 
 void AdvancedRenameTest::newFileList_tests()
@@ -776,7 +775,7 @@ void AdvancedRenameTest::indexOfFile_invalid_input_returns_minus_one()
     files << ps;
 
     AdvancedRenameManager manager(files);
-    QCOMPARE(manager.indexOfFile("none_existent_file.png"), -1);
+    QCOMPARE(manager.indexOfFile(QLatin1String("none_existent_file.png")), -1);
 }
 
 void AdvancedRenameTest::indexOfFolder_invalid_input_returns_minus_one()
@@ -787,7 +786,7 @@ void AdvancedRenameTest::indexOfFolder_invalid_input_returns_minus_one()
     files << ps;
 
     AdvancedRenameManager manager(files);
-    QCOMPARE(manager.indexOfFolder("none_existent_file.png"), -1);
+    QCOMPARE(manager.indexOfFolder(QLatin1String("none_existent_file.png")), -1);
 }
 
 void AdvancedRenameTest::indexOfFileGroup_invalid_input_returns_minus_one()
@@ -798,7 +797,7 @@ void AdvancedRenameTest::indexOfFileGroup_invalid_input_returns_minus_one()
     files << ps;
 
     AdvancedRenameManager manager(files);
-    QCOMPARE(manager.indexOfFileGroup("none_existent_file.png"), -1);
+    QCOMPARE(manager.indexOfFileGroup(QLatin1String("none_existent_file.png")), -1);
 }
 
 void AdvancedRenameTest::sequencenumber_tests_startIndex_data()
@@ -811,24 +810,24 @@ void AdvancedRenameTest::sequencenumber_tests_startIndex_data()
     QTest::addColumn<QStringList>("results");
 
     QTest::newRow("####")
-            << QString("####")
+            << "####"
             << files
-            << (QStringList() << "0025.jpg" << "0026.jpg" << "0027.jpg");
+            << (QStringList() << QLatin1String("0025.jpg") << QLatin1String("0026.jpg") << QLatin1String("0027.jpg"));
 
     QTest::newRow("###[-2]")
-            << QString("###[-2]")
+            << "###[-2]"
             << files
-            << (QStringList() << "025.jpg" << "026.jpg" << "027.jpg");
+            << (QStringList() << QLatin1String("025.jpg") << QLatin1String("026.jpg") << QLatin1String("027.jpg"));
 
     QTest::newRow("###[2]")
-            << QString("###[2]")
+            << "###[2]"
             << files
-            << (QStringList() << "002.jpg" << "003.jpg" << "004.jpg");
+            << (QStringList() << QLatin1String("002.jpg") << QLatin1String("003.jpg") << QLatin1String("004.jpg"));
 
     QTest::newRow("##[3,3]")
-            << QString("##[3,3]")
+            << "##[3,3]"
             << files
-            << (QStringList() << "03.jpg" << "06.jpg" << "09.jpg");
+            << (QStringList() << QLatin1String("03.jpg") << QLatin1String("06.jpg") << QLatin1String("09.jpg"));
 }
 
 void AdvancedRenameTest::sequencenumber_tests_startIndex()
@@ -1095,32 +1094,32 @@ void AdvancedRenameTest::testReplaceModifier_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("[file]{replace:\"adv\",\"AAA\"}")
-            << QString("[file]{replace:\"adv\",\"AAA\"}")
-            << QString("AAAancedrename_testimage.jpg");
+            << "[file]{replace:\"adv\",\"AAA\"}"
+            << "AAAancedrename_testimage.jpg";
 
     QTest::newRow("[file]{replace:\"Adv\",\"AAA\"}")
-            << QString("[file]{replace:\"Adv\",\"AAA\"}")
-            << QString("advancedrename_testimage.jpg");
+            << "[file]{replace:\"Adv\",\"AAA\"}"
+            << "advancedrename_testimage.jpg";
 
     QTest::newRow("[file]{replace:\"Adv\",\"AAA\",i}")
-            << QString("[file]{replace:\"Adv\",\"AAA\",i}")
-            << QString("AAAancedrename_testimage.jpg");
+            << "[file]{replace:\"Adv\",\"AAA\",i}"
+            << "AAAancedrename_testimage.jpg";
 
     QTest::newRow("[file]{replace:\"Adv\",\"AAA\",ri}")
-            << QString("[file]{replace:\"Adv\",\"AAA\",ri}")
-            << QString("AAAancedrename_testimage.jpg");
+            << "[file]{replace:\"Adv\",\"AAA\",ri}"
+            << "AAAancedrename_testimage.jpg";
 
     QTest::newRow("[file]{replace:\"Adv\",\"AAA\",ir}")
-            << QString("[file]{replace:\"Adv\",\"AAA\",ir}")
-            << QString("AAAancedrename_testimage.jpg");
+            << "[file]{replace:\"Adv\",\"AAA\",ir}"
+            << "AAAancedrename_testimage.jpg";
 
     QTest::newRow("[file]{replace:\"a.v\",\"AAA\"}")
-            << QString("[file]{replace:\"a.v\",\"AAA\"}")
-            << QString("advancedrename_testimage.jpg");
+            << "[file]{replace:\"a.v\",\"AAA\"}"
+            << "advancedrename_testimage.jpg";
 
     QTest::newRow("[file]{replace:\"a.v\",\"AAA\",r}")
-            << QString("[file]{replace:\"a.v\",\"AAA\",r}")
-            << QString("AAAancedrename_testimage.jpg");
+            << "[file]{replace:\"a.v\",\"AAA\",r}"
+            << "AAAancedrename_testimage.jpg";
 }
 
 void AdvancedRenameTest::testReplaceModifier()
@@ -1147,37 +1146,36 @@ void AdvancedRenameTest::testRangeModifier_data()
     QDateTime curdate = QDateTime::currentDateTime();
 
     QTest::newRow("[file]{range:1}")
-            << QString("[file]{range:1}")
-            << QString("a.jpg");
+            << "[file]{range:1}"
+            << "a.jpg";
 
     QTest::newRow("[file]{range:3}")
-            << QString("[file]{range:3}")
-            << QString("v.jpg");
+            << "[file]{range:3}"
+            << "v.jpg";
 
     QTest::newRow("[file]{range:1,3}")
-            << QString("[file]{range:1,3}")
-            << QString("adv.jpg");
+            << "[file]{range:1,3}"
+            << "adv.jpg";
 
     QTest::newRow("[file]{range:3,}")
-            << QString("[file]{range:3,}")
-            << QString("vancedrename_testimage.jpg");
+            << "[file]{range:3,}"
+            << "vancedrename_testimage.jpg";
 
     QTest::newRow("[file]{range:0}")
-            << QString("[file]{range:0}")
-            << QString("advancedrename_testimage.jpg");
+            << "[file]{range:0}"
+            << "advancedrename_testimage.jpg";
 
     QTest::newRow("[file]{range:-100}")
-            << QString("[file]{range:-100}")
-            << QString("a.jpg");
+            << "[file]{range:-100}"
+            << "a.jpg";
 
     QTest::newRow("[file]{range:-100,}")
-            << QString("[file]{range:-100,}")
-            << QString("advancedrename_testimage.jpg");
-
+            << "[file]{range:-100,}"
+            << "advancedrename_testimage.jpg";
 
     QTest::newRow("[file]{range:-100,2}")
-            << QString("[file]{range:-100,2}")
-            << QString("ad.jpg");
+            << "[file]{range:-100,2}"
+            << "ad.jpg";
 }
 
 void AdvancedRenameTest::testRangeModifier()
@@ -1204,12 +1202,12 @@ void AdvancedRenameTest::testDefaultValueModifier_data()
     QDateTime curdate = QDateTime::currentDateTime();
 
     QTest::newRow("[meta:Iptc.Application2.Keywords]_[file]")
-            << QString("[meta:Iptc.Application2.Keywords]{default:\"Unknown\"}_[file]")
-            << QString("Colca Canyon_advancedrename_testimage.jpg");
+            << "[meta:Iptc.Application2.Keywords]{default:\"Unknown\"}_[file]"
+            << "Colca Canyon_advancedrename_testimage.jpg";
 
     QTest::newRow("[meta:Exif.GPSInfo.GPSAltitude]_[file]")
-            << QString("[meta:Exif.GPSInfo.GPSAltitude]{default:\"Unknown\"}_[file]")
-            << QString("Unknown_advancedrename_testimage.jpg");
+            << "[meta:Exif.GPSInfo.GPSAltitude]{default:\"Unknown\"}_[file]"
+            << "Unknown_advancedrename_testimage.jpg";
 }
 
 void AdvancedRenameTest::testDefaultValueModifier()
@@ -1235,7 +1233,7 @@ void AdvancedRenameTest::testLowercaseModifier()
     ps.fileUrl = QUrl::fromLocalFile(filePath);
     files << ps;
     AdvancedRenameManager manager(files);
-    manager.parseFiles("[file]{lower}");
+    manager.parseFiles(QLatin1String("[file]{lower}"));
 
     QString parsed = manager.newName(filePath);
     QCOMPARE(parsed, fileName.toLower());
@@ -1250,12 +1248,12 @@ void AdvancedRenameTest::testEmptyParseString()
     AdvancedRenameManager manager(files);
 
     // test for empty parser string
-    manager.parseFiles("");
+    manager.parseFiles(QLatin1String(""));
 
     QString parsed = manager.newName(filePath);
     QCOMPARE(parsed, fileName);
 
-    manager.parseFiles("      ");
+    manager.parseFiles(QLatin1String("      "));
     parsed = manager.newName(filePath);
     QCOMPARE(parsed, fileName);
 }
