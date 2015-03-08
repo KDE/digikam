@@ -497,16 +497,14 @@ void SetupCollectionModel::addCollection(int category)
         picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
     }
 
-    QString path = QFileDialog::getExistingDirectory(m_dialogParentWidget,
+    QUrl curl = QFileDialog::getExistingDirectoryUrl(m_dialogParentWidget,
                                                      i18n("Choose the folder containing your collection"),
-                                                     picturesPath);
+                                                     QUrl::fromLocalFile(picturesPath));
 
-    if (path.isEmpty())
+    if (curl.isEmpty())
     {
         return;
     }
-
-    path = QDir::fromNativeSeparators(path);
 
     // Check path: First check with manager
     QString messageFromManager, deviceIcon;
@@ -523,12 +521,14 @@ void SetupCollectionModel::addCollection(int category)
     CollectionManager::LocationCheckResult result;
 
     if (category == CategoryRemote)
-        result = CollectionManager::instance()->checkNetworkLocation(QUrl::fromLocalFile(path), assumeDeleted,
+        result = CollectionManager::instance()->checkNetworkLocation(curl, assumeDeleted,
                                                                      &messageFromManager, &deviceIcon);
     else
-        result = CollectionManager::instance()->checkLocation(QUrl::fromLocalFile(path), assumeDeleted,
+        result = CollectionManager::instance()->checkLocation(curl, assumeDeleted,
                                                               &messageFromManager, &deviceIcon);
 
+    QString path = QDir::fromNativeSeparators(curl.toDisplayString());
+        
     // If there are other added collections then CollectionManager does not know about them. Check here.
     foreach(const Item& item, m_collections)
     {
