@@ -953,7 +953,7 @@ bool ImagePropertiesTab::aspectRatioToString(int width, int height, QString& arS
     }
 
     long   num=0, den=0;
-    doubleToHumanReadableFraction((double)nw / (double)nh, &num, &den, 4);
+    doubleToHumanReadableFraction((double)nw / (double)nh, &num, &den, 10);
 
     const QString awidth  = QString::number(num);
     const QString aheight = QString::number(den);
@@ -992,7 +992,7 @@ QString ImagePropertiesTab::humanReadableBytesCount(qint64 bytes, bool si)
     int unit        = si ? 1000 : 1024;
     QString byteStr = i18nc("unit file size in bytes", "B");
     QString ret     = QString::number(bytes);
-    
+
     if (bytes >= unit)
     {
         int exp     = (int)(qLn(bytes) / qLn(unit));
