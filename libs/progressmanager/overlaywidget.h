@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT OverlayWidget : public RHBox
 
 public:
 
-    OverlayWidget(QWidget* const alignWidget, QWidget* const parent, const char* name = 0);
+    OverlayWidget(QWidget* const alignWidget, QWidget* const parent, const QString& name = QString());
     ~OverlayWidget();
 
     QWidget* alignWidget() const;

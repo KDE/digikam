@@ -86,7 +86,7 @@ class TransactionItemView : public QScrollArea
 
 public:
 
-    explicit TransactionItemView(QWidget* const parent=0, const char* name=0);
+    explicit TransactionItemView(QWidget* const parent=0, const QString& name=QString());
     virtual ~TransactionItemView() {}
 
     TransactionItem* addTransactionItem(ProgressItem* item, bool first);
@@ -119,7 +119,7 @@ class DIGIKAM_EXPORT ProgressView : public OverlayWidget
 
 public:
 
-    ProgressView(QWidget* const alignWidget, QWidget* const parent, const char* name = 0);
+    ProgressView(QWidget* const alignWidget, QWidget* const parent, const QString& name = QString());
     ~ProgressView();
 
     void setVisible(bool b);

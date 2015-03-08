@@ -32,10 +32,11 @@
 namespace Digikam
 {
 
-OverlayWidget::OverlayWidget(QWidget* const alignWidget, QWidget* const parent, const char* name)
-    : RHBox(parent), mAlignWidget(0)
+OverlayWidget::OverlayWidget(QWidget* const alignWidget, QWidget* const parent, const QString& name)
+    : RHBox(parent),
+      mAlignWidget(0)
 {
-    setObjectName(QLatin1String(name));
+    setObjectName(name);
     setAlignWidget(alignWidget);
 }
 

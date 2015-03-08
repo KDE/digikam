@@ -57,10 +57,10 @@ namespace Digikam
 
 class TransactionItem;
 
-TransactionItemView::TransactionItemView(QWidget* const parent, const char* name)
-    : QScrollArea( parent )
+TransactionItemView::TransactionItemView(QWidget* const parent, const QString& name)
+    : QScrollArea(parent)
 {
-    setObjectName(QLatin1String(name));
+    setObjectName(name);
     setFrameStyle(NoFrame);
     m_bigBox = new RVBox(this);
     setWidget(m_bigBox);
@@ -174,7 +174,8 @@ public:
 };
 
 TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item, bool first)
-    : RVBox(parent), d(new Private)
+    : RVBox(parent),
+      d(new Private)
 {
     d->item  = item;
     setSpacing(2);
@@ -313,28 +314,29 @@ public:
     QMap<const ProgressItem*, TransactionItem*> transactionsToListviewItems;
 };
 
-ProgressView::ProgressView(QWidget* const alignWidget, QWidget* const parent, const char* name)
-    : OverlayWidget(alignWidget, parent, name), d(new Private)
+ProgressView::ProgressView(QWidget* const alignWidget, QWidget* const parent, const QString& name)
+    : OverlayWidget(alignWidget, parent, name),
+      d(new Private)
 {
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     setAutoFillBackground(true);
 
-    d->scrollView = new TransactionItemView( this, "ProgressScrollView" );
+    d->scrollView = new TransactionItemView(this, QLatin1String("ProgressScrollView"));
     layout()->addWidget( d->scrollView );
 
     // No more close button for now, since there is no more autoshow
-    /*
-        QVBox* rightBox = new QVBox( this );
-        QToolButton* pbClose = new QToolButton( rightBox );
-        pbClose->setAutoRaise(true);
-        pbClose->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-        pbClose->setFixedSize( 16, 16 );
-        pbClose->setIcon( KIconLoader::global()->loadIconSet( "window-close", KIconLoader::Small, 14 ) );
-        pbClose->setToolTip( i18n( "Hide detailed progress window" ) );
-        connect(pbClose, SIGNAL(clicked()), this, SLOT(slotClose()));
-        QWidget* spacer = new QWidget( rightBox ); // don't let the close button take up all the height
-        rightBox->setStretchFactor( spacer, 100 );
-    */
+/*
+    QVBox* const rightBox      = new QVBox( this );
+    QToolButton* const pbClose = new QToolButton( rightBox );
+    pbClose->setAutoRaise(true);
+    pbClose->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+    pbClose->setFixedSize( 16, 16 );
+    pbClose->setIcon( KIconLoader::global()->loadIconSet( "window-close", KIconLoader::Small, 14 ) );
+    pbClose->setToolTip( i18n( "Hide detailed progress window" ) );
+    connect(pbClose, SIGNAL(clicked()), this, SLOT(slotClose()));
+    QWidget* const spacer = new QWidget( rightBox ); // don't let the close button take up all the height
+    rightBox->setStretchFactor( spacer, 100 );
+*/
 
     /*
     * Get the singleton ProgressManager item which will inform us of
