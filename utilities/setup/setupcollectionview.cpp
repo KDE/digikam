@@ -546,19 +546,17 @@ void SetupCollectionModel::addCollection(int category)
 #endif
     }
 
-    QString path = KFileDialog::getExistingDirectory(KUrl(picturesPath), m_dialogParentWidget,
+    KUrl curl = KFileDialog::getExistingDirectoryUrl(KUrl(picturesPath), m_dialogParentWidget,
                                                      i18n("Choose the folder containing your collection"));
 #else
-    QString path = KFileDialog::getExistingDirectory(KUrl("kfiledialog:///collectionlocation"), m_dialogParentWidget,
+    KUrl curl = KFileDialog::getExistingDirectoryUrl(KUrl("kfiledialog:///collectionlocation"), m_dialogParentWidget,
                                                      i18n("Choose the folder containing your collection"));
 #endif
 
-    if (path.isEmpty())
+    if (curl.isEmpty())
     {
         return;
     }
-
-    path = QDir::fromNativeSeparators(path);
 
     // Check path: First check with manager
     QString messageFromManager, deviceIcon;
@@ -575,11 +573,17 @@ void SetupCollectionModel::addCollection(int category)
     CollectionManager::LocationCheckResult result;
 
     if (category == CategoryRemote)
-        result = CollectionManager::instance()->checkNetworkLocation(KUrl::fromPath(path), assumeDeleted,
+    {
+        result = CollectionManager::instance()->checkNetworkLocation(curl, assumeDeleted,
                                                                      &messageFromManager, &deviceIcon);
+    }
     else
-        result = CollectionManager::instance()->checkLocation(KUrl::fromPath(path), assumeDeleted,
+    {
+        result = CollectionManager::instance()->checkLocation(curl, assumeDeleted,
                                                               &messageFromManager, &deviceIcon);
+    }
+
+    QString path = QDir::fromNativeSeparators(curl.pathOrUrl());
 
     // If there are other added collections then CollectionManager does not know about them. Check here.
     foreach(const Item& item, m_collections)
