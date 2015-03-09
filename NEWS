@@ -12,5 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 004 ==> 330224 - Add collection from network share is silently ignored [patch].
 005 ==> 344699 - Maintenance is using the wrong face data management [patch].
 006 ==> 342931 - Wrong apect ratio in item properties and in item view.
-007 ==> 
-
+007 ==> 344793 - thumbnail-preview broken for tags and timeline.
+008 ==> 
