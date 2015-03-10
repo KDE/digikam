@@ -255,9 +255,9 @@ DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumb
 {
     QVariant id;
     DatabaseCoreBackend::QueryState lastQueryState;
-    lastQueryState= d->db->execSql(QLatin1String("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);"),
-                                   info.type, info.modificationDate, info.orientationHint, info.data,
-                                   0, &id);
+    lastQueryState = d->db->execSql(QLatin1String("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);"),
+                                    info.type, info.modificationDate, info.orientationHint, info.data,
+                                    0, &id);
 
     if (DatabaseCoreBackend::NoErrors == lastQueryState)
     {
@@ -279,7 +279,7 @@ DatabaseCoreBackend::QueryState ThumbnailDB::replaceThumbnail(const DatabaseThum
 
 DatabaseCoreBackend::QueryState ThumbnailDB::updateModificationDate(int thumbId, const QDateTime& modificationDate)
 {
-    return d->db->execSql(QLatin1String("UPDATE Thumbnails SET modificationDate=? WHERE id=?;"), thumbId, modificationDate);
+    return d->db->execSql(QLatin1String("UPDATE Thumbnails SET modificationDate=? WHERE id=?;"), modificationDate, thumbId);
 }
 
 void ThumbnailDB::replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize,
