@@ -74,7 +74,6 @@ set(CMAKE_MODULE_PATH ${digikam_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 include(GenerateExportHeader)
 include(CheckFunctionExists)
 include(FeatureSummary)
-include(MacroBoolTo01)
 # ECM macros
 include(ECMOptionalAddSubdirectory)
 include(ECMAddTests)
@@ -95,6 +94,7 @@ include(MacroUtils)
 include(MacroLocalLibs)
 include(MacroOpenCV)
 include(MacroJPEG)
+include(MacroBoolTo01)
 
 # ==================================================================================================
 
