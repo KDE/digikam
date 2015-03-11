@@ -14,4 +14,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 006 ==> 342931 - Wrong apect ratio in item properties and in item view.
 007 ==> 344793 - Thumbnail-preview broken for tags and timeline.
 008 ==> 345025 - Wrong sql statement updating thumbnail modification date.
-009 ==> 
+009 ==> 327009 - Tags auto-completion suggestions list is cut off at the right side.
+010 ==> 

@@ -193,7 +193,7 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::Private::createItemForExistingTa
     }
     else
     {
-        item->setText(i18nc("<tag name> in <tag path>", "%1\n  in %2",
+        item->setText(i18nc("<tag name> in <tag path>", "%1 in %2",
                             talbum->title(), parent->tagPath(false)));
     }
 
@@ -233,7 +233,7 @@ AddTagsCompletionBoxItem* AddTagsCompletionBox::Private::createItemForNewTag(con
 
     if (parent)
     {
-        item->setText(i18nc("Create New Tag <tag name> in <parent tag path>", "Create \"%1\"\n  in %2",
+        item->setText(i18nc("Create New Tag <tag name> in <parent tag path>", "Create \"%1\" in %2",
                             newName, parent->tagPath(false)));
     }
     else
