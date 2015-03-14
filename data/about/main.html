@@ -1,62 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content="HTML Tidy for Linux/x86 (vers 1st August 2004), see www.w3.org" />
-
-  <style type="text/css">
-  /*<![CDATA[*/
-    @import "%1";            /* KDE css        */
-    @import "%7";            /* local css      */
-    @import "%2";            /* locationRtl    */
-    body {font-size: %3px;}  /* fontSize       */
-  /*]]>*/
-  </style>
-
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+  <link rel="stylesheet" type="text/css" href="css/digikam.css">
   <title>digiKam</title>
 </head>
 
 <body>
-
-<div id="header">
-    <div id="headerL"/>
-    <div id="headerR"/>
-
-    <div id="title">
-        %4 <!-- appTitle -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="http://www.digikam.org">
+          <img alt="Brand" src="images/top-left-digikam.png" id="brand-img" class="gloss">
+        </a>
+      </div>
+      <div class="navbar-header pull-right" id="app-name">
+        <h1>%1</h1>
+      </div>
     </div>
-
-    <div id="tagline">
+  </nav>
+  <div class="container-fluid" id="content">
+    <div class="container text-center" id="slogan">
+      <h4>%2</h4>
     </div>
-</div>
-
- <!-- the bar -->
-<div id="bar">
-<div id="barT"><div id="barTL"/><div id="barTR"/><div id="barTC"/></div>
-<div id="barL">
-<div id="barR">
-<div id="barCenter" class="bar_text">
-        %5 <!-- Slogan -->
-</div>
-</div>
-</div>
-<div id="barB"><div id="barBL"/><div id="barBR"/><div id="barBC"/></div>
-</div>
-
-  <!-- the main text box -->
-  <div id="box">
-    <div id="boxT"><div id="boxTL"/><div id="boxTR"/><div id="boxTC"/></div>
-    <div id="boxL">
-      <div id="boxR">
-        <div id="boxCenter">
-           %6 <!-- Advanced information -->
+    <div class="container" id="text-cont">
+      <div class="col-md-12 text-center">
+        <h1>%3</h1>
+      </div>
+      <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-justified" role="tablist">
+          <li role="presentation" class="active"><a href="#features" aria-controls="features" role="tab" data-toggle="tab">%4</a></li>
+          <li role="presentation"><a href="#about" aria-controls="about" role="tab" data-toggle="tab">%5</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane fade in active" id="features">
+            %6
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="about">
+            %7
+          </div>
         </div>
       </div>
     </div>
-    <div id="boxB"><div id="boxBL"/><div id="boxBR"/><div id="boxBC"/></div>
   </div>
-
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/digikam.js"></script>
 </body>
 </html>

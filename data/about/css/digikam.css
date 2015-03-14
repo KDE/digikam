@@ -1,0 +1,46 @@
+.navbar {
+  min-height: 111px;
+  background-image: linear-gradient(-190deg,#1D74B6 0,#01080F 50%);
+  border-radius: 0px;
+}
+
+#app-name {
+  text-shadow: #FFFFFF 0px 0px 35px;
+  margin-top: 11px;
+  color: rgba(255, 255, 255, 0.67);
+}
+
+#brand-img {
+  width: 100px;
+  height: 80px;
+}
+
+body {
+  background-image: url("../images/body-background.png");
+  background-position: -65em -10em;
+  background-repeat: no-repeat;
+}
+
+#text-cont {
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  min-height: 450px;
+}
+
+#slogan {
+  color: #B0B0B0;
+}
+
+.nav-tabs.nav-justified>li>a {
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  border-radius: 4px 4px 0 0;
+}
+
+ul > li {
+  font-size: 18px;
+}
+
+#content {
+  padding-top: 111px;
+}

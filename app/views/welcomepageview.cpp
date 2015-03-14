@@ -9,6 +9,7 @@
  *
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,7 +77,7 @@ void WelcomePageView::slotUrlOpen(const QUrl& url)
     QDesktopServices::openUrl(url);
 }
 
-QString WelcomePageView::infoPage() const
+QStringList WelcomePageView::featuresTabContent() const
 {
     QStringList newFeatures;
     newFeatures << i18n("Port to Qt5 and KF5;");
@@ -90,74 +91,28 @@ QString WelcomePageView::infoPage() const
         featureItems += i18n("<li>%1</li>\n", newFeatures.at(i));
     }
 
-    QString info =
-        i18nc(
-            "%1: current digiKam version; "
-            "%2: digiKam help:// Url; "
-            "%3: digiKam homepage Url; "
-            "%4: prior digiKam version; "
-            "%5: prior KDE version; "
-            "%6: generated list of new features; "
-            "%7: generated list of important changes; "
-            "--- end of comment ---",
+    QString tabHeader = i18n("New Features");
+    QString tabContent =
+        i18n("<h3>%1</h3><ul>%2</ul>",
+             i18n("Some of the new features in this release of digiKam include (compared to digiKam 4.x):"),
+             featureItems
+            );
 
-            "<h2 style='margin-top: 0px;'>"
-            "Welcome to digiKam %1"
-            "</h2>"
+    return QStringList() << tabHeader << tabContent;
+}
 
-            "<p>"
-            "digiKam is an open source photo management program "
-            "designed to import, organize, enhance, search and export your "
-            "digital images to and from your computer."
-            "</p>"
-
-            "<p>"
-            "Currently, you are in the Album view mode of digiKam. Albums are the places "
-            "where your files are stored, and are identical to the folders "
-            "on your hard disk."
-            "</p>"
-
-            "<p>"
-            "<ul>"
-            "<li>"
-            "digiKam has many powerful features which are described in the "
-            "<a href=\"%2\">documentation</a>"
-            "</li>"
-            "<li>"
-            "The <a href=\"%3\">digiKam homepage</a> provides information about "
-            "new versions of digiKam."
-            "</li>"
-            "</ul>"
-            "</p>"
-
-            "<p>%7</p>"
-
-            "<p>"
-            "Some of the new features in this release of digiKam include "
-            "(compared to digiKam %4):"
-            "</p>"
-
-            "<p>"
-            "<ul>%5</ul>"
-            "</p>"
-
-            "<p>%6</p>"
-
-            "<p>We hope that you will enjoy digiKam.</p>"
-
-            "<p>Thank you,</p>"
-
-            "<p style='margin-bottom: 0px; margin-left:20px;'>The digiKam team</p>",
-
-            QLatin1String(digikam_version),             // %1 : current digiKam version
-            QLatin1String("help:/digikam/index.html"),  // %2 : digiKam help:// Url
-            DAboutData::webProjectUrl().url(),          // %3 : digiKam homepage Url
-            QLatin1String("4.x"),                       // %4 : prior digiKam version
-            featureItems,                               // %5 : prior KDE version
-            QString(),                                  // %6 : generated list of new features
-            QString());                                 // %7 : previous digiKam release.
-
-    return info;
+QStringList WelcomePageView::aboutTabContent() const
+{
+    QString tabHeader = i18n("About");
+    QString tabContent =
+        i18n("<h3>%1</h3><h3>%2</h3><ul>%3</ul>",
+             i18n("digiKam is an open source photo management program designed to import, organize, enhance, search and export your digital images to and from your computer."),
+             i18n("Currently, you are in the Album view mode of digiKam. Albums are the places where your files are stored, and are identical to the folders on your hard disk."),
+             i18n("<li>%1</li><li>%2</li>",
+                  i18n("digiKam has many powerful features which are described in the <a href=\"help:/digikam/index.html\">documentation</a>"),
+                  i18n("The <a href=\"http://www.digikam.org\">digiKam homepage</a> provides information about new versions of digiKam."))
+            );
+    return QStringList() << tabHeader << tabContent;
 }
 
 QByteArray WelcomePageView::fileToString(const QString& aFileName) const
@@ -196,25 +151,18 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName) const
 
 void WelcomePageView::slotThemeChanged()
 {
-    QString infoPageCss      = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kf5/infopage/kde_infopage.css"));
-    QString digikamCss       = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/about/digikam.css"));
-    QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString slogan           = DAboutData::digiKamSlogan();
     QString locationHtml     = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/about/main.html"));
-    QString locationRtl      = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kf5/infopage/kde_infopage_rtl.css"));
-    QString rtl              = qApp->isRightToLeft() ? QString::fromUtf8("@import \"%1\";" ).arg(locationRtl)
-                                                     : QString();
 
     QString content = QString::fromUtf8(fileToString(locationHtml));
-    content         = content.arg(infoPageCss) // %1
-                      .arg(rtl)                // %2
-                      .arg(fontSize)           // %3
-                      .arg(appTitle)           // %4
-                      .arg(slogan)             // %5
-                      .arg(infoPage())         // %6
-                      .arg(digikamCss);        // %7
-
+    content         = content.arg(appTitle)
+                             .arg(slogan)
+                             .arg(i18n("Welcome to digiKam %1", QLatin1String(digikam_version)))
+                             .arg(featuresTabContent()[0])
+                             .arg(aboutTabContent()[0])
+                             .arg(featuresTabContent()[1])
+                             .arg(aboutTabContent()[1]);
     //qCDebug(DIGIKAM_GENERAL_LOG) << content;
 
     setHtml(content, QUrl::fromLocalFile(locationHtml));

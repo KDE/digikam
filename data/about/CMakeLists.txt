@@ -5,8 +5,17 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 install(FILES main.html
-              top-left-digikam.png
-              digikam.css
-
         DESTINATION ${DATA_INSTALL_DIR}/digikam/about
+)
+
+install(DIRECTORY css/
+	DESTINATION ${DATA_INSTALL_DIR}/digikam/about/css
+)
+
+install(DIRECTORY images/
+	DESTINATION ${DATA_INSTALL_DIR}/digikam/about/images
+)
+
+install(DIRECTORY js/
+	DESTINATION ${DATA_INSTALL_DIR}/digikam/about/js
 )
