@@ -9,13 +9,13 @@ install(FILES main.html
 )
 
 install(DIRECTORY css/
-	DESTINATION ${DATA_INSTALL_DIR}/digikam/about/css
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/about/css
 )
 
 install(DIRECTORY images/
-	DESTINATION ${DATA_INSTALL_DIR}/digikam/about/images
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/about/images
 )
 
 install(DIRECTORY js/
-	DESTINATION ${DATA_INSTALL_DIR}/digikam/about/js
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/about/js
 )
