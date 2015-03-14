@@ -24,9 +24,6 @@
 #ifndef ADDTAGSLINEEDIT_H
 #define ADDTAGSLINEEDIT_H
 
-// KDE includes
-
-//#include <klineedit.h>
 #include <QLineEdit>
 
 // Local includes
@@ -36,7 +33,6 @@
 namespace Digikam
 {
 
-class AddTagsCompletionBox;
 class AlbumFilterModel;
 class TAlbum;
 class TagModel;
@@ -72,11 +68,6 @@ public:
      */
     void setCurrentTag(TAlbum* album);
 
-    //void setCurrentTaggingAction(const TaggingAction& action);
-    //TaggingAction currentTaggingAction() const;
-
-    /// The custom completion box in use
-    //AddTagsCompletionBox* tagCompletionBox() const;
     void setCompleter(TagModelCompletion *c);
 
     void setAllowExceedBound(bool value);
@@ -101,14 +92,7 @@ Q_SIGNALS:
 protected Q_SLOTS:
 
     void completerActivated(QModelIndex index);
-    //virtual void makeCompletion(const QString&);
-    //void setCompletedItems(const QStringList& items, bool autoSuggest=true);
-    //void makeSubstringCompletion(const QString&);
-//    void slotCompletionBoxTextChanged(const QString& text);
-//    void slotCompletionBoxTaggingActionChanged(const TaggingAction& action);
-//    void slotCompletionBoxCancelled();
-//    void slotReturnPressed(const QString& text);
-//    void slotTextChanged(const QString& text);
+
 
 protected:
         void focusInEvent(QFocusEvent *f);
