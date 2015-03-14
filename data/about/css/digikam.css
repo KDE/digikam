@@ -24,8 +24,8 @@ body {
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.5);
   min-height: 450px;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 #slogan {
