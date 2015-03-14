@@ -207,7 +207,8 @@ set(digikam_SRCS
 )
 
 # this is only required by Win & OSX
-kde4_add_app_icon(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/hi*-apps-digikam.png")
+ecm_add_app_icon(digikam_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(digikam ${digikam_SRCS})
 
