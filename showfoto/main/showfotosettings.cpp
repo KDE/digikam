@@ -6,7 +6,7 @@
  * Date        : 2013-12-20
  * Description : Settings for Showfoto
  *
- * Copyright (C) 2013-2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013-2014 by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2013-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
