@@ -17,14 +17,15 @@
 
 body {
   background-image: url("../images/body-background.png");
-  background-position: -65em -10em;
-  background-repeat: no-repeat;
+  background-size: 100%;
 }
 
 #text-cont {
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.5);
   min-height: 450px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 #slogan {
