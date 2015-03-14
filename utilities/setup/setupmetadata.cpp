@@ -493,7 +493,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     balooBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
     QLabel* const balooLogoLabel   = new QLabel;
-    balooLogoLabel->setPixmap(QIcon::fromTheme(QLatin1String("baloo").pixmap(48));
+    balooLogoLabel->setPixmap(QIcon::fromTheme(QLatin1String("baloo")).pixmap(48));
 
     QLabel* const balooExplanation = new QLabel(balooBox);
     balooExplanation->setOpenExternalLinks(true);
