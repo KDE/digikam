@@ -7,7 +7,7 @@
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -1210,7 +1210,7 @@ void DImg::prepareSubPixelAccess()
         }
         else
         {
-            float d = sqrt(((float)i) / LANCZOS_TABLE_RES);
+            float d          = sqrt(((float)i) / LANCZOS_TABLE_RES);
             lanczos_func [i] = (LANCZOS_DATA_TYPE)((LANCZOS_DATA_ONE * LANCZOS_SUPPORT *
                                                     sin(M_PI * d) * sin((M_PI / LANCZOS_SUPPORT) * d)) /
                                                    (M_PI * M_PI * d * d));
@@ -1270,7 +1270,7 @@ static inline int normalizeAndClamp(int norm, int sum, int max)
 
 DColor DImg::getSubPixelColor(float x, float y) const
 {
-    if (isNull() || x >= width() || y >= height())
+    if (isNull() || x < 0 || y < 0 || x >= width() || y >= height())
     {
         return DColor();
     }
@@ -1307,16 +1307,15 @@ DColor DImg::getSubPixelColor(float x, float y) const
             for (xc = xs; xc <= xe; xc += 1.0, dx -= 1.0)
             {
                 uchar* data = bits() + (int)(xs * bytesDepth()) + (int)(width() * ys * bytesDepth());
-                DColor src = DColor(data, sixteenBit());
-
-                float d = dx * dx + dy * dy;
+                DColor src  = DColor(data, sixteenBit());
+                float d     = dx * dx + dy * dy;
 
                 if (d >= LANCZOS_SUPPORT * LANCZOS_SUPPORT)
                 {
                     continue;
                 }
 
-                d    = lanczos_func [(int)(d * LANCZOS_TABLE_RES)];
+                d     = lanczos_func [(int)(d * LANCZOS_TABLE_RES)];
                 norm += d;
                 sumR += d * src.red();
                 sumG += d * src.green();
@@ -1367,7 +1366,7 @@ DColor DImg::getSubPixelColor(float x, float y) const
                 continue;
             }
 
-            d    = lanczos_func [(d * LANCZOS_TABLE_RES) >> 12];
+            d     = lanczos_func [(d * LANCZOS_TABLE_RES) >> 12];
             norm += d;
             sumR += d * src.red();
             sumG += d * src.green();
@@ -1387,11 +1386,21 @@ DColor DImg::getSubPixelColor(float x, float y) const
 
 DColor DImg::getSubPixelColorFast(float x, float y) const
 {
-    int xx    = (int)x;
-    int yy    = (int)y;
-    float d_x = x - (int)x;
-    float d_y = y - (int)y;
-    uchar* data;
+    if (x < 0)
+    {
+        x = 0;
+    }
+
+    if (y < 0)
+    {
+        y = 0;
+    }
+
+    int xx      = (int)x;
+    int yy      = (int)y;
+    float d_x   = x - (int)x;
+    float d_y   = y - (int)y;
+    uchar* data = 0;
 
     DColor d00, d01, d10, d11;
     DColor col;
