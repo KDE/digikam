@@ -1,6 +1,6 @@
 .navbar {
   min-height: 111px;
-  background-image: linear-gradient(-190deg,#1D74B6 0,#01080F 50%);
+  background-image: linear-gradient(-190deg,#CFA63C 0,#01080F 50%);
   border-radius: 0px;
 }
 
@@ -17,7 +17,7 @@
 
 body {
   background-image: url("../images/body-background.jpg");
-  background-size: 100%;
+  background-size: cover;
 }
 
 #text-cont {
@@ -26,10 +26,16 @@ body {
   min-height: 450px;
   margin-left: 5%;
   margin-right: 5%;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
-#slogan {
-  color: #B0B0B0;
+#author {
+  color: #0A3961;
+}
+
+#win-img-set {
+  margin: 10px 0 10px 0;
 }
 
 .nav-tabs.nav-justified>li>a {
