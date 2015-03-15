@@ -180,7 +180,7 @@ target_link_libraries(digikamgui
 )
 
 # TODO check if these linkings are required?
-if(${Baloo_FOUND})
+if(${KFILEMETADATA_FOUND})
     target_link_libraries(digikamgui baloowrap)
 endif()
 

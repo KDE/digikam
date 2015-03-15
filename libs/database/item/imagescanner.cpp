@@ -53,7 +53,7 @@
 #include "dimagehistory.h"
 #include "imagehistory/imagehistorygraphdata.h"
 
-#ifdef HAVE_BALOO
+#ifdef HAVE_KFILEMETADATA
 #include "baloowrap.h"
 #endif
 
@@ -1818,7 +1818,7 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
 
 void ImageScanner::scanBalooInfo()
 {
-#ifdef HAVE_BALOO
+#ifdef HAVE_KFILEMETADATA
 
     BalooWrap* const baloo = BalooWrap::instance();
 
@@ -1858,7 +1858,7 @@ void ImageScanner::scanBalooInfo()
         }
     }
 
-#endif // HAVE_BALOO
+#endif // HAVE_KFILEMETADATA
 }
 
 void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)

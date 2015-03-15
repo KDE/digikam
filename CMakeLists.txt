@@ -98,14 +98,14 @@ include(MacroJPEG)
 
 # ==================================================================================================
 
-option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
-option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                   ON)
-option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
-option(ENABLE_MEDIAPLAYER       "Build digiKam with QtMultimedia support (default=ON)"                            ON)
+option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
+option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KFileMetadata support (default=ON)"                           ON)
+option(ENABLE_KDEPIMLIBSSUPPORT     "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
+option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=ON)"                            OFF)
 
 # Mysql support options (experimental):
-option(ENABLE_MYSQLSUPPORT      "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
-option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
+option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
+option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
 
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
@@ -295,17 +295,14 @@ else()
     set(LENSFUN_FOUND FALSE)
 endif()
 
-# -- Baloo libraries rules ---------------------------------------------------------------------
+# -- KFileMetadata libraries rules ---------------------------------------------------------------------
 
-if(ENABLE_BALOOSUPPORT)
-
-    find_package(KF5Baloo)
+if(ENABLE_KFILEMETADATASUPPORT)
     find_package(KF5FileMetaData)
-
-    if(KF5Baloo_FOUND AND KF5FileMetaData_FOUND)
-        set(Baloo_FOUND TRUE)
+    if(KF5FileMetaData_FOUND)
+        set(KFILEMETADATA_FOUND TRUE)
     else()
-        set(Baloo_FOUND FALSE)
+        set(KFILEMETADATA_FOUND FALSE)
     endif()
 
 endif()
@@ -323,7 +320,7 @@ MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
 MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
 MACRO_BOOL_TO_01(KF5KFace_FOUND           HAVE_KFACE)
 MACRO_BOOL_TO_01(KF5KGeoMap_FOUND         HAVE_KGEOMAP)
-MACRO_BOOL_TO_01(Baloo_FOUND              HAVE_BALOO)
+MACRO_BOOL_TO_01(KFILEMETADATA_FOUND      HAVE_KFILEMETADATA)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -384,7 +381,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"      "http://liblqr.wikidot.com"       
 PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"     "http://eigen.tuxfamily.org"                                     "(version >= 3.0.0)"                  "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"    "http://www.gphoto.org"                                          "(version >= 2.4.0)"                  "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"       "http://www.doxygen.org"                                         "(version >= 1.8.0)"                  "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libbaloo"      "https://projects.kde.org/projects/kde/kdelibs/baloo"            "(version >= 5.0.0)"                  "digiKam will be compiled without KDE files indexing support."                Baloo_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"    "https://projects.kde.org/projects/kde/kdelibs/baloo"      "(version >= 5.0.0)"                  "digiKam will be compiled without KDE file metadata support."                 KFILEMETADATA_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs" "http://pim.kde.org"                                             "(version >= 5.0.0)"                  "digiKam will be compiled without KDE address book support."                  KDEPIMLIBS_FOUND)
 
 # ================================================================

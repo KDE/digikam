@@ -82,11 +82,11 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("LibGphoto2 support"), i18n("no"));
 #endif /* HAVE_GPHOTO2 */
 
-#ifdef HAVE_BALOO
+#ifdef HAVE_KFILEMETADATA
     list.insert(i18n("Baloo support"), i18n("Yes"));
 #else
     list.insert(i18n("Baloo support"), i18n("no"));
-#endif /* HAVE_BALOO */
+#endif /* HAVE_KFILEMETADATA */
 
 #ifdef HAVE_KDEPIMLIBS
     list.insert(i18n("Kdepimlibs support"), i18n("Yes"));

@@ -50,7 +50,7 @@
 #include "applicationsettings.h"
 #include "facetagseditor.h"
 
-#ifdef HAVE_BALOO
+#ifdef HAVE_KFILEMETADATA
 #include "baloowrap.h"
 #endif
 
@@ -992,7 +992,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
 
 void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsContainer& settings)
 {
-#ifdef HAVE_BALOO
+#ifdef HAVE_KFILEMETADATA
 
     BalooWrap* const baloo = BalooWrap::instance();
     int rating             = -1;

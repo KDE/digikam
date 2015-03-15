@@ -128,7 +128,7 @@
 #include "kipipluginloader.h"
 #endif
 
-#ifdef HAVE_BALOO
+#ifdef HAVE_KFILEMETADATA
 #include "baloowrap.h"
 #endif
 
@@ -260,12 +260,12 @@ DigikamApp::DigikamApp()
 
     readFullScreenSettings(group);
 
-#ifdef HAVE_BALOO
+#ifdef HAVE_KFILEMETADATA
     //Create BalooWrap object, because it need to register a listener
     // to update digiKam data when changes in Baloo occur
     BalooWrap* const baloo = BalooWrap::instance();
     Q_UNUSED(baloo);
-#endif //HAVE_BALOO
+#endif //HAVE_KFILEMETADATA
 
     setAutoSaveSettings(group, true);
 
@@ -315,7 +315,7 @@ DigikamApp::~DigikamApp()
         TagsManager::instance()->close();
     }
 
-#ifdef HAVE_BALOO
+#ifdef HAVE_KFILEMETADATA
     if(BalooWrap::isCreated())
     {
         delete BalooWrap::instance();

@@ -16,7 +16,7 @@ add_subdirectory(firstrun)
 add_subdirectory(maintenance)
 add_subdirectory(searchwindow)
 
-if(${Baloo_FOUND})
+if(${KFILEMETADATA_FOUND})
     add_subdirectory(baloo)
 endif()
 
