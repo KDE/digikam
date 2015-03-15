@@ -262,7 +262,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* const label10      = new QLabel(i18n("Supplication:"));
+    QLabel* const label10      = new QLabel(i18n("Sublocation:"));
     d->locationSublocationEdit = new QLineEdit;
     d->locationSublocationEdit->setClearButtonEnabled(true);
     d->locationSublocationEdit->setPlaceholderText(i18n("Enter the city sublocation of contents here."));
