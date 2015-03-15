@@ -1,6 +1,6 @@
 .navbar {
   min-height: 111px;
-  background-image: linear-gradient(-190deg,#CFA63C 0,#01080F 50%);
+  background-image: linear-gradient(-186deg,#CFA63C 0,#01080F 55%);
   border-radius: 0px;
 }
 
@@ -31,7 +31,12 @@ body {
 }
 
 #author {
-  color: #0A3961;
+  color: #084C84;
+}
+
+#author:hover {
+  color: #206ADB;
+  text-decoration: none;
 }
 
 #win-img-set {
@@ -50,4 +55,8 @@ ul > li {
 
 #content {
   padding-top: 111px;
+}
+
+.info {
+  color: #0B0101;
 }
