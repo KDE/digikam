@@ -18,6 +18,7 @@
 body {
   background-image: url("../images/body-background.jpg");
   background-size: cover;
+  overflow-x: hidden;
 }
 
 #text-cont {
@@ -30,11 +31,11 @@ body {
   margin-bottom: 30px;
 }
 
-#author {
+.info-link {
   color: #084C84;
 }
 
-#author:hover {
+.info-link:hover {
   color: #206ADB;
   text-decoration: none;
 }
