@@ -1270,7 +1270,7 @@ static inline int normalizeAndClamp(int norm, int sum, int max)
 
 DColor DImg::getSubPixelColor(float x, float y) const
 {
-    if (isNull() || x < 0 || y < 0 || x >= width() || y >= height())
+    if (isNull())
     {
         return DColor();
     }
@@ -1281,6 +1281,9 @@ DColor DImg::getSubPixelColor(float x, float y) const
     {
         return DColor();
     }
+
+    x = qBound(0.0f, x, (float)width() - 1);
+    y = qBound(0.0f, y, (float)height() - 1);
 
     Digikam::DColor col(0, 0, 0, 0xFFFF, sixteenBit());
 
@@ -1386,15 +1389,13 @@ DColor DImg::getSubPixelColor(float x, float y) const
 
 DColor DImg::getSubPixelColorFast(float x, float y) const
 {
-    if (x < 0)
+    if (isNull())
     {
-        x = 0;
+        return DColor();
     }
 
-    if (y < 0)
-    {
-        y = 0;
-    }
+    x = qBound(0.0f, x, (float)width() - 1);
+    y = qBound(0.0f, y, (float)height() - 1);
 
     int xx      = (int)x;
     int yy      = (int)y;
