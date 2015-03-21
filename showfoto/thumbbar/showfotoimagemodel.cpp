@@ -434,7 +434,7 @@ void ShowfotoImageModel::removeIndexs(const QList<QModelIndex>& indexes)
         return;
     }
 
-    //removeRowPairsWithCheck(ShowfotoImageModelIncrementalUpdater::toContiguousPairs(indexesList));
+    removeRowPairs(toContiguousPairs(indexesList));
 }
 
 void ShowfotoImageModel::setSendRemovalSignals(bool send)
@@ -528,6 +528,42 @@ void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
             }
         }
     }
+}
+
+QList<QPair<int, int> > ShowfotoImageModel::toContiguousPairs(const QList<int>& unsorted)
+{
+    // Take the given indices and return them as contiguous pairs [begin, end]
+
+    QList<QPair<int, int> > pairs;
+
+    if (unsorted.isEmpty())
+    {
+        return pairs;
+    }
+
+    QList<int> indices(unsorted);
+    qSort(indices);
+
+    QPair<int, int> pair(indices.first(), indices.first());
+
+    for (int i=1; i < indices.size(); i++)
+    {
+        const int &index = indices.at(i);
+
+        if (index == pair.second + 1)
+        {
+            pair.second = index;
+            continue;
+        }
+
+        pairs << pair; // insert last pair
+        pair.first  = index;
+        pair.second = index;
+    }
+
+    pairs << pair;
+
+    return pairs;
 }
 
 // ------------ QAbstractItemModel implementation -------------

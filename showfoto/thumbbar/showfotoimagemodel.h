@@ -40,6 +40,8 @@ using namespace Digikam;
 namespace ShowFoto
 {
 
+typedef QPair<int, int> IntPair;
+
 class ShowfotoImageModel : public QAbstractListModel, public DragDropModelImplementation
 {
     Q_OBJECT
@@ -263,9 +265,10 @@ private:
 
     void appendInfos(const QList<ShowfotoItemInfo>& infos);
     void publiciseInfos(const QList<ShowfotoItemInfo>& infos);
-    void cleanSituationChecks();
+    // void cleanSituationChecks();
     void removeRowPairs(const QList<QPair<int, int> >& toRemove);
-    void removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove);
+    // void removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove);
+    static QList<IntPair> toContiguousPairs(const QList<int>& unsorted);
 
 public:
 
