@@ -1002,7 +1002,7 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
     }
 
     // No error, remove item in thumbbar.
-    //d->model->removeIndex(d->thumbBar->currentIndex());
+    d->model->removeIndex(d->thumbBar->currentIndex());
 
     // Disable menu actions and SideBar if no current image.
 

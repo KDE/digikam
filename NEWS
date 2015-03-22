@@ -18,4 +18,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 010 ==> 345168 - Crash when applying auto lens correction (chromatic aberration) [patch].
 011 ==> 319383 - Crash while applying lensfun distortion correction.
 012 ==> 333540 - Random crashes on OpenSUSE 13.1.
-013 ==> 
+013 ==> 345387 - Lens auto-correction tools shows "partial mathc" for canon 700d 18-135 is stm.
+014 ==> 345367] The sideview containing the thumbnails is not updated after deleting a photo.
+015 ==> 
