@@ -46,8 +46,8 @@ class TagModelCompletion : public QCompleter
 
 public:
 
-    /** A KCompletion object operating on a TagModel
-    */
+    /** A completion object operating on a TagModel
+     */
     TagModelCompletion();
 
     void setModel(TagModel* model);
@@ -69,8 +69,6 @@ private:
     class Private;
     Private *d;
 };
-
-
 
 } // namespace Digikam
 

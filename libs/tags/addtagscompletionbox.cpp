@@ -63,8 +63,8 @@ public:
 
     Private()
     {
-        model = 0;
-        rootItem = 0;
+        model       = 0;
+        rootItem    = 0;
         parentModel = 0;
     }
 
@@ -110,19 +110,20 @@ void TagModelCompletion::setModel(TagModel* model)
             i++;
             QIcon icon;
 
-            if(t->icon().isEmpty())
+            if (t->icon().isEmpty())
                 icon = QIcon::fromTheme(QLatin1String("tag"));
             else
                 icon = QIcon::fromTheme(t->icon());
 
-            QStandardItem* const item = new QStandardItem(icon,t->title());
-            item->setData(QVariant(t->id()),Qt::UserRole+5);
+            QStandardItem* const item = new QStandardItem(icon, t->title());
+            item->setData(QVariant(t->id()), Qt::UserRole+5);
             d->allItems.append(item);
         }
-        int index = 0;
+
+        int index         = 0;
         QModelIndex child = current.child(index++,0);
 
-        while(child.isValid())
+        while (child.isValid())
         {
             q.append(child);
             child = current.child(index++, 0);
@@ -190,15 +191,14 @@ void TagModelCompletion::slotInsertRows(QModelIndex index, int start, int end)
     for(int i = start; i <= end; i++)
     {
         TAlbum* const t = dynamic_cast<TAlbum*>(d->parentModel->albumForIndex(index.child(i,0)));
-        
+
         if (t != NULL && !t->isInternalTag())
         {
-            QIcon icon(index.child(i,0).data(Qt::DecorationRole).value<QPixmap>());
+            QIcon icon(index.child(i, 0).data(Qt::DecorationRole).value<QPixmap>());
             QStandardItem* const item = new QStandardItem(icon,t->title());
-            item->setData(QVariant(t->id()),Qt::UserRole+5);
+            item->setData(QVariant(t->id()), Qt::UserRole+5);
             //root->appendRow(item);
             d->allItems.append(item);
-
         }
     }
 
