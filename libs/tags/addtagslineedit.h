@@ -68,7 +68,7 @@ public:
      */
     void setCurrentTag(TAlbum* album);
 
-    void setCompleter(TagModelCompletion *c);
+    void setCompleter(TagModelCompletion* c);
 
     void setAllowExceedBound(bool value);
 
@@ -93,10 +93,10 @@ protected Q_SLOTS:
 
     void completerActivated(QModelIndex index);
 
-
 protected:
-        void focusInEvent(QFocusEvent *f);
-        void keyPressEvent(QKeyEvent* e);
+
+    void focusInEvent(QFocusEvent* f);
+    void keyPressEvent(QKeyEvent* e);
 
 //    void setCompletionObject(KCompletion* comp, bool dontuse=false);
 
