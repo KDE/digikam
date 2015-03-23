@@ -403,6 +403,11 @@ void AddTagsLineEdit::slotReturnPressed(const QString& text)
       return;
     }
 
+    if (currentTaggingAction().shallAssignTag() && d->completionBox->isVisible())
+    {
+        setText(d->completionBox->currentCompletionText());
+    }
+
     //Q_UNUSED(text);
     emit taggingActionActivated(currentTaggingAction());
 }
