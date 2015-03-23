@@ -7,11 +7,11 @@
  * Description : Special line edit for adding or creatingtags
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 1997      Sven Radej (sven.radej@iname.com)
- * Copyright (c) 1999      Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
- * Copyright (c) 1999      Preston Brown <pbrown@kde.org>
- * Copyright (c) 2000-2001 Dawit Alemayehu <adawit@kde.org>
- * Copyright (c) 2000-2001 Carsten Pfeiffer <pfeiffer@kde.org>
+ * Copyright (C) 1997      by Sven Radej (sven.radej@iname.com)
+ * Copyright (c) 1999      by Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
+ * Copyright (c) 1999      by Preston Brown <pbrown@kde.org>
+ * Copyright (c) 2000-2001 by Dawit Alemayehu <adawit@kde.org>
+ * Copyright (c) 2000-2001 by Carsten Pfeiffer <pfeiffer@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,8 +57,8 @@ public:
 
     Private()
     {
-        completion    = 0;
-        tagView       = 0;
+        completion         = 0;
+        tagView            = 0;
         resetFromCompleter = false;
     }
 
@@ -70,9 +70,11 @@ public:
     TAlbum*               currentTag;
     TagModel*             tagModel;
 
-//public:
+/*
+public:
 
-    //TaggingAction makeTaggingAction(const QString& userText);
+    TaggingAction makeTaggingAction(const QString& userText);
+*/
 };
 
 // ---------------------------------------------------------------------------------------
@@ -81,10 +83,8 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
     : QLineEdit(parent),
       d(new Private)
 {
-
     d->completion = new TagModelCompletion;
     setCompleter(d->completion);
-
 }
 
 AddTagsLineEdit::~AddTagsLineEdit()
@@ -208,9 +208,10 @@ void AddTagsLineEdit::setCompleter(TagModelCompletion *c)
 void AddTagsLineEdit::focusInEvent(QFocusEvent* f)
 {
     QLineEdit::focusInEvent(f);
-    /** Need to disconnect completer from QLineEdit, otherwise
-     *  we won't be able to clear completion after tag was added
-     */
+
+    // NOTE: Need to disconnect completer from QLineEdit, otherwise
+    // we won't be able to clear completion after tag was added
+
     disconnect(d->completion, SIGNAL(activated(QString)),
                this, SLOT(setText(QString)));
 }
@@ -219,7 +220,7 @@ void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
 {
     if (d->completion && d->completion->popup()->isVisible())
     {
-    // The following keys are forwarded by the completer to the widget
+        // The following keys are forwarded by the completer to the widget
         switch (e->key())
         {
             case Qt::Key_Enter:
