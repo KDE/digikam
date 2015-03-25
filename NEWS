@@ -24,4 +24,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 016 ==> 326208 - When doing a face learning (erase data and rebuild), Database is not erased and grow.
 017 ==> 323888 - Face recognition makes digikam fill all the available memory (Qt SQlite plugin relevant).
 018 ==> 338176 - Face Recognition memory allocation crash application.
-019 ==> 
+019 ==> 339933 - ICONVIEW : Incorrect Image Aspect Ratio shown.
+020 ==> 
