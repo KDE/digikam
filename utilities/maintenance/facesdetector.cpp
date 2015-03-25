@@ -126,7 +126,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     if (settings.task == FaceScanSettings::RetrainAll)
     {
         // clear all training data in the database
-        KFaceIface::RecognitionDatabase::addDatabase().clearAllTraining("digikam");
+        KFaceIface::RecognitionDatabase::addDatabase().clearAllTraining(QLatin1String("digikam"));
         d->pipeline.plugRetrainingDatabaseFilter();
         d->pipeline.plugTrainer();
         d->pipeline.construct();
