@@ -62,6 +62,7 @@
 #include "imagecopyright.h"
 #include "imageinfo.h"
 #include "imagescanner.h"
+#include "metadatasettings.h"
 #include "tagscache.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
@@ -1146,7 +1147,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
             QWriteLocker locker(&d->hints->lock);
             d->hints->rescanItemHints.remove(scanInfo.id);
         }
-        
+
         rescanFile(fi, scanInfo);
 
         return;
@@ -1157,7 +1158,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
             QWriteLocker locker(&d->hints->lock);
             d->hints->modifiedItemHints.remove(scanInfo.id);
         }
-        
+
         scanModifiedFile(fi, scanInfo);
 
         return;
@@ -1188,7 +1189,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
             && fi.size() == scanInfo.fileSize)
         {
             scanFileUpdateHashReuseThumbnail(fi, scanInfo, false);
-            
+
             return;
         }
     }
@@ -1196,7 +1197,14 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     if (!modificationDateEquals(fi.lastModified(), scanInfo.modificationDate)
         || fi.size() != scanInfo.fileSize)
     {
-        scanModifiedFile(fi, scanInfo);
+        if (MetadataSettings::instance()->settings().rescanImageIfModified)
+        {
+            rescanFile(fi, scanInfo);
+        }
+        else
+        {
+            scanModifiedFile(fi, scanInfo);
+        }
     }
 }
 

@@ -53,7 +53,7 @@ target_link_libraries(dimagehistorygraphtest
 
                       dimg
                       digikamdatabase
-                      
+
                       Qt5::Test
 )
 
@@ -130,11 +130,11 @@ add_test(renamecustomizertest renamecustomizertest)
 ecm_mark_as_test(renamecustomizertest)
 
 target_link_libraries(renamecustomizertest
-                      
+
                       digikamdatabase
                       importui
                       advancedrename
-                      
+
                       Qt5::Gui
                       Qt5::Test
 )
@@ -172,6 +172,26 @@ target_link_libraries(freerotationtest
 
                       Qt5::Test
 )
+
+#------------------------------------------------------------------------
+
+set(timestampupdatetest_SRCS
+    timestampupdatetest.cpp
+   )
+
+add_executable(timestampupdatetest ${timestampupdatetest_SRCS})
+add_test(timestampupdatetest timestampupdatetest)
+ecm_mark_as_test(timestampupdatetest)
+
+target_link_libraries(timestampupdatetest
+
+                      digikamdatabase
+
+                      Qt5::Gui
+                      Qt5::Test
+
+                      KF5::KExiv2
+                     )
 
 #------------------------------------------------------------------------
 
@@ -318,7 +338,7 @@ target_link_libraries(advancedrenametest
                       advancedrename
 
                       Qt5::Test
-                      
+
                       KF5::KIOCore
 )
 
@@ -329,18 +349,18 @@ target_link_libraries(advancedrenametest
 # set(filesaveoptionsboxtest_SRCS
 #     filesaveoptionsboxtest.cpp
 # )
-# 
+#
 # add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
 # add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
 # ecm_mark_as_test(filesaveoptionsboxtest)
-# 
+#
 # target_link_libraries(filesaveoptionsboxtest
-#                       
+#
 #                       dimg
 #                       filters
 #                       digikamgui
 #                       digikamwidgets
-#                       
+#
 #                       Qt5::Test
 # )
 
@@ -349,21 +369,21 @@ target_link_libraries(advancedrenametest
 # NOTE: code ported to Qt5 but do not link yet.
 # undefined reference to `Digikam::DatabaseFields::FieldMetaInfo<QFlags<Digikam::DatabaseFields::ImagesField> >::Last'
 # happens even though file defining those libs/database/framework/databasefields.h is included and linking against digikamdatabase.
-# 
+#
 # set(databasefieldstest_SRCS
 #     databasefieldstest.cpp
 # )
-# 
+#
 # add_executable(databasefieldstest ${databasefieldstest_SRCS})
 # add_test(databasefieldstest databasefieldstest)
 # ecm_mark_as_test(databasefieldstest)
-# 
+#
 # target_link_libraries(databasefieldstest
-# 
+#
 #                       digikamdatabase
-# 
+#
 #                       Qt5::Gui
 #                       Qt5::Test
-# 
+#
 #                       KF5::KExiv2
 # )
