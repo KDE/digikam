@@ -191,7 +191,7 @@ void ImportThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rat
 bool ImportThumbnailBar::event(QEvent* e)
 {
     // reset widget max/min sizes
-    if (e->type() == QEvent::StyleChange)
+    if (e->type() == QEvent::StyleChange || e->type() == QEvent::Show)
     {
         setFlow(flow());
     }
