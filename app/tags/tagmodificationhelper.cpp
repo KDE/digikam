@@ -46,7 +46,9 @@
 #include "scancontroller.h"
 #include "statusprogressbar.h"
 #include "tagsactionmngr.h"
+#include "tagproperties.h"
 #include "tageditdlg.h"
+#include "facetags.h"
 
 namespace Digikam
 {
@@ -183,7 +185,17 @@ void TagModificationHelper::slotTagEdit(TAlbum* t)
     {
         QString errMsg;
 
-        if (!AlbumManager::instance()->renameTAlbum(tag, title, errMsg))
+        if (AlbumManager::instance()->renameTAlbum(tag, title, errMsg))
+        {
+            // TODO: make an option to edit the full name of a face tag
+            if (FaceTags::isPerson(tag->id()))
+            {
+                TagProperties props(tag->id());
+                props.setProperty(TagPropertyName::person(), title);
+                props.setProperty(TagPropertyName::kfaceName(), title);
+            }
+        }
+        else
         {
             KMessageBox::error(0, errMsg);
         }

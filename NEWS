@@ -26,4 +26,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 018 ==> 338176 - Face Recognition memory allocation crash application.
 019 ==> 339933 - ICONVIEW : Incorrect Image Aspect Ratio shown.
 020 ==> 344997 - 100% CPU - Hang for VERY long periods.
-021 ==> 
+021 ==> 344420 - Incomplete update of sidecar after renaming face tag.
+022 ==> 
+
