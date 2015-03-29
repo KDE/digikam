@@ -515,6 +515,9 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
     // If not, we load imageInfoCurrent, then the index 0, then again imageInfoCurrent
     d->thumbBar->setEnabled(false);
     d->imageInfoModel->setImageInfos(imageInfoList);
+    // Update the sorting of images, see bug #342788
+    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)ApplicationSettings::instance()->getImageSortOrder());
+    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)ApplicationSettings::instance()->getImageSorting());
     d->setThumbBarToCurrent();
 
     if (!caption.isEmpty())
