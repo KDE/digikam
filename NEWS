@@ -28,4 +28,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 020 ==> 344997 - 100% CPU - Hang for VERY long periods.
 021 ==> 344420 - Incomplete update of sidecar after renaming face tag.
 022 ==> 342788 - THUMBBAR : Sort order not in sync with pictures in editor.
-022 ==> 
+023 ==> 345659 - Cannot shrink thumbnails panel.
+024 ==> 337502 - THUMBBAR : no thumbs generated.
+025 ==> 
