@@ -1082,6 +1082,7 @@ void ImportUI::slotBusy(bool val)
         d->cameraCancelAction->setEnabled(false);
         d->cameraActions->setEnabled(true);
         d->advBox->setEnabled(true);
+        d->view->setEnabled(true);
 
         // selection-dependent update of lockAction, markAsDownloadedAction,
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
@@ -1114,6 +1115,7 @@ void ImportUI::slotBusy(bool val)
 
         // TODO see if this can be enabled too, except while downloading..
         d->advBox->setEnabled(false);
+        d->view->setEnabled(false);
     }
 }
 
