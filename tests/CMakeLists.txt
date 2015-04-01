@@ -107,6 +107,23 @@ endif()
 
 #------------------------------------------------------------------------
 
+set(timestampupdate_SRCS
+    timestampupdatetest.cpp
+   )
+
+KDE4_ADD_UNIT_TEST(timestampupdatetest ${timestampupdate_SRCS})
+
+target_link_libraries(timestampupdatetest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      ${KEXIV2_LIBRARIES}
+                      digikamcore
+                      digikamdatabase
+                     )
+
+#------------------------------------------------------------------------
+
 set(statesavingobject_SRCS
     statesavingobjecttest.cpp
    )

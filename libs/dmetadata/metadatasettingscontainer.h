@@ -102,6 +102,7 @@ public:
 
     bool                        writeRawFiles;
     bool                        updateFileTimeStamp;
+    bool                        rescanImageIfModified;
     bool                        useXMPSidecar4Reading;
 
     KExiv2::MetadataWritingMode metadataWritingMode;

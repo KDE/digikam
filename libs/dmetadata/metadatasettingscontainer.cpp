@@ -50,6 +50,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     useXMPSidecar4Reading = false;
     metadataWritingMode   = KExiv2::WRITETOIMAGEONLY;
     updateFileTimeStamp   = true;
+    rescanImageIfModified = false;
     rotationBehavior      = RotatingFlags | RotateByLosslessRotation;
 }
 
@@ -73,6 +74,7 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
     metadataWritingMode   = (KExiv2::MetadataWritingMode)
                             group.readEntry("Metadata Writing Mode",       (int)KExiv2::WRITETOIMAGEONLY);
     updateFileTimeStamp   = group.readEntry("Update File Timestamp",       true);
+    rescanImageIfModified = group.readEntry("Rescan File If Modified",     false);
 
     rotationBehavior      = NoRotation;
 
@@ -116,6 +118,7 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
     group.writeEntry("Use XMP Sidecar For Reading", useXMPSidecar4Reading);
     group.writeEntry("Metadata Writing Mode",       (int)metadataWritingMode);
     group.writeEntry("Update File Timestamp",       updateFileTimeStamp);
+    group.writeEntry("Rescan File If Modified",     rescanImageIfModified);
 
     group.writeEntry("Rotate By Internal Flag",     bool(rotationBehavior & RotateByInternalFlag));
     group.writeEntry("Rotate By Metadata Flag",     bool(rotationBehavior & RotateByMetadataFlag));
