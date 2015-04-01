@@ -32,4 +32,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 024 ==> 337502 - THUMBBAR : no thumbs generated.
 025 ==> 338230 - digiKam stops refreshing download progress after de-selecting pictures.
 026 ==> 345648 - Progress bar disappeared while importing pictures before importing finished.
-027 ==> 
+027 ==> 340139 - digiKam hangs after selecting folder with pictures.
+028 ==> 
