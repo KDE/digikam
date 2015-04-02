@@ -24,13 +24,16 @@
 #ifndef TIMESTAMPUPDATETEST_H
 #define TIMESTAMPUPDATETEST_H
 
+// Qt includes
+
 #include <QtTest/QtTest>
 
 class TimeStampUpdateTest : public QObject
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
+
     void initTestCase();
     void cleanupTestCase();
     void cleanup();
@@ -38,10 +41,11 @@ private slots:
     void testRescanImageIfModifiedSet2False();
 
 private:
+
     QString tempFileName(const QString& purpose) const;
     QString tempFilePath(const QString& purpose) const;
 
-    QString dbFile;
+    QString          dbFile;
     QList<qlonglong> ids;
 };
 

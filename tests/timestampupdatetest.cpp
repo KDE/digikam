@@ -21,9 +21,23 @@
  *
  * ============================================================ */
 
-#include "timestampupdatetest.h"
+#include "timestampupdatetest.moc"
+
+// Qt includes
+
+#include <QtTest>
+#include <QFileInfo>
+#include <QDBusConnection>
+
+// KDE includes
+
+#include <kdemacros.h>
+
+// Libkexiv2 includes
 
 #include <libkexiv2/kexiv2.h>
+
+// Local includes
 
 #include "albumdb.h"
 #include "collectionlocation.h"
@@ -31,12 +45,6 @@
 #include "collectionscanner.h"
 #include "imageinfo.h"
 #include "metadatasettings.h"
-
-#include <QtTest>
-#include <QFileInfo>
-#include <QDBusConnection>
-
-#include <kdemacros.h>
 
 const QString originalImageFolder(KDESRCDIR"timestampupdatetestimages");
 const QString originalImageFile(KDESRCDIR"timestampupdatetestimages/1.jpg");
@@ -66,7 +74,6 @@ void TimeStampUpdateTest::initTestCase()
     QDir collectionDir = QDir(originalImageFolder);
     QVERIFY(collectionDir.exists());
 
-
     // Create new temporary database
     dbFile = tempFilePath("database");
     DatabaseParameters params("QSQLITE", dbFile, "QSQLITE", dbFile);
@@ -74,24 +81,25 @@ void TimeStampUpdateTest::initTestCase()
     QVERIFY(DatabaseAccess::checkReadyForUse(0));
     QVERIFY(QFile(dbFile).exists());
 
-
     // Add collection and scan
     CollectionManager::instance()->addLocation(collectionDir.path());
     CollectionScanner().completeScan();
-
 
     // Verify that the scanned collection is correct
     QList<AlbumShortInfo> albums = DatabaseAccess().db()->getAlbumShortInfos();
     QVERIFY(albums.size() == 1);
     QStringList readOnlyImages;
+
     foreach(const AlbumShortInfo& album, albums)
     {
         readOnlyImages << DatabaseAccess().db()->getItemURLsInAlbum(album.id);
     }
+
     foreach(const QString& file, readOnlyImages)
     {
         ids << ImageInfo::fromLocalFile(file).id();
     }
+
     QVERIFY(!ids.contains(-1));
     QVERIFY(ids.size() == 1);
 }
@@ -140,16 +148,13 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
     set.rescanImageIfModified = true;
     MetadataSettings::instance()->setSettings(set);
 
-
     // Load the test image and verify that it's there
     QFileInfo originalFileInfo(originalImageFile);
     QVERIFY(originalFileInfo.isReadable());
 
-
     // Check that Exif.Image.Model in database is empty
     QVariantList dbModel = DatabaseAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
     QVERIFY2(dbModel.at(0).toString().isEmpty(), "Exif.Image.Model should be empty");
-
 
     // Verify that Exif.Image.Model in image file is empty
     KExiv2Iface::KExiv2 meta;
@@ -159,23 +164,19 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
     QString model = meta.getExifTagString("Exif.Image.Model");
     QVERIFY(model.isEmpty());
 
-
     // Change the metadata in image file
     meta.setExifTagString("Exif.Image.Model", "TimeStampUpdateTestCamera", false);
     QVERIFY2(meta.applyChanges(), "Exif.Image.Model is added");
     QVERIFY(meta.getExifTagString("Exif.Image.Model") == "TimeStampUpdateTestCamera");
 
-
     // Simulate restart of Digikam
     // The scan should detect that image file has changed
     CollectionScanner().completeScan();
-
 
     // Verify that the change is detected, and no exists in the database
     dbModel = DatabaseAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
     QVERIFY(dbModel.at(0).toString() == "TimeStampUpdateTestCamera");
 }
-
 
 /*
  * This test manipulates the Exif.Image.Model without updating
@@ -193,16 +194,13 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
     set.rescanImageIfModified = false; // Deafult value
     MetadataSettings::instance()->setSettings(set);
 
-
     // Load the test image and verify that it's there
     QFileInfo originalFileInfo(originalImageFile);
     QVERIFY(originalFileInfo.isReadable());
 
-
     // Check that Exif.Image.Model in database is empty
     QVariantList dbModel = DatabaseAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
     QVERIFY2(dbModel.at(0).toString().isEmpty(), "Exif.Image.Model should be empty");
-
 
     // Verify that Exif.Image.Model in image file is empty
     KExiv2Iface::KExiv2 meta;
@@ -212,21 +210,16 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
     QString model = meta.getExifTagString("Exif.Image.Model");
     QVERIFY(model.isEmpty());
 
-
     // Change the metadata in image file
     meta.setExifTagString("Exif.Image.Model", "TimeStampUpdateTestCamera", false);
     QVERIFY2(meta.applyChanges(), "Exif.Image.Model is added");
     QVERIFY(meta.getExifTagString("Exif.Image.Model") == "TimeStampUpdateTestCamera");
 
-
     // Simulate restart of Digikam
     // The scan should detect that image file has changed
     CollectionScanner().completeScan();
-
 
     // Verify that the changed image did not change the database
     dbModel = DatabaseAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
     QVERIFY(dbModel.at(0).toString().isEmpty());
 }
-
-#include "timestampupdatetest.moc"
