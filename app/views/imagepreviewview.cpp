@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
@@ -613,11 +613,12 @@ void ImagePreviewView::dropEvent(QDropEvent* e)
 
 void ImagePreviewView::mousePressEvent(QMouseEvent* e)
 {
+#ifdef HAVE_KFACE
     if (e->button() == Qt::LeftButton && QApplication::keyboardModifiers() == Qt::ControlModifier)
     {
         d->faceGroup->addFace();
     }
-
+#endif /* HAVE_KFACE */
     GraphicsDImgView::mousePressEvent(e);
 }
 
