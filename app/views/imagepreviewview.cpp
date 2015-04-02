@@ -611,4 +611,14 @@ void ImagePreviewView::dropEvent(QDropEvent* e)
     return;
 }
 
+void ImagePreviewView::mousePressEvent(QMouseEvent* e)
+{
+    if (e->button() == Qt::LeftButton && QApplication::keyboardModifiers() == Qt::ControlModifier)
+    {
+        d->faceGroup->addFace();
+    }
+
+    GraphicsDImgView::mousePressEvent(e);
+}
+
 }  // namespace Digikam

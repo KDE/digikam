@@ -91,6 +91,7 @@ Q_SIGNALS:
 protected:
 
     bool acceptsMouseClick(QMouseEvent* e);
+    void mousePressEvent(QMouseEvent* e);
     void enterEvent(QEvent* e);
     void leaveEvent(QEvent* e);
     void showEvent(QShowEvent* e);
