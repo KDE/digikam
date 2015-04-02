@@ -284,9 +284,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rescanImageIfModifiedBox = new QCheckBox;
     d->rescanImageIfModifiedBox->setText(i18nc("@option:check", "&Rescan file when files are modified"));
     d->rescanImageIfModifiedBox->setWhatsThis(i18nc("@info:whatsthis",
-                                                  "Turning this option on, will force Digikam to rescan files that has been modified outside Digikam. "
-                                                  "If a file has changed it's file size or if the last modified timestamp has changed, a rescan of that"
-                                                  "file will be performed when Digikam starts."));
+                                                  "Turning this option on, will force digiKam to rescan files that has been modified outside digiKam. "
+                                                  "If a file has changed it's file size or if the last modified timestamp has changed, a rescan of that "
+                                                  "file will be performed when digiKam starts."));
 
     readWriteLayout->addWidget(readWriteIconLabel,          0, 0);
     readWriteLayout->addWidget(readWriteLabel,              0, 1);
