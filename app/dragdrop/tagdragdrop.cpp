@@ -265,7 +265,14 @@ Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelInde
 
         if (!destAlbum)
         {
-            if (droppedAlbum->parent()->isRoot())
+            Album* const palbum = droppedAlbum->parent();
+
+            if (!palbum)
+            {
+                 return Qt::IgnoreAction;
+            }
+
+            if (palbum->isRoot())
             {
                 return Qt::IgnoreAction;
             }
