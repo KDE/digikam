@@ -21,6 +21,7 @@
   <name xml:lang="uk">ImagePlugin-Color</name>
   <name xml:lang="x-test">xxImagePlugin-Colorxx</name>
   <summary>A tool to correct colors of image</summary>
+  <summary xml:lang="ast">Una ferramienta pa correxir los colores d'imáxenes</summary>
   <summary xml:lang="bs">Alat za ispravljanje boja na slici</summary>
   <summary xml:lang="ca">Una eina per a corregir els colors de la imatge</summary>
   <summary xml:lang="cs">Nástroj pro opravu barev obrázku</summary>

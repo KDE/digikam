@@ -21,6 +21,7 @@
   <name xml:lang="uk">ImagePlugin-Decorate</name>
   <name xml:lang="x-test">xxImagePlugin-Decoratexx</name>
   <summary>A tool to decorate an image</summary>
+  <summary xml:lang="ast">Una ferramienta pa decorar una imaxe</summary>
   <summary xml:lang="bs">Alat za dekoraciju slika</summary>
   <summary xml:lang="ca">Una eina per a decorar una imatge</summary>
   <summary xml:lang="cs">Nástroj pro dekoraci obrázku</summary>
