@@ -483,7 +483,7 @@ void ProgressManager::addProgressItemImpl(ProgressItem* const t, ProgressItem* c
     connect(t, SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotTransactionCompleted(ProgressItem*)), Qt::DirectConnection);
 
-    connect(this, SIGNAL(completeTransactionDeferred(ProgressItem*)),
+    connect(t, SIGNAL(completeTransactionDeferred(ProgressItem*)),
             this, SLOT(slotTransactionCompletedDeferred(ProgressItem*)));
 
     connect(t, SIGNAL(progressItemProgress(ProgressItem*,uint)),
