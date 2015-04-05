@@ -29,10 +29,6 @@
 #include <QFileInfo>
 #include <QDBusConnection>
 
-// KDE includes
-
-#include <kdemacros.h>
-
 // Libkexiv2 includes
 
 #include <kexiv2.h>
