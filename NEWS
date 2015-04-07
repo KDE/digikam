@@ -6,4 +6,5 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
-001 ==> 
+001 ==> 345954 - Recursive calls made into ProgressManager::slotTransactionCompletedDeferred [patch].
+002 ==> 
