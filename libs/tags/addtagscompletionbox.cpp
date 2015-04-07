@@ -94,6 +94,8 @@ void TagModelCompletion::setModel(TagModel* model)
     connect(d->parentModel,SIGNAL(rowsInserted(QModelIndex, int, int)),
             this, SLOT(slotInsertRows(QModelIndex, int, int)));
 
+    connect(d->parentModel,SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            this, SLOT(slotDeleteRows(QModelIndex, int, int)));
 
     int i = 0;
     QQueue<QModelIndex> q;
@@ -136,6 +138,9 @@ void TagModelCompletion::setModel(TagModel* model)
 void TagModelCompletion::setModel(AlbumFilterModel* model)
 {
     //QCompleter::setModel(d->model);
+    TagModel* tagModel = dynamic_cast<TagModel*>(model);
+    if(tagModel != NULL)
+        setModel(tagModel);
 }
 
 TagModel* TagModelCompletion::model() const
@@ -160,8 +165,10 @@ void TagModelCompletion::update(QString word)
     QList<QStandardItem*> filtered;
 
     if(word.isEmpty())
+    {
+        QCompleter::complete();
         return;
-
+    }
     for(QStandardItem* item : d->allItems)
     {
         if(item->data(Qt::DisplayRole).toString().contains(word, Qt::CaseInsensitive))
@@ -203,6 +210,27 @@ void TagModelCompletion::slotInsertRows(QModelIndex index, int start, int end)
     }
 
     QCompleter::setModel(d->model);
+}
+
+void TagModelCompletion::slotDeleteRows(QModelIndex index, int start, int end)
+{
+    if(!index.isValid())
+        return;
+
+    QList<int> removedIndexes;
+
+    for(int i = start; i <= end; i++)
+    {
+        TAlbum* const t = dynamic_cast<TAlbum*>(d->parentModel->albumForIndex(index.child(i,0)));
+        if(t != NULL && !t->isInternalTag())
+            removedIndexes.append(t->id());
+    }
+    QMutableListIterator<QStandardItem*> it(d->allItems);
+    while(it.hasNext())
+    {
+        if(removedIndexes.contains(it.next()->data(Qt::UserRole+5).toInt()))
+            it.remove();
+    }
 }
 
 } // namespace Digikam

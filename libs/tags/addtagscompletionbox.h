@@ -63,6 +63,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotInsertRows(QModelIndex index, int start, int end);
+    void slotDeleteRows(QModelIndex index, int start, int end);
 
 private:
 
