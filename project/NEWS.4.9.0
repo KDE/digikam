@@ -1,0 +1,37 @@
+*****************************************************************************************************
+digiKam 4.9.0 - Release date: 2015-04-05
+
+NEW FEATURES:
+
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 344484 - digiKam 4.8.0 compilation error : undefined reference to `cv::Exception::Exception.
+002 ==> 203733 - Syncing EXIF Artist and Copyright fields with IPTC/XMP.
+003 ==> 338753 - Exif ImageDescription field is being used incorrectly.
+004 ==> 330224 - Add collection from network share is silently ignored [patch].
+005 ==> 344699 - Maintenance is using the wrong face data management [patch].
+006 ==> 342931 - Wrong apect ratio in item properties and in item view.
+007 ==> 344793 - Thumbnail-preview broken for tags and timeline.
+008 ==> 345025 - Wrong sql statement updating thumbnail modification date.
+009 ==> 327009 - Tags auto-completion suggestions list is cut off at the right side.
+010 ==> 345168 - Crash when applying auto lens correction (chromatic aberration) [patch].
+011 ==> 319383 - Crash while applying lensfun distortion correction.
+012 ==> 333540 - Random crashes on OpenSUSE 13.1.
+013 ==> 345387 - Lens auto-correction tools shows "partial mathc" for canon 700d 18-135 is stm.
+014 ==> 345367 - The sideview containing the thumbnails is not updated after deleting a photo.
+015 ==> 345187 - When naming unkown faces digikam only remembers typed characters and not the selected name for the next face [patch].
+016 ==> 326208 - When doing a face learning (erase data and rebuild), Database is not erased and grow.
+017 ==> 323888 - Face recognition makes digikam fill all the available memory (Qt SQlite plugin relevant).
+018 ==> 338176 - Face Recognition memory allocation crash application.
+019 ==> 339933 - ICONVIEW : Incorrect Image Aspect Ratio shown.
+020 ==> 344997 - 100% CPU - Hang for VERY long periods.
+021 ==> 344420 - Incomplete update of sidecar after renaming face tag.
+022 ==> 342788 - THUMBBAR : Sort order not in sync with pictures in editor.
+023 ==> 345659 - Cannot shrink thumbnails panel.
+024 ==> 337502 - THUMBBAR : no thumbs generated.
+025 ==> 338230 - digiKam stops refreshing download progress after de-selecting pictures.
+026 ==> 345648 - Progress bar disappeared while importing pictures before importing finished.
+027 ==> 340139 - digiKam hangs after selecting folder with pictures.
+028 ==> 341772 - Re-read metadata when image file timestamp has changed [patch].
+029 ==> 329433 - Manual adding of faces made easier [patch].
