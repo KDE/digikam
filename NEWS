@@ -8,4 +8,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
 001 ==> 345954 - Recursive calls made into ProgressManager::slotTransactionCompletedDeferred [patch].
 002 ==> 329214 - Crash when moving tags by D&D.
-003 ==> 
+003 ==> 345941 - Add an auxiliary grid-thirds in the crop tool.
+004 ==> 
