@@ -237,7 +237,6 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
 Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& dropIndex)
 {
-
     TAlbum* const destAlbum = model()->albumForIndex(dropIndex);
 
     if (DTagListDrag::canDecode(e->mimeData()))
@@ -262,7 +261,14 @@ Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelInde
         // - unless the itemDrag is already at root level
         if (!destAlbum)
         {
-            if (droppedAlbum->parent()->isRoot())
+            Album* const palbum = droppedAlbum->parent();
+
+            if (!palbum)
+            {
+                 return Qt::IgnoreAction;
+            }
+
+            if (palbum->isRoot())
             {
                 return Qt::IgnoreAction;
             }
