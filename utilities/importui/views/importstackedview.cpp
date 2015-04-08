@@ -81,8 +81,10 @@ public:
 
 void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* filterModel)
 {
+    d->syncingSelection = true;
     d->importIconView->setModels(model, filterModel);
     d->thumbBar->setModelsFiltered(model, filterModel);
+    d->syncingSelection = false;
 
     // TODO this is currently here because the code structure, waiting for restructuring..
     d->importIconView->init();
