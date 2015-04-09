@@ -388,6 +388,9 @@ ProgressManager::ProgressManager()
     }
 
     d->waitingLoop = new QEventLoop(this);
+
+    connect(this, SIGNAL(completeTransactionDeferred(ProgressItem*)),
+            this, SLOT(slotTransactionCompletedDeferred(ProgressItem*)));
 }
 
 ProgressManager::~ProgressManager()
@@ -482,9 +485,6 @@ void ProgressManager::addProgressItemImpl(ProgressItem* const t, ProgressItem* c
 
     connect(t, SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotTransactionCompleted(ProgressItem*)), Qt::DirectConnection);
-
-    connect(t, SIGNAL(completeTransactionDeferred(ProgressItem*)),
-            this, SLOT(slotTransactionCompletedDeferred(ProgressItem*)));
 
     connect(t, SIGNAL(progressItemProgress(ProgressItem*,uint)),
             this, SIGNAL(progressItemProgress(ProgressItem*,uint)));
