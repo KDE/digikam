@@ -157,6 +157,7 @@ Q_SIGNALS:
 protected:
 
     void keyPressEvent(QKeyEvent* e);
+    void showEvent(QShowEvent* e);
 
 protected Q_SLOTS:
 

@@ -763,4 +763,23 @@ void AssignNameWidget::keyPressEvent(QKeyEvent* e)
     QWidget::keyPressEvent(e);
 }
 
+void AssignNameWidget::showEvent(QShowEvent* e)
+{
+    if (d->mode == UnconfirmedEditMode || d->mode == ConfirmedEditMode)
+    {
+        if (d->comboBox)
+        {
+            d->comboBox->lineEdit()->selectAll();
+            d->comboBox->lineEdit()->setFocus();
+        }
+        else if (d->lineEdit)
+        {
+            d->lineEdit->selectAll();
+            d->lineEdit->setFocus();
+        }
+    }
+
+    QWidget::showEvent(e);
+}
+
 } // namespace Digikam
