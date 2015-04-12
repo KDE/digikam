@@ -10,5 +10,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 002 ==> 329214 - Crash when moving tags by D&D.
 003 ==> 345941 - Add an auxiliary grid-thirds in the crop tool.
 004 ==> 345942 - Leak of memory when color autocorrection used on all processor cores.
-005 ==> 345184 - when manually adding a face, the focus should automatically go to the text.
-006 ==> 
+005 ==> 345184 - When manually adding a face, the focus should automatically go to the text.
+006 ==> 346025 - Unable to add keywords to Database, unable to view keywords from past.
+007 ==> 
