@@ -153,8 +153,7 @@ TaggingAction AddTagsComboBox::currentTaggingAction()
     }
 
 #pragma message "KCompleter port, check what this do"
-    return TaggingAction();
-    //return d->lineEdit->currentTaggingAction();
+    return d->lineEdit->currentTaggingAction();
 }
 
 void AddTagsComboBox::slotViewIndexActivated(const QModelIndex& index)

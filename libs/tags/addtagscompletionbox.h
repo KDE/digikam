@@ -50,8 +50,9 @@ public:
      */
     TagModelCompletion();
 
-    void setModel(TagModel* model);
+    void setModel(QAbstractItemModel *model, int idRole);
     void setModel(AlbumFilterModel* model);
+    void setModel(TagModel* model);
     TagModel* model() const;
 
     void update(QString word);

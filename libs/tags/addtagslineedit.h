@@ -72,14 +72,20 @@ public:
 
     void setAllowExceedBound(bool value);
 
+    void setCurrentTaggingAction(const TaggingAction& action);
+
+    TaggingAction currentTaggingAction() const;
+
 public Q_SLOTS:
 
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action.
      *  If you set a tag tree view, this is taken care for automatically.
      */
-    void setParentTag(QModelIndex &index);
+    void slotSetParentTag(QModelIndex index);
 
     void setParentTag(TAlbum* album);
+
+    void slotReturnPressed(const QString& text);
 
 Q_SIGNALS:
 

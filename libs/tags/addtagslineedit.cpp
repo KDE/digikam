@@ -61,7 +61,6 @@ public:
         tagView            = 0;
         resetFromCompleter = false;
     }
-
     TagModelCompletion*   completion;
     TagTreeView*          tagView;
     TaggingAction         currentTaggingAction;
@@ -70,13 +69,63 @@ public:
     TAlbum*               currentTag;
     TagModel*             tagModel;
 
-/*
 public:
 
-    TaggingAction makeTaggingAction(const QString& userText);
-*/
+    TaggingAction makeDefaultTaggingAction(const QString& test, int parentTagId);
+
 };
 
+TaggingAction AddTagsLineEdit::Private::makeDefaultTaggingAction(const QString& text, int parentTagId)
+{
+    // We now take the presumedly best action, without autocompletion popup.
+    // 1. Tag exists?
+    //    a) Single tag? Assign.
+    //    b) Multiple tags? 1. Existing tag under parent. 2. Toplevel tag 3. Alphabetically lowest tag
+    // 2. Create tag under parent. No parent selected? Toplevel
+
+    QList<int> tagIds = TagsCache::instance()->tagsForName(text);
+
+    if (!tagIds.isEmpty())
+    {
+        if (tagIds.count() == 1)
+        {
+            return TaggingAction(tagIds.first());
+        }
+        else
+        {
+            int tagId = 0;
+
+            if (parentTagId)
+            {
+                tagId = TagsCache::instance()->tagForName(text, parentTagId);
+            }
+
+            if (!tagId)
+            {
+                tagId = TagsCache::instance()->tagForName(text);    // toplevel tag
+            }
+
+            if (!tagId)
+            {
+                // sort lexically
+                QMap<QString, int> map;
+
+                foreach(int id, tagIds)
+                {
+                    map[TagsCache::instance()->tagPath(id, TagsCache::NoLeadingSlash)] = id;
+                }
+
+                tagId = map.begin().value();
+            }
+
+            return TaggingAction(tagId);
+        }
+    }
+    else
+    {
+        return TaggingAction(text, parentTagId);
+    }
+}
 // ---------------------------------------------------------------------------------------
 
 AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
@@ -89,6 +138,7 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
 
 AddTagsLineEdit::~AddTagsLineEdit()
 {
+    delete d->completion;
     delete d;
 }
 
@@ -134,7 +184,7 @@ void AddTagsLineEdit::setTagTreeView(TagTreeView* view)
     {
         //d->completionBox->setParentTag(d->tagView->currentIndex());
         connect(d->tagView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(setParentTag(QModelIndex)));
+                this, SLOT(slotSetParentTag(QModelIndex)));
     }
 }
 
@@ -143,7 +193,7 @@ void AddTagsLineEdit::setCurrentTag(TAlbum *album)
     d->parentTag = album;
 }
 
-void AddTagsLineEdit::setParentTag(QModelIndex& index)
+void AddTagsLineEdit::slotSetParentTag(QModelIndex index)
 {
     if(index.isValid())
         d->parentTag = dynamic_cast<TAlbum*>(d->tagModel->albumForIndex(index));
@@ -164,6 +214,8 @@ void AddTagsLineEdit::completerActivated(QModelIndex index)
 
     if(id == -5)
     {
+        d->currentTaggingAction = TaggingAction(index.data(Qt::UserRole+4).toString(),
+                                                d->tagView->currentAlbum()->id());
         QMap<QString, QString> errMap;
         AlbumList al = TagEditDlg::createTAlbum(d->tagView->currentAlbum(),
                                                 index.data(Qt::UserRole+4).toString(),
@@ -176,6 +228,7 @@ void AddTagsLineEdit::completerActivated(QModelIndex index)
     }
     else
     {
+        d->currentTaggingAction = TaggingAction(id);
         TAlbum* const tAlbum = AlbumManager::instance()->findTAlbum(id);
         d->tagModel->setCheckState(tAlbum,Qt::Checked);
     }
@@ -218,13 +271,17 @@ void AddTagsLineEdit::focusInEvent(QFocusEvent* f)
 
 void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
 {
+//    qDebug() << "Debug this " << e->key();
     if (d->completion && d->completion->popup()->isVisible())
     {
         // The following keys are forwarded by the completer to the widget
         switch (e->key())
         {
-            case Qt::Key_Enter:
             case Qt::Key_Return:
+                slotReturnPressed(text());
+                e->ignore();
+                return;
+            case Qt::Key_Enter:
             case Qt::Key_Escape:
             case Qt::Key_Tab:
             case Qt::Key_Backtab:
@@ -252,5 +309,50 @@ void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
     d->completion->update(text());
     d->completion->popup()->setCurrentIndex(d->completion->completionModel()->index(0, 0));
 }
+
+// Tagging action is used by facemanagement and assignwidget
+
+void AddTagsLineEdit::slotReturnPressed(const QString& text)
+{
+    qDebug() << "slot return pressed";
+    if (text.isEmpty())
+    {
+      //focus back to mainview
+      emit taggingActionFinished();
+      return;
+    }
+
+    //Q_UNUSED(text);
+    emit taggingActionActivated(currentTaggingAction());
+}
+
+void AddTagsLineEdit::setCurrentTaggingAction(const TaggingAction& action)
+{
+    qDebug() << "Set current Tagging action";
+    if (d->currentTaggingAction == action)
+    {
+        return;
+    }
+
+    d->currentTaggingAction = action;
+    emit taggingActionSelected(action);
+}
+
+TaggingAction AddTagsLineEdit::currentTaggingAction() const
+{
+    if (d->currentTaggingAction.isValid())
+    {
+        return d->currentTaggingAction;
+    }
+    else if(!text().isEmpty())
+    {
+        return d->makeDefaultTaggingAction(text(),d->currentTag->id());
+    }
+    else
+    {
+        return TaggingAction();
+    }
+}
+
 
 } // namespace Digikam

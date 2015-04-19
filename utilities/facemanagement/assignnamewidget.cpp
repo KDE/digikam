@@ -501,12 +501,13 @@ void AssignNameWidget::Private::setAddTagsWidgetContents(T* const widget)
     {
         widget->setCurrentTag(currentTag);
         widget->setPlaceholderText((mode == UnconfirmedEditMode) ? i18n("Who is this?") : QString());
+        qDebug() << "************setAddTagsWidgetContents called: confirm button";
 
 #pragma message "QCompleter port"
-//        if (confirmButton)
-//        {
-//            confirmButton->setEnabled(widget->currentTaggingAction().isValid());
-//        }
+        if (confirmButton)
+        {
+            confirmButton->setEnabled(widget->currentTaggingAction().isValid());
+        }
     }
 }
 
@@ -711,14 +712,15 @@ void AssignNameWidget::setCurrentTag(TAlbum* album)
 void AssignNameWidget::slotConfirm()
 {
 #pragma message "QCompleter port, check what this do"
-//    if (d->comboBox)
-//    {
-//        emit assigned(d->comboBox->currentTaggingAction(), d->info, d->faceIdentifier);
-//    }
-//    else if (d->lineEdit)
-//    {
-//        emit assigned(d->lineEdit->currentTaggingAction(), d->info, d->faceIdentifier);
-//    }
+    qDebug() << "*******************AssignName widget slot confirm";
+    if (d->comboBox)
+    {
+        emit assigned(d->comboBox->currentTaggingAction(), d->info, d->faceIdentifier);
+    }
+    else if (d->lineEdit)
+    {
+        emit assigned(d->lineEdit->currentTaggingAction(), d->info, d->faceIdentifier);
+    }
 }
 
 void AssignNameWidget::slotReject()
