@@ -32,6 +32,7 @@
     <p xml:lang="bs">digiKam je napredna aplikacija za upravljanje digitalnim fotografijama, što čini uvoz i organizaciju digitalnih fotografija "klikom". Fotografije su organizovane u albumima koji mogu biti sortirani hronološki, po rasporedu foldera ili po korisničkim kolekcijama.</p>
     <p xml:lang="ca">El digiKam és una avançada aplicació per a gestionar les fotografies digitals, la qual fa que la importació i organització de les fotografies digitals sigui una «tasca fàcil». Les fotografies s'organitzen en àlbums, els quals es poden ordenar cronològicament, per disposició de la carpeta o per col·leccions personalitzades.</p>
     <p xml:lang="en-GB">digiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.</p>
+    <p xml:lang="es">digiKam es una aplicación avanzada de gestión de fotos digitales que facilita la importación y la organización de fotos digitales. Las fotos se organizan en álbumes, que se pueden ordenar cronológicamente, por esquemas de carpetas o por colecciones personalizadas.</p>
     <p xml:lang="fr">digiKam est une application de gestion de photos avancée, qui rend l'import et l'organisation des photos comme un jeu d'enfant. Les photos sont organisées dans des albums qui peuvent être triés de manière chronologique, selon l'organisation des dossiers, ou par collections personnalisées.</p>
     <p xml:lang="it">digiKam è un'applicazione per la gestione avanzata delle fotografie digitali, che permette di importare e organizzare le proprie foto in pochi clic. Le foto sono organizzate in album, i quali possono essere ordinati per data, per disposizione delle cartelle o per raccolte personalizzate.</p>
     <p xml:lang="ko">digiKam은 디지털 사진을 가져오고 관리하는 고급 디지털 사진 관리 프로그램입니다. 사진은 시간순, 폴더별 등 다양한 방법으로 정리할 수 있습니다.</p>
@@ -69,6 +70,7 @@
       <li xml:lang="bs">Organizacija fotografija u albume i podalbume (sa podrškom za označavanje i komentarisanje)</li>
       <li xml:lang="ca">Organització de les fotografies en àlbums i sub-àlbums (amb implementació per a les etiquetes i comentaris)</li>
       <li xml:lang="en-GB">Organisation of photos in albums and sub-albums (with tags and comments support)</li>
+      <li xml:lang="es">Organización de fotos en álbumes y álbumes anidados (con uso de etiquetas y comentarios)</li>
       <li xml:lang="fr">Organisation de photos en albums et sous-albums (avec prise en charge des étiquettes et des commentaires)</li>
       <li xml:lang="it">Organizzazione di foto in album e sotto-album (con supporto per le etichette e i commenti)</li>
       <li xml:lang="ko">앨범 및 하위 앨범으로 사진 정렬(태그와 주석 지원)</li>
@@ -86,6 +88,7 @@
       <li xml:lang="ca">Implementació per a notes Exif, Iptc, Xmp i del fabricant</li>
       <li xml:lang="de">Unterstützung für Exif, Iptc, Xmp und Herstellerbemerkungen</li>
       <li xml:lang="en-GB">Support for Exif, Iptc, Xmp, Makernotes</li>
+      <li xml:lang="es">Uso de Exif, Iptc, Xmp y notas del fabricante</li>
       <li xml:lang="fr">Prise en charge des données EXIF, IPTC, XMP, MakerNotes</li>
       <li xml:lang="it">Supporto per Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="ko">EXIF, IPTC, XMP, 메이커 노트 지원</li>
@@ -103,6 +106,7 @@
       <li xml:lang="ca">Emmagatzematge amb SQLite pels àlbums i les seves metadades</li>
       <li xml:lang="de">Speicherung der Alben und Metadaten in einer SQLite-Datenbank</li>
       <li xml:lang="en-GB">SQLite powered storage for the albums and its metadata</li>
+      <li xml:lang="es">Almacenamiento basado en SQLite para los álbumes y sus metadatos</li>
       <li xml:lang="fr">Stockage des albums et des métadonnées fonctionnant avec SQLite</li>
       <li xml:lang="it">Memorizzazione degli album e dei dati aggiuntivi fornita da SQLite</li>
       <li xml:lang="ko">SQLite 기반 앨범과 메타데이터 저장소</li>
@@ -120,6 +124,7 @@
       <li xml:lang="ca">Implementació pel filtratge i classificació dels àlbums</li>
       <li xml:lang="de">Unterstützung für das Filtern und Sortieren von Alben</li>
       <li xml:lang="en-GB">Support for filtering and sorting albums</li>
+      <li xml:lang="es">Implementación de filtrado y ordenación de álbumes</li>
       <li xml:lang="fr">Prise en charge du filtrage et du tri des albums</li>
       <li xml:lang="it">Supporto per il filtraggio e l'ordinamento degli album</li>
       <li xml:lang="ko">앨범 필터링 및 정렬</li>
@@ -137,6 +142,7 @@
       <li xml:lang="ca">Importa des de més de 1.100 dispositius de càmeres digitals</li>
       <li xml:lang="de">Import von mehr als 1100 digitalen Kameras</li>
       <li xml:lang="en-GB">Import from more than 1100 digital camera devices</li>
+      <li xml:lang="es">Permite importar de más de 1100 cámaras digitales</li>
       <li xml:lang="fr">Importe à partir de plus de 1100 appareils photos numériques</li>
       <li xml:lang="it">Importazione da più di 1.100 dispositivi fotografici digitali</li>
       <li xml:lang="ko">1100종 이상의 디지털 카메라에서 사진 가져오기</li>
@@ -154,6 +160,7 @@
       <li xml:lang="ca">Implementació per a 300 formats d'imatges RAW</li>
       <li xml:lang="de">Unterstützung für 300 Bild-Rohformate</li>
       <li xml:lang="en-GB">Support for 300 RAW format pictures</li>
+      <li xml:lang="es">Implementación imágenes en 300 formatos RAW</li>
       <li xml:lang="fr">Prise en charge de 300 formats d'image RAW</li>
       <li xml:lang="ko">300종 이상의 RAW 사진 형식 지원</li>
       <li xml:lang="nl">Ondersteuning voor 300 RAW-format afbeeldingen</li>
@@ -170,6 +177,7 @@
       <li xml:lang="ca">La característica taula de llum</li>
       <li xml:lang="de">Leuchttischfunktion</li>
       <li xml:lang="en-GB">Light Table feature</li>
+      <li xml:lang="es">Función de tabla de luz</li>
       <li xml:lang="fr">Fonction table lumineuse</li>
       <li xml:lang="it">Tavolo luminoso</li>
       <li xml:lang="ko">조명 테이블 기능</li>
@@ -187,6 +195,7 @@
       <li xml:lang="ca">Arquitectura de connectors: usant els connectors Kipi</li>
       <li xml:lang="de">Modul-Architektur: Erweiterung durch KIPI-Module</li>
       <li xml:lang="en-GB">Plugins architectures: using Kipi-plugins</li>
+      <li xml:lang="es">Arquitectura de complementos: uso de complementos Kipi</li>
       <li xml:lang="fr">Architectures de modules externes : utilise les modules KIPI</li>
       <li xml:lang="it">Architettura estensioni: uso delle estensioni Kipi</li>
       <li xml:lang="ko">플러그인 아키텍처: Kipi 플러그인 지원</li>
@@ -203,6 +212,7 @@
       <li xml:lang="bs">Podijelite vaše fotografije koristeći HTML ili objavljujući ih na socijalne web stranice</li>
       <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
       <li xml:lang="en-GB">Share your photos using HTML or publishing them to social web sites</li>
+      <li xml:lang="es">Compartir fotos usando HTML o publicándolas en sitios web sociales</li>
       <li xml:lang="fr">Permet de partager vos photos avec des pages HTML ou publiez les sur des réseaux sociaux</li>
       <li xml:lang="it">Condivisione delle foto tramite HTML o loro pubblicazione nei siti web sociali</li>
       <li xml:lang="ko">HTML 및 소셜 웹 사이트를 통한 사진 지원</li>
@@ -219,6 +229,7 @@
       <li xml:lang="bs">Uvršten uređivač slika sa naprednim svojstvima</li>
       <li xml:lang="ca">Inclou un editor d'imatges amb característiques avançades</li>
       <li xml:lang="en-GB">Image editor included with advanced features</li>
+      <li xml:lang="es">Editor de imágenes incluido con funciones avanzadas</li>
       <li xml:lang="fr">Éditeur d'images inclus, avec des fonctionnalités avancées</li>
       <li xml:lang="it">Editor delle immagini con caratteristiche avanzate incluso</li>
       <li xml:lang="ko">고급 기능이 있는 그림 편집기</li>
