@@ -12,4 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 004 ==> 345942 - Leak of memory when color autocorrection used on all processor cores.
 005 ==> 345184 - When manually adding a face, the focus should automatically go to the text.
 006 ==> 346025 - Unable to add keywords to Database, unable to view keywords from past.
-007 ==> 
+007 ==> 346646 - Renaming works when downloading selected but settings are ignored when. 
+008 ==> 

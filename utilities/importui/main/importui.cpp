@@ -1683,6 +1683,11 @@ void ImportUI::slotLocked(const QString& folder, const QString& file, bool statu
 
 void ImportUI::slotUpdateDownloadName()
 {
+    if (d->busy)
+    {
+        return;
+    }
+
     d->view->setIconViewUpdatesEnabled(false);
 
     bool noSelection          = d->view->selectedCamItemInfos().count() == 0;
