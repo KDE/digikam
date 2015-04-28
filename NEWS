@@ -13,4 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 005 ==> 345184 - When manually adding a face, the focus should automatically go to the text.
 006 ==> 346025 - Unable to add keywords to Database, unable to view keywords from past.
 007 ==> 346646 - Renaming works when downloading selected but settings are ignored when. 
-008 ==> 
+008 ==> 331742 - This takes a lot of time processing > 200 images in BQM [patch].
+009 ==> 
