@@ -1645,6 +1645,11 @@ void ImportUI::slotLocked(const QString& folder, const QString& file, bool statu
 
 void ImportUI::slotUpdateDownloadName()
 {
+    if (d->busy)
+    {
+        return;
+    }
+
     d->view->setIconViewUpdatesEnabled(false);
 
     bool noSelection          = d->view->selectedCamItemInfos().count() == 0;
@@ -1707,8 +1712,6 @@ void ImportUI::slotUpdateDownloadName()
 //FIXME: the new pictures are marked by CameraHistoryUpdater which is not working yet.
 void ImportUI::slotSelectNew()
 {
-    blockSignals(true);
-
     CamItemInfoList infos = d->view->allItems();
     CamItemInfoList toBeSelected;
 
@@ -1721,7 +1724,6 @@ void ImportUI::slotSelectNew()
     }
 
     d->view->setSelectedCamItemInfos(toBeSelected);
-    blockSignals(false);
 }
 
 void ImportUI::slotSelectLocked()
