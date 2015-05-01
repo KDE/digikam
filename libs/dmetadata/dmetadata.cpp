@@ -1422,7 +1422,13 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
 
             for(int index = 0; index < splitTags.size(); index++)
             {
-                int tagIndex = xmlTags.indexOf(QRegExp(QString(QLatin1String("^<.*>%1$")).arg(splitTags[index])));
+                int tagIndex = xmlTags.indexOf(category.arg(0) + splitTags[index]);
+
+                if (tagIndex == -1)
+                {
+                    tagIndex = xmlTags.indexOf(category.arg(1) + splitTags[index]);
+                }
+
                 splitTags[index].insert(0, category.arg(index == splitTags.size() - 1 ? 1 : 0));
 
                 if (tagIndex == -1)
