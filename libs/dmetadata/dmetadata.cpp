@@ -279,6 +279,16 @@ CaptionsMap DMetadata::getImageComments() const
 
     if (hasXmp())
     {
+        if (authorsMap.isEmpty() && commonAuthor.isEmpty())
+        {
+            QString xmpAuthors = getXmpTagString("Xmp.acdsee.author", false);
+
+            if (!xmpAuthors.isEmpty())
+            {
+                authorsMap.insert(QLatin1String("x-default"), xmpAuthors);
+            }
+        }
+
         commentsMap = getXmpTagStringListLangAlt("Xmp.dc.description", false);
 
         if (!commentsMap.isEmpty())
@@ -297,6 +307,15 @@ CaptionsMap DMetadata::getImageComments() const
         }
 
         xmpComment = getXmpTagStringLangAlt("Xmp.tiff.ImageDescription", QString(), false);
+
+        if (!xmpComment.isEmpty())
+        {
+            commentsMap.insert(QLatin1String("x-default"), xmpComment);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
+            return captionsMap;
+        }
+        
+        xmpComment = getXmpTagString("Xmp.acdsee.notes", false);
 
         if (!xmpComment.isEmpty())
         {
@@ -368,6 +387,17 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
         {
             return false;
         }
+        
+        QString defaultAuthor  = comments.value(QLatin1String("x-default")).author;
+        removeXmpTag("Xmp.acdsee.author");
+
+        if (!defaultAuthor.isNull())
+        {
+            if (!setXmpTagString("Xmp.acdsee.author", defaultAuthor, false))
+            {
+                return false;
+            }
+        }
 
         if (!setXmpTagStringListLangAlt("Xmp.digiKam.CaptionsDateTimeStamps", comments.datesList(), false))
         {
@@ -415,6 +445,15 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
         if (!defaultComment.isNull())
         {
             if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", defaultComment, QString(), false))
+            {
+                return false;
+            }
+        }
+        
+        removeXmpTag("Xmp.acdsee.notes");
+        if (!defaultComment.isEmpty())
+        {
+            if (!setXmpTagString("Xmp.acdsee.notes", defaultComment, false))
             {
                 return false;
             }
@@ -523,6 +562,14 @@ CaptionsMap DMetadata::getImageTitles() const
             captionsMap.setData(titlesMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
+        
+        QString xmpTitle = getXmpTagString("Xmp.acdsee.caption" ,false);
+        if (!xmpTitle.isEmpty() && !xmpTitle.trimmed().isEmpty())
+        {
+            titlesMap.insert(QLatin1String("x-default"), xmpTitle);
+            captionsMap.setData(titlesMap, authorsMap, commonAuthor, datesMap);
+            return captionsMap;
+        }
     }
 
     // We trying to get IPTC title
@@ -547,15 +594,26 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
 
     QString defaultTitle = titles[QLatin1String("x-default")].caption;
 
-
     // In First we write comments into XMP. Language Alternative rule is not yet used.
 
     if (supportXmp())
     {
         // NOTE : setXmpTagStringListLangAlt remove xmp tag before to add new values
         if (!setXmpTagStringListLangAlt("Xmp.dc.title", titles.toAltLangMap(), false))
+        {
             return false;
+        }
+        
+        removeXmpTag("Xmp.acdsee.caption");
+        if (!defaultTitle.isEmpty())
+        {
+            if (!setXmpTagString("Xmp.acdsee.caption", defaultTitle, false))
+            {
+                return false;
+            }
+        }
     }
+
     // In Second we write comments into IPTC.
     // Note that Caption IPTC tag is limited to 64 char and ASCII charset.
 
@@ -598,6 +656,19 @@ int DMetadata::getImageRating() const
     if (hasXmp())
     {
         QString value = getXmpTagString("Xmp.xmp.Rating", false);
+
+        if (!value.isEmpty())
+        {
+            bool ok     = false;
+            long rating = value.toLong(&ok);
+
+            if (ok && rating >= RatingMin && rating <= RatingMax)
+            {
+                return rating;
+            }
+        }
+        
+        value = getXmpTagString("Xmp.acdsee.rating", false);
 
         if (!value.isEmpty())
         {
@@ -811,6 +882,11 @@ bool DMetadata::setImageRating(int rating) const
     if (supportXmp())
     {
         if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
+        {
+            return false;
+        }
+
+        if (!setXmpTagString("Xmp.acdsee.rating", QString::number(rating), false))
         {
             return false;
         }
@@ -1229,6 +1305,48 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
         return true;
     }
 
+    // Try to get Tags Path list from ACDSee 8 Pro categories.
+    QString xmlACDSee = getXmpTagString("Xmp.acdsee.categories", false);
+    if (!xmlACDSee.isEmpty())
+    {
+        xmlACDSee.remove(QLatin1String("</Categories>"));
+        xmlACDSee.remove(QLatin1String("<Categories>"));
+        xmlACDSee.replace(QLatin1String("/"), QLatin1String("\\"));
+
+        QStringList xmlTags = xmlACDSee.split(QLatin1String("<Category Assigned"));
+        int category        = 0;
+
+        foreach(const QString& tags, xmlTags)
+        {
+            if (!tags.isEmpty())
+            {
+                int count  = tags.count(QLatin1String("<\\Category>"));
+                int length = tags.length() - (11 * count) - 5;
+
+                if (category == 0)
+                {
+                    tagsPath << tags.mid(5, length);
+                }
+                else
+                {
+                    tagsPath.last().append(QLatin1String("/") + tags.mid(5, length));
+                }
+
+                category = category - count + 1;
+
+                if (tags.left(5) == QLatin1String("=\"1\">") && category > 0)
+                {
+                    tagsPath << tagsPath.last().section(QLatin1String("/"), 0, category - 1);
+                }
+            }
+        }
+
+        if (!tagsPath.isEmpty())
+        {
+            return true;
+        }
+    }
+    
     // Try to get Tags Path list from IPTC keywords.
     // digiKam 0.9.x has used IPTC keywords to store Tags Path list.
     // This way is obsolete now since digiKam support XMP because IPTC
@@ -1290,6 +1408,59 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
         if (!setXmpTagStringBag("Xmp.lr.hierarchicalSubject", LRtagsPath))
         {
             return false;
+        }
+        
+        // Converting Tags path list to ACDSee 8 Pro categories.
+        const QString category(QLatin1String("<Category Assigned=\"%1\">"));
+        QStringList splitTags;
+        QStringList xmlTags;
+
+        foreach(const QString& tags, tagsPath)
+        {
+            splitTags   = tags.split(QLatin1String("/"));
+            int current = 0;
+
+            for(int index = 0; index < splitTags.size(); index++)
+            {
+                int tagIndex = xmlTags.indexOf(QRegExp(QString(QLatin1String("^<.*>%1$")).arg(splitTags[index])));
+                splitTags[index].insert(0, category.arg(index == splitTags.size() - 1 ? 1 : 0));
+
+                if (tagIndex == -1)
+                {
+                    if (index == 0)
+                    {
+                        xmlTags << splitTags[index];
+                        xmlTags << QLatin1String("</Category>");
+                        current = xmlTags.size() - 1;
+                    }
+                    else
+                    {
+                        xmlTags.insert(current, splitTags[index]);
+                        xmlTags.insert(current + 1, QLatin1String("</Category>"));
+                        current++;
+                    }
+                }
+                else
+                {
+                    if (index == splitTags.size() - 1)
+                    {
+                        xmlTags[tagIndex] = splitTags[index];
+                    }
+
+                    current = tagIndex + 1;
+                }
+            }
+        }
+
+        QString xmlACDSee = QLatin1String("<Categories>") + xmlTags.join(QLatin1String("")) + QLatin1String("</Categories>");
+
+        removeXmpTag("Xmp.acdsee.categories");
+        if (!xmlTags.isEmpty())
+        {
+            if (!setXmpTagString("Xmp.acdsee.categories", xmlACDSee, false))
+            {
+                return false;
+            }
         }
     }
 
@@ -2186,14 +2357,16 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return fromIptcOrXmp("Iptc.Application2.Headline", "Xmp.photoshop.Headline");
         case MetadataInfo::Title:
         {
-            QVariant var = fromXmpLangAlt("Xmp.dc.title");
+            QString str = getImageTitles()[QLatin1String("x-default")].caption;
 
-            if (!var.isNull())
+            if (str.isEmpty())
             {
-                return var;
+                return QVariant(QVariant::Map);
             }
 
-            return fromIptcEmulateLangAlt("Iptc.Application2.ObjectName");
+            QMap<QString, QVariant> map;
+            map[QLatin1String("x-default")] = str;
+            return map;
         }
         case MetadataInfo::DescriptionWriter:
             return fromIptcOrXmp("Iptc.Application2.Writer", "Xmp.photoshop.CaptionWriter");
