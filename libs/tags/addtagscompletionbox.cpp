@@ -99,8 +99,9 @@ void TagModelCompletion::setModel(QAbstractItemModel* model, int idRole)
 
     int i = 0;
     QQueue<QModelIndex> q;
-
-    q.append(model->index(0,0));
+    int val =0;
+    while(model->index(val,0).isValid())
+        q.append(model->index(val++,0,QModelIndex()));
 
     while(!q.isEmpty())
     {
@@ -132,7 +133,6 @@ void TagModelCompletion::setModel(QAbstractItemModel* model, int idRole)
         }
     }
 
-    QCompleter::setModel(d->model);
 }
 
 void TagModelCompletion::setModel(AlbumFilterModel* model)
@@ -192,7 +192,6 @@ void TagModelCompletion::update(QString word)
 
 void TagModelCompletion::complete(const QRect &rect)
 {
-    //qDebug() << "+++ Completion +++";
     QCompleter::complete(rect);
 }
 
@@ -211,7 +210,6 @@ void TagModelCompletion::slotInsertRows(QModelIndex index, int start, int end)
 
             QStandardItem* const item = new QStandardItem(icon,t->title());
             item->setData(QVariant(t->id()), Qt::UserRole+5);
-            //root->appendRow(item);
             d->allItems.append(item);
         }
     }
