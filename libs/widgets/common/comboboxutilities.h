@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <klineedit.h>
+#include <QLineEdit>
 
 // Local includes
 
@@ -45,7 +45,7 @@ class QTreeView;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ProxyLineEdit : public KLineEdit
+class DIGIKAM_EXPORT ProxyLineEdit : public QLineEdit
 {
     Q_OBJECT
 
