@@ -75,7 +75,8 @@ public:
 // -------------------------------------------------------
 
 Task::Task()
-    : RActionJob(), d(new Private)
+    : RActionJob(),
+      d(new Private)
 {
 }
 
@@ -101,7 +102,6 @@ void Task::slotCancel()
         d->tool->cancel();
 
     d->cancel = true;
-
 }
 
 void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const QUrl& dest)
@@ -116,7 +116,7 @@ void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, cons
 
 void Task::run()
 {
-    if(d->cancel)
+    if (d->cancel)
     {
         return;
     }
