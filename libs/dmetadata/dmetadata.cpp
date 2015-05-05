@@ -1297,10 +1297,20 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
         return true;
     }
 
-    // Try to get Tags Path list from XMP keywords.
-    tagsPath = getXmpKeywords();
+    // Try to get Tags Path list from Media Pro XMP first.
+    tagsPath = getXmpTagStringBag("Xmp.mediapro.CatalogSets", false);
+
+    // There is another Media Pro tag for hierarchical subjects.
+    if (tagsPath.isEmpty())
+    {
+        tagsPath = getXmpTagStringBag("Xmp.expressionmedia.CatalogSets", false);
+    }
+
     if (!tagsPath.isEmpty())
     {
+        // Media Pro Catalog Sets use '|' as separator.
+        tagsPath = tagsPath.replaceInStrings("|", "/");
+        kDebug() << "Tags Path imported from Media Pro: " << tagsPath;
         return true;
     }
 
@@ -1342,8 +1352,16 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 
         if (!tagsPath.isEmpty())
         {
+            kDebug() << "Tags Path imported from ACDSee: " << tagsPath;
             return true;
         }
+    }
+
+    // Try to get Tags Path list from XMP keywords.
+    tagsPath = getXmpKeywords();
+    if (!tagsPath.isEmpty())
+    {
+        return true;
     }
 
     // Try to get Tags Path list from IPTC keywords.
@@ -1405,6 +1423,14 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
         LRtagsPath             = LRtagsPath.replaceInStrings("/", "|");
 
         if (!setXmpTagStringBag("Xmp.lr.hierarchicalSubject", LRtagsPath))
+        {
+            return false;
+        }
+
+        QStringList MPtagsPath = tagsPath;
+        MPtagsPath             = MPtagsPath.replaceInStrings("/", "|");
+
+        if (!setXmpTagStringBag("Xmp.mediapro.CatalogSets", MPtagsPath))
         {
             return false;
         }
