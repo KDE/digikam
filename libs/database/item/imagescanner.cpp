@@ -84,7 +84,9 @@ public:
           commitImageComments(false),
           commitImageCopyright(false),
           commitFaces(false),
-          commitIPTCCore(false)
+          commitIPTCCore(false),
+          hasColorTag(false),
+          hasPickTag(false)
     {
     }
 
@@ -102,6 +104,8 @@ public:
     bool                             commitImageCopyright;
     bool                             commitFaces;
     bool                             commitIPTCCore;
+    bool                             hasColorTag;
+    bool                             hasPickTag;
 
     DatabaseFields::ImageInformation imageInformationFields;
     QVariantList                     imageInformationInfos;
@@ -863,6 +867,7 @@ void ImageScanner::scanTags()
         if (tagId)
         {
             d->commit.tagIds << tagId;
+            d->commit.hasPickTag = true;
             qCDebug(DIGIKAM_GENERAL_LOG) << "Assigned Pick Label Tag  : " << tagId;
         }
         else
@@ -884,6 +889,7 @@ void ImageScanner::scanTags()
         if (tagId)
         {
             d->commit.tagIds << tagId;
+            d->commit.hasColorTag = true;
             qCDebug(DIGIKAM_GENERAL_LOG) << "Assigned Color Label Tag  : " << tagId;
         }
         else
@@ -895,6 +901,25 @@ void ImageScanner::scanTags()
 
 void ImageScanner::commitTags()
 {
+    QList<int> currentTags = DatabaseAccess().db()->getItemTagIDs(d->scanInfo.id);
+    QVector<int> colorTags = TagsCache::instance()->colorLabelTags();
+    QVector<int> pickTags  = TagsCache::instance()->pickLabelTags();
+    QList<int> removeTags;
+
+    foreach(int cTag, currentTags)
+    {
+        if ((d->commit.hasColorTag && colorTags.contains(cTag)) ||
+            (d->commit.hasPickTag && pickTags.contains(cTag)))
+        {
+            removeTags << cTag;
+        }
+    }
+
+    if (!removeTags.isEmpty())
+    {
+        DatabaseAccess().db()->removeTagsFromItems(QList<qlonglong>() << d->scanInfo.id, removeTags);
+    }
+
     DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << d->scanInfo.id, d->commit.tagIds);
 }
 
