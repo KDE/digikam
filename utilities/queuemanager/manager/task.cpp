@@ -150,6 +150,7 @@ void Task::run()
         d->tool->setInputUrl(inUrl);
         d->tool->setWorkingUrl(workUrl);
         d->tool->setSettings(set.settings);
+        d->tool->setIOFileSettings(d->settings.ioFileSettings);
         d->tool->setRawLoadingRules(d->settings.rawLoadingRule);
         d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
         d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);

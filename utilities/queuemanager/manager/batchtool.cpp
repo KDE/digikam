@@ -49,6 +49,8 @@
 #include "dimgthreadedfilter.h"
 #include "filereadwritelock.h"
 #include "batchtoolutils.h"
+#include "jpegsettings.h"
+#include "pngsettings.h"
 
 using namespace KDcrawIface;
 
@@ -92,6 +94,8 @@ public:
     DImg                          image;
 
     RawDecodingSettings           rawDecodingSettings;
+
+    IOFileSettings                ioFileSettings;
 
     BatchToolSettings             settings;
 
@@ -287,6 +291,16 @@ RawDecodingSettings BatchTool::rawDecodingSettings() const
     return d->rawDecodingSettings;
 }
 
+void BatchTool::setIOFileSettings(const IOFileSettings& settings)
+{
+    d->ioFileSettings = settings;
+}
+
+IOFileSettings BatchTool::ioFileSettings() const
+{
+    return d->ioFileSettings;
+}
+
 void BatchTool::setWorkingUrl(const QUrl& workingUrl)
 {
     d->workingUrl = workingUrl;
@@ -389,6 +403,30 @@ bool BatchTool::savefromDImg() const
     if (frm.isEmpty())
     {
         // In case of output support is not set for ex. with all tool which do not convert to new format.
+        if (detectedFormat == DImg::JPEG)
+        {
+            d->image.setAttribute(QLatin1String("quality"),     JPEGSettings::convertCompressionForLibJpeg(ioFileSettings().JPEGCompression));
+            d->image.setAttribute(QLatin1String("subsampling"), ioFileSettings().JPEGSubSampling);
+        }
+        else if (detectedFormat == DImg::PNG)
+        {
+            d->image.setAttribute(QLatin1String("quality"),     PNGSettings::convertCompressionForLibPng(ioFileSettings().PNGCompression));
+        }
+        else if (detectedFormat == DImg::TIFF)
+        {
+            d->image.setAttribute(QLatin1String("compress"),    ioFileSettings().TIFFCompression);
+        }
+        else if (detectedFormat == DImg::JP2K)
+        {
+            d->image.setAttribute(QLatin1String("quality"),     ioFileSettings().JPEG2000LossLess ? 100 :
+                                  ioFileSettings().JPEG2000Compression);
+        }
+        else if (detectedFormat == DImg::PGF)
+        {
+            d->image.setAttribute(QLatin1String("quality"),     ioFileSettings().PGFLossLess ? 0 :
+                                  ioFileSettings().PGFCompression);
+        }
+
         d->image.prepareMetadataToSave(outputUrl().toLocalFile(), DImg::formatToMimeType(detectedFormat), resetOrientation);
         bool b = d->image.save(outputUrl().toLocalFile(), detectedFormat, d->observer);
         return b;

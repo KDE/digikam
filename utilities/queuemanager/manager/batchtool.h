@@ -36,6 +36,7 @@
 
 #include "dimg.h"
 #include "queuesettings.h"
+#include "iofilesettings.h"
 
 class QWidget;
 
@@ -185,6 +186,14 @@ public:
     /** Return RAW decoding settings used during tool operations.
      */
     RawDecodingSettings rawDecodingSettings() const;
+
+    /** Set-up IOFile settings no use during tool operations.
+     */
+    void setIOFileSettings(const IOFileSettings& settings);
+
+    /** Return IOFile settings used during tool operations.
+     */
+    IOFileSettings ioFileSettings() const;
 
     /** Apply all change to perform by this tool. This method call customized toolOperations().
      */

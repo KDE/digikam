@@ -32,6 +32,10 @@
 
 #include <KDCRAW/RawDecodingSettings>
 
+// Local includes
+
+#include "iofilesettings.h"
+
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -93,6 +97,8 @@ public:
     RawLoadingRule      rawLoadingRule;
 
     RawDecodingSettings rawDecodingSettings;
+
+    IOFileSettings      ioFileSettings;
 };
 
 }  // namespace Digikam
