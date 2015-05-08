@@ -18,4 +18,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 009 ==> 345220 - HUB : Import ACDSee Categories to hierarchical Tags [patch].
 010 ==> 346637 - Missing support for Media Pro hierarchical keywords [patch].
 011 ==> 346405 - Problem importing pick labels [patch].
-012 ==> 
+012 ==> 347053 - BQM: "batched' files" are different from manually processed files [patch].
+013 ==> 

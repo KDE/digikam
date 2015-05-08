@@ -57,6 +57,14 @@
 #include "albumselectwidget.h"
 #include "batchtool.h"
 #include "queuesettings.h"
+#include "jpegsettings.h"
+#include "tiffsettings.h"
+#include "pngsettings.h"
+#include "pgfsettings.h"
+
+#ifdef HAVE_JASPER
+#include "jp2ksettings.h"
+#endif // HAVE_JASPER
 
 using namespace KDcrawIface;
 
@@ -72,7 +80,8 @@ public:
         TARGET = 0,
         RENAMING,
         BEHAVIOR,
-        RAW
+        RAW,
+        SAVE
     };
 
 public:
@@ -94,7 +103,14 @@ public:
         albumSel(0),
         advancedRenameManager(0),
         advancedRenameWidget(0),
-        rawSettings(0)
+        rawSettings(0),
+        jpgSettings(0),
+        pngSettings(0),
+        tifSettings(0),
+#ifdef HAVE_JASPER
+        j2kSettings(0),
+#endif // HAVE_JASPER
+        pgfSettings(0)
     {
     }
 
@@ -121,6 +137,14 @@ public:
     AdvancedRenameWidget*  advancedRenameWidget;
 
     DcrawSettingsWidget*   rawSettings;
+
+    JPEGSettings*          jpgSettings;
+    PNGSettings*           pngSettings;
+    TIFFSettings*          tifSettings;
+#ifdef HAVE_JASPER
+    JP2KSettings*          j2kSettings;
+#endif // HAVE_JASPER
+    PGFSettings*           pgfSettings;
 };
 
 QueueSettingsView::QueueSettingsView(QWidget* const parent)
@@ -247,6 +271,57 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    QScrollArea* const sv4   = new QScrollArea(this);
+    QWidget* const spanel    = new QWidget(sv4->viewport());
+    QVBoxLayout* const slay  = new QVBoxLayout(spanel);
+    sv4->setWidget(spanel);
+    sv4->setWidgetResizable(true);
+
+    QGroupBox* const  box1   = new QGroupBox;
+    QVBoxLayout* const lbox1 = new QVBoxLayout;
+    d->jpgSettings           = new JPEGSettings();
+    lbox1->addWidget(d->jpgSettings);
+    box1->setLayout(lbox1);
+    slay->addWidget(box1);
+
+    QGroupBox* const  box2   = new QGroupBox;
+    QVBoxLayout* const lbox2 = new QVBoxLayout;
+    d->pngSettings           = new PNGSettings();
+    lbox2->addWidget(d->pngSettings);
+    box2->setLayout(lbox2);
+    slay->addWidget(box2);
+
+    QGroupBox* const  box3   = new QGroupBox;
+    QVBoxLayout* const lbox3 = new QVBoxLayout;
+    d->tifSettings           = new TIFFSettings();
+    lbox3->addWidget(d->tifSettings);
+    box3->setLayout(lbox3);
+    slay->addWidget(box3);
+
+#ifdef HAVE_JASPER
+    QGroupBox* const  box4   = new QGroupBox;
+    QVBoxLayout* const lbox4 = new QVBoxLayout;
+    d->j2kSettings           = new JP2KSettings();
+    lbox4->addWidget(d->j2kSettings);
+    box4->setLayout(lbox4);
+    slay->addWidget(box4);
+#endif // HAVE_JASPER
+
+    QGroupBox* const  box5   = new QGroupBox;
+    QVBoxLayout* const lbox5 = new QVBoxLayout;
+    d->pgfSettings           = new PGFSettings();
+    lbox5->addWidget(d->pgfSettings);
+    box5->setLayout(lbox5);
+    slay->addWidget(box5);
+
+    slay->setMargin(KDialog::spacingHint());
+    slay->setSpacing(KDialog::spacingHint());
+    slay->addStretch();
+
+    insertTab(Private::SAVE, sv4, SmallIcon("document-save-all"), i18n("Saving Images"));
+
+    // --------------------------------------------------------
+
     connect(d->useOrgAlbum, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
@@ -269,6 +344,23 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
             this, SLOT(slotSettingsChanged()));
 
     connect(d->rawSettings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(d->jpgSettings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(d->pngSettings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(d->tifSettings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+#ifdef HAVE_JASPER
+    connect(d->j2kSettings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+#endif // HAVE_JASPER
+
+    connect(d->pgfSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
     // --------------------------------------------------------
@@ -303,6 +395,16 @@ void QueueSettingsView::slotResetSettings()
     d->rawLoadingButtonGroup->button(QueueSettings::DEMOSAICING)->setChecked(true);
     d->advancedRenameWidget->clearParseString();
     d->rawSettings->resetToDefault();
+    d->jpgSettings->setCompressionValue(75);
+    d->jpgSettings->setSubSamplingValue(1);
+    d->pngSettings->setCompressionValue(9);
+    d->tifSettings->setCompression(false);
+#ifdef HAVE_JASPER
+    d->j2kSettings->setLossLessCompression(true);
+    d->j2kSettings->setCompressionValue(75);
+#endif // HAVE_JASPER
+    d->pgfSettings->setLossLessCompression(true);
+    d->pgfSettings->setCompressionValue(3);
     blockSignals(false);
     slotSettingsChanged();
 }
@@ -326,6 +428,17 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     d->advancedRenameWidget->setParseString(settings.renamingParser);
 
     d->rawSettings->setSettings(settings.rawDecodingSettings);
+
+    d->jpgSettings->setCompressionValue(settings.ioFileSettings.JPEGCompression);
+    d->jpgSettings->setSubSamplingValue(settings.ioFileSettings.JPEGSubSampling);
+    d->pngSettings->setCompressionValue(settings.ioFileSettings.PNGCompression);
+    d->tifSettings->setCompression(settings.ioFileSettings.TIFFCompression);
+#ifdef HAVE_JASPER
+    d->j2kSettings->setLossLessCompression(settings.ioFileSettings.JPEG2000LossLess);
+    d->j2kSettings->setCompressionValue(settings.ioFileSettings.JPEG2000Compression);
+#endif // HAVE_JASPER
+    d->pgfSettings->setLossLessCompression(settings.ioFileSettings.PGFLossLess);
+    d->pgfSettings->setCompressionValue(settings.ioFileSettings.PGFCompression);
 }
 
 void QueueSettingsView::slotSettingsChanged()
@@ -347,6 +460,17 @@ void QueueSettingsView::slotSettingsChanged()
     setTabEnabled(Private::RAW, (settings.rawLoadingRule == QueueSettings::DEMOSAICING));
 
     settings.rawDecodingSettings = d->rawSettings->settings();
+
+    settings.ioFileSettings.JPEGCompression     = d->jpgSettings->getCompressionValue();
+    settings.ioFileSettings.JPEGSubSampling     = d->jpgSettings->getSubSamplingValue();
+    settings.ioFileSettings.PNGCompression      = d->pngSettings->getCompressionValue();
+    settings.ioFileSettings.TIFFCompression     = d->tifSettings->getCompression();
+#ifdef HAVE_JASPER
+    settings.ioFileSettings.JPEG2000LossLess    = d->j2kSettings->getLossLessCompression();
+    settings.ioFileSettings.JPEG2000Compression = d->j2kSettings->getCompressionValue();
+#endif // HAVE_JASPER
+    settings.ioFileSettings.PGFLossLess         = d->pgfSettings->getLossLessCompression();
+    settings.ioFileSettings.PGFCompression      = d->pgfSettings->getCompressionValue();
 
     emit signalSettingsChanged(settings);
 }

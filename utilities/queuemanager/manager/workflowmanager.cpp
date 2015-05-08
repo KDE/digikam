@@ -248,6 +248,38 @@ bool WorkflowManager::save()
             data.setAttribute(QString::fromLatin1("value"), q.qSettings.rawLoadingRule);
             elm.appendChild(data);
 
+            data = doc.createElement(QString::fromLatin1("jpegcompression"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.JPEGCompression);
+            elm.appendChild(data);
+
+            data = doc.createElement(QString::fromLatin1("jpegsubsampling"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.JPEGSubSampling);
+            elm.appendChild(data);
+
+            data = doc.createElement(QString::fromLatin1("pngcompression"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.PNGCompression);
+            elm.appendChild(data);
+
+            data = doc.createElement(QString::fromLatin1("tiffcompression"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.TIFFCompression);
+            elm.appendChild(data);
+
+            data = doc.createElement(QString::fromLatin1("jpeg2000lossless"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.JPEG2000LossLess);
+            elm.appendChild(data);
+
+            data = doc.createElement(QString::fromLatin1("jpeg2000compression"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.JPEG2000Compression);
+            elm.appendChild(data);
+
+            data = doc.createElement(QString::fromLatin1("pgflossless"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.PGFLossLess);
+            elm.appendChild(data);
+
+            data = doc.createElement(QString::fromLatin1("pgfcompression"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.ioFileSettings.PGFCompression);
+            elm.appendChild(data);
+
             // ----------------------
 
             QDomElement rawdecodingsettings = doc.createElement(QString::fromLatin1("rawdecodingsettings"));
@@ -400,6 +432,38 @@ bool WorkflowManager::load(QStringList& failed)
             else if (name2 == "rawloadingrule")
             {
                 q.qSettings.rawLoadingRule = (QueueSettings::RawLoadingRule)val2.toUInt(&ok);
+            }
+            else if (name2 == "jpegcompression")
+            {
+                q.qSettings.ioFileSettings.JPEGCompression = val2.toUInt(&ok);
+            }
+            else if (name2 == "jpegsubsampling")
+            {
+                q.qSettings.ioFileSettings.JPEGSubSampling = val2.toUInt(&ok);
+            }
+            else if (name2 == "pngcompression")
+            {
+                q.qSettings.ioFileSettings.PNGCompression = val2.toUInt(&ok);
+            }
+            else if (name2 == "tiffcompression")
+            {
+                q.qSettings.ioFileSettings.TIFFCompression = (bool)val2.toUInt(&ok);
+            }
+            else if (name2 == "jpeg2000lossless")
+            {
+                q.qSettings.ioFileSettings.JPEG2000LossLess = (bool)val2.toUInt(&ok);
+            }
+            else if (name2 == "jpeg2000compression")
+            {
+                q.qSettings.ioFileSettings.JPEG2000Compression = val2.toUInt(&ok);
+            }
+            else if (name2 == "pgflossless")
+            {
+                q.qSettings.ioFileSettings.PGFLossLess = (bool)val2.toUInt(&ok);
+            }
+            else if (name2 == "pgfcompression")
+            {
+                q.qSettings.ioFileSettings.PGFCompression = val2.toUInt(&ok);
             }
             else if (name2 == "rawdecodingsettings")
             {
