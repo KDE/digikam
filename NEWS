@@ -20,4 +20,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 011 ==> 346405 - Problem importing pick labels [patch].
 012 ==> 347053 - BQM: "batched' files" are different from manually processed files [patch].
 013 ==> 186054 - FILEIO : add non-rgb TIFF files support [patch].
-014 ==> 
+014 ==> 329637 - Can't find Dutch translations of documentation in digikam tarball.
+015 ==> 
