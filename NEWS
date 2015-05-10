@@ -12,4 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 005 ==> 343652 - "Open with" with "Run in Terminal" does not open a Terminal.
 006 ==> 162950 - View albums thumbnail in icon-view with a special frame as Dolphin.
 007 ==> 344608 - digiKam freezes for a second or three after rating a raw photo.
-008 ==> 
+008 ==> 323458 - Removing all face tags doesn't work.
+009 ==> 
