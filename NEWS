@@ -13,4 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 006 ==> 162950 - View albums thumbnail in icon-view with a special frame as Dolphin.
 007 ==> 344608 - digiKam freezes for a second or three after rating a raw photo.
 008 ==> 323458 - Removing all face tags doesn't work.
-009 ==> 
+009 ==> 335515 - Crash on Enhance -> Noise Reduction.
+010 ==> 
