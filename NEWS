@@ -8,4 +8,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 001 ==> 342791 - Quality sorter does not honor album selection, scans all albums instead.
 002 ==> 277024 - After running a batch process to change metadata, the files halved in size.
 003 ==> 320466 - SCAN : after to run BQM a lot of files are missing in icon-view.
-004 ==> 
+004 ==> 338765 - BQM Watermark tool : output files have reduced size compared to original.
+005 ==> 
