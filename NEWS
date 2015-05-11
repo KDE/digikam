@@ -17,4 +17,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 010 ==> 294217 - Make add face persistent, and add box by single click instead of drawing [patch].
 011 ==> 298929 - MAINTENANCE : cannot assign tags anymore.
 012 ==> 262171 - When attaching a name to a face in Preview mode, the widget does not behave correctly.
-013 ==> 
+013 ==> 333955 - BQM: offer option to optimize jpg pics.
+014 ==> 
