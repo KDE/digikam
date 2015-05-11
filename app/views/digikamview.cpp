@@ -372,8 +372,9 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     }
 
     // To the right.
-
-    d->addPageUpDownActions(this, d->rightSideBar->imageDescEditTab());
+   // NOTE: by Veaceslav, currently if you register these actions in Tags/Caption window,
+   // the arrow up and down are not handled correctly by QCompleter
+   // d->addPageUpDownActions(this, d->rightSideBar->imageDescEditTab());
 
     // Tags Filter sidebar tab contents.
     d->filterWidget   = new FilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());

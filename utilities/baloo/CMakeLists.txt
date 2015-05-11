@@ -10,3 +10,4 @@ add_library(baloowrap STATIC ${baloowrap_SRCS})
 
 target_link_libraries(baloowrap KF5::FileMetaData KF5::I18n)
 
+#target_include_directories(baloowrap PRIVATE "$<TARGET_PROPERTY:KF5::FileMetadata,INTERFACE_INCLUDE_DIRECTORIES>")

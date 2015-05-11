@@ -271,7 +271,6 @@ void AddTagsLineEdit::focusInEvent(QFocusEvent* f)
 
 void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
 {
-//    qDebug() << "Debug this " << e->key();
     if (d->completion && d->completion->popup()->isVisible())
     {
         // The following keys are forwarded by the completer to the widget
@@ -328,7 +327,6 @@ void AddTagsLineEdit::slotReturnPressed(const QString& text)
 
 void AddTagsLineEdit::setCurrentTaggingAction(const TaggingAction& action)
 {
-    qDebug() << "Set current Tagging action";
     if (d->currentTaggingAction == action)
     {
         return;
