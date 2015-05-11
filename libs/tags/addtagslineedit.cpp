@@ -320,7 +320,10 @@ void AddTagsLineEdit::slotReturnPressed(const QString& text)
       emit taggingActionFinished();
       return;
     }
-
+    if (d->currentTaggingAction.shallAssignTag() && d->completion->popup()->isVisible())
+    {
+        setText(d->completion->currentCompletion());
+    }
     //Q_UNUSED(text);
     emit taggingActionActivated(currentTaggingAction());
 }
