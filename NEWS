@@ -20,4 +20,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 013 ==> 333955 - BQM: offer option to optimize jpg pics.
 014 ==> 165344 - Empty albums should not be included when sorting albums by date.
 015 ==> 329138 - Convert to B&W hangs when moving editor window to other screen.
-016 ==> 
+016 ==> 347628 - Can't remove "legend" field when updating metadata.
+017 ==> 
