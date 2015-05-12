@@ -19,4 +19,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 012 ==> 262171 - When attaching a name to a face in Preview mode, the widget does not behave correctly.
 013 ==> 333955 - BQM: offer option to optimize jpg pics.
 014 ==> 165344 - Empty albums should not be included when sorting albums by date.
-015 ==> 
+015 ==> 329138 - Convert to B&W hangs when moving editor window to other screen.
+016 ==> 
