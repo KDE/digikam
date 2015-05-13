@@ -808,6 +808,7 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 void CIETongueWidget::resizeEvent(QResizeEvent* event)
 {
     Q_UNUSED(event);
+    setMinimumHeight(width());
     d->needUpdatePixmap = true;
 }
 

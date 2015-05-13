@@ -88,7 +88,7 @@ private Q_SLOTS:
 
     void slotProgressTimerDone();
 
-private :
+private:
 
     class Private;
     Private* const d;
