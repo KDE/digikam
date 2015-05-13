@@ -113,7 +113,16 @@ void FingerPrintsGenerator::slotStart()
     for (AlbumList::ConstIterator it = d->albumList.constBegin();
          !canceled() && (it != d->albumList.constEnd()); ++it)
     {
-        QStringList aPaths = DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+        QStringList aPaths;
+
+        if ((*it)->type() == Album::PHYSICAL)
+        {
+            aPaths = DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+        }
+        else if ((*it)->type() == Album::TAG)
+        {
+            aPaths = DatabaseAccess().db()->getItemURLsInTag((*it)->id());
+        }
 
         if (!d->rebuildAll)
         {
