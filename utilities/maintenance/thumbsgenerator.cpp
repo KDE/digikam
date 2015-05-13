@@ -135,7 +135,14 @@ void ThumbsGenerator::slotStart()
             continue;
         }
 
-        d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+        if ((*it)->type() == Album::PHYSICAL)
+        {
+            d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+        }
+        else if ((*it)->type() == Album::TAG)
+        {
+            d->allPicturesPath += DatabaseAccess().db()->getItemURLsInTag((*it)->id());
+        }
     }
 
     if (!d->rebuildAll)
