@@ -22,4 +22,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 015 ==> 329138 - Convert to B&W hangs when moving editor window to other screen.
 016 ==> 347628 - Can't remove "legend" field when updating metadata.
 017 ==> 290930 - Cannot resize gamut diagram vertically, only horizontally.
-018 ==> 
+018 ==> 266264 - Sidebar does not automatically resize to avoid horizontal scrollbar.
+019 ==> 
