@@ -23,4 +23,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 016 ==> 347628 - Can't remove "legend" field when updating metadata.
 017 ==> 290930 - Cannot resize gamut diagram vertically, only horizontally.
 018 ==> 266264 - Sidebar does not automatically resize to avoid horizontal scrollbar.
-019 ==> 
+019 ==> 347728 - Build crashes when compiling libkdcraw with libraw 0.16.1.-76.1-x86_64.
+020 ==> 
