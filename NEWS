@@ -25,4 +25,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 018 ==> 266264 - Sidebar does not automatically resize to avoid horizontal scrollbar.
 019 ==> 347728 - Build crashes when compiling libkdcraw with libraw 0.16.1.-76.1-x86_64.
 020 ==> 341266 - No preview available with Gphoto2 camera.
-021 ==> 
+021 ==> 309638 - Searching on technical images properties.
+022 ==> 
