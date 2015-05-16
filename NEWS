@@ -26,4 +26,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 019 ==> 347728 - Build crashes when compiling libkdcraw with libraw 0.16.1.-76.1-x86_64.
 020 ==> 341266 - No preview available with Gphoto2 camera.
 021 ==> 309638 - Searching on technical images properties.
-022 ==> 
+022 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
+023 ==> 
