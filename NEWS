@@ -27,4 +27,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 020 ==> 341266 - No preview available with Gphoto2 camera.
 021 ==> 309638 - Searching on technical images properties.
 022 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
-023 ==> 
+023 ==> 244097 - When importing .NEF files, if highlights are "rebuild", "auto-brightness" has no effect.
+024 ==> 
