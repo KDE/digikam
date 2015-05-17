@@ -31,4 +31,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 024 ==> 339612 - When adding label it moves files.
 025 ==> 181736 - New tool for Image Editor to "delighting" photo.
 026 ==> 196075 - Creating a quick-fix dialogue would give digiKam a real edge.
-027 ==> 
+027 ==> 346877 - Cannot assign arrow keys as keyboard shortcut.
+028 ==> 
