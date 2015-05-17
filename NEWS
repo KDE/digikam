@@ -30,4 +30,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 023 ==> 244097 - When importing .NEF files, if highlights are "rebuild", "auto-brightness" has no effect.
 024 ==> 339612 - When adding label it moves files.
 025 ==> 181736 - New tool for Image Editor to "delighting" photo.
-026 ==> 
+026 ==> 196075 - Creating a quick-fix dialogue would give digiKam a real edge.
+027 ==> 
