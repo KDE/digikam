@@ -29,4 +29,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 022 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
 023 ==> 244097 - When importing .NEF files, if highlights are "rebuild", "auto-brightness" has no effect.
 024 ==> 339612 - When adding label it moves files.
-025 ==> 
+025 ==> 181736 - New tool for Image Editor to "delighting" photo.
+026 ==> 
