@@ -2422,9 +2422,15 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return (int)getImageOrientation();
 
         case MetadataInfo::Make:
-            return fromExifOrXmp("Exif.Image.Make", "Xmp.tiff.Make");
+        {
+            QVariant var = fromExifOrXmp("Exif.Image.Make", "Xmp.tiff.Make");
+            return QVariant(var.toString().trimmed());
+        }
         case MetadataInfo::Model:
-            return fromExifOrXmp("Exif.Image.Model", "Xmp.tiff.Model");
+        {
+            QVariant var = fromExifOrXmp("Exif.Image.Model", "Xmp.tiff.Model");
+            return QVariant(var.toString().trimmed());
+        }
         case MetadataInfo::Lens:
             return getLensDescription();
         case MetadataInfo::Aperture:
