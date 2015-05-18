@@ -33,4 +33,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 026 ==> 196075 - Creating a quick-fix dialogue would give digiKam a real edge.
 027 ==> 346877 - Cannot assign arrow keys as keyboard shortcut.
 028 ==> 336126 - Batch renaming is broken : file just renamed cannot be found.
-029 ==> 
+029 ==> 195701 - do not default to "include subfolders"/no possibility to not include sub-folders.
+030 ==> 
