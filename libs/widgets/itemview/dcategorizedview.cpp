@@ -64,6 +64,8 @@ public:
         currentMouseEvent(0),
         ensureOneSelectedItem(false),
         ensureInitialSelectedItem(false),
+        scrollCurrentToCenter(false),
+        mouseButtonPressed(false),
         hintAtSelectionRow(-1),
         q(q)
     {
@@ -83,6 +85,8 @@ public:
     QMouseEvent*            currentMouseEvent;
     bool                    ensureOneSelectedItem;
     bool                    ensureInitialSelectedItem;
+    bool                    scrollCurrentToCenter;
+    bool                    mouseButtonPressed;
     QPersistentModelIndex   hintAtSelectionIndex;
     int                     hintAtSelectionRow;
     QPersistentModelIndex   hintAtScrollPosition;
@@ -772,11 +776,18 @@ void DCategorizedView::contextMenuEvent(QContextMenuEvent* event)
 void DCategorizedView::leaveEvent(QEvent*)
 {
     hideIndexNotification();
+
+    if (d->scrollCurrentToCenter && d->mouseButtonPressed)
+    {
+        d->mouseButtonPressed = false;
+        scrollTo(currentIndex());
+    }
 }
 
 void DCategorizedView::mousePressEvent(QMouseEvent* event)
 {
     userInteraction();
+    d->mouseButtonPressed           = true;
     const QModelIndex index         = indexAt(event->pos());
 
     // Clear selection on click on empty area. Standard behavior, but not done by QAbstractItemView for some reason.
@@ -812,6 +823,13 @@ void DCategorizedView::mousePressEvent(QMouseEvent* event)
 void DCategorizedView::mouseReleaseEvent(QMouseEvent* event)
 {
     userInteraction();
+    d->mouseButtonPressed = false;
+
+    if (d->scrollCurrentToCenter)
+    {
+        scrollTo(currentIndex());
+    }
+
     DigikamKCategorizedView::mouseReleaseEvent(event);
 }
 
@@ -1015,6 +1033,21 @@ QPixmap DCategorizedView::pixmapForDrag(const QList<QModelIndex>& indexes) const
     QStyleOptionViewItem option = viewOptions();
     option.rect                 = viewport()->rect();
     return d->delegate->pixmapForDrag(option, indexes);
+}
+
+void DCategorizedView::setScrollCurrentToCenter(bool enabled)
+{
+    d->scrollCurrentToCenter = enabled;
+}
+
+void DCategorizedView::scrollTo(const QModelIndex& index, ScrollHint hint)
+{
+    if (d->scrollCurrentToCenter && !d->mouseButtonPressed)
+    {
+        hint = QAbstractItemView::PositionAtCenter;
+    }
+
+    DigikamKCategorizedView::scrollTo(index, hint);
 }
 
 } // namespace Digikam
