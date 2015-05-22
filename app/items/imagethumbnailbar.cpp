@@ -64,6 +64,7 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget* const parent)
     setSpacing(3);
     setUsePointingHandCursor(false);
     setScrollStepGranularity(5);
+    setScrollCurrentToCenter(true);
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     setDragEnabled(true);
