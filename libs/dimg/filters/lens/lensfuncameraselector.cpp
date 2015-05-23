@@ -55,6 +55,13 @@ public:
 
     Private()
         : configUseMetadata(QLatin1String("UseMetadata")),
+          configCameraModel(QLatin1String("CameraModel")),
+          configCameraMake(QLatin1String("CameraMake")),
+          configLensModel(QLatin1String("LensModel")),
+          configSubjectDistance(QLatin1String("SubjectDistance")),
+          configFocalLength(QLatin1String("FocalLength")),
+          configCropFactor(QLatin1String("CropFactor")),
+          configAperture(QLatin1String("Aperture")),
           redStyle(QLatin1String("QLabel {color: red;}")),
           orangeStyle(QLatin1String("QLabel {color: orange;}")),
           greenStyle(QLatin1String("QLabel {color: green;}"))
@@ -92,6 +99,13 @@ public:
     QLabel*             distLabel;
 
     const QString       configUseMetadata;
+    const QString       configCameraModel;
+    const QString       configCameraMake;
+    const QString       configLensModel;
+    const QString       configSubjectDistance;
+    const QString       configFocalLength;
+    const QString       configCropFactor;
+    const QString       configAperture;
     const QString       redStyle;
     const QString       orangeStyle;
     const QString       greenStyle;
@@ -116,49 +130,49 @@ public:
 LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
-    d->iface            = new LensFunIface();
+    d->iface                = new LensFunIface();
 
-    QGridLayout* grid   = new QGridLayout(this);
-    RHBox* hbox         = new RHBox(this);
-    d->metadataUsage    = new QCheckBox(i18n("Use Metadata"), hbox);
-    QLabel* space       = new QLabel(hbox);
-    d->metadataResult   = new QLabel(hbox);
+    QGridLayout* const grid = new QGridLayout(this);
+    RHBox* const hbox       = new RHBox(this);
+    d->metadataUsage        = new QCheckBox(i18n("Use Metadata"), hbox);
+    QLabel* const space     = new QLabel(hbox);
+    d->metadataResult       = new QLabel(hbox);
     hbox->setStretchFactor(space, 10);
 
-    RHBox* hbox1        = new RHBox(this);
-    d->makeLabel        = new QLabel(i18nc("camera make",  "Make:"),  hbox1);
-    QLabel* space1      = new QLabel(hbox1);
-    d->makeDescription  = new RAdjustableLabel(hbox1);
+    RHBox* const hbox1   = new RHBox(this);
+    d->makeLabel         = new QLabel(i18nc("camera make",  "Make:"),  hbox1);
+    QLabel* const space1 = new QLabel(hbox1);
+    d->makeDescription   = new RAdjustableLabel(hbox1);
     hbox1->setStretchFactor(space1, 10);
     d->makeDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->makeDescription->setWhatsThis(i18n("This is the camera maker description string found in image meta-data. "
                                           "This one is used to query and find relevant camera device information from Lensfun database."));
 
-    d->make             = new RComboBox(this);
+    d->make              = new RComboBox(this);
     d->make->setDefaultIndex(0);
 
-    RHBox* hbox2        = new RHBox(this);
-    d->modelLabel       = new QLabel(i18nc("camera model", "Model:"), hbox2);
-    QLabel* space2      = new QLabel(hbox2);
-    d->modelDescription = new RAdjustableLabel(hbox2);
+    RHBox* const hbox2   = new RHBox(this);
+    d->modelLabel        = new QLabel(i18nc("camera model", "Model:"), hbox2);
+    QLabel* const space2 = new QLabel(hbox2);
+    d->modelDescription  = new RAdjustableLabel(hbox2);
     hbox2->setStretchFactor(space2, 10);
     d->modelDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->modelDescription->setWhatsThis(i18n("This is the camera model description string found in image meta-data. "
                                            "This one is used to query and found relevant camera device information from Lensfun database."));
 
-    d->model            = new RComboBox(this);
+    d->model             = new RComboBox(this);
     d->model->setDefaultIndex(0);
 
-    RHBox* hbox3        = new RHBox(this);
-    d->lensLabel        = new QLabel(i18nc("camera lens",  "Lens:"),  hbox3);
-    QLabel* space3      = new QLabel(hbox3);
-    d->lensDescription  = new RAdjustableLabel(hbox3);
+    RHBox* const hbox3   = new RHBox(this);
+    d->lensLabel         = new QLabel(i18nc("camera lens",  "Lens:"),  hbox3);
+    QLabel* const space3 = new QLabel(hbox3);
+    d->lensDescription   = new RAdjustableLabel(hbox3);
     d->lensDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->lensDescription->setWhatsThis(i18n("This is the lens description string found in image meta-data. "
                                           "This one is used to query and found relevant lens information from Lensfun database."));
     hbox3->setStretchFactor(space3, 10);
 
-    d->lens             = new RComboBox(this);
+    d->lens              = new RComboBox(this);
     d->lens->setDefaultIndex(0);
 
     d->metadataUsage->setEnabled(false);
@@ -272,12 +286,47 @@ void LensFunCameraSelector::resetToDefault()
 void LensFunCameraSelector::readSettings(KConfigGroup& group)
 {
     setUseMetadata(group.readEntry(d->configUseMetadata, true));
+    
+    if (!useMetadata())
+    {
+        LensFunContainer settings = d->iface->settings();
+        settings.cameraModel = group.readEntry(d->configCameraModel, QString());
+        settings.cameraMake  = group.readEntry(d->configCameraMake,  QString());
+        settings.lensModel   = group.readEntry(d->configLensModel,   QString());
+
+        if (settings.subjectDistance == -1.0)
+        {
+            settings.subjectDistance = group.readEntry(d->configSubjectDistance, -1.0);
+        }
+
+        if (settings.focalLength == -1.0)
+        {
+            settings.focalLength = group.readEntry(d->configFocalLength, -1.0);
+        }
+
+        settings.cropFactor = group.readEntry(d->configCropFactor, -1.0);
+
+        if (settings.aperture == -1.0)
+        {
+            settings.aperture = group.readEntry(d->configAperture, -1.0);
+        }
+
+        setSettings(settings);
+    }
+    
     slotUseMetadata(useMetadata());
 }
 
 void LensFunCameraSelector::writeSettings(KConfigGroup& group)
 {
-    group.writeEntry(d->configUseMetadata, useMetadata());
+    group.writeEntry(d->configUseMetadata,     useMetadata());
+    group.writeEntry(d->configCameraModel,     d->iface->settings().cameraModel);
+    group.writeEntry(d->configCameraMake,      d->iface->settings().cameraMake);
+    group.writeEntry(d->configLensModel,       d->iface->settings().lensModel);
+    group.writeEntry(d->configSubjectDistance, d->iface->settings().subjectDistance);
+    group.writeEntry(d->configFocalLength,     d->iface->settings().focalLength);
+    group.writeEntry(d->configCropFactor,      d->iface->settings().cropFactor);
+    group.writeEntry(d->configAperture,        d->iface->settings().aperture);
 }
 
 void LensFunCameraSelector::setMetadata(const DMetadata& meta)
@@ -374,10 +423,6 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
                     break;
             }
         }
-    }
-    else
-    {
-        slotMakeSelected();
     }
 }
 
