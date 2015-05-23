@@ -40,4 +40,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 033 ==> 337878 - THUMBBAR : item focus must stay in the middle [patch].
 034 ==> 344952 - Keep selected image in thumbbar in the middle while being in preview mode.
 035 ==> 348146 - kipi configuration module?
-036 ==> 
+036 ==> 332316 - Lens Auto-Correction should remember previously used settings.
+037 ==> 

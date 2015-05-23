@@ -53,6 +53,13 @@ public:
 
     Private()
         : configUseMetadata("UseMetadata"),
+          configCameraModel("CameraModel"),
+          configCameraMake("CameraMake"),
+          configLensModel("LensModel"),
+          configSubjectDistance("SubjectDistance"),
+          configFocalLength("FocalLength"),
+          configCropFactor("CropFactor"),
+          configAperture("Aperture"),
           redStyle("QLabel {color: red;}"),
           orangeStyle("QLabel {color: orange;}"),
           greenStyle("QLabel {color: green;}")
@@ -90,6 +97,13 @@ public:
     QLabel*             distLabel;
 
     const QString       configUseMetadata;
+    const QString       configCameraModel;
+    const QString       configCameraMake;
+    const QString       configLensModel;
+    const QString       configSubjectDistance;
+    const QString       configFocalLength;
+    const QString       configCropFactor;
+    const QString       configAperture;
     const QString       redStyle;
     const QString       orangeStyle;
     const QString       greenStyle;
@@ -264,12 +278,47 @@ void LensFunCameraSelector::resetToDefault()
 void LensFunCameraSelector::readSettings(KConfigGroup& group)
 {
     setUseMetadata(group.readEntry(d->configUseMetadata, true));
+
+    if (!useMetadata())
+    {
+        LensFunContainer settings = d->iface->settings();
+        settings.cameraModel = group.readEntry(d->configCameraModel, QString());
+        settings.cameraMake  = group.readEntry(d->configCameraMake,  QString());
+        settings.lensModel   = group.readEntry(d->configLensModel,   QString());
+
+        if (settings.subjectDistance == -1.0)
+        {
+            settings.subjectDistance = group.readEntry(d->configSubjectDistance, -1.0);
+        }
+
+        if (settings.focalLength == -1.0)
+        {
+            settings.focalLength = group.readEntry(d->configFocalLength, -1.0);
+        }
+
+        settings.cropFactor = group.readEntry(d->configCropFactor, -1.0);
+
+        if (settings.aperture == -1.0)
+        {
+            settings.aperture = group.readEntry(d->configAperture, -1.0);
+        }
+
+        setSettings(settings);
+    }
+
     slotUseMetadata(useMetadata());
 }
 
 void LensFunCameraSelector::writeSettings(KConfigGroup& group)
 {
     group.writeEntry(d->configUseMetadata, useMetadata());
+    group.writeEntry(d->configCameraModel,     d->iface->settings().cameraModel);
+    group.writeEntry(d->configCameraMake,      d->iface->settings().cameraMake);
+    group.writeEntry(d->configLensModel,       d->iface->settings().lensModel);
+    group.writeEntry(d->configSubjectDistance, d->iface->settings().subjectDistance);
+    group.writeEntry(d->configFocalLength,     d->iface->settings().focalLength);
+    group.writeEntry(d->configCropFactor,      d->iface->settings().cropFactor);
+    group.writeEntry(d->configAperture,        d->iface->settings().aperture);
 }
 
 void LensFunCameraSelector::setMetadata(const DMetadata& meta)
@@ -366,10 +415,6 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
                     break;
             }
         }
-    }
-    else
-    {
-        slotMakeSelected();
     }
 }
 
