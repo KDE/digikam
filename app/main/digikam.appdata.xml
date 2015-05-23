@@ -69,6 +69,7 @@
       <li>Organization of photos in albums and sub-albums (with tags and comments support)</li>
       <li xml:lang="bs">Organizacija fotografija u albume i podalbume (sa podrškom za označavanje i komentarisanje)</li>
       <li xml:lang="ca">Organització de les fotografies en àlbums i sub-àlbums (amb implementació per a les etiquetes i comentaris)</li>
+      <li xml:lang="de">Organisation von Fotos in Alben und Unteralben mit Unterstützung für Stichwörter und Kommentare</li>
       <li xml:lang="en-GB">Organisation of photos in albums and sub-albums (with tags and comments support)</li>
       <li xml:lang="es">Organización de fotos en álbumes y álbumes anidados (con uso de etiquetas y comentarios)</li>
       <li xml:lang="fr">Organisation de photos en albums et sous-albums (avec prise en charge des étiquettes et des commentaires)</li>
@@ -228,6 +229,7 @@
       <li>Image editor included with advanced features</li>
       <li xml:lang="bs">Uvršten uređivač slika sa naprednim svojstvima</li>
       <li xml:lang="ca">Inclou un editor d'imatges amb característiques avançades</li>
+      <li xml:lang="de">Bildbearbeitung mit erweiterten Funktionen</li>
       <li xml:lang="en-GB">Image editor included with advanced features</li>
       <li xml:lang="es">Editor de imágenes incluido con funciones avanzadas</li>
       <li xml:lang="fr">Éditeur d'images inclus, avec des fonctionnalités avancées</li>
