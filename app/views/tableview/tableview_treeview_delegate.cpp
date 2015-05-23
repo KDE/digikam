@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-TableViewItemDelegate::TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* parent)
+TableViewItemDelegate::TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* const parent)
     : QItemDelegate(parent),
       s(tableViewShared)
 {
@@ -67,8 +67,7 @@ void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem&
     if (!useDefaultPainter)
     {
         TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewModelIndex);
-
-        useDefaultPainter = !columnObject->paint(painter, option, item);
+        useDefaultPainter                = !columnObject->paint(painter, option, item);
     }
 
     if (useDefaultPainter)
@@ -81,35 +80,45 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
 {
     const int columnIndex = tableViewModelIndex.column();
 
+/*    if (!QModelIndex().isValid())
+        return QSize();
+*/
+    
     /// @todo Debug output to find OSX crash
-    if (columnIndex>=s->tableViewModel->columnCount(QModelIndex()))
+    if (columnIndex >= s->tableViewModel->columnCount(QModelIndex()))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "------ CRASH AHEAD: tableViewModelIndex = " << tableViewModelIndex;
         qCDebug(DIGIKAM_GENERAL_LOG) << "------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = " << s->tableViewModel->columnCount(QModelIndex());
         qCDebug(DIGIKAM_GENERAL_LOG) << "------ CRASH AHEAD: columnIndex: " << columnIndex;
     }
 
-    TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
-    TableViewModel::Item* const item    = s->tableViewModel->itemFromIndex(tableViewModelIndex);
-
     /// we have to take the maximum of all columns for the height
     /// @todo somehow cache this calculation
     /// @todo check column flags
-    const int columnCount = s->tableViewModel->columnCount(QModelIndex());
-    int maxHeight         = 0;
+    const int columnCount            = s->tableViewModel->columnCount(QModelIndex());
+    TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewModelIndex);
+    int maxHeight                    = 0;
 
-    for (int i=0; i<columnCount; ++i)
+    for (int i = 0; i < columnCount ; ++i)
     {
         TableViewColumn* const iColumnObject = s->tableViewModel->getColumnObject(i);
-        const QSize iColumnSize              = iColumnObject->sizeHint(option, item);
 
-        if (iColumnSize.isValid())
+        if (iColumnObject && item)
         {
-            maxHeight = qMax(maxHeight, iColumnSize.height());
+            const QSize iColumnSize = iColumnObject->sizeHint(option, item);
+
+            if (iColumnSize.isValid())
+            {
+                maxHeight = qMax(maxHeight, iColumnSize.height());
+            }
         }
     }
 
-    QSize columnSize = columnObject->sizeHint(option, item);
+    QSize columnSize;
+    TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
+
+    if (columnObject && item)
+        columnSize = columnObject->sizeHint(option, item);
 
     if (!columnSize.isValid())
     {
@@ -121,4 +130,4 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     return QSize(columnSize.width(), maxHeight);
 }
 
-} /* namespace Digikam */
+} // namespace Digikam
