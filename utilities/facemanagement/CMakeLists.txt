@@ -19,6 +19,6 @@ target_link_libraries(facemanagement
                       digikamdatabase
                       digikamtags
                       fileactionmanager
-                      
-                      KF5::KFace
+
+                      ${KF5KFace_LIBRARIES}
 )
