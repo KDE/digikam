@@ -228,10 +228,10 @@ void LensFunFilter::filterImage()
 
         for (unsigned int y = 0; runningFlag() && (y < m_destImage.height()); ++y)
         {
-            if (d->modifier->ApplyColorModification(data, 0.0, y, m_destImage.width(),
-                                                    1, m_destImage.bytesDepth(), 0))
+            if (d->modifier->ApplyColorModification(data, 0.0, y, m_destImage.width(), 1,
+                                                    LF_CR_4(RED, GREEN, BLUE, UNKNOWN), 0))
             {
-                data += m_destImage.height() * m_destImage.bytesDepth();
+                data += m_destImage.width() * m_destImage.bytesDepth();
                 ++loop;
             }
 
