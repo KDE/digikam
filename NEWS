@@ -33,7 +33,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 026 ==> 196075 - Creating a quick-fix dialogue would give digiKam a real edge.
 027 ==> 346877 - Cannot assign arrow keys as keyboard shortcut.
 028 ==> 336126 - Batch renaming is broken : file just renamed cannot be found.
-029 ==> 195701 - do not default to "include subfolders"/no possibility to not include sub-folders.
+029 ==> 195701 - Do not default to "include subfolders"/no possibility to not include sub-folders.
 030 ==> 262499 - Cannot rename .AVI files.
 031 ==> 331194 - SCAN : prevent trailing white spaces in camera model/maker names [patch].
 032 ==> 326589 - When detect face with one folder limit and option skip already scanned image, .avi and .move in other folder are scanned too.
@@ -45,5 +45,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 038 ==> 257679 - Build a PKG package for digiKam under MacOSX.
 039 ==> 348105 - TAGS MANAGER : Delete all unused tags.
 040 ==> 309243 - Reread metadata does not remove tags from database.
-041 ==> 348463 - first time, digiKam seems using more than one cpu.
-042 ==> 
+041 ==> 348463 - First time, digiKam seems using more than one cpu.
+042 ==> 348586 - digiKam does not write description to XMP sidecar file anymore.
+043 ==> 
