@@ -36,6 +36,10 @@ target_include_directories(digikamtags PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tagsmanager>
 )
 
+target_include_directories(digikamtags
+                           PRIVATE
+                           "$<TARGET_PROPERTY:lighttable,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>")
 target_link_libraries(digikamtags
 
                       digikamalbum

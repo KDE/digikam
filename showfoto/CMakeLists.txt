@@ -56,21 +56,24 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.i
 set_target_properties(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 
 target_link_libraries(showfoto
+                      PRIVATE
                       dimg
                       fileactionmanager
+                      imageeditor
+                      imagepropertiesdigikam
 )
 
 if(${KF5KGeoMap_FOUND})
-    target_link_libraries(showfoto ${KGEOMAP_LIBRARIES})
+    target_link_libraries(showfoto PUBLIC ${KGEOMAP_LIBRARIES})
 endif()
 
 if(NOT WIN32)
     # To link under Solaris (see bug #274484)
-    target_link_libraries(showfoto ${MATH_LIBRARY})
+    target_link_libraries(showfoto PUBLIC ${MATH_LIBRARY})
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
-    target_link_libraries(showfoto ${KVM_LIBRARY})
+    target_link_libraries(showfoto PUBLIC ${KVM_LIBRARY})
 endif()
 
 install(TARGETS  showfoto                  ${INSTALL_TARGETS_DEFAULT_ARGS})

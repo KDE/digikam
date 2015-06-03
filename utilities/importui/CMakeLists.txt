@@ -81,6 +81,8 @@ include_directories(
 
 add_library(importuibackend STATIC ${libimportuibackend_SRCS})
 
+target_include_directories(importuibackend PRIVATE "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>"
+                                            "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>")
 target_link_libraries(importuibackend
                       dmetadata
                       advancedrename
@@ -107,6 +109,9 @@ target_include_directories(importui PUBLIC
                               "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items>"
                               "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dialogs>"
 )
+
+target_include_directories(importui PRIVATE "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>"
+                                            "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>")
 
 target_link_libraries(importui
                       importuibackend

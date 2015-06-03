@@ -16,6 +16,10 @@ target_link_libraries(editorplugin
                       dimg
 )
 
+target_include_directories(editorplugin
+                           PRIVATE
+                           "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>"
+)
 target_include_directories(editorplugin INTERFACE
                            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plugin>"
 )
@@ -93,6 +97,8 @@ target_include_directories(imageeditor PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dialogs>
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rawimport>
+                           PRIVATE
+                           "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>"
 )
 
 target_link_libraries(imageeditor

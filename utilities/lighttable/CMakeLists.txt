@@ -13,6 +13,10 @@ set(liblighttable_SRCS
 
 add_library(lighttable STATIC ${liblighttable_SRCS})
 
+target_include_directories(lighttable
+                           PRIVATE
+                           "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>")
 target_link_libraries(lighttable
 
                       digikamdatabase

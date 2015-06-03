@@ -244,6 +244,7 @@ target_include_directories(dimg
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/greycstoration>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lens>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dklcms>
+                           PRIVATE "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>"
 )
 
 # TODO ugly way to expose lensfun include dirs to users of dimg.

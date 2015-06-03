@@ -111,6 +111,9 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
+                           PRIVATE
+                           "$<TARGET_PROPERTY:baloowrap,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>"
 )
 
 target_link_libraries(digikamdatabase

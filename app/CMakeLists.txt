@@ -141,21 +141,27 @@ target_include_directories(digikamgui PUBLIC
 )
 
 target_link_libraries(digikamgui
-
+                      PRIVATE
                       3rdparty
                       digikamwidgets
                       digikamdatabase
                       digikammodels
+                      digikamalbum
+                      digikamsettings
                       filters
                       dimg
+                      dmetadata
                       dthread
                       threadimageio
                       setup
                       imagepropertiesdigikam
                       advancedrename
                       queuemanager
+                      versionmanager
+                      progressmanager
                       importui
                       imageeditor
+                      editorplugin
                       searchwindow
                       firstrun
                       lighttable
@@ -163,7 +169,15 @@ target_link_libraries(digikamgui
                       fileactionmanager
                       maintenance
                       digikamtags
+                      digikamdialogs
+                      facemanagement
+                      slideshow
 
+
+)
+
+target_link_libraries(digikamgui
+                      PUBLIC
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -179,26 +193,25 @@ target_link_libraries(digikamgui
                       KF5::IconThemes
                       KF5::I18n
 )
-
 # TODO check if these linkings are required?
 if(${KFILEMETADATA_FOUND})
-    target_link_libraries(digikamgui baloowrap)
+    target_link_libraries(digikamgui PRIVATE baloowrap)
 endif()
 
 if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamgui Qt5::Multimedia Qt5::MultimediaWidgets)
+    target_link_libraries(digikamgui PUBLIC Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(APPLE)
-    target_link_libraries(digikamgui /System/Library/Frameworks/AppKit.framework)
+    target_link_libraries(digikamgui PUBLIC /System/Library/Frameworks/AppKit.framework)
 endif()
 
 if(${KF5Kipi_FOUND})
-    target_link_libraries(digikamgui kipiiface)
+    target_link_libraries(digikamgui PUBLIC kipiiface)
 endif()
 
 if(${KF5KGeoMap_FOUND}) # fixme hackish
-    target_link_libraries(digikamgui gpssearch kgeomaphelper)
+    target_link_libraries(digikamgui PUBLIC gpssearch kgeomaphelper)
 endif()
 
 # digiKam binary progam #########################################################
@@ -227,6 +240,9 @@ set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURREN
 
 target_link_libraries(digikam
                       digikamgui
+                      digikamwidgets
+                      digikamalbum
+                      firstrun
 
                       Qt5::Sql
                       Qt5::Test

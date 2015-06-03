@@ -31,7 +31,10 @@ add_library(digikamimageplugin_enhance MODULE ${digikamimageplugin_enhance_PART_
 
 # NOTE: no need to link with lensfun library here. DImg is already linked in core.
 
-target_link_libraries(digikamimageplugin_enhance editorplugin)
+target_link_libraries(digikamimageplugin_enhance
+                      PRIVATE
+                      editorplugin
+                      imageeditor)
 
 install(TARGETS digikamimageplugin_enhance             DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES digikamimageplugin_enhance_ui.rc         DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

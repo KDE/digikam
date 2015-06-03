@@ -21,8 +21,11 @@ set(digikamimageplugin_color_PART_SRCS autocorrectiontool.cpp
 
 add_library(digikamimageplugin_color MODULE ${digikamimageplugin_color_PART_SRCS})
 
+
 target_link_libraries(digikamimageplugin_color
+                      PRIVATE
                       editorplugin
+                      imageeditor
                      )
 
 install(TARGETS digikamimageplugin_color             DESTINATION ${PLUGIN_INSTALL_DIR})

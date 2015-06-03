@@ -13,8 +13,12 @@ set(libtemplate_SRCS
     subjectedit.cpp
 )
 
+
 add_library(digikamtemplate STATIC ${libtemplate_SRCS})
 
+target_include_directories(digikamtemplate
+                           PRIVATE
+                           "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>")
 target_link_libraries(digikamtemplate
 
                       dmetadata

@@ -18,7 +18,9 @@ set(digikamimageplugin_fxfilters_PART_SRCS imageplugin_fxfilters.cpp
 add_library(digikamimageplugin_fxfilters MODULE ${digikamimageplugin_fxfilters_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_fxfilters
+                      PRIVATE
                       editorplugin
+                      imageeditor
 )
 
 install(TARGETS digikamimageplugin_fxfilters             DESTINATION ${PLUGIN_INSTALL_DIR})

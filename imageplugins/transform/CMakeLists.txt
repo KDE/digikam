@@ -26,7 +26,10 @@ endif()
 
 add_library(digikamimageplugin_transform MODULE ${digikamimageplugin_transform_PART_SRCS})
 
-target_link_libraries(digikamimageplugin_transform editorplugin)
+target_link_libraries(digikamimageplugin_transform
+                      PRIVATE
+                      editorplugin
+                      imageeditor)
 
 # NOTE: no need to link with lqr-1 library here. DImg is already linked in core.
 

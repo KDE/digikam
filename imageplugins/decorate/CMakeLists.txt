@@ -14,7 +14,9 @@ set(digikamimageplugin_decorate_PART_SRCS imageplugin_decorate.cpp
 add_library(digikamimageplugin_decorate MODULE ${digikamimageplugin_decorate_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_decorate
+                      PRIVATE
                       editorplugin
+                      imageeditor
 )
 
 install(TARGETS digikamimageplugin_decorate             DESTINATION ${PLUGIN_INSTALL_DIR})
