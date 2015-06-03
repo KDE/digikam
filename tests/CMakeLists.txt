@@ -53,6 +53,7 @@ target_link_libraries(dimagehistorygraphtest
 
                       dimg
                       digikamdatabase
+                      imageeditor
 
                       Qt5::Test
 )
@@ -71,6 +72,7 @@ ecm_mark_as_test(dimagehistorytest)
 target_link_libraries(dimagehistorytest
 
                       dimg
+                      imageeditor
 
                       Qt5::Test
 )
@@ -189,6 +191,8 @@ target_link_libraries(timestampupdatetest
 
                       Qt5::Gui
                       Qt5::Test
+                      Qt5::DBus
+                      dimg
 
                       KF5::KExiv2
                      )
@@ -233,6 +237,8 @@ add_executable(testdatabase ${testdatabase_SRCS})
 target_link_libraries(testdatabase
 
                       digikamdatabase
+                      Qt5::DBus
+                      dimg
 )
 
 #------------------------------------------------------------------------
@@ -294,6 +300,7 @@ ecm_mark_as_test(cameranamehelpertest)
 target_link_libraries(cameranamehelpertest
 
                       digikamdatabase
+                      imageeditor
 
                       Qt5::Test
 )
@@ -316,6 +323,8 @@ ecm_mark_as_test(albummodeltest)
 target_link_libraries(albummodeltest
 
                       digikamdatabase
+                      digikammodels
+                      imageeditor
 
                       Qt5::Test
 
@@ -336,6 +345,7 @@ target_link_libraries(advancedrenametest
 
                       digikamdatabase
                       advancedrename
+                      dimg
 
                       Qt5::Test
 

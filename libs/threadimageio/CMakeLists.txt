@@ -27,6 +27,7 @@ add_library(threadimageio STATIC ${libthreadimageio_SRCS})
 
 target_link_libraries(threadimageio
 
+                      dimg
                       digikamdatabase
                       dthread
                       pgfutils

@@ -12,8 +12,10 @@ add_library(kio_digikamtags MODULE ${kio_digikamtags_PART_SRCS})
 
 target_link_libraries(kio_digikamtags
                       digikamdatabase
+                      dimg
                       KF5::KIOCore
                       Qt5::Core
+                      Qt5::DBus
 )
 
 # # digiKam Albums kio slave #########################################################
@@ -24,8 +26,11 @@ add_library(kio_digikamalbums MODULE ${kio_digikamalbums_PART_SRCS})
 
 target_link_libraries(kio_digikamalbums
                       digikamdatabase
+                      dimg
+
                       KF5::KIOCore
                       Qt5::Core
+                      Qt5::DBus
 )
 
 # # digiKam Date kio slave ###########################################################
@@ -36,8 +41,10 @@ add_library(kio_digikamdates MODULE ${kio_digikamdates_PART_SRCS})
 
 target_link_libraries(kio_digikamdates
                       digikamdatabase
+                      dimg
                       KF5::KIOCore
                       Qt5::Core
+                      Qt5::DBus
 )
 
 # # digiKam MapImages kio slave ######################################################
@@ -48,8 +55,11 @@ add_library(kio_digikammapimages MODULE ${kio_digikammapimages_PART_SRCS})
 
 target_link_libraries(kio_digikammapimages
                       digikamdatabase
+                      dimg
+
                       KF5::KIOCore
                       Qt5::Core
+                      Qt5::DBus
 )
 
 # # digiKam Search kio slave #########################################################
@@ -60,8 +70,10 @@ add_library(kio_digikamsearch MODULE ${kio_digikamsearch_PART_SRCS})
 
 target_link_libraries(kio_digikamsearch
                       digikamdatabase
+                      dimg
                       KF5::KIOCore
                       Qt5::Core
+                      Qt5::DBus
 )
 
 # Files to install ###################################################################

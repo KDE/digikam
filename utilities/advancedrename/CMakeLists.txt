@@ -32,6 +32,9 @@ add_library(advancedrename STATIC ${libadvancedrename_SRCS})
 target_include_directories(advancedrename PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/parser>
+                           PRIVATE
+                           "$<TARGET_PROPERTY:digikamdialogs,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:digikamwidgets,INTERFACE_INCLUDE_DIRECTORIES>"
 )
 
 target_link_libraries(advancedrename

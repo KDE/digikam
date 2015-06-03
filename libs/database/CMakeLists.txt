@@ -117,10 +117,9 @@ target_include_directories(digikamdatabase
 )
 
 target_link_libraries(digikamdatabase
-
+                      PRIVATE
                       dmetadata
                       digikamwidgets
-                      
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
@@ -134,18 +133,18 @@ target_link_libraries(digikamdatabase
 )
 
 if(KF5KFace_FOUND)
-    target_link_libraries(digikamdatabase ${KF5KFace_LIBRARIES})
+    target_link_libraries(digikamdatabase PUBLIC ${KF5KFace_LIBRARIES})
 endif()
 
 if(KF5KGeoMap_FOUND)
-    target_link_libraries(digikamdatabase ${KF5KGeoMap_LIBRARIES})
+    target_link_libraries(digikamdatabase PUBLIC ${KF5KGeoMap_LIBRARIES})
 endif()
 
 if(Baloo_FOUND) # circular linking, because we need baloowrap.h path.
-    target_link_libraries(digikamdatabase baloowrap)
+    target_link_libraries(digikamdatabase PUBLIC baloowrap)
 endif()
 
 # for imgqsort, does it even belong to database?
 if(OpenCV_FOUND)
-    target_link_libraries(digikamdatabase ${OpenCV_LIBRARIES})
+    target_link_libraries(digikamdatabase PUBLIC ${OpenCV_LIBRARIES})
 endif()
