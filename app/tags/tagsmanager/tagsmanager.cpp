@@ -857,15 +857,11 @@ void TagsManager::doSaveState()
 
 void TagsManager::slotRemoveNotAssignedTags()
 {
-
     const int result = KMessageBox::warningContinueCancel(
-            this,
-            i18n(
-                    "This option will remove all tags which \n"
-                    " are not assigned to any image. \n "
-                    "Do you want to continue?"
-                )
-        );
+                       this,
+                       i18n("This option will remove all tags which\n"
+                            "are not assigned to any image.\n "
+                            "Do you want to continue?"));
 
     if (result != KMessageBox::Continue)
     {
@@ -875,37 +871,40 @@ void TagsManager::slotRemoveNotAssignedTags()
     QModelIndex root = d->tagMngrView->model()->index(0,0);
 
     QQueue<QModelIndex> greyNodes;
-
-    QList<QModelIndex> redNodes;
-
-    QSet<QModelIndex> greenNodes;
+    QList<QModelIndex>  redNodes;
+    QSet<QModelIndex>   greenNodes;
 
     int iter = 0;
 
-    while(root.child(iter,0).isValid())
+    while (root.child(iter,0).isValid())
     {
         greyNodes.append(root.child(iter++,0));
     }
 
-    while(!greyNodes.isEmpty())
+    while (!greyNodes.isEmpty())
     {
         QModelIndex current = greyNodes.dequeue();
 
-        if(!(current.isValid()))
+        if (!(current.isValid()))
         {
             continue;
         }
-        if(current.child(0,0).isValid())
+
+        if (current.child(0,0).isValid())
         {
             // Add in the list
             int iterator = 0;
-            while(current.child(iterator,0).isValid())
-                greyNodes.append(current.child(iterator++,0));
+
+            while (current.child(iterator,0).isValid())
+            {
+                greyNodes.append(current.child(iterator++, 0));
+            }
         }
         else
         {
             TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(current));
-            if(t && !t->isRoot() && !t->isInternalTag())
+
+            if (t && !t->isRoot() && !t->isInternalTag())
             {
                 QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(t->id());
 
@@ -916,7 +915,8 @@ void TagsManager::slotRemoveNotAssignedTags()
                 else
                 {
                     QModelIndex tmp = current.parent();
-                    while(tmp.isValid())
+
+                    while (tmp.isValid())
                     {
                         greenNodes.insert(tmp);
                         tmp = tmp.parent();
@@ -931,14 +931,16 @@ void TagsManager::slotRemoveNotAssignedTags()
     foreach(QModelIndex toDelete, redNodes)
     {
         QModelIndex current = toDelete;
-        while(current.isValid() && !greenNodes.contains(current))
+
+        while (current.isValid() && !greenNodes.contains(current))
         {
             TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(current));
-            if(t && !t->isRoot() && !t->isInternalTag())
+
+            if (t && !t->isRoot() && !t->isInternalTag())
             {
                 QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(t->id());
 
-                if(assignedItems.isEmpty() && !toRemove.contains(t))
+                if (assignedItems.isEmpty() && !toRemove.contains(t))
                 {
                     toRemove.append(t);
                 }
@@ -947,19 +949,21 @@ void TagsManager::slotRemoveNotAssignedTags()
                     break;
                 }
             }
+
             current = current.parent();
         }
     }
-    foreach (TAlbum* elem, toRemove)
+
+    foreach (TAlbum* const elem, toRemove)
     {
         qDebug() << elem->title();
         QString errMsg;
+
         if (!AlbumManager::instance()->deleteTAlbum(elem, errMsg))
         {
             KMessageBox::error(0, errMsg);
         }
     }
-
 }
 
 } // namespace Digikam
