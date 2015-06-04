@@ -91,7 +91,8 @@ target_include_directories(queuemanager PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
                            PRIVATE
-                           "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>"
+                           ${DK_LOCAL_INCLUDES}
+                           ${KF5_INCLUDES_ALL}
 )
 
 target_link_libraries(queuemanager

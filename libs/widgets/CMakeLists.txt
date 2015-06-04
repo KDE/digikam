@@ -131,10 +131,13 @@ target_include_directories(digikamwidgets
 
 target_link_libraries(digikamwidgets
 
+                      PUBLIC
                       digikamdialogs # for libsinfodlg
-                      dimg
-                      digikammodels
+                      digikammodels # something fishy with this include
                       
+                      PRIVATE
+                      dimg
+
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets

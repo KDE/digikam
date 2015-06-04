@@ -25,6 +25,10 @@ set(libthreadimageio_SRCS
 
 add_library(threadimageio STATIC ${libthreadimageio_SRCS})
 
+target_include_directories(threadimageio
+                           PRIVATE
+                           "$<TARGET_PROPERTY:jpegutils,INTERFACE_INCLUDE_DIRECTORIES>")
+
 target_link_libraries(threadimageio
 
                       dimg

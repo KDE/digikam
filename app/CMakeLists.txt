@@ -192,6 +192,8 @@ target_link_libraries(digikamgui
                       KF5::TextWidgets
                       KF5::IconThemes
                       KF5::I18n
+                      KF5::KExiv2
+                      KF5::KDcraw
 )
 # TODO check if these linkings are required?
 if(${KFILEMETADATA_FOUND})
@@ -199,7 +201,7 @@ if(${KFILEMETADATA_FOUND})
 endif()
 
 if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamgui PUBLIC Qt5::Multimedia Qt5::MultimediaWidgets)
+    target_link_libraries(digikamgui PRIVATE Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(APPLE)
@@ -207,11 +209,11 @@ if(APPLE)
 endif()
 
 if(${KF5Kipi_FOUND})
-    target_link_libraries(digikamgui PUBLIC kipiiface)
+    target_link_libraries(digikamgui PRIVATE kipiiface)
 endif()
 
 if(${KF5KGeoMap_FOUND}) # fixme hackish
-    target_link_libraries(digikamgui PUBLIC gpssearch kgeomaphelper)
+    target_link_libraries(digikamgui PRIVATE gpssearch kgeomaphelper)
 endif()
 
 # digiKam binary progam #########################################################

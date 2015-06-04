@@ -35,17 +35,26 @@ endif()
 
 add_library(maintenance STATIC ${libmaintenance_SRCS})
 
+target_include_directories(maintenance
+                           PRIVATE
+                           ${DK_LOCAL_INCLUDES}
+                           ${KF5_INCLUDES_ALL}
+)
 target_link_libraries(maintenance
+                      PRIVATE
+                      digikamgui # for DigikamApp...
+
 
                       digikamdatabase
                       notificationmanager
                       progressmanager
-                      digikamgui # for DigikamApp...
-                      
-                      KF5::KExiv2
+
                       KF5::KDcraw
+                      KF5::KExiv2
+                      KF5::Kipi # dependecy from digikamgui
+
 )
 
 if(${KF5KFace_FOUND})
-    target_link_libraries(maintenance facemanagement)
+    target_link_libraries(maintenance PUBLIC facemanagement)
 endif()

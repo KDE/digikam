@@ -19,7 +19,9 @@ add_library(fileactionmanager STATIC ${fileactionmanager_SRCS})
 
 target_include_directories(fileactionmanager
                            PRIVATE
-                           "$<TARGET_PROPERTY:baloowrap,INTERFACE_INCLUDE_DIRECTORIES>")
+                           "$<TARGET_PROPERTY:baloowrap,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:jpegutils,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:digikamtemplate,INTERFACE_INCLUDE_DIRECTORIES>")
 target_link_libraries(fileactionmanager
                       
                       progressmanager

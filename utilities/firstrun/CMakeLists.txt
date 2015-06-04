@@ -22,7 +22,10 @@ add_library(firstrun STATIC ${libfirstrun_SRCS})
 target_include_directories(firstrun
                            PRIVATE
                            "$<TARGET_PROPERTY:digikamwidgets,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:digikamsettings,INTERFACE_INCLUDE_DIRECTORIES>"
 )
+
 target_link_libraries(firstrun
                       PRIVATE
                       digikamdatabase
@@ -32,6 +35,8 @@ target_link_libraries(firstrun
                       KF5::WidgetsAddons
                       KF5::ConfigWidgets
                       KF5::KIOWidgets
-                      
+                      KF5::Kipi # kxmlgui dependecy
+
+                      KF5::KExiv2
                       KF5::KDcraw
 )

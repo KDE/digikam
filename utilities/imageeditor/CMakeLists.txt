@@ -19,9 +19,20 @@ target_link_libraries(editorplugin
 target_include_directories(editorplugin
                            PRIVATE
                            "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:slideshow,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>" #kmainwindow
+                           "$<TARGET_PROPERTY:digikamsettings,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:digikamgui,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:setup,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:fileactionmanager,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:digikamtags,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:notificationmanager,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
 )
 target_include_directories(editorplugin INTERFACE
                            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plugin>"
+
 )
 
 install(FILES plugin/digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
@@ -99,6 +110,15 @@ target_include_directories(imageeditor PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rawimport>
                            PRIVATE
                            "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:slideshow,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>" #kmainwindow
+                           "$<TARGET_PROPERTY:digikamsettings,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:digikamgui,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:setup,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:fileactionmanager,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:digikamtags,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:notificationmanager,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
 )
 
 target_link_libraries(imageeditor

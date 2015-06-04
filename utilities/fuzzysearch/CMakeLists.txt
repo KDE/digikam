@@ -13,7 +13,13 @@ set(libfuzzysearch_SRCS
 )
 
 add_library(fuzzysearch STATIC ${libfuzzysearch_SRCS})
-
+target_include_directories(fuzzysearch
+                           PRIVATE
+                           "$<TARGET_PROPERTY:digikamgui,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:setup,INTERFACE_INCLUDE_DIRECTORIES>"
+                           "$<TARGET_PROPERTY:maintenance,INTERFACE_INCLUDE_DIRECTORIES>"
+)
 target_link_libraries(fuzzysearch
                       digikamalbum
                       digikamwidgets

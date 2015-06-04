@@ -38,8 +38,10 @@ target_include_directories(digikamtags PUBLIC
 
 target_include_directories(digikamtags
                            PRIVATE
-                           "$<TARGET_PROPERTY:lighttable,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>")
+                           ${DK_LOCAL_INCLUDES}
+                           ${KF5_INCLUDES_ALL}
+
+                           )
 target_link_libraries(digikamtags
 
                       digikamalbum

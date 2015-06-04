@@ -61,6 +61,7 @@ target_link_libraries(showfoto
                       fileactionmanager
                       imageeditor
                       imagepropertiesdigikam
+                      slideshow
 )
 
 if(${KF5KGeoMap_FOUND})

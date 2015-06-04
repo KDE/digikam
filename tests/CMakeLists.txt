@@ -188,11 +188,11 @@ ecm_mark_as_test(timestampupdatetest)
 target_link_libraries(timestampupdatetest
 
                       digikamdatabase
-
+                      dimg
                       Qt5::Gui
                       Qt5::Test
                       Qt5::DBus
-                      dimg
+
 
                       KF5::KExiv2
                      )
@@ -301,6 +301,7 @@ target_link_libraries(cameranamehelpertest
 
                       digikamdatabase
                       imageeditor
+                      importui
 
                       Qt5::Test
 )
