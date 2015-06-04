@@ -59,6 +59,7 @@
 // Local includes
 
 #include "album.h"
+#include "albumdb.h"
 #include "albummanager.h"
 #include "albummodel.h"
 #include "albumselectcombobox.h"
@@ -267,13 +268,9 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("File Format"), i18n("Return pictures with the image file format"));
-        QStringList formats;
-        formats << "JPG" << "JPEG";
-        formats << "PNG" << "PNG";
-        formats << "RAW*" << "RAW";
-        formats << "TIFF" << "TIFF";
-        formats << "PPM" << "PPM";
-        formats << "JP2*" << "JPEG 2000";
+        QStringList formats = DatabaseAccess().db()->getFormatStatistics().keys();
+        formats += formats;
+        formats.sort();
         field->setChoice(formats);
         return field;
     }

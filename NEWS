@@ -47,4 +47,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 040 ==> 309243 - Reread metadata does not remove tags from database.
 041 ==> 348463 - First time, digiKam seems using more than one cpu.
 042 ==> 348586 - digiKam does not write description to XMP sidecar file anymore.
-043 ==> 
+043 ==> 318319 - Extended files type mime supported into search tool [patch].
+044 ==> 
