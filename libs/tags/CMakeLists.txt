@@ -36,12 +36,6 @@ target_include_directories(digikamtags PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tagsmanager>
 )
 
-target_include_directories(digikamtags
-                           PRIVATE
-                           ${DK_LOCAL_INCLUDES}
-                           ${KF5_INCLUDES_ALL}
-
-                           )
 target_link_libraries(digikamtags
 
                       digikamalbum

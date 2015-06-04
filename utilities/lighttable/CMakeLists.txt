@@ -13,11 +13,6 @@ set(liblighttable_SRCS
 
 add_library(lighttable STATIC ${liblighttable_SRCS})
 
-target_include_directories(lighttable
-                           PRIVATE
-                           ${DK_LOCAL_INCLUDES}
-                           ${KF5_INCLUDES_ALL}
-)
 target_link_libraries(lighttable
 
                       digikamdatabase

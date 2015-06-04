@@ -23,10 +23,6 @@ set(libalbum_SRCS
 
 add_library(digikamalbum STATIC ${libalbum_SRCS})
 
-target_include_directories(digikamalbum
-                           PRIVATE
-                           "$<TARGET_PROPERTY:searchwindow,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:digikamdatabase,INTERFACE_INCLUDE_DIRECTORIES>")
 
 target_link_libraries(digikamalbum
                       PRIVATE

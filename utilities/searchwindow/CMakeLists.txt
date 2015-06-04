@@ -19,17 +19,6 @@ set(libsearchwindow_SRCS
 
 add_library(searchwindow STATIC ${libsearchwindow_SRCS})
 
-target_include_directories(searchwindow
-                           PRIVATE
-                           "$<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
-
-                           "$<TARGET_PROPERTY:digikamgui,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:digikamwidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:digikamalbum,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:digikamsettings,INTERFACE_INCLUDE_DIRECTORIES>"
-
-)
 target_link_libraries(searchwindow
                       PRIVATE
                       digikamdatabase

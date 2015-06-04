@@ -17,9 +17,6 @@ set(libsettings_SRCS
 
 add_library(digikamsettings STATIC ${libsettings_SRCS})
 
-target_include_directories(digikamsettings
-                           PRIVATE
-                           "$<TARGET_PROPERTY:baloowrap,INTERFACE_INCLUDE_DIRECTORIES>")
 
 target_link_libraries(digikamsettings
 

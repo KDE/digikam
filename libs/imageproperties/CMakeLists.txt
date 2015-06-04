@@ -43,11 +43,6 @@ endif()
 # TODO we need this to showfoto?
 #add_library(imageproperties STATIC ${libimageproperties_SRCS})
 
-target_include_directories(imagepropertiesdigikam
-                           PRIVATE
-                           "$<TARGET_PROPERTY:importui,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:digikamtemplate,INTERFACE_INCLUDE_DIRECTORIES>"
-)
 target_link_libraries(imagepropertiesdigikam
 
                       digikamwidgets

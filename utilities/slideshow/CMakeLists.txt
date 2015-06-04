@@ -18,7 +18,6 @@ set(libslideshow_SRCS
 
 add_library(slideshow STATIC ${libslideshow_SRCS})
 
-target_include_directories(slideshow PRIVATE "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>")
 
 target_link_libraries(slideshow
 

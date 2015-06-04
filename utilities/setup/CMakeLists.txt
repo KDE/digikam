@@ -51,10 +51,8 @@ add_library(setup STATIC ${libsetup_SRCS} ${libsetupshowfoto_SRCS})
 target_include_directories(setup PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/camera>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collections>
-                           PRIVATE
-                           "$<TARGET_PROPERTY:digikamsettings,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>"
 )
+
 target_link_libraries(setup
                       PRIVATE
                       digikamtemplate

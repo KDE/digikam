@@ -19,12 +19,6 @@ set(libfirstrun_SRCS
 
 add_library(firstrun STATIC ${libfirstrun_SRCS})
 
-target_include_directories(firstrun
-                           PRIVATE
-                           "$<TARGET_PROPERTY:digikamwidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>"
-                           "$<TARGET_PROPERTY:digikamsettings,INTERFACE_INCLUDE_DIRECTORIES>"
-)
 
 target_link_libraries(firstrun
                       PRIVATE

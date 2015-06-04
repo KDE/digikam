@@ -125,8 +125,6 @@ target_include_directories(digikamwidgets
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/graphicsview>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/iccprofiles>
-                           PRIVATE
-                           "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>"
 )
 
 target_link_libraries(digikamwidgets

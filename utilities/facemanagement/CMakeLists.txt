@@ -13,10 +13,8 @@ set(libfacemanagement_SRCS
 )
 
 add_library(facemanagement STATIC ${libfacemanagement_SRCS})
-target_include_directories(facemanagement PRIVATE
-                                            "$<TARGET_PROPERTY:digikamsettings,INTERFACE_INCLUDE_DIRECTORIES>"
-                                            "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
-)
+
+
 target_link_libraries(facemanagement
 
                       digikamdatabase

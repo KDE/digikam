@@ -15,13 +15,6 @@ set(libkipiiface_SRCS
 
 add_library(kipiiface STATIC ${libkipiiface_SRCS})
 
-target_include_directories(kipiiface PRIVATE "$<TARGET_PROPERTY:digikammodels,INTERFACE_INCLUDE_DIRECTORIES>"
-                                            "$<TARGET_PROPERTY:digikamalbum,INTERFACE_INCLUDE_DIRECTORIES>"
-                                            "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
-                                            "$<TARGET_PROPERTY:progressmanager,INTERFACE_INCLUDE_DIRECTORIES>"
-                                            "$<TARGET_PROPERTY:fileactionmanager,INTERFACE_INCLUDE_DIRECTORIES>"
-
-)
 # TODO we shouldn't depend on digikamgui, but on a specific library providing what we need
 target_link_libraries(kipiiface
 
