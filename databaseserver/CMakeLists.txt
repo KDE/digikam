@@ -19,6 +19,7 @@ target_link_libraries(digikamdatabaseserver
                       digikamdatabase
 
                       Qt5::Sql
+                      Qt5::DBus
 )
 
 if(NOT WIN32)

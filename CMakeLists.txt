@@ -122,6 +122,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              PrintSupport
              Test
              WebKitWidgets
+             DBus
 )
 
 if(ENABLE_MEDIAPLAYER)
