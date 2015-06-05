@@ -47,16 +47,23 @@ target_link_libraries(maintenance
                       advancedrename
                       searchwindow
                       queuemanager
-                      kipiiface
+
 
                       Qt5::WebKitWidgets
                       KF5::KDcraw
                       KF5::KExiv2
-                      KF5::Kipi # dependecy from digikamgui
                       KF5::WindowSystem
 
 )
 
 if(${KF5KFace_FOUND})
     target_link_libraries(maintenance PUBLIC facemanagement)
+endif()
+
+if(${KF5KGeoMap_FOUND}) # fixme hackish
+    target_link_libraries(maintenance PRIVATE gpssearch kgeomaphelper)
+endif()
+
+if(${KF5Kipi_FOUND})
+    target_link_libraries(maintenance PRIVATE kipiiface KF5::Kipi)
 endif()

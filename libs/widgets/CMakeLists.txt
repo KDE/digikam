@@ -139,6 +139,12 @@ target_link_libraries(digikamwidgets
                       Qt5::Gui
                       Qt5::Widgets
 
-                      KF5::Kipi  # about dialog requires kipi
-                      ${KF5KFace_LIBRARIES} # about dialog
 )
+
+if(KF5KFace_FOUND)
+    target_link_libraries(digikamwidgets PRIVATE ${KF5KFace_LIBRARIES})
+endif()
+
+if(${KF5Kipi_FOUND})
+    target_link_libraries(digikamwidgets PRIVATE KF5::Kipi)  # about dialog requires kipi
+endif()
