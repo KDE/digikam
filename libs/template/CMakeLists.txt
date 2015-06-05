@@ -13,6 +13,7 @@ set(libtemplate_SRCS
     subjectedit.cpp
 )
 
+
 add_library(digikamtemplate STATIC ${libtemplate_SRCS})
 
 target_link_libraries(digikamtemplate

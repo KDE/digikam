@@ -19,8 +19,10 @@ add_library(kipiiface STATIC ${libkipiiface_SRCS})
 target_link_libraries(kipiiface
 
                       digikamgui      # for digikamapp
+
                       digikamsettings # for applicationsettings
 
-                      KF5::Kipi                      
+                      KF5::Kipi
+
 )
 

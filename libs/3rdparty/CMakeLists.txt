@@ -11,7 +11,7 @@ set(libkde3rdparty_SRCS
 
 add_library(3rdparty STATIC ${libkde3rdparty_SRCS})
 
-target_link_libraries(3rdparty
-
-                      Qt5::Core
-)
+#target_link_libraries(3rdparty
+#                      PRIVATE
+#                      Qt5::Core
+#)

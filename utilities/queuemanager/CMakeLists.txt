@@ -71,26 +71,21 @@ endif()
 
 add_library(queuemanager STATIC ${libqueuemanager_SRCS})
 
-# TODO instead of including subdirs, just modify the sources
-include_directories(
-    manager/
-    basetools/
-    basetools/color/
-    basetools/convert/
-    basetools/decorate/
-    basetools/enhance/
-    basetools/filters/
-    basetools/metadata/
-    basetools/transform/
-    views/
-    main/
-)
-
-target_include_directories(queuemanager PUBLIC
+target_include_directories(queuemanager
+                           PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/manager>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/color>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/convert>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/decorate>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/enhance>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/filters>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/metadata>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
 )
+
 
 target_link_libraries(queuemanager
                       Qt5::Gui

@@ -46,6 +46,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
+#include "dmessagebox.h"
 #include "tagpropwidget.h"
 #include "tagmngrtreeview.h"
 #include "taglist.h"
@@ -678,6 +679,9 @@ void TagsManager::setupActions()
     QAction* const delTagFromImg = new QAction(QIcon::fromTheme(QLatin1String("tag-delete")),
                                          i18n("Remove Tag from Images"), this);
 
+    QAction* const deleteUnused  = new QAction(QIcon::fromTheme(QLatin1String("draw-eraser")),
+                                         i18n("Delete Unassigned Tags"), this);
+    
     /** Tool tips  **/
     setHelpText(d->addAction, i18n("Add new tag to current tag. "
                                    "Current tag is last clicked tag."));
@@ -699,6 +703,9 @@ void TagsManager::setupActions()
     setHelpText(delTagFromImg, i18n("Delete selected tag(s) from images. "
                                     "Works with multiple selection."));
 
+    setHelpText(deleteUnused, i18n("Delete all tags that are not assigned to images. "
+                                   "Use with caution."));
+
     connect(resetIcon, SIGNAL(triggered()),
             this, SLOT(slotResetTagIcon()));
 
@@ -717,12 +724,16 @@ void TagsManager::setupActions()
     connect(delTagFromImg, SIGNAL(triggered()),
             this, SLOT(slotRemoveTagsFromImgs()));
 
+    connect(deleteUnused, SIGNAL(triggered()),
+            this, SLOT(slotRemoveNotAssignedTags()));
+    
     d->organizeAction->addAction(resetIcon);
     d->organizeAction->addAction(createTagAddr);
     d->organizeAction->addAction(invSel);
     d->organizeAction->addAction(expandTree);
     d->organizeAction->addAction(expandSel);
     d->organizeAction->addAction(delTagFromImg);
+    d->organizeAction->addAction(deleteUnused);
 
     /** Sync & Export Group **/
     d->syncexportAction     = new QMenu(i18n("Sync &Export"), this);
@@ -737,7 +748,6 @@ void TagsManager::setupActions()
 
     QAction* const wipeAll  = new QAction(QIcon::fromTheme(QLatin1String("draw-eraser")),
                                           i18n("Wipe all tags from Database only"), this);
-
 
     setHelpText(wrDbImg, i18n("Write Tags Metadata to Image."));
 
@@ -817,6 +827,118 @@ void TagsManager::doSaveState()
     KConfigGroup group = getConfigGroup();
     d->tagMngrView->doSaveState();
     group.sync();
+}
+
+void TagsManager::slotRemoveNotAssignedTags()
+{
+    const int result = DMessageBox::showContinueCancel(QMessageBox::Warning,
+                                                       this,
+                                                       i18n("Warning"),
+                                                       i18n("This option will remove all tags which\n"
+                                                            "are not assigned to any image.\n "
+                                                            "Do you want to continue?"));
+
+    if (result != QMessageBox::Yes)
+    {
+        return;
+    }
+
+    QModelIndex root = d->tagMngrView->model()->index(0,0);
+
+    QQueue<QModelIndex> greyNodes;
+    QList<QModelIndex>  redNodes;
+    QSet<QModelIndex>   greenNodes;
+
+    int iter = 0;
+
+    while (root.child(iter,0).isValid())
+    {
+        greyNodes.append(root.child(iter++,0));
+    }
+
+    while (!greyNodes.isEmpty())
+    {
+        QModelIndex current = greyNodes.dequeue();
+
+        if (!(current.isValid()))
+        {
+            continue;
+        }
+
+        if (current.child(0,0).isValid())
+        {
+            // Add in the list
+            int iterator = 0;
+
+            while (current.child(iterator,0).isValid())
+            {
+                greyNodes.append(current.child(iterator++,0));
+            }
+        }
+        else
+        {
+            TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(current));
+
+            if (t && !t->isRoot() && !t->isInternalTag())
+            {
+                QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(t->id());
+
+                if (assignedItems.isEmpty())
+                {
+                    redNodes.append(current);
+                }
+                else
+                {
+                    QModelIndex tmp = current.parent();
+
+                    while (tmp.isValid())
+                    {
+                        greenNodes.insert(tmp);
+                        tmp = tmp.parent();
+                    }
+                }
+            }
+        }
+    }
+
+    QList<TAlbum*> toRemove;
+
+    foreach(QModelIndex toDelete, redNodes)
+    {
+        QModelIndex current = toDelete;
+
+        while (current.isValid() && !greenNodes.contains(current))
+        {
+            TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(current));
+
+            if (t && !t->isRoot() && !t->isInternalTag())
+            {
+                QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(t->id());
+
+                if (assignedItems.isEmpty() && !toRemove.contains(t))
+                {
+                    toRemove.append(t);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            current = current.parent();
+        }
+    }
+
+    foreach (TAlbum* const elem, toRemove)
+    {
+        qDebug() << elem->title();
+        QString errMsg;
+
+        if (!AlbumManager::instance()->deleteTAlbum(elem, errMsg))
+        {
+            QMessageBox::critical(this, qApp->applicationName(), errMsg);
+        }
+    }
 }
 
 } // namespace Digikam

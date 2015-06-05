@@ -124,7 +124,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 # ugly hack, but better than listing these in main cmakelists or polluting includes
-include_directories(imagehistory/ 
+include_directories(imagehistory/
                       filters/
                       filters/decorate/
                       filters/film/
@@ -204,16 +204,16 @@ endif()
 add_library(dimg STATIC ${libdimgloaders_SRCS} ${libdimgfilters_SRCS} ${libdimg_SRCS})
 
 if(X11_FOUND)
-    target_link_libraries(dimg Qt5::X11Extras ${X11_LIBRARIES})
+    target_link_libraries(dimg PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
 if(JASPER_FOUND)
-    target_link_libraries(dimg ${JASPER_LIBRARIES})
+    target_link_libraries(dimg PRIVATE ${JASPER_LIBRARIES})
 endif()
 
 # LibLqr-1 library rules for content-aware filter
 if(LQR-1_FOUND)
-    target_link_libraries(dimg ${LQR-1_LIBRARIES})
+    target_link_libraries(dimg PRIVATE ${LQR-1_LIBRARIES})
 endif()
 
 add_dependencies(dimg digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
@@ -244,42 +244,45 @@ target_include_directories(dimg
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/greycstoration>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lens>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dklcms>
+
 )
 
 # TODO ugly way to expose lensfun include dirs to users of dimg.
 if(LENSFUN_FOUND)
     target_include_directories(dimg PUBLIC ${LENSFUN_INCLUDE_DIRS})
-    target_link_libraries(dimg ${LENSFUN_LIBRARIES})
+    target_link_libraries(dimg PRIVATE ${LENSFUN_LIBRARIES})
 endif()
 
 # for nrfilter
 if(OpenCV_FOUND)
-    target_link_libraries(dimg ${OpenCV_LIBRARIES})
+    target_link_libraries(dimg PRIVATE ${OpenCV_LIBRARIES})
 endif()
 
 target_link_libraries(dimg
-
+                      PUBLIC
                       digikamwidgets
+
+                      PRIVATE
                       dmetadata
                       dthread
                       jpegutils
                       pgfutils
                       3rdparty # KMemoryInfo
-                      
+
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Concurrent # filters
                       Qt5::Widgets
                       Qt5::Xml
-                      
+
                       KF5::KExiv2
                       KF5::KDcraw
-                      
+
                       # Required by CImg library which is using pthread internally.
                       ${CMAKE_THREAD_LIBS_INIT}
 
                       ${LCMS2_LIBRARIES} # filters
-                      
+
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}
 )

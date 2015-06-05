@@ -13,7 +13,7 @@ set(libdialogs_SRCS
     infodlg.cpp
     libsinfodlg.cpp
     rawcameradlg.cpp
-    
+
     migrationdlg.cpp # used to belong to separate target (database dependency?) verify FIXME
 )
 
@@ -28,16 +28,15 @@ endif()
 add_library(digikamdialogs STATIC ${libdialogs_SRCS} ${libdeletedialog_SRCS})
 
 target_link_libraries(digikamdialogs
-
-                      digikamdatabase # migrationdlg needs this
-                      versionmanager  # migrationdlg needs this too
+                      PRIVATE
                       threadimageio   # loadingdescription for imagedialog
+                      digikamdatabase_static # migrationdlg needs this
+                      versionmanager  # migrationdlg needs this too
                       dmetadata
-
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
                       Qt5::Sql # for databaseurl
-                      
+
                       KF5::KDcraw
 )

@@ -15,7 +15,7 @@ add_library(lighttable STATIC ${liblighttable_SRCS})
 
 target_link_libraries(lighttable
 
-                      digikamdatabase
+                      digikamdatabase_static
 
                       Qt5::Gui
 )

@@ -54,7 +54,7 @@ target_include_directories(setup PUBLIC
 )
 
 target_link_libraries(setup
-
+                      PRIVATE
                       digikamtemplate
                       digikamwidgets # TODO for fullscreensettings
                       maintenance
@@ -63,4 +63,5 @@ target_link_libraries(setup
                       dimg
 
                       Qt5::Widgets
+
 )

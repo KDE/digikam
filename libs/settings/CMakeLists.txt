@@ -17,6 +17,7 @@ set(libsettings_SRCS
 
 add_library(digikamsettings STATIC ${libsettings_SRCS})
 
+
 target_link_libraries(digikamsettings
 
                       digikamwidgets #required for DMultiTabbar 

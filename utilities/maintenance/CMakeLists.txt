@@ -36,16 +36,20 @@ endif()
 add_library(maintenance STATIC ${libmaintenance_SRCS})
 
 target_link_libraries(maintenance
+                      PRIVATE
+                      digikamgui # for DigikamApp...
 
-                      digikamdatabase
+
+                      digikamdatabase_static
                       notificationmanager
                       progressmanager
-                      digikamgui # for DigikamApp...
-                      
-                      KF5::KExiv2
+
                       KF5::KDcraw
+                      KF5::KExiv2
+                      KF5::Kipi # dependecy from digikamgui
+
 )
 
 if(${KF5KFace_FOUND})
-    target_link_libraries(maintenance facemanagement)
+    target_link_libraries(maintenance PUBLIC facemanagement)
 endif()

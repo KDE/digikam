@@ -19,15 +19,18 @@ set(libfirstrun_SRCS
 
 add_library(firstrun STATIC ${libfirstrun_SRCS})
 
-target_link_libraries(firstrun
 
-                      digikamdatabase
+target_link_libraries(firstrun
+                      PRIVATE
+                      digikamdatabase_static
 
                       Qt5::Widgets
-                      
+
                       KF5::WidgetsAddons
                       KF5::ConfigWidgets
                       KF5::KIOWidgets
-                      
+                      KF5::Kipi # kxmlgui dependecy
+
+                      KF5::KExiv2
                       KF5::KDcraw
 )

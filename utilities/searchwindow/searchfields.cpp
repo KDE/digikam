@@ -59,6 +59,7 @@
 
 #include "digikam_debug.h"
 #include "album.h"
+#include "albumdb.h"
 #include "albummanager.h"
 #include "albummodel.h"
 #include "albumselectcombobox.h"
@@ -271,13 +272,9 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("File Format"), i18n("Return pictures with the image file format"));
-        QStringList formats;
-        formats << QLatin1String("JPG") << QLatin1String("JPEG");
-        formats << QLatin1String("PNG") << QLatin1String("PNG");
-        formats << QLatin1String("RAW*") << QLatin1String("RAW");
-        formats << QLatin1String("TIFF") << QLatin1String("TIFF");
-        formats << QLatin1String("PPM") << QLatin1String("PPM");
-        formats << QLatin1String("JP2*") << QLatin1String("JPEG 2000");
+        QStringList formats = DatabaseAccess().db()->getFormatStatistics().keys();
+        formats += formats;
+        formats.sort();
         field->setChoice(formats);
         return field;
     }

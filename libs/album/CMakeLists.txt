@@ -23,9 +23,10 @@ set(libalbum_SRCS
 
 add_library(digikamalbum STATIC ${libalbum_SRCS})
 
-target_link_libraries(digikamalbum
 
-                      digikamdatabase
+target_link_libraries(digikamalbum
+                      PRIVATE
                       setup            # for setupcollections.h, FIXME
                       digikamwidgets   # for fullscreensettings
+
 )
