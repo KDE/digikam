@@ -124,7 +124,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 # ugly hack, but better than listing these in main cmakelists or polluting includes
-include_directories(imagehistory/ 
+include_directories(imagehistory/
                       filters/
                       filters/decorate/
                       filters/film/
@@ -263,27 +263,26 @@ target_link_libraries(dimg
                       digikamwidgets
 
                       PRIVATE
-
                       dmetadata
                       dthread
                       jpegutils
                       pgfutils
                       3rdparty # KMemoryInfo
-                      
+
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Concurrent # filters
                       Qt5::Widgets
                       Qt5::Xml
-                      
+
                       KF5::KExiv2
                       KF5::KDcraw
-                      
+
                       # Required by CImg library which is using pthread internally.
                       ${CMAKE_THREAD_LIBS_INIT}
 
                       ${LCMS2_LIBRARIES} # filters
-                      
+
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}
 )

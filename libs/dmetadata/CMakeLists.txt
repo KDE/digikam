@@ -20,8 +20,8 @@ add_library(dmetadata STATIC ${libdmetadata_SRCS})
 add_dependencies(dmetadata digikam-gitversion)
 
 target_link_libraries(dmetadata
-                      
+                      PRIVATE
                       dimg
-                      
+
                       Qt5::Core
 )

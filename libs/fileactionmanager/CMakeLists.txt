@@ -18,7 +18,7 @@ set(fileactionmanager_SRCS
 add_library(fileactionmanager STATIC ${fileactionmanager_SRCS})
 
 target_link_libraries(fileactionmanager
-                      
+                      PRIVATE
                       progressmanager
                       dmetadata
 )
