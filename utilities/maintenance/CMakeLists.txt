@@ -35,11 +35,6 @@ endif()
 
 add_library(maintenance STATIC ${libmaintenance_SRCS})
 
-target_include_directories(maintenance
-                           PRIVATE
-                           ${DK_LOCAL_INCLUDES}
-                           ${KF5_INCLUDES_ALL}
-)
 target_link_libraries(maintenance
                       PRIVATE
                       digikamgui # for DigikamApp...

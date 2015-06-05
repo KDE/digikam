@@ -130,18 +130,18 @@ target_link_libraries(digikamdatabase
 )
 
 if(KF5KFace_FOUND)
-    target_link_libraries(digikamdatabase PUBLIC ${KF5KFace_LIBRARIES})
+    target_link_libraries(digikamdatabase PRIVATE ${KF5KFace_LIBRARIES})
 endif()
 
 if(KF5KGeoMap_FOUND)
-    target_link_libraries(digikamdatabase PUBLIC ${KF5KGeoMap_LIBRARIES})
+    target_link_libraries(digikamdatabase PRIVATE ${KF5KGeoMap_LIBRARIES})
 endif()
 
 if(Baloo_FOUND) # circular linking, because we need baloowrap.h path.
-    target_link_libraries(digikamdatabase PUBLIC baloowrap)
+    target_link_libraries(digikamdatabase PRIVATE baloowrap)
 endif()
 
 # for imgqsort, does it even belong to database?
 if(OpenCV_FOUND)
-    target_link_libraries(digikamdatabase PUBLIC ${OpenCV_LIBRARIES})
+    target_link_libraries(digikamdatabase PRIVATE ${OpenCV_LIBRARIES})
 endif()
