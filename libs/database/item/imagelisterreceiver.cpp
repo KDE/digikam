@@ -186,4 +186,51 @@ void ImageListerSlaveBaseGrowingPartsSendingReceiver::receive(const ImageListerR
     }
 }
 
+// ---------------------------------------------------------------------------------------------------------
+
+ImageListerJobReceiver::ImageListerJobReceiver(DatesJob * const job)
+    : m_job(job)
+{
+}
+
+void ImageListerJobReceiver::sendData()
+{
+    QByteArray  ba;
+    QDataStream os(&ba, QIODevice::WriteOnly);
+
+    if (!records.isEmpty())
+    {
+        ImageListerRecord::initializeStream(records.first().binaryFormat, os);
+    }
+
+    for (QList<ImageListerRecord>::const_iterator it = records.constBegin(); it != records.constEnd(); ++it)
+    {
+        os << *it;
+    }
+
+    m_job->slotData(ba);
+
+    records.clear();
+}
+
+// ----------------------------------
+
+ImageListerJobPartsSendingReceiver::ImageListerJobPartsSendingReceiver(DatesJob *const job, int limit)
+    : ImageListerJobReceiver(job), m_limit(limit), m_count(0)
+{
+
+}
+
+void ImageListerJobPartsSendingReceiver::receive(const ImageListerRecord &record)
+{
+
+    ImageListerJobReceiver::receive(record);
+
+    if (++m_count > m_limit)
+    {
+        sendData();
+        m_count = 0;
+    }
+}
+
 }  // namespace Digikam

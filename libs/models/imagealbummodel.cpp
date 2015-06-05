@@ -376,6 +376,7 @@ void ImageAlbumModel::slotResult(KJob* job)
 
 void ImageAlbumModel::slotData(KIO::Job* job, const QByteArray& data)
 {
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DATA FROM KIO: " << data.toHex();
     if (data.isEmpty() || job != d->job)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Data from KIOSlave is null: " << data.isEmpty();

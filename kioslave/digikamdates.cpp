@@ -58,7 +58,6 @@ void kio_digikamdates::special(const QByteArray& data)
 {
     bool        folders = (metaData(QLatin1String("folders")) == QLatin1String("true"));
     QUrl        url;
-    QString     filter;
     QDataStream ds(data);
     ds >> url;
 

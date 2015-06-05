@@ -38,7 +38,8 @@
 
 #include "digikam_export.h"
 #include "imagelisterrecord.h"
-
+//#include "KDCRAW/RActionJob"
+#include "datesjob.h"
 
 namespace Digikam
 {
@@ -93,6 +94,37 @@ public:
 
     ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase* slave, int limit);
     virtual void receive(const ImageListerRecord& record);
+
+protected:
+
+    int m_limit;
+    int m_count;
+};
+
+// ------------------------------------------------------------------------------------------------
+
+class DIGIKAM_DATABASE_EXPORT ImageListerJobReceiver : public ImageListerValueListReceiver
+{
+
+public:
+
+    explicit ImageListerJobReceiver(DatesJob *const job);
+    //TODO: virtual void error(const QString &errMsg);
+    void sendData();
+
+protected:
+
+    DatesJob *const m_job;
+};
+
+
+class DIGIKAM_DATABASE_EXPORT ImageListerJobPartsSendingReceiver : public ImageListerJobReceiver
+{
+
+public:
+
+    ImageListerJobPartsSendingReceiver(DatesJob *const job, int limit);
+    virtual void receive(const ImageListerRecord &record);
 
 protected:
 
