@@ -123,7 +123,8 @@ if(${KF5KGeoMap_FOUND})
 endif()
 
 # TODO this should be turned from static to dynamic
-add_library(digikamgui STATIC ${libdigikamgui_SRCS})
+add_library(digikamgui_src OBJECT ${libdigikamgui_SRCS})
+add_library(digikamgui STATIC $<TARGET_OBJECTS:digikamgui_src>)
 
 # TODO temporary ugly hack, the common utils used by other components (esp. utilities and libs) should be moved to libs..
 target_include_directories(digikamgui PUBLIC
