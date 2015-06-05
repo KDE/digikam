@@ -33,20 +33,27 @@ if(${KF5KFace_FOUND})
        )
 endif()
 
-add_library(maintenance STATIC ${libmaintenance_SRCS})
+add_library(maintenance STATIC ${libmaintenance_SRCS} $<TARGET_OBJECTS:digikamgui_src>)
 
 target_link_libraries(maintenance
                       PRIVATE
-                      digikamgui # for DigikamApp...
+#                      digikamgui # for DigikamApp...
 
 
                       digikamdatabase_static
                       notificationmanager
                       progressmanager
+                      fuzzysearch
+                      advancedrename
+                      searchwindow
+                      queuemanager
+                      kipiiface
 
+                      Qt5::WebKitWidgets
                       KF5::KDcraw
                       KF5::KExiv2
                       KF5::Kipi # dependecy from digikamgui
+                      KF5::WindowSystem
 
 )
 

@@ -133,6 +133,7 @@ target_link_libraries(digikamwidgets
                       digikamdialogs # for libsinfodlg
                       digikammodels # something fishy with this include
                       dimg
+                      Qt5::PrintSupport
 
                       Qt5::Core
                       Qt5::Gui

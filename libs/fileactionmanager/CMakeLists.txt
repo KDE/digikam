@@ -21,4 +21,5 @@ target_link_libraries(fileactionmanager
                       PRIVATE
                       progressmanager
                       dmetadata
+                      baloowrap
 )
