@@ -286,7 +286,7 @@ void LensFunCameraSelector::resetToDefault()
 void LensFunCameraSelector::readSettings(KConfigGroup& group)
 {
     setUseMetadata(group.readEntry(d->configUseMetadata, true));
-    
+
     if (!useMetadata())
     {
         LensFunContainer settings = d->iface->settings();
@@ -294,26 +294,26 @@ void LensFunCameraSelector::readSettings(KConfigGroup& group)
         settings.cameraMake  = group.readEntry(d->configCameraMake,  QString());
         settings.lensModel   = group.readEntry(d->configLensModel,   QString());
 
-        if (settings.subjectDistance == -1.0)
+        if (settings.subjectDistance <= 0.0)
         {
             settings.subjectDistance = group.readEntry(d->configSubjectDistance, -1.0);
         }
 
-        if (settings.focalLength == -1.0)
+        if (settings.focalLength <= 0.0)
         {
             settings.focalLength = group.readEntry(d->configFocalLength, -1.0);
         }
 
         settings.cropFactor = group.readEntry(d->configCropFactor, -1.0);
 
-        if (settings.aperture == -1.0)
+        if (settings.aperture <= 0.0)
         {
             settings.aperture = group.readEntry(d->configAperture, -1.0);
         }
 
         setSettings(settings);
     }
-    
+
     slotUseMetadata(useMetadata());
 }
 
