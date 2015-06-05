@@ -13,7 +13,7 @@ add_library(gpssearch STATIC ${libgpssearch_SRCS})
 
 target_link_libraries(gpssearch
 
-                      digikamdatabase
+                      digikamdatabase_static
                       digikamtags
                       fileactionmanager
 

@@ -144,7 +144,6 @@ target_link_libraries(digikamgui
                       PRIVATE
                       3rdparty
                       digikamwidgets
-                      digikamdatabase
                       digikammodels
                       digikamalbum
                       digikamsettings
@@ -241,6 +240,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.i
 set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 
 target_link_libraries(digikam
+                      digikamdatabase
                       digikamgui
                       digikamwidgets
                       digikamalbum

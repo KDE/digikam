@@ -40,7 +40,7 @@ target_link_libraries(maintenance
                       digikamgui # for DigikamApp...
 
 
-                      digikamdatabase
+                      digikamdatabase_static
                       notificationmanager
                       progressmanager
 

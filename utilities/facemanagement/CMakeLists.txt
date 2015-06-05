@@ -17,7 +17,7 @@ add_library(facemanagement STATIC ${libfacemanagement_SRCS})
 
 target_link_libraries(facemanagement
 
-                      digikamdatabase
+                      digikamdatabase_static
                       digikamtags
                       fileactionmanager
 

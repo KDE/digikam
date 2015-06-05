@@ -5,7 +5,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # sources
-file(GLOB libadvancedrename_SRCS 
+file(GLOB libadvancedrename_SRCS
           ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/common/*.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/parser/*.cpp
@@ -16,7 +16,7 @@ file(GLOB libadvancedrename_SRCS
     )
 
 # ui files
-file(GLOB libadvancedrename_UI 
+file(GLOB libadvancedrename_UI
           ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/*.ui
           ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/*.ui
     )
@@ -35,13 +35,13 @@ target_include_directories(advancedrename PUBLIC
 )
 
 target_link_libraries(advancedrename
-                      digikamdatabase
-                        
+                      digikamdatabase_static
+
                       Qt5::Widgets
                       Qt5::Sql
 
                       KF5::I18n # TODO verify if needed
-                      
+
                       KF5::KExiv2
                       KF5::KDcraw
                      )

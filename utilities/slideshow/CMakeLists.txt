@@ -22,12 +22,12 @@ add_library(slideshow STATIC ${libslideshow_SRCS})
 target_link_libraries(slideshow
 
                       digikamwidgets
-                      digikamdatabase
+                      digikamdatabase_static
                       digikamalbum
 
-                      
+
                       Qt5::Widgets
-                      
+
                       KF5::WidgetsAddons
                       KF5::KDcraw
                       KF5::KExiv2

@@ -22,10 +22,10 @@ add_library(firstrun STATIC ${libfirstrun_SRCS})
 
 target_link_libraries(firstrun
                       PRIVATE
-                      digikamdatabase
+                      digikamdatabase_static
 
                       Qt5::Widgets
-                      
+
                       KF5::WidgetsAddons
                       KF5::ConfigWidgets
                       KF5::KIOWidgets

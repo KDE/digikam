@@ -30,7 +30,7 @@ add_library(digikamdialogs STATIC ${libdialogs_SRCS} ${libdeletedialog_SRCS})
 target_link_libraries(digikamdialogs
                       PRIVATE
                       threadimageio   # loadingdescription for imagedialog
-                      digikamdatabase # migrationdlg needs this
+                      digikamdatabase_static # migrationdlg needs this
                       versionmanager  # migrationdlg needs this too
                       dmetadata
                       Qt5::Core

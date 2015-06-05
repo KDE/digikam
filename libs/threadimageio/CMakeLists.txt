@@ -32,7 +32,7 @@ target_link_libraries(threadimageio
                       dthread
 
                       PRIVATE
-                      digikamdatabase
+                      digikamdatabase_static
                       pgfutils
                       3rdparty
 
