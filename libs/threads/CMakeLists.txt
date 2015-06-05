@@ -16,6 +16,6 @@ add_library(dthread STATIC ${libdthread_SRCS})
 message(INFO "rename dthread to something else?")
 
 target_link_libraries(dthread
-
+                      PRIVATE
                       Qt5::Core
 )

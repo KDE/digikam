@@ -55,6 +55,7 @@ target_link_libraries(dimagehistorygraphtest
                       digikamdatabase
                       imageeditor
 
+                      KF5::KIOWidgets # for previewjob
                       Qt5::Test
 )
 
@@ -86,6 +87,7 @@ ecm_mark_nongui_executable(loadpgfdata)
 target_link_libraries(loadpgfdata
 
                       threadimageio # for PGFUtils
+                      Qt5::Core
 )
 
 #------------------------------------------------------------------------
@@ -97,6 +99,7 @@ ecm_mark_nongui_executable(loadsavethreadtest)
 target_link_libraries(loadsavethreadtest
 
                       dimg
+                      Qt5::Core
 )
 
 #------------------------------------------------------------------------
@@ -108,6 +111,7 @@ ecm_mark_nongui_executable(pgfscaled)
 target_link_libraries(pgfscaled
 
                       threadimageio # for PGFUtils
+                      Qt5::Core
 )
 
 #------------------------------------------------------------------------
@@ -119,6 +123,7 @@ ecm_mark_nongui_executable(qtpgftest)
 target_link_libraries(qtpgftest
 
                       threadimageio # for PGFUtils
+                      Qt5::Core
 )
 
 #------------------------------------------------------------------------
@@ -154,7 +159,7 @@ ecm_mark_as_test(searchtextbartest)
 target_link_libraries(searchtextbartest
 
                       digikamwidgets
-
+                      KF5::Kipi  # about dialog requires kipi
                       Qt5::Test
 )
 
@@ -227,6 +232,7 @@ ecm_mark_nongui_executable(testautocrop)
 target_link_libraries(testautocrop
 
                       dimg
+                      Qt5::Core
 )
 
 #------------------------------------------------------------------------
@@ -250,6 +256,7 @@ ecm_mark_nongui_executable(testdimgloader)
 target_link_libraries(testdimgloader
 
                       dimg
+                      Qt5::Core
 )
 
 #------------------------------------------------------------------------
@@ -262,7 +269,8 @@ if(LENSFUN_FOUND)
 
     target_link_libraries(testlensfuniface
 
-                          dimg # TODO move lensuniface to libs.
+                      dimg # TODO move lensuniface to libs.
+                      Qt5::Core
     )
 
     if(NOT WIN32)
@@ -285,6 +293,7 @@ ecm_mark_nongui_executable(testnrestimate)
 target_link_libraries(testnrestimate
 
                       dimg
+                      Qt5::Core
 )
 
 #------------------------------------------------------------------------

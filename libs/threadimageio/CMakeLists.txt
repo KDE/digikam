@@ -27,18 +27,20 @@ add_library(threadimageio STATIC ${libthreadimageio_SRCS})
 
 
 target_link_libraries(threadimageio
-
+                      PUBLIC
                       dimg
-                      digikamdatabase
                       dthread
+
+                      PRIVATE
+                      digikamdatabase
                       pgfutils
                       3rdparty
-                      
+
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets # QMessageBox in ThumbnailLoadThread..
                       Qt5::Sql
                       Qt5::DBus
-                      
+
                       KF5::KIOWidgets # for previewjob
 )

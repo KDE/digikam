@@ -22,7 +22,7 @@ set(libcommonwidgets_SRCS
     common/workingwidget.cpp
     common/workingpixmap.cpp
     common/widgets_debug.cpp
-    
+
     common/databasewidget.cpp # FIXME used to belong to separate target, check
 )
 
@@ -66,7 +66,7 @@ set(libitemview_SRCS
     itemview/itemviewtooltip.cpp
     itemview/itemviewcategorized.cpp
 )
-   
+
 set(libgraphicsviewwidgets_SRCS
     graphicsview/clickdragreleaseitem.cpp
     graphicsview/dimgchilditem.cpp
@@ -103,7 +103,7 @@ set(libiccprofileswidgets_SRCS
     iccprofiles/iccprofilescombobox.cpp
 )
 
-add_library(digikamwidgets STATIC 
+add_library(digikamwidgets STATIC
     ${libmainview_SRCS}
     ${libcommonwidgets_SRCS}
     ${libgraphicsviewwidgets_SRCS}
@@ -129,17 +129,15 @@ target_include_directories(digikamwidgets
 
 target_link_libraries(digikamwidgets
 
-                      PUBLIC
+                      PRIVATE
                       digikamdialogs # for libsinfodlg
                       digikammodels # something fishy with this include
-                      
-                      PRIVATE
                       dimg
 
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
-                      
+
                       KF5::Kipi  # about dialog requires kipi
                       ${KF5KFace_LIBRARIES} # about dialog
 )
