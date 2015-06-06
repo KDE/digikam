@@ -32,11 +32,14 @@ include_directories(tagsmanager/
 
 add_library(digikamtags STATIC ${libtags_SRCS})
 
-target_include_directories(digikamtags PUBLIC 
+target_include_directories(digikamtags PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tagsmanager>
 )
 
 target_link_libraries(digikamtags
-
                       digikamalbum
+                      lighttable
+                      imageeditor
+
+                      KF5::IconThemes
 )

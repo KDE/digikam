@@ -84,6 +84,7 @@ add_library(importuibackend STATIC ${libimportuibackend_SRCS})
 target_link_libraries(importuibackend
                       dmetadata
                       advancedrename
+                      imagepropertiesdigikam
 
                       KF5::Solid
                       Qt5::Core
@@ -111,7 +112,7 @@ target_include_directories(importui PUBLIC
 
 target_link_libraries(importui
                       importuibackend
-                      
+
                       KF5::NotifyConfig
                       KF5::KExiv2
                       KF5::KDcraw

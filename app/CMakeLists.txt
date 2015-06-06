@@ -124,7 +124,7 @@ endif()
 
 # TODO this should be turned from static to dynamic
 add_library(digikamgui_src OBJECT ${libdigikamgui_SRCS})
-add_library(digikamgui STATIC $<TARGET_OBJECTS:digikamgui_src>)
+add_library(digikamgui SHARED $<TARGET_OBJECTS:digikamgui_src>)
 
 # TODO temporary ugly hack, the common utils used by other components (esp. utilities and libs) should be moved to libs..
 target_include_directories(digikamgui PUBLIC
@@ -216,6 +216,7 @@ if(${KF5KGeoMap_FOUND}) # fixme hackish
     target_link_libraries(digikamgui PRIVATE gpssearch kgeomaphelper)
 endif()
 
+install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})
 # digiKam binary progam #########################################################
 
 set(digikam_SRCS
