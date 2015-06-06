@@ -536,7 +536,6 @@ if(${KF5KGeoMap_FOUND}) # fixme hackish
         "$<TARGET_PROPERTY:gpssearch,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:kgeomaphelper,INTERFACE_INCLUDE_DIRECTORIES>"
     )
-    target_link_libraries(digikamgui PRIVATE gpssearch kgeomaphelper)
 endif()
 
 # possible includes
