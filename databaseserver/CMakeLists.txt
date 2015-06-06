@@ -32,4 +32,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     target_link_libraries(digikamdatabaseserver ${KVM_LIBRARY})
 endif()
 
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(digikamdatabaseserver ${KF5KGeoMap_LIBRARIES})
+endif()
+
 install(TARGETS digikamdatabaseserver DESTINATION ${LIBEXEC_INSTALL_DIR})
