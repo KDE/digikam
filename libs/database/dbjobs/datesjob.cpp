@@ -59,8 +59,6 @@ void DatesJob::run()
         QDataStream ds(d->data);
         ds >> url;
 
-        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Entered kio_digikamdates::special";
-
         DatabaseParameters dbParameters(url);
         DatabaseAccess::setParameters(dbParameters);
 

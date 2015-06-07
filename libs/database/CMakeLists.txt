@@ -48,6 +48,8 @@ set(libdatabase_SRCS
     framework/databasecopymanager.cpp
     framework/databaseserverstarter.cpp
     framework/databaseservererror.cpp
+    dbjobs/dbjobsthread.cpp
+    dbjobs/datesjob.cpp
     item/imagecomments.cpp
     item/imageextendedproperties.cpp
     item/imageinfo.cpp
@@ -107,6 +109,7 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
@@ -119,7 +122,6 @@ target_link_libraries(digikamdatabase
                       PRIVATE
                       dmetadata
                       digikamwidgets
-                      dbjobs
                       
                       Qt5::Core
                       Qt5::Gui
@@ -162,6 +164,7 @@ target_include_directories(digikamdatabase_static
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>

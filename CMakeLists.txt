@@ -598,7 +598,6 @@ endif()
    add_subdirectory(utilities)
    add_subdirectory(app)
    add_subdirectory(kioslave)
-   add_subdirectory(dbjobs)
    add_subdirectory(showfoto)
    add_subdirectory(imageplugins)
 

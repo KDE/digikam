@@ -70,6 +70,7 @@ void kio_digikamdates::special(const QByteArray& data)
 
     if (folders)
     {
+        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Entered Folders inside KIO";
 
         QMap<QDateTime, int> dateNumberMap = Digikam::DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
         QByteArray           ba;
