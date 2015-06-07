@@ -37,6 +37,7 @@ target_include_directories(digikamtags PUBLIC
 )
 
 target_link_libraries(digikamtags
+                      PRIVATE
                       digikamalbum
                       lighttable
                       imageeditor

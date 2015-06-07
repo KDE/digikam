@@ -19,8 +19,8 @@ add_library(digikamsettings STATIC ${libsettings_SRCS})
 
 
 target_link_libraries(digikamsettings
-
-                      digikamwidgets #required for DMultiTabbar 
+                      PRIVATE
+                      digikamwidgets #required for DMultiTabbar
 
                       Qt5::Gui
                       Qt5::Widgets

@@ -27,11 +27,10 @@ add_library(threadimageio STATIC ${libthreadimageio_SRCS})
 
 
 target_link_libraries(threadimageio
-                      PUBLIC
-                      dimg
-                      dthread
 
                       PRIVATE
+                      dimg
+                      dthread
                       digikamdatabase_static
                       pgfutils
                       3rdparty
