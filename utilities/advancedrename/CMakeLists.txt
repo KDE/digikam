@@ -35,6 +35,7 @@ target_include_directories(advancedrename PUBLIC
 )
 
 target_link_libraries(advancedrename
+                      PRIVATE
                       digikamdatabase_static
 
                       Qt5::Widgets

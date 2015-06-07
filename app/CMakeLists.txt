@@ -212,8 +212,12 @@ if(${KF5Kipi_FOUND})
     target_link_libraries(digikamgui PRIVATE kipiiface)
 endif()
 
-if(${KF5KGeoMap_FOUND}) # fixme hackish
+if(${KF5KGeoMap_FOUND})
     target_link_libraries(digikamgui PRIVATE gpssearch kgeomaphelper)
+endif()
+
+if(KF5KFace_FOUND)
+    target_link_libraries(digikamgui PRIVATE ${KF5KFace_LIBRARIES})
 endif()
 
 install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})

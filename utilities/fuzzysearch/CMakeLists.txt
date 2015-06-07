@@ -15,6 +15,7 @@ set(libfuzzysearch_SRCS
 add_library(fuzzysearch STATIC ${libfuzzysearch_SRCS})
 
 target_link_libraries(fuzzysearch
+                      PRIVATE
                       digikamalbum
                       digikamwidgets
 )

@@ -98,14 +98,14 @@ include(MacroBoolTo01)
 
 # ==================================================================================================
 
-option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
+option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              ON)
 option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KFileMetadata support (default=ON)"                           ON)
 option(ENABLE_KDEPIMLIBSSUPPORT     "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
 option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=ON)"                           OFF)
 
 # Mysql support options (experimental):
-option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
-option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
+option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                        ON)
+option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              ON)
 
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                        OFF)
@@ -538,8 +538,12 @@ if(${KF5KGeoMap_FOUND}) # fixme hackish
     )
 endif()
 
-# possible includes
-#${KF5KFace_LIBRARIES}
+if(KF5KFace_FOUND) # fixme hackish
+    set(KF5_INCLUDES_ALL
+        ${KF5_INCLUDES_ALL}
+        "$<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
+    )
+endif()
 
 set(QT5_INCLUDES_ALL
     "$<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>"
