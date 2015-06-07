@@ -1525,7 +1525,7 @@ void ImageScanner::scanAudioFile()
     * @todo
     */
 
-    QVariantList infos;
+    d->commit.commitImageInformation = true;
 
     d->commit.imageInformationInfos
           << -1
