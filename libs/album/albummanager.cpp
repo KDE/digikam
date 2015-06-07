@@ -100,6 +100,8 @@ extern "C"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnailloadthread.h"
 #include "dnotificationwrapper.h"
+#include "dbjobinfo.h"
+#include "dbjobsmanager.h"
 
 namespace Digikam
 {

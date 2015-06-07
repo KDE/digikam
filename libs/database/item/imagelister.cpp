@@ -55,9 +55,8 @@
 #include "sqlquery.h"
 #include "tagscache.h"
 #include "imagetagpair.h"
-#include "datesjob.h"
-#include "KDCRAW/RActionThreadBase"
-#include "QThreadPool"
+#include "dbjobsthread.h"
+#include "dbjobinfo.h"
 
 namespace Digikam
 {
@@ -140,13 +139,6 @@ KIO::TransferJob* ImageLister::startListJob(const DatabaseUrl& url, int extraVal
     if (extraValue != -1)
     {
         ds << extraValue;
-    }
-
-    if(url.isDateUrl())
-    {
-        DatesJob *j = new DatesJob();
-        j->setData(ba);
-        QThreadPool::globalInstance()->start(j);
     }
 
     return (new KIO::SpecialJob(url, ba));

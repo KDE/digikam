@@ -1,13 +1,11 @@
 #ifndef DATESJOB_H
 #define DATESJOB_H
 
-#include "KDCRAW/RActionJob"
-
-using namespace KDcrawIface;
+#include "dbjob.h"
 
 namespace Digikam {
 
-class DatesJob : public RActionJob
+class DatesJob : public DBJob
 {
     Q_OBJECT
 
@@ -16,12 +14,9 @@ public:
     DatesJob();
     ~DatesJob();
 
-    void setData(const QByteArray &data);
-
-public Q_SLOTS:
-
-    void slotCancel();
-    void slotData(const QByteArray &data);
+    void setStartDate(const QDate &startDate);
+    void setEndDate(const QDate &endDate);
+    void setFoldersListing(bool folders);
 
 protected:
 

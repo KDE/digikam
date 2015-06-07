@@ -208,7 +208,7 @@ void ImageListerJobReceiver::sendData()
         os << *it;
     }
 
-    m_job->slotData(ba);
+    emit m_job->data(ba);
 
     records.clear();
 }

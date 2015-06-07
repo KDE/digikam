@@ -5,6 +5,12 @@
 
 #include "KDCRAW/RActionThreadBase"
 
+// Local includes
+
+#include "databaseparameters.h"
+#include "dbjobinfo.h"
+#include "dbjob.h"
+
 using namespace KDcrawIface;
 
 namespace Digikam {
@@ -18,8 +24,13 @@ public:
     explicit DBJobsThread(QObject* const parent);
     ~DBJobsThread();
 
+    void datesListing(const QDate &startDate, const QDate &endDate, bool folders = false);
+
     void setUseMultiCore(const bool useMultiCore);
-    void cancel();
+
+Q_SIGNALS:
+    void signalData(const QByteArray &);
+
 };
 
 } // namespace Digikam

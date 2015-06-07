@@ -45,6 +45,7 @@
 #include "imagelister.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
+#include "dbjobsmanager.h"
 
 namespace Digikam
 {
@@ -349,6 +350,16 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
 
     connect(d->job, SIGNAL(data(KIO::Job*,QByteArray)),
             this, SLOT(slotData(KIO::Job*,QByteArray)));
+
+    if(albums.first()->type() == Album::DATE)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Entered IF SECTION";
+        DBJobInfo jobInfo = DBJobInfo(url);
+        jobInfo.recursive = d->recurseAlbums;
+        jobInfo.listAvailableImagesOnly = d->listOnlyAvailableImages;
+        DBJobsManager *jobsManager = new DBJobsManager(jobInfo);
+        jobsManager->start();
+    }
 }
 
 void ImageAlbumModel::slotResult(KJob* job)
@@ -376,7 +387,8 @@ void ImageAlbumModel::slotResult(KJob* job)
 
 void ImageAlbumModel::slotData(KIO::Job* job, const QByteArray& data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DATA FROM KIO: " << data.toHex();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Data from KIOSlave: " << data.toHex();
+
     if (data.isEmpty() || job != d->job)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Data from KIOSlave is null: " << data.isEmpty();

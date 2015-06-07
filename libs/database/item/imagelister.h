@@ -43,6 +43,7 @@
 #include "databaseurl.h"
 #include "imagelisterrecord.h"
 #include "imagelisterreceiver.h"
+#include "dbjobinfo.h"
 
 namespace Digikam
 {
