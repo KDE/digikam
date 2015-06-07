@@ -259,10 +259,8 @@ if(OpenCV_FOUND)
 endif()
 
 target_link_libraries(dimg
-                      PUBLIC
-                      digikamwidgets
-
                       PRIVATE
+                      digikamwidgets
                       dmetadata
                       dthread
                       jpegutils

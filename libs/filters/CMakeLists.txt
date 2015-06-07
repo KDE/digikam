@@ -19,10 +19,8 @@ set(libfilters_SRCS
 add_library(filters STATIC ${libfilters_SRCS})
 
 target_link_libraries(filters
-                      PUBLIC
-                      digikamalbum
                       PRIVATE
-
+                      digikamalbum
                       digikammodels
                       digikamwidgets
                       digikamsettings
