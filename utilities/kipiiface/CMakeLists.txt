@@ -17,7 +17,7 @@ add_library(kipiiface STATIC ${libkipiiface_SRCS} $<TARGET_OBJECTS:digikamgui_sr
 
 # TODO we shouldn't depend on digikamgui, but on a specific library providing what we need
 target_link_libraries(kipiiface
-
+                      PRIVATE
 #                      digikamgui      # for digikamapp
 
                       digikamsettings # for applicationsettings

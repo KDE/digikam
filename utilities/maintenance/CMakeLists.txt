@@ -37,7 +37,6 @@ add_library(maintenance STATIC ${libmaintenance_SRCS} $<TARGET_OBJECTS:digikamgu
 
 target_link_libraries(maintenance
                       PRIVATE
-#                      digikamgui # for DigikamApp...
 
 
                       digikamdatabase_static

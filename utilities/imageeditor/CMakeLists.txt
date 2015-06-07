@@ -13,6 +13,7 @@ set(libeditorplugin_SRCS
 add_library(editorplugin STATIC ${libeditorplugin_SRCS})
 
 target_link_libraries(editorplugin
+                      PRIVATE
                       dimg
 )
 
@@ -97,6 +98,7 @@ target_include_directories(imageeditor PUBLIC
 )
 
 target_link_libraries(imageeditor
+                      PRIVATE
                       versionmanager
                       editorplugin
 )

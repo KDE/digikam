@@ -20,7 +20,7 @@ add_library(slideshow STATIC ${libslideshow_SRCS})
 
 
 target_link_libraries(slideshow
-
+                      PRIVATE
                       digikamwidgets
                       digikamdatabase_static
                       digikamalbum

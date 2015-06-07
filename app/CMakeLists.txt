@@ -153,31 +153,28 @@ target_link_libraries(digikamgui
                       dmetadata
                       dthread
                       threadimageio
-                      setup
+
                       imagepropertiesdigikam
+                      imageeditor
                       advancedrename
                       queuemanager
                       versionmanager
                       progressmanager
-                      importui
-                      imageeditor
                       editorplugin
                       searchwindow
-                      firstrun
-                      lighttable
-                      fuzzysearch
                       fileactionmanager
                       maintenance
                       digikamtags
                       digikamdialogs
                       facemanagement
+
+                      setup
                       slideshow
+                      firstrun
+                      lighttable
+                      importui
+                      fuzzysearch
 
-
-)
-
-target_link_libraries(digikamgui
-                      PUBLIC
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -194,7 +191,10 @@ target_link_libraries(digikamgui
                       KF5::I18n
                       KF5::KExiv2
                       KF5::KDcraw
+
+
 )
+
 # TODO check if these linkings are required?
 if(${KFILEMETADATA_FOUND})
     target_link_libraries(digikamgui PRIVATE baloowrap)
@@ -246,11 +246,13 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.i
 set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 
 target_link_libraries(digikam
+
                       digikamdatabase
                       digikamgui
                       digikamwidgets
                       digikamalbum
                       firstrun
+
 
                       Qt5::Sql
                       Qt5::Test

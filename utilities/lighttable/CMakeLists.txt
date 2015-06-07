@@ -14,7 +14,7 @@ set(liblighttable_SRCS
 add_library(lighttable STATIC ${liblighttable_SRCS})
 
 target_link_libraries(lighttable
-
+                      PRIVATE
                       digikamdatabase_static
                       imagepropertiesdigikam
                       imageeditor

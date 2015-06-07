@@ -88,6 +88,7 @@ target_include_directories(queuemanager
 
 
 target_link_libraries(queuemanager
+                      PRIVATE
                       Qt5::Gui
 
                       KF5::KExiv2
@@ -96,7 +97,7 @@ target_link_libraries(queuemanager
 
 if(LENSFUN_FOUND)
     message(INFO " move lensfun to its own library")
-    target_link_libraries(queuemanager dimg)
+    target_link_libraries(queuemanager PRIVATE dimg)
 endif()
 
 install( FILES main/queuemgrwindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )

@@ -82,6 +82,7 @@ include_directories(
 add_library(importuibackend STATIC ${libimportuibackend_SRCS})
 
 target_link_libraries(importuibackend
+                      PRIVATE
                       dmetadata
                       advancedrename
                       imagepropertiesdigikam
@@ -95,7 +96,7 @@ target_link_libraries(importuibackend
 )
 
 if(GPHOTO2_FOUND)
-    target_link_libraries(importuibackend ${GPHOTO2_LIBRARIES})
+    target_link_libraries(importuibackend PRIVATE ${GPHOTO2_LIBRARIES})
 endif()
 
 add_library(importui STATIC ${libimportui_SRCS})
@@ -111,6 +112,7 @@ target_include_directories(importui PUBLIC
 )
 
 target_link_libraries(importui
+                      PRIVATE
                       importuibackend
 
                       KF5::NotifyConfig

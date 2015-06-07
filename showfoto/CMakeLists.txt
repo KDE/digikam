@@ -62,6 +62,8 @@ target_link_libraries(showfoto
                       imageeditor
                       imagepropertiesdigikam
                       slideshow
+
+                      Qt5::Core
 )
 
 if(${KF5KGeoMap_FOUND})
