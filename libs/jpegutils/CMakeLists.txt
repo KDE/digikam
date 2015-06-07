@@ -30,10 +30,10 @@ target_include_directories(jpegutils
 )
 
 target_link_libraries(jpegutils
-
+                      PRIVATE
                       dimg
                       dmetadata
-                      
+
                       Qt5::Core
                       Qt5::Gui
 

@@ -18,11 +18,11 @@ endif()
 add_library(notificationmanager STATIC ${libnotificationmanager_SRCS})
 
 target_link_libraries(notificationmanager
-
+                      PRIVATE
                       Qt5::Core
                       Qt5::Gui
                       Qt5::DBus
                       Qt5::Widgets
-                      
+
                       KF5::Notifications
 )

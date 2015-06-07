@@ -17,8 +17,8 @@ add_library(pgfutils STATIC ${libpgfutils_SRCS})
 target_include_directories(pgfutils PUBLIC ${PGF_INCLUDE_DIRS})
 
 target_link_libraries(pgfutils
-                      
+                      PRIVATE
                       Qt5::Gui
-                      
+
                       ${PGF_LIBRARIES}
 )

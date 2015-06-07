@@ -32,10 +32,9 @@ set(libgenericmodels_SRCS
 add_library(digikammodels STATIC ${libdatabasemodels_SRCS} ${libalbummodels_SRCS} ${libgenericmodels_SRCS})
 
 target_link_libraries(digikammodels
-                      PUBLIC
-                      filters
 
                       PRIVATE
+                      filters
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets

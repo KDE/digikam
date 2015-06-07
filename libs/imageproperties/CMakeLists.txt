@@ -37,14 +37,14 @@ set(libimagepropertiesdigikam_SRCS
 add_library(imagepropertiesdigikam STATIC ${libimageproperties_SRCS} ${libimagepropertiesdigikam_SRCS})
 
 if(${KF5KGeoMap_FOUND})
-    target_link_libraries(imagepropertiesdigikam KF5::KGeoMap)
+    target_link_libraries(imagepropertiesdigikam PRIVATE KF5::KGeoMap)
 endif()
 
 # TODO we need this to showfoto?
 #add_library(imageproperties STATIC ${libimageproperties_SRCS})
 
 target_link_libraries(imagepropertiesdigikam
-
+                      PRIVATE
                       digikamwidgets
 
                       Qt5::Core
