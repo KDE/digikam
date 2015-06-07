@@ -48,4 +48,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 041 ==> 348463 - First time, digiKam seems using more than one cpu.
 042 ==> 348586 - digiKam does not write description to XMP sidecar file anymore.
 043 ==> 318319 - Extended files type mime supported into search tool [patch].
-044 ==> 
+044 ==> 319921 - SCAN : Audio files are ignored [patch].
+045 ==> 
