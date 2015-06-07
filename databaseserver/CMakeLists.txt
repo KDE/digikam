@@ -20,6 +20,7 @@ target_link_libraries(digikamdatabaseserver
 
                       Qt5::Sql
                       Qt5::DBus
+                      KF5::I18n
 )
 
 if(NOT WIN32)
@@ -29,6 +30,10 @@ endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     target_link_libraries(digikamdatabaseserver ${KVM_LIBRARY})
+endif()
+
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(digikamdatabaseserver ${KF5KGeoMap_LIBRARIES})
 endif()
 
 install(TARGETS digikamdatabaseserver DESTINATION ${LIBEXEC_INSTALL_DIR})
