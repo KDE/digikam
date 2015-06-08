@@ -23,6 +23,5 @@ add_dependencies(dmetadata digikam-gitversion)
 target_link_libraries(dmetadata
                       PRIVATE
                       dimg
-
                       Qt5::Core
 )

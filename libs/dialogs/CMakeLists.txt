@@ -13,11 +13,10 @@ set(libdialogs_SRCS
     infodlg.cpp
     libsinfodlg.cpp
     rawcameradlg.cpp
-
-    migrationdlg.cpp # used to belong to separate target (database dependency?) verify FIXME
 )
 
 set(libdeletedialog_SRCS
+    migrationdlg.cpp # used to belong to separate target (database dependency?) verify FIXME
     deletedialog.cpp
 )
 
@@ -25,8 +24,13 @@ if(LENSFUN_FOUND)
     include_directories(${LENSFUN_INCLUDE_DIRS})
 endif()
 
+#used by digikamcore
+add_library(digikamdialogscore_src OBJECT ${libdialogs_SRCS})
+
 add_library(digikamdialogs_src OBJECT ${libdialogs_SRCS} ${libdeletedialog_SRCS})
-add_library(digikamdialogs STATIC $<TARGET_OBJECTS:digikamdialogs_src>)
+add_library(digikamdialogs STATIC
+                           $<TARGET_OBJECTS:digikamdialogs_src>
+)
 
 target_link_libraries(digikamdialogs
                       PRIVATE
