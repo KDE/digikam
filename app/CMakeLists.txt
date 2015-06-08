@@ -4,7 +4,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in    ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in
+               ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
 
 # digiKam GUI begins here
 
@@ -128,17 +129,17 @@ add_library(digikamgui SHARED $<TARGET_OBJECTS:digikamgui_src>)
 
 # TODO temporary ugly hack, the common utils used by other components (esp. utilities and libs) should be moved to libs..
 target_include_directories(digikamgui PUBLIC
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album> # move out
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags/tagsmanager>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items/overlays> # common too, move out
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/database>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/date> # belongs to libs/widgets?
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dragdrop>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album> # move out
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags/tagsmanager>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items/overlays> # common too, move out
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/database>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/date> # belongs to libs/widgets?
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dragdrop>
 )
 
 target_link_libraries(digikamgui
@@ -172,8 +173,6 @@ target_link_libraries(digikamgui
                       digikamdialogs
                       facemanagement
                       slideshow
-
-
 )
 
 target_link_libraries(digikamgui
@@ -195,6 +194,7 @@ target_link_libraries(digikamgui
                       KF5::KExiv2
                       KF5::KDcraw
 )
+
 # TODO check if these linkings are required?
 if(${KFILEMETADATA_FOUND})
     target_link_libraries(digikamgui PRIVATE baloowrap)
@@ -217,6 +217,7 @@ if(${KF5KGeoMap_FOUND}) # fixme hackish
 endif()
 
 install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})
+
 # digiKam binary progam #########################################################
 
 set(digikam_SRCS
