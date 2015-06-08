@@ -15,7 +15,8 @@ set(libdmetadata_SRCS
     captionvalues.cpp
 )
 
-add_library(dmetadata STATIC ${libdmetadata_SRCS})
+add_library(dmetadata_src OBJECT ${libdmetadata_SRCS})
+add_library(dmetadata STATIC $<TARGET_OBJECTS:dmetadata_src>)
 
 add_dependencies(dmetadata digikam-gitversion)
 

@@ -495,13 +495,6 @@ if(${KFILEMETADATA_FOUND})
     )
 endif()
 
-if(ENABLE_MEDIAPLAYER)
-    set(DK_LOCAL_INCLUDES
-        ${QT5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    )
-endif()
 
 
 
@@ -567,6 +560,13 @@ if(ENABLE_MEDIAPLAYER)
         "$<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
     )
+endif()
+
+if(X11_FOUND)
+    set(QT5_INCLUDES_ALL
+        ${QT5_INCLUDES_ALL}
+        "$<TARGET_PROPERTY:Qt5::X11Extras,INTERFACE_INCLUDE_DIRECTORIES>"
+)
 endif()
 
     # TODO digikam_export.h, version.h, git_version.h and config-digikam.h should be created to the main binarydir? or main sourcedir?

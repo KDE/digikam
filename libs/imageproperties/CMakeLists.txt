@@ -34,7 +34,8 @@ set(libimagepropertiesdigikam_SRCS
     captionedit.cpp
 )
 
-add_library(imagepropertiesdigikam STATIC ${libimageproperties_SRCS} ${libimagepropertiesdigikam_SRCS})
+add_library(imagepropertiesdigikam_src OBJECT ${libimageproperties_SRCS} ${libimagepropertiesdigikam_SRCS})
+add_library(imagepropertiesdigikam STATIC $<TARGET_OBJECTS:imagepropertiesdigikam_src>)
 
 if(${KF5KGeoMap_FOUND})
     target_link_libraries(imagepropertiesdigikam PRIVATE KF5::KGeoMap)

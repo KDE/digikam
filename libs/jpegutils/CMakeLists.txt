@@ -21,7 +21,8 @@ if(MSVC)
     )
 endif()
 
-add_library(jpegutils STATIC ${libjpegutils_SRCS})
+add_library(jpegutils_src OBJECT ${libjpegutils_SRCS})
+add_library(jpegutils STATIC $<TARGET_OBJECTS:jpegutils_src>)
 
 target_include_directories(jpegutils
                            PUBLIC

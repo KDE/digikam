@@ -78,8 +78,9 @@ include_directories(
 )
 
 # TODO backend shouldn't probably be required to linkg against all of these?
+add_library(importuibackend_src OBJECT ${libimportuibackend_SRCS})
 
-add_library(importuibackend STATIC ${libimportuibackend_SRCS})
+add_library(importuibackend STATIC $<TARGET_OBJECTS:importuibackend_src>)
 
 target_link_libraries(importuibackend
                       PRIVATE
@@ -99,7 +100,9 @@ if(GPHOTO2_FOUND)
     target_link_libraries(importuibackend PRIVATE ${GPHOTO2_LIBRARIES})
 endif()
 
-add_library(importui STATIC ${libimportui_SRCS})
+add_library(importui_src OBJECT ${libimportui_SRCS})
+
+add_library(importui STATIC $<TARGET_OBJECTS:importui_src>)
 
 target_include_directories(importui PUBLIC
                               "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>"
@@ -114,6 +117,7 @@ target_include_directories(importui PUBLIC
 target_link_libraries(importui
                       PRIVATE
                       importuibackend
+                      maintenance
 
                       KF5::NotifyConfig
                       KF5::KExiv2

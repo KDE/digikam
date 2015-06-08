@@ -15,7 +15,9 @@ if(APPLE)
     )
 endif()
 
-add_library(notificationmanager STATIC ${libnotificationmanager_SRCS})
+add_library(notificationmanager_src OBJECT ${libnotificationmanager_SRCS})
+add_library(notificationmanager STATIC $<TARGET_OBJECTS:notificationmanager_src>)
+
 
 target_link_libraries(notificationmanager
                       PRIVATE

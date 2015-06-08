@@ -201,7 +201,8 @@ if(JASPER_FOUND)
     )
 endif()
 
-add_library(dimg STATIC ${libdimgloaders_SRCS} ${libdimgfilters_SRCS} ${libdimg_SRCS})
+add_library(dimg_src OBJECT ${libdimgloaders_SRCS} ${libdimgfilters_SRCS} ${libdimg_SRCS})
+add_library(dimg STATIC $<TARGET_OBJECTS:dimg_src>)
 
 if(X11_FOUND)
     target_link_libraries(dimg PRIVATE Qt5::X11Extras ${X11_LIBRARIES})

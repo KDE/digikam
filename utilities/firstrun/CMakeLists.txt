@@ -16,8 +16,9 @@ set(libfirstrun_SRCS
     metadatapage.cpp
     startscanpage.cpp
 )
+add_library(firstrun_src OBJECT ${libfirstrun_SRCS})
 
-add_library(firstrun STATIC ${libfirstrun_SRCS})
+add_library(firstrun STATIC $<TARGET_OBJECTS:firstrun_src>)
 
 
 target_link_libraries(firstrun

@@ -11,7 +11,9 @@ set(liblighttable_SRCS
     lighttablewindow.cpp
 )
 
-add_library(lighttable STATIC ${liblighttable_SRCS})
+add_library(lighttable_src OBJECT ${liblighttable_SRCS})
+
+add_library(lighttable STATIC $<TARGET_OBJECTS:lighttable_src>)
 
 target_link_libraries(lighttable
                       PRIVATE

@@ -15,8 +15,9 @@ set(libsettings_SRCS
     applicationsettings_tooltips.cpp
 )
 
-add_library(digikamsettings STATIC ${libsettings_SRCS})
+add_library(digikamsettings_src OBJECT ${libsettings_SRCS})
 
+add_library(digikamsettings STATIC $<TARGET_OBJECTS:digikamsettings_src>)
 
 target_link_libraries(digikamsettings
                       PRIVATE

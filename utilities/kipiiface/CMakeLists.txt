@@ -13,12 +13,13 @@ set(libkipiiface_SRCS
     kipipluginloader.cpp
 )
 
-add_library(kipiiface STATIC ${libkipiiface_SRCS} $<TARGET_OBJECTS:digikamgui_src>)
+add_library(kipiiface_src OBJECT ${libkipiiface_SRCS})
+
+add_library(kipiiface STATIC $<TARGET_OBJECTS:kipiiface_src> $<TARGET_OBJECTS:digikamgui_src>)
 
 # TODO we shouldn't depend on digikamgui, but on a specific library providing what we need
 target_link_libraries(kipiiface
                       PRIVATE
-#                      digikamgui      # for digikamapp
 
                       digikamsettings # for applicationsettings
 

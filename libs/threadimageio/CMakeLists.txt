@@ -23,7 +23,8 @@ set(libthreadimageio_SRCS
     thumbnailsize.cpp
 )
 
-add_library(threadimageio STATIC ${libthreadimageio_SRCS})
+add_library(threadimageio_src OBJECT ${libthreadimageio_SRCS})
+add_library(threadimageio STATIC $<TARGET_OBJECTS:threadimageio_src>)
 
 
 target_link_libraries(threadimageio

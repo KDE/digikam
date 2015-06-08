@@ -25,7 +25,8 @@ if(LENSFUN_FOUND)
     include_directories(${LENSFUN_INCLUDE_DIRS})
 endif()
 
-add_library(digikamdialogs STATIC ${libdialogs_SRCS} ${libdeletedialog_SRCS})
+add_library(digikamdialogs_src OBJECT ${libdialogs_SRCS} ${libdeletedialog_SRCS})
+add_library(digikamdialogs STATIC $<TARGET_OBJECTS:digikamdialogs_src>)
 
 target_link_libraries(digikamdialogs
                       PRIVATE

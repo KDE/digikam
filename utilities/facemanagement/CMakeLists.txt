@@ -12,7 +12,10 @@ set(libfacemanagement_SRCS
     assignnamewidget.cpp
 )
 
-add_library(facemanagement STATIC ${libfacemanagement_SRCS})
+
+add_library(facemanagement_src OBJECT ${libfacemanagement_SRCS})
+
+add_library(facemanagement STATIC $<TARGET_OBJECTS:facemanagement_src>)
 
 
 target_link_libraries(facemanagement

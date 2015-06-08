@@ -6,6 +6,21 @@
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in    ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
 
+
+# digikam core
+
+#add_library(digikamcore SHARED $<TARGET_OBJECTS:digikamdatabasecore_src>)
+
+#target_link_libraries(digikamcore
+#                      PRIVATE
+#                      dimg
+#                      jpegutils
+#                      dmetadata
+#                      dthread
+#                      threadimageio
+#                      imagepropertiesdigikam
+#                      )
+
 # digiKam GUI begins here
 
 include_directories(
@@ -175,12 +190,13 @@ target_link_libraries(digikamgui
                       fuzzysearch
 
 
-                      # move to digikam exec
-#                      maintenance
                       facemanagement
                       imageeditor
                       editorplugin
 
+                      lighttable
+                      importui
+                      maintenance
 
                       Qt5::Core
                       Qt5::Gui
@@ -253,11 +269,6 @@ target_link_libraries(digikam
                       digikamwidgets
                       digikamalbum
                       firstrun
-
-
-                      lighttable
-                      importui
-                      maintenance
 
 
                       Qt5::Sql

@@ -103,7 +103,7 @@ set(libiccprofileswidgets_SRCS
     iccprofiles/iccprofilescombobox.cpp
 )
 
-add_library(digikamwidgets STATIC
+add_library(digikamwidgets_src OBJECT
     ${libmainview_SRCS}
     ${libcommonwidgets_SRCS}
     ${libgraphicsviewwidgets_SRCS}
@@ -113,6 +113,8 @@ add_library(digikamwidgets STATIC
     ${libcolorchooser_SRCS}
     ${libimagehistory_SRCS}
 )
+
+add_library(digikamwidgets STATIC $<TARGET_OBJECTS:digikamwidgets_src>)
 
 add_dependencies(digikamwidgets digikam-gitversion) # splashscreen shows version
 

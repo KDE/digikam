@@ -16,7 +16,8 @@ set(libfilters_SRCS
 
 #TODO rename to digikamfilters?
 
-add_library(filters STATIC ${libfilters_SRCS})
+add_library(filters_src OBJECT ${libfilters_SRCS})
+add_library(filters STATIC $<TARGET_OBJECTS:filters_src>)
 
 target_link_libraries(filters
                       PRIVATE

@@ -89,14 +89,15 @@ set(libimgqsort_SRCS
 
 set(digikamdatabase_LIB_SRCS
         ${libdatabase_SRCS}
-        ${libdatabasecore_SRCS}
+
         ${libdatabasemodels_SRCS}
         ${libhaar_SRCS}
         ${pgfutils_SRCS}
-        ${libimgqsort_SRCS}
+
 )
 
 add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS})
+add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} ${libimgqsort_SRCS})
 add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src>)
 
 
@@ -150,7 +151,8 @@ endif()
 
 # digikamdatabase static for linking with other static libs
 
-add_library(digikamdatabase_static STATIC $<TARGET_OBJECTS:digikamdatabase_src>)
+add_library(digikamdatabase_static STATIC $<TARGET_OBJECTS:digikamdatabase_src>
+                                          $<TARGET_OBJECTS:digikamdatabasecore_src> )
 
 
 # TODO clean this up by changing the includes using database to use longer path?

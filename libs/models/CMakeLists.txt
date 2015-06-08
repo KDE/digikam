@@ -29,7 +29,8 @@ set(libgenericmodels_SRCS
     categorizeditemmodel.cpp
 )
 
-add_library(digikammodels STATIC ${libdatabasemodels_SRCS} ${libalbummodels_SRCS} ${libgenericmodels_SRCS})
+add_library(digikammodels_src OBJECT ${libdatabasemodels_SRCS} ${libalbummodels_SRCS} ${libgenericmodels_SRCS})
+add_library(digikammodels STATIC $<TARGET_OBJECTS:digikammodels_src>)
 
 target_link_libraries(digikammodels
 

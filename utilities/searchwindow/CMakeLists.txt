@@ -17,7 +17,9 @@ set(libsearchwindow_SRCS
     searchtabheader.cpp
 )
 
-add_library(searchwindow STATIC ${libsearchwindow_SRCS})
+add_library(searchwindow_src OBJECT ${libsearchwindow_SRCS})
+
+add_library(searchwindow STATIC $<TARGET_OBJECTS:searchwindow_src>)
 
 target_link_libraries(searchwindow
                       PRIVATE

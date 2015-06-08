@@ -14,15 +14,16 @@ set(libtemplate_SRCS
 )
 
 
-add_library(digikamtemplate STATIC ${libtemplate_SRCS})
+add_library(digikamtemplate_src OBJECT  ${libtemplate_SRCS})
+add_library(digikamtemplate STATIC $<TARGET_OBJECTS:digikamtemplate_src>)
 
 target_link_libraries(digikamtemplate
-
+                      PRIVATE
                       dmetadata
 
                       Qt5::Core
                       Qt5::Widgets
                       Qt5::Xml
-                      
+
                       KF5::WidgetsAddons
 )

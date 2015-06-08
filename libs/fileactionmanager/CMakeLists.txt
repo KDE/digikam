@@ -15,7 +15,8 @@ set(fileactionmanager_SRCS
     fileactionimageinfolist.cpp
 )
 
-add_library(fileactionmanager STATIC ${fileactionmanager_SRCS})
+add_library(fileactionmanager_src OBJECT ${fileactionmanager_SRCS})
+add_library(fileactionmanager STATIC $<TARGET_OBJECTS:fileactionmanager_src>)
 
 target_link_libraries(fileactionmanager
                       PRIVATE

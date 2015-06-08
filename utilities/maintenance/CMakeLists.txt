@@ -33,7 +33,8 @@ if(${KF5KFace_FOUND})
        )
 endif()
 
-add_library(maintenance STATIC ${libmaintenance_SRCS} $<TARGET_OBJECTS:digikamgui_src>)
+add_library(maintenance_src OBJECT ${libmaintenance_SRCS})
+add_library(maintenance STATIC $<TARGET_OBJECTS:maintenance_src> $<TARGET_OBJECTS:digikamgui_src>)
 
 target_link_libraries(maintenance
                       PRIVATE

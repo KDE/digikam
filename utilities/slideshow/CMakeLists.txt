@@ -16,7 +16,9 @@ set(libslideshow_SRCS
     slideshowsettings.cpp
 )
 
-add_library(slideshow STATIC ${libslideshow_SRCS})
+add_library(slideshow_src OBJECT ${libslideshow_SRCS})
+
+add_library(slideshow STATIC $<TARGET_OBJECTS:slideshow_src>)
 
 
 target_link_libraries(slideshow
@@ -24,6 +26,7 @@ target_link_libraries(slideshow
                       digikamwidgets
                       digikamdatabase_static
                       digikamalbum
+                      maintenance
 
 
                       Qt5::Widgets

@@ -10,7 +10,9 @@ set(libeditorplugin_SRCS
     plugin/imagepluginloader.cpp
 )
 
-add_library(editorplugin STATIC ${libeditorplugin_SRCS})
+add_library(editorplugin_src OBJECT ${libeditorplugin_SRCS})
+
+add_library(editorplugin STATIC $<TARGET_OBJECTS:editorplugin_src>)
 
 target_link_libraries(editorplugin
                       PRIVATE
@@ -85,7 +87,10 @@ set(libeditoriface_SRCS
     editor/actioncategorizedview.cpp
 )
 
-add_library(imageeditor STATIC ${libeditorcore_SRCS} ${libeditordlg_SRCS} ${libeditorgui_SRCS} ${libeditoriface_SRCS} ${libeditorprintiface_SRCS} ${libeditorrawimport_SRCS} ${libeditorwidgets_SRCS})
+add_library(imageeditor_src OBJECT ${libeditorcore_SRCS} ${libeditordlg_SRCS} ${libeditorgui_SRCS} ${libeditoriface_SRCS} ${libeditorprintiface_SRCS} ${libeditorrawimport_SRCS} ${libeditorwidgets_SRCS})
+
+
+add_library(imageeditor STATIC $<TARGET_OBJECTS:imageeditor_src>)
 
 target_include_directories(imageeditor PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/printiface>

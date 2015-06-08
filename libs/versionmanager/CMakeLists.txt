@@ -8,7 +8,8 @@ set(libversionmanager_SRCS
     versionmanager.cpp
 )
 
-add_library(versionmanager STATIC ${libversionmanager_SRCS})
+add_library(versionmanager_src OBJECT ${libversionmanager_SRCS})
+add_library(versionmanager STATIC $<TARGET_OBJECTS:versionmanager_src>)
 
 target_link_libraries(versionmanager
                       PRIVATE
