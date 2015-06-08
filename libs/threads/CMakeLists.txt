@@ -10,8 +10,8 @@ set(libdthread_SRCS
     dynamicthread.cpp
     parallelworkers.cpp
 )
-
-add_library(dthread STATIC ${libdthread_SRCS})
+add_library(dthread_src OBJECT ${libdthread_SRCS})
+add_library(dthread STATIC $<TARGET_OBJECTS:dthread_src>)
 
 message(INFO "rename dthread to something else?")
 
