@@ -154,26 +154,33 @@ target_link_libraries(digikamgui
                       dthread
                       threadimageio
 
-                      imagepropertiesdigikam
-                      imageeditor
                       advancedrename
                       queuemanager
                       versionmanager
                       progressmanager
-                      editorplugin
+
                       searchwindow
                       fileactionmanager
-                      maintenance
+
                       digikamtags
                       digikamdialogs
-                      facemanagement
 
+
+                      imagepropertiesdigikam
                       setup
                       slideshow
-                      firstrun
-                      lighttable
-                      importui
+#                      firstrun
+#                      lighttable
+#                      importui
                       fuzzysearch
+
+
+                      # move to digikam exec
+#                      maintenance
+                      facemanagement
+                      imageeditor
+                      editorplugin
+
 
                       Qt5::Core
                       Qt5::Gui
@@ -208,13 +215,7 @@ if(APPLE)
     target_link_libraries(digikamgui PUBLIC /System/Library/Frameworks/AppKit.framework)
 endif()
 
-if(${KF5Kipi_FOUND})
-    target_link_libraries(digikamgui PRIVATE kipiiface)
-endif()
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(digikamgui PRIVATE gpssearch kgeomaphelper)
-endif()
 
 if(KF5KFace_FOUND)
     target_link_libraries(digikamgui PRIVATE ${KF5KFace_LIBRARIES})
@@ -254,12 +255,25 @@ target_link_libraries(digikam
                       firstrun
 
 
+                      lighttable
+                      importui
+                      maintenance
+
+
                       Qt5::Sql
                       Qt5::Test
                       Qt5::WebKitWidgets
 
                       ${OpenCV_LIBRARIES}
 )
+
+if(${KF5Kipi_FOUND})
+    target_link_libraries(digikam  kipiiface)
+endif()
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(digikam  gpssearch kgeomaphelper)
+endif()
 
 if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
