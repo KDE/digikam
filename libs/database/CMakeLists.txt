@@ -10,7 +10,7 @@ set(libdatabasecore_SRCS
     core/databasecorebackend.cpp
     core/databaseparameters.cpp
     core/databaseerrorhandler.cpp
-    core/databaseguierrorhandler.cpp # FIXME used to be part of app, ok here?
+
     core/thumbnaildatabaseaccess.cpp
     core/thumbnaildb.cpp
     core/thumbnailschemaupdater.cpp
@@ -19,13 +19,17 @@ set(libdatabasecore_SRCS
     core/dbactiontype.cpp
     core/tagregion.cpp
 
+)
+
+#this sources must be set in digikam main app
+set(libdatabasemain_SRCS
+    core/databaseguierrorhandler.cpp # FIXME used to be part of app, ok here?
     # FIXME moved from app, check
     core/dbstatdlg.cpp
     core/scancontroller.cpp
     core/dio.cpp
     core/syncjob.cpp
     core/imageattributeswatch.cpp
-
 )
 
 set(libdatabase_SRCS
@@ -96,9 +100,9 @@ set(digikamdatabase_LIB_SRCS
 
 )
 
-add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS})
-add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} ${libimgqsort_SRCS})
-add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src>)
+add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS} ${libdatabasemain_SRCS} ${libimgqsort_SRCS})
+add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} )
+add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasecore_src>)
 
 
 # TODO clean this up by changing the includes using database to use longer path?
@@ -174,6 +178,7 @@ target_link_libraries(digikamdatabase_static
                       PRIVATE
                       dmetadata
                       digikamwidgets
+                      dimg
 )
 
 set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})

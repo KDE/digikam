@@ -9,18 +9,114 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in    $
 
 # digikam core
 
-#add_library(digikamcore SHARED $<TARGET_OBJECTS:digikamdatabasecore_src>)
+add_library(digikamcore
+            SHARED
+            $<TARGET_OBJECTS:digikamdatabasecore_src>
+            $<TARGET_OBJECTS:dimg_src>
+            $<TARGET_OBJECTS:dmetadata_src>
+            $<TARGET_OBJECTS:jpegutils_src>
+            $<TARGET_OBJECTS:progressmanager_src>
+            $<TARGET_OBJECTS:threadimageio_src>
+            $<TARGET_OBJECTS:pgfutils_src>
+            $<TARGET_OBJECTS:dthread_src>
+            $<TARGET_OBJECTS:versionmanager_src>
+            $<TARGET_OBJECTS:3rdparty_src>
 
-#target_link_libraries(digikamcore
-#                      PRIVATE
-#                      dimg
-#                      jpegutils
-#                      dmetadata
-#                      dthread
-#                      threadimageio
-#                      imagepropertiesdigikam
-#                      )
+            # widgets
+            $<TARGET_OBJECTS:digikamwidgetscore_src> #
+            $<TARGET_OBJECTS:digikamdialogscore_src> #
+            $<TARGET_OBJECTS:imageproperties_src> #
+            $<TARGET_OBJECTS:digikamgenericmodels_src> #
 
+            # utilities
+            $<TARGET_OBJECTS:slideshow_src>
+            $<TARGET_OBJECTS:imageeditor_src> #
+            $<TARGET_OBJECTS:editorplugin_src>
+
+            $<TARGET_OBJECTS:kgeomaphelper_src>
+
+            utils/digikam_debug.cpp
+)
+
+target_link_libraries(digikamcore
+                      PRIVATE
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Widgets
+                      Qt5::Sql
+                      Qt5::WebKitWidgets
+                      Qt5::PrintSupport
+
+                      KF5::Solid
+                      KF5::KIOCore
+                      KF5::NotifyConfig
+                      KF5::WindowSystem
+                      KF5::TextWidgets
+                      KF5::KIOWidgets
+                      KF5::IconThemes
+                      KF5::I18n
+                      KF5::KExiv2
+                      KF5::KDcraw
+
+                      # required by dimg
+                      # Required by CImg library which is using pthread internally.
+                      ${CMAKE_THREAD_LIBS_INIT}
+
+                      ${LCMS2_LIBRARIES} # filters
+
+                      ${TIFF_LIBRARIES}
+                      ${PNG_LIBRARIES}
+
+                      ${PGF_LIBRARIES}
+
+                      KF5::Kipi
+                      KF5::KGeoMap # must wrap in if
+
+)
+
+add_dependencies(digikamcore digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
+
+if(X11_FOUND)
+    target_link_libraries(digikamcore PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
+endif()
+
+if(JASPER_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${JASPER_LIBRARIES})
+endif()
+
+# LibLqr-1 library rules for content-aware filter
+if(LQR-1_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${LQR-1_LIBRARIES})
+endif()
+
+
+if(LENSFUN_FOUND)
+    target_include_directories(digikamcore PUBLIC ${LENSFUN_INCLUDE_DIRS})
+    target_link_libraries(digikamcore PRIVATE ${LENSFUN_LIBRARIES})
+endif()
+
+# for nrfilter
+if(OpenCV_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${OpenCV_LIBRARIES})
+endif()
+
+if(${KFILEMETADATA_FOUND})
+    target_link_libraries(digikamcore PRIVATE baloowrap)
+endif()
+
+if(ENABLE_MEDIAPLAYER)
+    target_link_libraries(digikamcore PRIVATE Qt5::Multimedia Qt5::MultimediaWidgets)
+endif()
+
+if(APPLE)
+    target_link_libraries(digikamcore PUBLIC /System/Library/Frameworks/AppKit.framework)
+endif()
+
+if(KF5KFace_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${KF5KFace_LIBRARIES})
+endif()
+
+install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 # digiKam GUI begins here
 
 include_directories(
