@@ -23,7 +23,6 @@ set(libcommonwidgets_SRCS
     common/workingpixmap.cpp
     common/widgets_debug.cpp
 
-    common/databasewidget.cpp # FIXME used to belong to separate target, check
 )
 
 set(libimagehistory_SRCS
@@ -32,6 +31,8 @@ set(libimagehistory_SRCS
     imagehistory/imagefiltershistorymodel.cpp
     imagehistory/imagefiltershistorytreeitem.cpp
     imagehistory/versionswidget.cpp
+
+    common/databasewidget.cpp # FIXME belongs to database target
 )
 
 set(libcolorchooser_SRCS
@@ -103,7 +104,7 @@ set(libiccprofileswidgets_SRCS
     iccprofiles/iccprofilescombobox.cpp
 )
 
-add_library(digikamwidgets_src OBJECT
+add_library(digikamwidgetscore_src OBJECT
     ${libmainview_SRCS}
     ${libcommonwidgets_SRCS}
     ${libgraphicsviewwidgets_SRCS}
@@ -111,10 +112,13 @@ add_library(digikamwidgets_src OBJECT
     ${libitemview_SRCS}
     ${libmetadatawidgets_SRCS}
     ${libcolorchooser_SRCS}
-    ${libimagehistory_SRCS}
 )
 
-add_library(digikamwidgets STATIC $<TARGET_OBJECTS:digikamwidgets_src>)
+add_library(imagehistorywidgets_src OBJECT
+                                    ${libimagehistory_SRCS})
+
+add_library(digikamwidgets STATIC $<TARGET_OBJECTS:digikamwidgetscore_src>
+                                  $<TARGET_OBJECTS:imagehistorywidgets_src>)
 
 add_dependencies(digikamwidgets digikam-gitversion) # splashscreen shows version
 
