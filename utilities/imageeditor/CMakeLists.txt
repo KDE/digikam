@@ -87,10 +87,11 @@ set(libeditoriface_SRCS
     editor/actioncategorizedview.cpp
 )
 
-add_library(imageeditor_src OBJECT ${libeditorcore_SRCS} ${libeditordlg_SRCS} ${libeditorgui_SRCS} ${libeditoriface_SRCS} ${libeditorprintiface_SRCS} ${libeditorrawimport_SRCS} ${libeditorwidgets_SRCS})
+# this lib is used to build digikam core
+add_library(imageeditor_src OBJECT ${libeditorcore_SRCS} ${libeditordlg_SRCS}  ${libeditoriface_SRCS} ${libeditorprintiface_SRCS} ${libeditorrawimport_SRCS} ${libeditorwidgets_SRCS})
 
 
-add_library(imageeditor STATIC $<TARGET_OBJECTS:imageeditor_src>)
+add_library(imageeditor STATIC $<TARGET_OBJECTS:imageeditor_src> ${libeditorgui_SRCS} )
 
 target_include_directories(imageeditor PUBLIC
                               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/printiface>
@@ -106,4 +107,6 @@ target_link_libraries(imageeditor
                       PRIVATE
                       versionmanager
                       editorplugin
+                      digikamdialogs
+                      digikamsettings
 )
