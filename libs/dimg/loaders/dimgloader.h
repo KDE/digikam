@@ -159,7 +159,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(quint64 w, quint64 h, ui
 template <typename Type>
 Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
 {
-    quint64 res = checkAllocation(size);
+    qint64 res = checkAllocation(size);
 
     switch(res)
     {
