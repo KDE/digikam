@@ -61,12 +61,6 @@ set_target_properties(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRE
 target_link_libraries(showfoto
                       PRIVATE
                       digikamcore
-#                      digikamdatabase
-#                      dimg
-#                      fileactionmanager
-#                      imageeditor
-#                      imagepropertiesdigikam
-#                      slideshow
 
                       Qt5::Core
                       KF5::KExiv2
