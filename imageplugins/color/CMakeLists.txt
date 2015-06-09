@@ -24,8 +24,17 @@ add_library(digikamimageplugin_color MODULE ${digikamimageplugin_color_PART_SRCS
 
 target_link_libraries(digikamimageplugin_color
                       PRIVATE
-                      editorplugin
-                      imageeditor
+                      digikamcore
+
+                      Qt5::Core
+                      Qt5::Gui
+
+                      KF5::XmlGui
+                      KF5::KIOCore
+                      KF5::KDcraw
+                      KF5::KExiv2
+                      KF5::Notifications
+                      KF5::JobWidgets
                      )
 
 install(TARGETS digikamimageplugin_color             DESTINATION ${PLUGIN_INSTALL_DIR})

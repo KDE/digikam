@@ -607,7 +607,7 @@ endif()
    add_subdirectory(app)
    add_subdirectory(kioslave)
    add_subdirectory(showfoto)
-   #add_subdirectory(imageplugins)
+   add_subdirectory(imageplugins)
 
     if(ENABLE_INTERNALMYSQL)
     #    add_subdirectory(databaseserver)

@@ -24,7 +24,7 @@ add_library(slideshow STATIC $<TARGET_OBJECTS:slideshow_src>)
 target_link_libraries(slideshow
                       PRIVATE
                       digikamwidgets
-                      digikamdatabase
+                      digikamdatabases
                       digikamalbum
                       maintenance
 
