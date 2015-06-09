@@ -7,9 +7,7 @@
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in    ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
 
 # digikam core
-
-add_library(digikamcore
-            SHARED
+set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:digikamdatabasecore_src>
             $<TARGET_OBJECTS:dimg_src>
             $<TARGET_OBJECTS:dmetadata_src>
@@ -32,9 +30,22 @@ add_library(digikamcore
             $<TARGET_OBJECTS:imageeditor_src> #
             $<TARGET_OBJECTS:editorplugin_src>
 
-            $<TARGET_OBJECTS:kgeomaphelper_src>
+
 
             utils/digikam_debug.cpp
+)
+
+if(KF5KGeoMap_FOUND)
+    set(DIGIKAMCORE_OBJECTS
+    ${DIGIKAMCORE_OBJECTS}
+    $<TARGET_OBJECTS:kgeomaphelper_src>
+    )
+
+endif()
+
+add_library(digikamcore
+            SHARED
+            ${DIGIKAMCORE_OBJECTS}
 )
 
 target_link_libraries(digikamcore
