@@ -27,7 +27,7 @@ ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 include_directories(common/ parser/options/ parser/options/database/ parser/options/database/keys/ parser/modifiers/)
 
 add_library(advancedrename_src OBJECT ${libadvancedrename_SRCS})
-add_library(advancedrename STATIC $<TARGET_OBJECTS:advancedrename_src>)
+add_library(advancedrename STATIC $<TARGET_OBJECTS:advancedrename_src> $<TARGET_OBJECTS:digikamgui_src>)
 
 # TODO importui is not using partial paths, but direct one for from those
 target_include_directories(advancedrename PUBLIC
@@ -37,7 +37,7 @@ target_include_directories(advancedrename PUBLIC
 
 target_link_libraries(advancedrename
                       PRIVATE
-                      digikamdatabase_static
+                      digikamdatabase
 
                       Qt5::Widgets
                       Qt5::Sql

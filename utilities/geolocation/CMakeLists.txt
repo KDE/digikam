@@ -15,7 +15,7 @@ add_library(gpssearch STATIC $<TARGET_OBJECTS:gpssearch_src>)
 
 target_link_libraries(gpssearch
                       PRIVATE
-                      digikamdatabase_static
+                      digikamdatabase
                       digikamtags
                       fileactionmanager
                       maintenance

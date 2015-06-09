@@ -71,7 +71,7 @@ endif()
 
 add_library(queuemanager_src OBJECT ${libqueuemanager_SRCS})
 
-add_library(queuemanager STATIC $<TARGET_OBJECTS:queuemanager_src>)
+add_library(queuemanager STATIC $<TARGET_OBJECTS:queuemanager_src> $<TARGET_OBJECTS:digikamgui_src>)
 
 target_include_directories(queuemanager
                            PUBLIC

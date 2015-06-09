@@ -85,6 +85,7 @@ set(libhaar_SRCS
     haar/haariface.cpp
 )
 
+# Also part of digikam main app
 set(libimgqsort_SRCS
     imgqsort/imgqsort.cpp
 )
@@ -93,16 +94,17 @@ set(libimgqsort_SRCS
 
 set(digikamdatabase_LIB_SRCS
         ${libdatabase_SRCS}
-
-        ${libdatabasemodels_SRCS}
+#        ${libdatabasemodels_SRCS}
         ${libhaar_SRCS}
         ${pgfutils_SRCS}
 
 )
 
-add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS} ${libdatabasemain_SRCS} ${libimgqsort_SRCS})
+
+add_library(digikamdatabasemain_src OBJECT ${libdatabasemain_SRCS} ${libimgqsort_SRCS})
+add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS} )
 add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} )
-add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasecore_src>)
+add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:dgikamdatabasemodels_src>)
 
 
 # TODO clean this up by changing the includes using database to use longer path?
@@ -121,14 +123,20 @@ target_include_directories(digikamdatabase
 )
 
 target_link_libraries(digikamdatabase
+                      PUBLIC
+                      digikamcore # digikamdebug is missing
+
                       PRIVATE
-                      dmetadata
-                      digikamwidgets
+                      baloowrap
+#                      dmetadata
+#                      digikamwidgets
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
+                      Qt5::DBus
 
                       KF5::KIOCore
+                      KF5::Solid
 
                       KF5::KExiv2
                       KF5::KDcraw
@@ -149,37 +157,38 @@ if(Baloo_FOUND) # circular linking, because we need baloowrap.h path.
 endif()
 
 # for imgqsort, does it even belong to database?
-if(OpenCV_FOUND)
-    target_link_libraries(digikamdatabase PRIVATE ${OpenCV_LIBRARIES})
-endif()
+#if(OpenCV_FOUND)
+#    target_link_libraries(digikamdatabase PRIVATE ${OpenCV_LIBRARIES})
+#endif()
 
 # digikamdatabase static for linking with other static libs
 
-add_library(digikamdatabase_static STATIC $<TARGET_OBJECTS:digikamdatabase_src>
-                                          $<TARGET_OBJECTS:digikamdatabasecore_src> )
+#add_library(digikamdatabase_static STATIC $<TARGET_OBJECTS:digikamdatabase_src>
+#                                          $<TARGET_OBJECTS:digikamdatabasecore_src> )
 
 
-# TODO clean this up by changing the includes using database to use longer path?
-target_include_directories(digikamdatabase_static
-                           PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
-)
+## TODO clean this up by changing the includes using database to use longer path?
+#target_include_directories(digikamdatabase_static
+#                           PUBLIC
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
+#)
 
-target_link_libraries(digikamdatabase_static
-                      PRIVATE
-                      dmetadata
-                      digikamwidgets
-                      dimg
-)
+#target_link_libraries(digikamdatabase_static
+#                      PRIVATE
+#                      digikamcore
+#                      dmetadata
+#                      digikamwidgets
+##                      dimg
+#)
 
 set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 

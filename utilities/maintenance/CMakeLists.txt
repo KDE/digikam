@@ -38,7 +38,7 @@ add_library(maintenance STATIC $<TARGET_OBJECTS:maintenance_src> $<TARGET_OBJECT
 
 target_link_libraries(maintenance
                       PRIVATE
-                      digikamdatabase_static
+                      digikamdatabase
                       notificationmanager
                       progressmanager
                       fuzzysearch

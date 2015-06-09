@@ -23,7 +23,7 @@ add_library(searchwindow STATIC $<TARGET_OBJECTS:searchwindow_src>)
 
 target_link_libraries(searchwindow
                       PRIVATE
-                      digikamdatabase_static
+                      digikamdatabase
 
                       Qt5::Widgets
 )

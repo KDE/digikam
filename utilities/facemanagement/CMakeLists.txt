@@ -21,7 +21,7 @@ add_library(facemanagement STATIC $<TARGET_OBJECTS:facemanagement_src>)
 target_link_libraries(facemanagement
 
                       PRIVATE
-                      digikamdatabase_static
+                      digikamdatabase
                       digikamtags
                       fileactionmanager
 

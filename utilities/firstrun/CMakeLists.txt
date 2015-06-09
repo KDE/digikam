@@ -23,7 +23,7 @@ add_library(firstrun STATIC $<TARGET_OBJECTS:firstrun_src>)
 
 target_link_libraries(firstrun
                       PRIVATE
-                      digikamdatabase_static
+                      digikamdatabase
 
                       Qt5::Widgets
 

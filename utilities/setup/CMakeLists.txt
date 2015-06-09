@@ -47,6 +47,8 @@ set(libsetup_SRCS
 
 add_library(setup_src OBJECT ${libsetup_SRCS} ${libsetupshowfoto_SRCS})
 
+add_library(setupshowfoto_src OBJECT  ${libsetupshowfoto_SRCS})
+
 add_library(setup STATIC $<TARGET_OBJECTS:setup_src>)
 
 # TODO may be better if users of setup would use complete path for includes?

@@ -17,7 +17,7 @@ add_library(lighttable STATIC $<TARGET_OBJECTS:lighttable_src>)
 
 target_link_libraries(lighttable
                       PRIVATE
-                      digikamdatabase_static
+                      digikamdatabase
                       imagepropertiesdigikam
                       imageeditor
 

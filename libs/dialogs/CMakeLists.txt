@@ -27,6 +27,8 @@ endif()
 #used by digikamcore
 add_library(digikamdialogscore_src OBJECT ${libdialogs_SRCS})
 
+add_library(digikamdeletedialog_src OBJECT ${libdeletedialog_SRCS})
+
 add_library(digikamdialogs_src OBJECT ${libdialogs_SRCS} ${libdeletedialog_SRCS})
 add_library(digikamdialogs STATIC
                            $<TARGET_OBJECTS:digikamdialogs_src>
@@ -35,7 +37,7 @@ add_library(digikamdialogs STATIC
 target_link_libraries(digikamdialogs
                       PRIVATE
                       threadimageio   # loadingdescription for imagedialog
-                      digikamdatabase_static # migrationdlg needs this
+                      digikamdatabase # migrationdlg needs this
                       versionmanager  # migrationdlg needs this too
                       dmetadata
                       Qt5::Core
