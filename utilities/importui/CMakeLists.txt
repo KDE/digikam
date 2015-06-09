@@ -116,11 +116,20 @@ target_include_directories(importui PUBLIC
 target_link_libraries(importui
                       PRIVATE
                       importuibackend
-#                      maintenance
+
 
                       KF5::NotifyConfig
                       KF5::KExiv2
                       KF5::KDcraw
 )
+
+if(KF5KFace_FOUND)
+    target_link_libraries(importui PRIVATE ${KF5KFace_LIBRARIES})
+endif()
+
+
+if(${KF5Kipi_FOUND})
+    target_link_libraries(importui PRIVATE  KF5::Kipi)
+endif()
 
 install(FILES main/importui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

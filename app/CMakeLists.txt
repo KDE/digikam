@@ -455,12 +455,12 @@ target_link_libraries(digikam
 
                       ${OpenCV_LIBRARIES}
                       ${KF5KFace_LIBRARIES}
-                      KF5::Kipi
+
 )
 
-#if(${KF5Kipi_FOUND})
-#    target_link_libraries(digikam  kipiiface)
-#endif()
+if(${KF5Kipi_FOUND})
+    target_link_libraries(digikam  KF5::Kipi)
+endif()
 
 if(${KF5KGeoMap_FOUND})
 #    target_link_libraries(digikam  gpssearch kgeomaphelper)
