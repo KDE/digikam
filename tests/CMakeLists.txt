@@ -32,7 +32,7 @@ ecm_mark_as_test(dimagefilteractiontest)
 
 target_link_libraries(dimagefilteractiontest
 
-                      dimg
+                      digikamcore
 
                       Qt5::Test
 )
@@ -51,9 +51,9 @@ ecm_mark_as_test(dimagehistorygraphtest)
 
 target_link_libraries(dimagehistorygraphtest
 
-                      dimg
+                      digikamcore
                       digikamdatabase
-                      imageeditor
+#                      imageeditor
 
                       KF5::KIOWidgets # for previewjob
                       Qt5::Test
@@ -72,8 +72,8 @@ ecm_mark_as_test(dimagehistorytest)
 
 target_link_libraries(dimagehistorytest
 
-                      dimg
-                      imageeditor
+                      digikamcore
+#                      imageeditor
 
                       Qt5::Test
 )
@@ -86,7 +86,8 @@ ecm_mark_nongui_executable(loadpgfdata)
 
 target_link_libraries(loadpgfdata
 
-                      threadimageio # for PGFUtils
+                      digikamcore
+#                      threadimageio # for PGFUtils
                       Qt5::Core
 )
 
@@ -98,7 +99,7 @@ ecm_mark_nongui_executable(loadsavethreadtest)
 
 target_link_libraries(loadsavethreadtest
 
-                      dimg
+                      digikamcore
                       Qt5::Core
 )
 
@@ -109,8 +110,8 @@ add_executable(pgfscaled ${pgfscaled_SRCS})
 ecm_mark_nongui_executable(pgfscaled)
 
 target_link_libraries(pgfscaled
-
-                      threadimageio # for PGFUtils
+                      digikamcore
+#                      threadimageio # for PGFUtils
                       Qt5::Core
 )
 
@@ -121,8 +122,8 @@ add_executable(qtpgftest ${qtpgftest_SRCS})
 ecm_mark_nongui_executable(qtpgftest)
 
 target_link_libraries(qtpgftest
-
-                      threadimageio # for PGFUtils
+                      digikamcore
+#                      threadimageio # for PGFUtils
                       Qt5::Core
 )
 
@@ -355,7 +356,7 @@ target_link_libraries(advancedrenametest
 
                       digikamdatabase
                       advancedrename
-                      dimg
+                      digikamcore
 
                       Qt5::Test
 

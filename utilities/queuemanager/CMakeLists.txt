@@ -71,7 +71,7 @@ endif()
 
 add_library(queuemanager_src OBJECT ${libqueuemanager_SRCS})
 
-add_library(queuemanager STATIC $<TARGET_OBJECTS:queuemanager_src> $<TARGET_OBJECTS:digikamgui_src>)
+add_library(queuemanager STATIC $<TARGET_OBJECTS:queuemanager_src>)
 
 target_include_directories(queuemanager
                            PUBLIC
@@ -98,8 +98,7 @@ target_link_libraries(queuemanager
 )
 
 if(LENSFUN_FOUND)
-    message(INFO " move lensfun to its own library")
-    target_link_libraries(queuemanager PRIVATE dimg)
+    target_link_libraries(queuemanager PRIVATE ${LENSFUN_LIBRARIES})
 endif()
 
 install( FILES main/queuemgrwindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )

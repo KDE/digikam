@@ -379,11 +379,11 @@ add_executable(digikam
             $<TARGET_OBJECTS:digikamtemplate_src> #
             $<TARGET_OBJECTS:imagepropertiesdigikam_src> #
             $<TARGET_OBJECTS:setup_src> #
-            $<TARGET_OBJECTS:importui_src> #
+#            $<TARGET_OBJECTS:importui_src> #
             $<TARGET_OBJECTS:lighttable_src> #
             $<TARGET_OBJECTS:maintenance_src> #
             $<TARGET_OBJECTS:searchwindow_src> #
-            $<TARGET_OBJECTS:queuemanager_src> #
+#            $<TARGET_OBJECTS:queuemanager_src> #
             $<TARGET_OBJECTS:digikammodels_src> #
             $<TARGET_OBJECTS:digikamalbum_src> #
             $<TARGET_OBJECTS:firstrun_src> #
@@ -396,7 +396,7 @@ add_executable(digikam
             $<TARGET_OBJECTS:gpssearch_src> # wrap kgeomap
             $<TARGET_OBJECTS:digikamtags_src>
             $<TARGET_OBJECTS:digikamsettings_src>
-            $<TARGET_OBJECTS:advancedrename_src>
+#            $<TARGET_OBJECTS:advancedrename_src>
             $<TARGET_OBJECTS:notificationmanager_src>
             $<TARGET_OBJECTS:filters_src>
             $<TARGET_OBJECTS:importuibackend_src>
@@ -419,6 +419,10 @@ target_link_libraries(digikam
 
                       digikamdatabase
                       digikamcore
+
+                      queuemanager
+                      advancedrename
+                      importui
 #                      digikamgui
 #                      digikamwidgets
 #                      digikamalbum
