@@ -49,9 +49,10 @@ set(libdatabase_SRCS
     framework/databaseserverstarter.cpp
     framework/databaseservererror.cpp
     dbjobs/dbjobsthread.cpp
-    dbjobs/datesjob.cpp
-    dbjobs/dbjobinfo.cpp
     dbjobs/dbjob.cpp
+    dbjobs/datesjob.cpp
+    dbjobs/gpsjob.cpp
+    dbjobs/dbjobinfo.cpp
     dbjobs/dbjobsmanager.cpp
     item/imagecomments.cpp
     item/imageextendedproperties.cpp

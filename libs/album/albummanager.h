@@ -646,7 +646,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotDatesJobResult(KJob* job);
-    void slotDatesJobData(KIO::Job* job, const QByteArray& data);
+    void slotDatesJobData(const QByteArray& data);
     void slotAlbumsJobResult(KJob* job);
     void slotAlbumsJobData(KIO::Job* job, const QByteArray& data);
     void slotTagsJobResult(KJob* job);

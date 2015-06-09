@@ -59,7 +59,6 @@ void kio_digikammapimages::special(const QByteArray& data)
 {
     bool        wantDirectQuery = (metaData(QLatin1String("wantDirectQuery")) == QLatin1String("true"));
     QUrl        url;
-    QString     filter;
     QDataStream ds(data);
     ds >> url;
 

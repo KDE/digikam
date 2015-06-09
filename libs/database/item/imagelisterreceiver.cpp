@@ -188,7 +188,7 @@ void ImageListerSlaveBaseGrowingPartsSendingReceiver::receive(const ImageListerR
 
 // ---------------------------------------------------------------------------------------------------------
 
-ImageListerJobReceiver::ImageListerJobReceiver(DatesJob * const job)
+ImageListerJobReceiver::ImageListerJobReceiver(DBJob *const job)
     : m_job(job)
 {
 }
@@ -215,7 +215,7 @@ void ImageListerJobReceiver::sendData()
 
 // ----------------------------------
 
-ImageListerJobPartsSendingReceiver::ImageListerJobPartsSendingReceiver(DatesJob *const job, int limit)
+ImageListerJobPartsSendingReceiver::ImageListerJobPartsSendingReceiver(DBJob *const job, int limit)
     : ImageListerJobReceiver(job), m_limit(limit), m_count(0)
 {
 

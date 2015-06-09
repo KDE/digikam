@@ -12,4 +12,5 @@ DBJob::~DBJob()
 {
     this->cancel();
 }
+
 } // namespace Digikam

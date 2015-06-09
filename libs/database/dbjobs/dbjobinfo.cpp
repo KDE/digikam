@@ -6,30 +6,12 @@ DBJobInfo::DBJobInfo()
 {
 }
 
-DBJobInfo::DBJobInfo(const DatabaseUrl &url)
+DBJobInfo::DBJobInfo(Type jType)
+    : jobType(jType)
 {
     folders                 = false;
     listAvailableImagesOnly = false;
     recursive               = false;
-
-    dbUrl = url;
-
-    if (url.isAlbumUrl())
-    {
-        jobType = Type::AlbumsJob;
-    }
-    else if (url.isTagUrl())
-    {
-        jobType = Type::TagsJob;
-    }
-    else if (url.isDateUrl())
-    {
-        jobType = Type::DatesJob;
-    }
-    else if (url.isMapImagesUrl())
-    {
-        jobType = Type::GPSJob;
-    }
 }
 
 DBJobInfo::Type DBJobInfo::type()
@@ -37,34 +19,36 @@ DBJobInfo::Type DBJobInfo::type()
     return jobType;
 }
 
-DatabaseUrl DBJobInfo::databaseUrl()
-{
-    return dbUrl;
-}
-
 // ---------------------------------------------
 
-TagsDBJobInfo::TagsDBJobInfo(const DatabaseUrl &url)
-    : DBJobInfo(url)
+TagsDBJobInfo::TagsDBJobInfo()
+    : DBJobInfo(Type::TagsJob)
 {
     faceFolders = false;
 }
 
 // ---------------------------------------------
 
-GPSDBJobInfo::GPSDBJobInfo(const DatabaseUrl &url)
-    : DBJobInfo(url)
+GPSDBJobInfo::GPSDBJobInfo()
+    : DBJobInfo(Type::GPSJob)
 {
     wantDirectQuery = false;
 }
 
 // ---------------------------------------------
 
-SearchDBJobInfo::SearchDBJobInfo(const DatabaseUrl &url)
-    : DBJobInfo(url)
+SearchDBJobInfo::SearchDBJobInfo()
+    : DBJobInfo(Type::SearchesJob)
 {
     duplicates = false;
     threshold  = 0;
+}
+
+// ---------------------------------------------
+
+DatesDBJobInfo::DatesDBJobInfo()
+    : DBJobInfo(Type::DatesJob)
+{
 }
 
 } // namespace Digikam

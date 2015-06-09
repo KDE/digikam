@@ -6,54 +6,37 @@
 
 namespace Digikam {
 
-class DBJobsManager::Private
+class DBJobsManagerCreator
 {
 public:
 
-    Private()
-    {
-        thread = 0;
-    }
-
-    DBJobsThread *thread;
-    DBJobInfo     jobInfo;
+    DBJobsManager object;
 };
 
-DBJobsManager::DBJobsManager(DBJobInfo &jobInfo)
-    : d(new Private)
-{
-    d->thread = new DBJobsThread(this);
-    d->jobInfo = jobInfo;
+Q_GLOBAL_STATIC(DBJobsManagerCreator, creator)
 
-    connect(d->thread, SIGNAL(signalData(QByteArray)),
-            this, SLOT(data(QByteArray)));
+// -----------------------------------------------
+
+DBJobsManager::DBJobsManager()
+{
 }
 
 DBJobsManager::~DBJobsManager()
 {
-    delete d;
 }
 
-void DBJobsManager::start()
+DBJobsManager *DBJobsManager::instance()
 {
-    if(d->jobInfo.type() == DBJobInfo::DatesJob)
-    {
-        d->thread->datesListing(d->jobInfo.databaseUrl().startDate(),
-                                d->jobInfo.databaseUrl().endDate(),
-                                d->jobInfo.folders);
-        d->thread->start();
-    }
-
+    return &creator->object;
 }
 
-void DBJobsManager::cancel()
+DBJobsThread* DBJobsManager::startDatesJobThread(DatesDBJobInfo *jInfo)
 {
-    d->thread->cancel();
-}
+    DBJobsThread *thread = new DBJobsThread(this);
+    thread->datesListing(jInfo);
+    thread->start();
 
-void DBJobsManager::data(const QByteArray &ba)
-{
-    qDebug() << "Data from New Manager: " << ba.toHex();
+    return thread;
 }
 
 } // namespace Digikam

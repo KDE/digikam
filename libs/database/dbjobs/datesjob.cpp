@@ -18,52 +18,21 @@
 
 namespace Digikam {
 
-class DatesJob::Private
+DatesJob::DatesJob(DatesDBJobInfo *jobInfo)
+    : DBJob()
 {
-public:
-
-    Private()
-        : folders(0)
-    {
-    }
-
-    bool       folders;
-    QDate      startDate;
-    QDate      endDate;
-};
-
-// -------------------------------------------------------
-
-DatesJob::DatesJob()
-    : DBJob(), d(new Private)
-{
+    m_jobInfo = jobInfo;
 }
 
 DatesJob::~DatesJob()
 {
-    delete d;
-}
-
-void DatesJob::setStartDate(const QDate &startDate)
-{
-    d->startDate = startDate;
-}
-
-void DatesJob::setEndDate(const QDate &endDate)
-{
-    d->endDate = endDate;
-}
-
-void DatesJob::setFoldersListing(bool folders)
-{
-    d->folders = folders;
 }
 
 void DatesJob::run()
 {
-    if (d->folders)
+    if (m_jobInfo->folders)
     {
-        QMap<QDateTime, int> dateNumberMap = Digikam::DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
+        QMap<QDateTime, int> dateNumberMap = DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
         QByteArray           ba;
         QDataStream          os(&ba, QIODevice::WriteOnly);
         os << dateNumberMap;
@@ -75,7 +44,7 @@ void DatesJob::run()
         lister.setListOnlyAvailable(true);
         // send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
-        lister.listDateRange(&receiver, d->startDate, d->endDate);
+        lister.listDateRange(&receiver, m_jobInfo->startDate, m_jobInfo->endDate);
         // send rest
         receiver.sendData();
     }

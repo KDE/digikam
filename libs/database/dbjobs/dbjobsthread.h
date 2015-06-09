@@ -24,12 +24,13 @@ public:
     explicit DBJobsThread(QObject* const parent);
     ~DBJobsThread();
 
-    void datesListing(const QDate &startDate, const QDate &endDate, bool folders = false);
+    void datesListing(DatesDBJobInfo *info);
+    void GPSListing(GPSDBJobInfo *info);
 
     void setUseMultiCore(const bool useMultiCore);
 
 Q_SIGNALS:
-    void signalData(const QByteArray &);
+    void data(const QByteArray &);
 
 };
 

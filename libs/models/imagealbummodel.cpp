@@ -46,6 +46,7 @@
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 #include "dbjobsmanager.h"
+#include "dbjobsthread.h"
 
 namespace Digikam
 {
@@ -315,7 +316,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         return;
     }
 
-    QUrl url;
+    DatabaseUrl url;
 
     if(albums.first()->type() == Album::TAG)
     {
@@ -333,32 +334,37 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         url = albums.first()->databaseUrl();
     }
 
-    d->extraValueJob = false;
-    d->job           = ImageLister::startListJob(url);
-    d->job->addMetaData(QLatin1String("listAlbumsRecursively"),   d->recurseAlbums           ? QLatin1String("true") : QLatin1String("false"));
-    d->job->addMetaData(QLatin1String("listTagsRecursively"),     d->recurseTags             ? QLatin1String("true") : QLatin1String("false"));
-    d->job->addMetaData(QLatin1String("listOnlyAvailableImages"), d->listOnlyAvailableImages ? QLatin1String("true") : QLatin1String("false"));
-
-    if (albums.first()->type() == Album::TAG && !d->specialListing.isNull())
-    {
-        d->job->addMetaData(QLatin1String("specialTagListing"), d->specialListing);
-        d->extraValueJob = true;
-    }
-
-    connect(d->job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
-
-    connect(d->job, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotData(KIO::Job*,QByteArray)));
-
     if(albums.first()->type() == Album::DATE)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Entered IF SECTION";
-        DBJobInfo jobInfo = DBJobInfo(url);
-        jobInfo.recursive = d->recurseAlbums;
-        jobInfo.listAvailableImagesOnly = d->listOnlyAvailableImages;
-        DBJobsManager *jobsManager = new DBJobsManager(jobInfo);
-        jobsManager->start();
+        DatesDBJobInfo *jobInfo = new DatesDBJobInfo();
+        jobInfo->startDate = url.startDate();
+        jobInfo->endDate   = url.endDate();
+        jobInfo->recursive = d->recurseAlbums;
+        jobInfo->listAvailableImagesOnly = d->listOnlyAvailableImages;
+        DBJobsThread *thread = DBJobsManager::instance()->startDatesJobThread(jobInfo);
+
+        connect(thread, SIGNAL(data(QByteArray)),
+                this, SLOT(slotDataFromNewMechanism(QByteArray)));
+    }
+    else
+    {
+        d->extraValueJob = false;
+        d->job           = ImageLister::startListJob(url);
+        d->job->addMetaData(QLatin1String("listAlbumsRecursively"),   d->recurseAlbums           ? QLatin1String("true") : QLatin1String("false"));
+        d->job->addMetaData(QLatin1String("listTagsRecursively"),     d->recurseTags             ? QLatin1String("true") : QLatin1String("false"));
+        d->job->addMetaData(QLatin1String("listOnlyAvailableImages"), d->listOnlyAvailableImages ? QLatin1String("true") : QLatin1String("false"));
+
+        if (albums.first()->type() == Album::TAG && !d->specialListing.isNull())
+        {
+            d->job->addMetaData(QLatin1String("specialTagListing"), d->specialListing);
+            d->extraValueJob = true;
+        }
+
+        connect(d->job, SIGNAL(result(KJob*)),
+                this, SLOT(slotResult(KJob*)));
+
+        connect(d->job, SIGNAL(data(KIO::Job*,QByteArray)),
+                this, SLOT(slotData(KIO::Job*,QByteArray)));
     }
 }
 
@@ -392,6 +398,78 @@ void ImageAlbumModel::slotData(KIO::Job* job, const QByteArray& data)
     if (data.isEmpty() || job != d->job)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Data from KIOSlave is null: " << data.isEmpty();
+        return;
+    }
+
+    ImageInfoList newItemsList;
+    QByteArray    tmp(data);
+    QDataStream   ds(&tmp, QIODevice::ReadOnly);
+
+    if (d->extraValueJob)
+    {
+        QList<QVariant> extraValues;
+
+        if (!ImageListerRecord::checkStream(ImageListerRecord::ExtraValueFormat, ds))
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Binary stream from ioslave is not valid, rejecting";
+            return;
+        }
+
+        while (!ds.atEnd())
+        {
+            ImageListerRecord record(ImageListerRecord::ExtraValueFormat);
+            ds >> record;
+
+            ImageInfo info(record);
+            newItemsList << info;
+
+            if (d->specialListing == QLatin1String("faces"))
+            {
+                DatabaseFace face = DatabaseFace::fromListing(info.id(), record.extraValues);
+                extraValues << face.toVariant();
+            }
+            else
+            {
+                // default handling: just pass extraValue
+                if (record.extraValues.isEmpty())
+                {
+                    extraValues  << QVariant();
+                }
+                else if (record.extraValues.size() == 1)
+                {
+                    extraValues  << record.extraValues.first();
+                }
+                else
+                {
+                    extraValues  << QVariant(record.extraValues);    // uh-uh. List in List.
+                }
+            }
+        }
+
+        addImageInfos(newItemsList, extraValues);
+    }
+    else
+    {
+        while (!ds.atEnd())
+        {
+            ImageListerRecord record;
+            ds >> record;
+
+            ImageInfo info(record);
+            newItemsList << info;
+        }
+
+        addImageInfos(newItemsList);
+    }
+}
+
+void ImageAlbumModel::slotDataFromNewMechanism(const QByteArray &data)
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Data From DBJobsThread: " << data.toHex();
+
+    if (data.isEmpty())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Data From DBJobsThread is null: " << data.isEmpty();
         return;
     }
 

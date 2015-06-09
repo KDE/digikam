@@ -2,6 +2,7 @@
 #define DATESJOB_H
 
 #include "dbjob.h"
+#include "dbjobinfo.h"
 
 namespace Digikam {
 
@@ -11,12 +12,8 @@ class DatesJob : public DBJob
 
 public:
 
-    DatesJob();
+    DatesJob(DatesDBJobInfo *jobInfo);
     ~DatesJob();
-
-    void setStartDate(const QDate &startDate);
-    void setEndDate(const QDate &endDate);
-    void setFoldersListing(bool folders);
 
 protected:
 
@@ -24,8 +21,7 @@ protected:
 
 private:
 
-    class Private;
-    Private *const d;
+    DatesDBJobInfo *m_jobInfo;
 };
 
 } // namespace Digikam

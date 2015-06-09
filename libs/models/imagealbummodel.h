@@ -87,6 +87,8 @@ protected Q_SLOTS:
 
     void slotResult(KJob* job);
     void slotData(KIO::Job* job, const QByteArray& data);
+    // TODO rename after dropping all KIO slaves
+    void slotDataFromNewMechanism(const QByteArray& data);
 
     void slotNextRefresh();
     void slotNextIncrementalRefresh();

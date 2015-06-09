@@ -102,6 +102,7 @@ extern "C"
 #include "dnotificationwrapper.h"
 #include "dbjobinfo.h"
 #include "dbjobsmanager.h"
+#include "dbjobsthread.h"
 
 namespace Digikam
 {
@@ -198,9 +199,10 @@ public:
     bool                        showOnlyAvailableAlbums;
 
     KIO::TransferJob*           albumListJob;
-    KIO::TransferJob*           dateListJob;
+    DBJobsThread*               dateListJob;
     KIO::TransferJob*           tagListJob;
     KIO::TransferJob*           personListJob;
+
 
     AlbumWatch*                 albumWatch;
 
@@ -367,7 +369,7 @@ void AlbumManager::cleanUp()
 
     if (d->dateListJob)
     {
-        d->dateListJob->kill();
+        d->dateListJob->cancel();
         d->dateListJob = 0;
     }
 
@@ -1784,19 +1786,20 @@ void AlbumManager::scanDAlbums()
 
     if (d->dateListJob)
     {
-        d->dateListJob->kill();
+        d->dateListJob->cancel();
         d->dateListJob = 0;
     }
 
     DatabaseUrl u  = DatabaseUrl::dateUrl();
-    d->dateListJob = ImageLister::startListJob(u);
-    d->dateListJob->addMetaData(QLatin1String("folders"), QLatin1String("true"));
+    DatesDBJobInfo *jInfo = new DatesDBJobInfo();
+    jInfo->folders = true;
+    d->dateListJob = DBJobsManager::instance()->startDatesJobThread(jInfo);
 
-    connect(d->dateListJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotDatesJobResult(KJob*)));
+//    connect(d->dateListJob, SIGNAL(result(KJob*)),
+//            this, SLOT(slotDatesJobResult(KJob*)));
 
-    connect(d->dateListJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotDatesJobData(KIO::Job*,QByteArray)));
+    connect(d->dateListJob, SIGNAL(data(QByteArray)),
+            this, SLOT(slotDatesJobData(QByteArray)));
 }
 
 AlbumList AlbumManager::allPAlbums() const
@@ -3120,7 +3123,7 @@ void AlbumManager::slotDatesJobResult(KJob* job)
     emit signalAllDAlbumsLoaded();
 }
 
-void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotDatesJobData(const QByteArray& data)
 {
     if (data.isEmpty() || !d->rootDAlbum)
     {

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "dbjobinfo.h"
+#include "dbjobsthread.h"
 
 namespace Digikam {
 
@@ -10,20 +11,16 @@ class DBJobsManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit DBJobsManager(DBJobInfo &jobInfo);
+    explicit DBJobsManager();
     ~DBJobsManager();
 
-    void start();
-    void cancel();
+    static DBJobsManager* instance();
 
-Q_SIGNALS:
-
-public Q_SLOTS:
-    void data(const QByteArray &ba);
+    DBJobsThread* startDatesJobThread(DatesDBJobInfo *jInfo);
+    DBJobsThread* startGPSJobThread(GPSDBJobInfo *jInfo);
 
 private:
-    class Private;
-    Private *const d;
+    friend class DBJobsManagerCreator;
 };
 
 } // namespace Digikam

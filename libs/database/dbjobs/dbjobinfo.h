@@ -17,11 +17,10 @@ public:
         GPSJob
     };
 
+    DBJobInfo(Type jType);
     DBJobInfo();
-    DBJobInfo(const DatabaseUrl &dbUrl);
 
     Type        type();
-    DatabaseUrl databaseUrl();
 
     bool        folders;
     bool        listAvailableImagesOnly;
@@ -29,7 +28,6 @@ public:
 
 private:
     Type        jobType;
-    DatabaseUrl dbUrl;
 };
 
 // ---------------------------------------------
@@ -37,7 +35,7 @@ private:
 class TagsDBJobInfo : public DBJobInfo
 {
 public:
-    TagsDBJobInfo(const DatabaseUrl &url);
+    TagsDBJobInfo();
 
     bool    faceFolders;
     QString specialTag;
@@ -48,9 +46,13 @@ public:
 class GPSDBJobInfo : public DBJobInfo
 {
 public:
-    GPSDBJobInfo(const DatabaseUrl &url);
+    GPSDBJobInfo();
 
-    bool wantDirectQuery;
+    bool  wantDirectQuery;
+    qreal lat1;
+    qreal lng1;
+    qreal lat2;
+    qreal lng2;
 };
 
 // ---------------------------------------------
@@ -58,12 +60,23 @@ public:
 class SearchDBJobInfo : public DBJobInfo
 {
 public:
-    SearchDBJobInfo(const DatabaseUrl &url);
+    SearchDBJobInfo();
 
     bool       duplicates;
     double     threshold;
     QList<int> albumIds;
     QList<int> tagIds;
+};
+
+// ---------------------------------------------
+
+class DatesDBJobInfo : public DBJobInfo
+{
+public:
+    DatesDBJobInfo();
+
+    QDate startDate;
+    QDate endDate;
 };
 
 }
