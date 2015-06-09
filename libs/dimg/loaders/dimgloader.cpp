@@ -42,7 +42,7 @@
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
-#include "kmemoryinfo/kmemoryinfo.h"
+#include "kmemoryinfo.h"
 
 namespace Digikam
 {
@@ -391,7 +391,7 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     // Create the unique ID
 
     QCryptographicHash md5(QCryptographicHash::Md5);
-    
+
     // First, read the Exif data into the hash
     md5.addData(bv);
 

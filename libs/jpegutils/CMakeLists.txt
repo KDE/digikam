@@ -24,6 +24,7 @@ endif()
 add_library(jpegutils_src OBJECT ${libjpegutils_SRCS})
 add_library(jpegutils STATIC $<TARGET_OBJECTS:jpegutils_src>)
 
+MESSAGE(STATUS "LIBJPEGDIr+++++++++++++++++++++" ${DIGIKAM_LIBJPEG_DIR})
 target_include_directories(jpegutils
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>

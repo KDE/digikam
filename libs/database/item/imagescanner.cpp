@@ -45,13 +45,13 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
-#include "imagehistory/imagehistorygraph.h"
+#include "imagehistorygraph.h"
 #include "metadatasettings.h"
 #include "tagregion.h"
 #include "tagscache.h"
 #include "iostream"
 #include "dimagehistory.h"
-#include "imagehistory/imagehistorygraphdata.h"
+#include "imagehistorygraphdata.h"
 
 #ifdef HAVE_KFILEMETADATA
 #include "baloowrap.h"

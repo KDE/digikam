@@ -42,7 +42,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "databaseparameters.h"
-#include "kinotify/kinotify.h"
+#include "kinotify.h"
 #include "scancontroller.h"
 
 namespace Digikam
@@ -276,7 +276,7 @@ void AlbumWatch::slotAlbumAdded(Album* a)
             // On Windows, file watch is broken for large numbers of files
             // and prevents any thumbnails from being shown (probably due to
             // the thread manager that is used by QFileSystemWatcher that
-            // KDirWatch uses). Fixing is beyond our scope. See bugs #290962, 
+            // KDirWatch uses). Fixing is beyond our scope. See bugs #290962,
             // #297793, #308310, #310252, #310865, #312422, and #312999.
             // Disable file watch for OS X and Windows and hope for future
             // improvement (possibly with the improvements planned for

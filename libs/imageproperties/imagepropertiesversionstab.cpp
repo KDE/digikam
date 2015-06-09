@@ -46,8 +46,8 @@
 #include "dimagehistory.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
-#include "imagehistory/versionswidget.h"
-#include "imagehistory/filtershistorywidget.h"
+#include "versionswidget.h"
+#include "filtershistorywidget.h"
 #include "applicationsettings.h"
 #include "versionsoverlays.h"
 
