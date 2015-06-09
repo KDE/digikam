@@ -610,7 +610,7 @@ endif()
    add_subdirectory(imageplugins)
 
     if(ENABLE_INTERNALMYSQL)
-    #    add_subdirectory(databaseserver)
+        add_subdirectory(databaseserver)
     endif()
 
     if(BUILD_TESTING)
