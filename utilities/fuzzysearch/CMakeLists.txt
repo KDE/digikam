@@ -13,11 +13,11 @@ set(libfuzzysearch_SRCS
 )
 add_library(fuzzysearch_src OBJECT ${libfuzzysearch_SRCS})
 
-add_library(fuzzysearch STATIC $<TARGET_OBJECTS:fuzzysearch_src>)
+#add_library(fuzzysearch STATIC $<TARGET_OBJECTS:fuzzysearch_src>)
 
-target_link_libraries(fuzzysearch
-                      PRIVATE
-                      digikamalbum
-                      digikamwidgets
-                      maintenance
-)
+#target_link_libraries(fuzzysearch
+#                      PRIVATE
+#                      digikamalbum
+#                      digikamwidgets
+#                      maintenance
+#)

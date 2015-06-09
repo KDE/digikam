@@ -16,15 +16,15 @@ if(APPLE)
 endif()
 
 add_library(notificationmanager_src OBJECT ${libnotificationmanager_SRCS})
-add_library(notificationmanager STATIC $<TARGET_OBJECTS:notificationmanager_src>)
+#add_library(notificationmanager STATIC $<TARGET_OBJECTS:notificationmanager_src>)
 
 
-target_link_libraries(notificationmanager
-                      PRIVATE
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::DBus
-                      Qt5::Widgets
+#target_link_libraries(notificationmanager
+#                      PRIVATE
+#                      Qt5::Core
+#                      Qt5::Gui
+#                      Qt5::DBus
+#                      Qt5::Widgets
 
-                      KF5::Notifications
-)
+#                      KF5::Notifications
+#)

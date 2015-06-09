@@ -30,20 +30,20 @@ add_library(digikamdialogscore_src OBJECT ${libdialogs_SRCS})
 add_library(digikamdeletedialog_src OBJECT ${libdeletedialog_SRCS})
 
 add_library(digikamdialogs_src OBJECT ${libdialogs_SRCS} ${libdeletedialog_SRCS})
-add_library(digikamdialogs STATIC
-                           $<TARGET_OBJECTS:digikamdialogs_src>
-)
+#add_library(digikamdialogs STATIC
+#                           $<TARGET_OBJECTS:digikamdialogs_src>
+#)
 
-target_link_libraries(digikamdialogs
-                      PRIVATE
-                      threadimageio   # loadingdescription for imagedialog
-                      digikamdatabase # migrationdlg needs this
-                      versionmanager  # migrationdlg needs this too
-                      dmetadata
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
-                      Qt5::Sql # for databaseurl
+#target_link_libraries(digikamdialogs
+#                      PRIVATE
+#                      threadimageio   # loadingdescription for imagedialog
+#                      digikamdatabase # migrationdlg needs this
+#                      versionmanager  # migrationdlg needs this too
+#                      dmetadata
+#                      Qt5::Core
+#                      Qt5::Gui
+#                      Qt5::Widgets
+#                      Qt5::Sql # for databaseurl
 
-                      KF5::KDcraw
-)
+#                      KF5::KDcraw
+#)

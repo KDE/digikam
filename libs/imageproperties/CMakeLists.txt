@@ -43,25 +43,25 @@ add_library(imagepropertiesdigikam_src OBJECT
                                       ${libimageversionssidebar_SRCS}
                                       ${libimagepropertiesdigikam_SRCS}
 )
-add_library(imagepropertiesdigikam STATIC
-                                   $<TARGET_OBJECTS:imageproperties_src>
-                                   $<TARGET_OBJECTS:imagepropertiesdigikam_src>)
+#add_library(imagepropertiesdigikam STATIC
+#                                   $<TARGET_OBJECTS:imageproperties_src>
+#                                   $<TARGET_OBJECTS:imagepropertiesdigikam_src>)
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(imagepropertiesdigikam PRIVATE KF5::KGeoMap)
-endif()
+#if(${KF5KGeoMap_FOUND})
+#    target_link_libraries(imagepropertiesdigikam PRIVATE KF5::KGeoMap)
+#endif()
 
-# TODO we need this to showfoto?
-#add_library(imageproperties STATIC ${libimageproperties_SRCS})
+## TODO we need this to showfoto?
+##add_library(imageproperties STATIC ${libimageproperties_SRCS})
 
-target_link_libraries(imagepropertiesdigikam
-                      PRIVATE
-                      digikamwidgets
+#target_link_libraries(imagepropertiesdigikam
+#                      PRIVATE
+#                      digikamwidgets
 
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
-                      Qt5::Sql
+#                      Qt5::Core
+#                      Qt5::Gui
+#                      Qt5::Widgets
+#                      Qt5::Sql
 
-                      KF5::ConfigCore
-)
+#                      KF5::ConfigCore
+#)

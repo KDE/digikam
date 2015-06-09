@@ -13,15 +13,15 @@ set(liblighttable_SRCS
 
 add_library(lighttable_src OBJECT ${liblighttable_SRCS})
 
-add_library(lighttable STATIC $<TARGET_OBJECTS:lighttable_src>)
+#add_library(lighttable STATIC $<TARGET_OBJECTS:lighttable_src>)
 
-target_link_libraries(lighttable
-                      PRIVATE
-                      digikamdatabase
-                      imagepropertiesdigikam
-                      imageeditor
+#target_link_libraries(lighttable
+#                      PRIVATE
+#                      digikamdatabase
+#                      imagepropertiesdigikam
+#                      imageeditor
 
-                      Qt5::Gui
-)
+#                      Qt5::Gui
+#)
 
 install( FILES lighttablewindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )

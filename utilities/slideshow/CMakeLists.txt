@@ -18,20 +18,20 @@ set(libslideshow_SRCS
 
 add_library(slideshow_src OBJECT ${libslideshow_SRCS})
 
-add_library(slideshow STATIC $<TARGET_OBJECTS:slideshow_src>)
+#add_library(slideshow STATIC $<TARGET_OBJECTS:slideshow_src>)
 
 
-target_link_libraries(slideshow
-                      PRIVATE
-                      digikamwidgets
-                      digikamdatabases
-                      digikamalbum
-                      maintenance
+#target_link_libraries(slideshow
+#                      PRIVATE
+#                      digikamwidgets
+#                      digikamdatabases
+#                      digikamalbum
+#                      maintenance
 
 
-                      Qt5::Widgets
+#                      Qt5::Widgets
 
-                      KF5::WidgetsAddons
-                      KF5::KDcraw
-                      KF5::KExiv2
-)
+#                      KF5::WidgetsAddons
+#                      KF5::KDcraw
+#                      KF5::KExiv2
+#)

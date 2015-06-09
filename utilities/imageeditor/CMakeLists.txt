@@ -12,17 +12,17 @@ set(libeditorplugin_SRCS
 
 add_library(editorplugin_src OBJECT ${libeditorplugin_SRCS})
 
-add_library(editorplugin STATIC $<TARGET_OBJECTS:editorplugin_src>)
+#add_library(editorplugin STATIC $<TARGET_OBJECTS:editorplugin_src>)
 
-target_link_libraries(editorplugin
-                      PRIVATE
-                      dimg
-)
+#target_link_libraries(editorplugin
+#                      PRIVATE
+#                      dimg
+#)
 
-target_include_directories(editorplugin INTERFACE
-                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plugin>"
+#target_include_directories(editorplugin INTERFACE
+#                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plugin>"
 
-)
+#)
 
 install(FILES plugin/digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
@@ -91,22 +91,22 @@ set(libeditoriface_SRCS
 add_library(imageeditor_src OBJECT ${libeditorcore_SRCS} ${libeditordlg_SRCS}  ${libeditoriface_SRCS} ${libeditorprintiface_SRCS} ${libeditorrawimport_SRCS} ${libeditorwidgets_SRCS})
 
 add_library(imageeditorgui_src OBJECT ${libeditorgui_SRCS})
-add_library(imageeditor STATIC $<TARGET_OBJECTS:imageeditor_src> ${libeditorgui_SRCS} $<TARGET_OBJECTS:digikamgui_src>)
+#add_library(imageeditor STATIC $<TARGET_OBJECTS:imageeditor_src> ${libeditorgui_SRCS} $<TARGET_OBJECTS:digikamgui_src>)
 
-target_include_directories(imageeditor PUBLIC
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/printiface>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/editor>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dialogs>
-                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rawimport>
-)
+#target_include_directories(imageeditor PUBLIC
+#                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/printiface>
+#                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
+#                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
+#                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/editor>
+#                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
+#                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dialogs>
+#                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rawimport>
+#)
 
-target_link_libraries(imageeditor
-                      PRIVATE
-                      versionmanager
-                      editorplugin
-                      digikamdialogs
-                      digikamsettings
-)
+#target_link_libraries(imageeditor
+#                      PRIVATE
+#                      versionmanager
+#                      editorplugin
+#                      digikamdialogs
+#                      digikamsettings
+#)

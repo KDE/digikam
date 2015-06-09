@@ -13,13 +13,13 @@ set(libprogressmanager_SRCS
 )
 add_library(progressmanager_src OBJECT ${libprogressmanager_SRCS})
 
-add_library(progressmanager STATIC $<TARGET_OBJECTS:progressmanager_src>)
+#add_library(progressmanager STATIC $<TARGET_OBJECTS:progressmanager_src>)
 
-target_link_libraries(progressmanager
+#target_link_libraries(progressmanager
 
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
+#                      Qt5::Core
+#                      Qt5::Gui
+#                      Qt5::Widgets
 
-                      KF5::KDcraw
-)
+#                      KF5::KDcraw
+#)

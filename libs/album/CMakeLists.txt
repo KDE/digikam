@@ -22,12 +22,12 @@ set(libalbum_SRCS
 )
 
 add_library(digikamalbum_src OBJECT ${libalbum_SRCS})
-add_library(digikamalbum STATIC $<TARGET_OBJECTS:digikamalbum_src>)
+#add_library(digikamalbum STATIC $<TARGET_OBJECTS:digikamalbum_src>)
 
 
-target_link_libraries(digikamalbum
-                      PRIVATE
-                      setup            # for setupcollections.h, FIXME
-                      digikamwidgets   # for fullscreensettings
-                      maintenance
-)
+#target_link_libraries(digikamalbum
+#                      PRIVATE
+#                      setup            # for setupcollections.h, FIXME
+#                      digikamwidgets   # for fullscreensettings
+#                      maintenance
+#)

@@ -17,12 +17,12 @@ set(libsettings_SRCS
 
 add_library(digikamsettings_src OBJECT ${libsettings_SRCS})
 
-add_library(digikamsettings STATIC $<TARGET_OBJECTS:digikamsettings_src>)
+#add_library(digikamsettings STATIC $<TARGET_OBJECTS:digikamsettings_src>)
 
-target_link_libraries(digikamsettings
-                      PRIVATE
-                      digikamwidgets #required for DMultiTabbar
+#target_link_libraries(digikamsettings
+#                      PRIVATE
+#                      digikamwidgets #required for DMultiTabbar
 
-                      Qt5::Gui
-                      Qt5::Widgets
-)
+#                      Qt5::Gui
+#                      Qt5::Widgets
+#)

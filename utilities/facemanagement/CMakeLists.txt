@@ -15,15 +15,15 @@ set(libfacemanagement_SRCS
 
 add_library(facemanagement_src OBJECT ${libfacemanagement_SRCS})
 
-add_library(facemanagement STATIC $<TARGET_OBJECTS:facemanagement_src>)
+#add_library(facemanagement STATIC $<TARGET_OBJECTS:facemanagement_src>)
 
 
-target_link_libraries(facemanagement
+#target_link_libraries(facemanagement
 
-                      PRIVATE
-                      digikamdatabase
-                      digikamtags
-                      fileactionmanager
+#                      PRIVATE
+#                      digikamdatabase
+#                      digikamtags
+#                      fileactionmanager
 
-                      ${KF5KFace_LIBRARIES}
-)
+#                      ${KF5KFace_LIBRARIES}
+#)

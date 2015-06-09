@@ -73,20 +73,20 @@ add_library(queuemanager_src OBJECT ${libqueuemanager_SRCS})
 
 add_library(queuemanager STATIC $<TARGET_OBJECTS:queuemanager_src>)
 
-target_include_directories(queuemanager
-                           PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/manager>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/color>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/convert>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/decorate>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/enhance>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/filters>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/metadata>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
-)
+#target_include_directories(queuemanager
+#                           PUBLIC
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/manager>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/color>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/convert>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/decorate>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/enhance>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/filters>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/metadata>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/basetools/transform>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
+#)
 
 
 target_link_libraries(queuemanager

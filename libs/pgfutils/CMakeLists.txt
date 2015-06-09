@@ -13,14 +13,14 @@ set(libpgfutils_SRCS pgfutils.cpp)
 
 # TODO needs exports to build a dynamic lib if wanted.
 add_library(pgfutils_src OBJECT ${libpgfutils_SRCS})
-add_library(pgfutils STATIC $<TARGET_OBJECTS:pgfutils_src>)
+#add_library(pgfutils STATIC $<TARGET_OBJECTS:pgfutils_src>)
 
-target_include_directories(pgfutils PUBLIC ${PGF_INCLUDE_DIRS})
+#target_include_directories(pgfutils PUBLIC ${PGF_INCLUDE_DIRS})
 
 
-target_link_libraries(pgfutils
-                      PRIVATE
-                      Qt5::Gui
+#target_link_libraries(pgfutils
+#                      PRIVATE
+#                      Qt5::Gui
 
-                      ${PGF_LIBRARIES}
-)
+#                      ${PGF_LIBRARIES}
+#)

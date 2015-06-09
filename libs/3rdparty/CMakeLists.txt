@@ -13,7 +13,7 @@ set(libkde3rdparty_SRCS
 #add_library( STATIC $<TARGET_OBJECTS:>)
 
 add_library(3rdparty_src OBJECT ${libkde3rdparty_SRCS})
-add_library(3rdparty STATIC $<TARGET_OBJECTS:3rdparty_src>)
+#add_library(3rdparty STATIC $<TARGET_OBJECTS:3rdparty_src>)
 
 #target_link_libraries(3rdparty
 #                      PRIVATE

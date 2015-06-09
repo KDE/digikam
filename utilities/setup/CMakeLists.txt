@@ -49,23 +49,23 @@ add_library(setup_src OBJECT ${libsetup_SRCS} ${libsetupshowfoto_SRCS})
 
 add_library(setupshowfoto_src OBJECT  ${libsetupshowfoto_SRCS})
 
-add_library(setup STATIC $<TARGET_OBJECTS:setup_src>)
+#add_library(setup STATIC $<TARGET_OBJECTS:setup_src>)
 
-# TODO may be better if users of setup would use complete path for includes?
-target_include_directories(setup PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/camera>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collections>
-)
+## TODO may be better if users of setup would use complete path for includes?
+#target_include_directories(setup PUBLIC
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/camera>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collections>
+#)
 
-target_link_libraries(setup
-                      PRIVATE
-                      digikamtemplate
-                      digikamwidgets # TODO for fullscreensettings
-                      maintenance
-                      importui
-                      slideshow
-                      dimg
+#target_link_libraries(setup
+#                      PRIVATE
+#                      digikamtemplate
+#                      digikamwidgets # TODO for fullscreensettings
+#                      maintenance
+#                      importui
+#                      slideshow
+#                      dimg
 
-                      Qt5::Widgets
+#                      Qt5::Widgets
 
-)
+#)

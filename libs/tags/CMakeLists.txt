@@ -32,18 +32,18 @@ include_directories(tagsmanager/
 
 add_library(digikamtags_src OBJECT ${libtags_SRCS})
 
-add_library(digikamtags STATIC $<TARGET_OBJECTS:digikamtags_src>)
+#add_library(digikamtags STATIC $<TARGET_OBJECTS:digikamtags_src>)
 
-target_include_directories(digikamtags PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tagsmanager>
-)
+#target_include_directories(digikamtags PUBLIC
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tagsmanager>
+#)
 
-target_link_libraries(digikamtags
-                      PRIVATE
-                      digikamalbum
-                      lighttable
-                      imageeditor
-                      maintenance
+#target_link_libraries(digikamtags
+#                      PRIVATE
+#                      digikamalbum
+#                      lighttable
+#                      imageeditor
+#                      maintenance
 
-                      KF5::IconThemes
-)
+#                      KF5::IconThemes
+#)

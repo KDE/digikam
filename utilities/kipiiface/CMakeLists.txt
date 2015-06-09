@@ -15,15 +15,15 @@ set(libkipiiface_SRCS
 
 add_library(kipiiface_src OBJECT ${libkipiiface_SRCS})
 
-add_library(kipiiface STATIC $<TARGET_OBJECTS:kipiiface_src> $<TARGET_OBJECTS:digikamgui_src>)
+#add_library(kipiiface STATIC $<TARGET_OBJECTS:kipiiface_src> $<TARGET_OBJECTS:digikamgui_src>)
 
-target_link_libraries(kipiiface
-                      PRIVATE
-                      digikamdatabase
+#target_link_libraries(kipiiface
+#                      PRIVATE
+#                      digikamdatabase
 
-                      digikamsettings # for applicationsettings
+#                      digikamsettings # for applicationsettings
 
-                      KF5::Kipi
+#                      KF5::Kipi
 
-)
+#)
 

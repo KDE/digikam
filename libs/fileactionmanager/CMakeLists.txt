@@ -16,11 +16,11 @@ set(fileactionmanager_SRCS
 )
 
 add_library(fileactionmanager_src OBJECT ${fileactionmanager_SRCS})
-add_library(fileactionmanager STATIC $<TARGET_OBJECTS:fileactionmanager_src> $<TARGET_OBJECTS:digikamgui_src>)
+#add_library(fileactionmanager STATIC $<TARGET_OBJECTS:fileactionmanager_src> $<TARGET_OBJECTS:digikamgui_src>)
 
-target_link_libraries(fileactionmanager
-                      PRIVATE
-                      progressmanager
-                      dmetadata
-                      baloowrap
-)
+#target_link_libraries(fileactionmanager
+#                      PRIVATE
+#                      progressmanager
+#                      dmetadata
+#                      baloowrap
+#)

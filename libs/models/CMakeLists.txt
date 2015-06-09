@@ -34,15 +34,15 @@ add_library(digikamgenericmodels_src OBJECT ${libgenericmodels_SRCS})
 
 add_library(dgikamdatabasemodels_src OBJECT ${libdatabasemodels_SRCS})
 add_library(digikammodels_src OBJECT  ${libalbummodels_SRCS} ${libgenericmodels_SRCS})
-add_library(digikammodels STATIC $<TARGET_OBJECTS:digikammodels_src>)
+#add_library(digikammodels STATIC $<TARGET_OBJECTS:digikammodels_src>)
 
-target_link_libraries(digikammodels
+#target_link_libraries(digikammodels
 
-                      PRIVATE
-                      filters
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
-                      Qt5::Sql
-                      Qt5::DBus
-)
+#                      PRIVATE
+#                      filters
+#                      Qt5::Core
+#                      Qt5::Gui
+#                      Qt5::Widgets
+#                      Qt5::Sql
+#                      Qt5::DBus
+#)

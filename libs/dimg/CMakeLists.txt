@@ -202,86 +202,86 @@ if(JASPER_FOUND)
 endif()
 
 add_library(dimg_src OBJECT ${libdimgloaders_SRCS} ${libdimgfilters_SRCS} ${libdimg_SRCS})
-add_library(dimg STATIC $<TARGET_OBJECTS:dimg_src>)
+#add_library(dimg STATIC $<TARGET_OBJECTS:dimg_src>)
 
-if(X11_FOUND)
-    target_link_libraries(dimg PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
-endif()
+#if(X11_FOUND)
+#    target_link_libraries(dimg PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
+#endif()
 
-if(JASPER_FOUND)
-    target_link_libraries(dimg PRIVATE ${JASPER_LIBRARIES})
-endif()
+#if(JASPER_FOUND)
+#    target_link_libraries(dimg PRIVATE ${JASPER_LIBRARIES})
+#endif()
 
-# LibLqr-1 library rules for content-aware filter
-if(LQR-1_FOUND)
-    target_link_libraries(dimg PRIVATE ${LQR-1_LIBRARIES})
-endif()
+## LibLqr-1 library rules for content-aware filter
+#if(LQR-1_FOUND)
+#    target_link_libraries(dimg PRIVATE ${LQR-1_LIBRARIES})
+#endif()
 
-add_dependencies(dimg digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
+#add_dependencies(dimg digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
 
-# TODO clear this up. users should be using more complete path than direct one...
-# TODO this is just the same as with include_directories, macro?
-target_include_directories(dimg
-                           PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/loaders>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/decorate>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/film>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/fx>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/auto>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/cb>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/bcg>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/bw>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/hsl>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/icc>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lc>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/nr>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/sharp>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/levels>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/curves>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/wb>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/transform>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/greycstoration>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lens>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dklcms>
+## TODO clear this up. users should be using more complete path than direct one...
+## TODO this is just the same as with include_directories, macro?
+#target_include_directories(dimg
+#                           PUBLIC
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/loaders>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/decorate>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/film>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/fx>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/auto>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/cb>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/bcg>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/bw>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/hsl>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/icc>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lc>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/nr>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/sharp>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/levels>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/curves>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/wb>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/transform>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/greycstoration>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filters/lens>
+#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dklcms>
 
-)
+#)
 
-# TODO ugly way to expose lensfun include dirs to users of dimg.
-if(LENSFUN_FOUND)
-    target_include_directories(dimg PUBLIC ${LENSFUN_INCLUDE_DIRS})
-    target_link_libraries(dimg PRIVATE ${LENSFUN_LIBRARIES})
-endif()
+## TODO ugly way to expose lensfun include dirs to users of dimg.
+#if(LENSFUN_FOUND)
+#    target_include_directories(dimg PUBLIC ${LENSFUN_INCLUDE_DIRS})
+#    target_link_libraries(dimg PRIVATE ${LENSFUN_LIBRARIES})
+#endif()
 
-# for nrfilter
-if(OpenCV_FOUND)
-    target_link_libraries(dimg PRIVATE ${OpenCV_LIBRARIES})
-endif()
+## for nrfilter
+#if(OpenCV_FOUND)
+#    target_link_libraries(dimg PRIVATE ${OpenCV_LIBRARIES})
+#endif()
 
-target_link_libraries(dimg
-                      PRIVATE
-                      digikamwidgets
-                      dmetadata
-                      dthread
-                      jpegutils
-                      pgfutils
-                      3rdparty # KMemoryInfo
+#target_link_libraries(dimg
+#                      PRIVATE
+#                      digikamwidgets
+#                      dmetadata
+#                      dthread
+#                      jpegutils
+#                      pgfutils
+#                      3rdparty # KMemoryInfo
 
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Concurrent # filters
-                      Qt5::Widgets
-                      Qt5::Xml
+#                      Qt5::Core
+#                      Qt5::Gui
+#                      Qt5::Concurrent # filters
+#                      Qt5::Widgets
+#                      Qt5::Xml
 
-                      KF5::KExiv2
-                      KF5::KDcraw
+#                      KF5::KExiv2
+#                      KF5::KDcraw
 
-                      # Required by CImg library which is using pthread internally.
-                      ${CMAKE_THREAD_LIBS_INIT}
+#                      # Required by CImg library which is using pthread internally.
+#                      ${CMAKE_THREAD_LIBS_INIT}
 
-                      ${LCMS2_LIBRARIES} # filters
+#                      ${LCMS2_LIBRARIES} # filters
 
-                      ${TIFF_LIBRARIES}
-                      ${PNG_LIBRARIES}
-)
+#                      ${TIFF_LIBRARIES}
+#                      ${PNG_LIBRARIES}
+#)

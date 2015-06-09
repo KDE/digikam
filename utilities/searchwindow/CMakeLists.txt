@@ -19,11 +19,11 @@ set(libsearchwindow_SRCS
 
 add_library(searchwindow_src OBJECT ${libsearchwindow_SRCS})
 
-add_library(searchwindow STATIC $<TARGET_OBJECTS:searchwindow_src>)
+#add_library(searchwindow STATIC $<TARGET_OBJECTS:searchwindow_src>)
 
-target_link_libraries(searchwindow
-                      PRIVATE
-                      digikamdatabase
+#target_link_libraries(searchwindow
+#                      PRIVATE
+#                      digikamdatabase
 
-                      Qt5::Widgets
-)
+#                      Qt5::Widgets
+#)

@@ -18,20 +18,20 @@ set(libfirstrun_SRCS
 )
 add_library(firstrun_src OBJECT ${libfirstrun_SRCS})
 
-add_library(firstrun STATIC $<TARGET_OBJECTS:firstrun_src>)
+#add_library(firstrun STATIC $<TARGET_OBJECTS:firstrun_src>)
 
 
-target_link_libraries(firstrun
-                      PRIVATE
-                      digikamdatabase
+#target_link_libraries(firstrun
+#                      PRIVATE
+#                      digikamdatabase
 
-                      Qt5::Widgets
+#                      Qt5::Widgets
 
-                      KF5::WidgetsAddons
-                      KF5::ConfigWidgets
-                      KF5::KIOWidgets
-                      KF5::Kipi # kxmlgui dependecy
+#                      KF5::WidgetsAddons
+#                      KF5::ConfigWidgets
+#                      KF5::KIOWidgets
+#                      KF5::Kipi # kxmlgui dependecy
 
-                      KF5::KExiv2
-                      KF5::KDcraw
-)
+#                      KF5::KExiv2
+#                      KF5::KDcraw
+#)

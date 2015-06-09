@@ -11,11 +11,11 @@ set(libdthread_SRCS
     parallelworkers.cpp
 )
 add_library(dthread_src OBJECT ${libdthread_SRCS})
-add_library(dthread STATIC $<TARGET_OBJECTS:dthread_src>)
+#add_library(dthread STATIC $<TARGET_OBJECTS:dthread_src>)
 
-message(INFO "rename dthread to something else?")
+#message(INFO "rename dthread to something else?")
 
-target_link_libraries(dthread
-                      PRIVATE
-                      Qt5::Core
-)
+#target_link_libraries(dthread
+#                      PRIVATE
+#                      Qt5::Core
+#)

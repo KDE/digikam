@@ -17,16 +17,16 @@ set(libfilters_SRCS
 #TODO rename to digikamfilters?
 
 add_library(filters_src OBJECT ${libfilters_SRCS})
-add_library(filters STATIC $<TARGET_OBJECTS:filters_src>)
+#add_library(filters STATIC $<TARGET_OBJECTS:filters_src>)
 
-target_link_libraries(filters
-                      PRIVATE
-                      digikamalbum
-                      digikammodels
-                      digikamwidgets
-                      digikamsettings
+#target_link_libraries(filters
+#                      PRIVATE
+#                      digikamalbum
+#                      digikammodels
+#                      digikamwidgets
+#                      digikamsettings
 
 
-                      Qt5::Gui
-                      Qt5::Widgets
-)
+#                      Qt5::Gui
+#                      Qt5::Widgets
+#)

@@ -16,12 +16,12 @@ set(libdmetadata_SRCS
 )
 
 add_library(dmetadata_src OBJECT ${libdmetadata_SRCS})
-add_library(dmetadata STATIC $<TARGET_OBJECTS:dmetadata_src>)
+#add_library(dmetadata STATIC $<TARGET_OBJECTS:dmetadata_src>)
 
-add_dependencies(dmetadata digikam-gitversion)
+#add_dependencies(dmetadata digikam-gitversion)
 
-target_link_libraries(dmetadata
-                      PRIVATE
-                      dimg
-                      Qt5::Core
-)
+#target_link_libraries(dmetadata
+#                      PRIVATE
+#                      dimg
+#                      Qt5::Core
+#)
