@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -12,13 +13,5 @@ include_directories(${PGF_INCLUDE_DIRS})
 set(libpgfutils_SRCS pgfutils.cpp)
 
 # TODO needs exports to build a dynamic lib if wanted.
-add_library(pgfutils STATIC ${libpgfutils_SRCS})
+add_library(pgfutils_src OBJECT ${libpgfutils_SRCS})
 
-target_include_directories(pgfutils PUBLIC ${PGF_INCLUDE_DIRS})
-
-target_link_libraries(pgfutils
-                      
-                      Qt5::Gui
-                      
-                      ${PGF_LIBRARIES}
-)

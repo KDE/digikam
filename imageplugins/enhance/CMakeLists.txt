@@ -29,12 +29,21 @@ endif()
 
 add_library(digikamimageplugin_enhance MODULE ${digikamimageplugin_enhance_PART_SRCS})
 
-# NOTE: no need to link with lensfun library here. DImg is already linked in core.
 
 target_link_libraries(digikamimageplugin_enhance
                       PRIVATE
-                      editorplugin
-                      imageeditor)
+                      digikamcore
+
+                      Qt5::Core
+                      Qt5::Gui
+
+                      KF5::XmlGui
+                      KF5::KIOCore
+                      KF5::KDcraw
+                      KF5::KExiv2
+                      KF5::Notifications
+                      KF5::JobWidgets
+)
 
 install(TARGETS digikamimageplugin_enhance             DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES digikamimageplugin_enhance_ui.rc         DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

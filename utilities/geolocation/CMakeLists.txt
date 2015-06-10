@@ -9,13 +9,16 @@ set(libgpssearch_SRCS
     gpsmarkertiler.cpp
 )
 
-add_library(gpssearch STATIC ${libgpssearch_SRCS})
+add_library(gpssearch_src OBJECT ${libgpssearch_SRCS})
 
-target_link_libraries(gpssearch
+#add_library(gpssearch STATIC $<TARGET_OBJECTS:gpssearch_src>)
 
-                      digikamdatabase_static
-                      digikamtags
-                      fileactionmanager
+#target_link_libraries(gpssearch
+#                      PRIVATE
+#                      digikamdatabase
+#                      digikamtags
+#                      fileactionmanager
+#                      maintenance
 
-                      KF5::KGeoMap
-)
+#                      KF5::KGeoMap
+#)

@@ -7,4 +7,4 @@
 set(detectcompression_SRCS detectcompression.cpp)
 add_executable(detectcompression ${detectcompression_SRCS})
 ecm_mark_nongui_executable(detectcompression)
-target_link_libraries(detectcompression dimg ${OpenCV_LIBRARIES})
+target_link_libraries(detectcompression digikamcore ${OpenCV_LIBRARIES})

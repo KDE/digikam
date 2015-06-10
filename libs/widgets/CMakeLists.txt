@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -23,7 +24,6 @@ set(libcommonwidgets_SRCS
     common/workingpixmap.cpp
     common/widgets_debug.cpp
 
-    common/databasewidget.cpp # FIXME used to belong to separate target, check
 )
 
 set(libimagehistory_SRCS
@@ -32,6 +32,8 @@ set(libimagehistory_SRCS
     imagehistory/imagefiltershistorymodel.cpp
     imagehistory/imagefiltershistorytreeitem.cpp
     imagehistory/versionswidget.cpp
+
+    common/databasewidget.cpp # FIXME belongs to database target
 )
 
 set(libcolorchooser_SRCS
@@ -103,7 +105,7 @@ set(libiccprofileswidgets_SRCS
     iccprofiles/iccprofilescombobox.cpp
 )
 
-add_library(digikamwidgets STATIC
+add_library(digikamwidgetscore_src OBJECT
     ${libmainview_SRCS}
     ${libcommonwidgets_SRCS}
     ${libgraphicsviewwidgets_SRCS}
@@ -111,40 +113,8 @@ add_library(digikamwidgets STATIC
     ${libitemview_SRCS}
     ${libmetadatawidgets_SRCS}
     ${libcolorchooser_SRCS}
-    ${libimagehistory_SRCS}
 )
 
-add_dependencies(digikamwidgets digikam-gitversion) # splashscreen shows version
+add_library(imagehistorywidgets_src OBJECT
+                                    ${libimagehistory_SRCS})
 
-target_include_directories(digikamwidgets
-                           PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/colorchooser>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/mainview>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/itemview>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/graphicsview>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/iccprofiles>
-)
-
-target_link_libraries(digikamwidgets
-
-                      PRIVATE
-                      digikamdialogs # for libsinfodlg
-                      digikammodels # something fishy with this include
-                      dimg
-                      Qt5::PrintSupport
-
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
-
-)
-
-if(KF5KFace_FOUND)
-    target_link_libraries(digikamwidgets PRIVATE ${KF5KFace_LIBRARIES})
-endif()
-
-if(${KF5Kipi_FOUND})
-    target_link_libraries(digikamwidgets PRIVATE KF5::Kipi)  # about dialog requires kipi
-endif()

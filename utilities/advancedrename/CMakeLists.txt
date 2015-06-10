@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -26,16 +27,13 @@ ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 # TODO for internal use, prefer complete include paths instead of this
 include_directories(common/ parser/options/ parser/options/database/ parser/options/database/keys/ parser/modifiers/)
 
-add_library(advancedrename STATIC ${libadvancedrename_SRCS})
+add_library(advancedrename_src OBJECT ${libadvancedrename_SRCS})
+add_library(advancedrename STATIC $<TARGET_OBJECTS:advancedrename_src>)
 
-# TODO importui is not using partial paths, but direct one for from those
-target_include_directories(advancedrename PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/parser>
-)
 
 target_link_libraries(advancedrename
-                      digikamdatabase_static
+                      PRIVATE
+                      digikamdatabase
 
                       Qt5::Widgets
                       Qt5::Sql

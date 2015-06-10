@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -24,8 +25,17 @@ add_library(digikamimageplugin_color MODULE ${digikamimageplugin_color_PART_SRCS
 
 target_link_libraries(digikamimageplugin_color
                       PRIVATE
-                      editorplugin
-                      imageeditor
+                      digikamcore
+
+                      Qt5::Core
+                      Qt5::Gui
+
+                      KF5::XmlGui
+                      KF5::KIOCore
+                      KF5::KDcraw
+                      KF5::KExiv2
+                      KF5::Notifications
+                      KF5::JobWidgets
                      )
 
 install(TARGETS digikamimageplugin_color             DESTINATION ${PLUGIN_INSTALL_DIR})

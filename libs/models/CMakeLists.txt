@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -29,16 +30,9 @@ set(libgenericmodels_SRCS
     categorizeditemmodel.cpp
 )
 
-add_library(digikammodels STATIC ${libdatabasemodels_SRCS} ${libalbummodels_SRCS} ${libgenericmodels_SRCS})
+#for digikam core lib
+add_library(digikamgenericmodels_src OBJECT ${libgenericmodels_SRCS})
 
-target_link_libraries(digikammodels
-                      PUBLIC
-                      filters
+add_library(dgikamdatabasemodels_src OBJECT ${libdatabasemodels_SRCS})
+add_library(digikammodels_src OBJECT  ${libalbummodels_SRCS} ${libgenericmodels_SRCS})
 
-                      PRIVATE
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
-                      Qt5::Sql
-                      Qt5::DBus
-)

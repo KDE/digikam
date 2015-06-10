@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -66,56 +67,13 @@ set(libimportui_SRCS
     main/importui.cpp
 )
 
-# TODO this is basically the same as target_include_directories..
-include_directories(
-    main/
-    backend/
-    widgets/
-    views/
-    models/
-    items/
-    dialogs/
-)
 
-# TODO backend shouldn't probably be required to linkg against all of these?
+add_library(importuibackend_src OBJECT ${libimportuibackend_SRCS})
 
-add_library(importuibackend STATIC ${libimportuibackend_SRCS})
 
-target_link_libraries(importuibackend
-                      dmetadata
-                      advancedrename
-                      imagepropertiesdigikam
+add_library(importui_src OBJECT ${libimportui_SRCS})
 
-                      KF5::Solid
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
-                      Qt5::Concurrent
-                      Qt5::Sql
-)
+add_library(importui STATIC $<TARGET_OBJECTS:importui_src>)
 
-if(GPHOTO2_FOUND)
-    target_link_libraries(importuibackend ${GPHOTO2_LIBRARIES})
-endif()
-
-add_library(importui STATIC ${libimportui_SRCS})
-
-target_include_directories(importui PUBLIC
-                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>"
-                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/backend>"
-                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>"
-                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>"
-                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/models>"
-                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items>"
-                              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dialogs>"
-)
-
-target_link_libraries(importui
-                      importuibackend
-
-                      KF5::NotifyConfig
-                      KF5::KExiv2
-                      KF5::KDcraw
-)
 
 install(FILES main/importui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

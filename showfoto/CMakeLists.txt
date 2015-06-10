@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -41,7 +42,10 @@ set(showfoto_SRCS
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/hi*-apps-showfoto.png")
 ecm_add_app_icon(showfoto_SRCS ICONS ${ICONS_SRCS})
 
-add_executable(showfoto ${showfoto_SRCS})
+add_executable(showfoto ${showfoto_SRCS}
+                        $<TARGET_OBJECTS:setupshowfoto_src>
+                        $<TARGET_OBJECTS:notificationmanager_src>
+)
 
 add_dependencies(showfoto digikam-gitversion)
 
@@ -57,11 +61,15 @@ set_target_properties(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRE
 
 target_link_libraries(showfoto
                       PRIVATE
-                      dimg
-                      fileactionmanager
-                      imageeditor
-                      imagepropertiesdigikam
-                      slideshow
+                      digikamcore
+
+                      Qt5::Core
+                      KF5::KExiv2
+                      KF5::KDcraw
+                      KF5::KIOCore
+                      KF5::JobWidgets
+                      KF5::XmlGui
+                      KF5::Notifications
 )
 
 if(${KF5KGeoMap_FOUND})

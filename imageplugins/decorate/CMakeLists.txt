@@ -15,8 +15,17 @@ add_library(digikamimageplugin_decorate MODULE ${digikamimageplugin_decorate_PAR
 
 target_link_libraries(digikamimageplugin_decorate
                       PRIVATE
-                      editorplugin
-                      imageeditor
+                      digikamcore
+
+                      Qt5::Core
+                      Qt5::Gui
+
+                      KF5::XmlGui
+                      KF5::KIOCore
+                      KF5::KDcraw
+                      KF5::KExiv2
+                      KF5::Notifications
+                      KF5::JobWidgets
 )
 
 install(TARGETS digikamimageplugin_decorate             DESTINATION ${PLUGIN_INSTALL_DIR})

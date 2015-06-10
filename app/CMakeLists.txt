@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -7,6 +8,132 @@
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
 
+# digikam core
+set(DIGIKAMCORE_OBJECTS
+            $<TARGET_OBJECTS:digikamdatabasecore_src>
+            $<TARGET_OBJECTS:dimg_src>
+            $<TARGET_OBJECTS:dmetadata_src>
+            $<TARGET_OBJECTS:jpegutils_src>
+            $<TARGET_OBJECTS:progressmanager_src>
+            $<TARGET_OBJECTS:threadimageio_src>
+            $<TARGET_OBJECTS:pgfutils_src>
+            $<TARGET_OBJECTS:dthread_src>
+            $<TARGET_OBJECTS:versionmanager_src>
+            $<TARGET_OBJECTS:3rdparty_src>
+
+            # widgets
+            $<TARGET_OBJECTS:digikamwidgetscore_src> #
+            $<TARGET_OBJECTS:digikamdialogscore_src> #
+            $<TARGET_OBJECTS:imageproperties_src> #
+            $<TARGET_OBJECTS:digikamgenericmodels_src> #
+
+            # utilities
+            $<TARGET_OBJECTS:slideshow_src>
+            $<TARGET_OBJECTS:imageeditor_src> #
+            $<TARGET_OBJECTS:editorplugin_src>
+
+
+
+            utils/digikam_debug.cpp
+)
+
+if(KF5KGeoMap_FOUND)
+    set(DIGIKAMCORE_OBJECTS
+        ${DIGIKAMCORE_OBJECTS}
+        $<TARGET_OBJECTS:kgeomaphelper_src>
+    )
+
+endif()
+
+add_library(digikamcore
+            SHARED
+            ${DIGIKAMCORE_OBJECTS}
+)
+
+target_link_libraries(digikamcore
+                      PRIVATE
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Widgets
+                      Qt5::Sql
+                      Qt5::WebKitWidgets
+                      Qt5::PrintSupport
+
+                      KF5::Solid
+                      KF5::KIOCore
+                      KF5::NotifyConfig
+                      KF5::WindowSystem
+                      KF5::TextWidgets
+                      KF5::KIOWidgets
+                      KF5::IconThemes
+                      KF5::I18n
+                      KF5::KExiv2
+                      KF5::KDcraw
+
+                      # required by dimg
+                      # Required by CImg library which is using pthread internally.
+                      ${CMAKE_THREAD_LIBS_INIT}
+
+                      ${LCMS2_LIBRARIES} # filters
+
+                      ${TIFF_LIBRARIES}
+                      ${PNG_LIBRARIES}
+
+                      ${PGF_LIBRARIES}
+
+)
+
+#add_dependencies(digikamcore digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
+
+if(KF5Kipi_FOUND)
+    target_link_libraries(digikamcore PRIVATE KF5::Kipi)
+endif()
+
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(digikamcore PRIVATE KF5::KGeoMap)
+endif()
+
+if(X11_FOUND)
+    target_link_libraries(digikamcore PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
+endif()
+
+if(JASPER_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${JASPER_LIBRARIES})
+endif()
+
+# LibLqr-1 library rules for content-aware filter
+if(LQR-1_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${LQR-1_LIBRARIES})
+endif()
+
+
+if(LENSFUN_FOUND)
+    target_include_directories(digikamcore PUBLIC ${LENSFUN_INCLUDE_DIRS})
+    target_link_libraries(digikamcore PRIVATE ${LENSFUN_LIBRARIES})
+endif()
+
+# for nrfilter
+if(OpenCV_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${OpenCV_LIBRARIES})
+endif()
+
+if(${KFILEMETADATA_FOUND})
+    target_link_libraries(digikamcore PRIVATE baloowrap)
+endif()
+
+if(ENABLE_MEDIAPLAYER)
+    target_link_libraries(digikamcore PRIVATE Qt5::Multimedia Qt5::MultimediaWidgets)
+endif()
+
+if(APPLE)
+    target_link_libraries(digikamcore PUBLIC /System/Library/Frameworks/AppKit.framework)
+endif()
+
+if(KF5KFace_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${KF5KFace_LIBRARIES})
+endif()
+
+install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 # digiKam GUI begins here
 
 include_directories(
@@ -28,8 +155,6 @@ include_directories(
 
 qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
-# TODO split this target
-# TODO some parts could/should be their own libraries, like album access?
 set(libdigikamgui_SRCS
     main/digikamapp.cpp
 
@@ -123,100 +248,12 @@ if(${KF5KGeoMap_FOUND})
        )
 endif()
 
-# TODO this should be turned from static to dynamic
-add_library(digikamgui_src OBJECT ${libdigikamgui_SRCS})
-add_library(digikamgui SHARED $<TARGET_OBJECTS:digikamgui_src>)
 
-# TODO temporary ugly hack, the common utils used by other components (esp. utilities and libs) should be moved to libs..
-target_include_directories(digikamgui PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album> # move out
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/views>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags/tagsmanager>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/items/overlays> # common too, move out
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/database>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/date> # belongs to libs/widgets?
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dragdrop>
+add_library(digikamgui_src
+            OBJECT
+            ${libdigikamgui_SRCS}
 )
 
-target_link_libraries(digikamgui
-                      PRIVATE
-                      3rdparty
-                      digikamwidgets
-                      digikammodels
-                      digikamalbum
-                      digikamsettings
-                      filters
-                      dimg
-                      dmetadata
-                      dthread
-                      threadimageio
-                      setup
-                      imagepropertiesdigikam
-                      advancedrename
-                      queuemanager
-                      versionmanager
-                      progressmanager
-                      importui
-                      imageeditor
-                      editorplugin
-                      searchwindow
-                      firstrun
-                      lighttable
-                      fuzzysearch
-                      fileactionmanager
-                      maintenance
-                      digikamtags
-                      digikamdialogs
-                      facemanagement
-                      slideshow
-)
-
-target_link_libraries(digikamgui
-                      PUBLIC
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
-                      Qt5::Sql
-                      Qt5::WebKitWidgets
-                      Qt5::PrintSupport
-
-                      KF5::Solid
-                      KF5::KIOCore
-                      KF5::NotifyConfig
-                      KF5::WindowSystem
-                      KF5::TextWidgets
-                      KF5::IconThemes
-                      KF5::I18n
-                      KF5::KExiv2
-                      KF5::KDcraw
-)
-
-# TODO check if these linkings are required?
-if(${KFILEMETADATA_FOUND})
-    target_link_libraries(digikamgui PRIVATE baloowrap)
-endif()
-
-if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamgui PRIVATE Qt5::Multimedia Qt5::MultimediaWidgets)
-endif()
-
-if(APPLE)
-    target_link_libraries(digikamgui PUBLIC /System/Library/Frameworks/AppKit.framework)
-endif()
-
-if(${KF5Kipi_FOUND})
-    target_link_libraries(digikamgui PRIVATE kipiiface)
-endif()
-
-if(${KF5KGeoMap_FOUND}) # fixme hackish
-    target_link_libraries(digikamgui PRIVATE gpssearch kgeomaphelper)
-endif()
-
-install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # digiKam binary progam #########################################################
 
@@ -228,7 +265,56 @@ set(digikam_SRCS
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/hi*-apps-digikam.png")
 ecm_add_app_icon(digikam_SRCS ICONS ${ICONS_SRCS})
 
-add_executable(digikam ${digikam_SRCS})
+set(DIGIKAM_OBJECTS
+            ${digikam_SRCS}
+            $<TARGET_OBJECTS:digikamdatabasemain_src> # #
+            $<TARGET_OBJECTS:digikamgui_src> # #
+            $<TARGET_OBJECTS:digikamdeletedialog_src> #
+            $<TARGET_OBJECTS:digikamtemplate_src> #
+            $<TARGET_OBJECTS:imagepropertiesdigikam_src> #
+            $<TARGET_OBJECTS:setup_src> #
+            $<TARGET_OBJECTS:lighttable_src> #
+            $<TARGET_OBJECTS:maintenance_src> #
+            $<TARGET_OBJECTS:searchwindow_src> #
+            $<TARGET_OBJECTS:digikammodels_src> #
+            $<TARGET_OBJECTS:digikamalbum_src> #
+            $<TARGET_OBJECTS:firstrun_src> #
+            $<TARGET_OBJECTS:fuzzysearch_src> #
+            $<TARGET_OBJECTS:imageeditorgui_src> #
+            $<TARGET_OBJECTS:fileactionmanager_src>
+            $<TARGET_OBJECTS:digikamtags_src>
+            $<TARGET_OBJECTS:digikamsettings_src>
+            $<TARGET_OBJECTS:notificationmanager_src>
+            $<TARGET_OBJECTS:filters_src>
+            $<TARGET_OBJECTS:importuibackend_src>
+            $<TARGET_OBJECTS:imagehistorywidgets_src>
+
+
+)
+if(${KF5Kipi_FOUND})
+    set(DIGIKAM_OBJECTS
+        ${DIGIKAM_OBJECTS}
+        $<TARGET_OBJECTS:kipiiface_src> # wrap in if(KIPIfound)
+    )
+endif()
+
+if(${KF5KFace_FOUND})
+    set(DIGIKAM_OBJECTS
+        ${DIGIKAM_OBJECTS}
+            $<TARGET_OBJECTS:facemanagement_src> # wrap
+    )
+endif()
+
+if(${KF5KGeoMap_FOUND})
+    set(DIGIKAM_OBJECTS
+        ${DIGIKAM_OBJECTS}
+            $<TARGET_OBJECTS:kgeomaphelper_src> # wrap kgeomap
+            $<TARGET_OBJECTS:gpssearch_src> # wrap kgeomap
+    )
+endif()
+
+
+add_executable(digikam ${DIGIKAM_OBJECTS})
 
 add_dependencies(digikam digikam-gitversion)
 
@@ -243,18 +329,50 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.i
 set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 
 target_link_libraries(digikam
-                      digikamdatabase
-                      digikamgui
-                      digikamwidgets
-                      digikamalbum
-                      firstrun
 
+                      digikamdatabase
+                      digikamcore
+
+                      queuemanager
+                      advancedrename
+                      importui
+
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Widgets
                       Qt5::Sql
-                      Qt5::Test
                       Qt5::WebKitWidgets
+                      Qt5::PrintSupport
+                      Qt5::DBus
+
+                      KF5::Solid
+                      KF5::KIOCore
+                      KF5::KIOWidgets
+                      KF5::Notifications
+                      KF5::NotifyConfig
+                      KF5::WindowSystem
+                      KF5::TextWidgets
+                      KF5::IconThemes
+                      KF5::I18n
+                      KF5::KExiv2
+                      KF5::KDcraw
 
                       ${OpenCV_LIBRARIES}
+                      ${KF5KFace_LIBRARIES}
+
 )
+
+if(${KF5Kipi_FOUND})
+    target_link_libraries(digikam  KF5::Kipi)
+endif()
+
+if(${KF5KGeoMap_FOUND})
+     target_link_libraries(digikam KF5::KGeoMap)
+endif()
+
+if(APPLE)
+    target_link_libraries(digikam /System/Library/Frameworks/AppKit.framework)
+endif()
 
 if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)

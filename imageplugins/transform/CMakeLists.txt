@@ -28,8 +28,18 @@ add_library(digikamimageplugin_transform MODULE ${digikamimageplugin_transform_P
 
 target_link_libraries(digikamimageplugin_transform
                       PRIVATE
-                      editorplugin
-                      imageeditor)
+                      digikamcore
+
+                      Qt5::Core
+                      Qt5::Gui
+
+                      KF5::XmlGui
+                      KF5::KIOCore
+                      KF5::KDcraw
+                      KF5::KExiv2
+                      KF5::Notifications
+                      KF5::JobWidgets
+)
 
 # NOTE: no need to link with lqr-1 library here. DImg is already linked in core.
 

@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -23,24 +24,4 @@ set(libthreadimageio_SRCS
     thumbnailsize.cpp
 )
 
-add_library(threadimageio STATIC ${libthreadimageio_SRCS})
-
-
-target_link_libraries(threadimageio
-                      PUBLIC
-                      dimg
-                      dthread
-
-                      PRIVATE
-                      digikamdatabase_static
-                      pgfutils
-                      3rdparty
-
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets # QMessageBox in ThumbnailLoadThread..
-                      Qt5::Sql
-                      Qt5::DBus
-
-                      KF5::KIOWidgets # for previewjob
-)
+add_library(threadimageio_src OBJECT ${libthreadimageio_SRCS})
