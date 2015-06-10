@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -443,56 +444,14 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Includes rules
 
-#set(DK_LOCAL_INCLUDES2
-#    # app
-#    "$<TARGET_PROPERTY:digikamgui,INTERFACE_INCLUDE_DIRECTORIES>"
-#    # libs
-#    "$<TARGET_PROPERTY:3rdparty,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:digikamalbum,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:digikamdatabase,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:digikamdialogs,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:dimg,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:dmetadata,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:fileactionmanager,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:filters,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:imagepropertiesdigikam,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:jpegutils,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:digikammodels,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:notificationmanager,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:pgfutils,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:progressmanager,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:digikamsettings,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:digikamtags,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:digikamtemplate,INTERFACE_INCLUDE_DIRECTORIES>"
 
-#    "$<TARGET_PROPERTY:threadimageio,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:dthread,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:versionmanager,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:digikamwidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-
-#    #utilities
-#    "$<TARGET_PROPERTY:advancedrename,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:facemanagement,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:firstrun,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:fuzzysearch,INTERFACE_INCLUDE_DIRECTORIES>"
-
-#    "$<TARGET_PROPERTY:editorplugin,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:imageeditor,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:importui,INTERFACE_INCLUDE_DIRECTORIES>"
-
-#    "$<TARGET_PROPERTY:lighttable,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:maintenance,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:queuemanager,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:searchwindow,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:setup,INTERFACE_INCLUDE_DIRECTORIES>"
-#    "$<TARGET_PROPERTY:slideshow,INTERFACE_INCLUDE_DIRECTORIES>"
-#)
-
+# Recursively get all directories which contain header files
 set(DK_INCLUDES_ALL "")
 
 HEADER_DIRECTORIES(DK_LOCAL_INCLUDES_RAW)
 
-# Filter all libjpeg- dirs, we will add later the one we need
+# This macro will set all paths which do not containt libjpeg-
+# We will add later the directory we need
 
 FOREACH(var ${DK_LOCAL_INCLUDES_RAW})
     STRING(REGEX MATCH "libjpeg-" item ${var})
@@ -506,25 +465,6 @@ set(DK_LOCAL_INCLUDES ${DK_LOCAL_INCLUDES}
 
 
 include_directories(${DK_LOCAL_INCLUDES})
-#MESSAGE( STATUS "Local includes:         " ${DK_LOCAL_INCLUDES} )
-
-#MESSAGE( STATUS "Local includes2:         " ${DK_LOCAL_INCLUDES2} )
-#if(${KFILEMETADATA_FOUND})
-#    set(DK_LOCAL_INCLUDES
-#        ${DK_LOCAL_INCLUDES}
-#        "$<TARGET_PROPERTY:baloowrap,INTERFACE_INCLUDE_DIRECTORIES>"
-#    )
-#endif()
-
-
-
-
-#if(${KF5Kipi_FOUND})
-#    set(DK_LOCAL_INCLUDES
-#        ${DK_LOCAL_INCLUDES}
-#        "$<TARGET_PROPERTY:kipiiface,INTERFACE_INCLUDE_DIRECTORIES>"
-#    )
-#endif()
 
 
 set(KF5_INCLUDES_ALL
@@ -533,7 +473,6 @@ set(KF5_INCLUDES_ALL
     "$<TARGET_PROPERTY:KF5::FileMetaData,INTERFACE_INCLUDE_DIRECTORIES>"
     "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
     "$<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>" #kmainwindow
     "$<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>"
     "$<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
     "$<TARGET_PROPERTY:KF5::IconThemes,INTERFACE_INCLUDE_DIRECTORIES>"
@@ -546,17 +485,21 @@ set(KF5_INCLUDES_ALL
     "$<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>"
 
 )
-if(${KF5KGeoMap_FOUND}) # fixme hackish
+
+if(${KF5Kipi_FOUND})
     set(KF5_INCLUDES_ALL
         ${KF5_INCLUDES_ALL}
-
-#        "$<TARGET_PROPERTY:gpssearch,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>"
+    )
+endif()
+if(${KF5KGeoMap_FOUND})
+    set(KF5_INCLUDES_ALL
+        ${KF5_INCLUDES_ALL}
         "$<TARGET_PROPERTY:KF5::KGeoMap,INTERFACE_INCLUDE_DIRECTORIES>"
-#        "$<TARGET_PROPERTY:kgeomaphelper,INTERFACE_INCLUDE_DIRECTORIES>"
     )
 endif()
 
-if(KF5KFace_FOUND) # fixme hackish
+if(KF5KFace_FOUND)
     set(KF5_INCLUDES_ALL
         ${KF5_INCLUDES_ALL}
         "$<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
@@ -590,9 +533,7 @@ if(X11_FOUND)
 )
 endif()
 
-    # TODO digikam_export.h, version.h, git_version.h and config-digikam.h should be created to the main binarydir? or main sourcedir?
     include_directories(
-                        app/utils/ # required for digikam_export.h
 
                         # version.h, gitversion.h config-digikam.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/utils
@@ -610,7 +551,6 @@ endif()
 
                         ${KF5_INCLUDES_ALL}
                         ${QT5_INCLUDES_ALL}
-#                        "$<TARGET_PROPERTY:3rdparty,INTERFACE_INCLUDE_DIRECTORIES>"
     )
 
     # libgphoto2 library rules

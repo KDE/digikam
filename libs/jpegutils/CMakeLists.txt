@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -22,22 +23,4 @@ if(MSVC)
 endif()
 
 add_library(jpegutils_src OBJECT ${libjpegutils_SRCS})
-#add_library(jpegutils STATIC $<TARGET_OBJECTS:jpegutils_src>)
 
-#MESSAGE(STATUS "LIBJPEGDIr+++++++++++++++++++++" ${DIGIKAM_LIBJPEG_DIR})
-#target_include_directories(jpegutils
-#                           PUBLIC
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${DIGIKAM_LIBJPEG_DIR}>
-#)
-
-#target_link_libraries(jpegutils
-#                      PRIVATE
-#                      dimg
-#                      dmetadata
-
-#                      Qt5::Core
-#                      Qt5::Gui
-
-#                      ${JPEG_LIBRARIES}
-#)

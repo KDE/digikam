@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -23,8 +24,7 @@ set(libdatabasecore_SRCS
 
 #this sources must be set in digikam main app
 set(libdatabasemain_SRCS
-    core/databaseguierrorhandler.cpp # FIXME used to be part of app, ok here?
-    # FIXME moved from app, check
+    core/databaseguierrorhandler.cpp
     core/dbstatdlg.cpp
     core/scancontroller.cpp
     core/dio.cpp
@@ -94,7 +94,6 @@ set(libimgqsort_SRCS
 
 set(digikamdatabase_LIB_SRCS
         ${libdatabase_SRCS}
-#        ${libdatabasemodels_SRCS}
         ${libhaar_SRCS}
         ${pgfutils_SRCS}
 
@@ -107,7 +106,6 @@ add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} )
 add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:dgikamdatabasemodels_src>)
 
 
-# TODO clean this up by changing the includes using database to use longer path?
 target_include_directories(digikamdatabase
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
@@ -123,13 +121,10 @@ target_include_directories(digikamdatabase
 )
 
 target_link_libraries(digikamdatabase
-                      PUBLIC
-                      digikamcore # digikamdebug is missing
 
                       PRIVATE
+                      digikamcore
                       baloowrap
-#                      dmetadata
-#                      digikamwidgets
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
@@ -156,39 +151,6 @@ if(Baloo_FOUND) # circular linking, because we need baloowrap.h path.
     target_link_libraries(digikamdatabase PRIVATE baloowrap)
 endif()
 
-# for imgqsort, does it even belong to database?
-#if(OpenCV_FOUND)
-#    target_link_libraries(digikamdatabase PRIVATE ${OpenCV_LIBRARIES})
-#endif()
-
-# digikamdatabase static for linking with other static libs
-
-#add_library(digikamdatabase_static STATIC $<TARGET_OBJECTS:digikamdatabase_src>
-#                                          $<TARGET_OBJECTS:digikamdatabasecore_src> )
-
-
-## TODO clean this up by changing the includes using database to use longer path?
-#target_include_directories(digikamdatabase_static
-#                           PUBLIC
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
-#                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
-#)
-
-#target_link_libraries(digikamdatabase_static
-#                      PRIVATE
-#                      digikamcore
-#                      dmetadata
-#                      digikamwidgets
-##                      dimg
-#)
 
 set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 

@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -37,8 +38,8 @@ set(DIGIKAMCORE_OBJECTS
 
 if(KF5KGeoMap_FOUND)
     set(DIGIKAMCORE_OBJECTS
-    ${DIGIKAMCORE_OBJECTS}
-    $<TARGET_OBJECTS:kgeomaphelper_src>
+        ${DIGIKAMCORE_OBJECTS}
+        $<TARGET_OBJECTS:kgeomaphelper_src>
     )
 
 endif()
@@ -81,7 +82,7 @@ target_link_libraries(digikamcore
 
 )
 
-add_dependencies(digikamcore digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
+#add_dependencies(digikamcore digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
 
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::Kipi)
@@ -246,31 +247,13 @@ if(${KF5KGeoMap_FOUND})
        )
 endif()
 
-# TODO this should be turned from static to dynamic
+
 add_library(digikamgui_src
             OBJECT
             ${libdigikamgui_SRCS}
 )
 
 
-## TODO check if these linkings are required?
-#if(${KFILEMETADATA_FOUND})
-#    target_link_libraries(digikamgui PRIVATE baloowrap)
-#endif()
-
-#if(ENABLE_MEDIAPLAYER)
-#    target_link_libraries(digikamgui PRIVATE Qt5::Multimedia Qt5::MultimediaWidgets)
-#endif()
-
-
-
-
-
-#if(KF5KFace_FOUND)
-#    target_link_libraries(digikamgui PRIVATE ${KF5KFace_LIBRARIES})
-#endif()
-
-#install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})
 # digiKam binary progam #########################################################
 
 set(digikam_SRCS
@@ -384,7 +367,6 @@ if(${KF5Kipi_FOUND})
 endif()
 
 if(${KF5KGeoMap_FOUND})
-#    target_link_libraries(digikam  gpssearch kgeomaphelper)
      target_link_libraries(digikam KF5::KGeoMap)
 endif()
 

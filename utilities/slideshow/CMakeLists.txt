@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -18,20 +19,3 @@ set(libslideshow_SRCS
 
 add_library(slideshow_src OBJECT ${libslideshow_SRCS})
 
-#add_library(slideshow STATIC $<TARGET_OBJECTS:slideshow_src>)
-
-
-#target_link_libraries(slideshow
-#                      PRIVATE
-#                      digikamwidgets
-#                      digikamdatabases
-#                      digikamalbum
-#                      maintenance
-
-
-#                      Qt5::Widgets
-
-#                      KF5::WidgetsAddons
-#                      KF5::KDcraw
-#                      KF5::KExiv2
-#)

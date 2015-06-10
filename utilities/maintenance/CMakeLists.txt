@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -34,34 +35,4 @@ if(${KF5KFace_FOUND})
 endif()
 
 add_library(maintenance_src OBJECT ${libmaintenance_SRCS})
-#add_library(maintenance STATIC $<TARGET_OBJECTS:maintenance_src> $<TARGET_OBJECTS:digikamgui_src>)
 
-#target_link_libraries(maintenance
-#                      PRIVATE
-#                      digikamdatabase
-#                      notificationmanager
-#                      progressmanager
-#                      fuzzysearch
-#                      advancedrename
-#                      searchwindow
-#                      queuemanager
-
-
-#                      Qt5::WebKitWidgets
-#                      KF5::KDcraw
-#                      KF5::KExiv2
-#                      KF5::WindowSystem
-
-#)
-
-#if(${KF5KFace_FOUND})
-#    target_link_libraries(maintenance PUBLIC facemanagement)
-#endif()
-
-#if(${KF5KGeoMap_FOUND}) # fixme hackish
-#    target_link_libraries(maintenance PRIVATE gpssearch kgeomaphelper)
-#endif()
-
-#if(${KF5Kipi_FOUND})
-#    target_link_libraries(maintenance PRIVATE kipiiface KF5::Kipi)
-#endif()
