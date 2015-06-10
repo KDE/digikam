@@ -73,7 +73,7 @@ target_link_libraries(showfoto
 )
 
 if(${KF5KGeoMap_FOUND})
-    target_link_libraries(showfoto PUBLIC ${KGEOMAP_LIBRARIES})
+    target_link_libraries(showfoto PUBLIC ${KF5KGeoMap_LIBRARIES})
 endif()
 
 if(NOT WIN32)
