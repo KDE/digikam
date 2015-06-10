@@ -198,10 +198,10 @@ public:
 
     bool                        showOnlyAvailableAlbums;
 
-    KIO::TransferJob*           albumListJob;
+    DBJobsThread*               albumListJob;
     DBJobsThread*               dateListJob;
-    KIO::TransferJob*           tagListJob;
-    KIO::TransferJob*           personListJob;
+    DBJobsThread*               tagListJob;
+    DBJobsThread*               personListJob;
 
 
     AlbumWatch*                 albumWatch;
@@ -375,19 +375,19 @@ void AlbumManager::cleanUp()
 
     if (d->albumListJob)
     {
-        d->albumListJob->kill();
+        d->albumListJob->cancel();
         d->albumListJob = 0;
     }
 
     if (d->tagListJob)
     {
-        d->tagListJob->kill();
+        d->tagListJob->cancel();
         d->tagListJob = 0;
     }
 
     if (d->personListJob)
     {
-        d->personListJob->kill();
+        d->personListJob->cancel();
         d->personListJob = 0;
     }
 }
@@ -1489,19 +1489,21 @@ void AlbumManager::getAlbumItemsCount()
 
     if (d->albumListJob)
     {
-        d->albumListJob->kill();
+        d->albumListJob->cancel();
         d->albumListJob = 0;
     }
 
-    DatabaseUrl u   = DatabaseUrl::albumUrl();
-    d->albumListJob = ImageLister::startListJob(u);
-    d->albumListJob->addMetaData(QLatin1String("folders"), QLatin1String("true"));
+//    DatabaseUrl u   = DatabaseUrl::albumUrl();
+qCDebug(DIGIKAM_GENERAL_LOG) << "LISTING ALL";
+    AlbumsDBJobInfo *jInfo = new AlbumsDBJobInfo();
+    jInfo->folders = true;
+    d->albumListJob = DBJobsManager::instance()->startAlbumsJobThread(jInfo);
 
-    connect(d->albumListJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotAlbumsJobResult(KJob*)));
+//    connect(d->albumListJob, SIGNAL(result(KJob*)),
+//            this, SLOT(slotAlbumsJobResult(KJob*)));
 
-    connect(d->albumListJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotAlbumsJobData(KIO::Job*,QByteArray)));
+    connect(d->albumListJob, SIGNAL(data(QByteArray)),
+            this, SLOT(slotAlbumsJobData(QByteArray)));
 }
 
 void AlbumManager::scanTAlbums()
@@ -1658,34 +1660,39 @@ void AlbumManager::getTagItemsCount()
 
     if (d->tagListJob)
     {
-        d->tagListJob->kill();
+        d->tagListJob->cancel();
         d->tagListJob = 0;
     }
 
-    DatabaseUrl u = DatabaseUrl::fromTagIds(QList<int>());
-    d->tagListJob = ImageLister::startListJob(u);
-    d->tagListJob->addMetaData(QLatin1String("folders"), QLatin1String("true"));
+//    DatabaseUrl u = DatabaseUrl::fromTagIds(QList<int>());
 
-    connect(d->tagListJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotTagsJobResult(KJob*)));
+    TagsDBJobInfo *jInfo = new TagsDBJobInfo();
+    jInfo->folders = true;
 
-    connect(d->tagListJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotTagsJobData(KIO::Job*,QByteArray)));
+    d->tagListJob = DBJobsManager::instance()->startTagsJobThread(jInfo);
+
+//    connect(d->tagListJob, SIGNAL(result(KJob*)),
+//            this, SLOT(slotTagsJobResult(KJob*)));
+
+    connect(d->tagListJob, SIGNAL(data(QByteArray)),
+            this, SLOT(slotTagsJobData(QByteArray)));
 
     if (d->personListJob)
     {
-        d->personListJob->kill();
+        d->personListJob->cancel();
         d->personListJob = 0;
     }
 
-    d->personListJob = ImageLister::startListJob(u);
-    d->personListJob->addMetaData(QLatin1String("facefolders"), QLatin1String("true"));
+    jInfo->folders = false;
+    jInfo->faceFolders = true;
 
-    connect(d->personListJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotPeopleJobResult(KJob*)));
+    d->personListJob = DBJobsManager::instance()->startTagsJobThread(jInfo);
 
-    connect(d->personListJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotPeopleJobData(KIO::Job*,QByteArray)));
+//    connect(d->personListJob, SIGNAL(result(KJob*)),
+//            this, SLOT(slotPeopleJobResult(KJob*)));
+
+    connect(d->personListJob, SIGNAL(data(QByteArray)),
+            this, SLOT(slotPeopleJobData(QByteArray)));
 }
 
 void AlbumManager::scanSAlbums()
@@ -3018,7 +3025,7 @@ void AlbumManager::slotAlbumsJobResult(KJob* job)
     }
 }
 
-void AlbumManager::slotAlbumsJobData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotAlbumsJobData(const QByteArray& data)
 {
     if (data.isEmpty())
     {
@@ -3048,7 +3055,7 @@ void AlbumManager::slotPeopleJobResult(KJob* job)
     }
 }
 
-void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotPeopleJobData(const QByteArray& data)
 {
     if (data.isEmpty())
     {
@@ -3091,7 +3098,7 @@ void AlbumManager::slotTagsJobResult(KJob* job)
     }
 }
 
-void AlbumManager::slotTagsJobData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotTagsJobData(const QByteArray& data)
 {
     if (data.isEmpty())
     {

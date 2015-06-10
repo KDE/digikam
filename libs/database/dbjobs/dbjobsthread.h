@@ -24,8 +24,11 @@ public:
     explicit DBJobsThread(QObject* const parent);
     ~DBJobsThread();
 
+    void albumsListing(AlbumsDBJobInfo *info);
     void datesListing(DatesDBJobInfo *info);
     void GPSListing(GPSDBJobInfo *info);
+    void tagsListing(TagsDBJobInfo *info);
+    void searchesListing(SearchesDBJobInfo *info);
 
     void setUseMultiCore(const bool useMultiCore);
 

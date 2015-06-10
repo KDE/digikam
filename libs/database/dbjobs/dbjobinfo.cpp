@@ -21,6 +21,14 @@ DBJobInfo::Type DBJobInfo::type()
 
 // ---------------------------------------------
 
+AlbumsDBJobInfo::AlbumsDBJobInfo()
+    : DBJobInfo(Type::AlbumsJob)
+{
+    albumRootId = -1;
+}
+
+// ---------------------------------------------
+
 TagsDBJobInfo::TagsDBJobInfo()
     : DBJobInfo(Type::TagsJob)
 {
@@ -37,7 +45,7 @@ GPSDBJobInfo::GPSDBJobInfo()
 
 // ---------------------------------------------
 
-SearchDBJobInfo::SearchDBJobInfo()
+SearchesDBJobInfo::SearchesDBJobInfo()
     : DBJobInfo(Type::SearchesJob)
 {
     duplicates = false;

@@ -38,8 +38,7 @@
 
 #include "digikam_export.h"
 #include "imagelisterrecord.h"
-//#include "KDCRAW/RActionJob"
-#include "datesjob.h"
+#include "dbjob.h"
 
 namespace Digikam
 {
@@ -103,6 +102,23 @@ protected:
 
 // ------------------------------------------------------------------------------------------------
 
+class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseGrowingPartsSendingReceiver
+    : public ImageListerSlaveBasePartsSendingReceiver
+{
+
+public:
+
+    ImageListerSlaveBaseGrowingPartsSendingReceiver(KIO::SlaveBase* slave, int start, int end, int increment);
+    virtual void receive(const ImageListerRecord& record);
+
+protected:
+
+    int m_maxLimit;
+    int m_increment;
+};
+
+// ------------------------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT ImageListerJobReceiver : public ImageListerValueListReceiver
 {
 
@@ -117,6 +133,7 @@ protected:
     DBJob *const m_job;
 };
 
+// ------------------------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT ImageListerJobPartsSendingReceiver : public ImageListerJobReceiver
 {
@@ -134,13 +151,13 @@ protected:
 
 // ------------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseGrowingPartsSendingReceiver
-    : public ImageListerSlaveBasePartsSendingReceiver
+class DIGIKAM_DATABASE_EXPORT ImageListerJobGrowingPartsSendingReceiver
+    : public ImageListerJobPartsSendingReceiver
 {
 
 public:
 
-    ImageListerSlaveBaseGrowingPartsSendingReceiver(KIO::SlaveBase* slave, int start, int end, int increment);
+    ImageListerJobGrowingPartsSendingReceiver(DBJob* job, int start, int end, int increment);
     virtual void receive(const ImageListerRecord& record);
 
 protected:

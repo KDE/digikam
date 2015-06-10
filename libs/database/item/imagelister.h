@@ -141,7 +141,7 @@ public:
      */
     void listHaarSearch(ImageListerReceiver* const receiver, const QString& xml);
 
-    QString tagSearchXml(const DatabaseUrl&, const QString& type, bool includeChildTags) const;
+    QString tagSearchXml(int tagId, const QString& type, bool includeChildTags) const;
 
 private:
 

@@ -213,7 +213,7 @@ void ImageListerJobReceiver::sendData()
     records.clear();
 }
 
-// ----------------------------------
+// ----------------------------------------------
 
 ImageListerJobPartsSendingReceiver::ImageListerJobPartsSendingReceiver(DBJob *const job, int limit)
     : ImageListerJobReceiver(job), m_limit(limit), m_count(0)
@@ -230,6 +230,25 @@ void ImageListerJobPartsSendingReceiver::receive(const ImageListerRecord &record
     {
         sendData();
         m_count = 0;
+    }
+}
+
+// ----------------------------------------------
+
+ImageListerJobGrowingPartsSendingReceiver::
+    ImageListerJobGrowingPartsSendingReceiver(DBJob* job, int start, int end, int increment)
+    : ImageListerJobPartsSendingReceiver(job, start),
+      m_maxLimit(end), m_increment(increment)
+{
+}
+
+void ImageListerJobGrowingPartsSendingReceiver::receive(const ImageListerRecord& record)
+{
+    ImageListerJobPartsSendingReceiver::receive(record);
+    // limit was reached?
+    if (m_count == 0)
+    {
+        m_limit = qMin(m_limit + m_increment, m_maxLimit);
     }
 }
 

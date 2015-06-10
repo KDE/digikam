@@ -648,11 +648,11 @@ private Q_SLOTS:
     void slotDatesJobResult(KJob* job);
     void slotDatesJobData(const QByteArray& data);
     void slotAlbumsJobResult(KJob* job);
-    void slotAlbumsJobData(KIO::Job* job, const QByteArray& data);
+    void slotAlbumsJobData(const QByteArray& data);
     void slotTagsJobResult(KJob* job);
-    void slotTagsJobData(KIO::Job* job, const QByteArray& data);
+    void slotTagsJobData(const QByteArray& data);
     void slotPeopleJobResult(KJob* job);
-    void slotPeopleJobData(KIO::Job* job, const QByteArray& data);
+    void slotPeopleJobData(const QByteArray& data);
 
     void slotCollectionLocationStatusChanged(const CollectionLocation&, int);
     void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);

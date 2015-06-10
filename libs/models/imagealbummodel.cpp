@@ -317,11 +317,10 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     }
 
     DatabaseUrl url;
+    QList<int> tagIds;
 
     if(albums.first()->type() == Album::TAG)
     {
-        QList<int> tagIds;
-
         for(QList<Album*>::iterator it = albums.begin(); it != albums.end(); ++it)
         {
             tagIds << (*it)->id();
@@ -336,12 +335,47 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
 
     if(albums.first()->type() == Album::DATE)
     {
+        d->extraValueJob = false;
         DatesDBJobInfo *jobInfo = new DatesDBJobInfo();
         jobInfo->startDate = url.startDate();
         jobInfo->endDate   = url.endDate();
         jobInfo->recursive = d->recurseAlbums;
         jobInfo->listAvailableImagesOnly = d->listOnlyAvailableImages;
+
         DBJobsThread *thread = DBJobsManager::instance()->startDatesJobThread(jobInfo);
+
+        connect(thread, SIGNAL(data(QByteArray)),
+                this, SLOT(slotDataFromNewMechanism(QByteArray)));
+    }
+    else if (albums.first()->type() == Album::TAG)
+    {
+        d->extraValueJob = false;
+        TagsDBJobInfo *jobInfo = new TagsDBJobInfo();
+        jobInfo->listAvailableImagesOnly = d->listOnlyAvailableImages;
+        jobInfo->recursive = d->recurseTags;
+        jobInfo->tagsIds = tagIds;
+
+        if (!d->specialListing.isNull())
+        {
+            jobInfo->specialTag = d->specialListing;
+            d->extraValueJob = true;
+        }
+
+        DBJobsThread *thread = DBJobsManager::instance()->startTagsJobThread(jobInfo);
+
+        connect(thread, SIGNAL(data(QByteArray)),
+                this, SLOT(slotDataFromNewMechanism(QByteArray)));
+    }
+    else if(albums.first()->type() == Album::PHYSICAL)
+    {
+        d->extraValueJob = false;
+        AlbumsDBJobInfo *jobInfo = new AlbumsDBJobInfo();
+        jobInfo->listAvailableImagesOnly = d->listOnlyAvailableImages;
+        jobInfo->recursive = d->recurseAlbums;
+        jobInfo->albumRootId = url.albumRootId();
+        jobInfo->album = url.album();
+
+        DBJobsThread *thread = DBJobsManager::instance()->startAlbumsJobThread(jobInfo);
 
         connect(thread, SIGNAL(data(QByteArray)),
                 this, SLOT(slotDataFromNewMechanism(QByteArray)));
@@ -351,14 +385,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         d->extraValueJob = false;
         d->job           = ImageLister::startListJob(url);
         d->job->addMetaData(QLatin1String("listAlbumsRecursively"),   d->recurseAlbums           ? QLatin1String("true") : QLatin1String("false"));
-        d->job->addMetaData(QLatin1String("listTagsRecursively"),     d->recurseTags             ? QLatin1String("true") : QLatin1String("false"));
         d->job->addMetaData(QLatin1String("listOnlyAvailableImages"), d->listOnlyAvailableImages ? QLatin1String("true") : QLatin1String("false"));
-
-        if (albums.first()->type() == Album::TAG && !d->specialListing.isNull())
-        {
-            d->job->addMetaData(QLatin1String("specialTagListing"), d->specialListing);
-            d->extraValueJob = true;
-        }
 
         connect(d->job, SIGNAL(result(KJob*)),
                 this, SLOT(slotResult(KJob*)));

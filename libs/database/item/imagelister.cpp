@@ -944,10 +944,8 @@ QSet<int> ImageLister::albumRootsToList() const
     return ids;
 }
 
-QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type, bool includeChildTags) const
+QString ImageLister::tagSearchXml(int tagId, const QString& type, bool includeChildTags) const
 {
-    int tagId = url.tagId();
-
     if (type == QLatin1String("faces"))
     {
         SearchXmlWriter writer;

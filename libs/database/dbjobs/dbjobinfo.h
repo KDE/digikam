@@ -22,12 +22,23 @@ public:
 
     Type        type();
 
-    bool        folders;
-    bool        listAvailableImagesOnly;
-    bool        recursive;
+    bool folders;
+    bool listAvailableImagesOnly;
+    bool recursive;
 
 private:
-    Type        jobType;
+    Type jobType;
+};
+
+// ---------------------------------------------
+
+class AlbumsDBJobInfo : public DBJobInfo
+{
+public:
+    AlbumsDBJobInfo();
+
+    int     albumRootId;
+    QString album;
 };
 
 // ---------------------------------------------
@@ -37,8 +48,9 @@ class TagsDBJobInfo : public DBJobInfo
 public:
     TagsDBJobInfo();
 
-    bool    faceFolders;
-    QString specialTag;
+    bool       faceFolders;
+    QString    specialTag;
+    QList<int> tagsIds;
 };
 
 // ---------------------------------------------
@@ -57,12 +69,13 @@ public:
 
 // ---------------------------------------------
 
-class SearchDBJobInfo : public DBJobInfo
+class SearchesDBJobInfo : public DBJobInfo
 {
 public:
-    SearchDBJobInfo();
+    SearchesDBJobInfo();
 
     bool       duplicates;
+    int        searchId;
     double     threshold;
     QList<int> albumIds;
     QList<int> tagIds;

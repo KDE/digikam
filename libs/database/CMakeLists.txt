@@ -50,8 +50,6 @@ set(libdatabase_SRCS
     framework/databaseservererror.cpp
     dbjobs/dbjobsthread.cpp
     dbjobs/dbjob.cpp
-    dbjobs/datesjob.cpp
-    dbjobs/gpsjob.cpp
     dbjobs/dbjobinfo.cpp
     dbjobs/dbjobsmanager.cpp
     item/imagecomments.cpp
