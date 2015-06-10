@@ -5,7 +5,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in    ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in
+               ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
 
 # digikam core
 set(DIGIKAMCORE_OBJECTS
@@ -289,7 +290,6 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:imagehistorywidgets_src>
 
 
-
 )
 if(${KF5Kipi_FOUND})
     set(DIGIKAM_OBJECTS
@@ -312,6 +312,7 @@ if(${KF5KGeoMap_FOUND})
             $<TARGET_OBJECTS:gpssearch_src> # wrap kgeomap
     )
 endif()
+
 
 add_executable(digikam ${DIGIKAM_OBJECTS})
 
@@ -360,7 +361,6 @@ target_link_libraries(digikam
                       ${KF5KFace_LIBRARIES}
 
 )
-
 
 if(${KF5Kipi_FOUND})
     target_link_libraries(digikam  KF5::Kipi)
