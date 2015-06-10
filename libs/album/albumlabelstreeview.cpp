@@ -50,6 +50,7 @@
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 #include "ratingwidget.h"
+#include "dbjobsmanager.h"
 
 namespace Digikam
 {
@@ -837,15 +838,17 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& r
 
 void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
 {
-    QUrl url = d->albumForSelectedItems->databaseUrl();
-    KIO::TransferJob* const job = ImageLister::startListJob(url);
-    job->addMetaData(QLatin1String("listAlbumsRecursively"), QLatin1String("true"));
+    SearchesDBJobInfo *jobInfo = new SearchesDBJobInfo();
+    jobInfo->searchId = d->albumForSelectedItems->id();
+    jobInfo->recursive = true;
 
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    SearchesDBJobsThread *thread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
 
-    connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotData(KIO::Job*,QByteArray)));
+//    connect(job, SIGNAL(result(KJob*)),
+//            this, SLOT(slotResult(KJob*)));
+
+    connect(thread, SIGNAL(data(QByteArray)),
+            this, SLOT(slotData(QByteArray)));
 }
 
 QString AlbumLabelsSearchHandler::getDefaultTitle() const
@@ -930,10 +933,8 @@ void AlbumLabelsSearchHandler::slotResult(KJob* job)
     }
 }
 
-void AlbumLabelsSearchHandler::slotData(KIO::Job* job, const QByteArray& data)
+void AlbumLabelsSearchHandler::slotData(const QByteArray& data)
 {
-    Q_UNUSED(job);
-
     if (data.isEmpty())
     {
         return;

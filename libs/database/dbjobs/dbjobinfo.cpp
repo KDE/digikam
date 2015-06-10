@@ -50,6 +50,7 @@ SearchesDBJobInfo::SearchesDBJobInfo()
 {
     duplicates = false;
     threshold  = 0;
+    searchId   = -1;
 }
 
 // ---------------------------------------------

@@ -56,6 +56,7 @@ set(libdatabase_SRCS
     dbjobs/dbjob.cpp
     dbjobs/dbjobinfo.cpp
     dbjobs/dbjobsmanager.cpp
+    dbjobs/duplicatesprogressobserver.cpp
     item/imagecomments.cpp
     item/imageextendedproperties.cpp
     item/imageinfo.cpp

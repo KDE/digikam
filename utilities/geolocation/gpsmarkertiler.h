@@ -108,8 +108,8 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     /// @todo Do we monitor all signals of the source models?
-    void slotMapImagesJobResult(KJob* job);
-    void slotMapImagesJobData(KIO::Job* job, const QByteArray& data);
+    void slotMapImagesJobResult(GPSDBJobsThread* jobThread);
+    void slotMapImagesJobData(GPSDBJobsThread* jobThread, const QByteArray& data);
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
     void slotImageChange(const ImageChangeset& changeset);
     void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);

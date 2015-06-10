@@ -37,6 +37,7 @@
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 #include "digikam_debug.h"
+#include "dbjobsmanager.h"
 
 /// @todo Actually use this definition!
 typedef QPair<KGeoMap::TileIndex, int> MapPair;
@@ -84,13 +85,13 @@ public:
 
         InternalJobs()
             : level(0),
-              kioJob(0),
+              jobThread(0),
               dataFromDatabase()
         {
         }
 
         int                      level;
-        KIO::Job*                kioJob;
+        GPSDBJobsThread*         jobThread;
         QList<GPSImageInfo> dataFromDatabase;
     };
 
@@ -245,23 +246,27 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Listing" << lat1 << lat2 << lng1 << lng2;
 
-    DatabaseUrl u              = DatabaseUrl::fromAreaRange(lat1, lat2, lng1, lng2);
-    KIO::Job* const currentJob = ImageLister::startListJob(u);
+    GPSDBJobInfo *jobInfo = new GPSDBJobInfo();
+    jobInfo->lat1 = lat1;
+    jobInfo->lat2 = lat2;
+    jobInfo->lng1 = lng1;
+    jobInfo->lng2 = lng2;
+    jobInfo->wantDirectQuery = false;
 
-    currentJob->addMetaData(QLatin1String("wantDirectQuery"), QLatin1String("false"));
+    GPSDBJobsThread *const currentJob = DBJobsManager::instance()->startGPSJobThread(jobInfo);
 
     Private::InternalJobs currentJobInfo;
 
-    currentJobInfo.kioJob = currentJob;
+    currentJobInfo.jobThread = currentJob;
     currentJobInfo.level  = level;
 
     d->jobs.append(currentJobInfo);
 
-    connect(currentJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotMapImagesJobResult(KJob*)));
+    connect(currentJob, SIGNAL(signalDone(GPSDBJobsThread*)),
+            this, SLOT(slotMapImagesJobResult(GPSDBJobsThread*)));
 
-    connect(currentJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotMapImagesJobData(KIO::Job*,QByteArray)));
+    connect(currentJob, SIGNAL(signalData(GPSDBJobsThread*, QByteArray)),
+            this, SLOT(slotMapImagesJobData(GPSDBJobsThread*, QByteArray)));
 }
 
 /**
@@ -502,7 +507,7 @@ KGeoMap::KGeoMapGroupState GPSMarkerTiler::getTileGroupState(const KGeoMap::Tile
 /**
  * @brief The marker data is returned from the database in batches. This function takes and unites the batches.
  */
-void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
+void GPSMarkerTiler::slotMapImagesJobData(GPSDBJobsThread* jobThread, const QByteArray& data)
 {
     if (data.isEmpty())
     {
@@ -516,7 +521,7 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 
     for (int i = 0; i < d->jobs.count(); ++i)
     {
-        if (job == d->jobs.at(i).kioJob)
+        if (jobThread == d->jobs.at(i).jobThread)
         {
             /// @todo Is this really safe?
             internalJob = &d->jobs[i];
@@ -562,15 +567,15 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 /**
  * @brief Now, all the marker data has been retrieved from the database. Here, the markers are sorted into tiles.
  */
-void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
+void GPSMarkerTiler::slotMapImagesJobResult(GPSDBJobsThread* jobThread)
 {
-    KIO::Job* const currentJob = qobject_cast<KIO::Job*>(job);
+//    KIO::Job* const currentJob = qobject_cast<KIO::Job*>(job);
 
     int foundIndex = -1;
 
     for (int i = 0; i < d->jobs.count(); ++i)
     {
-        if (currentJob == d->jobs.at(i).kioJob)
+        if (jobThread == d->jobs.at(i).jobThread)
         {
             foundIndex = i;
             break;
@@ -583,14 +588,15 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
         return;
     }
 
-    if (job->error())
-    {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list images in selected area:" << job->errorString();
+// TODO: implement error method
+//    if (job->error())
+//    {
+//        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list images in selected area:" << job->errorString();
 
-        // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
-                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
-    }
+//        // Pop-up a message about the error.
+//        DNotificationWrapper(QString(), job->errorString(),
+//                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+//    }
 
     // get the results from the job:
     const QList<GPSImageInfo> returnedImageInfo = d->jobs.at(foundIndex).dataFromDatabase;
@@ -598,8 +604,8 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     //     const int wantedLevel = d->jobs.at(foundIndex).level;
 
     // remove the finished job
-    d->jobs[foundIndex].kioJob->kill();
-    d->jobs[foundIndex].kioJob = 0;
+    d->jobs[foundIndex].jobThread->cancel();
+    d->jobs[foundIndex].jobThread = 0;
     d->jobs.removeAt(foundIndex);
 
     if (returnedImageInfo.isEmpty())

@@ -20,9 +20,10 @@ public:
 
     DBJobsThread* startAlbumsJobThread(AlbumsDBJobInfo *jInfo);
     DBJobsThread* startDatesJobThread(DatesDBJobInfo *jInfo);
-    DBJobsThread* startGPSJobThread(GPSDBJobInfo *jInfo);
     DBJobsThread* startTagsJobThread(TagsDBJobInfo *jInfo);
-    DBJobsThread* startSearchesJobThread(SearchesDBJobInfo *jInfo);
+
+    GPSDBJobsThread* startGPSJobThread(GPSDBJobInfo *jInfo);
+    SearchesDBJobsThread* startSearchesJobThread(SearchesDBJobInfo *jInfo);
 
 private:
     friend class DBJobsManagerCreator;

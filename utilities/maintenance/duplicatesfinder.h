@@ -60,8 +60,8 @@ private Q_SLOTS:
     void slotStart();
     void slotDone();
     void slotCancel();
-    void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
+    void slotDuplicatesSearchTotalAmount(int);
+    void slotDuplicatesSearchProcessedAmount(int);
 
 private:
 

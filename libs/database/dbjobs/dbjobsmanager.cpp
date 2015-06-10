@@ -57,10 +57,19 @@ DBJobsThread *DBJobsManager::startTagsJobThread(TagsDBJobInfo *jInfo)
     return thread;
 }
 
-DBJobsThread *DBJobsManager::startSearchesJobThread(SearchesDBJobInfo *jInfo)
+SearchesDBJobsThread *DBJobsManager::startSearchesJobThread(SearchesDBJobInfo *jInfo)
 {
-    DBJobsThread *thread = new DBJobsThread(this);
+    SearchesDBJobsThread *thread = new SearchesDBJobsThread(this);
     thread->searchesListing(jInfo);
+    thread->start();
+
+    return thread;
+}
+
+GPSDBJobsThread *DBJobsManager::startGPSJobThread(GPSDBJobInfo *jInfo)
+{
+    GPSDBJobsThread *thread = new GPSDBJobsThread(this);
+    thread->GPSListing(jInfo);
     thread->start();
 
     return thread;

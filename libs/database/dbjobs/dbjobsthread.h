@@ -10,6 +10,7 @@
 #include "databaseparameters.h"
 #include "dbjobinfo.h"
 #include "dbjob.h"
+#include "haariface.h"
 
 using namespace KDcrawIface;
 
@@ -28,13 +29,56 @@ public:
     void datesListing(DatesDBJobInfo *info);
     void GPSListing(GPSDBJobInfo *info);
     void tagsListing(TagsDBJobInfo *info);
-    void searchesListing(SearchesDBJobInfo *info);
 
     void setUseMultiCore(const bool useMultiCore);
 
 Q_SIGNALS:
     void data(const QByteArray &);
 
+};
+
+// ---------------------------------------------
+
+class SearchesDBJobsThread : public DBJobsThread
+{
+    Q_OBJECT
+
+public:
+
+    explicit SearchesDBJobsThread(QObject* const parent);
+    ~SearchesDBJobsThread();
+
+    void searchesListing(SearchesDBJobInfo *info);
+
+Q_SIGNALS:
+
+    void done();
+    void processedSize(int number);
+    void totalSize(int number);
+};
+
+// ---------------------------------------------
+
+class GPSDBJobsThread : public DBJobsThread
+{
+    Q_OBJECT
+
+public:
+
+    explicit GPSDBJobsThread(QObject* const parent);
+    ~GPSDBJobsThread();
+
+    void GPSListing(GPSDBJobInfo *info);
+
+public Q_SLOTS:
+
+    void data(const QByteArray &);
+    void done();
+
+Q_SIGNALS:
+
+    void signalDone(GPSDBJobsThread*);
+    void signalData(GPSDBJobsThread*, const QByteArray &);
 };
 
 } // namespace Digikam

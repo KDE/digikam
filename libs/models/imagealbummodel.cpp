@@ -380,6 +380,18 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         connect(thread, SIGNAL(data(QByteArray)),
                 this, SLOT(slotDataFromNewMechanism(QByteArray)));
     }
+    else if(albums.first()->type() == Album::SEARCH)
+    {
+        d->extraValueJob = false;
+        SearchesDBJobInfo *jobInfo = new SearchesDBJobInfo();
+        jobInfo->listAvailableImagesOnly = d->listOnlyAvailableImages;
+        jobInfo->searchId = url.searchId();
+
+        SearchesDBJobsThread *thread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
+
+        connect(thread, SIGNAL(data(QByteArray)),
+                this, SLOT(slotDataFromNewMechanism(QByteArray)));
+    }
     else
     {
         d->extraValueJob = false;

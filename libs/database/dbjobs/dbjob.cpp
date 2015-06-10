@@ -7,6 +7,7 @@
 #include "imagelister.h"
 #include "digikam_export.h"
 #include "digikam_debug.h"
+#include "dbjobsthread.h"
 
 namespace Digikam {
 
@@ -133,6 +134,8 @@ void GPSJob::run()
         // send rest
         receiver.sendData();
     }
+
+    emit done();
 }
 
 // ----------------------------------------------
@@ -212,20 +215,8 @@ SearchesJob::~SearchesJob()
 
 void SearchesJob::run()
 {
-// bool duplicates = !metaData(QLatin1String("duplicates")).isEmpty();
-
     // TODO: CHECK WHEN DOES THIS VALUE CHANGE FROM ZERO
     int listingType = 0;
-
-//    if (!ds.atEnd())
-//    {
-//        ds >> listingType;
-//    }
-
-//    Digikam::DatabaseUrl dbUrl(url);
-//    QDBusConnection::sessionBus().registerService(QString::fromUtf8("org.kde.digikam.KIO-digikamtags-%1")
-//                                                  .arg(QString::number(QCoreApplication::instance()->applicationPid())));
-//    Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrl);
 
     if (!m_jobInfo->duplicates)
     {
@@ -274,22 +265,21 @@ void SearchesJob::run()
             return;
         }
 
-        // get info about threshold
-        // If threshold value cannot be converted from string, we will use 0.4 instead.
-        // 40% sound like the minimum value to use to have suitable results.
-//        bool   ok;
-//        double threshold = thresholdString.toDouble(&ok);
+        if (m_jobInfo->threshold == 0)
+        {
+            m_jobInfo->threshold = 0.4;
+        }
 
-//        if (!ok)
-//        {
-//            threshold = 0.4;
-//        }
+        DuplicatesProgressObserver observer(this);
 
-//        DuplicatesProgressObserver observer(this);
+        // rebuild the duplicate albums
+        HaarIface iface;
+        iface.rebuildDuplicatesAlbums(m_jobInfo->albumIds,
+                                      m_jobInfo->tagIds,
+                                      m_jobInfo->threshold,
+                                      &observer);
 
-//        // rebuild the duplicate albums
-//        Digikam::HaarIface iface;
-//        iface.rebuildDuplicatesAlbums(albumIds, tagIds, threshold, &observer);
+        emit done();
     }
 }
 

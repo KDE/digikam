@@ -3,10 +3,14 @@
 
 #include "KDCRAW/RActionJob"
 #include "dbjobinfo.h"
+#include "dbjobsthread.h"
+#include "duplicatesprogressobserver.h"
 
 using namespace KDcrawIface;
 
 namespace Digikam {
+
+class DuplicatesProgressObserver;
 
 class DBJob : public RActionJob
 {
@@ -20,6 +24,7 @@ public:
 Q_SIGNALS:
 
     void data(const QByteArray &ba);
+    void done();
 };
 
 // ----------------------------------------------
@@ -113,6 +118,11 @@ public:
     SearchesJob(SearchesDBJobInfo *jobInfo);
     ~SearchesJob();
 
+Q_SIGNALS:
+
+    void processedSize(int);
+    void totalSize(int);
+
 protected:
 
     void run();
@@ -122,9 +132,7 @@ private:
     SearchesDBJobInfo *m_jobInfo;
 };
 
-// ----------------------------------------------
 
-
-}
+} // namespace Digikam
 
 #endif // DBJOB_H
