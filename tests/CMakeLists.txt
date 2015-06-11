@@ -11,7 +11,6 @@ add_subdirectory(imgqsort)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
-
 if(ENABLE_DIGIKAM_MODELTEST)
     message(STATUS "Modeltest enabled")
     set(libdigikamgui_SRCS ${libdigikamgui_SRCS}
@@ -45,6 +44,10 @@ target_link_libraries(dimagefilteractiontest
                       ${OpenCV_LIBRARIES}
 )
 
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(dimagefilteractiontest ${KF5KGeoMap_LIBRARIES})
+endif()
+
 #------------------------------------------------------------------------
 
 set(dimagehistorygraphtest_SRCS
@@ -73,6 +76,10 @@ target_link_libraries(dimagehistorygraphtest
                       ${OpenCV_LIBRARIES}
 )
 
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(dimagehistorygraphtest ${KF5KGeoMap_LIBRARIES})
+endif()
+
 #------------------------------------------------------------------------
 
 set(dimagehistorytest_SRCS
@@ -96,6 +103,10 @@ target_link_libraries(dimagehistorytest
                       ${OpenCV_LIBRARIES}
 )
 
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(dimagehistorytest ${KF5KGeoMap_LIBRARIES})
+endif()
+
 #------------------------------------------------------------------------
 
 set(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
@@ -108,6 +119,10 @@ target_link_libraries(loadpgfdata
                       Qt5::Gui
                       KF5::KIOCore
 )
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(loadpgfdata ${KF5KGeoMap_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 
@@ -125,6 +140,11 @@ target_link_libraries(loadsavethreadtest
 
 )
 
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(loadsavethreadtest ${KF5KGeoMap_LIBRARIES})
+endif()
+
 #------------------------------------------------------------------------
 
 set(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
@@ -138,6 +158,10 @@ target_link_libraries(pgfscaled
                       KF5::KIOCore
 )
 
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(pgfscaled ${KF5KGeoMap_LIBRARIES})
+endif()
+
 #------------------------------------------------------------------------
 
 set(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
@@ -150,6 +174,10 @@ target_link_libraries(qtpgftest
                       Qt5::Gui
                       KF5::KIOCore
 )
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(qtpgftest ${KF5KGeoMap_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 # NOTE: Test have heavy dependecies.
@@ -202,6 +230,10 @@ target_link_libraries(searchtextbartest
                       Qt5::Test
 )
 
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(searchtextbartest ${KF5KGeoMap_LIBRARIES})
+endif()
+
 #------------------------------------------------------------------------
 
 set(freerotationtest_SRCS
@@ -218,6 +250,10 @@ target_link_libraries(freerotationtest
 
                       Qt5::Test
 )
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(freerotationtest ${KF5KGeoMap_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 
@@ -239,6 +275,10 @@ target_link_libraries(timestampupdatetest
 
                       KF5::KExiv2
                      )
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(timestampupdatetest ${KF5KGeoMap_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 
@@ -262,6 +302,10 @@ if(GPHOTO2_FOUND)
     target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
 endif()
 
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(statesavingobjecttest ${KF5KGeoMap_LIBRARIES})
+endif()
+
 #------------------------------------------------------------------------
 
 set(testautocrop_SRCS testautocrop.cpp)
@@ -281,6 +325,10 @@ target_link_libraries(testautocrop
 
                       ${OpenCV_LIBRARIES}
 )
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(testautocrop ${KF5KGeoMap_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 # NOTE: The dependencies are heavy for this one
@@ -340,6 +388,10 @@ target_link_libraries(testdimgloader
                       ${OpenCV_LIBRARIES}
 )
 
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(testdimgloader ${KF5KGeoMap_LIBRARIES})
+endif()
+
 #------------------------------------------------------------------------
 
 if(LENSFUN_FOUND)
@@ -370,6 +422,10 @@ if(LENSFUN_FOUND)
         target_link_libraries(testlensfuniface ${KVM_LIBRARY})
     endif()
 
+    if(${KF5KGeoMap_FOUND})
+        target_link_libraries(testlensfuniface ${KF5KGeoMap_LIBRARIES})
+    endif()
+
 endif()
 
 #------------------------------------------------------------------------
@@ -395,6 +451,10 @@ target_link_libraries(testnrestimate
                       ${OpenCV_LIBRARIES}
 )
 
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(testnrestimate ${KF5KGeoMap_LIBRARIES})
+endif()
+    
 #------------------------------------------------------------------------
 
 set(cameranamehelper_SRCS
@@ -427,6 +487,10 @@ target_link_libraries(cameranamehelpertest
 
 if(GPHOTO2_FOUND)
     target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
+endif()
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(cameranamehelpertest ${KF5KGeoMap_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
