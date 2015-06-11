@@ -117,7 +117,7 @@ void DuplicatesFinder::slotStart()
 //    d->job->addMetaData(QLatin1String("duplicates"), QLatin1String("normal"));
 //    d->job->addMetaData(QLatin1String("threshold"),  QString::number(thresh));
 
-    connect(d->job, SIGNAL(done()),
+    connect(d->job, SIGNAL(finished()),
             this, SLOT(slotDone()));
 
     connect(d->job, SIGNAL(totalSize(int)),

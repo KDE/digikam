@@ -263,7 +263,7 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
     d->jobs.append(currentJobInfo);
 
     connect(currentJob, SIGNAL(signalDone(GPSDBJobsThread*)),
-            this, SLOT(slotMapImagesJobResult(GPSDBJobsThread*)));
+            this, SLOT(slotMapImagesJobResult(GPSDBJobsThread*)), Qt::QueuedConnection);
 
     connect(currentJob, SIGNAL(signalData(GPSDBJobsThread*, QByteArray)),
             this, SLOT(slotMapImagesJobData(GPSDBJobsThread*, QByteArray)));

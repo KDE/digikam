@@ -36,6 +36,7 @@
 #include "imagelister.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
+#include "dbjobsmanager.h"
 
 namespace Digikam
 {
@@ -45,11 +46,11 @@ class ImageInfoJob::Private
 public:
 
     Private() :
-        job(0)
+        jobThread(0)
     {
     }
 
-    KIO::TransferJob* job;
+    DBJobsThread* jobThread;
 };
 
 ImageInfoJob::ImageInfoJob()
@@ -59,9 +60,9 @@ ImageInfoJob::ImageInfoJob()
 
 ImageInfoJob::~ImageInfoJob()
 {
-    if (d->job)
+    if (d->jobThread)
     {
-        d->job->kill();
+        d->jobThread->cancel();
     }
 
     delete d;
@@ -69,10 +70,10 @@ ImageInfoJob::~ImageInfoJob()
 
 void ImageInfoJob::allItemsFromAlbum(Album* const album)
 {
-    if (d->job)
+    if (d->jobThread)
     {
-        d->job->kill();
-        d->job = 0;
+        d->jobThread->cancel();
+        d->jobThread = 0;
     }
 
     if (!album)
@@ -80,47 +81,79 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
         return;
     }
 
-    ImageLister lister;
-    d->job = lister.startListJob(album->databaseUrl());
+    // TODO: Drop Database Url usage
+    DatabaseUrl url = album->databaseUrl();
 
-    connect(d->job, SIGNAL(finished(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    if(album->type() == Album::DATE)
+    {
+        DatesDBJobInfo *jobInfo = new DatesDBJobInfo();
+        jobInfo->startDate = url.startDate();
+        jobInfo->endDate   = url.endDate();
 
-    connect(d->job, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotData(KIO::Job*,QByteArray)));
+        d->jobThread = DBJobsManager::instance()->startDatesJobThread(jobInfo);
+    }
+    else if (album->type() == Album::TAG)
+    {
+        TagsDBJobInfo *jobInfo = new TagsDBJobInfo();
+        jobInfo->tagsIds = url.tagIds();
+
+        d->jobThread = DBJobsManager::instance()->startTagsJobThread(jobInfo);
+    }
+    else if(album->type() == Album::PHYSICAL)
+    {
+        AlbumsDBJobInfo *jobInfo = new AlbumsDBJobInfo();
+        jobInfo->albumRootId = url.albumRootId();
+        jobInfo->album = url.album();
+
+        d->jobThread = DBJobsManager::instance()->startAlbumsJobThread(jobInfo);
+    }
+    else if(album->type() == Album::SEARCH)
+    {
+        SearchesDBJobInfo *jobInfo = new SearchesDBJobInfo();
+        jobInfo->searchId = url.searchId();
+
+        d->jobThread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
+    }
+
+    connect(d->jobThread, SIGNAL(finished()),
+            this, SLOT(slotResult()));
+
+    connect(d->jobThread, SIGNAL(data(QByteArray)),
+            this, SLOT(slotData(QByteArray)));
 }
 
 void ImageInfoJob::stop()
 {
-    if (d->job)
+    if (d->jobThread)
     {
-        d->job->kill();
-        d->job = 0;
+        d->jobThread->cancel();
+        d->jobThread = 0;
     }
 }
 
 bool ImageInfoJob::isRunning() const
 {
-    return d->job;
+    return d->jobThread;
 }
 
-void ImageInfoJob::slotResult(KJob* job)
+void ImageInfoJob::slotResult()
 {
-    if (job->error())
-    {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << job->errorString();
+//    if (job->error())
+//    {
+//        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << job->errorString();
 
-        // Pop-up a message about the error.
-        DNotificationWrapper(QString(), d->job->errorString(),
-                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
-    }
+//        // Pop-up a message about the error.
+//        DNotificationWrapper(QString(), d->jobThread->errorString(),
+//                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+//    }
 
-    d->job = 0;
+    d->jobThread->cancel();
+    d->jobThread = 0;
 
     emit signalCompleted();
 }
 
-void ImageInfoJob::slotData(KIO::Job*, const QByteArray& data)
+void ImageInfoJob::slotData(const QByteArray& data)
 {
     if (data.isEmpty())
     {

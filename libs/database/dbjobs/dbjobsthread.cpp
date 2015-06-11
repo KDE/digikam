@@ -32,6 +32,9 @@ void DBJobsThread::datesListing(DatesDBJobInfo *info)
 {
     DatesJob *j = new DatesJob(info);
 
+    connect(j, SIGNAL(done()),
+            this, SIGNAL(finished()));
+
     connect(j, SIGNAL(data(const QByteArray &)),
             this, SIGNAL(data(const QByteArray &)));
 
@@ -44,6 +47,9 @@ void DBJobsThread::datesListing(DatesDBJobInfo *info)
 void DBJobsThread::tagsListing(TagsDBJobInfo *info)
 {
     TagsJob *j = new TagsJob(info);
+
+    connect(j, SIGNAL(done()),
+            this, SIGNAL(finished()));
 
     connect(j, SIGNAL(data(const QByteArray &)),
             this, SIGNAL(data(const QByteArray &)));
@@ -106,10 +112,11 @@ void SearchesDBJobsThread::searchesListing(SearchesDBJobInfo *info)
 {
     SearchesJob *j = new SearchesJob(info);
 
+    connect(j, SIGNAL(done()),
+            this, SIGNAL(finished()));
+
     if(info->duplicates)
     {
-        connect(j, SIGNAL(done()),
-                this, SIGNAL(done()));
 
         connect(j, SIGNAL(totalSize(int)),
                 this, SIGNAL(totalSize(int)));

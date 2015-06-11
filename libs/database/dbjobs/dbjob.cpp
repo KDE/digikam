@@ -54,6 +54,8 @@ void AlbumsJob::run()
         lister.listAlbum(&receiver, m_jobInfo->albumRootId, m_jobInfo->album);
         receiver.sendData();
     }
+
+    emit done();
 }
 
 // ----------------------------------------------
@@ -88,6 +90,8 @@ void DatesJob::run()
         // send rest
         receiver.sendData();
     }
+
+    emit done();
 }
 
 // ----------------------------------------------
@@ -199,6 +203,7 @@ void TagsJob::run()
         // finish sending
         receiver.sendData();
     }
+    emit done();
 }
 
 // ----------------------------------------------
@@ -278,9 +283,8 @@ void SearchesJob::run()
                                       m_jobInfo->tagIds,
                                       m_jobInfo->threshold,
                                       &observer);
-
-        emit done();
     }
+    emit done();
 }
 
 } // namespace Digikam

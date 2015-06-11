@@ -34,6 +34,7 @@ public:
 
 Q_SIGNALS:
     void data(const QByteArray &);
+    void finished();
 
 };
 
@@ -52,7 +53,6 @@ public:
 
 Q_SIGNALS:
 
-    void done();
     void processedSize(int number);
     void totalSize(int number);
 };
