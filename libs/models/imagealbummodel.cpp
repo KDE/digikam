@@ -384,7 +384,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     }
 
     connect(d->jobThread, SIGNAL(finished()),
-            this, SLOT(slotResult()), Qt::QueuedConnection);
+            this, SLOT(slotResult()));
 
     connect(d->jobThread, SIGNAL(data(QList<ImageListerRecord>)),
             this, SLOT(slotData(QList<ImageListerRecord>)));
@@ -392,7 +392,10 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
 
 void ImageAlbumModel::slotResult()
 {
-    d->jobThread->cancel();
+    if(d->jobThread != sender())
+        return;
+
+    d->jobThread = 0;
 
     // either of the two
     finishRefresh();
@@ -401,6 +404,9 @@ void ImageAlbumModel::slotResult()
 
 void ImageAlbumModel::slotData(const QList<ImageListerRecord> &records)
 {
+    if(d->jobThread != sender())
+        return;
+
     if (records.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Data From DBJobsThread is null: " << records.isEmpty();
