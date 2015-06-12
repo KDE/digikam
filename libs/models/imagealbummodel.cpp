@@ -83,6 +83,8 @@ ImageAlbumModel::ImageAlbumModel(QObject* const parent)
     : ImageThumbnailModel(parent),
       d(new Private)
 {
+    qRegisterMetaType<QList<ImageListerRecord>>("QList<ImageListerRecord>");
+
     d->refreshTimer     = new QTimer(this);
     d->refreshTimer->setSingleShot(true);
 
@@ -384,8 +386,8 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     connect(d->jobThread, SIGNAL(finished()),
             this, SLOT(slotResult()), Qt::QueuedConnection);
 
-    connect(d->jobThread, SIGNAL(data(QByteArray)),
-            this, SLOT(slotData(QByteArray)));
+    connect(d->jobThread, SIGNAL(data(QList<ImageListerRecord>)),
+            this, SLOT(slotData(QList<ImageListerRecord>)));
 }
 
 void ImageAlbumModel::slotResult()
@@ -395,44 +397,24 @@ void ImageAlbumModel::slotResult()
     // either of the two
     finishRefresh();
     finishIncrementalRefresh();
-
-//    if (job->error())
-//    {
-//        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << job->errorString();
-
-//        // Pop-up a message about the error.
-//        DNotificationWrapper(QString(), job->errorString(),
-//                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
-//    }
 }
 
-void ImageAlbumModel::slotData(const QByteArray &data)
+void ImageAlbumModel::slotData(const QList<ImageListerRecord> &records)
 {
-    if (data.isEmpty())
+    if (records.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Data From DBJobsThread is null: " << data.isEmpty();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Data From DBJobsThread is null: " << records.isEmpty();
         return;
     }
 
     ImageInfoList newItemsList;
-    QByteArray    tmp(data);
-    QDataStream   ds(&tmp, QIODevice::ReadOnly);
 
     if (d->extraValueJob)
     {
         QList<QVariant> extraValues;
 
-        if (!ImageListerRecord::checkStream(ImageListerRecord::ExtraValueFormat, ds))
+        foreach (const ImageListerRecord &record, records)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Binary stream from DBJob is not valid, rejecting";
-            return;
-        }
-
-        while (!ds.atEnd())
-        {
-            ImageListerRecord record(ImageListerRecord::ExtraValueFormat);
-            ds >> record;
-
             ImageInfo info(record);
             newItemsList << info;
 
@@ -463,11 +445,8 @@ void ImageAlbumModel::slotData(const QByteArray &data)
     }
     else
     {
-        while (!ds.atEnd())
+        foreach (const ImageListerRecord &record, records)
         {
-            ImageListerRecord record;
-            ds >> record;
-
             ImageInfo info(record);
             newItemsList << info;
         }

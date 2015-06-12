@@ -86,7 +86,7 @@ protected Q_SLOTS:
     void scheduleIncrementalRefresh();
 
     void slotResult();
-    void slotData(const QByteArray& data);
+    void slotData(const QList<ImageListerRecord> &records);
 
     void slotNextRefresh();
     void slotNextIncrementalRefresh();

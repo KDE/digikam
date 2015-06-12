@@ -38,11 +38,7 @@ void AlbumsJob::run()
     if (m_jobInfo->folders)
     {
         QMap<int, int> albumNumberMap = DatabaseAccess().db()->getNumberOfImagesInAlbums();
-
-        QByteArray  ba;
-        QDataStream os(&ba, QIODevice::WriteOnly);
-        os << albumNumberMap;
-        emit data(ba);
+        emit foldersData(albumNumberMap);
     }
     else
     {
@@ -75,10 +71,7 @@ void DatesJob::run()
     if (m_jobInfo->folders)
     {
         QMap<QDateTime, int> dateNumberMap = DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
-        QByteArray           ba;
-        QDataStream          os(&ba, QIODevice::WriteOnly);
-        os << dateNumberMap;
-        emit data(ba);
+        emit foldersData(dateNumberMap);
     }
     else
     {
@@ -118,10 +111,7 @@ void GPSJob::run()
                                                            0,
                                                            QLatin1String("rating"));
 
-        QByteArray  ba;
-        QDataStream os(&ba, QIODevice::WriteOnly);
-        os << imagesInfoFromArea;
-        emit data(ba);
+        emit directQueryData(imagesInfoFromArea);
     }
     else
     {
@@ -159,11 +149,7 @@ void TagsJob::run()
     if (m_jobInfo->folders)
     {
         QMap<int, int> tagNumberMap = DatabaseAccess().db()->getNumberOfImagesInTags();
-
-        QByteArray  ba;
-        QDataStream os(&ba, QIODevice::WriteOnly);
-        os << tagNumberMap;
-        emit data(ba);
+        emit foldersData(tagNumberMap);
     }
     else if (m_jobInfo->faceFolders)
     {
@@ -173,18 +159,15 @@ void TagsJob::run()
         facesNumberMap[ImageTagPropertyName::tagRegion()]        =
             DatabaseAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::tagRegion());
 
-        QByteArray  ba;
-        QDataStream os(&ba, QIODevice::WriteOnly);
-        os << facesNumberMap;
-        emit data(ba);
+        emit faceFoldersData(facesNumberMap);
     }
     else
     {
-        Digikam::ImageLister lister;
+        ImageLister lister;
         lister.setRecursive(m_jobInfo->recursive);
         lister.setListOnlyAvailable(m_jobInfo->listAvailableImagesOnly);
         // send data every 200 images to be more responsive
-        Digikam::ImageListerJobPartsSendingReceiver receiver(this, 200);
+        ImageListerJobPartsSendingReceiver receiver(this, 200);
 
         if (!m_jobInfo->specialTag.isNull())
         {

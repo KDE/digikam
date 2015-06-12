@@ -4,6 +4,7 @@
 #include "KDCRAW/RActionJob"
 #include "dbjobinfo.h"
 #include "dbjobsthread.h"
+#include "imagelisterrecord.h"
 #include "duplicatesprogressobserver.h"
 
 using namespace KDcrawIface;
@@ -23,7 +24,7 @@ public:
 
 Q_SIGNALS:
 
-    void data(const QByteArray &ba);
+    void data(const QList<ImageListerRecord> &records);
     void done();
 };
 
@@ -41,6 +42,10 @@ public:
 protected:
 
     void run();
+
+Q_SIGNALS:
+
+    void foldersData(const QMap<int, int> &);
 
 private:
 
@@ -62,6 +67,10 @@ protected:
 
     void run();
 
+Q_SIGNALS:
+
+    void foldersData(const QMap<QDateTime, int>& datesStatMap);
+
 private:
 
     DatesDBJobInfo *m_jobInfo;
@@ -82,6 +91,10 @@ protected:
 
     void run();
 
+Q_SIGNALS:
+
+    void directQueryData(const QList<QVariant> & data);
+
 private:
 
     GPSDBJobInfo *m_jobInfo;
@@ -101,6 +114,11 @@ public:
 protected:
 
     void run();
+
+Q_SIGNALS:
+
+    void foldersData(const QMap<int, int> & data);
+    void faceFoldersData(const QMap<QString, QMap<int, int> > & data);
 
 private:
 

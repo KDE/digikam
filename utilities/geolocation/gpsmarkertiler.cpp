@@ -265,8 +265,8 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
     connect(currentJob, SIGNAL(signalDone(GPSDBJobsThread*)),
             this, SLOT(slotMapImagesJobResult(GPSDBJobsThread*)), Qt::QueuedConnection);
 
-    connect(currentJob, SIGNAL(signalData(GPSDBJobsThread*, QByteArray)),
-            this, SLOT(slotMapImagesJobData(GPSDBJobsThread*, QByteArray)));
+    connect(currentJob, SIGNAL(signalData(GPSDBJobsThread*, QList<ImageListerRecord>)),
+            this, SLOT(slotMapImagesJobData(GPSDBJobsThread*, QList<ImageListerRecord>)));
 }
 
 /**
@@ -507,15 +507,12 @@ KGeoMap::KGeoMapGroupState GPSMarkerTiler::getTileGroupState(const KGeoMap::Tile
 /**
  * @brief The marker data is returned from the database in batches. This function takes and unites the batches.
  */
-void GPSMarkerTiler::slotMapImagesJobData(GPSDBJobsThread* jobThread, const QByteArray& data)
+void GPSMarkerTiler::slotMapImagesJobData(GPSDBJobsThread* jobThread, const QList<ImageListerRecord>& records)
 {
-    if (data.isEmpty())
+    if (records.isEmpty())
     {
         return;
     }
-
-    QByteArray  di(data);
-    QDataStream ds(&di, QIODevice::ReadOnly);
 
     Private::InternalJobs* internalJob = 0;
 
@@ -534,19 +531,8 @@ void GPSMarkerTiler::slotMapImagesJobData(GPSDBJobsThread* jobThread, const QByt
         return;
     }
 
-    if (!ImageListerRecord::checkStream(ImageListerRecord::ExtraValueFormat, ds))
+    foreach (const ImageListerRecord &record, records)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Binary stream from ioslave is not valid, rejecting";
-        return;
-    }
-
-    GPSImageInfo::List newEntries;
-
-    while (!ds.atEnd())
-    {
-        ImageListerRecord record(ImageListerRecord::ExtraValueFormat);
-        ds >> record;
-
         if (record.extraValues.count() < 2)
         {
             // skip info without coordinates
@@ -569,8 +555,6 @@ void GPSMarkerTiler::slotMapImagesJobData(GPSDBJobsThread* jobThread, const QByt
  */
 void GPSMarkerTiler::slotMapImagesJobResult(GPSDBJobsThread* jobThread)
 {
-//    KIO::Job* const currentJob = qobject_cast<KIO::Job*>(job);
-
     int foundIndex = -1;
 
     for (int i = 0; i < d->jobs.count(); ++i)
@@ -587,16 +571,6 @@ void GPSMarkerTiler::slotMapImagesJobResult(GPSDBJobsThread* jobThread)
         // this should not happen, but ok...
         return;
     }
-
-// TODO: implement error method
-//    if (job->error())
-//    {
-//        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list images in selected area:" << job->errorString();
-
-//        // Pop-up a message about the error.
-//        DNotificationWrapper(QString(), job->errorString(),
-//                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
-//    }
 
     // get the results from the job:
     const QList<GPSImageInfo> returnedImageInfo = d->jobs.at(foundIndex).dataFromDatabase;

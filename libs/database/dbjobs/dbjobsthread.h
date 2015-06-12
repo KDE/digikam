@@ -11,6 +11,7 @@
 #include "dbjobinfo.h"
 #include "dbjob.h"
 #include "haariface.h"
+#include "imagelisterrecord.h"
 
 using namespace KDcrawIface;
 
@@ -25,17 +26,67 @@ public:
     explicit DBJobsThread(QObject* const parent);
     ~DBJobsThread();
 
-    void albumsListing(AlbumsDBJobInfo *info);
-    void datesListing(DatesDBJobInfo *info);
-    void GPSListing(GPSDBJobInfo *info);
-    void tagsListing(TagsDBJobInfo *info);
-
     void setUseMultiCore(const bool useMultiCore);
 
 Q_SIGNALS:
-    void data(const QByteArray &);
+    void data(const QList<ImageListerRecord> &records);
     void finished();
+};
 
+// ---------------------------------------------
+
+class AlbumsDBJobsThread : public DBJobsThread
+{
+    Q_OBJECT
+
+public:
+
+    explicit AlbumsDBJobsThread(QObject *const parent);
+    ~AlbumsDBJobsThread();
+
+    void albumsListing(AlbumsDBJobInfo *info);
+
+Q_SIGNALS:
+
+    void foldersData(const QMap<int, int> &);
+    void faceFoldersData(const QMap<QString, QMap<int, int> > &);
+};
+
+// ---------------------------------------------
+
+class TagsDBJobsThread : public DBJobsThread
+{
+    Q_OBJECT
+
+public:
+
+    explicit TagsDBJobsThread(QObject *const parent);
+    ~TagsDBJobsThread();
+
+    void tagsListing(TagsDBJobInfo *info);
+
+Q_SIGNALS:
+
+    void foldersData(const QMap<int, int> &);
+    void faceFoldersData(const QMap<QString, QMap<int, int> > &);
+};
+
+// ---------------------------------------------
+
+class DatesDBJobsThread : public DBJobsThread
+{
+    Q_OBJECT
+
+public:
+
+    explicit DatesDBJobsThread(QObject *const parent);
+    ~DatesDBJobsThread();
+
+    void datesListing(DatesDBJobInfo *info);
+
+Q_SIGNALS:
+
+    void foldersData(const QMap<QDateTime,int> &);
 };
 
 // ---------------------------------------------
@@ -72,13 +123,13 @@ public:
 
 public Q_SLOTS:
 
-    void data(const QByteArray &);
+    void data(const QList<ImageListerRecord> & records);
     void done();
 
 Q_SIGNALS:
 
     void signalDone(GPSDBJobsThread*);
-    void signalData(GPSDBJobsThread*, const QByteArray &);
+    void signalData(GPSDBJobsThread*, const QList<ImageListerRecord>&);
 };
 
 } // namespace Digikam

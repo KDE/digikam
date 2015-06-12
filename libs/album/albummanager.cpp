@@ -198,10 +198,10 @@ public:
 
     bool                        showOnlyAvailableAlbums;
 
-    DBJobsThread*               albumListJob;
-    DBJobsThread*               dateListJob;
-    DBJobsThread*               tagListJob;
-    DBJobsThread*               personListJob;
+    AlbumsDBJobsThread*         albumListJob;
+    DatesDBJobsThread*          dateListJob;
+    TagsDBJobsThread*           tagListJob;
+    TagsDBJobsThread*           personListJob;
 
 
     AlbumWatch*                 albumWatch;
@@ -295,6 +295,10 @@ AlbumManager* AlbumManager::instance()
 AlbumManager::AlbumManager()
     : d(new Private)
 {
+    qRegisterMetaType<QMap<QDateTime,int>>("QMap<QDateTime,int>");
+    qRegisterMetaType<QMap<int,int>>("QMap<int,int>");
+    qRegisterMetaType<QMap<QString,QMap<int,int> >>("QMap<QString,QMap<int,int> >");
+
     internalInstance = this;
     d->albumWatch    = new AlbumWatch(this);
 
@@ -1485,25 +1489,23 @@ void AlbumManager::getAlbumItemsCount()
         return;
     }
 
-    // List albums using kioslave
-
     if (d->albumListJob)
     {
         d->albumListJob->cancel();
         d->albumListJob = 0;
     }
 
-//    DatabaseUrl u   = DatabaseUrl::albumUrl();
-qCDebug(DIGIKAM_GENERAL_LOG) << "LISTING ALL";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "LISTING ALL";
+
     AlbumsDBJobInfo *jInfo = new AlbumsDBJobInfo();
     jInfo->folders = true;
-    d->albumListJob = DBJobsManager::instance()->startAlbumsJobThread(jInfo);
+    d->albumListJob = dynamic_cast<AlbumsDBJobsThread*>(DBJobsManager::instance()->startAlbumsJobThread(jInfo));
 
-//    connect(d->albumListJob, SIGNAL(result(KJob*)),
-//            this, SLOT(slotAlbumsJobResult(KJob*)));
+    connect(d->albumListJob, SIGNAL(finished()),
+            this, SLOT(slotAlbumsJobResult()));
 
-    connect(d->albumListJob, SIGNAL(data(QByteArray)),
-            this, SLOT(slotAlbumsJobData(QByteArray)));
+    connect(d->albumListJob, SIGNAL(foldersData(QMap<int,int>)),
+            this, SLOT(slotAlbumsJobData(QMap<int,int>)));
 }
 
 void AlbumManager::scanTAlbums()
@@ -1664,18 +1666,16 @@ void AlbumManager::getTagItemsCount()
         d->tagListJob = 0;
     }
 
-//    DatabaseUrl u = DatabaseUrl::fromTagIds(QList<int>());
-
     TagsDBJobInfo *jInfo = new TagsDBJobInfo();
     jInfo->folders = true;
 
-    d->tagListJob = DBJobsManager::instance()->startTagsJobThread(jInfo);
+    d->tagListJob = dynamic_cast<TagsDBJobsThread*>(DBJobsManager::instance()->startTagsJobThread(jInfo));
 
-//    connect(d->tagListJob, SIGNAL(result(KJob*)),
-//            this, SLOT(slotTagsJobResult(KJob*)));
+    connect(d->tagListJob, SIGNAL(finished()),
+            this, SLOT(slotTagsJobResult()));
 
-    connect(d->tagListJob, SIGNAL(data(QByteArray)),
-            this, SLOT(slotTagsJobData(QByteArray)));
+    connect(d->tagListJob, SIGNAL(foldersData(QMap<int,int>)),
+            this, SLOT(slotTagsJobData(QMap<int,int>)));
 
     if (d->personListJob)
     {
@@ -1686,13 +1686,13 @@ void AlbumManager::getTagItemsCount()
     jInfo->folders = false;
     jInfo->faceFolders = true;
 
-    d->personListJob = DBJobsManager::instance()->startTagsJobThread(jInfo);
+    d->personListJob = dynamic_cast<TagsDBJobsThread*>(DBJobsManager::instance()->startTagsJobThread(jInfo));
 
-//    connect(d->personListJob, SIGNAL(result(KJob*)),
-//            this, SLOT(slotPeopleJobResult(KJob*)));
+    connect(d->personListJob, SIGNAL(finished()),
+            this, SLOT(slotPeopleJobResult()));
 
-    connect(d->personListJob, SIGNAL(data(QByteArray)),
-            this, SLOT(slotPeopleJobData(QByteArray)));
+    connect(d->personListJob, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),
+            this, SLOT(slotPeopleJobData(QMap<QString,QMap<int,int> >)));
 }
 
 void AlbumManager::scanSAlbums()
@@ -1797,16 +1797,15 @@ void AlbumManager::scanDAlbums()
         d->dateListJob = 0;
     }
 
-    DatabaseUrl u  = DatabaseUrl::dateUrl();
     DatesDBJobInfo *jInfo = new DatesDBJobInfo();
     jInfo->folders = true;
-    d->dateListJob = DBJobsManager::instance()->startDatesJobThread(jInfo);
+    d->dateListJob = dynamic_cast<DatesDBJobsThread*>(DBJobsManager::instance()->startDatesJobThread(jInfo));
 
-//    connect(d->dateListJob, SIGNAL(result(KJob*)),
-//            this, SLOT(slotDatesJobResult(KJob*)));
+    connect(d->dateListJob, SIGNAL(finished()),
+            this, SLOT(slotDatesJobResult()));
 
-    connect(d->dateListJob, SIGNAL(data(QByteArray)),
-            this, SLOT(slotDatesJobData(QByteArray)));
+    connect(d->dateListJob, SIGNAL(foldersData(QMap<QDateTime,int>)),
+            this, SLOT(slotDatesJobData(QMap<QDateTime, int>)));
 }
 
 AlbumList AlbumManager::allPAlbums() const
@@ -3011,61 +3010,33 @@ void AlbumManager::notifyAlbumDeletion(Album* album)
     invalidateGuardedPointers(album);
 }
 
-void AlbumManager::slotAlbumsJobResult(KJob* job)
+void AlbumManager::slotAlbumsJobResult()
 {
-    d->albumListJob = 0;
-
-    if (job->error())
-    {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list albums";
-
-        // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
-                             0, i18n("digiKam"));
-    }
+    d->albumListJob->cancel();
 }
 
-void AlbumManager::slotAlbumsJobData(const QByteArray& data)
+void AlbumManager::slotAlbumsJobData(const QMap<int, int> &albumsStatMap)
 {
-    if (data.isEmpty())
+    if (albumsStatMap.isEmpty())
     {
         return;
     }
-
-    QMap<int, int> albumsStatMap;
-    QByteArray di(data);
-    QDataStream ds(&di, QIODevice::ReadOnly);
-    ds >> albumsStatMap;
 
     d->pAlbumsCount = albumsStatMap;
     emit signalPAlbumsDirty(albumsStatMap);
 }
 
-void AlbumManager::slotPeopleJobResult(KJob* job)
+void AlbumManager::slotPeopleJobResult()
 {
-    d->personListJob = 0;
-
-    if (job->error())
-    {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list face tags";
-
-        // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
-                             0, i18n("digiKam"));
-    }
+    d->personListJob->cancel();
 }
 
-void AlbumManager::slotPeopleJobData(const QByteArray& data)
+void AlbumManager::slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesStatMap)
 {
-    if (data.isEmpty())
+    if (facesStatMap.isEmpty())
     {
         return;
     }
-
-    QMap<QString, QMap<int, int> > facesStatMap;
-    QByteArray di(data);
-    QDataStream ds(&di, QIODevice::ReadOnly);
-    ds >> facesStatMap;
 
     // For now, we only use the sum of confirmed and unconfirmed faces
     d->fAlbumsCount.clear();
@@ -3084,55 +3055,32 @@ void AlbumManager::slotPeopleJobData(const QByteArray& data)
     emit signalFaceCountsDirty(d->fAlbumsCount);
 }
 
-void AlbumManager::slotTagsJobResult(KJob* job)
+void AlbumManager::slotTagsJobResult()
 {
-    d->tagListJob = 0;
-
-    if (job->error())
-    {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list tags";
-
-        // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
-                             0, i18n("digiKam"));
-    }
+    d->tagListJob->cancel();
 }
 
-void AlbumManager::slotTagsJobData(const QByteArray& data)
+void AlbumManager::slotTagsJobData(const QMap<int,int>& tagsStatMap)
 {
-    if (data.isEmpty())
+    if (tagsStatMap.isEmpty())
     {
         return;
     }
-
-    QMap<int, int> tagsStatMap;
-    QByteArray     di(data);
-    QDataStream    ds(&di, QIODevice::ReadOnly);
-    ds >> tagsStatMap;
 
     d->tAlbumsCount = tagsStatMap;
     emit signalTAlbumsDirty(tagsStatMap);
 }
 
-void AlbumManager::slotDatesJobResult(KJob* job)
+void AlbumManager::slotDatesJobResult()
 {
-    d->dateListJob = 0;
-
-    if (job->error())
-    {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list dates";
-
-        // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
-                             0, i18n("digiKam"));
-    }
+    d->dateListJob->cancel();
 
     emit signalAllDAlbumsLoaded();
 }
 
-void AlbumManager::slotDatesJobData(const QByteArray& data)
+void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 {
-    if (data.isEmpty() || !d->rootDAlbum)
+    if (datesStatMap.isEmpty() || !d->rootDAlbum)
     {
         return;
     }
@@ -3158,11 +3106,6 @@ void AlbumManager::slotDatesJobData(const QByteArray& data)
 
         ++it;
     }
-
-    QMap<QDateTime, int> datesStatMap;
-    QByteArray           di(data);
-    QDataStream          ds(&di, QIODevice::ReadOnly);
-    ds >> datesStatMap;
 
     QMap<YearMonth, int> yearMonthMap;
 

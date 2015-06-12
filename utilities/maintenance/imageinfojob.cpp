@@ -118,8 +118,8 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
     connect(d->jobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));
 
-    connect(d->jobThread, SIGNAL(data(QByteArray)),
-            this, SLOT(slotData(QByteArray)));
+    connect(d->jobThread, SIGNAL(data(QList<ImageListerRecord>)),
+            this, SLOT(slotData(QList<ImageListerRecord>)));
 }
 
 void ImageInfoJob::stop()
@@ -138,38 +138,24 @@ bool ImageInfoJob::isRunning() const
 
 void ImageInfoJob::slotResult()
 {
-//    if (job->error())
-//    {
-//        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << job->errorString();
-
-//        // Pop-up a message about the error.
-//        DNotificationWrapper(QString(), d->jobThread->errorString(),
-//                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
-//    }
-
     d->jobThread->cancel();
     d->jobThread = 0;
 
     emit signalCompleted();
 }
 
-void ImageInfoJob::slotData(const QByteArray& data)
+void ImageInfoJob::slotData(const QList<ImageListerRecord>& records)
 {
-    if (data.isEmpty())
+    if (records.isEmpty())
     {
         return;
     }
 
     ImageInfoList itemsList;
-    QDataStream   ds(data);
 
-    while (!ds.atEnd())
+    foreach (const ImageListerRecord &record, records)
     {
-        ImageListerRecord record;
-        ds >> record;
-
         ImageInfo info(record);
-
         itemsList.append(info);
     }
 

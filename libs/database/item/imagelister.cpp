@@ -128,22 +128,6 @@ void ImageLister::setAllowExtraValues(bool useExtraValue)
     d->allowExtraValues = useExtraValue;
 }
 
-KIO::TransferJob* ImageLister::startListJob(const DatabaseUrl& url, int extraValue)
-{
-    QByteArray ba;
-    QDataStream ds(&ba, QIODevice::WriteOnly);
-    ds << url;
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Query Kioslave Url:" << url.toDisplayString();
-
-    if (extraValue != -1)
-    {
-        ds << extraValue;
-    }
-
-    return (new KIO::SpecialJob(url, ba));
-}
-
 void ImageLister::list(ImageListerReceiver* const receiver, const DatabaseUrl& url)
 {
     if (url.isAlbumUrl())

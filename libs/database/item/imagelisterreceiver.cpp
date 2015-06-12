@@ -195,20 +195,7 @@ ImageListerJobReceiver::ImageListerJobReceiver(DBJob *const job)
 
 void ImageListerJobReceiver::sendData()
 {
-    QByteArray  ba;
-    QDataStream os(&ba, QIODevice::WriteOnly);
-
-    if (!records.isEmpty())
-    {
-        ImageListerRecord::initializeStream(records.first().binaryFormat, os);
-    }
-
-    for (QList<ImageListerRecord>::const_iterator it = records.constBegin(); it != records.constEnd(); ++it)
-    {
-        os << *it;
-    }
-
-    emit m_job->data(ba);
+    emit m_job->data(records);
 
     records.clear();
 }

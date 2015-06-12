@@ -15,28 +15,34 @@ DBJobsThread::~DBJobsThread()
 {
 }
 
-void DBJobsThread::albumsListing(AlbumsDBJobInfo *info)
+// -------------------------------------------------
+
+AlbumsDBJobsThread::AlbumsDBJobsThread(QObject *const parent)
+    : DBJobsThread(parent)
 {
-    AlbumsJob *j = new AlbumsJob(info);
-
-    connect(j, SIGNAL(data(const QByteArray &)),
-            this, SIGNAL(data(const QByteArray &)));
-
-    RJobCollection collection;
-    collection.insert(j,0);
-
-    appendJobs(collection);
 }
 
-void DBJobsThread::datesListing(DatesDBJobInfo *info)
+AlbumsDBJobsThread::~AlbumsDBJobsThread()
 {
-    DatesJob *j = new DatesJob(info);
+}
+
+void AlbumsDBJobsThread::albumsListing(AlbumsDBJobInfo *info)
+{
+    AlbumsJob *j = new AlbumsJob(info);
 
     connect(j, SIGNAL(done()),
             this, SIGNAL(finished()));
 
-    connect(j, SIGNAL(data(const QByteArray &)),
-            this, SIGNAL(data(const QByteArray &)));
+    if(info->folders)
+    {
+        connect(j, SIGNAL(foldersData(QMap<int,int>)),
+                this, SIGNAL(foldersData(QMap<int,int>)));
+    }
+    else
+    {
+        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
+                this, SIGNAL(data(QList<ImageListerRecord>)));
+    }
 
     RJobCollection collection;
     collection.insert(j,0);
@@ -44,15 +50,74 @@ void DBJobsThread::datesListing(DatesDBJobInfo *info)
     appendJobs(collection);
 }
 
-void DBJobsThread::tagsListing(TagsDBJobInfo *info)
+// -------------------------------------------------
+
+TagsDBJobsThread::TagsDBJobsThread(QObject *const parent)
+    : DBJobsThread(parent)
+{
+}
+
+TagsDBJobsThread::~TagsDBJobsThread()
+{
+}
+
+void TagsDBJobsThread::tagsListing(TagsDBJobInfo *info)
 {
     TagsJob *j = new TagsJob(info);
 
     connect(j, SIGNAL(done()),
             this, SIGNAL(finished()));
 
-    connect(j, SIGNAL(data(const QByteArray &)),
-            this, SIGNAL(data(const QByteArray &)));
+    if(info->folders)
+    {
+        connect(j, SIGNAL(foldersData(QMap<int,int>)),
+                this, SIGNAL(foldersData(QMap<int,int>)));
+    }
+    else if(info->faceFolders)
+    {
+        connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),
+                this, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)));
+    }
+    else
+    {
+        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
+                this, SIGNAL(data(QList<ImageListerRecord>)));
+    }
+
+    RJobCollection collection;
+    collection.insert(j,0);
+
+    appendJobs(collection);
+}
+
+// -------------------------------------------------
+
+DatesDBJobsThread::DatesDBJobsThread(QObject *const parent)
+    : DBJobsThread(parent)
+{
+}
+
+DatesDBJobsThread::~DatesDBJobsThread()
+{
+}
+
+void DatesDBJobsThread::datesListing(DatesDBJobInfo *info)
+{
+    DatesJob *j = new DatesJob(info);
+
+    connect(j, SIGNAL(done()),
+            this, SIGNAL(finished()));
+
+    if(info->folders)
+    {
+        connect(j, SIGNAL(foldersData(const QMap<QDateTime,int> &)),
+                this, SIGNAL(foldersData(const QMap<QDateTime,int> &)));
+    }
+    else
+    {
+        connect(j, SIGNAL(data(const QList<ImageListerRecord> &)),
+                this, SIGNAL(data(const QList<ImageListerRecord> &)));
+    }
 
     RJobCollection collection;
     collection.insert(j,0);
@@ -71,7 +136,7 @@ GPSDBJobsThread::~GPSDBJobsThread()
 {
 }
 
-void GPSDBJobsThread::data(const QByteArray & data)
+void GPSDBJobsThread::data(const QList<ImageListerRecord> &data)
 {
     emit signalData(this, data);
 }
@@ -88,8 +153,8 @@ void GPSDBJobsThread::GPSListing(GPSDBJobInfo *info)
     connect(j, SIGNAL(done()),
             this, SLOT(done()));
 
-    connect(j, SIGNAL(data(const QByteArray &)),
-            this, SLOT(data(const QByteArray &)));
+    connect(j, SIGNAL(data(QList<ImageListerRecord>)),
+            this, SLOT(data(QList<ImageListerRecord>)));
 
     RJobCollection collection;
     collection.insert(j,0);
@@ -126,8 +191,8 @@ void SearchesDBJobsThread::searchesListing(SearchesDBJobInfo *info)
     }
     else
     {
-        connect(j, SIGNAL(data(const QByteArray &)),
-                this, SIGNAL(data(const QByteArray &)));
+        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
+                this, SIGNAL(data(QList<ImageListerRecord>)));
     }
 
     RJobCollection collection;

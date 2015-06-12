@@ -66,7 +66,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotResult();
-    void slotData(const QByteArray& data);
+    void slotData(const QList<ImageListerRecord>& data);
 
 private:
 

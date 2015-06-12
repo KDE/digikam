@@ -50,16 +50,6 @@ namespace Digikam
 
 class DIGIKAM_DATABASE_EXPORT ImageLister
 {
-public:
-
-    /**
-     * Create a TransferJob for the "special" method of one of the database ioslaves,
-     * referenced by the URL.
-     * @param url url referencing the database ioslave
-     * @param extraValue If -1, nothing is sent. If it takes another value,
-     *                   this value will be sent as a second parameter.
-     */
-    static KIO::TransferJob* startListJob(const DatabaseUrl& url, int extraValue = -1);
 
 public:
 

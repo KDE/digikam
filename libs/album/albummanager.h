@@ -42,6 +42,7 @@
 #include "albuminfo.h"
 #include "databaseparameters.h"
 #include "digikam_export.h"
+#include "imagelisterrecord.h"
 
 class QDate;
 
@@ -645,14 +646,14 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotDatesJobResult(KJob* job);
-    void slotDatesJobData(const QByteArray& data);
-    void slotAlbumsJobResult(KJob* job);
-    void slotAlbumsJobData(const QByteArray& data);
-    void slotTagsJobResult(KJob* job);
-    void slotTagsJobData(const QByteArray& data);
-    void slotPeopleJobResult(KJob* job);
-    void slotPeopleJobData(const QByteArray& data);
+    void slotDatesJobResult();
+    void slotDatesJobData(const QMap<QDateTime, int>& datesStatMap);
+    void slotAlbumsJobResult();
+    void slotAlbumsJobData(const QMap<int,int>& albumsStatMap);
+    void slotTagsJobResult();
+    void slotTagsJobData(const QMap<int,int>& tagsStatMap);
+    void slotPeopleJobResult();
+    void slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesStatMap);
 
     void slotCollectionLocationStatusChanged(const CollectionLocation&, int);
     void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);
