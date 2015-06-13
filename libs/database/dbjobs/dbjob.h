@@ -25,7 +25,6 @@ public:
 Q_SIGNALS:
 
     void data(const QList<ImageListerRecord> &records);
-    void done();
 };
 
 // ----------------------------------------------

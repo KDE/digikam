@@ -262,11 +262,11 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
 
     d->jobs.append(currentJobInfo);
 
-    connect(currentJob, SIGNAL(signalDone(GPSDBJobsThread*)),
-            this, SLOT(slotMapImagesJobResult(GPSDBJobsThread*)), Qt::QueuedConnection);
+    connect(currentJob, SIGNAL(finished()),
+            this, SLOT(slotMapImagesJobResult()));
 
-    connect(currentJob, SIGNAL(signalData(GPSDBJobsThread*, QList<ImageListerRecord>)),
-            this, SLOT(slotMapImagesJobData(GPSDBJobsThread*, QList<ImageListerRecord>)));
+    connect(currentJob, SIGNAL(data(QList<ImageListerRecord>)),
+            this, SLOT(slotMapImagesJobData(QList<ImageListerRecord>)));
 }
 
 /**
@@ -507,7 +507,7 @@ KGeoMap::KGeoMapGroupState GPSMarkerTiler::getTileGroupState(const KGeoMap::Tile
 /**
  * @brief The marker data is returned from the database in batches. This function takes and unites the batches.
  */
-void GPSMarkerTiler::slotMapImagesJobData(GPSDBJobsThread* jobThread, const QList<ImageListerRecord>& records)
+void GPSMarkerTiler::slotMapImagesJobData(const QList<ImageListerRecord>& records)
 {
     if (records.isEmpty())
     {
@@ -518,7 +518,7 @@ void GPSMarkerTiler::slotMapImagesJobData(GPSDBJobsThread* jobThread, const QLis
 
     for (int i = 0; i < d->jobs.count(); ++i)
     {
-        if (jobThread == d->jobs.at(i).jobThread)
+        if (sender() == d->jobs.at(i).jobThread)
         {
             /// @todo Is this really safe?
             internalJob = &d->jobs[i];
@@ -553,13 +553,13 @@ void GPSMarkerTiler::slotMapImagesJobData(GPSDBJobsThread* jobThread, const QLis
 /**
  * @brief Now, all the marker data has been retrieved from the database. Here, the markers are sorted into tiles.
  */
-void GPSMarkerTiler::slotMapImagesJobResult(GPSDBJobsThread* jobThread)
+void GPSMarkerTiler::slotMapImagesJobResult()
 {
     int foundIndex = -1;
 
     for (int i = 0; i < d->jobs.count(); ++i)
     {
-        if (jobThread == d->jobs.at(i).jobThread)
+        if (sender() == d->jobs.at(i).jobThread)
         {
             foundIndex = i;
             break;

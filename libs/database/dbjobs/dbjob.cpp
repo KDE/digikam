@@ -51,7 +51,7 @@ void AlbumsJob::run()
         receiver.sendData();
     }
 
-    emit done();
+    emit signalDone();
 }
 
 // ----------------------------------------------
@@ -84,7 +84,7 @@ void DatesJob::run()
         receiver.sendData();
     }
 
-    emit done();
+    emit signalDone();
 }
 
 // ----------------------------------------------
@@ -129,7 +129,7 @@ void GPSJob::run()
         receiver.sendData();
     }
 
-    emit done();
+    emit signalDone();
 }
 
 // ----------------------------------------------
@@ -186,7 +186,7 @@ void TagsJob::run()
         // finish sending
         receiver.sendData();
     }
-    emit done();
+    emit signalDone();
 }
 
 // ----------------------------------------------
@@ -249,7 +249,6 @@ void SearchesJob::run()
         if (m_jobInfo->albumIds.isEmpty() && m_jobInfo->tagIds.isEmpty())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "No album ids passed for duplicates search";
-//            error(KIO::ERR_INTERNAL, i18n("No album ids passed"));
             return;
         }
 
@@ -267,7 +266,7 @@ void SearchesJob::run()
                                       m_jobInfo->threshold,
                                       &observer);
     }
-    emit done();
+    emit signalDone();
 }
 
 } // namespace Digikam

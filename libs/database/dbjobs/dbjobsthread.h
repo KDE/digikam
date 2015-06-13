@@ -29,8 +29,8 @@ public:
     void setUseMultiCore(const bool useMultiCore);
 
 Q_SIGNALS:
-    void data(const QList<ImageListerRecord> &records);
     void finished();
+    void data(const QList<ImageListerRecord> &records);
 };
 
 // ---------------------------------------------
@@ -121,15 +121,9 @@ public:
 
     void GPSListing(GPSDBJobInfo *info);
 
-public Q_SLOTS:
-
-    void data(const QList<ImageListerRecord> & records);
-    void done();
-
 Q_SIGNALS:
 
-    void signalDone(GPSDBJobsThread*);
-    void signalData(GPSDBJobsThread*, const QList<ImageListerRecord>&);
+    void directQueryData(const QList<QVariant> & data);
 };
 
 } // namespace Digikam

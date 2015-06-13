@@ -30,7 +30,7 @@ void AlbumsDBJobsThread::albumsListing(AlbumsDBJobInfo *info)
 {
     AlbumsJob *j = new AlbumsJob(info);
 
-    connect(j, SIGNAL(done()),
+    connect(j, SIGNAL(signalDone()),
             this, SIGNAL(finished()));
 
     if(info->folders)
@@ -65,7 +65,7 @@ void TagsDBJobsThread::tagsListing(TagsDBJobInfo *info)
 {
     TagsJob *j = new TagsJob(info);
 
-    connect(j, SIGNAL(done()),
+    connect(j, SIGNAL(signalDone()),
             this, SIGNAL(finished()));
 
     if(info->folders)
@@ -105,7 +105,7 @@ void DatesDBJobsThread::datesListing(DatesDBJobInfo *info)
 {
     DatesJob *j = new DatesJob(info);
 
-    connect(j, SIGNAL(done()),
+    connect(j, SIGNAL(signalDone()),
             this, SIGNAL(finished()));
 
     if(info->folders)
@@ -136,25 +136,23 @@ GPSDBJobsThread::~GPSDBJobsThread()
 {
 }
 
-void GPSDBJobsThread::data(const QList<ImageListerRecord> &data)
-{
-    emit signalData(this, data);
-}
-
-void GPSDBJobsThread::done()
-{
-    emit signalDone(this);
-}
-
 void GPSDBJobsThread::GPSListing(GPSDBJobInfo *info)
 {
     GPSJob *j = new GPSJob(info);
 
-    connect(j, SIGNAL(done()),
-            this, SLOT(done()));
+    connect(j, SIGNAL(signalDone()),
+            this, SIGNAL(finished()));
 
-    connect(j, SIGNAL(data(QList<ImageListerRecord>)),
-            this, SLOT(data(QList<ImageListerRecord>)));
+    if(info->wantDirectQuery)
+    {
+        connect(j, SIGNAL(directQueryData(QList<QVariant>)),
+                this, SIGNAL(directQueryData(QList<QVariant>)));
+    }
+    else
+    {
+        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
+                this, SIGNAL(data(QList<ImageListerRecord>)));
+    }
 
     RJobCollection collection;
     collection.insert(j,0);
@@ -177,7 +175,7 @@ void SearchesDBJobsThread::searchesListing(SearchesDBJobInfo *info)
 {
     SearchesJob *j = new SearchesJob(info);
 
-    connect(j, SIGNAL(done()),
+    connect(j, SIGNAL(signalDone()),
             this, SIGNAL(finished()));
 
     if(info->duplicates)

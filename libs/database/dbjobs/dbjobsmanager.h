@@ -18,11 +18,10 @@ public:
 
     static DBJobsManager* instance();
 
-    DBJobsThread* startAlbumsJobThread(AlbumsDBJobInfo *jInfo);
-    DBJobsThread* startDatesJobThread(DatesDBJobInfo *jInfo);
-    DBJobsThread* startTagsJobThread(TagsDBJobInfo *jInfo);
-
-    GPSDBJobsThread* startGPSJobThread(GPSDBJobInfo *jInfo);
+    GPSDBJobsThread*      startGPSJobThread(GPSDBJobInfo *jInfo);
+    TagsDBJobsThread*     startTagsJobThread(TagsDBJobInfo *jInfo);
+    DatesDBJobsThread*    startDatesJobThread(DatesDBJobInfo *jInfo);
+    AlbumsDBJobsThread*   startAlbumsJobThread(AlbumsDBJobInfo *jInfo);
     SearchesDBJobsThread* startSearchesJobThread(SearchesDBJobInfo *jInfo);
 
 private:
