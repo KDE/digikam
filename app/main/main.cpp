@@ -228,14 +228,7 @@ int main(int argc, char* argv[])
         digikam->autoDetect();
     }
 
-    QStringList tipsFiles;
-    tipsFiles.append(QLatin1String("digikam/tips"));
-    tipsFiles.append(QLatin1String("kipi/tips"));
-
-    if (!app.isSessionRestored())
-    {
-        KTipDialog::showMultiTip(digikam, tipsFiles, false);
-    }
+    KTipDialog::setShowOnStart(false);
 
     int ret = app.exec();
 
