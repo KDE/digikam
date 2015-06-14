@@ -222,7 +222,6 @@ set(libdigikamgui_SRCS
     views/digikamview.cpp
     views/stackedview.cpp
 
-    ${digikamadaptor_SRCS}
 )
 
 if(ENABLE_MEDIAPLAYER)
@@ -259,6 +258,7 @@ add_library(digikamgui_src
 
 set(digikam_SRCS
     main/main.cpp
+    ${digikamadaptor_SRCS}
 )
 
 # this is only required by Win & OSX
