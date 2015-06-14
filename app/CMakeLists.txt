@@ -258,7 +258,7 @@ add_library(digikamgui_src
 
 set(digikam_SRCS
     main/main.cpp
-    ${digikamadaptor_SRCS}
+
 )
 
 # this is only required by Win & OSX
@@ -289,7 +289,7 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:importuibackend_src>
             $<TARGET_OBJECTS:imagehistorywidgets_src>
 
-
+            ${digikamadaptor_SRCS}
 )
 if(${KF5Kipi_FOUND})
     set(DIGIKAM_OBJECTS
