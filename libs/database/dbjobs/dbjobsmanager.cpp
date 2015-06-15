@@ -30,7 +30,7 @@ DBJobsManager *DBJobsManager::instance()
     return &creator->object;
 }
 
-DBJobsThread *DBJobsManager::startAlbumsJobThread(AlbumsDBJobInfo *jInfo)
+AlbumsDBJobsThread *DBJobsManager::startAlbumsJobThread(AlbumsDBJobInfo *jInfo)
 {
     AlbumsDBJobsThread *thread = new AlbumsDBJobsThread(this);
     thread->albumsListing(jInfo);
@@ -39,7 +39,7 @@ DBJobsThread *DBJobsManager::startAlbumsJobThread(AlbumsDBJobInfo *jInfo)
     return thread;
 }
 
-DBJobsThread* DBJobsManager::startDatesJobThread(DatesDBJobInfo *jInfo)
+DatesDBJobsThread* DBJobsManager::startDatesJobThread(DatesDBJobInfo *jInfo)
 {
     DatesDBJobsThread *thread = new DatesDBJobsThread(this);
     thread->datesListing(jInfo);
@@ -48,7 +48,7 @@ DBJobsThread* DBJobsManager::startDatesJobThread(DatesDBJobInfo *jInfo)
     return thread;
 }
 
-DBJobsThread *DBJobsManager::startTagsJobThread(TagsDBJobInfo *jInfo)
+TagsDBJobsThread *DBJobsManager::startTagsJobThread(TagsDBJobInfo *jInfo)
 {
     TagsDBJobsThread *thread = new TagsDBJobsThread(this);
     thread->tagsListing(jInfo);
