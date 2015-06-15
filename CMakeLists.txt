@@ -27,11 +27,11 @@ option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message 
 
 # digiKam version
 set(DIGIKAM_MAJOR_VERSION "4")
-set(DIGIKAM_MINOR_VERSION "11")
+set(DIGIKAM_MINOR_VERSION "12")
 set(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-set(DIGIKAM_RELEASE_DATE "2015-06-14")
+set(DIGIKAM_RELEASE_DATE "2015-07-26")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
