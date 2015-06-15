@@ -50,3 +50,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 043 ==> 318319 - Extended files type mime supported into search tool [patch].
 044 ==> 319921 - SCAN : Audio files are ignored [patch].
 045 ==> 253622 - digikam editor cannot use unsharp mask with radius smaller than one with Canon 7D RAW images.
+046 ==> 349157 - Album view have random invisible / empty / disappearing previews, messed up selection.
