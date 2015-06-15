@@ -222,6 +222,8 @@ set(libdigikamgui_SRCS
     views/digikamview.cpp
     views/stackedview.cpp
 
+    ${digikamadaptor_SRCS}
+
 )
 
 if(ENABLE_MEDIAPLAYER)
@@ -289,7 +291,6 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:importuibackend_src>
             $<TARGET_OBJECTS:imagehistorywidgets_src>
 
-            ${digikamadaptor_SRCS}
 )
 if(${KF5Kipi_FOUND})
     set(DIGIKAM_OBJECTS
