@@ -222,6 +222,8 @@ set(libdigikamgui_SRCS
     views/digikamview.cpp
     views/stackedview.cpp
 
+    ${digikamadaptor_SRCS}
+
 )
 
 if(ENABLE_MEDIAPLAYER)
