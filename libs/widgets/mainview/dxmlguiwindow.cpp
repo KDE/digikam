@@ -197,6 +197,10 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction(QLatin1String("help_donatemoney"), donateMoneyAction);
 
+    QAction* const recipesBookAction   = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Recipes Book..."), this);
+    connect(recipesBookAction, SIGNAL(triggered()), this, SLOT(slotRecipesBook()));
+    actionCollection()->addAction(QLatin1String("help_recipesbook"), recipesBookAction);
+
     QAction* const contributeAction    = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Contribute..."), this);
     connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     actionCollection()->addAction(QLatin1String("help_contribute"), contributeAction);
@@ -649,9 +653,6 @@ QAction* DXmlGuiWindow::buildStdAction(StdActionType type, const QObject* const 
         case StdZoomOutAction:
             return KStandardAction::zoomOut(recvr, slot, parent);
             break;
-        case StdTipOfDayAction:
-            return KStandardAction::tipOfDay(recvr, slot, parent);
-            break;
         case StdOpenAction:
             return KStandardAction::open(recvr, slot, parent);
             break;
@@ -683,12 +684,17 @@ void DXmlGuiWindow::slotRawCameraList()
 
 void DXmlGuiWindow::slotDonateMoney()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("http://www.digikam.org/?q=donation")));
+    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/?q=donation")));
+}
+
+void DXmlGuiWindow::slotRecipesBook()
+{
+    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/node/543")));
 }
 
 void DXmlGuiWindow::slotContribute()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("http://www.digikam.org/?q=contrib")));
+    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/?q=contrib")));
 }
 
 } // namespace Digikam

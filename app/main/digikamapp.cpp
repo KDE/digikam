@@ -50,7 +50,6 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <ktip.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
@@ -1262,11 +1261,6 @@ void DigikamApp::setupActions()
     connect(d->kipiHelpAction, SIGNAL(triggered()), this, SLOT(slotShowKipiHelp()));
     ac->addAction(QLatin1String("help_kipi"), d->kipiHelpAction);
 
-    // -----------------------------------------------------------
-
-    d->tipAction = buildStdAction(StdTipOfDayAction, this, SLOT(slotShowTip()), this);
-    ac->addAction(QLatin1String("help_tipofday"), d->tipAction);
-
     //------------------------------------------------------------
 
     QAction* const findAction = new QAction(QIcon::fromTheme(QLatin1String("system-search")), i18n("Search..."), this);
@@ -2410,14 +2404,6 @@ void DigikamApp::slotEditKeys()
 #else
     editKeyboardShortcuts();
 #endif /* HAVE_KIPI */
-}
-
-void DigikamApp::slotShowTip()
-{
-    QStringList tipsFiles;
-    tipsFiles.append(QLatin1String("digikam/tips"));
-    tipsFiles.append(QLatin1String("kipi/tips"));
-    KTipDialog::showMultiTip(this, tipsFiles, true);
 }
 
 void DigikamApp::slotShowKipiHelp()

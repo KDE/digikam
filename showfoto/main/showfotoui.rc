@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="500" name="showfoto" >
+<gui version="501" name="showfoto" >
 
 <MenuBar>
 
@@ -83,7 +83,9 @@
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="help_rawcameralist"/>
         <Action name="help_librariesinfo"/>
+        <Separator/>
         <Action name="help_donatemoney" />
+        <Action name="help_recipesbook"/>
         <Action name="help_contribute" />
     </Menu>
 

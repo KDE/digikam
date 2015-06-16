@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="500" name="digikam" >
+<gui version="501" name="digikam" >
 
  <MenuBar>
 
@@ -167,9 +167,9 @@
     <Action name="help_librariesinfo"/>
     <Action name="help_dbstat"/>
     <Action name="help_kipi"/>
-    <Action name="help_tipofday"/>
     <Separator/>
     <Action name="help_donatemoney"/>
+    <Action name="help_recipesbook"/>
     <Action name="help_contribute"/>
   </Menu>
 

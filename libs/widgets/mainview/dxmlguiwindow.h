@@ -72,7 +72,6 @@ enum StdActionType
     StdCloseAction,
     StdZoomInAction,
     StdZoomOutAction,
-    StdTipOfDayAction,
     StdOpenAction,
     StdSaveAction,
     StdSaveAsAction,
@@ -185,6 +184,7 @@ private Q_SLOTS:
 
     void slotRawCameraList();
     void slotDonateMoney();
+    void slotRecipesBook();
     void slotContribute();
 
     // Slots for common Help Actions
