@@ -57,6 +57,9 @@ set(libdatabase_SRCS
     dbjobs/dbjobinfo.cpp
     dbjobs/dbjobsmanager.cpp
     dbjobs/duplicatesprogressobserver.cpp
+    iojobs/iojobsthread.cpp
+    iojobs/iojob.cpp
+    iojobs/iojobsmanager.cpp
     item/imagecomments.cpp
     item/imageextendedproperties.cpp
     item/imageinfo.cpp
@@ -118,6 +121,7 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/iojobs>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
