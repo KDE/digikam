@@ -285,7 +285,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rescanImageIfModifiedBox->setWhatsThis(i18nc("@info:whatsthis",
                                                   "Turning this option on, will force digiKam to rescan files that has been modified outside digiKam. "
                                                   "If a file has changed it's file size or if the last modified timestamp has changed, a rescan of that "
-                                                  "file will be performed when digiKam starts."));  
+                                                  "file will be performed when digiKam starts."));
 
     readWriteLayout->addWidget(readWriteIconLabel,          0, 0);
     readWriteLayout->addWidget(readWriteLabel,              0, 1);
@@ -537,6 +537,10 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
 #endif // HAVE_KFILEMETADATA
 
+    //--------------Advanced Metadata Configuration --------------
+    AdvancedMetadataTab* advTab = new AdvancedMetadataTab;
+    d->tab->insertTab(AdvancedConfig, advTab, i18nc("@title:tab", "Advanced Configurations"));
+
     // --------------------------------------------------------
 
     readSettings();
@@ -544,7 +548,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     connect(d->exifRotateBox, SIGNAL(toggled(bool)),
             this, SLOT(slotExifAutoRotateToggled(bool)));
 
-    // --------------------------------------------------------
 }
 
 SetupMetadata::~SetupMetadata()

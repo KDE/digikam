@@ -43,6 +43,7 @@ public:
         Behavior = 0,
         Rotation,
         Display,
+        AdvancedConfig,
         Baloo
     };
 
