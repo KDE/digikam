@@ -155,17 +155,17 @@ public:
     */
     void load(const ImageInfo& info);
 
-    /**
-        Add metadata information from the DMetadata object
-    */
-    void load(const DMetadata& metadata);
+//    /**
+//        Add metadata information from the DMetadata object
+//    */
+//    void load(const DMetadata& metadata);
 
-    /**
-        Load metadata information from the given file.
-        (Uses DMetadata, QFileInfo)
-        @returns True if the metadata could be loaded
-    */
-    bool load(const QString& filePath, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+//    /**
+//        Load metadata information from the given file.
+//        (Uses DMetadata, QFileInfo)
+//        @returns True if the metadata could be loaded
+//    */
+//    bool load(const QString& filePath, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     // --------------------------------------------------
 

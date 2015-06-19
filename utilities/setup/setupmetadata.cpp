@@ -63,6 +63,7 @@
 #include "digikam_config.h"
 #include "metadatapanel.h"
 #include "metadatasettings.h"
+#include "advancedmetadatatab.h"
 
 using namespace KExiv2Iface;
 using namespace KDcrawIface;

@@ -24,6 +24,8 @@
 
 namespace Digikam
 {
+
+
 class AdvancedMetadataTab : public QWidget
 {
 public:

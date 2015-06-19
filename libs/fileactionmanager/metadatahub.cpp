@@ -206,76 +206,7 @@ void MetadataHub::load(const ImageInfo& info)
     loadFaceTags(info, info.dimensions());
 }
 
-void MetadataHub::load(const DMetadata& metadata)
-{
-    d->count++;
 
-    CaptionsMap comments;
-    CaptionsMap titles;
-    QStringList keywords;
-    QDateTime   datetime;
-    int         pickLabel;
-    int         colorLabel;
-    int         rating;
-
-    titles = metadata.getImageTitles();
-
-    // Try to get comments from image :
-    // In first, from Xmp comments tag,
-    // In second, from standard JPEG JFIF comments section,
-    // In third, from Exif comments tag,
-    // In four, from Iptc comments tag.
-    comments = metadata.getImageComments();
-
-    // Try to get date and time from image :
-    // In first, from Exif date & time tags,
-    // In second, from Xmp date & time tags, or
-    // In third, from Iptc date & time tags.
-    // else use file system time stamp.
-    datetime = metadata.getImageDateTime();
-
-    if ( !datetime.isValid() )
-    {
-        QFileInfo info( metadata.getFilePath() );
-        datetime = info.lastModified();
-    }
-
-    // Try to get image pick label from Xmp tag
-    pickLabel = metadata.getImagePickLabel();
-
-    // Try to get image color label from Xmp tag
-    colorLabel = metadata.getImageColorLabel();
-
-    // Try to get image rating from Xmp tag, or Iptc Urgency tag
-    rating = metadata.getImageRating();
-
-    Template tref = metadata.getMetadataTemplate();
-    Template t    = TemplateManager::defaultManager()->findByContents(tref);
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Found Metadata Template: " << t.templateTitle();
-
-    load(datetime, titles, comments, colorLabel, pickLabel, rating, t.isNull() ? tref : t);
-
-    // Try to get image tags from Xmp using digiKam namespace tags.
-
-    QStringList tagPaths;
-
-    if (metadata.getImageTagsPath(tagPaths))
-    {
-        QList<int> tagIds = TagsCache::instance()->tagsForPaths(tagPaths);
-        loadTags(tagIds);
-    }
-}
-
-bool MetadataHub::load(const QString& filePath, const MetadataSettingsContainer& settings)
-{
-
-    DMetadata metadata;
-    metadata.setSettings(settings);
-    bool success = metadata.load(filePath);
-    load(metadata); // increments count
-    return success;
-}
 
 // private common code to merge tags
 void MetadataHub::loadTags(const QList<int>& loadedTags)
@@ -334,30 +265,7 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
     }
 }
 
-/*
-// private code to merge tags with d->tagList
-void MetadataHub::loadTags(const QStringList& loadedTagPaths)
-{
-    if (d->count == 1)
-    {
-        d->tagList = loadedTagPaths;
-    }
-    else
-    {
-        // a simple intersection
-        QStringList toBeAdded;
-        for (QStringList::iterator it = d->tagList.begin(); it != d->tagList.end(); ++it)
-        {
-            if (loadedTagPaths.indexOf(*it) == -1)
-            {
-                // it's not in the loadedTagPaths list. Remove it from intersection list.
-                it = d->tagList.erase(it);
-            }
-            // else, it is in both lists, so no need to change d->tagList, it's already added.
-        }
-    }
-}
-*/
+
 
 // private common code to load dateTime, comment, color label, pick label, rating
 void MetadataHub::load(const QDateTime& dateTime,
@@ -592,6 +500,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     return changed;
 }
 
+/** safe **/
 bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMode, const MetadataSettingsContainer &settings)
 {
     applyChangeNotifications();
@@ -854,7 +763,6 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
                 continue;
             }
 
-            // it is important that MetadataDisjoint keywords are not touched
             // WARNING: Do not use write(QFilePath ...) when multiple image info are loaded
             // otherwise disjoint tags will not be used, use writeToMetadata(ImageInfo...)
             if (it.value() == MetadataAvailable)
@@ -1476,5 +1384,103 @@ void Digikam::MetadataHub::loadFaceTags(const ImageInfo& info, const QSize& size
 
     }
 }
+
+
+// NOTE: Unused code
+//void MetadataHub::load(const DMetadata& metadata)
+//{
+//    d->count++;
+
+//    CaptionsMap comments;
+//    CaptionsMap titles;
+//    QStringList keywords;
+//    QDateTime   datetime;
+//    int         pickLabel;
+//    int         colorLabel;
+//    int         rating;
+
+//    titles = metadata.getImageTitles();
+
+//    // Try to get comments from image :
+//    // In first, from Xmp comments tag,
+//    // In second, from standard JPEG JFIF comments section,
+//    // In third, from Exif comments tag,
+//    // In four, from Iptc comments tag.
+//    comments = metadata.getImageComments();
+
+//    // Try to get date and time from image :
+//    // In first, from Exif date & time tags,
+//    // In second, from Xmp date & time tags, or
+//    // In third, from Iptc date & time tags.
+//    // else use file system time stamp.
+//    datetime = metadata.getImageDateTime();
+
+//    if ( !datetime.isValid() )
+//    {
+//        QFileInfo info( metadata.getFilePath() );
+//        datetime = info.lastModified();
+//    }
+
+//    // Try to get image pick label from Xmp tag
+//    pickLabel = metadata.getImagePickLabel();
+
+//    // Try to get image color label from Xmp tag
+//    colorLabel = metadata.getImageColorLabel();
+
+//    // Try to get image rating from Xmp tag, or Iptc Urgency tag
+//    rating = metadata.getImageRating();
+
+//    Template tref = metadata.getMetadataTemplate();
+//    Template t    = TemplateManager::defaultManager()->findByContents(tref);
+
+//    qCDebug(DIGIKAM_GENERAL_LOG) << "Found Metadata Template: " << t.templateTitle();
+
+//    load(datetime, titles, comments, colorLabel, pickLabel, rating, t.isNull() ? tref : t);
+
+//    // Try to get image tags from Xmp using digiKam namespace tags.
+
+//    QStringList tagPaths;
+
+//    if (metadata.getImageTagsPath(tagPaths))
+//    {
+//        QList<int> tagIds = TagsCache::instance()->tagsForPaths(tagPaths);
+//        loadTags(tagIds);
+//    }
+//}
+
+//bool MetadataHub::load(const QString& filePath, const MetadataSettingsContainer& settings)
+//{
+
+//    DMetadata metadata;
+//    metadata.setSettings(settings);
+//    bool success = metadata.load(filePath);
+//    load(metadata); // increments count
+//    return success;
+//}
+
+/*
+// private code to merge tags with d->tagList
+void MetadataHub::loadTags(const QStringList& loadedTagPaths)
+{
+    if (d->count == 1)
+    {
+        d->tagList = loadedTagPaths;
+    }
+    else
+    {
+        // a simple intersection
+        QStringList toBeAdded;
+        for (QStringList::iterator it = d->tagList.begin(); it != d->tagList.end(); ++it)
+        {
+            if (loadedTagPaths.indexOf(*it) == -1)
+            {
+                // it's not in the loadedTagPaths list. Remove it from intersection list.
+                it = d->tagList.erase(it);
+            }
+            // else, it is in both lists, so no need to change d->tagList, it's already added.
+        }
+    }
+}
+*/
 
 } // namespace Digikam
