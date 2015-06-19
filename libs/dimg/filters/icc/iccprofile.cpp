@@ -160,7 +160,7 @@ IccProfile::IccProfile(const char* const location, const QString& relativePath)
     {
         qCDebug(LOG_DIMG) << "Data location " << location << " to handle bundled profile is not supported.";
     }
-        
+
     if (filePath.isNull())
     {
         qCDebug(LOG_DIMG) << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
@@ -507,7 +507,7 @@ QStringList IccProfile::defaultSearchPaths()
     candidates << QDir::homePath() + QLatin1String("/Library/ColorSync/Profiles");
 
     // MacPorts installs for KDE, so we include the XDG data dirs, including /usr/share/color/icc
-    QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(':', QString::SkipEmptyParts);
+    QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(QLatin1Char(':'), QString::SkipEmptyParts);
 
     if (!dataDirs.contains(QLatin1String("/opt/local/share")))
     {
