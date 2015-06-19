@@ -79,26 +79,6 @@ public:
 #endif // HAVE_KGEOMAP
 };
 
-void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* filterModel)
-{
-    d->syncingSelection = true;
-    d->importIconView->setModels(model, filterModel);
-    d->thumbBar->setModelsFiltered(model, filterModel);
-    d->syncingSelection = false;
-
-    // TODO this is currently here because the code structure, waiting for restructuring..
-    d->importIconView->init();
-
-#ifdef HAVE_KGEOMAP
-    // TODO refactor MapWidgetView not to require the models on startup?
-    d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
-                                           d->importIconView->importFilterModel(), this,
-                                           MapWidgetView::ApplicationImportUI);
-    d->mapWidgetView->setObjectName("import_mapwidgetview");
-    insertWidget(MapWidgetMode,     d->mapWidgetView);
-#endif // HAVE_KGEOMAP
-}
-
 ImportStackedView::ImportStackedView(QWidget* const parent)
     : QStackedWidget(parent), d(new Private)
 {
@@ -106,6 +86,8 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     d->importPreviewView = new ImportPreviewView(this);
     d->thumbBarDock      = new ThumbBarDock();
     d->thumbBar          = new ImportThumbnailBar(d->thumbBarDock);
+    d->thumbBar->setModelsFiltered(d->importIconView->importImageModel(),
+                                   d->importIconView->importFilterModel());
 
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
@@ -116,6 +98,15 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode,  d->importPreviewView);
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
+
+#ifdef HAVE_KGEOMAP
+    // TODO refactor MapWidgetView not to require the models on startup?
+    d->mapWidgetView     = new MapWidgetView(d->importIconView->getSelectionModel(),
+                                             d->importIconView->importFilterModel(), this,
+                                             MapWidgetView::ApplicationImportUI);
+    d->mapWidgetView->setObjectName("import_mapwidgetview");
+    insertWidget(MapWidgetMode,     d->mapWidgetView);
+#endif // HAVE_KGEOMAP
 
     setAttribute(Qt::WA_DeleteOnClose);
 

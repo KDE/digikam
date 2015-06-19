@@ -121,7 +121,6 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotEscapePreview();
-    void setModels(ImportImageModel* model, ImportFilterModel* filterModel);
 
 private Q_SLOTS:
 
