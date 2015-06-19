@@ -211,57 +211,14 @@ void MetadataHub::load(const ImageInfo& info)
 // private common code to merge tags
 void MetadataHub::loadTags(const QList<int>& loadedTags)
 {
-    // get copy of tags
-    QSet<int> previousTags = d->tags.keys().toSet();
-
-    // first go through all tags contained in this set
+    d->tags.clear();
     foreach(int tagId, loadedTags)
     {
-        if (TagsCache::instance()->isInternalTag(tagId))
+        if(TagsCache::instance()->isInternalTag(tagId))
         {
             continue;
         }
-
-        // that is a reference
-        TagStatus& status = d->tags[tagId];
-
-        // if it was not contained in the list, the default constructor will mark it as invalid
-        if (status == MetadataInvalid)
-        {
-            if (d->count == 1)
-                // there were no previous sets that could have contained the set
-            {
-                status = TagStatus(MetadataAvailable, true);
-            }
-            else
-                // previous sets did not contain the tag, we do => disjoint
-            {
-                status = TagStatus(MetadataDisjoint, true);
-            }
-        }
-        else if (status == TagStatus(MetadataAvailable, false))
-        {
-            // set to explicitly not contained, but we contain it => disjoint
-            status = TagStatus(MetadataDisjoint, true);
-        }
-
-        // else if mapIt.value() ==  MetadataAvailable, true: all right, we contain it too
-        // else if mapIt.value() ==  MetadataDisjoint: it's already disjoint
-
-        // remove from the list to signal that this tag has been handled
-        previousTags.remove(tagId);
-    }
-
-    // Those tags which had been set as MetadataAvailable before,
-    // but are not contained in this set, have to be set to MetadataDisjoint
-    foreach(int tagId, previousTags)
-    {
-        QMap<int, TagStatus>::iterator mapIt = d->tags.find(tagId);
-
-        if (mapIt != d->tags.end() && mapIt.value() == TagStatus(MetadataAvailable, true))
-        {
-            mapIt.value() = TagStatus(MetadataDisjoint, true);
-        }
+        d->tags[tagId] = TagStatus(MetadataAvailable, true);
     }
 }
 
@@ -381,16 +338,8 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     bool saveColorLabel = (d->colorLabelStatus == MetadataAvailable);
     bool saveRating     = (d->ratingStatus     == MetadataAvailable);
     bool saveTemplate   = (d->templateStatus   == MetadataAvailable);
-    bool saveTags       = false;
+    bool saveTags       = true;
 
-    for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
-    {
-        if (it.value() == MetadataAvailable)
-        {
-            saveTags = true;
-            break;
-        }
-    }
 
     bool writeAllFields;
 
