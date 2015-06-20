@@ -4,6 +4,7 @@
 #include "KDCRAW/RActionThreadBase"
 #include "album.h"
 #include "iojob.h"
+#include "imageinfo.h"
 
 using namespace KDcrawIface;
 
@@ -20,8 +21,8 @@ public:
     void copyPAlbum(const PAlbum *srcAlbum, const PAlbum *destAlbum, const CopyJob::OperationType opType);
     void copyFiles(const QList<QUrl> &srcFiles, const PAlbum *destAlbum, const CopyJob::OperationType opType);
 
-    void deletePAlbum(const PAlbum *albumToDelete, bool isPermanentDeletion);
-    void deleteFiles(const QList<QUrl> &srcsToDelete, bool isPermanentDeletion);
+    void deletePAlbum(const PAlbum *albumToDelete, bool useTrash);
+    void deleteFiles(const QList<ImageInfo> &srcsToDelete, bool isPermanentDeletion);
 };
 
 } // namespace Digikam

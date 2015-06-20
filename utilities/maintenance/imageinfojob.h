@@ -33,13 +33,6 @@
 
 #include "imageinfo.h"
 
-namespace KIO
-{
-    class Job;
-}
-
-class KJob;
-
 namespace Digikam
 {
 

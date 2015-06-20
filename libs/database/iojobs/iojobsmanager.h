@@ -5,6 +5,7 @@
 #include <QUrl>
 #include "album.h"
 #include "iojobsthread.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -20,8 +21,8 @@ public:
     IOJobsThread *startCopyJob(const PAlbum *srcAlbum, const PAlbum *destAlbum, const CopyJob::OperationType opType);
     IOJobsThread *startCopyJob(const QList<QUrl> &srcsList, const PAlbum *destAlbum, const CopyJob::OperationType opType);
 
-    IOJobsThread *startDeleteJob(const PAlbum *albumToDelete, bool isPermanentDeletion = false);
-    IOJobsThread *startDeleteJob(const QList<QUrl> &filesToDelete, bool isPermanentDeletion = false);
+    IOJobsThread *startDeleteJob(const PAlbum *albumToDelete, bool useTrash = true);
+    IOJobsThread *startDeleteJob(const QList<ImageInfo> &filesToDelete, bool useTrash = true);
 
 // TODO
 //    IOJobsThread *startRenameFileJob();

@@ -39,19 +39,19 @@ IOJobsThread *IOJobsManager::startCopyJob(const QList<QUrl> &srcsList, const PAl
     return thread;
 }
 
-IOJobsThread *IOJobsManager::startDeleteJob(const PAlbum *albumToDelete, bool isPermanentDeletion)
+IOJobsThread *IOJobsManager::startDeleteJob(const PAlbum *albumToDelete, bool useTrash)
 {
     IOJobsThread *thread = new IOJobsThread(this);
-    thread->deletePAlbum(albumToDelete, isPermanentDeletion);
+    thread->deletePAlbum(albumToDelete, useTrash);
     thread->start();
 
     return thread;
 }
 
-IOJobsThread *IOJobsManager::startDeleteJob(const QList<QUrl> &filesToDelete, bool isPermanentDeletion)
+IOJobsThread *IOJobsManager::startDeleteJob(const QList<ImageInfo> &filesToDelete, bool useTrash)
 {
     IOJobsThread *thread = new IOJobsThread(this);
-    thread->deleteFiles(filesToDelete, isPermanentDeletion);
+    thread->deleteFiles(filesToDelete, useTrash);
     thread->start();
 
     return thread;

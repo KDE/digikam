@@ -1,5 +1,7 @@
 #include "iojobsthread.h"
+
 #include "iojob.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -47,13 +49,13 @@ void IOJobsThread::deletePAlbum(const PAlbum *albumToDelete, bool isPermanentDel
     appendJobs(collection);
 }
 
-void IOJobsThread::deleteFiles(const QList<QUrl> &srcsToDelete, bool isPermanentDeletion)
+void IOJobsThread::deleteFiles(const QList<ImageInfo> &srcsToDelete, bool useTrash)
 {
     RJobCollection collection;
 
-    foreach (const QUrl &url, srcsToDelete)
+    foreach (const ImageInfo &info, srcsToDelete)
     {
-        DeleteFileJob *j = new DeleteFileJob(url, isPermanentDeletion);
+        DeleteFileJob *j = new DeleteFileJob(info, useTrash);
 
         // TODO: Create a connection here for progress or whatever feedback
 

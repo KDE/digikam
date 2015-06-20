@@ -1,14 +1,26 @@
 #ifndef IOJOB_H
 #define IOJOB_H
 
-#include "KDCRAW/RActionJob"
+// Qt includes
+
 #include "QUrl"
+
+// KDCraw includes
+
+#include "KDCRAW/RActionJob"
+
+// Local includes
+
 #include "album.h"
+#include "item/imageinfo.h"
+#include "framework/databaseaccess.h"
 
 using namespace KDcrawIface;
 
 namespace Digikam
 {
+
+class ImageInfo;
 
 class IOJob : public RActionJob
 {
@@ -17,6 +29,10 @@ class IOJob : public RActionJob
 public:
 
     IOJob();
+
+Q_SIGNALS:
+
+    void error(const QString &errMsg);
 };
 
 // ---------------------------------------
@@ -90,7 +106,7 @@ public:
 
 protected:
 
-    bool m_isPermanentDeletion;
+    bool m_useTrash;
 };
 
 // -----------
@@ -101,7 +117,7 @@ class DeleteFileJob : public DeleteJob
 
 public:
 
-    DeleteFileJob(const QUrl &srcToDelete, bool isPermanentDeletion);
+    DeleteFileJob(const ImageInfo &srcToDelete, bool useTrash);
 
 protected:
 
@@ -109,7 +125,7 @@ protected:
 
 private:
 
-    QUrl m_srcToDelete;
+    ImageInfo m_srcToDelete;
 };
 
 // -----------
@@ -120,7 +136,7 @@ class DeleteAlbumJob : public DeleteJob
 
 public:
 
-    DeleteAlbumJob(const PAlbum *album, bool isPermanentDeletion);
+    DeleteAlbumJob(const PAlbum *album, bool useTrash);
 
 protected:
 

@@ -1,6 +1,9 @@
+#include "dbjob.h"
+
+// KDCraw includes
 #include "KDCRAW/RActionJob"
 
-#include "dbjob.h"
+// Local Includes
 #include "databaseaccess.h"
 #include "databaseparameters.h"
 #include "albumdb.h"
