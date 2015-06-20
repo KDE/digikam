@@ -38,7 +38,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ktip.h>
 #include <kaboutdata.h>
 
 // Libkexiv2 includes
@@ -226,8 +225,6 @@ int main(int argc, char* argv[])
     {
         digikam->autoDetect();
     }
-
-    KTipDialog::setShowOnStart(false);
 
     int ret = app.exec();
 
