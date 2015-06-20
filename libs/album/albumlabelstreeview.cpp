@@ -6,7 +6,7 @@
  * Date        : 2014-05-17
  * Description : Album Labels Tree View.
  *
- * Copyright (C) 2014 Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
     Copyright (C) 2014 Laurent Montel <montel at kde dot org>
+    Copyright (C) 2015 Mohamed Anwer <m dot anwer at gmx dot com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
