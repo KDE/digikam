@@ -56,10 +56,14 @@ ImportIconView::ImportIconView(QWidget* const parent)
     : ImportCategorizedView(parent),
       d(new Private(this))
 {
-}
+    ImportThumbnailModel* const model    = new ImportThumbnailModel(this);
+    ImportFilterModel* const filterModel = new ImportFilterModel(this);
 
-void ImportIconView::init()
-{
+    filterModel->setSourceImportModel(model);
+    filterModel->sort(0); // an initial sorting is necessary
+
+    setModels(model, filterModel);
+    
     d->normalDelegate              = new ImportNormalDelegate(this);
 
     setItemDelegate(d->normalDelegate);

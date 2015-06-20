@@ -6,7 +6,8 @@
  * Date        : 2012-26-07
  * Description : Main view for import tool
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,9 +69,7 @@ public:
         mapView(0),
 #endif // HAVE_KGEOMAP
         stackedView(0),
-        lastViewMode(ImportStackedView::PreviewCameraMode),
-        model(0),
-        filterModel(0)
+        lastViewMode(ImportStackedView::PreviewCameraMode)
         //FIXME: filterWidget(0)
     {
     }
@@ -96,11 +95,9 @@ public:
 #ifdef HAVE_KGEOMAP
     MapWidgetView*                     mapView;
 #endif // HAVE_KGEOMAP
+
     ImportStackedView*                 stackedView;
     ImportStackedView::StackedViewMode lastViewMode;
-
-    ImportImageModel*                  model;
-    ImportFilterModel*                 filterModel;
 
     //FIXME: FilterSideBarWidget*      filterWidget;
 
@@ -118,12 +115,10 @@ void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* con
     defineShortcut(w, Qt::Key_Left,     q, SLOT(slotPrevItem()));
 }
 
-ImportView::ImportView(ImportUI* const ui, ImportImageModel* const model, ImportFilterModel* const filterModel, QWidget* const parent)
-    : RHBox(parent), d(new Private)
+ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
+    : RHBox(parent),
+      d(new Private)
 {
-    d->model       = model;
-    d->filterModel = filterModel;
-
     d->parent   = static_cast<ImportUI*>(ui);
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle(QFrame::NoFrame);
@@ -137,7 +132,6 @@ ImportView::ImportView(ImportUI* const ui, ImportImageModel* const model, Import
     d->dockArea    = new QMainWindow(this, Qt::Widget);
     d->splitter->addWidget(d->dockArea);
     d->stackedView = new ImportStackedView(d->dockArea);
-    d->stackedView->setModels(d->model, d->filterModel);
     d->stackedView->setViewMode(ImportStackedView::PreviewCameraMode); // call here, because the models need to be set first..
     d->dockArea->setCentralWidget(d->stackedView);
     d->stackedView->setDockArea(d->dockArea);
@@ -843,7 +837,7 @@ void ImportView::slotImageExifOrientation(int orientation)
 
 ImportFilterModel* ImportView::importFilterModel() const
 {
-    return d->filterModel;
+    return d->iconView->importFilterModel();
 }
 
 ImportStackedView::StackedViewMode ImportView::viewMode() const
