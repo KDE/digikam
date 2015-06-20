@@ -8,4 +8,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 001 ==> 349302 - Copy path to clipboard.
 002 ==> 339008 - DigiKam crashed when opening import window.
 003 ==> 349280 - Crash when importing photos via MTP.
-004 ==> 
+004 ==> 330943 - New lens not detected.
+005 ==> 
