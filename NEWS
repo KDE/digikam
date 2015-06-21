@@ -9,4 +9,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 002 ==> 339008 - DigiKam crashed when opening import window.
 003 ==> 349280 - Crash when importing photos via MTP.
 004 ==> 330943 - New lens not detected.
-005 ==> 
+005 ==> 285521 - Search by time of day [patch].
+006 ==> 

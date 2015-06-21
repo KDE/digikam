@@ -131,7 +131,7 @@ DDateEdit::DDateEdit(QWidget* const parent, const char* const name)
 
     addItem( today );
     setCurrentIndex( 0 );
-    setMinimumSize( sizeHint() );
+    setMinimumSize( minimumSizeHint() );
 
     connect( lineEdit(), SIGNAL(returnPressed()),
              this, SLOT(lineEnterPressed()) );
