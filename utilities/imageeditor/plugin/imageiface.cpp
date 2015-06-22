@@ -7,7 +7,7 @@
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -240,6 +240,8 @@ DImg ImageIface::setPreviewSize(const QSize& size) const
 
 DImg ImageIface::preview() const
 {
+    // NOTE: corrects the values for width and height of the preview image from the image data interface
+    // See Bug #320382 for details.
     uchar* const data = d->previewImageData();
     return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), data);
 }
