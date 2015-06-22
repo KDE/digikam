@@ -11,6 +11,8 @@ set(libdmetadata_SRCS
     metadatainfo.cpp
     infocontainer.cpp
     dmetadata.cpp
+    dmetadatasettings.cpp
+    dmetadatasettingscontainer.cpp
     geodetictools.cpp
     template.cpp
     captionvalues.cpp
