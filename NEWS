@@ -19,5 +19,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 012 ==> 341356 - Not getting the new Versions of digiKam.
 013 ==> 342625 - can't install digikam because py27-numpy refuses to install.
 014 ==> 326580 - digiKam 3.5 corrupts JPG, TiFF, PNG images.
-015 ==> 349155 - digikam does not work properly on OSX Yosemite.
-016 ==> 
+015 ==> 349155 - digiKam does not work properly on OSX Yosemite.
+016 ==> 347289 - digiKam crashes while beginning correcting perspective.
+017 ==> 
