@@ -21,4 +21,12 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 014 ==> 326580 - digiKam 3.5 corrupts JPG, TiFF, PNG images.
 015 ==> 349155 - digiKam does not work properly on OSX Yosemite.
 016 ==> 347289 - digiKam crashes while beginning correcting perspective.
-017 ==> 
+017 ==> 343948 - Crashes as soon as i try to import from USB3 attached flash drive with images on.
+018 ==> 337537 - Crash on Import.
+019 ==> 321899 - crash during large import.
+020 ==> 293671 - digiKam freezes on / after Import.
+021 ==> 338685 - Program crashed while trying to import files from external USB HDD drive.
+022 ==> 340990 - Crash after clicking importing from sd card.
+023 ==> 345990 - 4.9.0 import from external card reader crashe.
+024 ==> 339615 - Crashed after selecting Import (sd card reader).
+025 ==> 
