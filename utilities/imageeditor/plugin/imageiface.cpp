@@ -240,7 +240,8 @@ DImg ImageIface::setPreviewSize(const QSize& size) const
 
 DImg ImageIface::preview() const
 {
-    return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), d->previewImageData());
+    uchar* const data = d->previewImageData();
+    return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), data);
 }
 
 DImg* ImageIface::original() const
