@@ -29,4 +29,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 022 ==> 340990 - Crash after clicking importing from sd card.
 023 ==> 345990 - 4.9.0 import from external card reader crashe.
 024 ==> 339615 - Crashed after selecting Import (sd card reader).
-025 ==> 
+025 ==> 277242 - MYSQL : using different databases for images metadata and thumbnail cache is broken.
+026 ==> 
