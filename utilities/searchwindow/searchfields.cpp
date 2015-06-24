@@ -162,7 +162,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("modificationdate"))
     {
-        SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateOnly);
+        SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateTime);
         field->setFieldName(name);
         field->setText(i18n("Modification"), i18n("Return pictures modified between"));
         field->setBetweenText(i18nc("'Return pictures modified between...and...", "and"));
@@ -196,7 +196,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("creationdate"))
     {
-        SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateOnly);
+        SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateTime);
         field->setFieldName(name);
         field->setText(i18n("Date"), i18n("Return pictures created between"));
         field->setBetweenText(i18nc("'Return pictures created between...and...", "and"));
@@ -204,7 +204,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("digitizationdate"))
     {
-        SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateOnly);
+        SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateTime);
         field->setFieldName(name);
         field->setText(i18n("Digitization"), i18n("Return pictures digitized between"));
         field->setBetweenText(i18nc("'Return pictures digitized between...and...", "and"));
@@ -962,13 +962,6 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout* layout, int row, int c
         layout->addWidget(m_firstDateEdit,  row, column);
         layout->addWidget(m_betweenLabel,   row, column + 1, Qt::AlignHCenter);
         layout->addWidget(m_secondDateEdit, row, column + 2);
-/*
-        hbox->addWidget(m_firstDateEdit);
-        hbox->addWidget(m_betweenLabel);
-        hbox->addWidget(m_secondDateEdit);
-        hbox->addWidget(m_endLabel);
-        hbox->addStretch(1);
-*/
     }
     else
     {
@@ -979,23 +972,17 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout* layout, int row, int c
         layout->addWidget(m_betweenLabel, row, column + 1, Qt::AlignHCenter);
         layout->addLayout(hbox2, row, column + 2);
 
+        m_firstTimeEdit  = new QTimeEdit;
+        m_secondTimeEdit = new QTimeEdit;
+
         hbox1->addWidget(m_firstDateEdit);
         hbox1->addWidget(m_firstTimeEdit);
         hbox2->addWidget(m_secondDateEdit);
         hbox2->addWidget(m_secondTimeEdit);
 
-/*
-        m_firstTimeEdit = new QTimeEdit;
-        m_secondTimeEdit = new QTimeEdit;
-
-        hbox->addWidget(m_firstDateEdit);
-        hbox->addWidget(m_firstTimeEdit);
-        hbox->addWidget(m_betweenLabel);
-        hbox->addWidget(m_secondDateEdit);
-        hbox->addWidget(m_secondTimeEdit);
-        hbox->addWidget(m_endLabel);
-        hbox->addStretch(1);
-*/
+        layout->addLayout(hbox1,          row, column);
+        layout->addWidget(m_betweenLabel, row, column + 1, Qt::AlignHCenter);
+        layout->addLayout(hbox2,          row, column + 2);
     }
 
     connect(m_firstDateEdit, SIGNAL(dateChanged(QDate)),
@@ -1087,6 +1074,8 @@ void SearchFieldRangeDate::read(SearchXmlCachingReader& reader)
             }
         }
     }
+
+    valueChanged();
 }
 
 void SearchFieldRangeDate::write(SearchXmlWriter& writer)
