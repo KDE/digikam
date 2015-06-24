@@ -418,7 +418,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
             // See bug 320107 : if lossless transform cannot be achieve, do lossy transform.
             DImg srcImg;
 
-            kError() << "Trying lossy transform for " << src;
+            kDebug() << "Trying lossy transform for " << src;
 
             if (!srcImg.load(src))
             {
@@ -433,9 +433,13 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
             if (!srcImg.save(tempFile, DImg::JPEG))
             {
+                kError() << "Lossy transform failed for" << src;
+
                 ::unlink(QFile::encodeName(tempFile));
                 return false;
             }
+
+            kDebug() << "lossy transform done for " << src;
         }
 
         if (i+1 != actions.size())
