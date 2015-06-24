@@ -39,13 +39,23 @@ class IOJobsThread : public RActionThreadBase
     Q_OBJECT
 
 public:
+
     IOJobsThread(QObject *const parent);
 
-    void copyPAlbum(const PAlbum *srcAlbum, const PAlbum *destAlbum, const CopyJob::OperationType opType);
-    void copyFiles(const QList<QUrl> &srcFiles, const PAlbum *destAlbum, const CopyJob::OperationType opType);
+    void copy(const QList<QUrl> &srcFiles, const QUrl destAlbum);
+    void move(const QList<QUrl> &srcFiles, const QUrl destAlbum);
+    void del(const QList<QUrl> &srcsToDelete, bool useTrash);
+    void renameFile(const QUrl &srcToRename, const QString &newName);
 
-    void deletePAlbum(const PAlbum *albumToDelete, bool useTrash);
-    void deleteFiles(const QList<ImageInfo> &srcsToDelete, bool isPermanentDeletion);
+public Q_SLOTS:
+
+    void oneJobFinished();
+
+Q_SIGNALS:
+
+    void error(const QString &errString);
+    void finished();
+    void renamed(const QUrl &oldUrl, const QUrl &newURl);
 };
 
 } // namespace Digikam

@@ -25,6 +25,9 @@
 
 #include "iojob.h"
 #include "imageinfo.h"
+#include "dnotificationwrapper.h"
+#include "digikam_debug.h"
+#include "digikamapp.h"
 
 namespace Digikam
 {
@@ -34,26 +37,19 @@ IOJobsThread::IOJobsThread(QObject *const parent)
 {
 }
 
-void IOJobsThread::copyPAlbum(const PAlbum *srcAlbum, const PAlbum *destAlbum, const CopyJob::OperationType opType)
-{
-    RJobCollection collection;
-    CopyAlbumJob *j = new CopyAlbumJob(srcAlbum, destAlbum, opType);
-
-    // TODO: Create a connection here for progress or whatever feedback
-
-    collection.insert(j, 0);
-    appendJobs(collection);
-}
-
-void IOJobsThread::copyFiles(const QList<QUrl> &srcFiles, const PAlbum *destAlbum, const CopyJob::OperationType opType)
+void IOJobsThread::copy(const QList<QUrl> &srcFiles, const QUrl destAlbum)
 {
     RJobCollection collection;
 
     foreach (const QUrl &url, srcFiles)
     {
-        CopyFileJob *j = new CopyFileJob(url, destAlbum, opType);
+        CopyJob *j = new CopyJob(url, destAlbum, false);
 
-        // TODO: Create a connection here for progress or whatever feedback
+        connect(j, SIGNAL(error(QString)),
+                this, SIGNAL(error(QString)));
+
+        connect(j, SIGNAL(signalDone()),
+                this, SLOT(oneJobFinished()));
 
         collection.insert(j, 0);
     }
@@ -61,31 +57,70 @@ void IOJobsThread::copyFiles(const QList<QUrl> &srcFiles, const PAlbum *destAlbu
     appendJobs(collection);
 }
 
-void IOJobsThread::deletePAlbum(const PAlbum *albumToDelete, bool isPermanentDeletion)
+void IOJobsThread::move(const QList<QUrl> &srcFiles, const QUrl destAlbum)
 {
     RJobCollection collection;
-    DeleteAlbumJob *j = new DeleteAlbumJob(albumToDelete, isPermanentDeletion);
 
-    // TODO: Create a connection here for progress or whatever feedback
+    foreach (const QUrl &url, srcFiles)
+    {
+        CopyJob *j = new CopyJob(url, destAlbum, true);
+
+        connect(j, SIGNAL(error(QString)),
+                this, SIGNAL(error(QString)));
+
+        connect(j, SIGNAL(signalDone()),
+                this, SLOT(oneJobFinished()));
+
+        collection.insert(j, 0);
+    }
+
+    appendJobs(collection);
+}
+
+void IOJobsThread::del(const QList<QUrl> &srcsToDelete, bool useTrash)
+{
+    RJobCollection collection;
+
+    foreach (const QUrl &url, srcsToDelete)
+    {
+        DeleteJob *j = new DeleteJob(url, useTrash);
+
+        connect(j, SIGNAL(error(QString)),
+                this, SIGNAL(error(QString)));
+
+        connect(j, SIGNAL(signalDone()),
+                this, SLOT(oneJobFinished()));
+
+        collection.insert(j, 0);
+    }
+
+    appendJobs(collection);
+}
+
+void IOJobsThread::renameFile(const QUrl &srcToRename, const QString &newName)
+{
+    RJobCollection collection;
+    RenameFileJob *j = new RenameFileJob(srcToRename, newName);
+
+    connect(j, SIGNAL(error(QString)),
+            this, SIGNAL(error(QString)));
+
+    // Connecting directly to signal finished
+    // because it's only one job
+    connect(j, SIGNAL(signalDone()),
+            this, SIGNAL(finished()));
+
+    connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
+            this, SIGNAL(renamed(QUrl,QUrl)));
 
     collection.insert(j, 0);
     appendJobs(collection);
 }
 
-void IOJobsThread::deleteFiles(const QList<ImageInfo> &srcsToDelete, bool useTrash)
+void IOJobsThread::oneJobFinished()
 {
-    RJobCollection collection;
-
-    foreach (const ImageInfo &info, srcsToDelete)
-    {
-        DeleteFileJob *j = new DeleteFileJob(info, useTrash);
-
-        // TODO: Create a connection here for progress or whatever feedback
-
-        collection.insert(j, 0);
-    }
-
-    appendJobs(collection);
+    if(isEmpty())
+        emit finished();
 }
 
 } // namespace Digikam

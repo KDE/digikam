@@ -49,6 +49,7 @@
 #include "loadingcacheinterface.h"
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
+#include "iojobsmanager.h"
 
 namespace Digikam
 {
@@ -271,57 +272,55 @@ void DIO::cleanUp()
     instance()->d->wait();
 }
 
-KIO::Job* DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
+void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
 {
     if (src.isEmpty())
     {
-        return 0;
+        return;
     }
 
-    KIO::Job* job  = 0;
+    IOJobsThread *jobThread  = 0;
+
     int flags      = operation & FlagMask;
     operation     &= OperationMask;
 
     if (operation == Copy)
     {
-        job = KIO::copy(src, dest);
+        jobThread = IOJobsManager::instance()->startCopy(src, dest);
     }
     else if (operation == Move)
     {
-        job = KIO::move(src, dest);
+        jobThread = IOJobsManager::instance()->startMove(src, dest);
     }
     else if (operation == Rename)
     {
         if (src.size() != 1)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid operation: renaming is not 1:1";
-            return 0;
+            return;
         }
 
-        job = KIO::move(src.first(), dest, KIO::HideProgressInfo);
-        job->setProperty(renameFileProperty.toLatin1().constData(), src.first().toLocalFile());
+        jobThread = IOJobsManager::instance()->startRenameFile(src.first(), dest.fileName());
 
-        connect(job, SIGNAL(copyingDone(KIO::Job*,QUrl,QUrl,time_t,bool,bool)),
-                this, SLOT(slotRenamed(KIO::Job*,QUrl,QUrl)));
+        connect(jobThread, SIGNAL(renamed(QUrl,QUrl)),
+                this, SLOT(slotRenamed(QUrl,QUrl)));
     }
     else if (operation == Trash)
     {
-        job = KIO::trash(src);
+        jobThread = IOJobsManager::instance()->startDelete(src);
     }
     else // operation == Del
     {
-        job = KIO::del(src);
+        jobThread = IOJobsManager::instance()->startDelete(src, false);
     }
 
     if (flags & SourceStatusUnknown)
     {
-        job->setProperty(noErrorMessageProperty.toLatin1().constData(), true);
+//        job->setProperty(noErrorMessageProperty.toLatin1().constData(), true);
     }
 
-    connect(job, SIGNAL(result(KJob*)),
+    connect(jobThread, SIGNAL(result()),
             this, SLOT(slotResult(KJob*)));
-
-    return job;
 }
 
 void DIO::slotResult(KJob* kjob)
@@ -357,21 +356,14 @@ void DIO::slotResult(KJob* kjob)
     }
 }
 
-void DIO::slotRenamed(KIO::Job* job, const QUrl& , const QUrl& newURL)
+void DIO::slotRenamed(const QUrl& oldUrl, const QUrl& newUrl)
 {
-    // reconstruct file path from digikamalbums:// URL
-    QUrl fileURL;
-    fileURL.setPath(newURL.userName());
-    fileURL = fileURL.adjusted(QUrl::StripTrailingSlash);
-    fileURL.setPath(fileURL.path() + QLatin1Char('/') + (newURL.path()));
-
     // refresh thumbnail
-    ThumbnailLoadThread::deleteThumbnail(fileURL.toLocalFile());
+    ThumbnailLoadThread::deleteThumbnail(newUrl.toLocalFile());
     // clean LoadingCache as well - be pragmatic, do it here.
-    LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
+    LoadingCacheInterface::fileChanged(newUrl.toLocalFile());
 
-    QUrl url(job->property(renameFileProperty.toLatin1().constData()).toString());
-    emit imageRenameSucceeded(url);
+    emit imageRenameSucceeded(oldUrl);
 }
 
 // Album -> Album -----------------------------------------------------

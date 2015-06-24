@@ -41,19 +41,14 @@ public:
 
     static IOJobsManager *instance();
 
-    IOJobsThread *startCopyJob(const PAlbum *srcAlbum, const PAlbum *destAlbum, const CopyJob::OperationType opType);
-    IOJobsThread *startCopyJob(const QList<QUrl> &srcsList, const PAlbum *destAlbum, const CopyJob::OperationType opType);
-
-    IOJobsThread *startDeleteJob(const PAlbum *albumToDelete, bool useTrash = true);
-    IOJobsThread *startDeleteJob(const QList<ImageInfo> &filesToDelete, bool useTrash = true);
-
-// TODO
-//    IOJobsThread *startRenameFileJob();
-//    IOJobsThread *startRenameAlbumJob();
+    IOJobsThread *startCopy(const QList<QUrl> &srcsList, const QUrl &destAlbum);
+    IOJobsThread *startMove(const QList<QUrl> &srcsList, const QUrl &destAlbum);
+    IOJobsThread *startDelete(const QList<QUrl>filesToDelete, bool useTrash = true);
+    IOJobsThread *startRenameFile(const QUrl &srcToRename, const QString &newName);
 
 private:
 
-    friend class FileSystemJobsManagerCreator;
+    friend class IOJobsManagerCreator;
 };
 
 } // namespace Digikam

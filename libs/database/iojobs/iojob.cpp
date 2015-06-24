@@ -36,12 +36,11 @@
 
 #include "digikam_debug.h"
 #include "digikam_export.h"
-#include "albummanager.h"
 #include "albumdb.h"
 #include "album.h"
-#include "framework/databaseaccess.h"
+#include "databaseaccess.h"
 #include "databaseparameters.h"
-#include "item/imageinfo.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -52,64 +51,127 @@ IOJob::IOJob()
 
 // --------------------------------------------
 
-CopyJob::CopyJob(const PAlbum *dest, CopyJob::OperationType type)
+CopyJob::CopyJob(const QUrl &src, const QUrl &dest, bool isMove)
 {
-    m_dest = dest;
-    m_type = type;
+    m_src    = src;
+    m_dest   = dest;
+    m_isMove = isMove;
 }
 
-// --------------------------------------------
-
-CopyFileJob::CopyFileJob(const QUrl &src, const PAlbum *dest, CopyJob::OperationType type)
-    : CopyJob(dest, type)
+bool CopyJob::copyFolderRecursively(const QString &srcPath, const QString &dstPath)
 {
-    m_srcFile = src;
+    QDir srcDir(srcPath);
+    QString newCopyPath = dstPath + QDir::separator() + srcDir.dirName();
+
+    if(!srcDir.mkpath(newCopyPath))
+    {
+        return false;
+    }
+
+    foreach (const QFileInfo &fileInfo, srcDir.entryInfoList(QDir::Files))
+    {
+        QString copyPath = newCopyPath + QDir::separator() + fileInfo.baseName();
+
+        if(!QFile::copy(fileInfo.filePath(), copyPath))
+            return false;
+    }
+
+    foreach (const QFileInfo &fileInfo, srcDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        copyFolderRecursively(fileInfo.filePath(), newCopyPath);
+    }
+
+    return true;
 }
 
-void CopyFileJob::run()
+void CopyJob::run()
 {
-    // TODO
+    QFileInfo srcInfo(m_src.toLocalFile());
+    QDir dstDir(m_dest.toLocalFile());
+
+    if(!srcInfo.exists())
+    {
+        error(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
+        emit signalDone();
+        return;
+    }
+
+    if(!dstDir.exists())
+    {
+        error(i18n("Album %1 does not exist anymore", dstDir.dirName()));
+        emit signalDone();
+        return;
+    }
+
+    // Checking if there is a file with the same name in destination folder
+    QString destenation = dstDir.path() + QDir::separator() + srcInfo.baseName();
+    QFileInfo fileInfoForDestination(destenation);
+    if(fileInfoForDestination.exists())
+    {
+        error(i18n("A file or folder named %1 already exists in %2",
+                   srcInfo.baseName(), dstDir.path()));
+    }
+
+    if(m_isMove)
+    {
+        if(srcInfo.isDir())
+        {
+            QDir srcDir(srcInfo.path());
+            if(!srcDir.rename(srcDir.path(), destenation))
+            {
+                error(i18n("Could not move folder %1 to album %2",
+                           srcDir.path(), dstDir.path()));
+            }
+        }
+        else
+        {
+            QFile srcFile(srcInfo.path());
+            if(!srcFile.rename(destenation))
+            {
+                error(i18n("Could not move file %1 to album %2",
+                           srcInfo.path(), dstDir.path()));
+            }
+        }
+    }
+    else
+    {
+        if(srcInfo.isDir())
+        {
+            QDir srcDir(srcInfo.path());
+            if(!copyFolderRecursively(srcDir.path(), dstDir.path()))
+            {
+                error(i18n("Could not copy folder %1 to album %2",
+                           srcDir.path(), dstDir.path()));
+            }
+        }
+        else
+        {
+            if(!QFile::copy(srcInfo.filePath(), destenation))
+            {
+                error(i18n("Could not copy file %1 to album %2",
+                           srcInfo.path(), dstDir.path()));
+            }
+        }
+    }
+
     emit signalDone();
 }
 
 // --------------------------------------------
 
-CopyAlbumJob::CopyAlbumJob(const PAlbum *src, const PAlbum *dest, CopyJob::OperationType type)
-    : CopyJob(dest, type)
+DeleteJob::DeleteJob(const QUrl &srcToDelete, bool useTrash)
 {
-    m_srcAlbum = src;
-}
-
-void CopyAlbumJob::run()
-{
-    // TODO
-    emit signalDone();
-}
-
-// --------------------------------------------
-
-DeleteJob::DeleteJob(bool useTrash)
-{
+    m_srcToDelete = srcToDelete;
     m_useTrash = useTrash;
 }
 
-// --------------------------------------------
-
-DeleteFileJob::DeleteFileJob(const ImageInfo &srcToDelete, bool useTrash)
-    : DeleteJob(useTrash)
+void DeleteJob::run()
 {
-    m_srcToDelete = srcToDelete;
-}
+    QFileInfo fileInfo(m_srcToDelete.path());
 
-void DeleteFileJob::run()
-{
-    qCDebug(DIGIKAM_IOJOB_LOG) << "DELETING: " << m_srcToDelete.fileUrl();
-
-    PAlbum *album = AlbumManager::instance()->findPAlbum(m_srcToDelete.albumId());
-
-    if (!album)
+    if(!fileInfo.exists())
     {
-        error(i18n("Source album %1 not found in database", m_srcToDelete.fileUrl().adjusted(QUrl::RemoveFilename).path()));
+        error(i18n("File/Folder %1 does not exist", fileInfo.path()));
         emit signalDone();
         return;
     }
@@ -120,7 +182,22 @@ void DeleteFileJob::run()
     }
     else
     {
-
+        if(fileInfo.isDir())
+        {
+            QDir dir(fileInfo.path());
+            if(!dir.removeRecursively())
+            {
+                error(i18n("Album %1 could not be removed", fileInfo.path()));
+            }
+        }
+        else
+        {
+            QFile file(fileInfo.path());
+            if(!file.remove())
+            {
+                error(i18n("Image %1 could not be removed", fileInfo.path()));
+            }
+        }
     }
 
     emit signalDone();
@@ -128,46 +205,29 @@ void DeleteFileJob::run()
 
 // --------------------------------------------
 
-DeleteAlbumJob::DeleteAlbumJob(const PAlbum *album, bool useTrash)
-    : DeleteJob(useTrash)
+RenameFileJob::RenameFileJob(const QUrl &srcToRename, const QString &newName)
 {
-    m_albumToDelete = album;
+    m_srcToRename = srcToRename;
+    m_newName     = newName;
 }
 
-void DeleteAlbumJob::run()
-{
-    qCDebug(DIGIKAM_IOJOB_LOG) << "DELETING PALBUM: " << m_albumToDelete->albumPath();
-
-    PAlbum *album = AlbumManager::instance()->findPAlbum(m_albumToDelete->id());
-
-    if (!album)
+void RenameFileJob::run()
+{   
+    if(m_newName.isEmpty())
     {
-        emit error(i18n("Source album %1 not found in database", m_albumToDelete->albumPath()));
         emit signalDone();
         return;
     }
 
-    QDir albumFolder(m_albumToDelete->albumPath());
+    QFile file(m_srcToRename.toLocalFile());
 
-    if(!albumFolder.exists())
+    if(!file.rename(m_newName))
     {
-        emit error(i18n("Folder %1 does not exist anymore", m_albumToDelete->title()));
-        emit signalDone();
-        return;
+        error(i18n("Image %1 could not be renamed", m_srcToRename.path()));
     }
 
-    if(!m_useTrash)
-    {
-        // TODO: Trash Implementation
-    }
-    else
-    {
-        if(!albumFolder.removeRecursively())
-        {
-            emit error(i18n("Album %1 could not be deleted", m_albumToDelete->title()));
-        }
-    }
-
+    QUrl newUrl = m_srcToRename.adjusted(QUrl::RemoveFilename) + m_newName;
+    emit signalRenamed(m_srcToRename, newUrl);
     emit signalDone();
 }
 

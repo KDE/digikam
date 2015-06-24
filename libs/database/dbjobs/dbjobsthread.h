@@ -53,6 +53,7 @@ public:
     void setUseMultiCore(const bool useMultiCore);
 
 Q_SIGNALS:
+
     void finished();
     void data(const QList<ImageListerRecord> &records);
 };

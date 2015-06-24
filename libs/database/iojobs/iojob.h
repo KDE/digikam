@@ -32,12 +32,6 @@
 
 #include "KDCRAW/RActionJob"
 
-// Local includes
-
-#include "album.h"
-#include "item/imageinfo.h"
-#include "framework/databaseaccess.h"
-
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -66,55 +60,18 @@ class CopyJob : public IOJob
 
 public:
 
-    enum OperationType
-    {
-        Copy = 0,
-        Move
-    };
-
-    CopyJob(const PAlbum *dest, OperationType type);
-
-protected:
-    const PAlbum  *m_dest;
-    OperationType  m_type;
-};
-
-// -----------
-
-class CopyFileJob : public CopyJob
-{
-    Q_OBJECT
-
-public:
-
-    CopyFileJob(const QUrl &src, const PAlbum *dest, OperationType type);
+    CopyJob(const QUrl &src, const QUrl &dest, bool isMove);
 
 protected:
 
     void run();
+    bool copyFolderRecursively(const QString &srcPath, const QString &dstPath);
 
 private:
 
-    QUrl m_srcFile;
-};
-
-// -----------
-
-class CopyAlbumJob : public CopyJob
-{
-    Q_OBJECT
-
-public:
-
-    CopyAlbumJob(const PAlbum *src, const PAlbum *dest, OperationType type);
-
-protected:
-
-    void run();
-
-private:
-
-    const PAlbum *m_srcAlbum;
+    QUrl m_src;
+    QUrl m_dest;
+    bool m_isMove;
 };
 
 // ---------------------------------------
@@ -125,22 +82,31 @@ class DeleteJob : public IOJob
 
 public:
 
-    DeleteJob(bool isPermanentDeletion);
+    DeleteJob(const QUrl &srcToDelete, bool useTrash);
 
 protected:
 
+    void run();
+
+private:
+
+    QUrl m_srcToDelete;
     bool m_useTrash;
 };
 
-// -----------
+// ---------------------------------------
 
-class DeleteFileJob : public DeleteJob
+class RenameFileJob : public IOJob
 {
     Q_OBJECT
 
 public:
 
-    DeleteFileJob(const ImageInfo &srcToDelete, bool useTrash);
+    RenameFileJob(const QUrl &srcToRename, const QString &newName);
+
+Q_SIGNALS:
+
+    void signalRenamed(const QUrl &oldUrl, const QUrl &newUrl);
 
 protected:
 
@@ -148,61 +114,9 @@ protected:
 
 private:
 
-    ImageInfo m_srcToDelete;
+    QUrl    m_srcToRename;
+    QString m_newName;
 };
-
-// -----------
-
-class DeleteAlbumJob : public DeleteJob
-{
-    Q_OBJECT
-
-public:
-
-    DeleteAlbumJob(const PAlbum *album, bool useTrash);
-
-protected:
-
-    void run();
-
-private:
-
-    const PAlbum *m_albumToDelete;
-};
-
-// ---------------------------------------
-
-//class RenameJob : public FileSystemJob
-//{
-
-//};
-
-// ---------------------------------------
-
-//class StatJob : public FileSystemJob
-//{
-//    Q_OBJECT
-
-//public:
-
-//    StatJob();
-
-//protected:
-
-//    void run();
-//};
-
-// ---------------------------------------
-
-//class MkdirJob : public FileSystemJob
-//{
-//    Q_OBJECT
-
-//public:
-
-//    MkdirJob();
-//};
-
 
 } // namespace Digikam
 
