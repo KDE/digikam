@@ -105,7 +105,7 @@ public:
         exifSetOrientationBox(0),
         saveToBalooBox(0),
         readFromBalooBox(0),
-        resyncButton(0),
+        // resyncButton(0),
         tab(0),
         displaySubTab(0),
         tagsCfgPanel(0)
@@ -145,7 +145,7 @@ public:
 
     QCheckBox*     saveToBalooBox;
     QCheckBox*     readFromBalooBox;
-    QToolButton*   resyncButton;
+    // QToolButton*   resyncButton;
 
     KTabWidget*    tab;
     KTabWidget*    displaySubTab;
@@ -534,7 +534,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     balooLayout->addWidget(balooGroup);
     balooLayout->addSpacing(KDialog::spacingHint());
     balooLayout->addWidget(balooBox);
-    balooLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
+    // balooLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
     balooLayout->addStretch();
 
 #endif // HAVE_BALOO
