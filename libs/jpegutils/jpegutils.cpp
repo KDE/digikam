@@ -7,7 +7,7 @@
  * Description : perform lossless rotation/flip to JPEG file
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Parts of the loading code is taken from qjpeghandler.cpp, copyright follows:
@@ -329,7 +329,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 }
 
 JpegRotator::JpegRotator(const QString& file)
-    : m_file(file), m_destFile(file)
+    : m_file(file),
+      m_destFile(file)
 {
     m_metadata.load(file);
     m_orientation  = m_metadata.getImageOrientation();
@@ -412,9 +413,29 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
         if (!performJpegTransform(actions[i], src, tempFile))
         {
-            ::unlink(QFile::encodeName(tempFile));
-            kError() << "JPEG transform of" << src << "failed";
-            return false;
+            kError() << "JPEG lossless transform failed for" << src;
+
+            // See bug 320107 : if lossless transform cannot be achieve, do lossy transform.
+            DImg srcImg;
+
+            kError() << "Trying lossy transform for " << src;
+
+            if (!srcImg.load(src))
+            {
+                ::unlink(QFile::encodeName(tempFile));
+                return false;
+            }
+
+            if (actions[i] != KExiv2Iface::RotationMatrix::NoTransformation)
+            {
+                srcImg.transform(actions[i]);
+            }
+
+            if (!srcImg.save(tempFile, DImg::JPEG))
+            {
+                ::unlink(QFile::encodeName(tempFile));
+                return false;
+            }
         }
 
         if (i+1 != actions.size())
@@ -531,7 +552,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 
 #if (JPEG_LIB_VERSION >= 80)
     // we need to initialize a few more parameters, see bug 274947
-    transformoption.perfect         = false;
+    transformoption.perfect         = true;             // See bug 320107 : we need perfect transform here.
     transformoption.crop            = false;
 #endif
 
