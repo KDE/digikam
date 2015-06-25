@@ -35,4 +35,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 028 ==> 319730 - Local contrast crashes digikam when used for second time.
 029 ==> 312476 - Crash while playing with liquid rescale.
 030 ==> 209398 - Crashes with SIGABRT upon free rotation of large image (55 MPixel) in image editor.
-031 ==> 
+031 ==> 342313 - SQLITE : detected locked database file. There is an active transaction. Waited but giving up now.
+032 ==> 
