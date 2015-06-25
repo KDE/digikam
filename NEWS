@@ -17,13 +17,13 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 010 ==> 294793 - Refocus filter crashes with 16bit images.
 011 ==> 337324 - digiKam crashes when opening the import view via Import "Add Images...".
 012 ==> 341356 - Not getting the new Versions of digiKam.
-013 ==> 342625 - can't install digikam because py27-numpy refuses to install.
+013 ==> 342625 - Can't install digikam because py27-numpy refuses to install.
 014 ==> 326580 - digiKam 3.5 corrupts JPG, TiFF, PNG images.
 015 ==> 349155 - digiKam does not work properly on OSX Yosemite.
 016 ==> 347289 - digiKam crashes while beginning correcting perspective.
 017 ==> 343948 - Crashes as soon as i try to import from USB3 attached flash drive with images on.
 018 ==> 337537 - Crash on Import.
-019 ==> 321899 - crash during large import.
+019 ==> 321899 - Crash during large import.
 020 ==> 293671 - digiKam freezes on / after Import.
 021 ==> 338685 - Program crashed while trying to import files from external USB HDD drive.
 022 ==> 340990 - Crash after clicking importing from sd card.
@@ -31,4 +31,8 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 024 ==> 339615 - Crashed after selecting Import (sd card reader).
 025 ==> 277242 - MYSQL : using different databases for images metadata and thumbnail cache is broken.
 026 ==> 320107 - Flip/Mirror operation doesn't flip/mirror the entirety of the picture (there is a strip left unmirrored) [patch].
-027 ==> 
+027 ==> 222462 - Crashed unexpectedly when using refocus tool.
+028 ==> 319730 - Local contrast crashes digikam when used for second time.
+029 ==> 312476 - Crash while playing with liquid rescale.
+030 ==> 209398 - Crashes with SIGABRT upon free rotation of large image (55 MPixel) in image editor.
+031 ==> 
