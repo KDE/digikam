@@ -42,4 +42,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 035 ==> 268356 - 0-pointer access if mysql-db is not working correctly.
 036 ==> 257119 - digiKam crashes when i update fingerprints database.
 037 ==> 348508 - Typing into "Enter Tag Here" crashes digikam 100% of the time.
-038 ==> 
+038 ==> 349528 - After viewing only a handful of photos, digikam crashes.
+039 ==> 
+
