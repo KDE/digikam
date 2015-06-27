@@ -45,5 +45,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 038 ==> 349528 - After viewing only a handful of photos, digikam crashes.
 039 ==> 314721 - Crash while starting.
 040 ==> 313329 - Failed to start digiKam.
-041 ==> 
+041 ==> 282047 - No open digikam.
+042 ==> 
 
