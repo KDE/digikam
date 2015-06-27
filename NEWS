@@ -46,5 +46,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 039 ==> 314721 - Crash while starting.
 040 ==> 313329 - Failed to start digiKam.
 041 ==> 282047 - No open digikam.
-042 ==> 
+042 ==> 276999 - Crash on saving changing EXIF settings.
+043 ==> 298639 - digiKam crash when clicking on "next photo" button on lower right corner.
+044 ==> 
 
