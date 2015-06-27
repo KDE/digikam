@@ -32,9 +32,34 @@
 namespace Digikam
 {
 
-IOJobsThread::IOJobsThread(QObject *const parent)
-    : RActionThreadBase(parent)
+class IOJobsThread::Private
 {
+
+public:
+
+    Private()
+        : isCanceled(false),
+          isRenameThread(false),
+          keepErrors(true)
+    {
+    }
+
+    bool           isCanceled;
+    bool           isRenameThread;
+    QUrl           oldUrl;
+
+    bool           keepErrors;
+    QList<QString> errorsList;
+};
+
+IOJobsThread::IOJobsThread(QObject *const parent)
+    : RActionThreadBase(parent), d(new Private)
+{
+}
+
+IOJobsThread::~IOJobsThread()
+{
+    delete d;
 }
 
 void IOJobsThread::copy(const QList<QUrl> &srcFiles, const QUrl destAlbum)
@@ -46,7 +71,7 @@ void IOJobsThread::copy(const QList<QUrl> &srcFiles, const QUrl destAlbum)
         CopyJob *j = new CopyJob(url, destAlbum, false);
 
         connect(j, SIGNAL(error(QString)),
-                this, SIGNAL(error(QString)));
+                this, SLOT(error(QString)));
 
         connect(j, SIGNAL(signalDone()),
                 this, SLOT(oneJobFinished()));
@@ -66,7 +91,7 @@ void IOJobsThread::move(const QList<QUrl> &srcFiles, const QUrl destAlbum)
         CopyJob *j = new CopyJob(url, destAlbum, true);
 
         connect(j, SIGNAL(error(QString)),
-                this, SIGNAL(error(QString)));
+                this, SLOT(error(QString)));
 
         connect(j, SIGNAL(signalDone()),
                 this, SLOT(oneJobFinished()));
@@ -86,7 +111,7 @@ void IOJobsThread::del(const QList<QUrl> &srcsToDelete, bool useTrash)
         DeleteJob *j = new DeleteJob(url, useTrash);
 
         connect(j, SIGNAL(error(QString)),
-                this, SIGNAL(error(QString)));
+                this, SLOT(error(QString)));
 
         connect(j, SIGNAL(signalDone()),
                 this, SLOT(oneJobFinished()));
@@ -103,7 +128,7 @@ void IOJobsThread::renameFile(const QUrl &srcToRename, const QString &newName)
     RenameFileJob *j = new RenameFileJob(srcToRename, newName);
 
     connect(j, SIGNAL(error(QString)),
-            this, SIGNAL(error(QString)));
+            this, SLOT(error(QString)));
 
     // Connecting directly to signal finished
     // because it's only one job
@@ -113,14 +138,53 @@ void IOJobsThread::renameFile(const QUrl &srcToRename, const QString &newName)
     connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
             this, SIGNAL(renamed(QUrl,QUrl)));
 
+    d->isRenameThread = true;
+    d->oldUrl = srcToRename;
+
     collection.insert(j, 0);
     appendJobs(collection);
+}
+
+bool IOJobsThread::isRenameThread()
+{
+   return d->isRenameThread;
+}
+
+QUrl IOJobsThread::oldUrlToRename()
+{
+    return d->oldUrl;
+}
+
+void IOJobsThread::cancel()
+{
+    d->isCanceled = true;
+    RActionThreadBase::cancel();
+}
+
+bool IOJobsThread::isCanceled()
+{
+    return d->isCanceled;
+}
+
+bool IOJobsThread::hasErrors()
+{
+    return !d->errorsList.isEmpty();
+}
+
+QList<QString> &IOJobsThread::errorsList()
+{
+    return d->errorsList;
 }
 
 void IOJobsThread::oneJobFinished()
 {
     if(isEmpty())
         emit finished();
+}
+
+void IOJobsThread::error(const QString &errString)
+{
+    d->errorsList.append(errString);
 }
 
 } // namespace Digikam

@@ -311,6 +311,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
     }
     else // operation == Del
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "SRCS " << src;
         jobThread = IOJobsManager::instance()->startDelete(src, false);
     }
 
@@ -319,25 +320,21 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
 //        job->setProperty(noErrorMessageProperty.toLatin1().constData(), true);
     }
 
-    connect(jobThread, SIGNAL(result()),
-            this, SLOT(slotResult(KJob*)));
+    connect(jobThread, SIGNAL(finished()),
+            this, SLOT(slotResult()));
 }
 
-void DIO::slotResult(KJob* kjob)
+void DIO::slotResult()
 {
-    KIO::Job* const job = static_cast<KIO::Job*>(kjob);
+    IOJobsThread *jobThread = dynamic_cast<IOJobsThread*>(sender());
 
-    if (job->error())
+    if (jobThread->hasErrors())
     {
-        // this slot can be used by others, too.
-        // check if image renaming property is set.
-        QVariant v = job->property(renameFileProperty.toLatin1().constData());
-
-        if (!v.isNull())
+        if (jobThread->isRenameThread())
         {
-            QUrl url(v.toString());
+            QUrl url(jobThread->oldUrlToRename());
 
-            if (job->error() == KIO::Job::KilledJobError)
+            if (jobThread->isCanceled())
             {
                 emit renamingAborted(url);
             }
@@ -347,12 +344,12 @@ void DIO::slotResult(KJob* kjob)
             }
         }
 
-        if (job->property(noErrorMessageProperty.toLatin1().constData()).isValid())
-        {
-            return;
-        }
+//        if (job->property(noErrorMessageProperty.toLatin1().constData()).isValid())
+//        {
+//            return;
+//        }
 
-        job->ui()->showErrorMessage();
+//        job->ui()->showErrorMessage();
     }
 }
 

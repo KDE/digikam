@@ -70,7 +70,7 @@ bool CopyJob::copyFolderRecursively(const QString &srcPath, const QString &dstPa
 
     foreach (const QFileInfo &fileInfo, srcDir.entryInfoList(QDir::Files))
     {
-        QString copyPath = newCopyPath + QDir::separator() + fileInfo.baseName();
+        QString copyPath = newCopyPath + QDir::separator() + fileInfo.fileName();
 
         if(!QFile::copy(fileInfo.filePath(), copyPath))
             return false;
@@ -104,19 +104,25 @@ void CopyJob::run()
     }
 
     // Checking if there is a file with the same name in destination folder
-    QString destenation = dstDir.path() + QDir::separator() + srcInfo.baseName();
+    QString destenationName = srcInfo.isFile() ? srcInfo.fileName() : srcInfo.dir().dirName();
+    QString destenation = dstDir.path() + QDir::separator() + destenationName;
     QFileInfo fileInfoForDestination(destenation);
+
     if(fileInfoForDestination.exists())
     {
         error(i18n("A file or folder named %1 already exists in %2",
                    srcInfo.baseName(), dstDir.path()));
+
+        emit signalDone();
+        return;
     }
 
     if(m_isMove)
     {
         if(srcInfo.isDir())
         {
-            QDir srcDir(srcInfo.path());
+            qCDebug(DIGIKAM_IOJOB_LOG) << "IT IS DIR";
+            QDir srcDir(srcInfo.filePath());
             if(!srcDir.rename(srcDir.path(), destenation))
             {
                 error(i18n("Could not move folder %1 to album %2",
@@ -125,11 +131,11 @@ void CopyJob::run()
         }
         else
         {
-            QFile srcFile(srcInfo.path());
+            QFile srcFile(srcInfo.filePath());
             if(!srcFile.rename(destenation))
             {
                 error(i18n("Could not move file %1 to album %2",
-                           srcInfo.path(), dstDir.path()));
+                           srcInfo.filePath(), dstDir.path()));
             }
         }
     }
@@ -137,7 +143,7 @@ void CopyJob::run()
     {
         if(srcInfo.isDir())
         {
-            QDir srcDir(srcInfo.path());
+            QDir srcDir(srcInfo.filePath());
             if(!copyFolderRecursively(srcDir.path(), dstDir.path()))
             {
                 error(i18n("Could not copy folder %1 to album %2",
@@ -168,10 +174,13 @@ DeleteJob::DeleteJob(const QUrl &srcToDelete, bool useTrash)
 void DeleteJob::run()
 {
     QFileInfo fileInfo(m_srcToDelete.path());
+    qCDebug(DIGIKAM_IOJOB_LOG) << "DELETING: " << fileInfo.filePath() << "\n"
+                               << "FILE EXISTS? " << fileInfo.exists() << "\n"
+                               << "IS TO TRASH? " << m_useTrash;
 
     if(!fileInfo.exists())
     {
-        error(i18n("File/Folder %1 does not exist", fileInfo.path()));
+        error(i18n("File/Folder %1 does not exist", fileInfo.filePath()));
         emit signalDone();
         return;
     }
@@ -184,7 +193,7 @@ void DeleteJob::run()
     {
         if(fileInfo.isDir())
         {
-            QDir dir(fileInfo.path());
+            QDir dir(fileInfo.filePath());
             if(!dir.removeRecursively())
             {
                 error(i18n("Album %1 could not be removed", fileInfo.path()));
@@ -192,10 +201,10 @@ void DeleteJob::run()
         }
         else
         {
-            QFile file(fileInfo.path());
+            QFile file(fileInfo.filePath());
             if(!file.remove())
             {
-                error(i18n("Image %1 could not be removed", fileInfo.path()));
+                error(i18n("Image %1 could not be removed", fileInfo.filePath()));
             }
         }
     }
@@ -226,7 +235,7 @@ void RenameFileJob::run()
         error(i18n("Image %1 could not be renamed", m_srcToRename.path()));
     }
 
-    QUrl newUrl = m_srcToRename.adjusted(QUrl::RemoveFilename) + m_newName;
+    QUrl newUrl = QUrl(m_srcToRename.adjusted(QUrl::RemoveFilename).toLocalFile() + m_newName);
     emit signalRenamed(m_srcToRename, newUrl);
     emit signalDone();
 }

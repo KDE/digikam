@@ -41,21 +41,36 @@ class IOJobsThread : public RActionThreadBase
 public:
 
     IOJobsThread(QObject *const parent);
+    ~IOJobsThread();
 
     void copy(const QList<QUrl> &srcFiles, const QUrl destAlbum);
     void move(const QList<QUrl> &srcFiles, const QUrl destAlbum);
     void del(const QList<QUrl> &srcsToDelete, bool useTrash);
     void renameFile(const QUrl &srcToRename, const QString &newName);
 
+    bool isRenameThread();
+    QUrl oldUrlToRename();
+
+    void cancel();
+    bool isCanceled();
+
+    bool hasErrors() ;
+    QList<QString> &errorsList();
+
 public Q_SLOTS:
 
     void oneJobFinished();
+    void error(const QString &errString);
 
 Q_SIGNALS:
 
-    void error(const QString &errString);
     void finished();
     void renamed(const QUrl &oldUrl, const QUrl &newURl);
+
+private:
+
+    class Private;
+    Private *const d;
 };
 
 } // namespace Digikam

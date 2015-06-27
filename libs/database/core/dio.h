@@ -93,7 +93,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotResult(KJob* kjob);
+    void slotResult();
     void slotRenamed(const QUrl& oldUrl, const QUrl& newUrl);
     void createJob(int operation, const QList<QUrl>& src, const QUrl& dest);
 
