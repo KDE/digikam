@@ -124,6 +124,10 @@ void KipiPluginLoader::Private::loadPlugins()
     ignores.append("RawConverter");
 
     // List of obsolete tool actions to not load
+    
+    //Disable loading of old PicasaWeb and Google Drive.
+    ignores.append("Picasaweb Exporter");
+    ignores.append("Google Drive Export");
 
     QStringList pluginActionsDisabled;
     pluginActionsDisabled << QString("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
