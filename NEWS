@@ -50,6 +50,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 043 ==> 298639 - digiKam crash when clicking on "next photo" button on lower right corner.
 044 ==> 330106 - digikam crashes when changing database location.
 045 ==> 288584 - Crash on exit.
-046 ==> 
-
+046 ==> 338104 - digiKam crash when changing parameters for "detect and recognize faces".
+047 ==> 
 
