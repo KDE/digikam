@@ -53,4 +53,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 046 ==> 338104 - digiKam crash when changing parameters for "detect and recognize faces".
 047 ==> 204482 - SCAN : Failed to open database error message.
 048 ==> 331937 - poll_for_event: assertion !xcb_xlib_threads_sequence_lost fails after editing metadata of a few videos and/or after viewing a few videos.
-049 ==> 
+049 ==> 338695 - Crash when editig raw file: enhance -> restoration -> cancel.
