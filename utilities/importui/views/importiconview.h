@@ -43,8 +43,6 @@ public:
     explicit ImportIconView(QWidget* const parent = 0);
     ~ImportIconView();
 
-    void init();
-
     ImageViewUtilities* utilities() const;
 
     int fitToWidthIcons();

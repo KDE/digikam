@@ -237,7 +237,10 @@ DImg ImageIface::setPreviewSize(const QSize& size) const
 
 DImg ImageIface::preview() const
 {
-    return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), d->previewImageData());
+    // NOTE: corrects the values for width and height of the preview image from the image data interface
+    // See Bug #320382 for details.
+    uchar* const data = d->previewImageData();
+    return DImg(d->previewWidth, d->previewHeight, previewSixteenBit(), previewHasAlpha(), data);
 }
 
 DImg* ImageIface::original() const

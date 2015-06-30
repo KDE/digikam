@@ -87,6 +87,8 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     d->importPreviewView = new ImportPreviewView(this);
     d->thumbBarDock      = new ThumbBarDock();
     d->thumbBar          = new ImportThumbnailBar(d->thumbBarDock);
+    d->thumbBar->setModelsFiltered(d->importIconView->importImageModel(),
+                                   d->importIconView->importFilterModel());
 
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
@@ -103,6 +105,15 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
 #endif //HAVE_VIDEOPLAYER
 
+#ifdef HAVE_KGEOMAP
+    // TODO refactor MapWidgetView not to require the models on startup?
+    d->mapWidgetView     = new MapWidgetView(d->importIconView->getSelectionModel(),
+                                             d->importIconView->importFilterModel(), this,
+                                             MapWidgetView::ApplicationImportUI);
+    d->mapWidgetView->setObjectName(QLatin1String("import_mapwidgetview"));
+    insertWidget(MapWidgetMode,     d->mapWidgetView);
+#endif // HAVE_KGEOMAP
+    
     setAttribute(Qt::WA_DeleteOnClose);
 
     readSettings();
@@ -188,24 +199,6 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
 ImportStackedView::~ImportStackedView()
 {
     delete d;
-}
-
-void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* filterModel)
-{
-    d->importIconView->setModels(model, filterModel);
-    d->thumbBar->setModelsFiltered(model, filterModel);
-
-    // TODO this is currently here because the code structure, waiting for restructuring..
-    d->importIconView->init();
-
-#ifdef HAVE_KGEOMAP
-    // TODO refactor MapWidgetView not to require the models on startup?
-    d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
-                                           d->importIconView->importFilterModel(), this,
-                                           MapWidgetView::ApplicationImportUI);
-    d->mapWidgetView->setObjectName(QLatin1String("import_mapwidgetview"));
-    insertWidget(MapWidgetMode,     d->mapWidgetView);
-#endif // HAVE_KGEOMAP
 }
 
 void ImportStackedView::readSettings()

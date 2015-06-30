@@ -60,7 +60,8 @@ public:
 };
 
 AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& list)
-    : DProgressDlg(0), d(new Private)
+    : DProgressDlg(0),
+      d(new Private)
 {
     d->newNameList     = list;
     d->utilities       = new ImageViewUtilities(this);

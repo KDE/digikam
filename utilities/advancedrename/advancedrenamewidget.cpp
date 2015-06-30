@@ -216,8 +216,8 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 
 QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, const RulesList& rules)
 {
-    QMenu* menu     = new QMenu(parent);
-    QAction* action = 0;
+    QMenu* const menu = new QMenu(parent);
+    QAction* action   = 0;
 
     foreach(Rule* const rule, rules)
     {

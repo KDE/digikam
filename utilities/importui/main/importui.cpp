@@ -211,16 +211,10 @@ ImportUI* ImportUI::instance()
 
 void ImportUI::setupUserArea()
 {
-    ImportThumbnailModel* const model    = new ImportThumbnailModel(this);
-    ImportFilterModel* const filterModel = new ImportFilterModel(this);
-
-    filterModel->setSourceImportModel(model);
-    filterModel->sort(0); // an initial sorting is necessary
-
     RHBox* const widget = new RHBox(this);
     d->splitter         = new SidebarSplitter(widget);
     RVBox* const vbox   = new RVBox(d->splitter);
-    d->view             = new ImportView(this, model, filterModel, vbox);
+    d->view             = new ImportView(this, vbox);
     d->view->importFilterModel()->setCameraThumbsController(d->camThumbsCtrl);
     d->historyView      = new DHistoryView(vbox);
     d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, Qt::RightEdge, true);

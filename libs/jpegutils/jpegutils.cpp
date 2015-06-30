@@ -335,7 +335,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 }
 
 JpegRotator::JpegRotator(const QString& file)
-    : m_file(file), m_destFile(file)
+    : m_file(file),
+      m_destFile(file)
 {
     m_metadata.load(file);
     m_orientation  = m_metadata.getImageOrientation();
@@ -420,9 +421,33 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
         if (!performJpegTransform(actions[i], src, tempFile))
         {
-            ::unlink(QFile::encodeName(tempFile).constData());
-            qCDebug(DIGIKAM_GENERAL_LOG) << "JPEG transform of" << src << "failed";
-            return false;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "JPEG lossless transform failed for" << src;
+            
+             // See bug 320107 : if lossless transform cannot be achieve, do lossy transform.
+            DImg srcImg;
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Trying lossy transform for " << src;
+
+            if (!srcImg.load(src))
+            {
+                ::unlink(QFile::encodeName(tempFile).constData());
+                return false;
+            }
+
+            if (actions[i] != RotationMatrix::NoTransformation)
+            {
+                srcImg.transform(actions[i]);
+            }
+
+            if (!srcImg.save(tempFile, DImg::JPEG))
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Lossy transform failed for" << src;
+
+                ::unlink(QFile::encodeName(tempFile).constData());
+                return false;
+            }
+            
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Lossy transform done for " << src;
         }
 
         if (i+1 != actions.size())
@@ -546,7 +571,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 #if (JPEG_LIB_VERSION >= 80)
 
     // we need to initialize a few more parameters, see bug 274947
-    transformoption.perfect         = false;
+    transformoption.perfect         = true;   // See bug 320107 : we need perfect transform here.
     transformoption.crop            = false;
 
 #endif // (JPEG_LIB_VERSION >= 80)
