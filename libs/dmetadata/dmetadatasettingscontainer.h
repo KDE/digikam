@@ -41,6 +41,35 @@ namespace Digikam
 {
 
 /**
+ * @brief The NamespaceEntry class provide a simple container
+ *        for dmetadata namespaces variables, such
+ *        as names, what types of data expects and extra
+ *        xml tags
+ */
+class NamespaceEntry{
+
+public:
+    enum Type {TAG, TAGPATH};
+    NamespaceEntry(){}
+    NamespaceEntry(QString name, Type isPath, QString separator, QString extraXml)
+    {
+        this->namespaceName = name;
+        this->tagPaths = isPath;
+        this->separator = separator;
+        this->extraXml = extraXml;
+    }
+
+    ~NamespaceEntry(){}
+
+
+
+    QString namespaceName;
+    Type    tagPaths;
+    QString separator;
+    QString extraXml;
+};
+
+/**
     The class DMetadataSettingsContainer is designed to dynamically add namespaces.
 */
 class DIGIKAM_EXPORT DMetadataSettingsContainer
@@ -50,12 +79,19 @@ public:
     DMetadataSettingsContainer();
     ~DMetadataSettingsContainer()
     {
-    };
+    }
 
 public:
 
     void readFromConfig(KConfigGroup& group);
     void writeToConfig(KConfigGroup& group) const;
+
+    /**
+     * @brief defaultValues - default namespaces used by digiKam
+     */
+    void defaultValues();
+
+    QList<NamespaceEntry> namespaceEntries;
 
 };
 

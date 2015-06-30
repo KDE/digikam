@@ -41,12 +41,64 @@ DMetadataSettingsContainer::DMetadataSettingsContainer()
 
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
-    Q_UNUSED(group);
+    if(group.hasGroup("namespaces"))
+    {
+        KConfigGroup myItems = group.group("namespaces");
+
+        for(QString element : myItems.groupList())
+        {
+            KConfigGroup gr = myItems.group(element);
+            NamespaceEntry ns(
+                        element,
+                        (NamespaceEntry::Type)gr.readEntry("Type").toInt(),
+                        gr.readEntry("separator"),
+                        gr.readEntry("extraXml"));
+
+           namespaceEntries.append(ns);
+        }
+
+    }
+    else
+    {
+        defaultValues();
+    }
 }
 
 void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
-    Q_UNUSED(group);
+    KConfigGroup namespacesGroup = group.group("namespaces");
+
+    for(NamespaceEntry e : namespaceEntries)
+    {
+        KConfigGroup tmp = namespacesGroup.group(e.namespaceName);
+        tmp.writeEntry("Type",(int)e.tagPaths);
+        tmp.writeEntry("separator", e.separator);
+        tmp.writeEntry("extraXml",e.extraXml);
+    }
+
+    group.sync();
+}
+
+void DMetadataSettingsContainer::defaultValues()
+{
+    this->namespaceEntries.clear();
+
+    namespaceEntries.append(NamespaceEntry(QLatin1String("Xmp.digiKam.TagsList"),
+                                           NamespaceEntry::TAGPATH,
+                                           QLatin1String("/"),
+                                           QString()));
+    namespaceEntries.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
+                                           NamespaceEntry::TAGPATH,
+                                           QLatin1String("/"),
+                                           QString()));
+    namespaceEntries.append(NamespaceEntry(QLatin1String("Xmp.lr.hierarchicalSubject"),
+                                           NamespaceEntry::TAGPATH,
+                                           QLatin1String("|"),
+                                           QString()));
+    namespaceEntries.append(NamespaceEntry(QLatin1String("Xmp.mediapro.CatalogSets"),
+                                           NamespaceEntry::TAGPATH,
+                                           QLatin1String("|"),
+                                           QString()));
 }
 
 }  // namespace Digikam
