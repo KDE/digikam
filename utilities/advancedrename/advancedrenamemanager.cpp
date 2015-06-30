@@ -289,6 +289,7 @@ void AdvancedRenameManager::addFiles(const QList<ParseSettings>& files)
     {
         addFile(ps.fileUrl.toLocalFile(), ps.creationTime);
     }
+
     initialize();
 }
 
@@ -324,27 +325,27 @@ void AdvancedRenameManager::initializeFileList()
 
     switch (d->sortAction)
     {
-    case SortName:
-    {
-        qSort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
-        break;
-    }
+        case SortName:
+        {
+            qSort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
+            break;
+        }
 
-    case SortDate:
-    {
-        qSort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
-        break;
-    }
+        case SortDate:
+        {
+            qSort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
+            break;
+        }
 
-    case SortSize:
-    {
-        qSort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
-        break;
-    }
+        case SortSize:
+        {
+            qSort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
+            break;
+        }
 
-    case SortCustom:
-    default:
-        break;
+        case SortCustom:
+        default:
+            break;
     }
 
     if (d->sortAction != SortCustom && d->sortDirection == SortDescending)
@@ -381,6 +382,7 @@ bool AdvancedRenameManager::initialize()
     // fill normal index map
     {
         int counter = 1;
+
         foreach(const QString& file, d->files)
         {
             d->fileIndexMap[file] = counter++;
@@ -390,6 +392,7 @@ bool AdvancedRenameManager::initialize()
     // fill file group index map
     {
         int counter = 1;
+
         foreach(const QString& file, d->files)
         {
             if (!d->fileGroupIndexMap.contains(fileGroupKey(file)))
@@ -402,6 +405,7 @@ bool AdvancedRenameManager::initialize()
     // fill folder group index map
     {
         QMap<QString, QList<QString> > dirMap;
+
         foreach(const QString& file, d->files)
         {
             QFileInfo fi(file);
@@ -421,6 +425,7 @@ bool AdvancedRenameManager::initialize()
         foreach(const QString& dir, dirMap.keys())
         {
             int index = 0;
+
             foreach(const QString& f, dirMap[dir])
             {
                 if (!d->folderIndexMap.contains(f))

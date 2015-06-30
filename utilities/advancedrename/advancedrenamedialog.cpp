@@ -57,6 +57,7 @@
 #include "parsesettings.h"
 #include "advancedrenamemanager.h"
 #include "advancedrenameprocessdialog.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -487,6 +488,7 @@ void AdvancedRenameDialog::slotAddImages(const QList<QUrl>& urls)
 {
     if (urls.isEmpty())
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No item to process";
         return;
     }
 
@@ -499,6 +501,7 @@ void AdvancedRenameDialog::slotAddImages(const QList<QUrl>& urls)
         ParseSettings ps;
         ps.fileUrl = url;
         files << ps;
+        qCDebug(DIGIKAM_GENERAL_LOG) << url;
     }
 
     d->advancedRenameManager->addFiles(files);
