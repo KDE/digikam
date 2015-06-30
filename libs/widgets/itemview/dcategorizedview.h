@@ -155,6 +155,7 @@ protected:
     void reset();
     void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
     void rowsInserted(const QModelIndex& parent, int start, int end);
+    void rowsRemoved(const QModelIndex& parent, int start, int end);
     void selectionChanged(const QItemSelection&, const QItemSelection&);
     bool viewportEvent(QEvent* event);
     void wheelEvent(QWheelEvent* event);
