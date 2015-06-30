@@ -54,3 +54,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 047 ==> 204482 - SCAN : Failed to open database error message.
 048 ==> 331937 - poll_for_event: assertion !xcb_xlib_threads_sequence_lost fails after editing metadata of a few videos and/or after viewing a few videos.
 049 ==> 338695 - Crash when editig raw file: enhance -> restoration -> cancel.
+050 ==> 249153 - Xorg with almost 100% CPU now and then during digiKam's usage.
+051 ==> 
