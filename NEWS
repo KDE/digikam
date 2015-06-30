@@ -57,5 +57,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 050 ==> 249153 - Xorg with almost 100% CPU now and then during digiKam's usage.
 051 ==> 334951 - digiKam freezes and after a while shutdown. no crash report.
 052 ==> 322115 - Crash when opening an image.
-053 ==> 
+053 ==> 267408 - digiKam new metadata template editor crash during save.
+054 ==> 
+
 
