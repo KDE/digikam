@@ -66,6 +66,10 @@ public Q_SLOTS:
      * @brief slotDeleteSelected - delete selected item from Quick Access List
      */
     void slotDeleteSelected();
+
+    void slotMoveItemUp();
+
+    void slotMoveItemDown();
 };
 
 } // namespace Digikam

@@ -62,18 +62,15 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
 {
     // ---------- Advanced Configuration Panel -----------------------------
 
-//    QWidget* const advancedConfPanel      = new QWidget;
-    //QGridLayout* const advancedConfLayout = new QGridLayout;
+    QVBoxLayout* const advancedConfLayout = new QVBoxLayout(this);
 
-    QVBoxLayout* const advancedConfLayout = new QVBoxLayout;
-
-    QHBoxLayout* const topLayout = new QHBoxLayout;
-    QHBoxLayout* const bottomLayout = new QHBoxLayout;
+    QHBoxLayout* const topLayout = new QHBoxLayout(this);
+    QHBoxLayout* const bottomLayout = new QHBoxLayout(this);
 
     //--- Top layout ----------------
-    d->metadataType = new QComboBox;
+    d->metadataType = new QComboBox(this);
 
-    d->operationType = new QComboBox;
+    d->operationType = new QComboBox(this);
 
     d->metadataType->insertItems(0, QStringList() << i18n("Tags") << i18n("Ratings") << i18n("Comments"));
 
@@ -87,12 +84,12 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
 
     //------------ Bottom Layout-------------
     // View
-    d->namespaceView = new NamespaceListView();
+    d->namespaceView = new NamespaceListView(this);
     d->model = new QStandardItemModel(this);
     setModelData();
 
     // Buttons
-    QVBoxLayout* buttonsLayout = new QVBoxLayout;
+    QVBoxLayout* buttonsLayout = new QVBoxLayout(this);
     buttonsLayout->setAlignment(Qt::AlignTop);
     d->addButton = new QPushButton(i18n("Add"));
     d->deleteButton = new QPushButton(i18n("Delete"));
@@ -108,7 +105,7 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     buttonsLayout->addWidget(d->moveDownButton);
     buttonsLayout->addWidget(d->resetButton);
 
-    QVBoxLayout* vbox = new QVBoxLayout;
+    QVBoxLayout* vbox = new QVBoxLayout(this);
     vbox->addWidget(d->namespaceView);
 
     bottomLayout->addLayout(vbox);
@@ -122,7 +119,7 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
 
 AdvancedMetadataTab::~AdvancedMetadataTab()
 {
-
+    delete d;
 }
 
 void AdvancedMetadataTab::slotResetView()
@@ -135,6 +132,8 @@ void AdvancedMetadataTab::connectButtons()
 {
     connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
     connect(d->resetButton, SIGNAL(clicked()), this, SLOT(slotResetView()));
+    connect(d->moveUpButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemUp()));
+    connect(d->moveDownButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemDown()));
 }
 
 void AdvancedMetadataTab::setModelData()

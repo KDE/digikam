@@ -135,4 +135,67 @@ void NamespaceListView::slotDeleteSelected()
     }
 }
 
+void NamespaceListView::slotMoveItemUp()
+{
+    QModelIndexList sel = this->selectionModel()->selectedIndexes();
+
+    if(sel.isEmpty())
+        return;
+
+    QStandardItemModel* const model = dynamic_cast<QStandardItemModel*>(this->model());
+
+    if(!model)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
+        return;
+    }
+
+    QModelIndex index = sel.first();
+
+    if(index.row() == 0)
+        return;
+    QStandardItem* root = model->invisibleRootItem();
+    int savedRow = index.row();
+    QStandardItem* const item = root->child(index.row());
+    QStandardItem* newCopy = item->clone();
+
+
+    root->removeRow(index.row());
+    root->insertRow(savedRow-1,newCopy);
+
+    this->setCurrentIndex(model->index(index.row()-1, index.column(), index.parent()));
+}
+
+void NamespaceListView::slotMoveItemDown()
+{
+    QModelIndexList sel = this->selectionModel()->selectedIndexes();
+
+    if(sel.isEmpty())
+        return;
+
+    QStandardItemModel* const model = dynamic_cast<QStandardItemModel*>(this->model());
+
+    if(!model)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
+        return;
+    }
+
+    QModelIndex index = sel.first();
+
+    QStandardItem* root = model->invisibleRootItem();
+    if(index.row() == root->rowCount()-1)
+        return;
+
+    int savedRow = index.row();
+    QStandardItem* const item = root->child(index.row());
+    QStandardItem* newCopy = item->clone();
+
+
+    root->removeRow(index.row());
+    root->insertRow(savedRow+1,newCopy);
+
+    this->setCurrentIndex(model->index(index.row()+1, index.column(), index.parent()));
+}
+
 } // namespace Digikam
