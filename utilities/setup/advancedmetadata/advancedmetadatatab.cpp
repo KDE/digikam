@@ -31,6 +31,7 @@
 #include <QListView>
 #include <QStandardItemModel>
 #include <QStandardItem>
+#include <QDebug>
 
 #include "klocale.h"
 #include "dmetadatasettings.h"
@@ -87,6 +88,7 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     //------------ Bottom Layout-------------
     // View
     d->namespaceView = new NamespaceListView();
+    d->model = new QStandardItemModel(this);
     setModelData();
 
     // Buttons
@@ -94,10 +96,11 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     buttonsLayout->setAlignment(Qt::AlignTop);
     d->addButton = new QPushButton(i18n("Add"));
     d->deleteButton = new QPushButton(i18n("Delete"));
-    connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
+
     d->moveUpButton = new QPushButton(i18n("Move Up"));
     d->moveDownButton = new QPushButton(i18n("Move Down"));
     d->resetButton = new QPushButton(i18n("Reset"));
+    connectButtons();
 
     buttonsLayout->addWidget(d->addButton);
     buttonsLayout->addWidget(d->deleteButton);
@@ -122,9 +125,22 @@ AdvancedMetadataTab::~AdvancedMetadataTab()
 
 }
 
+void AdvancedMetadataTab::slotResetView()
+{
+    setModelData();
+}
+
+
+void AdvancedMetadataTab::connectButtons()
+{
+    connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
+    connect(d->resetButton, SIGNAL(clicked()), this, SLOT(slotResetView()));
+}
+
 void AdvancedMetadataTab::setModelData()
 {
-    d->model = new QStandardItemModel(this);
+    qDebug() << "Setting model data";
+    d->model->clear();
     DMetadataSettingsContainer dm = DMetadataSettings::instance()->settings();
 
     QStandardItem* root = d->model->invisibleRootItem();
@@ -135,9 +151,6 @@ void AdvancedMetadataTab::setModelData()
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         root->appendRow(item);
     }
-   // d->namespaceView->setAcceptDrops(true);
-//    d->namespaceView->setDragEnabled(true);
-//    d->namespaceView->setDragDropMode(QAbstractItemView::InternalMove);
     d->namespaceView->setModel(d->model);
 }
 

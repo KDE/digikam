@@ -28,11 +28,18 @@ namespace Digikam
 
 class AdvancedMetadataTab : public QWidget
 {
+    Q_OBJECT
 public:
     AdvancedMetadataTab(QWidget *parent = 0);
     virtual ~AdvancedMetadataTab();
+
+public Q_SLOTS:
+
+    void slotResetView();
+
 private:
 
+    void connectButtons();
     void setModelData();
     class Private;
     Private* d;
