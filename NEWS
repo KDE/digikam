@@ -58,6 +58,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 051 ==> 334951 - digiKam freezes and after a while shutdown. no crash report.
 052 ==> 322115 - Crash when opening an image.
 053 ==> 267408 - digiKam new metadata template editor crash during save.
-054 ==> 
-
-
+054 ==> 238935 - Jpeg 2000 Quality setting isn't working right: Always the same quality.
+055 ==> 
