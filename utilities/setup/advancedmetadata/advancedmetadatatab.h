@@ -32,6 +32,8 @@ public:
     AdvancedMetadataTab(QWidget *parent = 0);
     virtual ~AdvancedMetadataTab();
 private:
+
+    void setModelData();
     class Private;
     Private* d;
 };

@@ -29,9 +29,12 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QListView>
+#include <QStandardItemModel>
+#include <QStandardItem>
 
 #include "klocale.h"
-
+#include "dmetadatasettings.h"
+#include "namespacelistview.h"
 
 namespace Digikam
 {
@@ -50,6 +53,8 @@ public:
     QPushButton* moveUpButton;
     QPushButton* moveDownButton;
     QPushButton* resetButton;
+    QStandardItemModel* model;
+    NamespaceListView* namespaceView;
 };
 AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     :QWidget(parent), d(new Private())
@@ -80,11 +85,16 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     topLayout->addWidget(checkBox);
 
     //------------ Bottom Layout-------------
-    QListView* nameSpaceView = new QListView();
+    // View
+    d->namespaceView = new NamespaceListView();
+    setModelData();
+
+    // Buttons
     QVBoxLayout* buttonsLayout = new QVBoxLayout;
     buttonsLayout->setAlignment(Qt::AlignTop);
     d->addButton = new QPushButton(i18n("Add"));
     d->deleteButton = new QPushButton(i18n("Delete"));
+    connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
     d->moveUpButton = new QPushButton(i18n("Move Up"));
     d->moveDownButton = new QPushButton(i18n("Move Down"));
     d->resetButton = new QPushButton(i18n("Reset"));
@@ -96,7 +106,7 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     buttonsLayout->addWidget(d->resetButton);
 
     QVBoxLayout* vbox = new QVBoxLayout;
-    vbox->addWidget(nameSpaceView);
+    vbox->addWidget(d->namespaceView);
 
     bottomLayout->addLayout(vbox);
     bottomLayout->addLayout(buttonsLayout);
@@ -110,6 +120,25 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
 AdvancedMetadataTab::~AdvancedMetadataTab()
 {
 
+}
+
+void AdvancedMetadataTab::setModelData()
+{
+    d->model = new QStandardItemModel(this);
+    DMetadataSettingsContainer dm = DMetadataSettings::instance()->settings();
+
+    QStandardItem* root = d->model->invisibleRootItem();
+    for(NamespaceEntry e : dm.namespaceEntries)
+    {
+        QString text = e.namespaceName + QLatin1String(",") + i18n("Separator:") + e.separator;
+        QStandardItem* item = new QStandardItem(text);
+        item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
+        root->appendRow(item);
+    }
+   // d->namespaceView->setAcceptDrops(true);
+//    d->namespaceView->setDragEnabled(true);
+//    d->namespaceView->setDragDropMode(QAbstractItemView::InternalMove);
+    d->namespaceView->setModel(d->model);
 }
 
 }

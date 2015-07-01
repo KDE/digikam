@@ -31,7 +31,9 @@ set(libsetup_SRCS
     setupdatabase.cpp
     setupversioning.cpp
     setupimagequalitysorter.cpp
-    advancedmetadatatab.cpp
+    
+    advancedmetadata/advancedmetadatatab.cpp
+    advancedmetadata/namespacelistview.cpp
 
     collections/setupcollections.cpp
     collections/setupcollectionview.cpp
