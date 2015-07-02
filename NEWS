@@ -61,5 +61,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 054 ==> 238935 - Jpeg 2000 Quality setting isn't working right: Always the same quality.
 055 ==> 273290 - digiKam has crashed during import of pictures from SD card.
 056 ==> 337921 - Unable to compile due to pointer type issue in gpcamera.
-057 ==> 
+057 ==> 229779 - imported folders show not images.
+058 ==> 
 
