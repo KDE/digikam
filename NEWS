@@ -62,5 +62,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 055 ==> 273290 - digiKam has crashed during import of pictures from SD card.
 056 ==> 337921 - Unable to compile due to pointer type issue in gpcamera.
 057 ==> 229779 - imported folders show not images.
-058 ==> 
+058 ==> 210742 - Kodak camera cx4300 detects but won't download locks @20% (old o.s. & digikam worked).
+059 ==> 
+
 
