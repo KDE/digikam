@@ -64,5 +64,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 057 ==> 229779 - imported folders show not images.
 058 ==> 210742 - Kodak camera cx4300 detects but won't download locks @20% (old o.s. & digikam worked).
 059 ==> 323210 - Image History Bar Shows A Mess Of Derived Images And Identical Images That Are Neither Derived Nor Identical.
-060 ==> 245345 - Digikam crashes while importing pictures from card reader.
-061 ==> 
+060 ==> 245345 - digiKam crashes while importing pictures from card reader.
+061 ==> 274768 - digiKam crashed @DatabaseConfigElement::element.
+062 ==> 
