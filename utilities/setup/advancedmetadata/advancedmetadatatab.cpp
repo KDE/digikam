@@ -23,6 +23,7 @@
 
 #include "advancedmetadatatab.h"
 
+#include <QApplication>
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QHBoxLayout>
@@ -36,6 +37,7 @@
 #include "klocale.h"
 #include "dmetadatasettings.h"
 #include "namespacelistview.h"
+#include "namespaceeditdlg.h"
 
 namespace Digikam
 {
@@ -127,9 +129,23 @@ void AdvancedMetadataTab::slotResetView()
     setModelData();
 }
 
+void AdvancedMetadataTab::slotAddNewNamespace()
+{
+    QString name;
+    QString separator;
+    bool isPath;
+    QString extraXml;
+
+    if (!NamespaceEditDlg::create(qApp->activeWindow(), name, separator, isPath, extraXml))
+    {
+        return;
+    }
+}
+
 
 void AdvancedMetadataTab::connectButtons()
 {
+    connect(d->addButton, SIGNAL(clicked()), this, SLOT(slotAddNewNamespace()));
     connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
     connect(d->resetButton, SIGNAL(clicked()), this, SLOT(slotResetView()));
     connect(d->moveUpButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemUp()));
@@ -151,6 +167,11 @@ void AdvancedMetadataTab::setModelData()
         root->appendRow(item);
     }
     d->namespaceView->setModel(d->model);
+}
+
+void AdvancedMetadataTab::addEntry()
+{
+
 }
 
 }

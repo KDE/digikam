@@ -36,11 +36,14 @@ public:
 public Q_SLOTS:
 
     void slotResetView();
+    void slotAddNewNamespace();
 
 private:
 
     void connectButtons();
     void setModelData();
+
+    void addEntry();
     class Private;
     Private* d;
 };

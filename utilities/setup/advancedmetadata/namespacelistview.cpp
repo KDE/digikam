@@ -45,8 +45,6 @@
 #include "digikam_debug.h"
 //#include "contextmenuhelper.h"
 
-
-
 namespace Digikam
 {
 

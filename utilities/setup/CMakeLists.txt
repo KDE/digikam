@@ -34,6 +34,7 @@ set(libsetup_SRCS
     
     advancedmetadata/advancedmetadatatab.cpp
     advancedmetadata/namespacelistview.cpp
+    advancedmetadata/namespaceeditdlg.cpp
 
     collections/setupcollections.cpp
     collections/setupcollectionview.cpp
