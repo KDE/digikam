@@ -1,3 +1,26 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2015-07-03
+ * Description : dialog to edit and create digiKam xmp namespaces
+ *
+ * Copyright (C) 2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 #include "namespaceeditdlg.h"
 #include <QGridLayout>
 #include <QLabel>
@@ -9,6 +32,7 @@
 #include <QPointer>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QStandardPaths>
 
 #include <KLocalizedString>
 
@@ -92,22 +116,6 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, QWidget *parent)
 
     d->nameSpaceSeparator = new QLineEdit(this);
 
-//    d->iconButton         = new QPushButton(page);
-//    d->iconButton->setFixedSize(40, 40);
-//    iconTextLabel->setBuddy(d->iconButton);
-
-//    // In create mode, by default assign the icon of the parent (if not root) to this new tag.
-//    d->icon = album->icon();
-
-////    d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
-
-//    d->resetIconButton = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Reset"), page);
-
-//    if (create)
-//    {
-//        d->resetIconButton->hide();
-//    }
-
     // --------------------------------------------------------
 
     QLabel* const kscTextLabel = new QLabel(page);
@@ -116,6 +124,7 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, QWidget *parent)
     d->isPath = new QCheckBox(this);
 
     QLabel* const extraXmlLabel = new QLabel(page);
+    extraXmlLabel->setText(i18n("Extra XML"));
     d->extraXml = new QLineEdit(page);
 
     QLabel* const tipLabel2 = new QLabel(page);
@@ -168,8 +177,7 @@ NamespaceEditDlg::~NamespaceEditDlg()
 
 }
 
-bool NamespaceEditDlg::create(QWidget *parent, QString& nameStr, QString& separator,
-                               bool& isPath, QString& extraXml)
+bool NamespaceEditDlg::create(QWidget *parent, NamespaceEntry& entry)
 {
     QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(true, parent);
 
@@ -177,10 +185,13 @@ bool NamespaceEditDlg::create(QWidget *parent, QString& nameStr, QString& separa
 
     if (valRet == QDialog::Accepted)
     {
-        nameStr     = dlg->namespaceName();
-        separator   = dlg->nameSpaceSeparator();
-        isPath      = dlg->isTagPath();
-        extraXml    = dlg->extraXml();
+        entry.namespaceName     = dlg->namespaceName();
+        entry.separator   = dlg->nameSpaceSeparator();
+        if(dlg->isTagPath())
+            entry.tagPaths      = NamespaceEntry::TAGPATH;
+        else
+            entry.tagPaths      = NamespaceEntry::TAG;
+        entry.extraXml    = dlg->extraXml();
     }
 
     delete dlg;

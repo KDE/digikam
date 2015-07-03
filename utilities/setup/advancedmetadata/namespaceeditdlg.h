@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-07-01
- * Description : dialog to edit and create digiKam Tags
+ * Date        : 2015-07-03
+ * Description : dialog to edit and create digiKam xmp namespaces
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +33,7 @@
 
 // Local includes
 
-#include "albummanager.h"
+#include "dmetadatasettingscontainer.h"
 
 namespace Digikam
 {
@@ -61,8 +60,7 @@ public:
 //        'errMap' is Map of TAlbum path and error message if tag creation failed.
 //        Return the list of created Albums.
 //    */
-    static bool create(QWidget* parent, QString& nameStr, QString& separator,
-                       bool& isPath,QString& extraXml);
+    static bool create(QWidget* parent, NamespaceEntry& entry);
 
     QString namespaceName() const;
     QString nameSpaceSeparator() const;

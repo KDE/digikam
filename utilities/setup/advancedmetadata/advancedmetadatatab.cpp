@@ -58,11 +58,13 @@ public:
     QPushButton* resetButton;
     QStandardItemModel* model;
     NamespaceListView* namespaceView;
+    DMetadataSettingsContainer container;
 };
 AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     :QWidget(parent), d(new Private())
 {
     // ---------- Advanced Configuration Panel -----------------------------
+    d->container = DMetadataSettings::instance()->settings();
 
     QVBoxLayout* const advancedConfLayout = new QVBoxLayout(this);
 
@@ -131,15 +133,19 @@ void AdvancedMetadataTab::slotResetView()
 
 void AdvancedMetadataTab::slotAddNewNamespace()
 {
-    QString name;
-    QString separator;
-    bool isPath;
-    QString extraXml;
+    NamespaceEntry entry;
 
-    if (!NamespaceEditDlg::create(qApp->activeWindow(), name, separator, isPath, extraXml))
+    if (!NamespaceEditDlg::create(qApp->activeWindow(), entry))
     {
         return;
     }
+
+    QStandardItem* root = d->model->invisibleRootItem();
+    QString text = entry.namespaceName + QLatin1String(",") + i18n("Separator:") + entry.separator;
+    QStandardItem* item = new QStandardItem(text);
+    item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
+    root->appendRow(item);
+    d->container.namespaceEntries.append(entry);
 }
 
 
@@ -156,10 +162,9 @@ void AdvancedMetadataTab::setModelData()
 {
     qDebug() << "Setting model data";
     d->model->clear();
-    DMetadataSettingsContainer dm = DMetadataSettings::instance()->settings();
 
     QStandardItem* root = d->model->invisibleRootItem();
-    for(NamespaceEntry e : dm.namespaceEntries)
+    for(NamespaceEntry e : d->container.namespaceEntries)
     {
         QString text = e.namespaceName + QLatin1String(",") + i18n("Separator:") + e.separator;
         QStandardItem* item = new QStandardItem(text);
