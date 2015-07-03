@@ -140,7 +140,7 @@ please install "ffmpegthumbs" package, which is the kdemultimedia Video thumbnai
 In order to compile, just use something like that:
 
 # export VERBOSE=1
-# export QTDIR=/usr/lib/qt4
+# export QTDIR=/usr/lib/qt5
 # export PATH=$QTDIR/bin:$PATH
 # cmake .
 # make
@@ -163,9 +163,9 @@ Compared to old autoconf options:
 
 More details can be found at this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
 
-Note: To know KDE install path on your computer, use 'kde-config --prefix' command line like this (with full debug object enabled):
+Note: To know KDE install path on your computer, use 'kf5-config --prefix' command line like this (with full debug object enabled):
 
-"cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix`"
+"cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix`"
 
 -- DONATE MONEY --------------------------------------------------------
 
