@@ -67,4 +67,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 060 ==> 245345 - digiKam crashes while importing pictures from card reader.
 061 ==> 274768 - digiKam crashed @DatabaseConfigElement::element.
 062 ==> 271677 - Renaming.
-063 ==> 
+063 ==> 225760 - started program with NFS album; scanning started; then at some point crash (wasn't paying attention).
+064 ==> 
