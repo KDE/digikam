@@ -69,4 +69,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 062 ==> 271677 - Renaming.
 063 ==> 225760 - started program with NFS album; scanning started; then at some point crash (wasn't paying attention).
 064 ==> 349689 - digiKam cannot display images if directory name contains UTF8 characters (as e.g. 'ü').
-065 ==> 
+065 ==> 219308 - digiKam crash when i close it, after to move 50 items.
+066 ==> 
+
