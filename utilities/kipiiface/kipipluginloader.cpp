@@ -6,7 +6,7 @@
  * Date        : 2012-10-03
  * Description : kipi Loader Implementation
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Victor Dodon <dodonvictor at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -123,12 +123,11 @@ void KipiPluginLoader::Private::loadPlugins()
     // Raw converter batch dialog is obsolete since 3.0.0 with new Raw decoding settings include in Batch Queue Manager.
     ignores.append("RawConverter");
 
-    // List of obsolete tool actions to not load
-    
-    //Disable loading of old PicasaWeb and Google Drive.
+    // Disable loading of old PicasaWeb and Google Drive factored in GoogleServices.
     ignores.append("Picasaweb Exporter");
     ignores.append("Google Drive Export");
 
+    // List of obsolete tool actions to not load
     QStringList pluginActionsDisabled;
     pluginActionsDisabled << QString("gpssync2");                       // Experimental plugin renamed gpssync during GoSC2010.
     pluginActionsDisabled << QString("batch_rename_images");            // Obsolete since 1.0.0, replaced by AdvancedRename.
