@@ -121,6 +121,15 @@ void KipiPluginLoader::Private::loadPlugins()
     // Raw converter batch dialog is obsolete since 3.0.0 with new Raw decoding settings include in Batch Queue Manager.
     ignores.append(QLatin1String("RawConverter"));
 
+    // Disable loading of old PicasaWeb and Google Drive factored in GoogleServices.
+    ignores.append(QLatin1String("Picasaweb Exporter"));
+    ignores.append(QLatin1String("Google Drive Export"));
+
+    // These plugins have been renamed with 5.0.0
+
+    ignores.append(QLatin1String("FlickrExport"));
+    ignores.append(QLatin1String("GPSSync"));
+
     // List of obsolete tool actions to not load
 
     QStringList pluginActionsDisabled;
