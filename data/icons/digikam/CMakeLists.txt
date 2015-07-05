@@ -1,67 +1,391 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2015, Alexander Potashev, <aspotashev@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# Install standard icons.
-
-ecm_install_icons(ICONS hi128-actions-adjustcurves.png              hi16-actions-albumfolder-new.png         hi22-actions-albumfolder-importimages.png  hi32-actions-albumfolder-importdir.png     hi48-actions-albumfolder-importdir2.png    hi64-actions-adjustrgb.png
-                        hi128-actions-adjustlevels.png              hi16-actions-albumfolder-properties.png  hi22-actions-albumfolder-new.png           hi32-actions-albumfolder-importimages.png  hi48-actions-albumfolder-importdir.png     hi64-actions-albumfolder-importdir2.png
-                        hi128-actions-adjustrgb.png                 hi16-actions-albumfolder-user-trash.png  hi22-actions-albumfolder-properties.png    hi32-actions-albumfolder-new.png           hi48-actions-albumfolder-importimages.png  hi64-actions-albumfolder-importdir.png
-                        hi128-actions-albumfolder-importdir2.png    hi16-actions-antivignetting.png          hi22-actions-albumfolder-user-trash.png    hi32-actions-albumfolder-properties.png    hi48-actions-albumfolder-new.png           hi64-actions-albumfolder-importimages.png
-                        hi128-actions-albumfolder-importdir.png     hi16-actions-autocorrection.png          hi22-actions-antivignetting.png            hi32-actions-albumfolder-user-trash.png    hi48-actions-albumfolder-properties.png    hi64-actions-albumfolder-new.png
-                        hi128-actions-albumfolder-importimages.png  hi16-actions-blurfx.png                  hi22-actions-autocorrection.png            hi32-actions-antivignetting.png            hi48-actions-albumfolder-user-trash.png    hi64-actions-albumfolder-properties.png
-                        hi128-actions-albumfolder-new.png           hi16-actions-blurimage.png               hi22-actions-blurfx.png                    hi32-actions-autocorrection.png            hi48-actions-antivignetting.png            hi64-actions-albumfolder-user-trash.png
-                        hi128-actions-albumfolder-properties.png    hi16-actions-bordertool.png              hi22-actions-blurimage.png                 hi32-actions-blurfx.png                    hi48-actions-autocorrection.png            hi64-actions-antivignetting.png
-                        hi128-actions-albumfolder-user-trash.png    hi16-actions-bqm-add.png                 hi22-actions-bordertool.png                hi32-actions-blurimage.png                 hi48-actions-blurfx.png                    hi64-actions-autocorrection.png
-                        hi128-actions-antivignetting.png            hi16-actions-bqm-addqueue.png            hi22-actions-bqm-add.png                   hi32-actions-bordertool.png                hi48-actions-blurimage.png                 hi64-actions-blurfx.png
-                        hi128-actions-autocorrection.png            hi16-actions-bqm-commit.png              hi22-actions-bqm-addqueue.png              hi32-actions-bqm-add.png                   hi48-actions-bordertool.png                hi64-actions-blurimage.png
-                        hi128-actions-blurfx.png                    hi16-actions-bqm-diff.png                hi22-actions-bqm-commit.png                hi32-actions-bqm-addqueue.png              hi48-actions-bqm-add.png                   hi64-actions-bordertool.png
-                        hi128-actions-blurimage.png                 hi16-actions-bqm-remove.png              hi22-actions-bqm-diff.png                  hi32-actions-bqm-commit.png                hi48-actions-bqm-addqueue.png              hi64-actions-bqm-add.png
-                        hi128-actions-bordertool.png                hi16-actions-bqm-rmqueue.png             hi22-actions-bqm-remove.png                hi32-actions-bqm-diff.png                  hi48-actions-bqm-commit.png                hi64-actions-bqm-addqueue.png
-                        hi128-actions-bwtonal.png                   hi16-actions-bqm-update.png              hi22-actions-bqm-rmqueue.png               hi32-actions-bqm-remove.png                hi48-actions-bqm-diff.png                  hi64-actions-bqm-commit.png
-                        hi128-actions-channelmixer.png              hi16-actions-bwtonal.png                 hi22-actions-bqm-update.png                hi32-actions-bqm-rmqueue.png               hi48-actions-bqm-remove.png                hi64-actions-bqm-diff.png
-                        hi128-actions-colormanagement.png           hi16-actions-channelmixer.png            hi22-actions-bwtonal.png                   hi32-actions-bqm-update.png                hi48-actions-bqm-rmqueue.png               hi64-actions-bqm-remove.png
-                        hi128-actions-contrast.png                  hi16-actions-colormanagement.png         hi22-actions-channelmixer.png              hi32-actions-bwtonal.png                   hi48-actions-bqm-update.png                hi64-actions-bqm-rmqueue.png
-                        hi128-actions-depth16to8.png                hi16-actions-contrast.png                hi22-actions-colormanagement.png           hi32-actions-channelmixer.png              hi48-actions-bwtonal.png                   hi64-actions-bqm-update.png
-                        hi128-actions-depth8to16.png                hi16-actions-depth16to8.png              hi22-actions-contrast.png                  hi32-actions-colormanagement.png           hi48-actions-channelmixer.png              hi64-actions-bwtonal.png
-                        hi128-actions-distortionfx.png              hi16-actions-depth8to16.png              hi22-actions-depth16to8.png                hi32-actions-contrast.png                  hi48-actions-colormanagement.png           hi64-actions-channelmixer.png
-                        hi128-actions-editimage.png                 hi16-actions-distortionfx.png            hi22-actions-depth8to16.png                hi32-actions-depth16to8.png                hi48-actions-contrast.png                  hi64-actions-colormanagement.png
-                        hi128-actions-exifinfo.png                  hi16-actions-editimage.png               hi22-actions-distortionfx.png              hi32-actions-depth8to16.png                hi48-actions-depth16to8.png                hi64-actions-contrast.png
-                        hi128-actions-filmgrain.png                 hi16-actions-exifinfo.png                hi22-actions-editimage.png                 hi32-actions-distortionfx.png              hi48-actions-depth8to16.png                hi64-actions-depth16to8.png
-                        hi128-actions-freerotation.png              hi16-actions-filmgrain.png               hi22-actions-exifinfo.png                  hi32-actions-editimage.png                 hi48-actions-distortionfx.png              hi64-actions-depth8to16.png
-                        hi128-actions-hotpixels.png                 hi16-actions-freerotation.png            hi22-actions-filmgrain.png                 hi32-actions-exifinfo.png                  hi48-actions-editimage.png                 hi64-actions-distortionfx.png
-                        hi128-actions-imagecomment.png              hi16-actions-hotpixels.png               hi22-actions-freerotation.png              hi32-actions-filmgrain.png                 hi48-actions-exifinfo.png                  hi64-actions-editimage.png
-                        hi128-actions-inpainting.png                hi16-actions-imagecomment.png            hi22-actions-hotpixels.png                 hi32-actions-freerotation.png              hi48-actions-filmgrain.png                 hi64-actions-exifinfo.png
-                        hi128-actions-invertimage.png               hi16-actions-inpainting.png              hi22-actions-imagecomment.png              hi32-actions-hotpixels.png                 hi48-actions-freerotation.png              hi64-actions-filmgrain.png
-                        hi128-actions-lensautofix.png               hi16-actions-invertimage.png             hi22-actions-inpainting.png                hi32-actions-imagecomment.png              hi48-actions-hotpixels.png                 hi64-actions-freerotation.png
-                        hi128-actions-noisereduction.png            hi16-actions-lensautofix.png             hi22-actions-invertimage.png               hi32-actions-inpainting.png                hi48-actions-imagecomment.png              hi64-actions-hotpixels.png
-                        hi128-actions-perspective.png               hi16-actions-noisereduction.png          hi22-actions-lensautofix.png               hi32-actions-invertimage.png               hi48-actions-inpainting.png                hi64-actions-imagecomment.png
-                        hi128-actions-ratiocrop.png                 hi16-actions-perspective.png             hi22-actions-noisereduction.png            hi32-actions-lensautofix.png               hi48-actions-invertimage.png               hi64-actions-inpainting.png
-                        hi128-actions-restoration.png               hi16-actions-ratiocrop.png               hi22-actions-perspective.png               hi32-actions-noisereduction.png            hi48-actions-lensautofix.png               hi64-actions-invertimage.png
-                        hi128-actions-sharpenimage.png              hi16-actions-restoration.png             hi22-actions-ratiocrop.png                 hi32-actions-perspective.png               hi48-actions-noisereduction.png            hi64-actions-lensautofix.png
-                        hi128-actions-shear.png                     hi16-actions-sharpenimage.png            hi22-actions-restoration.png               hi32-actions-ratiocrop.png                 hi48-actions-perspective.png               hi64-actions-noisereduction.png
-                        hi128-actions-superimpose.png               hi16-actions-shear.png                   hi22-actions-sharpenimage.png              hi32-actions-restoration.png               hi48-actions-ratiocrop.png                 hi64-actions-perspective.png
-                        hi128-actions-texture.png                   hi16-actions-superimpose.png             hi22-actions-shear.png                     hi32-actions-sharpenimage.png              hi48-actions-restoration.png               hi64-actions-ratiocrop.png
-                        hi128-actions-tonemap.png                   hi16-actions-texture.png                 hi22-actions-superimpose.png               hi32-actions-shear.png                     hi48-actions-sharpenimage.png              hi64-actions-restoration.png
-                        hi128-actions-whitebalance.png              hi16-actions-tonemap.png                 hi22-actions-texture.png                   hi32-actions-superimpose.png               hi48-actions-shear.png                     hi64-actions-sharpenimage.png
-                        hi16-actions-adjustcurves.png               hi16-actions-whitebalance.png            hi22-actions-tonemap.png                   hi32-actions-texture.png                   hi48-actions-superimpose.png               hi64-actions-shear.png
-                        hi16-actions-adjustlevels.png               hi22-actions-adjustcurves.png            hi22-actions-whitebalance.png              hi32-actions-tonemap.png                   hi48-actions-texture.png                   hi64-actions-superimpose.png
-                        hi16-actions-adjustrgb.png                  hi22-actions-adjustlevels.png            hi32-actions-adjustcurves.png              hi32-actions-whitebalance.png              hi48-actions-tonemap.png                   hi64-actions-texture.png
-                        hi16-actions-albumfolder-importdir2.png     hi22-actions-adjustrgb.png               hi32-actions-adjustlevels.png              hi48-actions-adjustcurves.png              hi48-actions-whitebalance.png              hi64-actions-tonemap.png
-                        hi16-actions-albumfolder-importdir.png      hi22-actions-albumfolder-importdir2.png  hi32-actions-adjustrgb.png                 hi48-actions-adjustlevels.png              hi64-actions-adjustcurves.png              hi64-actions-whitebalance.png
-                        hi16-actions-albumfolder-importimages.png   hi22-actions-albumfolder-importdir.png   hi32-actions-albumfolder-importdir2.png    hi48-actions-adjustrgb.png                 hi64-actions-adjustlevels.png
-                  DESTINATION ${DATA_INSTALL_DIR}/digikam/icons)
-
-# Install standard icons.
-
-ecm_install_icons(ICONS hi128-actions-adjusthsl.png       hi128-actions-viewimage.png      hi16-actions-redeyes.png         hi22-actions-raindrop.png        hi32-actions-lighttableadd.png    hi48-actions-charcoaltool.png    hi64-actions-adjusthsl.png       hi64-actions-viewimage.png
-                        hi128-actions-charcoaltool.png    hi16-actions-adjusthsl.png       hi16-actions-viewimage.png       hi22-actions-redeyes.png         hi32-actions-lighttable.png       hi48-actions-colorfx.png         hi64-actions-charcoaltool.png
-                        hi128-actions-colorfx.png         hi16-actions-charcoaltool.png    hi22-actions-adjusthsl.png       hi22-actions-viewimage.png       hi32-actions-oilpaint.png         hi48-actions-embosstool.png      hi64-actions-colorfx.png
-                        hi128-actions-embosstool.png      hi16-actions-colorfx.png         hi22-actions-charcoaltool.png    hi32-actions-adjusthsl.png       hi32-actions-raindrop.png         hi48-actions-lensdistortion.png  hi64-actions-embosstool.png
-                        hi128-actions-lensdistortion.png  hi16-actions-embosstool.png      hi22-actions-colorfx.png         hi32-actions-charcoaltool.png    hi32-actions-redeyes.png          hi48-actions-oilpaint.png        hi64-actions-lensdistortion.png
-                        hi128-actions-oilpaint.png        hi16-actions-lensdistortion.png  hi22-actions-embosstool.png      hi32-actions-colorfx.png         hi32-actions-viewimage.png        hi48-actions-raindrop.png        hi64-actions-oilpaint.png
-                        hi128-actions-raindrop.png        hi16-actions-oilpaint.png        hi22-actions-lensdistortion.png  hi32-actions-embosstool.png      hi32-actions-zoom-select-fit.png  hi48-actions-redeyes.png         hi64-actions-raindrop.png
-                        hi128-actions-redeyes.png         hi16-actions-raindrop.png        hi22-actions-oilpaint.png        hi32-actions-lensdistortion.png  hi48-actions-adjusthsl.png        hi48-actions-viewimage.png       hi64-actions-redeyes.png
-                  DESTINATION ${DATA_INSTALL_DIR}/digikam/icons)
+ecm_install_icons(
+    ICONS
+        16-actions-adjustcurves.png
+        22-actions-adjustcurves.png
+        32-actions-adjustcurves.png
+        48-actions-adjustcurves.png
+        64-actions-adjustcurves.png
+        128-actions-adjustcurves.png
+        sc-actions-adjustcurves.svgz
+        16-actions-adjusthsl.png
+        22-actions-adjusthsl.png
+        32-actions-adjusthsl.png
+        48-actions-adjusthsl.png
+        64-actions-adjusthsl.png
+        128-actions-adjusthsl.png
+        16-actions-adjustlevels.png
+        22-actions-adjustlevels.png
+        32-actions-adjustlevels.png
+        48-actions-adjustlevels.png
+        64-actions-adjustlevels.png
+        128-actions-adjustlevels.png
+        sc-actions-adjustlevels.svgz
+        16-actions-adjustrgb.png
+        22-actions-adjustrgb.png
+        32-actions-adjustrgb.png
+        48-actions-adjustrgb.png
+        64-actions-adjustrgb.png
+        128-actions-adjustrgb.png
+        sc-actions-adjustrgb.svgz
+        16-actions-albumfolder-importdir.png
+        22-actions-albumfolder-importdir.png
+        32-actions-albumfolder-importdir.png
+        48-actions-albumfolder-importdir.png
+        64-actions-albumfolder-importdir.png
+        128-actions-albumfolder-importdir.png
+        sc-actions-albumfolder-importdir.svgz
+        16-actions-albumfolder-importdir2.png
+        22-actions-albumfolder-importdir2.png
+        32-actions-albumfolder-importdir2.png
+        48-actions-albumfolder-importdir2.png
+        64-actions-albumfolder-importdir2.png
+        128-actions-albumfolder-importdir2.png
+        sc-actions-albumfolder-importdir2.svgz
+        16-actions-albumfolder-importimages.png
+        22-actions-albumfolder-importimages.png
+        32-actions-albumfolder-importimages.png
+        48-actions-albumfolder-importimages.png
+        64-actions-albumfolder-importimages.png
+        128-actions-albumfolder-importimages.png
+        sc-actions-albumfolder-importimages.svgz
+        16-actions-albumfolder-new.png
+        22-actions-albumfolder-new.png
+        32-actions-albumfolder-new.png
+        48-actions-albumfolder-new.png
+        64-actions-albumfolder-new.png
+        128-actions-albumfolder-new.png
+        sc-actions-albumfolder-new.svgz
+        16-actions-albumfolder-properties.png
+        22-actions-albumfolder-properties.png
+        32-actions-albumfolder-properties.png
+        48-actions-albumfolder-properties.png
+        64-actions-albumfolder-properties.png
+        128-actions-albumfolder-properties.png
+        sc-actions-albumfolder-properties.svgz
+        16-actions-albumfolder-user-trash.png
+        22-actions-albumfolder-user-trash.png
+        32-actions-albumfolder-user-trash.png
+        48-actions-albumfolder-user-trash.png
+        64-actions-albumfolder-user-trash.png
+        128-actions-albumfolder-user-trash.png
+        sc-actions-albumfolder-user-trash.svgz
+        16-actions-antivignetting.png
+        22-actions-antivignetting.png
+        32-actions-antivignetting.png
+        48-actions-antivignetting.png
+        64-actions-antivignetting.png
+        128-actions-antivignetting.png
+        sc-actions-antivignetting.svgz
+        16-actions-autocorrection.png
+        22-actions-autocorrection.png
+        32-actions-autocorrection.png
+        48-actions-autocorrection.png
+        64-actions-autocorrection.png
+        128-actions-autocorrection.png
+        sc-actions-autocorrection.svgz
+        16-actions-blurfx.png
+        22-actions-blurfx.png
+        32-actions-blurfx.png
+        48-actions-blurfx.png
+        64-actions-blurfx.png
+        128-actions-blurfx.png
+        sc-actions-blurfx.svgz
+        16-actions-blurimage.png
+        22-actions-blurimage.png
+        32-actions-blurimage.png
+        48-actions-blurimage.png
+        64-actions-blurimage.png
+        128-actions-blurimage.png
+        sc-actions-blurimage.svgz
+        16-actions-bordertool.png
+        22-actions-bordertool.png
+        32-actions-bordertool.png
+        48-actions-bordertool.png
+        64-actions-bordertool.png
+        128-actions-bordertool.png
+        sc-actions-bordertool.svgz
+        16-actions-bqm-add.png
+        22-actions-bqm-add.png
+        32-actions-bqm-add.png
+        48-actions-bqm-add.png
+        64-actions-bqm-add.png
+        sc-actions-bqm-add.svgz
+        16-actions-bqm-addqueue.png
+        22-actions-bqm-addqueue.png
+        32-actions-bqm-addqueue.png
+        48-actions-bqm-addqueue.png
+        64-actions-bqm-addqueue.png
+        sc-actions-bqm-addqueue.svgz
+        16-actions-bqm-commit.png
+        22-actions-bqm-commit.png
+        32-actions-bqm-commit.png
+        48-actions-bqm-commit.png
+        64-actions-bqm-commit.png
+        sc-actions-bqm-commit.svgz
+        16-actions-bqm-diff.png
+        22-actions-bqm-diff.png
+        32-actions-bqm-diff.png
+        48-actions-bqm-diff.png
+        64-actions-bqm-diff.png
+        sc-actions-bqm-diff.svgz
+        16-actions-bqm-remove.png
+        22-actions-bqm-remove.png
+        32-actions-bqm-remove.png
+        48-actions-bqm-remove.png
+        64-actions-bqm-remove.png
+        sc-actions-bqm-remove.svgz
+        16-actions-bqm-rmqueue.png
+        22-actions-bqm-rmqueue.png
+        32-actions-bqm-rmqueue.png
+        48-actions-bqm-rmqueue.png
+        64-actions-bqm-rmqueue.png
+        sc-actions-bqm-rmqueue.svgz
+        16-actions-bqm-update.png
+        22-actions-bqm-update.png
+        32-actions-bqm-update.png
+        48-actions-bqm-update.png
+        64-actions-bqm-update.png
+        sc-actions-bqm-update.svgz
+        16-actions-bwtonal.png
+        22-actions-bwtonal.png
+        32-actions-bwtonal.png
+        48-actions-bwtonal.png
+        64-actions-bwtonal.png
+        128-actions-bwtonal.png
+        sc-actions-bwtonal.svgz
+        16-actions-channelmixer.png
+        22-actions-channelmixer.png
+        32-actions-channelmixer.png
+        48-actions-channelmixer.png
+        64-actions-channelmixer.png
+        128-actions-channelmixer.png
+        sc-actions-channelmixer.svgz
+        16-actions-charcoaltool.png
+        22-actions-charcoaltool.png
+        32-actions-charcoaltool.png
+        48-actions-charcoaltool.png
+        64-actions-charcoaltool.png
+        128-actions-charcoaltool.png
+        16-actions-colorfx.png
+        22-actions-colorfx.png
+        32-actions-colorfx.png
+        48-actions-colorfx.png
+        64-actions-colorfx.png
+        128-actions-colorfx.png
+        16-actions-colormanagement.png
+        22-actions-colormanagement.png
+        32-actions-colormanagement.png
+        48-actions-colormanagement.png
+        64-actions-colormanagement.png
+        128-actions-colormanagement.png
+        sc-actions-colormanagement.svgz
+        sc-actions-colorneg.svgz
+        16-actions-contrast.png
+        22-actions-contrast.png
+        32-actions-contrast.png
+        48-actions-contrast.png
+        64-actions-contrast.png
+        128-actions-contrast.png
+        sc-actions-contrast.svgz
+        16-actions-depth16to8.png
+        22-actions-depth16to8.png
+        32-actions-depth16to8.png
+        48-actions-depth16to8.png
+        64-actions-depth16to8.png
+        128-actions-depth16to8.png
+        sc-actions-depth16to8.svgz
+        16-actions-depth8to16.png
+        22-actions-depth8to16.png
+        32-actions-depth8to16.png
+        48-actions-depth8to16.png
+        64-actions-depth8to16.png
+        128-actions-depth8to16.png
+        sc-actions-depth8to16.svgz
+        16-actions-distortionfx.png
+        22-actions-distortionfx.png
+        32-actions-distortionfx.png
+        48-actions-distortionfx.png
+        64-actions-distortionfx.png
+        128-actions-distortionfx.png
+        sc-actions-distortionfx.svgz
+        16-actions-editimage.png
+        22-actions-editimage.png
+        32-actions-editimage.png
+        48-actions-editimage.png
+        64-actions-editimage.png
+        128-actions-editimage.png
+        sc-actions-editimage.svgz
+        16-actions-embosstool.png
+        22-actions-embosstool.png
+        32-actions-embosstool.png
+        48-actions-embosstool.png
+        64-actions-embosstool.png
+        128-actions-embosstool.png
+        16-actions-exifinfo.png
+        22-actions-exifinfo.png
+        32-actions-exifinfo.png
+        48-actions-exifinfo.png
+        64-actions-exifinfo.png
+        128-actions-exifinfo.png
+        sc-actions-exifinfo.svgz
+        16-actions-filmgrain.png
+        22-actions-filmgrain.png
+        32-actions-filmgrain.png
+        48-actions-filmgrain.png
+        64-actions-filmgrain.png
+        128-actions-filmgrain.png
+        sc-actions-filmgrain.svgz
+        16-actions-freerotation.png
+        22-actions-freerotation.png
+        32-actions-freerotation.png
+        48-actions-freerotation.png
+        64-actions-freerotation.png
+        128-actions-freerotation.png
+        sc-actions-freerotation.svgz
+        16-actions-hotpixels.png
+        22-actions-hotpixels.png
+        32-actions-hotpixels.png
+        48-actions-hotpixels.png
+        64-actions-hotpixels.png
+        128-actions-hotpixels.png
+        sc-actions-hotpixels.svgz
+        16-actions-imagecomment.png
+        22-actions-imagecomment.png
+        32-actions-imagecomment.png
+        48-actions-imagecomment.png
+        64-actions-imagecomment.png
+        128-actions-imagecomment.png
+        sc-actions-imagecomment.svgz
+        16-actions-inpainting.png
+        22-actions-inpainting.png
+        32-actions-inpainting.png
+        48-actions-inpainting.png
+        64-actions-inpainting.png
+        128-actions-inpainting.png
+        sc-actions-inpainting.svgz
+        16-actions-invertimage.png
+        22-actions-invertimage.png
+        32-actions-invertimage.png
+        48-actions-invertimage.png
+        64-actions-invertimage.png
+        128-actions-invertimage.png
+        sc-actions-invertimage.svgz
+        16-actions-lensautofix.png
+        22-actions-lensautofix.png
+        32-actions-lensautofix.png
+        48-actions-lensautofix.png
+        64-actions-lensautofix.png
+        128-actions-lensautofix.png
+        sc-actions-lensautofix.svgz
+        16-actions-lensdistortion.png
+        22-actions-lensdistortion.png
+        32-actions-lensdistortion.png
+        48-actions-lensdistortion.png
+        64-actions-lensdistortion.png
+        128-actions-lensdistortion.png
+        32-actions-lighttable.png
+        32-actions-lighttableadd.png
+        16-actions-noisereduction.png
+        22-actions-noisereduction.png
+        32-actions-noisereduction.png
+        48-actions-noisereduction.png
+        64-actions-noisereduction.png
+        128-actions-noisereduction.png
+        sc-actions-noisereduction.svgz
+        16-actions-oilpaint.png
+        22-actions-oilpaint.png
+        32-actions-oilpaint.png
+        48-actions-oilpaint.png
+        64-actions-oilpaint.png
+        128-actions-oilpaint.png
+        16-actions-perspective.png
+        22-actions-perspective.png
+        32-actions-perspective.png
+        48-actions-perspective.png
+        64-actions-perspective.png
+        128-actions-perspective.png
+        sc-actions-perspective.svgz
+        16-actions-raindrop.png
+        22-actions-raindrop.png
+        32-actions-raindrop.png
+        48-actions-raindrop.png
+        64-actions-raindrop.png
+        128-actions-raindrop.png
+        16-actions-ratiocrop.png
+        22-actions-ratiocrop.png
+        32-actions-ratiocrop.png
+        48-actions-ratiocrop.png
+        64-actions-ratiocrop.png
+        128-actions-ratiocrop.png
+        sc-actions-ratiocrop.svgz
+        16-actions-redeyes.png
+        22-actions-redeyes.png
+        32-actions-redeyes.png
+        48-actions-redeyes.png
+        64-actions-redeyes.png
+        128-actions-redeyes.png
+        16-actions-restoration.png
+        22-actions-restoration.png
+        32-actions-restoration.png
+        48-actions-restoration.png
+        64-actions-restoration.png
+        128-actions-restoration.png
+        sc-actions-restoration.svgz
+        16-actions-sharpenimage.png
+        22-actions-sharpenimage.png
+        32-actions-sharpenimage.png
+        48-actions-sharpenimage.png
+        64-actions-sharpenimage.png
+        128-actions-sharpenimage.png
+        sc-actions-sharpenimage.svgz
+        16-actions-shear.png
+        22-actions-shear.png
+        32-actions-shear.png
+        48-actions-shear.png
+        64-actions-shear.png
+        128-actions-shear.png
+        sc-actions-shear.svgz
+        16-actions-superimpose.png
+        22-actions-superimpose.png
+        32-actions-superimpose.png
+        48-actions-superimpose.png
+        64-actions-superimpose.png
+        128-actions-superimpose.png
+        sc-actions-superimpose.svgz
+        16-actions-texture.png
+        22-actions-texture.png
+        32-actions-texture.png
+        48-actions-texture.png
+        64-actions-texture.png
+        128-actions-texture.png
+        sc-actions-texture.svgz
+        16-actions-tonemap.png
+        22-actions-tonemap.png
+        32-actions-tonemap.png
+        48-actions-tonemap.png
+        64-actions-tonemap.png
+        128-actions-tonemap.png
+        sc-actions-tonemap.svgz
+        16-actions-viewimage.png
+        22-actions-viewimage.png
+        32-actions-viewimage.png
+        48-actions-viewimage.png
+        64-actions-viewimage.png
+        128-actions-viewimage.png
+        16-actions-whitebalance.png
+        22-actions-whitebalance.png
+        32-actions-whitebalance.png
+        48-actions-whitebalance.png
+        64-actions-whitebalance.png
+        128-actions-whitebalance.png
+        sc-actions-whitebalance.svgz
+        32-actions-zoom-select-fit.png
+    DESTINATION ${DATA_INSTALL_DIR}/digikam/icons
+)
