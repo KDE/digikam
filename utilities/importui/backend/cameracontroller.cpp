@@ -74,6 +74,7 @@ extern "C"
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "jpegutils.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -630,44 +631,50 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
 
-                if (!templateTitle.isNull() || fixDateTime)
+                kDebug() << "Set metadata from: " << file << " using (" << tempURL << ")";
+                DMetadata metadata(tempURL.toLocalFile());
+
+                metadata.setExifTagString("Exif.Image.DocumentName", QFileInfo(dest).fileName());
+
+                if (fixDateTime)
                 {
-                    kDebug() << "Set metadata from: " << file << " using (" << tempURL << ")";
-                    DMetadata metadata(tempURL.toLocalFile());
-
-                    if (fixDateTime)
-                    {
-                        metadata.setImageDateTime(newDateTime, true);
-                    }
-
-                    //TODO: Set image tags using DMetadata.
-                    metadata.setImagePickLabel(pickLabel);
-                    metadata.setImageColorLabel(colorLabel);
-                    metadata.setImageRating(rating);
-
-                    TemplateManager* tm = TemplateManager::defaultManager();
-
-                    if (tm && !templateTitle.isEmpty())
-                    {
-                        kDebug() << "Metadata template title : " << templateTitle;
-
-                        if (templateTitle == Template::removeTemplateTitle())
-                        {
-                            metadata.removeMetadataTemplate();
-                        }
-                        else if (templateTitle.isEmpty())
-                        {
-                            // Nothing to do.
-                        }
-                        else
-                        {
-                            metadata.removeMetadataTemplate();
-                            metadata.setMetadataTemplate(tm->findByTitle(templateTitle));
-                        }
-                    }
-
-                    metadata.applyChanges();
+                    metadata.setImageDateTime(newDateTime, true);
                 }
+
+                //TODO: Set image tags using DMetadata.
+
+                if (colorLabel > NoColorLabel)
+                {
+                    metadata.setImageColorLabel(colorLabel);
+                }
+
+                if (pickLabel > NoPickLabel)
+                {
+                    metadata.setImagePickLabel(pickLabel);
+                }
+
+                if (rating > RatingMin)
+                {
+                    metadata.setImageRating(rating);
+                }
+
+                if (!templateTitle.isNull() && !templateTitle.isEmpty())
+                {
+                    TemplateManager* tm = TemplateManager::defaultManager();
+                    kDebug() << "Metadata template title : " << templateTitle;
+
+                    if (tm && templateTitle == Template::removeTemplateTitle())
+                    {
+                        metadata.removeMetadataTemplate();
+                    }
+                    else if (tm)
+                    {
+                        metadata.removeMetadataTemplate();
+                        metadata.setMetadataTemplate(tm->findByTitle(templateTitle));
+                    }
+                }
+
+                metadata.applyChanges();
 
                 // Convert JPEG file to lossless format if wanted,
                 // and move converted image to destination.
