@@ -452,12 +452,12 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # This macro will set all paths which do not containt libjpeg-
     # We will add later the directory we need
 
-    FOREACH(var ${DK_LOCAL_INCLUDES_RAW})
-        STRING(REGEX MATCH "libjpeg-" item ${var})
-        IF(item STREQUAL "")
-            LIST(APPEND DK_LOCAL_INCLUDES ${var})
-        ENDIF(item)
-    ENDFOREACH(var)
+    foreach(var ${DK_LOCAL_INCLUDES_RAW})
+        string(REGEX MATCH "libjpeg-" item ${var})
+        if(item STREQUAL "")
+            list(APPEND DK_LOCAL_INCLUDES ${var})
+        endif()
+    endforeach()
 
     set(DK_LOCAL_INCLUDES ${DK_LOCAL_INCLUDES}
                           libs/jpegutils/${DIGIKAM_LIBJPEG_DIR})
@@ -466,7 +466,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     set(KF5_INCLUDES_ALL
         "$<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::FileMetaData,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>"
@@ -481,6 +480,13 @@ if(DIGIKAM_CAN_BE_COMPILED)
         "$<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>"
        )
 
+    if(KFILEMETADATA_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:KF5::FileMetaData,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+       
     if(KF5Kipi_FOUND)
         set(KF5_INCLUDES_ALL
             ${KF5_INCLUDES_ALL}
