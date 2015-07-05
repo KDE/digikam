@@ -73,6 +73,9 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 066 ==> 215782 - digiKam crash when setting tags.
 067 ==> 314526 - Crash at displaying preview images.
 068 ==> 233612 - The DocumentName tag is not added when importing [patch].
-069 ==> 349903 - crash importing images on OSX.
-070 ==> 
+069 ==> 349903 - Crash importing images on OSX.
+070 ==> 233222 - Thumbnails displayed are from incorrect images.
+071 ==> 264999 - Exif-dates not recognices OK.
+072 ==> 
+
 
