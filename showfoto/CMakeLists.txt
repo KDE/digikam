@@ -39,7 +39,7 @@ set(showfoto_SRCS
     main/showfoto.cpp
 )
 
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/hi*-apps-showfoto.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/*-apps-showfoto.png")
 ecm_add_app_icon(showfoto_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(showfoto ${showfoto_SRCS}
