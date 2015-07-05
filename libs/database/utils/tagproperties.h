@@ -30,6 +30,7 @@
 #include <QStringList>
 #include <QList>
 #include <QExplicitlySharedDataPointer>
+#include <QMap>
 
 // Local includes
 

@@ -465,6 +465,16 @@ void ItemViewCategorized::rowsInserted(const QModelIndex& parent, int start, int
     }
 }
 
+void ItemViewCategorized::rowsRemoved(const QModelIndex& parent, int start, int end)
+{
+    DCategorizedView::rowsRemoved(parent, start, end);
+
+    if (d->scrollCurrentToCenter)
+    {
+        scrollTo(currentIndex());
+    }
+}
+
 void ItemViewCategorized::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     DCategorizedView::rowsAboutToBeRemoved(parent, start, end);

@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
-# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -32,8 +32,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:slideshow_src>
             $<TARGET_OBJECTS:imageeditor_src> #
             $<TARGET_OBJECTS:editorplugin_src>
-
-
 
             utils/digikam_debug.cpp
 )
@@ -380,8 +378,11 @@ if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
-if(KDEPIMLIBS_FOUND)
-    target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
+if(KF5AkonadiContact_FOUND)
+    target_link_libraries(digikam
+#                          KF5::AkonadiCore
+                          KF5::AkonadiContact
+                         )
 endif()
 
 if(NOT WIN32)

@@ -50,7 +50,7 @@
 
 // Libkexiv2 includes
 
-#include <kexiv2.h>
+#include <KExiv2/KExiv2>
 
 // Libkdcraw includes
 
@@ -103,7 +103,7 @@ public:
         exifSetOrientationBox(0),
         saveToBalooBox(0),
         readFromBalooBox(0),
-        resyncButton(0),
+        // resyncButton(0),
         tab(0),
         displaySubTab(0),
         tagsCfgPanel(0)
@@ -143,7 +143,7 @@ public:
 
     QCheckBox*     saveToBalooBox;
     QCheckBox*     readFromBalooBox;
-    QToolButton*   resyncButton;
+    //QToolButton*   resyncButton;
 
     QTabWidget*    tab;
     QTabWidget*    displaySubTab;
@@ -532,7 +532,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     balooLayout->addWidget(balooGroup);
     balooLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     balooLayout->addWidget(balooBox);
-    balooLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
+    //balooLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
     balooLayout->addStretch();
 
 #endif // HAVE_KFILEMETADATA

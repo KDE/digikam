@@ -86,51 +86,49 @@ Name            Version                       URL                               
 
 Required:
 
-CMake            >= 3.0.0                      http://www.cmake.org
-libqt            >= 5.1.0                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
-kdelibs          >= 5.1.0                      http://www.kde.org
-libjpeg          >= 6b                         http://www.ijg.org
-libtiff          >= 3.8.2                      http://www.remotesensing.org/libtiff
-libpng           >= 1.2.0                      http://www.libpng.org/pub/png/libpng.html
-liblcms          >= 2.x                        http://www.littlecms.com
-libboostgraph    >= 1.43.0                     http://www.boost.org/doc/libs
-libkexiv2        >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
-libkdcraw        >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
-libpgf           >= 6.11.24                    http://www.libpgf.org
-libopencv        >= 2.4.9                      http://opencv.willowgarage.com
-
+CMake             >= 3.0.0                      http://www.cmake.org
+libqt             >= 5.1.0                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
+kdelibs           >= 5.1.0                      http://www.kde.org
+libjpeg           >= 6b                         http://www.ijg.org
+libtiff           >= 3.8.2                      http://www.remotesensing.org/libtiff
+libpng            >= 1.2.0                      http://www.libpng.org/pub/png/libpng.html
+liblcms           >= 2.x                        http://www.littlecms.com
+libboostgraph     >= 1.43.0                     http://www.boost.org/doc/libs
+libpgf            >= 6.11.24                    http://www.libpgf.org
+libopencv         >= 2.4.9                      http://opencv.willowgarage.com
+libkexiv2         >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
+libkdcraw         >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
 Optional:
 
-libkipi          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
-libkface         >= 5.0.0                      https://projects.kde.org/projects/extragear/libs/libkface         To support faces detection and recognition.
-libkgeomap       >= 5.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap       To support geolocation maps.
-libkdepimlibs    >= 5.x                        http://pim.kde.org                                                To support KAddressBook entries.
-libjasper        >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.
-liblensfun       >= 0.2.6                      http://lensfun.sourceforge.net                                    To support LensCorrection tool.
-liblqr-1         >= 0.4.1                      http://liblqr.wikidot.com                                         To support Liquid Rescale tool.
-libeigen3        >= 3.0.0                      http://eigen.tuxfamily.org                                        To support Refocus tool.
-libgphoto2       >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras drivers.
-libusb           >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in bug #268267.
-libkfilemetadata >= 5.x                        https://projects.kde.org/projects/kde/kdelibs/baloo               To support KDE files indexing support.
-doxygen          >= 1.8.0                      http://www.doxygen.org                                            To support API documentation building (This does not affect building digiKam in any way).
+libkipi           >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
+libkface          >= 5.0.0                      https://projects.kde.org/projects/extragear/libs/libkface         To support faces detection and recognition.
+libkgeomap        >= 5.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap       To support geolocation maps.
+libakonadicontact >= 5.x                        https://projects.kde.org/projects/kde/kdepimlibs                  To support KDE Address Book entries.
+libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/kde/kdelibs/baloo               To support KDE files indexing support.
+libjasper         >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.
+liblensfun        >= 0.2.6                      http://lensfun.sourceforge.net                                    To support LensCorrection tool.
+liblqr-1          >= 0.4.1                      http://liblqr.wikidot.com                                         To support Liquid Rescale tool.
+libeigen3         >= 3.0.0                      http://eigen.tuxfamily.org                                        To support Refocus tool.
+libgphoto2        >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras drivers.
+libusb            >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in bug #268267.
+doxygen           >= 1.8.0                      http://www.doxygen.org                                            To support API documentation building (This does not affect building digiKam in any way).
 
 Note: all library dependencies require development and binary packages installed on your computer to compile digiKam.
 
 CMake compilation options to custom digiKam:
 
-Use CMake "-DENABLE_BALOOSUPPORT=on"      flag to compile digiKam with Baloo support                                             (disabled by default).
-Use CMake "-DENABLE_KDEPIMLIBSSUPPORT=on" flag to compile digiKam with KdePimLibs support                                        (disabled by default).
-Use CMake "-DENABLE_MEDIAPLAYER"          flag to compile digiKam with QtMultimedia support                                      (enabled by default).
+Use CMake "-DENABLE_BALOOSUPPORT=on"          flag to compile digiKam with Baloo support                                             (disabled by default).
+Use CMake "-DENABLE_AKONADICONTACTSUPPORT=on" flag to compile digiKam with KdePimLibs support                                        (disabled by default).
+Use CMake "-DENABLE_MEDIAPLAYER=on"           flag to compile digiKam with QtMultimedia support                                      (disabled by default).
 
 Mysql support options (experimental):
 
-Use CMake "-DENABLE_MYSQLSUPPORT=on"      flag to compile digiKam with MysSql support                                            (disabled by default).
-Use CMake "-DENABLE_INTERNALMYSQL=on"     flag to compile digiKam with internal MySQL server                                     (disabled by default).
+Use CMake "-DENABLE_MYSQLSUPPORT=on"          flag to compile digiKam with MysSql support                                            (disabled by default).
+Use CMake "-DENABLE_INTERNALMYSQL=on"         flag to compile digiKam with internal MySQL server                                     (disabled by default).
 
 Debug options:
 
-Use CMake "-DENABLE_ADVANCEDDEBUGMSG=on"  flag to compile digiKam with more internal debug messages, especially in image loaders (disabled by default).
-Use CMake "-DKDE4_BUILD_TESTS=on"         flag to compile digiKam source code unit tests                                         (disabled by default).
+Use CMake "-DBUILD_TESTING=on"                flag to compile digiKam source code unit tests                                         (disabled by default).
 
 digiKam do not have any video thumbnailer. Video support is delegate to KDE. To support Video thumbnails, 
 please install "ffmpegthumbs" package, which is the kdemultimedia Video thumbnail generator for KDE4 file managers.
@@ -140,7 +138,7 @@ please install "ffmpegthumbs" package, which is the kdemultimedia Video thumbnai
 In order to compile, just use something like that:
 
 # export VERBOSE=1
-# export QTDIR=/usr/lib/qt4
+# export QTDIR=/usr/lib/qt5
 # export PATH=$QTDIR/bin:$PATH
 # cmake .
 # make
@@ -163,9 +161,9 @@ Compared to old autoconf options:
 
 More details can be found at this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
 
-Note: To know KDE install path on your computer, use 'kde-config --prefix' command line like this (with full debug object enabled):
+Note: To know KDE install path on your computer, use 'kf5-config --prefix' command line like this (with full debug object enabled):
 
-"cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix`"
+"cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix`"
 
 -- DONATE MONEY --------------------------------------------------------
 

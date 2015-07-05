@@ -29,6 +29,7 @@
 #include <QUrl>
 #include <QString>
 #include <QStringList>
+#include <QObject>
 
 namespace Digikam
 {

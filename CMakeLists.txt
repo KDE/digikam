@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
-# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -19,7 +19,7 @@ set(DIGIKAM_MINOR_VERSION "0")
 set(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-set(DIGIKAM_RELEASE_DATE "2015-07-05")
+set(DIGIKAM_RELEASE_DATE "2015-09-06")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -99,17 +99,17 @@ include(MacroBoolTo01)
 
 # ==================================================================================================
 
-option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              ON)
-option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KFileMetadata support (default=ON)"                           ON)
-option(ENABLE_KDEPIMLIBSSUPPORT     "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
-option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=ON)"                           OFF)
+option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
+option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KFileMetadata support (default=OFF)"                         OFF)
+option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with AkonadiContact support (default=OFF)"                        OFF)
+option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=OFF)"                          OFF)
 
 # Mysql support options (experimental):
-option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                        ON)
-option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              ON)
+option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
+option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
 
 # Debug options:
-option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                        OFF)
+option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
 
 ############## Find Packages ###################
 
@@ -149,7 +149,7 @@ find_package(KF5 REQUIRED COMPONENTS
 )
 
 # ==================================================================================================
-# Dependencies
+# Dependencies Rules
 
 # mandatory
 
@@ -280,8 +280,8 @@ endif()
 
 # -- KDEPim libraries rules -------------------------------------------------------------------
 
-if(ENABLE_KDEPIMLIBSSUPPORT)
-    find_package(KdepimLibs)
+if(ENABLE_AKONADICONTACTSUPPORT)
+    find_package(KF5AkonadiContact)
 endif()
 
 # -- Check LensFun library for Lens auto-correction tool --------------------------------------
@@ -313,7 +313,7 @@ endif()
 # -- compilation options definitions -----------------------------------------------------------
 
 MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
-MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND         HAVE_KDEPIMLIBS)
+MACRO_BOOL_TO_01(KF5AkonadiContact_FOUND  HAVE_AKONADICONTACT)
 MACRO_BOOL_TO_01(LENSFUN_FOUND            HAVE_LENSFUN)
 MACRO_BOOL_TO_01(LQR-1_FOUND              HAVE_LIBLQR_1)
 MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT      HAVE_MYSQLSUPPORT)
@@ -368,24 +368,24 @@ PRINT_LIBRARY_STATUS("libtiff"                "http://www.remotesensing.org/libt
 PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/libpng.html"                        "(version >= 1.2.7)"                 PNG_FOUND)
 PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                                         "(version >= 1.0.0)"                 LCMS2_FOUND)
 PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                                    "(version >= 1.43.0)"                Boost_FOUND)
-PRINT_LIBRARY_STATUS("libkexiv2"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2" "(version >= ${KEXIV2_MIN_VERSION})" KF5KExiv2_FOUND)
-PRINT_LIBRARY_STATUS("libkdcraw"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw" "(version >= ${KDCRAW_MIN_VERSION})" KF5KDcraw_FOUND)
 PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"                                            "(version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
 PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
+PRINT_LIBRARY_STATUS("libkexiv2"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2" "(version >= ${KEXIV2_MIN_VERSION})" KF5KExiv2_FOUND)
+PRINT_LIBRARY_STATUS("libkdcraw"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw" "(version >= ${KDCRAW_MIN_VERSION})" KF5KDcraw_FOUND)
 
 # ================================================================
 
 PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"          "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi" "(version >= ${KIPI_MIN_VERSION})"    "digiKam will be compiled without Kipi-plugins support."                      KF5Kipi_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkface"         "https://projects.kde.org/projects/extragear/libs/libkface"      "(version >= 2.0.0)"                  "digiKam will be compiled without faces detection and recognition support."   KF5KFace_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkface"         "https://projects.kde.org/projects/extragear/libs/libkface"      "(version >= ${KFACE_MIN_VERSION})"   "digiKam will be compiled without faces detection and recognition support."   KF5KFace_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkgeomap"       "https://projects.kde.org/projects/extragear/libs/libkgeomap"    "(version >= ${KGEOMAP_MIN_VERSION})" "digiKam will be compiled without geolocation maps support."                  KF5KGeoMap_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata" "https://projects.kde.org/projects/kde/kdelibs/baloo"            "(version >= 5.0.0)"                  "digiKam will be compiled without KDE file metadata support."                 KFILEMETADATA_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact""https://projects.kde.org/projects/kde/kdepimlibs"               "(version >= 5.0.0)"                  "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"        "http://www.ece.uvic.ca/~mdadams/jasper"                         "(version >= 1.7.0)"                  "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"       "http://lensfun.sourceforge.net"                                 "(version >= 0.2.6)"                  "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"         "http://liblqr.wikidot.com"                                      "(version >= 0.4.1)"                  "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"        "http://eigen.tuxfamily.org"                                     "(version >= 3.0.0)"                  "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"       "http://www.gphoto.org"                                          "(version >= 2.4.0)"                  "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"          "http://www.doxygen.org"                                         "(version >= 1.8.0)"                  "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata" "https://projects.kde.org/projects/kde/kdelibs/baloo"            "(version >= 5.0.0)"                  "digiKam will be compiled without KDE file metadata support."                 KFILEMETADATA_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs"    "http://pim.kde.org"                                             "(version >= 5.0.0)"                  "digiKam will be compiled without KDE address book support."                  KDEPIMLIBS_FOUND)
 
 # ================================================================
 
@@ -444,97 +444,106 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Includes rules
 
+    # Recursively get all directories which contain header files
+    set(DK_INCLUDES_ALL "")
 
-# Recursively get all directories which contain header files
-set(DK_INCLUDES_ALL "")
+    HEADER_DIRECTORIES(DK_LOCAL_INCLUDES_RAW)
 
-HEADER_DIRECTORIES(DK_LOCAL_INCLUDES_RAW)
+    # This macro will set all paths which do not containt libjpeg-
+    # We will add later the directory we need
 
-# This macro will set all paths which do not containt libjpeg-
-# We will add later the directory we need
+    foreach(var ${DK_LOCAL_INCLUDES_RAW})
+        string(REGEX MATCH "libjpeg-" item ${var})
+        if(item STREQUAL "")
+            list(APPEND DK_LOCAL_INCLUDES ${var})
+        endif()
+    endforeach()
 
-FOREACH(var ${DK_LOCAL_INCLUDES_RAW})
-    STRING(REGEX MATCH "libjpeg-" item ${var})
-    IF(item STREQUAL "")
-        LIST(APPEND DK_LOCAL_INCLUDES ${var})
-    ENDIF(item)
-ENDFOREACH(var)
+    set(DK_LOCAL_INCLUDES ${DK_LOCAL_INCLUDES}
+                          libs/jpegutils/${DIGIKAM_LIBJPEG_DIR})
 
-set(DK_LOCAL_INCLUDES ${DK_LOCAL_INCLUDES}
-                      libs/jpegutils/${DIGIKAM_LIBJPEG_DIR})
+    include_directories(${DK_LOCAL_INCLUDES})
 
-
-include_directories(${DK_LOCAL_INCLUDES})
-
-
-set(KF5_INCLUDES_ALL
-
-    "$<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::FileMetaData,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::IconThemes,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::TextWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>"
-
-)
-
-if(${KF5Kipi_FOUND})
     set(KF5_INCLUDES_ALL
-        ${KF5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>"
-    )
-endif()
-if(${KF5KGeoMap_FOUND})
-    set(KF5_INCLUDES_ALL
-        ${KF5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:KF5::KGeoMap,INTERFACE_INCLUDE_DIRECTORIES>"
-    )
-endif()
+        "$<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::IconThemes,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::TextWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>"
+       )
 
-if(KF5KFace_FOUND)
-    set(KF5_INCLUDES_ALL
-        ${KF5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
-    )
-endif()
+    if(KFILEMETADATA_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:KF5::FileMetaData,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+       
+    if(KF5Kipi_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
 
-set(QT5_INCLUDES_ALL
-    "$<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>"
-)
-if(ENABLE_MEDIAPLAYER)
+    if(KF5KGeoMap_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:KF5::KGeoMap,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+
+    if(KF5KFace_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+
+    if(KF5AkonadiContact_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:${KF5AkonadiContact_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+    
     set(QT5_INCLUDES_ALL
-        ${QT5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    )
-endif()
+        "$<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>"
+       )
 
-if(X11_FOUND)
-    set(QT5_INCLUDES_ALL
-        ${QT5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:Qt5::X11Extras,INTERFACE_INCLUDE_DIRECTORIES>"
-)
-endif()
+    if(ENABLE_MEDIAPLAYER)
+        set(QT5_INCLUDES_ALL
+            ${QT5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>"
+            "$<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+
+    if(X11_FOUND)
+        set(QT5_INCLUDES_ALL
+            ${QT5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:Qt5::X11Extras,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
 
     include_directories(
-
                         # version.h, gitversion.h config-digikam.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/utils
 
@@ -551,7 +560,7 @@ endif()
 
                         ${KF5_INCLUDES_ALL}
                         ${QT5_INCLUDES_ALL}
-    )
+                       )
 
     # libgphoto2 library rules
     message(INFO "gphoto2 includes are required only to display the version in the about data/component info, refactor")

@@ -88,11 +88,11 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("Baloo support"), i18n("no"));
 #endif /* HAVE_KFILEMETADATA */
 
-#ifdef HAVE_KDEPIMLIBS
-    list.insert(i18n("Kdepimlibs support"), i18n("Yes"));
+#ifdef HAVE_AKONADICONTACT
+    list.insert(i18n("AkonadiContact support"), i18n("Yes"));
 #else
-    list.insert(i18n("Kdepimlibs support"), i18n("no"));
-#endif /* HAVE_KDEPIMLIBS */
+    list.insert(i18n("AkonadiContact support"), i18n("no"));
+#endif /* HAVE_AKONADICONTACT */
 
 #ifdef HAVE_VIDEOPLAYER
     list.insert(i18n("QtMultimedia support"), i18n("Yes"));

@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 5.0.0-beta1 - Release date: 2015-07-05
+digiKam 5.0.0-beta1 - Release date: 2015-09-06
 
 NEW FEATURES:
 
@@ -22,5 +22,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 009 ==> 345484 - Add Eclipse support to bootstrap.linux, fix QT_INSTALL_PREFIX detection.
 010 ==> 278577 - Display album thumbnails in welcome page.
 011 ==> 138200 - Display all pictures when root album (as "My Albums" and "My Tags") is selected instead of welcome page.
-012 ==> 348173 - Digikam crash during i was browsing photo in a directory.
-013 ==> 
+012 ==> 348173 - digiKam crash during i was browsing photo in a directory.
+013 ==> 349925 - Fail cmake chek if -DENABLE_KFILEMETADATASUPPORT=ON is not set.
+014 ==> 

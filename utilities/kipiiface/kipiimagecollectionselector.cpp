@@ -296,16 +296,9 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
 
 void KipiImageCollectionSelector::enableVirtualCollections(bool flag)
 {
-    if (flag == false)
-    {
-        d->tab->setTabEnabled(1, false);
-        d->tab->setTabEnabled(2, false);
-    }
-    else
-    {
-        d->tab->setTabEnabled(1, true);
-        d->tab->setTabEnabled(2, true);
-    }
+    d->tab->setTabEnabled(1, flag);
+    d->tab->setTabEnabled(2, flag);
+    d->tab->setTabEnabled(3, flag);
 }
 
 }  // namespace Digikam
