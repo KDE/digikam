@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
-# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -149,7 +149,7 @@ find_package(KF5 REQUIRED COMPONENTS
 )
 
 # ==================================================================================================
-# Dependencies
+# Dependencies Rules
 
 # mandatory
 
@@ -444,97 +444,100 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Includes rules
 
+    # Recursively get all directories which contain header files
+    set(DK_INCLUDES_ALL "")
 
-# Recursively get all directories which contain header files
-set(DK_INCLUDES_ALL "")
+    HEADER_DIRECTORIES(DK_LOCAL_INCLUDES_RAW)
 
-HEADER_DIRECTORIES(DK_LOCAL_INCLUDES_RAW)
+    # This macro will set all paths which do not containt libjpeg-
+    # We will add later the directory we need
 
-# This macro will set all paths which do not containt libjpeg-
-# We will add later the directory we need
+    FOREACH(var ${DK_LOCAL_INCLUDES_RAW})
+        STRING(REGEX MATCH "libjpeg-" item ${var})
+        IF(item STREQUAL "")
+            LIST(APPEND DK_LOCAL_INCLUDES ${var})
+        ENDIF(item)
+    ENDFOREACH(var)
 
-FOREACH(var ${DK_LOCAL_INCLUDES_RAW})
-    STRING(REGEX MATCH "libjpeg-" item ${var})
-    IF(item STREQUAL "")
-        LIST(APPEND DK_LOCAL_INCLUDES ${var})
-    ENDIF(item)
-ENDFOREACH(var)
+    set(DK_LOCAL_INCLUDES ${DK_LOCAL_INCLUDES}
+                          libs/jpegutils/${DIGIKAM_LIBJPEG_DIR})
 
-set(DK_LOCAL_INCLUDES ${DK_LOCAL_INCLUDES}
-                      libs/jpegutils/${DIGIKAM_LIBJPEG_DIR})
+    include_directories(${DK_LOCAL_INCLUDES})
 
-
-include_directories(${DK_LOCAL_INCLUDES})
-
-
-set(KF5_INCLUDES_ALL
-
-    "$<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::FileMetaData,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::IconThemes,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::TextWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>"
-
-)
-
-if(${KF5Kipi_FOUND})
     set(KF5_INCLUDES_ALL
-        ${KF5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>"
-    )
-endif()
-if(${KF5KGeoMap_FOUND})
-    set(KF5_INCLUDES_ALL
-        ${KF5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:KF5::KGeoMap,INTERFACE_INCLUDE_DIRECTORIES>"
-    )
-endif()
+        "$<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::FileMetaData,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::IconThemes,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::TextWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>"
+       )
 
-if(KF5KFace_FOUND)
-    set(KF5_INCLUDES_ALL
-        ${KF5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
-    )
-endif()
+    if(KF5Kipi_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
 
-set(QT5_INCLUDES_ALL
-    "$<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    "$<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>"
-)
-if(ENABLE_MEDIAPLAYER)
+    if(KF5KGeoMap_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:KF5::KGeoMap,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+
+    if(KF5KFace_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+
+    if(KF5AkonadiContact_FOUND)
+        set(KF5_INCLUDES_ALL
+            ${KF5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:${KF5AkonadiContact_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+    
     set(QT5_INCLUDES_ALL
-        ${QT5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-    )
-endif()
+        "$<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>"
+       )
 
-if(X11_FOUND)
-    set(QT5_INCLUDES_ALL
-        ${QT5_INCLUDES_ALL}
-        "$<TARGET_PROPERTY:Qt5::X11Extras,INTERFACE_INCLUDE_DIRECTORIES>"
-)
-endif()
+    if(ENABLE_MEDIAPLAYER)
+        set(QT5_INCLUDES_ALL
+            ${QT5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>"
+            "$<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
+
+    if(X11_FOUND)
+        set(QT5_INCLUDES_ALL
+            ${QT5_INCLUDES_ALL}
+            "$<TARGET_PROPERTY:Qt5::X11Extras,INTERFACE_INCLUDE_DIRECTORIES>"
+           )
+    endif()
 
     include_directories(
-
                         # version.h, gitversion.h config-digikam.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/utils
 
@@ -551,7 +554,7 @@ endif()
 
                         ${KF5_INCLUDES_ALL}
                         ${QT5_INCLUDES_ALL}
-    )
+                       )
 
     # libgphoto2 library rules
     message(INFO "gphoto2 includes are required only to display the version in the about data/component info, refactor")
