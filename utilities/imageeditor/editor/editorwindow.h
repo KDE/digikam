@@ -326,7 +326,7 @@ private Q_SLOTS:
     void slotDecreaseZoom();
     void slotCloseTool();
     void slotApplyTool();
-    void slotKioMoveFinished(KJob* job);
+    void slotKioMoveFinished();
     void slotUndoStateChanged();
     void slotSelectToolsMenuAboutToShow();
     void slotThemeChanged();

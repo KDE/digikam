@@ -844,8 +844,8 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
 
     SearchesDBJobsThread *thread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
 
-//    connect(job, SIGNAL(result(KJob*)),
-//            this, SLOT(slotResult(KJob*)));
+    connect(thread, SIGNAL(finished()),
+            this, SLOT(slotResult()));
 
     connect(thread, SIGNAL(data(QByteArray)),
             this, SLOT(slotData(QByteArray)));
@@ -921,14 +921,15 @@ void AlbumLabelsSearchHandler::slotSetCurrentAlbum()
     slotSelectionChanged();
 }
 
-void AlbumLabelsSearchHandler::slotResult(KJob* job)
+void AlbumLabelsSearchHandler::slotResult()
 {
-    if (job->error())
+    DBJobsThread *const jobThread = dynamic_cast<DBJobsThread*>(sender());
+    if (jobThread->hasErrors())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << job->errorString();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list urls";
 
         // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), i18n("Failed to list urls"),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
 }

@@ -133,6 +133,8 @@
 #include "versioningpromptusersavedlg.h"
 #include "undostate.h"
 #include "versionmanager.h"
+#include "iojobsthread.h"
+#include "iojobsmanager.h"
 
 using namespace KDcrawIface;
 
@@ -1665,7 +1667,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         /*
          *            / -> moveLocalFile()                    \
          * moveFile()                                           ->     movingSaveFileFinished()
-         *            \ -> KIO::move() -> slotKioMoveFinished /        |              |
+         *            \ -> move() -> slotKioMoveFinished      /        |              |
          *
          *                                                    finishSaving(true)  save...IsComplete()
          */
@@ -2355,27 +2357,31 @@ void EditorWindow::moveFile()
 
         if (DMetadata::hasSidecar(m_savingContext.saveTempFileName))
         {
-            KIO::move(DMetadata::sidecarUrl(m_savingContext.saveTempFileName),
+            IOJobsManager::instance()->
+                    startMove(QList<QUrl>() << DMetadata::sidecarUrl(m_savingContext.saveTempFileName),
                       DMetadata::sidecarUrl(m_savingContext.destinationURL));
         }
 
-        KIO::CopyJob* const moveJob = KIO::move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
-                                                m_savingContext.destinationURL);
+        IOJobsThread *const moveJobThread = IOJobsManager::instance()->
+                    startMove(QList<QUrl>() << QUrl::fromLocalFile(m_savingContext.saveTempFileName),
+                              m_savingContext.destinationURL);
 
-        connect(moveJob, SIGNAL(result(KJob*)),
+        connect(moveJobThread, SIGNAL(finished()),
                 this, SLOT(slotKioMoveFinished(KJob*)));
     }
 }
 
-void EditorWindow::slotKioMoveFinished(KJob* job)
+void EditorWindow::slotKioMoveFinished()
 {
-    if (job->error())
+    IOJobsThread *const moveJobThread = dynamic_cast<IOJobsThread*>(sender());
+
+    if (moveJobThread->hasErrors())
     {
         QMessageBox::critical(this, i18n("Error Saving File"),
-                              i18n("Failed to save file: %1", job->errorString()));
+                              i18n("Failed to save file: %1", moveJobThread->errorsList().first()));
     }
 
-    movingSaveFileFinished(!job->error());
+    movingSaveFileFinished(!moveJobThread->hasErrors());
 }
 
 void EditorWindow::slotDiscardChanges()

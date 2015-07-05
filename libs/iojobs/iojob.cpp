@@ -228,14 +228,24 @@ void RenameFileJob::run()
         return;
     }
 
+    QUrl newUrl = QUrl(m_srcToRename.adjusted(QUrl::RemoveFilename).toLocalFile() + m_newName);
+
+    if(QFileInfo(newUrl.path()).exists())
+    {
+        error(i18n("Image with the same name %1 already there", m_newName));
+        emit signalDone();
+        return;
+    }
+
     QFile file(m_srcToRename.toLocalFile());
 
     if(!file.rename(m_newName))
     {
         error(i18n("Image %1 could not be renamed", m_srcToRename.path()));
+        emit signalDone();
+        return;
     }
 
-    QUrl newUrl = QUrl(m_srcToRename.adjusted(QUrl::RemoveFilename).toLocalFile() + m_newName);
     emit signalRenamed(m_srcToRename, newUrl);
     emit signalDone();
 }

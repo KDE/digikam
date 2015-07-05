@@ -40,6 +40,21 @@ DBJobsThread::~DBJobsThread()
 {
 }
 
+bool DBJobsThread::hasErrors()
+{
+    return !m_errorsList.isEmpty();
+}
+
+QList<QString> &DBJobsThread::errors()
+{
+    return m_errorsList;
+}
+
+void DBJobsThread::error(const QString &errString)
+{
+    m_errorsList.append(errString);
+}
+
 // -------------------------------------------------
 
 AlbumsDBJobsThread::AlbumsDBJobsThread(QObject *const parent)

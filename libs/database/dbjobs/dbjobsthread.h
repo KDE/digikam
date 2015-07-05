@@ -50,12 +50,21 @@ public:
     explicit DBJobsThread(QObject* const parent);
     ~DBJobsThread();
 
-    void setUseMultiCore(const bool useMultiCore);
+    bool hasErrors();
+    QList<QString> &errors();
+
+public Q_SLOTS:
+
+    void error(const QString &errString);
 
 Q_SIGNALS:
 
     void finished();
     void data(const QList<ImageListerRecord> &records);
+
+private:
+
+    QStringList m_errorsList;
 };
 
 // ---------------------------------------------

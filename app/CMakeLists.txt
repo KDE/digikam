@@ -20,6 +20,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:dthread_src>
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:3rdparty_src>
+            $<TARGET_OBJECTS:iojobs_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src> #

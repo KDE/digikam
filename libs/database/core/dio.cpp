@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -317,7 +318,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
 
     if (flags & SourceStatusUnknown)
     {
-//        job->setProperty(noErrorMessageProperty.toLatin1().constData(), true);
+        jobThread->setKeepErrors(false);
     }
 
     connect(jobThread, SIGNAL(finished()),
@@ -344,11 +345,12 @@ void DIO::slotResult()
             }
         }
 
-//        if (job->property(noErrorMessageProperty.toLatin1().constData()).isValid())
-//        {
-//            return;
-//        }
+        if (!jobThread->isKeepingErrors())
+        {
+            return;
+        }
 
+// TODO: Is DNotificationWrapper the suitable way?
 //        job->ui()->showErrorMessage();
     }
 }

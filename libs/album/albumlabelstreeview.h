@@ -229,7 +229,7 @@ private Q_SLOTS:
     void slotSelectionChanged();
     void slotCheckStateChanged();
     void slotSetCurrentAlbum();
-    void slotResult(KJob* job);
+    void slotResult();
     void slotData(const QByteArray& data);
 
 Q_SIGNALS:

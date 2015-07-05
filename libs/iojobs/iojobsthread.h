@@ -54,7 +54,9 @@ public:
     void cancel();
     bool isCanceled();
 
-    bool hasErrors() ;
+    bool hasErrors();
+    void setKeepErrors(bool keepErrors);
+    bool isKeepingErrors();
     QList<QString> &errorsList();
 
 public Q_SLOTS:

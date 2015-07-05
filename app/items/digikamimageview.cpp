@@ -666,6 +666,8 @@ void DigikamImageView::rename()
     QList<QUrl>   urls = selectedUrls();
     NewNamesList newNamesList;
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "SELECTED URLS TO RENAME: " << urls;
+
     QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
     dlg->slotAddImages(urls);
 

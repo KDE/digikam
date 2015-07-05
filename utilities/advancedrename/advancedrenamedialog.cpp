@@ -57,6 +57,7 @@
 #include "parsesettings.h"
 #include "advancedrenamemanager.h"
 #include "advancedrenameprocessdialog.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {

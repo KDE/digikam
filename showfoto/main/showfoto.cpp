@@ -121,6 +121,8 @@ extern "C"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
 #include "showfoto_p.h"
+#include "iojobsmanager.h"
+#include "iojobsthread.h"
 
 using namespace KDcrawIface;
 
@@ -989,26 +991,28 @@ void ShowFoto::slotDeleteCurrentItem()
         }
         else
         {
-            KIO::Job* const job = KIO::del(urlCurrent);
+            IOJobsThread *const jobThread = IOJobsManager::instance()->startDelete(QList<QUrl>() << urlCurrent, false);
 
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
+            connect(jobThread, SIGNAL(finished()),
+                    this, SLOT(slotDeleteCurrentItemResult()) );
         }
     }
     else
     {
-        KIO::Job* const job = KIO::trash(urlCurrent);
+//        KIO::Job* const job = KIO::trash(urlCurrent);
 
-        connect(job, SIGNAL(result(KJob*)),
-                this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
+//        connect(job, SIGNAL(result(KJob*)),
+//                this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
     }
 }
 
-void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
+void ShowFoto::slotDeleteCurrentItemResult()
 {
-    if (job->error() != 0)
+    IOJobsThread *const jobThread = dynamic_cast<IOJobsThread*>(sender());
+
+    if (jobThread->hasErrors())
     {
-        QString errMsg(job->errorString());
+        QString errMsg(jobThread->errorsList().first());
         QMessageBox::critical(this, qApp->applicationName(), errMsg);
         return;
     }

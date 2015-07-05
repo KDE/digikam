@@ -171,6 +171,16 @@ bool IOJobsThread::hasErrors()
     return !d->errorsList.isEmpty();
 }
 
+void IOJobsThread::setKeepErrors(bool keepErrors)
+{
+    d->keepErrors = keepErrors;
+}
+
+bool IOJobsThread::isKeepingErrors()
+{
+    return d->keepErrors;
+}
+
 QList<QString> &IOJobsThread::errorsList()
 {
     return d->errorsList;
