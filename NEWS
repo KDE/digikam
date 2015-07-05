@@ -82,7 +82,8 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 075 ==> 192701 - Signal SIGSEGV - Crash under Gnome.
 076 ==> 196917 - Problem with "sticky" tooltips in album view.
 077 ==> 216392 - digiKam crashed during moving of an empty folder.
-078 ==> 
+078 ==> 220549 - Clicking OK closes showfoto and digikam.
+079 ==> 
 
 
 
