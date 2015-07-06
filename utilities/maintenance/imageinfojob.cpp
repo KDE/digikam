@@ -138,7 +138,15 @@ bool ImageInfoJob::isRunning() const
 
 void ImageInfoJob::slotResult()
 {
-    d->jobThread->cancel();
+    if (d->jobThread->hasErrors())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << d->jobThread->errorsList().first();
+
+        // Pop-up a message about the error.
+        DNotificationWrapper(QString(), d->jobThread->errorsList().first(),
+                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+    }
+
     d->jobThread = 0;
 
     emit signalCompleted();

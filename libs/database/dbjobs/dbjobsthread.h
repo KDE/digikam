@@ -41,6 +41,8 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
+class DBJob;
+
 class DBJobsThread : public RActionThreadBase
 {
     Q_OBJECT
@@ -51,7 +53,11 @@ public:
     ~DBJobsThread();
 
     bool hasErrors();
-    QList<QString> &errors();
+    QList<QString> &errorsList();
+
+protected:
+
+    void connectFinishAndErrorSignals(DBJob *j);
 
 public Q_SLOTS:
 

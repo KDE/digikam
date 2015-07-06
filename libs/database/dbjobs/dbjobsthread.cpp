@@ -45,9 +45,18 @@ bool DBJobsThread::hasErrors()
     return !m_errorsList.isEmpty();
 }
 
-QList<QString> &DBJobsThread::errors()
+QList<QString> &DBJobsThread::errorsList()
 {
     return m_errorsList;
+}
+
+void DBJobsThread::connectFinishAndErrorSignals(DBJob *j)
+{
+    connect(j, SIGNAL(signalDone()),
+            this, SLOT(finished()));
+
+    connect(j, SIGNAL(error(QString)),
+            this, SLOT(error(QString)));
 }
 
 void DBJobsThread::error(const QString &errString)
@@ -70,8 +79,7 @@ void AlbumsDBJobsThread::albumsListing(AlbumsDBJobInfo *info)
 {
     AlbumsJob *j = new AlbumsJob(info);
 
-    connect(j, SIGNAL(signalDone()),
-            this, SIGNAL(finished()));
+    connectFinishAndErrorSignals(j);
 
     if(info->folders)
     {
@@ -105,8 +113,7 @@ void TagsDBJobsThread::tagsListing(TagsDBJobInfo *info)
 {
     TagsJob *j = new TagsJob(info);
 
-    connect(j, SIGNAL(signalDone()),
-            this, SIGNAL(finished()));
+    connectFinishAndErrorSignals(j);
 
     if(info->folders)
     {
@@ -145,8 +152,7 @@ void DatesDBJobsThread::datesListing(DatesDBJobInfo *info)
 {
     DatesJob *j = new DatesJob(info);
 
-    connect(j, SIGNAL(signalDone()),
-            this, SIGNAL(finished()));
+    connectFinishAndErrorSignals(j);
 
     if(info->folders)
     {
@@ -180,8 +186,7 @@ void GPSDBJobsThread::GPSListing(GPSDBJobInfo *info)
 {
     GPSJob *j = new GPSJob(info);
 
-    connect(j, SIGNAL(signalDone()),
-            this, SIGNAL(finished()));
+    connectFinishAndErrorSignals(j);
 
     if(info->wantDirectQuery)
     {
@@ -215,8 +220,7 @@ void SearchesDBJobsThread::searchesListing(SearchesDBJobInfo *info)
 {
     SearchesJob *j = new SearchesJob(info);
 
-    connect(j, SIGNAL(signalDone()),
-            this, SIGNAL(finished()));
+    connectFinishAndErrorSignals(j);
 
     if(info->duplicates)
     {

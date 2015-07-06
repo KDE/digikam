@@ -3013,7 +3013,16 @@ void AlbumManager::notifyAlbumDeletion(Album* album)
 
 void AlbumManager::slotAlbumsJobResult()
 {
-    d->albumListJob->cancel();
+    if (d->albumListJob->hasErrors())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list albums";
+
+        // Pop-up a message about the error.
+        DNotificationWrapper(QString(), d->albumListJob->errorsList().first(),
+                             0, i18n("digiKam"));
+    }
+
+    d->albumListJob = 0;
 }
 
 void AlbumManager::slotAlbumsJobData(const QMap<int, int> &albumsStatMap)
@@ -3029,7 +3038,16 @@ void AlbumManager::slotAlbumsJobData(const QMap<int, int> &albumsStatMap)
 
 void AlbumManager::slotPeopleJobResult()
 {
-    d->personListJob->cancel();
+    if (d->personListJob->hasErrors())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list face tags";
+
+        // Pop-up a message about the error.
+        DNotificationWrapper(QString(), d->personListJob->errorsList().first(),
+                             0, i18n("digiKam"));
+    }
+
+    d->personListJob = 0;
 }
 
 void AlbumManager::slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesStatMap)
@@ -3058,7 +3076,16 @@ void AlbumManager::slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesSt
 
 void AlbumManager::slotTagsJobResult()
 {
-    d->tagListJob->cancel();
+    if (d->tagListJob->hasErrors())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list face tags";
+
+        // Pop-up a message about the error.
+        DNotificationWrapper(QString(), d->personListJob->errorsList().first(),
+                             0, i18n("digiKam"));
+    }
+
+    d->tagListJob = 0;
 }
 
 void AlbumManager::slotTagsJobData(const QMap<int,int>& tagsStatMap)
@@ -3074,8 +3101,16 @@ void AlbumManager::slotTagsJobData(const QMap<int,int>& tagsStatMap)
 
 void AlbumManager::slotDatesJobResult()
 {
-    d->dateListJob->cancel();
+    if (d->dateListJob->hasErrors())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list dates";
 
+        // Pop-up a message about the error.
+        DNotificationWrapper(QString(), d->dateListJob->errorsList().first(),
+                             0, i18n("digiKam"));
+    }
+
+    d->dateListJob = 0;
     emit signalAllDAlbumsLoaded();
 }
 

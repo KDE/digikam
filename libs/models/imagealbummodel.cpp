@@ -396,6 +396,16 @@ void ImageAlbumModel::slotResult()
     if(d->jobThread != sender())
         return;
 
+    if(d->jobThread->hasErrors())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: "
+                                       << d->jobThread->errorsList().first();
+
+        // Pop-up a message about the error.
+        DNotificationWrapper(QString(), d->jobThread->errorsList().first(),
+                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+    }
+
     d->jobThread = 0;
 
     // either of the two

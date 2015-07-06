@@ -924,12 +924,13 @@ void AlbumLabelsSearchHandler::slotSetCurrentAlbum()
 void AlbumLabelsSearchHandler::slotResult()
 {
     DBJobsThread *const jobThread = dynamic_cast<DBJobsThread*>(sender());
+
     if (jobThread->hasErrors())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list urls";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list urls: " << jobThread->errorsList().first();
 
         // Pop-up a message about the error.
-        DNotificationWrapper(QString(), i18n("Failed to list urls"),
+        DNotificationWrapper(QString(),  jobThread->errorsList().first(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
 }

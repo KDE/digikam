@@ -141,14 +141,14 @@ void DuplicatesFinder::slotDuplicatesSearchProcessedAmount(int amount)
 
 void DuplicatesFinder::slotDone()
 {
-//    if (d->job->error())
-//    {
-//        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << d->job->errorString();
+    if (d->job->hasErrors())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << d->job->errorsList().first();
 
-//        // Pop-up a message about the error.
-//        DNotificationWrapper(QString(), d->job->errorString(),
-//                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
-//    }
+        // Pop-up a message about the error.
+        DNotificationWrapper(QString(), d->job->errorsList().first(),
+                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+    }
 
     d->job = 0;
     MaintenanceTool::slotDone();

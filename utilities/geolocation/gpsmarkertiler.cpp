@@ -573,6 +573,18 @@ void GPSMarkerTiler::slotMapImagesJobResult()
         return;
     }
 
+    if (d->jobs.at(foundIndex).jobThread->hasErrors())
+    {
+        const QString &err = d->jobs.at(foundIndex).jobThread->errorsList().first();
+
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list images in selected area: "
+                                       << err;
+
+        // Pop-up a message about the error.
+        DNotificationWrapper(QString(), err,
+                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+    }
+
     // get the results from the job:
     const QList<GPSImageInfo> returnedImageInfo = d->jobs.at(foundIndex).dataFromDatabase;
     /// @todo Currently, we ignore the wanted level and just add the images
