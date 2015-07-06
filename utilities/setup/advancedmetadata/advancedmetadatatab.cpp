@@ -52,6 +52,7 @@ public:
     QComboBox* metadataType;
     QComboBox* operationType;
     QPushButton* addButton;
+    QPushButton* editButton;
     QPushButton* deleteButton;
     QPushButton* moveUpButton;
     QPushButton* moveDownButton;
@@ -96,6 +97,7 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     QVBoxLayout* buttonsLayout = new QVBoxLayout(this);
     buttonsLayout->setAlignment(Qt::AlignTop);
     d->addButton = new QPushButton(i18n("Add"));
+    d->editButton = new QPushButton(i18n("Edit"));
     d->deleteButton = new QPushButton(i18n("Delete"));
 
     d->moveUpButton = new QPushButton(i18n("Move Up"));
@@ -104,6 +106,7 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     connectButtons();
 
     buttonsLayout->addWidget(d->addButton);
+    buttonsLayout->addWidget(d->editButton);
     buttonsLayout->addWidget(d->deleteButton);
     buttonsLayout->addWidget(d->moveUpButton);
     buttonsLayout->addWidget(d->moveDownButton);
@@ -148,10 +151,33 @@ void AdvancedMetadataTab::slotAddNewNamespace()
     d->container.namespaceEntries.append(entry);
 }
 
+void AdvancedMetadataTab::slotEditNamespace()
+{
+
+    if(!d->namespaceView->currentIndex().isValid())
+        return;
+
+    NamespaceEntry entry = d->container.namespaceEntries.at(d->namespaceView->currentIndex().row());
+
+
+    if (!NamespaceEditDlg::edit(qApp->activeWindow(), entry))
+    {
+        return;
+    }
+
+
+    QStandardItem* root = d->model->invisibleRootItem();
+    QStandardItem* item = root->child(d->namespaceView->currentIndex().row());
+    QString text = entry.namespaceName + QLatin1String(",") + i18n("Separator:") + entry.separator;
+    item->setText(text);
+
+}
+
 
 void AdvancedMetadataTab::connectButtons()
 {
     connect(d->addButton, SIGNAL(clicked()), this, SLOT(slotAddNewNamespace()));
+    connect(d->editButton, SIGNAL(clicked()), this, SLOT(slotEditNamespace()));
     connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
     connect(d->resetButton, SIGNAL(clicked()), this, SLOT(slotResetView()));
     connect(d->moveUpButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemUp()));
@@ -174,10 +200,6 @@ void AdvancedMetadataTab::setModelData()
     d->namespaceView->setModel(d->model);
 }
 
-void AdvancedMetadataTab::addEntry()
-{
-
-}
 
 }
 

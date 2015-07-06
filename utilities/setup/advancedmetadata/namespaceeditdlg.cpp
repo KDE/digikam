@@ -55,7 +55,7 @@ public:
     QLineEdit* extraXml;
 };
 
-NamespaceEditDlg::NamespaceEditDlg(bool create, QWidget *parent)
+NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *parent)
     : QDialog(parent), d(new Private())
 {
     setModal(true);
@@ -151,6 +151,21 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, QWidget *parent)
     grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
+    if(!create)
+    {
+        d->namespaceName->setText(entry.namespaceName);
+        d->nameSpaceSeparator->setText(entry.separator);
+        if(entry.tagPaths == NamespaceEntry::TAGPATH)
+        {
+            d->isPath->setChecked(true);
+        }
+        else
+        {
+            d->isPath->setChecked(false);
+        }
+        d->extraXml->setText(entry.extraXml);
+    }
+
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(page);
     vbx->addWidget(d->buttons);
@@ -179,7 +194,28 @@ NamespaceEditDlg::~NamespaceEditDlg()
 
 bool NamespaceEditDlg::create(QWidget *parent, NamespaceEntry& entry)
 {
-    QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(true, parent);
+    QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(true,entry,parent);
+
+    bool valRet = dlg->exec();
+
+    if (valRet == QDialog::Accepted)
+    {
+        entry.namespaceName     = dlg->namespaceName();
+        entry.separator   = dlg->nameSpaceSeparator();
+        if(dlg->isTagPath())
+            entry.tagPaths      = NamespaceEntry::TAGPATH;
+        else
+            entry.tagPaths      = NamespaceEntry::TAG;
+        entry.extraXml    = dlg->extraXml();
+    }
+
+    delete dlg;
+    return valRet;
+}
+
+bool NamespaceEditDlg::edit(QWidget *parent, NamespaceEntry &entry)
+{
+    QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(false,entry, parent);
 
     bool valRet = dlg->exec();
 

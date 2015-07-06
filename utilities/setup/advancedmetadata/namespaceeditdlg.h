@@ -44,7 +44,7 @@ class NamespaceEditDlg : public QDialog
 
 public:
 
-    NamespaceEditDlg( bool create, QWidget* parent = 0);
+    NamespaceEditDlg( bool create, NamespaceEntry& entry, QWidget* parent = 0);
     ~NamespaceEditDlg();
 
 //    QString      title()    const;
@@ -61,6 +61,7 @@ public:
 //        Return the list of created Albums.
 //    */
     static bool create(QWidget* parent, NamespaceEntry& entry);
+    static bool edit(QWidget* parent, NamespaceEntry& entry);
 
     QString namespaceName() const;
     QString nameSpaceSeparator() const;

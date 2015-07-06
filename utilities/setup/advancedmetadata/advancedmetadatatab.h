@@ -37,13 +37,13 @@ public Q_SLOTS:
 
     void slotResetView();
     void slotAddNewNamespace();
+    void slotEditNamespace();
 
 private:
 
     void connectButtons();
     void setModelData();
 
-    void addEntry();
     class Private;
     Private* d;
 };
