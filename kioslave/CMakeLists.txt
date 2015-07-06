@@ -4,20 +4,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# # digiKam Tags kio slave ###########################################################
-
-set(kio_digikamtags_PART_SRCS digikamtags.cpp)
-
-add_library(kio_digikamtags MODULE ${kio_digikamtags_PART_SRCS})
-
-target_link_libraries(kio_digikamtags
-                      digikamdatabase
-                      digikamcore
-                      KF5::KIOCore
-                      Qt5::Core
-                      Qt5::DBus
-)
-
 # # digiKam Albums kio slave #########################################################
 
 set(kio_digikamalbums_PART_SRCS digikamalbums.cpp)
@@ -34,62 +20,10 @@ target_link_libraries(kio_digikamalbums
                       Qt5::DBus
 )
 
-# # digiKam Date kio slave ###########################################################
-
-set(kio_digikamdates_PART_SRCS digikamdates.cpp)
-
-add_library(kio_digikamdates MODULE ${kio_digikamdates_PART_SRCS})
-
-target_link_libraries(kio_digikamdates
-                      digikamdatabase
-                      digikamcore
-                      KF5::KIOCore
-                      Qt5::Core
-                      Qt5::DBus
-)
-
-# # digiKam MapImages kio slave ######################################################
-
-set(kio_digikammapimages_PART_SRCS digikammapimages.cpp)
-
-add_library(kio_digikammapimages MODULE ${kio_digikammapimages_PART_SRCS})
-
-target_link_libraries(kio_digikammapimages
-                      digikamdatabase
-                      digikamcore
-
-                      KF5::KIOCore
-                      Qt5::Core
-                      Qt5::DBus
-)
-
-# # digiKam Search kio slave #########################################################
-
-set(kio_digikamsearch_PART_SRCS digikamsearch.cpp)
-
-add_library(kio_digikamsearch MODULE ${kio_digikamsearch_PART_SRCS})
-
-target_link_libraries(kio_digikamsearch
-                      digikamdatabase
-                      digikamcore
-                      KF5::KIOCore
-                      Qt5::Core
-                      Qt5::DBus
-                      KF5::I18n
-)
-
 # Files to install ###################################################################
 
-install(TARGETS kio_digikamtags      DESTINATION ${PLUGIN_INSTALL_DIR})
-install(TARGETS kio_digikamdates     DESTINATION ${PLUGIN_INSTALL_DIR})
-install(TARGETS kio_digikamsearch    DESTINATION ${PLUGIN_INSTALL_DIR})
 install(TARGETS kio_digikamalbums    DESTINATION ${PLUGIN_INSTALL_DIR})
-install(TARGETS kio_digikammapimages DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES digikamtags.protocol
-              digikamalbums.protocol
-              digikamdates.protocol
-              digikamsearch.protocol
-              digikammapimages.protocol
+install(FILES digikamalbums.protocol
         DESTINATION ${SERVICES_INSTALL_DIR}
 )

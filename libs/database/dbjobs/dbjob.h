@@ -49,6 +49,7 @@ public:
 Q_SIGNALS:
 
     void data(const QList<ImageListerRecord> &records);
+    void error(const QString &err);
 };
 
 // ----------------------------------------------

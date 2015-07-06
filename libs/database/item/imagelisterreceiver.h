@@ -72,61 +72,13 @@ public:
 
 // ------------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseReceiver : public ImageListerValueListReceiver
-{
-
-public:
-
-    explicit ImageListerSlaveBaseReceiver(KIO::SlaveBase* slave);
-    virtual void error(const QString& errMsg);
-    void sendData();
-
-protected:
-
-    KIO::SlaveBase* m_slave;
-};
-
-class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBasePartsSendingReceiver
-    : public ImageListerSlaveBaseReceiver
-{
-
-public:
-
-    ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase* slave, int limit);
-    virtual void receive(const ImageListerRecord& record);
-
-protected:
-
-    int m_limit;
-    int m_count;
-};
-
-// ------------------------------------------------------------------------------------------------
-
-class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseGrowingPartsSendingReceiver
-    : public ImageListerSlaveBasePartsSendingReceiver
-{
-
-public:
-
-    ImageListerSlaveBaseGrowingPartsSendingReceiver(KIO::SlaveBase* slave, int start, int end, int increment);
-    virtual void receive(const ImageListerRecord& record);
-
-protected:
-
-    int m_maxLimit;
-    int m_increment;
-};
-
-// ------------------------------------------------------------------------------------------------
-
 class DIGIKAM_DATABASE_EXPORT ImageListerJobReceiver : public ImageListerValueListReceiver
 {
 
 public:
 
     explicit ImageListerJobReceiver(DBJob *const job);
-    //TODO: virtual void error(const QString &errMsg);
+    virtual void error(const QString &errMsg);
     void sendData();
 
 protected:

@@ -847,8 +847,8 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
     connect(thread, SIGNAL(finished()),
             this, SLOT(slotResult()));
 
-    connect(thread, SIGNAL(data(QByteArray)),
-            this, SLOT(slotData(QByteArray)));
+    connect(thread, SIGNAL(data(QList<ImageListerRecord>)),
+            this, SLOT(slotData(QList<ImageListerRecord>)));
 }
 
 QString AlbumLabelsSearchHandler::getDefaultTitle() const
@@ -934,22 +934,17 @@ void AlbumLabelsSearchHandler::slotResult()
     }
 }
 
-void AlbumLabelsSearchHandler::slotData(const QByteArray& data)
+void AlbumLabelsSearchHandler::slotData(const QList<ImageListerRecord>& data)
 {
     if (data.isEmpty())
     {
         return;
     }
 
-    QByteArray    tmp(data);
-    QDataStream   ds(&tmp, QIODevice::ReadOnly);
     QList<QUrl> urlList;
 
-    while (!ds.atEnd())
+    foreach (const ImageListerRecord &record, data)
     {
-        ImageListerRecord record;
-        ds >> record;
-
         ImageInfo info(record);
         urlList << info.fileUrl();
     }

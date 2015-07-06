@@ -37,6 +37,7 @@
 #include "databaseconstants.h"
 #include "album.h"
 #include "statesavingobject.h"
+#include "imagelisterrecord.h"
 
 namespace Digikam
 {
@@ -213,7 +214,7 @@ private:
     void generateAlbumNameForExporting(const QList<int>& ratings, const QList<int>& colorsList, const QList<int>& picksList);
 
     /**
-     * @brief Passes the current album DB url to a KIO::TransferJob
+     * @brief Passes the current album DB url to a IOJobsManager
      *        to get images urls in this album
      */
     void imagesUrlsForCurrentAlbum();
@@ -230,7 +231,7 @@ private Q_SLOTS:
     void slotCheckStateChanged();
     void slotSetCurrentAlbum();
     void slotResult();
-    void slotData(const QByteArray& data);
+    void slotData(const QList<ImageListerRecord>& data);
 
 Q_SIGNALS:
 

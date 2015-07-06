@@ -67,48 +67,6 @@ kio_digikamalbums::~kio_digikamalbums()
 {
 }
 
-// ------------------------ Listing and Scanning ------------------------ //
-
-void kio_digikamalbums::special(const QByteArray& data)
-{
-    QUrl        url;
-    QDataStream ds(data);
-    ds >> url;
-
-    qCDebug(DIGIKAM_KIOSLAVES_LOG) << "kio_digikamalbums::special " << url;
-
-    Digikam::DatabaseParameters dbParameters(url);
-    QDBusConnection::sessionBus().registerService(QString::fromUtf8("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
-    Digikam::DatabaseAccess::setParameters(dbParameters);
-
-    bool folders = (metaData(QLatin1String("folders")) == QLatin1String("true"));
-
-    if (folders)
-    {
-        QMap<int, int> albumNumberMap = Digikam::DatabaseAccess().db()->getNumberOfImagesInAlbums();
-
-        QByteArray  ba;
-        QDataStream os(&ba, QIODevice::WriteOnly);
-        os << albumNumberMap;
-        SlaveBase::data(ba);
-    }
-    else
-    {
-        bool recursive               = (metaData(QLatin1String("listAlbumsRecursively")) == QLatin1String("true"));
-        bool listOnlyAvailableImages = (metaData(QLatin1String("listOnlyAvailableImages")) == QLatin1String("true"));
-
-        Digikam::ImageLister lister;
-        lister.setRecursive(recursive);
-        lister.setListOnlyAvailable(listOnlyAvailableImages);
-        // send data every 200 images to be more responsive
-        Digikam::ImageListerSlaveBaseGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
-        lister.list(&receiver, url);
-        receiver.sendData();
-    }
-
-    finished();
-}
-
 // ------------------------ Implementation of KIO::SlaveBase ------------------------ //
 
 void kio_digikamalbums::get(const QUrl& url)

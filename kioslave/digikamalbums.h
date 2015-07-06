@@ -50,8 +50,6 @@ public:
     kio_digikamalbums(const QByteArray& pool_socket, const QByteArray& app_socket);
     virtual ~kio_digikamalbums();
 
-    void special(const QByteArray& data);
-
     void get(const QUrl& url);
     void put(const QUrl& url, int _mode, KIO::JobFlags _flags);
     void copy(const QUrl& src, const QUrl& dest, int mode, KIO::JobFlags flags);
