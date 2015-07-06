@@ -35,6 +35,7 @@
 
 #include <QFile>
 #include <QSharedData>
+#include <QDataStream>
 
 // Local includes
 

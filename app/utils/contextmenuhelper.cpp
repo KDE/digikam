@@ -45,7 +45,7 @@
 #include <kopenwithdialog.h>
 #include <krun.h>
 
-#ifdef HAVE_KDEPIMLIBS
+#ifdef HAVE_AKONADICONTACT
 
 #if defined(__APPLE__) && defined(__clang__)
 #pragma clang diagnostic push
@@ -59,7 +59,7 @@
 #pragma clang diagnostic pop
 #endif
 
-#endif // HAVE_KDEPIMLIBS
+#endif // HAVE_AKONADICONTACT
 
 // Local includes
 
@@ -523,7 +523,7 @@ void ContextMenuHelper::addLabelsAction()
 
 void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 {
-#ifdef HAVE_KDEPIMLIBS
+#ifdef HAVE_AKONADICONTACT
 
     delete d->ABCmenu;
 
@@ -543,10 +543,10 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotABCSearchResult(KJob*)));
 
-#endif // HAVE_KDEPIMLIBS
+#endif // HAVE_AKONADICONTACT
 }
 
-#ifdef HAVE_KDEPIMLIBS
+#ifdef HAVE_AKONADICONTACT
 
 void ContextMenuHelper::slotABCSearchResult(KJob* job)
 {
@@ -601,7 +601,7 @@ void ContextMenuHelper::slotABCMenuTriggered(QAction* action)
     emit signalAddNewTagFromABCMenu(name);
 }
 
-#endif // HAVE_KDEPIMLIBS
+#endif // HAVE_AKONADICONTACT
 
 void ContextMenuHelper::slotDeselectAllAlbumItems()
 {

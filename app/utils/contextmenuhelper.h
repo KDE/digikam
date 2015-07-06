@@ -400,10 +400,10 @@ private Q_SLOTS:
     void slotSelectParents();
     void slotDeselectParents();
 
-#ifdef HAVE_KDEPIMLIBS
+#ifdef HAVE_AKONADICONTACT
     void slotABCSearchResult(KJob*);
     void slotABCMenuTriggered(QAction*);
-#endif // HAVE_KDEPIMLIBS
+#endif // HAVE_AKONADICONTACT
 
 private:
 

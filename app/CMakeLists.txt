@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
-# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -31,8 +31,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:slideshow_src>
             $<TARGET_OBJECTS:imageeditor_src> #
             $<TARGET_OBJECTS:editorplugin_src>
-
-
 
             utils/digikam_debug.cpp
 )
@@ -83,8 +81,6 @@ target_link_libraries(digikamcore
 
 )
 
-#add_dependencies(digikamcore digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
-
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::Kipi)
 endif()
@@ -134,24 +130,8 @@ if(KF5KFace_FOUND)
 endif()
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
-# digiKam GUI begins here
 
-include_directories(
-    date/
-    dragdrop/
-    items/
-    items/overlays/
-    fileaction/
-    views/
-    views/tableview/
-    filters/
-    utils/
-    tags/
-    tags/tagsmanager/
-    tags/tagsmanager/models/
-    main/
-    ${CMAKE_CURRENT_BINARY_DIR}/app/utils # for qt5_add_dbus_adaptor adaptor, TODO
-)
+# digiKam GUI begins here
 
 qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
@@ -264,7 +244,7 @@ set(digikam_SRCS
 )
 
 # this is only required by Win & OSX
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/hi*-apps-digikam.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/*-apps-digikam.png")
 ecm_add_app_icon(digikam_SRCS ICONS ${ICONS_SRCS})
 
 set(DIGIKAM_OBJECTS
@@ -379,8 +359,11 @@ if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
-if(KDEPIMLIBS_FOUND)
-    target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
+if(KF5AkonadiContact_FOUND)
+    target_link_libraries(digikam
+#                          KF5::AkonadiCore
+                          KF5::AkonadiContact
+                         )
 endif()
 
 if(NOT WIN32)
