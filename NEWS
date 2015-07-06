@@ -84,7 +84,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 077 ==> 216392 - digiKam crashed during moving of an empty folder.
 078 ==> 220549 - Clicking OK closes showfoto and digikam.
 079 ==> 235392 - digiKam crash after changing folder/album.
-080 ==> 
-
-
-
+080 ==> 343288 - Crash after opening multiple images in editor window.
+081 ==> 
