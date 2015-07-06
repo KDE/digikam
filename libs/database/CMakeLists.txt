@@ -147,7 +147,7 @@ if(KF5KGeoMap_FOUND)
     target_link_libraries(digikamdatabase PRIVATE ${KF5KGeoMap_LIBRARIES})
 endif()
 
-if(Baloo_FOUND) # circular linking, because we need baloowrap.h path.
+if(${KFILEMETADATA_FOUND})
     target_link_libraries(digikamdatabase PRIVATE baloowrap)
 endif()
 
