@@ -91,17 +91,6 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
 {
     const int columnIndex = tableViewModelIndex.column();
 
-/*    if (!QModelIndex().isValid())
-        return QSize();
-*/
-    /// @todo Debug output to find OSX crash
-    if (columnIndex >= s->tableViewModel->columnCount(QModelIndex()))
-    {
-        kDebug() << "------ CRASH AHEAD: tableViewModelIndex = " << tableViewModelIndex;
-        kDebug() << "------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = " << s->tableViewModel->columnCount(QModelIndex());
-        kDebug() << "------ CRASH AHEAD: columnIndex: " << columnIndex;
-    }
-
     /// we have to take the maximum of all columns for the height
     /// @todo somehow cache this calculation
     /// @todo check column flags

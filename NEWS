@@ -86,4 +86,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 079 ==> 235392 - digiKam crash after changing folder/album.
 080 ==> 343288 - Crash after opening multiple images in editor window.
 081 ==> 335850 - Switch to next picture takes a long time.
-082 ==> 
+082 ==> 349937 - Crash if view is switched to table view.
+083 ==> 
