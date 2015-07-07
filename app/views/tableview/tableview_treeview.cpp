@@ -71,10 +71,14 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
       d(new Private()),
       s(tableViewShared)
 {
+    setModel(s->tableViewModel);
+    setSelectionModel(s->tableViewSelectionModel);
+
     s->itemDelegate = new TableViewItemDelegate(s, this);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setItemDelegate(s->itemDelegate);
     setAlternatingRowColors(true);
+    setSortingEnabled(true);
     setAllColumnsShowFocus(true);
     setDragEnabled(true);
     setAcceptDrops(true);
@@ -93,9 +97,6 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
 
     header()->installEventFilter(this);
 
-    setModel(s->tableViewModel);
-    setSelectionModel(s->tableViewSelectionModel);
-    setSortingEnabled(true);
     slotModelGroupingModeChanged();
 
     connect(s->tableViewModel, SIGNAL(signalGroupingModeChanged()),
