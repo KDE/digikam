@@ -331,33 +331,33 @@ void ImportContextMenuHelper::slotRotate()
 //    }
 }
 
-void ImportContextMenuHelper::addAssignTagsMenu(itemIds& ids)
+void ImportContextMenuHelper::addAssignTagsMenu(itemIds& /*ids*/)
 {
-    setSelectedIds(ids);
+    //setSelectedIds(ids);
 
-    QMenu* const assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
-    assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
-    assignTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
-    d->parent->addMenu(assignTagsPopup);
+    //QMenu* const assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
+    //assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
+    //assignTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
+    //d->parent->addMenu(assignTagsPopup);
 
-    connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
-            this, SIGNAL(signalAssignTag(int)));
+    //connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
+    //        this, SIGNAL(signalAssignTag(int)));
 
-    connect(assignTagsPopup, SIGNAL(signalPopupTagsView()),
-            this, SIGNAL(signalPopupTagsView()));
+    //connect(assignTagsPopup, SIGNAL(signalPopupTagsView()),
+    //        this, SIGNAL(signalPopupTagsView()));
 }
 
-void ImportContextMenuHelper::addRemoveTagsMenu(itemIds& ids)
+void ImportContextMenuHelper::addRemoveTagsMenu(itemIds& /*ids*/)
 {
-    setSelectedIds(ids);
+    //setSelectedIds(ids);
 
-    QMenu* const removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
-    removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
-    removeTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
-    d->parent->addMenu(removeTagsPopup);
+    //QMenu* const removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
+    //removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
+    //removeTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
+    //d->parent->addMenu(removeTagsPopup);
 
-    connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
-            this, SIGNAL(signalRemoveTag(int)));
+    //connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
+    //        this, SIGNAL(signalRemoveTag(int)));
 }
 
 void ImportContextMenuHelper::addLabelsAction()
