@@ -497,7 +497,8 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
         foreach (int tag, tagIDs)
         {
             if (TagsCache::instance()->colorLabelForTag(tag) == -1 &&
-                TagsCache::instance()->pickLabelForTag(tag)  == -1)
+                TagsCache::instance()->pickLabelForTag(tag)  == -1 &&
+                TagsCache::instance()->isInternalTag(tag)    == false)
             {
                 enable = true;
                 break;
