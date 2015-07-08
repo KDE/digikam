@@ -103,8 +103,6 @@ void AdvancedRenameListItem::setImageUrl(const QUrl& url)
 
     setName(d->completeFileName);
     setNewName(d->completeFileName);
-    
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Append to list view: " << url;
 }
 
 QUrl AdvancedRenameListItem::imageUrl() const
@@ -340,7 +338,7 @@ void AdvancedRenameDialog::initDialog()
 
     foreach(const QString& file, fileList)
     {
-        QUrl url(file);
+        QUrl url = QUrl::fromLocalFile(file);
         new AdvancedRenameListItem(d->listView, url);
     }
 
