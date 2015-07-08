@@ -118,7 +118,7 @@ private Q_SLOTS:
     void slotChanged();
     void slotUpdateItemInfo();
 
-    void slotDeleteCurrentItemResult();
+    void slotDeleteCurrentItemResult(KJob*);
 
     void slotPrepareToLoad();
     void slotLoadingStarted(const QString& filename);

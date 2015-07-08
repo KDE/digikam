@@ -12,7 +12,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2008      by Arnd Baecker <arnd dot baecker at web dot de>
- * Copyright (C) 2013-2014 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2013-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -121,8 +121,6 @@ extern "C"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
 #include "showfoto_p.h"
-#include "iojobsmanager.h"
-#include "iojobsthread.h"
 
 using namespace KDcrawIface;
 
@@ -991,28 +989,26 @@ void ShowFoto::slotDeleteCurrentItem()
         }
         else
         {
-            IOJobsThread *const jobThread = IOJobsManager::instance()->startDelete(QList<QUrl>() << urlCurrent, false);
+            KIO::Job* const job = KIO::del(urlCurrent);
 
-            connect(jobThread, SIGNAL(finished()),
-                    this, SLOT(slotDeleteCurrentItemResult()) );
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
         }
     }
     else
     {
-//        KIO::Job* const job = KIO::trash(urlCurrent);
+        KIO::Job* const job = KIO::trash(urlCurrent);
 
-//        connect(job, SIGNAL(result(KJob*)),
-//                this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
+        connect(job, SIGNAL(result(KJob*)),
+                this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
     }
 }
 
-void ShowFoto::slotDeleteCurrentItemResult()
+void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
 {
-    IOJobsThread *const jobThread = dynamic_cast<IOJobsThread*>(sender());
-
-    if (jobThread->hasErrors())
+    if (job->error() != 0)
     {
-        QString errMsg(jobThread->errorsList().first());
+        QString errMsg(job->errorString());
         QMessageBox::critical(this, qApp->applicationName(), errMsg);
         return;
     }
