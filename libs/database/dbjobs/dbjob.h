@@ -24,7 +24,12 @@
 #ifndef DBJOB_H
 #define DBJOB_H
 
+// Libkdcraw includes
+
 #include "KDCRAW/RActionJob"
+
+// Local includes
+
 #include "dbjobinfo.h"
 #include "dbjobsthread.h"
 #include "imagelisterrecord.h"
@@ -60,7 +65,7 @@ class AlbumsJob : public DBJob
 
 public:
 
-    AlbumsJob(AlbumsDBJobInfo *jobInfo);
+    AlbumsJob(AlbumsDBJobInfo* const jobInfo);
     ~AlbumsJob();
 
 protected:
@@ -73,7 +78,7 @@ Q_SIGNALS:
 
 private:
 
-    AlbumsDBJobInfo *m_jobInfo;
+    AlbumsDBJobInfo* m_jobInfo;
 };
 
 // ----------------------------------------------
@@ -84,7 +89,7 @@ class DatesJob : public DBJob
 
 public:
 
-    DatesJob(DatesDBJobInfo *jobInfo);
+    DatesJob(DatesDBJobInfo* const jobInfo);
     ~DatesJob();
 
 protected:
@@ -97,7 +102,7 @@ Q_SIGNALS:
 
 private:
 
-    DatesDBJobInfo *m_jobInfo;
+    DatesDBJobInfo* m_jobInfo;
 };
 
 // ----------------------------------------------
@@ -108,7 +113,7 @@ class GPSJob : public DBJob
 
 public:
 
-    GPSJob(GPSDBJobInfo *jobInfo);
+    GPSJob(GPSDBJobInfo* const jobInfo);
     ~GPSJob();
 
 protected:
@@ -121,7 +126,7 @@ Q_SIGNALS:
 
 private:
 
-    GPSDBJobInfo *m_jobInfo;
+    GPSDBJobInfo* m_jobInfo;
 };
 
 // ----------------------------------------------
@@ -132,7 +137,7 @@ class TagsJob : public DBJob
 
 public:
 
-    TagsJob(TagsDBJobInfo *jobInfo);
+    TagsJob(TagsDBJobInfo* const jobInfo);
     ~TagsJob();
 
 protected:
@@ -146,7 +151,7 @@ Q_SIGNALS:
 
 private:
 
-    TagsDBJobInfo *m_jobInfo;
+    TagsDBJobInfo* m_jobInfo;
 };
 
 // ----------------------------------------------
@@ -157,7 +162,7 @@ class SearchesJob : public DBJob
 
 public:
 
-    SearchesJob(SearchesDBJobInfo *jobInfo);
+    SearchesJob(SearchesDBJobInfo* const jobInfo);
     ~SearchesJob();
 
 Q_SIGNALS:
@@ -171,9 +176,8 @@ protected:
 
 private:
 
-    SearchesDBJobInfo *m_jobInfo;
+    SearchesDBJobInfo* m_jobInfo;
 };
-
 
 } // namespace Digikam
 

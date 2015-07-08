@@ -23,10 +23,12 @@
 
 #include "dbjob.h"
 
-// KDCraw includes
+// Libkdcraw includes
+
 #include "KDCRAW/RActionJob"
 
-// Local Includes
+// Local includes
+
 #include "databaseaccess.h"
 #include "databaseparameters.h"
 #include "albumdb.h"
@@ -50,7 +52,7 @@ DBJob::~DBJob()
 
 // ----------------------------------------------
 
-AlbumsJob::AlbumsJob(AlbumsDBJobInfo *jobInfo)
+AlbumsJob::AlbumsJob(AlbumsDBJobInfo* const jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -83,7 +85,7 @@ void AlbumsJob::run()
 
 // ----------------------------------------------
 
-DatesJob::DatesJob(DatesDBJobInfo *jobInfo)
+DatesJob::DatesJob(DatesDBJobInfo* const jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -116,7 +118,7 @@ void DatesJob::run()
 
 // ----------------------------------------------
 
-GPSJob::GPSJob(GPSDBJobInfo *jobInfo)
+GPSJob::GPSJob(GPSDBJobInfo* const jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -161,7 +163,7 @@ void GPSJob::run()
 
 // ----------------------------------------------
 
-TagsJob::TagsJob(TagsDBJobInfo *jobInfo)
+TagsJob::TagsJob(TagsDBJobInfo* const jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -213,12 +215,13 @@ void TagsJob::run()
         // finish sending
         receiver.sendData();
     }
+
     emit signalDone();
 }
 
 // ----------------------------------------------
 
-SearchesJob::SearchesJob(SearchesDBJobInfo *jobInfo)
+SearchesJob::SearchesJob(SearchesDBJobInfo* const jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -293,6 +296,7 @@ void SearchesJob::run()
                                       m_jobInfo->threshold,
                                       &observer);
     }
+
     emit signalDone();
 }
 
