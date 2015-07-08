@@ -33,11 +33,6 @@
 #include "imageinfo.h"
 #include "albummanager.h"
 
-namespace KIO
-{
-class Job;
-}
-
 namespace Digikam
 {
 

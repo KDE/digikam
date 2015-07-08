@@ -31,10 +31,6 @@
 
 #include <QString>
 
-// KDE includes
-
-#include <kio/job.h>
-
 // Local includes
 
 #include "digikam_export.h"

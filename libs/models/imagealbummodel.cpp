@@ -28,10 +28,6 @@
 
 #include <QTimer>
 
-// KDE includes
-
-#include <kio/job.h>
-
 // Local includes
 
 #include "digikam_debug.h"

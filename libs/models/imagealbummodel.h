@@ -30,12 +30,6 @@
 #include "imagethumbnailmodel.h"
 #include "album.h"
 
-namespace KIO
-{
-class Job;
-}
-class KJob;
-
 namespace Digikam
 {
 

@@ -31,10 +31,6 @@
 #include <QString>
 #include <QList>
 
-// KDE includes
-
-#include <kio/slavebase.h>
-
 // Local includes
 
 #include "digikam_export.h"

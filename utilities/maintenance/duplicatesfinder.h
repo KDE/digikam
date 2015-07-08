@@ -30,10 +30,6 @@
 #include <QString>
 #include <QObject>
 
-// KDE includes
-
-#include <kjob.h>
-
 // Local includes
 
 #include "album.h"

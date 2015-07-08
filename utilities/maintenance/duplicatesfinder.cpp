@@ -44,8 +44,6 @@
 #include "dbjobsthread.h"
 #include "dbjobsmanager.h"
 
-using namespace KIO;
-
 namespace Digikam
 {
 

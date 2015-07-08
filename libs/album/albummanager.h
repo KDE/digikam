@@ -46,13 +46,6 @@
 
 class QDate;
 
-class KJob;
-
-namespace KIO
-{
-    class Job;
-}
-
 namespace Digikam
 {
 
