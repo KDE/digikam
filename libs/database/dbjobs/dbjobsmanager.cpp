@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "dbjobsmanager.h"
-
 #include "dbjobsthread.h"
 #include "dbjobinfo.h"
 
@@ -48,50 +47,50 @@ DBJobsManager::~DBJobsManager()
 {
 }
 
-DBJobsManager *DBJobsManager::instance()
+DBJobsManager* DBJobsManager::instance()
 {
     return &creator->object;
 }
 
-AlbumsDBJobsThread *DBJobsManager::startAlbumsJobThread(AlbumsDBJobInfo *jInfo)
+AlbumsDBJobsThread* DBJobsManager::startAlbumsJobThread(AlbumsDBJobInfo* const jInfo)
 {
-    AlbumsDBJobsThread *thread = new AlbumsDBJobsThread(this);
+    AlbumsDBJobsThread* const thread = new AlbumsDBJobsThread(this);
     thread->albumsListing(jInfo);
     thread->start();
 
     return thread;
 }
 
-DatesDBJobsThread* DBJobsManager::startDatesJobThread(DatesDBJobInfo *jInfo)
+DatesDBJobsThread* DBJobsManager::startDatesJobThread(DatesDBJobInfo* const jInfo)
 {
-    DatesDBJobsThread *thread = new DatesDBJobsThread(this);
+    DatesDBJobsThread* const thread = new DatesDBJobsThread(this);
     thread->datesListing(jInfo);
     thread->start();
 
     return thread;
 }
 
-TagsDBJobsThread *DBJobsManager::startTagsJobThread(TagsDBJobInfo *jInfo)
+TagsDBJobsThread* DBJobsManager::startTagsJobThread(TagsDBJobInfo* const jInfo)
 {
-    TagsDBJobsThread *thread = new TagsDBJobsThread(this);
+    TagsDBJobsThread* const thread = new TagsDBJobsThread(this);
     thread->tagsListing(jInfo);
     thread->start();
 
     return thread;
 }
 
-SearchesDBJobsThread *DBJobsManager::startSearchesJobThread(SearchesDBJobInfo *jInfo)
+SearchesDBJobsThread* DBJobsManager::startSearchesJobThread(SearchesDBJobInfo* const jInfo)
 {
-    SearchesDBJobsThread *thread = new SearchesDBJobsThread(this);
+    SearchesDBJobsThread* const thread = new SearchesDBJobsThread(this);
     thread->searchesListing(jInfo);
     thread->start();
 
     return thread;
 }
 
-GPSDBJobsThread *DBJobsManager::startGPSJobThread(GPSDBJobInfo *jInfo)
+GPSDBJobsThread* DBJobsManager::startGPSJobThread(GPSDBJobInfo* const jInfo)
 {
-    GPSDBJobsThread *thread = new GPSDBJobsThread(this);
+    GPSDBJobsThread* const thread = new GPSDBJobsThread(this);
     thread->GPSListing(jInfo);
     thread->start();
 

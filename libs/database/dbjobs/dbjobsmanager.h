@@ -24,7 +24,12 @@
 #ifndef DBJOBSMANAGER_H
 #define DBJOBSMANAGER_H
 
+// Qt includes
+
 #include <QObject>
+
+// Local includes
+
 #include "dbjobinfo.h"
 #include "dbjobsthread.h"
 
@@ -42,13 +47,14 @@ public:
 
     static DBJobsManager* instance();
 
-    GPSDBJobsThread*      startGPSJobThread(GPSDBJobInfo *jInfo);
-    TagsDBJobsThread*     startTagsJobThread(TagsDBJobInfo *jInfo);
-    DatesDBJobsThread*    startDatesJobThread(DatesDBJobInfo *jInfo);
-    AlbumsDBJobsThread*   startAlbumsJobThread(AlbumsDBJobInfo *jInfo);
-    SearchesDBJobsThread* startSearchesJobThread(SearchesDBJobInfo *jInfo);
+    GPSDBJobsThread*      startGPSJobThread(GPSDBJobInfo* const jInfo);
+    TagsDBJobsThread*     startTagsJobThread(TagsDBJobInfo* const jInfo);
+    DatesDBJobsThread*    startDatesJobThread(DatesDBJobInfo* const jInfo);
+    AlbumsDBJobsThread*   startAlbumsJobThread(AlbumsDBJobInfo* const jInfo);
+    SearchesDBJobsThread* startSearchesJobThread(SearchesDBJobInfo* const jInfo);
 
 private:
+
     friend class DBJobsManagerCreator;
 };
 
