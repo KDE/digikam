@@ -52,7 +52,7 @@ QList<QString> &DBJobsThread::errorsList()
 void DBJobsThread::connectFinishAndErrorSignals(DBJob* const j)
 {
     connect(j, SIGNAL(signalDone()),
-            this, SLOT(finished()));
+            this, SIGNAL(finished()));
 
     connect(j, SIGNAL(error(QString)),
             this, SLOT(error(QString)));
