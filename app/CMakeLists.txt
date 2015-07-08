@@ -82,8 +82,6 @@ target_link_libraries(digikamcore
 
 )
 
-#add_dependencies(digikamcore digikam-gitversion) # needed by pngloader. TODO extraction may speed-up compilation of dimg and its dependents
-
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::Kipi)
 endif()
@@ -133,24 +131,8 @@ if(KF5KFace_FOUND)
 endif()
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
-# digiKam GUI begins here
 
-include_directories(
-    date/
-    dragdrop/
-    items/
-    items/overlays/
-    fileaction/
-    views/
-    views/tableview/
-    filters/
-    utils/
-    tags/
-    tags/tagsmanager/
-    tags/tagsmanager/models/
-    main/
-    ${CMAKE_CURRENT_BINARY_DIR}/app/utils # for qt5_add_dbus_adaptor adaptor, TODO
-)
+# digiKam GUI begins here
 
 qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
@@ -263,7 +245,7 @@ set(digikam_SRCS
 )
 
 # this is only required by Win & OSX
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/hi*-apps-digikam.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/*-apps-digikam.png")
 ecm_add_app_icon(digikam_SRCS ICONS ${ICONS_SRCS})
 
 set(DIGIKAM_OBJECTS

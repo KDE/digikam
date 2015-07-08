@@ -131,7 +131,7 @@ target_link_libraries(digikamdatabase
 
                       PRIVATE
                       digikamcore
-                      baloowrap
+
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
@@ -154,10 +154,9 @@ if(KF5KGeoMap_FOUND)
     target_link_libraries(digikamdatabase PRIVATE ${KF5KGeoMap_LIBRARIES})
 endif()
 
-if(Baloo_FOUND) # circular linking, because we need baloowrap.h path.
+if(${KFILEMETADATA_FOUND})
     target_link_libraries(digikamdatabase PRIVATE baloowrap)
 endif()
-
 
 set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 

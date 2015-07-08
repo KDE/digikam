@@ -420,12 +420,6 @@ void TableViewModel::removeColumnAt(const int columnIndex)
 
 TableViewColumn* TableViewModel::getColumnObject(const int columnIndex)
 {
-    /// @todo Debug output to find OSX crash
-    if (columnIndex>=d->columnObjects.count())
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG)<<"------ CRASH AHEAD: columnObjects.count(): "<<d->columnObjects.count()<<", columnIndex: "<<columnIndex;
-    }
-
     return d->columnObjects.at(columnIndex);
 }
 

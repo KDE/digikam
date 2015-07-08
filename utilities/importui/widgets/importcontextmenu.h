@@ -52,9 +52,9 @@ public:
 
 Q_SIGNALS:
 
-    void signalAssignTag(int);
-    void signalRemoveTag(int);
-    void signalPopupTagsView();
+    //void signalAssignTag(int);
+    //void signalRemoveTag(int);
+  //  void signalPopupTagsView();
     void signalAssignPickLabel(int);
     void signalAssignColorLabel(int);
     void signalAssignRating(int);

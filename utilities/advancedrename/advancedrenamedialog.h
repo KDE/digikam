@@ -59,8 +59,8 @@ public:
 
 public:
 
-    explicit AdvancedRenameListItem(QTreeWidget* view);
-    AdvancedRenameListItem(QTreeWidget* view, const QUrl& info);
+    explicit AdvancedRenameListItem(QTreeWidget* const view);
+    AdvancedRenameListItem(QTreeWidget* const view, const QUrl& info);
     virtual ~AdvancedRenameListItem();
 
     void setImageUrl(const QUrl& url);
@@ -97,7 +97,7 @@ class AdvancedRenameDialog : public QDialog
 
 public:
 
-    explicit AdvancedRenameDialog(QWidget* parent = 0);
+    explicit AdvancedRenameDialog(QWidget* const parent = 0);
     ~AdvancedRenameDialog();
 
     NewNamesList newNames() const;
