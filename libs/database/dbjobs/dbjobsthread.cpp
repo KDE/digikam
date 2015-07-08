@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "dbjobsthread.h"
-
 #include "databaseaccess.h"
 #include "dbjobinfo.h"
 #include "dbjob.h"
@@ -50,7 +49,7 @@ QList<QString> &DBJobsThread::errorsList()
     return m_errorsList;
 }
 
-void DBJobsThread::connectFinishAndErrorSignals(DBJob *j)
+void DBJobsThread::connectFinishAndErrorSignals(DBJob* const j)
 {
     connect(j, SIGNAL(signalDone()),
             this, SLOT(finished()));
@@ -66,7 +65,7 @@ void DBJobsThread::error(const QString &errString)
 
 // -------------------------------------------------
 
-AlbumsDBJobsThread::AlbumsDBJobsThread(QObject *const parent)
+AlbumsDBJobsThread::AlbumsDBJobsThread(QObject* const parent)
     : DBJobsThread(parent)
 {
 }
@@ -75,16 +74,16 @@ AlbumsDBJobsThread::~AlbumsDBJobsThread()
 {
 }
 
-void AlbumsDBJobsThread::albumsListing(AlbumsDBJobInfo *info)
+void AlbumsDBJobsThread::albumsListing(AlbumsDBJobInfo* const info)
 {
-    AlbumsJob *j = new AlbumsJob(info);
+    AlbumsJob* const j = new AlbumsJob(info);
 
     connectFinishAndErrorSignals(j);
 
     if(info->folders)
     {
-        connect(j, SIGNAL(foldersData(QMap<int,int>)),
-                this, SIGNAL(foldersData(QMap<int,int>)));
+        connect(j, SIGNAL(foldersData(QMap<int, int>)),
+                this, SIGNAL(foldersData(QMap<int, int>)));
     }
     else
     {
@@ -100,7 +99,7 @@ void AlbumsDBJobsThread::albumsListing(AlbumsDBJobInfo *info)
 
 // -------------------------------------------------
 
-TagsDBJobsThread::TagsDBJobsThread(QObject *const parent)
+TagsDBJobsThread::TagsDBJobsThread(QObject* const parent)
     : DBJobsThread(parent)
 {
 }
@@ -109,21 +108,21 @@ TagsDBJobsThread::~TagsDBJobsThread()
 {
 }
 
-void TagsDBJobsThread::tagsListing(TagsDBJobInfo *info)
+void TagsDBJobsThread::tagsListing(TagsDBJobInfo* const info)
 {
-    TagsJob *j = new TagsJob(info);
+    TagsJob* const j = new TagsJob(info);
 
     connectFinishAndErrorSignals(j);
 
     if(info->folders)
     {
-        connect(j, SIGNAL(foldersData(QMap<int,int>)),
-                this, SIGNAL(foldersData(QMap<int,int>)));
+        connect(j, SIGNAL(foldersData(QMap<int, int>)),
+                this, SIGNAL(foldersData(QMap<int, int>)));
     }
     else if(info->faceFolders)
     {
-        connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),
-                this, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)));
+        connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)),
+                this, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)));
     }
     else
     {
@@ -139,7 +138,7 @@ void TagsDBJobsThread::tagsListing(TagsDBJobInfo *info)
 
 // -------------------------------------------------
 
-DatesDBJobsThread::DatesDBJobsThread(QObject *const parent)
+DatesDBJobsThread::DatesDBJobsThread(QObject* const parent)
     : DBJobsThread(parent)
 {
 }
@@ -148,21 +147,21 @@ DatesDBJobsThread::~DatesDBJobsThread()
 {
 }
 
-void DatesDBJobsThread::datesListing(DatesDBJobInfo *info)
+void DatesDBJobsThread::datesListing(DatesDBJobInfo* const info)
 {
-    DatesJob *j = new DatesJob(info);
+    DatesJob* const j = new DatesJob(info);
 
     connectFinishAndErrorSignals(j);
 
     if(info->folders)
     {
-        connect(j, SIGNAL(foldersData(const QMap<QDateTime,int> &)),
-                this, SIGNAL(foldersData(const QMap<QDateTime,int> &)));
+        connect(j, SIGNAL(foldersData(const QMap<QDateTime, int>&)),
+                this, SIGNAL(foldersData(const QMap<QDateTime, int>&)));
     }
     else
     {
-        connect(j, SIGNAL(data(const QList<ImageListerRecord> &)),
-                this, SIGNAL(data(const QList<ImageListerRecord> &)));
+        connect(j, SIGNAL(data(const QList<ImageListerRecord>&)),
+                this, SIGNAL(data(const QList<ImageListerRecord>&)));
     }
 
     RJobCollection collection;
@@ -173,7 +172,7 @@ void DatesDBJobsThread::datesListing(DatesDBJobInfo *info)
 
 // -------------------------------------------------
 
-GPSDBJobsThread::GPSDBJobsThread(QObject * const parent)
+GPSDBJobsThread::GPSDBJobsThread(QObject* const parent)
     : DBJobsThread(parent)
 {
 }
@@ -182,9 +181,9 @@ GPSDBJobsThread::~GPSDBJobsThread()
 {
 }
 
-void GPSDBJobsThread::GPSListing(GPSDBJobInfo *info)
+void GPSDBJobsThread::GPSListing(GPSDBJobInfo* const info)
 {
-    GPSJob *j = new GPSJob(info);
+    GPSJob* const j = new GPSJob(info);
 
     connectFinishAndErrorSignals(j);
 
@@ -207,7 +206,7 @@ void GPSDBJobsThread::GPSListing(GPSDBJobInfo *info)
 
 // -------------------------------------------------
 
-SearchesDBJobsThread::SearchesDBJobsThread(QObject * const parent)
+SearchesDBJobsThread::SearchesDBJobsThread(QObject* const parent)
     : DBJobsThread(parent)
 {
 }
@@ -216,9 +215,9 @@ SearchesDBJobsThread::~SearchesDBJobsThread()
 {
 }
 
-void SearchesDBJobsThread::searchesListing(SearchesDBJobInfo *info)
+void SearchesDBJobsThread::searchesListing(SearchesDBJobInfo* const info)
 {
-    SearchesJob *j = new SearchesJob(info);
+    SearchesJob* const j = new SearchesJob(info);
 
     connectFinishAndErrorSignals(j);
 

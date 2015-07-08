@@ -24,7 +24,7 @@
 #ifndef DBJOBSTHREAD_H
 #define DBJOBSTHREAD_H
 
-// KDCraw Includes
+// Libkdcraw Includes
 
 #include "KDCRAW/RActionThreadBase"
 
@@ -57,16 +57,16 @@ public:
 
 protected:
 
-    void connectFinishAndErrorSignals(DBJob *j);
+    void connectFinishAndErrorSignals(DBJob* const j);
 
 public Q_SLOTS:
 
-    void error(const QString &errString);
+    void error(const QString& errString);
 
 Q_SIGNALS:
 
     void finished();
-    void data(const QList<ImageListerRecord> &records);
+    void data(const QList<ImageListerRecord>& records);
 
 private:
 
@@ -81,15 +81,15 @@ class AlbumsDBJobsThread : public DBJobsThread
 
 public:
 
-    explicit AlbumsDBJobsThread(QObject *const parent);
+    explicit AlbumsDBJobsThread(QObject* const parent);
     ~AlbumsDBJobsThread();
 
-    void albumsListing(AlbumsDBJobInfo *info);
+    void albumsListing(AlbumsDBJobInfo* const info);
 
 Q_SIGNALS:
 
-    void foldersData(const QMap<int, int> &);
-    void faceFoldersData(const QMap<QString, QMap<int, int> > &);
+    void foldersData(const QMap<int, int>&);
+    void faceFoldersData(const QMap<QString, QMap<int, int> >&);
 };
 
 // ---------------------------------------------
@@ -100,15 +100,15 @@ class TagsDBJobsThread : public DBJobsThread
 
 public:
 
-    explicit TagsDBJobsThread(QObject *const parent);
+    explicit TagsDBJobsThread(QObject* const parent);
     ~TagsDBJobsThread();
 
-    void tagsListing(TagsDBJobInfo *info);
+    void tagsListing(TagsDBJobInfo* const info);
 
 Q_SIGNALS:
 
-    void foldersData(const QMap<int, int> &);
-    void faceFoldersData(const QMap<QString, QMap<int, int> > &);
+    void foldersData(const QMap<int, int>&);
+    void faceFoldersData(const QMap<QString, QMap<int, int> >&);
 };
 
 // ---------------------------------------------
@@ -119,14 +119,14 @@ class DatesDBJobsThread : public DBJobsThread
 
 public:
 
-    explicit DatesDBJobsThread(QObject *const parent);
+    explicit DatesDBJobsThread(QObject* const parent);
     ~DatesDBJobsThread();
 
-    void datesListing(DatesDBJobInfo *info);
+    void datesListing(DatesDBJobInfo* const info);
 
 Q_SIGNALS:
 
-    void foldersData(const QMap<QDateTime,int> &);
+    void foldersData(const QMap<QDateTime, int>&);
 };
 
 // ---------------------------------------------
@@ -140,7 +140,7 @@ public:
     explicit SearchesDBJobsThread(QObject* const parent);
     ~SearchesDBJobsThread();
 
-    void searchesListing(SearchesDBJobInfo *info);
+    void searchesListing(SearchesDBJobInfo* const info);
 
 Q_SIGNALS:
 
@@ -159,11 +159,11 @@ public:
     explicit GPSDBJobsThread(QObject* const parent);
     ~GPSDBJobsThread();
 
-    void GPSListing(GPSDBJobInfo *info);
+    void GPSListing(GPSDBJobInfo* info);
 
 Q_SIGNALS:
 
-    void directQueryData(const QList<QVariant> & data);
+    void directQueryData(const QList<QVariant>& data);
 };
 
 } // namespace Digikam

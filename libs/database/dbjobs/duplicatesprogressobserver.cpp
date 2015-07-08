@@ -22,13 +22,12 @@
  * ============================================================ */
 
 #include "duplicatesprogressobserver.h"
-
 #include "dbjob.h"
 
 namespace Digikam
 {
 
-DuplicatesProgressObserver::DuplicatesProgressObserver(SearchesJob *thread)
+DuplicatesProgressObserver::DuplicatesProgressObserver(SearchesJob* const thread)
     : m_job(thread)
 {
 }

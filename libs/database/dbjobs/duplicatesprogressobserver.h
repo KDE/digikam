@@ -37,7 +37,7 @@ class DuplicatesProgressObserver : public HaarProgressObserver
 
 public:
 
-    DuplicatesProgressObserver(SearchesJob *thread);
+    DuplicatesProgressObserver(SearchesJob* const thread);
     ~DuplicatesProgressObserver();
 
     virtual void totalNumberToScan(int number);
@@ -45,7 +45,7 @@ public:
 
 private:
 
-    SearchesJob *m_job;
+    SearchesJob* m_job;
 };
 
 } // namespace Digikam
