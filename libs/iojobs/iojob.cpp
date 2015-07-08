@@ -230,17 +230,26 @@ void RenameFileJob::run()
 
     QUrl newUrl = QUrl(m_srcToRename.adjusted(QUrl::RemoveFilename).toLocalFile() + m_newName);
 
+    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url: " << newUrl << "\n"
+                               << "Destination Url path: " << newUrl.path();
+
     if(QFileInfo(newUrl.path()).exists())
     {
+        qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
         error(i18n("Image with the same name %1 already there", m_newName));
         emit signalDone();
         return;
     }
 
-    QFile file(m_srcToRename.toLocalFile());
+    QFile file(m_srcToRename.path());
 
-    if(!file.rename(m_newName))
+    qCDebug(DIGIKAM_IOJOB_LOG) << "Trying to rename"
+                               << m_srcToRename.toLocalFile() << "\nto "
+                               << newUrl.path();
+
+    if(!file.rename(newUrl.path()))
     {
+        qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
         error(i18n("Image %1 could not be renamed", m_srcToRename.path()));
         emit signalDone();
         return;
