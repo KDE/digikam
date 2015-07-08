@@ -24,7 +24,12 @@
 #ifndef DBJOBINFO_H
 #define DBJOBINFO_H
 
+// Qt includes
+
 #include <QString>
+
+// Local includes
+
 #include "databaseurl.h"
 
 namespace Digikam
@@ -33,7 +38,9 @@ namespace Digikam
 class DBJobInfo
 {
 public:
-    enum Type {
+
+    enum Type
+    {
         AlbumsJob=0,
         TagsJob,
         DatesJob,
@@ -41,16 +48,21 @@ public:
         GPSJob
     };
 
+public:
+
     DBJobInfo(Type jType);
     DBJobInfo();
 
-    Type        type();
+    Type type();
+
+public:
 
     bool folders;
     bool listAvailableImagesOnly;
     bool recursive;
 
 private:
+
     Type jobType;
 };
 
@@ -59,7 +71,10 @@ private:
 class AlbumsDBJobInfo : public DBJobInfo
 {
 public:
+
     AlbumsDBJobInfo();
+
+public:
 
     int     albumRootId;
     QString album;
@@ -70,7 +85,10 @@ public:
 class TagsDBJobInfo : public DBJobInfo
 {
 public:
+
     TagsDBJobInfo();
+
+public:
 
     bool       faceFolders;
     QString    specialTag;
@@ -82,7 +100,10 @@ public:
 class GPSDBJobInfo : public DBJobInfo
 {
 public:
+
     GPSDBJobInfo();
+
+public:
 
     bool  wantDirectQuery;
     qreal lat1;
@@ -96,8 +117,11 @@ public:
 class SearchesDBJobInfo : public DBJobInfo
 {
 public:
+
     SearchesDBJobInfo();
 
+public:
+    
     bool       duplicates;
     int        searchId;
     double     threshold;
@@ -110,11 +134,15 @@ public:
 class DatesDBJobInfo : public DBJobInfo
 {
 public:
+
     DatesDBJobInfo();
+
+public:
 
     QDate startDate;
     QDate endDate;
 };
 
-}
+} // namespace Digikam
+
 #endif // DBJOBINFO_H
