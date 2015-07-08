@@ -473,7 +473,7 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
         for (int j = 0 ; runningFlag() && (j < valsy.count()-1) ; ++j)
         {
             prm.start = valsy[j];
-            prm.stop  = valsy[j];
+            prm.stop  = valsy[j + 1];
             tasks.append(QtConcurrent::run(this,
                                            &LocalContrastFilter::inplaceBlurYMultithreaded,
                                            prm
@@ -488,7 +488,7 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
         for (int j = 0 ; runningFlag() && (j < valsx.count()-1) ; ++j)
         {
             prm.start = valsx[j];
-            prm.stop  = valsx[j];
+            prm.stop  = valsx[j + 1];
             tasks.append(QtConcurrent::run(this,
                                            &LocalContrastFilter::inplaceBlurXMultithreaded,
                                            prm

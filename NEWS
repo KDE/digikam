@@ -92,5 +92,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 085 ==> 220194 - Moving or copying photos crashes digiKam.
 086 ==> 192119 - Thumbnail orientation is always landscape even with portrait images.
 087 ==> 191211 - digiKam crashes and causes 'signal 6 (SIGBART)' when detecting new images.
-088 ==> 
-
+088 ==> 337729 - Blur parameter has no effect in Local Contrast tool.
+089 ==> 
