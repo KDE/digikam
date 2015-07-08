@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "iojobsthread.h"
-
 #include "iojob.h"
 #include "imageinfo.h"
 #include "dnotificationwrapper.h"
@@ -52,8 +51,9 @@ public:
     QList<QString> errorsList;
 };
 
-IOJobsThread::IOJobsThread(QObject *const parent)
-    : RActionThreadBase(parent), d(new Private)
+IOJobsThread::IOJobsThread(QObject* const parent)
+    : RActionThreadBase(parent),
+      d(new Private)
 {
 }
 
@@ -62,13 +62,13 @@ IOJobsThread::~IOJobsThread()
     delete d;
 }
 
-void IOJobsThread::copy(const QList<QUrl> &srcFiles, const QUrl destAlbum)
+void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
 {
     RJobCollection collection;
 
-    foreach (const QUrl &url, srcFiles)
+    foreach (const QUrl& url, srcFiles)
     {
-        CopyJob *j = new CopyJob(url, destAlbum, false);
+        CopyJob* const j = new CopyJob(url, destAlbum, false);
 
         connect(j, SIGNAL(error(QString)),
                 this, SLOT(error(QString)));
@@ -82,13 +82,13 @@ void IOJobsThread::copy(const QList<QUrl> &srcFiles, const QUrl destAlbum)
     appendJobs(collection);
 }
 
-void IOJobsThread::move(const QList<QUrl> &srcFiles, const QUrl destAlbum)
+void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
 {
     RJobCollection collection;
 
-    foreach (const QUrl &url, srcFiles)
+    foreach (const QUrl& url, srcFiles)
     {
-        CopyJob *j = new CopyJob(url, destAlbum, true);
+        CopyJob* const j = new CopyJob(url, destAlbum, true);
 
         connect(j, SIGNAL(error(QString)),
                 this, SLOT(error(QString)));
@@ -102,13 +102,13 @@ void IOJobsThread::move(const QList<QUrl> &srcFiles, const QUrl destAlbum)
     appendJobs(collection);
 }
 
-void IOJobsThread::del(const QList<QUrl> &srcsToDelete, bool useTrash)
+void IOJobsThread::del(const QList<QUrl>& srcsToDelete, bool useTrash)
 {
     RJobCollection collection;
 
-    foreach (const QUrl &url, srcsToDelete)
+    foreach (const QUrl& url, srcsToDelete)
     {
-        DeleteJob *j = new DeleteJob(url, useTrash);
+        DeleteJob* const j = new DeleteJob(url, useTrash);
 
         connect(j, SIGNAL(error(QString)),
                 this, SLOT(error(QString)));
@@ -122,10 +122,10 @@ void IOJobsThread::del(const QList<QUrl> &srcsToDelete, bool useTrash)
     appendJobs(collection);
 }
 
-void IOJobsThread::renameFile(const QUrl &srcToRename, const QUrl &newName)
+void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
 {
     RJobCollection collection;
-    RenameFileJob *j = new RenameFileJob(srcToRename, newName);
+    RenameFileJob* const j = new RenameFileJob(srcToRename, newName);
 
     connect(j, SIGNAL(error(QString)),
             this, SLOT(error(QString)));
@@ -139,7 +139,7 @@ void IOJobsThread::renameFile(const QUrl &srcToRename, const QUrl &newName)
             this, SIGNAL(renamed(QUrl,QUrl)));
 
     d->isRenameThread = true;
-    d->oldUrl = srcToRename;
+    d->oldUrl         = srcToRename;
 
     collection.insert(j, 0);
     appendJobs(collection);
@@ -181,7 +181,7 @@ bool IOJobsThread::isKeepingErrors()
     return d->keepErrors;
 }
 
-QList<QString> &IOJobsThread::errorsList()
+QList<QString>& IOJobsThread::errorsList()
 {
     return d->errorsList;
 }
@@ -192,7 +192,7 @@ void IOJobsThread::oneJobFinished()
         emit finished();
 }
 
-void IOJobsThread::error(const QString &errString)
+void IOJobsThread::error(const QString& errString)
 {
     d->errorsList.append(errString);
 }

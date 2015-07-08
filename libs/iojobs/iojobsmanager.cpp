@@ -41,41 +41,41 @@ IOJobsManager::IOJobsManager()
 {
 }
 
-IOJobsManager *IOJobsManager::instance()
+IOJobsManager* IOJobsManager::instance()
 {
-    return &creator->object;
+    return& creator->object;
 }
 
-IOJobsThread *IOJobsManager::startCopy(const QList<QUrl> &srcsList, const QUrl &destAlbum)
+IOJobsThread* IOJobsManager::startCopy(const QList<QUrl>& srcsList, const QUrl& destAlbum)
 {
-    IOJobsThread *thread = new IOJobsThread(this);
+    IOJobsThread* const thread = new IOJobsThread(this);
     thread->copy(srcsList, destAlbum);
     thread->start();
 
     return thread;
 }
 
-IOJobsThread *IOJobsManager::startMove(const QList<QUrl> &srcsList, const QUrl &destAlbum)
+IOJobsThread* IOJobsManager::startMove(const QList<QUrl>& srcsList, const QUrl& destAlbum)
 {
-    IOJobsThread *thread = new IOJobsThread(this);
+    IOJobsThread* const thread = new IOJobsThread(this);
     thread->move(srcsList, destAlbum);
     thread->start();
 
     return thread;
 }
 
-IOJobsThread *IOJobsManager::startDelete(const QList<QUrl> &filesToDelete, bool useTrash)
+IOJobsThread *IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool useTrash)
 {
-    IOJobsThread *thread = new IOJobsThread(this);
+    IOJobsThread* const thread = new IOJobsThread(this);
     thread->del(filesToDelete, useTrash);
     thread->start();
 
     return thread;
 }
 
-IOJobsThread *IOJobsManager::startRenameFile(const QUrl &srcToRename, const QUrl &newUrl)
+IOJobsThread *IOJobsManager::startRenameFile(const QUrl& srcToRename, const QUrl& newUrl)
 {
-    IOJobsThread *thread = new IOJobsThread(this);
+    IOJobsThread* const thread = new IOJobsThread(this);
     thread->renameFile(srcToRename, newUrl);
     thread->start();
 

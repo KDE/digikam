@@ -24,7 +24,12 @@
 #ifndef IOJOBSTHREAD_H
 #define IOJOBSTHREAD_H
 
-#include "KDCRAW/RActionThreadBase"
+// Libkdcraw includes
+
+#include <KDCRAW/RActionThreadBase>
+
+// Local includes
+
 #include "album.h"
 #include "iojob.h"
 #include "imageinfo.h"
@@ -40,13 +45,13 @@ class IOJobsThread : public RActionThreadBase
 
 public:
 
-    IOJobsThread(QObject *const parent);
+    IOJobsThread(QObject* const parent);
     ~IOJobsThread();
 
-    void copy(const QList<QUrl> &srcFiles, const QUrl destAlbum);
-    void move(const QList<QUrl> &srcFiles, const QUrl destAlbum);
-    void del(const QList<QUrl> &srcsToDelete, bool useTrash);
-    void renameFile(const QUrl &srcToRename, const QUrl &newName);
+    void copy(const QList<QUrl>& srcFiles, const QUrl destAlbum);
+    void move(const QList<QUrl>& srcFiles, const QUrl destAlbum);
+    void del(const QList<QUrl>& srcsToDelete, bool useTrash);
+    void renameFile(const QUrl& srcToRename, const QUrl& newName);
 
     bool isRenameThread();
     QUrl oldUrlToRename();
@@ -57,17 +62,17 @@ public:
     bool hasErrors();
     void setKeepErrors(bool keepErrors);
     bool isKeepingErrors();
-    QList<QString> &errorsList();
+    QList<QString>& errorsList();
 
 public Q_SLOTS:
 
     void oneJobFinished();
-    void error(const QString &errString);
+    void error(const QString& errString);
 
 Q_SIGNALS:
 
     void finished();
-    void renamed(const QUrl &oldUrl, const QUrl &newURl);
+    void renamed(const QUrl& oldUrl, const QUrl& newURl);
 
 private:
 

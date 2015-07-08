@@ -26,11 +26,11 @@
 
 // Qt includes
 
-#include "QUrl"
+#include <QUrl>
 
 // KDCraw includes
 
-#include "KDCRAW/RActionJob"
+#include <KDCRAW/RActionJob>
 
 using namespace KDcrawIface;
 
@@ -49,7 +49,7 @@ public:
 
 Q_SIGNALS:
 
-    void error(const QString &errMsg);
+    void error(const QString& errMsg);
 };
 
 // ---------------------------------------
@@ -60,12 +60,12 @@ class CopyJob : public IOJob
 
 public:
 
-    CopyJob(const QUrl &src, const QUrl &dest, bool isMove);
+    CopyJob(const QUrl& src, const QUrl& dest, bool isMove);
 
 protected:
 
     void run();
-    bool copyFolderRecursively(const QString &srcPath, const QString &dstPath);
+    bool copyFolderRecursively(const QString& srcPath, const QString& dstPath);
 
 private:
 
@@ -82,7 +82,7 @@ class DeleteJob : public IOJob
 
 public:
 
-    DeleteJob(const QUrl &srcToDelete, bool useTrash);
+    DeleteJob(const QUrl& srcToDelete, bool useTrash);
 
 protected:
 
@@ -102,11 +102,11 @@ class RenameFileJob : public IOJob
 
 public:
 
-    RenameFileJob(const QUrl &srcToRename, const QUrl &newName);
+    RenameFileJob(const QUrl& srcToRename, const QUrl& newName);
 
 Q_SIGNALS:
 
-    void signalRenamed(const QUrl &oldUrl, const QUrl &newUrl);
+    void signalRenamed(const QUrl& oldUrl, const QUrl& newUrl);
 
 protected:
 
@@ -114,8 +114,8 @@ protected:
 
 private:
 
-    QUrl    m_srcToRename;
-    QUrl    m_newUrl;
+    QUrl m_srcToRename;
+    QUrl m_newUrl;
 };
 
 } // namespace Digikam

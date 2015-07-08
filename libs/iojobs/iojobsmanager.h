@@ -24,8 +24,13 @@
 #ifndef IOJOBSMANAGER_H
 #define IOJOBSMANAGER_H
 
+// Qt includes
+
 #include <QObject>
 #include <QUrl>
+
+// Local includes
+
 #include "iojobsthread.h"
 #include "imageinfo.h"
 
@@ -36,14 +41,15 @@ class IOJobsManager : public QObject
 {
 
 public:
+
     IOJobsManager();
 
-    static IOJobsManager *instance();
+    static IOJobsManager* instance();
 
-    IOJobsThread *startCopy(const QList<QUrl> &srcsList, const QUrl &destAlbum);
-    IOJobsThread *startMove(const QList<QUrl> &srcsList, const QUrl &destAlbum);
-    IOJobsThread *startDelete(const QList<QUrl> &filesToDelete, bool useTrash = true);
-    IOJobsThread *startRenameFile(const QUrl &srcToRename, const QUrl &newUrl);
+    IOJobsThread* startCopy(const QList<QUrl>& srcsList, const QUrl& destAlbum);
+    IOJobsThread* startMove(const QList<QUrl>& srcsList, const QUrl& destAlbum);
+    IOJobsThread* startDelete(const QList<QUrl>& filesToDelete, bool useTrash = true);
+    IOJobsThread* startRenameFile(const QUrl& srcToRename, const QUrl& newUrl);
 
 private:
 
