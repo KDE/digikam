@@ -122,7 +122,7 @@ void IOJobsThread::del(const QList<QUrl> &srcsToDelete, bool useTrash)
     appendJobs(collection);
 }
 
-void IOJobsThread::renameFile(const QUrl &srcToRename, const QString &newName)
+void IOJobsThread::renameFile(const QUrl &srcToRename, const QUrl &newName)
 {
     RJobCollection collection;
     RenameFileJob *j = new RenameFileJob(srcToRename, newName);

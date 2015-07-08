@@ -215,6 +215,10 @@ void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
     newUrl.setPath(newUrl.path() + newName);
 
     PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Image Album: " << album->title();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "belongs to root?" << album->isRoot();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Image Album id?" << album->id();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Image info album root id?" << info.albumRootId();
 
     if (album)
     {
@@ -301,7 +305,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
             return;
         }
 
-        jobThread = IOJobsManager::instance()->startRenameFile(src.first(), dest.fileName());
+        jobThread = IOJobsManager::instance()->startRenameFile(src.first(), dest);
 
         connect(jobThread, SIGNAL(renamed(QUrl,QUrl)),
                 this, SLOT(slotRenamed(QUrl,QUrl)));

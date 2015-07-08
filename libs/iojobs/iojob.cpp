@@ -214,29 +214,27 @@ void DeleteJob::run()
 
 // --------------------------------------------
 
-RenameFileJob::RenameFileJob(const QUrl &srcToRename, const QString &newName)
+RenameFileJob::RenameFileJob(const QUrl &srcToRename, const QUrl &newUrl)
 {
     m_srcToRename = srcToRename;
-    m_newName     = newName;
+    m_newUrl      = newUrl;
 }
 
 void RenameFileJob::run()
 {   
-    if(m_newName.isEmpty())
+    if(m_newUrl.isEmpty())
     {
         emit signalDone();
         return;
     }
 
-    QUrl newUrl = QUrl(m_srcToRename.adjusted(QUrl::RemoveFilename).toLocalFile() + m_newName);
+    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url: " << m_newUrl << "\n"
+                               << "Destination Url path: " << m_newUrl.path();
 
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url: " << newUrl << "\n"
-                               << "Destination Url path: " << newUrl.path();
-
-    if(QFileInfo(newUrl.path()).exists())
+    if(QFileInfo(m_newUrl.path()).exists())
     {
         qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
-        error(i18n("Image with the same name %1 already there", m_newName));
+        error(i18n("Image with the same name %1 already there", m_newUrl.path()));
         emit signalDone();
         return;
     }
@@ -245,9 +243,9 @@ void RenameFileJob::run()
 
     qCDebug(DIGIKAM_IOJOB_LOG) << "Trying to rename"
                                << m_srcToRename.toLocalFile() << "\nto "
-                               << newUrl.path();
+                               << m_newUrl.path();
 
-    if(!file.rename(newUrl.path()))
+    if(!file.rename(m_newUrl.path()))
     {
         qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
         error(i18n("Image %1 could not be renamed", m_srcToRename.path()));
@@ -255,7 +253,7 @@ void RenameFileJob::run()
         return;
     }
 
-    emit signalRenamed(m_srcToRename, newUrl);
+    emit signalRenamed(m_srcToRename, m_newUrl);
     emit signalDone();
 }
 

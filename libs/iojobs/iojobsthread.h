@@ -46,7 +46,7 @@ public:
     void copy(const QList<QUrl> &srcFiles, const QUrl destAlbum);
     void move(const QList<QUrl> &srcFiles, const QUrl destAlbum);
     void del(const QList<QUrl> &srcsToDelete, bool useTrash);
-    void renameFile(const QUrl &srcToRename, const QString &newName);
+    void renameFile(const QUrl &srcToRename, const QUrl &newName);
 
     bool isRenameThread();
     QUrl oldUrlToRename();

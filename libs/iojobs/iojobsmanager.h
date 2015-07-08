@@ -26,7 +26,6 @@
 
 #include <QObject>
 #include <QUrl>
-#include "album.h"
 #include "iojobsthread.h"
 #include "imageinfo.h"
 
@@ -43,8 +42,8 @@ public:
 
     IOJobsThread *startCopy(const QList<QUrl> &srcsList, const QUrl &destAlbum);
     IOJobsThread *startMove(const QList<QUrl> &srcsList, const QUrl &destAlbum);
-    IOJobsThread *startDelete(const QList<QUrl>filesToDelete, bool useTrash = true);
-    IOJobsThread *startRenameFile(const QUrl &srcToRename, const QString &newName);
+    IOJobsThread *startDelete(const QList<QUrl> &filesToDelete, bool useTrash = true);
+    IOJobsThread *startRenameFile(const QUrl &srcToRename, const QUrl &newUrl);
 
 private:
 

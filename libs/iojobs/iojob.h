@@ -102,7 +102,7 @@ class RenameFileJob : public IOJob
 
 public:
 
-    RenameFileJob(const QUrl &srcToRename, const QString &newName);
+    RenameFileJob(const QUrl &srcToRename, const QUrl &newName);
 
 Q_SIGNALS:
 
@@ -115,7 +115,7 @@ protected:
 private:
 
     QUrl    m_srcToRename;
-    QString m_newName;
+    QUrl    m_newUrl;
 };
 
 } // namespace Digikam
