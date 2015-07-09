@@ -148,7 +148,7 @@ void AdvancedMetadataTab::slotAddNewNamespace()
     QStandardItem* item = new QStandardItem(text);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
     root->appendRow(item);
-    d->container.namespaceEntries.append(entry);
+    d->container.readTagNamespaces.append(entry);
 }
 
 void AdvancedMetadataTab::slotEditNamespace()
@@ -157,7 +157,7 @@ void AdvancedMetadataTab::slotEditNamespace()
     if(!d->namespaceView->currentIndex().isValid())
         return;
 
-    NamespaceEntry entry = d->container.namespaceEntries.at(d->namespaceView->currentIndex().row());
+    NamespaceEntry entry = d->container.readTagNamespaces.at(d->namespaceView->currentIndex().row());
 
 
     if (!NamespaceEditDlg::edit(qApp->activeWindow(), entry))
@@ -190,7 +190,7 @@ void AdvancedMetadataTab::setModelData()
     d->model->clear();
 
     QStandardItem* root = d->model->invisibleRootItem();
-    for(NamespaceEntry e : d->container.namespaceEntries)
+    for(NamespaceEntry e : d->container.readTagNamespaces)
     {
         QString text = e.namespaceName + QLatin1String(",") + i18n("Separator:") + e.separator;
         QStandardItem* item = new QStandardItem(text);

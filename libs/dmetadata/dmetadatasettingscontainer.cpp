@@ -50,11 +50,11 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
             KConfigGroup gr = myItems.group(element);
             NamespaceEntry ns(
                         element,
-                        (NamespaceEntry::Type)gr.readEntry("Type").toInt(),
+                        (NamespaceEntry::TagType)gr.readEntry("Type").toInt(),
                         gr.readEntry("separator"),
                         gr.readEntry("extraXml"));
 
-           namespaceEntries.append(ns);
+           readTagNamespaces.append(ns);
         }
 
     }
@@ -68,7 +68,7 @@ void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
     KConfigGroup namespacesGroup = group.group("namespaces");
 
-    for(NamespaceEntry e : namespaceEntries)
+    for(NamespaceEntry e : readTagNamespaces)
     {
         KConfigGroup tmp = namespacesGroup.group(e.namespaceName);
         tmp.writeEntry("Type",(int)e.tagPaths);
@@ -81,24 +81,36 @@ void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 
 void DMetadataSettingsContainer::defaultValues()
 {
-    this->namespaceEntries.clear();
+    this->readTagNamespaces.clear();
+    this->readCommentNamespaces.clear();
+    this->readRatingNamespaces.clear();
+    this->unifyReadWrite = true;
 
-    namespaceEntries.append(NamespaceEntry(QLatin1String("Xmp.digiKam.TagsList"),
+    // Default tag namespaces
+    readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.digiKam.TagsList"),
                                            NamespaceEntry::TAGPATH,
                                            QLatin1String("/"),
                                            QString()));
-    namespaceEntries.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
+    readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
                                            NamespaceEntry::TAGPATH,
                                            QLatin1String("/"),
                                            QString()));
-    namespaceEntries.append(NamespaceEntry(QLatin1String("Xmp.lr.hierarchicalSubject"),
+    readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.lr.hierarchicalSubject"),
                                            NamespaceEntry::TAGPATH,
                                            QLatin1String("|"),
                                            QString()));
-    namespaceEntries.append(NamespaceEntry(QLatin1String("Xmp.mediapro.CatalogSets"),
+    readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.mediapro.CatalogSets"),
                                            NamespaceEntry::TAGPATH,
                                            QLatin1String("|"),
                                            QString()));
+
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.xmp.Rating"), 1));
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.rating"), 1));
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.Rating"), 25));
+
+    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.dc.description")));
+    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.exif.UserComment")));
+    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.tiff.ImageDescription")));
 }
 
 }  // namespace Digikam

@@ -49,24 +49,58 @@ namespace Digikam
 class NamespaceEntry{
 
 public:
-    enum Type {TAG, TAGPATH};
+    enum TagType {TAG, TAGPATH};
+    enum NamespaceType {TAGS, RATING, COMMENT};
+
     NamespaceEntry(){}
-    NamespaceEntry(QString name, Type isPath, QString separator, QString extraXml)
+
+    /**
+     * @brief NamespaceEntry -constructor for tag type namespace
+     * @param name - namespace name
+     * @param isPath - namespace with keywords or full path
+     * @param separator - separator used for tag paths
+     * @param extraXml  - xml to format tags
+     */
+    NamespaceEntry(QString name, TagType isPath, QString separator, QString extraXml)
     {
         this->namespaceName = name;
         this->tagPaths = isPath;
         this->separator = separator;
         this->extraXml = extraXml;
+        this->nsType = TAGS;
+        this->convertRatio = -1;
     }
 
+    /**
+     * @brief NamespaceEntry -constructor to build a rating
+     * @param name - namespace name
+     * @param convertRatio - convert ration ex: 1:1 if namespace store 5 star rating
+     *                       or 25:1 if rating must be stored from 0-100
+     */
+    NamespaceEntry(QString name, int convertRatio)
+    {
+        this->namespaceName = name;
+        this->convertRatio  = convertRatio;
+        this->nsType = RATING;
+    }
+
+    /**
+     * @brief NamespaceEntry -constructor to build a comment
+     * @param name - namespace name
+     */
+    NamespaceEntry(QString name)
+    {
+        this->namespaceName = name;
+        this->nsType = COMMENT;
+    }
     ~NamespaceEntry(){}
 
-
-
     QString namespaceName;
-    Type    tagPaths;
+    TagType    tagPaths;
     QString separator;
     QString extraXml;
+    NamespaceType nsType;
+    int convertRatio;
 };
 
 /**
@@ -91,7 +125,14 @@ public:
      */
     void defaultValues();
 
-    QList<NamespaceEntry> namespaceEntries;
+    QList<NamespaceEntry> readTagNamespaces;
+    QList<NamespaceEntry> readRatingNamespaces;
+    QList<NamespaceEntry> readCommentNamespaces;
+
+    QList<NamespaceEntry> writeTagNamespaces;
+    QList<NamespaceEntry> writeRatingNamespaces;
+    QList<NamespaceEntry> writeCommentNamespaces;
+    bool unifyReadWrite;
 
 };
 
