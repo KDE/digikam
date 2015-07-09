@@ -51,6 +51,7 @@
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
 #include "iojobsmanager.h"
+#include "collectionmanager.h"
 
 namespace Digikam
 {
@@ -215,10 +216,6 @@ void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
     newUrl.setPath(newUrl.path() + newName);
 
     PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Image Album: " << album->title();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "belongs to root?" << album->isRoot();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Image Album id?" << album->id();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Image info album root id?" << info.albumRootId();
 
     if (album)
     {

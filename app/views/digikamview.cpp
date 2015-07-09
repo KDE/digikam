@@ -39,8 +39,6 @@
 #include <ktoolinvocation.h>
 #include <krun.h>
 
-#include <kio/statjob.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -85,6 +83,7 @@
 #include "thumbsgenerator.h"
 #include "albumlabelstreeview.h"
 #include "tagsactionmngr.h"
+#include "kiowrapper.h"
 
 #ifdef HAVE_VIDEOPLAYER
 #include "mediaplayerview.h"
@@ -1308,11 +1307,7 @@ void DigikamView::slotAlbumOpenInTerminal()
 
     QString dir(palbum->folderPath());
 
-    // If the given directory is not local, it can still be the URL of an
-    // ioslave using UDS_LOCAL_PATH which to be converted first.
-    KIO::StatJob* const job = KIO::mostLocalUrl(QUrl::fromLocalFile(dir), KIO::HideProgressInfo);
-    job->exec();
-    QUrl url = job->mostLocalUrl();
+    QUrl url = KIOWrapper::instance()->mostLocalUrl(QUrl::fromLocalFile(dir));
 
     //If the URL is local after the above conversion, set the directory.
     if (url.isLocalFile())

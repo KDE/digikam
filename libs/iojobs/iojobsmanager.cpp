@@ -64,7 +64,7 @@ IOJobsThread* IOJobsManager::startMove(const QList<QUrl>& srcsList, const QUrl& 
     return thread;
 }
 
-IOJobsThread *IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool useTrash)
+IOJobsThread* IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool useTrash)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->del(filesToDelete, useTrash);
@@ -73,7 +73,7 @@ IOJobsThread *IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool 
     return thread;
 }
 
-IOJobsThread *IOJobsManager::startRenameFile(const QUrl& srcToRename, const QUrl& newUrl)
+IOJobsThread* IOJobsManager::startRenameFile(const QUrl& srcToRename, const QUrl& newUrl)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->renameFile(srcToRename, newUrl);
