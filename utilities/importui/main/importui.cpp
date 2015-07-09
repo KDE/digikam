@@ -1645,7 +1645,8 @@ void ImportUI::slotUpdateDownloadName()
 
     d->view->setIconViewUpdatesEnabled(false);
 
-    bool noSelection          = d->view->selectedCamItemInfos().count() == 0;
+    QList<QUrl> selected      = d->view->selectedUrls();
+    bool hasNoSelection       = selected.count() == 0;
     CamItemInfoList list      = d->view->allItems();
     DownloadSettings settings = downloadSettings();
 
@@ -1656,7 +1657,7 @@ void ImportUI::slotUpdateDownloadName()
 
         QString newName = info.name;
 
-        if (noSelection || d->view->isSelected(info.url()))
+        if (hasNoSelection || selected.contains(info.url()))
         {
             newName = d->renameCustomizer->newName(info.name, info.ctime);
         }
@@ -1665,7 +1666,7 @@ void ImportUI::slotUpdateDownloadName()
         // is from cameracontroller.cpp moved here.
 
         if (settings.convertJpeg && info.mime == QLatin1String("image/jpeg") &&
-           (noSelection || d->view->isSelected(info.url())))
+           (hasNoSelection || selected.contains(info.url())))
         {
             QFileInfo     fi(newName);
             QString ext = fi.suffix();
@@ -1807,13 +1808,14 @@ void ImportUI::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSi
 {
     qint64 fSize = 0;  // Files size
     qint64 dSize = 0;  // Estimated space requires to download and process files.
+    
+    QList<QUrl> selected      = d->view->selectedUrls();
+    CamItemInfoList list      = d->view->allItems();
     DownloadSettings settings = downloadSettings();
 
-    QList<CamItemInfo> infos = d->view->allItems();
-
-    foreach (CamItemInfo info, infos)
+    foreach (CamItemInfo info, list)
     {
-        if (d->view->isSelected(info.url()))
+        if (selected.contains(info.url()))
         {
             qint64 size = info.size;
 
@@ -1987,12 +1989,13 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
 
     // -- Download camera items -------------------------------
 
-    QSet<QString> usedDownloadPaths;
+    QList<QUrl> selected = d->view->selectedUrls();
     CamItemInfoList list = d->view->allItems();
+    QSet<QString> usedDownloadPaths;
 
     foreach(CamItemInfo info, list)
     {
-        if (onlySelected && !(d->view->isSelected(info.url())))
+        if (onlySelected && !(selected.contains(info.url())))
         {
             continue;
         }
@@ -2224,7 +2227,7 @@ void ImportUI::slotMetadata(const QString& folder, const QString& file, const DM
 
 void ImportUI::slotNewSelection(bool hasSelection)
 {
-    if (!d->controller)
+    if (!d->controller || d->busy)
     {
         return;
     }
