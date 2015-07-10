@@ -2189,12 +2189,11 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     url.setPath(url.path() + QLatin1Char('/') + name);
     QUrl fileUrl    = url.fileUrl();
 
-    auto mkdirJob = KIO::mkdir(fileUrl);
-    KJobWidgets::setWindow(mkdirJob, QApplication::activeWindow());
+    bool jobExecution = KIOWrapper::instance()->mkdir(fileUrl, true, QApplication::activeWindow());
 
-    if (!mkdirJob->exec())
+    if (!jobExecution)
     {
-        errMsg = i18n("Failed to create directory '%1': %2", fileUrl.toString(), mkdirJob->errorString()); // TODO add tags?
+        errMsg = i18n("Failed to create directory '%1'", fileUrl.toString()); // TODO add tags?
         return 0;
     }
 

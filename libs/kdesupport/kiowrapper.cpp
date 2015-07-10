@@ -33,6 +33,7 @@
 #include <kjobwidgets.h>
 #include <kio/job.h>
 #include <kio/copyjob.h>
+#include <kio/mkdirjob.h>
 
 namespace Digikam
 {
@@ -82,6 +83,18 @@ bool KIOWrapper::fileMove(const QUrl &src, const QUrl &dest)
 {
     KIO::Job* const job = KIO::file_move(src, dest, -1,
                                          KIO::Overwrite | KIO::HideProgressInfo);
+
+    return job->exec();
+}
+
+bool KIOWrapper::mkdir(const QUrl &url, bool withKJobWidget, QWidget *widget)
+{
+    KIO::Job* const job = KIO::mkdir(url);
+
+    if (withKJobWidget)
+    {
+        KJobWidgets::setWindow(job, widget);
+    }
 
     return job->exec();
 }
