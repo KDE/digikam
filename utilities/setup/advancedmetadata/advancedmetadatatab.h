@@ -47,6 +47,17 @@ private Q_SLOTS:
 
 private:
 
+    /**
+     * @brief The NsRoles enum will encode data from NamespaceEntry in
+     *        model items, so we could retrieve and save it later
+     */
+    enum NsRoles { NAME_ROLE = Qt::UserRole+1,
+                   ISTAG_ROLE = Qt::UserRole+2,
+                   SEPARATOR_ROLE = Qt::UserRole+3,
+                   EXTRAXML_ROLE = Qt::UserRole+4,
+                   NSTYPE_ROLE = Qt::UserRole+5,
+                   CONVERSION_ROLE =Qt::UserRole+6};
+
     void connectButtons();
     void setModelData(QStandardItemModel* model, QList<NamespaceEntry> &container);
     void setUi();

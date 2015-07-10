@@ -185,8 +185,13 @@ void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<Namespac
     QStandardItem* root = model->invisibleRootItem();
     for(NamespaceEntry e : container)
     {
-        QString text = e.namespaceName + QLatin1String(",") + i18n("Separator:") + e.separator;
-        QStandardItem* item = new QStandardItem(text);
+        QStandardItem* item = new QStandardItem(e.namespaceName);
+        item->setData(e.namespaceName,NAME_ROLE);
+        item->setData((int)e.tagPaths, ISTAG_ROLE);
+        item->setData(e.separator, SEPARATOR_ROLE);
+        item->setData(e.extraXml, EXTRAXML_ROLE);
+        item->setData((int)e.nsType, NSTYPE_ROLE);
+        item->setData(e.convertRatio, CONVERSION_ROLE);
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         root->appendRow(item);
     }
