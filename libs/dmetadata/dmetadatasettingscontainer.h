@@ -93,6 +93,17 @@ public:
         this->namespaceName = name;
         this->nsType = COMMENT;
     }
+
+    NamespaceEntry(const NamespaceEntry& copy)
+    {
+        this->namespaceName = copy.namespaceName;
+        this->tagPaths      = copy.tagPaths;
+        this->separator     = copy.separator;
+        this->extraXml      = copy.extraXml;
+        this->nsType        = copy.nsType;
+        this->convertRatio  = copy.convertRatio;
+    }
+
     ~NamespaceEntry(){}
 
     QString namespaceName;
@@ -133,6 +144,10 @@ public:
     QList<NamespaceEntry> writeRatingNamespaces;
     QList<NamespaceEntry> writeCommentNamespaces;
     bool unifyReadWrite;
+
+private:
+    void readOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry> &container);
+    void writeOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry> container) const;
 
 };
 

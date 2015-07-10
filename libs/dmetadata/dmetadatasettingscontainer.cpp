@@ -41,40 +41,35 @@ DMetadataSettingsContainer::DMetadataSettingsContainer()
 
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
-    if(group.hasGroup("namespaces"))
+    if(group.hasGroup("readTagNamespaces")
+       && group.hasGroup("readRatingNamespaces")
+       && group.hasGroup("readCommentNamespaces")
+       && group.hasGroup("writeTagNamespaces")
+       && group.hasGroup("writeRatingNamespaces")
+       && group.hasGroup("writeCommentNamespaces"))
     {
-        KConfigGroup myItems = group.group("namespaces");
-
-        for(QString element : myItems.groupList())
-        {
-            KConfigGroup gr = myItems.group(element);
-            NamespaceEntry ns(
-                        element,
-                        (NamespaceEntry::TagType)gr.readEntry("Type").toInt(),
-                        gr.readEntry("separator"),
-                        gr.readEntry("extraXml"));
-
-           readTagNamespaces.append(ns);
-        }
-
+        readOneGroup(group,QLatin1String("readTagNamespaces"),     readTagNamespaces);
+        readOneGroup(group,QLatin1String("readRatingNamespaces"),  readRatingNamespaces);
+        readOneGroup(group,QLatin1String("readCommentNamespaces"), readCommentNamespaces);
+        readOneGroup(group,QLatin1String("writeTagNamespaces"),    writeTagNamespaces);
+        readOneGroup(group,QLatin1String("writeRatingNamespaces"), writeRatingNamespaces);
+        readOneGroup(group,QLatin1String("writeCommentNamespaces"),writeCommentNamespaces);
     }
     else
     {
         defaultValues();
     }
+
 }
 
 void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
-    KConfigGroup namespacesGroup = group.group("namespaces");
-
-    for(NamespaceEntry e : readTagNamespaces)
-    {
-        KConfigGroup tmp = namespacesGroup.group(e.namespaceName);
-        tmp.writeEntry("Type",(int)e.tagPaths);
-        tmp.writeEntry("separator", e.separator);
-        tmp.writeEntry("extraXml",e.extraXml);
-    }
+    writeOneGroup(group,QLatin1String("readTagNamespaces"),     readTagNamespaces);
+    writeOneGroup(group,QLatin1String("readRatingNamespaces"),  readRatingNamespaces);
+    writeOneGroup(group,QLatin1String("readCommentNamespaces"), readCommentNamespaces);
+    writeOneGroup(group,QLatin1String("writeTagNamespaces"),    writeTagNamespaces);
+    writeOneGroup(group,QLatin1String("writeRatingNamespaces"), writeRatingNamespaces);
+    writeOneGroup(group,QLatin1String("writeCommentNamespaces"),writeCommentNamespaces);
 
     group.sync();
 }
@@ -84,6 +79,9 @@ void DMetadataSettingsContainer::defaultValues()
     this->readTagNamespaces.clear();
     this->readCommentNamespaces.clear();
     this->readRatingNamespaces.clear();
+    this->writeTagNamespaces.clear();
+    this->writeRatingNamespaces.clear();
+    this->writeCommentNamespaces.clear();
     this->unifyReadWrite = true;
 
     // Default tag namespaces
@@ -111,6 +109,46 @@ void DMetadataSettingsContainer::defaultValues()
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.dc.description")));
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.exif.UserComment")));
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.tiff.ImageDescription")));
+
+    writeTagNamespaces = QList<NamespaceEntry>(readTagNamespaces);
+    writeRatingNamespaces = QList<NamespaceEntry>(readRatingNamespaces);
+    writeCommentNamespaces = QList<NamespaceEntry>(readRatingNamespaces);
+}
+
+void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name, QList<NamespaceEntry>& container)
+{
+    KConfigGroup myItems = group.group(name);
+
+    for(QString element : myItems.groupList())
+    {
+        KConfigGroup gr = myItems.group(element);
+        NamespaceEntry ns(
+                    element,
+                    (NamespaceEntry::TagType)gr.readEntry("Type").toInt(),
+                    gr.readEntry("separator"),
+                    gr.readEntry("extraXml"));
+
+        ns.nsType = (NamespaceEntry::NamespaceType)gr.readEntry("NSType").toInt();
+        ns.convertRatio = gr.readEntry("convertRatio").toInt();
+
+       container.append(ns);
+    }
+}
+
+void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name, QList<NamespaceEntry> container) const
+{
+    KConfigGroup namespacesGroup = group.group(name);
+
+    for(NamespaceEntry e : container)
+    {
+        KConfigGroup tmp = namespacesGroup.group(e.namespaceName);
+        tmp.writeEntry("Type",(int)e.tagPaths);
+        tmp.writeEntry("separator", e.separator);
+        tmp.writeEntry("extraXml",e.extraXml);
+        tmp.writeEntry("NSType",(int)e.nsType);
+        tmp.writeEntry("convertRatio", e.convertRatio);
+    }
+
 }
 
 }  // namespace Digikam
