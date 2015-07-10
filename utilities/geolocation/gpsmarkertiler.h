@@ -33,10 +33,6 @@
 #include <QMetaType>
 #include <QItemSelectionModel>
 
-// KDE includes
-
-#include <kio/job.h>
-
 // libkgeomap includes
 
 #include <abstractmarkertiler.h>

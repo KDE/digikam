@@ -70,10 +70,6 @@ extern "C"
 
 #include <klocalizedstring.h>
 
-#include <kjobwidgets.h>
-#include <kio/global.h>
-#include <kio/job.h>
-
 // Local includes
 
 #include "digikam_debug.h"

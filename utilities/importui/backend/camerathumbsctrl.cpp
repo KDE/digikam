@@ -30,10 +30,6 @@
 #include <QPair>
 #include <QUrl>
 
-// KDE includes
-
-#include <kio/previewjob.h>
-
 // Local includes
 
 #include "digikam_debug.h"

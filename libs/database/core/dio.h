@@ -27,12 +27,8 @@
 
 // Qt includes
 
+#include <QObject>
 #include <QUrl>
-
-// KDE includes
-
-#include <kio/job.h>
-#include <kio/copyjob.h>
 
 namespace Digikam
 {

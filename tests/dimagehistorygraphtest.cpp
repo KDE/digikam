@@ -34,10 +34,6 @@
 #include <QTest>
 #include <QUrl>
 
-// KDE includes
-
-#include <kio/job.h>
-
 // Local includes
 
 #include "albumdb.h"

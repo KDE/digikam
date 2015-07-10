@@ -78,10 +78,6 @@ extern "C"
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
-#include <kjobwidgets.h>
-#include <kio/job.h>
-#include <kio/copyjob.h>
-
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>

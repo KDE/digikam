@@ -30,10 +30,6 @@
 #include <QDebug>
 #include <QUrl>
 
-// KDE includes
-
-#include <kio/job.h>
-
 // Local includes
 
 #include "albumfiltermodel.h"

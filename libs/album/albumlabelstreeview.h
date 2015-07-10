@@ -28,10 +28,6 @@
 
 #include <QTreeWidget>
 
-// KDE includes
-
-#include <kio/job.h>
-
 // Local includes
 
 #include "databaseconstants.h"
