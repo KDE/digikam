@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * Part of the algorithm for finding the hot pixels was based on
  * the code of jpegpixi, which was released under the GPL license,
@@ -45,11 +46,9 @@
 #include <QApplication>
 #include <QTemporaryFile>
 
-// KDE includes
+// Local includes
 
-#include <kjobwidgets.h>
-#include <kio/job.h>
-#include <kio/copyjob.h>
+#include "kiowrapper.h"
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -98,10 +97,7 @@ void BlackFrameParser::parseBlackFrame(const QUrl& url)
         localFile      = tmpFile.fileName();
         m_tempFilePath = localFile;
 
-        KIO::FileCopyJob* const fileCopyJob = KIO::file_copy(url, QUrl::fromLocalFile(localFile), -1, KIO::Overwrite);
-        KJobWidgets::setWindow(fileCopyJob, qApp->activeWindow());
-
-        fileCopyJob->exec();
+        KIOWrapper::instance()->fileCopy(url, QUrl::fromLocalFile(localFile), true, qApp->activeWindow());
     }
 
     if (!m_imageLoaderThread)

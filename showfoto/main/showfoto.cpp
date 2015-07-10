@@ -121,6 +121,7 @@ extern "C"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
 #include "showfoto_p.h"
+#include "kiowrapper.h"
 
 using namespace KDcrawIface;
 
@@ -589,10 +590,7 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
         localFile       = tmpFile.fileName();
         d->tempFilePath = localFile;
 
-        KIO::FileCopyJob* const fileCopyJob = KIO::file_copy(info.url, QUrl::fromLocalFile(localFile), -1, KIO::Overwrite);
-        KJobWidgets::setWindow(fileCopyJob, this);
-
-        fileCopyJob->exec();
+        KIOWrapper::instance()->fileCopy(info.url, QUrl::fromLocalFile(localFile), true, this);
     }
     
     m_canvas->load(localFile, m_IOFileSettings);

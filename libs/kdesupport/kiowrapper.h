@@ -41,6 +41,7 @@ public:
     static KIOWrapper* instance();
 
     QUrl mostLocalUrl(const QUrl& url);
+    bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* widget = 0);
 
 private:
 

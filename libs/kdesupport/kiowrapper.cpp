@@ -24,10 +24,15 @@
 #include "kiowrapper.h"
 
 // Qt includes
+
 #include <QUrl>
 
 // KDE includes
+
 #include <kio/statjob.h>
+#include <kjobwidgets.h>
+#include <kio/job.h>
+#include <kio/copyjob.h>
 
 namespace Digikam
 {
@@ -59,6 +64,18 @@ QUrl KIOWrapper::mostLocalUrl(const QUrl& url)
     KIO::StatJob* const job = KIO::mostLocalUrl(url, KIO::HideProgressInfo);
     job->exec();
     return job->mostLocalUrl();
+}
+
+bool KIOWrapper::fileCopy(const QUrl &src, const QUrl &dest, bool withKJobWidget, QWidget* widget)
+{
+    KIO::FileCopyJob* const fileCopyJob = KIO::file_copy(src, dest, KIO::Overwrite);
+
+    if (withKJobWidget)
+    {
+        KJobWidgets::setWindow(fileCopyJob, widget);
+    }
+
+    return fileCopyJob->exec();
 }
 
 } // namespace Digikam

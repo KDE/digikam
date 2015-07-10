@@ -104,6 +104,7 @@ extern "C"
 #include "dbjobinfo.h"
 #include "dbjobsmanager.h"
 #include "dbjobsthread.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -441,10 +442,10 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
                        "Starting with an empty database.",
                        QDir::toNativeSeparators(oldFile.filePath()), QDir::toNativeSeparators(newFile.filePath()));
 
-    KIO::Job* const job = KIO::file_copy(QUrl::fromLocalFile(oldFile.filePath()), QUrl::fromLocalFile(newFile.filePath()),
-                                         -1, KIO::Overwrite /*| KIO::HideProgressInfo*/);
+    bool jobExecution = KIOWrapper::instance()->fileCopy(QUrl::fromLocalFile(oldFile.filePath()),
+                                                         QUrl::fromLocalFile(newFile.filePath()));
 
-    if (!job->exec())
+    if (!jobExecution)
     {
         QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), message);
         return false;
