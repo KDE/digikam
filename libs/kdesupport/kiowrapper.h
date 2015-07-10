@@ -42,6 +42,7 @@ public:
 
     QUrl mostLocalUrl(const QUrl& url);
     bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* widget = 0);
+    bool fileMove(const QUrl& src, const QUrl& dest);
 
 private:
 
