@@ -39,10 +39,14 @@ public Q_SLOTS:
     void slotAddNewNamespace();
     void slotEditNamespace();
 
+private Q_SLOTS:
+    void slotUnifyChecked(bool value);
+
 private:
 
     void connectButtons();
     void setModelData();
+    void setUi();
 
     class Private;
     Private* d;
