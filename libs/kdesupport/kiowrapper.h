@@ -36,6 +36,7 @@ class KIOWrapper : public QObject
     Q_OBJECT
 
 public:
+
     KIOWrapper();
 
     static KIOWrapper* instance();
@@ -45,6 +46,16 @@ public:
     bool fileMove(const QUrl& src, const QUrl& dest);
     bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* widget = 0);
     bool rename(const QUrl& oldUrl, const QUrl& newUrl);
+    void del(const QUrl& url);
+    void trash(const QUrl& url);
+
+Q_SIGNALS:
+
+    void error(const QString& errMsg);
+
+private Q_SLOTS:
+
+    void kioJobResult(KJob* job);
 
 private:
 

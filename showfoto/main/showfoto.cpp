@@ -81,7 +81,6 @@ extern "C"
 #include <kjobwidgets.h>
 #include <kio/job.h>
 #include <kio/copyjob.h>
-#include <kio/deletejob.h>
 
 // Libkdcraw includes
 
@@ -987,26 +986,27 @@ void ShowFoto::slotDeleteCurrentItem()
         }
         else
         {
-            KIO::Job* const job = KIO::del(urlCurrent);
+            KIOWrapper* const kioWrapperInstance = KIOWrapper::instance();
+            kioWrapperInstance->del(urlCurrent);
 
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
+            connect(kioWrapperInstance, SIGNAL(error(QString)),
+                    this, SLOT(slotDeleteCurrentItemResult(QString)));
         }
     }
     else
-    {
-        KIO::Job* const job = KIO::trash(urlCurrent);
+    {   
+        KIOWrapper* const kioWrapperInstance = KIOWrapper::instance();
+        kioWrapperInstance->trash(urlCurrent);
 
-        connect(job, SIGNAL(result(KJob*)),
-                this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
+        connect(kioWrapperInstance, SIGNAL(error(QString)),
+                this, SLOT(slotDeleteCurrentItemResult(QString)));
     }
 }
 
-void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
+void ShowFoto::slotDeleteCurrentItemResult(const QString& errMsg)
 {
-    if (job->error() != 0)
+    if (!errMsg.isEmpty())
     {
-        QString errMsg(job->errorString());
         QMessageBox::critical(this, qApp->applicationName(), errMsg);
         return;
     }

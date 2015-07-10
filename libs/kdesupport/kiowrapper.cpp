@@ -34,6 +34,7 @@
 #include <kio/job.h>
 #include <kio/copyjob.h>
 #include <kio/mkdirjob.h>
+#include <kio/deletejob.h>
 
 namespace Digikam
 {
@@ -104,6 +105,34 @@ bool KIOWrapper::rename(const QUrl &oldUrl, const QUrl &newUrl)
     KIO::Job* const job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
 
     return job->exec();
+}
+
+void KIOWrapper::del(const QUrl &url)
+{
+    KIO::Job* const job = KIO::del(url);
+
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(kioJobResult(KJob*)));
+}
+
+void KIOWrapper::trash(const QUrl &url)
+{
+    KIO::Job* const job = KIO::trash(url);
+
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(kioJobResult(KJob*)) );
+}
+
+void KIOWrapper::kioJobResult(KJob *job)
+{
+    if (job->error() != 0)
+    {
+        emit error(job->errorString());
+    }
+    else
+    {
+        emit error(QString());
+    }
 }
 
 } // namespace Digikam
