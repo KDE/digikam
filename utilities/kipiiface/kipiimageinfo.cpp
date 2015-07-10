@@ -10,6 +10,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well dot com>
  * Copyright (C) 2004-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +35,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kio/global.h>
 
 // LibKipi includes
 
@@ -57,6 +57,7 @@
 #include "digikam_globals.h"
 #include "scancontroller.h"
 #include "tagscache.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -200,7 +201,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             if (p && !newName.isEmpty())
             {
                 DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
-                _url = KIO::upUrl(_url);
+                _url = KIOWrapper::instance()->upUrl(_url);
                 _url.setPath(newName);
             }
 

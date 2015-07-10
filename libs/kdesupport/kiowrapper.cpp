@@ -32,6 +32,7 @@
 #include <kio/statjob.h>
 #include <kjobwidgets.h>
 #include <kio/job.h>
+#include <kio/global.h>
 #include <kio/copyjob.h>
 #include <kio/mkdirjob.h>
 #include <kio/deletejob.h>
@@ -66,6 +67,11 @@ QUrl KIOWrapper::mostLocalUrl(const QUrl& url)
     KIO::StatJob* const job = KIO::mostLocalUrl(url, KIO::HideProgressInfo);
     job->exec();
     return job->mostLocalUrl();
+}
+
+QUrl KIOWrapper::upUrl(const QUrl &url)
+{
+    return KIO::upUrl(url);
 }
 
 bool KIOWrapper::fileCopy(const QUrl &src, const QUrl &dest, bool withKJobWidget, QWidget* widget)

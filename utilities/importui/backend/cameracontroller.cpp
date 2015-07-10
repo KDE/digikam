@@ -9,6 +9,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,7 +62,6 @@ extern "C"
 #include <kmacroexpander.h>
 
 #include <kio/renamedialog.h>
-#include <kio/global.h>
 
 // Local includes
 
@@ -74,6 +74,7 @@ extern "C"
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "jpegutils.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -617,7 +618,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             // TODO clean-up up and generalize temporary file creation
             QUrl tempURL = QUrl::fromLocalFile(dest);
-            tempURL = KIO::upUrl(tempURL);
+            tempURL = KIOWrapper::instance()->upUrl(tempURL);
             tempURL = tempURL.adjusted(QUrl::StripTrailingSlash);
             tempURL.setPath(tempURL.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp1-%1").arg(getpid()).append(file)));
             qCDebug(LOG_IMPORTUI) << "Downloading: " << file << " using (" << tempURL << ")";
@@ -688,7 +689,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 {
                     // TODO clean-up up and generalize temporary file creation
                     QUrl tempURL2 = QUrl::fromLocalFile(dest);
-                    tempURL2 = KIO::upUrl(tempURL2);
+                    tempURL2 = KIOWrapper::instance()->upUrl(tempURL2);
                     tempURL2 = tempURL2.adjusted(QUrl::StripTrailingSlash);
                     tempURL2.setPath(tempURL2.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
                     temp     = tempURL2.toLocalFile();
