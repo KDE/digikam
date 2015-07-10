@@ -21,7 +21,9 @@
  *
  * ============================================================ */
 #include <QWidget>
+#include "dmetadatasettingscontainer.h"
 
+class QStandardItemModel;
 namespace Digikam
 {
 
@@ -41,12 +43,23 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotUnifyChecked(bool value);
+    void slotIndexChanged();
 
 private:
 
     void connectButtons();
-    void setModelData();
+    void setModelData(QStandardItemModel* model, QList<NamespaceEntry> &container);
     void setUi();
+
+    /**
+     * @brief getModelIndex - the view can have up to 6 models
+     *                        based on tags, comments, rating selection
+     *                        and read/ write operation selected
+     * @return              - return index of correct model in d->models
+     */
+    int getModelIndex();
+
+    void setModels();
 
     class Private;
     Private* d;

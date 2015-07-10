@@ -58,7 +58,7 @@ public:
     QPushButton* moveDownButton;
     QPushButton* resetButton;
     QCheckBox*   unifyReadWrite;
-    QStandardItemModel* model;
+    QList<QStandardItemModel*> models;
     NamespaceListView* namespaceView;
     DMetadataSettingsContainer container;
 };
@@ -68,11 +68,12 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     // ---------- Advanced Configuration Panel -----------------------------
     d->container = DMetadataSettings::instance()->settings();
     setUi();
-    setModelData();
+    setModels();
     connectButtons();
 
     d->unifyReadWrite->setChecked(d->container.unifyReadWrite);
     connect(d->unifyReadWrite, SIGNAL(toggled(bool)), this, SLOT(slotUnifyChecked(bool)));
+    connect(d->metadataType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged()));
 
     if(d->unifyReadWrite->isChecked())
     {
@@ -87,7 +88,32 @@ AdvancedMetadataTab::~AdvancedMetadataTab()
 
 void AdvancedMetadataTab::slotResetView()
 {
-    setModelData();
+    d->models.at(getModelIndex())->clear();
+    switch(getModelIndex())
+    {
+    case 0:
+        setModelData(d->models.at(0),d->container.readTagNamespaces);
+        break;
+    case 1:
+        setModelData(d->models.at(1),d->container.readRatingNamespaces);
+        break;
+    case 2:
+        setModelData(d->models.at(2),d->container.readCommentNamespaces);
+        break;
+    case 3:
+        setModelData(d->models.at(3),d->container.writeTagNamespaces);
+        break;
+    case 4:
+        setModelData(d->models.at(4),d->container.writeRatingNamespaces);
+        break;
+    case 5:
+        setModelData(d->models.at(5),d->container.writeCommentNamespaces);
+        break;
+    default:
+        qDebug() << "warning, Unknown case";
+    }
+
+    d->namespaceView->setModel(d->models.at(getModelIndex()));
 }
 
 void AdvancedMetadataTab::slotAddNewNamespace()
@@ -99,7 +125,7 @@ void AdvancedMetadataTab::slotAddNewNamespace()
         return;
     }
 
-    QStandardItem* root = d->model->invisibleRootItem();
+    QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
     QString text = entry.namespaceName + QLatin1String(",") + i18n("Separator:") + entry.separator;
     QStandardItem* item = new QStandardItem(text);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
@@ -122,7 +148,7 @@ void AdvancedMetadataTab::slotEditNamespace()
     }
 
 
-    QStandardItem* root = d->model->invisibleRootItem();
+    QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
     QStandardItem* item = root->child(d->namespaceView->currentIndex().row());
     QString text = entry.namespaceName + QLatin1String(",") + i18n("Separator:") + entry.separator;
     item->setText(text);
@@ -133,6 +159,11 @@ void AdvancedMetadataTab::slotUnifyChecked(bool value)
 {
     d->operationType->setDisabled(value);
     d->container.unifyReadWrite = value;
+}
+
+void AdvancedMetadataTab::slotIndexChanged()
+{
+    d->namespaceView->setModel(d->models.at(getModelIndex()));
 }
 
 
@@ -146,20 +177,20 @@ void AdvancedMetadataTab::connectButtons()
     connect(d->moveDownButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemDown()));
 }
 
-void AdvancedMetadataTab::setModelData()
+void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<NamespaceEntry>& container)
 {
     qDebug() << "Setting model data";
-    d->model->clear();
+//    d->model->clear();
 
-    QStandardItem* root = d->model->invisibleRootItem();
-    for(NamespaceEntry e : d->container.readTagNamespaces)
+    QStandardItem* root = model->invisibleRootItem();
+    for(NamespaceEntry e : container)
     {
         QString text = e.namespaceName + QLatin1String(",") + i18n("Separator:") + e.separator;
         QStandardItem* item = new QStandardItem(text);
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         root->appendRow(item);
     }
-    d->namespaceView->setModel(d->model);
+
 }
 
 void AdvancedMetadataTab::setUi()
@@ -188,7 +219,6 @@ void AdvancedMetadataTab::setUi()
     //------------ Bottom Layout-------------
     // View
     d->namespaceView = new NamespaceListView(this);
-    d->model = new QStandardItemModel(this);
 
 
     // Buttons
@@ -222,6 +252,57 @@ void AdvancedMetadataTab::setUi()
     this->setLayout(advancedConfLayout);
 }
 
+int AdvancedMetadataTab::getModelIndex()
+{
+    if(d->unifyReadWrite->isChecked())
+    {
+        return d->metadataType->currentIndex();
+    }
+    else
+    {
+        return (d->metadataType->currentIndex())*(d->operationType->currentIndex());
+    }
+}
+
+void AdvancedMetadataTab::setModels()
+{
+    // Append 6 empty models
+    for(int i = 0 ; i < 6; i++)
+        d->models.append(new QStandardItemModel(this));
+
+    setModelData(d->models.at(0), d->container.readTagNamespaces);
+    setModelData(d->models.at(1), d->container.readRatingNamespaces);
+    setModelData(d->models.at(2), d->container.readCommentNamespaces);
+
+    if(d->container.writeTagNamespaces.isEmpty())
+    {
+        setModelData(d->models.at(3), d->container.readTagNamespaces);
+    }
+    else
+    {
+        setModelData(d->models.at(3), d->container.writeTagNamespaces);
+    }
+
+    if(d->container.writeRatingNamespaces.isEmpty())
+    {
+        setModelData(d->models.at(4), d->container.readRatingNamespaces);
+    }
+    else
+    {
+        setModelData(d->models.at(4), d->container.writeRatingNamespaces);
+    }
+
+    if(d->container.writeCommentNamespaces.isEmpty())
+    {
+        setModelData(d->models.at(5), d->container.readCommentNamespaces);
+    }
+    else
+    {
+        setModelData(d->models.at(5), d->container.writeCommentNamespaces);
+    }
+
+    d->namespaceView->setModel(d->models.at(getModelIndex()));
+}
 
 }
 
