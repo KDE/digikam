@@ -99,4 +99,11 @@ bool KIOWrapper::mkdir(const QUrl &url, bool withKJobWidget, QWidget *widget)
     return job->exec();
 }
 
+bool KIOWrapper::rename(const QUrl &oldUrl, const QUrl &newUrl)
+{
+    KIO::Job* const job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
+
+    return job->exec();
+}
+
 } // namespace Digikam

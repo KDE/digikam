@@ -2270,9 +2270,9 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     // we rename them directly. Faster.
     ScanController::instance()->suspendCollectionScan();
 
-    KIO::Job* const job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
+    bool jobExecution = KIOWrapper::instance()->rename(oldUrl, newUrl);
 
-    if (!job->exec())
+    if (!jobExecution)
     {
         errMsg = i18n("Failed to rename Album");
         return false;
