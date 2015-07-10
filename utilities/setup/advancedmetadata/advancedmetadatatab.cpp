@@ -131,7 +131,8 @@ void AdvancedMetadataTab::slotEditNamespace()
 
 void AdvancedMetadataTab::slotUnifyChecked(bool value)
 {
-
+    d->operationType->setDisabled(value);
+    d->container.unifyReadWrite = value;
 }
 
 
