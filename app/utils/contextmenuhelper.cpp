@@ -82,6 +82,7 @@
 #include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
 #include "fileactionmngr.h"
+#include "tagscache.h"
 #include "dimg.h"
 #include "dxmlguiwindow.h"
 
@@ -114,7 +115,7 @@ public:
     QAction*                     setThumbnailAction;
 
     QList<qlonglong>             selectedIds;
-    QList<QUrl>                   selectedItems;
+    QList<QUrl>                  selectedItems;
 
     QMap<int, QAction*>          queueActions;
     QMap<QString, KService::Ptr> servicesMap;
@@ -488,9 +489,23 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
 
     // Performance: Only check for tags if there are <250 images selected
     // Otherwise enable it regardless if there are tags or not
-    if (ids.count() < 250 && !DatabaseAccess().db()->hasTags(ids))
+    if (ids.count() < 250)
     {
-        removeTagsPopup->menuAction()->setEnabled(false);
+        QList<int> tagIDs = DatabaseAccess().db()->getItemCommonTagIDs(ids);
+        bool enable       = false;
+
+        foreach (int tag, tagIDs)
+        {
+            if (TagsCache::instance()->colorLabelForTag(tag) == -1 &&
+                TagsCache::instance()->pickLabelForTag(tag)  == -1 &&
+                TagsCache::instance()->isInternalTag(tag)    == false)
+            {
+                enable = true;
+                break;
+            }
+        }
+
+        removeTagsPopup->menuAction()->setEnabled(enable);
     }
 
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),

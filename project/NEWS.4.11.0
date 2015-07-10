@@ -1,0 +1,53 @@
+*****************************************************************************************************
+digiKam 4.11.0 - Release date: 2015-06-14
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 342791 - Quality sorter does not honor album selection, scans all albums instead.
+002 ==> 277024 - After running a batch process to change metadata, the files halved in size.
+003 ==> 320466 - SCAN : after to run BQM a lot of files are missing in icon-view.
+004 ==> 338765 - BQM Watermark tool : output files have reduced size compared to original.
+005 ==> 343652 - "Open with" with "Run in Terminal" does not open a Terminal.
+006 ==> 162950 - View albums thumbnail in icon-view with a special frame as Dolphin.
+007 ==> 344608 - digiKam freezes for a second or three after rating a raw photo.
+008 ==> 323458 - Removing all face tags doesn't work.
+009 ==> 335515 - Crash on Enhance -> Noise Reduction.
+010 ==> 294217 - Make add face persistent, and add box by single click instead of drawing [patch].
+011 ==> 298929 - MAINTENANCE : cannot assign tags anymore.
+012 ==> 262171 - When attaching a name to a face in Preview mode, the widget does not behave correctly.
+013 ==> 333955 - BQM: offer option to optimize jpg pics.
+014 ==> 165344 - Empty albums should not be included when sorting albums by date.
+015 ==> 329138 - Convert to B&W hangs when moving editor window to other screen.
+016 ==> 347628 - Can't remove "legend" field when updating metadata.
+017 ==> 290930 - Cannot resize gamut diagram vertically, only horizontally.
+018 ==> 266264 - Sidebar does not automatically resize to avoid horizontal scrollbar.
+019 ==> 347728 - Build crashes when compiling libkdcraw with libraw 0.16.1.-76.1-x86_64.
+020 ==> 341266 - No preview available with Gphoto2 camera.
+021 ==> 309638 - Searching on technical images properties.
+022 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
+023 ==> 244097 - When importing .NEF files, if highlights are "rebuild", "auto-brightness" has no effect.
+024 ==> 339612 - When adding label it moves files.
+025 ==> 181736 - New tool for Image Editor to "delighting" photo.
+026 ==> 196075 - Creating a quick-fix dialogue would give digiKam a real edge.
+027 ==> 346877 - Cannot assign arrow keys as keyboard shortcut.
+028 ==> 336126 - Batch renaming is broken : file just renamed cannot be found.
+029 ==> 195701 - Do not default to "include subfolders"/no possibility to not include sub-folders.
+030 ==> 262499 - Cannot rename .AVI files.
+031 ==> 331194 - SCAN : prevent trailing white spaces in camera model/maker names [patch].
+032 ==> 326589 - When detect face with one folder limit and option skip already scanned image, .avi and .move in other folder are scanned too.
+033 ==> 337878 - THUMBBAR : item focus must stay in the middle [patch].
+034 ==> 344952 - Keep selected image in thumbbar in the middle while being in preview mode.
+035 ==> 348146 - kipi configuration module?
+036 ==> 332316 - Lens Auto-Correction should remember previously used settings.
+037 ==> 333630 - Cannot search items with exposure times > 30s or focal lengths > 1000mm.
+038 ==> 257679 - Build a PKG package for digiKam under MacOSX.
+039 ==> 348105 - TAGS MANAGER : Delete all unused tags.
+040 ==> 309243 - Reread metadata does not remove tags from database.
+041 ==> 348463 - First time, digiKam seems using more than one cpu.
+042 ==> 348586 - digiKam does not write description to XMP sidecar file anymore.
+043 ==> 318319 - Extended files type mime supported into search tool [patch].
+044 ==> 319921 - SCAN : Audio files are ignored [patch].
+045 ==> 253622 - digikam editor cannot use unsharp mask with radius smaller than one with Canon 7D RAW images.
+046 ==> 349157 - Album view have random invisible / empty / disappearing previews, messed up selection.

@@ -1,0 +1,23 @@
+*****************************************************************************************************
+digiKam 4.10.0 - Release date: 2015-05-10
+
+NEW FEATURES:
+
+General : add support of ACDSee and MediaPro metadata for interroperability purpose.
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 345954 - Recursive calls made into ProgressManager::slotTransactionCompletedDeferred [patch].
+002 ==> 329214 - Crash when moving tags by D&D.
+003 ==> 345941 - Add an auxiliary grid-thirds in the crop tool.
+004 ==> 345942 - Leak of memory when color autocorrection used on all processor cores.
+005 ==> 345184 - When manually adding a face, the focus should automatically go to the text.
+006 ==> 346025 - Unable to add keywords to Database, unable to view keywords from past.
+007 ==> 346646 - Renaming works when downloading selected but settings are ignored when.
+008 ==> 331742 - This takes a lot of time processing > 200 images in BQM [patch].
+009 ==> 345220 - HUB : Import ACDSee Categories to hierarchical Tags [patch].
+010 ==> 346637 - Missing support for Media Pro hierarchical keywords [patch].
+011 ==> 346405 - Problem importing pick labels [patch].
+012 ==> 347053 - BQM: "batched' files" are different from manually processed files [patch].
+013 ==> 186054 - FILEIO : add non-rgb TIFF files support [patch].
+014 ==> 329637 - Can't find Dutch translations of documentation in digikam tarball.

@@ -76,13 +76,15 @@ public:
 
 // --------------------------------------------------------
 
-AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view)
-    : QTreeWidgetItem(view), d(new Private)
+AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* const view)
+    : QTreeWidgetItem(view),
+      d(new Private)
 {
 }
 
-AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const QUrl& url)
-    : QTreeWidgetItem(view), d(new Private)
+AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* const view, const QUrl& url)
+    : QTreeWidgetItem(view),
+      d(new Private)
 {
     setImageUrl(url);
 }
@@ -196,7 +198,7 @@ const QString AdvancedRenameDialog::Private::configDialogSizeEntry(QLatin1String
 
 // --------------------------------------------------------
 
-AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
+AdvancedRenameDialog::AdvancedRenameDialog(QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
@@ -336,7 +338,7 @@ void AdvancedRenameDialog::initDialog()
 
     foreach(const QString& file, fileList)
     {
-        QUrl url(file);
+        QUrl url = QUrl::fromLocalFile(file);
         new AdvancedRenameListItem(d->listView, url);
     }
 
