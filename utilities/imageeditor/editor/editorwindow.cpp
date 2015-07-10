@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -77,8 +78,6 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
-#include <kio/copyjob.h>
-
 // Libkdcraw includes
 
 #include <libkdcraw_version.h>
@@ -133,6 +132,7 @@
 #include "versioningpromptusersavedlg.h"
 #include "undostate.h"
 #include "versionmanager.h"
+#include "kiowrapper.h"
 
 using namespace KDcrawIface;
 
@@ -1663,9 +1663,9 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         }
 
         /*
-         *            / -> moveLocalFile()                    \
-         * moveFile()                                           ->     movingSaveFileFinished()
-         *            \ -> KIO::move() -> slotKioMoveFinished /        |              |
+         *            / -> moveLocalFile()                           \
+         * moveFile()                                                 ->     movingSaveFileFinished()
+         *            \ -> KIOWrapper::move() -> slotKioMoveFinished /        |              |
          *
          *                                                    finishSaving(true)  save...IsComplete()
          */
@@ -2355,27 +2355,29 @@ void EditorWindow::moveFile()
 
         if (DMetadata::hasSidecar(m_savingContext.saveTempFileName))
         {
-            KIO::move(DMetadata::sidecarUrl(m_savingContext.saveTempFileName),
-                      DMetadata::sidecarUrl(m_savingContext.destinationURL));
+            KIOWrapper::instance()->move(
+                    DMetadata::sidecarUrl(m_savingContext.saveTempFileName),
+                    DMetadata::sidecarUrl(m_savingContext.destinationURL)
+            );
         }
 
-        KIO::CopyJob* const moveJob = KIO::move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
-                                                m_savingContext.destinationURL);
-
-        connect(moveJob, SIGNAL(result(KJob*)),
-                this, SLOT(slotKioMoveFinished(KJob*)));
+        KIOWrapper* const kioWrapperInstance = KIOWrapper::instance();
+        kioWrapperInstance->move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
+                                 m_savingContext.destinationURL);
+        connect(kioWrapperInstance, SIGNAL(error(QString)),
+                this, SLOT(slotKioMoveFinished(QString)));
     }
 }
 
-void EditorWindow::slotKioMoveFinished(KJob* job)
+void EditorWindow::slotKioMoveFinished(const QString &errMsg)
 {
-    if (job->error())
+    if (!errMsg.isEmpty())
     {
         QMessageBox::critical(this, i18n("Error Saving File"),
-                              i18n("Failed to save file: %1", job->errorString()));
+                              i18n("Failed to save file: %1", errMsg));
     }
 
-    movingSaveFileFinished(!job->error());
+    movingSaveFileFinished(!errMsg.isEmpty());
 }
 
 void EditorWindow::slotDiscardChanges()

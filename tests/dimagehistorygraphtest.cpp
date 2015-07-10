@@ -37,7 +37,6 @@
 // KDE includes
 
 #include <kio/job.h>
-#include <kio/deletejob.h>
 
 // Local includes
 
@@ -54,6 +53,7 @@
 #include "iofilesettings.h"
 #include "modeltest/modeltest.h"
 #include "tagscache.h"
+#include "kiowrapper.h"
 
 using namespace Digikam;
 
@@ -111,8 +111,8 @@ void DImageHistoryGraphTest::cleanupTestCase()
     QFile(dbFile).remove();
 
     QUrl deleteUrl = QUrl::fromLocalFile(collectionDir.path());
-    auto deleteJob = KIO::file_delete(deleteUrl);
-    deleteJob->exec();
+
+    KIOWrapper::instance()->fileDelete(deleteUrl);
 
     qDebug() << "deleted test folder " << deleteUrl;
 }

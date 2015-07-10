@@ -94,6 +94,12 @@ bool KIOWrapper::fileMove(const QUrl &src, const QUrl &dest)
     return job->exec();
 }
 
+bool KIOWrapper::fileDelete(const QUrl& url)
+{
+    KIO::SimpleJob* const job = KIO::file_delete(url);
+    return job->exec();
+}
+
 bool KIOWrapper::mkdir(const QUrl &url, bool withKJobWidget, QWidget *widget)
 {
     KIO::Job* const job = KIO::mkdir(url);
@@ -111,6 +117,14 @@ bool KIOWrapper::rename(const QUrl &oldUrl, const QUrl &newUrl)
     KIO::Job* const job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
 
     return job->exec();
+}
+
+void KIOWrapper::move(const QUrl &src, const QUrl &dest)
+{
+    KIO::Job* const job = KIO::move(src, dest);
+
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(kioJobResult(KJob*)));
 }
 
 void KIOWrapper::del(const QUrl &url)
