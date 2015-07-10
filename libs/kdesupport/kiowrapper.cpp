@@ -26,6 +26,8 @@
 // Qt includes
 
 #include <QUrl>
+#include <QPair>
+#include <QPointer>
 
 // KDE includes
 
@@ -37,6 +39,7 @@
 #include <kio/mkdirjob.h>
 #include <kio/deletejob.h>
 #include <kio/previewjob.h>
+#include <KIOWidgets/kio/renamedialog.h>
 
 namespace Digikam
 {
@@ -195,6 +198,22 @@ void KIOWrapper::previewJobFailed(const KFileItem& item)
 void KIOWrapper::gotPreview(const KFileItem& item, const QPixmap& pix)
 {
     emit gotPreview(item.url(), pix);
+}
+
+QPair<int, QString> KIOWrapper::renameDlg(QWidget *widget, const QString &caption, const QUrl &src, const QUrl &dest)
+{
+    QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(widget, caption,
+                                                            src, dest,
+                                                            KIO::RenameDialog_Mode(KIO::M_MULTI |
+                                                            KIO::M_OVERWRITE |
+                                                            KIO::M_SKIP));
+    QPair<int, QString> pair;
+    pair.first  = dlg->exec();
+    pair.second = dlg->newDestUrl().toLocalFile();
+
+    delete dlg;
+
+    return pair;
 }
 
 } // namespace Digikam

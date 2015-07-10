@@ -47,7 +47,6 @@ extern "C"
 #include <QFile>
 #include <QRegExp>
 #include <QFileInfo>
-#include <QPointer>
 #include <QtConcurrent>
 #include <QFuture>
 #include <QFutureWatcher>
@@ -60,8 +59,6 @@ extern "C"
 #include <klocalizedstring.h>
 #include <kprocess.h>
 #include <kmacroexpander.h>
-
-#include <kio/renamedialog.h>
 
 // Local includes
 
@@ -830,47 +827,44 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
                 break;
             }
 
-            QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(d->parent, i18nc("@title:window", "Rename File"),
-                                                                    QUrl::fromLocalFile(folder + QLatin1String("/") + file),
-                                                                    QUrl::fromLocalFile(dest),
-                                                                    KIO::RenameDialog_Mode(KIO::M_MULTI     |
-                                                                            KIO::M_OVERWRITE |
-                                                                            KIO::M_SKIP));
+            QPair<int, QString> resultAndDest =
+                    KIOWrapper::instance()->renameDlg(d->parent,
+                                          i18nc("@title:window", "Rename File"),
+                                          QUrl::fromLocalFile(folder + QLatin1String("/") + file),
+                                          QUrl::fromLocalFile(dest));
 
-            int result = dlg->exec();
-            dest       = dlg->newDestUrl().toLocalFile();
+            int result = resultAndDest.first;
+            dest       = resultAndDest.second;
             info       = QFileInfo(dest);
-
-            delete dlg;
 
             switch (result)
             {
-                case KIO::R_CANCEL:
+                case KIOWrapper::Cancel:
                 {
                     cancel = true;
                     break;
                 }
 
-                case KIO::R_SKIP:
+                case KIOWrapper::Skip:
                 {
                     skip = true;
                     break;
                 }
 
-                case KIO::R_AUTO_SKIP:
+                case KIOWrapper::SkipAll:
                 {
                     d->skipAll = true;
                     skip       = true;
                     break;
                 }
 
-                case KIO::R_OVERWRITE:
+                case KIOWrapper::Overwrite:
                 {
                     overwrite = true;
                     break;
                 }
 
-                case KIO::R_OVERWRITE_ALL:
+                case KIOWrapper::OverwriteAll:
                 {
                     d->overwriteAll = true;
                     overwrite       = true;

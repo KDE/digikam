@@ -27,6 +27,7 @@
 #include <QObject>
 
 #include <kio/previewjob.h>
+#include <KIOWidgets/kio/renamedialog.h>
 
 class KJob;
 
@@ -36,6 +37,16 @@ namespace Digikam
 class KIOWrapper : public QObject
 {
     Q_OBJECT
+
+public:
+
+    enum RenameDlgResults {
+        Cancel       = KIO::Result_Cancel,
+        Skip         = KIO::Result_Skip,
+        SkipAll      = KIO::Result_AutoSkip,
+        Overwrite    = KIO::Result_Overwrite,
+        OverwriteAll = KIO::Result_OverwriteAll
+    };
 
 public:
 
@@ -60,6 +71,8 @@ public:
 
     QStringList previewJobAvailablePlugins();
     void filePreview(const QList<QUrl> &urlList,const QSize &size, const QStringList *enabledPlugins = 0);
+
+    QPair<int, QString> renameDlg(QWidget* widget, const QString& caption, const QUrl& src, const QUrl& dest);
 
 Q_SIGNALS:
 
