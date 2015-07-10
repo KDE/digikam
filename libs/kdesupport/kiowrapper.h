@@ -26,6 +26,8 @@
 
 #include <QObject>
 
+#include <kio/previewjob.h>
+
 class KJob;
 
 namespace Digikam
@@ -56,13 +58,23 @@ public:
 
     QString convertSizeFromKiB(quint64 KbSize);
 
+    QStringList previewJobAvailablePlugins();
+    void filePreview(const QList<QUrl> &urlList,const QSize &size, const QStringList *enabledPlugins = 0);
+
 Q_SIGNALS:
 
     void error(const QString& errMsg);
 
+    void gotPreview(const QUrl& itemUrl, const QPixmap& pix);
+    void previewJobFinished();
+    void previewJobFailed(QUrl);
+
 private Q_SLOTS:
 
     void kioJobResult(KJob* job);
+
+    void gotPreview(const KFileItem& item, const QPixmap& pix);
+    void previewJobFailed(const KFileItem& item);
 
 private:
 

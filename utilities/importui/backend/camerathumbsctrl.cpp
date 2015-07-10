@@ -7,6 +7,7 @@
  * Description : digital camera thumbnails controller
  *
  * Copyright (C) 2011-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,6 +42,7 @@
 #include "iccsettings.h"
 #include "iccmanager.h"
 #include "iccprofile.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -70,19 +72,19 @@ public:
 
     Private()
         : controller(0),
-          kdeJob(0)
+          kioWrapper(0)
     {
     }
 
     QCache<QUrl, CachedItem> cache;  // Camera info/thumb cache based on item url keys.
 
-    QList<QUrl>               pendingItems;
+    QList<QUrl>              pendingItems;
 
     CameraController*        controller;
 
     QList<CamItemInfo>       kdeTodo;
     QHash<QUrl, CamItemInfo> kdeJobHash;
-    KIO::PreviewJob*         kdeJob;
+    KIOWrapper*              kioWrapper;
 };
 
 // --------------------------------------------------------
@@ -190,7 +192,7 @@ void CameraThumbsCtrl::loadWithKDE(const CamItemInfo& info)
 
 void CameraThumbsCtrl::startKdePreviewJob()
 {
-    if (d->kdeJob || d->kdeTodo.isEmpty())
+    if (d->kioWrapper || d->kdeTodo.isEmpty())
     {
         return;
     }
@@ -215,31 +217,32 @@ void CameraThumbsCtrl::startKdePreviewJob()
             items.append(KFileItem(*it));
     }
 
-    d->kdeJob = KIO::filePreview(items, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
+    d->kioWrapper = KIOWrapper::instance();
+    d->kioWrapper->filePreview(list, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
 
-    connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
-            this, SLOT(slotGotKDEPreview(KFileItem,QPixmap)));
+    connect(d->kioWrapper, SIGNAL(gotPreview(QUrl,QPixmap)),
+            this, SLOT(slotGotKDEPreview(QUrl,QPixmap)));
 
-    connect(d->kdeJob, SIGNAL(failed(KFileItem)),
-            this, SLOT(slotFailedKDEPreview(KFileItem)));
+    connect(d->kioWrapper, SIGNAL(previewJobFailed(QUrl)),
+            this, SLOT(slotFailedKDEPreview(QUrl)));
 
-    connect(d->kdeJob, SIGNAL(finished(KJob*)),
-            this, SLOT(slotKdePreviewFinished(KJob*)));
+    connect(d->kioWrapper, SIGNAL(previewJobFinished()),
+            this, SLOT(slotKdePreviewFinished()));
 }
 
-void CameraThumbsCtrl::slotGotKDEPreview(const KFileItem& item, const QPixmap& pix)
+void CameraThumbsCtrl::slotGotKDEPreview(const QUrl& item, const QPixmap& pix)
 {
     procressKDEPreview(item, pix);
 }
 
-void CameraThumbsCtrl::slotFailedKDEPreview(const KFileItem& item)
+void CameraThumbsCtrl::slotFailedKDEPreview(const QUrl& item)
 {
     procressKDEPreview(item, QPixmap());
 }
 
-void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& pix)
+void CameraThumbsCtrl::procressKDEPreview(const QUrl& item, const QPixmap& pix)
 {
-    CamItemInfo info = d->kdeJobHash.value(item.url());
+    CamItemInfo info = d->kdeJobHash.value(item);
     QUrl url         = info.url();
 
     if (info.isNull())
@@ -247,20 +250,20 @@ void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& 
         return;
     }
 
-    QString file   = item.url().fileName();
-    QString folder = item.url().toLocalFile().remove(QLatin1String("/") + file);
+    QString file   = item.fileName();
+    QString folder = item.toLocalFile().remove(QLatin1String("/") + file);
     QPixmap thumb;
 
     if (pix.isNull())
     {
         // This call must be run outside Camera Controller thread.
         thumb = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
-        qCDebug(LOG_IMPORTUI) << "Failed thumb from KDE Preview : " << item.url();
+        qCDebug(LOG_IMPORTUI) << "Failed thumb from KDE Preview : " << item;
     }
     else
     {
         thumb = pix;
-        qCDebug(LOG_IMPORTUI) << "Got thumb from KDE Preview : " << item.url();
+        qCDebug(LOG_IMPORTUI) << "Got thumb from KDE Preview : " << item;
     }
 
     putItemToCache(url, info, thumb);
@@ -268,9 +271,9 @@ void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& 
     emit signalThumbInfoReady(info);
 }
 
-void CameraThumbsCtrl::slotKdePreviewFinished(KJob*)
+void CameraThumbsCtrl::slotKdePreviewFinished()
 {
-    d->kdeJob = 0;
+    d->kioWrapper = 0;
     startKdePreviewJob();
 }
 

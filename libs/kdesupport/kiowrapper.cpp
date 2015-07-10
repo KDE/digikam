@@ -36,6 +36,7 @@
 #include <kio/copyjob.h>
 #include <kio/mkdirjob.h>
 #include <kio/deletejob.h>
+#include <kio/previewjob.h>
 
 namespace Digikam
 {
@@ -148,6 +149,32 @@ QString KIOWrapper::convertSizeFromKiB(quint64 KbSize)
     return KIO::convertSizeFromKiB(KbSize);
 }
 
+QStringList KIOWrapper::previewJobAvailablePlugins()
+{
+    return KIO::PreviewJob::availablePlugins();
+}
+
+void KIOWrapper::filePreview(const QList<QUrl>& urlList, const QSize &size, const QStringList* enabledPlugins)
+{
+    KFileItemList items;
+    for (QList<QUrl>::ConstIterator it = urlList.constBegin() ; it != urlList.constEnd() ; ++it)
+    {
+        if ((*it).isValid())
+            items.append(KFileItem(*it));
+    }
+
+    KIO::PreviewJob* const job = KIO::filePreview(items, size, enabledPlugins);
+
+    connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
+            this, SLOT(gotPreview(KFileItem,QPixmap)));
+
+    connect(job, SIGNAL(failed(KFileItem)),
+            this, SLOT(previewJobFailed(KFileItem)));
+
+    connect(job, SIGNAL(finished(KJob*)),
+            this, SIGNAL(previewJobFinished()));
+}
+
 void KIOWrapper::kioJobResult(KJob *job)
 {
     if (job->error() != 0)
@@ -158,6 +185,16 @@ void KIOWrapper::kioJobResult(KJob *job)
     {
         emit error(QString());
     }
+}
+
+void KIOWrapper::previewJobFailed(const KFileItem& item)
+{
+    emit previewJobFailed(item.url());
+}
+
+void KIOWrapper::gotPreview(const KFileItem& item, const QPixmap& pix)
+{
+    emit gotPreview(item.url(), pix);
 }
 
 } // namespace Digikam
