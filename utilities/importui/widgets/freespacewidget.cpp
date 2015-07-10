@@ -46,13 +46,12 @@
 
 #include <klocalizedstring.h>
 
-#include <kio/global.h>
-
 // Local includes
 
 #include "digikam_debug.h"
 #include "freespacetooltip.h"
 #include "applicationsettings.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -343,24 +342,26 @@ void FreeSpaceWidget::updateToolTip()
 
         tip += cnt.headBeg + header + cnt.headEnd;
 
+        KIOWrapper* const kioWrapperInstance = KIOWrapper::instance();
+
         if (d->dSizeKb > 0)
         {
             tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
-            tip += KIO::convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
+            tip += kioWrapperInstance->convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
-            tip += KIO::convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
+            tip += kioWrapperInstance->convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Require:") + cnt.cellMid;
-            tip += KIO::convertSizeFromKiB(d->dSizeKb) + cnt.cellEnd;
+            tip += kioWrapperInstance->convertSizeFromKiB(d->dSizeKb) + cnt.cellEnd;
         }
         else
         {
             tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
-            tip += KIO::convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
+            tip += kioWrapperInstance->convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
-            tip += KIO::convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
+            tip += kioWrapperInstance->convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
         }
 
         tip += cnt.tipFooter;

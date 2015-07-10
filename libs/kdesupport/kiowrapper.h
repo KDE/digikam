@@ -43,12 +43,16 @@ public:
 
     QUrl mostLocalUrl(const QUrl& url);
     QUrl upUrl(const QUrl& url);
+
     bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* widget = 0);
     bool fileMove(const QUrl& src, const QUrl& dest);
     bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* widget = 0);
     bool rename(const QUrl& oldUrl, const QUrl& newUrl);
+
     void del(const QUrl& url);
     void trash(const QUrl& url);
+
+    QString convertSizeFromKiB(quint64 KbSize);
 
 Q_SIGNALS:
 

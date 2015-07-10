@@ -129,6 +129,11 @@ void KIOWrapper::trash(const QUrl &url)
             this, SLOT(kioJobResult(KJob*)) );
 }
 
+QString KIOWrapper::convertSizeFromKiB(quint64 KbSize)
+{
+    return KIO::convertSizeFromKiB(KbSize);
+}
+
 void KIOWrapper::kioJobResult(KJob *job)
 {
     if (job->error() != 0)
