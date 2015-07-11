@@ -488,6 +488,7 @@ if(${KF5KGeoMap_FOUND})
 endif()
 
 #------------------------------------------------------------------------
+
 set(albummodeltest_SRCS
     albummodeltest.cpp
     modeltest/modeltest.cpp
@@ -562,6 +563,10 @@ target_link_libraries(advancedrenametest
 
                        Qt5::Test
  )
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(filesaveoptionsboxtest ${KF5KGeoMap_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 
