@@ -64,7 +64,6 @@ target_link_libraries(dimagehistorygraphtest
 
                       digikamcore
                       digikamdatabase
-#                      imageeditor
 
                       Qt5::Gui
                       Qt5::Test
@@ -180,38 +179,34 @@ if(${KF5KGeoMap_FOUND})
 endif()
 
 #------------------------------------------------------------------------
-# NOTE: Test have heavy dependecies.
-#set(renamecustomizertest_SRCS
-#    renamecustomizertest.cpp
-#)
+set(renamecustomizertest_SRCS
+    renamecustomizertest.cpp
+)
 
-#add_executable(renamecustomizertest ${renamecustomizertest_SRCS})
-#add_test(renamecustomizertest renamecustomizertest)
-#ecm_mark_as_test(renamecustomizertest)
+add_executable(renamecustomizertest ${renamecustomizertest_SRCS})
+add_test(renamecustomizertest renamecustomizertest)
+ecm_mark_as_test(renamecustomizertest)
 
-#target_link_libraries(renamecustomizertest
+target_link_libraries(renamecustomizertest
 
-#                      digikamdatabase
-#                      digikamcore
-#                      importui
-#                      advancedrename
+                      digikamgui
 
-#                      Qt5::Core
-#                      Qt5::Gui
-#                      Qt5::Test
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Test
 
-#                      KF5::XmlGui
-#                      KF5::KIOCore
-#                      KF5::KIOWidgets
-#                      KF5::KExiv2
-#                      KF5::KDcraw
+                      KF5::XmlGui
+                      KF5::KIOCore
+                      KF5::KIOWidgets
+                      KF5::KExiv2
+                      KF5::KDcraw
 
-#                      ${OpenCV_LIBRARIES}
-#)
+                      ${OpenCV_LIBRARIES}
+)
 
-#if(KF5KFace_FOUND)
-#    target_link_libraries(renamecustomizertest  ${KF5KFace_LIBRARIES})
-#endif()
+if(KF5KFace_FOUND)
+    target_link_libraries(renamecustomizertest  ${KF5KFace_LIBRARIES})
+endif()
 #------------------------------------------------------------------------
 
 set(searchtextbartest_SRCS
@@ -331,43 +326,42 @@ if(${KF5KGeoMap_FOUND})
 endif()
 
 #------------------------------------------------------------------------
-# NOTE: The dependencies are heavy for this one
-#set(testdatabase_SRCS testdatabase.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/album/album.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/album/albumhistory.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/album/albummanager.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/album/albumwatch.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/core/scancontroller.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/core/databaseguierrorhandler.cpp
-#   )
-#add_executable(testdatabase ${testdatabase_SRCS}
-#                            $<TARGET_OBJECTS:digikamsettings_src>
-#                            $<TARGET_OBJECTS:notificationmanager_src>
-#                            $<TARGET_OBJECTS:setup_src>
-#)
 
-#target_link_libraries(testdatabase
+set(testdatabase_SRCS testdatabase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/album/album.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/album/albumhistory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/album/albummanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/album/albumwatch.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/core/scancontroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/core/databaseguierrorhandler.cpp
+   )
+add_executable(testdatabase ${testdatabase_SRCS}
+                            $<TARGET_OBJECTS:digikamsettings_src>
+                            $<TARGET_OBJECTS:notificationmanager_src>
+                            $<TARGET_OBJECTS:setup_src>
+)
 
-#                      digikamdatabase
-#                      digikamcore
-#                      Qt5::DBus
-#                      Qt5::Core
-#                      Qt5::Gui
-#                      Qt5::Test
-#                      Qt5::Sql
+target_link_libraries(testdatabase
 
-#                      KF5::XmlGui
-#                      KF5::KIOCore
-#                      KF5::KExiv2
-#                      KF5::KDcraw
-#                      KF5::JobWidgets
-#                      KF5::Notifications
+                      digikamgui
+                      Qt5::DBus
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Test
+                      Qt5::Sql
 
-#                      ${OpenCV_LIBRARIES}
-#)
-#if(${KF5Kipi_FOUND})
-#    target_link_libraries(testdatabase  KF5::Kipi)
-#endif()
+                      KF5::XmlGui
+                      KF5::KIOCore
+                      KF5::KExiv2
+                      KF5::KDcraw
+                      KF5::JobWidgets
+                      KF5::Notifications
+
+                      ${OpenCV_LIBRARIES}
+)
+if(${KF5Kipi_FOUND})
+    target_link_libraries(testdatabase  KF5::Kipi)
+endif()
 
 #------------------------------------------------------------------------
 
@@ -454,7 +448,7 @@ target_link_libraries(testnrestimate
 if(${KF5KGeoMap_FOUND})
     target_link_libraries(testnrestimate ${KF5KGeoMap_LIBRARIES})
 endif()
-    
+
 #------------------------------------------------------------------------
 
 set(cameranamehelper_SRCS
@@ -494,85 +488,80 @@ if(${KF5KGeoMap_FOUND})
 endif()
 
 #------------------------------------------------------------------------
-# NOTE: This have extensive dependecies
-#set(albummodeltest_SRCS
-#    albummodeltest.cpp
-#    modeltest/modeltest.cpp
-#)
+set(albummodeltest_SRCS
+    albummodeltest.cpp
+    modeltest/modeltest.cpp
+)
 
-#add_executable(albummodeltest ${albummodeltest_SRCS})
-#add_test(albummodeltest albummodeltest)
-#ecm_mark_as_test(albummodeltest)
+add_executable(albummodeltest ${albummodeltest_SRCS})
+add_test(albummodeltest albummodeltest)
+ecm_mark_as_test(albummodeltest)
 
-#target_link_libraries(albummodeltest
+target_link_libraries(albummodeltest
 
-#                      digikamdatabase
-#                      digikamcore
+                      digikamgui
 
-#                      Qt5::Gui
-#                      Qt5::Test
-#                      Qt5::Sql
-#                      Qt5::Xml
+                      Qt5::Gui
+                      Qt5::Test
+                      Qt5::Sql
+                      Qt5::Xml
 
-#                      KF5::XmlGui
-#                      KF5::KExiv2
-#                      KF5::KDcraw
-#                      KF5::KIOCore
-#                      ${OpenCV_LIBRARIES}
+                      KF5::XmlGui
+                      KF5::KExiv2
+                      KF5::KDcraw
+                      KF5::KIOCore
+                      ${OpenCV_LIBRARIES}
 
 
-#)
+)
 
 #------------------------------------------------------------------------
 
-# NOTE: Depends on too many components from digikam core
-#set(advancedrenametest_SRCS
-#    advancedrenametest.cpp
-#)
+set(advancedrenametest_SRCS
+    advancedrenametest.cpp
+)
 
-#add_executable(advancedrenametest ${advancedrenametest_SRCS}
-#)
-#add_test(advancedrenametest advancedrenametest)
-#ecm_mark_as_test(advancedrenametest)
+add_executable(advancedrenametest ${advancedrenametest_SRCS}
+)
+add_test(advancedrenametest advancedrenametest)
+ecm_mark_as_test(advancedrenametest)
 
-#target_link_libraries(advancedrenametest
+target_link_libraries(advancedrenametest
 
-#                      advancedrename
-#                      digikamcore
+                      advancedrename
+                      digikamgui
 
-#                      Qt5::Core
-#                      Qt5::Gui
-#                      Qt5::Test
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Test
 
-#                      KF5::KIOCore
-#                      KF5::KIOWidgets
-#                      KF5::Solid
-#                      KF5::XmlGui
-#                      KF5::KExiv2
-#                      KF5::KDcraw
+                      KF5::KIOCore
+                      KF5::KIOWidgets
+                      KF5::Solid
+                      KF5::XmlGui
+                      KF5::KExiv2
+                      KF5::KDcraw
 
-#                      ${OpenCV_LIBRARIES}
-#)
+                      ${OpenCV_LIBRARIES}
+)
 
 #------------------------------------------------------------------------
 
-# NOTE: code ported to Qt5 but do not link yet.
-#
-# set(filesaveoptionsboxtest_SRCS
-#     filesaveoptionsboxtest.cpp
-# )
-#
-# add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
-# add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
-# ecm_mark_as_test(filesaveoptionsboxtest)
-#
-# target_link_libraries(filesaveoptionsboxtest
-#
-#                       digikamcore
-#                       digikamdatabase
-#
-#                       Qt5::Test
-# )
+ set(filesaveoptionsboxtest_SRCS
+     filesaveoptionsboxtest.cpp
+ )
+
+ add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
+ add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
+ ecm_mark_as_test(filesaveoptionsboxtest)
+
+ target_link_libraries(filesaveoptionsboxtest
+
+                       digikamcore
+                       digikamdatabase
+
+                       Qt5::Test
+ )
 
 #------------------------------------------------------------------------
 
@@ -583,17 +572,16 @@ endif()
 # set(databasefieldstest_SRCS
 #     databasefieldstest.cpp
 # )
-#
+
 # add_executable(databasefieldstest ${databasefieldstest_SRCS})
 # add_test(databasefieldstest databasefieldstest)
 # ecm_mark_as_test(databasefieldstest)
-#
+
 # target_link_libraries(databasefieldstest
-#
+
 #                       digikamdatabase
-#
-#                       Qt5::Gui
 #                       Qt5::Test
-#
+#                       Qt5::Core
+
 #                       KF5::KExiv2
 # )
