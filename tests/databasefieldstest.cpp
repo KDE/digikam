@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "databasefields.h"
+#include "framework/databasefields.h"
 
 using namespace Digikam;
 
