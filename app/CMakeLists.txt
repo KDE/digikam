@@ -133,7 +133,7 @@ endif()
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-# digiKam GUI begins here
+########################## digiKam GUI sources #############################
 
 qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
@@ -179,7 +179,7 @@ set(libdigikamgui_SRCS
     utils/sidebarwidget.cpp
     utils/slideshowbuilder.cpp
     utils/digikammodelcollection.cpp
-    utils/digikam_debug.cpp # TODO should this be here or elsewhere?
+    utils/digikam_debug.cpp
 
     views/tableview/tableview.cpp
     views/tableview/tableview_treeview.cpp
@@ -238,33 +238,29 @@ add_library(digikamgui_src
 )
 
 
-# digiKam binary progam #########################################################
+######################### digiKam GUI objects ############################
 
-set(digikam_SRCS
-    main/main.cpp
 
-)
 
 # this is only required by Win & OSX
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/*-apps-digikam.png")
 ecm_add_app_icon(digikam_SRCS ICONS ${ICONS_SRCS})
 
 set(DIGIKAM_OBJECTS
-            ${digikam_SRCS}
-            $<TARGET_OBJECTS:digikamdatabasemain_src> # #
-            $<TARGET_OBJECTS:digikamgui_src> # #
-            $<TARGET_OBJECTS:digikamdeletedialog_src> #
-            $<TARGET_OBJECTS:digikamtemplate_src> #
-            $<TARGET_OBJECTS:imagepropertiesdigikam_src> #
-            $<TARGET_OBJECTS:setup_src> #
-            $<TARGET_OBJECTS:lighttable_src> #
-            $<TARGET_OBJECTS:maintenance_src> #
-            $<TARGET_OBJECTS:searchwindow_src> #
-            $<TARGET_OBJECTS:digikammodels_src> #
-            $<TARGET_OBJECTS:digikamalbum_src> #
-            $<TARGET_OBJECTS:firstrun_src> #
-            $<TARGET_OBJECTS:fuzzysearch_src> #
-            $<TARGET_OBJECTS:imageeditorgui_src> #
+            $<TARGET_OBJECTS:digikamdatabasemain_src>
+            $<TARGET_OBJECTS:digikamgui_src>
+            $<TARGET_OBJECTS:digikamdeletedialog_src>
+            $<TARGET_OBJECTS:digikamtemplate_src>
+            $<TARGET_OBJECTS:imagepropertiesdigikam_src>
+            $<TARGET_OBJECTS:setup_src>
+            $<TARGET_OBJECTS:lighttable_src>
+            $<TARGET_OBJECTS:maintenance_src>
+            $<TARGET_OBJECTS:searchwindow_src>
+            $<TARGET_OBJECTS:digikammodels_src>
+            $<TARGET_OBJECTS:digikamalbum_src>
+            $<TARGET_OBJECTS:firstrun_src>
+            $<TARGET_OBJECTS:fuzzysearch_src>
+            $<TARGET_OBJECTS:imageeditorgui_src>
             $<TARGET_OBJECTS:fileactionmanager_src>
             $<TARGET_OBJECTS:digikamtags_src>
             $<TARGET_OBJECTS:digikamsettings_src>
@@ -277,14 +273,14 @@ set(DIGIKAM_OBJECTS
 if(${KF5Kipi_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
-        $<TARGET_OBJECTS:kipiiface_src> # wrap in if(KIPIfound)
+        $<TARGET_OBJECTS:kipiiface_src>
     )
 endif()
 
 if(${KF5KFace_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
-            $<TARGET_OBJECTS:facemanagement_src> # wrap
+            $<TARGET_OBJECTS:facemanagement_src>
     )
 endif()
 
@@ -296,22 +292,12 @@ if(${KF5KGeoMap_FOUND})
     )
 endif()
 
-
-add_executable(digikam ${DIGIKAM_OBJECTS})
-
-add_dependencies(digikam digikam-gitversion)
-
-# TO fill plist XML file for OSX #####################################################
-
-set(MACOSX_APP_NAME_STRING             "digikam")
-set(MACOSX_APP_DESCRIPTION             "Advanced digital photo management application")
-set(MACOSX_BUNDLE_LONG_VERSION_STRING  ${DIGIKAM_VERSION_STRING})
-set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DIGIKAM_VERSION_SHORT})
-set(MACOSX_BUNDLE_BUNDLE_VERSION       ${DIGIKAM_VERSION_STRING})
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
-set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
-
-target_link_libraries(digikam
+#################### Digikam GUI shared Lib ################################
+add_library(digikamgui
+            SHARED
+            ${DIGIKAM_OBJECTS}
+)
+target_link_libraries(digikamgui
 
                       digikamdatabase
                       digikamcore
@@ -346,23 +332,23 @@ target_link_libraries(digikam
 )
 
 if(${KF5Kipi_FOUND})
-    target_link_libraries(digikam  KF5::Kipi)
+    target_link_libraries(digikamgui  KF5::Kipi)
 endif()
 
 if(${KF5KGeoMap_FOUND})
-     target_link_libraries(digikam KF5::KGeoMap)
+     target_link_libraries(digikamgui KF5::KGeoMap)
 endif()
 
 if(APPLE)
-    target_link_libraries(digikam /System/Library/Frameworks/AppKit.framework)
+    target_link_libraries(digikamgui /System/Library/Frameworks/AppKit.framework)
 endif()
 
 if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
+    target_link_libraries(digikamgui Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(KF5AkonadiContact_FOUND)
-    target_link_libraries(digikam
+    target_link_libraries(digikamgui
 #                          KF5::AkonadiCore
                           KF5::AkonadiContact
                          )
@@ -370,26 +356,67 @@ endif()
 
 if(NOT WIN32)
     # To link under Solaris (see bug #274484)
-    target_link_libraries(digikam ${MATH_LIBRARY})
+    target_link_libraries(digikamgui ${MATH_LIBRARY})
 endif()
 
 if(WIN32)
-    set_target_properties(digikam PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
+    set_target_properties(digikamgui PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
-    target_link_libraries(digikam ${KVM_LIBRARY})
+    target_link_libraries(digikamgui ${KVM_LIBRARY})
 endif()
 
 if(GPHOTO2_FOUND)
     # See bug #258931: libgphoto2 library must be the last arg for linker.
-    target_link_libraries(digikam ${GPHOTO2_LIBRARIES})
+    target_link_libraries(digikamgui ${GPHOTO2_LIBRARIES})
 
     if(NOT WIN32)
         # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
-        target_link_libraries(digikam ${LibUSB1_LIBRARIES})
+        target_link_libraries(digikamgui ${LibUSB1_LIBRARIES})
     endif()
 endif()
+
+install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+#################### digiKam Executable  ####################################
+
+set(digikam_SRCS
+    main/main.cpp
+
+)
+
+add_executable(digikam ${DIGIKAM_OBJECTS} ${digikam_SRCS})
+
+add_dependencies(digikam digikam-gitversion)
+
+# TO fill plist XML file for OSX ############
+
+set(MACOSX_APP_NAME_STRING             "digikam")
+set(MACOSX_APP_DESCRIPTION             "Advanced digital photo management application")
+set(MACOSX_BUNDLE_LONG_VERSION_STRING  ${DIGIKAM_VERSION_STRING})
+set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DIGIKAM_VERSION_SHORT})
+set(MACOSX_BUNDLE_BUNDLE_VERSION       ${DIGIKAM_VERSION_STRING})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
+set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
+
+target_link_libraries(digikam
+
+                      digikamgui
+
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Widgets
+                      Qt5::DBus
+
+                      KF5::KIOCore
+                      KF5::KIOWidgets
+                      KF5::WindowSystem
+                      KF5::IconThemes
+                      KF5::I18n
+                      KF5::KExiv2
+
+)
 
 install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
