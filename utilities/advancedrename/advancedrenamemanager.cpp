@@ -304,7 +304,6 @@ void AdvancedRenameManager::reset()
 void AdvancedRenameManager::resetState()
 {
     d->parser->reset();
-    d->startIndex = 1;
 }
 
 void AdvancedRenameManager::initializeFileList()
