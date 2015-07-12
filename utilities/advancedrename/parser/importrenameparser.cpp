@@ -34,12 +34,14 @@ namespace Digikam
 ImportRenameParser::ImportRenameParser()
     : Parser()
 {
-    // unregister options that are not suitable during import
+    // unregister options that are not suitable while import
     RulesList oplist = options();
 
     foreach(Rule* const option, oplist)
     {
-        if (dynamic_cast<DatabaseOption*>(option))
+        if (dynamic_cast<DatabaseOption*>(option) ||
+            dynamic_cast<MetadataOption*>(option) ||
+            dynamic_cast<CameraNameOption*>(option))
         {
             unregisterOption(option);
         }
