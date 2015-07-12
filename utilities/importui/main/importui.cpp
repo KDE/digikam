@@ -1698,39 +1698,45 @@ void ImportUI::slotUpdateDownloadName()
 
         if (hasNoSelection || selected.contains(info.url()))
         {
-            newName = d->renameCustomizer->newName(info.name, info.ctime);
-        }
-
-        // Renaming files for the converting jpg to a lossless format
-        // is from cameracontroller.cpp moved here.
-
-        if (settings.convertJpeg && info.mime == QString("image/jpeg") &&
-           (hasNoSelection || selected.contains(info.url())))
-        {
-            QFileInfo     fi(newName);
-            QString ext = fi.suffix();
-
-            if (!ext.isEmpty())
+            if (d->renameCustomizer->useDefault())
             {
-                if (ext == "JPG" || ext == "JPE" || ext == "JPEG")
-                {
-                    ext = settings.losslessFormat.toUpper();
-                }
-                else if (ext == "Jpg" || ext == "Jpe" || ext == "Jpeg")
-                {
-                    ext    = settings.losslessFormat.toLower();
-                    ext[0] = ext[0].toUpper();
-                }
-                else
-                {
-                   ext = settings.losslessFormat.toLower();
-                }
-
-                newName = fi.completeBaseName() + '.' + ext;
+                newName = d->renameCustomizer->newName(info.name, info.ctime);
             }
             else
             {
-                newName = newName + '.' + settings.losslessFormat.toLower();
+                newName = d->renameCustomizer->newName(info.url().toLocalFile(), info.ctime);
+            }
+
+            // Renaming files for the converting jpg to a lossless format
+            // is from cameracontroller.cpp moved here.
+
+            if (settings.convertJpeg && info.mime == QLatin1String("image/jpeg"))
+            {
+                QFileInfo     fi(newName);
+                QString ext = fi.suffix();
+
+                if (!ext.isEmpty())
+                {
+                    if (ext[0].isUpper() && ext[ext.length()-1].isUpper())
+                    {
+                        ext = settings.losslessFormat.toUpper();
+                    }
+                    else if (ext[0].isUpper())
+                    {
+                        ext    = settings.losslessFormat.toLower();
+                        ext[0] = ext[0].toUpper();
+                    }
+                    else
+                    {
+                        ext = settings.losslessFormat.toLower();
+                    }
+
+                    newName = fi.completeBaseName() + QLatin1Char('.') + ext;
+                }
+                else
+                {
+                    newName = newName + QLatin1Char('.') + settings.losslessFormat.toLower();
+                }
             }
         }
 
@@ -2311,7 +2317,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
     {
         ParseSettings parseSettings;
 
-        parseSettings.fileUrl      = info.name;
+        parseSettings.fileUrl      = info.url();
         parseSettings.creationTime = info.ctime;
         renameFiles.append(parseSettings);
     }
