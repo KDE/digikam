@@ -24,7 +24,11 @@
 #ifndef KIOWRAPPER_H
 #define KIOWRAPPER_H
 
+// Qt includes
+
 #include <QObject>
+
+// KDE includes
 
 #include <kio/previewjob.h>
 #include <KIOWidgets/kio/renamedialog.h>
@@ -40,7 +44,8 @@ class KIOWrapper : public QObject
 
 public:
 
-    enum RenameDlgResults {
+    enum RenameDlgResults
+    {
         Cancel       = KIO::Result_Cancel,
         Skip         = KIO::Result_Skip,
         SkipAll      = KIO::Result_AutoSkip,
@@ -57,10 +62,10 @@ public:
     QUrl mostLocalUrl(const QUrl& url);
     QUrl upUrl(const QUrl& url);
 
-    bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* widget = 0);
+    bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
     bool fileMove(const QUrl& src, const QUrl& dest);
     bool fileDelete(const QUrl &url);
-    bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* widget = 0);
+    bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
     bool rename(const QUrl& oldUrl, const QUrl& newUrl);
 
     void move(const QUrl& src, const QUrl& dest);
@@ -70,9 +75,9 @@ public:
     QString convertSizeFromKiB(quint64 KbSize);
 
     QStringList previewJobAvailablePlugins();
-    void filePreview(const QList<QUrl> &urlList,const QSize &size, const QStringList *enabledPlugins = 0);
+    void filePreview(const QList<QUrl> &urlList, const QSize &size, const QStringList* const enabledPlugins = 0);
 
-    QPair<int, QString> renameDlg(QWidget* widget, const QString& caption, const QUrl& src, const QUrl& dest);
+    QPair<int, QString> renameDlg(QWidget* const widget, const QString& caption, const QUrl& src, const QUrl& dest);
 
 Q_SIGNALS:
 

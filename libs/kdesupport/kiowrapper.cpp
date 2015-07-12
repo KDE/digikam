@@ -78,7 +78,7 @@ QUrl KIOWrapper::upUrl(const QUrl &url)
     return KIO::upUrl(url);
 }
 
-bool KIOWrapper::fileCopy(const QUrl &src, const QUrl &dest, bool withKJobWidget, QWidget* widget)
+bool KIOWrapper::fileCopy(const QUrl &src, const QUrl &dest, bool withKJobWidget, QWidget* const widget)
 {
     KIO::FileCopyJob* const fileCopyJob = KIO::file_copy(src, dest, KIO::Overwrite);
 
@@ -104,7 +104,7 @@ bool KIOWrapper::fileDelete(const QUrl& url)
     return job->exec();
 }
 
-bool KIOWrapper::mkdir(const QUrl &url, bool withKJobWidget, QWidget *widget)
+bool KIOWrapper::mkdir(const QUrl &url, bool withKJobWidget, QWidget* const widget)
 {
     KIO::Job* const job = KIO::mkdir(url);
 
@@ -157,9 +157,10 @@ QStringList KIOWrapper::previewJobAvailablePlugins()
     return KIO::PreviewJob::availablePlugins();
 }
 
-void KIOWrapper::filePreview(const QList<QUrl>& urlList, const QSize &size, const QStringList* enabledPlugins)
+void KIOWrapper::filePreview(const QList<QUrl>& urlList, const QSize &size, const QStringList* const enabledPlugins)
 {
     KFileItemList items;
+
     for (QList<QUrl>::ConstIterator it = urlList.constBegin() ; it != urlList.constEnd() ; ++it)
     {
         if ((*it).isValid())
