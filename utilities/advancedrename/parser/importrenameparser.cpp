@@ -26,6 +26,8 @@
 
 // local includes
 
+#include "cameranameoption.h"
+#include "metadataoption.h"
 #include "databaseoption.h"
 
 namespace Digikam
@@ -39,7 +41,9 @@ ImportRenameParser::ImportRenameParser()
 
     foreach(Rule* option, oplist)
     {
-        if (dynamic_cast<DatabaseOption*>(option))
+        if (dynamic_cast<DatabaseOption*>(option) ||
+            dynamic_cast<MetadataOption*>(option) ||
+            dynamic_cast<CameraNameOption*>(option))
         {
             unregisterOption(option);
         }
