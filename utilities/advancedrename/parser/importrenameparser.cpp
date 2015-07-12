@@ -27,6 +27,8 @@
 // Local includes
 
 #include "databaseoption.h"
+#include "cameranameoption.h"
+#include "metadataoption.h"
 
 namespace Digikam
 {
