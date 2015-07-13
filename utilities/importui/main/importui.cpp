@@ -1709,11 +1709,6 @@ void ImportUI::slotLocked(const QString& folder, const QString& file, bool statu
 
 void ImportUI::slotUpdateDownloadName()
 {
-    if (d->busy)
-    {
-        return;
-    }
-
     d->view->setIconViewUpdatesEnabled(false);
 
     KUrl::List selected       = d->view->selectedUrls();
@@ -1734,9 +1729,13 @@ void ImportUI::slotUpdateDownloadName()
             {
                 newName = d->renameCustomizer->newName(info.name, info.ctime);
             }
-            else
+            else if (d->renameCustomizer->isEnabled())
             {
                 newName = d->renameCustomizer->newName(info.url().toLocalFile(), info.ctime);
+            }
+            else if (!refInfo.downloadName.isEmpty())
+            {
+                newName = refInfo.downloadName;
             }
 
             // Renaming files for the converting jpg to a lossless format
@@ -1773,6 +1772,7 @@ void ImportUI::slotUpdateDownloadName()
         }
 
         refInfo.downloadName = newName;
+
         kDebug() << "slotDownloadNameChanged, new: " << refInfo.downloadName;
     }
 
@@ -2306,11 +2306,6 @@ void ImportUI::slotMetadata(const QString& folder, const QString& file, const DM
 
 void ImportUI::slotNewSelection(bool hasSelection)
 {
-    if (!d->controller || d->busy)
-    {
-        return;
-    }
-
     updateActions();
 
     QList<ParseSettings> renameFiles;
@@ -2389,7 +2384,11 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
 void ImportUI::updateRightSideBar(const CamItemInfo& info)
 {
     d->rightSideBar->itemChanged(info, DMetadata());
-    d->controller->getMetadata(info.folder, info.name);
+
+    if (!d->busy)
+    {
+        d->controller->getMetadata(info.folder, info.name);
+    }
 }
 
 QString ImportUI::identifyCategoryforMime(const QString& mime)
