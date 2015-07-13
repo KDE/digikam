@@ -2353,18 +2353,19 @@ void EditorWindow::moveFile()
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "moving a remote file via KIO";
 
+        d->kioWrapper = new KIOWrapper();
+
         if (DMetadata::hasSidecar(m_savingContext.saveTempFileName))
         {
-            KIOWrapper::instance()->move(
+            d->kioWrapper->move(
                     DMetadata::sidecarUrl(m_savingContext.saveTempFileName),
                     DMetadata::sidecarUrl(m_savingContext.destinationURL)
             );
         }
 
-        KIOWrapper* const kioWrapperInstance = KIOWrapper::instance();
-        kioWrapperInstance->move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
+        d->kioWrapper->move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
                                  m_savingContext.destinationURL);
-        connect(kioWrapperInstance, SIGNAL(error(QString)),
+        connect(d->kioWrapper, SIGNAL(error(QString)),
                 this, SLOT(slotKioMoveFinished(QString)));
     }
 }

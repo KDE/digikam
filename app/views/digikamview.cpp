@@ -1307,7 +1307,7 @@ void DigikamView::slotAlbumOpenInTerminal()
 
     QString dir(palbum->folderPath());
 
-    QUrl url = KIOWrapper::instance()->mostLocalUrl(QUrl::fromLocalFile(dir));
+    QUrl url = KIOWrapper::mostLocalUrl(QUrl::fromLocalFile(dir));
 
     //If the URL is local after the above conversion, set the directory.
     if (url.isLocalFile())

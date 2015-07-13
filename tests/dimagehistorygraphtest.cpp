@@ -108,7 +108,7 @@ void DImageHistoryGraphTest::cleanupTestCase()
 
     QUrl deleteUrl = QUrl::fromLocalFile(collectionDir.path());
 
-    KIOWrapper::instance()->fileDelete(deleteUrl);
+    KIOWrapper::fileDelete(deleteUrl);
 
     qDebug() << "deleted test folder " << deleteUrl;
 }

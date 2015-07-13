@@ -213,7 +213,7 @@ void CameraThumbsCtrl::startKdePreviewJob()
             items.append(KFileItem(*it));
     }
 
-    d->kioWrapper = KIOWrapper::instance();
+    d->kioWrapper = new KIOWrapper();
     d->kioWrapper->filePreview(list, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
 
     connect(d->kioWrapper, SIGNAL(gotPreview(QUrl,QPixmap)),

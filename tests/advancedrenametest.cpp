@@ -197,9 +197,9 @@ void AdvancedRenameTest::testDirectoryNameToken_data()
 
     // The main directory of digikam can have different names, depending on how the
     // user named it. Therefore we have to detect the name here:
-    const QUrl dir2up          = KIOWrapper::instance()->upUrl(QUrl::fromLocalFile(QFINDTESTDATA(imagesDir)));
+    const QUrl dir2up          = KIOWrapper::upUrl(QUrl::fromLocalFile(QFINDTESTDATA(imagesDir)));
     const QString dir2upString = dir2up.url();
-    QString digikamDir         = dir2upString.right(dir2upString.size() - KIOWrapper::instance()->upUrl(dir2up).url().size());
+    QString digikamDir         = dir2upString.right(dir2upString.size() - KIOWrapper::upUrl(dir2up).url().size());
     digikamDir.chop(1);
 
     QTest::newRow("[dir]")

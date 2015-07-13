@@ -42,9 +42,6 @@ class DBJobsManager : public QObject
 
 public:
 
-    explicit DBJobsManager();
-    ~DBJobsManager();
-
     static DBJobsManager* instance();
 
     GPSDBJobsThread*      startGPSJobThread(GPSDBJobInfo* const jInfo);
@@ -56,6 +53,7 @@ public:
 private:
 
     friend class DBJobsManagerCreator;
+    DBJobsManager();
 };
 
 } // namespace Digikam

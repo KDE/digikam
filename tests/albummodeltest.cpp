@@ -111,7 +111,7 @@ void AlbumModelTest::cleanupTestCase()
 
     QUrl deleteUrl = QUrl::fromLocalFile(dbPath);
     
-    KIOWrapper::instance()->fileDelete(deleteUrl);
+    KIOWrapper::fileDelete(deleteUrl);
     
     qDebug() << "deleted test folder " << deleteUrl;
 }
@@ -350,7 +350,7 @@ void AlbumModelTest::deletePAlbum(PAlbum* album)
     u.setScheme(QLatin1String("file"));
     u.setPath(album->folderPath());
     
-    KIOWrapper::instance()->fileDelete(u);
+    KIOWrapper::fileDelete(u);
 }
 
 void AlbumModelTest::setLastPAlbumCountMap(const QMap<int, int> &map)

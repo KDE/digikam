@@ -97,7 +97,7 @@ void BlackFrameParser::parseBlackFrame(const QUrl& url)
         localFile      = tmpFile.fileName();
         m_tempFilePath = localFile;
 
-        KIOWrapper::instance()->fileCopy(url, QUrl::fromLocalFile(localFile), true, qApp->activeWindow());
+        KIOWrapper::fileCopy(url, QUrl::fromLocalFile(localFile), true, qApp->activeWindow());
     }
 
     if (!m_imageLoaderThread)

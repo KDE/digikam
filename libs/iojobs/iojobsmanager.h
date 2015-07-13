@@ -42,8 +42,6 @@ class IOJobsManager : public QObject
 
 public:
 
-    IOJobsManager();
-
     static IOJobsManager* instance();
 
     IOJobsThread* startCopy(const QList<QUrl>& srcsList, const QUrl& destAlbum);
@@ -54,6 +52,7 @@ public:
 private:
 
     friend class IOJobsManagerCreator;
+    IOJobsManager();
 };
 
 } // namespace Digikam

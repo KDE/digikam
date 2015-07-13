@@ -43,10 +43,6 @@ DBJobsManager::DBJobsManager()
 {
 }
 
-DBJobsManager::~DBJobsManager()
-{
-}
-
 DBJobsManager* DBJobsManager::instance()
 {
     return &creator->object;

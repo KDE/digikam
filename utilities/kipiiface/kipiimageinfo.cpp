@@ -201,7 +201,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             if (p && !newName.isEmpty())
             {
                 DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
-                _url = KIOWrapper::instance()->upUrl(_url);
+                _url = KIOWrapper::upUrl(_url);
                 _url.setPath(newName);
             }
 

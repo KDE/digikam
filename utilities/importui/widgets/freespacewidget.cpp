@@ -342,26 +342,24 @@ void FreeSpaceWidget::updateToolTip()
 
         tip += cnt.headBeg + header + cnt.headEnd;
 
-        KIOWrapper* const kioWrapperInstance = KIOWrapper::instance();
-
         if (d->dSizeKb > 0)
         {
             tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
-            tip += kioWrapperInstance->convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
+            tip += KIOWrapper::convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
-            tip += kioWrapperInstance->convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
+            tip += KIOWrapper::convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Require:") + cnt.cellMid;
-            tip += kioWrapperInstance->convertSizeFromKiB(d->dSizeKb) + cnt.cellEnd;
+            tip += KIOWrapper::convertSizeFromKiB(d->dSizeKb) + cnt.cellEnd;
         }
         else
         {
             tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
-            tip += kioWrapperInstance->convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
+            tip += KIOWrapper::convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
-            tip += kioWrapperInstance->convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
+            tip += KIOWrapper::convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
         }
 
         tip += cnt.tipFooter;

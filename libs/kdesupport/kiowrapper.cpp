@@ -44,24 +44,8 @@
 namespace Digikam
 {
 
-class KIOWrapperCreator
-{
-public:
-
-    KIOWrapper object;
-};
-
-Q_GLOBAL_STATIC(KIOWrapperCreator, creator)
-
-// ----------------------------------------------
-
 KIOWrapper::KIOWrapper()
 {
-}
-
-KIOWrapper* KIOWrapper::instance()
-{
-    return& creator->object;
 }
 
 QUrl KIOWrapper::mostLocalUrl(const QUrl& url)

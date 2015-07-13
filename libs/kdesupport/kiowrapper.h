@@ -57,27 +57,25 @@ public:
 
     KIOWrapper();
 
-    static KIOWrapper* instance();
+    static QUrl mostLocalUrl(const QUrl& url);
+    static QUrl upUrl(const QUrl& url);
 
-    QUrl mostLocalUrl(const QUrl& url);
-    QUrl upUrl(const QUrl& url);
-
-    bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
-    bool fileMove(const QUrl& src, const QUrl& dest);
-    bool fileDelete(const QUrl &url);
-    bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
-    bool rename(const QUrl& oldUrl, const QUrl& newUrl);
+    static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
+    static bool fileMove(const QUrl& src, const QUrl& dest);
+    static bool fileDelete(const QUrl &url);
+    static bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
+    static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
 
     void move(const QUrl& src, const QUrl& dest);
     void del(const QUrl& url);
     void trash(const QUrl& url);
 
-    QString convertSizeFromKiB(quint64 KbSize);
+    static QString convertSizeFromKiB(quint64 KbSize);
 
-    QStringList previewJobAvailablePlugins();
+    static QStringList previewJobAvailablePlugins();
     void filePreview(const QList<QUrl> &urlList, const QSize &size, const QStringList* const enabledPlugins = 0);
 
-    QPair<int, QString> renameDlg(QWidget* const widget, const QString& caption, const QUrl& src, const QUrl& dest);
+    static QPair<int, QString> renameDlg(QWidget* const widget, const QString& caption, const QUrl& src, const QUrl& dest);
 
 Q_SIGNALS:
 
@@ -93,10 +91,6 @@ private Q_SLOTS:
 
     void gotPreview(const KFileItem& item, const QPixmap& pix);
     void previewJobFailed(const KFileItem& item);
-
-private:
-
-    friend class KIOWrapperCreator;
 };
 
 } // namespace Digikam

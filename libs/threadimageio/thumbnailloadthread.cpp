@@ -797,9 +797,9 @@ void ThumbnailLoadThread::startKdePreviewJob()
     d->kdeTodo.clear();
 
     if (d->previewPlugins.isEmpty())
-      d->previewPlugins = KIOWrapper::instance()->previewJobAvailablePlugins();
+      d->previewPlugins = KIOWrapper::previewJobAvailablePlugins();
 
-    d->kioWrapper = KIOWrapper::instance();
+    d->kioWrapper = new KIOWrapper();
 
     // FIXME: do not know if size 0 is allowed
     d->kioWrapper->filePreview(list, QSize(d->creator->storedSize(), d->creator->storedSize()), &d->previewPlugins);

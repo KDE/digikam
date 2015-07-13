@@ -412,8 +412,8 @@ static bool moveToBackup(const QFileInfo& info)
     {
         QFileInfo backup(info.dir(), info.fileName() + QLatin1String("-backup-") + QDateTime::currentDateTime().toString(Qt::ISODate));
 
-        bool jobExecution = KIOWrapper::instance()->fileMove(QUrl::fromLocalFile(info.filePath()),
-                                                             QUrl::fromLocalFile(backup.filePath()));
+        bool jobExecution = KIOWrapper::fileMove(QUrl::fromLocalFile(info.filePath()),
+                                                 QUrl::fromLocalFile(backup.filePath()));
 
         if (!jobExecution)
         {
@@ -439,7 +439,7 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
                        "Starting with an empty database.",
                        QDir::toNativeSeparators(oldFile.filePath()), QDir::toNativeSeparators(newFile.filePath()));
 
-    bool jobExecution = KIOWrapper::instance()->fileCopy(QUrl::fromLocalFile(oldFile.filePath()),
+    bool jobExecution = KIOWrapper::fileCopy(QUrl::fromLocalFile(oldFile.filePath()),
                                                          QUrl::fromLocalFile(newFile.filePath()));
 
     if (!jobExecution)
@@ -2185,7 +2185,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     url.setPath(url.path() + QLatin1Char('/') + name);
     QUrl fileUrl    = url.fileUrl();
 
-    bool jobExecution = KIOWrapper::instance()->mkdir(fileUrl, true, QApplication::activeWindow());
+    bool jobExecution = KIOWrapper::mkdir(fileUrl, true, QApplication::activeWindow());
 
     if (!jobExecution)
     {
@@ -2266,7 +2266,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     // we rename them directly. Faster.
     ScanController::instance()->suspendCollectionScan();
 
-    bool jobExecution = KIOWrapper::instance()->rename(oldUrl, newUrl);
+    bool jobExecution = KIOWrapper::rename(oldUrl, newUrl);
 
     if (!jobExecution)
     {

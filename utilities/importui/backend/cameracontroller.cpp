@@ -615,7 +615,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             // TODO clean-up up and generalize temporary file creation
             QUrl tempURL = QUrl::fromLocalFile(dest);
-            tempURL = KIOWrapper::instance()->upUrl(tempURL);
+            tempURL = KIOWrapper::upUrl(tempURL);
             tempURL = tempURL.adjusted(QUrl::StripTrailingSlash);
             tempURL.setPath(tempURL.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp1-%1").arg(getpid()).append(file)));
             qCDebug(LOG_IMPORTUI) << "Downloading: " << file << " using (" << tempURL << ")";
@@ -686,7 +686,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 {
                     // TODO clean-up up and generalize temporary file creation
                     QUrl tempURL2 = QUrl::fromLocalFile(dest);
-                    tempURL2 = KIOWrapper::instance()->upUrl(tempURL2);
+                    tempURL2 = KIOWrapper::upUrl(tempURL2);
                     tempURL2 = tempURL2.adjusted(QUrl::StripTrailingSlash);
                     tempURL2.setPath(tempURL2.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
                     temp     = tempURL2.toLocalFile();
@@ -828,7 +828,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
             }
 
             QPair<int, QString> resultAndDest =
-                    KIOWrapper::instance()->renameDlg(d->parent,
+                    KIOWrapper::renameDlg(d->parent,
                                           i18nc("@title:window", "Rename File"),
                                           QUrl::fromLocalFile(folder + QLatin1String("/") + file),
                                           QUrl::fromLocalFile(dest));

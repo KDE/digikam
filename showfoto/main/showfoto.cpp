@@ -585,7 +585,7 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
         localFile       = tmpFile.fileName();
         d->tempFilePath = localFile;
 
-        KIOWrapper::instance()->fileCopy(info.url, QUrl::fromLocalFile(localFile), true, this);
+        KIOWrapper::fileCopy(info.url, QUrl::fromLocalFile(localFile), true, this);
     }
     
     m_canvas->load(localFile, m_IOFileSettings);
@@ -982,19 +982,19 @@ void ShowFoto::slotDeleteCurrentItem()
         }
         else
         {
-            KIOWrapper* const kioWrapperInstance = KIOWrapper::instance();
-            kioWrapperInstance->del(urlCurrent);
+            d->kioWrapper = new KIOWrapper();
+            d->kioWrapper->del(urlCurrent);
 
-            connect(kioWrapperInstance, SIGNAL(error(QString)),
+            connect(d->kioWrapper, SIGNAL(error(QString)),
                     this, SLOT(slotDeleteCurrentItemResult(QString)));
         }
     }
     else
     {   
-        KIOWrapper* const kioWrapperInstance = KIOWrapper::instance();
-        kioWrapperInstance->trash(urlCurrent);
+        d->kioWrapper = new KIOWrapper();
+        d->kioWrapper->trash(urlCurrent);
 
-        connect(kioWrapperInstance, SIGNAL(error(QString)),
+        connect(d->kioWrapper, SIGNAL(error(QString)),
                 this, SLOT(slotDeleteCurrentItemResult(QString)));
     }
 }
