@@ -265,7 +265,9 @@ int AdvancedMetadataTab::getModelIndex()
     }
     else
     {
-        return (d->metadataType->currentIndex())*(d->operationType->currentIndex());
+        // read operation = 3*0 + (0, 1, 2)
+        // write operation = 3*1 + (0, 1, 2) = (3, 4 ,5)
+        return (3*d->operationType->currentIndex()) + d->metadataType->currentIndex();
     }
 }
 
