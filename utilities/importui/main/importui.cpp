@@ -1659,44 +1659,44 @@ void ImportUI::slotUpdateDownloadName()
 
         if (hasNoSelection || selected.contains(info.url()))
         {
-            newName = d->renameCustomizer->newName(info.name, info.ctime);
-        }
-
-        // Renaming files for the converting jpg to a lossless format
-        // is from cameracontroller.cpp moved here.
-
-        if (settings.convertJpeg && info.mime == QLatin1String("image/jpeg") &&
-           (hasNoSelection || selected.contains(info.url())))
-        {
-            QFileInfo     fi(newName);
-            QString ext = fi.suffix();
-
-            if (!ext.isEmpty())
+            if (d->renameCustomizer->useDefault())
             {
-                if (ext == QLatin1String("JPG") || ext == QLatin1String("JPE") || ext == QLatin1String("JPEG"))
-                {
-                    ext = settings.losslessFormat.toUpper();
-                }
-                else if (ext == QLatin1String("Jpg") || ext == QLatin1String("Jpe") || ext == QLatin1String("Jpeg"))
-                {
-                    ext    = settings.losslessFormat.toLower();
-                    ext[0] = ext[0].toUpper();
-                }
-                else
-                {
-                   ext = settings.losslessFormat.toLower();
-                }
-
-                newName = fi.completeBaseName() + QLatin1Char('.') + ext;
+                newName = d->renameCustomizer->newName(info.name, info.ctime);
             }
             else
             {
-                newName = newName + QLatin1Char('.') + settings.losslessFormat.toLower();
+                newName = d->renameCustomizer->newName(info.url().toLocalFile(), info.ctime);
+            }
+
+            // Renaming files for the converting jpg to a lossless format
+            // is from cameracontroller.cpp moved here.
+
+            if (settings.convertJpeg && info.mime == QLatin1String("image/jpeg"))
+            {
+                QFileInfo     fi(newName);
+                QString ext = fi.suffix();
+
+                if (!ext.isEmpty())
+                {
+                    if (ext[0].isUpper() && ext[ext.length()-1].isUpper())
+                    {
+                        ext = settings.losslessFormat.toUpper();
+                    }
+                    else if (ext[0].isUpper())
+                    {
+                        ext    = settings.losslessFormat.toLower();
+                        ext[0] = ext[0].toUpper();
+                    }
+                    else
+                    {
+                        newName = newName + QLatin1Char('.') + settings.losslessFormat.toLower();
+                    }
+                }
             }
         }
 
         refInfo.downloadName = newName;
-        
+
         qCDebug(LOG_IMPORTUI) << "slotDownloadNameChanged, new: " << refInfo.downloadName;
     }
 
@@ -2262,7 +2262,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
     {
         d->markAsDownloadedAction->setEnabled(false);
     }
-    
+
     QList<ParseSettings> renameFiles;
     CamItemInfoList list = hasSelection ? d->view->selectedCamItemInfos() : d->view->allItems();
 
@@ -2270,8 +2270,8 @@ void ImportUI::slotNewSelection(bool hasSelection)
     {
         ParseSettings parseSettings;
 
-        parseSettings.fileUrl.fileName() = info.name;    // TODO : Qt5 port : check if KUrl() == QString() replacement is valid here. 
-        parseSettings.creationTime       = info.ctime;
+        parseSettings.fileUrl      = info.url();
+        parseSettings.creationTime = info.ctime;
         renameFiles.append(parseSettings);
     }
 

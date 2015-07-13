@@ -488,6 +488,7 @@ if(${KF5KGeoMap_FOUND})
 endif()
 
 #------------------------------------------------------------------------
+<<<<<<< HEAD
 set(albummodeltest_SRCS
     albummodeltest.cpp
     modeltest/modeltest.cpp
@@ -511,8 +512,37 @@ target_link_libraries(albummodeltest
                       KF5::KDcraw
                       KF5::KIOCore
                       ${OpenCV_LIBRARIES}
+=======
 
+set(albummodeltest_SRCS
+    albummodeltest.cpp
+    modeltest/modeltest.cpp
+)
 
+add_executable(albummodeltest ${albummodeltest_SRCS})
+add_test(albummodeltest albummodeltest)
+ecm_mark_as_test(albummodeltest)
+
+target_link_libraries(albummodeltest
+
+                      digikamgui
+
+                      Qt5::Gui
+                      Qt5::Test
+                      Qt5::Sql
+                      Qt5::Xml
+>>>>>>> frameworks
+
+                      KF5::XmlGui
+                      KF5::KExiv2
+                      KF5::KDcraw
+                      KF5::KIOCore
+                      ${OpenCV_LIBRARIES}
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> frameworks
 )
 
 #------------------------------------------------------------------------
@@ -562,6 +592,10 @@ target_link_libraries(advancedrenametest
 
                        Qt5::Test
  )
+
+if(${KF5KGeoMap_FOUND})
+    target_link_libraries(filesaveoptionsboxtest ${KF5KGeoMap_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 
