@@ -115,7 +115,7 @@ public:
         highlight          = true;
         sendSurrogate      = true;
         creator            = 0;
-        kioWrapper = 0;
+        kioWrapper         = 0;
         notifiedForResults = false;
     }
 
