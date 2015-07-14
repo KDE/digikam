@@ -685,6 +685,8 @@ private Q_SLOTS:
 
     void getAlbumItemsCount();
     void getTagItemsCount();
+    void tagItemsCount();
+    void personItemsCount();
 
 private:
 

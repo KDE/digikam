@@ -99,22 +99,15 @@ void DuplicatesFinder::slotStart()
     ProgressManager::addProgressItem(this);
 
     double thresh = d->similarity / 100.0;
-    SearchesDBJobInfo *jobInfo = new SearchesDBJobInfo();
-    jobInfo->duplicates = true;
-    jobInfo->threshold = thresh;
-    jobInfo->albumIds = d->albumsIdList;
+    SearchesDBJobInfo jobInfo;
+    jobInfo.duplicates = true;
+    jobInfo.threshold = thresh;
+    jobInfo.albumIds = d->albumsIdList;
 
     if (!d->tagsIdList.isEmpty())
-        jobInfo->tagIds = d->tagsIdList;
+        jobInfo.tagIds = d->tagsIdList;
 
     d->job = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
-
-//    if (!d->tagsIdList.isEmpty())
-//        d->job->addMetaData(QLatin1String("tagids"), d->tagsIdList.join(QLatin1String(",")));
-
-//    d->job->addMetaData(QLatin1String("albumids"),   d->albumsIdList.join(QLatin1String(",")));
-//    d->job->addMetaData(QLatin1String("duplicates"), QLatin1String("normal"));
-//    d->job->addMetaData(QLatin1String("threshold"),  QString::number(thresh));
 
     connect(d->job, SIGNAL(finished()),
             this, SLOT(slotDone()));

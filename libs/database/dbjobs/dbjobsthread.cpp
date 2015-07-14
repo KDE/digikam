@@ -26,6 +26,7 @@
 #include "dbjobinfo.h"
 #include "dbjob.h"
 #include "duplicatesprogressobserver.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -74,13 +75,13 @@ AlbumsDBJobsThread::~AlbumsDBJobsThread()
 {
 }
 
-void AlbumsDBJobsThread::albumsListing(AlbumsDBJobInfo* const info)
+void AlbumsDBJobsThread::albumsListing(const AlbumsDBJobInfo& info)
 {
     AlbumsJob* const j = new AlbumsJob(info);
 
     connectFinishAndErrorSignals(j);
 
-    if(info->folders)
+    if(info.folders)
     {
         connect(j, SIGNAL(foldersData(QMap<int, int>)),
                 this, SIGNAL(foldersData(QMap<int, int>)));
@@ -108,18 +109,20 @@ TagsDBJobsThread::~TagsDBJobsThread()
 {
 }
 
-void TagsDBJobsThread::tagsListing(TagsDBJobInfo* const info)
+void TagsDBJobsThread::tagsListing(const TagsDBJobInfo& info)
 {
     TagsJob* const j = new TagsJob(info);
 
     connectFinishAndErrorSignals(j);
 
-    if(info->folders)
+    qCDebug(DIGIKAM_DBJOB_LOG) << "JOB INFO is folders: " << info.folders;
+
+    if(info.folders)
     {
         connect(j, SIGNAL(foldersData(QMap<int, int>)),
                 this, SIGNAL(foldersData(QMap<int, int>)));
     }
-    else if(info->faceFolders)
+    else if(info.faceFolders)
     {
         connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)),
                 this, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)));
@@ -147,13 +150,13 @@ DatesDBJobsThread::~DatesDBJobsThread()
 {
 }
 
-void DatesDBJobsThread::datesListing(DatesDBJobInfo* const info)
+void DatesDBJobsThread::datesListing(const DatesDBJobInfo& info)
 {
     DatesJob* const j = new DatesJob(info);
 
     connectFinishAndErrorSignals(j);
 
-    if(info->folders)
+    if(info.folders)
     {
         connect(j, SIGNAL(foldersData(const QMap<QDateTime, int>&)),
                 this, SIGNAL(foldersData(const QMap<QDateTime, int>&)));
@@ -181,13 +184,13 @@ GPSDBJobsThread::~GPSDBJobsThread()
 {
 }
 
-void GPSDBJobsThread::GPSListing(GPSDBJobInfo* const info)
+void GPSDBJobsThread::GPSListing(const GPSDBJobInfo& info)
 {
     GPSJob* const j = new GPSJob(info);
 
     connectFinishAndErrorSignals(j);
 
-    if(info->wantDirectQuery)
+    if(info.wantDirectQuery)
     {
         connect(j, SIGNAL(directQueryData(QList<QVariant>)),
                 this, SIGNAL(directQueryData(QList<QVariant>)));
@@ -215,13 +218,13 @@ SearchesDBJobsThread::~SearchesDBJobsThread()
 {
 }
 
-void SearchesDBJobsThread::searchesListing(SearchesDBJobInfo* const info)
+void SearchesDBJobsThread::searchesListing(const SearchesDBJobInfo& info)
 {
     SearchesJob* const j = new SearchesJob(info);
 
     connectFinishAndErrorSignals(j);
 
-    if(info->duplicates)
+    if(info.duplicates)
     {
 
         connect(j, SIGNAL(totalSize(int)),

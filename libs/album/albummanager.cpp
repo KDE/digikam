@@ -1496,8 +1496,8 @@ void AlbumManager::getAlbumItemsCount()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "LISTING ALL";
 
-    AlbumsDBJobInfo *jInfo = new AlbumsDBJobInfo();
-    jInfo->folders = true;
+    AlbumsDBJobInfo jInfo;
+    jInfo.folders = true;
     d->albumListJob = dynamic_cast<AlbumsDBJobsThread*>(DBJobsManager::instance()->startAlbumsJobThread(jInfo));
 
     connect(d->albumListJob, SIGNAL(finished()),
@@ -1657,16 +1657,20 @@ void AlbumManager::getTagItemsCount()
         return;
     }
 
-    // List tags using kioslave
+    tagItemsCount();
+    personItemsCount();
+}
 
+void AlbumManager::tagItemsCount()
+{
     if (d->tagListJob)
     {
         d->tagListJob->cancel();
         d->tagListJob = 0;
     }
 
-    TagsDBJobInfo *jInfo = new TagsDBJobInfo();
-    jInfo->folders = true;
+    TagsDBJobInfo jInfo;
+    jInfo.folders = true;
 
     d->tagListJob = dynamic_cast<TagsDBJobsThread*>(DBJobsManager::instance()->startTagsJobThread(jInfo));
 
@@ -1675,15 +1679,18 @@ void AlbumManager::getTagItemsCount()
 
     connect(d->tagListJob, SIGNAL(foldersData(QMap<int,int>)),
             this, SLOT(slotTagsJobData(QMap<int,int>)));
+}
 
+void AlbumManager::personItemsCount()
+{
     if (d->personListJob)
     {
         d->personListJob->cancel();
         d->personListJob = 0;
     }
 
-    jInfo->folders = false;
-    jInfo->faceFolders = true;
+    TagsDBJobInfo jInfo;
+    jInfo.faceFolders = true;
 
     d->personListJob = dynamic_cast<TagsDBJobsThread*>(DBJobsManager::instance()->startTagsJobThread(jInfo));
 
@@ -1786,18 +1793,14 @@ void AlbumManager::scanDAlbums()
 {
     d->scanDAlbumsTimer->stop();
 
-    // List dates using kioslave:
-    // The kioslave has a special mode listing the dates
-    // for which there are images in the DB.
-
     if (d->dateListJob)
     {
         d->dateListJob->cancel();
         d->dateListJob = 0;
     }
 
-    DatesDBJobInfo *jInfo = new DatesDBJobInfo();
-    jInfo->folders = true;
+    DatesDBJobInfo jInfo;
+    jInfo.folders = true;
     d->dateListJob = dynamic_cast<DatesDBJobsThread*>(DBJobsManager::instance()->startDatesJobThread(jInfo));
 
     connect(d->dateListJob, SIGNAL(finished()),

@@ -84,7 +84,7 @@ public:
     explicit AlbumsDBJobsThread(QObject* const parent);
     ~AlbumsDBJobsThread();
 
-    void albumsListing(AlbumsDBJobInfo* const info);
+    void albumsListing(const AlbumsDBJobInfo& info);
 
 Q_SIGNALS:
 
@@ -103,7 +103,7 @@ public:
     explicit TagsDBJobsThread(QObject* const parent);
     ~TagsDBJobsThread();
 
-    void tagsListing(TagsDBJobInfo* const info);
+    void tagsListing(const TagsDBJobInfo& info);
 
 Q_SIGNALS:
 
@@ -122,7 +122,7 @@ public:
     explicit DatesDBJobsThread(QObject* const parent);
     ~DatesDBJobsThread();
 
-    void datesListing(DatesDBJobInfo* const info);
+    void datesListing(const DatesDBJobInfo& info);
 
 Q_SIGNALS:
 
@@ -140,7 +140,7 @@ public:
     explicit SearchesDBJobsThread(QObject* const parent);
     ~SearchesDBJobsThread();
 
-    void searchesListing(SearchesDBJobInfo* const info);
+    void searchesListing(const SearchesDBJobInfo& info);
 
 Q_SIGNALS:
 
@@ -159,7 +159,7 @@ public:
     explicit GPSDBJobsThread(QObject* const parent);
     ~GPSDBJobsThread();
 
-    void GPSListing(GPSDBJobInfo* info);
+    void GPSListing(const GPSDBJobInfo& info);
 
 Q_SIGNALS:
 

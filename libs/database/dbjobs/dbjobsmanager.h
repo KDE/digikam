@@ -44,11 +44,11 @@ public:
 
     static DBJobsManager* instance();
 
-    GPSDBJobsThread*      startGPSJobThread(GPSDBJobInfo* const jInfo);
-    TagsDBJobsThread*     startTagsJobThread(TagsDBJobInfo* const jInfo);
-    DatesDBJobsThread*    startDatesJobThread(DatesDBJobInfo* const jInfo);
-    AlbumsDBJobsThread*   startAlbumsJobThread(AlbumsDBJobInfo* const jInfo);
-    SearchesDBJobsThread* startSearchesJobThread(SearchesDBJobInfo* const jInfo);
+    GPSDBJobsThread*      startGPSJobThread(const GPSDBJobInfo& jInfo);
+    TagsDBJobsThread*     startTagsJobThread(const TagsDBJobInfo& jInfo);
+    DatesDBJobsThread*    startDatesJobThread(const DatesDBJobInfo& jInfo);
+    AlbumsDBJobsThread*   startAlbumsJobThread(const AlbumsDBJobInfo& jInfo);
+    SearchesDBJobsThread* startSearchesJobThread(const SearchesDBJobInfo& jInfo);
 
 private:
 

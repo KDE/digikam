@@ -838,9 +838,9 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& r
 
 void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
 {
-    SearchesDBJobInfo *jobInfo = new SearchesDBJobInfo();
-    jobInfo->searchId = d->albumForSelectedItems->id();
-    jobInfo->recursive = true;
+    SearchesDBJobInfo jobInfo;
+    jobInfo.searchId = d->albumForSelectedItems->id();
+    jobInfo.recursive = true;
 
     SearchesDBJobsThread *thread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
 

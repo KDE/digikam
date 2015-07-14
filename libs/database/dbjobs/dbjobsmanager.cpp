@@ -48,7 +48,7 @@ DBJobsManager* DBJobsManager::instance()
     return &creator->object;
 }
 
-AlbumsDBJobsThread* DBJobsManager::startAlbumsJobThread(AlbumsDBJobInfo* const jInfo)
+AlbumsDBJobsThread* DBJobsManager::startAlbumsJobThread(const AlbumsDBJobInfo& jInfo)
 {
     AlbumsDBJobsThread* const thread = new AlbumsDBJobsThread(this);
     thread->albumsListing(jInfo);
@@ -57,7 +57,7 @@ AlbumsDBJobsThread* DBJobsManager::startAlbumsJobThread(AlbumsDBJobInfo* const j
     return thread;
 }
 
-DatesDBJobsThread* DBJobsManager::startDatesJobThread(DatesDBJobInfo* const jInfo)
+DatesDBJobsThread* DBJobsManager::startDatesJobThread(const DatesDBJobInfo& jInfo)
 {
     DatesDBJobsThread* const thread = new DatesDBJobsThread(this);
     thread->datesListing(jInfo);
@@ -66,7 +66,7 @@ DatesDBJobsThread* DBJobsManager::startDatesJobThread(DatesDBJobInfo* const jInf
     return thread;
 }
 
-TagsDBJobsThread* DBJobsManager::startTagsJobThread(TagsDBJobInfo* const jInfo)
+TagsDBJobsThread* DBJobsManager::startTagsJobThread(const TagsDBJobInfo& jInfo)
 {
     TagsDBJobsThread* const thread = new TagsDBJobsThread(this);
     thread->tagsListing(jInfo);
@@ -75,7 +75,7 @@ TagsDBJobsThread* DBJobsManager::startTagsJobThread(TagsDBJobInfo* const jInfo)
     return thread;
 }
 
-SearchesDBJobsThread* DBJobsManager::startSearchesJobThread(SearchesDBJobInfo* const jInfo)
+SearchesDBJobsThread* DBJobsManager::startSearchesJobThread(const SearchesDBJobInfo& jInfo)
 {
     SearchesDBJobsThread* const thread = new SearchesDBJobsThread(this);
     thread->searchesListing(jInfo);
@@ -84,7 +84,7 @@ SearchesDBJobsThread* DBJobsManager::startSearchesJobThread(SearchesDBJobInfo* c
     return thread;
 }
 
-GPSDBJobsThread* DBJobsManager::startGPSJobThread(GPSDBJobInfo* const jInfo)
+GPSDBJobsThread* DBJobsManager::startGPSJobThread(const GPSDBJobInfo& jInfo)
 {
     GPSDBJobsThread* const thread = new GPSDBJobsThread(this);
     thread->GPSListing(jInfo);

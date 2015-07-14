@@ -53,8 +53,8 @@ public:
 
 Q_SIGNALS:
 
-    void data(const QList<ImageListerRecord> &records);
-    void error(const QString &err);
+    void data(const QList<ImageListerRecord>& records);
+    void error(const QString& err);
 };
 
 // ----------------------------------------------
@@ -65,7 +65,7 @@ class AlbumsJob : public DBJob
 
 public:
 
-    AlbumsJob(AlbumsDBJobInfo* const jobInfo);
+    AlbumsJob(const AlbumsDBJobInfo& jobInfo);
     ~AlbumsJob();
 
 protected:
@@ -78,7 +78,7 @@ Q_SIGNALS:
 
 private:
 
-    AlbumsDBJobInfo* m_jobInfo;
+    AlbumsDBJobInfo m_jobInfo;
 };
 
 // ----------------------------------------------
@@ -89,7 +89,7 @@ class DatesJob : public DBJob
 
 public:
 
-    DatesJob(DatesDBJobInfo* const jobInfo);
+    DatesJob(const DatesDBJobInfo& jobInfo);
     ~DatesJob();
 
 protected:
@@ -102,7 +102,7 @@ Q_SIGNALS:
 
 private:
 
-    DatesDBJobInfo* m_jobInfo;
+    DatesDBJobInfo m_jobInfo;
 };
 
 // ----------------------------------------------
@@ -113,7 +113,7 @@ class GPSJob : public DBJob
 
 public:
 
-    GPSJob(GPSDBJobInfo* const jobInfo);
+    GPSJob(const GPSDBJobInfo& jobInfo);
     ~GPSJob();
 
 protected:
@@ -122,11 +122,11 @@ protected:
 
 Q_SIGNALS:
 
-    void directQueryData(const QList<QVariant> & data);
+    void directQueryData(const QList<QVariant>& data);
 
 private:
 
-    GPSDBJobInfo* m_jobInfo;
+    GPSDBJobInfo m_jobInfo;
 };
 
 // ----------------------------------------------
@@ -137,7 +137,7 @@ class TagsJob : public DBJob
 
 public:
 
-    TagsJob(TagsDBJobInfo* const jobInfo);
+    TagsJob(const TagsDBJobInfo& jobInfo);
     ~TagsJob();
 
 protected:
@@ -151,7 +151,7 @@ Q_SIGNALS:
 
 private:
 
-    TagsDBJobInfo* m_jobInfo;
+    TagsDBJobInfo m_jobInfo;
 };
 
 // ----------------------------------------------
@@ -162,7 +162,7 @@ class SearchesJob : public DBJob
 
 public:
 
-    SearchesJob(SearchesDBJobInfo* const jobInfo);
+    SearchesJob(const SearchesDBJobInfo& jobInfo);
     ~SearchesJob();
 
 Q_SIGNALS:
@@ -176,7 +176,7 @@ protected:
 
 private:
 
-    SearchesDBJobInfo* m_jobInfo;
+    SearchesDBJobInfo m_jobInfo;
 };
 
 } // namespace Digikam

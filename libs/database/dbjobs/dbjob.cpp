@@ -52,7 +52,7 @@ DBJob::~DBJob()
 
 // ----------------------------------------------
 
-AlbumsJob::AlbumsJob(AlbumsDBJobInfo* const jobInfo)
+AlbumsJob::AlbumsJob(const AlbumsDBJobInfo& jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -64,7 +64,7 @@ AlbumsJob::~AlbumsJob()
 
 void AlbumsJob::run()
 {
-    if (m_jobInfo->folders)
+    if (m_jobInfo.folders)
     {
         QMap<int, int> albumNumberMap = DatabaseAccess().db()->getNumberOfImagesInAlbums();
         emit foldersData(albumNumberMap);
@@ -72,11 +72,11 @@ void AlbumsJob::run()
     else
     {
         ImageLister lister;
-        lister.setRecursive(m_jobInfo->recursive);
-        lister.setListOnlyAvailable(m_jobInfo->listAvailableImagesOnly);
+        lister.setRecursive(m_jobInfo.recursive);
+        lister.setListOnlyAvailable(m_jobInfo.listAvailableImagesOnly);
         // send data every 200 images to be more responsive
         Digikam::ImageListerJobGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
-        lister.listAlbum(&receiver, m_jobInfo->albumRootId, m_jobInfo->album);
+        lister.listAlbum(&receiver, m_jobInfo.albumRootId, m_jobInfo.album);
         receiver.sendData();
     }
 
@@ -85,7 +85,7 @@ void AlbumsJob::run()
 
 // ----------------------------------------------
 
-DatesJob::DatesJob(DatesDBJobInfo* const jobInfo)
+DatesJob::DatesJob(const DatesDBJobInfo& jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -97,7 +97,7 @@ DatesJob::~DatesJob()
 
 void DatesJob::run()
 {
-    if (m_jobInfo->folders)
+    if (m_jobInfo.folders)
     {
         QMap<QDateTime, int> dateNumberMap = DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
         emit foldersData(dateNumberMap);
@@ -108,7 +108,7 @@ void DatesJob::run()
         lister.setListOnlyAvailable(true);
         // send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
-        lister.listDateRange(&receiver, m_jobInfo->startDate, m_jobInfo->endDate);
+        lister.listDateRange(&receiver, m_jobInfo.startDate, m_jobInfo.endDate);
         // send rest
         receiver.sendData();
     }
@@ -118,7 +118,7 @@ void DatesJob::run()
 
 // ----------------------------------------------
 
-GPSJob::GPSJob(GPSDBJobInfo* const jobInfo)
+GPSJob::GPSJob(const GPSDBJobInfo& jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -130,13 +130,13 @@ GPSJob::~GPSJob()
 
 void GPSJob::run()
 {
-    if (m_jobInfo->wantDirectQuery)
+    if (m_jobInfo.wantDirectQuery)
     {
         QList<QVariant> imagesInfoFromArea =
-                DatabaseAccess().db()->getImageIdsFromArea(m_jobInfo->lat1,
-                                                           m_jobInfo->lat2,
-                                                           m_jobInfo->lng1,
-                                                           m_jobInfo->lng2,
+                DatabaseAccess().db()->getImageIdsFromArea(m_jobInfo.lat1,
+                                                           m_jobInfo.lat2,
+                                                           m_jobInfo.lng1,
+                                                           m_jobInfo.lng2,
                                                            0,
                                                            QLatin1String("rating"));
 
@@ -146,14 +146,14 @@ void GPSJob::run()
     {
         ImageLister lister;
         lister.setAllowExtraValues(true);
-        lister.setListOnlyAvailable(m_jobInfo->listAvailableImagesOnly);
+        lister.setListOnlyAvailable(m_jobInfo.listAvailableImagesOnly);
         // send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
         lister.listAreaRange(&receiver,
-                             m_jobInfo->lat1,
-                             m_jobInfo->lat2,
-                             m_jobInfo->lng1,
-                             m_jobInfo->lng2);
+                             m_jobInfo.lat1,
+                             m_jobInfo.lat2,
+                             m_jobInfo.lng1,
+                             m_jobInfo.lng2);
         // send rest
         receiver.sendData();
     }
@@ -163,7 +163,7 @@ void GPSJob::run()
 
 // ----------------------------------------------
 
-TagsJob::TagsJob(TagsDBJobInfo* const jobInfo)
+TagsJob::TagsJob(const TagsDBJobInfo& jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -175,12 +175,13 @@ TagsJob::~TagsJob()
 
 void TagsJob::run()
 {
-    if (m_jobInfo->folders)
+    if (m_jobInfo.folders)
     {
         QMap<int, int> tagNumberMap = DatabaseAccess().db()->getNumberOfImagesInTags();
+        qCDebug(DIGIKAM_DBJOB_LOG) << tagNumberMap;
         emit foldersData(tagNumberMap);
     }
-    else if (m_jobInfo->faceFolders)
+    else if (m_jobInfo.faceFolders)
     {
         QMap<QString, QMap<int, int> > facesNumberMap;
         facesNumberMap[ImageTagPropertyName::autodetectedFace()] =
@@ -193,23 +194,23 @@ void TagsJob::run()
     else
     {
         ImageLister lister;
-        lister.setRecursive(m_jobInfo->recursive);
-        lister.setListOnlyAvailable(m_jobInfo->listAvailableImagesOnly);
+        lister.setRecursive(m_jobInfo.recursive);
+        lister.setListOnlyAvailable(m_jobInfo.listAvailableImagesOnly);
         // send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
 
-        if (!m_jobInfo->specialTag.isNull())
+        if (!m_jobInfo.specialTag.isNull())
         {
             QString searchXml =
-                lister.tagSearchXml(m_jobInfo->tagsIds.first(),
-                                    m_jobInfo->specialTag,
-                                    m_jobInfo->recursive);
+                lister.tagSearchXml(m_jobInfo.tagsIds.first(),
+                                    m_jobInfo.specialTag,
+                                    m_jobInfo.recursive);
             lister.setAllowExtraValues(true); // pass property value as extra value, different binary protocol
             lister.listImageTagPropertySearch(&receiver, searchXml);
         }
         else
         {
-            lister.listTag(&receiver, m_jobInfo->tagsIds);
+            lister.listTag(&receiver, m_jobInfo.tagsIds);
         }
 
         // finish sending
@@ -221,7 +222,7 @@ void TagsJob::run()
 
 // ----------------------------------------------
 
-SearchesJob::SearchesJob(SearchesDBJobInfo* const jobInfo)
+SearchesJob::SearchesJob(const SearchesDBJobInfo& jobInfo)
     : DBJob()
 {
     m_jobInfo = jobInfo;
@@ -236,12 +237,12 @@ void SearchesJob::run()
     // TODO: CHECK WHEN DOES THIS VALUE CHANGE FROM ZERO
     int listingType = 0;
 
-    if (!m_jobInfo->duplicates)
+    if (!m_jobInfo.duplicates)
     {
-        SearchInfo info = DatabaseAccess().db()->getSearchInfo(m_jobInfo->searchId);
+        SearchInfo info = DatabaseAccess().db()->getSearchInfo(m_jobInfo.searchId);
 
         ImageLister lister;
-        lister.setListOnlyAvailable(m_jobInfo->listAvailableImagesOnly);
+        lister.setListOnlyAvailable(m_jobInfo.listAvailableImagesOnly);
 
         if (listingType == 0)
         {
@@ -276,24 +277,24 @@ void SearchesJob::run()
     }
     else
     {
-        if (m_jobInfo->albumIds.isEmpty() && m_jobInfo->tagIds.isEmpty())
+        if (m_jobInfo.albumIds.isEmpty() && m_jobInfo.tagIds.isEmpty())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "No album ids passed for duplicates search";
             return;
         }
 
-        if (m_jobInfo->threshold == 0)
+        if (m_jobInfo.threshold == 0)
         {
-            m_jobInfo->threshold = 0.4;
+            m_jobInfo.threshold = 0.4;
         }
 
         DuplicatesProgressObserver observer(this);
 
         // rebuild the duplicate albums
         HaarIface iface;
-        iface.rebuildDuplicatesAlbums(m_jobInfo->albumIds,
-                                      m_jobInfo->tagIds,
-                                      m_jobInfo->threshold,
+        iface.rebuildDuplicatesAlbums(m_jobInfo.albumIds,
+                                      m_jobInfo.tagIds,
+                                      m_jobInfo.threshold,
                                       &observer);
     }
 
