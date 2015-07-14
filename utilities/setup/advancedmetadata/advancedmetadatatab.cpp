@@ -74,6 +74,7 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     d->unifyReadWrite->setChecked(d->container.unifyReadWrite);
     connect(d->unifyReadWrite, SIGNAL(toggled(bool)), this, SLOT(slotUnifyChecked(bool)));
     connect(d->metadataType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged()));
+    connect(d->operationType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged()));
 
     if(d->unifyReadWrite->isChecked())
     {
@@ -159,6 +160,9 @@ void AdvancedMetadataTab::slotUnifyChecked(bool value)
 {
     d->operationType->setDisabled(value);
     d->container.unifyReadWrite = value;
+    if(true)
+        d->operationType->setCurrentIndex(0);
+    slotIndexChanged();
 }
 
 void AdvancedMetadataTab::slotIndexChanged()
