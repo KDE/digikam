@@ -49,7 +49,7 @@ namespace Digikam
 class NamespaceEntry{
 
 public:
-    enum TagType {TAG, TAGPATH};
+    enum TagType {TAG = 0, TAGPATH = 1};
     enum NamespaceType {TAGS = 0, RATING = 1, COMMENT = 2};
 
     NamespaceEntry(){}
@@ -69,7 +69,6 @@ public:
         this->separator = separator;
         this->extraXml = extraXml;
         this->nsType = nsType;
-        this->convertRatio = -1;
         this->index = index;
     }
 
@@ -79,10 +78,10 @@ public:
      * @param convertRatio - convert ration ex: 1:1 if namespace store 5 star rating
      *                       or 25:1 if rating must be stored from 0-100
      */
-    NamespaceEntry(QString name, int convertRatio, NamespaceType nsType, int index)
+    NamespaceEntry(QString name, QList<int> convertRatio, NamespaceType nsType, int index)
     {
         this->namespaceName = name;
-        this->convertRatio  = convertRatio;
+        this->convertRatio  = QList<int>(convertRatio);
         this->nsType = nsType;
         this->index = index;
     }
@@ -105,7 +104,7 @@ public:
         this->separator     = copy.separator;
         this->extraXml      = copy.extraXml;
         this->nsType        = copy.nsType;
-        this->convertRatio  = copy.convertRatio;
+        this->convertRatio  = QList<int>(copy.convertRatio);
         this->index         = copy.index;
     }
 
@@ -116,7 +115,7 @@ public:
     QString separator;
     QString extraXml;
     NamespaceType nsType;
-    int convertRatio;
+    QList<int> convertRatio;
     int index;
 };
 

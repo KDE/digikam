@@ -217,7 +217,15 @@ void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<Namespac
         item->setData(e.separator, SEPARATOR_ROLE);
         item->setData(e.extraXml, EXTRAXML_ROLE);
         item->setData((int)e.nsType, NSTYPE_ROLE);
-        item->setData(e.convertRatio, CONVERSION_ROLE);
+        if(e.nsType == NamespaceEntry::RATING)
+        {
+           item->setData(e.convertRatio.at(0), ZEROSTAR_ROLE);
+           item->setData(e.convertRatio.at(1), ONESTAR_ROLE);
+           item->setData(e.convertRatio.at(2), TWOSTAR_ROLE);
+           item->setData(e.convertRatio.at(3), THREESTAR_ROLE);
+           item->setData(e.convertRatio.at(4), FOURSTAR_ROLE);
+           item->setData(e.convertRatio.at(5), FIVESTAR_ROLE);
+        }
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         root->appendRow(item);
     }
@@ -331,7 +339,15 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
         ns.separator            = current->data(SEPARATOR_ROLE).toString();
         ns.extraXml             = current->data(EXTRAXML_ROLE).toString();
         ns.nsType               = (NamespaceEntry::NamespaceType)current->data(NSTYPE_ROLE).toInt();
-        ns.convertRatio         = current->data(CONVERSION_ROLE).toInt();
+        if(ns.nsType == NamespaceEntry::RATING)
+        {
+            ns.convertRatio.append(current->data(ZEROSTAR_ROLE).toInt());
+            ns.convertRatio.append(current->data(ONESTAR_ROLE).toInt());
+            ns.convertRatio.append(current->data(TWOSTAR_ROLE).toInt());
+            ns.convertRatio.append(current->data(THREESTAR_ROLE).toInt());
+            ns.convertRatio.append(current->data(FOURSTAR_ROLE).toInt());
+            ns.convertRatio.append(current->data(FIVESTAR_ROLE).toInt());
+        }
         ns.index                = i;
         qDebug() << "saving+++++" << ns.namespaceName << " " << ns.index;
         container.append(ns);

@@ -117,9 +117,11 @@ void DMetadataSettingsContainer::defaultValues()
                                            NamespaceEntry::TAGS,
                                            3));
 
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.xmp.Rating"), 1, NamespaceEntry::RATING, 0));
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.rating"), 1, NamespaceEntry::RATING, 1));
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.Rating"), 25, NamespaceEntry::RATING, 2));
+    QList<int> defaultVal;
+    defaultVal << 0 << 1 << 2 << 3 << 4 << 5;
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.xmp.Rating"), defaultVal, NamespaceEntry::RATING, 0));
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.rating"), defaultVal, NamespaceEntry::RATING, 1));
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.Rating"), defaultVal, NamespaceEntry::RATING, 2));
 
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.dc.description"), NamespaceEntry::COMMENT, 0));
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.exif.UserComment"), NamespaceEntry::COMMENT, 1));
@@ -145,7 +147,13 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
                     (NamespaceEntry::NamespaceType)gr.readEntry("NSType").toInt(),
                     gr.readEntry("index").toInt());
 
-        ns.convertRatio = gr.readEntry("convertRatio").toInt();
+        QString conversion = gr.readEntry("convertRatio");
+
+        for(QString str : conversion.split(QLatin1String(",")))
+        {
+            ns.convertRatio.append(str.toInt());
+        }
+
        qDebug() << "Reading element " << ns.namespaceName << " " << ns.index;
        container.append(ns);
     }

@@ -58,7 +58,14 @@ private:
                    SEPARATOR_ROLE = Qt::UserRole+3,
                    EXTRAXML_ROLE = Qt::UserRole+4,
                    NSTYPE_ROLE = Qt::UserRole+5,
-                   CONVERSION_ROLE =Qt::UserRole+6};
+
+                   ZEROSTAR_ROLE =Qt::UserRole+6,
+                   ONESTAR_ROLE =Qt::UserRole+7,
+                   TWOSTAR_ROLE =Qt::UserRole+8,
+                   THREESTAR_ROLE =Qt::UserRole+9,
+                   FOURSTAR_ROLE =Qt::UserRole+10,
+                   FIVESTAR_ROLE =Qt::UserRole+11,
+                    };
 
     enum ModelNumbers { READ_TAGS = 0,
                         READ_RATINGS = 1,
