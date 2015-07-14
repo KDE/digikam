@@ -46,7 +46,7 @@ class DBJob : public RActionJob
 {
     Q_OBJECT
 
-public:
+protected:
 
     DBJob();
     ~DBJob();

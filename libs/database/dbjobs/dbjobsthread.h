@@ -52,15 +52,32 @@ public:
     explicit DBJobsThread(QObject* const parent);
     ~DBJobsThread();
 
+    /**
+     * @brief hasErrors: a method to check for jobs errors
+     * @return bool: true if the error list is not empty
+     */
     bool hasErrors();
+
+    /**
+     * @brief A method to get all errors reported from jobs
+     * @return String list with errors
+     */
     QList<QString> &errorsList();
 
 protected:
 
+    /**
+     * @brief Connects the signals of job to the signals of the thread
+     * @param j: Job that wanted to be connected
+     */
     void connectFinishAndErrorSignals(DBJob* const j);
 
 public Q_SLOTS:
 
+    /**
+     * @brief Appends the error string to m_errorsList
+     * @param errString: error string reported from the job
+     */
     void error(const QString& errString);
 
 Q_SIGNALS:
@@ -84,6 +101,10 @@ public:
     explicit AlbumsDBJobsThread(QObject* const parent);
     ~AlbumsDBJobsThread();
 
+    /**
+     * @brief Starts PAlbums listing and scanning job(s)
+     * @param info: represents the albums job info
+     */
     void albumsListing(const AlbumsDBJobInfo& info);
 
 Q_SIGNALS:
@@ -103,6 +124,10 @@ public:
     explicit TagsDBJobsThread(QObject* const parent);
     ~TagsDBJobsThread();
 
+    /**
+     * @brief Starts tags listing and scanning job(s)
+     * @param info: represents the tags job info
+     */
     void tagsListing(const TagsDBJobInfo& info);
 
 Q_SIGNALS:
@@ -122,6 +147,10 @@ public:
     explicit DatesDBJobsThread(QObject* const parent);
     ~DatesDBJobsThread();
 
+    /**
+     * @brief Starts dates listing and scanning
+     * @param info: represents the dates job info
+     */
     void datesListing(const DatesDBJobInfo& info);
 
 Q_SIGNALS:
@@ -140,6 +169,10 @@ public:
     explicit SearchesDBJobsThread(QObject* const parent);
     ~SearchesDBJobsThread();
 
+    /**
+     * @brief Starts searches listing and scanning
+     * @param info: represents the searches job info
+     */
     void searchesListing(const SearchesDBJobInfo& info);
 
 Q_SIGNALS:
@@ -159,6 +192,10 @@ public:
     explicit GPSDBJobsThread(QObject* const parent);
     ~GPSDBJobsThread();
 
+    /**
+     * @brief Starts GPS listing and scanning
+     * @param info: represents the GPS job info
+     */
     void GPSListing(const GPSDBJobInfo& info);
 
 Q_SIGNALS:

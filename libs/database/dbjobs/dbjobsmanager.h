@@ -42,12 +42,45 @@ class DBJobsManager : public QObject
 
 public:
 
+    /**
+     * @brief instance: returns DBJobsManager singleton
+     * @return DBJobsManager global instance
+     */
     static DBJobsManager* instance();
 
-    GPSDBJobsThread*      startGPSJobThread(const GPSDBJobInfo& jInfo);
-    TagsDBJobsThread*     startTagsJobThread(const TagsDBJobInfo& jInfo);
-    DatesDBJobsThread*    startDatesJobThread(const DatesDBJobInfo& jInfo);
-    AlbumsDBJobsThread*   startAlbumsJobThread(const AlbumsDBJobInfo& jInfo);
+    /**
+     * @brief startGPSJobThread: creates and starts GPS Job Thread
+     * @param jInfo: holds job info about the DB job
+     * @return GPSDBJobsThread instance for signal/slot connection
+     */
+    GPSDBJobsThread* startGPSJobThread(const GPSDBJobInfo& jInfo);
+
+    /**
+     * @brief startTagsJobThread: creates and starts Tag Job Thread
+     * @param jInfo: holds job info about the DB job
+     * @return TagsDBJobsThread instance for signal/slot connection
+     */
+    TagsDBJobsThread* startTagsJobThread(const TagsDBJobInfo& jInfo);
+
+    /**
+     * @brief startDatesJobThread: creates and starts Dates Job Thread
+     * @param jInfo: holds job info about the DB job
+     * @return DatesDBJobsThread instance for signal/slot connection
+     */
+    DatesDBJobsThread* startDatesJobThread(const DatesDBJobInfo& jInfo);
+
+    /**
+     * @brief startAlbumsJobThread: creates and starts Albums Job Thread
+     * @param jInfo: holds job info about the DB job
+     * @return AlbumsDBJobsThread instance for signal/slot connection
+     */
+    AlbumsDBJobsThread* startAlbumsJobThread(const AlbumsDBJobInfo& jInfo);
+
+    /**
+     * @brief startSearchesJobThread: creates and starts Searches Job Thread
+     * @param jInfo: holds job info about the DB job
+     * @return SearchesDBJobsThread instance for signal/slot connection
+     */
     SearchesDBJobsThread* startSearchesJobThread(const SearchesDBJobInfo& jInfo);
 
 private:

@@ -50,9 +50,6 @@ public:
 
 public:
 
-    DBJobInfo(Type jType);
-    DBJobInfo();
-
     Type type();
 
 public:
@@ -60,6 +57,10 @@ public:
     bool folders;
     bool listAvailableImagesOnly;
     bool recursive;
+
+protected:
+
+    DBJobInfo(Type jType);
 
 private:
 

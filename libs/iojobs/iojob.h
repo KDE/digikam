@@ -43,7 +43,7 @@ class IOJob : public RActionJob
 {
     Q_OBJECT
 
-public:
+protected:
 
     IOJob();
 

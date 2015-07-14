@@ -48,31 +48,105 @@ public:
     IOJobsThread(QObject* const parent);
     ~IOJobsThread();
 
+    /**
+     * @brief Starts a number of jobs to copy source files to destination
+     * @param srcFiles: files to be copied
+     * @param destAlbum: destination folder
+     */
     void copy(const QList<QUrl>& srcFiles, const QUrl destAlbum);
+
+    /**
+     * @brief Starts a number of jobs to move source files to destination
+     * @param srcFiles: files to be moved
+     * @param destAlbum: destination folder
+     */
     void move(const QList<QUrl>& srcFiles, const QUrl destAlbum);
+
+    /**
+     * @brief Starts a number of jobs to delete multiple files
+     * @param srcsToDelete: files to be deleted
+     * @param useTrash: a flag to use trash or not
+     */
     void del(const QList<QUrl>& srcsToDelete, bool useTrash);
+
+    /**
+     * @brief Starts one job to rename a file to a new name
+     * @param srcToRename: the url to be renamed
+     * @param newName: the url of the renamed item
+     */
     void renameFile(const QUrl& srcToRename, const QUrl& newName);
 
+    /**
+     * @return true if the thread is a renaming thread
+     */
     bool isRenameThread();
+
+    /**
+     * @return url of the item that is renamed
+     */
     QUrl oldUrlToRename();
 
+    /**
+     * @brief cancels thread execution
+     */
     void cancel();
+
+    /**
+     * @brief isCanceled
+     * @return true if the thread was inturrupted
+     */
     bool isCanceled();
 
+    /**
+     * @brief hasErrors
+     * @return true if string list was not empty
+     */
     bool hasErrors();
+
+    /**
+     * @brief a setter to make the thread keep errors reported
+     *        by the job
+     */
     void setKeepErrors(bool keepErrors);
+
+    /**
+     * @brief isKeepingErrors
+     * @return true if the thread keeps error
+     */
     bool isKeepingErrors();
+
+    /**
+     * @brief errorsList
+     * @return
+     */
     QList<QString>& errorsList();
 
 public Q_SLOTS:
 
+    /**
+     * @brief connected to all active jobs and checks if the job
+     *        list has finished to report that thread is finished
+     */
     void oneJobFinished();
+
+    /**
+     * @brief A slot to receive the error from the job
+     * @param errString: string to be appended
+     */
     void error(const QString& errString);
 
 Q_SIGNALS:
 
     void finished();
     void renamed(const QUrl& oldUrl, const QUrl& newURl);
+
+private:
+
+    /**
+     * @brief connects the job with signals/slots
+     * @param job to be connected
+     */
+    void connectOneJob(IOJob* const j);
 
 private:
 

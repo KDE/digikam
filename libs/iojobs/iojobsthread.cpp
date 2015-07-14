@@ -70,11 +70,7 @@ void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
     {
         CopyJob* const j = new CopyJob(url, destAlbum, false);
 
-        connect(j, SIGNAL(error(QString)),
-                this, SLOT(error(QString)));
-
-        connect(j, SIGNAL(signalDone()),
-                this, SLOT(oneJobFinished()));
+        connectOneJob(j);
 
         collection.insert(j, 0);
     }
@@ -90,11 +86,7 @@ void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
     {
         CopyJob* const j = new CopyJob(url, destAlbum, true);
 
-        connect(j, SIGNAL(error(QString)),
-                this, SLOT(error(QString)));
-
-        connect(j, SIGNAL(signalDone()),
-                this, SLOT(oneJobFinished()));
+        connectOneJob(j);
 
         collection.insert(j, 0);
     }
@@ -110,11 +102,7 @@ void IOJobsThread::del(const QList<QUrl>& srcsToDelete, bool useTrash)
     {
         DeleteJob* const j = new DeleteJob(url, useTrash);
 
-        connect(j, SIGNAL(error(QString)),
-                this, SLOT(error(QString)));
-
-        connect(j, SIGNAL(signalDone()),
-                this, SLOT(oneJobFinished()));
+        connectOneJob(j);
 
         collection.insert(j, 0);
     }
@@ -184,6 +172,15 @@ bool IOJobsThread::isKeepingErrors()
 QList<QString>& IOJobsThread::errorsList()
 {
     return d->errorsList;
+}
+
+void IOJobsThread::connectOneJob(IOJob * const j)
+{
+    connect(j, SIGNAL(error(QString)),
+            this, SLOT(error(QString)));
+
+    connect(j, SIGNAL(signalDone()),
+            this, SLOT(oneJobFinished()));
 }
 
 void IOJobsThread::oneJobFinished()

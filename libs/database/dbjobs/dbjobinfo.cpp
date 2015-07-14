@@ -26,10 +26,6 @@
 namespace Digikam
 {
 
-DBJobInfo::DBJobInfo()
-{
-}
-
 DBJobInfo::DBJobInfo(Type jType)
     : jobType(jType)
 {
