@@ -110,6 +110,7 @@ protected:
 private:
 
     void setupActions();
+    void updateActions();
     void setupConnections();
     void setupUserArea();
     void setupStatusBar();
@@ -150,6 +151,7 @@ private:
     void toogleShowBar();
     void setInitialSorting();
     void sidebarTabTitleStyleChanged();
+    void updateRightSideBar(const CamItemInfo& info);
 
 private Q_SLOTS:
 
@@ -207,8 +209,6 @@ private Q_SLOTS:
 
     void slotNewSelection(bool);
     void slotImageSelected(const CamItemInfoList& selection, const CamItemInfoList& listAll);
-
-    void slotItemsSelected(const CamItemInfo& info, bool selected);
 
     void slotSwitchedToPreview();
     void slotSwitchedToIconView();
