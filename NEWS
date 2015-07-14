@@ -8,6 +8,8 @@ General: Integer and double input value sliders use now PhotoShop/Krita/Gimp lik
 General: LCMS1 support removed.
 General: Sqlite2 support removed.
 General: Welcome Page view re-writed to support selected best background photo from end user.
+General: Replacing annoying KIOSlave listing and scanning methods with new thread based implementation
+General: Isolating KIO calls in KIOWrapper to be able to create a pure qt digiKam soon
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
