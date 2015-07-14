@@ -23,7 +23,6 @@
 Q_LOGGING_CATEGORY(DIGIKAM_GENERAL_LOG,        "digikam.general")
 Q_LOGGING_CATEGORY(DIGIKAM_DBJOB_LOG,          "digikam.dbjob")
 Q_LOGGING_CATEGORY(DIGIKAM_IOJOB_LOG,          "digikam.iojob")
-Q_LOGGING_CATEGORY(DIGIKAM_KIOSLAVES_LOG,      "digikam.kioslaves")
 Q_LOGGING_CATEGORY(DIGIKAM_SHOWFOTO_LOG,       "digikam.showfoto")
 Q_LOGGING_CATEGORY(DIGIKAM_IMAGEPLUGINS_LOG,   "digikam.imageplugins")
 Q_LOGGING_CATEGORY(DIGIKAM_DATABASESERVER_LOG, "digikam.databaseserver")

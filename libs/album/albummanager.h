@@ -63,7 +63,7 @@ class ImageTagChangeset;
  * AlbumManager manages albums: does listing of albums and controls the lifetime of it.
  * For PAlbums and TAlbums, the listing is done by reading the db directly and
  * building the hierarchy of the albums. For DAlbums, since the listing takes
- * time, the work is delegated to a kioslave. Interested frontend entities can
+ * time, the work is delegated to a dbjob. Interested frontend entities can
  * connect to the albummanager to receive notifications of new Albums, when
  * Albums are deleted and when the current album is changed.
  *
