@@ -57,12 +57,12 @@ QUrl KIOWrapper::mostLocalUrl(const QUrl& url)
     return job->mostLocalUrl();
 }
 
-QUrl KIOWrapper::upUrl(const QUrl &url)
+QUrl KIOWrapper::upUrl(const QUrl& url)
 {
     return KIO::upUrl(url);
 }
 
-bool KIOWrapper::fileCopy(const QUrl &src, const QUrl &dest, bool withKJobWidget, QWidget* const widget)
+bool KIOWrapper::fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget, QWidget* const widget)
 {
     KIO::FileCopyJob* const fileCopyJob = KIO::file_copy(src, dest, KIO::Overwrite);
 
@@ -74,7 +74,7 @@ bool KIOWrapper::fileCopy(const QUrl &src, const QUrl &dest, bool withKJobWidget
     return fileCopyJob->exec();
 }
 
-bool KIOWrapper::fileMove(const QUrl &src, const QUrl &dest)
+bool KIOWrapper::fileMove(const QUrl& src, const QUrl& dest)
 {
     KIO::Job* const job = KIO::file_move(src, dest, -1,
                                          KIO::Overwrite | KIO::HideProgressInfo);
@@ -88,7 +88,7 @@ bool KIOWrapper::fileDelete(const QUrl& url)
     return job->exec();
 }
 
-bool KIOWrapper::mkdir(const QUrl &url, bool withKJobWidget, QWidget* const widget)
+bool KIOWrapper::mkdir(const QUrl& url, bool withKJobWidget, QWidget* const widget)
 {
     KIO::Job* const job = KIO::mkdir(url);
 
@@ -100,14 +100,14 @@ bool KIOWrapper::mkdir(const QUrl &url, bool withKJobWidget, QWidget* const widg
     return job->exec();
 }
 
-bool KIOWrapper::rename(const QUrl &oldUrl, const QUrl &newUrl)
+bool KIOWrapper::rename(const QUrl& oldUrl, const QUrl& newUrl)
 {
     KIO::Job* const job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
 
     return job->exec();
 }
 
-void KIOWrapper::move(const QUrl &src, const QUrl &dest)
+void KIOWrapper::move(const QUrl& src, const QUrl& dest)
 {
     KIO::Job* const job = KIO::move(src, dest);
 
@@ -115,7 +115,7 @@ void KIOWrapper::move(const QUrl &src, const QUrl &dest)
             this, SLOT(kioJobResult(KJob*)));
 }
 
-void KIOWrapper::del(const QUrl &url)
+void KIOWrapper::del(const QUrl& url)
 {
     KIO::Job* const job = KIO::del(url);
 
@@ -123,7 +123,7 @@ void KIOWrapper::del(const QUrl &url)
             this, SLOT(kioJobResult(KJob*)));
 }
 
-void KIOWrapper::trash(const QUrl &url)
+void KIOWrapper::trash(const QUrl& url)
 {
     KIO::Job* const job = KIO::trash(url);
 
@@ -141,7 +141,7 @@ QStringList KIOWrapper::previewJobAvailablePlugins()
     return KIO::PreviewJob::availablePlugins();
 }
 
-void KIOWrapper::filePreview(const QList<QUrl>& urlList, const QSize &size, const QStringList* const enabledPlugins)
+void KIOWrapper::filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins)
 {
     KFileItemList items;
 
@@ -163,7 +163,7 @@ void KIOWrapper::filePreview(const QList<QUrl>& urlList, const QSize &size, cons
             this, SIGNAL(previewJobFinished()));
 }
 
-void KIOWrapper::kioJobResult(KJob *job)
+void KIOWrapper::kioJobResult(KJob* job)
 {
     if (job->error() != 0)
     {
@@ -185,7 +185,7 @@ void KIOWrapper::gotPreview(const KFileItem& item, const QPixmap& pix)
     emit gotPreview(item.url(), pix);
 }
 
-QPair<int, QString> KIOWrapper::renameDlg(QWidget *widget, const QString &caption, const QUrl &src, const QUrl &dest)
+QPair<int, QString> KIOWrapper::renameDlg(QWidget* widget, const QString& caption, const QUrl& src, const QUrl& dest)
 {
     QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(widget, caption,
                                                             src, dest,

@@ -62,7 +62,7 @@ public:
 
     static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
     static bool fileMove(const QUrl& src, const QUrl& dest);
-    static bool fileDelete(const QUrl &url);
+    static bool fileDelete(const QUrl& url);
     static bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
     static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
 
@@ -73,7 +73,7 @@ public:
     static QString convertSizeFromKiB(quint64 KbSize);
 
     static QStringList previewJobAvailablePlugins();
-    void filePreview(const QList<QUrl> &urlList, const QSize &size, const QStringList* const enabledPlugins = 0);
+    void filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins = 0);
 
     static QPair<int, QString> renameDlg(QWidget* const widget, const QString& caption, const QUrl& src, const QUrl& dest);
 
@@ -83,7 +83,7 @@ Q_SIGNALS:
 
     void gotPreview(const QUrl& itemUrl, const QPixmap& pix);
     void previewJobFinished();
-    void previewJobFailed(QUrl);
+    void previewJobFailed(const QUrl& itemUrl);
 
 private Q_SLOTS:
 
