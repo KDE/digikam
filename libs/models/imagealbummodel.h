@@ -7,6 +7,7 @@
  * Description : Qt item model for database entries, listing done with ioslave
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,12 +29,6 @@
 
 #include "imagethumbnailmodel.h"
 #include "album.h"
-
-namespace KIO
-{
-class Job;
-}
-class KJob;
 
 namespace Digikam
 {
@@ -85,8 +80,8 @@ protected Q_SLOTS:
     void scheduleRefresh();
     void scheduleIncrementalRefresh();
 
-    void slotResult(KJob* job);
-    void slotData(KIO::Job* job, const QByteArray& data);
+    void slotResult();
+    void slotData(const QList<ImageListerRecord> &records);
 
     void slotNextRefresh();
     void slotNextIncrementalRefresh();

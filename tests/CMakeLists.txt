@@ -513,7 +513,6 @@ target_link_libraries(albummodeltest
                       KF5::KIOCore
                       ${OpenCV_LIBRARIES}
 
-
 )
 
 #------------------------------------------------------------------------

@@ -40,6 +40,7 @@
 #include "showfotodelegate.h"
 #include "showfotosettings.h"
 #include "showfotodragdrophandler.h"
+#include "kiowrapper.h"
 
 namespace ShowFoto
 {
@@ -62,6 +63,7 @@ public:
         dDHandler(0),
         filterModel(0),
         thumbLoadThread(0),
+        kioWrapper(0),
         thumbBar(0),
         thumbBarDock(0),
         normalDelegate(0),
@@ -94,6 +96,7 @@ public:
     ShowfotoDragDropHandler*         dDHandler;
     ShowfotoFilterModel*             filterModel;
     Digikam::ThumbnailLoadThread*    thumbLoadThread;
+    Digikam::KIOWrapper*             kioWrapper;
     ShowfotoThumbnailBar*            thumbBar;
     Digikam::ThumbBarDock*           thumbBarDock;
     ShowfotoNormalDelegate*          normalDelegate;

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +39,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kio/previewjob.h>
 
 // Local includes
 
@@ -52,6 +52,7 @@
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -114,7 +115,7 @@ public:
         highlight          = true;
         sendSurrogate      = true;
         creator            = 0;
-        kdeJob             = 0;
+        kioWrapper         = 0;
         notifiedForResults = false;
     }
 
@@ -132,7 +133,7 @@ public:
 
     QList<LoadingDescription>       kdeTodo;
     QHash<QUrl, LoadingDescription> kdeJobHash;
-    KIO::PreviewJob*                kdeJob;
+    KIOWrapper*                     kioWrapper;
 
     QList<LoadingDescription>       lastDescriptions;
     QStringList                     previewPlugins;
@@ -778,7 +779,7 @@ void ThumbnailLoadThread::loadWithKDE(const LoadingDescription& description)
 
 void ThumbnailLoadThread::startKdePreviewJob()
 {
-    if (d->kdeJob || d->kdeTodo.isEmpty())
+    if (d->kioWrapper || d->kdeTodo.isEmpty())
     {
         return;
     }
@@ -795,37 +796,32 @@ void ThumbnailLoadThread::startKdePreviewJob()
 
     d->kdeTodo.clear();
 
-    KFileItemList items;
-
     if (d->previewPlugins.isEmpty())
-      d->previewPlugins = KIO::PreviewJob::availablePlugins();
+      d->previewPlugins = KIOWrapper::previewJobAvailablePlugins();
 
-    for (QList<QUrl>::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-    {
-        if ((*it).isValid())
-            items.append(KFileItem(*it));
-    }
+    d->kioWrapper = new KIOWrapper();
 
-    d->kdeJob = KIO::filePreview(items, QSize(d->creator->storedSize(), d->creator->storedSize()), &d->previewPlugins); // FIXME: do not know if size 0 is allowed
+    // FIXME: do not know if size 0 is allowed
+    d->kioWrapper->filePreview(list, QSize(d->creator->storedSize(), d->creator->storedSize()), &d->previewPlugins);
 
-    connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
-            this, SLOT(gotKDEPreview(KFileItem,QPixmap)));
+    connect(d->kioWrapper, SIGNAL(gotPreview(QUrl,QPixmap)),
+            this, SLOT(gotKDEPreview(QUrl,QPixmap)));
 
-    connect(d->kdeJob, SIGNAL(failed(KFileItem)),
-            this, SLOT(failedKDEPreview(KFileItem)));
+    connect(d->kioWrapper, SIGNAL(previewJobFailed(QUrl)),
+            this, SLOT(failedKDEPreview(QUrl)));
 
-    connect(d->kdeJob, SIGNAL(finished(KJob*)),
-            this, SLOT(kdePreviewFinished(KJob*)));
+    connect(d->kioWrapper, SIGNAL(previewJobFinished()),
+            this, SLOT(kdePreviewFinished()));
 }
 
-void ThumbnailLoadThread::gotKDEPreview(const KFileItem& item, const QPixmap& kdepix)
+void ThumbnailLoadThread::gotKDEPreview(const QUrl& item, const QPixmap& kdepix)
 {
-    if (!d->kdeJobHash.contains(item.url()))
+    if (!d->kdeJobHash.contains(item))
     {
         return;
     }
 
-    LoadingDescription description = d->kdeJobHash.value(item.url());
+    LoadingDescription description = d->kdeJobHash.value(item);
     QPixmap pix;
 
     if (kdepix.isNull())
@@ -850,14 +846,14 @@ void ThumbnailLoadThread::gotKDEPreview(const KFileItem& item, const QPixmap& kd
     emit signalThumbnailLoaded(description, pix);
 }
 
-void ThumbnailLoadThread::failedKDEPreview(const KFileItem& item)
+void ThumbnailLoadThread::failedKDEPreview(const QUrl& item)
 {
     gotKDEPreview(item, QPixmap());
 }
 
-void ThumbnailLoadThread::kdePreviewFinished(KJob*)
+void ThumbnailLoadThread::kdePreviewFinished()
 {
-    d->kdeJob = 0;
+    d->kioWrapper = 0;
     startKdePreviewJob();
 }
 

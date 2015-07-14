@@ -264,9 +264,9 @@ private Q_SLOTS:
 
     void slotThumbnailsAvailable();
     void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& thumb);
-    void gotKDEPreview(const KFileItem&, const QPixmap& pix);
-    void failedKDEPreview(const KFileItem&);
-    void kdePreviewFinished(KJob*);
+    void gotKDEPreview(const QUrl &, const QPixmap& pix);
+    void failedKDEPreview(const QUrl&);
+    void kdePreviewFinished();
 
 private:
 

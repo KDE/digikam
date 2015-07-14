@@ -7,6 +7,7 @@
  * Description : Duplicates items finder.
  *
  * Copyright (C) 2012-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,10 +29,6 @@
 
 #include <QString>
 #include <QObject>
-
-// KDE includes
-
-#include <kjob.h>
 
 // Local includes
 
@@ -60,8 +57,8 @@ private Q_SLOTS:
     void slotStart();
     void slotDone();
     void slotCancel();
-    void slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong);
-    void slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong);
+    void slotDuplicatesSearchTotalAmount(int);
+    void slotDuplicatesSearchProcessedAmount(int);
 
 private:
 

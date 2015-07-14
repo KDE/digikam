@@ -9,6 +9,7 @@
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,10 +70,6 @@ extern "C"
 
 #include <klocalizedstring.h>
 
-#include <kjobwidgets.h>
-#include <kio/global.h>
-#include <kio/job.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -100,6 +97,10 @@ extern "C"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnailloadthread.h"
 #include "dnotificationwrapper.h"
+#include "dbjobinfo.h"
+#include "dbjobsmanager.h"
+#include "dbjobsthread.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -195,10 +196,11 @@ public:
 
     bool                        showOnlyAvailableAlbums;
 
-    KIO::TransferJob*           albumListJob;
-    KIO::TransferJob*           dateListJob;
-    KIO::TransferJob*           tagListJob;
-    KIO::TransferJob*           personListJob;
+    AlbumsDBJobsThread*         albumListJob;
+    DatesDBJobsThread*          dateListJob;
+    TagsDBJobsThread*           tagListJob;
+    TagsDBJobsThread*           personListJob;
+
 
     AlbumWatch*                 albumWatch;
 
@@ -291,6 +293,10 @@ AlbumManager* AlbumManager::instance()
 AlbumManager::AlbumManager()
     : d(new Private)
 {
+    qRegisterMetaType<QMap<QDateTime,int>>("QMap<QDateTime,int>");
+    qRegisterMetaType<QMap<int,int>>("QMap<int,int>");
+    qRegisterMetaType<QMap<QString,QMap<int,int> >>("QMap<QString,QMap<int,int> >");
+
     internalInstance = this;
     d->albumWatch    = new AlbumWatch(this);
 
@@ -365,25 +371,25 @@ void AlbumManager::cleanUp()
 
     if (d->dateListJob)
     {
-        d->dateListJob->kill();
+        d->dateListJob->cancel();
         d->dateListJob = 0;
     }
 
     if (d->albumListJob)
     {
-        d->albumListJob->kill();
+        d->albumListJob->cancel();
         d->albumListJob = 0;
     }
 
     if (d->tagListJob)
     {
-        d->tagListJob->kill();
+        d->tagListJob->cancel();
         d->tagListJob = 0;
     }
 
     if (d->personListJob)
     {
-        d->personListJob->kill();
+        d->personListJob->cancel();
         d->personListJob = 0;
     }
 }
@@ -405,10 +411,11 @@ static bool moveToBackup(const QFileInfo& info)
     if (info.exists())
     {
         QFileInfo backup(info.dir(), info.fileName() + QLatin1String("-backup-") + QDateTime::currentDateTime().toString(Qt::ISODate));
-        KIO::Job* const job = KIO::file_move(QUrl::fromLocalFile(info.filePath()), QUrl::fromLocalFile(backup.filePath()),
-                                             -1, KIO::Overwrite | KIO::HideProgressInfo);
 
-        if (!job->exec())
+        bool jobExecution = KIOWrapper::fileMove(QUrl::fromLocalFile(info.filePath()),
+                                                 QUrl::fromLocalFile(backup.filePath()));
+
+        if (!jobExecution)
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                   i18n("Failed to backup the existing database file (\"%1\"). "
@@ -432,10 +439,10 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
                        "Starting with an empty database.",
                        QDir::toNativeSeparators(oldFile.filePath()), QDir::toNativeSeparators(newFile.filePath()));
 
-    KIO::Job* const job = KIO::file_copy(QUrl::fromLocalFile(oldFile.filePath()), QUrl::fromLocalFile(newFile.filePath()),
-                                         -1, KIO::Overwrite /*| KIO::HideProgressInfo*/);
+    bool jobExecution = KIOWrapper::fileCopy(QUrl::fromLocalFile(oldFile.filePath()),
+                                                         QUrl::fromLocalFile(newFile.filePath()));
 
-    if (!job->exec())
+    if (!jobExecution)
     {
         QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), message);
         return false;
@@ -1481,23 +1488,23 @@ void AlbumManager::getAlbumItemsCount()
         return;
     }
 
-    // List albums using kioslave
-
     if (d->albumListJob)
     {
-        d->albumListJob->kill();
+        d->albumListJob->cancel();
         d->albumListJob = 0;
     }
 
-    DatabaseUrl u   = DatabaseUrl::albumUrl();
-    d->albumListJob = ImageLister::startListJob(u);
-    d->albumListJob->addMetaData(QLatin1String("folders"), QLatin1String("true"));
+    qCDebug(DIGIKAM_GENERAL_LOG) << "LISTING ALL";
 
-    connect(d->albumListJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotAlbumsJobResult(KJob*)));
+    AlbumsDBJobInfo *jInfo = new AlbumsDBJobInfo();
+    jInfo->folders = true;
+    d->albumListJob = dynamic_cast<AlbumsDBJobsThread*>(DBJobsManager::instance()->startAlbumsJobThread(jInfo));
 
-    connect(d->albumListJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotAlbumsJobData(KIO::Job*,QByteArray)));
+    connect(d->albumListJob, SIGNAL(finished()),
+            this, SLOT(slotAlbumsJobResult()));
+
+    connect(d->albumListJob, SIGNAL(foldersData(QMap<int,int>)),
+            this, SLOT(slotAlbumsJobData(QMap<int,int>)));
 }
 
 void AlbumManager::scanTAlbums()
@@ -1654,34 +1661,37 @@ void AlbumManager::getTagItemsCount()
 
     if (d->tagListJob)
     {
-        d->tagListJob->kill();
+        d->tagListJob->cancel();
         d->tagListJob = 0;
     }
 
-    DatabaseUrl u = DatabaseUrl::fromTagIds(QList<int>());
-    d->tagListJob = ImageLister::startListJob(u);
-    d->tagListJob->addMetaData(QLatin1String("folders"), QLatin1String("true"));
+    TagsDBJobInfo *jInfo = new TagsDBJobInfo();
+    jInfo->folders = true;
 
-    connect(d->tagListJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotTagsJobResult(KJob*)));
+    d->tagListJob = dynamic_cast<TagsDBJobsThread*>(DBJobsManager::instance()->startTagsJobThread(jInfo));
 
-    connect(d->tagListJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotTagsJobData(KIO::Job*,QByteArray)));
+    connect(d->tagListJob, SIGNAL(finished()),
+            this, SLOT(slotTagsJobResult()));
+
+    connect(d->tagListJob, SIGNAL(foldersData(QMap<int,int>)),
+            this, SLOT(slotTagsJobData(QMap<int,int>)));
 
     if (d->personListJob)
     {
-        d->personListJob->kill();
+        d->personListJob->cancel();
         d->personListJob = 0;
     }
 
-    d->personListJob = ImageLister::startListJob(u);
-    d->personListJob->addMetaData(QLatin1String("facefolders"), QLatin1String("true"));
+    jInfo->folders = false;
+    jInfo->faceFolders = true;
 
-    connect(d->personListJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotPeopleJobResult(KJob*)));
+    d->personListJob = dynamic_cast<TagsDBJobsThread*>(DBJobsManager::instance()->startTagsJobThread(jInfo));
 
-    connect(d->personListJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotPeopleJobData(KIO::Job*,QByteArray)));
+    connect(d->personListJob, SIGNAL(finished()),
+            this, SLOT(slotPeopleJobResult()));
+
+    connect(d->personListJob, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),
+            this, SLOT(slotPeopleJobData(QMap<QString,QMap<int,int> >)));
 }
 
 void AlbumManager::scanSAlbums()
@@ -1782,19 +1792,19 @@ void AlbumManager::scanDAlbums()
 
     if (d->dateListJob)
     {
-        d->dateListJob->kill();
+        d->dateListJob->cancel();
         d->dateListJob = 0;
     }
 
-    DatabaseUrl u  = DatabaseUrl::dateUrl();
-    d->dateListJob = ImageLister::startListJob(u);
-    d->dateListJob->addMetaData(QLatin1String("folders"), QLatin1String("true"));
+    DatesDBJobInfo *jInfo = new DatesDBJobInfo();
+    jInfo->folders = true;
+    d->dateListJob = dynamic_cast<DatesDBJobsThread*>(DBJobsManager::instance()->startDatesJobThread(jInfo));
 
-    connect(d->dateListJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotDatesJobResult(KJob*)));
+    connect(d->dateListJob, SIGNAL(finished()),
+            this, SLOT(slotDatesJobResult()));
 
-    connect(d->dateListJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotDatesJobData(KIO::Job*,QByteArray)));
+    connect(d->dateListJob, SIGNAL(foldersData(QMap<QDateTime,int>)),
+            this, SLOT(slotDatesJobData(QMap<QDateTime, int>)));
 }
 
 AlbumList AlbumManager::allPAlbums() const
@@ -2175,12 +2185,11 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     url.setPath(url.path() + QLatin1Char('/') + name);
     QUrl fileUrl    = url.fileUrl();
 
-    auto mkdirJob = KIO::mkdir(fileUrl);
-    KJobWidgets::setWindow(mkdirJob, QApplication::activeWindow());
+    bool jobExecution = KIOWrapper::mkdir(fileUrl, true, QApplication::activeWindow());
 
-    if (!mkdirJob->exec())
+    if (!jobExecution)
     {
-        errMsg = i18n("Failed to create directory '%1': %2", fileUrl.toString(), mkdirJob->errorString()); // TODO add tags?
+        errMsg = i18n("Failed to create directory '%1'", fileUrl.toString()); // TODO add tags?
         return 0;
     }
 
@@ -2257,9 +2266,9 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     // we rename them directly. Faster.
     ScanController::instance()->suspendCollectionScan();
 
-    KIO::Job* const job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
+    bool jobExecution = KIOWrapper::rename(oldUrl, newUrl);
 
-    if (!job->exec())
+    if (!jobExecution)
     {
         errMsg = i18n("Failed to rename Album");
         return false;
@@ -2999,61 +3008,51 @@ void AlbumManager::notifyAlbumDeletion(Album* album)
     invalidateGuardedPointers(album);
 }
 
-void AlbumManager::slotAlbumsJobResult(KJob* job)
+void AlbumManager::slotAlbumsJobResult()
 {
-    d->albumListJob = 0;
-
-    if (job->error())
+    if (d->albumListJob->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list albums";
 
         // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), d->albumListJob->errorsList().first(),
                              0, i18n("digiKam"));
     }
+
+    d->albumListJob = 0;
 }
 
-void AlbumManager::slotAlbumsJobData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotAlbumsJobData(const QMap<int, int> &albumsStatMap)
 {
-    if (data.isEmpty())
+    if (albumsStatMap.isEmpty())
     {
         return;
     }
-
-    QMap<int, int> albumsStatMap;
-    QByteArray di(data);
-    QDataStream ds(&di, QIODevice::ReadOnly);
-    ds >> albumsStatMap;
 
     d->pAlbumsCount = albumsStatMap;
     emit signalPAlbumsDirty(albumsStatMap);
 }
 
-void AlbumManager::slotPeopleJobResult(KJob* job)
+void AlbumManager::slotPeopleJobResult()
 {
-    d->personListJob = 0;
-
-    if (job->error())
+    if (d->personListJob->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list face tags";
 
         // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), d->personListJob->errorsList().first(),
                              0, i18n("digiKam"));
     }
+
+    d->personListJob = 0;
 }
 
-void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesStatMap)
 {
-    if (data.isEmpty())
+    if (facesStatMap.isEmpty())
     {
         return;
     }
-
-    QMap<QString, QMap<int, int> > facesStatMap;
-    QByteArray di(data);
-    QDataStream ds(&di, QIODevice::ReadOnly);
-    ds >> facesStatMap;
 
     // For now, we only use the sum of confirmed and unconfirmed faces
     d->fAlbumsCount.clear();
@@ -3072,55 +3071,49 @@ void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& data)
     emit signalFaceCountsDirty(d->fAlbumsCount);
 }
 
-void AlbumManager::slotTagsJobResult(KJob* job)
+void AlbumManager::slotTagsJobResult()
 {
-    d->tagListJob = 0;
-
-    if (job->error())
+    if (d->tagListJob->hasErrors())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list tags";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list face tags";
 
         // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), d->personListJob->errorsList().first(),
                              0, i18n("digiKam"));
     }
+
+    d->tagListJob = 0;
 }
 
-void AlbumManager::slotTagsJobData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotTagsJobData(const QMap<int,int>& tagsStatMap)
 {
-    if (data.isEmpty())
+    if (tagsStatMap.isEmpty())
     {
         return;
     }
-
-    QMap<int, int> tagsStatMap;
-    QByteArray     di(data);
-    QDataStream    ds(&di, QIODevice::ReadOnly);
-    ds >> tagsStatMap;
 
     d->tAlbumsCount = tagsStatMap;
     emit signalTAlbumsDirty(tagsStatMap);
 }
 
-void AlbumManager::slotDatesJobResult(KJob* job)
+void AlbumManager::slotDatesJobResult()
 {
-    d->dateListJob = 0;
-
-    if (job->error())
+    if (d->dateListJob->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list dates";
 
         // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), d->dateListJob->errorsList().first(),
                              0, i18n("digiKam"));
     }
 
+    d->dateListJob = 0;
     emit signalAllDAlbumsLoaded();
 }
 
-void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 {
-    if (data.isEmpty() || !d->rootDAlbum)
+    if (datesStatMap.isEmpty() || !d->rootDAlbum)
     {
         return;
     }
@@ -3146,11 +3139,6 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
 
         ++it;
     }
-
-    QMap<QDateTime, int> datesStatMap;
-    QByteArray           di(data);
-    QDataStream          ds(&di, QIODevice::ReadOnly);
-    ds >> datesStatMap;
 
     QMap<YearMonth, int> yearMonthMap;
 

@@ -27,12 +27,8 @@
 
 // Qt includes
 
+#include <QObject>
 #include <QUrl>
-
-// KDE includes
-
-#include <kio/job.h>
-#include <kio/copyjob.h>
 
 namespace Digikam
 {
@@ -93,9 +89,9 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotResult(KJob* kjob);
-    void slotRenamed(KIO::Job*, const QUrl& , const QUrl& newURL);
-    KIO::Job* createJob(int operation, const QList<QUrl>& src, const QUrl& dest);
+    void slotResult();
+    void slotRenamed(const QUrl& oldUrl, const QUrl& newUrl);
+    void createJob(int operation, const QList<QUrl>& src, const QUrl& dest);
 
 private:
 

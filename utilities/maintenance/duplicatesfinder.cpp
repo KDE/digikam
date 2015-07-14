@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2012-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,8 +41,8 @@
 #include "imagelister.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
-
-using namespace KIO;
+#include "dbjobsthread.h"
+#include "dbjobsmanager.h"
 
 namespace Digikam
 {
@@ -56,10 +57,10 @@ public:
     {
     }
 
-    int         similarity;
-    QStringList albumsIdList;
-    QStringList tagsIdList;
-    Job*        job;
+    int                   similarity;
+    QList<int>            albumsIdList;
+    QList<int>            tagsIdList;
+    SearchesDBJobsThread* job;
 };
 
 DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int similarity, ProgressItem* const parent)
@@ -69,10 +70,10 @@ DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tag
     d->similarity   = similarity;
 
     foreach(Album* const a, albums)
-        d->albumsIdList << QString::number(a->id());
+        d->albumsIdList << a->id();
 
     foreach(Album* const a, tags)
-        d->tagsIdList << QString::number(a->id());
+        d->tagsIdList << a->id();
 }
 
 DuplicatesFinder::DuplicatesFinder(const int similarity, ProgressItem* const parent)
@@ -82,7 +83,7 @@ DuplicatesFinder::DuplicatesFinder(const int similarity, ProgressItem* const par
     d->similarity = similarity;
 
     foreach(Album* const a, AlbumManager::instance()->allPAlbums())
-        d->albumsIdList << QString::number(a->id());
+        d->albumsIdList << a->id();
 }
 
 DuplicatesFinder::~DuplicatesFinder()
@@ -98,31 +99,39 @@ void DuplicatesFinder::slotStart()
     ProgressManager::addProgressItem(this);
 
     double thresh = d->similarity / 100.0;
-    d->job        = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
-    d->job->addMetaData(QLatin1String("albumids"),   d->albumsIdList.join(QLatin1String(",")));
+    SearchesDBJobInfo *jobInfo = new SearchesDBJobInfo();
+    jobInfo->duplicates = true;
+    jobInfo->threshold = thresh;
+    jobInfo->albumIds = d->albumsIdList;
 
     if (!d->tagsIdList.isEmpty())
-        d->job->addMetaData(QLatin1String("tagids"), d->tagsIdList.join(QLatin1String(",")));
+        jobInfo->tagIds = d->tagsIdList;
 
-    d->job->addMetaData(QLatin1String("duplicates"), QLatin1String("normal"));
-    d->job->addMetaData(QLatin1String("threshold"),  QString::number(thresh));
+    d->job = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
 
-    connect(d->job, SIGNAL(result(KJob*)),
+//    if (!d->tagsIdList.isEmpty())
+//        d->job->addMetaData(QLatin1String("tagids"), d->tagsIdList.join(QLatin1String(",")));
+
+//    d->job->addMetaData(QLatin1String("albumids"),   d->albumsIdList.join(QLatin1String(",")));
+//    d->job->addMetaData(QLatin1String("duplicates"), QLatin1String("normal"));
+//    d->job->addMetaData(QLatin1String("threshold"),  QString::number(thresh));
+
+    connect(d->job, SIGNAL(finished()),
             this, SLOT(slotDone()));
 
-    connect(d->job, SIGNAL(totalAmount(KJob*,KJob::Unit,qulonglong)),
-            this, SLOT(slotDuplicatesSearchTotalAmount(KJob*,KJob::Unit,qulonglong)));
+    connect(d->job, SIGNAL(totalSize(int)),
+            this, SLOT(slotDuplicatesSearchTotalAmount(int)));
 
-    connect(d->job, SIGNAL(processedAmount(KJob*,KJob::Unit,qulonglong)),
-            this, SLOT(slotDuplicatesSearchProcessedAmount(KJob*,KJob::Unit,qulonglong)));
+    connect(d->job, SIGNAL(processedSize(int)),
+            this, SLOT(slotDuplicatesSearchProcessedAmount(int)));
 }
 
-void DuplicatesFinder::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
+void DuplicatesFinder::slotDuplicatesSearchTotalAmount(int amount)
 {
     setTotalItems(amount);
 }
 
-void DuplicatesFinder::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong amount)
+void DuplicatesFinder::slotDuplicatesSearchProcessedAmount(int amount)
 {
     setCompletedItems(amount);
     updateProgress();
@@ -130,12 +139,12 @@ void DuplicatesFinder::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qu
 
 void DuplicatesFinder::slotDone()
 {
-    if (d->job->error())
+    if (d->job->hasErrors())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << d->job->errorString();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << d->job->errorsList().first();
 
         // Pop-up a message about the error.
-        DNotificationWrapper(QString(), d->job->errorString(),
+        DNotificationWrapper(QString(), d->job->errorsList().first(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
 
@@ -147,7 +156,7 @@ void DuplicatesFinder::slotCancel()
 {
     if (d->job)
     {
-        d->job->kill();
+        d->job->cancel();
         d->job = 0;
     }
 

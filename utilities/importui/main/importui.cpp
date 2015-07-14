@@ -67,8 +67,6 @@
 #include <kactioncollection.h>
 #include <kmessagewidget.h>
 
-#include <kio/global.h>
-
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
@@ -117,6 +115,7 @@
 #include "thememanager.h"
 #include "thumbnailsize.h"
 #include "importthumbnailmodel.h"
+#include "kiowrapper.h"
 
 using namespace KDcrawIface;
 
@@ -1259,8 +1258,8 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
                                         "to upload pictures.\n\n"
                                         "Space require: %1\n"
                                         "Available free space: %2",
-                                        KIO::convertSizeFromKiB(totalKbSize),
-                                        KIO::convertSizeFromKiB(d->cameraFreeSpace->kBAvail())));
+                                        KIOWrapper::convertSizeFromKiB(totalKbSize),
+                                        KIOWrapper::convertSizeFromKiB(d->cameraFreeSpace->kBAvail())));
             return;
         }
     }
@@ -1965,8 +1964,8 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
                                                     "Estimated space required: %1\n"
                                                     "Available free space: %2\n\n"
                                                     "Try Anyway?",
-                                                    KIO::convertSizeFromKiB(dSize),
-                                                    KIO::convertSizeFromKiB(kBAvail)),
+                                                    KIOWrapper::convertSizeFromKiB(dSize),
+                                                    KIOWrapper::convertSizeFromKiB(kBAvail)),
                                               QMessageBox::Yes | QMessageBox::No);
 
         if (result == QMessageBox::No)

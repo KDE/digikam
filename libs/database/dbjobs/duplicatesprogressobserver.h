@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-04-21
- * Description : a kio-slave to process search on digiKam albums
+ * Date        : 2015-06-10
+ * Description : Progress observer for duplicate scanning
  *
- * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,22 +21,33 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMSEARCH_H
-#define DIGIKAMSEARCH_H
+#ifndef DUPLICATESPROGRESSOBSERVER_H
+#define DUPLICATESPROGRESSOBSERVER_H
 
-// KDE includes
+#include "haariface.h"
+#include "dbjob.h"
 
-#include <kio/slavebase.h>
+namespace Digikam
+{
 
-class kio_digikamsearch : public KIO::SlaveBase
+class SearchesJob;
+
+class DuplicatesProgressObserver : public HaarProgressObserver
 {
 
 public:
 
-    kio_digikamsearch(const QByteArray& pool_socket, const QByteArray& app_socket);
-    virtual ~kio_digikamsearch();
+    DuplicatesProgressObserver(SearchesJob* const thread);
+    ~DuplicatesProgressObserver();
 
-    void special(const QByteArray& data);
+    virtual void totalNumberToScan(int number);
+    virtual void processedNumber(int number);
+
+private:
+
+    SearchesJob* m_job;
 };
 
-#endif /* DIGIKAMSEARCH_H */
+} // namespace Digikam
+
+#endif // DUPLICATESPROGRESSOBSERVER_H

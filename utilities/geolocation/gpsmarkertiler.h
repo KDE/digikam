@@ -6,9 +6,10 @@
  * Date        : 2010-07-20
  * Description : GPS search marker tiler
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
- * Copyright (C) 2010, 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010      by Gabriel Voicu <ping dot gabi at gmail dot com>
+ * Copyright (C) 2010-2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,10 +32,6 @@
 #include <QByteArray>
 #include <QMetaType>
 #include <QItemSelectionModel>
-
-// KDE includes
-
-#include <kio/job.h>
 
 // libkgeomap includes
 
@@ -108,8 +105,8 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     /// @todo Do we monitor all signals of the source models?
-    void slotMapImagesJobResult(KJob* job);
-    void slotMapImagesJobData(KIO::Job* job, const QByteArray& data);
+    void slotMapImagesJobResult();
+    void slotMapImagesJobData(const QList<ImageListerRecord>& records);
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
     void slotImageChange(const ImageChangeset& changeset);
     void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);

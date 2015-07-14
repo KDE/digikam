@@ -9,6 +9,7 @@
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,10 +31,6 @@
 
 #include <QString>
 
-// KDE includes
-
-#include <kio/job.h>
-
 // Local includes
 
 #include "digikam_export.h"
@@ -43,22 +40,13 @@
 #include "databaseurl.h"
 #include "imagelisterrecord.h"
 #include "imagelisterreceiver.h"
+#include "dbjobinfo.h"
 
 namespace Digikam
 {
 
 class DIGIKAM_DATABASE_EXPORT ImageLister
 {
-public:
-
-    /**
-     * Create a TransferJob for the "special" method of one of the database ioslaves,
-     * referenced by the URL.
-     * @param url url referencing the database ioslave
-     * @param extraValue If -1, nothing is sent. If it takes another value,
-     *                   this value will be sent as a second parameter.
-     */
-    static KIO::TransferJob* startListJob(const DatabaseUrl& url, int extraValue = -1);
 
 public:
 
@@ -140,7 +128,7 @@ public:
      */
     void listHaarSearch(ImageListerReceiver* const receiver, const QString& xml);
 
-    QString tagSearchXml(const DatabaseUrl&, const QString& type, bool includeChildTags) const;
+    QString tagSearchXml(int tagId, const QString& type, bool includeChildTags) const;
 
 private:
 
