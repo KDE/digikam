@@ -44,6 +44,7 @@
 #include "infocontainer.h"
 #include "metadatainfo.h"
 #include "digikam_export.h"
+#include "dmetadatasettings.h"
 
 using namespace KExiv2Iface;
 
@@ -94,7 +95,8 @@ public:
     bool setImageRating(int rating) const;
 
     bool getImageTagsPath(QStringList& tagsPath) const;
-    bool setImageTagsPath(const QStringList& tagsPath) const;
+    bool setImageTagsPath(const QStringList& tagsPath,
+                          const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
 
     /** Get Images Face Map based on tags stored in Picassa/Metadatagroup
      * format. Use $ exiv2 -pa image to see the tag structure

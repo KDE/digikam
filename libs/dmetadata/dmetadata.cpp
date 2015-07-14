@@ -1400,7 +1400,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     return false;
 }
 
-bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
+bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSettingsContainer& settings) const
 {
     // NOTE : with digiKam 0.9.x, we have used IPTC Keywords for that.
     // Now this way is obsolete, and we use XMP instead.
@@ -1409,31 +1409,19 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     // Unlike the other keyword fields, we do not need to merge existing entries.
     if (supportXmp())
     {
-        if (!setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
+        for(NamespaceEntry entry : settings.readTagNamespaces)
         {
-            return false;
-        }
-
-        // See bug #269418 : register Tags path list for Windows Live Photo Gallery.
-        if (!setXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", tagsPath))
-        {
-            return false;
-        }
-
-        QStringList LRtagsPath = tagsPath;
-        LRtagsPath             = LRtagsPath.replaceInStrings(QLatin1String("/"), QLatin1String("|"));
-
-        if (!setXmpTagStringBag("Xmp.lr.hierarchicalSubject", LRtagsPath))
-        {
-            return false;
-        }
-        
-        QStringList MPtagsPath = tagsPath;
-        MPtagsPath             = MPtagsPath.replaceInStrings(QLatin1String("/"), QLatin1String("|"));
-
-        if (!setXmpTagStringBag("Xmp.mediapro.CatalogSets", MPtagsPath))
-        {
-            return false;
+            QStringList newList = tagsPath;
+            if(entry.separator.compare(QLatin1String("/")) != 0){
+                newList = newList.replaceInStrings(QLatin1String("/"), entry.separator);
+            }
+            const std::string myStr = entry.namespaceName.toStdString();
+            const char* nameSpace = myStr.data();
+            if(!setXmpTagStringSeq(nameSpace, newList))
+            {
+                qDebug() << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                return false;
+            }
         }
         
         // Converting Tags path list to ACDSee 8 Pro categories.
@@ -1485,7 +1473,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
         }
 
         QString xmlACDSee = QLatin1String("<Categories>") + xmlTags.join(QLatin1String("")) + QLatin1String("</Categories>");
-
+        qDebug() << "xmlACDSee" << xmlACDSee;
         removeXmpTag("Xmp.acdsee.categories");
         if (!xmlTags.isEmpty())
         {

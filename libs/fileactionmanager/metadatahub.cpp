@@ -653,6 +653,7 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataSettings
 bool MetadataHub::writeTags(const QString& filePath, MetadataHub::WriteMode writeMode,
                             const MetadataSettingsContainer& settings)
 {
+
     applyChangeNotifications();
 
     // if no DMetadata object is needed at all, don't construct one -
@@ -693,6 +694,7 @@ bool MetadataHub::writeTags(const QString& filePath, MetadataHub::WriteMode writ
 
 bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
 {
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Writting tags";
     bool dirty = false;
 
     if (saveTags)
