@@ -156,6 +156,30 @@ void AdvancedMetadataTab::slotEditNamespace()
 
 }
 
+void AdvancedMetadataTab::applySettings()
+{
+    d->container.readTagNamespaces.clear();
+    saveModelData(d->models.at(READ_TAGS),d->container.readTagNamespaces);
+
+    d->container.readRatingNamespaces.clear();
+    saveModelData(d->models.at(READ_RATINGS),d->container.readRatingNamespaces);
+
+    d->container.readCommentNamespaces.clear();
+    saveModelData(d->models.at(READ_COMMENTS),d->container.readCommentNamespaces);
+
+    d->container.writeTagNamespaces.clear();
+    saveModelData(d->models.at(WRITE_TAGS),d->container.writeTagNamespaces);
+
+    d->container.writeRatingNamespaces.clear();
+    saveModelData(d->models.at(WRITE_RATINGS),d->container.writeRatingNamespaces);
+
+    d->container.writeCommentNamespaces.clear();
+    saveModelData(d->models.at(WRITE_COMMENTS),d->container.writeCommentNamespaces);
+
+    d->container.unifyReadWrite = d->unifyReadWrite->isChecked();
+    DMetadataSettings::instance()->setSettings(d->container);
+}
+
 void AdvancedMetadataTab::slotUnifyChecked(bool value)
 {
     d->operationType->setDisabled(value);
@@ -181,10 +205,8 @@ void AdvancedMetadataTab::connectButtons()
     connect(d->moveDownButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemDown()));
 }
 
-void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<NamespaceEntry>& container)
+void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<NamespaceEntry> const &container)
 {
-    qDebug() << "Setting model data";
-//    d->model->clear();
 
     QStandardItem* root = model->invisibleRootItem();
     for(NamespaceEntry e : container)
@@ -281,38 +303,39 @@ void AdvancedMetadataTab::setModels()
     for(int i = 0 ; i < 6; i++)
         d->models.append(new QStandardItemModel(this));
 
-    setModelData(d->models.at(0), d->container.readTagNamespaces);
-    setModelData(d->models.at(1), d->container.readRatingNamespaces);
-    setModelData(d->models.at(2), d->container.readCommentNamespaces);
+    setModelData(d->models.at(READ_TAGS), d->container.readTagNamespaces);
+    setModelData(d->models.at(READ_RATINGS), d->container.readRatingNamespaces);
+    setModelData(d->models.at(READ_COMMENTS), d->container.readCommentNamespaces);
 
-    if(d->container.writeTagNamespaces.isEmpty())
-    {
-        setModelData(d->models.at(3), d->container.readTagNamespaces);
-    }
-    else
-    {
-        setModelData(d->models.at(3), d->container.writeTagNamespaces);
-    }
+    setModelData(d->models.at(WRITE_TAGS), d->container.writeTagNamespaces);
+    setModelData(d->models.at(WRITE_RATINGS), d->container.writeRatingNamespaces);
+    setModelData(d->models.at(WRITE_COMMENTS), d->container.writeCommentNamespaces);
 
-    if(d->container.writeRatingNamespaces.isEmpty())
-    {
-        setModelData(d->models.at(4), d->container.readRatingNamespaces);
-    }
-    else
-    {
-        setModelData(d->models.at(4), d->container.writeRatingNamespaces);
-    }
+    slotIndexChanged();
 
-    if(d->container.writeCommentNamespaces.isEmpty())
-    {
-        setModelData(d->models.at(5), d->container.readCommentNamespaces);
-    }
-    else
-    {
-        setModelData(d->models.at(5), d->container.writeCommentNamespaces);
-    }
+}
 
-    d->namespaceView->setModel(d->models.at(getModelIndex()));
+void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<NamespaceEntry> &container)
+{
+    QStandardItem* root = model->invisibleRootItem();
+
+    if(!root->hasChildren())
+        return;
+
+    for(int i = 0 ; i < root->rowCount(); i++)
+    {
+        NamespaceEntry ns;
+        QStandardItem  *current = root->child(i);
+        ns.namespaceName        = current->data(NAME_ROLE).toString();
+        ns.tagPaths             = (NamespaceEntry::TagType)current->data(ISTAG_ROLE).toInt();
+        ns.separator            = current->data(SEPARATOR_ROLE).toString();
+        ns.extraXml             = current->data(EXTRAXML_ROLE).toString();
+        ns.nsType               = (NamespaceEntry::NamespaceType)current->data(NSTYPE_ROLE).toInt();
+        ns.convertRatio         = current->data(CONVERSION_ROLE).toInt();
+        ns.index                = i;
+        qDebug() << "saving+++++" << ns.namespaceName << " " << ns.index;
+        container.append(ns);
+    }
 }
 
 }

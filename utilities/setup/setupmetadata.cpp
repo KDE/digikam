@@ -150,6 +150,7 @@ public:
     QTabWidget*    displaySubTab;
 
     MetadataPanel* tagsCfgPanel;
+    AdvancedMetadataTab* advTab;
 };
 
 SetupMetadata::SetupMetadata(QWidget* const parent)
@@ -539,8 +540,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 #endif // HAVE_KFILEMETADATA
 
     //--------------Advanced Metadata Configuration --------------
-    AdvancedMetadataTab* advTab = new AdvancedMetadataTab;
-    d->tab->insertTab(AdvancedConfig, advTab, i18nc("@title:tab", "Advanced Configurations"));
+    d->advTab = new AdvancedMetadataTab(this);
+    d->tab->insertTab(AdvancedConfig, d->advTab, i18nc("@title:tab", "Advanced Configurations"));
 
     // --------------------------------------------------------
 
@@ -640,6 +641,8 @@ void SetupMetadata::applySettings()
 #endif // HAVE_NEPOMUK
 
     d->tagsCfgPanel->applySettings();
+
+    d->advTab->applySettings();
 }
 
 void SetupMetadata::readSettings()

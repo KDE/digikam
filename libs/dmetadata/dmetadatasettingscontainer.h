@@ -50,7 +50,7 @@ class NamespaceEntry{
 
 public:
     enum TagType {TAG, TAGPATH};
-    enum NamespaceType {TAGS, RATING, COMMENT};
+    enum NamespaceType {TAGS = 0, RATING = 1, COMMENT = 2};
 
     NamespaceEntry(){}
 
@@ -61,14 +61,16 @@ public:
      * @param separator - separator used for tag paths
      * @param extraXml  - xml to format tags
      */
-    NamespaceEntry(QString name, TagType isPath, QString separator, QString extraXml)
+    NamespaceEntry(QString name, TagType isPath, QString separator, QString extraXml,
+                   NamespaceType nsType, int index)
     {
         this->namespaceName = name;
         this->tagPaths = isPath;
         this->separator = separator;
         this->extraXml = extraXml;
-        this->nsType = TAGS;
+        this->nsType = nsType;
         this->convertRatio = -1;
+        this->index = index;
     }
 
     /**
@@ -77,21 +79,23 @@ public:
      * @param convertRatio - convert ration ex: 1:1 if namespace store 5 star rating
      *                       or 25:1 if rating must be stored from 0-100
      */
-    NamespaceEntry(QString name, int convertRatio)
+    NamespaceEntry(QString name, int convertRatio, NamespaceType nsType, int index)
     {
         this->namespaceName = name;
         this->convertRatio  = convertRatio;
-        this->nsType = RATING;
+        this->nsType = nsType;
+        this->index = index;
     }
 
     /**
      * @brief NamespaceEntry -constructor to build a comment
      * @param name - namespace name
      */
-    NamespaceEntry(QString name)
+    NamespaceEntry(QString name, NamespaceType nsType, int index)
     {
         this->namespaceName = name;
-        this->nsType = COMMENT;
+        this->nsType = nsType;
+        this->index = index;
     }
 
     NamespaceEntry(const NamespaceEntry& copy)
@@ -102,6 +106,7 @@ public:
         this->extraXml      = copy.extraXml;
         this->nsType        = copy.nsType;
         this->convertRatio  = copy.convertRatio;
+        this->index         = copy.index;
     }
 
     ~NamespaceEntry(){}
@@ -112,6 +117,7 @@ public:
     QString extraXml;
     NamespaceType nsType;
     int convertRatio;
+    int index;
 };
 
 /**

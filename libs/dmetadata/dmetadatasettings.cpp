@@ -125,7 +125,13 @@ DMetadataSettingsContainer DMetadataSettings::settings() const
     return s;
 }
 
-
+void DMetadataSettings::setSettings(const DMetadataSettingsContainer& settings)
+{
+    DMetadataSettingsContainer old = d->setSettings(settings);
+    emit dmetadataSettingsChanged();
+    emit dmetadataSettingsChanged(settings, old);
+    d->writeToConfig();
+}
 
 void DMetadataSettings::readFromConfig()
 {

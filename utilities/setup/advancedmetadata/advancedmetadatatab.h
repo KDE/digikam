@@ -34,12 +34,14 @@ class AdvancedMetadataTab : public QWidget
 public:
     AdvancedMetadataTab(QWidget *parent = 0);
     virtual ~AdvancedMetadataTab();
+    void applySettings();
 
 public Q_SLOTS:
 
     void slotResetView();
     void slotAddNewNamespace();
     void slotEditNamespace();
+
 
 private Q_SLOTS:
     void slotUnifyChecked(bool value);
@@ -58,8 +60,20 @@ private:
                    NSTYPE_ROLE = Qt::UserRole+5,
                    CONVERSION_ROLE =Qt::UserRole+6};
 
+    enum ModelNumbers { READ_TAGS = 0,
+                        READ_RATINGS = 1,
+                        READ_COMMENTS = 2,
+                        WRITE_TAGS = 3,
+                        WRITE_RATINGS = 4,
+                        WRITE_COMMENTS = 5 };
+
     void connectButtons();
-    void setModelData(QStandardItemModel* model, QList<NamespaceEntry> &container);
+    /**
+     * @brief setModelData for one model
+     * @param model - model to be populated
+     * @param container - namespace container to get data
+     */
+    void setModelData(QStandardItemModel* model, QList<NamespaceEntry> const &container);
     void setUi();
 
     /**
@@ -71,6 +85,8 @@ private:
     int getModelIndex();
 
     void setModels();
+
+    void saveModelData(QStandardItemModel *model, QList<NamespaceEntry> &container);
 
     class Private;
     Private* d;

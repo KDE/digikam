@@ -23,6 +23,8 @@
 
 #include "metadatasettingscontainer.h"
 
+#include <QDebug>
+
 // KDE includes
 
 #include <kconfiggroup.h>
@@ -33,6 +35,11 @@
 
 namespace Digikam
 {
+
+bool dmcompare(NamespaceEntry& e1, NamespaceEntry e2)
+{
+    return  e1.index < e2.index;
+}
 
 DMetadataSettingsContainer::DMetadataSettingsContainer()
 {
@@ -88,31 +95,39 @@ void DMetadataSettingsContainer::defaultValues()
     readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.digiKam.TagsList"),
                                            NamespaceEntry::TAGPATH,
                                            QLatin1String("/"),
-                                           QString()));
+                                           QString(),
+                                           NamespaceEntry::TAGS,
+                                           0));
     readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
                                            NamespaceEntry::TAGPATH,
                                            QLatin1String("/"),
-                                           QString()));
+                                           QString(),
+                                           NamespaceEntry::TAGS,
+                                           1));
     readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.lr.hierarchicalSubject"),
                                            NamespaceEntry::TAGPATH,
                                            QLatin1String("|"),
-                                           QString()));
+                                           QString(),
+                                            NamespaceEntry::TAGS,
+                                            2));
     readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.mediapro.CatalogSets"),
                                            NamespaceEntry::TAGPATH,
                                            QLatin1String("|"),
-                                           QString()));
+                                           QString(),
+                                           NamespaceEntry::TAGS,
+                                           3));
 
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.xmp.Rating"), 1));
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.rating"), 1));
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.Rating"), 25));
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.xmp.Rating"), 1, NamespaceEntry::RATING, 0));
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.rating"), 1, NamespaceEntry::RATING, 1));
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.Rating"), 25, NamespaceEntry::RATING, 2));
 
-    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.dc.description")));
-    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.exif.UserComment")));
-    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.tiff.ImageDescription")));
+    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.dc.description"), NamespaceEntry::COMMENT, 0));
+    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.exif.UserComment"), NamespaceEntry::COMMENT, 1));
+    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.tiff.ImageDescription"), NamespaceEntry::COMMENT, 2));
 
     writeTagNamespaces = QList<NamespaceEntry>(readTagNamespaces);
     writeRatingNamespaces = QList<NamespaceEntry>(readRatingNamespaces);
-    writeCommentNamespaces = QList<NamespaceEntry>(readRatingNamespaces);
+    writeCommentNamespaces = QList<NamespaceEntry>(readCommentNamespaces);
 }
 
 void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name, QList<NamespaceEntry>& container)
@@ -126,13 +141,15 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
                     element,
                     (NamespaceEntry::TagType)gr.readEntry("Type").toInt(),
                     gr.readEntry("separator"),
-                    gr.readEntry("extraXml"));
+                    gr.readEntry("extraXml"),
+                    (NamespaceEntry::NamespaceType)gr.readEntry("NSType").toInt(),
+                    gr.readEntry("index").toInt());
 
-        ns.nsType = (NamespaceEntry::NamespaceType)gr.readEntry("NSType").toInt();
         ns.convertRatio = gr.readEntry("convertRatio").toInt();
-
+       qDebug() << "Reading element " << ns.namespaceName << " " << ns.index;
        container.append(ns);
     }
+    qSort(container.begin(), container.end(),Digikam::dmcompare);
 }
 
 void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name, QList<NamespaceEntry> container) const
@@ -147,6 +164,7 @@ void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name
         tmp.writeEntry("extraXml",e.extraXml);
         tmp.writeEntry("NSType",(int)e.nsType);
         tmp.writeEntry("convertRatio", e.convertRatio);
+        tmp.writeEntry("index",e.index);
     }
 
 }
