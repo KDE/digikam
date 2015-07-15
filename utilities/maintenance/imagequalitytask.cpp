@@ -116,6 +116,7 @@ void ImageQualityTask::run()
         // Dispatch progress to Progress Manager
         QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
         emit signalFinished(qimg);
+        emit signalDone();
     }
 }
 }  // namespace Digikam
