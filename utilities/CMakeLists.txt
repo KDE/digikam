@@ -15,10 +15,7 @@ add_subdirectory(fuzzysearch)
 add_subdirectory(firstrun)
 add_subdirectory(maintenance)
 add_subdirectory(searchwindow)
-
-if(${KFILEMETADATA_FOUND})
-    add_subdirectory(baloo)
-endif()
+add_subdirectory(kdesupport)
 
 if(${KF5KFace_FOUND})
     add_subdirectory(facemanagement)

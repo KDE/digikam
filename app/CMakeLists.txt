@@ -21,7 +21,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:3rdparty_src>
             $<TARGET_OBJECTS:iojobs_src>
-            $<TARGET_OBJECTS:kdesupport_src>
+            $<TARGET_OBJECTS:kiowrapper_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src> #
@@ -328,11 +328,10 @@ target_link_libraries(digikamgui
 
                       ${OpenCV_LIBRARIES}
                       ${KF5KFace_LIBRARIES}
-
 )
 
 if(${KF5Kipi_FOUND})
-    target_link_libraries(digikamgui  KF5::Kipi)
+    target_link_libraries(digikamgui KF5::Kipi)
 endif()
 
 if(${KF5KGeoMap_FOUND})

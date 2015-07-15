@@ -4,8 +4,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-set(libkdesupport_SRCS
+set(libkiowrapper_SRCS
     kiowrapper.cpp
 )
 
-add_library(kdesupport_src OBJECT ${libkdesupport_SRCS})
+add_library(kiowrapper_src OBJECT ${libkiowrapper_SRCS})
