@@ -100,12 +100,12 @@ void DuplicatesFinder::slotStart()
 
     double thresh = d->similarity / 100.0;
     SearchesDBJobInfo jobInfo;
-    jobInfo.duplicates = true;
-    jobInfo.threshold = thresh;
-    jobInfo.albumIds = d->albumsIdList;
+    jobInfo.setDuplicatesJob();
+    jobInfo.setThreshold(thresh);
+    jobInfo.setAlbumsIds(d->albumsIdList);
 
     if (!d->tagsIdList.isEmpty())
-        jobInfo.tagIds = d->tagsIdList;
+        jobInfo.setTagsIds(d->tagsIdList);
 
     d->job = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
 

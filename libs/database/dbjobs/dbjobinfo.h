@@ -39,32 +39,24 @@ class DBJobInfo
 {
 public:
 
-    enum Type
-    {
-        AlbumsJob=0,
-        TagsJob,
-        DatesJob,
-        SearchesJob,
-        GPSJob
-    };
+    void setFoldersJob();
+    bool isFoldersJob() const;
 
-public:
+    void setListAvailableImagesOnly();
+    bool isListAvailableImagesOnly() const;
 
-    Type type();
-
-public:
-
-    bool folders;
-    bool listAvailableImagesOnly;
-    bool recursive;
+    void setRecursive();
+    bool isRecursive() const;
 
 protected:
 
-    DBJobInfo(Type jType);
+    DBJobInfo();
 
 private:
 
-    Type jobType;
+    bool m_folders;
+    bool m_listAvailableImagesOnly;
+    bool m_recursive;
 };
 
 // ---------------------------------------------
@@ -75,10 +67,16 @@ public:
 
     AlbumsDBJobInfo();
 
-public:
+    void setAlbumRootId(int id);
+    int  albumRootId();
 
-    int     albumRootId;
-    QString album;
+    void setAlbum(const QString& album);
+    QString album();
+
+private:
+
+    int     m_albumRootId;
+    QString m_album;
 };
 
 // ---------------------------------------------
@@ -89,11 +87,20 @@ public:
 
     TagsDBJobInfo();
 
-public:
+    void setFaceFoldersJob();
+    bool isFaceFoldersJob() const;
 
-    bool       faceFolders;
-    QString    specialTag;
-    QList<int> tagsIds;
+    void setSpecialTag(const QString& tag);
+    QString specialTag() const;
+
+    void setTagsIds(const QList<int>& tagsIds);
+    QList<int> tagsIds() const;
+
+private:
+
+    bool       m_faceFolders;
+    QString    m_specialTag;
+    QList<int> m_tagsIds;
 };
 
 // ---------------------------------------------
@@ -104,13 +111,28 @@ public:
 
     GPSDBJobInfo();
 
-public:
+    void setDirectQuery();
+    bool isDirectQuery() const;
 
-    bool  wantDirectQuery;
-    qreal lat1;
-    qreal lng1;
-    qreal lat2;
-    qreal lng2;
+    void setLat1(qreal lat);
+    qreal lat1() const;
+
+    void setLng1(qreal lng);
+    qreal lng1() const;
+
+    void setLat2(qreal lat);
+    qreal lat2() const;
+
+    void setLng2(qreal lng);
+    qreal lng2() const;
+
+private:
+
+    bool  m_directQuery;
+    qreal m_lat1;
+    qreal m_lng1;
+    qreal m_lat2;
+    qreal m_lng2;
 };
 
 // ---------------------------------------------
@@ -121,13 +143,28 @@ public:
 
     SearchesDBJobInfo();
 
+    void setDuplicatesJob();
+    bool isDuplicatesJob() const;
+
+    void setSearchId(int id);
+    int searchId() const;
+
+    void setThreshold(double t);
+    double threshold() const;
+
+    void setAlbumsIds(const QList<int>& albumsIds);
+    QList<int> albumsIds() const;
+
+    void setTagsIds(const QList<int>& tagsIds);
+    QList<int> tagsIds() const;
+
 public:
     
-    bool       duplicates;
-    int        searchId;
-    double     threshold;
-    QList<int> albumIds;
-    QList<int> tagIds;
+    bool       m_duplicates;
+    int        m_searchId;
+    double     m_threshold;
+    QList<int> m_albumsIds;
+    QList<int> m_tagsIds;
 };
 
 // ---------------------------------------------
@@ -138,10 +175,16 @@ public:
 
     DatesDBJobInfo();
 
-public:
+    void setStartDate(const QDate& date);
+    QDate startDate() const;
 
-    QDate startDate;
-    QDate endDate;
+    void setEndDate(const QDate& date);
+    QDate endDate() const;
+
+private:
+
+    QDate m_startDate;
+    QDate m_endDate;
 };
 
 } // namespace Digikam

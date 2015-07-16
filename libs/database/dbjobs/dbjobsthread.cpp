@@ -81,7 +81,7 @@ void AlbumsDBJobsThread::albumsListing(const AlbumsDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    if(info.folders)
+    if(info.isFoldersJob())
     {
         connect(j, SIGNAL(foldersData(QMap<int, int>)),
                 this, SIGNAL(foldersData(QMap<int, int>)));
@@ -115,14 +115,12 @@ void TagsDBJobsThread::tagsListing(const TagsDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    qCDebug(DIGIKAM_DBJOB_LOG) << "JOB INFO is folders: " << info.folders;
-
-    if(info.folders)
+    if(info.isFoldersJob())
     {
         connect(j, SIGNAL(foldersData(QMap<int, int>)),
                 this, SIGNAL(foldersData(QMap<int, int>)));
     }
-    else if(info.faceFolders)
+    else if(info.isFaceFoldersJob())
     {
         connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)),
                 this, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)));
@@ -156,7 +154,7 @@ void DatesDBJobsThread::datesListing(const DatesDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    if(info.folders)
+    if(info.isFoldersJob())
     {
         connect(j, SIGNAL(foldersData(const QMap<QDateTime, int>&)),
                 this, SIGNAL(foldersData(const QMap<QDateTime, int>&)));
@@ -190,7 +188,7 @@ void GPSDBJobsThread::GPSListing(const GPSDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    if(info.wantDirectQuery)
+    if(info.isDirectQuery())
     {
         connect(j, SIGNAL(directQueryData(QList<QVariant>)),
                 this, SIGNAL(directQueryData(QList<QVariant>)));
@@ -224,7 +222,7 @@ void SearchesDBJobsThread::searchesListing(const SearchesDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    if(info.duplicates)
+    if(info.isDuplicatesJob())
     {
 
         connect(j, SIGNAL(totalSize(int)),

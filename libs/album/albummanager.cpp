@@ -1497,8 +1497,8 @@ void AlbumManager::getAlbumItemsCount()
     qCDebug(DIGIKAM_GENERAL_LOG) << "LISTING ALL";
 
     AlbumsDBJobInfo jInfo;
-    jInfo.folders = true;
-    d->albumListJob = dynamic_cast<AlbumsDBJobsThread*>(DBJobsManager::instance()->startAlbumsJobThread(jInfo));
+    jInfo.setFoldersJob();
+    d->albumListJob = DBJobsManager::instance()->startAlbumsJobThread(jInfo);
 
     connect(d->albumListJob, SIGNAL(finished()),
             this, SLOT(slotAlbumsJobResult()));
@@ -1670,9 +1670,9 @@ void AlbumManager::tagItemsCount()
     }
 
     TagsDBJobInfo jInfo;
-    jInfo.folders = true;
+    jInfo.setFoldersJob();
 
-    d->tagListJob = dynamic_cast<TagsDBJobsThread*>(DBJobsManager::instance()->startTagsJobThread(jInfo));
+    d->tagListJob = DBJobsManager::instance()->startTagsJobThread(jInfo);
 
     connect(d->tagListJob, SIGNAL(finished()),
             this, SLOT(slotTagsJobResult()));
@@ -1690,9 +1690,9 @@ void AlbumManager::personItemsCount()
     }
 
     TagsDBJobInfo jInfo;
-    jInfo.faceFolders = true;
+    jInfo.setFaceFoldersJob();
 
-    d->personListJob = dynamic_cast<TagsDBJobsThread*>(DBJobsManager::instance()->startTagsJobThread(jInfo));
+    d->personListJob = DBJobsManager::instance()->startTagsJobThread(jInfo);
 
     connect(d->personListJob, SIGNAL(finished()),
             this, SLOT(slotPeopleJobResult()));
@@ -1800,8 +1800,8 @@ void AlbumManager::scanDAlbums()
     }
 
     DatesDBJobInfo jInfo;
-    jInfo.folders = true;
-    d->dateListJob = dynamic_cast<DatesDBJobsThread*>(DBJobsManager::instance()->startDatesJobThread(jInfo));
+    jInfo.setFoldersJob();
+    d->dateListJob = DBJobsManager::instance()->startDatesJobThread(jInfo);
 
     connect(d->dateListJob, SIGNAL(finished()),
             this, SLOT(slotDatesJobResult()));

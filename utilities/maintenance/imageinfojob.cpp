@@ -87,30 +87,30 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
     if(album->type() == Album::DATE)
     {
         DatesDBJobInfo jobInfo;
-        jobInfo.startDate = url.startDate();
-        jobInfo.endDate   = url.endDate();
+        jobInfo.setStartDate( url.startDate() );
+        jobInfo.setEndDate( url.endDate() );
 
         d->jobThread = DBJobsManager::instance()->startDatesJobThread(jobInfo);
     }
     else if (album->type() == Album::TAG)
     {
         TagsDBJobInfo jobInfo;
-        jobInfo.tagsIds = url.tagIds();
+        jobInfo.setTagsIds( url.tagIds() );
 
         d->jobThread = DBJobsManager::instance()->startTagsJobThread(jobInfo);
     }
     else if(album->type() == Album::PHYSICAL)
     {
         AlbumsDBJobInfo jobInfo;
-        jobInfo.albumRootId = url.albumRootId();
-        jobInfo.album = url.album();
+        jobInfo.setAlbumRootId( url.albumRootId() );
+        jobInfo.setAlbum( url.album() );
 
         d->jobThread = DBJobsManager::instance()->startAlbumsJobThread(jobInfo);
     }
     else if(album->type() == Album::SEARCH)
     {
         SearchesDBJobInfo jobInfo;
-        jobInfo.searchId = url.searchId();
+        jobInfo.setSearchId( url.searchId() );
 
         d->jobThread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
     }

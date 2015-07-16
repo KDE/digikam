@@ -335,25 +335,37 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     if(albums.first()->type() == Album::DATE)
     {
         d->extraValueJob = false;
+
         DatesDBJobInfo jobInfo;
-        jobInfo.startDate = url.startDate();
-        jobInfo.endDate   = url.endDate();
-        jobInfo.recursive = d->recurseAlbums;
-        jobInfo.listAvailableImagesOnly = d->listOnlyAvailableImages;
+
+        jobInfo.setStartDate( url.startDate() );
+        jobInfo.setEndDate( url.endDate() );
+
+        if (d->recurseAlbums)
+            jobInfo.setRecursive();
+
+        if (d->listOnlyAvailableImages)
+            jobInfo.setListAvailableImagesOnly();
 
         d->jobThread = DBJobsManager::instance()->startDatesJobThread(jobInfo);
     }
     else if (albums.first()->type() == Album::TAG)
     {
         d->extraValueJob = false;
+
         TagsDBJobInfo jobInfo;
-        jobInfo.listAvailableImagesOnly = d->listOnlyAvailableImages;
-        jobInfo.recursive = d->recurseTags;
-        jobInfo.tagsIds = tagIds;
+
+        if (d->listOnlyAvailableImages)
+            jobInfo.setListAvailableImagesOnly();
+
+        if (d->recurseTags)
+            jobInfo.setRecursive();
+
+        jobInfo.setTagsIds(tagIds);
 
         if (!d->specialListing.isNull())
         {
-            jobInfo.specialTag = d->specialListing;
+            jobInfo.setSpecialTag(d->specialListing);
             d->extraValueJob = true;
         }
 
@@ -363,19 +375,28 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     {
         d->extraValueJob = false;
         AlbumsDBJobInfo jobInfo;
-        jobInfo.listAvailableImagesOnly = d->listOnlyAvailableImages;
-        jobInfo.recursive = d->recurseAlbums;
-        jobInfo.albumRootId = url.albumRootId();
-        jobInfo.album = url.album();
+
+        if (d->recurseAlbums)
+            jobInfo.setRecursive();
+
+        if (d->listOnlyAvailableImages)
+            jobInfo.setListAvailableImagesOnly();
+
+        jobInfo.setAlbumRootId( url.albumRootId() );
+        jobInfo.setAlbum( url.album() );
 
         d->jobThread = DBJobsManager::instance()->startAlbumsJobThread(jobInfo);
     }
     else if(albums.first()->type() == Album::SEARCH)
     {
         d->extraValueJob = false;
+
         SearchesDBJobInfo jobInfo;
-        jobInfo.listAvailableImagesOnly = d->listOnlyAvailableImages;
-        jobInfo.searchId = url.searchId();
+
+        if (d->listOnlyAvailableImages)
+            jobInfo.setListAvailableImagesOnly();
+
+        jobInfo.setSearchId( url.searchId() );
 
         d->jobThread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
     }

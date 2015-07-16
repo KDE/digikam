@@ -248,11 +248,10 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
     qCDebug(DIGIKAM_GENERAL_LOG) << "Listing" << lat1 << lat2 << lng1 << lng2;
 
     GPSDBJobInfo jobInfo;
-    jobInfo.lat1 = lat1;
-    jobInfo.lat2 = lat2;
-    jobInfo.lng1 = lng1;
-    jobInfo.lng2 = lng2;
-    jobInfo.wantDirectQuery = false;
+    jobInfo.setLat1(lat1);
+    jobInfo.setLat2(lat2);
+    jobInfo.setLng1(lng1);
+    jobInfo.setLng2(lng2);
 
     GPSDBJobsThread *const currentJob = DBJobsManager::instance()->startGPSJobThread(jobInfo);
 
