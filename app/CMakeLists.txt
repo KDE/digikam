@@ -381,7 +381,7 @@ set(digikam_SRCS
     main/main.cpp
 )
 
-add_executable(digikam ${DIGIKAM_OBJECTS} ${digikam_SRCS})
+add_executable(digikam ${digikam_SRCS})
 
 add_dependencies(digikam digikam-gitversion)
 
