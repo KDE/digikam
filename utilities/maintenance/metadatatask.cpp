@@ -110,6 +110,7 @@ void MetadataTask::run()
     }
 
     emit signalFinished(QImage());
+    emit signalDone();
 }
 
 }  // namespace Digikam

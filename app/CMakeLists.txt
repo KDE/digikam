@@ -20,6 +20,8 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:dthread_src>
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:3rdparty_src>
+            $<TARGET_OBJECTS:iojobs_src>
+            $<TARGET_OBJECTS:kiowrapper_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src> #
@@ -40,7 +42,6 @@ if(KF5KGeoMap_FOUND)
         ${DIGIKAMCORE_OBJECTS}
         $<TARGET_OBJECTS:kgeomaphelper_src>
     )
-
 endif()
 
 add_library(digikamcore
@@ -78,7 +79,6 @@ target_link_libraries(digikamcore
                       ${PNG_LIBRARIES}
 
                       ${PGF_LIBRARIES}
-
 )
 
 if(KF5Kipi_FOUND)
@@ -203,7 +203,6 @@ set(libdigikamgui_SRCS
     views/stackedview.cpp
 
     ${digikamadaptor_SRCS}
-
 )
 
 if(ENABLE_MEDIAPLAYER)
@@ -266,8 +265,8 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:filters_src>
             $<TARGET_OBJECTS:importuibackend_src>
             $<TARGET_OBJECTS:imagehistorywidgets_src>
-
 )
+
 if(${KF5Kipi_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
@@ -326,11 +325,10 @@ target_link_libraries(digikamgui
 
                       ${OpenCV_LIBRARIES}
                       ${KF5KFace_LIBRARIES}
-
 )
 
 if(${KF5Kipi_FOUND})
-    target_link_libraries(digikamgui  KF5::Kipi)
+    target_link_libraries(digikamgui KF5::Kipi)
 endif()
 
 if(${KF5KGeoMap_FOUND})
@@ -381,10 +379,9 @@ install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set(digikam_SRCS
     main/main.cpp
-
 )
 
-add_executable(digikam ${DIGIKAM_OBJECTS} ${digikam_SRCS})
+add_executable(digikam ${digikam_SRCS})
 
 add_dependencies(digikam digikam-gitversion)
 
@@ -413,7 +410,6 @@ target_link_libraries(digikam
                       KF5::IconThemes
                       KF5::I18n
                       KF5::KExiv2
-
 )
 
 install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})

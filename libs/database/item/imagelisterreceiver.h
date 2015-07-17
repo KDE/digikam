@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,15 +31,11 @@
 #include <QString>
 #include <QList>
 
-// KDE includes
-
-#include <kio/slavebase.h>
-
 // Local includes
 
 #include "digikam_export.h"
 #include "imagelisterrecord.h"
-
+#include "dbjob.h"
 
 namespace Digikam
 {
@@ -71,28 +68,29 @@ public:
 
 // ------------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseReceiver : public ImageListerValueListReceiver
+class DIGIKAM_DATABASE_EXPORT ImageListerJobReceiver : public ImageListerValueListReceiver
 {
 
 public:
 
-    explicit ImageListerSlaveBaseReceiver(KIO::SlaveBase* slave);
-    virtual void error(const QString& errMsg);
+    explicit ImageListerJobReceiver(DBJob *const job);
+    virtual void error(const QString &errMsg);
     void sendData();
 
 protected:
 
-    KIO::SlaveBase* m_slave;
+    DBJob *const m_job;
 };
 
-class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBasePartsSendingReceiver
-    : public ImageListerSlaveBaseReceiver
+// ------------------------------------------------------------------------------------------------
+
+class DIGIKAM_DATABASE_EXPORT ImageListerJobPartsSendingReceiver : public ImageListerJobReceiver
 {
 
 public:
 
-    ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase* slave, int limit);
-    virtual void receive(const ImageListerRecord& record);
+    ImageListerJobPartsSendingReceiver(DBJob *const job, int limit);
+    virtual void receive(const ImageListerRecord &record);
 
 protected:
 
@@ -102,13 +100,13 @@ protected:
 
 // ------------------------------------------------------------------------------------------------
 
-class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseGrowingPartsSendingReceiver
-    : public ImageListerSlaveBasePartsSendingReceiver
+class DIGIKAM_DATABASE_EXPORT ImageListerJobGrowingPartsSendingReceiver
+    : public ImageListerJobPartsSendingReceiver
 {
 
 public:
 
-    ImageListerSlaveBaseGrowingPartsSendingReceiver(KIO::SlaveBase* slave, int start, int end, int increment);
+    ImageListerJobGrowingPartsSendingReceiver(DBJob* job, int start, int end, int increment);
     virtual void receive(const ImageListerRecord& record);
 
 protected:

@@ -9,6 +9,7 @@
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,6 +56,8 @@
 #include "sqlquery.h"
 #include "tagscache.h"
 #include "imagetagpair.h"
+#include "dbjobsthread.h"
+#include "dbjobinfo.h"
 
 namespace Digikam
 {
@@ -124,22 +127,6 @@ void ImageLister::setListOnlyAvailable(bool listOnlyAvailable)
 void ImageLister::setAllowExtraValues(bool useExtraValue)
 {
     d->allowExtraValues = useExtraValue;
-}
-
-KIO::TransferJob* ImageLister::startListJob(const DatabaseUrl& url, int extraValue)
-{
-    QByteArray ba;
-    QDataStream ds(&ba, QIODevice::WriteOnly);
-    ds << url;
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Query Kioslave Url:" << url.toDisplayString();
-
-    if (extraValue != -1)
-    {
-        ds << extraValue;
-    }
-
-    return (new KIO::SpecialJob(url, ba));
 }
 
 void ImageLister::list(ImageListerReceiver* const receiver, const DatabaseUrl& url)
@@ -942,10 +929,8 @@ QSet<int> ImageLister::albumRootsToList() const
     return ids;
 }
 
-QString ImageLister::tagSearchXml(const DatabaseUrl& url, const QString& type, bool includeChildTags) const
+QString ImageLister::tagSearchXml(int tagId, const QString& type, bool includeChildTags) const
 {
-    int tagId = url.tagId();
-
     if (type == QLatin1String("faces"))
     {
         SearchXmlWriter writer;

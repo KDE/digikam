@@ -112,6 +112,7 @@ void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, cons
     ad.message = mess;
     ad.destUrl = dest;
     emit signalFinished(ad);
+    emit signalDone();
 }
 
 void Task::run()

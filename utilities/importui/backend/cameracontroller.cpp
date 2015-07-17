@@ -9,6 +9,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +47,6 @@ extern "C"
 #include <QFile>
 #include <QRegExp>
 #include <QFileInfo>
-#include <QPointer>
 #include <QtConcurrent>
 #include <QFuture>
 #include <QFutureWatcher>
@@ -60,9 +60,6 @@ extern "C"
 #include <kprocess.h>
 #include <kmacroexpander.h>
 
-#include <kio/renamedialog.h>
-#include <kio/global.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -74,6 +71,7 @@ extern "C"
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "jpegutils.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -617,7 +615,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             // TODO clean-up up and generalize temporary file creation
             QUrl tempURL = QUrl::fromLocalFile(dest);
-            tempURL = KIO::upUrl(tempURL);
+            tempURL = KIOWrapper::upUrl(tempURL);
             tempURL = tempURL.adjusted(QUrl::StripTrailingSlash);
             tempURL.setPath(tempURL.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp1-%1").arg(getpid()).append(file)));
             qCDebug(LOG_IMPORTUI) << "Downloading: " << file << " using (" << tempURL << ")";
@@ -688,7 +686,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 {
                     // TODO clean-up up and generalize temporary file creation
                     QUrl tempURL2 = QUrl::fromLocalFile(dest);
-                    tempURL2 = KIO::upUrl(tempURL2);
+                    tempURL2 = KIOWrapper::upUrl(tempURL2);
                     tempURL2 = tempURL2.adjusted(QUrl::StripTrailingSlash);
                     tempURL2.setPath(tempURL2.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
                     temp     = tempURL2.toLocalFile();
@@ -829,47 +827,44 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
                 break;
             }
 
-            QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(d->parent, i18nc("@title:window", "Rename File"),
-                                                                    QUrl::fromLocalFile(folder + QLatin1String("/") + file),
-                                                                    QUrl::fromLocalFile(dest),
-                                                                    KIO::RenameDialog_Mode(KIO::M_MULTI     |
-                                                                            KIO::M_OVERWRITE |
-                                                                            KIO::M_SKIP));
+            QPair<int, QString> resultAndDest =
+                    KIOWrapper::renameDlg(d->parent,
+                                          i18nc("@title:window", "Rename File"),
+                                          QUrl::fromLocalFile(folder + QLatin1String("/") + file),
+                                          QUrl::fromLocalFile(dest));
 
-            int result = dlg->exec();
-            dest       = dlg->newDestUrl().toLocalFile();
+            int result = resultAndDest.first;
+            dest       = resultAndDest.second;
             info       = QFileInfo(dest);
-
-            delete dlg;
 
             switch (result)
             {
-                case KIO::R_CANCEL:
+                case KIOWrapper::Cancel:
                 {
                     cancel = true;
                     break;
                 }
 
-                case KIO::R_SKIP:
+                case KIOWrapper::Skip:
                 {
                     skip = true;
                     break;
                 }
 
-                case KIO::R_AUTO_SKIP:
+                case KIOWrapper::SkipAll:
                 {
                     d->skipAll = true;
                     skip       = true;
                     break;
                 }
 
-                case KIO::R_OVERWRITE:
+                case KIOWrapper::Overwrite:
                 {
                     overwrite = true;
                     break;
                 }
 
-                case KIO::R_OVERWRITE_ALL:
+                case KIOWrapper::OverwriteAll:
                 {
                     d->overwriteAll = true;
                     overwrite       = true;

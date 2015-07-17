@@ -81,15 +81,15 @@ private Q_SLOTS:
 
     void slotThumbInfo(const QString&, const QString&, const CamItemInfo&, const QImage&);
     void slotThumbInfoFailed(const QString&, const QString&, const CamItemInfo&);
-    void slotGotKDEPreview(const KFileItem&, const QPixmap&);
-    void slotFailedKDEPreview(const KFileItem&);
-    void slotKdePreviewFinished(KJob*);
+    void slotGotKDEPreview(const QUrl&, const QPixmap&);
+    void slotFailedKDEPreview(const QUrl &);
+    void slotKdePreviewFinished();
 
 private:
 
     void loadWithKDE(const CamItemInfo& info);
     void startKdePreviewJob();
-    void procressKDEPreview(const KFileItem& item, const QPixmap& pix);
+    void procressKDEPreview(const QUrl& item, const QPixmap& pix);
 
     /// Cache management methods.
     void removeItemFromCache(const QUrl& url);

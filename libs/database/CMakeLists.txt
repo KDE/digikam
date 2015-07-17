@@ -1,6 +1,7 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015 by Mohamed Anwer, <m dot anwer at gmx dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -52,6 +53,11 @@ set(libdatabase_SRCS
     framework/databasecopymanager.cpp
     framework/databaseserverstarter.cpp
     framework/databaseservererror.cpp
+    dbjobs/dbjobsthread.cpp
+    dbjobs/dbjob.cpp
+    dbjobs/dbjobinfo.cpp
+    dbjobs/dbjobsmanager.cpp
+    dbjobs/duplicatesprogressobserver.cpp
     item/imagecomments.cpp
     item/imageextendedproperties.cpp
     item/imageinfo.cpp
@@ -112,6 +118,7 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>

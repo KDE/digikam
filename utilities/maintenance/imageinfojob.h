@@ -33,13 +33,6 @@
 
 #include "imageinfo.h"
 
-namespace KIO
-{
-    class Job;
-}
-
-class KJob;
-
 namespace Digikam
 {
 
@@ -65,8 +58,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotResult(KJob* job);
-    void slotData(KIO::Job* job, const QByteArray& data);
+    void slotResult();
+    void slotData(const QList<ImageListerRecord>& data);
 
 private:
 

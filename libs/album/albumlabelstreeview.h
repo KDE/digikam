@@ -6,7 +6,7 @@
  * Date        : 2014-05-17
  * Description : Album Labels Tree View.
  *
- * Copyright (C) 2014 Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,15 +28,12 @@
 
 #include <QTreeWidget>
 
-// KDE includes
-
-#include <kio/job.h>
-
 // Local includes
 
 #include "databaseconstants.h"
 #include "album.h"
 #include "statesavingobject.h"
+#include "imagelisterrecord.h"
 
 namespace Digikam
 {
@@ -213,7 +210,7 @@ private:
     void generateAlbumNameForExporting(const QList<int>& ratings, const QList<int>& colorsList, const QList<int>& picksList);
 
     /**
-     * @brief Passes the current album DB url to a KIO::TransferJob
+     * @brief Passes the current album DB url to a IOJobsManager
      *        to get images urls in this album
      */
     void imagesUrlsForCurrentAlbum();
@@ -229,8 +226,8 @@ private Q_SLOTS:
     void slotSelectionChanged();
     void slotCheckStateChanged();
     void slotSetCurrentAlbum();
-    void slotResult(KJob* job);
-    void slotData(KIO::Job* job, const QByteArray& data);
+    void slotResult();
+    void slotData(const QList<ImageListerRecord>& data);
 
 Q_SIGNALS:
 

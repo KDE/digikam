@@ -6,7 +6,7 @@
  * Date        : 2014-05-17
  * Description : Album Labels Tree View.
  *
- * Copyright (C) 2014 Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +50,7 @@
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 #include "ratingwidget.h"
+#include "dbjobsmanager.h"
 
 namespace Digikam
 {
@@ -837,15 +838,17 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& r
 
 void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
 {
-    QUrl url = d->albumForSelectedItems->databaseUrl();
-    KIO::TransferJob* const job = ImageLister::startListJob(url);
-    job->addMetaData(QLatin1String("listAlbumsRecursively"), QLatin1String("true"));
+    SearchesDBJobInfo jobInfo;
+    jobInfo.setSearchId( d->albumForSelectedItems->id() );
+    jobInfo.setRecursive();
 
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    SearchesDBJobsThread *thread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
 
-    connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotData(KIO::Job*,QByteArray)));
+    connect(thread, SIGNAL(finished()),
+            this, SLOT(slotResult()));
+
+    connect(thread, SIGNAL(data(QList<ImageListerRecord>)),
+            this, SLOT(slotData(QList<ImageListerRecord>)));
 }
 
 QString AlbumLabelsSearchHandler::getDefaultTitle() const
@@ -918,36 +921,31 @@ void AlbumLabelsSearchHandler::slotSetCurrentAlbum()
     slotSelectionChanged();
 }
 
-void AlbumLabelsSearchHandler::slotResult(KJob* job)
+void AlbumLabelsSearchHandler::slotResult()
 {
-    if (job->error())
+    DBJobsThread *const jobThread = dynamic_cast<DBJobsThread*>(sender());
+
+    if (jobThread->hasErrors())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << job->errorString();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list urls: " << jobThread->errorsList().first();
 
         // Pop-up a message about the error.
-        DNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(),  jobThread->errorsList().first(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
 }
 
-void AlbumLabelsSearchHandler::slotData(KIO::Job* job, const QByteArray& data)
+void AlbumLabelsSearchHandler::slotData(const QList<ImageListerRecord>& data)
 {
-    Q_UNUSED(job);
-
     if (data.isEmpty())
     {
         return;
     }
 
-    QByteArray    tmp(data);
-    QDataStream   ds(&tmp, QIODevice::ReadOnly);
     QList<QUrl> urlList;
 
-    while (!ds.atEnd())
+    foreach (const ImageListerRecord &record, data)
     {
-        ImageListerRecord record;
-        ds >> record;
-
         ImageInfo info(record);
         urlList << info.fileUrl();
     }

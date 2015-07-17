@@ -12,7 +12,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2008      by Arnd Baecker <arnd dot baecker at web dot de>
- * Copyright (C) 2013-2014 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2013-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,11 +78,6 @@ extern "C"
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
-#include <kjobwidgets.h>
-#include <kio/job.h>
-#include <kio/copyjob.h>
-#include <kio/deletejob.h>
-
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
@@ -121,6 +116,7 @@ extern "C"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
 #include "showfoto_p.h"
+#include "kiowrapper.h"
 
 using namespace KDcrawIface;
 
@@ -589,10 +585,7 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
         localFile       = tmpFile.fileName();
         d->tempFilePath = localFile;
 
-        KIO::FileCopyJob* const fileCopyJob = KIO::file_copy(info.url, QUrl::fromLocalFile(localFile), -1, KIO::Overwrite);
-        KJobWidgets::setWindow(fileCopyJob, this);
-
-        fileCopyJob->exec();
+        KIOWrapper::fileCopy(info.url, QUrl::fromLocalFile(localFile), true, this);
     }
     
     m_canvas->load(localFile, m_IOFileSettings);
@@ -989,26 +982,27 @@ void ShowFoto::slotDeleteCurrentItem()
         }
         else
         {
-            KIO::Job* const job = KIO::del(urlCurrent);
+            d->kioWrapper = new KIOWrapper();
+            d->kioWrapper->del(urlCurrent);
 
-            connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
+            connect(d->kioWrapper, SIGNAL(error(QString)),
+                    this, SLOT(slotDeleteCurrentItemResult(QString)));
         }
     }
     else
-    {
-        KIO::Job* const job = KIO::trash(urlCurrent);
+    {   
+        d->kioWrapper = new KIOWrapper();
+        d->kioWrapper->trash(urlCurrent);
 
-        connect(job, SIGNAL(result(KJob*)),
-                this, SLOT(slotDeleteCurrentItemResult(KJob*)) );
+        connect(d->kioWrapper, SIGNAL(error(QString)),
+                this, SLOT(slotDeleteCurrentItemResult(QString)));
     }
 }
 
-void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
+void ShowFoto::slotDeleteCurrentItemResult(const QString& errMsg)
 {
-    if (job->error() != 0)
+    if (!errMsg.isEmpty())
     {
-        QString errMsg(job->errorString());
         QMessageBox::critical(this, qApp->applicationName(), errMsg);
         return;
     }

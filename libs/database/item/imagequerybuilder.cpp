@@ -1900,7 +1900,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* b
         }
         else
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown op type: " << op << " passed to kioslave";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown op type: " << op << " passed to dbjob";
             continue;
         }
 

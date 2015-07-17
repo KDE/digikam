@@ -42,15 +42,9 @@
 #include "albuminfo.h"
 #include "databaseparameters.h"
 #include "digikam_export.h"
+#include "imagelisterrecord.h"
 
 class QDate;
-
-class KJob;
-
-namespace KIO
-{
-    class Job;
-}
 
 namespace Digikam
 {
@@ -69,7 +63,7 @@ class ImageTagChangeset;
  * AlbumManager manages albums: does listing of albums and controls the lifetime of it.
  * For PAlbums and TAlbums, the listing is done by reading the db directly and
  * building the hierarchy of the albums. For DAlbums, since the listing takes
- * time, the work is delegated to a kioslave. Interested frontend entities can
+ * time, the work is delegated to a dbjob. Interested frontend entities can
  * connect to the albummanager to receive notifications of new Albums, when
  * Albums are deleted and when the current album is changed.
  *
@@ -645,14 +639,14 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotDatesJobResult(KJob* job);
-    void slotDatesJobData(KIO::Job* job, const QByteArray& data);
-    void slotAlbumsJobResult(KJob* job);
-    void slotAlbumsJobData(KIO::Job* job, const QByteArray& data);
-    void slotTagsJobResult(KJob* job);
-    void slotTagsJobData(KIO::Job* job, const QByteArray& data);
-    void slotPeopleJobResult(KJob* job);
-    void slotPeopleJobData(KIO::Job* job, const QByteArray& data);
+    void slotDatesJobResult();
+    void slotDatesJobData(const QMap<QDateTime, int>& datesStatMap);
+    void slotAlbumsJobResult();
+    void slotAlbumsJobData(const QMap<int,int>& albumsStatMap);
+    void slotTagsJobResult();
+    void slotTagsJobData(const QMap<int,int>& tagsStatMap);
+    void slotPeopleJobResult();
+    void slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesStatMap);
 
     void slotCollectionLocationStatusChanged(const CollectionLocation&, int);
     void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);
@@ -691,6 +685,8 @@ private Q_SLOTS:
 
     void getAlbumItemsCount();
     void getTagItemsCount();
+    void tagItemsCount();
+    void personItemsCount();
 
 private:
 

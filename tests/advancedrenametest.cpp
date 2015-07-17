@@ -7,6 +7,7 @@
  * Description : a test for the AdvancedRename utility
  *
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,9 +34,9 @@
 #include <QTest>
 #include <QUrl>
 
-// KDE includes
+// Local includes
 
-#include <kio/global.h>
+#include <kiowrapper.h>
 
 using namespace Digikam;
 
@@ -196,9 +197,9 @@ void AdvancedRenameTest::testDirectoryNameToken_data()
 
     // The main directory of digikam can have different names, depending on how the
     // user named it. Therefore we have to detect the name here:
-    const QUrl dir2up          = KIO::upUrl(QUrl::fromLocalFile(QFINDTESTDATA(imagesDir)));
+    const QUrl dir2up          = KIOWrapper::upUrl(QUrl::fromLocalFile(QFINDTESTDATA(imagesDir)));
     const QString dir2upString = dir2up.url();
-    QString digikamDir         = dir2upString.right(dir2upString.size() - KIO::upUrl(dir2up).url().size());
+    QString digikamDir         = dir2upString.right(dir2upString.size() - KIOWrapper::upUrl(dir2up).url().size());
     digikamDir.chop(1);
 
     QTest::newRow("[dir]")

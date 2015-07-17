@@ -30,11 +30,6 @@
 #include <QDebug>
 #include <QUrl>
 
-// KDE includes
-
-#include <kio/job.h>
-#include <kio/deletejob.h>
-
 // Local includes
 
 #include "albumfiltermodel.h"
@@ -48,6 +43,7 @@
 #include "modeltest/modeltest.h"
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
+#include "kiowrapper.h"
 
 using namespace Digikam;
 
@@ -115,8 +111,7 @@ void AlbumModelTest::cleanupTestCase()
 
     QUrl deleteUrl = QUrl::fromLocalFile(dbPath);
     
-    auto deleteJob = KIO::file_delete(deleteUrl);
-    deleteJob->exec();
+    KIOWrapper::fileDelete(deleteUrl);
     
     qDebug() << "deleted test folder " << deleteUrl;
 }
@@ -355,8 +350,7 @@ void AlbumModelTest::deletePAlbum(PAlbum* album)
     u.setScheme(QLatin1String("file"));
     u.setPath(album->folderPath());
     
-    auto deleteJob = KIO::file_delete(u);
-    deleteJob->exec();
+    KIOWrapper::fileDelete(u);
 }
 
 void AlbumModelTest::setLastPAlbumCountMap(const QMap<int, int> &map)
