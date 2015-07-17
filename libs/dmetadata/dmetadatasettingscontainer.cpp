@@ -121,11 +121,15 @@ void DMetadataSettingsContainer::defaultValues()
     defaultVal << 0 << 1 << 2 << 3 << 4 << 5;
     readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.xmp.Rating"), defaultVal, NamespaceEntry::RATING, 0));
     readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.rating"), defaultVal, NamespaceEntry::RATING, 1));
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.Rating"), defaultVal, NamespaceEntry::RATING, 2));
+
+    QList<int> microsoftMappings;
+    microsoftMappings << 0 << 1 << 25 << 50 << 75 << 99;
+    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.Rating"), microsoftMappings, NamespaceEntry::RATING, 2));
 
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.dc.description"), NamespaceEntry::COMMENT, 0));
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.exif.UserComment"), NamespaceEntry::COMMENT, 1));
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.tiff.ImageDescription"), NamespaceEntry::COMMENT, 2));
+    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.notes"), NamespaceEntry::COMMENT, 3));
 
     writeTagNamespaces = QList<NamespaceEntry>(readTagNamespaces);
     writeRatingNamespaces = QList<NamespaceEntry>(readRatingNamespaces);

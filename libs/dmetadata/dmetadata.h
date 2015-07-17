@@ -80,7 +80,8 @@ public:
     /** Metadata manipulation methods */
 
     CaptionsMap getImageComments() const;
-    bool setImageComments(const CaptionsMap& comments) const;
+    bool setImageComments(const CaptionsMap& comments,
+                          const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
 
     int  getImagePickLabel() const;
     bool setImagePickLabel(int pickId) const;
@@ -92,7 +93,8 @@ public:
     bool setImageTitles(const CaptionsMap& title) const;
 
     int  getImageRating() const;
-    bool setImageRating(int rating) const;
+    bool setImageRating(int rating,
+                        const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
 
     bool getImageTagsPath(QStringList& tagsPath) const;
     bool setImageTagsPath(const QStringList& tagsPath,

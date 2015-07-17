@@ -314,7 +314,7 @@ CaptionsMap DMetadata::getImageComments() const
             captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
-        
+
         xmpComment = getXmpTagString("Xmp.acdsee.notes", false);
 
         if (!xmpComment.isEmpty())
@@ -369,7 +369,7 @@ CaptionsMap DMetadata::getImageComments() const
     return captionsMap;
 }
 
-bool DMetadata::setImageComments(const CaptionsMap& comments) const
+bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSettingsContainer &settings) const
 {
     //See bug #139313: An empty string is also a valid value
     /*
@@ -387,7 +387,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
         {
             return false;
         }
-        
+
         QString defaultAuthor  = comments.value(QLatin1String("x-default")).author;
         removeXmpTag("Xmp.acdsee.author");
 
@@ -426,38 +426,71 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
     if (supportXmp())
     {
         // NOTE : setXmpTagStringListLangAlt remove xmp tag before to add new values
+        // TODO : make a part of advmetadata
         if (!setXmpTagStringListLangAlt("Xmp.dc.description", comments.toAltLangMap(), false))
         {
             return false;
         }
 
-        // setXmpTagStringLangAlt does not remove xmp tag before adding a new value, so we do it.
-        removeXmpTag("Xmp.exif.UserComment");
-        if (!defaultComment.isNull())
+        QList<NamespaceEntry> toWrite = settings.readCommentNamespaces;
+        if(!settings.unifyReadWrite)
+            toWrite = settings.writeCommentNamespaces;
+
+        for(NamespaceEntry entry : toWrite)
         {
-            if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", defaultComment, QString(), false))
+
+            const std::string myStr = entry.namespaceName.toStdString();
+            const char* nameSpace = myStr.data();
+            removeXmpTag(nameSpace);
+            if(!defaultComment.isNull())
             {
-                return false;
+                // NOTE: Check if acdsee need particular format..
+//                if(entry.namespaceName == QLatin1String("Xmp.acdsee.notes"))
+//                {
+//                    qDebug() << "Setting ACDSee";
+//                    if (!setXmpTagString("Xmp.acdsee.notes", defaultComment, false))
+//                    {
+//                        return false;
+//                    }
+//                }
+//                else
+//                {
+                    if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
+                    {
+                        qDebug() << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
+                        return false;
+                    }
+//                }
             }
         }
 
-        removeXmpTag("Xmp.tiff.ImageDescription");
-        if (!defaultComment.isNull())
-        {
-            if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", defaultComment, QString(), false))
-            {
-                return false;
-            }
-        }
-        
-        removeXmpTag("Xmp.acdsee.notes");
-        if (!defaultComment.isEmpty())
-        {
-            if (!setXmpTagString("Xmp.acdsee.notes", defaultComment, false))
-            {
-                return false;
-            }
-        }
+        // setXmpTagStringLangAlt does not remove xmp tag before adding a new value, so we do it.
+//        removeXmpTag("Xmp.exif.UserComment");
+//        if (!defaultComment.isNull())
+//        {
+//            if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", defaultComment, QString(), false))
+//            {
+//                return false;
+//            }
+//        }
+
+//        removeXmpTag("Xmp.tiff.ImageDescription");
+//        if (!defaultComment.isNull())
+//        {
+//            if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", defaultComment, QString(), false))
+//            {
+//                return false;
+//            }
+//        }
+
+//        removeXmpTag("Xmp.acdsee.notes");
+//        if (!defaultComment.isEmpty())
+//        {
+//            if (!setXmpTagString("Xmp.acdsee.notes", defaultComment, false))
+//            {
+//                return false;
+//            }
+//        }
     }
 
     // In Four we write comments into IPTC.
@@ -562,7 +595,7 @@ CaptionsMap DMetadata::getImageTitles() const
             captionsMap.setData(titlesMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
-        
+
         QString xmpTitle = getXmpTagString("Xmp.acdsee.caption" ,false);
         if (!xmpTitle.isEmpty() && !xmpTitle.trimmed().isEmpty())
         {
@@ -603,7 +636,7 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
         {
             return false;
         }
-        
+
         removeXmpTag("Xmp.acdsee.caption");
         if (!defaultTitle.isEmpty())
         {
@@ -667,7 +700,7 @@ int DMetadata::getImageRating() const
                 return rating;
             }
         }
-        
+
         value = getXmpTagString("Xmp.acdsee.rating", false);
 
         if (!value.isEmpty())
@@ -859,7 +892,7 @@ bool DMetadata::setImageColorLabel(int colorId) const
     return true;
 }
 
-bool DMetadata::setImageRating(int rating) const
+bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &settings) const
 {
     // NOTE : with digiKam 0.9.x, we have used IPTC Urgency to store Rating.
     // Now this way is obsolete, and we use standard XMP rating tag instead.
@@ -870,27 +903,41 @@ bool DMetadata::setImageRating(int rating) const
         return false;
     }
 
-    qCDebug(LOG_METADATA) << getFilePath() << " ==> Rating: " << rating;
+    qCDebug(DIGIKAM_GENERAL_LOG) << getFilePath() << " ==> Rating: +++++++++++" << rating;
 
     if (!setProgramId())
     {
         return false;
     }
+    QList<NamespaceEntry> toWrite = settings.readRatingNamespaces;
 
-    // Set standard XMP rating tag.
+    if(!settings.unifyReadWrite)
+        toWrite = settings.writeRatingNamespaces;
 
-    if (supportXmp())
+    for(NamespaceEntry entry : toWrite)
     {
-        if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
+        const std::string myStr = entry.namespaceName.toStdString();
+        const char* nameSpace = myStr.data();
+        if(!setXmpTagString(nameSpace, QString::number(entry.convertRatio.at(rating))))
         {
-            return false;
-        }
-
-        if (!setXmpTagString("Xmp.acdsee.rating", QString::number(rating), false))
-        {
+            qDebug() << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
             return false;
         }
     }
+    // Set standard XMP rating tag.
+
+//    if (supportXmp())
+//    {
+//        if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
+//        {
+//            return false;
+//        }
+
+//        if (!setXmpTagString("Xmp.acdsee.rating", QString::number(rating), false))
+//        {
+//            return false;
+//        }
+//    }
 
     // Set Exif rating tag used by Windows Vista.
 
@@ -924,13 +971,13 @@ bool DMetadata::setImageRating(int rating) const
             break;
     }
 
-    if (supportXmp())
-    {
-        if (!setXmpTagString("Xmp.MicrosoftPhoto.Rating", QString::number(ratePercents)))
-        {
-            return false;
-        }
-    }
+//    if (supportXmp())
+//    {
+//        if (!setXmpTagString("Xmp.MicrosoftPhoto.Rating", QString::number(ratePercents)))
+//        {
+//            return false;
+//        }
+//    }
 
     if (!setExifTagLong("Exif.Image.0x4749", ratePercents))
     {
@@ -1357,14 +1404,14 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
             return true;
         }
     }
-    
+
     // Try to get Tags Path list from XMP keywords.
     tagsPath = getXmpKeywords();
     if (!tagsPath.isEmpty())
     {
         return true;
     }
-    
+
     // Try to get Tags Path list from IPTC keywords.
     // digiKam 0.9.x has used IPTC keywords to store Tags Path list.
     // This way is obsolete now since digiKam support XMP because IPTC
@@ -1409,7 +1456,11 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
     // Unlike the other keyword fields, we do not need to merge existing entries.
     if (supportXmp())
     {
-        for(NamespaceEntry entry : settings.readTagNamespaces)
+        QList<NamespaceEntry> toWrite = settings.readTagNamespaces;
+        if(!settings.unifyReadWrite)
+            toWrite = settings.writeTagNamespaces;
+
+        for(NamespaceEntry entry : toWrite)
         {
             QStringList newList = tagsPath;
             if(entry.separator.compare(QLatin1String("/")) != 0){
@@ -1423,7 +1474,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
                 return false;
             }
         }
-        
+
         // Converting Tags path list to ACDSee 8 Pro categories.
         const QString category(QLatin1String("<Category Assigned=\"%1\">"));
         QStringList splitTags;
@@ -2133,9 +2184,9 @@ QString DMetadata::getLensDescription() const
     lensExifTags.append(QLatin1String("Exif.Samsung2.LensType"));     // Samsung Cameras Makernote.
     lensExifTags.append(QLatin1String("Exif.Photo.0xFDEA"));          // Non-standard Exif tag set by Camera Raw.
     lensExifTags.append(QLatin1String("Exif.OlympusEq.LensModel"));   // Olympus Cameras Makernote.
-    
+
     // Olympus Cameras Makernote. FIXME is this necessary? exiv2 returns complete name, which doesn't match with lensfun information, see bug #311295
-    //lensExifTags.append("Exif.OlympusEq.LensType");    
+    //lensExifTags.append("Exif.OlympusEq.LensType");
 
     // TODO : add Fuji camera Makernotes.
 
@@ -2147,7 +2198,7 @@ QString DMetadata::getLensDescription() const
         lens = getExifTagString((*it).toLatin1().constData());
 
         if ( !lens.isEmpty() &&
-             !(lens.startsWith(QLatin1Char('(')) && 
+             !(lens.startsWith(QLatin1Char('(')) &&
                lens.endsWith(QLatin1Char(')'))
               )
            )   // To prevent undecoded tag values from Exiv2 as "(65535)".
