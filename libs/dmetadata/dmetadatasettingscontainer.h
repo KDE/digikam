@@ -50,7 +50,8 @@ class NamespaceEntry{
 
 public:
     enum TagType {TAG = 0, TAGPATH = 1};
-    enum NamespaceType {TAGS = 0, RATING = 1, COMMENT = 2};
+    enum CommentType {NOTYPE = -1, ALTLANG = 3, ATLLANGLIST = 4, XMP = 5};
+    enum NamespaceType {TAGS = 7, RATING = 8, COMMENT = 9};
 
     NamespaceEntry(){}
 
@@ -70,6 +71,7 @@ public:
         this->extraXml = extraXml;
         this->nsType = nsType;
         this->index = index;
+        this->commentType = NOTYPE;
     }
 
     /**
@@ -84,17 +86,19 @@ public:
         this->convertRatio  = QList<int>(convertRatio);
         this->nsType = nsType;
         this->index = index;
+        this->commentType = NOTYPE;
     }
 
     /**
      * @brief NamespaceEntry -constructor to build a comment
      * @param name - namespace name
      */
-    NamespaceEntry(QString name, NamespaceType nsType, int index)
+    NamespaceEntry(QString name, NamespaceType nsType, CommentType comm, int index)
     {
         this->namespaceName = name;
         this->nsType = nsType;
         this->index = index;
+        this->commentType = comm;
     }
 
     NamespaceEntry(const NamespaceEntry& copy)
@@ -105,18 +109,34 @@ public:
         this->extraXml      = copy.extraXml;
         this->nsType        = copy.nsType;
         this->convertRatio  = QList<int>(copy.convertRatio);
+        this->commentType   = copy.commentType;
         this->index         = copy.index;
     }
 
     ~NamespaceEntry(){}
 
+    NamespaceType nsType;
+    int index;
+
+    /**
+     * Tag Options
+     */
     QString namespaceName;
     TagType    tagPaths;
     QString separator;
     QString extraXml;
-    NamespaceType nsType;
+
+
+    /**
+     * Rating Options
+     */
     QList<int> convertRatio;
-    int index;
+
+    /**
+     * Comment Options
+     */
+    CommentType commentType;
+
 };
 
 /**

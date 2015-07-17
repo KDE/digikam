@@ -53,18 +53,20 @@ private:
      * @brief The NsRoles enum will encode data from NamespaceEntry in
      *        model items, so we could retrieve and save it later
      */
-    enum NsRoles { NAME_ROLE = Qt::UserRole+1,
-                   ISTAG_ROLE = Qt::UserRole+2,
-                   SEPARATOR_ROLE = Qt::UserRole+3,
-                   EXTRAXML_ROLE = Qt::UserRole+4,
-                   NSTYPE_ROLE = Qt::UserRole+5,
+    enum NsRoles { NAME_ROLE        = Qt::UserRole+1,
+                   ISTAG_ROLE       = Qt::UserRole+2,
+                   SEPARATOR_ROLE   = Qt::UserRole+3,
+                   EXTRAXML_ROLE    = Qt::UserRole+4,
+                   NSTYPE_ROLE      = Qt::UserRole+5,
 
-                   ZEROSTAR_ROLE =Qt::UserRole+6,
-                   ONESTAR_ROLE =Qt::UserRole+7,
-                   TWOSTAR_ROLE =Qt::UserRole+8,
-                   THREESTAR_ROLE =Qt::UserRole+9,
-                   FOURSTAR_ROLE =Qt::UserRole+10,
-                   FIVESTAR_ROLE =Qt::UserRole+11,
+                   ZEROSTAR_ROLE    = Qt::UserRole+6,
+                   ONESTAR_ROLE     = Qt::UserRole+7,
+                   TWOSTAR_ROLE     = Qt::UserRole+8,
+                   THREESTAR_ROLE   = Qt::UserRole+9,
+                   FOURSTAR_ROLE    = Qt::UserRole+10,
+                   FIVESTAR_ROLE    = Qt::UserRole+11,
+
+                   COMMENTTYPE_ROLE = Qt::UserRole+12
                     };
 
     enum ModelNumbers { READ_TAGS = 0,

@@ -425,12 +425,6 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
 
     if (supportXmp())
     {
-        // NOTE : setXmpTagStringListLangAlt remove xmp tag before to add new values
-        // TODO : make a part of advmetadata
-        if (!setXmpTagStringListLangAlt("Xmp.dc.description", comments.toAltLangMap(), false))
-        {
-            return false;
-        }
 
         QList<NamespaceEntry> toWrite = settings.readCommentNamespaces;
         if(!settings.unifyReadWrite)
@@ -444,53 +438,32 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
             removeXmpTag(nameSpace);
             if(!defaultComment.isNull())
             {
-                // NOTE: Check if acdsee need particular format..
-//                if(entry.namespaceName == QLatin1String("Xmp.acdsee.notes"))
-//                {
-//                    qDebug() << "Setting ACDSee";
-//                    if (!setXmpTagString("Xmp.acdsee.notes", defaultComment, false))
-//                    {
-//                        return false;
-//                    }
-//                }
-//                else
-//                {
-                    if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
-                    {
-                        qDebug() << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
-                        return false;
-                    }
-//                }
+                switch(entry.commentType)
+                {
+                    case NamespaceEntry::ALTLANG:
+                        if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
+                        {
+                            qDebug() << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
+                            return false;
+                        }
+                        break;
+                    case NamespaceEntry::ATLLANGLIST:
+                        if (!setXmpTagStringListLangAlt(nameSpace, comments.toAltLangMap(), false))
+                        {
+                            return false;
+                        }
+                        break;
+                    case NamespaceEntry::XMP:
+                        if (!setXmpTagString(nameSpace, defaultComment, false))
+                        {
+                            return false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
-
-        // setXmpTagStringLangAlt does not remove xmp tag before adding a new value, so we do it.
-//        removeXmpTag("Xmp.exif.UserComment");
-//        if (!defaultComment.isNull())
-//        {
-//            if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", defaultComment, QString(), false))
-//            {
-//                return false;
-//            }
-//        }
-
-//        removeXmpTag("Xmp.tiff.ImageDescription");
-//        if (!defaultComment.isNull())
-//        {
-//            if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", defaultComment, QString(), false))
-//            {
-//                return false;
-//            }
-//        }
-
-//        removeXmpTag("Xmp.acdsee.notes");
-//        if (!defaultComment.isEmpty())
-//        {
-//            if (!setXmpTagString("Xmp.acdsee.notes", defaultComment, false))
-//            {
-//                return false;
-//            }
-//        }
     }
 
     // In Four we write comments into IPTC.
