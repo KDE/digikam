@@ -125,10 +125,10 @@ void KipiPluginLoader::Private::loadPlugins()
     ignores.append(QLatin1String("Picasaweb Exporter"));
     ignores.append(QLatin1String("Google Drive Export"));
 
-    // These plugins have been renamed with 5.0.0
-
-    ignores.append(QLatin1String("FlickrExport"));
-    ignores.append(QLatin1String("GPSSync"));
+    // These plugins have been managed with 5.0.0
+    ignores.append(QLatin1String("FlickrExport"));   // Renamed as Flickr
+    ignores.append(QLatin1String("GPSSync"));        // Renamed as GeoLocator
+    ignores.append(QLatin1String("DNGConverter"));   // Moved to digiKAm core.
 
     // List of obsolete tool actions to not load
 
