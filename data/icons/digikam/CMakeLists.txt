@@ -386,6 +386,13 @@ ecm_install_icons(
         64-actions-whitebalance.png
         128-actions-whitebalance.png
         sc-actions-whitebalance.svgz
+        16-actions-dngconverter.png
+        22-actions-dngconverter.png
+        32-actions-dngconverter.png
+        48-actions-dngconverter.png
+        64-actions-dngconverter.png
+        128-actions-dngconverter.png
+        sc-actions-dngconverter.svgz
         32-actions-zoom-select-fit.png
     DESTINATION ${DATA_INSTALL_DIR}/digikam/icons
 )

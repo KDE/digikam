@@ -131,7 +131,8 @@ private:
 };
 
 BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
     d->observer      = new BatchToolObserver(d);
     d->toolGroup     = group;
