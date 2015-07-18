@@ -95,6 +95,7 @@ libpng            >= 1.2.0                      http://www.libpng.org/pub/png/li
 liblcms           >= 2.x                        http://www.littlecms.com
 libboostgraph     >= 1.43.0                     http://www.boost.org/doc/libs
 libpgf            >= 6.11.24                    http://www.libpgf.org
+libexpat          >= 2.0.0                      http://expat.sourceforge.net
 libopencv         >= 2.4.9                      http://opencv.willowgarage.com
 libkexiv2         >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
 libkdcraw         >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
