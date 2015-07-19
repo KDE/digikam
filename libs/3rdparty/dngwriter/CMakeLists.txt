@@ -167,3 +167,5 @@ foreach(_currentfile ${dngwriter_SRCS})
 endforeach()
 
 add_library(dngwriter_src OBJECT ${dngwriter_SRCS})
+
+add_subdirectory(tests)

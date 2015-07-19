@@ -4,7 +4,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# enabling for everything although only required by dimg*
+# enabling for everything although only required by DImg.
 kde_enable_exceptions()
 
 add_subdirectory(imgqsort)
@@ -136,7 +136,6 @@ target_link_libraries(loadsavethreadtest
                       Qt5::Core
                       KF5::KExiv2
                       KF5::KDcraw
-
 )
 
 
