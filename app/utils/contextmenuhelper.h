@@ -44,7 +44,6 @@ class QMenu;
 class QPoint;
 class QString;
 
-class QAction;
 class KActionCollection;
 
 namespace Digikam
@@ -399,11 +398,6 @@ private Q_SLOTS:
     void slotDeselectChildren();
     void slotSelectParents();
     void slotDeselectParents();
-
-#ifdef HAVE_AKONADICONTACT
-    void slotABCSearchResult(KJob*);
-    void slotABCMenuTriggered(QAction*);
-#endif // HAVE_AKONADICONTACT
 
 private:
 

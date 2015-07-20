@@ -20,8 +20,10 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:dthread_src>
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:3rdparty_src>
+            $<TARGET_OBJECTS:dngwriter_src>
             $<TARGET_OBJECTS:iojobs_src>
             $<TARGET_OBJECTS:kiowrapper_src>
+            $<TARGET_OBJECTS:akonadiiface_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src> #
@@ -69,8 +71,7 @@ target_link_libraries(digikamcore
                       KF5::KExiv2
                       KF5::KDcraw
 
-                      # required by dimg
-                      # Required by CImg library which is using pthread internally.
+                      # Required by CImg and DNGWriter which use pthread internally.
                       ${CMAKE_THREAD_LIBS_INIT}
 
                       ${LCMS2_LIBRARIES} # filters
@@ -79,6 +80,7 @@ target_link_libraries(digikamcore
                       ${PNG_LIBRARIES}
 
                       ${PGF_LIBRARIES}
+                      ${EXPAT_LIBRARY}
 )
 
 if(KF5Kipi_FOUND)
@@ -341,13 +343,6 @@ endif()
 
 if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamgui Qt5::Multimedia Qt5::MultimediaWidgets)
-endif()
-
-if(KF5AkonadiContact_FOUND)
-    target_link_libraries(digikamgui
-#                          KF5::AkonadiCore
-                          KF5::AkonadiContact
-                         )
 endif()
 
 if(NOT WIN32)

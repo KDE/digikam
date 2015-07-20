@@ -205,7 +205,7 @@ public:
 
     /** Re-implement this method is you want customize cancelization of tool, for ex. to call
         a dedicated method to kill sub-threads parented to this tool instance.
-        Unforget to call parent BatchTool::cancel() method in you customized implementation.
+        Unforget to call parent BatchTool::cancel() method in your customized implementation.
      */
     virtual void cancel();
 

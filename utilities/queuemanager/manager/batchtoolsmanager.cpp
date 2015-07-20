@@ -32,6 +32,7 @@
 #include "convert2pgf.h"
 #include "convert2png.h"
 #include "convert2tiff.h"
+#include "convert2dng.h"
 #include "crop.h"
 #include "flip.h"
 #include "resize.h"
@@ -111,6 +112,7 @@ BatchToolsManager::BatchToolsManager()
     registerTool(new Convert2JP2(this));
 #endif // HAVE_JASPER
     registerTool(new Convert2PGF(this));
+    registerTool(new Convert2DNG(this));
 
     // Transform
     registerTool(new Rotate(this));

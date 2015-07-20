@@ -10,6 +10,6 @@ set(libkde3rdparty_SRCS
     kinotify/kinotify.cpp
 )
 
-
 add_library(3rdparty_src OBJECT ${libkde3rdparty_SRCS})
 
+add_subdirectory(dngwriter)

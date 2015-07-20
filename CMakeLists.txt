@@ -162,6 +162,8 @@ find_package(PNG                    REQUIRED)
 find_package(PGF ${PGF_MIN_VERSION} REQUIRED)
 find_package(Boost                  REQUIRED)
 find_package(LCMS2                  REQUIRED)
+find_package(EXPAT                  REQUIRED)  # For DNGWriter: XMP SDK need Expat library to compile.
+find_package(Threads                REQUIRED)  # For DNGWriter: DNG SDK need native threads support.
 
 DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)
 DETECT_LIBKEXIV2(${KEXIV2_MIN_VERSION})
@@ -373,7 +375,9 @@ PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"           
 PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2" "(version >= ${KEXIV2_MIN_VERSION})" KF5KExiv2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw" "(version >= ${KDCRAW_MIN_VERSION})" KF5KDcraw_FOUND)
-
+PRINT_LIBRARY_STATUS("libexpat"               "http://expat.sourceforge.net"                                     "(version >= 2.0.0)"                 EXPAT_FOUND)
+PRINT_LIBRARY_STATUS("native threads support" ""                                                                 ""                                   CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
+    
 # ================================================================
 
 PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi" "(version >= ${KIPI_MIN_VERSION})"    "digiKam will be compiled without Kipi-plugins support."                      KF5Kipi_FOUND)
@@ -390,7 +394,20 @@ PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"      
 
 # ================================================================
 
-if(Qt5_FOUND AND KF5_FOUND AND JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS2_FOUND AND Boost_FOUND AND KF5KExiv2_FOUND AND KF5KDcraw_FOUND AND PGF_FOUND AND OpenCV_FOUND)
+if(Qt5_FOUND       AND
+   KF5_FOUND       AND
+   JPEG_FOUND      AND
+   TIFF_FOUND      AND
+   PNG_FOUND       AND
+   LCMS2_FOUND     AND
+   Boost_FOUND     AND
+   KF5KExiv2_FOUND AND
+   KF5KDcraw_FOUND AND
+   PGF_FOUND       AND
+   OpenCV_FOUND    AND
+   EXPAT_FOUND     AND
+   (CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
+  )
     message(STATUS " digiKam can be compiled.................. YES")
     set(DIGIKAM_CAN_BE_COMPILED true)
 else()
@@ -487,7 +504,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
             "$<TARGET_PROPERTY:KF5::FileMetaData,INTERFACE_INCLUDE_DIRECTORIES>"
            )
     endif()
-       
+
     if(KF5Kipi_FOUND)
         set(KF5_INCLUDES_ALL
             ${KF5_INCLUDES_ALL}
@@ -545,7 +562,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     endif()
 
     include_directories(
-                        # version.h, gitversion.h config-digikam.h
+                        # version.h gitversion.h config-digikam.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/utils
 
                         # dbconfigversion.h
