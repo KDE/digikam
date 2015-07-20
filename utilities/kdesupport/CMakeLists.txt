@@ -5,6 +5,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 add_subdirectory(kio)
+add_subdirectory(akonadi)
 
 if(${KFILEMETADATA_FOUND})
     add_subdirectory(baloo)

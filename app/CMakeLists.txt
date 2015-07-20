@@ -23,6 +23,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:dngwriter_src>
             $<TARGET_OBJECTS:iojobs_src>
             $<TARGET_OBJECTS:kiowrapper_src>
+            $<TARGET_OBJECTS:akonadiiface_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src> #
@@ -342,13 +343,6 @@ endif()
 
 if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamgui Qt5::Multimedia Qt5::MultimediaWidgets)
-endif()
-
-if(KF5AkonadiContact_FOUND)
-    target_link_libraries(digikamgui
-#                          KF5::AkonadiCore
-                          KF5::AkonadiContact
-                         )
 endif()
 
 if(NOT WIN32)

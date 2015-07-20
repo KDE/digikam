@@ -29,7 +29,6 @@
 #include <QAction>
 #include <QClipboard>
 #include <QMap>
-#include <QMenu>
 #include <QMimeData>
 #include <QPointer>
 #include <QString>
@@ -44,22 +43,6 @@
 #include <klocalizedstring.h>
 #include <kopenwithdialog.h>
 #include <krun.h>
-
-#ifdef HAVE_AKONADICONTACT
-
-#if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundef"
-#endif
-
-#include <Akonadi/Item>
-#include <Akonadi/Contact/ContactSearchJob>
-
-#if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic pop
-#endif
-
-#endif // HAVE_AKONADICONTACT
 
 // Local includes
 
@@ -85,6 +68,7 @@
 #include "tagscache.h"
 #include "dimg.h"
 #include "dxmlguiwindow.h"
+#include "akonadiiface.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -104,7 +88,6 @@ public:
         imageFilterModel(0),
         albumModel(0),
         parent(0),
-        ABCmenu(0),
         stdActionCollection(0),
         q(q)
     {
@@ -124,7 +107,6 @@ public:
     AbstractCheckableAlbumModel* albumModel;
 
     QMenu*                       parent;
-    QMenu*                       ABCmenu;
 
     KActionCollection*           stdActionCollection;
 
@@ -533,90 +515,15 @@ void ContextMenuHelper::addLabelsAction()
             this, SIGNAL(signalAssignRating(int)));
 }
 
-// TODO: Port from KABC::AdressBook to to libakonadi-kontact. For instance using Akonadi::ContactSearchJob.
-// See http://techbase.kde.org/Development/AkonadiPorting/AddressBook
-
 void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 {
-#ifdef HAVE_AKONADICONTACT
+    AkonadiIface* const abc = new AkonadiIface(d->parent);
 
-    delete d->ABCmenu;
-
-    d->ABCmenu = new QMenu(d->parent);
-
-    QAction* const abcAction = d->ABCmenu->menuAction();
-    abcAction->setIcon(QIcon::fromTheme(QLatin1String("tag-addressbook")));
-    abcAction->setText(i18n("Create Tag From Address Book"));
-    d->parent->addMenu(d->ABCmenu);
-
-    QAction* const nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
-    nothingFound->setEnabled(false);
-
-    Akonadi::ContactSearchJob* const job = new Akonadi::ContactSearchJob();
-    job->setQuery(Akonadi::ContactSearchJob::ContactUid, "");
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotABCSearchResult(KJob*)));
-
-#endif // HAVE_AKONADICONTACT
+    connect(abc, SIGNAL(signalContactTriggered(QString)),
+            this, SIGNAL(signalAddNewTagFromABCMenu(QString)));
+    
+    // AkonadiIface instance will be deleted with d->parent.
 }
-
-#ifdef HAVE_AKONADICONTACT
-
-void ContextMenuHelper::slotABCSearchResult(KJob* job)
-{
-    if (job->error())
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Akonadi search was not succesfull";
-        return;
-    }
-
-    Akonadi::ContactSearchJob *searchJob = qobject_cast<Akonadi::ContactSearchJob*>(job);
-    const KABC::Addressee::List contacts = searchJob->contacts();
-
-    if (contacts.isEmpty())
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "No contacts in Akonadi";
-        return;
-    }
-
-    QStringList names;
-
-    foreach(const KABC::Addressee& addr, contacts)
-    {
-        if (!addr.realName().isNull())
-        {
-            names.append(addr.realName());
-        }
-    }
-
-    names.removeDuplicates();
-    names.sort();
-
-    if (names.isEmpty())
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "No names in the address book";
-        return;
-    }
-
-    d->ABCmenu->clear();
-
-    foreach (const QString& name, names)
-    {
-        d->ABCmenu->addAction(name);
-    }
-
-    connect(d->ABCmenu, SIGNAL(triggered(QAction*)),
-            this, SLOT(slotABCMenuTriggered(QAction*)));
-}
-
-void ContextMenuHelper::slotABCMenuTriggered(QAction* action)
-{
-    QString name = action->iconText();
-    emit signalAddNewTagFromABCMenu(name);
-}
-
-#endif // HAVE_AKONADICONTACT
 
 void ContextMenuHelper::slotDeselectAllAlbumItems()
 {
