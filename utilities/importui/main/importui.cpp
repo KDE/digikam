@@ -1138,10 +1138,6 @@ void ImportUI::slotBusy(bool val)
 
         d->busy = true;
         d->cameraActions->setEnabled(false);
-
-        // TODO see if this can be enabled too, except while downloading..
-        d->advBox->setEnabled(false);
-        d->view->setEnabled(false);
     }
 }
 
@@ -1709,8 +1705,6 @@ void ImportUI::slotLocked(const QString& folder, const QString& file, bool statu
 
 void ImportUI::slotUpdateDownloadName()
 {
-    d->view->setIconViewUpdatesEnabled(false);
-
     KUrl::List selected       = d->view->selectedUrls();
     bool hasNoSelection       = selected.count() == 0;
     CamItemInfoList list      = d->view->allItems();
@@ -1776,7 +1770,7 @@ void ImportUI::slotUpdateDownloadName()
         kDebug() << "slotDownloadNameChanged, new: " << refInfo.downloadName;
     }
 
-    d->view->setIconViewUpdatesEnabled(true);
+    d->view->updateIconView();
 }
 
 //FIXME: the new pictures are marked by CameraHistoryUpdater which is not working yet.
@@ -2161,6 +2155,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     // disable settings tab here instead of slotBusy:
     // Only needs to be disabled while downloading
     d->advBox->setEnabled(false);
+    d->view->setEnabled(false);
 
     d->deleteAfter = deleteAfter;
 
