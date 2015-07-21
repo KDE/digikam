@@ -223,8 +223,11 @@ void PrivateProgressItemCreator::addProgressItem(ProgressItem* const item)
 
     connect(item, SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotProgressItemCompleted()),
-            Qt::DirectConnection
-           );
+            Qt::DirectConnection);
+
+    connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SLOT(slotProgressItemCanceled(ProgressItem*)),
+            Qt::DirectConnection);
 
     ProgressManager::addProgressItem(item);
 }
@@ -232,6 +235,12 @@ void PrivateProgressItemCreator::addProgressItem(ProgressItem* const item)
 void PrivateProgressItemCreator::slotProgressItemCompleted()
 {
     activeProgressItems.deref();
+}
+
+void PrivateProgressItemCreator::slotProgressItemCanceled(ProgressItem* const item)
+{
+    FileActionMngr::instance()->shutDown();
+    item->setComplete();
 }
 
 /*
