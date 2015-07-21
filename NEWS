@@ -99,4 +99,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 092 ==> 331989 - digiKam crashes when playing AVI-file.
 093 ==> 350239 - Unmounted network shares, external hard drives show up in the album view.
 094 ==> 338200 - Cancelling tags assigment in file metadata does not work [patch].
-095 ==> 
+095 ==> 239896 - digiKam hangs and/or crashes after adding tags.
+096 ==> 
