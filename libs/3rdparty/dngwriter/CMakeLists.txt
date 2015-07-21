@@ -7,15 +7,7 @@
 # DNG SDK and XMP SDK use C++ exceptions
 kde_enable_exceptions()
 
-include_directories(${EXPAT_INCLUDE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/
-                    ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5
-                    ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
-                    ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore
-                    ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common
-                    ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include
-                    ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include/client-glue
-                   )
+
 
 # Set platteforms flags.
 # NOTE: see bug #195735: do not enable Mac flags provided by Adobe.
@@ -65,7 +57,7 @@ add_definitions(-DqDNGValidateTarget=1)
 
 set(dngwriter_SRCS
 
-    # MD5 
+    # MD5
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5/MD5.cpp
 
     # XMP SDK
@@ -130,7 +122,7 @@ set(dngwriter_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_opcode_list.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_opcodes.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_orientation.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_render.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_render.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_tag_types.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_color_space.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_globals.cpp
@@ -149,13 +141,16 @@ set(dngwriter_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_hue_sat_map.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_pthread.cpp
 
+
+)
+
+set(dngwriter_iface_SRCS
     # DNGWritter interface
     ${CMAKE_CURRENT_SOURCE_DIR}/dngwriter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dngwriter_p.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dngwriterhost.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dngsettings.cpp
 )
-
 # Disable warnings: we will never touch this code.
 # Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (bug: #269903)
 foreach(_currentfile ${dngwriter_SRCS})
@@ -167,5 +162,32 @@ foreach(_currentfile ${dngwriter_SRCS})
 endforeach()
 
 add_library(dngwriter_src OBJECT ${dngwriter_SRCS})
+target_include_directories(dngwriter_src
+                            PRIVATE
+                            ${EXPAT_INCLUDE_DIR}
+                            ${CMAKE_CURRENT_SOURCE_DIR}/
+                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5
+                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
+                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore
+                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common
+                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include
+                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include/client-glue
+                   )
+add_library(dngwriter_iface_src OBJECT ${dngwriter_iface_SRCS})
+
+add_library(dngwriter SHARED $<TARGET_OBJECTS:dngwriter_src>)
+
+target_link_libraries(dngwriter
+                      PRIVATE
+                      ${CMAKE_THREAD_LIBS_INIT}
+                      ${EXPAT_LIBRARY}
+)
+
+target_include_directories(dngwriter
+                           INTERFACE
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
+)
 
 add_subdirectory(tests)
+
+install(TARGETS dngwriter ${INSTALL_TARGETS_DEFAULT_ARGS})
