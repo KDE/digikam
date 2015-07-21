@@ -14,6 +14,7 @@ ecm_mark_nongui_executable(dngvalidate)
 
 target_link_libraries(dngvalidate
                       digikamcore
+                      dngwriter
                       ${CMAKE_THREAD_LIBS_INIT}
                      )
 
@@ -31,6 +32,7 @@ ecm_mark_nongui_executable(dnginfo)
 
 target_link_libraries(dnginfo
                       digikamcore
+                      dngwriter
                       Qt5::Core
                       ${EXPAT_LIBRARY}
                       ${CMAKE_THREAD_LIBS_INIT}
@@ -53,6 +55,7 @@ ecm_mark_nongui_executable(raw2dng)
 
 target_link_libraries(raw2dng
                       digikamcore
+                      dngwriter
                       Qt5::Core
                       KF5::KIOCore
                       KF5::KExiv2

@@ -20,10 +20,10 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:dthread_src>
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:3rdparty_src>
-            $<TARGET_OBJECTS:dngwriter_src>
             $<TARGET_OBJECTS:iojobs_src>
             $<TARGET_OBJECTS:kiowrapper_src>
             $<TARGET_OBJECTS:akonadiiface_src>
+            $<TARGET_OBJECTS:dngwriter_iface_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src> #
@@ -53,6 +53,7 @@ add_library(digikamcore
 
 target_link_libraries(digikamcore
                       PRIVATE
+                      dngwriter
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -72,6 +73,7 @@ target_link_libraries(digikamcore
                       KF5::KDcraw
 
                       # Required by CImg and DNGWriter which use pthread internally.
+
                       ${CMAKE_THREAD_LIBS_INIT}
 
                       ${LCMS2_LIBRARIES} # filters
@@ -80,7 +82,6 @@ target_link_libraries(digikamcore
                       ${PNG_LIBRARIES}
 
                       ${PGF_LIBRARIES}
-                      ${EXPAT_LIBRARY}
 )
 
 if(KF5Kipi_FOUND)
