@@ -86,11 +86,17 @@ protected:
     // The moc-generated metaObject of the target object
     virtual const QMetaObject *mocMetaObject() const = 0;
 
+    int replacementStaticQtMetacall(QMetaObject::Call _c, int _id, void **_a);
+    typedef void (*StaticMetacallFunction)(QObject *, QMetaObject::Call, int, void **);
+    virtual StaticMetacallFunction staticMetacallPointer() = 0;
+
 protected:
 
     QList<WorkerObject*> m_workers;
     int                  m_currentIndex;
     QMetaObject*         m_replacementMetaObject;
+
+    StaticMetacallFunction m_originalStaticMetacall;
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -124,6 +130,10 @@ public:
         { return WorkerObject::qt_metacall(_c, _id, _a); }
     const QMetaObject *mocMetaObject() const
         { return A::metaObject(); }
+    static void qt_static_metacall(QObject* o, QMetaObject::Call _c, int _id, void **_a)
+        { static_cast<ParallelAdapter*>(o)->replacementStaticQtMetacall(_c, _id, _a); }
+    virtual StaticMetacallFunction staticMetacallPointer() { return qt_static_metacall; }
+
 
     virtual const QMetaObject *metaObject() const
         { return ParallelWorkers::replacementMetaObject(); }
