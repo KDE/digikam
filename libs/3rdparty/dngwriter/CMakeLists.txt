@@ -7,8 +7,6 @@
 # DNG SDK and XMP SDK use C++ exceptions
 kde_enable_exceptions()
 
-
-
 # Set platteforms flags.
 # NOTE: see bug #195735: do not enable Mac flags provided by Adobe.
 #       Sounds like all compile fine like under Linux.
@@ -55,11 +53,22 @@ endif()
 add_definitions(-DqDNGDebug=0)
 add_definitions(-DqDNGValidateTarget=1)
 
-set(xmpsdk_SRCS
-    # MD5
-    ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5/MD5.cpp
+#------------------------------------------------------------------------------------
 
-    # XMP SDK
+set(libmd5_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5/MD5.cpp)
+
+# Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (bug: #269903)
+foreach(_currentfile ${libmd5_SRCS})
+    if(NOT MSVC)
+        set_source_files_properties(${_currentfile} PROPERTIES COMPILE_FLAGS "-fPIC")
+    endif()
+endforeach()
+
+add_library(libmd5 STATIC ${libmd5_SRCS})
+
+#------------------------------------------------------------------------------------
+
+set(libxmp_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common/XML_Node.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common/UnicodeConversions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore/XMPCore_Impl.cpp
@@ -76,9 +85,10 @@ set(xmpsdk_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore/ExpatAdapter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore/ParseRDF.cpp
 )
+
 # Disable warnings: we will never touch this code.
 # Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (bug: #269903)
-foreach(_currentfile ${xmpsdk_SRCS})
+foreach(_currentfile ${libxmp_SRCS})
     if(MSVC)
         set_source_files_properties(${_currentfile} PROPERTIES COMPILE_FLAGS "-w")
     else()
@@ -86,27 +96,29 @@ foreach(_currentfile ${xmpsdk_SRCS})
     endif()
 endforeach()
 
-add_library(dng_xmp_sdk STATIC ${xmpsdk_SRCS})
+add_library(libxmp STATIC ${libxmp_SRCS})
 
-target_link_libraries(dng_xmp_sdk
+target_link_libraries(libxmp
                       PRIVATE
+                      libmd5
                       ${EXPAT_LIBRARY}
 )
 
-target_include_directories(dng_xmp_sdk
-                            PRIVATE
-                            ${EXPAT_INCLUDE_DIR}
-                            ${CMAKE_CURRENT_SOURCE_DIR}/
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include/client-glue
-                   )
-set(dngwriter_SRCS
+target_include_directories(libxmp
+                           PRIVATE
+                           ${EXPAT_INCLUDE_DIR}
+                           ${CMAKE_CURRENT_SOURCE_DIR}/
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include/client-glue
+)
 
-    # DNG SDK
+#------------------------------------------------------------------------------------
+
+set(libdng_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_1d_function.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_date_time.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_ifd.cpp
@@ -169,19 +181,11 @@ set(dngwriter_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_tone_curve.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_hue_sat_map.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk/dng_pthread.cpp
-
 )
 
-set(dngwriter_iface_SRCS
-    # DNGWritter interface
-    ${CMAKE_CURRENT_SOURCE_DIR}/dngwriter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/dngwriter_p.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/dngwriterhost.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/dngsettings.cpp
-)
 # Disable warnings: we will never touch this code.
 # Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (bug: #269903)
-foreach(_currentfile ${dngwriter_SRCS})
+foreach(_currentfile ${libdng_SRCS})
     if(MSVC)
         set_source_files_properties(${_currentfile} PROPERTIES COMPILE_FLAGS "-w")
     else()
@@ -189,28 +193,42 @@ foreach(_currentfile ${dngwriter_SRCS})
     endif()
 endforeach()
 
-add_library(dngwriter_src OBJECT ${dngwriter_SRCS})
-target_include_directories(dngwriter_src
-                            PRIVATE
-                            ${EXPAT_INCLUDE_DIR}
-                            ${CMAKE_CURRENT_SOURCE_DIR}/
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include
-                            ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include/client-glue
-                   )
-add_library(dngwriter_iface_src OBJECT ${dngwriter_iface_SRCS})
+add_library(libdng STATIC ${libdng_SRCS})
 
-add_library(dngwriter STATIC $<TARGET_OBJECTS:dngwriter_src>)
+target_link_libraries(libdng
+                      PRIVATE
+                      libxmp
+                      ${CMAKE_THREAD_LIBS_INIT}
+)
+
+target_include_directories(libdng
+                           PRIVATE
+                           ${CMAKE_CURRENT_SOURCE_DIR}/
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include
+                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include/client-glue
+)
+
+#------------------------------------------------------------------------------------
+
+set(dngwriter_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/dngwriter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dngwriter_p.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dngwriterhost.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dngsettings.cpp
+)
+
+add_library(dngwriter STATIC ${dngwriter_SRCS})
 
 target_link_libraries(dngwriter
                       PRIVATE
-                      dng_xmp_sdk
-                      ${CMAKE_THREAD_LIBS_INIT}
-
+                      libdng
 )
+
+#add_library(dngwriter_src OBJECT $<TARGET_OBJECTS:dngwriter_SRCS>)
 
 add_subdirectory(tests)
 
