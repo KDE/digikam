@@ -35,7 +35,7 @@
 // namespace prefixes will be unique. The ns field of an XML_Node is the namespace URI, the name
 // field contains a qualified name (prefix:local). This includes default namespace mapping, the
 // URI and prefix will be missing only for elements and attributes in no namespace.
-
+namespace DngXmpSdk { 
 class XML_Node;
 
 typedef XML_Node *	XML_NodePtr;	// Handy for things like: XML_Node * a, b; - b is XML_Node, not XML_Node*!
@@ -137,4 +137,5 @@ public:
 
 // =================================================================================================
 
+} //namespace
 #endif	// __XMLParserAdapter_hpp__
