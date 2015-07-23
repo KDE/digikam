@@ -100,4 +100,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 093 ==> 350239 - Unmounted network shares, external hard drives show up in the album view.
 094 ==> 338200 - Cancelling tags assigment in file metadata does not work [patch].
 095 ==> 239896 - digiKam hangs and/or crashes after adding tags.
-096 ==> 
+096 ==> 321680 - Crash / segmentation fault when trying to recognize faces.
+097 ==> 
