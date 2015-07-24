@@ -57,6 +57,7 @@
 /// Access these functions through the concrete class, \c SXMPFiles.
 // =================================================================================================
 
+namespace DngXmpSdk {
 
 template <class tStringObj>
 class TXMPFiles {
@@ -629,6 +630,8 @@ private:
 	XMPFilesRef xmpFilesRef;
 
 };	// class TXMPFiles
+
+} //namespace
 
 // =================================================================================================
 

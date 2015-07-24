@@ -68,9 +68,11 @@
     #include "TXMPMeta.hpp"
     #include "TXMPIterator.hpp"
     #include "TXMPUtils.hpp"
+namespace DngXmpSdk { 
     typedef class TXMPMeta <TXMP_STRING_TYPE>     SXMPMeta;       // For client convenience.
     typedef class TXMPIterator <TXMP_STRING_TYPE> SXMPIterator;
     typedef class TXMPUtils <TXMP_STRING_TYPE>    SXMPUtils;
+} //namespace
     #if TXMP_EXPAND_INLINE
     	#error "TXMP_EXPAND_INLINE is not working at present. Please don't use it."
         #include "client-glue/TXMPMeta.incl_cpp"
@@ -81,7 +83,9 @@
 
 	#if XMP_INCLUDE_XMPFILES
 		#include "TXMPFiles.hpp"	// ! Needs typedef for SXMPMeta.
+namespace DngXmpSdk { 
 		typedef class TXMPFiles <TXMP_STRING_TYPE>    SXMPFiles;
+} //namespace
 		#if TXMP_EXPAND_INLINE
 			#include "client-glue/TXMPFiles.incl_cpp"
 		#endif

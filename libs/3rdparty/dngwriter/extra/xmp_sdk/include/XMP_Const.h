@@ -17,6 +17,8 @@
     #include <stdint.h>
 #endif
 
+namespace DngXmpSdk {
+
 #if __cplusplus
 extern "C" {
 #endif
@@ -1326,5 +1328,7 @@ typedef struct XMP_VersionInfo {
 #if __cplusplus
 } // extern "C"
 #endif
+
+} //namespace
 
 #endif  // __XMP_Const_h__

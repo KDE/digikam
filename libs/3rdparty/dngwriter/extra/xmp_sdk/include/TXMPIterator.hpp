@@ -78,6 +78,8 @@
 
 #include "client-glue/WXMPIterator.hpp"
 
+namespace DngXmpSdk {
+    
 template <class tStringObj> class TXMPIterator {
 
 public:
@@ -229,6 +231,8 @@ private:
     TXMPIterator();	// ! Hidden, must choose property or table iteration.
 
 };  // class TXMPIterator
+
+} //namespace
 
 // =================================================================================================
 

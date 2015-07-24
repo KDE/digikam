@@ -11,6 +11,8 @@
 
 #include "client-glue/WXMP_Common.hpp"
 
+namespace DngXmpSdk {
+    
 #if __cplusplus
 extern "C" {
 #endif
@@ -318,5 +320,7 @@ WXMPUtils_DuplicateSubtree_1 ( XMPMetaRef     source,
 #if __cplusplus
 } /* extern "C" */
 #endif
+
+} //namespace
 
 #endif  // __WXMPUtils_hpp__

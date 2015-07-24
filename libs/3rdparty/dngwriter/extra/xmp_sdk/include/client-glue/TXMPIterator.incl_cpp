@@ -15,6 +15,8 @@
 #include "client-glue/WXMP_Common.hpp"
 #include "client-glue/WXMPIterator.hpp"
 
+namespace DngXmpSdk { 
+    
 // =================================================================================================
 // Implementation Guidelines
 // =========================
@@ -222,5 +224,7 @@ Skip ( XMP_OptionBits options )
 {
 	WrapCheckVoid ( zXMPIterator_Skip_1 ( options ) );
 }
+
+} //namespace
 
 // =================================================================================================

@@ -41,6 +41,8 @@
 /// or that you obtain from files using the XMP Toolkit's XMPFiles component; see \c TXMPFiles.hpp.
 // =================================================================================================
 
+namespace DngXmpSdk { 
+    
 template <class tStringObj> class TXMPIterator;
 template <class tStringObj> class TXMPUtils;
 
@@ -1809,5 +1811,7 @@ private:
 #endif
 
 };  // class TXMPMeta
+
+} //namespace
 
 #endif  // __TXMPMeta_hpp__

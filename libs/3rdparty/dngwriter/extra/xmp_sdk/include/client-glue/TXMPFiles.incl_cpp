@@ -19,6 +19,8 @@
 #include "client-glue/WXMP_Common.hpp"
 #include "client-glue/WXMPFiles.hpp"
 
+namespace DngXmpSdk { 
+
 // =================================================================================================
 // Implementation Guidelines
 // =========================
@@ -361,5 +363,7 @@ CanPutXMP ( const tStringObj & xmpPacket )
 {
 	return this->CanPutXMP ( xmpPacket.c_str(), (XMP_StringLen)xmpPacket.size() );
 }
+
+} //namespace
 
 // =================================================================================================
