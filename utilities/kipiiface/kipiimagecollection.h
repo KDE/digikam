@@ -69,8 +69,8 @@ public:
     virtual QString     category();
     virtual QDate       date();
     virtual QList<QUrl> images();
-    virtual QUrl        path();
-    virtual QUrl        uploadPath();
+    virtual QUrl        url();
+    virtual QUrl        uploadUrl();
     virtual QUrl        uploadRoot();
     virtual QString     uploadRootName();
     virtual bool        isDirectory();
