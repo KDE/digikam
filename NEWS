@@ -61,13 +61,13 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 054 ==> 238935 - Jpeg 2000 Quality setting isn't working right: Always the same quality.
 055 ==> 273290 - digiKam has crashed during import of pictures from SD card.
 056 ==> 337921 - Unable to compile due to pointer type issue in gpcamera.
-057 ==> 229779 - imported folders show not images.
+057 ==> 229779 - Imported folders show not images.
 058 ==> 210742 - Kodak camera cx4300 detects but won't download locks @20% (old o.s. & digikam worked).
 059 ==> 323210 - Image History Bar Shows A Mess Of Derived Images And Identical Images That Are Neither Derived Nor Identical.
 060 ==> 245345 - digiKam crashes while importing pictures from card reader.
 061 ==> 274768 - digiKam crashed @DatabaseConfigElement::element.
 062 ==> 271677 - Renaming.
-063 ==> 225760 - started program with NFS album; scanning started; then at some point crash (wasn't paying attention).
+063 ==> 225760 - Started program with NFS album; scanning started; then at some point crash (wasn't paying attention).
 064 ==> 349689 - digiKam cannot display images if directory name contains UTF8 characters (as e.g. 'ü').
 065 ==> 219308 - digiKam crash when i close it, after to move 50 items.
 066 ==> 215782 - digiKam crash when setting tags.
@@ -101,4 +101,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 094 ==> 338200 - Cancelling tags assigment in file metadata does not work [patch].
 095 ==> 239896 - digiKam hangs and/or crashes after adding tags.
 096 ==> 321680 - Crash / segmentation fault when trying to recognize faces.
-097 ==> 
+097 ==> 167418 - Browsing with pgdn stops working after a movie.
+098 ==>
