@@ -75,6 +75,9 @@
 /* Define to 1 if system use X11 */
 #cmakedefine HAVE_X11 1
 
+/* Define to 1 if dng converter is enabled */
+#cmakedefine HAVE_DNGCONVERTER 1
+
 #define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
 
 /*

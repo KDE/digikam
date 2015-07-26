@@ -12,4 +12,6 @@ set(libkde3rdparty_SRCS
 
 add_library(3rdparty_src OBJECT ${libkde3rdparty_SRCS})
 
-add_subdirectory(dngwriter)
+if(ENABLE_DNGCONVERTER)
+    add_subdirectory(dngwriter)
+endif()
