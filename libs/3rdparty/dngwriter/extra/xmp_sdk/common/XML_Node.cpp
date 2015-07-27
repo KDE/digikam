@@ -13,6 +13,7 @@
 #include <cstring>
 #include <cstdio>
 
+namespace DngXmpSdk { 
 // ! Can't include XMP..._Impl.hpp - used by both Core and Files.
 #define XMP_LitNMatch(s,l,n)	(std::strncmp((s),(l),(n)) == 0)
 
@@ -458,4 +459,5 @@ void XML_Node::ClearNode()
 
 }	// XML_Node::ClearNode
 
+} //namespace
 // =================================================================================================

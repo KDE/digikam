@@ -11,6 +11,8 @@
 
 #include "client-glue/WXMP_Common.hpp"
 
+namespace DngXmpSdk { 
+    
 #if __cplusplus
 extern "C" {
 #endif
@@ -620,5 +622,7 @@ WXMPMeta_SerializeToBuffer_1 ( XMPMetaRef      xmpRef,
 #if __cplusplus
 } /* extern "C" */
 #endif
+
+} //namespace
 
 #endif  // __WXMPMeta_hpp__

@@ -12,7 +12,7 @@
 #include <string>
 
 // =================================================================================================
-
+namespace DngXmpSdk {  
 #if UnicodeTestBuild
 	typedef unsigned char  UTF8Unit;
 	typedef unsigned short UTF16Unit;
@@ -117,5 +117,5 @@ extern void FromUTF32Native ( const UTF32Unit * utf32In, size_t utf32Len, std::s
 extern void InitializeUnicodeConversions();
 
 // =================================================================================================
-
+} //namespace
 #endif	// __UnicodeConversions_h__

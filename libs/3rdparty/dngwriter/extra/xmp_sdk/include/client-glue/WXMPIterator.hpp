@@ -11,6 +11,8 @@
 
 #include "client-glue/WXMP_Common.hpp"
 
+namespace DngXmpSdk { 
+    
 #if __cplusplus
 extern "C" {
 #endif
@@ -79,5 +81,7 @@ WXMPUtils_UnlockIter_1 ( XMPIteratorRef iterRef,
 #if __cplusplus
 } /* extern "C" */
 #endif
+
+} //namespace
 
 #endif  // __WXMPIterator_hpp__

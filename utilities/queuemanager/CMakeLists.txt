@@ -22,7 +22,6 @@ set(libqueuemanager_SRCS
     basetools/convert/convert2pgf.cpp
     basetools/convert/convert2png.cpp
     basetools/convert/convert2tiff.cpp
-    basetools/convert/convert2dng.cpp
     basetools/decorate/border.cpp
     basetools/decorate/watermark.cpp
     basetools/enhance/antivignetting.cpp
@@ -57,6 +56,12 @@ set(libqueuemanager_SRCS
     views/workflowlist.cpp
     main/queuemgrwindow.cpp
 )
+
+if(ENABLE_DNGCONVERTER)
+    set(libqueuemanager_SRCS ${libqueuemanager_SRCS}
+        basetools/convert/convert2dng.cpp
+       )
+endif()
 
 if(JASPER_FOUND)
     set(libqueuemanager_SRCS ${libqueuemanager_SRCS}

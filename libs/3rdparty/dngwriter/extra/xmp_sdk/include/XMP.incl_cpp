@@ -50,13 +50,17 @@
     #include "client-glue/TXMPMeta.incl_cpp"
     #include "client-glue/TXMPIterator.incl_cpp"
     #include "client-glue/TXMPUtils.incl_cpp"
+namespace DngXmpSdk { 
     template class TXMPMeta <TXMP_STRING_TYPE>;
     template class TXMPIterator <TXMP_STRING_TYPE>;
     template class TXMPUtils <TXMP_STRING_TYPE>;
+} //namespace
 	#if XMP_INCLUDE_XMPFILES
 	    #include "client-glue/TXMPFiles.incl_cpp"
+namespace DngXmpSdk { 
 	    template class TXMPFiles <TXMP_STRING_TYPE>;
-   #endif
+} //namespace
+    #endif
 
 #endif
 

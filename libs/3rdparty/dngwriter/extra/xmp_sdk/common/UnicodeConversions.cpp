@@ -22,6 +22,7 @@
 
 using namespace std;
 
+namespace DngXmpSdk { 
 // =================================================================================================
 
 // *** Look into using asm inlines, e.g. count-leading bits for multi-byte UTF-8.
@@ -1662,4 +1663,5 @@ Done:	// Set the output lengths.
 	
 }	// UTF32Swp_to_UTF16Nat
 
+} //namespace
 // =================================================================================================

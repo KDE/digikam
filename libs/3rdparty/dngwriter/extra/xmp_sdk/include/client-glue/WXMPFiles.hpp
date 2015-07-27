@@ -12,6 +12,8 @@
 
 #include "client-glue/WXMP_Common.hpp"
 
+namespace DngXmpSdk { 
+    
 #if __cplusplus
 extern "C" {
 #endif
@@ -163,5 +165,7 @@ extern void WXMPFiles_CanPutXMP_1 ( XMPFilesRef   xmpFilesRef,
 #if __cplusplus
 }
 #endif
+
+} //namespace
 
 #endif // __WXMPFiles_hpp__

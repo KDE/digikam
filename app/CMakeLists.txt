@@ -23,17 +23,16 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:iojobs_src>
             $<TARGET_OBJECTS:kiowrapper_src>
             $<TARGET_OBJECTS:akonadiiface_src>
-            $<TARGET_OBJECTS:dngwriter_iface_src>
 
             # widgets
-            $<TARGET_OBJECTS:digikamwidgetscore_src> #
-            $<TARGET_OBJECTS:digikamdialogscore_src> #
-            $<TARGET_OBJECTS:imageproperties_src> #
-            $<TARGET_OBJECTS:digikamgenericmodels_src> #
+            $<TARGET_OBJECTS:digikamwidgetscore_src>
+            $<TARGET_OBJECTS:digikamdialogscore_src>
+            $<TARGET_OBJECTS:imageproperties_src>
+            $<TARGET_OBJECTS:digikamgenericmodels_src>
 
             # utilities
             $<TARGET_OBJECTS:slideshow_src>
-            $<TARGET_OBJECTS:imageeditor_src> #
+            $<TARGET_OBJECTS:imageeditor_src>
             $<TARGET_OBJECTS:editorplugin_src>
 
             utils/digikam_debug.cpp
@@ -52,8 +51,9 @@ add_library(digikamcore
 )
 
 target_link_libraries(digikamcore
+
                       PRIVATE
-                      dngwriter
+
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -72,7 +72,7 @@ target_link_libraries(digikamcore
                       KF5::KExiv2
                       KF5::KDcraw
 
-                      # Required by CImg and DNGWriter which use pthread internally.
+                      # Required by CImg which use pthread internally.
 
                       ${CMAKE_THREAD_LIBS_INIT}
 
@@ -83,6 +83,10 @@ target_link_libraries(digikamcore
 
                       ${PGF_LIBRARIES}
 )
+
+if(ENABLE_DNGCONVERTER)
+    target_link_libraries(digikamcore PUBLIC dngwriter)
+endif()
 
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::Kipi)

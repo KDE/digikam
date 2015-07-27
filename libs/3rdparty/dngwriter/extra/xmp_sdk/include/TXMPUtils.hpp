@@ -45,6 +45,7 @@
 ///   \li JPEG file handling
 ///   \li Editing aids for creating a user interface for the XMP Toolkit
 // =================================================================================================
+namespace DngXmpSdk { 
 
 template <class tStringObj> class TXMPUtils {
 
@@ -959,6 +960,8 @@ public:
     // =============================================================================================
 
 };  // class TXMPUtils
+
+} //namespace
 
 // =================================================================================================
 

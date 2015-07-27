@@ -1,6 +1,8 @@
 #if ! __WXMP_Common_hpp__
 #define __WXMP_Common_hpp__ 1
 
+namespace DngXmpSdk { 
+    
 // =================================================================================================
 // Copyright 2002-2007 Adobe Systems Incorporated
 // All Rights Reserved.
@@ -119,5 +121,7 @@ extern "C" {
 #if __cplusplus
 } /* extern "C" */
 #endif
+
+} //namespace
 
 #endif  // __WXMP_Common_hpp__

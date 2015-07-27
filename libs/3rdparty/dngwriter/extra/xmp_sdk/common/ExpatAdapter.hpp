@@ -15,36 +15,38 @@
 // =================================================================================================
 // Derived XML parser adapter for Expat.
 // =================================================================================================
-
-#ifndef BanAllEntityUsage
-	#define BanAllEntityUsage	0
-#endif
-
 struct XML_ParserStruct;	// ! Hack to avoid exposing expat.h to all clients.
 typedef struct XML_ParserStruct *XML_Parser;
+
+#ifndef BanAllEntityUsage
+    #define BanAllEntityUsage	0
+#endif
+
+namespace DngXmpSdk {
+
 
 class ExpatAdapter : public XMLParserAdapter {
 public:
 
-	XML_Parser parser;
-	
-	#if BanAllEntityUsage
-		bool isAborted;
-	#endif
-	
-	#if XMP_DebugBuild
-		size_t elemNesting;
-	#endif
-	
-	ExpatAdapter();
-	virtual ~ExpatAdapter();
-	
-	void ParseBuffer ( const void * buffer, size_t length, bool last = true );
+    XML_Parser parser;
+
+    #if BanAllEntityUsage
+        bool isAborted;
+    #endif
+
+    #if XMP_DebugBuild
+        size_t elemNesting;
+    #endif
+
+    ExpatAdapter();
+    virtual ~ExpatAdapter();
+
+    void ParseBuffer ( const void * buffer, size_t length, bool last = true );
 
 };
 
 extern "C" ExpatAdapter * XMP_NewExpatAdapter();
 
 // =================================================================================================
-
+} //namespace
 #endif	// __ExpatAdapter_hpp__

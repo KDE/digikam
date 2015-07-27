@@ -49,6 +49,8 @@
 
 #include "XMP.incl_cpp"
 
+using namespace DngXmpSdk;
+
 /*****************************************************************************/
 
 const char *XMP_NS_TIFF	      = "http://ns.adobe.com/tiff/1.0/";

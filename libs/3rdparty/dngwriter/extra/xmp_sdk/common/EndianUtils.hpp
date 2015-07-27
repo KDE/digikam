@@ -17,7 +17,7 @@
 // *** May want to improve with PowerPC swapping load/store, or SSE instructions.
 
 // =================================================================================================
-
+namespace DngXmpSdk { 
 #define kLittleEndianHost (! kBigEndianHost)
 #if XMP_WinBuild
 	#pragma warning ( disable : 4127 )	// conditional expression is constant
@@ -417,5 +417,6 @@ PutDoubleLE ( double value, void * addr )
 }
 
 // =================================================================================================
+} //namespace
 
 #endif	// __EndianUtils_hpp__

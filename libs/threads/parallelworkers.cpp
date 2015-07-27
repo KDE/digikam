@@ -146,12 +146,8 @@ bool ParallelWorkers::connect(const char* const signal,
     return true;
 }
 
-int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void **_a)
+int ParallelWorkers::replacementStaticQtMetacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = WorkerObjectQtMetacall(_c, _id, _a);
-    if (_id < 0)
-        return _id;
-
     if (_c == QMetaObject::InvokeMetaMethod)
     {
         // This is the common ancestor's meta object, below WorkerObject
@@ -207,8 +203,26 @@ int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void *
                       args[8],
                       args[9]);
 
-        _id -= properMethods;
+        return _id - properMethods; // this return is used by replacementQtMetacall
     }
+    else
+    {
+        m_originalStaticMetacall(asQObject(), _c, _id, _a);
+    }
+    return _id; // this return will be ignored (qt_static_metacall is void)
+}
+
+int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = WorkerObjectQtMetacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+
+    if (_c == QMetaObject::InvokeMetaMethod)
+    {
+        return replacementStaticQtMetacall(_c, _id, _a);
+    }
+
     return _id;
 }
 
@@ -216,11 +230,11 @@ const QMetaObject *ParallelWorkers::replacementMetaObject() const
 {
     if (!m_replacementMetaObject)
     {
-        // We skip the extraData added in Qt 4.8, which gives the static_qt_metacall, bypassing
-        // our overriding of the qt_metacall virtual
         QMetaObject *rmo = new QMetaObject(*mocMetaObject());
-        rmo->d.extradata = 0;
-        const_cast<ParallelWorkers*>(this)->m_replacementMetaObject = rmo;
+        ParallelWorkers* nonConstThis = const_cast<ParallelWorkers*>(this);
+        nonConstThis->m_originalStaticMetacall = rmo->d.static_metacall;
+        rmo->d.static_metacall = nonConstThis->staticMetacallPointer();
+        nonConstThis->m_replacementMetaObject  = rmo;
     }
     return m_replacementMetaObject;
 }
