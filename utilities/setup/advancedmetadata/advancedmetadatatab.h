@@ -66,7 +66,11 @@ private:
                    FOURSTAR_ROLE    = Qt::UserRole+10,
                    FIVESTAR_ROLE    = Qt::UserRole+11,
 
-                   SPECIALOPTS_ROLE = Qt::UserRole+12
+                   SPECIALOPTS_ROLE = Qt::UserRole+12,
+
+                   ALTNAME_ROLE     = Qt::UserRole+13,
+                   SUBSPACE_ROLE    = Qt::UserRole+14,
+                   ALTNAMEOPTS_ROLE  = Qt::UserRole+15
                     };
 
     enum ModelNumbers { READ_TAGS = 0,

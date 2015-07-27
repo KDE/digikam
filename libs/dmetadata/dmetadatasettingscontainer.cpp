@@ -171,13 +171,16 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
         KConfigGroup gr = myItems.group(element);
         NamespaceEntry ns(
                     element,
-                    (NamespaceEntry::TagType)gr.readEntry("Type").toInt(),
+                    (NamespaceEntry::TagType)gr.readEntry("tagPaths").toInt(),
                     gr.readEntry("separator"),
                     gr.readEntry("extraXml"),
-                    (NamespaceEntry::NamespaceType)gr.readEntry("NSType").toInt(),
+                    (NamespaceEntry::NamespaceType)gr.readEntry("nsType").toInt(),
                     gr.readEntry("index").toInt());
 
+        ns.subspace = (NamespaceEntry::NsSubspace)gr.readEntry("subspace").toInt();
+        ns.alternativeName = gr.readEntry("alternativeName");
         ns.specialOpts = (NamespaceEntry::SpecialOptions)gr.readEntry("specialOpts").toInt();
+        ns.secondNameOpts = (NamespaceEntry::SpecialOptions)gr.readEntry("secondNameOpts").toInt();
         QString conversion = gr.readEntry("convertRatio");
 
         for(QString str : conversion.split(QLatin1String(",")))
@@ -198,12 +201,15 @@ void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name
     for(NamespaceEntry e : container)
     {
         KConfigGroup tmp = namespacesGroup.group(e.namespaceName);
-        tmp.writeEntry("Type",(int)e.tagPaths);
+        tmp.writeEntry("alternativeName", e.alternativeName);
+        tmp.writeEntry("subspace",(int)e.subspace);
+        tmp.writeEntry("tagPaths",(int)e.tagPaths);
         tmp.writeEntry("separator", e.separator);
         tmp.writeEntry("extraXml",e.extraXml);
-        tmp.writeEntry("NSType",(int)e.nsType);
+        tmp.writeEntry("nsType",(int)e.nsType);
         tmp.writeEntry("convertRatio", e.convertRatio);
         tmp.writeEntry("specialOpts",(int)e.specialOpts);
+        tmp.writeEntry("secondNameOpts",(int)e.secondNameOpts);
         tmp.writeEntry("index",e.index);
     }
 

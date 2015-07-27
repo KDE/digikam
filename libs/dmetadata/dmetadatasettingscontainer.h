@@ -49,6 +49,8 @@ namespace Digikam
 class NamespaceEntry{
 
 public:
+
+    enum NsSubspace {EXIV = 0, IPTC = 1, XMP = 2 };
     enum TagType {TAG = 0, TAGPATH = 1};
     enum SpecialOptions {NO_OPTS = -1,
                          COMMENT_ALTLANG = 3,
@@ -110,25 +112,29 @@ public:
     NamespaceEntry(const NamespaceEntry& copy)
     {
         this->namespaceName = copy.namespaceName;
+        this->alternativeName = copy.alternativeName;
         this->tagPaths      = copy.tagPaths;
         this->separator     = copy.separator;
         this->extraXml      = copy.extraXml;
         this->nsType        = copy.nsType;
         this->convertRatio  = QList<int>(copy.convertRatio);
         this->specialOpts   = copy.specialOpts;
+        this->secondNameOpts = copy.secondNameOpts;
         this->index         = copy.index;
     }
 
     ~NamespaceEntry(){}
 
     NamespaceType nsType;
+    NsSubspace    subspace;
     int index;
 
     /**
      * Tag Options
      */
     QString namespaceName;
-    TagType    tagPaths;
+    QString alternativeName;
+    TagType tagPaths;
     QString separator;
     QString extraXml;
 
@@ -138,10 +144,9 @@ public:
      */
     QList<int> convertRatio;
 
-    /**
-     * Comment Options
-     */
+
     SpecialOptions specialOpts;
+    SpecialOptions secondNameOpts;
 
 };
 

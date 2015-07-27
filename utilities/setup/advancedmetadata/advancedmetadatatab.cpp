@@ -227,6 +227,9 @@ void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<Namespac
            item->setData(e.convertRatio.at(5), FIVESTAR_ROLE);
         }
         item->setData((int)e.specialOpts, SPECIALOPTS_ROLE);
+        item->setData(e.alternativeName, ALTNAME_ROLE);
+        item->setData((int)e.subspace, SUBSPACE_ROLE);
+        item->setData((int)e.secondNameOpts, ALTNAMEOPTS_ROLE);
         qDebug() << "Loading ++++++++ " << e.namespaceName << e.specialOpts;
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         root->appendRow(item);
@@ -351,6 +354,9 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
             ns.convertRatio.append(current->data(FIVESTAR_ROLE).toInt());
         }
         ns.specialOpts          = (NamespaceEntry::SpecialOptions)current->data(SPECIALOPTS_ROLE).toInt();
+        ns.alternativeName      = current->data(ALTNAME_ROLE).toString();
+        ns.subspace             = (NamespaceEntry::NsSubspace)current->data(SUBSPACE_ROLE).toInt();
+        ns.secondNameOpts       = (NamespaceEntry::SpecialOptions)current->data(ALTNAMEOPTS_ROLE).toInt();
         ns.index                = i;
         qDebug() << "saving+++++" << ns.namespaceName << " " << ns.index << " " << ns.specialOpts;
         container.append(ns);
