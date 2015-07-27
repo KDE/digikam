@@ -92,7 +92,7 @@ public:
     CaptionsMap getImageTitles() const;
     bool setImageTitles(const CaptionsMap& title) const;
 
-    int  getImageRating() const;
+    int  getImageRating(const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
     bool setImageRating(int rating,
                         const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
 

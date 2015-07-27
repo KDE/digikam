@@ -651,7 +651,7 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
     return true;
 }
 
-int DMetadata::getImageRating() const
+int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
 {
     if (getFilePath().isEmpty())
     {
@@ -660,69 +660,21 @@ int DMetadata::getImageRating() const
 
     if (hasXmp())
     {
-        QString value = getXmpTagString("Xmp.xmp.Rating", false);
-
-        if (!value.isEmpty())
+        for(NamespaceEntry entry : settings.readRatingNamespaces)
         {
-            bool ok     = false;
-            long rating = value.toLong(&ok);
+            const std::string myStr = entry.namespaceName.toStdString();
+            const char* nameSpace = myStr.data();
+            QString value = getXmpTagString(nameSpace, false);
 
-            if (ok && rating >= RatingMin && rating <= RatingMax)
+            if(!value.isEmpty())
             {
-                return rating;
-            }
-        }
+                bool ok = false;
+                int rating = value.toInt(&ok);
 
-        value = getXmpTagString("Xmp.acdsee.rating", false);
-
-        if (!value.isEmpty())
-        {
-            bool ok     = false;
-            long rating = value.toLong(&ok);
-
-            if (ok && rating >= RatingMin && rating <= RatingMax)
-            {
-                return rating;
-            }
-        }
-
-        value = getXmpTagString("Xmp.MicrosoftPhoto.Rating", false);
-
-        if (!value.isEmpty())
-        {
-            bool ok            = false;
-            long ratingPercent = value.toLong(&ok);
-
-            if (ok)
-            {
-                // Wrapper around rating percents managed by Windows Vista.
-                long rating = -1;
-
-                switch (ratingPercent)
+                int index = entry.convertRatio.indexOf(rating);
+                if(ok && index != -1)
                 {
-                    case 0:
-                        rating = 0;
-                        break;
-                    case 1:
-                        rating = 1;
-                        break;
-                    case 25:
-                        rating = 2;
-                        break;
-                    case 50:
-                        rating = 3;
-                        break;
-                    case 75:
-                        rating = 4;
-                        break;
-                    case 99:
-                        rating = 5;
-                        break;
-                }
-
-                if (rating != -1 && rating >= RatingMin && rating <= RatingMax)
-                {
-                    return rating;
+                    return index;
                 }
             }
         }
@@ -896,20 +848,6 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
             return false;
         }
     }
-    // Set standard XMP rating tag.
-
-//    if (supportXmp())
-//    {
-//        if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
-//        {
-//            return false;
-//        }
-
-//        if (!setXmpTagString("Xmp.acdsee.rating", QString::number(rating), false))
-//        {
-//            return false;
-//        }
-//    }
 
     // Set Exif rating tag used by Windows Vista.
 
