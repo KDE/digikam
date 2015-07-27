@@ -294,15 +294,15 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
             QString xmpComment;
             const std::string myStr = entry.namespaceName.toStdString();
             const char* nameSpace = myStr.data();
-            switch(entry.commentType)
+            switch(entry.specialOpts)
             {
-            case NamespaceEntry::ALTLANG:
+            case NamespaceEntry::COMMENT_ALTLANG:
                 xmpComment = getXmpTagStringLangAlt(nameSpace, QString(), false);
                 break;
-            case NamespaceEntry::ATLLANGLIST:
+            case NamespaceEntry::COMMENT_ATLLANGLIST:
                 commentsMap = getXmpTagStringListLangAlt(nameSpace, false);
                 break;
-            case NamespaceEntry::XMP:
+            case NamespaceEntry::COMMENT_XMP:
                 xmpComment = getXmpTagString("Xmp.acdsee.notes", false);
                 break;
             default:
@@ -437,22 +437,22 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
             removeXmpTag(nameSpace);
             if(!defaultComment.isNull())
             {
-                switch(entry.commentType)
+                switch(entry.specialOpts)
                 {
-                    case NamespaceEntry::ALTLANG:
+                    case NamespaceEntry::COMMENT_ALTLANG:
                         if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
                         {
                             qDebug() << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
                             return false;
                         }
                         break;
-                    case NamespaceEntry::ATLLANGLIST:
+                    case NamespaceEntry::COMMENT_ATLLANGLIST:
                         if (!setXmpTagStringListLangAlt(nameSpace, comments.toAltLangMap(), false))
                         {
                             return false;
                         }
                         break;
-                    case NamespaceEntry::XMP:
+                    case NamespaceEntry::COMMENT_XMP:
                         if (!setXmpTagString(nameSpace, defaultComment, false))
                         {
                             return false;
@@ -880,14 +880,6 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
             ratePercents = 99;
             break;
     }
-
-//    if (supportXmp())
-//    {
-//        if (!setXmpTagString("Xmp.MicrosoftPhoto.Rating", QString::number(ratePercents)))
-//        {
-//            return false;
-//        }
-//    }
 
     if (!setExifTagLong("Exif.Image.0x4749", ratePercents))
     {

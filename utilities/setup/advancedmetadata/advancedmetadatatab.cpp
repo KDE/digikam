@@ -226,8 +226,8 @@ void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<Namespac
            item->setData(e.convertRatio.at(4), FOURSTAR_ROLE);
            item->setData(e.convertRatio.at(5), FIVESTAR_ROLE);
         }
-        item->setData((int)e.commentType, COMMENTTYPE_ROLE);
-        qDebug() << "Loading ++++++++ " << e.namespaceName << e.commentType;
+        item->setData((int)e.specialOpts, SPECIALOPTS_ROLE);
+        qDebug() << "Loading ++++++++ " << e.namespaceName << e.specialOpts;
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         root->appendRow(item);
     }
@@ -350,9 +350,9 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
             ns.convertRatio.append(current->data(FOURSTAR_ROLE).toInt());
             ns.convertRatio.append(current->data(FIVESTAR_ROLE).toInt());
         }
-        ns.commentType          = (NamespaceEntry::CommentType)current->data(COMMENTTYPE_ROLE).toInt();
+        ns.specialOpts          = (NamespaceEntry::SpecialOptions)current->data(SPECIALOPTS_ROLE).toInt();
         ns.index                = i;
-        qDebug() << "saving+++++" << ns.namespaceName << " " << ns.index << " " << ns.commentType;
+        qDebug() << "saving+++++" << ns.namespaceName << " " << ns.index << " " << ns.specialOpts;
         container.append(ns);
     }
 }

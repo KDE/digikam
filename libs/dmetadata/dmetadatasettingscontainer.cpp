@@ -93,30 +93,42 @@ void DMetadataSettingsContainer::defaultValues()
     this->unifyReadWrite = true;
 
     // Default tag namespaces
-    readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.digiKam.TagsList"),
-                                           NamespaceEntry::TAGPATH,
-                                           QLatin1String("/"),
-                                           QString(),
-                                           NamespaceEntry::TAGS,
-                                           0));
-    readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
-                                           NamespaceEntry::TAGPATH,
-                                           QLatin1String("/"),
-                                           QString(),
-                                           NamespaceEntry::TAGS,
-                                           1));
-    readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.lr.hierarchicalSubject"),
-                                           NamespaceEntry::TAGPATH,
-                                           QLatin1String("|"),
-                                           QString(),
-                                            NamespaceEntry::TAGS,
-                                            2));
-    readTagNamespaces.append(NamespaceEntry(QLatin1String("Xmp.mediapro.CatalogSets"),
-                                           NamespaceEntry::TAGPATH,
-                                           QLatin1String("|"),
-                                           QString(),
-                                           NamespaceEntry::TAGS,
-                                           3));
+    NamespaceEntry tagNs1 (QLatin1String("Xmp.digiKam.TagsList"),
+                                               NamespaceEntry::TAGPATH,
+                                               QLatin1String("/"),
+                                               QString(),
+                                               NamespaceEntry::TAGS,
+                                               0);
+    tagNs1.specialOpts = NamespaceEntry::TAG_XMPSEQ;
+
+    NamespaceEntry tagNs2 (QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
+                                               NamespaceEntry::TAGPATH,
+                                               QLatin1String("/"),
+                                               QString(),
+                                               NamespaceEntry::TAGS,
+                                               1);
+    tagNs2.specialOpts = NamespaceEntry::TAG_XMPBAG;
+
+    NamespaceEntry tagNs3 (QLatin1String("Xmp.lr.hierarchicalSubject"),
+                                               NamespaceEntry::TAGPATH,
+                                               QLatin1String("|"),
+                                               QString(),
+                                                NamespaceEntry::TAGS,
+                                                2);
+
+    tagNs3.specialOpts = NamespaceEntry::TAG_XMPBAG;
+    NamespaceEntry tagNs4 (QLatin1String("Xmp.mediapro.CatalogSets"),
+                                               NamespaceEntry::TAGPATH,
+                                               QLatin1String("|"),
+                                               QString(),
+                                               NamespaceEntry::TAGS,
+                                               3);
+    tagNs4.specialOpts = NamespaceEntry::TAG_XMPBAG;
+
+    readTagNamespaces.append(tagNs1);
+    readTagNamespaces.append(tagNs2);
+    readTagNamespaces.append(tagNs3);
+    readTagNamespaces.append(tagNs4);
 
     QList<int> defaultVal;
     defaultVal << 0 << 1 << 2 << 3 << 4 << 5;
@@ -129,23 +141,21 @@ void DMetadataSettingsContainer::defaultValues()
 
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.dc.description"),
                                                 NamespaceEntry::COMMENT,
-                                                NamespaceEntry::ATLLANGLIST,
+                                                NamespaceEntry::COMMENT_ATLLANGLIST,
                                                 0));
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.exif.UserComment"),
                                                 NamespaceEntry::COMMENT,
-                                                NamespaceEntry::ALTLANG,
+                                                NamespaceEntry::COMMENT_ALTLANG,
                                                 1));
 
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.tiff.ImageDescription"),
                                                 NamespaceEntry::COMMENT,
-                                                NamespaceEntry::ALTLANG,
+                                                NamespaceEntry::COMMENT_ALTLANG,
                                                 2));
     readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.notes"),
                                                 NamespaceEntry::COMMENT,
-                                                NamespaceEntry::XMP,
+                                                NamespaceEntry::COMMENT_XMP,
                                                 3));
-    qDebug() << "+++++++++++++++++++Comment type" << readCommentNamespaces.first().commentType;
-    qDebug() << "+++++++++++++++++++Comment type" << readCommentNamespaces.first().commentType;
 
     writeTagNamespaces = QList<NamespaceEntry>(readTagNamespaces);
     writeRatingNamespaces = QList<NamespaceEntry>(readRatingNamespaces);
@@ -167,7 +177,7 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
                     (NamespaceEntry::NamespaceType)gr.readEntry("NSType").toInt(),
                     gr.readEntry("index").toInt());
 
-        ns.commentType = (NamespaceEntry::CommentType)gr.readEntry("commentType").toInt();
+        ns.specialOpts = (NamespaceEntry::SpecialOptions)gr.readEntry("specialOpts").toInt();
         QString conversion = gr.readEntry("convertRatio");
 
         for(QString str : conversion.split(QLatin1String(",")))
@@ -193,7 +203,7 @@ void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name
         tmp.writeEntry("extraXml",e.extraXml);
         tmp.writeEntry("NSType",(int)e.nsType);
         tmp.writeEntry("convertRatio", e.convertRatio);
-        tmp.writeEntry("commentType",(int)e.commentType);
+        tmp.writeEntry("specialOpts",(int)e.specialOpts);
         tmp.writeEntry("index",e.index);
     }
 

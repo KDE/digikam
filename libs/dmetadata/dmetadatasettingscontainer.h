@@ -50,7 +50,13 @@ class NamespaceEntry{
 
 public:
     enum TagType {TAG = 0, TAGPATH = 1};
-    enum CommentType {NOTYPE = -1, ALTLANG = 3, ATLLANGLIST = 4, XMP = 5};
+    enum SpecialOptions {NO_OPTS = -1,
+                         COMMENT_ALTLANG = 3,
+                         COMMENT_ATLLANGLIST = 4,
+                         COMMENT_XMP = 5,
+                         TAG_XMPBAG = 6,
+                         TAG_XMPSEQ = 7};
+
     enum NamespaceType {TAGS = 7, RATING = 8, COMMENT = 9};
 
     NamespaceEntry(){}
@@ -71,7 +77,7 @@ public:
         this->extraXml = extraXml;
         this->nsType = nsType;
         this->index = index;
-        this->commentType = NOTYPE;
+        this->specialOpts = NO_OPTS;
     }
 
     /**
@@ -86,19 +92,19 @@ public:
         this->convertRatio  = QList<int>(convertRatio);
         this->nsType = nsType;
         this->index = index;
-        this->commentType = NOTYPE;
+        this->specialOpts = NO_OPTS;
     }
 
     /**
      * @brief NamespaceEntry -constructor to build a comment
      * @param name - namespace name
      */
-    NamespaceEntry(QString name, NamespaceType nsType, CommentType comm, int index)
+    NamespaceEntry(QString name, NamespaceType nsType, SpecialOptions comm, int index)
     {
         this->namespaceName = name;
         this->nsType = nsType;
         this->index = index;
-        this->commentType = comm;
+        this->specialOpts = comm;
     }
 
     NamespaceEntry(const NamespaceEntry& copy)
@@ -109,7 +115,7 @@ public:
         this->extraXml      = copy.extraXml;
         this->nsType        = copy.nsType;
         this->convertRatio  = QList<int>(copy.convertRatio);
-        this->commentType   = copy.commentType;
+        this->specialOpts   = copy.specialOpts;
         this->index         = copy.index;
     }
 
@@ -135,7 +141,7 @@ public:
     /**
      * Comment Options
      */
-    CommentType commentType;
+    SpecialOptions specialOpts;
 
 };
 
