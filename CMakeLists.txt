@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 2.8.9)
 #
 # Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #

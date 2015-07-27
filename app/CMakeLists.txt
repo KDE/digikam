@@ -66,7 +66,7 @@ KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
 add_dependencies(digikamcore digikam-gitversion)
 
-target_link_libraries(digikamcore
+target_link_libraries(digikamcore LINK_PUBLIC
                       ${QT_QTSQL_LIBRARY}
 
                       ${KDE4_KDECORE_LIBS}
@@ -94,35 +94,35 @@ target_link_libraries(digikamcore
                      )
 
 if(Q_WS_X11)
-    target_link_libraries(digikamcore ${X11_LIBRARIES})
+   target_link_libraries(digikamcore LINK_PRIVATE ${X11_LIBRARIES})
 endif()
 
 if(APPLE)
-    target_link_libraries(digikamcore /System/Library/Frameworks/AppKit.framework)
+   target_link_libraries(digikamcore LINK_PRIVATE /System/Library/Frameworks/AppKit.framework)
 endif()
 
 if(JASPER_FOUND)
-    target_link_libraries(digikamcore ${JASPER_LIBRARIES})
+   target_link_libraries(digikamcore LINK_PUBLIC ${JASPER_LIBRARIES})
 endif()
 
 if(LENSFUN_FOUND)
-   target_link_libraries(digikamcore ${LENSFUN_LIBRARIES})
+   target_link_libraries(digikamcore LINK_PUBLIC ${LENSFUN_LIBRARIES})
 endif()
 
 if(LQR-1_FOUND)
-   target_link_libraries(digikamcore ${liblqr_LIBS})
+   target_link_libraries(digikamcore LINK_PUBLIC ${liblqr_LIBS})
 endif()
 
 if(KIPI_FOUND)
-   target_link_libraries(digikamcore ${KIPI_LIBRARIES})
+   target_link_libraries(digikamcore LINK_PUBLIC ${KIPI_LIBRARIES})
 endif()
 
 if(KFACE_FOUND)
-   target_link_libraries(digikamcore ${KFACE_LIBRARIES})
+   target_link_libraries(digikamcore LINK_PUBLIC ${KFACE_LIBRARIES})
 endif()
 
 if(KGEOMAP_FOUND)
-   target_link_libraries(digikamcore ${KGEOMAP_LIBRARIES})
+   target_link_libraries(digikamcore LINK_PUBLIC ${KGEOMAP_LIBRARIES})
 endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
@@ -153,7 +153,7 @@ endif()
 
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 
-target_link_libraries(digikamdatabase
+target_link_libraries(digikamdatabase LINK_PUBLIC
                       digikamcore
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
@@ -169,19 +169,19 @@ target_link_libraries(digikamdatabase
                      )
 
 if(KFACE_FOUND)
-   target_link_libraries(digikamdatabase ${KFACE_LIBRARIES})
+   target_link_libraries(digikamdatabase LINK_PUBLIC ${KFACE_LIBRARIES})
 endif()
 
 if(KGEOMAP_FOUND)
-   target_link_libraries(digikamdatabase ${KGEOMAP_LIBRARIES})
+   target_link_libraries(digikamdatabase LINK_PUBLIC ${KGEOMAP_LIBRARIES})
 endif()
 
 if(Baloo_FOUND)
-    target_link_libraries(digikamdatabase ${BALOO_LIBRARIES})
+    target_link_libraries(digikamdatabase LINK_PUBLIC ${BALOO_LIBRARIES})
 endif()
 
 if(SQLITE2_FOUND)
-    target_link_libraries(digikamdatabase ${SQLITE2_LIBRARIES})
+    target_link_libraries(digikamdatabase LINK_PUBLIC ${SQLITE2_LIBRARIES})
 endif()
 
 set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
