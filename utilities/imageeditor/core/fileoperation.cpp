@@ -145,9 +145,9 @@ void FileOperation::openFilesWithDefaultApplication(const KUrl::List& urls, QWid
         }
 
         KService::Ptr ptr                                  = offers.first();
-        QMap<KService::Ptr, KUrl::List>::const_iterator it = servicesMap.find(ptr);
+        QMap<KService::Ptr, KUrl::List>::const_iterator it = servicesMap.constFind(ptr);
 
-        if (it != servicesMap.end())
+        if (it != servicesMap.constEnd())
         {
             servicesMap[ptr] << url;
         }

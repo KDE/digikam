@@ -207,7 +207,7 @@ void CameraThumbsCtrl::startKdePreviewJob()
 
 #if KDE_IS_VERSION(4,7,0)
     KFileItemList items;
-    for (KUrl::List::ConstIterator it = list.begin() ; it != list.end() ; ++it)
+    for (KUrl::List::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         if ((*it).isValid())
             items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));
