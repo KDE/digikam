@@ -246,7 +246,7 @@ bool DMetadata::mSecTimeStamp(const char* const exifTagName, int& ms) const
     return ok;
 }
 
-CaptionsMap DMetadata::getImageComments() const
+CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settings) const
 {
     if (getFilePath().isEmpty())
     {
@@ -289,39 +289,38 @@ CaptionsMap DMetadata::getImageComments() const
             }
         }
 
-        commentsMap = getXmpTagStringListLangAlt("Xmp.dc.description", false);
-
-        if (!commentsMap.isEmpty())
+        for(NamespaceEntry entry : settings.readCommentNamespaces)
         {
-            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
-            return captionsMap;
-        }
+            QString xmpComment;
+            const std::string myStr = entry.namespaceName.toStdString();
+            const char* nameSpace = myStr.data();
+            switch(entry.commentType)
+            {
+            case NamespaceEntry::ALTLANG:
+                xmpComment = getXmpTagStringLangAlt(nameSpace, QString(), false);
+                break;
+            case NamespaceEntry::ATLLANGLIST:
+                commentsMap = getXmpTagStringListLangAlt(nameSpace, false);
+                break;
+            case NamespaceEntry::XMP:
+                xmpComment = getXmpTagString("Xmp.acdsee.notes", false);
+                break;
+            default:
+                break;
+            }
 
-        QString xmpComment = getXmpTagStringLangAlt("Xmp.exif.UserComment", QString(), false);
+            if(!xmpComment.isEmpty())
+            {
+                commentsMap.insert(QLatin1String("x-default"), xmpComment);
+                captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
+                return captionsMap;
+            }
 
-        if (!xmpComment.isEmpty())
-        {
-            commentsMap.insert(QLatin1String("x-default"), xmpComment);
-            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
-            return captionsMap;
-        }
-
-        xmpComment = getXmpTagStringLangAlt("Xmp.tiff.ImageDescription", QString(), false);
-
-        if (!xmpComment.isEmpty())
-        {
-            commentsMap.insert(QLatin1String("x-default"), xmpComment);
-            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
-            return captionsMap;
-        }
-
-        xmpComment = getXmpTagString("Xmp.acdsee.notes", false);
-
-        if (!xmpComment.isEmpty())
-        {
-            commentsMap.insert(QLatin1String("x-default"), xmpComment);
-            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
-            return captionsMap;
+            if(!commentsMap.isEmpty())
+            {
+                captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
+                return captionsMap;
+            }
         }
     }
 

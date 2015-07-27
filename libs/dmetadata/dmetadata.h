@@ -79,7 +79,7 @@ public:
 
     /** Metadata manipulation methods */
 
-    CaptionsMap getImageComments() const;
+    CaptionsMap getImageComments(const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
     bool setImageComments(const CaptionsMap& comments,
                           const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
 
