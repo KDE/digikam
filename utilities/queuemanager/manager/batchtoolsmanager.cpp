@@ -32,7 +32,7 @@
 #include "convert2pgf.h"
 #include "convert2png.h"
 #include "convert2tiff.h"
-#include "convert2dng.h"
+
 #include "crop.h"
 #include "flip.h"
 #include "resize.h"
@@ -67,6 +67,10 @@
 #ifdef HAVE_LENSFUN
 #include "lensautofix.h"
 #endif // HAVE_LENSFUN
+
+#ifdef HAVE_DNGCONVERTER
+#include "convert2dng.h"
+#endif // HAVE_DNGCONVERTER
 
 namespace Digikam
 {
@@ -112,7 +116,10 @@ BatchToolsManager::BatchToolsManager()
     registerTool(new Convert2JP2(this));
 #endif // HAVE_JASPER
     registerTool(new Convert2PGF(this));
+
+#ifdef HAVE_DNGCONVERTER
     registerTool(new Convert2DNG(this));
+#endif // HAVE_DNGCOVERTER
 
     // Transform
     registerTool(new Rotate(this));

@@ -111,6 +111,7 @@ option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server ex
 
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
+option(ENABLE_DNGCONVERTER          "Enable DNG Converter, crashes on some systems (default=OFF)"                    OFF)
 
 ############## Find Packages ###################
 
@@ -313,6 +314,12 @@ if(ENABLE_KFILEMETADATASUPPORT)
 
 endif()
 
+# -- dng converter options -----------------
+if(ENABLE_DNGCOVERTER)
+    set(USE_DNGCONVERTER TRUE)
+else()
+    set(USE_DNGCONVERTER FALSE)
+endif()
 # -- compilation options definitions -----------------------------------------------------------
 
 MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
@@ -327,6 +334,7 @@ MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
 MACRO_BOOL_TO_01(KF5KFace_FOUND           HAVE_KFACE)
 MACRO_BOOL_TO_01(KF5KGeoMap_FOUND         HAVE_KGEOMAP)
 MACRO_BOOL_TO_01(KFILEMETADATA_FOUND      HAVE_KFILEMETADATA)
+MACRO_BOOL_TO_01(USE_DNGCOVERTER          HAVE_DNGCONVERTER)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -377,7 +385,7 @@ PRINT_LIBRARY_STATUS("libkexiv2"              "https://projects.kde.org/projects
 PRINT_LIBRARY_STATUS("libkdcraw"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw" "(version >= ${KDCRAW_MIN_VERSION})" KF5KDcraw_FOUND)
 PRINT_LIBRARY_STATUS("libexpat"               "http://expat.sourceforge.net"                                     "(version >= 2.0.0)"                 EXPAT_FOUND)
 PRINT_LIBRARY_STATUS("native threads support" ""                                                                 ""                                   CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
-    
+
 # ================================================================
 
 PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi" "(version >= ${KIPI_MIN_VERSION})"    "digiKam will be compiled without Kipi-plugins support."                      KF5Kipi_FOUND)
@@ -532,7 +540,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
             "$<TARGET_PROPERTY:${KF5AkonadiContact_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
            )
     endif()
-    
+
     set(QT5_INCLUDES_ALL
         "$<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>"
