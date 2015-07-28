@@ -80,6 +80,7 @@ public:
         this->nsType = nsType;
         this->index = index;
         this->specialOpts = NO_OPTS;
+        this->secondNameOpts = NO_OPTS;
     }
 
     /**
@@ -95,6 +96,7 @@ public:
         this->nsType = nsType;
         this->index = index;
         this->specialOpts = NO_OPTS;
+        this->secondNameOpts = NO_OPTS;
     }
 
     /**
@@ -107,6 +109,7 @@ public:
         this->nsType = nsType;
         this->index = index;
         this->specialOpts = comm;
+        this->secondNameOpts = NO_OPTS;
     }
 
     NamespaceEntry(const NamespaceEntry& copy)
@@ -182,6 +185,9 @@ public:
     bool unifyReadWrite;
 
 private:
+    void defaultTagValues();
+    void defaultRatingValues();
+    void defaultCommentValues();
     void readOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry> &container);
     void writeOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry> container) const;
 

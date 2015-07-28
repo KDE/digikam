@@ -96,7 +96,8 @@ public:
     bool setImageRating(int rating,
                         const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
 
-    bool getImageTagsPath(QStringList& tagsPath) const;
+    bool getImageTagsPath(QStringList& tagsPath,
+                          const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
     bool setImageTagsPath(const QStringList& tagsPath,
                           const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
 

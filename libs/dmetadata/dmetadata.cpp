@@ -1214,54 +1214,49 @@ VideoInfoContainer DMetadata::getVideoInformation() const
     return videoInfo;
 }
 
-bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
+bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsContainer &settings) const
 {
-    // Try to get Tags Path list from XMP in first.
-    tagsPath = getXmpTagStringSeq("Xmp.digiKam.TagsList", false);
-    if (!tagsPath.isEmpty())
+
+    for(NamespaceEntry entry : settings.readTagNamespaces)
     {
-        return true;
-    }
+        int index  = 0;
+        QString currentNamespace = entry.namespaceName;
+        NamespaceEntry::SpecialOptions currentOpts = entry.specialOpts;
+        // Some namespaces have altenative paths, we must search them both
+        while(index < 2)
+        {
+            const std::string myStr = currentNamespace.toStdString();
+            const char* nameSpace = myStr.data();
+            switch(currentOpts){
+            case NamespaceEntry::TAG_XMPBAG:
+                tagsPath = getXmpTagStringBag(nameSpace, false);
+                break;
+            case NamespaceEntry::TAG_XMPSEQ:
+                tagsPath = getXmpTagStringSeq(nameSpace, false);
+                break;
+            default:
+                break;
+            }
 
-    // See bug #269418 : try to get Tags Path list from M$ Windows Live Photo Gallery.
-    tagsPath = getXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", false);
-    if (!tagsPath.isEmpty())
-    {
-        return true;
-    }
-
-    // Try to get Tags Path list from XMP in first.
-    tagsPath = getXmpTagStringBag("Xmp.lr.hierarchicalSubject", false);
-
-    // See bug #221460: there is another LR tag for hierarchical subjects.
-    if (tagsPath.isEmpty())
-    {
-        tagsPath = getXmpTagStringSeq("Xmp.lr.HierarchicalSubject", false);
-    }
-
-    if (!tagsPath.isEmpty())
-    {
-        // See bug #197285: LightRoom use '|' as separator.
-        tagsPath = tagsPath.replaceInStrings(QLatin1String("|"), QLatin1String("/"));
-        qCDebug(LOG_METADATA) << "Tags Path imported from LightRoom: " << tagsPath;
-        return true;
-    }
-
-    // Try to get Tags Path list from Media Pro XMP first.
-    tagsPath = getXmpTagStringBag("Xmp.mediapro.CatalogSets", false);
-
-    // There is another Media Pro tag for hierarchical subjects.
-    if (tagsPath.isEmpty())
-    {
-        tagsPath = getXmpTagStringBag("Xmp.expressionmedia.CatalogSets", false);
-    }
-
-    if (!tagsPath.isEmpty())
-    {
-        // Media Pro Catalog Sets use '|' as separator.
-        tagsPath = tagsPath.replaceInStrings(QLatin1String("|"), QLatin1String("/"));
-        qCDebug(LOG_METADATA) << "Tags Path imported from Media Pro: " << tagsPath;
-        return true;
+            if(!tagsPath.isEmpty())
+            {
+                if(entry.separator != QLatin1String("/"))
+                {
+                    tagsPath = tagsPath.replaceInStrings(entry.separator, QLatin1String("/"));
+                }
+                return true;
+            }
+            else if(!entry.alternativeName.isEmpty())
+            {
+                currentNamespace = entry.alternativeName;
+                currentOpts = entry.secondNameOpts;
+            }
+            else
+            {
+                break; // no alternative namespace, go to next one
+            }
+            index++;
+        }
     }
 
     // Try to get Tags Path list from ACDSee 8 Pro categories.

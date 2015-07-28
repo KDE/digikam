@@ -84,13 +84,18 @@ void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 void DMetadataSettingsContainer::defaultValues()
 {
     qDebug() << "Loading default values ++++++++++++++++";
-    this->readTagNamespaces.clear();
-    this->readCommentNamespaces.clear();
-    this->readRatingNamespaces.clear();
-    this->writeTagNamespaces.clear();
-    this->writeRatingNamespaces.clear();
-    this->writeCommentNamespaces.clear();
     this->unifyReadWrite = true;
+
+    defaultTagValues();
+    defaultRatingValues();
+    defaultCommentValues();
+
+}
+
+void DMetadataSettingsContainer::defaultTagValues()
+{
+    this->readTagNamespaces.clear();
+    this->writeTagNamespaces.clear();
 
     // Default tag namespaces
     NamespaceEntry tagNs1 (QLatin1String("Xmp.digiKam.TagsList"),
@@ -100,6 +105,7 @@ void DMetadataSettingsContainer::defaultValues()
                                                NamespaceEntry::TAGS,
                                                0);
     tagNs1.specialOpts = NamespaceEntry::TAG_XMPSEQ;
+    tagNs1.subspace    = NamespaceEntry::XMP;
 
     NamespaceEntry tagNs2 (QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
                                                NamespaceEntry::TAGPATH,
@@ -108,6 +114,7 @@ void DMetadataSettingsContainer::defaultValues()
                                                NamespaceEntry::TAGS,
                                                1);
     tagNs2.specialOpts = NamespaceEntry::TAG_XMPBAG;
+    tagNs2.subspace    = NamespaceEntry::XMP;
 
     NamespaceEntry tagNs3 (QLatin1String("Xmp.lr.hierarchicalSubject"),
                                                NamespaceEntry::TAGPATH,
@@ -117,6 +124,10 @@ void DMetadataSettingsContainer::defaultValues()
                                                 2);
 
     tagNs3.specialOpts = NamespaceEntry::TAG_XMPBAG;
+    tagNs3.subspace    = NamespaceEntry::XMP;
+    tagNs3.alternativeName = QLatin1String("Xmp.lr.HierarchicalSubject");
+    tagNs3.secondNameOpts = NamespaceEntry::TAG_XMPSEQ;
+
     NamespaceEntry tagNs4 (QLatin1String("Xmp.mediapro.CatalogSets"),
                                                NamespaceEntry::TAGPATH,
                                                QLatin1String("|"),
@@ -124,41 +135,82 @@ void DMetadataSettingsContainer::defaultValues()
                                                NamespaceEntry::TAGS,
                                                3);
     tagNs4.specialOpts = NamespaceEntry::TAG_XMPBAG;
+    tagNs4.subspace    = NamespaceEntry::XMP;
 
     readTagNamespaces.append(tagNs1);
     readTagNamespaces.append(tagNs2);
     readTagNamespaces.append(tagNs3);
     readTagNamespaces.append(tagNs4);
 
-    QList<int> defaultVal;
-    defaultVal << 0 << 1 << 2 << 3 << 4 << 5;
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.xmp.Rating"), defaultVal, NamespaceEntry::RATING, 0));
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.rating"), defaultVal, NamespaceEntry::RATING, 1));
-
-    QList<int> microsoftMappings;
-    microsoftMappings << 0 << 1 << 25 << 50 << 75 << 99;
-    readRatingNamespaces.append(NamespaceEntry(QLatin1String("Xmp.MicrosoftPhoto.Rating"), microsoftMappings, NamespaceEntry::RATING, 2));
-
-    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.dc.description"),
-                                                NamespaceEntry::COMMENT,
-                                                NamespaceEntry::COMMENT_ATLLANGLIST,
-                                                0));
-    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.exif.UserComment"),
-                                                NamespaceEntry::COMMENT,
-                                                NamespaceEntry::COMMENT_ALTLANG,
-                                                1));
-
-    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.tiff.ImageDescription"),
-                                                NamespaceEntry::COMMENT,
-                                                NamespaceEntry::COMMENT_ALTLANG,
-                                                2));
-    readCommentNamespaces.append(NamespaceEntry(QLatin1String("Xmp.acdsee.notes"),
-                                                NamespaceEntry::COMMENT,
-                                                NamespaceEntry::COMMENT_XMP,
-                                                3));
-
     writeTagNamespaces = QList<NamespaceEntry>(readTagNamespaces);
+}
+
+void DMetadataSettingsContainer::defaultRatingValues()
+{
+    this->readRatingNamespaces.clear();
+    this->writeRatingNamespaces.clear();
+
+    QList<int> defaultVal, microsoftMappings;
+    defaultVal << 0 << 1 << 2 << 3 << 4 << 5;
+    microsoftMappings << 0 << 1 << 25 << 50 << 75 << 99;
+
+    NamespaceEntry ratingNs1 (QLatin1String("Xmp.xmp.Rating"),
+                                                   defaultVal,
+                                                   NamespaceEntry::RATING, 0);
+    ratingNs1.subspace = NamespaceEntry::XMP;
+
+    NamespaceEntry ratingNs2(QLatin1String("Xmp.acdsee.rating"),
+                                                   defaultVal,
+                                                   NamespaceEntry::RATING, 1);
+    ratingNs2.subspace = NamespaceEntry::XMP;
+
+    NamespaceEntry ratingNs3(QLatin1String("Xmp.MicrosoftPhoto.Rating"),
+                                                   microsoftMappings,
+                                                   NamespaceEntry::RATING, 2);
+    ratingNs3.subspace = NamespaceEntry::XMP;
+
+    readRatingNamespaces.append(ratingNs1);
+    readRatingNamespaces.append(ratingNs2);
+    readRatingNamespaces.append(ratingNs3);
+
     writeRatingNamespaces = QList<NamespaceEntry>(readRatingNamespaces);
+}
+
+void DMetadataSettingsContainer::defaultCommentValues()
+{
+    this->readCommentNamespaces.clear();
+    this->writeCommentNamespaces.clear();
+
+    NamespaceEntry commNs1 (QLatin1String("Xmp.dc.description"),
+                                                    NamespaceEntry::COMMENT,
+                                                    NamespaceEntry::COMMENT_ATLLANGLIST,
+                                                    0);
+    commNs1.subspace = NamespaceEntry::XMP;
+
+    NamespaceEntry commNs2 (QLatin1String("Xmp.exif.UserComment"),
+                                                    NamespaceEntry::COMMENT,
+                                                    NamespaceEntry::COMMENT_ALTLANG,
+                                                    1);
+    commNs1.subspace = NamespaceEntry::XMP;
+
+    NamespaceEntry commNs3 (QLatin1String("Xmp.tiff.ImageDescription"),
+                                                    NamespaceEntry::COMMENT,
+                                                    NamespaceEntry::COMMENT_ALTLANG,
+                                                    2);
+    commNs1.subspace = NamespaceEntry::XMP;
+
+    NamespaceEntry commNs4 (QLatin1String("Xmp.acdsee.notes"),
+                                                    NamespaceEntry::COMMENT,
+                                                    NamespaceEntry::COMMENT_XMP,
+                                                    3);
+    commNs1.subspace = NamespaceEntry::XMP;
+
+    readCommentNamespaces.append(commNs1);
+    readCommentNamespaces.append(commNs2);
+
+    readCommentNamespaces.append(commNs3);
+    readCommentNamespaces.append(commNs4);
+
     writeCommentNamespaces = QList<NamespaceEntry>(readCommentNamespaces);
 }
 
