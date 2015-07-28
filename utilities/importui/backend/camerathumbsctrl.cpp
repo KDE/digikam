@@ -207,7 +207,7 @@ void CameraThumbsCtrl::startKdePreviewJob()
 
     KFileItemList items;
 
-    for (QList<QUrl>::iterator it = list.begin() ; it != list.end() ; ++it)
+    for (QList<QUrl>::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         if ((*it).isValid())
             items.append(KFileItem(*it));
