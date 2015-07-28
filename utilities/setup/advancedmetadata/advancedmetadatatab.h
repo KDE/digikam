@@ -97,6 +97,8 @@ private:
      */
     int getModelIndex();
 
+    QList<NamespaceEntry>& getCurrentContainer();
+
     void setModels();
 
     void saveModelData(QStandardItemModel *model, QList<NamespaceEntry> &container);

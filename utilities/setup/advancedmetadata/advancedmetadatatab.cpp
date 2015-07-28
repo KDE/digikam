@@ -90,29 +90,7 @@ AdvancedMetadataTab::~AdvancedMetadataTab()
 void AdvancedMetadataTab::slotResetView()
 {
     d->models.at(getModelIndex())->clear();
-    switch(getModelIndex())
-    {
-    case 0:
-        setModelData(d->models.at(0),d->container.readTagNamespaces);
-        break;
-    case 1:
-        setModelData(d->models.at(1),d->container.readRatingNamespaces);
-        break;
-    case 2:
-        setModelData(d->models.at(2),d->container.readCommentNamespaces);
-        break;
-    case 3:
-        setModelData(d->models.at(3),d->container.writeTagNamespaces);
-        break;
-    case 4:
-        setModelData(d->models.at(4),d->container.writeRatingNamespaces);
-        break;
-    case 5:
-        setModelData(d->models.at(5),d->container.writeCommentNamespaces);
-        break;
-    default:
-        qDebug() << "warning, Unknown case";
-    }
+    setModelData(d->models.at(getModelIndex()),getCurrentContainer());
 
     d->namespaceView->setModel(d->models.at(getModelIndex()));
 }
@@ -140,14 +118,13 @@ void AdvancedMetadataTab::slotEditNamespace()
     if(!d->namespaceView->currentIndex().isValid())
         return;
 
-    NamespaceEntry entry = d->container.readTagNamespaces.at(d->namespaceView->currentIndex().row());
+    NamespaceEntry entry = getCurrentContainer().at(d->namespaceView->currentIndex().row());
 
 
     if (!NamespaceEditDlg::edit(qApp->activeWindow(), entry))
     {
         return;
     }
-
 
     QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
     QStandardItem* item = root->child(d->namespaceView->currentIndex().row());
@@ -307,6 +284,28 @@ int AdvancedMetadataTab::getModelIndex()
         // read operation = 3*0 + (0, 1, 2)
         // write operation = 3*1 + (0, 1, 2) = (3, 4 ,5)
         return (3*d->operationType->currentIndex()) + d->metadataType->currentIndex();
+    }
+}
+
+QList<NamespaceEntry>& AdvancedMetadataTab::getCurrentContainer()
+{
+    switch(getModelIndex())
+    {
+    case 0:
+        return d->container.readTagNamespaces;
+    case 1:
+        return d->container.readRatingNamespaces;
+    case 2:
+        return d->container.readCommentNamespaces;
+    case 3:
+        return d->container.writeTagNamespaces;
+    case 4:
+        return d->container.writeRatingNamespaces;
+    case 5:
+        return d->container.writeCommentNamespaces;
+    default:
+        qDebug() << "warning, Unknown case";
+        return d->container.readTagNamespaces;
     }
 }
 

@@ -80,6 +80,9 @@ public:
 
 private:
 
+    void setupTagGui(NamespaceEntry& entry);
+    void setupRatingGui(NamespaceEntry& entry);
+    void setupCommentGui(NamespaceEntry& entry);
     class Private;
     Private* const d;
 };
