@@ -63,6 +63,8 @@ public:
     static bool create(QWidget* parent, NamespaceEntry& entry);
     static bool edit(QWidget* parent, NamespaceEntry& entry);
 
+    void saveData(NamespaceEntry& entry);
+
     QString namespaceName() const;
     QString nameSpaceSeparator() const;
     bool isTagPath() const;
@@ -83,6 +85,7 @@ private:
     void setupTagGui(NamespaceEntry& entry);
     void populateFields(NamespaceEntry& entry);
     void setType(NamespaceEntry::NamespaceType type);
+
     class Private;
     Private* const d;
 };

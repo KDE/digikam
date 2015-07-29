@@ -152,13 +152,7 @@ bool NamespaceEditDlg::create(QWidget *parent, NamespaceEntry& entry)
 
     if (valRet == QDialog::Accepted)
     {
-        entry.namespaceName     = dlg->namespaceName();
-        entry.separator   = dlg->nameSpaceSeparator();
-        if(dlg->isTagPath())
-            entry.tagPaths      = NamespaceEntry::TAGPATH;
-        else
-            entry.tagPaths      = NamespaceEntry::TAG;
-        entry.extraXml    = dlg->extraXml();
+        dlg->saveData(entry);
     }
 
     delete dlg;
@@ -173,13 +167,7 @@ bool NamespaceEditDlg::edit(QWidget *parent, NamespaceEntry &entry)
 
     if (valRet == QDialog::Accepted)
     {
-        entry.namespaceName     = dlg->namespaceName();
-        entry.separator   = dlg->nameSpaceSeparator();
-        if(dlg->isTagPath())
-            entry.tagPaths      = NamespaceEntry::TAGPATH;
-        else
-            entry.tagPaths      = NamespaceEntry::TAG;
-        entry.extraXml    = dlg->extraXml();
+        dlg->saveData(entry);
     }
 
     delete dlg;
@@ -457,6 +445,27 @@ void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
     }
 }
 
+void NamespaceEditDlg::saveData( NamespaceEntry &entry)
+{
+    entry.namespaceName     = d->namespaceName->text();
+    entry.separator   = d->nameSpaceSeparator->text();
+    if(d->isPath)
+        entry.tagPaths      = NamespaceEntry::TAGPATH;
+    else
+        entry.tagPaths      = NamespaceEntry::TAG;
+    entry.extraXml    = d->extraXml->text();
+    entry.alternativeName = d->alternativeName->text();
+    entry.specialOpts    = (NamespaceEntry::SpecialOptions)d->specialOptsCombo->currentData().toInt();
+    entry.secondNameOpts = (NamespaceEntry::SpecialOptions)d->altSpecialOptsCombo->currentData().toInt();
+    entry.subspace       = (NamespaceEntry::NsSubspace)d->subspaceCombo->currentData().toInt();
 
+    entry.convertRatio.clear();
+    entry.convertRatio.append(d->zeroStars->value());
+    entry.convertRatio.append(d->oneStar->value());
+    entry.convertRatio.append(d->twoStars->value());
+    entry.convertRatio.append(d->threeStars->value());
+    entry.convertRatio.append(d->fourStars->value());
+    entry.convertRatio.append(d->fiveStars->value());
+}
 
 }
