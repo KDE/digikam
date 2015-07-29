@@ -106,7 +106,25 @@ void AdvancedMetadataTab::slotAddNewNamespace()
 
     QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
     QString text = entry.namespaceName + QLatin1String(",") + i18n("Separator:") + entry.separator;
-    QStandardItem* item = new QStandardItem(text);
+    QStandardItem* item = new QStandardItem(entry.namespaceName);
+    item->setData(entry.namespaceName,NAME_ROLE);
+    item->setData((int)entry.tagPaths, ISTAG_ROLE);
+    item->setData(entry.separator, SEPARATOR_ROLE);
+    item->setData(entry.extraXml, EXTRAXML_ROLE);
+    item->setData((int)entry.nsType, NSTYPE_ROLE);
+    if(entry.nsType == NamespaceEntry::RATING)
+    {
+       item->setData(entry.convertRatio.at(0), ZEROSTAR_ROLE);
+       item->setData(entry.convertRatio.at(1), ONESTAR_ROLE);
+       item->setData(entry.convertRatio.at(2), TWOSTAR_ROLE);
+       item->setData(entry.convertRatio.at(3), THREESTAR_ROLE);
+       item->setData(entry.convertRatio.at(4), FOURSTAR_ROLE);
+       item->setData(entry.convertRatio.at(5), FIVESTAR_ROLE);
+    }
+    item->setData((int)entry.specialOpts, SPECIALOPTS_ROLE);
+    item->setData(entry.alternativeName, ALTNAME_ROLE);
+    item->setData((int)entry.subspace, SUBSPACE_ROLE);
+    item->setData((int)entry.secondNameOpts, ALTNAMEOPTS_ROLE);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
     root->appendRow(item);
     d->container.readTagNamespaces.append(entry);
@@ -120,16 +138,35 @@ void AdvancedMetadataTab::slotEditNamespace()
 
     NamespaceEntry entry = getCurrentContainer().at(d->namespaceView->currentIndex().row());
 
-
+    qDebug() << "Name before save: " << entry.namespaceName;
     if (!NamespaceEditDlg::edit(qApp->activeWindow(), entry))
     {
         return;
     }
-
+    qDebug() << "Name after save: " << entry.namespaceName;
     QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
     QStandardItem* item = root->child(d->namespaceView->currentIndex().row());
-    QString text = entry.namespaceName + QLatin1String(",") + i18n("Separator:") + entry.separator;
-    item->setText(text);
+
+    getCurrentContainer().replace(d->namespaceView->currentIndex().row(), entry);
+    item->setData(entry.namespaceName,Qt::DisplayRole);
+    item->setData(entry.namespaceName,NAME_ROLE);
+    item->setData((int)entry.tagPaths, ISTAG_ROLE);
+    item->setData(entry.separator, SEPARATOR_ROLE);
+    item->setData(entry.extraXml, EXTRAXML_ROLE);
+    item->setData((int)entry.nsType, NSTYPE_ROLE);
+    if(entry.nsType == NamespaceEntry::RATING)
+    {
+       item->setData(entry.convertRatio.at(0), ZEROSTAR_ROLE);
+       item->setData(entry.convertRatio.at(1), ONESTAR_ROLE);
+       item->setData(entry.convertRatio.at(2), TWOSTAR_ROLE);
+       item->setData(entry.convertRatio.at(3), THREESTAR_ROLE);
+       item->setData(entry.convertRatio.at(4), FOURSTAR_ROLE);
+       item->setData(entry.convertRatio.at(5), FIVESTAR_ROLE);
+    }
+    item->setData((int)entry.specialOpts, SPECIALOPTS_ROLE);
+    item->setData(entry.alternativeName, ALTNAME_ROLE);
+    item->setData((int)entry.subspace, SUBSPACE_ROLE);
+    item->setData((int)entry.secondNameOpts, ALTNAMEOPTS_ROLE);
 
 }
 

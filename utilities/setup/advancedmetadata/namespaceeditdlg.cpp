@@ -148,13 +148,14 @@ bool NamespaceEditDlg::create(QWidget *parent, NamespaceEntry& entry)
 {
     QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(true,entry,parent);
 
+    qDebug() << "Name before save: " << entry.namespaceName;
     bool valRet = dlg->exec();
 
     if (valRet == QDialog::Accepted)
     {
         dlg->saveData(entry);
     }
-
+    qDebug() << "Name after save: " << entry.namespaceName;
     delete dlg;
     return valRet;
 }
@@ -163,6 +164,7 @@ bool NamespaceEditDlg::edit(QWidget *parent, NamespaceEntry &entry)
 {
     QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(false, entry, parent);
 
+    qDebug() << "Name before save: " << entry.namespaceName;
     bool valRet = dlg->exec();
 
     if (valRet == QDialog::Accepted)
@@ -170,6 +172,7 @@ bool NamespaceEditDlg::edit(QWidget *parent, NamespaceEntry &entry)
         dlg->saveData(entry);
     }
 
+    qDebug() << "Name before save: " << entry.namespaceName;
     delete dlg;
     return valRet;
 }
@@ -449,10 +452,11 @@ void NamespaceEditDlg::saveData( NamespaceEntry &entry)
 {
     entry.namespaceName     = d->namespaceName->text();
     entry.separator   = d->nameSpaceSeparator->text();
-    if(d->isPath)
+    if(d->isPath->isChecked())
         entry.tagPaths      = NamespaceEntry::TAGPATH;
     else
         entry.tagPaths      = NamespaceEntry::TAG;
+
     entry.extraXml    = d->extraXml->text();
     entry.alternativeName = d->alternativeName->text();
     entry.specialOpts    = (NamespaceEntry::SpecialOptions)d->specialOptsCombo->currentData().toInt();
