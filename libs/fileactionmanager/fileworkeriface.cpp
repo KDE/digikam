@@ -48,6 +48,11 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
 
     foreach(const ImageInfo& info, infos)
     {
+        if (state() == WorkerObject::Deactivating)
+        {
+            break;
+        }
+
         QString path                  = info.filePath();
         DMetadata metadata(path);
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
@@ -85,6 +90,10 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
 
     foreach(const ImageInfo& info, infos)
     {
+        if (state() == WorkerObject::Deactivating)
+        {
+            break;
+        }
 
         hub.load(info);
         QString filePath = info.filePath();
@@ -111,6 +120,11 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, Meta
 
     foreach(const ImageInfo& info, infos)
     {
+        if (state() == WorkerObject::Deactivating)
+        {
+            break;
+        }
+
         // apply to file metadata
         ScanController::FileMetadataWrite writeScope(info);
         writeScope.changed(hub->writeToMetadata(info, MetadataHub::FullWrite, writeSettings));
@@ -135,6 +149,11 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
 
     foreach(const ImageInfo& info, infos)
     {
+        if (state() == WorkerObject::Deactivating)
+        {
+            break;
+        }
+
         QString path                                = info.filePath();
         QString format                              = info.format();
         KExiv2::ImageOrientation currentOrientation = (KExiv2::ImageOrientation)info.orientation();

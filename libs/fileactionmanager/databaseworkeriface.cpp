@@ -62,6 +62,10 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
 
         foreach(const ImageInfo& info, infos)
         {
+            if (state() == WorkerObject::Deactivating)
+            {
+                break;
+            }
 
             hub.load(info);
 
@@ -108,6 +112,11 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
 
         foreach(const ImageInfo& info, infos)
         {
+            if (state() == WorkerObject::Deactivating)
+            {
+                break;
+            }
+
             hub.load(info);
             hub.setPickLabel(pickId);
             hub.write(info, MetadataHub::PartialWrite);
@@ -148,6 +157,11 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
 
         foreach(const ImageInfo& info, infos)
         {
+            if (state() == WorkerObject::Deactivating)
+            {
+                break;
+            }
+
             hub.load(info);
             hub.setColorLabel(colorId);
             hub.write(info, MetadataHub::PartialWrite);
@@ -189,6 +203,11 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
 
         foreach(const ImageInfo& info, infos)
         {
+            if (state() == WorkerObject::Deactivating)
+            {
+                break;
+            }
+
             hub.load(info);
             hub.setRating(rating);
             hub.write(info, MetadataHub::PartialWrite);
@@ -225,6 +244,11 @@ void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& p
 
         foreach(const ImageInfo& constInfo, infos)
         {
+            if (state() == WorkerObject::Deactivating)
+            {
+                break;
+            }
+
             ImageInfo info(constInfo);
 
             switch (groupAction)
@@ -256,6 +280,11 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
 
         foreach (ImageInfo info, infos)
         {
+            if (state() == WorkerObject::Deactivating)
+            {
+                break;
+            }
+
             info.setOrientation(orientation);
         }
     }
@@ -278,6 +307,11 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
 
         foreach(const ImageInfo& info, infos)
         {
+            if (state() == WorkerObject::Deactivating)
+            {
+                break;
+            }
+
             // apply to database
             hub->write(info);
             infos.dbProcessedOne();
@@ -305,6 +339,11 @@ void FileActionMngrDatabaseWorker::copyAttributes(FileActionImageInfoList infos,
     {
         foreach (const QString& path, derivedPaths)
         {
+            if (state() == WorkerObject::Deactivating)
+            {
+                break;
+            }
+
             ImageInfo dest = ScanController::instance()->scannedInfo(path);
             CollectionScanner::copyFileProperties(infos.first(), dest);
         }
