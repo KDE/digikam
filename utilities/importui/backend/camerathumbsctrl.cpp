@@ -304,8 +304,8 @@ void CameraThumbsCtrl::clearCache()
 
 void CameraThumbsCtrl::setCacheSize(int numberOfItems)
 {
-    d->cache.setMaxCost((numberOfItems * ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() * QPixmap::defaultDepth() / 8) +
-                        (numberOfItems * 1024 * 2));
+    d->cache.setMaxCost(numberOfItems * (ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() *
+                                         QPixmap(1, 1).depth() / 8) + (numberOfItems * sizeof(CamItemInfo)));
 }
 
 }  // namespace Digikam
