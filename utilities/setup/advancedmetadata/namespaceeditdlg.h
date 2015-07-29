@@ -81,6 +81,8 @@ public:
 private:
 
     void setupTagGui(NamespaceEntry& entry);
+    void populateFields(NamespaceEntry& entry);
+    void setType(NamespaceEntry::NamespaceType type);
     class Private;
     Private* const d;
 };

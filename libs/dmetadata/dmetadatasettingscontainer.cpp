@@ -191,19 +191,19 @@ void DMetadataSettingsContainer::defaultCommentValues()
                                                     NamespaceEntry::COMMENT,
                                                     NamespaceEntry::COMMENT_ALTLANG,
                                                     1);
-    commNs1.subspace = NamespaceEntry::XMP;
+    commNs2.subspace = NamespaceEntry::XMP;
 
     NamespaceEntry commNs3 (QLatin1String("Xmp.tiff.ImageDescription"),
                                                     NamespaceEntry::COMMENT,
                                                     NamespaceEntry::COMMENT_ALTLANG,
                                                     2);
-    commNs1.subspace = NamespaceEntry::XMP;
+    commNs3.subspace = NamespaceEntry::XMP;
 
     NamespaceEntry commNs4 (QLatin1String("Xmp.acdsee.notes"),
                                                     NamespaceEntry::COMMENT,
                                                     NamespaceEntry::COMMENT_XMP,
                                                     3);
-    commNs1.subspace = NamespaceEntry::XMP;
+    commNs4.subspace = NamespaceEntry::XMP;
 
     readCommentNamespaces.append(commNs1);
     readCommentNamespaces.append(commNs2);

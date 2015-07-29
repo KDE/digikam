@@ -207,7 +207,7 @@ void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<Namespac
         item->setData(e.alternativeName, ALTNAME_ROLE);
         item->setData((int)e.subspace, SUBSPACE_ROLE);
         item->setData((int)e.secondNameOpts, ALTNAMEOPTS_ROLE);
-        qDebug() << "Loading ++++++++ " << e.namespaceName << e.specialOpts;
+        qDebug() << "Loading ++++++++ " << e.namespaceName << " " << e.specialOpts << "subspace" << e.subspace;
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         root->appendRow(item);
     }

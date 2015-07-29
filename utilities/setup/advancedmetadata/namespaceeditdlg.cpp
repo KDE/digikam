@@ -36,6 +36,7 @@
 #include <QSpinBox>
 #include <QDebug>
 #include <QComboBox>
+#include <QGroupBox>
 
 #include <KLocalizedString>
 
@@ -65,6 +66,7 @@ public:
     QLineEdit* nameSpaceSeparator;
     QCheckBox* isPath;
     QLineEdit* extraXml;
+    QGroupBox* ratingMappings;
 
 
     QSpinBox* zeroStars;
@@ -73,6 +75,21 @@ public:
     QSpinBox* threeStars;
     QSpinBox* fourStars;
     QSpinBox* fiveStars;
+
+    // Labels
+    QLabel*    tagTipLabel;
+    QLabel*    ratingTipLabel;
+    QLabel*    commentTipLabel;
+    QLabel*    subspaceLabel;
+    QLabel*    titleLabel;
+    QLabel*    specialOptsLabel;
+    QLabel*    alternativeNameLabel;
+    QLabel*    altspecialOptsLabel;
+    QLabel*    isTagLabel;
+    QLabel*    separatorLabel;
+
+    QLabel*    extraXmlLabel;
+    QLabel*    tipLabel2;
 };
 
 NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *parent)
@@ -112,6 +129,13 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *
 
     // --------------------------------------------------------
 
+    if(!d->create)
+    {
+        populateFields(entry);
+    }
+
+    setType(entry.nsType);
+    qDebug() << "Entry type" << entry.nsType << "subspace" << entry.subspace;
     adjustSize();
 }
 
@@ -198,8 +222,8 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->topLabel->setText(i18n("Add metadata namespace"));
 
     d->subspaceCombo = new QComboBox(this);
-    QLabel* const subspaceLabel = new QLabel(d->page);
-    subspaceLabel->setText(i18n("Metadata Subspace"));
+    d->subspaceLabel = new QLabel(d->page);
+    d->subspaceLabel->setText(i18n("Metadata Subspace"));
 
     d->subspaceCombo->addItem(QLatin1String("EXIV"),(int)NamespaceEntry::EXIV);
     d->subspaceCombo->addItem(QLatin1String("IPTC"),(int)NamespaceEntry::IPTC);
@@ -210,17 +234,17 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
 
     // -------------------Tag Elements---------------------------------
 
-    QLabel* const titleLabel = new QLabel(d->page);
-    titleLabel->setText(i18n("Name:"));
+    d->titleLabel = new QLabel(d->page);
+    d->titleLabel->setText(i18n("Name:"));
 
     d->namespaceName = new QLineEdit(this);
 
 
     //----------------- Tip Labels --------------------------------------
-    QLabel* const tagTipLabel   = new QLabel(d->page);
-    tagTipLabel->setTextFormat(Qt::RichText);
-    tagTipLabel->setWordWrap(true);
-    tagTipLabel->setText(i18n("<p>To create new namespaces, you need to specify paramters:</p>"
+    d->tagTipLabel   = new QLabel(d->page);
+    d->tagTipLabel->setTextFormat(Qt::RichText);
+    d->tagTipLabel->setWordWrap(true);
+    d->tagTipLabel->setText(i18n("<p>To create new namespaces, you need to specify paramters:</p>"
                            "<p><ul><li>Namespace name with dots.<br/>"
                            "Ex.: <i>\"Xmp.digiKam.TagsList\"</i></li>"
                            "<li>Separator parameter, used by tag paths <br/>"
@@ -228,10 +252,10 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
                            "<li>Specify if only keyword or the whole path must be written.</li></ul></p>"
                           ));
 
-    QLabel* const ratingTipLabel   = new QLabel(d->page);
-    ratingTipLabel->setTextFormat(Qt::RichText);
-    ratingTipLabel->setWordWrap(true);
-    ratingTipLabel->setText(i18n("<p>To create new rating namespaces, you need to specify paramters:</p>"
+    d->ratingTipLabel   = new QLabel(d->page);
+    d->ratingTipLabel->setTextFormat(Qt::RichText);
+    d->ratingTipLabel->setWordWrap(true);
+    d->ratingTipLabel->setText(i18n("<p>To create new rating namespaces, you need to specify paramters:</p>"
                            "<p><ul><li>Namespace name with dots.<br/>"
                            "Ex.: <i>\"Xmp.xmp.Rating\"</i></li>"
                            "<li>Rating mappings, if namespace need other values than 0-5 <br/>"
@@ -239,17 +263,17 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
                            "<li>Select the correct namespace option from list.</li></ul></p>"
                           ));
 
-    QLabel* const commentTipLabel   = new QLabel(d->page);
-    commentTipLabel->setTextFormat(Qt::RichText);
-    commentTipLabel->setWordWrap(true);
-    commentTipLabel->setText(i18n("<p>To create new comment namespaces, you need to specify paramters:</p>"
+    d->commentTipLabel   = new QLabel(d->page);
+    d->commentTipLabel->setTextFormat(Qt::RichText);
+    d->commentTipLabel->setWordWrap(true);
+    d->commentTipLabel->setText(i18n("<p>To create new comment namespaces, you need to specify paramters:</p>"
                            "<p><ul><li>Namespace name with dots.<br/>"
                            "Ex.: <i>\"Xmp.xmp.Rating\"</i></li>"
                            "<li>Select the correct namespace option from list.</li></ul></p>"
                           ));
     // -------------------------------------------------------
-    QLabel* const specialOptsLabel = new QLabel(d->page);
-    specialOptsLabel->setText(i18n("Special Options"));
+    d->specialOptsLabel = new QLabel(d->page);
+    d->specialOptsLabel->setText(i18n("Special Options"));
     d->specialOptsCombo = new QComboBox(d->page);
     d->specialOptsCombo->addItem(QLatin1String("NO_OPTS"), (int)NamespaceEntry::NO_OPTS);
     d->specialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
@@ -258,37 +282,48 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->specialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
     d->specialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
 
-    QLabel* alternativeNameLabel = new QLabel(d->page);
-    alternativeNameLabel->setText(i18n("Alternative name"));
+    d->alternativeNameLabel = new QLabel(d->page);
+    d->alternativeNameLabel->setText(i18n("Alternative name"));
     d->alternativeName = new QLineEdit(d->page);
 
-    QLabel* altSpecialOptsLabel = new QLabel(d->page);
-    altSpecialOptsLabel->setText(i18n("Alternative special options"));
-    d->altSpecialOptsCombo = new QComboBox(d->specialOptsCombo);
+    d->altspecialOptsLabel = new QLabel(d->page);
+    d->altspecialOptsLabel->setText(i18n("Alternative special options"));
+    d->altSpecialOptsCombo = new QComboBox(d->page);
+    d->altSpecialOptsCombo->addItem(QLatin1String("NO_OPTS"), (int)NamespaceEntry::NO_OPTS);
+    d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
+    d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANGLIST"), NamespaceEntry::COMMENT_ATLLANGLIST);
+    d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_XMP"), NamespaceEntry::COMMENT_XMP);
+    d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
+    d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
     // --------------------------------------------------------
 
-    QLabel* const separatorLabel = new QLabel(d->page);
-    separatorLabel->setText(i18n("Separator:"));
+    d->separatorLabel = new QLabel(d->page);
+    d->separatorLabel->setText(i18n("Separator:"));
 
     d->nameSpaceSeparator = new QLineEdit(this);
 
     // --------------------------------------------------------
 
-    QLabel* const kscTextLabel = new QLabel(d->page);
-    kscTextLabel->setText(i18n("Set Tags Path:"));
+    d->isTagLabel = new QLabel(d->page);
+    d->isTagLabel->setText(i18n("Set Tags Path:"));
 
     d->isPath = new QCheckBox(this);
 
-    QLabel* const extraXmlLabel = new QLabel(d->page);
-    extraXmlLabel->setText(i18n("Extra XML"));
+    d->extraXmlLabel = new QLabel(d->page);
+    d->extraXmlLabel->setText(i18n("Extra XML"));
     d->extraXml = new QLineEdit(d->page);
 
-    QLabel* const tipLabel2 = new QLabel(d->page);
-    tipLabel2->setTextFormat(Qt::RichText);
-    tipLabel2->setWordWrap(true);
-    tipLabel2->setText(i18n("<p><b>Note</b>: Extra xml field can be used for namespaces with non standard wrapping.</p>"));
+    d->tipLabel2 = new QLabel(d->page);
+    d->tipLabel2->setTextFormat(Qt::RichText);
+    d->tipLabel2->setWordWrap(true);
+    d->tipLabel2->setText(i18n("<p><b>Note</b>: Extra xml field can be used for namespaces with non standard wrapping.</p>"));
 
     // ----------------------Rating Elements----------------------------------
+    d->ratingMappings = new QGroupBox(this);
+    d->ratingMappings->setFlat(true);
+
+    QGridLayout* ratingMappingsLayout = new QGridLayout(d->ratingMappings);
+
     QLabel* const ratingLabel = new QLabel(d->page);
     ratingLabel->setText(i18n("Rating Mapping:"));
 
@@ -310,64 +345,116 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->fiveStars = new QSpinBox(this);
     d->fiveStars->setValue(5);
 
+    ratingMappingsLayout->addWidget(ratingLabel,            0, 0, 1, 2);
+
+    ratingMappingsLayout->addWidget(d->zeroStars,           1, 0, 1, 1);
+    ratingMappingsLayout->addWidget(d->oneStar,             1, 1, 1, 1);
+    ratingMappingsLayout->addWidget(d->twoStars,            1, 2, 1, 1);
+    ratingMappingsLayout->addWidget(d->threeStars,          1, 3, 1, 1);
+    ratingMappingsLayout->addWidget(d->fourStars,           1, 4, 1, 1);
+    ratingMappingsLayout->addWidget(d->fiveStars,           1, 5, 1, 1);
+
     d->gridLayout->addWidget(d->logo,                0, 0, 1, 2);
     d->gridLayout->addWidget(d->topLabel,            0, 1, 1, 4);
-    d->gridLayout->addWidget(tagTipLabel,            1, 0, 1, 6);
-    d->gridLayout->addWidget(ratingTipLabel,         2, 0, 1, 6);
-    d->gridLayout->addWidget(commentTipLabel,        3, 0, 1, 6);
+    d->gridLayout->addWidget(d->tagTipLabel,            1, 0, 1, 6);
+    d->gridLayout->addWidget(d->ratingTipLabel,         2, 0, 1, 6);
+    d->gridLayout->addWidget(d->commentTipLabel,        3, 0, 1, 6);
 
-    d->gridLayout->addWidget(subspaceLabel,          5, 0, 1, 2);
+    d->gridLayout->addWidget(d->subspaceLabel,          5, 0, 1, 2);
     d->gridLayout->addWidget(d->subspaceCombo,       5, 2, 1, 4);
 
-    d->gridLayout->addWidget(titleLabel,             6, 0, 1, 2);
+    d->gridLayout->addWidget(d->titleLabel,             6, 0, 1, 2);
     d->gridLayout->addWidget(d->namespaceName,       6, 2, 1, 4);
-    d->gridLayout->addWidget(specialOptsLabel,       7, 0, 1, 2);
+    d->gridLayout->addWidget(d->specialOptsLabel,       7, 0, 1, 2);
     d->gridLayout->addWidget(d->specialOptsCombo,    7, 2, 1, 4);
 
-    d->gridLayout->addWidget(alternativeNameLabel,   8, 0, 1, 2);
+    d->gridLayout->addWidget(d->alternativeNameLabel,   8, 0, 1, 2);
     d->gridLayout->addWidget(d->alternativeName,     8, 2, 1, 4);
-    d->gridLayout->addWidget(altSpecialOptsLabel,    9, 0, 1, 3);
+    d->gridLayout->addWidget(d->altspecialOptsLabel,    9, 0, 1, 3);
     d->gridLayout->addWidget(d->altSpecialOptsCombo, 9, 3, 1, 3);
 
-    d->gridLayout->addWidget(separatorLabel,         10, 0, 1, 2);
+    d->gridLayout->addWidget(d->separatorLabel,         10, 0, 1, 2);
     d->gridLayout->addWidget(d->nameSpaceSeparator,  10, 2, 1, 4);
-    d->gridLayout->addWidget(kscTextLabel,           11, 0, 1, 2);
+    d->gridLayout->addWidget(d->isTagLabel,           11, 0, 1, 2);
     d->gridLayout->addWidget(d->isPath,              11, 2, 1, 3);
-    d->gridLayout->addWidget(extraXmlLabel,          12, 0, 1, 2);
+    d->gridLayout->addWidget(d->extraXmlLabel,          12, 0, 1, 2);
     d->gridLayout->addWidget(d->extraXml,            12, 2, 1, 4);
-    d->gridLayout->addWidget(tipLabel2,              13, 0, 1, 4);
+    d->gridLayout->addWidget(d->tipLabel2,              13, 0, 1, 4);
 
-    d->gridLayout->addWidget(ratingLabel,            14, 0, 1, 2);
-
-    d->gridLayout->addWidget(d->zeroStars,           15, 0, 1, 1);
-    d->gridLayout->addWidget(d->oneStar,             15, 1, 1, 1);
-    d->gridLayout->addWidget(d->twoStars,            15, 2, 1, 1);
-    d->gridLayout->addWidget(d->threeStars,          15, 3, 1, 1);
-    d->gridLayout->addWidget(d->fourStars,           15, 4, 1, 1);
-    d->gridLayout->addWidget(d->fiveStars,           15, 5, 1, 1);
-
+    d->gridLayout->addWidget(d->ratingMappings,      14, 0, 2, 6);
 
     d->gridLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     d->gridLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    if(!d->create)
-    {
-        d->namespaceName->setText(entry.namespaceName);
-        d->nameSpaceSeparator->setText(entry.separator);
-        if(entry.tagPaths == NamespaceEntry::TAGPATH)
-        {
-            d->isPath->setChecked(true);
-        }
-        else
-        {
-            d->isPath->setChecked(false);
-        }
-        d->extraXml->setText(entry.extraXml);
-    }
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(d->page);
     vbx->addWidget(d->buttons);
+}
+
+void NamespaceEditDlg::populateFields(NamespaceEntry &entry)
+{
+    d->namespaceName->setText(entry.namespaceName);
+    d->nameSpaceSeparator->setText(entry.separator);
+    if(entry.tagPaths == NamespaceEntry::TAGPATH)
+    {
+        d->isPath->setChecked(true);
+    }
+    else
+    {
+        d->isPath->setChecked(false);
+    }
+    d->extraXml->setText(entry.extraXml);
+    d->specialOptsCombo->setCurrentIndex((int)entry.specialOpts);
+
+    d->alternativeName->setText(entry.alternativeName);
+    d->altSpecialOptsCombo->setCurrentIndex((int)entry.secondNameOpts);
+
+    if(entry.convertRatio.size() == 6)
+    {
+        d->zeroStars->setValue(entry.convertRatio.at(0));
+        d->oneStar->setValue(entry.convertRatio.at(1));
+        d->twoStars->setValue(entry.convertRatio.at(2));
+        d->threeStars->setValue(entry.convertRatio.at(3));
+        d->fourStars->setValue(entry.convertRatio.at(4));
+        d->fiveStars->setValue(entry.convertRatio.at(5));
+    }
+}
+
+void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
+{
+    switch(type)
+    {
+    case NamespaceEntry::TAGS:
+        qDebug() << "Setting up tags";
+        d->ratingTipLabel->hide();
+        d->commentTipLabel->hide();
+        d->ratingMappings->hide();
+        break;
+    case NamespaceEntry::RATING:
+        d->tagTipLabel->hide();
+        d->commentTipLabel->hide();
+        d->extraXml->hide();
+        d->extraXmlLabel->hide();
+        d->isPath->hide();
+        d->isTagLabel->hide();
+        d->tipLabel2->hide();
+        d->separatorLabel->hide();
+        d->nameSpaceSeparator->hide();
+        break;
+    case NamespaceEntry::COMMENT:
+        d->tagTipLabel->hide();
+        d->ratingTipLabel->hide();
+        d->extraXml->hide();
+        d->extraXmlLabel->hide();
+        d->isPath->hide();
+        d->isTagLabel->hide();
+        d->tipLabel2->hide();
+        d->separatorLabel->hide();
+        d->nameSpaceSeparator->hide();
+        d->ratingMappings->hide();
+        break;
+    }
 }
 
 

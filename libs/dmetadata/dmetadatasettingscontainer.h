@@ -52,14 +52,14 @@ public:
 
     enum NsSubspace {EXIV = 0, IPTC = 1, XMP = 2 };
     enum TagType {TAG = 0, TAGPATH = 1};
-    enum SpecialOptions {NO_OPTS = -1,
-                         COMMENT_ALTLANG = 3,
-                         COMMENT_ATLLANGLIST = 4,
-                         COMMENT_XMP = 5,
-                         TAG_XMPBAG = 6,
-                         TAG_XMPSEQ = 7};
+    enum SpecialOptions {NO_OPTS = 0,
+                         COMMENT_ALTLANG = 1,
+                         COMMENT_ATLLANGLIST = 2,
+                         COMMENT_XMP = 3,
+                         TAG_XMPBAG = 4,
+                         TAG_XMPSEQ = 5};
 
-    enum NamespaceType {TAGS = 7, RATING = 8, COMMENT = 9};
+    enum NamespaceType {TAGS = 0, RATING = 1, COMMENT = 2};
 
     NamespaceEntry(){}
 
@@ -124,6 +124,7 @@ public:
         this->specialOpts   = copy.specialOpts;
         this->secondNameOpts = copy.secondNameOpts;
         this->index         = copy.index;
+        this->subspace      = copy.subspace;
     }
 
     ~NamespaceEntry(){}
