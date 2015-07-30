@@ -128,7 +128,7 @@ QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QSt
 
     QFileInfo imgFileInfo(imagePath);
 
-    QString jsonFileName = getAvialableFilePathInTrash(collectionPath, imgFileInfo.baseName());
+    QString jsonFileName = getAvialableJsonFilePathInTrash(collectionPath, imgFileInfo.baseName());
 
     QFile jsonFileForImg(jsonFileName);
     jsonFileForImg.open(QFile::WriteOnly);
@@ -152,7 +152,7 @@ QString DTrash::getAvialableJsonFilePathInTrash(const QString& collectionPath, c
 
     if (jsonFileInfo.exists())
     {
-        return getAvialableFilePathInTrash(collectionPath, baseName, ++version);
+        return getAvialableJsonFilePathInTrash(collectionPath, baseName, ++version);
     }
     else
     {
