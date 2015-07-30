@@ -8,6 +8,7 @@ set(libiojobs_SRCS
     iojob.cpp
     iojobsthread.cpp
     iojobsmanager.cpp
+    dtrash.cpp
 )
 
 add_library(iojobs_src OBJECT ${libiojobs_SRCS})

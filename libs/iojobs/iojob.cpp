@@ -41,6 +41,7 @@
 #include "databaseaccess.h"
 #include "databaseparameters.h"
 #include "imageinfo.h"
+#include "dtrash.h"
 
 namespace Digikam
 {
@@ -190,7 +191,10 @@ void DeleteJob::run()
 
     if (m_useTrash)
     {
-        // TODO : This part must depend of desktop trash implementation, as Gnome, KDE, Windows, OSX, etc...
+        if (!DTrash::instance()->deleteImage(m_srcToDelete))
+        {
+            error(i18n("Couldn't move image %1 to collection trash", fileInfo.filePath()));
+        }
     }
     else
     {
