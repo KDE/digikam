@@ -56,6 +56,7 @@ public:
     QPushButton* deleteButton;
     QPushButton* moveUpButton;
     QPushButton* moveDownButton;
+    QPushButton* revertChanges;
     QPushButton* resetButton;
     QCheckBox*   unifyReadWrite;
     QList<QStandardItemModel*> models;
@@ -87,7 +88,16 @@ AdvancedMetadataTab::~AdvancedMetadataTab()
     delete d;
 }
 
-void AdvancedMetadataTab::slotResetView()
+void AdvancedMetadataTab::slotResetToDefault()
+{
+    d->container.defaultValues();
+    d->models.at(getModelIndex())->clear();
+    setModelData(d->models.at(getModelIndex()),getCurrentContainer());
+
+    d->namespaceView->setModel(d->models.at(getModelIndex()));
+}
+
+void AdvancedMetadataTab::slotRevertChanges()
 {
     d->models.at(getModelIndex())->clear();
     setModelData(d->models.at(getModelIndex()),getCurrentContainer());
@@ -214,7 +224,8 @@ void AdvancedMetadataTab::connectButtons()
     connect(d->addButton, SIGNAL(clicked()), this, SLOT(slotAddNewNamespace()));
     connect(d->editButton, SIGNAL(clicked()), this, SLOT(slotEditNamespace()));
     connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
-    connect(d->resetButton, SIGNAL(clicked()), this, SLOT(slotResetView()));
+    connect(d->resetButton, SIGNAL(clicked()), this, SLOT(slotResetToDefault()));
+    connect(d->revertChanges, SIGNAL(clicked()), this, SLOT(slotRevertChanges()));
     connect(d->moveUpButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemUp()));
     connect(d->moveDownButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemDown()));
 }
@@ -288,7 +299,8 @@ void AdvancedMetadataTab::setUi()
 
     d->moveUpButton = new QPushButton(i18n("Move Up"));
     d->moveDownButton = new QPushButton(i18n("Move Down"));
-    d->resetButton = new QPushButton(i18n("Reset"));
+    d->revertChanges = new QPushButton(i18n("Revert Changes"));
+    d->resetButton = new QPushButton(i18n("Reset to Default"));
 
 
     buttonsLayout->addWidget(d->addButton);
@@ -296,6 +308,7 @@ void AdvancedMetadataTab::setUi()
     buttonsLayout->addWidget(d->deleteButton);
     buttonsLayout->addWidget(d->moveUpButton);
     buttonsLayout->addWidget(d->moveDownButton);
+    buttonsLayout->addWidget(d->revertChanges);
     buttonsLayout->addWidget(d->resetButton);
 
     QVBoxLayout* vbox = new QVBoxLayout(this);

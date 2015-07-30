@@ -38,7 +38,8 @@ public:
 
 public Q_SLOTS:
 
-    void slotResetView();
+    void slotResetToDefault();
+    void slotRevertChanges();
     void slotAddNewNamespace();
     void slotEditNamespace();
 
