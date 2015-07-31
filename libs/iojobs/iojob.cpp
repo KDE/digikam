@@ -191,9 +191,19 @@ void DeleteJob::run()
 
     if (m_useTrash)
     {
-        if (!DTrash::instance()->deleteImage(m_srcToDelete))
+        if (fileInfo.isDir())
         {
-            error(i18n("Couldn't move image %1 to collection trash", fileInfo.filePath()));
+            if (!DTrash::instance()->deleteDirRecursivley(m_srcToDelete.path()))
+            {
+                error(i18n("Couldn't move Dir %1 to collection trash", fileInfo.path()));
+            }
+        }
+        else
+        {
+            if (!DTrash::instance()->deleteImage(m_srcToDelete.path()))
+            {
+                error(i18n("Couldn't move image %1 to collection trash", fileInfo.filePath()));
+            }
         }
     }
     else

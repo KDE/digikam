@@ -37,7 +37,8 @@ public:
 
     static DTrash* instance();
 
-    bool deleteImage(const QUrl& imageToDelete);
+    bool deleteImage(const QString &imageToDelete);
+    bool deleteDirRecursivley(const QString& dirToDelete);
 
 private:
 

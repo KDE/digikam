@@ -59,9 +59,9 @@ DTrash* DTrash::instance()
     return& creator->object;
 }
 
-bool DTrash::deleteImage(const QUrl& imageToDelete)
+bool DTrash::deleteImage(const QString& imageToDelete)
 {
-    QString collection = CollectionManager::instance()->albumRootPath(imageToDelete.path());
+    QString collection = CollectionManager::instance()->albumRootPath(imageToDelete);
 
     qCDebug(DIGIKAM_IOJOB_LOG)  << "DTrash: Image album root path:"
                                 << collection;
@@ -71,10 +71,10 @@ bool DTrash::deleteImage(const QUrl& imageToDelete)
         return false;
     }
 
-    QString baseNameForMovingIntoTrash = createJsonRecordForFile(collection, imageToDelete.path());
+    QString baseNameForMovingIntoTrash = createJsonRecordForFile(collection, imageToDelete);
 
-    QFileInfo imageFileInfo(imageToDelete.path());
-    QFile imageFile(imageToDelete.path());
+    QFileInfo imageFileInfo(imageToDelete);
+    QFile imageFile(imageToDelete);
 
     QString destinationInTrash = collection + QDir::separator() + QLatin1String(".trash") +
                                  QDir::separator() + QLatin1String("files") + QDir::separator() +
@@ -87,6 +87,26 @@ bool DTrash::deleteImage(const QUrl& imageToDelete)
     }
 
     return true;
+}
+
+bool DTrash::deleteDirRecursivley(const QString& dirToDelete)
+{
+    QDir srcDir(dirToDelete);
+
+    foreach (const QFileInfo& fileInfo, srcDir.entryInfoList(QDir::Files))
+    {
+        if (!deleteImage(fileInfo.filePath()))
+        {
+            return false;
+        }
+    }
+
+    foreach (const QFileInfo& fileInfo, srcDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        deleteDirRecursivley(fileInfo.filePath());
+    }
+
+    return srcDir.removeRecursively();
 }
 
 bool DTrash::prepareCollectionTrash(const QString& collectionPath)
