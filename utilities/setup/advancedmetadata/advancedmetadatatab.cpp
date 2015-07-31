@@ -227,9 +227,14 @@ void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<Namespac
     for(NamespaceEntry e : container)
     {
         QStandardItem* item = new QStandardItem(e.namespaceName);
-//        item->setData(QBrush(Qt::gray), Qt::ForegroundRole);
+
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         setDataToItem(item, e);
+        if(e.isDisabled)
+        {
+            item->setForeground(QBrush(Qt::gray));
+            item->setText(i18n("(Disabled)") + e.namespaceName);
+        }
         root->appendRow(item);
     }
 

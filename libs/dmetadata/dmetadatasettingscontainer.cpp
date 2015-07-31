@@ -221,18 +221,20 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
     for(QString element : myItems.groupList())
     {
         KConfigGroup gr = myItems.group(element);
-        NamespaceEntry ns(
-                    element,
-                    (NamespaceEntry::TagType)gr.readEntry("tagPaths").toInt(),
-                    gr.readEntry("separator"),
-                    gr.readEntry("extraXml"),
-                    (NamespaceEntry::NamespaceType)gr.readEntry("nsType").toInt(),
-                    gr.readEntry("index").toInt());
+        NamespaceEntry ns;
 
+        ns.namespaceName = element;
+        ns.tagPaths = (NamespaceEntry::TagType)gr.readEntry("tagPaths").toInt();
+        ns.separator = gr.readEntry("separator");
+        ns.extraXml  = gr.readEntry("extraXml");
+        ns.nsType    = (NamespaceEntry::NamespaceType)gr.readEntry("nsType").toInt();
+        ns.index     = gr.readEntry("index").toInt();
         ns.subspace = (NamespaceEntry::NsSubspace)gr.readEntry("subspace").toInt();
         ns.alternativeName = gr.readEntry("alternativeName");
         ns.specialOpts = (NamespaceEntry::SpecialOptions)gr.readEntry("specialOpts").toInt();
         ns.secondNameOpts = (NamespaceEntry::SpecialOptions)gr.readEntry("secondNameOpts").toInt();
+        ns.isDefault      = gr.readEntry(QLatin1String("isDefault"), QVariant(true)).toBool();
+        ns.isDisabled     = gr.readEntry(QLatin1String("isDisabled"), QVariant(false)).toBool();
         QString conversion = gr.readEntry("convertRatio");
 
         for(QString str : conversion.split(QLatin1String(",")))
@@ -263,6 +265,8 @@ void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name
         tmp.writeEntry("specialOpts",(int)e.specialOpts);
         tmp.writeEntry("secondNameOpts",(int)e.secondNameOpts);
         tmp.writeEntry("index",e.index);
+        tmp.writeEntry("isDisabled", e.isDisabled);
+        tmp.writeEntry("isDefault",e.isDefault);
     }
 
 }

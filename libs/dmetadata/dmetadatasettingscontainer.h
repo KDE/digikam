@@ -61,7 +61,10 @@ public:
 
     enum NamespaceType {TAGS = 0, RATING = 1, COMMENT = 2};
 
-    NamespaceEntry(){}
+    NamespaceEntry(){
+        this->isDefault = true;
+        this->isDisabled = false;
+    }
 
     /**
      * @brief NamespaceEntry -constructor for tag type namespace
