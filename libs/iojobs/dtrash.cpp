@@ -36,6 +36,14 @@
 #include "digikam_debug.h"
 #include "collectionmanager.h"
 
+// Macros
+#define TRASH_FOLDER               QLatin1String(".dtrash")
+#define FILES_FOLDER               QLatin1String("files")
+#define INFO_FOLDER                QLatin1String("info")
+#define INFO_FILE_EXTENSION        QLatin1String(".dtrashinfo")
+#define PATH_JSON_KEY              QLatin1String("path")
+#define DELETIONTIMESTAMP_JSON_KEY QLatin1String("deletiontimestamp")
+
 namespace Digikam
 {
 
@@ -76,8 +84,8 @@ bool DTrash::deleteImage(const QString& imageToDelete)
     QFileInfo imageFileInfo(imageToDelete);
     QFile imageFile(imageToDelete);
 
-    QString destinationInTrash = collection + QDir::separator() + QLatin1String(".trash") +
-                                 QDir::separator() + QLatin1String("files") + QDir::separator() +
+    QString destinationInTrash = collection + QDir::separator() + TRASH_FOLDER +
+                                 QDir::separator() + FILES_FOLDER + QDir::separator() +
                                  baseNameForMovingIntoTrash + QLatin1String(".") +
                                  imageFileInfo.completeSuffix();
 
@@ -111,7 +119,7 @@ bool DTrash::deleteDirRecursivley(const QString& dirToDelete)
 
 bool DTrash::prepareCollectionTrash(const QString& collectionPath)
 {
-    QString trashFolder = collectionPath + QDir::separator() + QLatin1String(".trash");
+    QString trashFolder = collectionPath + QDir::separator() + TRASH_FOLDER;
     QDir trashDir(trashFolder);
 
     if (!trashDir.exists())
@@ -119,8 +127,8 @@ bool DTrash::prepareCollectionTrash(const QString& collectionPath)
         bool isCreated = true;
 
         isCreated &= trashDir.mkpath(trashFolder);
-        isCreated &= trashDir.mkpath(trashFolder + QDir::separator() + QLatin1String("files"));
-        isCreated &= trashDir.mkpath(trashFolder + QDir::separator() + QLatin1String("info"));
+        isCreated &= trashDir.mkpath(trashFolder + QDir::separator() + FILES_FOLDER);
+        isCreated &= trashDir.mkpath(trashFolder + QDir::separator() + INFO_FOLDER);
 
         if(!isCreated)
         {
@@ -141,8 +149,8 @@ QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QSt
     QJsonValue pathJsonVal(imagePath);
     QJsonValue timestampJsonVal(QDateTime::currentDateTime().toString());
 
-    jsonObjForImg.insert(QLatin1String("path"), pathJsonVal);
-    jsonObjForImg.insert(QLatin1String("deletionTimestamp"), timestampJsonVal);
+    jsonObjForImg.insert(PATH_JSON_KEY, pathJsonVal);
+    jsonObjForImg.insert(DELETIONTIMESTAMP_JSON_KEY, timestampJsonVal);
 
     QJsonDocument jsonDocForImg(jsonObjForImg);
 
@@ -162,11 +170,11 @@ QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QSt
 QString DTrash::getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version)
 {
     QString pathToCreateJsonFile = collectionPath + QDir::separator() +
-                                   QLatin1String(".trash") + QDir::separator() +
-                                   QLatin1String("info") + QDir::separator() +
+                                   TRASH_FOLDER + QDir::separator() +
+                                   INFO_FOLDER + QDir::separator() +
                                    baseName +
                                    (version ? QString::number(version) : QLatin1String("")) +
-                                   QLatin1String(".dtrashInfo");
+                                   INFO_FILE_EXTENSION;
 
     QFileInfo jsonFileInfo(pathToCreateJsonFile);
 
