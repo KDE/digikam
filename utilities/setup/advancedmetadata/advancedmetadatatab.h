@@ -24,6 +24,8 @@
 #include "dmetadatasettingscontainer.h"
 
 class QStandardItemModel;
+class QStandardItem;
+
 namespace Digikam
 {
 
@@ -42,6 +44,7 @@ public Q_SLOTS:
     void slotRevertChanges();
     void slotAddNewNamespace();
     void slotEditNamespace();
+    void slotDisableNamespace();
 
 
 private Q_SLOTS:
@@ -71,7 +74,10 @@ private:
 
                    ALTNAME_ROLE     = Qt::UserRole+13,
                    SUBSPACE_ROLE    = Qt::UserRole+14,
-                   ALTNAMEOPTS_ROLE  = Qt::UserRole+15
+                   ALTNAMEOPTS_ROLE  = Qt::UserRole+15,
+
+                   ISDEFAULT_ROLE   = Qt::UserRole+16,
+                   ISDISABLED_ROLE   = Qt::UserRole+16
                     };
 
     enum ModelNumbers { READ_TAGS = 0,
@@ -89,6 +95,8 @@ private:
      */
     void setModelData(QStandardItemModel* model, QList<NamespaceEntry> const &container);
     void setUi();
+
+    void setDataToItem(QStandardItem* item, NamespaceEntry& entry);
 
     /**
      * @brief getModelIndex - the view can have up to 6 models

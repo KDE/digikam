@@ -54,6 +54,7 @@ public:
     QPushButton* addButton;
     QPushButton* editButton;
     QPushButton* deleteButton;
+    QPushButton* disableButton;
     QPushButton* moveUpButton;
     QPushButton* moveDownButton;
     QPushButton* revertChanges;
@@ -115,26 +116,9 @@ void AdvancedMetadataTab::slotAddNewNamespace()
     }
 
     QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
-    QString text = entry.namespaceName + QLatin1String(",") + i18n("Separator:") + entry.separator;
     QStandardItem* item = new QStandardItem(entry.namespaceName);
-    item->setData(entry.namespaceName,NAME_ROLE);
-    item->setData((int)entry.tagPaths, ISTAG_ROLE);
-    item->setData(entry.separator, SEPARATOR_ROLE);
-    item->setData(entry.extraXml, EXTRAXML_ROLE);
-    item->setData((int)entry.nsType, NSTYPE_ROLE);
-    if(entry.nsType == NamespaceEntry::RATING)
-    {
-       item->setData(entry.convertRatio.at(0), ZEROSTAR_ROLE);
-       item->setData(entry.convertRatio.at(1), ONESTAR_ROLE);
-       item->setData(entry.convertRatio.at(2), TWOSTAR_ROLE);
-       item->setData(entry.convertRatio.at(3), THREESTAR_ROLE);
-       item->setData(entry.convertRatio.at(4), FOURSTAR_ROLE);
-       item->setData(entry.convertRatio.at(5), FIVESTAR_ROLE);
-    }
-    item->setData((int)entry.specialOpts, SPECIALOPTS_ROLE);
-    item->setData(entry.alternativeName, ALTNAME_ROLE);
-    item->setData((int)entry.subspace, SUBSPACE_ROLE);
-    item->setData((int)entry.secondNameOpts, ALTNAMEOPTS_ROLE);
+    setDataToItem(item, entry);
+
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
     root->appendRow(item);
     d->container.readTagNamespaces.append(entry);
@@ -158,26 +142,31 @@ void AdvancedMetadataTab::slotEditNamespace()
     QStandardItem* item = root->child(d->namespaceView->currentIndex().row());
 
     getCurrentContainer().replace(d->namespaceView->currentIndex().row(), entry);
-    item->setData(entry.namespaceName,Qt::DisplayRole);
-    item->setData(entry.namespaceName,NAME_ROLE);
-    item->setData((int)entry.tagPaths, ISTAG_ROLE);
-    item->setData(entry.separator, SEPARATOR_ROLE);
-    item->setData(entry.extraXml, EXTRAXML_ROLE);
-    item->setData((int)entry.nsType, NSTYPE_ROLE);
-    if(entry.nsType == NamespaceEntry::RATING)
-    {
-       item->setData(entry.convertRatio.at(0), ZEROSTAR_ROLE);
-       item->setData(entry.convertRatio.at(1), ONESTAR_ROLE);
-       item->setData(entry.convertRatio.at(2), TWOSTAR_ROLE);
-       item->setData(entry.convertRatio.at(3), THREESTAR_ROLE);
-       item->setData(entry.convertRatio.at(4), FOURSTAR_ROLE);
-       item->setData(entry.convertRatio.at(5), FIVESTAR_ROLE);
-    }
-    item->setData((int)entry.specialOpts, SPECIALOPTS_ROLE);
-    item->setData(entry.alternativeName, ALTNAME_ROLE);
-    item->setData((int)entry.subspace, SUBSPACE_ROLE);
-    item->setData((int)entry.secondNameOpts, ALTNAMEOPTS_ROLE);
+    setDataToItem(item, entry);
 
+}
+
+void AdvancedMetadataTab::slotDisableNamespace()
+{
+//    QStandardItem* elem = static_cast<QStandardItem*>(d->namespaceView->currentIndex().internalPointer());
+
+    QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
+
+    QStandardItem* elem = root->child(d->namespaceView->currentIndex().row());
+
+    bool state = !elem->data(ISDISABLED_ROLE).toBool();
+
+    if(state)
+    {
+        elem->setForeground(QBrush(Qt::gray));
+        elem->setText(i18n("(Disabled)") +elem->data(NAME_ROLE).toString());
+    }
+    else
+    {
+        elem->setForeground(QBrush(Qt::black));
+        elem->setText(elem->data(NAME_ROLE).toString());
+    }
+    elem->setData(state, ISDISABLED_ROLE);
 }
 
 void AdvancedMetadataTab::applySettings()
@@ -224,6 +213,7 @@ void AdvancedMetadataTab::connectButtons()
     connect(d->addButton, SIGNAL(clicked()), this, SLOT(slotAddNewNamespace()));
     connect(d->editButton, SIGNAL(clicked()), this, SLOT(slotEditNamespace()));
     connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
+    connect(d->disableButton, SIGNAL(clicked()), this, SLOT(slotDisableNamespace()));
     connect(d->resetButton, SIGNAL(clicked()), this, SLOT(slotResetToDefault()));
     connect(d->revertChanges, SIGNAL(clicked()), this, SLOT(slotRevertChanges()));
     connect(d->moveUpButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemUp()));
@@ -237,26 +227,9 @@ void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<Namespac
     for(NamespaceEntry e : container)
     {
         QStandardItem* item = new QStandardItem(e.namespaceName);
-        item->setData(e.namespaceName,NAME_ROLE);
-        item->setData((int)e.tagPaths, ISTAG_ROLE);
-        item->setData(e.separator, SEPARATOR_ROLE);
-        item->setData(e.extraXml, EXTRAXML_ROLE);
-        item->setData((int)e.nsType, NSTYPE_ROLE);
-        if(e.nsType == NamespaceEntry::RATING)
-        {
-           item->setData(e.convertRatio.at(0), ZEROSTAR_ROLE);
-           item->setData(e.convertRatio.at(1), ONESTAR_ROLE);
-           item->setData(e.convertRatio.at(2), TWOSTAR_ROLE);
-           item->setData(e.convertRatio.at(3), THREESTAR_ROLE);
-           item->setData(e.convertRatio.at(4), FOURSTAR_ROLE);
-           item->setData(e.convertRatio.at(5), FIVESTAR_ROLE);
-        }
-        item->setData((int)e.specialOpts, SPECIALOPTS_ROLE);
-        item->setData(e.alternativeName, ALTNAME_ROLE);
-        item->setData((int)e.subspace, SUBSPACE_ROLE);
-        item->setData((int)e.secondNameOpts, ALTNAMEOPTS_ROLE);
-        qDebug() << "Loading ++++++++ " << e.namespaceName << " " << e.specialOpts << "subspace" << e.subspace;
+//        item->setData(QBrush(Qt::gray), Qt::ForegroundRole);
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
+        setDataToItem(item, e);
         root->appendRow(item);
     }
 
@@ -295,6 +268,7 @@ void AdvancedMetadataTab::setUi()
     buttonsLayout->setAlignment(Qt::AlignTop);
     d->addButton = new QPushButton(i18n("Add"));
     d->editButton = new QPushButton(i18n("Edit"));
+    d->disableButton = new QPushButton(i18n("Disable"));
     d->deleteButton = new QPushButton(i18n("Delete"));
 
     d->moveUpButton = new QPushButton(i18n("Move Up"));
@@ -305,6 +279,7 @@ void AdvancedMetadataTab::setUi()
 
     buttonsLayout->addWidget(d->addButton);
     buttonsLayout->addWidget(d->editButton);
+    buttonsLayout->addWidget(d->disableButton);
     buttonsLayout->addWidget(d->deleteButton);
     buttonsLayout->addWidget(d->moveUpButton);
     buttonsLayout->addWidget(d->moveDownButton);
@@ -321,6 +296,31 @@ void AdvancedMetadataTab::setUi()
     advancedConfLayout->addLayout(bottomLayout);
 
     this->setLayout(advancedConfLayout);
+}
+
+void AdvancedMetadataTab::setDataToItem(QStandardItem *item, NamespaceEntry &entry)
+{
+    item->setData(entry.namespaceName,Qt::DisplayRole);
+    item->setData(entry.namespaceName,NAME_ROLE);
+    item->setData((int)entry.tagPaths, ISTAG_ROLE);
+    item->setData(entry.separator, SEPARATOR_ROLE);
+    item->setData(entry.extraXml, EXTRAXML_ROLE);
+    item->setData((int)entry.nsType, NSTYPE_ROLE);
+    if(entry.nsType == NamespaceEntry::RATING)
+    {
+       item->setData(entry.convertRatio.at(0), ZEROSTAR_ROLE);
+       item->setData(entry.convertRatio.at(1), ONESTAR_ROLE);
+       item->setData(entry.convertRatio.at(2), TWOSTAR_ROLE);
+       item->setData(entry.convertRatio.at(3), THREESTAR_ROLE);
+       item->setData(entry.convertRatio.at(4), FOURSTAR_ROLE);
+       item->setData(entry.convertRatio.at(5), FIVESTAR_ROLE);
+    }
+    item->setData((int)entry.specialOpts, SPECIALOPTS_ROLE);
+    item->setData(entry.alternativeName, ALTNAME_ROLE);
+    item->setData((int)entry.subspace, SUBSPACE_ROLE);
+    item->setData((int)entry.secondNameOpts, ALTNAMEOPTS_ROLE);
+    item->setData(entry.isDefault, ISDEFAULT_ROLE);
+    item->setData(entry.isDisabled, ISDISABLED_ROLE);
 }
 
 int AdvancedMetadataTab::getModelIndex()
@@ -407,6 +407,8 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
         ns.subspace             = (NamespaceEntry::NsSubspace)current->data(SUBSPACE_ROLE).toInt();
         ns.secondNameOpts       = (NamespaceEntry::SpecialOptions)current->data(ALTNAMEOPTS_ROLE).toInt();
         ns.index                = i;
+        ns.isDefault            = current->data(ISDEFAULT_ROLE).toBool();
+        ns.isDisabled           = current->data(ISDISABLED_ROLE).toBool();
         qDebug() << "saving+++++" << ns.namespaceName << " " << ns.index << " " << ns.specialOpts;
         container.append(ns);
     }

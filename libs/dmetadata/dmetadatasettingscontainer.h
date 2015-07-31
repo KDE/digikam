@@ -81,6 +81,8 @@ public:
         this->index = index;
         this->specialOpts = NO_OPTS;
         this->secondNameOpts = NO_OPTS;
+        this->isDefault = true;
+        this->isDisabled = false;
     }
 
     /**
@@ -97,6 +99,8 @@ public:
         this->index = index;
         this->specialOpts = NO_OPTS;
         this->secondNameOpts = NO_OPTS;
+        this->isDefault = true;
+        this->isDisabled = false;
     }
 
     /**
@@ -110,6 +114,8 @@ public:
         this->index = index;
         this->specialOpts = comm;
         this->secondNameOpts = NO_OPTS;
+        this->isDefault = true;
+        this->isDisabled = false;
     }
 
     NamespaceEntry(const NamespaceEntry& copy)
@@ -125,12 +131,16 @@ public:
         this->secondNameOpts = copy.secondNameOpts;
         this->index         = copy.index;
         this->subspace      = copy.subspace;
+        this->isDefault     = copy.isDefault;
+        this->isDisabled    = copy.isDisabled;
     }
 
     ~NamespaceEntry(){}
 
     NamespaceType nsType;
     NsSubspace    subspace;
+    bool          isDefault;
+    bool          isDisabled;
     int index;
 
     /**
