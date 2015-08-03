@@ -57,7 +57,9 @@ public:
                          COMMENT_ATLLANGLIST = 2,
                          COMMENT_XMP = 3,
                          TAG_XMPBAG = 4,
-                         TAG_XMPSEQ = 5};
+                         TAG_XMPSEQ = 5,
+                         TAG_ACDSEE = 6
+                        };
 
     enum NamespaceType {TAGS = 0, RATING = 1, COMMENT = 2};
 

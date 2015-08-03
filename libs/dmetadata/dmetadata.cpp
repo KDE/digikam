@@ -1246,6 +1246,9 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
             case NamespaceEntry::TAG_XMPSEQ:
                 tagsPath = getXmpTagStringSeq(nameSpace, false);
                 break;
+            case NamespaceEntry::TAG_ACDSEE:
+                getACDSeeTagsPath(tagsPath);
+                break;
             default:
                 break;
             }
@@ -1270,8 +1273,6 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
             index++;
         }
     }
-    if(getACDSeeTagsPath(tagsPath))
-        return true;
 
     // Try to get Tags Path list from XMP keywords.
     tagsPath = getXmpKeywords();
@@ -1339,15 +1340,32 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
             }
             const std::string myStr = entry.namespaceName.toStdString();
             const char* nameSpace = myStr.data();
-            if(!setXmpTagStringSeq(nameSpace, newList))
+            switch(entry.specialOpts)
             {
-                qDebug() << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
-                return false;
+            case NamespaceEntry::TAG_XMPSEQ:
+                if(!setXmpTagStringSeq(nameSpace, newList))
+                {
+                    qDebug() << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                    return false;
+                }
+                break;
+            case NamespaceEntry::TAG_XMPBAG:
+                if(!setXmpTagStringBag(nameSpace, newList))
+                {
+                    qDebug() << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                    return false;
+                }
+                break;
+            case NamespaceEntry::TAG_ACDSEE:
+                if(!setACDSeeTagsPath(newList))
+                {
+                    qDebug() << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                    return false;
+                }
             }
         }
-        return setACDSeeTagsPath(tagsPath);
     }
-    return false;
+    return true;
 }
 
 bool DMetadata::getACDSeeTagsPath(QStringList &tagsPath) const
