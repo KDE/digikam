@@ -68,6 +68,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotProgressItemCompleted();
+    void slotProgressItemCanceled(ProgressItem*);
 };
 
 // -----------------------------------------------------------------------------------------------------------

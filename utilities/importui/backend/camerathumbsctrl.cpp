@@ -207,7 +207,7 @@ void CameraThumbsCtrl::startKdePreviewJob()
 
     KFileItemList items;
 
-    for (QList<QUrl>::iterator it = list.begin() ; it != list.end() ; ++it)
+    for (QList<QUrl>::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         if ((*it).isValid())
             items.append(KFileItem(*it));
@@ -304,8 +304,8 @@ void CameraThumbsCtrl::clearCache()
 
 void CameraThumbsCtrl::setCacheSize(int numberOfItems)
 {
-    d->cache.setMaxCost((numberOfItems * ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() * QPixmap::defaultDepth() / 8) +
-                        (numberOfItems * 1024 * 2));
+    d->cache.setMaxCost(numberOfItems * (ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() *
+                                         QPixmap(1, 1).depth() / 8) + (numberOfItems * sizeof(CamItemInfo)));
 }
 
 }  // namespace Digikam

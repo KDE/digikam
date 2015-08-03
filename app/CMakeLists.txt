@@ -20,7 +20,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:dthread_src>
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:3rdparty_src>
-            $<TARGET_OBJECTS:iojobs_src>
             $<TARGET_OBJECTS:kiowrapper_src>
             $<TARGET_OBJECTS:akonadiiface_src>
 
@@ -272,6 +271,7 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:filters_src>
             $<TARGET_OBJECTS:importuibackend_src>
             $<TARGET_OBJECTS:imagehistorywidgets_src>
+            $<TARGET_OBJECTS:iojobs_src>
 )
 
 if(${KF5Kipi_FOUND})
