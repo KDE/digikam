@@ -1274,13 +1274,6 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
         }
     }
 
-    // Try to get Tags Path list from XMP keywords.
-    tagsPath = getXmpKeywords();
-    if (!tagsPath.isEmpty())
-    {
-        return true;
-    }
-
     // Try to get Tags Path list from IPTC keywords.
     // digiKam 0.9.x has used IPTC keywords to store Tags Path list.
     // This way is obsolete now since digiKam support XMP because IPTC
@@ -1334,9 +1327,21 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
             if(entry.isDisabled)
                 continue;
 
-            QStringList newList = tagsPath;
-            if(entry.separator.compare(QLatin1String("/")) != 0){
-                newList = newList.replaceInStrings(QLatin1String("/"), entry.separator);
+            // get keywords from tags path, is type is tag
+            QStringList newList;
+            if(entry.tagPaths == NamespaceEntry::TAG)
+            {
+                for(QString tagPath : tagsPath)
+                {
+                    newList.append(tagPath.split(QLatin1String("/")).last());
+                }
+            }
+            else
+            {
+                newList = tagsPath;
+                if(entry.separator.compare(QLatin1String("/")) != 0){
+                    newList = newList.replaceInStrings(QLatin1String("/"), entry.separator);
+                }
             }
             const std::string myStr = entry.namespaceName.toStdString();
             const char* nameSpace = myStr.data();

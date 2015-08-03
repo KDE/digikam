@@ -146,11 +146,21 @@ void DMetadataSettingsContainer::defaultTagValues()
     tagNs1.specialOpts = NamespaceEntry::TAG_ACDSEE;
     tagNs1.subspace    = NamespaceEntry::XMP;
 
+    NamespaceEntry tagNs6 (QLatin1String("Xmp.dc.subject"),
+                                               NamespaceEntry::TAG,
+                                               QLatin1String("/"),
+                                               QString(),
+                                               NamespaceEntry::TAGS,
+                                               0);
+    tagNs1.specialOpts = NamespaceEntry::TAG_XMPBAG;
+    tagNs1.subspace    = NamespaceEntry::XMP;
+
     readTagNamespaces.append(tagNs1);
     readTagNamespaces.append(tagNs2);
     readTagNamespaces.append(tagNs3);
     readTagNamespaces.append(tagNs4);
     readTagNamespaces.append(tagNs5);
+    readTagNamespaces.append(tagNs6);
 
     writeTagNamespaces = QList<NamespaceEntry>(readTagNamespaces);
 }
