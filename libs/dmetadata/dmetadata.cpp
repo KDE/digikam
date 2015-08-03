@@ -291,6 +291,9 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
 
         for(NamespaceEntry entry : settings.readCommentNamespaces)
         {
+            if(entry.isDisabled)
+                continue;
+
             QString xmpComment;
             const std::string myStr = entry.namespaceName.toStdString();
             const char* nameSpace = myStr.data();
@@ -431,7 +434,8 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
 
         for(NamespaceEntry entry : toWrite)
         {
-
+            if(entry.isDisabled)
+                continue;
             const std::string myStr = entry.namespaceName.toStdString();
             const char* nameSpace = myStr.data();
             removeXmpTag(nameSpace);
@@ -662,6 +666,9 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
     {
         for(NamespaceEntry entry : settings.readRatingNamespaces)
         {
+            if(entry.isDisabled)
+                continue;
+
             const std::string myStr = entry.namespaceName.toStdString();
             const char* nameSpace = myStr.data();
             QString value = getXmpTagString(nameSpace, false);
@@ -840,6 +847,9 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
 
     for(NamespaceEntry entry : toWrite)
     {
+        if(entry.isDisabled)
+            continue;
+
         const std::string myStr = entry.namespaceName.toStdString();
         const char* nameSpace = myStr.data();
         if(!setXmpTagString(nameSpace, QString::number(entry.convertRatio.at(rating))))
@@ -1219,6 +1229,8 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
 
     for(NamespaceEntry entry : settings.readTagNamespaces)
     {
+        if(entry.isDisabled)
+            continue;
         int index  = 0;
         QString currentNamespace = entry.namespaceName;
         NamespaceEntry::SpecialOptions currentOpts = entry.specialOpts;
@@ -1359,6 +1371,9 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
 
         for(NamespaceEntry entry : toWrite)
         {
+            if(entry.isDisabled)
+                continue;
+
             QStringList newList = tagsPath;
             if(entry.separator.compare(QLatin1String("/")) != 0){
                 newList = newList.replaceInStrings(QLatin1String("/"), entry.separator);
