@@ -143,8 +143,8 @@ void DMetadataSettingsContainer::defaultTagValues()
                                                QString(),
                                                NamespaceEntry::TAGS,
                                                0);
-    tagNs1.specialOpts = NamespaceEntry::TAG_ACDSEE;
-    tagNs1.subspace    = NamespaceEntry::XMP;
+    tagNs5.specialOpts = NamespaceEntry::TAG_ACDSEE;
+    tagNs5.subspace    = NamespaceEntry::XMP;
 
     NamespaceEntry tagNs6 (QLatin1String("Xmp.dc.subject"),
                                                NamespaceEntry::TAG,
@@ -152,8 +152,25 @@ void DMetadataSettingsContainer::defaultTagValues()
                                                QString(),
                                                NamespaceEntry::TAGS,
                                                0);
-    tagNs1.specialOpts = NamespaceEntry::TAG_XMPBAG;
-    tagNs1.subspace    = NamespaceEntry::XMP;
+    tagNs6.specialOpts = NamespaceEntry::TAG_XMPBAG;
+    tagNs6.subspace    = NamespaceEntry::XMP;
+
+    NamespaceEntry tagNs7 (QLatin1String("Iptc.Application2.Keywords"),
+                                               NamespaceEntry::TAGPATH,
+                                               QLatin1String("."),
+                                               QString(),
+                                               NamespaceEntry::TAGS,
+                                               0);
+    tagNs7.subspace    = NamespaceEntry::IPTC;
+
+    NamespaceEntry tagNs8 (QLatin1String("Exif.Image.XPKeywords"),
+                                               NamespaceEntry::TAGPATH,
+                                               QLatin1String(";"),
+                                               QString(),
+                                               NamespaceEntry::TAGS,
+                                               0);
+    tagNs8.subspace    = NamespaceEntry::EXIV;
+
 
     readTagNamespaces.append(tagNs1);
     readTagNamespaces.append(tagNs2);
@@ -161,6 +178,8 @@ void DMetadataSettingsContainer::defaultTagValues()
     readTagNamespaces.append(tagNs4);
     readTagNamespaces.append(tagNs5);
     readTagNamespaces.append(tagNs6);
+    readTagNamespaces.append(tagNs7);
+    readTagNamespaces.append(tagNs8);
 
     writeTagNamespaces = QList<NamespaceEntry>(readTagNamespaces);
 }

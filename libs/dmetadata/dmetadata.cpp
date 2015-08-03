@@ -1226,7 +1226,6 @@ VideoInfoContainer DMetadata::getVideoInformation() const
 
 bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsContainer &settings) const
 {
-
     for(NamespaceEntry entry : settings.readTagNamespaces)
     {
         if(entry.isDisabled)
@@ -1235,74 +1234,90 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
         QString currentNamespace = entry.namespaceName;
         NamespaceEntry::SpecialOptions currentOpts = entry.specialOpts;
         // Some namespaces have altenative paths, we must search them both
-        while(index < 2)
+        switch(entry.subspace)
         {
-            const std::string myStr = currentNamespace.toStdString();
-            const char* nameSpace = myStr.data();
-            switch(currentOpts){
-            case NamespaceEntry::TAG_XMPBAG:
-                tagsPath = getXmpTagStringBag(nameSpace, false);
-                break;
-            case NamespaceEntry::TAG_XMPSEQ:
-                tagsPath = getXmpTagStringSeq(nameSpace, false);
-                break;
-            case NamespaceEntry::TAG_ACDSEE:
-                getACDSeeTagsPath(tagsPath);
-                break;
-            default:
-                break;
-            }
-
-            if(!tagsPath.isEmpty())
+        case NamespaceEntry::XMP:
+            while(index < 2)
             {
-                if(entry.separator != QLatin1String("/"))
-                {
-                    tagsPath = tagsPath.replaceInStrings(entry.separator, QLatin1String("/"));
+                const std::string myStr = currentNamespace.toStdString();
+                const char* nameSpace = myStr.data();
+                switch(currentOpts){
+                case NamespaceEntry::TAG_XMPBAG:
+                    tagsPath = getXmpTagStringBag(nameSpace, false);
+                    break;
+                case NamespaceEntry::TAG_XMPSEQ:
+                    tagsPath = getXmpTagStringSeq(nameSpace, false);
+                    break;
+                case NamespaceEntry::TAG_ACDSEE:
+                    getACDSeeTagsPath(tagsPath);
+                    break;
+                // not used here, to suppress warnings
+                case NamespaceEntry::COMMENT_XMP:
+                case NamespaceEntry::COMMENT_ALTLANG:
+                case NamespaceEntry::COMMENT_ATLLANGLIST:
+                case NamespaceEntry::NO_OPTS:
+                default:
+                    break;
                 }
+
+                if(!tagsPath.isEmpty())
+                {
+                    if(entry.separator != QLatin1String("/"))
+                    {
+                        tagsPath = tagsPath.replaceInStrings(entry.separator, QLatin1String("/"));
+                    }
+                    return true;
+                }
+                else if(!entry.alternativeName.isEmpty())
+                {
+                    currentNamespace = entry.alternativeName;
+                    currentOpts = entry.secondNameOpts;
+                }
+                else
+                {
+                    break; // no alternative namespace, go to next one
+                }
+                index++;
+            }
+            break;
+        case NamespaceEntry::IPTC:
+            // Try to get Tags Path list from IPTC keywords.
+            // digiKam 0.9.x has used IPTC keywords to store Tags Path list.
+            // This way is obsolete now since digiKam support XMP because IPTC
+            // do not support UTF-8 and have strings size limitation. But we will
+            // let the capability to import it for interworking issues.
+            tagsPath = getIptcKeywords();
+            if (!tagsPath.isEmpty())
+            {
+                // Work around to Imach tags path list hosted in IPTC with '.' as separator.
+                QStringList ntp = tagsPath.replaceInStrings(entry.separator, QLatin1String("/"));
+
+                if (ntp != tagsPath)
+                {
+                    tagsPath = ntp;
+                    qCDebug(LOG_METADATA) << "Tags Path imported from Imach: " << tagsPath;
+                }
+
                 return true;
             }
-            else if(!entry.alternativeName.isEmpty())
-            {
-                currentNamespace = entry.alternativeName;
-                currentOpts = entry.secondNameOpts;
-            }
-            else
-            {
-                break; // no alternative namespace, go to next one
-            }
-            index++;
-        }
-    }
-
-    // Try to get Tags Path list from IPTC keywords.
-    // digiKam 0.9.x has used IPTC keywords to store Tags Path list.
-    // This way is obsolete now since digiKam support XMP because IPTC
-    // do not support UTF-8 and have strings size limitation. But we will
-    // let the capability to import it for interworking issues.
-    tagsPath = getIptcKeywords();
-    if (!tagsPath.isEmpty())
-    {
-        // Work around to Imach tags path list hosted in IPTC with '.' as separator.
-        QStringList ntp = tagsPath.replaceInStrings(QLatin1String("."), QLatin1String("/"));
-
-        if (ntp != tagsPath)
+            break;
+        case NamespaceEntry::EXIV:
         {
-            tagsPath = ntp;
-            qCDebug(LOG_METADATA) << "Tags Path imported from Imach: " << tagsPath;
+            // Try to get Tags Path list from Exif Windows keywords.
+            QString keyWords = getExifTagString("Exif.Image.XPKeywords", false);
+            if (!keyWords.isEmpty())
+            {
+                tagsPath = keyWords.split(entry.separator);
+
+                if (!tagsPath.isEmpty())
+                {
+                    return true;
+                }
+            }
+            break;
         }
-
-        return true;
-    }
-
-    // Try to get Tags Path list from Exif Windows keywords.
-    QString keyWords = getExifTagString("Exif.Image.XPKeywords", false);
-    if (!keyWords.isEmpty())
-    {
-        tagsPath = keyWords.split(QLatin1String(";"));
-
-        if (!tagsPath.isEmpty())
-        {
-            return true;
+        default:
+            break;
         }
     }
 
@@ -1325,6 +1340,10 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
         for(NamespaceEntry entry : toWrite)
         {
             if(entry.isDisabled)
+                continue;
+
+            // We do not write to IPTC and EXIV namespaces, for now
+            if(entry.subspace != NamespaceEntry::XMP)
                 continue;
 
             // get keywords from tags path, is type is tag
