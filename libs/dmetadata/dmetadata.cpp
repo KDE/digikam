@@ -265,6 +265,16 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
     {
         authorsMap = getXmpTagStringListLangAlt("Xmp.digiKam.CaptionsAuthorNames",    false);
         datesMap   = getXmpTagStringListLangAlt("Xmp.digiKam.CaptionsDateTimeStamps", false);
+
+        if (authorsMap.isEmpty() && commonAuthor.isEmpty())
+        {
+            QString xmpAuthors = getXmpTagString("Xmp.acdsee.author", false);
+
+            if (!xmpAuthors.isEmpty())
+            {
+                authorsMap.insert(QLatin1String("x-default"), xmpAuthors);
+            }
+        }
     }
 
     // Get author name from IPTC DescriptionWriter. Private namespace above gets precedence.
@@ -279,42 +289,50 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
 
     if (hasXmp())
     {
-        if (authorsMap.isEmpty() && commonAuthor.isEmpty())
-        {
-            QString xmpAuthors = getXmpTagString("Xmp.acdsee.author", false);
-
-            if (!xmpAuthors.isEmpty())
-            {
-                authorsMap.insert(QLatin1String("x-default"), xmpAuthors);
-            }
-        }
 
         for(NamespaceEntry entry : settings.readCommentNamespaces)
         {
             if(entry.isDisabled)
                 continue;
 
-            QString xmpComment;
+            QString commentString;
             const std::string myStr = entry.namespaceName.toStdString();
             const char* nameSpace = myStr.data();
-            switch(entry.specialOpts)
+            switch(entry.subspace)
             {
-            case NamespaceEntry::COMMENT_ALTLANG:
-                xmpComment = getXmpTagStringLangAlt(nameSpace, QString(), false);
+            case NamespaceEntry::XMP:
+                switch(entry.specialOpts)
+                {
+                case NamespaceEntry::COMMENT_ALTLANG:
+                    commentString = getXmpTagStringLangAlt(nameSpace, QString(), false);
+                    break;
+                case NamespaceEntry::COMMENT_ATLLANGLIST:
+                    commentsMap = getXmpTagStringListLangAlt(nameSpace, false);
+                    break;
+                case NamespaceEntry::COMMENT_XMP:
+                    commentString = getXmpTagString("Xmp.acdsee.notes", false);
+                    break;
+                case NamespaceEntry::COMMENT_JPEG:
+                    // Now, we trying to get image comments, outside of XMP.
+                    // For JPEG, string is extracted from JFIF Comments section.
+                    // For PNG, string is extracted from iTXt chunk.
+                    commentString = getCommentsDecoded();
+                default:
+                    break;
+                }
                 break;
-            case NamespaceEntry::COMMENT_ATLLANGLIST:
-                commentsMap = getXmpTagStringListLangAlt(nameSpace, false);
+            case NamespaceEntry::IPTC:
+                commentString = getIptcTagString(nameSpace, false);
                 break;
-            case NamespaceEntry::COMMENT_XMP:
-                xmpComment = getXmpTagString("Xmp.acdsee.notes", false);
+            case NamespaceEntry::EXIV:
+                commentString = getExifComment();
                 break;
             default:
                 break;
             }
-
-            if(!xmpComment.isEmpty())
+            if(!commentString.isEmpty() &&!commentString.trimmed().isEmpty())
             {
-                commentsMap.insert(QLatin1String("x-default"), xmpComment);
+                commentsMap.insert(QLatin1String("x-default"), commentString);
                 captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
                 return captionsMap;
             }
@@ -324,47 +342,6 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
                 captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
                 return captionsMap;
             }
-        }
-    }
-
-    // Now, we trying to get image comments, outside of XMP.
-    // For JPEG, string is extracted from JFIF Comments section.
-    // For PNG, string is extracted from iTXt chunk.
-
-    QString comment = getCommentsDecoded();
-
-    if (!comment.isEmpty())
-    {
-        commentsMap.insert(QLatin1String("x-default"), comment);
-        captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
-        return captionsMap;
-    }
-
-    // We trying to get Exif comments
-
-    if (hasExif())
-    {
-        QString exifComment = getExifComment();
-
-        if (!exifComment.isEmpty())
-        {
-            commentsMap.insert(QLatin1String("x-default"), exifComment);
-            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
-            return captionsMap;
-        }
-    }
-
-    // We trying to get IPTC comments
-
-    if (hasIptc())
-    {
-        QString iptcComment = getIptcTagString("Iptc.Application2.Caption", false);
-
-        if (!iptcComment.isEmpty() && !iptcComment.trimmed().isEmpty())
-        {
-            commentsMap.insert(QLatin1String("x-default"), iptcComment);
-            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
-            return captionsMap;
         }
     }
 
@@ -416,72 +393,74 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
         return false;
     }
 
-    // In Second we write comments into Exif.
+    QList<NamespaceEntry> toWrite = settings.readCommentNamespaces;
+    if(!settings.unifyReadWrite)
+        toWrite = settings.writeCommentNamespaces;
 
-    if (!setExifComment(defaultComment))
+    for(NamespaceEntry entry : toWrite)
     {
-        return false;
-    }
+        if(entry.isDisabled)
+            continue;
+        const std::string myStr = entry.namespaceName.toStdString();
+        const char* nameSpace = myStr.data();
 
-    // In Third we write comments into XMP. Language Alternative rule is not yet used.
-
-    if (supportXmp())
-    {
-
-        QList<NamespaceEntry> toWrite = settings.readCommentNamespaces;
-        if(!settings.unifyReadWrite)
-            toWrite = settings.writeCommentNamespaces;
-
-        for(NamespaceEntry entry : toWrite)
+        switch(entry.subspace)
         {
-            if(entry.isDisabled)
-                continue;
-            const std::string myStr = entry.namespaceName.toStdString();
-            const char* nameSpace = myStr.data();
+        case NamespaceEntry::XMP:
             removeXmpTag(nameSpace);
-            if(!defaultComment.isNull())
+            switch(entry.specialOpts)
             {
-                switch(entry.specialOpts)
+            case NamespaceEntry::COMMENT_ALTLANG:
+                if(!defaultComment.isNull())
                 {
-                    case NamespaceEntry::COMMENT_ALTLANG:
-                        if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
-                        {
-                            qDebug() << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
-                            return false;
-                        }
-                        break;
-                    case NamespaceEntry::COMMENT_ATLLANGLIST:
-                        if (!setXmpTagStringListLangAlt(nameSpace, comments.toAltLangMap(), false))
-                        {
-                            return false;
-                        }
-                        break;
-                    case NamespaceEntry::COMMENT_XMP:
-                        if (!setXmpTagString(nameSpace, defaultComment, false))
-                        {
-                            return false;
-                        }
-                        break;
-                    default:
-                        break;
+                    if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
+                    {
+                        qDebug() << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
+                        return false;
+                    }
+                }
+                break;
+            case NamespaceEntry::COMMENT_ATLLANGLIST:
+                if (!setXmpTagStringListLangAlt(nameSpace, comments.toAltLangMap(), false))
+                {
+                    return false;
+                }
+                break;
+            case NamespaceEntry::COMMENT_XMP:
+                if(!defaultComment.isNull())
+                {
+                    if (!setXmpTagString(nameSpace, defaultComment, false))
+                    {
+                        return false;
+                    }
+                }
+                break;
+            default:
+                break;
+            }
+            break;
+        case NamespaceEntry::IPTC:
+            removeIptcTag(nameSpace);
+            if (!defaultComment.isNull())
+            {
+                defaultComment.truncate(2000);
+
+                if (!setIptcTagString(nameSpace, defaultComment))
+                {
+                    return false;
                 }
             }
+            break;
+        case NamespaceEntry::EXIV:
+            if (!setExifComment(defaultComment))
+            {
+                return false;
+            }
+            break;
+        default:
+            break;
         }
-    }
 
-    // In Four we write comments into IPTC.
-    // Note that Caption IPTC tag is limited to 2000 char and ASCII charset.
-
-    removeIptcTag("Iptc.Application2.Caption");
-
-    if (!defaultComment.isNull())
-    {
-        defaultComment.truncate(2000);
-
-        if (!setIptcTagString("Iptc.Application2.Caption", defaultComment))
-        {
-            return false;
-        }
     }
 
     return true;
