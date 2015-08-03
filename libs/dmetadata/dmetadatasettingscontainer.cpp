@@ -189,9 +189,10 @@ void DMetadataSettingsContainer::defaultRatingValues()
     this->readRatingNamespaces.clear();
     this->writeRatingNamespaces.clear();
 
-    QList<int> defaultVal, microsoftMappings;
+    QList<int> defaultVal, microsoftMappings, iptcMappings;
     defaultVal << 0 << 1 << 2 << 3 << 4 << 5;
     microsoftMappings << 0 << 1 << 25 << 50 << 75 << 99;
+    iptcMappings << 8 << 6 << 5 << 4 << 2 << 1;
 
     NamespaceEntry ratingNs1 (QLatin1String("Xmp.xmp.Rating"),
                                                    defaultVal,
@@ -208,9 +209,27 @@ void DMetadataSettingsContainer::defaultRatingValues()
                                                    NamespaceEntry::RATING, 2);
     ratingNs3.subspace = NamespaceEntry::XMP;
 
+    NamespaceEntry ratingNs4(QLatin1String("Exif.Image.0x4746"),
+                                            defaultVal,
+                                            NamespaceEntry::RATING, 2);
+    ratingNs4.subspace = NamespaceEntry::EXIV;
+
+    NamespaceEntry ratingNs5(QLatin1String("Exif.Image.0x4749"),
+                                            microsoftMappings,
+                                            NamespaceEntry::RATING, 2);
+    ratingNs5.subspace = NamespaceEntry::EXIV;
+
+    NamespaceEntry ratingNs6(QLatin1String("Iptc.Application2.Urgency"),
+                                                   iptcMappings,
+                                                   NamespaceEntry::RATING, 2);
+    ratingNs6.subspace = NamespaceEntry::IPTC;
+
     readRatingNamespaces.append(ratingNs1);
     readRatingNamespaces.append(ratingNs2);
     readRatingNamespaces.append(ratingNs3);
+    readRatingNamespaces.append(ratingNs4);
+    readRatingNamespaces.append(ratingNs5);
+    readRatingNamespaces.append(ratingNs6);
 
     writeRatingNamespaces = QList<NamespaceEntry>(readRatingNamespaces);
 }

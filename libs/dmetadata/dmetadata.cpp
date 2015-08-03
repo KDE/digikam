@@ -661,104 +661,66 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
     {
         return -1;
     }
+    long rating = -1;
+    bool xmpSupported = hasXmp();
+    bool iptcSupported = hasIptc();
+    bool exivSupported = hasExif();
 
-    if (hasXmp())
+    for(NamespaceEntry entry : settings.readRatingNamespaces)
     {
-        for(NamespaceEntry entry : settings.readRatingNamespaces)
+        if(entry.isDisabled)
+            continue;
+
+        const std::string myStr = entry.namespaceName.toStdString();
+        const char* nameSpace = myStr.data();
+        QString value;
+        switch(entry.subspace)
         {
-            if(entry.isDisabled)
-                continue;
-
-            const std::string myStr = entry.namespaceName.toStdString();
-            const char* nameSpace = myStr.data();
-            QString value = getXmpTagString(nameSpace, false);
-
-            if(!value.isEmpty())
+        case NamespaceEntry::XMP:
+            if(xmpSupported)
+                value = getXmpTagString(nameSpace, false);
+            break;
+        case NamespaceEntry::IPTC:
+            if(iptcSupported)
+                value = QString::fromUtf8(getIptcTagData(nameSpace));
+            break;
+        case NamespaceEntry::EXIV:
+            if(exivSupported)
+                getExifTagLong(nameSpace, rating);
+            break;
+        default:
+            break;
+        }
+        if(!value.isEmpty())
+        {
+            bool ok = false;
+            rating = value.toLong(&ok);
+            if(!ok)
             {
-                bool ok = false;
-                int rating = value.toInt(&ok);
+                return -1;
+            }
 
-                int index = entry.convertRatio.indexOf(rating);
-                if(ok && index != -1)
+        }
+        int index = entry.convertRatio.indexOf(rating);
+
+        // Exact value was not found,but rating is in range,
+        // so we try to aproximate it
+        if(index == -1
+                && rating > entry.convertRatio.first()
+                && rating < entry.convertRatio.last())
+        {
+            for(int i = 0; i < entry.convertRatio.size(); i++)
+            {
+                if(rating > entry.convertRatio.at(i))
                 {
-                    return index;
+                    index = i;
                 }
             }
         }
-    }
 
-    // Check Exif rating tag set by Windows Vista
-    // Note : no need to check rating in percent tags (Exif.image.0x4747) here because
-    // its appear always with rating tag value (Exif.image.0x4749).
-
-    if (hasExif())
-    {
-        long rating = -1;
-
-        if (getExifTagLong("Exif.Image.0x4746", rating))
+        if(index != -1)
         {
-            if (rating >= RatingMin && rating <= RatingMax)
-            {
-                return rating;
-            }
-        }
-    }
-
-    // digiKam 0.9.x has used IPTC Urgency to store Rating.
-    // This way is obsolete now since digiKam support XMP.
-    // But we will let the capability to import it.
-    // Iptc.Application2.Urgency <==> digiKam Rating links:
-    //
-    // digiKam     IPTC
-    // Rating      Urgency
-    //
-    // 0 star  <=>  8          // Least important
-    // 1 star  <=>  7
-    // 1 star  <==  6
-    // 2 star  <=>  5
-    // 3 star  <=>  4
-    // 4 star  <==  3
-    // 4 star  <=>  2
-    // 5 star  <=>  1          // Most important
-
-    if (hasIptc())
-    {
-        QString IptcUrgency = QString::fromUtf8(getIptcTagData("Iptc.Application2.Urgency"));
-
-        if (!IptcUrgency.isEmpty())
-        {
-            if (IptcUrgency == QLatin1String("1"))
-            {
-                return 5;
-            }
-            else if (IptcUrgency == QLatin1String("2"))
-            {
-                return 4;
-            }
-            else if (IptcUrgency == QLatin1String("3"))
-            {
-                return 4;
-            }
-            else if (IptcUrgency == QLatin1String("4"))
-            {
-                return 3;
-            }
-            else if (IptcUrgency == QLatin1String("5"))
-            {
-                return 2;
-            }
-            else if (IptcUrgency == QLatin1String("6"))
-            {
-                return 1;
-            }
-            else if (IptcUrgency == QLatin1String("7"))
-            {
-                return 1;
-            }
-            else if (IptcUrgency == QLatin1String("8"))
-            {
-                return 0;
-            }
+            return index;
         }
     }
 
@@ -852,10 +814,23 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
 
         const std::string myStr = entry.namespaceName.toStdString();
         const char* nameSpace = myStr.data();
-        if(!setXmpTagString(nameSpace, QString::number(entry.convertRatio.at(rating))))
+        switch(entry.subspace)
         {
-            qDebug() << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
-            return false;
+        case NamespaceEntry::XMP:
+            if(!setXmpTagString(nameSpace, QString::number(entry.convertRatio.at(rating))))
+            {
+                qDebug() << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
+                return false;
+            }
+            break;
+        case NamespaceEntry::EXIV:
+            if (!setExifTagLong(nameSpace, rating))
+            {
+                return false;
+            }
+        case NamespaceEntry::IPTC: // IPTC rating deprecated
+        default:
+            break;
         }
     }
 
