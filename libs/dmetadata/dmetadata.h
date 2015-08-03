@@ -101,6 +101,10 @@ public:
     bool setImageTagsPath(const QStringList& tagsPath,
                           const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
 
+    bool getACDSeeTagsPath(QStringList& tagsPath) const;
+
+    bool setACDSeeTagsPath(const QStringList& tagsPath) const;
+
     /** Get Images Face Map based on tags stored in Picassa/Metadatagroup
      * format. Use $ exiv2 -pa image to see the tag structure
      */

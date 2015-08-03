@@ -1270,49 +1270,8 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
             index++;
         }
     }
-
-    // Try to get Tags Path list from ACDSee 8 Pro categories.
-    QString xmlACDSee = getXmpTagString("Xmp.acdsee.categories", false);
-    if (!xmlACDSee.isEmpty())
-    {
-        xmlACDSee.remove(QLatin1String("</Categories>"));
-        xmlACDSee.remove(QLatin1String("<Categories>"));
-        xmlACDSee.replace(QLatin1String("/"), QLatin1String("\\"));
-
-        QStringList xmlTags = xmlACDSee.split(QLatin1String("<Category Assigned"));
-        int category        = 0;
-
-        foreach(const QString& tags, xmlTags)
-        {
-            if (!tags.isEmpty())
-            {
-                int count  = tags.count(QLatin1String("<\\Category>"));
-                int length = tags.length() - (11 * count) - 5;
-
-                if (category == 0)
-                {
-                    tagsPath << tags.mid(5, length);
-                }
-                else
-                {
-                    tagsPath.last().append(QLatin1String("/") + tags.mid(5, length));
-                }
-
-                category = category - count + 1;
-
-                if (tags.left(5) == QLatin1String("=\"1\">") && category > 0)
-                {
-                    tagsPath << tagsPath.last().section(QLatin1String("/"), 0, category - 1);
-                }
-            }
-        }
-
-        if (!tagsPath.isEmpty())
-        {
-            qCDebug(LOG_METADATA) << "Tags Path imported from ACDSee: " << tagsPath;
-            return true;
-        }
-    }
+    if(getACDSeeTagsPath(tagsPath))
+        return true;
 
     // Try to get Tags Path list from XMP keywords.
     tagsPath = getXmpKeywords();
@@ -1386,67 +1345,118 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
                 return false;
             }
         }
+        return setACDSeeTagsPath(tagsPath);
+    }
+    return false;
+}
 
-        // Converting Tags path list to ACDSee 8 Pro categories.
-        const QString category(QLatin1String("<Category Assigned=\"%1\">"));
-        QStringList splitTags;
-        QStringList xmlTags;
+bool DMetadata::getACDSeeTagsPath(QStringList &tagsPath) const
+{
+    // Try to get Tags Path list from ACDSee 8 Pro categories.
+    QString xmlACDSee = getXmpTagString("Xmp.acdsee.categories", false);
+    if (!xmlACDSee.isEmpty())
+    {
+        xmlACDSee.remove(QLatin1String("</Categories>"));
+        xmlACDSee.remove(QLatin1String("<Categories>"));
+        xmlACDSee.replace(QLatin1String("/"), QLatin1String("\\"));
 
-        foreach(const QString& tags, tagsPath)
+        QStringList xmlTags = xmlACDSee.split(QLatin1String("<Category Assigned"));
+        int category        = 0;
+
+        foreach(const QString& tags, xmlTags)
         {
-            splitTags   = tags.split(QLatin1String("/"));
-            int current = 0;
-
-            for(int index = 0; index < splitTags.size(); index++)
+            if (!tags.isEmpty())
             {
-                int tagIndex = xmlTags.indexOf(category.arg(0) + splitTags[index]);
+                int count  = tags.count(QLatin1String("<\\Category>"));
+                int length = tags.length() - (11 * count) - 5;
 
-                if (tagIndex == -1)
+                if (category == 0)
                 {
-                    tagIndex = xmlTags.indexOf(category.arg(1) + splitTags[index]);
-                }
-
-                splitTags[index].insert(0, category.arg(index == splitTags.size() - 1 ? 1 : 0));
-
-                if (tagIndex == -1)
-                {
-                    if (index == 0)
-                    {
-                        xmlTags << splitTags[index];
-                        xmlTags << QLatin1String("</Category>");
-                        current = xmlTags.size() - 1;
-                    }
-                    else
-                    {
-                        xmlTags.insert(current, splitTags[index]);
-                        xmlTags.insert(current + 1, QLatin1String("</Category>"));
-                        current++;
-                    }
+                    tagsPath << tags.mid(5, length);
                 }
                 else
                 {
-                    if (index == splitTags.size() - 1)
-                    {
-                        xmlTags[tagIndex] = splitTags[index];
-                    }
+                    tagsPath.last().append(QLatin1String("/") + tags.mid(5, length));
+                }
 
-                    current = tagIndex + 1;
+                category = category - count + 1;
+
+                if (tags.left(5) == QLatin1String("=\"1\">") && category > 0)
+                {
+                    tagsPath << tagsPath.last().section(QLatin1String("/"), 0, category - 1);
                 }
             }
         }
 
-        QString xmlACDSee = QLatin1String("<Categories>") + xmlTags.join(QLatin1String("")) + QLatin1String("</Categories>");
-        qDebug() << "xmlACDSee" << xmlACDSee;
-        removeXmpTag("Xmp.acdsee.categories");
-        if (!xmlTags.isEmpty())
+        if (!tagsPath.isEmpty())
         {
-            if (!setXmpTagString("Xmp.acdsee.categories", xmlACDSee, false))
+            qCDebug(LOG_METADATA) << "Tags Path imported from ACDSee: " << tagsPath;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool DMetadata::setACDSeeTagsPath(const QStringList &tagsPath) const
+{
+    // Converting Tags path list to ACDSee 8 Pro categories.
+    const QString category(QLatin1String("<Category Assigned=\"%1\">"));
+    QStringList splitTags;
+    QStringList xmlTags;
+
+    foreach(const QString& tags, tagsPath)
+    {
+        splitTags   = tags.split(QLatin1String("/"));
+        int current = 0;
+
+        for(int index = 0; index < splitTags.size(); index++)
+        {
+            int tagIndex = xmlTags.indexOf(category.arg(0) + splitTags[index]);
+
+            if (tagIndex == -1)
             {
-                return false;
+                tagIndex = xmlTags.indexOf(category.arg(1) + splitTags[index]);
+            }
+
+            splitTags[index].insert(0, category.arg(index == splitTags.size() - 1 ? 1 : 0));
+
+            if (tagIndex == -1)
+            {
+                if (index == 0)
+                {
+                    xmlTags << splitTags[index];
+                    xmlTags << QLatin1String("</Category>");
+                    current = xmlTags.size() - 1;
+                }
+                else
+                {
+                    xmlTags.insert(current, splitTags[index]);
+                    xmlTags.insert(current + 1, QLatin1String("</Category>"));
+                    current++;
+                }
+            }
+            else
+            {
+                if (index == splitTags.size() - 1)
+                {
+                    xmlTags[tagIndex] = splitTags[index];
+                }
+
+                current = tagIndex + 1;
             }
         }
     }
 
+    QString xmlACDSee = QLatin1String("<Categories>") + xmlTags.join(QLatin1String("")) + QLatin1String("</Categories>");
+    qDebug() << "xmlACDSee" << xmlACDSee;
+    removeXmpTag("Xmp.acdsee.categories");
+    if (!xmlTags.isEmpty())
+    {
+        if (!setXmpTagString("Xmp.acdsee.categories", xmlACDSee, false))
+        {
+            return false;
+        }
+    }
     return true;
 }
 
