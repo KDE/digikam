@@ -40,6 +40,8 @@
 
 #include <KLocalizedString>
 
+#include "dxmlguiwindow.h"
+
 
 namespace Digikam {
 
@@ -65,7 +67,6 @@ public:
     QLineEdit* alternativeName;
     QLineEdit* nameSpaceSeparator;
     QCheckBox* isPath;
-    QLineEdit* extraXml;
     QGroupBox* ratingMappings;
 
 
@@ -88,8 +89,7 @@ public:
     QLabel*    isTagLabel;
     QLabel*    separatorLabel;
 
-    QLabel*    extraXmlLabel;
-    QLabel*    tipLabel2;
+//    QLabel*    tipLabel2;
 };
 
 NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *parent)
@@ -175,26 +175,6 @@ bool NamespaceEditDlg::edit(QWidget *parent, NamespaceEntry &entry)
     qDebug() << "Name before save: " << entry.namespaceName;
     delete dlg;
     return valRet;
-}
-
-QString NamespaceEditDlg::namespaceName() const
-{
-    return d->namespaceName->text();
-}
-
-QString NamespaceEditDlg::nameSpaceSeparator() const
-{
-    return d->nameSpaceSeparator->text();
-}
-
-bool NamespaceEditDlg::isTagPath() const
-{
-    return d->isPath->isChecked();
-}
-
-QString NamespaceEditDlg::extraXml() const
-{
-    return d->extraXml->text();
 }
 
 void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
@@ -300,14 +280,11 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
 
     d->isPath = new QCheckBox(this);
 
-    d->extraXmlLabel = new QLabel(d->page);
-    d->extraXmlLabel->setText(i18n("Extra XML"));
-    d->extraXml = new QLineEdit(d->page);
 
-    d->tipLabel2 = new QLabel(d->page);
-    d->tipLabel2->setTextFormat(Qt::RichText);
-    d->tipLabel2->setWordWrap(true);
-    d->tipLabel2->setText(i18n("<p><b>Note</b>: Extra xml field can be used for namespaces with non standard wrapping.</p>"));
+//    d->tipLabel2 = new QLabel(d->page);
+//    d->tipLabel2->setTextFormat(Qt::RichText);
+//    d->tipLabel2->setWordWrap(true);
+//    d->tipLabel2->setText(i18n("<p><b>Note</b>: Extra xml field can be used for namespaces with non standard wrapping.</p>"));
 
     // ----------------------Rating Elements----------------------------------
     d->ratingMappings = new QGroupBox(this);
@@ -368,9 +345,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->gridLayout->addWidget(d->nameSpaceSeparator,  10, 2, 1, 4);
     d->gridLayout->addWidget(d->isTagLabel,           11, 0, 1, 2);
     d->gridLayout->addWidget(d->isPath,              11, 2, 1, 3);
-    d->gridLayout->addWidget(d->extraXmlLabel,          12, 0, 1, 2);
-    d->gridLayout->addWidget(d->extraXml,            12, 2, 1, 4);
-    d->gridLayout->addWidget(d->tipLabel2,              13, 0, 1, 4);
+//    d->gridLayout->addWidget(d->tipLabel2,              13, 0, 1, 4);
 
     d->gridLayout->addWidget(d->ratingMappings,      14, 0, 2, 6);
 
@@ -395,7 +370,6 @@ void NamespaceEditDlg::populateFields(NamespaceEntry &entry)
     {
         d->isPath->setChecked(false);
     }
-    d->extraXml->setText(entry.extraXml);
     d->specialOptsCombo->setCurrentIndex((int)entry.specialOpts);
 
     d->alternativeName->setText(entry.alternativeName);
@@ -425,22 +399,18 @@ void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
     case NamespaceEntry::RATING:
         d->tagTipLabel->hide();
         d->commentTipLabel->hide();
-        d->extraXml->hide();
-        d->extraXmlLabel->hide();
         d->isPath->hide();
         d->isTagLabel->hide();
-        d->tipLabel2->hide();
+//        d->tipLabel2->hide();
         d->separatorLabel->hide();
         d->nameSpaceSeparator->hide();
         break;
     case NamespaceEntry::COMMENT:
         d->tagTipLabel->hide();
         d->ratingTipLabel->hide();
-        d->extraXml->hide();
-        d->extraXmlLabel->hide();
         d->isPath->hide();
         d->isTagLabel->hide();
-        d->tipLabel2->hide();
+//        d->tipLabel2->hide();
         d->separatorLabel->hide();
         d->nameSpaceSeparator->hide();
         d->ratingMappings->hide();
@@ -457,7 +427,6 @@ void NamespaceEditDlg::saveData( NamespaceEntry &entry)
     else
         entry.tagPaths      = NamespaceEntry::TAG;
 
-    entry.extraXml    = d->extraXml->text();
     entry.alternativeName = d->alternativeName->text();
     entry.specialOpts    = (NamespaceEntry::SpecialOptions)d->specialOptsCombo->currentData().toInt();
     entry.secondNameOpts = (NamespaceEntry::SpecialOptions)d->altSpecialOptsCombo->currentData().toInt();
@@ -470,6 +439,11 @@ void NamespaceEditDlg::saveData( NamespaceEntry &entry)
     entry.convertRatio.append(d->threeStars->value());
     entry.convertRatio.append(d->fourStars->value());
     entry.convertRatio.append(d->fiveStars->value());
+}
+
+void NamespaceEditDlg::slotHelp()
+{
+    DXmlGuiWindow::openHandbook(QLatin1String("namespacesadd.anchor"), QLatin1String("digikam"));
 }
 
 }

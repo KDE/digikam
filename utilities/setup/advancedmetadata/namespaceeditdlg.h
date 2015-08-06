@@ -47,38 +47,14 @@ public:
     NamespaceEditDlg( bool create, NamespaceEntry& entry, QWidget* parent = 0);
     ~NamespaceEditDlg();
 
-//    QString      title()    const;
-
-
-//    static bool tagEdit(QWidget* const parent, TAlbum* const album, QString& title, QString& icon, QKeySequence& ks);
-//    static bool tagCreate(QWidget* const parent, TAlbum* const album, QString& title, QString& icon, QKeySequence& ks);
-
-//    /** Create a list of new Tag album using a list of tags hierarchies separated by ",".
-//        A hierarchy of tags is a string path of tags name separated by "/".
-//        If a hierarchy start by "/" or if mainRootAlbum is null, it will be created from
-//        root tag album, else it will be created from mainRootAlbum as parent album.
-//        'errMap' is Map of TAlbum path and error message if tag creation failed.
-//        Return the list of created Albums.
-//    */
     static bool create(QWidget* parent, NamespaceEntry& entry);
     static bool edit(QWidget* parent, NamespaceEntry& entry);
 
     void saveData(NamespaceEntry& entry);
 
-    QString namespaceName() const;
-    QString nameSpaceSeparator() const;
-    bool isTagPath() const;
-    QString extraXml() const;
+private Q_SLOTS:
 
-
-//    static void showtagsListCreationError(QWidget* const parent, const QMap<QString, QString>& errMap);
-
-//private Q_SLOTS:
-
-//    void slotIconChanged();
-//    void slotIconResetClicked();
-//    void slotTitleChanged(const QString& newtitle);
-//    void slotHelp();
+    void slotHelp();
 
 private:
 
