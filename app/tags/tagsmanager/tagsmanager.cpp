@@ -267,7 +267,7 @@ void TagsManager::slotAddAction()
         parent = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(d->tagMngrView->model()->index(0,0)));
     }
 
-    if (!TagEditDlg::tagCreate(kApp->activeWindow(), parent, title, icon, ks))
+    if (!TagEditDlg::tagCreate(kapp->activeWindow(), parent, title, icon, ks))
     {
         return;
     }
