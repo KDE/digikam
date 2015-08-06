@@ -139,8 +139,9 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *
     setType(entry.nsType);
 
     if(entry.isDefault)
-        makeReadOnly(entry.nsType);
-    qDebug() << "Entry type" << entry.nsType << "subspace" << entry.subspace;
+        makeReadOnly();
+
+    qDebug() << "Entry type" << entry.nsType << "subspace" << entry.subspace << entry.isDefault;
     adjustSize();
 }
 
@@ -172,7 +173,7 @@ bool NamespaceEditDlg::edit(QWidget *parent, NamespaceEntry &entry)
     qDebug() << "Name before save: " << entry.namespaceName;
     bool valRet = dlg->exec();
 
-    if (valRet == QDialog::Accepted)
+    if (valRet == QDialog::Accepted && !entry.isDefault)
     {
         dlg->saveData(entry);
     }
@@ -251,12 +252,15 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->specialOptsLabel = new QLabel(d->page);
     d->specialOptsLabel->setText(i18n("Special Options"));
     d->specialOptsCombo = new QComboBox(d->page);
+
     d->specialOptsCombo->addItem(QLatin1String("NO_OPTS"), (int)NamespaceEntry::NO_OPTS);
     d->specialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
     d->specialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANGLIST"), NamespaceEntry::COMMENT_ATLLANGLIST);
     d->specialOptsCombo->addItem(QLatin1String("COMMENT_XMP"), NamespaceEntry::COMMENT_XMP);
+    d->specialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"), NamespaceEntry::COMMENT_JPEG);
     d->specialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
     d->specialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
+    d->specialOptsCombo->addItem(QLatin1String("TAG_ACDSEE"), NamespaceEntry::TAG_ACDSEE);
 
     d->alternativeNameLabel = new QLabel(d->page);
     d->alternativeNameLabel->setText(i18n("Alternative name"));
@@ -264,13 +268,16 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
 
     d->altspecialOptsLabel = new QLabel(d->page);
     d->altspecialOptsLabel->setText(i18n("Alternative special options"));
+
     d->altSpecialOptsCombo = new QComboBox(d->page);
     d->altSpecialOptsCombo->addItem(QLatin1String("NO_OPTS"), (int)NamespaceEntry::NO_OPTS);
     d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
     d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANGLIST"), NamespaceEntry::COMMENT_ATLLANGLIST);
     d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_XMP"), NamespaceEntry::COMMENT_XMP);
+    d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"), NamespaceEntry::COMMENT_JPEG);
     d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
     d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
+    d->altSpecialOptsCombo->addItem(QLatin1String("TAG_ACDSEE"), NamespaceEntry::TAG_ACDSEE);
     // --------------------------------------------------------
 
     d->separatorLabel = new QLabel(d->page);
@@ -353,7 +360,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
 
 
     d->gridLayout->addWidget(d->ratingMappings,      14, 0, 2, 6);
-    d->gridLayout->addWidget(d->tipLabel2,              15, 0, 1, 4);
+    d->gridLayout->addWidget(d->tipLabel2,              15, 0, 1, 6);
 
     d->gridLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     d->gridLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -401,6 +408,9 @@ void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
         d->ratingTipLabel->hide();
         d->commentTipLabel->hide();
         d->ratingMappings->hide();
+        // disable IPTC and EXIV for tags
+        d->subspaceCombo->setItemData(0, 0, Qt::UserRole -1);
+        d->subspaceCombo->setItemData(1, 0, Qt::UserRole -1);
         break;
     case NamespaceEntry::RATING:
         d->tagTipLabel->hide();
@@ -422,7 +432,7 @@ void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
     }
 }
 
-void NamespaceEditDlg::makeReadOnly(NamespaceEntry::NamespaceType &nsType)
+void NamespaceEditDlg::makeReadOnly()
 {
 
     QString txt = i18n("This is a default namespace. Default namespaces can only be disabled");
@@ -453,6 +463,11 @@ void NamespaceEditDlg::makeReadOnly(NamespaceEntry::NamespaceType &nsType)
     d->fiveStars->setDisabled(true);
 }
 
+bool NamespaceEditDlg::validifyCheck()
+{
+    return true;
+}
+
 void NamespaceEditDlg::saveData( NamespaceEntry &entry)
 {
     entry.namespaceName     = d->namespaceName->text();
@@ -474,6 +489,12 @@ void NamespaceEditDlg::saveData( NamespaceEntry &entry)
     entry.convertRatio.append(d->threeStars->value());
     entry.convertRatio.append(d->fourStars->value());
     entry.convertRatio.append(d->fiveStars->value());
+}
+
+void NamespaceEditDlg::accept()
+{
+    if(validifyCheck())
+        QDialog::accept();
 }
 
 void NamespaceEditDlg::slotHelp()

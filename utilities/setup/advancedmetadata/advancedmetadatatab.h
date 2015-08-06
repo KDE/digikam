@@ -77,7 +77,7 @@ private:
                    ALTNAMEOPTS_ROLE  = Qt::UserRole+15,
 
                    ISDEFAULT_ROLE   = Qt::UserRole+16,
-                   ISDISABLED_ROLE   = Qt::UserRole+16
+                   ISDISABLED_ROLE   = Qt::UserRole+17
                     };
 
     enum ModelNumbers { READ_TAGS = 0,

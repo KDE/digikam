@@ -52,6 +52,8 @@ public:
 
     void saveData(NamespaceEntry& entry);
 
+public Q_SLOTS:
+    virtual void accept();
 private Q_SLOTS:
 
     void slotHelp();
@@ -61,7 +63,8 @@ private:
     void setupTagGui(NamespaceEntry& entry);
     void populateFields(NamespaceEntry& entry);
     void setType(NamespaceEntry::NamespaceType type);
-    void makeReadOnly(NamespaceEntry::NamespaceType &nsType);
+    void makeReadOnly();
+    bool validifyCheck();
 
     class Private;
     Private* const d;
