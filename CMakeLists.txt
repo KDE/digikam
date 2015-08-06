@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8.9)
 #
 # Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+cmake_minimum_required(VERSION 2.8.9)
 project(digikam)
 
 message(STATUS "----------------------------------------------------------------------------------")
@@ -28,11 +28,11 @@ option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message 
 
 # digiKam version
 set(DIGIKAM_MAJOR_VERSION "4")
-set(DIGIKAM_MINOR_VERSION "12")
+set(DIGIKAM_MINOR_VERSION "13")
 set(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-set(DIGIKAM_RELEASE_DATE "2015-07-26")
+set(DIGIKAM_RELEASE_DATE "2015-08-30")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
