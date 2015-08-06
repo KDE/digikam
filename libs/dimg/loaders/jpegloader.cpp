@@ -239,7 +239,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     }
 
     // read image information
-    jpeg_read_header(&cinfo, true);
+    jpeg_read_header(&cinfo, boolean(true));
 
     // read dimension (nominal values from header)
     int w = cinfo.image_width;
@@ -289,8 +289,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     if (m_loadFlags & LoadImageData)
     {
         // set decompression parameters
-        cinfo.do_fancy_upsampling = false;
-        cinfo.do_block_smoothing  = false;
+        cinfo.do_fancy_upsampling = boolean(false);
+        cinfo.do_block_smoothing  = boolean(false);
 
         // handle scaled loading
         if (scaledLoadingSize)
@@ -773,8 +773,8 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         }
     }
 
-    jpeg_set_quality(&cinfo, quality, true);
-    jpeg_start_compress(&cinfo, true);
+    jpeg_set_quality(&cinfo, quality, boolean(true));
+    jpeg_start_compress(&cinfo, boolean(true));
 
     qCDebug(LOG_DIMG_JPEG) << "Using LibJPEG quality compression value: " << quality;
 

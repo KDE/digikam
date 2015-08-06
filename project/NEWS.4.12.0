@@ -1,0 +1,103 @@
+*****************************************************************************************************
+digiKam 4.12.0 - Release date: 2015-07-26
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 349302 - Copy path to clipboard.
+002 ==> 339008 - digiKam crashed when opening import window.
+003 ==> 349280 - Crash when importing photos via MTP.
+004 ==> 330943 - New lens not detected.
+005 ==> 285521 - Search by time of day [patch].
+006 ==> 269682 - digiKam crashes when selecting lens auto correction (ResizeEvent relevant).
+007 ==> 317689 - Crash on selecting perspective tool (ResizeEvent relevant).
+008 ==> 320382 - Unable to crop due to image corruption into canvas with not X11 based computers (ResizeEvent relevant).
+009 ==> 340389 - digiKam crashes while editing pictures for color balancing on OSX.
+010 ==> 294793 - Refocus filter crashes with 16bit images.
+011 ==> 337324 - digiKam crashes when opening the import view via Import "Add Images...".
+012 ==> 341356 - Not getting the new Versions of digiKam.
+013 ==> 342625 - Can't install digikam because py27-numpy refuses to install.
+014 ==> 326580 - digiKam 3.5 corrupts JPG, TiFF, PNG images.
+015 ==> 349155 - digiKam does not work properly on OSX Yosemite.
+016 ==> 347289 - digiKam crashes while beginning correcting perspective.
+017 ==> 343948 - Crashes as soon as i try to import from USB3 attached flash drive with images on.
+018 ==> 337537 - Crash on Import.
+019 ==> 321899 - Crash during large import.
+020 ==> 293671 - digiKam freezes on / after Import.
+021 ==> 338685 - Program crashed while trying to import files from external USB HDD drive.
+022 ==> 340990 - Crash after clicking importing from sd card.
+023 ==> 345990 - 4.9.0 import from external card reader crashe.
+024 ==> 339615 - Crashed after selecting Import (sd card reader).
+025 ==> 277242 - MYSQL : using different databases for images metadata and thumbnail cache is broken.
+026 ==> 320107 - Flip/Mirror operation doesn't flip/mirror the entirety of the picture (there is a strip left unmirrored) [patch].
+027 ==> 222462 - Crashed unexpectedly when using refocus tool.
+028 ==> 319730 - Local contrast crashes digikam when used for second time.
+029 ==> 312476 - Crash while playing with liquid rescale.
+030 ==> 209398 - Crashes with SIGABRT upon free rotation of large image (55 MPixel) in image editor.
+031 ==> 342313 - SQLITE : detected locked database file. There is an active transaction. Waited but giving up now.
+032 ==> 334992 - Select color space -> other -> crash.
+033 ==> 326133 - Crash during reread metadata from image.
+034 ==> 316126 - digiKam crashed when choosing dlna export.
+035 ==> 268356 - 0-pointer access if mysql-db is not working correctly.
+036 ==> 257119 - digiKam crashes when i update fingerprints database.
+037 ==> 348508 - Typing into "Enter Tag Here" crashes digikam 100% of the time.
+038 ==> 349528 - After viewing only a handful of photos, digikam crashes.
+039 ==> 314721 - Crash while starting.
+040 ==> 313329 - Failed to start digiKam.
+041 ==> 282047 - No open digikam.
+042 ==> 276999 - Crash on saving changing EXIF settings.
+043 ==> 298639 - digiKam crash when clicking on "next photo" button on lower right corner.
+044 ==> 330106 - digikam crashes when changing database location.
+045 ==> 288584 - Crash on exit.
+046 ==> 338104 - digiKam crash when changing parameters for "detect and recognize faces".
+047 ==> 204482 - SCAN : Failed to open database error message.
+048 ==> 331937 - poll_for_event: assertion !xcb_xlib_threads_sequence_lost fails after editing metadata of a few videos and/or after viewing a few videos.
+049 ==> 338695 - Crash when editig raw file: enhance -> restoration -> cancel.
+050 ==> 249153 - Xorg with almost 100% CPU now and then during digiKam's usage.
+051 ==> 334951 - digiKam freezes and after a while shutdown. no crash report.
+052 ==> 322115 - Crash when opening an image.
+053 ==> 267408 - digiKam new metadata template editor crash during save.
+054 ==> 238935 - Jpeg 2000 Quality setting isn't working right: Always the same quality.
+055 ==> 273290 - digiKam has crashed during import of pictures from SD card.
+056 ==> 337921 - Unable to compile due to pointer type issue in gpcamera.
+057 ==> 229779 - imported folders show not images.
+058 ==> 210742 - Kodak camera cx4300 detects but won't download locks @20% (old o.s. & digikam worked).
+059 ==> 323210 - Image History Bar Shows A Mess Of Derived Images And Identical Images That Are Neither Derived Nor Identical.
+060 ==> 245345 - digiKam crashes while importing pictures from card reader.
+061 ==> 274768 - digiKam crashed @DatabaseConfigElement::element.
+062 ==> 271677 - Renaming.
+063 ==> 225760 - started program with NFS album; scanning started; then at some point crash (wasn't paying attention).
+064 ==> 349689 - digiKam cannot display images if directory name contains UTF8 characters (as e.g. 'ü').
+065 ==> 219308 - digiKam crash when i close it, after to move 50 items.
+066 ==> 215782 - digiKam crash when setting tags.
+067 ==> 314526 - Crash at displaying preview images.
+068 ==> 233612 - The DocumentName tag is not added when importing [patch].
+069 ==> 349903 - Crash importing images on OSX.
+070 ==> 233222 - Thumbnails displayed are from incorrect images.
+071 ==> 264999 - Exif-dates not recognices OK.
+072 ==> 212848 - Crashed in slideshow while viewing.
+073 ==> 194047 - digiKam crashes while atempting to index photos.
+074 ==> 190982 - Crashes when selecting album every time.
+075 ==> 192701 - Signal SIGSEGV - Crash under Gnome.
+076 ==> 196917 - Problem with "sticky" tooltips in album view.
+077 ==> 216392 - digiKam crashed during moving of an empty folder.
+078 ==> 220549 - Clicking OK closes showfoto and digikam.
+079 ==> 235392 - digiKam crash after changing folder/album.
+080 ==> 343288 - Crash after opening multiple images in editor window.
+081 ==> 335850 - Switch to next picture takes a long time.
+082 ==> 349937 - Crash if view is switched to table view.
+083 ==> 348344 - Crash when in Image Editor I select an image area and click Enhance->in-painting.
+084 ==> 329127 - Remove Tag menu entry is enabled if a picture has no Tags [patch].
+085 ==> 220194 - Moving or copying photos crashes digiKam.
+086 ==> 192119 - Thumbnail orientation is always landscape even with portrait images.
+087 ==> 191211 - digiKam crashes and causes 'signal 6 (SIGBART)' when detecting new images.
+088 ==> 337729 - Blur parameter has no effect in Local Contrast tool.
+089 ==> 349975 - Import window freezes when selecting multiple items and scrolling.
+090 ==> 346465 - Crash after loading tools.
+091 ==> 291822 - Saving a versioned image puts it last.
+092 ==> 331989 - digiKam crashes when playing AVI-file.
+093 ==> 350239 - Unmounted network shares, external hard drives show up in the album view.
+094 ==> 338200 - Cancelling tags assigment in file metadata does not work [patch].
+095 ==> 239896 - digiKam hangs and/or crashes after adding tags.
+096 ==> 321680 - Crash / segmentation fault when trying to recognize faces.
