@@ -90,6 +90,8 @@ public:
     QLabel*    separatorLabel;
 
     QLabel*    tipLabel2;
+
+    NamespaceEntry::NamespaceType nsType;
 };
 
 NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *parent)
@@ -113,6 +115,7 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *
     }
 
     d->create           = create;
+    d->nsType           = entry.nsType;
 
     setupTagGui(entry);
 
@@ -254,13 +257,19 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->specialOptsCombo = new QComboBox(d->page);
 
     d->specialOptsCombo->addItem(QLatin1String("NO_OPTS"), (int)NamespaceEntry::NO_OPTS);
-    d->specialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
-    d->specialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANGLIST"), NamespaceEntry::COMMENT_ATLLANGLIST);
-    d->specialOptsCombo->addItem(QLatin1String("COMMENT_XMP"), NamespaceEntry::COMMENT_XMP);
-    d->specialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"), NamespaceEntry::COMMENT_JPEG);
-    d->specialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
-    d->specialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
-    d->specialOptsCombo->addItem(QLatin1String("TAG_ACDSEE"), NamespaceEntry::TAG_ACDSEE);
+    if(entry.nsType == NamespaceEntry::COMMENT)
+    {
+        d->specialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
+        d->specialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANGLIST"), NamespaceEntry::COMMENT_ATLLANGLIST);
+        d->specialOptsCombo->addItem(QLatin1String("COMMENT_XMP"), NamespaceEntry::COMMENT_XMP);
+        d->specialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"), NamespaceEntry::COMMENT_JPEG);
+    }
+    if(entry.nsType == NamespaceEntry::TAGS)
+    {
+        d->specialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
+        d->specialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
+        d->specialOptsCombo->addItem(QLatin1String("TAG_ACDSEE"), NamespaceEntry::TAG_ACDSEE);
+    }
 
     d->alternativeNameLabel = new QLabel(d->page);
     d->alternativeNameLabel->setText(i18n("Alternative name"));
@@ -270,14 +279,21 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->altspecialOptsLabel->setText(i18n("Alternative special options"));
 
     d->altSpecialOptsCombo = new QComboBox(d->page);
+
     d->altSpecialOptsCombo->addItem(QLatin1String("NO_OPTS"), (int)NamespaceEntry::NO_OPTS);
-    d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
-    d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANGLIST"), NamespaceEntry::COMMENT_ATLLANGLIST);
-    d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_XMP"), NamespaceEntry::COMMENT_XMP);
-    d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"), NamespaceEntry::COMMENT_JPEG);
-    d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
-    d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
-    d->altSpecialOptsCombo->addItem(QLatin1String("TAG_ACDSEE"), NamespaceEntry::TAG_ACDSEE);
+    if(entry.nsType == NamespaceEntry::COMMENT)
+    {
+        d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
+        d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANGLIST"), NamespaceEntry::COMMENT_ATLLANGLIST);
+        d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_XMP"), NamespaceEntry::COMMENT_XMP);
+        d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"), NamespaceEntry::COMMENT_JPEG);
+    }
+    if(entry.nsType == NamespaceEntry::TAGS)
+    {
+        d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
+        d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
+        d->altSpecialOptsCombo->addItem(QLatin1String("TAG_ACDSEE"), NamespaceEntry::TAG_ACDSEE);
+    }
     // --------------------------------------------------------
 
     d->separatorLabel = new QLabel(d->page);
@@ -296,6 +312,12 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->tipLabel2 = new QLabel(d->page);
     d->tipLabel2->setTextFormat(Qt::RichText);
     d->tipLabel2->setWordWrap(true);
+    QPalette sample_palette;
+    sample_palette.setColor(QPalette::Window, QColor(255, 51, 51, 150));
+    sample_palette.setColor(QPalette::WindowText, Qt::black);
+
+    d->tipLabel2->setAutoFillBackground(true);
+    d->tipLabel2->setPalette(sample_palette);
     d->tipLabel2->hide();
 
     // ----------------------Rating Elements----------------------------------
@@ -334,33 +356,33 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     ratingMappingsLayout->addWidget(d->fourStars,           1, 4, 1, 1);
     ratingMappingsLayout->addWidget(d->fiveStars,           1, 5, 1, 1);
 
-    d->gridLayout->addWidget(d->logo,                0, 0, 1, 2);
-    d->gridLayout->addWidget(d->topLabel,            0, 1, 1, 4);
-    d->gridLayout->addWidget(d->tagTipLabel,            1, 0, 1, 6);
-    d->gridLayout->addWidget(d->ratingTipLabel,         2, 0, 1, 6);
-    d->gridLayout->addWidget(d->commentTipLabel,        3, 0, 1, 6);
+    d->gridLayout->addWidget(d->logo,                       0, 0, 1, 2);
+    d->gridLayout->addWidget(d->topLabel,                   0, 1, 1, 4);
+    d->gridLayout->addWidget(d->tagTipLabel,                1, 0, 1, 6);
+    d->gridLayout->addWidget(d->ratingTipLabel,             2, 0, 1, 6);
+    d->gridLayout->addWidget(d->commentTipLabel,            3, 0, 1, 6);
 
-    d->gridLayout->addWidget(d->subspaceLabel,          5, 0, 1, 2);
-    d->gridLayout->addWidget(d->subspaceCombo,       5, 2, 1, 4);
+    d->gridLayout->addWidget(d->subspaceLabel,              5, 0, 1, 2);
+    d->gridLayout->addWidget(d->subspaceCombo,              5, 2, 1, 4);
 
-    d->gridLayout->addWidget(d->titleLabel,             6, 0, 1, 2);
-    d->gridLayout->addWidget(d->namespaceName,       6, 2, 1, 4);
-    d->gridLayout->addWidget(d->specialOptsLabel,       7, 0, 1, 2);
-    d->gridLayout->addWidget(d->specialOptsCombo,    7, 2, 1, 4);
+    d->gridLayout->addWidget(d->titleLabel,                 6, 0, 1, 2);
+    d->gridLayout->addWidget(d->namespaceName,              6, 2, 1, 4);
+    d->gridLayout->addWidget(d->specialOptsLabel,           7, 0, 1, 2);
+    d->gridLayout->addWidget(d->specialOptsCombo,           7, 2, 1, 4);
 
-    d->gridLayout->addWidget(d->alternativeNameLabel,   8, 0, 1, 2);
-    d->gridLayout->addWidget(d->alternativeName,     8, 2, 1, 4);
-    d->gridLayout->addWidget(d->altspecialOptsLabel,    9, 0, 1, 3);
-    d->gridLayout->addWidget(d->altSpecialOptsCombo, 9, 3, 1, 3);
+    d->gridLayout->addWidget(d->alternativeNameLabel,       8, 0, 1, 2);
+    d->gridLayout->addWidget(d->alternativeName,            8, 2, 1, 4);
+    d->gridLayout->addWidget(d->altspecialOptsLabel,        9, 0, 1, 3);
+    d->gridLayout->addWidget(d->altSpecialOptsCombo,        9, 3, 1, 3);
 
-    d->gridLayout->addWidget(d->separatorLabel,         10, 0, 1, 2);
-    d->gridLayout->addWidget(d->nameSpaceSeparator,  10, 2, 1, 4);
-    d->gridLayout->addWidget(d->isTagLabel,           11, 0, 1, 2);
-    d->gridLayout->addWidget(d->isPath,              11, 2, 1, 3);
+    d->gridLayout->addWidget(d->separatorLabel,             10, 0, 1, 2);
+    d->gridLayout->addWidget(d->nameSpaceSeparator,         10, 2, 1, 4);
+    d->gridLayout->addWidget(d->isTagLabel,                 11, 0, 1, 2);
+    d->gridLayout->addWidget(d->isPath,                     11, 2, 1, 3);
 
 
-    d->gridLayout->addWidget(d->ratingMappings,      14, 0, 2, 6);
-    d->gridLayout->addWidget(d->tipLabel2,              15, 0, 1, 6);
+    d->gridLayout->addWidget(d->ratingMappings,             14, 0, 2, 6);
+    d->gridLayout->addWidget(d->tipLabel2,                  15, 0, 1, 6);
 
     d->gridLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     d->gridLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -436,12 +458,6 @@ void NamespaceEditDlg::makeReadOnly()
 {
 
     QString txt = i18n("This is a default namespace. Default namespaces can only be disabled");
-    QPalette sample_palette;
-    sample_palette.setColor(QPalette::Window, QColor(255, 51, 51, 150));
-    sample_palette.setColor(QPalette::WindowText, Qt::black);
-
-    d->tipLabel2->setAutoFillBackground(true);
-    d->tipLabel2->setPalette(sample_palette);
     d->tipLabel2->setText(txt);
     d->tipLabel2->show();
 
@@ -463,8 +479,83 @@ void NamespaceEditDlg::makeReadOnly()
     d->fiveStars->setDisabled(true);
 }
 
-bool NamespaceEditDlg::validifyCheck()
+bool NamespaceEditDlg::validifyCheck(QString & errMsg)
 {
+    bool result = true;
+
+
+    if(d->namespaceName->text().isEmpty())
+    {
+        errMsg = i18n("The namespace name is required");
+        return false;
+    }
+
+    switch(d->subspaceCombo->currentData().toInt())
+    {
+    case NamespaceEntry::EXIV:
+        if(d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
+        {
+            errMsg = i18n("EXIV namespace name must start with \"Exif\".");
+            return false;
+        }
+        if(!d->alternativeName->text().isEmpty()
+           && d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
+        {
+            errMsg = i18n("EXIV alternative namespace name must start with \"Exif\".");
+            return false;
+        }
+        break;
+    case NamespaceEntry::IPTC:
+        if(d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
+        {
+            errMsg = i18n("IPTC namespace name must start with \"Iptc\".");
+            return false;
+        }
+        if(!d->alternativeName->text().isEmpty()
+           && d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
+        {
+            errMsg = i18n("IPTC alternative namespace name must start with \"Iptc\".");
+            return false;
+        }
+        break;
+    case NamespaceEntry::XMP:
+        if(d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Xmp"))
+        {
+            errMsg = i18n("XMP namespace name must start with \"Xmp\".");
+            return false;
+        }
+        if(!d->alternativeName->text().isEmpty()
+           && d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Xmp"))
+        {
+            errMsg = i18n("XMP alternative namespace name must start with \"Xmp\".");
+            return false;
+        }
+        break;
+    default:
+        break;
+    }
+
+    switch(d->nsType)
+    {
+    case NamespaceEntry::TAGS:
+
+        if(d->nameSpaceSeparator->text().isEmpty())
+        {
+            errMsg = i18n("Tag Path separator is required");
+            return false;
+        }
+        if(d->nameSpaceSeparator->text().size() > 1)
+        {
+            errMsg = i18n("Only one character is now supported as tag path separator");
+            return false;
+        }
+        break;
+    case NamespaceEntry::RATING:
+        break;
+    case NamespaceEntry::COMMENT:
+        break;
+    }
+
     return true;
 }
 
@@ -493,8 +584,14 @@ void NamespaceEditDlg::saveData( NamespaceEntry &entry)
 
 void NamespaceEditDlg::accept()
 {
-    if(validifyCheck())
+    QString errMsg;
+    if(validifyCheck(errMsg))
         QDialog::accept();
+    else
+    {
+        d->tipLabel2->setText(errMsg);
+        d->tipLabel2->show();
+    }
 }
 
 void NamespaceEditDlg::slotHelp()

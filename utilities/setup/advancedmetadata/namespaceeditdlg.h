@@ -64,7 +64,7 @@ private:
     void populateFields(NamespaceEntry& entry);
     void setType(NamespaceEntry::NamespaceType type);
     void makeReadOnly();
-    bool validifyCheck();
+    bool validifyCheck(QString &errMsg);
 
     class Private;
     Private* const d;
