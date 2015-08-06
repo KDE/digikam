@@ -242,12 +242,10 @@ void TagsManager::slotSelectionChanged()
     {
         enableRootTagActions(false);
         d->listView->enableAddButton(false);
-        d->addAction->setEnabled(!selectedTags.isEmpty());
     }
     else
     {
         enableRootTagActions(true);
-        d->addAction->setEnabled(true);
         d->listView->enableAddButton(true);
     }
 
