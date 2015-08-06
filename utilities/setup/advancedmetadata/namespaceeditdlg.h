@@ -61,6 +61,7 @@ private:
     void setupTagGui(NamespaceEntry& entry);
     void populateFields(NamespaceEntry& entry);
     void setType(NamespaceEntry::NamespaceType type);
+    void makeReadOnly(NamespaceEntry::NamespaceType &nsType);
 
     class Private;
     Private* const d;

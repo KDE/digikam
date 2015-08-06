@@ -89,7 +89,7 @@ public:
     QLabel*    isTagLabel;
     QLabel*    separatorLabel;
 
-//    QLabel*    tipLabel2;
+    QLabel*    tipLabel2;
 };
 
 NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *parent)
@@ -116,6 +116,8 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *
 
     setupTagGui(entry);
 
+
+
     // --------------------------------------------------------
 
     connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
@@ -135,6 +137,9 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *
     }
 
     setType(entry.nsType);
+
+    if(entry.isDefault)
+        makeReadOnly(entry.nsType);
     qDebug() << "Entry type" << entry.nsType << "subspace" << entry.subspace;
     adjustSize();
 }
@@ -281,10 +286,10 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->isPath = new QCheckBox(this);
 
 
-//    d->tipLabel2 = new QLabel(d->page);
-//    d->tipLabel2->setTextFormat(Qt::RichText);
-//    d->tipLabel2->setWordWrap(true);
-//    d->tipLabel2->setText(i18n("<p><b>Note</b>: Extra xml field can be used for namespaces with non standard wrapping.</p>"));
+    d->tipLabel2 = new QLabel(d->page);
+    d->tipLabel2->setTextFormat(Qt::RichText);
+    d->tipLabel2->setWordWrap(true);
+    d->tipLabel2->hide();
 
     // ----------------------Rating Elements----------------------------------
     d->ratingMappings = new QGroupBox(this);
@@ -345,9 +350,10 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->gridLayout->addWidget(d->nameSpaceSeparator,  10, 2, 1, 4);
     d->gridLayout->addWidget(d->isTagLabel,           11, 0, 1, 2);
     d->gridLayout->addWidget(d->isPath,              11, 2, 1, 3);
-//    d->gridLayout->addWidget(d->tipLabel2,              13, 0, 1, 4);
+
 
     d->gridLayout->addWidget(d->ratingMappings,      14, 0, 2, 6);
+    d->gridLayout->addWidget(d->tipLabel2,              15, 0, 1, 4);
 
     d->gridLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     d->gridLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -401,7 +407,6 @@ void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
         d->commentTipLabel->hide();
         d->isPath->hide();
         d->isTagLabel->hide();
-//        d->tipLabel2->hide();
         d->separatorLabel->hide();
         d->nameSpaceSeparator->hide();
         break;
@@ -410,12 +415,42 @@ void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
         d->ratingTipLabel->hide();
         d->isPath->hide();
         d->isTagLabel->hide();
-//        d->tipLabel2->hide();
         d->separatorLabel->hide();
         d->nameSpaceSeparator->hide();
         d->ratingMappings->hide();
         break;
     }
+}
+
+void NamespaceEditDlg::makeReadOnly(NamespaceEntry::NamespaceType &nsType)
+{
+
+    QString txt = i18n("This is a default namespace. Default namespaces can only be disabled");
+    QPalette sample_palette;
+    sample_palette.setColor(QPalette::Window, QColor(255, 51, 51, 150));
+    sample_palette.setColor(QPalette::WindowText, Qt::black);
+
+    d->tipLabel2->setAutoFillBackground(true);
+    d->tipLabel2->setPalette(sample_palette);
+    d->tipLabel2->setText(txt);
+    d->tipLabel2->show();
+
+    d->subspaceCombo->setDisabled(true);
+    d->specialOptsCombo->setDisabled(true);
+    d->altSpecialOptsCombo->setDisabled(true);
+    d->namespaceName->setDisabled(true);
+    d->alternativeName->setDisabled(true);
+    d->nameSpaceSeparator->setDisabled(true);
+    d->isPath->setDisabled(true);
+    d->ratingMappings->setDisabled(true);
+
+
+    d->zeroStars->setDisabled(true);
+    d->oneStar->setDisabled(true);
+    d->twoStars->setDisabled(true);
+    d->threeStars->setDisabled(true);
+    d->fourStars->setDisabled(true);
+    d->fiveStars->setDisabled(true);
 }
 
 void NamespaceEditDlg::saveData( NamespaceEntry &entry)

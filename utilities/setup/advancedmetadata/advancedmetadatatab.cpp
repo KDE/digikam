@@ -110,6 +110,13 @@ void AdvancedMetadataTab::slotAddNewNamespace()
 {
     NamespaceEntry entry;
 
+    /**
+     * Setting some default parameters;
+     */
+    entry.nsType = (NamespaceEntry::NamespaceType)d->metadataType->currentIndex();
+    entry.isDefault = false;
+    entry.subspace = NamespaceEntry::XMP;
+
     if (!NamespaceEditDlg::create(qApp->activeWindow(), entry))
     {
         return;
