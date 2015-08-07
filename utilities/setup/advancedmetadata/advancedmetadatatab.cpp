@@ -167,11 +167,13 @@ void AdvancedMetadataTab::slotDisableNamespace()
     {
         elem->setForeground(QBrush(Qt::gray));
         elem->setText(i18n("(Disabled)") +elem->data(NAME_ROLE).toString());
+        d->disableButton->setText(i18n("Enable"));
     }
     else
     {
         elem->setForeground(QBrush(Qt::black));
         elem->setText(elem->data(NAME_ROLE).toString());
+        d->disableButton->setText(i18n("Disable"));
     }
     elem->setData(state, ISDISABLED_ROLE);
 }
@@ -214,6 +216,16 @@ void AdvancedMetadataTab::slotIndexChanged()
     d->namespaceView->setModel(d->models.at(getModelIndex()));
 }
 
+void AdvancedMetadataTab::slotCurrentIndexChanged()
+{
+    QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
+    QStandardItem* item = root->child(d->namespaceView->currentIndex().row());
+
+    if(item->data(ISDISABLED_ROLE).toBool())
+        d->disableButton->setText(i18n("Enable"));
+    else
+        d->disableButton->setText(i18n("Disable"));
+}
 
 void AdvancedMetadataTab::connectButtons()
 {
@@ -225,6 +237,7 @@ void AdvancedMetadataTab::connectButtons()
     connect(d->revertChanges, SIGNAL(clicked()), this, SLOT(slotRevertChanges()));
     connect(d->moveUpButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemUp()));
     connect(d->moveDownButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemDown()));
+    connect(d->namespaceView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotCurrentIndexChanged()));
 }
 
 void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<NamespaceEntry> const &container)
