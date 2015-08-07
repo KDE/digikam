@@ -63,6 +63,8 @@ public:
     QList<QStandardItemModel*> models;
     NamespaceListView* namespaceView;
     DMetadataSettingsContainer container;
+
+    bool                       changed;
 };
 AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     :QWidget(parent), d(new Private())
@@ -77,6 +79,17 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     connect(d->unifyReadWrite, SIGNAL(toggled(bool)), this, SLOT(slotUnifyChecked(bool)));
     connect(d->metadataType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged()));
     connect(d->operationType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged()));
+
+    connect(d->namespaceView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotCurrentIndexChanged()));
+
+    /**
+     * Connect all actions to slotRevertAvailable, which will enable revert to original
+     * if an add, edit, delete, or reorder was made
+     */
+    connect(d->namespaceView, SIGNAL(signalItemsChanged()), this, SLOT(slotRevertChangesAvailable()));
+
+
+    d->changed = false;
 
     if(d->unifyReadWrite->isChecked())
     {
@@ -104,6 +117,9 @@ void AdvancedMetadataTab::slotRevertChanges()
     setModelData(d->models.at(getModelIndex()),getCurrentContainer());
 
     d->namespaceView->setModel(d->models.at(getModelIndex()));
+
+    d->changed = false;
+    d->revertChanges->setEnabled(false);
 }
 
 void AdvancedMetadataTab::slotAddNewNamespace()
@@ -129,6 +145,8 @@ void AdvancedMetadataTab::slotAddNewNamespace()
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
     root->appendRow(item);
     d->container.readTagNamespaces.append(entry);
+
+    slotRevertChangesAvailable();
 }
 
 void AdvancedMetadataTab::slotEditNamespace()
@@ -150,7 +168,7 @@ void AdvancedMetadataTab::slotEditNamespace()
 
     getCurrentContainer().replace(d->namespaceView->currentIndex().row(), entry);
     setDataToItem(item, entry);
-
+    slotRevertChangesAvailable();
 }
 
 void AdvancedMetadataTab::slotDisableNamespace()
@@ -176,6 +194,8 @@ void AdvancedMetadataTab::slotDisableNamespace()
         d->disableButton->setText(i18n("Disable"));
     }
     elem->setData(state, ISDISABLED_ROLE);
+
+    slotRevertChangesAvailable();
 }
 
 void AdvancedMetadataTab::applySettings()
@@ -227,6 +247,15 @@ void AdvancedMetadataTab::slotCurrentIndexChanged()
         d->disableButton->setText(i18n("Disable"));
 }
 
+void AdvancedMetadataTab::slotRevertChangesAvailable()
+{
+    if(!d->changed)
+    {
+        d->revertChanges->setEnabled(true);
+        d->changed = true;
+    }
+}
+
 void AdvancedMetadataTab::connectButtons()
 {
     connect(d->addButton, SIGNAL(clicked()), this, SLOT(slotAddNewNamespace()));
@@ -237,7 +266,6 @@ void AdvancedMetadataTab::connectButtons()
     connect(d->revertChanges, SIGNAL(clicked()), this, SLOT(slotRevertChanges()));
     connect(d->moveUpButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemUp()));
     connect(d->moveDownButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemDown()));
-    connect(d->namespaceView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotCurrentIndexChanged()));
 }
 
 void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<NamespaceEntry> const &container)
@@ -264,8 +292,8 @@ void AdvancedMetadataTab::setUi()
 {
     QVBoxLayout* const advancedConfLayout = new QVBoxLayout(this);
 
-    QHBoxLayout* const topLayout = new QHBoxLayout(this);
-    QHBoxLayout* const bottomLayout = new QHBoxLayout(this);
+    QHBoxLayout* const topLayout = new QHBoxLayout();
+    QHBoxLayout* const bottomLayout = new QHBoxLayout();
 
     //--- Top layout ----------------
     d->metadataType = new QComboBox(this);
@@ -289,7 +317,7 @@ void AdvancedMetadataTab::setUi()
 
 
     // Buttons
-    QVBoxLayout* buttonsLayout = new QVBoxLayout(this);
+    QVBoxLayout* buttonsLayout = new QVBoxLayout();
     buttonsLayout->setAlignment(Qt::AlignTop);
     d->addButton = new QPushButton(i18n("Add"));
     d->editButton = new QPushButton(i18n("Edit"));
@@ -299,6 +327,9 @@ void AdvancedMetadataTab::setUi()
     d->moveUpButton = new QPushButton(i18n("Move Up"));
     d->moveDownButton = new QPushButton(i18n("Move Down"));
     d->revertChanges = new QPushButton(i18n("Revert Changes"));
+
+    // Revert changes is disabled, until a change is made
+    d->revertChanges->setEnabled(false);
     d->resetButton = new QPushButton(i18n("Reset to Default"));
 
 
@@ -311,7 +342,7 @@ void AdvancedMetadataTab::setUi()
     buttonsLayout->addWidget(d->revertChanges);
     buttonsLayout->addWidget(d->resetButton);
 
-    QVBoxLayout* vbox = new QVBoxLayout(this);
+    QVBoxLayout* vbox = new QVBoxLayout();
     vbox->addWidget(d->namespaceView);
 
     bottomLayout->addLayout(vbox);
@@ -320,7 +351,6 @@ void AdvancedMetadataTab::setUi()
     advancedConfLayout->addLayout(topLayout);
     advancedConfLayout->addLayout(bottomLayout);
 
-    this->setLayout(advancedConfLayout);
 }
 
 void AdvancedMetadataTab::setDataToItem(QStandardItem *item, NamespaceEntry &entry)

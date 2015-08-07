@@ -58,7 +58,8 @@ protected:
 //     *                           to handle custom context menu
 //     */
 //    void contextMenuEvent(QContextMenuEvent* event);
-
+Q_SIGNALS:
+    void signalItemsChanged();
 
 public Q_SLOTS:
 

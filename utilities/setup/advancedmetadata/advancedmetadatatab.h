@@ -51,6 +51,7 @@ private Q_SLOTS:
     void slotUnifyChecked(bool value);
     void slotIndexChanged();
     void slotCurrentIndexChanged();
+    void slotRevertChangesAvailable();
 
 private:
 

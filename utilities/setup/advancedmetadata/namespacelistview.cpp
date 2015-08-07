@@ -70,6 +70,7 @@ QModelIndexList NamespaceListView::mySelectedIndexes()
 void NamespaceListView::dropEvent(QDropEvent *e)
 {
     QListView::dropEvent(e);
+    emit signalItemsChanged();
 }
 
 QModelIndex NamespaceListView::indexVisuallyAt(const QPoint& p)
@@ -131,6 +132,7 @@ void NamespaceListView::slotDeleteSelected()
         QStandardItem* root = model->invisibleRootItem();
         root->removeRow(index.row());
     }
+    emit signalItemsChanged();
 }
 
 void NamespaceListView::slotMoveItemUp()
@@ -162,6 +164,8 @@ void NamespaceListView::slotMoveItemUp()
     root->insertRow(savedRow-1,newCopy);
 
     this->setCurrentIndex(model->index(index.row()-1, index.column(), index.parent()));
+
+    emit signalItemsChanged();
 }
 
 void NamespaceListView::slotMoveItemDown()
@@ -194,6 +198,8 @@ void NamespaceListView::slotMoveItemDown()
     root->insertRow(savedRow+1,newCopy);
 
     this->setCurrentIndex(model->index(index.row()+1, index.column(), index.parent()));
+
+    emit signalItemsChanged();
 }
 
 } // namespace Digikam
