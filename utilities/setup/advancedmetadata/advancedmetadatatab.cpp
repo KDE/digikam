@@ -319,18 +319,29 @@ void AdvancedMetadataTab::setUi()
     // Buttons
     QVBoxLayout* buttonsLayout = new QVBoxLayout();
     buttonsLayout->setAlignment(Qt::AlignTop);
-    d->addButton = new QPushButton(i18n("Add"));
-    d->editButton = new QPushButton(i18n("Edit"));
-    d->disableButton = new QPushButton(i18n("Disable"));
-    d->deleteButton = new QPushButton(i18n("Delete"));
+    d->addButton = new QPushButton(QIcon::fromTheme(QLatin1String("list-add")),
+                                   i18n("Add"));
+    d->editButton = new QPushButton(QIcon::fromTheme(QLatin1String("document-edit")),
+                                                     i18n("Edit"));
+    d->disableButton = new QPushButton(QIcon::fromTheme(QLatin1String("list-remove")),
+                                       i18n("Disable"));
 
-    d->moveUpButton = new QPushButton(i18n("Move Up"));
-    d->moveDownButton = new QPushButton(i18n("Move Down"));
-    d->revertChanges = new QPushButton(i18n("Revert Changes"));
+    d->deleteButton = new QPushButton(QIcon::fromTheme(QLatin1String("window-close")),
+                                      i18n("Delete"));
+
+    d->moveUpButton = new QPushButton(QIcon::fromTheme(QLatin1String("arrow-up")),
+                                      i18n("Move Up"));
+
+    d->moveDownButton = new QPushButton(QIcon::fromTheme(QLatin1String("arrow-down")),
+                                        i18n("Move Down"));
+
+    d->revertChanges = new QPushButton(QIcon::fromTheme(QLatin1String("edit-undo")),
+                                       i18n("Revert Changes"));
 
     // Revert changes is disabled, until a change is made
     d->revertChanges->setEnabled(false);
-    d->resetButton = new QPushButton(i18n("Reset to Default"));
+    d->resetButton = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")),
+                                     i18n("Reset to Default"));
 
 
     buttonsLayout->addWidget(d->addButton);
