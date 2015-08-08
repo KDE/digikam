@@ -33,6 +33,10 @@
 #include <QPersistentModelIndex>
 #include <QAbstractItemDelegate>
 
+// Local includes
+
+#include "dwitemdelegate_p.h"
+
 class QObject;
 class QPainter;
 class QStyleOption;
@@ -43,7 +47,6 @@ class QItemSelection;
 namespace Digikam
 {
 
-class DWItemDelegatePrivate;
 class DWItemDelegatePool;
 
 /**
@@ -143,7 +146,15 @@ private:
 
     friend class DWItemDelegatePool;
     friend class DWItemDelegateEventListener;
-    DWItemDelegatePrivate *const d;
+    DWItemDelegatePrivate* const d;
+    
+    Q_PRIVATE_SLOT(d, void slotDWRowsInserted(const QModelIndex&,int,int))
+    Q_PRIVATE_SLOT(d, void slotDWRowsAboutToBeRemoved(const QModelIndex&,int,int))
+    Q_PRIVATE_SLOT(d, void slotDWRowsRemoved(const QModelIndex&,int,int))
+    Q_PRIVATE_SLOT(d, void slotDWDataChanged(const QModelIndex&,const QModelIndex&))
+    Q_PRIVATE_SLOT(d, void slotDWLayoutChanged())
+    Q_PRIVATE_SLOT(d, void slotDWModelReset())
+    Q_PRIVATE_SLOT(d, void slotDWSelectionChanged(const QItemSelection&,const QItemSelection&))
 };
 
 } // namespace Digikam
