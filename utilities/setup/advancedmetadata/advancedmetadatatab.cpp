@@ -38,6 +38,7 @@
 #include "dmetadatasettings.h"
 #include "namespacelistview.h"
 #include "namespaceeditdlg.h"
+#include "dmessagebox.h"
 
 namespace Digikam
 {
@@ -101,6 +102,17 @@ AdvancedMetadataTab::~AdvancedMetadataTab()
 
 void AdvancedMetadataTab::slotResetToDefault()
 {
+    const int result = DMessageBox::showContinueCancel(QMessageBox::Warning,
+                                                       this,
+                                                       i18n("Warning"),
+                                                       i18n("This option will reset configuration to default\n"
+                                                            "All your changes will be lost.\n "
+                                                            "Do you want to continue?"));
+
+    if (result != QMessageBox::Yes)
+    {
+        return;
+    }
     d->container.defaultValues();
     d->models.at(getModelIndex())->clear();
     setModelData(d->models.at(getModelIndex()),getCurrentContainer());
