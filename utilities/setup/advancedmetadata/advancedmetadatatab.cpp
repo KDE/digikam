@@ -54,7 +54,6 @@ public:
     QPushButton* addButton;
     QPushButton* editButton;
     QPushButton* deleteButton;
-    QPushButton* disableButton;
     QPushButton* moveUpButton;
     QPushButton* moveDownButton;
     QPushButton* revertChanges;
@@ -79,8 +78,6 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
     connect(d->unifyReadWrite, SIGNAL(toggled(bool)), this, SLOT(slotUnifyChecked(bool)));
     connect(d->metadataType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged()));
     connect(d->operationType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged()));
-
-    connect(d->namespaceView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotCurrentIndexChanged()));
 
     /**
      * Connect all actions to slotRevertAvailable, which will enable revert to original
@@ -171,33 +168,6 @@ void AdvancedMetadataTab::slotEditNamespace()
     slotRevertChangesAvailable();
 }
 
-void AdvancedMetadataTab::slotDisableNamespace()
-{
-//    QStandardItem* elem = static_cast<QStandardItem*>(d->namespaceView->currentIndex().internalPointer());
-
-    QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
-
-    QStandardItem* elem = root->child(d->namespaceView->currentIndex().row());
-
-    bool state = !elem->data(ISDISABLED_ROLE).toBool();
-
-    if(state)
-    {
-        elem->setForeground(QBrush(Qt::gray));
-        elem->setText(i18n("(Disabled)") +elem->data(NAME_ROLE).toString());
-        d->disableButton->setText(i18n("Enable"));
-    }
-    else
-    {
-        elem->setForeground(QBrush(Qt::black));
-        elem->setText(elem->data(NAME_ROLE).toString());
-        d->disableButton->setText(i18n("Disable"));
-    }
-    elem->setData(state, ISDISABLED_ROLE);
-
-    slotRevertChangesAvailable();
-}
-
 void AdvancedMetadataTab::applySettings()
 {
     d->container.readTagNamespaces.clear();
@@ -236,17 +206,6 @@ void AdvancedMetadataTab::slotIndexChanged()
     d->namespaceView->setModel(d->models.at(getModelIndex()));
 }
 
-void AdvancedMetadataTab::slotCurrentIndexChanged()
-{
-    QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
-    QStandardItem* item = root->child(d->namespaceView->currentIndex().row());
-
-    if(item->data(ISDISABLED_ROLE).toBool())
-        d->disableButton->setText(i18n("Enable"));
-    else
-        d->disableButton->setText(i18n("Disable"));
-}
-
 void AdvancedMetadataTab::slotRevertChangesAvailable()
 {
     if(!d->changed)
@@ -261,7 +220,6 @@ void AdvancedMetadataTab::connectButtons()
     connect(d->addButton, SIGNAL(clicked()), this, SLOT(slotAddNewNamespace()));
     connect(d->editButton, SIGNAL(clicked()), this, SLOT(slotEditNamespace()));
     connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
-    connect(d->disableButton, SIGNAL(clicked()), this, SLOT(slotDisableNamespace()));
     connect(d->resetButton, SIGNAL(clicked()), this, SLOT(slotResetToDefault()));
     connect(d->revertChanges, SIGNAL(clicked()), this, SLOT(slotRevertChanges()));
     connect(d->moveUpButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemUp()));
@@ -278,14 +236,9 @@ void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<Namespac
 
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         setDataToItem(item, e);
-        if(e.isDisabled)
-        {
-            item->setForeground(QBrush(Qt::gray));
-            item->setText(i18n("(Disabled)") + e.namespaceName);
-        }
         root->appendRow(item);
     }
-
+    connect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(slotRevertChangesAvailable()));
 }
 
 void AdvancedMetadataTab::setUi()
@@ -323,8 +276,6 @@ void AdvancedMetadataTab::setUi()
                                    i18n("Add"));
     d->editButton = new QPushButton(QIcon::fromTheme(QLatin1String("document-edit")),
                                                      i18n("Edit"));
-    d->disableButton = new QPushButton(QIcon::fromTheme(QLatin1String("list-remove")),
-                                       i18n("Disable"));
 
     d->deleteButton = new QPushButton(QIcon::fromTheme(QLatin1String("window-close")),
                                       i18n("Delete"));
@@ -346,7 +297,6 @@ void AdvancedMetadataTab::setUi()
 
     buttonsLayout->addWidget(d->addButton);
     buttonsLayout->addWidget(d->editButton);
-    buttonsLayout->addWidget(d->disableButton);
     buttonsLayout->addWidget(d->deleteButton);
     buttonsLayout->addWidget(d->moveUpButton);
     buttonsLayout->addWidget(d->moveDownButton);
@@ -386,7 +336,10 @@ void AdvancedMetadataTab::setDataToItem(QStandardItem *item, NamespaceEntry &ent
     item->setData((int)entry.subspace, SUBSPACE_ROLE);
     item->setData((int)entry.secondNameOpts, ALTNAMEOPTS_ROLE);
     item->setData(entry.isDefault, ISDEFAULT_ROLE);
-    item->setData(entry.isDisabled, ISDISABLED_ROLE);
+
+    item->setCheckable(true);
+    if(!entry.isDisabled)
+        item->setCheckState(Qt::Checked);
 }
 
 int AdvancedMetadataTab::getModelIndex()
@@ -474,7 +427,12 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
         ns.secondNameOpts       = (NamespaceEntry::SpecialOptions)current->data(ALTNAMEOPTS_ROLE).toInt();
         ns.index                = i;
         ns.isDefault            = current->data(ISDEFAULT_ROLE).toBool();
-        ns.isDisabled           = current->data(ISDISABLED_ROLE).toBool();
+
+        if(current->checkState() == Qt::Checked)
+            ns.isDisabled = false;
+        else
+            ns.isDisabled = true;
+
         qDebug() << "saving+++++" << ns.namespaceName << " " << ns.index << " " << ns.specialOpts;
         container.append(ns);
     }

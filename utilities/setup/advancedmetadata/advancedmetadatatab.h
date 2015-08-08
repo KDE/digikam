@@ -44,13 +44,11 @@ public Q_SLOTS:
     void slotRevertChanges();
     void slotAddNewNamespace();
     void slotEditNamespace();
-    void slotDisableNamespace();
 
 
 private Q_SLOTS:
     void slotUnifyChecked(bool value);
     void slotIndexChanged();
-    void slotCurrentIndexChanged();
     void slotRevertChangesAvailable();
 
 private:
@@ -79,7 +77,6 @@ private:
                    ALTNAMEOPTS_ROLE  = Qt::UserRole+15,
 
                    ISDEFAULT_ROLE   = Qt::UserRole+16,
-                   ISDISABLED_ROLE   = Qt::UserRole+17
                     };
 
     enum ModelNumbers { READ_TAGS = 0,
