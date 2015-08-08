@@ -33,6 +33,7 @@
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QDebug>
+#include <QLabel>
 
 #include "klocale.h"
 #include "dmetadatasettings.h"
@@ -260,6 +261,14 @@ void AdvancedMetadataTab::setUi()
     QHBoxLayout* const topLayout = new QHBoxLayout();
     QHBoxLayout* const bottomLayout = new QHBoxLayout();
 
+    QLabel* const tipLabel = new QLabel(this);
+    tipLabel->setTextFormat(Qt::RichText);
+    tipLabel->setWordWrap(true);
+    tipLabel->setText(i18n("Advanced configuration menu allow you to manage metadata namespaces"
+                           " used by digiKam to store and retrieve tags, rating and comments.<br>"
+                           "<b>Note: </b>Order is important when reading metadata"
+                          ));
+
     //--- Top layout ----------------
     d->metadataType = new QComboBox(this);
 
@@ -321,6 +330,7 @@ void AdvancedMetadataTab::setUi()
     bottomLayout->addLayout(vbox);
     bottomLayout->addLayout(buttonsLayout);
 
+    advancedConfLayout->addWidget(tipLabel);
     advancedConfLayout->addLayout(topLayout);
     advancedConfLayout->addLayout(bottomLayout);
 
@@ -451,5 +461,3 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
 }
 
 }
-
-
