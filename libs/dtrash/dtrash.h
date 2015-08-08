@@ -24,8 +24,22 @@
 #ifndef DTRASH_H
 #define DTRASH_H
 
+// Qt includes
+
 #include <QObject>
 #include <QFileInfo>
+
+// Local includes
+
+#include "imageinfo.h"
+
+// Macros
+#define TRASH_FOLDER               QLatin1String(".dtrash")
+#define FILES_FOLDER               QLatin1String("files")
+#define INFO_FOLDER                QLatin1String("info")
+#define INFO_FILE_EXTENSION        QLatin1String(".dtrashinfo")
+#define PATH_JSON_KEY              QLatin1String("path")
+#define DELETIONTIMESTAMP_JSON_KEY QLatin1String("deletiontimestamp")
 
 namespace Digikam
 {

@@ -338,6 +338,8 @@ public:
     PAlbum(int albumRoot, const QString& label);
     /// Constructor for normal albums
     PAlbum(int albumRoot, const QString& parentPath, const QString& title, int id);
+    /// Constrctor for Trash album
+    PAlbum(const QString& parentPath, int albumRoot);
     ~PAlbum();
 
     void setCaption(const QString& caption);
@@ -358,6 +360,10 @@ public:
     bool        isAlbumRoot()   const;
 
 private:
+
+    /// A special integer for Trash virtual folders Ids;
+    /// That gets decremented not incremented
+    static int m_uniqueTrashId;
 
     bool       m_isAlbumRootAlbum;
 

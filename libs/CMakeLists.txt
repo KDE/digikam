@@ -1,6 +1,7 @@
 add_subdirectory(dimg)
 add_subdirectory(dmetadata)
 add_subdirectory(database)
+add_subdirectory(dtrash)
 add_subdirectory(iojobs)
 add_subdirectory(jpegutils)
 add_subdirectory(pgfutils)

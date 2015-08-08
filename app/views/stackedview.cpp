@@ -9,6 +9,7 @@
  *
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +51,7 @@
 #include "welcomepageview.h"
 #include "thumbbardock.h"
 #include "tableview.h"
+#include "trashview.h"
 
 #ifdef HAVE_VIDEOPLAYER
 #include "mediaplayerview.h"
@@ -101,6 +103,7 @@ public:
     ThumbBarDock*      thumbBarDock;
     WelcomePageView*   welcomePageView;
     TableView*         tableView;
+    TrashView*         trashView;
 
 #ifdef HAVE_VIDEOPLAYER
     MediaPlayerView*   mediaPlayerView;
@@ -128,6 +131,7 @@ StackedView::StackedView(QWidget* const parent)
                                        d->imageIconView->imageFilterModel(),
                                        this);
     d->tableView->setObjectName(QLatin1String("mainwindow_tableview"));
+    d->trashView = new TrashView(this);
 
 #ifdef HAVE_KGEOMAP
     d->mapWidgetView   = new MapWidgetView(d->imageIconView->getSelectionModel(),
@@ -145,6 +149,7 @@ StackedView::StackedView(QWidget* const parent)
     insertWidget(PreviewImageMode, d->imagePreviewView);
     insertWidget(WelcomePageMode,  d->welcomePageView);
     insertWidget(TableViewMode,    d->tableView);
+    insertWidget(TrashViewMode,    d->trashView);
 
 #ifdef HAVE_KGEOMAP
     insertWidget(MapWidgetMode,    d->mapWidgetView);

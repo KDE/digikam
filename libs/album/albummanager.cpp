@@ -1213,9 +1213,15 @@ void AlbumManager::addAlbumRoot(const CollectionLocation& location)
         QString label = d->labelForAlbumRootAlbum(location);
         album         = new PAlbum(location.id(), label);
 
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Added root album called: " << album->title();
+
         // insert album root created into hash
         d->albumRootAlbumHash.insert(location.id(), album);
     }
+
+    // Inserting virtual Trash PAlbum for AlbumsRootAlbum using special constructor
+    PAlbum* trashAlbum = new PAlbum(album->title(), album->id());
+    insertPAlbum(trashAlbum, album);
 }
 
 void AlbumManager::removeAlbumRoot(const CollectionLocation& location)
@@ -1493,8 +1499,6 @@ void AlbumManager::getAlbumItemsCount()
         d->albumListJob->cancel();
         d->albumListJob = 0;
     }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "LISTING ALL";
 
     AlbumsDBJobInfo jInfo;
     jInfo.setFoldersJob();

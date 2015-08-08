@@ -82,4 +82,13 @@ IOJobsThread* IOJobsManager::startRenameFile(const QUrl& srcToRename, const QUrl
     return thread;
 }
 
+IOJobsThread *IOJobsManager::startDTrashItemsListingForCollection(const QString& collectionPath)
+{
+    IOJobsThread* const thread = new IOJobsThread(this);
+    thread->listDTrashItems(collectionPath);
+    thread->start();
+
+    return thread;
+}
+
 } // namespace Digikam

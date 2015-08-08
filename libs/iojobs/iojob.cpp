@@ -276,4 +276,33 @@ void RenameFileJob::run()
     emit signalDone();
 }
 
+// ----------------------------------------------
+
+DTrashItemsListingJob::DTrashItemsListingJob(const QString &collectionPath)
+{
+    m_collectionPath = collectionPath;
+}
+
+void DTrashItemsListingJob::run()
+{
+    ImageInfoList imgsInfoList;
+
+    QString collectionTrashFilesPath = m_collectionPath + QDir::separator() + TRASH_FOLDER +
+                                       QDir::separator() + FILES_FOLDER;
+
+    qCDebug(DIGIKAM_IOJOB_LOG) << "collectionTrashFilesPath: " << collectionTrashFilesPath;
+
+    QDir filesDir(collectionTrashFilesPath);
+
+    foreach (const QFileInfo& fileInfo, filesDir.entryInfoList(QDir::Files))
+    {
+        qCDebug(DIGIKAM_IOJOB_LOG) << "file in trash: " << fileInfo.filePath();
+        qCDebug(DIGIKAM_IOJOB_LOG) << "image info produced: " << ImageInfo::fromLocalFile(fileInfo.filePath());
+        imgsInfoList << ImageInfo::fromLocalFile(fileInfo.filePath());
+    }
+
+    emit trashImagesInfoList(imgsInfoList);
+    emit signalDone();
+}
+
 } // namespace Digikam

@@ -80,6 +80,13 @@ public:
      */
     IOJobsThread* startRenameFile(const QUrl& srcToRename, const QUrl& newUrl);
 
+    /**
+     * @brief Starts a thread for listing items inside trash for specific collection
+     * @param collectionPath: the path for collection to list items for it's trash
+     * @return IOJobsThread pointer for signal/slot connection
+     */
+    IOJobsThread* startDTrashItemsListingForCollection(const QString& collectionPath);
+
 private:
 
     friend class IOJobsManagerCreator;

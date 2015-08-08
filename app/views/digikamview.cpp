@@ -1244,6 +1244,10 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
     {
         d->stackedview->setViewMode(StackedView::WelcomePageMode);
     }
+    else if (album->type() == Album::PHYSICAL && album->id() < -1) // Trash Album
+    {
+        d->stackedview->setViewMode(StackedView::TrashViewMode);
+    }
     else
     {
         switch (viewMode())
@@ -1251,6 +1255,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
             case StackedView::PreviewImageMode:
             case StackedView::MediaPlayerMode:
             case StackedView::WelcomePageMode:
+            case StackedView::TrashViewMode:
                 slotTogglePreviewMode(ImageInfo());
                 break;
             default:

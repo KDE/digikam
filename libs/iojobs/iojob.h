@@ -32,6 +32,11 @@
 
 #include <KDCRAW/RActionJob>
 
+// Local includes
+
+#include "imageinfo.h"
+#include "dtrash.h"
+
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -116,6 +121,29 @@ private:
 
     QUrl m_srcToRename;
     QUrl m_newUrl;
+};
+
+// ----------------------------------------------
+
+class DTrashItemsListingJob : public IOJob
+{
+    Q_OBJECT
+
+public:
+
+    DTrashItemsListingJob(const QString& collectionPath);
+
+Q_SIGNALS:
+
+    void trashImagesInfoList(const ImageInfoList& list);
+
+private:
+
+    void run();
+
+private:
+
+    QString m_collectionPath;
 };
 
 } // namespace Digikam

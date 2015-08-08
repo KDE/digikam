@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -329,6 +329,8 @@ void Album::setUsedByLabelsTree(bool isUsed)
 
 // ------------------------------------------------------------------------------
 
+int PAlbum::m_uniqueTrashId = -2;
+
 PAlbum::PAlbum(const QString& title)
     : Album(Album::PHYSICAL, 0, true),
       m_iconId(0)
@@ -363,6 +365,17 @@ PAlbum::PAlbum(int albumRoot, const QString& parentPath, const QString& title, i
     m_parentPath       = parentPath + QLatin1Char('/');
     m_path             = title;
     m_date             = QDate::currentDate();
+}
+
+PAlbum::PAlbum(const QString& parentPath, int albumRoot)
+    : Album(Album::PHYSICAL, m_uniqueTrashId--, false)
+{
+    setTitle(QLatin1String("Trash"));
+
+    m_albumRootId      = albumRoot;
+    m_isAlbumRootAlbum = false;
+    m_parentPath       = parentPath + QLatin1Char('/');
+    m_path             = QLatin1String("Trash");
 }
 
 PAlbum::~PAlbum()

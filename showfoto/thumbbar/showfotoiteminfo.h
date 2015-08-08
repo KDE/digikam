@@ -53,10 +53,6 @@ public:
      */
     bool isNull() const;
 
-//    /** Return the local file system (mounted on computer) url to the file.
-//     */
-//    QUrl url()    const;
-
     /** Compare for information equality and un-equality, not including variable values.
      */
     bool operator==(const ShowfotoItemInfo& info) const;
