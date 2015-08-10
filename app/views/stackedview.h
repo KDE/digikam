@@ -37,6 +37,7 @@
 #include "digikam_export.h"
 #include "imageinfo.h"
 #include "thumbbardock.h"
+#include "trashview.h"
 
 namespace Digikam
 {
@@ -69,8 +70,9 @@ public:
         WelcomePageMode      = 2,
         TableViewMode        = 3,
         MapWidgetMode        = 4,
-        MediaPlayerMode      = 5,
-        StackedViewModeLast  = 5
+        TrashViewMode        = 5,
+        MediaPlayerMode      = 6,
+        StackedViewModeLast  = 6
     };
 
 public:
@@ -86,6 +88,7 @@ public:
     DigikamImageView*  imageIconView()    const;
     ImagePreviewView*  imagePreviewView() const;
     TableView*         tableView()        const;
+    TrashView*         trashView()        const;
 
 #ifdef HAVE_VIDEOPLAYER
     MediaPlayerView*   mediaPlayerView()  const;

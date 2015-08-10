@@ -44,6 +44,8 @@
 #include "digikamapp.h"
 #include "dbjobsmanager.h"
 #include "dbjobsthread.h"
+#include "iojobsmanager.h"
+#include "iojobsmanager.h"
 
 namespace Digikam
 {

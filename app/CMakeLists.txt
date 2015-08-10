@@ -206,6 +206,7 @@ set(libdigikamgui_SRCS
     views/welcomepageview.cpp
     views/leftsidebarwidgets.cpp
     views/digikamview.cpp
+    views/trashview.cpp
     views/stackedview.cpp
 
     ${digikamadaptor_SRCS}
@@ -272,6 +273,7 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:importuibackend_src>
             $<TARGET_OBJECTS:imagehistorywidgets_src>
             $<TARGET_OBJECTS:iojobs_src>
+            $<TARGET_OBJECTS:dtrash_src>
 )
 
 if(${KF5Kipi_FOUND})

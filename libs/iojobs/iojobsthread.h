@@ -70,6 +70,12 @@ public:
     void del(const QList<QUrl>& srcsToDelete, bool useTrash);
 
     /**
+     * @brief Starts a job for listing trash items in a collection
+     * @param collectionPath
+     */
+    void listDTrashItems(const QString& collectionPath);
+
+    /**
      * @brief Starts one job to rename a file to a new name
      * @param srcToRename: the url to be renamed
      * @param newName: the url of the renamed item
@@ -139,6 +145,7 @@ Q_SIGNALS:
 
     void finished();
     void renamed(const QUrl& oldUrl, const QUrl& newURl);
+    void collectionTrashImagesInfoList(const ImageInfoList& imgsList);
 
 private:
 

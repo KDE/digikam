@@ -260,7 +260,7 @@ QList<QUrl> KipiImageCollection::Private::imagesFromTAlbum(TAlbum* const album) 
     return urlList;
 }
 
-QUrl KipiImageCollection::path()
+QUrl KipiImageCollection::url()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
@@ -278,7 +278,7 @@ QUrl KipiImageCollection::path()
     return QUrl();
 }
 
-QUrl KipiImageCollection::uploadPath()
+QUrl KipiImageCollection::uploadUrl()
 {
     if (d->album->type() == Album::PHYSICAL)
     {

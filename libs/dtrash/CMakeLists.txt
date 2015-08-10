@@ -4,10 +4,10 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-set(libiojobs_SRCS
-    iojob.cpp
-    iojobsthread.cpp
-    iojobsmanager.cpp
+set(libdtrash_SRCS
+    dtrash.cpp
+    dtrashiteminfo.cpp
+    dtrashitemmodel.cpp
 )
 
-add_library(iojobs_src OBJECT ${libiojobs_SRCS})
+add_library(dtrash_src OBJECT ${libdtrash_SRCS})

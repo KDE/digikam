@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
@@ -24,6 +24,7 @@
 #include "dtrash.h"
 
 // Qt includes
+
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -33,16 +34,9 @@
 #include <QDateTime>
 
 // Local includes
+
 #include "digikam_debug.h"
 #include "collectionmanager.h"
-
-// Macros
-#define TRASH_FOLDER               QLatin1String(".dtrash")
-#define FILES_FOLDER               QLatin1String("files")
-#define INFO_FOLDER                QLatin1String("info")
-#define INFO_FILE_EXTENSION        QLatin1String(".dtrashinfo")
-#define PATH_JSON_KEY              QLatin1String("path")
-#define DELETIONTIMESTAMP_JSON_KEY QLatin1String("deletiontimestamp")
 
 namespace Digikam
 {

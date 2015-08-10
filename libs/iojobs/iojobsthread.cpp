@@ -110,6 +110,22 @@ void IOJobsThread::del(const QList<QUrl>& srcsToDelete, bool useTrash)
     appendJobs(collection);
 }
 
+void IOJobsThread::listDTrashItems(const QString& collectionPath)
+{
+    RJobCollection collection;
+
+    DTrashItemsListingJob* const j = new DTrashItemsListingJob(collectionPath);
+
+    connect(j, SIGNAL(trashImagesInfoList(ImageInfoList)),
+            this, SIGNAL(collectionTrashImagesInfoList(ImageInfoList)));
+
+    connect(j, SIGNAL(signalDone()),
+            this, SIGNAL(finished()));
+
+    collection.insert(j, 0);
+    appendJobs(collection);
+}
+
 void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
 {
     RJobCollection collection;
