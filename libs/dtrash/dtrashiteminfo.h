@@ -3,15 +3,16 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2015-08-07
- * Description : Trash view
+ * Date        : 2015-08-08
+ * Description : DTrash item info container
  *
  * Copyright (C) 2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
+ * either version 2, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,34 +21,35 @@
  *
  * ============================================================ */
 
-#ifndef TRASHVIEW_H
-#define TRASHVIEW_H
+#ifndef DTRASHITEMINFO_H
+#define DTRASHITEMINFO_H
 
-// Qt includes
-
-#include <QWidget>
-
-// Local includes
-
-#include "dtrashitemmodel.h"
+#include <QList>
+#include <QDateTime>
 
 namespace Digikam
 {
 
-class TrashView : public QWidget
+class DTrashItemInfo
 {
-    Q_OBJECT
 
 public:
 
-    explicit TrashView(QWidget* parent = 0);
-    DTrashItemModel* model();
+    DTrashItemInfo();
+    bool isNull() const;
 
-private:
+public:
 
-    class Private;
-    Private* const d;
+    QString   trashPath;
+    QString   collectionRelativePath;
+    QDateTime deletionTimestamp;
 };
 
+typedef QList<DTrashItemInfo> DTrashItemInfoList;
+
+//! qDebug() stream operator. Writes property @a info to the debug output in a nicely formatted way.
+QDebug operator<<(QDebug dbg, const DTrashItemInfo& info);
+
 } // namespace Digikam
-#endif // TRASHVIEW_H
+
+#endif // DTRASHITEMINFO_H

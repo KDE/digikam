@@ -57,7 +57,6 @@ public:
     Private()
     {
         jobThread               = 0;
-        trashJobThread          = 0;
         refreshTimer            = 0;
         incrementalTimer        = 0;
         recurseAlbums           = false;
@@ -68,7 +67,6 @@ public:
 
     QList<Album*>     currentAlbums;
     DBJobsThread*     jobThread;
-    IOJobsThread*     trashJobThread;
     QTimer*           refreshTimer;
     QTimer*           incrementalTimer;
 
@@ -377,21 +375,6 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     }
     else if(albums.first()->type() == Album::PHYSICAL)
     {
-        // Checking if virtual Trash folder was selected
-        if(albums.first()->title() == QLatin1String("Trash") && albums.first()->id() < -1)
-        {
-            PAlbum* const trashAlbum = dynamic_cast<PAlbum*>(albums.first());
-            QString albumsRootAlbumPath = trashAlbum->parent()->title();
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Trash album selected" << "\n"
-                                         << "Trash belongs to: " << albumsRootAlbumPath;
-
-            d->trashJobThread = IOJobsManager::instance()->startDTrashItemsListingForCollection(albumsRootAlbumPath);
-            connect(d->trashJobThread, SIGNAL(collectionTrashImagesInfoList(ImageInfoList)),
-                    this, SLOT(slotTrashImagesInfoList(ImageInfoList)));
-            return;
-        }
-
         d->extraValueJob = false;
         AlbumsDBJobInfo jobInfo;
 
@@ -506,15 +489,6 @@ void ImageAlbumModel::slotData(const QList<ImageListerRecord> &records)
 
         addImageInfos(newItemsList);
     }
-}
-
-void ImageAlbumModel::slotTrashImagesInfoList(const ImageInfoList& list)
-{
-    addImageInfos(list);
-    d->trashJobThread = 0;
-
-    finishRefresh();
-    finishIncrementalRefresh();
 }
 
 void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)

@@ -6,6 +6,8 @@
 
 set(libdtrash_SRCS
     dtrash.cpp
+    dtrashiteminfo.cpp
+    dtrashitemmodel.cpp
 )
 
 add_library(dtrash_src OBJECT ${libdtrash_SRCS})

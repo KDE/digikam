@@ -297,6 +297,12 @@ TableView* StackedView::tableView() const
 {
     return d->tableView;
 }
+
+TrashView* StackedView::trashView() const
+{
+    return d->trashView;
+}
+
 #ifdef HAVE_VIDEOPLAYER
 MediaPlayerView* StackedView::mediaPlayerView() const
 {

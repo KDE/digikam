@@ -83,8 +83,6 @@ protected Q_SLOTS:
     void slotResult();
     void slotData(const QList<ImageListerRecord> &records);
 
-    void slotTrashImagesInfoList(const ImageInfoList& list);
-
     void slotNextRefresh();
     void slotNextIncrementalRefresh();
 

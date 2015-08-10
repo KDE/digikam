@@ -3017,6 +3017,9 @@ void AlbumManager::notifyAlbumDeletion(Album* album)
 
 void AlbumManager::slotAlbumsJobResult()
 {
+    if (!d->albumListJob)
+        return;
+
     if (d->albumListJob->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list albums";
