@@ -42,6 +42,7 @@
 #include "thumbnailsize.h"
 #include "iojobsmanager.h"
 #include "iojobsthread.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -68,6 +69,7 @@ public:
     QPushButton*     restoreButton;
     QPushButton*     deleteButton;
     IOJobsThread*    itemsLoadingThread;
+    QModelIndexList  selectedIndexesToRemove;
 };
 
 TrashView::TrashView(QWidget* parent)
@@ -85,9 +87,21 @@ TrashView::TrashView(QWidget* parent)
     d->tableView->verticalHeader()->setDefaultSectionSize(ThumbnailSize::Large);
     d->tableView->verticalHeader()->hide();
     d->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    d->tableView->selectionModel()->setModel(d->model);
+
+    connect(d->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(slotSelectionChanged()));
 
     d->restoreButton = new QPushButton(i18n("Restore"));
     d->deleteButton  = new QPushButton(i18n("Delete Permanently"));
+    d->restoreButton->setEnabled(false);
+    d->deleteButton->setEnabled(false);
+
+    connect(d->restoreButton, SIGNAL(released()),
+            this, SLOT(slotRestoreSelectedItems()));
+
+    connect(d->deleteButton, SIGNAL(released()),
+            this, SLOT(slotDeleteSelectedItems()));
 
     d->mainLayout->addWidget(d->tableView);
     d->mainLayout->addWidget(d->restoreButton);
@@ -111,6 +125,52 @@ void TrashView::showTrashItemsForCollection(const QString& collectionPath)
 
     connect(d->itemsLoadingThread, SIGNAL(collectionTrashItemInfo(DTrashItemInfo)),
             d->model, SLOT(append(DTrashItemInfo)));
+}
+
+void TrashView::slotSelectionChanged()
+{
+    if (d->tableView->selectionModel()->hasSelection())
+    {
+        d->deleteButton->setEnabled(true);
+        d->restoreButton->setEnabled(true);
+    }
+    else
+    {
+        d->deleteButton->setEnabled(false);
+        d->restoreButton->setEnabled(false);
+    }
+}
+
+void TrashView::slotRestoreSelectedItems()
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Restoring selected items from collection trash";
+
+}
+
+void TrashView::slotDeleteSelectedItems()
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting selected items from collection trash";
+
+    d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
+    DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Items count: " << items.count();
+
+    IOJobsThread* const thread = IOJobsManager::instance()->startDeletingDTrashItems(items);
+
+    connect(thread, SIGNAL(finished()),
+            this, SLOT(slotRemoveItemsFromModel()));
+}
+
+void TrashView::slotRemoveItemsFromModel()
+{
+    if (d->selectedIndexesToRemove.isEmpty())
+        return;
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Removing deleted items from view";
+
+    d->model->removeItems(d->selectedIndexesToRemove);
+    d->selectedIndexesToRemove.clear();
 }
 
 } // namespace Digikam

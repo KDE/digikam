@@ -76,6 +76,18 @@ public:
     void listDTrashItems(const QString& collectionPath);
 
     /**
+     * @brief creates a job for every item to restore back to album
+     * @param items to restore
+     */
+    void restoreDTrashItems(const DTrashItemInfoList& items);
+
+    /**
+     * @brief creates a job for every item to delete from collection trash
+     * @param items to delete
+     */
+    void deleteDTrashItems(const DTrashItemInfoList& items);
+
+    /**
      * @brief Starts one job to rename a file to a new name
      * @param srcToRename: the url to be renamed
      * @param newName: the url of the renamed item

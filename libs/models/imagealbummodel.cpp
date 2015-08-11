@@ -320,6 +320,11 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     DatabaseUrl url;
     QList<int> tagIds;
 
+    if (albums.first()->isTrashAlbum())
+    {
+        return;
+    }
+
     if(albums.first()->type() == Album::TAG)
     {
         for(QList<Album*>::iterator it = albums.begin(); it != albums.end(); ++it)

@@ -41,6 +41,7 @@ public:
 public:
 
     QString   trashPath;
+    QString   jsonFilePath;
     QString   collectionRelativePath;
     QDateTime deletionTimestamp;
 };

@@ -117,6 +117,8 @@ void DTrash::extractJsonForItem(const QString &collPath, const QString &baseName
 
     QJsonObject fileInfoObj = doc.object();
 
+    itemInfo.jsonFilePath = jsonFilePath;
+
     itemInfo.collectionRelativePath = fileInfoObj.value(PATH_JSON_KEY).toString()
                                       .replace(collPath, QLatin1String(""));
 

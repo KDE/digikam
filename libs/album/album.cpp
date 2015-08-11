@@ -322,6 +322,16 @@ bool Album::isUsedByLabelsTree() const
     return m_usedByLabelsTree;
 }
 
+bool Album::isTrashAlbum() const
+{
+    if (m_id < -1 && m_type == PHYSICAL)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void Album::setUsedByLabelsTree(bool isUsed)
 {
     m_usedByLabelsTree = isUsed;

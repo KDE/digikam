@@ -53,9 +53,12 @@ public:
     bool pixmapForItem(const QString& path, QPixmap& pix) const;
     void clearCurrentData();
 
+    DTrashItemInfoList itemsForIndexes(QList<QModelIndex> indexes);
+
 public Q_SLOTS:
 
     void append(const DTrashItemInfo &itemInfo);
+    void removeItems(const QModelIndexList& indexes);
 
 private:
 

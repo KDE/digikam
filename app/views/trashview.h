@@ -46,6 +46,13 @@ public:
     DTrashItemModel* model();
     void showTrashItemsForCollection(const QString& collectionPath);
 
+private Q_SLOTS:
+
+    void slotSelectionChanged();
+    void slotRestoreSelectedItems();
+    void slotDeleteSelectedItems();
+    void slotRemoveItemsFromModel();
+
 private:
 
     class Private;

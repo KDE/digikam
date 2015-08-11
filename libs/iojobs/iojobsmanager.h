@@ -32,7 +32,7 @@
 // Local includes
 
 #include "iojobsthread.h"
-#include "imageinfo.h"
+#include "dtrashiteminfo.h"
 
 namespace Digikam
 {
@@ -86,6 +86,20 @@ public:
      * @return IOJobsThread pointer for signal/slot connection
      */
     IOJobsThread* startDTrashItemsListingForCollection(const QString& collectionPath);
+
+    /**
+     * @brief Starts a thread to restore mutiple trash items
+     * @param trashItemsList: list of selected trash items to restore
+     * @return IOJobsThread pointer for signal/slot connection
+     */
+    IOJobsThread* startRestoringDTrashItems(const DTrashItemInfoList& trashItemsList);
+
+    /**
+     * @brief Starts a thread to delete mutiple trash items
+     * @param trashItemsList: list of selected trash items to delete
+     * @return IOJobsThread pointer for signal/slot connection
+     */
+    IOJobsThread* startDeletingDTrashItems(const DTrashItemInfoList& trashItemsList);
 
 private:
 

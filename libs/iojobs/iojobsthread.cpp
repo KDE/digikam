@@ -37,14 +37,17 @@ class IOJobsThread::Private
 public:
 
     Private()
-        : isCanceled(false),
+        : jobsCount(0),
+          isCanceled(false),
           isRenameThread(false),
           keepErrors(true)
     {
     }
 
+    int            jobsCount;
     bool           isCanceled;
     bool           isRenameThread;
+
     QUrl           oldUrl;
 
     bool           keepErrors;
@@ -73,6 +76,7 @@ void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
         connectOneJob(j);
 
         collection.insert(j, 0);
+        d->jobsCount++;
     }
 
     appendJobs(collection);
@@ -89,6 +93,7 @@ void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
         connectOneJob(j);
 
         collection.insert(j, 0);
+        d->jobsCount++;
     }
 
     appendJobs(collection);
@@ -105,6 +110,7 @@ void IOJobsThread::del(const QList<QUrl>& srcsToDelete, bool useTrash)
         connectOneJob(j);
 
         collection.insert(j, 0);
+        d->jobsCount++;
     }
 
     appendJobs(collection);
@@ -123,7 +129,27 @@ void IOJobsThread::listDTrashItems(const QString& collectionPath)
             this, SIGNAL(finished()));
 
     collection.insert(j, 0);
+    d->jobsCount++;
+
     appendJobs(collection);
+}
+
+void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
+{
+    // TODO
+}
+
+void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
+{
+    QList<QUrl> urlsToDelete;
+
+    foreach (const DTrashItemInfo& item, items)
+    {
+        urlsToDelete << QUrl::fromLocalFile(item.trashPath);
+        urlsToDelete << QUrl::fromLocalFile(item.jsonFilePath);
+    }
+
+    del(urlsToDelete, false);
 }
 
 void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
@@ -146,6 +172,8 @@ void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
     d->oldUrl         = srcToRename;
 
     collection.insert(j, 0);
+    d->jobsCount++;
+
     appendJobs(collection);
 }
 
@@ -190,7 +218,7 @@ QList<QString>& IOJobsThread::errorsList()
     return d->errorsList;
 }
 
-void IOJobsThread::connectOneJob(IOJob * const j)
+void IOJobsThread::connectOneJob(IOJob* const j)
 {
     connect(j, SIGNAL(error(QString)),
             this, SLOT(error(QString)));
@@ -201,8 +229,13 @@ void IOJobsThread::connectOneJob(IOJob * const j)
 
 void IOJobsThread::oneJobFinished()
 {
-    if(isEmpty())
+    d->jobsCount--;
+
+    if(d->jobsCount == 0)
+    {
         emit finished();
+        qCDebug(DIGIKAM_IOJOB_LOG) << "Thread Finished";
+    }
 }
 
 void IOJobsThread::error(const QString& errString)

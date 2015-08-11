@@ -104,11 +104,47 @@ void DTrashItemModel::append(const DTrashItemInfo& itemInfo)
     endInsertRows();
 }
 
+void DTrashItemModel::removeItems(const QModelIndexList& indexes)
+{
+    layoutAboutToBeChanged();
+    beginRemoveRows(QModelIndex(), m_data.count(), m_data.count());
+
+    foreach (const QModelIndex& index, indexes)
+    {
+        if (!index.isValid())
+            continue;
+
+        m_data.removeAt(index.row());
+    }
+
+    endRemoveRows();
+    layoutChanged();
+}
+
 void DTrashItemModel::clearCurrentData()
 {
     beginResetModel();
     m_data.clear();
     endResetModel();
+}
+
+DTrashItemInfoList DTrashItemModel::itemsForIndexes(QList<QModelIndex> indexes)
+{
+    DTrashItemInfoList items;
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of indexes: " << indexes.count();
+
+    foreach (const QModelIndex& index, indexes)
+    {
+        if (!index.isValid())
+            continue;
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Item for index: " << m_data.at(index.row());
+
+        items << m_data.at(index.row());
+    }
+
+    return items;
 }
 
 } // namespace Digikam
