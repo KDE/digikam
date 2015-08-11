@@ -48,24 +48,10 @@ const QString DTrash::INFO_FILE_EXTENSION        = QLatin1String(".dtrashinfo");
 const QString DTrash::PATH_JSON_KEY              = QLatin1String("path");
 const QString DTrash::DELETIONTIMESTAMP_JSON_KEY = QLatin1String("deletiontimestamp");
 
-class DTrashCreator
-{
-public:
-
-    DTrash object;
-};
-
-Q_GLOBAL_STATIC(DTrashCreator, creator)
-
 // ----------------------------------------------
 
 DTrash::DTrash()
 {
-}
-
-DTrash* DTrash::instance()
-{
-    return& creator->object;
 }
 
 bool DTrash::deleteImage(const QString& imageToDelete)
@@ -116,6 +102,26 @@ bool DTrash::deleteDirRecursivley(const QString& dirToDelete)
     }
 
     return srcDir.removeRecursively();
+}
+
+void DTrash::extractJsonForItem(const QString &collPath, const QString &baseName, DTrashItemInfo &itemInfo)
+{
+    QString jsonFilePath = collPath + QDir::separator() + TRASH_FOLDER +
+                           QDir::separator() + INFO_FOLDER + QDir::separator() +
+                           baseName + INFO_FILE_EXTENSION;
+
+    QFile jsonFile(jsonFilePath);
+    jsonFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QJsonDocument doc = QJsonDocument::fromJson(jsonFile.readAll());
+    jsonFile.close();
+
+    QJsonObject fileInfoObj = doc.object();
+
+    itemInfo.collectionRelativePath = fileInfoObj.value(PATH_JSON_KEY).toString()
+                                      .replace(collPath, QLatin1String(""));
+
+    itemInfo.deletionTimestamp = QDateTime::fromString(
+                                 fileInfoObj.value(DELETIONTIMESTAMP_JSON_KEY).toString());
 }
 
 bool DTrash::prepareCollectionTrash(const QString& collectionPath)

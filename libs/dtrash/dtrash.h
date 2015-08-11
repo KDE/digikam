@@ -29,6 +29,10 @@
 #include <QObject>
 #include <QFileInfo>
 
+// Local includes
+
+#include "dtrashiteminfo.h"
+
 namespace Digikam
 {
 
@@ -46,10 +50,9 @@ public:
 
 public:
 
-    static DTrash* instance();
-
-    bool deleteImage(const QString &imageToDelete);
-    bool deleteDirRecursivley(const QString& dirToDelete);
+    static bool deleteImage(const QString &imageToDelete);
+    static bool deleteDirRecursivley(const QString& dirToDelete);
+    static void extractJsonForItem(const QString& collPath, const QString& baseName, DTrashItemInfo& itemInfo);
 
 private:
 
@@ -58,7 +61,7 @@ private:
      * @param collectionPath: the full path to the collection to prepare the trash for
      * @return true if the trash is prepared successfully
      */
-    bool prepareCollectionTrash(const QString& collectionPath);
+    static bool prepareCollectionTrash(const QString& collectionPath);
 
     /**
      * @brief Creates a json file containing the image path and deletion timestamp
@@ -69,7 +72,7 @@ private:
      * @example createJsonRecordForFile("home/user/Pics", "/home/user/Pics/cats/cute/katy.jpg")
      *          returns => "katy"
      */
-    QString createJsonRecordForFile(const QString& collectionPath, const QString& imagePath);
+    static QString createJsonRecordForFile(const QString& collectionPath, const QString& imagePath);
 
     /**
      * @brief Checks for duplicates of files names inside the trash and if there is
@@ -84,11 +87,10 @@ private:
      *          returns => "home/user/Pics/.trash/info/katy{version}.dtrashInfo"
      *          where {version} is a integer number that is available in trash
      */
-    QString getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version = 0);
+    static QString getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version = 0);
 
 private:
 
-    friend class DTrashCreator;
     DTrash();
 };
 
