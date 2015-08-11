@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
+#include "dtrashiteminfo.h"
 #include "dtrash.h"
 
 using namespace KDcrawIface;
@@ -135,7 +135,7 @@ public:
 
 Q_SIGNALS:
 
-    void trashImagesInfoList(const ImageInfoList& list);
+    void trashItemInfo(const DTrashItemInfo& info);
 
 private:
 

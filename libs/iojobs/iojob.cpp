@@ -27,6 +27,8 @@
 
 #include <QFile>
 #include <QDir>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 // KDE includes
 
@@ -285,10 +287,10 @@ DTrashItemsListingJob::DTrashItemsListingJob(const QString &collectionPath)
 
 void DTrashItemsListingJob::run()
 {
-    ImageInfoList imgsInfoList;
+    DTrashItemInfo itemInfo;
 
-    QString collectionTrashFilesPath = m_collectionPath + QDir::separator() + TRASH_FOLDER +
-                                       QDir::separator() + FILES_FOLDER;
+    QString collectionTrashFilesPath = m_collectionPath + QDir::separator() + DTrash::TRASH_FOLDER +
+                                       QDir::separator() + DTrash::FILES_FOLDER;
 
     qCDebug(DIGIKAM_IOJOB_LOG) << "collectionTrashFilesPath: " << collectionTrashFilesPath;
 
@@ -297,11 +299,30 @@ void DTrashItemsListingJob::run()
     foreach (const QFileInfo& fileInfo, filesDir.entryInfoList(QDir::Files))
     {
         qCDebug(DIGIKAM_IOJOB_LOG) << "file in trash: " << fileInfo.filePath();
-        qCDebug(DIGIKAM_IOJOB_LOG) << "image info produced: " << ImageInfo::fromLocalFile(fileInfo.filePath());
-        imgsInfoList << ImageInfo::fromLocalFile(fileInfo.filePath());
+        itemInfo.trashPath = fileInfo.filePath();
+
+        QString jsonFilePath = m_collectionPath + QDir::separator() + DTrash::TRASH_FOLDER +
+                               QDir::separator() + DTrash::INFO_FOLDER + QDir::separator() +
+                               fileInfo.baseName() + DTrash::INFO_FILE_EXTENSION;
+        QFile jsonFile(jsonFilePath);
+        jsonFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        QJsonDocument doc = QJsonDocument::fromJson(jsonFile.readAll());
+        jsonFile.close();
+
+        QJsonObject fileInfoObj = doc.object();
+
+        itemInfo.collectionRelativePath =
+                fileInfoObj.value(DTrash::PATH_JSON_KEY).toString()
+                .replace(m_collectionPath, QLatin1String(""));
+
+        itemInfo.deletionTimestamp = QDateTime::fromString(
+                    fileInfoObj.value(DTrash::DELETIONTIMESTAMP_JSON_KEY)
+                                     .toString()
+                    );
+
+        emit trashItemInfo(itemInfo);
     }
 
-    emit trashImagesInfoList(imgsInfoList);
     emit signalDone();
 }
 

@@ -40,6 +40,8 @@
 #include "dtrashiteminfo.h"
 #include "dtrashitemmodel.h"
 #include "thumbnailsize.h"
+#include "iojobsmanager.h"
+#include "iojobsthread.h"
 
 namespace Digikam
 {
@@ -50,42 +52,65 @@ class TrashView::Private
 public:
 
     Private()
-        : model(0)
+        : model(0),
+          mainLayout(0),
+          tableView(0),
+          restoreButton(0),
+          deleteButton(0)
     {
     }
 
 public:
 
     DTrashItemModel* model;
+    QVBoxLayout*     mainLayout;
+    QTableView*      tableView;
+    QPushButton*     restoreButton;
+    QPushButton*     deleteButton;
+    IOJobsThread*    itemsLoadingThread;
 };
 
 TrashView::TrashView(QWidget* parent)
     : QWidget(parent), d(new Private)
 {
-    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    d->mainLayout = new QVBoxLayout(this);
 
-    QTableView* tableView = new QTableView(this);
+    d->tableView = new QTableView(this);
 
     d->model = new DTrashItemModel(this);
-    tableView->setModel(d->model);
 
-    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    tableView->verticalHeader()->setDefaultSectionSize(ThumbnailSize::Large);
-    tableView->verticalHeader()->hide();
-    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    d->tableView->setModel(d->model);
+    d->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    d->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    d->tableView->verticalHeader()->setDefaultSectionSize(ThumbnailSize::Large);
+    d->tableView->verticalHeader()->hide();
+    d->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    QPushButton* restoreButton = new QPushButton(i18n("Restore"));
-    QPushButton* deleteButton = new QPushButton(i18n("Delete Permanently"));
+    d->restoreButton = new QPushButton(i18n("Restore"));
+    d->deleteButton  = new QPushButton(i18n("Delete Permanently"));
 
-    mainLayout->addWidget(tableView);
-    mainLayout->addWidget(restoreButton);
-    mainLayout->addWidget(deleteButton);
+    d->mainLayout->addWidget(d->tableView);
+    d->mainLayout->addWidget(d->restoreButton);
+    d->mainLayout->addWidget(d->deleteButton);
+}
+
+TrashView::~TrashView()
+{
+    delete d;
 }
 
 DTrashItemModel* TrashView::model()
 {
     return d->model;
+}
+
+void TrashView::showTrashItemsForCollection(const QString& collectionPath)
+{
+    d->model->clearCurrentData();
+    d->itemsLoadingThread = IOJobsManager::instance()->startDTrashItemsListingForCollection(collectionPath);
+
+    connect(d->itemsLoadingThread, SIGNAL(collectionTrashItemInfo(DTrashItemInfo)),
+            d->model, SLOT(append(DTrashItemInfo)));
 }
 
 } // namespace Digikam

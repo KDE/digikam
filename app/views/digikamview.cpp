@@ -1246,6 +1246,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
     }
     else if (album->type() == Album::PHYSICAL && album->id() < -1) // Trash Album
     {
+        d->stackedview->trashView()->showTrashItemsForCollection(album->parent()->title());
         d->stackedview->setViewMode(StackedView::TrashViewMode);
     }
     else

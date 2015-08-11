@@ -32,7 +32,7 @@
 
 #include "album.h"
 #include "iojob.h"
-#include "imageinfo.h"
+#include "dtrashiteminfo.h"
 
 using namespace KDcrawIface;
 
@@ -145,7 +145,7 @@ Q_SIGNALS:
 
     void finished();
     void renamed(const QUrl& oldUrl, const QUrl& newURl);
-    void collectionTrashImagesInfoList(const ImageInfoList& imgsList);
+    void collectionTrashItemInfo(const DTrashItemInfo& trashItemInfo);
 
 private:
 

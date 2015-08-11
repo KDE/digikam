@@ -43,6 +43,7 @@ namespace Digikam
 DTrashItemModel::DTrashItemModel(QObject* parent)
     : QAbstractTableModel(parent)
 {
+    qRegisterMetaType<DTrashItemInfo>("DTrashItemInfo");
     m_thumbnailThread = new ThumbnailLoadThread(this);
 }
 
@@ -101,6 +102,13 @@ void DTrashItemModel::append(const DTrashItemInfo& itemInfo)
     beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
     m_data.append(itemInfo);
     endInsertRows();
+}
+
+void DTrashItemModel::clearCurrentData()
+{
+    beginResetModel();
+    m_data.clear();
+    endResetModel();
 }
 
 } // namespace Digikam

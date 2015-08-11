@@ -41,6 +41,13 @@
 namespace Digikam
 {
 
+const QString DTrash::TRASH_FOLDER               = QLatin1String(".dtrash");
+const QString DTrash::FILES_FOLDER               = QLatin1String("files");
+const QString DTrash::INFO_FOLDER                = QLatin1String("info");
+const QString DTrash::INFO_FILE_EXTENSION        = QLatin1String(".dtrashinfo");
+const QString DTrash::PATH_JSON_KEY              = QLatin1String("path");
+const QString DTrash::DELETIONTIMESTAMP_JSON_KEY = QLatin1String("deletiontimestamp");
+
 class DTrashCreator
 {
 public:

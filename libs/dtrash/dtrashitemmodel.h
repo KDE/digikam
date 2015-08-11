@@ -38,16 +38,23 @@ namespace Digikam
 
 class DTrashItemModel : public QAbstractTableModel
 {
+    Q_OBJECT
 
 public:
+
     DTrashItemModel(QObject* parent = 0);
 
     inline int rowCount(const QModelIndex &) const { return m_data.count(); }
     inline int columnCount(const QModelIndex &) const { return 3; }
 
     QVariant data(const QModelIndex& index, int role) const;
-    bool pixmapForItem(const QString& path, QPixmap& pix) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+    bool pixmapForItem(const QString& path, QPixmap& pix) const;
+    void clearCurrentData();
+
+public Q_SLOTS:
+
     void append(const DTrashItemInfo &itemInfo);
 
 private:

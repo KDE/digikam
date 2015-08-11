@@ -23,10 +23,10 @@
 
 #include "iojobsthread.h"
 #include "iojob.h"
-#include "imageinfo.h"
 #include "dnotificationwrapper.h"
 #include "digikam_debug.h"
 #include "digikamapp.h"
+#include "dtrashiteminfo.h"
 
 namespace Digikam
 {
@@ -116,8 +116,8 @@ void IOJobsThread::listDTrashItems(const QString& collectionPath)
 
     DTrashItemsListingJob* const j = new DTrashItemsListingJob(collectionPath);
 
-    connect(j, SIGNAL(trashImagesInfoList(ImageInfoList)),
-            this, SIGNAL(collectionTrashImagesInfoList(ImageInfoList)));
+    connect(j, SIGNAL(trashItemInfo(DTrashItemInfo)),
+            this, SIGNAL(collectionTrashItemInfo(DTrashItemInfo)));
 
     connect(j, SIGNAL(signalDone()),
             this, SIGNAL(finished()));

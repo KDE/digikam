@@ -41,7 +41,10 @@ class TrashView : public QWidget
 public:
 
     explicit TrashView(QWidget* parent = 0);
+    ~TrashView();
+
     DTrashItemModel* model();
+    void showTrashItemsForCollection(const QString& collectionPath);
 
 private:
 
@@ -50,4 +53,5 @@ private:
 };
 
 } // namespace Digikam
+
 #endif // TRASHVIEW_H
