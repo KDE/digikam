@@ -21,6 +21,13 @@
  *
  * ============================================================ */
 
+// Qt includes
+
+#include <QFileInfo>
+#include <QDir>
+
+// Local includes
+
 #include "iojobsthread.h"
 #include "iojob.h"
 #include "dnotificationwrapper.h"
@@ -136,7 +143,19 @@ void IOJobsThread::listDTrashItems(const QString& collectionPath)
 
 void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
 {
-    // TODO
+    QList<QUrl> listOfJsonFilesToRemove;
+
+    foreach (const DTrashItemInfo& item, items)
+    {
+        QUrl srcToRename = QUrl::fromLocalFile(item.trashPath);
+        QUrl newName     = getAvailableQUrlToRestoreInCollection(item.collectionPath);
+
+        qCDebug(DIGIKAM_IOJOB_LOG) << "new url: " << newName;
+
+        renameFile(srcToRename, newName);
+        listOfJsonFilesToRemove << QUrl::fromLocalFile(item.jsonFilePath);
+    }
+    del(listOfJsonFilesToRemove, false);
 }
 
 void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
@@ -157,13 +176,7 @@ void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
     RJobCollection collection;
     RenameFileJob* const j = new RenameFileJob(srcToRename, newName);
 
-    connect(j, SIGNAL(error(QString)),
-            this, SLOT(error(QString)));
-
-    // Connecting directly to signal finished
-    // because it's only one job
-    connect(j, SIGNAL(signalDone()),
-            this, SIGNAL(finished()));
+    connectOneJob(j);
 
     connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
             this, SIGNAL(renamed(QUrl,QUrl)));
@@ -225,6 +238,28 @@ void IOJobsThread::connectOneJob(IOJob* const j)
 
     connect(j, SIGNAL(signalDone()),
             this, SLOT(oneJobFinished()));
+}
+
+QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColPath, int version)
+{
+    QFileInfo fileInfo(fileColPath);
+
+    if (version != 0)
+    {
+        QString dir      = fileInfo.dir().path() + QDir::separator();
+        QString baseName = fileInfo.baseName() + QString::number(version);
+        QString suffix   = QLatin1String(".") + fileInfo.completeSuffix();
+        fileInfo.setFile(dir + baseName + suffix);
+    }
+
+    if (!fileInfo.exists())
+    {
+        return QUrl::fromLocalFile(fileInfo.filePath());
+    }
+    else
+    {
+        return getAvailableQUrlToRestoreInCollection(fileColPath, ++version);
+    }
 }
 
 void IOJobsThread::oneJobFinished()

@@ -30,7 +30,6 @@
 #include <QHeaderView>
 #include <QListView>
 #include <QMessageBox>
-#include <QApplication>
 
 // KDE includes
 
@@ -146,13 +145,21 @@ void TrashView::slotRestoreSelectedItems()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Restoring selected items from collection trash";
 
+    d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
+    DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
+
+    IOJobsThread* const thread = IOJobsManager::instance()->startRestoringDTrashItems(items);
+
+    connect(thread, SIGNAL(finished()),
+            this, SLOT(slotRemoveItemsFromModel()));
 }
 
 void TrashView::slotDeleteSelectedItems()
 {
+    QString title = i18n("Confirm Deletion");
     QString msg = i18n("Are you sure you want to delete those items permanently?");
 
-    int result = QMessageBox::warning(this, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::No);
+    int result = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
 
     if (result == QMessageBox::No)
         return;

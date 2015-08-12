@@ -132,14 +132,10 @@ DTrashItemInfoList DTrashItemModel::itemsForIndexes(QList<QModelIndex> indexes)
 {
     DTrashItemInfoList items;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of indexes: " << indexes.count();
-
     foreach (const QModelIndex& index, indexes)
     {
         if (!index.isValid())
             continue;
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Item for index: " << m_data.at(index.row());
 
         items << m_data.at(index.row());
     }

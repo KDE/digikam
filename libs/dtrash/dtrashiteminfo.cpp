@@ -37,6 +37,7 @@ bool DTrashItemInfo::isNull() const
 {
     return trashPath.isEmpty()              &&
            jsonFilePath.isEmpty()           &&
+           collectionPath.isEmpty()               &&
            collectionRelativePath.isEmpty() &&
            deletionTimestamp.isNull();
 }
@@ -47,6 +48,8 @@ QDebug operator<<(QDebug dbg, const DTrashItemInfo& info)
                   << info.trashPath << ", ";
     dbg.nospace() << "DTrashItemInfo::jsonFilePath: "
                   << info.jsonFilePath << ", ";
+    dbg.nospace() << "DTrashItemInfo::CollectionPath: "
+                  << info.collectionPath<< ", ";
     dbg.nospace() << "DTrashItemInfo::RelativePath: "
                   << info.collectionRelativePath << ", ";
     dbg.nospace() << "DTrashItemInfo::DeletionTimestamp: "
