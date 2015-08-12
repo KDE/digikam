@@ -779,6 +779,7 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
 
     if (!setProgramId())
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Could not set program id";
         return false;
     }
     QList<NamespaceEntry> toWrite = settings.readRatingNamespaces;

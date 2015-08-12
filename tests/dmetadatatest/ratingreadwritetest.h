@@ -65,12 +65,6 @@ private Q_SLOTS:
      */
     void testReadFromDisabledNamespaces();
 
-
-
-private:
-    QStringList tagSet1;
-    QStringList tagSet2;
-    QStringList tagSet3;
 };
 
 #endif /* RATINGSREADWRITETEST_H */
