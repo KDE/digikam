@@ -23,10 +23,6 @@
 
 #include "tagsreadwritetest.h"
 
-// C++ includes
-
-#include <cmath>
-
 // Qt includes
 
 #include <QTest>
