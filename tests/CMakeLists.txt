@@ -8,6 +8,7 @@
 kde_enable_exceptions()
 
 add_subdirectory(imgqsort)
+add_subdirectory(dmetadatatest)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
