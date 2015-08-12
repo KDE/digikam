@@ -25,11 +25,12 @@
 // Qt includes
 
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QTableView>
 #include <QPushButton>
 #include <QHeaderView>
 #include <QListView>
+#include <QMessageBox>
+#include <QApplication>
 
 // KDE includes
 
@@ -149,6 +150,13 @@ void TrashView::slotRestoreSelectedItems()
 
 void TrashView::slotDeleteSelectedItems()
 {
+    QString msg = i18n("Are you sure you want to delete those items permanently?");
+
+    int result = QMessageBox::warning(this, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::No);
+
+    if (result == QMessageBox::No)
+        return;
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting selected items from collection trash";
 
     d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
