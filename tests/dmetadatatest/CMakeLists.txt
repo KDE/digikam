@@ -10,7 +10,9 @@ ecm_mark_nongui_executable(tagsReadWriteTest)
 target_link_libraries(tagsReadWriteTest
                         Qt5::Core
                         Qt5::Test
-                        digikamcore)
+                        digikamcore
+                        KF5::KExiv2
+                     )
 
 if(${KF5KGeoMap_FOUND})
     target_link_libraries(tagsReadWriteTest ${KF5KGeoMap_LIBRARIES})
