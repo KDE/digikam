@@ -146,7 +146,13 @@ void TrashView::slotRestoreSelectedItems()
     qCDebug(DIGIKAM_GENERAL_LOG) << "Restoring selected items from collection trash";
 
     d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of selected items to restore: "
+                                 << d->selectedIndexesToRemove;
+
     DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Items to Restore:\n " << items;
 
     IOJobsThread* const thread = IOJobsManager::instance()->startRestoringDTrashItems(items);
 
@@ -182,7 +188,8 @@ void TrashView::slotRemoveItemsFromModel()
     if (d->selectedIndexesToRemove.isEmpty())
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Removing deleted items from view";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Removing deleted items from view with indexes:"
+                                 << d->selectedIndexesToRemove;
 
     d->model->removeItems(d->selectedIndexesToRemove);
     d->selectedIndexesToRemove.clear();

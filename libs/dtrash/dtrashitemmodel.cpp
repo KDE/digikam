@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QPixmap>
+#include <QPersistentModelIndex>
 
 // KDE includes
 
@@ -106,18 +107,26 @@ void DTrashItemModel::append(const DTrashItemInfo& itemInfo)
 
 void DTrashItemModel::removeItems(const QModelIndexList& indexes)
 {
-    layoutAboutToBeChanged();
-    beginRemoveRows(QModelIndex(), m_data.count(), m_data.count());
+    QList<QPersistentModelIndex> persistentIndexes;
 
     foreach (const QModelIndex& index, indexes)
+    {
+        persistentIndexes << index;
+    }
+
+    layoutAboutToBeChanged();
+
+    foreach (const QPersistentModelIndex& index, persistentIndexes)
     {
         if (!index.isValid())
             continue;
 
+        beginRemoveRows(QModelIndex(), index.row(), index.row());
+        removeRow(index.row());
         m_data.removeAt(index.row());
+        endRemoveRows();
     }
 
-    endRemoveRows();
     layoutChanged();
 }
 

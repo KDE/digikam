@@ -152,6 +152,12 @@ void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
 
         qCDebug(DIGIKAM_IOJOB_LOG) << "new url: " << newName;
 
+        QFileInfo fi(item.collectionPath);
+        if(!fi.dir().exists())
+        {
+            fi.dir().mkpath(fi.dir().path());
+        }
+
         renameFile(srcToRename, newName);
         listOfJsonFilesToRemove << QUrl::fromLocalFile(item.jsonFilePath);
     }
