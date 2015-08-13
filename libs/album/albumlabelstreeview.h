@@ -210,7 +210,7 @@ private:
     void generateAlbumNameForExporting(const QList<int>& ratings, const QList<int>& colorsList, const QList<int>& picksList);
 
     /**
-     * @brief Passes the current album DB url to a IOJobsManager
+     * @brief Passes the current album DB url to a DBJobsManager
      *        to get images urls in this album
      */
     void imagesUrlsForCurrentAlbum();

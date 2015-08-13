@@ -87,7 +87,6 @@ TrashView::TrashView(QWidget* parent)
     d->tableView->verticalHeader()->setDefaultSectionSize(ThumbnailSize::Large);
     d->tableView->verticalHeader()->hide();
     d->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    d->tableView->selectionModel()->setModel(d->model);
 
     connect(d->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotSelectionChanged()));
