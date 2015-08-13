@@ -386,13 +386,6 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
 
     QString defaultComment = comments.value(QLatin1String("x-default")).caption;
 
-    // In first we set image comments, outside of Exif, XMP, and IPTC.
-
-    if (!setComments(defaultComment.toUtf8()))
-    {
-        return false;
-    }
-
     QList<NamespaceEntry> toWrite = settings.readCommentNamespaces;
     if(!settings.unifyReadWrite)
         toWrite = settings.writeCommentNamespaces;
@@ -434,6 +427,13 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
                         return false;
                     }
                 }
+            case NamespaceEntry::COMMENT_JPEG:
+                // In first we set image comments, outside of Exif, XMP, and IPTC.
+                if (!setComments(defaultComment.toUtf8()))
+                {
+                    return false;
+                }
+
                 break;
             default:
                 break;

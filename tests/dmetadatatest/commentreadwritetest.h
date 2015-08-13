@@ -29,6 +29,8 @@
 #include <QObject>
 #include <QStringList>
 
+#include "captionvalues.h"
+
 class CommentReadWriteTest : public QObject
 {
     Q_OBJECT
@@ -68,9 +70,8 @@ private Q_SLOTS:
 
 
 private:
-    QStringList tagSet1;
-    QStringList tagSet2;
-    QStringList tagSet3;
+    Digikam::CaptionsMap commentSet1;
+    Digikam::CaptionsMap commentSet2;
 };
 
 
