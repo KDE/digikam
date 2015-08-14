@@ -144,13 +144,14 @@ void IOJobsThread::listDTrashItems(const QString& collectionPath)
 void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
 {
     QList<QUrl> listOfJsonFilesToRemove;
+    QList<QUrl> listOfUsedUrls;
 
     foreach (const DTrashItemInfo& item, items)
     {
         QUrl srcToRename = QUrl::fromLocalFile(item.trashPath);
-        QUrl newName     = getAvailableQUrlToRestoreInCollection(item.collectionPath);
+        QUrl newName     = getAvailableQUrlToRestoreInCollection(item.collectionPath, listOfUsedUrls);
 
-        qCDebug(DIGIKAM_IOJOB_LOG) << "new url: " << newName;
+        listOfUsedUrls << newName;
 
         QFileInfo fi(item.collectionPath);
         if(!fi.dir().exists())
@@ -246,7 +247,7 @@ void IOJobsThread::connectOneJob(IOJob* const j)
             this, SLOT(oneJobFinished()));
 }
 
-QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColPath, int version)
+QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColPath, QList<QUrl>& usedUrls, int version)
 {
     QFileInfo fileInfo(fileColPath);
 
@@ -258,13 +259,16 @@ QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColP
         fileInfo.setFile(dir + baseName + suffix);
     }
 
-    if (!fileInfo.exists())
+    QUrl url = QUrl::fromLocalFile(fileInfo.filePath());
+    qCDebug(DIGIKAM_GENERAL_LOG) << "URL USED BEFORE: " << usedUrls.contains(url);
+
+    if (!fileInfo.exists() && !usedUrls.contains(url))
     {
-        return QUrl::fromLocalFile(fileInfo.filePath());
+        return url;
     }
     else
     {
-        return getAvailableQUrlToRestoreInCollection(fileColPath, ++version);
+        return getAvailableQUrlToRestoreInCollection(fileColPath, usedUrls, ++version);
     }
 }
 

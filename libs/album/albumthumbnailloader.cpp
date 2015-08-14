@@ -181,7 +181,7 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum* const album, Relative
     {
         return getStandardAlbumRootIcon(relativeSize);
     }
-    if (album->isTrashAlbum())
+    else if (album->isTrashAlbum())
     {
         return getStandardAlbumTrashIcon();
     }
