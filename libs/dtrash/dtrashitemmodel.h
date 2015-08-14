@@ -54,11 +54,17 @@ public:
     void clearCurrentData();
 
     DTrashItemInfoList itemsForIndexes(QList<QModelIndex> indexes);
+    DTrashItemInfoList allItems();
+    bool isEmpty();
 
 public Q_SLOTS:
 
-    void append(const DTrashItemInfo &itemInfo);
+    void append(const DTrashItemInfo& itemInfo);
     void removeItems(const QModelIndexList& indexes);
+
+Q_SIGNALS:
+
+    void dataChange();
 
 private:
 

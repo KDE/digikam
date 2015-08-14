@@ -52,6 +52,9 @@ private Q_SLOTS:
     void slotRestoreSelectedItems();
     void slotDeleteSelectedItems();
     void slotRemoveItemsFromModel();
+    void slotRemoveAllItemsFromModel();
+    void slotDeleteAllItems();
+    void slotDataChanged();
 
 private:
 

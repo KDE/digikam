@@ -532,7 +532,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
 QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
 {
-    if (!album)
+    if (!album || album->isTrashAlbum())
     {
         return QString();
     }

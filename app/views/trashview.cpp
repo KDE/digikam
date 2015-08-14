@@ -25,6 +25,7 @@
 // Qt includes
 
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QTableView>
 #include <QPushButton>
 #include <QHeaderView>
@@ -55,9 +56,11 @@ public:
     Private()
         : model(0),
           mainLayout(0),
+          btnsLayout(0),
           tableView(0),
           restoreButton(0),
-          deleteButton(0)
+          deleteButton(0),
+          deleteAllButton(0)
     {
     }
 
@@ -65,9 +68,11 @@ public:
 
     DTrashItemModel* model;
     QVBoxLayout*     mainLayout;
+    QHBoxLayout*     btnsLayout;
     QTableView*      tableView;
     QPushButton*     restoreButton;
     QPushButton*     deleteButton;
+    QPushButton*     deleteAllButton;
     IOJobsThread*    itemsLoadingThread;
     QModelIndexList  selectedIndexesToRemove;
 };
@@ -76,6 +81,7 @@ TrashView::TrashView(QWidget* parent)
     : QWidget(parent), d(new Private)
 {
     d->mainLayout = new QVBoxLayout(this);
+    d->btnsLayout = new QHBoxLayout();
 
     d->tableView = new QTableView(this);
 
@@ -87,14 +93,26 @@ TrashView::TrashView(QWidget* parent)
     d->tableView->verticalHeader()->setDefaultSectionSize(ThumbnailSize::Large);
     d->tableView->verticalHeader()->hide();
     d->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    d->tableView->setShowGrid(false);
 
     connect(d->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotSelectionChanged()));
 
-    d->restoreButton = new QPushButton(i18n("Restore"));
-    d->deleteButton  = new QPushButton(i18n("Delete Permanently"));
+    d->restoreButton   = new QPushButton(i18n("Restore"));
+    d->deleteButton    = new QPushButton(i18n("Delete Permanently"));
+    d->deleteAllButton = new QPushButton(i18n("Delete All Permanently"));
+
     d->restoreButton->setEnabled(false);
     d->deleteButton->setEnabled(false);
+    d->deleteAllButton->setEnabled(false);
+
+    d->mainLayout->addWidget(d->tableView);
+
+    d->btnsLayout->addWidget(d->restoreButton);
+    d->btnsLayout->addWidget(d->deleteButton);
+    d->btnsLayout->addWidget(d->deleteAllButton);
+
+    d->mainLayout->addLayout(d->btnsLayout);
 
     connect(d->restoreButton, SIGNAL(released()),
             this, SLOT(slotRestoreSelectedItems()));
@@ -102,9 +120,11 @@ TrashView::TrashView(QWidget* parent)
     connect(d->deleteButton, SIGNAL(released()),
             this, SLOT(slotDeleteSelectedItems()));
 
-    d->mainLayout->addWidget(d->tableView);
-    d->mainLayout->addWidget(d->restoreButton);
-    d->mainLayout->addWidget(d->deleteButton);
+    connect(d->deleteAllButton, SIGNAL(released()),
+            this, SLOT(slotDeleteAllItems()));
+
+    connect(d->model, SIGNAL(dataChange()),
+            this, SLOT(slotDataChanged()));
 }
 
 TrashView::~TrashView()
@@ -187,11 +207,39 @@ void TrashView::slotRemoveItemsFromModel()
     if (d->selectedIndexesToRemove.isEmpty())
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Removing deleted items from view with indexes:"
-                                 << d->selectedIndexesToRemove;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Removing deleted items from view";
 
     d->model->removeItems(d->selectedIndexesToRemove);
     d->selectedIndexesToRemove.clear();
+}
+
+void TrashView::slotRemoveAllItemsFromModel()
+{
+    d->model->clearCurrentData();
+}
+
+void TrashView::slotDeleteAllItems()
+{
+    if (d->model->isEmpty())
+        return;
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Removing all item from trash permanently";
+
+    IOJobsThread* const thread =
+            IOJobsManager::instance()->startDeletingDTrashItems(d->model->allItems());
+
+    connect(thread,SIGNAL(finished()),
+            this, SLOT(slotRemoveItemsFromModel()));
+}
+
+void TrashView::slotDataChanged()
+{
+    if (d->model->isEmpty())
+    {
+        d->deleteAllButton->setEnabled(false);
+        return;
+    }
+    d->deleteAllButton->setEnabled(true);
 }
 
 } // namespace Digikam

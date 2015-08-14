@@ -103,6 +103,7 @@ void DTrashItemModel::append(const DTrashItemInfo& itemInfo)
     beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
     m_data.append(itemInfo);
     endInsertRows();
+    dataChange();
 }
 
 void DTrashItemModel::removeItems(const QModelIndexList& indexes)
@@ -128,6 +129,7 @@ void DTrashItemModel::removeItems(const QModelIndexList& indexes)
     }
 
     layoutChanged();
+    dataChange();
 }
 
 void DTrashItemModel::clearCurrentData()
@@ -135,6 +137,7 @@ void DTrashItemModel::clearCurrentData()
     beginResetModel();
     m_data.clear();
     endResetModel();
+    dataChange();
 }
 
 DTrashItemInfoList DTrashItemModel::itemsForIndexes(QList<QModelIndex> indexes)
@@ -150,6 +153,16 @@ DTrashItemInfoList DTrashItemModel::itemsForIndexes(QList<QModelIndex> indexes)
     }
 
     return items;
+}
+
+DTrashItemInfoList DTrashItemModel::allItems()
+{
+    return m_data;
+}
+
+bool DTrashItemModel::isEmpty()
+{
+    return m_data.isEmpty();
 }
 
 } // namespace Digikam
