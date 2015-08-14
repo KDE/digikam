@@ -64,8 +64,6 @@ FileActionMngr* FileActionMngr::instance()
 FileActionMngr::FileActionMngr()
     : d(new Private(this))
 {
-    qRegisterMetaType<MetadataHub*>("MetadataHub*");
-    qRegisterMetaType<FileActionImageInfoList>("FileActionImageInfoList");
 
     connect(d->fileWorker, SIGNAL(imageChangeFailed(QString,QStringList)),
             this, SIGNAL(signalImageChangeFailed(QString,QStringList)));

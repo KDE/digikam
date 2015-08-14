@@ -600,9 +600,10 @@ bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMo
     // important optimization if writing to file is turned off in setup!
     if (!willWriteMetadata(writeMode, settings))
     {
+        qDebug() << "returning false=======================";
         return false;
     }
-
+    qDebug() << "Writting metadata++++++++++++++++++++++";
     // Reload all tags from image info
     // Ugly hack to allow metadatahub to write disjoit tags when multiple images are loaded
     d->tags.clear();

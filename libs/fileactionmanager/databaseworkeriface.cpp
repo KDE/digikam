@@ -93,6 +93,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
         FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
+        qDebug() << "Scheduled to write";
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(splitter.next());
     }
@@ -300,6 +301,7 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
 
 void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, MetadataHub* hub)
 {
+    qDebug() << "Infos size" << infos.size();
     //ScanController::instance()->suspendCollectionScan();
     {
         DatabaseOperationGroup group;
@@ -320,13 +322,17 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
     }
     //ScanController::instance()->resumeCollectionScan();
 
-    if (hub->willWriteMetadata(MetadataHub::FullWriteIfChanged))
+    connect(this, SIGNAL(writeMetadata(FileActionImageInfoList,MetadataHub*)), this, SLOT(dumySlot(FileActionImageInfoList)));
+    if (hub->willWriteMetadata(MetadataHub::FullWriteIfChanged), Qt::DirectConnection)
     {
         // dont filter by shallSendForWriting here; we write from the hub, not from freshly loaded data
         infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
-            emit writeMetadata(splitter.next(), hub->clone());
+        {
+            FileActionImageInfoList rez = splitter.next();
+            emit writeMetadata(rez, hub->clone());
+        }
     }
 
     delete hub;
@@ -352,6 +358,11 @@ void FileActionMngrDatabaseWorker::copyAttributes(FileActionImageInfoList infos,
     }
 
     infos.dbFinished();
+}
+
+void FileActionMngrDatabaseWorker::dumySlot(FileActionImageInfoList infos)
+{
+    qDebug() << "Infos size +==========================" << infos.size();
 }
 
 } // namespace Digikam

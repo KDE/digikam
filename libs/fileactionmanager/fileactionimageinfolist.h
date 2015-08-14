@@ -35,6 +35,9 @@
 #include "imageinfo.h"
 #include "progressmanager.h"
 
+#include <QDebug>
+
+
 namespace Digikam
 {
 
@@ -85,6 +88,12 @@ class FileActionImageInfoList : public QList<ImageInfo>
 public:
 
     FileActionImageInfoList() {}
+    FileActionImageInfoList(const FileActionImageInfoList& copy) : QList(copy)
+    {
+        qDebug() << "Copy is called +++++++++++++++++++" << copy.size() << this->size();
+        this->container = copy.container;
+    }
+    ~FileActionImageInfoList() {}
 
     static FileActionImageInfoList create(const QList<ImageInfo>& list);
     static FileActionImageInfoList continueTask(const QList<ImageInfo>& list, FileActionProgressItemContainer* const container);
@@ -120,6 +129,9 @@ private:
     QExplicitlySharedDataPointer<FileActionProgressItemContainer> container;
 };
 
+
 } // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::FileActionImageInfoList)
 
 #endif // FILEACTIONIMAGEINFOLIST_H
