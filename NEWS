@@ -9,4 +9,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 002 ==> 343548 - Tag Manager crashes when adding a new tag.
 003 ==> 350541 - PNG alpha channel is ignored [patch].
 004 ==> 229788 - digiKam crashes fetching pictures SD-Card.
-005 ==> 
+005 ==> 298265 - Embedded preview changes from full to reduced size regardless album view settings [patch].
+006 ==> 
+
