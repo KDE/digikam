@@ -527,7 +527,7 @@ void SetupCollectionModel::addCollection(int category)
         result = CollectionManager::instance()->checkLocation(curl, assumeDeleted,
                                                               &messageFromManager, &deviceIcon);
 
-    QString path = QDir::fromNativeSeparators(curl.toDisplayString());
+    QString path = QDir::fromNativeSeparators(curl.toDisplayString(QUrl::PreferLocalFile ));
         
     // If there are other added collections then CollectionManager does not know about them. Check here.
     foreach(const Item& item, m_collections)
