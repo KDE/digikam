@@ -26,7 +26,7 @@
 
 // Libkdcraw includes
 
-#include "KDCRAW/RActionJob"
+#include <KDCRAW/RActionJob>
 
 // Local includes
 

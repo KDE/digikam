@@ -26,7 +26,7 @@
 
 // Libkdcraw Includes
 
-#include "KDCRAW/RActionThreadBase"
+#include <KDCRAW/RActionThreadBase>
 
 // Local includes
 

@@ -70,7 +70,7 @@
 
 // Libkexiv2
 
-#include <rotationmatrix.h>
+#include <KExiv2/RotationMatrix>
 
 // Local includes
 

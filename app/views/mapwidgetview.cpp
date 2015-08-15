@@ -32,14 +32,10 @@
 #include <QAbstractItemModel>
 #include <QPersistentModelIndex>
 
-// KDE includes
-
-
-
 // Libkgeomap includes
 
-#include <kgeomap_widget.h>
-#include <itemmarkertiler.h>
+#include <KGeoMap/KGeoMap_Widget>
+#include <KGeoMap/ItemMarkerTiler>
 
 //local includes
 

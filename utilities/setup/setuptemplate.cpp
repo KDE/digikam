@@ -43,7 +43,7 @@
 
 // Libkexiv2 includes
 
-#include <altlangstredit.h>
+#include <KExiv2/AltLangStrEdit>
 
 // Local includes
 

@@ -36,7 +36,7 @@
 
 // Libkgeomap includes
 
-#include <kgeomap_widget.h>
+#include <KGeoMap/KGeoMap_Widget>
 
 namespace Digikam
 {

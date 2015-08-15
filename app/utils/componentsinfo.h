@@ -45,7 +45,7 @@
 
 // Libkface includes
 
-#include <recognitiondatabase.h>
+#include <KFace/RecognitionDatabase>
 
 #endif /* HAVE_KFACE */
 

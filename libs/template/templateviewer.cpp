@@ -36,7 +36,7 @@
 
 // Libkexiv2 includes
 
-#include <countryselector.h>
+#include <KExiv2/CountrySelector>
 
 // Libkdcraw includes
 

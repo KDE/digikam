@@ -33,8 +33,8 @@
 
 // Libkexiv2 includes
 
-#include <altlangstredit.h>
-#include <msgtextedit.h>
+#include <KExiv2/AltLangStrEdit>
+#include <KExiv2/MsgTextEdit>
 
 // Local includes
 

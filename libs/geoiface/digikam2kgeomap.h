@@ -33,7 +33,7 @@
 
 // libkgeomap includes
 
-#include <kgeomap_primitives.h>
+#include <KGeoMap/KGeoMap_Primitives>
 
 namespace KGeoMap
 {

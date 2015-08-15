@@ -36,8 +36,8 @@
 
 // Libkface includes
 
-#include <facedetector.h>
-#include <recognitiondatabase.h>
+#include <KFace/FaceDetector>
+#include <KFace/RecognitionDatabase>
 
 // Local includes
 

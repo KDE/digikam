@@ -38,7 +38,7 @@
 
 // libkexiv2 includes
 
-#include <rotationmatrix.h>
+#include <KExiv2/RotationMatrix>
 
 // Local includes
 

@@ -39,8 +39,8 @@
 
 // Libkexiv2 includes
 
-#include <altlangstredit.h>
-#include <countryselector.h>
+#include <KExiv2/AltLangStrEdit>
+#include <KExiv2/CountrySelector>
 
 // Local includes
 
