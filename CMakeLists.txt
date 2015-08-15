@@ -29,7 +29,7 @@ set(DIGIKAM_RELEASE_DATE "2015-09-06")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-set(DIGIKAM_SUFFIX_VERSION "-git")
+set(DIGIKAM_SUFFIX_VERSION "-beta1")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -314,12 +314,14 @@ if(ENABLE_KFILEMETADATASUPPORT)
 
 endif()
 
-# -- dng converter options -----------------
+# -- dng converter options ---------------------------------------------------------------------
+
 if(ENABLE_DNGCOVERTER)
     set(USE_DNGCONVERTER TRUE)
 else()
     set(USE_DNGCONVERTER FALSE)
 endif()
+
 # -- compilation options definitions -----------------------------------------------------------
 
 MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
