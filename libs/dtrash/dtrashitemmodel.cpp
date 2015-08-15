@@ -27,6 +27,7 @@
 
 #include <QPixmap>
 #include <QPersistentModelIndex>
+#include <QTimer>
 
 // KDE includes
 
@@ -46,6 +47,19 @@ DTrashItemModel::DTrashItemModel(QObject* parent)
 {
     qRegisterMetaType<DTrashItemInfo>("DTrashItemInfo");
     m_thumbnailThread = new ThumbnailLoadThread(this);
+    m_thumbSize = ThumbnailSize::Large;
+    m_timer = new QTimer();
+    m_timer->setInterval(100);
+    m_timer->setSingleShot(true);
+
+    connect(m_timer, SIGNAL(timeout()),
+            this, SLOT(refreshLayout()));
+}
+
+DTrashItemModel::~DTrashItemModel()
+{
+    m_thumbnailThread->cleanUp();
+    delete m_thumbnailThread;
 }
 
 QVariant DTrashItemModel::data(const QModelIndex &index, int role) const
@@ -81,7 +95,7 @@ QVariant DTrashItemModel::data(const QModelIndex &index, int role) const
 
 bool DTrashItemModel::pixmapForItem(const QString &path, QPixmap &pix) const
 {
-    return m_thumbnailThread->find(ThumbnailIdentifier(path), pix, ThumbnailSize::Large);
+    return m_thumbnailThread->find(ThumbnailIdentifier(path), pix, m_thumbSize);
 }
 
 QVariant DTrashItemModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -132,6 +146,12 @@ void DTrashItemModel::removeItems(const QModelIndexList& indexes)
     dataChange();
 }
 
+void DTrashItemModel::refreshLayout()
+{
+    layoutAboutToBeChanged();
+    layoutChanged();
+}
+
 void DTrashItemModel::clearCurrentData()
 {
     beginResetModel();
@@ -163,6 +183,20 @@ DTrashItemInfoList DTrashItemModel::allItems()
 bool DTrashItemModel::isEmpty()
 {
     return m_data.isEmpty();
+}
+
+void DTrashItemModel::changeThumbSize(int size)
+{
+    m_thumbSize = size;
+
+    if (isEmpty())
+        return;
+
+    const QModelIndex topLeft = index(0, 0, QModelIndex());
+    const QModelIndex bottomRight = index(rowCount(QModelIndex())-1, 0, QModelIndex());
+    dataChanged(topLeft, bottomRight);
+
+    m_timer->start();
 }
 
 } // namespace Digikam

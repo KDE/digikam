@@ -30,6 +30,7 @@
 // Local includes
 
 #include "dtrashitemmodel.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -45,6 +46,9 @@ public:
 
     DTrashItemModel* model();
     void showTrashItemsForCollection(const QString& collectionPath);
+
+    ThumbnailSize getThumbnailSize();
+    void setThumbnailSize(ThumbnailSize thumbSize);
 
 private Q_SLOTS:
 

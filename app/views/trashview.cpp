@@ -60,7 +60,8 @@ public:
           tableView(0),
           restoreButton(0),
           deleteButton(0),
-          deleteAllButton(0)
+          deleteAllButton(0),
+          thumbSize(ThumbnailSize::Large)
     {
     }
 
@@ -75,6 +76,7 @@ public:
     QPushButton*     deleteAllButton;
     IOJobsThread*    itemsLoadingThread;
     QModelIndexList  selectedIndexesToRemove;
+    ThumbnailSize    thumbSize;
 };
 
 TrashView::TrashView(QWidget* parent)
@@ -90,7 +92,7 @@ TrashView::TrashView(QWidget* parent)
     d->tableView->setModel(d->model);
     d->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     d->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    d->tableView->verticalHeader()->setDefaultSectionSize(ThumbnailSize::Large);
+    d->tableView->verticalHeader()->setDefaultSectionSize(d->thumbSize.size());
     d->tableView->verticalHeader()->hide();
     d->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->tableView->setShowGrid(false);
@@ -144,6 +146,11 @@ void TrashView::showTrashItemsForCollection(const QString& collectionPath)
 
     connect(d->itemsLoadingThread, SIGNAL(collectionTrashItemInfo(DTrashItemInfo)),
             d->model, SLOT(append(DTrashItemInfo)));
+}
+
+ThumbnailSize TrashView::getThumbnailSize()
+{
+    return d->thumbSize;
 }
 
 void TrashView::slotSelectionChanged()
@@ -248,6 +255,13 @@ void TrashView::slotDataChanged()
         return;
     }
     d->deleteAllButton->setEnabled(true);
+}
+
+void TrashView::setThumbnailSize(ThumbnailSize thumbSize)
+{
+    d->model->changeThumbSize(thumbSize.size());
+    d->tableView->verticalHeader()->setDefaultSectionSize(thumbSize.size());
+    d->thumbSize = thumbSize;
 }
 
 } // namespace Digikam

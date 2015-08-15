@@ -43,6 +43,7 @@ class DTrashItemModel : public QAbstractTableModel
 public:
 
     DTrashItemModel(QObject* parent = 0);
+    ~DTrashItemModel();
 
     inline int rowCount(const QModelIndex &) const { return m_data.count(); }
     inline int columnCount(const QModelIndex &) const { return 3; }
@@ -57,10 +58,13 @@ public:
     DTrashItemInfoList allItems();
     bool isEmpty();
 
+    void changeThumbSize(int size);
+
 public Q_SLOTS:
 
     void append(const DTrashItemInfo& itemInfo);
     void removeItems(const QModelIndexList& indexes);
+    void refreshLayout();
 
 Q_SIGNALS:
 
@@ -68,8 +72,10 @@ Q_SIGNALS:
 
 private:
 
+    int                  m_thumbSize;
     DTrashItemInfoList   m_data;
     ThumbnailLoadThread* m_thumbnailThread;
+    QTimer*              m_timer;
 };
 
 } // namespace Digikam

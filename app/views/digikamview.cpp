@@ -1247,6 +1247,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
     else if (album->isTrashAlbum())
     {
         d->stackedview->trashView()->showTrashItemsForCollection(album->parent()->title());
+        d->filterWidget->setEnabled(false);
         d->stackedview->setViewMode(StackedView::TrashViewMode);
     }
     else
@@ -1262,6 +1263,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
             default:
                 break;
         }
+        d->filterWidget->setEnabled(true);
     }
 }
 
@@ -1467,7 +1469,8 @@ void DigikamView::setThumbSize(int size)
         setZoomFactor(z);
     }
     else if (   (viewMode() == StackedView::IconViewMode)
-             || (viewMode() == StackedView::TableViewMode) )
+             || (viewMode() == StackedView::TableViewMode)
+             || (viewMode() == StackedView::TrashViewMode))
     {
         if (size > ThumbnailSize::maxThumbsSize())
         {
@@ -1492,6 +1495,7 @@ void DigikamView::slotThumbSizeEffect()
 {
     d->iconView->setThumbnailSize(d->thumbSize);
     d->tableView->setThumbnailSize(d->thumbSize);
+    d->stackedview->trashView()->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 
     ApplicationSettings::instance()->setDefaultIconSize(d->thumbSize);
@@ -1751,8 +1755,11 @@ void DigikamView::slotViewModeChanged()
             //TODO: connect map view's zoom buttons to main status bar zoom buttons
             break;
         case StackedView::TableViewMode:
-            emit signalSwitchedToTableView();
-            emit signalThumbSizeChanged(d->tableView->getThumbnailSize().size());
+            emit signalSwitchedToTrashView();
+            emit signalThumbSizeChanged(d->stackedview->trashView()->getThumbnailSize().size());
+            break;
+        case StackedView::TrashViewMode:
+            emit signalSwitchedToIconView();
             break;
     }
 }
