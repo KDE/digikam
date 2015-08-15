@@ -223,13 +223,21 @@ void TrashView::slotDeleteAllItems()
     if (d->model->isEmpty())
         return;
 
+    QString title = i18n("Confirm Deletion");
+    QString msg = i18n("Are you sure you want to delete ALL items permanently?");
+
+    int result = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
+
+    if (result == QMessageBox::No)
+        return;
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Removing all item from trash permanently";
 
     IOJobsThread* const thread =
             IOJobsManager::instance()->startDeletingDTrashItems(d->model->allItems());
 
     connect(thread,SIGNAL(finished()),
-            this, SLOT(slotRemoveItemsFromModel()));
+            this, SLOT(slotRemoveAllItemsFromModel()));
 }
 
 void TrashView::slotDataChanged()
