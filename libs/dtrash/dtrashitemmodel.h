@@ -45,8 +45,8 @@ public:
     DTrashItemModel(QObject* parent = 0);
     ~DTrashItemModel();
 
-    inline int rowCount(const QModelIndex &) const { return m_data.count(); }
-    inline int columnCount(const QModelIndex &) const { return 3; }
+    int rowCount(const QModelIndex &) const;
+    int columnCount(const QModelIndex &) const;
 
     QVariant data(const QModelIndex& index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
@@ -54,7 +54,9 @@ public:
     bool pixmapForItem(const QString& path, QPixmap& pix) const;
     void clearCurrentData();
 
-    DTrashItemInfoList itemsForIndexes(QList<QModelIndex> indexes);
+    void loadItemsForCollection(const QString& colPath);
+    DTrashItemInfo itemForIndex(const QModelIndex& index);
+    DTrashItemInfoList itemsForIndexes(const QList<QModelIndex>& indexes);
     DTrashItemInfoList allItems();
     bool isEmpty();
 
@@ -72,10 +74,8 @@ Q_SIGNALS:
 
 private:
 
-    int                  m_thumbSize;
-    DTrashItemInfoList   m_data;
-    ThumbnailLoadThread* m_thumbnailThread;
-    QTimer*              m_timer;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

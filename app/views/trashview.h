@@ -44,11 +44,13 @@ public:
     explicit TrashView(QWidget* parent = 0);
     ~TrashView();
 
-    DTrashItemModel* model();
-    void showTrashItemsForCollection(const QString& collectionPath);
+    DTrashItemModel* model() const;
 
-    ThumbnailSize getThumbnailSize();
+    ThumbnailSize getThumbnailSize() const;
     void setThumbnailSize(ThumbnailSize thumbSize);
+
+    QUrl lastSelectedItemUrl() const;
+    void selectLastSelected();
 
 private Q_SLOTS:
 
@@ -59,6 +61,11 @@ private Q_SLOTS:
     void slotRemoveAllItemsFromModel();
     void slotDeleteAllItems();
     void slotDataChanged();
+    void slotChangeLastSelectedItem(const QModelIndex& curr, const QModelIndex& prev);
+
+Q_SIGNALS:
+
+    void selectionChanged();
 
 private:
 

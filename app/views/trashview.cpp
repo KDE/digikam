@@ -41,9 +41,9 @@
 #include "dtrashiteminfo.h"
 #include "dtrashitemmodel.h"
 #include "thumbnailsize.h"
+#include "digikam_debug.h"
 #include "iojobsmanager.h"
 #include "iojobsthread.h"
-#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -74,7 +74,8 @@ public:
     QPushButton*     restoreButton;
     QPushButton*     deleteButton;
     QPushButton*     deleteAllButton;
-    IOJobsThread*    itemsLoadingThread;
+    QModelIndex      lastSelectedIndex;
+    DTrashItemInfo   lastSelectedItem;
     QModelIndexList  selectedIndexesToRemove;
     ThumbnailSize    thumbSize;
 };
@@ -85,10 +86,9 @@ TrashView::TrashView(QWidget* parent)
     d->mainLayout = new QVBoxLayout(this);
     d->btnsLayout = new QHBoxLayout();
 
-    d->tableView = new QTableView(this);
-
     d->model = new DTrashItemModel(this);
 
+    d->tableView = new QTableView(this);
     d->tableView->setModel(d->model);
     d->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     d->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -127,6 +127,9 @@ TrashView::TrashView(QWidget* parent)
 
     connect(d->model, SIGNAL(dataChange()),
             this, SLOT(slotDataChanged()));
+
+    connect(d->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(slotChangeLastSelectedItem(QModelIndex,QModelIndex)));
 }
 
 TrashView::~TrashView()
@@ -134,21 +137,12 @@ TrashView::~TrashView()
     delete d;
 }
 
-DTrashItemModel* TrashView::model()
+DTrashItemModel* TrashView::model() const
 {
     return d->model;
 }
 
-void TrashView::showTrashItemsForCollection(const QString& collectionPath)
-{
-    d->model->clearCurrentData();
-    d->itemsLoadingThread = IOJobsManager::instance()->startDTrashItemsListingForCollection(collectionPath);
-
-    connect(d->itemsLoadingThread, SIGNAL(collectionTrashItemInfo(DTrashItemInfo)),
-            d->model, SLOT(append(DTrashItemInfo)));
-}
-
-ThumbnailSize TrashView::getThumbnailSize()
+ThumbnailSize TrashView::getThumbnailSize() const
 {
     return d->thumbSize;
 }
@@ -255,6 +249,14 @@ void TrashView::slotDataChanged()
         return;
     }
     d->deleteAllButton->setEnabled(true);
+    selectLastSelected();
+}
+
+void TrashView::slotChangeLastSelectedItem(const QModelIndex& curr, const QModelIndex&)
+{
+    d->lastSelectedIndex = curr;
+    d->lastSelectedItem = d->model->itemForIndex(curr);
+    emit selectionChanged();
 }
 
 void TrashView::setThumbnailSize(ThumbnailSize thumbSize)
@@ -262,6 +264,28 @@ void TrashView::setThumbnailSize(ThumbnailSize thumbSize)
     d->model->changeThumbSize(thumbSize.size());
     d->tableView->verticalHeader()->setDefaultSectionSize(thumbSize.size());
     d->thumbSize = thumbSize;
+}
+
+QUrl TrashView::lastSelectedItemUrl() const
+{
+    return QUrl::fromLocalFile(d->lastSelectedItem.trashPath);
+}
+
+void TrashView::selectLastSelected()
+{
+    if (d->model->isEmpty())
+        return;
+
+    if (d->lastSelectedItem.isNull())
+    {
+        d->tableView->selectRow(0);
+        d->tableView->scrollTo(QModelIndex(), QAbstractItemView::EnsureVisible);
+        return;
+    }
+
+    d->tableView->selectRow(d->lastSelectedIndex.row());
+    d->tableView->scrollTo(d->lastSelectedIndex, QAbstractItemView::EnsureVisible);
+    emit selectionChanged();
 }
 
 } // namespace Digikam

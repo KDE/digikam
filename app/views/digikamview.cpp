@@ -129,6 +129,7 @@ public:
         parent(0),
         iconView(0),
         tableView(0),
+        trashView(0),
         albumManager(0),
         albumHistory(0),
         stackedview(0),
@@ -184,6 +185,7 @@ public:
     DigikamApp*                   parent;
     DigikamImageView*             iconView;
     TableView*                    tableView;
+    TrashView*                    trashView;
     AlbumManager*                 albumManager;
     AlbumHistory*                 albumHistory;
     StackedView*                  stackedview;
@@ -283,6 +285,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 #endif // HAVE_KGEOMAP
 
     d->tableView = d->stackedview->tableView();
+    d->trashView = d->stackedview->trashView();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
@@ -531,6 +534,11 @@ void DigikamView::setupConnections()
     // TableView::signalItemsChanged is emitted when something changes in the model that
     // DigikamView should care about, not only the selection.
     connect(d->tableView, SIGNAL(signalItemsChanged()),
+            this, SLOT(slotImageSelected()));
+
+    // -- Trash View Connections ----------------------------------
+
+    connect(d->trashView, SIGNAL(selectionChanged()),
             this, SLOT(slotImageSelected()));
 
     // -- Sidebar Connections -------------------------------------
@@ -1246,7 +1254,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
     }
     else if (album->isTrashAlbum())
     {
-        d->stackedview->trashView()->showTrashItemsForCollection(album->parent()->title());
+        d->trashView->model()->loadItemsForCollection(album->parent()->title());
         d->filterWidget->setEnabled(false);
         d->stackedview->setViewMode(StackedView::TrashViewMode);
     }
@@ -1394,6 +1402,12 @@ void DigikamView::slotImageSelected()
 
 void DigikamView::slotDispatchImageSelected()
 {
+    if (viewMode() == StackedView::TrashViewMode)
+    {
+        d->rightSideBar->itemChanged(d->trashView->lastSelectedItemUrl());
+        return;
+    }
+
     if (d->needDispatchSelection)
     {
         // the list of ImageInfos of currently selected items, currentItem first
@@ -1495,7 +1509,7 @@ void DigikamView::slotThumbSizeEffect()
 {
     d->iconView->setThumbnailSize(d->thumbSize);
     d->tableView->setThumbnailSize(d->thumbSize);
-    d->stackedview->trashView()->setThumbnailSize(d->thumbSize);
+    d->trashView->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 
     ApplicationSettings::instance()->setDefaultIconSize(d->thumbSize);
@@ -1756,7 +1770,7 @@ void DigikamView::slotViewModeChanged()
             break;
         case StackedView::TableViewMode:
             emit signalSwitchedToTrashView();
-            emit signalThumbSizeChanged(d->stackedview->trashView()->getThumbnailSize().size());
+            emit signalThumbSizeChanged(d->trashView->getThumbnailSize().size());
             break;
         case StackedView::TrashViewMode:
             emit signalSwitchedToIconView();
