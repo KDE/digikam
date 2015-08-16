@@ -151,8 +151,8 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
     else if (index.data(SetupCollectionModel::IsButtonRole).toBool())
     {
         // set real pixmap on sample button to compute correct size hint
-        QPixmap pix      = index.data(SetupCollectionModel::ButtonDecorationRole).value<QPixmap>();
-        m_sampleToolButton->setIcon(index.data(SetupCollectionModel::ButtonDecorationRole).value<QPixmap>());
+        QIcon pix      = index.data(SetupCollectionModel::ButtonDecorationRole).value<QIcon>();
+        m_sampleToolButton->setIcon(index.data(SetupCollectionModel::ButtonDecorationRole).value<QIcon>());
         QSize widgetHint = m_sampleToolButton->sizeHint();
 
         // combine hints
@@ -187,7 +187,7 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
     }
     else if (index.data(SetupCollectionModel::IsButtonRole).toBool())
     {
-        toolButton->setIcon(index.data(SetupCollectionModel::ButtonDecorationRole).value<QPixmap>());
+        toolButton->setIcon(index.data(SetupCollectionModel::ButtonDecorationRole).value<QIcon>());
         toolButton->resize(toolButton->sizeHint());
         toolButton->move(0, (option.rect.height() - toolButton->height()) / 2);
         toolButton->show();
@@ -859,7 +859,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                 break;
 
             case ColumnDeleteButton:
-
+ 
                 switch (role)
                 {
                     case Qt::ToolTipRole:
