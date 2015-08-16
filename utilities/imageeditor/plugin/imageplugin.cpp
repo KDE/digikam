@@ -29,6 +29,9 @@
 #include "editortool.h"
 #include "editortooliface.h"
 
+#define INVALID_CATEGORY "__INVALID__"
+#define ACTION_CATEGORY  "ActionCategory"
+
 namespace Digikam
 {
 
@@ -68,11 +71,11 @@ void ImagePlugin::slotToolDone()
 
 QString ImagePlugin::actionCategory() const
 {
-    QString val = property("ActionCategory").toString();
+    QString val = property(ACTION_CATEGORY).toString();
 
     if (val.isNull() || val.isEmpty())
     {
-        val = QLatin1String("__INVALID__");
+        val = QLatin1String(INVALID_CATEGORY);
     }
 
     return val;
@@ -82,9 +85,9 @@ void ImagePlugin::setActionCategory(const QString& cat)
 {
     QString val = actionCategory();
 
-    if (val == QLatin1String("__INVALID__"))
+    if (val == QLatin1String(INVALID_CATEGORY))
     {
-         setProperty("ActionCategory", cat);
+         setProperty(ACTION_CATEGORY, cat);
     }
 }
 
