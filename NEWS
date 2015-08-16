@@ -13,4 +13,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 006 ==> 351142 - Add metadata tags support for video files time-stamp.
 007 ==> 334244 - Face tag zones are hidden after adding a new face.
 008 ==> 351243 - Table view click to select broken.
-009 ==> 
+009 ==> 350225 - Auto rename on import does not work for RAW images.
+010 ==> 346646 - renaming works when downloading selected but settings are ignored when importing new ones only.
+011 ==> 
