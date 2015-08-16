@@ -28,6 +28,7 @@
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QVBoxLayout>
+#include <QApplication>
 
 // KDE includes
 
@@ -40,6 +41,7 @@
 #include "contextmenuhelper.h"
 #include "fileactionmngr.h"
 #include "album.h"
+#include "applicationsettings.h"
 #include "imageviewutilities.h"
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
@@ -164,8 +166,26 @@ void TableView::slotItemActivated(const QModelIndex& tableViewIndex)
 {
     const ImageInfo info = s->tableViewModel->imageInfo(tableViewIndex);
 
-    /// @todo Respect edit/preview setting
-    emit signalPreviewRequested(info);
+    if (info.isNull())
+    {
+        return;
+    }
+
+    if (qApp->queryKeyboardModifiers() != Qt::MetaModifier)
+    {
+        if (ApplicationSettings::instance()->getItemLeftClickAction() == ApplicationSettings::ShowPreview)
+        {
+            emit signalPreviewRequested(info);
+        }
+        else
+        {
+            d->imageViewUtilities->openInfos(info, allInfo(), currentAlbum());
+        }
+    }
+    else
+    {
+        d->imageViewUtilities->openInfosWithDefaultApplication(QList<ImageInfo>() << info);
+    }
 }
 
 bool TableView::eventFilter(QObject* watched, QEvent* event)

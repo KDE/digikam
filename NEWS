@@ -11,5 +11,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 004 ==> 229788 - digiKam crashes fetching pictures SD-Card.
 005 ==> 298265 - Embedded preview changes from full to reduced size regardless album view settings [patch].
 006 ==> 351142 - Add metadata tags support for video files time-stamp.
-007 ==> 
-
+007 ==> 351243 - Table view click to select broken.
+008 ==> 
