@@ -217,6 +217,9 @@ void DTrashItemModel::loadItemsForCollection(const QString &colPath)
 
 DTrashItemInfo DTrashItemModel::itemForIndex(const QModelIndex &index)
 {
+    if (!index.isValid())
+        return DTrashItemInfo();
+
     return d->data.at(index.row());
 }
 

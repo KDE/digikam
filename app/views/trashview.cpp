@@ -243,13 +243,13 @@ void TrashView::slotDeleteAllItems()
 
 void TrashView::slotDataChanged()
 {
+    selectLastSelected();
     if (d->model->isEmpty())
     {
         d->deleteAllButton->setEnabled(false);
         return;
     }
     d->deleteAllButton->setEnabled(true);
-    selectLastSelected();
 }
 
 void TrashView::slotChangeLastSelectedItem(const QModelIndex& curr, const QModelIndex&)
@@ -274,17 +274,20 @@ QUrl TrashView::lastSelectedItemUrl() const
 void TrashView::selectLastSelected()
 {
     if (d->model->isEmpty())
-        return;
-
-    if (d->lastSelectedItem.isNull())
+    {
+        d->lastSelectedItem = DTrashItemInfo();
+        d->lastSelectedIndex = QModelIndex();
+    }
+    else if (!d->lastSelectedIndex.isValid())
     {
         d->tableView->selectRow(0);
         d->tableView->scrollTo(QModelIndex(), QAbstractItemView::EnsureVisible);
-        return;
     }
-
-    d->tableView->selectRow(d->lastSelectedIndex.row());
-    d->tableView->scrollTo(d->lastSelectedIndex, QAbstractItemView::EnsureVisible);
+    else
+    {
+        d->tableView->selectRow(d->lastSelectedIndex.row());
+        d->tableView->scrollTo(d->lastSelectedIndex, QAbstractItemView::EnsureVisible);
+    }
     emit selectionChanged();
 }
 
