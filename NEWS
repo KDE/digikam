@@ -14,5 +14,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 007 ==> 334244 - Face tag zones are hidden after adding a new face.
 008 ==> 351243 - Table view click to select broken.
 009 ==> 350225 - Auto rename on import does not work for RAW images.
-010 ==> 346646 - renaming works when downloading selected but settings are ignored when importing new ones only.
-011 ==> 
+010 ==> 346646 - Renaming works when downloading selected but settings are ignored when importing new ones only.
+011 ==> 351245 - Unable to connect to mysql database, due to missing 'create trigger' while user has ALL privileges on digikam DBs.
+012 ==> 
