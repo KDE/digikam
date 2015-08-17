@@ -122,7 +122,7 @@ public:
 
     QStringList                       tagList;
 
-    QMultiMap<QString, QVariant>           faceTagsList;
+    QMultiMap<QString, QVariant>      faceTagsList;
 
     MetadataHub::Status               dateTimeStatus;
     MetadataHub::Status               titlesStatus;
@@ -267,7 +267,7 @@ template <class T> void MetadataHub::Private::loadWithInterval(const T& data, T&
             }
 
             // they are not equal. We need to enter the disjoint state.
-            status = MetadataHub::MetadataDisjoint;
+//            status = MetadataHub::MetadataDisjoint;
 
             if (data > storage)
             {
@@ -280,19 +280,19 @@ template <class T> void MetadataHub::Private::loadWithInterval(const T& data, T&
             }
 
             break;
-        case MetadataHub::MetadataDisjoint:
+//        case MetadataHub::MetadataDisjoint:
 
-            // smaller value is stored in storage
-            if (data < storage)
-            {
-                storage = data;
-            }
-            else if (highestStorage < data)
-            {
-                highestStorage = data;
-            }
+//            // smaller value is stored in storage
+//            if (data < storage)
+//            {
+//                storage = data;
+//            }
+//            else if (highestStorage < data)
+//            {
+//                highestStorage = data;
+//            }
 
-            break;
+//            break;
     }
 }
 
@@ -315,10 +315,10 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
             }
 
             // they are not equal. We need to enter the disjoint state.
-            status = MetadataHub::MetadataDisjoint;
-            break;
-        case MetadataHub::MetadataDisjoint:
-            break;
+//            status = MetadataHub::MetadataDisjoint;
+//            break;
+//        case MetadataHub::MetadataDisjoint:
+//            break;
     }
 }
 
@@ -1050,10 +1050,10 @@ void MetadataHub::dateTimeInterval(QDateTime& lowest, QDateTime& highest) const
         case MetadataAvailable:
             lowest = highest = d->dateTime;
             break;
-        case MetadataDisjoint:
-            lowest  = d->dateTime;
-            highest = d->lastDateTime;
-            break;
+//        case MetadataDisjoint:
+//            lowest  = d->dateTime;
+//            highest = d->lastDateTime;
+//            break;
     }
 }
 
@@ -1067,10 +1067,10 @@ void MetadataHub::pickLabelInterval(int& lowest, int& highest) const
         case MetadataAvailable:
             lowest = highest = d->pickLabel;
             break;
-        case MetadataDisjoint:
-            lowest  = d->pickLabel;
-            highest = d->highestPickLabel;
-            break;
+//        case MetadataDisjoint:
+//            lowest  = d->pickLabel;
+//            highest = d->highestPickLabel;
+//            break;
     }
 }
 
@@ -1084,10 +1084,10 @@ void MetadataHub::colorLabelInterval(int& lowest, int& highest) const
         case MetadataAvailable:
             lowest = highest = d->colorLabel;
             break;
-        case MetadataDisjoint:
-            lowest  = d->colorLabel;
-            highest = d->highestColorLabel;
-            break;
+//        case MetadataDisjoint:
+//            lowest  = d->colorLabel;
+//            highest = d->highestColorLabel;
+//            break;
     }
 }
 
@@ -1101,10 +1101,10 @@ void MetadataHub::ratingInterval(int& lowest, int& highest) const
         case MetadataAvailable:
             lowest = highest = d->rating;
             break;
-        case MetadataDisjoint:
-            lowest  = d->rating;
-            highest = d->highestRating;
-            break;
+//        case MetadataDisjoint:
+//            lowest  = d->rating;
+//            highest = d->highestRating;
+//            break;
     }
 }
 

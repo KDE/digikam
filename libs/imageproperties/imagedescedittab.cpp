@@ -1074,20 +1074,20 @@ void ImageDescEditTab::setTagState(TAlbum* const tag, MetadataHub::TagStatus sta
         return;
     }
 
-    switch (status.status)
-    {
-        case MetadataHub::MetadataDisjoint:
-            d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
-            break;
-        case MetadataHub::MetadataAvailable:
-        case MetadataHub::MetadataInvalid:
-            d->tagModel->setChecked(tag, status.hasTag);
-            break;
-        default:
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Untreated tag status enum value " << status.status;
-            d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
-            break;
-    }
+//    switch (status.status)
+//    {
+//        case MetadataHub::MetadataDisjoint:
+//            d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
+//            break;
+//        case MetadataHub::MetadataAvailable:
+//        case MetadataHub::MetadataInvalid:
+//            d->tagModel->setChecked(tag, status.hasTag);
+//            break;
+//        default:
+//            qCWarning(DIGIKAM_GENERAL_LOG) << "Untreated tag status enum value " << status.status;
+//            d->tagModel->setCheckState(tag, Qt::PartiallyChecked);
+//            break;
+//    }
 }
 
 void ImageDescEditTab::initializeTags(QModelIndex& parent)
@@ -1154,14 +1154,14 @@ void ImageDescEditTab::updatePickLabel()
 {
     d->pickLabelSelector->blockSignals(true);
 
-    if (d->hub.pickLabelStatus() == MetadataHub::MetadataDisjoint)
-    {
-        d->pickLabelSelector->setPickLabel(NoPickLabel);
-    }
-    else
-    {
-        d->pickLabelSelector->setPickLabel((PickLabel)d->hub.pickLabel());
-    }
+//    if (d->hub.pickLabelStatus() == MetadataHub::MetadataDisjoint)
+//    {
+//        d->pickLabelSelector->setPickLabel(NoPickLabel);
+//    }
+//    else
+//    {
+//        d->pickLabelSelector->setPickLabel((PickLabel)d->hub.pickLabel());
+//    }
 
     d->pickLabelSelector->blockSignals(false);
 }
@@ -1170,14 +1170,14 @@ void ImageDescEditTab::updateColorLabel()
 {
     d->colorLabelSelector->blockSignals(true);
 
-    if (d->hub.colorLabelStatus() == MetadataHub::MetadataDisjoint)
-    {
-        d->colorLabelSelector->setColorLabel(NoColorLabel);
-    }
-    else
-    {
-        d->colorLabelSelector->setColorLabel((ColorLabel)d->hub.colorLabel());
-    }
+//    if (d->hub.colorLabelStatus() == MetadataHub::MetadataDisjoint)
+//    {
+//        d->colorLabelSelector->setColorLabel(NoColorLabel);
+//    }
+//    else
+//    {
+//        d->colorLabelSelector->setColorLabel((ColorLabel)d->hub.colorLabel());
+//    }
 
     d->colorLabelSelector->blockSignals(false);
 }
@@ -1186,14 +1186,14 @@ void ImageDescEditTab::updateRating()
 {
     d->ratingWidget->blockSignals(true);
 
-    if (d->hub.ratingStatus() == MetadataHub::MetadataDisjoint)
-    {
-        d->ratingWidget->setRating(0);
-    }
-    else
-    {
-        d->ratingWidget->setRating(d->hub.rating());
-    }
+//    if (d->hub.ratingStatus() == MetadataHub::MetadataDisjoint)
+//    {
+//        d->ratingWidget->setRating(0);
+//    }
+//    else
+//    {
+//        d->ratingWidget->setRating(d->hub.rating());
+//    }
 
     d->ratingWidget->blockSignals(false);
 }
@@ -1217,17 +1217,17 @@ void ImageDescEditTab::updateTemplate()
 
 void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget* const widget)
 {
-    if (status == MetadataHub::MetadataDisjoint)
-    {
-        // For text widgets: Set text color to color of disabled text
-        QPalette palette = widget->palette();
-        palette.setColor(QPalette::Text, palette.color(QPalette::Disabled, QPalette::Text));
-        widget->setPalette(palette);
-    }
-    else
-    {
-        widget->setPalette(QPalette());
-    }
+//    if (status == MetadataHub::MetadataDisjoint)
+//    {
+//        // For text widgets: Set text color to color of disabled text
+//        QPalette palette = widget->palette();
+//        palette.setColor(QPalette::Text, palette.color(QPalette::Disabled, QPalette::Text));
+//        widget->setPalette(palette);
+//    }
+//    else
+//    {
+//        widget->setPalette(QPalette());
+//    }
 }
 
 void ImageDescEditTab::slotMoreMenu()

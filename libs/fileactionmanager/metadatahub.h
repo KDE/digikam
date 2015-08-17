@@ -58,8 +58,8 @@ public:
     enum Status
     {
         MetadataInvalid,   /// not yet filled with any value
-        MetadataAvailable, /// only one data set has been added, or a common value is available
-        MetadataDisjoint   /// No common value is available. For rating and dates, the interval is available.
+        MetadataAvailable /// only one data set has been added, or a common value is available
+//        MetadataDisjoint   /// No common value is available. For rating and dates, the interval is available.
     };
 
 public:
