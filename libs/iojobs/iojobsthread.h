@@ -32,7 +32,7 @@
 
 #include "album.h"
 #include "iojob.h"
-#include "imageinfo.h"
+#include "dtrashiteminfo.h"
 
 using namespace KDcrawIface;
 
@@ -74,6 +74,18 @@ public:
      * @param collectionPath
      */
     void listDTrashItems(const QString& collectionPath);
+
+    /**
+     * @brief creates a job for every item to restore back to album
+     * @param items to restore
+     */
+    void restoreDTrashItems(const DTrashItemInfoList& items);
+
+    /**
+     * @brief creates a job for every item to delete from collection trash
+     * @param items to delete
+     */
+    void deleteDTrashItems(const DTrashItemInfoList& items);
 
     /**
      * @brief Starts one job to rename a file to a new name
@@ -145,7 +157,7 @@ Q_SIGNALS:
 
     void finished();
     void renamed(const QUrl& oldUrl, const QUrl& newURl);
-    void collectionTrashImagesInfoList(const ImageInfoList& imgsList);
+    void collectionTrashItemInfo(const DTrashItemInfo& trashItemInfo);
 
 private:
 
@@ -154,6 +166,16 @@ private:
      * @param job to be connected
      */
     void connectOneJob(IOJob* const j);
+
+    /**
+     * @brief Recursive method to find the suitable to restore items from trash
+     * @param colPath: Path of item in collection before deleting to trash
+     * @param usedUrls: a list of all used urls to rename previous files,
+     *        to prevent duplication
+     * @param version: to add to the base name in case the name was taken
+     * @return QUrl to use in the renameFile() method
+     */
+    QUrl getAvailableQUrlToRestoreInCollection(const QString& fileColPath, QList<QUrl>& usedUrls, int version = 0);
 
 private:
 

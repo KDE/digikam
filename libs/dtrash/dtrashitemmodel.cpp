@@ -26,6 +26,8 @@
 // Qt includes
 
 #include <QPixmap>
+#include <QPersistentModelIndex>
+#include <QTimer>
 
 // KDE includes
 
@@ -36,22 +38,73 @@
 #include "digikam_debug.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
+#include "iojobsmanager.h"
+#include "iojobsthread.h"
 
 namespace Digikam
 {
 
-DTrashItemModel::DTrashItemModel(QObject* parent)
-    : QAbstractTableModel(parent)
+class DTrashItemModel::Private
 {
-    m_thumbnailThread = new ThumbnailLoadThread(this);
+
+public:
+
+    Private() :
+        thumbSize(ThumbnailSize::Large),
+        itemsLoadingThread(0),
+        thumbnailThread(0),
+        timer(0)
+    {
+    }
+
+public:
+
+    int                  thumbSize;
+    IOJobsThread*        itemsLoadingThread;
+    ThumbnailLoadThread* thumbnailThread;
+    QTimer*              timer;
+    DTrashItemInfoList   data;
+};
+
+DTrashItemModel::DTrashItemModel(QObject* parent)
+    : QAbstractTableModel(parent), d(new Private)
+{
+    qRegisterMetaType<DTrashItemInfo>("DTrashItemInfo");
+    d->thumbnailThread = new ThumbnailLoadThread(this);
+
+    d->timer = new QTimer();
+    d->timer->setInterval(100);
+    d->timer->setSingleShot(true);
+
+    connect(d->timer, SIGNAL(timeout()),
+            this, SLOT(refreshLayout()));
+}
+
+DTrashItemModel::~DTrashItemModel()
+{
+    d->thumbnailThread->cleanUp();
+    delete d->thumbnailThread;
+}
+
+int DTrashItemModel::rowCount(const QModelIndex &) const
+{
+    return d->data.count();
+}
+
+int DTrashItemModel::columnCount(const QModelIndex &) const
+{
+    return 3;
 }
 
 QVariant DTrashItemModel::data(const QModelIndex &index, int role) const
 {
-    if (role != Qt::DisplayRole && role != Qt::DecorationRole && role != Qt::TextAlignmentRole)
+    if ( role != Qt::DisplayRole &&
+         role != Qt::DecorationRole &&
+         role != Qt::TextAlignmentRole &&
+         role != Qt::ToolTipRole)
         return QVariant();
 
-    const DTrashItemInfo& item = m_data[index.row()];
+    const DTrashItemInfo& item = d->data[index.row()];
 
     if (role == Qt::TextAlignmentRole)
         return Qt::AlignCenter;
@@ -69,6 +122,9 @@ QVariant DTrashItemModel::data(const QModelIndex &index, int role) const
         }
     }
 
+    if (role == Qt::ToolTipRole && index.column() == 1)
+        return item.collectionRelativePath;
+
     switch (index.column())
     {
         case 1: return item.collectionRelativePath;
@@ -79,7 +135,7 @@ QVariant DTrashItemModel::data(const QModelIndex &index, int role) const
 
 bool DTrashItemModel::pixmapForItem(const QString &path, QPixmap &pix) const
 {
-    return m_thumbnailThread->find(ThumbnailIdentifier(path), pix, ThumbnailSize::Large);
+    return d->thumbnailThread->find(ThumbnailIdentifier(path), pix, d->thumbSize);
 }
 
 QVariant DTrashItemModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -98,9 +154,112 @@ QVariant DTrashItemModel::headerData(int section, Qt::Orientation orientation, i
 
 void DTrashItemModel::append(const DTrashItemInfo& itemInfo)
 {
-    beginInsertRows(QModelIndex(), m_data.count(), m_data.count());
-    m_data.append(itemInfo);
+    if (d->itemsLoadingThread != sender())
+        return;
+
+    beginInsertRows(QModelIndex(), d->data.count(), d->data.count());
+    d->data.append(itemInfo);
     endInsertRows();
+    dataChange();
+}
+
+void DTrashItemModel::removeItems(const QModelIndexList& indexes)
+{
+    QList<QPersistentModelIndex> persistentIndexes;
+
+    foreach (const QModelIndex& index, indexes)
+    {
+        persistentIndexes << index;
+    }
+
+    layoutAboutToBeChanged();
+
+    foreach (const QPersistentModelIndex& index, persistentIndexes)
+    {
+        if (!index.isValid())
+            continue;
+
+        beginRemoveRows(QModelIndex(), index.row(), index.row());
+        removeRow(index.row());
+        d->data.removeAt(index.row());
+        endRemoveRows();
+    }
+
+    layoutChanged();
+    dataChange();
+}
+
+void DTrashItemModel::refreshLayout()
+{
+    layoutAboutToBeChanged();
+    layoutChanged();
+}
+
+void DTrashItemModel::clearCurrentData()
+{
+    beginResetModel();
+    d->data.clear();
+    endResetModel();
+    dataChange();
+}
+
+void DTrashItemModel::loadItemsForCollection(const QString &colPath)
+{
+    clearCurrentData();
+
+    d->itemsLoadingThread =
+            IOJobsManager::instance()->startDTrashItemsListingForCollection(colPath);
+
+    connect(d->itemsLoadingThread, SIGNAL(collectionTrashItemInfo(DTrashItemInfo)),
+            this, SLOT(append(DTrashItemInfo)),
+            Qt::QueuedConnection);
+}
+
+DTrashItemInfo DTrashItemModel::itemForIndex(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return DTrashItemInfo();
+
+    return d->data.at(index.row());
+}
+
+DTrashItemInfoList DTrashItemModel::itemsForIndexes(const QList<QModelIndex>& indexes)
+{
+    DTrashItemInfoList items;
+
+    foreach (const QModelIndex& index, indexes)
+    {
+        if (!index.isValid())
+            continue;
+
+        items << itemForIndex(index);
+    }
+
+    return items;
+}
+
+DTrashItemInfoList DTrashItemModel::allItems()
+{
+    return d->data;
+}
+
+bool DTrashItemModel::isEmpty()
+{
+    return d->data.isEmpty();
+}
+
+void DTrashItemModel::changeThumbSize(int size)
+{
+    d->thumbSize = size;
+
+    if (isEmpty())
+        return;
+
+    const QModelIndex topLeft = index(0, 0, QModelIndex());
+    const QModelIndex bottomRight = index(rowCount(QModelIndex())-1, 0, QModelIndex());
+    dataChanged(topLeft, bottomRight);
+
+    d->timer->start();
 }
 
 } // namespace Digikam

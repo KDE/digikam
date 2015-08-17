@@ -91,4 +91,22 @@ IOJobsThread *IOJobsManager::startDTrashItemsListingForCollection(const QString&
     return thread;
 }
 
+IOJobsThread* IOJobsManager::startRestoringDTrashItems(const DTrashItemInfoList& trashItemsList)
+{
+    IOJobsThread* const thread = new IOJobsThread(this);
+    thread->restoreDTrashItems(trashItemsList);
+    thread->start();
+
+    return thread;
+}
+
+IOJobsThread* IOJobsManager::startDeletingDTrashItems(const DTrashItemInfoList& trashItemsList)
+{
+    IOJobsThread* const thread = new IOJobsThread(this);
+    thread->deleteDTrashItems(trashItemsList);
+    thread->start();
+
+    return thread;
+}
+
 } // namespace Digikam

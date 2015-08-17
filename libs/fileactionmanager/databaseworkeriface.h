@@ -55,7 +55,7 @@ public Q_SLOTS:
     virtual void setExifOrientation(FileActionImageInfoList, int)            {};
     virtual void applyMetadata(FileActionImageInfoList, MetadataHub*)        {};
     virtual void copyAttributes(FileActionImageInfoList, const QStringList&) {};
-
+    virtual void dumySlot(FileActionImageInfoList infos){};
 Q_SIGNALS:
 
     void writeMetadataToFiles(FileActionImageInfoList infos);
@@ -85,6 +85,7 @@ public:
     void setExifOrientation(FileActionImageInfoList infos, int orientation);
     void applyMetadata(FileActionImageInfoList infos, MetadataHub* hub);
     void copyAttributes(FileActionImageInfoList infos, const QStringList& derivedPaths);
+    void dumySlot(FileActionImageInfoList infos);
 
 private:
 

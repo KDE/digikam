@@ -40,6 +40,10 @@ namespace Digikam
 FileActionMngr::Private::Private(FileActionMngr* const q)
     : q(q)
 {
+    qRegisterMetaType<MetadataHub*>("MetadataHub*");
+    qRegisterMetaType<FileActionImageInfoList>("FileActionImageInfoList");
+    qRegisterMetaType<QList<ImageInfo> >("QList<ImageInfo>");
+
     dbWorker   = new FileActionMngrDatabaseWorker(this);
     fileWorker = new ParallelAdapter<FileWorkerInterface>();
 

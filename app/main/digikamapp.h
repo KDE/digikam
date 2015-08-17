@@ -141,7 +141,7 @@ private:
     void    showSideBars(bool visible);
     bool    thumbbarVisibility() const;
     void    customizedFullScreenMode(bool set);
-    void    toogleShowBar();
+    void    toggleShowBar();
 
 private Q_SLOTS:
 
@@ -204,6 +204,7 @@ private Q_SLOTS:
     void slotSwitchedToIconView();
     void slotSwitchedToMapView();
     void slotSwitchedToTableView();
+    void slotSwitchedToTrashView();
 
     void slotImportAddImages();
     void slotImportAddFolders();

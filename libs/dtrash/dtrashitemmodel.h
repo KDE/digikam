@@ -38,22 +38,44 @@ namespace Digikam
 
 class DTrashItemModel : public QAbstractTableModel
 {
+    Q_OBJECT
 
 public:
-    DTrashItemModel(QObject* parent = 0);
 
-    inline int rowCount(const QModelIndex &) const { return m_data.count(); }
-    inline int columnCount(const QModelIndex &) const { return 3; }
+    DTrashItemModel(QObject* parent = 0);
+    ~DTrashItemModel();
+
+    int rowCount(const QModelIndex &) const;
+    int columnCount(const QModelIndex &) const;
 
     QVariant data(const QModelIndex& index, int role) const;
-    bool pixmapForItem(const QString& path, QPixmap& pix) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    void append(const DTrashItemInfo &itemInfo);
+
+    bool pixmapForItem(const QString& path, QPixmap& pix) const;
+    void clearCurrentData();
+
+    void loadItemsForCollection(const QString& colPath);
+    DTrashItemInfo itemForIndex(const QModelIndex& index);
+    DTrashItemInfoList itemsForIndexes(const QList<QModelIndex>& indexes);
+    DTrashItemInfoList allItems();
+    bool isEmpty();
+
+    void changeThumbSize(int size);
+
+public Q_SLOTS:
+
+    void append(const DTrashItemInfo& itemInfo);
+    void removeItems(const QModelIndexList& indexes);
+    void refreshLayout();
+
+Q_SIGNALS:
+
+    void dataChange();
 
 private:
 
-    DTrashItemInfoList   m_data;
-    ThumbnailLoadThread* m_thumbnailThread;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -38,7 +38,7 @@
 
 // libkexiv2 includes
 
-#include <rotationmatrix.h>
+#include <KExiv2/RotationMatrix>
 
 // Local includes
 
@@ -122,6 +122,7 @@ Q_SIGNALS:
     void signalSwitchedToIconView();
     void signalSwitchedToMapView();
     void signalSwitchedToTableView();
+    void signalSwitchedToTrashView();
 
     void signalGotoAlbumAndItem(const ImageInfo&);
     void signalGotoDateAndItem(AlbumIconItem*);

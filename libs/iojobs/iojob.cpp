@@ -40,7 +40,6 @@
 #include "album.h"
 #include "databaseaccess.h"
 #include "databaseparameters.h"
-#include "imageinfo.h"
 #include "dtrash.h"
 
 namespace Digikam
@@ -193,14 +192,14 @@ void DeleteJob::run()
     {
         if (fileInfo.isDir())
         {
-            if (!DTrash::instance()->deleteDirRecursivley(m_srcToDelete.path()))
+            if (!DTrash::deleteDirRecursivley(m_srcToDelete.path()))
             {
                 error(i18n("Couldn't move Dir %1 to collection trash", fileInfo.path()));
             }
         }
         else
         {
-            if (!DTrash::instance()->deleteImage(m_srcToDelete.path()))
+            if (!DTrash::deleteImage(m_srcToDelete.path()))
             {
                 error(i18n("Couldn't move image %1 to collection trash", fileInfo.filePath()));
             }
@@ -285,10 +284,10 @@ DTrashItemsListingJob::DTrashItemsListingJob(const QString &collectionPath)
 
 void DTrashItemsListingJob::run()
 {
-    ImageInfoList imgsInfoList;
+    DTrashItemInfo itemInfo;
 
-    QString collectionTrashFilesPath = m_collectionPath + QDir::separator() + TRASH_FOLDER +
-                                       QDir::separator() + FILES_FOLDER;
+    QString collectionTrashFilesPath = m_collectionPath + QDir::separator() + DTrash::TRASH_FOLDER +
+                                       QDir::separator() + DTrash::FILES_FOLDER;
 
     qCDebug(DIGIKAM_IOJOB_LOG) << "collectionTrashFilesPath: " << collectionTrashFilesPath;
 
@@ -297,11 +296,13 @@ void DTrashItemsListingJob::run()
     foreach (const QFileInfo& fileInfo, filesDir.entryInfoList(QDir::Files))
     {
         qCDebug(DIGIKAM_IOJOB_LOG) << "file in trash: " << fileInfo.filePath();
-        qCDebug(DIGIKAM_IOJOB_LOG) << "image info produced: " << ImageInfo::fromLocalFile(fileInfo.filePath());
-        imgsInfoList << ImageInfo::fromLocalFile(fileInfo.filePath());
+        itemInfo.trashPath = fileInfo.filePath();
+
+        DTrash::extractJsonForItem(m_collectionPath, fileInfo.baseName(), itemInfo);
+
+        emit trashItemInfo(itemInfo);
     }
 
-    emit trashImagesInfoList(imgsInfoList);
     emit signalDone();
 }
 

@@ -30,6 +30,7 @@
 // Local includes
 
 #include "dtrashitemmodel.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -41,7 +42,30 @@ class TrashView : public QWidget
 public:
 
     explicit TrashView(QWidget* parent = 0);
-    DTrashItemModel* model();
+    ~TrashView();
+
+    DTrashItemModel* model() const;
+
+    ThumbnailSize getThumbnailSize() const;
+    void setThumbnailSize(ThumbnailSize thumbSize);
+
+    QUrl lastSelectedItemUrl() const;
+    void selectLastSelected();
+
+private Q_SLOTS:
+
+    void slotSelectionChanged();
+    void slotRestoreSelectedItems();
+    void slotDeleteSelectedItems();
+    void slotRemoveItemsFromModel();
+    void slotRemoveAllItemsFromModel();
+    void slotDeleteAllItems();
+    void slotDataChanged();
+    void slotChangeLastSelectedItem(const QModelIndex& curr, const QModelIndex& prev);
+
+Q_SIGNALS:
+
+    void selectionChanged();
 
 private:
 
@@ -50,4 +74,5 @@ private:
 };
 
 } // namespace Digikam
+
 #endif // TRASHVIEW_H

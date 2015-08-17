@@ -44,8 +44,6 @@
 #include "digikamapp.h"
 #include "dbjobsmanager.h"
 #include "dbjobsthread.h"
-#include "iojobsmanager.h"
-#include "iojobsmanager.h"
 
 namespace Digikam
 {
@@ -317,8 +315,19 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         return;
     }
 
+    if (d->jobThread)
+    {
+        d->jobThread->cancel();
+        d->jobThread = 0;
+    }
+
     DatabaseUrl url;
     QList<int> tagIds;
+
+    if (albums.first()->isTrashAlbum())
+    {
+        return;
+    }
 
     if(albums.first()->type() == Album::TAG)
     {
@@ -425,6 +434,7 @@ void ImageAlbumModel::slotResult()
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
 
+    d->jobThread->cancel();
     d->jobThread = 0;
 
     // either of the two

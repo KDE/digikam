@@ -70,7 +70,7 @@
 
 // Libkexiv2
 
-#include <rotationmatrix.h>
+#include <KExiv2/RotationMatrix>
 
 // Local includes
 
@@ -536,6 +536,9 @@ void DigikamApp::setupViewConnections()
 
     connect(d->view, SIGNAL(signalSwitchedToTableView()),
             this, SLOT(slotSwitchedToTableView()));
+
+    connect(d->view, SIGNAL(signalSwitchedToTrashView()),
+            this, SLOT(slotSwitchedToTrashView()));
 }
 
 void DigikamApp::setupStatusBar()
@@ -3005,14 +3008,14 @@ void DigikamApp::slotSwitchedToPreview()
 {
     d->imagePreviewAction->setChecked(true);
     d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
-    toogleShowBar();
+    toggleShowBar();
 }
 
 void DigikamApp::slotSwitchedToIconView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     d->imageIconViewAction->setChecked(true);
-    toogleShowBar();
+    toggleShowBar();
 }
 
 void DigikamApp::slotSwitchedToMapView()
@@ -3022,14 +3025,21 @@ void DigikamApp::slotSwitchedToMapView()
 #ifdef HAVE_KGEOMAP
     d->imageMapViewAction->setChecked(true);
 #endif // HAVE_KGEOMAP
-    toogleShowBar();
+    toggleShowBar();
 }
 
 void DigikamApp::slotSwitchedToTableView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     d->imageTableViewAction->setChecked(true);
-    toogleShowBar();
+    toggleShowBar();
+}
+
+void DigikamApp::slotSwitchedToTrashView()
+{
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+    // TODO: disable all other views
+    toggleShowBar();
 }
 
 void DigikamApp::customizedFullScreenMode(bool set)
@@ -3038,12 +3048,12 @@ void DigikamApp::customizedFullScreenMode(bool set)
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
-        : toogleShowBar();
+        : toggleShowBar();
 
     d->view->toggleFullScreen(set);
 }
 
-void DigikamApp::toogleShowBar()
+void DigikamApp::toggleShowBar()
 {
     switch (d->view->viewMode())
     {

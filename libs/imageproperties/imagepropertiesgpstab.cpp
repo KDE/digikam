@@ -52,8 +52,8 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // Libkgeomap includes
 
-#include <kgeomap_widget.h>
-#include <itemmarkertiler.h>
+#include <KGeoMap/KGeoMap_Widget>
+#include <KGeoMap/ItemMarkerTiler>
 
 // Libkdcraw includes
 

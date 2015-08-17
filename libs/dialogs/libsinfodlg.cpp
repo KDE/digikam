@@ -47,11 +47,13 @@
 #include <KDCRAW/KDcraw>
 
 #ifdef HAVE_KGEOMAP
+
 // Libkgeomap includes
 
-#include <kgeomap_widget.h>
+#include <KGeoMap/KGeoMap_Widget>
 
 using namespace KGeoMap;
+
 #endif // HAVE_KGEOMAP
 
 // C ANSI includes

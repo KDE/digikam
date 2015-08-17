@@ -7,6 +7,7 @@
  * Description : Load and cache tag thumbnails
  *
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -135,6 +136,7 @@ public:
     QPixmap getNewTagIcon(RelativeSize size = NormalSize);
 
     QPixmap getStandardAlbumIcon(RelativeSize size = NormalSize);
+    QPixmap getStandardAlbumTrashIcon(RelativeSize size = NormalSize);
     QPixmap getStandardAlbumRootIcon(RelativeSize size = NormalSize);
     QPixmap getStandardAlbumIcon(PAlbum* const album, RelativeSize size = NormalSize);
 

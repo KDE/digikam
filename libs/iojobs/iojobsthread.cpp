@@ -21,12 +21,19 @@
  *
  * ============================================================ */
 
+// Qt includes
+
+#include <QFileInfo>
+#include <QDir>
+
+// Local includes
+
 #include "iojobsthread.h"
 #include "iojob.h"
-#include "imageinfo.h"
 #include "dnotificationwrapper.h"
 #include "digikam_debug.h"
 #include "digikamapp.h"
+#include "dtrashiteminfo.h"
 
 namespace Digikam
 {
@@ -37,14 +44,17 @@ class IOJobsThread::Private
 public:
 
     Private()
-        : isCanceled(false),
+        : jobsCount(0),
+          isCanceled(false),
           isRenameThread(false),
           keepErrors(true)
     {
     }
 
+    int            jobsCount;
     bool           isCanceled;
     bool           isRenameThread;
+
     QUrl           oldUrl;
 
     bool           keepErrors;
@@ -73,6 +83,7 @@ void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
         connectOneJob(j);
 
         collection.insert(j, 0);
+        d->jobsCount++;
     }
 
     appendJobs(collection);
@@ -89,6 +100,7 @@ void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
         connectOneJob(j);
 
         collection.insert(j, 0);
+        d->jobsCount++;
     }
 
     appendJobs(collection);
@@ -105,6 +117,7 @@ void IOJobsThread::del(const QList<QUrl>& srcsToDelete, bool useTrash)
         connectOneJob(j);
 
         collection.insert(j, 0);
+        d->jobsCount++;
     }
 
     appendJobs(collection);
@@ -116,14 +129,53 @@ void IOJobsThread::listDTrashItems(const QString& collectionPath)
 
     DTrashItemsListingJob* const j = new DTrashItemsListingJob(collectionPath);
 
-    connect(j, SIGNAL(trashImagesInfoList(ImageInfoList)),
-            this, SIGNAL(collectionTrashImagesInfoList(ImageInfoList)));
+    connect(j, SIGNAL(trashItemInfo(DTrashItemInfo)),
+            this, SIGNAL(collectionTrashItemInfo(DTrashItemInfo)));
 
     connect(j, SIGNAL(signalDone()),
             this, SIGNAL(finished()));
 
     collection.insert(j, 0);
+    d->jobsCount++;
+
     appendJobs(collection);
+}
+
+void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
+{
+    QList<QUrl> listOfJsonFilesToRemove;
+    QList<QUrl> listOfUsedUrls;
+
+    foreach (const DTrashItemInfo& item, items)
+    {
+        QUrl srcToRename = QUrl::fromLocalFile(item.trashPath);
+        QUrl newName     = getAvailableQUrlToRestoreInCollection(item.collectionPath, listOfUsedUrls);
+
+        listOfUsedUrls << newName;
+
+        QFileInfo fi(item.collectionPath);
+        if(!fi.dir().exists())
+        {
+            fi.dir().mkpath(fi.dir().path());
+        }
+
+        renameFile(srcToRename, newName);
+        listOfJsonFilesToRemove << QUrl::fromLocalFile(item.jsonFilePath);
+    }
+    del(listOfJsonFilesToRemove, false);
+}
+
+void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
+{
+    QList<QUrl> urlsToDelete;
+
+    foreach (const DTrashItemInfo& item, items)
+    {
+        urlsToDelete << QUrl::fromLocalFile(item.trashPath);
+        urlsToDelete << QUrl::fromLocalFile(item.jsonFilePath);
+    }
+
+    del(urlsToDelete, false);
 }
 
 void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
@@ -131,13 +183,7 @@ void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
     RJobCollection collection;
     RenameFileJob* const j = new RenameFileJob(srcToRename, newName);
 
-    connect(j, SIGNAL(error(QString)),
-            this, SLOT(error(QString)));
-
-    // Connecting directly to signal finished
-    // because it's only one job
-    connect(j, SIGNAL(signalDone()),
-            this, SIGNAL(finished()));
+    connectOneJob(j);
 
     connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
             this, SIGNAL(renamed(QUrl,QUrl)));
@@ -146,6 +192,8 @@ void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
     d->oldUrl         = srcToRename;
 
     collection.insert(j, 0);
+    d->jobsCount++;
+
     appendJobs(collection);
 }
 
@@ -190,7 +238,7 @@ QList<QString>& IOJobsThread::errorsList()
     return d->errorsList;
 }
 
-void IOJobsThread::connectOneJob(IOJob * const j)
+void IOJobsThread::connectOneJob(IOJob* const j)
 {
     connect(j, SIGNAL(error(QString)),
             this, SLOT(error(QString)));
@@ -199,10 +247,40 @@ void IOJobsThread::connectOneJob(IOJob * const j)
             this, SLOT(oneJobFinished()));
 }
 
+QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColPath, QList<QUrl>& usedUrls, int version)
+{
+    QFileInfo fileInfo(fileColPath);
+
+    if (version != 0)
+    {
+        QString dir      = fileInfo.dir().path() + QDir::separator();
+        QString baseName = fileInfo.baseName() + QString::number(version);
+        QString suffix   = QLatin1String(".") + fileInfo.completeSuffix();
+        fileInfo.setFile(dir + baseName + suffix);
+    }
+
+    QUrl url = QUrl::fromLocalFile(fileInfo.filePath());
+    qCDebug(DIGIKAM_GENERAL_LOG) << "URL USED BEFORE: " << usedUrls.contains(url);
+
+    if (!fileInfo.exists() && !usedUrls.contains(url))
+    {
+        return url;
+    }
+    else
+    {
+        return getAvailableQUrlToRestoreInCollection(fileColPath, usedUrls, ++version);
+    }
+}
+
 void IOJobsThread::oneJobFinished()
 {
-    if(isEmpty())
+    d->jobsCount--;
+
+    if(d->jobsCount == 0)
+    {
         emit finished();
+        qCDebug(DIGIKAM_IOJOB_LOG) << "Thread Finished";
+    }
 }
 
 void IOJobsThread::error(const QString& errString)

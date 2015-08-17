@@ -31,8 +31,8 @@
 
 // Libkface includes
 
-#include <identity.h>
-#include <recognitiondatabase.h>
+#include <KFace/Identity>
+#include <KFace/RecognitionDatabase>
 
 // Local includes
 

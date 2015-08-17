@@ -31,7 +31,7 @@
 
 // Libkface includes
 
-#include <identity.h>
+#include <KFace/Identity>
 
 // Local includes
 

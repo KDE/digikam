@@ -35,8 +35,8 @@
 
 // libkgeomap includes
 
-#include <abstractmarkertiler.h>
-#include <kgeomap_widget.h>
+#include <KGeoMap/AbstractMarkerTiler>
+#include <KGeoMap/KGeoMap_Widget>
 
 // Local includes
 

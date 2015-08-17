@@ -322,6 +322,16 @@ bool Album::isUsedByLabelsTree() const
     return m_usedByLabelsTree;
 }
 
+bool Album::isTrashAlbum() const
+{
+    if (m_id < -1 && m_type == PHYSICAL)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void Album::setUsedByLabelsTree(bool isUsed)
 {
     m_usedByLabelsTree = isUsed;
@@ -368,7 +378,8 @@ PAlbum::PAlbum(int albumRoot, const QString& parentPath, const QString& title, i
 }
 
 PAlbum::PAlbum(const QString& parentPath, int albumRoot)
-    : Album(Album::PHYSICAL, m_uniqueTrashId--, false)
+    : Album(Album::PHYSICAL, m_uniqueTrashId--, false),
+      m_iconId(0)
 {
     setTitle(QLatin1String("Trash"));
 

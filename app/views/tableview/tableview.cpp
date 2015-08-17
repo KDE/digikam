@@ -31,12 +31,14 @@
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
+#include <QApplication>
 
 // Local includes
 
 #include "contextmenuhelper.h"
 #include "fileactionmngr.h"
 #include "album.h"
+#include "applicationsettings.h"
 #include "imageviewutilities.h"
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
@@ -53,6 +55,7 @@ class ImageFilterModel;
 class TableView::Private
 {
 public:
+
     Private()
       : columnProfiles(),
         thumbnailSize(),
@@ -73,13 +76,13 @@ TableView::TableView(QItemSelectionModel* const selectionModel,
       d(new Private()),
       s(new TableViewShared())
 {
-    s->isActive                  = false;
-    s->tableView                 = this;
-    s->thumbnailLoadThread       = new ThumbnailLoadThread(this);
-    s->imageFilterModel          = dynamic_cast<ImageFilterModel*>(imageFilterModel);
-    s->imageModel                = dynamic_cast<ImageModel*>(imageFilterModel->sourceModel());
-    s->imageFilterSelectionModel = selectionModel;
-    s->columnFactory             = new TableViewColumnFactory(s.data(), this);
+    s->isActive                      = false;
+    s->tableView                     = this;
+    s->thumbnailLoadThread           = new ThumbnailLoadThread(this);
+    s->imageFilterModel              = dynamic_cast<ImageFilterModel*>(imageFilterModel);
+    s->imageModel                    = dynamic_cast<ImageModel*>(imageFilterModel->sourceModel());
+    s->imageFilterSelectionModel     = selectionModel;
+    s->columnFactory                 = new TableViewColumnFactory(s.data(), this);
 
     QVBoxLayout* const vbox1         = new QVBoxLayout();
     s->tableViewModel                = new TableViewModel(s.data(), this);
@@ -157,8 +160,26 @@ void TableView::slotItemActivated(const QModelIndex& tableViewIndex)
 {
     const ImageInfo info = s->tableViewModel->imageInfo(tableViewIndex);
 
-    /// @todo Respect edit/preview setting
-    emit signalPreviewRequested(info);
+    if (info.isNull())
+    {
+        return;
+    }
+
+    if (qApp->queryKeyboardModifiers() != Qt::MetaModifier)
+    {
+        if (ApplicationSettings::instance()->getItemLeftClickAction() == ApplicationSettings::ShowPreview)
+        {
+            emit signalPreviewRequested(info);
+        }
+        else
+        {
+            d->imageViewUtilities->openInfos(info, allInfo(), currentAlbum());
+        }
+    }
+    else
+    {
+        d->imageViewUtilities->openInfosWithDefaultApplication(QList<ImageInfo>() << info);
+    }
 }
 
 bool TableView::eventFilter(QObject* watched, QEvent* event)

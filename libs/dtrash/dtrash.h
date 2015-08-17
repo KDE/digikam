@@ -31,15 +31,7 @@
 
 // Local includes
 
-#include "imageinfo.h"
-
-// Macros
-#define TRASH_FOLDER               QLatin1String(".dtrash")
-#define FILES_FOLDER               QLatin1String("files")
-#define INFO_FOLDER                QLatin1String("info")
-#define INFO_FILE_EXTENSION        QLatin1String(".dtrashinfo")
-#define PATH_JSON_KEY              QLatin1String("path")
-#define DELETIONTIMESTAMP_JSON_KEY QLatin1String("deletiontimestamp")
+#include "dtrashiteminfo.h"
 
 namespace Digikam
 {
@@ -49,10 +41,18 @@ class DTrash
 
 public:
 
-    static DTrash* instance();
+    const static QString TRASH_FOLDER;
+    const static QString FILES_FOLDER;
+    const static QString INFO_FOLDER;
+    const static QString INFO_FILE_EXTENSION;
+    const static QString PATH_JSON_KEY;
+    const static QString DELETIONTIMESTAMP_JSON_KEY;
 
-    bool deleteImage(const QString &imageToDelete);
-    bool deleteDirRecursivley(const QString& dirToDelete);
+public:
+
+    static bool deleteImage(const QString &imageToDelete);
+    static bool deleteDirRecursivley(const QString& dirToDelete);
+    static void extractJsonForItem(const QString& collPath, const QString& baseName, DTrashItemInfo& itemInfo);
 
 private:
 
@@ -61,7 +61,7 @@ private:
      * @param collectionPath: the full path to the collection to prepare the trash for
      * @return true if the trash is prepared successfully
      */
-    bool prepareCollectionTrash(const QString& collectionPath);
+    static bool prepareCollectionTrash(const QString& collectionPath);
 
     /**
      * @brief Creates a json file containing the image path and deletion timestamp
@@ -72,7 +72,7 @@ private:
      * @example createJsonRecordForFile("home/user/Pics", "/home/user/Pics/cats/cute/katy.jpg")
      *          returns => "katy"
      */
-    QString createJsonRecordForFile(const QString& collectionPath, const QString& imagePath);
+    static QString createJsonRecordForFile(const QString& collectionPath, const QString& imagePath);
 
     /**
      * @brief Checks for duplicates of files names inside the trash and if there is
@@ -87,11 +87,10 @@ private:
      *          returns => "home/user/Pics/.trash/info/katy{version}.dtrashInfo"
      *          where {version} is a integer number that is available in trash
      */
-    QString getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version = 0);
+    static QString getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version = 0);
 
 private:
 
-    friend class DTrashCreator;
     DTrash();
 };
 

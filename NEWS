@@ -3,14 +3,15 @@ digiKam 5.0.0-beta1 - Release date: 2015-09-06
 
 NEW FEATURES:
 
-General: Implementations ported to Qt5 libraries and KF5 library.
+General: Implementations ported to Qt5 libraries and KF5 libraries.
 General: Integer and double input value sliders use now PhotoShop/Krita/Gimp like widget.
 General: LCMS1 support removed.
 General: Sqlite2 support removed.
 General: Welcome Page view re-writed to support selected best background photo from end user.
-General: Replacing annoying KIOSlave listing and scanning methods with new thread based implementation.
+General: Replacing annoying KIOSlave listing and scanning methods with new threads based implementation.
 General: Isolating KIO calls in KIOWrapper to be able to create a pure qt digiKam soon.
-General: new BQM tool to convert RAW to DNG. 
+General: New BQM tool to convert RAW to DNG.
+General: Add embedded trash support for each collection instead desktop trash.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 

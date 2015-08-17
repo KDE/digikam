@@ -87,7 +87,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
     MetadataHub hub;
 
     ScanController::instance()->suspendCollectionScan();
-
+    qDebug() << "Wtitting to files +++++++++++++++++++++++++++++++++++";
     foreach(const ImageInfo& info, infos)
     {
         if (state() == WorkerObject::Deactivating)
@@ -112,6 +112,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
 
 void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, MetadataHub* hub)
 {
+    qDebug() << "post signal infos size " << infos.size();
     d->startingToWrite(infos);
 
     MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();

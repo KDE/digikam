@@ -7,6 +7,7 @@
  * Description : Load and cache tag thumbnails
  *
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -164,6 +165,11 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(RelativeSize relativeSize)
     return loadIcon(QLatin1String("folder"), computeIconSize(relativeSize));
 }
 
+QPixmap AlbumThumbnailLoader::getStandardAlbumTrashIcon(RelativeSize relativeSize)
+{
+    return loadIcon(QLatin1String("user-trash"), computeIconSize(relativeSize));
+}
+
 QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(RelativeSize relativeSize)
 {
     return loadIcon(QLatin1String("folder-image"), computeIconSize(relativeSize));
@@ -174,6 +180,10 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum* const album, Relative
     if (album->isRoot() || album->isAlbumRoot())
     {
         return getStandardAlbumRootIcon(relativeSize);
+    }
+    else if (album->isTrashAlbum())
+    {
+        return getStandardAlbumTrashIcon();
     }
     else
     {
