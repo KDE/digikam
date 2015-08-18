@@ -45,8 +45,6 @@
 #include "graphicsdimgview.h"
 #include "imageinfo.h"
 #include "regionframeitem.h"
-// TODO remove before commit if not really needed
-//#include "searchutilities.h"
 #include "taggingaction.h"
 #include "itemvisibilitycontroller.h"
 #include "digikam_debug.h"
@@ -88,7 +86,8 @@ protected:
 
 FaceItem::FaceItem(QGraphicsItem* const parent)
     : RegionFrameItem(parent),
-      m_widget(0), m_changer(0)
+      m_widget(0),
+      m_changer(0)
 {
 }
 
@@ -219,7 +218,8 @@ public:
 };
 
 FaceGroup::FaceGroup(GraphicsDImgView* const view)
-    : QObject(view), d(new Private(this))
+    : QObject(view),
+      d(new Private(this))
 {
     d->view                 = view;
     d->visibilityController = new ItemVisibilityController(this);
@@ -342,7 +342,7 @@ void FaceGroup::setVisibleItem(RegionFrameItem* item)
 
 void FaceGroup::setInfo(const ImageInfo& info)
 {
-    if (d->info == info)
+    if (d->info == info && d->state != NoFaces)
     {
         return;
     }

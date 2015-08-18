@@ -140,6 +140,9 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     connect(d->item, SIGNAL(loadingFailed()),
             this, SLOT(imageLoadingFailed()));
+    
+    connect(d->item, SIGNAL(imageChanged()),
+            this, SLOT(slotUpdateFaces()));
 
     connect(d->item, SIGNAL(showContextMenu(QGraphicsSceneContextMenuEvent*)),
             this, SLOT(slotShowContextMenu(QGraphicsSceneContextMenuEvent*)));
@@ -246,9 +249,6 @@ void ImagePreviewView::imageLoaded()
 #ifdef HAVE_KFACE
     d->faceGroup->setInfo(d->item->imageInfo());
 #endif /* HAVE_KFACE */
-
-    connect(d->item, SIGNAL(imageChanged()),
-            this, SLOT(slotUpdateFaces()));
 }
 
 void ImagePreviewView::imageLoadingFailed()
