@@ -34,6 +34,7 @@ set(libimagepropertiesdigikam_SRCS
     imagepropertiessidebardb.cpp
     cameraitempropertiestab.cpp
     imagedescedittab.cpp
+    disjointmetadata.cpp
     captionedit.cpp
 )
 
