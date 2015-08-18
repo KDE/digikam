@@ -103,8 +103,8 @@ void FileActionMngr::Private::connectToDatabaseWorker()
     WorkerObject::connectAndSchedule(this, SIGNAL(signalSetExifOrientation(FileActionImageInfoList,int)),
                                      dbWorker, SLOT(setExifOrientation(FileActionImageInfoList,int)));
 
-    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(FileActionImageInfoList,MetadataHub*)),
-                                     dbWorker, SLOT(applyMetadata(FileActionImageInfoList,MetadataHub*)));
+    WorkerObject::connectAndSchedule(this, SIGNAL(signalApplyMetadata(FileActionImageInfoList,DisjointMetadata*)),
+                                     dbWorker, SLOT(applyMetadata(FileActionImageInfoList,DisjointMetadata*)));
 
     WorkerObject::connectAndSchedule(this, SIGNAL(signalCopyAttributes(FileActionImageInfoList,QStringList)),
                                      dbWorker, SLOT(copyAttributes(FileActionImageInfoList,QStringList)));

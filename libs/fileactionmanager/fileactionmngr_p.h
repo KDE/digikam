@@ -93,7 +93,7 @@ Q_SIGNALS:
     void signalAssignColorLabel(const FileActionImageInfoList& infos, int colorId);
     void signalAssignRating(const FileActionImageInfoList& infos, int rating);
     void signalSetExifOrientation(const FileActionImageInfoList& infos, int orientation);
-    void signalApplyMetadata(const FileActionImageInfoList& infos, MetadataHub* hub);
+    void signalApplyMetadata(const FileActionImageInfoList& infos, DisjointMetadata* hub);
     void signalEditGroup(int groupAction, const ImageInfo& pick, const FileActionImageInfoList& infos);
     void signalTransform(const FileActionImageInfoList& infos, int orientation);
     void signalCopyAttributes(const FileActionImageInfoList& infos, const QStringList& derivedPaths);
@@ -139,7 +139,7 @@ public:
         emit signalSetExifOrientation(infos, orientation);
     }
 
-    void applyMetadata(const FileActionImageInfoList& infos, MetadataHub* hub)
+    void applyMetadata(const FileActionImageInfoList& infos, DisjointMetadata* hub)
     {
         emit signalApplyMetadata(infos, hub);
     }

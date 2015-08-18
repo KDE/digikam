@@ -35,6 +35,7 @@
 #include "imageinfotasksplitter.h"
 #include "fileactionmngr_p.h"
 #include "scancontroller.h"
+#include "disjointmetadata.h"
 
 namespace Digikam
 {
@@ -299,7 +300,7 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
     infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, MetadataHub* hub)
+void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, DisjointMetadata *hub)
 {
     qDebug() << "Infos size" << infos.size();
     //ScanController::instance()->suspendCollectionScan();
@@ -322,8 +323,8 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
     }
     //ScanController::instance()->resumeCollectionScan();
 
-    connect(this, SIGNAL(writeMetadata(FileActionImageInfoList,MetadataHub*)), this, SLOT(dumySlot(FileActionImageInfoList)));
-    if (hub->willWriteMetadata(MetadataHub::FullWriteIfChanged), Qt::DirectConnection)
+    MetadataHub mHub;
+    if (mHub.willWriteMetadata(MetadataHub::FullWriteIfChanged), Qt::DirectConnection)
     {
         // dont filter by shallSendForWriting here; we write from the hub, not from freshly loaded data
         infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());
@@ -331,7 +332,7 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
         for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
         {
             FileActionImageInfoList rez = splitter.next();
-            emit writeMetadata(rez, hub->clone());
+            emit writeMetadataToFiles(rez);
         }
     }
 

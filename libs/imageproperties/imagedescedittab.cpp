@@ -703,7 +703,7 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Meta
     }
 
     // otherwise apply:
-    FileActionMngr::instance()->applyMetadata(infos, hub);
+//    FileActionMngr::instance()->applyMetadata(infos, hub);
 }
 
 void ImageDescEditTab::reset()
@@ -727,8 +727,7 @@ void ImageDescEditTab::slotApplyAllChanges()
         return;
     }
 
-    // NOTE: Veaceslav port
-//    FileActionMngr::instance()->applyMetadata(d->currInfos, d->hub);
+    FileActionMngr::instance()->applyMetadata(d->currInfos, d->hub);
     reset();
 }
 
@@ -1484,7 +1483,7 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
     }
 
     // NOTE: Veaceslav port
-//    FileActionMngr::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
+    FileActionMngr::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
 
     d->modified = false;
     d->hub.resetChanged();
