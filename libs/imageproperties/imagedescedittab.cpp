@@ -542,8 +542,7 @@ void ImageDescEditTab::slotChangingItems()
     if (!ApplicationSettings::instance()->getApplySidebarChangesDirectly())
     {
         // Open dialog via queued connection out-of-scope, see bug 302311
-        // NOTE: Veaceslav port
-        //emit askToApplyChanges(d->currInfos, new MetadataHubOnTheRoad(d->hub));
+        emit askToApplyChanges(d->currInfos, new DisjointMetadata(d->hub));
         reset();
     }
     else
@@ -552,7 +551,7 @@ void ImageDescEditTab::slotChangingItems()
     }
 }
 
-void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub)
+void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, DisjointMetadata* hub)
 {
     int changedFields = 0;
 
@@ -703,7 +702,7 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Meta
     }
 
     // otherwise apply:
-//    FileActionMngr::instance()->applyMetadata(infos, hub);
+    FileActionMngr::instance()->applyMetadata(infos, hub);
 }
 
 void ImageDescEditTab::reset()
@@ -1482,7 +1481,6 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
         tmpSet.insert(relations.at(i).second);
     }
 
-    // NOTE: Veaceslav port
     FileActionMngr::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
 
     d->modified = false;

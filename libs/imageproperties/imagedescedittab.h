@@ -120,7 +120,7 @@ private:
 
 Q_SIGNALS:
 
-    void askToApplyChanges(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub);
+    void askToApplyChanges(const QList<ImageInfo>& infos, DisjointMetadata* hub);
 
 private Q_SLOTS:
 
@@ -156,7 +156,7 @@ private Q_SLOTS:
     void slotReadFromFileMetadataToDatabase();
     void slotWriteToFileMetadataFromDatabase();
 
-    void slotAskToApplyChanges(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub);
+    void slotAskToApplyChanges(const QList<ImageInfo>& infos, DisjointMetadata *hub);
 
 private:
 

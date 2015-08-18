@@ -361,9 +361,5 @@ void FileActionMngrDatabaseWorker::copyAttributes(FileActionImageInfoList infos,
     infos.dbFinished();
 }
 
-void FileActionMngrDatabaseWorker::dumySlot(FileActionImageInfoList infos)
-{
-    qDebug() << "Infos size +==========================" << infos.size();
-}
 
 } // namespace Digikam
