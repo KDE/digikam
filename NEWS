@@ -18,4 +18,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 011 ==> 351245 - Unable to connect to mysql database, due to missing 'create trigger' while user has ALL privileges on digikam DBs.
 012 ==> 351404 - Wrong country name in country list.
 013 ==> 351244 - Target album should be source album by default.
-014 ==> 
+014 ==> 349901 - Delete shortcut key needed and should be Apple+delete.
+015 ==> 
