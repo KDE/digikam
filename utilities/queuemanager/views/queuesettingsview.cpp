@@ -323,7 +323,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     // --------------------------------------------------------
 
     connect(d->useOrgAlbum, SIGNAL(toggled(bool)),
-            this, SLOT(slotSettingsChanged()));
+            this, SLOT(slotUseOrgAlbum()));
 
     connect(d->useMutiCoreCPU, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
@@ -382,6 +382,23 @@ void QueueSettingsView::setBusy(bool b)
     {
         widget(i)->setEnabled(!b);
     }
+}
+
+void QueueSettingsView::slotUseOrgAlbum()
+{
+    if (!d->useOrgAlbum->isChecked())
+    {
+        PAlbum* const album = AlbumManager::instance()->currentPAlbum();
+
+        if (album)
+        {
+            blockSignals(true);
+            d->albumSel->setCurrentAlbum(album);
+            blockSignals(false);
+        }
+    }
+
+    slotSettingsChanged();
 }
 
 void QueueSettingsView::slotResetSettings()

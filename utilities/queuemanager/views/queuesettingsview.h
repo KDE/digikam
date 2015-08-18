@@ -61,6 +61,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
+    void slotUseOrgAlbum();
     void slotResetSettings();
     void slotSettingsChanged();
 
