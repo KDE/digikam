@@ -69,31 +69,34 @@ public:
 
 public:
 
-    DTrashItemModel* model;
+    DTrashItemModel*           model;
     ThumbnailAligningDelegate* thumbDelegate;
-    QVBoxLayout*     mainLayout;
-    QHBoxLayout*     btnsLayout;
-    QTableView*      tableView;
-    QPushButton*     restoreButton;
-    QPushButton*     deleteButton;
-    QPushButton*     deleteAllButton;
-    QModelIndex      lastSelectedIndex;
-    DTrashItemInfo   lastSelectedItem;
-    QModelIndexList  selectedIndexesToRemove;
-    ThumbnailSize    thumbSize;
+    QVBoxLayout*               mainLayout;
+    QHBoxLayout*               btnsLayout;
+    QTableView*                tableView;
+    QPushButton*               restoreButton;
+    QPushButton*               deleteButton;
+    QPushButton*               deleteAllButton;
+    QModelIndex                lastSelectedIndex;
+    DTrashItemInfo             lastSelectedItem;
+    QModelIndexList            selectedIndexesToRemove;
+    ThumbnailSize              thumbSize;
 };
 
 TrashView::TrashView(QWidget* parent)
     : QWidget(parent), d(new Private)
 {
+    // Layouts
     d->mainLayout = new QVBoxLayout(this);
     d->btnsLayout = new QHBoxLayout();
 
-    d->model = new DTrashItemModel(this);
-
+    // View and plugins
     d->tableView = new QTableView(this);
+    d->model = new DTrashItemModel(this);
+    d->thumbDelegate = new ThumbnailAligningDelegate(this);
+
+    // Table view settings
     d->tableView->setModel(d->model);
-    d->thumbDelegate = new ThumbnailAligningDelegate(d->tableView);
     d->tableView->setItemDelegateForColumn(0, d->thumbDelegate);
     d->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     d->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -102,9 +105,7 @@ TrashView::TrashView(QWidget* parent)
     d->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->tableView->setShowGrid(false);
 
-    connect(d->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(slotSelectionChanged()));
-
+    // Action Buttons
     d->restoreButton   = new QPushButton(i18n("Restore"));
     d->deleteButton    = new QPushButton(i18n("Delete Permanently"));
     d->deleteAllButton = new QPushButton(i18n("Delete All Permanently"));
@@ -113,6 +114,7 @@ TrashView::TrashView(QWidget* parent)
     d->deleteButton->setEnabled(false);
     d->deleteAllButton->setEnabled(false);
 
+    // Adding widgets to layouts
     d->mainLayout->addWidget(d->tableView);
 
     d->btnsLayout->addWidget(d->restoreButton);
@@ -120,6 +122,10 @@ TrashView::TrashView(QWidget* parent)
     d->btnsLayout->addWidget(d->deleteAllButton);
 
     d->mainLayout->addLayout(d->btnsLayout);
+
+    // Signals and Slots connections
+    connect(d->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(slotSelectionChanged()));
 
     connect(d->restoreButton, SIGNAL(released()),
             this, SLOT(slotRestoreSelectedItems()));
@@ -171,9 +177,6 @@ void TrashView::slotRestoreSelectedItems()
     qCDebug(DIGIKAM_GENERAL_LOG) << "Restoring selected items from collection trash";
 
     d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of selected items to restore: "
-                                 << d->selectedIndexesToRemove;
 
     DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
 
