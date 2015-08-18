@@ -128,6 +128,12 @@ DisjointMetadata::~DisjointMetadata()
 
 }
 
+DisjointMetadata& DisjointMetadata::operator=(const DisjointMetadata &other)
+{
+    (*d) = (*other.d);
+    return *this;
+}
+
 void DisjointMetadata::load(const ImageInfo &info)
 {
     CaptionsMap commentMap;
@@ -300,6 +306,21 @@ void DisjointMetadata::setTag(int albumID, DisjointMetadata::Status status)
     d->tagsChanged = true;
 }
 
+
+void DisjointMetadata::resetChanged()
+{
+
+    d->dateTimeChanged   = false;
+    d->titlesChanged     = false;
+    d->commentsChanged   = false;
+    d->pickLabelChanged  = false;
+    d->colorLabelChanged = false;
+    d->ratingChanged     = false;
+    d->templateChanged   = false;
+    d->tagsChanged       = false;
+
+}
+
 void DisjointMetadata::load(const QDateTime &dateTime,const CaptionsMap &titles,
                             const CaptionsMap &comment, int colorLabel,
                             int pickLabel, int rating, const Template &t)
@@ -363,6 +384,137 @@ void DisjointMetadata::loadTags(const QList<int> &loadedTagIds)
     }
 }
 
+
+QDateTime DisjointMetadata::dateTime() const
+{
+    return d->dateTime;
+}
+
+CaptionsMap DisjointMetadata::titles() const
+{
+    return d->titles;
+}
+
+CaptionsMap DisjointMetadata::comments() const
+{
+    return d->comments;
+}
+
+int DisjointMetadata::pickLabel() const
+{
+    return d->pickLabel;
+}
+
+int DisjointMetadata::colorLabel() const
+{
+    return d->colorLabel;
+}
+
+int DisjointMetadata::rating() const
+{
+    return d->rating;
+}
+
+Template DisjointMetadata::metadataTemplate() const
+{
+    return d->metadataTemplate;
+}
+
+void DisjointMetadata::dateTimeInterval(QDateTime& lowest, QDateTime& highest) const
+{
+    switch (d->dateTimeStatus)
+    {
+        case MetadataInvalid:
+            lowest = highest = QDateTime();
+            break;
+        case MetadataAvailable:
+            lowest = highest = d->dateTime;
+            break;
+//        case MetadataDisjoint:
+//            lowest  = d->dateTime;
+//            highest = d->lastDateTime;
+//            break;
+    }
+}
+
+void DisjointMetadata::pickLabelInterval(int& lowest, int& highest) const
+{
+    switch (d->pickLabelStatus)
+    {
+        case MetadataInvalid:
+            lowest = highest = -1;
+            break;
+        case MetadataAvailable:
+            lowest = highest = d->pickLabel;
+            break;
+//        case MetadataDisjoint:
+//            lowest  = d->pickLabel;
+//            highest = d->highestPickLabel;
+//            break;
+    }
+}
+
+void DisjointMetadata::colorLabelInterval(int& lowest, int& highest) const
+{
+    switch (d->colorLabelStatus)
+    {
+        case MetadataInvalid:
+            lowest = highest = -1;
+            break;
+        case MetadataAvailable:
+            lowest = highest = d->colorLabel;
+            break;
+//        case MetadataDisjoint:
+//            lowest  = d->colorLabel;
+//            highest = d->highestColorLabel;
+//            break;
+    }
+}
+
+void DisjointMetadata::ratingInterval(int& lowest, int& highest) const
+{
+    switch (d->ratingStatus)
+    {
+        case MetadataInvalid:
+            lowest = highest = -1;
+            break;
+        case MetadataAvailable:
+            lowest = highest = d->rating;
+            break;
+//        case MetadataDisjoint:
+//            lowest  = d->rating;
+//            highest = d->highestRating;
+//            break;
+    }
+}
+
+QStringList DisjointMetadata::keywords() const
+{
+    QStringList tagList;
+
+    QList<int> keys = d->tags.keys();
+    foreach (int key, keys)
+    {
+        if (d->tags.value(key) == MetadataAvailable)
+        {
+            tagList.append(TagsCache::instance()->tagPath(key, TagsCache::NoLeadingSlash));
+        }
+    }
+
+    return tagList;
+}
+
+QMap<int, DisjointMetadata::Status> DisjointMetadata::tags() const
+{
+    // DatabaseMode == ManagedTags is assumed
+    return d->tags;
+}
+
+QMap<int, DisjointMetadata::Status> DisjointMetadata::tagIDs() const
+{
+    // DatabaseMode == ManagedTags is assumed
+    return QMap<int, DisjointMetadata::Status>(d->tags);
+}
 template <class T> void DisjointMetadata::Private::loadSingleValue(const T& data, T& storage,
                                                               DisjointMetadata::Status& status)
 {

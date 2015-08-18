@@ -45,6 +45,7 @@
 #include "metadatahub.h"
 #include "searchtextbar.h"
 #include "addtagslineedit.h"
+#include "disjointmetadata.h"
 
 using namespace KDcrawIface;
 
@@ -97,7 +98,7 @@ private:
 
     void reset();
     void initializeTags(QModelIndex& parent);
-    void setTagState(TAlbum* const tag, MetadataHub::TagStatus status);
+    void setTagState(TAlbum* const tag, DisjointMetadata::Status status);
 
     void setInfos(const ImageInfoList& infos);
     void setFocusToLastSelectedWidget();

@@ -25,6 +25,7 @@
 #define DISJOINTMETADATA_H
 
 #include <QString>
+#include <QMap>
 
 class QDateTime;
 
@@ -51,6 +52,8 @@ public:
 
     DisjointMetadata();
     ~DisjointMetadata();
+
+    DisjointMetadata& operator=(const DisjointMetadata& other);
 
     void load(const ImageInfo& info);
 
@@ -91,6 +94,115 @@ public:
     void setRating(int rating, Status status = MetadataAvailable);
     void setMetadataTemplate(const Template& t, Status status = MetadataAvailable);
     void setTag(int albumID, Status status = MetadataAvailable);
+
+    /**
+        Returns the dateTime.
+        If status is MetadataDisjoint, the earliest date is returned.
+                                       (see dateTimeInterval())
+        If status is MetadataInvalid, an invalid date is returned.
+    */
+    QDateTime   dateTime() const;
+
+    /**
+        Returns a map all alternate language titles.
+        If status is MetadataDisjoint, the first loaded map is returned.
+        If status is MetadataInvalid, CaptionMap() is returned.
+    */
+    CaptionsMap titles() const;
+
+    /**
+        Returns a map all alternate language omments .
+        If status is MetadataDisjoint, the first loaded map is returned.
+        If status is MetadataInvalid, CaptionMap() is returned.
+    */
+    CaptionsMap comments() const;
+
+    /**
+        Returns the Pick Label id (see PickLabel values in globals.h).
+        If status is MetadataDisjoint, the None Label is returned.
+                                       (see pickLabelInterval())
+        If status is MetadataInvalid, -1 is returned.
+    */
+    int         pickLabel() const;
+
+    /**
+        Returns the Color Label id (see ColorLabel values in globals.h).
+        If status is MetadataDisjoint, the None Label is returned.
+                                       (see colorLabelInterval())
+        If status is MetadataInvalid, -1 is returned.
+    */
+    int         colorLabel() const;
+
+    /**
+        Returns the rating.
+        If status is MetadataDisjoint, the lowest rating is returned.
+                                       (see ratingInterval())
+        If status is MetadataInvalid, -1 is returned.
+    */
+    int         rating() const;
+
+    /**
+        Returns the metadata template.
+        If status is MetadataDisjoint, the first loaded template is returned.
+        If status is MetadataInvalid, 0 is returned.
+    */
+    Template metadataTemplate() const;
+
+    /**
+        Returns the earliest and latest date.
+        If status is MetadataAvailable, the values are the same.
+        If status is MetadataInvalid, invalid dates are returned.
+    */
+    void                dateTimeInterval(QDateTime& lowest, QDateTime& highest) const;
+
+    /**
+        Returns the lowest and highest Pick Label id (see PickLabel values from globals.h).
+        If status is MetadataAvailable, the values are the same.
+        If status is MetadataInvalid, -1 is returned.
+    */
+    void                pickLabelInterval(int& lowest, int& highest) const;
+
+    /**
+        Returns the lowest and highest Color Label id (see ColorLabel values from globals.h).
+        If status is MetadataAvailable, the values are the same.
+        If status is MetadataInvalid, -1 is returned.
+    */
+    void                colorLabelInterval(int& lowest, int& highest) const;
+
+    /**
+        Returns the lowest and highest rating.
+        If status is MetadataAvailable, the values are the same.
+        If status is MetadataInvalid, -1 is returned.
+    */
+    void                ratingInterval(int& lowest, int& highest) const;
+
+    /**
+        Returns a QStringList with all tags with status MetadataAvailable.
+        (i.e., the intersection of tags from all loaded metadata sets)
+    */
+    QStringList         keywords() const;
+
+    /**
+        Returns a map with the status for each tag.
+        Tags not contained in the list are considered to have the status MetadataInvalid,
+        that means no loaded metadata set contained this tag.
+        If a tag in the map has the status MetadataAvailable and it has the tag,
+        all loaded sets contained the tag.
+        If a tag in the map has the status MetadataAvailable and it does not have the tag,
+        no loaded sets contains this tag (has been explicitly set so)
+        If a tag in the map has the status MetadataDisjoint, some but not all loaded
+        sets contained the tag. The hasTag value is true then.
+        If MapMode (set in constructor) is false, returns an empty map.
+    */
+    QMap<int, Status> tags() const;
+
+    /**
+        Similar to the method above.
+        This method is less efficient internally.
+    */
+    QMap<int, Status>   tagIDs() const;
+
+    void resetChanged();
 
 protected:
     void load(const QDateTime& dateTime,

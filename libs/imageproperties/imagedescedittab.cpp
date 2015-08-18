@@ -78,6 +78,7 @@
 #include "fileactionprogress.h"
 #include "tagsmanager.h"
 #include "searchtextbar.h"
+#include "disjointmetadata.h"
 
 namespace Digikam
 {
@@ -169,7 +170,7 @@ public:
     ColorLabelSelector*  colorLabelSelector;
     PickLabelSelector*   pickLabelSelector;
 
-    MetadataHubOnTheRoad hub;
+    DisjointMetadata     hub;
 
     TagModel*            tagModel;
 
@@ -541,7 +542,8 @@ void ImageDescEditTab::slotChangingItems()
     if (!ApplicationSettings::instance()->getApplySidebarChangesDirectly())
     {
         // Open dialog via queued connection out-of-scope, see bug 302311
-        emit askToApplyChanges(d->currInfos, new MetadataHubOnTheRoad(d->hub));
+        // NOTE: Veaceslav port
+        //emit askToApplyChanges(d->currInfos, new MetadataHubOnTheRoad(d->hub));
         reset();
     }
     else
@@ -725,7 +727,8 @@ void ImageDescEditTab::slotApplyAllChanges()
         return;
     }
 
-    FileActionMngr::instance()->applyMetadata(d->currInfos, d->hub);
+    // NOTE: Veaceslav port
+//    FileActionMngr::instance()->applyMetadata(d->currInfos, d->hub);
     reset();
 }
 
@@ -767,7 +770,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
 {
     if (infos.isEmpty())
     {
-        d->hub = MetadataHub();
+        d->hub = DisjointMetadata();
         d->captionsEdit->blockSignals(true);
         d->captionsEdit->reset();
         d->captionsEdit->blockSignals(false);
@@ -784,7 +787,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     d->currInfos = infos;
     d->modified  = false;
     resetMetadataChangeInfo();
-    d->hub       = MetadataHub();
+    d->hub       = DisjointMetadata();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
@@ -930,13 +933,13 @@ void ImageDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkSta
     {
         case Qt::Checked:
             isChecked = true;
+            d->hub.setTag(tag->id());
             break;
         default:
             isChecked = false;
+            d->hub.setTag(tag->id(), DisjointMetadata::MetadataInvalid);
             break;
     }
-
-    d->hub.setTag(tag->id(), isChecked);
     slotModified();
 }
 
@@ -1067,7 +1070,7 @@ void ImageDescEditTab::assignRating(int rating)
     d->ratingWidget->setRating(rating);
 }
 
-void ImageDescEditTab::setTagState(TAlbum* const tag, MetadataHub::TagStatus status)
+void ImageDescEditTab::setTagState(TAlbum* const tag, DisjointMetadata::Status status)
 {
     if (!tag)
     {
@@ -1482,7 +1485,8 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
         tmpSet.insert(relations.at(i).second);
     }
 
-    FileActionMngr::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
+    // NOTE: Veaceslav port
+//    FileActionMngr::instance()->applyMetadata(ImageInfoList(tmpSet.toList()), d->hub);
 
     d->modified = false;
     d->hub.resetChanged();
