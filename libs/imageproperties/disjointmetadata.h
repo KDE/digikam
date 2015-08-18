@@ -50,6 +50,30 @@ public:
         MetadataDisjoint   /// No common value is available. For rating and dates, the interval is available.
     };
 
+    enum WriteMode
+    {
+        /**
+            Write all available information
+        */
+        FullWrite,
+        /**
+            Do a full write if and only if
+                - metadata fields changed
+                - the changed fields shall be written according to write settings
+            "Changed" in this context means changed by one of the set... methods,
+            the load() methods are ignored for this attribute.
+            This mode allows to avoid write operations when e.g. the user does not want
+            keywords to be written and only changes keywords.
+        */
+        FullWriteIfChanged,
+        /**
+            Write only the changed parts.
+            Metadata fields which cannot be changed from MetadataHub (photographer ID etc.)
+            will never be written
+        */
+        PartialWrite
+    };
+
     DisjointMetadata();
     ~DisjointMetadata();
 
@@ -204,6 +228,12 @@ public:
 
     void resetChanged();
 
+    /**
+        Applies the set of metadata contained in this MetadataHub
+        to the given ImageInfo object.
+        @return Returns true if the info object has been changed
+    */
+    bool write(ImageInfo info, WriteMode writeMode = FullWrite);
 protected:
     void load(const QDateTime& dateTime,
               const CaptionsMap& titles, const CaptionsMap& comment,

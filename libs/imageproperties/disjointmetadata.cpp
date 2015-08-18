@@ -321,6 +321,129 @@ void DisjointMetadata::resetChanged()
 
 }
 
+bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
+{
+//    applyChangeNotifications();
+
+    bool changed = false;
+
+    // find out in advance if we have something to write - needed for FullWriteIfChanged mode
+    bool saveTitle      = (d->titlesStatus     == MetadataAvailable);
+    bool saveComment    = (d->commentsStatus   == MetadataAvailable);
+    bool saveDateTime   = (d->dateTimeStatus   == MetadataAvailable);
+    bool savePickLabel  = (d->pickLabelStatus  == MetadataAvailable);
+    bool saveColorLabel = (d->colorLabelStatus == MetadataAvailable);
+    bool saveRating     = (d->ratingStatus     == MetadataAvailable);
+    bool saveTemplate   = (d->templateStatus   == MetadataAvailable);
+    bool saveTags       = true;
+
+
+    bool writeAllFields;
+
+    if (writeMode == FullWrite)
+    {
+        writeAllFields = true;
+    }
+    else if (writeMode == FullWriteIfChanged)
+    {
+        writeAllFields = (
+                             (saveTitle      && d->titlesChanged)     ||
+                             (saveComment    && d->commentsChanged)   ||
+                             (saveDateTime   && d->dateTimeChanged)   ||
+                             (savePickLabel  && d->pickLabelChanged)  ||
+                             (saveColorLabel && d->colorLabelChanged) ||
+                             (saveRating     && d->ratingChanged)     ||
+                             (saveTemplate   && d->templateChanged)   ||
+                             (saveTags       && d->tagsChanged)
+                         );
+    }
+    else // PartialWrite
+    {
+        writeAllFields = false;
+    }
+
+    if (saveTitle && (writeAllFields || d->titlesChanged))
+    {
+        DatabaseAccess access;
+        ImageComments comments = info.imageComments(access);
+        comments.replaceComments(d->titles, DatabaseComment::Title);
+        changed                = true;
+    }
+
+    if (saveComment && (writeAllFields || d->commentsChanged))
+    {
+        DatabaseAccess access;
+        ImageComments comments = info.imageComments(access);
+        comments.replaceComments(d->comments);
+        changed                = true;
+    }
+
+    if (saveDateTime && (writeAllFields || d->dateTimeChanged))
+    {
+        info.setDateTime(d->dateTime);
+        changed = true;
+    }
+
+    if (savePickLabel && (writeAllFields || d->pickLabelChanged))
+    {
+        info.setPickLabel(d->pickLabel);
+        changed = true;
+    }
+
+    if (saveColorLabel && (writeAllFields || d->colorLabelChanged))
+    {
+        info.setColorLabel(d->colorLabel);
+        changed = true;
+    }
+
+    if (saveRating && (writeAllFields || d->ratingChanged))
+    {
+        info.setRating(d->rating);
+        changed = true;
+    }
+
+    if (saveTemplate && writeAllFields)
+    {
+        QString title = d->metadataTemplate.templateTitle();
+
+        if (title == Template::removeTemplateTitle())
+        {
+            info.removeMetadataTemplate();
+        }
+
+        if (title.isEmpty())
+        {
+            // Nothing to do.
+        }
+        else
+        {
+            info.setMetadataTemplate(d->metadataTemplate);
+        }
+
+        changed = true;
+    }
+
+    if (writeAllFields || d->tagsChanged)
+    {
+        QList<int> keys = d->tags.keys();
+        foreach (int key, keys)
+        {
+            if (d->tags.value(key) == MetadataAvailable)
+            {
+                info.setTag(key);
+                changed = true;
+            }
+            if(d->tags.value(key) == MetadataInvalid)
+            {
+                info.removeTag(key);
+                changed = true;
+            }
+        }
+    }
+
+    return changed;
+}
+
 void DisjointMetadata::load(const QDateTime &dateTime,const CaptionsMap &titles,
                             const CaptionsMap &comment, int colorLabel,
                             int pickLabel, int rating, const Template &t)
@@ -430,10 +553,10 @@ void DisjointMetadata::dateTimeInterval(QDateTime& lowest, QDateTime& highest) c
         case MetadataAvailable:
             lowest = highest = d->dateTime;
             break;
-//        case MetadataDisjoint:
-//            lowest  = d->dateTime;
-//            highest = d->lastDateTime;
-//            break;
+        case MetadataDisjoint:
+            lowest  = d->dateTime;
+            highest = d->lastDateTime;
+            break;
     }
 }
 
@@ -447,10 +570,10 @@ void DisjointMetadata::pickLabelInterval(int& lowest, int& highest) const
         case MetadataAvailable:
             lowest = highest = d->pickLabel;
             break;
-//        case MetadataDisjoint:
-//            lowest  = d->pickLabel;
-//            highest = d->highestPickLabel;
-//            break;
+        case MetadataDisjoint:
+            lowest  = d->pickLabel;
+            highest = d->highestPickLabel;
+            break;
     }
 }
 
@@ -464,10 +587,10 @@ void DisjointMetadata::colorLabelInterval(int& lowest, int& highest) const
         case MetadataAvailable:
             lowest = highest = d->colorLabel;
             break;
-//        case MetadataDisjoint:
-//            lowest  = d->colorLabel;
-//            highest = d->highestColorLabel;
-//            break;
+        case MetadataDisjoint:
+            lowest  = d->colorLabel;
+            highest = d->highestColorLabel;
+            break;
     }
 }
 
@@ -481,10 +604,10 @@ void DisjointMetadata::ratingInterval(int& lowest, int& highest) const
         case MetadataAvailable:
             lowest = highest = d->rating;
             break;
-//        case MetadataDisjoint:
-//            lowest  = d->rating;
-//            highest = d->highestRating;
-//            break;
+        case MetadataDisjoint:
+            lowest  = d->rating;
+            highest = d->highestRating;
+            break;
     }
 }
 
@@ -515,6 +638,8 @@ QMap<int, DisjointMetadata::Status> DisjointMetadata::tagIDs() const
     // DatabaseMode == ManagedTags is assumed
     return QMap<int, DisjointMetadata::Status>(d->tags);
 }
+
+
 template <class T> void DisjointMetadata::Private::loadSingleValue(const T& data, T& storage,
                                                               DisjointMetadata::Status& status)
 {
