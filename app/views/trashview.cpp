@@ -312,8 +312,13 @@ void ThumbnailAligningDelegate::paint(QPainter *painter, const QStyleOptionViewI
 
     painter->save();
 
-    if (option.state & QStyle::State_Selected) {
+    if (option.state & QStyle::State_Selected)
+    {
         painter->fillRect(option.rect, option.palette.highlight());
+    }
+    else if (option.state & QStyle::State_MouseOver)
+    {
+        painter->fillRect(option.rect, option.palette.brush(QPalette::Inactive, QPalette::Highlight));
     }
 
     painter->drawPixmap(loc, pixmap);
