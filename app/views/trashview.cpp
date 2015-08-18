@@ -31,6 +31,7 @@
 #include <QHeaderView>
 #include <QListView>
 #include <QMessageBox>
+#include <QPainter>
 
 // KDE includes
 
@@ -55,6 +56,7 @@ public:
 
     Private()
         : model(0),
+          thumbDelegate(0),
           mainLayout(0),
           btnsLayout(0),
           tableView(0),
@@ -68,6 +70,7 @@ public:
 public:
 
     DTrashItemModel* model;
+    ThumbnailAligningDelegate* thumbDelegate;
     QVBoxLayout*     mainLayout;
     QHBoxLayout*     btnsLayout;
     QTableView*      tableView;
@@ -90,6 +93,8 @@ TrashView::TrashView(QWidget* parent)
 
     d->tableView = new QTableView(this);
     d->tableView->setModel(d->model);
+    d->thumbDelegate = new ThumbnailAligningDelegate(d->tableView);
+    d->tableView->setItemDelegateForColumn(0, d->thumbDelegate);
     d->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     d->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     d->tableView->verticalHeader()->setDefaultSectionSize(d->thumbSize.size());
@@ -290,5 +295,30 @@ void TrashView::selectLastSelected()
     }
     emit selectionChanged();
 }
+
+// --------------------------------------------------
+
+ThumbnailAligningDelegate::ThumbnailAligningDelegate(QObject *parent)
+    : QStyledItemDelegate(parent)
+{
+}
+
+void ThumbnailAligningDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QPixmap pixmap;
+    pixmap = index.data(Qt::DecorationRole).value<QPixmap>();
+
+    QPoint loc = option.rect.center() - pixmap.rect().center();
+
+    painter->save();
+
+    if (option.state & QStyle::State_Selected) {
+        painter->fillRect(option.rect, option.palette.highlight());
+    }
+
+    painter->drawPixmap(loc, pixmap);
+    painter->restore();
+}
+
 
 } // namespace Digikam
