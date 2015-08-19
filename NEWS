@@ -19,4 +19,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 012 ==> 351404 - Wrong country name in country list.
 013 ==> 351244 - Target album should be source album by default.
 014 ==> 349901 - Delete shortcut key needed and should be Apple+delete.
-015 ==> 
+015 ==> 349878 - digiKam Crashes when running maintenance.
+016 ==> 
