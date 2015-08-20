@@ -131,13 +131,6 @@ public:
     // --------------------------------------------------
 
     /**
-        Applies the set of metadata contained in this MetadataHub
-        to the given ImageInfo object.
-        @return Returns true if the info object has been changed
-    */
-    bool write(ImageInfo info, WriteMode writeMode = FullWrite);
-
-    /**
      * @brief writeToMetadata - write to metadata using image info to retrieve tags and filepath
      *                          use this method when multiple image infos are loaded in hub
      * @param info - image info to retrieve current tags

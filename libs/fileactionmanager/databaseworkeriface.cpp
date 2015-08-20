@@ -53,7 +53,7 @@ void FileActionMngrDatabaseWorker::removeTags(FileActionImageInfoList infos, con
 void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
                                               const QList<int>& tagIDs, bool addOrRemove)
 {
-    MetadataHub      hub;
+    DisjointMetadata    hub;
     QList<ImageInfo> forWriting;
 
     {
@@ -72,12 +72,15 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
 
             for (QList<int>::const_iterator tagIt = tagIDs.constBegin(); tagIt != tagIDs.constEnd(); ++tagIt)
             {
-                hub.setTag(*tagIt, addOrRemove);
+                if(addOrRemove)
+                    hub.setTag(*tagIt, DisjointMetadata::MetadataAvailable);
+                else
+                    hub.setTag(*tagIt, DisjointMetadata::MetadataInvalid);
             }
 
-            hub.write(info, MetadataHub::PartialWrite);
+            hub.write(info, DisjointMetadata::PartialWrite);
 
-            if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
+            if (hub.willWriteMetadata(DisjointMetadata::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
             {
                 forWriting << info;
             }
@@ -104,7 +107,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
 
 void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos, int pickId)
 {
-    MetadataHub      hub;
+    DisjointMetadata      hub;
     QList<ImageInfo> forWriting;
 
     {
@@ -121,9 +124,9 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
 
             hub.load(info);
             hub.setPickLabel(pickId);
-            hub.write(info, MetadataHub::PartialWrite);
+            hub.write(info, DisjointMetadata::PartialWrite);
 
-            if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
+            if (hub.willWriteMetadata(DisjointMetadata::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
             {
                 forWriting << info;
             }
@@ -149,7 +152,7 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
 
 void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList infos, int colorId)
 {
-    MetadataHub      hub;
+    DisjointMetadata      hub;
     QList<ImageInfo> forWriting;
 
     {
@@ -166,9 +169,9 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
 
             hub.load(info);
             hub.setColorLabel(colorId);
-            hub.write(info, MetadataHub::PartialWrite);
+            hub.write(info, DisjointMetadata::PartialWrite);
 
-            if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
+            if (hub.willWriteMetadata(DisjointMetadata::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
             {
                 forWriting << info;
             }
@@ -195,7 +198,7 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
 void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
-    MetadataHub      hub;
+    DisjointMetadata      hub;
     QList<ImageInfo> forWriting;
 
     {
@@ -212,9 +215,9 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
 
             hub.load(info);
             hub.setRating(rating);
-            hub.write(info, MetadataHub::PartialWrite);
+            hub.write(info, DisjointMetadata::PartialWrite);
 
-            if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
+            if (hub.willWriteMetadata(DisjointMetadata::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
             {
                 forWriting << info;
             }
@@ -323,8 +326,7 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
     }
     //ScanController::instance()->resumeCollectionScan();
 
-    MetadataHub mHub;
-    if (mHub.willWriteMetadata(MetadataHub::FullWriteIfChanged), Qt::DirectConnection)
+    if (hub->willWriteMetadata(DisjointMetadata::FullWriteIfChanged), Qt::DirectConnection)
     {
         // dont filter by shallSendForWriting here; we write from the hub, not from freshly loaded data
         infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());

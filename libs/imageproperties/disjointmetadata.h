@@ -28,6 +28,8 @@
 #include <QMap>
 #include <QObject>
 
+#include "metadatasettings.h"
+
 class QDateTime;
 
 namespace Digikam
@@ -240,7 +242,13 @@ public:
         @return Returns true if the info object has been changed
     */
     bool write(ImageInfo info, WriteMode writeMode = FullWrite);
-
+    /**
+        With the currently applied changes, the given writeMode and settings,
+        returns if write(DMetadata), write(QString) or write(DImg) will actually
+        apply any changes.
+    */
+    bool willWriteMetadata(WriteMode writeMode,
+                           const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings()) const;
 protected:
     void load(const QDateTime& dateTime,
               const CaptionsMap& titles, const CaptionsMap& comment,

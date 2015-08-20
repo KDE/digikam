@@ -502,6 +502,56 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
     return changed;
 }
 
+bool DisjointMetadata::willWriteMetadata(DisjointMetadata::WriteMode writeMode, const MetadataSettingsContainer &settings) const
+{
+    // This is the same logic as in write(DMetadata) but without actually writing.
+    // Adapt if the method above changes
+    bool saveTitle      = (settings.saveComments   && d->titlesStatus     == MetadataAvailable);
+    bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
+    bool saveDateTime   = (settings.saveDateTime   && d->dateTimeStatus   == MetadataAvailable);
+    bool savePickLabel  = (settings.savePickLabel  && d->pickLabelStatus  == MetadataAvailable);
+    bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
+    bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
+    bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
+    bool saveTags       = settings.saveTags;
+
+
+    bool writeAllFields;
+
+    if (writeMode == FullWrite)
+    {
+        writeAllFields = true;
+    }
+    else if (writeMode == FullWriteIfChanged)
+    {
+        writeAllFields = (
+                             (saveTitle      && d->titlesChanged)     ||
+                             (saveComment    && d->commentsChanged)   ||
+                             (saveDateTime   && d->dateTimeChanged)   ||
+                             (savePickLabel  && d->pickLabelChanged)  ||
+                             (saveColorLabel && d->colorLabelChanged) ||
+                             (saveRating     && d->ratingChanged)     ||
+                             (saveTemplate   && d->templateChanged)   ||
+                             (saveTags       && d->tagsChanged)
+                         );
+    }
+    else // PartialWrite
+    {
+        writeAllFields = false;
+    }
+
+    return (
+               (saveTitle      && (writeAllFields || d->titlesChanged))     ||
+               (saveComment    && (writeAllFields || d->commentsChanged))   ||
+               (saveDateTime   && (writeAllFields || d->dateTimeChanged))   ||
+               (savePickLabel  && (writeAllFields || d->pickLabelChanged))  ||
+               (saveColorLabel && (writeAllFields || d->colorLabelChanged)) ||
+               (saveRating     && (writeAllFields || d->ratingChanged))     ||
+               (saveTags       && (writeAllFields || d->tagsChanged))       ||
+               (saveTemplate   && (writeAllFields || d->templateChanged))
+           );
+}
+
 void DisjointMetadata::load(const QDateTime &dateTime,const CaptionsMap &titles,
                             const CaptionsMap &comment, int colorLabel,
                             int pickLabel, int rating, const Template &t)
