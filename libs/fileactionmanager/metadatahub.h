@@ -279,20 +279,6 @@ public:
     TagStatus tagStatus(int albumId) const;
     TagStatus tagStatus(const QString& tagPath) const;
 
-    /**
-        Returns if the metadata field has been changed
-        with the corresponding set... method
-    */
-    bool dateTimeChanged()   const;
-    bool titlesChanged()     const;
-    bool commentsChanged()   const;
-    bool pickLabelChanged()  const;
-    bool colorLabelChanged() const;
-    bool ratingChanged()     const;
-    bool templateChanged()   const;
-    bool tagsChanged()       const;
-
-
     // --------------------------------------------------
 
     /**

@@ -965,51 +965,6 @@ MetadataHub::TagStatus MetadataHub::tagStatus(const QString& tagPath) const
     return tagStatus(TagsCache::instance()->tagForPath(tagPath));
 }
 
-bool MetadataHub::dateTimeChanged() const
-{
-    return d->dateTimeChanged;
-}
-
-bool MetadataHub::titlesChanged() const
-{
-    return d->titlesChanged;
-}
-
-bool MetadataHub::commentsChanged() const
-{
-    return d->commentsChanged;
-}
-
-bool MetadataHub::pickLabelChanged() const
-{
-    return d->pickLabelChanged;
-}
-
-bool MetadataHub::colorLabelChanged() const
-{
-    return d->colorLabelChanged;
-}
-
-bool MetadataHub::ratingChanged() const
-{
-    return d->ratingChanged;
-}
-
-bool MetadataHub::templateChanged() const
-{
-    return d->templateChanged;
-}
-
-bool MetadataHub::tagsChanged() const
-{
-    return d->tagsChanged;
-}
-
-void MetadataHub::notifyTagDeleted(int tagId)
-{
-    d->tags.remove(tagId);
-}
-
 // --------------------------------------------------------------------------------------------------------
 
 void MetadataHub::setDateTime(const QDateTime& dateTime, Status status)
