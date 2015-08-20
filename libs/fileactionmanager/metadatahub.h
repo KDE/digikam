@@ -224,12 +224,6 @@ public:
     // --------------------------------------------------
 
     /**
-        Resets the information that metadata fields have been changed with one of the
-        set... methods (see commentChanged, dateTimeChanged etc.)
-    */
-    void resetChanged();
-
-    /**
         Dedicated method to set face rectangles from database
         When called from outside the metadatahub and  ImageInfo is cached,
         method dimension() can return wrong values, QSize must be specified

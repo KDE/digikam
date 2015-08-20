@@ -81,26 +81,9 @@ public:
 
         count             = 0;
 
-        dateTimeChanged   = false;
-        titlesChanged     = false;
-        commentsChanged   = false;
-        pickLabelChanged  = false;
-        colorLabelChanged = false;
-        ratingChanged     = false;
-        templateChanged   = false;
-        tagsChanged       = false;
     }
 
 public:
-
-    bool                              dateTimeChanged;
-    bool                              titlesChanged;
-    bool                              commentsChanged;
-    bool                              pickLabelChanged;
-    bool                              colorLabelChanged;
-    bool                              ratingChanged;
-    bool                              templateChanged;
-    bool                              tagsChanged;
 
     int                               pickLabel;
     int                               highestPickLabel;
@@ -384,13 +367,13 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     else if (writeMode == FullWriteIfChanged)
     {
         writeAllFields = (
-                             (saveTitle      && d->titlesChanged)     ||
-                             (saveComment    && d->commentsChanged)   ||
-                             (saveDateTime   && d->dateTimeChanged)   ||
-                             (savePickLabel  && d->pickLabelChanged)  ||
-                             (saveColorLabel && d->colorLabelChanged) ||
-                             (saveRating     && d->ratingChanged)     ||
-                             (saveTemplate   && d->templateChanged)
+                             saveTitle      ||
+                             saveComment    ||
+                             saveDateTime   ||
+                             savePickLabel  ||
+                             saveColorLabel ||
+                             saveRating     ||
+                             saveTemplate
                          );
     }
     else // PartialWrite
@@ -398,43 +381,43 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
         writeAllFields = false;
     }
 
-    if (saveTitle && (writeAllFields || d->titlesChanged))
+    if (saveTitle && writeAllFields)
     {
         // Store titles in image as Iptc Object name and Xmp.
         dirty |= metadata.setImageTitles(d->titles);
     }
 
-    if (saveComment && (writeAllFields || d->commentsChanged))
+    if (saveComment && writeAllFields)
     {
         // Store comments in image as JFIF comments, Exif comments, Iptc Caption, and Xmp.
         dirty |= metadata.setImageComments(d->comments);
     }
 
-    if (saveDateTime && (writeAllFields || d->dateTimeChanged))
+    if (saveDateTime && writeAllFields)
     {
         // Store Image Date & Time as Exif and Iptc tags.
         dirty |= metadata.setImageDateTime(d->dateTime, false);
     }
 
-    if (savePickLabel && (writeAllFields || d->pickLabelChanged))
+    if (savePickLabel && writeAllFields)
     {
         // Store Image Pick Label as XMP tag.
         dirty |= metadata.setImagePickLabel(d->pickLabel);
     }
 
-    if (saveColorLabel && (writeAllFields || d->colorLabelChanged))
+    if (saveColorLabel && writeAllFields)
     {
         // Store Image Color Label as XMP tag.
         dirty |= metadata.setImageColorLabel(d->colorLabel);
     }
 
-    if (saveRating && (writeAllFields || d->ratingChanged))
+    if (saveRating && writeAllFields)
     {
         // Store Image rating as Iptc tag.
         dirty |= metadata.setImageRating(d->rating);
     }
 
-    if (saveTemplate && (writeAllFields || d->templateChanged))
+    if (saveTemplate && writeAllFields)
     {
         QString title = d->metadataTemplate.templateTitle();
 
@@ -689,14 +672,13 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
     else if (writeMode == FullWriteIfChanged)
     {
         writeAllFields = (
-                             (saveTitle      && d->titlesChanged)     ||
-                             (saveComment    && d->commentsChanged)   ||
-                             (saveDateTime   && d->dateTimeChanged)   ||
-                             (savePickLabel  && d->pickLabelChanged)  ||
-                             (saveColorLabel && d->colorLabelChanged) ||
-                             (saveRating     && d->ratingChanged)     ||
-                             (saveTemplate   && d->templateChanged)   ||
-                             (saveTags       && d->tagsChanged)
+                             saveTitle      ||
+                             saveComment    ||
+                             saveDateTime   ||
+                             savePickLabel  ||
+                             saveColorLabel ||
+                             saveRating     ||
+                             saveTemplate
                          );
     }
     else // PartialWrite
@@ -705,14 +687,14 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
     }
 
     return (
-               (saveTitle      && (writeAllFields || d->titlesChanged))     ||
-               (saveComment    && (writeAllFields || d->commentsChanged))   ||
-               (saveDateTime   && (writeAllFields || d->dateTimeChanged))   ||
-               (savePickLabel  && (writeAllFields || d->pickLabelChanged))  ||
-               (saveColorLabel && (writeAllFields || d->colorLabelChanged)) ||
-               (saveRating     && (writeAllFields || d->ratingChanged))     ||
-               (saveTags       && (writeAllFields || d->tagsChanged))       ||
-               (saveTemplate   && (writeAllFields || d->templateChanged))
+               (saveTitle      && writeAllFields) ||
+               (saveComment    && writeAllFields) ||
+               (saveDateTime   && writeAllFields) ||
+               (savePickLabel  && writeAllFields) ||
+               (saveColorLabel && writeAllFields) ||
+               (saveRating     && writeAllFields) ||
+               (saveTags       && writeAllFields) ||
+               (saveTemplate   && writeAllFields)
            );
 }
 
@@ -777,17 +759,6 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsCo
 #endif
 }
 
-void MetadataHub::resetChanged()
-{
-    d->dateTimeChanged   = false;
-    d->titlesChanged     = false;
-    d->commentsChanged   = false;
-    d->pickLabelChanged  = false;
-    d->colorLabelChanged = false;
-    d->ratingChanged     = false;
-    d->templateChanged   = false;
-    d->tagsChanged       = false;
-}
 
 void MetadataHub::applyChangeNotifications()
 {
