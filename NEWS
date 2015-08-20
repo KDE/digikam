@@ -21,4 +21,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 014 ==> 349901 - Delete shortcut key needed and should be Apple+delete.
 015 ==> 349878 - digiKam Crashes when running maintenance.
 016 ==> 350930 - UI freeze when importing to remote storage.
-017 ==> 
+017 ==> 313390 - RAW images cannot be decoded if selected from within the image editor.
+018 ==> 
