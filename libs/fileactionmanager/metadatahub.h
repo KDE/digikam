@@ -268,16 +268,16 @@ public:
 
     // --------------------------------------------------
 
-    Status dateTimeStatus()   const;
-    Status titlesStatus()     const;
-    Status commentsStatus()   const;
-    Status pickLabelStatus()  const;
-    Status colorLabelStatus() const;
-    Status ratingStatus()     const;
-    Status templateStatus()   const;
+//    Status dateTimeStatus()   const;
+//    Status titlesStatus()     const;
+//    Status commentsStatus()   const;
+//    Status pickLabelStatus()  const;
+//    Status colorLabelStatus() const;
+//    Status ratingStatus()     const;
+//    Status templateStatus()   const;
 
-    TagStatus tagStatus(int albumId) const;
-    TagStatus tagStatus(const QString& tagPath) const;
+//    TagStatus tagStatus(int albumId) const;
+//    TagStatus tagStatus(const QString& tagPath) const;
 
     // --------------------------------------------------
 

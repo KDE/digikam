@@ -911,62 +911,6 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsCo
 #endif
 }
 
-// ---------------------------------------------------------------------------------------------------------
-
-MetadataHub::Status MetadataHub::dateTimeStatus() const
-{
-    return d->dateTimeStatus;
-}
-
-MetadataHub::Status MetadataHub::titlesStatus() const
-{
-    return d->titlesStatus;
-}
-
-MetadataHub::Status MetadataHub::commentsStatus() const
-{
-    return d->commentsStatus;
-}
-
-MetadataHub::Status MetadataHub::pickLabelStatus() const
-{
-    return d->pickLabelStatus;
-}
-
-MetadataHub::Status MetadataHub::colorLabelStatus() const
-{
-    return d->colorLabelStatus;
-}
-
-MetadataHub::Status MetadataHub::ratingStatus() const
-{
-    return d->ratingStatus;
-}
-
-MetadataHub::Status MetadataHub::templateStatus() const
-{
-    return d->templateStatus;
-}
-
-MetadataHub::TagStatus MetadataHub::tagStatus(int tagId) const
-{
-    QMap<int, TagStatus>::const_iterator mapIt = d->tags.constFind(tagId);
-
-    if (mapIt == d->tags.constEnd())
-    {
-        return TagStatus(MetadataInvalid);
-    }
-
-    return mapIt.value();
-}
-
-MetadataHub::TagStatus MetadataHub::tagStatus(const QString& tagPath) const
-{
-    return tagStatus(TagsCache::instance()->tagForPath(tagPath));
-}
-
-// --------------------------------------------------------------------------------------------------------
-
 void MetadataHub::setDateTime(const QDateTime& dateTime, Status status)
 {
     d->dateTimeStatus  = status;
