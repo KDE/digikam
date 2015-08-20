@@ -400,7 +400,9 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
         switch(entry.subspace)
         {
         case NamespaceEntry::XMP:
-            removeXmpTag(nameSpace);
+            if(entry.namespaceName.contains(QLatin1String("Xmp.")))
+                removeXmpTag(nameSpace);
+
             switch(entry.specialOpts)
             {
             case NamespaceEntry::COMMENT_ALTLANG:
