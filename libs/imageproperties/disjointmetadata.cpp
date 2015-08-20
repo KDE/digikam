@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QStringList>
 #include <QDateTime>
+#include <QMutexLocker>
 
 #include "captionvalues.h"
 #include "template.h"
@@ -35,6 +36,7 @@
 #include "databaseaccess.h"
 #include "imagecomments.h"
 #include "imageinfo.h"
+#include "databasewatch.h"
 
 namespace Digikam
 {
@@ -70,6 +72,40 @@ public:
         ratingChanged     = false;
         templateChanged   = false;
         tagsChanged       = false;
+
+        invalid           = false;
+    }
+
+    Private(const Private& other)
+    {
+        dateTimeStatus    = other.dateTimeStatus;
+        pickLabelStatus   = other.pickLabelStatus;
+        colorLabelStatus  = other.colorLabelStatus;
+        ratingStatus      = other.ratingStatus;
+        titlesStatus      = other.titlesStatus;
+        commentsStatus    = other.commentsStatus;
+        templateStatus    = other.templateStatus;
+
+        pickLabel         = other.pickLabel;
+        colorLabel        = other.colorLabel;
+        highestPickLabel  = other.highestPickLabel;
+        highestColorLabel = other.highestColorLabel;
+
+        rating            = other.rating;
+        highestRating     = other.highestRating;
+
+        count             = other.count;
+
+        dateTimeChanged   = other.dateTimeChanged;
+        titlesChanged     = other.titlesChanged;
+        commentsChanged   = other.commentsChanged;
+        pickLabelChanged  = other.pickLabelChanged;
+        colorLabelChanged = other.colorLabelChanged;
+        ratingChanged     = other.ratingChanged;
+        templateChanged   = other.templateChanged;
+        tagsChanged       = other.tagsChanged;
+
+        invalid           = other.invalid;
     }
 
     bool                              dateTimeChanged;
@@ -111,14 +147,29 @@ public:
     DisjointMetadata::Status               ratingStatus;
     DisjointMetadata::Status               templateStatus;
 
+    QMutex     mutex;
+    QList<int> tagIds;
+    bool       invalid;
+
 public:
     template <class T> void loadSingleValue(const T& data,
                                             T& storage,
                                             DisjointMetadata::Status& status);
 };
 
-DisjointMetadata::DisjointMetadata()
-    :d(new Private())
+DisjointMetadata::DisjointMetadata(QObject *parent)
+    :QObject(parent),d(new Private())
+{
+    connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
+            this, SLOT(slotTagDeleted(int)),
+            Qt::DirectConnection);
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(databaseChanged()),
+            this, SLOT(slotInvalidate()));
+}
+
+DisjointMetadata::DisjointMetadata(const DisjointMetadata &other)
+    :QObject(other.parent()), d(new Private(*other.d))
 {
 
 }
@@ -130,8 +181,15 @@ DisjointMetadata::~DisjointMetadata()
 
 DisjointMetadata& DisjointMetadata::operator=(const DisjointMetadata &other)
 {
-    (*d) = (*other.d);
+    delete d;
+    d = new Private(*other.d);
     return *this;
+}
+
+void DisjointMetadata::reset()
+{
+    delete d;
+    d =  new Private();
 }
 
 void DisjointMetadata::load(const ImageInfo &info)
@@ -323,7 +381,7 @@ void DisjointMetadata::resetChanged()
 
 bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
 {
-//    applyChangeNotifications();
+    applyChangeNotifications();
 
     bool changed = false;
 
@@ -504,6 +562,43 @@ void DisjointMetadata::loadTags(const QList<int> &loadedTagIds)
         {
             d->tags[tagId] = MetadataDisjoint;
         }
+    }
+}
+
+void DisjointMetadata::notifyTagDeleted(int id)
+{
+    d->tags.remove(id);
+}
+
+void DisjointMetadata::slotTagDeleted(int tagId)
+{
+    QMutexLocker locker(&d->mutex);
+    d->tagIds << tagId;
+}
+
+void DisjointMetadata::slotInvalidate()
+{
+    QMutexLocker locker(&d->mutex);
+    d->invalid = true;
+}
+
+void DisjointMetadata::applyChangeNotifications()
+{
+    if (d->invalid)
+    {
+        reset();
+    }
+
+    QList<int> tagIds;
+    {
+        QMutexLocker locker(&d->mutex);
+        tagIds = d->tagIds;
+        d->tagIds.clear();
+    }
+
+    foreach(int tagId, tagIds)
+    {
+        notifyTagDeleted(tagId);
     }
 }
 

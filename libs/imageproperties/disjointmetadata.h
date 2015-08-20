@@ -26,6 +26,7 @@
 
 #include <QString>
 #include <QMap>
+#include <QObject>
 
 class QDateTime;
 
@@ -35,8 +36,10 @@ class ImageInfo;
 class CaptionsMap;
 class Template;
 
-class DisjointMetadata
+class DisjointMetadata : public QObject
 {
+    Q_OBJECT
+
 public:
     /**
         The status enum describes the result of joining several metadata sets.
@@ -74,10 +77,13 @@ public:
         PartialWrite
     };
 
-    DisjointMetadata();
+    DisjointMetadata(QObject* parent = 0);
+    DisjointMetadata(const DisjointMetadata&other);
     ~DisjointMetadata();
 
     DisjointMetadata& operator=(const DisjointMetadata& other);
+
+    void reset();
 
     void load(const ImageInfo& info);
 
@@ -234,12 +240,24 @@ public:
         @return Returns true if the info object has been changed
     */
     bool write(ImageInfo info, WriteMode writeMode = FullWrite);
+
 protected:
     void load(const QDateTime& dateTime,
               const CaptionsMap& titles, const CaptionsMap& comment,
               int colorLabel, int pickLabel,
               int rating, const Template& t);
     void loadTags(const QList<int>& loadedTagIds);
+    void notifyTagDeleted(int id);
+
+// Former MetadataHubOnTheRoad implementation
+protected Q_SLOTS:
+
+    void slotTagDeleted(int tagId);
+    void slotInvalidate();
+
+private:
+
+    virtual void applyChangeNotifications();
 
 private:
     class Private;
