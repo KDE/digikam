@@ -409,8 +409,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     connect(d->metadataChangeTimer, SIGNAL(timeout()),
             this, SLOT(slotReloadForMetadataChange()));
 
-    connect(this, SIGNAL(askToApplyChanges(QList<ImageInfo>,MetadataHubOnTheRoad*)),
-            this, SLOT(slotAskToApplyChanges(QList<ImageInfo>,MetadataHubOnTheRoad*)),
+    connect(this, SIGNAL(askToApplyChanges(QList<ImageInfo>,DisjointMetadata*)),
+            this, SLOT(slotAskToApplyChanges(QList<ImageInfo>,DisjointMetadata*)),
             Qt::QueuedConnection
            );
 
