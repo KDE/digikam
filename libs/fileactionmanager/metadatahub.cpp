@@ -598,6 +598,7 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
 
         if(!newKeywords.isEmpty())
         {
+            qDebug() << "-------------------------- New Keywords" << newKeywords;
             // NOTE: See bug #175321 : we remove all old keyword from IPTC and XMP before to
             // synchronize metadata, else contents is not coherent.
 
@@ -613,6 +614,7 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
         }
         else
         {
+            qDebug() << "Delete all keywords";
             // Delete all IPTC and XMP keywords
             dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), QStringList());
             dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());

@@ -90,7 +90,6 @@ public:
     FileActionImageInfoList() {}
     FileActionImageInfoList(const FileActionImageInfoList& copy) : QList(copy)
     {
-        qDebug() << "Copy is called +++++++++++++++++++" << copy.size() << this->size();
         this->container = copy.container;
     }
     ~FileActionImageInfoList() {}

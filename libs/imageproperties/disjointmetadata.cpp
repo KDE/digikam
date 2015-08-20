@@ -106,6 +106,8 @@ public:
         tagsChanged       = other.tagsChanged;
 
         invalid           = other.invalid;
+
+        tags              = QMap<int, DisjointMetadata::Status>(other.tags);
     }
 
     bool                              dateTimeChanged;
@@ -486,12 +488,12 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
         QList<int> keys = d->tags.keys();
         foreach (int key, keys)
         {
-            if (d->tags.value(key) == MetadataAvailable)
+            if (d->tags.value(key) == DisjointMetadata::MetadataAvailable)
             {
                 info.setTag(key);
                 changed = true;
             }
-            if(d->tags.value(key) == MetadataInvalid)
+            if(d->tags.value(key) == DisjointMetadata::MetadataInvalid)
             {
                 info.removeTag(key);
                 changed = true;
