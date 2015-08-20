@@ -118,7 +118,7 @@ public:
 
     Template                          metadataTemplate;
 
-    QMap<int, MetadataHub::TagStatus> tags;
+    QMap<int, MetadataHub::Status>    tags;
 
     QStringList                       tagList;
 
@@ -206,6 +206,129 @@ void MetadataHub::load(const ImageInfo& info)
     loadFaceTags(info, info.dimensions());
 }
 
+bool MetadataHub::write(ImageInfo info, MetadataHub::WriteMode writeMode)
+{
+    applyChangeNotifications();
+
+    bool changed = false;
+
+    // find out in advance if we have something to write - needed for FullWriteIfChanged mode
+    bool saveTitle      = (d->titlesStatus     == MetadataAvailable);
+    bool saveComment    = (d->commentsStatus   == MetadataAvailable);
+    bool saveDateTime   = (d->dateTimeStatus   == MetadataAvailable);
+    bool savePickLabel  = (d->pickLabelStatus  == MetadataAvailable);
+    bool saveColorLabel = (d->colorLabelStatus == MetadataAvailable);
+    bool saveRating     = (d->ratingStatus     == MetadataAvailable);
+    bool saveTemplate   = (d->templateStatus   == MetadataAvailable);
+    bool saveTags       = true;
+
+
+    bool writeAllFields;
+
+    if (writeMode == FullWrite)
+    {
+        writeAllFields = true;
+    }
+    else if (writeMode == FullWriteIfChanged)
+    {
+        writeAllFields = (
+                             (saveTitle      && d->titlesChanged)     ||
+                             (saveComment    && d->commentsChanged)   ||
+                             (saveDateTime   && d->dateTimeChanged)   ||
+                             (savePickLabel  && d->pickLabelChanged)  ||
+                             (saveColorLabel && d->colorLabelChanged) ||
+                             (saveRating     && d->ratingChanged)     ||
+                             (saveTemplate   && d->templateChanged)   ||
+                             (saveTags       && d->tagsChanged)
+                         );
+    }
+    else // PartialWrite
+    {
+        writeAllFields = false;
+    }
+
+    if (saveTitle && (writeAllFields || d->titlesChanged))
+    {
+        DatabaseAccess access;
+        ImageComments comments = info.imageComments(access);
+        comments.replaceComments(d->titles, DatabaseComment::Title);
+        changed                = true;
+    }
+
+    if (saveComment && (writeAllFields || d->commentsChanged))
+    {
+        DatabaseAccess access;
+        ImageComments comments = info.imageComments(access);
+        comments.replaceComments(d->comments);
+        changed                = true;
+    }
+
+    if (saveDateTime && (writeAllFields || d->dateTimeChanged))
+    {
+        info.setDateTime(d->dateTime);
+        changed = true;
+    }
+
+    if (savePickLabel && (writeAllFields || d->pickLabelChanged))
+    {
+        info.setPickLabel(d->pickLabel);
+        changed = true;
+    }
+
+    if (saveColorLabel && (writeAllFields || d->colorLabelChanged))
+    {
+        info.setColorLabel(d->colorLabel);
+        changed = true;
+    }
+
+    if (saveRating && (writeAllFields || d->ratingChanged))
+    {
+        info.setRating(d->rating);
+        changed = true;
+    }
+
+    if (saveTemplate && writeAllFields)
+    {
+        QString title = d->metadataTemplate.templateTitle();
+
+        if (title == Template::removeTemplateTitle())
+        {
+            info.removeMetadataTemplate();
+        }
+
+        if (title.isEmpty())
+        {
+            // Nothing to do.
+        }
+        else
+        {
+            info.setMetadataTemplate(d->metadataTemplate);
+        }
+
+        changed = true;
+    }
+
+    if (writeAllFields || d->tagsChanged)
+    {
+        QList<int> keys = d->tags.keys();
+        foreach (int key, keys)
+        {
+            if (d->tags.value(key) == MetadataAvailable)
+            {
+                info.setTag(key);
+                changed = true;
+            }
+            if(d->tags.value(key) == MetadataInvalid)
+            {
+                info.removeTag(key);
+                changed = true;
+            }
+        }
+    }
+
+    return changed;
+}
+
 
 
 // private common code to merge tags
@@ -218,7 +341,7 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
         {
             continue;
         }
-        d->tags[tagId] = TagStatus(MetadataAvailable, true);
+        d->tags[tagId] = MetadataAvailable;
     }
 }
 
@@ -324,131 +447,6 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
 
 // ------------------------------------------------------------------------------------------------------------
 
-bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
-{
-    applyChangeNotifications();
-
-    bool changed = false;
-
-    // find out in advance if we have something to write - needed for FullWriteIfChanged mode
-    bool saveTitle      = (d->titlesStatus     == MetadataAvailable);
-    bool saveComment    = (d->commentsStatus   == MetadataAvailable);
-    bool saveDateTime   = (d->dateTimeStatus   == MetadataAvailable);
-    bool savePickLabel  = (d->pickLabelStatus  == MetadataAvailable);
-    bool saveColorLabel = (d->colorLabelStatus == MetadataAvailable);
-    bool saveRating     = (d->ratingStatus     == MetadataAvailable);
-    bool saveTemplate   = (d->templateStatus   == MetadataAvailable);
-    bool saveTags       = true;
-
-
-    bool writeAllFields;
-
-    if (writeMode == FullWrite)
-    {
-        writeAllFields = true;
-    }
-    else if (writeMode == FullWriteIfChanged)
-    {
-        writeAllFields = (
-                             (saveTitle      && d->titlesChanged)     ||
-                             (saveComment    && d->commentsChanged)   ||
-                             (saveDateTime   && d->dateTimeChanged)   ||
-                             (savePickLabel  && d->pickLabelChanged)  ||
-                             (saveColorLabel && d->colorLabelChanged) ||
-                             (saveRating     && d->ratingChanged)     ||
-                             (saveTemplate   && d->templateChanged)   ||
-                             (saveTags       && d->tagsChanged)
-                         );
-    }
-    else // PartialWrite
-    {
-        writeAllFields = false;
-    }
-
-    if (saveTitle && (writeAllFields || d->titlesChanged))
-    {
-        DatabaseAccess access;
-        ImageComments comments = info.imageComments(access);
-        comments.replaceComments(d->titles, DatabaseComment::Title);
-        changed                = true;
-    }
-
-    if (saveComment && (writeAllFields || d->commentsChanged))
-    {
-        DatabaseAccess access;
-        ImageComments comments = info.imageComments(access);
-        comments.replaceComments(d->comments);
-        changed                = true;
-    }
-
-    if (saveDateTime && (writeAllFields || d->dateTimeChanged))
-    {
-        info.setDateTime(d->dateTime);
-        changed = true;
-    }
-
-    if (savePickLabel && (writeAllFields || d->pickLabelChanged))
-    {
-        info.setPickLabel(d->pickLabel);
-        changed = true;
-    }
-
-    if (saveColorLabel && (writeAllFields || d->colorLabelChanged))
-    {
-        info.setColorLabel(d->colorLabel);
-        changed = true;
-    }
-
-    if (saveRating && (writeAllFields || d->ratingChanged))
-    {
-        info.setRating(d->rating);
-        changed = true;
-    }
-
-    if (saveTemplate && writeAllFields)
-    {
-        QString title = d->metadataTemplate.templateTitle();
-
-        if (title == Template::removeTemplateTitle())
-        {
-            info.removeMetadataTemplate();
-        }
-
-        if (title.isEmpty())
-        {
-            // Nothing to do.
-        }
-        else
-        {
-            info.setMetadataTemplate(d->metadataTemplate);
-        }
-
-        changed = true;
-    }
-
-    if (writeAllFields || d->tagsChanged)
-    {
-        for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
-        {
-            if (it.value() == MetadataAvailable)
-            {
-                if (it.value().hasTag)
-                {
-                    info.setTag(it.key());
-                }
-                else
-                {
-                    info.removeTag(it.key());
-                }
-
-                changed = true;
-            }
-        }
-    }
-
-    return changed;
-}
-
 /** safe **/
 bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMode, const MetadataSettingsContainer &settings)
 {
@@ -468,7 +466,7 @@ bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMo
     QList<int> tags = info.tagIds();
 
     Q_FOREACH(int tag, tags){
-        d->tags[tag] = TagStatus(MetadataAvailable,true);
+        d->tags[tag] = MetadataAvailable;
     }
 
     writeToBaloo(info.filePath());
@@ -708,38 +706,33 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
         // create list of keywords to be added and to be removed
         QStringList tagsPathList, newKeywords;
 
-        for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+        QList<int> keys = d->tags.keys();
+
+        foreach (int tagId, keys)
         {
-            if (!TagsCache::instance()->canBeWrittenToMetadata(it.key()))
+            if (!TagsCache::instance()->canBeWrittenToMetadata(tagId))
             {
                 continue;
             }
 
             // WARNING: Do not use write(QFilePath ...) when multiple image info are loaded
             // otherwise disjoint tags will not be used, use writeToMetadata(ImageInfo...)
-            if (it.value() == MetadataAvailable)
+            if (d->tags.value(tagId) == MetadataAvailable)
             {
                 // This works for single and multiple selection.
                 // In both situations, tags which had originally been loaded
                 // have explicitly been removed with setTag.
-                QString tagName = TagsCache::instance()->tagName(it.key());
-                QString tagPath = TagsCache::instance()->tagPath(it.key(), TagsCache::NoLeadingSlash);
+                QString tagName = TagsCache::instance()->tagName(tagId);
+                QString tagPath = TagsCache::instance()->tagPath(tagId, TagsCache::NoLeadingSlash);
 
-                if (it.value().hasTag)
+                if (!tagsPathList.contains(tagPath))
                 {
-                    if (!tagsPathList.contains(tagPath))
-                    {
-                        tagsPathList << tagPath;
-                    }
-
-                    if(!tagName.isEmpty())
-                    {
-                        newKeywords << tagName;
-                    }
+                    tagsPathList << tagPath;
                 }
-                else
+
+                if(!tagName.isEmpty())
                 {
-                    tagsPathList.removeAll(tagPath);
+                    newKeywords << tagName;
                 }
             }
         }
@@ -963,7 +956,7 @@ void MetadataHub::setMetadataTemplate(const Template& t, Status status)
 void MetadataHub::setTag(int tagId, bool hasTag, Status status)
 {
     // DatabaseMode == ManagedTags is assumed
-    d->tags[tagId] = TagStatus(status, hasTag);
+    d->tags[tagId] = status;
     d->tagsChanged = true;
 }
 

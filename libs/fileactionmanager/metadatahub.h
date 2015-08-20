@@ -59,46 +59,7 @@ public:
     {
         MetadataInvalid,   /// not yet filled with any value
         MetadataAvailable /// only one data set has been added, or a common value is available
-//        MetadataDisjoint   /// No common value is available. For rating and dates, the interval is available.
     };
-
-public:
-
-    /**
-        Describes the complete status of a Tag: The metadata status, and the fact if it has the tag or not.
-    */
-    class TagStatus
-    {
-    public:
-
-        explicit TagStatus(Status status, bool hasTag = false)
-            : status(status),
-              hasTag(hasTag)
-        {
-        };
-
-        TagStatus()
-            : status(MetadataInvalid),
-              hasTag(false)
-        {
-        };
-
-        Status status;
-        bool   hasTag;
-
-        bool operator==(const TagStatus& otherstatus) const
-        {
-            return otherstatus.status == status &&
-                   otherstatus.hasTag == hasTag;
-        }
-
-        bool operator==(const Status& otherstatus) const
-        {
-            return otherstatus == status;
-        }
-    };
-
-public:
 
     enum WriteMode
     {
