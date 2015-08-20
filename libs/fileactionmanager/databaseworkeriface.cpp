@@ -99,7 +99,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
 
         qDebug() << "Scheduled to write";
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(splitter.next());
+            emit writeMetadataToFiles(new FileActionImageInfoList(splitter.next()));
     }
 
     infos.dbFinished();
@@ -144,7 +144,7 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(splitter.next());
+            emit writeMetadataToFiles(new FileActionImageInfoList(splitter.next()));
     }
 
     infos.dbFinished();
@@ -189,7 +189,7 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(splitter.next());
+            emit writeMetadataToFiles(new FileActionImageInfoList(splitter.next()));
     }
 
     infos.dbFinished();
@@ -235,7 +235,7 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(splitter.next());
+            emit writeMetadataToFiles(new FileActionImageInfoList(splitter.next()));
     }
 
     infos.dbFinished();
@@ -298,7 +298,7 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
     infos.schedulingForWrite(infos.count(), i18n("Revising Exif Orientation tags"), d->fileProgressCreator());
 
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
-        emit writeOrientationToFiles(splitter.next(), orientation);
+        emit writeOrientationToFiles(new FileActionImageInfoList(splitter.next()), orientation);
 
     infos.dbFinished();
 }
@@ -333,7 +333,8 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
 
         for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
         {
-            FileActionImageInfoList rez = splitter.next();
+            FileActionImageInfoList* rez = new FileActionImageInfoList(splitter.next());
+
             emit writeMetadataToFiles(rez);
         }
     }

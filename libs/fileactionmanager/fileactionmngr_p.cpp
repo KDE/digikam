@@ -42,6 +42,7 @@ FileActionMngr::Private::Private(FileActionMngr* const q)
 {
     qRegisterMetaType<MetadataHub*>("MetadataHub*");
     qRegisterMetaType<FileActionImageInfoList>("FileActionImageInfoList");
+    qRegisterMetaType<FileActionImageInfoList*>("FileActionImageInfoList*");
     qRegisterMetaType<QList<ImageInfo> >("QList<ImageInfo>");
 
     dbWorker   = new FileActionMngrDatabaseWorker(this);
@@ -112,11 +113,11 @@ void FileActionMngr::Private::connectToDatabaseWorker()
 
 void FileActionMngr::Private::connectDatabaseToFileWorker()
 {
-    connect(dbWorker, SIGNAL(writeMetadataToFiles(FileActionImageInfoList)),
-            fileWorker, SLOT(writeMetadataToFiles(FileActionImageInfoList)), Qt::DirectConnection);
+    connect(dbWorker, SIGNAL(writeMetadataToFiles(FileActionImageInfoList*)),
+            fileWorker, SLOT(writeMetadataToFiles(FileActionImageInfoList*)), Qt::DirectConnection);
 
-    connect(dbWorker, SIGNAL(writeOrientationToFiles(FileActionImageInfoList,int)),
-            fileWorker, SLOT(writeOrientationToFiles(FileActionImageInfoList,int)), Qt::DirectConnection);
+    connect(dbWorker, SIGNAL(writeOrientationToFiles(FileActionImageInfoList*,int)),
+            fileWorker, SLOT(writeOrientationToFiles(FileActionImageInfoList*,int)), Qt::DirectConnection);
 
     connect(dbWorker, SIGNAL(writeMetadata(FileActionImageInfoList,MetadataHub*)),
             fileWorker, SLOT(writeMetadata(FileActionImageInfoList,MetadataHub*)), Qt::DirectConnection);
