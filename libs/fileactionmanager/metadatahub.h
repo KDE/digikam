@@ -224,18 +224,6 @@ public:
     // --------------------------------------------------
 
     /**
-//        Set dateTime to the given value, and the dateTime status to MetadataAvailable
-//    */
-    void setDateTime(const QDateTime& dateTime, Status status = MetadataAvailable);
-    void setTitles(const CaptionsMap& titles, Status status = MetadataAvailable);
-    void setComments(const CaptionsMap& comments, Status status = MetadataAvailable);
-    void setPickLabel(int pickId, Status status = MetadataAvailable);
-    void setColorLabel(int colorId, Status status = MetadataAvailable);
-    void setRating(int rating, Status status = MetadataAvailable);
-    void setMetadataTemplate(const Template& t, Status status = MetadataAvailable);
-    void setTag(int albumID, bool hasTag, Status status = MetadataAvailable);
-
-    /**
         Resets the information that metadata fields have been changed with one of the
         set... methods (see commentChanged, dateTimeChanged etc.)
     */

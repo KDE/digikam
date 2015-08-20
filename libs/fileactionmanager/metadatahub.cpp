@@ -220,8 +220,6 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
     }
 }
 
-
-
 // private common code to load dateTime, comment, color label, pick label, rating
 void MetadataHub::load(const QDateTime& dateTime,
                        const CaptionsMap& titles, const CaptionsMap& comments,
@@ -777,62 +775,6 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsCo
     Q_UNUSED(filePath);
     Q_UNUSED(settings);
 #endif
-}
-
-void MetadataHub::setDateTime(const QDateTime& dateTime, Status status)
-{
-    d->dateTimeStatus  = status;
-    d->dateTime        = dateTime;
-    d->dateTimeChanged = true;
-}
-
-void MetadataHub::setTitles(const CaptionsMap& titles, Status status)
-{
-    d->titlesStatus  = status;
-    d->titles        = titles;
-    d->titlesChanged = true;
-}
-
-void MetadataHub::setComments(const CaptionsMap& comments, Status status)
-{
-    d->commentsStatus  = status;
-    d->comments        = comments;
-    d->commentsChanged = true;
-}
-
-void MetadataHub::setPickLabel(int pickId, Status status)
-{
-    d->pickLabelStatus  = status;
-    d->pickLabel        = pickId;
-    d->pickLabelChanged = true;
-}
-
-void MetadataHub::setColorLabel(int colorId, Status status)
-{
-    d->colorLabelStatus  = status;
-    d->colorLabel        = colorId;
-    d->colorLabelChanged = true;
-}
-
-void MetadataHub::setRating(int rating, Status status)
-{
-    d->ratingStatus   = status;
-    d->rating         = rating;
-    d->ratingChanged  = true;
-}
-
-void MetadataHub::setMetadataTemplate(const Template& t, Status status)
-{
-    d->templateStatus   = status;
-    d->metadataTemplate = t;
-    d->templateChanged  = true;
-}
-
-void MetadataHub::setTag(int tagId, bool hasTag, Status status)
-{
-    // DatabaseMode == ManagedTags is assumed
-    d->tags[tagId] = status;
-    d->tagsChanged = true;
 }
 
 void MetadataHub::resetChanged()
