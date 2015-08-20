@@ -11,6 +11,7 @@
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -814,7 +815,6 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     d->ignoreImageAttributesWatch = true;
     int i                         = 0;
 
-    DatabaseTransaction transaction;
     ScanController::instance()->suspendCollectionScan();
 
     CollectionScanner scanner;
@@ -822,15 +822,6 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     foreach(const ImageInfo& info, d->currInfos)
     {
         scanner.scanFile(info, CollectionScanner::Rescan);
-
-/*
-        // A batch operation: a hub for each single file, not the common hub
-        MetadataHub fileHub(MetadataHub::NewTagsImport);
-        // read in from DMetadata
-        fileHub.load(info.filePath());
-        // write out to database
-        fileHub.write(info);
-*/
 
         emit signalProgressValueChanged(i++/(float)d->currInfos.count());
 
