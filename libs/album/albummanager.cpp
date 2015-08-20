@@ -1331,6 +1331,9 @@ void AlbumManager::scanPAlbums()
 
     foreach(PAlbum* const album, oldAlbums)
     {
+        if (album->isTrashAlbum())
+            continue;
+
         if (!album->parent() || !oldAlbums.contains(album->parent()->id()))
         {
             topMostOldAlbums << album;
