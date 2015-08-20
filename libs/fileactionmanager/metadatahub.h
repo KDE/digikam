@@ -445,41 +445,6 @@ private:
     Private* const d;
 };
 
-// ----------------------------------------------------------------------------------------------------
-
-/** Use this class if you keep your MetadataHub for a longer time than
- *  the current scope. It will watch for tag changes and update
- *  its map, at least if it lives in a thread with an event loop to receive signals.
- */
-class MetadataHubOnTheRoad : public QObject, public MetadataHub
-{
-    Q_OBJECT
-
-public:
-
-    explicit MetadataHubOnTheRoad(QObject* const parent = 0);
-    MetadataHubOnTheRoad& operator=(const MetadataHub&);
-    explicit MetadataHubOnTheRoad(const MetadataHub&);
-    MetadataHubOnTheRoad(const MetadataHubOnTheRoad&, QObject* const parent = 0);
-    ~MetadataHubOnTheRoad();
-
-    virtual MetadataHub* clone() const;
-
-protected Q_SLOTS:
-
-    void slotTagDeleted(int tagId);
-    void slotInvalidate();
-
-private:
-
-    virtual void applyChangeNotifications();
-
-private:
-
-    class Private;
-    Private* const d;
-};
-
 } // namespace Digikam
 
 #endif // METADATAHUB_H
