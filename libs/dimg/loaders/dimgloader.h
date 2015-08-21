@@ -7,7 +7,7 @@
  * Description : DImg image loader interface
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -148,8 +148,9 @@ template <typename Type>
 Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel)
 {
     quint64 requested = w * h * quint64(typesPerPixel);
+    quint64 maximum   = std::numeric_limits<size_t>::max();
 
-    if (requested > std::numeric_limits<size_t>::max())
+    if (requested > maximum)
     {
         kError() << "Requested memory of" << requested*quint64(sizeof(Type))
                  << "is larger than size_t supported by platform.";
