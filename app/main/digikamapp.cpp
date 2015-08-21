@@ -1407,7 +1407,9 @@ void DigikamApp::slotAlbumSelected(Album* album)
 {
     if (album)
     {
-        if (album->type() != Album::PHYSICAL)
+        PAlbum* const palbum = dynamic_cast<PAlbum*>(album);
+
+        if (album->type() != Album::PHYSICAL || !palbum)
         {
             // Rules if not Physical album.
 
@@ -1436,7 +1438,7 @@ void DigikamApp::slotAlbumSelected(Album* album)
 
             // We have either the abstract root album,
             // the album root album for collection base dirs, or normal albums.
-            PAlbum* const palbum = dynamic_cast<PAlbum*>(album);
+
             bool isRoot          = palbum->isRoot();
             bool isAlbumRoot     = palbum->isAlbumRoot();
             bool isNormalAlbum   = !isRoot && !isAlbumRoot;
