@@ -128,6 +128,7 @@ public:
     QCheckBox*     saveTemplateBox;
     QCheckBox*     saveFaceTags;
 
+    QCheckBox*     useLazySync;
     QCheckBox*     writeRawFilesBox;
     QCheckBox*     writeXMPSidecarBox;
     QCheckBox*     readXMPSidecarBox;
@@ -223,17 +224,16 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->saveFaceTags->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store face tags "
                                            "with face rectangles in the XMP tags."));
 
-    fieldsLayout->addWidget(fieldsIconLabel,       0, 0);
-    fieldsLayout->addWidget(fieldsLabel,           0, 1);
-    fieldsLayout->addWidget(d->saveTagsBox,        1, 0, 1, 3);
-    fieldsLayout->addWidget(d->saveCommentsBox,    2, 0, 1, 3);
-    fieldsLayout->addWidget(d->saveRatingBox,      3, 0, 1, 3);
-    fieldsLayout->addWidget(d->savePickLabelBox,   4, 0, 1, 3);
-    fieldsLayout->addWidget(d->saveColorLabelBox,  5, 0, 1, 3);
-    fieldsLayout->addWidget(d->saveDateTimeBox,    6, 0, 1, 3);
-    fieldsLayout->addWidget(d->saveTemplateBox,    7, 0, 1, 3);
-    fieldsLayout->addWidget(d->saveFaceTags,       8 ,0, 1, 3);
-    fieldsLayout->setColumnStretch(2, 1);
+    fieldsLayout->addWidget(fieldsIconLabel,       0, 0, 2, 3);
+    fieldsLayout->addWidget(fieldsLabel,           0, 1, 2, 3);
+    fieldsLayout->addWidget(d->saveTagsBox,        2, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveCommentsBox,    3, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveRatingBox,      4, 0, 1, 3);
+    fieldsLayout->addWidget(d->savePickLabelBox,   5, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveColorLabelBox,  6, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveDateTimeBox,    7, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveTemplateBox,    8, 0, 1, 3);
+    fieldsLayout->addWidget(d->saveFaceTags,       9 ,0, 1, 3);
     d->fieldsGroup->setLayout(fieldsLayout);
 
     // --------------------------------------------------------
@@ -246,6 +246,11 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     QLabel* const readWriteLabel       = new QLabel(i18nc("@label", "Reading and Writing Metadata"));
 
+    d->useLazySync        = new QCheckBox;
+    d->useLazySync->setText(i18nc("@option:check", "Use lazy synchronization"));
+    d->useLazySync->setWhatsThis(i18nc("@info:whatsthis",
+                                             "Instead of synchronizing metadata, just schedule it for syncronization."
+                                             "Synchronization can be done later by triggering the apply pending, or at digikam exit"));
     d->readXMPSidecarBox  = new QCheckBox;
     d->readXMPSidecarBox->setText(i18nc("@option:check", "Read from sidecar files"));
     d->readXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
@@ -289,15 +294,15 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                                   "If a file has changed it's file size or if the last modified timestamp has changed, a rescan of that "
                                                   "file will be performed when digiKam starts."));
 
-    readWriteLayout->addWidget(readWriteIconLabel,          0, 0);
-    readWriteLayout->addWidget(readWriteLabel,              0, 1);
-    readWriteLayout->addWidget(d->readXMPSidecarBox,        1, 0, 1, 3);
-    readWriteLayout->addWidget(d->writeXMPSidecarBox,       2, 0, 1, 3);
-    readWriteLayout->addWidget(d->writingModeCombo,         3, 1, 1, 2);
-    readWriteLayout->addWidget(d->writeRawFilesBox,         4, 0, 1, 3);
-    readWriteLayout->addWidget(d->updateFileTimeStampBox,   5, 0, 1, 3);
-    readWriteLayout->addWidget(d->rescanImageIfModifiedBox, 6, 0, 1, 3);
-    readWriteLayout->setColumnStretch(3, 1);
+    readWriteLayout->addWidget(readWriteIconLabel,          0, 0, 2, 3);
+    readWriteLayout->addWidget(readWriteLabel,              0, 1, 2, 3);
+    readWriteLayout->addWidget(d->useLazySync,              2, 0, 1, 3);
+    readWriteLayout->addWidget(d->readXMPSidecarBox,        3, 0, 1, 3);
+    readWriteLayout->addWidget(d->writeXMPSidecarBox,       4, 0, 1, 3);
+    readWriteLayout->addWidget(d->writingModeCombo,         5, 1, 1, 2);
+    readWriteLayout->addWidget(d->writeRawFilesBox,         6, 0, 1, 3);
+    readWriteLayout->addWidget(d->updateFileTimeStampBox,   7, 0, 1, 3);
+    readWriteLayout->addWidget(d->rescanImageIfModifiedBox, 8, 0, 1, 3);
     d->readWriteGroup->setLayout(readWriteLayout);
 
     // --------------------------------------------------------
