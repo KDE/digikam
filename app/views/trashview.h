@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QWidget>
+#include <QStyledItemDelegate>
 
 // Local includes
 
@@ -44,12 +45,30 @@ public:
     explicit TrashView(QWidget* parent = 0);
     ~TrashView();
 
+    /**
+     * @return model used for the view
+     */
     DTrashItemModel* model() const;
 
+    /**
+     * @return current thumbnail size
+     */
     ThumbnailSize getThumbnailSize() const;
+
+    /**
+     * @brief set thumbnail size to give to model
+     * @param thumbSize: size to set
+     */
     void setThumbnailSize(ThumbnailSize thumbSize);
 
+    /**
+     * @return QUrl to the last selected item in view
+     */
     QUrl lastSelectedItemUrl() const;
+
+    /**
+     * @brief Highlights the last selected item when the view gets focus
+     */
     void selectLastSelected();
 
 private Q_SLOTS:
@@ -71,6 +90,17 @@ private:
 
     class Private;
     Private* const d;
+};
+
+// --------------------------------------------------
+
+class ThumbnailAligningDelegate : public QStyledItemDelegate
+{
+
+public:
+    ThumbnailAligningDelegate(QObject *parent = 0);
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 } // namespace Digikam

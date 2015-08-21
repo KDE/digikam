@@ -50,8 +50,26 @@ public:
 
 public:
 
+    /**
+     * @brief Deletes image to the trash of a particular collection
+     * @param imageToDelete: path to image
+     * @return true if the image was deleted
+     */
     static bool deleteImage(const QString &imageToDelete);
+
+    /**
+     * @brief Deletes a whole folder from the collection
+     * @param dirToDelete: path to folder
+     * @return true if folder was deleted
+     */
     static bool deleteDirRecursivley(const QString& dirToDelete);
+
+    /**
+     * @brief Extracts the data from json file and gives it to DTrashItemInfo
+     * @param collPath: path to collection
+     * @param baseName: name of the file inside the trash
+     * @param itemInfo: item to extract data to it
+     */
     static void extractJsonForItem(const QString& collPath, const QString& baseName, DTrashItemInfo& itemInfo);
 
 private:

@@ -1370,13 +1370,13 @@ void ImportUI::slotUploaded(const CamItemInfo& /*itemInfo*/)
 
 void ImportUI::slotDownloadNew()
 {
-    slotSelectNew();
+    slotNewSelection(d->view->selectedUrls().count() > 0);
     QTimer::singleShot(0, this, SLOT(slotDownloadSelected()));
 }
 
 void ImportUI::slotDownloadAndDeleteNew()
 {
-    slotSelectNew();
+    slotNewSelection(d->view->selectedUrls().count() > 0);
     QTimer::singleShot(0, this, SLOT(slotDownloadAndDeleteSelected()));
 }
 
@@ -1410,15 +1410,13 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         return;
     }
 
-    // enable cancel action.
-    d->cameraCancelAction->setEnabled(true);
-
     // See bug #143934: force to select all items to prevent problem
     // when !renameCustomizer->useDefault() ==> iconItem->getDownloadName()
     // can return an empty string in this case because it depends on selection.
     if (!onlySelected)
     {
         d->view->slotSelectAll();
+        slotNewSelection(d->view->selectedUrls().count() > 0);
     }
 
     // -- Get the destination album from digiKam library ---------------
@@ -1964,6 +1962,9 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
         d->statusProgressBar->setProgressTotalSteps(deleteList.count());
         d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
+        // enable cancel action.
+        d->cameraCancelAction->setEnabled(true);
+
         for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
         {
             d->controller->deleteFile(*itFolder, *itFile);
@@ -2108,6 +2109,9 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->setProgressTotalSteps(downloadedItems);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+
+    // enable cancel action.
+    d->cameraCancelAction->setEnabled(true);
 
     // disable settings tab here instead of slotBusy:
     // Only needs to be disabled while downloading
@@ -2287,6 +2291,11 @@ void ImportUI::slotNewSelection(bool hasSelection)
 
 void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItemInfoList& listAll)
 {
+    if (d->cameraCancelAction->isEnabled())
+    {
+        return;
+    }
+
     int num_images = listAll.count();
 
     switch (selection.count())

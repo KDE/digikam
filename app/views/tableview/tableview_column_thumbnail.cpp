@@ -113,31 +113,26 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
 
     if (!info.isNull())
     {
-        const QSize imageSize     = info.dimensions();
-        const QSize availableSize = option.rect.size() - QSize(ThumbnailBorder, ThumbnailBorder);
-        QSize size(m_thumbnailSize, m_thumbnailSize);
 
-        if (imageSize.isValid() && (imageSize.width()>imageSize.height()) )
+        const QSize availableSize = option.rect.size() - QSize(ThumbnailBorder, ThumbnailBorder);
+        const QSize imageSize     = info.dimensions();
+        int maxSize               = m_thumbnailSize;
+
+        if (imageSize.isValid() && (imageSize.width() > imageSize.height()))
         {
             // for landscape pictures, try to use all available horizontal space
             qreal scaleFactor = qreal(availableSize.height()) / qreal(imageSize.height());
-
-            if (qreal(imageSize.width())*scaleFactor > availableSize.width())
-            {
-                scaleFactor = qreal(availableSize.width()) / qreal(imageSize.width());
-            }
-
-            size.setWidth(imageSize.width()*scaleFactor);
+            maxSize           = imageSize.width() * scaleFactor;
         }
 
         // Calculate the maximum thumbnail size
         // The idea here is that for landscape images, we adjust the height to
         // to be as high as the row height as long as the width can stretch enough
         // because the column is wider than the thumbnail size.
-        const int bestSize = qMax(size.width()/* + 2*/, size.height()/* + 2*/);
+        maxSize = qMin(maxSize, availableSize.width());
 
         // However, digiKam limits the thumbnail size, so we also do that here
-        const int maxSize  = qMin(bestSize, (int)ThumbnailSize::maxThumbsSize());
+        maxSize = qMin(maxSize, (int)ThumbnailSize::maxThumbsSize());
         QPixmap thumbnail;
 
         if (s->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, maxSize))
@@ -145,7 +140,7 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
             /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
             /// @todo Remove borders - but they actually look nice in the table
             const QSize alignSize  = option.rect.size();
-//                 thumbnail = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
+//          thumbnail              = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
             const QSize pixmapSize = thumbnail.size().boundedTo(availableSize);
             QPoint startPoint((alignSize.width()  - pixmapSize.width())  / 2,
                               (alignSize.height() - pixmapSize.height()) / 2);
