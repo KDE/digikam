@@ -25,4 +25,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 018 ==> 329873 - Crash during face detection.
 019 ==> 351241 - Table view shows wrong thumbnails [patch].
 020 ==> 303545 - digiKam crash when importing photos from a camera.
-021 ==> 
+021 ==> 344521 - digiKam crashes when trying to define one more face.
+022 ==> 
+
