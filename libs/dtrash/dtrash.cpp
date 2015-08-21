@@ -111,7 +111,10 @@ void DTrash::extractJsonForItem(const QString &collPath, const QString &baseName
                            baseName + INFO_FILE_EXTENSION;
 
     QFile jsonFile(jsonFilePath);
-    jsonFile.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    if (!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
     QJsonDocument doc = QJsonDocument::fromJson(jsonFile.readAll());
     jsonFile.close();
 
@@ -170,11 +173,15 @@ QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QSt
     QString jsonFileName = getAvialableJsonFilePathInTrash(collectionPath, imgFileInfo.baseName());
 
     QFile jsonFileForImg(jsonFileName);
-    jsonFileForImg.open(QFile::WriteOnly);
+
+    QFileInfo jsonFileInfo(jsonFileName);
+
+    if(!jsonFileForImg.open(QFile::WriteOnly))
+        return jsonFileInfo.baseName();
+
     jsonFileForImg.write(jsonDocForImg.toJson());
     jsonFileForImg.close();
 
-    QFileInfo jsonFileInfo(jsonFileName);
     return jsonFileInfo.baseName();
 }
 

@@ -494,18 +494,20 @@ public:
 
     Private() :
         treeWidget(0),
+        dbJobThread(0),
         restoringSelectionFromHistory(0),
         currentXmlIsEmpty(0),
         albumForSelectedItems(0)
     {  
     }
 
-    AlbumLabelsTreeView* treeWidget;
-    bool                 restoringSelectionFromHistory;
-    bool                 currentXmlIsEmpty;
-    QString              oldXml;
-    Album*               albumForSelectedItems;
-    QString              generatedAlbumName;
+    AlbumLabelsTreeView*  treeWidget;
+    SearchesDBJobsThread* dbJobThread;
+    bool                  restoringSelectionFromHistory;
+    bool                  currentXmlIsEmpty;
+    QString               oldXml;
+    Album*                albumForSelectedItems;
+    QString               generatedAlbumName;
     QList<QUrl>           urlListForSelectedAlbum;
 };
 
@@ -842,12 +844,12 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
     jobInfo.setSearchId( d->albumForSelectedItems->id() );
     jobInfo.setRecursive();
 
-    SearchesDBJobsThread *thread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
+    d->dbJobThread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
 
-    connect(thread, SIGNAL(finished()),
+    connect(d->dbJobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));
 
-    connect(thread, SIGNAL(data(QList<ImageListerRecord>)),
+    connect(d->dbJobThread, SIGNAL(data(QList<ImageListerRecord>)),
             this, SLOT(slotData(QList<ImageListerRecord>)));
 }
 
@@ -923,24 +925,23 @@ void AlbumLabelsSearchHandler::slotSetCurrentAlbum()
 
 void AlbumLabelsSearchHandler::slotResult()
 {
-    DBJobsThread *const jobThread = dynamic_cast<DBJobsThread*>(sender());
+    if (d->dbJobThread != sender())
+        return;
 
-    if (jobThread->hasErrors())
+    if (d->dbJobThread->hasErrors())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list urls: " << jobThread->errorsList().first();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list urls: " << d->dbJobThread->errorsList().first();
 
         // Pop-up a message about the error.
-        DNotificationWrapper(QString(),  jobThread->errorsList().first(),
+        DNotificationWrapper(QString(),  d->dbJobThread->errorsList().first(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
 }
 
 void AlbumLabelsSearchHandler::slotData(const QList<ImageListerRecord>& data)
 {
-    if (data.isEmpty())
-    {
+    if (d->dbJobThread != sender() || data.isEmpty())
         return;
-    }
 
     QList<QUrl> urlList;
 
