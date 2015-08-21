@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2014      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2014-2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,12 +73,7 @@ public:
 
         pickLabel         = -1;
         colorLabel        = -1;
-        highestPickLabel  = -1;
-        highestColorLabel = -1;
-
         rating            = -1;
-        highestRating     = -1;
-
         count             = 0;
 
     }
@@ -86,15 +81,11 @@ public:
 public:
 
     int                               pickLabel;
-    int                               highestPickLabel;
     int                               colorLabel;
-    int                               highestColorLabel;
     int                               rating;
-    int                               highestRating;
     int                               count;
 
     QDateTime                         dateTime;
-    QDateTime                         lastDateTime;
 
     CaptionsMap                       titles;
     CaptionsMap                       comments;
@@ -116,8 +107,6 @@ public:
     MetadataHub::Status               templateStatus;
 
 public:
-
-    template <class T> void loadWithInterval(const T& data, T& storage, T& highestStorage, MetadataHub::Status& status);
     template <class T> void loadSingleValue(const T& data, T& storage, MetadataHub::Status& status);
 };
 
@@ -211,14 +200,14 @@ void MetadataHub::load(const QDateTime& dateTime,
 {
     if (dateTime.isValid())
     {
-        d->loadWithInterval<QDateTime>(dateTime, d->dateTime, d->lastDateTime, d->dateTimeStatus);
+        d->loadSingleValue<QDateTime>(dateTime, d->dateTime, d->dateTimeStatus);
     }
 
-    d->loadWithInterval<int>(pickLabel, d->pickLabel, d->highestPickLabel, d->pickLabelStatus);
+    d->loadSingleValue<int>(pickLabel, d->pickLabel, d->pickLabelStatus);
 
-    d->loadWithInterval<int>(colorLabel, d->colorLabel, d->highestColorLabel, d->colorLabelStatus);
+    d->loadSingleValue<int>(colorLabel, d->colorLabel, d->colorLabelStatus);
 
-    d->loadWithInterval<int>(rating, d->rating, d->highestRating, d->ratingStatus);
+    d->loadSingleValue<int>(rating, d->rating, d->ratingStatus);
 
     d->loadSingleValue<CaptionsMap>(titles, d->titles, d->titlesStatus);
 
@@ -227,53 +216,6 @@ void MetadataHub::load(const QDateTime& dateTime,
     d->loadSingleValue<Template>(t, d->metadataTemplate, d->templateStatus);
 }
 
-// template method to share code for dateTime, colorLabel, pickLabel, and rating
-template <class T> void MetadataHub::Private::loadWithInterval(const T& data, T& storage, T& highestStorage,
-                                                               MetadataHub::Status& status)
-{
-    switch (status)
-    {
-        case MetadataHub::MetadataInvalid:
-            storage = data;
-            status  = MetadataHub::MetadataAvailable;
-            break;
-        case MetadataHub::MetadataAvailable:
-
-            // we have two values. If they are equal, status is unchanged
-            if (data == storage)
-            {
-                break;
-            }
-
-            // they are not equal. We need to enter the disjoint state.
-//            status = MetadataHub::MetadataDisjoint;
-
-            if (data > storage)
-            {
-                highestStorage = data;
-            }
-            else
-            {
-                highestStorage = storage;
-                storage        = data;
-            }
-
-            break;
-//        case MetadataHub::MetadataDisjoint:
-
-//            // smaller value is stored in storage
-//            if (data < storage)
-//            {
-//                storage = data;
-//            }
-//            else if (highestStorage < data)
-//            {
-//                highestStorage = data;
-//            }
-
-//            break;
-    }
-}
 
 // template method used by comment and template
 template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& storage,
@@ -286,18 +228,7 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
             status  = MetadataHub::MetadataAvailable;
             break;
         case MetadataHub::MetadataAvailable:
-
-            // we have two values. If they are equal, status is unchanged
-            if (data == storage)
-            {
-                break;
-            }
-
-            // they are not equal. We need to enter the disjoint state.
-//            status = MetadataHub::MetadataDisjoint;
-//            break;
-//        case MetadataHub::MetadataDisjoint:
-//            break;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "You should not load more than one image info in metadatahub";
     }
 }
 
