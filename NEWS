@@ -24,4 +24,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 017 ==> 313390 - RAW images cannot be decoded if selected from within the image editor.
 018 ==> 329873 - Crash during face detection.
 019 ==> 351241 - Table view shows wrong thumbnails [patch].
-020 ==> 
+020 ==> 303545 - digiKam crash when importing photos from a camera.
+021 ==> 
