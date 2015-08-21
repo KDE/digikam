@@ -45,6 +45,8 @@ public:
 
     Private(DPointSelect* const q):
         q(q),
+        px(0),
+        py(0),
         xPos(0),
         yPos(0),
         minX(0),
