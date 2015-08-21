@@ -121,7 +121,7 @@ QString ApplicationSettings::getRawFileFilter() const
 QString ApplicationSettings::getAllFileFilter() const
 {
     QStringList imageFilter, audioFilter, videoFilter;
-    DatabaseAccess().db()->getFilterSettings(&imageFilter, &audioFilter, &videoFilter);
+    DatabaseAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
     QStringList wildcards;
 
     foreach(const QString& suffix, imageFilter)
