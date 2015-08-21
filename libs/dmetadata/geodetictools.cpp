@@ -531,7 +531,7 @@ bool GeodeticCalculator::computeDirection()
 
     // The distance in ellispoid axis units.
     m_distance = m_semiMinorAxis * (bo*sig + b2*ssig*q2 + b4*r2*q4 + b6*r3*q6);
-    double az1 = (dlon<0) ? M_PI*(3/2) : M_PI/2;
+    double az1 = (dlon < 0.0) ? M_PI*(3.0/2.0) : M_PI/2.0;
 
     // now compute the az1 & az2 for latitudes not on the equator
     if ((fabs(su1)>=TOLERANCE_0) || (fabs(su2)>=TOLERANCE_0))
