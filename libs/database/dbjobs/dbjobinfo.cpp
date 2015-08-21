@@ -135,6 +135,10 @@ GPSDBJobInfo::GPSDBJobInfo()
     : DBJobInfo()
 {
     m_directQuery = false;
+    m_lat1        = 0;
+    m_lng1        = 0;
+    m_lat2        = 0;
+    m_lng2        = 0;
 }
 
 void GPSDBJobInfo::setDirectQuery()

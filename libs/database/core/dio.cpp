@@ -327,6 +327,9 @@ void DIO::slotResult()
 {
     IOJobsThread *jobThread = dynamic_cast<IOJobsThread*>(sender());
 
+    if (!jobThread)
+        return;
+
     if (jobThread->hasErrors())
     {
         if (jobThread->isRenameThread())
