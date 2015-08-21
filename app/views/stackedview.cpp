@@ -81,6 +81,7 @@ public:
         needUpdateBar      = false;
         syncingSelection   = false;
         tableView          = 0;
+        trashView          = 0;
 
 #ifdef HAVE_VIDEOPLAYER
         mediaPlayerView    = 0;
