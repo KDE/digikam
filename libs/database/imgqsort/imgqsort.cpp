@@ -485,11 +485,6 @@ double ImgQSort::noisedetector() const
 
     float* ptr = 0;
 
-    if (runningFlag())
-    {
-        ptr = reinterpret_cast<float*>(sd->data.ptr);
-    }
-
     qCDebug(DIGIKAM_GENERAL_LOG) << "The rowPosition array is ready!";
 
     for (uint i=0 ; runningFlag() && (i < d->neimage.numPixels()) ; i++)
