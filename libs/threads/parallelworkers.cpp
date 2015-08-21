@@ -181,7 +181,7 @@ int ParallelWorkers::replacementStaticQtMetacall(QMetaObject::Call _c, int _id, 
             // we use QMetaType to copy the data. _a[0] is reserved for a return parameter.
             void* const data = QMetaType(typeId).construct(_a[i+1]);
             args[i]          = QGenericArgument(types[i].constData(), data);
-                        qDebug() << "Data:" << QLatin1String(types[i].constData());
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Data:" << QLatin1String(types[i].constData());
 
         }
 

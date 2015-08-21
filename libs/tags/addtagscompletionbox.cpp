@@ -166,7 +166,7 @@ void TagModelCompletion::update(QString word)
     d->model->clear();
     QList<QStandardItem*> filtered;
     if(d->allItems.isEmpty())
-        qDebug() << "The model was not set, no data";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "The model was not set, no data";
     if(word.isEmpty())
     {
         QCompleter::complete();

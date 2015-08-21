@@ -936,7 +936,7 @@ void TagsManager::slotRemoveNotAssignedTags()
 
     foreach (TAlbum* const elem, toRemove)
     {
-        qDebug() << elem->title();
+        qCDebug(DIGIKAM_GENERAL_LOG) << elem->title();
         QString errMsg;
 
         if (!AlbumManager::instance()->deleteTAlbum(elem, errMsg))
