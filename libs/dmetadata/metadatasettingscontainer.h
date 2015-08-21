@@ -104,6 +104,7 @@ public:
     bool                        updateFileTimeStamp;
     bool                        rescanImageIfModified;
     bool                        useXMPSidecar4Reading;
+    bool                        useLazySync;
 
     KExiv2::MetadataWritingMode metadataWritingMode;
 

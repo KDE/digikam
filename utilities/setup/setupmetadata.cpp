@@ -612,6 +612,7 @@ void SetupMetadata::applySettings()
     set.saveTemplate          = d->saveTemplateBox->isChecked();
     set.saveFaceTags          = d->saveFaceTags->isChecked();
 
+    set.useLazySync           = d->useLazySync->isChecked();
     set.writeRawFiles         = d->writeRawFilesBox->isChecked();
     set.useXMPSidecar4Reading = d->readXMPSidecarBox->isChecked();
 
@@ -686,6 +687,7 @@ void SetupMetadata::readSettings()
     d->saveTemplateBox->setChecked(set.saveTemplate);
     d->saveFaceTags->setChecked(set.saveFaceTags);
 
+    d->useLazySync->setChecked(set.useLazySync);
     d->writeRawFilesBox->setChecked(set.writeRawFiles);
     d->readXMPSidecarBox->setChecked(set.useXMPSidecar4Reading);
     d->updateFileTimeStampBox->setChecked(set.updateFileTimeStamp);

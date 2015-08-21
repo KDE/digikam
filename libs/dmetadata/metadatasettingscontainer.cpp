@@ -52,6 +52,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     updateFileTimeStamp   = true;
     rescanImageIfModified = false;
     rotationBehavior      = RotatingFlags | RotateByLosslessRotation;
+    useLazySync           = false;
 }
 
 void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
@@ -75,6 +76,7 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
                             group.readEntry("Metadata Writing Mode",       (int)KExiv2::WRITETOIMAGEONLY);
     updateFileTimeStamp   = group.readEntry("Update File Timestamp",       true);
     rescanImageIfModified = group.readEntry("Rescan File If Modified",     false);
+    useLazySync           = group.readEntry("Use Lazy Synchronization",    false);
 
     rotationBehavior      = NoRotation;
 
@@ -124,6 +126,7 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
     group.writeEntry("Rotate By Metadata Flag",     bool(rotationBehavior & RotateByMetadataFlag));
     group.writeEntry("Rotate Contents Lossless",    bool(rotationBehavior & RotateByLosslessRotation));
     group.writeEntry("Rotate Contents Lossy",       bool(rotationBehavior & RotateByLossyRotation));
+    group.writeEntry("Use Lazy Synchronization",    useLazySync);
 }
 
 }  // namespace Digikam
