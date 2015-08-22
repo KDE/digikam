@@ -234,9 +234,6 @@ SearchesJob::~SearchesJob()
 
 void SearchesJob::run()
 {
-    // TODO: CHECK WHEN DOES THIS VALUE CHANGE FROM ZERO
-    int listingType = 0;
-
     if (!m_jobInfo.isDuplicatesJob())
     {
         SearchInfo info = DatabaseAccess().db()->getSearchInfo(m_jobInfo.searchId());
@@ -244,35 +241,21 @@ void SearchesJob::run()
         ImageLister lister;
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
 
-        if (listingType == 0)
+        // send data every 200 images to be more responsive
+        ImageListerJobPartsSendingReceiver receiver(this, 200);
+
+        if (info.type == DatabaseSearch::HaarSearch)
         {
-            // send data every 200 images to be more responsive
-            ImageListerJobPartsSendingReceiver receiver(this, 200);
-
-            if (info.type == DatabaseSearch::HaarSearch)
-            {
-                lister.listHaarSearch(&receiver, info.query);
-            }
-            else
-            {
-                lister.listSearch(&receiver, info.query);
-            }
-
-            if (!receiver.hasError)
-            {
-                receiver.sendData();
-            }
+            lister.listHaarSearch(&receiver, info.query);
         }
         else
         {
-            ImageListerJobReceiver receiver(this);
-            // fast mode: limit results to 500
-            lister.listSearch(&receiver, info.query, 500);
+            lister.listSearch(&receiver, info.query);
+        }
 
-            if (!receiver.hasError)
-            {
-                receiver.sendData();
-            }
+        if (!receiver.hasError)
+        {
+            receiver.sendData();
         }
     }
     else

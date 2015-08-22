@@ -501,7 +501,7 @@ void AssignNameWidget::Private::setAddTagsWidgetContents(T* const widget)
     {
         widget->setCurrentTag(currentTag);
         widget->setPlaceholderText((mode == UnconfirmedEditMode) ? i18n("Who is this?") : QString());
-        qDebug() << "************setAddTagsWidgetContents called: confirm button";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "************setAddTagsWidgetContents called: confirm button";
 
 #pragma message "QCompleter port"
         if (confirmButton)
@@ -712,7 +712,7 @@ void AssignNameWidget::setCurrentTag(TAlbum* album)
 void AssignNameWidget::slotConfirm()
 {
 #pragma message "QCompleter port, check what this do"
-    qDebug() << "*******************AssignName widget slot confirm";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "*******************AssignName widget slot confirm";
     if (d->comboBox)
     {
         emit assigned(d->comboBox->currentTaggingAction(), d->info, d->faceIdentifier);

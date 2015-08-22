@@ -145,8 +145,9 @@ template <typename Type>
 Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(quint64 w, quint64 h, uint typesPerPixel)
 {
     quint64 requested = w * h * quint64(typesPerPixel);
+    quint64 maximum   = std::numeric_limits<size_t>::max();
 
-    if (requested > std::numeric_limits<size_t>::max())
+    if (requested > maximum)
     {
         qCCritical(LOG_DIMG) << "Requested memory of" << requested*quint64(sizeof(Type))
                                         << "is larger than size_t supported by platform.";

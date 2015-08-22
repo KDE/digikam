@@ -154,5 +154,4 @@ public:
 
 } // namespace Digikam
 
-#endif
-
+#endif // PARALLELWORKERS_H

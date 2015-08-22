@@ -239,11 +239,6 @@ void NREstimate::startAnalyse()
 
     float* ptr = 0;
 
-    if (runningFlag())
-    {
-        ptr = reinterpret_cast<float*>(sd->data.ptr);
-    }
-
     qCDebug(LOG_DIMG) << "The rowPosition array is ready!";
     postProgress(40);
 

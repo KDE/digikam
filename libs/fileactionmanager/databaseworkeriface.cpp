@@ -97,7 +97,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
         FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
-        qDebug() << "Scheduled to write";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Scheduled to write";
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(new FileActionImageInfoList(splitter.next()));
     }
@@ -305,7 +305,7 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
 
 void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, DisjointMetadata *hub)
 {
-    qDebug() << "Infos size" << infos.size();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Infos size" << infos.size();
     //ScanController::instance()->suspendCollectionScan();
     {
         DatabaseOperationGroup group;
@@ -363,6 +363,5 @@ void FileActionMngrDatabaseWorker::copyAttributes(FileActionImageInfoList infos,
 
     infos.dbFinished();
 }
-
 
 } // namespace Digikam

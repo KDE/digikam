@@ -353,6 +353,7 @@ QIcon DMessageBox::createIcon(QMessageBox::Icon icon)
 
         case QMessageBox::Question:
             tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxQuestion, 0, qApp->activeWindow());
+            break;
 
         case QMessageBox::Information:
         default:

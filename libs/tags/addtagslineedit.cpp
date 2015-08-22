@@ -60,19 +60,22 @@ public:
         completion         = 0;
         tagView            = 0;
         resetFromCompleter = false;
+        parentTag          = 0;
+        currentTag         = 0;
+        tagModel           = 0;
     }
-    TagModelCompletion*   completion;
-    TagTreeView*          tagView;
-    TaggingAction         currentTaggingAction;
-    bool                  resetFromCompleter;
-    TAlbum*               parentTag;
-    TAlbum*               currentTag;
-    TagModel*             tagModel;
+
+    TagModelCompletion* completion;
+    TagTreeView*        tagView;
+    TaggingAction       currentTaggingAction;
+    bool                resetFromCompleter;
+    TAlbum*             parentTag;
+    TAlbum*             currentTag;
+    TagModel*           tagModel;
 
 public:
 
     TaggingAction makeDefaultTaggingAction(const QString& test, int parentTagId);
-
 };
 
 TaggingAction AddTagsLineEdit::Private::makeDefaultTaggingAction(const QString& text, int parentTagId)
@@ -188,7 +191,7 @@ void AddTagsLineEdit::setTagTreeView(TagTreeView* view)
     }
 }
 
-void AddTagsLineEdit::setCurrentTag(TAlbum *album)
+void AddTagsLineEdit::setCurrentTag(TAlbum* album)
 {
     d->parentTag = album;
 }
@@ -199,20 +202,19 @@ void AddTagsLineEdit::slotSetParentTag(QModelIndex index)
         d->parentTag = dynamic_cast<TAlbum*>(d->tagModel->albumForIndex(index));
 }
 
-void AddTagsLineEdit::setParentTag(TAlbum *album)
+void AddTagsLineEdit::setParentTag(TAlbum* album)
 {
-    if(album != NULL)
+    if (album)
         d->parentTag = album;
 }
 
 void AddTagsLineEdit::completerActivated(QModelIndex index)
 {
-
     int id = index.data(Qt::UserRole+5).toInt();
 
-    qDebug() << "Completer activated" << index.data() << id;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Completer activated" << index.data() << id;
 
-    if(id == -5)
+    if (id == -5)
     {
         d->currentTaggingAction = TaggingAction(index.data(Qt::UserRole+4).toString(),
                                                 d->tagView->currentAlbum()->id());
@@ -242,7 +244,7 @@ void AddTagsLineEdit::setAllowExceedBound(bool value)
     // set maximum size of pop-up widget
 }
 
-void AddTagsLineEdit::setCompleter(TagModelCompletion *c)
+void AddTagsLineEdit::setCompleter(TagModelCompletion* c)
 {
     if (d->completion)
         QObject::disconnect(d->completion, 0, this, 0);
@@ -269,7 +271,7 @@ void AddTagsLineEdit::focusInEvent(QFocusEvent* f)
                this, SLOT(setText(QString)));
 }
 
-void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
+void AddTagsLineEdit::keyPressEvent(QKeyEvent* e)
 {
     if (d->completion && d->completion->popup()->isVisible())
     {
@@ -313,17 +315,20 @@ void AddTagsLineEdit::keyPressEvent(QKeyEvent *e)
 
 void AddTagsLineEdit::slotReturnPressed(const QString& text)
 {
-    qDebug() << "slot return pressed";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "slot return pressed";
+
     if (text.isEmpty())
     {
       //focus back to mainview
       emit taggingActionFinished();
       return;
     }
+
     if (d->currentTaggingAction.shallAssignTag() && d->completion->popup()->isVisible())
     {
         setText(d->completion->currentCompletion());
     }
+
     //Q_UNUSED(text);
     emit taggingActionActivated(currentTaggingAction());
 }
@@ -354,6 +359,5 @@ TaggingAction AddTagsLineEdit::currentTaggingAction() const
         return TaggingAction();
     }
 }
-
 
 } // namespace Digikam

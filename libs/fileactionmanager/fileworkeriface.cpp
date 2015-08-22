@@ -85,7 +85,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList *inf
     d->startingToWrite(*infos);
 
     ScanController::instance()->suspendCollectionScan();
-    qDebug() << "Wtitting to files +++++++++++++++++++++++++++++++++++";
+
     foreach(const ImageInfo& info, *infos)
     {
         MetadataHub hub;
@@ -113,7 +113,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList *inf
 
 void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, MetadataHub* hub)
 {
-    qDebug() << "post signal infos size " << infos.size();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "post signal infos size " << infos.size();
     d->startingToWrite(infos);
 
     ScanController::instance()->suspendCollectionScan();
