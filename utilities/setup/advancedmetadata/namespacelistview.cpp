@@ -7,7 +7,7 @@
  * Description : Reimplemented QListView for Tags Manager, with support for
  *               drag-n-drop
  *
- * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2013-2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,6 +57,7 @@ NamespaceListView::NamespaceListView(QWidget* const parent)
     setDragDropMode(QAbstractItemView::InternalMove);
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
+
 void NamespaceListView::startDrag(Qt::DropActions supportedActions)
 {
     QListView::startDrag(supportedActions);
@@ -116,22 +117,23 @@ void NamespaceListView::slotDeleteSelected()
 {
     QModelIndexList sel = this->selectionModel()->selectedIndexes();
 
-    if(sel.isEmpty())
+    if (sel.isEmpty())
         return;
 
     QStandardItemModel* const model = dynamic_cast<QStandardItemModel*>(this->model());
 
-    if(!model)
+    if (!model)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
         return;
     }
 
-    foreach(const QModelIndex& index, sel)
+    foreach (const QModelIndex& index, sel)
     {
-        QStandardItem* root = model->invisibleRootItem();
+        QStandardItem* const root = model->invisibleRootItem();
         root->removeRow(index.row());
     }
+
     emit signalItemsChanged();
 }
 
@@ -139,12 +141,12 @@ void NamespaceListView::slotMoveItemUp()
 {
     QModelIndexList sel = this->selectionModel()->selectedIndexes();
 
-    if(sel.isEmpty())
+    if (sel.isEmpty())
         return;
 
     QStandardItemModel* const model = dynamic_cast<QStandardItemModel*>(this->model());
 
-    if(!model)
+    if (!model)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
         return;
@@ -152,13 +154,13 @@ void NamespaceListView::slotMoveItemUp()
 
     QModelIndex index = sel.first();
 
-    if(index.row() == 0)
+    if (index.row() == 0)
         return;
-    QStandardItem* root = model->invisibleRootItem();
-    int savedRow = index.row();
-    QStandardItem* const item = root->child(index.row());
-    QStandardItem* newCopy = item->clone();
 
+    QStandardItem* const root    = model->invisibleRootItem();
+    int savedRow                 = index.row();
+    QStandardItem* const item    = root->child(index.row());
+    QStandardItem* const newCopy = item->clone();
 
     root->removeRow(index.row());
     root->insertRow(savedRow-1,newCopy);
@@ -172,12 +174,12 @@ void NamespaceListView::slotMoveItemDown()
 {
     QModelIndexList sel = this->selectionModel()->selectedIndexes();
 
-    if(sel.isEmpty())
+    if (sel.isEmpty())
         return;
 
     QStandardItemModel* const model = dynamic_cast<QStandardItemModel*>(this->model());
 
-    if(!model)
+    if (!model)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
         return;
@@ -185,13 +187,14 @@ void NamespaceListView::slotMoveItemDown()
 
     QModelIndex index = sel.first();
 
-    QStandardItem* root = model->invisibleRootItem();
-    if(index.row() == root->rowCount()-1)
+    QStandardItem* const root = model->invisibleRootItem();
+
+    if (index.row() == root->rowCount()-1)
         return;
 
     int savedRow = index.row();
     QStandardItem* const item = root->child(index.row());
-    QStandardItem* newCopy = item->clone();
+    QStandardItem* const newCopy = item->clone();
 
 
     root->removeRow(index.row());

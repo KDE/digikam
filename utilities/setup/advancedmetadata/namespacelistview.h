@@ -7,7 +7,7 @@
  * Description : Reimplemented QListView for Tags Manager, with support for
  *               drag-n-drop
  *
- * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2013-2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ protected:
      * Reimplemented methods to enable custom drag-n-drop in QListView
      */
     void startDrag(Qt::DropActions supportedActions);
-    void dropEvent(QDropEvent *e);
+    void dropEvent(QDropEvent* e);
 
     QModelIndex indexVisuallyAt(const QPoint& p);
 
@@ -58,7 +58,9 @@ protected:
 //     *                           to handle custom context menu
 //     */
 //    void contextMenuEvent(QContextMenuEvent* event);
+
 Q_SIGNALS:
+
     void signalItemsChanged();
 
 public Q_SLOTS:
