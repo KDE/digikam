@@ -108,6 +108,7 @@ public:
     MetadataHub::Status               templateStatus;
 
 public:
+
     template <class T> void loadSingleValue(const T& data, T& storage, MetadataHub::Status& status);
 };
 
@@ -183,12 +184,14 @@ void MetadataHub::load(const ImageInfo& info)
 void MetadataHub::loadTags(const QList<int>& loadedTags)
 {
     d->tags.clear();
+
     foreach(int tagId, loadedTags)
     {
         if(TagsCache::instance()->isInternalTag(tagId))
         {
             continue;
         }
+
         d->tags[tagId] = MetadataAvailable;
     }
 }
@@ -228,8 +231,10 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
             storage = data;
             status  = MetadataHub::MetadataAvailable;
             break;
+
         case MetadataHub::MetadataAvailable:
-        qCDebug(DIGIKAM_GENERAL_LOG) << "You should not load more than one image info in metadatahub";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "You should not load more than one image info in metadatahub";
+            break;
     }
 }
 
@@ -240,7 +245,7 @@ bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMo
 {
     applyChangeNotifications();
 
-    if(!ignoreLazySync && settings.useLazySync)
+    if (!ignoreLazySync && settings.useLazySync)
     {
         MetadataHubMngr::instance()->addPending(info);
         return true;
@@ -365,7 +370,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
         }
     }
 
-    if(saveFaces)
+    if (saveFaces)
     {
         metadata.setImageFacesMap(d->faceTagsList,true);
     }
@@ -383,7 +388,7 @@ bool MetadataHub::write(const QString& filePath, WriteMode writeMode, bool ignor
 {
     applyChangeNotifications();
 
-    if(!ignoreLazySync && settings.useLazySync)
+    if (!ignoreLazySync && settings.useLazySync)
     {
         ImageInfo info = ImageInfo::fromLocalFile(filePath);
         MetadataHubMngr::instance()->addPending(info);
@@ -449,7 +454,6 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, bool ignoreLazySync, c
 bool MetadataHub::writeTags(const QString& filePath, MetadataHub::WriteMode writeMode,
                             const MetadataSettingsContainer& settings)
 {
-
     applyChangeNotifications();
 
     // if no DMetadata object is needed at all, don't construct one -
@@ -465,7 +469,7 @@ bool MetadataHub::writeTags(const QString& filePath, MetadataHub::WriteMode writ
     bool saveTags  = settings.saveTags;
 
 
-    if(saveFaces)
+    if (saveFaces)
     {
         metadata.setImageFacesMap(d->faceTagsList,true);
     }
@@ -537,7 +541,7 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
         tagsPathList = cleanupTags(tagsPathList);
         newKeywords = cleanupTags(newKeywords);
 
-        if(!newKeywords.isEmpty())
+        if (!newKeywords.isEmpty())
         {
             qDebug() << "-------------------------- New Keywords" << newKeywords;
             // NOTE: See bug #175321 : we remove all old keyword from IPTC and XMP before to
@@ -660,7 +664,7 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsCo
 
     QStringList newKeywords;
 
-    for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+    for (QMap<int, MetadataHub::Status>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
         if (!TagsCache::instance()->canBeWrittenToMetadata(it.key()))
         {
@@ -673,22 +677,19 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsCo
         {
             QString tagName = TagsCache::instance()->tagName(it.key());
 
-            if (it.value().hasTag)
+            if (!tagName.isEmpty())
             {
-                if (!tagName.isEmpty())
-                {
-                    newKeywords << tagName;
-                }
+                newKeywords << tagName;
             }
         }
     }
 
-    if(saveComment)
+    if (saveComment)
     {
         comment = new QString(d->comments.value(QLatin1String("x-default")).caption);
     }
 
-    if(saveRating)
+    if (saveRating)
     {
         rating = d->rating;
     }
@@ -701,7 +702,6 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsCo
     Q_UNUSED(settings);
 #endif
 }
-
 
 void MetadataHub::applyChangeNotifications()
 {

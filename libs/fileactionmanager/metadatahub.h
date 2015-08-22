@@ -58,7 +58,7 @@ public:
     enum Status
     {
         MetadataInvalid,   /// not yet filled with any value
-        MetadataAvailable /// only one data set has been added, or a common value is available
+        MetadataAvailable  /// only one data set has been added, or a common value is available
     };
 
     enum WriteMode
