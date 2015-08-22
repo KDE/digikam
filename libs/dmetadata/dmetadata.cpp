@@ -1343,7 +1343,10 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
                     qDebug() << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
                     return false;
                 }
+            default:
+                break;
             }
+
         }
     }
     return true;
