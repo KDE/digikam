@@ -45,13 +45,8 @@ public:
 
 public Q_SLOTS:
 
-//    void slotFilterMatches(bool);
     void slotSettingsChanged();
-
-//Q_SIGNALS:
-
-//    void signalResetFilters();
-//    void signalPopupFiltersView();
+    void slotSetPendingItems(int number);
 
 private:
 

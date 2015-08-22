@@ -92,6 +92,7 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
     d->applyBtn->setToolTip(i18n("Apply pending changes to metadata"));
     d->applyBtn->setFocusPolicy(Qt::NoFocus);
     d->applyBtn->setAutoRaise(true);
+    d->applyBtn->setDisabled(true);
 
     vlay->addWidget(d->info);
     vlay->addWidget(d->applyBtn);
@@ -101,9 +102,16 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
 
     connect(MetadataSettings::instance(), SIGNAL(settingsChanged()), this,
             SLOT(slotSettingsChanged()));
-//    connect(d->resetBtn, SIGNAL(released()),
-//            this, SIGNAL(signalResetFilters()));
+    connect(d->applyBtn, SIGNAL(released()),
+            MetadataHubMngr::instance(), SLOT(slotApplyPending()));
 
+    connect(MetadataHubMngr::instance(), SIGNAL(signalPendingMetadata(int)),
+            this, SLOT(setPendingItems(int)));
+
+    if(MetadataSettings::instance()->settings().useLazySync)
+        this->show();
+    else
+        this->hide();
 }
 
 MetadataStatusBar::~MetadataStatusBar()
@@ -213,6 +221,22 @@ void MetadataStatusBar::slotSettingsChanged()
         this->show();
     else
         this->hide();
+}
+
+void MetadataStatusBar::slotSetPendingItems(int number)
+{
+    if(number == 0)
+    {
+        d->info->setAdjustedText(i18n("No pending metadata synchronization"));
+        d->applyBtn->setDisabled(true);
+    }
+    else
+    {
+        d->info->setAdjustedText(i18np("1 file awaits syncronization",
+                                       "%l files await syncronization",
+                                       number));
+        d->applyBtn->setDisabled(false);
+    }
 }
 
 }  // namespace Digikam

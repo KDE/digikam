@@ -41,6 +41,9 @@ public:
 
     void addPending(ImageInfo& info);
 
+Q_SIGNALS:
+    void signalPendingMetadata(int numbers);
+
 public Q_SLOTS:
     void slotApplyPending();
 

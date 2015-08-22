@@ -38,7 +38,7 @@ QPointer<MetadataHubMngr> MetadataHubMngr::internalPtr = QPointer<MetadataHubMng
 class MetadataHubMngr::Private
 {
 public:
-    Private()
+    Private(): mutex(QMutex::Recursive)
     {
 
     }
@@ -63,13 +63,20 @@ void MetadataHubMngr::addPending(ImageInfo &info)
     QMutexLocker locker(&d->mutex);
     if(!d->pendingItems.contains(info))
         d->pendingItems.append(info);
+    emit signalPendingMetadata(d->pendingItems.size());
 }
 
 void MetadataHubMngr::slotApplyPending()
 {
     QMutexLocker lock(&d->mutex);
+
+    if(d->pendingItems.isEmpty())
+        return;
+
     ImageInfoList infos(d->pendingItems);
     d->pendingItems.clear();
+
+    emit signalPendingMetadata(0);
 
     MetadataSynchronizer* const tool = new MetadataSynchronizer(infos,
                                                                 MetadataSynchronizer::WriteFromDatabaseToFile);
@@ -77,6 +84,7 @@ void MetadataHubMngr::slotApplyPending()
 }
 
 MetadataHubMngr::MetadataHubMngr()
+    : d(new Private())
 {
 
 }
