@@ -35,6 +35,10 @@
 
 #include <klocalizedstring.h>
 
+// LibKDcraw includes
+
+#include <KDCRAW/RWidgetUtils>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -42,7 +46,6 @@
 #include "imagehistorygraphmodel.h"
 #include "imageversionsmodel.h"
 #include "thumbnailloadthread.h"
-#include "workingpixmap.h"
 #include "dcategorydrawer.h"
 
 namespace Digikam
@@ -62,19 +65,20 @@ public:
           thumbsWaitingFor(0),
           inSizeHint(false)
     {
+        workingPixmap = KDcrawIface::WorkingPixmap();
     }
 
-    const int           categoryExtraSpacing;
-    const int           filterItemExtraSpacing;
+    const int                     categoryExtraSpacing;
+    const int                     filterItemExtraSpacing;
 
-    int                 animationState;
-    QPropertyAnimation* animation;
-    WorkingPixmap     workingPixmap;
-    DCategoryDrawer*    categoryDrawer;
-    int                 thumbnailSize;
+    int                           animationState;
+    QPropertyAnimation*           animation;
+    KDcrawIface::WorkingPixmap    workingPixmap;
+    DCategoryDrawer*              categoryDrawer;
+    int                           thumbnailSize;
 
-    int                 thumbsWaitingFor;
-    bool                inSizeHint;
+    int                           thumbsWaitingFor;
+    bool                          inSizeHint;
 
 public:
 

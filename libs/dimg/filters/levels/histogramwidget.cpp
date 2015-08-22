@@ -43,6 +43,10 @@
 
 #include <klocalizedstring.h>
 
+// LibKDcraw includes
+
+#include <KDCRAW/RWidgetUtils>
+
 // Local includes
 
 #include "dimg.h"
@@ -51,7 +55,6 @@
 #include "digikam_globals.h"
 #include "dimg_debug.h"
 #include "histogrampainter.h"
-#include "workingpixmap.h"
 
 namespace Digikam
 {
@@ -93,39 +96,40 @@ public:
           animation(0),
           histogramPainter(0)
     {
+        progressPix = KDcrawIface::WorkingPixmap();
     }
 
 public:
 
-    bool                sixteenBits;
-    bool                guideVisible;           // Display color guide.
-    bool                statisticsVisible;      // Display tooltip histogram statistics.
-    bool                inSelected;
-    bool                selectMode;             // If true, a part of the histogram can be selected !
-    bool                showProgress;           // If true, a message will be displayed during histogram computation,
+    bool                             sixteenBits;
+    bool                             guideVisible;           // Display color guide.
+    bool                             statisticsVisible;      // Display tooltip histogram statistics.
+    bool                             inSelected;
+    bool                             selectMode;             // If true, a part of the histogram can be selected !
+    bool                             showProgress;           // If true, a message will be displayed during histogram computation,
                                                 // else nothing (limit flicker effect in widget especially for small
                                                 // image/computation time).
-    int                 renderingType;          // Using full image or image selection for histogram rendering.
-    int                 range;
-    HistogramState      state;                  // Clear drawing zone with message.
+    int                              renderingType;          // Using full image or image selection for histogram rendering.
+    int                              range;
+    HistogramState                   state;                  // Clear drawing zone with message.
 
-    ChannelType         channelType;            // Channel type to draw
-    HistogramScale      scaleType;              // Scale to use for drawing
-    ImageHistogram*     imageHistogram;         // Full image
-    ImageHistogram*     selectionHistogram;     // Image selection
+    ChannelType                      channelType;            // Channel type to draw
+    HistogramScale                   scaleType;              // Scale to use for drawing
+    ImageHistogram*                  imageHistogram;         // Full image
+    ImageHistogram*                  selectionHistogram;     // Image selection
 
     // Current selection information.
-    double              xmin;
-    double              xminOrg;
-    double              xmax;
+    double                           xmin;
+    double                           xminOrg;
+    double                           xmax;
 
-    int                 animationState;
-    QPropertyAnimation* animation;
-    WorkingPixmap       progressPix;
+    int                              animationState;
+    QPropertyAnimation*              animation;
+    KDcrawIface::WorkingPixmap       progressPix;
 
-    DColor              colorGuide;
+    DColor                           colorGuide;
 
-    HistogramPainter*   histogramPainter;
+    HistogramPainter*                histogramPainter;
 };
 
 HistogramWidget::HistogramWidget(int w, int h,

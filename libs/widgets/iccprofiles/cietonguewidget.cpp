@@ -43,12 +43,15 @@
 
 #include <klocalizedstring.h>
 
+// LibKDcraw includes
+
+#include <KDCRAW/RWidgetUtils>
+
 // Local includes
 
 #include "digikam_config.h"
 #include "widgets_debug.h"
 #include "iccprofile.h"
-#include "workingpixmap.h"
 
 namespace Digikam
 {
@@ -172,33 +175,34 @@ public:
         hMonitorProfile(0),
         hXFORM(0)
     {
+        progressPix = KDcrawIface::WorkingPixmap();
     }
 
-    bool            profileDataAvailable;
-    bool            loadingImageMode;
-    bool            loadingImageSucess;
-    bool            needUpdatePixmap;
-    bool            uncalibratedColor;
+    bool                         profileDataAvailable;
+    bool                         loadingImageMode;
+    bool                         loadingImageSucess;
+    bool                         needUpdatePixmap;
+    bool                         uncalibratedColor;
 
-    int             xBias;
-    int             yBias;
-    int             pxcols;
-    int             pxrows;
-    int             progressCount;           // Position of animation during loading/calculation.
+    int                          xBias;
+    int                          yBias;
+    int                          pxcols;
+    int                          pxrows;
+    int                          progressCount;           // Position of animation during loading/calculation.
 
-    double          gridside;
+    double                       gridside;
 
-    QPainter        painter;
+    QPainter                     painter;
 
-    QTimer*         progressTimer;
+    QTimer*                      progressTimer;
 
-    QPixmap         pixmap;
-    WorkingPixmap   progressPix;
+    QPixmap                      pixmap;
+    KDcrawIface::WorkingPixmap   progressPix;
 
-    cmsHPROFILE     hMonitorProfile;
-    cmsHTRANSFORM   hXFORM;
-    cmsCIExyYTRIPLE Primaries;
-    cmsCIEXYZ       MediaWhite;
+    cmsHPROFILE                  hMonitorProfile;
+    cmsHTRANSFORM                hXFORM;
+    cmsCIExyYTRIPLE              Primaries;
+    cmsCIEXYZ                    MediaWhite;
 };
 
 CIETongueWidget::CIETongueWidget(int w, int h, QWidget* const parent, cmsHPROFILE hMonitor)
