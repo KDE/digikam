@@ -27,4 +27,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 020 ==> 303545 - digiKam crash when importing photos from a camera.
 021 ==> 344521 - digiKam crashes when trying to define one more face.
 022 ==> 304952 - digiKam thumbnails don't load, even after rebuild thumbnails and application crashes.
-023 ==> 
+023 ==> 341685 - Tags disappear on some photos after a few days.
+024 ==> 
