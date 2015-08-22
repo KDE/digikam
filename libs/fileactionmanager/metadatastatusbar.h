@@ -29,6 +29,7 @@
 #include <QWidget>
 
 // Local includes
+
 #include "metadatahubmngr.h"
 
 namespace Digikam

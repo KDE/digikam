@@ -39,6 +39,8 @@
 
 #include <KDCRAW/RWidgetUtils>
 
+// Local includes
+
 #include "metadatasettings.h"
 
 using namespace KDcrawIface;
@@ -74,7 +76,8 @@ public:
 };
 
 MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QHBoxLayout* const vlay = new QHBoxLayout(this);
 
@@ -102,6 +105,7 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
 
     connect(MetadataSettings::instance(), SIGNAL(settingsChanged()), this,
             SLOT(slotSettingsChanged()));
+
     connect(d->applyBtn, SIGNAL(released()),
             MetadataHubMngr::instance(), SLOT(slotApplyPending()));
 
@@ -144,4 +148,3 @@ void MetadataStatusBar::slotSetPendingItems(int number)
 }
 
 }  // namespace Digikam
-
