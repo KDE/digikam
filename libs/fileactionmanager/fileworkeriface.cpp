@@ -84,12 +84,11 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList *inf
 {
     d->startingToWrite(*infos);
 
-    MetadataHub hub;
-
     ScanController::instance()->suspendCollectionScan();
     qDebug() << "Wtitting to files +++++++++++++++++++++++++++++++++++";
     foreach(const ImageInfo& info, *infos)
     {
+        MetadataHub hub;
         if (state() == WorkerObject::Deactivating)
         {
             break;

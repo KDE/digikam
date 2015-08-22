@@ -122,6 +122,7 @@
 #include "imagepluginloader.h"
 #include "tagsmanager.h"
 #include "imagesortsettings.h"
+#include "metadatahubmngr.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -277,6 +278,9 @@ DigikamApp::DigikamApp()
 
 DigikamApp::~DigikamApp()
 {
+    // Apply pending metadata if any
+    MetadataHubMngr::instance()->slotApplyPending();
+
     ProgressManager::instance()->slotAbortAll();
 
     ImageAttributesWatch::shutDown();
