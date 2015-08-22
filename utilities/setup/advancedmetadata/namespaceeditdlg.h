@@ -47,13 +47,15 @@ public:
     NamespaceEditDlg( bool create, NamespaceEntry& entry, QWidget* parent = 0);
     ~NamespaceEditDlg();
 
-    static bool create(QWidget* parent, NamespaceEntry& entry);
-    static bool edit(QWidget* parent, NamespaceEntry& entry);
+    static bool create(QWidget* const parent, NamespaceEntry& entry);
+    static bool edit(QWidget* const parent, NamespaceEntry& entry);
 
     void saveData(NamespaceEntry& entry);
 
 public Q_SLOTS:
+
     virtual void accept();
+
 private Q_SLOTS:
 
     void slotHelp();
@@ -65,6 +67,8 @@ private:
     void setType(NamespaceEntry::NamespaceType type);
     void makeReadOnly();
     bool validifyCheck(QString &errMsg);
+
+private:
 
     class Private;
     Private* const d;

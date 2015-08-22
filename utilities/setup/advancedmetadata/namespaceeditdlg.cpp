@@ -22,6 +22,9 @@
  * ============================================================ */
 
 #include "namespaceeditdlg.h"
+
+// Qt includes
+
 #include <QGridLayout>
 #include <QLabel>
 #include <QDialogButtonBox>
@@ -38,70 +41,75 @@
 #include <QComboBox>
 #include <QGroupBox>
 
-#include <KLocalizedString>
+// KDE includes
+
+#include <klocalizedstring.h>
+
+// Local includes
 
 #include "dxmlguiwindow.h"
 
-
-namespace Digikam {
+namespace Digikam
+{
 
 class NamespaceEditDlg::Private
 {
 public:
+
     Private()
     {
-
     }
-    QDialogButtonBox* buttons;
-    bool create;
-    QLabel* topLabel;
-    QLabel* logo;
-    QGridLayout* gridLayout;
-    QWidget*    page;
+
+    QDialogButtonBox*               buttons;
+    bool                            create;
+    QLabel*                         topLabel;
+    QLabel*                         logo;
+    QGridLayout*                    gridLayout;
+    QWidget*                        page;
 
     // NamespaceEntry variables
-    QComboBox* subspaceCombo;
-    QComboBox* specialOptsCombo;
-    QComboBox* altSpecialOptsCombo;
-    QLineEdit* namespaceName;
-    QLineEdit* alternativeName;
-    QLineEdit* nameSpaceSeparator;
-    QCheckBox* isPath;
-    QGroupBox* ratingMappings;
+    QComboBox*                      subspaceCombo;
+    QComboBox*                      specialOptsCombo;
+    QComboBox*                      altSpecialOptsCombo;
+    QLineEdit*                      namespaceName;
+    QLineEdit*                      alternativeName;
+    QLineEdit*                      nameSpaceSeparator;
+    QCheckBox*                      isPath;
+    QGroupBox*                      ratingMappings;
 
-
-    QSpinBox* zeroStars;
-    QSpinBox* oneStar;
-    QSpinBox* twoStars;
-    QSpinBox* threeStars;
-    QSpinBox* fourStars;
-    QSpinBox* fiveStars;
+    QSpinBox*                       zeroStars;
+    QSpinBox*                       oneStar;
+    QSpinBox*                       twoStars;
+    QSpinBox*                       threeStars;
+    QSpinBox*                       fourStars;
+    QSpinBox*                       fiveStars;
 
     // Labels
-    QLabel*    tagTipLabel;
-    QLabel*    ratingTipLabel;
-    QLabel*    commentTipLabel;
-    QLabel*    subspaceLabel;
-    QLabel*    titleLabel;
-    QLabel*    specialOptsLabel;
-    QLabel*    alternativeNameLabel;
-    QLabel*    altspecialOptsLabel;
-    QLabel*    isTagLabel;
-    QLabel*    separatorLabel;
+    QLabel*                         tagTipLabel;
+    QLabel*                         ratingTipLabel;
+    QLabel*                         commentTipLabel;
+    QLabel*                         subspaceLabel;
+    QLabel*                         titleLabel;
+    QLabel*                         specialOptsLabel;
+    QLabel*                         alternativeNameLabel;
+    QLabel*                         altspecialOptsLabel;
+    QLabel*                         isTagLabel;
+    QLabel*                         separatorLabel;
 
-    QLabel*    tipLabel2;
+    QLabel*                         tipLabel2;
 
-    NamespaceEntry::NamespaceType nsType;
+    NamespaceEntry::NamespaceType   nsType;
 };
 
 NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *parent)
-    : QDialog(parent), d(new Private())
+    : QDialog(parent),
+      d(new Private())
 {
     setModal(true);
 
-    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help
-                                      | QDialogButtonBox::Ok
-                                      | QDialogButtonBox::Cancel, this);
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help |
+                                      QDialogButtonBox::Ok   |
+                                      QDialogButtonBox::Cancel, this);
 
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
@@ -119,8 +127,6 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *
 
     setupTagGui(entry);
 
-
-
     // --------------------------------------------------------
 
     connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
@@ -134,14 +140,14 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *
 
     // --------------------------------------------------------
 
-    if(!d->create)
+    if (!d->create)
     {
         populateFields(entry);
     }
 
     setType(entry.nsType);
 
-    if(entry.isDefault)
+    if (entry.isDefault)
         makeReadOnly();
 
     qDebug() << "Entry type" << entry.nsType << "subspace" << entry.subspace << entry.isDefault;
@@ -150,10 +156,9 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *
 
 NamespaceEditDlg::~NamespaceEditDlg()
 {
-
 }
 
-bool NamespaceEditDlg::create(QWidget *parent, NamespaceEntry& entry)
+bool NamespaceEditDlg::create(QWidget* const parent, NamespaceEntry& entry)
 {
     QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(true,entry,parent);
 
@@ -164,12 +169,14 @@ bool NamespaceEditDlg::create(QWidget *parent, NamespaceEntry& entry)
     {
         dlg->saveData(entry);
     }
+
     qDebug() << "Name after save: " << entry.namespaceName;
+
     delete dlg;
     return valRet;
 }
 
-bool NamespaceEditDlg::edit(QWidget *parent, NamespaceEntry &entry)
+bool NamespaceEditDlg::edit(QWidget* const parent, NamespaceEntry& entry)
 {
     QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(false, entry, parent);
 
@@ -186,17 +193,17 @@ bool NamespaceEditDlg::edit(QWidget *parent, NamespaceEntry &entry)
     return valRet;
 }
 
-void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
+void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
 {
-    d->page = new QWidget(this);
+    d->page       = new QWidget(this);
     d->gridLayout = new QGridLayout(d->page);
-    d->logo      = new QLabel(d->page);
+    d->logo       = new QLabel(d->page);
     d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                    QLatin1String("digikam/data/logo-digikam.png")))
-                    .scaled(48, 48, Qt::KeepAspectRatio,
-                            Qt::SmoothTransformation));
+                       .scaled(48, 48, Qt::KeepAspectRatio,
+                               Qt::SmoothTransformation));
 
-    d->topLabel             = new QLabel(d->page);
+    d->topLabel   = new QLabel(d->page);
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
     d->topLabel->setText(i18n("Add metadata namespace"));
@@ -219,8 +226,8 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
 
     d->namespaceName = new QLineEdit(this);
 
-
     //----------------- Tip Labels --------------------------------------
+
     d->tagTipLabel   = new QLabel(d->page);
     d->tagTipLabel->setTextFormat(Qt::RichText);
     d->tagTipLabel->setWordWrap(true);
@@ -257,14 +264,16 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->specialOptsCombo = new QComboBox(d->page);
 
     d->specialOptsCombo->addItem(QLatin1String("NO_OPTS"), (int)NamespaceEntry::NO_OPTS);
-    if(entry.nsType == NamespaceEntry::COMMENT)
+
+    if (entry.nsType == NamespaceEntry::COMMENT)
     {
         d->specialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
         d->specialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANGLIST"), NamespaceEntry::COMMENT_ATLLANGLIST);
         d->specialOptsCombo->addItem(QLatin1String("COMMENT_XMP"), NamespaceEntry::COMMENT_XMP);
         d->specialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"), NamespaceEntry::COMMENT_JPEG);
     }
-    if(entry.nsType == NamespaceEntry::TAGS)
+    
+    if (entry.nsType == NamespaceEntry::TAGS)
     {
         d->specialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
         d->specialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
@@ -281,24 +290,26 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->altSpecialOptsCombo = new QComboBox(d->page);
 
     d->altSpecialOptsCombo->addItem(QLatin1String("NO_OPTS"), (int)NamespaceEntry::NO_OPTS);
-    if(entry.nsType == NamespaceEntry::COMMENT)
+
+    if (entry.nsType == NamespaceEntry::COMMENT)
     {
         d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANG"), NamespaceEntry::COMMENT_ALTLANG);
         d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_ALTLANGLIST"), NamespaceEntry::COMMENT_ATLLANGLIST);
         d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_XMP"), NamespaceEntry::COMMENT_XMP);
         d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"), NamespaceEntry::COMMENT_JPEG);
     }
-    if(entry.nsType == NamespaceEntry::TAGS)
+    
+    if (entry.nsType == NamespaceEntry::TAGS)
     {
         d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
         d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
         d->altSpecialOptsCombo->addItem(QLatin1String("TAG_ACDSEE"), NamespaceEntry::TAG_ACDSEE);
     }
+    
     // --------------------------------------------------------
 
-    d->separatorLabel = new QLabel(d->page);
+    d->separatorLabel     = new QLabel(d->page);
     d->separatorLabel->setText(i18n("Separator:"));
-
     d->nameSpaceSeparator = new QLineEdit(this);
 
     // --------------------------------------------------------
@@ -306,10 +317,9 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->isTagLabel = new QLabel(d->page);
     d->isTagLabel->setText(i18n("Set Tags Path:"));
 
-    d->isPath = new QCheckBox(this);
+    d->isPath     = new QCheckBox(this);
 
-
-    d->tipLabel2 = new QLabel(d->page);
+    d->tipLabel2  = new QLabel(d->page);
     d->tipLabel2->setTextFormat(Qt::RichText);
     d->tipLabel2->setWordWrap(true);
     QPalette sample_palette;
@@ -321,10 +331,11 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->tipLabel2->hide();
 
     // ----------------------Rating Elements----------------------------------
+
     d->ratingMappings = new QGroupBox(this);
     d->ratingMappings->setFlat(true);
 
-    QGridLayout* ratingMappingsLayout = new QGridLayout(d->ratingMappings);
+    QGridLayout* const ratingMappingsLayout = new QGridLayout(d->ratingMappings);
 
     QLabel* const ratingLabel = new QLabel(d->page);
     ratingLabel->setText(i18n("Rating Mapping:"));
@@ -387,7 +398,6 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry &entry)
     d->gridLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     d->gridLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(d->page);
     vbx->addWidget(d->buttons);
@@ -397,7 +407,8 @@ void NamespaceEditDlg::populateFields(NamespaceEntry &entry)
 {
     d->namespaceName->setText(entry.namespaceName);
     d->nameSpaceSeparator->setText(entry.separator);
-    if(entry.tagPaths == NamespaceEntry::TAGPATH)
+
+    if (entry.tagPaths == NamespaceEntry::TAGPATH)
     {
         d->isPath->setChecked(true);
     }
@@ -405,12 +416,13 @@ void NamespaceEditDlg::populateFields(NamespaceEntry &entry)
     {
         d->isPath->setChecked(false);
     }
+
     d->specialOptsCombo->setCurrentIndex((int)entry.specialOpts);
 
     d->alternativeName->setText(entry.alternativeName);
     d->altSpecialOptsCombo->setCurrentIndex((int)entry.secondNameOpts);
 
-    if(entry.convertRatio.size() == 6)
+    if (entry.convertRatio.size() == 6)
     {
         d->zeroStars->setValue(entry.convertRatio.at(0));
         d->oneStar->setValue(entry.convertRatio.at(1));
@@ -425,38 +437,39 @@ void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
 {
     switch(type)
     {
-    case NamespaceEntry::TAGS:
-        qDebug() << "Setting up tags";
-        d->ratingTipLabel->hide();
-        d->commentTipLabel->hide();
-        d->ratingMappings->hide();
-        // disable IPTC and EXIV for tags
-        d->subspaceCombo->setItemData(0, 0, Qt::UserRole -1);
-        d->subspaceCombo->setItemData(1, 0, Qt::UserRole -1);
-        break;
-    case NamespaceEntry::RATING:
-        d->tagTipLabel->hide();
-        d->commentTipLabel->hide();
-        d->isPath->hide();
-        d->isTagLabel->hide();
-        d->separatorLabel->hide();
-        d->nameSpaceSeparator->hide();
-        break;
-    case NamespaceEntry::COMMENT:
-        d->tagTipLabel->hide();
-        d->ratingTipLabel->hide();
-        d->isPath->hide();
-        d->isTagLabel->hide();
-        d->separatorLabel->hide();
-        d->nameSpaceSeparator->hide();
-        d->ratingMappings->hide();
-        break;
+        case NamespaceEntry::TAGS:
+            qDebug() << "Setting up tags";
+            d->ratingTipLabel->hide();
+            d->commentTipLabel->hide();
+            d->ratingMappings->hide();
+            // disable IPTC and EXIV for tags
+            d->subspaceCombo->setItemData(0, 0, Qt::UserRole -1);
+            d->subspaceCombo->setItemData(1, 0, Qt::UserRole -1);
+            break;
+
+        case NamespaceEntry::RATING:
+            d->tagTipLabel->hide();
+            d->commentTipLabel->hide();
+            d->isPath->hide();
+            d->isTagLabel->hide();
+            d->separatorLabel->hide();
+            d->nameSpaceSeparator->hide();
+            break;
+
+        case NamespaceEntry::COMMENT:
+            d->tagTipLabel->hide();
+            d->ratingTipLabel->hide();
+            d->isPath->hide();
+            d->isTagLabel->hide();
+            d->separatorLabel->hide();
+            d->nameSpaceSeparator->hide();
+            d->ratingMappings->hide();
+            break;
     }
 }
 
 void NamespaceEditDlg::makeReadOnly()
 {
-
     QString txt = i18n("This is a default namespace. Default namespaces can only be disabled");
     d->tipLabel2->setText(txt);
     d->tipLabel2->show();
@@ -479,12 +492,11 @@ void NamespaceEditDlg::makeReadOnly()
     d->fiveStars->setDisabled(true);
 }
 
-bool NamespaceEditDlg::validifyCheck(QString & errMsg)
+bool NamespaceEditDlg::validifyCheck(QString& errMsg)
 {
-    bool result = true;
+    // bool result = true; NOT USED
 
-
-    if(d->namespaceName->text().isEmpty())
+    if (d->namespaceName->text().isEmpty())
     {
         errMsg = i18n("The namespace name is required");
         return false;
@@ -492,68 +504,84 @@ bool NamespaceEditDlg::validifyCheck(QString & errMsg)
 
     switch(d->subspaceCombo->currentData().toInt())
     {
-    case NamespaceEntry::EXIV:
-        if(d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
-        {
-            errMsg = i18n("EXIV namespace name must start with \"Exif\".");
-            return false;
-        }
-        if(!d->alternativeName->text().isEmpty()
-           && d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
-        {
-            errMsg = i18n("EXIV alternative namespace name must start with \"Exif\".");
-            return false;
-        }
-        break;
-    case NamespaceEntry::IPTC:
-        if(d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
-        {
-            errMsg = i18n("IPTC namespace name must start with \"Iptc\".");
-            return false;
-        }
-        if(!d->alternativeName->text().isEmpty()
-           && d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
-        {
-            errMsg = i18n("IPTC alternative namespace name must start with \"Iptc\".");
-            return false;
-        }
-        break;
-    case NamespaceEntry::XMP:
-        if(d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Xmp"))
-        {
-            errMsg = i18n("XMP namespace name must start with \"Xmp\".");
-            return false;
-        }
-        if(!d->alternativeName->text().isEmpty()
-           && d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Xmp"))
-        {
-            errMsg = i18n("XMP alternative namespace name must start with \"Xmp\".");
-            return false;
-        }
-        break;
-    default:
-        break;
+        case NamespaceEntry::EXIV:
+            
+            if (d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
+            {
+                errMsg = i18n("EXIV namespace name must start with \"Exif\".");
+                return false;
+            }
+            
+            if (!d->alternativeName->text().isEmpty() &&
+                d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
+            {
+                errMsg = i18n("EXIV alternative namespace name must start with \"Exif\".");
+                return false;
+            }
+
+            break;
+
+        case NamespaceEntry::IPTC:
+            
+            if (d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
+            {
+                errMsg = i18n("IPTC namespace name must start with \"Iptc\".");
+                return false;
+            }
+            
+            if(!d->alternativeName->text().isEmpty() &&
+               d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
+            {
+                errMsg = i18n("IPTC alternative namespace name must start with \"Iptc\".");
+                return false;
+            }
+
+            break;
+
+        case NamespaceEntry::XMP:
+
+            if (d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Xmp"))
+            {
+                errMsg = i18n("XMP namespace name must start with \"Xmp\".");
+                return false;
+            }
+            
+            if (!d->alternativeName->text().isEmpty() &&
+                d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Xmp"))
+            {
+                errMsg = i18n("XMP alternative namespace name must start with \"Xmp\".");
+                return false;
+            }
+
+            break;
+
+        default:
+            break;
     }
 
     switch(d->nsType)
     {
-    case NamespaceEntry::TAGS:
+        case NamespaceEntry::TAGS:
 
-        if(d->nameSpaceSeparator->text().isEmpty())
-        {
-            errMsg = i18n("Tag Path separator is required");
-            return false;
-        }
-        if(d->nameSpaceSeparator->text().size() > 1)
-        {
-            errMsg = i18n("Only one character is now supported as tag path separator");
-            return false;
-        }
-        break;
-    case NamespaceEntry::RATING:
-        break;
-    case NamespaceEntry::COMMENT:
-        break;
+            if (d->nameSpaceSeparator->text().isEmpty())
+            {
+                errMsg = i18n("Tag Path separator is required");
+                return false;
+            }
+            
+            if (d->nameSpaceSeparator->text().size() > 1)
+            {
+                errMsg = i18n("Only one character is now supported as tag path separator");
+                return false;
+            }
+
+            break;
+
+        case NamespaceEntry::RATING:
+            break;
+
+        case NamespaceEntry::COMMENT:
+            break;
     }
 
     return true;
@@ -561,17 +589,18 @@ bool NamespaceEditDlg::validifyCheck(QString & errMsg)
 
 void NamespaceEditDlg::saveData( NamespaceEntry &entry)
 {
-    entry.namespaceName     = d->namespaceName->text();
-    entry.separator   = d->nameSpaceSeparator->text();
-    if(d->isPath->isChecked())
+    entry.namespaceName = d->namespaceName->text();
+    entry.separator     = d->nameSpaceSeparator->text();
+
+    if (d->isPath->isChecked())
         entry.tagPaths      = NamespaceEntry::TAGPATH;
     else
         entry.tagPaths      = NamespaceEntry::TAG;
 
     entry.alternativeName = d->alternativeName->text();
-    entry.specialOpts    = (NamespaceEntry::SpecialOptions)d->specialOptsCombo->currentData().toInt();
-    entry.secondNameOpts = (NamespaceEntry::SpecialOptions)d->altSpecialOptsCombo->currentData().toInt();
-    entry.subspace       = (NamespaceEntry::NsSubspace)d->subspaceCombo->currentData().toInt();
+    entry.specialOpts     = (NamespaceEntry::SpecialOptions)d->specialOptsCombo->currentData().toInt();
+    entry.secondNameOpts  = (NamespaceEntry::SpecialOptions)d->altSpecialOptsCombo->currentData().toInt();
+    entry.subspace        = (NamespaceEntry::NsSubspace)d->subspaceCombo->currentData().toInt();
 
     entry.convertRatio.clear();
     entry.convertRatio.append(d->zeroStars->value());
@@ -585,8 +614,11 @@ void NamespaceEditDlg::saveData( NamespaceEntry &entry)
 void NamespaceEditDlg::accept()
 {
     QString errMsg;
-    if(validifyCheck(errMsg))
+
+    if (validifyCheck(errMsg))
+    {
         QDialog::accept();
+    }
     else
     {
         d->tipLabel2->setText(errMsg);
@@ -599,4 +631,4 @@ void NamespaceEditDlg::slotHelp()
     DXmlGuiWindow::openHandbook(QLatin1String("namespacesadd.anchor"), QLatin1String("digikam"));
 }
 
-}
+} // namespace Digikam
