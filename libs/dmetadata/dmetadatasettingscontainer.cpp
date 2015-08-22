@@ -34,6 +34,7 @@
 // Local includes
 
 #include "dmetadatasettings.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -84,7 +85,7 @@ void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 
 void DMetadataSettingsContainer::defaultValues()
 {
-    qDebug() << "Loading default values ++++++++++++++++";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Loading default values ++++++++++++++++";
     this->unifyReadWrite = true;
 
     defaultTagValues();
@@ -321,7 +322,7 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
             ns.convertRatio.append(str.toInt());
         }
 
-       qDebug() << "Reading element " << ns.namespaceName << " " << ns.index;
+       qCDebug(DIGIKAM_GENERAL_LOG) << "Reading element " << ns.namespaceName << " " << ns.index;
        container.append(ns);
     }
 

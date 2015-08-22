@@ -44,7 +44,7 @@ class NamespaceEditDlg : public QDialog
 
 public:
 
-    NamespaceEditDlg( bool create, NamespaceEntry& entry, QWidget* parent = 0);
+    NamespaceEditDlg( bool create, NamespaceEntry& entry, QWidget* const parent = 0);
     ~NamespaceEditDlg();
 
     static bool create(QWidget* const parent, NamespaceEntry& entry);
@@ -66,7 +66,7 @@ private:
     void populateFields(NamespaceEntry& entry);
     void setType(NamespaceEntry::NamespaceType type);
     void makeReadOnly();
-    bool validifyCheck(QString &errMsg);
+    bool validifyCheck(QString& errMsg);
 
 private:
 

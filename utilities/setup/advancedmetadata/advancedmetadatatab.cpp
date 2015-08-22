@@ -39,7 +39,7 @@
 
 // KDE includes
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
@@ -47,6 +47,7 @@
 #include "namespacelistview.h"
 #include "namespaceeditdlg.h"
 #include "dmessagebox.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -184,14 +185,14 @@ void AdvancedMetadataTab::slotEditNamespace()
 
     NamespaceEntry entry = getCurrentContainer().at(d->namespaceView->currentIndex().row());
 
-    qDebug() << "Name before save: " << entry.namespaceName;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Name before save: " << entry.namespaceName;
 
     if (!NamespaceEditDlg::edit(qApp->activeWindow(), entry))
     {
         return;
     }
 
-    qDebug() << "Name after save: " << entry.namespaceName;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Name after save: " << entry.namespaceName;
     
     QStandardItem* const root = d->models.at(getModelIndex())->invisibleRootItem();
     QStandardItem* const item = root->child(d->namespaceView->currentIndex().row());
@@ -435,7 +436,7 @@ QList<NamespaceEntry>& AdvancedMetadataTab::getCurrentContainer()
         case 5:
             return d->container.writeCommentNamespaces;
         default:
-            qDebug() << "warning, Unknown case";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "warning, Unknown case";
             return d->container.readTagNamespaces;
     }
 }
@@ -496,7 +497,7 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
         else
             ns.isDisabled = true;
 
-        qDebug() << "saving+++++" << ns.namespaceName << " " << ns.index << " " << ns.specialOpts;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "saving+++++" << ns.namespaceName << " " << ns.index << " " << ns.specialOpts;
         container.append(ns);
     }
 }

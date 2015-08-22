@@ -410,7 +410,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
                 {
                     if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
                     {
-                        qDebug() << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
                         return false;
                     }
                 }
@@ -801,7 +801,7 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
         case NamespaceEntry::XMP:
             if(!setXmpTagString(nameSpace, QString::number(entry.convertRatio.at(rating))))
             {
-                qDebug() << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
                 return false;
             }
             break;
@@ -1326,27 +1326,24 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
             case NamespaceEntry::TAG_XMPSEQ:
                 if(!setXmpTagStringSeq(nameSpace, newList))
                 {
-                    qDebug() << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
                     return false;
                 }
                 break;
             case NamespaceEntry::TAG_XMPBAG:
                 if(!setXmpTagStringBag(nameSpace, newList))
                 {
-                    qDebug() << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
                     return false;
                 }
                 break;
             case NamespaceEntry::TAG_ACDSEE:
                 if(!setACDSeeTagsPath(newList))
                 {
-                    qDebug() << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
                     return false;
                 }
-            default:
-                break;
             }
-
         }
     }
     return true;
@@ -1450,7 +1447,7 @@ bool DMetadata::setACDSeeTagsPath(const QStringList &tagsPath) const
     }
 
     QString xmlACDSee = QLatin1String("<Categories>") + xmlTags.join(QLatin1String("")) + QLatin1String("</Categories>");
-    qDebug() << "xmlACDSee" << xmlACDSee;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "xmlACDSee" << xmlACDSee;
     removeXmpTag("Xmp.acdsee.categories");
     if (!xmlTags.isEmpty())
     {

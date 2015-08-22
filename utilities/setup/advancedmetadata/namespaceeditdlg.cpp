@@ -48,6 +48,7 @@
 // Local includes
 
 #include "dxmlguiwindow.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -101,7 +102,7 @@ public:
     NamespaceEntry::NamespaceType   nsType;
 };
 
-NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *parent)
+NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry& entry, QWidget* const parent)
     : QDialog(parent),
       d(new Private())
 {
@@ -150,7 +151,7 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry &entry, QWidget *
     if (entry.isDefault)
         makeReadOnly();
 
-    qDebug() << "Entry type" << entry.nsType << "subspace" << entry.subspace << entry.isDefault;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Entry type" << entry.nsType << "subspace" << entry.subspace << entry.isDefault;
     adjustSize();
 }
 
@@ -162,7 +163,7 @@ bool NamespaceEditDlg::create(QWidget* const parent, NamespaceEntry& entry)
 {
     QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(true,entry,parent);
 
-    qDebug() << "Name before save: " << entry.namespaceName;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Name before save: " << entry.namespaceName;
     bool valRet = dlg->exec();
 
     if (valRet == QDialog::Accepted)
@@ -170,7 +171,7 @@ bool NamespaceEditDlg::create(QWidget* const parent, NamespaceEntry& entry)
         dlg->saveData(entry);
     }
 
-    qDebug() << "Name after save: " << entry.namespaceName;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Name after save: " << entry.namespaceName;
 
     delete dlg;
     return valRet;
@@ -180,7 +181,7 @@ bool NamespaceEditDlg::edit(QWidget* const parent, NamespaceEntry& entry)
 {
     QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(false, entry, parent);
 
-    qDebug() << "Name before save: " << entry.namespaceName;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Name before save: " << entry.namespaceName;
     bool valRet = dlg->exec();
 
     if (valRet == QDialog::Accepted && !entry.isDefault)
@@ -188,7 +189,7 @@ bool NamespaceEditDlg::edit(QWidget* const parent, NamespaceEntry& entry)
         dlg->saveData(entry);
     }
 
-    qDebug() << "Name before save: " << entry.namespaceName;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Name before save: " << entry.namespaceName;
     delete dlg;
     return valRet;
 }
@@ -217,7 +218,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
     d->subspaceCombo->addItem(QLatin1String("XMP"),(int)NamespaceEntry::XMP);
     d->subspaceCombo->setCurrentIndex((int)entry.subspace);
 
-    qDebug() << "Enrty subspace" << (int)entry.subspace;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Enrty subspace" << (int)entry.subspace;
 
     // -------------------Tag Elements---------------------------------
 
@@ -282,12 +283,12 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
 
     d->alternativeNameLabel = new QLabel(d->page);
     d->alternativeNameLabel->setText(i18n("Alternative name"));
-    d->alternativeName = new QLineEdit(d->page);
+    d->alternativeName      = new QLineEdit(d->page);
 
-    d->altspecialOptsLabel = new QLabel(d->page);
+    d->altspecialOptsLabel  = new QLabel(d->page);
     d->altspecialOptsLabel->setText(i18n("Alternative special options"));
 
-    d->altSpecialOptsCombo = new QComboBox(d->page);
+    d->altSpecialOptsCombo  = new QComboBox(d->page);
 
     d->altSpecialOptsCombo->addItem(QLatin1String("NO_OPTS"), (int)NamespaceEntry::NO_OPTS);
 
@@ -438,7 +439,7 @@ void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
     switch(type)
     {
         case NamespaceEntry::TAGS:
-            qDebug() << "Setting up tags";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Setting up tags";
             d->ratingTipLabel->hide();
             d->commentTipLabel->hide();
             d->ratingMappings->hide();
