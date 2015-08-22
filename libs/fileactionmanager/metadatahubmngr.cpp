@@ -23,6 +23,7 @@
 #include "metadatahubmngr.h"
 
 #include <QMutex>
+#include <QDebug>
 
 #include "imageinfo.h"
 #include "metadatahub.h"
@@ -60,9 +61,11 @@ MetadataHubMngr::~MetadataHubMngr()
 
 void MetadataHubMngr::addPending(ImageInfo &info)
 {
+
     QMutexLocker locker(&d->mutex);
     if(!d->pendingItems.contains(info))
         d->pendingItems.append(info);
+        qDebug() << "Add file " << d->pendingItems.size();
     emit signalPendingMetadata(d->pendingItems.size());
 }
 

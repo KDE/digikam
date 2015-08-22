@@ -49,6 +49,7 @@
 #include "tagscache.h"
 #include "applicationsettings.h"
 #include "facetagseditor.h"
+#include "metadatahubmngr.h"
 
 #ifdef HAVE_KFILEMETADATA
 #include "baloowrap.h"
@@ -235,25 +236,21 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
 // ------------------------------------------------------------------------------------------------------------
 
 /** safe **/
-bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMode, const MetadataSettingsContainer &settings)
+bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMode, bool ignoreLazySync, const MetadataSettingsContainer &settings)
 {
     applyChangeNotifications();
+
+    if(!ignoreLazySync && settings.useLazySync)
+    {
+        MetadataHubMngr::instance()->addPending(info);
+        return true;
+    }
 
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!
     if (!willWriteMetadata(writeMode, settings))
     {
-        qDebug() << "returning false=======================";
         return false;
-    }
-    qDebug() << "Writting metadata++++++++++++++++++++++";
-    // Reload all tags from image info
-    // Ugly hack to allow metadatahub to write disjoit tags when multiple images are loaded
-    d->tags.clear();
-    QList<int> tags = info.tagIds();
-
-    Q_FOREACH(int tag, tags){
-        d->tags[tag] = MetadataAvailable;
     }
 
     writeToBaloo(info.filePath());
@@ -382,10 +379,16 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     return dirty;
 }
 
-bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(const QString& filePath, WriteMode writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
 
+    if(!ignoreLazySync && settings.useLazySync)
+    {
+        ImageInfo info = ImageInfo::fromLocalFile(filePath);
+        MetadataHubMngr::instance()->addPending(info);
+        return true;
+    }
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!
     if (!willWriteMetadata(writeMode, settings))
@@ -407,7 +410,7 @@ bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const Meta
     return false;
 }
 
-bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(DImg& image, WriteMode writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -426,6 +429,13 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataSettings
     if (filePath.isEmpty())
     {
         filePath = image.lastSavedFilePath();
+    }
+
+    if(!ignoreLazySync && settings.useLazySync && !filePath.isEmpty())
+    {
+        ImageInfo info = ImageInfo::fromLocalFile(filePath);
+        MetadataHubMngr::instance()->addPending(info);
+        return true;
     }
 
     if (!filePath.isEmpty())

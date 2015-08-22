@@ -117,8 +117,6 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, Meta
     qDebug() << "post signal infos size " << infos.size();
     d->startingToWrite(infos);
 
-    MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
-
     ScanController::instance()->suspendCollectionScan();
 
     foreach(const ImageInfo& info, infos)
@@ -130,7 +128,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, Meta
 
         // apply to file metadata
         ScanController::FileMetadataWrite writeScope(info);
-        writeScope.changed(hub->writeToMetadata(info, MetadataHub::FullWrite, writeSettings));
+        writeScope.changed(hub->writeToMetadata(info, MetadataHub::FullWrite));
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();

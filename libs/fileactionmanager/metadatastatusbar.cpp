@@ -106,7 +106,7 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
             MetadataHubMngr::instance(), SLOT(slotApplyPending()));
 
     connect(MetadataHubMngr::instance(), SIGNAL(signalPendingMetadata(int)),
-            this, SLOT(setPendingItems(int)));
+            this, SLOT(slotSetPendingItems(int)));
 
     if(MetadataSettings::instance()->settings().useLazySync)
         this->show();
@@ -233,7 +233,7 @@ void MetadataStatusBar::slotSetPendingItems(int number)
     else
     {
         d->info->setAdjustedText(i18np("1 file awaits syncronization",
-                                       "%l files await syncronization",
+                                       "%1 files await syncronization",
                                        number));
         d->applyBtn->setDisabled(false);
     }

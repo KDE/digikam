@@ -139,28 +139,8 @@ public:
      * @return true           - if everything is succesfull
      */
     bool writeToMetadata(ImageInfo info, WriteMode writeMode = FullWrite,
-               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
-    /**
-        Applies the set of metadata contained in this MetadataHub
-        to the given DMetadata object.
-        The MetadataSettingsContainer determine whether data is actually
-        set or not.
-        The following metadata fields may be set (depending on settings):
-        - Comment
-        - Date
-        - Rating
-        - Tags
-        - Photographer ID (data from settings)
-        - Credits (data from settings)
+               bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
-        The data fields taken from this MetadataHub object are only set if
-        their status is MetadataAvailable.
-        If the status is MetadataInvalid or MetadataDisjoint, the respective
-        metadata field is not touched.
-        @return Returns true if the metadata object has been touched
-    */
-    bool write(DMetadata& metadata, WriteMode writeMode = FullWrite,
-               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
         Constructs a DMetadata object for given filePath,
@@ -172,7 +152,7 @@ public:
         @return Returns if the file has been touched
     */
     bool write(const QString& filePath, WriteMode writeMode = FullWrite,
-               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+               bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
         Constructs a DMetadata object from the metadata stored in the given DImg object,
@@ -180,7 +160,7 @@ public:
         @return Returns if the DImg object has been touched
     */
     bool write(DImg& image, WriteMode writeMode = FullWrite,
-               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+               bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
         Will write only Tags to image. Used by TagsManager to write tags to image
@@ -232,6 +212,28 @@ public:
     void loadFaceTags(const ImageInfo& info, const QSize& size);
 
 protected:
+
+    /**
+        Applies the set of metadata contained in this MetadataHub
+        to the given DMetadata object.
+        The MetadataSettingsContainer determine whether data is actually
+        set or not.
+        The following metadata fields may be set (depending on settings):
+        - Comment
+        - Date
+        - Rating
+        - Tags
+        - Photographer ID (data from settings)
+        - Credits (data from settings)
+
+        The data fields taken from this MetadataHub object are only set if
+        their status is MetadataAvailable.
+        If the status is MetadataInvalid or MetadataDisjoint, the respective
+        metadata field is not touched.
+        @return Returns true if the metadata object has been touched
+    */
+    bool write(DMetadata& metadata, WriteMode writeMode = FullWrite,
+               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     void load(const QDateTime& dateTime,
               const CaptionsMap& titles, const CaptionsMap& comment,
