@@ -7,6 +7,7 @@
  * Description : application settings interface
  *
  * Copyright (C) 2003-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,7 +54,7 @@ const QString ApplicationSettings::Private::configGroupGeneral(QLatin1String("Ge
 const QString ApplicationSettings::Private::configGroupVersioning(QLatin1String("Versioning Settings"));
 const QString ApplicationSettings::Private::configGroupFaceDetection(QLatin1String("Face Detection Settings"));
 const QString ApplicationSettings::Private::configAlbumCollectionsEntry(QLatin1String("Album Collections"));
-const QString ApplicationSettings::Private::configAlbumSortOrderEntry(QLatin1String("Album Sort Order"));
+const QString ApplicationSettings::Private::configAlbumSortRoleEntry(QLatin1String("Album Sort Role"));
 const QString ApplicationSettings::Private::configImageSortOrderEntry(QLatin1String("Image Sort Order"));
 const QString ApplicationSettings::Private::configImageSortingEntry(QLatin1String("Image Sorting"));
 const QString ApplicationSettings::Private::configImageGroupModeEntry(QLatin1String("Image Group Mode"));
@@ -193,7 +194,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const q)
       recursiveAlbums(false),
       recursiveTags(false),
       sidebarTitleStyle(DMultiTabBar::ActiveIconText),
-      albumSortOrder(ApplicationSettings::ByFolder),
+      albumSortRole(ApplicationSettings::ByFolder),
       albumSortChanged(false),
       imageSortOrder(0),
       imageSorting(0),
@@ -225,7 +226,7 @@ void ApplicationSettings::Private::init()
     albumCategoryNames.append(i18n("Miscellaneous"));
     albumCategoryNames.sort();
 
-    albumSortOrder                      = ApplicationSettings::ByFolder;
+    albumSortRole                       = ApplicationSettings::ByFolder;
     imageSortOrder                      = ImageSortSettings::SortByFileName;
     imageSorting                        = ImageSortSettings::AscendingOrder;
     imageGroupMode                      = ImageSortSettings::CategoryByAlbum;

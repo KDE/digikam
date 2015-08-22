@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +29,7 @@
 
 #include <QSortFilterProxyModel>
 #include <QCollator>
+#include <QHeaderView>
 
 // Local includes
 
@@ -45,6 +46,7 @@ AlbumFilterModel::AlbumFilterModel(QObject* const parent)
 {
     m_filterBehavior = FullFiltering;
     m_chainedModel   = 0;
+    m_view           = static_cast<QTreeView*>(parent);
     setSortRole(AbstractAlbumModel::AlbumSortRole);
     setSortCaseSensitivity(Qt::CaseInsensitive);
 
@@ -245,15 +247,17 @@ QVariant AlbumFilterModel::dataForCurrentSortRole(const QModelIndex& index) cons
     {
         if(album->type() == Album::PHYSICAL)
         {
-            ApplicationSettings::AlbumSortOrder sortRole = ApplicationSettings::instance()->getAlbumSortOrder();
+            PAlbum* a = static_cast<PAlbum*>(album);
+
+            ApplicationSettings::AlbumSortRole sortRole = ApplicationSettings::instance()->getAlbumSortRole();
             switch (sortRole)
             {
                 case ApplicationSettings::ByFolder:
-                    return static_cast<PAlbum*>(album)->title();
+                    return a->title();
                 case ApplicationSettings::ByDate:
-                    return static_cast<PAlbum*>(album)->date();
+                    return a->date();
                 default:
-                    return static_cast<PAlbum*>(album)->category();
+                    return a->category();
             }
         }
         else if(album->type() == Album::TAG)
@@ -365,16 +369,27 @@ bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
 
 bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
+    // TODO: Find more convenient way to do this, becuase it's not good to be done
+    //       in the comparison method
+    if (albumForIndex(left)->isTrashAlbum() || albumForIndex(right)->isTrashAlbum())
+    {
+        if(m_view->header()->sortIndicatorOrder() == Qt::AscendingOrder)
+            return albumForIndex(left)->isTrashAlbum() ? false : true;
+        else
+            return albumForIndex(left)->isTrashAlbum() ? true : false;
+    }
+
     QVariant valLeft  = dataForCurrentSortRole(left);
     QVariant valRight = dataForCurrentSortRole(right);
 
-    ApplicationSettings::StringComparisonType strComparisonType = ApplicationSettings::instance()->getStringComparisonType();
-    ApplicationSettings::AlbumSortOrder role = ApplicationSettings::instance()->getAlbumSortOrder();
+    ApplicationSettings::AlbumSortRole role = ApplicationSettings::instance()->getAlbumSortRole();
 
     if((role == ApplicationSettings::ByDate || role == ApplicationSettings::ByCategory)&&(valLeft == valRight))
     {
             return QSortFilterProxyModel::lessThan(left, right);
     }
+
+    ApplicationSettings::StringComparisonType strComparisonType = ApplicationSettings::instance()->getStringComparisonType();
 
     if((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
     {

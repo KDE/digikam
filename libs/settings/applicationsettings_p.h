@@ -7,6 +7,7 @@
  * Description : application settings interface
  *
  * Copyright (C) 2003-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C  2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +51,7 @@ public:
     static const QString                      configGroupVersioning;
     static const QString                      configGroupFaceDetection;
     static const QString                      configAlbumCollectionsEntry;
-    static const QString                      configAlbumSortOrderEntry;
+    static const QString                      configAlbumSortRoleEntry;
     static const QString                      configImageSortOrderEntry;
     static const QString                      configImageSortingEntry;
     static const QString                      configImageGroupModeEntry;
@@ -222,10 +223,10 @@ public:
 
     KSharedConfigPtr                          config;
 
-    DMultiTabBar::TextStyle           sidebarTitleStyle;
+    DMultiTabBar::TextStyle                   sidebarTitleStyle;
 
     // album view settings
-    ApplicationSettings::AlbumSortOrder       albumSortOrder;
+    ApplicationSettings::AlbumSortRole        albumSortRole;
     bool                                      albumSortChanged;
 
     // icon view settings

@@ -145,7 +145,7 @@ public Q_SLOTS:
     // Album action slots
     void slotRefresh();
     void slotNewAlbum();
-    void slotSortAlbums(int order);
+    void slotSortAlbums(int role);
     void slotDeleteAlbum();
     void slotRenameAlbum();
     void slotAlbumPropsEdit();

@@ -11,7 +11,7 @@
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2011-2013 by Michael G. Hansen <mike at mghansen dot de>
- * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -950,7 +950,7 @@ void DigikamView::slotAllAlbumsLoaded()
     d->albumManager->setCurrentAlbums(QList<Album*>() << album);
 }
 
-void DigikamView::slotSortAlbums(int order)
+void DigikamView::slotSortAlbums(int role)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -959,7 +959,7 @@ void DigikamView::slotSortAlbums(int order)
         return;
     }
 
-    settings->setAlbumSortOrder((ApplicationSettings::AlbumSortOrder) order);
+    settings->setAlbumSortRole((ApplicationSettings::AlbumSortRole) role);
     settings->saveSettings();
     //A dummy way to force the tree view to resort if the album sort role changed
 
