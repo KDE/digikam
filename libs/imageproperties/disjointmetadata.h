@@ -7,7 +7,6 @@
  * Description : Helper class for Image Description Editor Tab
  *
  * Copyright (C) 2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
-
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,12 +20,17 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef DISJOINTMETADATA_H
 #define DISJOINTMETADATA_H
+
+// Qt includes
 
 #include <QString>
 #include <QMap>
 #include <QObject>
+
+// Local includes
 
 #include "metadatasettings.h"
 
@@ -34,6 +38,7 @@ class QDateTime;
 
 namespace Digikam
 {
+
 class ImageInfo;
 class CaptionsMap;
 class Template;
@@ -43,11 +48,12 @@ class DisjointMetadata : public QObject
     Q_OBJECT
 
 public:
+
     /**
         The status enum describes the result of joining several metadata sets.
         If only one set has been added, the status is always MetadataAvailable.
         If no set has been added, the status is always MetadataInvalid
-    */
+     */
     enum Status
     {
         MetadataInvalid,   /// not yet filled with any value
@@ -59,7 +65,7 @@ public:
     {
         /**
             Write all available information
-        */
+         */
         FullWrite,
         /**
             Do a full write if and only if
@@ -69,13 +75,13 @@ public:
             the load() methods are ignored for this attribute.
             This mode allows to avoid write operations when e.g. the user does not want
             keywords to be written and only changes keywords.
-        */
+         */
         FullWriteIfChanged,
         /**
             Write only the changed parts.
             Metadata fields which cannot be changed from MetadataHub (photographer ID etc.)
             will never be written
-        */
+         */
         PartialWrite
     };
 
@@ -88,7 +94,6 @@ public:
     void reset();
 
     void load(const ImageInfo& info);
-
 
     //** Status **//
     Status dateTimeStatus()   const;
@@ -105,7 +110,7 @@ public:
     /**
         Returns if the metadata field has been changed
         with the corresponding set... method
-    */
+     */
     bool dateTimeChanged()   const;
     bool titlesChanged()     const;
     bool commentsChanged()   const;
@@ -117,7 +122,7 @@ public:
 
     /**
         Set dateTime to the given value, and the dateTime status to MetadataAvailable
-    */
+     */
     void setDateTime(const QDateTime& dateTime, Status status = MetadataAvailable);
     void setTitles(const CaptionsMap& titles, Status status = MetadataAvailable);
     void setComments(const CaptionsMap& comments, Status status = MetadataAvailable);
@@ -132,21 +137,21 @@ public:
         If status is MetadataDisjoint, the earliest date is returned.
                                        (see dateTimeInterval())
         If status is MetadataInvalid, an invalid date is returned.
-    */
+     */
     QDateTime   dateTime() const;
 
     /**
         Returns a map all alternate language titles.
         If status is MetadataDisjoint, the first loaded map is returned.
         If status is MetadataInvalid, CaptionMap() is returned.
-    */
+     */
     CaptionsMap titles() const;
 
     /**
         Returns a map all alternate language omments .
         If status is MetadataDisjoint, the first loaded map is returned.
         If status is MetadataInvalid, CaptionMap() is returned.
-    */
+     */
     CaptionsMap comments() const;
 
     /**
@@ -154,7 +159,7 @@ public:
         If status is MetadataDisjoint, the None Label is returned.
                                        (see pickLabelInterval())
         If status is MetadataInvalid, -1 is returned.
-    */
+     */
     int         pickLabel() const;
 
     /**
@@ -162,7 +167,7 @@ public:
         If status is MetadataDisjoint, the None Label is returned.
                                        (see colorLabelInterval())
         If status is MetadataInvalid, -1 is returned.
-    */
+     */
     int         colorLabel() const;
 
     /**
@@ -170,35 +175,35 @@ public:
         If status is MetadataDisjoint, the lowest rating is returned.
                                        (see ratingInterval())
         If status is MetadataInvalid, -1 is returned.
-    */
+     */
     int         rating() const;
 
     /**
         Returns the metadata template.
         If status is MetadataDisjoint, the first loaded template is returned.
         If status is MetadataInvalid, 0 is returned.
-    */
+     */
     Template metadataTemplate() const;
 
     /**
         Returns the earliest and latest date.
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, invalid dates are returned.
-    */
+     */
     void                dateTimeInterval(QDateTime& lowest, QDateTime& highest) const;
 
     /**
         Returns the lowest and highest Pick Label id (see PickLabel values from globals.h).
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, -1 is returned.
-    */
+     */
     void                pickLabelInterval(int& lowest, int& highest) const;
 
     /**
         Returns the lowest and highest Color Label id (see ColorLabel values from globals.h).
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, -1 is returned.
-    */
+     */
     void                colorLabelInterval(int& lowest, int& highest) const;
 
     /**
@@ -211,7 +216,7 @@ public:
     /**
         Returns a QStringList with all tags with status MetadataAvailable.
         (i.e., the intersection of tags from all loaded metadata sets)
-    */
+     */
     QStringList         keywords() const;
 
     /**
@@ -225,7 +230,7 @@ public:
         If a tag in the map has the status MetadataDisjoint, some but not all loaded
         sets contained the tag. The hasTag value is true then.
         If MapMode (set in constructor) is false, returns an empty map.
-    */
+     */
     QMap<int, Status> tags() const;
 
     /**
@@ -240,16 +245,17 @@ public:
         Applies the set of metadata contained in this MetadataHub
         to the given ImageInfo object.
         @return Returns true if the info object has been changed
-    */
+     */
     bool write(ImageInfo info, WriteMode writeMode = FullWrite);
     /**
         With the currently applied changes, the given writeMode and settings,
         returns if write(DMetadata), write(QString) or write(DImg) will actually
         apply any changes.
-    */
+     */
     bool willWriteMetadata(WriteMode writeMode,
                            const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings()) const;
 protected:
+
     void load(const QDateTime& dateTime,
               const CaptionsMap& titles, const CaptionsMap& comment,
               int colorLabel, int pickLabel,
@@ -268,9 +274,11 @@ private:
     virtual void applyChangeNotifications();
 
 private:
+
     class Private;
     Private *d;
 };
 
-}
+} // namespace Digikam
+
 #endif // DISJOINTMETADATA_H

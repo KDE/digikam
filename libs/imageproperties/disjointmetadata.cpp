@@ -21,18 +21,22 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #include "disjointmetadata.h"
+
+// Qt includes
 
 #include <QMap>
 #include <QStringList>
 #include <QDateTime>
 #include <QMutexLocker>
 
+// Local includes
+
 #include "captionvalues.h"
 #include "template.h"
 #include "templatemanager.h"
 #include "tagscache.h"
-
 #include "databaseaccess.h"
 #include "imagecomments.h"
 #include "imageinfo.h"
@@ -44,6 +48,7 @@ namespace Digikam
 class DisjointMetadata::Private
 {
 public:
+
     Private()
     {
         dateTimeStatus    = DisjointMetadata::MetadataInvalid;
@@ -110,36 +115,36 @@ public:
         tags              = QMap<int, DisjointMetadata::Status>(other.tags);
     }
 
-    bool                              dateTimeChanged;
-    bool                              titlesChanged;
-    bool                              commentsChanged;
-    bool                              pickLabelChanged;
-    bool                              colorLabelChanged;
-    bool                              ratingChanged;
-    bool                              templateChanged;
-    bool                              tagsChanged;
+    bool                                   dateTimeChanged;
+    bool                                   titlesChanged;
+    bool                                   commentsChanged;
+    bool                                   pickLabelChanged;
+    bool                                   colorLabelChanged;
+    bool                                   ratingChanged;
+    bool                                   templateChanged;
+    bool                                   tagsChanged;
 
-    int                               pickLabel;
-    int                               highestPickLabel;
-    int                               colorLabel;
-    int                               highestColorLabel;
-    int                               rating;
-    int                               highestRating;
-    int                               count;
+    int                                    pickLabel;
+    int                                    highestPickLabel;
+    int                                    colorLabel;
+    int                                    highestColorLabel;
+    int                                    rating;
+    int                                    highestRating;
+    int                                    count;
 
-    QDateTime                         dateTime;
-    QDateTime                         lastDateTime;
+    QDateTime                              dateTime;
+    QDateTime                              lastDateTime;
 
-    CaptionsMap                       titles;
-    CaptionsMap                       comments;
+    CaptionsMap                            titles;
+    CaptionsMap                            comments;
 
-    Template                          metadataTemplate;
+    Template                               metadataTemplate;
 
-    QMap<int, DisjointMetadata::Status> tags;
+    QMap<int, DisjointMetadata::Status>    tags;
 
-    QStringList                       tagList;
+    QStringList                            tagList;
 
-    QMultiMap<QString, QVariant>      faceTagsList;
+    QMultiMap<QString, QVariant>           faceTagsList;
 
     DisjointMetadata::Status               dateTimeStatus;
     DisjointMetadata::Status               titlesStatus;
@@ -160,7 +165,8 @@ public:
 };
 
 DisjointMetadata::DisjointMetadata(QObject *parent)
-    :QObject(parent),d(new Private())
+    : QObject(parent),
+      d(new Private())
 {
     connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
             this, SLOT(slotTagDeleted(int)),
@@ -171,14 +177,13 @@ DisjointMetadata::DisjointMetadata(QObject *parent)
 }
 
 DisjointMetadata::DisjointMetadata(const DisjointMetadata &other)
-    :QObject(other.parent()), d(new Private(*other.d))
+    : QObject(other.parent()),
+      d(new Private(*other.d))
 {
-
 }
 
 DisjointMetadata::~DisjointMetadata()
 {
-
 }
 
 DisjointMetadata& DisjointMetadata::operator=(const DisjointMetadata &other)
@@ -222,8 +227,8 @@ void DisjointMetadata::load(const ImageInfo &info)
     loadTags(tagIds);
 }
 
-
 //-----------------------------Status -------------------------
+
 DisjointMetadata::Status DisjointMetadata::dateTimeStatus() const
 {
     return d->dateTimeStatus;
@@ -366,10 +371,8 @@ void DisjointMetadata::setTag(int albumID, DisjointMetadata::Status status)
     d->tagsChanged = true;
 }
 
-
 void DisjointMetadata::resetChanged()
 {
-
     d->dateTimeChanged   = false;
     d->titlesChanged     = false;
     d->commentsChanged   = false;
@@ -378,7 +381,6 @@ void DisjointMetadata::resetChanged()
     d->ratingChanged     = false;
     d->templateChanged   = false;
     d->tagsChanged       = false;
-
 }
 
 bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
@@ -396,7 +398,6 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
     bool saveRating     = (d->ratingStatus     == MetadataAvailable);
     bool saveTemplate   = (d->templateStatus   == MetadataAvailable);
     bool saveTags       = true;
-
 
     bool writeAllFields;
 
@@ -517,7 +518,6 @@ bool DisjointMetadata::willWriteMetadata(DisjointMetadata::WriteMode writeMode, 
     bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
     bool saveTags       = settings.saveTags;
 
-
     bool writeAllFields;
 
     if (writeMode == FullWrite)
@@ -579,27 +579,31 @@ void DisjointMetadata::load(const QDateTime &dateTime,const CaptionsMap &titles,
 void DisjointMetadata::loadTags(const QList<int> &loadedTagIds)
 {
     // If tags map is empty, set them all as Available
-    if(d->tags.isEmpty())
+    if (d->tags.isEmpty())
     {
-        foreach(int tagId, loadedTagIds)
+        foreach (int tagId, loadedTagIds)
         {
-            if(TagsCache::instance()->isInternalTag(tagId))
+            if (TagsCache::instance()->isInternalTag(tagId))
             {
                 continue;
             }
+
             d->tags[tagId] = MetadataAvailable;
         }
+
         return;
     }
+
     // We search for metadata available tags, and
     // it is not present in current list, set it to
     // disjoint
     QList<int> keySet = d->tags.keys();
-    foreach(int key, keySet)
+
+    foreach (int key, keySet)
     {
-        if(d->tags.value(key) == MetadataAvailable)
+        if (d->tags.value(key) == MetadataAvailable)
         {
-            if(!loadedTagIds.contains(key))
+            if (!loadedTagIds.contains(key))
             {
                 d->tags[key] = MetadataDisjoint;
             }
@@ -608,9 +612,9 @@ void DisjointMetadata::loadTags(const QList<int> &loadedTagIds)
 
     // new tags which are not yet in the set,
     // are added as Disjoint
-    foreach(int tagId, loadedTagIds)
+    foreach (int tagId, loadedTagIds)
     {
-        if(!d->tags.contains(tagId))
+        if (!d->tags.contains(tagId))
         {
             d->tags[tagId] = MetadataDisjoint;
         }
@@ -648,7 +652,7 @@ void DisjointMetadata::applyChangeNotifications()
         d->tagIds.clear();
     }
 
-    foreach(int tagId, tagIds)
+    foreach (int tagId, tagIds)
     {
         notifyTagDeleted(tagId);
     }
@@ -763,6 +767,7 @@ QStringList DisjointMetadata::keywords() const
     QStringList tagList;
 
     QList<int> keys = d->tags.keys();
+
     foreach (int key, keys)
     {
         if (d->tags.value(key) == MetadataAvailable)
@@ -786,9 +791,8 @@ QMap<int, DisjointMetadata::Status> DisjointMetadata::tagIDs() const
     return QMap<int, DisjointMetadata::Status>(d->tags);
 }
 
-
 template <class T> void DisjointMetadata::Private::loadSingleValue(const T& data, T& storage,
-                                                              DisjointMetadata::Status& status)
+                                                                   DisjointMetadata::Status& status)
 {
     switch (status)
     {
@@ -796,6 +800,7 @@ template <class T> void DisjointMetadata::Private::loadSingleValue(const T& data
             storage = data;
             status  = DisjointMetadata::MetadataAvailable;
             break;
+
         case DisjointMetadata::MetadataAvailable:
 
             // we have two values. If they are equal, status is unchanged
@@ -807,9 +812,10 @@ template <class T> void DisjointMetadata::Private::loadSingleValue(const T& data
             // they are not equal. We need to enter the disjoint state.
             status = DisjointMetadata::MetadataDisjoint;
             break;
+
         case DisjointMetadata::MetadataDisjoint:
             break;
     }
 }
 
-}
+} // namespace Digikam
