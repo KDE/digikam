@@ -20,7 +20,13 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Qt includes
+
 #include <QWidget>
+
+// Local includes
+
 #include "dmetadatasettingscontainer.h"
 
 class QStandardItemModel;
@@ -29,13 +35,15 @@ class QStandardItem;
 namespace Digikam
 {
 
-
 class AdvancedMetadataTab : public QWidget
 {
     Q_OBJECT
+
 public:
-    AdvancedMetadataTab(QWidget *parent = 0);
+
+    AdvancedMetadataTab(QWidget* const parent = 0);
     virtual ~AdvancedMetadataTab();
+
     void applySettings();
 
 public Q_SLOTS:
@@ -45,8 +53,8 @@ public Q_SLOTS:
     void slotAddNewNamespace();
     void slotEditNamespace();
 
-
 private Q_SLOTS:
+
     void slotUnifyChecked(bool value);
     void slotIndexChanged();
     void slotRevertChangesAvailable();
@@ -57,35 +65,42 @@ private:
      * @brief The NsRoles enum will encode data from NamespaceEntry in
      *        model items, so we could retrieve and save it later
      */
-    enum NsRoles { NAME_ROLE        = Qt::UserRole+1,
-                   ISTAG_ROLE       = Qt::UserRole+2,
-                   SEPARATOR_ROLE   = Qt::UserRole+3,
-                   EXTRAXML_ROLE    = Qt::UserRole+4,
-                   NSTYPE_ROLE      = Qt::UserRole+5,
+    enum NsRoles
+    {
+        NAME_ROLE        = Qt::UserRole+1,
+        ISTAG_ROLE       = Qt::UserRole+2,
+        SEPARATOR_ROLE   = Qt::UserRole+3,
+        EXTRAXML_ROLE    = Qt::UserRole+4,
+        NSTYPE_ROLE      = Qt::UserRole+5,
 
-                   ZEROSTAR_ROLE    = Qt::UserRole+6,
-                   ONESTAR_ROLE     = Qt::UserRole+7,
-                   TWOSTAR_ROLE     = Qt::UserRole+8,
-                   THREESTAR_ROLE   = Qt::UserRole+9,
-                   FOURSTAR_ROLE    = Qt::UserRole+10,
-                   FIVESTAR_ROLE    = Qt::UserRole+11,
+        ZEROSTAR_ROLE    = Qt::UserRole+6,
+        ONESTAR_ROLE     = Qt::UserRole+7,
+        TWOSTAR_ROLE     = Qt::UserRole+8,
+        THREESTAR_ROLE   = Qt::UserRole+9,
+        FOURSTAR_ROLE    = Qt::UserRole+10,
+        FIVESTAR_ROLE    = Qt::UserRole+11,
 
-                   SPECIALOPTS_ROLE = Qt::UserRole+12,
+        SPECIALOPTS_ROLE = Qt::UserRole+12,
 
-                   ALTNAME_ROLE     = Qt::UserRole+13,
-                   SUBSPACE_ROLE    = Qt::UserRole+14,
-                   ALTNAMEOPTS_ROLE  = Qt::UserRole+15,
+        ALTNAME_ROLE     = Qt::UserRole+13,
+        SUBSPACE_ROLE    = Qt::UserRole+14,
+        ALTNAMEOPTS_ROLE = Qt::UserRole+15,
 
-                   ISDEFAULT_ROLE   = Qt::UserRole+16,
-                    };
+        ISDEFAULT_ROLE   = Qt::UserRole+16,
+    };
 
-    enum ModelNumbers { READ_TAGS = 0,
-                        READ_RATINGS = 1,
-                        READ_COMMENTS = 2,
-                        WRITE_TAGS = 3,
-                        WRITE_RATINGS = 4,
-                        WRITE_COMMENTS = 5 };
+    enum ModelNumbers
+    {
+        READ_TAGS      = 0,
+        READ_RATINGS   = 1,
+        READ_COMMENTS  = 2,
+        WRITE_TAGS     = 3,
+        WRITE_RATINGS  = 4,
+        WRITE_COMMENTS = 5
+    };
 
+private:
+    
     void connectButtons();
     /**
      * @brief setModelData for one model
@@ -111,8 +126,10 @@ private:
 
     void saveModelData(QStandardItemModel *model, QList<NamespaceEntry> &container);
 
+private:
+
     class Private;
     Private* d;
 };
 
-}
+} // namespace Digikam

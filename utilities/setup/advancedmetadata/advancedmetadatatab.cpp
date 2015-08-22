@@ -23,6 +23,8 @@
 
 #include "advancedmetadatatab.h"
 
+// Qt includes
+
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QComboBox>
@@ -35,7 +37,12 @@
 #include <QDebug>
 #include <QLabel>
 
-#include "klocale.h"
+// KDE includes
+
+#include <klocale.h>
+
+// Local includes
+
 #include "dmetadatasettings.h"
 #include "namespacelistview.h"
 #include "namespaceeditdlg.h"
@@ -47,50 +54,59 @@ namespace Digikam
 class AdvancedMetadataTab::Private
 {
 public:
+
     Private()
     {
-
     }
-    QComboBox* metadataType;
-    QComboBox* operationType;
-    QPushButton* addButton;
-    QPushButton* editButton;
-    QPushButton* deleteButton;
-    QPushButton* moveUpButton;
-    QPushButton* moveDownButton;
-    QPushButton* revertChanges;
-    QPushButton* resetButton;
-    QCheckBox*   unifyReadWrite;
-    QList<QStandardItemModel*> models;
-    NamespaceListView* namespaceView;
-    DMetadataSettingsContainer container;
 
-    bool                       changed;
+    QComboBox*                  metadataType;
+    QComboBox*                  operationType;
+    QPushButton*                addButton;
+    QPushButton*                editButton;
+    QPushButton*                deleteButton;
+    QPushButton*                moveUpButton;
+    QPushButton*                moveDownButton;
+    QPushButton*                revertChanges;
+    QPushButton*                resetButton;
+    QCheckBox*                  unifyReadWrite;
+    QList<QStandardItemModel*>  models;
+    NamespaceListView*          namespaceView;
+    DMetadataSettingsContainer  container;
+
+    bool                        changed;
 };
-AdvancedMetadataTab::AdvancedMetadataTab(QWidget* parent)
-    :QWidget(parent), d(new Private())
+AdvancedMetadataTab::AdvancedMetadataTab(QWidget* const parent)
+    : QWidget(parent),
+      d(new Private())
 {
     // ---------- Advanced Configuration Panel -----------------------------
+
     d->container = DMetadataSettings::instance()->settings();
     setUi();
     setModels();
     connectButtons();
 
     d->unifyReadWrite->setChecked(d->container.unifyReadWrite);
-    connect(d->unifyReadWrite, SIGNAL(toggled(bool)), this, SLOT(slotUnifyChecked(bool)));
-    connect(d->metadataType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged()));
-    connect(d->operationType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotIndexChanged()));
+    
+    connect(d->unifyReadWrite, SIGNAL(toggled(bool)),
+            this, SLOT(slotUnifyChecked(bool)));
+
+    connect(d->metadataType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotIndexChanged()));
+
+    connect(d->operationType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotIndexChanged()));
 
     /**
      * Connect all actions to slotRevertAvailable, which will enable revert to original
      * if an add, edit, delete, or reorder was made
      */
-    connect(d->namespaceView, SIGNAL(signalItemsChanged()), this, SLOT(slotRevertChangesAvailable()));
-
+    connect(d->namespaceView, SIGNAL(signalItemsChanged()),
+            this, SLOT(slotRevertChangesAvailable()));
 
     d->changed = false;
 
-    if(d->unifyReadWrite->isChecked())
+    if (d->unifyReadWrite->isChecked())
     {
         d->operationType->setEnabled(false);
     }
@@ -114,6 +130,7 @@ void AdvancedMetadataTab::slotResetToDefault()
     {
         return;
     }
+
     d->container.defaultValues();
     d->models.at(getModelIndex())->clear();
     setModelData(d->models.at(getModelIndex()),getCurrentContainer());
@@ -148,8 +165,8 @@ void AdvancedMetadataTab::slotAddNewNamespace()
         return;
     }
 
-    QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
-    QStandardItem* item = new QStandardItem(entry.namespaceName);
+    QStandardItem* const root = d->models.at(getModelIndex())->invisibleRootItem();
+    QStandardItem* const item = new QStandardItem(entry.namespaceName);
     setDataToItem(item, entry);
 
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
@@ -162,19 +179,22 @@ void AdvancedMetadataTab::slotAddNewNamespace()
 void AdvancedMetadataTab::slotEditNamespace()
 {
 
-    if(!d->namespaceView->currentIndex().isValid())
+    if (!d->namespaceView->currentIndex().isValid())
         return;
 
     NamespaceEntry entry = getCurrentContainer().at(d->namespaceView->currentIndex().row());
 
     qDebug() << "Name before save: " << entry.namespaceName;
+
     if (!NamespaceEditDlg::edit(qApp->activeWindow(), entry))
     {
         return;
     }
+
     qDebug() << "Name after save: " << entry.namespaceName;
-    QStandardItem* root = d->models.at(getModelIndex())->invisibleRootItem();
-    QStandardItem* item = root->child(d->namespaceView->currentIndex().row());
+    
+    QStandardItem* const root = d->models.at(getModelIndex())->invisibleRootItem();
+    QStandardItem* const item = root->child(d->namespaceView->currentIndex().row());
 
     getCurrentContainer().replace(d->namespaceView->currentIndex().row(), entry);
     setDataToItem(item, entry);
@@ -209,8 +229,10 @@ void AdvancedMetadataTab::slotUnifyChecked(bool value)
 {
     d->operationType->setDisabled(value);
     d->container.unifyReadWrite = value;
-    if(true)
+
+    if (true)
         d->operationType->setCurrentIndex(0);
+
     slotIndexChanged();
 }
 
@@ -221,7 +243,7 @@ void AdvancedMetadataTab::slotIndexChanged()
 
 void AdvancedMetadataTab::slotRevertChangesAvailable()
 {
-    if(!d->changed)
+    if (!d->changed)
     {
         d->revertChanges->setEnabled(true);
         d->changed = true;
@@ -230,28 +252,43 @@ void AdvancedMetadataTab::slotRevertChangesAvailable()
 
 void AdvancedMetadataTab::connectButtons()
 {
-    connect(d->addButton, SIGNAL(clicked()), this, SLOT(slotAddNewNamespace()));
-    connect(d->editButton, SIGNAL(clicked()), this, SLOT(slotEditNamespace()));
-    connect(d->deleteButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotDeleteSelected()));
-    connect(d->resetButton, SIGNAL(clicked()), this, SLOT(slotResetToDefault()));
-    connect(d->revertChanges, SIGNAL(clicked()), this, SLOT(slotRevertChanges()));
-    connect(d->moveUpButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemUp()));
-    connect(d->moveDownButton, SIGNAL(clicked()), d->namespaceView, SLOT(slotMoveItemDown()));
+    connect(d->addButton, SIGNAL(clicked()),
+            this, SLOT(slotAddNewNamespace()));
+
+    connect(d->editButton, SIGNAL(clicked()),
+            this, SLOT(slotEditNamespace()));
+    
+    connect(d->deleteButton, SIGNAL(clicked()),
+            d->namespaceView, SLOT(slotDeleteSelected()));
+    
+    connect(d->resetButton, SIGNAL(clicked()),
+            this, SLOT(slotResetToDefault()));
+    
+    connect(d->revertChanges, SIGNAL(clicked()),
+            this, SLOT(slotRevertChanges()));
+    
+    connect(d->moveUpButton, SIGNAL(clicked()),
+            d->namespaceView, SLOT(slotMoveItemUp()));
+    
+    connect(d->moveDownButton, SIGNAL(clicked()),
+            d->namespaceView, SLOT(slotMoveItemDown()));
 }
 
 void AdvancedMetadataTab::setModelData(QStandardItemModel* model, QList<NamespaceEntry> const &container)
 {
+    QStandardItem* const root = model->invisibleRootItem();
 
-    QStandardItem* root = model->invisibleRootItem();
-    for(NamespaceEntry e : container)
+    for (NamespaceEntry e : container)
     {
-        QStandardItem* item = new QStandardItem(e.namespaceName);
+        QStandardItem* const item = new QStandardItem(e.namespaceName);
 
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
         setDataToItem(item, e);
         root->appendRow(item);
     }
-    connect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(slotRevertChangesAvailable()));
+
+    connect(model, SIGNAL(itemChanged(QStandardItem*)),
+            this, SLOT(slotRevertChangesAvailable()));
 }
 
 void AdvancedMetadataTab::setUi()
@@ -270,7 +307,8 @@ void AdvancedMetadataTab::setUi()
                           ));
 
     //--- Top layout ----------------
-    d->metadataType = new QComboBox(this);
+
+    d->metadataType  = new QComboBox(this);
 
     d->operationType = new QComboBox(this);
 
@@ -280,41 +318,41 @@ void AdvancedMetadataTab::setUi()
 
     d->unifyReadWrite = new QCheckBox(i18n("Unify read and write"));
 
-
     topLayout->addWidget(d->metadataType);
     topLayout->addWidget(d->operationType);
     topLayout->addWidget(d->unifyReadWrite);
 
     //------------ Bottom Layout-------------
+
     // View
     d->namespaceView = new NamespaceListView(this);
 
 
     // Buttons
-    QVBoxLayout* buttonsLayout = new QVBoxLayout();
+    QVBoxLayout* const buttonsLayout = new QVBoxLayout();
     buttonsLayout->setAlignment(Qt::AlignTop);
-    d->addButton = new QPushButton(QIcon::fromTheme(QLatin1String("list-add")),
-                                   i18n("Add"));
-    d->editButton = new QPushButton(QIcon::fromTheme(QLatin1String("document-edit")),
-                                                     i18n("Edit"));
 
-    d->deleteButton = new QPushButton(QIcon::fromTheme(QLatin1String("window-close")),
-                                      i18n("Delete"));
+    d->addButton      = new QPushButton(QIcon::fromTheme(QLatin1String("list-add")),
+                                     i18n("Add"));
+    d->editButton     = new QPushButton(QIcon::fromTheme(QLatin1String("document-edit")),
+                                                         i18n("Edit"));
 
-    d->moveUpButton = new QPushButton(QIcon::fromTheme(QLatin1String("arrow-up")),
-                                      i18n("Move Up"));
+    d->deleteButton   = new QPushButton(QIcon::fromTheme(QLatin1String("window-close")),
+                                        i18n("Delete"));
+
+    d->moveUpButton   = new QPushButton(QIcon::fromTheme(QLatin1String("arrow-up")),
+                                        i18n("Move Up"));
 
     d->moveDownButton = new QPushButton(QIcon::fromTheme(QLatin1String("arrow-down")),
                                         i18n("Move Down"));
 
-    d->revertChanges = new QPushButton(QIcon::fromTheme(QLatin1String("edit-undo")),
-                                       i18n("Revert Changes"));
+    d->revertChanges  = new QPushButton(QIcon::fromTheme(QLatin1String("edit-undo")),
+                                        i18n("Revert Changes"));
 
     // Revert changes is disabled, until a change is made
     d->revertChanges->setEnabled(false);
     d->resetButton = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")),
                                      i18n("Reset to Default"));
-
 
     buttonsLayout->addWidget(d->addButton);
     buttonsLayout->addWidget(d->editButton);
@@ -324,7 +362,7 @@ void AdvancedMetadataTab::setUi()
     buttonsLayout->addWidget(d->revertChanges);
     buttonsLayout->addWidget(d->resetButton);
 
-    QVBoxLayout* vbox = new QVBoxLayout();
+    QVBoxLayout* const vbox = new QVBoxLayout();
     vbox->addWidget(d->namespaceView);
 
     bottomLayout->addLayout(vbox);
@@ -333,7 +371,6 @@ void AdvancedMetadataTab::setUi()
     advancedConfLayout->addWidget(tipLabel);
     advancedConfLayout->addLayout(topLayout);
     advancedConfLayout->addLayout(bottomLayout);
-
 }
 
 void AdvancedMetadataTab::setDataToItem(QStandardItem *item, NamespaceEntry &entry)
@@ -344,7 +381,8 @@ void AdvancedMetadataTab::setDataToItem(QStandardItem *item, NamespaceEntry &ent
     item->setData(entry.separator, SEPARATOR_ROLE);
     item->setData(entry.extraXml, EXTRAXML_ROLE);
     item->setData((int)entry.nsType, NSTYPE_ROLE);
-    if(entry.nsType == NamespaceEntry::RATING)
+
+    if (entry.nsType == NamespaceEntry::RATING)
     {
        item->setData(entry.convertRatio.at(0), ZEROSTAR_ROLE);
        item->setData(entry.convertRatio.at(1), ONESTAR_ROLE);
@@ -353,6 +391,7 @@ void AdvancedMetadataTab::setDataToItem(QStandardItem *item, NamespaceEntry &ent
        item->setData(entry.convertRatio.at(4), FOURSTAR_ROLE);
        item->setData(entry.convertRatio.at(5), FIVESTAR_ROLE);
     }
+
     item->setData((int)entry.specialOpts, SPECIALOPTS_ROLE);
     item->setData(entry.alternativeName, ALTNAME_ROLE);
     item->setData((int)entry.subspace, SUBSPACE_ROLE);
@@ -360,13 +399,14 @@ void AdvancedMetadataTab::setDataToItem(QStandardItem *item, NamespaceEntry &ent
     item->setData(entry.isDefault, ISDEFAULT_ROLE);
 
     item->setCheckable(true);
-    if(!entry.isDisabled)
+
+    if (!entry.isDisabled)
         item->setCheckState(Qt::Checked);
 }
 
 int AdvancedMetadataTab::getModelIndex()
 {
-    if(d->unifyReadWrite->isChecked())
+    if (d->unifyReadWrite->isChecked())
     {
         return d->metadataType->currentIndex();
     }
@@ -380,23 +420,23 @@ int AdvancedMetadataTab::getModelIndex()
 
 QList<NamespaceEntry>& AdvancedMetadataTab::getCurrentContainer()
 {
-    switch(getModelIndex())
+    switch (getModelIndex())
     {
-    case 0:
-        return d->container.readTagNamespaces;
-    case 1:
-        return d->container.readRatingNamespaces;
-    case 2:
-        return d->container.readCommentNamespaces;
-    case 3:
-        return d->container.writeTagNamespaces;
-    case 4:
-        return d->container.writeRatingNamespaces;
-    case 5:
-        return d->container.writeCommentNamespaces;
-    default:
-        qDebug() << "warning, Unknown case";
-        return d->container.readTagNamespaces;
+        case 0:
+            return d->container.readTagNamespaces;
+        case 1:
+            return d->container.readRatingNamespaces;
+        case 2:
+            return d->container.readCommentNamespaces;
+        case 3:
+            return d->container.writeTagNamespaces;
+        case 4:
+            return d->container.writeRatingNamespaces;
+        case 5:
+            return d->container.writeCommentNamespaces;
+        default:
+            qDebug() << "warning, Unknown case";
+            return d->container.readTagNamespaces;
     }
 }
 
@@ -415,26 +455,26 @@ void AdvancedMetadataTab::setModels()
     setModelData(d->models.at(WRITE_COMMENTS), d->container.writeCommentNamespaces);
 
     slotIndexChanged();
-
 }
 
 void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<NamespaceEntry> &container)
 {
-    QStandardItem* root = model->invisibleRootItem();
+    QStandardItem* const root = model->invisibleRootItem();
 
-    if(!root->hasChildren())
+    if (!root->hasChildren())
         return;
 
-    for(int i = 0 ; i < root->rowCount(); i++)
+    for (int i = 0 ; i < root->rowCount(); i++)
     {
         NamespaceEntry ns;
-        QStandardItem  *current = root->child(i);
-        ns.namespaceName        = current->data(NAME_ROLE).toString();
-        ns.tagPaths             = (NamespaceEntry::TagType)current->data(ISTAG_ROLE).toInt();
-        ns.separator            = current->data(SEPARATOR_ROLE).toString();
-        ns.extraXml             = current->data(EXTRAXML_ROLE).toString();
-        ns.nsType               = (NamespaceEntry::NamespaceType)current->data(NSTYPE_ROLE).toInt();
-        if(ns.nsType == NamespaceEntry::RATING)
+        QStandardItem* const current = root->child(i);
+        ns.namespaceName             = current->data(NAME_ROLE).toString();
+        ns.tagPaths                  = (NamespaceEntry::TagType)current->data(ISTAG_ROLE).toInt();
+        ns.separator                 = current->data(SEPARATOR_ROLE).toString();
+        ns.extraXml                  = current->data(EXTRAXML_ROLE).toString();
+        ns.nsType                    = (NamespaceEntry::NamespaceType)current->data(NSTYPE_ROLE).toInt();
+
+        if (ns.nsType == NamespaceEntry::RATING)
         {
             ns.convertRatio.append(current->data(ZEROSTAR_ROLE).toInt());
             ns.convertRatio.append(current->data(ONESTAR_ROLE).toInt());
@@ -443,6 +483,7 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
             ns.convertRatio.append(current->data(FOURSTAR_ROLE).toInt());
             ns.convertRatio.append(current->data(FIVESTAR_ROLE).toInt());
         }
+
         ns.specialOpts          = (NamespaceEntry::SpecialOptions)current->data(SPECIALOPTS_ROLE).toInt();
         ns.alternativeName      = current->data(ALTNAME_ROLE).toString();
         ns.subspace             = (NamespaceEntry::NsSubspace)current->data(SUBSPACE_ROLE).toInt();
@@ -450,7 +491,7 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
         ns.index                = i;
         ns.isDefault            = current->data(ISDEFAULT_ROLE).toBool();
 
-        if(current->checkState() == Qt::Checked)
+        if (current->checkState() == Qt::Checked)
             ns.isDisabled = false;
         else
             ns.isDisabled = true;
@@ -460,4 +501,4 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
     }
 }
 
-}
+} // namespace Digikam
