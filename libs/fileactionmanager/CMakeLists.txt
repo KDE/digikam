@@ -7,6 +7,8 @@
 
 set(fileactionmanager_SRCS
     metadatahub.cpp
+    metadatahubmngr.cpp
+    metadatastatusbar.cpp
     fileactionprogress.cpp
     fileactionmngr.cpp
     fileactionmngr_p.cpp
