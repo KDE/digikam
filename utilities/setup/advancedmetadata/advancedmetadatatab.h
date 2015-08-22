@@ -70,7 +70,6 @@ private:
         NAME_ROLE        = Qt::UserRole+1,
         ISTAG_ROLE       = Qt::UserRole+2,
         SEPARATOR_ROLE   = Qt::UserRole+3,
-        EXTRAXML_ROLE    = Qt::UserRole+4,
         NSTYPE_ROLE      = Qt::UserRole+5,
 
         ZEROSTAR_ROLE    = Qt::UserRole+6,

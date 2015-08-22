@@ -58,6 +58,17 @@ public:
 
     Private()
     {
+        metadataType = 0;
+        operationType = 0;
+        addButton = 0;
+        editButton = 0;
+        deleteButton = 0;
+        moveUpButton = 0;
+        moveDownButton = 0;
+        revertChanges = 0;
+        resetButton = 0;
+        unifyReadWrite = 0;
+        namespaceView = 0;
     }
 
     QComboBox*                  metadataType;
@@ -231,8 +242,7 @@ void AdvancedMetadataTab::slotUnifyChecked(bool value)
     d->operationType->setDisabled(value);
     d->container.unifyReadWrite = value;
 
-    if (true)
-        d->operationType->setCurrentIndex(0);
+    d->operationType->setCurrentIndex(0);
 
     slotIndexChanged();
 }
@@ -380,7 +390,6 @@ void AdvancedMetadataTab::setDataToItem(QStandardItem *item, NamespaceEntry &ent
     item->setData(entry.namespaceName,NAME_ROLE);
     item->setData((int)entry.tagPaths, ISTAG_ROLE);
     item->setData(entry.separator, SEPARATOR_ROLE);
-    item->setData(entry.extraXml, EXTRAXML_ROLE);
     item->setData((int)entry.nsType, NSTYPE_ROLE);
 
     if (entry.nsType == NamespaceEntry::RATING)
@@ -472,7 +481,6 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel *model, QList<Namespa
         ns.namespaceName             = current->data(NAME_ROLE).toString();
         ns.tagPaths                  = (NamespaceEntry::TagType)current->data(ISTAG_ROLE).toInt();
         ns.separator                 = current->data(SEPARATOR_ROLE).toString();
-        ns.extraXml                  = current->data(EXTRAXML_ROLE).toString();
         ns.nsType                    = (NamespaceEntry::NamespaceType)current->data(NSTYPE_ROLE).toInt();
 
         if (ns.nsType == NamespaceEntry::RATING)

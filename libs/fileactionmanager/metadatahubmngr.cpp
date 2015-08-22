@@ -62,6 +62,7 @@ MetadataHubMngr* MetadataHubMngr::instance()
 
 MetadataHubMngr::~MetadataHubMngr()
 {
+    delete d;
 }
 
 void MetadataHubMngr::addPending(ImageInfo &info)

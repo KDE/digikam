@@ -75,7 +75,6 @@ void TagsReadWriteTest::testWriteToDisabledNamespaces()
     NamespaceEntry tagNs2 (QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("/"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            1);
     tagNs2.specialOpts = NamespaceEntry::TAG_XMPBAG;
@@ -85,7 +84,6 @@ void TagsReadWriteTest::testWriteToDisabledNamespaces()
     NamespaceEntry tagNs3 (QLatin1String("Xmp.lr.hierarchicalSubject"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("|"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            2);
 
@@ -123,7 +121,6 @@ void TagsReadWriteTest::testReadFromDisabledNamespaces()
     NamespaceEntry tagNs2 (QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("/"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            1);
     tagNs2.specialOpts = NamespaceEntry::TAG_XMPBAG;
@@ -133,7 +130,6 @@ void TagsReadWriteTest::testReadFromDisabledNamespaces()
     NamespaceEntry tagNs3 (QLatin1String("Xmp.lr.hierarchicalSubject"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("/"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            2);
 
@@ -168,7 +164,6 @@ void TagsReadWriteTest::testTagSeparatorWrite()
     NamespaceEntry tagNs3 (QLatin1String("Xmp.lr.hierarchicalSubject"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("|"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            2);
 
@@ -202,7 +197,6 @@ void TagsReadWriteTest::testTagSeparatorRead()
     NamespaceEntry tagNs3 (QLatin1String("Xmp.lr.hierarchicalSubject"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("|"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            2);
 
@@ -240,7 +234,6 @@ void TagsReadWriteTest::testTagReadAlternativeNameSpace()
     NamespaceEntry tagNs3 (QLatin1String("Xmp.lr.hierarchicalSubject"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("|"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            2);
 

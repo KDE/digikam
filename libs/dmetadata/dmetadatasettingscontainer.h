@@ -77,13 +77,12 @@ public:
      * @param separator - separator used for tag paths
      * @param extraXml  - xml to format tags
      */
-    NamespaceEntry(QString name, TagType isPath, QString separator, QString extraXml,
+    NamespaceEntry(QString name, TagType isPath, QString separator,
                    NamespaceType nsType, int index)
     {
         this->namespaceName = name;
         this->tagPaths = isPath;
         this->separator = separator;
-        this->extraXml = extraXml;
         this->nsType = nsType;
         this->index = index;
         this->specialOpts = NO_OPTS;
@@ -131,7 +130,6 @@ public:
         this->alternativeName = copy.alternativeName;
         this->tagPaths      = copy.tagPaths;
         this->separator     = copy.separator;
-        this->extraXml      = copy.extraXml;
         this->nsType        = copy.nsType;
         this->convertRatio  = QList<int>(copy.convertRatio);
         this->specialOpts   = copy.specialOpts;
@@ -157,7 +155,6 @@ public:
     QString alternativeName;
     TagType tagPaths;
     QString separator;
-    QString extraXml;
 
     /**
      * Rating Options

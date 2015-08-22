@@ -102,7 +102,6 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs1 (QLatin1String("Xmp.digiKam.TagsList"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("/"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            0);
     tagNs1.specialOpts = NamespaceEntry::TAG_XMPSEQ;
@@ -111,7 +110,6 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs2 (QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("/"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            1);
     tagNs2.specialOpts = NamespaceEntry::TAG_XMPBAG;
@@ -120,7 +118,6 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs3 (QLatin1String("Xmp.lr.hierarchicalSubject"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("|"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            2);
 
@@ -132,7 +129,6 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs4 (QLatin1String("Xmp.mediapro.CatalogSets"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("|"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            3);
     tagNs4.specialOpts = NamespaceEntry::TAG_XMPBAG;
@@ -141,7 +137,6 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs5 (QLatin1String("Xmp.acdsee.categories"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("/"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            4);
     tagNs5.specialOpts = NamespaceEntry::TAG_ACDSEE;
@@ -150,7 +145,6 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs6 (QLatin1String("Xmp.dc.subject"),
                            NamespaceEntry::TAG,
                            QLatin1String("/"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            5);
     tagNs6.specialOpts = NamespaceEntry::TAG_XMPBAG;
@@ -159,7 +153,6 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs7 (QLatin1String("Iptc.Application2.Keywords"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String("."),
-                           QString(),
                            NamespaceEntry::TAGS,
                            6);
     tagNs7.subspace    = NamespaceEntry::IPTC;
@@ -167,7 +160,6 @@ void DMetadataSettingsContainer::defaultTagValues()
     NamespaceEntry tagNs8 (QLatin1String("Exif.Image.XPKeywords"),
                            NamespaceEntry::TAGPATH,
                            QLatin1String(";"),
-                           QString(),
                            NamespaceEntry::TAGS,
                            7);
     tagNs8.subspace    = NamespaceEntry::EXIV;
@@ -306,7 +298,6 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
         ns.namespaceName    = element;
         ns.tagPaths         = (NamespaceEntry::TagType)gr.readEntry("tagPaths").toInt();
         ns.separator        = gr.readEntry("separator");
-        ns.extraXml         = gr.readEntry("extraXml");
         ns.nsType           = (NamespaceEntry::NamespaceType)gr.readEntry("nsType").toInt();
         ns.index            = gr.readEntry("index").toInt();
         ns.subspace         = (NamespaceEntry::NsSubspace)gr.readEntry("subspace").toInt();
@@ -340,7 +331,6 @@ void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name
         tmp.writeEntry("subspace",          (int)e.subspace);
         tmp.writeEntry("tagPaths",          (int)e.tagPaths);
         tmp.writeEntry("separator",         e.separator);
-        tmp.writeEntry("extraXml",          e.extraXml);
         tmp.writeEntry("nsType",            (int)e.nsType);
         tmp.writeEntry("convertRatio",      e.convertRatio);
         tmp.writeEntry("specialOpts",       (int)e.specialOpts);
