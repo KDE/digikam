@@ -20,10 +20,15 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #include "metadatahubmngr.h"
+
+// Qt includes
 
 #include <QMutex>
 #include <QDebug>
+
+// Local includes
 
 #include "imageinfo.h"
 #include "metadatahub.h"
@@ -35,35 +40,35 @@ namespace Digikam
 
 QPointer<MetadataHubMngr> MetadataHubMngr::internalPtr = QPointer<MetadataHubMngr>();
 
-
 class MetadataHubMngr::Private
 {
 public:
+
     Private(): mutex(QMutex::Recursive)
     {
-
     }
 
     ImageInfoList pendingItems;
     QMutex mutex;
 };
+
 MetadataHubMngr* MetadataHubMngr::instance()
 {
-    if(internalPtr.isNull())
+    if (internalPtr.isNull())
         internalPtr = new MetadataHubMngr();
+
     return internalPtr;
 }
 
 MetadataHubMngr::~MetadataHubMngr()
 {
-
 }
 
 void MetadataHubMngr::addPending(ImageInfo &info)
 {
-
     QMutexLocker locker(&d->mutex);
-    if(!d->pendingItems.contains(info))
+
+    if (!d->pendingItems.contains(info))
         d->pendingItems.append(info);
 
     emit signalPendingMetadata(d->pendingItems.size());
@@ -73,7 +78,7 @@ void MetadataHubMngr::slotApplyPending()
 {
     QMutexLocker lock(&d->mutex);
 
-    if(d->pendingItems.isEmpty())
+    if (d->pendingItems.isEmpty())
         return;
 
     ImageInfoList infos(d->pendingItems);
@@ -89,7 +94,6 @@ void MetadataHubMngr::slotApplyPending()
 MetadataHubMngr::MetadataHubMngr()
     : d(new Private())
 {
-
 }
 
-}
+} // namespace Digikam

@@ -20,20 +20,25 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef METADATAHUBMNGR_H
 #define METADATAHUBMNGR_H
 
-#include <QPointer>
+// Qt includes
 
+#include <QPointer>
 
 namespace Digikam
 {
 
 class ImageInfo;
+
 class MetadataHubMngr : public QObject
 {
     Q_OBJECT
+
 public:
+
     static MetadataHubMngr* instance();
     ~MetadataHubMngr();
 
@@ -42,18 +47,21 @@ public:
     void addPending(ImageInfo& info);
 
 Q_SIGNALS:
+
     void signalPendingMetadata(int numbers);
 
 public Q_SLOTS:
+
     void slotApplyPending();
 
 private:
+
     MetadataHubMngr();
 
     class Private;
     Private* d;
-
 };
-}
+    
+} // namespace Digikam
 
 #endif // METADATAHUBMNGR_H

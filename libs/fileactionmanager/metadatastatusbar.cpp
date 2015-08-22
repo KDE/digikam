@@ -112,7 +112,7 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
     connect(MetadataHubMngr::instance(), SIGNAL(signalPendingMetadata(int)),
             this, SLOT(slotSetPendingItems(int)));
 
-    if(MetadataSettings::instance()->settings().useLazySync)
+    if (MetadataSettings::instance()->settings().useLazySync)
         this->show();
     else
         this->hide();
@@ -125,7 +125,7 @@ MetadataStatusBar::~MetadataStatusBar()
 
 void MetadataStatusBar::slotSettingsChanged()
 {
-    if(MetadataSettings::instance()->settings().useLazySync)
+    if (MetadataSettings::instance()->settings().useLazySync)
         this->show();
     else
         this->hide();
@@ -133,7 +133,7 @@ void MetadataStatusBar::slotSettingsChanged()
 
 void MetadataStatusBar::slotSetPendingItems(int number)
 {
-    if(number == 0)
+    if (number == 0)
     {
         d->info->setAdjustedText(i18n("No pending metadata synchronization"));
         d->applyBtn->setDisabled(true);
