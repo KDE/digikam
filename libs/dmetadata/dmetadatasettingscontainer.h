@@ -29,13 +29,11 @@
 #include <QFlags>
 #include <QString>
 
-
 // Local includes
 
 #include "digikam_export.h"
 
 class KConfigGroup;
-
 
 namespace Digikam
 {
@@ -52,19 +50,22 @@ public:
 
     enum NsSubspace {EXIV = 0, IPTC = 1, XMP = 2 };
     enum TagType {TAG = 0, TAGPATH = 1};
-    enum SpecialOptions {NO_OPTS = 0,
-                         COMMENT_ALTLANG = 1,
-                         COMMENT_ATLLANGLIST = 2,
-                         COMMENT_XMP = 3,
-                         COMMENT_JPEG = 4,
-                         TAG_XMPBAG = 5,
-                         TAG_XMPSEQ = 6,
-                         TAG_ACDSEE = 7
-                        };
+    enum SpecialOptions
+    {
+        NO_OPTS = 0,
+        COMMENT_ALTLANG = 1,
+        COMMENT_ATLLANGLIST = 2,
+        COMMENT_XMP = 3,
+        COMMENT_JPEG = 4,
+        TAG_XMPBAG = 5,
+        TAG_XMPSEQ = 6,
+        TAG_ACDSEE = 7
+    };
 
     enum NamespaceType {TAGS = 0, RATING = 1, COMMENT = 2};
 
-    NamespaceEntry(){
+    NamespaceEntry()
+    {
         this->isDefault = true;
         this->isDisabled = false;
     }
@@ -158,16 +159,13 @@ public:
     QString separator;
     QString extraXml;
 
-
     /**
      * Rating Options
      */
     QList<int> convertRatio;
 
-
     SpecialOptions specialOpts;
     SpecialOptions secondNameOpts;
-
 };
 
 /**
@@ -202,15 +200,14 @@ public:
     bool unifyReadWrite;
 
 private:
+
     void defaultTagValues();
     void defaultRatingValues();
     void defaultCommentValues();
     void readOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry> &container);
     void writeOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry> container) const;
-
 };
 
 }  // namespace Digikam
-
 
 #endif  // METADATASETTINGSCONTAINER_H
