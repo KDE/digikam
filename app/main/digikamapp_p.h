@@ -52,6 +52,7 @@
 #include "splashscreen.h"
 #include "dzoombar.h"
 #include "digikamview.h"
+#include "metadatastatusbar.h"
 
 class KToolBarPopupAction;
 
@@ -314,6 +315,7 @@ public:
     QEventLoop*                         eventLoop;
     QString                             solidErrorMessage;
 
+    MetadataStatusBar*                  metadataStatusBar;
     FilterStatusBar*                    filterStatusBar;
     SplashScreen*                       splashScreen;
     DigikamView*                        view;
