@@ -119,8 +119,6 @@ void FileActionMngr::Private::connectDatabaseToFileWorker()
     connect(dbWorker, SIGNAL(writeOrientationToFiles(FileActionImageInfoList*,int)),
             fileWorker, SLOT(writeOrientationToFiles(FileActionImageInfoList*,int)), Qt::DirectConnection);
 
-    connect(dbWorker, SIGNAL(writeMetadata(FileActionImageInfoList,MetadataHub*)),
-            fileWorker, SLOT(writeMetadata(FileActionImageInfoList,MetadataHub*)), Qt::DirectConnection);
 }
 
 FileActionMngr::Private::~Private()
