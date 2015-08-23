@@ -6,7 +6,7 @@
  * Date        : 2009-02-18
  * Description : Channel mixer settings view.
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT MixerSettings : public QWidget
 
 public:
 
-    explicit MixerSettings(QWidget* parent);
+    explicit MixerSettings(QWidget* const parent);
     ~MixerSettings();
 
     MixerContainer defaultSettings() const;
@@ -86,8 +86,8 @@ private Q_SLOTS:
 
 private:
 
-    class MixerSettingsPriv;
-    MixerSettingsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

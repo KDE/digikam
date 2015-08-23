@@ -6,7 +6,7 @@
  * Date        : 2009-02-18
  * Description : Channel mixer settings view.
  *
- * Copyright (C) 2010-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,11 +57,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class MixerSettings::MixerSettingsPriv
+class MixerSettings::Private
 {
 public:
 
-    MixerSettingsPriv() :
+    Private() :
         currentChannel(RedChannel),
         monochromeTips(0),
         totalPercents(0),
@@ -73,7 +73,8 @@ public:
         redGain(0),
         greenGain(0),
         blueGain(0)
-    {}
+    {
+    }
 
     static const QString  configMonochromeEntry;
     static const QString  configPreserveLuminosityEntry;
@@ -109,28 +110,29 @@ public:
     RDoubleNumInput*      greenGain;
     RDoubleNumInput*      blueGain;
 };
-const QString MixerSettings::MixerSettingsPriv::configMonochromeEntry("Monochrome");
-const QString MixerSettings::MixerSettingsPriv::configPreserveLuminosityEntry("PreserveLuminosity");
-const QString MixerSettings::MixerSettingsPriv::configRedRedGainEntry("RedRedGain");
-const QString MixerSettings::MixerSettingsPriv::configRedGreenGainEntry("RedGreenGain");
-const QString MixerSettings::MixerSettingsPriv::configRedBlueGainEntry("RedBlueGain");
-const QString MixerSettings::MixerSettingsPriv::configGreenRedGainEntry("GreenRedGain");
-const QString MixerSettings::MixerSettingsPriv::configGreenGreenGainEntry("GreenGreenGain");
-const QString MixerSettings::MixerSettingsPriv::configGreenBlueGainEntry("GreenBlueGain");
-const QString MixerSettings::MixerSettingsPriv::configBlueRedGainEntry("BlueRedGain");
-const QString MixerSettings::MixerSettingsPriv::configBlueGreenGainEntry("BlueGreenGain");
-const QString MixerSettings::MixerSettingsPriv::configBlueBlueGainEntry("BlueBlueGain");
-const QString MixerSettings::MixerSettingsPriv::configBlackRedGainEntry("BlackRedGain");
-const QString MixerSettings::MixerSettingsPriv::configBlackGreenGainEntry("BlackGreenGain");
-const QString MixerSettings::MixerSettingsPriv::configBlackBlueGainEntry("BlackBlueGain");
+
+const QString MixerSettings::Private::configMonochromeEntry("Monochrome");
+const QString MixerSettings::Private::configPreserveLuminosityEntry("PreserveLuminosity");
+const QString MixerSettings::Private::configRedRedGainEntry("RedRedGain");
+const QString MixerSettings::Private::configRedGreenGainEntry("RedGreenGain");
+const QString MixerSettings::Private::configRedBlueGainEntry("RedBlueGain");
+const QString MixerSettings::Private::configGreenRedGainEntry("GreenRedGain");
+const QString MixerSettings::Private::configGreenGreenGainEntry("GreenGreenGain");
+const QString MixerSettings::Private::configGreenBlueGainEntry("GreenBlueGain");
+const QString MixerSettings::Private::configBlueRedGainEntry("BlueRedGain");
+const QString MixerSettings::Private::configBlueGreenGainEntry("BlueGreenGain");
+const QString MixerSettings::Private::configBlueBlueGainEntry("BlueBlueGain");
+const QString MixerSettings::Private::configBlackRedGainEntry("BlackRedGain");
+const QString MixerSettings::Private::configBlackGreenGainEntry("BlackGreenGain");
+const QString MixerSettings::Private::configBlackBlueGainEntry("BlackBlueGain");
 
 // --------------------------------------------------------
 
-MixerSettings::MixerSettings(QWidget* parent)
+MixerSettings::MixerSettings(QWidget* const parent)
     : QWidget(parent),
-      d(new MixerSettingsPriv)
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     d->outChannelLabel = new QLabel(i18n("Output Channel:"));
     d->outChannelCB    = new KComboBox;
@@ -138,24 +140,24 @@ MixerSettings::MixerSettings(QWidget* parent)
     d->outChannelCB->addItem(i18n("Green"), QVariant(GreenChannel));
     d->outChannelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
 
-    QLabel* redLabel  = new QLabel(i18n("Red (%):"));
-    d->redGain        = new RDoubleNumInput;
+    QLabel* const redLabel = new QLabel(i18n("Red (%):"));
+    d->redGain             = new RDoubleNumInput;
     d->redGain->setDecimals(1);
     d->redGain->setRange(-200.0, 200.0, 1);
     d->redGain->setDefaultValue(0);
     d->redGain->setWhatsThis(i18n("Select the red color gain, as a percentage, "
                                   "for the current channel."));
 
-    QLabel* greenLabel = new QLabel(i18n("Green (%):"));
-    d->greenGain       = new RDoubleNumInput;
+    QLabel* const greenLabel = new QLabel(i18n("Green (%):"));
+    d->greenGain             = new RDoubleNumInput;
     d->greenGain->setDecimals(1);
     d->greenGain->setRange(-200.0, 200.0, 1);
     d->greenGain->setDefaultValue(0);
     d->greenGain->setWhatsThis(i18n("Select the green color gain, as a percentage, "
                                     "for the current channel."));
 
-    QLabel* blueLabel = new QLabel(i18n("Blue (%):"));
-    d->blueGain       = new RDoubleNumInput;
+    QLabel* const blueLabel = new QLabel(i18n("Blue (%):"));
+    d->blueGain             = new RDoubleNumInput;
     d->blueGain->setDecimals(1);
     d->blueGain->setRange(-200.0, 200.0, 1);
     d->blueGain->setDefaultValue(0);
@@ -558,7 +560,6 @@ void MixerSettings::loadSettings()
 
     if (fp)
     {
-//        ChannelType currentOutputChannel = RedChannel;
         char buf1[1024];
         char buf2[1024];
         char buf3[1024];
@@ -567,29 +568,9 @@ void MixerSettings::loadSettings()
 
         fgets(buf1, 1023, fp);
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf (fp, "%*s %s", buf1);
-
-//        // Get the current output channel in dialog.
-//
-//        if (strcmp (buf1, "RED") == 0)
-//        {
-//            currentOutputChannel = RedChannel;
-//        }
-//        else if (strcmp (buf1, "GREEN") == 0)
-//        {
-//            currentOutputChannel = GreenChannel;
-//        }
-//        else if (strcmp (buf1, "BLUE") == 0)
-//        {
-//            currentOutputChannel = BlueChannel;
-//        }
-
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s", buf1);  // preview flag, preserved for compatibility
-
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s", buf1);
+        fscanf(fp, "%*s %256s", buf1);
+        fscanf(fp, "%*s %256s", buf1);  // preview flag, preserved for compatibility
+        fscanf(fp, "%*s %256s", buf1);
 
         if (strcmp(buf1, "true") == 0)
         {
@@ -600,8 +581,7 @@ void MixerSettings::loadSettings()
             settings.bMonochrome = false;
         }
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s", buf1);
+        fscanf(fp, "%*s %256s", buf1);
 
         if (strcmp(buf1, "true") == 0)
         {
@@ -612,26 +592,22 @@ void MixerSettings::loadSettings()
             settings.bPreserveLum = false;
         }
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %256s %256s %256s", buf1, buf2, buf3);
         settings.redRedGain   = atof(buf1);
         settings.redGreenGain = atof(buf2);
         settings.redBlueGain  = atof(buf3);
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %256s %256s %256s", buf1, buf2, buf3);
         settings.greenRedGain   = atof(buf1);
         settings.greenGreenGain = atof(buf2);
         settings.greenBlueGain  = atof(buf3);
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %256s %256s %256s", buf1, buf2, buf3);
         settings.blueRedGain   = atof(buf1);
         settings.blueGreenGain = atof(buf2);
         settings.blueBlueGain  = atof(buf3);
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %256s %256s %256s", buf1, buf2, buf3);
         settings.blackRedGain   = atof(buf1);
         settings.blackGreenGain = atof(buf2);
         settings.blackBlueGain  = atof(buf3);
