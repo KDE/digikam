@@ -857,8 +857,18 @@ void ContextMenuHelper::setAlbumModel(AbstractCheckableAlbumModel* model)
 
 void ContextMenuHelper::addAlbumCheckUncheckActions(Album* album)
 {
-    QVariant albumData = QVariant::fromValue(AlbumPointer<>(album));
-    QString allString = album->type() == Album::TAG ? i18n("All Tags") : i18n("All Albums");
+    bool     enabled   = false;
+    QString  allString = i18n("All Albums");
+    QVariant albumData;
+
+    if (album)
+    {
+        enabled   = true;
+        albumData = QVariant::fromValue(AlbumPointer<>(album));
+
+        if (album->type() == Album::TAG)
+            allString = i18n("All Tags");
+    }
 
     KMenu* const selectTagsMenu = new KMenu(i18nc("select tags menu", "Select"));
     addSubMenu(selectTagsMenu);
@@ -866,26 +876,26 @@ void ContextMenuHelper::addAlbumCheckUncheckActions(Album* album)
     selectTagsMenu->addAction(allString, d->albumModel, SLOT(checkAllAlbums()));
     selectTagsMenu->addSeparator();
     QAction* const selectChildrenAction = selectTagsMenu->addAction(i18n("Children"), this, SLOT(slotSelectChildren()));
-    QAction* const selectParentsAction  = selectTagsMenu->addAction(i18n("Parents"), this, SLOT(slotSelectParents()));
+    QAction* const selectParentsAction  = selectTagsMenu->addAction(i18n("Parents"),  this, SLOT(slotSelectParents()));
     selectChildrenAction->setData(albumData);
     selectParentsAction->setData(albumData);
 
-    KMenu* const deselectTagsMenu       = new KMenu(i18nc("deselect tags menu", "Deselect"));
+    KMenu* const deselectTagsMenu = new KMenu(i18nc("deselect tags menu", "Deselect"));
     addSubMenu(deselectTagsMenu);
 
     deselectTagsMenu->addAction(allString, d->albumModel, SLOT(resetAllCheckedAlbums()));
     deselectTagsMenu->addSeparator();
     QAction* const deselectChildrenAction = deselectTagsMenu->addAction(i18n("Children"), this, SLOT(slotDeselectChildren()));
-    QAction* const deselectParentsAction  = deselectTagsMenu->addAction(i18n("Parents"), this, SLOT(slotDeselectParents()));
+    QAction* const deselectParentsAction  = deselectTagsMenu->addAction(i18n("Parents"),  this, SLOT(slotDeselectParents()));
     deselectChildrenAction->setData(albumData);
     deselectParentsAction->setData(albumData);
 
     d->parent->addAction(i18n("Invert Selection"), d->albumModel, SLOT(invertCheckedAlbums()));
 
-    selectChildrenAction->setEnabled(album);
-    selectParentsAction->setEnabled(album);
-    deselectChildrenAction->setEnabled(album);
-    deselectParentsAction->setEnabled(album);
+    selectChildrenAction->setEnabled(enabled);
+    selectParentsAction->setEnabled(enabled);
+    deselectChildrenAction->setEnabled(enabled);
+    deselectParentsAction->setEnabled(enabled);
 }
 
 void ContextMenuHelper::slotSelectChildren()
