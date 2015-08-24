@@ -71,24 +71,6 @@ public:
     }
 
     /**
-     * @brief NamespaceEntry -constructor to build a rating
-     * @param name - namespace name
-     * @param convertRatio - convert ration ex: 1:1 if namespace store 5 star rating
-     *                       or 25:1 if rating must be stored from 0-100
-     */
-    NamespaceEntry(QString name, QList<int> convertRatio, NamespaceType nsType, int index)
-    {
-        this->namespaceName = name;
-        this->convertRatio  = QList<int>(convertRatio);
-        this->nsType = nsType;
-        this->index = index;
-        this->specialOpts = NO_OPTS;
-        this->secondNameOpts = NO_OPTS;
-        this->isDefault = true;
-        this->isDisabled = false;
-    }
-
-    /**
      * @brief NamespaceEntry -constructor to build a comment
      * @param name - namespace name
      */
