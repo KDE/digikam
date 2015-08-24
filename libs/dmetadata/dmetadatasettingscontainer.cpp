@@ -100,22 +100,22 @@ void DMetadataSettingsContainer::defaultTagValues()
 
     // Default tag namespaces
     NamespaceEntry tagNs1;
-    tagNs1.namespaceName = QLatin1String("Xmp.digiKam.TagsList");
-    tagNs1.tagPaths = NamespaceEntry::TAGPATH;
-    tagNs1.separator = QLatin1String("/");
-    tagNs1.nsType  = NamespaceEntry::TAGS;
-    tagNs1.index =  0;
-    tagNs1.specialOpts = NamespaceEntry::TAG_XMPSEQ;
-    tagNs1.subspace    = NamespaceEntry::XMP;
+    tagNs1.namespaceName    = QLatin1String("Xmp.digiKam.TagsList");
+    tagNs1.tagPaths         = NamespaceEntry::TAGPATH;
+    tagNs1.separator        = QLatin1String("/");
+    tagNs1.nsType           = NamespaceEntry::TAGS;
+    tagNs1.index            = 0;
+    tagNs1.specialOpts      = NamespaceEntry::TAG_XMPSEQ;
+    tagNs1.subspace         = NamespaceEntry::XMP;
 
     NamespaceEntry tagNs2;
-    tagNs2.namespaceName = QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP");
-    tagNs2.tagPaths = NamespaceEntry::TAGPATH;
-    tagNs2.separator = QLatin1String("/");
-    tagNs2.nsType  = NamespaceEntry::TAGS;
-    tagNs2.index = 1;
-    tagNs2.specialOpts = NamespaceEntry::TAG_XMPBAG;
-    tagNs2.subspace    = NamespaceEntry::XMP;
+    tagNs2.namespaceName    = QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP");
+    tagNs2.tagPaths         = NamespaceEntry::TAGPATH;
+    tagNs2.separator        = QLatin1String("/");
+    tagNs2.nsType           = NamespaceEntry::TAGS;
+    tagNs2.index            = 1;
+    tagNs2.specialOpts      = NamespaceEntry::TAG_XMPBAG;
+    tagNs2.subspace         = NamespaceEntry::XMP;
 
     NamespaceEntry tagNs3;
     tagNs3.namespaceName = QLatin1String("Xmp.lr.hierarchicalSubject");
@@ -250,47 +250,54 @@ void DMetadataSettingsContainer::defaultCommentValues()
     this->readCommentNamespaces.clear();
     this->writeCommentNamespaces.clear();
 
-    NamespaceEntry commNs1 (QLatin1String("Xmp.dc.description"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::COMMENT_ATLLANGLIST,
-                            0);
+    NamespaceEntry commNs1;
+    commNs1.namespaceName   = QLatin1String("Xmp.dc.description");
+    commNs1.nsType          = NamespaceEntry::COMMENT;
+    commNs1.specialOpts     = NamespaceEntry::COMMENT_ATLLANGLIST;
+    commNs1.index           = 0;
     commNs1.subspace = NamespaceEntry::XMP;
 
-    NamespaceEntry commNs2 (QLatin1String("Xmp.exif.UserComment"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::COMMENT_ALTLANG,
-                            1);
+    NamespaceEntry commNs2;
+    commNs2.namespaceName   = QLatin1String("Xmp.exif.UserComment");
+    commNs2.nsType          = NamespaceEntry::COMMENT;
+    commNs2.specialOpts     = NamespaceEntry::COMMENT_ALTLANG;
+    commNs2.index           = 1;
     commNs2.subspace = NamespaceEntry::XMP;
 
-    NamespaceEntry commNs3 (QLatin1String("Xmp.tiff.ImageDescription"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::COMMENT_ALTLANG,
-                            2);
+    NamespaceEntry commNs3;
+    commNs3.namespaceName   = QLatin1String("Xmp.tiff.ImageDescription");
+    commNs3.nsType          = NamespaceEntry::COMMENT;
+    commNs3.specialOpts     = NamespaceEntry::COMMENT_ALTLANG;
+    commNs3.index           = 2;
     commNs3.subspace = NamespaceEntry::XMP;
 
-    NamespaceEntry commNs4 (QLatin1String("Xmp.acdsee.notes"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::COMMENT_XMP,
-                            3);
+    NamespaceEntry commNs4;
+    commNs4.namespaceName   = QLatin1String("Xmp.acdsee.notes");
+    commNs4.nsType          = NamespaceEntry::COMMENT;
+    commNs4.specialOpts     = NamespaceEntry::COMMENT_XMP;
+    commNs4.index           = 3;
     commNs4.subspace = NamespaceEntry::XMP;
 
-    NamespaceEntry commNs5 (QLatin1String("JPEG/TIFF Comments"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::COMMENT_JPEG,
-                            5);
+    NamespaceEntry commNs5;
+    commNs5.namespaceName   = QLatin1String("JPEG/TIFF Comments");
+    commNs5.nsType          = NamespaceEntry::COMMENT;
+    commNs5.specialOpts     = NamespaceEntry::COMMENT_JPEG;
+    commNs5.index           = 4;
     commNs5.subspace = NamespaceEntry::XMP;
 
-    NamespaceEntry commNs6 (QLatin1String("Exif.Image.ImageDescription"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::NO_OPTS,
-                            4);
+    NamespaceEntry commNs6;
+    commNs6.namespaceName   = QLatin1String("Exif.Image.ImageDescription");
+    commNs6.nsType          = NamespaceEntry::COMMENT;
+    commNs6.specialOpts     = NamespaceEntry::NO_OPTS;
+    commNs6.index           = 5;
     commNs6.alternativeName = QLatin1String("Exif.Photo.UserComment");
     commNs6.subspace = NamespaceEntry::EXIV;
 
-    NamespaceEntry commNs7 (QLatin1String("Iptc.Application2.Caption"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::NO_OPTS,
-                            6);
+    NamespaceEntry commNs7;
+    commNs7.namespaceName   = QLatin1String("Iptc.Application2.Caption");
+    commNs7.nsType          = NamespaceEntry::COMMENT;
+    commNs7.specialOpts     = NamespaceEntry::NO_OPTS;
+    commNs7.index           = 6;
     commNs7.subspace = NamespaceEntry::IPTC;
 
     readCommentNamespaces.append(commNs1);

@@ -90,20 +90,19 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
 
     DMetadataSettingsContainer dmsettings;
 
-    NamespaceEntry commNs1 (QLatin1String("Xmp.dc.description"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::COMMENT_ATLLANGLIST,
-                            0);
+    NamespaceEntry commNs1;
+    commNs1.namespaceName   = QLatin1String("Xmp.dc.description");
+    commNs1.nsType          = NamespaceEntry::COMMENT;
+    commNs1.specialOpts     = NamespaceEntry::COMMENT_ATLLANGLIST;
+    commNs1.index           = 0;
     commNs1.subspace = NamespaceEntry::XMP;
-    commNs1.isDisabled = true;
 
-    NamespaceEntry commNs2 (QLatin1String("Xmp.exif.UserComment"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::COMMENT_ALTLANG,
-                            1);
+    NamespaceEntry commNs2;
+    commNs2.namespaceName   = QLatin1String("Xmp.exif.UserComment");
+    commNs2.nsType          = NamespaceEntry::COMMENT;
+    commNs2.specialOpts     = NamespaceEntry::COMMENT_ALTLANG;
+    commNs2.index           = 1;
     commNs2.subspace = NamespaceEntry::XMP;
-
-
 
     dmsettings.unifyReadWrite = false;
     dmsettings.writeCommentNamespaces.clear();
@@ -135,17 +134,18 @@ void CommentReadWriteTest::testReadFromDisabledNamespaces()
 
     DMetadataSettingsContainer dmsettings;
 
-    NamespaceEntry commNs1 (QLatin1String("Xmp.dc.description"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::COMMENT_ATLLANGLIST,
-                            0);
+    NamespaceEntry commNs1;
+    commNs1.namespaceName   = QLatin1String("Xmp.dc.description");
+    commNs1.nsType          = NamespaceEntry::COMMENT;
+    commNs1.specialOpts     = NamespaceEntry::COMMENT_ATLLANGLIST;
+    commNs1.index           = 0;
     commNs1.subspace = NamespaceEntry::XMP;
-    commNs1.isDisabled = true;
 
-    NamespaceEntry commNs2 (QLatin1String("Xmp.exif.UserComment"),
-                            NamespaceEntry::COMMENT,
-                            NamespaceEntry::COMMENT_ALTLANG,
-                            1);
+    NamespaceEntry commNs2;
+    commNs2.namespaceName   = QLatin1String("Xmp.exif.UserComment");
+    commNs2.nsType          = NamespaceEntry::COMMENT;
+    commNs2.specialOpts     = NamespaceEntry::COMMENT_ALTLANG;
+    commNs2.index           = 1;
     commNs2.subspace = NamespaceEntry::XMP;
 
 

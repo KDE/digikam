@@ -66,20 +66,7 @@ public:
 
     NamespaceEntry()
     {
-        this->isDefault = true;
-        this->isDisabled = false;
-    }
-
-    /**
-     * @brief NamespaceEntry -constructor to build a comment
-     * @param name - namespace name
-     */
-    NamespaceEntry(QString name, NamespaceType nsType, SpecialOptions comm, int index)
-    {
-        this->namespaceName = name;
-        this->nsType = nsType;
-        this->index = index;
-        this->specialOpts = comm;
+        this->specialOpts = NO_OPTS;
         this->secondNameOpts = NO_OPTS;
         this->isDefault = true;
         this->isDisabled = false;
