@@ -71,17 +71,19 @@ void RatingReadWriteTest::testWriteToDisabledNamespaces()
     microsoftMappings << 0 << 1 << 25 << 50 << 75 << 99;
     iptcMappings << 8 << 6 << 5 << 4 << 2 << 1;
 
-    NamespaceEntry ratingNs2(QLatin1String("Xmp.acdsee.rating"),
-                             defaultVal,
-                             NamespaceEntry::RATING, 1);
+    NamespaceEntry ratingNs2;
+    ratingNs2.namespaceName = QLatin1String("Xmp.acdsee.rating");
+    ratingNs2.convertRatio  = defaultVal;
+    ratingNs2.nsType        = NamespaceEntry::RATING;
+    ratingNs2.index         = 1;
     ratingNs2.subspace = NamespaceEntry::XMP;
-    ratingNs2.isDisabled = true;
 
-    NamespaceEntry ratingNs3(QLatin1String("Xmp.MicrosoftPhoto.Rating"),
-                             microsoftMappings,
-                             NamespaceEntry::RATING, 2);
+    NamespaceEntry ratingNs3;
+    ratingNs3.namespaceName = QLatin1String("Xmp.MicrosoftPhoto.Rating");
+    ratingNs3.convertRatio  = microsoftMappings;
+    ratingNs3.nsType        = NamespaceEntry::RATING;
+    ratingNs3.index         = 2;
     ratingNs3.subspace = NamespaceEntry::XMP;
-
 
 
     dmsettings.writeRatingNamespaces.clear();
@@ -119,15 +121,18 @@ void RatingReadWriteTest::testReadFromDisabledNamespaces()
     microsoftMappings << 0 << 1 << 25 << 50 << 75 << 99;
     iptcMappings << 8 << 6 << 5 << 4 << 2 << 1;
 
-    NamespaceEntry ratingNs2(QLatin1String("Xmp.acdsee.rating"),
-                             defaultVal,
-                             NamespaceEntry::RATING, 1);
+    NamespaceEntry ratingNs2;
+    ratingNs2.namespaceName = QLatin1String("Xmp.acdsee.rating");
+    ratingNs2.convertRatio  = defaultVal;
+    ratingNs2.nsType        = NamespaceEntry::RATING;
+    ratingNs2.index         = 1;
     ratingNs2.subspace = NamespaceEntry::XMP;
-    ratingNs2.isDisabled = true;
 
-    NamespaceEntry ratingNs3(QLatin1String("Xmp.MicrosoftPhoto.Rating"),
-                             microsoftMappings,
-                             NamespaceEntry::RATING, 2);
+    NamespaceEntry ratingNs3;
+    ratingNs3.namespaceName = QLatin1String("Xmp.MicrosoftPhoto.Rating");
+    ratingNs3.convertRatio  = microsoftMappings;
+    ratingNs3.nsType        = NamespaceEntry::RATING;
+    ratingNs3.index         = 2;
     ratingNs3.subspace = NamespaceEntry::XMP;
 
 

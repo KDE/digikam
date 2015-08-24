@@ -193,34 +193,46 @@ void DMetadataSettingsContainer::defaultRatingValues()
     microsoftMappings << 0 << 1 << 25 << 50 << 75 << 99;
     iptcMappings << 8 << 6 << 5 << 4 << 2 << 1;
 
-    NamespaceEntry ratingNs1 (QLatin1String("Xmp.xmp.Rating"),
-                              defaultVal,
-                              NamespaceEntry::RATING, 0);
+    NamespaceEntry ratingNs1;
+    ratingNs1.namespaceName = QLatin1String("Xmp.xmp.Rating");
+    ratingNs1.convertRatio  = defaultVal;
+    ratingNs1.nsType        = NamespaceEntry::RATING;
+    ratingNs1.index         = 0;
     ratingNs1.subspace = NamespaceEntry::XMP;
 
-    NamespaceEntry ratingNs2(QLatin1String("Xmp.acdsee.rating"),
-                             defaultVal,
-                             NamespaceEntry::RATING, 1);
+    NamespaceEntry ratingNs2;
+    ratingNs2.namespaceName = QLatin1String("Xmp.acdsee.rating");
+    ratingNs2.convertRatio  = defaultVal;
+    ratingNs2.nsType        = NamespaceEntry::RATING;
+    ratingNs2.index         = 1;
     ratingNs2.subspace = NamespaceEntry::XMP;
 
-    NamespaceEntry ratingNs3(QLatin1String("Xmp.MicrosoftPhoto.Rating"),
-                             microsoftMappings,
-                             NamespaceEntry::RATING, 2);
+    NamespaceEntry ratingNs3;
+    ratingNs3.namespaceName = QLatin1String("Xmp.MicrosoftPhoto.Rating");
+    ratingNs3.convertRatio  = microsoftMappings;
+    ratingNs3.nsType        = NamespaceEntry::RATING;
+    ratingNs3.index         = 2;
     ratingNs3.subspace = NamespaceEntry::XMP;
 
-    NamespaceEntry ratingNs4(QLatin1String("Exif.Image.0x4746"),
-                             defaultVal,
-                             NamespaceEntry::RATING, 3);
+    NamespaceEntry ratingNs4;
+    ratingNs4.namespaceName = QLatin1String("Exif.Image.0x4746");
+    ratingNs4.convertRatio  = defaultVal;
+    ratingNs4.nsType        = NamespaceEntry::RATING;
+    ratingNs4.index         = 3;
     ratingNs4.subspace = NamespaceEntry::EXIV;
 
-    NamespaceEntry ratingNs5(QLatin1String("Exif.Image.0x4749"),
-                             microsoftMappings,
-                             NamespaceEntry::RATING, 4);
+    NamespaceEntry ratingNs5;
+    ratingNs5.namespaceName = QLatin1String("Exif.Image.0x4749");
+    ratingNs5.convertRatio  = microsoftMappings;
+    ratingNs5.nsType        = NamespaceEntry::RATING;
+    ratingNs5.index         = 4;
     ratingNs5.subspace = NamespaceEntry::EXIV;
 
-    NamespaceEntry ratingNs6(QLatin1String("Iptc.Application2.Urgency"),
-                             iptcMappings,
-                             NamespaceEntry::RATING, 5);
+    NamespaceEntry ratingNs6;
+    ratingNs6.namespaceName = QLatin1String("Iptc.Application2.Urgency");
+    ratingNs6.convertRatio  = iptcMappings;
+    ratingNs6.nsType        = NamespaceEntry::RATING;
+    ratingNs6.index         = 5;
     ratingNs6.subspace = NamespaceEntry::IPTC;
 
     readRatingNamespaces.append(ratingNs1);
