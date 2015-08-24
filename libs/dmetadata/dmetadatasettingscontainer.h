@@ -66,10 +66,15 @@ public:
 
     NamespaceEntry()
     {
-        this->specialOpts = NO_OPTS;
-        this->secondNameOpts = NO_OPTS;
-        this->isDefault = true;
-        this->isDisabled = false;
+        specialOpts = NO_OPTS;
+        secondNameOpts = NO_OPTS;
+        isDefault = true;
+        isDisabled = false;
+        nsType = TAGS;
+        subspace = XMP;
+        index = -1;
+        tagPaths = TAGPATH;
+
     }
 
     NamespaceEntry(const NamespaceEntry& copy)
