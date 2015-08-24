@@ -29,4 +29,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 022 ==> 304952 - digiKam thumbnails don't load, even after rebuild thumbnails and application crashes.
 023 ==> 341685 - Tags disappear on some photos after a few days.
 024 ==> 346070 - Crash during "maintenance".
-025 ==> 
+025 ==> 347348 - Moving a directory loses metadata in database associated with .cr2 raw files.
+026 ==> 269634 - Crash when adding tags.
+027 ==> 311135 - digikam crashed after saving a new version of a modified picture.
+028 ==> 
