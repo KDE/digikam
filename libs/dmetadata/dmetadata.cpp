@@ -1343,6 +1343,8 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
                     qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
                     return false;
                 }
+            default:
+                break;
             }
         }
     }

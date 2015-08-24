@@ -175,6 +175,7 @@ public:
     DMetadataSettingsContainer();
     ~DMetadataSettingsContainer()
     {
+        unifyReadWrite = false;
     }
 
 public:
