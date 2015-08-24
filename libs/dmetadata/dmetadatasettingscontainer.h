@@ -71,27 +71,6 @@ public:
     }
 
     /**
-     * @brief NamespaceEntry -constructor for tag type namespace
-     * @param name - namespace name
-     * @param isPath - namespace with keywords or full path
-     * @param separator - separator used for tag paths
-     * @param extraXml  - xml to format tags
-     */
-    NamespaceEntry(QString name, TagType isPath, QString separator,
-                   NamespaceType nsType, int index)
-    {
-        this->namespaceName = name;
-        this->tagPaths = isPath;
-        this->separator = separator;
-        this->nsType = nsType;
-        this->index = index;
-        this->specialOpts = NO_OPTS;
-        this->secondNameOpts = NO_OPTS;
-        this->isDefault = true;
-        this->isDisabled = false;
-    }
-
-    /**
      * @brief NamespaceEntry -constructor to build a rating
      * @param name - namespace name
      * @param convertRatio - convert ration ex: 1:1 if namespace store 5 star rating

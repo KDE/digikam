@@ -99,69 +99,76 @@ void DMetadataSettingsContainer::defaultTagValues()
     this->writeTagNamespaces.clear();
 
     // Default tag namespaces
-    NamespaceEntry tagNs1 (QLatin1String("Xmp.digiKam.TagsList"),
-                           NamespaceEntry::TAGPATH,
-                           QLatin1String("/"),
-                           NamespaceEntry::TAGS,
-                           0);
+    NamespaceEntry tagNs1;
+    tagNs1.namespaceName = QLatin1String("Xmp.digiKam.TagsList");
+    tagNs1.tagPaths = NamespaceEntry::TAGPATH;
+    tagNs1.separator = QLatin1String("/");
+    tagNs1.nsType  = NamespaceEntry::TAGS;
+    tagNs1.index =  0;
     tagNs1.specialOpts = NamespaceEntry::TAG_XMPSEQ;
     tagNs1.subspace    = NamespaceEntry::XMP;
 
-    NamespaceEntry tagNs2 (QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP"),
-                           NamespaceEntry::TAGPATH,
-                           QLatin1String("/"),
-                           NamespaceEntry::TAGS,
-                           1);
+    NamespaceEntry tagNs2;
+    tagNs2.namespaceName = QLatin1String("Xmp.MicrosoftPhoto.LastKeywordXMP");
+    tagNs2.tagPaths = NamespaceEntry::TAGPATH;
+    tagNs2.separator = QLatin1String("/");
+    tagNs2.nsType  = NamespaceEntry::TAGS;
+    tagNs2.index = 1;
     tagNs2.specialOpts = NamespaceEntry::TAG_XMPBAG;
     tagNs2.subspace    = NamespaceEntry::XMP;
 
-    NamespaceEntry tagNs3 (QLatin1String("Xmp.lr.hierarchicalSubject"),
-                           NamespaceEntry::TAGPATH,
-                           QLatin1String("|"),
-                           NamespaceEntry::TAGS,
-                           2);
-
+    NamespaceEntry tagNs3;
+    tagNs3.namespaceName = QLatin1String("Xmp.lr.hierarchicalSubject");
+    tagNs3.tagPaths = NamespaceEntry::TAGPATH;
+    tagNs3.separator = QLatin1String("|");
+    tagNs3.nsType  = NamespaceEntry::TAGS;
+    tagNs3.index = 2;
     tagNs3.specialOpts = NamespaceEntry::TAG_XMPBAG;
     tagNs3.subspace    = NamespaceEntry::XMP;
     tagNs3.alternativeName = QLatin1String("Xmp.lr.HierarchicalSubject");
     tagNs3.secondNameOpts = NamespaceEntry::TAG_XMPSEQ;
 
-    NamespaceEntry tagNs4 (QLatin1String("Xmp.mediapro.CatalogSets"),
-                           NamespaceEntry::TAGPATH,
-                           QLatin1String("|"),
-                           NamespaceEntry::TAGS,
-                           3);
+    NamespaceEntry tagNs4;
+    tagNs4.namespaceName = QLatin1String("Xmp.mediapro.CatalogSets");
+    tagNs4.tagPaths = NamespaceEntry::TAGPATH;
+    tagNs4.separator = QLatin1String("|");
+    tagNs4.nsType  = NamespaceEntry::TAGS;
+    tagNs4.index = 3;
     tagNs4.specialOpts = NamespaceEntry::TAG_XMPBAG;
     tagNs4.subspace    = NamespaceEntry::XMP;
 
-    NamespaceEntry tagNs5 (QLatin1String("Xmp.acdsee.categories"),
-                           NamespaceEntry::TAGPATH,
-                           QLatin1String("/"),
-                           NamespaceEntry::TAGS,
-                           4);
+    NamespaceEntry tagNs5;
+    tagNs5.namespaceName = QLatin1String("Xmp.acdsee.categories");
+    tagNs5.tagPaths = NamespaceEntry::TAGPATH;
+    tagNs5.separator = QLatin1String("/");
+    tagNs5.nsType  = NamespaceEntry::TAGS;
+    tagNs5.index = 4;
     tagNs5.specialOpts = NamespaceEntry::TAG_ACDSEE;
     tagNs5.subspace    = NamespaceEntry::XMP;
 
-    NamespaceEntry tagNs6 (QLatin1String("Xmp.dc.subject"),
-                           NamespaceEntry::TAG,
-                           QLatin1String("/"),
-                           NamespaceEntry::TAGS,
-                           5);
+    NamespaceEntry tagNs6;
+    tagNs6.namespaceName = QLatin1String("Xmp.dc.subject");
+    tagNs6.tagPaths = NamespaceEntry::TAG;
+    tagNs6.separator = QLatin1String("/");
+    tagNs6.nsType  = NamespaceEntry::TAGS;
+    tagNs6.index = 5;
     tagNs6.specialOpts = NamespaceEntry::TAG_XMPBAG;
     tagNs6.subspace    = NamespaceEntry::XMP;
 
-    NamespaceEntry tagNs7 (QLatin1String("Iptc.Application2.Keywords"),
-                           NamespaceEntry::TAGPATH,
-                           QLatin1String("."),
-                           NamespaceEntry::TAGS,
-                           6);
+    NamespaceEntry tagNs7;
+    tagNs7.namespaceName = QLatin1String("Iptc.Application2.Keywords");
+    tagNs7.tagPaths = NamespaceEntry::TAGPATH;
+    tagNs7.separator = QLatin1String(".");
+    tagNs7.nsType  = NamespaceEntry::TAGS;
+    tagNs7.index = 6;
     tagNs7.subspace    = NamespaceEntry::IPTC;
 
-    NamespaceEntry tagNs8 (QLatin1String("Exif.Image.XPKeywords"),
-                           NamespaceEntry::TAGPATH,
-                           QLatin1String(";"),
-                           NamespaceEntry::TAGS,
-                           7);
+    NamespaceEntry tagNs8;
+    tagNs8.namespaceName = QLatin1String("Exif.Image.XPKeywords");
+    tagNs8.tagPaths = NamespaceEntry::TAGPATH;
+    tagNs8.separator = QLatin1String(";");
+    tagNs8.nsType  = NamespaceEntry::TAGS;
+    tagNs8.index = 7;
     tagNs8.subspace    = NamespaceEntry::EXIV;
 
     readTagNamespaces.append(tagNs1);
