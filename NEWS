@@ -30,4 +30,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 013 ==> 349925 - Fail cmake chek if -DENABLE_KFILEMETADATASUPPORT=ON is not set.
 014 ==> 333377 - Show warning messagebox when non-RAW file is added to DNGConverter instead of none.
 015 ==> 122653 - file-dialogue claims that pictures are not on the local-storage, yet they are
-016 ==>
+016 ==> 348347 - Can't create albums - menu is greyed out.
+017 ==> 
+
