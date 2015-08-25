@@ -32,4 +32,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 025 ==> 347348 - Moving a directory loses metadata in database associated with .cr2 raw files.
 026 ==> 269634 - Crash when adding tags.
 027 ==> 311135 - digikam crashed after saving a new version of a modified picture.
-028 ==> 
+028 ==> 309058 - Database can't be synchronized with XMP sidecars.
+029 ==> 
+
