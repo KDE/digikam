@@ -38,6 +38,7 @@
 
 // Local includes
 
+#include "iccprofile.h"
 #include "widgets_debug.h"
 #include "cietonguewidget.h"
 #include "metadatalistview.h"
@@ -235,7 +236,7 @@ bool ICCProfileWidget::loadFromURL(const QUrl& url)
 
     if (url.isEmpty())
     {
-        setProfile();
+        setProfile(IccProfile());
         d->cieTongue->setProfileData();
         return false;
     }
@@ -245,7 +246,7 @@ bool ICCProfileWidget::loadFromURL(const QUrl& url)
 
         if (!setProfile(profile))
         {
-            setProfile();
+            setProfile(IccProfile());
             d->cieTongue->setProfileData();
             return false;
         }
