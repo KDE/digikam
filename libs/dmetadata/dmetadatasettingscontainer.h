@@ -44,75 +44,97 @@ namespace Digikam
  *        as names, what types of data expects and extra
  *        xml tags
  */
-class NamespaceEntry{
+class NamespaceEntry
+{
 
 public:
 
-    enum NsSubspace {EXIV = 0, IPTC = 1, XMP = 2 };
-    enum TagType {TAG = 0, TAGPATH = 1};
-    enum SpecialOptions
+    enum NsSubspace
     {
-        NO_OPTS = 0,
-        COMMENT_ALTLANG = 1,
-        COMMENT_ATLLANGLIST = 2,
-        COMMENT_XMP = 3,
-        COMMENT_JPEG = 4,
-        TAG_XMPBAG = 5,
-        TAG_XMPSEQ = 6,
-        TAG_ACDSEE = 7
+        EXIV = 0,
+        IPTC = 1,
+        XMP  = 2
     };
 
-    enum NamespaceType {TAGS = 0, RATING = 1, COMMENT = 2};
+    enum TagType
+    {
+        TAG     = 0,
+        TAGPATH = 1
+    };
+
+    enum SpecialOptions
+    {
+        NO_OPTS             = 0,
+        COMMENT_ALTLANG     = 1,
+        COMMENT_ATLLANGLIST = 2,
+        COMMENT_XMP         = 3,
+        COMMENT_JPEG        = 4,
+        TAG_XMPBAG          = 5,
+        TAG_XMPSEQ          = 6,
+        TAG_ACDSEE          = 7
+    };
+
+    enum NamespaceType
+    {
+        TAGS    = 0,
+        RATING  = 1,
+        COMMENT = 2
+    };
+
+public:
 
     NamespaceEntry()
     {
-        specialOpts = NO_OPTS;
+        specialOpts    = NO_OPTS;
         secondNameOpts = NO_OPTS;
-        isDefault = true;
-        isDisabled = false;
-        nsType = TAGS;
-        subspace = XMP;
-        index = -1;
-        tagPaths = TAGPATH;
-
+        isDefault      = true;
+        isDisabled     = false;
+        nsType         = TAGS;
+        subspace       = XMP;
+        index          = -1;
+        tagPaths       = TAGPATH;
     }
 
     NamespaceEntry(const NamespaceEntry& copy)
     {
-        this->namespaceName = copy.namespaceName;
+        this->namespaceName   = copy.namespaceName;
         this->alternativeName = copy.alternativeName;
-        this->tagPaths      = copy.tagPaths;
-        this->separator     = copy.separator;
-        this->nsType        = copy.nsType;
-        this->convertRatio  = QList<int>(copy.convertRatio);
-        this->specialOpts   = copy.specialOpts;
-        this->secondNameOpts = copy.secondNameOpts;
-        this->index         = copy.index;
-        this->subspace      = copy.subspace;
-        this->isDefault     = copy.isDefault;
-        this->isDisabled    = copy.isDisabled;
+        this->tagPaths        = copy.tagPaths;
+        this->separator       = copy.separator;
+        this->nsType          = copy.nsType;
+        this->convertRatio    = QList<int>(copy.convertRatio);
+        this->specialOpts     = copy.specialOpts;
+        this->secondNameOpts  = copy.secondNameOpts;
+        this->index           = copy.index;
+        this->subspace        = copy.subspace;
+        this->isDefault       = copy.isDefault;
+        this->isDisabled      = copy.isDisabled;
     }
 
-    ~NamespaceEntry(){}
+    ~NamespaceEntry()
+    {
+    }
 
-    NamespaceType nsType;
-    NsSubspace    subspace;
-    bool          isDefault;
-    bool          isDisabled;
-    int index;
+public:
+
+    NamespaceType  nsType;
+    NsSubspace     subspace;
+    bool           isDefault;
+    bool           isDisabled;
+    int            index;
 
     /**
      * Tag Options
      */
-    QString namespaceName;
-    QString alternativeName;
-    TagType tagPaths;
-    QString separator;
+    QString        namespaceName;
+    QString        alternativeName;
+    TagType        tagPaths;
+    QString        separator;
 
     /**
      * Rating Options
      */
-    QList<int> convertRatio;
+    QList<int>     convertRatio;
 
     SpecialOptions specialOpts;
     SpecialOptions secondNameOpts;
@@ -126,10 +148,7 @@ class DIGIKAM_EXPORT DMetadataSettingsContainer
 public:
 
     DMetadataSettingsContainer();
-    ~DMetadataSettingsContainer()
-    {
-        unifyReadWrite = false;
-    }
+    ~DMetadataSettingsContainer();
 
 public:
 

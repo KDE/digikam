@@ -44,10 +44,17 @@ bool dmcompare(NamespaceEntry& e1, NamespaceEntry e2)
     return  e1.index < e2.index;
 }
 
+// -------------------------------------------------------------------------------------------------
+
 DMetadataSettingsContainer::DMetadataSettingsContainer()
 {
+    unifyReadWrite = false;
 }
 
+DMetadataSettingsContainer::~DMetadataSettingsContainer()
+{
+}
+    
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
     if (group.hasGroup("readTagNamespaces")     &&
@@ -118,58 +125,58 @@ void DMetadataSettingsContainer::defaultTagValues()
     tagNs2.subspace         = NamespaceEntry::XMP;
 
     NamespaceEntry tagNs3;
-    tagNs3.namespaceName = QLatin1String("Xmp.lr.hierarchicalSubject");
-    tagNs3.tagPaths = NamespaceEntry::TAGPATH;
-    tagNs3.separator = QLatin1String("|");
-    tagNs3.nsType  = NamespaceEntry::TAGS;
-    tagNs3.index = 2;
-    tagNs3.specialOpts = NamespaceEntry::TAG_XMPBAG;
-    tagNs3.subspace    = NamespaceEntry::XMP;
-    tagNs3.alternativeName = QLatin1String("Xmp.lr.HierarchicalSubject");
-    tagNs3.secondNameOpts = NamespaceEntry::TAG_XMPSEQ;
+    tagNs3.namespaceName    = QLatin1String("Xmp.lr.hierarchicalSubject");
+    tagNs3.tagPaths         = NamespaceEntry::TAGPATH;
+    tagNs3.separator        = QLatin1String("|");
+    tagNs3.nsType           = NamespaceEntry::TAGS;
+    tagNs3.index            = 2;
+    tagNs3.specialOpts      = NamespaceEntry::TAG_XMPBAG;
+    tagNs3.subspace         = NamespaceEntry::XMP;
+    tagNs3.alternativeName  = QLatin1String("Xmp.lr.HierarchicalSubject");
+    tagNs3.secondNameOpts   = NamespaceEntry::TAG_XMPSEQ;
 
     NamespaceEntry tagNs4;
-    tagNs4.namespaceName = QLatin1String("Xmp.mediapro.CatalogSets");
-    tagNs4.tagPaths = NamespaceEntry::TAGPATH;
-    tagNs4.separator = QLatin1String("|");
-    tagNs4.nsType  = NamespaceEntry::TAGS;
-    tagNs4.index = 3;
-    tagNs4.specialOpts = NamespaceEntry::TAG_XMPBAG;
-    tagNs4.subspace    = NamespaceEntry::XMP;
+    tagNs4.namespaceName    = QLatin1String("Xmp.mediapro.CatalogSets");
+    tagNs4.tagPaths         = NamespaceEntry::TAGPATH;
+    tagNs4.separator        = QLatin1String("|");
+    tagNs4.nsType           = NamespaceEntry::TAGS;
+    tagNs4.index            = 3;
+    tagNs4.specialOpts      = NamespaceEntry::TAG_XMPBAG;
+    tagNs4.subspace         = NamespaceEntry::XMP;
 
     NamespaceEntry tagNs5;
-    tagNs5.namespaceName = QLatin1String("Xmp.acdsee.categories");
-    tagNs5.tagPaths = NamespaceEntry::TAGPATH;
-    tagNs5.separator = QLatin1String("/");
-    tagNs5.nsType  = NamespaceEntry::TAGS;
-    tagNs5.index = 4;
-    tagNs5.specialOpts = NamespaceEntry::TAG_ACDSEE;
-    tagNs5.subspace    = NamespaceEntry::XMP;
+    tagNs5.namespaceName    = QLatin1String("Xmp.acdsee.categories");
+    tagNs5.tagPaths         = NamespaceEntry::TAGPATH;
+    tagNs5.separator        = QLatin1String("/");
+    tagNs5.nsType           = NamespaceEntry::TAGS;
+    tagNs5.index            = 4;
+    tagNs5.specialOpts      = NamespaceEntry::TAG_ACDSEE;
+    tagNs5.subspace         = NamespaceEntry::XMP;
 
     NamespaceEntry tagNs6;
-    tagNs6.namespaceName = QLatin1String("Xmp.dc.subject");
-    tagNs6.tagPaths = NamespaceEntry::TAG;
-    tagNs6.separator = QLatin1String("/");
-    tagNs6.nsType  = NamespaceEntry::TAGS;
-    tagNs6.index = 5;
-    tagNs6.specialOpts = NamespaceEntry::TAG_XMPBAG;
-    tagNs6.subspace    = NamespaceEntry::XMP;
+    tagNs6.namespaceName    = QLatin1String("Xmp.dc.subject");
+    tagNs6.tagPaths         = NamespaceEntry::TAG;
+    tagNs6.separator        = QLatin1String("/");
+    tagNs6.nsType           = NamespaceEntry::TAGS;
+    tagNs6.index            = 5;
+    tagNs6.specialOpts      = NamespaceEntry::TAG_XMPBAG;
+    tagNs6.subspace         = NamespaceEntry::XMP;
 
     NamespaceEntry tagNs7;
-    tagNs7.namespaceName = QLatin1String("Iptc.Application2.Keywords");
-    tagNs7.tagPaths = NamespaceEntry::TAGPATH;
-    tagNs7.separator = QLatin1String(".");
-    tagNs7.nsType  = NamespaceEntry::TAGS;
-    tagNs7.index = 6;
-    tagNs7.subspace    = NamespaceEntry::IPTC;
+    tagNs7.namespaceName    = QLatin1String("Iptc.Application2.Keywords");
+    tagNs7.tagPaths         = NamespaceEntry::TAGPATH;
+    tagNs7.separator        = QLatin1String(".");
+    tagNs7.nsType           = NamespaceEntry::TAGS;
+    tagNs7.index            = 6;
+    tagNs7.subspace         = NamespaceEntry::IPTC;
 
     NamespaceEntry tagNs8;
-    tagNs8.namespaceName = QLatin1String("Exif.Image.XPKeywords");
-    tagNs8.tagPaths = NamespaceEntry::TAGPATH;
-    tagNs8.separator = QLatin1String(";");
-    tagNs8.nsType  = NamespaceEntry::TAGS;
-    tagNs8.index = 7;
-    tagNs8.subspace    = NamespaceEntry::EXIV;
+    tagNs8.namespaceName    = QLatin1String("Exif.Image.XPKeywords");
+    tagNs8.tagPaths         = NamespaceEntry::TAGPATH;
+    tagNs8.separator        = QLatin1String(";");
+    tagNs8.nsType           = NamespaceEntry::TAGS;
+    tagNs8.index            = 7;
+    tagNs8.subspace         = NamespaceEntry::EXIV;
 
     readTagNamespaces.append(tagNs1);
     readTagNamespaces.append(tagNs2);
@@ -188,52 +195,55 @@ void DMetadataSettingsContainer::defaultRatingValues()
     this->readRatingNamespaces.clear();
     this->writeRatingNamespaces.clear();
 
-    QList<int> defaultVal, microsoftMappings, iptcMappings;
-    defaultVal << 0 << 1 << 2 << 3 << 4 << 5;
+    QList<int> defaultVal;
+    QList<int> microsoftMappings;
+    QList<int> iptcMappings;
+
+    defaultVal        << 0 << 1 << 2 << 3 << 4 << 5;
     microsoftMappings << 0 << 1 << 25 << 50 << 75 << 99;
-    iptcMappings << 8 << 6 << 5 << 4 << 2 << 1;
+    iptcMappings      << 8 << 6 << 5 << 4 << 2 << 1;
 
     NamespaceEntry ratingNs1;
     ratingNs1.namespaceName = QLatin1String("Xmp.xmp.Rating");
     ratingNs1.convertRatio  = defaultVal;
     ratingNs1.nsType        = NamespaceEntry::RATING;
     ratingNs1.index         = 0;
-    ratingNs1.subspace = NamespaceEntry::XMP;
+    ratingNs1.subspace      = NamespaceEntry::XMP;
 
     NamespaceEntry ratingNs2;
     ratingNs2.namespaceName = QLatin1String("Xmp.acdsee.rating");
     ratingNs2.convertRatio  = defaultVal;
     ratingNs2.nsType        = NamespaceEntry::RATING;
     ratingNs2.index         = 1;
-    ratingNs2.subspace = NamespaceEntry::XMP;
+    ratingNs2.subspace      = NamespaceEntry::XMP;
 
     NamespaceEntry ratingNs3;
     ratingNs3.namespaceName = QLatin1String("Xmp.MicrosoftPhoto.Rating");
     ratingNs3.convertRatio  = microsoftMappings;
     ratingNs3.nsType        = NamespaceEntry::RATING;
     ratingNs3.index         = 2;
-    ratingNs3.subspace = NamespaceEntry::XMP;
+    ratingNs3.subspace      = NamespaceEntry::XMP;
 
     NamespaceEntry ratingNs4;
     ratingNs4.namespaceName = QLatin1String("Exif.Image.0x4746");
     ratingNs4.convertRatio  = defaultVal;
     ratingNs4.nsType        = NamespaceEntry::RATING;
     ratingNs4.index         = 3;
-    ratingNs4.subspace = NamespaceEntry::EXIV;
+    ratingNs4.subspace      = NamespaceEntry::EXIV;
 
     NamespaceEntry ratingNs5;
     ratingNs5.namespaceName = QLatin1String("Exif.Image.0x4749");
     ratingNs5.convertRatio  = microsoftMappings;
     ratingNs5.nsType        = NamespaceEntry::RATING;
     ratingNs5.index         = 4;
-    ratingNs5.subspace = NamespaceEntry::EXIV;
+    ratingNs5.subspace      = NamespaceEntry::EXIV;
 
     NamespaceEntry ratingNs6;
     ratingNs6.namespaceName = QLatin1String("Iptc.Application2.Urgency");
     ratingNs6.convertRatio  = iptcMappings;
     ratingNs6.nsType        = NamespaceEntry::RATING;
     ratingNs6.index         = 5;
-    ratingNs6.subspace = NamespaceEntry::IPTC;
+    ratingNs6.subspace      = NamespaceEntry::IPTC;
 
     readRatingNamespaces.append(ratingNs1);
     readRatingNamespaces.append(ratingNs2);
@@ -255,35 +265,35 @@ void DMetadataSettingsContainer::defaultCommentValues()
     commNs1.nsType          = NamespaceEntry::COMMENT;
     commNs1.specialOpts     = NamespaceEntry::COMMENT_ATLLANGLIST;
     commNs1.index           = 0;
-    commNs1.subspace = NamespaceEntry::XMP;
+    commNs1.subspace        = NamespaceEntry::XMP;
 
     NamespaceEntry commNs2;
     commNs2.namespaceName   = QLatin1String("Xmp.exif.UserComment");
     commNs2.nsType          = NamespaceEntry::COMMENT;
     commNs2.specialOpts     = NamespaceEntry::COMMENT_ALTLANG;
     commNs2.index           = 1;
-    commNs2.subspace = NamespaceEntry::XMP;
+    commNs2.subspace        = NamespaceEntry::XMP;
 
     NamespaceEntry commNs3;
     commNs3.namespaceName   = QLatin1String("Xmp.tiff.ImageDescription");
     commNs3.nsType          = NamespaceEntry::COMMENT;
     commNs3.specialOpts     = NamespaceEntry::COMMENT_ALTLANG;
     commNs3.index           = 2;
-    commNs3.subspace = NamespaceEntry::XMP;
+    commNs3.subspace        = NamespaceEntry::XMP;
 
     NamespaceEntry commNs4;
     commNs4.namespaceName   = QLatin1String("Xmp.acdsee.notes");
     commNs4.nsType          = NamespaceEntry::COMMENT;
     commNs4.specialOpts     = NamespaceEntry::COMMENT_XMP;
     commNs4.index           = 3;
-    commNs4.subspace = NamespaceEntry::XMP;
+    commNs4.subspace        = NamespaceEntry::XMP;
 
     NamespaceEntry commNs5;
     commNs5.namespaceName   = QLatin1String("JPEG/TIFF Comments");
     commNs5.nsType          = NamespaceEntry::COMMENT;
     commNs5.specialOpts     = NamespaceEntry::COMMENT_JPEG;
     commNs5.index           = 4;
-    commNs5.subspace = NamespaceEntry::XMP;
+    commNs5.subspace        = NamespaceEntry::XMP;
 
     NamespaceEntry commNs6;
     commNs6.namespaceName   = QLatin1String("Exif.Image.ImageDescription");
@@ -291,25 +301,24 @@ void DMetadataSettingsContainer::defaultCommentValues()
     commNs6.specialOpts     = NamespaceEntry::NO_OPTS;
     commNs6.index           = 5;
     commNs6.alternativeName = QLatin1String("Exif.Photo.UserComment");
-    commNs6.subspace = NamespaceEntry::EXIV;
+    commNs6.subspace        = NamespaceEntry::EXIV;
 
     NamespaceEntry commNs7;
     commNs7.namespaceName   = QLatin1String("Iptc.Application2.Caption");
     commNs7.nsType          = NamespaceEntry::COMMENT;
     commNs7.specialOpts     = NamespaceEntry::NO_OPTS;
     commNs7.index           = 6;
-    commNs7.subspace = NamespaceEntry::IPTC;
+    commNs7.subspace        = NamespaceEntry::IPTC;
 
     readCommentNamespaces.append(commNs1);
     readCommentNamespaces.append(commNs2);
-
     readCommentNamespaces.append(commNs3);
     readCommentNamespaces.append(commNs4);
     readCommentNamespaces.append(commNs5);
     readCommentNamespaces.append(commNs6);
     readCommentNamespaces.append(commNs7);
 
-    writeCommentNamespaces = QList<NamespaceEntry>(readCommentNamespaces);
+    writeCommentNamespaces  = QList<NamespaceEntry>(readCommentNamespaces);
 }
 
 void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name, QList<NamespaceEntry>& container)
@@ -318,7 +327,7 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
 
     for (QString element : myItems.groupList())
     {
-        KConfigGroup gr = myItems.group(element);
+        KConfigGroup gr     = myItems.group(element);
         NamespaceEntry ns;
 
         ns.namespaceName    = element;
