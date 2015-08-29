@@ -11,7 +11,7 @@
  * Copyright (C) 2002-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
- * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1353,7 +1353,7 @@ void DigikamApp::initGui()
     d->imageExifOrientationActionMenu->setEnabled(false);
     d->slideShowSelectionAction->setEnabled(false);
 
-    d->albumSortAction->setCurrentItem((int)ApplicationSettings::instance()->getAlbumSortOrder());
+    d->albumSortAction->setCurrentItem((int)ApplicationSettings::instance()->getAlbumSortRole());
     d->imageSortAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSortOrder());
     d->imageSortOrderAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSorting());
     d->imageGroupAction->setCurrentItem((int)ApplicationSettings::instance()->getImageGroupMode()-1); // no action for enum 0

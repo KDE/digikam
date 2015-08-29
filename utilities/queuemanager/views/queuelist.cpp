@@ -42,6 +42,10 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
+// LibKDcraw includes
+
+#include <KDCRAW/RWidgetUtils>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -56,7 +60,6 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "workflowmanager.h"
-#include "workingpixmap.h"
 
 namespace Digikam
 {
@@ -263,26 +266,27 @@ public:
         toolTip         = 0;
         toolTipItem     = 0;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
+        progressPix     = KDcrawIface::WorkingPixmap();
     }
 
-    bool                 showTips;
+    bool                        showTips;
 
-    const int            iconSize;
+    const int                   iconSize;
 
-    QTimer*              toolTipTimer;
-    QTimer*              progressTimer;
+    QTimer*                     toolTipTimer;
+    QTimer*                     progressTimer;
 
-    ThumbnailLoadThread* thumbLoadThread;
+    ThumbnailLoadThread*        thumbLoadThread;
 
-    QueueSettings        settings;
+    QueueSettings               settings;
 
-    AssignedBatchTools   toolsList;
+    AssignedBatchTools          toolsList;
 
-    QueueToolTip*        toolTip;
+    QueueToolTip*               toolTip;
 
-    QueueListViewItem*   toolTipItem;
+    QueueListViewItem*          toolTipItem;
 
-    WorkingPixmap        progressPix;
+    KDcrawIface::WorkingPixmap  progressPix;
 };
 
 QueueListView::QueueListView(QWidget* const parent)

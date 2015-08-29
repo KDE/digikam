@@ -7,7 +7,7 @@
  * Description : helper class used to modify physical albums in views
  *
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -317,7 +317,7 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
         }
 
         // Resorting the tree View after changing metadata
-        DigikamApp::instance()->view()->slotSortAlbums(ApplicationSettings::instance()->getAlbumSortOrder());
+        DigikamApp::instance()->view()->slotSortAlbums(ApplicationSettings::instance()->getAlbumSortRole());
     }
 }
 

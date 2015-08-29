@@ -30,6 +30,7 @@
 
 #include <QPointer>
 #include <QSortFilterProxyModel>
+#include <QTreeView>
 
 // Local includes
 
@@ -254,6 +255,7 @@ protected:
     FilterBehavior             m_filterBehavior;
     SearchTextSettings         m_settings;
     QPointer<AlbumFilterModel> m_chainedModel;
+    QTreeView*                 m_view;
 
 private:
 

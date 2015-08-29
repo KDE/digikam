@@ -32,9 +32,9 @@
 #include <QPixmap>
 #include <QIcon>
 
-// Local includes
+// LibKDcraw includes
 
-#include "workingpixmap.h"
+#include <KDCRAW/RWidgetUtils>
 
 namespace Digikam
 {
@@ -47,11 +47,12 @@ public:
     Private()
     {
         currentPixmap = 0;
+        pixmaps       = KDcrawIface::WorkingPixmap();
     }
 
-    WorkingPixmap pixmaps;
-    int           currentPixmap;
-    QTimer        timer;
+    KDcrawIface::WorkingPixmap pixmaps;
+    int                        currentPixmap;
+    QTimer                     timer;
 };
 
 WorkingWidget::WorkingWidget(QWidget* const parent)

@@ -35,13 +35,16 @@
 
 #include <klocalizedstring.h>
 
+// LibKDcraw includes
+
+#include <KDCRAW/RWidgetUtils>
+
 // Local includes
 
 #include "dimg.h"
 #include "dimgthreadedfilter.h"
 #include "imageiface.h"
 #include "digikam_debug.h"
-#include "workingpixmap.h"
 
 namespace Digikam
 {
@@ -221,15 +224,16 @@ public:
         progressTimer(0),
         wrapper(0)
     {
+        progressPix = KDcrawIface::WorkingPixmap();
     }
 
-    int                   progressCount;
+    int                        progressCount;
 
-    QTimer*               progressTimer;
+    QTimer*                    progressTimer;
 
-    WorkingPixmap         progressPix;
+    KDcrawIface::WorkingPixmap progressPix;
 
-    PreviewThreadWrapper* wrapper;
+    PreviewThreadWrapper*      wrapper;
 };
 
 PreviewList::PreviewList(QObject* const /*parent*/)

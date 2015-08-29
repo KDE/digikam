@@ -47,6 +47,10 @@
 
 #include <klocalizedstring.h>
 
+// LibKDcraw includes
+
+#include <KDCRAW/RWidgetUtils>
+
 // Local includes
 
 #include "dimg.h"
@@ -55,7 +59,6 @@
 #include "digikam_globals.h"
 #include "dimg_debug.h"
 #include "histogrampainter.h"
-#include "workingpixmap.h"
 
 namespace Digikam
 {
@@ -92,32 +95,33 @@ public:
         clearFlag        = HistogramNone;
         progressCount    = 0;
         progressTimer    = 0;
+        progressPix      = KDcrawIface::WorkingPixmap();
     }
 
-    bool              readOnlyMode;
-    bool              guideVisible;
+    bool                           readOnlyMode;
+    bool                           guideVisible;
 
-    int               clearFlag;          // Clear drawing zone with message.
-    int               leftMost;
-    int               rightMost;
-    int               grabPoint;
-    int               last;
-    int               xMouseOver;
-    int               yMouseOver;
-    int               progressCount;      // Position of animation during loading/calculation.
-    ChannelType       channelType;        // Channel type to draw
-    HistogramScale    scaleType;          // Scale to use for drawing
-    ImageHistogram*   imageHistogram;     // Full image
+    int                            clearFlag;          // Clear drawing zone with message.
+    int                            leftMost;
+    int                            rightMost;
+    int                            grabPoint;
+    int                            last;
+    int                            xMouseOver;
+    int                            yMouseOver;
+    int                            progressCount;      // Position of animation during loading/calculation.
+    ChannelType                    channelType;        // Channel type to draw
+    HistogramScale                 scaleType;          // Scale to use for drawing
+    ImageHistogram*                imageHistogram;     // Full image
 
-    QTimer*           progressTimer;
+    QTimer*                        progressTimer;
 
-    WorkingPixmap     progressPix;
+    KDcrawIface::WorkingPixmap     progressPix;
 
-    DColor            colorGuide;
+    DColor                         colorGuide;
 
-    ImageCurves*      curves;             // Curves data instance.
+    ImageCurves*                   curves;             // Curves data instance.
 
-    HistogramPainter* histogramPainter;
+    HistogramPainter*              histogramPainter;
 
     // --- misc methods ---
 

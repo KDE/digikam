@@ -142,8 +142,8 @@ MixerSettings::MixerSettings(QWidget* const parent)
     d->outChannelCB->addItem(i18n("Green"), QVariant(GreenChannel));
     d->outChannelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
 
-    QLabel* const redLabel  = new QLabel(i18n("Red (%):"));
-    d->redGain        = new RDoubleNumInput;
+    QLabel* const redLabel = new QLabel(i18n("Red (%):"));
+    d->redGain             = new RDoubleNumInput;
     d->redGain->setDecimals(1);
     d->redGain->setRange(-200.0, 200.0, 1);
     d->redGain->setDefaultValue(0);
@@ -151,7 +151,7 @@ MixerSettings::MixerSettings(QWidget* const parent)
                                   "for the current channel."));
 
     QLabel* const greenLabel = new QLabel(i18n("Green (%):"));
-    d->greenGain       = new RDoubleNumInput;
+    d->greenGain             = new RDoubleNumInput;
     d->greenGain->setDecimals(1);
     d->greenGain->setRange(-200.0, 200.0, 1);
     d->greenGain->setDefaultValue(0);
@@ -159,7 +159,7 @@ MixerSettings::MixerSettings(QWidget* const parent)
                                     "for the current channel."));
 
     QLabel* const blueLabel = new QLabel(i18n("Blue (%):"));
-    d->blueGain       = new RDoubleNumInput;
+    d->blueGain             = new RDoubleNumInput;
     d->blueGain->setDecimals(1);
     d->blueGain->setRange(-200.0, 200.0, 1);
     d->blueGain->setDefaultValue(0);
@@ -562,7 +562,6 @@ void MixerSettings::loadSettings()
 
     if (fp)
     {
-//        ChannelType currentOutputChannel = RedChannel;
         char buf1[1024];
         char buf2[1024];
         char buf3[1024];
@@ -571,29 +570,9 @@ void MixerSettings::loadSettings()
 
         fgets(buf1, 1023, fp);
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf (fp, "%*s %s", buf1);
-
-//        // Get the current output channel in dialog.
-//
-//        if (strcmp (buf1, "RED") == 0)
-//        {
-//            currentOutputChannel = RedChannel;
-//        }
-//        else if (strcmp (buf1, "GREEN") == 0)
-//        {
-//            currentOutputChannel = GreenChannel;
-//        }
-//        else if (strcmp (buf1, "BLUE") == 0)
-//        {
-//            currentOutputChannel = BlueChannel;
-//        }
-
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s", buf1);  // preview flag, preserved for compatibility
-
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s", buf1);
+        fscanf(fp, "%*s %256s", buf1);
+        fscanf(fp, "%*s %256s", buf1);  // preview flag, preserved for compatibility
+        fscanf(fp, "%*s %256s", buf1);
 
         if (strcmp(buf1, "true") == 0)
         {
@@ -604,8 +583,7 @@ void MixerSettings::loadSettings()
             settings.bMonochrome = false;
         }
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s", buf1);
+        fscanf(fp, "%*s %256s", buf1);
 
         if (strcmp(buf1, "true") == 0)
         {
@@ -616,26 +594,22 @@ void MixerSettings::loadSettings()
             settings.bPreserveLum = false;
         }
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %256s %256s %256s", buf1, buf2, buf3);
         settings.redRedGain   = atof(buf1);
         settings.redGreenGain = atof(buf2);
         settings.redBlueGain  = atof(buf3);
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %256s %256s %256s", buf1, buf2, buf3);
         settings.greenRedGain   = atof(buf1);
         settings.greenGreenGain = atof(buf2);
         settings.greenBlueGain  = atof(buf3);
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %256s %256s %256s", buf1, buf2, buf3);
         settings.blueRedGain   = atof(buf1);
         settings.blueGreenGain = atof(buf2);
         settings.blueBlueGain  = atof(buf3);
 
-        // FIXME: scanf without field width limits can crash with huge input data
-        fscanf(fp, "%*s %s %s %s", buf1, buf2, buf3);
+        fscanf(fp, "%*s %256s %256s %256s", buf1, buf2, buf3);
         settings.blackRedGain   = atof(buf1);
         settings.blackGreenGain = atof(buf2);
         settings.blackBlueGain  = atof(buf3);

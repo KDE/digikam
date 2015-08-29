@@ -9,7 +9,7 @@
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2003-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
- * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2014      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -119,7 +119,7 @@ void ApplicationSettings::readSettings()
         d->albumCategoryNames = collectionList;
     }
 
-    d->albumSortOrder                   = ApplicationSettings::AlbumSortOrder(group.readEntry(d->configAlbumSortOrderEntry,
+    d->albumSortRole                    = ApplicationSettings::AlbumSortRole(group.readEntry(d->configAlbumSortRoleEntry,
                                           (int)ApplicationSettings::ByFolder));
 
     d->imageSortOrder                   = group.readEntry(d->configImageSortOrderEntry,      (int)ImageSortSettings::SortByFileName);
@@ -272,7 +272,7 @@ void ApplicationSettings::saveSettings()
     KConfigGroup group = config->group(d->configGroupDefault);
 
     group.writeEntry(d->configAlbumCollectionsEntry,                   d->albumCategoryNames);
-    group.writeEntry(d->configAlbumSortOrderEntry,                     (int)d->albumSortOrder);
+    group.writeEntry(d->configAlbumSortRoleEntry,                      (int)d->albumSortRole);
     group.writeEntry(d->configImageSortOrderEntry,                     (int)d->imageSortOrder);
     group.writeEntry(d->configImageSortingEntry,                       (int)d->imageSorting);
     group.writeEntry(d->configImageGroupModeEntry,                     (int)d->imageGroupMode);

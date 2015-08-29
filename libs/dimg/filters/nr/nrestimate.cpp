@@ -454,11 +454,9 @@ void NREstimate::startAnalyse()
 
         if (datasd[0] < 7)
             L = datasd[0] - 0.98;
-
-        if (datasd[0] >= 7 && datasd[0] < 8)
+        else if (datasd[0] >= 7 && datasd[0] < 8)
             L = datasd[0] - 1.2;
-
-        if (datasd[0] >= 8 && datasd[0] < 9)
+        else if (datasd[0] >= 8 && datasd[0] < 9)
             L = datasd[0] - 1.5;
         else
             L = datasd[0] - 1.7;
@@ -484,10 +482,8 @@ void NREstimate::startAnalyse()
 
         if ( L > 9 )
             LSoft = CrSoft = CbSoft = 0.8;
-
         else if ( L > 3)
             LSoft = CrSoft = CbSoft = 0.7;
-
         else
             LSoft = CrSoft = CbSoft = 0.6;
     }
