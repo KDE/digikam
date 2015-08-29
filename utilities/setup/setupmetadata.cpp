@@ -104,53 +104,54 @@ public:
         exifSetOrientationBox(0),
         saveToBalooBox(0),
         readFromBalooBox(0),
-        // resyncButton(0),
+//      resyncButton(0),
         tab(0),
         displaySubTab(0),
-        tagsCfgPanel(0)
+        tagsCfgPanel(0),
+        advTab(0)
     {
     }
 
-    bool           exifAutoRotateOriginal;
-    bool           exifAutoRotateShowedInfo;
+    bool                 exifAutoRotateOriginal;
+    bool                 exifAutoRotateShowedInfo;
 
-    QGroupBox*     fieldsGroup;
-    QGroupBox*     readWriteGroup;
-    QGroupBox*     rotationGroup;
-    QGroupBox*     rotationAdvGroup;
+    QGroupBox*           fieldsGroup;
+    QGroupBox*           readWriteGroup;
+    QGroupBox*           rotationGroup;
+    QGroupBox*           rotationAdvGroup;
 
-    QCheckBox*     saveTagsBox;
-    QCheckBox*     saveCommentsBox;
-    QCheckBox*     saveRatingBox;
-    QCheckBox*     savePickLabelBox;
-    QCheckBox*     saveColorLabelBox;
-    QCheckBox*     saveDateTimeBox;
-    QCheckBox*     saveTemplateBox;
-    QCheckBox*     saveFaceTags;
+    QCheckBox*           saveTagsBox;
+    QCheckBox*           saveCommentsBox;
+    QCheckBox*           saveRatingBox;
+    QCheckBox*           savePickLabelBox;
+    QCheckBox*           saveColorLabelBox;
+    QCheckBox*           saveDateTimeBox;
+    QCheckBox*           saveTemplateBox;
+    QCheckBox*           saveFaceTags;
 
-    QCheckBox*     useLazySync;
-    QCheckBox*     writeRawFilesBox;
-    QCheckBox*     writeXMPSidecarBox;
-    QCheckBox*     readXMPSidecarBox;
-    QCheckBox*     updateFileTimeStampBox;
-    QCheckBox*     rescanImageIfModifiedBox;
-    QComboBox*     writingModeCombo;
+    QCheckBox*           useLazySync;
+    QCheckBox*           writeRawFilesBox;
+    QCheckBox*           writeXMPSidecarBox;
+    QCheckBox*           readXMPSidecarBox;
+    QCheckBox*           updateFileTimeStampBox;
+    QCheckBox*           rescanImageIfModifiedBox;
+    QComboBox*           writingModeCombo;
 
-    QRadioButton*  rotateByFlag;
-    QRadioButton*  rotateByContents;
-    QCheckBox*     allowRotateByMetadata;
-    QCheckBox*     allowLossyRotate;
-    QCheckBox*     exifRotateBox;
-    QCheckBox*     exifSetOrientationBox;
+    QRadioButton*        rotateByFlag;
+    QRadioButton*        rotateByContents;
+    QCheckBox*           allowRotateByMetadata;
+    QCheckBox*           allowLossyRotate;
+    QCheckBox*           exifRotateBox;
+    QCheckBox*           exifSetOrientationBox;
 
-    QCheckBox*     saveToBalooBox;
-    QCheckBox*     readFromBalooBox;
-    //QToolButton*   resyncButton;
+    QCheckBox*           saveToBalooBox;
+    QCheckBox*           readFromBalooBox;
+//  QToolButton*         resyncButton;
 
-    QTabWidget*    tab;
-    QTabWidget*    displaySubTab;
+    QTabWidget*          tab;
+    QTabWidget*          displaySubTab;
 
-    MetadataPanel* tagsCfgPanel;
+    MetadataPanel*       tagsCfgPanel;
     AdvancedMetadataTab* advTab;
 };
 
@@ -545,6 +546,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 #endif // HAVE_KFILEMETADATA
 
     //--------------Advanced Metadata Configuration --------------
+
     d->advTab = new AdvancedMetadataTab(this);
     d->tab->insertTab(AdvancedConfig, d->advTab, i18nc("@title:tab", "Advanced Configurations"));
 
@@ -633,6 +635,7 @@ void SetupMetadata::applySettings()
 
 
 #ifdef HAVE_KFILEMETADATA
+
     ApplicationSettings* const aSettings = ApplicationSettings::instance();
 
     if (!aSettings)
@@ -644,7 +647,8 @@ void SetupMetadata::applySettings()
     aSettings->setSyncBalooToDigikam(d->readFromBalooBox->isChecked());
 
     aSettings->saveSettings();
-#endif // HAVE_NEPOMUK
+
+#endif // HAVE_KFILEMETADATA
 
     d->tagsCfgPanel->applySettings();
 
@@ -704,6 +708,7 @@ void SetupMetadata::readSettings()
     }
 
 #ifdef HAVE_KFILEMETADATA
+
     ApplicationSettings* const aSettings = ApplicationSettings::instance();
 
     if (!aSettings)
@@ -713,7 +718,8 @@ void SetupMetadata::readSettings()
 
     d->saveToBalooBox->setChecked(aSettings->getSyncDigikamToBaloo());
     d->readFromBalooBox->setChecked(aSettings->getSyncBalooToDigikam());
-#endif
+
+#endif // HAVE_KFILEMETADATA
 
 }
 
