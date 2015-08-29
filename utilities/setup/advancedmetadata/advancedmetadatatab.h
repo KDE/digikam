@@ -106,7 +106,7 @@ private:
      * @param model - model to be populated
      * @param container - namespace container to get data
      */
-    void setModelData(QStandardItemModel* model, QList<NamespaceEntry> const &container);
+    void setModelData(QStandardItemModel* model, const QList<NamespaceEntry>& container);
     void setUi();
 
     void setDataToItem(QStandardItem* item, NamespaceEntry& entry);
@@ -123,7 +123,7 @@ private:
 
     void setModels();
 
-    void saveModelData(QStandardItemModel *model, QList<NamespaceEntry> &container);
+    void saveModelData(QStandardItemModel* model, QList<NamespaceEntry>& container);
 
 private:
 
