@@ -384,85 +384,93 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
         }
     }
 
-    QString defaultComment = comments.value(QLatin1String("x-default")).caption;
-
+    QString defaultComment        = comments.value(QLatin1String("x-default")).caption;
     QList<NamespaceEntry> toWrite = settings.readCommentNamespaces;
-    if(!settings.unifyReadWrite)
+
+    if (!settings.unifyReadWrite)
         toWrite = settings.writeCommentNamespaces;
 
-    for(NamespaceEntry entry : toWrite)
+    for (NamespaceEntry entry : toWrite)
     {
-        if(entry.isDisabled)
+        if (entry.isDisabled)
             continue;
+
         const std::string myStr = entry.namespaceName.toStdString();
-        const char* nameSpace = myStr.data();
+        const char* nameSpace   = myStr.data();
 
         switch(entry.subspace)
         {
-        case NamespaceEntry::XMP:
-            if(entry.namespaceName.contains(QLatin1String("Xmp.")))
-                removeXmpTag(nameSpace);
+            case NamespaceEntry::XMP:
+                if(entry.namespaceName.contains(QLatin1String("Xmp.")))
+                    removeXmpTag(nameSpace);
 
-            switch(entry.specialOpts)
-            {
-            case NamespaceEntry::COMMENT_ALTLANG:
-                if(!defaultComment.isNull())
+                switch(entry.specialOpts)
                 {
-                    if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
+                    case NamespaceEntry::COMMENT_ALTLANG:
+                        if (!defaultComment.isNull())
+                        {
+                            if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
+                            {
+                                qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
+                                return false;
+                            }
+                        }
+                        break;
+
+                    case NamespaceEntry::COMMENT_ATLLANGLIST:
+                        if (!setXmpTagStringListLangAlt(nameSpace, comments.toAltLangMap(), false))
+                        {
+                            return false;
+                        }
+                        break;
+
+                    case NamespaceEntry::COMMENT_XMP:
+                        if (!defaultComment.isNull())
+                        {
+                            if (!setXmpTagString(nameSpace, defaultComment, false))
+                            {
+                                return false;
+                            }
+                        }
+                        break;
+
+                    case NamespaceEntry::COMMENT_JPEG:
+                        // In first we set image comments, outside of Exif, XMP, and IPTC.
+                        if (!setComments(defaultComment.toUtf8()))
+                        {
+                            return false;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+
+            case NamespaceEntry::IPTC:
+                removeIptcTag(nameSpace);
+
+                if (!defaultComment.isNull())
+                {
+                    defaultComment.truncate(2000);
+
+                    if (!setIptcTagString(nameSpace, defaultComment))
                     {
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
                         return false;
                     }
                 }
                 break;
-            case NamespaceEntry::COMMENT_ATLLANGLIST:
-                if (!setXmpTagStringListLangAlt(nameSpace, comments.toAltLangMap(), false))
-                {
-                    return false;
-                }
-                break;
-            case NamespaceEntry::COMMENT_XMP:
-                if(!defaultComment.isNull())
-                {
-                    if (!setXmpTagString(nameSpace, defaultComment, false))
-                    {
-                        return false;
-                    }
-                }
-            case NamespaceEntry::COMMENT_JPEG:
-                // In first we set image comments, outside of Exif, XMP, and IPTC.
-                if (!setComments(defaultComment.toUtf8()))
-                {
-                    return false;
-                }
 
+            case NamespaceEntry::EXIV:
+                if (!setExifComment(defaultComment))
+                {
+                    return false;
+                }
                 break;
+
             default:
                 break;
-            }
-            break;
-        case NamespaceEntry::IPTC:
-            removeIptcTag(nameSpace);
-            if (!defaultComment.isNull())
-            {
-                defaultComment.truncate(2000);
-
-                if (!setIptcTagString(nameSpace, defaultComment))
-                {
-                    return false;
-                }
-            }
-            break;
-        case NamespaceEntry::EXIV:
-            if (!setExifComment(defaultComment))
-            {
-                return false;
-            }
-            break;
-        default:
-            break;
         }
-
     }
 
     return true;
