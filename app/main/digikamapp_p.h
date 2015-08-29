@@ -81,6 +81,8 @@ public:
     bool    canCancel;
 };
 
+// ------------------------------------------------------------------------------
+
 class DigikamApp::Private
 {
 public:
@@ -183,6 +185,7 @@ public:
         solidUsmActionGroup(0),
         exifOrientationActionGroup(0),
         eventLoop(0),
+        metadataStatusBar(0),
         filterStatusBar(0),
         splashScreen(0),
         view(0),
