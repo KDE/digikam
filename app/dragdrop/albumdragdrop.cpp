@@ -10,6 +10,7 @@
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -336,19 +337,20 @@ Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent* e, const QModelIn
 {
     PAlbum* const destAlbum = model()->albumForIndex(dropIndex);
 
+    if (!destAlbum)
+    {
+        return Qt::IgnoreAction;
+    }
+
+    // Dropping on root is not allowed and
+    // Dropping on trash is not implemented yet
+    if (destAlbum->isRoot() || destAlbum->isTrashAlbum())
+    {
+        return Qt::IgnoreAction;
+    }
+
     if (DAlbumDrag::canDecode(e->mimeData()))
     {
-        // do not allow to drop on root
-        if (dropIndex == model()->rootAlbumIndex())
-        {
-            return Qt::IgnoreAction;
-        }
-
-        if (!destAlbum)
-        {
-            return Qt::IgnoreAction;
-        }
-
         QList<QUrl> urls;
         int         albumId = 0;
 
@@ -382,11 +384,7 @@ Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent* e, const QModelIn
              DCameraItemListDrag::canDecode(e->mimeData()) ||
              e->mimeData()->hasUrls())
     {
-        // Do not allow drop images on album root
-        if (destAlbum && !destAlbum->isRoot())
-        {
-            return Qt::MoveAction;
-        }
+        return Qt::MoveAction;
     }
 
     return Qt::IgnoreAction;
@@ -417,6 +415,12 @@ QMimeData* AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
     }
 
     PAlbum* const palbum = dynamic_cast<PAlbum*>(albums.first());
+
+    // Root and Trash Albums are not dragable
+    if (palbum->isRoot() || palbum->isTrashAlbum())
+    {
+        return 0;
+    }
 
     return (new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id(),
                           palbum ? palbum->fileUrl() : QUrl()));

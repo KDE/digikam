@@ -31,12 +31,13 @@
 
 // Local includes
 
-#include "iccprofile.h"
 #include "metadatawidget.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
+
+class IccProfile;
 
 class DIGIKAM_EXPORT ICCProfileWidget : public MetadataWidget
 {
@@ -60,8 +61,7 @@ public:
     void    setDataLoading();
     void    setUncalibratedColor();
 
-#pragma message("TODO it's a bad idea to pass a call to constructor in a header file, which forces include for iccprofile")
-    bool  setProfile(const IccProfile& profile = IccProfile());
+    bool  setProfile(const IccProfile& profile);
     IccProfile getProfile() const;
 
 protected Q_SLOTS:
