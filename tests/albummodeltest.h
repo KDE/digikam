@@ -43,6 +43,7 @@ class AlbumModelTest: public QObject
     Q_OBJECT
 
 public:
+
     AlbumModelTest();
     virtual ~AlbumModelTest();
 
@@ -76,36 +77,37 @@ private:
 
     void ensureItemCounts();
 
-    QString dbPath;
-    QString tempSuffix;
+private:
 
-    const QString albumCategory;
+    const QString        albumCategory;
 
-    Digikam::PAlbum* palbumRoot0;
-    Digikam::PAlbum* palbumRoot1;
-    Digikam::PAlbum* palbumRoot2;
-    Digikam::PAlbum* palbumChild0Root0;
-    Digikam::PAlbum* palbumChild1Root0;
-    Digikam::PAlbum* palbumChild2Root0;
-    Digikam::PAlbum* palbumChild0Root1;
+    QString              dbPath;
+    QString              tempSuffix;
 
-    Digikam::TAlbum* rootTag;
-    Digikam::TAlbum* talbumRoot0;
-    Digikam::TAlbum* talbumRoot1;
-    Digikam::TAlbum* talbumChild0Root0;
-    Digikam::TAlbum* talbumChild1Root0;
-    Digikam::TAlbum* talbumChild0Child1Root0;
-    Digikam::TAlbum* talbumChild0Root1;
+    Digikam::PAlbum*     palbumRoot0;
+    Digikam::PAlbum*     palbumRoot1;
+    Digikam::PAlbum*     palbumRoot2;
+    Digikam::PAlbum*     palbumChild0Root0;
+    Digikam::PAlbum*     palbumChild1Root0;
+    Digikam::PAlbum*     palbumChild2Root0;
+    Digikam::PAlbum*     palbumChild0Root1;
 
-    QMap<int, int> palbumCountMap;
+    Digikam::TAlbum*     rootTag;
+    Digikam::TAlbum*     talbumRoot0;
+    Digikam::TAlbum*     talbumRoot1;
+    Digikam::TAlbum*     talbumChild0Root0;
+    Digikam::TAlbum*     talbumChild1Root0;
+    Digikam::TAlbum*     talbumChild0Child1Root0;
+    Digikam::TAlbum*     talbumChild0Root1;
+
+    QMap<int, int>       palbumCountMap;
 
     /**
      * This model is used to ensure that adding and changing signals are emitted
      * correctly if the model is created beorre the scanning starts.
      */
     Digikam::AlbumModel* startModel;
-    QList<int> addedIds;
-
+    QList<int>           addedIds;
 };
 
 #endif /* ALBUMMODELTEST_H */
