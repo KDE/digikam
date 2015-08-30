@@ -108,7 +108,6 @@ if(LQR-1_FOUND)
     target_link_libraries(digikamcore PRIVATE ${LQR-1_LIBRARIES})
 endif()
 
-
 if(LENSFUN_FOUND)
     target_include_directories(digikamcore PUBLIC ${LENSFUN_INCLUDE_DIRS})
     target_link_libraries(digikamcore PRIVATE ${LENSFUN_LIBRARIES})
@@ -134,6 +133,8 @@ endif()
 if(KF5KFace_FOUND)
     target_link_libraries(digikamcore PRIVATE ${KF5KFace_LIBRARIES})
 endif()
+
+set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -299,10 +300,12 @@ if(${KF5KGeoMap_FOUND})
 endif()
 
 #################### Digikam GUI shared Lib ################################
+
 add_library(digikamgui
             SHARED
             ${DIGIKAM_OBJECTS}
 )
+
 target_link_libraries(digikamgui
 
                       digikamdatabase
@@ -374,6 +377,8 @@ if(GPHOTO2_FOUND)
         target_link_libraries(digikamgui ${LibUSB1_LIBRARIES})
     endif()
 endif()
+
+set_target_properties(digikamgui PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
 install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
