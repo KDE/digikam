@@ -48,7 +48,6 @@
 namespace Digikam
 {
 
-#pragma message("this should be moved to some common place instead of app/utils..")
 QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObject* receiver, const char* slot)
 {
     QShortcut* const s = new QShortcut(w);
@@ -80,8 +79,10 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
             break;
     }
 
-    bool tiff=false, jpeg=false, jp2k=false;
-    
+    bool tiff = false;
+    bool jpeg = false;
+    bool jp2k = false;
+
     Q_FOREACH(const QByteArray& frm, supported)
     {
         if (QString::fromLatin1(frm).contains(QLatin1String("tif"),  Qt::CaseInsensitive) ||
@@ -90,7 +91,7 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
             tiff = true;
             continue;
         }
-        
+
         if (QString::fromLatin1(frm).contains(QLatin1String("jpg"),  Qt::CaseInsensitive) ||
             QString::fromLatin1(frm).contains(QLatin1String("jpeg"), Qt::CaseInsensitive))
         {
@@ -125,7 +126,7 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
         formats.append(i18n("JPEG Image (*.jpg *.jpeg *.jpe)"));
         allTypes.append(QLatin1String("*.jpg *.jpeg *.jpe "));
     }
-    
+
 #ifdef HAVE_JASPER
     if (jp2k)
     {
