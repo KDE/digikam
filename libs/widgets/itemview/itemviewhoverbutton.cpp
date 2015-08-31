@@ -148,7 +148,7 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
     // draw the icon overlay
     if (m_isHovered)
     {
-#pragma message("hardcoded pixmap sizes")
+        // FIXME; see bugs #261568 about hardcoded pixmap sizes
         QPixmap activeIcon = m_icon.pixmap(48);
         painter.drawPixmap(0, 0, activeIcon);
     }
@@ -161,7 +161,7 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
             QPixmap alphaMask(icon.width(), icon.height());
             const QColor color(m_fadingValue, m_fadingValue, m_fadingValue);
             alphaMask.fill(color);
-            
+
             /* NOTE : old Qt4 code ported to Qt5 due to deprecated QPixmap::setAlphaChannel()
              *        clusterPixmap.setAlphaChannel(alphaPixmap);
              */
@@ -169,7 +169,7 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
             p.setOpacity(0.2);
             p.drawPixmap(0, 0, alphaMask);
             p.end();
-                        
+
             painter.drawPixmap(0, 0, icon);
         }
         else
