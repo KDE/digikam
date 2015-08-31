@@ -88,6 +88,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
 
     ScanController::instance()->suspendCollectionScan();
     qCDebug(DIGIKAM_GENERAL_LOG) << "Wtitting to files +++++++++++++++++++++++++++++++++++";
+
     foreach(const ImageInfo& info, infos)
     {
         if (state() == WorkerObject::Deactivating)
@@ -159,13 +160,11 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         QString format                              = info.format();
         KExiv2::ImageOrientation currentOrientation = (KExiv2::ImageOrientation)info.orientation();
         bool isRaw                                  = info.format().startsWith(QLatin1String("RAW"));
-
-        bool rotateAsJpeg     = false;
-        bool rotateLossy      = false;
+        bool rotateAsJpeg                           = false;
+        bool rotateLossy                            = false;
 
         MetadataSettingsContainer::RotationBehaviorFlags behavior;
-        behavior = MetadataSettings::instance()->settings().rotationBehavior;
-
+        behavior              = MetadataSettings::instance()->settings().rotationBehavior;
         bool rotateByMetadata = (behavior & MetadataSettingsContainer::RotateByMetadataFlag);
 
         // Check if rotation by content, as desired, is feasible
@@ -198,11 +197,10 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         ajustFaceRectangles(info,action);
 
         KExiv2Iface::RotationMatrix matrix;
-        matrix *= currentOrientation;
-        matrix *= (KExiv2Iface::RotationMatrix::TransformationAction)action;
-        KExiv2::ImageOrientation finalOrientation = matrix.exifOrientation();
-
-        bool rotatedPixels = false;
+        matrix                                    *= currentOrientation;
+        matrix                                    *= (KExiv2Iface::RotationMatrix::TransformationAction)action;
+        KExiv2::ImageOrientation finalOrientation  = matrix.exifOrientation();
+        bool rotatedPixels                         = false;
 
         if (rotateAsJpeg)
         {
@@ -308,22 +306,19 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
 
     foreach(const DatabaseFace& dface, facesList)
     {
-        QString name = FaceTags::faceNameForTag(dface.tagId());
-
+        QString name  = FaceTags::faceNameForTag(dface.tagId());
         QRect oldrect = dface.region().toRect();
 
         if(action == 5) // TODO: use enum
         {
             QRect newRect      = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),0);
             ajustedFaces[name] = newRect;
-
         }
 
         if(action == 7) // TODO: use enum
         {
             QRect newRect      = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),1);
             ajustedFaces[name] = newRect;
-
         }
     }
 
