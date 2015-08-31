@@ -50,10 +50,59 @@
 namespace Digikam
 {
 
+QueuePoolBar::QueuePoolBar(QWidget* const parent)
+    : QTabBar(parent)
+{
+  setAcceptDrops(true);
+  setMouseTracking(true);
+}
+
+QueuePoolBar::~QueuePoolBar()
+{
+}    
+
+void QueuePoolBar::dragEnterEvent(QDragEnterEvent* e)
+{
+    int tab = tabAt(e->pos());
+
+    if ( tab != -1 )
+    {
+        bool accept = false;
+        // The receivers of the testCanDecode() signal has to adjust 'accept' accordingly.
+        emit signalTestCanDecode(e, accept);
+
+        e->setAccepted(accept);
+        return;
+    }
+
+    QTabBar::dragEnterEvent(e);
+}
+
+void QueuePoolBar::dragMoveEvent(QDragMoveEvent* e)
+{
+    int tab = tabAt(e->pos());
+
+    if ( tab != -1 )
+    {
+        bool accept = false;
+        // The receivers of the testCanDecode() signal has to adjust 'accept' accordingly.
+        emit signalTestCanDecode(e, accept);
+
+        e->setAccepted(accept);
+        return;
+    }
+
+    QTabBar::dragMoveEvent(e);
+}
+
+// --------------------------------------------------------------------------------------------
+
 QueuePool::QueuePool(QWidget* const parent)
     : QTabWidget(parent)
 {
+    setTabBar(new QueuePoolBar(this));
     setTabsClosable(false);
+    setAcceptDrops(true);
     slotAddQueue();
 
     connect(this, SIGNAL(currentChanged(int)),
@@ -62,9 +111,8 @@ QueuePool::QueuePool(QWidget* const parent)
     connect(this, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotCloseQueueRequest(int)));
 
-#pragma "Port to Qt5"
-    connect(this, SIGNAL(testCanDecode(const QDragMoveEvent*,bool&)),
-            this, SLOT(slotTestCanDecode(const QDragMoveEvent*,bool&)));
+    connect(tabBar(), SIGNAL(signalTestCanDecode(const QDragMoveEvent*, bool&)),
+            this, SLOT(slotTestCanDecode(const QDragMoveEvent*, bool&)));
 
     // -- FileWatch connections ------------------------------
 
