@@ -53,14 +53,15 @@ public Q_SLOTS:
     virtual void assignRating(FileActionImageInfoList, int)                  {};
     virtual void editGroup(int, const ImageInfo&, FileActionImageInfoList)   {};
     virtual void setExifOrientation(FileActionImageInfoList, int)            {};
-    virtual void applyMetadata(FileActionImageInfoList, DisjointMetadata*)   {};
+    virtual void applyMetadata(FileActionImageInfoList, MetadataHub*)        {};
     virtual void copyAttributes(FileActionImageInfoList, const QStringList&) {};
+    virtual void dumySlot(FileActionImageInfoList)                           {};
 
 Q_SIGNALS:
 
-    void writeMetadataToFiles(FileActionImageInfoList* infos);
-    void writeOrientationToFiles(FileActionImageInfoList* infos, int orientation);
-    void writeMetadata(FileActionImageInfoList infos);
+    void writeMetadataToFiles(FileActionImageInfoList infos);
+    void writeOrientationToFiles(FileActionImageInfoList infos, int orientation);
+    void writeMetadata(FileActionImageInfoList infos, MetadataHub* hub);
 };
 
 // ------------------------------------------------------------------------------------
@@ -83,8 +84,9 @@ public:
     void assignRating(FileActionImageInfoList infos, int rating);
     void editGroup(int groupAction, const ImageInfo& pick, FileActionImageInfoList infos);
     void setExifOrientation(FileActionImageInfoList infos, int orientation);
-    void applyMetadata(FileActionImageInfoList infos, DisjointMetadata* hub);
+    void applyMetadata(FileActionImageInfoList infos, MetadataHub* hub);
     void copyAttributes(FileActionImageInfoList infos, const QStringList& derivedPaths);
+    void dumySlot(FileActionImageInfoList infos);
 
 private:
 

@@ -42,8 +42,8 @@ class FileWorkerInterface : public WorkerObject
 
 public Q_SLOTS:
 
-    virtual void writeOrientationToFiles(FileActionImageInfoList*, int){};
-    virtual void writeMetadataToFiles(FileActionImageInfoList*)        {};
+    virtual void writeOrientationToFiles(FileActionImageInfoList, int){};
+    virtual void writeMetadataToFiles(FileActionImageInfoList)        {};
     virtual void writeMetadata(FileActionImageInfoList, MetadataHub*) {};
     virtual void transform(FileActionImageInfoList, int)              {};
 
@@ -67,8 +67,8 @@ public:
 
 public:
 
-    void writeOrientationToFiles(FileActionImageInfoList *infos, int orientation);
-    void writeMetadataToFiles(FileActionImageInfoList* infos);
+    void writeOrientationToFiles(FileActionImageInfoList infos, int orientation);
+    void writeMetadataToFiles(FileActionImageInfoList infos);
     void writeMetadata(FileActionImageInfoList infos, MetadataHub* hub);
     void transform(FileActionImageInfoList infos, int orientation);
     void ajustFaceRectangles(const ImageInfo &info, int action);
