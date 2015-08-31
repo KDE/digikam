@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QMap>
+#include <QTabBar>
 #include <QWidget>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -43,6 +44,28 @@ class DRawDecoding;
 class AssignedBatchTools;
 class QueueSettings;
 class QueueListView;
+
+
+class QueuePoolBar : public QTabBar
+{
+    Q_OBJECT
+
+public:
+
+    QueuePoolBar(QWidget* const parent);
+    ~QueuePoolBar();
+
+Q_SIGNALS:
+    
+    void signalTestCanDecode(const QDragMoveEvent*, bool&);
+
+private:
+
+    void dragEnterEvent(QDragEnterEvent* e);
+    void dragMoveEvent(QDragMoveEvent* e);
+};
+
+// --------------------------------------------------------------------------------------
 
 class QueuePool : public QTabWidget
 {
