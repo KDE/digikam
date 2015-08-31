@@ -43,6 +43,7 @@
 #include "albummanager.h"
 #include "importui.h"
 #include "importiconview.h"
+#include "imagethumbnailbar.h"
 #include "ddragobjects.h"
 #include "dio.h"
 #include "imagecategorizedview.h"
@@ -283,7 +284,16 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         if (droppedOn.isValid())
         {
-            droppedOnInfo = model()->imageInfo(droppedOn);
+            ImageThumbnailBar* const thumbBar = qobject_cast<ImageThumbnailBar*>(abstractview);
+
+            if (thumbBar)
+            {
+                droppedOnInfo = model()->imageInfo(thumbBar->imageFilterModel()->mapToSourceImageModel(droppedOn));
+            }
+            else
+            {
+                droppedOnInfo = model()->imageInfo(droppedOn);
+            }
         }
 
         if (m_readOnly)
