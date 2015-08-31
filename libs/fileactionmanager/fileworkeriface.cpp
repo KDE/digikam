@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList infos, int orientation)
+void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList* infos, int orientation)
 {
     QStringList failedItems;
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, *infos)
     {
         if (state() == WorkerObject::Deactivating)
         {
@@ -69,7 +69,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
             ImageAttributesWatch::instance()->fileMetadataChanged(url);
         }
 
-        infos.writtenToOne();
+        infos->writtenToOne();
     }
 
     if (!failedItems.isEmpty())
@@ -77,20 +77,19 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
         emit imageChangeFailed(i18n("Failed to revise Exif orientation these files:"), failedItems);
     }
 
-    infos.finishedWriting();
+    infos->finishedWriting();
 }
 
-void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList infos)
+void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList *infos)
 {
-    d->startingToWrite(infos);
-
-    MetadataHub hub;
+    d->startingToWrite(*infos);
 
     ScanController::instance()->suspendCollectionScan();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Wtitting to files +++++++++++++++++++++++++++++++++++";
 
-    foreach(const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, *infos)
     {
+        MetadataHub hub;
+
         if (state() == WorkerObject::Deactivating)
         {
             break;
@@ -103,20 +102,20 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
         writeScope.changed(hub.write(filePath, MetadataHub::FullWrite));
         // hub emits fileMetadataChanged
 
-        infos.writtenToOne();
+        infos->writtenToOne();
     }
 
     ScanController::instance()->resumeCollectionScan();
 
-    infos.finishedWriting();
+    infos->finishedWriting();
+
+    delete infos;
 }
 
 void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, MetadataHub* hub)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "post signal infos size " << infos.size();
     d->startingToWrite(infos);
-
-    MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
 
     ScanController::instance()->suspendCollectionScan();
 
@@ -129,7 +128,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, Meta
 
         // apply to file metadata
         ScanController::FileMetadataWrite writeScope(info);
-        writeScope.changed(hub->writeToMetadata(info, MetadataHub::FullWrite, writeSettings));
+        writeScope.changed(hub->writeToMetadata(info, MetadataHub::FullWrite));
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();
