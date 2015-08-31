@@ -88,11 +88,15 @@ class FileActionImageInfoList : public QList<ImageInfo>
 public:
 
     FileActionImageInfoList() {}
+
     FileActionImageInfoList(const FileActionImageInfoList& copy) : QList(copy)
     {
         this->container = copy.container;
     }
+
     ~FileActionImageInfoList() {}
+
+public:
 
     static FileActionImageInfoList create(const QList<ImageInfo>& list);
     static FileActionImageInfoList continueTask(const QList<ImageInfo>& list, FileActionProgressItemContainer* const container);
@@ -127,7 +131,6 @@ private:
 
     QExplicitlySharedDataPointer<FileActionProgressItemContainer> container;
 };
-
 
 } // namespace Digikam
 

@@ -55,6 +55,7 @@ public Q_SLOTS:
     virtual void setExifOrientation(FileActionImageInfoList, int)            {};
     virtual void applyMetadata(FileActionImageInfoList, DisjointMetadata*)   {};
     virtual void copyAttributes(FileActionImageInfoList, const QStringList&) {};
+
 Q_SIGNALS:
 
     void writeMetadataToFiles(FileActionImageInfoList* infos);
