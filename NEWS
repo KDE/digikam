@@ -34,5 +34,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 027 ==> 311135 - digiKam crashed after saving a new version of a modified picture.
 028 ==> 309058 - Database can't be synchronized with XMP sidecars.
 029 ==> 351679 - digiKam does not find album library.
-030 ==> 
-
+030 ==> 350885 - Grouping images via the thumbbar is possible, but they disappear in digikam [patch].
+031 ==> 
