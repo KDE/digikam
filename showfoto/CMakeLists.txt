@@ -72,8 +72,8 @@ target_link_libraries(showfoto
                       KF5::Notifications
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(showfoto PUBLIC ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(showfoto PRIVATE KF5::KGeoMap)
 endif()
 
 if(NOT WIN32)
