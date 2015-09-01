@@ -52,6 +52,11 @@ TagDragDropHandler::TagDragDropHandler(TagModel* const model)
 {
 }
 
+TagModel* TagDragDropHandler::model() const
+{
+    return static_cast<TagModel*>(m_model);
+}
+
 bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                                    const QModelIndex& droppedOn)
 {
@@ -71,8 +76,10 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             return false;
         }
 
-        if(tagIDs.isEmpty())
+        if (tagIDs.isEmpty())
+        {
             return false;
+        }
 
         QMenu popMenu(view);
         QAction* const gotoAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("go-jump")), i18n("&Move Here"));
@@ -81,7 +88,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         popMenu.setMouseTracking(true);
         QAction* const choice     = popMenu.exec(QCursor::pos());
 
-        for(int index=0;index<tagIDs.count();++index)
+        for (int index=0;index<tagIDs.count();++index)
         {
             TAlbum* const talbum = AlbumManager::instance()->findTAlbum(tagIDs.at(index));
 
@@ -123,6 +130,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 }
             }
         }
+
         return true;
     }
     else if (DItemDrag::canDecode(e->mimeData()))
@@ -191,7 +199,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
         QList<Album*> selTags = ((AbstractAlbumTreeView*)view)->selectedItems();
 
-        for(int it = 0 ; it < selTags.count(); ++it)
+        for (int it = 0 ; it < selTags.count(); ++it)
         {
             TAlbum* const temp = dynamic_cast<TAlbum*>(selTags.at(it));
 
@@ -204,7 +212,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
         // If nothing selected, use dropped on tag
 
-        if(tagIdList.isEmpty())
+        if (tagIdList.isEmpty())
         {
             tagIdList << destAlbum->id();
             tagNames << destAlbum->title();
@@ -330,7 +338,7 @@ QMimeData* TagDragDropHandler::createMimeData(const QList<Album*>& albums)
 
     QList<int> ids;
 
-    foreach(Album* const album, albums)
+    foreach (Album* const album, albums)
     {
         ids << album->id();
     }

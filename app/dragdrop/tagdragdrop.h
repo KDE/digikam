@@ -40,10 +40,7 @@ public:
 
     explicit TagDragDropHandler(TagModel* const model);
 
-    TagModel* model() const
-    {
-        return static_cast<TagModel*>(m_model);
-    }
+    TagModel* model() const;
 
     virtual bool dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);

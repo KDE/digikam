@@ -74,13 +74,14 @@ QStringList DItemDrag::mimeTypes()
 
 bool DItemDrag::canDecode(const QMimeData* e)
 {
-    foreach(const QString& mimeType, mimeTypes())
+    foreach (const QString& mimeType, mimeTypes())
     {
         if (!e->hasFormat(mimeType))
         {
             return false;
         }
     }
+
     return true;
 }
 
@@ -179,13 +180,14 @@ bool DAlbumDrag::canDecode(const QMimeData* e)
         return false;
     }
 
-    foreach(const QString& mimeType, mimeTypes())
+    foreach (const QString& mimeType, mimeTypes())
     {
         if (!e->hasFormat(mimeType))
         {
             return false;
         }
     }
+
     return true;
 }
 

@@ -193,6 +193,11 @@ ImageDragDropHandler::ImageDragDropHandler(ImageModel* const model)
 {
 }
 
+ImageModel* ImageDragDropHandler::model() const
+{
+    return static_cast<ImageModel*>(m_model);
+}
+
 ImageAlbumModel* ImageDragDropHandler::albumModel() const
 {
     return qobject_cast<ImageAlbumModel*>(model());
@@ -462,7 +467,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         QList<int> tagIDs;
         bool isDecoded = DTagListDrag::decode(e->mimeData(), tagIDs);
 
-        if(!isDecoded)
+        if (!isDecoded)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Deconding failed!";
             return false;

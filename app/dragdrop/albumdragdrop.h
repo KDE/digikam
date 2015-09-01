@@ -42,10 +42,7 @@ public:
 
     explicit AlbumDragDropHandler(AlbumModel* const model);
 
-    AlbumModel* model() const
-    {
-        return static_cast<AlbumModel*>(m_model);
-    }
+    AlbumModel* model() const;
 
     virtual bool dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);

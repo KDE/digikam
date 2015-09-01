@@ -95,10 +95,10 @@ ImportDragDropHandler::DropAction ImportDragDropHandler::copyOrMove(const QDropE
 
     if (allowMove)
     {
-        moveAction = popMenu.addAction( QIcon::fromTheme(QLatin1String("go-jump")), i18n("&Move Here"));
+        moveAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("go-jump")), i18n("&Move Here"));
     }
 
-    QAction* const copyAction = popMenu.addAction( QIcon::fromTheme(QLatin1String("edit-copy")), i18n("&Copy Here"));
+    QAction* const copyAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("&Copy Here"));
     popMenu.addSeparator();
 
     QAction* groupAction = 0;
@@ -225,7 +225,7 @@ QMimeData* ImportDragDropHandler::createMimeData(const QList<QModelIndex>& index
 
     QStringList lst;
 
-    foreach(CamItemInfo info, infos)
+    foreach (CamItemInfo info, infos)
     {
         lst.append(info.folder + info.name);
     }

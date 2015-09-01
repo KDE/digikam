@@ -55,6 +55,11 @@ AlbumDragDropHandler::AlbumDragDropHandler(AlbumModel* const model)
 {
 }
 
+AlbumModel* AlbumDragDropHandler::model() const
+{
+    return static_cast<AlbumModel*>(m_model);
+}
+
 bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn)
 {
     if (accepts(e, droppedOn) == Qt::IgnoreAction)
@@ -417,13 +422,12 @@ QMimeData* AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
     PAlbum* const palbum = dynamic_cast<PAlbum*>(albums.first());
 
     // Root and Trash Albums are not dragable
-    if (palbum->isRoot() || palbum->isTrashAlbum())
+    if (!palbum || palbum->isRoot() || palbum->isTrashAlbum())
     {
         return 0;
     }
 
-    return (new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id(),
-                          palbum ? palbum->fileUrl() : QUrl()));
+    return (new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id(), palbum->fileUrl()));
 }
 
 } // namespace Digikam

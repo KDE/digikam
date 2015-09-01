@@ -45,11 +45,7 @@ public:
 
     explicit ImageDragDropHandler(ImageModel* const model);
 
-    ImageModel* model() const
-    {
-        return static_cast<ImageModel*>(m_model);
-    }
-
+    ImageModel*      model()      const;
     ImageAlbumModel* albumModel() const;
 
     /**
