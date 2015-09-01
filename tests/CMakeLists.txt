@@ -45,8 +45,8 @@ target_link_libraries(dimagefilteractiontest
                       ${OpenCV_LIBRARIES}
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(dimagefilteractiontest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(dimagefilteractiontest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -76,8 +76,8 @@ target_link_libraries(dimagehistorygraphtest
                       ${OpenCV_LIBRARIES}
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(dimagehistorygraphtest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(dimagehistorygraphtest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -103,8 +103,8 @@ target_link_libraries(dimagehistorytest
                       ${OpenCV_LIBRARIES}
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(dimagehistorytest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(dimagehistorytest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -120,8 +120,8 @@ target_link_libraries(loadpgfdata
                       KF5::KIOCore
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(loadpgfdata ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(loadpgfdata PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -140,8 +140,8 @@ target_link_libraries(loadsavethreadtest
 )
 
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(loadsavethreadtest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(loadsavethreadtest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -157,8 +157,8 @@ target_link_libraries(pgfscaled
                       KF5::KIOCore
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(pgfscaled ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(pgfscaled PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -174,8 +174,8 @@ target_link_libraries(qtpgftest
                       KF5::KIOCore
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(qtpgftest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(qtpgftest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -204,8 +204,8 @@ target_link_libraries(renamecustomizertest
                       ${OpenCV_LIBRARIES}
 )
 
-if(KF5KFace_FOUND)
-    target_link_libraries(renamecustomizertest  ${KF5KFace_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(renamecustomizertest PRIVATE KF5::KGeoMap)
 endif()
 #------------------------------------------------------------------------
 
@@ -225,8 +225,8 @@ target_link_libraries(searchtextbartest
                       Qt5::Test
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(searchtextbartest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(searchtextbartest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -246,8 +246,8 @@ target_link_libraries(freerotationtest
                       Qt5::Test
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(freerotationtest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(freerotationtest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -271,8 +271,8 @@ target_link_libraries(timestampupdatetest
                       KF5::KExiv2
                      )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(timestampupdatetest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(timestampupdatetest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -297,8 +297,8 @@ if(GPHOTO2_FOUND)
     target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
 endif()
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(statesavingobjecttest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(statesavingobjecttest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -321,8 +321,8 @@ target_link_libraries(testautocrop
                       ${OpenCV_LIBRARIES}
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(testautocrop ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(testautocrop PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -382,8 +382,8 @@ target_link_libraries(testdimgloader
                       ${OpenCV_LIBRARIES}
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(testdimgloader ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(testdimgloader PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -416,8 +416,8 @@ if(LENSFUN_FOUND)
         target_link_libraries(testlensfuniface ${KVM_LIBRARY})
     endif()
 
-    if(${KF5KGeoMap_FOUND})
-        target_link_libraries(testlensfuniface ${KF5KGeoMap_LIBRARIES})
+    if(KF5KGeoMap_FOUND)
+        target_link_libraries(testlensfuniface PRIVATE KF5::KGeoMap)
     endif()
 
 endif()
@@ -445,8 +445,8 @@ target_link_libraries(testnrestimate
                       ${OpenCV_LIBRARIES}
 )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(testnrestimate ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(testnrestimate PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -483,8 +483,8 @@ if(GPHOTO2_FOUND)
     target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
 endif()
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(cameranamehelpertest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(cameranamehelpertest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
@@ -563,8 +563,8 @@ target_link_libraries(advancedrenametest
                        Qt5::Test
  )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(filesaveoptionsboxtest ${KF5KGeoMap_LIBRARIES})
+if(KF5KGeoMap_FOUND)
+    target_link_libraries(filesaveoptionsboxtest PRIVATE KF5::KGeoMap)
 endif()
 
 #------------------------------------------------------------------------
