@@ -590,9 +590,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${QT5_INCLUDES_ALL}
                        )
 
-    # libgphoto2 library rules
-    message(INFO "gphoto2 includes are required only to display the version in the about data/component info, refactor")
-
     if(GPHOTO2_FOUND)
         include_directories(${GPHOTO2_INCLUDE_DIRS})
     endif()
