@@ -190,7 +190,9 @@ void AdvancedMetadataTab::slotAddNewNamespace()
 void AdvancedMetadataTab::slotEditNamespace()
 {
     if (!d->namespaceView->currentIndex().isValid())
+    {
         return;
+    }
 
     NamespaceEntry entry = getCurrentContainer().at(d->namespaceView->currentIndex().row());
 
@@ -303,9 +305,8 @@ void AdvancedMetadataTab::setModelData(QStandardItemModel* model, const QList<Na
 void AdvancedMetadataTab::setUi()
 {
     QVBoxLayout* const advancedConfLayout = new QVBoxLayout(this);
-
-    QHBoxLayout* const topLayout = new QHBoxLayout();
-    QHBoxLayout* const bottomLayout = new QHBoxLayout();
+    QHBoxLayout* const topLayout          = new QHBoxLayout();
+    QHBoxLayout* const bottomLayout       = new QHBoxLayout();
 
     QLabel* const tipLabel = new QLabel(this);
     tipLabel->setTextFormat(Qt::RichText);
@@ -318,11 +319,9 @@ void AdvancedMetadataTab::setUi()
     //--- Top layout ----------------
 
     d->metadataType  = new QComboBox(this);
-
     d->operationType = new QComboBox(this);
 
     d->metadataType->insertItems(0, QStringList() << i18n("Tags") << i18n("Ratings") << i18n("Comments"));
-
     d->operationType->insertItems(0, QStringList() << i18n("Read Options") << i18n("Write Options"));
 
     d->unifyReadWrite = new QCheckBox(i18n("Unify read and write"));
@@ -336,15 +335,15 @@ void AdvancedMetadataTab::setUi()
     // View
     d->namespaceView = new NamespaceListView(this);
 
-
     // Buttons
     QVBoxLayout* const buttonsLayout = new QVBoxLayout();
     buttonsLayout->setAlignment(Qt::AlignTop);
 
     d->addButton      = new QPushButton(QIcon::fromTheme(QLatin1String("list-add")),
-                                     i18n("Add"));
+                                        i18n("Add"));
+
     d->editButton     = new QPushButton(QIcon::fromTheme(QLatin1String("document-edit")),
-                                                         i18n("Edit"));
+                                        i18n("Edit"));
 
     d->deleteButton   = new QPushButton(QIcon::fromTheme(QLatin1String("window-close")),
                                         i18n("Delete"));
@@ -409,7 +408,9 @@ void AdvancedMetadataTab::setDataToItem(QStandardItem* item, NamespaceEntry& ent
     item->setCheckable(true);
 
     if (!entry.isDisabled)
+    {
         item->setCheckState(Qt::Checked);
+    }
 }
 
 int AdvancedMetadataTab::getModelIndex()
@@ -452,7 +453,9 @@ void AdvancedMetadataTab::setModels()
 {
     // Append 6 empty models
     for(int i = 0 ; i < 6; i++)
+    {
         d->models.append(new QStandardItemModel(this));
+    }
 
     setModelData(d->models.at(READ_TAGS), d->container.readTagNamespaces);
     setModelData(d->models.at(READ_RATINGS), d->container.readRatingNamespaces);
@@ -470,7 +473,9 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel* model, QList<Namespa
     QStandardItem* const root = model->invisibleRootItem();
 
     if (!root->hasChildren())
+    {
         return;
+    }
 
     for (int i = 0 ; i < root->rowCount(); i++)
     {
@@ -491,17 +496,21 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel* model, QList<Namespa
             ns.convertRatio.append(current->data(FIVESTAR_ROLE).toInt());
         }
 
-        ns.specialOpts          = (NamespaceEntry::SpecialOptions)current->data(SPECIALOPTS_ROLE).toInt();
-        ns.alternativeName      = current->data(ALTNAME_ROLE).toString();
-        ns.subspace             = (NamespaceEntry::NsSubspace)current->data(SUBSPACE_ROLE).toInt();
-        ns.secondNameOpts       = (NamespaceEntry::SpecialOptions)current->data(ALTNAMEOPTS_ROLE).toInt();
-        ns.index                = i;
-        ns.isDefault            = current->data(ISDEFAULT_ROLE).toBool();
+        ns.specialOpts     = (NamespaceEntry::SpecialOptions)current->data(SPECIALOPTS_ROLE).toInt();
+        ns.alternativeName = current->data(ALTNAME_ROLE).toString();
+        ns.subspace        = (NamespaceEntry::NsSubspace)current->data(SUBSPACE_ROLE).toInt();
+        ns.secondNameOpts  = (NamespaceEntry::SpecialOptions)current->data(ALTNAMEOPTS_ROLE).toInt();
+        ns.index           = i;
+        ns.isDefault       = current->data(ISDEFAULT_ROLE).toBool();
 
         if (current->checkState() == Qt::Checked)
+        {
             ns.isDisabled = false;
+        }
         else
+        {
             ns.isDisabled = true;
+        }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "saving+++++" << ns.namespaceName << " " << ns.index << " " << ns.specialOpts;
         container.append(ns);

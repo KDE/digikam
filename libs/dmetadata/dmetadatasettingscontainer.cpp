@@ -176,7 +176,7 @@ void DMetadataSettingsContainer::defaultTagValues()
     tagNs8.separator        = QLatin1String(";");
     tagNs8.nsType           = NamespaceEntry::TAGS;
     tagNs8.index            = 7;
-    tagNs8.subspace         = NamespaceEntry::EXIV;
+    tagNs8.subspace         = NamespaceEntry::EXIF;
 
     readTagNamespaces.append(tagNs1);
     readTagNamespaces.append(tagNs2);
@@ -229,14 +229,14 @@ void DMetadataSettingsContainer::defaultRatingValues()
     ratingNs4.convertRatio  = defaultVal;
     ratingNs4.nsType        = NamespaceEntry::RATING;
     ratingNs4.index         = 3;
-    ratingNs4.subspace      = NamespaceEntry::EXIV;
+    ratingNs4.subspace      = NamespaceEntry::EXIF;
 
     NamespaceEntry ratingNs5;
     ratingNs5.namespaceName = QLatin1String("Exif.Image.0x4749");
     ratingNs5.convertRatio  = microsoftMappings;
     ratingNs5.nsType        = NamespaceEntry::RATING;
     ratingNs5.index         = 4;
-    ratingNs5.subspace      = NamespaceEntry::EXIV;
+    ratingNs5.subspace      = NamespaceEntry::EXIF;
 
     NamespaceEntry ratingNs6;
     ratingNs6.namespaceName = QLatin1String("Iptc.Application2.Urgency");
@@ -301,7 +301,7 @@ void DMetadataSettingsContainer::defaultCommentValues()
     commNs6.specialOpts     = NamespaceEntry::NO_OPTS;
     commNs6.index           = 5;
     commNs6.alternativeName = QLatin1String("Exif.Photo.UserComment");
-    commNs6.subspace        = NamespaceEntry::EXIV;
+    commNs6.subspace        = NamespaceEntry::EXIF;
 
     NamespaceEntry commNs7;
     commNs7.namespaceName   = QLatin1String("Iptc.Application2.Caption");

@@ -43,7 +43,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-//#include "contextmenuhelper.h"
 
 namespace Digikam
 {
@@ -98,7 +97,7 @@ QModelIndex NamespaceListView::indexVisuallyAt(const QPoint& p)
 
 //    TagList* const tagList = dynamic_cast<TagList*>(this->parent());
 
-//    if(!tagList)
+//    if (!tagList)
 //    {
 //        return;
 //    }
@@ -107,7 +106,8 @@ QModelIndex NamespaceListView::indexVisuallyAt(const QPoint& p)
 //    cmhelper.addAction(delAction, tagList, SLOT(slotDeleteSelected()),false);
 
 //    QModelIndexList sel = this->selectionModel()->selectedIndexes();
-//    if(sel.size() == 1 && sel.first().row() == 0)
+//
+//    if (sel.size() == 1 && sel.first().row() == 0)
 //        delAction->setDisabled(true);
 
 //    cmhelper.exec(QCursor::pos());
@@ -118,7 +118,9 @@ void NamespaceListView::slotDeleteSelected()
     QModelIndexList sel = this->selectionModel()->selectedIndexes();
 
     if (sel.isEmpty())
+    {
         return;
+    }
 
     QStandardItemModel* const model = dynamic_cast<QStandardItemModel*>(this->model());
 
@@ -142,7 +144,9 @@ void NamespaceListView::slotMoveItemUp()
     QModelIndexList sel = this->selectionModel()->selectedIndexes();
 
     if (sel.isEmpty())
+    {
         return;
+    }
 
     QStandardItemModel* const model = dynamic_cast<QStandardItemModel*>(this->model());
 
@@ -155,7 +159,9 @@ void NamespaceListView::slotMoveItemUp()
     QModelIndex index = sel.first();
 
     if (index.row() == 0)
+    {
         return;
+    }
 
     QStandardItem* const root    = model->invisibleRootItem();
     int savedRow                 = index.row();
@@ -175,7 +181,9 @@ void NamespaceListView::slotMoveItemDown()
     QModelIndexList sel = this->selectionModel()->selectedIndexes();
 
     if (sel.isEmpty())
+    {
         return;
+    }
 
     QStandardItemModel* const model = dynamic_cast<QStandardItemModel*>(this->model());
 
@@ -190,10 +198,12 @@ void NamespaceListView::slotMoveItemDown()
     QStandardItem* const root = model->invisibleRootItem();
 
     if (index.row() == root->rowCount()-1)
+    {
         return;
+    }
 
-    int savedRow = index.row();
-    QStandardItem* const item = root->child(index.row());
+    int savedRow                 = index.row();
+    QStandardItem* const item    = root->child(index.row());
     QStandardItem* const newCopy = item->clone();
 
 

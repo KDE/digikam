@@ -324,7 +324,7 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
             case NamespaceEntry::IPTC:
                 commentString = getIptcTagString(nameSpace, false);
                 break;
-            case NamespaceEntry::EXIV:
+            case NamespaceEntry::EXIF:
                 commentString = getExifComment();
                 break;
             default:
@@ -461,7 +461,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
                 }
                 break;
 
-            case NamespaceEntry::EXIV:
+            case NamespaceEntry::EXIF:
                 if (!setExifComment(defaultComment))
                 {
                     return false;
@@ -673,7 +673,7 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
             if(iptcSupported)
                 value = QString::fromUtf8(getIptcTagData(nameSpace));
             break;
-        case NamespaceEntry::EXIV:
+        case NamespaceEntry::EXIF:
             if(exivSupported)
                 getExifTagLong(nameSpace, rating);
             break;
@@ -813,7 +813,7 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
                 return false;
             }
             break;
-        case NamespaceEntry::EXIV:
+        case NamespaceEntry::EXIF:
             if (!setExifTagLong(nameSpace, rating))
             {
                 return false;
@@ -1266,7 +1266,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
                 return true;
             }
             break;
-        case NamespaceEntry::EXIV:
+        case NamespaceEntry::EXIF:
         {
             // Try to get Tags Path list from Exif Windows keywords.
             QString keyWords = getExifTagString("Exif.Image.XPKeywords", false);

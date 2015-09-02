@@ -36,7 +36,7 @@
 #include "dmetadatasettingscontainer.h"
 
 namespace Digikam
-{
+{    
 
 class NamespaceEditDlg : public QDialog
 {
@@ -47,10 +47,10 @@ public:
     NamespaceEditDlg( bool create, NamespaceEntry& entry, QWidget* const parent = 0);
     ~NamespaceEditDlg();
 
+    void saveData(NamespaceEntry& entry);
+
     static bool create(QWidget* const parent, NamespaceEntry& entry);
     static bool edit(QWidget* const parent, NamespaceEntry& entry);
-
-    void saveData(NamespaceEntry& entry);
 
 public Q_SLOTS:
 

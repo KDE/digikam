@@ -51,7 +51,7 @@ public:
 
     enum NsSubspace
     {
-        EXIV = 0,
+        EXIF = 0,
         IPTC = 1,
         XMP  = 2
     };
