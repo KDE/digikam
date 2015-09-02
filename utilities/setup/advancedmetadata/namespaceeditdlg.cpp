@@ -59,45 +59,45 @@ public:
 
     Private()
     {
-        buttons             = 0;
-        create              = 0;
-        topLabel            = 0;
-        logo                = 0;
-        gridLayout          = 0;
-        page                = 0;
+        buttons              = 0;
+        create               = 0;
+        topLabel             = 0;
+        logo                 = 0;
+        gridLayout           = 0;
+        page                 = 0;
 
         // NamespaceEntry variables
-        subspaceCombo       = 0;
-        specialOptsCombo    = 0;
-        altSpecialOptsCombo = 0;
-        namespaceName       = 0;
-        alternativeName     = 0;
-        nameSpaceSeparator  = 0;
-        isPath              = 0;
-        ratingMappings      = 0;
+        subspaceCombo        = 0;
+        specialOptsCombo     = 0;
+        altSpecialOptsCombo  = 0;
+        namespaceName        = 0;
+        alternativeName      = 0;
+        nameSpaceSeparator   = 0;
+        isPath               = 0;
+        ratingMappings       = 0;
 
-        zeroStars           = 0;
-        oneStar             = 0;
-        twoStars            = 0;
-        threeStars          = 0;
-        fourStars           = 0;
-        fiveStars           = 0;
+        zeroStars            = 0;
+        oneStar              = 0;
+        twoStars             = 0;
+        threeStars           = 0;
+        fourStars            = 0;
+        fiveStars            = 0;
 
         // Labels
-        tagTipLabel         = 0;
-        ratingTipLabel      = 0;
-        commentTipLabel     = 0;
-        subspaceLabel       = 0;
-        titleLabel          = 0;
-        specialOptsLabel    = 0;
-        alternativeNameLabel = 0 ;
-        altspecialOptsLabel = 0;
-        isTagLabel          = 0;
-        separatorLabel      = 0;
+        tagTipLabel          = 0;
+        ratingTipLabel       = 0;
+        commentTipLabel      = 0;
+        subspaceLabel        = 0;
+        titleLabel           = 0;
+        specialOptsLabel     = 0;
+        alternativeNameLabel = 0;
+        altspecialOptsLabel  = 0;
+        isTagLabel           = 0;
+        separatorLabel       = 0;
 
-        tipLabel2           = 0;
+        tipLabel2            = 0;
 
-        nsType              = NamespaceEntry::TAGS;
+        nsType               = NamespaceEntry::TAGS;
     }
 
     QDialogButtonBox*               buttons;
