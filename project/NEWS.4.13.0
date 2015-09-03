@@ -1,0 +1,39 @@
+*****************************************************************************************************
+digiKam 4.13.0 - Release date: 2015-08-30
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 350915 - digiKam 4.11.0 fails to compile with jpeg-9a [patch].
+002 ==> 343548 - Tag Manager crashes when adding a new tag.
+003 ==> 350541 - PNG alpha channel is ignored [patch].
+004 ==> 229788 - digiKam crashes fetching pictures SD-Card.
+005 ==> 298265 - Embedded preview changes from full to reduced size regardless album view settings [patch].
+006 ==> 351142 - Add metadata tags support for video files time-stamp.
+007 ==> 334244 - Face tag zones are hidden after adding a new face.
+008 ==> 351243 - Table view click to select broken.
+009 ==> 350225 - Auto rename on import does not work for RAW images.
+010 ==> 346646 - Renaming works when downloading selected but settings are ignored when importing new ones only.
+011 ==> 351245 - Unable to connect to mysql database, due to missing 'create trigger' while user has ALL privileges on digikam DBs.
+012 ==> 351404 - Wrong country name in country list.
+013 ==> 351244 - Target album should be source album by default.
+014 ==> 349901 - Delete shortcut key needed and should be Apple+delete.
+015 ==> 349878 - digiKam Crashes when running maintenance.
+016 ==> 350930 - UI freeze when importing to remote storage.
+017 ==> 313390 - RAW images cannot be decoded if selected from within the image editor.
+018 ==> 329873 - Crash during face detection.
+019 ==> 351241 - Table view shows wrong thumbnails [patch].
+020 ==> 303545 - digiKam crash when importing photos from a camera.
+021 ==> 344521 - digiKam crashes when trying to define one more face.
+022 ==> 304952 - digiKam thumbnails don't load, even after rebuild thumbnails and application crashes.
+023 ==> 341685 - Tags disappear on some photos after a few days.
+024 ==> 346070 - Crash during "maintenance".
+025 ==> 347348 - Moving a directory loses metadata in database associated with .cr2 raw files.
+026 ==> 269634 - Crash when adding tags.
+027 ==> 311135 - digiKam crashed after saving a new version of a modified picture.
+028 ==> 309058 - Database can't be synchronized with XMP sidecars.
+029 ==> 351679 - digiKam does not find album library.
+030 ==> 350885 - Grouping images via the thumbbar is possible, but they disappear in digikam [patch].
+031 ==> 352040 - Names for faces do not take non-ASCII characters.
+032 ==> 
