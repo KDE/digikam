@@ -186,7 +186,6 @@ bool IccSettings::monitorProfileFromSystem() const
  *               2004 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>
- * IccProfile Private::profileForScreen(QWidget* widget)
 */
 IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 {
