@@ -97,13 +97,13 @@ void IOJobsTest::copyAndMove()
     QThreadPool::globalInstance()->start(job);
     QThreadPool::globalInstance()->waitForDone();
 
+    delete job;
+
     QFileInfo dstFiAfterCopy(pathToCheckInDst);
 
     QCOMPARE(dstFiAfterCopy.exists(), shouldExistInDst);
     srcFi.refresh();
     QCOMPARE(srcFi.exists(), !isMove);
-
-    delete job;
 }
 
 void IOJobsTest::copyAndMove_data()
@@ -141,6 +141,36 @@ void IOJobsTest::copyAndMove_data()
             << true
             << true
             << (destPath + testFolderName + QDir::separator() + testFileName);
+}
+
+void IOJobsTest::permanentDel()
+{
+    QFETCH(QString, srcToDel);
+
+    QFileInfo fi(srcToDel);
+
+    QUrl fileUrl = QUrl::fromLocalFile(fi.absoluteFilePath());
+
+    DeleteJob* job = new DeleteJob(fileUrl, false);
+
+    QThreadPool::globalInstance()->start(job);
+    QThreadPool::globalInstance()->waitForDone();
+
+    delete job;
+
+    fi.refresh();
+    QVERIFY(!fi.exists());
+}
+
+void IOJobsTest::permanentDel_data()
+{
+    QTest::addColumn<QString>("srcToDel");
+
+    QTest::newRow(qPrintable(QLatin1String("Deleting File")))
+            << testFilePath;
+
+    QTest::newRow(qPrintable(QLatin1String("Deleting Folder")))
+            << testFolderPath;
 }
 
 QTEST_MAIN(IOJobsTest)

@@ -40,7 +40,8 @@ private Q_SLOTS:
     void copyAndMove();
     void copyAndMove_data();
 
-//    void del();
+    void permanentDel();
+    void permanentDel_data();
 //    void rename();
 };
 
