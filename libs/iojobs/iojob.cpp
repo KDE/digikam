@@ -121,7 +121,6 @@ void CopyJob::run()
     {
         if(srcInfo.isDir())
         {
-            qCDebug(DIGIKAM_IOJOB_LOG) << "IT IS DIR";
             QDir srcDir(srcInfo.filePath());
 
             if (!srcDir.rename(srcDir.path(), destenation))
