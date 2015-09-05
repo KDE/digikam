@@ -86,9 +86,6 @@ void IOJobsTest::copyAndMove()
     QFileInfo srcFi(src);
     QFileInfo dstFi(dst);
 
-    QVERIFY(srcFi.exists());
-    QVERIFY(dstFi.exists());
-
     QUrl srcUrl = QUrl::fromLocalFile(srcFi.absoluteFilePath());
     QUrl dstUrl = QUrl::fromLocalFile(dstFi.absoluteFilePath());
 
