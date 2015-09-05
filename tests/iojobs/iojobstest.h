@@ -28,11 +28,6 @@
 
 #include <QObject>
 
-//namespace Digikam
-//{
-//class IOJob;
-//}
-
 class IOJobsTest : public QObject
 {
     Q_OBJECT

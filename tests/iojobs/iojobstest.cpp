@@ -81,6 +81,7 @@ void IOJobsTest::copyAndMove()
     QFETCH(QString, dst);
     QFETCH(bool, isMove);
     QFETCH(bool, shouldExistInDst);
+    QFETCH(QString, pathToCheckInDst);
 
     QFileInfo srcFi(src);
     QFileInfo dstFi(dst);
@@ -96,15 +97,7 @@ void IOJobsTest::copyAndMove()
     QThreadPool::globalInstance()->start(job);
     QThreadPool::globalInstance()->waitForDone();
 
-    QFileInfo dstFiAfterCopy;
-    if (srcFi.isDir())
-    {
-        dstFiAfterCopy = QFileInfo(dst + testFolderName + QDir::separator() + testFileName);
-    }
-    else
-    {
-        dstFiAfterCopy = QFileInfo(dst + testFileName);
-    }
+    QFileInfo dstFiAfterCopy(pathToCheckInDst);
 
     QCOMPARE(dstFiAfterCopy.exists(), shouldExistInDst);
     srcFi.refresh();
@@ -119,30 +112,35 @@ void IOJobsTest::copyAndMove_data()
     QTest::addColumn<QString>("dst");
     QTest::addColumn<bool>("isMove");
     QTest::addColumn<bool>("shouldExistInDst");
+    QTest::addColumn<QString>("pathToCheckInDst");
 
     QTest::newRow(qPrintable(QLatin1String("Copying file")))
             << testFilePath
             << destPath
             << false
-            << true;
+            << true
+            << (destPath + testFileName);
 
     QTest::newRow(qPrintable(QLatin1String("Moving file")))
             << testFilePath
             << destPath
             << true
-            << true;
+            << true
+            << (destPath + testFileName);
 
     QTest::newRow(qPrintable(QLatin1String("Copying Folder")))
             << testFolderPath
             << destPath
             << false
-            << true;
+            << true
+            << (destPath + testFolderName + QDir::separator() + testFileName);
 
     QTest::newRow(qPrintable(QLatin1String("Moving Folder")))
             << testFolderPath
             << destPath
             << true
-            << true;
+            << true
+            << (destPath + testFolderName + QDir::separator() + testFileName);
 }
 
 QTEST_MAIN(IOJobsTest)
