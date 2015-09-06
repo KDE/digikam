@@ -389,7 +389,10 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
         }
 
         case MapWidgetView::ApplicationImportUI:
-            return index.data(ImportImageModel::ThumbnailRole).value<QPixmap>();
+        {
+            QPixmap thumbnail = index.data(ImportImageModel::ThumbnailRole).value<QPixmap>();
+            return thumbnail.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
     }
 
     return QPixmap();
