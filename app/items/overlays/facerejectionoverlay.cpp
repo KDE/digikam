@@ -6,7 +6,7 @@
  * Date        : 2009-04-30
  * Description : selection icon view item at mouse hover
  *
- * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
+ * Copyright (C) 2008      by Peter Penz <peter.penz@gmx.at>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -39,14 +39,14 @@
 namespace Digikam
 {
 
-FaceRejectionOverlayButton::FaceRejectionOverlayButton(QAbstractItemView* parentView)
+FaceRejectionOverlayButton::FaceRejectionOverlayButton(QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView)
 {
 }
 
 QSize FaceRejectionOverlayButton::sizeHint() const
 {
-    return QSize(16, 16);
+    return QSize(32, 32);
 }
 
 QIcon FaceRejectionOverlayButton::icon()
@@ -61,7 +61,7 @@ void FaceRejectionOverlayButton::updateToolTip()
 
 // --------------------------------------------------------------------
 
-FaceRejectionOverlay::FaceRejectionOverlay(QObject* parent)
+FaceRejectionOverlay::FaceRejectionOverlay(QObject* const parent)
     : HoverButtonDelegateOverlay(parent)
 {
 }
@@ -89,9 +89,11 @@ ItemViewHoverButton* FaceRejectionOverlay::createButton()
 void FaceRejectionOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
+    const int size   = qBound(16, rect.width() / 8 - 2, 48);
     const int gap    = 5;
-    const int x      = rect.right() - button()->sizeHint().width() - gap;
-    const int y      = rect.top() + gap;
+    const int x      = rect.right() - gap - size;
+    const int y      = rect.top()   + gap;
+    button()->resize(size, size);
     button()->move(QPoint(x, y));
 }
 
