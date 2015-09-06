@@ -43,7 +43,7 @@ set(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
 )
 
-# Databse Schema version
+# Database Schema version
 # We must set this variable here at top level because it is used in both digikam/database and data/database
 # Version history:
 # 1 : Original database schema
@@ -62,7 +62,6 @@ set(KDCRAW_MIN_VERSION  "5.0.0")
 set(KFACE_MIN_VERSION   "5.0.0")
 set(KGEOMAP_MIN_VERSION "5.0.0")
 set(PGF_MIN_VERSION     "6.12.24")
-set(OPENCV_MIN_VERSION  "2.4.9")
 set(LENSFUN_MIN_VERSION "0.2.6.0")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
@@ -167,9 +166,32 @@ find_package(LCMS2                  REQUIRED)
 find_package(EXPAT                  REQUIRED)  # For DNGWriter: XMP SDK need Expat library to compile.
 find_package(Threads                REQUIRED)  # For DNGWriter: DNG SDK need native threads support.
 
-DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)
 DETECT_LIBKEXIV2(${KEXIV2_MIN_VERSION})
 DETECT_LIBKDCRAW(${KDCRAW_MIN_VERSION})
+
+# -- check OpenCV --------------------------------------------------------------------------------
+
+if(ENABLE_OPENCV3)
+
+    set(OPENCV_MIN_VERSION "3.0.0")
+    DETECT_OPENCV(${OPENCV_MIN_VERSION} core face highgui objdetect imgproc)
+
+    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_LESS 3.0.0)
+        message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.0.0 have been found. Disabled ENABLE_OPENCV3")
+        set(OpenCV_FOUND FALSE)
+    endif()
+
+else()
+
+    set(OPENCV_MIN_VERSION "2.4.9")
+    DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)
+
+    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_GREATER 2.4.99)
+        message(STATUS "ENABLE_OPENCV3 option is disabled and OpenCV >= 3.0.0 have been found. Enabled ENABLE_OPENCV3")
+        set(OpenCV_FOUND FALSE)
+    endif()
+
+endif()
 
 # optional
 
