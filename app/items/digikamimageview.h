@@ -86,6 +86,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void previewRequested(const ImageInfo& info);
+    void fullscreenRequested(const ImageInfo& info);
     void gotoAlbumAndImageRequested(const ImageInfo& info);
     void gotoTagAndImageRequested(int tagId);
     void gotoDateAndImageRequested(const ImageInfo& info);
@@ -110,6 +111,7 @@ private Q_SLOTS:
 
     void slotRotateLeft(const QList<QModelIndex>&);
     void slotRotateRight(const QList<QModelIndex>&);
+    void slotFullscreen(const QList<QModelIndex>&);
     void slotInitProgressIndicator();
 
 private:

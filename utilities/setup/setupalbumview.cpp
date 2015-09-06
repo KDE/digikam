@@ -73,6 +73,7 @@ public:
         iconShowCommentsBox(0),
         iconShowTagsBox(0),
         iconShowOverlaysBox(0),
+        iconShowFullscreenBox(0),
         iconShowRatingBox(0),
         iconShowFormatBox(0),
         iconShowCoordinatesBox(0),
@@ -105,6 +106,7 @@ public:
     QCheckBox*          iconShowCommentsBox;
     QCheckBox*          iconShowTagsBox;
     QCheckBox*          iconShowOverlaysBox;
+    QCheckBox*          iconShowFullscreenBox;
     QCheckBox*          iconShowRatingBox;
     QCheckBox*          iconShowFormatBox;
     QCheckBox*          iconShowCoordinatesBox;
@@ -184,6 +186,10 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
                                               "the image thumbnail for image rotation."));
 
+    d->iconShowFullscreenBox  = new QCheckBox(i18n("Show fullscreen overlay button"), iconViewGroup);
+    d->iconShowFullscreenBox->setWhatsThis(i18n("Set this option to show an overlay button on the "
+                                                "image thumbnail to open it in fullscreen."));
+
     d->iconShowCoordinatesBox = new QCheckBox(i18n("Show Geolocation Indicator"), iconViewGroup);
     d->iconShowCoordinatesBox->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
 
@@ -217,7 +223,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid->addWidget(d->iconShowTagsBox,          2, 1, 1, 1);
     grid->addWidget(d->iconShowRatingBox,        3, 1, 1, 1);
     grid->addWidget(d->iconShowOverlaysBox,      4, 1, 1, 1);
-    grid->addWidget(d->iconShowCoordinatesBox,   5, 1, 1, 1);
+    grid->addWidget(d->iconShowFullscreenBox,    5, 1, 1, 1);
+    grid->addWidget(d->iconShowCoordinatesBox,   6, 1, 1, 1);
 
     grid->addWidget(leftClickLabel,              7, 0, 1, 1);
     grid->addWidget(d->leftClickActionComboBox,  7, 1, 1, 1);
@@ -340,6 +347,7 @@ void SetupAlbumView::applySettings()
     settings->setIconShowTitle(d->iconShowTitleBox->isChecked());
     settings->setIconShowComments(d->iconShowCommentsBox->isChecked());
     settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
+    settings->setIconShowFullscreen(d->iconShowFullscreenBox->isChecked());
     settings->setIconShowCoordinates(d->iconShowCoordinatesBox->isChecked());
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());
     settings->setIconShowImageFormat(d->iconShowFormatBox->isChecked());
@@ -402,6 +410,7 @@ void SetupAlbumView::readSettings()
     d->iconShowTitleBox->setChecked(settings->getIconShowTitle());
     d->iconShowCommentsBox->setChecked(settings->getIconShowComments());
     d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
+    d->iconShowFullscreenBox->setChecked(settings->getIconShowFullscreen());
     d->iconShowCoordinatesBox->setChecked(settings->getIconShowCoordinates());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
     d->iconShowFormatBox->setChecked(settings->getIconShowImageFormat());

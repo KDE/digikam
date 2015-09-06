@@ -73,6 +73,7 @@ public:
     static const QString                      configIconShowCommentsEntry;
     static const QString                      configIconShowTagsEntry;
     static const QString                      configIconShowOverlaysEntry;
+    static const QString                      configIconShowFullscreenEntry;
     static const QString                      configIconShowRatingEntry;
     static const QString                      configIconShowImageFormatEntry;
     static const QString                      configIconShowCoordinatesEntry;
@@ -149,6 +150,7 @@ public:
     bool                                      iconShowResolution;
     bool                                      iconShowTags;
     bool                                      iconShowOverlays;
+    bool                                      iconShowFullscreen;
     bool                                      iconShowRating;
     bool                                      iconShowImageFormat;
     bool                                      iconShowCoordinates;

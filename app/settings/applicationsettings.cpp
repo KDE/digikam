@@ -155,6 +155,7 @@ void ApplicationSettings::readSettings()
     d->iconShowComments                 = group.readEntry(d->configIconShowCommentsEntry,             true);
     d->iconShowTags                     = group.readEntry(d->configIconShowTagsEntry,                 true);
     d->iconShowOverlays                 = group.readEntry(d->configIconShowOverlaysEntry,             true);
+    d->iconShowFullscreen               = group.readEntry(d->configIconShowFullscreenEntry,           true);
     d->iconShowRating                   = group.readEntry(d->configIconShowRatingEntry,               true);
     d->iconShowImageFormat              = group.readEntry(d->configIconShowImageFormatEntry,          false);
     d->iconShowCoordinates              = group.readEntry(d->configIconShowCoordinatesEntry,          false);
@@ -298,6 +299,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configIconShowCommentsEntry,                   d->iconShowComments);
     group.writeEntry(d->configIconShowTagsEntry,                       d->iconShowTags);
     group.writeEntry(d->configIconShowOverlaysEntry,                   d->iconShowOverlays);
+    group.writeEntry(d->configIconShowFullscreenEntry,                 d->iconShowFullscreen);
     group.writeEntry(d->configIconShowRatingEntry,                     d->iconShowRating);
     group.writeEntry(d->configIconShowImageFormatEntry,                d->iconShowImageFormat);
     group.writeEntry(d->configIconShowCoordinatesEntry,                d->iconShowCoordinates);

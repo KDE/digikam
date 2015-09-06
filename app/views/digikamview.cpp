@@ -479,6 +479,9 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(previewRequested(ImageInfo)),
             this, SLOT(slotTogglePreviewMode(ImageInfo)));
 
+    connect(d->iconView, SIGNAL(fullscreenRequested(ImageInfo)),
+            this, SLOT(slotSlideShowManualFrom(ImageInfo)));
+
     connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(ImageInfo)),
             this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
 
@@ -596,6 +599,9 @@ void DigikamView::setupConnections()
 
     connect(d->stackedview, SIGNAL(signalSlideShow()),
             this, SLOT(slotSlideShowAll()));
+
+    connect(d->stackedview, SIGNAL(signalSlideShowCurrent()),
+            this, SLOT(slotSlideShowManualFromCurrent()));
 
     connect(d->stackedview, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
@@ -2082,7 +2088,26 @@ void DigikamView::slotSlideShowRecursive()
 
         connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
                 this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
+
+        builder->run();
     }
+}
+
+void DigikamView::slotSlideShowManualFromCurrent()
+{
+    slotSlideShowManualFrom(currentInfo());
+}
+
+void DigikamView::slotSlideShowManualFrom(const ImageInfo& info)
+{
+   SlideShowBuilder* const builder = new SlideShowBuilder(allInfo());
+   builder->setOverrideStartFrom(info);
+   builder->setAutoPlayEnabled(false);
+
+   connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
+           this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
+
+   builder->run();
 }
 
 void DigikamView::slideShow(const ImageInfoList& infoList)
@@ -2091,6 +2116,8 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
 
     connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
             this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
+
+    builder->run();
 }
 
 void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
@@ -2098,9 +2125,13 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
     SlideShow* const slide = new SlideShow(settings);
     TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
-    if (settings.startWithCurrent)
+    if (settings.imageUrl.isValid())
     {
-        slide->setCurrentItem(currentUrl());
+        slide->setCurrentItem(settings.imageUrl);
+    }
+    else if (settings.startWithCurrent)
+    {
+        slide->setCurrentItem(currentInfo().fileUrl());
     }
 
     connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),

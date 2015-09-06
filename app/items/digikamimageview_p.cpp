@@ -39,11 +39,13 @@ namespace Digikam
 
 DigikamImageView::Private::Private(DigikamImageView* const qq)
     : overlaysActive(false),
+      fullscreenActive(false),
       q_ptr(qq)
 {
     utilities          = 0;
     rotateLeftOverlay  = 0;
     rotateRightOverlay = 0;
+    fullscreenOverlay  = 0;
     normalDelegate     = 0;
     faceDelegate       = 0;
     faceMode           = false;
@@ -89,6 +91,31 @@ void DigikamImageView::Private::updateOverlays()
                     q, SLOT(slotRotateRight(QList<QModelIndex>)));
 
             overlaysActive = true;
+        }
+    }
+
+    if (fullscreenActive)
+    {
+        if (!settings->getIconShowFullscreen())
+        {
+            disconnect(fullscreenOverlay, SIGNAL(signalRotate(QList<QModelIndex>)),
+                       q, SLOT(slotFullscreen(QList<QModelIndex>)));
+
+            q->removeOverlay(fullscreenOverlay);
+
+            fullscreenActive = false;
+        }
+    }
+    else
+    {
+        if (settings->getIconShowFullscreen())
+        {
+            fullscreenActive = true;
+
+            q->addOverlay(fullscreenOverlay, normalDelegate);
+
+            connect(fullscreenOverlay, SIGNAL(signalFullscreen(QList<QModelIndex>)),
+                    q, SLOT(slotFullscreen(QList<QModelIndex>)));
         }
     }
 }

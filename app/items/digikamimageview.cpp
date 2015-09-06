@@ -71,6 +71,7 @@
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
+#include "imagefsoverlay.h"
 #include "imagecoordinatesoverlay.h"
 #include "tagslineeditoverlay.h"
 #include "imageviewutilities.h"
@@ -136,6 +137,7 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     // rotation overlays
     d->rotateLeftOverlay  = ImageRotateOverlay::left(this);
     d->rotateRightOverlay = ImageRotateOverlay::right(this);
+    d->fullscreenOverlay  = ImageFsOverlay::instance(this);
     d->updateOverlays();
 
     // rating overlay
@@ -711,6 +713,21 @@ void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
     FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
                                           KExiv2Iface::RotationMatrix::Rotate90);
+}
+
+void DigikamImageView::slotFullscreen(const QList<QModelIndex>& indexes)
+{
+   QList<ImageInfo> infos = imageFilterModel()->imageInfos(indexes);
+
+   if (infos.isEmpty())
+   {
+        return;
+   }
+
+   // Just fullscreen the first.
+   const ImageInfo& info = infos.at(0);
+
+   emit fullscreenRequested(info);
 }
 
 void DigikamImageView::slotInitProgressIndicator()

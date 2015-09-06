@@ -228,6 +228,16 @@ void ApplicationSettings::setIconShowOverlays(bool val)
     d->iconShowOverlays = val;
 }
 
+void ApplicationSettings::setIconShowFullscreen(bool val)
+{
+   d->iconShowFullscreen = val;
+}
+
+bool ApplicationSettings::getIconShowFullscreen() const
+{
+   return d->iconShowFullscreen;
+}
+
 bool ApplicationSettings::getIconShowOverlays() const
 {
     return d->iconShowOverlays;

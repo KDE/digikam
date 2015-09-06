@@ -160,6 +160,10 @@ public:
      */
     int                          delay;
 
+    /** Whether to enable the auto-move feature.
+     */
+    bool                         autoPlayEnabled;
+
     /** Screen to use in case of multi-monitor computer.
      */
     int                          slideScreen;
@@ -179,6 +183,10 @@ public:
     /** Map of pictures information to slide
      */
     QMap<KUrl, SlidePictureInfo> pictInfoMap;
+
+    /** URL of the first image to show if requested
+     */
+    KUrl                         imageUrl;
 
 private:
 

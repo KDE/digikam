@@ -88,15 +88,18 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
     d->stopBtn = new QToolButton(this);
 
     d->playBtn->setCheckable(true);
+    d->playBtn->setChecked(!settings.autoPlayEnabled);
+
     d->playBtn->setFocusPolicy(Qt::NoFocus);
     d->prevBtn->setFocusPolicy(Qt::NoFocus);
     d->nextBtn->setFocusPolicy(Qt::NoFocus);
     d->stopBtn->setFocusPolicy(Qt::NoFocus);
 
-    d->playBtn->setIcon(d->loader->loadIcon("media-playback-pause", KIconLoader::Toolbar, d->iconSize));
-    d->prevBtn->setIcon(d->loader->loadIcon("media-skip-backward",  KIconLoader::Toolbar, d->iconSize));
-    d->nextBtn->setIcon(d->loader->loadIcon("media-skip-forward",   KIconLoader::Toolbar, d->iconSize));
-    d->stopBtn->setIcon(d->loader->loadIcon("media-playback-stop",  KIconLoader::Toolbar, d->iconSize));
+    QString iconString = settings.autoPlayEnabled ? "media-playback-pause" : "media-playback-start";
+    d->playBtn->setIcon(d->loader->loadIcon(iconString,            KIconLoader::Toolbar, d->iconSize));
+    d->prevBtn->setIcon(d->loader->loadIcon("media-skip-backward", KIconLoader::Toolbar, d->iconSize));
+    d->nextBtn->setIcon(d->loader->loadIcon("media-skip-forward",  KIconLoader::Toolbar, d->iconSize));
+    d->stopBtn->setIcon(d->loader->loadIcon("media-playback-stop", KIconLoader::Toolbar, d->iconSize));
 
     d->playBtn->setIconSize(QSize(d->iconSize, d->iconSize));
     d->prevBtn->setIconSize(QSize(d->iconSize, d->iconSize));

@@ -50,6 +50,18 @@ public:
     explicit SlideShowBuilder(Album* const album);
     ~SlideShowBuilder();
 
+    /**
+      * The builder creates the slideshow by reading the internal setup. These functions permit
+      * to override the setup.
+      *
+      * @brief setOverrideStartFromCurrent
+      * @param startFromCurrent
+      */
+    void setOverrideStartFrom(const ImageInfo& info);
+    void setAutoPlayEnabled(bool enable);
+
+    void run();
+
 Q_SIGNALS:
 
     void signalComplete(const SlideShowSettings&);
