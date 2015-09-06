@@ -40,21 +40,21 @@
 namespace Digikam
 {
 
-FaceRejectionOverlayButton::FaceRejectionOverlayButton(QAbstractItemView* parentView)
+FaceRejectionOverlayButton::FaceRejectionOverlayButton(QAbstractItemView* const parentView)
     : ItemViewHoverButton(parentView)
 {
 }
 
 QSize FaceRejectionOverlayButton::sizeHint() const
 {
-    return QSize(16, 16);
+    return QSize(32, 32);
 }
 
 QPixmap FaceRejectionOverlayButton::icon()
 {
     return KIconLoader::global()->loadIcon("dialog-close",
                                            KIconLoader::NoGroup,
-                                           KIconLoader::SizeSmall);
+                                           KIconLoader::SizeMedium);
 }
 
 void FaceRejectionOverlayButton::updateToolTip()
@@ -64,7 +64,7 @@ void FaceRejectionOverlayButton::updateToolTip()
 
 // --------------------------------------------------------------------
 
-FaceRejectionOverlay::FaceRejectionOverlay(QObject* parent)
+FaceRejectionOverlay::FaceRejectionOverlay(QObject* const parent)
     : HoverButtonDelegateOverlay(parent)
 {
 }
@@ -92,9 +92,11 @@ ItemViewHoverButton* FaceRejectionOverlay::createButton()
 void FaceRejectionOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
+    const int size   = qBound(16, rect.width() / 8 - 2, 48);
     const int gap    = 5;
-    const int x      = rect.right() - button()->sizeHint().width() - gap;
-    const int y      = rect.top() + gap;
+    const int x      = rect.right() - gap - size;
+    const int y      = rect.top()   + gap;
+    button()->resize(size, size);
     button()->move(QPoint(x, y));
 }
 

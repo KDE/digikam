@@ -42,7 +42,7 @@ class FaceRejectionOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    explicit FaceRejectionOverlayButton(QAbstractItemView* parentView);
+    explicit FaceRejectionOverlayButton(QAbstractItemView* const parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -59,7 +59,7 @@ class FaceRejectionOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    explicit FaceRejectionOverlay(QObject* parent);
+    explicit FaceRejectionOverlay(QObject* const parent);
     virtual void setActive(bool active);
 
 Q_SIGNALS:
