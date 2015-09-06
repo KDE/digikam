@@ -6,8 +6,8 @@
  * Date        : 2010-07-15
  * Description : central Map view
  *
- * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
- * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010         by Gabriel Voicu <ping dot gabi at gmail dot com>
+ * Copyright (C) 2010         by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -99,12 +99,14 @@ public:
  * @param parent Parent object
  */
 MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
-                             DCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, const MapWidgetView::Application application)
+                             DCategorizedSortFilterProxyModel* const imageFilterModel,
+                             QWidget* const parent,
+                             const MapWidgetView::Application application)
     : QWidget(parent),
       StateSavingObject(this),
       d(new Private())
 {
-    d->application = application;
+    d->application    = application;
     d->selectionModel = selectionModel;
 
     switch(d->application)
@@ -148,9 +150,8 @@ void MapWidgetView::doLoadState()
 {
     KConfigGroup group = getConfigGroup();
 
-    d->gpsImageInfoSorter->setSortOptions(
-        GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"), int(d->gpsImageInfoSorter->getSortOptions())))
-    );
+    d->gpsImageInfoSorter->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
+                                                                                          int(d->gpsImageInfoSorter->getSortOptions()))));
 
     const KConfigGroup groupCentralMap = KConfigGroup(&group, QLatin1String("Central Map Widget"));
     d->mapWidget->readSettingsFromGroup(&groupCentralMap);
@@ -260,7 +261,6 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
  */
 MapViewModelHelper::~MapViewModelHelper()
 {
-
 }
 
 /**
@@ -384,7 +384,10 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
         }
 
         case MapWidgetView::ApplicationImportUI:
-            return index.data(ImportImageModel::ThumbnailRole).value<QPixmap>();
+        {
+            QPixmap thumbnail = index.data(ImportImageModel::ThumbnailRole).value<QPixmap>();
+            return thumbnail.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
     }
 
     return QPixmap();
@@ -408,7 +411,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     QList<QModelIndex> indexList;
     QModelIndex        bestIndex;
 
-    for (int i=0; i<list.count(); ++i)
+    for (int i=0; i < list.count(); ++i)
     {
         const QModelIndex newIndex(list.at(i));
         indexList.append(newIndex);
@@ -442,7 +445,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             bestIndex                     = indexList.first();
             GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
 
-            for (int i=1; i<gpsImageInfoList.count(); ++i)
+            for (int i=1; i < gpsImageInfoList.count(); ++i)
             {
                 const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
 
@@ -503,7 +506,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             bestIndex                     = indexList.first();
             GPSImageInfo bestGPSImageInfo = gpsImageInfoList.first();
 
-            for (int i=1; i<gpsImageInfoList.count(); ++i)
+            for (int i=1; i < gpsImageInfoList.count(); ++i)
             {
                 const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
 
@@ -594,7 +597,7 @@ void MapViewModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& cl
 
     QList<qlonglong> imagesIdList;
 
-    for (int i=0; i<imageInfoList.count(); ++i)
+    for (int i=0; i < imageInfoList.count(); ++i)
     {
         imagesIdList.append(imageInfoList[i].id());
     }
@@ -611,9 +614,9 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 //    const DatabaseFields::ImagePositions imagePositionChanges = changes;
 
     /// @todo More detailed check
-    if (   ( changes & DatabaseFields::LatitudeNumber )  ||
-           ( changes & DatabaseFields::LongitudeNumber ) ||
-           ( changes & DatabaseFields::Altitude ) )
+    if (( changes & DatabaseFields::LatitudeNumber )  ||
+        ( changes & DatabaseFields::LongitudeNumber ) ||
+        ( changes & DatabaseFields::Altitude ) )
     {
         foreach(const qlonglong& id, changeset.ids())
         {
