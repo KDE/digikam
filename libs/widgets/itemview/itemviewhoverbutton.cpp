@@ -154,28 +154,29 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
     painter.drawEllipse(0, 0, width(), height());
 
     // draw the icon overlay
+    QPixmap icon = m_icon.scaled(width() - 2, height() - 2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
     if (m_isHovered)
     {
         KIconEffect iconEffect;
-        QPixmap activeIcon = iconEffect.apply(m_icon, KIconLoader::Desktop, KIconLoader::ActiveState);
-        painter.drawPixmap(0, 0, activeIcon);
+        QPixmap activeIcon = iconEffect.apply(icon, KIconLoader::Desktop, KIconLoader::ActiveState);
+        painter.drawPixmap(1, 1, activeIcon);
     }
     else
     {
         if (m_fadingValue < 255)
         {
             // apply an alpha mask respecting the fading value to the icon
-            QPixmap icon = m_icon;
             QPixmap alphaMask(icon.width(), icon.height());
             const QColor color(m_fadingValue, m_fadingValue, m_fadingValue);
             alphaMask.fill(color);
             icon.setAlphaChannel(alphaMask);
-            painter.drawPixmap(0, 0, icon);
+            painter.drawPixmap(1, 1, icon);
         }
         else
         {
             // no fading is required
-            painter.drawPixmap(0, 0, m_icon);
+            painter.drawPixmap(1, 1, icon);
         }
     }
 }

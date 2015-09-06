@@ -44,14 +44,14 @@ ImageSelectionOverlayButton::ImageSelectionOverlayButton(QAbstractItemView* pare
 
 QSize ImageSelectionOverlayButton::sizeHint() const
 {
-    return QSize(16, 16);
+    return QSize(32, 32);
 }
 
 QPixmap ImageSelectionOverlayButton::icon()
 {
     return KIconLoader::global()->loadIcon(isChecked() ? "list-remove" : "list-add",
                                            KIconLoader::NoGroup,
-                                           KIconLoader::SizeSmall);
+                                           KIconLoader::SizeMedium);
 }
 
 void ImageSelectionOverlayButton::updateToolTip()
@@ -99,9 +99,11 @@ ItemViewHoverButton* ImageSelectionOverlay::createButton()
 void ImageSelectionOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
+    const int size   = qBound(16, rect.width() / 8 - 2, 48);
     const int gap    = 5;
     const int x      = rect.left() + gap;
     const int y      = rect.top() + gap;
+    button()->resize(size, size);
     button()->move(QPoint(x, y));
 
     QItemSelectionModel* selModel = m_view->selectionModel();

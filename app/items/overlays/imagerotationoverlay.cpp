@@ -46,18 +46,18 @@ ImageRotateOverlayButton::ImageRotateOverlayButton(ImageRotateOverlayDirection d
 
 QSize ImageRotateOverlayButton::sizeHint() const
 {
-    return QSize(16, 16);
+    return QSize(32, 32);
 }
 
 QPixmap ImageRotateOverlayButton::icon()
 {
     if (m_direction == ImageRotateOverlayLeft)
     {
-        return KIconLoader::global()->loadIcon("object-rotate-left", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        return KIconLoader::global()->loadIcon("object-rotate-left", KIconLoader::NoGroup, KIconLoader::SizeMedium);
     }
     else
     {
-        return KIconLoader::global()->loadIcon("object-rotate-right", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        return KIconLoader::global()->loadIcon("object-rotate-right", KIconLoader::NoGroup, KIconLoader::SizeMedium);
     }
 }
 
@@ -102,9 +102,11 @@ ItemViewHoverButton* ImageRotateOverlay::createButton()
 void ImageRotateOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
+    const int size   = qBound(16, rect.width() / 8 - 2, 48);
     const int gap    = 5;
-    const int x      = rect.right() - 2*gap - (isLeft() ? KIconLoader::SizeSmall*3 + 2 : KIconLoader::SizeSmall*2 +2);
+    const int x      = rect.right() - 2*gap - (isLeft() ? size*3 + 2 : size*2 + 2);
     const int y      = rect.top() + gap;
+    button()->resize(size, size);
     button()->move(QPoint(x, y));
 }
 
