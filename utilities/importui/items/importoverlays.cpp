@@ -413,7 +413,7 @@ ImportRotateOverlayButton::ImportRotateOverlayButton(ImportRotateOverlayDirectio
 
 QSize ImportRotateOverlayButton::sizeHint() const
 {
-    return QSize(16, 16);
+    return QSize(32, 32);
 }
 
 QIcon ImportRotateOverlayButton::icon()
@@ -467,9 +467,11 @@ ItemViewHoverButton* ImportRotateOverlay::createButton()
 void ImportRotateOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
+    const int size   = qBound(16, rect.width() / 8 - 2, 48);
     const int gap    = 5;
-    const int x      = rect.right() - 2*gap - (isLeft() ? 16*5 + 2 : 16*4 +2);
+    const int x      = rect.right() - 2*gap - (isLeft() ? size*5 + 2 : size*4 + 2);
     const int y      = rect.top() + gap;
+    button()->resize(size, size);
     button()->move(QPoint(x, y));
 }
 

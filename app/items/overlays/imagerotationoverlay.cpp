@@ -45,7 +45,7 @@ ImageRotateOverlayButton::ImageRotateOverlayButton(ImageRotateOverlayDirection d
 
 QSize ImageRotateOverlayButton::sizeHint() const
 {
-    return QSize(16, 16);
+    return QSize(32, 32);
 }
 
 QIcon ImageRotateOverlayButton::icon()
@@ -101,9 +101,11 @@ ItemViewHoverButton* ImageRotateOverlay::createButton()
 void ImageRotateOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
+    const int size   = qBound(16, rect.width() / 8 - 2, 48);
     const int gap    = 5;
-    const int x      = rect.right() - 2*gap - (isLeft() ? 16*3 + 2 : 16*2 +2);
+    const int x      = rect.right() - 2*gap - (isLeft() ? size*3 + 2 : size*2 + 2);
     const int y      = rect.top() + gap;
+    button()->resize(size, size);
     button()->move(QPoint(x, y));
 }
 
