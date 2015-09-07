@@ -107,7 +107,7 @@ int main(int argc, char** argv)
 
             if (extractOriginal)
             {
-                if(originalDataLength > 0)
+                if (originalDataLength > 0)
                 {
                     dng_memory_allocator memalloc(gDefaultDNGMemoryAllocator);
                     dng_memory_stream compressedDataStream(memalloc);
@@ -126,7 +126,13 @@ int main(int argc, char** argv)
 
                     QFile originalFile(dngFileInfo.absolutePath() + QLatin1Char('/') + originalFileName);
                     qDebug() << "extracting embedded original to " << dngFileInfo.fileName();
-                    originalFile.open(QIODevice::WriteOnly);
+                    
+                    if (!originalFile.open(QIODevice::WriteOnly))
+                    {
+                        qDebug() << "Cannot open file. Aborted...";
+                        return 1;
+                    }
+                    
                     QDataStream originalDataStream(&originalFile);
 
                     for (quint32 block = 0; block < forkBlocks; ++block)
