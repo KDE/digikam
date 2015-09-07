@@ -1080,7 +1080,13 @@ int DNGWriter::convert()
             QFileInfo originalFileInfo(inputFile());
 
             QFile originalFile(originalFileInfo.absoluteFilePath());
-            originalFile.open(QIODevice::ReadOnly);
+
+            if (!originalFile.open(QIODevice::ReadOnly))
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "DNGWriter: Cannot open original RAW file to backup in DNG. Aborted...";
+                return PROCESSFAILED;
+            }
+
             QDataStream originalDataStream(&originalFile);
 
             quint32 forkLength = originalFileInfo.size();
@@ -1097,7 +1103,7 @@ int DNGWriter::convert()
 
             if (!compressedFile.open())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "DNGWriter: Cannot open temporary file to write Zip Raw file. Aborted...";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "DNGWriter: Cannot open temporary file to write Zipped Raw data. Aborted...";
                 return PROCESSFAILED;
             }
 
