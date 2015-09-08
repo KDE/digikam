@@ -42,12 +42,10 @@ namespace Digikam
 {
 
 AlbumFilterModel::AlbumFilterModel(QObject* const parent)
-    : QSortFilterProxyModel(parent), m_parent(0)
+    : QSortFilterProxyModel(parent), m_parent(parent)
 {
     m_filterBehavior = FullFiltering;
     m_chainedModel   = 0;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parent instantce album filter model: " << parent;
-    m_parent         = parent;
     setSortRole(AbstractAlbumModel::AlbumSortRole);
     setSortCaseSensitivity(Qt::CaseInsensitive);
 
