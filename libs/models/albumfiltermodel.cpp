@@ -42,11 +42,12 @@ namespace Digikam
 {
 
 AlbumFilterModel::AlbumFilterModel(QObject* const parent)
-    : QSortFilterProxyModel(parent)
+    : QSortFilterProxyModel(parent), m_parent(0)
 {
     m_filterBehavior = FullFiltering;
     m_chainedModel   = 0;
-    m_view           = static_cast<QTreeView*>(parent);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "parent instantce album filter model: " << parent;
+    m_parent         = parent;
     setSortRole(AbstractAlbumModel::AlbumSortRole);
     setSortCaseSensitivity(Qt::CaseInsensitive);
 
@@ -373,7 +374,11 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     //       in the comparison method
     if (albumForIndex(left)->isTrashAlbum() || albumForIndex(right)->isTrashAlbum())
     {
-        if(m_view->header()->sortIndicatorOrder() == Qt::AscendingOrder)
+        QTreeView* view = dynamic_cast<QTreeView*>(m_parent);
+        if (!view)
+            return false;
+
+        if (view->header()->sortIndicatorOrder() == Qt::AscendingOrder)
             return albumForIndex(left)->isTrashAlbum() ? false : true;
         else
             return albumForIndex(left)->isTrashAlbum() ? true : false;
