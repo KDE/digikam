@@ -61,9 +61,7 @@ public:
     ImageFsOverlay(QObject* const parent);
     virtual void setActive(bool active);
 
-    static ImageFsOverlay* instance(QObject* parent) {
-       return new ImageFsOverlay(parent);
-    }
+    static ImageFsOverlay* instance(QObject* const parent);
 
 Q_SIGNALS:
 

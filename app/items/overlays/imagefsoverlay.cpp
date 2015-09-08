@@ -66,6 +66,11 @@ ImageFsOverlay::ImageFsOverlay(QObject* const parent)
 {
 }
 
+static ImageFsOverlay::ImageFsOverlay* instance(QObject* const parent)
+{
+    return new ImageFsOverlay(parent);
+}
+
 void ImageFsOverlay::setActive(bool active)
 {
     HoverButtonDelegateOverlay::setActive(active);
