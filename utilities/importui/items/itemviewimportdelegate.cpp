@@ -437,7 +437,7 @@ void ItemViewImportDelegate::drawGeolocationIndicator(QPainter* p, const QRect& 
 {
     if (!r.isNull())
     {
-        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, r.width());
         qreal op   = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
@@ -451,17 +451,17 @@ void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, 
 
     if (itemType == CamItemInfo::DownloadUnknown)
     {
-        icon = KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        icon = KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, r.width());
     }
 
     if (itemType == CamItemInfo::DownloadedNo) // TODO: CamItemInfo::NewPicture
     {
-        icon = KIconLoader::global()->loadIcon("favorites", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        icon = KIconLoader::global()->loadIcon("favorites", KIconLoader::NoGroup, r.width());
     }
 
     if (itemType == CamItemInfo::DownloadedYes)
     {
-        icon = KIconLoader::global()->loadIcon("dialog-ok", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        icon = KIconLoader::global()->loadIcon("dialog-ok", KIconLoader::NoGroup, r.width());
     }
 
     qreal op = p->opacity();
@@ -482,7 +482,7 @@ void ItemViewImportDelegate::drawLockIndicator(QPainter* p, const QRect& r, int 
 
     if (lockStatus == 0)
     {
-        icon = KIconLoader::global()->loadIcon("object-locked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        icon = KIconLoader::global()->loadIcon("object-locked", KIconLoader::NoGroup, r.width());
     }
 
     qreal op = p->opacity();

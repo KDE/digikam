@@ -92,10 +92,10 @@ void DigikamImageDelegate::updateRects()
     d->drawImageFormat                 = albumSettings->getIconShowImageFormat();
     d->drawCoordinates                 = ApplicationSettings::instance()->getIconShowCoordinates();
 
-    const int iconSize = KIconLoader::SizeSmallMedium;
+    const int iconSize = qBound(16, (d->contentWidth + 2*d->margin) / 8 - 2, 48);
     d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
     d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
-    d->coordinatesRect = QRect(d->contentWidth - KIconLoader::SizeSmall+2, d->pixmapRect.top(), KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+    d->coordinatesRect = QRect(d->contentWidth - iconSize+2, d->pixmapRect.top(), iconSize, iconSize);
 
     if (albumSettings->getIconShowRating())
     {

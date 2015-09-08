@@ -492,7 +492,7 @@ void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right
 {
     Q_D(const ItemViewImageDelegate);
 
-    int iconSize = KIconLoader::SizeSmall;
+    const int iconSize = qBound(16, d->rect.width() / 8 - 2, 48);
 
     if (left)
     {
@@ -513,7 +513,7 @@ void ItemViewImageDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r
 {
     if (!r.isNull())
     {
-        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, r.width());
         qreal op   = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);

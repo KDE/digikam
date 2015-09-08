@@ -118,9 +118,10 @@ void ImageThumbnailDelegate::updateRects()
 {
     Q_D(ImageThumbnailDelegate);
 
-    d->coordinatesRect = QRect(d->contentWidth - KIconLoader::SizeSmall+2, d->pixmapRect.top(), KIconLoader::SizeSmall, KIconLoader::SizeSmall);
-    d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
+    d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
+    const int iconSize = qBound(16, (d->contentWidth + 2*d->margin) / 8 - 2, 48);
+    d->coordinatesRect = QRect(d->contentWidth - iconSize+2, d->pixmapRect.top(), iconSize, iconSize);
     d->drawImageFormat = ApplicationSettings::instance()->getIconShowImageFormat();
     d->drawCoordinates = ApplicationSettings::instance()->getIconShowCoordinates();
 
