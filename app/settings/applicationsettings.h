@@ -237,13 +237,13 @@ public:
      */
     void setIconShowOverlays(bool val);
 
-    void setIconShowFullscreen(bool val);
-    bool getIconShowFullscreen() const;
-
     /**
      * Determines whether the overlay buttons should be displayed on the icons.
      */
     bool getIconShowOverlays() const;
+
+    void setIconShowFullscreen(bool val);
+    bool getIconShowFullscreen() const;
 
     void setPreviewSettings(const PreviewSettings& settings);
     PreviewSettings getPreviewSettings() const;
