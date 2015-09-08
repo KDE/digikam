@@ -45,7 +45,7 @@
 const QLatin1String originalImageFolder("timestampupdatetestimages");
 const QLatin1String originalImageFile("timestampupdatetestimages/1.jpg");
 
-QTEST_MAIN(TimeStampUpdateTest);
+QTEST_MAIN(TimeStampUpdateTest)
 
 using namespace Digikam;
 
