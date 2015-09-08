@@ -49,7 +49,7 @@
 const QString originalImageFolder(KDESRCDIR"timestampupdatetestimages");
 const QString originalImageFile(KDESRCDIR"timestampupdatetestimages/1.jpg");
 
-QTEST_MAIN(TimeStampUpdateTest);
+QTEST_MAIN(TimeStampUpdateTest)
 
 using namespace Digikam;
 
