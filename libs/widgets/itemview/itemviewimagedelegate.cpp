@@ -92,13 +92,15 @@ void ItemViewImageDelegatePrivate::makeStarPolygon()
 }
 
 ItemViewImageDelegate::ItemViewImageDelegate(QObject* const parent)
-    : DItemDelegate(parent), d_ptr(new ItemViewImageDelegatePrivate)
+    : DItemDelegate(parent),
+      d_ptr(new ItemViewImageDelegatePrivate)
 {
     d_ptr->init(this);
 }
 
 ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, QObject* const parent)
-    : DItemDelegate(parent), d_ptr(&dd)
+    : DItemDelegate(parent),
+      d_ptr(&dd)
 {
     d_ptr->init(this);
 }
@@ -489,7 +491,7 @@ void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right
 {
     Q_D(const ItemViewImageDelegate);
 
-    int iconSize = 16;
+    const int iconSize = qBound(16, d->rect.width() / 8 - 2, 48);
 
     if (left)
     {

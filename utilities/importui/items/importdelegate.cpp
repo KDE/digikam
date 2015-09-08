@@ -672,7 +672,7 @@ void ImportThumbnailDelegate::updateRects()
     d->drawImageFormat = ImportSettings::instance()->getIconShowImageFormat();
     d->drawCoordinates = ImportSettings::instance()->getIconShowCoordinates();
 
-    const int iconSize = 16;
+    const int iconSize = qBound(16, (d->contentWidth + 2*d->margin) / 8 - 2, 48);
     int pos            = iconSize + 2;
     d->downloadRect    = QRect(d->contentWidth - pos, d->pixmapRect.top(), iconSize, iconSize);
     pos += iconSize;
@@ -743,7 +743,7 @@ void ImportNormalDelegate::updateRects()
     const ImportSettings* const importSettings = ImportSettings::instance();
     d->drawImageFormat                         = importSettings->getIconShowImageFormat();
     d->drawCoordinates                         = ImportSettings::instance()->getIconShowCoordinates();
-    const int iconSize                         = 16;
+    const int iconSize                         = qBound(16, (d->contentWidth + 2*d->margin) / 8 - 2, 48);
 
     d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
 //  d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize); // TODO
