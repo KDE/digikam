@@ -49,13 +49,16 @@ public:
 
     Private() :
         cancel(false),
-        album(0)
+        album(0),
+        autoPlayEnabled(true)
     {
     }
 
     bool          cancel;
     ImageInfoList infoList;
     Album*        album;
+    bool          autoPlayEnabled;
+    QUrl          startFrom;           // Overrides the startFromCurrent flag read from settings.
 };
 
 SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
@@ -65,8 +68,6 @@ SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
     d->infoList = infoList;
 
     ProgressManager::addProgressItem(this);
-
-    QTimer::singleShot(500, this, SLOT(slotRun()));
 }
 
 SlideShowBuilder::SlideShowBuilder(Album* const album)
@@ -76,13 +77,26 @@ SlideShowBuilder::SlideShowBuilder(Album* const album)
     d->album = album;
 
     ProgressManager::addProgressItem(this);
-
-    QTimer::singleShot(500, this, SLOT(slotRun()));
 }
 
 SlideShowBuilder::~SlideShowBuilder()
 {
     delete d;
+}
+
+void SlideShowBuilder::setOverrideStartFrom(const ImageInfo& info)
+{
+   d->startFrom = info.fileUrl();
+}
+
+void SlideShowBuilder::setAutoPlayEnabled(bool enable)
+{
+    d->autoPlayEnabled = enable;
+}
+
+void SlideShowBuilder::run()
+{
+    QTimer::singleShot(500, this, SLOT(slotRun()));
 }
 
 void SlideShowBuilder::slotRun()
@@ -125,7 +139,13 @@ void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
     int               i = 0;
     SlideShowSettings settings;
     settings.readFromConfig();
+    settings.autoPlayEnabled = d->autoPlayEnabled;
     settings.previewSettings = ApplicationSettings::instance()->getPreviewSettings();
+
+    if (d->startFrom.isValid())
+    {
+        settings.imageUrl = d->startFrom;
+    }
 
     for (ImageInfoList::const_iterator it = list.constBegin();
          !d->cancel && (it != list.constEnd()) ; ++it)

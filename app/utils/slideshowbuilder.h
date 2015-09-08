@@ -40,12 +40,28 @@ class SlideShowBuilder : public ProgressItem
 
 public:
 
-    /** Contructor to work on image list */
+    /** Contructor to work on image list
+     */
     explicit SlideShowBuilder(const ImageInfoList& infoList);
-    /** Contructor to work on recursive mode from album */
+
+    /** Contructor to work on recursive mode from album
+     */
     explicit SlideShowBuilder(Album* const album);
+    
     ~SlideShowBuilder();
 
+    /**
+      * The builder creates the slideshow by reading the internal setup. These functions permit
+      * to override the setup.
+      *
+      * @brief setOverrideStartFromCurrent
+      * @param startFromCurrent
+      */
+    void setOverrideStartFrom(const ImageInfo& info);
+    void setAutoPlayEnabled(bool enable);
+
+    void run();    
+    
 Q_SIGNALS:
 
     void signalComplete(const SlideShowSettings&);

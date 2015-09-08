@@ -36,6 +36,7 @@
 #include "digikamimageview.h"
 #include "digikamimagedelegate.h"
 #include "imagerotationoverlay.h"
+#include "imagefsoverlay.h"
 #include "applicationsettings.h"
 
 #ifdef HAVE_KFACE
@@ -73,9 +74,11 @@ public:
     DigikamImageFaceDelegate* faceDelegate;
 
     bool                      overlaysActive;
+    bool                      fullscreenActive;
 
     ImageRotateOverlay*       rotateLeftOverlay;
     ImageRotateOverlay*       rotateRightOverlay;
+    ImageFsOverlay*           fullscreenOverlay;
 
     bool                      faceMode;
 

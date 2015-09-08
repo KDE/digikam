@@ -253,11 +253,14 @@ public:
      * Sets the visibility of the overlay buttons on the image icons.
      */
     void setIconShowOverlays(bool val);
-
+    
     /**
      * Determines whether the overlay buttons should be displayed on the icons.
      */
     bool getIconShowOverlays() const;
+
+    void setIconShowFullscreen(bool val);
+    bool getIconShowFullscreen() const;
 
     void setPreviewSettings(const PreviewSettings& settings);
     PreviewSettings getPreviewSettings() const;

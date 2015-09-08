@@ -81,6 +81,7 @@ const QString ApplicationSettings::Private::configIconShowImageFormatEntry(QLati
 const QString ApplicationSettings::Private::configIconShowCoordinatesEntry(QLatin1String("Icon Show Coordinates"));
 const QString ApplicationSettings::Private::configIconShowAspectRatioEntry(QLatin1String("Icon Show Aspect Ratio"));
 const QString ApplicationSettings::Private::configIconShowOverlaysEntry(QLatin1String("Icon Show Overlays"));
+const QString ApplicationSettings::Private::configIconShowFullscreenEntry(QLatin1String("Icon Show Fullscreen"));
 const QString ApplicationSettings::Private::configIconViewFontEntry(QLatin1String("IconView Font"));
 const QString ApplicationSettings::Private::configToolTipsFontEntry(QLatin1String("ToolTips Font"));
 const QString ApplicationSettings::Private::configShowToolTipsEntry(QLatin1String("Show ToolTips"));
@@ -148,6 +149,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const q)
       iconShowResolution(false),
       iconShowTags(false),
       iconShowOverlays(false),
+      iconShowFullscreen(false),
       iconShowRating(false),
       iconShowImageFormat(false),
       iconShowCoordinates(false),
@@ -257,6 +259,7 @@ void ApplicationSettings::Private::init()
     iconShowAspectRatio                 = false;
     iconShowTags                        = true;
     iconShowOverlays                    = true;
+    iconShowFullscreen                  = true;
     iconShowRating                      = true;
     iconShowImageFormat                 = false;
     iconShowCoordinates                 = false;

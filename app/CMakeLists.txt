@@ -172,6 +172,7 @@ set(libdigikamgui_SRCS
     items/imageviewutilities.cpp
 
     items/overlays/groupindicatoroverlay.cpp
+    items/overlays/imagefsoverlay.cpp
     items/overlays/imageratingoverlay.cpp
     items/overlays/imagerotationoverlay.cpp
     items/overlays/imagecoordinatesoverlay.cpp

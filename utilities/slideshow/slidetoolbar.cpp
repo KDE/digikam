@@ -71,7 +71,8 @@ public:
 };
 
 SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const parent)
-    : RHBox(parent), d(new Private)
+    : RHBox(parent),
+      d(new Private)
 {
     setMouseTracking(true);
     setMargin(0);
@@ -82,12 +83,14 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
     d->stopBtn = new QToolButton(this);
 
     d->playBtn->setCheckable(true);
+    d->playBtn->setChecked(!settings.autoPlayEnabled);
     d->playBtn->setFocusPolicy(Qt::NoFocus);
     d->prevBtn->setFocusPolicy(Qt::NoFocus);
     d->nextBtn->setFocusPolicy(Qt::NoFocus);
     d->stopBtn->setFocusPolicy(Qt::NoFocus);
 
-    d->playBtn->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
+    QString iconString = settings.autoPlayEnabled ? QLatin1String("media-playback-pause") : QLatin1String("media-playback-start");
+    d->playBtn->setIcon(QIcon::fromTheme(iconString));
     d->prevBtn->setIcon(QIcon::fromTheme(QLatin1String("media-skip-backward")));
     d->nextBtn->setIcon(QIcon::fromTheme(QLatin1String("media-skip-forward")));
     d->stopBtn->setIcon(QIcon::fromTheme(QLatin1String("media-playback-stop")));

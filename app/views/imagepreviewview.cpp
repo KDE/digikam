@@ -95,6 +95,8 @@ public:
         addPersonAction     = 0;
         forgetFacesAction   = 0;
 #endif /* HAVE_KFACE */
+        
+        fullscreenAction    = 0;
     }
 
     bool                   fullSize;
@@ -119,10 +121,13 @@ public:
     QAction*               addPersonAction;
     QAction*               forgetFacesAction;
 #endif /* HAVE_KFACE */
+    
+    QAction*               fullscreenAction;
 };
 
 ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
-    : GraphicsDImgView(parent), d(new Private)
+    : GraphicsDImgView(parent),
+      d(new Private)
 {
     d->mode      = mode;
     d->item      = new ImagePreviewViewItem();
@@ -134,7 +139,7 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     d->item->setFaceGroup(d->faceGroup);
 #endif /* HAVE_KFACE */
-
+   
     connect(d->item, SIGNAL(loaded()),
             this, SLOT(imageLoaded()));
 
@@ -170,6 +175,7 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     d->peopleToggleAction->setCheckable(true);
 #endif /* HAVE_KFACE */
 
+    d->fullscreenAction    = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18n("Show Fullscreen"), this);
     d->toolBar             = new QToolBar(this);
 
     if (mode == IconViewPreview)
@@ -185,6 +191,8 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     d->toolBar->addAction(d->peopleToggleAction);
     d->toolBar->addAction(d->addPersonAction);
 #endif /* HAVE_KFACE */
+
+    d->toolBar->addAction(d->fullscreenAction);
 
     connect(d->prevAction, SIGNAL(triggered()),
             this, SIGNAL(toPreviousImage()));
@@ -208,6 +216,9 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     connect(d->forgetFacesAction, SIGNAL(triggered()),
             d->faceGroup, SLOT(rejectAll()));
 #endif /* HAVE_KFACE */
+
+    connect(d->fullscreenAction, SIGNAL(triggered()),
+            this, SIGNAL(signalSlideShowCurrent()));
 
     // ------------------------------------------------------------
 

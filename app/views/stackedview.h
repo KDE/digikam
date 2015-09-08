@@ -136,6 +136,7 @@ Q_SIGNALS:
     void signalViewModeChanged();
     void signalEscapePreview();
     void signalSlideShow();
+    void signalSlideShowCurrent();
     void signalZoomFactorChanged(double);
     void signalInsert2LightTable();
     void signalInsert2QueueMgr();

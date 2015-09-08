@@ -76,6 +76,7 @@ Q_SIGNALS:
     void signalEditItem();
     void signalPreviewLoaded(bool success);
     void signalEscapePreview();
+    void signalSlideShowCurrent();
     void signalSlideShow();
     void signalInsert2LightTable();
     void signalInsert2QueueMgr();
