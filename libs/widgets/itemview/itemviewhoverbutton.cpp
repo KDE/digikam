@@ -150,8 +150,14 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
     
     if (m_isHovered)
     {
-        QPixmap activeIcon = icon.scaled(48, 48);
-        painter.drawPixmap(1, 1, activeIcon);
+        QPixmap alphaMask(icon.width(), icon.height());
+        const QColor color(127, 127, 127);
+        alphaMask.fill(color);
+        QPainter p(&icon);
+        p.setOpacity(0.1);
+        p.drawPixmap(0, 0, alphaMask);
+        p.end();
+        painter.drawPixmap(1, 1, icon);
     }
     else
     {
@@ -161,15 +167,10 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
             QPixmap alphaMask(icon.width(), icon.height());
             const QColor color(m_fadingValue, m_fadingValue, m_fadingValue);
             alphaMask.fill(color);
-
-            /* NOTE : old Qt4 code ported to Qt5 due to deprecated QPixmap::setAlphaChannel()
-             *        clusterPixmap.setAlphaChannel(alphaPixmap);
-             */
             QPainter p(&icon);
             p.setOpacity(0.2);
             p.drawPixmap(0, 0, alphaMask);
             p.end();
-
             painter.drawPixmap(1, 1, icon);
         }
         else
