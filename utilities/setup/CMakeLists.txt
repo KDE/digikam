@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
-# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -22,7 +22,6 @@ set(libsetup_SRCS
     setuptemplate.cpp
     setupmime.cpp
     setupslideshow.cpp
-    setupmetadata.cpp
     setupeditor.cpp
     setupmisc.cpp
     setuplighttable.cpp
@@ -31,10 +30,11 @@ set(libsetup_SRCS
     setupdatabase.cpp
     setupversioning.cpp
     setupimagequalitysorter.cpp
-    
-    advancedmetadata/advancedmetadatatab.cpp
-    advancedmetadata/namespacelistview.cpp
-    advancedmetadata/namespaceeditdlg.cpp
+
+    metadata/setupmetadata.cpp
+    metadata/advancedmetadatatab.cpp
+    metadata/namespacelistview.cpp
+    metadata/namespaceeditdlg.cpp
 
     collections/setupcollections.cpp
     collections/setupcollectionview.cpp
@@ -47,7 +47,6 @@ set(libsetup_SRCS
     camera/cameraselection.cpp
     camera/cameralist.cpp
     camera/cameratype.cpp
-
 )
 
 add_library(setup_src OBJECT ${libsetup_SRCS} ${libsetupshowfoto_SRCS})
