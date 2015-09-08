@@ -105,6 +105,8 @@ public:
         addPersonAction     = 0;
         forgetFacesAction   = 0;
 #endif /* HAVE_KFACE */
+
+        fullscreenAction    = 0;
     }
 
     bool                   fullSize;
