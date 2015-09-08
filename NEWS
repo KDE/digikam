@@ -4,7 +4,8 @@ digiKam 4.14.0 - Release date: 2015-10-11
 NEW FEATURES:
 
 General : Add support of OpenCV 3.x.
-General : overlay icons are resized accordingly with thumbnails sizes.
+General : Overlay icons are resized accordingly with thumbnails sizes.
+General : New Overlay icon to quickly show an image in full-screen.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
