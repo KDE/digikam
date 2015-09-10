@@ -85,8 +85,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     QLabel* const logo      = new QLabel(page);
     QLabel* const message   = new QLabel(page);
 
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                    .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
     message->setText(i18n("<p>Please select the camera folder "
                           "where you want to upload the images.</p>"));

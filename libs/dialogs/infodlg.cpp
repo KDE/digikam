@@ -87,13 +87,11 @@ InfoDlg::InfoDlg(QWidget* const parent)
 
     if (QApplication::applicationName() == QLatin1String("digikam"))
     {
-        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                        .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
     }
     else
     {
-        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/logo-showfoto.png")))
-                        .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        logo->setPixmap(QIcon::fromTheme(QLatin1String("showfoto")).pixmap(QSize(48,48)));
     }
 
     // --------------------------------------------------------

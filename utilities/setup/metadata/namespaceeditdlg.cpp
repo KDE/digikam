@@ -242,10 +242,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
     d->page       = new QWidget(this);
     d->gridLayout = new QGridLayout(d->page);
     d->logo       = new QLabel(d->page);
-    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                   QLatin1String("digikam/data/logo-digikam.png")))
-                       .scaled(48, 48, Qt::KeepAspectRatio,
-                               Qt::SmoothTransformation));
+    d->logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
     d->topLabel   = new QLabel(d->page);
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);

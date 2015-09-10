@@ -220,8 +220,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     QGridLayout* gLayout5 = new QGridLayout(box2);
 
     QLabel* const logo = new QLabel(box2);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                    .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
     QLabel* const link = new QLabel(box2);
     link->setText(i18n("<p>To set a <b>USB Mass Storage</b> camera<br/>"

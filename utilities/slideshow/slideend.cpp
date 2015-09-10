@@ -63,13 +63,11 @@ SlideEnd::SlideEnd(QWidget* const parent)
 
     if (QApplication::applicationName() == QLatin1String("digikam"))
     {
-        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        logo = QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48));
     }
     else
     {
-        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/logo-showfoto.png")))
-                .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        logo = QIcon::fromTheme(QLatin1String("showfoto")).pixmap(QSize(48,48));
     }
 
     logoLabel->setPixmap(logo);

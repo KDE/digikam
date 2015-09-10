@@ -99,8 +99,7 @@ DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
     d->label->setWordWrap(true);
     d->actionPix->setFixedSize(QSize(32, 32));
 
-    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                       .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    d->logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
     grid->addWidget(d->logo,        0, 0, 3, 1);
     grid->addWidget(d->label,       0, 1, 1, 2);

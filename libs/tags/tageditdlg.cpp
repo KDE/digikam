@@ -131,8 +131,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
 
     QGridLayout* const grid = new QGridLayout(page);
     QLabel* const logo      = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                    .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
     d->topLabel             = new QLabel(page);
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);

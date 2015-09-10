@@ -272,8 +272,7 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
 
     d->checkBoxStack = new QStackedWidget(this);
     QLabel* logo     = new QLabel(this);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                    .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
     d->warningIcon   = new QLabel(this);
     d->warningIcon->setWordWrap(false);

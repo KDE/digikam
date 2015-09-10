@@ -479,8 +479,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
     if (type == SearchGroup::FirstGroup)
     {
         QLabel* const logo = new QLabel;
-        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                        .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
         d->optionsLabel = new RClickLabel;
         d->optionsLabel->setObjectName(QLatin1String("SearchGroupLabel_OptionsLabel"));

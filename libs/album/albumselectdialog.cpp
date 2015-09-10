@@ -87,8 +87,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* const parent, PAlbum* const albumT
     QWidget* const page     = new QWidget(this);
     QGridLayout* const grid = new QGridLayout(page);
     QLabel* const logo      = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                    .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
     QLabel* const message   = new QLabel(page);
     message->setWordWrap(true);

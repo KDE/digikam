@@ -185,8 +185,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QGridLayout* const grid = new QGridLayout(page);
 
     d->logo                 = new QLabel(page);
-    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                       .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    d->logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
     d->expanderBox          = new RExpanderBox(page);
 

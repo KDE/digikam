@@ -31,6 +31,7 @@
 #include <QProcess>
 #include <QApplication>
 #include <QStandardPaths>
+#include <QIcon>
 
 // KDE includes
 
@@ -103,13 +104,11 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     {
         if (QApplication::applicationName() == QLatin1String("digikam"))
         {
-            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                         .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            logoPixmap = QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48));
         }
         else
         {
-            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/logo-showfoto.png")))
-                         .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            logoPixmap = QIcon::fromTheme(QLatin1String("showfoto")).pixmap(QSize(48,48));
         }
     }
 

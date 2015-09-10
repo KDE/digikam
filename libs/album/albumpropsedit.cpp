@@ -131,8 +131,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     d->album            = album;
     QWidget* const page = new QWidget(this);
     QLabel* const logo  = new QLabel(page);
-    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png")))
-                    .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
     QLabel* const topLabel = new QLabel(page);
 
