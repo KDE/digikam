@@ -85,6 +85,7 @@ public:
     QList<QStandardItemModel*>  models;
     NamespaceListView*          namespaceView;
     DMetadataSettingsContainer  container;
+    int                         metadataTypeSize;
 
     bool                        changed;
 };
@@ -215,25 +216,20 @@ void AdvancedMetadataTab::slotEditNamespace()
 
 void AdvancedMetadataTab::applySettings()
 {
-    d->container.readTagNamespaces.clear();
-    saveModelData(d->models.at(READ_TAGS),d->container.readTagNamespaces);
+    QList<QLatin1String> keys = d->container.mappingKeys();
+    int index = 0;
+    foreach(QLatin1String str, keys)
+    {
+        d->container.getReadMapping(str).clear();
+        saveModelData(d->models.at(index++),d->container.getReadMapping(str));
+    }
 
-    d->container.readRatingNamespaces.clear();
-    saveModelData(d->models.at(READ_RATINGS),d->container.readRatingNamespaces);
+    foreach(QLatin1String str, keys)
+    {
+        d->container.getWriteMapping(str).clear();
+        saveModelData(d->models.at(index++),d->container.getWriteMapping(str));
+    }
 
-    d->container.readCommentNamespaces.clear();
-    saveModelData(d->models.at(READ_COMMENTS),d->container.readCommentNamespaces);
-
-    d->container.writeTagNamespaces.clear();
-    saveModelData(d->models.at(WRITE_TAGS),d->container.writeTagNamespaces);
-
-    d->container.writeRatingNamespaces.clear();
-    saveModelData(d->models.at(WRITE_RATINGS),d->container.writeRatingNamespaces);
-
-    d->container.writeCommentNamespaces.clear();
-    saveModelData(d->models.at(WRITE_COMMENTS),d->container.writeCommentNamespaces);
-
-    d->container.unifyReadWrite = d->unifyReadWrite->isChecked();
     DMetadataSettings::instance()->setSettings(d->container);
 }
 
@@ -321,7 +317,6 @@ void AdvancedMetadataTab::setUi()
     d->metadataType  = new QComboBox(this);
     d->operationType = new QComboBox(this);
 
-    d->metadataType->insertItems(0, QStringList() << i18n("Tags") << i18n("Ratings") << i18n("Comments"));
     d->operationType->insertItems(0, QStringList() << i18n("Read Options") << i18n("Write Options"));
 
     d->unifyReadWrite = new QCheckBox(i18n("Unify read and write"));
@@ -421,49 +416,56 @@ int AdvancedMetadataTab::getModelIndex()
     }
     else
     {
+        // for 3 metadata types:
         // read operation  = 3*0 + (0, 1, 2)
         // write operation = 3*1 + (0, 1, 2) = (3, 4 ,5)
-        return (3 * d->operationType->currentIndex()) + d->metadataType->currentIndex();
+        return (d->metadataTypeSize * d->operationType->currentIndex())
+                + d->metadataType->currentIndex();
     }
 }
 
 QList<NamespaceEntry>& AdvancedMetadataTab::getCurrentContainer()
 {
-    switch (getModelIndex())
+
+    int currentIndex = getModelIndex();
+
+    if(currentIndex >= d->metadataTypeSize)
     {
-        case 0:
-            return d->container.readTagNamespaces;
-        case 1:
-            return d->container.readRatingNamespaces;
-        case 2:
-            return d->container.readCommentNamespaces;
-        case 3:
-            return d->container.writeTagNamespaces;
-        case 4:
-            return d->container.writeRatingNamespaces;
-        case 5:
-            return d->container.writeCommentNamespaces;
-        default:
-            qCDebug(DIGIKAM_GENERAL_LOG) << "warning, Unknown case";
-            return d->container.readTagNamespaces;
+        return d->container.getWriteMapping(QLatin1String(d->metadataType->currentData().toByteArray()));
     }
+    else
+    {
+        return d->container.getReadMapping(QLatin1String(d->metadataType->currentData().toByteArray()));
+    }
+
 }
 
 void AdvancedMetadataTab::setModels()
 {
-    // Append 6 empty models
-    for(int i = 0 ; i < 6; i++)
+    QList<QLatin1String> keys = d->container.mappingKeys();
+
+    foreach(QLatin1String str, keys)
+    {
+        d->metadataType->addItem(i18n(str.data()), str);
+    }
+
+    d->metadataTypeSize = keys.size();
+
+    for(int i = 0 ; i < keys.size()*2; i++)
     {
         d->models.append(new QStandardItemModel(this));
     }
 
-    setModelData(d->models.at(READ_TAGS), d->container.getReadMapping(QLatin1String(DM_TAG_CONTAINER)));
-    setModelData(d->models.at(READ_RATINGS), d->container.readRatingNamespaces);
-    setModelData(d->models.at(READ_COMMENTS), d->container.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)));
+    int index = 0;
+    foreach(QLatin1String str, keys)
+    {
+        setModelData(d->models.at(index++), d->container.getReadMapping(str));
+    }
 
-    setModelData(d->models.at(WRITE_TAGS), d->container.getWriteMapping(QLatin1String(DM_TAG_CONTAINER)));
-    setModelData(d->models.at(WRITE_RATINGS), d->container.writeRatingNamespaces);
-    setModelData(d->models.at(WRITE_COMMENTS),d->container.getWriteMapping(QLatin1String(DM_COMMENT_CONTAINER)));
+    foreach(QLatin1String str, keys)
+    {
+        setModelData(d->models.at(index++), d->container.getWriteMapping(str));
+    }
 
     slotIndexChanged();
 }
