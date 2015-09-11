@@ -50,6 +50,7 @@ public:
 
 Q_SIGNALS:
 
+    void signalProgress(const QUrl&, int);
     void signalComplete(const QUrl&, bool);
 
 private:

@@ -35,6 +35,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QImageWriter>
+#include <QProgressBar>
 
 // KDE includes
 
@@ -60,10 +61,12 @@ public:
 
     Private()
     {
+        progress   = 0;
         saneWidget = 0;
     }
 
-    KSaneWidget* saneWidget;
+    QProgressBar* progress;
+    KSaneWidget*  saneWidget;
 };
 
 ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
@@ -76,9 +79,14 @@ ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
     d->saneWidget = saneWdg;
     d->saneWidget->show();
 
+    d->progress = new QProgressBar(this);
+    d->progress->setMinimum(0);
+    d->progress->setMaximum(100);
+    d->progress->setTextVisible(true);
+
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(d->saneWidget);
-    //vbx->addWidget(buttons);
+    vbx->addWidget(d->progress);
     setLayout(vbx);
 
     // ------------------------------------------------------------------------
@@ -255,6 +263,9 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
 
     SaveImgThread* const thread = new SaveImgThread(this);
 
+    connect(thread, SIGNAL(signalProgress(QUrl,int)),
+            this, SLOT(slotThreadProgress(QUrl,int)));
+
     connect(thread, SIGNAL(signalComplete(QUrl,bool)),
             this, SLOT(slotThreadDone(QUrl,bool)));
 
@@ -264,11 +275,20 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
     thread->start();
 }
 
+void ScanDialog::slotThreadProgress(const QUrl& url, int percent)
+{
+    d->progress->setFormat(i18n("Saving file %1 - %p%", url.fileName()));
+    d->progress->setValue(percent);
+}
+
 void ScanDialog::slotThreadDone(const QUrl& url, bool success)
 {
     if (!success)
+    {
         QMessageBox::critical(0, i18n("File Not Saved"), i18n("Cannot save \"%1\" file", url.fileName()));
+    }
 
+    d->progress->setFormat(QLatin1String("%p%"));
     QApplication::restoreOverrideCursor();
     setEnabled(true);
 }

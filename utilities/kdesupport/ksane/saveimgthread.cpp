@@ -106,8 +106,11 @@ void SaveImgThread::setScannerModel(const QString& make, const QString& model)
 
 void SaveImgThread::run()
 {
+    emit signalProgress(d->newUrl, 10);
+
     bool sixteenBit = (d->frmt == KSaneWidget::FormatRGB_16_C);
     DImg img((uint)d->width, (uint)d->height, sixteenBit, false);
+    int progress;
 
     if (!sixteenBit)
     {
@@ -123,6 +126,13 @@ void SaveImgThread::run()
 
             dst    += 4;
             src    += 3;
+
+            progress = 10 + (int)(((double)w * 50.0) / d->width);
+
+            if (progress % 5 == 0)
+            {
+                emit signalProgress(d->newUrl, progress);
+            }
         }
     }
     else
@@ -139,10 +149,21 @@ void SaveImgThread::run()
 
             dst    += 4;
             src    += 3;
+
+            progress = 10 + (int)(((double)w * 50.0) / d->width);
+
+            if (progress % 5 == 0)
+            {
+               emit signalProgress(d->newUrl, progress);
+            }
         }
     }
 
+    emit signalProgress(d->newUrl, 60);
+
     bool success = img.save(d->newUrl.toLocalFile(), d->format);
+
+    emit signalProgress(d->newUrl, 80);
 
     if (!success)
     {
@@ -158,8 +179,12 @@ void SaveImgThread::run()
     meta.setXmpTagString("Xmp.tiff.Model",    d->model);
     meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
     meta.setImageColorWorkSpace(DMetadata::WORKSPACE_SRGB);
+
+    emit signalProgress(d->newUrl, 90);
+
     meta.applyChanges();
 
+    emit signalProgress(d->newUrl, 100);
     emit signalComplete(d->newUrl, success);
 }
 

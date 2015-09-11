@@ -56,6 +56,7 @@ protected:
 private Q_SLOTS:
 
     void slotSaveImage(QByteArray&, int, int, int, int);
+    void slotThreadProgress(const QUrl&, int);
     void slotThreadDone(const QUrl&, bool);
     void slotDialogFinished();
 
