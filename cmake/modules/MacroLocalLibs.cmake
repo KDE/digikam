@@ -218,3 +218,43 @@ macro(DETECT_LIBKGEOMAP MIN_VERSION)
     message(STATUS "libkgeomap includes   : ${KF5KGeoMap_INCLUDE_DIRS}")
 
 endmacro()
+
+###########################################################################################################################################"
+
+macro(DETECT_LIBKSANE MIN_VERSION)
+
+    if (NOT DIGIKAMSC_COMPILE_LIBKSANE)
+
+        message(STATUS "libksane : search system based library")
+        find_package(KF5Sane ${MIN_VERSION})
+
+        if(KF5Sane_FOUND)
+            set(LIBKSANE_LIBRARIES KF5::Sane)
+            get_target_property(LIBKSANE_INCLUDES KF5::Sane INTERFACE_INCLUDE_DIRECTORIES)
+            set(KF5Sane_FOUND TRUE)
+        else()
+            set(KF5Sane_FOUND FALSE)
+        endif()
+
+    else()
+
+        message(STATUS "libksane : use local library from ${CMAKE_SOURCE_DIR}/extra/libksane/")
+        find_file(KF5Sane_FOUND CMakeLists.txt PATHS ${CMAKE_SOURCE_DIR}/extra/libksane/)
+
+        if(NOT KF5Sane_FOUND)
+            message(ERROR "libksane : local library not found")
+            set(KF5Sane_FOUND FALSE)
+        else()
+            set(KF5Sane_FOUND TRUE)
+        endif()
+
+        set(LIBKSANE_INCLUDES ${CMAKE_SOURCE_DIR}/extra/libksane/ ${CMAKE_BINARY_DIR}/extra/libksane)
+        set(LIBKSANE_LIBRARIES KF5Sane)
+
+    endif()
+
+    message(STATUS "libksane found      : ${KF5Sane_FOUND}")
+    message(STATUS "libksane library    : ${LIBKSANE_LIBRARIES}")
+    message(STATUS "libksane includes   : ${LIBKSANE_INCLUDES}")
+
+endmacro()

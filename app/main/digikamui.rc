@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="501" name="digikam" >
+<gui version="502" name="digikam" >
 
  <MenuBar>
 
@@ -137,6 +137,7 @@
       <Separator/>
       <Action name="import_addImages" />
       <Action name="import_addFolders" />
+      <Action name="import_scan" />
       <Separator/>
       <Action name="empty_import_group" />
       <DefineGroup name="kipi_import_group" append="kipi_import_group" />

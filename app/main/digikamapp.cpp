@@ -132,6 +132,10 @@
 #include "baloowrap.h"
 #endif
 
+#ifdef HAVE_KSANE
+#include "kscaniface.h"
+#endif // HAVE_KSANE
+
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -601,7 +605,7 @@ void DigikamApp::setupStatusBar()
 
 void DigikamApp::setupAccelerators()
 {
-    KActionCollection* ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
     // Action are added by <MainWindow> tag in ui.rc XML file
     QAction* const escapeAction = new QAction(i18n("Exit Preview Mode"), this);
@@ -959,6 +963,11 @@ void DigikamApp::setupActions()
     d->quickImportMenu->setTitle(i18nc("@action Import photos from camera", "Import"));
     d->quickImportMenu->setIcon(QIcon::fromTheme(QLatin1String("camera-photo")));
     ac->addAction(QLatin1String("import_auto"), d->quickImportMenu->menuAction());
+
+#ifdef HAVE_KSANE
+    KScanAction* const scan = new KScanAction(this);
+    ac->addAction(QLatin1String("import_scan"), scan);
+#endif // HAVE_KSANE
 
     // -----------------------------------------------------------------
 

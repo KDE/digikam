@@ -10,3 +10,7 @@ add_subdirectory(akonadi)
 if(${KFILEMETADATA_FOUND})
     add_subdirectory(baloo)
 endif()
+
+if(KF5Sane_FOUND)
+    add_subdirectory(kscan)
+endif()

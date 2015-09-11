@@ -44,6 +44,13 @@ if(KF5KGeoMap_FOUND)
     )
 endif()
 
+if(KF5Sane_FOUND)
+    set(DIGIKAMCORE_OBJECTS
+        ${DIGIKAMCORE_OBJECTS}
+        $<TARGET_OBJECTS:ksaneiface_src>
+    )
+endif()
+
 add_library(digikamcore
             SHARED
             ${DIGIKAMCORE_OBJECTS}
@@ -132,6 +139,10 @@ endif()
 
 if(KF5KFace_FOUND)
     target_link_libraries(digikamcore PRIVATE ${KF5KFace_LIBRARIES})
+endif()
+
+if(KF5Sane_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${LIBKSANE_LIBRARIES})
 endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
