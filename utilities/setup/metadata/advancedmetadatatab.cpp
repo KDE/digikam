@@ -457,13 +457,13 @@ void AdvancedMetadataTab::setModels()
         d->models.append(new QStandardItemModel(this));
     }
 
-    setModelData(d->models.at(READ_TAGS), d->container.readTagNamespaces);
+    setModelData(d->models.at(READ_TAGS), d->container.getReadMapping(QLatin1String(DM_TAG_CONTAINER)));
     setModelData(d->models.at(READ_RATINGS), d->container.readRatingNamespaces);
-    setModelData(d->models.at(READ_COMMENTS), d->container.readCommentNamespaces);
+    setModelData(d->models.at(READ_COMMENTS), d->container.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)));
 
-    setModelData(d->models.at(WRITE_TAGS), d->container.writeTagNamespaces);
+    setModelData(d->models.at(WRITE_TAGS), d->container.getWriteMapping(QLatin1String(DM_TAG_CONTAINER)));
     setModelData(d->models.at(WRITE_RATINGS), d->container.writeRatingNamespaces);
-    setModelData(d->models.at(WRITE_COMMENTS), d->container.writeCommentNamespaces);
+    setModelData(d->models.at(WRITE_COMMENTS),d->container.getWriteMapping(QLatin1String(DM_COMMENT_CONTAINER)));
 
     slotIndexChanged();
 }
