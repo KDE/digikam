@@ -45,74 +45,37 @@
 namespace Digikam
 {
 
-class DisjointMetadata::Private
+// This class was split from Private to be able to use the automatic C++ copy constructor
+// (Private contains a QMutex and is thus non-copyable)
+class DisjointMetadataDataFields
 {
 public:
 
-    Private()
+    DisjointMetadataDataFields()
+        : dateTimeChanged  (false),
+          titlesChanged(false),
+          commentsChanged(false),
+          pickLabelChanged(false),
+          colorLabelChanged(false),
+          ratingChanged(false),
+          templateChanged(false),
+          tagsChanged(false),
+          pickLabel(-1),
+          highestPickLabel(-1),
+          colorLabel(-1),
+          highestColorLabel(-1),
+          rating(-1),
+          highestRating(-1),
+          count(0),
+          dateTimeStatus(DisjointMetadata::MetadataInvalid),
+          titlesStatus(DisjointMetadata::MetadataInvalid),
+          commentsStatus(DisjointMetadata::MetadataInvalid),
+          pickLabelStatus(DisjointMetadata::MetadataInvalid),
+          colorLabelStatus(DisjointMetadata::MetadataInvalid),
+          ratingStatus(DisjointMetadata::MetadataInvalid),
+          templateStatus(DisjointMetadata::MetadataInvalid),
+          invalid(false)
     {
-        dateTimeStatus    = DisjointMetadata::MetadataInvalid;
-        pickLabelStatus   = DisjointMetadata::MetadataInvalid;
-        colorLabelStatus  = DisjointMetadata::MetadataInvalid;
-        ratingStatus      = DisjointMetadata::MetadataInvalid;
-        titlesStatus      = DisjointMetadata::MetadataInvalid;
-        commentsStatus    = DisjointMetadata::MetadataInvalid;
-        templateStatus    = DisjointMetadata::MetadataInvalid;
-
-        pickLabel         = -1;
-        colorLabel        = -1;
-        highestPickLabel  = -1;
-        highestColorLabel = -1;
-
-        rating            = -1;
-        highestRating     = -1;
-
-        count             = 0;
-
-        dateTimeChanged   = false;
-        titlesChanged     = false;
-        commentsChanged   = false;
-        pickLabelChanged  = false;
-        colorLabelChanged = false;
-        ratingChanged     = false;
-        templateChanged   = false;
-        tagsChanged       = false;
-
-        invalid           = false;
-    }
-
-    Private(const Private& other)
-    {
-        dateTimeStatus    = other.dateTimeStatus;
-        pickLabelStatus   = other.pickLabelStatus;
-        colorLabelStatus  = other.colorLabelStatus;
-        ratingStatus      = other.ratingStatus;
-        titlesStatus      = other.titlesStatus;
-        commentsStatus    = other.commentsStatus;
-        templateStatus    = other.templateStatus;
-
-        pickLabel         = other.pickLabel;
-        colorLabel        = other.colorLabel;
-        highestPickLabel  = other.highestPickLabel;
-        highestColorLabel = other.highestColorLabel;
-
-        rating            = other.rating;
-        highestRating     = other.highestRating;
-
-        count             = other.count;
-
-        dateTimeChanged   = other.dateTimeChanged;
-        titlesChanged     = other.titlesChanged;
-        commentsChanged   = other.commentsChanged;
-        pickLabelChanged  = other.pickLabelChanged;
-        colorLabelChanged = other.colorLabelChanged;
-        ratingChanged     = other.ratingChanged;
-        templateChanged   = other.templateChanged;
-        tagsChanged       = other.tagsChanged;
-
-        invalid           = other.invalid;
-
-        tags              = QMap<int, DisjointMetadata::Status>(other.tags);
     }
 
     bool                                   dateTimeChanged;
@@ -154,36 +117,61 @@ public:
     DisjointMetadata::Status               ratingStatus;
     DisjointMetadata::Status               templateStatus;
 
-    QMutex     mutex;
     QList<int> tagIds;
     bool       invalid;
+};
+
+class DisjointMetadata::Private : public DisjointMetadataDataFields
+{
+public:
+
+    Private()
+    {
+    }
+
+    // use the automatic copy constructor
+    Private(const Private& other)
+        : DisjointMetadataDataFields(other)
+    {
+    }
+
+    QMutex     mutex;
 
 public:
+
     template <class T> void loadSingleValue(const T& data,
                                             T& storage,
                                             DisjointMetadata::Status& status);
+    void makeConnections(DisjointMetadata* q);
 };
+
+void DisjointMetadata::Private::makeConnections(DisjointMetadata *q)
+{
+    QObject::connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
+                     q, SLOT(slotTagDeleted(int)),
+                     Qt::DirectConnection);
+
+    QObject::connect(DatabaseAccess::databaseWatch(), SIGNAL(databaseChanged()),
+                      q, SLOT(slotInvalidate()));
+}
 
 DisjointMetadata::DisjointMetadata(QObject *parent)
     : QObject(parent),
       d(new Private())
 {
-    connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
-            this, SLOT(slotTagDeleted(int)),
-            Qt::DirectConnection);
-
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(databaseChanged()),
-            this, SLOT(slotInvalidate()));
+    d->makeConnections(this);
 }
 
 DisjointMetadata::DisjointMetadata(const DisjointMetadata &other)
     : QObject(other.parent()),
       d(new Private(*other.d))
 {
+    d->makeConnections(this);
 }
 
 DisjointMetadata::~DisjointMetadata()
 {
+    delete d;
 }
 
 DisjointMetadata& DisjointMetadata::operator=(const DisjointMetadata &other)
