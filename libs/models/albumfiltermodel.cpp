@@ -238,10 +238,8 @@ QModelIndex AlbumFilterModel::rootAlbumIndex() const
     return mapFromSourceAlbumModel(model->rootAlbumIndex());
 }
 
-QVariant AlbumFilterModel::dataForCurrentSortRole(const QModelIndex& index) const
+QVariant AlbumFilterModel::dataForCurrentSortRole(Album* album) const
 {
-    Album* album = albumForIndex(index);
-
     if(album)
     {
         if(album->type() == Album::PHYSICAL)
@@ -368,33 +366,33 @@ bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
 
 bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
-    // TODO: Find more convenient way to do this, becuase it's not good to be done
-    //       in the comparison method
-    if (albumForIndex(left)->isTrashAlbum() || albumForIndex(right)->isTrashAlbum())
-    {
-        QTreeView* view = dynamic_cast<QTreeView*>(m_parent);
-        if (!view)
-            return false;
+    Album* leftAlbum  = albumForIndex(left);
+    Album* rightAlbum = albumForIndex(right);
 
-        if (view->header()->sortIndicatorOrder() == Qt::AscendingOrder)
-            return albumForIndex(left)->isTrashAlbum() ? false : true;
-        else
-            return albumForIndex(left)->isTrashAlbum() ? true : false;
+    if (!leftAlbum || !rightAlbum)
+    {
+        return QSortFilterProxyModel::lessThan(left, right);
     }
 
-    QVariant valLeft  = dataForCurrentSortRole(left);
-    QVariant valRight = dataForCurrentSortRole(right);
+    if (leftAlbum->isTrashAlbum() != rightAlbum->isTrashAlbum())
+    {
+        // trash albums go to the bottom, regardless of sort role
+        return (sortOrder() == Qt::AscendingOrder) ? !leftAlbum->isTrashAlbum() : leftAlbum->isTrashAlbum();
+    }
+
+    QVariant valLeft  = dataForCurrentSortRole(leftAlbum);
+    QVariant valRight = dataForCurrentSortRole(rightAlbum);
 
     ApplicationSettings::AlbumSortRole role = ApplicationSettings::instance()->getAlbumSortRole();
 
-    if((role == ApplicationSettings::ByDate || role == ApplicationSettings::ByCategory)&&(valLeft == valRight))
+    if ((role == ApplicationSettings::ByDate || role == ApplicationSettings::ByCategory)&&(valLeft == valRight))
     {
-            return QSortFilterProxyModel::lessThan(left, right);
+        return QSortFilterProxyModel::lessThan(left, right);
     }
 
     ApplicationSettings::StringComparisonType strComparisonType = ApplicationSettings::instance()->getStringComparisonType();
 
-    if((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
+    if ((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
     {
         switch (strComparisonType)
         {
