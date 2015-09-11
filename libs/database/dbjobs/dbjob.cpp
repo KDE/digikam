@@ -178,7 +178,7 @@ void TagsJob::run()
     if (m_jobInfo.isFoldersJob())
     {
         QMap<int, int> tagNumberMap = DatabaseAccess().db()->getNumberOfImagesInTags();
-        qCDebug(DIGIKAM_DBJOB_LOG) << tagNumberMap;
+        //qCDebug(DIGIKAM_DBJOB_LOG) << tagNumberMap;
         emit foldersData(tagNumberMap);
     }
     else if (m_jobInfo.isFaceFoldersJob())

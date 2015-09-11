@@ -100,7 +100,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
     url.setQuery(q);
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromAlbumAndName : " << url.toDisplayString();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromAlbumAndName : " << url.toDisplayString();
 
     return url;
 }

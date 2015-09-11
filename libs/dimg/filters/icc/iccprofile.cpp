@@ -153,7 +153,7 @@ IccProfile::IccProfile(const char* const location, const QString& relativePath)
 
     if (QLatin1String(location) == QLatin1String("data"))
     {
-         qCDebug(LOG_DIMG) << "Searching ICC profile from data directory with relative path:" << relativePath;
+         //qCDebug(LOG_DIMG) << "Searching ICC profile from data directory with relative path:" << relativePath;
          filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, relativePath);
     }
     else
