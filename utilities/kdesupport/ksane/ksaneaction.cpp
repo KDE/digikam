@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "kscaniface.h"
+#include "ksaneaction.h"
 
 // Qt includes
 
@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-KScanAction::KScanAction(QObject* const parent)
+KSaneAction::KSaneAction(QObject* const parent)
     : QAction(parent)
 {
     m_saneWidget = 0;
@@ -58,11 +58,11 @@ KScanAction::KScanAction(QObject* const parent)
             this, SLOT(slotActivate()));
 }
 
-KScanAction::~KScanAction()
+KSaneAction::~KSaneAction()
 {
 }
 
-void KScanAction::slotActivate()
+void KSaneAction::slotActivate()
 {
     if (!m_saneWidget)
     {

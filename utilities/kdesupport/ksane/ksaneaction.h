@@ -38,14 +38,14 @@ using namespace KSaneIface;
 namespace Digikam
 {
 
-class KScanAction : public QAction
+class KSaneAction : public QAction
 {
     Q_OBJECT
 
 public:
 
-    explicit KScanAction(QObject* const parent);
-    virtual ~KScanAction();
+    explicit KSaneAction(QObject* const parent);
+    virtual ~KSaneAction();
 
 private Q_SLOTS:
 

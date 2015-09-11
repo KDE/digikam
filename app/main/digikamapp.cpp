@@ -133,7 +133,7 @@
 #endif
 
 #ifdef HAVE_KSANE
-#include "kscaniface.h"
+#include "ksaneaction.h"
 #endif // HAVE_KSANE
 
 using namespace KDcrawIface;
@@ -965,7 +965,7 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("import_auto"), d->quickImportMenu->menuAction());
 
 #ifdef HAVE_KSANE
-    KScanAction* const scan = new KScanAction(this);
+    KSaneAction* const scan = new KSaneAction(this);
     ac->addAction(QLatin1String("import_scan"), scan);
 #endif // HAVE_KSANE
 

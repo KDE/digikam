@@ -12,5 +12,5 @@ if(${KFILEMETADATA_FOUND})
 endif()
 
 if(KF5Sane_FOUND)
-    add_subdirectory(kscan)
+    add_subdirectory(ksane)
 endif()
