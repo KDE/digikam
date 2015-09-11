@@ -594,9 +594,9 @@ void DisjointMetadata::loadTags( QList<int> &loadedTagIds)
     {
         if (it.value() == MetadataAvailable)
         {
-            if (qBinaryFind(loadedTagIds.begin(),loadedTagIds.end(),it.key()) != loadedTagIds.end())
+            if (qBinaryFind(loadedTagIds.begin(),loadedTagIds.end(),it.key()) == loadedTagIds.end())
             {
-                d->tags[it.key()] = MetadataDisjoint;
+                it.value() = MetadataDisjoint;
             }
         }
     }
@@ -605,6 +605,11 @@ void DisjointMetadata::loadTags( QList<int> &loadedTagIds)
     // are added as Disjoint
     foreach (int tagId, loadedTagIds)
     {
+        if (TagsCache::instance()->isInternalTag(tagId))
+        {
+            continue;
+        }
+
         if (!d->tags.contains(tagId))
         {
             d->tags[tagId] = MetadataDisjoint;
@@ -774,12 +779,6 @@ QMap<int, DisjointMetadata::Status> DisjointMetadata::tags() const
 {
     // DatabaseMode == ManagedTags is assumed
     return d->tags;
-}
-
-QMap<int, DisjointMetadata::Status> DisjointMetadata::tagIDs() const
-{
-    // DatabaseMode == ManagedTags is assumed
-    return QMap<int, DisjointMetadata::Status>(d->tags);
 }
 
 template <class T> void DisjointMetadata::Private::loadSingleValue(const T& data, T& storage,

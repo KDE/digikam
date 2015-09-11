@@ -221,23 +221,12 @@ public:
 
     /**
         Returns a map with the status for each tag.
-        Tags not contained in the list are considered to have the status MetadataInvalid,
-        that means no loaded metadata set contained this tag.
-        If a tag in the map has the status MetadataAvailable and it has the tag,
-        all loaded sets contained the tag.
-        If a tag in the map has the status MetadataAvailable and it does not have the tag,
-        no loaded sets contains this tag (has been explicitly set so)
-        If a tag in the map has the status MetadataDisjoint, some but not all loaded
-        sets contained the tag. The hasTag value is true then.
-        If MapMode (set in constructor) is false, returns an empty map.
+        Any tag that was set on one of the loaded images is contained in the map.
+        (If a tag is not contained in the map, it was not set on any of the loaded images)
+        If the tag was set on all loaded images, the status is MetadataAvailable.
+        If the tag was set on at least one, but not all of the loaded images, the status is MetadataDisjoint.
      */
     QMap<int, Status> tags() const;
-
-    /**
-        Similar to the method above.
-        This method is less efficient internally.
-    */
-    QMap<int, Status>   tagIDs() const;
 
     void resetChanged();
 
