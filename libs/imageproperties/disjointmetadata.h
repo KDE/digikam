@@ -260,7 +260,7 @@ protected:
               const CaptionsMap& titles, const CaptionsMap& comment,
               int colorLabel, int pickLabel,
               int rating, const Template& t);
-    void loadTags(const QList<int>& loadedTagIds);
+    void loadTags( QList<int>& loadedTagIds);
     void notifyTagDeleted(int id);
 
 // Former MetadataHubOnTheRoad implementation

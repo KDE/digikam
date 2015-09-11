@@ -30,6 +30,7 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QMutexLocker>
+#include <QtAlgorithms>
 
 // Local includes
 
@@ -564,9 +565,10 @@ void DisjointMetadata::load(const QDateTime &dateTime,const CaptionsMap &titles,
     d->loadSingleValue<Template>(t, d->metadataTemplate, d->templateStatus);
 }
 
-void DisjointMetadata::loadTags(const QList<int> &loadedTagIds)
+void DisjointMetadata::loadTags( QList<int> &loadedTagIds)
 {
     // If tags map is empty, set them all as Available
+
     if (d->tags.isEmpty())
     {
         foreach (int tagId, loadedTagIds)
@@ -582,18 +584,19 @@ void DisjointMetadata::loadTags(const QList<int> &loadedTagIds)
         return;
     }
 
+    qSort(loadedTagIds.begin(),loadedTagIds.end());
     // We search for metadata available tags, and
     // it is not present in current list, set it to
     // disjoint
-    QList<int> keySet = d->tags.keys();
 
-    foreach (int key, keySet)
+    QMap<int, DisjointMetadata::Status>::iterator it;
+    for(it = d->tags.begin(); it != d->tags.end(); ++it)
     {
-        if (d->tags.value(key) == MetadataAvailable)
+        if (it.value() == MetadataAvailable)
         {
-            if (!loadedTagIds.contains(key))
+            if (qBinaryFind(loadedTagIds.begin(),loadedTagIds.end(),it.key()) != loadedTagIds.end())
             {
-                d->tags[key] = MetadataDisjoint;
+                d->tags[it.key()] = MetadataDisjoint;
             }
         }
     }
