@@ -77,6 +77,7 @@
 #include "iccsettings.h"
 #include "imagewindow.h"
 #include "imagedescedittab.h"
+#include "slideshowbuilder.h"
 #include "slideshow.h"
 #include "setup.h"
 #include "syncjob.h"
@@ -419,7 +420,13 @@ void LightTableWindow::setupConnections()
             this, SLOT(slotDeleteItem(ImageInfo)));
 
     connect(d->previewView, SIGNAL(signalSlideShow()),
-            this, SLOT(slotToggleSlideShow()));
+            this, SLOT(slotSlideShowAll()));
+
+    connect(d->previewView, SIGNAL(signalLeftSlideShowCurrent()),
+            this, SLOT(slotLeftSlideShowManualFromCurrent()));
+
+    connect(d->previewView, SIGNAL(signalRightSlideShowCurrent()),
+            this, SLOT(slotRightSlideShowManualFromCurrent()));
 
     connect(d->previewView, SIGNAL(signalLeftDroppedItems(ImageInfoList)),
             this, SLOT(slotLeftDroppedItems(ImageInfoList)));
@@ -562,7 +569,7 @@ void LightTableWindow::setupActions()
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
-    connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
+    connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotSlideShowAll()));
     actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);
 
     // Left Panel Zoom Actions
@@ -1410,76 +1417,65 @@ void LightTableWindow::slotEditItem(const ImageInfo& info)
     im->setFocus();
 }
 
-void LightTableWindow::slotToggleSlideShow()
+void LightTableWindow::slotSlideShowAll()
 {
-    SlideShowSettings settings;
-    settings.readFromConfig();
-    slideShow(settings);
+   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->imageInfos());
+
+   connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
+           this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
+
+   builder->run();
 }
 
-void LightTableWindow::slideShow(SlideShowSettings& settings)
+void LightTableWindow::slotLeftSlideShowManualFromCurrent()
 {
-    if (!d->thumbView->countItems())
-    {
-        return;
-    }
-
-    int              i = 0;
-    d->cancelSlideShow = false;
-
-    d->statusProgressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode,
-                                          i18n("Preparing slideshow. Please wait..."));
-
-    ImageInfoList list = d->thumbView->imageInfos();
-
-    for (ImageInfoList::const_iterator it = list.constBegin();
-         !d->cancelSlideShow && it != list.constEnd() ; ++it)
-    {
-        SlidePictureInfo pictInfo;
-        pictInfo.comment    = (*it).comment();
-        pictInfo.rating     = (*it).rating();
-        pictInfo.colorLabel = (*it).colorLabel();
-        pictInfo.pickLabel  = (*it).pickLabel();
-        pictInfo.photoInfo  = (*it).photoInfoContainer();
-        settings.pictInfoMap.insert((*it).fileUrl(), pictInfo);
-        settings.fileList.append((*it).fileUrl());
-
-        d->statusProgressBar->setProgressValue((int)((i++ / (float)list.count()) * 100.0));
-        kapp->processEvents();
-    }
-
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, QString());
-    slotRefreshStatusBar();
-
-    if (!d->cancelSlideShow)
-    {
-        SlideShow* const slide = new SlideShow(settings);
-        TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
-
-        if (settings.startWithCurrent)
-        {
-            slide->setCurrentItem(d->thumbView->currentInfo().fileUrl());
-        }
-
-        connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
-                d->thumbView, SLOT(slotRatingChanged(KUrl,int)));
-
-        connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
-                d->thumbView, SLOT(slotColorLabelChanged(KUrl,int)));
-
-        connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
-                d->thumbView, SLOT(slotPickLabelChanged(KUrl,int)));
-
-        connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
-                d->thumbView, SLOT(slotToggleTag(KUrl,int)));
-
-        slide->show();
-    }
+    slotSlideShowManualFrom(d->previewView->leftImageInfo());
 }
 
-void LightTableWindow::slotProgressBarCancelButtonPressed()
+void LightTableWindow::slotRightSlideShowManualFromCurrent()
 {
-    d->cancelSlideShow = true;
+    slotSlideShowManualFrom(d->previewView->rightImageInfo());
+}
+
+void LightTableWindow::slotSlideShowManualFrom(const ImageInfo& info)
+{
+   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->imageInfos());
+   builder->setOverrideStartFrom(info);
+   builder->setAutoPlayEnabled(false);
+
+   connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
+           this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
+
+   builder->run();
+}
+
+void LightTableWindow::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
+{
+    SlideShow* const slide = new SlideShow(settings);
+    TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
+
+    if (settings.imageUrl.isValid())
+    {
+        slide->setCurrentItem(settings.imageUrl);
+    }
+    else if (settings.startWithCurrent)
+    {
+        slide->setCurrentItem(d->thumbView->currentInfo().fileUrl());
+    }
+
+    connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
+            d->thumbView, SLOT(slotRatingChanged(KUrl,int)));
+
+    connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
+            d->thumbView, SLOT(slotColorLabelChanged(KUrl,int)));
+
+    connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
+            d->thumbView, SLOT(slotPickLabelChanged(KUrl,int)));
+
+    connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
+            d->thumbView, SLOT(slotToggleTag(KUrl,int)));
+
+    slide->show();
 }
 
 void LightTableWindow::slotEditKeys()

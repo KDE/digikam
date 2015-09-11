@@ -55,7 +55,6 @@ public:
     Private() :
         autoLoadOnRightPanel(true),
         autoSyncPreview(true),
-        cancelSlideShow(false),
         setItemLeftAction(0),
         setItemRightAction(0),
         clearListAction(0),
@@ -102,7 +101,6 @@ public:
 
     bool                      autoLoadOnRightPanel;
     bool                      autoSyncPreview;
-    bool                      cancelSlideShow;
 
     KAction*                  setItemLeftAction;
     KAction*                  setItemRightAction;
