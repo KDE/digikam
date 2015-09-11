@@ -42,11 +42,11 @@
 namespace Digikam
 {
 
-void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList* infos, int orientation)
+void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList infos, int orientation)
 {
     QStringList failedItems;
 
-    foreach(const ImageInfo& info, *infos)
+    foreach(const ImageInfo& info, infos)
     {
         if (state() == WorkerObject::Deactivating)
         {
@@ -69,7 +69,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList* 
             ImageAttributesWatch::instance()->fileMetadataChanged(url);
         }
 
-        infos->writtenToOne();
+        infos.writtenToOne();
     }
 
     if (!failedItems.isEmpty())
@@ -77,16 +77,16 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList* 
         emit imageChangeFailed(i18n("Failed to revise Exif orientation these files:"), failedItems);
     }
 
-    infos->finishedWriting();
+    infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList *infos)
+void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList infos)
 {
-    d->startingToWrite(*infos);
+    d->startingToWrite(infos);
 
     ScanController::instance()->suspendCollectionScan();
 
-    foreach(const ImageInfo& info, *infos)
+    foreach(const ImageInfo& info, infos)
     {
         MetadataHub hub;
 
@@ -102,19 +102,16 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList *inf
         writeScope.changed(hub.write(filePath, MetadataHub::FullWrite));
         // hub emits fileMetadataChanged
 
-        infos->writtenToOne();
+        infos.writtenToOne();
     }
 
     ScanController::instance()->resumeCollectionScan();
 
-    infos->finishedWriting();
-
-    delete infos;
+    infos.finishedWriting();
 }
 
 void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, MetadataHub* hub)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "post signal infos size " << infos.size();
     d->startingToWrite(infos);
 
     ScanController::instance()->suspendCollectionScan();

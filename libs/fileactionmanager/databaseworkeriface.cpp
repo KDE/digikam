@@ -99,7 +99,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Scheduled to write";
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(new FileActionImageInfoList(splitter.next()));
+            emit writeMetadataToFiles(FileActionImageInfoList(splitter.next()));
     }
 
     infos.dbFinished();
@@ -144,7 +144,7 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(new FileActionImageInfoList(splitter.next()));
+            emit writeMetadataToFiles(FileActionImageInfoList(splitter.next()));
     }
 
     infos.dbFinished();
@@ -189,7 +189,7 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(new FileActionImageInfoList(splitter.next()));
+            emit writeMetadataToFiles(FileActionImageInfoList(splitter.next()));
     }
 
     infos.dbFinished();
@@ -235,7 +235,7 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(new FileActionImageInfoList(splitter.next()));
+            emit writeMetadataToFiles(FileActionImageInfoList(splitter.next()));
     }
 
     infos.dbFinished();
@@ -298,14 +298,13 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
     infos.schedulingForWrite(infos.count(), i18n("Revising Exif Orientation tags"), d->fileProgressCreator());
 
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
-        emit writeOrientationToFiles(new FileActionImageInfoList(splitter.next()), orientation);
+        emit writeOrientationToFiles(FileActionImageInfoList(splitter.next()), orientation);
 
     infos.dbFinished();
 }
 
 void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, DisjointMetadata *hub)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Infos size" << infos.size();
     //ScanController::instance()->suspendCollectionScan();
     {
         DatabaseOperationGroup group;
@@ -333,9 +332,7 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
 
         for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
         {
-            FileActionImageInfoList* rez = new FileActionImageInfoList(splitter.next());
-
-            emit writeMetadataToFiles(rez);
+            emit writeMetadataToFiles(FileActionImageInfoList(splitter.next()));
         }
     }
 
