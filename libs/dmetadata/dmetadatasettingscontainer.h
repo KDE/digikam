@@ -28,6 +28,7 @@
 
 #include <QFlags>
 #include <QString>
+#include <QMap>
 
 // Local includes
 
@@ -167,7 +168,16 @@ public:
     QList<NamespaceEntry> writeTagNamespaces;
     QList<NamespaceEntry> writeRatingNamespaces;
     QList<NamespaceEntry> writeCommentNamespaces;
+
     bool unifyReadWrite;
+
+    void addMapping(const QLatin1String key);
+
+    QList<NamespaceEntry>& getReadMapping(const QLatin1String& key) const;
+
+    QList<NamespaceEntry>& getWriteMapping(const QLatin1String& key) const;
+
+    QList<QLatin1String> mappingKeys() const;
 
 private:
 
@@ -175,7 +185,10 @@ private:
     void defaultRatingValues();
     void defaultCommentValues();
     void readOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry> &container);
-    void writeOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry> container) const;
+    void writeOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry>& container) const;
+
+    class Private;
+    Private* d;
 };
 
 }  // namespace Digikam

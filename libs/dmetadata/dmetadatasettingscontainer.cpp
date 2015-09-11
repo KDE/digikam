@@ -35,6 +35,7 @@
 
 #include "dmetadatasettings.h"
 #include "digikam_debug.h"
+#include "klocale.h"
 
 namespace Digikam
 {
@@ -46,9 +47,25 @@ bool dmcompare(NamespaceEntry& e1, NamespaceEntry e2)
 
 // -------------------------------------------------------------------------------------------------
 
+class DMetadataSettingsContainer::Private
+{
+public:
+    Private()
+    {
+        unifyReadWrite = false;
+    }
+    QMap<QLatin1String, QList<NamespaceEntry> > readMappings;
+    QMap<QLatin1String, QList<NamespaceEntry> > writeMappings;
+    bool unifyReadWrite;
+};
+
 DMetadataSettingsContainer::DMetadataSettingsContainer()
+    : d(new Private)
 {
     unifyReadWrite = false;
+    addMapping(QLatin1String(I18N_NOOP("Tags")));
+    addMapping(QLatin1String(I18N_NOOP("Rating")));
+    addMapping(QLatin1String(I18N_NOOP("Comment")));
 }
 
 DMetadataSettingsContainer::~DMetadataSettingsContainer()
@@ -57,35 +74,68 @@ DMetadataSettingsContainer::~DMetadataSettingsContainer()
     
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
-    if (group.hasGroup("readTagNamespaces")     &&
-        group.hasGroup("readRatingNamespaces")  &&
-        group.hasGroup("readCommentNamespaces") &&
-        group.hasGroup("writeTagNamespaces")    &&
-        group.hasGroup("writeRatingNamespaces") &&
-        group.hasGroup("writeCommentNamespaces"))
+    bool valid = true;
+
+    foreach(QLatin1String str, mappingKeys())
     {
-        readOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
-        readOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
-        readOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
-        readOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
-        readOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
-        readOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
+        if(!group.hasGroup(QLatin1String("read") + str + QLatin1String("Namespaces")))
+        {
+            valid = false;
+            break;
+        }
+        if(!group.hasGroup(QLatin1String("write") + str + QLatin1String("Namespaces")))
+        {
+            valid = false;
+            break;
+        }
+    }
+
+    if(valid)
+    {
+        foreach(QLatin1String str, mappingKeys())
+        {
+            readOneGroup(group, QLatin1String("read") + str + QLatin1String("Namespaces"), getReadMapping(str));
+            readOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
+        }
     }
     else
     {
         defaultValues();
     }
+//    if (group.hasGroup("readTagNamespaces")     &&
+//        group.hasGroup("readRatingNamespaces")  &&
+//        group.hasGroup("readCommentNamespaces") &&
+//        group.hasGroup("writeTagNamespaces")    &&
+//        group.hasGroup("writeRatingNamespaces") &&
+//        group.hasGroup("writeCommentNamespaces"))
+//    {
+//        readOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
+//        readOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
+//        readOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
+//        readOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
+//        readOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
+//        readOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
+//    }
+//    else
+//    {
+//        defaultValues();
+//    }
 
 }
 
 void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
-    writeOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
-    writeOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
-    writeOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
-    writeOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
-    writeOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
-    writeOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
+    foreach(QLatin1String str, mappingKeys())
+    {
+        writeOneGroup(group, QLatin1String("read") + str + QLatin1String("Namespaces"), getReadMapping(str));
+        writeOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
+    }
+//    writeOneGroup(group, QLatin1String("readTagNamespaces"),      readTagNamespaces);
+//    writeOneGroup(group, QLatin1String("readRatingNamespaces"),   readRatingNamespaces);
+//    writeOneGroup(group, QLatin1String("readCommentNamespaces"),  readCommentNamespaces);
+//    writeOneGroup(group, QLatin1String("writeTagNamespaces"),     writeTagNamespaces);
+//    writeOneGroup(group, QLatin1String("writeRatingNamespaces"),  writeRatingNamespaces);
+//    writeOneGroup(group, QLatin1String("writeCommentNamespaces"), writeCommentNamespaces);
 
     group.sync();
 }
@@ -98,6 +148,27 @@ void DMetadataSettingsContainer::defaultValues()
     defaultTagValues();
     defaultRatingValues();
     defaultCommentValues();
+}
+
+void DMetadataSettingsContainer::addMapping(const QLatin1String key)
+{
+    d->readMappings[key] = QList<NamespaceEntry>();
+    d->writeMappings[key] = QList<NamespaceEntry>();
+}
+
+QList<NamespaceEntry> &DMetadataSettingsContainer::getReadMapping(const QLatin1String &key) const
+{
+    return d->readMappings[key];
+}
+
+QList<Digikam::NamespaceEntry> &DMetadataSettingsContainer::getWriteMapping(const QLatin1String &key) const
+{
+    return d->writeMappings[key];
+}
+
+QList<QLatin1String> DMetadataSettingsContainer::mappingKeys() const
+{
+    return d->readMappings.keys();
 }
 
 void DMetadataSettingsContainer::defaultTagValues()
@@ -355,7 +426,7 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
     qSort(container.begin(), container.end(),Digikam::dmcompare);
 }
 
-void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name, QList<NamespaceEntry> container) const
+void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name, QList<NamespaceEntry>& container) const
 {
     KConfigGroup namespacesGroup = group.group(name);
 
