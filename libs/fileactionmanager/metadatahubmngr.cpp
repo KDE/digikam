@@ -44,7 +44,7 @@ class MetadataHubMngr::Private
 {
 public:
 
-    Private(): mutex(QMutex::Recursive)
+    Private(): mutex()
     {
     }
 

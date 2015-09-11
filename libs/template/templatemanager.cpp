@@ -50,7 +50,7 @@ class TemplateManager::Private
 public:
 
     Private()
-        :mutex(QMutex::Recursive)
+        :mutex()
     {
         modified = false;
     }

@@ -103,7 +103,7 @@ class IccProfileStatic
 public:
 
     IccProfileStatic()
-        : lcmsMutex(QMutex::Recursive)
+        : lcmsMutex()
     {
     }
 
