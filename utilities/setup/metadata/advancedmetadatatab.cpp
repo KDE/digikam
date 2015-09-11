@@ -197,14 +197,11 @@ void AdvancedMetadataTab::slotEditNamespace()
 
     NamespaceEntry entry = getCurrentContainer().at(d->namespaceView->currentIndex().row());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Name before save: " << entry.namespaceName;
 
     if (!NamespaceEditDlg::edit(qApp->activeWindow(), entry))
     {
         return;
     }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Name after save: " << entry.namespaceName;
     
     QStandardItem* const root = d->models.at(getModelIndex())->invisibleRootItem();
     QStandardItem* const item = root->child(d->namespaceView->currentIndex().row());
@@ -514,7 +511,6 @@ void AdvancedMetadataTab::saveModelData(QStandardItemModel* model, QList<Namespa
             ns.isDisabled = true;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "saving+++++" << ns.namespaceName << " " << ns.index << " " << ns.specialOpts;
         container.append(ns);
     }
 }

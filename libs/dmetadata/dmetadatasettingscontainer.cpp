@@ -414,8 +414,6 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
         {
             ns.convertRatio.append(str.toInt());
         }
-
-       qCDebug(DIGIKAM_GENERAL_LOG) << "Reading element " << ns.namespaceName << " " << ns.index;
        container.append(ns);
     }
 
