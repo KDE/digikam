@@ -50,6 +50,7 @@ public:
         preloadThumbSize(0),
         emitDataChanged(true)
     {
+        staticListContainingThumbnailRole << ImageModel::ThumbnailRole;
     }
 
     ThumbnailLoadThread*   thread;
@@ -58,6 +59,7 @@ public:
     ThumbnailSize          lastGlobalThumbSize;
     ThumbnailSize          preloadThumbSize;
     QRect                  detailRect;
+    QVector<int>           staticListContainingThumbnailRole;
 
     bool                   emitDataChanged;
 
@@ -312,7 +314,7 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
 
             if (d->emitDataChanged)
             {
-                emit dataChanged(index, index);
+                emit dataChanged(index, index, d->staticListContainingThumbnailRole);
             }
         }
     }
