@@ -2028,6 +2028,11 @@ Album* AlbumManager::findAlbum(int gid) const
     return d->allAlbumsIdHash.value(gid);
 }
 
+Album* AlbumManager::findAlbum(Album::Type type, int id) const
+{
+    return findAlbum(Album::globalID(type, id));
+}
+
 TAlbum* AlbumManager::findTAlbum(const QString& tagPath) const
 {
     // handle gracefully with or without leading slash

@@ -226,23 +226,28 @@ void Album::clear()
 
 int Album::globalID() const
 {
-    switch (m_type)
+    return globalID(m_type, m_id);
+}
+
+int Album::globalID(Type type, int id)
+{
+    switch (type)
     {
         // Use the upper bits to create unique ids.
         case (PHYSICAL):
-            return m_id;
+            return id;
 
         case (TAG):
-            return m_id | (1 << 28);
+            return id | (1 << 28);
 
         case (DATE):
-            return m_id | (1 << 29);
+            return id | (1 << 29);
 
         case (SEARCH):
-            return m_id | (1 << 30);
+            return id | (1 << 30);
 
         case (FACE):
-            return m_id | (1 << 31);
+            return id | (1 << 31);
 
         default:
             qCDebug(DIGIKAM_GENERAL_LOG) << "Unknown album type";

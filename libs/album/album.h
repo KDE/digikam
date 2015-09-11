@@ -242,6 +242,14 @@ public:
      */
     void setUsedByLabelsTree(bool isUsed);
 
+    /**
+     * @brief Produces the global id
+     * @param type The type of the album
+     * @param id the (type-specific) id of the album
+     * @return the global id
+     */
+    static int globalID(Type type, int id);
+
 protected:
 
     /**
