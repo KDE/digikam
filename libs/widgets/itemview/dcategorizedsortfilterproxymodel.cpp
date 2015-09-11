@@ -41,6 +41,7 @@ DCategorizedSortFilterProxyModel::DCategorizedSortFilterProxyModel(QObject* cons
     : QSortFilterProxyModel(parent),
       d(new Private())
 {
+    setDynamicSortFilter(false);
 }
 
 DCategorizedSortFilterProxyModel::~DCategorizedSortFilterProxyModel()

@@ -55,7 +55,7 @@ AlbumFilterModel::AlbumFilterModel(QObject* const parent)
 
     // dynamicSortFilter does not work well for us: a dataChange may, because of our way of filtering,
     // also affect parents and children of the changed index, which is not handled by QSortFilterProxyModel.
-    //setDynamicSortFilter(true);
+    setDynamicSortFilter(false);
     // Instead, we listen directly to AlbumManager's relevant change signals
     connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
