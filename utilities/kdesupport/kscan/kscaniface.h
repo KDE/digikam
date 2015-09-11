@@ -47,9 +47,6 @@ public:
     explicit KScanAction(QObject* const parent);
     virtual ~KScanAction();
 
-Q_SIGNALS:
-
-
 private Q_SLOTS:
 
     void slotActivate();

@@ -3,10 +3,10 @@
  * This file is a part of kipi-plugins project
  * http://www.digikam.org
  *
- * Date        : 2007-09-09
- * Description : scanner dialog
+ * Date        : 2009-10-11
+ * Description : save image thread
  *
- * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,49 +20,41 @@
  *
  * ============================================================ */
 
-#ifndef SCANDIALOG_H
-#define SCANDIALOG_H
+#ifndef SAVEIMGTHREAD_H
+#define SAVEIMGTHREAD_H
 
 // Qt includes
 
-#include <QCloseEvent>
-#include <QDialog>
-
-class QWidget;
-
-namespace KSaneIface
-{
-    class KSaneWidget;
-}
-
-using namespace KSaneIface;
+#include <QObject>
+#include <QThread>
+#include <QString>
+#include <QByteArray>
+#include <QUrl>
 
 namespace Digikam
 {
 
-class ScanDialog : public QDialog
+class SaveImgThread : public QThread
 {
     Q_OBJECT
 
 public:
 
-    ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent=0);
-    ~ScanDialog();
+    SaveImgThread(QObject* const parent);
+    ~SaveImgThread();
 
-protected:
+    void setTargetFile(const QUrl& url, const QString& format);
+    void setScannerModel(const QString& make, const QString& model);
+    void setImageData(const QByteArray& ksaneData, int width, int height,
+                      int bytesPerLine, int ksaneFormat);
 
-    void closeEvent(QCloseEvent*);
+Q_SIGNALS:
 
-private Q_SLOTS:
-
-    void slotSaveImage(QByteArray&, int, int, int, int);
-    void slotThreadDone(const QUrl&, bool);
-    void slotDialogFinished();
+    void signalComplete(const QUrl&, bool);
 
 private:
 
-    void readSettings();
-    void saveSettings();
+    void run();
 
 private:
 
@@ -72,4 +64,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SCANDIALOG_H
+#endif // SAVEIMGTHREAD_H

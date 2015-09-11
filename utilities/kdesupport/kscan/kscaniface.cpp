@@ -41,6 +41,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "scandialog.h"
 
 namespace Digikam
 {
@@ -84,7 +85,8 @@ void KScanAction::slotActivate()
             return;
         }
 
-        m_saneWidget->show();
+        ScanDialog* const dlg = new ScanDialog(m_saneWidget);
+        dlg->show();
     }
 }
 
