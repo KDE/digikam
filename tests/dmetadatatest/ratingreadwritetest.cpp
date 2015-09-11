@@ -77,6 +77,7 @@ void RatingReadWriteTest::testWriteToDisabledNamespaces()
     ratingNs2.nsType        = NamespaceEntry::RATING;
     ratingNs2.index         = 1;
     ratingNs2.subspace = NamespaceEntry::XMP;
+    ratingNs2.isDisabled    = true;
 
     NamespaceEntry ratingNs3;
     ratingNs3.namespaceName = QLatin1String("Xmp.MicrosoftPhoto.Rating");
@@ -86,9 +87,10 @@ void RatingReadWriteTest::testWriteToDisabledNamespaces()
     ratingNs3.subspace = NamespaceEntry::XMP;
 
 
-    dmsettings.writeRatingNamespaces.clear();
-    dmsettings.writeRatingNamespaces.append(ratingNs2);
-    dmsettings.writeRatingNamespaces.append(ratingNs3);
+    dmsettings.getWriteMapping(QLatin1String(DM_RATING_CONTAINER)).clear();
+    dmsettings.getWriteMapping(QLatin1String(DM_RATING_CONTAINER))
+             << ratingNs2
+             << ratingNs3;
 
     for(int i = 0; i < 6; i++)
     {
@@ -127,6 +129,7 @@ void RatingReadWriteTest::testReadFromDisabledNamespaces()
     ratingNs2.nsType        = NamespaceEntry::RATING;
     ratingNs2.index         = 1;
     ratingNs2.subspace = NamespaceEntry::XMP;
+    ratingNs2.isDisabled    = true;
 
     NamespaceEntry ratingNs3;
     ratingNs3.namespaceName = QLatin1String("Xmp.MicrosoftPhoto.Rating");
@@ -136,10 +139,10 @@ void RatingReadWriteTest::testReadFromDisabledNamespaces()
     ratingNs3.subspace = NamespaceEntry::XMP;
 
 
-
-    dmsettings.readRatingNamespaces.clear();
-    dmsettings.readRatingNamespaces.append(ratingNs2);
-    dmsettings.readRatingNamespaces.append(ratingNs3);
+    dmsettings.getReadMapping(QLatin1String(DM_RATING_CONTAINER)).clear();
+    dmsettings.getReadMapping(QLatin1String(DM_RATING_CONTAINER))
+             << ratingNs2
+             << ratingNs3;
 
     for(int i = 0; i < 6; i++)
     {

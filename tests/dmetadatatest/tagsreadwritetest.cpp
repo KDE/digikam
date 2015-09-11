@@ -79,6 +79,7 @@ void TagsReadWriteTest::testWriteToDisabledNamespaces()
     tagNs2.index = 1;
     tagNs2.specialOpts = NamespaceEntry::TAG_XMPBAG;
     tagNs2.subspace    = NamespaceEntry::XMP;
+    tagNs2.isDisabled  = true;
 
     NamespaceEntry tagNs3;
     tagNs3.namespaceName = QLatin1String("Xmp.lr.hierarchicalSubject");
@@ -91,9 +92,10 @@ void TagsReadWriteTest::testWriteToDisabledNamespaces()
     tagNs3.alternativeName = QLatin1String("Xmp.lr.HierarchicalSubject");
     tagNs3.secondNameOpts = NamespaceEntry::TAG_XMPSEQ;
 
-    dmsettings.writeTagNamespaces.clear();
-    dmsettings.writeTagNamespaces.append(tagNs2);
-    dmsettings.writeTagNamespaces.append(tagNs3);
+    dmsettings.getWriteMapping(QLatin1String(DM_TAG_CONTAINER)).clear();
+    dmsettings.getWriteMapping(QLatin1String(DM_TAG_CONTAINER))
+             << tagNs2
+             << tagNs3;
 
     dmeta.setImageTagsPath(tagSet1, dmsettings);
 
@@ -125,6 +127,7 @@ void TagsReadWriteTest::testReadFromDisabledNamespaces()
     tagNs2.index = 1;
     tagNs2.specialOpts = NamespaceEntry::TAG_XMPBAG;
     tagNs2.subspace    = NamespaceEntry::XMP;
+    tagNs2.isDisabled  = true;
 
     NamespaceEntry tagNs3;
     tagNs3.namespaceName = QLatin1String("Xmp.lr.hierarchicalSubject");
@@ -137,9 +140,10 @@ void TagsReadWriteTest::testReadFromDisabledNamespaces()
     tagNs3.alternativeName = QLatin1String("Xmp.lr.HierarchicalSubject");
     tagNs3.secondNameOpts = NamespaceEntry::TAG_XMPSEQ;
 
-    dmsettings.readTagNamespaces.clear();
-    dmsettings.readTagNamespaces.append(tagNs2);
-    dmsettings.readTagNamespaces.append(tagNs3);
+    dmsettings.getReadMapping(QLatin1String(DM_TAG_CONTAINER)).clear();
+    dmsettings.getReadMapping(QLatin1String(DM_TAG_CONTAINER))
+             << tagNs2
+             << tagNs3;
 
     dmeta.setXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", tagSet1);
 
@@ -171,8 +175,9 @@ void TagsReadWriteTest::testTagSeparatorWrite()
     tagNs3.alternativeName = QLatin1String("Xmp.lr.HierarchicalSubject");
     tagNs3.secondNameOpts = NamespaceEntry::TAG_XMPSEQ;
 
-    dmsettings.writeTagNamespaces.clear();
-    dmsettings.writeTagNamespaces.append(tagNs3);
+    dmsettings.getWriteMapping(QLatin1String(DM_TAG_CONTAINER)).clear();
+    dmsettings.getWriteMapping(QLatin1String(DM_TAG_CONTAINER))
+             << tagNs3;
 
     dmeta.setImageTagsPath(tagSet1, dmsettings);
 
@@ -204,8 +209,9 @@ void TagsReadWriteTest::testTagSeparatorRead()
     tagNs3.alternativeName = QLatin1String("Xmp.lr.HierarchicalSubject");
     tagNs3.secondNameOpts = NamespaceEntry::TAG_XMPSEQ;
 
-    dmsettings.readTagNamespaces.clear();
-    dmsettings.readTagNamespaces.append(tagNs3);
+    dmsettings.getReadMapping(QLatin1String(DM_TAG_CONTAINER)).clear();
+    dmsettings.getReadMapping(QLatin1String(DM_TAG_CONTAINER))
+             << tagNs3;
 
     toWrite = tagSet1;
     toWrite = toWrite.replaceInStrings(QLatin1String("/"),QLatin1String("|"));
@@ -240,6 +246,10 @@ void TagsReadWriteTest::testTagReadAlternativeNameSpace()
     tagNs3.subspace    = NamespaceEntry::XMP;
     tagNs3.alternativeName = QLatin1String("Xmp.lr.HierarchicalSubject");
     tagNs3.secondNameOpts = NamespaceEntry::TAG_XMPSEQ;
+
+    dmsettings.getReadMapping(QLatin1String(DM_TAG_CONTAINER)).clear();
+    dmsettings.getReadMapping(QLatin1String(DM_TAG_CONTAINER))
+             << tagNs3;
 
     toWrite = tagSet1;
     toWrite = toWrite.replaceInStrings(QLatin1String("/"),QLatin1String("|"));

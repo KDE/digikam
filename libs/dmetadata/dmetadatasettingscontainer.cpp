@@ -174,8 +174,6 @@ QList<QLatin1String> DMetadataSettingsContainer::mappingKeys() const
 
 void DMetadataSettingsContainer::defaultTagValues()
 {
-//    this->readTagNamespaces.clear();
-//    this->writeTagNamespaces.clear();
 
     // Default tag namespaces
     NamespaceEntry tagNs1;
@@ -264,8 +262,6 @@ void DMetadataSettingsContainer::defaultTagValues()
 
 void DMetadataSettingsContainer::defaultRatingValues()
 {
-//    this->readRatingNamespaces.clear();
-//    this->writeRatingNamespaces.clear();
 
     QList<int> defaultVal;
     QList<int> microsoftMappings;
@@ -329,8 +325,6 @@ void DMetadataSettingsContainer::defaultRatingValues()
 
 void DMetadataSettingsContainer::defaultCommentValues()
 {
-    this->readCommentNamespaces.clear();
-    this->writeCommentNamespaces.clear();
 
     NamespaceEntry commNs1;
     commNs1.namespaceName   = QLatin1String("Xmp.dc.description");

@@ -168,13 +168,13 @@ public:
      */
     void defaultValues();
 
-    QList<NamespaceEntry> readTagNamespaces;
-    QList<NamespaceEntry> readRatingNamespaces;
-    QList<NamespaceEntry> readCommentNamespaces;
+//    QList<NamespaceEntry> readTagNamespaces;
+//    QList<NamespaceEntry> readRatingNamespaces;
+//    QList<NamespaceEntry> readCommentNamespaces;
 
-    QList<NamespaceEntry> writeTagNamespaces;
-    QList<NamespaceEntry> writeRatingNamespaces;
-    QList<NamespaceEntry> writeCommentNamespaces;
+//    QList<NamespaceEntry> writeTagNamespaces;
+//    QList<NamespaceEntry> writeRatingNamespaces;
+//    QList<NamespaceEntry> writeCommentNamespaces;
 
     bool unifyReadWrite;
 

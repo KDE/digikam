@@ -183,7 +183,7 @@ void AdvancedMetadataTab::slotAddNewNamespace()
 
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled);
     root->appendRow(item);
-    d->container.readTagNamespaces.append(entry);
+    getCurrentContainer().append(entry);
 
     slotRevertChangesAvailable();
 }

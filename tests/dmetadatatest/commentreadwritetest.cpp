@@ -96,6 +96,7 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
     commNs1.specialOpts     = NamespaceEntry::COMMENT_ATLLANGLIST;
     commNs1.index           = 0;
     commNs1.subspace = NamespaceEntry::XMP;
+    commNs1.isDisabled      = true;
 
     NamespaceEntry commNs2;
     commNs2.namespaceName   = QLatin1String("Xmp.exif.UserComment");
@@ -105,9 +106,11 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
     commNs2.subspace = NamespaceEntry::XMP;
 
     dmsettings.unifyReadWrite = false;
-    dmsettings.writeCommentNamespaces.clear();
-    dmsettings.writeCommentNamespaces.append(commNs1);
-    dmsettings.writeCommentNamespaces.append(commNs2);
+
+    dmsettings.getWriteMapping(QLatin1String(DM_COMMENT_CONTAINER)).clear();
+    dmsettings.getWriteMapping(QLatin1String(DM_COMMENT_CONTAINER))
+             << commNs1
+             << commNs2;
 
     bool rez = dmeta.setImageComments(commentSet1, dmsettings);
 
@@ -140,6 +143,7 @@ void CommentReadWriteTest::testReadFromDisabledNamespaces()
     commNs1.specialOpts     = NamespaceEntry::COMMENT_ATLLANGLIST;
     commNs1.index           = 0;
     commNs1.subspace = NamespaceEntry::XMP;
+    commNs1.isDisabled      = true;
 
     NamespaceEntry commNs2;
     commNs2.namespaceName   = QLatin1String("Xmp.exif.UserComment");
@@ -151,9 +155,10 @@ void CommentReadWriteTest::testReadFromDisabledNamespaces()
 
 
     dmsettings.unifyReadWrite = false;
-    dmsettings.readCommentNamespaces.clear();
-    dmsettings.readCommentNamespaces.append(commNs1);
-    dmsettings.readCommentNamespaces.append(commNs2);
+    dmsettings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)).clear();
+    dmsettings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER))
+             << commNs1
+             << commNs2;
 
     dmeta.setXmpTagStringListLangAlt("Xmp.dc.description", commentSet1.toAltLangMap(),false);
     dmeta.setXmpTagStringLangAlt("Xmp.exif.UserComment", commentSet2.value(QLatin1String("x-default")).caption, QString(),false);
