@@ -61,7 +61,7 @@ public:
         ensureOneSelectedItem(false),
         ensureInitialSelectedItem(false),
         scrollCurrentToCenter(false),
-        mouseButtonPressed(false),
+        mouseButtonPressed(Qt::NoButton),
         hintAtSelectionRow(-1),
         q(q)
     {
@@ -82,7 +82,7 @@ public:
     bool                       ensureOneSelectedItem;
     bool                       ensureInitialSelectedItem;
     bool                       scrollCurrentToCenter;
-    bool                       mouseButtonPressed;
+    Qt::MouseButton         mouseButtonPressed;
     QPersistentModelIndex      hintAtSelectionIndex;
     int                        hintAtSelectionRow;
     QPersistentModelIndex      hintAtScrollPosition;
@@ -471,7 +471,7 @@ void ItemViewCategorized::rowsRemoved(const QModelIndex& parent, int start, int 
 
     if (d->scrollCurrentToCenter)
     {
-        scrollTo(currentIndex());
+        scrollTo(currentIndex(), QAbstractItemView::PositionAtCenter);
     }
 }
 
@@ -787,17 +787,16 @@ void ItemViewCategorized::leaveEvent(QEvent*)
 {
     hideIndexNotification();
 
-    if (d->scrollCurrentToCenter && d->mouseButtonPressed)
+    if (d->mouseButtonPressed != Qt::RightButton)
     {
-        d->mouseButtonPressed = false;
-        scrollTo(currentIndex());
+        d->mouseButtonPressed = Qt::NoButton;
     }
 }
 
 void ItemViewCategorized::mousePressEvent(QMouseEvent* event)
 {
     userInteraction();
-    d->mouseButtonPressed           = true;
+
     const QModelIndex index         = indexAt(event->pos());
 
     // Clear selection on click on empty area. Standard behavior, but not done by QAbstractItemView for some reason.
@@ -806,6 +805,7 @@ void ItemViewCategorized::mousePressEvent(QMouseEvent* event)
     const bool rightButtonPressed   = button & Qt::RightButton;
     const bool shiftKeyPressed      = modifiers & Qt::ShiftModifier;
     const bool controlKeyPressed    = modifiers & Qt::ControlModifier;
+    d->mouseButtonPressed           = button;
 
     if (!index.isValid() && !rightButtonPressed && !shiftKeyPressed && !controlKeyPressed)
     {
@@ -833,11 +833,10 @@ void ItemViewCategorized::mousePressEvent(QMouseEvent* event)
 void ItemViewCategorized::mouseReleaseEvent(QMouseEvent* event)
 {
     userInteraction();
-    d->mouseButtonPressed = false;
 
     if (d->scrollCurrentToCenter)
     {
-        scrollTo(currentIndex());
+        scrollTo(currentIndex(), QAbstractItemView::PositionAtCenter);
     }
 
     DCategorizedView::mouseReleaseEvent(event);
@@ -1052,11 +1051,12 @@ void ItemViewCategorized::setScrollCurrentToCenter(bool enabled)
 
 void ItemViewCategorized::scrollTo(const QModelIndex& index, ScrollHint hint)
 {
-    if (d->scrollCurrentToCenter && !d->mouseButtonPressed)
+    if (d->scrollCurrentToCenter && d->mouseButtonPressed == Qt::NoButton)
     {
         hint = QAbstractItemView::PositionAtCenter;
     }
 
+    d->mouseButtonPressed = Qt::NoButton;
     DCategorizedView::scrollTo(index, hint);
 }
 
