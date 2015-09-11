@@ -46,7 +46,7 @@ class MetadataSettings::Private
 public:
 
     Private()
-        : mutex(QMutex::Recursive),
+        : mutex(),
           configGroup(QLatin1String("Metadata Settings"))
     {
     }

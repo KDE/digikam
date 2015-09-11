@@ -97,7 +97,6 @@ protected:
 private:
 
     void reset();
-    void initializeTags(QModelIndex& parent);
     void setTagState(TAlbum* const tag, DisjointMetadata::Status status);
 
     void setInfos(const ImageInfoList& infos);

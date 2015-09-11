@@ -841,6 +841,7 @@ class AbstractCheckableAlbumModel::Private
 public:
 
     Private()
+        : staticVectorContainingCheckStateRole(1, Qt::CheckStateRole)
     {
         extraFlags         = 0;
         rootIsCheckable    = true;
@@ -851,6 +852,8 @@ public:
     bool                          rootIsCheckable;
     bool                          addExcludeTristate;
     QHash<Album*, Qt::CheckState> checkedAlbums;
+
+    QVector<int> staticVectorContainingCheckStateRole;
 };
 
 AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, Album* const rootAlbum,
@@ -970,14 +973,17 @@ QList<Album*> AbstractCheckableAlbumModel::partiallyCheckedAlbums() const
 
 void AbstractCheckableAlbumModel::resetAllCheckedAlbums()
 {
-    QList<Album*> oldChecked = d->checkedAlbums.keys();
+    const QHash<Album*, Qt::CheckState> oldChecked = d->checkedAlbums;
     d->checkedAlbums.clear();
 
-    foreach(Album* const album, oldChecked)
+    for (QHash<Album*, Qt::CheckState>::const_iterator it = oldChecked.begin(); it != oldChecked.end(); ++it)
     {
-        QModelIndex index = indexForAlbum(album);
-        emit dataChanged(index, index);
-        emit checkStateChanged(album, Qt::Unchecked);
+        if (it.value() != Qt::Unchecked)
+        {
+            QModelIndex index = indexForAlbum(it.key());
+            emit dataChanged(index, index, d->staticVectorContainingCheckStateRole);
+            emit checkStateChanged(it.key(), Qt::Unchecked);
+        }
     }
 }
 

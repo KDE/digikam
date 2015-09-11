@@ -1080,24 +1080,6 @@ void ImageDescEditTab::setTagState(TAlbum* const tag, DisjointMetadata::Status s
     }
 }
 
-void ImageDescEditTab::initializeTags(QModelIndex& parent)
-{
-    TAlbum* const tag = d->tagModel->albumForIndex(parent);
-
-    if (!tag)
-    {
-        return;
-    }
-
-    setTagState(tag, d->hub.tagStatus(tag->id()));
-
-    for (int row = 0; row < d->tagModel->rowCount(parent); ++row)
-    {
-        QModelIndex index = d->tagModel->index(row, 0, parent);
-        initializeTags(index);
-    }
-}
-
 void ImageDescEditTab::updateTagsView()
 {
     // avoid that the automatic tag toggling handles these calls and
@@ -1110,10 +1092,11 @@ void ImageDescEditTab::updateTagsView()
     d->tagModel->resetAllCheckedAlbums();
 
     // then update checked state for all tags of the currently selected images
-    for (int row = 0; row < d->tagModel->rowCount(); ++row)
+    const QMap<int, DisjointMetadata::Status> hubMap = d->hub.tags();
+    for (QMap<int, DisjointMetadata::Status>::const_iterator it = hubMap.begin(); it != hubMap.end(); ++it)
     {
-        QModelIndex index = d->tagModel->index(row, 0);
-        initializeTags(index);
+        TAlbum* tag = AlbumManager::instance()->findTAlbum(it.key());
+        setTagState(tag, it.value());
     }
 
     d->ignoreTagChanges = false;

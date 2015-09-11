@@ -51,7 +51,7 @@ class WorkflowManager::Private
 public:
 
     Private()
-        :mutex(QMutex::Recursive)
+        :mutex()
     {
         modified = false;
     }

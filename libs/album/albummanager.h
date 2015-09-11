@@ -240,6 +240,12 @@ public:
     Album*    findAlbum(int gid) const;
 
     /**
+     * @return a Album with the given type and id
+     * @param id the id for the album (not the global id)
+     */
+    Album*    findAlbum(Album::Type type, int id) const;
+
+    /**
      * @return a TAlbum with given tag path, or 0 if not found
      * @param tagPath the tag path ("People/Friend/John")
      */
