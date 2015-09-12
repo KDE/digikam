@@ -129,21 +129,6 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     connect(d->tabXmp, SIGNAL(signalModified()),
             this, SLOT(slotModified()));
 
-    connect(this, SIGNAL(applyClicked()),
-            this, SLOT(slotApply()));
-
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOk()));
-
-    connect(this, SIGNAL(closeClicked()),
-            this, SLOT(slotClose()));
-
-    connect(this, SIGNAL(user1Clicked()),
-            this, SLOT(slotNext()));
-
-    connect(this, SIGNAL(user2Clicked()),
-            this, SLOT(slotPrevious()));
-
     connect(d->tabExif, SIGNAL(signalSetReadOnly(bool)),
             this, SLOT(slotSetReadOnly(bool)));
 
@@ -152,6 +137,24 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
 
     connect(d->tabXmp, SIGNAL(signalSetReadOnly(bool)),
             this, SLOT(slotSetReadOnly(bool)));
+
+    connect(d->buttons->button(QDialogButtonBox::Apply), SIGNAL(clicked()),
+            this, SLOT(slotApply()));
+
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(slotOk()));
+
+    connect(d->buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
+            this, SLOT(slotClose()));
+
+    if (d->urls.count() > 1)
+    {
+        connect(d->buttons->button(QDialogButtonBox::No), SIGNAL(clicked()),
+                this, SLOT(slotNext()));
+
+        connect(d->buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
+                this, SLOT(slotPrevious()));
+    }
 
     //----------------------------------------------------------
 

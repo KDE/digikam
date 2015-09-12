@@ -29,7 +29,6 @@
 #include <QPushButton>
 #include <QTimeEdit>
 #include <QValidator>
-#include <QtDebug>
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QComboBox>
@@ -359,10 +358,10 @@ IPTCProperties::IPTCProperties(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    connect(d->dateReleasedSel, SIGNAL(changed(QDate)),
+    connect(d->dateReleasedSel, SIGNAL(dateChanged(QDate)),
             this, SIGNAL(signalModified()));
 
-    connect(d->dateExpiredSel, SIGNAL(changed(QDate)),
+    connect(d->dateExpiredSel, SIGNAL(dateChanged(QDate)),
             this, SIGNAL(signalModified()));
 
     connect(d->timeReleasedSel, SIGNAL(timeChanged(QTime)),

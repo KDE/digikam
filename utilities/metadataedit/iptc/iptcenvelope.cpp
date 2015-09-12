@@ -395,7 +395,7 @@ IPTCEnvelope::IPTCEnvelope(QWidget* const parent)
     connect(d->formatCB, SIGNAL(activated(int)),
             this, SIGNAL(signalModified()));
 
-    connect(d->dateSentSel, SIGNAL(changed(QDate)),
+    connect(d->dateSentSel, SIGNAL(dateChanged(QDate)),
             this, SIGNAL(signalModified()));
 
     connect(d->timeSentSel, SIGNAL(timeChanged(QTime)),

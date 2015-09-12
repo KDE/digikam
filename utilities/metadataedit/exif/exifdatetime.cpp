@@ -267,13 +267,13 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
     connect(d->dateDigitalizedSubSecEdit, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalModified()));
 
-    connect(d->dateCreatedSel, SIGNAL(valueChanged(QDateTime)),
+    connect(d->dateCreatedSel, SIGNAL(dateTimeChanged(QDateTime)),
             this, SIGNAL(signalModified()));
 
-    connect(d->dateOriginalSel, SIGNAL(valueChanged(QDateTime)),
+    connect(d->dateOriginalSel, SIGNAL(dateTimeChanged(QDateTime)),
             this, SIGNAL(signalModified()));
 
-    connect(d->dateDigitalizedSel, SIGNAL(valueChanged(QDateTime)),
+    connect(d->dateDigitalizedSel, SIGNAL(dateTimeChanged(QDateTime)),
             this, SIGNAL(signalModified()));
 
     // --------------------------------------------------------

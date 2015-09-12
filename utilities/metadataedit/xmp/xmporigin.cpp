@@ -264,10 +264,10 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    connect(d->dateCreatedSel, SIGNAL(valueChanged(QDateTime)),
+    connect(d->dateCreatedSel, SIGNAL(dateTimeChanged(QDateTime)),
             this, SIGNAL(signalModified()));
 
-    connect(d->dateDigitalizedSel, SIGNAL(valueChanged(QDateTime)),
+    connect(d->dateDigitalizedSel, SIGNAL(dateTimeChanged(QDateTime)),
             this, SIGNAL(signalModified()));
 
     connect(d->zoneCreatedSel, SIGNAL(currentIndexChanged(QString)),

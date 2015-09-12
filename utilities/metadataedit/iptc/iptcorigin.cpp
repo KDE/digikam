@@ -346,10 +346,10 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    connect(d->dateCreatedSel, SIGNAL(changed(QDate)),
+    connect(d->dateCreatedSel, SIGNAL(dateChanged(QDate)),
             this, SIGNAL(signalModified()));
 
-    connect(d->dateDigitalizedSel, SIGNAL(changed(QDate)),
+    connect(d->dateDigitalizedSel, SIGNAL(dateChanged(QDate)),
             this, SIGNAL(signalModified()));
 
     connect(d->timeCreatedSel, SIGNAL(timeChanged(QTime)),
