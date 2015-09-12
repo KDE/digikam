@@ -55,6 +55,7 @@ public Q_SLOTS:
     virtual void setExifOrientation(FileActionImageInfoList, int)            {};
     virtual void applyMetadata(FileActionImageInfoList, DisjointMetadata*)   {};
     virtual void copyAttributes(FileActionImageInfoList, const QStringList&) {};
+    virtual void enableScanAfterWrite(){};
 
 Q_SIGNALS:
 
@@ -85,6 +86,7 @@ public:
     void setExifOrientation(FileActionImageInfoList infos, int orientation);
     void applyMetadata(FileActionImageInfoList infos, DisjointMetadata* hub);
     void copyAttributes(FileActionImageInfoList infos, const QStringList& derivedPaths);
+    void enableScanAfterWrite();
 
 private:
 

@@ -25,6 +25,7 @@
 
 #include "fileactionimageinfolist.h"
 #include "digikam_debug.h"
+#include "progressmanager.h"
 
 namespace Digikam
 {
@@ -67,7 +68,12 @@ void TwoProgressItemsContainer::advance(QAtomicPointer<ProgressItem>& ptr, int n
     }
 }
 
-void FileActionProgressItemContainer::schedulingForDB(int numberOfInfos, const QString& action, 
+FileActionProgressItemContainer::FileActionProgressItemContainer()
+{
+
+}
+
+void FileActionProgressItemContainer::schedulingForDB(int numberOfInfos, const QString& action,
                                                       FileActionProgressItemCreator* const creator)
 {
     scheduleOnProgressItem(firstItem, numberOfInfos, action, creator);
@@ -87,6 +93,7 @@ void FileActionProgressItemContainer::schedulingForWrite(int numberOfInfos, cons
                                                          FileActionProgressItemCreator* const creator)
 {
     scheduleOnProgressItem(secondItem, numberOfInfos, action, creator);
+    connect(secondItem, SIGNAL(progressItemCompleted(ProgressItem*)), this, SIGNAL(signalWrittingDone()));
 }
 
 void FileActionProgressItemContainer::written(int numberOfInfos)
@@ -96,7 +103,7 @@ void FileActionProgressItemContainer::written(int numberOfInfos)
 
 void FileActionProgressItemContainer::finishedWriting()
 {
-    //checkFinish(secondItem);
+//    checkFinish(secondItem);
 }
 
 FileActionImageInfoList FileActionImageInfoList::create(const QList<ImageInfo>& infos)

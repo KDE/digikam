@@ -52,7 +52,7 @@ public:
 
 // -------------------------------------------------------------------------------------------------------------------
 
-class TwoProgressItemsContainer : public QSharedData
+class TwoProgressItemsContainer :  public QSharedData
 {
 protected:
 
@@ -69,16 +69,21 @@ protected:
 
 // -------------------------------------------------------------------------------------------------------------------
 
-class FileActionProgressItemContainer : public TwoProgressItemsContainer
+class FileActionProgressItemContainer :public QObject, public TwoProgressItemsContainer
 {
+    Q_OBJECT
 public:
-
+    FileActionProgressItemContainer();
     void schedulingForDB(int numberOfInfos, const QString& action, FileActionProgressItemCreator* const creator);
     void dbProcessed(int numberOfInfos);
     void dbFinished();
     void schedulingForWrite(int numberOfInfos, const QString& action, FileActionProgressItemCreator* const creator);
     void written(int numberOfInfos);
     void finishedWriting();
+
+Q_SIGNALS:
+    void signalWrittingDone();
+
 };
 
 // -------------------------------------------------------------------------------------------------------------------
@@ -125,11 +130,11 @@ public:
     void written(int numberOfInfos) { progress()->written(numberOfInfos); }
     void finishedWriting()          { progress()->finishedWriting();      }
 
+    QExplicitlySharedDataPointer<FileActionProgressItemContainer> container;
 private:
 
     FileActionImageInfoList(const QList<ImageInfo>& list) : QList<ImageInfo>(list) {}
 
-    QExplicitlySharedDataPointer<FileActionProgressItemContainer> container;
 };
 
 } // namespace Digikam

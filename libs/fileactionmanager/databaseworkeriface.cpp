@@ -143,6 +143,8 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
         FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
+        connect(d->fileProgressCreator(), SIGNAL(lastItemCompleted()), this , SLOT(enableScanAfterWrite()));
+        ScanController::instance()->suspendCollectionScan();
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadata(FileActionImageInfoList(splitter.next()), MetadataHub::WRITE_PICKLABEL);;
     }
@@ -305,7 +307,6 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
 
 void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, DisjointMetadata *hub)
 {
-    //ScanController::instance()->suspendCollectionScan();
     {
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
@@ -330,6 +331,8 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
         int flags = hub->changedFlags();
         // dont filter by shallSendForWriting here; we write from the hub, not from freshly loaded data
         infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());
+        connect(infos.container.data(), SIGNAL(signalWrittingDone()), this , SLOT(enableScanAfterWrite()));
+        ScanController::instance()->suspendCollectionScan();
 
         for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
         {
@@ -360,6 +363,11 @@ void FileActionMngrDatabaseWorker::copyAttributes(FileActionImageInfoList infos,
     }
 
     infos.dbFinished();
+}
+
+void FileActionMngrDatabaseWorker::enableScanAfterWrite()
+{
+    ScanController::instance()->resumeCollectionScan();
 }
 
 } // namespace Digikam

@@ -509,6 +509,7 @@ void ScanController::scheduleCollectionScanRelaxed(const QString& path)
 void ScanController::slotRelaxedScanning()
 {
     d->relaxedTimer->stop();
+    qCDebug(DIGIKAM_GENERAL_LOG()) << "Starting scan!";
 
     QMutexLocker lock(&d->mutex);
     d->condVar.wakeAll();

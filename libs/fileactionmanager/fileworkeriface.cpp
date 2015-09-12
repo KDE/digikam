@@ -114,7 +114,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int 
 {
     d->startingToWrite(infos);
 
-    ScanController::instance()->suspendCollectionScan();
+//    ScanController::instance()->suspendCollectionScan();
 
     MetadataHub hub;
     foreach(const ImageInfo& info, infos)
@@ -134,7 +134,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int 
         infos.writtenToOne();
     }
 
-    ScanController::instance()->resumeCollectionScan();
+//    ScanController::instance()->resumeCollectionScan();
 
     infos.finishedWriting();
 }
