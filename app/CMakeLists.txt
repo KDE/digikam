@@ -21,7 +21,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:3rdparty_src>
             $<TARGET_OBJECTS:kiowrapper_src>
-            $<TARGET_OBJECTS:akonadiiface_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src>
@@ -33,6 +32,8 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:slideshow_src>
             $<TARGET_OBJECTS:imageeditor_src>
             $<TARGET_OBJECTS:editorplugin_src>
+            $<TARGET_OBJECTS:metadataedit_src>
+            $<TARGET_OBJECTS:akonadiiface_src>  # NOTE: even if optional this code need to be compiled here.
 
             utils/digikam_debug.cpp
 )

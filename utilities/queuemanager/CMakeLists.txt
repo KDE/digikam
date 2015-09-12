@@ -80,8 +80,6 @@ add_library(queuemanager_src OBJECT ${libqueuemanager_SRCS})
 
 add_library(queuemanager STATIC $<TARGET_OBJECTS:queuemanager_src>)
 
-
-
 target_link_libraries(queuemanager
                       PRIVATE
                       Qt5::Gui

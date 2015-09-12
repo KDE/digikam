@@ -15,6 +15,7 @@ add_subdirectory(fuzzysearch)
 add_subdirectory(firstrun)
 add_subdirectory(maintenance)
 add_subdirectory(searchwindow)
+add_subdirectory(metadataedit)
 add_subdirectory(kdesupport)
 
 if(${KF5KFace_FOUND})
