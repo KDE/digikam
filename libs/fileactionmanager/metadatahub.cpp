@@ -286,7 +286,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
     bool saveDateTime   = (settings.saveDateTime   && (d->dateTimeStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_DATETIME));
     bool savePickLabel  = (settings.savePickLabel  && (d->pickLabelStatus  == MetadataAvailable) && writeMode.testFlag(WRITE_PICKLABEL));
     bool saveColorLabel = (settings.saveColorLabel && (d->colorLabelStatus == MetadataAvailable) && writeMode.testFlag(WRITE_COLORLABEL));
-    bool saveRating     = (settings.saveRating     && (d->ratingStatus     == MetadataAvailable) && writeMode.testFlag(WRITE_TEMPLATE));
+    bool saveRating     = (settings.saveRating     && (d->ratingStatus     == MetadataAvailable) && writeMode.testFlag(WRITE_RATING));
     bool saveTemplate   = (settings.saveTemplate   && (d->templateStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_TEMPLATE));
     bool saveTags       = settings.saveTags && writeMode.testFlag(WRITE_TAGS);
     bool saveFaces      = settings.saveFaceTags && writeMode.testFlag((WRITE_TAGS));
@@ -300,21 +300,18 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
 
     if (saveComment)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG()) << "Saving comment";
         // Store comments in image as JFIF comments, Exif comments, Iptc Caption, and Xmp.
         dirty |= metadata.setImageComments(d->comments);
     }
 
     if (saveDateTime)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving datetime";
         // Store Image Date & Time as Exif and Iptc tags.
         dirty |= metadata.setImageDateTime(d->dateTime, false);
     }
 
     if (savePickLabel)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving pick label";
         // Store Image Pick Label as XMP tag.
         dirty |= metadata.setImagePickLabel(d->pickLabel);
     }
@@ -322,20 +319,17 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
     if (saveColorLabel)
     {
         // Store Image Color Label as XMP tag.
-        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving color label";
         dirty |= metadata.setImageColorLabel(d->colorLabel);
     }
 
     if (saveRating)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving rating";
         // Store Image rating as Iptc tag.
         dirty |= metadata.setImageRating(d->rating);
     }
 
     if (saveTemplate)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving template";
         QString title = d->metadataTemplate.templateTitle();
 
         if (title == Template::removeTemplateTitle())
@@ -354,10 +348,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
         }
     }
 
-    if(saveTags)
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving tags";
-    }
     dirty |= metadata.setImageFacesMap(d->faceTagsList,saveFaces);
 
     dirty |= writeTags(metadata,saveTags);
@@ -586,7 +576,7 @@ bool MetadataHub::willWriteMetadata(WriteComponent writeMode, const MetadataSett
     bool saveDateTime   = (settings.saveDateTime   && (d->dateTimeStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_DATETIME));
     bool savePickLabel  = (settings.savePickLabel  && (d->pickLabelStatus  == MetadataAvailable) && writeMode.testFlag(WRITE_PICKLABEL));
     bool saveColorLabel = (settings.saveColorLabel && (d->colorLabelStatus == MetadataAvailable) && writeMode.testFlag(WRITE_COLORLABEL));
-    bool saveRating     = (settings.saveRating     && (d->ratingStatus     == MetadataAvailable) && writeMode.testFlag(WRITE_TEMPLATE));
+    bool saveRating     = (settings.saveRating     && (d->ratingStatus     == MetadataAvailable) && writeMode.testFlag(WRITE_RATING));
     bool saveTemplate   = (settings.saveTemplate   && (d->templateStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_TEMPLATE));
     bool saveTags       = settings.saveTags && writeMode.testFlag(WRITE_TAGS);
 

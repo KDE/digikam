@@ -42,6 +42,7 @@
 #include "imagecomments.h"
 #include "imageinfo.h"
 #include "databasewatch.h"
+#include "metadatahub.h"
 
 namespace Digikam
 {
@@ -540,7 +541,31 @@ bool DisjointMetadata::willWriteMetadata(DisjointMetadata::WriteMode writeMode, 
                (saveRating     && (writeAllFields || d->ratingChanged))     ||
                (saveTags       && (writeAllFields || d->tagsChanged))       ||
                (saveTemplate   && (writeAllFields || d->templateChanged))
-           );
+                );
+}
+
+int DisjointMetadata::changedFlags()
+{
+    int value = 0;
+
+    if(d->titlesChanged)
+        value |= MetadataHub::WRITE_TITLE;
+    if(d->commentsChanged)
+        value |= MetadataHub::WRITE_COMMENTS;
+    if(d->dateTimeChanged)
+        value |= MetadataHub::WRITE_DATETIME;
+    if(d->pickLabelChanged)
+        value |= MetadataHub::WRITE_PICKLABEL;
+    if(d->colorLabelChanged)
+        value |= MetadataHub::WRITE_COLORLABEL;
+    if(d->ratingChanged)
+        value |= MetadataHub::WRITE_RATING;
+    if(d->tagsChanged)
+        value |= MetadataHub::WRITE_TAGS;
+    if(d->templateChanged)
+        value |= MetadataHub::WRITE_TEMPLATE;
+
+    return value;
 }
 
 void DisjointMetadata::load(const QDateTime &dateTime,const CaptionsMap &titles,

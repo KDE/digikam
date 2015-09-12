@@ -243,6 +243,13 @@ public:
      */
     bool willWriteMetadata(WriteMode writeMode,
                            const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings()) const;
+
+    /**
+     * @brief changedFlags - used for selective metadata write. The result will be passed to metadatahub and it will
+     *                     - write it to disk
+     * @return - metadatahub flags encoded as int
+     */
+    int changedFlags();
 protected:
 
     void load(const QDateTime& dateTime,
