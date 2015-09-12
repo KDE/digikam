@@ -241,7 +241,7 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
 // ------------------------------------------------------------------------------------------------------------
 
 /** safe **/
-bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMode, bool ignoreLazySync, const MetadataSettingsContainer &settings)
+bool MetadataHub::writeToMetadata(ImageInfo info, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer &settings)
 {
     applyChangeNotifications();
 
@@ -272,7 +272,7 @@ bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMo
     return false;
 }
 
-bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -281,77 +281,61 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     metadata.setSettings(settings);
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
-    bool saveTitle      = (settings.saveComments   && d->titlesStatus     == MetadataAvailable);
-    bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
-    bool saveDateTime   = (settings.saveDateTime   && d->dateTimeStatus   == MetadataAvailable);
-    bool savePickLabel  = (settings.savePickLabel  && d->pickLabelStatus  == MetadataAvailable);
-    bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
-    bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
-    bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
-    bool saveFaces      =  settings.saveFaceTags;
-    bool saveTags       = settings.saveTags;
+    bool saveTitle      = (settings.saveComments   && (d->titlesStatus     == MetadataAvailable) && writeMode.testFlag(WRITE_TITLE));
+    bool saveComment    = (settings.saveComments   && (d->commentsStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_COMMENTS));
+    bool saveDateTime   = (settings.saveDateTime   && (d->dateTimeStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_DATETIME));
+    bool savePickLabel  = (settings.savePickLabel  && (d->pickLabelStatus  == MetadataAvailable) && writeMode.testFlag(WRITE_PICKLABEL));
+    bool saveColorLabel = (settings.saveColorLabel && (d->colorLabelStatus == MetadataAvailable) && writeMode.testFlag(WRITE_COLORLABEL));
+    bool saveRating     = (settings.saveRating     && (d->ratingStatus     == MetadataAvailable) && writeMode.testFlag(WRITE_TEMPLATE));
+    bool saveTemplate   = (settings.saveTemplate   && (d->templateStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_TEMPLATE));
+    bool saveTags       = settings.saveTags && writeMode.testFlag(WRITE_TAGS);
+    bool saveFaces      = settings.saveFaceTags && writeMode.testFlag((WRITE_TAGS));
 
-    bool writeAllFields;
 
-    if (writeMode == FullWrite)
-    {
-        writeAllFields = true;
-    }
-    else if (writeMode == FullWriteIfChanged)
-    {
-        writeAllFields = (
-                             saveTitle      ||
-                             saveComment    ||
-                             saveDateTime   ||
-                             savePickLabel  ||
-                             saveColorLabel ||
-                             saveRating     ||
-                             saveTemplate
-                         );
-    }
-    else // PartialWrite
-    {
-        writeAllFields = false;
-    }
-
-    if (saveTitle && writeAllFields)
+    if (saveTitle)
     {
         // Store titles in image as Iptc Object name and Xmp.
         dirty |= metadata.setImageTitles(d->titles);
     }
 
-    if (saveComment && writeAllFields)
+    if (saveComment)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG()) << "Saving comment";
         // Store comments in image as JFIF comments, Exif comments, Iptc Caption, and Xmp.
         dirty |= metadata.setImageComments(d->comments);
     }
 
-    if (saveDateTime && writeAllFields)
+    if (saveDateTime)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving datetime";
         // Store Image Date & Time as Exif and Iptc tags.
         dirty |= metadata.setImageDateTime(d->dateTime, false);
     }
 
-    if (savePickLabel && writeAllFields)
+    if (savePickLabel)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving pick label";
         // Store Image Pick Label as XMP tag.
         dirty |= metadata.setImagePickLabel(d->pickLabel);
     }
 
-    if (saveColorLabel && writeAllFields)
+    if (saveColorLabel)
     {
         // Store Image Color Label as XMP tag.
+        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving color label";
         dirty |= metadata.setImageColorLabel(d->colorLabel);
     }
 
-    if (saveRating && writeAllFields)
+    if (saveRating)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving rating";
         // Store Image rating as Iptc tag.
         dirty |= metadata.setImageRating(d->rating);
     }
 
-    if (saveTemplate && writeAllFields)
+    if (saveTemplate)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving template";
         QString title = d->metadataTemplate.templateTitle();
 
         if (title == Template::removeTemplateTitle())
@@ -370,21 +354,18 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
         }
     }
 
-    if (saveFaces)
+    if(saveTags)
     {
-        metadata.setImageFacesMap(d->faceTagsList,true);
+        qCDebug(DIGIKAM_GENERAL_LOG()) << "saving tags";
     }
-    else
-    {
-        metadata.setImageFacesMap(d->faceTagsList,false);
-    }
+    dirty |= metadata.setImageFacesMap(d->faceTagsList,saveFaces);
 
     dirty |= writeTags(metadata,saveTags);
 
     return dirty;
 }
 
-bool MetadataHub::write(const QString& filePath, WriteMode writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -415,7 +396,7 @@ bool MetadataHub::write(const QString& filePath, WriteMode writeMode, bool ignor
     return false;
 }
 
-bool MetadataHub::write(DImg& image, WriteMode writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
+bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
 
@@ -451,7 +432,7 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, bool ignoreLazySync, c
     return write(metadata, writeMode, settings);
 }
 
-bool MetadataHub::writeTags(const QString& filePath, MetadataHub::WriteMode writeMode,
+bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
                             const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
@@ -596,52 +577,31 @@ QStringList MetadataHub::cleanupTags(const QStringList& toClean)
     return deduplicator.toList();
 }
 
-bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsContainer& settings) const
+bool MetadataHub::willWriteMetadata(WriteComponent writeMode, const MetadataSettingsContainer& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes
-    bool saveTitle      = (settings.saveComments   && d->titlesStatus     == MetadataAvailable);
-    bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
-    bool saveDateTime   = (settings.saveDateTime   && d->dateTimeStatus   == MetadataAvailable);
-    bool savePickLabel  = (settings.savePickLabel  && d->pickLabelStatus  == MetadataAvailable);
-    bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
-    bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
-    bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
-    bool saveTags       = settings.saveTags;
+    bool saveTitle      = (settings.saveComments   && (d->titlesStatus     == MetadataAvailable) && writeMode.testFlag(WRITE_TITLE));
+    bool saveComment    = (settings.saveComments   && (d->commentsStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_COMMENTS));
+    bool saveDateTime   = (settings.saveDateTime   && (d->dateTimeStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_DATETIME));
+    bool savePickLabel  = (settings.savePickLabel  && (d->pickLabelStatus  == MetadataAvailable) && writeMode.testFlag(WRITE_PICKLABEL));
+    bool saveColorLabel = (settings.saveColorLabel && (d->colorLabelStatus == MetadataAvailable) && writeMode.testFlag(WRITE_COLORLABEL));
+    bool saveRating     = (settings.saveRating     && (d->ratingStatus     == MetadataAvailable) && writeMode.testFlag(WRITE_TEMPLATE));
+    bool saveTemplate   = (settings.saveTemplate   && (d->templateStatus   == MetadataAvailable) && writeMode.testFlag(WRITE_TEMPLATE));
+    bool saveTags       = settings.saveTags && writeMode.testFlag(WRITE_TAGS);
 
 
-    bool writeAllFields;
 
-    if (writeMode == FullWrite)
-    {
-        writeAllFields = true;
-    }
-    else if (writeMode == FullWriteIfChanged)
-    {
-        writeAllFields = (
-                             saveTitle      ||
-                             saveComment    ||
-                             saveDateTime   ||
-                             savePickLabel  ||
-                             saveColorLabel ||
-                             saveRating     ||
-                             saveTemplate
-                         );
-    }
-    else // PartialWrite
-    {
-        writeAllFields = false;
-    }
 
     return (
-               (saveTitle      && writeAllFields) ||
-               (saveComment    && writeAllFields) ||
-               (saveDateTime   && writeAllFields) ||
-               (savePickLabel  && writeAllFields) ||
-               (saveColorLabel && writeAllFields) ||
-               (saveRating     && writeAllFields) ||
-               (saveTags       && writeAllFields) ||
-               (saveTemplate   && writeAllFields)
+               saveTitle       ||
+               saveComment     ||
+               saveDateTime    ||
+               savePickLabel   ||
+               saveColorLabel  ||
+               saveRating      ||
+               saveTags        ||
+               saveTemplate
            );
 }
 

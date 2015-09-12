@@ -100,7 +100,7 @@ void MetadataTask::run()
         }
         else
         {
-            fileHub.write(d->item.filePath(), MetadataHub::FullWrite, true);
+            fileHub.write(d->item.filePath(), MetadataHub::WRITE_ALL, true);
         }
     }
     else // MetadataSynchronizer::ReadFromFileToDatabase

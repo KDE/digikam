@@ -85,6 +85,19 @@ public:
         PartialWrite
     };
 
+    enum WriteComponents{
+        WRITE_DATETIME  = 1,
+        WRITE_TITLE     = 2,
+        WRITE_COMMENTS  = 4,
+        WRITE_PICKLABEL = 8,
+        WRITE_COLORLABEL= 16,
+        WRITE_RATING    = 32,
+        WRITE_TEMPLATE  = 64,
+        WRITE_TAGS      = 128,
+        WRITE_ALL       = 255
+    };
+     Q_DECLARE_FLAGS(WriteComponent, WriteComponents)
+
 public:
 
     /**
@@ -138,7 +151,7 @@ public:
      * @param settings
      * @return true           - if everything is succesfull
      */
-    bool writeToMetadata(ImageInfo info, WriteMode writeMode = FullWrite,
+    bool writeToMetadata(ImageInfo info, WriteComponent writeMode = WRITE_ALL,
                bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
 
@@ -151,7 +164,7 @@ public:
                  Use writeToMetadata(Image info ...) instead
         @return Returns if the file has been touched
     */
-    bool write(const QString& filePath, WriteMode writeMode = FullWrite,
+    bool write(const QString& filePath, WriteComponent writeMode = WRITE_ALL,
                bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
@@ -159,7 +172,7 @@ public:
         calls the above method, and changes the stored metadata in the DImg object.
         @return Returns if the DImg object has been touched
     */
-    bool write(DImg& image, WriteMode writeMode = FullWrite,
+    bool write(DImg& image, WriteComponent writeMode = WRITE_ALL,
                bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
@@ -167,7 +180,7 @@ public:
         Other metadata are not updated.
         @return if tags were successfully written.
     */
-    bool writeTags(const QString& filePath, WriteMode writeMode = FullWrite,
+    bool writeTags(const QString& filePath, WriteComponent writeMode = WRITE_ALL,
                    const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
@@ -190,7 +203,7 @@ public:
         returns if write(DMetadata), write(QString) or write(DImg) will actually
         apply any changes.
     */
-    bool willWriteMetadata(WriteMode writeMode,
+    bool willWriteMetadata(Digikam::MetadataHub::WriteComponent writeMode = WRITE_ALL,
                            const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings()) const;
 
     /**
@@ -232,7 +245,7 @@ protected:
         metadata field is not touched.
         @return Returns true if the metadata object has been touched
     */
-    bool write(DMetadata& metadata, WriteMode writeMode = FullWrite,
+    bool write(DMetadata& metadata, WriteComponent writeMode = WRITE_ALL,
                const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     void load(const QDateTime& dateTime,
@@ -253,4 +266,5 @@ private:
 
 } // namespace Digikam
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataHub::WriteComponent)
 #endif // METADATAHUB_H

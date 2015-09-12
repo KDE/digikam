@@ -99,7 +99,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
         QString filePath = info.filePath();
 
         ScanController::FileMetadataWrite writeScope(info);
-        writeScope.changed(hub.write(filePath, MetadataHub::FullWrite));
+        writeScope.changed(hub.write(filePath, MetadataHub::WRITE_ALL));
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();
@@ -125,7 +125,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, Meta
 
         // apply to file metadata
         ScanController::FileMetadataWrite writeScope(info);
-        writeScope.changed(hub->writeToMetadata(info, MetadataHub::FullWrite));
+        writeScope.changed(hub->writeToMetadata(info, MetadataHub::WRITE_ALL));
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();
@@ -345,7 +345,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
     hub.load(info);
     QSize tempS = info.dimensions ();
     hub.loadFaceTags (info,QSize(tempS.height (),tempS.width ()));
-    hub.write (info.filePath (),MetadataHub::FullWrite);
+    hub.write (info.filePath (),MetadataHub::WRITE_ALL);
 }
 
 } // namespace Digikam

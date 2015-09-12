@@ -1070,7 +1070,7 @@ void ImageWindow::prepareImageToSave()
         MetadataHub hub;
         hub.load(d->currentImageInfo);
         DImg image(m_canvas->currentImage());
-        hub.write(image, MetadataHub::FullWrite);
+        hub.write(image, MetadataHub::WRITE_ALL);
 
         // Ensure there is a UUID for the source image in the database,
         // even if not in the source image's metadata
