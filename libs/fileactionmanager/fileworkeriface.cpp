@@ -110,30 +110,31 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
     infos.finishedWriting();
 }
 
-void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, MetadataHub* hub)
+void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int flags)
 {
     d->startingToWrite(infos);
 
     ScanController::instance()->suspendCollectionScan();
 
+    MetadataHub hub;
     foreach(const ImageInfo& info, infos)
     {
+        hub.reset();
         if (state() == WorkerObject::Deactivating)
         {
             break;
         }
 
+        hub.load(info);
         // apply to file metadata
         ScanController::FileMetadataWrite writeScope(info);
-        writeScope.changed(hub->writeToMetadata(info, MetadataHub::WRITE_ALL));
+        writeScope.changed(hub.writeToMetadata(info, (MetadataHub::WriteComponents)flags));
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();
     }
 
     ScanController::instance()->resumeCollectionScan();
-
-    delete hub;
 
     infos.finishedWriting();
 }

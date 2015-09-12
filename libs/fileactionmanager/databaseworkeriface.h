@@ -60,7 +60,7 @@ Q_SIGNALS:
 
     void writeMetadataToFiles(FileActionImageInfoList infos);
     void writeOrientationToFiles(FileActionImageInfoList infos, int orientation);
-    void writeMetadata(FileActionImageInfoList infos);
+    void writeMetadata(FileActionImageInfoList infos, int flag);
 };
 
 // ------------------------------------------------------------------------------------

@@ -44,7 +44,7 @@ public Q_SLOTS:
 
     virtual void writeOrientationToFiles(FileActionImageInfoList, int){};
     virtual void writeMetadataToFiles(FileActionImageInfoList)        {};
-    virtual void writeMetadata(FileActionImageInfoList, MetadataHub*) {};
+    virtual void writeMetadata(FileActionImageInfoList, int)          {};
     virtual void transform(FileActionImageInfoList, int)              {};
 
 Q_SIGNALS:
@@ -69,7 +69,7 @@ public:
 
     void writeOrientationToFiles(FileActionImageInfoList infos, int orientation);
     void writeMetadataToFiles(FileActionImageInfoList infos);
-    void writeMetadata(FileActionImageInfoList infos, MetadataHub* hub);
+    void writeMetadata(FileActionImageInfoList infos, int flags);
     void transform(FileActionImageInfoList infos, int orientation);
     void ajustFaceRectangles(const ImageInfo &info, int action);
 

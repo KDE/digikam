@@ -99,7 +99,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Scheduled to write";
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(FileActionImageInfoList(splitter.next()));
+            emit writeMetadata(FileActionImageInfoList(splitter.next()), MetadataHub::WRITE_TAGS);
     }
 
     infos.dbFinished();
@@ -144,7 +144,7 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(FileActionImageInfoList(splitter.next()));
+            emit writeMetadata(FileActionImageInfoList(splitter.next()), MetadataHub::WRITE_PICKLABEL);;
     }
 
     infos.dbFinished();
@@ -189,7 +189,7 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(FileActionImageInfoList(splitter.next()));
+            emit writeMetadata(FileActionImageInfoList(splitter.next()), MetadataHub::WRITE_COLORLABEL);;
     }
 
     infos.dbFinished();
@@ -235,7 +235,7 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
-            emit writeMetadataToFiles(FileActionImageInfoList(splitter.next()));
+            emit writeMetadata(FileActionImageInfoList(splitter.next()), MetadataHub::WRITE_RATING);
     }
 
     infos.dbFinished();
