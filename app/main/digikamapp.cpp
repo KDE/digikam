@@ -83,6 +83,7 @@
 #include "importui.h"
 #include "cameranamehelper.h"
 #include "collectionscanner.h"
+#include "collectionmanager.h"
 #include "componentsinfo.h"
 #include "databasethumbnailinfoprovider.h"
 #include "digikamadaptor.h"
@@ -131,10 +132,6 @@
 #ifdef HAVE_KFILEMETADATA
 #include "baloowrap.h"
 #endif
-
-#ifdef HAVE_KSANE
-#include "ksaneaction.h"
-#endif // HAVE_KSANE
 
 using namespace KDcrawIface;
 
@@ -964,10 +961,7 @@ void DigikamApp::setupActions()
     d->quickImportMenu->setIcon(QIcon::fromTheme(QLatin1String("camera-photo")));
     ac->addAction(QLatin1String("import_auto"), d->quickImportMenu->menuAction());
 
-#ifdef HAVE_KSANE
-    KSaneAction* const scan = new KSaneAction(this);
-    ac->addAction(QLatin1String("import_scan"), scan);
-#endif // HAVE_KSANE
+    createKSaneAction();
 
     // -----------------------------------------------------------------
 
@@ -3112,6 +3106,36 @@ void DigikamApp::slotColorManagementOptionsChanged()
     d->viewCMViewAction->setEnabled(settings.enableCM);
     d->viewCMViewAction->setChecked(settings.useManagedPreviews);
     d->viewCMViewAction->blockSignals(false);
+}
+
+void DigikamApp::slotImportFromScanner()
+{
+    QString place    = QDir::homePath();
+    QStringList pics = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+
+    if (!pics.isEmpty())
+        place = pics.first();
+
+    Album* const album = AlbumManager::instance()->currentAlbums().first();
+
+    if (album->type() == Album::PHYSICAL)
+    {
+        PAlbum* const p = dynamic_cast<PAlbum*>(album);
+
+        if (p)
+        {
+            place = p->folderPath();
+        }
+    }
+    else
+    {
+        QStringList cols = CollectionManager::instance()->allAvailableAlbumRootPaths();
+
+        if (!cols.isEmpty())
+            place = cols.first();
+    }
+
+    m_ksaneAction->activate(place, configGroupName());
 }
 
 }  // namespace Digikam

@@ -210,6 +210,8 @@ private Q_SLOTS:
     void slotImportAddFolders();
     void slotThemeChanged();
 
+    void slotImportFromScanner();
+
 private:
 
     class Private;

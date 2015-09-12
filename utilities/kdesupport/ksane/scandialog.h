@@ -49,6 +49,9 @@ public:
     ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent=0);
     ~ScanDialog();
 
+    void setTargetDir(const QString& targetDir);
+    void setConfigGroupName(const QString& name);
+
 protected:
 
     void closeEvent(QCloseEvent*);

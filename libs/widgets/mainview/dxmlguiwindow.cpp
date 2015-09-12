@@ -149,7 +149,12 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
-    m_animLogo = 0;
+    m_animLogo    = 0;
+
+#ifdef HAVE_KSANE
+    m_ksaneAction = 0;
+#endif
+
     installEventFilter(this);
 }
 
@@ -306,6 +311,17 @@ void DXmlGuiWindow::slotNewToolbarConfig()
     applyMainWindowSettings(group);
 }
 
+void DXmlGuiWindow::createKSaneAction()
+{
+#ifdef HAVE_KSANE
+    m_ksaneAction = new KSaneAction(this);
+    actionCollection()->addAction(QLatin1String("import_scan"), m_ksaneAction);
+
+    connect(m_ksaneAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotImportFromScanner()));
+#endif // HAVE_KSANE
+}
+ 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)
 {
     d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);

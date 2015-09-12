@@ -65,6 +65,8 @@ public:
         saneWidget = 0;
     }
 
+    QString       targetDir;
+    QString       configGroupName;
     QProgressBar* progress;
     KSaneWidget*  saneWidget;
 };
@@ -107,16 +109,26 @@ ScanDialog::~ScanDialog()
     delete d;
 }
 
+void ScanDialog::setTargetDir(const QString& targetDir)
+{
+    d->targetDir = targetDir;
+}
+
+void ScanDialog::setConfigGroupName(const QString& config)
+{
+    d->configGroupName = config;
+}
+
 void ScanDialog::readSettings()
 {
-    KConfig config(QLatin1String("kipirc"));
+    KConfig config(d->configGroupName);
     KConfigGroup group = config.group(QLatin1String("Scan Tool Dialog"));
     KWindowConfig::restoreWindowSize(windowHandle(), group);
 }
 
 void ScanDialog::saveSettings()
 {
-    KConfig config(QLatin1String("kipirc"));
+    KConfig config(d->configGroupName);
     KConfigGroup group = config.group(QLatin1String("Scan Tool Dialog"));
     KWindowConfig::saveWindowSize(windowHandle(), group);
     config.sync();
@@ -161,21 +173,8 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
 
     QLatin1String defaultMimeType("image/png");
     QLatin1String defaultFileName("image.png");
-    QString place = QDir::homePath();
-/*
-    Album* const album = AlbumManager::instance()->currentAlbums().first();
 
-    if (album->type() == Album::PHYSICAL)
-    {
-        PAlbum* const p = dynamic_cast<PAlbum*>(album);
-
-        if (p)
-        {
-            place = p->folderPath();
-        }
-    }
-*/
-    QPointer<QFileDialog> imageFileSaveDialog = new QFileDialog(0, i18n("New Image File Name"), place);
+    QPointer<QFileDialog> imageFileSaveDialog = new QFileDialog(0, i18n("New Image File Name"), d->targetDir);
     imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
     imageFileSaveDialog->setMimeTypeFilters(writableMimetypes);
     imageFileSaveDialog->selectMimeTypeFilter(defaultMimeType);

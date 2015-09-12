@@ -40,6 +40,11 @@
 
 #include "digikam_export.h"
 #include "dlogoaction.h"
+#include "digikam_config.h"
+
+#ifdef HAVE_KSANE
+#include "ksaneaction.h"
+#endif
 
 class QEvent;
 
@@ -99,7 +104,11 @@ public:
      */
     void setConfigGroupName(const QString& name);
     QString configGroupName() const;
-    
+
+    /** Create Ksane action to import from scanner.
+     */
+    void createKSaneAction();
+
     /** Create common actions to setup all digiKam main windows.
      */
     void createSettingsActions();
@@ -129,7 +138,7 @@ public:
     /** Return true if managed window is currently in Full Screen Mode.
      */
     bool fullScreenIsActive() const;
-    
+
     static void openHandbook(const QString& anchor = QString(), const QString& appname = QString());
     static void restoreWindowSize(QWindow* const win, const KConfigGroup& group);
     static void saveWindowSize(QWindow* const win, KConfigGroup& group);
@@ -139,6 +148,10 @@ public:
 protected:
 
     DLogoAction* m_animLogo;
+
+#ifdef HAVE_KSANE
+    KSaneAction* m_ksaneAction;
+#endif
 
 protected:
 
@@ -173,7 +186,7 @@ protected:
     /** Re-implement this method if managed window has a thumbbar. This must return visibility state of it.
      */
     virtual bool thumbbarVisibility() const;
-    
+
 private Q_SLOTS:
 
     void slotToggleFullScreen(bool);
@@ -202,6 +215,9 @@ private Q_SLOTS:
     // Slots for common Settings actions
     virtual void slotEditKeys()                { editKeyboardShortcuts(); };
     virtual void slotSetup() = 0;
+
+    // Called by KSane action.
+    virtual void slotImportFromScanner()       {};
 
 private:
 

@@ -53,16 +53,13 @@ KSaneAction::KSaneAction(QObject* const parent)
 
     setText(i18n("Import from Scanner..."));
     setIcon(QIcon::fromTheme(QLatin1String("scanner")));
-
-    connect(this, SIGNAL(triggered(bool)),
-            this, SLOT(slotActivate()));
 }
 
 KSaneAction::~KSaneAction()
 {
 }
 
-void KSaneAction::slotActivate()
+void KSaneAction::activate(const QString& targetDir, const QString& config)
 {
     if (!m_saneWidget)
     {
@@ -86,6 +83,8 @@ void KSaneAction::slotActivate()
         }
 
         ScanDialog* const dlg = new ScanDialog(m_saneWidget);
+        dlg->setTargetDir(targetDir);
+        dlg->setConfigGroupName(config);
         dlg->show();
     }
 }
