@@ -3108,7 +3108,7 @@ void DigikamApp::slotColorManagementOptionsChanged()
     d->viewCMViewAction->blockSignals(false);
 }
 
-void DigikamApp::slotImportFromScanner()
+QString DigikamApp::scannerTargetPlace()
 {
     QString place    = QDir::homePath();
     QStringList pics = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
@@ -3135,7 +3135,14 @@ void DigikamApp::slotImportFromScanner()
             place = cols.first();
     }
 
-    m_ksaneAction->activate(place, configGroupName());
+    return place;
+}
+
+void DigikamApp::slotImportFromScanner()
+{
+#ifdef HAVE_KSANE
+    m_ksaneAction->activate(scannerTargetPlace(), configGroupName());
+#endif
 }
 
 }  // namespace Digikam

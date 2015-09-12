@@ -72,8 +72,6 @@ public:
     virtual void show();
     void restoreSession();
 
-    static DigikamApp* instance();
-
     QMenu* slideShowMenu() const;
 
     void autoDetect();
@@ -91,6 +89,9 @@ public:
     void rebuild();
 
     DigikamView* view() const;
+
+    static DigikamApp* instance();
+    static QString scannerTargetPlace();
 
 Q_SIGNALS:
 

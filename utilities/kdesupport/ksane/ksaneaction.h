@@ -41,6 +41,7 @@ namespace Digikam
 
 class KSaneAction : public QAction
 {
+    Q_OBJECT
 
 public:
 
@@ -51,6 +52,10 @@ public:
      *  config is the application config name to store scan dialog qettings between sessions.
      */
     void activate(const QString& targetDir, const QString& config);
+
+Q_SIGNALS:
+
+    void signalImportedImage(const QUrl&);
 
 private:
 

@@ -184,6 +184,9 @@ private Q_SLOTS:
     void slotRightSideBarActivateComments();
     void slotRightSideBarActivateAssignedTags();
 
+    void slotImportFromScanner();
+    void slotImportedImagefromScanner(const QUrl& url);
+
 private:
 
     static ImageWindow* m_instance;

@@ -81,6 +81,7 @@
 #include "dimg.h"
 #include "editorcore.h"
 #include "dimagehistory.h"
+#include "digikamapp.h"
 #include "dio.h"
 #include "dmetadata.h"
 #include "editorstackview.h"
@@ -1696,6 +1697,22 @@ void ImageWindow::slotRightSideBarActivateAssignedTags()
 {
     d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
     d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
+}
+
+void ImageWindow::slotImportFromScanner()
+{
+#ifdef HAVE_KSANE
+    m_ksaneAction->activate(DigikamApp::instance()->scannerTargetPlace(), configGroupName());
+
+    connect(m_ksaneAction, SIGNAL(signalImportedImage(QUrl)),
+            this, SLOT(slotImportedImagefromScanner(QUrl)));
+#endif
+}
+
+void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
+{
+    ImageInfo info = ScanController::instance()->scannedInfo(url.toLocalFile());
+    openImage(info);
 }
 
 }  // namespace Digikam

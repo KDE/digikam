@@ -56,6 +56,10 @@ protected:
 
     void closeEvent(QCloseEvent*);
 
+Q_SIGNALS:
+
+    void signalImportedImage(const QUrl&);
+
 private Q_SLOTS:
 
     void slotSaveImage(QByteArray&, int, int, int, int);

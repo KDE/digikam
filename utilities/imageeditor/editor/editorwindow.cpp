@@ -427,6 +427,8 @@ void EditorWindow::setupStandardActions()
     QAction* const closeAction = buildStdAction(StdCloseAction, this, SLOT(close()), this);
     ac->addAction(QLatin1String("editorwindow_close"), closeAction);
 
+    createKSaneAction();
+
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
     d->copyAction = buildStdAction(StdCopyAction, m_canvas, SLOT(slotCopy()), this);

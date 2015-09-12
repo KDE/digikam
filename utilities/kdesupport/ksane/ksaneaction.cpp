@@ -86,6 +86,9 @@ void KSaneAction::activate(const QString& targetDir, const QString& config)
         dlg->setTargetDir(targetDir);
         dlg->setConfigGroupName(config);
         dlg->show();
+
+        connect(dlg, SIGNAL(signalImportedImage(QUrl)),
+                this, SIGNAL(signalImportedImage(QUrl)));
     }
 }
 

@@ -290,6 +290,11 @@ void ScanDialog::slotThreadDone(const QUrl& url, bool success)
     d->progress->setFormat(QLatin1String("%p%"));
     QApplication::restoreOverrideCursor();
     setEnabled(true);
+
+    if (success)
+    {
+        emit signalImportedImage(url);
+    }
 }
 
 }  // namespace KIPIAcquireImagesPlugin
