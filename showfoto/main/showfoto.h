@@ -57,7 +57,7 @@ public Q_SLOTS:
 
     void slotSetup();
     void slotSetupICC();
-    
+
 private:
 
     bool setup(bool iccSetupPage=false);
@@ -130,6 +130,9 @@ private Q_SLOTS:
     void slotSetupMetadataFilters(int);
 
     void slotAddedDropedItems(QDropEvent*);
+
+    void slotImportFromScanner();
+    void slotImportedImagefromScanner(const QUrl& url);
 
 Q_SIGNALS:
 

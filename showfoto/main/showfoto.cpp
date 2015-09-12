@@ -932,7 +932,6 @@ void ShowFoto::saveVersionIsComplete()
 
 QUrl ShowFoto::saveDestinationUrl()
 {
-
     if (d->thumbBar->currentInfo().isNull())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot return the url of the image to save "
@@ -1342,6 +1341,38 @@ void ShowFoto::addServicesMenu()
 void ShowFoto::slotOpenWith(QAction* action)
 {
     openWith(d->thumbBar->currentUrl(), action);
+}
+
+void ShowFoto::slotImportFromScanner()
+{
+#ifdef HAVE_KSANE
+
+    QString place    = QDir::homePath();
+    QStringList pics = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+
+    if (!pics.isEmpty())
+        place = pics.first();
+
+    QUrl trg = saveDestinationUrl();
+
+    if (!trg.isEmpty())
+    {
+        QString path = trg.adjusted(QUrl::RemoveFilename).toLocalFile();
+
+        if (!path.isEmpty())
+            place = path;
+    }
+
+    m_ksaneAction->activate(place, configGroupName());
+
+    connect(m_ksaneAction, SIGNAL(signalImportedImage(QUrl)),
+            this, SLOT(slotImportedImagefromScanner(QUrl)));
+#endif
+}
+
+void ShowFoto::slotImportedImagefromScanner(const QUrl& url)
+{
+    openUrls(QList<QUrl>() << url);
 }
 
 }   // namespace ShowFoto
