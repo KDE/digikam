@@ -92,14 +92,14 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
 
     QDialogButtonBox::StandardButtons btns = QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Close;
 
-    if (urls.count() > 1)
+    if (d->urls.count() > 1)
         btns = btns | QDialogButtonBox::No | QDialogButtonBox::Yes;
 
     d->buttons = new QDialogButtonBox(btns, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
     d->buttons->button(QDialogButtonBox::Apply)->setEnabled(false);
 
-    if (urls.count() > 1)
+    if (d->urls.count() > 1)
     {
         d->buttons->button(QDialogButtonBox::No)->setText(i18nc("@action:button",  "Previous"));
         d->buttons->button(QDialogButtonBox::Yes)->setText(i18nc("@action:button", "Next"));
@@ -257,8 +257,12 @@ void MetadataEditDialog::slotItemChanged()
         .arg(d->urls.indexOf(*(d->currItem))+1)
         .arg(d->urls.count()));
 
-    d->buttons->button(QDialogButtonBox::No)->setEnabled(*(d->currItem) != d->urls.last());
-    d->buttons->button(QDialogButtonBox::Yes)->setEnabled(*(d->currItem) != d->urls.first());
+    if (d->urls.count() > 1)
+    {
+        d->buttons->button(QDialogButtonBox::No)->setEnabled(*(d->currItem) != d->urls.last());
+        d->buttons->button(QDialogButtonBox::Yes)->setEnabled(*(d->currItem) != d->urls.first());
+    }
+
     d->buttons->button(QDialogButtonBox::Apply)->setEnabled(!d->isReadOnly);
 }
 
@@ -266,14 +270,14 @@ bool MetadataEditDialog::eventFilter(QObject*, QEvent* e)
 {
     if ( e->type() == QEvent::KeyPress )
     {
-        QKeyEvent* k = (QKeyEvent*)e;
+        QKeyEvent* const k = (QKeyEvent*)e;
 
         if (k->modifiers() == Qt::ControlModifier &&
             (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return))
         {
             slotApply();
 
-            if (d->buttons->button(QDialogButtonBox::No)->isEnabled())
+            if ((d->urls.count() > 1) && d->buttons->button(QDialogButtonBox::No)->isEnabled())
                 slotNext();
 
             return true;
@@ -283,7 +287,7 @@ bool MetadataEditDialog::eventFilter(QObject*, QEvent* e)
         {
             slotApply();
 
-            if (d->buttons->button(QDialogButtonBox::Yes)->isEnabled())
+            if ((d->urls.count() > 1) && d->buttons->button(QDialogButtonBox::Yes)->isEnabled())
                 slotPrevious();
 
             return true;

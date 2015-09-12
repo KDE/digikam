@@ -212,6 +212,7 @@ private Q_SLOTS:
     void slotThemeChanged();
 
     void slotImportFromScanner();
+    void slotEditMetadata();
 
 private:
 

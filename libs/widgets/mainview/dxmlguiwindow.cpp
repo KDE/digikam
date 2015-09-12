@@ -149,10 +149,11 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
-    m_animLogo    = 0;
+    m_metadataEditAction = 0;
+    m_animLogo           = 0;
 
 #ifdef HAVE_KSANE
-    m_ksaneAction = 0;
+    m_ksaneAction        = 0;
 #endif
 
     installEventFilter(this);
@@ -309,6 +310,15 @@ void DXmlGuiWindow::slotNewToolbarConfig()
 {
     KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
     applyMainWindowSettings(group);
+}
+
+void DXmlGuiWindow::createMetadatEditAction()
+{
+    m_metadataEditAction = new QAction(QIcon::fromTheme(QLatin1String("text-xml")), i18n("Edit Metadata..."), this);
+    actionCollection()->addAction(QLatin1String("metadata_edit"), m_metadataEditAction);
+
+    connect(m_metadataEditAction, SIGNAL(triggered(bool)),
+            this,SLOT(slotEditMetadata()));
 }
 
 void DXmlGuiWindow::createKSaneAction()

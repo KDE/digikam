@@ -105,6 +105,10 @@ public:
     void setConfigGroupName(const QString& name);
     QString configGroupName() const;
 
+    /** Create Metadata Edit action.
+     */
+    void createMetadatEditAction();
+
     /** Create Ksane action to import from scanner.
      */
     void createKSaneAction();
@@ -147,6 +151,7 @@ public:
 
 protected:
 
+    QAction*     m_metadataEditAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
@@ -218,6 +223,9 @@ private Q_SLOTS:
 
     // Called by KSane action.
     virtual void slotImportFromScanner()       {};
+
+    // Called by Metadata Edit tool.
+    virtual void slotEditMetadata()            {};
 
 private:
 

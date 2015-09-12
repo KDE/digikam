@@ -124,6 +124,7 @@
 #include "tagsmanager.h"
 #include "imagesortsettings.h"
 #include "metadatahubmngr.h"
+#include "metadataedit.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -1158,6 +1159,7 @@ void DigikamApp::setupActions()
 
     setupImageTransformActions();
     setupExifOrientationActions();
+    createMetadatEditAction();
 
     // -----------------------------------------------------------------
 
@@ -3136,6 +3138,19 @@ QString DigikamApp::scannerTargetPlace()
     }
 
     return place;
+}
+
+void DigikamApp::slotEditMetadata()
+{
+    QList<QUrl> urls = view()->selectedUrls();
+
+    if ( urls.isEmpty() )
+        return;
+
+    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(), urls);
+    dialog->exec();
+
+    delete dialog;
 }
 
 void DigikamApp::slotImportFromScanner()
