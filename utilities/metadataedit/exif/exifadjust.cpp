@@ -46,11 +46,11 @@
 namespace Digikam
 {
 
-class EXIFAdjust::EXIFAdjustPriv
+class EXIFAdjust::Private
 {
 public:
 
-    EXIFAdjustPriv()
+    Private()
     {
         brightnessCheck     = 0;
         gainControlCheck    = 0;
@@ -84,7 +84,7 @@ public:
 };
 
 EXIFAdjust::EXIFAdjust(QWidget* const parent)
-    : QWidget(parent), d(new EXIFAdjustPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 

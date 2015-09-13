@@ -53,8 +53,8 @@ private Q_SLOTS:
 
 private:
 
-    class IPTCEnvelopePriv;
-    IPTCEnvelopePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

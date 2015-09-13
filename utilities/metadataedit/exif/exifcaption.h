@@ -61,8 +61,8 @@ Q_SIGNALS:
 
 private:
 
-    class EXIFCaptionPriv;
-    EXIFCaptionPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -31,19 +31,16 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
 
 // KDE includes
 
-
-#include <QLineEdit>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "multistringsedit.h"
 #include "dmetadata.h"
-
-
 
 namespace Digikam
 {

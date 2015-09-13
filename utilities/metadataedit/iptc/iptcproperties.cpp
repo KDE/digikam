@@ -884,8 +884,6 @@ void IPTCProperties::applyMetadata(QByteArray& iptcData)
     else
         meta.removeIptcTag("Iptc.Application2.TransmissionReference");
 
-    //FIXME meta.setImageProgramId(QString("Kipi-plugins"), QString(kipiplugins_version));
-
     iptcData = meta.getIptc();
 }
 

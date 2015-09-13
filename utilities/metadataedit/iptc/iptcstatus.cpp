@@ -30,29 +30,25 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
+#include <QTextEdit>
 
 // KDE includes
 
-
-#include <QLineEdit>
 #include <klocalizedstring.h>
-#include <QTextEdit>
 
 // Local includes
 
-
 #include "dmetadata.h"
-
-
 
 namespace Digikam
 {
 
-class IPTCStatus::IPTCStatusPriv
+class IPTCStatus::Private
 {
 public:
 
-    IPTCStatusPriv()
+    Private()
     {
         statusEdit              = 0;
         JobIDEdit               = 0;
@@ -77,7 +73,7 @@ public:
 };
 
 IPTCStatus::IPTCStatus(QWidget* const parent)
-    : QWidget(parent), d(new IPTCStatusPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 
@@ -278,8 +274,6 @@ void IPTCStatus::applyMetadata(QByteArray& iptcData)
         meta.setIptcTagString("Iptc.Application2.SpecialInstructions", d->specialInstructionEdit->toPlainText());
     else
         meta.removeIptcTag("Iptc.Application2.SpecialInstructions");
-
- //FIXME   meta.setImageProgramId(QString("Kipi-plugins"), QString(kipiplugins_version));
 
     iptcData = meta.getIptc();
 }

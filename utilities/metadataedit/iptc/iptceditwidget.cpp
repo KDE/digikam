@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kguiitem.h>
 #include <khelpmenu.h>
@@ -60,12 +60,12 @@
 namespace Digikam
 {
 
-class IPTCEditWidget::IPTCEditWidgetPrivate
+class IPTCEditWidget::Private
 {
 
 public:
 
-    IPTCEditWidgetPrivate()
+    Private()
     {
         modified        = false;
         isReadOnly      = false;
@@ -120,7 +120,7 @@ public:
 };
 
 IPTCEditWidget::IPTCEditWidget(MetadataEditDialog* const parent)
-    : KPageWidget(parent), d(new IPTCEditWidgetPrivate)
+    : KPageWidget(parent), d(new Private)
 {
     d->dlg           = parent;
 
@@ -220,8 +220,8 @@ IPTCEditWidget::~IPTCEditWidget()
 
 void IPTCEditWidget::readSettings()
 {
-    KConfig config(QLatin1String("kipirc")); // FIXME
-    KConfigGroup group = config.group(QLatin1String("All Metadata Edit Settings"));
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
     showPage(group.readEntry(QLatin1String("All IPTC Edit Page"), 0));
     d->contentPage->setCheckedSyncJFIFComment(group.readEntry(QLatin1String("All Sync JFIF Comment"), true));
     d->contentPage->setCheckedSyncHOSTComment(group.readEntry(QLatin1String("All Sync Host Comment"), true));
@@ -232,15 +232,15 @@ void IPTCEditWidget::readSettings()
 
 void IPTCEditWidget::saveSettings()
 {
-    KConfig config(QLatin1String("kipirc")); // FIXME
-    KConfigGroup group = config.group(QLatin1String("All Metadata Edit Settings"));
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
     group.writeEntry(QLatin1String("All IPTC Edit Page"), activePageIndex());
     group.writeEntry(QLatin1String("All Sync JFIF Comment"), d->contentPage->syncJFIFCommentIsChecked());
     group.writeEntry(QLatin1String("All Sync Host Comment"), d->contentPage->syncHOSTCommentIsChecked());
     group.writeEntry(QLatin1String("All Sync EXIF Comment"), d->contentPage->syncEXIFCommentIsChecked());
     group.writeEntry(QLatin1String("All Sync Host Date"), d->originPage->syncHOSTDateIsChecked());
     group.writeEntry(QLatin1String("All Sync EXIF Date"), d->originPage->syncEXIFDateIsChecked());
-    config.sync();
+    config->sync();
 }
 
 void IPTCEditWidget::slotItemChanged()

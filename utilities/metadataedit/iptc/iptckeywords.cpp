@@ -31,29 +31,25 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
+#include <QListWidget>
 
 // KDE includes
 
-
-
-#include <QLineEdit>
-#include <QListWidget>
 #include <klocalizedstring.h>
 
 // local includes
 
 #include "dmetadata.h"
 
-
-
 namespace Digikam
 {
 
-class IPTCKeywords::IPTCKeywordsPriv
+class IPTCKeywords::Private
 {
 public:
 
-    IPTCKeywordsPriv()
+    Private()
     {
         addKeywordButton = 0;
         delKeywordButton = 0;
@@ -77,7 +73,7 @@ public:
 };
 
 IPTCKeywords::IPTCKeywords(QWidget* const parent)
-    : QWidget(parent), d(new IPTCKeywordsPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 

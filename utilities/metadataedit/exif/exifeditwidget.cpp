@@ -7,7 +7,7 @@
  * Description : a KPageWidget to edit EXIF metadata
  *
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011 by Victor Dodon <dodon dot victor at gmail dot com>
+ * Copyright (C) 2011      by Victor Dodon <dodon dot victor at gmail dot com>
 
  *
  * This program is free software; you can redistribute it
@@ -35,11 +35,11 @@
 // KDE includes
 
 #include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kguiitem.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-
 #include <ktoolinvocation.h>
 #include <kconfiggroup.h>
 
@@ -58,12 +58,12 @@
 namespace Digikam
 {
 
-class EXIFEditWidget::EXIFEditWidgetPrivate
+class EXIFEditWidget::Private
 {
 
 public:
 
-    EXIFEditWidgetPrivate()
+    Private()
     {
         modified      = false;
         isReadOnly    = false;
@@ -107,7 +107,7 @@ public:
 };
 
 EXIFEditWidget::EXIFEditWidget(MetadataEditDialog* const parent)
-    : KPageWidget(parent), d(new EXIFEditWidgetPrivate)
+    : KPageWidget(parent), d(new Private)
 {
     d->dlg           = parent;
 
@@ -174,8 +174,8 @@ EXIFEditWidget::~EXIFEditWidget()
 
 void EXIFEditWidget::readSettings()
 {
-    KConfig config(QLatin1String("kipirc")); // FIXME
-    KConfigGroup group = config.group(QLatin1String("All Metadata Edit Settings"));
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
     showPage(group.readEntry(QLatin1String("All EXIF Edit Page"), 0));
     d->captionPage->setCheckedSyncJFIFComment(group.readEntry(QLatin1String("All Sync JFIF Comment"), true));
     d->captionPage->setCheckedSyncHOSTComment(group.readEntry(QLatin1String("All Sync Host Comment"), true));
@@ -188,8 +188,8 @@ void EXIFEditWidget::readSettings()
 
 void EXIFEditWidget::saveSettings()
 {
-    KConfig config(QLatin1String("kipirc")); // FIXME
-    KConfigGroup group = config.group(QLatin1String("All Metadata Edit Settings"));
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
     group.writeEntry(QLatin1String("All EXIF Edit Page"), activePageIndex());
     group.writeEntry(QLatin1String("All Sync JFIF Comment"), d->captionPage->syncJFIFCommentIsChecked());
     group.writeEntry(QLatin1String("All Sync Host Comment"), d->captionPage->syncHOSTCommentIsChecked());
@@ -198,7 +198,7 @@ void EXIFEditWidget::saveSettings()
     group.writeEntry(QLatin1String("All Sync Host Date"), d->datetimePage->syncHOSTDateIsChecked());
     group.writeEntry(QLatin1String("All Sync XMP Date"), d->datetimePage->syncXMPDateIsChecked());
     group.writeEntry(QLatin1String("All Sync IPTC Date"), d->datetimePage->syncIPTCDateIsChecked());
-    config.sync();
+    config->sync();
 }
 
 void EXIFEditWidget::slotItemChanged()

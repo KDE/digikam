@@ -32,29 +32,25 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
+#include <QListWidget>
 
 // KDE includes
 
-
-
-#include <QLineEdit>
-#include <QListWidget>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "dmetadata.h"
 
-
-
 namespace Digikam
 {
 
-class IPTCCategories::IPTCCategoriesPriv
+class IPTCCategories::Private
 {
 public:
 
-    IPTCCategoriesPriv()
+    Private()
     {
         addSubCategoryButton = 0;
         delSubCategoryButton = 0;
@@ -82,7 +78,7 @@ public:
 };
 
 IPTCCategories::IPTCCategories(QWidget* const parent)
-    : QWidget(parent), d(new IPTCCategoriesPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 

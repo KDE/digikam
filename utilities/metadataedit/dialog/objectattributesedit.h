@@ -59,8 +59,8 @@ private Q_SLOTS:
 
 private:
 
-    class ObjectAttributesEditPriv;
-    ObjectAttributesEditPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -44,11 +44,11 @@
 namespace Digikam
 {
 
-class EXIFDateTime::EXIFDateTimePriv
+class EXIFDateTime::Private
 {
 public:
 
-    EXIFDateTimePriv()
+    Private()
     {
         dateCreatedSel             = 0;
         dateOriginalSel            = 0;
@@ -97,7 +97,7 @@ public:
 
 EXIFDateTime::EXIFDateTime(QWidget* const parent)
     : QWidget(parent),
-      d(new EXIFDateTimePriv)
+      d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
 

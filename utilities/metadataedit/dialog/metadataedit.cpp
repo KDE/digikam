@@ -38,7 +38,8 @@
 
 // KDE includes
 
-#include <kconfig.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 #include <kwindowconfig.h>
 
@@ -232,16 +233,16 @@ void MetadataEditDialog::slotPrevious()
 
 void MetadataEditDialog::readSettings()
 {
-    KConfig config(QLatin1String("kipirc")); // FIXME
-    KConfigGroup group = config.group(QLatin1String("Metadata Edit Dialog"));
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group = config->group(QLatin1String("Metadata Edit Dialog"));
     d->tabWidget->setCurrentIndex(group.readEntry(QLatin1String("Tab Index"), 0));
     KWindowConfig::restoreWindowSize(windowHandle(), group);
 }
 
 void MetadataEditDialog::saveSettings()
 {
-    KConfig config(QLatin1String("kipirc")); // FIXME
-    KConfigGroup group = config.group(QLatin1String("Metadata Edit Dialog"));
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(QLatin1String("Metadata Edit Dialog"));
     group.writeEntry(QLatin1String("Tab Index"), d->tabWidget->currentIndex());
     KWindowConfig::saveWindowSize(windowHandle(), group);
 

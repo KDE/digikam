@@ -64,8 +64,8 @@ private:
 
 private:
 
-    class XMPCategoriesPriv;
-    XMPCategoriesPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

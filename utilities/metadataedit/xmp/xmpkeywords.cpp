@@ -29,29 +29,25 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
+#include <QListWidget>
 
 // KDE includes
 
-
-
-#include <QLineEdit>
-#include <QListWidget>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "dmetadata.h"
 
-
-
 namespace Digikam
 {
 
-class XMPKeywords::XMPKeywordsPriv
+class XMPKeywords::Private
 {
 public:
 
-    XMPKeywordsPriv()
+    Private()
     {
         addKeywordButton = 0;
         delKeywordButton = 0;
@@ -75,9 +71,10 @@ public:
 };
 
 XMPKeywords::XMPKeywords(QWidget* const parent)
-    : QWidget(parent), d(new XMPKeywordsPriv)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // --------------------------------------------------------
 

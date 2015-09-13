@@ -49,20 +49,18 @@
 
 #include "metadatacheckbox.h"
 #include "timezonecombobox.h"
-
 #include "dmetadata.h"
-
 
 using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class IPTCEnvelope::IPTCEnvelopePriv
+class IPTCEnvelope::Private
 {
 public:
 
-    IPTCEnvelopePriv()
+    Private()
     {
         unoIDCheck       = 0;
         unoIDEdit        = 0;
@@ -163,7 +161,7 @@ public:
 
 IPTCEnvelope::IPTCEnvelope(QWidget* const parent)
     : QWidget(parent),
-      d(new IPTCEnvelopePriv)
+      d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 
@@ -243,7 +241,7 @@ IPTCEnvelope::IPTCEnvelope(QWidget* const parent)
 
     int index = 0;
 
-    for (IPTCEnvelopePriv::FileFormatMap::Iterator it = d->fileFormatMap.begin();
+    for (Private::FileFormatMap::Iterator it = d->fileFormatMap.begin();
          it != d->fileFormatMap.end(); ++it)
     {
         d->formatCB->insertSqueezedItem(it.value(), index);
@@ -527,7 +525,7 @@ void IPTCEnvelope::readMetadata(QByteArray& iptcData)
             QString key = QString::fromUtf8("%1-%2").arg(format).arg(version);
             int index = -1, i = 0;
 
-            for (IPTCEnvelopePriv::FileFormatMap::Iterator it = d->fileFormatMap.begin();
+            for (Private::FileFormatMap::Iterator it = d->fileFormatMap.begin();
                  it != d->fileFormatMap.end(); ++it)
             {
                 if (it.key() == key) index = i;
@@ -651,7 +649,7 @@ void IPTCEnvelope::applyMetadata(QByteArray& iptcData)
         QString key;
         int i = 0;
 
-        for (IPTCEnvelopePriv::FileFormatMap::Iterator it = d->fileFormatMap.begin();
+        for (Private::FileFormatMap::Iterator it = d->fileFormatMap.begin();
              it != d->fileFormatMap.end(); ++it)
         {
             if (i == d->formatCB->currentIndex()) key = it.key();
@@ -689,8 +687,6 @@ void IPTCEnvelope::applyMetadata(QByteArray& iptcData)
     {
         meta.removeIptcTag("Iptc.Envelope.TimeSent");
     }
-
-// FIXME    meta.setImageProgramId(QString("Kipi-plugins"), QString(kipiplugins_version));
 
     iptcData = meta.getIptc();
 }

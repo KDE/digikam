@@ -66,8 +66,8 @@ private Q_SLOTS:
 
 private:
 
-    class EXIFDateTimePriv;
-    EXIFDateTimePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

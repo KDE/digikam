@@ -46,11 +46,11 @@
 namespace Digikam
 {
 
-class IPTCContent::IPTCContentPriv
+class IPTCContent::Private
 {
 public:
 
-    IPTCContentPriv()
+    Private()
     {
         headlineCheck        = 0;
         captionEdit          = 0;
@@ -76,7 +76,7 @@ public:
 };
 
 IPTCContent::IPTCContent(QWidget* const parent)
-    : QWidget(parent), d(new IPTCContentPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 

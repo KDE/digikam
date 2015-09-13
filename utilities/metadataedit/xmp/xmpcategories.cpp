@@ -30,29 +30,25 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
+#include <QListWidget>
 
 // KDE includes
 
-
-
-#include <QLineEdit>
-#include <QListWidget>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "dmetadata.h"
 
-
-
 namespace Digikam
 {
 
-class XMPCategories::XMPCategoriesPriv
+class XMPCategories::Private
 {
 public:
 
-    XMPCategoriesPriv()
+    Private()
     {
         addSubCategoryButton = 0;
         delSubCategoryButton = 0;
@@ -80,7 +76,7 @@ public:
 };
 
 XMPCategories::XMPCategories(QWidget* const parent)
-    : QWidget(parent), d(new XMPCategoriesPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 

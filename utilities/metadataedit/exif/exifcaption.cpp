@@ -39,19 +39,16 @@
 
 // Local includes
 
-
 #include "dmetadata.h"
-
-
 
 namespace Digikam
 {
 
-class EXIFCaption::EXIFCaptionPriv
+class EXIFCaption::Private
 {
 public:
 
-    EXIFCaptionPriv()
+    Private()
     {
         documentNameEdit     = 0;
         imageDescEdit        = 0;
@@ -89,7 +86,7 @@ public:
 
 EXIFCaption::EXIFCaption(QWidget* const parent)
     : QWidget(parent),
-      d(new EXIFCaptionPriv)
+      d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
 
@@ -414,8 +411,6 @@ void EXIFCaption::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QByt
     }
     else
         meta.removeExifTag("Exif.Photo.UserComment");
-
-//FIXME    meta.setImageProgramId(QLatin1String("Kipi-plugins"), QString(kipiplugins_version));
 
 #if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();

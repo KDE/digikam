@@ -64,8 +64,8 @@ private:
 
 private:
 
-    class IPTCCategoriesPriv;
-    IPTCCategoriesPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

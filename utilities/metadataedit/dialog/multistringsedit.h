@@ -56,8 +56,8 @@ private Q_SLOTS:
 
 private:
 
-    class MultiStringsEditPriv;
-    MultiStringsEditPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -31,13 +31,11 @@
 #include <QGridLayout>
 #include <QComboBox>
 #include <QApplication>
+#include <QLineEdit>
+#include <QListWidget>
 
 // KDE includes
 
-
-
-#include <QLineEdit>
-#include <QListWidget>
 #include <klocalizedstring.h>
 
 // LibKDcraw includes
@@ -53,11 +51,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class ObjectAttributesEdit::ObjectAttributesEditPriv
+class ObjectAttributesEdit::Private
 {
 public:
 
-    ObjectAttributesEditPriv()
+    Private()
     {
         addValueButton = 0;
         delValueButton = 0;
@@ -84,7 +82,7 @@ public:
 };
 
 ObjectAttributesEdit::ObjectAttributesEdit(QWidget* const parent, bool ascii, int size)
-    : QWidget(parent), d(new ObjectAttributesEditPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout *grid = new QGridLayout(this);
 

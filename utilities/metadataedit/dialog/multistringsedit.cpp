@@ -39,11 +39,11 @@
 namespace Digikam
 {
 
-class MultiStringsEdit::MultiStringsEditPriv
+class MultiStringsEdit::Private
 {
 public:
 
-    MultiStringsEditPriv()
+    Private()
     {
         addValueButton = 0;
         delValueButton = 0;
@@ -68,7 +68,7 @@ public:
 
 MultiStringsEdit::MultiStringsEdit(QWidget* const parent, const QString& title,
                                    const QString& desc, bool ascii, int size)
-    : QWidget(parent), d(new MultiStringsEditPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
 

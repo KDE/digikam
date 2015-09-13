@@ -59,8 +59,8 @@ Q_SIGNALS:
 
 private:
 
-    class IPTCContentPriv;
-    IPTCContentPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

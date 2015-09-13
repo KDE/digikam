@@ -58,11 +58,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class XMPProperties::XMPPropertiesPriv
+class XMPProperties::Private
 {
 public:
 
-    XMPPropertiesPriv()
+    Private()
     {
         priorityCB           = 0;
         objectTypeCB         = 0;
@@ -152,7 +152,7 @@ public:
 
 XMPProperties::XMPProperties(QWidget* const parent)
     : QWidget(parent),
-      d(new XMPPropertiesPriv)
+      d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
 
@@ -163,7 +163,7 @@ XMPProperties::XMPProperties(QWidget* const parent)
 
     QStringList list;
 
-    for (XMPPropertiesPriv::LanguageCodeMap::Iterator it = d->languageCodeMap.begin();
+    for (Private::LanguageCodeMap::Iterator it = d->languageCodeMap.begin();
          it != d->languageCodeMap.end(); ++it)
         list.append(QString::fromUtf8("%1 - %2").arg(it.key()).arg(it.value()));
 
@@ -192,7 +192,7 @@ XMPProperties::XMPProperties(QWidget* const parent)
 
     QStringList list2;
 
-    for (XMPPropertiesPriv::SceneCodeMap::Iterator it = d->sceneCodeMap.begin();
+    for (Private::SceneCodeMap::Iterator it = d->sceneCodeMap.begin();
          it != d->sceneCodeMap.end(); ++it)
         list2.append(QString::fromUtf8("%1 - %2").arg(it.key()).arg(it.value()));
 
@@ -205,7 +205,7 @@ XMPProperties::XMPProperties(QWidget* const parent)
 
     QStringList list3;
 
-    for (XMPPropertiesPriv::TypeCodeMap::Iterator it = d->typeCodeMap.begin();
+    for (Private::TypeCodeMap::Iterator it = d->typeCodeMap.begin();
          it != d->typeCodeMap.end(); ++it)
         list3.append(it.value());
 
@@ -529,10 +529,6 @@ void XMPProperties::applyMetadata(QByteArray& xmpData)
         meta.setXmpTagString("Xmp.photoshop.TransmissionReference", d->originalTransEdit->text());
     else
         meta.removeXmpTag("Xmp.photoshop.TransmissionReference");
-
-    // ---------------------------------------------------------------
-
-//FIXME    meta.setImageProgramId(QString("Kipi-plugins"), QString(kipiplugins_version));
 
     xmpData = meta.getXmp();
 }

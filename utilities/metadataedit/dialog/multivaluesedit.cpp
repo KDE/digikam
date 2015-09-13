@@ -29,12 +29,10 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QComboBox>
+#include <QListWidget>
 
 // KDE includes
 
-
-
-#include <QListWidget>
 #include <klocalizedstring.h>
 
 // LibKDcraw includes
@@ -50,11 +48,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class MultiValuesEdit::MultiValuesEditPriv
+class MultiValuesEdit::Private
 {
 public:
 
-    MultiValuesEditPriv()
+    Private()
     {
         addValueButton = 0;
         delValueButton = 0;
@@ -78,7 +76,7 @@ public:
 };
 
 MultiValuesEdit::MultiValuesEdit(QWidget* const parent, const QString& title, const QString& desc)
-    : QWidget(parent), d(new MultiValuesEditPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 

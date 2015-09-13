@@ -49,8 +49,8 @@ Q_SIGNALS:
 
 private:
 
-    class EXIFAdjustPriv;
-    EXIFAdjustPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kguiitem.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
@@ -58,12 +58,12 @@
 namespace Digikam
 {
 
-class XMPEditWidget::XMPEditWidgetPrivate
+class XMPEditWidget::Private
 {
 
 public:
 
-    XMPEditWidgetPrivate()
+    Private()
     {
         modified        = false;
         isReadOnly      = false;
@@ -119,7 +119,7 @@ public:
 };
 
 XMPEditWidget::XMPEditWidget(MetadataEditDialog* const parent)
-    : KPageWidget(parent), d(new XMPEditWidgetPrivate)
+    : KPageWidget(parent), d(new Private)
 {
     d->dlg       = parent;
 
@@ -210,8 +210,8 @@ XMPEditWidget::~XMPEditWidget()
 
 void XMPEditWidget::readSettings()
 {
-    KConfig config(QLatin1String("kipirc")); // FIXME
-    KConfigGroup group = config.group(QLatin1String("All Metadata Edit Settings"));
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
 
     showPage(group.readEntry(QLatin1String("All XMP Edit Page"), 0));
     d->contentPage->setCheckedSyncJFIFComment(group.readEntry(QLatin1String("All Sync JFIF Comment"), true));
@@ -220,13 +220,13 @@ void XMPEditWidget::readSettings()
     d->originPage->setCheckedSyncHOSTDate(group.readEntry(QLatin1String("All Sync Host Date"), true));
     d->originPage->setCheckedSyncEXIFDate(group.readEntry(QLatin1String("All Sync EXIF Date"), true));
 
-    KConfigGroup group2 = config.group(QLatin1String("All XMP Edit Dialog"));
+    KConfigGroup group2 = config->group(QLatin1String("All XMP Edit Dialog"));
 }
 
 void XMPEditWidget::saveSettings()
 {
-    KConfig config(QLatin1String("kipirc")); // FIXME
-    KConfigGroup group = config.group(QLatin1String("All Metadata Edit Settings"));
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
 
     group.writeEntry(QLatin1String("All XMP Edit Page"), activePageIndex());
     group.writeEntry(QLatin1String("All Sync JFIF Comment"), d->contentPage->syncJFIFCommentIsChecked());
@@ -235,8 +235,8 @@ void XMPEditWidget::saveSettings()
     group.writeEntry(QLatin1String("All Sync Host Date"), d->originPage->syncHOSTDateIsChecked());
     group.writeEntry(QLatin1String("All Sync EXIF Date"), d->originPage->syncEXIFDateIsChecked());
 
-    KConfigGroup group2 = config.group(QLatin1String("All XMP Edit Dialog"));
-    config.sync();
+    KConfigGroup group2 = config->group(QLatin1String("All XMP Edit Dialog"));
+    config->sync();
 }
 
 void XMPEditWidget::slotItemChanged()

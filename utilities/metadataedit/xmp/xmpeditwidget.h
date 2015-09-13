@@ -65,8 +65,8 @@ private:
 
 private:
 
-    class XMPEditWidgetPrivate;
-    XMPEditWidgetPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

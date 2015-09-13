@@ -46,11 +46,11 @@
 namespace Digikam
 {
 
-class EXIFLens::EXIFLensPriv
+class EXIFLens::Private
 {
 public:
 
-    EXIFLensPriv()
+    Private()
     {
         apertureCheck         = 0;
         maxApertureCheck      = 0;
@@ -142,7 +142,7 @@ public:
 };
 
 EXIFLens::EXIFLens(QWidget* const parent)
-    : QWidget(parent), d(new EXIFLensPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 

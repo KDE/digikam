@@ -28,34 +28,28 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
+#include <QTextEdit>
 
 // KDE includes
 
-
-
-
-#include <QLineEdit>
 #include <klocalizedstring.h>
 #include <kseparator.h>
-#include <QTextEdit>
 
 // Local includes
 
 #include "altlangstringedit.h"
 #include "multistringsedit.h"
-
 #include "dmetadata.h"
-
-
 
 namespace Digikam
 {
 
-class XMPStatus::XMPStatusPriv
+class XMPStatus::Private
 {
 public:
 
-    XMPStatusPriv()
+    Private()
     {
         objectNameEdit          = 0;
         specialInstructionEdit  = 0;
@@ -78,7 +72,7 @@ public:
 };
 
 XMPStatus::XMPStatus(QWidget* const parent)
-    : QWidget(parent), d(new XMPStatusPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid  = new QGridLayout(this);
 
@@ -234,8 +228,6 @@ void XMPStatus::applyMetadata(QByteArray& xmpData)
         meta.setXmpTagString("Xmp.photoshop.Instructions", d->specialInstructionEdit->toPlainText());
     else
         meta.removeXmpTag("Xmp.photoshop.Instructions");
-
-//FIXME    meta.setImageProgramId(QString("Kipi-plugins"), QString(kipiplugins_version));
 
     xmpData = meta.getXmp();
 }

@@ -31,11 +31,10 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
 
 // KDE includes
 
-
-#include <QLineEdit>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -43,16 +42,14 @@
 #include "multistringsedit.h"
 #include "dmetadata.h"
 
-
-
 namespace Digikam
 {
 
-class IPTCCredits::IPTCCreditsPriv
+class IPTCCredits::Private
 {
 public:
 
-    IPTCCreditsPriv()
+    Private()
     {
         copyrightEdit    = 0;
         bylineEdit       = 0;
@@ -85,7 +82,7 @@ public:
 };
 
 IPTCCredits::IPTCCredits(QWidget* const parent)
-    : QWidget(parent), d(new IPTCCreditsPriv)
+    : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
 

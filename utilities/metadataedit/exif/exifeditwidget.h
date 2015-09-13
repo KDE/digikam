@@ -65,8 +65,8 @@ private:
 
 private:
 
-    class EXIFEditWidgetPrivate;
-    EXIFEditWidgetPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

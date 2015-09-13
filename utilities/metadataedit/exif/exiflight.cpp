@@ -124,7 +124,8 @@ public:
 // --------------------------------------------------------------------------
 
 EXIFLight::EXIFLight(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
 
