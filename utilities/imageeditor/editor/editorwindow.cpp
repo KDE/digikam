@@ -322,20 +322,24 @@ void EditorWindow::setupStandardActions()
     m_backwardAction = buildStdAction(StdBackAction, this, SLOT(slotBackward()), this);
     ac->addAction(QLatin1String("editorwindow_backward"), m_backwardAction);
     ac->setDefaultShortcuts(m_backwardAction, QList<QKeySequence>() << Qt::Key_PageUp << Qt::Key_Backspace);
+    m_backwardAction->setEnabled(false);
 
     m_forwardAction = buildStdAction(StdForwardAction, this, SLOT(slotForward()), this);
     ac->addAction(QLatin1String("editorwindow_forward"), m_forwardAction);
     ac->setDefaultShortcuts(m_forwardAction, QList<QKeySequence>() << Qt::Key_PageDown << Qt::Key_Space);
+    m_forwardAction->setEnabled(false);
 
     m_firstAction = new QAction(QIcon::fromTheme(QLatin1String("go-first")), i18n("&First"), this);
     connect(m_firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
     ac->addAction(QLatin1String("editorwindow_first"), m_firstAction);
     ac->setDefaultShortcuts(m_firstAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_Home);
+    m_firstAction->setEnabled(false);
 
     m_lastAction = new QAction(QIcon::fromTheme(QLatin1String("go-last")), i18n("&Last"), this);
     connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     ac->addAction(QLatin1String("editorwindow_last"), m_lastAction);
     ac->setDefaultShortcuts(m_lastAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_End);
+    m_lastAction->setEnabled(false);
 
     m_openVersionAction = new QAction(QIcon::fromTheme(QLatin1String("image-loading")),
                                       i18nc("@action", "Open Original"), this);
@@ -348,7 +352,7 @@ void EditorWindow::setupStandardActions()
 
     m_saveAsAction = buildStdAction(StdSaveAsAction, this, SLOT(saveAs()), this);
     ac->addAction(QLatin1String("editorwindow_saveas"), m_saveAsAction);
-    
+
     m_saveCurrentVersionAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok-apply")),
                                              i18nc("@action Save changes to current version", "Save Changes"), this);
     m_saveCurrentVersionAction->setToolTip(i18nc("@info:tooltip", "Save the modifications to the current version of the file"));
@@ -412,23 +416,27 @@ void EditorWindow::setupStandardActions()
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
     ac->addAction(QLatin1String("editorwindow_print"), d->filePrintAction);
     ac->setDefaultShortcut(d->filePrintAction, Qt::CTRL + Qt::Key_P);
+    d->filePrintAction->setEnabled(false);
 
-    QAction* const openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
-    openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
-    connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
-    ac->addAction(QLatin1String("open_with_default_application"), openWithAction);
-    ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
+    d->openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
+    d->openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
+    connect(d->openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
+    ac->addAction(QLatin1String("open_with_default_application"), d->openWithAction);
+    ac->setDefaultShortcut(d->openWithAction, Qt::META + Qt::Key_F4);
+    d->openWithAction->setEnabled(false);
 
     m_fileDeleteAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash")), i18nc("Non-pluralized", "Move to Trash"), this);
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     ac->addAction(QLatin1String("editorwindow_delete"), m_fileDeleteAction);
     ac->setDefaultShortcut(m_fileDeleteAction, Qt::Key_Delete);
+    m_fileDeleteAction->setEnabled(false);
 
     QAction* const closeAction = buildStdAction(StdCloseAction, this, SLOT(close()), this);
     ac->addAction(QLatin1String("editorwindow_close"), closeAction);
 
     createKSaneAction();
     createMetadatEditAction();
+    m_metadataEditAction->setEnabled(false);
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
@@ -1090,6 +1098,9 @@ void EditorWindow::toggleStandardActions(bool val)
     m_selectToolsAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
+    d->openWithAction->setEnabled(val);
+    d->filePrintAction->setEnabled(val);
+    m_metadataEditAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);

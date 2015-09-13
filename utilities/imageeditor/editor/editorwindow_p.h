@@ -96,6 +96,7 @@ public:
         zoomMinusAction(0),
         zoomPlusAction(0),
         zoomTo100percents(0),
+        openWithAction(0),
         undoSignalMapper(0),
         redoSignalMapper(0),
         formatMenuActionMapper(0),
@@ -174,6 +175,7 @@ public:
     QAction*                     zoomMinusAction;
     QAction*                     zoomPlusAction;
     QAction*                     zoomTo100percents;
+    QAction*                     openWithAction;
 
     QSignalMapper*               undoSignalMapper;
     QSignalMapper*               redoSignalMapper;

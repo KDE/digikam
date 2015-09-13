@@ -896,11 +896,11 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("image_edit"), d->imageViewAction);
     ac->setDefaultShortcut(d->imageViewAction, Qt::Key_F4);
 
-    QAction* const openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
-    openWithAction->setWhatsThis(i18n("Open the selected item with default assigned application."));
-    connect(openWithAction, SIGNAL(triggered()), d->view, SLOT(slotFileWithDefaultApplication()));
-    ac->addAction(QLatin1String("open_with_default_application"), openWithAction);
-    ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
+    d->openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
+    d->openWithAction->setWhatsThis(i18n("Open the selected item with default assigned application."));
+    connect(d->openWithAction, SIGNAL(triggered()), d->view, SLOT(slotFileWithDefaultApplication()));
+    ac->addAction(QLatin1String("open_with_default_application"), d->openWithAction);
+    ac->setDefaultShortcut(d->openWithAction, Qt::META + Qt::Key_F4);
 
     QAction* const ieAction = new QAction(QIcon::fromTheme(QLatin1String("editimage")), i18n("Image Editor"), this);
     ieAction->setWhatsThis(i18n("Open the image editor."));
@@ -1356,7 +1356,10 @@ void DigikamApp::initGui()
     d->imageRenameAction->setEnabled(false);
     d->imageDeleteAction->setEnabled(false);
     d->imageExifOrientationActionMenu->setEnabled(false);
+    d->openWithAction->setEnabled(false);
     d->slideShowSelectionAction->setEnabled(false);
+    m_metadataEditAction->setEnabled(false);
+    d->imageAutoExifActionMenu->setEnabled(false);
 
     d->albumSortAction->setCurrentItem((int)ApplicationSettings::instance()->getAlbumSortRole());
     d->imageSortAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSortOrder());
@@ -1534,6 +1537,7 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     // The preview can either be activated when only one image is selected,
     // or if multiple images are selected, but one image is the 'current image'.
     bool hasAtLeastCurrent =(selectionCount == 1) || ( (selectionCount > 0) && d->view->hasCurrentItem());
+
     d->imagePreviewAction->setEnabled(hasAtLeastCurrent);
     d->imageViewAction->setEnabled(hasAtLeastCurrent);
     d->imageFindSimilarAction->setEnabled(selectionCount == 1);
@@ -1552,6 +1556,9 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->moveSelectionToAlbumAction->setEnabled(selectionCount > 0);
     d->cutItemsAction->setEnabled(selectionCount > 0);
     d->copyItemsAction->setEnabled(selectionCount > 0);
+    m_metadataEditAction->setEnabled(selectionCount > 0);
+    d->openWithAction->setEnabled(selectionCount > 0);
+    d->imageAutoExifActionMenu->setEnabled(selectionCount > 0);
 
     if (selectionCount > 0)
     {
