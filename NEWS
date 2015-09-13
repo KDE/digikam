@@ -17,6 +17,11 @@ Batch Queue Manager: New BQM tool to convert RAW to DNG.
 Image Editor       : Add a new option to import images from a digital scanner.
 Image Editor       : Add a new option to edit metadata.
 
+Light Table        : Add a new option to edit metadata.
+
+Showfoto           : Add a new option to import images from a digital scanner.
+Showfoto           : Add a new option to edit metadata.
+
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
 001 ==> 284216 - Using slider widget from Krita.

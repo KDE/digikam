@@ -1721,14 +1721,16 @@ void ImageWindow::slotEditMetadata()
     if ( d->currentImageInfo.isNull() )
         return;
 
+    QUrl url = d->currentImageInfo.fileUrl();
+
     QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(),
-                                                                 QList<QUrl>() << d->currentImageInfo.fileUrl());
+                                                                 QList<QUrl>() << url);
     dialog->exec();
 
     delete dialog;
 
     // Refresh Database with new metadata from file.
-    ScanController::instance()->scannedInfo(d->currentImageInfo.fileUrl().toLocalFile());
+    ScanController::instance()->scannedInfo(url.toLocalFile());
 }
 
 }  // namespace Digikam

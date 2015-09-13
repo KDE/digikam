@@ -54,6 +54,7 @@
 #include "dmetadata.h"
 #include "fileoperation.h"
 #include "metadatasettings.h"
+#include "metadataedit.h"
 #include "applicationsettings.h"
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
@@ -67,6 +68,7 @@
 #include "lighttablepreview.h"
 #include "albummodel.h"
 #include "databasechangesets.h"
+#include "scancontroller.h"
 #include "tagsactionmngr.h"
 #include "thumbbardock.h"
 #include "thumbnailsize.h"
@@ -478,6 +480,8 @@ void LightTableWindow::setupActions()
     connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
     ac->addAction(QLatin1String("open_with_default_application"), openWithAction);
     ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
+
+    createMetadatEditAction();
 
     d->removeItemAction = new QAction(QIcon::fromTheme(QLatin1String("list-remove")), i18n("Remove item from LightTable"), this);
     d->removeItemAction->setEnabled(false);
@@ -1695,6 +1699,25 @@ void LightTableWindow::slotColorManagementOptionsChanged()
     d->viewCMViewAction->setEnabled(settings.enableCM);
     d->viewCMViewAction->setChecked(settings.useManagedPreviews);
     d->viewCMViewAction->blockSignals(false);
+}
+
+void LightTableWindow::slotEditMetadata()
+{
+    if (d->thumbView->currentInfo().isNull())
+    {
+        return;
+    }
+
+    QUrl url = d->thumbView->currentInfo().fileUrl();
+
+    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(),
+                                                                 QList<QUrl>() << url);
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from file.
+    ScanController::instance()->scannedInfo(url.toLocalFile());
 }
 
 }  // namespace Digikam

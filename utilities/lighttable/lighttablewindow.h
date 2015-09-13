@@ -165,6 +165,8 @@ private Q_SLOTS:
     void slotLeftSideBarActivateComments();
     void slotLeftSideBarActivateAssignedTags();
 
+    void slotEditMetadata();
+
 private:
 
     class Private;
