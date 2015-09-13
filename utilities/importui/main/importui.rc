@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="500" name="importui" >
+<gui version="501" name="importui" >
 
 <MenuBar>
 
@@ -22,7 +22,7 @@
         <Action name="importui_selectlockeditems" />
     </Menu>
 
-    <Menu name="Image" ><text>&amp;Image</text>
+    <Menu name="Image" ><text>&amp;Item</text>
         <Action name="importui_imagedownloadnew" />
         <Action name="importui_imagedownloadselected" />
         <Action name="importui_imagedownloadall" />
