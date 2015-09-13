@@ -44,11 +44,9 @@ public:
     void applyMetadata(QByteArray& exifData, QByteArray& iptcData, QByteArray& xmpData);
     void readMetadata(QByteArray& exifData);
 
-    bool syncHOSTDateIsChecked() const;
     bool syncXMPDateIsChecked() const;
     bool syncIPTCDateIsChecked() const;
 
-    void setCheckedSyncHOSTDate(bool c);
     void setCheckedSyncXMPDate(bool c);
     void setCheckedSyncIPTCDate(bool c);
 

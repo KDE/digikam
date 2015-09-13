@@ -77,7 +77,6 @@ public:
         zoneDigitalizedSel     = 0;
         dateCreatedCheck       = 0;
         dateDigitalizedCheck   = 0;
-        syncHOSTDateCheck      = 0;
         syncEXIFDateCheck      = 0;
         setTodayCreatedBtn     = 0;
         setTodayDigitalizedBtn = 0;
@@ -86,7 +85,6 @@ public:
 
     QCheckBox*                     dateCreatedCheck;
     QCheckBox*                     dateDigitalizedCheck;
-    QCheckBox*                     syncHOSTDateCheck;
     QCheckBox*                     syncEXIFDateCheck;
     QCheckBox*                     cityCheck;
     QCheckBox*                     sublocationCheck;
@@ -137,9 +135,6 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
     d->dateCreatedCheck   = new QCheckBox(i18n("Creation date"), this);
     d->zoneCreatedSel     = new TimeZoneComboBox(this);
     d->dateCreatedSel     = new QDateTimeEdit(this);
-    d->syncHOSTDateCheck  = new QCheckBox(i18n("Sync creation date hosted by %1",
-                                               QApplication::applicationName()),
-                                               this);
     d->syncEXIFDateCheck  = new QCheckBox(i18n("Sync EXIF creation date"), this);
 
     d->setTodayCreatedBtn = new QPushButton();
@@ -193,7 +188,6 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
     grid->addWidget(d->dateCreatedSel,                      3, 0, 1, 3);
     grid->addWidget(d->zoneCreatedSel,                      3, 3, 1, 1);
     grid->addWidget(d->setTodayCreatedBtn,                  3, 5, 1, 1);
-    grid->addWidget(d->syncHOSTDateCheck,                   4, 0, 1, 6);
     grid->addWidget(d->syncEXIFDateCheck,                   5, 0, 1, 6);
     grid->addWidget(new KSeparator(Qt::Horizontal, this),   6, 0, 1, 6);
     grid->addWidget(d->cityCheck,                           7, 0, 1, 1);
@@ -222,9 +216,6 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
 
     connect(d->dateDigitalizedCheck, SIGNAL(toggled(bool)),
             d->zoneDigitalizedSel, SLOT(setEnabled(bool)));
-
-    connect(d->dateCreatedCheck, SIGNAL(toggled(bool)),
-            d->syncHOSTDateCheck, SLOT(setEnabled(bool)));
 
     connect(d->dateCreatedCheck, SIGNAL(toggled(bool)),
             d->syncEXIFDateCheck, SLOT(setEnabled(bool)));
@@ -315,19 +306,9 @@ void XMPOrigin::slotSetTodayDigitalized()
     d->zoneDigitalizedSel->setToUTC();
 }
 
-bool XMPOrigin::syncHOSTDateIsChecked() const
-{
-    return d->syncHOSTDateCheck->isChecked();
-}
-
 bool XMPOrigin::syncEXIFDateIsChecked() const
 {
     return d->syncEXIFDateCheck->isChecked();
-}
-
-void XMPOrigin::setCheckedSyncHOSTDate(bool c)
-{
-    d->syncHOSTDateCheck->setChecked(c);
 }
 
 void XMPOrigin::setCheckedSyncEXIFDate(bool c)
@@ -384,7 +365,6 @@ void XMPOrigin::readMetadata(QByteArray& xmpData)
 
     d->dateCreatedSel->setEnabled(d->dateCreatedCheck->isChecked());
     d->zoneCreatedSel->setEnabled(d->dateCreatedCheck->isChecked());
-    d->syncHOSTDateCheck->setEnabled(d->dateCreatedCheck->isChecked());
     d->syncEXIFDateCheck->setEnabled(d->dateCreatedCheck->isChecked());
 
     dateTimeStr = meta.getXmpTagString("Xmp.exif.DateTimeDigitized", false);

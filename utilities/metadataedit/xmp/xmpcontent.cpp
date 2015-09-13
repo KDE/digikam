@@ -57,14 +57,12 @@ public:
         writerEdit           = 0;
         headlineEdit         = 0;
         syncJFIFCommentCheck = 0;
-        syncHOSTCommentCheck = 0;
         syncEXIFCommentCheck = 0;
         copyrightEdit        = 0;
     }
 
     QCheckBox*          headlineCheck;
     QCheckBox*          syncJFIFCommentCheck;
-    QCheckBox*          syncHOSTCommentCheck;
     QCheckBox*          syncEXIFCommentCheck;
     QCheckBox*          writerCheck;
 
@@ -97,15 +95,11 @@ XMPContent::XMPContent(QWidget* const parent)
     QVBoxLayout* const vlay       = new QVBoxLayout(syncOptions);
 
     d->syncJFIFCommentCheck = new QCheckBox(i18n("Sync JFIF Comment section"), syncOptions);
-    d->syncHOSTCommentCheck = new QCheckBox(i18n("Sync caption entered through %1",
-                                            QApplication::applicationName()),
-                                            syncOptions);
     d->syncEXIFCommentCheck = new QCheckBox(i18n("Sync EXIF Comment"), syncOptions);
 
     vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vlay->addWidget(d->syncJFIFCommentCheck);
-    vlay->addWidget(d->syncHOSTCommentCheck);
     vlay->addWidget(d->syncEXIFCommentCheck);
 
     // --------------------------------------------------------
@@ -183,11 +177,6 @@ bool XMPContent::syncJFIFCommentIsChecked() const
     return d->syncJFIFCommentCheck->isChecked();
 }
 
-bool XMPContent::syncHOSTCommentIsChecked() const
-{
-    return d->syncHOSTCommentCheck->isChecked();
-}
-
 bool XMPContent::syncEXIFCommentIsChecked() const
 {
     return d->syncEXIFCommentCheck->isChecked();
@@ -201,11 +190,6 @@ QString XMPContent::getXMPCaption() const
 void XMPContent::setCheckedSyncJFIFComment(bool c)
 {
     d->syncJFIFCommentCheck->setChecked(c);
-}
-
-void XMPContent::setCheckedSyncHOSTComment(bool c)
-{
-    d->syncHOSTCommentCheck->setChecked(c);
 }
 
 void XMPContent::setCheckedSyncEXIFComment(bool c)
@@ -321,7 +305,6 @@ void XMPContent::slotSyncOptionsEnabled(bool defaultLangAlt)
 {
     bool cond = defaultLangAlt & d->captionEdit->isValid();
     d->syncJFIFCommentCheck->setEnabled(cond);
-    d->syncHOSTCommentCheck->setEnabled(cond);
     d->syncEXIFCommentCheck->setEnabled(cond);
 }
 

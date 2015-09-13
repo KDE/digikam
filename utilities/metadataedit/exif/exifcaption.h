@@ -44,12 +44,10 @@ public:
     void readMetadata(QByteArray& exifData);
 
     bool syncJFIFCommentIsChecked() const;
-    bool syncHOSTCommentIsChecked() const;
     bool syncXMPCaptionIsChecked() const;
     bool syncIPTCCaptionIsChecked() const;
 
     void setCheckedSyncJFIFComment(bool c);
-    void setCheckedSyncHOSTComment(bool c);
     void setCheckedSyncXMPCaption(bool c);
     void setCheckedSyncIPTCCaption(bool c);
 

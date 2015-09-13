@@ -58,14 +58,12 @@ public:
         headlineEdit         = 0;
         captionCheck         = 0;
         syncJFIFCommentCheck = 0;
-        syncHOSTCommentCheck = 0;
         syncEXIFCommentCheck = 0;
     }
 
     QCheckBox*        captionCheck;
     QCheckBox*        headlineCheck;
     QCheckBox*        syncJFIFCommentCheck;
-    QCheckBox*        syncHOSTCommentCheck;
     QCheckBox*        syncEXIFCommentCheck;
 
     QTextEdit*        captionEdit;
@@ -99,9 +97,6 @@ IPTCContent::IPTCContent(QWidget* const parent)
     d->captionCheck         = new QCheckBox(i18nc("content description", "Caption:"), this);
     d->captionEdit          = new QTextEdit(this);
     d->syncJFIFCommentCheck = new QCheckBox(i18n("Sync JFIF Comment section"), this);
-    d->syncHOSTCommentCheck = new QCheckBox(i18n("Sync caption entered through %1",
-                                              QApplication::applicationName()),
-                                            this);
     d->syncEXIFCommentCheck = new QCheckBox(i18n("Sync EXIF Comment"), this);
 
 /*    d->captionEdit->setValidator(asciiValidator);
@@ -134,7 +129,6 @@ IPTCContent::IPTCContent(QWidget* const parent)
     grid->addWidget(d->captionCheck,                        1, 0, 1, 3);
     grid->addWidget(d->captionEdit,                         2, 0, 1, 3);
     grid->addWidget(d->syncJFIFCommentCheck,                3, 0, 1, 3);
-    grid->addWidget(d->syncHOSTCommentCheck,                4, 0, 1, 3);
     grid->addWidget(d->syncEXIFCommentCheck,                5, 0, 1, 3);
     grid->addWidget(new KSeparator(Qt::Horizontal, this),   6, 0, 1, 3);
     grid->addWidget(d->writerEdit,                          7, 0, 1, 3);
@@ -151,9 +145,6 @@ IPTCContent::IPTCContent(QWidget* const parent)
 
     connect(d->captionCheck, SIGNAL(toggled(bool)),
             d->syncJFIFCommentCheck, SLOT(setEnabled(bool)));
-
-    connect(d->captionCheck, SIGNAL(toggled(bool)),
-            d->syncHOSTCommentCheck, SLOT(setEnabled(bool)));
 
     connect(d->captionCheck, SIGNAL(toggled(bool)),
             d->syncEXIFCommentCheck, SLOT(setEnabled(bool)));
@@ -191,11 +182,6 @@ bool IPTCContent::syncJFIFCommentIsChecked() const
     return d->syncJFIFCommentCheck->isChecked();
 }
 
-bool IPTCContent::syncHOSTCommentIsChecked() const
-{
-    return d->syncHOSTCommentCheck->isChecked();
-}
-
 bool IPTCContent::syncEXIFCommentIsChecked() const
 {
     return d->syncEXIFCommentCheck->isChecked();
@@ -209,11 +195,6 @@ QString IPTCContent::getIPTCCaption() const
 void IPTCContent::setCheckedSyncJFIFComment(bool c)
 {
     d->syncJFIFCommentCheck->setChecked(c);
-}
-
-void IPTCContent::setCheckedSyncHOSTComment(bool c)
-{
-    d->syncHOSTCommentCheck->setChecked(c);
 }
 
 void IPTCContent::setCheckedSyncEXIFComment(bool c)
@@ -239,7 +220,6 @@ void IPTCContent::readMetadata(QByteArray& iptcData)
     }
     d->captionEdit->setEnabled(d->captionCheck->isChecked());
     d->syncJFIFCommentCheck->setEnabled(d->captionCheck->isChecked());
-    d->syncHOSTCommentCheck->setEnabled(d->captionCheck->isChecked());
     d->syncEXIFCommentCheck->setEnabled(d->captionCheck->isChecked());
 
     list = meta.getIptcTagsStringList("Iptc.Application2.Writer", false);

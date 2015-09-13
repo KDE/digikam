@@ -86,7 +86,6 @@ public:
         dateDigitalizedCheck   = 0;
         timeCreatedCheck       = 0;
         timeDigitalizedCheck   = 0;
-        syncHOSTDateCheck      = 0;
         syncEXIFDateCheck      = 0;
         setTodayCreatedBtn     = 0;
         setTodayDigitalizedBtn = 0;
@@ -97,7 +96,6 @@ public:
     QCheckBox*                     dateDigitalizedCheck;
     QCheckBox*                     timeCreatedCheck;
     QCheckBox*                     timeDigitalizedCheck;
-    QCheckBox*                     syncHOSTDateCheck;
     QCheckBox*                     syncEXIFDateCheck;
     QCheckBox*                     cityCheck;
     QCheckBox*                     sublocationCheck;
@@ -164,9 +162,6 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
     d->zoneCreatedSel     = new TimeZoneComboBox(this);
     d->dateCreatedSel     = new QDateEdit(this);
     d->timeCreatedSel     = new QTimeEdit(this);
-    d->syncHOSTDateCheck  = new QCheckBox(i18n("Sync creation date hosted by %1",
-                                               QApplication::applicationName()),
-                                               this);
     d->syncEXIFDateCheck  = new QCheckBox(i18n("Sync EXIF creation date"), this);
 
     d->setTodayCreatedBtn = new QPushButton();
@@ -259,7 +254,6 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
     grid->addWidget(d->timeCreatedSel,                      3, 2, 1, 1);
     grid->addWidget(d->zoneCreatedSel,                      3, 3, 1, 1);
     grid->addWidget(d->setTodayCreatedBtn,                  3, 5, 1, 1);
-    grid->addWidget(d->syncHOSTDateCheck,                   4, 0, 1, 6);
     grid->addWidget(d->syncEXIFDateCheck,                   5, 0, 1, 6);
     grid->addWidget(d->locationEdit,                        6, 0, 1, 6);
     grid->addWidget(new KSeparator(Qt::Horizontal, this),   7, 0, 1, 6);
@@ -296,9 +290,6 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
 
     connect(d->timeDigitalizedCheck, SIGNAL(toggled(bool)),
             d->zoneDigitalizedSel, SLOT(setEnabled(bool)));
-
-    connect(d->dateCreatedCheck, SIGNAL(toggled(bool)),
-            d->syncHOSTDateCheck, SLOT(setEnabled(bool)));
 
     connect(d->dateCreatedCheck, SIGNAL(toggled(bool)),
             d->syncEXIFDateCheck, SLOT(setEnabled(bool)));
@@ -406,19 +397,9 @@ void IPTCOrigin::slotSetTodayDigitalized()
     d->zoneDigitalizedSel->setToUTC();
 }
 
-bool IPTCOrigin::syncHOSTDateIsChecked() const
-{
-    return d->syncHOSTDateCheck->isChecked();
-}
-
 bool IPTCOrigin::syncEXIFDateIsChecked() const
 {
     return d->syncEXIFDateCheck->isChecked();
-}
-
-void IPTCOrigin::setCheckedSyncHOSTDate(bool c)
-{
-    d->syncHOSTDateCheck->setChecked(c);
 }
 
 void IPTCOrigin::setCheckedSyncEXIFDate(bool c)
@@ -461,7 +442,6 @@ void IPTCOrigin::readMetadata(QByteArray& iptcData)
     }
 
     d->dateCreatedSel->setEnabled(d->dateCreatedCheck->isChecked());
-    d->syncHOSTDateCheck->setEnabled(d->dateCreatedCheck->isChecked());
     d->syncEXIFDateCheck->setEnabled(d->dateCreatedCheck->isChecked());
 
     d->timeCreatedSel->setTime(QTime::currentTime());

@@ -178,10 +178,8 @@ void EXIFEditWidget::readSettings()
     KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
     showPage(group.readEntry(QLatin1String("All EXIF Edit Page"), 0));
     d->captionPage->setCheckedSyncJFIFComment(group.readEntry(QLatin1String("All Sync JFIF Comment"), true));
-    d->captionPage->setCheckedSyncHOSTComment(group.readEntry(QLatin1String("All Sync Host Comment"), true));
     d->captionPage->setCheckedSyncXMPCaption(group.readEntry(QLatin1String("All Sync XMP Caption"), true));
     d->captionPage->setCheckedSyncIPTCCaption(group.readEntry(QLatin1String("All Sync IPTC Caption"), true));
-    d->datetimePage->setCheckedSyncHOSTDate(group.readEntry(QLatin1String("All Sync Host Date"), true));
     d->datetimePage->setCheckedSyncXMPDate(group.readEntry(QLatin1String("All Sync XMP Date"), true));
     d->datetimePage->setCheckedSyncIPTCDate(group.readEntry(QLatin1String("All Sync IPTC Date"), true));
 }
@@ -192,10 +190,8 @@ void EXIFEditWidget::saveSettings()
     KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
     group.writeEntry(QLatin1String("All EXIF Edit Page"), activePageIndex());
     group.writeEntry(QLatin1String("All Sync JFIF Comment"), d->captionPage->syncJFIFCommentIsChecked());
-    group.writeEntry(QLatin1String("All Sync Host Comment"), d->captionPage->syncHOSTCommentIsChecked());
     group.writeEntry(QLatin1String("All Sync XMP Caption"), d->captionPage->syncXMPCaptionIsChecked());
     group.writeEntry(QLatin1String("All Sync IPTC Caption"), d->captionPage->syncIPTCCaptionIsChecked());
-    group.writeEntry(QLatin1String("All Sync Host Date"), d->datetimePage->syncHOSTDateIsChecked());
     group.writeEntry(QLatin1String("All Sync XMP Date"), d->datetimePage->syncXMPDateIsChecked());
     group.writeEntry(QLatin1String("All Sync IPTC Date"), d->datetimePage->syncIPTCDateIsChecked());
     config->sync();
@@ -235,21 +231,9 @@ void EXIFEditWidget::apply()
 {
     if (d->modified && !d->isReadOnly)
     {
-/*FIXME
-        KPImageInfo info(*d->dlg->currentItem());
-
-        if (d->captionPage->syncHOSTCommentIsChecked())
-        {
-            info.setDescription(d->captionPage->getEXIFUserComments());
-        }
         d->captionPage->applyMetadata(d->exifData, d->iptcData, d->xmpData);
-
-        if (d->datetimePage->syncHOSTDateIsChecked())
-        {
-            info.setDate(d->datetimePage->getEXIFCreationDate());
-        }
         d->datetimePage->applyMetadata(d->exifData, d->iptcData, d->xmpData);
-*/
+
         d->lensPage->applyMetadata(d->exifData);
         d->devicePage->applyMetadata(d->exifData);
         d->lightPage->applyMetadata(d->exifData);

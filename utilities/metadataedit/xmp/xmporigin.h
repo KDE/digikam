@@ -44,10 +44,8 @@ public:
     void applyMetadata(QByteArray& exifData, QByteArray& xmpData);
     void readMetadata(QByteArray& xmpData);
 
-    bool syncHOSTDateIsChecked() const;
     bool syncEXIFDateIsChecked() const;
 
-    void setCheckedSyncHOSTDate(bool c);
     void setCheckedSyncEXIFDate(bool c);
 
     QDateTime getXMPCreationDate() const;

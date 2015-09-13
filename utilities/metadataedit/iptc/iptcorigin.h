@@ -44,10 +44,8 @@ public:
     void applyMetadata(QByteArray& exifData, QByteArray& iptcData);
     void readMetadata(QByteArray& iptcData);
 
-    bool syncHOSTDateIsChecked() const;
     bool syncEXIFDateIsChecked() const;
 
-    void setCheckedSyncHOSTDate(bool c);
     void setCheckedSyncEXIFDate(bool c);
 
     QDateTime getIPTCCreationDate() const;

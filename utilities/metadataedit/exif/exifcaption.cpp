@@ -61,7 +61,6 @@ public:
         artistCheck          = 0;
         copyrightCheck       = 0;
         syncJFIFCommentCheck = 0;
-        syncHOSTCommentCheck = 0;
         syncXMPCaptionCheck  = 0;
         syncIPTCCaptionCheck = 0;
     }
@@ -72,7 +71,6 @@ public:
     QCheckBox* copyrightCheck;
     QCheckBox* userCommentCheck;
     QCheckBox* syncJFIFCommentCheck;
-    QCheckBox* syncHOSTCommentCheck;
     QCheckBox* syncXMPCaptionCheck;
     QCheckBox* syncIPTCCaptionCheck;
 
@@ -139,9 +137,6 @@ EXIFCaption::EXIFCaption(QWidget* const parent)
                                           "This field is not limited. UTF8 encoding "
                                           "will be used to save the text."));
 
-    d->syncHOSTCommentCheck = new QCheckBox(i18n("Sync captions entered through %1",
-                                            QApplication::applicationName()),
-                                            this);
     d->syncJFIFCommentCheck = new QCheckBox(i18n("Sync JFIF Comment section"), this);
     d->syncXMPCaptionCheck  = new QCheckBox(i18n("Sync XMP caption"), this);
     d->syncIPTCCaptionCheck = new QCheckBox(i18n("Sync IPTC caption (warning: limited to 2000 printable "
@@ -173,12 +168,11 @@ EXIFCaption::EXIFCaption(QWidget* const parent)
     grid->addWidget(d->copyrightEdit,           3, 1, 1, 2);
     grid->addWidget(d->userCommentCheck,        4, 0, 1, 3);
     grid->addWidget(d->userCommentEdit,         5, 0, 1, 3);
-    grid->addWidget(d->syncHOSTCommentCheck,    6, 0, 1, 3);
-    grid->addWidget(d->syncJFIFCommentCheck,    7, 0, 1, 3);
-    grid->addWidget(d->syncXMPCaptionCheck,     8, 0, 1, 3);
-    grid->addWidget(d->syncIPTCCaptionCheck,    9, 0, 1, 3);
-    grid->addWidget(note,                      10, 0, 1, 3);
-    grid->setRowStretch(11, 10);
+    grid->addWidget(d->syncJFIFCommentCheck,    6, 0, 1, 3);
+    grid->addWidget(d->syncXMPCaptionCheck,     7, 0, 1, 3);
+    grid->addWidget(d->syncIPTCCaptionCheck,    8, 0, 1, 3);
+    grid->addWidget(note,                       9, 0, 1, 3);
+    grid->setRowStretch(10, 10);
     grid->setColumnStretch(2, 10);
     grid->setMargin(0);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -202,9 +196,6 @@ EXIFCaption::EXIFCaption(QWidget* const parent)
 
     connect(d->userCommentCheck, SIGNAL(toggled(bool)),
             d->syncJFIFCommentCheck, SLOT(setEnabled(bool)));
-
-    connect(d->userCommentCheck, SIGNAL(toggled(bool)),
-            d->syncHOSTCommentCheck, SLOT(setEnabled(bool)));
 
     connect(d->userCommentCheck, SIGNAL(toggled(bool)),
             d->syncXMPCaptionCheck, SLOT(setEnabled(bool)));
@@ -257,11 +248,6 @@ bool EXIFCaption::syncJFIFCommentIsChecked() const
     return d->syncJFIFCommentCheck->isChecked();
 }
 
-bool EXIFCaption::syncHOSTCommentIsChecked() const
-{
-    return d->syncHOSTCommentCheck->isChecked();
-}
-
 bool EXIFCaption::syncXMPCaptionIsChecked() const
 {
     return d->syncXMPCaptionCheck->isChecked();
@@ -280,11 +266,6 @@ QString EXIFCaption::getEXIFUserComments() const
 void EXIFCaption::setCheckedSyncJFIFComment(bool c)
 {
     d->syncJFIFCommentCheck->setChecked(c);
-}
-
-void EXIFCaption::setCheckedSyncHOSTComment(bool c)
-{
-    d->syncHOSTCommentCheck->setChecked(c);
 }
 
 void EXIFCaption::setCheckedSyncXMPCaption(bool c)
@@ -354,7 +335,6 @@ void EXIFCaption::readMetadata(QByteArray& exifData)
     }
     d->userCommentEdit->setEnabled(d->userCommentCheck->isChecked());
     d->syncJFIFCommentCheck->setEnabled(d->userCommentCheck->isChecked());
-    d->syncHOSTCommentCheck->setEnabled(d->userCommentCheck->isChecked());
     d->syncXMPCaptionCheck->setEnabled(d->userCommentCheck->isChecked());
     d->syncIPTCCaptionCheck->setEnabled(d->userCommentCheck->isChecked());
 

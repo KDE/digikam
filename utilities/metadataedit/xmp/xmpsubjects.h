@@ -37,8 +37,6 @@
 
 #include "dmetadata.h"
 
-
-
 namespace Digikam
 {
 

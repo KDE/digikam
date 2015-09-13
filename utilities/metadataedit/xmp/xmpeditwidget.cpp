@@ -215,12 +215,8 @@ void XMPEditWidget::readSettings()
 
     showPage(group.readEntry(QLatin1String("All XMP Edit Page"), 0));
     d->contentPage->setCheckedSyncJFIFComment(group.readEntry(QLatin1String("All Sync JFIF Comment"), true));
-    d->contentPage->setCheckedSyncHOSTComment(group.readEntry(QLatin1String("All Sync Host Comment"), true));
     d->contentPage->setCheckedSyncEXIFComment(group.readEntry(QLatin1String("All Sync EXIF Comment"), true));
-    d->originPage->setCheckedSyncHOSTDate(group.readEntry(QLatin1String("All Sync Host Date"), true));
     d->originPage->setCheckedSyncEXIFDate(group.readEntry(QLatin1String("All Sync EXIF Date"), true));
-
-    KConfigGroup group2 = config->group(QLatin1String("All XMP Edit Dialog"));
 }
 
 void XMPEditWidget::saveSettings()
@@ -230,12 +226,8 @@ void XMPEditWidget::saveSettings()
 
     group.writeEntry(QLatin1String("All XMP Edit Page"), activePageIndex());
     group.writeEntry(QLatin1String("All Sync JFIF Comment"), d->contentPage->syncJFIFCommentIsChecked());
-    group.writeEntry(QLatin1String("All Sync Host Comment"), d->contentPage->syncHOSTCommentIsChecked());
     group.writeEntry(QLatin1String("All Sync EXIF Comment"), d->contentPage->syncEXIFCommentIsChecked());
-    group.writeEntry(QLatin1String("All Sync Host Date"), d->originPage->syncHOSTDateIsChecked());
     group.writeEntry(QLatin1String("All Sync EXIF Date"), d->originPage->syncEXIFDateIsChecked());
-
-    KConfigGroup group2 = config->group(QLatin1String("All XMP Edit Dialog"));
     config->sync();
 }
 
@@ -280,20 +272,8 @@ void XMPEditWidget::apply()
 {
     if (d->modified && !d->isReadOnly)
     {
-/*FIXME        KPImageInfo info(*d->dlg->currentItem());
-
-        if (d->contentPage->syncHOSTCommentIsChecked())
-        {
-            info.setDescription(d->contentPage->getXMPCaption());
-        }
         d->contentPage->applyMetadata(d->exifData, d->xmpData);
-
-        if (d->originPage->syncHOSTDateIsChecked())
-        {
-            info.setDate(d->originPage->getXMPCreationDate());
-        }
         d->originPage->applyMetadata(d->exifData, d->xmpData);
-*/
         d->subjectsPage->applyMetadata(d->xmpData);
         d->keywordsPage->applyMetadata(d->xmpData);
         d->categoriesPage->applyMetadata(d->xmpData);

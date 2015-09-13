@@ -63,7 +63,6 @@ public:
         dateCreatedSubSecCheck     = 0;
         dateOriginalSubSecCheck    = 0;
         dateDigitalizedSubSecCheck = 0;
-        syncHOSTDateCheck          = 0;
         syncXMPDateCheck           = 0;
         syncIPTCDateCheck          = 0;
 
@@ -78,7 +77,6 @@ public:
     QCheckBox*       dateCreatedSubSecCheck;
     QCheckBox*       dateOriginalSubSecCheck;
     QCheckBox*       dateDigitalizedSubSecCheck;
-    QCheckBox*       syncHOSTDateCheck;
     QCheckBox*       syncXMPDateCheck;
     QCheckBox*       syncIPTCDateCheck;
 
@@ -112,9 +110,6 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
     d->dateCreatedSubSecEdit->setSingleStep(1);
     d->dateCreatedSubSecEdit->setValue(0);
 
-    d->syncHOSTDateCheck      = new QCheckBox(i18n("Sync creation date hosted by %1",
-                                              QApplication::applicationName()),
-                                              this);
     d->syncXMPDateCheck       = new QCheckBox(i18n("Sync XMP creation date"), this);
     d->syncIPTCDateCheck      = new QCheckBox(i18n("Sync IPTC creation date"), this);
 
@@ -187,23 +182,22 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
     grid->addWidget(d->dateCreatedSel,                      1, 0, 1, 1);
     grid->addWidget(d->dateCreatedSubSecEdit,               1, 1, 1, 1);
     grid->addWidget(d->setTodayCreatedBtn,                  1, 3, 1, 1);
-    grid->addWidget(d->syncHOSTDateCheck,                   2, 0, 1, 4);
-    grid->addWidget(d->syncXMPDateCheck,                    3, 0, 1, 4);
-    grid->addWidget(d->syncIPTCDateCheck,                   4, 0, 1, 4);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this),   5, 0, 1, 4);
-    grid->addWidget(d->dateOriginalCheck,                   6, 0, 1, 1);
-    grid->addWidget(d->dateOriginalSubSecCheck,             6, 1, 1, 3);
-    grid->addWidget(d->dateOriginalSel,                     7, 0, 1, 1);
-    grid->addWidget(d->dateOriginalSubSecEdit,              7, 1, 1, 1);
-    grid->addWidget(d->setTodayOriginalBtn,                 7, 3, 1, 1);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this),   8, 0, 1, 4);
-    grid->addWidget(d->dateDigitalizedCheck,                9, 0, 1, 1);
-    grid->addWidget(d->dateDigitalizedSubSecCheck,          9, 1, 1, 3);
-    grid->addWidget(d->dateDigitalizedSel,                 10, 0, 1, 1);
-    grid->addWidget(d->dateDigitalizedSubSecEdit,          10, 1, 1, 1);
-    grid->addWidget(d->setTodayDigitalizedBtn,             10, 3, 1, 1);
+    grid->addWidget(d->syncXMPDateCheck,                    2, 0, 1, 4);
+    grid->addWidget(d->syncIPTCDateCheck,                   3, 0, 1, 4);
+    grid->addWidget(new KSeparator(Qt::Horizontal, this),   4, 0, 1, 4);
+    grid->addWidget(d->dateOriginalCheck,                   5, 0, 1, 1);
+    grid->addWidget(d->dateOriginalSubSecCheck,             5, 1, 1, 3);
+    grid->addWidget(d->dateOriginalSel,                     6, 0, 1, 1);
+    grid->addWidget(d->dateOriginalSubSecEdit,              6, 1, 1, 1);
+    grid->addWidget(d->setTodayOriginalBtn,                 6, 3, 1, 1);
+    grid->addWidget(new KSeparator(Qt::Horizontal, this),   7, 0, 1, 4);
+    grid->addWidget(d->dateDigitalizedCheck,                8, 0, 1, 1);
+    grid->addWidget(d->dateDigitalizedSubSecCheck,          8, 1, 1, 3);
+    grid->addWidget(d->dateDigitalizedSel,                  9, 0, 1, 1);
+    grid->addWidget(d->dateDigitalizedSubSecEdit,           9, 1, 1, 1);
+    grid->addWidget(d->setTodayDigitalizedBtn,              9, 3, 1, 1);
     grid->setColumnStretch(2, 10);
-    grid->setRowStretch(11, 10);
+    grid->setRowStretch(10, 10);
     grid->setMargin(0);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -226,9 +220,6 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
 
     connect(d->dateDigitalizedSubSecCheck, SIGNAL(toggled(bool)),
             d->dateDigitalizedSubSecEdit, SLOT(setEnabled(bool)));
-
-    connect(d->dateCreatedCheck, SIGNAL(toggled(bool)),
-            d->syncHOSTDateCheck, SLOT(setEnabled(bool)));
 
     connect(d->dateCreatedCheck, SIGNAL(toggled(bool)),
             d->syncXMPDateCheck, SLOT(setEnabled(bool)));
@@ -311,11 +302,6 @@ void EXIFDateTime::slotSetTodayDigitalized()
     d->dateDigitalizedSubSecEdit->setValue(0);
 }
 
-bool EXIFDateTime::syncHOSTDateIsChecked() const
-{
-    return d->syncHOSTDateCheck->isChecked();
-}
-
 bool EXIFDateTime::syncXMPDateIsChecked() const
 {
     return d->syncXMPDateCheck->isChecked();
@@ -324,11 +310,6 @@ bool EXIFDateTime::syncXMPDateIsChecked() const
 bool EXIFDateTime::syncIPTCDateIsChecked() const
 {
     return d->syncIPTCDateCheck->isChecked();
-}
-
-void EXIFDateTime::setCheckedSyncHOSTDate(bool c)
-{
-    d->syncHOSTDateCheck->setChecked(c);
 }
 
 void EXIFDateTime::setCheckedSyncXMPDate(bool c)
@@ -368,7 +349,6 @@ void EXIFDateTime::readMetadata(QByteArray& exifData)
         }
     }
     d->dateCreatedSel->setEnabled(d->dateCreatedCheck->isChecked());
-    d->syncHOSTDateCheck->setEnabled(d->dateCreatedCheck->isChecked());
     d->syncXMPDateCheck->setEnabled(d->dateCreatedCheck->isChecked());
     d->syncIPTCDateCheck->setEnabled(d->dateCreatedCheck->isChecked());
 

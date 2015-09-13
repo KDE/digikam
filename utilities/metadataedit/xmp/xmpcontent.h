@@ -44,11 +44,9 @@ public:
     void readMetadata(QByteArray& xmpData);
 
     bool syncJFIFCommentIsChecked() const;
-    bool syncHOSTCommentIsChecked() const;
     bool syncEXIFCommentIsChecked() const;
 
     void setCheckedSyncJFIFComment(bool c);
-    void setCheckedSyncHOSTComment(bool c);
     void setCheckedSyncEXIFComment(bool c);
 
     QString getXMPCaption() const;
