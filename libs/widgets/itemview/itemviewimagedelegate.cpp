@@ -450,14 +450,14 @@ void ItemViewImageDelegate::drawImageFormat(QPainter* p, const QRect& r, const Q
         p->setPen(QPen(Qt::gray));
         p->setOpacity(0.50);
 
-        QRect bRect = p->boundingRect(r, Qt::AlignTop | Qt::AlignHCenter, f.toUpper());
-        bRect.adjust(-1, -1, 1, 1);
+        QRect bRect = p->boundingRect(r, Qt::AlignBottom | Qt::AlignHCenter, f.toUpper());
+        bRect.adjust(1, 1, -1, -1);
         bRect.translate(0, 1);
 
         p->fillRect(bRect, Qt::SolidPattern);
         p->setPen(QPen(Qt::white));
         p->setOpacity(1.0);
-        p->drawText(bRect, Qt::AlignTop | Qt::AlignHCenter, f.toUpper());
+        p->drawText(bRect, Qt::AlignBottom | Qt::AlignHCenter, f.toUpper());
 
         p->restore();
     }

@@ -335,14 +335,14 @@ void ItemViewImportDelegate::drawImageFormat(QPainter* p, const QRect& r, const 
         p->setPen(QPen(Qt::gray));
         p->setOpacity(0.50);
 
-        QRect bRect = p->boundingRect(r, Qt::AlignTop | Qt::AlignHCenter, type.toUpper());
-        bRect.adjust(-1, -1, 1, 1);
+        QRect bRect = p->boundingRect(r, Qt::AlignBottom | Qt::AlignHCenter, type.toUpper());
+        bRect.adjust(1, 1, -1, -1);
         bRect.translate(0, 1);
 
         p->fillRect(bRect, Qt::SolidPattern);
         p->setPen(QPen(Qt::white));
         p->setOpacity(1.0);
-        p->drawText(bRect, Qt::AlignTop | Qt::AlignHCenter, type.toUpper());
+        p->drawText(bRect, Qt::AlignBottom | Qt::AlignHCenter, type.toUpper());
 
         p->restore();
     }
