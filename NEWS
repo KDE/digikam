@@ -3,16 +3,19 @@ digiKam 5.0.0-beta1 - Release date: 2015-09-06
 
 NEW FEATURES:
 
-General: Implementations ported to Qt5 libraries and KF5 libraries.
-General: Integer and double input value sliders use now PhotoShop/Krita/Gimp like widget.
-General: LCMS1 support removed.
-General: Sqlite2 support removed.
-General: Welcome Page view re-writed to support selected best background photo from end user.
-General: Replacing annoying KIOSlave listing and scanning methods with new threads based implementation.
-General: Isolating KIO calls in KIOWrapper to be able to create a pure qt digiKam soon.
-General: New BQM tool to convert RAW to DNG.
-General: Add embedded trash support for each collection instead desktop trash.
-General: Image Editor and Showfoto are now able to import images from a digital scanner.
+General            : Implementations ported to Qt5 libraries and KF5 libraries.
+General            : Integer and double input value sliders use now PhotoShop/Krita/Gimp like widget.
+General            : LCMS1 support removed.
+General            : Sqlite2 support removed.
+General            : Welcome Page view re-writed to support selected best background photo from end user.
+General            : Replacing annoying KIOSlave listing and scanning methods with new threads based implementation.
+General            : Isolating KIO calls in KIOWrapper to be able to create a pure Qt digiKam in the future.
+General            : Add embedded trash support for each collection instead desktop trash.
+
+Batch Queue Manager: New BQM tool to convert RAW to DNG.
+
+Image Editor       : Add a new option to import images from a digital scanner.
+Image Editor       : Add a new option to edit metadata.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
@@ -33,4 +36,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 015 ==> 122653 - file-dialogue claims that pictures are not on the local-storage, yet they are
 016 ==> 348347 - Can't create albums - menu is greyed out.
 017 ==> 164168 - Integration of image scanning into showfoto.
-018 ==> 
+018 ==> 144597 - Metadata editor not accessible from image editor.
+019 ==> 132161 - Support for editing EXIF comments.
+020 ==> 
+
