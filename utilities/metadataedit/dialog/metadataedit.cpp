@@ -39,9 +39,7 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kguiitem.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kwindowconfig.h>
 
 // Local includes
@@ -84,16 +82,17 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     : QDialog(parent),
       d(new Private)
 {
-    setWindowTitle(i18n("Metadata edit dialog"));
+    setWindowTitle(i18n("Edit Metadata"));
     setModal(true);
 
     d->urls     = urls;
     d->currItem = d->urls.begin();
 
-    QDialogButtonBox::StandardButtons btns = QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Close;
-
-    if (d->urls.count() > 1)
-        btns = btns | QDialogButtonBox::No | QDialogButtonBox::Yes;
+    QDialogButtonBox::StandardButtons btns = QDialogButtonBox::Ok    | 
+                                             QDialogButtonBox::Apply | 
+                                             QDialogButtonBox::Close |
+                                             QDialogButtonBox::No    |   // Previous item
+                                             QDialogButtonBox::Yes;      // Next item
 
     d->buttons = new QDialogButtonBox(btns, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
@@ -103,6 +102,11 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     {
         d->buttons->button(QDialogButtonBox::No)->setText(i18nc("@action:button",  "Previous"));
         d->buttons->button(QDialogButtonBox::Yes)->setText(i18nc("@action:button", "Next"));
+    }
+    else
+    {
+        d->buttons->button(QDialogButtonBox::No)->setVisible(false);
+        d->buttons->button(QDialogButtonBox::Yes)->setVisible(false);
     }
 
     d->tabWidget = new QTabWidget(this);
@@ -147,14 +151,11 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     connect(d->buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
             this, SLOT(slotClose()));
 
-    if (d->urls.count() > 1)
-    {
-        connect(d->buttons->button(QDialogButtonBox::No), SIGNAL(clicked()),
-                this, SLOT(slotNext()));
+    connect(d->buttons->button(QDialogButtonBox::No), SIGNAL(clicked()),
+            this, SLOT(slotNext()));
 
-        connect(d->buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
-                this, SLOT(slotPrevious()));
-    }
+    connect(d->buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
+            this, SLOT(slotPrevious()));
 
     //----------------------------------------------------------
 
@@ -260,12 +261,8 @@ void MetadataEditDialog::slotItemChanged()
         .arg(d->urls.indexOf(*(d->currItem))+1)
         .arg(d->urls.count()));
 
-    if (d->urls.count() > 1)
-    {
-        d->buttons->button(QDialogButtonBox::No)->setEnabled(*(d->currItem) != d->urls.last());
-        d->buttons->button(QDialogButtonBox::Yes)->setEnabled(*(d->currItem) != d->urls.first());
-    }
-
+    d->buttons->button(QDialogButtonBox::No)->setEnabled(*(d->currItem) != d->urls.last());
+    d->buttons->button(QDialogButtonBox::Yes)->setEnabled(*(d->currItem) != d->urls.first());
     d->buttons->button(QDialogButtonBox::Apply)->setEnabled(!d->isReadOnly);
 }
 
@@ -280,7 +277,7 @@ bool MetadataEditDialog::eventFilter(QObject*, QEvent* e)
         {
             slotApply();
 
-            if ((d->urls.count() > 1) && d->buttons->button(QDialogButtonBox::No)->isEnabled())
+            if (d->buttons->button(QDialogButtonBox::No)->isEnabled())
                 slotNext();
 
             return true;
@@ -290,7 +287,7 @@ bool MetadataEditDialog::eventFilter(QObject*, QEvent* e)
         {
             slotApply();
 
-            if ((d->urls.count() > 1) && d->buttons->button(QDialogButtonBox::Yes)->isEnabled())
+            if (d->buttons->button(QDialogButtonBox::Yes)->isEnabled())
                 slotPrevious();
 
             return true;
