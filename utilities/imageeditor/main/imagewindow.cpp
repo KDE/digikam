@@ -1726,6 +1726,9 @@ void ImageWindow::slotEditMetadata()
     dialog->exec();
 
     delete dialog;
+
+    // Refresh Database with new metadata from file.
+    ScanController::instance()->scannedInfo(d->currentImageInfo.fileUrl().toLocalFile());
 }
 
 }  // namespace Digikam

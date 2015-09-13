@@ -3158,6 +3158,12 @@ void DigikamApp::slotEditMetadata()
     dialog->exec();
 
     delete dialog;
+
+    // Refresh Database with new metadata from files.
+    foreach(QUrl u, urls)
+    {
+        ScanController::instance()->scannedInfo(u.toLocalFile());
+    }
 }
 
 void DigikamApp::slotImportFromScanner()

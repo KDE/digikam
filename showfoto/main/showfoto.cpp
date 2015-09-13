@@ -1386,6 +1386,9 @@ void ShowFoto::slotEditMetadata()
     dialog->exec();
 
     delete dialog;
+
+    // Update image information everywhere.
+    slotChanged();
 }
 
 }   // namespace ShowFoto
