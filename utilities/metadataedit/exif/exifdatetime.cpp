@@ -35,11 +35,16 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
+
+// Libkdcraw includes
+
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
 #include "dmetadata.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -160,7 +165,7 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
     d->dateDigitalizedSubSecEdit->setMaximum(999);
     d->dateDigitalizedSubSecEdit->setSingleStep(1);
     d->dateDigitalizedSubSecEdit->setValue(0);
-    
+
     d->setTodayDigitalizedBtn     = new QPushButton();
     d->setTodayDigitalizedBtn->setIcon(QIcon::fromTheme(QLatin1String("go-jump-today")));
     d->setTodayDigitalizedBtn->setWhatsThis(i18n("Set digitization date to today"));
@@ -184,13 +189,13 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
     grid->addWidget(d->setTodayCreatedBtn,                  1, 3, 1, 1);
     grid->addWidget(d->syncXMPDateCheck,                    2, 0, 1, 4);
     grid->addWidget(d->syncIPTCDateCheck,                   3, 0, 1, 4);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this),   4, 0, 1, 4);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  4, 0, 1, 4);
     grid->addWidget(d->dateOriginalCheck,                   5, 0, 1, 1);
     grid->addWidget(d->dateOriginalSubSecCheck,             5, 1, 1, 3);
     grid->addWidget(d->dateOriginalSel,                     6, 0, 1, 1);
     grid->addWidget(d->dateOriginalSubSecEdit,              6, 1, 1, 1);
     grid->addWidget(d->setTodayOriginalBtn,                 6, 3, 1, 1);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this),   7, 0, 1, 4);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  7, 0, 1, 4);
     grid->addWidget(d->dateDigitalizedCheck,                8, 0, 1, 1);
     grid->addWidget(d->dateDigitalizedSubSecCheck,          8, 1, 1, 3);
     grid->addWidget(d->dateDigitalizedSel,                  9, 0, 1, 1);
@@ -339,15 +344,18 @@ void EXIFDateTime::readMetadata(QByteArray& exifData)
     d->dateCreatedSel->setDateTime(QDateTime::currentDateTime());
     d->dateCreatedCheck->setChecked(false);
     datetimeStr = meta.getExifTagString("Exif.Image.DateTime", false);
+
     if (!datetimeStr.isEmpty())
     {
         datetime = QDateTime::fromString(datetimeStr, Qt::ISODate);
+
         if (datetime.isValid())
         {
             d->dateCreatedSel->setDateTime(datetime);
             d->dateCreatedCheck->setChecked(true);
         }
     }
+
     d->dateCreatedSel->setEnabled(d->dateCreatedCheck->isChecked());
     d->syncXMPDateCheck->setEnabled(d->dateCreatedCheck->isChecked());
     d->syncIPTCDateCheck->setEnabled(d->dateCreatedCheck->isChecked());
@@ -355,74 +363,89 @@ void EXIFDateTime::readMetadata(QByteArray& exifData)
     d->dateCreatedSubSecEdit->setValue(0);
     d->dateCreatedSubSecCheck->setChecked(false);
     data = meta.getExifTagString("Exif.Photo.SubSecTime", false);
+
     if (!data.isNull())
     {
         bool ok    = false;
         int subsec = data.toInt(&ok);
+
         if (ok)
         {
             d->dateCreatedSubSecEdit->setValue(subsec);
             d->dateCreatedSubSecCheck->setChecked(true);
         }
     }
+
     d->dateCreatedSubSecEdit->setEnabled(d->dateCreatedSubSecCheck->isChecked());
 
     d->dateOriginalSel->setDateTime(QDateTime::currentDateTime());
     d->dateOriginalCheck->setChecked(false);
     datetimeStr = meta.getExifTagString("Exif.Photo.DateTimeOriginal", false);
+
     if (!datetimeStr.isEmpty())
     {
         datetime = QDateTime::fromString(datetimeStr, Qt::ISODate);
+
         if (datetime.isValid())
         {
             d->dateOriginalSel->setDateTime(datetime);
             d->dateOriginalCheck->setChecked(true);
         }
     }
+
     d->dateOriginalSel->setEnabled(d->dateOriginalCheck->isChecked());
 
     d->dateOriginalSubSecEdit->setValue(0);
     d->dateOriginalSubSecCheck->setChecked(false);
     data = meta.getExifTagString("Exif.Photo.SubSecTimeOriginal", false);
+
     if (!data.isNull())
     {
         bool ok    = false;
         int subsec = data.toInt(&ok);
+
         if (ok)
         {
             d->dateOriginalSubSecEdit->setValue(subsec);
             d->dateOriginalSubSecCheck->setChecked(true);
         }
     }
+
     d->dateOriginalSubSecEdit->setEnabled(d->dateOriginalSubSecCheck->isChecked());
 
     d->dateDigitalizedSel->setDateTime(QDateTime::currentDateTime());
     d->dateDigitalizedCheck->setChecked(false);
     datetimeStr = meta.getExifTagString("Exif.Photo.DateTimeDigitized", false);
+
     if (!datetimeStr.isEmpty())
     {
         datetime = QDateTime::fromString(datetimeStr, Qt::ISODate);
+
         if (datetime.isValid())
         {
             d->dateDigitalizedSel->setDateTime(datetime);
             d->dateDigitalizedCheck->setChecked(true);
         }
     }
+
     d->dateDigitalizedSel->setEnabled(d->dateDigitalizedCheck->isChecked());
 
     d->dateDigitalizedSubSecEdit->setValue(0);
     d->dateDigitalizedSubSecCheck->setChecked(false);
     data = meta.getExifTagString("Exif.Photo.SubSecTimeDigitized", false);
+
     if (!data.isNull())
     {
         bool ok    = false;
         int subsec = data.toInt(&ok);
+
         if (ok)
         {
             d->dateDigitalizedSubSecEdit->setValue(subsec);
             d->dateDigitalizedSubSecCheck->setChecked(true);
         }
     }
+
     d->dateDigitalizedSubSecEdit->setEnabled(d->dateDigitalizedSubSecCheck->isChecked());
 
     blockSignals(false);
@@ -497,12 +520,7 @@ void EXIFDateTime::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QBy
     else
         meta.removeExifTag("Exif.Photo.SubSecTimeDigitized");
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
-
     iptcData = meta.getIptc();
     xmpData  = meta.getXmp();
 }

@@ -82,13 +82,14 @@ public:
 };
 
 IPTCCredits::IPTCCredits(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // IPTC only accept printable Ascii char.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* asciiValidator = new QRegExpValidator(asciiRx, this);
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     // --------------------------------------------------------
 
@@ -140,7 +141,7 @@ IPTCCredits::IPTCCredits(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel *note = new QLabel(i18n("<b>Note: "
+    QLabel* const note = new QLabel(i18n("<b>Note: "
                  "<b><a href='http://en.wikipedia.org/wiki/IPTC_Information_Interchange_Model'>IPTC</a></b> "
                  "text tags only support the printable "
                  "<b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
@@ -227,11 +228,13 @@ void IPTCCredits::readMetadata(QByteArray& iptcData)
     d->copyrightEdit->clear();
     d->copyrightCheck->setChecked(false);
     data = meta.getIptcTagString("Iptc.Application2.Copyright", false);
+
     if (!data.isNull())
     {
         d->copyrightEdit->setText(data);
         d->copyrightCheck->setChecked(true);
     }
+
     d->copyrightEdit->setEnabled(d->copyrightCheck->isChecked());
 
     list = meta.getIptcTagsStringList("Iptc.Application2.Byline", false);
@@ -243,21 +246,25 @@ void IPTCCredits::readMetadata(QByteArray& iptcData)
     d->creditEdit->clear();
     d->creditCheck->setChecked(false);
     data = meta.getIptcTagString("Iptc.Application2.Credit", false);
+
     if (!data.isNull())
     {
         d->creditEdit->setText(data);
         d->creditCheck->setChecked(true);
     }
+
     d->creditEdit->setEnabled(d->creditCheck->isChecked());
 
     d->sourceEdit->clear();
     d->sourceCheck->setChecked(false);
     data = meta.getIptcTagString("Iptc.Application2.Source", false);
+
     if (!data.isNull())
     {
         d->sourceEdit->setText(data);
         d->sourceCheck->setChecked(true);
     }
+
     d->sourceEdit->setEnabled(d->sourceCheck->isChecked());
 
     list = meta.getIptcTagsStringList("Iptc.Application2.Contact", false);

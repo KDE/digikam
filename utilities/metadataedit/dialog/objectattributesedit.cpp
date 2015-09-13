@@ -82,17 +82,18 @@ public:
 };
 
 ObjectAttributesEdit::ObjectAttributesEdit(QWidget* const parent, bool ascii, int size)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout *grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // IPTC only accept printable Ascii char.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* asciiValidator = new QRegExpValidator(asciiRx, this);
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     // --------------------------------------------------------
 
-    d->valueCheck = new MetadataCheckBox(i18n("Attribute:"), this);
+    d->valueCheck     = new MetadataCheckBox(i18n("Attribute:"), this);
 
     d->addValueButton = new QPushButton(this);
     d->delValueButton = new QPushButton(this);
@@ -236,8 +237,9 @@ ObjectAttributesEdit::~ObjectAttributesEdit()
 
 void ObjectAttributesEdit::slotDeleteValue()
 {
-    QListWidgetItem* item = d->valueBox->currentItem();
+    QListWidgetItem* const item = d->valueBox->currentItem();
     if (!item) return;
+
     d->valueBox->takeItem(d->valueBox->row(item));
     delete item;
 }
@@ -257,6 +259,7 @@ void ObjectAttributesEdit::slotSelectionChanged()
     {
         bool ok   = false;
         int index = d->valueBox->selectedItems()[0]->text().section(QLatin1Char(':'), 0, 0).toInt(&ok);
+
         if (ok)
         {
             d->dataList->setCurrentIndex(index-1);
@@ -299,11 +302,13 @@ void ObjectAttributesEdit::setValues(const QStringList& values)
 
     d->valueBox->clear();
     d->valueCheck->setChecked(false);
+
     if (!d->oldValues.isEmpty())
     {
         d->valueBox->insertItems(0, d->oldValues);
         d->valueCheck->setChecked(true);
     }
+
     d->dataList->setEnabled(d->valueCheck->isChecked());
     d->valueBox->setEnabled(d->valueCheck->isChecked());
     d->addValueButton->setEnabled(d->valueCheck->isChecked());
@@ -315,11 +320,11 @@ void ObjectAttributesEdit::setValues(const QStringList& values)
 bool ObjectAttributesEdit::getValues(QStringList& oldValues, QStringList& newValues)
 {
     oldValues = d->oldValues;
-
     newValues.clear();
+
     for (int i = 0 ; i < d->valueBox->count(); ++i)
     {
-        QListWidgetItem* item = d->valueBox->item(i);
+        QListWidgetItem* const item = d->valueBox->item(i);
         newValues.append(item->text());
     }
 

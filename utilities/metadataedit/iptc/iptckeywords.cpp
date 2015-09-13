@@ -73,13 +73,14 @@ public:
 };
 
 IPTCKeywords::IPTCKeywords(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // IPTC only accept printable Ascii char.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* asciiValidator = new QRegExpValidator(asciiRx, this);
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     // --------------------------------------------------------
 
@@ -106,7 +107,7 @@ IPTCKeywords::IPTCKeywords(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* note = new QLabel(i18n("<b>Note: "
+    QLabel* const note = new QLabel(i18n("<b>Note: "
                  "<b><a href='http://en.wikipedia.org/wiki/IPTC_Information_Interchange_Model'>IPTC</a></b> "
                  "text tags only support the printable "
                  "<b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
@@ -120,7 +121,7 @@ IPTCKeywords::IPTCKeywords(QWidget* const parent)
     // --------------------------------------------------------
 
     grid->setAlignment( Qt::AlignTop );
-    grid->addWidget(d->keywordsCheck,       0, 0, 1, 2 );
+    grid->addWidget(d->keywordsCheck,       0, 0, 1, 2);
     grid->addWidget(d->keywordEdit,         1, 0, 1, 1);
     grid->addWidget(d->keywordsBox,         2, 0, 5, 1);
     grid->addWidget(d->addKeywordButton,    2, 1, 1, 1);
@@ -185,8 +186,9 @@ IPTCKeywords::~IPTCKeywords()
 
 void IPTCKeywords::slotDelKeyword()
 {
-    QListWidgetItem* item = d->keywordsBox->currentItem();
+    QListWidgetItem* const item = d->keywordsBox->currentItem();
     if (!item) return;
+
     d->keywordsBox->takeItem(d->keywordsBox->row(item));
     delete item;
 }
@@ -224,9 +226,11 @@ void IPTCKeywords::slotAddKeyword()
     if (newKeyword.isEmpty()) return;
 
     bool found = false;
+
     for (int i = 0 ; i < d->keywordsBox->count(); ++i)
     {
-        QListWidgetItem* item = d->keywordsBox->item(i);
+        QListWidgetItem* const item = d->keywordsBox->item(i);
+
         if (newKeyword == item->text())
         {
             found = true;
@@ -250,11 +254,13 @@ void IPTCKeywords::readMetadata(QByteArray& iptcData)
 
     d->keywordsBox->clear();
     d->keywordsCheck->setChecked(false);
+
     if (!d->oldKeywords.isEmpty())
     {
         d->keywordsBox->insertItems(0, d->oldKeywords);
         d->keywordsCheck->setChecked(true);
     }
+
     d->keywordEdit->setEnabled(d->keywordsCheck->isChecked());
     d->keywordsBox->setEnabled(d->keywordsCheck->isChecked());
     d->addKeywordButton->setEnabled(d->keywordsCheck->isChecked());
@@ -271,7 +277,7 @@ void IPTCKeywords::applyMetadata(QByteArray& iptcData)
 
     for (int i = 0 ; i < d->keywordsBox->count(); ++i)
     {
-        QListWidgetItem* item = d->keywordsBox->item(i);
+        QListWidgetItem* const item = d->keywordsBox->item(i);
         newKeywords.append(item->text());
     }
 

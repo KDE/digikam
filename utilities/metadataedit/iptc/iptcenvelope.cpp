@@ -163,18 +163,20 @@ IPTCEnvelope::IPTCEnvelope(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // IPTC only accept printable Ascii char.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* asciiValidator = new QRegExpValidator(asciiRx, this);
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     // --------------------------------------------------------
 
     d->destinationCheck = new QCheckBox(i18n("Destination:"), this);
     d->destinationEdit  = new QTextEdit(this);
-/*    d->specialInstructionEdit->setValidator(asciiValidator);
-    d->specialInstructionEdit->document()->setMaxLength;*/
+/*
+    d->specialInstructionEdit->setValidator(asciiValidator);
+    d->specialInstructionEdit->document()->setMaxLength;
+*/
     d->destinationEdit->setWhatsThis(i18n("Enter the envelope destination. "
                                           "This field is limited to 1024 ASCII characters."));
 
@@ -499,6 +501,7 @@ void IPTCEnvelope::readMetadata(QByteArray& iptcData)
     if (!data.isNull())
     {
         const int val = data.toInt();
+
         if (val >= 0 && val <= 9)
         {
             d->priorityCB->setCurrentIndex(val);

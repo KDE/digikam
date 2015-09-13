@@ -42,7 +42,7 @@ IPTCSubjects::IPTCSubjects(QWidget* const parent)
     // - ':' (\x3A)
     // - '?' (\x3F)
     QRegExp subjectAsciiRx(QLatin1String("[\x20-\x29\x2B-\x39\x3B-\x3E\x40-\x7F]+$"));
-    QValidator* subjectAsciiValidator = new QRegExpValidator(subjectAsciiRx, this);
+    QValidator* const subjectAsciiValidator = new QRegExpValidator(subjectAsciiRx, this);
 
     // --------------------------------------------------------
 

@@ -40,12 +40,17 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
+
+// Libkdcraw includes
+
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
 #include "metadatacheckbox.h"
 #include "dmetadata.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -116,7 +121,8 @@ public:
 };
 
 EXIFDevice::EXIFDevice(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
 
@@ -160,7 +166,7 @@ EXIFDevice::EXIFDevice(QWidget* const parent)
     warning->setWordWrap(true);
     warning->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    KSeparator* const line = new KSeparator(Qt::Horizontal, this);
+    RLineWidget* const line = new RLineWidget(Qt::Horizontal, this);
 
     // --------------------------------------------------------
 
@@ -219,7 +225,7 @@ EXIFDevice::EXIFDevice(QWidget* const parent)
     d->exposureBiasEdit->setWhatsThis(i18n("Set here the exposure bias value (in APEX units) "
                                            "used by camera to take the picture."));
 
-    KSeparator* const line2 = new KSeparator(Qt::Horizontal, this);
+    RLineWidget* const line2 = new RLineWidget(Qt::Horizontal, this);
 
     // --------------------------------------------------------
 
@@ -591,7 +597,7 @@ void EXIFDevice::readMetadata(QByteArray& exifData)
 
     if (meta.getExifTagLong("Exif.Photo.ExposureMode", val))
     {
-        if (val>=0 && val <=2)
+        if (val >= 0 && val <= 2)
         {
             d->exposureModeCB->setCurrentIndex(val);
             d->exposureModeCheck->setChecked(true);
@@ -601,6 +607,7 @@ void EXIFDevice::readMetadata(QByteArray& exifData)
             d->exposureModeCheck->setValid(false);
         }
     }
+
     d->exposureModeCB->setEnabled(d->exposureModeCheck->isChecked());
 
     d->exposureBiasEdit->setValue(0.0);
@@ -619,7 +626,7 @@ void EXIFDevice::readMetadata(QByteArray& exifData)
 
     if (meta.getExifTagLong("Exif.Photo.MeteringMode", val))
     {
-        if ((val>= 0 && val <=6) || val == 255)
+        if ((val >= 0 && val <= 6) || val == 255)
         {
             d->meteringModeCB->setCurrentIndex(val == 255 ? 7 : val);
             d->meteringModeCheck->setChecked(true);
@@ -684,7 +691,7 @@ void EXIFDevice::readMetadata(QByteArray& exifData)
 
     if (meta.getExifTagLong("Exif.Photo.SensingMethod", val))
     {
-        if (val>=1 && val<=8 && val!=6)
+        if (val >= 1 && val <= 8 && val != 6)
         {
             d->sensingMethodCB->setCurrentIndex(val > 6 ? val-2 : val-1);
             d->sensingMethodCheck->setChecked(true);
@@ -702,7 +709,7 @@ void EXIFDevice::readMetadata(QByteArray& exifData)
 
     if (meta.getExifTagLong("Exif.Photo.SceneCaptureType", val))
     {
-        if (val>=0 && val<=3)
+        if (val >= 0 && val <= 3)
         {
             d->sceneTypeCB->setCurrentIndex(val);
             d->sceneTypeCheck->setChecked(true);
@@ -720,7 +727,7 @@ void EXIFDevice::readMetadata(QByteArray& exifData)
 
     if (meta.getExifTagLong("Exif.Photo.SubjectDistanceRange", val))
     {
-        if (val>=0 && val<=3)
+        if (val >= 0 && val <= 3)
         {
             d->subjectDistanceTypeCB->setCurrentIndex(val);
             d->subjectDistanceTypeCheck->setChecked(true);
@@ -835,11 +842,7 @@ void EXIFDevice::applyMetadata(QByteArray& exifData)
     else if (d->subjectDistanceTypeCheck->isValid())
         meta.removeExifTag("Exif.Photo.SubjectDistanceRange");
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
 }
 
 }  // namespace Digikam

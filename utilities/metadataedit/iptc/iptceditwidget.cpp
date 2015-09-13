@@ -36,11 +36,7 @@
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
-#include <kguiitem.h>
-#include <khelpmenu.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <ktoolinvocation.h>
 
 // Local includes
 
@@ -120,7 +116,8 @@ public:
 };
 
 IPTCEditWidget::IPTCEditWidget(MetadataEditDialog* const parent)
-    : KPageWidget(parent), d(new Private)
+    : KPageWidget(parent),
+      d(new Private)
 {
     d->dlg           = parent;
 
@@ -244,12 +241,7 @@ void IPTCEditWidget::slotItemChanged()
     DMetadata meta;
     meta.load((*d->dlg->currentItem()).path());
 
-#if KEXIV2_VERSION >= 0x010000
     d->exifData = meta.getExifEncoded();
-#else
-    d->exifData = meta.getExif();
-#endif
-
     d->iptcData = meta.getIptc();
     d->contentPage->readMetadata(d->iptcData);
     d->originPage->readMetadata(d->iptcData);

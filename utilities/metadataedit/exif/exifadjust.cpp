@@ -84,9 +84,10 @@ public:
 };
 
 EXIFAdjust::EXIFAdjust(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // --------------------------------------------------------
 
@@ -242,15 +243,18 @@ void EXIFAdjust::readMetadata(QByteArray& exifData)
 
     d->brightnessEdit->setValue(0.0);
     d->brightnessCheck->setChecked(false);
+
     if (meta.getExifTagRational("Exif.Photo.BrightnessValue", num, den))
     {
         d->brightnessEdit->setValue((double)(num) / (double)(den));
         d->brightnessCheck->setChecked(true);
     }
+
     d->brightnessEdit->setEnabled(d->brightnessCheck->isChecked());
 
     d->gainControlCB->setCurrentIndex(0);
     d->gainControlCheck->setChecked(false);
+
     if (meta.getExifTagLong("Exif.Photo.GainControl", val))
     {
         if (val >= 0 && val <= 4)
@@ -261,10 +265,12 @@ void EXIFAdjust::readMetadata(QByteArray& exifData)
         else
             d->gainControlCheck->setValid(false);
     }
+
     d->gainControlCB->setEnabled(d->gainControlCheck->isChecked());
 
     d->contrastCB->setCurrentIndex(0);
     d->contrastCheck->setChecked(false);
+
     if (meta.getExifTagLong("Exif.Photo.Contrast", val))
     {
         if (val >= 0 && val <= 2)
@@ -275,10 +281,12 @@ void EXIFAdjust::readMetadata(QByteArray& exifData)
         else
             d->contrastCheck->setValid(false);
     }
+
     d->contrastCB->setEnabled(d->contrastCheck->isChecked());
 
     d->saturationCB->setCurrentIndex(0);
     d->saturationCheck->setChecked(false);
+
     if (meta.getExifTagLong("Exif.Photo.Saturation", val))
     {
         if (val >= 0 && val <= 2)
@@ -289,10 +297,12 @@ void EXIFAdjust::readMetadata(QByteArray& exifData)
         else
             d->saturationCheck->setValid(false);
     }
+
     d->saturationCB->setEnabled(d->saturationCheck->isChecked());
 
     d->sharpnessCB->setCurrentIndex(0);
     d->sharpnessCheck->setChecked(false);
+
     if (meta.getExifTagLong("Exif.Photo.Sharpness", val))
     {
         if (val >= 0 && val <= 2)
@@ -303,10 +313,12 @@ void EXIFAdjust::readMetadata(QByteArray& exifData)
         else
             d->sharpnessCheck->setValid(false);
     }
+
     d->sharpnessCB->setEnabled(d->sharpnessCheck->isChecked());
 
     d->customRenderedCB->setCurrentIndex(0);
     d->customRenderedCheck->setChecked(false);
+
     if (meta.getExifTagLong("Exif.Photo.CustomRendered", val))
     {
         if (val >= 0 && val <= 1)
@@ -317,6 +329,7 @@ void EXIFAdjust::readMetadata(QByteArray& exifData)
         else
             d->customRenderedCheck->setValid(false);
     }
+
     d->customRenderedCB->setEnabled(d->customRenderedCheck->isChecked());
 
     blockSignals(false);
@@ -361,11 +374,7 @@ void EXIFAdjust::applyMetadata(QByteArray& exifData)
     else if (d->customRenderedCheck->isValid())
         meta.removeExifTag("Exif.Photo.CustomRendered");
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
 }
 
 }  // namespace Digikam

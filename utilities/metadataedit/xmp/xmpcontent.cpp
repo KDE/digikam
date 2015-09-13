@@ -35,12 +35,17 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
+
+// Libkdcraw includes
+
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
 #include "altlangstringedit.h"
 #include "dmetadata.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -114,14 +119,14 @@ XMPContent::XMPContent(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    grid->addWidget(d->headlineCheck,                     0, 0, 1, 1);
-    grid->addWidget(d->headlineEdit,                      0, 1, 1, 2);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this), 1, 0, 1, 3);
-    grid->addWidget(d->captionEdit,                       2, 0, 1, 3);
-    grid->addWidget(syncOptions,                          3, 0, 1, 3);
-    grid->addWidget(d->writerCheck,                       4, 0, 1, 1);
-    grid->addWidget(d->writerEdit,                        4, 1, 1, 2);
-    grid->addWidget(d->copyrightEdit,                     5, 0, 1, 3);
+    grid->addWidget(d->headlineCheck,                      0, 0, 1, 1);
+    grid->addWidget(d->headlineEdit,                       0, 1, 1, 2);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, this), 1, 0, 1, 3);
+    grid->addWidget(d->captionEdit,                        2, 0, 1, 3);
+    grid->addWidget(syncOptions,                           3, 0, 1, 3);
+    grid->addWidget(d->writerCheck,                        4, 0, 1, 1);
+    grid->addWidget(d->writerEdit,                         4, 1, 1, 2);
+    grid->addWidget(d->copyrightEdit,                      5, 0, 1, 3);
     grid->setRowStretch(6, 10);
     grid->setColumnStretch(2, 10);
     grid->setMargin(0);
@@ -292,12 +297,7 @@ void XMPContent::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
     else if (d->copyrightEdit->isValid())
         meta.removeXmpTag("Xmp.dc.rights");
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
-
     xmpData  = meta.getXmp();
 }
 

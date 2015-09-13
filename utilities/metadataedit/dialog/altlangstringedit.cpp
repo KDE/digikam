@@ -61,8 +61,8 @@ public:
     }
 
     DMetadata::AltLangMap oldValues;
-    MetadataCheckBox*      valueCheck;
-    AltLangStrEdit*        editor;
+    MetadataCheckBox*     valueCheck;
+    AltLangStrEdit*       editor;
 };
 
 AltLangStringsEdit::AltLangStringsEdit(QWidget* const parent, const QString& title, const QString& desc)

@@ -34,13 +34,8 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <ksharedconfig.h>
-#include <kguiitem.h>
-#include <khelpmenu.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <ktoolinvocation.h>
 #include <kconfiggroup.h>
 
 // Local includes

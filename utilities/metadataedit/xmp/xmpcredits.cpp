@@ -102,7 +102,8 @@ public:
 };
 
 XMPCredits::XMPCredits(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
 
@@ -511,10 +512,10 @@ void XMPCredits::applyMetadata(QByteArray& xmpData)
         meta.removeXmpTag("Xmp.iptc.CiEmailWork");
     }
     else
-        {
+    {
         meta.removeXmpTag("Xmp.iptc.CiEmailWork");
         meta.removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork");
-        }
+    }
 
     if (d->urlCheck->isChecked())
     {
@@ -522,10 +523,10 @@ void XMPCredits::applyMetadata(QByteArray& xmpData)
         meta.removeXmpTag("Xmp.iptc.CiUrlWork");
     }
     else
-        {
+    {
         meta.removeXmpTag("Xmp.iptc.CiUrlWork");
         meta.removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork");
-        }
+    }
 
     if (d->phoneCheck->isChecked())
     {
@@ -533,10 +534,10 @@ void XMPCredits::applyMetadata(QByteArray& xmpData)
         meta.removeXmpTag("Xmp.iptc.CiTelWork");
     }
     else
-        {
+    {
         meta.removeXmpTag("Xmp.iptc.CiTelWork");
         meta.removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork");
-        }
+    }
 
     if (d->addressCheck->isChecked())
     {
@@ -544,10 +545,10 @@ void XMPCredits::applyMetadata(QByteArray& xmpData)
         meta.removeXmpTag("Xmp.iptc.CiAdrExtadr");
     }
     else
-        {
+    {
         meta.removeXmpTag("Xmp.iptc.CiAdrExtadr");
         meta.removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr");
-        }
+    }
 
     if (d->postalCodeCheck->isChecked())
     {
@@ -555,10 +556,10 @@ void XMPCredits::applyMetadata(QByteArray& xmpData)
         meta.removeXmpTag("Xmp.iptc.CiAdrPcode");
     }
     else
-        {
+    {
         meta.removeXmpTag("Xmp.iptc.CiAdrPcode");
         meta.removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode");
-        }
+    }
 
     if (d->cityCheck->isChecked())
     {
@@ -566,10 +567,10 @@ void XMPCredits::applyMetadata(QByteArray& xmpData)
         meta.removeXmpTag("Xmp.iptc.CiAdrCity");
     }
     else
-        {
+    {
         meta.removeXmpTag("Xmp.iptc.CiAdrCity");
         meta.removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity");
-        }
+    }
 
     if (d->countryCheck->isChecked())
     {
@@ -577,10 +578,10 @@ void XMPCredits::applyMetadata(QByteArray& xmpData)
         meta.removeXmpTag("Xmp.iptc.CiAdrCtry");
     }
     else
-        {
+    {
         meta.removeXmpTag("Xmp.iptc.CiAdrCtry");
         meta.removeXmpTag("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry");
-        }
+    }
 
     // --------------------------------------------------------
 
@@ -604,4 +605,3 @@ void XMPCredits::applyMetadata(QByteArray& xmpData)
 }
 
 }  // namespace Digikam
-

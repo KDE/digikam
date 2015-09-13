@@ -37,7 +37,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
 
 // LibKExiv2 includes
 
@@ -46,6 +45,7 @@
 // LibKDcraw includes
 
 #include <KDCRAW/SqueezedComboBox>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
@@ -93,8 +93,8 @@ public:
     QPushButton*                   setTodayCreatedBtn;
     QPushButton*                   setTodayDigitalizedBtn;
 
-    QDateTimeEdit*               dateCreatedSel;
-    QDateTimeEdit*               dateDigitalizedSel;
+    QDateTimeEdit*                 dateCreatedSel;
+    QDateTimeEdit*                 dateDigitalizedSel;
 
     TimeZoneComboBox*              zoneCreatedSel;
     TimeZoneComboBox*              zoneDigitalizedSel;
@@ -109,7 +109,8 @@ public:
 };
 
 XMPOrigin::XMPOrigin(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
 
@@ -189,7 +190,7 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
     grid->addWidget(d->zoneCreatedSel,                      3, 3, 1, 1);
     grid->addWidget(d->setTodayCreatedBtn,                  3, 5, 1, 1);
     grid->addWidget(d->syncEXIFDateCheck,                   5, 0, 1, 6);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this),   6, 0, 1, 6);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  6, 0, 1, 6);
     grid->addWidget(d->cityCheck,                           7, 0, 1, 1);
     grid->addWidget(d->cityEdit,                            7, 1, 1, 5);
     grid->addWidget(d->sublocationCheck,                    8, 0, 1, 1);
@@ -548,12 +549,7 @@ void XMPOrigin::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
         meta.removeXmpTag("Xmp.photoshop.Country");
     }
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
-
     xmpData  = meta.getXmp();
 }
 

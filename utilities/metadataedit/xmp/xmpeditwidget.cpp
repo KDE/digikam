@@ -34,12 +34,8 @@
 // KDE includes
 
 #include <ksharedconfig.h>
-#include <kguiitem.h>
-#include <khelpmenu.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kconfiggroup.h>
-#include <ktoolinvocation.h>
 
 // Local includes
 
@@ -86,42 +82,43 @@ public:
         dlg             = 0;
     }
 
-    bool                 modified;
-    bool                 isReadOnly;
+    bool                  modified;
+    bool                  isReadOnly;
 
-    QByteArray           exifData;
-    QByteArray           iptcData;
-    QByteArray           xmpData;
+    QByteArray            exifData;
+    QByteArray            iptcData;
+    QByteArray            xmpData;
 
-    KPageWidgetItem*     page_content;
-    KPageWidgetItem*     page_origin;
-    KPageWidgetItem*     page_subjects;
-    KPageWidgetItem*     page_keywords;
-    KPageWidgetItem*     page_categories;
-    KPageWidgetItem*     page_credits;
-    KPageWidgetItem*     page_status;
-    KPageWidgetItem*     page_properties;
+    KPageWidgetItem*      page_content;
+    KPageWidgetItem*      page_origin;
+    KPageWidgetItem*      page_subjects;
+    KPageWidgetItem*      page_keywords;
+    KPageWidgetItem*      page_categories;
+    KPageWidgetItem*      page_credits;
+    KPageWidgetItem*      page_status;
+    KPageWidgetItem*      page_properties;
 
     QList<QUrl>           urls;
 
     QList<QUrl>::iterator currItem;
 
-    XMPContent*          contentPage;
-    XMPKeywords*         keywordsPage;
-    XMPCategories*       categoriesPage;
-    XMPSubjects*         subjectsPage;
-    XMPOrigin*           originPage;
-    XMPCredits*          creditsPage;
-    XMPStatus*           statusPage;
-    XMPProperties*       propertiesPage;
+    XMPContent*           contentPage;
+    XMPKeywords*          keywordsPage;
+    XMPCategories*        categoriesPage;
+    XMPSubjects*          subjectsPage;
+    XMPOrigin*            originPage;
+    XMPCredits*           creditsPage;
+    XMPStatus*            statusPage;
+    XMPProperties*        propertiesPage;
 
-    MetadataEditDialog*  dlg;
+    MetadataEditDialog*   dlg;
 };
 
 XMPEditWidget::XMPEditWidget(MetadataEditDialog* const parent)
-    : KPageWidget(parent), d(new Private)
+    : KPageWidget(parent),
+      d(new Private)
 {
-    d->dlg       = parent;
+    d->dlg           = parent;
 
     d->contentPage   = new XMPContent(this);
     d->page_content  = addPage(d->contentPage, i18n("Content"));
@@ -236,12 +233,7 @@ void XMPEditWidget::slotItemChanged()
     DMetadata meta;
     meta.load((*d->dlg->currentItem()).path());
 
-#if KEXIV2_VERSION >= 0x010000
     d->exifData = meta.getExifEncoded();
-#else
-    d->exifData = meta.getExif();
-#endif
-
     d->iptcData = meta.getIptc();
     d->xmpData  = meta.getXmp();
 
@@ -265,7 +257,6 @@ void XMPEditWidget::slotItemChanged()
     d->page_credits->setEnabled(!d->isReadOnly);
     d->page_status->setEnabled(!d->isReadOnly);
     d->page_properties->setEnabled(!d->isReadOnly);
-
 }
 
 void XMPEditWidget::apply()
@@ -303,7 +294,7 @@ void XMPEditWidget::slotModified()
 
 void XMPEditWidget::showPage(int page)
 {
-    switch(page)
+    switch (page)
     {
         case 0:
             setCurrentPage(d->page_content);
@@ -337,7 +328,7 @@ void XMPEditWidget::showPage(int page)
 
 int XMPEditWidget::activePageIndex() const
 {
-    KPageWidgetItem* cur = currentPage();
+    KPageWidgetItem* const cur = currentPage();
 
     if (cur == d->page_content)    return 0;
     if (cur == d->page_origin)     return 1;

@@ -68,7 +68,8 @@ public:
 
 MultiStringsEdit::MultiStringsEdit(QWidget* const parent, const QString& title,
                                    const QString& desc, bool ascii, int size)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
 
@@ -187,8 +188,9 @@ MultiStringsEdit::~MultiStringsEdit()
 
 void MultiStringsEdit::slotDeleteValue()
 {
-    QListWidgetItem* item = d->valueBox->currentItem();
+    QListWidgetItem* const item = d->valueBox->currentItem();
     if (!item) return;
+
     d->valueBox->takeItem(d->valueBox->row(item));
     delete item;
 }
@@ -226,9 +228,11 @@ void MultiStringsEdit::slotAddValue()
     if (newValue.isEmpty()) return;
 
     bool found = false;
+
     for (int i = 0 ; i < d->valueBox->count(); ++i)
     {
-        QListWidgetItem* item = d->valueBox->item(i);
+        QListWidgetItem* const item = d->valueBox->item(i);
+
         if (newValue == item->text())
         {
             found = true;
@@ -250,11 +254,13 @@ void MultiStringsEdit::setValues(const QStringList& values)
 
     d->valueBox->clear();
     d->valueCheck->setChecked(false);
+
     if (!d->oldValues.isEmpty())
     {
         d->valueBox->insertItems(0, d->oldValues);
         d->valueCheck->setChecked(true);
     }
+
     d->valueEdit->setEnabled(d->valueCheck->isChecked());
     d->valueBox->setEnabled(d->valueCheck->isChecked());
     d->addValueButton->setEnabled(d->valueCheck->isChecked());
@@ -266,11 +272,11 @@ void MultiStringsEdit::setValues(const QStringList& values)
 bool MultiStringsEdit::getValues(QStringList& oldValues, QStringList& newValues)
 {
     oldValues = d->oldValues;
-
     newValues.clear();
+
     for (int i = 0 ; i < d->valueBox->count(); ++i)
     {
-        QListWidgetItem* item = d->valueBox->item(i);
+        QListWidgetItem* const item = d->valueBox->item(i);
         newValues.append(item->text());
     }
 

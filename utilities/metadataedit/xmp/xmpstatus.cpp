@@ -34,7 +34,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
 
 // Local includes
 
@@ -72,9 +71,10 @@ public:
 };
 
 XMPStatus::XMPStatus(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid  = new QGridLayout(this);
+    QGridLayout* const grid  = new QGridLayout(this);
 
     // --------------------------------------------------------
 
@@ -167,7 +167,7 @@ void XMPStatus::readMetadata(QByteArray& xmpData)
     map = meta.getXmpTagStringListLangAlt("Xmp.dc.title", false);
 
     if (!map.isEmpty())
-    {    
+    {
         d->objectNameEdit->setValues(map);
         d->objectNameEdit->setValid(true);
     }
@@ -209,6 +209,7 @@ void XMPStatus::applyMetadata(QByteArray& xmpData)
     meta.setXmp(xmpData);
 
     DMetadata::AltLangMap oldAltLangMap, newAltLangMap;
+
     if (d->objectNameEdit->getValues(oldAltLangMap, newAltLangMap))
         meta.setXmpTagStringListLangAlt("Xmp.dc.title", newAltLangMap, false);
     else if (d->objectNameEdit->isValid())

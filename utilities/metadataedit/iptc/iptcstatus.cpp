@@ -73,13 +73,14 @@ public:
 };
 
 IPTCStatus::IPTCStatus(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // IPTC only accept printable Ascii char.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* asciiValidator = new QRegExpValidator(asciiRx, this);
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     // --------------------------------------------------------
 
@@ -124,7 +125,7 @@ IPTCStatus::IPTCStatus(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel *note = new QLabel(i18n("<b>Note: "
+    QLabel* const note = new QLabel(i18n("<b>Note: "
                  "<b><a href='http://en.wikipedia.org/wiki/IPTC_Information_Interchange_Model'>IPTC</a></b> "
                  "text tags only support the printable "
                  "<b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
@@ -210,41 +211,49 @@ void IPTCStatus::readMetadata(QByteArray& iptcData)
     d->objectNameEdit->clear();
     d->objectNameCheck->setChecked(false);
     data = meta.getIptcTagString("Iptc.Application2.ObjectName", false);
+
     if (!data.isNull())
     {
         d->objectNameEdit->setText(data);
         d->objectNameCheck->setChecked(true);
     }
+
     d->objectNameEdit->setEnabled(d->objectNameCheck->isChecked());
 
     d->statusEdit->clear();
     d->statusCheck->setChecked(false);
     data = meta.getIptcTagString("Iptc.Application2.EditStatus", false);
+
     if (!data.isNull())
     {
         d->statusEdit->setText(data);
         d->statusCheck->setChecked(true);
     }
+
     d->statusEdit->setEnabled(d->statusCheck->isChecked());
 
     d->JobIDEdit->clear();
     d->JobIDCheck->setChecked(false);
     data = meta.getIptcTagString("Iptc.Application2.FixtureId", false);
+
     if (!data.isNull())
     {
         d->JobIDEdit->setText(data);
         d->JobIDCheck->setChecked(true);
     }
+
     d->JobIDEdit->setEnabled(d->JobIDCheck->isChecked());
 
     d->specialInstructionEdit->clear();
     d->specialInstructionCheck->setChecked(false);
     data = meta.getIptcTagString("Iptc.Application2.SpecialInstructions", false);
+
     if (!data.isNull())
     {
         d->specialInstructionEdit->setText(data);
         d->specialInstructionCheck->setChecked(true);
     }
+
     d->specialInstructionEdit->setEnabled(d->specialInstructionCheck->isChecked());
 
     blockSignals(false);

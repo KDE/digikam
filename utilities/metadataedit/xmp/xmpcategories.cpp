@@ -76,9 +76,10 @@ public:
 };
 
 XMPCategories::XMPCategories(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // --------------------------------------------------------
 
@@ -199,8 +200,9 @@ void XMPCategories::enableWidgets(bool checked1, bool checked2)
 
 void XMPCategories::slotDelCategory()
 {
-    QListWidgetItem *item = d->subCategoriesBox->currentItem();
+    QListWidgetItem* const item = d->subCategoriesBox->currentItem();
     if (!item) return;
+
     d->subCategoriesBox->takeItem(d->subCategoriesBox->row(item));
     delete item;
 }
@@ -238,9 +240,11 @@ void XMPCategories::slotAddCategory()
     if (newCategory.isEmpty()) return;
 
     bool found = false;
+
     for (int i = 0 ; i < d->subCategoriesBox->count(); ++i)
     {
-        QListWidgetItem *item = d->subCategoriesBox->item(i);
+        QListWidgetItem* const item = d->subCategoriesBox->item(i);
+
         if (newCategory == item->text())
         {
             found = true;
@@ -267,6 +271,7 @@ void XMPCategories::readMetadata(QByteArray& xmpData)
     d->subCategoriesBox->clear();
     d->subCategoriesCheck->setChecked(false);
     d->oldSubCategories = meta.getXmpSubCategories();
+
     if (!d->oldSubCategories.isEmpty())
     {
         d->subCategoriesBox->insertItems(0, d->oldSubCategories);
@@ -278,11 +283,13 @@ void XMPCategories::readMetadata(QByteArray& xmpData)
     d->categoryEdit->clear();
     d->categoryCheck->setChecked(false);
     data = meta.getXmpTagString("Xmp.photoshop.Category", false);
+
     if (!data.isNull())
     {
         d->categoryEdit->setText(data);
         d->categoryCheck->setChecked(true);
     }
+
     d->categoryEdit->setEnabled(d->categoryCheck->isChecked());
     d->subCategoriesCheck->setEnabled(d->categoryCheck->isChecked());
     d->subCategoryEdit->setEnabled(d->categoryCheck->isChecked() && d->subCategoriesCheck->isChecked());
@@ -306,7 +313,7 @@ void XMPCategories::applyMetadata(QByteArray& xmpData)
 
     for (int i = 0 ; i < d->subCategoriesBox->count(); ++i)
     {
-        QListWidgetItem *item = d->subCategoriesBox->item(i);
+        QListWidgetItem* const item = d->subCategoriesBox->item(i);
         newCategories.append(item->text());
     }
 

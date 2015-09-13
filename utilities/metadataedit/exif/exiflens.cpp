@@ -142,9 +142,10 @@ public:
 };
 
 EXIFLens::EXIFLens(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // --------------------------------------------------------
 
@@ -278,38 +279,45 @@ void EXIFLens::readMetadata(QByteArray& exifData)
 
     d->focalLengthEdit->setValue(50.0);
     d->focalLengthCheck->setChecked(false);
+
     if (meta.getExifTagRational("Exif.Photo.FocalLength", num, den))
     {
         d->focalLengthEdit->setValue((double)(num) / (double)(den));
         d->focalLengthCheck->setChecked(true);
     }
+
     d->focalLengthEdit->setEnabled(d->focalLengthCheck->isChecked());
 
     d->focalLength35mmEdit->setValue(10);
     d->focalLength35mmCheck->setChecked(false);
+
     if (meta.getExifTagLong("Exif.Photo.FocalLengthIn35mmFilm", val))
     {
         d->focalLength35mmEdit->setValue(val);
         d->focalLength35mmCheck->setChecked(true);
     }
+
     d->focalLength35mmEdit->setEnabled(d->focalLength35mmCheck->isChecked());
 
     d->digitalZoomRatioEdit->setValue(1.0);
     d->digitalZoomRatioCheck->setChecked(false);
+
     if (meta.getExifTagRational("Exif.Photo.DigitalZoomRatio", num, den))
     {
         d->digitalZoomRatioEdit->setValue((num == 0) ? 0.0 : (double)(num) / (double)(den));
         d->digitalZoomRatioCheck->setChecked(true);
     }
+
     d->digitalZoomRatioEdit->setEnabled(d->digitalZoomRatioCheck->isChecked());
 
     d->apertureCB->setCurrentIndex(0);
     d->apertureCheck->setChecked(false);
+
     if (meta.getExifTagRational("Exif.Photo.FNumber", num, den))
     {
         QString fnumber = QString::number((double)(num)/(double)(den), 'f', 1);
+        int item        = -1;
 
-        int item = -1;
         for (int i = 0 ; i < d->apertureCB->count() ; ++i)
         {
             if (d->apertureCB->itemText(i).remove(0, 2) == fnumber)
@@ -325,10 +333,9 @@ void EXIFLens::readMetadata(QByteArray& exifData)
     else if (meta.getExifTagRational("Exif.Photo.ApertureValue", num, den))
     {
         double aperture = std::pow(2.0, ((double)(num)/(double)(den))/2.0);
-
         QString fnumber = QString::number(aperture, 'f', 1);
+        int item        = -1;
 
-        int item = -1;
         for (int i = 0 ; i < d->apertureCB->count() ; ++i)
         {
             if (d->apertureCB->itemText(i).remove(0, 2) == fnumber)
@@ -347,13 +354,13 @@ void EXIFLens::readMetadata(QByteArray& exifData)
 
     d->maxApertureCB->setCurrentIndex(0);
     d->maxApertureCheck->setChecked(false);
+
     if (meta.getExifTagRational("Exif.Photo.MaxApertureValue", num, den))
     {
         double maxAperture = std::pow(2.0, ((double)(num)/(double)(den))/2.0);
+        QString fnumber    = QString::number(maxAperture, 'f', 1);
+        int item           = -1;
 
-        QString fnumber = QString::number(maxAperture, 'f', 1);
-
-        int item = -1;
         for (int i = 0 ; i < d->apertureCB->count() ; ++i)
         {
             if (d->maxApertureCB->itemText(i).remove(0, 2) == fnumber)
@@ -370,6 +377,7 @@ void EXIFLens::readMetadata(QByteArray& exifData)
             d->maxApertureCheck->setValid(false);
         }
     }
+
     d->maxApertureCB->setEnabled(d->maxApertureCheck->isChecked());
 
     blockSignals(false);
@@ -428,11 +436,7 @@ void EXIFLens::applyMetadata(QByteArray& exifData)
     else if (d->maxApertureCheck->isValid())
         meta.removeExifTag("Exif.Photo.MaxApertureValue");
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
 }
 
 }  // namespace Digikam

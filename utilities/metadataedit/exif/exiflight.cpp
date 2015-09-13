@@ -264,6 +264,7 @@ void EXIFLight::readMetadata(QByteArray& exifData)
 
     d->lightSourceCB->setCurrentIndex(0);
     d->lightSourceCheck->setChecked(false);
+
     if (meta.getExifTagLong("Exif.Photo.LightSource", val))
     {
         if ((val>=0 && val <=4) || (val> 8 && val <16) || (val> 16 && val <25) || val == 255)
@@ -283,13 +284,16 @@ void EXIFLight::readMetadata(QByteArray& exifData)
             d->lightSourceCheck->setValid(false);
         }
     }
+
     d->lightSourceCB->setEnabled(d->lightSourceCheck->isChecked());
 
     d->flashModeCB->setCurrentIndex(0);
     d->flashModeCheck->setChecked(false);
+
     if (meta.getExifTagLong("Exif.Photo.Flash", val))
     {
         int item = -1;
+
         for (Private::FlashModeMap::Iterator it = d->flashModeMap.begin();
             it != d->flashModeMap.end(); ++it )
         {
@@ -307,19 +311,23 @@ void EXIFLight::readMetadata(QByteArray& exifData)
             d->flashModeCheck->setValid(false);
         }
     }
+
     d->flashModeCB->setEnabled(d->flashModeCheck->isChecked());
 
     d->flashEnergyEdit->setValue(1.0);
     d->flashEnergyCheck->setChecked(false);
+
     if (meta.getExifTagRational("Exif.Photo.FlashEnergy", num, den))
     {
         d->flashEnergyEdit->setValue((double)(num) / (double)(den));
         d->flashEnergyCheck->setChecked(true);
     }
+
     d->flashEnergyEdit->setEnabled(d->flashEnergyCheck->isChecked());
 
     d->whiteBalanceCB->setCurrentIndex(0);
     d->whiteBalanceCheck->setChecked(false);
+
     if (meta.getExifTagLong("Exif.Photo.WhiteBalance", val))
     {
         if (val>=0 && val<=1)
@@ -332,6 +340,7 @@ void EXIFLight::readMetadata(QByteArray& exifData)
             d->whiteBalanceCheck->setValid(false);
         }
     }
+
     d->whiteBalanceCB->setEnabled(d->whiteBalanceCheck->isChecked());
 
     blockSignals(false);
@@ -346,6 +355,7 @@ void EXIFLight::applyMetadata(QByteArray& exifData)
     if (d->lightSourceCheck->isChecked())
     {
         long val = d->lightSourceCB->currentIndex();
+
         if (val > 4 && val < 12)
             val = val + 4;
         else if (val > 11 && val < 20)
@@ -385,11 +395,7 @@ void EXIFLight::applyMetadata(QByteArray& exifData)
     else if (d->whiteBalanceCheck->isValid())
         meta.removeExifTag("Exif.Photo.WhiteBalance");
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
 }
 
 }  // namespace Digikam

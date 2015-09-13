@@ -31,11 +31,11 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
+#include <QTextEdit>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <QTextEdit>
 
 // Local includes
 
@@ -90,7 +90,7 @@ EXIFCaption::EXIFCaption(QWidget* const parent)
 
     // EXIF only accept printable Ascii char.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* asciiValidator = new QRegExpValidator(asciiRx, this);
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     // --------------------------------------------------------
 
@@ -147,7 +147,7 @@ EXIFCaption::EXIFCaption(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* note = new QLabel(i18n("<b>Note: "
+    QLabel* const note = new QLabel(i18n("<b>Note: "
                  "<b><a href='http://en.wikipedia.org/wiki/EXIF'>EXIF</a></b> "
                  "text tags marked by (*) only support printable "
                  "<b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
@@ -288,51 +288,61 @@ void EXIFCaption::readMetadata(QByteArray& exifData)
     d->documentNameEdit->clear();
     d->documentNameCheck->setChecked(false);
     data = meta.getExifTagString("Exif.Image.DocumentName", false);
+
     if (!data.isNull())
     {
         d->documentNameEdit->setText(data);
         d->documentNameCheck->setChecked(true);
     }
+
     d->documentNameEdit->setEnabled(d->documentNameCheck->isChecked());
 
     d->imageDescEdit->clear();
     d->imageDescCheck->setChecked(false);
     data = meta.getExifTagString("Exif.Image.ImageDescription", false);
+
     if (!data.isNull())
     {
         d->imageDescEdit->setText(data);
         d->imageDescCheck->setChecked(true);
     }
+
     d->imageDescEdit->setEnabled(d->imageDescCheck->isChecked());
 
     d->artistEdit->clear();
     d->artistCheck->setChecked(false);
     data = meta.getExifTagString("Exif.Image.Artist", false);
+
     if (!data.isNull())
     {
         d->artistEdit->setText(data);
         d->artistCheck->setChecked(true);
     }
+
     d->artistEdit->setEnabled(d->artistCheck->isChecked());
 
     d->copyrightEdit->clear();
     d->copyrightCheck->setChecked(false);
     data = meta.getExifTagString("Exif.Image.Copyright", false);
+
     if (!data.isNull())
     {
         d->copyrightEdit->setText(data);
         d->copyrightCheck->setChecked(true);
     }
+
     d->copyrightEdit->setEnabled(d->copyrightCheck->isChecked());
 
     d->userCommentEdit->clear();
     d->userCommentCheck->setChecked(false);
     data = meta.getExifComment();
+
     if (!data.isNull())
     {
         d->userCommentEdit->setText(data);
         d->userCommentCheck->setChecked(true);
     }
+
     d->userCommentEdit->setEnabled(d->userCommentCheck->isChecked());
     d->syncJFIFCommentCheck->setEnabled(d->userCommentCheck->isChecked());
     d->syncXMPCaptionCheck->setEnabled(d->userCommentCheck->isChecked());
@@ -392,12 +402,7 @@ void EXIFCaption::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QByt
     else
         meta.removeExifTag("Exif.Photo.UserComment");
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
-
     iptcData = meta.getIptc();
     xmpData  = meta.getXmp();
 }

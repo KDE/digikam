@@ -36,11 +36,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
-#include <kconfiggroup.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
+#include <KDCRAW/RWidgetUtils>
 #include <KDCRAW/SqueezedComboBox>
 
 // Local includes
@@ -75,7 +74,6 @@ public:
         languageEdit         = 0;
         originalTransEdit    = 0;
         originalTransCheck   = 0;
-
 
         sceneCodeMap.insert( QLatin1String("010100"), i18n("Headshot") );
         sceneCodeMap.insert( QLatin1String("010200"), i18n("Half-length") );
@@ -257,14 +255,13 @@ XMPProperties::XMPProperties(QWidget* const parent)
     grid->addWidget(d->priorityCB,                          1, 1, 1, 1);
     grid->addWidget(d->sceneEdit,                           2, 0, 1, 5);
     grid->addWidget(d->objectTypeEdit,                      3, 0, 1, 5);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this),   4, 0, 1, 5);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  4, 0, 1, 5);
     grid->addWidget(d->objectAttributeCheck,                5, 0, 1, 1);
     grid->addWidget(d->objectAttributeCB,                   5, 1, 1, 2);
     grid->addWidget(d->objectAttributeEdit,                 5, 3, 1, 2);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this),   6, 0, 1, 5);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  6, 0, 1, 5);
     grid->addWidget(d->originalTransCheck,                  7, 0, 1, 1);
     grid->addWidget(d->originalTransEdit,                   7, 1, 1, 4);
-
     grid->setRowStretch(8, 10);
     grid->setColumnStretch(4, 10);
     grid->setMargin(0);
@@ -344,6 +341,7 @@ void XMPProperties::readMetadata(QByteArray& xmpData)
     {
         QStringList data = d->languageEdit->getData();
         QStringList::Iterator it2;
+
         for (it2 = data.begin(); it2 != data.end(); ++it2)
         {
             if ((*it2).left(2) == (*it))
@@ -352,9 +350,11 @@ void XMPProperties::readMetadata(QByteArray& xmpData)
                 break;
             }
         }
+
         if (it2 == data.end())
             d->languageEdit->setValid(false);
     }
+
     d->languageEdit->setValues(list);
 
     // ---------------------------------------------------------------
@@ -362,9 +362,11 @@ void XMPProperties::readMetadata(QByteArray& xmpData)
     d->priorityCB->setCurrentIndex(0);
     d->priorityCheck->setChecked(false);
     data = meta.getXmpTagString("Xmp.photoshop.Urgency", false);
+
     if (!data.isNull())
     {
         val = data.toInt();
+
         if (val >= 0 && val <= 9)
         {
             d->priorityCB->setCurrentIndex(val);
@@ -373,15 +375,18 @@ void XMPProperties::readMetadata(QByteArray& xmpData)
         else
             d->priorityCheck->setValid(false);
     }
+
     d->priorityCB->setEnabled(d->priorityCheck->isChecked());
 
     // ---------------------------------------------------------------
 
     code = meta.getXmpTagStringBag("Xmp.iptc.Scene", false);
+
     for (QStringList::Iterator it = code.begin(); it != code.end(); ++it)
     {
         QStringList data = d->sceneEdit->getData();
         QStringList::Iterator it2;
+
         for (it2 = data.begin(); it2 != data.end(); ++it2)
         {
             if ((*it2).left(6) == (*it))
@@ -390,18 +395,22 @@ void XMPProperties::readMetadata(QByteArray& xmpData)
                 break;
             }
         }
+
         if (it2 == data.end())
             d->sceneEdit->setValid(false);
     }
+
     d->sceneEdit->setValues(list);
 
     // ---------------------------------------------------------------
 
     code = meta.getXmpTagStringBag("Xmp.dc.type", false);
+
     for (QStringList::Iterator it3 = code.begin(); it3 != code.end(); ++it3)
     {
         QStringList data = d->objectTypeEdit->getData();
         QStringList::Iterator it4;
+
         for (it4 = data.begin(); it4 != data.end(); ++it4)
         {
             if ((*it4) == (*it3))
@@ -410,9 +419,11 @@ void XMPProperties::readMetadata(QByteArray& xmpData)
                 break;
             }
         }
+
         if (it4 == data.end())
             d->objectTypeEdit->setValid(false);
     }
+
     d->objectTypeEdit->setValues(list2);
 
     // ---------------------------------------------------------------
@@ -421,12 +432,15 @@ void XMPProperties::readMetadata(QByteArray& xmpData)
     d->objectAttributeEdit->clear();
     d->objectAttributeCheck->setChecked(false);
     data = meta.getXmpTagString("Xmp.iptc.IntellectualGenre", false);
+
     if (!data.isNull())
     {
         QString attrSec = data.section(QLatin1Char(':'), 0, 0);
+
         if (!attrSec.isEmpty())
         {
             int attr = attrSec.toInt()-1;
+
             if (attr >= 0 && attr < 23)
             {
                 d->objectAttributeCB->setCurrentIndex(attr);
@@ -437,6 +451,7 @@ void XMPProperties::readMetadata(QByteArray& xmpData)
                 d->objectAttributeCheck->setValid(false);
         }
     }
+
     d->objectAttributeCB->setEnabled(d->objectAttributeCheck->isChecked());
     d->objectAttributeEdit->setEnabled(d->objectAttributeCheck->isChecked());
 
@@ -445,11 +460,13 @@ void XMPProperties::readMetadata(QByteArray& xmpData)
     d->originalTransEdit->clear();
     d->originalTransCheck->setChecked(false);
     data = meta.getXmpTagString("Xmp.photoshop.TransmissionReference", false);
+
     if (!data.isNull())
     {
         d->originalTransEdit->setText(data);
         d->originalTransCheck->setChecked(true);
     }
+
     d->originalTransEdit->setEnabled(d->originalTransCheck->isChecked());
 
     // ---------------------------------------------------------------

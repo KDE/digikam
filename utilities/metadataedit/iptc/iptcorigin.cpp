@@ -40,14 +40,14 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
 
 // LibKExiv2 includes
 
 #include <KExiv2/CountrySelector>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
+#include <KDCRAW/RWidgetUtils>
 #include <KDCRAW/SqueezedComboBox>
 
 // Local includes
@@ -132,7 +132,7 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
 
     // IPTC only accept printable Ascii char.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* asciiValidator = new QRegExpValidator(asciiRx, this);
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     // --------------------------------------------------------
 
@@ -256,7 +256,7 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
     grid->addWidget(d->setTodayCreatedBtn,                  3, 5, 1, 1);
     grid->addWidget(d->syncEXIFDateCheck,                   5, 0, 1, 6);
     grid->addWidget(d->locationEdit,                        6, 0, 1, 6);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this),   7, 0, 1, 6);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, this),   7, 0, 1, 6);
     grid->addWidget(d->cityCheck,                           8, 0, 1, 1);
     grid->addWidget(d->cityEdit,                            8, 1, 1, 5);
     grid->addWidget(d->sublocationCheck,                    9, 0, 1, 1);
@@ -451,6 +451,7 @@ void IPTCOrigin::readMetadata(QByteArray& iptcData)
     if (!timeStr.isEmpty())
     {
         time = QTime::fromString(timeStr, Qt::ISODate);
+
         if (time.isValid())
         {
             d->timeCreatedSel->setTime(time);
@@ -693,12 +694,7 @@ void IPTCOrigin::applyMetadata(QByteArray& exifData, QByteArray& iptcData)
         meta.removeIptcTag("Iptc.Application2.CountryName");
     }
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
-
     iptcData = meta.getIptc();
 }
 

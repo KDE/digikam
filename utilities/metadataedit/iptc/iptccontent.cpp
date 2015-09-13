@@ -36,12 +36,17 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
+
+// Libkdcraw includes
+
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
 #include "multistringsedit.h"
 #include "dmetadata.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -74,13 +79,14 @@ public:
 };
 
 IPTCContent::IPTCContent(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // IPTC only accept printable Ascii char.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* asciiValidator = new QRegExpValidator(asciiRx, this);
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     // --------------------------------------------------------
 
@@ -99,8 +105,10 @@ IPTCContent::IPTCContent(QWidget* const parent)
     d->syncJFIFCommentCheck = new QCheckBox(i18n("Sync JFIF Comment section"), this);
     d->syncEXIFCommentCheck = new QCheckBox(i18n("Sync EXIF Comment"), this);
 
-/*    d->captionEdit->setValidator(asciiValidator);
-    d->captionEdit->setMaxLength(2000);*/
+/*
+    d->captionEdit->setValidator(asciiValidator);
+    d->captionEdit->setMaxLength(2000);
+*/
     d->captionEdit->setWhatsThis(i18n("Enter the content description. This field is limited "
                                       "to 2000 ASCII characters."));
 
@@ -112,7 +120,7 @@ IPTCContent::IPTCContent(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel *note = new QLabel(i18n("<b>Note: "
+    QLabel* const note = new QLabel(i18n("<b>Note: "
                  "<b><a href='http://en.wikipedia.org/wiki/IPTC_Information_Interchange_Model'>IPTC</a></b> "
                  "text tags only support the printable "
                  "<b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
@@ -130,7 +138,7 @@ IPTCContent::IPTCContent(QWidget* const parent)
     grid->addWidget(d->captionEdit,                         2, 0, 1, 3);
     grid->addWidget(d->syncJFIFCommentCheck,                3, 0, 1, 3);
     grid->addWidget(d->syncEXIFCommentCheck,                5, 0, 1, 3);
-    grid->addWidget(new KSeparator(Qt::Horizontal, this),   6, 0, 1, 3);
+    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  6, 0, 1, 3);
     grid->addWidget(d->writerEdit,                          7, 0, 1, 3);
     grid->addWidget(note,                                   8, 0, 1, 3);
     grid->setRowStretch(9, 10);

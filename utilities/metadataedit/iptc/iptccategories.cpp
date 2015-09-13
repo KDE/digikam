@@ -78,13 +78,14 @@ public:
 };
 
 IPTCCategories::IPTCCategories(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // IPTC only accept printable Ascii char.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
-    QValidator* asciiValidator = new QRegExpValidator(asciiRx, this);
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     // --------------------------------------------------------
 
@@ -119,7 +120,7 @@ IPTCCategories::IPTCCategories(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel *note = new QLabel(i18n("<b>Note: "
+    QLabel* const note = new QLabel(i18n("<b>Note: "
                  "<b><a href='http://en.wikipedia.org/wiki/IPTC_Information_Interchange_Model'>IPTC</a></b> "
                  "text tags only support the printable "
                  "<b><a href='http://en.wikipedia.org/wiki/Ascii'>ASCII</a></b> "
@@ -199,8 +200,9 @@ IPTCCategories::~IPTCCategories()
 
 void IPTCCategories::slotDelCategory()
 {
-    QListWidgetItem *item = d->subCategoriesBox->currentItem();
+    QListWidgetItem* const item = d->subCategoriesBox->currentItem();
     if (!item) return;
+
     d->subCategoriesBox->takeItem(d->subCategoriesBox->row(item));
     delete item;
 }
@@ -238,9 +240,11 @@ void IPTCCategories::slotAddCategory()
     if (newCategory.isEmpty()) return;
 
     bool found = false;
+
     for (int i = 0 ; i < d->subCategoriesBox->count(); ++i)
     {
-        QListWidgetItem *item = d->subCategoriesBox->item(i);
+        QListWidgetItem* const item = d->subCategoriesBox->item(i);
+
         if (newCategory == item->text())
         {
             found = true;
@@ -267,6 +271,7 @@ void IPTCCategories::readMetadata(QByteArray& iptcData)
     d->subCategoriesBox->clear();
     d->subCategoriesCheck->setChecked(false);
     d->oldSubCategories = meta.getIptcSubCategories();
+
     if (!d->oldSubCategories.isEmpty())
     {
         d->subCategoriesBox->insertItems(0, d->oldSubCategories);
@@ -278,11 +283,13 @@ void IPTCCategories::readMetadata(QByteArray& iptcData)
     d->categoryEdit->clear();
     d->categoryCheck->setChecked(false);
     data = meta.getIptcTagString("Iptc.Application2.Category", false);
+
     if (!data.isNull())
     {
         d->categoryEdit->setText(data);
         d->categoryCheck->setChecked(true);
     }
+
     d->categoryEdit->setEnabled(d->categoryCheck->isChecked());
     d->subCategoriesCheck->setEnabled(d->categoryCheck->isChecked());
     d->subCategoryEdit->setEnabled(d->categoryCheck->isChecked() && d->subCategoriesCheck->isChecked());
@@ -306,7 +313,7 @@ void IPTCCategories::applyMetadata(QByteArray& iptcData)
 
     for (int i = 0 ; i < d->subCategoriesBox->count(); ++i)
     {
-        QListWidgetItem *item = d->subCategoriesBox->item(i);
+        QListWidgetItem* const item = d->subCategoriesBox->item(i);
         newCategories.append(item->text());
     }
 

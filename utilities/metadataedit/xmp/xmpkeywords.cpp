@@ -163,8 +163,9 @@ XMPKeywords::~XMPKeywords()
 
 void XMPKeywords::slotDelKeyword()
 {
-    QListWidgetItem *item = d->keywordsBox->currentItem();
+    QListWidgetItem* const item = d->keywordsBox->currentItem();
     if (!item) return;
+
     d->keywordsBox->takeItem(d->keywordsBox->row(item));
     delete item;
 }
@@ -202,9 +203,11 @@ void XMPKeywords::slotAddKeyword()
     if (newKeyword.isEmpty()) return;
 
     bool found = false;
+
     for (int i = 0 ; i < d->keywordsBox->count(); ++i)
     {
-        QListWidgetItem* item = d->keywordsBox->item(i);
+        QListWidgetItem* const item = d->keywordsBox->item(i);
+
         if (newKeyword == item->text())
         {
             found = true;
@@ -228,11 +231,13 @@ void XMPKeywords::readMetadata(QByteArray& xmpData)
 
     d->keywordsBox->clear();
     d->keywordsCheck->setChecked(false);
+
     if (!d->oldKeywords.isEmpty())
     {
         d->keywordsBox->insertItems(0, d->oldKeywords);
         d->keywordsCheck->setChecked(true);
     }
+
     d->keywordEdit->setEnabled(d->keywordsCheck->isChecked());
     d->keywordsBox->setEnabled(d->keywordsCheck->isChecked());
     d->addKeywordButton->setEnabled(d->keywordsCheck->isChecked());
@@ -249,7 +254,7 @@ void XMPKeywords::applyMetadata(QByteArray& xmpData)
 
     for (int i = 0 ; i < d->keywordsBox->count(); ++i)
     {
-        QListWidgetItem* item = d->keywordsBox->item(i);
+        QListWidgetItem* const item = d->keywordsBox->item(i);
         newKeywords.append(item->text());
     }
 
