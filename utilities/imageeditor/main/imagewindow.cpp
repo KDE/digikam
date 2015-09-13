@@ -106,6 +106,7 @@
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "metadatasettings.h"
+#include "metadataedit.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 #include "ratingwidget.h"
@@ -1713,6 +1714,18 @@ void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
 {
     ImageInfo info = ScanController::instance()->scannedInfo(url.toLocalFile());
     openImage(info);
+}
+
+void ImageWindow::slotEditMetadata()
+{
+    if ( d->currentImageInfo.isNull() )
+        return;
+
+    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(),
+                                                                 QList<QUrl>() << d->currentImageInfo.fileUrl());
+    dialog->exec();
+
+    delete dialog;
 }
 
 }  // namespace Digikam

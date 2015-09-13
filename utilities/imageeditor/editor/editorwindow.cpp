@@ -413,7 +413,7 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_print"), d->filePrintAction);
     ac->setDefaultShortcut(d->filePrintAction, Qt::CTRL + Qt::Key_P);
 
-    QAction * const openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
+    QAction* const openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
     openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
     connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
     ac->addAction(QLatin1String("open_with_default_application"), openWithAction);
@@ -428,6 +428,7 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_close"), closeAction);
 
     createKSaneAction();
+    createMetadatEditAction();
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 

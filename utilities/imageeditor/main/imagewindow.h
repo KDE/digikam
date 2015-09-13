@@ -187,6 +187,8 @@ private Q_SLOTS:
     void slotImportFromScanner();
     void slotImportedImagefromScanner(const QUrl& url);
 
+    void slotEditMetadata();
+
 private:
 
     static ImageWindow* m_instance;

@@ -100,6 +100,7 @@ extern "C"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
 #include "metadatasettings.h"
+#include "metadataedit.h"
 #include "savingcontext.h"
 #include "showfotosetup.h"
 #include "showfotosetupmisc.h"
@@ -1373,6 +1374,18 @@ void ShowFoto::slotImportFromScanner()
 void ShowFoto::slotImportedImagefromScanner(const QUrl& url)
 {
     openUrls(QList<QUrl>() << url);
+}
+
+void ShowFoto::slotEditMetadata()
+{
+    if ( d->thumbBar->currentInfo().isNull() )
+        return;
+
+    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(),
+                                                                 QList<QUrl>() << d->thumbBar->currentInfo().url);
+    dialog->exec();
+
+    delete dialog;
 }
 
 }   // namespace ShowFoto

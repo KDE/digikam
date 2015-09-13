@@ -134,6 +134,8 @@ private Q_SLOTS:
     void slotImportFromScanner();
     void slotImportedImagefromScanner(const QUrl& url);
 
+    void slotEditMetadata();
+
 Q_SIGNALS:
 
     void signalLoadCurrentItem(const QList<QUrl>& urlList);
