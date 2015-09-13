@@ -81,16 +81,13 @@ public:
     int                              itemsNb;
 
     QSplitter*                       vSplitter;
-
     QAction*                         fileOpenAction;
-
     QUrl                             lastOpenedDirectory;
-    
     QString                          tempFilePath;
-
     QAction*                         openFilesInFolderAction;
     QAction*                         first;
     QDir                             dir;
+
     ShowfotoItemInfoList             infoList;
     ShowfotoThumbnailModel*          model;
     ShowfotoDragDropHandler*         dDHandler;
