@@ -154,7 +154,8 @@ void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
         listOfUsedUrls << newName;
 
         QFileInfo fi(item.collectionPath);
-        if(!fi.dir().exists())
+
+        if (!fi.dir().exists())
         {
             fi.dir().mkpath(fi.dir().path());
         }
@@ -162,6 +163,7 @@ void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
         renameFile(srcToRename, newName);
         listOfJsonFilesToRemove << QUrl::fromLocalFile(item.jsonFilePath);
     }
+
     del(listOfJsonFilesToRemove, false);
 }
 
@@ -276,7 +278,7 @@ void IOJobsThread::oneJobFinished()
 {
     d->jobsCount--;
 
-    if(d->jobsCount == 0)
+    if (d->jobsCount == 0)
     {
         emit finished();
         qCDebug(DIGIKAM_IOJOB_LOG) << "Thread Finished";

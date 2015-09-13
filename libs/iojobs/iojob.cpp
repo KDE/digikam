@@ -105,7 +105,7 @@ void CopyJob::run()
 
     // Checking if there is a file with the same name in destination folder
     QString destenationName = srcInfo.isFile() ? srcInfo.fileName() : srcInfo.dir().dirName();
-    QString destenation = dstDir.path() + QDir::separator() + destenationName;
+    QString destenation     = dstDir.path() + QDir::separator() + destenationName;
     QFileInfo fileInfoForDestination(destenation);
 
     if (fileInfoForDestination.exists())
@@ -119,7 +119,7 @@ void CopyJob::run()
 
     if (m_isMove)
     {
-        if(srcInfo.isDir())
+        if (srcInfo.isDir())
         {
             QDir srcDir(srcInfo.filePath());
 
@@ -146,7 +146,7 @@ void CopyJob::run()
         {
             QDir srcDir(srcInfo.filePath());
 
-            if(!copyFolderRecursively(srcDir.path(), dstDir.path()))
+            if (!copyFolderRecursively(srcDir.path(), dstDir.path()))
             {
                 error(i18n("Could not copy folder %1 to album %2",
                            srcDir.path(), dstDir.path()));
@@ -176,8 +176,8 @@ DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash)
 void DeleteJob::run()
 {
     QFileInfo fileInfo(m_srcToDelete.path());
-    qCDebug(DIGIKAM_IOJOB_LOG) << "DELETING: " << fileInfo.filePath() << "\n"
-                               << "FILE EXISTS? " << fileInfo.exists() << "\n"
+    qCDebug(DIGIKAM_IOJOB_LOG) << "DELETING: "    << fileInfo.filePath() << "\n"
+                               << "FILE EXISTS? " << fileInfo.exists()   << "\n"
                                << "IS TO TRASH? " << m_useTrash;
 
     if (!fileInfo.exists())
@@ -238,14 +238,14 @@ RenameFileJob::RenameFileJob(const QUrl& srcToRename, const QUrl& newUrl)
 }
 
 void RenameFileJob::run()
-{   
+{
     if (m_newUrl.isEmpty())
     {
         emit signalDone();
         return;
     }
 
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url: " << m_newUrl << "\n"
+    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url: "      << m_newUrl << "\n"
                                << "Destination Url path: " << m_newUrl.path();
 
     if (QFileInfo(m_newUrl.path()).exists())
