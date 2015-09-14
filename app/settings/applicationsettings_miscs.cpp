@@ -99,7 +99,7 @@ bool ApplicationSettings::getShowPermanentDeleteDialog() const
 
 void ApplicationSettings::setApplySidebarChangesDirectly(bool val)
 {
-    d->sidebarApplyDirectly= val;
+    d->sidebarApplyDirectly = val;
 }
 
 bool ApplicationSettings::getApplySidebarChangesDirectly() const
@@ -109,7 +109,7 @@ bool ApplicationSettings::getApplySidebarChangesDirectly() const
 
 void ApplicationSettings::setScrollItemToCenter(bool val)
 {
-    d->scrollItemToCenter= val;
+    d->scrollItemToCenter = val;
 }
 
 bool ApplicationSettings::getScrollItemToCenter() const
