@@ -60,6 +60,7 @@ public:
     Private() :
         sidebarTypeLabel(0),
         applicationStyleLabel(0),
+        itemCenter(0),
         showSplash(0),
         showMimeOverImage(0),
         showCoordinates(0),
@@ -74,6 +75,7 @@ public:
     QLabel*              sidebarTypeLabel;
     QLabel*              applicationStyleLabel;
 
+    QCheckBox*           itemCenter;
     QCheckBox*           showSplash;
     QCheckBox*           showMimeOverImage;
     QCheckBox*           showCoordinates;
@@ -104,6 +106,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QVBoxLayout* const gLayout5       = new QVBoxLayout();
 
     d->useTrash          = new QCheckBox(i18n("&Deleted items should go to the trash"), miscOptionsGroup);
+    d->itemCenter        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), miscOptionsGroup);
     d->showSplash        = new QCheckBox(i18n("&Show splash screen at startup"), miscOptionsGroup);
     d->showMimeOverImage = new QCheckBox(i18n("&Show image Format"), miscOptionsGroup);
     d->showMimeOverImage->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
@@ -130,6 +133,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     }
 
     gLayout5->addWidget(d->useTrash);
+    gLayout5->addWidget(d->itemCenter);
     gLayout5->addWidget(d->showSplash);
     gLayout5->addWidget(d->showMimeOverImage);
     gLayout5->addWidget(d->showCoordinates);
@@ -182,6 +186,7 @@ void SetupMisc::readSettings()
     d->settings = ShowfotoSettings::instance();
 
     d->useTrash->setChecked(d->settings->getDeleteItem2Trash());
+    d->itemCenter->setChecked(d->settings->getItemCenter());
     d->showSplash->setChecked(d->settings->getShowSplash());
     d->showMimeOverImage->setChecked(d->settings->getShowFormatOverThumbnail());
     d->showCoordinates->setChecked(d->settings->getShowCoordinates());
@@ -194,6 +199,7 @@ void SetupMisc::readSettings()
 void SetupMisc::applySettings()
 {
     d->settings->setDeleteItem2Trash(d->useTrash->isChecked());
+    d->settings->setItemCenter(d->itemCenter->isChecked());
     d->settings->setShowSplash(d->showSplash->isChecked());
     d->settings->setShowFormatOverThumbnail(d->showMimeOverImage->isChecked());
     d->settings->setShowCoordinates(d->showCoordinates->isChecked());

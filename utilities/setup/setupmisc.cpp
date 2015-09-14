@@ -59,6 +59,7 @@ public:
         showTrashDeleteDialogCheck(0),
         showPermanentDeleteDialogCheck(0),
         sidebarApplyDirectlyCheck(0),
+        scrollItemToCenterCheck(0),
         sidebarType(0),
         stringComparisonType(0),
         applicationStyle(0)
@@ -73,6 +74,7 @@ public:
     QCheckBox* showTrashDeleteDialogCheck;
     QCheckBox* showPermanentDeleteDialogCheck;
     QCheckBox* sidebarApplyDirectlyCheck;
+    QCheckBox* scrollItemToCenterCheck;
 
     KComboBox* sidebarType;
     KComboBox* stringComparisonType;
@@ -92,6 +94,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
     d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items"), panel);
     d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar"), panel);
+    d->scrollItemToCenterCheck        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), panel);
     d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), panel);
     
     // --------------------------------------------------------
@@ -139,6 +142,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout->addWidget(d->showTrashDeleteDialogCheck);
     layout->addWidget(d->showPermanentDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);
+    layout->addWidget(d->scrollItemToCenterCheck);
     layout->addWidget(d->showSplashCheck);
     layout->addWidget(tabStyleHbox);
     layout->addWidget(appStyleHbox);
@@ -164,6 +168,7 @@ void SetupMisc::applySettings()
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
     settings->setShowPermanentDeleteDialog(d->showPermanentDeleteDialogCheck->isChecked());
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
+    settings->setScrollItemToCenter(d->scrollItemToCenterCheck->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
     settings->setStringComparisonType((ApplicationSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
     settings->setApplicationStyle(d->applicationStyle->currentText());
@@ -178,6 +183,7 @@ void SetupMisc::readSettings()
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());
     d->showPermanentDeleteDialogCheck->setChecked(settings->getShowPermanentDeleteDialog());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
+    d->scrollItemToCenterCheck->setChecked(settings->getScrollItemToCenter());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == KMultiTabBar::VSNET ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle()));

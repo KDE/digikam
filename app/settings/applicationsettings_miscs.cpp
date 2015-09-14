@@ -107,6 +107,16 @@ bool ApplicationSettings::getApplySidebarChangesDirectly() const
     return d->sidebarApplyDirectly;
 }
 
+void ApplicationSettings::setScrollItemToCenter(bool val)
+{
+    d->scrollItemToCenter= val;
+}
+
+bool ApplicationSettings::getScrollItemToCenter() const
+{
+    return d->scrollItemToCenter;
+}
+
 void ApplicationSettings::setStringComparisonType(ApplicationSettings::StringComparisonType val)
 {
     d->stringComparisonType = val;

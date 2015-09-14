@@ -231,6 +231,7 @@ void ApplicationSettings::readSettings()
     d->showTrashDeleteDialog            = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
     d->showPermanentDeleteDialog        = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
     d->sidebarApplyDirectly             = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
+    d->scrollItemToCenter               = group.readEntry(d->configScrollItemToCenterEntry,                          true);
     d->stringComparisonType             = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
 
@@ -378,6 +379,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configShowTrashDeleteDialogEntry,              d->showTrashDeleteDialog);
     group.writeEntry(d->configShowPermanentDeleteDialogEntry,          d->showPermanentDeleteDialog);
     group.writeEntry(d->configApplySidebarChangesDirectlyEntry,        d->sidebarApplyDirectly);
+    group.writeEntry(d->configScrollItemToCenterEntry,                 d->scrollItemToCenter);
     group.writeEntry(d->configStringComparisonTypeEntry,               (int) d->stringComparisonType);
     group.writeEntry(d->configApplicationStyleEntry,                   d->applicationStyle);
 

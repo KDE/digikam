@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "applicationsettings.h"
 #include "importsettings.h"
 #include "importdelegate.h"
 #include "importfiltermodel.h"
@@ -59,15 +60,14 @@ ImportThumbnailBar::ImportThumbnailBar(QWidget* const parent)
     setSpacing(3);
     setUsePointingHandCursor(false);
     setScrollStepGranularity(5);
-    setScrollCurrentToCenter(true);
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
-    //TODO: Implement Import Tool settings
-    //setToolTipEnabled(ImportSettings::instance()->showToolTipsIsValid());
+    setScrollCurrentToCenter(ApplicationSettings::instance()->getScrollItemToCenter());
+    setToolTipEnabled(ImportSettings::instance()->showToolTipsIsValid());
 
     connect(ImportSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
@@ -173,6 +173,7 @@ void ImportThumbnailBar::setFlow(QListView::Flow flow)
 
 void ImportThumbnailBar::slotSetupChanged()
 {
+    setScrollCurrentToCenter(ApplicationSettings::instance()->getScrollItemToCenter());
     setToolTipEnabled(ImportSettings::instance()->showToolTipsIsValid());
     setFont(ImportSettings::instance()->getIconViewFont());
 

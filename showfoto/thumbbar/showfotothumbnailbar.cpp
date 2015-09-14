@@ -34,6 +34,7 @@
 
 // Local includes
 
+#include "showfotosettings.h"
 #include "showfotodelegate.h"
 #include "showfotofiltermodel.h"
 #include "itemviewtooltip.h"
@@ -69,7 +70,7 @@ ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
     setSpacing(3);
     setUsePointingHandCursor(false);
     setScrollStepGranularity(3);
-    setScrollCurrentToCenter(true);
+    setScrollCurrentToCenter(ShowfotoSettings::instance()->getItemCenter());
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     setDragEnabled(true);

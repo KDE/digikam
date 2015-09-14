@@ -124,6 +124,7 @@ public:
     static const QString                      configShowTrashDeleteDialogEntry;
     static const QString                      configShowPermanentDeleteDialogEntry;
     static const QString                      configApplySidebarChangesDirectlyEntry;
+    static const QString                      configScrollItemToCenterEntry;
     static const QString                      configScanAtStartEntry;
     static const QString                      configSyncBalootoDigikamEntry;
     static const QString                      configSyncDigikamtoBalooEntry;
@@ -139,6 +140,8 @@ public:
     bool                                      showPermanentDeleteDialog;
     // metadata setting
     bool                                      sidebarApplyDirectly;
+    // item center settings
+    bool                                      scrollItemToCenter;
 
     // icon view settings
     bool                                      iconShowName;
