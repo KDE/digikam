@@ -322,9 +322,6 @@ void LightTableWindow::setupStatusBar()
 
 void LightTableWindow::setupConnections()
 {
-    connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
-            this, SLOT(slotProgressBarCancelButtonPressed()));
-
     connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotApplicationSettingsChanged()));
 
@@ -1393,6 +1390,9 @@ void LightTableWindow::slotSlideShowAll()
 {
    SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->imageInfos());
 
+   d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                         i18n("Preparing slideshow. Please wait..."));
+
    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
 
@@ -1415,6 +1415,9 @@ void LightTableWindow::slotSlideShowManualFrom(const ImageInfo& info)
    builder->setOverrideStartFrom(info);
    builder->setAutoPlayEnabled(false);
 
+   d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                         i18n("Preparing slideshow. Please wait..."));
+
    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
 
@@ -1425,6 +1428,9 @@ void LightTableWindow::slotSlideShowBuilderComplete(const SlideShowSettings& set
 {
     SlideShow* const slide = new SlideShow(settings);
     TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
+
+    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, QString());
+    slotRefreshStatusBar();
 
     if (settings.imageUrl.isValid())
     {
