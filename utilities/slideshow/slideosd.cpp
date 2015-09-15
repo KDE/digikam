@@ -58,6 +58,7 @@ class SlideOSD::Private
 public:
 
     Private() :
+        paused(false),
         blink(false),
         delay(500),         // Progress bar refresh slideTimer in ms
         progressBar(0),
@@ -75,6 +76,7 @@ public:
     {
     }
 
+    bool                paused;
     bool                blink;
     int const           delay;
 
@@ -273,6 +275,7 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
 {
     if (obj == d->labelsBox                    ||
         obj == d->toolBar                      ||
+        obj == d->toolBar                      ||
         obj == d->ratingWidget                 ||
         obj == d->clWidget                     ||
         obj == d->plWidget                     ||
@@ -281,13 +284,18 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
     {
         if (ev->type() == QEvent::Enter)
         {
+            d->paused = isPaused();
             d->parent->slotPause();
             return false;
         }
 
         if (ev->type() == QEvent::Leave)
         {
-            d->parent->slotPlay();
+            if (!d->paused)
+            {
+                d->parent->slotPlay();
+            }
+
             return false;
         }
     }
