@@ -7,7 +7,7 @@
  * Description : Settings for Showfoto
  *
  * Copyright (C) 2013-2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
- * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@ public:
         deleteItem2Trash(true),
         showFormatOverThumbnail(false),
         showCoordinates(false),
-        itemCenter(true),
+        itemCenter(false),
         showSplash(true),
         reverseSort(false),
         showToolTip(true),
@@ -224,6 +224,7 @@ void ShowfotoSettings::init()
 
     d->showFormatOverThumbnail = false;
     d->showCoordinates         = false;
+    d->itemCenter              = false;
 
     d->showToolTip             = true;
 
@@ -251,7 +252,7 @@ void ShowfotoSettings::readSettings()
     d->theme                   = group.readEntry(d->configCurrentTheme, Digikam::ThemeManager::instance()->defaultThemeName());
     d->rightSideBarStyle       = group.readEntry(d->configRightSideBarStyle, 0);
     d->applicationStyle        = group.readEntry(d->configApplicationStyle, kapp->style()->objectName());
-    d->itemCenter              = group.readEntry(d->configItemCenter, true);
+    d->itemCenter              = group.readEntry(d->configItemCenter, false);
     d->showSplash              = group.readEntry(d->configShowSplash, true);
     d->sortOrder               = group.readEntry(d->configSortOrder, 0);
     d->reverseSort             = group.readEntry(d->configReverseSort, false);

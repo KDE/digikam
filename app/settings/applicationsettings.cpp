@@ -217,9 +217,9 @@ void ApplicationSettings::readSettings()
     {
         d->previewSettings.quality = PreviewSettings::FastPreview;
     }
+
     d->previewShowIcons                 = group.readEntry(d->configPreviewShowIconsEntry,             true);
     d->showThumbbar                     = group.readEntry(d->configShowThumbbarEntry,                 true);
-
     d->showFolderTreeViewItemsCount     = group.readEntry(d->configShowFolderTreeViewItemsCountEntry, false);
 
     // ---------------------------------------------------------------------
@@ -231,7 +231,7 @@ void ApplicationSettings::readSettings()
     d->showTrashDeleteDialog            = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
     d->showPermanentDeleteDialog        = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
     d->sidebarApplyDirectly             = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
-    d->scrollItemToCenter               = group.readEntry(d->configScrollItemToCenterEntry,                          true);
+    d->scrollItemToCenter               = group.readEntry(d->configScrollItemToCenterEntry,                          false);
     d->stringComparisonType             = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
 
@@ -345,6 +345,7 @@ void ApplicationSettings::saveSettings()
     if (d->previewSettings.quality == PreviewSettings::HighQualityPreview)
     {
         group.writeEntry(d->configPreviewLoadFullImageSizeEntry, true);
+
         switch (d->previewSettings.rawLoading)
         {
             case PreviewSettings::RawPreviewAutomatic:
@@ -365,6 +366,7 @@ void ApplicationSettings::saveSettings()
     {
         group.writeEntry(d->configPreviewLoadFullImageSizeEntry, false);
     }
+
     group.writeEntry(d->configPreviewShowIconsEntry,                   d->previewShowIcons);
     group.writeEntry(d->configShowThumbbarEntry,                       d->showThumbbar);
 
