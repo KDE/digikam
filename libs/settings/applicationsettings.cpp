@@ -66,7 +66,8 @@ ApplicationSettings* ApplicationSettings::instance()
 }
 
 ApplicationSettings::ApplicationSettings()
-    : QObject(), d(new Private(this))
+    : QObject(),
+      d(new Private(this))
 {
     d->config = KSharedConfig::openConfig();
     d->init();
@@ -231,6 +232,7 @@ void ApplicationSettings::readSettings()
     d->showTrashDeleteDialog            = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
     d->showPermanentDeleteDialog        = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
     d->sidebarApplyDirectly             = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
+    d->scrollItemToCenter               = group.readEntry(d->configScrollItemToCenterEntry,                          false);
     d->stringComparisonType             = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, qApp->style()->objectName()));
 
@@ -364,9 +366,9 @@ void ApplicationSettings::saveSettings()
     {
         group.writeEntry(d->configPreviewLoadFullImageSizeEntry, false);
     }
+
     group.writeEntry(d->configPreviewShowIconsEntry,                   d->previewShowIcons);
     group.writeEntry(d->configShowThumbbarEntry,                       d->showThumbbar);
-
     group.writeEntry(d->configShowFolderTreeViewItemsCountEntry,       d->showFolderTreeViewItemsCount);
 
     // ---------------------------------------------------------------------
@@ -378,6 +380,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configShowTrashDeleteDialogEntry,              d->showTrashDeleteDialog);
     group.writeEntry(d->configShowPermanentDeleteDialogEntry,          d->showPermanentDeleteDialog);
     group.writeEntry(d->configApplySidebarChangesDirectlyEntry,        d->sidebarApplyDirectly);
+    group.writeEntry(d->configScrollItemToCenterEntry,                 d->scrollItemToCenter);
     group.writeEntry(d->configStringComparisonTypeEntry,               (int) d->stringComparisonType);
     group.writeEntry(d->configApplicationStyleEntry,                   d->applicationStyle);
 

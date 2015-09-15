@@ -31,6 +31,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "showfotosettings.h"
 #include "showfotodelegate.h"
 #include "showfotofiltermodel.h"
 #include "itemviewtooltip.h"
@@ -60,13 +61,14 @@ public:
 };
 
 ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
-    : ShowfotoCategorizedView(parent), d(new Private())
+    : ShowfotoCategorizedView(parent),
+      d(new Private())
 {
     setItemDelegate(new ShowfotoThumbnailDelegate(this));
     setSpacing(3);
     setUsePointingHandCursor(false);
     setScrollStepGranularity(3);
-    setScrollCurrentToCenter(true);
+    setScrollCurrentToCenter(ShowfotoSettings::instance()->getItemCenter());
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     setDragEnabled(true);

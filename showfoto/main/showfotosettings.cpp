@@ -53,6 +53,7 @@ public:
         deleteItem2Trash(true),
         showFormatOverThumbnail(false),
         showCoordinates(false),
+        itemCenter(false),
         showSplash(true),
         reverseSort(false),
         showToolTip(true),
@@ -82,6 +83,7 @@ public:
     static const QString configApplicationStyle;
     static const QString configShowFormatOverThumbnail;
     static const QString configShowCoordinates;
+    static const QString configItemCenter;
     static const QString configShowSplash;
     static const QString configSortOrder;
     static const QString configReverseSort;
@@ -107,6 +109,7 @@ public:
     bool                 deleteItem2Trash;
     bool                 showFormatOverThumbnail;
     bool                 showCoordinates;
+    bool                 itemCenter;
     bool                 showSplash;
     bool                 reverseSort;
 
@@ -150,6 +153,7 @@ const QString ShowfotoSettings::Private::configRightSideBarStyle(QLatin1String("
 const QString ShowfotoSettings::Private::configApplicationStyle(QLatin1String("Application Style"));
 const QString ShowfotoSettings::Private::configShowFormatOverThumbnail(QLatin1String("ShowMimeOverImage"));
 const QString ShowfotoSettings::Private::configShowCoordinates(QLatin1String("Show Coordinates"));
+const QString ShowfotoSettings::Private::configItemCenter(QLatin1String("Item To Center"));
 const QString ShowfotoSettings::Private::configShowSplash(QLatin1String("ShowSplash"));
 const QString ShowfotoSettings::Private::configSortOrder(QLatin1String("SortOrder"));
 const QString ShowfotoSettings::Private::configReverseSort(QLatin1String("ReverseSort"));
@@ -195,7 +199,8 @@ ShowfotoSettings* ShowfotoSettings::instance()
 }
 
 ShowfotoSettings::ShowfotoSettings()
-    : QObject(), d(new Private)
+    : QObject(),
+      d(new Private)
 {
     d->config = KSharedConfig::openConfig();
     d->group  = d->config->group(d->configGroupDefault);
@@ -218,6 +223,7 @@ void ShowfotoSettings::init()
 
     d->showFormatOverThumbnail = false;
     d->showCoordinates         = false;
+    d->itemCenter              = false;
 
     d->showToolTip             = true;
 
@@ -245,6 +251,7 @@ void ShowfotoSettings::readSettings()
     d->theme                   = group.readEntry(d->configCurrentTheme, Digikam::ThemeManager::instance()->defaultThemeName());
     d->rightSideBarStyle       = group.readEntry(d->configRightSideBarStyle, 0);
     d->applicationStyle        = group.readEntry(d->configApplicationStyle, qApp->style()->objectName());
+    d->itemCenter              = group.readEntry(d->configItemCenter, false);
     d->showSplash              = group.readEntry(d->configShowSplash, true);
     d->sortOrder               = group.readEntry(d->configSortOrder, 0);
     d->reverseSort             = group.readEntry(d->configReverseSort, false);
@@ -303,6 +310,11 @@ bool ShowfotoSettings::getShowCoordinates() const
 QString ShowfotoSettings::getApplicationStyle() const
 {
     return d->applicationStyle;
+}
+
+bool ShowfotoSettings::getItemCenter() const
+{
+    return d->itemCenter;
 }
 
 bool ShowfotoSettings::getShowSplash() const
@@ -493,6 +505,11 @@ void ShowfotoSettings::setShowFormatOverThumbnail(bool show)
 void ShowfotoSettings::setShowCoordinates(bool show)
 {
     d->group.writeEntry(d->configShowCoordinates, show);
+}
+
+void ShowfotoSettings::setItemCenter(bool item)
+{
+    d->group.writeEntry(d->configItemCenter, item);
 }
 
 void ShowfotoSettings::setShowSplash(bool show)

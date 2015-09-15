@@ -399,6 +399,9 @@ public:
     void setApplySidebarChangesDirectly(bool val);
     bool getApplySidebarChangesDirectly() const;
 
+    void setScrollItemToCenter(bool val);
+    bool getScrollItemToCenter() const;
+
     /**
      * Defines the way in which string comparisons are performed.
      *

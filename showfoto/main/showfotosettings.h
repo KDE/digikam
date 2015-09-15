@@ -68,6 +68,9 @@ public:
     bool getShowCoordinates() const;
     void setShowCoordinates(bool show);
 
+    bool getItemCenter() const;
+    void setItemCenter(bool item);
+    
     bool getShowSplash() const;
     void setShowSplash(bool show);
 

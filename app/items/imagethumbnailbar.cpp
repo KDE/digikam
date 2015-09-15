@@ -58,19 +58,20 @@ public:
 };
 
 ImageThumbnailBar::ImageThumbnailBar(QWidget* const parent)
-    : ImageCategorizedView(parent), d(new Private())
+    : ImageCategorizedView(parent),
+      d(new Private())
 {
     setItemDelegate(new ImageThumbnailDelegate(this));
     setSpacing(3);
     setUsePointingHandCursor(false);
     setScrollStepGranularity(5);
-    setScrollCurrentToCenter(true);
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
+    setScrollCurrentToCenter(ApplicationSettings::instance()->getScrollItemToCenter());
     setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
 
     connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
@@ -175,6 +176,7 @@ void ImageThumbnailBar::setFlow(QListView::Flow flow)
 
 void ImageThumbnailBar::slotSetupChanged()
 {
+    setScrollCurrentToCenter(ApplicationSettings::instance()->getScrollItemToCenter());
     setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
     setFont(ApplicationSettings::instance()->getIconViewFont());
 

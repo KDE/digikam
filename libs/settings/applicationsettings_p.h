@@ -62,6 +62,7 @@ public:
     static const QString                      configTreeViewFontEntry;
     static const QString                      configThemeEntry;
     static const QString                      configSidebarTitleStyleEntry;
+    static const QString                      configScrollItemToCenterEntry;
     static const QString                      configRatingFilterConditionEntry;
     static const QString                      configRecursiveAlbumsEntry;
     static const QString                      configRecursiveTagsEntry;
@@ -140,6 +141,8 @@ public:
     bool                                      showPermanentDeleteDialog;
     // metadata setting
     bool                                      sidebarApplyDirectly;
+    // item center settings
+    bool                                      scrollItemToCenter;
 
     // icon view settings
     bool                                      iconShowName;

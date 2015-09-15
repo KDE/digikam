@@ -128,6 +128,7 @@ const QString ApplicationSettings::Private::configUseTrashEntry(QLatin1String("U
 const QString ApplicationSettings::Private::configShowTrashDeleteDialogEntry(QLatin1String("Show Trash Delete Dialog"));
 const QString ApplicationSettings::Private::configShowPermanentDeleteDialogEntry(QLatin1String("Show Permanent Delete Dialog"));
 const QString ApplicationSettings::Private::configApplySidebarChangesDirectlyEntry(QLatin1String("Apply Sidebar Changes Directly"));
+const QString ApplicationSettings::Private::configScrollItemToCenterEntry(QLatin1String("Scroll Current Item To Center"));
 const QString ApplicationSettings::Private::configSyncBalootoDigikamEntry(QLatin1String("Sync Baloo to Digikam"));
 const QString ApplicationSettings::Private::configSyncDigikamtoBalooEntry(QLatin1String("Sync Digikam to Baloo"));
 const QString ApplicationSettings::Private::configStringComparisonTypeEntry(QLatin1String("String Comparison Type"));
@@ -140,6 +141,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const q)
       showTrashDeleteDialog(false),
       showPermanentDeleteDialog(false),
       sidebarApplyDirectly(false),
+      scrollItemToCenter(false),
       iconShowName(false),
       iconShowSize(false),
       iconShowDate(false),
@@ -248,6 +250,7 @@ void ApplicationSettings::Private::init()
     showTrashDeleteDialog               = true;
     showPermanentDeleteDialog           = true;
     sidebarApplyDirectly                = false;
+    scrollItemToCenter                  = false;
 
     iconShowName                        = false;
     iconShowSize                        = false;
