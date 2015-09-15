@@ -84,7 +84,6 @@ private:
     void setupConnections();
     void setupUserArea();
     void setupStatusBar();
-    void slideShow(SlideShowSettings& settings);
     void readSettings();
     void writeSettings();
 
@@ -116,6 +115,12 @@ private Q_SLOTS:
     void slotLeftZoomFactorChanged(double);
     void slotRightZoomFactorChanged(double);
 
+    void slotLeftSlideShowManualFromCurrent();
+    void slotRightSlideShowManualFromCurrent();
+
+    void slotSlideShowManualFrom(const ImageInfo&);
+    void slotSlideShowBuilderComplete(const SlideShowSettings&);
+
     void slotToggleOnSyncPreview(bool);
     void slotToggleSyncPreview();
     void slotToggleNavigateByPair();
@@ -137,8 +142,7 @@ private Q_SLOTS:
 
     void slotThumbbarDroppedItems(const QList<ImageInfo>&);
 
-    void slotProgressBarCancelButtonPressed();
-    void slotToggleSlideShow();
+    void slotSlideShowAll();
     void slotSetup();
     void slotColorManagementOptionsChanged();
     void slotToggleColorManagedView();

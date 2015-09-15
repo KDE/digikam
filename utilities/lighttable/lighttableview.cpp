@@ -70,7 +70,8 @@ public:
 };
 
 LightTableView::LightTableView(QWidget* const parent)
-    : QFrame(parent), d(new Private)
+    : QFrame(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle(QFrame::NoFrame);
@@ -113,6 +114,9 @@ LightTableView::LightTableView(QWidget* const parent)
     connect(d->leftPreview, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
 
+    connect(d->leftPreview, SIGNAL(signalSlideShowCurrent()),
+            this, SIGNAL(signalLeftSlideShowCurrent()));
+
     connect(d->leftPreview, SIGNAL(signalDroppedItems(ImageInfoList)),
             this, SIGNAL(signalLeftDroppedItems(ImageInfoList)));
 
@@ -141,6 +145,9 @@ LightTableView::LightTableView(QWidget* const parent)
 
     connect(d->rightPreview, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
+
+    connect(d->rightPreview, SIGNAL(signalSlideShowCurrent()),
+            this, SIGNAL(signalRightSlideShowCurrent()));
 
     connect(d->rightPreview, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotRightPreviewLoaded(bool)));

@@ -93,6 +93,9 @@ Q_SIGNALS:
 
     void signalLeftPopupTagsView();
     void signalRightPopupTagsView();
+    
+    void signalLeftSlideShowCurrent();
+    void signalRightSlideShowCurrent();
 
     void signalSlideShow();
     void signalDeleteItem(const ImageInfo&);
