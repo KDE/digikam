@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation
  *
- * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -348,20 +348,24 @@ void EditorWindow::setupStandardActions()
     m_backwardAction = KStandardAction::back(this, SLOT(slotBackward()), this);
     actionCollection()->addAction("editorwindow_backward", m_backwardAction);
     m_backwardAction->setShortcut(KShortcut(Qt::Key_PageUp, Qt::Key_Backspace));
+    m_backwardAction->setEnabled(false);
 
     m_forwardAction = KStandardAction::forward(this, SLOT(slotForward()), this);
     actionCollection()->addAction("editorwindow_forward", m_forwardAction);
     m_forwardAction->setShortcut(KShortcut(Qt::Key_PageDown, Qt::Key_Space));
+    m_forwardAction->setEnabled(false);
 
     m_firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
     m_firstAction->setShortcut(KStandardShortcut::begin());
     connect(m_firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
     actionCollection()->addAction("editorwindow_first", m_firstAction);
+    m_firstAction->setEnabled(false);
 
     m_lastAction = new KAction(KIcon("go-last"), i18n("&Last"), this);
     m_lastAction->setShortcut(KStandardShortcut::end());
     connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("editorwindow_last", m_lastAction);
+    m_lastAction->setEnabled(false);
 
     m_openVersionAction = new KAction(KIcon("image-loading"),
                                       i18nc("@action", "Open Original"), this);
@@ -440,17 +444,20 @@ void EditorWindow::setupStandardActions()
     d->filePrintAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_P));
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
     actionCollection()->addAction("editorwindow_print", d->filePrintAction);
+    d->filePrintAction->setEnabled(false);
 
-    KAction* const openWithAction = new KAction(KIcon("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
-    openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
-    openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
-    connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
-    actionCollection()->addAction("open_with_default_application", openWithAction);
+    d->openWithAction = new KAction(KIcon("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
+    d->openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
+    d->openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
+    connect(d->openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
+    actionCollection()->addAction("open_with_default_application", d->openWithAction);
+    d->openWithAction->setEnabled(false);
 
     m_fileDeleteAction = new KAction(KIcon("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
     m_fileDeleteAction->setShortcut(KShortcut(Qt::Key_Delete));
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);
+    m_fileDeleteAction->setEnabled(false);
 
     KAction* closeAction = KStandardAction::close(this, SLOT(close()), this);
     actionCollection()->addAction("editorwindow_close", closeAction);
@@ -1137,6 +1144,8 @@ void EditorWindow::toggleStandardActions(bool val)
     m_selectToolsAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
+    d->openWithAction->setEnabled(val);
+    d->filePrintAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);

@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C)      2006 by Tom Albers <tomalbers at kde dot nl>
- * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
@@ -917,11 +917,11 @@ void DigikamApp::setupActions()
     connect(d->imageViewAction, SIGNAL(triggered()), d->view, SLOT(slotImageEdit()));
     actionCollection()->addAction("image_edit", d->imageViewAction);
 
-    KAction* const openWithAction = new KAction(KIcon("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
-    openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
-    openWithAction->setWhatsThis(i18n("Open the selected item with default assigned application."));
-    connect(openWithAction, SIGNAL(triggered()), d->view, SLOT(slotFileWithDefaultApplication()));
-    actionCollection()->addAction("open_with_default_application", openWithAction);
+    d->openWithAction = new KAction(KIcon("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
+    d->openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
+    d->openWithAction->setWhatsThis(i18n("Open the selected item with default assigned application."));
+    connect(d->openWithAction, SIGNAL(triggered()), d->view, SLOT(slotFileWithDefaultApplication()));
+    actionCollection()->addAction("open_with_default_application", d->openWithAction);
 
     KAction* const ieAction = new KAction(KIcon("editimage"), i18n("Image Editor"), this);
     ieAction->setWhatsThis(i18n("Open the image editor."));
@@ -1383,6 +1383,8 @@ void DigikamApp::initGui()
     d->imageDeleteAction->setEnabled(false);
     d->imageExifOrientationActionMenu->setEnabled(false);
     d->slideShowSelectionAction->setEnabled(false);
+    d->openWithAction->setEnabled(false);
+    d->imageAutoExifActionMenu->setEnabled(false);
 
     d->albumSortAction->setCurrentItem((int)ApplicationSettings::instance()->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSortOrder());
@@ -1578,6 +1580,8 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->moveSelectionToAlbumAction->setEnabled(selectionCount > 0);
     d->cutItemsAction->setEnabled(selectionCount > 0);
     d->copyItemsAction->setEnabled(selectionCount > 0);
+    d->openWithAction->setEnabled(selectionCount > 0);
+    d->imageAutoExifActionMenu->setEnabled(selectionCount > 0);
 
     if (selectionCount > 0)
     {

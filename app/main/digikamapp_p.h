@@ -6,7 +6,7 @@
  * Date        : 2007-31-01
  * Description : main digiKam interface implementation
  *
- * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -148,6 +148,7 @@ public:
         imageAutoExifActionMenu(0),
         imageDeleteAction(0),
         imageExifOrientationActionMenu(0),
+        openWithAction(0),
         cutItemsAction(0),
         copyItemsAction(0),
         pasteItemsAction(0),
@@ -269,6 +270,7 @@ public:
     KAction*                            imageAutoExifActionMenu;
     KAction*                            imageDeleteAction;
     KActionMenu*                        imageExifOrientationActionMenu;
+    KAction*                            openWithAction;
 
     // Edit Actions
     KAction*                            cutItemsAction;
