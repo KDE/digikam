@@ -300,6 +300,9 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
                 lensMatches.append(lensList);
 
+                // Remove all duplicate lenses in the list by using QSet.
+                lensMatches = lensMatches.toSet().toList();
+
                 // Display the results.
 
                 if (lensMatches.isEmpty())
