@@ -60,6 +60,7 @@ public:
     {
         isReadOnly = false;
         tabWidget  = 0;
+        buttons    = 0;
         tabExif    = 0;
         tabIptc    = 0;
         tabXmp     = 0;
