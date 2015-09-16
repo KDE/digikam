@@ -7,7 +7,7 @@
  * Description : a KPageWidget to edit XMP metadata
  *
  * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011 by Victor Dodon <dodon dot victor at gmail dot com>
+ * Copyright (C) 2011      by Victor Dodon <dodon dot victor at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -122,50 +122,34 @@ XMPEditWidget::XMPEditWidget(MetadataEditDialog* const parent)
 
     d->contentPage   = new XMPContent(this);
     d->page_content  = addPage(d->contentPage, i18n("Content"));
-    d->page_content->setHeader(i18n("<qt>Content Information<br/>"
-                     "<i>Use this panel to describe the visual content of the image</i></qt>"));
     d->page_content->setIcon(QIcon::fromTheme(QLatin1String("draw-text")));
 
     d->originPage  = new XMPOrigin(this);
     d->page_origin = addPage(d->originPage, i18n("Origin"));
-    d->page_origin->setHeader(i18n("<qt>Origin Information<br/>"
-                    "<i>Use this panel for formal descriptive information about the image</i></qt>"));
     d->page_origin->setIcon(QIcon::fromTheme(QLatin1String("document-properties")));
 
     d->creditsPage  = new XMPCredits(this);
     d->page_credits = addPage(d->creditsPage, i18n("Credits"));
-    d->page_credits->setHeader(i18n("<qt>Credit Information<br/>"
-                     "<i>Use this panel to record copyright information about the image</i></qt>"));
     d->page_credits->setIcon(QIcon::fromTheme(QLatin1String("view-pim-contacts")));
 
     d->subjectsPage  = new XMPSubjects(this);
     d->page_subjects = addPage(d->subjectsPage, i18n("Subjects"));
-    d->page_subjects->setHeader(i18n("<qt>Subject Information<br/>"
-                      "<i>Use this panel to record subject information about the image</i></qt>"));
     d->page_subjects->setIcon(QIcon::fromTheme(QLatin1String("feed-subscribe")));
 
     d->keywordsPage  = new XMPKeywords(this);
     d->page_keywords = addPage(d->keywordsPage, i18n("Keywords"));
-    d->page_keywords->setHeader(i18n("<qt>Keyword Information<br/>"
-                      "<i>Use this panel to record keywords relevant to the image</i></qt>"));
     d->page_keywords->setIcon(QIcon::fromTheme(QLatin1String("bookmarks")));
 
     d->categoriesPage  = new XMPCategories(this);
     d->page_categories = addPage(d->categoriesPage, i18n("Categories"));
-    d->page_categories->setHeader(i18n("<qt>Category Information<br/>"
-                        "<i>Use this panel to record categories relevant to the image</i></qt>"));
     d->page_categories->setIcon(QIcon::fromTheme(QLatin1String("folder")));
 
     d->statusPage  = new XMPStatus(this);
     d->page_status = addPage(d->statusPage, i18n("Status"));
-    d->page_status->setHeader(i18n("<qt>Status Information<br/>"
-                    "<i>Use this panel to record workflow information</i></qt>"));
     d->page_status->setIcon(QIcon::fromTheme(QLatin1String("view-pim-tasks")));
 
     d->propertiesPage  = new XMPProperties(this);
     d->page_properties = addPage(d->propertiesPage, i18n("Properties"));
-    d->page_properties->setHeader(i18n("<qt>Status Properties<br/>"
-                      "<i>Use this panel to record workflow properties</i></qt>"));
     d->page_properties->setIcon(QIcon::fromTheme(QLatin1String("draw-freehand")));
 
     // ------------------------------------------------------------
@@ -221,15 +205,32 @@ void XMPEditWidget::saveSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
 
-    group.writeEntry(QLatin1String("All XMP Edit Page"), activePageIndex());
+    group.writeEntry(QLatin1String("All XMP Edit Page"),     activePageIndex());
     group.writeEntry(QLatin1String("All Sync JFIF Comment"), d->contentPage->syncJFIFCommentIsChecked());
     group.writeEntry(QLatin1String("All Sync EXIF Comment"), d->contentPage->syncEXIFCommentIsChecked());
-    group.writeEntry(QLatin1String("All Sync EXIF Date"), d->originPage->syncEXIFDateIsChecked());
+    group.writeEntry(QLatin1String("All Sync EXIF Date"),    d->originPage->syncEXIFDateIsChecked());
     config->sync();
 }
 
 void XMPEditWidget::slotItemChanged()
 {
+    d->page_content->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Content Information<br/>"
+                     "<i>Use this panel to describe the visual content of the image</i></qt>"));
+    d->page_origin->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Origin Information<br/>"
+                    "<i>Use this panel for formal descriptive information about the image</i></qt>"));
+    d->page_credits->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Credit Information<br/>"
+                     "<i>Use this panel to record copyright information about the image</i></qt>"));
+    d->page_subjects->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Subject Information<br/>"
+                      "<i>Use this panel to record subject information about the image</i></qt>"));
+    d->page_keywords->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Keyword Information<br/>"
+                      "<i>Use this panel to record keywords relevant to the image</i></qt>"));
+    d->page_categories->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Category Information<br/>"
+                        "<i>Use this panel to record categories relevant to the image</i></qt>"));
+    d->page_status->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Status Information<br/>"
+                    "<i>Use this panel to record workflow information</i></qt>"));
+    d->page_properties->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Status Properties<br/>"
+                      "<i>Use this panel to record workflow properties</i></qt>"));
+    
     DMetadata meta;
     meta.load((*d->dlg->currentItem()).path());
 

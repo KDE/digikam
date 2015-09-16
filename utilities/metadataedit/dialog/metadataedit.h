@@ -47,6 +47,7 @@ public:
     ~MetadataEditDialog();
 
     QList<QUrl>::iterator currentItem() const;
+    QString currentItemPreview() const;
 
 public Q_SLOTS:
 
@@ -71,6 +72,7 @@ private:
 
     void saveSettings();
     void readSettings();
+    void updatePreview();
 
 private:
 

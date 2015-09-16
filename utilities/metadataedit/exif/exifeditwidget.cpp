@@ -108,32 +108,26 @@ EXIFEditWidget::EXIFEditWidget(MetadataEditDialog* const parent)
 
     d->captionPage   = new EXIFCaption(this);
     d->page_caption  = addPage(d->captionPage, i18nc("image caption", "Caption"));
-    d->page_caption->setHeader(i18n("Caption Information"));
     d->page_caption->setIcon(QIcon::fromTheme(QLatin1String("edit-rename")));
 
     d->datetimePage  = new EXIFDateTime(this);
     d->page_datetime = addPage(d->datetimePage, i18n("Date & Time"));
-    d->page_datetime->setHeader(i18n("Date and Time Information"));
     d->page_datetime->setIcon(QIcon::fromTheme(QLatin1String("view-calendar-day")));
 
     d->lensPage      = new EXIFLens(this);
     d->page_lens     = addPage(d->lensPage, i18n("Lens"));
-    d->page_lens->setHeader(i18n("Lens Settings"));
     d->page_lens->setIcon(QIcon::fromTheme(QLatin1String("camera-photo")));
 
     d->devicePage    = new EXIFDevice(this);
     d->page_device   = addPage(d->devicePage, i18n("Device"));
-    d->page_device->setHeader(i18n("Capture Device Settings"));
     d->page_device->setIcon(QIcon::fromTheme(QLatin1String("scanner")));
 
     d->lightPage     = new EXIFLight(this);
     d->page_light    = addPage(d->lightPage, i18n("Light"));
-    d->page_light->setHeader(i18n("Light Source Information"));
     d->page_light->setIcon(QIcon::fromTheme(QLatin1String("image-x-generic")));
 
     d->adjustPage    = new EXIFAdjust(this);
     d->page_adjust   = addPage(d->adjustPage, i18nc("Picture adjustments", "Adjustments"));
-    d->page_adjust->setHeader(i18n("Pictures Adjustments"));
     d->page_adjust->setIcon(QIcon::fromTheme(QLatin1String("fill-color")));
 
     // ------------------------------------------------------------
@@ -183,17 +177,24 @@ void EXIFEditWidget::saveSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
-    group.writeEntry(QLatin1String("All EXIF Edit Page"), activePageIndex());
+    group.writeEntry(QLatin1String("All EXIF Edit Page"),    activePageIndex());
     group.writeEntry(QLatin1String("All Sync JFIF Comment"), d->captionPage->syncJFIFCommentIsChecked());
-    group.writeEntry(QLatin1String("All Sync XMP Caption"), d->captionPage->syncXMPCaptionIsChecked());
+    group.writeEntry(QLatin1String("All Sync XMP Caption"),  d->captionPage->syncXMPCaptionIsChecked());
     group.writeEntry(QLatin1String("All Sync IPTC Caption"), d->captionPage->syncIPTCCaptionIsChecked());
-    group.writeEntry(QLatin1String("All Sync XMP Date"), d->datetimePage->syncXMPDateIsChecked());
-    group.writeEntry(QLatin1String("All Sync IPTC Date"), d->datetimePage->syncIPTCDateIsChecked());
+    group.writeEntry(QLatin1String("All Sync XMP Date"),     d->datetimePage->syncXMPDateIsChecked());
+    group.writeEntry(QLatin1String("All Sync IPTC Date"),    d->datetimePage->syncIPTCDateIsChecked());
     config->sync();
 }
 
 void EXIFEditWidget::slotItemChanged()
 {
+    d->page_caption->setHeader(d->dlg->currentItemPreview() + i18n("Caption Information"));
+    d->page_datetime->setHeader(d->dlg->currentItemPreview() + i18n("Date and Time Information"));
+    d->page_lens->setHeader(d->dlg->currentItemPreview() + i18n("Lens Settings"));
+    d->page_device->setHeader(d->dlg->currentItemPreview() + i18n("Capture Device Settings"));
+    d->page_light->setHeader(d->dlg->currentItemPreview() + i18n("Light Source Information"));
+    d->page_adjust->setHeader(d->dlg->currentItemPreview() + i18n("Pictures Adjustments"));
+
     DMetadata meta;
     meta.load((*d->dlg->currentItem()).path());
 

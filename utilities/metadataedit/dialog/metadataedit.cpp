@@ -35,6 +35,10 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QImage>
+#include <QBuffer>
+#include <QPainter>
+#include <QPalette>
 
 // KDE includes
 
@@ -48,6 +52,7 @@
 #include "exifeditwidget.h"
 #include "iptceditwidget.h"
 #include "xmpeditwidget.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -58,26 +63,31 @@ public:
 
     Private()
     {
-        isReadOnly = false;
-        tabWidget  = 0;
-        buttons    = 0;
-        tabExif    = 0;
-        tabIptc    = 0;
-        tabXmp     = 0;
+        isReadOnly      = false;
+        tabWidget       = 0;
+        buttons         = 0;
+        tabExif         = 0;
+        tabIptc         = 0;
+        tabXmp          = 0;
+        catcher         = 0;
     }
 
-    bool                  isReadOnly;
+    bool                   isReadOnly;
 
-    QList<QUrl>           urls;
-    QList<QUrl>::iterator currItem;
+    QString                preview;
 
-    QTabWidget*           tabWidget;
+    QList<QUrl>            urls;
+    QList<QUrl>::iterator  currItem;
 
-    QDialogButtonBox*     buttons;
+    QTabWidget*            tabWidget;
 
-    EXIFEditWidget*       tabExif;
-    IPTCEditWidget*       tabIptc;
-    XMPEditWidget*        tabXmp;
+    QDialogButtonBox*      buttons;
+    
+    EXIFEditWidget*        tabExif;
+    IPTCEditWidget*        tabIptc;
+    XMPEditWidget*         tabXmp;
+
+    ThumbnailImageCatcher* catcher;
 };
 
 MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>& urls)
@@ -86,9 +96,15 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
 {
     setWindowTitle(i18n("Edit Metadata"));
     setModal(true);
+    
+    ThumbnailLoadThread* const thread = ThumbnailLoadThread::defaultThread();
+    thread->setThumbnailSize(48);
+    thread->setPixmapRequested(false);
+    d->catcher                        = new ThumbnailImageCatcher(thread, this);
 
     d->urls     = urls;
     d->currItem = d->urls.begin();
+    updatePreview();
 
     QDialogButtonBox::StandardButtons btns = QDialogButtonBox::Ok    | 
                                              QDialogButtonBox::Apply | 
@@ -168,6 +184,35 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
 MetadataEditDialog::~MetadataEditDialog()
 {
     delete d;
+}
+
+QString MetadataEditDialog::currentItemPreview() const
+{
+    return d->preview;
+}
+
+void MetadataEditDialog::updatePreview()
+{
+    d->catcher->setActive(true);
+
+    d->catcher->thread()->find(ThumbnailIdentifier(d->currItem->path()));
+    d->catcher->enqueue();
+    QList<QImage> images = d->catcher->waitForThumbnails();
+    
+    QImage img(48, 48, QImage::Format_ARGB32);
+    QImage thm = images.first();
+    QPainter p(&img);
+    p.fillRect(img.rect(), QPalette().window());
+    p.setPen(Qt::black);
+    p.drawRect(img.rect().left(), img.rect().top(), img.rect().right()-1, img.rect().bottom()-1);
+    p.drawImage((img.width() - thm.width())/2, (img.height() - thm.height())/2, thm);
+    
+    QByteArray byteArray;
+    QBuffer    buffer(&byteArray);
+    img.save(&buffer, "PNG");
+    d->preview = QString::fromLatin1("<img src=\"data:image/png;base64,%1\">  ").arg(QString::fromLatin1(byteArray.toBase64().data()));
+
+    d->catcher->setActive(false);
 }
 
 QList<QUrl>::iterator MetadataEditDialog::currentItem() const
@@ -254,6 +299,7 @@ void MetadataEditDialog::saveSettings()
 
 void MetadataEditDialog::slotItemChanged()
 {
+    updatePreview();
     d->tabExif->slotItemChanged();
     d->tabIptc->slotItemChanged();
     d->tabXmp->slotItemChanged();

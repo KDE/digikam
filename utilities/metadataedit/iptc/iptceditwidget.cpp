@@ -123,56 +123,38 @@ IPTCEditWidget::IPTCEditWidget(MetadataEditDialog* const parent)
 
     d->contentPage   = new IPTCContent(this);
     d->page_content  = addPage(d->contentPage, i18n("Content"));
-    d->page_content->setHeader(i18n("<qt>Content Information<br/>"
-                     "<i>Use this panel to describe the visual content of the image</i></qt>"));
     d->page_content->setIcon(QIcon::fromTheme(QLatin1String("help-contents")));
 
     d->originPage  = new IPTCOrigin(this);
     d->page_origin = addPage(d->originPage, i18n("Origin"));
-    d->page_origin->setHeader(i18n("<qt>Origin Information<br/>"
-                    "<i>Use this panel for formal descriptive information about the image</i></qt>"));
     d->page_origin->setIcon(QIcon::fromTheme(QLatin1String("applications-internet")));
 
     d->creditsPage  = new IPTCCredits(this);
     d->page_credits = addPage(d->creditsPage, i18n("Credits"));
-    d->page_credits->setHeader(i18n("<qt>Credit Information<br/>"
-                     "<i>Use this panel to record copyright information about the image</i></qt>"));
     d->page_credits->setIcon(QIcon::fromTheme(QLatin1String("view-pim-contacts")));
 
     d->subjectsPage  = new IPTCSubjects(this);
     d->page_subjects = addPage(d->subjectsPage, i18n("Subjects"));
-    d->page_subjects->setHeader(i18n("<qt>Subject Information<br/>"
-                      "<i>Use this panel to record subject information about the image</i></qt>"));
     d->page_subjects->setIcon(QIcon::fromTheme(QLatin1String("feed-subscribe")));
 
     d->keywordsPage  = new IPTCKeywords(this);
     d->page_keywords = addPage(d->keywordsPage, i18n("Keywords"));
-    d->page_keywords->setHeader(i18n("<qt>Keyword Information<br/>"
-                      "<i>Use this panel to record keywords relevant to the image</i></qt>"));
     d->page_keywords->setIcon(QIcon::fromTheme(QLatin1String("bookmarks")));
 
     d->categoriesPage  = new IPTCCategories(this);
     d->page_categories = addPage(d->categoriesPage, i18n("Categories"));
-    d->page_categories->setHeader(i18n("<qt>Category Information<br/>"
-                        "<i>Use this panel to record categories relevant to the image</i></qt>"));
     d->page_categories->setIcon(QIcon::fromTheme(QLatin1String("folder-image")));
 
     d->statusPage  = new IPTCStatus(this);
     d->page_status = addPage(d->statusPage, i18n("Status"));
-    d->page_status->setHeader(i18n("<qt>Status Information<br/>"
-                    "<i>Use this panel to record workflow information</i></qt>"));
     d->page_status->setIcon(QIcon::fromTheme(QLatin1String("view-pim-tasks")));
 
     d->propertiesPage  = new IPTCProperties(this);
     d->page_properties = addPage(d->propertiesPage, i18n("Properties"));
-    d->page_properties->setHeader(i18n("<qt>Status Properties<br/>"
-                      "<i>Use this panel to record workflow properties</i></qt>"));
     d->page_properties->setIcon(QIcon::fromTheme(QLatin1String("draw-freehand")));
 
     d->envelopePage  = new IPTCEnvelope(this);
     d->page_envelope = addPage(d->envelopePage, i18n("Envelope"));
-    d->page_envelope->setHeader(i18n("<qt>Envelope Information<br/>"
-                      "<i>Use this panel to record editorial details</i></qt>"));
     d->page_envelope->setIcon(QIcon::fromTheme(QLatin1String("view-pim-mail")));
 
     // ---------------------------------------------------------------
@@ -229,15 +211,34 @@ void IPTCEditWidget::saveSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("All Metadata Edit Settings"));
-    group.writeEntry(QLatin1String("All IPTC Edit Page"), activePageIndex());
+    group.writeEntry(QLatin1String("All IPTC Edit Page"),    activePageIndex());
     group.writeEntry(QLatin1String("All Sync JFIF Comment"), d->contentPage->syncJFIFCommentIsChecked());
     group.writeEntry(QLatin1String("All Sync EXIF Comment"), d->contentPage->syncEXIFCommentIsChecked());
-    group.writeEntry(QLatin1String("All Sync EXIF Date"), d->originPage->syncEXIFDateIsChecked());
+    group.writeEntry(QLatin1String("All Sync EXIF Date"),    d->originPage->syncEXIFDateIsChecked());
     config->sync();
 }
 
 void IPTCEditWidget::slotItemChanged()
 {
+    d->page_content->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Content Information<br/>"
+                     "<i>Use this panel to describe the visual content of the image</i></qt>"));
+    d->page_origin->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Origin Information<br/>"
+                    "<i>Use this panel for formal descriptive information about the image</i></qt>"));
+    d->page_credits->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Credit Information<br/>"
+                     "<i>Use this panel to record copyright information about the image</i></qt>"));
+    d->page_subjects->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Subject Information<br/>"
+                      "<i>Use this panel to record subject information about the image</i></qt>"));
+    d->page_keywords->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Keyword Information<br/>"
+                      "<i>Use this panel to record keywords relevant to the image</i></qt>"));
+    d->page_categories->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Category Information<br/>"
+                        "<i>Use this panel to record categories relevant to the image</i></qt>"));
+    d->page_status->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Status Information<br/>"
+                    "<i>Use this panel to record workflow information</i></qt>"));
+    d->page_properties->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Status Properties<br/>"
+                      "<i>Use this panel to record workflow properties</i></qt>"));
+    d->page_envelope->setHeader(d->dlg->currentItemPreview() + i18n("<qt>Envelope Information<br/>"
+                      "<i>Use this panel to record editorial details</i></qt>"));
+    
     DMetadata meta;
     meta.load((*d->dlg->currentItem()).path());
 
