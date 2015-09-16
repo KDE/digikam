@@ -188,12 +188,12 @@ void EXIFEditWidget::saveSettings()
 
 void EXIFEditWidget::slotItemChanged()
 {
-    d->page_caption->setHeader(d->dlg->currentItemPreview() + i18n("Caption Information"));
-    d->page_datetime->setHeader(d->dlg->currentItemPreview() + i18n("Date and Time Information"));
-    d->page_lens->setHeader(d->dlg->currentItemPreview() + i18n("Lens Settings"));
-    d->page_device->setHeader(d->dlg->currentItemPreview() + i18n("Capture Device Settings"));
-    d->page_light->setHeader(d->dlg->currentItemPreview() + i18n("Light Source Information"));
-    d->page_adjust->setHeader(d->dlg->currentItemPreview() + i18n("Pictures Adjustments"));
+    d->page_caption->setHeader(d->dlg->currentItemTitleHeader(i18n("Caption Information")));
+    d->page_datetime->setHeader(d->dlg->currentItemTitleHeader(i18n("Date and Time Information")));
+    d->page_lens->setHeader(d->dlg->currentItemTitleHeader(i18n("Lens Settings")));
+    d->page_device->setHeader(d->dlg->currentItemTitleHeader(i18n("Capture Device Settings")));
+    d->page_light->setHeader(d->dlg->currentItemTitleHeader(i18n("Light Source Information")));
+    d->page_adjust->setHeader(d->dlg->currentItemTitleHeader(i18n("Pictures Adjustments")));
 
     DMetadata meta;
     meta.load((*d->dlg->currentItem()).path());

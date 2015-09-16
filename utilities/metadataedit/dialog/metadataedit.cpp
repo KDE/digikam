@@ -39,6 +39,7 @@
 #include <QBuffer>
 #include <QPainter>
 #include <QPalette>
+#include <QIcon>
 
 // KDE includes
 
@@ -109,8 +110,8 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     QDialogButtonBox::StandardButtons btns = QDialogButtonBox::Ok    | 
                                              QDialogButtonBox::Apply | 
                                              QDialogButtonBox::Close |
-                                             QDialogButtonBox::No    |   // Previous item
-                                             QDialogButtonBox::Yes;      // Next item
+                                             QDialogButtonBox::No    |   // NextPrevious item
+                                             QDialogButtonBox::Yes;      // Previous item
 
     d->buttons = new QDialogButtonBox(btns, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
@@ -118,8 +119,10 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
 
     if (d->urls.count() > 1)
     {
-        d->buttons->button(QDialogButtonBox::No)->setText(i18nc("@action:button",  "Previous"));
-        d->buttons->button(QDialogButtonBox::Yes)->setText(i18nc("@action:button", "Next"));
+        d->buttons->button(QDialogButtonBox::No)->setText(i18nc("@action:button",  "Next"));
+        d->buttons->button(QDialogButtonBox::No)->setIcon(QIcon::fromTheme(QLatin1String("go-next")));
+        d->buttons->button(QDialogButtonBox::Yes)->setText(i18nc("@action:button", "Previous"));
+        d->buttons->button(QDialogButtonBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("go-previous")));
     }
     else
     {
@@ -186,9 +189,11 @@ MetadataEditDialog::~MetadataEditDialog()
     delete d;
 }
 
-QString MetadataEditDialog::currentItemPreview() const
+QString MetadataEditDialog::currentItemTitleHeader(const QString& title) const
 {
-    return d->preview;
+    QString start = QLatin1String("<qt><table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">");
+    QString end   = QLatin1String("</table></qt>");
+    return QString::fromLatin1("%1<tr><td>%2</td><td>%3</td></tr>%4").arg(start).arg(d->preview).arg(title).arg(end);
 }
 
 void MetadataEditDialog::updatePreview()

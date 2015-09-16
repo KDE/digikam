@@ -47,7 +47,7 @@ public:
     ~MetadataEditDialog();
 
     QList<QUrl>::iterator currentItem() const;
-    QString currentItemPreview() const;
+    QString currentItemTitleHeader(const QString& title) const;
 
 public Q_SLOTS:
 
