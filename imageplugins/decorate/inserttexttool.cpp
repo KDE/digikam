@@ -43,13 +43,13 @@
 #include <QIcon>
 #include <QComboBox>
 #include <QApplication>
+#include <QTextEdit>
 
 // KDE includes
 
 #include <kcolorbutton.h>
 #include <kfontchooser.h>
 #include <klocalizedstring.h>
-#include <ktextedit.h>
 #include <ksharedconfig.h>
 
 // Local includes
@@ -78,7 +78,8 @@ public:
         textEdit(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configTextRotationEntry;
@@ -102,7 +103,7 @@ public:
     QComboBox*           textRotation;
     KColorButton*        fontColorButton;
     KFontChooser*        fontChooserWidget;
-    KTextEdit*           textEdit;
+    QTextEdit*           textEdit;
 
     InsertTextWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
@@ -143,8 +144,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
-    d->textEdit     = new KTextEdit();
-    d->textEdit->setCheckSpellingEnabled(true);
+    d->textEdit     = new QTextEdit();
     d->textEdit->setWordWrapMode(QTextOption::NoWrap);
     d->textEdit->setWhatsThis( i18n("Here, enter the text you want to insert in your image."));
 

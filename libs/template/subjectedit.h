@@ -25,9 +25,7 @@
 
 // Local includes
 
-#include <subjectwidget.h>
-
-using namespace KExiv2Iface;
+#include "subjectwidget.h"
 
 namespace Digikam
 {

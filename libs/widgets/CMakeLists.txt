@@ -95,6 +95,11 @@ set(libmetadatawidgets_SRCS
     metadata/ratingwidget.cpp
     metadata/colorlabelwidget.cpp
     metadata/picklabelwidget.cpp
+    metadata/altlangstredit.cpp
+    metadata/colorlabelwidget.cpp
+    metadata/countryselector.cpp
+    metadata/msgtextedit.cpp
+    metadata/subjectwidget.cpp
 )
 
 set(libiccprofileswidgets_SRCS

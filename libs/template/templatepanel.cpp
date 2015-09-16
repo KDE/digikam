@@ -37,17 +37,12 @@
 
 #include <klocalizedstring.h>
 
-// Libkexiv2 includes
-
-#include <KExiv2/AltLangStrEdit>
-#include <KExiv2/CountrySelector>
-
 // Local includes
 
 #include "templatelist.h"
 #include "subjectedit.h"
-
-using namespace KExiv2Iface;
+#include "altlangstredit.h"
+#include "countryselector.h"
 
 namespace Digikam
 {

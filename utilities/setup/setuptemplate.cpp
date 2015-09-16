@@ -41,16 +41,11 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-// Libkexiv2 includes
-
-#include <KExiv2/AltLangStrEdit>
-
 // Local includes
 
 #include "templatelist.h"
 #include "templatepanel.h"
-
-using namespace KExiv2Iface;
+#include "altlangstredit.h"
 
 namespace Digikam
 {

@@ -38,10 +38,6 @@
 
 #include <klocalizedstring.h>
 
-// LibKExiv2 includes
-
-#include <KExiv2/CountrySelector>
-
 // LibKDcraw includes
 
 #include <KDCRAW/SqueezedComboBox>
@@ -52,6 +48,7 @@
 #include "metadatacheckbox.h"
 #include "timezonecombobox.h"
 #include "dmetadata.h"
+#include "countryselector.h"
 
 using namespace KDcrawIface;
 

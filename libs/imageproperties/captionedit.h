@@ -38,15 +38,12 @@
 
 #include "captionvalues.h"
 
-namespace KExiv2Iface
-{
-    class MsgTextEdit;
-}
-
 using namespace KDcrawIface;
 
 namespace Digikam
 {
+
+class MsgTextEdit;
 
 class CaptionEdit : public RVBox
 {
@@ -65,7 +62,7 @@ public:
 
     void reset();
 
-    KExiv2Iface::MsgTextEdit* textEdit() const;
+    MsgTextEdit* textEdit() const;
 
 Q_SIGNALS:
 

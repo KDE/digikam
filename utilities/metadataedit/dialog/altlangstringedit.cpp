@@ -37,13 +37,10 @@
 
 #include <KDCRAW/SqueezedComboBox>
 
-// libKExiv2 includes
-
-#include <KExiv2/AltLangStrEdit>
-
 // Local includes
 
 #include "metadatacheckbox.h"
+#include "altlangstredit.h"
 
 using namespace KDcrawIface;
 

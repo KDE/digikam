@@ -31,16 +31,11 @@
 
 #include <klocalizedstring.h>
 
-// Libkexiv2 includes
-
-#include <KExiv2/AltLangStrEdit>
-#include <KExiv2/MsgTextEdit>
-
 // Local includes
 
+#include "msgtextedit.h"
+#include "altlangstredit.h"
 #include "digikam_debug.h"
-
-using namespace KExiv2Iface;
 
 namespace Digikam
 {

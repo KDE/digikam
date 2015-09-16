@@ -29,12 +29,9 @@
 #include <QWidget>
 #include <QByteArray>
 
-// LibKExiv2 includes
-
-#include <KExiv2/SubjectWidget>
-
 // Local includes
 
+#include "subjectwidget.h"
 #include "dmetadata.h"
 
 namespace Digikam

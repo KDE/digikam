@@ -34,10 +34,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkexiv2 includes
-
-#include <KExiv2/CountrySelector>
-
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
@@ -47,6 +43,7 @@
 #include "imagepropertiestxtlabel.h"
 #include "template.h"
 #include "templatemanager.h"
+#include "countryselector.h"
 
 using namespace KDcrawIface;
 using namespace KExiv2Iface;

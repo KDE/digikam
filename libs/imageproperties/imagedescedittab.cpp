@@ -45,11 +45,6 @@
 #include <QCheckBox>
 #include <QMessageBox>
 
-// Libkexiv2 includes
-
-#include <KExiv2/AltLangStrEdit>
-#include <KExiv2/MsgTextEdit>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -80,6 +75,8 @@
 #include "tagsmanager.h"
 #include "searchtextbar.h"
 #include "disjointmetadata.h"
+#include "altlangstredit.h"
+#include "msgtextedit.h"
 
 namespace Digikam
 {

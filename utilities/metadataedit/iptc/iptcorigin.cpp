@@ -41,10 +41,6 @@
 
 #include <klocalizedstring.h>
 
-// LibKExiv2 includes
-
-#include <KExiv2/CountrySelector>
-
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
@@ -56,6 +52,7 @@
 #include "timezonecombobox.h"
 #include "multivaluesedit.h"
 #include "dmetadata.h"
+#include "countryselector.h"
 
 using namespace KDcrawIface;
 
