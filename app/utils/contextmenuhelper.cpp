@@ -1058,6 +1058,10 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(const imageIds &ids)
         connect(closeActionDate, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByTime()));
         actions << closeActionDate;
 
+        QAction* const closeActionType = new QAction(i18nc("@action:inmenu", "Group Selected By Type"), this);
+        connect(closeActionType, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByType()));
+        actions << closeActionType;
+
         QAction* const separator = new QAction(this);
         separator->setSeparator(true);
         actions << separator;

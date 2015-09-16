@@ -329,6 +329,16 @@ bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
     return a.dateTime() < b.dateTime();
 }
 
+bool lowerThanByNameForImageInfo(const ImageInfo& a, const ImageInfo& b)
+{
+    return a.name() < b.name();
+}
+
+bool lowerThanBySizeForImageInfo(const ImageInfo& a, const ImageInfo& b)
+{
+    return a.fileSize() < b.fileSize();
+}
+
 } // namespace
 
 void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imageInfoList)
@@ -362,6 +372,48 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imag
 
         if (!group.isEmpty())
         {
+            FileActionMngr::instance()->addToGroup(leader, group);
+        }
+    }
+}
+
+void ImageViewUtilities::createGroupByTypeFromInfoList(const ImageInfoList& imageInfoList)
+{
+    QList<ImageInfo> groupingList = imageInfoList;
+    // sort by Name
+    qStableSort(groupingList.begin(), groupingList.end(), lowerThanByNameForImageInfo);
+
+    QList<ImageInfo>::iterator it, it2;
+
+    for (it = groupingList.begin(); it != groupingList.end(); )
+    {
+        QList<ImageInfo> group;
+        QString fname = it->name().left(it->name().lastIndexOf(QChar('.')));
+        // don't know the leader yet so put first element also in group
+        group << *it;
+
+        for (it2 = it + 1; it2 != groupingList.end(); ++it2)
+        {
+            QString fname2 = it2->name().left(it2->name().lastIndexOf(QChar('.')));
+
+            if (fname == fname2)
+            {
+                group << *it2;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // increment to next item not put in the group
+        it = it2;
+
+        if (group.count() > 1)
+        {
+            // sort by filesize and take smallest as leader
+            qStableSort(group.begin(), group.end(), lowerThanBySizeForImageInfo);
+            const ImageInfo& leader = group.takeFirst();
             FileActionMngr::instance()->addToGroup(leader, group);
         }
     }

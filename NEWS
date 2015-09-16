@@ -14,4 +14,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 003 ==> 336331 - Thumbnails size can not be changed in MapView mode.
 004 ==> 339082 - Allow a simpler way to place a photo in full-screen using overlay [patch].
 005 ==> 352338 - Digikam doesn't match Nikon lenses 35mm f/1.8G and 50mm f/1.8G.
-006 ==> 
+006 ==> 126149 - Album icon view stores both jpeg and raw (nef), handle both as one [patch].
+007 ==> 
