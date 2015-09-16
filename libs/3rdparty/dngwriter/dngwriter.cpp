@@ -1310,12 +1310,14 @@ int DNGWriter::convert()
 
             // don't touch access time
             struct stat st;
-            stat(QFile::encodeName(dngFilePath).constData(), &st);
 
-            struct utimbuf ut;
-            ut.actime  = st.st_atime;
-            ut.modtime = date.toTime_t();
-            utime(QFile::encodeName(dngFilePath).constData(), &ut);
+            if (::stat(QFile::encodeName(dngFilePath).constData(), &st) == 0)
+            {
+                struct utimbuf ut;
+                ut.actime  = st.st_atime;
+                ut.modtime = date.toTime_t();
+                utime(QFile::encodeName(dngFilePath).constData(), &ut);
+            }
         }
     }
 
