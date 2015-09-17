@@ -316,6 +316,7 @@ void DXmlGuiWindow::createMetadatEditAction()
 {
     m_metadataEditAction = new QAction(QIcon::fromTheme(QLatin1String("text-xml")), i18n("Edit Metadata..."), this);
     actionCollection()->addAction(QLatin1String("metadata_edit"), m_metadataEditAction);
+    actionCollection()->setDefaultShortcut(m_metadataEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_M);
 
     connect(m_metadataEditAction, SIGNAL(triggered(bool)),
             this,SLOT(slotEditMetadata()));
