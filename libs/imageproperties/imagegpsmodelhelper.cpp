@@ -47,7 +47,8 @@ public:
 };
 
 ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
-    : KGeoMap::ModelHelper(parent), d(new Private())
+    : KGeoMap::ModelHelper(parent),
+      d(new Private())
 {
 
     d->itemModel           = itemModel;
@@ -105,6 +106,7 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
     ThumbnailIdentifier thumbId;
     thumbId.filePath = currentGPSImageInfo.url.path();
     thumbId.id       = currentGPSImageInfo.id;
+
     if (d->thumbnailLoadThread->find(thumbId, thumbnail, qMax(size.width(), size.height())))
     {
         // digikam returns thumbnails with a border around them, but libkgeomap expects them without a border
@@ -126,10 +128,10 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
         const QModelIndex currentIndex(list.at(i));
         const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
         const bool currentFitsBetter           = GPSImageInfoSorter::fitsBetter(bestGPSImageInfo,
-                                                                                KGeoMap::KGeoMapSelectedNone,
+                                                                                KGeoMap::SelectedNone,
                                                                                 currentGPSImageInfo,
-                                                                                KGeoMap::KGeoMapSelectedNone,
-                                                                                KGeoMap::KGeoMapSelectedNone,
+                                                                                KGeoMap::SelectedNone,
+                                                                                KGeoMap::SelectedNone,
                                                                                 GPSImageInfoSorter::SortOptions(sortKey));
 
         if (currentFitsBetter)

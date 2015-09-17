@@ -36,7 +36,7 @@
 // libkgeomap includes
 
 #include <KGeoMap/AbstractMarkerTiler>
-#include <KGeoMap/KGeoMap_Widget>
+#include <KGeoMap/MapWidget>
 
 // Local includes
 
@@ -83,8 +83,8 @@ public:
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey);
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size);
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
-    virtual KGeoMap::KGeoMapGroupState getTileGroupState(const KGeoMap::TileIndex& tileIndex);
-    virtual KGeoMap::KGeoMapGroupState getGlobalGroupState();
+    virtual KGeoMap::GroupState getTileGroupState(const KGeoMap::TileIndex& tileIndex);
+    virtual KGeoMap::GroupState getGlobalGroupState();
 
     virtual void onIndicesClicked(const ClickInfo& clickInfo);
 
@@ -114,7 +114,7 @@ private Q_SLOTS:
 private:
 
     QList<qlonglong> getTileMarkerIds(const KGeoMap::TileIndex& tileIndex);
-    KGeoMap::KGeoMapGroupState getImageState(const qlonglong imageId);
+    KGeoMap::GroupState getImageState(const qlonglong imageId);
     void removeMarkerFromTileAndChildren(const qlonglong imageId, const KGeoMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile);
     void addMarkerToTileAndChildren(const qlonglong imageId, const KGeoMap::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel);
 

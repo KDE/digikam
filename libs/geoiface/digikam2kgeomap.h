@@ -33,11 +33,12 @@
 
 // libkgeomap includes
 
-#include <KGeoMap/KGeoMap_Primitives>
+#include <KGeoMap/GeoCoordinates>
+#include <KGeoMap/GroupState>
 
 namespace KGeoMap
 {
-    class KGeoMapWidget;
+    class MapWidget;
 }
 
 namespace Digikam
@@ -112,13 +113,13 @@ public:
     explicit GPSImageInfoSorter(QObject* const parent);
     ~GPSImageInfoSorter();
 
-    void addToKGeoMapWidget(KGeoMap::KGeoMapWidget* const mapWidget);
+    void addToMapWidget(KGeoMap::MapWidget* const mapWidget);
     void setSortOptions(const SortOptions sortOptions);
     SortOptions getSortOptions() const;
 
-    static bool fitsBetter(const GPSImageInfo& oldInfo, const KGeoMap::KGeoMapGroupState oldState,
-                           const GPSImageInfo& newInfo, const KGeoMap::KGeoMapGroupState newState,
-                           const KGeoMap::KGeoMapGroupState globalGroupState, const SortOptions sortOptions);
+    static bool fitsBetter(const GPSImageInfo& oldInfo, const KGeoMap::GroupState oldState,
+                           const GPSImageInfo& newInfo, const KGeoMap::GroupState newState,
+                           const KGeoMap::GroupState globalGroupState, const SortOptions sortOptions);
 
 private Q_SLOTS:
 

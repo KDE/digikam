@@ -52,7 +52,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // Libkgeomap includes
 
-#include <KGeoMap/KGeoMap_Widget>
+#include <KGeoMap/MapWidget>
 #include <KGeoMap/ItemMarkerTiler>
 
 // Libkdcraw includes
@@ -107,7 +107,7 @@ public:
     RAdjustableLabel*       longitude;
     RAdjustableLabel*       date;
 
-    KGeoMap::KGeoMapWidget*   map;
+    KGeoMap::MapWidget*   map;
     KGeoMap::ItemMarkerTiler* itemMarkerTiler;
     GPSImageInfo::List        gpsInfoList;
 
@@ -131,13 +131,13 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
-    d->map                    = new KGeoMap::KGeoMapWidget(mapPanel);
+    d->map                    = new KGeoMap::MapWidget(mapPanel);
     d->map->setAvailableMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup);
     d->map->setVisibleMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup);
     d->map->setEnabledExtraActions(KGeoMap::ExtraActionSticky);
     d->map->setVisibleExtraActions(KGeoMap::ExtraActionSticky);
     d->gpsImageInfoSorter = new GPSImageInfoSorter(this);
-    d->gpsImageInfoSorter->addToKGeoMapWidget(d->map);
+    d->gpsImageInfoSorter->addToMapWidget(d->map);
     vlay2->addWidget(d->map);
     vlay2->setMargin(0);
     vlay2->setSpacing(0);

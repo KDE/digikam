@@ -32,7 +32,7 @@
 
 // libkgeomap includes
 
-#include <KGeoMap/KGeoMap_Primitives>
+#include <KGeoMap/GeoCoordinates>
 #include <KGeoMap/ModelHelper>
 
 // Local includes

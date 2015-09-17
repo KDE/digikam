@@ -70,6 +70,7 @@ target_link_libraries(dimagehistorygraphtest
                       Qt5::Gui
                       Qt5::Test
 
+                      KF5::I18n
                       KF5::XmlGui
                       KF5::KExiv2
                       KF5::KIOWidgets # for previewjob

@@ -50,7 +50,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/KGeoMap_Widget>
+#include <KGeoMap/MapWidget>
 
 using namespace KGeoMap;
 
@@ -173,8 +173,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #endif // HAVE_JASPER
 
 #ifdef HAVE_KGEOMAP
-    list.insert(i18nc(CONTEXT, "KGeoMap"),                     KGeoMapWidget::version());
-    list.insert(i18nc(CONTEXT, "Marble"),                      KGeoMapWidget::MarbleWidgetVersion());
+    list.insert(i18nc(CONTEXT, "KGeoMap"),                     MapWidget::version());
+    list.insert(i18nc(CONTEXT, "Marble"),                      MapWidget::MarbleWidgetVersion());
 #else
     list.insert(i18nc(CONTEXT, "KGeoMap support"),             SUPPORTED_NO);
 #endif // HAVE_KGEOMAP

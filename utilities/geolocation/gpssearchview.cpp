@@ -84,7 +84,7 @@ public:
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
     QSplitter*                  splitter;
-    KGeoMap::KGeoMapWidget*           mapSearchWidget;
+    KGeoMap::MapWidget*           mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
@@ -130,7 +130,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     mapPanel->setMinimumWidth(256);
     mapPanel->setMinimumHeight(256);
     QVBoxLayout* const vlay2 = new QVBoxLayout(mapPanel);
-    d->mapSearchWidget       = new KGeoMap::KGeoMapWidget(mapPanel);
+    d->mapSearchWidget       = new KGeoMap::MapWidget(mapPanel);
     d->mapSearchWidget->setBackend(QLatin1String("marble"));
     d->mapSearchWidget->setShowThumbnails(true);
 
@@ -141,7 +141,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     d->sortOrderOptionsHelper = new GPSImageInfoSorter(this);
-    d->sortOrderOptionsHelper->addToKGeoMapWidget(d->mapSearchWidget);
+    d->sortOrderOptionsHelper->addToMapWidget(d->mapSearchWidget);
 
     vlay2->addWidget(d->mapSearchWidget);
     vlay2->setMargin(0);

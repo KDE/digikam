@@ -34,7 +34,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/KGeoMap_Widget>
+#include <KGeoMap/MapWidget>
 #include <KGeoMap/ItemMarkerTiler>
 
 //local includes
@@ -81,7 +81,7 @@ public:
     }
 
     RVBox*                      vbox;
-    KGeoMap::KGeoMapWidget*     mapWidget;
+    KGeoMap::MapWidget*     mapWidget;
     ImageFilterModel*           imageFilterModel;
     ImageAlbumModel*            imageModel;
     ImportFilterModel*          importFilterModel;
@@ -125,7 +125,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     }
 
     QVBoxLayout* const vBoxLayout = new QVBoxLayout(this);
-    d->mapWidget                  = new KGeoMap::KGeoMapWidget(this);
+    d->mapWidget                  = new KGeoMap::MapWidget(this);
     d->mapWidget->setAvailableMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup|KGeoMap::MouseModeSelectThumbnail);
     d->mapWidget->setVisibleMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup|KGeoMap::MouseModeSelectThumbnail);
     KGeoMap::ItemMarkerTiler* const kgeomapMarkerModel = new KGeoMap::ItemMarkerTiler(d->mapViewModelHelper, this);
@@ -133,7 +133,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     d->mapWidget->setBackend(QLatin1String("marble"));
 
     d->gpsImageInfoSorter         = new GPSImageInfoSorter(this);
-    d->gpsImageInfoSorter->addToKGeoMapWidget(d->mapWidget);
+    d->gpsImageInfoSorter->addToMapWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget);
     vBoxLayout->addWidget(d->mapWidget->getControlWidget());
 }
@@ -449,9 +449,9 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             {
                 const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
 
-                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
-                                                   currentInfo, KGeoMap::KGeoMapSelectedNone,
-                                                   KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KGeoMap::SelectedNone,
+                                                   currentInfo, KGeoMap::SelectedNone,
+                                                   KGeoMap::SelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
                 {
                     bestIndex        = indexList.at(i);
                     bestGPSImageInfo = currentInfo;
@@ -510,9 +510,9 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             {
                 const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
 
-                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KGeoMap::KGeoMapSelectedNone,
-                                                   currentInfo, KGeoMap::KGeoMapSelectedNone,
-                                                   KGeoMap::KGeoMapSelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, KGeoMap::SelectedNone,
+                                                   currentInfo, KGeoMap::SelectedNone,
+                                                   KGeoMap::SelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
                 {
                     bestIndex        = indexList.at(i);
                     bestGPSImageInfo = currentInfo;
