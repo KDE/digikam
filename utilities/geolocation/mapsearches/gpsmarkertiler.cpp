@@ -32,6 +32,8 @@
 #include <QRectF>
 #include <QTimer>
 
+// KGeoMap includes
+
 #include <KGeoMap/GroupStateComputer>
 
 // Local includes
