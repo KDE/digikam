@@ -65,6 +65,8 @@ public:
         CUSTOM
     };
 
+public:
+
     Private()
     {
         addSubjectButton = 0;
@@ -122,8 +124,8 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
 
     QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, 
                                           QString::fromLatin1("digikam/metadata/topicset.iptc-subjectcode.xml"));
-
-    if (!loadSubjectCodesFromXML(QUrl(path)))
+    
+    if (!loadSubjectCodesFromXML(QUrl::fromLocalFile(path)))
         qCDebug(LOG_WIDGETS) << "Cannot load IPTC/NAA subject codes XML database";
 
     // --------------------------------------------------------
