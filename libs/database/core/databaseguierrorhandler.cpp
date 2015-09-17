@@ -35,6 +35,7 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include <QApplication>
+#include <QPointer>
 
 // KDE includes
 
