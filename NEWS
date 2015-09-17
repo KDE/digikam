@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 5.0.0-beta1 - Release date: 2015-09-06
+digiKam 5.0.0-beta1 - Release date: 2015-10-18
 
 NEW FEATURES:
 
@@ -43,6 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 017 ==> 164168 - Integration of image scanning into showfoto.
 018 ==> 144597 - Metadata editor not accessible from image editor.
 019 ==> 132161 - Support for editing EXIF comments.
-020 ==> 328548 - Show a progress bar while saving files.
+020 ==> 328548 - Show a progress bar while saving files imported from a scanner.
 021 ==> 
 
