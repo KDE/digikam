@@ -105,9 +105,13 @@ public:
     void setConfigGroupName(const QString& name);
     QString configGroupName() const;
 
+    /** Create Geolocation Edit action.
+     */
+    void createGeolocationEditAction();
+
     /** Create Metadata Edit action.
      */
-    void createMetadatEditAction();
+    void createMetadataEditAction();
 
     /** Create Ksane action to import from scanner.
      */
@@ -152,6 +156,7 @@ public:
 protected:
 
     QAction*     m_metadataEditAction;
+    QAction*     m_geolocationEditAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
@@ -226,6 +231,9 @@ private Q_SLOTS:
 
     // Called by Metadata Edit tool.
     virtual void slotEditMetadata()            {};
+
+    // Called by Geolocation Edit tool.
+    virtual void slotEditGeolocation()         {};
 
 private:
 

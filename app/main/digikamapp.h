@@ -213,6 +213,7 @@ private Q_SLOTS:
 
     void slotImportFromScanner();
     void slotEditMetadata();
+    void slotEditGeolocation();
 
 private:
 

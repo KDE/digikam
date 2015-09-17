@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="504" name="digikam" >
+<gui version="505" name="digikam" >
 
  <MenuBar>
 
@@ -66,6 +66,7 @@
      <Action name="image_transform_exif"/>
      <Action name="image_set_exif_orientation"/>
      <Action name="metadata_edit"/>
+     <Action name="geolocation_edit"/>
    <Separator />
      <DefineGroup name="kipi_image_group" append="kipi_image_group" />
   </Menu>

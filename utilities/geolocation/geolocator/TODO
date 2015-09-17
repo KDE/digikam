@@ -1,0 +1,18 @@
+tool parts:
+- correctly update the dirty state on undo/redo
+- read dilution of precision data and add warnings
+- add undo/redo buttons
+- make the coordinates of the images editable
+- disable closing while a thread is running
+- save the column ordering
+- sorting of the images
+- fix scroll-wheel interaction of the tabs
+- when resizing the widget horizontally, the star moves back and forth
+- add a tab for forward-geocoding
+
+kgeomap parts:
+- control over clustering grid size (UI)
+- re-cluster only every few pixels of panning
+- the clustering model does not go deep enough - when zooming in on Marble OSM, the positions are quantized
+- snapping for drag-and-drop coming in from outside the map
+- snapping in the Google Maps backend

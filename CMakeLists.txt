@@ -138,16 +138,24 @@ else()
     set(HAVE_VIDEOPLAYER FALSE)
 endif()
 
+# Note : See include rules to patch later in this file to compile fine if new dependencies are added.
+
 find_package(KF5 REQUIRED COMPONENTS
              NotifyConfig
              Notifications
              KIO
              TextWidgets
-             CoreAddons
              WindowSystem
              Solid
              IconThemes
              I18n
+
+             # For libkgeomap
+             OPTIONAL_COMPONENTS
+             GuiAddons
+             ItemModels
+             Bookmarks
+             KHtml
 )
 
 # ==================================================================================================
@@ -525,9 +533,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
     include_directories(${DK_LOCAL_INCLUDES})
 
     set(KF5_INCLUDES_ALL
-        "$<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>"
+
+        "$<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::IconThemes,INTERFACE_INCLUDE_DIRECTORIES>"
@@ -558,6 +567,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
         set(KF5_INCLUDES_ALL
             ${KF5_INCLUDES_ALL}
             "$<TARGET_PROPERTY:KF5::KGeoMap,INTERFACE_INCLUDE_DIRECTORIES>"
+            "$<TARGET_PROPERTY:KF5::Bookmarks,INTERFACE_INCLUDE_DIRECTORIES>"
+            "$<TARGET_PROPERTY:KF5::ItemModels,INTERFACE_INCLUDE_DIRECTORIES>"
+            "$<TARGET_PROPERTY:KF5::KHtml,INTERFACE_INCLUDE_DIRECTORIES>"
+            "$<TARGET_PROPERTY:KF5::GuiAddons,INTERFACE_INCLUDE_DIRECTORIES>"            
            )
     endif()
 

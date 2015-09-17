@@ -42,6 +42,7 @@ if(KF5KGeoMap_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
         $<TARGET_OBJECTS:kgeomaphelper_src>
+        $<TARGET_OBJECTS:geolocator_src>
     )
 endif()
 
@@ -64,9 +65,13 @@ target_link_libraries(digikamcore
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
+                      Qt5::Concurrent
                       Qt5::Sql
                       Qt5::WebKitWidgets
                       Qt5::PrintSupport
+
+                      KF5::KExiv2
+                      KF5::KDcraw
 
                       KF5::Solid
                       KF5::KIOCore
@@ -76,8 +81,6 @@ target_link_libraries(digikamcore
                       KF5::KIOWidgets
                       KF5::IconThemes
                       KF5::I18n
-                      KF5::KExiv2
-                      KF5::KDcraw
 
                       # Required by CImg which use pthread internally.
 
@@ -100,7 +103,12 @@ if(KF5Kipi_FOUND)
 endif()
 
 if(KF5KGeoMap_FOUND)
-    target_link_libraries(digikamcore PRIVATE KF5::KGeoMap)
+    target_link_libraries(digikamcore PRIVATE KF5::KGeoMap
+                                              KF5::KHtml
+                                              KF5::Bookmarks
+                                              KF5::ItemModels
+                                              KF5::GuiAddons
+)
 endif()
 
 if(X11_FOUND)
@@ -138,11 +146,11 @@ if(APPLE)
     target_link_libraries(digikamcore PUBLIC /System/Library/Frameworks/AppKit.framework)
 endif()
 
-if(KF5KFace_FOUND)
+if(${KF5KFace_FOUND})
     target_link_libraries(digikamcore PRIVATE ${KF5KFace_LIBRARIES})
 endif()
 
-if(KF5Sane_FOUND)
+if(${KF5Sane_FOUND})
     target_link_libraries(digikamcore PRIVATE ${LIBKSANE_LIBRARIES})
 endif()
 
@@ -308,7 +316,7 @@ if(${KF5KGeoMap_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
             $<TARGET_OBJECTS:kgeomaphelper_src> # wrap kgeomap
-            $<TARGET_OBJECTS:gpssearch_src> # wrap kgeomap
+            $<TARGET_OBJECTS:gpssearch_src>     # wrap kgeomap
     )
 endif()
 
@@ -336,6 +344,9 @@ target_link_libraries(digikamgui
                       Qt5::PrintSupport
                       Qt5::DBus
 
+                      KF5::KExiv2
+                      KF5::KDcraw
+
                       KF5::Solid
                       KF5::KIOCore
                       KF5::KIOWidgets
@@ -345,12 +356,13 @@ target_link_libraries(digikamgui
                       KF5::TextWidgets
                       KF5::IconThemes
                       KF5::I18n
-                      KF5::KExiv2
-                      KF5::KDcraw
 
                       ${OpenCV_LIBRARIES}
-                      ${KF5KFace_LIBRARIES}
 )
+
+if(${KF5KFace_FOUND})
+    target_link_libraries(digikamgui ${KF5KFace_LIBRARIES})
+endif()
 
 if(${KF5Kipi_FOUND})
     target_link_libraries(digikamgui KF5::Kipi)

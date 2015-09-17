@@ -131,7 +131,8 @@ void KipiPluginLoader::Private::loadPlugins()
     ignores.append(QLatin1String("DNGConverter"));   // Moved to digiKam core
     ignores.append(QLatin1String("AcquireImages"));  // Moved to digiKam core
     ignores.append(QLatin1String("MetadataEdit"));   // Moved to digiKam core
-
+    ignores.append(QLatin1String("Geolocator"));     // Moved to digiKam core
+    
     // List of obsolete tool actions to not load
 
     QStringList pluginActionsDisabled;

@@ -281,7 +281,7 @@ void EXIFEditWidget::showPage(int page)
 
 int EXIFEditWidget::activePageIndex() const
 {
-    KPageWidgetItem *cur = currentPage();
+    KPageWidgetItem* const cur = currentPage();
 
     if (cur == d->page_caption)  return 0;
     if (cur == d->page_datetime) return 1;

@@ -49,6 +49,12 @@ public:
     explicit GraphicsDImgView(QWidget* const parent = 0);
     virtual ~GraphicsDImgView();
 
+    /** Store internal instance of item as GraphicsDImgItem. You can store DImgPreviewItem object also by this method.
+     *  Use item() or previewItem() to get right version.
+     *  Note: if you store a GraphicsDImgItem object, previewItem() will return 0.
+     */
+    void setItem(GraphicsDImgItem* const item);
+
     /** Return the instance of item set by setItem().
      */
     GraphicsDImgItem*         item()        const;
@@ -95,12 +101,6 @@ Q_SIGNALS:
 protected:
 
     void drawForeground(QPainter* painter, const QRectF& rect);
-
-    /** Store internal instance of item as GraphicsDImgItem. You can store DImgPreviewItem object also by this method.
-     *  Use item() or previewItem() to get right version.
-     *  Note: if you store a GraphicsDImgItem object, previewItem() will return 0.
-     */
-    void setItem(GraphicsDImgItem* const item);
 
     void installPanIcon();
 

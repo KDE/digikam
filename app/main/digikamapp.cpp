@@ -125,6 +125,7 @@
 #include "imagesortsettings.h"
 #include "metadatahubmngr.h"
 #include "metadataedit.h"
+#include "gpssyncdialog.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -1159,7 +1160,8 @@ void DigikamApp::setupActions()
 
     setupImageTransformActions();
     setupExifOrientationActions();
-    createMetadatEditAction();
+    createMetadataEditAction();
+    createGeolocationEditAction();
 
     // -----------------------------------------------------------------
 
@@ -3145,6 +3147,26 @@ QString DigikamApp::scannerTargetPlace()
     }
 
     return place;
+}
+
+void DigikamApp::slotEditGeolocation()
+{
+    QList<QUrl> urls = view()->selectedUrls();
+
+    if ( urls.isEmpty() )
+        return;
+
+    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(QApplication::activeWindow());
+    dialog->setImages(urls);
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from files.
+    foreach(QUrl u, urls)
+    {
+        ScanController::instance()->scannedInfo(u.toLocalFile());
+    }
 }
 
 void DigikamApp::slotEditMetadata()

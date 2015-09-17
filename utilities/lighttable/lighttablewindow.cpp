@@ -485,7 +485,7 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("open_with_default_application"), openWithAction);
     ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
 
-    createMetadatEditAction();
+    createMetadataEditAction();
 
     d->removeItemAction = new QAction(QIcon::fromTheme(QLatin1String("list-remove")), i18n("Remove item from LightTable"), this);
     d->removeItemAction->setEnabled(false);

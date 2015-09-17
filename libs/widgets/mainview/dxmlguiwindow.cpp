@@ -149,11 +149,12 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
-    m_metadataEditAction = 0;
-    m_animLogo           = 0;
+    m_metadataEditAction    = 0;
+    m_geolocationEditAction = 0;
+    m_animLogo              = 0;
 
 #ifdef HAVE_KSANE
-    m_ksaneAction        = 0;
+    m_ksaneAction           = 0;
 #endif
 
     installEventFilter(this);
@@ -312,7 +313,17 @@ void DXmlGuiWindow::slotNewToolbarConfig()
     applyMainWindowSettings(group);
 }
 
-void DXmlGuiWindow::createMetadatEditAction()
+void DXmlGuiWindow::createGeolocationEditAction()
+{
+    m_geolocationEditAction = new QAction(QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Edit Geolocation..."), this);
+    actionCollection()->addAction(QLatin1String("geolocation_edit"), m_geolocationEditAction);
+    actionCollection()->setDefaultShortcut(m_geolocationEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_G);
+
+    connect(m_geolocationEditAction, SIGNAL(triggered(bool)),
+            this,SLOT(slotEditGeolocation()));
+}
+    
+void DXmlGuiWindow::createMetadataEditAction()
 {
     m_metadataEditAction = new QAction(QIcon::fromTheme(QLatin1String("text-xml")), i18n("Edit Metadata..."), this);
     actionCollection()->addAction(QLatin1String("metadata_edit"), m_metadataEditAction);

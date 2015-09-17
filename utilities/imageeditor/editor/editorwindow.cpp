@@ -435,7 +435,7 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_close"), closeAction);
 
     createKSaneAction();
-    createMetadatEditAction();
+    createMetadataEditAction();
     m_metadataEditAction->setEnabled(false);
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
