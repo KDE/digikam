@@ -43,5 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 017 ==> 164168 - Integration of image scanning into showfoto.
 018 ==> 144597 - Metadata editor not accessible from image editor.
 019 ==> 132161 - Support for editing EXIF comments.
-020 ==> 
+020 ==> 328548 - Show a progress bar while saving files.
+021 ==> 
 
