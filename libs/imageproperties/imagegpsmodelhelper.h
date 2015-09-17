@@ -32,12 +32,16 @@
 
 // libkgeomap includes
 
-#include <KGeoMap/GeoCoordinates>
 #include <KGeoMap/ModelHelper>
 
 // Local includes
 
 #include "thumbnailloadthread.h"
+
+namespace KGeoMap
+{
+    class GeoCoordinates;
+}
 
 namespace Digikam
 {

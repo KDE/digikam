@@ -287,7 +287,7 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
  */
 KGeoMap::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const KGeoMap::TileIndex& tileIndex, const bool stopIfEmpty)
 {
-    KGEOMAP_ASSERT(tileIndex.level() <= KGeoMap::TileIndex::MaxLevel);
+    Q_ASSERT(tileIndex.level() <= KGeoMap::TileIndex::MaxLevel);
 
     MyTile* tile = static_cast<MyTile*>(rootTile());
 
@@ -876,7 +876,7 @@ void GPSMarkerTiler::onIndicesClicked(const ClickInfo& clickInfo)
 
 QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const KGeoMap::TileIndex& tileIndex)
 {
-    KGEOMAP_ASSERT(tileIndex.level() <= KGeoMap::TileIndex::MaxLevel);
+    Q_ASSERT(tileIndex.level() <= KGeoMap::TileIndex::MaxLevel);
     const MyTile* const myTile = static_cast<MyTile*>(getTile(tileIndex, true));
 
     if (!myTile)
