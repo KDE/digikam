@@ -41,6 +41,7 @@ target_link_libraries(dimagefilteractiontest
 
                       KF5::KIOCore
                       KF5::XmlGui
+                      KF5::I18n
                       KF5::KExiv2
 
                       ${OpenCV_LIBRARIES}
@@ -99,6 +100,7 @@ target_link_libraries(dimagehistorytest
                       Qt5::Gui
                       Qt5::Test
 
+                      KF5::I18n
                       KF5::XmlGui
                       KF5::KExiv2
                       KF5::KIOWidgets # for previewjob
@@ -137,6 +139,8 @@ target_link_libraries(loadsavethreadtest
                       digikamcore
 
                       Qt5::Core
+
+                      KF5::I18n
                       KF5::KExiv2
                       KF5::KDcraw
 )
@@ -200,6 +204,8 @@ target_link_libraries(renamecustomizertest
                       KF5::XmlGui
                       KF5::KIOCore
                       KF5::KIOWidgets
+                      KF5::I18n
+
                       KF5::KExiv2
                       KF5::KDcraw
 
@@ -266,10 +272,12 @@ target_link_libraries(timestampupdatetest
 
                       digikamdatabase
                       digikamcore
+
                       Qt5::Gui
                       Qt5::Test
                       Qt5::DBus
 
+                      KF5::I18n
                       KF5::KExiv2
                      )
 
@@ -316,7 +324,9 @@ target_link_libraries(testautocrop
                       Qt5::Gui
                       Qt5::Test
 
+                      KF5::I18n
                       KF5::XmlGui
+
                       KF5::KExiv2
                       KF5::KDcraw
 
@@ -352,6 +362,7 @@ target_link_libraries(testdatabase
                       Qt5::Test
                       Qt5::Sql
 
+                      KF5::I18n
                       KF5::XmlGui
                       KF5::KIOCore
                       KF5::KExiv2
@@ -377,6 +388,7 @@ target_link_libraries(testdimgloader
                       Qt5::Core
                       Qt5::Gui
 
+                      KF5::I18n
                       KF5::XmlGui
                       KF5::KExiv2
                       KF5::KDcraw
@@ -402,6 +414,7 @@ if(LENSFUN_FOUND)
 
                       Qt5::Core
 
+                      KF5::I18n
                       KF5::KIOCore
                       KF5::KExiv2
 
@@ -440,6 +453,7 @@ target_link_libraries(testnrestimate
                       Qt5::Gui
                       Qt5::Test
 
+                      KF5::I18n
                       KF5::KIOCore
                       KF5::KExiv2
                       KF5::KDcraw
@@ -474,6 +488,7 @@ target_link_libraries(cameranamehelpertest
                       Qt5::Gui
                       Qt5::Test
 
+                      KF5::I18n
                       KF5::XmlGui
                       KF5::KExiv2
                       KF5::KDcraw
@@ -509,10 +524,12 @@ target_link_libraries(albummodeltest
                       Qt5::Sql
                       Qt5::Xml
 
+                      KF5::I18n
                       KF5::XmlGui
                       KF5::KExiv2
                       KF5::KDcraw
                       KF5::KIOCore
+
                       ${OpenCV_LIBRARIES}
 
 )
@@ -537,6 +554,7 @@ target_link_libraries(advancedrenametest
                       Qt5::Gui
                       Qt5::Test
 
+                      KF5::I18n
                       KF5::KIOCore
                       KF5::KIOWidgets
                       KF5::Solid
@@ -589,5 +607,6 @@ endif()
 #                       Qt5::Test
 #                       Qt5::Core
 
+#                       KF5::I18n
 #                       KF5::KExiv2
 # )
