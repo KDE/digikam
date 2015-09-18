@@ -269,7 +269,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
-    setWindowTitle(i18n("Geolocation Edit"));
+    setWindowTitle(i18n("Geolocation Editor"));
     setMinimumSize(300,400);
 
     d->imageModel     = new GPSImageModel(this);

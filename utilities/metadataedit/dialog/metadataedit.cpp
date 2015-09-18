@@ -95,7 +95,7 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     : QDialog(parent),
       d(new Private)
 {
-    setWindowTitle(i18n("Edit Metadata"));
+    setWindowTitle(i18n("Metadata Editor"));
     setModal(true);
     
     ThumbnailLoadThread* const thread = ThumbnailLoadThread::defaultThread();

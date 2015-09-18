@@ -4,7 +4,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-set(libgeolocator_SRCS backends/backend-rg.cpp
+set(libgeolocationedit_SRCS backends/backend-rg.cpp
                        backends/backend-geonames-rg.cpp
                        backends/backend-geonamesUS-rg.cpp
                        backends/backend-osm-rg.cpp
@@ -38,11 +38,11 @@ set(libgeolocator_SRCS backends/backend-rg.cpp
                        tests/simpletreemodel/simpletreemodel.cpp
    )
 
-add_library(geolocator_src OBJECT ${libgeolocator_SRCS})
+add_library(geolocationedit_src OBJECT ${libgeolocationedit_SRCS})
 
-add_library(geolocator STATIC $<TARGET_OBJECTS:geolocator_src>)
+add_library(geolocationedit STATIC $<TARGET_OBJECTS:geolocationedit_src>)
 
-target_link_libraries(geolocator
+target_link_libraries(geolocationedit
                       PRIVATE
                       Qt5::Gui
                       Qt5::Concurrent

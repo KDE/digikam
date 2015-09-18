@@ -42,7 +42,7 @@ if(KF5KGeoMap_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
         $<TARGET_OBJECTS:kgeomaphelper_src>
-        $<TARGET_OBJECTS:geolocator_src>
+        $<TARGET_OBJECTS:geolocationedit_src>
     )
 endif()
 
