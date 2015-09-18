@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "kipiimagelist.h"
+#include "gpsimagelist.h"
 
 // Qt includes
 
@@ -46,18 +46,18 @@
 namespace Digikam
 {
 
-KipiImageListDragDropHandler::KipiImageListDragDropHandler(QObject* const parent)
+ImageListDragDropHandler::ImageListDragDropHandler(QObject* const parent)
     : QObject(parent)
 {
 }
 
-KipiImageListDragDropHandler::~KipiImageListDragDropHandler()
+ImageListDragDropHandler::~ImageListDragDropHandler()
 {
 }
 
 // ------------------------------------------------------------------------------------------------
 
-class KipiImageList::Private
+class GPSImageList::Private
 {
 public:
 
@@ -72,16 +72,16 @@ public:
     {
     }
 
-    bool                          editEnabled;
-    bool                          dragEnabled;
-    KipiImageModel*               model;
-    QItemSelectionModel*          selectionModel;
-    KipiImageItemDelegate*        itemDelegate;
-    KipiImageSortProxyModel*      imageSortProxyModel;
-    KipiImageListDragDropHandler* dragDropHandler;
+    bool                      editEnabled;
+    bool                      dragEnabled;
+    GPSImageModel*            model;
+    QItemSelectionModel*      selectionModel;
+    GPSImageItemDelegate*     itemDelegate;
+    GPSImageSortProxyModel*   imageSortProxyModel;
+    ImageListDragDropHandler* dragDropHandler;
 };
 
-KipiImageList::KipiImageList(QWidget* const parent)
+GPSImageList::GPSImageList(QWidget* const parent)
     : QTreeView(parent),
       d(new Private())
 {
@@ -90,7 +90,7 @@ KipiImageList::KipiImageList(QWidget* const parent)
     setRootIsDecorated(false);
     setAlternatingRowColors(true);
 
-    d->itemDelegate = new KipiImageItemDelegate(this, this);
+    d->itemDelegate = new GPSImageItemDelegate(this, this);
     setItemDelegate(d->itemDelegate);
     setThumbnailSize(60);
     slotUpdateActionsEnabled();
@@ -98,12 +98,12 @@ KipiImageList::KipiImageList(QWidget* const parent)
     header()->installEventFilter(this);
 }
 
-KipiImageList::~KipiImageList()
+GPSImageList::~GPSImageList()
 {
     delete d;
 }
 
-void KipiImageList::startDrag(Qt::DropActions supportedActions)
+void GPSImageList::startDrag(Qt::DropActions supportedActions)
 {
     if (!d->dragDropHandler)
     {
@@ -131,11 +131,11 @@ void KipiImageList::startDrag(Qt::DropActions supportedActions)
     drag->start(Qt::CopyAction);
 }
 
-void KipiImageList::setModelAndSelectionModel(KipiImageModel* const model, QItemSelectionModel* const selectionModel)
+void GPSImageList::setModelAndSelectionModel(GPSImageModel* const model, QItemSelectionModel* const selectionModel)
 {
     d->model               = model;
     d->selectionModel      = selectionModel;
-    d->imageSortProxyModel = new KipiImageSortProxyModel(d->model, d->selectionModel);
+    d->imageSortProxyModel = new GPSImageSortProxyModel(d->model, d->selectionModel);
     setModel(d->imageSortProxyModel);
 
     connect(d->model, SIGNAL(signalThumbnailForIndexAvailable(QPersistentModelIndex,QPixmap)),
@@ -148,14 +148,14 @@ void KipiImageList::setModelAndSelectionModel(KipiImageModel* const model, QItem
         setSelectionModel(d->imageSortProxyModel->mappedSelectionModel());
 }
 
-void KipiImageList::setDragDropHandler(KipiImageListDragDropHandler* const dragDropHandler)
+void GPSImageList::setDragDropHandler(ImageListDragDropHandler* const dragDropHandler)
 {
     d->dragDropHandler = dragDropHandler;
 }
 
 // ------------------------------------------------------------------------------------------------
 
-class KipiImageItemDelegate::Private
+class GPSImageItemDelegate::Private
 {
 public:
 
@@ -165,24 +165,24 @@ public:
     {
     }
 
-    KipiImageList* imageList;
+    GPSImageList* imageList;
     int            thumbnailSize;
 };
 
-KipiImageItemDelegate::KipiImageItemDelegate(KipiImageList* const imageList, QObject* const parent)
+GPSImageItemDelegate::GPSImageItemDelegate(GPSImageList* const imageList, QObject* const parent)
     : QItemDelegate(parent), d(new Private())
 {
     d->imageList = imageList;
 }
 
-KipiImageItemDelegate::~KipiImageItemDelegate()
+GPSImageItemDelegate::~GPSImageItemDelegate()
 {
     delete d;
 }
 
-void KipiImageItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
+void GPSImageItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
 {
-    if (sortMappedindex.column() != KipiImageItem::ColumnThumbnail)
+    if (sortMappedindex.column() != GPSImageItem::ColumnThumbnail)
     {
         QItemDelegate::paint(painter, option, sortMappedindex);
         return;
@@ -214,9 +214,9 @@ void KipiImageItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem&
     painter->drawPixmap(QRect(startPoint, pixmapSize), itemPixmap, QRect(QPoint(0, 0), pixmapSize));
 }
 
-QSize KipiImageItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
+QSize GPSImageItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
 {
-    if (sortMappedindex.column() == KipiImageItem::ColumnThumbnail)
+    if (sortMappedindex.column() == GPSImageItem::ColumnThumbnail)
     {
         return QSize(d->thumbnailSize, d->thumbnailSize);
     }
@@ -226,10 +226,10 @@ QSize KipiImageItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     return QSize(realSizeHint.width(), d->thumbnailSize);
 }
 
-void KipiImageItemDelegate::setThumbnailSize(const int size)
+void GPSImageItemDelegate::setThumbnailSize(const int size)
 {
     d->thumbnailSize                 = size;
-    KipiImageModel* const imageModel = d->imageList->getModel();
+    GPSImageModel* const imageModel = d->imageList->getModel();
 
     if (!imageModel)
         return;
@@ -242,23 +242,23 @@ void KipiImageItemDelegate::setThumbnailSize(const int size)
     }
 }
 
-int KipiImageItemDelegate::getThumbnailSize() const
+int GPSImageItemDelegate::getThumbnailSize() const
 {
     return d->thumbnailSize;
 }
 
-KipiImageModel* KipiImageList::getModel() const
+GPSImageModel* GPSImageList::getModel() const
 {
     return d->model;
 }
 
-void KipiImageList::setThumbnailSize(const int size)
+void GPSImageList::setThumbnailSize(const int size)
 {
     d->itemDelegate->setThumbnailSize(size);
-    setColumnWidth(KipiImageItem::ColumnThumbnail, size);
+    setColumnWidth(GPSImageItem::ColumnThumbnail, size);
 }
 
-void KipiImageList::slotIncreaseThumbnailSize()
+void GPSImageList::slotIncreaseThumbnailSize()
 {
     // TODO: pick reasonable limits and make sure we stay on multiples of 5
     const int currentThumbnailSize = d->itemDelegate->getThumbnailSize();
@@ -267,7 +267,7 @@ void KipiImageList::slotIncreaseThumbnailSize()
         setThumbnailSize(currentThumbnailSize + 5);
 }
 
-void KipiImageList::slotDecreaseThumbnailSize()
+void GPSImageList::slotDecreaseThumbnailSize()
 {
     const int currentThumbnailSize = d->itemDelegate->getThumbnailSize();
 
@@ -275,7 +275,7 @@ void KipiImageList::slotDecreaseThumbnailSize()
         setThumbnailSize(currentThumbnailSize - 5);
 }
 
-void KipiImageList::wheelEvent(QWheelEvent* we)
+void GPSImageList::wheelEvent(QWheelEvent* we)
 {
     if ((we->modifiers() & Qt::ControlModifier) == 0)
     {
@@ -295,19 +295,19 @@ void KipiImageList::wheelEvent(QWheelEvent* we)
     }
 }
 
-void KipiImageList::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& /*pixmap*/)
+void GPSImageList::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& /*pixmap*/)
 {
     // TODO: verify that the size corresponds to the size of our thumbnails!
     update(d->imageSortProxyModel->mapFromSource(index));
 }
 
-void KipiImageList::saveSettingsToGroup(KConfigGroup* const group)
+void GPSImageList::saveSettingsToGroup(KConfigGroup* const group)
 {
     group->writeEntry("Image List Thumbnail Size", d->itemDelegate->getThumbnailSize());
     group->writeEntry("Header State",              header()->saveState());
 }
 
-void KipiImageList::readSettingsFromGroup(const KConfigGroup* const group)
+void GPSImageList::readSettingsFromGroup(const KConfigGroup* const group)
 {
     setThumbnailSize(group->readEntry("Image List Thumbnail Size", 60));
 
@@ -320,41 +320,41 @@ void KipiImageList::readSettingsFromGroup(const KConfigGroup* const group)
     else
     {
         // by default, hide the advanced columns:
-        header()->setSectionHidden(KipiImageItem::ColumnDOP,         true);
-        header()->setSectionHidden(KipiImageItem::ColumnFixType,     true);
-        header()->setSectionHidden(KipiImageItem::ColumnNSatellites, true);
+        header()->setSectionHidden(GPSImageItem::ColumnDOP,         true);
+        header()->setSectionHidden(GPSImageItem::ColumnFixType,     true);
+        header()->setSectionHidden(GPSImageItem::ColumnNSatellites, true);
     }
 }
 
-QItemSelectionModel* KipiImageList::getSelectionModel() const
+QItemSelectionModel* GPSImageList::getSelectionModel() const
 {
     return d->selectionModel;
 }
 
-void KipiImageList::slotInternalTreeViewImageActivated(const QModelIndex& index)
+void GPSImageList::slotInternalTreeViewImageActivated(const QModelIndex& index)
 {
     qCDebug(DIGIKAM_GENERAL_LOG)<<index<<d->imageSortProxyModel->mapToSource(index);
     emit(signalImageActivated(d->imageSortProxyModel->mapToSource(index)));
 }
 
-KipiImageSortProxyModel* KipiImageList::getSortProxyModel() const
+GPSImageSortProxyModel* GPSImageList::getSortProxyModel() const
 {
     return d->imageSortProxyModel;
 }
 
-void KipiImageList::setEditEnabled(const bool state)
+void GPSImageList::setEditEnabled(const bool state)
 {
     d->editEnabled = state;
     slotUpdateActionsEnabled();
 }
 
-void KipiImageList::setDragEnabled(const bool state)
+void GPSImageList::setDragEnabled(const bool state)
 {
     d->dragEnabled = state;
     slotUpdateActionsEnabled();
 }
 
-void KipiImageList::slotUpdateActionsEnabled()
+void GPSImageList::slotUpdateActionsEnabled()
 {
     QTreeView::setDragEnabled(d->dragEnabled&&d->editEnabled);
 
@@ -364,7 +364,7 @@ void KipiImageList::slotUpdateActionsEnabled()
     }
 }
 
-bool KipiImageList::eventFilter(QObject *watched, QEvent *event)
+bool GPSImageList::eventFilter(QObject *watched, QEvent *event)
 {
     QHeaderView* const headerView = header();
 
@@ -396,7 +396,7 @@ bool KipiImageList::eventFilter(QObject *watched, QEvent *event)
     return true;
 }
 
-void KipiImageList::slotColumnVisibilityActionTriggered(QAction* action)
+void GPSImageList::slotColumnVisibilityActionTriggered(QAction* action)
 {
     const int columnNumber     = action->data().toInt();
     const bool columnIsVisible = action->isChecked();

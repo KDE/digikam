@@ -66,12 +66,12 @@
 
 #include "gpsundocommand.h"
 #include "gpssyncdialog.h"
-#include "kipiimagemodel.h"
-#include "kipiimageitem.h"
+#include "gpsimagemodel.h"
+#include "gpsimageitem.h"
 #include "backend-geonames-rg.h"
 #include "backend-osm-rg.h"
 #include "backend-geonamesUS-rg.h"
-#include "parseTagString.h"
+#include "parsetagstring.h"
 #include "rgtagmodel.h"
 #include "tests/simpletreemodel/simpletreemodel.h"
 
@@ -147,7 +147,7 @@ public:
     bool                 hideOptions;
     bool                 UIEnabled;
     QLabel*              label;
-    KipiImageModel*      imageModel;
+    GPSImageModel*      imageModel;
     QItemSelectionModel* selectionModel;
     QPushButton*         buttonRGSelected;
 
@@ -203,7 +203,7 @@ public:
  * @param selectionModel KIPI image selection model
  * @param parent The parent object
  */
-RGWidget::RGWidget(KipiImageModel* const imageModel, QItemSelectionModel* const selectionModel, QWidget* const parent)
+RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const selectionModel, QWidget* const parent)
     : QWidget(parent),
       d(new Private())
 {
@@ -499,7 +499,7 @@ void RGWidget::slotButtonRGSelected()
     for ( int i = 0; i < selectedItems.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = selectedItems.at(i);
-        KipiImageItem* const selectedItem     = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const selectedItem     = d->imageModel->itemFromIndex(itemIndex);
         const GPSDataContainer gpsData        = selectedItem->gpsData();
 
          if (!gpsData.hasCoordinates())
@@ -616,7 +616,7 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
             }
 
             QList<QList<TagData> > returnedTags = d->tagModel->addNewData(elements, resultedData);   
-            KipiImageItem* const currentItem    = d->imageModel->itemFromIndex(currentImageIndex);
+            GPSImageItem* const currentItem    = d->imageModel->itemFromIndex(currentImageIndex);
 
             GPSUndoCommand::UndoInfo undoInfo(currentImageIndex);
             undoInfo.readOldDataFromItem(currentItem);
@@ -906,7 +906,7 @@ void RGWidget::slotReaddNewTags()
 {
     for (int row=0; row<d->imageModel->rowCount(); ++row)
     {
-        KipiImageItem* const currentItem    = d->imageModel->itemFromIndex(d->imageModel->index(row,0));
+        GPSImageItem* const currentItem    = d->imageModel->itemFromIndex(d->imageModel->index(row,0));
         QList<QList<TagData> > tagAddresses = currentItem->getTagList();
 
         if (!tagAddresses.isEmpty())

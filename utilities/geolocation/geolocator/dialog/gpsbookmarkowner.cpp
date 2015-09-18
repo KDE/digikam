@@ -39,7 +39,7 @@
 // local includes
 
 #include "gpsundocommand.h"
-#include "kipiimagemodel.h"
+#include "gpsimagemodel.h"
 
 namespace Digikam
 {
@@ -70,7 +70,7 @@ public:
     QString                 lastTitle;
 };
 
-GPSBookmarkOwner::GPSBookmarkOwner(KipiImageModel* const kipiImageModel, QWidget* const parent)
+GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const kipiImageModel, QWidget* const parent)
     : d(new Private())
 {
     d->parent = parent;
@@ -182,7 +182,7 @@ public:
 
     QStandardItemModel* model;
     KBookmarkManager*   bookmarkManager;
-    KipiImageModel*     kipiImageModel;
+    GPSImageModel*     kipiImageModel;
     QPixmap             pixmap;
     QUrl                bookmarkIconUrl;
     bool                visible;
@@ -216,7 +216,7 @@ void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(const KBookmarkGro
     }
 }
 
-GPSBookmarkModelHelper::GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, KipiImageModel* const kipiImageModel, QObject* const parent)
+GPSBookmarkModelHelper::GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, GPSImageModel* const kipiImageModel, QObject* const parent)
     : ModelHelper(parent),
       d(new Private())
 {
@@ -335,7 +335,7 @@ void GPSBookmarkModelHelper::snapItemsTo(const QModelIndex& targetIndex, const Q
     for (int i = 0; i < snappedIndices.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = snappedIndices.at(i);
-        KipiImageItem* const item             = d->kipiImageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item             = d->kipiImageModel->itemFromIndex(itemIndex);
 
         GPSDataContainer newData;
         newData.setCoordinates(targetCoordinates);

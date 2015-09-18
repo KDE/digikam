@@ -22,33 +22,26 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGELISTDRAGDROPHANDLER_H
-#define GPSIMAGELISTDRAGDROPHANDLER_H
-
-// Qt includes
-
-#include <QTreeView>
-
-// Local includes
-
-#include "mapdragdrophandler.h"
-#include "kipiimagelist.h"
+#include "gpsimagelistdragdrophandler.h"
 
 namespace Digikam
 {
 
-class GPSImageListDragDropHandler : public KipiImageListDragDropHandler
+GPSImageListDragDropHandler::GPSImageListDragDropHandler(QObject* const parent)
+    : ImageListDragDropHandler(parent)
 {
-    Q_OBJECT
+}
 
-public:
+GPSImageListDragDropHandler::~GPSImageListDragDropHandler()
+{
+}
 
-    explicit GPSImageListDragDropHandler(QObject* const parent = 0);
-    ~GPSImageListDragDropHandler();
+QMimeData* GPSImageListDragDropHandler::createMimeData(const QList<QPersistentModelIndex>& modelIndices)
+{
+    MapDragData* const mimeData = new MapDragData();
+    mimeData->draggedIndices    = modelIndices;
 
-    virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices);
-};
+    return mimeData;
+}
 
 } /* GPSIMAGELISTDRAGDROPHANDLER_H */
-
-#endif /* GPSIMAGELISTDRAGDROPHANDLER_H */

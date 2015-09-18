@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSLISTVIEWCONTEXTMENU_H
-#define GPSLISTVIEWCONTEXTMENU_H
+#ifndef GPSIMAGELISTCONTEXTMENU_H
+#define GPSIMAGELISTCONTEXTMENU_H
 
 // Qt includes:
 
@@ -36,11 +36,9 @@
 // local includes:
 
 #include "gpsdatacontainer.h"
-#include "kipiimagelist.h"
+#include "gpsimagelist.h"
 
-/// @cond false
 class QUrl;
-/// @endcond
 
 namespace Digikam
 {
@@ -48,14 +46,14 @@ namespace Digikam
 class GPSBookmarkOwner;
 class GPSUndoCommand;
 
-class GPSListViewContextMenu : public QObject
+class GPSImageListContextMenu : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSListViewContextMenu(KipiImageList* const imagesList, GPSBookmarkOwner* const bookmarkOwner = 0);
-    ~GPSListViewContextMenu();
+    explicit GPSImageListContextMenu(GPSImageList* const imagesList, GPSBookmarkOwner* const bookmarkOwner = 0);
+    ~GPSImageListContextMenu();
 
     void setEnabled(const bool state);
 
@@ -99,4 +97,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* GPSLISTVIEWCONTEXTMENU_H */
+#endif /* GPSIMAGELISTCONTEXTMENU_H */

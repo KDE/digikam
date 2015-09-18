@@ -79,18 +79,18 @@
 
 // Local includes
 
-#include "gpssync_common.h"
-#include "kipiimagemodel.h"
-#include "kipiimageitem.h"
+#include "gpscommon.h"
+#include "gpsimagemodel.h"
+#include "gpsimageitem.h"
 #include "mapdragdrophandler.h"
-#include "kipiimagelist.h"
+#include "gpsimagelist.h"
 #include "gpsimagelistdragdrophandler.h"
+#include "gpsimagelistcontextmenu.h"
 #include "gpscorrelatorwidget.h"
 #include "digikam_debug.h"
 #include "gpsundocommand.h"
 #include "rgwidget.h"
 #include "gpsbookmarkowner.h"
-#include "gpslistviewcontextmenu.h"
 #include "searchwidget.h"
 #include "backend-rg.h"
 #include "gpsimagedetails.h"
@@ -109,14 +109,14 @@ struct SaveChangedImagesHelper
 {
 public:
 
-    SaveChangedImagesHelper(KipiImageModel* const model)
+    SaveChangedImagesHelper(GPSImageModel* const model)
         : imageModel(model)
     {
     }
 
     QPair<QUrl, QString> operator()(const QPersistentModelIndex& itemIndex)
     {
-        KipiImageItem* const item = imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item = imageModel->itemFromIndex(itemIndex);
 
         if (!item)
             return QPair<QUrl, QString>(QUrl(), QString());
@@ -127,7 +127,7 @@ public:
 public:
 
     typedef QPair<QUrl, QString> result_type;
-    KipiImageModel* const        imageModel;
+    GPSImageModel* const        imageModel;
 };
 
 // ---------------------------------------------------------------------------------
@@ -136,14 +136,14 @@ struct LoadFileMetadataHelper
 {
 public:
 
-    LoadFileMetadataHelper(KipiImageModel* const model)
+    LoadFileMetadataHelper(GPSImageModel* const model)
         : imageModel(model)
     {
     }
 
     QPair<QUrl, QString> operator()(const QPersistentModelIndex& itemIndex)
     {
-        KipiImageItem* const item = imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item = imageModel->itemFromIndex(itemIndex);
 
         if (!item)
             return QPair<QUrl, QString>(QUrl(), QString());
@@ -156,7 +156,7 @@ public:
 public:
 
     typedef QPair<QUrl, QString> result_type;
-    KipiImageModel* const        imageModel;
+    GPSImageModel* const        imageModel;
 };
 
 // ---------------------------------------------------------------------------------
@@ -208,13 +208,13 @@ public:
     }
 
     // General things
-    KipiImageModel*                          imageModel;
+    GPSImageModel*                          imageModel;
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
     GPSSetupGlobalObject*                    setupGlobalObject;
     GPSBookmarkOwner*                        bookmarkOwner;
     QAction *                                 actionBookmarkVisibility;
-    GPSListViewContextMenu*                  listViewContextMenu;
+    GPSImageListContextMenu*                  listViewContextMenu;
     KGeoMap::TrackManager*                   trackManager;
 
     // Loading and saving
@@ -228,7 +228,7 @@ public:
     QDialogButtonBox*                        buttonBox;
     QSplitter*                               VSplitter;
     QSplitter*                               HSplitter;
-    KipiImageList*                           treeView;
+    GPSImageList*                           treeView;
     QStackedWidget*                          stackedWidget;
     QTabBar*                                 tabBar;
     int                                      splitterSize;
@@ -272,7 +272,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     setWindowTitle(i18n("Geolocation Edit"));
     setMinimumSize(300,400);
 
-    d->imageModel     = new KipiImageModel(this);
+    d->imageModel     = new GPSImageModel(this);
     d->selectionModel = new QItemSelectionModel(d->imageModel);
     d->trackManager   = new KGeoMap::TrackManager(this);
 
@@ -285,7 +285,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->stackedWidget = new QStackedWidget();
     d->searchWidget  = new SearchWidget(d->bookmarkOwner, d->imageModel, d->selectionModel, d->stackedWidget);
 
-    KipiImageItem::setHeaderData(d->imageModel);
+    GPSImageItem::setHeaderData(d->imageModel);
     d->mapModelHelper     = new GPSSyncKGeoMapModelHelper(d->imageModel, d->selectionModel, this);
     d->mapModelHelper->addUngroupedModelHelper(d->bookmarkOwner->bookmarkModelHelper());
     d->mapModelHelper->addUngroupedModelHelper(d->searchWidget->getModelHelper());
@@ -397,7 +397,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->mapSplitter->addWidget(mapVBox);
     d->VSplitter->addWidget(d->mapSplitter);
 
-    d->treeView            = new KipiImageList(this);
+    d->treeView            = new GPSImageList(this);
     d->treeView->setModelAndSelectionModel(d->imageModel, d->selectionModel);
     d->treeView->setDragDropHandler(new GPSImageListDragDropHandler(this));
     d->treeView->setDragEnabled(true);
@@ -408,7 +408,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->treeView->setSortingEnabled(true);
     d->VSplitter->addWidget(d->treeView);
 
-    d->listViewContextMenu = new GPSListViewContextMenu(d->treeView, d->bookmarkOwner);
+    d->listViewContextMenu = new GPSImageListContextMenu(d->treeView, d->bookmarkOwner);
     d->HSplitter->setCollapsible(1, true);
     d->HSplitter->addWidget(d->stackedWidget);
     d->splitterSize        = 0;
@@ -593,7 +593,7 @@ void GPSSyncDialog::setImages(const QList<QUrl>& images)
 {
     for ( QList<QUrl>::ConstIterator it = images.begin(); it != images.end(); ++it )
     {
-        KipiImageItem* const newItem = new KipiImageItem(*it);
+        GPSImageItem* const newItem = new GPSImageItem(*it);
         newItem->loadImageData();
         d->imageModel->addItem(newItem);
     }
@@ -777,7 +777,7 @@ void GPSSyncDialog::closeEvent(QCloseEvent *e)
     for (int i=0; i < d->imageModel->rowCount(); ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        KipiImageItem* const item   = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item   = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {
@@ -830,7 +830,7 @@ void GPSSyncDialog::slotImageActivated(const QModelIndex& index)
     if (!index.isValid())
         return;
 
-    KipiImageItem* const item = d->imageModel->itemFromIndex(index);
+    GPSImageItem* const item = d->imageModel->itemFromIndex(index);
 
     if (!item)
         return;
@@ -886,12 +886,12 @@ public:
         selectionModel = 0;
     }
 
-    KipiImageModel*      model;
+    GPSImageModel*      model;
     QItemSelectionModel* selectionModel;
     QList<ModelHelper*>  ungroupedModelHelpers;
 };
 
-GPSSyncKGeoMapModelHelper::GPSSyncKGeoMapModelHelper(KipiImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent)
+GPSSyncKGeoMapModelHelper::GPSSyncKGeoMapModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent)
     : ModelHelper(parent),
       d(new Private())
 {
@@ -917,7 +917,7 @@ QItemSelectionModel* GPSSyncKGeoMapModelHelper::selectionModel() const
 
 bool GPSSyncKGeoMapModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
 {
-    KipiImageItem* const item = d->model->itemFromIndex(index);
+    GPSImageItem* const item = d->model->itemFromIndex(index);
 
     if (!item)
         return false;
@@ -949,7 +949,7 @@ QPersistentModelIndex GPSSyncKGeoMapModelHelper::bestRepresentativeIndexFromList
     for (int i=0; i<list.count(); ++i)
     {
         const QPersistentModelIndex currentIndex = list.at(i);
-        const KipiImageItem* const currentItem   = static_cast<KipiImageItem*>(d->model->itemFromIndex(currentIndex));
+        const GPSImageItem* const currentItem   = static_cast<GPSImageItem*>(d->model->itemFromIndex(currentIndex));
         const QDateTime currentTime              = currentItem->dateTime();
         bool takeThisIndex                       = bestTime.isNull();
 
@@ -1012,7 +1012,7 @@ void GPSSyncKGeoMapModelHelper::onIndicesMoved(const QList<QPersistentModelIndex
     for (int i=0; i<movedMarkers.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = movedMarkers.at(i);
-        KipiImageItem* const item             = static_cast<KipiImageItem*>(d->model->itemFromIndex(itemIndex));
+        GPSImageItem* const item             = static_cast<GPSImageItem*>(d->model->itemFromIndex(itemIndex));
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);
@@ -1039,7 +1039,7 @@ void GPSSyncDialog::saveChanges(const bool closeAfterwards)
     for (int i=0; i<d->imageModel->rowCount(); ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        KipiImageItem* const item   = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item   = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {

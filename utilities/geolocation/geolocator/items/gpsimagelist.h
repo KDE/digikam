@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KIPIIMAGELIST_H
-#define KIPIIMAGELIST_H
+#ifndef GPSIMAGELIST_H
+#define GPSIMAGELIST_H
 
 // Qt includes
 
@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "kipiimagemodel.h"
+#include "gpsimagemodel.h"
 
 class QWheelEvent;
 class KConfigGroup;
@@ -40,37 +40,37 @@ class KConfigGroup;
 namespace Digikam
 {
 
-class KipiImageSortProxyModel;
+class GPSImageSortProxyModel;
 
-class KipiImageListDragDropHandler : public QObject
+class ImageListDragDropHandler : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit KipiImageListDragDropHandler(QObject* const parent = 0);
-    virtual ~KipiImageListDragDropHandler();
+    explicit ImageListDragDropHandler(QObject* const parent = 0);
+    virtual ~ImageListDragDropHandler();
 
     virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices) = 0;
 };
 
 // -------------------------------------------------------------------------------------------------
 
-class KipiImageList : public QTreeView
+class GPSImageList : public QTreeView
 {
     Q_OBJECT
 
 public:
 
-    explicit KipiImageList(QWidget* const parent = 0);
-    ~KipiImageList();
+    explicit GPSImageList(QWidget* const parent = 0);
+    ~GPSImageList();
 
-    void setModelAndSelectionModel(KipiImageModel* const model, QItemSelectionModel* const selectionModel);
-    KipiImageModel* getModel() const;
+    void setModelAndSelectionModel(GPSImageModel* const model, QItemSelectionModel* const selectionModel);
+    GPSImageModel* getModel() const;
     QItemSelectionModel* getSelectionModel() const;
-    void setDragDropHandler(KipiImageListDragDropHandler* const dragDropHandler);
+    void setDragDropHandler(ImageListDragDropHandler* const dragDropHandler);
     void setThumbnailSize(const int size);
-    KipiImageSortProxyModel* getSortProxyModel() const;
+    GPSImageSortProxyModel* getSortProxyModel() const;
 
     void saveSettingsToGroup(KConfigGroup* const group);
     void readSettingsFromGroup(const KConfigGroup* const group);
@@ -107,14 +107,14 @@ private:
 
 // -------------------------------------------------------------------------------------------------
 
-class KipiImageItemDelegate : public QItemDelegate
+class GPSImageItemDelegate : public QItemDelegate
 {
     Q_OBJECT
 
 public:
 
-    explicit KipiImageItemDelegate(KipiImageList* const imageList, QObject* const parent = 0);
-    virtual ~KipiImageItemDelegate();
+    explicit GPSImageItemDelegate(GPSImageList* const imageList, QObject* const parent = 0);
+    virtual ~GPSImageItemDelegate();
 
     void setThumbnailSize(const int size);
     int  getThumbnailSize() const;
@@ -130,4 +130,4 @@ private:
 
 } /* Digikam */
 
-#endif /* KIPIIMAGELIST_H */
+#endif /* GPSIMAGELIST_H */

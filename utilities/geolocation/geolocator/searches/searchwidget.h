@@ -107,7 +107,7 @@ public:
 
     SearchResultModelHelper(SearchResultModel* const resultModel,
                             QItemSelectionModel* const selectionModel,
-                            KipiImageModel* const imageModel,
+                            GPSImageModel* const imageModel,
                             QObject* const parent = 0);
     ~SearchResultModelHelper();
 
@@ -139,7 +139,7 @@ class SearchWidget : public QWidget
 
 public:
 
-    SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner, KipiImageModel* const kipiImageModel, QItemSelectionModel* const kipiImageSelectionModel, QWidget* parent = 0);
+    SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner, GPSImageModel* const kipiImageModel, QItemSelectionModel* const kipiImageSelectionModel, QWidget* parent = 0);
     ~SearchWidget();
 
     KGeoMap::ModelHelper* getModelHelper();

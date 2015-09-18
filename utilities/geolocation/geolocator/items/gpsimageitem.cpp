@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "kipiimageitem.h"
+#include "gpsimageitem.h"
 
 // Qt includes
 
@@ -36,7 +36,7 @@
 
 // local includes
 
-#include "kipiimagemodel.h"
+#include "gpsimagemodel.h"
 
 namespace Digikam
 {
@@ -116,7 +116,7 @@ bool setExifXmpTagDataVariant(DMetadata* const meta, const char* const exifTagNa
     return success;
 }
 
-KipiImageItem::KipiImageItem(const QUrl& url)
+GPSImageItem::GPSImageItem(const QUrl& url)
     : m_model(0),
       m_url(url),
       m_dateTime(),
@@ -130,11 +130,11 @@ KipiImageItem::KipiImageItem(const QUrl& url)
 {
 }
 
-KipiImageItem::~KipiImageItem()
+GPSImageItem::~GPSImageItem()
 {
 }
 
-DMetadata* KipiImageItem::getMetadataForFile() const
+DMetadata* GPSImageItem::getMetadataForFile() const
 {
     QScopedPointer<DMetadata> meta(new DMetadata);
 /* FIXME
@@ -180,7 +180,7 @@ int getWarningLevelFromGPSDataContainer(const GPSDataContainer& data)
     return -1;
 }
 
-bool KipiImageItem::loadImageData()
+bool GPSImageItem::loadImageData()
 {
 /* FIXME
     if (fromInterface && m_interface)
@@ -350,7 +350,7 @@ bool KipiImageItem::loadImageData()
     return true;
 }
 
-QVariant KipiImageItem::data(const int column, const int role) const
+QVariant GPSImageItem::data(const int column, const int role) const
 {
     if ((column==ColumnFilename)&&(role==Qt::DisplayRole))
     {
@@ -500,19 +500,19 @@ QVariant KipiImageItem::data(const int column, const int role) const
     return QVariant();
 }
 
-void KipiImageItem::setCoordinates(const GeoCoordinates& newCoordinates)
+void GPSImageItem::setCoordinates(const GeoCoordinates& newCoordinates)
 {
     m_gpsData.setCoordinates(newCoordinates);
     m_dirty = true;
     emitDataChanged();
 }
 
-void KipiImageItem::setModel(KipiImageModel* const model)
+void GPSImageItem::setModel(GPSImageModel* const model)
 {
     m_model = model;
 }
 
-void KipiImageItem::emitDataChanged()
+void GPSImageItem::emitDataChanged()
 {
     if (m_model)
     {
@@ -520,7 +520,7 @@ void KipiImageItem::emitDataChanged()
     }
 }
 
-void KipiImageItem::setHeaderData(KipiImageModel* const model)
+void GPSImageItem::setHeaderData(GPSImageModel* const model)
 {
     model->setColumnCount(ColumnGPSImageItemCount);
     model->setHeaderData(ColumnThumbnail,   Qt::Horizontal, i18n("Thumbnail"),      Qt::DisplayRole);
@@ -538,7 +538,7 @@ void KipiImageItem::setHeaderData(KipiImageModel* const model)
     model->setHeaderData(ColumnTags,        Qt::Horizontal, i18n("Tags"),           Qt::DisplayRole);
 }
 
-bool KipiImageItem::lessThan(const KipiImageItem* const otherItem, const int column) const
+bool GPSImageItem::lessThan(const GPSImageItem* const otherItem, const int column) const
 {
     switch (column)
     {
@@ -682,7 +682,7 @@ bool KipiImageItem::lessThan(const KipiImageItem* const otherItem, const int col
     }
 }
 
-QString KipiImageItem::saveChanges()
+QString GPSImageItem::saveChanges()
 {
     // determine what is to be done first
     bool shouldRemoveCoordinates = false;
@@ -925,14 +925,14 @@ QString KipiImageItem::saveChanges()
 /**
  * @brief Restore the gps data to @p container. Sets m_dirty to false if container equals savedState.
  */
-void KipiImageItem::restoreGPSData(const GPSDataContainer& container)
+void GPSImageItem::restoreGPSData(const GPSDataContainer& container)
 {
     m_dirty   = !(container == m_savedState);
     m_gpsData = container;
     emitDataChanged();
 }
 
-void KipiImageItem::restoreRGTagList(const QList<QList<TagData> >& tagList)
+void GPSImageItem::restoreRGTagList(const QList<QList<TagData> >& tagList)
 {
     //TODO: override == operator
 

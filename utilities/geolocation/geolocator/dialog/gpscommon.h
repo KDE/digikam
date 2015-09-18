@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSSYNC_COMMON_H
-#define GPSSYNC_COMMON_H
+#ifndef GPS_COMMON_H
+#define GPS_COMMON_H
 
 // Qt includes
 
@@ -47,7 +47,7 @@ enum MapLayout
     MapLayoutVertical   = 2
 };
 
-inline QString getKipiUserAgentName()
+inline QString getUserAgentName()
 {
     return QStringLiteral("KIPI-Plugins GPSSync - kde-imaging@kde.org");
 }
@@ -109,4 +109,4 @@ inline void CoordinatesToClipboard(const KGeoMap::GeoCoordinates& coordinates, c
 
 Q_DECLARE_METATYPE(Digikam::MapLayout)
 
-#endif /* GPSSYNC_COMMON_H */
+#endif /* GPS_COMMON_H */

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "kipiimagemodel.h"
+#include "gpsimagemodel.h"
 
 // KDE includes
 
@@ -36,27 +36,25 @@
 namespace Digikam
 {
 
-class KipiImageModel::Private
+class GPSImageModel::Private
 {
 public:
 
     Private()
       : items(),
         columnCount(0),
-        pixmapCache(0),
-        interface(0)
+        pixmapCache(0)
     {
     }
 
-    QList<KipiImageItem*>                     items;
+    QList<GPSImageItem*>                     items;
     int                                       columnCount;
     QMap<QPair<int, int>, QVariant>           headerData;
     KImageCache*                              pixmapCache;
-    KIPI::Interface*                          interface;
     QList<QPair<QPersistentModelIndex, int> > requestedPixmaps;
 };
 
-KipiImageModel::KipiImageModel(QObject* const parent)
+GPSImageModel::GPSImageModel(QObject* const parent)
     : QAbstractItemModel(parent),
       d(new Private)
 {
@@ -66,7 +64,7 @@ KipiImageModel::KipiImageModel(QObject* const parent)
     d->pixmapCache->setPixmapCaching(false);
 }
 
-KipiImageModel::~KipiImageModel()
+GPSImageModel::~GPSImageModel()
 {
     // TODO: send a signal before deleting the items?
     qDeleteAll(d->items);
@@ -74,12 +72,12 @@ KipiImageModel::~KipiImageModel()
     delete d;
 }
 
-int KipiImageModel::columnCount(const QModelIndex& /*parent*/) const
+int GPSImageModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return d->columnCount;
 }
 
-QVariant KipiImageModel::data(const QModelIndex& index, int role) const
+QVariant GPSImageModel::data(const QModelIndex& index, int role) const
 {
     if (index.isValid())
     {
@@ -96,7 +94,7 @@ QVariant KipiImageModel::data(const QModelIndex& index, int role) const
     return d->items.at(rowNumber)->data(index.column(), role);
 }
 
-QModelIndex KipiImageModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex GPSImageModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
@@ -118,13 +116,13 @@ QModelIndex KipiImageModel::index(int row, int column, const QModelIndex& parent
     return createIndex(row, column, (void*)0);
 }
 
-QModelIndex KipiImageModel::parent(const QModelIndex& /*index*/) const
+QModelIndex GPSImageModel::parent(const QModelIndex& /*index*/) const
 {
     // we have only top level items
     return QModelIndex();
 }
 
-void KipiImageModel::addItem(KipiImageItem* const newItem)
+void GPSImageModel::addItem(GPSImageItem* const newItem)
 {
     beginInsertRows(QModelIndex(), d->items.count(), d->items.count());
     newItem->setModel(this);
@@ -132,14 +130,14 @@ void KipiImageModel::addItem(KipiImageItem* const newItem)
     endInsertRows();
 }
 
-void KipiImageModel::setColumnCount(const int nColumns)
+void GPSImageModel::setColumnCount(const int nColumns)
 {
     emit(layoutAboutToBeChanged());
     d->columnCount = nColumns;
     emit(layoutChanged());
 }
 
-void KipiImageModel::itemChanged(KipiImageItem* const changedItem)
+void GPSImageModel::itemChanged(GPSImageItem* const changedItem)
 {
     const int itemIndex = d->items.indexOf(changedItem);
 
@@ -151,7 +149,7 @@ void KipiImageModel::itemChanged(KipiImageItem* const changedItem)
     emit(dataChanged(itemModelIndexStart, itemModelIndexEnd));
 }
 
-KipiImageItem* KipiImageModel::itemFromIndex(const QModelIndex& index) const
+GPSImageItem* GPSImageModel::itemFromIndex(const QModelIndex& index) const
 {
     if (index.isValid())
     {
@@ -169,7 +167,7 @@ KipiImageItem* KipiImageModel::itemFromIndex(const QModelIndex& index) const
     return d->items.at(row);
 }
 
-int KipiImageModel::rowCount(const QModelIndex& parent) const
+int GPSImageModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
@@ -182,7 +180,7 @@ int KipiImageModel::rowCount(const QModelIndex& parent) const
     return d->items.count();
 }
 
-bool KipiImageModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+bool GPSImageModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
 {
     if ((section >= d->columnCount) || (orientation != Qt::Horizontal))
         return false;
@@ -193,7 +191,7 @@ bool KipiImageModel::setHeaderData(int section, Qt::Orientation orientation, con
     return true;
 }
 
-QVariant KipiImageModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant GPSImageModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if ((section >= d->columnCount) || (orientation != Qt::Horizontal))
         return false;
@@ -202,7 +200,7 @@ QVariant KipiImageModel::headerData(int section, Qt::Orientation orientation, in
     return d->headerData.value(headerIndex);
 }
 
-bool KipiImageModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool GPSImageModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     Q_UNUSED(index);
     Q_UNUSED(value);
@@ -211,7 +209,7 @@ bool KipiImageModel::setData(const QModelIndex& index, const QVariant& value, in
     return false;
 }
 
-Qt::ItemFlags KipiImageModel::flags(const QModelIndex& index) const
+Qt::ItemFlags GPSImageModel::flags(const QModelIndex& index) const
 {
     if (index.isValid())
     {
@@ -224,7 +222,7 @@ Qt::ItemFlags KipiImageModel::flags(const QModelIndex& index) const
     return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
 }
 
-KipiImageItem* KipiImageModel::itemFromUrl(const QUrl& url) const
+GPSImageItem* GPSImageModel::itemFromUrl(const QUrl& url) const
 {
     for (int i=0; i<d->items.count(); ++i)
     {
@@ -235,7 +233,7 @@ KipiImageItem* KipiImageModel::itemFromUrl(const QUrl& url) const
     return 0;
 }
 
-QModelIndex KipiImageModel::indexFromUrl(const QUrl& url) const
+QModelIndex GPSImageModel::indexFromUrl(const QUrl& url) const
 {
     for (int i=0; i<d->items.count(); ++i)
     {
@@ -251,7 +249,7 @@ static QString CacheKeyFromSizeAndUrl(const int size, const QUrl& url)
     return QStringLiteral("%1-%3").arg(size).arg(url.url(QUrl::PreferLocalFile));
 }
 
-QPixmap KipiImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex, const int size)
+QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex, const int size)
 {
     if (itemIndex.isValid())
     {
@@ -261,7 +259,7 @@ QPixmap KipiImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex
     // TODO: should we cache the pixmap on our own here or does the interface usually cache it for us?
     // TODO: do we need to make sure we do not request the same pixmap twice in a row?
     // construct the key under which we stored the pixmap in the cache:
-    KipiImageItem* const imageItem = itemFromIndex(itemIndex);
+    GPSImageItem* const imageItem = itemFromIndex(itemIndex);
 
     if (!imageItem)
         return QPixmap();
@@ -290,26 +288,28 @@ QPixmap KipiImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex
     // remember at which size the pixmap was ordered:
     d->requestedPixmaps << QPair<QPersistentModelIndex, int>(itemIndex, size);
 
-    // TODO: what about raw images? The old version of the plugin had a special loading mechanism for those
+/* FIXME : port to ThumbLoadThread
+
     if (d->interface)
     {
         d->interface->thumbnails(QList<QUrl>()<<imageItem->url(), size);
     }
     else
     {
-//         KIO::PreviewJob *job = KIO::filePreview(urls, DEFAULTSIZE);
-//
-//         connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
-//                 this, SLOT(slotKDEPreview(KFileItem,QPixmap)));
-//
-//         connect(job, SIGNAL(failed(KFileItem)),
-//                 this, SLOT(slotKDEPreviewFailed(KFileItem)));
-    }
+        KIO::PreviewJob *job = KIO::filePreview(urls, DEFAULTSIZE);
 
+        connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
+                this, SLOT(slotKDEPreview(KFileItem,QPixmap)));
+
+        connect(job, SIGNAL(failed(KFileItem)),
+                this, SLOT(slotKDEPreviewFailed(KFileItem)));
+    }
+*/
     return QPixmap();
 }
 
-void KipiImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& pixmap)
+//FIXME : port to ThumbLoadThread
+void GPSImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& pixmap)
 {
     qCDebug(DIGIKAM_GENERAL_LOG)<<url<<pixmap.size();
 
@@ -372,26 +372,17 @@ void KipiImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& 
 
             emit(signalThumbnailForIndexAvailable(imageIndex, scaledPixmap));
         }
-
     }
 }
 
-void KipiImageModel::setKipiInterface(KIPI::Interface* const interface)
-{
-    d->interface = interface;
-
-    connect(d->interface, SIGNAL(gotThumbnail(QUrl,QPixmap)),
-            this, SLOT(slotThumbnailFromInterface(QUrl,QPixmap)));
-}
-
-Qt::DropActions KipiImageModel::supportedDragActions() const
+Qt::DropActions GPSImageModel::supportedDragActions() const
 {
     return Qt::CopyAction;
 }
 
 // --------------------------------------------------------------------------------------------
 
-class KipiImageSortProxyModel::Private
+class GPSImageSortProxyModel::Private
 {
 public:
 
@@ -402,27 +393,27 @@ public:
         linkItemSelectionModel = 0;
     }
 
-    KipiImageModel*          imageModel;
+    GPSImageModel*           imageModel;
     QItemSelectionModel*     sourceSelectionModel;
     KLinkItemSelectionModel* linkItemSelectionModel;
 };
 
-KipiImageSortProxyModel::KipiImageSortProxyModel(KipiImageModel* const kipiImageModel, QItemSelectionModel* const sourceSelectionModel)
-    : QSortFilterProxyModel(kipiImageModel),
+GPSImageSortProxyModel::GPSImageSortProxyModel(GPSImageModel* const imageModel, QItemSelectionModel* const sourceSelectionModel)
+    : QSortFilterProxyModel(imageModel),
       d(new Private())
 {
-    d->imageModel             = kipiImageModel;
+    d->imageModel             = imageModel;
     d->sourceSelectionModel   = sourceSelectionModel;
-    setSourceModel(kipiImageModel);
+    setSourceModel(imageModel);
     d->linkItemSelectionModel = new KLinkItemSelectionModel(this, d->sourceSelectionModel);
 }
 
-KipiImageSortProxyModel::~KipiImageSortProxyModel()
+GPSImageSortProxyModel::~GPSImageSortProxyModel()
 {
     delete d;
 }
 
-bool KipiImageSortProxyModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
+bool GPSImageSortProxyModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
     if ((!left.isValid())||(!right.isValid()))
     {
@@ -431,14 +422,14 @@ bool KipiImageSortProxyModel::lessThan(const QModelIndex& left, const QModelInde
     }
 
     const int column                     = left.column();
-    const KipiImageItem* const itemLeft  = d->imageModel->itemFromIndex(left);
-    const KipiImageItem* const itemRight = d->imageModel->itemFromIndex(right);
+    const GPSImageItem* const itemLeft  = d->imageModel->itemFromIndex(left);
+    const GPSImageItem* const itemRight = d->imageModel->itemFromIndex(right);
 
 //     qCDebug(DIGIKAM_GENERAL_LOG)<<itemLeft<<itemRight<<column<<rowCount()<<d->imageModel->rowCount();
     return itemLeft->lessThan(itemRight, column);
 }
 
-QItemSelectionModel* KipiImageSortProxyModel::mappedSelectionModel() const
+QItemSelectionModel* GPSImageSortProxyModel::mappedSelectionModel() const
 {
     return d->linkItemSelectionModel;
 }

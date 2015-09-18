@@ -51,7 +51,7 @@
 
 // local includes
 
-#include "kipiimagemodel.h"
+#include "gpsimagemodel.h"
 #include "gpsundocommand.h"
 #include "graphicsdimgview.h"
 #include "dimgpreviewitem.h"
@@ -88,7 +88,7 @@ public:
     {
     }
 
-    KipiImageModel*              imageModel;
+    GPSImageModel*              imageModel;
     GraphicsDImgView*            previewManager;
 
     QCheckBox*                   cbCoordinates;
@@ -114,7 +114,7 @@ public:
     bool                         haveDelayedState;
 };
 
-GPSImageDetails::GPSImageDetails(QWidget* const parent, KipiImageModel* const imageModel)
+GPSImageDetails::GPSImageDetails(QWidget* const parent, GPSImageModel* const imageModel)
     : QWidget(parent),
       d(new Private())
 {
@@ -357,7 +357,7 @@ void GPSImageDetails::slotSetCurrentImage(const QModelIndex& index)
 
     if (index.isValid())
     {
-        KipiImageItem* const item = d->imageModel->itemFromIndex(index);
+        GPSImageItem* const item = d->imageModel->itemFromIndex(index);
         qCDebug(DIGIKAM_GENERAL_LOG)<<item;
 
         if (item)
@@ -386,7 +386,7 @@ void GPSImageDetails::slotModelDataChanged(const QModelIndex& topLeft, const QMo
         }
 
         GPSDataContainer gpsData;
-        KipiImageItem* const item = d->imageModel->itemFromIndex(d->imageIndex);
+        GPSImageItem* const item = d->imageModel->itemFromIndex(d->imageIndex);
 
         if (item)
         {
@@ -440,7 +440,7 @@ void GPSImageDetails::slotApply()
         }
     }
 
-    KipiImageItem* const gpsItem      = d->imageModel->itemFromIndex(d->imageIndex);
+    GPSImageItem* const gpsItem      = d->imageModel->itemFromIndex(d->imageIndex);
     GPSUndoCommand* const undoCommand = new GPSUndoCommand();
 
     GPSUndoCommand::UndoInfo undoInfo(d->imageIndex);

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "gpslistviewcontextmenu.h"
+#include "gpsimagelistcontextmenu.h"
 
 // Qt includes:
 
@@ -52,13 +52,13 @@
 
 #include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"
-#include "gpssync_common.h"
-#include "kipiimageitem.h"
+#include "gpscommon.h"
+#include "gpsimageitem.h"
 
 namespace Digikam
 {
 
-class GPSListViewContextMenu::Private
+class GPSImageListContextMenu::Private
 {
 public:
 
@@ -95,7 +95,7 @@ public:
 
     GPSBookmarkOwner*                 bookmarkOwner;
 
-    KipiImageList*                    imagesList;
+    GPSImageList*                    imagesList;
 
     // Altitude lookup
     QPointer<KGeoMap::LookupAltitude> altitudeLookup;
@@ -104,7 +104,7 @@ public:
     int                               altitudeReceivedCount;
 };
 
-GPSListViewContextMenu::GPSListViewContextMenu(KipiImageList* const imagesList, GPSBookmarkOwner* const bookmarkOwner)
+GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList, GPSBookmarkOwner* const bookmarkOwner)
     : QObject(imagesList),
       d(new Private)
 {
@@ -154,19 +154,19 @@ GPSListViewContextMenu::GPSListViewContextMenu(KipiImageList* const imagesList, 
     d->imagesList->installEventFilter(this);
 }
 
-GPSListViewContextMenu::~GPSListViewContextMenu()
+GPSImageListContextMenu::~GPSImageListContextMenu()
 {
     delete d->altitudeUndoCommand;
     delete d;
 }
 
-bool GPSListViewContextMenu::eventFilter(QObject *watched, QEvent *event)
+bool GPSImageListContextMenu::eventFilter(QObject *watched, QEvent *event)
 {
     // we are only interested in context-menu events:
     if ((event->type()==QEvent::ContextMenu)&&d->enabled)
     {
         // enable or disable the actions:
-        KipiImageModel* const imageModel          = d->imagesList->getModel();
+        GPSImageModel* const imageModel          = d->imagesList->getModel();
         QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
         const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
         const int nSelected                       = selectedIndices.size();
@@ -181,7 +181,7 @@ bool GPSListViewContextMenu::eventFilter(QObject *watched, QEvent *event)
 
         for (int i=0; i<nSelected; ++i)
         {
-            KipiImageItem* const gpsItem = imageModel->itemFromIndex(selectedIndices.at(i));
+            GPSImageItem* const gpsItem = imageModel->itemFromIndex(selectedIndices.at(i));
 
             if (gpsItem)
             {
@@ -257,10 +257,10 @@ bool GPSListViewContextMenu::eventFilter(QObject *watched, QEvent *event)
 
 }
 
-bool GPSListViewContextMenu::getCurrentItemPositionAndUrl(GPSDataContainer* const gpsInfo, QUrl* const itemUrl)
+bool GPSImageListContextMenu::getCurrentItemPositionAndUrl(GPSDataContainer* const gpsInfo, QUrl* const itemUrl)
 {
     // NOTE: currentIndex does not seem to work any more since we use KLinkItemSelectionModel
-    KipiImageModel* const imageModel          = d->imagesList->getModel();
+    GPSImageModel* const imageModel          = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
 
@@ -276,7 +276,7 @@ bool GPSListViewContextMenu::getCurrentItemPositionAndUrl(GPSDataContainer* cons
         return false;
     }
 
-    KipiImageItem* const gpsItem = imageModel->itemFromIndex(currentIndex);
+    GPSImageItem* const gpsItem = imageModel->itemFromIndex(currentIndex);
 
     if (gpsItem)
     {
@@ -296,7 +296,7 @@ bool GPSListViewContextMenu::getCurrentItemPositionAndUrl(GPSDataContainer* cons
     return false;
 }
 
-void GPSListViewContextMenu::copyActionTriggered()
+void GPSImageListContextMenu::copyActionTriggered()
 {
     GPSDataContainer gpsInfo;
     QUrl itemUrl;
@@ -309,7 +309,7 @@ void GPSListViewContextMenu::copyActionTriggered()
     CoordinatesToClipboard(gpsInfo.getCoordinates(), itemUrl, QString());
 }
 
-void GPSListViewContextMenu::pasteActionTriggered()
+void GPSImageListContextMenu::pasteActionTriggered()
 {
     // extract the coordinates from the clipboard:
     QClipboard * const clipboard = QApplication::clipboard();
@@ -482,9 +482,9 @@ void GPSListViewContextMenu::pasteActionTriggered()
     setGPSDataForSelectedItems(gpsData, i18n("Coordinates pasted"));
 }
 
-void GPSListViewContextMenu::setGPSDataForSelectedItems(const GPSDataContainer& gpsData, const QString& undoDescription)
+void GPSImageListContextMenu::setGPSDataForSelectedItems(const GPSDataContainer& gpsData, const QString& undoDescription)
 {
-    KipiImageModel* const imageModel          = d->imagesList->getModel();
+    GPSImageModel* const imageModel          = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
     const int nSelected                       = selectedIndices.size();
@@ -493,7 +493,7 @@ void GPSListViewContextMenu::setGPSDataForSelectedItems(const GPSDataContainer& 
     for (int i=0; i<nSelected; ++i)
     {
         const QModelIndex itemIndex  = selectedIndices.at(i);
-        KipiImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(gpsItem);
@@ -508,27 +508,27 @@ void GPSListViewContextMenu::setGPSDataForSelectedItems(const GPSDataContainer& 
     emit(signalUndoCommand(undoCommand));
 }
 
-void GPSListViewContextMenu::slotBookmarkSelected(GPSDataContainer bookmarkPosition)
+void GPSImageListContextMenu::slotBookmarkSelected(GPSDataContainer bookmarkPosition)
 {
     setGPSDataForSelectedItems(bookmarkPosition, i18n("Bookmark selected"));
 }
 
-bool GPSListViewContextMenu::getCurrentPosition(GPSDataContainer* position, void* mydata)
+bool GPSImageListContextMenu::getCurrentPosition(GPSDataContainer* position, void* mydata)
 {
     if (!position || !mydata)
     {
         return false;
     }
 
-    GPSListViewContextMenu* const me = reinterpret_cast<GPSListViewContextMenu*>(mydata);
+    GPSImageListContextMenu* const me = reinterpret_cast<GPSImageListContextMenu*>(mydata);
 
     return me->getCurrentItemPositionAndUrl(position, 0);
 }
 
-void GPSListViewContextMenu::removeInformationFromSelectedImages(const GPSDataContainer::HasFlags flagsToClear, const QString& undoDescription)
+void GPSImageListContextMenu::removeInformationFromSelectedImages(const GPSDataContainer::HasFlags flagsToClear, const QString& undoDescription)
 {
     // enable or disable the actions:
-    KipiImageModel* const imageModel          = d->imagesList->getModel();
+    GPSImageModel* const imageModel          = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
     const int nSelected                       = selectedIndices.size();
@@ -537,7 +537,7 @@ void GPSListViewContextMenu::removeInformationFromSelectedImages(const GPSDataCo
     for (int i=0; i<nSelected; ++i)
     {
         const QModelIndex itemIndex  = selectedIndices.at(i);
-        KipiImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(gpsItem);
@@ -618,35 +618,35 @@ void GPSListViewContextMenu::removeInformationFromSelectedImages(const GPSDataCo
     }
 }
 
-void GPSListViewContextMenu::slotRemoveCoordinates()
+void GPSImageListContextMenu::slotRemoveCoordinates()
 {
     removeInformationFromSelectedImages(GPSDataContainer::HasCoordinates, i18n("Remove coordinates information"));
 }
 
-void GPSListViewContextMenu::slotRemoveAltitude()
+void GPSImageListContextMenu::slotRemoveAltitude()
 {
     removeInformationFromSelectedImages(GPSDataContainer::HasAltitude, i18n("Remove altitude information"));
 }
 
-void GPSListViewContextMenu::slotRemoveUncertainty()
+void GPSImageListContextMenu::slotRemoveUncertainty()
 {
     removeInformationFromSelectedImages(GPSDataContainer::HasNSatellites|GPSDataContainer::HasDop|GPSDataContainer::HasFixType,
                                         i18n("Remove uncertainty information"));
 }
 
-void GPSListViewContextMenu::setEnabled(const bool state)
+void GPSImageListContextMenu::setEnabled(const bool state)
 {
     d->enabled = state;
 }
 
-void GPSListViewContextMenu::slotRemoveSpeed()
+void GPSImageListContextMenu::slotRemoveSpeed()
 {
     removeInformationFromSelectedImages(GPSDataContainer::HasSpeed, i18n("Remove speed"));
 }
 
-void GPSListViewContextMenu::slotLookupMissingAltitudes()
+void GPSImageListContextMenu::slotLookupMissingAltitudes()
 {
-    KipiImageModel* const imageModel          = d->imagesList->getModel();
+    GPSImageModel* const imageModel          = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
 //     const int nSelected = selectedIndices.size();
@@ -656,7 +656,7 @@ void GPSListViewContextMenu::slotLookupMissingAltitudes()
 
     Q_FOREACH (const QModelIndex& currentIndex, selectedIndices)
     {
-        KipiImageItem* const gpsItem = imageModel->itemFromIndex(currentIndex);
+        GPSImageItem* const gpsItem = imageModel->itemFromIndex(currentIndex);
 
         if (!gpsItem)
         {
@@ -702,9 +702,9 @@ void GPSListViewContextMenu::slotLookupMissingAltitudes()
     d->altitudeLookup->startLookup();
 }
 
-void GPSListViewContextMenu::slotAltitudeLookupReady(const QList<int>& readyRequests)
+void GPSImageListContextMenu::slotAltitudeLookupReady(const QList<int>& readyRequests)
 {
-    KipiImageModel* const imageModel = d->imagesList->getModel();
+    GPSImageModel* const imageModel = d->imagesList->getModel();
 
     Q_FOREACH(const int requestIndex, readyRequests)
     {
@@ -716,7 +716,7 @@ void GPSListViewContextMenu::slotAltitudeLookupReady(const QList<int>& readyRequ
             continue;
         }
 
-        KipiImageItem* const gpsItem = imageModel->itemFromIndex(markerIndex);
+        GPSImageItem* const gpsItem = imageModel->itemFromIndex(markerIndex);
 
         if (!gpsItem)
         {
@@ -738,7 +738,7 @@ void GPSListViewContextMenu::slotAltitudeLookupReady(const QList<int>& readyRequ
     signalProgressChanged(d->altitudeReceivedCount);
 }
 
-void GPSListViewContextMenu::slotAltitudeLookupDone()
+void GPSImageListContextMenu::slotAltitudeLookupDone()
 {
     KGeoMap::LookupAltitude::Status requestStatus = d->altitudeLookup->getStatus();
 
@@ -765,7 +765,7 @@ void GPSListViewContextMenu::slotAltitudeLookupDone()
     emit(signalSetUIEnabled(true));
 }
 
-void GPSListViewContextMenu::slotAltitudeLookupCancel()
+void GPSImageListContextMenu::slotAltitudeLookupCancel()
 {
     if (d->altitudeLookup)
     {

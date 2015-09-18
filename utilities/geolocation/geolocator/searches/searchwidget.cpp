@@ -57,10 +57,10 @@
 // local includes
 
 #include "searchbackend.h"
-#include "gpssync_common.h"
+#include "gpscommon.h"
 #include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"
-#include "kipiimagemodel.h"
+#include "gpsimagemodel.h"
 
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
@@ -115,7 +115,7 @@ public:
     // Map
     KGeoMap::MapWidget*      mapWidget;
     GPSBookmarkOwner*        gpsBookmarkOwner;
-    KipiImageModel*          kipiImageModel;
+    GPSImageModel*          kipiImageModel;
     QItemSelectionModel*     kipiImageSelectionModel;
     QLineEdit*               searchTermLineEdit;
     QPushButton*             searchButton;
@@ -143,7 +143,7 @@ public:
 };
 
 SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
-                           KipiImageModel* const kipiImageModel,
+                           GPSImageModel* const kipiImageModel,
                            QItemSelectionModel* const kipiImageSelectionModel,
                            QWidget* const parent)
     : QWidget(parent),
@@ -516,13 +516,13 @@ public:
 
     SearchResultModel*   model;
     QItemSelectionModel* selectionModel;
-    KipiImageModel*      imageModel;
+    GPSImageModel*      imageModel;
     bool                 visible;
 };
 
 SearchResultModelHelper::SearchResultModelHelper(SearchResultModel* const resultModel,
                                                  QItemSelectionModel* const selectionModel,
-                                                 KipiImageModel* const imageModel,
+                                                 GPSImageModel* const imageModel,
                                                  QObject* const parent)
     : KGeoMap::ModelHelper(parent), d(new Private())
 {
@@ -769,7 +769,7 @@ void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex, const 
     for (int i=0; i<snappedIndices.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = snappedIndices.at(i);
-        KipiImageItem* const item             = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item             = d->imageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);
@@ -806,7 +806,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
     for (int i=0; i<selectedImageIndices.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = selectedImageIndices.at(i);
-        KipiImageItem* const item             = d->kipiImageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item             = d->kipiImageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

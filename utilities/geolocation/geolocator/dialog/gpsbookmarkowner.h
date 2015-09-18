@@ -46,7 +46,7 @@ class KBookmarkManager;
 namespace Digikam
 {
 
-class KipiImageModel;
+class GPSImageModel;
 class GPSUndoCommand;
 
 class GPSBookmarkModelHelper : public KGeoMap::ModelHelper
@@ -62,7 +62,7 @@ public:
 
 public:
 
-    GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, KipiImageModel* const kipiImageModel, QObject* const parent = 0);
+    GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, GPSImageModel* const kipiImageModel, QObject* const parent = 0);
     virtual ~GPSBookmarkModelHelper();
 
     void setVisible(const bool state);
@@ -97,7 +97,7 @@ class GPSBookmarkOwner : public QObject, public KBookmarkOwner
 
 public:
 
-    GPSBookmarkOwner(KipiImageModel* const kipiImageModel, QWidget* const parent);
+    GPSBookmarkOwner(GPSImageModel* const kipiImageModel, QWidget* const parent);
     virtual ~GPSBookmarkOwner();
 
     QMenu* getMenu() const;

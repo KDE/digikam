@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-06-28
- * @brief  Test loading and saving of data in KipiImageItem.
+ * @brief  Test loading and saving of data in GPSImageItem.
  *
  * @author Copyright (C) 2010 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
@@ -43,13 +43,13 @@
 
 using namespace Digikam;
 
-void TestKipiImageItem::initTestCase()
+void TestGPSImageItem::initTestCase()
 {
     // initialize exiv2 before doing any multitasking
     DMetadata::initializeExiv2();
 }
 
-void TestKipiImageItem::cleanupTestCase()
+void TestGPSImageItem::cleanupTestCase()
 {
     // clean up the exiv2 memory:
     DMetadata::cleanupExiv2();
@@ -67,9 +67,9 @@ QUrl GetTestDataDirectory()
     return testDataDir;
 }
 
-KipiImageItem* ItemFromFile(const QUrl& url)
+GPSImageItem* ItemFromFile(const QUrl& url)
 {
-    QScopedPointer<KipiImageItem> imageItem(new KipiImageItem(0, url));
+    QScopedPointer<GPSImageItem> imageItem(new GPSImageItem(0, url));
 
     if (imageItem->loadImageData(true, true))
     {
@@ -82,17 +82,17 @@ KipiImageItem* ItemFromFile(const QUrl& url)
 /**
  * @brief Dummy test that does nothing
  */
-void TestKipiImageItem::testNoOp()
+void TestGPSImageItem::testNoOp()
 {
 }
 
-void TestKipiImageItem::testBasicLoading()
+void TestGPSImageItem::testBasicLoading()
 {
     {
         // test failure on not-existing file
         QUrl testDataDir = GetTestDataDirectory();
         testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QLatin1String("not-existing"));
-        QScopedPointer<KipiImageItem> imageItem(ItemFromFile(testDataDir));
+        QScopedPointer<GPSImageItem> imageItem(ItemFromFile(testDataDir));
         QVERIFY(!imageItem);
     }
 
@@ -100,7 +100,7 @@ void TestKipiImageItem::testBasicLoading()
         // load a file without GPS info
         QUrl testDataDir = GetTestDataDirectory();
         testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QLatin1String("exiftest-nogps.png"));
-        QScopedPointer<KipiImageItem> imageItem(ItemFromFile(testDataDir));
+        QScopedPointer<GPSImageItem> imageItem(ItemFromFile(testDataDir));
         QVERIFY(imageItem);
 
         const GPSDataContainer container = imageItem->gpsData();
@@ -115,7 +115,7 @@ void TestKipiImageItem::testBasicLoading()
         // load a file with geo:5,15,25
         QUrl testDataDir = GetTestDataDirectory();
         testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QLatin1String("exiftest-5_15_25.jpg"));
-        QScopedPointer<KipiImageItem> imageItem(ItemFromFile(testDataDir));
+        QScopedPointer<GPSImageItem> imageItem(ItemFromFile(testDataDir));
         QVERIFY(imageItem);
 
         const GPSDataContainer container = imageItem->gpsData();
@@ -130,4 +130,4 @@ void TestKipiImageItem::testBasicLoading()
     }
 }
 
-QTEST_MAIN(TestKipiImageItem)
+QTEST_MAIN(TestGPSImageItem)

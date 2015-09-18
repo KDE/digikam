@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "kipiimageitem.h"
+#include "gpsimageitem.h"
 
 class QItemSelectionModel;
 class KConfigGroup;
@@ -46,7 +46,7 @@ class KConfigGroup;
 namespace Digikam
 {
 
-class KipiImageModel;
+class GPSImageModel;
 class GPSUndoCommand;
 
 class RGWidget : public QWidget
@@ -55,7 +55,7 @@ class RGWidget : public QWidget
 
 public:
 
-    RGWidget(KipiImageModel* const imageModel, QItemSelectionModel* const selectionModel, QWidget* const parent = 0);
+    RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const selectionModel, QWidget* const parent = 0);
     ~RGWidget();
 
     void setUIEnabled(const bool state);

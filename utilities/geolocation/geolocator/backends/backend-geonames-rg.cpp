@@ -42,7 +42,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "gpssync_common.h"
+#include "gpscommon.h"
 
 namespace Digikam
 {
@@ -129,7 +129,7 @@ void BackendGeonamesRG::nextPhoto()
     jobUrl.setQuery(q);
 
     d->jobs.first().kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-    d->jobs.first().kioJob->addMetaData(QStringLiteral("User-Agent"), getKipiUserAgentName());
+    d->jobs.first().kioJob->addMetaData(QStringLiteral("User-Agent"), getUserAgentName());
 
     connect(d->jobs.first().kioJob, SIGNAL(data(KIO::Job*,QByteArray)),
             this, SLOT(dataIsHere(KIO::Job*,QByteArray)));

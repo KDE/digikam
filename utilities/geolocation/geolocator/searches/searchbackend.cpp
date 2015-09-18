@@ -36,7 +36,7 @@
 
 // local includes
 
-#include "gpssync_common.h"
+#include "gpscommon.h"
 
 namespace Digikam
 {
@@ -88,7 +88,7 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
         jobUrl.setQuery(q);
         
         d->kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-        d->kioJob->addMetaData(QStringLiteral("User-Agent"), getKipiUserAgentName());
+        d->kioJob->addMetaData(QStringLiteral("User-Agent"), getUserAgentName());
 
         connect(d->kioJob, SIGNAL(data(KIO::Job*,QByteArray)),
                 this, SLOT(slotData(KIO::Job*,QByteArray)));
@@ -113,7 +113,7 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
         jobUrl.setQuery(q);
 
         d->kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-        d->kioJob->addMetaData(QStringLiteral("User-Agent"), getKipiUserAgentName());
+        d->kioJob->addMetaData(QStringLiteral("User-Agent"), getUserAgentName());
 
         connect(d->kioJob, SIGNAL(data(KIO::Job*,QByteArray)),
                 this, SLOT(slotData(KIO::Job*,QByteArray)));

@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "kipiimagemodel.h"
+#include "gpsimagemodel.h"
 
 namespace Digikam
 {
@@ -41,9 +41,9 @@ void GPSUndoCommand::changeItemData(const bool redoIt)
     if (undoList.isEmpty())
         return;
 
-    // get a pointer to the KipiImageModel:
+    // get a pointer to the GPSImageModel:
     // TODO: why is the model returned as const?
-    KipiImageModel* const imageModel = const_cast<KipiImageModel*>(dynamic_cast<const KipiImageModel*>(undoList.first().modelIndex.model()));
+    GPSImageModel* const imageModel = const_cast<GPSImageModel*>(dynamic_cast<const GPSImageModel*>(undoList.first().modelIndex.model()));
 
     if (!imageModel)
         return;
@@ -51,7 +51,7 @@ void GPSUndoCommand::changeItemData(const bool redoIt)
     for (int i=0; i<undoList.count(); ++i)
     {
         const UndoInfo& info      = undoList.at(i);
-        KipiImageItem* const item = imageModel->itemFromIndex(info.modelIndex);
+        GPSImageItem* const item = imageModel->itemFromIndex(info.modelIndex);
 
         // TODO: correctly handle the dirty flags
         // TODO: find a way to regenerate tag tree
@@ -77,13 +77,13 @@ void GPSUndoCommand::addUndoInfo(const UndoInfo& info)
     undoList << info;
 }
 
-void GPSUndoCommand::UndoInfo::readOldDataFromItem(const KipiImageItem* const imageItem)
+void GPSUndoCommand::UndoInfo::readOldDataFromItem(const GPSImageItem* const imageItem)
 {
     this->dataBefore = imageItem->gpsData();
     this->oldTagList = imageItem->getTagList(); 
 }
 
-void GPSUndoCommand::UndoInfo::readNewDataFromItem(const KipiImageItem* const imageItem)
+void GPSUndoCommand::UndoInfo::readNewDataFromItem(const GPSImageItem* const imageItem)
 {
     this->dataAfter = imageItem->gpsData();
     this->newTagList = imageItem->getTagList();

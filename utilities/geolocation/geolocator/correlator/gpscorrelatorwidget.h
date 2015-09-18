@@ -41,7 +41,7 @@ class KConfigGroup;
 namespace Digikam
 {
 
-class KipiImageModel;
+class GPSImageModel;
 class GPSUndoCommand;
 
 class GPSCorrelatorWidget : public QWidget
@@ -50,7 +50,7 @@ class GPSCorrelatorWidget : public QWidget
 
 public:
 
-    GPSCorrelatorWidget(QWidget* const parent, KipiImageModel* const imageModel, KGeoMap::TrackManager* const trackManager);
+    GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, KGeoMap::TrackManager* const trackManager);
     ~GPSCorrelatorWidget();
 
     void setUIEnabledExternal(const bool state);

@@ -8,26 +8,33 @@ set(libgeolocator_SRCS backends/backend-rg.cpp
                        backends/backend-geonames-rg.cpp
                        backends/backend-geonamesUS-rg.cpp
                        backends/backend-osm-rg.cpp
-                       tracks/track_correlator.cpp
-                       tracks/track_correlator_thread.cpp
-                       tracks/track_listmodel.cpp
+
+                       correlator/track_correlator.cpp
+                       correlator/track_correlator_thread.cpp
+                       correlator/track_listmodel.cpp
+                       correlator/gpscorrelatorwidget.cpp
+
                        reversegeocoding/rgtagmodel.cpp
                        reversegeocoding/rgwidget.cpp
+
                        searches/searchbackend.cpp
                        searches/searchwidget.cpp
-                       mapdragdrophandler.cpp
-                       kipiimagemodel.cpp
-                       kipiimageitem.cpp
-                       kipiimagelist.cpp
+
+                       dragdrop/mapdragdrophandler.cpp
+                       dragdrop/gpsimagelistdragdrophandler.cpp
+
+                       items/gpsimagemodel.cpp
+                       items/gpsimageitem.cpp
+                       items/gpsimagelist.cpp
+                       items/gpsimagelistcontextmenu.cpp
+
+                       dialog/gpsimagedetails.cpp
+                       dialog/gpsundocommand.cpp
+                       dialog/gpsbookmarkowner.cpp
+                       dialog/gpssyncdialog.cpp
+
                        gpssetup.cpp
                        gpssetupgeneral.cpp
-                       gpsimagelistdragdrophandler.cpp
-                       gpslistviewcontextmenu.cpp
-                       gpscorrelatorwidget.cpp
-                       gpsimagedetails.cpp
-                       gpsundocommand.cpp
-                       gpsbookmarkowner.cpp
-                       gpssyncdialog.cpp
                        tests/simpletreemodel/simpletreemodel.cpp
    )
 

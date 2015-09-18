@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KIPIIMAGEITEM_H
-#define KIPIIMAGEITEM_H
+#ifndef GPSIMAGEITEM_H
+#define GPSIMAGEITEM_H
 
 // Qt includes
 
@@ -97,9 +97,9 @@ typedef struct TagData
 
 } TagData;
 
-class KipiImageModel;
+class GPSImageModel;
 
-class KipiImageItem
+class GPSImageItem
 {
 public:
 
@@ -121,8 +121,8 @@ public:
 
     static const int ColumnGPSImageItemCount = 13;
 
-    KipiImageItem(const QUrl& url);
-    virtual ~KipiImageItem();
+    GPSImageItem(const QUrl& url);
+    virtual ~GPSImageItem();
 
     /// @name Loading and saving
     //@{
@@ -138,8 +138,8 @@ public:
 
     /// @name Functions used by the model
     //@{
-    static void setHeaderData(KipiImageModel* const model);
-    bool lessThan(const KipiImageItem* const otherItem, const int column) const;
+    static void setHeaderData(GPSImageModel* const model);
+    bool lessThan(const GPSImageItem* const otherItem, const int column) const;
     //@}
 
     /// @name GPS related functions
@@ -182,15 +182,15 @@ public:
 
 protected:
 
-    // these are only to be called by the KipiImageModel
+    // these are only to be called by the GPSImageModel
     QVariant data(const int column, const int role) const;
-    void setModel(KipiImageModel* const model);
+    void setModel(GPSImageModel* const model);
     void emitDataChanged();
     DMetadata* getMetadataForFile() const;
 
 protected:
 
-    KipiImageModel*        m_model;
+    GPSImageModel*        m_model;
 
     QUrl                   m_url;
     QDateTime              m_dateTime;
@@ -204,9 +204,9 @@ protected:
     QList<QList<TagData> > m_savedTagList;
     bool                   m_writeXmpTags;
 
-    friend class KipiImageModel;
+    friend class GPSImageModel;
 };
 
 } /* Digikam */
 
-#endif /* KIPIIMAGEITEM_H */
+#endif /* GPSIMAGEITEM_H */

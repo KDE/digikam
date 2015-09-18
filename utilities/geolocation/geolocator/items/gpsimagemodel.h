@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KIPIIMAGEMODEL_H
-#define KIPIIMAGEMODEL_H
+#ifndef GPSIMAGEMODEL_H
+#define GPSIMAGEMODEL_H
 
 // Qt includes
 
@@ -32,35 +32,30 @@
 #include <QPixmap>
 #include <QSortFilterProxyModel>
 
-// Libkipi includes
-
-#include <KIPI/Interface>
-
 // Local includes
 
-#include "kipiimageitem.h"
+#include "gpsimageitem.h"
 
 namespace Digikam
 {
 
-class KipiImageModel : public QAbstractItemModel
+class GPSImageModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
 
-    KipiImageModel(QObject* const parent = 0);
-    ~KipiImageModel();
+    GPSImageModel(QObject* const parent = 0);
+    ~GPSImageModel();
 
     // own functions:
-    void addItem(KipiImageItem* const newItem);
+    void addItem(GPSImageItem* const newItem);
     void setColumnCount(const int nColumns);
-    KipiImageItem* itemFromIndex(const QModelIndex& index) const;
-    KipiImageItem* itemFromUrl(const QUrl& url) const;
+    GPSImageItem* itemFromIndex(const QModelIndex& index) const;
+    GPSImageItem* itemFromUrl(const QUrl& url) const;
     QModelIndex indexFromUrl(const QUrl& url) const;
 
     QPixmap getPixmapForIndex(const QPersistentModelIndex& itemIndex, const int size);
-    void setKipiInterface(KIPI::Interface* const interface);
 
     // QAbstractItemModel:
     virtual int columnCount(const QModelIndex& parent = QModelIndex() ) const;
@@ -76,7 +71,7 @@ public:
 
 protected:
 
-    void itemChanged(KipiImageItem* const changedItem);
+    void itemChanged(GPSImageItem* const changedItem);
 
 Q_SIGNALS:
 
@@ -91,19 +86,19 @@ private:
     class Private;
     Private* const d;
 
-    friend class KipiImageItem;
+    friend class GPSImageItem;
 };
 
 // --------------------------------------------------------------------------------------------------------------------
 
-class KipiImageSortProxyModel : public QSortFilterProxyModel
+class GPSImageSortProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
 
-    KipiImageSortProxyModel(KipiImageModel* const kipiImageModel, QItemSelectionModel* const sourceSelectionModel);
-    ~KipiImageSortProxyModel();
+    GPSImageSortProxyModel(GPSImageModel* const imageModel, QItemSelectionModel* const sourceSelectionModel);
+    ~GPSImageSortProxyModel();
 
     QItemSelectionModel* mappedSelectionModel() const;
 
@@ -119,4 +114,4 @@ private:
 
 } /* Digikam */
 
-#endif /* KIPIIMAGEMODEL_H */
+#endif /* GPSIMAGEMODEL_H */

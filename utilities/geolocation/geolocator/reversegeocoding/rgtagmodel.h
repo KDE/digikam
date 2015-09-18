@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "kipiimageitem.h"
+#include "gpsimageitem.h"
 
 namespace Digikam
 {

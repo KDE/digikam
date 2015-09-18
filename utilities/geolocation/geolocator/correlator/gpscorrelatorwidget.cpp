@@ -62,8 +62,8 @@
 // local includes
 
 #include "digikam_debug.h"
-#include "kipiimagemodel.h"
-#include "kipiimageitem.h"
+#include "gpsimagemodel.h"
+#include "gpsimageitem.h"
 #include "gpsundocommand.h"
 #include "track_listmodel.h"
 
@@ -133,7 +133,7 @@ public:
     TrackListModel*         trackListModel;
     bool                    uiEnabledInternal;
     bool                    uiEnabledExternal;
-    KipiImageModel*         imageModel;
+    GPSImageModel*         imageModel;
 
     int                     correlationTotalCount;
     int                     correlationCorrelatedCount;
@@ -141,7 +141,7 @@ public:
     GPSUndoCommand*         correlationUndoCommand;
 };
 
-GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, KipiImageModel* const imageModel, KGeoMap::TrackManager* const trackManager)
+GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, KGeoMap::TrackManager* const trackManager)
     : QWidget(parent),
       d(new Private())
 {
@@ -497,7 +497,7 @@ void GPSCorrelatorWidget::slotCorrelate()
     for (int i = 0; i<imageCount; ++i)
     {
         QPersistentModelIndex imageIndex = d->imageModel->index(i, 0);
-        KipiImageItem* const imageItem   = d->imageModel->itemFromIndex(imageIndex);
+        GPSImageItem* const imageItem   = d->imageModel->itemFromIndex(imageIndex);
 
         if (!imageItem)
             continue;
@@ -534,7 +534,7 @@ void GPSCorrelatorWidget::slotItemsCorrelated(const Digikam::TrackCorrelator::Co
         if (!itemIndex.isValid())
             continue;
 
-        KipiImageItem* const imageItem                       = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const imageItem                       = d->imageModel->itemFromIndex(itemIndex);
 
         if (!imageItem)
             continue;

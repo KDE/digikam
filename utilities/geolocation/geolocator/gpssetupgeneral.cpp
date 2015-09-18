@@ -37,7 +37,7 @@
 
 // local includes
 
-#include "gpssync_common.h"
+#include "gpscommon.h"
 
 namespace Digikam
 {

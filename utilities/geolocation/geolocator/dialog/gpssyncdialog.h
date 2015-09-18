@@ -53,7 +53,7 @@ using namespace KGeoMap;
 namespace Digikam
 {
 
-class KipiImageModel;
+class GPSImageModel;
 class GPSUndoCommand;
 class GPSCorrelatorWidget;
 
@@ -63,7 +63,7 @@ class GPSSyncKGeoMapModelHelper : public ModelHelper
 
 public:
 
-    GPSSyncKGeoMapModelHelper(KipiImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent = 0);
+    GPSSyncKGeoMapModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent = 0);
     virtual ~GPSSyncKGeoMapModelHelper();
 
     virtual QAbstractItemModel* model() const;
