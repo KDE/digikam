@@ -1,4 +1,4 @@
-/* ============================================================
+/*============================================================
  *
  * This file is a part of kipi-plugins project
  * http://www.digikam.org
@@ -30,7 +30,6 @@
 #include <QKeyEvent>
 #include <QUrl>
 #include <QApplication>
-#include <QUrl>
 
 // KDE includes
 
@@ -340,7 +339,7 @@ void IPTCEditWidget::showPage(int page)
 
 int IPTCEditWidget::activePageIndex() const
 {
-    KPageWidgetItem* cur = currentPage();
+    KPageWidgetItem* const cur = currentPage();
 
     if (cur == d->page_content)    return 0;
     if (cur == d->page_origin)     return 1;

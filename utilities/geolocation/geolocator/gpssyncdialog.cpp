@@ -28,7 +28,6 @@
  *
  * ============================================================ */
 
-#include "gpssync_common.h"
 #include "gpssyncdialog.h"
 
 // Qt includes
@@ -63,7 +62,7 @@
 
 // KDE includes
 
-#include <kconfig.h>
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kwindowconfig.h>
@@ -80,6 +79,7 @@
 
 // Local includes
 
+#include "gpssync_common.h"
 #include "kipiimagemodel.h"
 #include "kipiimageitem.h"
 #include "mapdragdrophandler.h"
@@ -634,8 +634,8 @@ void GPSSyncDialog::slotFileMetadataLoaded(int beginIndex, int endIndex)
 
 void GPSSyncDialog::readSettings()
 {
-    KConfig config(QStringLiteral("kipirc"));   // FIXME
-    KConfigGroup group = config.group("GPS Sync 2 Settings");
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group = config->group("Geolocation Edit Settings");
 
     // --------------------------
 
@@ -716,8 +716,8 @@ void GPSSyncDialog::readSettings()
 
 void GPSSyncDialog::saveSettings()
 {
-    KConfig config(QStringLiteral("kipirc"));     // FIXME
-    KConfigGroup group = config.group("GPS Sync 2 Settings");
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group = config->group("Geolocation Edit Settings");
 
     // --------------------------
 
@@ -757,7 +757,7 @@ void GPSSyncDialog::saveSettings()
 
     // --------------------------
 
-    config.sync();
+    config->sync();
 }
 
 void GPSSyncDialog::closeEvent(QCloseEvent *e)
@@ -1181,7 +1181,6 @@ void GPSSyncKGeoMapModelHelper::addUngroupedModelHelper(ModelHelper* const newMo
 
 void GPSSyncDialog::slotConfigureClicked()
 {
-    KConfig config(QStringLiteral("kipirc")); // FIXME
     QScopedPointer<GPSSetup> setup(new GPSSetup(this));
     setup->exec();
 }
