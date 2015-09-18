@@ -75,13 +75,11 @@ GPSBookmarkOwner::GPSBookmarkOwner(KipiImageModel* const kipiImageModel, QWidget
 {
     d->parent = parent;
 
-    // TODO: where do we save the bookmarks? right now, they are kipi-specific
-    const QString bookmarksFileName =
-        QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
-        QLatin1Char('/') + QStringLiteral("kipi/geobookmarks.xml");
+    // TODO: where do we save the bookmarks? right now, they are application-specific
+    const QString bookmarksFileName = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
+                                      QLatin1Char('/') + QStringLiteral("kipi/geobookmarks.xml");
     d->actionCollection             = new KActionCollection(this);
-    d->bookmarkManager              = KBookmarkManager::managerForFile(
-        bookmarksFileName, QStringLiteral("kipigeobookmarks"));
+    d->bookmarkManager              = KBookmarkManager::managerForFile(bookmarksFileName, QStringLiteral("kipigeobookmarks"));
     d->bookmarkManager->setUpdate(true);
     d->bookmarkMenu                 = new QMenu(parent);
     d->bookmarkMenuController       = new KBookmarkMenu(d->bookmarkManager, this, d->bookmarkMenu, d->actionCollection);
@@ -218,15 +216,15 @@ void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(const KBookmarkGro
     }
 }
 
-GPSBookmarkModelHelper::GPSBookmarkModelHelper(
-    KBookmarkManager* const bookmarkManager, KipiImageModel* const kipiImageModel, QObject* const parent)
-    : ModelHelper(parent), d(new Private())
+GPSBookmarkModelHelper::GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, KipiImageModel* const kipiImageModel, QObject* const parent)
+    : ModelHelper(parent),
+      d(new Private())
 {
     d->model           = new QStandardItemModel(this);
     d->bookmarkManager = bookmarkManager;
     d->kipiImageModel  = kipiImageModel;
-    d->bookmarkIconUrl = QUrl::fromLocalFile(QStandardPaths::locate(
-        QStandardPaths::GenericDataLocation, QStringLiteral("gpssync/bookmarks-marker.png")));
+    d->bookmarkIconUrl = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                                    QStringLiteral("gpssync/bookmarks-marker.png")));
     d->pixmap          = QPixmap(d->bookmarkIconUrl.toLocalFile());
 
     connect(d->bookmarkManager, SIGNAL(bookmarksChanged(QString)),
@@ -334,7 +332,7 @@ void GPSBookmarkModelHelper::snapItemsTo(const QModelIndex& targetIndex, const Q
     if (!itemCoordinates(targetIndex, &targetCoordinates))
         return;
 
-    for (int i=0; i<snappedIndices.count(); ++i)
+    for (int i = 0; i < snappedIndices.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = snappedIndices.at(i);
         KipiImageItem* const item             = d->kipiImageModel->itemFromIndex(itemIndex);
