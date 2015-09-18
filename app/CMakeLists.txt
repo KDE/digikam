@@ -104,7 +104,6 @@ endif()
 
 if(KF5KGeoMap_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::KGeoMap
-                                              KF5::KHtml
                                               KF5::Bookmarks
                                               KF5::ItemModels
                                               KF5::GuiAddons

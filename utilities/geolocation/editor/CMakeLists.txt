@@ -54,5 +54,4 @@ target_link_libraries(geolocationedit
                       KF5::IconThemes
                       KF5::GuiAddons
                       KF5::Bookmarks
-                      KF5::KHtml
                     )

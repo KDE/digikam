@@ -155,7 +155,6 @@ find_package(KF5 REQUIRED COMPONENTS
              GuiAddons
              ItemModels
              Bookmarks
-             KHtml
 )
 
 # ==================================================================================================
@@ -569,7 +568,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
             "$<TARGET_PROPERTY:KF5::KGeoMap,INTERFACE_INCLUDE_DIRECTORIES>"
             "$<TARGET_PROPERTY:KF5::Bookmarks,INTERFACE_INCLUDE_DIRECTORIES>"
             "$<TARGET_PROPERTY:KF5::ItemModels,INTERFACE_INCLUDE_DIRECTORIES>"
-            "$<TARGET_PROPERTY:KF5::KHtml,INTERFACE_INCLUDE_DIRECTORIES>"
             "$<TARGET_PROPERTY:KF5::GuiAddons,INTERFACE_INCLUDE_DIRECTORIES>"            
            )
     endif()
