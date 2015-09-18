@@ -430,16 +430,16 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
 
     d->tabBar->installEventFilter(this);
 
-    d->detailsWidget = new GPSImageDetails(d->stackedWidget, d->imageModel);
+    d->detailsWidget    = new GPSImageDetails(d->stackedWidget, d->imageModel);
     d->stackedWidget->addWidget(d->detailsWidget);
 
     d->correlatorWidget = new GPSCorrelatorWidget(d->stackedWidget, d->imageModel, d->trackManager);
     d->stackedWidget->addWidget(d->correlatorWidget);
 
-    d->undoView = new QUndoView(d->undoStack, d->stackedWidget);
+    d->undoView         = new QUndoView(d->undoStack, d->stackedWidget);
     d->stackedWidget->addWidget(d->undoView);
 
-    d->rgWidget = new GPSReverseGeocodingWidget(d->imageModel, d->selectionModel, d->stackedWidget);
+    d->rgWidget         = new GPSReverseGeocodingWidget(d->imageModel, d->selectionModel, d->stackedWidget);
     d->stackedWidget->addWidget(d->rgWidget);
     d->stackedWidget->addWidget(d->searchWidget);
 
@@ -530,7 +530,7 @@ bool GPSSyncDialog::eventFilter(QObject* const o, QEvent* const e)
         QPoint p (m->x(), m->y());
         const int var = d->tabBar->tabAt(p);
 
-        if (var<0)
+        if (var < 0)
         {
             return false;
         }
