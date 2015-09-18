@@ -33,8 +33,6 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                        dialog/gpsbookmarkowner.cpp
                        dialog/gpssyncdialog.cpp
 
-                       gpssetup.cpp
-                       gpssetupgeneral.cpp
                        tests/simpletreemodel/simpletreemodel.cpp
    )
 
@@ -51,7 +49,6 @@ target_link_libraries(geolocationedit
                       KF5::KDcraw
                       KF5::KGeoMap
                       KF5::ItemModels
-                      KF5::IconThemes
                       KF5::GuiAddons
                       KF5::Bookmarks
                     )

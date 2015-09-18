@@ -94,7 +94,6 @@
 #include "searchwidget.h"
 #include "backend-rg.h"
 #include "gpsimagedetails.h"
-#include "gpssetup.h"
 
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
@@ -170,7 +169,6 @@ public:
         imageModel               = 0;
         selectionModel           = 0;
         uiEnabled                = true;
-        setupGlobalObject        = GPSSetupGlobalObject::instance();
         bookmarkOwner            = 0;
         actionBookmarkVisibility = 0;
         listViewContextMenu      = 0;
@@ -205,16 +203,16 @@ public:
         sortActionYoungestFirst  = 0;
         sortMenu                 = 0;
         mapLayout                = MapLayoutOne;
+        cbMapLayout              = 0;
     }
 
     // General things
-    GPSImageModel*                          imageModel;
+    GPSImageModel*                           imageModel;
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
-    GPSSetupGlobalObject*                    setupGlobalObject;
     GPSBookmarkOwner*                        bookmarkOwner;
-    QAction *                                 actionBookmarkVisibility;
-    GPSImageListContextMenu*                  listViewContextMenu;
+    QAction*                                 actionBookmarkVisibility;
+    GPSImageListContextMenu*                 listViewContextMenu;
     KGeoMap::TrackManager*                   trackManager;
 
     // Loading and saving
@@ -228,7 +226,7 @@ public:
     QDialogButtonBox*                        buttonBox;
     QSplitter*                               VSplitter;
     QSplitter*                               HSplitter;
-    GPSImageList*                           treeView;
+    GPSImageList*                            treeView;
     QStackedWidget*                          stackedWidget;
     QTabBar*                                 tabBar;
     int                                      splitterSize;
@@ -244,7 +242,7 @@ public:
     // UI: tab widgets
     GPSImageDetails*                         detailsWidget;
     GPSCorrelatorWidget*                     correlatorWidget;
-    RGWidget*               rgWidget;
+    RGWidget*                                rgWidget;
     SearchWidget*                            searchWidget;
 
     // map: UI
@@ -262,6 +260,7 @@ public:
     QAction*                                 sortActionOldestFirst;
     QAction*                                 sortActionYoungestFirst;
     QMenu*                                   sortMenu;
+    QComboBox*                               cbMapLayout;
 };
 
 GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
@@ -325,17 +324,18 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
 
     // ------------------------------------------------------------------------------------------------
 
-    QDialogButtonBox::StandardButtons btns = QDialogButtonBox::No    | 
-                                             QDialogButtonBox::Apply | 
-                                             QDialogButtonBox::Close;
-
-    d->buttonBox = new QDialogButtonBox(btns, this);
+    RHBox* const hbox            = new RHBox(this);
+    QLabel* const labelMapLayout = new QLabel(i18n("Layout:"), hbox);
+    d->cbMapLayout               = new QComboBox(hbox);
+    d->cbMapLayout->addItem(i18n("One map"),               QVariant::fromValue(MapLayoutOne));
+    d->cbMapLayout->addItem(i18n("Two maps - horizontal"), QVariant::fromValue(MapLayoutHorizontal));
+    d->cbMapLayout->addItem(i18n("Two maps - vertical"),   QVariant::fromValue(MapLayoutVertical));
+    labelMapLayout->setBuddy(d->cbMapLayout);
+    QWidget* const space         = new QWidget(hbox);
+    hbox->setStretchFactor(space, 10);
+   
+    d->buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, hbox);
     d->buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
-    d->buttonBox->button(QDialogButtonBox::No)->setText(i18nc("@action:button",  "Configure"));
-    d->buttonBox->button(QDialogButtonBox::No)->setIcon(QIcon::fromTheme(QLatin1String("configure")));
-
-    connect(d->buttonBox->button(QDialogButtonBox::No), &QPushButton::clicked,
-            this, &GPSSyncDialog::slotConfigureClicked);
 
     connect(d->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked,
             this, &GPSSyncDialog::slotApplyClicked);
@@ -343,7 +343,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     connect(d->buttonBox->button(QDialogButtonBox::Close), &QPushButton::clicked,
             this, &GPSSyncDialog::close);
 
-    mainLayout->addWidget(d->buttonBox);
+    mainLayout->addWidget(hbox);
 
     // ------------------------------------------------------------------------------------------------
     
@@ -508,8 +508,8 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     connect(d->detailsWidget, SIGNAL(signalUndoCommand(GPSUndoCommand*)),
             this, SLOT(slotGPSUndoCommand(GPSUndoCommand*)));
 
-    connect(d->setupGlobalObject, SIGNAL(signalSetupChanged()),
-            this, SLOT(slotSetupChanged()));
+    connect(d->cbMapLayout, SIGNAL(activated(int)),
+            this, SLOT(slotLayoutChanged(int)));
 
     readSettings();
 
@@ -702,7 +702,7 @@ void GPSSyncDialog::readSettings()
     // ----------------------------------
 
     d->mapLayout = MapLayout(group.readEntry("Map Layout", QVariant::fromValue(int(MapLayoutOne))).value<int>());
-    d->setupGlobalObject->writeEntry(QStringLiteral("Map Layout"), QVariant::fromValue(d->mapLayout));
+    d->cbMapLayout->setCurrentIndex(d->mapLayout);
     adjustMapLayout(false);
 
     if (d->mapWidget2)
@@ -1179,15 +1179,9 @@ void GPSSyncKGeoMapModelHelper::addUngroupedModelHelper(ModelHelper* const newMo
     d->ungroupedModelHelpers << newModelHelper;
 }
 
-void GPSSyncDialog::slotConfigureClicked()
+void GPSSyncDialog::slotLayoutChanged(int lay)
 {
-    QScopedPointer<GPSSetup> setup(new GPSSetup(this));
-    setup->exec();
-}
-
-void GPSSyncDialog::slotSetupChanged()
-{
-    d->mapLayout = d->setupGlobalObject->readEntry(QStringLiteral("Map Layout")).value<MapLayout>();
+    d->mapLayout = (MapLayout)lay;
     adjustMapLayout(true);
 }
 
@@ -1220,7 +1214,7 @@ MapWidget* GPSSyncDialog::makeMapWidget(QWidget** const pvbox)
 
 void GPSSyncDialog::adjustMapLayout(const bool syncSettings)
 {
-    if (d->mapLayout==MapLayoutOne)
+    if (d->mapLayout == MapLayoutOne)
     {
         if (d->mapSplitter->count()>1)
         {
@@ -1233,13 +1227,13 @@ void GPSSyncDialog::adjustMapLayout(const bool syncSettings)
         if (d->mapSplitter->count()==1)
         {
             QWidget* mapHolder = 0;
-            d->mapWidget2 = makeMapWidget(&mapHolder);
+            d->mapWidget2      = makeMapWidget(&mapHolder);
             d->mapSplitter->addWidget(mapHolder);
 
             if (syncSettings)
             {
-                KConfig config(QStringLiteral("kipirc"));
-                KConfigGroup group                = config.group("GPS Sync 2 Settings");
+                KSharedConfig::Ptr config = KSharedConfig::openConfig();
+                KConfigGroup group        = config->group("Geolocation Edit Settings");
                 const KConfigGroup groupMapWidget = KConfigGroup(&group, "Map Widget");
                 d->mapWidget2->readSettingsFromGroup(&groupMapWidget);
                 d->mapWidget2->setActive(true);

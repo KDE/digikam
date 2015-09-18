@@ -125,7 +125,6 @@ private Q_SLOTS:
     void slotSetUIEnabled(const bool enabledState, QObject* const cancelObject, const QString& cancelSlot);
     void slotSetUIEnabled(const bool enabledState);
     void slotApplyClicked();
-    void slotConfigureClicked();
     void slotFileChangesSaved(int beginIndex, int endIndex);
     void slotFileMetadataLoaded(int beginIndex, int endIndex);
     void slotProgressChanged(const int currentProgress);
@@ -136,7 +135,7 @@ private Q_SLOTS:
     void slotProgressCancelButtonClicked();
     void slotCurrentTabChanged(int);
     void slotBookmarkVisibilityToggled();
-    void slotSetupChanged();
+    void slotLayoutChanged(int);
 
 private:
 
