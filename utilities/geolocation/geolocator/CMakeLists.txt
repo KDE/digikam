@@ -11,14 +11,14 @@ set(libgeolocator_SRCS backends/backend-rg.cpp
                        tracks/track_correlator.cpp
                        tracks/track_correlator_thread.cpp
                        tracks/track_listmodel.cpp
-                       rgtagmodel.cpp
-                       tests/simpletreemodel/simpletreemodel.cpp
+                       reversegeocoding/rgtagmodel.cpp
+                       reversegeocoding/rgwidget.cpp
+                       searches/searchbackend.cpp
+                       searches/searchwidget.cpp
                        mapdragdrophandler.cpp
                        kipiimagemodel.cpp
                        kipiimageitem.cpp
                        kipiimagelist.cpp
-                       searchbackend.cpp
-                       searchwidget.cpp
                        gpssetup.cpp
                        gpssetupgeneral.cpp
                        gpsimagelistdragdrophandler.cpp
@@ -26,9 +26,9 @@ set(libgeolocator_SRCS backends/backend-rg.cpp
                        gpscorrelatorwidget.cpp
                        gpsimagedetails.cpp
                        gpsundocommand.cpp
-                       gpsreversegeocodingwidget.cpp
                        gpsbookmarkowner.cpp
                        gpssyncdialog.cpp
+                       tests/simpletreemodel/simpletreemodel.cpp
    )
 
 add_library(geolocator_src OBJECT ${libgeolocator_SRCS})

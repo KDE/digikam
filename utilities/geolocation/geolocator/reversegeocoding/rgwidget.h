@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef REVERSEGEOCODING_H
-#define REVERSEGEOCODING_H
+#ifndef RG_WIDGET_H
+#define RG_WIDGET_H
 
 // Qt includes
 
@@ -49,14 +49,14 @@ namespace Digikam
 class KipiImageModel;
 class GPSUndoCommand;
 
-class GPSReverseGeocodingWidget : public QWidget
+class RGWidget : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    GPSReverseGeocodingWidget(KipiImageModel* const imageModel, QItemSelectionModel* const selectionModel, QWidget* const parent = 0);
-    ~GPSReverseGeocodingWidget();
+    RGWidget(KipiImageModel* const imageModel, QItemSelectionModel* const selectionModel, QWidget* const parent = 0);
+    ~RGWidget();
 
     void setUIEnabled(const bool state);
     void readSettingsFromGroup(const KConfigGroup* const group);
@@ -115,4 +115,4 @@ private:
 
 }  /* namespace Digikam */
 
-#endif /* REVERSEGEOCODING_H */
+#endif /* RG_WIDGET_H */

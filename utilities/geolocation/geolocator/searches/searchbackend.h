@@ -35,16 +35,14 @@
 
 // Local includes
 
-#include "gpsreversegeocodingwidget.h"
+#include "rgwidget.h"
 
-/// @cond false
 namespace KIO
 {
     class Job;
 }
 
 class KJob;
-/// @endcond
 
 namespace Digikam
 {

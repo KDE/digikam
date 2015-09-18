@@ -88,7 +88,7 @@
 #include "gpscorrelatorwidget.h"
 #include "digikam_debug.h"
 #include "gpsundocommand.h"
-#include "gpsreversegeocodingwidget.h"
+#include "rgwidget.h"
 #include "gpsbookmarkowner.h"
 #include "gpslistviewcontextmenu.h"
 #include "searchwidget.h"
@@ -244,7 +244,7 @@ public:
     // UI: tab widgets
     GPSImageDetails*                         detailsWidget;
     GPSCorrelatorWidget*                     correlatorWidget;
-    GPSReverseGeocodingWidget*               rgWidget;
+    RGWidget*               rgWidget;
     SearchWidget*                            searchWidget;
 
     // map: UI
@@ -439,7 +439,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->undoView         = new QUndoView(d->undoStack, d->stackedWidget);
     d->stackedWidget->addWidget(d->undoView);
 
-    d->rgWidget         = new GPSReverseGeocodingWidget(d->imageModel, d->selectionModel, d->stackedWidget);
+    d->rgWidget         = new RGWidget(d->imageModel, d->selectionModel, d->stackedWidget);
     d->stackedWidget->addWidget(d->rgWidget);
     d->stackedWidget->addWidget(d->searchWidget);
 
