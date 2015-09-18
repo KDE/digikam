@@ -4,16 +4,16 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-set(libgeolocator_SRCS mapdragdrophandler.cpp
-                       backend-rg.cpp
-                       backend-geonames-rg.cpp
-                       backend-geonamesUS-rg.cpp
-                       backend-osm-rg.cpp
-                       track_correlator.cpp
-                       track_correlator_thread.cpp
-                       track_listmodel.cpp
+set(libgeolocator_SRCS backends/backend-rg.cpp
+                       backends/backend-geonames-rg.cpp
+                       backends/backend-geonamesUS-rg.cpp
+                       backends/backend-osm-rg.cpp
+                       tracks/track_correlator.cpp
+                       tracks/track_correlator_thread.cpp
+                       tracks/track_listmodel.cpp
                        rgtagmodel.cpp
                        tests/simpletreemodel/simpletreemodel.cpp
+                       mapdragdrophandler.cpp
                        kipiimagemodel.cpp
                        kipiimageitem.cpp
                        kipiimagelist.cpp
