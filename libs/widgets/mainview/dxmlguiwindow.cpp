@@ -315,12 +315,14 @@ void DXmlGuiWindow::slotNewToolbarConfig()
 
 void DXmlGuiWindow::createGeolocationEditAction()
 {
+#ifdef HAVE_KGEOMAP
     m_geolocationEditAction = new QAction(QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Edit Geolocation..."), this);
     actionCollection()->addAction(QLatin1String("geolocation_edit"), m_geolocationEditAction);
     actionCollection()->setDefaultShortcut(m_geolocationEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_G);
 
     connect(m_geolocationEditAction, SIGNAL(triggered(bool)),
-            this,SLOT(slotEditGeolocation()));
+            this, SLOT(slotEditGeolocation()));
+#endif    
 }
     
 void DXmlGuiWindow::createMetadataEditAction()
@@ -330,7 +332,7 @@ void DXmlGuiWindow::createMetadataEditAction()
     actionCollection()->setDefaultShortcut(m_metadataEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_M);
 
     connect(m_metadataEditAction, SIGNAL(triggered(bool)),
-            this,SLOT(slotEditMetadata()));
+            this, SLOT(slotEditMetadata()));
 }
 
 void DXmlGuiWindow::createKSaneAction()

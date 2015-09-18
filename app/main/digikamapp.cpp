@@ -3151,6 +3151,7 @@ QString DigikamApp::scannerTargetPlace()
 
 void DigikamApp::slotEditGeolocation()
 {
+#ifdef HAVE_KGEOMAP
     QList<QUrl> urls = view()->selectedUrls();
 
     if ( urls.isEmpty() )
@@ -3167,6 +3168,7 @@ void DigikamApp::slotEditGeolocation()
     {
         ScanController::instance()->scannedInfo(u.toLocalFile());
     }
+#endif
 }
 
 void DigikamApp::slotEditMetadata()
