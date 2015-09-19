@@ -103,16 +103,8 @@ MetadataOption::MetadataOption()
     : Option(i18n("Metadata..."),
              i18n("Add metadata information"))
 {
-    QString iconName(QLatin1String("metadataedit"));
-
-    // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
+    QString iconName(QLatin1String("text-xml"));
     QPixmap icon = QIcon::fromTheme(iconName).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize));
-
-    if (icon.isNull())
-    {
-        iconName = QLatin1String("editimage");
-    }
-
     setIcon(iconName);
 
     // --------------------------------------------------------

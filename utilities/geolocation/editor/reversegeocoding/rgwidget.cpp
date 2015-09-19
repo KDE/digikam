@@ -199,8 +199,8 @@ public:
 
 /**
  * Constructor
- * @param imageModel KIPI image model
- * @param selectionModel KIPI image selection model
+ * @param imageModel image model
+ * @param selectionModel image selection model
  * @param parent The parent object
  */
 RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const selectionModel, QWidget* const parent)
