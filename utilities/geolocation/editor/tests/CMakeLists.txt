@@ -71,5 +71,3 @@ add_test(gpssync_test_correlator       ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_co
 add_test(gpssync_test_gpsrgparsing     ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_rgparsing)
 add_test(gpssync_test_gpsrgtagmodel    ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_rgtagmodel)
 add_test(gpssync_test_gpskipiimageitem ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_kipiimageitem)
-
-ecm_optional_add_subdirectory(simpletreemodel)
