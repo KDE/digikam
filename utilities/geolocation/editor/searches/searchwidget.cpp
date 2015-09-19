@@ -115,7 +115,7 @@ public:
     // Map
     KGeoMap::MapWidget*      mapWidget;
     GPSBookmarkOwner*        gpsBookmarkOwner;
-    GPSImageModel*          kipiImageModel;
+    GPSImageModel*           kipiImageModel;
     QItemSelectionModel*     kipiImageSelectionModel;
     QLineEdit*               searchTermLineEdit;
     QPushButton*             searchButton;
@@ -724,7 +724,7 @@ void SearchWidget::slotCopyCoordinates()
     const QModelIndex currentIndex                        = d->searchResultsSelectionModel->currentIndex();
     const SearchResultModel::SearchResultItem currentItem = d->searchResultsModel->resultItem(currentIndex);
 
-    CoordinatesToClipboard(currentItem.result.coordinates, QUrl(), currentItem.result.name);
+    coordinatesToClipboard(currentItem.result.coordinates, QUrl(), currentItem.result.name);
 }
 
 void SearchWidget::saveSettingsToGroup(KConfigGroup* const group)

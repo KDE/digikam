@@ -5,35 +5,36 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 set(libgeolocationedit_SRCS backends/backend-rg.cpp
-                       backends/backend-geonames-rg.cpp
-                       backends/backend-geonamesUS-rg.cpp
-                       backends/backend-osm-rg.cpp
+                            backends/backend-geonames-rg.cpp
+                            backends/backend-geonamesUS-rg.cpp
+                            backends/backend-osm-rg.cpp
 
-                       correlator/track_correlator.cpp
-                       correlator/track_correlator_thread.cpp
-                       correlator/track_listmodel.cpp
-                       correlator/gpscorrelatorwidget.cpp
+                            correlator/track_correlator.cpp
+                            correlator/track_correlator_thread.cpp
+                            correlator/track_listmodel.cpp
+                            correlator/gpscorrelatorwidget.cpp
 
-                       reversegeocoding/rgtagmodel.cpp
-                       reversegeocoding/rgwidget.cpp
+                            reversegeocoding/rgtagmodel.cpp
+                            reversegeocoding/rgwidget.cpp
 
-                       searches/searchbackend.cpp
-                       searches/searchwidget.cpp
+                            searches/searchbackend.cpp
+                            searches/searchwidget.cpp
 
-                       dragdrop/mapdragdrophandler.cpp
-                       dragdrop/gpsimagelistdragdrophandler.cpp
+                            dragdrop/mapdragdrophandler.cpp
+                            dragdrop/gpsimagelistdragdrophandler.cpp
 
-                       items/gpsimagemodel.cpp
-                       items/gpsimageitem.cpp
-                       items/gpsimagelist.cpp
-                       items/gpsimagelistcontextmenu.cpp
+                            items/gpsimagemodel.cpp
+                            items/gpsimageitem.cpp
+                            items/gpsimagelist.cpp
+                            items/gpsimagelistcontextmenu.cpp
 
-                       dialog/gpsimagedetails.cpp
-                       dialog/gpsundocommand.cpp
-                       dialog/gpsbookmarkowner.cpp
-                       dialog/gpssyncdialog.cpp
+                            dialog/gpscommon.cpp
+                            dialog/gpsimagedetails.cpp
+                            dialog/gpsundocommand.cpp
+                            dialog/gpsbookmarkowner.cpp
+                            dialog/gpssyncdialog.cpp
 
-                       tests/simpletreemodel/simpletreemodel.cpp
+                            tests/simpletreemodel/simpletreemodel.cpp
    )
 
 add_library(geolocationedit_src OBJECT ${libgeolocationedit_SRCS})

@@ -35,6 +35,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QMessageBox>
+#include <QMimeData>
 
 // KDE includes
 
@@ -43,10 +44,6 @@
 // libkgeomap includes
 
 #include <KGeoMap/LookupFactory>
-
-// Libkipi includes
-
-#include <KIPI/Interface>
 
 // Local includes
 
@@ -95,7 +92,7 @@ public:
 
     GPSBookmarkOwner*                 bookmarkOwner;
 
-    GPSImageList*                    imagesList;
+    GPSImageList*                     imagesList;
 
     // Altitude lookup
     QPointer<KGeoMap::LookupAltitude> altitudeLookup;
@@ -166,7 +163,7 @@ bool GPSImageListContextMenu::eventFilter(QObject *watched, QEvent *event)
     if ((event->type()==QEvent::ContextMenu)&&d->enabled)
     {
         // enable or disable the actions:
-        GPSImageModel* const imageModel          = d->imagesList->getModel();
+        GPSImageModel* const imageModel           = d->imagesList->getModel();
         QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
         const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
         const int nSelected                       = selectedIndices.size();
@@ -219,15 +216,15 @@ bool GPSImageListContextMenu::eventFilter(QObject *watched, QEvent *event)
 
         if (pasteAvailable)
         {
-            QClipboard * const clipboard = QApplication::clipboard();
-            const QMimeData * mimedata   = clipboard->mimeData();
-            pasteAvailable               = mimedata->hasFormat(QStringLiteral("application/gpx+xml")) || mimedata->hasText();
+            QClipboard* const clipboard = QApplication::clipboard();
+            const QMimeData* mimedata   = clipboard->mimeData();
+            pasteAvailable              = mimedata->hasFormat(QStringLiteral("application/gpx+xml")) || mimedata->hasText();
         }
 
         d->actionPaste->setEnabled(pasteAvailable);
 
         // construct the context-menu:
-        QMenu * const menu = new QMenu(d->imagesList);
+        QMenu* const menu = new QMenu(d->imagesList);
         menu->addAction(d->actionCopy);
         menu->addAction(d->actionPaste);
         menu->addSeparator();
@@ -244,7 +241,7 @@ bool GPSImageListContextMenu::eventFilter(QObject *watched, QEvent *event)
             d->actionBookmark->setEnabled(nSelected>=1);
         }
 
-        QContextMenuEvent * const e = static_cast<QContextMenuEvent*>(event);
+        QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
         menu->exec(e->globalPos());
 
         delete menu;
@@ -260,7 +257,7 @@ bool GPSImageListContextMenu::eventFilter(QObject *watched, QEvent *event)
 bool GPSImageListContextMenu::getCurrentItemPositionAndUrl(GPSDataContainer* const gpsInfo, QUrl* const itemUrl)
 {
     // NOTE: currentIndex does not seem to work any more since we use KLinkItemSelectionModel
-    GPSImageModel* const imageModel          = d->imagesList->getModel();
+    GPSImageModel* const imageModel           = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
 
@@ -306,22 +303,23 @@ void GPSImageListContextMenu::copyActionTriggered()
         return;
     }
 
-    CoordinatesToClipboard(gpsInfo.getCoordinates(), itemUrl, QString());
+    coordinatesToClipboard(gpsInfo.getCoordinates(), itemUrl, QString());
 }
 
 void GPSImageListContextMenu::pasteActionTriggered()
 {
     // extract the coordinates from the clipboard:
-    QClipboard * const clipboard = QApplication::clipboard();
-    const QMimeData * mimedata   = clipboard->mimeData();
+    QClipboard* const clipboard = QApplication::clipboard();
+    const QMimeData* mimedata   = clipboard->mimeData();
 
     GPSDataContainer gpsData;
     bool foundData       = false;
+
     if (mimedata->hasFormat(QStringLiteral("application/gpx+xml")))
     {
         const QByteArray data = mimedata->data(QStringLiteral("application/gpx+xml"));
         bool xmlOkay          = true;
-        bool foundDoubleData = false;
+        bool foundDoubleData  = false;
 
         // code adapted from gpsdataparser.cpp
         QDomDocument gpxDoc(QStringLiteral("gpx"));
@@ -484,7 +482,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
 
 void GPSImageListContextMenu::setGPSDataForSelectedItems(const GPSDataContainer& gpsData, const QString& undoDescription)
 {
-    GPSImageModel* const imageModel          = d->imagesList->getModel();
+    GPSImageModel* const imageModel           = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
     const int nSelected                       = selectedIndices.size();
@@ -528,7 +526,7 @@ bool GPSImageListContextMenu::getCurrentPosition(GPSDataContainer* position, voi
 void GPSImageListContextMenu::removeInformationFromSelectedImages(const GPSDataContainer::HasFlags flagsToClear, const QString& undoDescription)
 {
     // enable or disable the actions:
-    GPSImageModel* const imageModel          = d->imagesList->getModel();
+    GPSImageModel* const imageModel           = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
     const int nSelected                       = selectedIndices.size();
@@ -646,10 +644,10 @@ void GPSImageListContextMenu::slotRemoveSpeed()
 
 void GPSImageListContextMenu::slotLookupMissingAltitudes()
 {
-    GPSImageModel* const imageModel          = d->imagesList->getModel();
+    GPSImageModel* const imageModel           = d->imagesList->getModel();
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
-//     const int nSelected = selectedIndices.size();
+//  const int nSelected                       = selectedIndices.size();
 
     // find the indices which have coordinates but no altitude
     KGeoMap::LookupAltitude::Request::List altitudeQueries;

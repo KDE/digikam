@@ -52,14 +52,14 @@ public:
     }
 
     DMetadataSettingsContainer settings;
-    QMutex                    mutex;
+    QMutex                     mutex;
 
-    const QString             configGroup;
+    const QString              configGroup;
 
 public:
 
     DMetadataSettingsContainer readFromConfig() const;
-    void                      writeToConfig() const;
+    void                       writeToConfig() const;
     DMetadataSettingsContainer setSettings(const DMetadataSettingsContainer& s);
 };
 
