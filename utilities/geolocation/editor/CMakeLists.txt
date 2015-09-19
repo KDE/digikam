@@ -33,8 +33,6 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             dialog/gpsundocommand.cpp
                             dialog/gpsbookmarkowner.cpp
                             dialog/gpssyncdialog.cpp
-
-                            tests/simpletreemodel/simpletreemodel.cpp
    )
 
 add_library(geolocationedit_src OBJECT ${libgeolocationedit_SRCS})

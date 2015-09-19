@@ -73,7 +73,7 @@
 #include "backend-geonamesUS-rg.h"
 #include "parsetagstring.h"
 #include "rgtagmodel.h"
-#include "tests/simpletreemodel/simpletreemodel.h"
+#include "albummodel.h"
 
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
@@ -222,15 +222,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
 
     Q_ASSERT(d->tagTreeView!=0);
 
-#if KIPI_VERSION>=0x010109
-    // FIXME d->externTagModel = interface->getTagTree();
-#endif
-
-    if (!d->externTagModel)
-    {
-        // we currently require a backend model, even if it is empty
-        d->externTagModel = new SimpleTreeModel(1, this);
-    }
+    d->externTagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0);
 
     if (d->externTagModel)
     {
@@ -446,7 +438,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
     connect(d->actionRemoveAllSpacers, SIGNAL(triggered(bool)),
             this, SLOT(slotRemoveAllSpacers()));
 
-    for (int i=0; i<d->backendRGList.count(); ++i)
+    for (int i = 0; i < d->backendRGList.count(); ++i)
     {
         connect(d->backendRGList[i], SIGNAL(signalRGReady(QList<RGInfo>&)),
                 this, SLOT(slotRGReady(QList<RGInfo>&)));

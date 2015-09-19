@@ -42,7 +42,6 @@ if(KF5KGeoMap_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
         $<TARGET_OBJECTS:kgeomaphelper_src>
-        $<TARGET_OBJECTS:geolocationedit_src>
     )
 endif()
 
@@ -65,7 +64,6 @@ target_link_libraries(digikamcore
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
-                      Qt5::Concurrent
                       Qt5::Sql
                       Qt5::WebKitWidgets
                       Qt5::PrintSupport
@@ -104,9 +102,6 @@ endif()
 
 if(KF5KGeoMap_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::KGeoMap
-                                              KF5::Bookmarks
-                                              KF5::ItemModels
-                                              KF5::GuiAddons
 )
 endif()
 
@@ -314,8 +309,9 @@ endif()
 if(${KF5KGeoMap_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
-            $<TARGET_OBJECTS:kgeomaphelper_src> # wrap kgeomap
-            $<TARGET_OBJECTS:gpssearch_src>     # wrap kgeomap
+            $<TARGET_OBJECTS:kgeomaphelper_src>
+            $<TARGET_OBJECTS:gpssearch_src>
+            $<TARGET_OBJECTS:geolocationedit_src>
     )
 endif()
 
@@ -339,6 +335,7 @@ target_link_libraries(digikamgui
                       Qt5::Gui
                       Qt5::Widgets
                       Qt5::Sql
+                      Qt5::Concurrent
                       Qt5::WebKitWidgets
                       Qt5::PrintSupport
                       Qt5::DBus
@@ -368,7 +365,11 @@ if(${KF5Kipi_FOUND})
 endif()
 
 if(${KF5KGeoMap_FOUND})
-     target_link_libraries(digikamgui KF5::KGeoMap)
+     target_link_libraries(digikamgui KF5::KGeoMap
+                                      KF5::Bookmarks
+                                      KF5::ItemModels
+                                      KF5::GuiAddons
+                          )
 endif()
 
 if(APPLE)
