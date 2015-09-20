@@ -95,6 +95,7 @@
 #include "searchwidget.h"
 #include "backend-rg.h"
 #include "gpsimagedetails.h"
+#include "gpssynckgeomapmodelhelper.h"
 
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
@@ -875,162 +876,6 @@ void GPSSyncDialog::slotSetUIEnabled(const bool enabledState)
     slotSetUIEnabled(enabledState, 0, QString());
 }
 
-// ------------------------------------------------------------------------------------------------
-
-class GPSSyncKGeoMapModelHelper::Private
-{
-public:
-
-    Private()
-    {
-        model          = 0;
-        selectionModel = 0;
-    }
-
-    GPSImageModel*      model;
-    QItemSelectionModel* selectionModel;
-    QList<ModelHelper*>  ungroupedModelHelpers;
-};
-
-GPSSyncKGeoMapModelHelper::GPSSyncKGeoMapModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent)
-    : ModelHelper(parent),
-      d(new Private())
-{
-    d->model          = model;
-    d->selectionModel = selectionModel;
-
-    connect(d->model, SIGNAL(signalThumbnailForIndexAvailable(QPersistentModelIndex,QPixmap)),
-            this, SLOT(slotThumbnailFromModel(QPersistentModelIndex,QPixmap)));
-
-    connect(d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            this, SIGNAL(signalModelChangedDrastically()));
-}
-
-QAbstractItemModel* GPSSyncKGeoMapModelHelper::model() const
-{
-    return d->model;
-}
-
-QItemSelectionModel* GPSSyncKGeoMapModelHelper::selectionModel() const
-{
-    return d->selectionModel;
-}
-
-bool GPSSyncKGeoMapModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
-{
-    GPSImageItem* const item = d->model->itemFromIndex(index);
-
-    if (!item)
-        return false;
-
-    if (!item->gpsData().hasCoordinates())
-        return false;
-
-    if (coordinates)
-        *coordinates = item->gpsData().getCoordinates();
-
-    return true;
-}
-
-GPSSyncKGeoMapModelHelper::~GPSSyncKGeoMapModelHelper()
-{
-}
-
-QPixmap GPSSyncKGeoMapModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
-{
-    return d->model->getPixmapForIndex(index, qMax(size.width(), size.height()));
-}
-
-QPersistentModelIndex GPSSyncKGeoMapModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
-{
-    const bool oldestFirst = sortKey & 1;
-    QPersistentModelIndex bestIndex;
-    QDateTime             bestTime;
-
-    for (int i=0; i<list.count(); ++i)
-    {
-        const QPersistentModelIndex currentIndex = list.at(i);
-        const GPSImageItem* const currentItem   = static_cast<GPSImageItem*>(d->model->itemFromIndex(currentIndex));
-        const QDateTime currentTime              = currentItem->dateTime();
-        bool takeThisIndex                       = bestTime.isNull();
-
-        if (!takeThisIndex)
-        {
-            if (oldestFirst)
-            {
-                takeThisIndex = currentTime < bestTime;
-            }
-            else
-            {
-                takeThisIndex = bestTime < currentTime;
-            }
-        }
-
-        if (takeThisIndex)
-        {
-            bestIndex = currentIndex;
-            bestTime  = currentTime;
-        }
-    }
-
-    return bestIndex;
-}
-
-void GPSSyncKGeoMapModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& pixmap)
-{
-    emit(signalThumbnailAvailableForIndex(index, pixmap));
-}
-
-void GPSSyncKGeoMapModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
-                                               const GeoCoordinates& targetCoordinates,
-                                               const QPersistentModelIndex& targetSnapIndex)
-{
-    if (targetSnapIndex.isValid())
-    {
-        const QAbstractItemModel* const targetModel = targetSnapIndex.model();
-
-        for (int i=0; i<d->ungroupedModelHelpers.count(); ++i)
-        {
-            ModelHelper* const ungroupedHelper = d->ungroupedModelHelpers.at(i);
-
-            if (ungroupedHelper->model()==targetModel)
-            {
-                QList<QModelIndex> iMovedMarkers;
-
-                for (int i=0; i<movedMarkers.count(); ++i)
-                {
-                    iMovedMarkers << movedMarkers.at(i);
-                }
-
-                ungroupedHelper->snapItemsTo(targetSnapIndex, iMovedMarkers);
-                return;
-            }
-        }
-    }
-
-    GPSUndoCommand* const undoCommand = new GPSUndoCommand();
-
-    for (int i=0; i<movedMarkers.count(); ++i)
-    {
-        const QPersistentModelIndex itemIndex = movedMarkers.at(i);
-        GPSImageItem* const item             = static_cast<GPSImageItem*>(d->model->itemFromIndex(itemIndex));
-
-        GPSUndoCommand::UndoInfo undoInfo(itemIndex);
-        undoInfo.readOldDataFromItem(item);
-
-        GPSDataContainer newData;
-        newData.setCoordinates(targetCoordinates);
-        item->setGPSData(newData);
-
-        undoInfo.readNewDataFromItem(item);
-        undoCommand->addUndoInfo(undoInfo);
-    }
-
-    undoCommand->setText(i18np("1 image moved", "%1 images moved", movedMarkers.count()));
-
-    emit(signalUndoCommand(undoCommand));
-}
-
 void GPSSyncDialog::saveChanges(const bool closeAfterwards)
 {
     // TODO: actually save the changes
@@ -1175,11 +1020,6 @@ void GPSSyncDialog::slotBookmarkVisibilityToggled()
     d->bookmarkOwner->bookmarkModelHelper()->setVisible(d->actionBookmarkVisibility->isChecked());
 }
 
-void GPSSyncKGeoMapModelHelper::addUngroupedModelHelper(ModelHelper* const newModelHelper)
-{
-    d->ungroupedModelHelpers << newModelHelper;
-}
-
 void GPSSyncDialog::slotLayoutChanged(int lay)
 {
     d->mapLayout = (MapLayout)lay;
@@ -1250,11 +1090,6 @@ void GPSSyncDialog::adjustMapLayout(const bool syncSettings)
             d->mapSplitter->setOrientation(Qt::Vertical);
         }
     }
-}
-
-ModelHelper::Flags GPSSyncKGeoMapModelHelper::modelFlags() const
-{
-    return FlagMovable;
 }
 
 }  // namespace Digikam

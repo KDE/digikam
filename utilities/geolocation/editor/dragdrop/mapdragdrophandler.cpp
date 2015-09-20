@@ -30,7 +30,7 @@
 
 // local includes
 
-#include "gpssyncdialog.h"
+#include "gpssynckgeomapmodelhelper.h"
 
 namespace Digikam
 {
@@ -81,4 +81,4 @@ QMimeData* MapDragDropHandler::createMimeData(const QList<QPersistentModelIndex>
     return 0;
 }
 
-} /* Digikam */
+} /* namespace Digikam */

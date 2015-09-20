@@ -28,74 +28,59 @@
  *
  * ============================================================ */
 
-#ifndef GPSSYNCDIALOG_H
-#define GPSSYNCDIALOG_H
+#ifndef GPSSYNCKGEOMAPMODELHELPER_H
+#define GPSSYNCKGEOMAPMODELHELPER_H
 
 // Qt includes
 
 #include <QModelIndex>
-#include <QWidget>
-#include <QDialog>
-#include <QUrl>
 
 // Libkgeomap includes
 
-#include <KGeoMap/Types>
 #include <KGeoMap/ModelHelper>
-#include <KGeoMap/Tracks>
 
 namespace KGeoMap
 {
     class MapWidget;
 }
+
 using namespace KGeoMap;
 
 namespace Digikam
 {
 
+class GPSImageModel;
 class GPSUndoCommand;
 
-class GPSSyncDialog : public QDialog
+class GPSSyncKGeoMapModelHelper : public ModelHelper
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSSyncDialog(QWidget* const parent);
-    ~GPSSyncDialog();
+    GPSSyncKGeoMapModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent = 0);
+    virtual ~GPSSyncKGeoMapModelHelper();
 
-    void setImages(const QList<QUrl>& images);
+    virtual QAbstractItemModel*  model()          const;
+    virtual QItemSelectionModel* selectionModel() const;
+    virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const;
+    virtual Flags modelFlags() const;
 
-protected:
+    virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
+    virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey);
 
-    void closeEvent(QCloseEvent* e);
-    bool eventFilter(QObject*, QEvent*);
+    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers, 
+                                const GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex);
 
-private:
-
-    void readSettings();
-    void saveSettings();
-    void saveChanges(const bool closeAfterwards);
-    MapWidget* makeMapWidget(QWidget** const pvbox);
-    void adjustMapLayout(const bool syncSettings);
+    void addUngroupedModelHelper(ModelHelper* const newModelHelper);
 
 private Q_SLOTS:
 
-    void slotImageActivated(const QModelIndex& index);
-    void slotSetUIEnabled(const bool enabledState, QObject* const cancelObject, const QString& cancelSlot);
-    void slotSetUIEnabled(const bool enabledState);
-    void slotApplyClicked();
-    void slotFileChangesSaved(int beginIndex, int endIndex);
-    void slotFileMetadataLoaded(int beginIndex, int endIndex);
-    void slotProgressChanged(const int currentProgress);
-    void slotProgressSetup(const int maxProgress, const QString& progressText);
-    void slotGPSUndoCommand(GPSUndoCommand* undoCommand);
-    void slotSortOptionTriggered(QAction* sortAction);
-    void setCurrentTab(const int index);
-    void slotProgressCancelButtonClicked();
-    void slotCurrentTabChanged(int);
-    void slotBookmarkVisibilityToggled();
-    void slotLayoutChanged(int);
+    void slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& pixmap);
+
+Q_SIGNALS:
+
+    void signalUndoCommand(GPSUndoCommand* undoCommand);
 
 private:
 
@@ -105,4 +90,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* GPSSYNCDIALOG_H */
+#endif /* GPSSYNCKGEOMAPMODELHELPER_H */
