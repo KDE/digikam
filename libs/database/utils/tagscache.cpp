@@ -224,6 +224,9 @@ public:
             pickLabelsTags      = pickTags;
         }
     }
+
+    QList<int> tagsForFragment(bool (QString::*stringFunction)(const QString &, Qt::CaseSensitivity cs) const,
+                               const QString& fragment, Qt::CaseSensitivity caseSensitivity, HiddenTagsPolicy hiddenTagsPolicy);
 };
 
 // ------------------------------------------------------------------------------------------
@@ -1077,6 +1080,44 @@ QStringList TagsCache::shortenedTagPaths(const QList<int>& ids,
                                          LeadingSlashPolicy slashPolicy, HiddenTagsPolicy hiddenTagsPolicy) const
 {
     return ImagePropertiesTab::shortenedTagPaths(tagPaths(ids, slashPolicy, hiddenTagsPolicy));
+}
+
+QList<int> TagsCache::TagsCachePriv::tagsForFragment(bool (QString::*stringFunction)(const QString &, Qt::CaseSensitivity cs) const,
+                                                     const QString& fragment,
+                                                     Qt::CaseSensitivity caseSensitivity,
+                                                     HiddenTagsPolicy hiddenTagsPolicy)
+{
+    checkNameHash();
+    QList<int> ids;
+    QMultiHash<QString, int>::const_iterator it;
+    const bool excludeHiddenTags = hiddenTagsPolicy == NoHiddenTags;
+
+    if (excludeHiddenTags)
+    {
+        checkProperties();
+    }
+
+    QReadLocker locker(&lock);
+    for (it = nameHash.constBegin(); it != nameHash.constEnd(); ++it)
+    {
+        if ( (!excludeHiddenTags || !internalTags.contains(it.value())) && (it.key().*stringFunction)(fragment, caseSensitivity))
+        {
+            ids << it.value();
+        }
+    }
+    return ids;
+}
+
+QList<int> TagsCache::tagsStartingWith(const QString& fragment, Qt::CaseSensitivity caseSensitivity,
+                                      HiddenTagsPolicy hiddenTagsPolicy)
+{
+    return d->tagsForFragment(&QString::startsWith, fragment, caseSensitivity, hiddenTagsPolicy);
+}
+
+QList<int> TagsCache::tagsContaining(const QString& fragment, Qt::CaseSensitivity caseSensitivity,
+                                      HiddenTagsPolicy hiddenTagsPolicy)
+{
+    return d->tagsForFragment(&QString::contains, fragment, caseSensitivity, hiddenTagsPolicy);
 }
 
 } // namespace Digikam

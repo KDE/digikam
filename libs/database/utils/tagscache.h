@@ -254,6 +254,16 @@ public:
      */
     int pickLabelFromTags(QList<int> tagIds);
 
+    /**
+     * Returns a list of tag ids whose tag name (not path) starts with /  contains the given fragment
+     */
+    QList<int> tagsContaining(const QString& fragment,
+                               Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive,
+                               HiddenTagsPolicy hiddenTagsPolicy = NoHiddenTags);
+    QList<int> tagsStartingWith(const QString& begin,
+                                Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive,
+                                HiddenTagsPolicy hiddenTagsPolicy = NoHiddenTags);
+
     static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
     static QLatin1String propertyNameDigikamInternalTag();
     static QLatin1String propertyNameExcludedFromWriting();
