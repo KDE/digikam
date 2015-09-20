@@ -341,7 +341,7 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* const filterMo
             expand(m_albumFilterModel->rootAlbumIndex());
         }
 
-        m_albumFilterModel->setDynamicSortFilter(true);
+        //m_albumFilterModel->setDynamicSortFilter(true);
     }
 }
 

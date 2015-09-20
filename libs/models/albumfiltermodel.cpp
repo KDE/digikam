@@ -427,9 +427,9 @@ void AlbumFilterModel::slotAlbumRenamed(Album* album)
 
 void AlbumFilterModel::slotAlbumsHaveBeenUpdated(int type)
 {
-    if (isFiltering() && sourceAlbumModel() && sourceAlbumModel()->albumType() == type)
+    if (sourceAlbumModel() && sourceAlbumModel()->albumType() == type)
     {
-        invalidateFilter();
+        invalidate();
     }
 }
 

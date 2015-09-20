@@ -106,7 +106,7 @@ void AlbumSelectComboBox::setModel(AbstractCheckableAlbumModel* model, AlbumFilt
     else
     {
         d->filterModel = new AlbumFilterModel(this);
-        d->filterModel->setDynamicSortFilter(true);
+        //d->filterModel->setDynamicSortFilter(true);
         d->filterModel->setSourceAlbumModel(d->model);
     }
 
