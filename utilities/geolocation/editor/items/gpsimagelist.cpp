@@ -33,11 +33,11 @@
 #include <QWheelEvent>
 #include <QMenu>
 #include <QAction>
+#include <QIcon>
 
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -192,8 +192,8 @@ void GPSImageItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& 
     {
         // TODO: paint some default logo
         // TODO: cache this logo
-        itemPixmap = SmallIcon(QStringLiteral("image-x-generic"),
-                               d->thumbnailSize, KIconLoader::DisabledState);
+        itemPixmap = QIcon::fromTheme(QStringLiteral("image-x-generic"))
+                                      .pixmap(d->thumbnailSize, QIcon::Disabled);
     }
 
     const QSize availableSize = option.rect.size();
