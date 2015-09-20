@@ -96,4 +96,3 @@ private:
 } /* namespace Digikam */
 
 #endif /* GPSCORRELATORWIDGET_H */
-

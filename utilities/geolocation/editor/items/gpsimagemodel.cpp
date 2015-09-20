@@ -379,4 +379,4 @@ Qt::DropActions GPSImageModel::supportedDragActions() const
     return Qt::CopyAction;
 }
 
-} /* Digikam */
+} /* namespace Digikam */

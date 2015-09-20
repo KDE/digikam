@@ -71,7 +71,6 @@ public:
     QPointer<KIO::Job> kioJob;
 };
 
-
 class BackendOsmRG::Private
 {
 public:
@@ -97,9 +96,9 @@ public:
  * @param Parent object.
  */
 BackendOsmRG::BackendOsmRG(QObject* const parent)
-    : RGBackend(parent), d(new Private())
+    : RGBackend(parent),
+      d(new Private())
 {
-
 }
 
 /**
@@ -298,4 +297,4 @@ void BackendOsmRG::cancelRequests()
     d->errorMessage.clear();
 }
 
-} // Digikam
+} // namespace Digikam

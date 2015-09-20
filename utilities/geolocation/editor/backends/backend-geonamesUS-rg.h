@@ -76,6 +76,6 @@ private:
     Private* const d;
 };
 
-} //KIPIGISSyncPlugin
+} // namespace Digikam
 
-#endif
+#endif // BACKEND_GEONAMESUS_RG_H

@@ -91,6 +91,7 @@
 #include "gpsundocommand.h"
 #include "rgwidget.h"
 #include "gpsbookmarkowner.h"
+#include "gpsbookmarkmodelhelper.h"
 #include "searchwidget.h"
 #include "backend-rg.h"
 #include "gpsimagedetails.h"
@@ -126,7 +127,7 @@ public:
 public:
 
     typedef QPair<QUrl, QString> result_type;
-    GPSImageModel* const        imageModel;
+    GPSImageModel* const         imageModel;
 };
 
 // ---------------------------------------------------------------------------------
@@ -155,7 +156,7 @@ public:
 public:
 
     typedef QPair<QUrl, QString> result_type;
-    GPSImageModel* const        imageModel;
+    GPSImageModel* const         imageModel;
 };
 
 // ---------------------------------------------------------------------------------

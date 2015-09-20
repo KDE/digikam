@@ -57,6 +57,6 @@ Q_SIGNALS:
     void signalRGReady(QList<RGInfo>&);
 };
 
-} //KIPIGPSPlugin
+} // namespace Digikam
 
 #endif /* BACKEND_RG_H */

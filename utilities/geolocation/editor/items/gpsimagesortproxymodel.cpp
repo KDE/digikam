@@ -70,7 +70,7 @@ bool GPSImageSortProxyModel::lessThan(const QModelIndex& left, const QModelIndex
 {
     if ((!left.isValid())||(!right.isValid()))
     {
-//         qCDebug(DIGIKAM_GENERAL_LOG)<<"INVALID INDICES"<<left<<right;
+//      qCDebug(DIGIKAM_GENERAL_LOG) << "INVALID INDICES" << left << right;
         return false;
     }
 
@@ -78,7 +78,7 @@ bool GPSImageSortProxyModel::lessThan(const QModelIndex& left, const QModelIndex
     const GPSImageItem* const itemLeft  = d->imageModel->itemFromIndex(left);
     const GPSImageItem* const itemRight = d->imageModel->itemFromIndex(right);
 
-//     qCDebug(DIGIKAM_GENERAL_LOG)<<itemLeft<<itemRight<<column<<rowCount()<<d->imageModel->rowCount();
+//  qCDebug(DIGIKAM_GENERAL_LOG) << itemLeft << itemRight << column << rowCount() << d->imageModel->rowCount();
     return itemLeft->lessThan(itemRight, column);
 }
 
@@ -87,4 +87,4 @@ QItemSelectionModel* GPSImageSortProxyModel::mappedSelectionModel() const
     return d->linkItemSelectionModel;
 }
 
-} /* Digikam */
+} /* namespace Digikam */

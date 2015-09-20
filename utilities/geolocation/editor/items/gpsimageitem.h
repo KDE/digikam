@@ -207,6 +207,6 @@ protected:
     friend class GPSImageModel;
 };
 
-} /* Digikam */
+} /* namespace Digikam */
 
 #endif /* GPSIMAGEITEM_H */

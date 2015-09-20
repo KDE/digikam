@@ -34,6 +34,7 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             dialog/gpsimagedetails.cpp
                             dialog/gpsundocommand.cpp
                             dialog/gpsbookmarkowner.cpp
+                            dialog/gpsbookmarkmodelhelper.cpp
                             dialog/gpssyncdialog.cpp
    )
 

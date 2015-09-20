@@ -286,4 +286,4 @@ void BackendGeonamesRG::cancelRequests()
     d->errorMessage.clear();
 }
 
-} //Digikam
+} // namespace Digikam

@@ -76,7 +76,6 @@ private:
     Private* const d;
 };
 
-
-} //KIPIGISSyncPlugin
+} // namespace Digikam
 
 #endif /* BACKEND_GEONAMES_RG_H */

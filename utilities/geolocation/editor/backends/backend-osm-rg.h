@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-
 #ifndef BACKEND_OSM_RG_H
 #define BACKEND_OSM_RG_H
 
@@ -38,7 +37,11 @@
 
 #include "backend-rg.h"
 
-namespace KIO { class Job; }
+namespace KIO
+{
+    class Job;
+}
+
 class KJob;
 
 namespace Digikam
@@ -72,7 +75,6 @@ private:
     Private* const d;
 };
 
-
-} // KIPIGISSyncPlugin
+} // namespace Digikam
 
 #endif /* BACKEND_OSM_RG_H */

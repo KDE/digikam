@@ -132,5 +132,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::TrackCorrelator::Correlation::List)
 
-#endif  // TRACK_CORRELATOR_H
-
+#endif // TRACK_CORRELATOR_H

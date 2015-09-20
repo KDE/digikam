@@ -22,16 +22,16 @@
  *
  * ============================================================ */
 
-#ifndef GPSBOOKMARKOWNER_H
-#define GPSBOOKMARKOWNER_H
-
-// Qt includes
-
-#include <QMenu>
+#ifndef GPSBOOKMARKMODELHELPER_H
+#define GPSBOOKMARKMODELHELPER_H
 
 // KDE includes:
 
 #include <kbookmarkmanager.h>
+
+// libkgeomap includes
+
+#include <KGeoMap/ModelHelper>
 
 // local includes:
 
@@ -43,36 +43,41 @@ namespace Digikam
 {
 
 class GPSImageModel;
-class GPSBookmarkModelHelper;
+class GPSUndoCommand;
 
-class GPSBookmarkOwner : public QObject, public KBookmarkOwner
+class GPSBookmarkModelHelper : public KGeoMap::ModelHelper
 {
     Q_OBJECT
 
 public:
 
-    GPSBookmarkOwner(GPSImageModel* const kipiImageModel, QWidget* const parent);
-    virtual ~GPSBookmarkOwner();
-
-    QMenu* getMenu() const;
-
-    void changeAddBookmark(const bool state);
-    void setPositionAndTitle(const KGeoMap::GeoCoordinates& coordinates, const QString& title);
-
-    KBookmarkManager*       bookmarkManager()     const;
-    GPSBookmarkModelHelper* bookmarkModelHelper() const;
+    enum Constants
+    {
+        CoordinatesRole = Qt::UserRole + 1
+    };
 
 public:
 
-    virtual bool supportsTabs() const;
-    virtual QString currentTitle() const;
-    virtual QUrl    currentUrl() const;
-    virtual bool enableOption(BookmarkOption option) const;
-    virtual void openBookmark(const KBookmark&, Qt::MouseButtons, Qt::KeyboardModifiers);
+    GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, GPSImageModel* const kipiImageModel, QObject* const parent = 0);
+    virtual ~GPSBookmarkModelHelper();
+
+    void setVisible(const bool state);
+
+    virtual QAbstractItemModel* model() const;
+    virtual QItemSelectionModel* selectionModel() const;
+    virtual bool itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const;
+    virtual bool itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const;
+    virtual Flags modelFlags() const;
+    virtual Flags itemFlags(const QModelIndex& index) const;
+    virtual void snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices);
+
+private Q_SLOTS:
+
+    void slotUpdateBookmarksModel();
 
 Q_SIGNALS:
 
-    void positionSelected(const GPSDataContainer& position);
+    void signalUndoCommand(GPSUndoCommand* undoCommand);
 
 private:
 
@@ -82,4 +87,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // GPSBOOKMARKOWNER_H
+#endif // GPSBOOKMARKMODELHELPER_H

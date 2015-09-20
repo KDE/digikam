@@ -41,7 +41,6 @@ namespace Digikam
 RGBackend::RGBackend(QObject* const parent)
     : QObject(parent)
 {
-
 }
 
 /**
@@ -61,4 +60,4 @@ QString RGBackend::backendName()
     return QString();
 }
 
-} //Digikam
+} // namespace Digikam
