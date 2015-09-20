@@ -27,7 +27,6 @@
 
 // Qt includes
 
-#include <QItemDelegate>
 #include <QTreeView>
 
 // Local includes
@@ -92,29 +91,6 @@ private:
     Private* const d;
 };
 
-// -------------------------------------------------------------------------------------------------
-
-class GPSImageItemDelegate : public QItemDelegate
-{
-    Q_OBJECT
-
-public:
-
-    explicit GPSImageItemDelegate(GPSImageList* const imageList, QObject* const parent = 0);
-    virtual ~GPSImageItemDelegate();
-
-    void setThumbnailSize(const int size);
-    int  getThumbnailSize() const;
-
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const;
-
-private:
-
-    class Private;
-    Private* const d;
-};
-
-} /* Digikam */
+} /* namespace Digikam */
 
 #endif /* GPSIMAGELIST_H */

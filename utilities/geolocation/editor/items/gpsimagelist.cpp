@@ -42,6 +42,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "gpsimageitemdelegate.h"
 #include "gpsimagelistdragdrophandler.h"
 
 namespace Digikam
@@ -141,100 +142,6 @@ void GPSImageList::setModelAndSelectionModel(GPSImageModel* const model, QItemSe
 void GPSImageList::setDragDropHandler(ImageListDragDropHandler* const dragDropHandler)
 {
     d->dragDropHandler = dragDropHandler;
-}
-
-// ------------------------------------------------------------------------------------------------
-
-class GPSImageItemDelegate::Private
-{
-public:
-
-    Private()
-    : imageList(0),
-      thumbnailSize(60)
-    {
-    }
-
-    GPSImageList* imageList;
-    int            thumbnailSize;
-};
-
-GPSImageItemDelegate::GPSImageItemDelegate(GPSImageList* const imageList, QObject* const parent)
-    : QItemDelegate(parent), d(new Private())
-{
-    d->imageList = imageList;
-}
-
-GPSImageItemDelegate::~GPSImageItemDelegate()
-{
-    delete d;
-}
-
-void GPSImageItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
-{
-    if (sortMappedindex.column() != GPSImageItem::ColumnThumbnail)
-    {
-        QItemDelegate::paint(painter, option, sortMappedindex);
-        return;
-    }
-
-    const QModelIndex& sourceModelIndex = d->imageList->getSortProxyModel()->mapToSource(sortMappedindex);
-
-    if (option.state & QStyle::State_Selected)
-    {
-        painter->fillRect(option.rect, option.palette.highlight());
-    }
-
-    // TODO: clipping, selected state, disabled state, etc.
-    QPixmap itemPixmap = d->imageList->getModel()->getPixmapForIndex(sourceModelIndex, d->thumbnailSize);
-
-    if (itemPixmap.isNull())
-    {
-        // TODO: paint some default logo
-        // TODO: cache this logo
-        itemPixmap = QIcon::fromTheme(QStringLiteral("image-x-generic"))
-                                      .pixmap(d->thumbnailSize, QIcon::Disabled);
-    }
-
-    const QSize availableSize = option.rect.size();
-    const QSize pixmapSize    = itemPixmap.size().boundedTo(availableSize);
-    QPoint startPoint((availableSize.width()  - pixmapSize.width())  / 2,
-                      (availableSize.height() - pixmapSize.height()) / 2);
-    startPoint               += option.rect.topLeft();
-    painter->drawPixmap(QRect(startPoint, pixmapSize), itemPixmap, QRect(QPoint(0, 0), pixmapSize));
-}
-
-QSize GPSImageItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& sortMappedindex) const
-{
-    if (sortMappedindex.column() == GPSImageItem::ColumnThumbnail)
-    {
-        return QSize(d->thumbnailSize, d->thumbnailSize);
-    }
-
-    const QSize realSizeHint = QItemDelegate::sizeHint(option, sortMappedindex);
-
-    return QSize(realSizeHint.width(), d->thumbnailSize);
-}
-
-void GPSImageItemDelegate::setThumbnailSize(const int size)
-{
-    d->thumbnailSize                 = size;
-    GPSImageModel* const imageModel = d->imageList->getModel();
-
-    if (!imageModel)
-        return;
-
-    if (imageModel->rowCount() > 0)
-    {
-        // TODO: is it enough to emit this signal for only 1 item?
-        // seems to work in Qt4.5 with QTreeView::setUniformRowHeights(true)
-        emit(sizeHintChanged(imageModel->index(0, 0)));
-    }
-}
-
-int GPSImageItemDelegate::getThumbnailSize() const
-{
-    return d->thumbnailSize;
 }
 
 GPSImageModel* GPSImageList::getModel() const
@@ -394,4 +301,4 @@ void GPSImageList::slotColumnVisibilityActionTriggered(QAction* action)
     header()->setSectionHidden(columnNumber, !columnIsVisible);
 }
 
-} /* Digikam */
+} /* namespace Digikam */
