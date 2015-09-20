@@ -26,7 +26,6 @@
 
 // KDE includes
 
-#include <klinkitemselectionmodel.h>
 #include <kimagecache.h>
 
 // Local includes
@@ -378,60 +377,6 @@ void GPSImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& p
 Qt::DropActions GPSImageModel::supportedDragActions() const
 {
     return Qt::CopyAction;
-}
-
-// --------------------------------------------------------------------------------------------
-
-class GPSImageSortProxyModel::Private
-{
-public:
-
-    Private()
-    {
-        imageModel             = 0;
-        sourceSelectionModel   = 0;
-        linkItemSelectionModel = 0;
-    }
-
-    GPSImageModel*           imageModel;
-    QItemSelectionModel*     sourceSelectionModel;
-    KLinkItemSelectionModel* linkItemSelectionModel;
-};
-
-GPSImageSortProxyModel::GPSImageSortProxyModel(GPSImageModel* const imageModel, QItemSelectionModel* const sourceSelectionModel)
-    : QSortFilterProxyModel(imageModel),
-      d(new Private())
-{
-    d->imageModel             = imageModel;
-    d->sourceSelectionModel   = sourceSelectionModel;
-    setSourceModel(imageModel);
-    d->linkItemSelectionModel = new KLinkItemSelectionModel(this, d->sourceSelectionModel);
-}
-
-GPSImageSortProxyModel::~GPSImageSortProxyModel()
-{
-    delete d;
-}
-
-bool GPSImageSortProxyModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
-{
-    if ((!left.isValid())||(!right.isValid()))
-    {
-//         qCDebug(DIGIKAM_GENERAL_LOG)<<"INVALID INDICES"<<left<<right;
-        return false;
-    }
-
-    const int column                     = left.column();
-    const GPSImageItem* const itemLeft  = d->imageModel->itemFromIndex(left);
-    const GPSImageItem* const itemRight = d->imageModel->itemFromIndex(right);
-
-//     qCDebug(DIGIKAM_GENERAL_LOG)<<itemLeft<<itemRight<<column<<rowCount()<<d->imageModel->rowCount();
-    return itemLeft->lessThan(itemRight, column);
-}
-
-QItemSelectionModel* GPSImageSortProxyModel::mappedSelectionModel() const
-{
-    return d->linkItemSelectionModel;
 }
 
 } /* Digikam */

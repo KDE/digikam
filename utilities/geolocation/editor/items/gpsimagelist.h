@@ -33,14 +33,13 @@
 // Local includes
 
 #include "gpsimagemodel.h"
+#include "gpsimagesortproxymodel.h"
 
 class QWheelEvent;
 class KConfigGroup;
 
 namespace Digikam
 {
-
-class GPSImageSortProxyModel;
 
 class ImageListDragDropHandler : public QObject
 {

@@ -28,9 +28,7 @@
 // Qt includes
 
 #include <QAbstractItemModel>
-#include <QItemSelectionModel>
 #include <QPixmap>
-#include <QSortFilterProxyModel>
 
 // Local includes
 
@@ -89,29 +87,6 @@ private:
     friend class GPSImageItem;
 };
 
-// --------------------------------------------------------------------------------------------------------------------
-
-class GPSImageSortProxyModel : public QSortFilterProxyModel
-{
-    Q_OBJECT
-
-public:
-
-    GPSImageSortProxyModel(GPSImageModel* const imageModel, QItemSelectionModel* const sourceSelectionModel);
-    ~GPSImageSortProxyModel();
-
-    QItemSelectionModel* mappedSelectionModel() const;
-
-protected:
-
-    virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
-
-private:
-
-    class Private;
-    Private* const d;
-};
-
-} /* Digikam */
+} /* namespace Digikam */
 
 #endif /* GPSIMAGEMODEL_H */
