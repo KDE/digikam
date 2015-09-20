@@ -91,6 +91,6 @@ private:
     Private* const d;
 };
 
-} /* Digikam */
+} /* namespace Digikam */
 
 #endif /* SEARCHBACKEND_H */

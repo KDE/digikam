@@ -321,4 +321,4 @@ QList<QPair<QString, QString> > SearchBackend::getBackends() const
     return resultList;
 }
 
-} /* Digikam */
+} /* namespace Digikam */
