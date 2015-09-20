@@ -27,6 +27,17 @@
 namespace Digikam
 {
 
+ImageListDragDropHandler::ImageListDragDropHandler(QObject* const parent)
+    : QObject(parent)
+{
+}
+
+ImageListDragDropHandler::~ImageListDragDropHandler()
+{
+}
+
+// ------------------------------------------------------------------------------------------------
+
 GPSImageListDragDropHandler::GPSImageListDragDropHandler(QObject* const parent)
     : ImageListDragDropHandler(parent)
 {

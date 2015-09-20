@@ -42,20 +42,10 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "gpsimagelistdragdrophandler.h"
 
 namespace Digikam
 {
-
-ImageListDragDropHandler::ImageListDragDropHandler(QObject* const parent)
-    : QObject(parent)
-{
-}
-
-ImageListDragDropHandler::~ImageListDragDropHandler()
-{
-}
-
-// ------------------------------------------------------------------------------------------------
 
 class GPSImageList::Private
 {

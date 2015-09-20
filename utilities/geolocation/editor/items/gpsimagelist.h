@@ -41,19 +41,7 @@ class KConfigGroup;
 namespace Digikam
 {
 
-class ImageListDragDropHandler : public QObject
-{
-    Q_OBJECT
-
-public:
-
-    explicit ImageListDragDropHandler(QObject* const parent = 0);
-    virtual ~ImageListDragDropHandler();
-
-    virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices) = 0;
-};
-
-// -------------------------------------------------------------------------------------------------
+class ImageListDragDropHandler;
 
 class GPSImageList : public QTreeView
 {
