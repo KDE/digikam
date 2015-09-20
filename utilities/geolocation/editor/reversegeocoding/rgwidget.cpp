@@ -95,51 +95,51 @@ class RGWidget::Private
 public:
 
     Private()
-    : currentlyAskingCancelQuestion(false),
-      hideOptions(true),
-      UIEnabled(true),
-      label(0),
-      imageModel(0),
-      selectionModel(0),
-      buttonRGSelected(0),
-      undoCommand(0),
-      serviceComboBox(0),
-      languageEdit(0),
-      currentBackend(0),
-      requestedRGCount(0),
-      receivedRGCount(0),
-      buttonHideOptions(0),
-      iptc(0),
-      xmpLoc(0),
-      xmpKey(0),
-      UGridContainer(0),
-      LGridContainer(0),
-      serviceLabel(0),
-      languageLabel(0),
-      separator(0),
-      externTagModel(0),
-      tagModel(0),
-      tagTreeView(0),
-      tagSelectionModel(0),
-      actionAddCountry(0),
-      actionAddState(0),
-      actionAddStateDistrict(0),
-      actionAddCounty(0),
-      actionAddCity(0),
-      actionAddCityDistrict(0),
-      actionAddSuburb(0),
-      actionAddTown(0),
-      actionAddVillage(0),
-      actionAddHamlet(0),
-      actionAddStreet(0),
-      actionAddHouseNumber(0),
-      actionAddPlace(0),
-      actionAddLAU2(0),
-      actionAddLAU1(0),
-      actionAddCustomizedSpacer(0),
-      actionRemoveTag(0),
-      actionRemoveAllSpacers(0),
-      actionAddAllAddressElementsToTag(0)
+        : currentlyAskingCancelQuestion(false),
+          hideOptions(true),
+          UIEnabled(true),
+          label(0),
+          imageModel(0),
+          selectionModel(0),
+          buttonRGSelected(0),
+          undoCommand(0),
+          serviceComboBox(0),
+          languageEdit(0),
+          currentBackend(0),
+          requestedRGCount(0),
+          receivedRGCount(0),
+          buttonHideOptions(0),
+          iptc(0),
+          xmpLoc(0),
+          xmpKey(0),
+          UGridContainer(0),
+          LGridContainer(0),
+          serviceLabel(0),
+          languageLabel(0),
+          separator(0),
+          externTagModel(0),
+          tagModel(0),
+          tagTreeView(0),
+          tagSelectionModel(0),
+          actionAddCountry(0),
+          actionAddState(0),
+          actionAddStateDistrict(0),
+          actionAddCounty(0),
+          actionAddCity(0),
+          actionAddCityDistrict(0),
+          actionAddSuburb(0),
+          actionAddTown(0),
+          actionAddVillage(0),
+          actionAddHamlet(0),
+          actionAddStreet(0),
+          actionAddHouseNumber(0),
+          actionAddPlace(0),
+          actionAddLAU2(0),
+          actionAddLAU1(0),
+          actionAddCustomizedSpacer(0),
+          actionRemoveTag(0),
+          actionRemoveAllSpacers(0),
+          actionAddAllAddressElementsToTag(0)
     {
     }
 
@@ -147,7 +147,7 @@ public:
     bool                 hideOptions;
     bool                 UIEnabled;
     QLabel*              label;
-    GPSImageModel*      imageModel;
+    GPSImageModel*       imageModel;
     QItemSelectionModel* selectionModel;
     QPushButton*         buttonRGSelected;
 
@@ -169,7 +169,7 @@ public:
     QWidget*             LGridContainer;
     QLabel*              serviceLabel;
     QLabel*              languageLabel;
-    RLineWidget*          separator;
+    RLineWidget*         separator;
 
     QAbstractItemModel*  externTagModel;
     RGTagModel*          tagModel;
@@ -235,7 +235,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
 #endif /* GPSSYNC_MODELTEST */
     }
 
-    d->tagSelectionModel = new QItemSelectionModel(d->tagModel);
+    d->tagSelectionModel         = new QItemSelectionModel(d->tagModel);
     d->tagTreeView->setSelectionModel(d->tagSelectionModel);
 
     d->actionAddCountry          = new QAction(i18n("Add country tag"), this);
@@ -272,9 +272,9 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
     d->actionRemoveTag           = new QAction(i18n("Remove selected tag"), this);
     d->actionRemoveAllSpacers    = new QAction(i18n("Remove all control tags below this tag"), this);
     d->actionRemoveAllSpacers->setData(QStringLiteral("Remove all spacers"));
-    d->actionAddAllAddressElementsToTag = new QAction(i18n("Add all address elements"), this);
 
-    QGridLayout* const gridLayout = new QGridLayout(d->UGridContainer);
+    d->actionAddAllAddressElementsToTag = new QAction(i18n("Add all address elements"), this);
+    QGridLayout* const gridLayout       = new QGridLayout(d->UGridContainer);
 
     d->languageLabel = new QLabel(i18n("Select language:"), d->UGridContainer);
     d->languageEdit  = new QComboBox(d->UGridContainer);
@@ -491,7 +491,7 @@ void RGWidget::slotButtonRGSelected()
     for ( int i = 0; i < selectedItems.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = selectedItems.at(i);
-        GPSImageItem* const selectedItem     = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const selectedItem      = d->imageModel->itemFromIndex(itemIndex);
         const GPSDataContainer gpsData        = selectedItem->gpsData();
 
          if (!gpsData.hasCoordinates())
@@ -608,7 +608,7 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
             }
 
             QList<QList<TagData> > returnedTags = d->tagModel->addNewData(elements, resultedData);   
-            GPSImageItem* const currentItem    = d->imageModel->itemFromIndex(currentImageIndex);
+            GPSImageItem* const currentItem     = d->imageModel->itemFromIndex(currentImageIndex);
 
             GPSUndoCommand::UndoInfo undoInfo(currentImageIndex);
             undoInfo.readOldDataFromItem(currentItem);
@@ -620,9 +620,9 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
         }
     }
 
-    d->receivedRGCount+=returnedRGList.count();
+    d->receivedRGCount += returnedRGList.count();
 
-    if (d->receivedRGCount>=d->requestedRGCount)
+    if (d->receivedRGCount >= d->requestedRGCount)
     {
         if (d->currentlyAskingCancelQuestion)
         {
@@ -660,7 +660,7 @@ bool RGWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == d->tagTreeView)
     {
-        if ((event->type()==QEvent::ContextMenu) && d->UIEnabled) 
+        if ((event->type() == QEvent::ContextMenu) && d->UIEnabled) 
         {
             QMenu* const menu             = new QMenu(d->tagTreeView);
             const int currentServiceIndex = d->serviceComboBox->currentIndex(); 
@@ -705,7 +705,7 @@ bool RGWidget::eventFilter(QObject* watched, QEvent* event)
             menu->addAction(d->actionAddCustomizedSpacer);
             menu->addSeparator();
 
-            if (tagType==TypeSpacer)
+            if (tagType == TypeSpacer)
             {
                 menu->addAction(d->actionRemoveTag);
             }
@@ -734,7 +734,7 @@ void RGWidget::saveSettingsToGroup(KConfigGroup* const group)
     const int spacerCount                    = currentSpacerList.count();
     group->writeEntry("Spacers count", spacerCount);
 
-    for (int i=0; i<currentSpacerList.count(); ++i)
+    for (int i = 0; i < currentSpacerList.count(); ++i)
     {
         QString spacerName;
         spacerName.append(QStringLiteral("Spacerlistname %1").arg(i));
@@ -744,7 +744,7 @@ void RGWidget::saveSettingsToGroup(KConfigGroup* const group)
         QStringList spacerTagNames;
         QStringList spacerTypes;
 
-        for (int j=0; j<currentSpacerList[i].count(); ++j)
+        for (int j = 0; j < currentSpacerList[i].count(); ++j)
         {
             spacerTagNames.append(currentSpacerList[i].at(j).tagName);
 
@@ -776,13 +776,13 @@ void RGWidget::readSettingsFromGroup(const KConfigGroup* const group)
     const int spacerCount = group->readEntry("Spacers count", 0);
     QList<QList<TagData> > spacersList;
 
-    for (int i=0; i<spacerCount; ++i)
+    for (int i = 0; i < spacerCount; ++i)
     {
         QStringList spacerTagNames = group->readEntry(QStringLiteral("Spacerlistname %1").arg(i), QStringList());
         QStringList spacerTypes    = group->readEntry(QStringLiteral("Spacerlisttype %1").arg(i), QStringList());
         QList<TagData> currentSpacerAddress;
 
-        for (int j=0; j<spacerTagNames.count(); ++j)
+        for (int j = 0; j < spacerTagNames.count(); ++j)
         {
             TagData currentTagData;
             currentTagData.tagName = spacerTagNames.at(j);
@@ -849,11 +849,10 @@ void RGWidget::slotAddCustomizedSpacer()
         baseIndex = d->tagSelectionModel->currentIndex();
     }
 
-    bool ok = false;
-    QString textString = QInputDialog::getText(
-        this, i18nc("@title:window", "Add new tag:"),
-        i18n("Select a name for the new tag:"),
-        QLineEdit::Normal, QString(), &ok);
+    bool ok            = false;
+    QString textString = QInputDialog::getText(this, i18nc("@title:window", "Add new tag:"),
+                                               i18n("Select a name for the new tag:"),
+                                               QLineEdit::Normal, QString(), &ok);
 
     if ( ok && !textString.isEmpty() )
     {
@@ -896,9 +895,9 @@ void RGWidget::slotRemoveAllSpacers()
  */
 void RGWidget::slotReaddNewTags()
 {
-    for (int row=0; row<d->imageModel->rowCount(); ++row)
+    for (int row = 0; row < d->imageModel->rowCount(); ++row)
     {
-        GPSImageItem* const currentItem    = d->imageModel->itemFromIndex(d->imageModel->index(row,0));
+        GPSImageItem* const currentItem     = d->imageModel->itemFromIndex(d->imageModel->index(row,0));
         QList<QList<TagData> > tagAddresses = currentItem->getTagList();
 
         if (!tagAddresses.isEmpty())
