@@ -72,6 +72,6 @@ private:
     GPSSyncKGeoMapModelHelper* const gpsSyncKGeoMapModelHelper;
 };
 
-} /* Digikam */
+} /* namespace Digikam */
 
 #endif /* MAPDRAGDROPHANDLER_H */

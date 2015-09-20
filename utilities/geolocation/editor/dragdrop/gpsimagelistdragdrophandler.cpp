@@ -55,4 +55,4 @@ QMimeData* GPSImageListDragDropHandler::createMimeData(const QList<QPersistentMo
     return mimeData;
 }
 
-} /* GPSIMAGELISTDRAGDROPHANDLER_H */
+} /* namespace Digikam */

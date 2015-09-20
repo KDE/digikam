@@ -276,6 +276,6 @@ QStringList makeTagString(const RGInfo& info,const QString& inputFormat,const QS
     return returnedAddressElements;
 }
 
-} // Digikam
+} // namespace Digikam
 
 #endif /* PARSETAGSTRING_H */

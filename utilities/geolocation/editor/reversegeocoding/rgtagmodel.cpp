@@ -221,7 +221,7 @@ QModelIndex RGTagModel::fromSourceIndex(const QModelIndex& externalTagModelIndex
 
         int where = -1;
 
-        for (int i=0; i < subModelBranch->oldChildren.count(); ++i)
+        for (int i = 0; i < subModelBranch->oldChildren.count(); ++i)
         {
             if (subModelBranch->oldChildren[i]->sourceIndex == parents[level])
             {
@@ -290,7 +290,7 @@ void RGTagModel::addSpacerTag(const QModelIndex& parent, const QString& spacerNa
 
     if (!parentBranch->spacerChildren.empty())
     {
-        for ( int i=0; i < parentBranch->spacerChildren.count(); ++i)
+        for ( int i = 0; i < parentBranch->spacerChildren.count(); ++i)
         {
             if (parentBranch->spacerChildren[i]->data == spacerName)
             {
@@ -326,7 +326,7 @@ QPersistentModelIndex RGTagModel::addNewTag(const QModelIndex& parent, const QSt
 
     if (!parentBranch->newChildren.empty())
     {
-        for ( int i=0; i<parentBranch->newChildren.count(); ++i)
+        for ( int i = 0; i < parentBranch->newChildren.count(); ++i)
         {
             if (parentBranch->newChildren[i]->data == newTagName)
             {
@@ -361,7 +361,7 @@ QList<TagData> RGTagModel::getTagAddress()
 {
     QList<TagData> tagAddress;
 
-    for (int i=0; i<d->auxTagList.count(); ++i)
+    for (int i = 0; i < d->auxTagList.count(); ++i)
     {
         TagData tagData;
         tagData.tagName = d->auxTagList[i];
@@ -397,7 +397,7 @@ void RGTagModel::addDataInTree(TreeBranch* currentBranch, int currentRow,const Q
         }
         else
         {
-            for ( int j=0; j<addressElements.count(); ++j)
+            for (int j = 0; j < addressElements.count(); ++j)
             {
                 if (currentBranch->spacerChildren[i]->data == addressElements[j])
                 {
@@ -446,7 +446,7 @@ void RGTagModel::addDataInTree(TreeBranch* currentBranch, int currentRow,const Q
         }
     }
 
-    for (int i=0; i<currentBranch->newChildren.count(); ++i)
+    for (int i = 0; i < currentBranch->newChildren.count(); ++i)
     {
         d->auxTagList.append(currentBranch->newChildren[i]->data);
         d->auxTagTypeList.append(TypeNewChild);
@@ -455,7 +455,7 @@ void RGTagModel::addDataInTree(TreeBranch* currentBranch, int currentRow,const Q
         d->auxTagTypeList.removeLast();
     }
 
-    for (int i=0; i<currentBranch->oldChildren.count(); ++i)
+    for (int i = 0; i < currentBranch->oldChildren.count(); ++i)
     {
         d->auxTagList.append(currentBranch->oldChildren.at(i)->data);
         d->auxTagTypeList.append(TypeChild);
@@ -745,7 +745,7 @@ void RGTagModel::slotRowsInserted()
 {
    TreeBranch* const parentBranch = d->parent.isValid() ? static_cast<TreeBranch*>(d->parent.internalPointer()) : d->rootTag;
 
-    for (int i=d->startInsert; i<d->endInsert; ++i)
+    for (int i = d->startInsert; i < d->endInsert; ++i)
     {
         TreeBranch* const newBranch = new TreeBranch();
         newBranch->parent = parentBranch;
@@ -792,7 +792,7 @@ void RGTagModel::deleteTag(const QModelIndex& currentIndex)
     {
         beginMoveRows(currentIndex,0,currentChildBranch->spacerChildren.count()-1,parentIndex, parentBranch->spacerChildren.count());
 
-        for (int j=0; j<currentChildBranch->spacerChildren.count(); ++j)
+        for (int j = 0; j < currentChildBranch->spacerChildren.count(); ++j)
         {
             parentBranch->spacerChildren.append(currentChildBranch->spacerChildren[j]);
             parentBranch->spacerChildren.last()->parent = parentBranch;
@@ -805,7 +805,7 @@ void RGTagModel::deleteTag(const QModelIndex& currentIndex)
         beginMoveRows(currentIndex, currentChildBranch->spacerChildren.count(), currentChildBranch->spacerChildren.count()+currentChildBranch->newChildren.count()-1,
                       parentIndex, parentBranch->spacerChildren.count()+parentBranch->newChildren.count());
 
-        for (int j=currentChildBranch->spacerChildren.count(); j<currentChildBranch->spacerChildren.count()+currentChildBranch->newChildren.count(); ++j)
+        for (int j = currentChildBranch->spacerChildren.count(); j < currentChildBranch->spacerChildren.count()+currentChildBranch->newChildren.count(); ++j)
         {
             parentBranch->newChildren.append(currentChildBranch->newChildren[j-currentChildBranch->spacerChildren.count()]);
             parentBranch->newChildren.last()->parent = parentBranch;
@@ -840,7 +840,7 @@ void RGTagModel::findAndDeleteSpacersOrNewTags( TreeBranch* currentBranch, int c
 {
     /*QModelIndex currentIndex = */createIndex(currentRow, 0, currentBranch);
 
-    for (int i=0; i<currentBranch->spacerChildren.count(); ++i)
+    for (int i = 0; i < currentBranch->spacerChildren.count(); ++i)
     {
         findAndDeleteSpacersOrNewTags(currentBranch->spacerChildren[i], i, whatShouldRemove);
 
@@ -852,7 +852,7 @@ void RGTagModel::findAndDeleteSpacersOrNewTags( TreeBranch* currentBranch, int c
         }
     }
 
-    for (int i=0; i<currentBranch->newChildren.count(); ++i)
+    for (int i = 0; i < currentBranch->newChildren.count(); ++i)
     {
         findAndDeleteSpacersOrNewTags(currentBranch->newChildren[i], i+currentBranch->spacerChildren.count(), whatShouldRemove);
 
@@ -864,7 +864,7 @@ void RGTagModel::findAndDeleteSpacersOrNewTags( TreeBranch* currentBranch, int c
         }
     }
 
-    for (int i=0; i<currentBranch->oldChildren.count(); ++i)
+    for (int i = 0; i < currentBranch->oldChildren.count(); ++i)
     {
         findAndDeleteSpacersOrNewTags(currentBranch->oldChildren[i], i+currentBranch->spacerChildren.count()+currentBranch->newChildren.count(), whatShouldRemove);
     }
@@ -909,7 +909,7 @@ void RGTagModel::readdTag(TreeBranch*& currentBranch, int currentRow,const QList
 
     if (tagAddressElements[currentAddressElementIndex].tagType == TypeSpacer)
     {
-        for (int i=0; i<currentBranch->spacerChildren.count(); ++i)
+        for (int i = 0; i < currentBranch->spacerChildren.count(); ++i)
         {
             if (currentBranch->spacerChildren[i]->data == tagAddressElements[currentAddressElementIndex].tagName)
             {
@@ -949,7 +949,7 @@ void RGTagModel::readdTag(TreeBranch*& currentBranch, int currentRow,const QList
     }
     else if (tagAddressElements[currentAddressElementIndex].tagType == TypeNewChild)
     {
-        for (int i=0; i<currentBranch->newChildren.count(); ++i)
+        for (int i = 0; i < currentBranch->newChildren.count(); ++i)
         {
             if (currentBranch->newChildren[i]->data == tagAddressElements[currentAddressElementIndex].tagName)
             {
@@ -993,7 +993,7 @@ void RGTagModel::readdTag(TreeBranch*& currentBranch, int currentRow,const QList
     {
         bool found = false;
 
-        for (int i=0; i<currentBranch->oldChildren.count(); ++i)
+        for (int i = 0; i < currentBranch->oldChildren.count(); ++i)
         {
             if (currentBranch->oldChildren[i]->data == tagAddressElements[currentAddressElementIndex].tagName)
             {
@@ -1036,7 +1036,7 @@ void RGTagModel::readdTag(TreeBranch*& currentBranch, int currentRow,const QList
  */ 
 void RGTagModel::readdNewTags(const QList<QList<TagData> >& tagAddressList)
 {
-    for (int i=0; i<tagAddressList.count(); ++i)
+    for (int i = 0; i < tagAddressList.count(); ++i)
     {
         QList<TagData> currentAddressTag = tagAddressList[i];
         readdTag(d->rootTag, 0, currentAddressTag, 0);
@@ -1071,7 +1071,7 @@ QList<TagData> RGTagModel::getSpacerAddress(TreeBranch* currentBranch)
  */ 
 void RGTagModel::climbTreeAndGetSpacers(const TreeBranch* currentBranch)
 {
-    for (int i=0; i<currentBranch->spacerChildren.count(); ++i)
+    for (int i = 0; i < currentBranch->spacerChildren.count(); ++i)
     {
         QList<TagData> currentSpacerAddress;
         currentSpacerAddress = getSpacerAddress(currentBranch->spacerChildren[i]);
@@ -1079,12 +1079,12 @@ void RGTagModel::climbTreeAndGetSpacers(const TreeBranch* currentBranch)
         climbTreeAndGetSpacers(currentBranch->spacerChildren[i]);
     }
 
-    for (int i=0; i<currentBranch->newChildren.count(); ++i)
+    for (int i = 0; i < currentBranch->newChildren.count(); ++i)
     {
         climbTreeAndGetSpacers(currentBranch->newChildren[i]);
     }
 
-    for (int i=0; i<currentBranch->oldChildren.count(); ++i)
+    for (int i = 0; i < currentBranch->oldChildren.count(); ++i)
     {
         climbTreeAndGetSpacers(currentBranch->oldChildren[i]);
     }
@@ -1142,7 +1142,7 @@ void RGTagModel::addAllSpacersToTag(const QModelIndex currentIndex,const QString
 
     TreeBranch* const currentBranch = branchFromIndex(currentIndex);  //currentIndex.isValid() ? static_cast<TreeBranch*>(currentIndex.internalPointer()) : d->rootTag;
 
-    for (int i=0; i<currentBranch->spacerChildren.count(); ++i)
+    for (int i = 0; i < currentBranch->spacerChildren.count(); ++i)
     {
         if (currentBranch->data == spacerList[spacerListIndex])
         {

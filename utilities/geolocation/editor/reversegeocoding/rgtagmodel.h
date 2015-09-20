@@ -35,38 +35,10 @@
 // Local includes
 
 #include "gpsimageitem.h"
+#include "treebranch.h"
 
 namespace Digikam
 {
-
-class TreeBranch
-{
-public:
-    TreeBranch()
-        : sourceIndex(),
-          parent(0),
-          data(),
-          type(),
-          oldChildren(),
-          spacerChildren()
-    {
-    }
-
-    ~TreeBranch()
-    {
-        qDeleteAll(oldChildren);
-    }
-
-    QPersistentModelIndex   sourceIndex;
-    TreeBranch*             parent;
-    QString                 data;
-    Type                    type;
-    QList<TreeBranch*>      oldChildren;
-    QList<TreeBranch*>      spacerChildren;
-    QList<TreeBranch*>      newChildren;
-};
-
-// ----------------------------------------------------------------------------------------
 
 class RGTagModel : public QAbstractItemModel
 {

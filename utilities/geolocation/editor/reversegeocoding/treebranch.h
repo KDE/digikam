@@ -4,11 +4,13 @@
  * This file is a part of kipi-plugins project
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * @date   2010-03-22
- * @brief  Drag and drop handler for the image list
+ * @date   2010-05-12
+ * @brief  A model to hold information about image tags.
  *
  * @author Copyright (C) 2010 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
+ * @author Copyright (C) 2010 by Gabriel Voicu
+ *         <a href="mailto:ping dot gabi at gmail dot com">ping dot gabi at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,46 +24,47 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGELISTDRAGDROPHANDLER_H
-#define GPSIMAGELISTDRAGDROPHANDLER_H
+#ifndef TREEBRANCH_H
+#define TREEBRANCH_H
 
 // Qt includes
 
-#include <QTreeView>
-
-// Local includes
-
-#include "mapdragdrophandler.h"
+#include <QPersistentModelIndex>
+#include <QList>
 
 namespace Digikam
 {
 
-class ImageListDragDropHandler : public QObject
+class TreeBranch
 {
-    Q_OBJECT
+public:
+
+    TreeBranch()
+        : sourceIndex(),
+          parent(0),
+          data(),
+          type(),
+          oldChildren(),
+          spacerChildren()
+    {
+    }
+
+    ~TreeBranch()
+    {
+        qDeleteAll(oldChildren);
+    }
 
 public:
 
-    explicit ImageListDragDropHandler(QObject* const parent = 0);
-    virtual ~ImageListDragDropHandler();
-
-    virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices) = 0;
-};
-
-// -------------------------------------------------------------------------------------------------
-
-class GPSImageListDragDropHandler : public ImageListDragDropHandler
-{
-    Q_OBJECT
-
-public:
-
-    explicit GPSImageListDragDropHandler(QObject* const parent = 0);
-    ~GPSImageListDragDropHandler();
-
-    virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices);
+    QPersistentModelIndex sourceIndex;
+    TreeBranch*           parent;
+    QString               data;
+    Type                  type;
+    QList<TreeBranch*>    oldChildren;
+    QList<TreeBranch*>    spacerChildren;
+    QList<TreeBranch*>    newChildren;
 };
 
 } // namespace Digikam
 
-#endif /* GPSIMAGELISTDRAGDROPHANDLER_H */
+#endif // TREEBRANCH_H
