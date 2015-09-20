@@ -7,7 +7,7 @@
 
 set(libtags_SRCS
     addtagscombobox.cpp
-    addtagscompletionbox.cpp
+    tagscompleter.cpp
     addtagslineedit.cpp
     tagcheckview.cpp
     tagfolderview.cpp
@@ -17,6 +17,7 @@ set(libtags_SRCS
     tageditdlg.cpp
     tagmodificationhelper.cpp
     tagsactionmngr.cpp
+    taggingactionfactory.cpp
 
     tagsmanager/tagsmanager.cpp
     tagsmanager/tagpropwidget.cpp

@@ -42,7 +42,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "addtagscompletionbox.h"
 #include "addtagslineedit.h"
 #include "albummodel.h"
 #include "albumfiltermodel.h"

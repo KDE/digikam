@@ -284,7 +284,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->openTagMngr = new QPushButton( i18n("Open Tag Manager"));
 
     d->newTagEdit   = new AddTagsLineEdit(tagsArea);
-    d->newTagEdit->setModel(d->tagModel);
+    d->newTagEdit->setSupportingTagModel(d->tagModel);
     d->newTagEdit->setTagTreeView(d->tagCheckView);
     //, "ImageDescEditTabNewTagEdit",
     //d->newTagEdit->setCaseSensitive(false);

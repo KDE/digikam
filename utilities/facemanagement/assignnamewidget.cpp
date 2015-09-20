@@ -40,7 +40,7 @@
 
 #include "digikam_debug.h"
 #include "addtagscombobox.h"
-#include "addtagscompletionbox.h"
+#include "tagscompleter.h"
 #include "addtagslineedit.h"
 #include "album.h"
 #include "albummanager.h"
@@ -501,9 +501,7 @@ void AssignNameWidget::Private::setAddTagsWidgetContents(T* const widget)
     {
         widget->setCurrentTag(currentTag);
         widget->setPlaceholderText((mode == UnconfirmedEditMode) ? i18n("Who is this?") : QString());
-        qCDebug(DIGIKAM_GENERAL_LOG) << "************setAddTagsWidgetContents called: confirm button";
 
-#pragma message "QCompleter port"
         if (confirmButton)
         {
             confirmButton->setEnabled(widget->currentTaggingAction().isValid());
@@ -711,8 +709,6 @@ void AssignNameWidget::setCurrentTag(TAlbum* album)
 
 void AssignNameWidget::slotConfirm()
 {
-#pragma message "QCompleter port, check what this do"
-    qCDebug(DIGIKAM_GENERAL_LOG) << "*******************AssignName widget slot confirm";
     if (d->comboBox)
     {
         emit assigned(d->comboBox->currentTaggingAction(), d->info, d->faceIdentifier);

@@ -39,12 +39,14 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "addtagscompletionbox.h"
+#include "tagscompleter.h"
 #include "tageditdlg.h"
 #include "album.h"
 #include "albummodel.h"
+#include "albumfiltermodel.h"
 #include "albumtreeview.h"
 #include "tagscache.h"
+#include "taggingactionfactory.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
 
@@ -56,208 +58,100 @@ class AddTagsLineEdit::Private
 public:
 
     Private()
+        : completer(0),
+          tagView(0),
+          tagFilterModel(0),
+          parentTagId(0)
     {
-        completion         = 0;
-        tagView            = 0;
-        resetFromCompleter = false;
-        parentTag          = 0;
-        currentTag         = 0;
-        tagModel           = 0;
     }
 
-    TagModelCompletion* completion;
+    TagCompleter*       completer;
     TagTreeView*        tagView;
+    AlbumFilterModel*   tagFilterModel;
     TaggingAction       currentTaggingAction;
-    bool                resetFromCompleter;
-    TAlbum*             parentTag;
-    TAlbum*             currentTag;
-    TagModel*           tagModel;
-
-public:
-
-    TaggingAction makeDefaultTaggingAction(const QString& test, int parentTagId);
+    int                 parentTagId;
 };
-
-TaggingAction AddTagsLineEdit::Private::makeDefaultTaggingAction(const QString& text, int parentTagId)
-{
-    // We now take the presumedly best action, without autocompletion popup.
-    // 1. Tag exists?
-    //    a) Single tag? Assign.
-    //    b) Multiple tags? 1. Existing tag under parent. 2. Toplevel tag 3. Alphabetically lowest tag
-    // 2. Create tag under parent. No parent selected? Toplevel
-
-    QList<int> tagIds = TagsCache::instance()->tagsForName(text);
-
-    if (!tagIds.isEmpty())
-    {
-        if (tagIds.count() == 1)
-        {
-            return TaggingAction(tagIds.first());
-        }
-        else
-        {
-            int tagId = 0;
-
-            if (parentTagId)
-            {
-                tagId = TagsCache::instance()->tagForName(text, parentTagId);
-            }
-
-            if (!tagId)
-            {
-                tagId = TagsCache::instance()->tagForName(text);    // toplevel tag
-            }
-
-            if (!tagId)
-            {
-                // sort lexically
-                QMap<QString, int> map;
-
-                foreach(int id, tagIds)
-                {
-                    map[TagsCache::instance()->tagPath(id, TagsCache::NoLeadingSlash)] = id;
-                }
-
-                tagId = map.begin().value();
-            }
-
-            return TaggingAction(tagId);
-        }
-    }
-    else
-    {
-        return TaggingAction(text, parentTagId);
-    }
-}
-// ---------------------------------------------------------------------------------------
 
 AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
     : QLineEdit(parent),
       d(new Private)
 {
-    d->completion = new TagModelCompletion;
-    setCompleter(d->completion);
+    d->completer = new TagCompleter(this);
+    d->completer->setMaxVisibleItems(15);
+    d->completer->setWidget(this);
+    setCompleter(d->completer);
+
+    connect(this, &QLineEdit::returnPressed, this, &AddTagsLineEdit::slotReturnPressed);
+    connect(this, &QLineEdit::editingFinished, this, &AddTagsLineEdit::slotEditingFinished);
+    connect(this, &QLineEdit::textChanged, this, &AddTagsLineEdit::slotTextChanged);
+
+    connect(d->completer, SIGNAL(activated(TaggingAction)), this, SLOT(completerActivated(TaggingAction)));
+    connect(d->completer, SIGNAL(highlighted(TaggingAction)), this, SIGNAL(taggingActionSelected(TaggingAction)));
 }
 
 AddTagsLineEdit::~AddTagsLineEdit()
 {
-    delete d->completion;
     delete d;
 }
 
-void AddTagsLineEdit::setModel(TagModel* model)
+void AddTagsLineEdit::setSupportingTagModel(TagModel* model)
 {
-    d->completion->setModel(model);
-    d->tagModel = model;
+    d->completer->setSupportingTagModel(model);
 }
 
-void AddTagsLineEdit::setModel(AlbumFilterModel* model)
+void AddTagsLineEdit::setFilterModel(AlbumFilterModel* model)
 {
-    d->completion->setModel(model);
+    d->tagFilterModel = model;
+    d->completer->setTagFilterModel(d->tagFilterModel);
 }
 
 void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, AlbumFilterModel* filterModel)
 {
     if (filterModel)
     {
-        setModel(filterModel);
+        setFilterModel(filterModel);
     }
     else if (filteredModel)
     {
-        setModel(filteredModel);
+        setFilterModel(filteredModel);
     }
-    else
-    {
-        setModel(model);
-    }
+    setSupportingTagModel(model);
 }
 
 void AddTagsLineEdit::setTagTreeView(TagTreeView* view)
 {
     if (d->tagView)
     {
-        disconnect(d->tagView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                   this, SLOT(setParentTag(QModelIndex)));
+        disconnect(d->tagView, &TagTreeView::currentAlbumChanged, this, &AddTagsLineEdit::setParentTag);
     }
 
     d->tagView = view;
-    setParentTag(d->tagView->currentAlbum());
 
     if (d->tagView)
     {
-        //d->completionBox->setParentTag(d->tagView->currentIndex());
-        connect(d->tagView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(slotSetParentTag(QModelIndex)));
+        connect(d->tagView, &TagTreeView::currentAlbumChanged, this, &AddTagsLineEdit::setParentTag);
+        setParentTag(d->tagView->currentAlbum());
     }
 }
 
 void AddTagsLineEdit::setCurrentTag(TAlbum* album)
 {
-    d->parentTag = album;
+    setCurrentTaggingAction(album ? TaggingAction(album->id()) : TaggingAction());
+    setText(album ? album->title() : QString());
 }
 
-void AddTagsLineEdit::slotSetParentTag(QModelIndex index)
+void AddTagsLineEdit::setParentTag(Album* album)
 {
-    if(index.isValid())
-        d->parentTag = dynamic_cast<TAlbum*>(d->tagModel->albumForIndex(index));
-}
-
-void AddTagsLineEdit::setParentTag(TAlbum* album)
-{
-    if (album)
-        d->parentTag = album;
-}
-
-void AddTagsLineEdit::completerActivated(QModelIndex index)
-{
-    int id = index.data(Qt::UserRole+5).toInt();
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Completer activated" << index.data() << id;
-
-    if (id == -5)
-    {
-        d->currentTaggingAction = TaggingAction(index.data(Qt::UserRole+4).toString(),
-                                                d->tagView->currentAlbum()->id());
-        QMap<QString, QString> errMap;
-        AlbumList al = TagEditDlg::createTAlbum(d->tagView->currentAlbum(),
-                                                index.data(Qt::UserRole+4).toString(),
-                                                QLatin1String("tag"),
-                                                QKeySequence(),errMap);
-        if(!al.isEmpty())
-        {
-            d->tagModel->setCheckState((TAlbum*)(al.first()),Qt::Checked);
-        }
-    }
-    else
-    {
-        d->currentTaggingAction = TaggingAction(id);
-        TAlbum* const tAlbum = AlbumManager::instance()->findTAlbum(id);
-        d->tagModel->setCheckState(tAlbum,Qt::Checked);
-    }
-
-    QLineEdit::clear();
+    d->parentTagId = album ? album->id() : 0;
+    d->completer->setContextParentTag(d->parentTagId);
 }
 
 void AddTagsLineEdit::setAllowExceedBound(bool value)
 {
     Q_UNUSED(value);
-    // set maximum size of pop-up widget
-}
-
-void AddTagsLineEdit::setCompleter(TagModelCompletion* c)
-{
-    if (d->completion)
-        QObject::disconnect(d->completion, 0, this, 0);
-
-    d->completion = c;
-
-    if (!d->completion)
-        return;
-
-    d->completion->setWidget(this);
-
-    connect(d->completion, SIGNAL(activated(QModelIndex)),
-            this, SLOT(completerActivated(QModelIndex)));
+    // -> the pop-up is allowed to be bigger than the line edit widget
+    // Currently unimplemented, QCompleter calculates the size automatically.
+    // Idea: intercept show event via event filter on completer->popup(); from there, change width.
 }
 
 void AddTagsLineEdit::focusInEvent(QFocusEvent* f)
@@ -266,71 +160,55 @@ void AddTagsLineEdit::focusInEvent(QFocusEvent* f)
 
     // NOTE: Need to disconnect completer from QLineEdit, otherwise
     // we won't be able to clear completion after tag was added
+    // See QLineEdit::focusInEvent(QFocusEvent *e) where this connection is made
 
-    disconnect(d->completion, SIGNAL(activated(QString)),
+    disconnect(d->completer, SIGNAL(activated(QString)),
                this, SLOT(setText(QString)));
-}
-
-void AddTagsLineEdit::keyPressEvent(QKeyEvent* e)
-{
-    if (d->completion && d->completion->popup()->isVisible())
-    {
-        // The following keys are forwarded by the completer to the widget
-        switch (e->key())
-        {
-            case Qt::Key_Return:
-                slotReturnPressed(text());
-                e->ignore();
-                return;
-            case Qt::Key_Enter:
-            case Qt::Key_Escape:
-            case Qt::Key_Tab:
-            case Qt::Key_Backtab:
-                e->ignore();
-                return; // Let the completer do default behavior
-        }
-    }
-
-    bool isShortcut = (e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_E;
-
-    if (!isShortcut)
-        QLineEdit::keyPressEvent(e); // Don't send the shortcut (CTRL-E) to the text edit.
-
-    if (!d->completion)
-        return;
-
-    bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
-
-    if (!isShortcut && !ctrlOrShift && e->modifiers() != Qt::NoModifier)
-    {
-        d->completion->popup()->hide();
-        return;
-    }
-
-    d->completion->update(text());
-    d->completion->popup()->setCurrentIndex(d->completion->completionModel()->index(0, 0));
 }
 
 // Tagging action is used by facemanagement and assignwidget
 
-void AddTagsLineEdit::slotReturnPressed(const QString& text)
+void AddTagsLineEdit::slotReturnPressed()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "slot return pressed";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "slot return pressed";
 
+    if (text().isEmpty())
+    {
+        //focus back to mainview
+        emit taggingActionFinished();
+        return;
+    }
+
+    if (d->currentTaggingAction.shallAssignTag() && d->completer->popup()->isVisible())
+    {
+        setText(d->currentTaggingAction.newTagName());
+    }
+
+    emit taggingActionActivated(currentTaggingAction());
+}
+
+void AddTagsLineEdit::slotEditingFinished()
+{
+    d->currentTaggingAction = TaggingAction();
+}
+
+void AddTagsLineEdit::slotTextChanged(const QString &text)
+{
     if (text.isEmpty())
     {
-      //focus back to mainview
-      emit taggingActionFinished();
-      return;
+        d->currentTaggingAction = TaggingAction();
     }
+}
 
-    if (d->currentTaggingAction.shallAssignTag() && d->completion->popup()->isVisible())
-    {
-        setText(d->completion->currentCompletion());
-    }
+void AddTagsLineEdit::completerActivated(const TaggingAction &action)
+{
+    setCurrentTaggingAction(action);
+    emit taggingActionActivated(action);
+}
 
-    //Q_UNUSED(text);
-    emit taggingActionActivated(currentTaggingAction());
+void AddTagsLineEdit::completerHighlighted(const TaggingAction &action)
+{
+    setCurrentTaggingAction(action);
 }
 
 void AddTagsLineEdit::setCurrentTaggingAction(const TaggingAction& action)
@@ -352,7 +230,7 @@ TaggingAction AddTagsLineEdit::currentTaggingAction() const
     }
     else if(!text().isEmpty())
     {
-        return d->makeDefaultTaggingAction(text(),d->currentTag->id());
+        return TaggingActionFactory::defaultTaggingAction(text(), d->parentTagId);
     }
     else
     {

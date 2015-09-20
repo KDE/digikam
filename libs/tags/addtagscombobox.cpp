@@ -152,7 +152,6 @@ TaggingAction AddTagsComboBox::currentTaggingAction()
         return d->viewTaggingAction;
     }
 
-#pragma message "KCompleter port, check what this do"
     return d->lineEdit->currentTaggingAction();
 }
 

@@ -34,11 +34,12 @@ namespace Digikam
 {
 
 class AlbumFilterModel;
+class Album;
 class TAlbum;
 class TagModel;
 class TagPropertiesFilterModel;
 class TagTreeView;
-class TagModelCompletion;
+class TagCompleter;
 
 class AddTagsLineEdit : public QLineEdit
 {
@@ -49,13 +50,17 @@ public:
     explicit AddTagsLineEdit(QWidget* const parent = 0);
     ~AddTagsLineEdit();
 
-    /** Set the tag model to use for completion.
-     *  The line edit only needs one model and used the model last set.
-     *  From the method giving three models, it will use a non-null model,
-     *  filter models having precedence.
+    /**
+     * Optional: set a model for additional information, like tag icons
      */
-    void setModel(TagModel* model);
-    void setModel(AlbumFilterModel* model);
+    void setSupportingTagModel(TagModel* model);
+    /**
+     * Set a tag filter model. Completion suggestions will be limited to tags contained in the filter model.
+     */
+    void setFilterModel(AlbumFilterModel* model);
+    /**
+     * Convenience: Will call setSupportingTagModel() and setFilterModel()
+     */
     void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, AlbumFilterModel* filterModel);
 
     /** Reads a tag treeview and takes the currently selected tag into account
@@ -64,11 +69,9 @@ public:
     void setTagTreeView(TagTreeView* treeView);
 
     /**
-     * Sets the currently selected tagging action to the given tag
+     * Adjusts the current default tagging action to assign the given tag
      */
-    void setCurrentTag(TAlbum* album);
-
-    void setCompleter(TagModelCompletion* c);
+    void setCurrentTag(TAlbum* tag);
 
     void setAllowExceedBound(bool value);
 
@@ -81,11 +84,7 @@ public Q_SLOTS:
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action.
      *  If you set a tag tree view, this is taken care for automatically.
      */
-    void slotSetParentTag(QModelIndex index);
-
-    void setParentTag(TAlbum* album);
-
-    void slotReturnPressed(const QString& text);
+    void setParentTag(Album* album);
 
 Q_SIGNALS:
 
@@ -97,14 +96,15 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void completerActivated(QModelIndex index);
+    void completerHighlighted(const TaggingAction& action);
+    void completerActivated(const TaggingAction& action);
+    void slotReturnPressed();
+    void slotEditingFinished();
+    void slotTextChanged(const QString& text);
 
 protected:
 
     void focusInEvent(QFocusEvent* f);
-    void keyPressEvent(QKeyEvent* e);
-
-//    void setCompletionObject(KCompletion* comp, bool dontuse=false);
 
 private:
 
