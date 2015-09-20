@@ -33,6 +33,8 @@
 #include "modelcompletion.h"
 #include "taggingaction.h"
 
+class QLineEdit;
+
 namespace Digikam
 {
 
@@ -40,7 +42,7 @@ class AlbumFilterModel;
 class TAlbum;
 class TagModel;
 
-class TagModelCompletion : public QCompleter
+class TagCompleter : public QCompleter
 {
     Q_OBJECT
 
@@ -48,25 +50,38 @@ public:
 
     /** A completion object operating on a TagModel
      */
-    TagModelCompletion();
+    TagCompleter(QObject* parent = 0);
+    ~TagCompleter();
 
-    void setModel(QAbstractItemModel *model, int idRole);
-    void setModel(AlbumFilterModel* model);
-    void setModel(TagModel* model);
-    TagModel* model() const;
+    // Update the completer for the given fragment
+    void update(const QString& fragment);
+    // Set a parent tag which may by the user be considered as a parent for a new tag during completion
+    void setContextParentTag(int parentTagId);
+    // Set a supporting model from which the completer may get data for its display. Optional.
+    void setSupportingTagModel(TagModel* supportingModel);
+    void setTagFilterModel(AlbumFilterModel* supportingModel);
 
-    void update(QString word);
+    // You must call this for the completion to work properly.
+    // This also calls lineEdit->setCompleter, you do not need to call this.
+    void setWidget(QLineEdit* lineEdit);
 
-public Q_SLOTS:
+Q_SIGNALS:
 
-    void complete(const QRect &rect);
+    void activated(const TaggingAction& action);
+    void highlighted(const TaggingAction& action);
 
 private Q_SLOTS:
 
-    void slotInsertRows(QModelIndex index, int start, int end);
-    void slotDeleteRows(QModelIndex index, int start, int end);
+    void slotActivated(const QModelIndex& index);
+    void slotHighlighted(const QModelIndex& index);
+    void textChanged(const QString& text);
+    void textEdited(const QString& text);
+    /*void slotInsertRows(QModelIndex index, int start, int end);
+    void slotDeleteRows(QModelIndex index, int start, int end);*/
 
 private:
+
+    void setModel(QAbstractItemModel*);
 
     class Private;
     Private *d;
