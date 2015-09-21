@@ -33,7 +33,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:imageeditor_src>
             $<TARGET_OBJECTS:editorplugin_src>
             $<TARGET_OBJECTS:metadataedit_src>
-            $<TARGET_OBJECTS:geolocationedit_src>
             $<TARGET_OBJECTS:akonadiiface_src>  # NOTE: even if optional this code need to be compiled here.
 
             utils/digikam_debug.cpp
@@ -42,7 +41,8 @@ set(DIGIKAMCORE_OBJECTS
 if(KF5KGeoMap_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
-        $<TARGET_OBJECTS:kgeomaphelper_src>
+        $<TARGET_OBJECTS:geomapwrapper_src>
+        $<TARGET_OBJECTS:geolocationedit_src>
     )
 endif()
 
@@ -313,7 +313,7 @@ endif()
 if(${KF5KGeoMap_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
-            $<TARGET_OBJECTS:kgeomaphelper_src>
+            $<TARGET_OBJECTS:geomapwrapper_src>
             $<TARGET_OBJECTS:gpssearch_src>
     )
 endif()

@@ -44,13 +44,9 @@ namespace KGeoMap
 namespace Digikam
 {
 
-class ImageInfo;
-
 class GPSImageInfo
 {
 public:
-
-    /// @todo De-inline these functions?
 
     GPSImageInfo()
         : id(-2),
@@ -78,8 +74,6 @@ public:
 
         return info;
     }
-
-    static bool fromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo);
 
 public:
 

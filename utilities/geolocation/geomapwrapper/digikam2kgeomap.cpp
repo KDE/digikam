@@ -139,6 +139,7 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const KGeoMap::
     // finally, decide by date:
     const bool oldHasDate = oldInfo.dateTime.isValid();
     const bool newHasDate = newInfo.dateTime.isValid();
+
     if (oldHasDate != newHasDate)
     {
         return newHasDate;

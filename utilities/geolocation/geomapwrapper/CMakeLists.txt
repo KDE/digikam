@@ -4,6 +4,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-add_subdirectory(mapsearches)
-add_subdirectory(editor)
-add_subdirectory(geomapwrapper)
+set(libgeomapwrapper_SRCS digikam2kgeomap.cpp)
+
+add_library(geomapwrapper_src OBJECT ${libgeomapwrapper_SRCS})

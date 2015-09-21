@@ -48,7 +48,9 @@
 #include "importimagemodel.h"
 #include "databasewatch.h"
 #include "databasefields.h"
-#include "digikam2kgeomap_database.h"
+#include "imagepropertiessidebardb.h"
+#include "digikam2kgeomap.h"
+
 #include "importui.h"
 
 namespace Digikam
@@ -429,7 +431,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             {
                 GPSImageInfo gpsImageInfo;
 
-                if (GPSImageInfo::fromImageInfo(imageInfo, &gpsImageInfo))
+                if (ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(imageInfo, &gpsImageInfo))
                 {
                     gpsImageInfoList << gpsImageInfo;
                 }

@@ -130,8 +130,8 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
 
 if(ENABLE_MEDIAPLAYER)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
-                Multimedia
-                MultimediaWidgets
+                 Multimedia
+                 MultimediaWidgets
     )
     set(HAVE_VIDEOPLAYER TRUE)
 else()

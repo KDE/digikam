@@ -36,6 +36,7 @@
 #include "imageinfolist.h"
 #include "imagepropertiessidebar.h"
 #include "digikam_export.h"
+#include "digikam_config.h"
 
 class QWidget;
 class QRect;
@@ -50,6 +51,7 @@ class ImageChangeset;
 class ImageDescEditTab;
 class ImageTagChangeset;
 class ImagePropertiesVersionsTab;
+class GPSImageInfo;
 
 class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 {
@@ -76,6 +78,13 @@ public:
                              DImg* const img = 0, const DImageHistory& history = DImageHistory());
 
     virtual void itemChanged(const ImageInfoList& infos);
+    
+    
+#ifdef HAVE_KGEOMAP
+
+    static bool GPSImageInfofromImageInfo(const ImageInfo&, GPSImageInfo* const);
+
+#endif // HAVE_KGEOMAP
 
 Q_SIGNALS:
 

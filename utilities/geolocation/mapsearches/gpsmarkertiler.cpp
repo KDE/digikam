@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "digikam2kgeomap_database.h"
+#include "digikam2kgeomap.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 #include "digikam_debug.h"

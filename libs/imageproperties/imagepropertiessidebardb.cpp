@@ -43,7 +43,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikam_config.h"
 #include "applicationsettings.h"
 #include "databaseinfocontainers.h"
 #include "databasewatch.h"
@@ -60,7 +59,7 @@
 
 #ifdef HAVE_KGEOMAP
 #include "imagepropertiesgpstab.h"
-#include "digikam2kgeomap_database.h"
+#include "digikam2kgeomap.h"
 #endif // HAVE_KGEOMAP
 
 namespace Digikam
@@ -306,7 +305,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             GPSImageInfo info;
 
-            if (!GPSImageInfo::fromImageInfo(d->currentInfos.first(), &info))
+            if (!GPSImageInfofromImageInfo(d->currentInfos.first(), &info))
             {
                 m_gpsTab->setCurrentURL();
             }
@@ -359,7 +358,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             {
                 GPSImageInfo info;
 
-                if (GPSImageInfo::fromImageInfo(*it, &info))
+                if (GPSImageInfofromImageInfo(*it, &info))
                 {
                     list << info;
                 }
@@ -702,5 +701,33 @@ void ImagePropertiesSideBarDB::slotPopupTagsView()
     setActiveTab(d->desceditTab);
     d->desceditTab->setFocusToTagsView();
 }
+
+#ifdef HAVE_KGEOMAP
+
+bool ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo)
+{
+    const ImagePosition pos = imageInfo.imagePosition();
+
+    if (pos.isEmpty())
+    {
+        return false;
+    }
+
+    gpsImageInfo->coordinates.setLatLon(pos.latitudeNumber(), pos.longitudeNumber());
+
+    if (pos.hasAltitude())
+    {
+        gpsImageInfo->coordinates.setAlt(pos.altitude());
+    }
+
+    gpsImageInfo->dateTime  = imageInfo.dateTime();
+    gpsImageInfo->rating    = imageInfo.rating();
+    gpsImageInfo->url       = imageInfo.fileUrl();
+    gpsImageInfo->id        = imageInfo.id();
+
+    return true;
+}
+
+#endif // HAVE_KGEOMAP
 
 }  // namespace Digikam
