@@ -16,11 +16,14 @@ Batch Queue Manager: New BQM tool to convert RAW to DNG.
 
 Image Editor       : Add a new option to import images from a digital scanner.
 Image Editor       : Add a new option to edit metadata.
+Image Editor       : Add a new option to edit geolocation.
 
 Light Table        : Add a new option to edit metadata.
+Light Table        : Add a new option to edit geolocation.
 
 Showfoto           : Add a new option to import images from a digital scanner.
 Showfoto           : Add a new option to edit metadata.
+Showfoto           : Add a new option to edit geolocation.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
