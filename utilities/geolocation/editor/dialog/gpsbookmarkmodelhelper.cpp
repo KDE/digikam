@@ -31,8 +31,6 @@
 
 // KDE includes
 
-#include <kactioncollection.h>
-#include <kbookmarkmenu.h>
 #include <kbookmarkmanager.h>
 #include <klocalizedstring.h>
 
@@ -52,7 +50,7 @@ public:
     Private()
       : model(0),
         bookmarkManager(0),
-        kipiImageModel(0),
+        imageModel(0),
         visible(false)
     {
     }
@@ -63,7 +61,7 @@ public:
 
     QStandardItemModel* model;
     KBookmarkManager*   bookmarkManager;
-    GPSImageModel*     kipiImageModel;
+    GPSImageModel*      imageModel;
     QPixmap             pixmap;
     QUrl                bookmarkIconUrl;
     bool                visible;
@@ -97,13 +95,13 @@ void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(const KBookmarkGro
     }
 }
 
-GPSBookmarkModelHelper::GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, GPSImageModel* const kipiImageModel, QObject* const parent)
+GPSBookmarkModelHelper::GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, GPSImageModel* const imageModel, QObject* const parent)
     : ModelHelper(parent),
       d(new Private())
 {
     d->model           = new QStandardItemModel(this);
     d->bookmarkManager = bookmarkManager;
-    d->kipiImageModel  = kipiImageModel;
+    d->imageModel      = imageModel;
     d->bookmarkIconUrl = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                                     QStringLiteral("gpssync/bookmarks-marker.png")));
     d->pixmap          = QPixmap(d->bookmarkIconUrl.toLocalFile());
@@ -205,7 +203,7 @@ void GPSBookmarkModelHelper::snapItemsTo(const QModelIndex& targetIndex, const Q
     for (int i = 0; i < snappedIndices.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = snappedIndices.at(i);
-        GPSImageItem* const item             = d->kipiImageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item             = d->imageModel->itemFromIndex(itemIndex);
 
         GPSDataContainer newData;
         newData.setCoordinates(targetCoordinates);
