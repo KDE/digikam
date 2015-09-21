@@ -46,7 +46,7 @@ public:
     {
     }
 
-    QList<GPSImageItem*>                     items;
+    QList<GPSImageItem*>                      items;
     int                                       columnCount;
     QMap<QPair<int, int>, QVariant>           headerData;
     KImageCache*                              pixmapCache;
@@ -85,7 +85,7 @@ QVariant GPSImageModel::data(const QModelIndex& index, int role) const
 
     const int rowNumber = index.row();
 
-    if ((rowNumber<0)||(rowNumber>=d->items.count()))
+    if ((rowNumber < 0) || (rowNumber >= d->items.count()))
     {
         return QVariant();
     }
@@ -108,8 +108,11 @@ QModelIndex GPSImageModel::index(int row, int column, const QModelIndex& parent)
         return QModelIndex();
     }
 
-    if ( (column<0) || (column>=d->columnCount) ||
-         (row<0) || (row>=d->items.count()) )
+    if ( (column < 0)               ||
+         (column >= d->columnCount) ||
+         (row < 0)                  || 
+         (row >= d->items.count())
+       )
         return QModelIndex();
 
     return createIndex(row, column, (void*)0);
@@ -223,9 +226,9 @@ Qt::ItemFlags GPSImageModel::flags(const QModelIndex& index) const
 
 GPSImageItem* GPSImageModel::itemFromUrl(const QUrl& url) const
 {
-    for (int i=0; i<d->items.count(); ++i)
+    for (int i = 0; i < d->items.count(); ++i)
     {
-        if (d->items.at(i)->url()==url)
+        if (d->items.at(i)->url() == url)
             return d->items.at(i);
     }
 
@@ -234,9 +237,9 @@ GPSImageItem* GPSImageModel::itemFromUrl(const QUrl& url) const
 
 QModelIndex GPSImageModel::indexFromUrl(const QUrl& url) const
 {
-    for (int i=0; i<d->items.count(); ++i)
+    for (int i = 0; i < d->items.count(); ++i)
     {
-        if (d->items.at(i)->url()==url)
+        if (d->items.at(i)->url() == url)
             return index(i, 0, QModelIndex());
     }
 
@@ -272,7 +275,7 @@ QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex,
         return thumbnailPixmap;
 
     // did we already request this pixmap at this size?
-    for (int i=0; i<d->requestedPixmaps.count(); ++i)
+    for (int i = 0; i < d->requestedPixmaps.count(); ++i)
     {
         if (d->requestedPixmaps.at(i).first==itemIndex)
         {
@@ -330,13 +333,13 @@ void GPSImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& p
         // index, size
         QList<QPair<int, int> > openRequests;
 
-        for (int i=0; i<d->requestedPixmaps.count(); ++i)
+        for (int i = 0; i < d->requestedPixmaps.count(); ++i)
         {
             if (d->requestedPixmaps.at(i).first==imageIndex)
             {
                 const int requestedSize = d->requestedPixmaps.at(i).second;
 
-                if (requestedSize==effectiveSize)
+                if (requestedSize == effectiveSize)
                 {
                     // match, send it out.
                     d->requestedPixmaps.removeAt(i);
@@ -357,7 +360,7 @@ void GPSImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& p
         }
 
         // the pixmap was not requested at this size, fulfill all requests:
-        for (int i=openRequests.count()-1; i>=0; --i)
+        for (int i = openRequests.count()-1; i >= 0; --i)
         {
             const int targetSize = openRequests.at(i).second;
             d->requestedPixmaps.removeAt(openRequests.at(i).first);
