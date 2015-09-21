@@ -18,6 +18,8 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             reversegeocoding/rgwidget.cpp
 
                             searches/searchbackend.cpp
+                            searches/searchresultmodel.cpp
+                            searches/searchresultmodelhelper.cpp
                             searches/searchwidget.cpp
 
                             dragdrop/mapdragdrophandler.cpp

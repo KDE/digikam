@@ -22,13 +22,12 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHWIDGET_H
-#define SEARCHWIDGET_H
+#ifndef SEARCHRESULTMODELHELPER_H
+#define SEARCHRESULTMODELHELPER_H
 
 // Qt includes
 
 #include <QAbstractItemModel>
-#include <QWidget>
 
 // libkgeomap includes
 
@@ -38,50 +37,33 @@
 
 #include "searchbackend.h"
 
-class QEvent;
-class KConfigGroup;
-
-namespace KGeoMap
-{
-    class MapWidget;
-}
-
 namespace Digikam
 {
 
-class GPSBookmarkOwner;
+class SearchResultModel;
 class GPSUndoCommand;
 
-class SearchWidget : public QWidget
+class SearchResultModelHelper : public KGeoMap::ModelHelper
 {
     Q_OBJECT
 
 public:
 
-    SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner, GPSImageModel* const kipiImageModel, QItemSelectionModel* const kipiImageSelectionModel, QWidget* parent = 0);
-    ~SearchWidget();
+    SearchResultModelHelper(SearchResultModel* const resultModel,
+                            QItemSelectionModel* const selectionModel,
+                            GPSImageModel* const imageModel,
+                            QObject* const parent = 0);
+    ~SearchResultModelHelper();
 
-    KGeoMap::ModelHelper* getModelHelper();
-    void saveSettingsToGroup(KConfigGroup* const group);
-    void readSettingsFromGroup(const KConfigGroup* const group);
+    void setVisibility(const bool state);
 
-    void setPrimaryMapWidget(KGeoMap::MapWidget* const mapWidget);
-
-private Q_SLOTS:
-
-    void slotSearchCompleted();
-    void slotTriggerSearch();
-    void slotCurrentlySelectedResultChanged(const QModelIndex& current, const QModelIndex& previous);
-    void slotClearSearchResults();
-    void slotVisibilityChanged(bool state);
-    void slotCopyCoordinates();
-    void slotMoveSelectedImagesToThisResult();
-    void slotUpdateActionAvailability();
-    void slotRemoveSelectedFromResultsList();
-
-protected:
-
-    virtual bool eventFilter(QObject *watched, QEvent *event);
+    virtual QAbstractItemModel* model() const;
+    virtual QItemSelectionModel* selectionModel() const;
+    virtual bool itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const;
+    virtual bool itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const;
+    virtual Flags modelFlags() const;
+    virtual Flags itemFlags(const QModelIndex& index) const;
+    virtual void snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices);
 
 Q_SIGNALS:
 
@@ -95,4 +77,4 @@ private:
 
 } /* namespace Digikam */
 
-#endif /* SEARCHWIDGET_H */
+#endif /* SEARCHRESULTMODELHELPER_H */

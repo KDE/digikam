@@ -57,6 +57,8 @@
 // local includes
 
 #include "searchbackend.h"
+#include "searchresultmodel.h"
+#include "searchresultmodelhelper.h"
 #include "gpscommon.h"
 #include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"
@@ -313,313 +315,9 @@ void SearchWidget::slotTriggerSearch()
     slotUpdateActionAvailability();
 }
 
-// -------------------------------------------------------------------------------------------------
-
-class SearchResultModel::Private
-{
-public:
-
-    Private()
-    {
-        markerNormalUrl   = QUrl::fromLocalFile(QStandardPaths::locate(
-            QStandardPaths::GenericDataLocation, QStringLiteral("gpssync/searchmarker-normal.png")));
-        markerNormal      = QPixmap(markerNormalUrl.toLocalFile());
-        markerSelectedUrl = QUrl::fromLocalFile(QStandardPaths::locate(
-            QStandardPaths::GenericDataLocation, QStringLiteral("gpssync/searchmarker-selected.png")));
-        markerSelected    = QPixmap(markerSelectedUrl.toLocalFile());
-        selectionModel    = 0;
-    }
-
-    QList<SearchResultModel::SearchResultItem> searchResults;
-    QUrl                                       markerNormalUrl;
-    QUrl                                       markerSelectedUrl;
-    QPixmap                                    markerNormal;
-    QPixmap                                    markerSelected;
-    QItemSelectionModel*                       selectionModel;
-};
-
-SearchResultModel::SearchResultModel(QObject* const parent)
-    : QAbstractItemModel(parent), d(new Private())
-{
-}
-
-SearchResultModel::~SearchResultModel()
-{
-    delete d;
-}
-
-int SearchResultModel::columnCount(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent)
-
-    return 1;
-}
-
-bool SearchResultModel::setData(const QModelIndex& index, const QVariant& value, int role)
-{
-    Q_UNUSED(index)
-    Q_UNUSED(value)
-    Q_UNUSED(role)
-
-    return false;
-}
-
-QVariant SearchResultModel::data(const QModelIndex& index, int role) const
-{
-    const int rowNumber = index.row();
-
-    if ((rowNumber<0)||(rowNumber>=d->searchResults.count()))
-    {
-        return QVariant();
-    }
-
-    const int columnNumber = index.column();
-
-    if (columnNumber==0)
-    {
-        switch (role)
-        {
-            case Qt::DisplayRole:
-                return d->searchResults.at(rowNumber).result.name;
-
-            case Qt::DecorationRole:
-            {
-                QPixmap markerIcon;
-                getMarkerIcon(index, 0, 0, &markerIcon, 0);
-                return markerIcon;
-            }
-
-            default:
-                return QVariant();
-        }
-    }
-
-    return QVariant();
-}
-
-QModelIndex SearchResultModel::index(int row, int column, const QModelIndex& parent) const
-{
-    if (parent.isValid())
-    {
-        // there are no child items, only top level items
-        return QModelIndex();
-    }
-
-    if ( (column<0) || (column>=1) || (row<0) || (row>=d->searchResults.count()) )
-    {
-        return QModelIndex();
-    }
-
-    return createIndex(row, column, (void*)0);
-}
-
-QModelIndex SearchResultModel::parent(const QModelIndex& index) const
-{
-    Q_UNUSED(index)
-
-    // we have only top level items
-    return QModelIndex();
-}
-
-int SearchResultModel::rowCount(const QModelIndex& parent) const
-{
-    if (parent.isValid())
-    {
-        return 0;
-    }
-
-    return d->searchResults.count();
-}
-
-bool SearchResultModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
-{
-    Q_UNUSED(section)
-    Q_UNUSED(orientation)
-    Q_UNUSED(value)
-    Q_UNUSED(role)
-
-    return false;
-}
-
-QVariant SearchResultModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    Q_UNUSED(role)
-
-    if ((section >= 1) || (orientation != Qt::Horizontal))
-    {
-        return false;
-    }
-
-    return QVariant(QStringLiteral("Name"));
-}
-
-Qt::ItemFlags SearchResultModel::flags(const QModelIndex& index) const
-{
-    return QAbstractItemModel::flags(index);
-}
-
-void SearchResultModel::addResults(const SearchBackend::SearchResult::List& results)
-{
-    // first check which items are not duplicates
-    QList<int> nonDuplicates;
-
-    for (int i=0; i<results.count(); ++i)
-    {
-        const SearchBackend::SearchResult& currentResult = results.at(i);
-        bool isDuplicate                                 = false;
-
-        for (int j=0; j<d->searchResults.count(); ++j)
-        {
-            if (currentResult.internalId==d->searchResults.at(j).result.internalId)
-            {
-                isDuplicate = true;
-                break;
-            }
-        }
-
-        if (!isDuplicate)
-        {
-            nonDuplicates << i;
-        }
-    }
-
-    if (nonDuplicates.isEmpty())
-    {
-        return;
-    }
-
-    beginInsertRows(QModelIndex(), d->searchResults.count(), d->searchResults.count()+nonDuplicates.count()-1);
-
-    for (int i=0; i<nonDuplicates.count(); ++i)
-    {
-        SearchResultItem item;
-        item.result = results.at(nonDuplicates.at(i));
-        d->searchResults << item;
-    }
-
-    endInsertRows();
-}
-
-// -------------------------------------------------------------------------------------------------
-
-class SearchResultModelHelper::Private
-{
-public:
-
-    Private()
-      : model(0),
-        selectionModel(0),
-        imageModel(0),
-        visible(true)
-    {
-    }
-
-    SearchResultModel*   model;
-    QItemSelectionModel* selectionModel;
-    GPSImageModel*      imageModel;
-    bool                 visible;
-};
-
-SearchResultModelHelper::SearchResultModelHelper(SearchResultModel* const resultModel,
-                                                 QItemSelectionModel* const selectionModel,
-                                                 GPSImageModel* const imageModel,
-                                                 QObject* const parent)
-    : KGeoMap::ModelHelper(parent), d(new Private())
-{
-    d->model          = resultModel;
-    d->selectionModel = selectionModel;
-    d->imageModel     = imageModel;
-}
-
-SearchResultModelHelper::~SearchResultModelHelper()
-{
-    delete d;
-}
-
-QAbstractItemModel* SearchResultModelHelper::model() const
-{
-    return d->model;
-}
-
-QItemSelectionModel* SearchResultModelHelper::selectionModel() const
-{
-    return d->selectionModel;
-}
-
-bool SearchResultModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const
-{
-    const SearchResultModel::SearchResultItem item = d->model->resultItem(index);
-    *coordinates                                   = item.result.coordinates;
-
-    return true;
-}
-
-bool SearchResultModelHelper::itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const
-{
-    return d->model->getMarkerIcon(index, offset, size, pixmap, url);
-}
-
-SearchResultModel::SearchResultItem SearchResultModel::resultItem(const QModelIndex& index) const
-{
-    if (!index.isValid())
-    {
-        return SearchResultItem();
-    }
-
-    return d->searchResults.at(index.row());
-}
-
 KGeoMap::ModelHelper* SearchWidget::getModelHelper()
 {
     return d->searchResultModelHelper;
-}
-
-bool SearchResultModel::getMarkerIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const
-{
-    // determine the id of the marker
-    const int markerNumber    = index.row();
-    const bool itemIsSelected = d->selectionModel ? d->selectionModel->isSelected(index) : false;
-    QPixmap markerPixmap      = itemIsSelected ? d->markerSelected : d->markerNormal;
-
-    // if the caller requests a URL and the marker will not get
-    // a special label, return a URL. Otherwise, return a pixmap.
-    const bool returnViaUrl = url && markerNumber>26;
-
-    if (returnViaUrl)
-    {
-        *url = itemIsSelected ? d->markerSelectedUrl : d->markerNormalUrl;
-
-        if (size)
-        {
-            *size = markerPixmap.size();
-        }
-    }
-    else
-    {
-        if (markerNumber<=26)
-        {
-            const QString markerId = QChar('A'+markerNumber);
-            QPainter painter(&markerPixmap);
-            painter.setRenderHint(QPainter::Antialiasing);
-            painter.setPen(Qt::black);
-            QRect textRect(0,2,markerPixmap.width(),markerPixmap.height());
-            painter.drawText(textRect, Qt::AlignHCenter, markerId);
-        }
-
-        *pixmap = markerPixmap;
-    }
-
-    if (offset)
-    {
-        *offset = QPoint(markerPixmap.width()/2, markerPixmap.height()-1);
-    }
-
-    return true;
-}
-
-void SearchResultModel::setSelectionModel(QItemSelectionModel* const selectionModel)
-{
-    d->selectionModel = selectionModel;
 }
 
 void SearchWidget::slotCurrentlySelectedResultChanged(const QModelIndex& current, const QModelIndex& previous)
@@ -646,23 +344,10 @@ void SearchWidget::slotClearSearchResults()
     slotUpdateActionAvailability();
 }
 
-void SearchResultModel::clearResults()
-{
-    beginResetModel();
-    d->searchResults.clear();
-    endResetModel();
-}
-
 void SearchWidget::slotVisibilityChanged(bool state)
 {
     d->searchResultModelHelper->setVisibility(state);
     slotUpdateActionAvailability();
-}
-
-void SearchResultModelHelper::setVisibility(const bool state)
-{
-    d->visible = state;
-    emit(signalVisibilityChanged());
 }
 
 void SearchWidget::slotUpdateActionAvailability()
@@ -679,18 +364,16 @@ void SearchWidget::slotUpdateActionAvailability()
 
     d->searchButton->setEnabled(haveSearchText&&!d->searchInProgress);
     d->actionClearResultsList->setEnabled(d->searchResultsModel->rowCount()>0);
-    d->actionToggleAllResultsVisibility->setIcon(
-            d->actionToggleAllResultsVisibility->isChecked() ?
-            d->actionToggleAllResultsVisibilityIconChecked :
-            d->actionToggleAllResultsVisibilityIconUnchecked
-        );
+    d->actionToggleAllResultsVisibility->setIcon(d->actionToggleAllResultsVisibility->isChecked() ? d->actionToggleAllResultsVisibilityIconChecked
+                                                                                                  : d->actionToggleAllResultsVisibilityIconUnchecked);
 }
 
 bool SearchWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == d->treeView)
     {
-        // we are only interested in context-menu events:
+        // we are only interested in context-menu events
+
         if (event->type() == QEvent::ContextMenu)
         {
             if (d->searchResultsSelectionModel->hasSelection())
@@ -707,7 +390,7 @@ bool SearchWidget::eventFilter(QObject *watched, QEvent *event)
             menu->addAction(d->actionCopyCoordinates);
             menu->addAction(d->actionMoveImagesToThisResult);
             menu->addAction(d->actionRemovedSelectedSearchResultsFromList);
-//             menu->addAction(d->actionBookmark);
+//          menu->addAction(d->actionBookmark);
             d->gpsBookmarkOwner->changeAddBookmark(true);
 
             QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
@@ -740,7 +423,7 @@ void SearchWidget::readSettingsFromGroup(const KConfigGroup* const group)
     d->actionKeepOldResults->setChecked(group->readEntry("Keep old results", false));
     const QString backendId = group->readEntry("Search backend", "osm");
 
-    for (int i=0; i<d->backendSelectionBox->count(); ++i)
+    for (int i = 0; i < d->backendSelectionBox->count(); ++i)
     {
         if (d->backendSelectionBox->itemData(i).toString()==backendId)
         {
@@ -748,45 +431,6 @@ void SearchWidget::readSettingsFromGroup(const KConfigGroup* const group)
             break;
         }
     }
-}
-
-KGeoMap::ModelHelper::Flags SearchResultModelHelper::modelFlags() const
-{
-    return FlagSnaps|(d->visible?FlagVisible:FlagNull);
-}
-
-KGeoMap::ModelHelper::Flags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
-{
-    return FlagVisible|FlagSnaps;
-}
-
-void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices)
-{
-    GPSUndoCommand* const undoCommand                = new GPSUndoCommand();
-    SearchResultModel::SearchResultItem targetItem   = d->model->resultItem(targetIndex);
-    const KGeoMap::GeoCoordinates& targetCoordinates = targetItem.result.coordinates;
-
-    for (int i=0; i<snappedIndices.count(); ++i)
-    {
-        const QPersistentModelIndex itemIndex = snappedIndices.at(i);
-        GPSImageItem* const item             = d->imageModel->itemFromIndex(itemIndex);
-
-        GPSUndoCommand::UndoInfo undoInfo(itemIndex);
-        undoInfo.readOldDataFromItem(item);
-
-        GPSDataContainer newData;
-        newData.setCoordinates(targetCoordinates);
-        item->setGPSData(newData);
-
-        undoInfo.readNewDataFromItem(item);
-
-        undoCommand->addUndoInfo(undoInfo);
-    }
-
-    undoCommand->setText(i18np("1 image snapped to '%2'",
-                               "%1 images snapped to '%2'", snappedIndices.count(), targetItem.result.name));
-
-    emit(signalUndoCommand(undoCommand));
 }
 
 void SearchWidget::slotMoveSelectedImagesToThisResult()
@@ -803,7 +447,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
 
     GPSUndoCommand* const undoCommand = new GPSUndoCommand();
 
-    for (int i=0; i<selectedImageIndices.count(); ++i)
+    for (int i = 0; i < selectedImageIndices.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = selectedImageIndices.at(i);
         GPSImageItem* const item             = d->kipiImageModel->itemFromIndex(itemIndex);
@@ -829,73 +473,6 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
 void SearchWidget::setPrimaryMapWidget(KGeoMap::MapWidget* const mapWidget)
 {
     d->mapWidget = mapWidget;
-}
-
-void SearchResultModel::removeRowsByIndexes(const QModelIndexList& rowsList)
-{
-    // extract the row numbers first:
-    QList<int> rowNumbers;
-
-    Q_FOREACH(const QModelIndex& index, rowsList)
-    {
-        if (index.isValid())
-        {
-            rowNumbers << index.row();
-        }
-    }
-
-    if (rowNumbers.isEmpty())
-    {
-        return;
-    }
-
-    qSort(rowNumbers.begin(), rowNumbers.end());
-
-    // now delete the rows, starting with the last row:
-    for (int i=rowNumbers.count()-1; i>=0; i--)
-    {
-        const int rowNumber = rowNumbers.at(i);
-
-        /// @todo This is very slow for several indexes, because the views update after every removal
-        beginRemoveRows(QModelIndex(), rowNumber, rowNumber);
-        d->searchResults.removeAt(rowNumber);
-        endRemoveRows();
-    }
-}
-
-static bool RowRangeLessThan(const QPair<int, int>& a, const QPair<int, int>& b)
-{
-    return a.first < b.first;
-}
-
-void SearchResultModel::removeRowsBySelection(const QItemSelection& selectionList)
-{
-    // extract the row numbers first:
-    QList<QPair<int, int> > rowRanges;
-
-    Q_FOREACH(const QItemSelectionRange& range, selectionList)
-    {
-        rowRanges << QPair<int, int>(range.top(), range.bottom());
-    }
-
-    // we expect the ranges to be sorted here
-    qSort(rowRanges.begin(), rowRanges.end(), RowRangeLessThan);
-
-    // now delete the rows, starting with the last row:
-    for (int i=rowRanges.count()-1; i>=0; i--)
-    {
-        const QPair<int, int> currentRange = rowRanges.at(i);
-
-        /// @todo This is very slow for several indexes, because the views update after every removal
-        beginRemoveRows(QModelIndex(), currentRange.first, currentRange.second);
-
-        for (int j=currentRange.second; j>=currentRange.first; j--)
-        {
-            d->searchResults.removeAt(j);
-        }
-
-        endRemoveRows();
-    }
 }
 
 void SearchWidget::slotRemoveSelectedFromResultsList()
