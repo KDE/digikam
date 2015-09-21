@@ -24,10 +24,6 @@
 
 #include "gpsimagemodel.h"
 
-// KDE includes
-
-#include <kimagecache.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -41,33 +37,30 @@ public:
 
     Private()
       : items(),
-        columnCount(0),
-        pixmapCache(0)
+        columnCount(0)
     {
     }
 
     QList<GPSImageItem*>                      items;
     int                                       columnCount;
     QMap<QPair<int, int>, QVariant>           headerData;
-    KImageCache*                              pixmapCache;
-    QList<QPair<QPersistentModelIndex, int> > requestedPixmaps;
+    ThumbnailLoadThread*                      thumbnailLoadThread;
 };
 
 GPSImageModel::GPSImageModel(QObject* const parent)
     : QAbstractItemModel(parent),
       d(new Private)
 {
-    // TODO: Find an appropriate name (is "digikam-geolocator" OK?)
-    // TODO: Make cache size configurable.
-    d->pixmapCache = new KImageCache(QStringLiteral("digikam-geolocator"), 5 * 1024 * 1024);
-    d->pixmapCache->setPixmapCaching(false);
+    d->thumbnailLoadThread = new ThumbnailLoadThread(this);
+
+    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
 }
 
 GPSImageModel::~GPSImageModel()
 {
     // TODO: send a signal before deleting the items?
     qDeleteAll(d->items);
-    delete d->pixmapCache;
     delete d;
 }
 
@@ -135,7 +128,9 @@ void GPSImageModel::addItem(GPSImageItem* const newItem)
 void GPSImageModel::setColumnCount(const int nColumns)
 {
     emit(layoutAboutToBeChanged());
+
     d->columnCount = nColumns;
+
     emit(layoutChanged());
 }
 
@@ -148,6 +143,7 @@ void GPSImageModel::itemChanged(GPSImageItem* const changedItem)
 
     const QModelIndex itemModelIndexStart = createIndex(itemIndex, 0, (void*)0);
     const QModelIndex itemModelIndexEnd   = createIndex(itemIndex, d->columnCount - 1, (void*)0);
+
     emit(dataChanged(itemModelIndexStart, itemModelIndexEnd));
 }
 
@@ -199,6 +195,7 @@ QVariant GPSImageModel::headerData(int section, Qt::Orientation orientation, int
         return false;
 
     const QPair<int, int> headerIndex = QPair<int, int>(section, role);
+
     return d->headerData.value(headerIndex);
 }
 
@@ -246,11 +243,6 @@ QModelIndex GPSImageModel::indexFromUrl(const QUrl& url) const
     return QModelIndex();
 }
 
-static QString CacheKeyFromSizeAndUrl(const int size, const QUrl& url)
-{
-    return QStringLiteral("%1-%3").arg(size).arg(url.url(QUrl::PreferLocalFile));
-}
-
 QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex, const int size)
 {
     if (itemIndex.isValid())
@@ -265,114 +257,30 @@ QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex,
 
     if (!imageItem)
         return QPixmap();
+    
+    QPixmap thumbnail;
 
-    const QString itemKeyString  = CacheKeyFromSizeAndUrl(size, imageItem->url());
-    QPixmap thumbnailPixmap;
-    const bool havePixmapInCache = d->pixmapCache->findPixmap(itemKeyString, &thumbnailPixmap);
-
-    if (havePixmapInCache)
-        return thumbnailPixmap;
-
-    // did we already request this pixmap at this size?
-    for (int i = 0; i < d->requestedPixmaps.count(); ++i)
+    if (d->thumbnailLoadThread->find(ThumbnailIdentifier(imageItem->url().path()), thumbnail, size))
     {
-        if (d->requestedPixmaps.at(i).first==itemIndex)
-        {
-            if (d->requestedPixmaps.at(i).second==size)
-            {
-                // the pixmap has already been requested, at this size
-                return QPixmap();
-            }
-        }
-    }
-
-    // remember at which size the pixmap was ordered:
-    d->requestedPixmaps << QPair<QPersistentModelIndex, int>(itemIndex, size);
-
-/* FIXME : port to ThumbLoadThread
-
-    if (d->interface)
-    {
-        d->interface->thumbnails(QList<QUrl>() << imageItem->url(), size);
-    }
-    else
-    {
-        KIO::PreviewJob *job = KIO::filePreview(urls, DEFAULTSIZE);
-
-        connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
-                this, SLOT(slotKDEPreview(KFileItem,QPixmap)));
-
-        connect(job, SIGNAL(failed(KFileItem)),
-                this, SLOT(slotKDEPreviewFailed(KFileItem)));
-    }
-*/
+        return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
+    }               
+     
     return QPixmap();
 }
 
-//FIXME : port to ThumbLoadThread
-void GPSImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& pixmap)
+void GPSImageModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG)<<url<<pixmap.size();
-
-    if (pixmap.isNull())
-        return;
-
-    const int effectiveSize = qMax(pixmap.size().width(), pixmap.size().height());
-
-    // find the item corresponding to the URL:
-    const QModelIndex imageIndex = indexFromUrl(url);
-    qCDebug(DIGIKAM_GENERAL_LOG) << url << imageIndex.isValid();
-
-    if (imageIndex.isValid())
+    if (thumb.isNull())
     {
-        // this is tricky: some kipi interfaces return pixmaps at the requested size, others do not.
-        // therefore we check whether a pixmap of this size has been requested. If so, we send it on.
-        // If a pixmap of this size has not been requested, we rescale it to fulfill all other requests.
+        return;
+    }
 
-        // index, size
-        QList<QPair<int, int> > openRequests;
+    const QModelIndex currentIndex = indexFromUrl(QUrl::fromLocalFile(loadingDescription.filePath));
 
-        for (int i = 0; i < d->requestedPixmaps.count(); ++i)
-        {
-            if (d->requestedPixmaps.at(i).first==imageIndex)
-            {
-                const int requestedSize = d->requestedPixmaps.at(i).second;
-
-                if (requestedSize == effectiveSize)
-                {
-                    // match, send it out.
-                    d->requestedPixmaps.removeAt(i);
-                    qCDebug(DIGIKAM_GENERAL_LOG) << i;
-
-                    // save the pixmap:
-                    const QString itemKeyString = CacheKeyFromSizeAndUrl(effectiveSize, url);
-                    d->pixmapCache->insertPixmap(itemKeyString, pixmap);
-
-                    emit(signalThumbnailForIndexAvailable(imageIndex, pixmap));
-                    return;
-                }
-                else
-                {
-                    openRequests << QPair<int, int>(i, requestedSize);
-                }
-            }
-        }
-
-        // the pixmap was not requested at this size, fulfill all requests:
-        for (int i = openRequests.count()-1; i >= 0; --i)
-        {
-            const int targetSize = openRequests.at(i).second;
-            d->requestedPixmaps.removeAt(openRequests.at(i).first);
-            qCDebug(DIGIKAM_GENERAL_LOG) << i << targetSize;
-
-            QPixmap scaledPixmap = pixmap.scaled(targetSize, targetSize, Qt::KeepAspectRatio);
-
-            // save the pixmap:
-            const QString itemKeyString = CacheKeyFromSizeAndUrl(targetSize, url);
-            d->pixmapCache->insertPixmap(itemKeyString, scaledPixmap);
-
-            emit(signalThumbnailForIndexAvailable(imageIndex, scaledPixmap));
-        }
+    if (currentIndex.isValid())
+    {
+        QPersistentModelIndex goodIndex(currentIndex);
+        emit(signalThumbnailForIndexAvailable(goodIndex, thumb.copy(1, 1, thumb.size().width()-2, thumb.size().height()-2)));
     }
 }
 

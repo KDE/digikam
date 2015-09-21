@@ -33,6 +33,7 @@
 // Local includes
 
 #include "gpsimageitem.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -77,7 +78,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotThumbnailFromInterface(const QUrl& url, const QPixmap& pixmap);
+    void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
 private:
 

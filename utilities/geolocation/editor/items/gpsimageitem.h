@@ -190,7 +190,7 @@ protected:
 
 protected:
 
-    GPSImageModel*        m_model;
+    GPSImageModel*         m_model;
 
     QUrl                   m_url;
     QDateTime              m_dateTime;

@@ -81,7 +81,7 @@ public:
     }
 
     RVBox*                      vbox;
-    KGeoMap::MapWidget*     mapWidget;
+    KGeoMap::MapWidget*         mapWidget;
     ImageFilterModel*           imageFilterModel;
     ImageAlbumModel*            imageModel;
     ImportFilterModel*          importFilterModel;
