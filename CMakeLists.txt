@@ -154,6 +154,7 @@ find_package(KF5 REQUIRED COMPONENTS
              OPTIONAL_COMPONENTS
              ItemModels
              Bookmarks
+             GuiAddons
 )
 
 # ==================================================================================================
