@@ -30,16 +30,13 @@
 #include <QClipboard>
 #include <QMimeData>
 
-// KDE includes
-
-#include <kmessagebox.h>
-
 // Local includes
 
 #include "digikam_debug.h"
 #include "dmetadata.h"
 #include "metadatasettings.h"
 #include "metadatasettingscontainer.h"
+#include "dmessagebox.h"
 
 namespace Digikam
 {
@@ -107,22 +104,16 @@ bool checkSidecarSettings()
     if ( (MetadataSettings::instance()->settings().metadataWritingMode != DMetadata::WRITETOIMAGEONLY) &&
          (!MetadataSettings::instance()->settings().useXMPSidecar4Reading) )
     {
-        const int result = KMessageBox::warningContinueCancel(
-                QApplication::activeWindow(),
-                i18n(
-                        "You have enabled writing to sidecar files for metadata storage in the host application,"
-                        " but not for reading."
-                        " This means that any metadata stored in the sidecar files will be overwritten here.\n"
-                        "Please enable reading of sidecar files in the host application or continue at your own risk."
-                    ),
-                i18n("Warning: Sidecar settings"),
-                KStandardGuiItem::cont(),
-                KStandardGuiItem::cancel(),
-                QString(),
-                KMessageBox::Dangerous
-            );
+        const int result = DMessageBox::showContinueCancel(QMessageBox::Warning,
+                                                           QApplication::activeWindow(),
+                                                           i18n("Warning: Sidecar settings"),
+                                                           i18n("You have enabled writing to sidecar files for metadata storage in the host application,"
+                                                                " but not for reading."
+                                                                " This means that any metadata stored in the sidecar files will be overwritten here.\n"
+                                                                "Please enable reading of sidecar files in the host application or continue at your own risk.")
+                                                          );
         
-        if (result != KMessageBox::Continue)
+        if (result != QMessageBox::Yes)
         {
             return false;
         }
