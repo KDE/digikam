@@ -29,7 +29,6 @@
 
 #include <QAbstractItemModel>
 
-class SimpleTreeModelPrivate;
 class SimpleTreeModel : public QAbstractItemModel
 {
 Q_OBJECT
@@ -39,10 +38,11 @@ public:
     class Item
     {
     public:
+
         Item()
-        : dataColumns(),
-          parent(0),
-          children()
+            : dataColumns(),
+              parent(0),
+              children()
         {
         }
 
@@ -52,10 +52,12 @@ public:
         }
 
         QString data;
+        
     private:
+
         QList<QMap<int, QVariant> > dataColumns;
-        Item* parent;
-        QList<Item*> children;
+        Item*                       parent;
+        QList<Item*>                children;
 
         friend class SimpleTreeModel;
     };
@@ -80,7 +82,9 @@ public:
     QModelIndex itemToIndex(const Item* const item) const;
 
 private:
-    SimpleTreeModelPrivate* const d;
+
+    class Private;
+    Private* const d;
 };
 
 #endif /* SIMPLETREEMODEL_H */

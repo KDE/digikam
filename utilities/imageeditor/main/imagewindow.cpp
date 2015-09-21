@@ -102,6 +102,7 @@
 #include "imagescanner.h"
 #include "imagethumbnailbar.h"
 #include "iofilesettings.h"
+#include "gpssyncdialog.h"
 #include "dnotificationwrapper.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
@@ -1714,6 +1715,25 @@ void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
 {
     ImageInfo info = ScanController::instance()->scannedInfo(url.toLocalFile());
     openImage(info);
+}
+
+void ImageWindow::slotEditGeolocation()
+{
+#ifdef HAVE_KGEOMAP
+    if ( d->currentImageInfo.isNull() )
+        return;
+    
+    QUrl url = d->currentImageInfo.fileUrl();
+
+    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
+    dialog->setImages(QList<QUrl>() << url);
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from files.
+    ScanController::instance()->scannedInfo(url.toLocalFile());
+#endif
 }
 
 void ImageWindow::slotEditMetadata()

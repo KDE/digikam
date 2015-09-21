@@ -59,6 +59,7 @@
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
 #include "deletedialog.h"
+#include "gpssyncdialog.h"
 #include "iccsettings.h"
 #include "imagewindow.h"
 #include "imagedescedittab.h"
@@ -1701,6 +1702,27 @@ void LightTableWindow::slotColorManagementOptionsChanged()
     d->viewCMViewAction->setEnabled(settings.enableCM);
     d->viewCMViewAction->setChecked(settings.useManagedPreviews);
     d->viewCMViewAction->blockSignals(false);
+}
+
+void LightTableWindow::slotEditGeolocation()
+{
+#ifdef HAVE_KGEOMAP
+    if (d->thumbView->currentInfo().isNull())
+    {
+        return;
+    }
+
+    QUrl url = d->thumbView->currentInfo().fileUrl();
+
+    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
+    dialog->setImages(QList<QUrl>() << url);
+    dialog->exec();
+
+    delete dialog;
+
+    // Refresh Database with new metadata from files.
+    ScanController::instance()->scannedInfo(url.toLocalFile());
+#endif
 }
 
 void LightTableWindow::slotEditMetadata()

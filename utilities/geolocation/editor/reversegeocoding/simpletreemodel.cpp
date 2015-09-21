@@ -24,37 +24,39 @@
 
 #include "simpletreemodel.h"
 
-class SimpleTreeModelPrivate
+class SimpleTreeModel::Private
 {
 public:
-    SimpleTreeModelPrivate()
-    : rootItem(0),
-      columnCount(1)
+    
+    Private()
+        : rootItem(0),
+          columnCount(1)
     {
     }
 
     SimpleTreeModel::Item* rootItem;
-    int columnCount;
+    int                    columnCount;
 };
 
 
 SimpleTreeModel::SimpleTreeModel(const int columnCount, QObject* const parent)
-: QAbstractItemModel(parent), d(new SimpleTreeModelPrivate())
+    : QAbstractItemModel(parent),
+      d(new Private())
 {
     d->columnCount = columnCount;
-    d->rootItem = new Item();
+    d->rootItem    = new Item();
 }
 
 SimpleTreeModel::~SimpleTreeModel()
 {
     delete d->rootItem;
-
     delete d;
 }
 
 int SimpleTreeModel::columnCount(const QModelIndex& parent) const
 {
     const Item* const item = indexToItem(parent);
+
     if (!item)
         return 0;
 
@@ -64,10 +66,12 @@ int SimpleTreeModel::columnCount(const QModelIndex& parent) const
 bool SimpleTreeModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     Item* const item = indexToItem(index);
+
     if (!item)
         return false;
 
     const int column = index.column();
+
     if (column<0)
         return false;
 
@@ -83,6 +87,7 @@ bool SimpleTreeModel::setData(const QModelIndex& index, const QVariant& value, i
 QVariant SimpleTreeModel::data(const QModelIndex& index, int role) const
 {
     const Item* const item = indexToItem(index);
+
     if (!item)
         return QVariant();
 
@@ -90,6 +95,7 @@ QVariant SimpleTreeModel::data(const QModelIndex& index, int role) const
         return QVariant();
 
     const int column = index.column();
+
     if ((column<0)||(column>=item->dataColumns.count()))
         return QVariant();
 
@@ -99,6 +105,7 @@ QVariant SimpleTreeModel::data(const QModelIndex& index, int role) const
 QModelIndex SimpleTreeModel::index(int row, int column, const QModelIndex& parent) const
 {
     Item* const item = indexToItem(parent);
+
     if (!item)
         return QModelIndex();
 
@@ -120,6 +127,7 @@ QModelIndex SimpleTreeModel::parent(const QModelIndex& index) const
         return QModelIndex();
 
     Item* const item = indexToItem(index);
+
     if (!item)
         return QModelIndex();
 
@@ -132,6 +140,7 @@ QModelIndex SimpleTreeModel::parent(const QModelIndex& index) const
 int SimpleTreeModel::rowCount(const QModelIndex& parent) const
 {
     const Item* const item = indexToItem(parent);
+
     if (!item)
         return 0;
 
@@ -163,13 +172,13 @@ Qt::ItemFlags SimpleTreeModel::flags(const QModelIndex& index) const
 SimpleTreeModel::Item* SimpleTreeModel::addItem(SimpleTreeModel::Item* const parentItem, const int rowNumber)
 {
     Item* const myParent = parentItem ? parentItem : d->rootItem;
-
-    Item* const newItem = new Item();
-    newItem->parent = myParent;
+    Item* const newItem  = new Item();
+    newItem->parent      = myParent;
 
     const int childrenCount = myParent->children.count();
-    int targetRow = rowNumber;
-    if ((rowNumber<0)||(rowNumber>childrenCount))
+    int targetRow           = rowNumber;
+
+    if ((rowNumber < 0) || (rowNumber > childrenCount))
     {
         targetRow = childrenCount;
     }
@@ -187,8 +196,9 @@ SimpleTreeModel::Item* SimpleTreeModel::indexToItem(const QModelIndex& itemIndex
         return d->rootItem;
 
     Item* const item = static_cast<Item*>(itemIndex.internalPointer());
-    const int row = itemIndex.row();
-    if ((row<0)||(row>=item->children.count()))
+    const int row    = itemIndex.row();
+
+    if ((row < 0) || (row >= item->children.count()))
         return 0;
 
     return item->children.at(row);
@@ -201,12 +211,13 @@ SimpleTreeModel::Item* SimpleTreeModel::rootItem() const
 
 QModelIndex SimpleTreeModel::itemToIndex(const Item* const item) const
 {
-    if ((!item)||(item==d->rootItem))
+    if ((!item) || (item == d->rootItem))
         return QModelIndex();
 
     Item* const parentItem = item->parent;
-    const int rowNumber = parentItem->children.indexOf(const_cast<Item*>(item));
-    if (rowNumber<0)
+    const int rowNumber    = parentItem->children.indexOf(const_cast<Item*>(item));
+
+    if (rowNumber < 0)
         return QModelIndex();
 
     return createIndex(rowNumber, 0, parentItem);

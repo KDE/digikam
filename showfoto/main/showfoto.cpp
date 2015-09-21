@@ -91,6 +91,7 @@ extern "C"
 #include "dmetadata.h"
 #include "editorstackview.h"
 #include "fileoperation.h"
+#include "gpssyncdialog.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imageplugin.h"
@@ -1374,6 +1375,23 @@ void ShowFoto::slotImportFromScanner()
 void ShowFoto::slotImportedImagefromScanner(const QUrl& url)
 {
     openUrls(QList<QUrl>() << url);
+}
+
+void ShowFoto::slotEditGeolocation()
+{
+#ifdef HAVE_KGEOMAP
+    if ( d->thumbBar->currentInfo().isNull() )
+        return;
+    
+    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(0, QApplication::activeWindow());
+    dialog->setImages(QList<QUrl>() << d->thumbBar->currentInfo().url);
+    dialog->exec();
+
+    delete dialog;
+
+    // Update image information everywhere.
+    slotChanged();
+#endif
 }
 
 void ShowFoto::slotEditMetadata()

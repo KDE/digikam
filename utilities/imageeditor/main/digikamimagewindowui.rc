@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="502" name="digikamimagewindow" >
+<gui version="503" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -13,6 +13,7 @@
         <Separator/>
         <Action name="import_scan" />
         <Action name="metadata_edit"/>
+        <Action name="geolocation_edit"/>
         <Action name="editorwindow_print" />
         <Action name="open_with_default_application" />
         <Separator/>

@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="503" name="showfoto" >
+<gui version="504" name="showfoto" >
 
 <MenuBar>
 
@@ -16,6 +16,7 @@
         <Separator/>
         <Action name="import_scan" />
         <Action name="metadata_edit"/>
+        <Action name="geolocation_edit"/>
         <Action name="editorwindow_print" />
         <Action name="open_with_default_application" />
         <Separator/>

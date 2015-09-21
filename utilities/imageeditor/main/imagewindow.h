@@ -188,6 +188,7 @@ private Q_SLOTS:
     void slotImportedImagefromScanner(const QUrl& url);
 
     void slotEditMetadata();
+    void slotEditGeolocation();
 
 private:
 

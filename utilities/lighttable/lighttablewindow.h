@@ -170,6 +170,7 @@ private Q_SLOTS:
     void slotLeftSideBarActivateAssignedTags();
 
     void slotEditMetadata();
+    void slotEditGeolocation();
 
 private:
 

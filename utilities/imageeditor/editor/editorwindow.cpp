@@ -436,7 +436,9 @@ void EditorWindow::setupStandardActions()
 
     createKSaneAction();
     createMetadataEditAction();
+    createGeolocationEditAction();
     m_metadataEditAction->setEnabled(false);
+    m_geolocationEditAction->setEnabled(false);
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
@@ -1101,6 +1103,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->openWithAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
     m_metadataEditAction->setEnabled(val);
+    m_geolocationEditAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
