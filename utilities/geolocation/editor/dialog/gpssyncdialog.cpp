@@ -307,23 +307,6 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->HSplitter            = new QSplitter(Qt::Horizontal, hboxMain);
     d->HSplitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    RHBox* const hboxBottom = new RHBox(this);
-    mainLayout->addWidget(hboxBottom);
-
-    d->progressBar          = new QProgressBar(hboxBottom);
-    d->progressBar->setVisible(false);
-    d->progressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    // we need a really large stretch factor here because the QDialogButtonBox also stretches a lot...
-    dynamic_cast<QHBoxLayout*>(hboxBottom->layout())->setStretch(200, 0);
-
-    d->progressCancelButton = new QPushButton(hboxBottom);
-    d->progressCancelButton->setVisible(false);
-    d->progressCancelButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    d->progressCancelButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
-
-    connect(d->progressCancelButton, SIGNAL(clicked()),
-            this, SLOT(slotProgressCancelButtonClicked()));
-
     // ------------------------------------------------------------------------------------------------
 
     RHBox* const hbox            = new RHBox(this);
@@ -333,9 +316,21 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->cbMapLayout->addItem(i18n("Two maps - horizontal"), QVariant::fromValue(MapLayoutHorizontal));
     d->cbMapLayout->addItem(i18n("Two maps - vertical"),   QVariant::fromValue(MapLayoutVertical));
     labelMapLayout->setBuddy(d->cbMapLayout);
-    QWidget* const space         = new QWidget(hbox);
-    hbox->setStretchFactor(space, 10);
    
+    d->progressBar          = new QProgressBar(hbox);
+    d->progressBar->setVisible(false);
+    d->progressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    // we need a really large stretch factor here because the QDialogButtonBox also stretches a lot...
+    dynamic_cast<QHBoxLayout*>(hbox->layout())->setStretch(200, 0);
+
+    d->progressCancelButton = new QPushButton(hbox);
+    d->progressCancelButton->setVisible(false);
+    d->progressCancelButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    d->progressCancelButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
+
+    connect(d->progressCancelButton, SIGNAL(clicked()),
+            this, SLOT(slotProgressCancelButtonClicked()));
+    
     d->buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, hbox);
     d->buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
 
@@ -348,26 +343,6 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     mainLayout->addWidget(hbox);
 
     // ------------------------------------------------------------------------------------------------
-    
-    // TODO: the code below does not seem to have any effect, slotApplyClicked is still triggered
-    //       when 'Enter' is pressed...
-    // make sure the 'Apply' button is not triggered when enter is pressed,
-    // because that causes problems with the search widget
-    QAbstractButton* testButton = 0;
-
-    Q_FOREACH(testButton, d->buttonBox->buttons())
-    {
-//         if (d->buttonBox->buttonRole(testButton)==QDialogButtonBox::AcceptRole)
-        {
-            QPushButton* const pushButton = dynamic_cast<QPushButton*>(testButton);
-            qCDebug(DIGIKAM_GENERAL_LOG) << pushButton << pushButton->isDefault();
-
-            if (pushButton)
-            {
-                pushButton->setDefault(false);
-            }
-        }
-    }
 
     d->VSplitter = new QSplitter(Qt::Vertical, d->HSplitter);
     d->HSplitter->addWidget(d->VSplitter);
@@ -393,13 +368,13 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
             this, SLOT(slotBookmarkVisibilityToggled()));
 
     QWidget* mapVBox = 0;
-    d->mapWidget           = makeMapWidget(&mapVBox);
+    d->mapWidget     = makeMapWidget(&mapVBox);
     d->searchWidget->setPrimaryMapWidget(d->mapWidget);
-    d->mapSplitter         = new QSplitter(this);
+    d->mapSplitter   = new QSplitter(this);
     d->mapSplitter->addWidget(mapVBox);
     d->VSplitter->addWidget(d->mapSplitter);
 
-    d->treeView            = new GPSImageList(this);
+    d->treeView      = new GPSImageList(this);
     d->treeView->setModelAndSelectionModel(d->imageModel, d->selectionModel);
     d->treeView->setDragDropHandler(new GPSImageListDragDropHandler(this));
     d->treeView->setDragEnabled(true);
@@ -415,7 +390,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->HSplitter->addWidget(d->stackedWidget);
     d->splitterSize        = 0;
 
-    KDcrawIface::RVBox* const vboxTabBar = new KDcrawIface::RVBox(hboxMain);
+    RVBox* const vboxTabBar = new RVBox(hboxMain);
     vboxTabBar->layout()->setSpacing(0);
     vboxTabBar->layout()->setMargin(0);
 
