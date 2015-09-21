@@ -80,7 +80,7 @@ QVariant GPSImageModel::data(const QModelIndex& index, int role) const
 {
     if (index.isValid())
     {
-        Q_ASSERT(index.model()==this);
+        Q_ASSERT(index.model() == this);
     }
 
     const int rowNumber = index.row();
@@ -97,7 +97,7 @@ QModelIndex GPSImageModel::index(int row, int column, const QModelIndex& parent)
 {
     if (parent.isValid())
     {
-        Q_ASSERT(parent.model()==this);
+        Q_ASSERT(parent.model() == this);
     }
 
 //     qCDebug(DIGIKAM_GENERAL_LOG)<<row<<column<<parent;
@@ -143,7 +143,7 @@ void GPSImageModel::itemChanged(GPSImageItem* const changedItem)
 {
     const int itemIndex = d->items.indexOf(changedItem);
 
-    if (itemIndex<0)
+    if (itemIndex < 0)
         return;
 
     const QModelIndex itemModelIndexStart = createIndex(itemIndex, 0, (void*)0);
@@ -163,7 +163,7 @@ GPSImageItem* GPSImageModel::itemFromIndex(const QModelIndex& index) const
 
     const int row = index.row();
 
-    if ((row<0)||(row>=d->items.count()))
+    if ((row < 0)||(row >= d->items.count()))
         return 0;
 
     return d->items.at(row);
@@ -255,7 +255,7 @@ QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex,
 {
     if (itemIndex.isValid())
     {
-        Q_ASSERT(itemIndex.model()==this);
+        Q_ASSERT(itemIndex.model() == this);
     }
 
     // TODO: should we cache the pixmap on our own here or does the interface usually cache it for us?
@@ -269,7 +269,6 @@ QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex,
     const QString itemKeyString  = CacheKeyFromSizeAndUrl(size, imageItem->url());
     QPixmap thumbnailPixmap;
     const bool havePixmapInCache = d->pixmapCache->findPixmap(itemKeyString, &thumbnailPixmap);
-//     qCDebug(DIGIKAM_GENERAL_LOG)<<imageItem->url()<<size<<havePixmapInCache<<d->pixmapCache->isEnabled();
 
     if (havePixmapInCache)
         return thumbnailPixmap;
@@ -294,7 +293,7 @@ QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex,
 
     if (d->interface)
     {
-        d->interface->thumbnails(QList<QUrl>()<<imageItem->url(), size);
+        d->interface->thumbnails(QList<QUrl>() << imageItem->url(), size);
     }
     else
     {
@@ -322,7 +321,7 @@ void GPSImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& p
 
     // find the item corresponding to the URL:
     const QModelIndex imageIndex = indexFromUrl(url);
-    qCDebug(DIGIKAM_GENERAL_LOG)<<url<<imageIndex.isValid();
+    qCDebug(DIGIKAM_GENERAL_LOG) << url << imageIndex.isValid();
 
     if (imageIndex.isValid())
     {
@@ -343,7 +342,7 @@ void GPSImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& p
                 {
                     // match, send it out.
                     d->requestedPixmaps.removeAt(i);
-                    qCDebug(DIGIKAM_GENERAL_LOG)<<i;
+                    qCDebug(DIGIKAM_GENERAL_LOG) << i;
 
                     // save the pixmap:
                     const QString itemKeyString = CacheKeyFromSizeAndUrl(effectiveSize, url);
@@ -364,7 +363,7 @@ void GPSImageModel::slotThumbnailFromInterface(const QUrl& url, const QPixmap& p
         {
             const int targetSize = openRequests.at(i).second;
             d->requestedPixmaps.removeAt(openRequests.at(i).first);
-            qCDebug(DIGIKAM_GENERAL_LOG)<<i<<targetSize;
+            qCDebug(DIGIKAM_GENERAL_LOG) << i << targetSize;
 
             QPixmap scaledPixmap = pixmap.scaled(targetSize, targetSize, Qt::KeepAspectRatio);
 
