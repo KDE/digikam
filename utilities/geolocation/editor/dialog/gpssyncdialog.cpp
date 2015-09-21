@@ -317,6 +317,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->cbMapLayout->addItem(i18n("Two maps - vertical"),   QVariant::fromValue(MapLayoutVertical));
     labelMapLayout->setBuddy(d->cbMapLayout);
    
+    // FIXME: use StatusProgressBar
     d->progressBar          = new QProgressBar(hbox);
     d->progressBar->setVisible(false);
     d->progressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -825,10 +826,10 @@ void GPSSyncDialog::slotSetUIEnabled(const bool enabledState, QObject* const can
     {
         // hide the progress bar
         d->progressBar->setVisible(false);
+        d->progressCancelButton->setVisible(false);
         
         /* FIXME :use progress manager
         d->progressBar->progressCompleted();
-        d->progressCancelButton->setVisible(false);
         */
     }
 
@@ -958,11 +959,12 @@ void GPSSyncDialog::slotProgressSetup(const int maxProgress, const QString& prog
     d->progressBar->setMaximum(maxProgress);
     d->progressBar->setValue(0);
     d->progressBar->setVisible(true);
+    d->progressCancelButton->setVisible(d->progressCancelObject!=0);
+
     /* FIXME :use progress manager    
     d->progressBar->progressScheduled(i18n("GPS sync"), true, true);
     d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QStringLiteral("kipi")).pixmap(22, 22));
     */
-    d->progressCancelButton->setVisible(d->progressCancelObject!=0);
 }
 
 void GPSSyncDialog::slotGPSUndoCommand(GPSUndoCommand* undoCommand)
@@ -987,6 +989,7 @@ void GPSSyncDialog::slotProgressCancelButtonClicked()
     if (d->progressCancelObject)
     {
         QTimer::singleShot(0, d->progressCancelObject, d->progressCancelSlot.toUtf8().constData());
+
         /* FIXME :use progress manager
         d->progressBar->progressCompleted();
         */
