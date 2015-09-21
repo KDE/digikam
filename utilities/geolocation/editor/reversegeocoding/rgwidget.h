@@ -41,6 +41,7 @@
 #include "gpsimageitem.h"
 
 class QItemSelectionModel;
+class QAbstractItemModel;
 class KConfigGroup;
 
 namespace Digikam
@@ -55,7 +56,8 @@ class RGWidget : public QWidget
 
 public:
 
-    RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const selectionModel, QWidget* const parent = 0);
+    RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const selectionModel,
+             QAbstractItemModel* externTagModel, QWidget* const parent = 0);
     ~RGWidget();
 
     void setUIEnabled(const bool state);

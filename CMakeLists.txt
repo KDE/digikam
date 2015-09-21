@@ -152,7 +152,6 @@ find_package(KF5 REQUIRED COMPONENTS
 
              # For libkgeomap
              OPTIONAL_COMPONENTS
-             GuiAddons
              ItemModels
              Bookmarks
 )
@@ -545,7 +544,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         "$<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>"
        )
 
     if(KFILEMETADATA_FOUND)

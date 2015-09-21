@@ -265,7 +265,7 @@ public:
     QComboBox*                               cbMapLayout;
 };
 
-GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
+GPSSyncDialog::GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
@@ -417,7 +417,7 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->undoView         = new QUndoView(d->undoStack, d->stackedWidget);
     d->stackedWidget->addWidget(d->undoView);
 
-    d->rgWidget         = new RGWidget(d->imageModel, d->selectionModel, d->stackedWidget);
+    d->rgWidget         = new RGWidget(d->imageModel, d->selectionModel, externTagModel, d->stackedWidget);
     d->stackedWidget->addWidget(d->rgWidget);
     d->stackedWidget->addWidget(d->searchWidget);
 

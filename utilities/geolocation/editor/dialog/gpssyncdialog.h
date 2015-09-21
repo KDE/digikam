@@ -44,6 +44,8 @@
 #include <KGeoMap/ModelHelper>
 #include <KGeoMap/Tracks>
 
+class QAbstractItemModel;
+
 namespace KGeoMap
 {
     class MapWidget;
@@ -61,7 +63,7 @@ class GPSSyncDialog : public QDialog
 
 public:
 
-    explicit GPSSyncDialog(QWidget* const parent);
+    explicit GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* const parent);
     ~GPSSyncDialog();
 
     void setImages(const QList<QUrl>& images);

@@ -71,7 +71,7 @@
 #include "backend-geonamesUS-rg.h"
 #include "parsetagstring.h"
 #include "rgtagmodel.h"
-#include "albummodel.h"
+#include "simpletreemodel.h"
 #include "dmessagebox.h"
 
 #ifdef GPSSYNC_MODELTEST
@@ -116,7 +116,6 @@ public:
           serviceLabel(0),
           languageLabel(0),
           separator(0),
-          externTagModel(0),
           tagModel(0),
           tagTreeView(0),
           tagSelectionModel(0),
@@ -170,7 +169,6 @@ public:
     QLabel*              languageLabel;
     RLineWidget*         separator;
 
-    QAbstractItemModel*  externTagModel;
     RGTagModel*          tagModel;
     QTreeView*           tagTreeView;
 
@@ -202,7 +200,8 @@ public:
  * @param selectionModel image selection model
  * @param parent The parent object
  */
-RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const selectionModel, QWidget* const parent)
+RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const selectionModel,
+                   QAbstractItemModel* externTagModel, QWidget* const parent)
     : QWidget(parent),
       d(new Private())
 {
@@ -221,18 +220,16 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
 
     Q_ASSERT(d->tagTreeView!=0);
 
-    d->externTagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0);
+    if (!externTagModel)
+        externTagModel = new SimpleTreeModel(1, this);
 
-    if (d->externTagModel)
-    {
-        d->tagModel = new RGTagModel(d->externTagModel, this);
-        d->tagTreeView->setModel(d->tagModel);
+    d->tagModel = new RGTagModel(externTagModel, this);
+    d->tagTreeView->setModel(d->tagModel);
 
 #ifdef GPSSYNC_MODELTEST
-        new ModelTest(d->externTagModel, d->tagTreeView);
-        new ModelTest(d->tagModel, d->tagTreeView);
+    new ModelTest(externTagModel, d->tagTreeView);
+    new ModelTest(d->tagModel, d->tagTreeView);
 #endif /* GPSSYNC_MODELTEST */
-    }
 
     d->tagSelectionModel         = new QItemSelectionModel(d->tagModel);
     d->tagTreeView->setSelectionModel(d->tagSelectionModel);

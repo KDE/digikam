@@ -77,6 +77,7 @@
 #include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
+#include "albummodel.h"
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "cameratype.h"
@@ -3157,7 +3158,7 @@ void DigikamApp::slotEditGeolocation()
     if ( urls.isEmpty() )
         return;
 
-    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(QApplication::activeWindow());
+    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
     dialog->setImages(urls);
     dialog->exec();
 

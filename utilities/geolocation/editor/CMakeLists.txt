@@ -16,6 +16,7 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
 
                             reversegeocoding/rgtagmodel.cpp
                             reversegeocoding/rgwidget.cpp
+                            reversegeocoding/simpletreemodel.cpp
 
                             searches/searchbackend.cpp
                             searches/searchresultmodel.cpp

@@ -33,6 +33,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:imageeditor_src>
             $<TARGET_OBJECTS:editorplugin_src>
             $<TARGET_OBJECTS:metadataedit_src>
+            $<TARGET_OBJECTS:geolocationedit_src>
             $<TARGET_OBJECTS:akonadiiface_src>  # NOTE: even if optional this code need to be compiled here.
 
             utils/digikam_debug.cpp
@@ -67,6 +68,7 @@ target_link_libraries(digikamcore
                       Qt5::Sql
                       Qt5::WebKitWidgets
                       Qt5::PrintSupport
+                      Qt5::Concurrent
 
                       KF5::KExiv2
                       KF5::KDcraw
@@ -102,6 +104,8 @@ endif()
 
 if(KF5KGeoMap_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::KGeoMap
+                                              KF5::Bookmarks
+                                              KF5::ItemModels
 )
 endif()
 
@@ -311,7 +315,6 @@ if(${KF5KGeoMap_FOUND})
         ${DIGIKAM_OBJECTS}
             $<TARGET_OBJECTS:kgeomaphelper_src>
             $<TARGET_OBJECTS:gpssearch_src>
-            $<TARGET_OBJECTS:geolocationedit_src>
     )
 endif()
 
@@ -335,7 +338,6 @@ target_link_libraries(digikamgui
                       Qt5::Gui
                       Qt5::Widgets
                       Qt5::Sql
-                      Qt5::Concurrent
                       Qt5::WebKitWidgets
                       Qt5::PrintSupport
                       Qt5::DBus
@@ -365,11 +367,7 @@ if(${KF5Kipi_FOUND})
 endif()
 
 if(${KF5KGeoMap_FOUND})
-     target_link_libraries(digikamgui KF5::KGeoMap
-                                      KF5::Bookmarks
-                                      KF5::ItemModels
-                                      KF5::GuiAddons
-                          )
+     target_link_libraries(digikamgui KF5::KGeoMap)
 endif()
 
 if(APPLE)
