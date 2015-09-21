@@ -192,6 +192,7 @@ DigikamApp::DigikamApp()
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
     MetadataSettings::instance();
+    DMetadataSettings::instance();
     ProgressManager::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
     DIO::instance();

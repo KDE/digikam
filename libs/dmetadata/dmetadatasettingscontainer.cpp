@@ -51,6 +51,15 @@ public:
         unifyReadWrite = false;
     }
 
+    void copyPrivateData(const Private* const other)
+    {
+        readMappings           = other->readMappings;
+        writeMappings          = other->writeMappings;
+        unifyReadWrite         = other->unifyReadWrite;
+    }
+
+public:
+
     QMap<QLatin1String, QList<NamespaceEntry> > readMappings;
     QMap<QLatin1String, QList<NamespaceEntry> > writeMappings;
     bool                                        unifyReadWrite;
@@ -63,6 +72,12 @@ DMetadataSettingsContainer::DMetadataSettingsContainer()
     addMapping(QLatin1String(DM_TAG_CONTAINER));
     addMapping(QLatin1String(DM_RATING_CONTAINER));
     addMapping(QLatin1String(DM_COMMENT_CONTAINER));
+}
+
+DMetadataSettingsContainer::DMetadataSettingsContainer(const DMetadataSettingsContainer& other)
+    : d(new Private)
+{
+    d->copyPrivateData(other.d);
 }
 
 DMetadataSettingsContainer::~DMetadataSettingsContainer()
