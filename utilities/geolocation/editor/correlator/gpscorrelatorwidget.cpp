@@ -51,7 +51,6 @@
 // KDE includes
 
 #include <kio/global.h>
-#include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
@@ -62,6 +61,7 @@
 // local includes
 
 #include "digikam_debug.h"
+#include "dmessagebox.h"
 #include "gpsimagemodel.h"
 #include "gpsimageitem.h"
 #include "gpsundocommand.h"
@@ -408,7 +408,11 @@ void GPSCorrelatorWidget::slotAllTrackFilesReady()
                 invalidFiles.count()
             );
 
-        KMessageBox::errorList(this, errorString, invalidFiles, errorTitleString);
+        DMessageBox::showInformationList(QMessageBox::Critical, 
+                                         this,
+                                         errorTitleString,
+                                         errorString,
+                                         invalidFiles);
     }
 
     emit(signalAllTrackFilesReady());
