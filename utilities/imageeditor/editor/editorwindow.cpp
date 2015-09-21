@@ -1535,12 +1535,12 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
     setCursor(Qt::WaitCursor);
     toggleActions(false);
     m_animLogo->start();
-    m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading: "));
+    m_nameLabel->setProgressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
 void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success)
 {
-    m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
+    m_nameLabel->setProgressBarMode(StatusProgressBar::TextMode);
     slotUpdateItemInfo();
 
     // Enable actions as appropriate after loading
@@ -1652,7 +1652,7 @@ void EditorWindow::slotSavingStarted(const QString& /*filename*/)
     emit signalNoCurrentItem();
     toggleActions(false);
 
-    m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, i18n("Saving: "));
+    m_nameLabel->setProgressBarMode(StatusProgressBar::CancelProgressBarMode, i18n("Saving: "));
 }
 
 void EditorWindow::slotSavingFinished(const QString& filename, bool success)
@@ -1755,7 +1755,7 @@ void EditorWindow::finishSaving(bool success)
     unsetCursor();
     m_animLogo->stop();
 
-    m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
+    m_nameLabel->setProgressBarMode(StatusProgressBar::TextMode);
     /*if (m_savingProgressDialog)
     {
         m_savingProgressDialog->close();
@@ -2525,7 +2525,7 @@ void EditorWindow::setToolStartProgress(const QString& toolName)
 {
     m_animLogo->start();
     m_nameLabel->setProgressValue(0);
-    m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, QString::fromUtf8("%1: ").arg(toolName));
+    m_nameLabel->setProgressBarMode(StatusProgressBar::CancelProgressBarMode, QString::fromUtf8("%1: ").arg(toolName));
 }
 
 void EditorWindow::setToolProgress(int progress)
@@ -2537,7 +2537,7 @@ void EditorWindow::setToolStopProgress()
 {
     m_animLogo->stop();
     m_nameLabel->setProgressValue(0);
-    m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
+    m_nameLabel->setProgressBarMode(StatusProgressBar::TextMode);
     slotUpdateItemInfo();
 }
 

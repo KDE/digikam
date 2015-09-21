@@ -526,7 +526,7 @@ void QueueMgrWindow::refreshStatusBar()
 
     if (!d->busy)
     {
-        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
+        d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
         d->removeItemsSelAction->setEnabled(items > 0);
         d->removeItemsDoneAction->setEnabled((items - pendingItems) > 0);
         d->clearQueueAction->setEnabled(items > 0);
@@ -677,7 +677,7 @@ void QueueMgrWindow::slotRun()
 
     d->statusProgressBar->setProgressTotalSteps(d->queuePool->totalPendingTasks());
     d->statusProgressBar->setProgressValue(0);
-    d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    d->statusProgressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
     d->toolsView->showTab(ToolsView::HISTORY);
     busy(true);
 
@@ -687,7 +687,7 @@ void QueueMgrWindow::slotRun()
 void QueueMgrWindow::processingAborted()
 {
     d->statusProgressBar->setProgressValue(0);
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode);
+    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode);
     busy(false);
     refreshStatusBar();
 }

@@ -1052,7 +1052,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
     m_cancelSlideShow   = false;
     Digikam::DMetadata meta;
 
-    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
+    m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
                                  i18n("Preparing slideshow. Please wait..."));
 
     for (QList<QUrl>::ConstIterator it = settings.fileList.constBegin() ;
@@ -1068,7 +1068,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
         qApp->processEvents();
     }
 
-    m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString());
+    m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::TextMode, QString());
 
     if (!m_cancelSlideShow)
     {

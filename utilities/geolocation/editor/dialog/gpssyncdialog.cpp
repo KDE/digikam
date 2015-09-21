@@ -57,7 +57,6 @@
 #include <QAction>
 #include <QApplication>
 #include <QComboBox>
-#include <QProgressBar>
 #include <QDialogButtonBox>
 
 // KDE includes
@@ -92,6 +91,7 @@
 #include "rgwidget.h"
 #include "gpsbookmarkowner.h"
 #include "gpsbookmarkmodelhelper.h"
+#include "statusprogressbar.h"
 #include "searchwidget.h"
 #include "backend-rg.h"
 #include "gpsimagedetails.h"
@@ -236,7 +236,7 @@ public:
     QUndoView*                               undoView;
 
     // UI: progress
-    QProgressBar*                            progressBar;
+    StatusProgressBar*                       progressBar;
     QPushButton*                             progressCancelButton;
     QObject*                                 progressCancelObject;
     QString                                  progressCancelSlot;
@@ -317,9 +317,9 @@ GPSSyncDialog::GPSSyncDialog(QWidget* const parent)
     d->cbMapLayout->addItem(i18n("Two maps - vertical"),   QVariant::fromValue(MapLayoutVertical));
     labelMapLayout->setBuddy(d->cbMapLayout);
    
-    // FIXME: use StatusProgressBar
-    d->progressBar          = new QProgressBar(hbox);
+    d->progressBar          = new StatusProgressBar(hbox);
     d->progressBar->setVisible(false);
+    d->progressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
     d->progressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // we need a really large stretch factor here because the QDialogButtonBox also stretches a lot...
     dynamic_cast<QHBoxLayout*>(hbox->layout())->setStretch(200, 0);
@@ -835,8 +835,8 @@ void GPSSyncDialog::slotSetUIEnabled(const bool enabledState, QObject* const can
 
     // TODO: disable the worldmapwidget and the images list (at least disable editing operations)
     d->progressCancelObject = cancelObject;
-    d->progressCancelSlot = cancelSlot;
-    d->uiEnabled = enabledState;
+    d->progressCancelSlot   = cancelSlot;
+    d->uiEnabled            = enabledState;
     d->buttonBox->setEnabled(enabledState);
     d->correlatorWidget->setUIEnabledExternal(enabledState);
     d->detailsWidget->setUIEnabledExternal(enabledState);
@@ -950,21 +950,18 @@ void GPSSyncDialog::slotApplyClicked()
 
 void GPSSyncDialog::slotProgressChanged(const int currentProgress)
 {
-    d->progressBar->setValue(currentProgress);
+    d->progressBar->setProgressValue(currentProgress);
 }
 
 void GPSSyncDialog::slotProgressSetup(const int maxProgress, const QString& progressText)
 {
-    d->progressBar->setFormat(progressText);
-    d->progressBar->setMaximum(maxProgress);
-    d->progressBar->setValue(0);
+    d->progressBar->setProgressText(progressText);
+    d->progressBar->setProgressTotalSteps(maxProgress);
+    d->progressBar->setProgressValue(0);
+    d->progressBar->setNotify(true);
+    d->progressBar->setNotificationTitle(i18n("Edit Geolocation"), QIcon::fromTheme(QLatin1String("applications-internet")));
     d->progressBar->setVisible(true);
-    d->progressCancelButton->setVisible(d->progressCancelObject!=0);
-
-    /* FIXME :use progress manager    
-    d->progressBar->progressScheduled(i18n("GPS sync"), true, true);
-    d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QStringLiteral("kipi")).pixmap(22, 22));
-    */
+    d->progressCancelButton->setVisible(d->progressCancelObject != 0);
 }
 
 void GPSSyncDialog::slotGPSUndoCommand(GPSUndoCommand* undoCommand)
@@ -990,9 +987,7 @@ void GPSSyncDialog::slotProgressCancelButtonClicked()
     {
         QTimer::singleShot(0, d->progressCancelObject, d->progressCancelSlot.toUtf8().constData());
 
-        /* FIXME :use progress manager
-        d->progressBar->progressCompleted();
-        */
+        d->progressBar->setProgressValue(d->progressBar->progressTotalSteps());
     }
 }
 

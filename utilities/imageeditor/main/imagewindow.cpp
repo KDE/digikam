@@ -1348,7 +1348,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
     {
         // We have started image editor from Album GUI. we get picture comments from database.
 
-        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
+        m_nameLabel->setProgressBarMode(StatusProgressBar::CancelProgressBarMode,
                                      i18n("Preparing slideshow. Please wait..."));
 
         float cnt = (float)d->imageInfoModel->rowCount();
@@ -1375,7 +1375,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
     {
         // We have started image editor from Camera GUI. we get picture comments from metadata.
 
-        m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
+        m_nameLabel->setProgressBarMode(StatusProgressBar::CancelProgressBarMode,
                                      i18n("Preparing slideshow. Please wait..."));
 
         cnt = (float)d->urlList.count();
@@ -1397,7 +1397,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
     }
 */
 
-    m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());
+    m_nameLabel->setProgressBarMode(StatusProgressBar::TextMode, QString());
 
     if (!m_cancelSlideShow)
     {

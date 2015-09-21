@@ -116,7 +116,7 @@ StatusProgressBar::StatusProgressBar(QWidget* const parent)
     connect(d->cancelButton, SIGNAL(clicked()),
             this, SIGNAL(signalCancelButtonPressed()) );
 
-    progressBarMode(TextMode);
+    setProgressBarMode(TextMode);
 }
 
 StatusProgressBar::~StatusProgressBar()
@@ -198,7 +198,7 @@ void StatusProgressBar::setProgressText(const QString& text)
     }
 }
 
-void StatusProgressBar::progressBarMode(int mode, const QString& text)
+void StatusProgressBar::setProgressBarMode(int mode, const QString& text)
 {
     if (mode == TextMode)
     {

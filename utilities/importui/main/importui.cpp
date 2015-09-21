@@ -937,7 +937,7 @@ void ImportUI::setInitialSorting()
 
 void ImportUI::slotCancelButton()
 {
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                           i18nc("@info:status", "Canceling current operation, please wait..."));
     d->controller->slotCancel();
     d->historyUpdater->slotCancel();
@@ -1004,7 +1004,7 @@ bool ImportUI::dialogClosed()
         }
     }
 
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                           i18nc("@info:status", "Disconnecting from camera, please wait..."));
 
     if (isBusy())
@@ -1046,7 +1046,7 @@ void ImportUI::finishDialog()
         // completely setup. That is why as an extra safeguard run CollectionScanner
         // over the folders we used. Bug: 119201
 
-        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+        d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                           i18nc("@info:status", "Scanning for new files, please wait..."));
 
         NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
@@ -1086,7 +1086,7 @@ void ImportUI::slotBusy(bool val)
 
         m_animLogo->stop();
         d->statusProgressBar->setProgressValue(0);
-        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18nc("@info:status", "Ready"));
+        d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, i18nc("@info:status", "Ready"));
 
         // like WDestructiveClose, but after camera controller operation has safely finished
         if (d->closed)
@@ -1621,7 +1621,7 @@ void ImportUI::slotToggleLock()
     {
         d->statusProgressBar->setProgressValue(0);
         d->statusProgressBar->setProgressTotalSteps(count);
-        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+        d->statusProgressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
     }
 
     foreach(CamItemInfo info, list)
@@ -1960,7 +1960,7 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 
         d->statusProgressBar->setProgressValue(0);
         d->statusProgressBar->setProgressTotalSteps(deleteList.count());
-        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+        d->statusProgressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
 
         // enable cancel action.
         d->cameraCancelAction->setEnabled(true);
@@ -2108,7 +2108,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     d->statusProgressBar->setNotify(true);
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->setProgressTotalSteps(downloadedItems);
-    d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+    d->statusProgressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
 
     // enable cancel action.
     d->cameraCancelAction->setEnabled(true);
@@ -2302,7 +2302,7 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
     {
         case 0:
         {
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18ncp("@info:status", "No item selected (%1 item)",
+            d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, i18ncp("@info:status", "No item selected (%1 item)",
                                                                                       "No item selected (%1 items)",
                                                                                       num_images));
 
@@ -2318,7 +2318,7 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
 
                 int index = listAll.indexOf(selection.first()) + 1;
 
-                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                                       i18nc("@info:status Filename of first selected item of number of items",
                                                             "<b>%1</b> (%2 of %3)",
                                                             selection.first().url().fileName(), index, num_images));
@@ -2326,7 +2326,7 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
             else
             {
                 d->rightSideBar->slotNoCurrentItem();
-                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                                       i18ncp("@info:status", "No item selected (%1 item)",
                                                                              "No item selected (%1 items)",
                                                                              num_images));
@@ -2336,7 +2336,7 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
         }
         default:
         {
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18ncp("@info:status", "%2/%1 item selected",
+            d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, i18ncp("@info:status", "%2/%1 item selected",
                                                                                       "%2/%1 items selected",
                                                                                       num_images, selection.count()));
             break;

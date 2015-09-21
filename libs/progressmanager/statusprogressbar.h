@@ -59,7 +59,7 @@ public:
 
     void setAlignment(Qt::Alignment a);
 
-    void progressBarMode(int mode, const QString& text=QString());
+    void setProgressBarMode(int mode, const QString& text=QString());
 
     int  progressValue() const;
 

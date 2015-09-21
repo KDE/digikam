@@ -731,7 +731,7 @@ bool LightTableWindow::isEmpty() const
 
 void LightTableWindow::slotRefreshStatusBar()
 {
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                           i18np("%1 item on Light Table", "%1 items on Light Table",
                                                 d->thumbView->countItems()));
 }
@@ -1390,7 +1390,7 @@ void LightTableWindow::slotSlideShowAll()
 {
    SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->imageInfos());
 
-   d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+   d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                          i18n("Preparing slideshow. Please wait..."));
 
    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
@@ -1415,7 +1415,7 @@ void LightTableWindow::slotSlideShowManualFrom(const ImageInfo& info)
    builder->setOverrideStartFrom(info);
    builder->setAutoPlayEnabled(false);
 
-   d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+   d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                          i18n("Preparing slideshow. Please wait..."));
 
    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
@@ -1429,7 +1429,7 @@ void LightTableWindow::slotSlideShowBuilderComplete(const SlideShowSettings& set
     SlideShow* const slide = new SlideShow(settings);
     TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, QString());
+    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, QString());
     slotRefreshStatusBar();
 
     if (settings.imageUrl.isValid())
