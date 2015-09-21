@@ -157,12 +157,16 @@ int getWarningLevelFromGPSDataContainer(const GPSDataContainer& data)
     if (data.hasDop())
     {
         const int dopValue = data.getDop();
+
         if (dopValue<2)
             return 1;
+
         if (dopValue<4)
             return 2;
+
         if (dopValue<10)
             return 3;
+
         return 4;
     }
     else if (data.hasFixType())

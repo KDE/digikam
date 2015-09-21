@@ -827,10 +827,7 @@ void GPSSyncDialog::slotSetUIEnabled(const bool enabledState, QObject* const can
         // hide the progress bar
         d->progressBar->setVisible(false);
         d->progressCancelButton->setVisible(false);
-        
-        /* FIXME :use progress manager
-        d->progressBar->progressCompleted();
-        */
+        d->progressBar->setProgressValue(d->progressBar->progressTotalSteps());
     }
 
     // TODO: disable the worldmapwidget and the images list (at least disable editing operations)
