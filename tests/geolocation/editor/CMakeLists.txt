@@ -6,8 +6,8 @@
 
 add_executable(gpssync_test_correlator
                test_correlator.cpp
-               ../correlator/track_correlator.cpp
-               ../correlator/track_correlator_thread.cpp
+               ../../../utilities/geolocation/editor/correlator/track_correlator.cpp
+               ../../../utilities/geolocation/editor/correlator/track_correlator_thread.cpp
               )
 
 target_link_libraries(gpssync_test_correlator
@@ -40,9 +40,9 @@ endif()
 
 add_executable(gpssync_test_rgtagmodel
                test_rgtagmodel.cpp
-               ../reversegeocoding/rgtagmodel.cpp
-               ../reversegeocoding/simpletreemodel.cpp
-               ../../../../tests/modeltest/modeltest.cpp
+               ../../../utilities/geolocation/editor/reversegeocoding/rgtagmodel.cpp
+               ../../../utilities/geolocation/editor/reversegeocoding/simpletreemodel.cpp
+               ../../modeltest/modeltest.cpp
               )
 
 target_link_libraries(gpssync_test_rgtagmodel
@@ -57,8 +57,8 @@ target_link_libraries(gpssync_test_rgtagmodel
 
 add_executable(gpssync_test_gpsimageitem
                test_gpsimageitem.cpp
-               ../items/gpsimageitem.cpp
-               ../items/gpsimagemodel.cpp
+               ../../../utilities/geolocation/editor/items/gpsimageitem.cpp
+               ../../../utilities/geolocation/editor/items/gpsimagemodel.cpp
               )
 
 target_link_libraries(gpssync_test_gpsimageitem
@@ -76,8 +76,8 @@ target_link_libraries(gpssync_test_gpsimageitem
                      
 add_executable(gpssync_test_simpletreemodel
                test_simpletreemodel.cpp
-               ../reversegeocoding/simpletreemodel.cpp
-               ../../../../tests/modeltest/modeltest.cpp
+               ../../../utilities/geolocation/editor/reversegeocoding/simpletreemodel.cpp
+               ../../modeltest/modeltest.cpp
               )
 
 target_link_libraries(gpssync_test_simpletreemodel

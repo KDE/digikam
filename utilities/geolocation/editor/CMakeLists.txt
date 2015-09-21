@@ -54,7 +54,3 @@ target_link_libraries(geolocationedit
                       KF5::KExiv2
                       KF5::KDcraw
                     )
-
-if(BUILD_TESTING)
-    ecm_optional_add_subdirectory(tests)
-endif()
