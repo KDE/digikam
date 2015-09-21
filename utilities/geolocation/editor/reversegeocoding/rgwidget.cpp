@@ -49,10 +49,8 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 // Libkdcraw includes
 
@@ -74,6 +72,7 @@
 #include "parsetagstring.h"
 #include "rgtagmodel.h"
 #include "albummodel.h"
+#include "dmessagebox.h"
 
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
@@ -990,16 +989,15 @@ void RGWidget::slotRGCanceled()
         const QString question = i18n("%1 out of %2 images have been reverse geocoded. Would you like to keep the tags which were already obtained or discard them?",
                                       d->receivedRGCount, d->requestedRGCount);
 
-        const int result = KMessageBox::questionYesNoCancel(this,
-                                                            question,
-                                                            i18n("Abort reverse geocoding?"),
-                                                            KGuiItem(i18n("Keep tags")),
-                                                            KGuiItem(i18n("Discard tags")),
-                                                            KGuiItem(i18n("Continue")));
+        const int result = DMessageBox::showYesNo(QMessageBox::Warning,
+                                                  this,
+                                                  i18n("Abort reverse geocoding?"),
+                                                  question
+                                                 );
 
         d->currentlyAskingCancelQuestion = false;
 
-        if (result == KMessageBox::Cancel)
+        if (result == QMessageBox::Cancel)
         {
             // continue
 
@@ -1020,13 +1018,13 @@ void RGWidget::slotRGCanceled()
             return;
         }
 
-        if (result == KMessageBox::No)
+        if (result == QMessageBox::No)
         {
             // discard the tags
             d->undoCommand->undo();
         }
 
-        if (result == KMessageBox::Yes)
+        if (result == QMessageBox::Yes)
         {
             if (d->undoCommand)
             {
