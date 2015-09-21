@@ -64,7 +64,6 @@
 
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kwindowconfig.h>
 
 // Libkgeomap includes
@@ -88,6 +87,7 @@
 #include "gpsimagelistcontextmenu.h"
 #include "gpscorrelatorwidget.h"
 #include "digikam_debug.h"
+#include "dmessagebox.h"
 #include "gpsundocommand.h"
 #include "rgwidget.h"
 #include "gpsbookmarkowner.h"
@@ -776,10 +776,10 @@ void GPSSyncDialog::closeEvent(QCloseEvent *e)
     // are there any modified images?
     int dirtyImagesCount = 0;
 
-    for (int i=0; i < d->imageModel->rowCount(); ++i)
+    for (int i = 0; i < d->imageModel->rowCount(); ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        GPSImageItem* const item   = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item    = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {
@@ -795,21 +795,20 @@ void GPSSyncDialog::closeEvent(QCloseEvent *e)
                     dirtyImagesCount
                 );
 
-        const int chosenAction = KMessageBox::warningYesNoCancel(this,
-            i18n("%1 Would you like to save the changes you made to them?", message),
-            i18n("Unsaved changes"),
-            KGuiItem(i18n("Save changes")),
-            KGuiItem(i18n("Close and discard changes"))
-            );
+        const int chosenAction = DMessageBox::showYesNo(QMessageBox::Warning,
+                                                        this,
+                                                        i18n("Unsaved changes"),
+                                                        i18n("%1 Would you like to save the changes you made to them?", message)
+                                                       );
 
-        if (chosenAction == KMessageBox::No)
+        if (chosenAction == QMessageBox::No)
         {
             saveSettings();
             e->accept();
             return;
         }
 
-        if (chosenAction == KMessageBox::Yes)
+        if (chosenAction == QMessageBox::Yes)
         {
             // the user wants to save his changes.
             // this will initiate the saving process and then close the dialog.
@@ -882,7 +881,7 @@ void GPSSyncDialog::saveChanges(const bool closeAfterwards)
     // are there any modified images?
     QList<QPersistentModelIndex> dirtyImages;
 
-    for (int i=0; i<d->imageModel->rowCount(); ++i)
+    for (int i = 0; i < d->imageModel->rowCount(); ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
         GPSImageItem* const item   = d->imageModel->itemFromIndex(itemIndex);
@@ -934,7 +933,7 @@ void GPSSyncDialog::slotFileChangesSaved(int beginIndex, int endIndex)
         // any errors?
         QList<QPair<QUrl, QString> > errorList;
 
-        for (int i=0; i<d->fileIOFuture.resultCount(); ++i)
+        for (int i = 0; i < d->fileIOFuture.resultCount(); ++i)
         {
             if (!d->fileIOFuture.resultAt(i).second.isEmpty())
                 errorList << d->fileIOFuture.resultAt(i);
@@ -944,7 +943,7 @@ void GPSSyncDialog::slotFileChangesSaved(int beginIndex, int endIndex)
         {
             QStringList errorStrings;
 
-            for (int i=0; i<errorList.count(); ++i)
+            for (int i = 0; i < errorList.count(); ++i)
             {
                 // TODO: how to do kurl->qstring?
                 errorStrings << QStringLiteral("%1: %2")
@@ -952,7 +951,11 @@ void GPSSyncDialog::slotFileChangesSaved(int beginIndex, int endIndex)
                     .arg(errorList.at(i).second);
             }
 
-            KMessageBox::errorList(this, i18n("Failed to save some information:"), errorStrings, i18n("Error"));
+            DMessageBox::showInformationList(QMessageBox::Critical, 
+                                             this,
+                                             i18n("Error"),
+                                             i18n("Failed to save some information:"),
+                                             errorStrings);
         }
 
         // done saving files
@@ -1028,8 +1031,8 @@ void GPSSyncDialog::slotLayoutChanged(int lay)
 
 MapWidget* GPSSyncDialog::makeMapWidget(QWidget** const pvbox)
 {
-    QWidget* const dummyWidget     = new QWidget(this);
-    QVBoxLayout* const vbox        = new QVBoxLayout(dummyWidget);
+    QWidget* const dummyWidget = new QWidget(this);
+    QVBoxLayout* const vbox    = new QVBoxLayout(dummyWidget);
     MapWidget* const mapWidget = new MapWidget(dummyWidget);
     mapWidget->setAvailableMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
     mapWidget->setVisibleMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
