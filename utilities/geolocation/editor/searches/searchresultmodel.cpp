@@ -35,10 +35,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkgeomap includes
-
-#include <KGeoMap/MapWidget>
-
 // local includes
 
 #include "searchbackend.h"
@@ -46,8 +42,6 @@
 #include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
-
-using namespace KGeoMap;
 
 namespace Digikam
 {
@@ -63,9 +57,11 @@ public:
 
     Private()
     {
-        markerNormalUrl   = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("gpssync/searchmarker-normal.png")));
+        markerNormalUrl   = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, 
+                                                QString::fromLatin1("digikam/geolocationedit/searchmarker-normal.png")));
         markerNormal      = QPixmap(markerNormalUrl.toLocalFile());
-        markerSelectedUrl = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("gpssync/searchmarker-selected.png")));
+        markerSelectedUrl = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, 
+                                                QString::fromLatin1("digikam/geolocationedit/searchmarker-selected.png")));
         markerSelected    = QPixmap(markerSelectedUrl.toLocalFile());
         selectionModel    = 0;
     }
@@ -260,7 +256,7 @@ bool SearchResultModel::getMarkerIcon(const QModelIndex& index, QPoint* const of
 
     // if the caller requests a URL and the marker will not get
     // a special label, return a URL. Otherwise, return a pixmap.
-    const bool returnViaUrl = url && markerNumber>26;
+    const bool returnViaUrl = url && (markerNumber > 26);
 
     if (returnViaUrl)
     {
@@ -275,11 +271,11 @@ bool SearchResultModel::getMarkerIcon(const QModelIndex& index, QPoint* const of
     {
         if (markerNumber <= 26)
         {
-            const QString markerId = QChar('A'+markerNumber);
+            const QString markerId = QChar('A' + markerNumber);
             QPainter painter(&markerPixmap);
             painter.setRenderHint(QPainter::Antialiasing);
             painter.setPen(Qt::black);
-            QRect textRect(0,2,markerPixmap.width(),markerPixmap.height());
+            QRect textRect(0, 2, markerPixmap.width(), markerPixmap.height());
             painter.drawText(textRect, Qt::AlignHCenter, markerId);
         }
 
