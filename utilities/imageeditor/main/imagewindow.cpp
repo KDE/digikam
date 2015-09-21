@@ -1184,7 +1184,10 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
         return;
     }
 
-    //PAlbum* palbum = AlbumManager::instance()->findPAlbum(d->currentImageInfo.albumId());
+    if (!promptUserDelete(d->currentUrl()))
+    {
+        return;
+    }
 
     bool useTrash;
 
@@ -1228,6 +1231,11 @@ void ImageWindow::removeCurrent()
     if (!d->currentIsValid())
     {
         return;
+    }
+
+    if (m_canvas->interface()->undoState().hasChanges)
+    {
+        m_canvas->slotRestore();
     }
 
     d->imageInfoModel->removeImageInfo(d->currentImageInfo);

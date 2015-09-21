@@ -1572,6 +1572,39 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveAskMode mode, bool allowC
     return true;
 }
 
+bool EditorWindow::promptUserDelete(const KUrl& url)
+{
+    if (d->currentWindowModalDialog)
+    {
+        d->currentWindowModalDialog->reject();
+    }
+
+    if (m_canvas->interface()->undoState().hasUndoableChanges)
+    {
+        // if window is minimized, show it
+        if (isMinimized())
+        {
+            KWindowSystem::unminimizeWindow(winId());
+        }
+
+        QString boxMessage = i18nc("@info",
+                                   "The image <filename>%1</filename> has been modified.<nl/>"
+                                   "All changes will be lost.", url.fileName());
+
+        int result = KMessageBox::warningContinueCancel(this,
+                                                        boxMessage,
+                                                        QString(),
+                                                        KStandardGuiItem::ok());
+
+        if (result == KMessageBox::Cancel)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool EditorWindow::waitForSavingToComplete()
 {
     // avoid reentrancy - return false means we have reentered the loop already.

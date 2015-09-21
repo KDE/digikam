@@ -192,6 +192,7 @@ protected:
     bool promptForOverWrite();
 
     bool promptUserSave(const KUrl& url, SaveAskMode mode = AskIfNeeded, bool allowCancel = true);
+    bool promptUserDelete(const KUrl& url);
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
     bool startingSaveAs(const KUrl& url);
