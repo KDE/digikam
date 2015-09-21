@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "test_kipiimageitem.h"
+#include "test_gpsimageitem.h"
 
 // Qt includes
 
@@ -37,8 +37,8 @@
 // local includes
 
 #include "dmetadata.h"
-#include "../gpsdatacontainer.h"
-#include "../kipiimageitem.h"
+#include "../correlator/gpsdatacontainer.h"
+#include "../items/gpsimageitem.h"
 
 
 using namespace Digikam;
@@ -69,9 +69,9 @@ QUrl GetTestDataDirectory()
 
 GPSImageItem* ItemFromFile(const QUrl& url)
 {
-    QScopedPointer<GPSImageItem> imageItem(new GPSImageItem(0, url));
+    QScopedPointer<GPSImageItem> imageItem(new GPSImageItem(url));
 
-    if (imageItem->loadImageData(true, true))
+    if (imageItem->loadImageData())
     {
         return imageItem.take();
     }

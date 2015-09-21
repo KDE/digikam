@@ -28,7 +28,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "track_correlator.h"
 
 namespace Digikam
@@ -80,7 +79,6 @@ void TrackCorrelatorThread::run()
             itemDateTime.setTimeSpec(Qt::UTC);
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << itemDateTime;
         // find the last point before our item:
         QDateTime lastSmallerTime;
         QPair<int, int> lastIndexPair;
@@ -272,7 +270,6 @@ void TrackCorrelatorThread::run()
         {
             TrackCorrelator::Correlation::List readyItems;
             readyItems << correlatedData;
-            qCDebug(DIGIKAM_GENERAL_LOG)<<"correlated!";
             emit(signalItemsCorrelated(readyItems));
         }
     }

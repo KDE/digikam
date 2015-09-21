@@ -6,18 +6,20 @@
 
 add_executable(gpssync_test_correlator
                test_correlator.cpp
-               ../track_correlator.cpp
-               ../track_correlator_thread.cpp
+               ../correlator/track_correlator.cpp
+               ../correlator/track_correlator_thread.cpp
               )
 
 target_link_libraries(gpssync_test_correlator
                       Qt5::Test
                       Qt5::Gui
                       Qt5::Xml
+                      KF5::KIOCore
                       KF5::ItemModels
                       KF5::KGeoMap
-                      KF5kipiplugins
                      )
+
+# ----------------------------------------------------------------
 
 if(NOT WIN32)
 
@@ -30,16 +32,17 @@ if(NOT WIN32)
                           Qt5::Gui
                           KF5::ItemModels
                           KF5::KGeoMap
-                          KF5kipiplugins
                          )
 
 endif()
 
+# ----------------------------------------------------------------
+
 add_executable(gpssync_test_rgtagmodel
                test_rgtagmodel.cpp
-               simpletreemodel/simpletreemodel.cpp
-               ../borrowed/modeltest.cpp
-               ../rgtagmodel.cpp
+               ../reversegeocoding/rgtagmodel.cpp
+               ../reversegeocoding/simpletreemodel.cpp
+               ../../../../tests/modeltest/modeltest.cpp
               )
 
 target_link_libraries(gpssync_test_rgtagmodel
@@ -47,27 +50,45 @@ target_link_libraries(gpssync_test_rgtagmodel
                       Qt5::Gui
                       KF5::ItemModels
                       KF5::KGeoMap
-                      KF5kipiplugins
+                      KF5::I18n
                      )
 
-add_executable(gpssync_test_kipiimageitem
-               test_kipiimageitem.cpp
-               ../kipiimageitem.cpp
-               ../kipiimagemodel.cpp
+# ----------------------------------------------------------------
+
+add_executable(gpssync_test_gpsimageitem
+               test_gpsimageitem.cpp
+               ../items/gpsimageitem.cpp
+               ../items/gpsimagemodel.cpp
               )
 
-target_link_libraries(gpssync_test_kipiimageitem
+target_link_libraries(gpssync_test_gpsimageitem
+                      digikamcore
                       Qt5::Test
                       Qt5::Gui
                       KF5::ItemModels
-                      KF5::GuiAddons
                       KF5::KExiv2
                       KF5::KGeoMap
-                      KF5::Kipi
-                      KF5kipiplugins
+                      KF5::KIOCore
+                      KF5::I18n
                      )
+
+# ----------------------------------------------------------------
+                     
+add_executable(gpssync_test_simpletreemodel
+               test_simpletreemodel.cpp
+               ../reversegeocoding/simpletreemodel.cpp
+               ../../../../tests/modeltest/modeltest.cpp
+              )
+
+target_link_libraries(gpssync_test_simpletreemodel
+                      Qt5::Test
+                      Qt5::Gui
+                     )
+
+# ----------------------------------------------------------------
 
 add_test(gpssync_test_correlator       ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_correlator)
 add_test(gpssync_test_gpsrgparsing     ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_rgparsing)
 add_test(gpssync_test_gpsrgtagmodel    ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_rgtagmodel)
-add_test(gpssync_test_gpskipiimageitem ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_kipiimageitem)
+add_test(gpssync_test_gpsgpsimageitem ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_gpsimageitem)
+add_test(gpssync_test_simpletreemodel  ${EXECUTABLE_OUTPUT_PATH}/gpssync_test_simpletreemodel)

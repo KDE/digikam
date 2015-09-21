@@ -36,8 +36,8 @@
 
 // local includes
 
-#include "../backend-rg.h"
-#include "../parseTagString.h"
+#include "../backends/backend-rg.h"
+#include "../reversegeocoding/parsetagstring.h"
 
 using namespace Digikam;
 

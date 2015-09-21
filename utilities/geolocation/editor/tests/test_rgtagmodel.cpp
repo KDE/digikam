@@ -28,13 +28,14 @@
 
 // KDE includes
 
+#include <QDebug>
 #include <QUrl>
 
 // local includes
 
-#include "simpletreemodel/simpletreemodel.h"
-#include "../borrowed/modeltest.h"
-#include "../rgtagmodel.h"
+#include "../reversegeocoding/simpletreemodel.h"
+#include "../reversegeocoding/rgtagmodel.h"
+#include "../../../../tests/modeltest/modeltest.h"
 
 /**
  * @brief Dummy test that does nothing
@@ -169,7 +170,7 @@ void TestRGTagModel::testModel1()
 
     const QPersistentModelIndex tagItem1Index = tagModel->fromSourceIndex(treeItem1Index);
     Q_ASSERT(tagItem1Index.isValid());
-    qCDebug(DIGIKAM_GENERAL_LOG)<<tagItem1Index;
+    qDebug()<<tagItem1Index;
     
     Q_ASSERT(tagModel->rowCount(tagItem1Index)==treeModel->rowCount(treeItem1Index));
     
@@ -205,7 +206,7 @@ void TestRGTagModel::testModel1()
     const QModelIndex ti11 = tagModel->index(0, 0, ti1);
     Q_ASSERT(ti11.isValid());
     Q_ASSERT(ti11 == tagItem11Index); 
-    qCDebug(DIGIKAM_GENERAL_LOG)<<"----------------------_";
+    qDebug()<<"----------------------_";
     // descends level 0 row 1
     const QModelIndex ti2 = tagModel->index(1, 0);
     Q_ASSERT(ti2.isValid());
@@ -257,26 +258,26 @@ void TestRGTagModel::testModelSpacerTags()
     const QPersistentModelIndex tagItem11Index = tagModel->fromSourceIndex(treeItem11Index);
     Q_ASSERT(tagItem11Index.isValid());
 
-    qCDebug(DIGIKAM_GENERAL_LOG)<<"Worked before adding spacers";
+    qDebug()<<"Worked before adding spacers";
 
     //insert spacer below ti21
     tagModel->addSpacerTag(QModelIndex(), QStringLiteral("{Country}"));
     tagModel->addNewTag(QModelIndex(), QStringLiteral("New Tag"));
 
-    qCDebug(DIGIKAM_GENERAL_LOG)<<"Added the spacers.";
+    qDebug()<<"Added the spacers.";
  
     const QModelIndex index11 = tagModel->index(0,0);  
     const QModelIndex index12 = tagModel->index(1,0);
     const QModelIndex index13 = tagModel->index(2,0);
     
-    qCDebug(DIGIKAM_GENERAL_LOG)<<tagModel->data(index11, Qt::DisplayRole);
-    qCDebug(DIGIKAM_GENERAL_LOG)<<tagModel->data(index12, Qt::DisplayRole);
-    qCDebug(DIGIKAM_GENERAL_LOG)<<tagModel->data(index13, Qt::DisplayRole);
-//    qCDebug(DIGIKAM_GENERAL_LOG)<<tagModel->data(2,0,QModelIndex());
+    qDebug()<<tagModel->data(index11, Qt::DisplayRole);
+    qDebug()<<tagModel->data(index12, Qt::DisplayRole);
+    qDebug()<<tagModel->data(index13, Qt::DisplayRole);
+//    qDebug()<<tagModel->data(2,0,QModelIndex());
    
 
  /*
-    qCDebug(DIGIKAM_GENERAL_LOG)<<"VERIFY IF NEW TAG EXISTS:";
+    qDebug()<<"VERIFY IF NEW TAG EXISTS:";
     QModelIndex ti211Spacer = tagModel->index(0,0,ti21);
     Q_ASSERT(ti211Spacer.isValid());
   */

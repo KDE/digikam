@@ -53,8 +53,8 @@ target_link_libraries(geolocationedit
 
                       KF5::KExiv2
                       KF5::KDcraw
-                      KF5::KGeoMap
-                      KF5::ItemModels
-                      KF5::GuiAddons
-                      KF5::Bookmarks
                     )
+
+if(BUILD_TESTING)
+    ecm_optional_add_subdirectory(tests)
+endif()

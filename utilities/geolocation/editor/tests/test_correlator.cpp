@@ -39,7 +39,7 @@
 
 // local includes
 
-#include "../track_correlator.h"
+#include "../correlator/track_correlator.h"
 
 using namespace Digikam;
 
