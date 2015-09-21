@@ -53,9 +53,11 @@ public:
 
     void copyPrivateData(const Private* const other)
     {
-        readMappings           = other->readMappings;
-        writeMappings          = other->writeMappings;
-        unifyReadWrite         = other->unifyReadWrite;
+        readMappings   = other->readMappings;
+        readMappings.detach();
+        writeMappings  = other->writeMappings;
+        writeMappings.detach();
+        unifyReadWrite = other->unifyReadWrite;
     }
 
 public:
@@ -82,7 +84,8 @@ DMetadataSettingsContainer::DMetadataSettingsContainer(const DMetadataSettingsCo
 
 DMetadataSettingsContainer::~DMetadataSettingsContainer()
 {
-    delete d;
+    // this line crash application
+    //delete d;
 }
     
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
