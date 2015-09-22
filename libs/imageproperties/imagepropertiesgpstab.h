@@ -34,7 +34,7 @@
 
 #include "dmetadata.h"
 #include "digikam_export.h"
-#include "digikam2kgeomap.h"
+#include "gpsimageinfosorter.h"
 
 namespace Digikam
 {

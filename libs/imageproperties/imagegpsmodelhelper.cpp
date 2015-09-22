@@ -22,10 +22,7 @@
  * ============================================================ */
 
 #include "imagegpsmodelhelper.h"
-
-// Local includes
-
-#include "digikam2kgeomap.h"
+#include "gpsimageinfosorter.h"
 
 namespace Digikam
 {
@@ -123,7 +120,7 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
     QModelIndex bestIndex         = list.first();
     GPSImageInfo bestGPSImageInfo = bestIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
 
-    for (int i=1; i<list.count(); ++i)
+    for (int i = 1; i < list.count(); ++i)
     {
         const QModelIndex currentIndex(list.at(i));
         const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
@@ -146,7 +143,7 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
 
 void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
-    for (int i=0; i<d->itemModel->rowCount(); ++i)
+    for (int i = 0; i < d->itemModel->rowCount(); ++i)
     {
         const QStandardItem* const item        = static_cast<QStandardItem*>(d->itemModel->item(i));
         const GPSImageInfo currentGPSImageInfo = item->data(RoleGPSImageInfo).value<GPSImageInfo>();

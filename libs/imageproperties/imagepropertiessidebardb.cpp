@@ -59,7 +59,7 @@
 
 #ifdef HAVE_KGEOMAP
 #include "imagepropertiesgpstab.h"
-#include "digikam2kgeomap.h"
+#include "gpsimageinfosorter.h"
 #endif // HAVE_KGEOMAP
 
 namespace Digikam

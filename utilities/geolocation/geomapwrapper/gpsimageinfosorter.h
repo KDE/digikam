@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-01-06
- * Description : Helper functions for libkgeomap interaction
+ * Description : Helper class for geomap interaction
  *
  * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM2KGEOMAP_H
-#define DIGIKAM2KGEOMAP_H
+#ifndef GPSIMAGEINFOSOERTER_H
+#define GPSIMAGEINFOSOERTER_H
 
 // Qt includes
 
@@ -36,6 +36,10 @@
 #include <KGeoMap/GeoCoordinates>
 #include <KGeoMap/GroupState>
 
+// Local includes
+
+#include "gpsimageinfo.h"
+
 namespace KGeoMap
 {
     class MapWidget;
@@ -43,50 +47,6 @@ namespace KGeoMap
 
 namespace Digikam
 {
-
-class GPSImageInfo
-{
-public:
-
-    GPSImageInfo()
-        : id(-2),
-          coordinates(),
-          rating(-1),
-          dateTime(),
-          url()
-    {
-    }
-
-    ~GPSImageInfo()
-    {
-    }
-
-public:
-
-    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id, const KGeoMap::GeoCoordinates& p_coordinates,
-                                                        const int p_rating, const QDateTime& p_creationDate)
-    {
-        GPSImageInfo info;
-        info.id          = p_id;
-        info.coordinates = p_coordinates;
-        info.rating      = p_rating;
-        info.dateTime    = p_creationDate;
-
-        return info;
-    }
-
-public:
-
-    qlonglong                   id;
-    KGeoMap::GeoCoordinates     coordinates;
-    int                         rating;
-    QDateTime                   dateTime;
-    QUrl                        url;
-
-    typedef QList<GPSImageInfo> List;
-};
-
-// --------------------------------------------------------------------------------------------------------------------------
 
 class GPSImageInfoSorter : public QObject
 {
@@ -111,6 +71,8 @@ public:
     void setSortOptions(const SortOptions sortOptions);
     SortOptions getSortOptions() const;
 
+public:
+
     static bool fitsBetter(const GPSImageInfo& oldInfo, const KGeoMap::GroupState oldState,
                            const GPSImageInfo& newInfo, const KGeoMap::GroupState newState,
                            const KGeoMap::GroupState globalGroupState, const SortOptions sortOptions);
@@ -123,13 +85,14 @@ private:
 
     void initializeSortMenu();
 
+private:
+
     class Private;
     Private* const d;
 };
 
 } /* namespace Digikam */
 
-Q_DECLARE_METATYPE(Digikam::GPSImageInfo)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions)
 
-#endif /* DIGIKAM2KGEOMAP_H */
+#endif /* GPSIMAGEINFOSOERTER_H */

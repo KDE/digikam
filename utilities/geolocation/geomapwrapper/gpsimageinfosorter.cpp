@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "digikam2kgeomap.h"
+#include "gpsimageinfosorter.h"
 
 // Qt includes
 
@@ -56,11 +56,11 @@ public:
     }
 
     QList<QPointer<KGeoMap::MapWidget> > mapWidgets;
-    GPSImageInfoSorter::SortOptions          sortOrder;
-    QPointer<QMenu>                          sortMenu;
-    QAction*                                 sortActionOldestFirst;
-    QAction*                                 sortActionYoungestFirst;
-    QAction*                                 sortActionRating;
+    GPSImageInfoSorter::SortOptions      sortOrder;
+    QPointer<QMenu>                      sortMenu;
+    QAction*                             sortActionOldestFirst;
+    QAction*                             sortActionYoungestFirst;
+    QAction*                             sortActionRating;
 
 };
 
@@ -214,7 +214,7 @@ void GPSImageInfoSorter::setSortOptions(const SortOptions sortOptions)
 {
     d->sortOrder = sortOptions;
 
-    for (int i=0; i<d->mapWidgets.count(); ++i)
+    for (int i = 0; i < d->mapWidgets.count(); ++i)
     {
         if (d->mapWidgets.at(i))
         {
@@ -247,7 +247,8 @@ void GPSImageInfoSorter::slotSortOptionTriggered()
     }
 
     d->sortOrder = newSortKey;
-    for (int i=0; i<d->mapWidgets.count(); ++i)
+
+    for (int i = 0; i < d->mapWidgets.count(); ++i)
     {
         if (d->mapWidgets.at(i))
         {

@@ -50,7 +50,7 @@
 #include "imageinfojob.h"
 #include "searchxml.h"
 #include "gpsmarkertiler.h"
-#include "digikam2kgeomap.h"
+#include "gpsimageinfosorter.h"
 
 namespace Digikam
 {

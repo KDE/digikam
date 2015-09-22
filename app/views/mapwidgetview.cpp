@@ -49,7 +49,7 @@
 #include "databasewatch.h"
 #include "databasefields.h"
 #include "imagepropertiessidebardb.h"
-#include "digikam2kgeomap.h"
+#include "gpsimageinfosorter.h"
 
 #include "importui.h"
 
