@@ -52,14 +52,14 @@ namespace Digikam
 class GPSImageModel;
 class GPSUndoCommand;
 
-class GPSSyncKGeoMapModelHelper : public ModelHelper
+class GPSSyncGeoIfaceModelHelper : public ModelHelper
 {
     Q_OBJECT
 
 public:
 
-    GPSSyncKGeoMapModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent = 0);
-    virtual ~GPSSyncKGeoMapModelHelper();
+    GPSSyncGeoIfaceModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent = 0);
+    virtual ~GPSSyncGeoIfaceModelHelper();
 
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;

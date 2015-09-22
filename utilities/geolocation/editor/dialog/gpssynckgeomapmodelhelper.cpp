@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class GPSSyncKGeoMapModelHelper::Private
+class GPSSyncGeoIfaceModelHelper::Private
 {
 public:
 
@@ -74,7 +74,7 @@ public:
     QList<ModelHelper*>  ungroupedModelHelpers;
 };
 
-GPSSyncKGeoMapModelHelper::GPSSyncKGeoMapModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent)
+GPSSyncGeoIfaceModelHelper::GPSSyncGeoIfaceModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent)
     : ModelHelper(parent),
       d(new Private())
 {
@@ -88,17 +88,17 @@ GPSSyncKGeoMapModelHelper::GPSSyncKGeoMapModelHelper(GPSImageModel* const model,
             this, SIGNAL(signalModelChangedDrastically()));
 }
 
-QAbstractItemModel* GPSSyncKGeoMapModelHelper::model() const
+QAbstractItemModel* GPSSyncGeoIfaceModelHelper::model() const
 {
     return d->model;
 }
 
-QItemSelectionModel* GPSSyncKGeoMapModelHelper::selectionModel() const
+QItemSelectionModel* GPSSyncGeoIfaceModelHelper::selectionModel() const
 {
     return d->selectionModel;
 }
 
-bool GPSSyncKGeoMapModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool GPSSyncGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
 {
     GPSImageItem* const item = d->model->itemFromIndex(index);
 
@@ -114,17 +114,17 @@ bool GPSSyncKGeoMapModelHelper::itemCoordinates(const QModelIndex& index, GeoCoo
     return true;
 }
 
-GPSSyncKGeoMapModelHelper::~GPSSyncKGeoMapModelHelper()
+GPSSyncGeoIfaceModelHelper::~GPSSyncGeoIfaceModelHelper()
 {
     delete d;
 }
 
-QPixmap GPSSyncKGeoMapModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
+QPixmap GPSSyncGeoIfaceModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
 {
     return d->model->getPixmapForIndex(index, qMax(size.width(), size.height()));
 }
 
-QPersistentModelIndex GPSSyncKGeoMapModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
+QPersistentModelIndex GPSSyncGeoIfaceModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
 {
     const bool oldestFirst = sortKey & 1;
     QPersistentModelIndex bestIndex;
@@ -159,12 +159,12 @@ QPersistentModelIndex GPSSyncKGeoMapModelHelper::bestRepresentativeIndexFromList
     return bestIndex;
 }
 
-void GPSSyncKGeoMapModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& pixmap)
+void GPSSyncGeoIfaceModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& pixmap)
 {
     emit(signalThumbnailAvailableForIndex(index, pixmap));
 }
 
-void GPSSyncKGeoMapModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
+void GPSSyncGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
                                                const GeoCoordinates& targetCoordinates,
                                                const QPersistentModelIndex& targetSnapIndex)
 {
@@ -214,12 +214,12 @@ void GPSSyncKGeoMapModelHelper::onIndicesMoved(const QList<QPersistentModelIndex
     emit(signalUndoCommand(undoCommand));
 }
 
-void GPSSyncKGeoMapModelHelper::addUngroupedModelHelper(ModelHelper* const newModelHelper)
+void GPSSyncGeoIfaceModelHelper::addUngroupedModelHelper(ModelHelper* const newModelHelper)
 {
     d->ungroupedModelHelpers << newModelHelper;
 }
 
-ModelHelper::Flags GPSSyncKGeoMapModelHelper::modelFlags() const
+ModelHelper::Flags GPSSyncGeoIfaceModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

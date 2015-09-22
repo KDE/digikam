@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-MapDragDropHandler::MapDragDropHandler(QAbstractItemModel* const /*pModel*/, GPSSyncKGeoMapModelHelper* const parent)
+MapDragDropHandler::MapDragDropHandler(QAbstractItemModel* const /*pModel*/, GPSSyncGeoIfaceModelHelper* const parent)
     : DragDropHandler(parent),
       gpsSyncKGeoMapModelHelper(parent)
 {

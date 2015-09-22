@@ -255,7 +255,7 @@ public:
 
     // map: helpers
     MapDragDropHandler*                      mapDragDropHandler;
-    GPSSyncKGeoMapModelHelper*               mapModelHelper;
+    GPSSyncGeoIfaceModelHelper*               mapModelHelper;
     ItemMarkerTiler*                         kgeomapMarkerModel;
 
     // map: actions
@@ -287,7 +287,7 @@ GPSSyncDialog::GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* 
     d->searchWidget  = new SearchWidget(d->bookmarkOwner, d->imageModel, d->selectionModel, d->stackedWidget);
 
     GPSImageItem::setHeaderData(d->imageModel);
-    d->mapModelHelper     = new GPSSyncKGeoMapModelHelper(d->imageModel, d->selectionModel, this);
+    d->mapModelHelper     = new GPSSyncGeoIfaceModelHelper(d->imageModel, d->selectionModel, this);
     d->mapModelHelper->addUngroupedModelHelper(d->bookmarkOwner->bookmarkModelHelper());
     d->mapModelHelper->addUngroupedModelHelper(d->searchWidget->getModelHelper());
     d->mapDragDropHandler = new MapDragDropHandler(d->imageModel, d->mapModelHelper);
