@@ -51,15 +51,6 @@ public:
         unifyReadWrite = false;
     }
 
-    void copyPrivateData(const Private* const other)
-    {
-        readMappings   = other->readMappings;
-        readMappings.detach();
-        writeMappings  = other->writeMappings;
-        writeMappings.detach();
-        unifyReadWrite = other->unifyReadWrite;
-    }
-
 public:
 
     QMap<QLatin1String, QList<NamespaceEntry> > readMappings;
@@ -79,13 +70,18 @@ DMetadataSettingsContainer::DMetadataSettingsContainer()
 DMetadataSettingsContainer::DMetadataSettingsContainer(const DMetadataSettingsContainer& other)
     : d(new Private)
 {
-    d->copyPrivateData(other.d);
+    *d = *other.d;
+}
+
+DMetadataSettingsContainer& DMetadataSettingsContainer::operator=(const DMetadataSettingsContainer& other)
+{
+    *d = *other.d;
+    return *this;
 }
 
 DMetadataSettingsContainer::~DMetadataSettingsContainer()
 {
-    // this line crash application
-    //delete d;
+    delete d;
 }
     
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)

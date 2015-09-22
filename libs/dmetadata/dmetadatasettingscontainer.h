@@ -158,6 +158,7 @@ public:
     DMetadataSettingsContainer();
     DMetadataSettingsContainer(const DMetadataSettingsContainer& other);
     ~DMetadataSettingsContainer();
+    DMetadataSettingsContainer& operator=(const DMetadataSettingsContainer& other);
 
 public:
 
