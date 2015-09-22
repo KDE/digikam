@@ -169,6 +169,9 @@ private Q_SLOTS:
     void slotLeftSideBarActivateComments();
     void slotLeftSideBarActivateAssignedTags();
 
+    void slotImportFromScanner();
+    void slotImportedImagefromScanner(const QUrl& url);
+
     void slotEditMetadata();
     void slotEditGeolocation();
 

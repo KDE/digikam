@@ -6,13 +6,12 @@
 
 set(calibrator_sources calibrator.cpp)
 
-add_executable(libkgeomap_calibrator ${calibrator_sources})
+add_executable(geoiface_calibrator ${calibrator_sources})
 
-target_link_libraries(libkgeomap_calibrator
-    PUBLIC
-        digikamcore
-        Qt5::Widgets
-    PRIVATE
-        KF5::CoreAddons
-        KF5::I18n
-)
+target_link_libraries(geoiface_calibrator
+                      PUBLIC
+                          digikamcore
+                          Qt5::Widgets
+                      PRIVATE
+                          KF5::CoreAddons
+                          KF5::I18n)

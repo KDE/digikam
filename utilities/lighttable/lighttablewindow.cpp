@@ -489,6 +489,7 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("open_with_default_application"), openWithAction);
     ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
 
+    createKSaneAction();
     createMetadataEditAction();
     createGeolocationEditAction();
 
@@ -1746,6 +1747,22 @@ void LightTableWindow::slotEditMetadata()
 
     // Refresh Database with new metadata from file.
     ScanController::instance()->scannedInfo(url.toLocalFile());
+}
+
+void LightTableWindow::slotImportFromScanner()
+{
+#ifdef HAVE_KSANE
+    m_ksaneAction->activate(DigikamApp::instance()->scannerTargetPlace(), configGroupName());
+
+    connect(m_ksaneAction, SIGNAL(signalImportedImage(QUrl)),
+            this, SLOT(slotImportedImagefromScanner(QUrl)));
+#endif
+}
+
+void LightTableWindow::slotImportedImagefromScanner(const QUrl& url)
+{
+    ImageInfo info = ScanController::instance()->scannedInfo(url.toLocalFile());
+    loadImageInfos(ImageInfoList() << info, info, true);
 }
 
 }  // namespace Digikam
