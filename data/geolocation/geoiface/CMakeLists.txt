@@ -4,9 +4,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-install(FILES backend-osm.html
-              backend-osm-js.js
-              backend-googlemaps.html
+install(FILES backend-googlemaps.html
               backend-googlemaps-js.js
               cluster-circle-00ff00.png
               cluster-circle-00ffff.png

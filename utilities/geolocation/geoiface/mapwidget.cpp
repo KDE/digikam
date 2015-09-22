@@ -77,18 +77,18 @@ namespace GeoIface
 
 /**
  * @class GeoIfaceWidget
- * @brief The central map view class of libkgeomap
+ * @brief The central map view class of GeoIface
  *
- * The GeoIfaceWidget class is the central widget of libkgeomap. It provides a widget which can display maps using
+ * The GeoIfaceWidget class is the central widget of GeoIface. It provides a widget which can display maps using
  * either the Marble or Google Maps backend. Using a model, items can be displayed on the map. For
  * models containing only a small number of items, the items can be shown directly, but for models with
  * a larger number of items, the items can also be grouped. Currently, any number of ungrouped models
  * can be shown, but only one grouped model. Item selection models can also be used along with the models,
- * to interact with the selection states of the items on the map. In order to use a model with libkgeomap, however,
+ * to interact with the selection states of the items on the map. In order to use a model with GeoIface, however,
  * a model helper has to be implemented, which extracts data from the model that is not provided by the Qt part
  * of a model's API.
  *
- * Now, a brief introduction on how to get libkgeomap working is provided:
+ * Now, a brief introduction on how to get GeoIface working is provided:
  * @li First, an instance of @c GeoIfaceWidget has to be created.
  * @li Next, @c ModelHelper has to be subclassed and at least the pure virtual functions have to be implemented.
  * @li To show the model's data ungrouped, the model helper has to be added to @c GeoIfaceWidget instance using addUngroupedModel.
@@ -1053,7 +1053,7 @@ void MapWidget::getColorInfos(const GroupState groupState,
             break;
     }
 
-    /// @todo These are the fill colors for the circles, for cases in which only some or all of the images are positively filtered. Filtering is implemented in libkgeomap, but the code here has not been adapted yet.
+    /// @todo These are the fill colors for the circles, for cases in which only some or all of the images are positively filtered. Filtering is implemented in GeoIface, but the code here has not been adapted yet.
     QColor fillAll, fillSome, fillNone;
 
     if (nMarkers >= 100)

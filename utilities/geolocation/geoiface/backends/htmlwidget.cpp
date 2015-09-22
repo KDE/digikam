@@ -70,7 +70,9 @@ public:
 };
 
 HTMLWidget::HTMLWidget(QWidget* const parent)
-    : QWebView(parent), d(new Private()), s(0)
+    : QWebView(parent),
+      d(new Private()),
+      s(0)
 {
     d->parent = parent;
     setFocusPolicy(Qt::WheelFocus);

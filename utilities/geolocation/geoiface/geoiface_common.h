@@ -97,7 +97,7 @@ public:
 Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIfaceInternalWidgetInfo::InternalWidgetStates)
 
 /**
- * @brief Global object for libkgeomap to hold items common to all GeoIfaceWidget instances
+ * @brief Global object for GeoIface to hold items common to all GeoIface Widget instances
  */
 class GeoIfaceGlobalObject : public QObject
 {
