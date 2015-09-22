@@ -34,7 +34,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/Types>
+#include "geoiface_types.h"
 
 // Local includes
 

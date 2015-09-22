@@ -41,9 +41,9 @@
 #include "imagefiltermodel.h"
 #include "albumlabelstreeview.h"
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 #include "gpssearchview.h"
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 namespace Digikam
 {
@@ -324,7 +324,7 @@ private:
 
 // -----------------------------------------------------------------------------------------
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 
 /**
  * SideBarWidget for the gps search.
@@ -360,7 +360,7 @@ private:
     Private* const d;
 };
 
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 // -----------------------------------------------------------------------------------------
 

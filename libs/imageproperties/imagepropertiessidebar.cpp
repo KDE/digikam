@@ -55,9 +55,9 @@
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiesversionstab.h"
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 #include "imagepropertiesgpstab.h"
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 namespace Digikam
 {
@@ -88,10 +88,10 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     appendTab(m_metadataTab,   QIcon::fromTheme(QLatin1String("exifinfo")),              i18n("Metadata")); // krazy:exclude=iconnames
     appendTab(m_colorTab,      QIcon::fromTheme(QLatin1String("format-fill-color")),     i18n("Colors"));
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     m_gpsTab = new ImagePropertiesGPSTab(parent);
     appendTab(m_gpsTab,        QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Geolocation"));
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
@@ -131,9 +131,9 @@ void ImagePropertiesSideBar::slotNoCurrentItem()
     m_metadataTab->setCurrentURL();
     m_colorTab->setData();
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     m_gpsTab->setCurrentURL();
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
@@ -160,9 +160,9 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 {
     if (!m_currentURL.isValid())
     {
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         m_gpsTab->setActive(tab == m_gpsTab);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
         return;
     }
 
@@ -184,7 +184,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
         m_colorTab->setData(m_currentURL, m_currentRect, m_image);
         m_dirtyColorTab = true;
     }
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     else if (tab == m_gpsTab && !m_dirtyGpsTab)
     {
         m_gpsTab->setCurrentURL(m_currentURL);
@@ -192,7 +192,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     }
 
     m_gpsTab->setActive(tab == m_gpsTab);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     unsetCursor();
 }
@@ -362,10 +362,10 @@ void ImagePropertiesSideBar::doLoadState()
 
     m_propertiesTab->readSettings(group);
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     const KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName(QLatin1String("GPS Properties Tab")));
     m_gpsTab->readSettings(groupGPSTab);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     const KConfigGroup groupColorTab    = KConfigGroup(&group, entryName(QLatin1String("Color Properties Tab")));
     m_colorTab->readSettings(groupColorTab);
@@ -382,10 +382,10 @@ void ImagePropertiesSideBar::doSaveState()
 
     m_propertiesTab->writeSettings(group);
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName(QLatin1String("GPS Properties Tab")));
     m_gpsTab->writeSettings(groupGPSTab);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     KConfigGroup groupColorTab    = KConfigGroup(&group, entryName(QLatin1String("Color Properties Tab")));
     m_colorTab->writeSettings(groupColorTab);

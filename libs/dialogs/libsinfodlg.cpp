@@ -46,15 +46,11 @@
 #include <libkdcraw_version.h>
 #include <KDCRAW/KDcraw>
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 
-// Libkgeomap includes
+#include "mapwidget.h"
 
-#include <KGeoMap/MapWidget>
-
-using namespace KGeoMap;
-
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 // C ANSI includes
 
@@ -91,6 +87,7 @@ extern "C"
 
 using namespace KExiv2Iface;
 using namespace KDcrawIface;
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -172,12 +169,11 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18nc(CONTEXT, "LibJasper support"),           SUPPORTED_NO);
 #endif // HAVE_JASPER
 
-#ifdef HAVE_KGEOMAP
-    list.insert(i18nc(CONTEXT, "KGeoMap"),                     MapWidget::version());
+#ifdef HAVE_MARBLE
     list.insert(i18nc(CONTEXT, "Marble"),                      MapWidget::MarbleWidgetVersion());
 #else
-    list.insert(i18nc(CONTEXT, "KGeoMap support"),             SUPPORTED_NO);
-#endif // HAVE_KGEOMAP
+    list.insert(i18nc(CONTEXT, "Marble support"),              SUPPORTED_NO);
+#endif // HAVE_MARBLE
 
 // TODO add sqlite versions here? Could be useful for debugging sqlite problems..
 

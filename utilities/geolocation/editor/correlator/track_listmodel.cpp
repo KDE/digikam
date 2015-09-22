@@ -30,7 +30,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/Tracks>
+#include "tracks.h"
 
 // Boost includes
 
@@ -64,10 +64,10 @@ public:
     {
     }
 
-    KGeoMap::TrackManager* trackManager;
+    GeoIface::TrackManager* trackManager;
 };
 
-TrackListModel::TrackListModel(KGeoMap::TrackManager* const trackManager, QObject* const parent)
+TrackListModel::TrackListModel(GeoIface::TrackManager* const trackManager, QObject* const parent)
     : QAbstractItemModel(parent),
       d(new Private())
 {
@@ -114,7 +114,7 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    KGeoMap::TrackManager::Track track = d->trackManager->getTrackById(index.internalId());
+    GeoIface::TrackManager::Track track = d->trackManager->getTrackById(index.internalId());
     if (track.id==0)
     {
         // track not found, invalid id
@@ -163,7 +163,7 @@ QModelIndex TrackListModel::index(int row, int column, const QModelIndex& parent
         return QModelIndex();
     }
 
-    const KGeoMap::TrackManager::Track track = d->trackManager->getTrack(row);
+    const GeoIface::TrackManager::Track track = d->trackManager->getTrack(row);
     /// @TODO We have to use quint32 for track ids
     return createIndex(row, column, quint32(track.id));
 }

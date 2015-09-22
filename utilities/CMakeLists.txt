@@ -22,6 +22,6 @@ if(${KF5KFace_FOUND})
     add_subdirectory(facemanagement)
 endif()
 
-if(${KF5KGeoMap_FOUND})
+if(${MARBLE_FOUND})
     add_subdirectory(geolocation)
 endif()

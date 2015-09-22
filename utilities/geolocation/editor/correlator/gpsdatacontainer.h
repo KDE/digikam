@@ -27,7 +27,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/GeoCoordinates>
+#include "geocoordinates.h"
 
 namespace Digikam
 {
@@ -61,7 +61,7 @@ public:
 private:
 
     HasFlags                m_hasFlags;
-    KGeoMap::GeoCoordinates m_coordinates;
+    GeoIface::GeoCoordinates m_coordinates;
     int                     m_nSatellites;
     qreal                   m_dop;
     int                     m_fixType;
@@ -127,12 +127,12 @@ public:
 
     /* coordinates */
 
-    inline KGeoMap::GeoCoordinates getCoordinates() const
+    inline GeoIface::GeoCoordinates getCoordinates() const
     {
         return m_coordinates;
     }
 
-    inline void setCoordinates(const KGeoMap::GeoCoordinates& coordinates)
+    inline void setCoordinates(const GeoIface::GeoCoordinates& coordinates)
     {
         m_coordinates = coordinates;
         if (coordinates.hasCoordinates())

@@ -31,7 +31,7 @@
 
 // libkgeomap includes
 
-#include <KGeoMap/ModelHelper>
+#include "modelhelper.h"
 
 // Local includes
 
@@ -85,7 +85,7 @@ private:
 
 // ------------------------------------------------------------------------------------------------------------
 
-class MapViewModelHelper : public KGeoMap::ModelHelper
+class MapViewModelHelper : public GeoIface::ModelHelper
 {
     Q_OBJECT
 
@@ -97,7 +97,7 @@ public:
 
     virtual QAbstractItemModel* model()                                                                const;
     virtual QItemSelectionModel* selectionModel()                                                      const;
-    virtual bool itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const;
 
     virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
     virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey);

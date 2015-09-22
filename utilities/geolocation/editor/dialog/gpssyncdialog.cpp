@@ -67,9 +67,9 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/MapWidget>
-#include <KGeoMap/ItemMarkerTiler>
-#include <KGeoMap/Tracks>
+#include "mapwidget.h"
+#include "itemmarkertiler.h"
+#include "tracks.h"
 
 // Libkdcraw includes
 
@@ -215,7 +215,7 @@ public:
     GPSBookmarkOwner*                        bookmarkOwner;
     QAction*                                 actionBookmarkVisibility;
     GPSImageListContextMenu*                 listViewContextMenu;
-    KGeoMap::TrackManager*                   trackManager;
+    GeoIface::TrackManager*                   trackManager;
 
     // Loading and saving
     QFuture<QPair<QUrl,QString> >            fileIOFuture;
@@ -275,7 +275,7 @@ GPSSyncDialog::GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* 
 
     d->imageModel     = new GPSImageModel(this);
     d->selectionModel = new QItemSelectionModel(d->imageModel);
-    d->trackManager   = new KGeoMap::TrackManager(this);
+    d->trackManager   = new GeoIface::TrackManager(this);
 
 #ifdef GPSSYNC_MODELTEST
     new ModelTest(d->imageModel, this);

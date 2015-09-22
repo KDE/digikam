@@ -43,9 +43,9 @@
 #include "mediaplayerview.h"
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 #include "mapwidgetview.h"
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 namespace Digikam
 {
@@ -80,9 +80,9 @@ public:
     MediaPlayerView*    mediaPlayerView()   const;
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     MapWidgetView*      mapWidgetView()     const;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     bool isInSingleFileMode()   const;
     bool isInMultipleFileMode() const;

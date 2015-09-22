@@ -42,6 +42,7 @@
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
@@ -75,6 +76,8 @@
 #include "thumbbardock.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -1707,7 +1710,7 @@ void LightTableWindow::slotColorManagementOptionsChanged()
 
 void LightTableWindow::slotEditGeolocation()
 {
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     if (d->thumbView->currentInfo().isNull())
     {
         return;

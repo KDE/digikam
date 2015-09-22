@@ -49,11 +49,11 @@ public:
 
     }
 
-    KGeoMap::TrackManager* trackManager;
+    GeoIface::TrackManager* trackManager;
     TrackCorrelatorThread* thread;
 };
 
-TrackCorrelator::TrackCorrelator(KGeoMap::TrackManager* const trackManager, QObject* const parent)
+TrackCorrelator::TrackCorrelator(GeoIface::TrackManager* const trackManager, QObject* const parent)
     : QObject(parent), d(new Private())
 {
     d->trackManager = trackManager;

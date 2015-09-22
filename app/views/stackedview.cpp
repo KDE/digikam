@@ -57,9 +57,9 @@
 #include "mediaplayerview.h"
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 #include "mapwidgetview.h"
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 namespace Digikam
 {
@@ -87,9 +87,9 @@ public:
         mediaPlayerView    = 0;
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         mapWidgetView      = 0;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
     }
 
     bool               needUpdateBar;
@@ -110,9 +110,9 @@ public:
     MediaPlayerView*   mediaPlayerView;
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     MapWidgetView*     mapWidgetView;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 };
 
 StackedView::StackedView(QWidget* const parent)
@@ -134,13 +134,13 @@ StackedView::StackedView(QWidget* const parent)
     d->tableView->setObjectName(QLatin1String("mainwindow_tableview"));
     d->trashView = new TrashView(this);
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapWidgetView   = new MapWidgetView(d->imageIconView->getSelectionModel(),
                                            d->imageIconView->imageFilterModel(), this,
                                            MapWidgetView::ApplicationDigikam
                                           );
     d->mapWidgetView->setObjectName(QLatin1String("mainwindow_mapwidgetview"));
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 #ifdef HAVE_VIDEOPLAYER
     d->mediaPlayerView = new MediaPlayerView(this);
@@ -152,9 +152,9 @@ StackedView::StackedView(QWidget* const parent)
     insertWidget(TableViewMode,    d->tableView);
     insertWidget(TrashViewMode,    d->trashView);
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     insertWidget(MapWidgetMode,    d->mapWidgetView);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 #ifdef HAVE_VIDEOPLAYER
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
@@ -290,12 +290,12 @@ ImagePreviewView* StackedView::imagePreviewView() const
     return d->imagePreviewView;
 }
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 MapWidgetView* StackedView::mapWidgetView() const
 {
     return d->mapWidgetView;
 }
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 TableView* StackedView::tableView() const
 {
@@ -418,9 +418,9 @@ void StackedView::setViewMode(const StackedViewMode mode)
         setCurrentIndex(mode);
     }
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapWidgetView->setActive(mode == MapWidgetMode);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     d->tableView->slotSetActive(mode == TableViewMode);
 
@@ -429,12 +429,12 @@ void StackedView::setViewMode(const StackedViewMode mode)
         d->imageIconView->setFocus();
     }
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     else if (mode == MapWidgetMode)
     {
         d->mapWidgetView->setFocus();
     }
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     else if (mode == TableViewMode)
     {

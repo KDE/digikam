@@ -93,7 +93,7 @@ void TrackCorrelatorThread::run()
                 return;
             }
 
-            const KGeoMap::TrackManager::Track& currentFile = fileList.at(f);
+            const GeoIface::TrackManager::Track& currentFile = fileList.at(f);
             int index = currentIndices.at(f);
 
             for (; index<currentFile.points.count(); ++index)
@@ -202,7 +202,7 @@ void TrackCorrelatorThread::run()
 
             if (indexToUse.first>=0)
             {
-                const KGeoMap::TrackManager::TrackPoint& dataPoint = fileList.at(indexToUse.first).points.at(indexToUse.second);
+                const GeoIface::TrackManager::TrackPoint& dataPoint = fileList.at(indexToUse.first).points.at(indexToUse.second);
                 correlatedData.coordinates                   = dataPoint.coordinates;
                 correlatedData.flags                         = static_cast<TrackCorrelator::CorrelationFlags>(correlatedData.flags|TrackCorrelator::CorrelationFlagCoordinates);
                 correlatedData.nSatellites                   = dataPoint.nSatellites;
@@ -229,8 +229,8 @@ void TrackCorrelatorThread::run()
 
             if (canInterpolate)
             {
-                const KGeoMap::TrackManager::TrackPoint& dataPointBefore = fileList.at(lastIndexPair.first).points.at(lastIndexPair.second);
-                const KGeoMap::TrackManager::TrackPoint& dataPointAfter  = fileList.at(firstIndexPair.first).points.at(firstIndexPair.second);
+                const GeoIface::TrackManager::TrackPoint& dataPointBefore = fileList.at(lastIndexPair.first).points.at(lastIndexPair.second);
+                const GeoIface::TrackManager::TrackPoint& dataPointAfter  = fileList.at(firstIndexPair.first).points.at(firstIndexPair.second);
 
                 const uint tBefore = dataPointBefore.dateTime.toTime_t();
                 const uint tAfter  = dataPointAfter.dateTime.toTime_t();
@@ -238,7 +238,7 @@ void TrackCorrelatorThread::run()
 
                 if (tCor-tBefore!=0)
                 {
-                    KGeoMap::GeoCoordinates resultCoordinates;
+                    GeoIface::GeoCoordinates resultCoordinates;
                     const double latBefore  = dataPointBefore.coordinates.lat();
                     const double lonBefore  = dataPointBefore.coordinates.lon();
                     const double latAfter   = dataPointAfter.coordinates.lat();

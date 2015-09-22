@@ -57,10 +57,10 @@
 #include "imageposition.h"
 #include "tagscache.h"
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 #include "imagepropertiesgpstab.h"
 #include "gpsimageinfosorter.h"
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 namespace Digikam
 {
@@ -254,13 +254,13 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->desceditTab->setItem();
             d->dirtyDesceditTab = true;
         }
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             m_gpsTab->setCurrentURL(m_currentURL);
             m_dirtyGpsTab = true;
         }
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
             //TODO: Make a database-less parent class with only the filters tab
@@ -300,7 +300,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->desceditTab->setItem(d->currentInfos.first());
             d->dirtyDesceditTab = true;
         }
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             GPSImageInfo info;
@@ -316,7 +316,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
             m_dirtyGpsTab = true;
         }
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
             d->versionsHistoryTab->setItem(d->currentInfos.first(), d->currentHistory);
@@ -348,7 +348,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->desceditTab->setItems(d->currentInfos);
             d->dirtyDesceditTab = true;
         }
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             GPSImageInfo::List list;
@@ -375,7 +375,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
             m_dirtyGpsTab = true;
         }
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
             // FIXME: Any sensible multi-selection functionality? Must scale for large n!
@@ -384,9 +384,9 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
     }
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     m_gpsTab->setActive(tab == m_gpsTab);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     unsetCursor();
 }
@@ -418,9 +418,9 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
         }
 
         if (tab == m_propertiesTab
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
             || tab == m_gpsTab
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
            )
         {
             ImageInfo& info = d->currentInfos.first();
@@ -444,9 +444,9 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                 }
 
                 if (tab == m_propertiesTab
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
                     || tab == m_gpsTab
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
                    )
                 {
                     // update now - reuse code form slotChangedTab
@@ -702,7 +702,7 @@ void ImagePropertiesSideBarDB::slotPopupTagsView()
     d->desceditTab->setFocusToTagsView();
 }
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 
 bool ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo)
 {
@@ -728,6 +728,6 @@ bool ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(const ImageInfo& imageI
     return true;
 }
 
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 }  // namespace Digikam

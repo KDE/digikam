@@ -52,9 +52,9 @@ class ImageThumbnailBar;
 class MediaPlayerView;
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 class MapWidgetView;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 class StackedView : public QStackedWidget
 {
@@ -94,9 +94,9 @@ public:
     MediaPlayerView*   mediaPlayerView()  const;
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     MapWidgetView*     mapWidgetView()    const;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     /**
      * Single-file mode is image preview or media player,

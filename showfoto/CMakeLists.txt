@@ -72,8 +72,8 @@ target_link_libraries(showfoto
                       KF5::Notifications
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(showfoto PRIVATE KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(showfoto PRIVATE ${MARBLE_LIBRARIES})
 endif()
 
 if(NOT WIN32)

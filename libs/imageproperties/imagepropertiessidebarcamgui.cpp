@@ -43,9 +43,9 @@
 #include "cameraitempropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 #include "imagepropertiesgpstab.h"
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 namespace Digikam
 {
@@ -58,9 +58,9 @@ public:
         dirtyMetadataTab(false),
         dirtyCameraItemTab(false),
         dirtyGpsTab(false),
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         gpsTab(0),
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
         metadataTab(0),
         cameraItemTab(0)
     {
@@ -74,9 +74,9 @@ public:
 
     CamItemInfo                 itemInfo;
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     ImagePropertiesGPSTab*      gpsTab;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     ImagePropertiesMetaDataTab* metadataTab;
     CameraItemPropertiesTab*    cameraItemTab;
@@ -95,10 +95,10 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
     appendTab(d->cameraItemTab, QIcon::fromTheme(QLatin1String("document-properties")),   i18n("Properties"));
     appendTab(d->metadataTab,   QIcon::fromTheme(QLatin1String("exifinfo")),              i18n("Metadata")); // krazy:exclude=iconnames
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->gpsTab        = new ImagePropertiesGPSTab(parent);
     appendTab(d->gpsTab,        QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Geolocation"));
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     // ----------------------------------------------------------
 
@@ -150,9 +150,9 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem()
     d->cameraItemTab->setCurrentItem();
     d->metadataTab->setCurrentURL();
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->gpsTab->setCurrentURL();
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 }
 
 void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
@@ -175,7 +175,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
         d->metadataTab->setCurrentData(d->metaData, d->itemInfo.name);
         d->dirtyMetadataTab = true;
     }
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     else if (tab == d->gpsTab && !d->dirtyGpsTab)
     {
         d->gpsTab->setMetadata(d->metaData, d->itemInfo.url());
@@ -183,7 +183,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     }
 
     d->gpsTab->setActive(tab == d->gpsTab);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     unsetCursor();
 }
@@ -200,10 +200,10 @@ void ImagePropertiesSideBarCamGui::doLoadState()
     KConfigGroup groupCameraItemTab    = KConfigGroup(&group, entryName(QLatin1String("Camera Item Properties Tab")));
     d->cameraItemTab->readSettings(groupCameraItemTab);
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     KConfigGroup groupGPSTab            = KConfigGroup(&group, entryName(QLatin1String("GPS Properties Tab")));
     d->gpsTab->readSettings(groupGPSTab);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName(QLatin1String("Metadata Properties Tab")));
     d->metadataTab->readSettings(groupMetadataTab);
@@ -222,10 +222,10 @@ void ImagePropertiesSideBarCamGui::doSaveState()
     KConfigGroup groupCameraItemTab = KConfigGroup(&group, entryName(QLatin1String("Camera Item Properties Tab")));
     d->cameraItemTab->writeSettings(groupCameraItemTab);
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     KConfigGroup groupGPSTab        = KConfigGroup(&group, entryName(QLatin1String("GPS Properties Tab")));
     d->gpsTab->writeSettings(groupGPSTab);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     KConfigGroup groupMetadataTab   = KConfigGroup(&group, entryName(QLatin1String("Metadata Properties Tab")));
     d->metadataTab->writeSettings(groupMetadataTab);

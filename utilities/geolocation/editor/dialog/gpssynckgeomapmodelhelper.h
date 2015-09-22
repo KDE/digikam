@@ -37,14 +37,14 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/ModelHelper>
+#include "modelhelper.h"
 
-namespace KGeoMap
+namespace GeoIface
 {
     class MapWidget;
 }
 
-using namespace KGeoMap;
+using namespace GeoIface;
 
 namespace Digikam
 {

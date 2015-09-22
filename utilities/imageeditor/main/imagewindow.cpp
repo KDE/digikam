@@ -1719,7 +1719,7 @@ void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
 
 void ImageWindow::slotEditGeolocation()
 {
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     if ( d->currentImageInfo.isNull() )
         return;
     

@@ -31,7 +31,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/Types>
+#include "geoiface_types.h"
 
 // Local includes
 
@@ -62,9 +62,9 @@ public:
         }
 
         typedef QList<SearchResult>   List;
-        KGeoMap::GeoCoordinates       coordinates;
+        GeoIface::GeoCoordinates       coordinates;
         QString                       name;
-        KGeoMap::GeoCoordinates::Pair boundingBox;
+        GeoIface::GeoCoordinates::Pair boundingBox;
         QString                       internalId;
     };
 

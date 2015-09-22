@@ -51,7 +51,7 @@ public:
 
     TrackCorrelator::Correlation::List itemsToCorrelate;
     TrackCorrelator::CorrelationOptions options;
-    KGeoMap::TrackManager::Track::List fileList;
+    GeoIface::TrackManager::Track::List fileList;
     bool doCancel;
     bool canceled;
 

@@ -34,7 +34,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/Types>
+#include "geoiface_types.h"
 
 // Local includes
 
@@ -42,7 +42,7 @@
 #include "gpsdatacontainer.h"
 #include "dmetadata.h"
 
-using namespace KGeoMap;
+using namespace GeoIface;
 
 namespace Digikam
 {

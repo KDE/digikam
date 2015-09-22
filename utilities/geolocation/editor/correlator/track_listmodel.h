@@ -29,7 +29,7 @@
 
 #include <QAbstractItemModel>
 
-namespace KGeoMap
+namespace GeoIface
 {
     class TrackManager;
 }
@@ -43,7 +43,7 @@ class TrackListModel : public QAbstractItemModel
 
 public:
 
-    TrackListModel(KGeoMap::TrackManager* const trackManager, QObject* const parent);
+    TrackListModel(GeoIface::TrackManager* const trackManager, QObject* const parent);
     ~TrackListModel();
 
     // QAbstractItemModel:

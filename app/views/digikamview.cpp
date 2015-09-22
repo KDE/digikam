@@ -89,9 +89,9 @@
 #include "mediaplayerview.h"
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 #include "mapwidgetview.h"
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 namespace Digikam
 {
@@ -117,10 +117,10 @@ public:
         searchSideBar(0),
         fuzzySearchSideBar(0),
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         gpsSearchSideBar(0),
         mapView(0),
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 #ifdef HAVE_KFACE
         peopleSideBar(0),
@@ -173,10 +173,10 @@ public:
     SearchSideBarWidget*          searchSideBar;
     FuzzySearchSideBarWidget*     fuzzySearchSideBar;
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     GPSSearchSideBarWidget*       gpsSearchSideBar;
     MapWidgetView*                mapView;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 #ifdef HAVE_KFACE
     PeopleSideBarWidget*          peopleSideBar;
@@ -280,9 +280,9 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     d->iconView  = d->stackedview->imageIconView();
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapView   = d->stackedview->mapWidgetView();
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     d->tableView = d->stackedview->tableView();
     d->trashView = d->stackedview->trashView();
@@ -342,14 +342,14 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
                                                          d->searchModificationHelper);
     d->leftSideBarWidgets << d->fuzzySearchSideBar;
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->gpsSearchSideBar = new GPSSearchSideBarWidget(d->leftSideBar,
                                                      d->modelCollection->getSearchModel(),
                                                      d->searchModificationHelper,
                                                      d->iconView->imageFilterModel(),d->iconView->getSelectionModel());
 
     d->leftSideBarWidgets << d->gpsSearchSideBar;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 #ifdef HAVE_KFACE
 
@@ -564,10 +564,10 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)),
             d->iconView->imageFilterModel(), SLOT(setIdWhitelist(QList<qlonglong>,QString)));
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     // -- Filter Bars Connections ---------------------------------
 
@@ -747,9 +747,9 @@ void DigikamView::loadViewState()
 
     d->initialAlbumID = group.readEntry(QLatin1String("InitialAlbumID"), 0);
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapView->loadState();
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     d->tableView->loadState();
     d->rightSideBar->loadState();
@@ -794,9 +794,9 @@ void DigikamView::saveViewState()
         group.writeEntry(QLatin1String("InitialAlbumID"), 0);
     }
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapView->saveState();
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     d->tableView->saveState();
     d->rightSideBar->saveState();
@@ -1223,9 +1223,9 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
     {
         d->iconView->openAlbum(QList<Album*>());
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         d->mapView->openAlbum(0);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
         slotTogglePreviewMode(ImageInfo());
         return;
@@ -2339,10 +2339,10 @@ ImageInfo DigikamView::currentInfo() const
         case StackedView::TableViewMode:
             return d->tableView->currentInfo();
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         case StackedView::MapWidgetMode:
             return d->mapView->currentImageInfo();
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
         case StackedView::MediaPlayerMode:
         case StackedView::PreviewImageMode:

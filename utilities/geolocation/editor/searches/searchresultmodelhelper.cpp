@@ -54,7 +54,7 @@
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
 
-using namespace KGeoMap;
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -123,12 +123,12 @@ bool SearchResultModelHelper::itemIcon(const QModelIndex& index, QPoint* const o
     return d->model->getMarkerIcon(index, offset, size, pixmap, url);
 }
 
-KGeoMap::ModelHelper::Flags SearchResultModelHelper::modelFlags() const
+GeoIface::ModelHelper::Flags SearchResultModelHelper::modelFlags() const
 {
     return FlagSnaps|(d->visible?FlagVisible:FlagNull);
 }
 
-KGeoMap::ModelHelper::Flags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
+GeoIface::ModelHelper::Flags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
 {
     return FlagVisible|FlagSnaps;
 }

@@ -407,7 +407,7 @@ void GPSImageDetails::slotApply()
     {
         const double lat = d->leLatitude->text().toDouble();
         const double lon = d->leLongitude->text().toDouble();
-        newData.setCoordinates(KGeoMap::GeoCoordinates(lat, lon));
+        newData.setCoordinates(GeoIface::GeoCoordinates(lat, lon));
 
         if (d->cbAltitude->isChecked())
         {

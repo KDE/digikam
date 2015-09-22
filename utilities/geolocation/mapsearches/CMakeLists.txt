@@ -20,5 +20,5 @@ add_library(gpssearch_src OBJECT ${libgpssearch_SRCS})
 #                      fileactionmanager
 #                      maintenance
 
-#                      KF5::KGeoMap
+#                      ${MARBLE_LIBRARIES}
 #)

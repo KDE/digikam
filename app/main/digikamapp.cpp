@@ -875,14 +875,14 @@ void DigikamApp::setupActions()
     connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->imagePreviewAction);
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->imageMapViewAction = new QAction(QIcon::fromTheme(QLatin1String("applications-internet")),
                                         i18nc("@action Switch to map view", "Map"), this);
     d->imageMapViewAction->setCheckable(true);
     ac->addAction(QLatin1String("map_view"), d->imageMapViewAction);
     connect(d->imageMapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->imageMapViewAction);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     d->imageTableViewAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-details")),
                                           i18nc("@action Switch to table view", "Table"), this);
@@ -3049,9 +3049,9 @@ void DigikamApp::slotSwitchedToMapView()
 {
     //TODO: Link to map view's zoom actions
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->imageMapViewAction->setChecked(true);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
     toggleShowBar();
 }
 
@@ -3153,7 +3153,7 @@ QString DigikamApp::scannerTargetPlace()
 
 void DigikamApp::slotEditGeolocation()
 {
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     QList<QUrl> urls = view()->selectedUrls();
 
     if ( urls.isEmpty() )

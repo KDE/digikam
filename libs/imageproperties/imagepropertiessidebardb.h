@@ -80,11 +80,11 @@ public:
     virtual void itemChanged(const ImageInfoList& infos);
     
     
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 
     static bool GPSImageInfofromImageInfo(const ImageInfo&, GPSImageInfo* const);
 
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 Q_SIGNALS:
 

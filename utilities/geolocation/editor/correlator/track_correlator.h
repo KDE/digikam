@@ -29,7 +29,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/Tracks>
+#include "tracks.h"
 
 namespace Digikam
 {
@@ -78,7 +78,7 @@ public:
         int                           fixType;
         qreal                         speed;
         CorrelationFlags              flags;
-        KGeoMap::GeoCoordinates       coordinates;
+        GeoIface::GeoCoordinates       coordinates;
     };
 
     // -------------------------------------
@@ -105,7 +105,7 @@ public:
 
 public:
 
-    explicit TrackCorrelator(KGeoMap::TrackManager* const trackManager, QObject* const parent = 0);
+    explicit TrackCorrelator(GeoIface::TrackManager* const trackManager, QObject* const parent = 0);
     ~TrackCorrelator();
 
     void correlate(const Correlation::List& itemsToCorrelate, const CorrelationOptions& options);

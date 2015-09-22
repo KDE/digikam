@@ -181,46 +181,6 @@ endmacro()
 
 ###########################################################################################################################################"
 
-macro(DETECT_LIBKGEOMAP MIN_VERSION)
-
-    if (NOT DIGIKAMSC_COMPILE_LIBKGEOMAP)
-
-        message(STATUS "libkgeomap : search system based library")
-        find_package(KF5KGeoMap ${MIN_VERSION})
-
-        if(KF5KGeoMap_FOUND)
-            set(KF5KGeoMap_LIBRARIES KF5::KGeoMap)
-            get_target_property(KF5KGeoMap_INCLUDE_DIRS KF5::KGeoMap INTERFACE_INCLUDE_DIRECTORIES)
-            set(KF5KGeoMap_FOUND TRUE)
-        else()
-            set(KF5KGeoMap_FOUND FALSE)
-        endif()
-
-    else()
-
-        message(STATUS "libkgeomap : use local library from ${CMAKE_SOURCE_DIR}/extra/libkgeomap/")
-        find_file(KF5KGeoMap_FOUND CMakeLists.txt PATHS ${CMAKE_SOURCE_DIR}/extra/libkgeomap/)
-
-        if(NOT KF5KGeoMap_FOUND)
-            message(ERROR "libkgeomap : local library not found")
-            set(KF5KGeoMap_FOUND FALSE)
-        else()
-            set(KF5KGeoMap_FOUND TRUE) 
-        endif()
-
-        set(KF5KGeoMap_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkgeomap/src ${CMAKE_BINARY_DIR}/extra/libkgeomap)
-        set(KF5KGeoMap_LIBRARIES KF5KGeoMap)
-
-    endif()
-
-    message(STATUS "libkgeomap found      : ${KF5KGeoMap_FOUND}")
-    message(STATUS "libkgeomap library    : ${KF5KGeoMap_LIBRARIES}")
-    message(STATUS "libkgeomap includes   : ${KF5KGeoMap_INCLUDE_DIRS}")
-
-endmacro()
-
-###########################################################################################################################################"
-
 macro(DETECT_LIBKSANE MIN_VERSION)
 
     if (NOT DIGIKAMSC_COMPILE_LIBKSANE)

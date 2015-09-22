@@ -17,8 +17,8 @@ target_link_libraries(dngvalidate
                       ${CMAKE_THREAD_LIBS_INIT}
                      )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(dngvalidate ${KF5KGeoMap_LIBRARIES})
+if(${MARBLE_FOUND})
+    target_link_libraries(dngvalidate ${MARBLE_LIBRARIES})
 endif()
 
 # =======================================================
@@ -36,8 +36,8 @@ target_link_libraries(dnginfo
                       ${CMAKE_THREAD_LIBS_INIT}
                      )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(dnginfo ${KF5KGeoMap_LIBRARIES})
+if(${MARBLE_FOUND})
+    target_link_libraries(dnginfo ${MARBLE_LIBRARIES})
 endif()
 
 # =======================================================
@@ -59,6 +59,6 @@ target_link_libraries(raw2dng
                       ${CMAKE_THREAD_LIBS_INIT}
                      )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(raw2dng ${KF5KGeoMap_LIBRARIES})
+if(${MARBLE_FOUND})
+    target_link_libraries(raw2dng ${MARBLE_LIBRARIES})
 endif()

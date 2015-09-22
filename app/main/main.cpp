@@ -68,7 +68,6 @@ int main(int argc, char* argv[])
     KLocalizedString::setApplicationDomain("digikam");
     KLocalizedString::setApplicationDomain("libkdcraw");
     KLocalizedString::setApplicationDomain("libkface");
-    KLocalizedString::setApplicationDomain("libkgeomap");
     KLocalizedString::setApplicationDomain("kipiplugins");
     KLocalizedString::setApplicationDomain("libkipi");
 

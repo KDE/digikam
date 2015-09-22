@@ -48,9 +48,9 @@ class ImagePropertiesTab;
 class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 class ImagePropertiesGPSTab;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 {
@@ -110,9 +110,9 @@ protected:
     ImagePropertiesMetaDataTab* m_metadataTab;
     ImagePropertiesColorsTab*   m_colorTab;
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     ImagePropertiesGPSTab*      m_gpsTab;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 };
 
 }  // namespace Digikam

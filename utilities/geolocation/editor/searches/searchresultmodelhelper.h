@@ -31,7 +31,7 @@
 
 // libkgeomap includes
 
-#include <KGeoMap/ModelHelper>
+#include "modelhelper.h"
 
 // local includes
 
@@ -43,7 +43,7 @@ namespace Digikam
 class SearchResultModel;
 class GPSUndoCommand;
 
-class SearchResultModelHelper : public KGeoMap::ModelHelper
+class SearchResultModelHelper : public GeoIface::ModelHelper
 {
     Q_OBJECT
 
@@ -59,7 +59,7 @@ public:
 
     virtual QAbstractItemModel* model() const;
     virtual QItemSelectionModel* selectionModel() const;
-    virtual bool itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const;
     virtual bool itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const;
     virtual Flags modelFlags() const;
     virtual Flags itemFlags(const QModelIndex& index) const;

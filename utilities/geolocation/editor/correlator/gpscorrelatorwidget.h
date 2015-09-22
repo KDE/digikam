@@ -50,13 +50,13 @@ class GPSCorrelatorWidget : public QWidget
 
 public:
 
-    GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, KGeoMap::TrackManager* const trackManager);
+    GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, GeoIface::TrackManager* const trackManager);
     ~GPSCorrelatorWidget();
 
     void setUIEnabledExternal(const bool state);
     void saveSettingsToGroup(KConfigGroup* const group);
     void readSettingsFromGroup(const KConfigGroup* const group);
-    QList<KGeoMap::GeoCoordinates::List> getTrackCoordinates() const;
+    QList<GeoIface::GeoCoordinates::List> getTrackCoordinates() const;
     bool getShowTracksOnMap() const;
 
 protected:

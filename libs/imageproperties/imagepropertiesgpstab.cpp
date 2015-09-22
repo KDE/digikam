@@ -52,8 +52,8 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // Libkgeomap includes
 
-#include <KGeoMap/MapWidget>
-#include <KGeoMap/ItemMarkerTiler>
+#include "mapwidget.h"
+#include "itemmarkertiler.h"
 
 // Libkdcraw includes
 
@@ -94,27 +94,27 @@ public:
     {
     }
 
-    QLabel*                   altLabel;
-    QLabel*                   latLabel;
-    QLabel*                   lonLabel;
-    QLabel*                   dateLabel;
+    QLabel*                    altLabel;
+    QLabel*                    latLabel;
+    QLabel*                    lonLabel;
+    QLabel*                    dateLabel;
 
-    QToolButton*              detailsBtn;
-    QComboBox*                detailsCombo;
+    QToolButton*               detailsBtn;
+    QComboBox*                 detailsCombo;
 
-    RAdjustableLabel*       altitude;
-    RAdjustableLabel*       latitude;
-    RAdjustableLabel*       longitude;
-    RAdjustableLabel*       date;
+    RAdjustableLabel*          altitude;
+    RAdjustableLabel*          latitude;
+    RAdjustableLabel*          longitude;
+    RAdjustableLabel*          date;
 
-    KGeoMap::MapWidget*   map;
-    KGeoMap::ItemMarkerTiler* itemMarkerTiler;
-    GPSImageInfo::List        gpsInfoList;
+    GeoIface::MapWidget*       map;
+    GeoIface::ItemMarkerTiler* itemMarkerTiler;
+    GPSImageInfo::List         gpsInfoList;
 
-    QStandardItemModel*       itemModel;
-    ImageGPSModelHelper*      gpsModelHelper;
-    GPSImageInfoSorter*       gpsImageInfoSorter;
-    bool                      boundariesShouldBeAdjusted;
+    QStandardItemModel*        itemModel;
+    ImageGPSModelHelper*       gpsModelHelper;
+    GPSImageInfoSorter*        gpsImageInfoSorter;
+    bool                       boundariesShouldBeAdjusted;
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
@@ -131,11 +131,11 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
-    d->map                    = new KGeoMap::MapWidget(mapPanel);
-    d->map->setAvailableMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup);
-    d->map->setVisibleMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup);
-    d->map->setEnabledExtraActions(KGeoMap::ExtraActionSticky);
-    d->map->setVisibleExtraActions(KGeoMap::ExtraActionSticky);
+    d->map                    = new GeoIface::MapWidget(mapPanel);
+    d->map->setAvailableMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup);
+    d->map->setVisibleMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup);
+    d->map->setEnabledExtraActions(GeoIface::ExtraActionSticky);
+    d->map->setVisibleExtraActions(GeoIface::ExtraActionSticky);
     d->gpsImageInfoSorter = new GPSImageInfoSorter(this);
     d->gpsImageInfoSorter->addToMapWidget(d->map);
     vlay2->addWidget(d->map);
@@ -146,7 +146,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
 
     d->itemModel        = new QStandardItemModel(this);
     d->gpsModelHelper   = new ImageGPSModelHelper(d->itemModel, this);
-    d->itemMarkerTiler  = new KGeoMap::ItemMarkerTiler(d->gpsModelHelper, this);
+    d->itemMarkerTiler  = new GeoIface::ItemMarkerTiler(d->gpsModelHelper, this);
     d->map->setGroupedModel(d->itemMarkerTiler);
 
     d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);
@@ -350,7 +350,7 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl& url)
         double alt;
         const bool haveAlt = meta.getGPSAltitude(&alt);
 
-        KGeoMap::GeoCoordinates coordinates(lat, lng);
+        GeoIface::GeoCoordinates coordinates(lat, lng);
 
         if (haveAlt)
         {
@@ -401,7 +401,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
     if (list.count() == 1)
     {
         const GPSImageInfo info = list.first();
-        const KGeoMap::GeoCoordinates& coordinates = info.coordinates;
+        const GeoIface::GeoCoordinates& coordinates = info.coordinates;
 
         if (!coordinates.hasAltitude())
         {

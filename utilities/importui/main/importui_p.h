@@ -115,9 +115,9 @@ public:
         imageViewSelectionAction(0),
         iconViewAction(0),
         camItemPreviewAction(0),
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         mapViewAction(0),
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
         viewCMViewAction(0),
         cameraActions(0),
         advBox(0),
@@ -204,9 +204,9 @@ public:
     KSelectAction*                imageViewSelectionAction;
     QAction*                      iconViewAction;
     QAction*                      camItemPreviewAction;
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     QAction*                      mapViewAction;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
     QAction*                      viewCMViewAction;
 
     QActionGroup*                 cameraActions;

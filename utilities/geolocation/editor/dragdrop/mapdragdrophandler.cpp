@@ -50,7 +50,7 @@ Qt::DropAction MapDragDropHandler::accepts(const QDropEvent* /*e*/)
     return Qt::CopyAction;
 }
 
-bool MapDragDropHandler::dropEvent(const QDropEvent* e, const KGeoMap::GeoCoordinates& dropCoordinates)
+bool MapDragDropHandler::dropEvent(const QDropEvent* e, const GeoIface::GeoCoordinates& dropCoordinates)
 {
     const MapDragData* const mimeData = qobject_cast<const MapDragData*>(e->mimeData());
 

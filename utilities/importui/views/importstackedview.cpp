@@ -57,9 +57,9 @@ public:
         mediaPlayerView     = 0;
 #endif // HAVE_VIDEOPLAYER
         syncingSelection    = false;
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         mapWidgetView       = 0;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
     }
 
     bool                syncingSelection;
@@ -74,9 +74,9 @@ public:
 #ifdef HAVE_VIDEOPLAYER
     MediaPlayerView*    mediaPlayerView; // Reuse of albumgui mediaplayer view.
 #endif // HAVE_VIDEOPLAYER
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     MapWidgetView*      mapWidgetView;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 };
 
 ImportStackedView::ImportStackedView(QWidget* const parent)
@@ -105,14 +105,14 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     // TODO refactor MapWidgetView not to require the models on startup?
     d->mapWidgetView     = new MapWidgetView(d->importIconView->getSelectionModel(),
                                              d->importIconView->importFilterModel(), this,
                                              MapWidgetView::ApplicationImportUI);
     d->mapWidgetView->setObjectName(QLatin1String("import_mapwidgetview"));
     insertWidget(MapWidgetMode,     d->mapWidgetView);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
     
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -247,12 +247,12 @@ ImportPreviewView* ImportStackedView::importPreviewView() const
     return d->importPreviewView;
 }
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 MapWidgetView* ImportStackedView::mapWidgetView() const
 {
     return d->mapWidgetView;
 }
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 #ifdef HAVE_VIDEOPLAYER
 MediaPlayerView* ImportStackedView::mediaPlayerView() const
@@ -361,20 +361,20 @@ void ImportStackedView::setViewMode(const StackedViewMode mode)
         setCurrentIndex(mode);
     }
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapWidgetView->setActive(mode == MapWidgetMode);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     if (mode == PreviewCameraMode)
     {
         d->importIconView->setFocus();
     }
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     else if (mode == MapWidgetMode)
     {
         d->mapWidgetView->setFocus();
     }
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     emit signalViewModeChanged();
 }

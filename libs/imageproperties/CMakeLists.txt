@@ -21,7 +21,7 @@ set(libimageversionssidebar_SRCS
     versionsdelegate.cpp
 )
 
-if(${KF5KGeoMap_FOUND})
+if(${MARBLE_FOUND})
     set(libimageproperties_SRCS
         ${libimageproperties_SRCS}
         imagepropertiesgpstab.cpp

@@ -40,17 +40,17 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/Types>
-#include <KGeoMap/ModelHelper>
-#include <KGeoMap/Tracks>
+#include "geoiface_types.h"
+#include "modelhelper.h"
+#include "tracks.h"
 
 class QAbstractItemModel;
 
-namespace KGeoMap
+namespace GeoIface
 {
     class MapWidget;
 }
-using namespace KGeoMap;
+using namespace GeoIface;
 
 namespace Digikam
 {

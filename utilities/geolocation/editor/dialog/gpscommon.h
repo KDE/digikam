@@ -32,7 +32,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/GeoCoordinates>
+#include "geocoordinates.h"
 
 namespace Digikam
 {
@@ -46,7 +46,7 @@ enum MapLayout
 
 QString getUserAgentName();
 
-void coordinatesToClipboard(const KGeoMap::GeoCoordinates& coordinates, const QUrl& url, const QString& title);
+void coordinatesToClipboard(const GeoIface::GeoCoordinates& coordinates, const QUrl& url, const QString& title);
 
 bool checkSidecarSettings();
 

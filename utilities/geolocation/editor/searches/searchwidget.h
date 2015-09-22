@@ -32,7 +32,7 @@
 
 // libkgeomap includes
 
-#include <KGeoMap/ModelHelper>
+#include "modelhelper.h"
 
 // local includes
 
@@ -41,7 +41,7 @@
 class QEvent;
 class KConfigGroup;
 
-namespace KGeoMap
+namespace GeoIface
 {
     class MapWidget;
 }
@@ -61,11 +61,11 @@ public:
     SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner, GPSImageModel* const kipiImageModel, QItemSelectionModel* const kipiImageSelectionModel, QWidget* parent = 0);
     ~SearchWidget();
 
-    KGeoMap::ModelHelper* getModelHelper();
+    GeoIface::ModelHelper* getModelHelper();
     void saveSettingsToGroup(KConfigGroup* const group);
     void readSettingsFromGroup(const KConfigGroup* const group);
 
-    void setPrimaryMapWidget(KGeoMap::MapWidget* const mapWidget);
+    void setPrimaryMapWidget(GeoIface::MapWidget* const mapWidget);
 
 private Q_SLOTS:
 

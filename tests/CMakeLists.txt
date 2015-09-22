@@ -48,8 +48,8 @@ target_link_libraries(dimagefilteractiontest
                       ${OpenCV_LIBRARIES}
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(dimagefilteractiontest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(dimagefilteractiontest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -80,8 +80,8 @@ target_link_libraries(dimagehistorygraphtest
                       ${OpenCV_LIBRARIES}
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(dimagehistorygraphtest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(dimagehistorygraphtest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -108,8 +108,8 @@ target_link_libraries(dimagehistorytest
                       ${OpenCV_LIBRARIES}
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(dimagehistorytest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(dimagehistorytest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -125,8 +125,8 @@ target_link_libraries(loadpgfdata
                       KF5::KIOCore
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(loadpgfdata KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(loadpgfdata ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -147,8 +147,8 @@ target_link_libraries(loadsavethreadtest
 )
 
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(loadsavethreadtest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(loadsavethreadtest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -164,8 +164,8 @@ target_link_libraries(pgfscaled
                       KF5::KIOCore
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(pgfscaled KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(pgfscaled ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -181,8 +181,8 @@ target_link_libraries(qtpgftest
                       KF5::KIOCore
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(qtpgftest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(qtpgftest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -213,8 +213,8 @@ target_link_libraries(renamecustomizertest
                       ${OpenCV_LIBRARIES}
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(renamecustomizertest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(renamecustomizertest ${MARBLE_LIBRARIES})
 endif()
 #------------------------------------------------------------------------
 
@@ -234,8 +234,8 @@ target_link_libraries(searchtextbartest
                       Qt5::Test
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(searchtextbartest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(searchtextbartest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -255,8 +255,8 @@ target_link_libraries(freerotationtest
                       Qt5::Test
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(freerotationtest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(freerotationtest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -282,8 +282,8 @@ target_link_libraries(timestampupdatetest
                       KF5::KExiv2
                      )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(timestampupdatetest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(timestampupdatetest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -308,8 +308,8 @@ if(GPHOTO2_FOUND)
     target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
 endif()
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(statesavingobjecttest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(statesavingobjecttest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -334,8 +334,8 @@ target_link_libraries(testautocrop
                       ${OpenCV_LIBRARIES}
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(testautocrop KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(testautocrop ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -397,8 +397,8 @@ target_link_libraries(testdimgloader
                       ${OpenCV_LIBRARIES}
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(testdimgloader KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(testdimgloader ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -432,8 +432,8 @@ if(LENSFUN_FOUND)
         target_link_libraries(testlensfuniface ${KVM_LIBRARY})
     endif()
 
-    if(KF5KGeoMap_FOUND)
-        target_link_libraries(testlensfuniface KF5::KGeoMap)
+    if(MARBLE_FOUND)
+        target_link_libraries(testlensfuniface ${MARBLE_LIBRARIES})
     endif()
 
 endif()
@@ -462,8 +462,8 @@ target_link_libraries(testnrestimate
                       ${OpenCV_LIBRARIES}
 )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(testnrestimate KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(testnrestimate ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -501,8 +501,8 @@ if(GPHOTO2_FOUND)
     target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
 endif()
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(cameranamehelpertest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(cameranamehelpertest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -584,8 +584,8 @@ target_link_libraries(advancedrenametest
                        Qt5::Test
  )
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(filesaveoptionsboxtest KF5::KGeoMap)
+if(MARBLE_FOUND)
+    target_link_libraries(filesaveoptionsboxtest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------

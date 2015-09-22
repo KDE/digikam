@@ -120,9 +120,9 @@ public:
         assignTagAction(0),
         imageViewSelectionAction(0),
         imagePreviewAction(0),
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         imageMapViewAction(0),
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
         imageTableViewAction(0),
         imageIconViewAction(0),
         imageLightTableAction(0),
@@ -240,9 +240,9 @@ public:
     // Image Actions
     KSelectAction*                      imageViewSelectionAction;
     QAction*                            imagePreviewAction;
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     QAction*                            imageMapViewAction;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
     QAction*                            imageTableViewAction;
     QAction*                            imageIconViewAction;
     QAction*                            imageLightTableAction;

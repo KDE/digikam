@@ -31,10 +31,10 @@
 
 // libkgeomap includes
 
-#include <KGeoMap/GeoCoordinates>
-#include <KGeoMap/GroupState>
+#include "geocoordinates.h"
+#include "groupstate.h"
 
-namespace KGeoMap
+namespace GeoIface
 {
     class MapWidget;
 }
@@ -51,13 +51,13 @@ public:
 
 public:
 
-    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id, const KGeoMap::GeoCoordinates& p_coordinates,
+    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id, const GeoIface::GeoCoordinates& p_coordinates,
                                                         const int p_rating, const QDateTime& p_creationDate);
 
 public:
 
     qlonglong                   id;
-    KGeoMap::GeoCoordinates     coordinates;
+    GeoIface::GeoCoordinates     coordinates;
     int                         rating;
     QDateTime                   dateTime;
     QUrl                        url;

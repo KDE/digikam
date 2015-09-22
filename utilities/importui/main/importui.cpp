@@ -462,14 +462,14 @@ void ImportUI::setupActions()
     connect(d->camItemPreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapViewAction = new QAction(QIcon::fromTheme(QLatin1String("applications-internet")),
                                    i18nc("@action Switch to map view", "Map"), this);
     d->mapViewAction->setCheckable(true);
     ac->addAction(QLatin1String("importui_map_view"), d->mapViewAction);
     connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->mapViewAction);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     /// @todo Add table view stuff here
 
@@ -2600,9 +2600,9 @@ void ImportUI::slotSwitchedToIconView()
 void ImportUI::slotSwitchedToMapView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
     toogleShowBar();
 }
 

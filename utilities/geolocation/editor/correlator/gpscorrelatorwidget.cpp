@@ -128,7 +128,7 @@ public:
 
     QPushButton*            correlateButton;
 
-    KGeoMap::TrackManager*  trackManager;
+    GeoIface::TrackManager*  trackManager;
     TrackCorrelator*        trackCorrelator;
     TrackListModel*         trackListModel;
     bool                    uiEnabledInternal;
@@ -141,7 +141,7 @@ public:
     GPSUndoCommand*         correlationUndoCommand;
 };
 
-GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, KGeoMap::TrackManager* const trackManager)
+GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, GeoIface::TrackManager* const trackManager)
     : QWidget(parent),
       d(new Private())
 {
@@ -668,18 +668,18 @@ void GPSCorrelatorWidget::slotCorrelationCanceled()
     emit(signalSetUIEnabled(true));
 }
 
-QList<KGeoMap::GeoCoordinates::List> GPSCorrelatorWidget::getTrackCoordinates() const
+QList<GeoIface::GeoCoordinates::List> GPSCorrelatorWidget::getTrackCoordinates() const
 {
-    QList<KGeoMap::GeoCoordinates::List> trackList;
+    QList<GeoIface::GeoCoordinates::List> trackList;
   
     for (int i=0; i<d->trackManager->trackCount(); ++i)
     {
-        const KGeoMap::TrackManager::Track& gpxData = d->trackManager->getTrack(i);
-        KGeoMap::GeoCoordinates::List track;
+        const GeoIface::TrackManager::Track& gpxData = d->trackManager->getTrack(i);
+        GeoIface::GeoCoordinates::List track;
 
         for (int coordIdx = 0; coordIdx < gpxData.points.count(); ++coordIdx)
         {
-            KGeoMap::TrackManager::TrackPoint const& point = gpxData.points.at(coordIdx);
+            GeoIface::TrackManager::TrackPoint const& point = gpxData.points.at(coordIdx);
             track << point.coordinates;
         }
 

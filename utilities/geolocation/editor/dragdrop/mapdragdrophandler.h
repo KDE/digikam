@@ -32,7 +32,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/DragDropHandler>
+#include "dragdrophandler.h"
 
 namespace Digikam
 {
@@ -54,7 +54,7 @@ public:
     QList<QPersistentModelIndex> draggedIndices;
 };
 
-class MapDragDropHandler : public KGeoMap::DragDropHandler
+class MapDragDropHandler : public GeoIface::DragDropHandler
 {
     Q_OBJECT
 
@@ -64,7 +64,7 @@ public:
     virtual ~MapDragDropHandler();
 
     virtual Qt::DropAction accepts(const QDropEvent* e);
-    virtual bool dropEvent(const QDropEvent* e, const KGeoMap::GeoCoordinates& dropCoordinates);
+    virtual bool dropEvent(const QDropEvent* e, const GeoIface::GeoCoordinates& dropCoordinates);
     virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices);
 
 private:

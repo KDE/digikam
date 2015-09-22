@@ -150,8 +150,8 @@ if(KF5KFace_FOUND)
     target_link_libraries(digikamdatabase PRIVATE ${KF5KFace_LIBRARIES})
 endif()
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(digikamdatabase PRIVATE ${KF5KGeoMap_LIBRARIES})
+if(MARBLE_FOUND)
+    target_link_libraries(digikamdatabase PRIVATE ${MARBLE_LIBRARIES})
 endif()
 
 if(${KFILEMETADATA_FOUND})

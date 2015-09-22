@@ -33,14 +33,14 @@
 
 // libkgeomap includes
 
-#include <KGeoMap/GeoCoordinates>
-#include <KGeoMap/GroupState>
+#include "geocoordinates.h"
+#include "groupstate.h"
 
 // Local includes
 
 #include "gpsimageinfo.h"
 
-namespace KGeoMap
+namespace GeoIface
 {
     class MapWidget;
 }
@@ -67,15 +67,15 @@ public:
     explicit GPSImageInfoSorter(QObject* const parent);
     ~GPSImageInfoSorter();
 
-    void addToMapWidget(KGeoMap::MapWidget* const mapWidget);
+    void addToMapWidget(GeoIface::MapWidget* const mapWidget);
     void setSortOptions(const SortOptions sortOptions);
     SortOptions getSortOptions() const;
 
 public:
 
-    static bool fitsBetter(const GPSImageInfo& oldInfo, const KGeoMap::GroupState oldState,
-                           const GPSImageInfo& newInfo, const KGeoMap::GroupState newState,
-                           const KGeoMap::GroupState globalGroupState, const SortOptions sortOptions);
+    static bool fitsBetter(const GPSImageInfo& oldInfo, const GeoIface::GroupState oldState,
+                           const GPSImageInfo& newInfo, const GeoIface::GroupState newState,
+                           const GeoIface::GroupState globalGroupState, const SortOptions sortOptions);
 
 private Q_SLOTS:
 

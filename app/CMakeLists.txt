@@ -38,9 +38,10 @@ set(DIGIKAMCORE_OBJECTS
             utils/digikam_debug.cpp
 )
 
-if(KF5KGeoMap_FOUND)
+if(MARBLE_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
+        $<TARGET_OBJECTS:geoiface_src>
         $<TARGET_OBJECTS:geomapwrapper_src>
         $<TARGET_OBJECTS:geolocationedit_src>
     )
@@ -102,11 +103,10 @@ if(KF5Kipi_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::Kipi)
 endif()
 
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(digikamcore PRIVATE KF5::KGeoMap
+if(MARBLE_FOUND)
+    target_link_libraries(digikamcore PRIVATE ${MARBLE_LIBRARIES}
                                               KF5::Bookmarks
-                                              KF5::ItemModels
-)
+                                              KF5::ItemModels)
 endif()
 
 if(X11_FOUND)
@@ -248,7 +248,7 @@ if(${KF5KFace_FOUND})
        )
 endif()
 
-if(${KF5KGeoMap_FOUND})
+if(${MARBLE_FOUND})
     set(libdigikamgui_SRCS
         ${libdigikamgui_SRCS}
         views/mapwidgetview.cpp
@@ -310,7 +310,7 @@ if(${KF5KFace_FOUND})
     )
 endif()
 
-if(${KF5KGeoMap_FOUND})
+if(${MARBLE_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
             $<TARGET_OBJECTS:geomapwrapper_src>
@@ -366,8 +366,8 @@ if(${KF5Kipi_FOUND})
     target_link_libraries(digikamgui KF5::Kipi)
 endif()
 
-if(${KF5KGeoMap_FOUND})
-     target_link_libraries(digikamgui KF5::KGeoMap)
+if(${MARBLE_FOUND})
+     target_link_libraries(digikamgui ${MARBLE_LIBRARIES})
 endif()
 
 if(APPLE)

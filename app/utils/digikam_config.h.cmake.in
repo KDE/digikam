@@ -42,8 +42,8 @@
 /* Define to 1 if an external Ksane shared library have been found */
 #cmakedefine HAVE_KSANE 1
 
-/* Define to 1 if an external Kgeomap shared library have been found */
-#cmakedefine HAVE_KGEOMAP 1
+/* Define to 1 if an external Marble shared library have been found */
+#cmakedefine HAVE_MARBLE 1
 
 /* Define to 1 if an external Eigen3 shared library have been found */
 #cmakedefine HAVE_EIGEN3 1

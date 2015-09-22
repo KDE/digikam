@@ -45,9 +45,9 @@
 #include "dzoombar.h"
 #include "camitemsortsettings.h"
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
 #include "mapwidgetview.h"
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
 namespace Digikam
 {
@@ -65,9 +65,9 @@ public:
         thumbSizeTimer(0),
         parent(0),
         iconView(0),
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
         mapView(0),
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
         stackedView(0),
         lastViewMode(ImportStackedView::PreviewCameraMode)
         //FIXME: filterWidget(0)
@@ -92,9 +92,9 @@ public:
     ImportUI*                          parent;
 
     ImportIconView*                    iconView;
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     MapWidgetView*                     mapView;
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     ImportStackedView*                 stackedView;
     ImportStackedView::StackedViewMode lastViewMode;
@@ -138,9 +138,9 @@ ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
 
     d->iconView = d->stackedView->importIconView();
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapView  = d->stackedView->mapWidgetView();
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     d->addPageUpDownActions(this, d->stackedView->importPreviewView());
     d->addPageUpDownActions(this, d->stackedView->thumbBar());
@@ -287,9 +287,9 @@ void ImportView::loadViewState()
     thumbbarState = group.readEntry("ThumbbarState", thumbbarState);
     d->dockArea->restoreState(QByteArray::fromBase64(thumbbarState));
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapView->loadState();
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 }
 
 void ImportView::saveViewState()
@@ -309,9 +309,9 @@ void ImportView::saveViewState()
     d->stackedView->thumbBarDock()->close();
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     d->mapView->saveState();
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 }
 
 CamItemInfo ImportView::camItemInfo(const QString& folder, const QString& file) const
@@ -654,13 +654,13 @@ void ImportView::slotImagePreview()
     {
         currentInfo = d->iconView->currentInfo();
     }
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     //TODO: Implement MapWidget
     else if (currentPreviewMode == ImportStackedView::MapWidgetMode)
     {
         currentInfo = d->mapView->currentCamItemInfo();
     }
-#endif // HAVE_KGEOMAP
+#endif // HAVE_MARBLE
 
     slotTogglePreviewMode(currentInfo, false);
 }

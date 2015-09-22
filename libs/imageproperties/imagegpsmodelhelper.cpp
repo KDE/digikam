@@ -44,7 +44,7 @@ public:
 };
 
 ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
-    : KGeoMap::ModelHelper(parent),
+    : GeoIface::ModelHelper(parent),
       d(new Private())
 {
 
@@ -74,7 +74,7 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
     return d->itemSelectionModel;
 }
 
-bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const
+bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const
 {
     const GPSImageInfo currentGPSImageInfo = index.data(RoleGPSImageInfo).value<GPSImageInfo>();
     *coordinates                           = currentGPSImageInfo.coordinates;
@@ -125,10 +125,10 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
         const QModelIndex currentIndex(list.at(i));
         const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
         const bool currentFitsBetter           = GPSImageInfoSorter::fitsBetter(bestGPSImageInfo,
-                                                                                KGeoMap::SelectedNone,
+                                                                                GeoIface::SelectedNone,
                                                                                 currentGPSImageInfo,
-                                                                                KGeoMap::SelectedNone,
-                                                                                KGeoMap::SelectedNone,
+                                                                                GeoIface::SelectedNone,
+                                                                                GeoIface::SelectedNone,
                                                                                 GPSImageInfoSorter::SortOptions(sortKey));
 
         if (currentFitsBetter)

@@ -9,6 +9,6 @@ add_executable(detectblur ${detectblur_SRCS})
 ecm_mark_nongui_executable(detectblur)
 target_link_libraries(detectblur ${OpenCV_LIBRARIES})
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(detectblur ${KF5KGeoMap_LIBRARIES})
+if(${MARBLE_FOUND})
+    target_link_libraries(detectblur ${MARBLE_LIBRARIES})
 endif()

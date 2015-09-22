@@ -1,4 +1,4 @@
-tool parts:
+Editor parts:
 - correctly update the dirty state on undo/redo
 - read dilution of precision data and add warnings
 - add undo/redo buttons
@@ -10,7 +10,7 @@ tool parts:
 - when resizing the widget horizontally, the star moves back and forth
 - add a tab for forward-geocoding
 
-kgeomap parts:
+GeoIface parts:
 - control over clustering grid size (UI)
 - re-cluster only every few pixels of panning
 - the clustering model does not go deep enough - when zooming in on Marble OSM, the positions are quantized

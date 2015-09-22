@@ -58,7 +58,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/Types>
+#include "geoiface_types.h"
 
 // local includes
 
@@ -498,7 +498,7 @@ void RGWidget::slotButtonRGSelected()
 
         RGInfo photoObj;
         photoObj.id           = itemIndex;
-        photoObj.coordinates  = KGeoMap::GeoCoordinates(latitude, longitude);
+        photoObj.coordinates  = GeoIface::GeoCoordinates(latitude, longitude);
 
         photoList << photoObj;
 

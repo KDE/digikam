@@ -103,7 +103,7 @@ Optional:
 
 libkipi           >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
 libkface          >= 5.0.0                      https://projects.kde.org/projects/extragear/libs/libkface         To support faces detection and recognition.
-libkgeomap        >= 5.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap       To support geolocation maps.
+libmarble         >= 0.22.0                     https://projects.kde.org/projects/kde/kdeedu/marble               To support geolocation maps.
 libakonadicontact >= 5.x                        https://projects.kde.org/projects/kde/kdepimlibs                  To support KDE Address Book entries.
 libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/kde/kdelibs/baloo               To support KDE files indexing support.
 libjasper         >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.

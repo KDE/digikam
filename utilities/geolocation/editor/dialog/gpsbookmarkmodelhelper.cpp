@@ -80,7 +80,7 @@ void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(const KBookmarkGro
         else
         {
             bool okay                                 = false;
-            const KGeoMap::GeoCoordinates coordinates = KGeoMap::GeoCoordinates::fromGeoUrl(currentBookmark.url().url(), &okay);
+            const GeoIface::GeoCoordinates coordinates = GeoIface::GeoCoordinates::fromGeoUrl(currentBookmark.url().url(), &okay);
 
             if (okay)
             {
@@ -130,9 +130,9 @@ QItemSelectionModel* GPSBookmarkModelHelper::selectionModel() const
     return 0;
 }
 
-bool GPSBookmarkModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const
+bool GPSBookmarkModelHelper::itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const
 {
-    const KGeoMap::GeoCoordinates itemCoordinates = index.data(CoordinatesRole).value<KGeoMap::GeoCoordinates>();
+    const GeoIface::GeoCoordinates itemCoordinates = index.data(CoordinatesRole).value<GeoIface::GeoCoordinates>();
 
     if (coordinates)
     {
@@ -182,12 +182,12 @@ void GPSBookmarkModelHelper::setVisible(const bool state)
     emit(signalVisibilityChanged());
 }
 
-KGeoMap::ModelHelper::Flags GPSBookmarkModelHelper::modelFlags() const
+GeoIface::ModelHelper::Flags GPSBookmarkModelHelper::modelFlags() const
 {
     return FlagSnaps|(d->visible?FlagVisible:FlagNull);
 }
 
-KGeoMap::ModelHelper::Flags GPSBookmarkModelHelper::itemFlags(const QModelIndex& /*index*/) const
+GeoIface::ModelHelper::Flags GPSBookmarkModelHelper::itemFlags(const QModelIndex& /*index*/) const
 {
     return FlagVisible|FlagSnaps;
 }
@@ -195,7 +195,7 @@ KGeoMap::ModelHelper::Flags GPSBookmarkModelHelper::itemFlags(const QModelIndex&
 void GPSBookmarkModelHelper::snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices)
 {
     GPSUndoCommand* const undoCommand = new GPSUndoCommand();
-    KGeoMap::GeoCoordinates targetCoordinates;
+    GeoIface::GeoCoordinates targetCoordinates;
 
     if (!itemCoordinates(targetIndex, &targetCoordinates))
         return;

@@ -48,7 +48,7 @@
 
 // Libkgeomap includes
 
-#include <KGeoMap/MapWidget>
+#include "mapwidget.h"
 
 // Libkdcraw includes
 
@@ -115,7 +115,7 @@ public:
     }
 
     // Map
-    KGeoMap::MapWidget*      mapWidget;
+    GeoIface::MapWidget*      mapWidget;
     GPSBookmarkOwner*        gpsBookmarkOwner;
     GPSImageModel*           kipiImageModel;
     QItemSelectionModel*     kipiImageSelectionModel;
@@ -315,7 +315,7 @@ void SearchWidget::slotTriggerSearch()
     slotUpdateActionAvailability();
 }
 
-KGeoMap::ModelHelper* SearchWidget::getModelHelper()
+GeoIface::ModelHelper* SearchWidget::getModelHelper()
 {
     return d->searchResultModelHelper;
 }
@@ -437,7 +437,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
 {
     const QModelIndex currentIndex                        = d->searchResultsSelectionModel->currentIndex();
     const SearchResultModel::SearchResultItem currentItem = d->searchResultsModel->resultItem(currentIndex);
-    const KGeoMap::GeoCoordinates& targetCoordinates      = currentItem.result.coordinates;
+    const GeoIface::GeoCoordinates& targetCoordinates      = currentItem.result.coordinates;
     const QModelIndexList selectedImageIndices            = d->kipiImageSelectionModel->selectedRows();
 
     if (selectedImageIndices.isEmpty())
@@ -470,7 +470,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
     emit(signalUndoCommand(undoCommand));
 }
 
-void SearchWidget::setPrimaryMapWidget(KGeoMap::MapWidget* const mapWidget)
+void SearchWidget::setPrimaryMapWidget(GeoIface::MapWidget* const mapWidget)
 {
     d->mapWidget = mapWidget;
 }

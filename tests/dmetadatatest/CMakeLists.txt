@@ -14,8 +14,8 @@ target_link_libraries(tagsReadWriteTest
                         KF5::KExiv2
                      )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(tagsReadWriteTest ${KF5KGeoMap_LIBRARIES})
+if(${MARBLE_FOUND})
+    target_link_libraries(tagsReadWriteTest ${MARBLE_LIBRARIES})
 endif() 
 
 set(testRating_SRCS ratingreadwritetest.cpp)
@@ -28,8 +28,8 @@ target_link_libraries(ratingReadWriteTest
                         KF5::KExiv2
                      )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(ratingReadWriteTest ${KF5KGeoMap_LIBRARIES})
+if(${MARBLE_FOUND})
+    target_link_libraries(ratingReadWriteTest ${MARBLE_LIBRARIES})
 endif() 
 
 set(testComment_SRCS commentreadwritetest.cpp)
@@ -42,6 +42,6 @@ target_link_libraries(commentReadWriteTest
                         KF5::KExiv2
                      )
 
-if(${KF5KGeoMap_FOUND})
-    target_link_libraries(commentReadWriteTest ${KF5KGeoMap_LIBRARIES})
+if(${MARBLE_FOUND})
+    target_link_libraries(commentReadWriteTest ${MARBLE_LIBRARIES})
 endif() 

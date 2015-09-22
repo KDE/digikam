@@ -1379,7 +1379,7 @@ void ShowFoto::slotImportedImagefromScanner(const QUrl& url)
 
 void ShowFoto::slotEditGeolocation()
 {
-#ifdef HAVE_KGEOMAP
+#ifdef HAVE_MARBLE
     if ( d->thumbBar->currentInfo().isNull() )
         return;
     

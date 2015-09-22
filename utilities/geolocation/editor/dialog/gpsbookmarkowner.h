@@ -57,7 +57,7 @@ public:
     QMenu* getMenu() const;
 
     void changeAddBookmark(const bool state);
-    void setPositionAndTitle(const KGeoMap::GeoCoordinates& coordinates, const QString& title);
+    void setPositionAndTitle(const GeoIface::GeoCoordinates& coordinates, const QString& title);
 
     KBookmarkManager*       bookmarkManager()     const;
     GPSBookmarkModelHelper* bookmarkModelHelper() const;

@@ -61,7 +61,6 @@ set(KEXIV2_MIN_VERSION  "5.0.0")
 set(KDCRAW_MIN_VERSION  "5.0.0")
 set(KFACE_MIN_VERSION   "5.0.0")
 set(KSANE_MIN_VERSION   "5.0.0")
-set(KGEOMAP_MIN_VERSION "5.0.0")
 set(PGF_MIN_VERSION     "6.12.24")
 set(LENSFUN_MIN_VERSION "0.2.6.0")
 
@@ -150,7 +149,7 @@ find_package(KF5 REQUIRED COMPONENTS
              IconThemes
              I18n
 
-             # For libkgeomap
+             # For geomapiface
              OPTIONAL_COMPONENTS
              ItemModels
              Bookmarks
@@ -204,7 +203,6 @@ endif()
 
 DETECT_LIBKIPI(${KIPI_MIN_VERSION})
 DETECT_LIBKFACE(${KFACE_MIN_VERSION})
-DETECT_LIBKGEOMAP(${KGEOMAP_MIN_VERSION})
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})
 
 if(KF5Sane_FOUND)
@@ -213,6 +211,7 @@ if(KF5Sane_FOUND)
                 )
 endif()
 
+find_package(Marble)
 find_package(PkgConfig)
 find_package(Jasper)
 find_package(Eigen3)
@@ -372,7 +371,7 @@ MACRO_BOOL_TO_01(JASPER_FOUND             HAVE_JASPER)
 MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
 MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
 MACRO_BOOL_TO_01(KF5KFace_FOUND           HAVE_KFACE)
-MACRO_BOOL_TO_01(KF5KGeoMap_FOUND         HAVE_KGEOMAP)
+MACRO_BOOL_TO_01(MARBLE_FOUND             HAVE_MARBLE)
 MACRO_BOOL_TO_01(KFILEMETADATA_FOUND      HAVE_KFILEMETADATA)
 MACRO_BOOL_TO_01(USE_DNGCOVERTER          HAVE_DNGCONVERTER)
 
@@ -430,7 +429,7 @@ PRINT_LIBRARY_STATUS("native threads support" ""                                
 
 PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi"  "(version >= ${KIPI_MIN_VERSION})"    "digiKam will be compiled without Kipi-plugins support."                      KF5Kipi_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkface"          "https://projects.kde.org/projects/extragear/libs/libkface"       "(version >= ${KFACE_MIN_VERSION})"   "digiKam will be compiled without faces detection and recognition support."   KF5KFace_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkgeomap"        "https://projects.kde.org/projects/extragear/libs/libkgeomap"     "(version >= ${KGEOMAP_MIN_VERSION})" "digiKam will be compiled without geolocation maps support."                  KF5KGeoMap_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libmarble"         "https://projects.kde.org/projects/kde/kdeedu/marble"             "(version >= 0.22.0)"                 "digiKam will be compiled without geolocation maps support."                  MARBLE_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libksane"          "https://projects.kde.org/projects/kde/kdegraphics/libs/libksane" "(version >= ${KSANE_MIN_VERSION})"   "digiKam will be compiled without libksane support."                          KF5Sane_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= 5.0.0)"                  "digiKam will be compiled without KDE file metadata support."                 KFILEMETADATA_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= 5.0.0)"                  "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
@@ -561,10 +560,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
            )
     endif()
 
-    if(KF5KGeoMap_FOUND)
+    if(MARBLE_FOUND)
         set(KF5_INCLUDES_ALL
             ${KF5_INCLUDES_ALL}
-            "$<TARGET_PROPERTY:KF5::KGeoMap,INTERFACE_INCLUDE_DIRECTORIES>"
+            ${MARBLE_INCLUDE_DIR}
             "$<TARGET_PROPERTY:KF5::Bookmarks,INTERFACE_INCLUDE_DIRECTORIES>"
             "$<TARGET_PROPERTY:KF5::ItemModels,INTERFACE_INCLUDE_DIRECTORIES>"
             "$<TARGET_PROPERTY:KF5::GuiAddons,INTERFACE_INCLUDE_DIRECTORIES>"            

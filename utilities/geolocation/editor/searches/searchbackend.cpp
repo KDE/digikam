@@ -198,7 +198,7 @@ void SearchBackend::slotResult(KJob* kJob)
             }
 
             SearchResult result;
-            result.coordinates = KGeoMap::GeoCoordinates(lat, lon);
+            result.coordinates = GeoIface::GeoCoordinates(lat, lon);
             result.name        = displayName;
 
             if (!placeId.isEmpty())
@@ -287,7 +287,7 @@ void SearchBackend::slotResult(KJob* kJob)
             }
 
             SearchResult result;
-            result.coordinates = KGeoMap::GeoCoordinates(lat, lon);
+            result.coordinates = GeoIface::GeoCoordinates(lat, lon);
             result.name        = displayName;
 
             if (!geoNameId.isEmpty())
