@@ -26,8 +26,8 @@
  *
  * ============================================================ */
 
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef GEOIFACE_COMMON_H
+#define GEOIFACE_COMMON_H
 
 // Qt includes
 
@@ -96,6 +96,8 @@ public:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIfaceInternalWidgetInfo::InternalWidgetStates)
 
+// ----------------------------------------------------------------------------------------------
+
 /**
  * @brief Global object for GeoIface to hold items common to all GeoIface Widget instances
  */
@@ -135,6 +137,8 @@ private:
 
     friend class GeoIfaceGlobalObjectCreator;
 };
+
+// ----------------------------------------------------------------------------------------------
 
 class GeoIfaceCluster
 {
@@ -180,10 +184,14 @@ public:
     QPoint              pixmapOffset;
 };
 
+// ----------------------------------------------------------------------------------------------
+
 /// @todo Move these somewhere else
 const int GeoIfaceMinMarkerGroupingRadius    = 1;
 const int GeoIfaceMinThumbnailGroupingRadius = 15;
 const int GeoIfaceMinThumbnailSize           = GeoIfaceMinThumbnailGroupingRadius * 2;
+
+// ----------------------------------------------------------------------------------------------
 
 /**
  * @brief Helper function, returns the square of the distance between two points
@@ -197,6 +205,8 @@ inline int QPointSquareDistance(const QPoint& a, const QPoint& b)
 {
     return (a.x() - b.x()) * (a.x() - b.x()) + (a.y() - b.y()) * (a.y() - b.y());
 }
+
+// ----------------------------------------------------------------------------------------------
 
 class GeoIfaceSharedData : public QSharedData
 {
@@ -269,6 +279,8 @@ public:
     //@}
 };
 
+// ----------------------------------------------------------------------------------------------
+
 // helper functions:
 
 bool GeoIfaceHelperParseLatLonString(const QString& latLonString, GeoCoordinates* const coordinates);
@@ -282,4 +294,4 @@ void GeoIface_assert(const char* const condition, const char* const filename, co
 
 #define GEOIFACE_ASSERT(cond) ((!(cond)) ? GeoIface::GeoIface_assert(#cond,__FILE__,__LINE__) : qt_noop())
 
-#endif // COMMON_H
+#endif // GEOIFACE_COMMON_H

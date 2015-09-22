@@ -122,16 +122,19 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Sql
              Xml
              PrintSupport
-             Test
              WebKitWidgets
              DBus
 )
 
+if(BUILD_TESTING)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+                 Test)
+endif()
+
 if(ENABLE_MEDIAPLAYER)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
                  Multimedia
-                 MultimediaWidgets
-    )
+                 MultimediaWidgets)
     set(HAVE_VIDEOPLAYER TRUE)
 else()
     set(HAVE_VIDEOPLAYER FALSE)

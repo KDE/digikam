@@ -75,7 +75,7 @@
 #include "mytreewidget.h"
 #include "myimageitem.h"
 
-using namespace KGeoMap;
+using namespace GeoIface;
 
 MarkerModelHelper::MarkerModelHelper(QAbstractItemModel* const itemModel, QItemSelectionModel* const itemSelectionModel)
     : ModelHelper(itemModel),
@@ -267,8 +267,8 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     d->mapWidget->setGroupedModel(mm);
     d->mapWidget->setActive(true);
     d->mapWidget->setDragDropHandler(new DemoDragDropHandler(d->displayMarkersModel, d->mapWidget));
-    d->mapWidget->setVisibleMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup|KGeoMap::MouseModeSelectThumbnail);
-    d->mapWidget->setAvailableMouseModes(KGeoMap::MouseModePan|KGeoMap::MouseModeZoomIntoGroup|KGeoMap::MouseModeSelectThumbnail);
+    d->mapWidget->setVisibleMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
+    d->mapWidget->setAvailableMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
 //     d->mapWidget->setTrackModel(d->trackModelHelper);
 
     connect(d->markerModelHelper, SIGNAL(signalMarkersMoved(QList<QPersistentModelIndex>)),
@@ -561,7 +561,7 @@ void MainWindow::slotAltitudeRequestsReady(const QList<int>& readyRequests)
 
     for (int i = 0; i < readyRequests.count(); ++i)
     {
-        const KGeoMap::LookupAltitude::Request& myLookup = myAltitudeLookup->getRequest(readyRequests.at(i));
+        const GeoIface::LookupAltitude::Request& myLookup = myAltitudeLookup->getRequest(readyRequests.at(i));
         const QPersistentModelIndex markerIndex          = myLookup.data.value<QPersistentModelIndex>();
 
         if (!markerIndex.isValid())
@@ -610,7 +610,7 @@ void MainWindow::createMenus()
             this, SLOT(slotAddImages()));
 }
 
-KGeoMap::ModelHelper::Flags MarkerModelHelper::modelFlags() const
+GeoIface::ModelHelper::Flags MarkerModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

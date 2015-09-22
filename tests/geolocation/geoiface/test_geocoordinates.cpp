@@ -27,7 +27,7 @@
 
 #include "geocoordinates.h"
 
-using namespace KGeoMap;
+using namespace GeoIface;
 
 void TestGeoCoordinates::testNoOp()
 {
@@ -49,7 +49,7 @@ void TestGeoCoordinates::testGeoCoordinates()
 }
 
 /**
- * KGeoMap::GeoCoordinates are declared as Q_MOVABLE_TYPE, here we test whether the class still
+ * GeoIface::GeoCoordinates are declared as Q_MOVABLE_TYPE, here we test whether the class still
  * works with Qt's container classes.
  */
 void TestGeoCoordinates::testMovable()

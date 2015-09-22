@@ -27,9 +27,9 @@
 
 #include "lookupaltitudegeonames.h"
 #include "lookupfactory.h"
-#include "kgeomap_common.h"
+#include "geoiface_common.h"
 
-using namespace KGeoMap;
+using namespace GeoIface;
 
 void TestLookupAltitudeGeonames::testNoOp()
 {

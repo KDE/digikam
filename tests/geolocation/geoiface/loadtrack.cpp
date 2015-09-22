@@ -33,10 +33,10 @@
 
 // local includes
 
-#include "../src/tracks.h"
-#include "../src/trackreader.h"
+#include "../../../utilities/geolocation/geoiface/tracks.h"
+#include "../../../utilities/geolocation/geoiface/trackreader.h"
 
-using namespace KGeoMap;
+using namespace GeoIface;
 
 namespace
 {
@@ -86,5 +86,6 @@ int main(int argc, char* argv[])
     }
 
     qerr << "Loaded successfully." << endl;
+
     return 0;
 }

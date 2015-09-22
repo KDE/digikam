@@ -22,14 +22,14 @@
  * ============================================================ */
 
 #include "test_itemmarkertiler.h"
-#include "kgeomap_common.h"
+#include "geoiface_common.h"
 
 // Qt includes
 
 #include <QStandardItemModel>
 #include <QDebug>
 
-using namespace KGeoMap;
+using namespace GeoIface;
 
 const int CoordinatesRole = Qt::UserRole + 0;
 
@@ -200,7 +200,7 @@ void TestItemMarkerTiler::testMoveMarkers1()
     itemModel->appendRow(item1);
     const QModelIndex markerIndex1 = itemModel->indexFromItem(item1);
 
-    KGEOMAP_ASSERT(markerIndex1.isValid());
+    GEOIFACE_ASSERT(markerIndex1.isValid());
 
     for (int l = 1; l <= fillLevel; ++l)
     {
@@ -661,7 +661,7 @@ void TestItemMarkerTiler::benchmarkIteratorWholeWorld()
         {
             for (qreal y = -50; y < 50; y+=1.0)
             {
-                itemModel->appendRow(MakeItemAt(KGeoMap::GeoCoordinates(x,y)));
+                itemModel->appendRow(MakeItemAt(GeoIface::GeoCoordinates(x,y)));
             }
         }
 

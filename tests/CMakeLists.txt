@@ -146,7 +146,6 @@ target_link_libraries(loadsavethreadtest
                       KF5::KDcraw
 )
 
-
 if(MARBLE_FOUND)
     target_link_libraries(loadsavethreadtest ${MARBLE_LIBRARIES})
 endif()

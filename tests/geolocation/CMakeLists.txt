@@ -4,5 +4,5 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-ADD_SUBDIRECTORY(editor)
-#ADD_SUBDIRECTORY(geoiface)
+add_subdirectory(editor)
+add_subdirectory(geoiface)

@@ -33,10 +33,10 @@
 // local includes
 
 #include "test_tracks.h"
-#include "../src/tracks.h"
-#include "../src/trackreader.h"
+#include "../../../utilities/geolocation/geoiface/tracks.h"
+#include "../../../utilities/geolocation/geoiface/trackreader.h"
 
-using namespace KGeoMap;
+using namespace GeoIface;
 
 QTEST_MAIN(TestTracks)
 
