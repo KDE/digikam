@@ -30,7 +30,7 @@
 
 // local includes
 
-#include "gpssynckgeomapmodelhelper.h"
+#include "gpssyncgeoifacemodelhelper.h"
 
 namespace Digikam
 {

@@ -28,7 +28,7 @@
  *
  * ============================================================ */
 
-#include "gpssynckgeomapmodelhelper.h"
+#include "gpssyncgeoifacemodelhelper.h"
 
 // Qt includes
 

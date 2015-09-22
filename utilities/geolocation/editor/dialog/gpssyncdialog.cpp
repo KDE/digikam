@@ -95,7 +95,7 @@
 #include "searchwidget.h"
 #include "backend-rg.h"
 #include "gpsimagedetails.h"
-#include "gpssynckgeomapmodelhelper.h"
+#include "gpssyncgeoifacemodelhelper.h"
 
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
