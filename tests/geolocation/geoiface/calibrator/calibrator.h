@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-09-18
- * @brief  A tool to calibrate the tiling levels used in libkgeomap
+ * @brief  A tool to calibrate the tiling levels used in GeoIface
  *
  * @author Copyright (C) 2009-2010 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>

@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-09-18
- * @brief  A tool to calibrate the tiling levels used in libkgeomap
+ * @brief  A tool to calibrate the tiling levels used in GeoIface
  *
  * @author Copyright (C) 2009-2010,2014 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
@@ -412,15 +412,14 @@ void Calibrator::slotActivateMapActionTriggered(bool state)
 int main(int argc, char* argv[])
 {
     KAboutData aboutData(QString::fromLatin1("calibrator-kgeomap"),
-                         i18n("KGeoMap calibration tool"),
+                         i18n("GeoIface calibration tool"),
                          QString::fromLatin1("kgeomap_version")); // TODO fix version
-    aboutData.setShortDescription(i18n("Used to calibrate the KGeoMap library tiling level"));
+    aboutData.setShortDescription(i18n("Used to calibrate the GeoIface tiling level"));
     aboutData.setLicense(KAboutLicense::GPL);
     aboutData.setCopyrightStatement(i18n("(c) 2010 Michael G. Hansen"));
     aboutData.setHomepage(QString::fromLatin1("http://www.digikam.org/sharedlibs"));
 
     aboutData.addAuthor(i18n("Michael G. Hansen"),
-                        i18n("KGeoMap library"),
                         QString::fromLatin1("mike@mghansen.de"),
                         QString::fromLatin1("http://www.mghansen.de"));
 

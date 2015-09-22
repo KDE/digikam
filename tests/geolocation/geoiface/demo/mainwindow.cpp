@@ -244,9 +244,9 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     ItemMarkerTiler* const mm = new ItemMarkerTiler(d->markerModelHelper, this);
 
     resize(512, 512);
-    setWindowTitle(i18n("LibKGeoMap demo"));
+    setWindowTitle(i18n("GeoIface demo"));
     setWindowIcon(QIcon::fromTheme(QString::fromLatin1("applications-internet")));
-    setObjectName(QLatin1String("Demo-KGeoMap" ));
+    setObjectName(QLatin1String("Demo-GeoIface" ));
 
     d->cmdLineArgs = cmdLineArgs;
 

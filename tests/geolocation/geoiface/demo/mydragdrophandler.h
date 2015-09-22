@@ -30,7 +30,7 @@
 #include <QMimeData>
 #include <QTreeWidgetItem>
 
-// libkgeomap includes
+// geoiface includes
 
 #include "dragdrophandler.h"
 

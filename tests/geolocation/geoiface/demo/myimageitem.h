@@ -30,7 +30,7 @@
 #include <QPersistentModelIndex>
 #include <QUrl>
 
-// libkgeomap includes
+// geoiface includes
 
 #include "geoiface_types.h"
 #include "geocoordinates.h"
