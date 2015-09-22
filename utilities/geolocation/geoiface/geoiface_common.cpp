@@ -47,7 +47,7 @@ public:
     GeoIfaceGlobalObject object;
 };
 
-Q_GLOBAL_STATIC(GeoIfaceGlobalObjectCreator, kgeomapGlobalObjectCreator)
+Q_GLOBAL_STATIC(GeoIfaceGlobalObjectCreator, geoifaceGlobalObjectCreator)
 
 class GeoIfaceGlobalObject::Private
 {
@@ -106,7 +106,7 @@ GeoIfaceGlobalObject::~GeoIfaceGlobalObject()
 
 GeoIfaceGlobalObject* GeoIfaceGlobalObject::instance()
 {
-    return &(kgeomapGlobalObjectCreator->object);
+    return &(geoifaceGlobalObjectCreator->object);
 }
 
 QPixmap GeoIfaceGlobalObject::getMarkerPixmap(const QString pixmapId)

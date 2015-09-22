@@ -130,8 +130,8 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     d->mapWidget                  = new GeoIface::MapWidget(this);
     d->mapWidget->setAvailableMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
     d->mapWidget->setVisibleMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
-    GeoIface::ItemMarkerTiler* const kgeomapMarkerModel = new GeoIface::ItemMarkerTiler(d->mapViewModelHelper, this);
-    d->mapWidget->setGroupedModel(kgeomapMarkerModel);
+    GeoIface::ItemMarkerTiler* const geoifaceMarkerModel = new GeoIface::ItemMarkerTiler(d->mapViewModelHelper, this);
+    d->mapWidget->setGroupedModel(geoifaceMarkerModel);
     d->mapWidget->setBackend(QLatin1String("marble"));
 
     d->gpsImageInfoSorter         = new GPSImageInfoSorter(this);
@@ -638,12 +638,12 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
  */
 ImageInfo MapWidgetView::currentImageInfo() const
 {
-    /// @todo Have kgeomapwidget honor the 'current index'
+    /// @todo Have geoifacewidget honor the 'current index'
     QModelIndex currentIndex = d->selectionModel->currentIndex();
 
     if (!currentIndex.isValid())
     {
-        /// @todo This is temporary until kgeomapwidget marks a 'current index'
+        /// @todo This is temporary until geoifacewidget marks a 'current index'
         if (!d->selectionModel->hasSelection())
         {
             return ImageInfo();
@@ -660,12 +660,12 @@ ImageInfo MapWidgetView::currentImageInfo() const
  */
 CamItemInfo MapWidgetView::currentCamItemInfo() const
 {
-    /// @todo Have kgeomapwidget honor the 'current index'
+    /// @todo Have geoifacewidget honor the 'current index'
     QModelIndex currentIndex = d->selectionModel->currentIndex();
 
     if (!currentIndex.isValid())
     {
-        /// @todo This is temporary until kgeomapwidget marks a 'current index'
+        /// @todo This is temporary until geoifacewidget marks a 'current index'
         if (!d->selectionModel->hasSelection())
         {
             return CamItemInfo();

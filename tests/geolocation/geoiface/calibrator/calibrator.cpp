@@ -53,6 +53,7 @@
 #include "itemmarkertiler.h"
 #include "mapwidget.h"
 #include "geocoordinates.h"
+#include "digikam_version.h"
 
 const int CoordinatesRole = Qt::UserRole + 1;
 
@@ -411,13 +412,13 @@ void Calibrator::slotActivateMapActionTriggered(bool state)
 
 int main(int argc, char* argv[])
 {
-    KAboutData aboutData(QString::fromLatin1("calibrator-kgeomap"),
+    KAboutData aboutData(QString::fromLatin1("calibrator-geoiface"),
                          i18n("GeoIface calibration tool"),
-                         QString::fromLatin1("kgeomap_version")); // TODO fix version
+                         Digikam::digiKamVersion()); // TODO fix version
     aboutData.setShortDescription(i18n("Used to calibrate the GeoIface tiling level"));
     aboutData.setLicense(KAboutLicense::GPL);
     aboutData.setCopyrightStatement(i18n("(c) 2010 Michael G. Hansen"));
-    aboutData.setHomepage(QString::fromLatin1("http://www.digikam.org/sharedlibs"));
+    aboutData.setHomepage(QString::fromLatin1("http://www.digikam.org"));
 
     aboutData.addAuthor(i18n("Michael G. Hansen"),
                         QString::fromLatin1("mike@mghansen.de"),

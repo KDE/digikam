@@ -200,7 +200,7 @@ public:
         mapWidget2               = 0;
         mapDragDropHandler       = 0;
         mapModelHelper           = 0;
-        kgeomapMarkerModel       = 0;
+        geoifaceMarkerModel      = 0;
         sortActionOldestFirst    = 0;
         sortActionYoungestFirst  = 0;
         sortMenu                 = 0;
@@ -215,7 +215,7 @@ public:
     GPSBookmarkOwner*                        bookmarkOwner;
     QAction*                                 actionBookmarkVisibility;
     GPSImageListContextMenu*                 listViewContextMenu;
-    GeoIface::TrackManager*                   trackManager;
+    GeoIface::TrackManager*                  trackManager;
 
     // Loading and saving
     QFuture<QPair<QUrl,QString> >            fileIOFuture;
@@ -255,8 +255,8 @@ public:
 
     // map: helpers
     MapDragDropHandler*                      mapDragDropHandler;
-    GPSSyncGeoIfaceModelHelper*               mapModelHelper;
-    ItemMarkerTiler*                         kgeomapMarkerModel;
+    GPSSyncGeoIfaceModelHelper*              mapModelHelper;
+    ItemMarkerTiler*                         geoifaceMarkerModel;
 
     // map: actions
     QAction*                                 sortActionOldestFirst;
@@ -291,7 +291,7 @@ GPSSyncDialog::GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* 
     d->mapModelHelper->addUngroupedModelHelper(d->bookmarkOwner->bookmarkModelHelper());
     d->mapModelHelper->addUngroupedModelHelper(d->searchWidget->getModelHelper());
     d->mapDragDropHandler = new MapDragDropHandler(d->imageModel, d->mapModelHelper);
-    d->kgeomapMarkerModel = new ItemMarkerTiler(d->mapModelHelper, this);
+    d->geoifaceMarkerModel = new ItemMarkerTiler(d->mapModelHelper, this);
 
     d->actionBookmarkVisibility = new QAction(this);
     d->actionBookmarkVisibility->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
@@ -1007,7 +1007,7 @@ MapWidget* GPSSyncDialog::makeMapWidget(QWidget** const pvbox)
     mapWidget->setAvailableMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
     mapWidget->setVisibleMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
     mapWidget->setMouseMode(MouseModeSelectThumbnail);
-    mapWidget->setGroupedModel(d->kgeomapMarkerModel);
+    mapWidget->setGroupedModel(d->geoifaceMarkerModel);
     mapWidget->setDragDropHandler(d->mapDragDropHandler);
     mapWidget->addUngroupedModel(d->bookmarkOwner->bookmarkModelHelper());
     mapWidget->addUngroupedModel(d->searchWidget->getModelHelper());
