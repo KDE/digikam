@@ -11,6 +11,7 @@ General            : Welcome Page view re-writed to support selected best backgr
 General            : Replacing annoying KIOSlave listing and scanning methods with new threads based implementation.
 General            : Isolating KIO calls in KIOWrapper to be able to create a pure Qt digiKam in the future.
 General            : Add embedded trash support for each collection instead desktop trash.
+General            : libkgeomap dependency remove. libkgeomap source code backport to core implementation.
 
 Batch Queue Manager: New BQM tool to convert RAW to DNG.
 
