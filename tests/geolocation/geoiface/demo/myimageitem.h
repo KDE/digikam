@@ -32,8 +32,8 @@
 
 // libkgeomap includes
 
-#include "src/types.h"
-#include "src/geocoordinates.h"
+#include "geoiface_types.h"
+#include "geocoordinates.h"
 
 const int RoleMyData      = Qt::UserRole+0;
 const int RoleCoordinates = Qt::UserRole+1;
@@ -42,7 +42,7 @@ class MyImageItem : public QTreeWidgetItem
 {
 public:
 
-    MyImageItem(const QUrl& url, const KGeoMap::GeoCoordinates& itemCoordinates);
+    MyImageItem(const QUrl& url, const GeoIface::GeoCoordinates& itemCoordinates);
     virtual ~MyImageItem();
 
     virtual QVariant data(int column, int role) const;
@@ -50,7 +50,7 @@ public:
 
 private:
 
-    KGeoMap::GeoCoordinates coordinates;
+    GeoIface::GeoCoordinates coordinates;
     QUrl                    imageUrl;
 };
 

@@ -4,7 +4,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-03-18
- * @brief  Drag-and-drop handler for KGeoMap used in the demo
+ * @brief  Drag-and-drop handler for GeoIface:: used in the demo
  *
  * @author Copyright (C) 2010 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DRAGDROPHANDLER_H
-#define DRAGDROPHANDLER_H
+#ifndef MYDRAGDROPHANDLER_H
+#define MYDRAGDROPHANDLER_H
 
 // Qt includes
 
@@ -32,7 +32,7 @@
 
 // libkgeomap includes
 
-#include "src/dragdrophandler.h"
+#include "dragdrophandler.h"
 
 class MyDragData : public QMimeData
 {
@@ -49,17 +49,17 @@ public:
     QList<QPersistentModelIndex> draggedIndices;
 };
 
-class DemoDragDropHandler : public KGeoMap::DragDropHandler
+class MyDragDropHandler : public GeoIface::DragDropHandler
 {
     Q_OBJECT
 
 public:
 
-    explicit DemoDragDropHandler(QAbstractItemModel* const pModel, QObject* const parent = 0);
-    virtual ~DemoDragDropHandler();
+    explicit MyDragDropHandler(QAbstractItemModel* const pModel, QObject* const parent = 0);
+    virtual ~MyDragDropHandler();
 
     virtual Qt::DropAction accepts(const QDropEvent* e);
-    virtual bool           dropEvent(const QDropEvent* e, const KGeoMap::GeoCoordinates& dropCoordinates);
+    virtual bool           dropEvent(const QDropEvent* e, const GeoIface::GeoCoordinates& dropCoordinates);
     virtual QMimeData*     createMimeData(const QList<QPersistentModelIndex>& modelIndices);
 
 private:
@@ -67,4 +67,4 @@ private:
     QAbstractItemModel* const model;
 };
 
-#endif /* DRAGDROPHANDLER_H */
+#endif /* MYDRAGDROPHANDLER_H */

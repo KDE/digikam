@@ -33,26 +33,22 @@
 #include <kaboutdata.h>
 #include <klocalizedstring.h>
 
-// libkgeomap includes
-
-#include "libkgeomap_version.h"
-
 // local includes
 
 #include "mainwindow.h"
+#include "digikam_version.h"
 
 int main(int argc, char* argv[])
 {
-    KAboutData aboutData(QString::fromLatin1("demo-kgeomap"),
-                         i18n("KGeoMap demo application"),
-                         QString::fromLatin1(KGEOMAP_VERSION_STRING));
+    KAboutData aboutData(QString::fromLatin1("demo-geoiface"),
+                         i18n("GeoIface demo application"),
+                         Digikam::digiKamVersion());
     aboutData.setShortDescription(i18n("Presents the World Map Widget Interface"));
     aboutData.setLicense(KAboutLicense::GPL);
     aboutData.setCopyrightStatement(i18n("(c) 2009-2010 Michael G. Hansen"));
-    aboutData.setHomepage(QString::fromLatin1("http://www.digikam.org/sharedlibs"));
+    aboutData.setHomepage(QString::fromLatin1("http://www.digikam.org"));
 
     aboutData.addAuthor(i18n("Michael G. Hansen"),
-                        i18n("KGeoMap library"),
                         QString::fromLatin1("mike@mghansen.de"),
                         QString::fromLatin1("http://www.mghansen.de"));
 

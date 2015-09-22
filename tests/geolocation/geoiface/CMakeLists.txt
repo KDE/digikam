@@ -5,16 +5,12 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 add_subdirectory(calibrator)
-# add_subdirectory(demo)
+add_subdirectory(demo)
 
 # -- test the primitive datatypes and helper functions -----------------------------------------
 
 set(test_primitives_sources
-    test_primitives.cpp
-    ../../../utilities/geolocation/geoiface/groupstatecomputer.cpp
-    ../../../utilities/geolocation/geoiface/geoiface_common.cpp
-    ../../../utilities/geolocation/geoiface/geoiface_debug.cpp
-    ../../../utilities/geolocation/geoiface/backends/mapbackend.cpp)
+    test_primitives.cpp)
 
 add_executable(geoiface_test_primitives ${test_primitives_sources})
 add_test(geoiface_test_primitives geoiface_test_primitives)
@@ -71,10 +67,7 @@ target_link_libraries(geoiface_test_tileindex
 if(NOT WIN32)
 
     set(test_itemmarkertiler_sources
-        test_itemmarkertiler.cpp
-        ../../../utilities/geolocation/geoiface/geoiface_common.cpp
-        ../../../utilities/geolocation/geoiface/geoiface_debug.cpp
-    )
+        test_itemmarkertiler.cpp)
     
     add_executable(geoiface_test_itemmarkertiler ${test_itemmarkertiler_sources})
     add_test(geoiface_test_itemmarkertiler geoiface_test_itemmarkertiler)

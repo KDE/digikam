@@ -31,15 +31,15 @@
 #include <QItemSelection>
 #include <QMainWindow>
 
-// libkgeomap includes
+// geoiface includes
 
-#include "types.h"
+#include "geoiface_types.h"
 #include "modelhelper.h"
 #include "tracks.h"
 
 class QCommandLineParser;
 
-class MarkerModelHelper : public KGeoMap::ModelHelper
+class MarkerModelHelper : public GeoIface::ModelHelper
 {
     Q_OBJECT
 
@@ -51,8 +51,8 @@ public:
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;
     virtual Flags                modelFlags()     const;
-    virtual bool itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const;
-    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices, const KGeoMap::GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex);
+    virtual bool itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const;
+    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices, const GeoIface::GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex);
 
 private:
 
@@ -74,7 +74,7 @@ public:
 
     MyTrackModelHelper(QAbstractItemModel* const imageItemsModel);
 
-    virtual KGeoMap::TrackManager::Track::List getTracks() const;
+    virtual GeoIface::TrackManager::Track::List getTracks() const;
 
 Q_SIGNALS:
 
@@ -86,7 +86,7 @@ public Q_SLOTS:
 
 private:
 
-    KGeoMap::TrackManager::Track::List m_tracks;
+    GeoIface::TrackManager::Track::List m_tracks;
     QAbstractItemModel*                m_itemModel;
 };
 

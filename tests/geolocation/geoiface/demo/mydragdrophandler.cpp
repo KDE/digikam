@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dragdrophandler.h"
+#include "mydragdrophandler.h"
 
 // Qt includes
 
@@ -32,21 +32,22 @@
 
 #include "mytreewidget.h"
 
-DemoDragDropHandler::DemoDragDropHandler(QAbstractItemModel* const pModel, QObject* const parent)
-    : DragDropHandler(parent), model(pModel)
+MyDragDropHandler::MyDragDropHandler(QAbstractItemModel* const pModel, QObject* const parent)
+    : DragDropHandler(parent),
+      model(pModel)
 {
 }
 
-DemoDragDropHandler::~DemoDragDropHandler()
+MyDragDropHandler::~MyDragDropHandler()
 {
 }
 
-Qt::DropAction DemoDragDropHandler::accepts(const QDropEvent* /*e*/)
+Qt::DropAction MyDragDropHandler::accepts(const QDropEvent* /*e*/)
 {
     return Qt::CopyAction;
 }
 
-bool DemoDragDropHandler::dropEvent(const QDropEvent* e, const GeoIface::GeoCoordinates& dropCoordinates)
+bool MyDragDropHandler::dropEvent(const QDropEvent* e, const GeoIface::GeoCoordinates& dropCoordinates)
 {
     const MyDragData* const mimeData = qobject_cast<const MyDragData*>(e->mimeData());
 
@@ -70,7 +71,7 @@ bool DemoDragDropHandler::dropEvent(const QDropEvent* e, const GeoIface::GeoCoor
     return true;
 }
 
-QMimeData* DemoDragDropHandler::createMimeData(const QList<QPersistentModelIndex>& /*modelIndices*/)
+QMimeData* MyDragDropHandler::createMimeData(const QList<QPersistentModelIndex>& /*modelIndices*/)
 {
     return 0;
 }

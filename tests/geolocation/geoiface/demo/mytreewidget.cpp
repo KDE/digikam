@@ -29,13 +29,13 @@
 #include <QMouseEvent>
 #include <QDrag>
 
-// libkgeomap includes
+// geoiface includes
 
-#include "src/types.h"
+#include "geoiface_types.h"
 
 // local includes
 
-#include "dragdrophandler.h"
+#include "mydragdrophandler.h"
 
 class MyTreeWidget::Private
 {
@@ -50,7 +50,8 @@ public:
 };
 
 MyTreeWidget::MyTreeWidget(QWidget* const parent)
-    : QTreeWidget(parent), d(new Private())
+    : QTreeWidget(parent),
+      d(new Private())
 {
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::DragOnly);

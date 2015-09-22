@@ -59,19 +59,19 @@
 
 // LibKExiv2 includes
 
-#include <kexiv2.h>
+#include <KExiv2/KExiv2>
 
-// libkgeomap includes
+// geoiface includes
 
-#include "src/lookupaltitude.h"
-#include "src/lookupfactory.h"
-#include "src/mapwidget.h"
-#include "src/itemmarkertiler.h"
-#include "src/kgeomap_common.h"
+#include "lookupaltitude.h"
+#include "lookupfactory.h"
+#include "mapwidget.h"
+#include "itemmarkertiler.h"
+#include "geoiface_common.h"
 
 // local includes
 
-#include "dragdrophandler.h"
+#include "mydragdrophandler.h"
 #include "mytreewidget.h"
 #include "myimageitem.h"
 
@@ -206,7 +206,7 @@ public:
     }
 
     QSplitter*                          splitter;
-    MapWidget*                      mapWidget;
+    MapWidget*                          mapWidget;
     QList<LookupAltitude*>              lookupAltitudeList;
     MyTreeWidget*                       treeWidget;
     QPointer<QProgressBar>              progressBar;
@@ -266,7 +266,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     d->mapWidget = new MapWidget(d->splitter);
     d->mapWidget->setGroupedModel(mm);
     d->mapWidget->setActive(true);
-    d->mapWidget->setDragDropHandler(new DemoDragDropHandler(d->displayMarkersModel, d->mapWidget));
+    d->mapWidget->setDragDropHandler(new MyDragDropHandler(d->displayMarkersModel, d->mapWidget));
     d->mapWidget->setVisibleMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
     d->mapWidget->setAvailableMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
 //     d->mapWidget->setTrackModel(d->trackModelHelper);
@@ -406,7 +406,8 @@ void MainWindow::slotFutureResultsReadyAt(int startIndex, int endIndex)
 
     // determine the sender:
     QFutureWatcher<MyImageData>* const futureSender = reinterpret_cast<QFutureWatcher<MyImageData>*>(sender());
-    KGEOMAP_ASSERT(futureSender!=0);
+
+    GEOIFACE_ASSERT(futureSender != 0);
 
     if (futureSender == 0)
         return;
@@ -422,7 +423,7 @@ void MainWindow::slotFutureResultsReadyAt(int startIndex, int endIndex)
         }
     }
 
-    KGEOMAP_ASSERT(futureIndex >= 0);
+    GEOIFACE_ASSERT(futureIndex >= 0);
 
     if (futureIndex < 0)
     {

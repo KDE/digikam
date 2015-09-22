@@ -24,7 +24,9 @@
 #include "myimageitem.h"
 
 MyImageItem::MyImageItem(const QUrl& url, const GeoIface::GeoCoordinates& itemCoordinates)
-    : QTreeWidgetItem(), coordinates(itemCoordinates), imageUrl(url)
+    : QTreeWidgetItem(),
+      coordinates(itemCoordinates),
+      imageUrl(url)
 {
 }
 
