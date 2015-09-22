@@ -1363,6 +1363,7 @@ void DigikamApp::initGui()
     d->openWithAction->setEnabled(false);
     d->slideShowSelectionAction->setEnabled(false);
     m_metadataEditAction->setEnabled(false);
+    m_geolocationEditAction->setEnabled(false);
     d->imageAutoExifActionMenu->setEnabled(false);
 
     d->albumSortAction->setCurrentItem((int)ApplicationSettings::instance()->getAlbumSortRole());
@@ -1561,6 +1562,7 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->cutItemsAction->setEnabled(selectionCount > 0);
     d->copyItemsAction->setEnabled(selectionCount > 0);
     m_metadataEditAction->setEnabled(selectionCount > 0);
+    m_geolocationEditAction->setEnabled(selectionCount > 0);
     d->openWithAction->setEnabled(selectionCount > 0);
     d->imageAutoExifActionMenu->setEnabled(selectionCount > 0);
 
