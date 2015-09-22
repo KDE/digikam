@@ -50,7 +50,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 #include <klocalizedstring.h>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "mapwidget.h"
 #include "itemmarkertiler.h"

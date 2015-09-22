@@ -33,7 +33,7 @@
 #include <QMetaType>
 #include <QItemSelectionModel>
 
-// libkgeomap includes
+// GeoIface includes
 
 #include "abstractmarkertiler.h"
 #include "mapwidget.h"

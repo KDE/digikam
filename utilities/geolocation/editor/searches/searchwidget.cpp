@@ -46,7 +46,7 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "mapwidget.h"
 

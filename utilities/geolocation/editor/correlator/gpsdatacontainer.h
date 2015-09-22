@@ -25,7 +25,7 @@
 #ifndef GPSDATACONTAINER_H
 #define GPSDATACONTAINER_H
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "geocoordinates.h"
 

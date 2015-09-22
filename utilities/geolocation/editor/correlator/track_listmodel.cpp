@@ -28,7 +28,7 @@
 
 #include <klocalizedstring.h>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "tracks.h"
 

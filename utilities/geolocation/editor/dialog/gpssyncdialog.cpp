@@ -65,7 +65,7 @@
 #include <klocalizedstring.h>
 #include <kwindowconfig.h>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "mapwidget.h"
 #include "itemmarkertiler.h"

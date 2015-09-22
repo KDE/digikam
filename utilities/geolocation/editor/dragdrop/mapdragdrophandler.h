@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-03-22
- * @brief  Drag-and-drop handler for KGeoMap integration.
+ * @brief  Drag-and-drop handler for GeoIface integration.
  *
  * @author Copyright (C) 2010 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
@@ -30,7 +30,7 @@
 #include <QAbstractItemModel>
 #include <QMimeData>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "dragdrophandler.h"
 

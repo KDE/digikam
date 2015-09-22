@@ -32,7 +32,7 @@
 #include <QRectF>
 #include <QTimer>
 
-// KGeoMap includes
+// GeoIface includes
 
 #include "groupstatecomputer.h"
 
@@ -50,14 +50,6 @@ Q_DECLARE_METATYPE(MapPair)
 
 namespace Digikam
 {
-
-void KGeoMap_assert(const char* const condition, const char* const filename, const int lineNumber)
-{
-    const QString debugString = QString::fromLatin1( "ASSERT: %1 - %2:%3").arg(QLatin1String( condition )).arg(QLatin1String( filename )).arg(lineNumber);
-    qCDebug(DIGIKAM_GENERAL_LOG) << debugString;
-}
-
-#define GEOIFACE_ASSERT(cond) ((!(cond)) ? KGeoMap_assert(#cond,__FILE__,__LINE__) : qt_noop())
 
 /**
  * @class GPSMarkerTiler
@@ -463,7 +455,7 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     if (d->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, qMax(size.width() + 2, size.height() + 2)))
     {
-        // digikam returns thumbnails with a border around them, but libkgeomap expects them without a border
+        // digikam returns thumbnails with a border around them, but GeoIface expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width() - 2, thumbnail.size().height() - 2);
     }
     else

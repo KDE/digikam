@@ -41,7 +41,7 @@
 
 #include <klocalizedstring.h>
 
-// libkgeomap includes
+// GeoIface includes
 
 #include "lookupfactory.h"
 

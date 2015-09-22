@@ -56,7 +56,7 @@
 
 #include <KDCRAW/RWidgetUtils>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "geoiface_types.h"
 

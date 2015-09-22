@@ -29,7 +29,7 @@
 
 #include <QAbstractItemModel>
 
-// libkgeomap includes
+// GeoIface includes
 
 #include "modelhelper.h"
 

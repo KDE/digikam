@@ -35,7 +35,7 @@
 
 #include <QModelIndex>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "modelhelper.h"
 

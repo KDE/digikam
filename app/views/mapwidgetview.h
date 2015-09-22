@@ -29,7 +29,7 @@
 
 #include <QWidget>
 
-// libkgeomap includes
+// GeoIface includes
 
 #include "modelhelper.h"
 

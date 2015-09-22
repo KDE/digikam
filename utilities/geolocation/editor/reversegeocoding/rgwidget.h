@@ -32,7 +32,7 @@
 #include <QUrl>
 #include <QWidget>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "geoiface_types.h"
 

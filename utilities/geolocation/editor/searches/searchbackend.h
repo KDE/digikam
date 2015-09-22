@@ -29,7 +29,7 @@
 
 #include <QObject>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "geoiface_types.h"
 

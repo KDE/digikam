@@ -33,7 +33,7 @@
 
 #include <kio/global.h>
 
-// libkgeomap includes
+// GeoIface includes
 
 #include "trackreader.h"
 

@@ -29,7 +29,7 @@
 #include <QDateTime>
 #include <QUrl>
 
-// libkgeomap includes
+// GeoIface includes
 
 #include "geocoordinates.h"
 #include "groupstate.h"

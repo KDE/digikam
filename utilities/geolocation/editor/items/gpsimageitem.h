@@ -32,7 +32,7 @@
 #include <QDateTime>
 #include <QUrl>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "geoiface_types.h"
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-01-06
- * Description : Helper functions for libkgeomap interaction
+ * Description : Helper functions for GeoIface interaction
  *
  * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -34,7 +34,7 @@
 
 #include <klocalizedstring.h>
 
-// Libkgeomap includes
+// GeoIface includes
 
 #include "mapwidget.h"
 

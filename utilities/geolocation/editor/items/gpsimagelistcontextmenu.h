@@ -29,7 +29,7 @@
 
 #include <QObject>
 
-// libkgeomap includes
+// GeoIface includes
 
 #include "lookupaltitude.h"
 
