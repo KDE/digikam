@@ -35,7 +35,7 @@
 
 class QStandardItemModel;
 
-class CalibratorModelHelper : public KGeoMap::ModelHelper
+class CalibratorModelHelper : public GeoIface::ModelHelper
 {
     Q_OBJECT
 
@@ -44,13 +44,13 @@ public:
     explicit CalibratorModelHelper(QStandardItemModel* const model, QObject* const parent = 0);
     ~CalibratorModelHelper();
 
-    void setItemCoordinates(const QModelIndex& index, const KGeoMap::GeoCoordinates& coordinates);
+    void setItemCoordinates(const QModelIndex& index, const GeoIface::GeoCoordinates& coordinates);
 
     // these are necessary for grouped and ungrouped models
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;
     virtual Flags                modelFlags()     const;
-    virtual bool itemCoordinates(const QModelIndex& index, KGeoMap::GeoCoordinates* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const;
 
 private:
 
@@ -73,7 +73,7 @@ public:
 
 private:
 
-    void addMarkerAt(const KGeoMap::GeoCoordinates& coordinates);
+    void addMarkerAt(const GeoIface::GeoCoordinates& coordinates);
 
 private Q_SLOTS:
 

@@ -44,8 +44,8 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <klocalizedstring.h>
+#include <kaboutdata.h>
 
 // local includes
 
@@ -53,7 +53,6 @@
 #include "itemmarkertiler.h"
 #include "mapwidget.h"
 #include "geocoordinates.h"
-#include "libkgeomap_version.h"
 
 const int CoordinatesRole = Qt::UserRole + 1;
 
@@ -137,10 +136,10 @@ public:
     }
 
     QHBoxLayout*                                     hBoxLayout;
-    QList<QPair<QWidget*, GeoIface::MapWidget*> > extraWidgetHolders;
+    QList<QPair<QWidget*, GeoIface::MapWidget*> >    extraWidgetHolders;
     QStandardItemModel*                              model;
     CalibratorModelHelper*                           modelHelper;
-    GeoIface::ItemMarkerTiler*                        markerTiler;
+    GeoIface::ItemMarkerTiler*                       markerTiler;
 
     QButtonGroup*                                    groupingMode;
     QSpinBox*                                        sbLevel;
