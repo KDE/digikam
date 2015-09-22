@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<gpx
+    version="1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.topografix.com/GPX/1/0"
+    xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<trk>
+    <number>1</number>
+    <trkseg>
+        <trkpt lat="18.00" lon="1.00">
+                <ele>4</ele>
+                <time>2009-11-29T17:01:00Z</time>
+                <fix>2d</fix>
+                <sat>3</sat>
+                <sym>Dot</sym>
+        </trkptERROR>
+    </trkseg>
+</trk>
+</gpx>
