@@ -70,15 +70,15 @@ void DImageFilterActionTest::testDRawDecoding()
 
 void DImageFilterActionTest::testActions()
 {
-    QStringList files = QDir(imagePath()).entryList(QDir::Files);
+    QStringList files = imageDir().entryList(QDir::Files);
     files.removeOne(originalImage());
 
-    DImg original(imagePath() + originalImage());
+    DImg original(imageDir().filePath(originalImage()));
     QVERIFY(!original.isNull());
 
     foreach(const QString& fileName, files)
     {
-        DImg ref(imagePath() + fileName);
+        DImg ref(imageDir().filePath(fileName));
         QVERIFY(!ref.isNull());
         DImageHistory history = ref.getImageHistory();
 
@@ -159,7 +159,7 @@ QString DImageFilterActionTest::originalImage()
     return QString::fromUtf8("DSC00636.JPG");
 }
 
-QString DImageFilterActionTest::imagePath()
+QDir DImageFilterActionTest::imageDir()
 {
-    return QFINDTESTDATA("filteractiontestimages");
+    return QDir(QFINDTESTDATA("filteractiontestimages"));
 }

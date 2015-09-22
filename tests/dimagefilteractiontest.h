@@ -28,6 +28,7 @@
 
 #include <QtTest/QtTest>
 #include <QEventLoop>
+#include <QtCore/QDir>
 
 // Local includes
 
@@ -42,7 +43,7 @@ class DImageFilterActionTest : public QObject
 
 public:
 
-    QString imagePath();
+    QDir imageDir();
     QString originalImage();
 
     void showDiff(const Digikam::DImg& orig, const Digikam::DImg& ref, const Digikam::DImg& result, const Digikam::DImg& diff);
