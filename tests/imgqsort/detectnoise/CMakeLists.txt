@@ -8,7 +8,3 @@ set(detectnoise_SRCS detectnoise.cpp)
 add_executable(detectnoise ${detectnoise_SRCS})
 ecm_mark_nongui_executable(detectnoise)
 target_link_libraries(detectnoise ${OpenCV_LIBRARIES})
-
-if(${MARBLE_FOUND})
-    target_link_libraries(detectnoise ${MARBLE_LIBRARIES})
-endif()

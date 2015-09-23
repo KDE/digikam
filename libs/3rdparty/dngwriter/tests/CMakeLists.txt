@@ -17,10 +17,6 @@ target_link_libraries(dngvalidate
                       ${CMAKE_THREAD_LIBS_INIT}
                      )
 
-if(${MARBLE_FOUND})
-    target_link_libraries(dngvalidate ${MARBLE_LIBRARIES})
-endif()
-
 # =======================================================
 # DNGINFO command line tool
 
@@ -35,10 +31,6 @@ target_link_libraries(dnginfo
                       ${EXPAT_LIBRARY}
                       ${CMAKE_THREAD_LIBS_INIT}
                      )
-
-if(${MARBLE_FOUND})
-    target_link_libraries(dnginfo ${MARBLE_LIBRARIES})
-endif()
 
 # =======================================================
 # RAW2DNG command line tool
@@ -58,7 +50,3 @@ target_link_libraries(raw2dng
                       ${EXPAT_LIBRARY}
                       ${CMAKE_THREAD_LIBS_INIT}
                      )
-
-if(${MARBLE_FOUND})
-    target_link_libraries(raw2dng ${MARBLE_LIBRARIES})
-endif()

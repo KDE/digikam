@@ -72,10 +72,6 @@ target_link_libraries(showfoto
                       KF5::Notifications
 )
 
-if(MARBLE_FOUND)
-    target_link_libraries(showfoto PRIVATE ${MARBLE_LIBRARIES})
-endif()
-
 if(NOT WIN32)
     # To link under Solaris (see bug #274484)
     target_link_libraries(showfoto PUBLIC ${MATH_LIBRARY})

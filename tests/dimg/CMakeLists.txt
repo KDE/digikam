@@ -28,10 +28,6 @@ target_link_libraries(dimgfilteractiontest
                       ${OpenCV_LIBRARIES}
 )
 
-if(MARBLE_FOUND)
-    target_link_libraries(dimgfilteractiontest ${MARBLE_LIBRARIES})
-endif()
-
 #------------------------------------------------------------------------
 
 set(dimghistorygraphtest_SRCS
@@ -60,10 +56,6 @@ target_link_libraries(dimghistorygraphtest
                       ${OpenCV_LIBRARIES}
 )
 
-if(MARBLE_FOUND)
-    target_link_libraries(dimghistorygraphtest ${MARBLE_LIBRARIES})
-endif()
-
 #------------------------------------------------------------------------
 
 set(dimghistorytest_SRCS
@@ -88,10 +80,6 @@ target_link_libraries(dimghistorytest
                       ${OpenCV_LIBRARIES}
 )
 
-if(MARBLE_FOUND)
-    target_link_libraries(dimghistorytest ${MARBLE_LIBRARIES})
-endif()
-
 #------------------------------------------------------------------------
 
 set(dimgfreerotationtest_SRCS
@@ -108,10 +96,6 @@ target_link_libraries(dimgfreerotationtest
 
                       Qt5::Test
 )
-
-if(MARBLE_FOUND)
-    target_link_libraries(dimgfreerotationtest ${MARBLE_LIBRARIES})
-endif()
 
 #------------------------------------------------------------------------
 
@@ -132,7 +116,3 @@ target_link_libraries(testdimgloader
 
                       ${OpenCV_LIBRARIES}
 )
-
-if(MARBLE_FOUND)
-    target_link_libraries(testdimgloader ${MARBLE_LIBRARIES})
-endif()

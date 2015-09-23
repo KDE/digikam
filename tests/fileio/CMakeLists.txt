@@ -15,10 +15,6 @@ target_link_libraries(pgfscaled
                       KF5::KIOCore
 )
 
-if(MARBLE_FOUND)
-    target_link_libraries(pgfscaled ${MARBLE_LIBRARIES})
-endif()
-
 #------------------------------------------------------------------------
 
 set(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
@@ -32,10 +28,6 @@ target_link_libraries(qtpgftest
                       KF5::KIOCore
 )
 
-if(MARBLE_FOUND)
-    target_link_libraries(qtpgftest ${MARBLE_LIBRARIES})
-endif()
-
 #------------------------------------------------------------------------
 
 set(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
@@ -48,10 +40,6 @@ target_link_libraries(loadpgfdata
                       Qt5::Gui
                       KF5::KIOCore
 )
-
-if(MARBLE_FOUND)
-    target_link_libraries(loadpgfdata ${MARBLE_LIBRARIES})
-endif()
 
 #------------------------------------------------------------------------
 
@@ -70,31 +58,23 @@ target_link_libraries(loadsavethreadtest
                       KF5::KDcraw
 )
 
-if(MARBLE_FOUND)
-    target_link_libraries(loadsavethreadtest ${MARBLE_LIBRARIES})
-endif()
-
 #------------------------------------------------------------------------
 
- set(filesaveoptionsboxtest_SRCS
-     filesaveoptionsboxtest.cpp
- )
+set(filesaveoptionsboxtest_SRCS
+    filesaveoptionsboxtest.cpp
+)
 
- add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
- add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
- ecm_mark_as_test(filesaveoptionsboxtest)
+add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
+add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
+ecm_mark_as_test(filesaveoptionsboxtest)
 
- target_link_libraries(filesaveoptionsboxtest
+target_link_libraries(filesaveoptionsboxtest
 
-                       digikamcore
-                       digikamdatabase
+                      digikamcore
+                      digikamdatabase
 
-                       Qt5::Test
- )
-
-if(MARBLE_FOUND)
-    target_link_libraries(filesaveoptionsboxtest ${MARBLE_LIBRARIES})
-endif()
+                      Qt5::Test
+)
 
 #------------------------------------------------------------------------
 
@@ -116,8 +96,4 @@ target_link_libraries(statesavingobjecttest
 
 if(GPHOTO2_FOUND)
     target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
-endif()
-
-if(MARBLE_FOUND)
-    target_link_libraries(statesavingobjecttest ${MARBLE_LIBRARIES})
 endif()

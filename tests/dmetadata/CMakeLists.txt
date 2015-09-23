@@ -14,10 +14,6 @@ target_link_libraries(tagsReadWriteTest
                         KF5::KExiv2
                      )
 
-if(${MARBLE_FOUND})
-    target_link_libraries(tagsReadWriteTest ${MARBLE_LIBRARIES})
-endif() 
-
 set(testRating_SRCS ratingreadwritetest.cpp)
 add_executable(ratingReadWriteTest ${testRating_SRCS})
 ecm_mark_nongui_executable(ratingReadWriteTest)
@@ -28,10 +24,6 @@ target_link_libraries(ratingReadWriteTest
                         KF5::KExiv2
                      )
 
-if(${MARBLE_FOUND})
-    target_link_libraries(ratingReadWriteTest ${MARBLE_LIBRARIES})
-endif() 
-
 set(testComment_SRCS commentreadwritetest.cpp)
 add_executable(commentReadWriteTest ${testComment_SRCS})
 ecm_mark_nongui_executable(commentReadWriteTest)
@@ -41,7 +33,3 @@ target_link_libraries(commentReadWriteTest
                         digikamcore
                         KF5::KExiv2
                      )
-
-if(${MARBLE_FOUND})
-    target_link_libraries(commentReadWriteTest ${MARBLE_LIBRARIES})
-endif() 

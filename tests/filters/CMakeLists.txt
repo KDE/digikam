@@ -24,10 +24,6 @@ target_link_libraries(testautocrop
                       ${OpenCV_LIBRARIES}
 )
 
-if(MARBLE_FOUND)
-    target_link_libraries(testautocrop ${MARBLE_LIBRARIES})
-endif()
-
 #------------------------------------------------------------------------
 
 if(LENSFUN_FOUND)
@@ -59,10 +55,6 @@ if(LENSFUN_FOUND)
         target_link_libraries(testlensfuniface ${KVM_LIBRARY})
     endif()
 
-    if(MARBLE_FOUND)
-        target_link_libraries(testlensfuniface ${MARBLE_LIBRARIES})
-    endif()
-
 endif()
 
 #------------------------------------------------------------------------
@@ -88,7 +80,3 @@ target_link_libraries(testnrestimate
 
                       ${OpenCV_LIBRARIES}
 )
-
-if(MARBLE_FOUND)
-    target_link_libraries(testnrestimate ${MARBLE_LIBRARIES})
-endif()

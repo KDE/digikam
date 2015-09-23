@@ -31,10 +31,6 @@ target_link_libraries(renamecustomizertest
                       ${OpenCV_LIBRARIES}
 )
 
-if(MARBLE_FOUND)
-    target_link_libraries(renamecustomizertest ${MARBLE_LIBRARIES})
-endif()
-
 #------------------------------------------------------------------------
 
 set(cameranamehelper_SRCS
@@ -68,10 +64,6 @@ target_link_libraries(cameranamehelpertest
 
 if(GPHOTO2_FOUND)
     target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
-endif()
-
-if(MARBLE_FOUND)
-    target_link_libraries(cameranamehelpertest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------

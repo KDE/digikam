@@ -150,10 +150,6 @@ if(KF5KFace_FOUND)
     target_link_libraries(digikamdatabase PRIVATE ${KF5KFace_LIBRARIES})
 endif()
 
-if(MARBLE_FOUND)
-    target_link_libraries(digikamdatabase PRIVATE ${MARBLE_LIBRARIES})
-endif()
-
 if(${KFILEMETADATA_FOUND})
     target_link_libraries(digikamdatabase PRIVATE baloowrap)
 endif()

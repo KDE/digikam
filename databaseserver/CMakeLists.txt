@@ -34,8 +34,4 @@ if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     target_link_libraries(digikamdatabaseserver ${KVM_LIBRARY})
 endif()
 
-if(MARBLE_FOUND)
-    target_link_libraries(digikamdatabaseserver ${MARBLE_LIBRARIES})
-endif()
-
 install(TARGETS digikamdatabaseserver DESTINATION ${LIBEXEC_INSTALL_DIR})
