@@ -882,7 +882,14 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
             // Fall back to camera file system info
             if (info.ctime.isNull())
             {
-                info.ctime = QDateTime::fromTime_t(cfinfo.file.mtime);
+                if (cfinfo.file.fields & GP_FILE_INFO_MTIME)
+                {
+                    info.ctime = QDateTime::fromTime_t(cfinfo.file.mtime);
+                }
+                else
+                {
+                    info.ctime = QDateTime::currentDateTime();
+                }
             }
         }
         else
@@ -891,6 +898,10 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
             if (cfinfo.file.fields & GP_FILE_INFO_MTIME)
             {
                 info.ctime = QDateTime::fromTime_t(cfinfo.file.mtime);
+            }
+            else
+            {
+                info.ctime = QDateTime::currentDateTime();
             }
 
             if (cfinfo.file.fields & GP_FILE_INFO_WIDTH)
