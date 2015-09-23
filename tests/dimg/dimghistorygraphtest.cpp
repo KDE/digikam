@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dimagehistorygraphtest.h"
+#include "dimghistorygraphtest.h"
 
 // Qt includes
 
@@ -53,13 +53,13 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(DImageHistoryGraphTest)
+QTEST_MAIN(DImgHistoryGraphTest)
 
-void DImageHistoryGraphTest::initTestCase()
+void DImgHistoryGraphTest::initTestCase()
 {
     initBaseTestCase();
 
-    QString name = tempFileName(QLatin1String("collection"));
+    QString name  = tempFileName(QLatin1String("collection"));
     collectionDir = QDir::temp();
     collectionDir.mkdir(name);
     collectionDir.cd(name);
@@ -97,10 +97,10 @@ void DImageHistoryGraphTest::initTestCase()
     }
 
     QVERIFY(!ids.contains(-1));
-    QVERIFY(ids.size() >= 24);
+    QVERIFY(ids.size() >= 6);          // Nb of files in data sub dir.
 }
 
-void DImageHistoryGraphTest::cleanupTestCase()
+void DImgHistoryGraphTest::cleanupTestCase()
 {
     cleanupBaseTestCase();
 
@@ -113,7 +113,7 @@ void DImageHistoryGraphTest::cleanupTestCase()
     qDebug() << "deleted test folder " << deleteUrl;
 }
 
-void DImageHistoryGraphTest::rescan()
+void DImgHistoryGraphTest::rescan()
 {
     CollectionScanner().completeScan();
 }
@@ -131,7 +131,7 @@ QList<to> mapList(const QList<from>& l, const QMap<from,to> map)
     return r;
 }
 
-void DImageHistoryGraphTest::testEditing()
+void DImgHistoryGraphTest::testEditing()
 {
     QDir imageDir(imagePath());
 
@@ -240,7 +240,7 @@ void DImageHistoryGraphTest::testEditing()
     QVERIFY(!one.tagIds().contains(intermediateVersionTag));
 }
 
-void DImageHistoryGraphTest::testHistory()
+void DImgHistoryGraphTest::testHistory()
 {
     ImageHistoryGraph graph;
     ImageInfo subject(ids.first());
@@ -270,7 +270,7 @@ public:
     QMap<HistoryGraph::Vertex, qlonglong> vertexToId;
 };
 
-void DImageHistoryGraphTest::testGraph()
+void DImgHistoryGraphTest::testGraph()
 {
     /*
     1
@@ -489,14 +489,14 @@ void DImageHistoryGraphTest::testGraph()
     QTest::qWait(25000);
 }
 
-void DImageHistoryGraphTest::slotImageLoaded(const QString& fileName, bool success)
+void DImgHistoryGraphTest::slotImageLoaded(const QString& fileName, bool success)
 {
     QVERIFY(success);
     qDebug() << "Loaded" << fileName;
     m_loop.quit();
 }
 
-void DImageHistoryGraphTest::slotImageSaved(const QString& fileName, bool success)
+void DImgHistoryGraphTest::slotImageSaved(const QString& fileName, bool success)
 {
     QVERIFY(success);
     m_im->setLastSaved(fileName);

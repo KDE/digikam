@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-06-09
- * Description : a test for the freerotation tool
+ * Date        : 2010-11-13
+ * Description : a test for applying FilterActions
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,25 +21,40 @@
  *
  * ============================================================ */
 
-#ifndef FREEROTATIONTEST_H
-#define FREEROTATIONTEST_H
+#ifndef DIMGFILTERACTIONTEST_H
+#define DIMGFILTERACTIONTEST_H
 
 // Qt includes
 
-#include <QObject>
+#include <QtTest/QtTest>
+#include <QEventLoop>
+#include <QtCore/QDir>
 
-class FreeRotationTest : public QObject
+// Local includes
+
+namespace Digikam
+{
+class DImg;
+}
+
+class DImgFilterActionTest : public QObject
 {
     Q_OBJECT
 
+public:
+
+    QDir    imageDir();
+    QString originalImage();
+
+    void showDiff(const Digikam::DImg& orig, const Digikam::DImg& ref, const Digikam::DImg& result, const Digikam::DImg& diff);
+
 private Q_SLOTS:
 
-    void testCalculateAngle();
-    void testCalculateAngle_data();
+    void testDRawDecoding();
+    void testActions();
 
-private:
-
-    double myRound(double val, int accuracy);
+    void initTestCase();
+    void cleanupTestCase();
 };
 
-#endif /* FREEROTATIONTEST_H_ */
+#endif // DIMGFILTERACTIONTEST_H

@@ -21,20 +21,20 @@
  *
  * ============================================================ */
 
-#ifndef DIMAGEHISTORYTEST_H
-#define DIMAGEHISTORYTEST_H
+#ifndef DIMGEHISTORYTEST_H
+#define DIMGEHISTORYTEST_H
 
 // Qt includes
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <QEventLoop>
-#include <QDir>
 
 // Local includes
 
-#include "abstractdimagehistorytest.h"
+#include "editorcore.h"
+#include "dimgabstracthistorytest.h"
 
-class DImageHistoryGraphTest : public AbstractDImageHistoryTest
+class DImgHistoryTest : public DImgAbstractHistoryTest
 {
     Q_OBJECT
 
@@ -45,21 +45,11 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
+    void testXml();
+    void testDImg();
+
     void initTestCase();
     void cleanupTestCase();
-
-    void testGraph();
-    void testHistory();
-
-private:
-
-    void rescan();
-    void testEditing();
-
-    QDir        collectionDir;
-    QString     dbFile;
-    QStringList readOnlyImages;
-    QList<qlonglong> ids;
 };
 
-#endif
+#endif // DIMGEHISTORYTEST_H

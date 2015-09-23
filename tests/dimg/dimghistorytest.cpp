@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dimagehistorytest.h"
+#include "dimghistorytest.h"
 
 // Qt includes
 
@@ -42,19 +42,19 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(DImageHistoryTest)
+QTEST_MAIN(DImgHistoryTest)
 
-void DImageHistoryTest::initTestCase()
+void DImgHistoryTest::initTestCase()
 {
     initBaseTestCase();
 }
 
-void DImageHistoryTest::cleanupTestCase()
+void DImgHistoryTest::cleanupTestCase()
 {
     cleanupBaseTestCase();
 }
 
-void DImageHistoryTest::testXml()
+void DImgHistoryTest::testXml()
 {
     DImageHistory history = history1();
 
@@ -69,7 +69,7 @@ void DImageHistoryTest::testXml()
     //QCOMPARE(history2, historyWithoutCurrent);
 }
 
-void DImageHistoryTest::testDImg()
+void DImgHistoryTest::testDImg()
 {
     QDir imageDir(imagePath());
     imageDir.setNameFilters(QStringList() << QLatin1String("*.jpg"));
@@ -107,7 +107,7 @@ void DImageHistoryTest::testDImg()
     QCOMPARE(history.entries().last().referredImages.first().m_type, HistoryImageId::Current);
 }
 
-void DImageHistoryTest::slotImageLoaded(const QString&, bool success)
+void DImgHistoryTest::slotImageLoaded(const QString&, bool success)
 {
     QVERIFY(success);
 
@@ -129,7 +129,7 @@ void DImageHistoryTest::slotImageLoaded(const QString&, bool success)
     m_loop.quit();
 }
 
-void DImageHistoryTest::slotImageSaved(const QString& fileName, bool success)
+void DImgHistoryTest::slotImageSaved(const QString& fileName, bool success)
 {
     QVERIFY(success);
 

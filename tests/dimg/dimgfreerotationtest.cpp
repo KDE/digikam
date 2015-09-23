@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "freerotationtest.h"
+#include "dimgfreerotationtest.h"
 
 // C++ includes
 
@@ -37,9 +37,9 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(FreeRotationTest)
+QTEST_MAIN(DImgFreeRotationTest)
 
-void FreeRotationTest::testCalculateAngle_data()
+void DImgFreeRotationTest::testCalculateAngle_data()
 {
     QTest::addColumn<QPoint>("p1");
     QTest::addColumn<QPoint>("p2");
@@ -105,7 +105,7 @@ void FreeRotationTest::testCalculateAngle_data()
             << 45.0;
 }
 
-void FreeRotationTest::testCalculateAngle()
+void DImgFreeRotationTest::testCalculateAngle()
 {
     QFETCH(QPoint, p1);
     QFETCH(QPoint, p2);
@@ -115,7 +115,7 @@ void FreeRotationTest::testCalculateAngle()
     QCOMPARE(myRound(angle, 2), result);
 }
 
-double FreeRotationTest::myRound(double val, int accuracy)
+double DImgFreeRotationTest::myRound(double val, int accuracy)
 {
     double tmp = pow(10.0, accuracy);
     double x   = val;

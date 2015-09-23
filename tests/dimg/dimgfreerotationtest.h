@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-08-01
- * Description : a test for the DImageHistory
+ * Date        : 2009-06-09
+ * Description : a test for the freerotation tool
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,35 +21,25 @@
  *
  * ============================================================ */
 
-#ifndef DIMAGEHISTORYTEST_H
-#define DIMAGEHISTORYTEST_H
+#ifndef DIMGFREEROTATIONTEST_H
+#define DIMGFREEROTATIONTEST_H
 
 // Qt includes
 
-#include <QtTest/QtTest>
-#include <QEventLoop>
+#include <QObject>
 
-// Local includes
-
-#include "editorcore.h"
-#include "abstractdimagehistorytest.h"
-
-class DImageHistoryTest : public AbstractDImageHistoryTest
+class DImgFreeRotationTest : public QObject
 {
     Q_OBJECT
 
-public Q_SLOTS:
-
-    void slotImageLoaded(const QString&, bool);
-    void slotImageSaved(const QString&, bool);
-
 private Q_SLOTS:
 
-    void testXml();
-    void testDImg();
+    void testCalculateAngle();
+    void testCalculateAngle_data();
 
-    void initTestCase();
-    void cleanupTestCase();
+private:
+
+    double myRound(double val, int accuracy);
 };
 
-#endif
+#endif /* DIMGFREEROTATIONTEST_H_ */

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dimagefilteractiontest.h"
+#include "dimgfilteractiontest.h"
 
 // Qt includes
 
@@ -45,9 +45,9 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(DImageFilterActionTest)
+QTEST_MAIN(DImgFilterActionTest)
 
-void DImageFilterActionTest::testDRawDecoding()
+void DImgFilterActionTest::testDRawDecoding()
 {
     DRawDecoding params;
 
@@ -68,7 +68,7 @@ void DImageFilterActionTest::testDRawDecoding()
     QVERIFY(params == params2);
 }
 
-void DImageFilterActionTest::testActions()
+void DImgFilterActionTest::testActions()
 {
     QStringList files = imageDir().entryList(QDir::Files);
     files.removeOne(originalImage());
@@ -123,7 +123,7 @@ void DImageFilterActionTest::testActions()
     }
 }
 
-void DImageFilterActionTest::showDiff(const Digikam::DImg& orig, const Digikam::DImg& ref,
+void DImgFilterActionTest::showDiff(const Digikam::DImg& orig, const Digikam::DImg& ref,
                                       const Digikam::DImg& result, const DImg& diff)
 {
     QDialog d;
@@ -141,25 +141,25 @@ void DImageFilterActionTest::showDiff(const Digikam::DImg& orig, const Digikam::
     d.exec();
 }
 
-void DImageFilterActionTest::initTestCase()
+void DImgFilterActionTest::initTestCase()
 {
     // initialize kexiv2 before doing any multitasking
     KExiv2Iface::KExiv2::initializeExiv2();
 }
 
-void DImageFilterActionTest::cleanupTestCase()
+void DImgFilterActionTest::cleanupTestCase()
 {
     // clean up the kexiv2 memory:
     KExiv2Iface::KExiv2::cleanupExiv2();
 }
 
-QString DImageFilterActionTest::originalImage()
+QString DImgFilterActionTest::originalImage()
 {
     // picture taken by me, downscaled to 100x66 and metadata stripped off
     return QString::fromUtf8("DSC00636.JPG");
 }
 
-QDir DImageFilterActionTest::imageDir()
+QDir DImgFilterActionTest::imageDir()
 {
-    return QDir(QFINDTESTDATA("filteractiontestimages"));
+    return QDir(QFINDTESTDATA("data/"));
 }

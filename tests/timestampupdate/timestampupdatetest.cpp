@@ -42,8 +42,8 @@
 #include "imageinfo.h"
 #include "metadatasettings.h"
 
-const QLatin1String originalImageFolder("timestampupdatetestimages");
-const QLatin1String originalImageFile("timestampupdatetestimages/1.jpg");
+const QString originalImageFolder(QFINDTESTDATA("data/"));
+const QString originalImageFile(QFINDTESTDATA("data/1.jpg"));
 
 QTEST_MAIN(TimeStampUpdateTest)
 

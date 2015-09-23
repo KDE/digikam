@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-11-13
- * Description : a test for applying FilterActions
+ * Date        : 2010-08-01
+ * Description : a test for the DImageHistory
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,40 +21,45 @@
  *
  * ============================================================ */
 
-#ifndef DIMAGEFILTERACTIONTEST_H
-#define DIMAGEFILTERACTIONTEST_H
+#ifndef DIMGHISTORYGRAPHTEST_H
+#define DIMGHISTORYGRAPHTEST_H
 
 // Qt includes
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <QEventLoop>
-#include <QtCore/QDir>
+#include <QDir>
 
 // Local includes
 
-namespace Digikam
-{
-class DImg;
-}
+#include "dimgabstracthistorytest.h"
 
-class DImageFilterActionTest : public QObject
+class DImgHistoryGraphTest : public DImgAbstractHistoryTest
 {
     Q_OBJECT
 
-public:
+public Q_SLOTS:
 
-    QDir imageDir();
-    QString originalImage();
-
-    void showDiff(const Digikam::DImg& orig, const Digikam::DImg& ref, const Digikam::DImg& result, const Digikam::DImg& diff);
+    void slotImageLoaded(const QString&, bool);
+    void slotImageSaved(const QString&, bool);
 
 private Q_SLOTS:
 
-    void testDRawDecoding();
-    void testActions();
-
     void initTestCase();
     void cleanupTestCase();
+
+    void testGraph();
+    void testHistory();
+
+private:
+
+    void rescan();
+    void testEditing();
+
+    QDir        collectionDir;
+    QString     dbFile;
+    QStringList readOnlyImages;
+    QList<qlonglong> ids;
 };
 
-#endif // DIMAGEFILTERACTIONTEST_H
+#endif // DIMGHISTORYGRAPHTEST_H

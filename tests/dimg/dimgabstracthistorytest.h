@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ABSTRACTDIMAGEHISTORYTEST_H
-#define ABSTRACTDIMAGEHISTORYTEST_H
+#ifndef DIMGABSTRACTHISTORYTEST_H
+#define DIMGABSTRACTHISTORYTEST_H
 
 // Qt includes
 
@@ -37,7 +37,7 @@ using namespace Digikam;
 
 QDebug operator<<(QDebug dbg, const HistoryImageId& id);
 
-class AbstractDImageHistoryTest : public QObject
+class DImgAbstractHistoryTest : public QObject
 {
     Q_OBJECT
 
@@ -78,5 +78,4 @@ protected:
     QString m_tempFile;
 };
 
-#endif
-
+#endif // DIMGABSTRACTHISTORYTEST_H

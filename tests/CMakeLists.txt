@@ -9,10 +9,12 @@ kde_enable_exceptions()
 
 add_subdirectory(albummodel)
 add_subdirectory(advancedrename)
-add_subdirectory(imgqsort)
-add_subdirectory(dmetadatatest)
-add_subdirectory(iojobs)
+add_subdirectory(dimg)
+add_subdirectory(dmetadata)
 add_subdirectory(geolocation)
+add_subdirectory(imgqsort)
+add_subdirectory(iojobs)
+add_subdirectory(timestampupdate)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -22,96 +24,6 @@ if(ENABLE_DIGIKAM_MODELTEST)
         modeltest/modeltest.cpp
        )
     add_definitions(-DENABLE_DIGIKAM_MODELTEST)
-endif()
-
-#------------------------------------------------------------------------
-
-set(dimagefilteractiontest_SRCS
-    dimagefilteractiontest.cpp
-)
-
-add_executable(dimagefilteractiontest ${dimagefilteractiontest_SRCS})
-add_test(dimagefilteractiontest dimagefilteractiontest)
-ecm_mark_as_test(dimagefilteractiontest)
-
-target_link_libraries(dimagefilteractiontest
-
-                      digikamcore
-
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Test
-
-                      KF5::KIOCore
-                      KF5::XmlGui
-                      KF5::I18n
-                      KF5::KExiv2
-
-                      ${OpenCV_LIBRARIES}
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(dimagefilteractiontest ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
-set(dimagehistorygraphtest_SRCS
-    abstractdimagehistorytest.cpp
-    dimagehistorygraphtest.cpp
-    modeltest/modeltest.cpp
-)
-
-add_executable(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
-add_test(dimagehistorygraphtest dimagehistorygraphtest)
-ecm_mark_as_test(dimagehistorygraphtest)
-
-target_link_libraries(dimagehistorygraphtest
-
-                      digikamcore
-                      digikamdatabase
-
-                      Qt5::Gui
-                      Qt5::Test
-
-                      KF5::I18n
-                      KF5::XmlGui
-                      KF5::KExiv2
-                      KF5::KIOWidgets # for previewjob
-
-                      ${OpenCV_LIBRARIES}
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(dimagehistorygraphtest ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
-set(dimagehistorytest_SRCS
-    abstractdimagehistorytest.cpp
-    dimagehistorytest.cpp
-)
-
-add_executable(dimagehistorytest ${dimagehistorytest_SRCS})
-add_test(dimagehistorytest dimagehistorytest)
-ecm_mark_as_test(dimagehistorytest)
-
-target_link_libraries(dimagehistorytest
-
-                      digikamcore
-                      Qt5::Gui
-                      Qt5::Test
-
-                      KF5::I18n
-                      KF5::XmlGui
-                      KF5::KExiv2
-                      KF5::KIOWidgets # for previewjob
-                      ${OpenCV_LIBRARIES}
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(dimagehistorytest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -210,54 +122,6 @@ endif()
 
 #------------------------------------------------------------------------
 
-set(freerotationtest_SRCS
-    freerotationtest.cpp
-)
-
-add_executable(freerotationtest ${freerotationtest_SRCS})
-add_test(freerotationtest freerotationtest)
-ecm_mark_as_test(freerotationtest)
-
-target_link_libraries(freerotationtest
-
-                      digikamcore
-
-                      Qt5::Test
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(freerotationtest ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
-set(timestampupdatetest_SRCS
-    timestampupdatetest.cpp
-   )
-
-add_executable(timestampupdatetest ${timestampupdatetest_SRCS})
-add_test(timestampupdatetest timestampupdatetest)
-ecm_mark_as_test(timestampupdatetest)
-
-target_link_libraries(timestampupdatetest
-
-                      digikamdatabase
-                      digikamcore
-
-                      Qt5::Gui
-                      Qt5::Test
-                      Qt5::DBus
-
-                      KF5::I18n
-                      KF5::KExiv2
-                     )
-
-if(MARBLE_FOUND)
-    target_link_libraries(timestampupdatetest ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
 set(statesavingobject_SRCS
     statesavingobjecttest.cpp
 )
@@ -345,30 +209,6 @@ target_link_libraries(testdatabase
 )
 if(${KF5Kipi_FOUND})
     target_link_libraries(testdatabase  KF5::Kipi)
-endif()
-
-#------------------------------------------------------------------------
-
-set(testdimgloader_SRCS testdimgloader.cpp)
-add_executable(testdimgloader ${testdimgloader_SRCS})
-ecm_mark_nongui_executable(testdimgloader)
-
-target_link_libraries(testdimgloader
-
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Gui
-
-                      KF5::I18n
-                      KF5::XmlGui
-                      KF5::KExiv2
-                      KF5::KDcraw
-
-                      ${OpenCV_LIBRARIES}
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(testdimgloader ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
