@@ -250,7 +250,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
 
     foreach(const QString& file, d->files)
     {
-        QUrl url(file);
+        QUrl url = QUrl::fromLocalFile(file);
         ParseSettings settings;
         settings.fileUrl      = url;
         settings.parseString  = parseString;
@@ -272,7 +272,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, const ParseSe
 
     foreach(const QString& file, d->files)
     {
-        QUrl url(file);
+        QUrl url = QUrl::fromLocalFile(file);
         ParseSettings settings = _settings;
         settings.fileUrl       = url;
         settings.parseString   = parseString;
