@@ -42,7 +42,7 @@ using namespace Digikam;
 
 QTEST_MAIN(AdvancedRenameTest)
 
-const QString imagesDir = QLatin1String("advancedrenameimages/");
+const QString imagesDir = QLatin1String("data/");
 
 QString createFilePath(const QString& file)
 {

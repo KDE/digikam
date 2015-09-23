@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "renamecustomizertest.h"
+
 // Qt includes
 
 #include <QFileInfo>
@@ -37,7 +39,7 @@
 
 using namespace Digikam;
 
-const QString imagesDir = QLatin1String("advancedrenameimages/");
+const QString imagesDir = QLatin1String("data/");
 
 QString createFilePath(const QString& file)
 {
@@ -64,32 +66,7 @@ const QString filePath7 = createFilePath(fileName7);
 const QString filePath8 = createFilePath(fileName8);
 const QString filePath9 = createFilePath(fileName9);
 
-
-class RenameCustomizerTest : public QObject
-{
-    Q_OBJECT
-
-private Q_SLOTS:
-
-    void newName_should_return_empty_string_with_empty_filename_data();
-    void newName_should_return_empty_string_with_empty_filename();
-
-    void setCaseType_set_to_none();
-    void setCaseType_set_to_upper();
-    void setCaseType_set_to_lower();
-
-    void setUseDefault_true();
-    void setUseDefault_false();
-    void setUseDefault_case_none_should_deliver_original_filename();
-    void setUseDefault_case_upper_should_deliver_uppercase_filename();
-    void setUseDefault_case_lower_should_deliver_lowercase_filename();
-};
-
-
-
 QTEST_MAIN(RenameCustomizerTest)
-
-
 
 void RenameCustomizerTest::newName_should_return_empty_string_with_empty_filename_data()
 {
@@ -167,5 +144,3 @@ void RenameCustomizerTest::setUseDefault_case_lower_should_deliver_lowercase_fil
     customizer.setChangeCase(RenameCustomizer::LOWER);
     QCOMPARE(customizer.newName(QLatin1String("TeSt.pnG"), QDateTime::currentDateTime()), QLatin1String("test.png"));
 }
-
-#include "renamecustomizertest.moc"

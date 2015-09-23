@@ -7,6 +7,8 @@
 # enabling for everything although only required by DImg.
 kde_enable_exceptions()
 
+
+add_subdirectory(advancedrename)
 add_subdirectory(imgqsort)
 add_subdirectory(dmetadatatest)
 add_subdirectory(iojobs)
@@ -184,37 +186,6 @@ if(MARBLE_FOUND)
     target_link_libraries(qtpgftest ${MARBLE_LIBRARIES})
 endif()
 
-#------------------------------------------------------------------------
-set(renamecustomizertest_SRCS
-    renamecustomizertest.cpp
-)
-
-add_executable(renamecustomizertest ${renamecustomizertest_SRCS})
-add_test(renamecustomizertest renamecustomizertest)
-ecm_mark_as_test(renamecustomizertest)
-
-target_link_libraries(renamecustomizertest
-
-                      digikamgui
-
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Test
-
-                      KF5::XmlGui
-                      KF5::KIOCore
-                      KF5::KIOWidgets
-                      KF5::I18n
-
-                      KF5::KExiv2
-                      KF5::KDcraw
-
-                      ${OpenCV_LIBRARIES}
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(renamecustomizertest ${MARBLE_LIBRARIES})
-endif()
 #------------------------------------------------------------------------
 
 set(searchtextbartest_SRCS
@@ -467,45 +438,6 @@ endif()
 
 #------------------------------------------------------------------------
 
-set(cameranamehelper_SRCS
-    cameranamehelpertest.cpp
-)
-
-add_executable(cameranamehelpertest
-              ${cameranamehelper_SRCS}
-              $<TARGET_OBJECTS:digikamsettings_src>
-)
-add_test(cameranamehelpertest cameranamehelpertest)
-ecm_mark_as_test(cameranamehelpertest)
-
-target_link_libraries(cameranamehelpertest
-
-                      digikamdatabase
-                      digikamcore
-                      importui
-
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Test
-
-                      KF5::I18n
-                      KF5::XmlGui
-                      KF5::KExiv2
-                      KF5::KDcraw
-
-                      ${OpenCV_LIBRARIES}
-)
-
-if(GPHOTO2_FOUND)
-    target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
-endif()
-
-if(MARBLE_FOUND)
-    target_link_libraries(cameranamehelpertest ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
 set(albummodeltest_SRCS
     albummodeltest.cpp
     modeltest/modeltest.cpp
@@ -532,37 +464,6 @@ target_link_libraries(albummodeltest
 
                       ${OpenCV_LIBRARIES}
 
-)
-
-#------------------------------------------------------------------------
-
-set(advancedrenametest_SRCS
-    advancedrenametest.cpp
-)
-
-add_executable(advancedrenametest ${advancedrenametest_SRCS}
-)
-add_test(advancedrenametest advancedrenametest)
-ecm_mark_as_test(advancedrenametest)
-
-target_link_libraries(advancedrenametest
-
-                      advancedrename
-                      digikamgui
-
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Test
-
-                      KF5::I18n
-                      KF5::KIOCore
-                      KF5::KIOWidgets
-                      KF5::Solid
-                      KF5::XmlGui
-                      KF5::KExiv2
-                      KF5::KDcraw
-
-                      ${OpenCV_LIBRARIES}
 )
 
 #------------------------------------------------------------------------

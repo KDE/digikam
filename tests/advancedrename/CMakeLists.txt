@@ -1,0 +1,106 @@
+#
+# Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+set(renamecustomizertest_SRCS
+    renamecustomizertest.cpp
+)
+
+add_executable(renamecustomizertest ${renamecustomizertest_SRCS})
+add_test(renamecustomizertest renamecustomizertest)
+ecm_mark_as_test(renamecustomizertest)
+
+target_link_libraries(renamecustomizertest
+
+                      digikamgui
+
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Test
+
+                      KF5::XmlGui
+                      KF5::KIOCore
+                      KF5::KIOWidgets
+                      KF5::I18n
+
+                      KF5::KExiv2
+                      KF5::KDcraw
+
+                      ${OpenCV_LIBRARIES}
+)
+
+if(MARBLE_FOUND)
+    target_link_libraries(renamecustomizertest ${MARBLE_LIBRARIES})
+endif()
+
+#------------------------------------------------------------------------
+
+set(cameranamehelper_SRCS
+    cameranamehelpertest.cpp
+)
+
+add_executable(cameranamehelpertest
+              ${cameranamehelper_SRCS}
+              $<TARGET_OBJECTS:digikamsettings_src>
+)
+add_test(cameranamehelpertest cameranamehelpertest)
+ecm_mark_as_test(cameranamehelpertest)
+
+target_link_libraries(cameranamehelpertest
+
+                      digikamdatabase
+                      digikamcore
+                      importui
+
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Test
+
+                      KF5::I18n
+                      KF5::XmlGui
+                      KF5::KExiv2
+                      KF5::KDcraw
+
+                      ${OpenCV_LIBRARIES}
+)
+
+if(GPHOTO2_FOUND)
+    target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
+endif()
+
+if(MARBLE_FOUND)
+    target_link_libraries(cameranamehelpertest ${MARBLE_LIBRARIES})
+endif()
+
+#------------------------------------------------------------------------
+
+set(advancedrenametest_SRCS
+    advancedrenametest.cpp
+)
+
+add_executable(advancedrenametest ${advancedrenametest_SRCS}
+)
+add_test(advancedrenametest advancedrenametest)
+ecm_mark_as_test(advancedrenametest)
+
+target_link_libraries(advancedrenametest
+
+                      advancedrename
+                      digikamgui
+
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Test
+
+                      KF5::I18n
+                      KF5::KIOCore
+                      KF5::KIOWidgets
+                      KF5::Solid
+                      KF5::XmlGui
+                      KF5::KExiv2
+                      KF5::KDcraw
+
+                      ${OpenCV_LIBRARIES}
+)
