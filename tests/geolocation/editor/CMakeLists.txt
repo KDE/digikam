@@ -4,11 +4,9 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-add_executable(geolocationedit_test_correlator
-               test_correlator.cpp
-               ../../../utilities/geolocation/editor/correlator/track_correlator.cpp
-               ../../../utilities/geolocation/editor/correlator/track_correlator_thread.cpp
-              )
+add_executable(geolocationedit_test_correlator test_correlator.cpp)
+add_test(geolocationedit_test_correlator geolocationedit_test_correlator)
+ecm_mark_as_test(geolocationedit_test_correlator)
 
 target_link_libraries(geolocationedit_test_correlator
                       digikamcore
@@ -23,11 +21,11 @@ target_link_libraries(geolocationedit_test_correlator
 
 if(NOT WIN32)
 
-    add_executable(geolocationedit_test_rgparsing
-                   test_rgparsing.cpp
-                  )
+    add_executable(geolocationedit_test_gpsrgparsing test_rgparsing.cpp)
+    add_test(geolocationedit_test_gpsrgparsing geolocationedit_test_gpsrgparsing)
+    ecm_mark_as_test(geolocationedit_test_gpsrgparsing)
 
-    target_link_libraries(geolocationedit_test_rgparsing
+    target_link_libraries(geolocationedit_test_gpsrgparsing
                           digikamcore
                           Qt5::Test
                           Qt5::Gui
@@ -38,14 +36,11 @@ endif()
 
 # ----------------------------------------------------------------
 
-add_executable(geolocationedit_test_rgtagmodel
-               test_rgtagmodel.cpp
-               ../../../utilities/geolocation/editor/reversegeocoding/rgtagmodel.cpp
-               ../../../utilities/geolocation/editor/reversegeocoding/simpletreemodel.cpp
-               ../../modeltest/modeltest.cpp
-              )
+add_executable(geolocationedit_test_gpsrgtagmodel test_rgtagmodel.cpp ../../modeltest/modeltest.cpp)
+add_test(geolocationedit_test_gpsrgtagmodel geolocationedit_test_gpsrgtagmodel)
+ecm_mark_as_test(geolocationedit_test_gpsrgtagmodel)
 
-target_link_libraries(geolocationedit_test_rgtagmodel
+target_link_libraries(geolocationedit_test_gpsrgtagmodel
                       digikamcore
                       Qt5::Test
                       Qt5::Gui
@@ -55,11 +50,9 @@ target_link_libraries(geolocationedit_test_rgtagmodel
 
 # ----------------------------------------------------------------
 
-add_executable(geolocationedit_test_gpsimageitem
-               test_gpsimageitem.cpp
-               ../../../utilities/geolocation/editor/items/gpsimageitem.cpp
-               ../../../utilities/geolocation/editor/items/gpsimagemodel.cpp
-              )
+add_executable(geolocationedit_test_gpsimageitem test_gpsimageitem.cpp)
+add_test(geolocationedit_test_gpsimageitem geolocationedit_test_gpsimageitem)
+ecm_mark_as_test(geolocationedit_test_gpsimageitem)
 
 target_link_libraries(geolocationedit_test_gpsimageitem
                       digikamcore
@@ -72,22 +65,13 @@ target_link_libraries(geolocationedit_test_gpsimageitem
                      )
 
 # ----------------------------------------------------------------
-                     
-add_executable(geolocationedit_test_simpletreemodel
-               test_simpletreemodel.cpp
-               ../../../utilities/geolocation/editor/reversegeocoding/simpletreemodel.cpp
-               ../../modeltest/modeltest.cpp
-              )
+
+add_executable(geolocationedit_test_simpletreemodel test_simpletreemodel.cpp ../../modeltest/modeltest.cpp)
+add_test(geolocationedit_test_simpletreemodel geolocationedit_test_simpletreemodel)
+ecm_mark_as_test(geolocationedit_test_simpletreemodel)
 
 target_link_libraries(geolocationedit_test_simpletreemodel
+                      digikamcore
                       Qt5::Test
                       Qt5::Gui
                      )
-
-# ----------------------------------------------------------------
-
-add_test(geolocationedit_test_correlator       ${EXECUTABLE_OUTPUT_PATH}/geolocationedit_test_correlator)
-add_test(geolocationedit_test_gpsrgparsing     ${EXECUTABLE_OUTPUT_PATH}/geolocationedit_test_rgparsing)
-add_test(geolocationedit_test_gpsrgtagmodel    ${EXECUTABLE_OUTPUT_PATH}/geolocationedit_test_rgtagmodel)
-add_test(geolocationedit_test_gpsgpsimageitem  ${EXECUTABLE_OUTPUT_PATH}/geolocationedit_test_gpsimageitem)
-add_test(geolocationedit_test_simpletreemodel  ${EXECUTABLE_OUTPUT_PATH}/geolocationedit_test_simpletreemodel)

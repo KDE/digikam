@@ -14,9 +14,9 @@ add_subdirectory(dmetadata)
 add_subdirectory(geolocation)
 add_subdirectory(imgqsort)
 add_subdirectory(iojobs)
+add_subdirectory(fileio)
+add_subdirectory(filters)
 add_subdirectory(timestampupdate)
-
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 if(ENABLE_DIGIKAM_MODELTEST)
     message(STATUS "Modeltest enabled")
@@ -24,78 +24,6 @@ if(ENABLE_DIGIKAM_MODELTEST)
         modeltest/modeltest.cpp
        )
     add_definitions(-DENABLE_DIGIKAM_MODELTEST)
-endif()
-
-#------------------------------------------------------------------------
-
-set(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
-add_executable(loadpgfdata ${loadpgfdata_SRCS})
-ecm_mark_nongui_executable(loadpgfdata)
-
-target_link_libraries(loadpgfdata
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Gui
-                      KF5::KIOCore
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(loadpgfdata ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
-set(loadsavethreadtest_SRCS loadsavethreadtest.cpp)
-add_executable(loadsavethreadtest ${loadsavethreadtest_SRCS})
-ecm_mark_nongui_executable(loadsavethreadtest)
-
-target_link_libraries(loadsavethreadtest
-
-                      digikamcore
-
-                      Qt5::Core
-
-                      KF5::I18n
-                      KF5::KExiv2
-                      KF5::KDcraw
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(loadsavethreadtest ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
-set(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
-add_executable(pgfscaled ${pgfscaled_SRCS})
-ecm_mark_nongui_executable(pgfscaled)
-
-target_link_libraries(pgfscaled
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Gui
-                      KF5::KIOCore
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(pgfscaled ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
-set(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
-add_executable(qtpgftest ${qtpgftest_SRCS})
-ecm_mark_nongui_executable(qtpgftest)
-
-target_link_libraries(qtpgftest
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Gui
-                      KF5::KIOCore
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(qtpgftest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -118,58 +46,6 @@ target_link_libraries(searchtextbartest
 
 if(MARBLE_FOUND)
     target_link_libraries(searchtextbartest ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
-set(statesavingobject_SRCS
-    statesavingobjecttest.cpp
-)
-
-add_executable(statesavingobjecttest ${statesavingobject_SRCS})
-add_test(statesavingobjecttest statesavingobjecttest)
-ecm_mark_as_test(statesavingobjecttest)
-
-target_link_libraries(statesavingobjecttest
-                      digikamcore
-                      Qt5::Gui
-                      Qt5::Test
-                      KF5::XmlGui
-                      ${OpenCV_LIBRARIES}
-)
-
-if(GPHOTO2_FOUND)
-    target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
-endif()
-
-if(MARBLE_FOUND)
-    target_link_libraries(statesavingobjecttest ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
-set(testautocrop_SRCS testautocrop.cpp)
-add_executable(testautocrop ${testautocrop_SRCS})
-ecm_mark_nongui_executable(testautocrop)
-
-target_link_libraries(testautocrop
-
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Test
-
-                      KF5::I18n
-                      KF5::XmlGui
-
-                      KF5::KExiv2
-                      KF5::KDcraw
-
-                      ${OpenCV_LIBRARIES}
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(testautocrop ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
@@ -207,95 +83,9 @@ target_link_libraries(testdatabase
 
                       ${OpenCV_LIBRARIES}
 )
+
 if(${KF5Kipi_FOUND})
     target_link_libraries(testdatabase  KF5::Kipi)
-endif()
-
-#------------------------------------------------------------------------
-
-if(LENSFUN_FOUND)
-
-    set(testlensfuniface_SRCS testlensfuniface.cpp)
-    add_executable(testlensfuniface ${testlensfuniface_SRCS})
-    ecm_mark_nongui_executable(testlensfuniface)
-
-    target_link_libraries(testlensfuniface
-
-                      digikamcore
-
-                      Qt5::Core
-
-                      KF5::I18n
-                      KF5::KIOCore
-                      KF5::KExiv2
-
-                      ${LENSFUN_LIBRARIES}
-                      ${OpenCV_LIBRARIES}
-    )
-
-    if(NOT WIN32)
-        # To link under Solaris (see bug #274484)
-        target_link_libraries(testlensfuniface ${MATH_LIBRARY})
-    endif()
-
-    if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
-        target_link_libraries(testlensfuniface ${KVM_LIBRARY})
-    endif()
-
-    if(MARBLE_FOUND)
-        target_link_libraries(testlensfuniface ${MARBLE_LIBRARIES})
-    endif()
-
-endif()
-
-#------------------------------------------------------------------------
-
-set(testnrestimate_SRCS testnrestimate.cpp)
-add_executable (testnrestimate ${testnrestimate_SRCS})
-ecm_mark_nongui_executable(testnrestimate)
-
-target_link_libraries(testnrestimate
-
-                      digikamcore
-                      digikamdatabase
-                      digikamcore
-
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Test
-
-                      KF5::I18n
-                      KF5::KIOCore
-                      KF5::KExiv2
-                      KF5::KDcraw
-
-                      ${OpenCV_LIBRARIES}
-)
-
-if(MARBLE_FOUND)
-    target_link_libraries(testnrestimate ${MARBLE_LIBRARIES})
-endif()
-
-#------------------------------------------------------------------------
-
- set(filesaveoptionsboxtest_SRCS
-     filesaveoptionsboxtest.cpp
- )
-
- add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
- add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
- ecm_mark_as_test(filesaveoptionsboxtest)
-
- target_link_libraries(filesaveoptionsboxtest
-
-                       digikamcore
-                       digikamdatabase
-
-                       Qt5::Test
- )
-
-if(MARBLE_FOUND)
-    target_link_libraries(filesaveoptionsboxtest ${MARBLE_LIBRARIES})
 endif()
 
 #------------------------------------------------------------------------
