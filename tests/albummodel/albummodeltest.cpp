@@ -47,7 +47,7 @@
 
 using namespace Digikam;
 
-const QString IMAGE_PATH(QFINDTESTDATA("albummodeltestimages"));
+const QString IMAGE_PATH(QFINDTESTDATA("data/"));
 
 QTEST_MAIN(AlbumModelTest)
 
@@ -209,7 +209,7 @@ void AlbumModelTest::init()
 
     qDebug() << "AlbumManager now knows these PAlbums:";
     
-    foreach(Album* a, AlbumManager::instance()->allPAlbums())
+    foreach(Album* const a, AlbumManager::instance()->allPAlbums())
     {
         qDebug() << "\t" << a->title();
     }
@@ -260,13 +260,13 @@ void AlbumModelTest::init()
     // root + 2 years + 2 and 3 months per year + (1997 as test year for date ordering with 12 months) = 21
     QCOMPARE(AlbumManager::instance()->allDAlbums().size(), 21);
     // ensure that there is a root date album
-    DAlbum* rootFromAlbumManager = AlbumManager::instance()->findDAlbum(0);
+    DAlbum* const rootFromAlbumManager = AlbumManager::instance()->findDAlbum(0);
     QVERIFY(rootFromAlbumManager);
-    DAlbum* rootFromList = 0;
+    DAlbum* rootFromList               = 0;
 
-    foreach(Album* album, AlbumManager::instance()->allDAlbums())
+    foreach(Album* const album, AlbumManager::instance()->allDAlbums())
     {
-        DAlbum* dAlbum = dynamic_cast<DAlbum*> (album);
+        DAlbum* const dAlbum = dynamic_cast<DAlbum*> (album);
         QVERIFY(dAlbum);
 
         if (dAlbum->isRoot())
@@ -492,23 +492,23 @@ void AlbumModelTest::testDisablePAlbumCount()
 
 void AlbumModelTest::testDAlbumModel()
 {
-    DateAlbumModel* albumModel = new DateAlbumModel();
+    DateAlbumModel* const albumModel = new DateAlbumModel();
     ensureItemCounts();
-    ModelTest* test            = new ModelTest(albumModel, 0);
+    ModelTest* const test            = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
 }
 
 void AlbumModelTest::testDAlbumContainsAlbums()
 {
-    DateAlbumModel* albumModel = new DateAlbumModel();
+    DateAlbumModel* const albumModel = new DateAlbumModel();
     ensureItemCounts();
 
     QVERIFY(albumModel->rootAlbum());
 
-    foreach(Album* album, AlbumManager::instance()->allDAlbums())
+    foreach(Album* const album, AlbumManager::instance()->allDAlbums())
     {
-        DAlbum* dAlbum = dynamic_cast<DAlbum*> (album);
+        DAlbum* const dAlbum = dynamic_cast<DAlbum*> (album);
         QVERIFY(dAlbum);
 
         qDebug() << "checking album for date " << dAlbum->date() << ", range = " << dAlbum->range();
@@ -581,8 +581,8 @@ void AlbumModelTest::testDAlbumSorting()
 
     for (int yearRow = 0; yearRow < albumModel.rowCount(); ++yearRow)
     {
-        QModelIndex yearIndex = albumModel.index(yearRow, 0);
-        DAlbum* yearAlbum     = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
+        QModelIndex yearIndex   = albumModel.index(yearRow, 0);
+        DAlbum* const yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
         QVERIFY(yearAlbum);
 
         QVERIFY(yearAlbum->date().year() > previousYear);
@@ -592,8 +592,8 @@ void AlbumModelTest::testDAlbumSorting()
 
         for (int monthRow = 0; monthRow < albumModel.rowCount(yearIndex); ++monthRow)
         {
-            QModelIndex monthIndex = albumModel.index(monthRow, 0, yearIndex);
-            DAlbum* monthAlbum     = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
+            QModelIndex monthIndex   = albumModel.index(monthRow, 0, yearIndex);
+            DAlbum* const monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
             QVERIFY(monthAlbum);
 
             QVERIFY(monthAlbum->date().month() > previousMonth);
@@ -607,8 +607,8 @@ void AlbumModelTest::testDAlbumSorting()
 
     for (int yearRow = 0; yearRow < albumModel.rowCount(); ++yearRow)
     {
-        QModelIndex yearIndex = albumModel.index(yearRow, 0);
-        DAlbum* yearAlbum     = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
+        QModelIndex yearIndex   = albumModel.index(yearRow, 0);
+        DAlbum* const yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
         QVERIFY(yearAlbum);
 
         QVERIFY(yearAlbum->date().year() < previousYear);
@@ -618,8 +618,8 @@ void AlbumModelTest::testDAlbumSorting()
 
         for (int monthRow = 0; monthRow < albumModel.rowCount(yearIndex); ++monthRow)
         {
-            QModelIndex monthIndex = albumModel.index(monthRow, 0, yearIndex);
-            DAlbum* monthAlbum     = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
+            QModelIndex monthIndex   = albumModel.index(monthRow, 0, yearIndex);
+            DAlbum* const monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
             QVERIFY(monthAlbum);
 
             QVERIFY(monthAlbum->date().month() < previousMonth);
@@ -630,7 +630,7 @@ void AlbumModelTest::testDAlbumSorting()
 
 void AlbumModelTest::testDAlbumCount()
 {
-    DateAlbumModel* albumModel = new DateAlbumModel();
+    DateAlbumModel* const albumModel = new DateAlbumModel();
     albumModel->setShowCount(true);
     ensureItemCounts();
 
@@ -639,8 +639,8 @@ void AlbumModelTest::testDAlbumCount()
     // check year albums
     for (int yearRow = 0; yearRow < albumModel->rowCount(albumModel->rootAlbumIndex()); ++yearRow)
     {
-        QModelIndex yearIndex = albumModel->index(yearRow, 0);
-        DAlbum* yearDAlbum    = albumModel->albumForIndex(yearIndex);
+        QModelIndex yearIndex    = albumModel->index(yearRow, 0);
+        DAlbum* const yearDAlbum = albumModel->albumForIndex(yearIndex);
         QVERIFY(yearDAlbum);
 
         QVERIFY(yearDAlbum->range() == DAlbum::Year);
@@ -760,7 +760,6 @@ void AlbumModelTest::testDAlbumCount()
 
 void AlbumModelTest::testTAlbumModel()
 {
-
     TagModel* albumModel = new TagModel();
     ModelTest* test      = new ModelTest(albumModel, 0);
     delete test;
@@ -774,8 +773,8 @@ void AlbumModelTest::testTAlbumModel()
 
 void AlbumModelTest::testSAlbumModel()
 {
-    SearchModel* albumModel = new SearchModel();
-    ModelTest* test         = new ModelTest(albumModel, 0);
+    SearchModel* const albumModel = new SearchModel();
+    ModelTest* const test         = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
 }
