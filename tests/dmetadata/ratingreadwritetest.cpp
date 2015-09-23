@@ -23,6 +23,8 @@
 
 #include "ratingreadwritetest.h"
 
+// Qt includes
+
 #include <QTest>
 #include <QStringList>
 #include <QString>
@@ -38,7 +40,6 @@ QTEST_MAIN(RatingReadWriteTest)
 
 void RatingReadWriteTest::initTestCase()
 {
-
 }
 
 void RatingReadWriteTest::testSimpleReadAfterWrite()

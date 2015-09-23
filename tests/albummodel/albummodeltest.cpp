@@ -40,10 +40,10 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "loadingcacheinterface.h"
-#include "modeltest/modeltest.h"
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
 #include "kiowrapper.h"
+#include "../modeltest/modeltest.h"
 
 using namespace Digikam;
 

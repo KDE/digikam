@@ -47,9 +47,9 @@
 #include "imagehistorygraphdata.h"
 #include "imagehistorygraphmodel.h"
 #include "iofilesettings.h"
-#include "modeltest/modeltest.h"
 #include "tagscache.h"
 #include "kiowrapper.h"
+#include "../modeltest/modeltest.h"
 
 using namespace Digikam;
 

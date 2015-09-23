@@ -108,7 +108,6 @@ void TagsReadWriteTest::testWriteToDisabledNamespaces()
     secondNamespace = secondNamespace.replaceInStrings(QLatin1String("|"),QLatin1String("/"));
 
     QCOMPARE(secondNamespace, tagSet1);
-
 }
 
 void TagsReadWriteTest::testReadFromDisabledNamespaces()
@@ -265,5 +264,3 @@ void TagsReadWriteTest::testTagReadAlternativeNameSpace()
 
     QCOMPARE(actual, tagSet1);
 }
-
-

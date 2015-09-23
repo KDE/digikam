@@ -237,8 +237,8 @@ template<typename FieldName> class FieldMetaInfo
     template<> class DIGIKAM_DATABASE_EXPORT FieldMetaInfo <FieldName>                                      \
     {                                                                                                       \
         public:                                                                                             \
-            static const FieldName##Field First = FieldName##First;                                         \
-            static const FieldName##Field Last  = FieldName##Last;                                          \
+            static const FieldName##Field DIGIKAM_DATABASE_EXPORT First = FieldName##First;                 \
+            static const FieldName##Field DIGIKAM_DATABASE_EXPORT Last  = FieldName##Last;                  \
             typedef FieldName##MinSizeType MinSizeType;                                                     \
             inline static MinSizeType toMinSizeType(const FieldName value)   { return MinSizeType(value); } \
             inline static FieldName fromMinSizeType(const MinSizeType value) { return FieldName(value);   } \

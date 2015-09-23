@@ -32,12 +32,11 @@
 class RatingReadWriteTest : public QObject
 {
     Q_OBJECT
-public:
-
 
 private Q_SLOTS:
 
     void initTestCase();
+
     /**
      * @brief testSimpleReadAfterWrite - default read and write
      * Description:
@@ -64,7 +63,6 @@ private Q_SLOTS:
      * Results: The call of getImageTagsPaths should return tagSet2
      */
     void testReadFromDisabledNamespaces();
-
 };
 
 #endif /* RATINGSREADWRITETEST_H */

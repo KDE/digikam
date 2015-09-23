@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class DatabaseFieldsTest : public QObject
 {
@@ -46,4 +46,4 @@ private Q_SLOTS:
     void cleanupTestCase();
 };
 
-#endif
+#endif // DATABASEFIELDSTEST_H

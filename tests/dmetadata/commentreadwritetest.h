@@ -29,17 +29,18 @@
 #include <QObject>
 #include <QStringList>
 
+// Local includes
+
 #include "captionvalues.h"
 
 class CommentReadWriteTest : public QObject
 {
     Q_OBJECT
-public:
-
 
 private Q_SLOTS:
 
     void initTestCase();
+
     /**
      * @brief testSimpleReadAfterWrite - default read and write
      * Description:
@@ -67,12 +68,10 @@ private Q_SLOTS:
      */
     void testReadFromDisabledNamespaces();
 
-
-
 private:
+
     Digikam::CaptionsMap commentSet1;
     Digikam::CaptionsMap commentSet2;
 };
-
 
 #endif /* COMMENTREADWRITETEST_H */

@@ -37,7 +37,6 @@ QTEST_MAIN(CommentReadWriteTest)
 
 using namespace Digikam;
 
-
 void CommentReadWriteTest::initTestCase()
 {
     KExiv2::AltLangMap authorsMap, authorsMap2;
@@ -76,9 +75,7 @@ void CommentReadWriteTest::testSimpleReadAfterWrite()
 
     QCOMPARE(rezAuthor, commentSet1.value(QLatin1String("x-default")).author);
     QCOMPARE(rezComment, commentSet1.value(QLatin1String("x-default")).caption);
-
 }
-
 
 void CommentReadWriteTest::testWriteToDisabledNamespaces()
 {
@@ -123,10 +120,7 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
     commentString = dmeta.getXmpTagStringLangAlt("Xmp.exif.UserComment", QString(), false);
 
     QCOMPARE(commentString, commentSet1.value(QLatin1String("x-default")).caption);
-
-
 }
-
 
 void CommentReadWriteTest::testReadFromDisabledNamespaces()
 {
@@ -151,8 +145,6 @@ void CommentReadWriteTest::testReadFromDisabledNamespaces()
     commNs2.specialOpts     = NamespaceEntry::COMMENT_ALTLANG;
     commNs2.index           = 1;
     commNs2.subspace = NamespaceEntry::XMP;
-
-
 
     dmsettings.unifyReadWrite = false;
     dmsettings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)).clear();

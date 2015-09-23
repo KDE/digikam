@@ -32,12 +32,11 @@
 class TagsReadWriteTest : public QObject
 {
     Q_OBJECT
-public:
-
 
 private Q_SLOTS:
 
     void initTestCase();
+
     /**
      * @brief testSimpleReadAfterWrite - default read and write
      * Description:
@@ -85,8 +84,8 @@ private Q_SLOTS:
      */
     void testTagReadAlternativeNameSpace();
 
-
 private:
+
     QStringList tagSet1;
     QStringList tagSet2;
     QStringList tagSet3;
