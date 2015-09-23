@@ -11,6 +11,7 @@
   <name xml:lang="de">Bildmodul Transformation</name>
   <name xml:lang="en-GB">ImagePlugin-Transform</name>
   <name xml:lang="es">Complemento de imagen - Transformar</name>
+  <name xml:lang="fr">ImagePlugin-Transform</name>
   <name xml:lang="it">ImagePlugin-Trasforma</name>
   <name xml:lang="ko">그림 플러그인-변형</name>
   <name xml:lang="nl">ImagePlugin-Transform</name>
@@ -30,6 +31,7 @@
   <summary xml:lang="de">Geometrische Transformation von Bildern</summary>
   <summary xml:lang="en-GB">A tool to transform image geometry</summary>
   <summary xml:lang="es">Una herramienta para transformar la geometría de una imagen</summary>
+  <summary xml:lang="fr">Un outil pour modifier la géométrie d'une image</summary>
   <summary xml:lang="gl">Unha ferramenta para transformar a xeometría das imaxes</summary>
   <summary xml:lang="it">Strumento per trasformare la geometria di un'immagine</summary>
   <summary xml:lang="ko">그림 크기를 변형하는 도구</summary>
@@ -51,6 +53,7 @@
   <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
+  <developer_name xml:lang="fr">Projet digiKam</developer_name>
   <developer_name xml:lang="it">Progetto digiKam</developer_name>
   <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>

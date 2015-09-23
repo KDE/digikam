@@ -11,6 +11,7 @@
   <name xml:lang="de">Bildmodul FxFilter</name>
   <name xml:lang="en-GB">ImagePlugin-FxFilters</name>
   <name xml:lang="es">Complemento de imagen - Filtros de efectos especiales</name>
+  <name xml:lang="fr">ImagePlugin-FxFilters</name>
   <name xml:lang="it">ImagePlugin-FiltriFx</name>
   <name xml:lang="ko">그림 플러그인-효과 필터</name>
   <name xml:lang="nl">ImagePlugin-FxFilters</name>
@@ -30,6 +31,7 @@
   <summary xml:lang="de">digiKam-Modul für Spezialeffekte</summary>
   <summary xml:lang="en-GB">Special effect filters plugin for digiKam</summary>
   <summary xml:lang="es">Complemento de filtros de efectos especiales para digiKam</summary>
+  <summary xml:lang="fr">Filtres d'effets spéciaux pour digiKam</summary>
   <summary xml:lang="gl">Engadido de filtros de efectos especiais para digiKam</summary>
   <summary xml:lang="it">Estensione di digiKam per filtri con effetti speciali</summary>
   <summary xml:lang="ko">digiKam용 특수 효과 필터 플러그인</summary>
@@ -51,6 +53,7 @@
   <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
+  <developer_name xml:lang="fr">Projet digiKam</developer_name>
   <developer_name xml:lang="it">Progetto digiKam</developer_name>
   <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>

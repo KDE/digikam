@@ -11,6 +11,7 @@
   <name xml:lang="de">Bildmodul Farben</name>
   <name xml:lang="en-GB">ImagePlugin-Color</name>
   <name xml:lang="es">Complemento de imagen - Color</name>
+  <name xml:lang="fr">ImagePlugin-Color</name>
   <name xml:lang="it">ImagePlugin-Colore</name>
   <name xml:lang="ko">그림 플러그인-색상</name>
   <name xml:lang="nl">ImagePlugin-Color</name>
@@ -31,6 +32,7 @@
   <summary xml:lang="de">Korrigiert Farben von Bildern</summary>
   <summary xml:lang="en-GB">A tool to correct colours of image</summary>
   <summary xml:lang="es">Una herramienta para corregir los colores de una imagen</summary>
+  <summary xml:lang="fr">Un outil pour corriger les couleurs d'une image</summary>
   <summary xml:lang="gl">Unha ferramenta para corrixir as cores das imaxes</summary>
   <summary xml:lang="it">Strumento per correggere i colori di un'immagine</summary>
   <summary xml:lang="ko">그림의 색상을 수정하는 도구</summary>
@@ -51,6 +53,7 @@
   <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
+  <developer_name xml:lang="fr">Projet digiKam</developer_name>
   <developer_name xml:lang="it">Progetto digiKam</developer_name>
   <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
