@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestGPXParsing : public QObject
 {

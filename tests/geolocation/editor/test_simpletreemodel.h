@@ -27,11 +27,7 @@
 
 // Qt includes
 
-#include <QtTest/QtTest>
-
-// KDE includes
-
-// local includes
+#include <QtTest>
 
 class TestSimpleTreeModel : public QObject
 {
@@ -41,7 +37,6 @@ private Q_SLOTS:
 
     void testNoOp();
     void testModel1();
-
 };
 
 #endif /* TEST_SIMPLETREEMODEL_H */

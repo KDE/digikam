@@ -26,16 +26,16 @@
 
 #include "test_rgtagmodel.h"
 
-// KDE includes
+// Qt includes
 
 #include <QDebug>
 #include <QUrl>
 
 // local includes
 
-#include "../reversegeocoding/simpletreemodel.h"
-#include "../reversegeocoding/rgtagmodel.h"
-#include "../../../../tests/modeltest/modeltest.h"
+#include "simpletreemodel.h"
+#include "rgtagmodel.h"
+#include "modeltest.h"
 
 /**
  * @brief Dummy test that does nothing
@@ -187,7 +187,6 @@ void TestRGTagModel::testModel1()
     Q_ASSERT(tagItem2Index.isValid());
 
     Q_ASSERT(tagModel->rowCount(tagItem2Index)==treeModel->rowCount(treeItem2Index));
-
  
     const QPersistentModelIndex tagItem11Index = tagModel->fromSourceIndex(treeItem11Index);
     Q_ASSERT(tagItem11Index.isValid());
@@ -195,7 +194,6 @@ void TestRGTagModel::testModel1()
     QPersistentModelIndex treeItem21Index = treeModel->itemToIndex(treeItem21);
     const QPersistentModelIndex tagItem21Index = tagModel->fromSourceIndex(treeItem21Index);
     Q_ASSERT(tagItem21Index.isValid());
-   
 
     // now make sure we can descend:
     const QModelIndex ti1 = tagModel->index(0, 0);
@@ -206,7 +204,9 @@ void TestRGTagModel::testModel1()
     const QModelIndex ti11 = tagModel->index(0, 0, ti1);
     Q_ASSERT(ti11.isValid());
     Q_ASSERT(ti11 == tagItem11Index); 
+
     qDebug()<<"----------------------_";
+
     // descends level 0 row 1
     const QModelIndex ti2 = tagModel->index(1, 0);
     Q_ASSERT(ti2.isValid());
@@ -232,7 +232,6 @@ void TestRGTagModel::testModel1()
     //checks parent of tagItem2 
     const QModelIndex parent_ti2 = tagModel->parent(ti2);
     Q_ASSERT(!parent_ti2.isValid());
-
 
     const QModelIndex parent_ti21 = tagModel->parent(ti21);
     Q_ASSERT(parent_ti21.isValid());
@@ -273,14 +272,13 @@ void TestRGTagModel::testModelSpacerTags()
     qDebug()<<tagModel->data(index11, Qt::DisplayRole);
     qDebug()<<tagModel->data(index12, Qt::DisplayRole);
     qDebug()<<tagModel->data(index13, Qt::DisplayRole);
-//    qDebug()<<tagModel->data(2,0,QModelIndex());
+//  qDebug()<<tagModel->data(2,0,QModelIndex());
    
-
- /*
+/*
     qDebug()<<"VERIFY IF NEW TAG EXISTS:";
     QModelIndex ti211Spacer = tagModel->index(0,0,ti21);
     Q_ASSERT(ti211Spacer.isValid());
-  */
+*/
 
 }
 

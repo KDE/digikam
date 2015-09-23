@@ -29,17 +29,10 @@
 #include <QDateTime>
 #include <QUrl>
 
-// KDE includes
-
-#include <kio/global.h>
-
 // GeoIface includes
 
 #include "trackreader.h"
-
-// local includes
-
-#include "../correlator/track_correlator.h"
+#include "track_correlator.h"
 
 using namespace Digikam;
 using namespace GeoIface;
@@ -47,13 +40,9 @@ using namespace GeoIface;
 /**
  * @brief Return the path of the directory containing the test data
  */
-QUrl GetTestDataDirectory()
+QString GetTestDataDirectory()
 {
-    // any better ideas on how to get the path?
-    const QUrl thisCPPFile(QStringLiteral(__FILE__));
-    QUrl testDataDir = KIO::upUrl(thisCPPFile);
-    testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QStringLiteral("data/"));
-    return testDataDir;
+    return QString(QFINDTESTDATA("data/"));
 }
 
 /**
@@ -68,8 +57,7 @@ void TestGPXParsing::testNoOp()
  */
 void TestGPXParsing::testCorrelator1()
 {
-    QUrl testDataDir = GetTestDataDirectory();
-    testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QLatin1String("gpxfile-1.gpx"));
+    QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("gpxfile-1.gpx"));
     
     QList<QUrl> fileList;
     fileList << testDataDir;
@@ -131,8 +119,7 @@ void TestGPXParsing::testCorrelator1()
  */
 void TestGPXParsing::testInterpolation()
 {
-    QUrl testDataDir = GetTestDataDirectory();
-    testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QLatin1String("gpxfile-1.gpx"));
+    QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("gpxfile-1.gpx"));
 
     QList<QUrl> fileList;
     fileList << testDataDir;

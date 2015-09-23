@@ -29,11 +29,7 @@
 
 // Qt includes
 
-#include <QtTest/QtTest>
-
-// KDE includes
-
-// local includes
+#include <QtTest>
 
 class TestRGTagModel : public QObject
 {
@@ -51,4 +47,3 @@ private Q_SLOTS:
 };
 
 #endif /* TEST_RGTAGMODEL_H */
-

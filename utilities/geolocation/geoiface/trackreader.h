@@ -40,7 +40,7 @@ class TestTracks;
 namespace GeoIface
 {
 
-class  TrackReader : public QXmlDefaultHandler
+class TrackReader : public QXmlDefaultHandler
 {
 public:
 

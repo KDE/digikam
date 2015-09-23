@@ -92,7 +92,6 @@ public:
         enum Flags
         {
             FlagVisible = 1,
-
             FlagDefault = FlagVisible
         };
 
@@ -105,6 +104,7 @@ public:
             color(Qt::red),
             flags(FlagDefault)
         {
+            qRegisterMetaType<TrackChanges>("TrackChanges");
         }
 
         QUrl                 url;

@@ -43,22 +43,11 @@ namespace
 }
 
 /**
- * @brief Return the path of the directory containing the test data
- */
-QUrl GetTestDataDirectory()
-{
-    const QUrl thisCPPFile(QString::fromLatin1(__FILE__));
-    const QUrl testDataDir = thisCPPFile.resolved(QUrl(QString::fromLatin1("../data/")));
-    return testDataDir;
-}
-
-/**
  * @brief Test loading of a GPX file directly
  */
 bool testSaxLoader(const QString& filename)
 {
-    const QUrl testDataDir                = GetTestDataDirectory();
-    TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(QUrl(filename));
+    TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(QUrl::fromLocalFile(filename));
 
     return fileData.isValid;
 }

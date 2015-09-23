@@ -22,12 +22,15 @@
  * ============================================================ */
 
 #include "test_itemmarkertiler.h"
-#include "geoiface_common.h"
 
 // Qt includes
 
 #include <QStandardItemModel>
 #include <QDebug>
+
+// Local includes
+
+#include "geoiface_common.h"
 
 using namespace GeoIface;
 

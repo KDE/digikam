@@ -30,15 +30,11 @@
 #include <QScopedPointer>
 #include <QUrl>
 
-// KDE includes
-
-#include <kio/global.h>
-
 // local includes
 
 #include "dmetadata.h"
-#include "../correlator/gpsdatacontainer.h"
-#include "../items/gpsimageitem.h"
+#include "gpsdatacontainer.h"
+#include "gpsimageitem.h"
 
 
 using namespace Digikam;
@@ -58,14 +54,10 @@ void TestGPSImageItem::cleanupTestCase()
 /**
  * @brief Return the path of the directory containing the test data
  */
-QUrl GetTestDataDirectory()
+QString GetTestDataDirectory()
 {
-    // any better ideas on how to get the path?
-    const QUrl thisCPPFile(QStringLiteral(__FILE__));
-    QUrl testDataDir = KIO::upUrl(thisCPPFile);
-    testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QStringLiteral("data/"));
-    return testDataDir;
-}
+    return QString(QFINDTESTDATA("data/"));
+}    
 
 GPSImageItem* ItemFromFile(const QUrl& url)
 {
@@ -90,16 +82,14 @@ void TestGPSImageItem::testBasicLoading()
 {
     {
         // test failure on not-existing file
-        QUrl testDataDir = GetTestDataDirectory();
-        testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QLatin1String("not-existing"));
+        QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("not-existing"));
         QScopedPointer<GPSImageItem> imageItem(ItemFromFile(testDataDir));
         QVERIFY(!imageItem);
     }
 
     {
         // load a file without GPS info
-        QUrl testDataDir = GetTestDataDirectory();
-        testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QLatin1String("exiftest-nogps.png"));
+        QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("exiftest-nogps.png"));
         QScopedPointer<GPSImageItem> imageItem(ItemFromFile(testDataDir));
         QVERIFY(imageItem);
 
@@ -113,8 +103,7 @@ void TestGPSImageItem::testBasicLoading()
 
     {
         // load a file with geo:5,15,25
-        QUrl testDataDir = GetTestDataDirectory();
-        testDataDir.setPath(testDataDir.path() + QLatin1Char('/') + QLatin1String("exiftest-5_15_25.jpg"));
+        QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("exiftest-5_15_25.jpg"));
         QScopedPointer<GPSImageItem> imageItem(ItemFromFile(testDataDir));
         QVERIFY(imageItem);
 

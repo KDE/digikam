@@ -27,9 +27,7 @@
 
 // Qt includes
 
-#include <QtTest/QtTest>
-
-// KDE includes
+#include <QtTest>
 
 // local includes
 
@@ -43,7 +41,6 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testNoOp();
     void testBasicLoading();
-
 };
 
 #endif /* TEST_KIPIIMAGEITEM_H */

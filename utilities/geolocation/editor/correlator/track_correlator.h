@@ -56,15 +56,15 @@ public:
     public:
 
         Correlation()
-        : dateTime(),
-          userData(),
-          nSatellites(-1),
-          hDop(-1),
-          pDop(-1),
-          fixType(-1),
-          speed(-1),
-          flags(),
-          coordinates()
+          : dateTime(),
+            userData(),
+            nSatellites(-1),
+            hDop(-1),
+            pDop(-1),
+            fixType(-1),
+            speed(-1),
+            flags(),
+            coordinates()
         {
         }
 
@@ -78,7 +78,7 @@ public:
         int                           fixType;
         qreal                         speed;
         CorrelationFlags              flags;
-        GeoIface::GeoCoordinates       coordinates;
+        GeoIface::GeoCoordinates      coordinates;
     };
 
     // -------------------------------------

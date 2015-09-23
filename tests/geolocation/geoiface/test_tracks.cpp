@@ -41,12 +41,9 @@ QTEST_MAIN(TestTracks)
 /**
  * @brief Return the path of the directory containing the test data
  */
-QUrl GetTestDataDirectory()
+QString GetTestDataDirectory()
 {
-    const QUrl thisCPPFile = QUrl::fromLocalFile(QString::fromLatin1(__FILE__));
-    const QUrl testDataDir = thisCPPFile.resolved(QUrl(QString::fromLatin1("data/")));
-
-    return testDataDir;
+    return QString(QFINDTESTDATA("data/"));
 }
 
 /**
@@ -134,10 +131,10 @@ void TestTracks::testCustomDateTimeParsing()
  */
 void TestTracks::testFileLoading()
 {
-    const QUrl testDataDir = GetTestDataDirectory();
-
+    QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("gpxfile-1.gpx"));
+    
     QList<QUrl> fileList;
-    fileList << QUrl(testDataDir).resolved(QUrl(QString::fromLatin1("gpxfile-1.gpx")));
+    fileList << testDataDir;
 
     TrackManager myParser;
 
@@ -164,9 +161,8 @@ void TestTracks::testFileLoading()
  */
 void TestTracks::testSaxLoader()
 {
-    const QUrl testDataDir                = GetTestDataDirectory();
-    const QUrl trackFile                  = testDataDir.resolved(QUrl(QString::fromLatin1("gpxfile-1.gpx")));
-    TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(trackFile);
+    QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("gpxfile-1.gpx"));
+    TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(testDataDir);
     QVERIFY(fileData.isValid);
     QVERIFY(fileData.loadError.isEmpty());
 
@@ -182,24 +178,25 @@ void TestTracks::testSaxLoader()
  */
 void TestTracks::testSaxLoaderError()
 {
-    const QUrl testDataDir = GetTestDataDirectory();
-
     {
-        TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(testDataDir.resolved(QUrl(QString::fromLatin1("gpx-invalid-empty.gpx"))));
+        QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("gpx-invalid-empty.gpx"));
+        TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(testDataDir);
         QVERIFY(!fileData.isValid);
         QVERIFY(!fileData.loadError.isEmpty());
         qDebug() << fileData.loadError;
     }
 
     {
-        TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(testDataDir.resolved(QUrl(QString::fromLatin1("gpx-invalid-xml-error.gpx"))));
+        QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("gpx-invalid-xml-error.gpx"));
+        TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(testDataDir);
         QVERIFY(!fileData.isValid);
         QVERIFY(!fileData.loadError.isEmpty());
         qDebug() << fileData.loadError;
     }
 
     {
-        TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(testDataDir.resolved(QUrl(QString::fromLatin1("gpx-invalid-no-points.gpx"))));
+        QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("gpx-invalid-no-points.gpx"));
+        TrackReader::TrackReadResult fileData = TrackReader::loadTrackFile(testDataDir);
         QVERIFY(!fileData.isValid);
         QVERIFY(!fileData.loadError.isEmpty());
         qDebug() << fileData.loadError;

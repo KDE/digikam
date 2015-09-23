@@ -29,7 +29,7 @@
 
 // Qt includes
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestRGParsing : public QObject
 {

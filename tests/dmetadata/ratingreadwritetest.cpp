@@ -52,7 +52,7 @@ void RatingReadWriteTest::testSimpleReadAfterWrite()
 
     qDebug() << dmeta.supportXmp();
 
-    for(int i = 0; i < 6; i++)
+    for (int i = 0; i < 6; i++)
     {
         dmeta.setImageRating(i);
         rez = dmeta.getImageRating();
@@ -93,18 +93,18 @@ void RatingReadWriteTest::testWriteToDisabledNamespaces()
              << ratingNs2
              << ratingNs3;
 
-    for(int i = 0; i < 6; i++)
+    for (int i = 0; i < 6; i++)
     {
         dmeta.setImageRating(i, dmsettings);
 
         QString data;
         bool ok;
 
-        data = dmeta.getXmpTagString("Xmp.acdsee.rating", false);
+        data    = dmeta.getXmpTagString("Xmp.acdsee.rating", false);
 
         QVERIFY(data.isEmpty());
 
-        data = dmeta.getXmpTagString("Xmp.MicrosoftPhoto.Rating", false);
+        data    = dmeta.getXmpTagString("Xmp.MicrosoftPhoto.Rating", false);
         int rez = data.toInt(&ok);
 
         QCOMPARE(ok, true);
@@ -145,7 +145,7 @@ void RatingReadWriteTest::testReadFromDisabledNamespaces()
              << ratingNs2
              << ratingNs3;
 
-    for(int i = 0; i < 6; i++)
+    for (int i = 0; i < 6; i++)
     {
 
         dmeta.setXmpTagString("Xmp.acdsee.rating", QString::number(5-i), false);

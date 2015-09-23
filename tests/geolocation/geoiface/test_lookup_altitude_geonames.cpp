@@ -33,7 +33,6 @@ using namespace GeoIface;
 
 void TestLookupAltitudeGeonames::testNoOp()
 {
-
 }
 
 void TestLookupAltitudeGeonames::testSimpleLookup()

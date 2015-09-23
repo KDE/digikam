@@ -50,11 +50,12 @@ public:
     }
 
     GeoIface::TrackManager* trackManager;
-    TrackCorrelatorThread* thread;
+    TrackCorrelatorThread*  thread;
 };
 
 TrackCorrelator::TrackCorrelator(GeoIface::TrackManager* const trackManager, QObject* const parent)
-    : QObject(parent), d(new Private())
+    : QObject(parent),
+      d(new Private())
 {
     d->trackManager = trackManager;
 
@@ -63,7 +64,6 @@ TrackCorrelator::TrackCorrelator(GeoIface::TrackManager* const trackManager, QOb
 
 TrackCorrelator::~TrackCorrelator()
 {
-
 }
 
 /**

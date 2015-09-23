@@ -39,14 +39,14 @@ using namespace Digikam;
 
 void CommentReadWriteTest::initTestCase()
 {
-    KExiv2::AltLangMap authorsMap, authorsMap2;
-    KExiv2::AltLangMap datesMap, datesMap2;
+    KExiv2::AltLangMap authorsMap,  authorsMap2;
+    KExiv2::AltLangMap datesMap,    datesMap2;
     KExiv2::AltLangMap commentsMap, commentsMap2;
     QString commonAuthor, commonAuthor2;
 
     authorsMap.insert(QLatin1String("x-default"), QLatin1String("Veaceslav"));
     commentsMap.insert(QLatin1String("x-default"), QLatin1String("Veaceslav's comment"));
-    commonAuthor = QLatin1String("Veaceslav");
+    commonAuthor  = QLatin1String("Veaceslav");
 
     commentSet1.setData(commentsMap, authorsMap, commonAuthor, datesMap);
 
@@ -56,7 +56,6 @@ void CommentReadWriteTest::initTestCase()
 
     commentSet2.setData(commentsMap2, authorsMap2, commonAuthor2, datesMap2);
 }
-
 
 void CommentReadWriteTest::testSimpleReadAfterWrite()
 {
@@ -70,10 +69,10 @@ void CommentReadWriteTest::testSimpleReadAfterWrite()
 
     result = dmeta.getImageComments();
 
-    QString rezAuthor = result.value(QLatin1String("x-default")).author;
+    QString rezAuthor  = result.value(QLatin1String("x-default")).author;
     QString rezComment = result.value(QLatin1String("x-default")).caption;
 
-    QCOMPARE(rezAuthor, commentSet1.value(QLatin1String("x-default")).author);
+    QCOMPARE(rezAuthor,  commentSet1.value(QLatin1String("x-default")).author);
     QCOMPARE(rezComment, commentSet1.value(QLatin1String("x-default")).caption);
 }
 
@@ -92,7 +91,7 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
     commNs1.nsType          = NamespaceEntry::COMMENT;
     commNs1.specialOpts     = NamespaceEntry::COMMENT_ATLLANGLIST;
     commNs1.index           = 0;
-    commNs1.subspace = NamespaceEntry::XMP;
+    commNs1.subspace        = NamespaceEntry::XMP;
     commNs1.isDisabled      = true;
 
     NamespaceEntry commNs2;
@@ -100,7 +99,7 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
     commNs2.nsType          = NamespaceEntry::COMMENT;
     commNs2.specialOpts     = NamespaceEntry::COMMENT_ALTLANG;
     commNs2.index           = 1;
-    commNs2.subspace = NamespaceEntry::XMP;
+    commNs2.subspace        = NamespaceEntry::XMP;
 
     dmsettings.unifyReadWrite = false;
 
@@ -113,7 +112,7 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
 
     QVERIFY(rez);
 
-    commentsMap = dmeta.getXmpTagStringListLangAlt("Xmp.dc.description", false);
+    commentsMap   = dmeta.getXmpTagStringListLangAlt("Xmp.dc.description", false);
 
     QCOMPARE(commentsMap.value(QLatin1String("x-default")), QString());
 
@@ -136,7 +135,7 @@ void CommentReadWriteTest::testReadFromDisabledNamespaces()
     commNs1.nsType          = NamespaceEntry::COMMENT;
     commNs1.specialOpts     = NamespaceEntry::COMMENT_ATLLANGLIST;
     commNs1.index           = 0;
-    commNs1.subspace = NamespaceEntry::XMP;
+    commNs1.subspace        = NamespaceEntry::XMP;
     commNs1.isDisabled      = true;
 
     NamespaceEntry commNs2;
@@ -144,7 +143,7 @@ void CommentReadWriteTest::testReadFromDisabledNamespaces()
     commNs2.nsType          = NamespaceEntry::COMMENT;
     commNs2.specialOpts     = NamespaceEntry::COMMENT_ALTLANG;
     commNs2.index           = 1;
-    commNs2.subspace = NamespaceEntry::XMP;
+    commNs2.subspace        = NamespaceEntry::XMP;
 
     dmsettings.unifyReadWrite = false;
     dmsettings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)).clear();

@@ -185,7 +185,7 @@ void TestPrimitives::testNormalizeBounds_data()
         << ( GeoCoordinates::PairList()
                 << GeoCoordinates::makePair(-10, -180, 15, -170)
                 << GeoCoordinates::makePair(-10, 20, 15, 180)
-            );
+        );
 }
 
 void TestPrimitives::testNormalizeBounds()

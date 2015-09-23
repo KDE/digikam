@@ -32,7 +32,7 @@
 // local includes
 
 #include "simpletreemodel.h"
-#include "../../../../tests/modeltest/modeltest.h"
+#include "modeltest.h"
 
 /**
  * @brief Dummy test that does nothing
@@ -81,7 +81,9 @@ void TestSimpleTreeModel::testModel1()
     Q_ASSERT(treeModel->hasIndex(0, 0) == true);
 
     QModelIndex topIndex = treeModel->index(0, 0, QModelIndex());
-    if (treeModel->rowCount(topIndex) > 0) {
+
+    if (treeModel->rowCount(topIndex) > 0)
+    {
         QModelIndex childIndex = treeModel->index(0, 0, topIndex);
         qDebug() << childIndex;
         qDebug() << treeModel->parent(childIndex);
