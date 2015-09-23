@@ -49,14 +49,14 @@ DKCamera::DKCamera(const QString& title, const QString& model, const QString& po
     m_captureImagePreviewSupport  = false;
 
     ApplicationSettings* const settings = ApplicationSettings::instance();
-    m_imageFilter                 = settings->getImageFileFilter();
-    m_movieFilter                 = settings->getMovieFileFilter();
-    m_audioFilter                 = settings->getAudioFileFilter();
-    m_rawFilter                   = settings->getRawFileFilter();
-    m_imageFilter                 = m_imageFilter.toLower();
-    m_movieFilter                 = m_movieFilter.toLower();
-    m_audioFilter                 = m_audioFilter.toLower();
-    m_rawFilter                   = m_rawFilter.toLower();
+    m_imageFilter                       = settings->getImageFileFilter();
+    m_movieFilter                       = settings->getMovieFileFilter();
+    m_audioFilter                       = settings->getAudioFileFilter();
+    m_rawFilter                         = settings->getRawFileFilter();
+    m_imageFilter                       = m_imageFilter.toLower();
+    m_movieFilter                       = m_movieFilter.toLower();
+    m_audioFilter                       = m_audioFilter.toLower();
+    m_rawFilter                         = m_rawFilter.toLower();
 }
 
 DKCamera::~DKCamera()
@@ -167,8 +167,13 @@ void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta
 {
     QSize dims     = meta.getImageDimensions();
     info.ctime     = meta.getImageDateTime();
+
     //NOTE: see bug #246401 to sort based on milliseconds for items  taken quickly.
-    info.ctime.setTime(info.ctime.time().addMSecs(meta.getMSecsInfo()));
+    if (!info.ctime.isNull())
+    {
+        info.ctime.setTime(info.ctime.time().addMSecs(meta.getMSecsInfo()));
+    }
+
     info.width     = dims.width();
     info.height    = dims.height();
     info.photoInfo = meta.getPhotographInformation();
