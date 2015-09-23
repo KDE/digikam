@@ -29,12 +29,10 @@
 #include <QDebug>
 #include <QtTest>
 
-// KDE includes
-
 // local includes
 
-#include "../../../utilities/geolocation/geoiface/tracks.h"
-#include "../../../utilities/geolocation/geoiface/trackreader.h"
+#include "tracks.h"
+#include "trackreader.h"
 
 using namespace GeoIface;
 

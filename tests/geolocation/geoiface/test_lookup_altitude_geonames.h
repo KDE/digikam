@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestLookupAltitudeGeonames : public QObject
 {
