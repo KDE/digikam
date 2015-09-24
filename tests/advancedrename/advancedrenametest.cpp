@@ -204,7 +204,7 @@ void AdvancedRenameTest::testDirectoryNameToken_data()
 
     QTest::newRow("[dir]")
             << "[dir]"
-            << "advancedrenameimages.jpg";
+            << "data.jpg";
 
     QTest::newRow("[dir.]")
             << "[dir.]"
@@ -212,7 +212,7 @@ void AdvancedRenameTest::testDirectoryNameToken_data()
 
     QTest::newRow("[dir.]_[dir]")
             << "[dir.]_[dir]"
-            << QString::fromUtf8("%1_advancedrenameimages.jpg").arg(digikamDir).toLatin1().constData();
+            << QString::fromUtf8("%1_data.jpg").arg(digikamDir).toLatin1().constData();
 
     QTest::newRow("[dir......................................................................]")
             << "[dir......................................................................]"
