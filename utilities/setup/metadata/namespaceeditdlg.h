@@ -44,7 +44,7 @@ class NamespaceEditDlg : public QDialog
 
 public:
 
-    NamespaceEditDlg( bool create, NamespaceEntry& entry, QWidget* const parent = 0);
+    NamespaceEditDlg(bool create, NamespaceEntry& entry, QWidget* const parent = 0);
     ~NamespaceEditDlg();
 
     void saveData(NamespaceEntry& entry);

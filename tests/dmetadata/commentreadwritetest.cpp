@@ -101,7 +101,7 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
     commNs2.index           = 1;
     commNs2.subspace        = NamespaceEntry::XMP;
 
-    dmsettings.unifyReadWrite = false;
+    dmsettings.setUnifyReadWrite(false);
 
     dmsettings.getWriteMapping(QLatin1String(DM_COMMENT_CONTAINER)).clear();
     dmsettings.getWriteMapping(QLatin1String(DM_COMMENT_CONTAINER))
@@ -145,7 +145,7 @@ void CommentReadWriteTest::testReadFromDisabledNamespaces()
     commNs2.index           = 1;
     commNs2.subspace        = NamespaceEntry::XMP;
 
-    dmsettings.unifyReadWrite = false;
+    dmsettings.setUnifyReadWrite(false);
     dmsettings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)).clear();
     dmsettings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER))
              << commNs1

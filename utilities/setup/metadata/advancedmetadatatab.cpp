@@ -89,6 +89,7 @@ public:
 
     bool                        changed;
 };
+
 AdvancedMetadataTab::AdvancedMetadataTab(QWidget* const parent)
     : QWidget(parent),
       d(new Private())
@@ -100,7 +101,7 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* const parent)
     setModels();
     connectButtons();
 
-    d->unifyReadWrite->setChecked(d->container.unifyReadWrite);
+    d->unifyReadWrite->setChecked(d->container.unifyReadWrite());
     
     connect(d->unifyReadWrite, SIGNAL(toggled(bool)),
             this, SLOT(slotUnifyChecked(bool)));
@@ -168,9 +169,9 @@ void AdvancedMetadataTab::slotAddNewNamespace()
     /**
      * Setting some default parameters;
      */
-    entry.nsType = (NamespaceEntry::NamespaceType)d->metadataType->currentIndex();
+    entry.nsType    = (NamespaceEntry::NamespaceType)d->metadataType->currentIndex();
     entry.isDefault = false;
-    entry.subspace = NamespaceEntry::XMP;
+    entry.subspace  = NamespaceEntry::XMP;
 
     if (!NamespaceEditDlg::create(qApp->activeWindow(), entry))
     {
@@ -214,7 +215,8 @@ void AdvancedMetadataTab::slotEditNamespace()
 void AdvancedMetadataTab::applySettings()
 {
     QList<QLatin1String> keys = d->container.mappingKeys();
-    int index = 0;
+    int index                 = 0;
+
     foreach(QLatin1String str, keys)
     {
         d->container.getReadMapping(str).clear();
@@ -233,7 +235,7 @@ void AdvancedMetadataTab::applySettings()
 void AdvancedMetadataTab::slotUnifyChecked(bool value)
 {
     d->operationType->setDisabled(value);
-    d->container.unifyReadWrite = value;
+    d->container.setUnifyReadWrite(value);
 
     d->operationType->setCurrentIndex(0);
 
@@ -426,7 +428,7 @@ QList<NamespaceEntry>& AdvancedMetadataTab::getCurrentContainer()
 
     int currentIndex = getModelIndex();
 
-    if(currentIndex >= d->metadataTypeSize)
+    if (currentIndex >= d->metadataTypeSize)
     {
         return d->container.getWriteMapping(QLatin1String(d->metadataType->currentData().toByteArray()));
     }
@@ -448,12 +450,13 @@ void AdvancedMetadataTab::setModels()
 
     d->metadataTypeSize = keys.size();
 
-    for(int i = 0 ; i < keys.size()*2; i++)
+    for (int i = 0 ; i < keys.size()*2; i++)
     {
         d->models.append(new QStandardItemModel(this));
     }
 
     int index = 0;
+
     foreach(QLatin1String str, keys)
     {
         setModelData(d->models.at(index++), d->container.getReadMapping(str));

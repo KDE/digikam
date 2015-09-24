@@ -162,8 +162,8 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry& entry, QWidget* 
         setWindowTitle(i18n("Edit Xmp Namespace"));
     }
 
-    d->create           = create;
-    d->nsType           = entry.nsType;
+    d->create = create;
+    d->nsType = entry.nsType;
 
     setupTagGui(entry);
 

@@ -387,7 +387,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
     QString defaultComment        = comments.value(QLatin1String("x-default")).caption;
     QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER));
 
-    if (!settings.unifyReadWrite)
+    if (!settings.unifyReadWrite())
         toWrite = settings.getWriteMapping(QLatin1String(DM_COMMENT_CONTAINER));
 
     for (NamespaceEntry entry : toWrite)
@@ -794,7 +794,7 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
     }
     QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_RATING_CONTAINER));
 
-    if(!settings.unifyReadWrite)
+    if(!settings.unifyReadWrite())
         toWrite = settings.getWriteMapping(QLatin1String(DM_RATING_CONTAINER));
 
     for(NamespaceEntry entry : toWrite)
@@ -1191,98 +1191,114 @@ VideoInfoContainer DMetadata::getVideoInformation() const
 
 bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsContainer &settings) const
 {
-    for(NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_TAG_CONTAINER)))
+    for (NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_TAG_CONTAINER)))
     {
-        if(entry.isDisabled)
+        if (entry.isDisabled)
             continue;
-        int index  = 0;
-        QString currentNamespace = entry.namespaceName;
+
+        int index                                  = 0;
+        QString currentNamespace                   = entry.namespaceName;
         NamespaceEntry::SpecialOptions currentOpts = entry.specialOpts;
+
         // Some namespaces have altenative paths, we must search them both
+
         switch(entry.subspace)
         {
-        case NamespaceEntry::XMP:
-            while(index < 2)
-            {
-                const std::string myStr = currentNamespace.toStdString();
-                const char* nameSpace = myStr.data();
-                switch(currentOpts){
-                case NamespaceEntry::TAG_XMPBAG:
-                    tagsPath = getXmpTagStringBag(nameSpace, false);
-                    break;
-                case NamespaceEntry::TAG_XMPSEQ:
-                    tagsPath = getXmpTagStringSeq(nameSpace, false);
-                    break;
-                case NamespaceEntry::TAG_ACDSEE:
-                    getACDSeeTagsPath(tagsPath);
-                    break;
-                // not used here, to suppress warnings
-                case NamespaceEntry::COMMENT_XMP:
-                case NamespaceEntry::COMMENT_ALTLANG:
-                case NamespaceEntry::COMMENT_ATLLANGLIST:
-                case NamespaceEntry::NO_OPTS:
-                default:
-                    break;
-                }
+            case NamespaceEntry::XMP:
 
-                if(!tagsPath.isEmpty())
+                while(index < 2)
                 {
-                    if(entry.separator != QLatin1String("/"))
+                    const std::string myStr = currentNamespace.toStdString();
+                    const char* nameSpace   = myStr.data();
+                    
+                    switch(currentOpts)
                     {
-                        tagsPath = tagsPath.replaceInStrings(entry.separator, QLatin1String("/"));
+                        case NamespaceEntry::TAG_XMPBAG:
+                            tagsPath = getXmpTagStringBag(nameSpace, false);
+                            break;
+                        case NamespaceEntry::TAG_XMPSEQ:
+                            tagsPath = getXmpTagStringSeq(nameSpace, false);
+                            break;
+                        case NamespaceEntry::TAG_ACDSEE:
+                            getACDSeeTagsPath(tagsPath);
+                            break;
+                        // not used here, to suppress warnings
+                        case NamespaceEntry::COMMENT_XMP:
+                        case NamespaceEntry::COMMENT_ALTLANG:
+                        case NamespaceEntry::COMMENT_ATLLANGLIST:
+                        case NamespaceEntry::NO_OPTS:
+                        default:
+                            break;
                     }
-                    return true;
-                }
-                else if(!entry.alternativeName.isEmpty())
-                {
-                    currentNamespace = entry.alternativeName;
-                    currentOpts = entry.secondNameOpts;
-                }
-                else
-                {
-                    break; // no alternative namespace, go to next one
-                }
-                index++;
-            }
-            break;
-        case NamespaceEntry::IPTC:
-            // Try to get Tags Path list from IPTC keywords.
-            // digiKam 0.9.x has used IPTC keywords to store Tags Path list.
-            // This way is obsolete now since digiKam support XMP because IPTC
-            // do not support UTF-8 and have strings size limitation. But we will
-            // let the capability to import it for interworking issues.
-            tagsPath = getIptcKeywords();
-            if (!tagsPath.isEmpty())
-            {
-                // Work around to Imach tags path list hosted in IPTC with '.' as separator.
-                QStringList ntp = tagsPath.replaceInStrings(entry.separator, QLatin1String("/"));
 
-                if (ntp != tagsPath)
-                {
-                    tagsPath = ntp;
-                    qCDebug(LOG_METADATA) << "Tags Path imported from Imach: " << tagsPath;
+                    if (!tagsPath.isEmpty())
+                    {
+                        if (entry.separator != QLatin1String("/"))
+                        {
+                            tagsPath = tagsPath.replaceInStrings(entry.separator, QLatin1String("/"));
+                        }
+
+                        return true;
+                    }
+                    else if (!entry.alternativeName.isEmpty())
+                    {
+                        currentNamespace = entry.alternativeName;
+                        currentOpts = entry.secondNameOpts;
+                    }
+                    else
+                    {
+                        break; // no alternative namespace, go to next one
+                    }
+
+                    index++;
                 }
 
-                return true;
-            }
-            break;
-        case NamespaceEntry::EXIF:
-        {
-            // Try to get Tags Path list from Exif Windows keywords.
-            QString keyWords = getExifTagString("Exif.Image.XPKeywords", false);
-            if (!keyWords.isEmpty())
-            {
-                tagsPath = keyWords.split(entry.separator);
+                break;
 
+            case NamespaceEntry::IPTC:
+                // Try to get Tags Path list from IPTC keywords.
+                // digiKam 0.9.x has used IPTC keywords to store Tags Path list.
+                // This way is obsolete now since digiKam support XMP because IPTC
+                // do not support UTF-8 and have strings size limitation. But we will
+                // let the capability to import it for interworking issues.
+                tagsPath = getIptcKeywords();
+ 
                 if (!tagsPath.isEmpty())
                 {
+                    // Work around to Imach tags path list hosted in IPTC with '.' as separator.
+                    QStringList ntp = tagsPath.replaceInStrings(entry.separator, QLatin1String("/"));
+
+                    if (ntp != tagsPath)
+                    {
+                        tagsPath = ntp;
+                        qCDebug(LOG_METADATA) << "Tags Path imported from Imach: " << tagsPath;
+                    }
+
                     return true;
                 }
+
+                break;
+
+            case NamespaceEntry::EXIF:
+            {
+                // Try to get Tags Path list from Exif Windows keywords.
+                QString keyWords = getExifTagString("Exif.Image.XPKeywords", false);
+
+                if (!keyWords.isEmpty())
+                {
+                    tagsPath = keyWords.split(entry.separator);
+
+                    if (!tagsPath.isEmpty())
+                    {
+                        return true;
+                    }
+                }
+
+                break;
             }
-            break;
-        }
-        default:
-            break;
+
+            default:
+                break;
         }
     }
 
@@ -1299,23 +1315,25 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
     if (supportXmp())
     {
         QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_TAG_CONTAINER));
-        if(!settings.unifyReadWrite)
+
+        if(!settings.unifyReadWrite())
             toWrite = settings.getWriteMapping(QLatin1String(DM_TAG_CONTAINER));
 
         for(NamespaceEntry entry : toWrite)
         {
-            if(entry.isDisabled)
+            if (entry.isDisabled)
                 continue;
 
             // We do not write to IPTC and EXIV namespaces, for now
-            if(entry.subspace != NamespaceEntry::XMP)
+            if (entry.subspace != NamespaceEntry::XMP)
                 continue;
 
             // get keywords from tags path, is type is tag
             QStringList newList;
-            if(entry.tagPaths == NamespaceEntry::TAG)
+
+            if (entry.tagPaths == NamespaceEntry::TAG)
             {
-                for(QString tagPath : tagsPath)
+                for (QString tagPath : tagsPath)
                 {
                     newList.append(tagPath.split(QLatin1String("/")).last());
                 }
@@ -1323,39 +1341,49 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
             else
             {
                 newList = tagsPath;
+
                 if(entry.separator.compare(QLatin1String("/")) != 0){
                     newList = newList.replaceInStrings(QLatin1String("/"), entry.separator);
                 }
             }
+
             const std::string myStr = entry.namespaceName.toStdString();
-            const char* nameSpace = myStr.data();
+            const char* nameSpace   = myStr.data();
+
             switch(entry.specialOpts)
             {
-            case NamespaceEntry::TAG_XMPSEQ:
-                if(!setXmpTagStringSeq(nameSpace, newList))
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
-                    return false;
-                }
-                break;
-            case NamespaceEntry::TAG_XMPBAG:
-                if(!setXmpTagStringBag(nameSpace, newList))
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
-                    return false;
-                }
-                break;
-            case NamespaceEntry::TAG_ACDSEE:
-                if(!setACDSeeTagsPath(newList))
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
-                    return false;
-                }
-            default:
-                break;
+                case NamespaceEntry::TAG_XMPSEQ:
+
+                    if (!setXmpTagStringSeq(nameSpace, newList))
+                    {
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                        return false;
+                    }
+                    break;
+
+                case NamespaceEntry::TAG_XMPBAG:
+
+                    if (!setXmpTagStringBag(nameSpace, newList))
+                    {
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                        return false;
+                    }
+                    break;
+
+                case NamespaceEntry::TAG_ACDSEE:
+
+                    if (!setACDSeeTagsPath(newList))
+                    {
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                        return false;
+                    }
+
+                default:
+                    break;
             }
         }
     }
+
     return true;
 }
 
@@ -1363,6 +1391,7 @@ bool DMetadata::getACDSeeTagsPath(QStringList &tagsPath) const
 {
     // Try to get Tags Path list from ACDSee 8 Pro categories.
     QString xmlACDSee = getXmpTagString("Xmp.acdsee.categories", false);
+
     if (!xmlACDSee.isEmpty())
     {
         xmlACDSee.remove(QLatin1String("</Categories>"));
@@ -1403,6 +1432,7 @@ bool DMetadata::getACDSeeTagsPath(QStringList &tagsPath) const
             return true;
         }
     }
+
     return false;
 }
 
@@ -1459,6 +1489,7 @@ bool DMetadata::setACDSeeTagsPath(const QStringList &tagsPath) const
     QString xmlACDSee = QLatin1String("<Categories>") + xmlTags.join(QLatin1String("")) + QLatin1String("</Categories>");
     qCDebug(DIGIKAM_GENERAL_LOG) << "xmlACDSee" << xmlACDSee;
     removeXmpTag("Xmp.acdsee.categories");
+
     if (!xmlTags.isEmpty())
     {
         if (!setXmpTagString("Xmp.acdsee.categories", xmlACDSee, false))
@@ -1466,6 +1497,7 @@ bool DMetadata::setACDSeeTagsPath(const QStringList &tagsPath) const
             return false;
         }
     }
+
     return true;
 }
 

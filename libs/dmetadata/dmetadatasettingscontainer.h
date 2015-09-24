@@ -48,8 +48,8 @@ namespace Digikam
  *        xml tags
  */
 
-const char* const DM_TAG_CONTAINER = I18N_NOOP("Tags");
-const char* const DM_RATING_CONTAINER = I18N_NOOP("Rating");
+const char* const DM_TAG_CONTAINER     = I18N_NOOP("Tags");
+const char* const DM_RATING_CONTAINER  = I18N_NOOP("Rating");
 const char* const DM_COMMENT_CONTAINER = I18N_NOOP("Comment");
 
 class NamespaceEntry
@@ -170,9 +170,9 @@ public:
      */
     void defaultValues();
 
-
-    bool unifyReadWrite;
-
+    bool unifyReadWrite() const;
+    void setUnifyReadWrite(bool b);
+    
     void addMapping(const QLatin1String key);
 
     QList<NamespaceEntry>& getReadMapping(const QLatin1String& key) const;
@@ -195,4 +195,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // METADATASETTINGSCONTAINER_H
+#endif  // DMETADATASETTINGSCONTAINER_H

@@ -61,7 +61,6 @@ public:
 DMetadataSettingsContainer::DMetadataSettingsContainer()
     : d(new Private)
 {
-    unifyReadWrite = false;
     addMapping(QLatin1String(DM_TAG_CONTAINER));
     addMapping(QLatin1String(DM_RATING_CONTAINER));
     addMapping(QLatin1String(DM_COMMENT_CONTAINER));
@@ -82,6 +81,16 @@ DMetadataSettingsContainer& DMetadataSettingsContainer::operator=(const DMetadat
 DMetadataSettingsContainer::~DMetadataSettingsContainer()
 {
     delete d;
+}
+
+bool DMetadataSettingsContainer::unifyReadWrite() const
+{
+    return d->unifyReadWrite;
+}
+
+void DMetadataSettingsContainer::setUnifyReadWrite(bool b)
+{
+    d->unifyReadWrite = b;
 }
     
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
@@ -158,7 +167,7 @@ void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 void DMetadataSettingsContainer::defaultValues()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading default values ++++++++++++++++";
-    this->unifyReadWrite = true;
+    d->unifyReadWrite = true;
 
     defaultTagValues();
     defaultRatingValues();
