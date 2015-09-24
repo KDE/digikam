@@ -14,6 +14,7 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             correlator/track_listmodel.cpp
                             correlator/gpscorrelatorwidget.cpp
 
+                            reversegeocoding/rginfo.cpp
                             reversegeocoding/rgtagmodel.cpp
                             reversegeocoding/rgwidget.cpp
                             reversegeocoding/simpletreemodel.cpp

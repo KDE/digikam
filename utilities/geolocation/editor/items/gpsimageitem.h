@@ -27,7 +27,6 @@
 
 // Qt includes
 
-#include <QPersistentModelIndex>
 #include <QVariant>
 #include <QDateTime>
 #include <QUrl>
@@ -41,47 +40,12 @@
 #include "digikam_debug.h"
 #include "gpsdatacontainer.h"
 #include "dmetadata.h"
+#include "rginfo.h"
 
 using namespace GeoIface;
 
 namespace Digikam
 {
-
-/**
- * @class RGInfo
- *
- * @brief This class contains data needed in reverse geocoding process.
- */
-
-class RGInfo
-{
-    public:
-
-    /**
-     * Constructor
-     */
-    RGInfo()
-      : id(),
-        coordinates(),
-        rgData()
-    {
-    }
-
-    /**
-     * The image index.
-     */
-    QPersistentModelIndex  id;
-
-    /**
-     * The coordinates of current image.
-     */
-    GeoCoordinates         coordinates;
-
-    /**
-     * The address elements and their names.
-     */
-    QMap<QString, QString> rgData;
-};
 
 enum Type
 {
@@ -121,20 +85,20 @@ public:
 
     static const int ColumnGPSImageItemCount = 13;
 
+public:
+
     GPSImageItem(const QUrl& url);
     virtual ~GPSImageItem();
 
     /// @name Loading and saving
     //@{
-    QString saveChanges();
-    bool loadImageData();
-
-    inline bool isDirty() const       { return m_dirty; }
+    virtual QString saveChanges();
+    virtual bool loadImageData();
     //@}
 
-    inline QUrl url() const           { return m_url; };
-
-    inline QDateTime dateTime() const { return m_dateTime; };
+    bool isDirty()       const;
+    QUrl url()           const;
+    QDateTime dateTime() const;
 
     /// @name Functions used by the model
     //@{
@@ -145,9 +109,9 @@ public:
     /// @name GPS related functions
     //@{
     void setCoordinates(const GeoCoordinates& newCoordinates);
-    inline GeoCoordinates coordinates() const                 { return m_gpsData.getCoordinates();                        }
-    inline GPSDataContainer gpsData() const                   { return m_gpsData;                                         }
-    inline void setGPSData(const GPSDataContainer& container) { m_gpsData = container; m_dirty = true; emitDataChanged(); }
+    GeoCoordinates coordinates() const;
+    GPSDataContainer gpsData() const;
+    void setGPSData(const GPSDataContainer& container);
     void restoreGPSData(const GPSDataContainer& container);
     //@}
 
@@ -157,17 +121,17 @@ public:
      * The tags added in reverse geocoding process are stored in each image, before they end up in external tag model. This function adds them.
      * @param externalTagList A list containing tags.
      */
-    inline void setTagList(const QList<QList<TagData> >& externalTagList) { m_tagList = externalTagList; m_tagListDirty = true; emitDataChanged(); };
+    void setTagList(const QList<QList<TagData> >& externalTagList);
 
     /**
      * @return Returns true is the current image has been modified and not saved.
      */
-    inline bool isTagListDirty() const { return m_tagListDirty; }
+    bool isTagListDirty() const;
 
     /**
      * Returns the tag list of the current image.
      */
-    inline QList<QList<TagData> > getTagList() const { return m_tagList; };
+    QList<QList<TagData> > getTagList() const;
 
     /**
      * Replaces the current tag list with the one contained in tagList.

@@ -884,4 +884,53 @@ void GPSImageItem::restoreRGTagList(const QList<QList<TagData> >& tagList)
     emitDataChanged();
 }
 
+bool GPSImageItem::isDirty() const
+{
+    return m_dirty;
+}
+
+QUrl GPSImageItem::url() const
+{
+    return m_url;
+}
+
+QDateTime GPSImageItem::dateTime() const
+{
+    return m_dateTime;
+}
+
+GeoCoordinates GPSImageItem::coordinates() const                 
+{
+    return m_gpsData.getCoordinates();                        
+}
+
+GPSDataContainer GPSImageItem::gpsData() const
+{
+    return m_gpsData;
+}
+
+void GPSImageItem::setGPSData(const GPSDataContainer& container)
+{
+    m_gpsData = container;
+    m_dirty   = true;
+    emitDataChanged();
+}
+
+void GPSImageItem::setTagList(const QList<QList<TagData> >& externalTagList)
+{
+    m_tagList      = externalTagList;
+    m_tagListDirty = true;
+    emitDataChanged();
+};
+
+bool GPSImageItem::isTagListDirty() const
+{
+    return m_tagListDirty;
+}
+
+QList<QList<TagData> > GPSImageItem::getTagList() const
+{
+    return m_tagList;
+}
+
 } /* namespace Digikam */
