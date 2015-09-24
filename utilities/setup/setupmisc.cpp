@@ -60,6 +60,7 @@ public:
         showPermanentDeleteDialogCheck(0),
         sidebarApplyDirectlyCheck(0),
         scrollItemToCenterCheck(0),
+        scrollItemToCenterCheck(0),
         sidebarType(0),
         stringComparisonType(0),
         applicationStyle(0)
@@ -82,7 +83,8 @@ public:
 };
 
 SetupMisc::SetupMisc(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
@@ -96,7 +98,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar"), panel);
     d->scrollItemToCenterCheck        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), panel);
     d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), panel);
-    
+
     // --------------------------------------------------------
 
     KHBox* const tabStyleHbox = new KHBox(panel);
