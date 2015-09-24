@@ -462,6 +462,9 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
             this, SLOT(createGroupByTimeFromSelection()));
 
+    connect(&cmhelper, SIGNAL(signalCreateGroupByType()),
+            this, SLOT(createGroupByTypeFromSelection()));
+
     connect(&cmhelper, SIGNAL(signalUngroup()),
             this, SLOT(ungroupSelected()));
 
