@@ -16,25 +16,12 @@ IF (LQR-1_LIBRARIES AND LQR-1_INCLUDE_DIRS)
     # in cache already
     SET(LQR-1_FOUND TRUE)
 ELSE (LQR-1_LIBRARIES AND LQR-1_INCLUDE_DIRS)
-    # use pkg-config to get the directories and then use these values
-    # in the FIND_PATH() and FIND_LIBRARY() calls
     IF (NOT WIN32)
-        INCLUDE(UsePkgConfig)
-        PKGCONFIG(lqr-1 _lqrIncDir _lqrLinkDir _lqrLinkFlags _lqrCflags)
+        INCLUDE(FindPkgConfig)
+        pkg_check_modules(LQR-1 lqr-1)
     ENDIF (NOT WIN32)
 
-    FIND_PATH(LQR-1_INCLUDE_DIR
-                NAMES         lqr.h
-                PATH_SUFFIXES lqr-1
-                PATHS         ${_lqrIncDir}
-             )
-
-    FIND_LIBRARY(LQR-1_LIBRARY
-                 NAMES lqr-1
-                 PATHS ${_lqrLinkDir}
-                )
-
-    IF (LQR-1_LIBRARY AND LQR-1_INCLUDE_DIR)
+    IF (LQR-1_LIBRARIES AND LQR-1_INCLUDE_DIRS)
         FIND_PACKAGE(GLIB2)
 
         IF (GLIB2_FOUND)
@@ -58,17 +45,7 @@ ELSE (LQR-1_LIBRARIES AND LQR-1_INCLUDE_DIRS)
 
         ENDIF (GLIB2_FOUND)
 
-    ENDIF (LQR-1_LIBRARY AND LQR-1_INCLUDE_DIR)
-
-    IF (LQR-1_FOUND)
-        SET(LQR-1_LIBRARIES
-            ${LQR-1_LIBRARIES}
-            ${LQR-1_LIBRARY}
-           )
-        SET(LQR-1_INCLUDE_DIRS
-            ${LQR-1_INCLUDE_DIR}
-           )
-    ENDIF (LQR-1_FOUND)
+    ENDIF (LQR-1_LIBRARIES AND LQR-1_INCLUDE_DIRS)
 
     FIND_PACKAGE_HANDLE_STANDARD_ARGS(Lqr-1 DEFAULT_MSG LQR-1_INCLUDE_DIRS LQR-1_LIBRARIES)
 
