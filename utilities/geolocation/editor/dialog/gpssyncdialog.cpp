@@ -79,7 +79,6 @@
 
 #include "gpscommon.h"
 #include "gpsimagemodel.h"
-#include "gpsimageitem.h"
 #include "mapdragdrophandler.h"
 #include "gpsimagelist.h"
 #include "gpsimagelistdragdrophandler.h"
@@ -569,16 +568,27 @@ void GPSSyncDialog::setCurrentTab(int index)
 
 void GPSSyncDialog::setImages(const QList<QUrl>& images)
 {
-    for ( QList<QUrl>::ConstIterator it = images.begin(); it != images.end(); ++it )
+    QList<GPSImageItem*> items;
+    
+    foreach(QUrl u, images)
     {
-        GPSImageItem* const newItem = new GPSImageItem(*it);
+        items << new GPSImageItem(u);
+    }
+
+    setItems(items);
+}
+
+void GPSSyncDialog::setItems(const QList<GPSImageItem*>& items)
+{
+    foreach(GPSImageItem* const newItem, items)
+    {
         newItem->loadImageData();
         d->imageModel->addItem(newItem);
     }
-
+    
     QList<QPersistentModelIndex> imagesToLoad;
 
-    for (int i=0; i<d->imageModel->rowCount(); ++i)
+    for (int i = 0; i < d->imageModel->rowCount(); ++i)
     {
         imagesToLoad << d->imageModel->index(i, 0);
     }

@@ -43,6 +43,7 @@
 #include "geoiface_types.h"
 #include "modelhelper.h"
 #include "tracks.h"
+#include "gpsimageitem.h"
 
 class QAbstractItemModel;
 
@@ -66,7 +67,13 @@ public:
     explicit GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* const parent);
     ~GPSSyncDialog();
 
+    /* Populate items in dialog list based on url. To be used in case of non database as with Showfoto.
+     */
     void setImages(const QList<QUrl>& images);
+    
+    /* Populate items in dialog list based dedicated GPSImageItem instances filled with DB info
+     */
+    void setItems(const QList<GPSImageItem*>& items);
 
 protected:
 
