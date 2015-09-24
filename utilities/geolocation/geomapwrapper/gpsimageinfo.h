@@ -57,7 +57,7 @@ public:
 public:
 
     qlonglong                   id;
-    GeoIface::GeoCoordinates     coordinates;
+    GeoIface::GeoCoordinates    coordinates;
     int                         rating;
     QDateTime                   dateTime;
     QUrl                        url;
