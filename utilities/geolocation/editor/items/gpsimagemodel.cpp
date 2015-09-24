@@ -37,7 +37,8 @@ public:
 
     Private()
       : items(),
-        columnCount(0)
+        columnCount(0),
+        thumbnailLoadThread(0)
     {
     }
 
@@ -103,7 +104,7 @@ QModelIndex GPSImageModel::index(int row, int column, const QModelIndex& parent)
 
     if ( (column < 0)               ||
          (column >= d->columnCount) ||
-         (row < 0)                  || 
+         (row < 0)                  ||
          (row >= d->items.count())
        )
         return QModelIndex();
@@ -257,14 +258,14 @@ QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex,
 
     if (!imageItem)
         return QPixmap();
-    
+
     QPixmap thumbnail;
 
     if (d->thumbnailLoadThread->find(ThumbnailIdentifier(imageItem->url().path()), thumbnail, size))
     {
         return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
-    }               
-     
+    }
+
     return QPixmap();
 }
 
