@@ -100,7 +100,7 @@ void AlbumModelTest::initTestCase()
             this, SLOT(setLastPAlbumCountMap(QMap<int,int>)));
 
     AlbumManager::checkDatabaseDirsAfterFirstRun(QDir::temp().absoluteFilePath(
-                tempSuffix), QDir::temp().absoluteFilePath(tempSuffix));
+                                                 tempSuffix), QDir::temp().absoluteFilePath(tempSuffix));
     DatabaseParameters params(QLatin1String("QSQLITE"), QDir::temp().absoluteFilePath(tempSuffix + QLatin1String("/digikam4.db")),
                               QString(), QString(), -1, false, QString(), QString());
     bool dbChangeGood = AlbumManager::instance()->setDatabase(params, false,
@@ -112,12 +112,24 @@ void AlbumModelTest::initTestCase()
     ScanController::instance()->completeCollectionScan();
     AlbumManager::instance()->startScan();
 
-    QVERIFY2(AlbumManager::instance()->allPAlbums().size() == 2,
-             "Failed to scan empty directory and have one root and one album root album");
+    AlbumList all = AlbumManager::instance()->allPAlbums();
+    qDebug() << "PAlbum registered : " << all.size();
+    
+    Q_FOREACH(Album* const a, all)
+    {
+        if (a)
+        {
+            qDebug() << " ==> Id : " << a->id() << " , is root : " << a->isRoot() << " , title : " << a->title();
+        }
+    }
+
+    QVERIFY2( all.size() == 3, "Failed to scan empty directory. We must have one root album, one album, and one trash.");
 }
 
 void AlbumModelTest::cleanupTestCase()
 {
+    qDebug() << "Start AlbumModelTest::cleanupTestCase()";
+
     ScanController::instance()->shutDown();
     AlbumManager::instance()->cleanUp();
     ThumbnailLoadThread::cleanUp();
@@ -125,9 +137,9 @@ void AlbumModelTest::cleanupTestCase()
     LoadingCacheInterface::cleanUp();
 
     QUrl deleteUrl = QUrl::fromLocalFile(dbPath);
-    
+
     KIOWrapper::fileDelete(deleteUrl);
-    
+
     qDebug() << "deleted test folder " << deleteUrl;
 }
 
@@ -152,6 +164,8 @@ void AlbumModelTest::cleanupTestCase()
 
 void AlbumModelTest::init()
 {
+    qDebug() << "Start AlbumModelTest::init()";
+
     palbumCountMap.clear();
 
     // create a model to check that model work is done correctly while scanning
@@ -168,12 +182,12 @@ void AlbumModelTest::init()
     qDebug() << "Created startModel" << startModel;
 
     // ensure that this model is empty in the beginning except for the root
-    // album and the collection
+    // album and the collection that include trash
     QCOMPARE(startModel->rowCount(), 1);
     QModelIndex rootIndex = startModel->index(0, 0);
     QCOMPARE(startModel->rowCount(rootIndex), 1);
     QModelIndex collectionIndex = startModel->index(0, 0, rootIndex);
-    QCOMPARE(startModel->rowCount(collectionIndex), 0);
+    QCOMPARE(startModel->rowCount(collectionIndex), 1);
 
     // insert some test data
 
@@ -187,7 +201,7 @@ void AlbumModelTest::init()
     ScanController::instance()->completeCollectionScan();
     AlbumManager::instance()->refresh();
 
-    QCOMPARE(AlbumManager::instance()->allPAlbums().size(), 4);
+    QCOMPARE(AlbumManager::instance()->allPAlbums().size(), 5);
 
     QString error;
     palbumRoot0 = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(dbPath + QLatin1String("/root0")));
@@ -281,6 +295,8 @@ void AlbumModelTest::init()
 
 void AlbumModelTest::testStartAlbumModel()
 {
+    qDebug() << "Start AlbumModelTest::testStartAlbumModel()";
+
     // verify that the start album model got all these changes
 
     // one root
@@ -371,7 +387,7 @@ void AlbumModelTest::deletePAlbum(PAlbum* album)
     QUrl u;
     u.setScheme(QLatin1String("file"));
     u.setPath(album->folderPath());
-    
+
     KIOWrapper::fileDelete(u);
 }
 
@@ -422,6 +438,8 @@ void AlbumModelTest::cleanup()
 
 void AlbumModelTest::testPAlbumModel()
 {
+    qDebug() << "Start AlbumModelTest::testPAlbumModel()";
+
     AlbumModel* albumModel = new AlbumModel();
     ModelTest* test        = new ModelTest(albumModel, 0);
     delete test;
@@ -435,6 +453,8 @@ void AlbumModelTest::testPAlbumModel()
 
 void AlbumModelTest::testDisablePAlbumCount()
 {
+    qDebug() << "Start AlbumModelTest::testDisablePAlbumCount()";
+
     AlbumModel albumModel;
     albumModel.setCountMap(palbumCountMap);
     albumModel.setShowCount(true);
@@ -492,6 +512,8 @@ void AlbumModelTest::testDisablePAlbumCount()
 
 void AlbumModelTest::testDAlbumModel()
 {
+    qDebug() << "Start AlbumModelTest::testDAlbumModel()";
+
     DateAlbumModel* const albumModel = new DateAlbumModel();
     ensureItemCounts();
     ModelTest* const test            = new ModelTest(albumModel, 0);
@@ -501,6 +523,8 @@ void AlbumModelTest::testDAlbumModel()
 
 void AlbumModelTest::testDAlbumContainsAlbums()
 {
+    qDebug() << "Start AlbumModelTest::testDAlbumContainsAlbums()";
+
     DateAlbumModel* const albumModel = new DateAlbumModel();
     ensureItemCounts();
 
@@ -571,6 +595,8 @@ void AlbumModelTest::testDAlbumContainsAlbums()
 
 void AlbumModelTest::testDAlbumSorting()
 {
+    qDebug() << "Start AlbumModelTest::testDAlbumSorting()";
+
     DateAlbumModel dateAlbumModel;
     AlbumFilterModel albumModel;
     albumModel.setSourceAlbumModel(&dateAlbumModel);
@@ -630,6 +656,8 @@ void AlbumModelTest::testDAlbumSorting()
 
 void AlbumModelTest::testDAlbumCount()
 {
+    qDebug() << "Start AlbumModelTest::testDAlbumCount()";
+
     DateAlbumModel* const albumModel = new DateAlbumModel();
     albumModel->setShowCount(true);
     ensureItemCounts();
@@ -760,6 +788,8 @@ void AlbumModelTest::testDAlbumCount()
 
 void AlbumModelTest::testTAlbumModel()
 {
+    qDebug() << "Start AlbumModelTest::testTAlbumModel()";
+
     TagModel* albumModel = new TagModel();
     ModelTest* test      = new ModelTest(albumModel, 0);
     delete test;
@@ -773,6 +803,8 @@ void AlbumModelTest::testTAlbumModel()
 
 void AlbumModelTest::testSAlbumModel()
 {
+    qDebug() << "Start AlbumModelTest::testSAlbumModel()";
+
     SearchModel* const albumModel = new SearchModel();
     ModelTest* const test         = new ModelTest(albumModel, 0);
     delete test;
