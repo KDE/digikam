@@ -2013,7 +2013,6 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     d->controller->downloadPrep();
 
     QString              downloadName;
-    QDateTime            dateTime;
     DownloadSettingsList allItems;
     DownloadSettings     settings = downloadSettings();
     QUrl url = pAlbum->fileUrl();
@@ -2037,9 +2036,8 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         settings.pickLabel  = info.pickLabel;
         settings.colorLabel = info.colorLabel;
         settings.rating     = info.rating;
-        dateTime            = info.ctime;
-
-        downloadName = info.downloadName; // downloadName should already be set by now
+        // downloadName should already be set by now
+        downloadName = info.downloadName;
 
         QUrl downloadUrl(url);
 
