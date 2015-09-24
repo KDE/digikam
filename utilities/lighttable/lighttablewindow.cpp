@@ -60,9 +60,10 @@
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
 #include "deletedialog.h"
-#include "gpssyncdialog.h"
+#include "geolocationedit.h"
 #include "iccsettings.h"
 #include "imagewindow.h"
+#include "imagegps.h"
 #include "imagedescedittab.h"
 #include "slideshowbuilder.h"
 #include "slideshow.h"
@@ -1712,21 +1713,21 @@ void LightTableWindow::slotColorManagementOptionsChanged()
 void LightTableWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    if (d->thumbView->currentInfo().isNull())
+    ImageInfo inf = d->thumbView->currentInfo();
+
+    if (inf.isNull())
     {
         return;
     }
 
-    QUrl url = d->thumbView->currentInfo().fileUrl();
-
-    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
-    dialog->setImages(QList<QUrl>() << url);
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
+    dialog->setItems(ImageGPS::infosToItems(ImageInfoList() << inf));
     dialog->exec();
 
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    ScanController::instance()->scannedInfo(url.toLocalFile());
+    ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
 #endif
 }
 

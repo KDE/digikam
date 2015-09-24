@@ -30,14 +30,14 @@
 
 // local includes
 
-#include "gpssyncgeoifacemodelhelper.h"
+#include "gpsgeoifacemodelhelper.h"
 
 namespace Digikam
 {
 
-MapDragDropHandler::MapDragDropHandler(QAbstractItemModel* const /*pModel*/, GPSSyncGeoIfaceModelHelper* const parent)
+MapDragDropHandler::MapDragDropHandler(QAbstractItemModel* const /*pModel*/, GPSGeoIfaceModelHelper* const parent)
     : DragDropHandler(parent),
-      gpsSyncKGeoMapModelHelper(parent)
+      gpsGeoIfaceModelHelper(parent)
 {
 }
 
@@ -70,7 +70,7 @@ bool MapDragDropHandler::dropEvent(const QDropEvent* e, const GeoIface::GeoCoord
         }
     }
     
-    gpsSyncKGeoMapModelHelper->onIndicesMoved(droppedIndices, dropCoordinates, QPersistentModelIndex());
+    gpsGeoIfaceModelHelper->onIndicesMoved(droppedIndices, dropCoordinates, QPersistentModelIndex());
 
     return true;
 }

@@ -63,7 +63,7 @@
 // local includes
 
 #include "gpsundocommand.h"
-#include "gpssyncdialog.h"
+#include "geolocationedit.h"
 #include "gpsimagemodel.h"
 #include "gpsimageitem.h"
 #include "backend-geonames-rg.h"

@@ -91,7 +91,7 @@ extern "C"
 #include "dmetadata.h"
 #include "editorstackview.h"
 #include "fileoperation.h"
-#include "gpssyncdialog.h"
+#include "geolocationedit.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imageplugin.h"
@@ -1383,7 +1383,7 @@ void ShowFoto::slotEditGeolocation()
     if ( d->thumbBar->currentInfo().isNull() )
         return;
     
-    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(0, QApplication::activeWindow());
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(0, QApplication::activeWindow());
     dialog->setImages(QList<QUrl>() << d->thumbBar->currentInfo().url);
     dialog->exec();
 

@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class GPSSyncGeoIfaceModelHelper;
+class GPSGeoIfaceModelHelper;
 
 class MapDragData : public QMimeData
 {
@@ -60,7 +60,7 @@ class MapDragDropHandler : public GeoIface::DragDropHandler
 
 public:
 
-    MapDragDropHandler(QAbstractItemModel* const /*pModel*/, GPSSyncGeoIfaceModelHelper* const parent);
+    MapDragDropHandler(QAbstractItemModel* const /*pModel*/, GPSGeoIfaceModelHelper* const parent);
     virtual ~MapDragDropHandler();
 
     virtual Qt::DropAction accepts(const QDropEvent* e);
@@ -69,7 +69,7 @@ public:
 
 private:
 
-    GPSSyncGeoIfaceModelHelper* const gpsSyncKGeoMapModelHelper;
+    GPSGeoIfaceModelHelper* const gpsGeoIfaceModelHelper;
 };
 
 } /* namespace Digikam */

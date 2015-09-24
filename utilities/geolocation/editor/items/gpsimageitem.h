@@ -61,6 +61,29 @@ typedef struct TagData
 
 } TagData;
 
+
+class SaveProperties
+{
+public:
+
+    SaveProperties()
+    {
+        shouldRemoveCoordinates = false;
+        shouldWriteCoordinates  = false;
+        shouldWriteAltitude     = false;
+        altitude                = 0.0;
+        latitude                = 0.0;
+        longitude               = 0.0;
+    }
+    
+    bool  shouldRemoveCoordinates;
+    bool  shouldWriteCoordinates;
+    bool  shouldWriteAltitude;
+    qreal altitude;
+    qreal latitude;
+    qreal longitude;
+};
+
 class GPSImageModel;
 
 class GPSImageItem
@@ -151,6 +174,7 @@ protected:
     void setModel(GPSImageModel* const model);
     void emitDataChanged();
     DMetadata* getMetadataForFile() const;
+    SaveProperties saveProperties() const;
 
 protected:
 

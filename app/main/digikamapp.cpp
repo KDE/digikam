@@ -81,6 +81,7 @@
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "cameratype.h"
+#include "imagegps.h"
 #include "importui.h"
 #include "cameranamehelper.h"
 #include "collectionscanner.h"
@@ -126,7 +127,7 @@
 #include "imagesortsettings.h"
 #include "metadatahubmngr.h"
 #include "metadataedit.h"
-#include "gpssyncdialog.h"
+#include "geolocationedit.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -3156,21 +3157,21 @@ QString DigikamApp::scannerTargetPlace()
 void DigikamApp::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    QList<QUrl> urls = view()->selectedUrls();
+    ImageInfoList infos = d->view->selectedInfoList();
 
-    if ( urls.isEmpty() )
+    if ( infos.isEmpty() )
         return;
 
-    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
-    dialog->setImages(urls);
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
+    dialog->setItems(ImageGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    foreach(QUrl u, urls)
+    foreach(ImageInfo inf, infos)
     {
-        ScanController::instance()->scannedInfo(u.toLocalFile());
+        ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
     }
 #endif
 }

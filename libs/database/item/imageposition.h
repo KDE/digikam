@@ -80,6 +80,7 @@ public:
      */
     QString latitude() const;
     QString longitude() const;
+
     /**
      * Returns latitude/longitude as a double in degrees.
      * North and East have a positive sign, South and West negative.
@@ -89,12 +90,14 @@ public:
      */
     double latitudeNumber() const;
     double longitudeNumber() const;
+
     /**
      * Returns the latitude/longitude in a user-presentable version,
      * in the form "30°45'55.123'' East"
      */
     QString latitudeFormatted() const;
     QString longitudeFormatted() const;
+
     /**
      * Returns latitude/longitude as user-presentable numbers.
      * This means that degrees and minutes are integer, the seconds fractional.
@@ -104,8 +107,11 @@ public:
      */
     bool latitudeUserPresentableNumbers(int* degrees, int* minutes, double* seconds, char* directionReference);
     bool longitudeUserPresentableNumbers(int* degrees, int* minutes, double* seconds, char* directionReference);
-    /** The altitude in meters */
+
+    /** The altitude in meters
+     */
     double altitude() const;
+
     /**
      * Returns the altitude formatted in a user-presentable way in the form "43.45m"
      */
@@ -129,6 +135,7 @@ public:
      */
     bool setLatitude(const QString& latitude);
     bool setLongitude(const QString longitude);
+
     /**
      * Sets the latitude/longitude from a double floating point number,
      * as described for latitudeNumber() above.
@@ -136,6 +143,7 @@ public:
      */
     bool setLatitude(double latitudeNumber);
     bool setLongitude(double longitudeNumber);
+
     /**
      * Set the altitude in meters
      */

@@ -94,6 +94,7 @@
 #include "imagedragdrop.h"
 #include "imagedescedittab.h"
 #include "imageinfo.h"
+#include "imagegps.h"
 #include "imagelistmodel.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
@@ -102,7 +103,7 @@
 #include "imagescanner.h"
 #include "imagethumbnailbar.h"
 #include "iofilesettings.h"
-#include "gpssyncdialog.h"
+#include "geolocationedit.h"
 #include "dnotificationwrapper.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
@@ -1728,19 +1729,19 @@ void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
 void ImageWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    if ( d->currentImageInfo.isNull() )
+    ImageInfo inf = d->currentImageInfo;
+
+    if ( inf.isNull() )
         return;
     
-    QUrl url = d->currentImageInfo.fileUrl();
-
-    QPointer<GPSSyncDialog> dialog = new GPSSyncDialog(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
-    dialog->setImages(QList<QUrl>() << url);
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
+    dialog->setItems(ImageGPS::infosToItems(ImageInfoList() << inf));
     dialog->exec();
 
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    ScanController::instance()->scannedInfo(url.toLocalFile());
+    ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
 #endif
 }
 

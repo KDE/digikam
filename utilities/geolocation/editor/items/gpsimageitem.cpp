@@ -303,7 +303,7 @@ bool GPSImageItem::loadImageData()
     }
 
     // read the DOP value:
-    success= meta->getExifTagRational("Exif.GPSInfo.GPSDOP", num, den);
+    success = meta->getExifTagRational("Exif.GPSInfo.GPSDOP", num, den);
 
     if (success)
     {
@@ -657,33 +657,35 @@ bool GPSImageItem::lessThan(const GPSImageItem* const otherItem, const int colum
     }
 }
 
-QString GPSImageItem::saveChanges()
+SaveProperties GPSImageItem::saveProperties() const
 {
-    // determine what is to be done first
-    bool shouldRemoveCoordinates = false;
-    bool shouldWriteCoordinates  = false;
-    bool shouldWriteAltitude     = false;
-    qreal altitude               = 0;
-    qreal latitude               = 0;
-    qreal longitude              = 0;
+    SaveProperties p;
 
     // do we have gps information?
+
     if (m_gpsData.hasCoordinates())
     {
-        shouldWriteCoordinates = true;
-        latitude               = m_gpsData.getCoordinates().lat();
-        longitude              = m_gpsData.getCoordinates().lon();
+        p.shouldWriteCoordinates = true;
+        p.latitude               = m_gpsData.getCoordinates().lat();
+        p.longitude              = m_gpsData.getCoordinates().lon();
 
         if (m_gpsData.hasAltitude())
         {
-            shouldWriteAltitude = true;
-            altitude            = m_gpsData.getCoordinates().alt();
+            p.shouldWriteAltitude = true;
+            p.altitude            = m_gpsData.getCoordinates().alt();
         }
     }
     else
     {
-        shouldRemoveCoordinates = true;
+        p.shouldRemoveCoordinates = true;
     }
+    
+    return p;
+}
+
+QString GPSImageItem::saveChanges()
+{
+    SaveProperties p = saveProperties();
 
     QString returnString;
 
@@ -698,15 +700,15 @@ QString GPSImageItem::saveChanges()
     }
     else
     {
-        if (shouldWriteCoordinates)
+        if (p.shouldWriteCoordinates)
         {
-            if (shouldWriteAltitude)
+            if (p.shouldWriteAltitude)
             {
-                success = meta->setGPSInfo(altitude, latitude, longitude);
+                success = meta->setGPSInfo(p.altitude, p.latitude, p.longitude);
             }
             else
             {
-                success = meta->setGPSInfo(static_cast<const double* const>(0), latitude, longitude);
+                success = meta->setGPSInfo(static_cast<const double* const>(0), p.latitude, p.longitude);
             }
 
             // write all other GPS information here too
@@ -761,7 +763,8 @@ QString GPSImageItem::saveChanges()
                 returnString = i18n("Failed to add GPS info to image.");
             }
         }
-        if (shouldRemoveCoordinates)
+
+        if (p.shouldRemoveCoordinates)
         {
             // TODO: remove only the altitude if requested
             success = meta->removeGPSInfo();

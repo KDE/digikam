@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2006-05-16
- * @brief  A plugin to synchronize pictures with a GPS device.
+ * @brief  A tool to edit geolocation
  *
  * @author Copyright (C) 2006-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -28,8 +28,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSSYNCKGEOMAPMODELHELPER_H
-#define GPSSYNCKGEOMAPMODELHELPER_H
+#ifndef GPSGEOIFACEMODELHELPER_H
+#define GPSGEOIFACEMODELHELPER_H
 
 // Qt includes
 
@@ -52,14 +52,14 @@ namespace Digikam
 class GPSImageModel;
 class GPSUndoCommand;
 
-class GPSSyncGeoIfaceModelHelper : public ModelHelper
+class GPSGeoIfaceModelHelper : public ModelHelper
 {
     Q_OBJECT
 
 public:
 
-    GPSSyncGeoIfaceModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent = 0);
-    virtual ~GPSSyncGeoIfaceModelHelper();
+    GPSGeoIfaceModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent = 0);
+    virtual ~GPSGeoIfaceModelHelper();
 
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;
@@ -90,4 +90,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* GPSSYNCKGEOMAPMODELHELPER_H */
+#endif /* GPSGEOIFACEMODELHELPER_H */

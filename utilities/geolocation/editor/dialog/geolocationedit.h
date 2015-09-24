@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2006-05-16
- * @brief  A plugin to synchronize pictures with a GPS device.
+ * @brief  A tool to edit geolocation
  *
  * @author Copyright (C) 2006-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -28,8 +28,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSSYNCDIALOG_H
-#define GPSSYNCDIALOG_H
+#ifndef GEOLOCATIONEDIT_H
+#define GEOLOCATIONEDIT_H
 
 // Qt includes
 
@@ -58,14 +58,14 @@ namespace Digikam
 
 class GPSUndoCommand;
 
-class GPSSyncDialog : public QDialog
+class GeolocationEdit : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* const parent);
-    ~GPSSyncDialog();
+    explicit GeolocationEdit(QAbstractItemModel* const externTagModel, QWidget* const parent);
+    ~GeolocationEdit();
 
     /* Populate items in dialog list based on url. To be used in case of non database as with Showfoto.
      */
@@ -114,4 +114,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* GPSSYNCDIALOG_H */
+#endif /* GEOLOCATIONEDIT_H */

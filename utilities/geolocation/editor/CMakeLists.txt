@@ -39,8 +39,8 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             dialog/gpsundocommand.cpp
                             dialog/gpsbookmarkowner.cpp
                             dialog/gpsbookmarkmodelhelper.cpp
-                            dialog/gpssyncdialog.cpp
-                            dialog/gpssyncgeoifacemodelhelper.cpp
+                            dialog/geolocationedit.cpp
+                            dialog/gpsgeoifacemodelhelper.cpp
    )
 
 add_library(geolocationedit_src OBJECT ${libgeolocationedit_SRCS})

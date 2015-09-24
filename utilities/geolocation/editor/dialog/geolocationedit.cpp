@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2006-05-16
- * @brief  A plugin to synchronize pictures with a GPS device.
+ * @brief  A tool to edit geolocation
  *
  * @author Copyright (C) 2006-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -28,7 +28,7 @@
  *
  * ============================================================ */
 
-#include "gpssyncdialog.h"
+#include "geolocationedit.h"
 
 // Qt includes
 
@@ -94,7 +94,7 @@
 #include "searchwidget.h"
 #include "backend-rg.h"
 #include "gpsimagedetails.h"
-#include "gpssyncgeoifacemodelhelper.h"
+#include "gpsgeoifacemodelhelper.h"
 
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
@@ -161,7 +161,7 @@ public:
 
 // ---------------------------------------------------------------------------------
 
-class GPSSyncDialog::Private
+class GeolocationEdit::Private
 {
 public:
 
@@ -254,7 +254,7 @@ public:
 
     // map: helpers
     MapDragDropHandler*                      mapDragDropHandler;
-    GPSSyncGeoIfaceModelHelper*              mapModelHelper;
+    GPSGeoIfaceModelHelper*              mapModelHelper;
     ItemMarkerTiler*                         geoifaceMarkerModel;
 
     // map: actions
@@ -264,7 +264,7 @@ public:
     QComboBox*                               cbMapLayout;
 };
 
-GPSSyncDialog::GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* const parent)
+GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
@@ -286,10 +286,10 @@ GPSSyncDialog::GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* 
     d->searchWidget  = new SearchWidget(d->bookmarkOwner, d->imageModel, d->selectionModel, d->stackedWidget);
 
     GPSImageItem::setHeaderData(d->imageModel);
-    d->mapModelHelper     = new GPSSyncGeoIfaceModelHelper(d->imageModel, d->selectionModel, this);
+    d->mapModelHelper      = new GPSGeoIfaceModelHelper(d->imageModel, d->selectionModel, this);
     d->mapModelHelper->addUngroupedModelHelper(d->bookmarkOwner->bookmarkModelHelper());
     d->mapModelHelper->addUngroupedModelHelper(d->searchWidget->getModelHelper());
-    d->mapDragDropHandler = new MapDragDropHandler(d->imageModel, d->mapModelHelper);
+    d->mapDragDropHandler  = new MapDragDropHandler(d->imageModel, d->mapModelHelper);
     d->geoifaceMarkerModel = new ItemMarkerTiler(d->mapModelHelper, this);
 
     d->actionBookmarkVisibility = new QAction(this);
@@ -335,10 +335,10 @@ GPSSyncDialog::GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* 
     d->buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
 
     connect(d->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked,
-            this, &GPSSyncDialog::slotApplyClicked);
+            this, &GeolocationEdit::slotApplyClicked);
 
     connect(d->buttonBox->button(QDialogButtonBox::Close), &QPushButton::clicked,
-            this, &GPSSyncDialog::close);
+            this, &GeolocationEdit::close);
 
     mainLayout->addWidget(hbox);
 
@@ -493,12 +493,12 @@ GPSSyncDialog::GPSSyncDialog(QAbstractItemModel* const externTagModel, QWidget* 
     d->mapWidget->setActive(true);
 }
 
-GPSSyncDialog::~GPSSyncDialog()
+GeolocationEdit::~GeolocationEdit()
 {
     delete d;
 }
 
-bool GPSSyncDialog::eventFilter(QObject* const o, QEvent* const e)
+bool GeolocationEdit::eventFilter(QObject* const o, QEvent* const e)
 {
     if ( ( o == d->tabBar ) && ( e->type() == QEvent::MouseButtonPress ) )
     {
@@ -543,14 +543,14 @@ bool GPSSyncDialog::eventFilter(QObject* const o, QEvent* const e)
     return QWidget::eventFilter(o, e);
 }
 
-void GPSSyncDialog::slotCurrentTabChanged(int index)
+void GeolocationEdit::slotCurrentTabChanged(int index)
 {
     d->tabBar->setCurrentIndex(index);
     d->stackedWidget->setCurrentIndex(index);
     d->detailsWidget->slotSetActive(d->stackedWidget->currentWidget()==d->detailsWidget);
 }
 
-void GPSSyncDialog::setCurrentTab(int index)
+void GeolocationEdit::setCurrentTab(int index)
 {
     d->tabBar->setCurrentIndex(index);
     d->stackedWidget->setCurrentIndex(index);
@@ -566,7 +566,7 @@ void GPSSyncDialog::setCurrentTab(int index)
     d->detailsWidget->slotSetActive( (d->stackedWidget->currentWidget()==d->detailsWidget) && (d->splitterSize==0) );
 }
 
-void GPSSyncDialog::setImages(const QList<QUrl>& images)
+void GeolocationEdit::setImages(const QList<QUrl>& images)
 {
     QList<GPSImageItem*> items;
     
@@ -578,7 +578,7 @@ void GPSSyncDialog::setImages(const QList<QUrl>& images)
     setItems(items);
 }
 
-void GPSSyncDialog::setItems(const QList<GPSImageItem*>& items)
+void GeolocationEdit::setItems(const QList<GPSImageItem*>& items)
 {
     foreach(GPSImageItem* const newItem, items)
     {
@@ -608,7 +608,7 @@ void GPSSyncDialog::setItems(const QList<GPSImageItem*>& items)
     d->fileIOFutureWatcher->setFuture(d->fileIOFuture);
 }
 
-void GPSSyncDialog::slotFileMetadataLoaded(int beginIndex, int endIndex)
+void GeolocationEdit::slotFileMetadataLoaded(int beginIndex, int endIndex)
 {
     qCDebug(DIGIKAM_GENERAL_LOG)<<beginIndex<<endIndex;
     d->fileIOCountDone += (endIndex-beginIndex);
@@ -620,7 +620,7 @@ void GPSSyncDialog::slotFileMetadataLoaded(int beginIndex, int endIndex)
     }
 }
 
-void GPSSyncDialog::readSettings()
+void GeolocationEdit::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group = config->group("Geolocation Edit Settings");
@@ -702,7 +702,7 @@ void GPSSyncDialog::readSettings()
     }
 }
 
-void GPSSyncDialog::saveSettings()
+void GeolocationEdit::saveSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group = config->group("Geolocation Edit Settings");
@@ -748,7 +748,7 @@ void GPSSyncDialog::saveSettings()
     config->sync();
 }
 
-void GPSSyncDialog::closeEvent(QCloseEvent *e)
+void GeolocationEdit::closeEvent(QCloseEvent *e)
 {
     if (!e) return;
 
@@ -810,7 +810,7 @@ void GPSSyncDialog::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
-void GPSSyncDialog::slotImageActivated(const QModelIndex& index)
+void GeolocationEdit::slotImageActivated(const QModelIndex& index)
 {
     d->detailsWidget->slotSetCurrentImage(index);
 
@@ -830,7 +830,7 @@ void GPSSyncDialog::slotImageActivated(const QModelIndex& index)
     }
 }
 
-void GPSSyncDialog::slotSetUIEnabled(const bool enabledState, QObject* const cancelObject, const QString& cancelSlot)
+void GeolocationEdit::slotSetUIEnabled(const bool enabledState, QObject* const cancelObject, const QString& cancelSlot)
 {
     if (enabledState)
     {
@@ -853,12 +853,12 @@ void GPSSyncDialog::slotSetUIEnabled(const bool enabledState, QObject* const can
     d->mapWidget->setAllowModifications(enabledState);
 }
 
-void GPSSyncDialog::slotSetUIEnabled(const bool enabledState)
+void GeolocationEdit::slotSetUIEnabled(const bool enabledState)
 {
     slotSetUIEnabled(enabledState, 0, QString());
 }
 
-void GPSSyncDialog::saveChanges(const bool closeAfterwards)
+void GeolocationEdit::saveChanges(const bool closeAfterwards)
 {
     // TODO: actually save the changes
     // are there any modified images?
@@ -902,7 +902,7 @@ void GPSSyncDialog::saveChanges(const bool closeAfterwards)
     d->fileIOFutureWatcher->setFuture(d->fileIOFuture);
 }
 
-void GPSSyncDialog::slotFileChangesSaved(int beginIndex, int endIndex)
+void GeolocationEdit::slotFileChangesSaved(int beginIndex, int endIndex)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << beginIndex << endIndex;
 
@@ -949,18 +949,18 @@ void GPSSyncDialog::slotFileChangesSaved(int beginIndex, int endIndex)
     }
 }
 
-void GPSSyncDialog::slotApplyClicked()
+void GeolocationEdit::slotApplyClicked()
 {
     // save the changes, but do not close afterwards
     saveChanges(false);
 }
 
-void GPSSyncDialog::slotProgressChanged(const int currentProgress)
+void GeolocationEdit::slotProgressChanged(const int currentProgress)
 {
     d->progressBar->setProgressValue(currentProgress);
 }
 
-void GPSSyncDialog::slotProgressSetup(const int maxProgress, const QString& progressText)
+void GeolocationEdit::slotProgressSetup(const int maxProgress, const QString& progressText)
 {
     d->progressBar->setProgressText(progressText);
     d->progressBar->setProgressTotalSteps(maxProgress);
@@ -971,12 +971,12 @@ void GPSSyncDialog::slotProgressSetup(const int maxProgress, const QString& prog
     d->progressCancelButton->setVisible(d->progressCancelObject != 0);
 }
 
-void GPSSyncDialog::slotGPSUndoCommand(GPSUndoCommand* undoCommand)
+void GeolocationEdit::slotGPSUndoCommand(GPSUndoCommand* undoCommand)
 {
     d->undoStack->push(undoCommand);
 }
 
-void GPSSyncDialog::slotSortOptionTriggered(QAction* /*sortAction*/)
+void GeolocationEdit::slotSortOptionTriggered(QAction* /*sortAction*/)
 {
     int newSortKey = 0;
 
@@ -988,7 +988,7 @@ void GPSSyncDialog::slotSortOptionTriggered(QAction* /*sortAction*/)
     d->mapWidget->setSortKey(newSortKey);
 }
 
-void GPSSyncDialog::slotProgressCancelButtonClicked()
+void GeolocationEdit::slotProgressCancelButtonClicked()
 {
     if (d->progressCancelObject)
     {
@@ -998,18 +998,18 @@ void GPSSyncDialog::slotProgressCancelButtonClicked()
     }
 }
 
-void GPSSyncDialog::slotBookmarkVisibilityToggled()
+void GeolocationEdit::slotBookmarkVisibilityToggled()
 {
     d->bookmarkOwner->bookmarkModelHelper()->setVisible(d->actionBookmarkVisibility->isChecked());
 }
 
-void GPSSyncDialog::slotLayoutChanged(int lay)
+void GeolocationEdit::slotLayoutChanged(int lay)
 {
     d->mapLayout = (MapLayout)lay;
     adjustMapLayout(true);
 }
 
-MapWidget* GPSSyncDialog::makeMapWidget(QWidget** const pvbox)
+MapWidget* GeolocationEdit::makeMapWidget(QWidget** const pvbox)
 {
     QWidget* const dummyWidget = new QWidget(this);
     QVBoxLayout* const vbox    = new QVBoxLayout(dummyWidget);
@@ -1036,7 +1036,7 @@ MapWidget* GPSSyncDialog::makeMapWidget(QWidget** const pvbox)
     return mapWidget;
 }
 
-void GPSSyncDialog::adjustMapLayout(const bool syncSettings)
+void GeolocationEdit::adjustMapLayout(const bool syncSettings)
 {
     if (d->mapLayout == MapLayoutOne)
     {

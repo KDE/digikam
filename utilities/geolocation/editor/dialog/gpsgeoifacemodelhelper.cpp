@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2006-05-16
- * @brief  A plugin to synchronize pictures with a GPS device.
+ * @brief  A tool to edit geolocation
  *
  * @author Copyright (C) 2006-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -28,7 +28,7 @@
  *
  * ============================================================ */
 
-#include "gpssyncgeoifacemodelhelper.h"
+#include "gpsgeoifacemodelhelper.h"
 
 // Qt includes
 
@@ -59,7 +59,7 @@
 namespace Digikam
 {
 
-class GPSSyncGeoIfaceModelHelper::Private
+class GPSGeoIfaceModelHelper::Private
 {
 public:
 
@@ -74,7 +74,7 @@ public:
     QList<ModelHelper*>  ungroupedModelHelpers;
 };
 
-GPSSyncGeoIfaceModelHelper::GPSSyncGeoIfaceModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent)
+GPSGeoIfaceModelHelper::GPSGeoIfaceModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent)
     : ModelHelper(parent),
       d(new Private())
 {
@@ -88,17 +88,17 @@ GPSSyncGeoIfaceModelHelper::GPSSyncGeoIfaceModelHelper(GPSImageModel* const mode
             this, SIGNAL(signalModelChangedDrastically()));
 }
 
-QAbstractItemModel* GPSSyncGeoIfaceModelHelper::model() const
+QAbstractItemModel* GPSGeoIfaceModelHelper::model() const
 {
     return d->model;
 }
 
-QItemSelectionModel* GPSSyncGeoIfaceModelHelper::selectionModel() const
+QItemSelectionModel* GPSGeoIfaceModelHelper::selectionModel() const
 {
     return d->selectionModel;
 }
 
-bool GPSSyncGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool GPSGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
 {
     GPSImageItem* const item = d->model->itemFromIndex(index);
 
@@ -114,17 +114,17 @@ bool GPSSyncGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index, GeoCo
     return true;
 }
 
-GPSSyncGeoIfaceModelHelper::~GPSSyncGeoIfaceModelHelper()
+GPSGeoIfaceModelHelper::~GPSGeoIfaceModelHelper()
 {
     delete d;
 }
 
-QPixmap GPSSyncGeoIfaceModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
+QPixmap GPSGeoIfaceModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
 {
     return d->model->getPixmapForIndex(index, qMax(size.width(), size.height()));
 }
 
-QPersistentModelIndex GPSSyncGeoIfaceModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
+QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
 {
     const bool oldestFirst = sortKey & 1;
     QPersistentModelIndex bestIndex;
@@ -159,12 +159,12 @@ QPersistentModelIndex GPSSyncGeoIfaceModelHelper::bestRepresentativeIndexFromLis
     return bestIndex;
 }
 
-void GPSSyncGeoIfaceModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& pixmap)
+void GPSGeoIfaceModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& pixmap)
 {
     emit(signalThumbnailAvailableForIndex(index, pixmap));
 }
 
-void GPSSyncGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
+void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
                                                const GeoCoordinates& targetCoordinates,
                                                const QPersistentModelIndex& targetSnapIndex)
 {
@@ -214,12 +214,12 @@ void GPSSyncGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelInde
     emit(signalUndoCommand(undoCommand));
 }
 
-void GPSSyncGeoIfaceModelHelper::addUngroupedModelHelper(ModelHelper* const newModelHelper)
+void GPSGeoIfaceModelHelper::addUngroupedModelHelper(ModelHelper* const newModelHelper)
 {
     d->ungroupedModelHelpers << newModelHelper;
 }
 
-ModelHelper::Flags GPSSyncGeoIfaceModelHelper::modelFlags() const
+ModelHelper::Flags GPSGeoIfaceModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

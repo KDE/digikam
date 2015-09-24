@@ -66,6 +66,7 @@ set(libdatabase_SRCS
     item/imagelister.cpp
     item/imagelisterreceiver.cpp
     item/imageposition.cpp
+    item/imagegps.cpp
     item/imagecopyright.cpp
     item/imagequerybuilder.cpp
     item/imagescanner.cpp
