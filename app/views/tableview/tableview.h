@@ -112,6 +112,7 @@ protected Q_SLOTS:
     void slotUngroupSelected();
     void slotCreateGroupFromSelection();
     void slotCreateGroupByTimeFromSelection();
+    void slotCreateGroupByTypeFromSelection();
     void slotGroupingModeActionTriggered();
 
 Q_SIGNALS:

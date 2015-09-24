@@ -76,6 +76,7 @@ public Q_SLOTS:
     void setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo);
 
     void createGroupByTimeFromInfoList(const ImageInfoList& imageInfoList);
+    void createGroupByTypeFromInfoList(const ImageInfoList& imageInfoList);
 
 Q_SIGNALS:
 

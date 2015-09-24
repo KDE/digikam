@@ -27,12 +27,9 @@
 
 // Qt includes
 
+#include <QObject>
 #include <QList>
 #include <QUrl>
-
-// KDE includes
-
-#include <kjob.h>
 
 // Local includes
 
@@ -104,6 +101,7 @@ Q_SIGNALS:
     void signalPopupTagsView();
     void signalCreateGroup();
     void signalCreateGroupByTime();
+    void signalCreateGroupByType();
     void signalUngroup();
     void signalRemoveFromGroup();
 
