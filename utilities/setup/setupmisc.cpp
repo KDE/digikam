@@ -60,7 +60,6 @@ public:
         showPermanentDeleteDialogCheck(0),
         sidebarApplyDirectlyCheck(0),
         scrollItemToCenterCheck(0),
-        scrollItemToCenterCheck(0),
         sidebarType(0),
         stringComparisonType(0),
         applicationStyle(0)
