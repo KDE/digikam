@@ -28,14 +28,13 @@
 
 #include <QPixmap>
 #include <QSet>
+#include <QFileSystemWatcher>
 
 // Local includes
 
 #include "dimg.h"
 #include "loadsavethread.h"
 #include "digikam_export.h"
-
-class KDirWatch;
 
 namespace Digikam
 {
@@ -122,8 +121,8 @@ Q_SIGNALS:
 
 protected:
 
-    KDirWatch*    m_watch;
-    QSet<QString> m_watchedFiles;
+    QFileSystemWatcher* m_watch;
+    QSet<QString>       m_watchedFiles;
 };
 
 // --------------------------------------------------------------------------------------------------------------
