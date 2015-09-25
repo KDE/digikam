@@ -437,6 +437,7 @@ void EditorWindow::setupStandardActions()
     createKSaneAction();
     createMetadataEditAction();
     createGeolocationEditAction();
+    m_ksaneAction->setEnabled(false);
     m_metadataEditAction->setEnabled(false);
     m_geolocationEditAction->setEnabled(false);
 
@@ -1102,6 +1103,7 @@ void EditorWindow::toggleStandardActions(bool val)
     m_saveAsAction->setEnabled(val);
     d->openWithAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
+    m_ksaneAction->setEnabled(val);
     m_metadataEditAction->setEnabled(val);
     m_geolocationEditAction->setEnabled(val);
     m_exportAction->setEnabled(val);
