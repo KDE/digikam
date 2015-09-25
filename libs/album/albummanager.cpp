@@ -1768,8 +1768,9 @@ void AlbumManager::scanSAlbums()
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
         emit signalAlbumDeleted(album);
+        quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
         delete album;
-        emit signalAlbumHasBeenDeleted(album);
+        emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
     // add new albums
@@ -2558,7 +2559,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
 
     album->setParent(0);
     emit signalAlbumDeleted(album);
-    emit signalAlbumHasBeenDeleted(album);
+    emit signalAlbumHasBeenDeleted(reinterpret_cast<quintptr>(album));
 
     emit signalAlbumAboutToBeAdded(album, newParent, newParent->lastChild());
     ChangingDB changing(d);
@@ -2856,8 +2857,9 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
 
     d->allAlbumsIdHash.remove(album->globalID());
     emit signalAlbumDeleted(album);
+    quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
     delete album;
-    emit signalAlbumHasBeenDeleted(album);
+    emit signalAlbumHasBeenDeleted(deletedAlbum);
 
     return true;
 }
@@ -2953,8 +2955,9 @@ void AlbumManager::removePAlbum(PAlbum* album)
     }
 
     emit signalAlbumDeleted(album);
+    quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
     delete album;
-    emit signalAlbumHasBeenDeleted(album);
+    emit signalAlbumHasBeenDeleted(deletedAlbum);
 }
 
 void AlbumManager::insertTAlbum(TAlbum* album, TAlbum* parent)
@@ -3014,8 +3017,9 @@ void AlbumManager::removeTAlbum(TAlbum* album)
     }
 
     emit signalAlbumDeleted(album);
+    quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
     delete album;
-    emit signalAlbumHasBeenDeleted(album);
+    emit signalAlbumHasBeenDeleted(deletedAlbum);
 }
 
 void AlbumManager::notifyAlbumDeletion(Album* album)
@@ -3245,8 +3249,9 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
         emit signalAlbumDeleted(album);
+        quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
         delete album;
-        emit signalAlbumHasBeenDeleted(album);
+        emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
     for (QMap<int, DAlbum*>::const_iterator it = yAlbumMap.constBegin();
@@ -3256,8 +3261,9 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
         emit signalAlbumDeleted(album);
+        quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
         delete album;
-        emit signalAlbumHasBeenDeleted(album);
+        emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
     d->dAlbumsCount = yearMonthMap;
