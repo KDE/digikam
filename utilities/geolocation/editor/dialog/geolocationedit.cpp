@@ -254,7 +254,7 @@ public:
 
     // map: helpers
     MapDragDropHandler*                      mapDragDropHandler;
-    GPSGeoIfaceModelHelper*              mapModelHelper;
+    GPSGeoIfaceModelHelper*                  mapModelHelper;
     ItemMarkerTiler*                         geoifaceMarkerModel;
 
     // map: actions
@@ -320,8 +320,6 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     d->progressBar->setVisible(false);
     d->progressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
     d->progressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    // we need a really large stretch factor here because the QDialogButtonBox also stretches a lot...
-    dynamic_cast<QHBoxLayout*>(hbox->layout())->setStretch(200, 0);
 
     d->progressCancelButton = new QPushButton(hbox);
     d->progressCancelButton->setVisible(false);
@@ -368,9 +366,9 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
             this, SLOT(slotBookmarkVisibilityToggled()));
 
     QWidget* mapVBox = 0;
-    d->mapWidget     = makeMapWidget(&mapVBox);
+    d->mapWidget           = makeMapWidget(&mapVBox);
     d->searchWidget->setPrimaryMapWidget(d->mapWidget);
-    d->mapSplitter   = new QSplitter(this);
+    d->mapSplitter         = new QSplitter(this);
     d->mapSplitter->addWidget(mapVBox);
     d->VSplitter->addWidget(d->mapSplitter);
 

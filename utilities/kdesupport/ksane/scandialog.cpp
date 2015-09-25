@@ -35,7 +35,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QImageWriter>
-#include <QProgressBar>
 
 // KDE includes
 
@@ -51,6 +50,7 @@
 
 #include "digikam_debug.h"
 #include "saveimgthread.h"
+#include "statusprogressbar.h"
 
 namespace Digikam
 {
@@ -65,10 +65,10 @@ public:
         saneWidget = 0;
     }
 
-    QString       targetDir;
-    QString       configGroupName;
-    QProgressBar* progress;
-    KSaneWidget*  saneWidget;
+    QString            targetDir;
+    QString            configGroupName;
+    StatusProgressBar* progress;
+    KSaneWidget*       saneWidget;
 };
 
 ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
@@ -81,10 +81,11 @@ ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
     d->saneWidget = saneWdg;
     d->saneWidget->show();
 
-    d->progress = new QProgressBar(this);
-    d->progress->setMinimum(0);
-    d->progress->setMaximum(100);
-    d->progress->setTextVisible(true);
+    d->progress = new StatusProgressBar(this);
+    d->progress->setProgressBarMode(StatusProgressBar::ProgressBarMode);
+    d->progress->setProgressTotalSteps(100);
+    d->progress->setNotify(true);
+    d->progress->setNotificationTitle(i18n("Scan Imagen"), QIcon::fromTheme(QLatin1String("scanner")));
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(d->saneWidget);
@@ -276,8 +277,8 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
 
 void ScanDialog::slotThreadProgress(const QUrl& url, int percent)
 {
-    d->progress->setFormat(i18n("Saving file %1 - %p%", url.fileName()));
-    d->progress->setValue(percent);
+    d->progress->setProgressText(i18n("Saving file %1 - ", url.fileName()));
+    d->progress->setProgressValue(percent);
 }
 
 void ScanDialog::slotThreadDone(const QUrl& url, bool success)
@@ -287,7 +288,7 @@ void ScanDialog::slotThreadDone(const QUrl& url, bool success)
         QMessageBox::critical(0, i18n("File Not Saved"), i18n("Cannot save \"%1\" file", url.fileName()));
     }
 
-    d->progress->setFormat(QLatin1String("%p%"));
+    d->progress->setProgressText(QLatin1String(""));
     QApplication::restoreOverrideCursor();
     setEnabled(true);
 
