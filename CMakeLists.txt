@@ -641,11 +641,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${TIFF_INCLUDE_DIR}
                         ${LCMS_INCLUDE_DIR}
                         ${PGF_INCLUDE_DIRS}
-
-
-                        ${KF5_INCLUDES_ALL}
-                        ${QT5_INCLUDES_ALL}
                        )
+
+    include_directories(${KF5_INCLUDES_ALL})
+    include_directories(${QT5_INCLUDES_ALL})
 
     if(GPHOTO2_FOUND)
         include_directories(${GPHOTO2_INCLUDE_DIRS})
