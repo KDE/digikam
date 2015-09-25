@@ -432,7 +432,7 @@ void ClassicLoadingCacheFileWatch::addedImage(const QString& filePath)
 {
     Q_UNUSED(filePath)
     // schedule update of file watch
-    // KDirWatch can only be accessed from main thread!
+    // QFileSystemWatch can only be accessed from main thread!
     emit signalUpdateDirWatch();
 }
 
