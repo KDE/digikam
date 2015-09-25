@@ -51,7 +51,7 @@ public:
         : QLabel(parent)
     {
         setText(name);
-        QFont fnt = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
+        QFont fnt;
         fnt.setItalic(true);
         setFont(fnt);
         setAlignment(Qt::AlignRight | Qt::AlignTop);
@@ -74,7 +74,6 @@ public:
         : RAdjustableLabel(parent)
     {
         setAdjustedText(value);
-        setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
         setAlignment(Qt::AlignLeft | Qt::AlignTop);
         setWordWrap(false);
         setElideMode(Qt::ElideRight);
@@ -107,7 +106,7 @@ public:
 
     void setLinesNumber(int l)
     {
-        QFont fnt = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
+        QFont fnt;
         document()->setDefaultFont(fnt);
         int left, top, right, bottom;
         getContentsMargins(&left, &top, &right, &bottom);
@@ -136,7 +135,7 @@ public:
 
     void setLinesNumber(int l)
     {
-        QFont fnt = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
+        QFont fnt;
         setFont(fnt);
         int left, top, right, bottom;
         getContentsMargins(&left, &top, &right, &bottom);

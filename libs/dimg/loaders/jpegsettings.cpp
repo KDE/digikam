@@ -74,7 +74,8 @@ public:
 };
 
 JPEGSettings::JPEGSettings(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -93,7 +94,7 @@ JPEGSettings::JPEGSettings(QWidget* const parent)
                                           "large file size)</p>"
                                           "<p><b>Note: JPEG always uses lossy compression.</b></p>"));
 
-    d->labelWarning = new QLabel(i18n("<font size='-1' color='red'><i>"
+    d->labelWarning = new QLabel(i18n("<font color='red'><i>"
                                       "Warning: <a href='http://en.wikipedia.org/wiki/JPEG'>JPEG</a> is a "
                                       "lossy image compression format."
                                       "</i></font>"), this);

@@ -39,7 +39,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ktextedit.h>
 
 // Local includes
 
