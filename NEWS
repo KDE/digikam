@@ -55,4 +55,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 025 ==> 284767 - No geolocating for (Canon) RAW files displayed/saved.
 026 ==> 146557 - kio_digikamdate takes the cpu load up when downloading raw files with digiKam.
 027 ==> 109631 - Make digikamtags protocol public KIO-slave.
-028 ==> 
+028 ==> 224604 - Add internal trash for files deleted in digiKam (as IPhoto).
+029 ==> 
