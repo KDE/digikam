@@ -51,7 +51,7 @@ public:
     AlbumModelDragDropHandler*            dragDropHandler;
 
     Album*                                addingAlbum;
-    Album*                                removingAlbum;
+    quintptr                              removingAlbum;
 
 public:
 

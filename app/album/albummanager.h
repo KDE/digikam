@@ -622,7 +622,7 @@ Q_SIGNALS:
     void signalAlbumDeleted(Album* album);
     /// The album is deleted, the object can no longer be accessed.
     /// For identification purposes, the former album pointer is passed.
-    void signalAlbumHasBeenDeleted(void*);
+    void signalAlbumHasBeenDeleted(quintptr);
     void signalAlbumsCleared();
     void signalAlbumCurrentChanged(QList<Album*> album);
     void signalAllAlbumsLoaded();

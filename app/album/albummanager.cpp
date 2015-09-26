@@ -6,8 +6,8 @@
  * Date        : 2004-06-15
  * Description : Albums manager interface.
  *
- * Copyright (C) 2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -1773,8 +1773,9 @@ void AlbumManager::scanSAlbums()
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
         emit signalAlbumDeleted(album);
+        quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
         delete album;
-        emit signalAlbumHasBeenDeleted(album);
+        emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
     // add new albums
@@ -2553,7 +2554,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
 
     album->setParent(0);
     emit signalAlbumDeleted(album);
-    emit signalAlbumHasBeenDeleted(album);
+    emit signalAlbumHasBeenDeleted(reinterpret_cast<quintptr>(album));
 
     emit signalAlbumAboutToBeAdded(album, newParent, newParent->lastChild());
     ChangingDB changing(d);
@@ -2848,8 +2849,9 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
 
     d->allAlbumsIdHash.remove(album->globalID());
     emit signalAlbumDeleted(album);
+    quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
     delete album;
-    emit signalAlbumHasBeenDeleted(album);
+    emit signalAlbumHasBeenDeleted(deletedAlbum);
 
     return true;
 }
@@ -2943,8 +2945,9 @@ void AlbumManager::removePAlbum(PAlbum* album)
     }
 
     emit signalAlbumDeleted(album);
+    quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
     delete album;
-    emit signalAlbumHasBeenDeleted(album);
+    emit signalAlbumHasBeenDeleted(deletedAlbum);
 }
 
 void AlbumManager::insertTAlbum(TAlbum* album, TAlbum* parent)
@@ -3004,8 +3007,9 @@ void AlbumManager::removeTAlbum(TAlbum* album)
     }
 
     emit signalAlbumDeleted(album);
+    quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
     delete album;
-    emit signalAlbumHasBeenDeleted(album);
+    emit signalAlbumHasBeenDeleted(deletedAlbum);
 }
 
 void AlbumManager::notifyAlbumDeletion(Album* album)
@@ -3253,8 +3257,9 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
         emit signalAlbumDeleted(album);
+        quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
         delete album;
-        emit signalAlbumHasBeenDeleted(album);
+        emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
     for (QMap<int, DAlbum*>::const_iterator it = yAlbumMap.constBegin();
@@ -3264,8 +3269,9 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
         emit signalAlbumAboutToBeDeleted(album);
         d->allAlbumsIdHash.remove(album->globalID());
         emit signalAlbumDeleted(album);
+        quintptr deletedAlbum = reinterpret_cast<quintptr>(album);
         delete album;
-        emit signalAlbumHasBeenDeleted(album);
+        emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
     d->dAlbumsCount = yearMonthMap;

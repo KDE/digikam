@@ -63,8 +63,8 @@ AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album* const rootA
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAboutToBeDeleted(Album*)),
             this, SLOT(slotAlbumAboutToBeDeleted(Album*)));
 
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumHasBeenDeleted(void*)),
-            this, SLOT(slotAlbumHasBeenDeleted(void*)));
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumHasBeenDeleted(quintptr)),
+            this, SLOT(slotAlbumHasBeenDeleted(quintptr)));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
@@ -486,10 +486,10 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album* album)
     albumCleared(album);
 
     // store album for slotAlbumHasBeenDeleted
-    d->removingAlbum = album;
+    d->removingAlbum = reinterpret_cast<quintptr>(album);
 }
 
-void AbstractAlbumModel::slotAlbumHasBeenDeleted(void* p)
+void AbstractAlbumModel::slotAlbumHasBeenDeleted(quintptr p)
 {
     if (d->removingAlbum == p)
     {
