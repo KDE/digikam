@@ -32,6 +32,8 @@
 
 // Local includes
 
+#include "digikam_config.h"
+
 namespace Digikam
 {
 
@@ -56,12 +58,14 @@ protected Q_SLOTS:
     void slotAlbumAdded(Album* album);
     void slotAlbumAboutToBeDeleted(Album* album);
 
+#ifdef USE_KNOTIFY 
     void slotFileMoved(const QString& path);
     void slotFileDeleted(const QString& urlString, bool isDir);
     void slotFileCreated(const QString& path, bool isDir);
     void slotFileClosedAfterWrite(const QString&);
     void slotInotifyWatchUserLimitReached();
-
+#endif
+    
     void slotQFSWatcherDirty(const QString& path);
     void slotKioFileMoved(const QString& urlFrom, const QString& urlTo);
     void slotKioFilesDeleted(const QStringList& urls);
@@ -72,7 +76,10 @@ private:
     void rescanDirectory(const QString& dir);
     void rescanPath(const QString& path);
 
+#ifdef USE_KNOTIFY 
     void connectToKInotify();
+#endif    
+    
     void connectToQFSWatcher();
     void connectToKIO();
     void handleKioNotification(const QUrl& url);

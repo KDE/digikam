@@ -99,18 +99,19 @@ include(MacroBoolTo01)
 
 # ==================================================================================================
 
-option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=OFF)"                       OFF)
-option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KFileMetadata support (default=OFF)"                         OFF)
-option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with AkonadiContact support (default=OFF)"                        OFF)
-option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=OFF)"                          OFF)
+option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=OFF)"                         OFF)
+option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KFileMetadata support (default=OFF)"                           OFF)
+option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with AkonadiContact support (default=OFF)"                          OFF)
+option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=OFF)"                            OFF)
 
 # Mysql support options (experimental):
-option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
-option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
+option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                          OFF)
+option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"                OFF)
 
 # Debug options:
-option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
-option(ENABLE_DNGCONVERTER          "Enable DNG Converter, crashes on some systems (default=OFF)"                    OFF)
+option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                      OFF)
+option(ENABLE_DNGCONVERTER          "Enable DNG Converter, crashes on some systems (default=OFF)"                      OFF)
+option(ENABLE_KINOTIFY              "Enable embeded Inotify wrapper under Linux to handle album changes (default=OFF)" OFF)
 
 ############## Find Packages ###################
 
@@ -353,14 +354,6 @@ if(ENABLE_KFILEMETADATASUPPORT)
 
 endif()
 
-# -- dng converter options ---------------------------------------------------------------------
-
-if(ENABLE_DNGCOVERTER)
-    set(USE_DNGCONVERTER TRUE)
-else()
-    set(USE_DNGCONVERTER FALSE)
-endif()
-
 # -- compilation options definitions -----------------------------------------------------------
 
 MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
@@ -376,7 +369,6 @@ MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
 MACRO_BOOL_TO_01(KF5KFace_FOUND           HAVE_KFACE)
 MACRO_BOOL_TO_01(MARBLE_FOUND             HAVE_MARBLE)
 MACRO_BOOL_TO_01(KFILEMETADATA_FOUND      HAVE_KFILEMETADATA)
-MACRO_BOOL_TO_01(USE_DNGCOVERTER          HAVE_DNGCONVERTER)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -384,6 +376,9 @@ MACRO_BOOL_TO_01(USE_DNGCOVERTER          HAVE_DNGCONVERTER)
 # this, so disable. If other renderers switch to coarser logical
 # pixels, one probably needs this feature on these platforms as well.
 MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
+
+MACRO_BOOL_TO_01(ENABLE_KINOTIFY          USE_KINOTIFY)
+MACRO_BOOL_TO_01(ENABLE_DNGCONVERTER      HAVE_DNGCONVERTER)
 
 # Set config files accordingly with optional dependencies
 
@@ -398,6 +393,8 @@ message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http:
 message(STATUS "")
 
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
+PRINT_COMPONENT_COMPILE_STATUS("DNGConverter Support"   ENABLE_DNGCONVERTER)
+PRINT_COMPONENT_COMPILE_STATUS("KInotify Support"       ENABLE_KINOTIFY)
 
 if(ENABLE_MYSQLSUPPORT)
 

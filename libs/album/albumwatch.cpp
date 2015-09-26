@@ -39,8 +39,11 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "databaseparameters.h"
-#include "kinotify.h"
 #include "scancontroller.h"
+
+#ifdef USE_KNOTIFY
+#include "kinotify.h"
+#endif
 
 namespace Digikam
 {
@@ -57,7 +60,9 @@ public:
 
     explicit Private(AlbumWatch* const q)
         : mode(InotifyMode),
+#ifdef USE_KNOTIFY
           inotify(0),
+#endif
           dirWatch(0),
           connectedToKIO(false),
           q(q)
@@ -78,7 +83,10 @@ public:
 
     Mode                mode;
 
+#ifdef USE_KNOTIFY
     KInotify*           inotify;
+#endif
+
     QFileSystemWatcher* dirWatch;
     QStringList         dirWatchAddedDirs;
     bool                connectedToKIO;
@@ -92,11 +100,13 @@ public:
 
 void AlbumWatch::Private::determineMode()
 {
+#ifdef USE_KNOTIFY
     if (KInotify::available())
     {
         mode = InotifyMode;
     }
     else
+#endif
     {
         mode = QFSWatcherMode;
     }
@@ -169,11 +179,13 @@ AlbumWatch::AlbumWatch(AlbumManager* const parent)
 {
     d->determineMode();
 
+#ifdef USE_KNOTIFY
     if (d->isInotifyMode())
     {
         connectToKInotify();
     }
     else
+#endif
     {
         connectToQFSWatcher();
         connectToKIO();
@@ -212,10 +224,12 @@ void AlbumWatch::clear()
         d->connectedToKIO = false;
     }
 
+#ifdef USE_KNOTIFY
     if (d->inotify)
     {
         d->inotify->removeAllWatches();
     }
+#endif
 }
 
 void AlbumWatch::setDatabaseParameters(const DatabaseParameters& params)
@@ -259,11 +273,13 @@ void AlbumWatch::slotAlbumAdded(Album* a)
         return;
     }
 
+#ifdef USE_KNOTIFY
     if (d->isInotifyMode())
     {
         d->inotify->watchDirectory(dir);
     }
     else
+#endif
     {
         if (!d->dirWatch->directories().contains(dir))
         {
@@ -288,11 +304,13 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
         return;
     }
 
+#ifdef USE_KNOTIFY        
     if (d->isInotifyMode())
     {
         d->inotify->removeDirectory(dir);
     }
     else
+#endif
     {
         d->dirWatch->removePath(album->folderPath());
     }
@@ -306,6 +324,7 @@ void AlbumWatch::rescanDirectory(const QString& dir)
 
 // -- KInotify ----------------------------------------------------------------------------------
 
+#ifdef USE_KNOTIFY  
 void AlbumWatch::connectToKInotify()
 {
     if (d->inotify)
@@ -394,6 +413,7 @@ void AlbumWatch::rescanPath(const QString& path)
     QUrl url(path);
     rescanDirectory(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
 }
+#endif
 
 // -- QFileSystemWatcher ---------------------------------------------------------------------------------------
 
@@ -454,10 +474,10 @@ void AlbumWatch::connectToQFSWatcher()
     qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumWatch use QFileSystemWatcher";
 
     connect(d->dirWatch, SIGNAL(directoryChanged(QString)),
-            this, SLOT(slotDirWatchDirty(QString)));
+            this, SLOT(slotQFSWatcherDirty(QString)));
     
     connect(d->dirWatch, SIGNAL(fileChanged(QString)),
-            this, SLOT(slotDirWatchDirty(QString)));
+            this, SLOT(slotQFSWatcherDirty(QString)));
 }
 
 // -- KIO -----------------------------------------------------------------------------------------
