@@ -29,10 +29,7 @@
 #include <QDBusConnection>
 #include <QDir>
 #include <QFileInfo>
-
-// KDE includes
-
-#include <kdirwatch.h>
+#include <QFileSystemWatcher>
 
 // Local includes
 
@@ -51,7 +48,7 @@ namespace Digikam
 enum Mode
 {
     InotifyMode,
-    KDirWatchMode
+    QFSWatcherMode
 };
 
 class AlbumWatch::Private
@@ -79,18 +76,18 @@ public:
 
 public:
 
-    Mode               mode;
+    Mode                mode;
 
-    KInotify*          inotify;
-    KDirWatch*         dirWatch;
-    QStringList        dirWatchAddedDirs;
-    bool               connectedToKIO;
+    KInotify*           inotify;
+    QFileSystemWatcher* dirWatch;
+    QStringList         dirWatchAddedDirs;
+    bool                connectedToKIO;
 
-    DatabaseParameters params;
-    QStringList        fileNameBlackList;
-    QList<QDateTime>   dbPathModificationDateList;
+    DatabaseParameters  params;
+    QStringList         fileNameBlackList;
+    QList<QDateTime>    dbPathModificationDateList;
 
-    AlbumWatch* const  q;
+    AlbumWatch* const   q;
 };
 
 void AlbumWatch::Private::determineMode()
@@ -101,7 +98,7 @@ void AlbumWatch::Private::determineMode()
     }
     else
     {
-        mode = KDirWatchMode;
+        mode = QFSWatcherMode;
     }
 }
 
@@ -178,7 +175,7 @@ AlbumWatch::AlbumWatch(AlbumManager* const parent)
     }
     else
     {
-        connectToKDirWatch();
+        connectToQFSWatcher();
         connectToKIO();
     }
 
@@ -200,7 +197,7 @@ void AlbumWatch::clear()
     {
         foreach(const QString& addedDirectory, d->dirWatchAddedDirs)
         {
-            d->dirWatch->removeDir(addedDirectory);
+            d->dirWatch->removePath(addedDirectory);
         }
 
         d->dirWatchAddedDirs.clear();
@@ -268,24 +265,10 @@ void AlbumWatch::slotAlbumAdded(Album* a)
     }
     else
     {
-        if (!d->dirWatch->contains(dir))
+        if (!d->dirWatch->directories().contains(dir))
         {
             d->dirWatchAddedDirs << dir;
-            // On OS X, file watch is broken in the OS and thus in Qt.
-            // Fixing is beyond our scope. See bug #289330.
-            // On Windows, file watch is broken for large numbers of files
-            // and prevents any thumbnails from being shown (probably due to
-            // the thread manager that is used by QFileSystemWatcher that
-            // KDirWatch uses). Fixing is beyond our scope. See bugs #290962,
-            // #297793, #308310, #310252, #310865, #312422, and #312999.
-            // Disable file watch for OS X and Windows and hope for future
-            // improvement (possibly with the improvements planned for
-            // QFileSystemWatcher in Qt 5.1)
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-            d->dirWatch->addDir(dir, KDirWatch::WatchDirOnly);
-#else
-            d->dirWatch->addDir(dir, KDirWatch::WatchFiles | KDirWatch::WatchDirOnly);
-#endif
+            d->dirWatch->addPath(dir);
         }
     }
 }
@@ -311,7 +294,7 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
     }
     else
     {
-        d->dirWatch->removeDir(album->folderPath());
+        d->dirWatch->removePath(album->folderPath());
     }
 }
 
@@ -321,7 +304,7 @@ void AlbumWatch::rescanDirectory(const QString& dir)
     ScanController::instance()->scheduleCollectionScanRelaxed(dir);
 }
 
-/* ---------- KInotify ---------- */
+// -- KInotify ----------------------------------------------------------------------------------
 
 void AlbumWatch::connectToKInotify()
 {
@@ -332,14 +315,18 @@ void AlbumWatch::connectToKInotify()
 
     d->inotify = new KInotify(this);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumWatch use KInotify";    
+    
     connect( d->inotify, SIGNAL(movedFrom(QString)),
              this, SLOT(slotFileMoved(QString)) );
 
     connect( d->inotify, SIGNAL(movedTo(QString)),
              this, SLOT(slotFileMoved(QString)) );
 
-    /*connect( d->inotify, SIGNAL(moved(QString,QString)),
-             this, SLOT(slotFileMoved(QString,QString)) );*/
+/*
+    connect( d->inotify, SIGNAL(moved(QString,QString)),
+             this, SLOT(slotFileMoved(QString,QString)) );
+*/
 
     connect( d->inotify, SIGNAL(deleted(QString,bool)),
              this, SLOT(slotFileDeleted(QString,bool)) );
@@ -408,7 +395,7 @@ void AlbumWatch::rescanPath(const QString& path)
     rescanDirectory(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
 }
 
-/* ---------- KDirWatch ---------- */
+// -- QFileSystemWatcher ---------------------------------------------------------------------------------------
 
 QList<QDateTime> AlbumWatch::Private::buildDirectoryModList(const QFileInfo& dbFile)
 {
@@ -429,7 +416,7 @@ QList<QDateTime> AlbumWatch::Private::buildDirectoryModList(const QFileInfo& dbF
     return modList;
 }
 
-void AlbumWatch::slotDirWatchDirty(const QString& path)
+void AlbumWatch::slotQFSWatcherDirty(const QString& path)
 {
     if (d->inBlackList(path))
     {
@@ -437,12 +424,13 @@ void AlbumWatch::slotDirWatchDirty(const QString& path)
     }
 
     QFileInfo info(path);
+
     if (d->inDirWatchParametersBlackList(info, path))
     {
         return;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "KDirWatch detected change at" << path;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "QFileSystemWatcher detected change at" << path;
 
     if (info.isDir())
     {
@@ -454,39 +442,25 @@ void AlbumWatch::slotDirWatchDirty(const QString& path)
     }
 }
 
-void AlbumWatch::connectToKDirWatch()
+void AlbumWatch::connectToQFSWatcher()
 {
     if (d->dirWatch)
     {
         return;
     }
 
-    d->dirWatch = new KDirWatch(this);
+    d->dirWatch = new QFileSystemWatcher(this);
 
-    KDirWatch::Method m = d->dirWatch->internalMethod();
-    QString mName     = QLatin1String("FAM");
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumWatch use QFileSystemWatcher";
 
-    if (m == KDirWatch::QFSWatch)
-    {
-        mName = QLatin1String("QFSWatch");
-    }
-    else if (m == KDirWatch::Stat)
-    {
-        mName = QLatin1String("Stat");
-    }
-    else if (m == KDirWatch::INotify)
-    {
-        mName = QLatin1String("INotify");
-    }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "KDirWatch method = " << mName;
-
-    connect(d->dirWatch, SIGNAL(dirty(QString)),
+    connect(d->dirWatch, SIGNAL(directoryChanged(QString)),
+            this, SLOT(slotDirWatchDirty(QString)));
+    
+    connect(d->dirWatch, SIGNAL(fileChanged(QString)),
             this, SLOT(slotDirWatchDirty(QString)));
 }
 
-
-/* ---------- KIO ---------- */
+// -- KIO -----------------------------------------------------------------------------------------
 
 void AlbumWatch::connectToKIO()
 {
@@ -497,8 +471,10 @@ void AlbumWatch::connectToKIO()
 
     QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FileMoved"),
                                           this, SLOT(slotKioFileMoved(QString,QString)));
+
     QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesAdded"),
                                           this, SLOT(slotKioFilesAdded(QString)));
+
     QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesRemoved"),
                                           this, SLOT(slotKioFilesDeleted(QStringList)));
 
@@ -541,7 +517,7 @@ void AlbumWatch::handleKioNotification(const QUrl& url)
             return;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "KDirNotify detected file change at" << path;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "QFileSystemWatcher detected file change at" << path;
 
         rescanDirectory(path);
     }
@@ -552,7 +528,7 @@ void AlbumWatch::handleKioNotification(const QUrl& url)
         if (dbUrl.isAlbumUrl())
         {
             QString path = dbUrl.fileUrl().adjusted(QUrl::RemoveFilename).path();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "KDirNotify detected file change at" << path;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "QFileSystemWatcher detected file change at" << path;
             rescanDirectory(path);
         }
     }

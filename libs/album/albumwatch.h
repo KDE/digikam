@@ -62,7 +62,7 @@ protected Q_SLOTS:
     void slotFileClosedAfterWrite(const QString&);
     void slotInotifyWatchUserLimitReached();
 
-    void slotDirWatchDirty(const QString& path);
+    void slotQFSWatcherDirty(const QString& path);
     void slotKioFileMoved(const QString& urlFrom, const QString& urlTo);
     void slotKioFilesDeleted(const QStringList& urls);
     void slotKioFilesAdded(const QString& directory);
@@ -73,7 +73,7 @@ private:
     void rescanPath(const QString& path);
 
     void connectToKInotify();
-    void connectToKDirWatch();
+    void connectToQFSWatcher();
     void connectToKIO();
     void handleKioNotification(const QUrl& url);
 
