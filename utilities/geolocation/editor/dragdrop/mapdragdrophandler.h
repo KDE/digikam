@@ -1,7 +1,7 @@
 /** ===========================================================
  * @file
  *
- * This file is a part of kipi-plugins project
+ * This file is a part of digiKam project
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-03-22

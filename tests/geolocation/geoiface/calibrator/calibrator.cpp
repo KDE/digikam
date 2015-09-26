@@ -45,7 +45,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kaboutdata.h>
 
 // local includes
 
@@ -412,26 +411,11 @@ void Calibrator::slotActivateMapActionTriggered(bool state)
 
 int main(int argc, char* argv[])
 {
-    KAboutData aboutData(QString::fromLatin1("calibrator-geoiface"),
-                         i18n("GeoIface calibration tool"),
-                         Digikam::digiKamVersion()); // TODO fix version
-    aboutData.setShortDescription(i18n("Used to calibrate the GeoIface tiling level"));
-    aboutData.setLicense(KAboutLicense::GPL);
-    aboutData.setCopyrightStatement(i18n("(c) 2010 Michael G. Hansen"));
-    aboutData.setHomepage(QString::fromLatin1("http://www.digikam.org"));
-
-    aboutData.addAuthor(i18n("Michael G. Hansen"),
-                        QString::fromLatin1("mike@mghansen.de"),
-                        QString::fromLatin1("http://www.mghansen.de"));
-
     QApplication app(argc, argv);
     QCommandLineParser parser;
-    KAboutData::setApplicationData(aboutData);
     parser.addVersionOption();
     parser.addHelpOption();
-    aboutData.setupCommandLine(&parser);
     parser.process(app);
-    aboutData.processCommandLine(&parser);
 
     Calibrator* const calibrator = new Calibrator();
     calibrator->show();

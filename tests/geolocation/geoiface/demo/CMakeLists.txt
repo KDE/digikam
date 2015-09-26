@@ -24,5 +24,5 @@ target_link_libraries(geoiface_demo
                       KF5::KExiv2
 
                       KF5::ConfigCore
-                      KF5::CoreAddons
-                      KF5::I18n)
+                      KF5::I18n
+                     )

@@ -13,5 +13,5 @@ target_link_libraries(geoiface_calibrator
                           digikamcore
                           Qt5::Widgets
                       PRIVATE
-                          KF5::CoreAddons
-                          KF5::I18n)
+                          KF5::I18n
+                     )
