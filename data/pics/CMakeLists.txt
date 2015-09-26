@@ -60,7 +60,6 @@ install(FILES splash-digikam.png
               colors-chromablue.png
               colors-chromared.png
               sample-aix.png
-              process-working.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data
 )
 
