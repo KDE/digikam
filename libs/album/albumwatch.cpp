@@ -7,6 +7,7 @@
  * Description : Directory watch interface
  *
  * Copyright (C) 2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +27,6 @@
 // Qt includes
 
 #include <QDateTime>
-#include <QDBusConnection>
 #include <QDir>
 #include <QFileInfo>
 #include <QFileSystemWatcher>
@@ -64,20 +64,15 @@ public:
           inotify(0),
 #endif
           dirWatch(0),
-          connectedToKIO(false),
           q(q)
     {
     }
 
-    bool isInotifyMode() const
-    {
-        return (mode == InotifyMode);
-    }
-
     void             determineMode();
+    bool             isInotifyMode()                  const;
     bool             inBlackList(const QString& path) const;
     bool             inDirWatchParametersBlackList(const QFileInfo& info, const QString& path);
-    QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile);
+    QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile) const;
 
 public:
 
@@ -89,7 +84,6 @@ public:
 
     QFileSystemWatcher* dirWatch;
     QStringList         dirWatchAddedDirs;
-    bool                connectedToKIO;
 
     DatabaseParameters  params;
     QStringList         fileNameBlackList;
@@ -97,6 +91,11 @@ public:
 
     AlbumWatch* const   q;
 };
+
+bool AlbumWatch::Private::isInotifyMode() const
+{
+    return (mode == InotifyMode);
+}
 
 void AlbumWatch::Private::determineMode()
 {
@@ -171,6 +170,28 @@ bool AlbumWatch::Private::inDirWatchParametersBlackList(const QFileInfo& info, c
     return false;
 }
 
+QList<QDateTime> AlbumWatch::Private::buildDirectoryModList(const QFileInfo& dbFile) const
+{
+    // Retrieve modification dates
+
+    QList<QDateTime> modList;
+    QFileInfoList    fileInfoList = dbFile.dir().entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+
+    // Build the list
+
+    foreach(const QFileInfo& info, fileInfoList)
+    {
+        // Ignore digikam4.db and journal and other temporary files
+
+        if (!fileNameBlackList.contains(info.fileName()))
+        {
+            modList << info.lastModified();
+        }
+    }
+
+    return modList;
+}
+
 // -------------------------------------------------------------------------------------
 
 AlbumWatch::AlbumWatch(AlbumManager* const parent)
@@ -188,7 +209,6 @@ AlbumWatch::AlbumWatch(AlbumManager* const parent)
 #endif
     {
         connectToQFSWatcher();
-        connectToKIO();
     }
 
     connect(parent, SIGNAL(signalAlbumAdded(Album*)),
@@ -213,15 +233,6 @@ void AlbumWatch::clear()
         }
 
         d->dirWatchAddedDirs.clear();
-    }
-
-    if (d->connectedToKIO)
-    {
-        QDBusConnection::sessionBus().disconnect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FileMoved"),    0, 0);
-        QDBusConnection::sessionBus().disconnect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesAdded"),   0, 0);
-        QDBusConnection::sessionBus().disconnect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesRemoved"), 0, 0);
-
-        d->connectedToKIO = false;
     }
 
 #ifdef USE_KNOTIFY
@@ -318,7 +329,7 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
 
 void AlbumWatch::rescanDirectory(const QString& dir)
 {
-//    qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of directory" << dir;
+//  qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of directory" << dir;
     ScanController::instance()->scheduleCollectionScanRelaxed(dir);
 }
 
@@ -361,14 +372,15 @@ void AlbumWatch::connectToKInotify()
 }
 
 /*
- * Note that moved(QString,QString) is only emitted if both source and target are watched!
- * This does not apply for moving to trash, or files moved from/to non-collection directories
+// Note that moved(QString,QString) is only emitted if both source and target are watched!
+// This does not apply for moving to trash, or files moved from/to non-collection directories
 void AlbumWatch::slotFileMoved(const QString& from, const QString& to)
 {
     // we could add a copyOrMoveHint here...but identical-file detection seems to work well
     rescanPath(from);
     rescanPath(to);
-}*/
+}
+*/
 
 void AlbumWatch::slotFileMoved(const QString& path)
 {
@@ -400,7 +412,7 @@ void AlbumWatch::slotFileClosedAfterWrite(const QString& path)
 
 void AlbumWatch::slotInotifyWatchUserLimitReached()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Reached inotify limit";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Reached Inotify limit";
 }
 
 void AlbumWatch::rescanPath(const QString& path)
@@ -410,31 +422,12 @@ void AlbumWatch::rescanPath(const QString& path)
         return;
     }
 
-    QUrl url(path);
+    QUrl url = QUrl::fromLocalFile(path);
     rescanDirectory(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
 }
 #endif
 
 // -- QFileSystemWatcher ---------------------------------------------------------------------------------------
-
-QList<QDateTime> AlbumWatch::Private::buildDirectoryModList(const QFileInfo& dbFile)
-{
-    // retrieve modification dates
-    QList<QDateTime> modList;
-    QFileInfoList    fileInfoList = dbFile.dir().entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-
-    // build list
-    foreach(const QFileInfo& info, fileInfoList)
-    {
-        // ignore digikam4.db and journal and other temporary files
-        if (!fileNameBlackList.contains(info.fileName()))
-        {
-            modList << info.lastModified();
-        }
-    }
-
-    return modList;
-}
 
 void AlbumWatch::slotQFSWatcherDirty(const QString& path)
 {
@@ -478,80 +471,6 @@ void AlbumWatch::connectToQFSWatcher()
     
     connect(d->dirWatch, SIGNAL(fileChanged(QString)),
             this, SLOT(slotQFSWatcherDirty(QString)));
-}
-
-// -- KIO -----------------------------------------------------------------------------------------
-
-void AlbumWatch::connectToKIO()
-{
-    if (d->connectedToKIO)
-    {
-        return;
-    }
-
-    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FileMoved"),
-                                          this, SLOT(slotKioFileMoved(QString,QString)));
-
-    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesAdded"),
-                                          this, SLOT(slotKioFilesAdded(QString)));
-
-    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.KDirNotify"), QLatin1String("FilesRemoved"),
-                                          this, SLOT(slotKioFilesDeleted(QStringList)));
-
-    d->connectedToKIO = true;
-}
-
-void AlbumWatch::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << urlFrom << urlTo;
-    handleKioNotification(QUrl(urlFrom));
-    handleKioNotification(QUrl(urlTo));
-}
-
-void AlbumWatch::slotKioFilesDeleted(const QStringList& urls)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << urls;
-
-    foreach(const QString& url, urls)
-    {
-        handleKioNotification(QUrl(url));
-    }
-}
-
-void AlbumWatch::slotKioFilesAdded(const QString& url)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << url;
-    handleKioNotification(QUrl(url));
-}
-
-void AlbumWatch::handleKioNotification(const QUrl& url)
-{
-    if (url.isLocalFile())
-    {
-        QString path = url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path();
-
-        //qCDebug(DIGIKAM_GENERAL_LOG) << path << !CollectionManager::instance()->albumRootPath(path).isEmpty();
-        // check path is in our collection
-        if (CollectionManager::instance()->albumRootPath(path).isNull())
-        {
-            return;
-        }
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "QFileSystemWatcher detected file change at" << path;
-
-        rescanDirectory(path);
-    }
-    else
-    {
-        DatabaseUrl dbUrl(url);
-
-        if (dbUrl.isAlbumUrl())
-        {
-            QString path = dbUrl.fileUrl().adjusted(QUrl::RemoveFilename).path();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "QFileSystemWatcher detected file change at" << path;
-            rescanDirectory(path);
-        }
-    }
 }
 
 } // namespace Digikam

@@ -7,6 +7,7 @@
  * Description : Directory watch interface
  *
  * Copyright (C) 2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,23 +68,17 @@ protected Q_SLOTS:
 #endif
     
     void slotQFSWatcherDirty(const QString& path);
-    void slotKioFileMoved(const QString& urlFrom, const QString& urlTo);
-    void slotKioFilesDeleted(const QStringList& urls);
-    void slotKioFilesAdded(const QString& directory);
 
 private:
 
     void rescanDirectory(const QString& dir);
     void rescanPath(const QString& path);
+    void connectToQFSWatcher();
 
 #ifdef USE_KNOTIFY 
     void connectToKInotify();
 #endif    
     
-    void connectToQFSWatcher();
-    void connectToKIO();
-    void handleKioNotification(const QUrl& url);
-
 private:
 
     class Private;
