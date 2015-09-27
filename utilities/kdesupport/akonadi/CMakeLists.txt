@@ -6,6 +6,14 @@
 
 set(akonadiiface_SRCS akonadiiface.cpp)
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::CoreAddons,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 add_library(akonadiiface_src OBJECT ${akonadiiface_SRCS})
 add_library(akonadiiface STATIC $<TARGET_OBJECTS:akonadiiface_src>)
 

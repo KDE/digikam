@@ -73,6 +73,7 @@ include_directories(
 if(ENABLE_MEDIAPLAYER)
     include_directories(
         $<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>
     )
 endif()
 
