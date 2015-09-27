@@ -530,101 +530,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     include_directories(${DK_LOCAL_INCLUDES})
 
-    set(KF5_INCLUDES_ALL
-        "$<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>"
-
-        "$<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::IconThemes,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::TextWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>"
-       )
-
-    if(KFILEMETADATA_FOUND)
-        set(KF5_INCLUDES_ALL
-            ${KF5_INCLUDES_ALL}
-            "$<TARGET_PROPERTY:KF5::FileMetaData,INTERFACE_INCLUDE_DIRECTORIES>"
-           )
-    endif()
-
-    if(KF5Kipi_FOUND)
-        set(KF5_INCLUDES_ALL
-            ${KF5_INCLUDES_ALL}
-            "$<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>"
-           )
-    endif()
-
-    if(MARBLE_FOUND)
-        set(KF5_INCLUDES_ALL
-            ${KF5_INCLUDES_ALL}
-            ${MARBLE_INCLUDE_DIR}
-            "$<TARGET_PROPERTY:KF5::Bookmarks,INTERFACE_INCLUDE_DIRECTORIES>"
-            "$<TARGET_PROPERTY:KF5::ItemModels,INTERFACE_INCLUDE_DIRECTORIES>"
-            "$<TARGET_PROPERTY:KF5::GuiAddons,INTERFACE_INCLUDE_DIRECTORIES>"            
-           )
-    endif()
-
-    if(KF5KFace_FOUND)
-        set(KF5_INCLUDES_ALL
-            ${KF5_INCLUDES_ALL}
-            "$<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
-           )
-    endif()
-
-    if(KF5Sane_FOUND)
-        set(KF5_INCLUDES_ALL
-            ${KF5_INCLUDES_ALL}
-            "$<TARGET_PROPERTY:${LIBKSANE_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
-           )
-    endif()
-
-    if(KF5AkonadiContact_FOUND)
-        set(KF5_INCLUDES_ALL
-            ${KF5_INCLUDES_ALL}
-            "$<TARGET_PROPERTY:${KF5AkonadiContact_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>"
-           )
-    endif()
-
-    set(QT5_INCLUDES_ALL
-        "$<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>"
-       )
-
-    if(BUILD_TESTING)
-        set(QT5_INCLUDES_ALL
-           ${QT5_INCLUDES_ALL}
-           "$<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>"
-           )
-    endif()
-       
-    if(ENABLE_MEDIAPLAYER)
-        set(QT5_INCLUDES_ALL
-            ${QT5_INCLUDES_ALL}
-            "$<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>"
-            "$<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>"
-           )
-    endif()
-
-    if(X11_FOUND)
-        set(QT5_INCLUDES_ALL
-            ${QT5_INCLUDES_ALL}
-            "$<TARGET_PROPERTY:Qt5::X11Extras,INTERFACE_INCLUDE_DIRECTORIES>"
-           )
-    endif()
-
     include_directories(
                         # version.h gitversion.h config-digikam.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/utils
@@ -639,9 +544,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${LCMS_INCLUDE_DIR}
                         ${PGF_INCLUDE_DIRS}
                        )
-
-    include_directories(${KF5_INCLUDES_ALL})
-    include_directories(${QT5_INCLUDES_ALL})
 
     if(GPHOTO2_FOUND)
         include_directories(${GPHOTO2_INCLUDE_DIRS})
