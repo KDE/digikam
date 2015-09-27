@@ -209,12 +209,6 @@ DETECT_LIBKIPI(${KIPI_MIN_VERSION})
 DETECT_LIBKFACE(${KFACE_MIN_VERSION})
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})
 
-if(KF5Sane_FOUND)
-    find_package(KF5 REQUIRED COMPONENTS
-                 Wallet
-                )
-endif()
-
 find_package(Marble)
 find_package(PkgConfig)
 find_package(Jasper)
