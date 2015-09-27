@@ -544,10 +544,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${LCMS_INCLUDE_DIR}
                        )
 
-    if(GPHOTO2_FOUND)
-        include_directories(${GPHOTO2_INCLUDE_DIRS})
-    endif()
-
     # ==================================================================================================
     # Common targets parts
 

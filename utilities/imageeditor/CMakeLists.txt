@@ -30,6 +30,10 @@ if(KF5KFace_FOUND)
     )
 endif()
 
+if(GPHOTO2_FOUND)
+    include_directories(${GPHOTO2_INCLUDE_DIRS})
+endif()
+
 set(libeditorplugin_SRCS
     plugin/imageiface.cpp
     plugin/imageplugin.cpp

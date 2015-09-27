@@ -76,6 +76,10 @@ if(LENSFUN_FOUND)
     include_directories(${LENSFUN_INCLUDE_DIRS})
 endif()
 
+if(GPHOTO2_FOUND)
+    include_directories(${GPHOTO2_INCLUDE_DIRS})
+endif()
+
 include_directories(
     $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>

@@ -34,6 +34,10 @@ if(KF5KFace_FOUND)
     )
 endif()
 
+if(GPHOTO2_FOUND)
+    include_directories(${GPHOTO2_INCLUDE_DIRS})
+endif()
+
 add_library(lighttable_src OBJECT ${liblighttable_SRCS})
 
 
