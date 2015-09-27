@@ -43,6 +43,8 @@ target_link_libraries(digikamimageplugin_enhance
                       KF5::KExiv2
                       KF5::Notifications
                       KF5::JobWidgets
+                      KF5::ConfigCore
+                      KF5::I18n
 )
 
 install(TARGETS digikamimageplugin_enhance             DESTINATION ${PLUGIN_INSTALL_DIR})
