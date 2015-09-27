@@ -43,8 +43,9 @@
 #endif
 
 #include <kjob.h>
-#include <Akonadi/Item>
+#include <AkonadiCore/Item>
 #include <Akonadi/Contact/ContactSearchJob>
+#include <KContacts/Addressee>
 
 #if defined(__APPLE__) && defined(__clang__)
 #pragma clang diagnostic pop
@@ -105,7 +106,7 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
     }
 
     Akonadi::ContactSearchJob* const searchJob = qobject_cast<Akonadi::ContactSearchJob*>(job);
-    const KABC::Addressee::List contacts       = searchJob->contacts();
+    const KContacts::Addressee::List contacts       = searchJob->contacts();
 
     if (contacts.isEmpty())
     {
@@ -115,7 +116,7 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
 
     QStringList names;
 
-    foreach(const KABC::Addressee& addr, contacts)
+    foreach(const KContacts::Addressee& addr, contacts)
     {
         if (!addr.realName().isNull())
         {
