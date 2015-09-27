@@ -536,12 +536,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
                         # dbconfigversion.h
                         ${CMAKE_CURRENT_BINARY_DIR}/app/database
-
-                        # external library paths
-                        ${JPEG_INCLUDE_DIR}
-                        ${PNG_PNG_INCLUDE_DIR}
-                        ${TIFF_INCLUDE_DIR}
-                        ${LCMS_INCLUDE_DIR}
                        )
 
     # ==================================================================================================
