@@ -10,6 +10,10 @@ set(libkde3rdparty_SRCS
     kinotify/kinotify.cpp
 )
 
+include_directories(
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 add_library(3rdparty_src OBJECT ${libkde3rdparty_SRCS})
 
 if(ENABLE_DNGCONVERTER)
