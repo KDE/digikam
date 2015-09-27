@@ -8,11 +8,11 @@
 # Enable C++ Exceptions support, required by pgfutils
 kde_source_files_enable_exceptions(pgfutils.cpp)
 
-include_directories(${PGF_INCLUDE_DIRS})
-
 set(libpgfutils_SRCS pgfutils.cpp)
 
 include_directories(
+    ${PGF_INCLUDE_DIRS}
+
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )

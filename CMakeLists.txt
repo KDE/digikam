@@ -542,7 +542,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${PNG_PNG_INCLUDE_DIR}
                         ${TIFF_INCLUDE_DIR}
                         ${LCMS_INCLUDE_DIR}
-                        ${PGF_INCLUDE_DIRS}
                        )
 
     if(GPHOTO2_FOUND)
