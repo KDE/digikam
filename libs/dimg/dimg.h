@@ -28,7 +28,7 @@
 
 // KExiv2 includes
 
-#include <kexiv2data.h>
+#include <KExiv2/KExiv2Data>
 
 // Qt includes
 
