@@ -26,8 +26,8 @@
 
 #include <QDateTime>
 #include <QTextStream>
+#include <QCoreApplication>
 #include <QDebug>
-#include <QtTest>
 
 // local includes
 
