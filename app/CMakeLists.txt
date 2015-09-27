@@ -190,6 +190,10 @@ if(${KF5Sane_FOUND})
                          )
 endif()
 
+if(KF5AkonadiContact_FOUND)
+    target_link_libraries(digikamcore PRIVATE KF5::AkonadiContact)
+endif()
+
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
