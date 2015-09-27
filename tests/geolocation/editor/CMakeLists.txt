@@ -6,6 +6,7 @@
 
 include_directories(
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 add_executable(geolocationedit_test_correlator test_correlator.cpp)
