@@ -7,6 +7,8 @@
 set(libgeomapwrapper_SRCS gpsimageinfo.cpp gpsimageinfosorter.cpp)
 
 include_directories(
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
