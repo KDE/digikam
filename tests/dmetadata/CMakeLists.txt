@@ -4,6 +4,10 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 set(testTag_SRCS tagsreadwritetest.cpp)
 add_executable(tagsReadWriteTest ${testTag_SRCS})
 ecm_mark_nongui_executable(tagsReadWriteTest)
