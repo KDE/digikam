@@ -87,7 +87,10 @@ extern "C"
 
 using namespace KExiv2Iface;
 using namespace KDcrawIface;
+
+#ifdef HAVE_MARBLE
 using namespace GeoIface;
+#endif // HAVE_MARBLE
 
 namespace Digikam
 {
