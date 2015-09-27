@@ -84,6 +84,12 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+if(ENABLE_MEDIAPLAYER)
+    include_directories(
+        $<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+endif()
+
 if(KF5KFace_FOUND)
     include_directories(
         $<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>

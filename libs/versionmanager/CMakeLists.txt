@@ -10,8 +10,9 @@ set(libversionmanager_SRCS
 )
 
 include_directories(
+    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
+
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 add_library(versionmanager_src OBJECT ${libversionmanager_SRCS})
-
