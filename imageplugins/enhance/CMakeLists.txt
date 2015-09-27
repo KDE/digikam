@@ -27,6 +27,10 @@ if(LENSFUN_FOUND)
        )
 endif()
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 add_library(digikamimageplugin_enhance MODULE ${digikamimageplugin_enhance_PART_SRCS})
 
 

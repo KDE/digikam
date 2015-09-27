@@ -42,6 +42,17 @@ set(libmetadataedit_SRCS exif/exifeditwidget.cpp
                          dialog/metadataedit.cpp
    )
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::ConfigWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 add_library(metadataedit_src OBJECT ${libmetadataedit_SRCS})
 
 add_library(metadataedit STATIC $<TARGET_OBJECTS:metadataedit_src>)

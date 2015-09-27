@@ -22,5 +22,12 @@ if(MSVC)
     )
 endif()
 
-add_library(jpegutils_src OBJECT ${libjpegutils_SRCS})
+include_directories(
+    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
 
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+add_library(jpegutils_src OBJECT ${libjpegutils_SRCS})

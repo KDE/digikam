@@ -18,5 +18,11 @@ set(libdmetadata_SRCS
     captionvalues.cpp
 )
 
-add_library(dmetadata_src OBJECT ${libdmetadata_SRCS})
+include_directories(
+    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
 
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+add_library(dmetadata_src OBJECT ${libdmetadata_SRCS})

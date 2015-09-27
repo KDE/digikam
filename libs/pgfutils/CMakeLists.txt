@@ -12,6 +12,10 @@ include_directories(${PGF_INCLUDE_DIRS})
 
 set(libpgfutils_SRCS pgfutils.cpp)
 
+include_directories(
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 # TODO needs exports to build a dynamic lib if wanted.
 add_library(pgfutils_src OBJECT ${libpgfutils_SRCS})
-

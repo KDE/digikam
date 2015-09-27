@@ -11,5 +11,9 @@ set(libdthread_SRCS
     dynamicthread.cpp
     parallelworkers.cpp
 )
-add_library(dthread_src OBJECT ${libdthread_SRCS})
 
+include_directories(
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+add_library(dthread_src OBJECT ${libdthread_SRCS})

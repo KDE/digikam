@@ -27,6 +27,20 @@ ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 # TODO for internal use, prefer complete include paths instead of this
 include_directories(common/ parser/options/ parser/options/database/ parser/options/database/keys/ parser/modifiers/)
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::Completion,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 add_library(advancedrename_src OBJECT ${libadvancedrename_SRCS})
 add_library(advancedrename STATIC $<TARGET_OBJECTS:advancedrename_src>)
 

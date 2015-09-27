@@ -4,6 +4,10 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 add_executable(geolocationedit_test_correlator test_correlator.cpp)
 add_test(geolocationedit_test_correlator geolocationedit_test_correlator)
 ecm_mark_as_test(geolocationedit_test_correlator)

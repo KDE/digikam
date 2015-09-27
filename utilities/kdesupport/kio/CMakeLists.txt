@@ -8,4 +8,10 @@ set(libkiowrapper_SRCS
     kiowrapper.cpp
 )
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 add_library(kiowrapper_src OBJECT ${libkiowrapper_SRCS})

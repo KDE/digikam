@@ -12,5 +12,9 @@ set(libprogressmanager_SRCS
     statusbarprogresswidget.cpp
     statusprogressbar.cpp
 )
-add_library(progressmanager_src OBJECT ${libprogressmanager_SRCS})
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+add_library(progressmanager_src OBJECT ${libprogressmanager_SRCS})

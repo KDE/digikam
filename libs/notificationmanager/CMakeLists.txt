@@ -16,5 +16,12 @@ if(APPLE)
     )
 endif()
 
-add_library(notificationmanager_src OBJECT ${libnotificationmanager_SRCS})
+include_directories(
+    $<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>
 
+    $<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+add_library(notificationmanager_src OBJECT ${libnotificationmanager_SRCS})

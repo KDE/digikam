@@ -10,9 +10,7 @@ set(libimageproperties_SRCS
     imagepropertiestab.cpp
     imagepropertiesmetadatatab.cpp
     imagepropertiescolorstab.cpp
-
-
-   )
+)
 
 set(libimageversionssidebar_SRCS
     imagepropertiesversionstab.cpp
@@ -38,6 +36,22 @@ set(libimagepropertiesdigikam_SRCS
     captionedit.cpp
 )
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:KF5::Completion,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::TextWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 # used to build digikamcore
 add_library(imageproperties_src OBJECT ${libimageproperties_SRCS})
 
@@ -45,4 +59,3 @@ add_library(imagepropertiesdigikam_src OBJECT
                                       ${libimageversionssidebar_SRCS}
                                       ${libimagepropertiesdigikam_SRCS}
 )
-

@@ -9,5 +9,9 @@ set(libversionmanager_SRCS
     versionmanager.cpp
 )
 
+include_directories(
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 add_library(versionmanager_src OBJECT ${libversionmanager_SRCS})
 

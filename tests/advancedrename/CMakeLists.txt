@@ -8,6 +8,10 @@ set(renamecustomizertest_SRCS
     renamecustomizertest.cpp
 )
 
+include_directories(
+    $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 add_executable(renamecustomizertest ${renamecustomizertest_SRCS})
 add_test(renamecustomizertest renamecustomizertest)
 ecm_mark_as_test(renamecustomizertest)
