@@ -5,6 +5,8 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include_directories(
+    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
+
     $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
