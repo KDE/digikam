@@ -109,9 +109,6 @@ DNGSettings::DNGSettings(QWidget* const parent)
     settingsBoxLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     settingsBoxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    connect(dngLogoLabel, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(processUrl(QString)));
-
     connect(d->backupOriginalRawFile, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 

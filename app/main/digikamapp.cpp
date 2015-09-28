@@ -2727,7 +2727,7 @@ void DigikamApp::updateQuickImportAction()
     }
     else
     {
-        disconnect(d->quickImportMenu, SIGNAL(triggered()), 0, 0);
+        disconnect(d->quickImportMenu, SIGNAL(triggered(QAction*)), 0, 0);
 
         QAction*  primaryAction = 0;
         QDateTime latest;
@@ -2748,7 +2748,7 @@ void DigikamApp::updateQuickImportAction()
             primaryAction = d->quickImportMenu->actions().first();
         }
 
-        connect(d->quickImportMenu, SIGNAL(triggered()),
+        connect(d->quickImportMenu, SIGNAL(triggered(QAction*)),
                 primaryAction, SLOT(trigger()));
     }
 }
