@@ -88,7 +88,7 @@ public:
     {
     }
 
-    GPSImageModel*              imageModel;
+    GPSImageModel*               imageModel;
     GraphicsDImgView*            previewManager;
 
     QCheckBox*                   cbCoordinates;
