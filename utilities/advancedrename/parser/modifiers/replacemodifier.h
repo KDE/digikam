@@ -29,7 +29,6 @@
 #include "modifier.h"
 #include "ruledialog.h"
 
-class KLineEdit;
 class QCheckBox;
 
 namespace Ui

@@ -29,8 +29,6 @@
 #include "modifier.h"
 #include "ruledialog.h"
 
-class KLineEdit;
-
 namespace Digikam
 {
 

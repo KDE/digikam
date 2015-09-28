@@ -34,8 +34,6 @@
 #include "modifier.h"
 #include "parseresults.h"
 
-class KLineEdit;
-
 namespace Digikam
 {
 

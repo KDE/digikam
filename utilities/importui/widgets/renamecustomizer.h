@@ -35,8 +35,6 @@
 
 class QDateTime;
 
-class KLineEdit;
-
 namespace Digikam
 {
 

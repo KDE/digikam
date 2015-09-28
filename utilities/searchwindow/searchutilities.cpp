@@ -6,6 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
+ * Copyright (C) 2007      by Aaron Seigo <aseigo at kde dot org>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -61,10 +62,6 @@
 
 namespace Digikam
 {
-
-// Initial revision copied from klineedit_p.h,
-// Copyright (C) 2007 Aaron Seigo <aseigo@kde.org>
-// Now substantially rewritten.
 
 class AnimatedClearButton::Private : public AnimatedVisibility
 {
