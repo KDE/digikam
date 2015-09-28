@@ -48,5 +48,5 @@ include_directories(
 #for digikam core lib
 add_library(digikamgenericmodels_src OBJECT ${libgenericmodels_SRCS})
 
-add_library(dgikamdatabasemodels_src OBJECT ${libdatabasemodels_SRCS})
+add_library(digikamdatabasemodels_src OBJECT ${libdatabasemodels_SRCS})
 add_library(digikammodels_src OBJECT  ${libalbummodels_SRCS} ${libgenericmodels_SRCS})

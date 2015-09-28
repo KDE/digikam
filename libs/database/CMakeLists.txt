@@ -127,7 +127,7 @@ include_directories(
 add_library(digikamdatabasemain_src OBJECT ${libdatabasemain_SRCS} ${libimgqsort_SRCS})
 add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS} )
 add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} )
-add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:dgikamdatabasemodels_src>)
+add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasemodels_src>)
 
 
 target_include_directories(digikamdatabase
