@@ -362,9 +362,13 @@ void AdvancedRenameInput::setupWidgets()
 
 void AdvancedRenameInput::setupConnections()
 {
+/*
+    // NOTE This signal do not exist with QLineEdit
+    
+
     connect(d->proxy, SIGNAL(clearButtonClicked()),
             this, SLOT(slotClearButtonPressed()));
-
+*/
     connect(d->lineEdit, SIGNAL(signalTextChanged(QString)),
             this, SIGNAL(signalTextChanged(QString)));
 

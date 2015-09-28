@@ -187,7 +187,6 @@ if(${KF5Sane_FOUND})
     target_link_libraries(digikamcore
                           PUBLIC
                           ${LIBKSANE_LIBRARIES}
-                          KF5::Wallet
                          )
 endif()
 
