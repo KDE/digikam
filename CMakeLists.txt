@@ -156,12 +156,6 @@ find_package(KF5 REQUIRED COMPONENTS
              Solid
              IconThemes
              I18n
-
-             # For geomapiface
-             OPTIONAL_COMPONENTS
-             ItemModels
-             Bookmarks
-             GuiAddons
 )
 
 # ==================================================================================================
@@ -214,12 +208,25 @@ DETECT_LIBKFACE(${KFACE_MIN_VERSION})
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})
 
 if(KF5Sane_FOUND)
+    # For kdesupport/ksane
+
     find_package(KF5 REQUIRED COMPONENTS
                  Wallet
                 )
 endif()
 
 find_package(Marble)
+
+if(MARBLE_FOUND)
+    # For geomapiface
+
+    find_package(KF5 REQUIRED COMPONENTS
+                 ItemModels
+                 Bookmarks
+                 GuiAddons
+                )
+endif()
+
 find_package(PkgConfig)
 find_package(Jasper)
 find_package(Eigen3)
