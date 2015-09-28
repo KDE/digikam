@@ -270,7 +270,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     setWindowTitle(i18n("Geolocation Editor"));
-    setMinimumSize(300,400);
+    setMinimumSize(300, 400);
 
     d->imageModel     = new GPSImageModel(this);
     d->selectionModel = new QItemSelectionModel(d->imageModel);
@@ -303,7 +303,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     RHBox* const hboxMain = new RHBox(this);
     mainLayout->addWidget(hboxMain);
 
-    d->HSplitter            = new QSplitter(Qt::Horizontal, hboxMain);
+    d->HSplitter          = new QSplitter(Qt::Horizontal, hboxMain);
     d->HSplitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // ------------------------------------------------------------------------------------------------
@@ -366,9 +366,9 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
             this, SLOT(slotBookmarkVisibilityToggled()));
 
     QWidget* mapVBox = 0;
-    d->mapWidget           = makeMapWidget(&mapVBox);
+    d->mapWidget     = makeMapWidget(&mapVBox);
     d->searchWidget->setPrimaryMapWidget(d->mapWidget);
-    d->mapSplitter         = new QSplitter(this);
+    d->mapSplitter   = new QSplitter(this);
     d->mapSplitter->addWidget(mapVBox);
     d->VSplitter->addWidget(d->mapSplitter);
 
@@ -865,7 +865,7 @@ void GeolocationEdit::saveChanges(const bool closeAfterwards)
     for (int i = 0; i < d->imageModel->rowCount(); ++i)
     {
         const QModelIndex itemIndex = d->imageModel->index(i, 0);
-        GPSImageItem* const item   = d->imageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item    = d->imageModel->itemFromIndex(itemIndex);
 
         if (item->isDirty() || item->isTagListDirty())
         {
