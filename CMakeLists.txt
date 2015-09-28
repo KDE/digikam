@@ -140,9 +140,6 @@ if(ENABLE_MEDIAPLAYER)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
                  Multimedia
                  MultimediaWidgets)
-    set(HAVE_VIDEOPLAYER TRUE)
-else()
-    set(HAVE_VIDEOPLAYER FALSE)
 endif()
 
 # Note : See include rules to patch later in this file to compile fine if new dependencies are added.
@@ -390,6 +387,7 @@ MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
 
 MACRO_BOOL_TO_01(ENABLE_KINOTIFY          USE_KINOTIFY)
 MACRO_BOOL_TO_01(ENABLE_DNGCONVERTER      HAVE_DNGCONVERTER)
+MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER       HAVE_VIDEOPLAYER)
 
 # Set config files accordingly with optional dependencies
 
