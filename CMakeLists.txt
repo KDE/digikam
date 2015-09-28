@@ -213,9 +213,8 @@ if(MARBLE_FOUND)
     find_package(KF5 REQUIRED OPTIONAL_COMPONENTS
                  ItemModels
                  Bookmarks
-                 GuiAddons
                 )
-    if(KF5ItemModels_FOUND AND KF5Bookmarks_FOUND AND KF5GuiAddons_FOUND)
+    if(KF5ItemModels_FOUND AND KF5Bookmarks_FOUND)
         set(MARBLE_FOUND TRUE)
     else()
         set(MARBLE_FOUND FALSE)
