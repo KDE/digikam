@@ -32,7 +32,6 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QApplication>
-#include <QDesktopServices>
 #include <QIcon>
 #include <QUrl>
 
@@ -126,11 +125,6 @@ DNGSettings::DNGSettings(QWidget* const parent)
 DNGSettings::~DNGSettings()
 {
     delete d;
-}
-
-void DNGSettings::processUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 void DNGSettings::setDefaultSettings()

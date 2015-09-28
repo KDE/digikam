@@ -54,10 +54,6 @@ Q_SIGNALS:
 
     void signalSettingsChanged();
 
-private Q_SLOTS:
-
-    void processUrl(const QString& url);
-
 private:
 
     class Private;
