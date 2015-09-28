@@ -184,7 +184,11 @@ if(${KF5KFace_FOUND})
 endif()
 
 if(${KF5Sane_FOUND})
-    target_link_libraries(digikamcore PRIVATE ${LIBKSANE_LIBRARIES})
+    target_link_libraries(digikamcore
+                          PUBLIC
+                          ${LIBKSANE_LIBRARIES}
+                          KF5::Wallet
+                         )
 endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
