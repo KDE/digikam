@@ -88,7 +88,6 @@ Q_SIGNALS:
     void signalGotoTagAndItem(int);
     void signalPopupTagsView();
 
-
 protected:
 
     bool acceptsMouseClick(QMouseEvent* e);
