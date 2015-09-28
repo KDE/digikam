@@ -157,10 +157,11 @@ GPSImageListContextMenu::~GPSImageListContextMenu()
     delete d;
 }
 
-bool GPSImageListContextMenu::eventFilter(QObject *watched, QEvent *event)
+bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
 {
-    // we are only interested in context-menu events:
-    if ((event->type()==QEvent::ContextMenu)&&d->enabled)
+    // We are only interested in context-menu events.
+
+    if ((event->type() == QEvent::ContextMenu) && d->enabled)
     {
         // enable or disable the actions:
         GPSImageModel* const imageModel           = d->imagesList->getModel();
@@ -169,14 +170,14 @@ bool GPSImageListContextMenu::eventFilter(QObject *watched, QEvent *event)
         const int nSelected                       = selectedIndices.size();
 
         // "copy" and "Add bookmark" are only available for one selected image with geo data:
-        bool copyAvailable                   = (nSelected==1);
+        bool copyAvailable                   = (nSelected == 1);
         bool removeAltitudeAvailable         = false;
         bool removeCoordinatesAvailable      = false;
         bool removeUncertaintyAvailable      = false;
         bool removeSpeedAvailable            = false;
         bool lookupMissingAltitudesAvailable = false;
 
-        for (int i=0; i<nSelected; ++i)
+        for (int i = 0; i < nSelected; ++i)
         {
             GPSImageItem* const gpsItem = imageModel->itemFromIndex(selectedIndices.at(i));
 
@@ -261,7 +262,7 @@ bool GPSImageListContextMenu::getCurrentItemPositionAndUrl(GPSDataContainer* con
     QItemSelectionModel* const selectionModel = d->imagesList->getSelectionModel();
     const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
 
-    if (selectedIndices.count()!=1)
+    if (selectedIndices.count() != 1)
     {
         return false;
     }
@@ -421,8 +422,8 @@ void GPSImageListContextMenu::pasteActionTriggered()
 
     if ((!foundData)&&(mimedata->hasText()))
     {
-        const QString textdata                  = mimedata->text();
-        bool foundGeoUrl                        = false;
+        const QString textdata                   = mimedata->text();
+        bool foundGeoUrl                         = false;
         GeoIface::GeoCoordinates testCoordinates = GeoIface::GeoCoordinates::fromGeoUrl(textdata, &foundGeoUrl);
 
         if (foundGeoUrl)
@@ -435,7 +436,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
             /// @todo this is legacy code from before we used geo-url
             const QStringList parts = textdata.split(QLatin1Char(','));
 
-            if ((parts.size()==3)||(parts.size()==2))
+            if ((parts.size() == 3) || (parts.size() == 2))
             {
                 bool okay            = true;
                 double    ptLatitude = 0.0;
@@ -443,12 +444,13 @@ void GPSImageListContextMenu::pasteActionTriggered()
                 bool haveAltitude    = false;
 
                 const double ptLongitude = parts[0].toDouble(&okay);
+
                 if (okay)
                 {
                     ptLatitude = parts[1].toDouble(&okay);
                 }
 
-                if (okay&&(parts.size()==3))
+                if (okay && (parts.size() == 3))
                 {
                     ptAltitude   = parts[2].toDouble(&okay);
                     haveAltitude = okay;
@@ -488,7 +490,7 @@ void GPSImageListContextMenu::setGPSDataForSelectedItems(const GPSDataContainer&
     const int nSelected                       = selectedIndices.size();
     GPSUndoCommand* const undoCommand         = new GPSUndoCommand();
 
-    for (int i=0; i<nSelected; ++i)
+    for (int i = 0; i < nSelected; ++i)
     {
         const QModelIndex itemIndex  = selectedIndices.at(i);
         GPSImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
@@ -534,14 +536,14 @@ void GPSImageListContextMenu::removeInformationFromSelectedImages(const GPSDataC
 
     for (int i=0; i<nSelected; ++i)
     {
-        const QModelIndex itemIndex  = selectedIndices.at(i);
+        const QModelIndex itemIndex = selectedIndices.at(i);
         GPSImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(gpsItem);
 
-        GPSDataContainer newGPSData  = gpsItem->gpsData();
-        bool didSomething            = false;
+        GPSDataContainer newGPSData = gpsItem->gpsData();
+        bool didSomething           = false;
 
         if (flagsToClear.testFlag(GPSDataContainer::HasCoordinates))
         {
@@ -707,7 +709,7 @@ void GPSImageListContextMenu::slotAltitudeLookupReady(const QList<int>& readyReq
     Q_FOREACH(const int requestIndex, readyRequests)
     {
         const GeoIface::LookupAltitude::Request myLookup = d->altitudeLookup->getRequest(requestIndex);
-        const QPersistentModelIndex markerIndex         = myLookup.data.value<QPersistentModelIndex>();
+        const QPersistentModelIndex markerIndex          = myLookup.data.value<QPersistentModelIndex>();
 
         if (!markerIndex.isValid())
         {
@@ -740,13 +742,13 @@ void GPSImageListContextMenu::slotAltitudeLookupDone()
 {
     GeoIface::LookupAltitude::Status requestStatus = d->altitudeLookup->getStatus();
 
-    if (requestStatus==GeoIface::LookupAltitude::StatusError)
+    if (requestStatus == GeoIface::LookupAltitude::StatusError)
     {
         const QString errorMessage = i18n("Altitude lookup failed:\n%1", d->altitudeLookup->errorMessage());
         QMessageBox::information(d->imagesList, i18n("GPS Sync"),errorMessage);
     }
 
-    if (d->altitudeReceivedCount>0)
+    if (d->altitudeReceivedCount > 0)
     {
         // at least some queries returned a result, save the undo command
         d->altitudeUndoCommand->setText(i18n("Altitude looked up"));
