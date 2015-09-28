@@ -1,20 +1,26 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
-# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-set(libkde3rdparty_SRCS
+set(lib3rdparty_SRCS
     kmemoryinfo/kmemoryinfo.cpp
-    kinotify/kinotify.cpp
 )
+
+if(ENABLE_KINOTIFY)
+    set(lib3rdparty_SRCS
+        ${lib3rdparty_SRCS}
+        kinotify/kinotify.cpp
+       )
+endif()
 
 include_directories(
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_library(3rdparty_src OBJECT ${libkde3rdparty_SRCS})
+add_library(3rdparty_src OBJECT ${lib3rdparty_SRCS})
 
 if(ENABLE_DNGCONVERTER)
     include_directories(
