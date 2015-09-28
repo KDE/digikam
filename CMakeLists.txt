@@ -145,6 +145,7 @@ endif()
 # Note : See include rules to patch later in this file to compile fine if new dependencies are added.
 
 find_package(KF5 REQUIRED COMPONENTS
+             Config
              NotifyConfig
              Notifications
              KIO
