@@ -79,7 +79,6 @@ TrackListModel::TrackListModel(GeoIface::TrackManager* const trackManager, QObje
 
 TrackListModel::~TrackListModel()
 {
-
 }
 
 int TrackListModel::columnCount(const QModelIndex& parent) const
@@ -102,20 +101,20 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
 {
     if (index.isValid())
     {
-        Q_ASSERT(index.model()==this);
+        Q_ASSERT(index.model() == this);
     }
 
-    const int rowNumber = index.row();
+    const int rowNumber    = index.row();
     const int columnNumber = index.column();
 
-    if (   (columnNumber<0) || (columnNumber>=ColumnCount)
-        || (rowNumber<0) || (rowNumber>=d->trackManager->trackCount()) )
+    if (   (columnNumber < 0) || (columnNumber >= ColumnCount)
+        || (rowNumber < 0) || (rowNumber >= d->trackManager->trackCount()) )
     {
         return QVariant();
     }
 
     GeoIface::TrackManager::Track track = d->trackManager->getTrackById(index.internalId());
-    if (track.id==0)
+    if (track.id == 0)
     {
         // track not found, invalid id
         return QVariant();
@@ -153,12 +152,12 @@ QModelIndex TrackListModel::index(int row, int column, const QModelIndex& parent
 {
     if (parent.isValid())
     {
-        Q_ASSERT(parent.model()==this);
+        Q_ASSERT(parent.model() == this);
         return QModelIndex();
     }
 
-    if (   (column<0) || (column>=ColumnCount)
-        || (row<0) || (row>=d->trackManager->trackCount()) )
+    if (   (column < 0) || (column >= ColumnCount)
+        || (row < 0) || (row >= d->trackManager->trackCount()) )
     {
         return QModelIndex();
     }
@@ -203,12 +202,12 @@ bool TrackListModel::setHeaderData(int section, Qt::Orientation orientation, con
 
 QVariant TrackListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if ((section >= ColumnCount) || (orientation!=Qt::Horizontal) )
+    if ((section >= ColumnCount) || (orientation != Qt::Horizontal) )
     {
         return false;
     }
 
-    if (role!=Qt::DisplayRole)
+    if (role != Qt::DisplayRole)
     {
         return QAbstractItemModel::headerData(section, orientation, role);
     }

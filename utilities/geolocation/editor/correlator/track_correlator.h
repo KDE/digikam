@@ -49,8 +49,6 @@ public:
 
 public:
 
-    // -------------------------------------
-
     class Correlation
     {
     public:

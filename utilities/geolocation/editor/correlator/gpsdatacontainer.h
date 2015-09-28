@@ -78,31 +78,31 @@ public:
 
         if (m_hasFlags.testFlag(HasCoordinates))
         {
-            if (!(m_coordinates==b.m_coordinates))
+            if (!(m_coordinates == b.m_coordinates))
                 return false;
         }
 
         if (hasNSatellites())
         {
-            if (m_nSatellites!=b.m_nSatellites)
+            if (m_nSatellites != b.m_nSatellites)
                 return false;
         }
 
         if (hasDop())
         {
-            if (m_dop!=b.m_dop)
+            if (m_dop != b.m_dop)
                 return false;
         }
 
         if (hasFixType())
         {
-            if (m_fixType!=b.m_fixType)
+            if (m_fixType != b.m_fixType)
                 return false;
         }
 
         if (hasSpeed())
         {
-            if (m_speed!=b.m_speed)
+            if (m_speed != b.m_speed)
                 return false;
         }
 
@@ -135,21 +135,22 @@ public:
     inline void setCoordinates(const GeoIface::GeoCoordinates& coordinates)
     {
         m_coordinates = coordinates;
+
         if (coordinates.hasCoordinates())
         {
-            m_hasFlags|=HasCoordinates;
+            m_hasFlags |= HasCoordinates;
         }
         else
         {
-            m_hasFlags&=~HasCoordinates;
+            m_hasFlags &= ~HasCoordinates;
         }
         if (coordinates.hasAltitude())
         {
-            m_hasFlags|=HasAltitude;
+            m_hasFlags |= HasAltitude;
         }
         else
         {
-            m_hasFlags&=~HasAltitude;
+            m_hasFlags &= ~HasAltitude;
         }
 
         clearNonCoordinates();
@@ -158,7 +159,7 @@ public:
     inline void setAltitude(const qreal alt)
     {
         m_coordinates.setAlt(alt);
-        m_hasFlags|=HasAltitude;
+        m_hasFlags |= HasAltitude;
     }
 
     inline bool hasAltitude() const
@@ -169,14 +170,14 @@ public:
     inline void setLatLon(const qreal lat, const qreal lon)
     {
         m_coordinates.setLatLon(lat, lon);
-        m_hasFlags|=HasCoordinates;
+        m_hasFlags |= HasCoordinates;
 
         clearNonCoordinates();
     }
 
     inline void clearAltitude()
     {
-        m_hasFlags&=~HasAltitude;
+        m_hasFlags &= ~HasAltitude;
         m_coordinates.clearAlt();
     }
 
@@ -199,13 +200,13 @@ public:
 
     inline void clearNSatellites()
     {
-        m_hasFlags&= ~HasNSatellites;
+        m_hasFlags &= ~HasNSatellites;
     }
 
     inline void setNSatellites(const int nSatellites)
     {
         m_nSatellites = nSatellites;
-        m_hasFlags|=HasNSatellites;
+        m_hasFlags |= HasNSatellites;
     }
 
     /* DOP */
@@ -217,13 +218,13 @@ public:
 
     inline void clearDop()
     {
-        m_hasFlags&= ~HasDop;
+        m_hasFlags &= ~HasDop;
     }
 
     inline void setDop(const qreal dop)
     {
-        m_dop = dop;
-        m_hasFlags|=HasDop;
+        m_dop       = dop;
+        m_hasFlags |= HasDop;
     }
 
     inline qreal getDop() const
@@ -240,8 +241,8 @@ public:
 
     inline void setFixType(const int fixType)
     {
-        m_fixType = fixType;
-        m_hasFlags|=HasFixType;
+        m_fixType   = fixType;
+        m_hasFlags |= HasFixType;
     }
 
     inline qreal getFixType() const
@@ -251,7 +252,7 @@ public:
 
     inline void clearFixType()
     {
-        m_hasFlags&= ~HasFixType;
+        m_hasFlags &= ~HasFixType;
     }
 
     /* speed */
@@ -274,17 +275,17 @@ public:
      */
     inline void setSpeed(const qreal speed)
     {
-        m_hasFlags|= HasSpeed;
-        m_speed = speed;
+        m_hasFlags |= HasSpeed;
+        m_speed     = speed;
     }
 
     inline void clearSpeed()
     {
-        m_hasFlags&=~HasSpeed;
+        m_hasFlags &= ~HasSpeed;
     }
 };
 
-} /* Digikam */
+} /* namespace Digikam */
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSDataContainer::HasFlags)
 

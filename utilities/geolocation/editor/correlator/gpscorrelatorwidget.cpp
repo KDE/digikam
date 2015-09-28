@@ -128,12 +128,12 @@ public:
 
     QPushButton*            correlateButton;
 
-    GeoIface::TrackManager*  trackManager;
+    GeoIface::TrackManager* trackManager;
     TrackCorrelator*        trackCorrelator;
     TrackListModel*         trackListModel;
     bool                    uiEnabledInternal;
     bool                    uiEnabledExternal;
-    GPSImageModel*         imageModel;
+    GPSImageModel*          imageModel;
 
     int                     correlationTotalCount;
     int                     correlationCorrelatedCount;
@@ -176,7 +176,7 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
     d->gpxFileList->setHeaderHidden(false);
     d->gpxFileList->setRootIsDecorated(false);
 
-    RLineWidget* const line    = new RLineWidget(Qt::Horizontal, this);
+    RLineWidget* const line   = new RLineWidget(Qt::Horizontal, this);
     QLabel* const maxGapLabel = new QLabel(i18n("Max. time gap (sec.):"), this);
 
     d->maxGapInput            = new QSpinBox(this);
@@ -283,8 +283,8 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
 
     QGridLayout* const offsetLayout = new QGridLayout(offsetWidget);
     offsetLayout->addWidget(d->offsetSign, 0, 0, 1, 1);
-    offsetLayout->addWidget(d->offsetMin, 0, 1, 1, 1);
-    offsetLayout->addWidget(d->offsetSec, 0, 2, 1, 1);
+    offsetLayout->addWidget(d->offsetMin,  0, 1, 1, 1);
+    offsetLayout->addWidget(d->offsetSec,  0, 2, 1, 1);
 
     // interpolation options
     d->interpolateBox = new QCheckBox(i18n("Interpolate"), this);
@@ -501,7 +501,7 @@ void GPSCorrelatorWidget::slotCorrelate()
     for (int i = 0; i<imageCount; ++i)
     {
         QPersistentModelIndex imageIndex = d->imageModel->index(i, 0);
-        GPSImageItem* const imageItem   = d->imageModel->itemFromIndex(imageIndex);
+        GPSImageItem* const imageItem    = d->imageModel->itemFromIndex(imageIndex);
 
         if (!imageItem)
             continue;
@@ -533,7 +533,7 @@ void GPSCorrelatorWidget::slotItemsCorrelated(const Digikam::TrackCorrelator::Co
     for (int i=0; i<correlatedItems.count(); ++i)
     {
         const TrackCorrelator::Correlation& itemCorrelation = correlatedItems.at(i);
-        const QPersistentModelIndex itemIndex                = itemCorrelation.userData.value<QPersistentModelIndex>();
+        const QPersistentModelIndex itemIndex               = itemCorrelation.userData.value<QPersistentModelIndex>();
 
         if (!itemIndex.isValid())
             continue;
@@ -672,7 +672,7 @@ QList<GeoIface::GeoCoordinates::List> GPSCorrelatorWidget::getTrackCoordinates()
 {
     QList<GeoIface::GeoCoordinates::List> trackList;
   
-    for (int i=0; i<d->trackManager->trackCount(); ++i)
+    for (int i = 0; i < d->trackManager->trackCount(); ++i)
     {
         const GeoIface::TrackManager::Track& gpxData = d->trackManager->getTrack(i);
         GeoIface::GeoCoordinates::List track;
@@ -691,7 +691,7 @@ QList<GeoIface::GeoCoordinates::List> GPSCorrelatorWidget::getTrackCoordinates()
   
 void GPSCorrelatorWidget::slotShowTracksStateChanged(int state)
 {
-    const bool doShowTracks = state == Qt::Checked;
+    const bool doShowTracks = (state == Qt::Checked);
     d->trackManager->setVisibility(doShowTracks);
 }
 

@@ -59,7 +59,7 @@ void TrackCorrelatorThread::run()
     const int nFiles = fileList.count();
     QList<int> currentIndices;
 
-    for (int i=0; i<nFiles; ++i)
+    for (int i = 0; i < nFiles; ++i)
         currentIndices << 0;
 
     for (TrackCorrelator::Correlation::List::iterator it = itemsToCorrelate.begin(); it!=itemsToCorrelate.end(); ++it)
@@ -85,7 +85,7 @@ void TrackCorrelatorThread::run()
         QDateTime firstBiggerTime;
         QPair<int, int> firstIndexPair;
 
-        for (int f = 0; f<nFiles; ++f)
+        for (int f = 0; f < nFiles; ++f)
         {
             if (doCancel)
             {
@@ -94,9 +94,9 @@ void TrackCorrelatorThread::run()
             }
 
             const GeoIface::TrackManager::Track& currentFile = fileList.at(f);
-            int index = currentIndices.at(f);
+            int index                                        = currentIndices.at(f);
 
-            for (; index<currentFile.points.count(); ++index)
+            for (; index < currentFile.points.count(); ++index)
             {
                 if (doCancel)
                 {
@@ -106,7 +106,7 @@ void TrackCorrelatorThread::run()
 
                 const QDateTime& indexTime = currentFile.points.at(index).dateTime;
 
-                if (indexTime<itemDateTime)
+                if (indexTime < itemDateTime)
                 {
                     bool timeIsBetter = false;
 
@@ -122,7 +122,7 @@ void TrackCorrelatorThread::run()
                     if (timeIsBetter)
                     {
                         lastSmallerTime = indexTime;
-                        lastIndexPair = QPair<int, int>(f, index);
+                        lastIndexPair   = QPair<int, int>(f, index);
                     }
                 }
                 else
@@ -183,7 +183,7 @@ void TrackCorrelatorThread::run()
             canUseTimeAfter = dtimeAfter <= options.maxGapTime;
         }
 
-        if (canUseTimeAfter||canUseTimeBefore)
+        if (canUseTimeAfter || canUseTimeBefore)
         {
             QPair<int, int> indexToUse(-1, -1);
 
@@ -236,7 +236,7 @@ void TrackCorrelatorThread::run()
                 const uint tAfter  = dataPointAfter.dateTime.toTime_t();
                 const uint tCor    = itemDateTime.toTime_t();
 
-                if (tCor-tBefore!=0)
+                if (tCor-tBefore != 0)
                 {
                     GeoIface::GeoCoordinates resultCoordinates;
                     const double latBefore  = dataPointBefore.coordinates.lat();
@@ -245,10 +245,8 @@ void TrackCorrelatorThread::run()
                     const double lonAfter   = dataPointAfter.coordinates.lon();
                     const qreal interFactor = qreal(tCor-tBefore)/qreal(tAfter-tBefore);
 
-                    resultCoordinates.setLatLon(
-                            latBefore + (latAfter - latBefore) * interFactor,
-                            lonBefore + (lonAfter - lonBefore) * interFactor
-                        );
+                    resultCoordinates.setLatLon(latBefore + (latAfter - latBefore) * interFactor,
+                                                lonBefore + (lonAfter - lonBefore) * interFactor);
 
                     const bool hasAlt = dataPointBefore.coordinates.hasAltitude() && dataPointAfter.coordinates.hasAltitude();
 
