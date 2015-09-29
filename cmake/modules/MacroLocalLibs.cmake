@@ -208,7 +208,7 @@ macro(DETECT_LIBKSANE MIN_VERSION)
             set(KF5Sane_FOUND TRUE)
         endif()
 
-        set(LIBKSANE_INCLUDES ${CMAKE_SOURCE_DIR}/extra/libksane/ ${CMAKE_BINARY_DIR}/extra/libksane)
+        set(LIBKSANE_INCLUDES ${CMAKE_SOURCE_DIR}/extra/libksane/src ${CMAKE_BINARY_DIR}/extra/libksane)
         set(LIBKSANE_LIBRARIES KF5Sane)
 
     endif()
