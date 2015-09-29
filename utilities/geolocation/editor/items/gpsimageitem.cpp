@@ -924,7 +924,7 @@ void GPSImageItem::setTagList(const QList<QList<TagData> >& externalTagList)
     m_tagList      = externalTagList;
     m_tagListDirty = true;
     emitDataChanged();
-};
+}
 
 bool GPSImageItem::isTagListDirty() const
 {
