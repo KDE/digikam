@@ -137,6 +137,7 @@ void LensAutoFix::slotAssignSettings2Widget()
 {
     d->cameraSelector->setUseMetadata(settings()[QLatin1String("UseMetadata")].toBool());
     LensFunContainer lfPrm;
+
     lfPrm.filterCCA       = settings()[QLatin1String("filterCCA")].toBool();
     lfPrm.filterVIG       = settings()[QLatin1String("filterVIG")].toBool();
     lfPrm.filterDST       = settings()[QLatin1String("filterDST")].toBool();
@@ -165,16 +166,16 @@ void LensAutoFix::slotSettingsChanged()
     BatchToolSettings prm;
     LensFunContainer  settings = d->cameraSelector->settings();
 
-    prm.insert(QLatin1String("UseMetadata"), (bool)d->cameraSelector->useMetadata());
+    prm.insert(QLatin1String("UseMetadata"),     (bool)d->cameraSelector->useMetadata());
 
-    prm.insert(QLatin1String("filterCCA"), (bool)settings.filterCCA);
-    prm.insert(QLatin1String("filterVIG"), (bool)settings.filterVIG);
-    prm.insert(QLatin1String("filterDST"), (bool)settings.filterDST);
-    prm.insert(QLatin1String("filterGEO"), (bool)settings.filterGEO);
+    prm.insert(QLatin1String("filterCCA"),       (bool)settings.filterCCA);
+    prm.insert(QLatin1String("filterVIG"),       (bool)settings.filterVIG);
+    prm.insert(QLatin1String("filterDST"),       (bool)settings.filterDST);
+    prm.insert(QLatin1String("filterGEO"),       (bool)settings.filterGEO);
 
-    prm.insert(QLatin1String("cropFactor"), (double)settings.cropFactor);
-    prm.insert(QLatin1String("focalLength"), (double)settings.focalLength);
-    prm.insert(QLatin1String("aperture"), (double)settings.aperture);
+    prm.insert(QLatin1String("cropFactor"),      (double)settings.cropFactor);
+    prm.insert(QLatin1String("focalLength"),     (double)settings.focalLength);
+    prm.insert(QLatin1String("aperture"),        (double)settings.aperture);
     prm.insert(QLatin1String("subjectDistance"), (double)settings.subjectDistance);
 
     prm.insert(QLatin1String("cameraMake"),      settings.cameraMake);
