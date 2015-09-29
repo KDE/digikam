@@ -49,12 +49,10 @@
 #include "gpscommon.h"
 #include "gpsimagemodel.h"
 #include "gpsimageitem.h"
-#include "mapdragdrophandler.h"
-#include "digikam_debug.h"
 #include "gpsundocommand.h"
-#include "gpsbookmarkowner.h"
-#include "gpsbookmarkmodelhelper.h"
+#include "mapdragdrophandler.h"
 #include "backend-rg.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -165,8 +163,8 @@ void GPSGeoIfaceModelHelper::slotThumbnailFromModel(const QPersistentModelIndex&
 }
 
 void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
-                                               const GeoCoordinates& targetCoordinates,
-                                               const QPersistentModelIndex& targetSnapIndex)
+                                            const GeoCoordinates& targetCoordinates,
+                                            const QPersistentModelIndex& targetSnapIndex)
 {
     if (targetSnapIndex.isValid())
     {
@@ -196,7 +194,7 @@ void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& 
     for (int i = 0; i < movedMarkers.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = movedMarkers.at(i);
-        GPSImageItem* const item             = static_cast<GPSImageItem*>(d->model->itemFromIndex(itemIndex));
+        GPSImageItem* const item              = static_cast<GPSImageItem*>(d->model->itemFromIndex(itemIndex));
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

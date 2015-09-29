@@ -60,12 +60,12 @@ public:
 
 private:
 
-    HasFlags                m_hasFlags;
+    HasFlags                 m_hasFlags;
     GeoIface::GeoCoordinates m_coordinates;
-    int                     m_nSatellites;
-    qreal                   m_dop;
-    int                     m_fixType;
-    qreal                   m_speed;
+    int                      m_nSatellites;
+    qreal                    m_dop;
+    int                      m_fixType;
+    qreal                    m_speed;
 
 public:
 

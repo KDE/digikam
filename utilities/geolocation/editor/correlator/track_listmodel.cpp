@@ -107,13 +107,14 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
     const int rowNumber    = index.row();
     const int columnNumber = index.column();
 
-    if (   (columnNumber < 0) || (columnNumber >= ColumnCount)
-        || (rowNumber < 0) || (rowNumber >= d->trackManager->trackCount()) )
+    if ( (columnNumber < 0) || (columnNumber >= ColumnCount) ||
+         (rowNumber < 0)    || (rowNumber >= d->trackManager->trackCount()) )
     {
         return QVariant();
     }
 
     GeoIface::TrackManager::Track track = d->trackManager->getTrackById(index.internalId());
+
     if (track.id == 0)
     {
         // track not found, invalid id
@@ -156,13 +157,14 @@ QModelIndex TrackListModel::index(int row, int column, const QModelIndex& parent
         return QModelIndex();
     }
 
-    if (   (column < 0) || (column >= ColumnCount)
-        || (row < 0) || (row >= d->trackManager->trackCount()) )
+    if ( (column < 0) || (column >= ColumnCount) ||
+         (row < 0)    || (row >= d->trackManager->trackCount()) )
     {
         return QModelIndex();
     }
 
     const GeoIface::TrackManager::Track track = d->trackManager->getTrack(row);
+
     /// @TODO We have to use quint32 for track ids
     return createIndex(row, column, quint32(track.id));
 }
@@ -182,7 +184,7 @@ int TrackListModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
-        Q_ASSERT(parent.model()==this);
+        Q_ASSERT(parent.model() == this);
 
         return 0;
     }

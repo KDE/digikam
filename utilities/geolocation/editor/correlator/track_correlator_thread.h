@@ -49,11 +49,11 @@ public:
 
 public:
 
-    TrackCorrelator::Correlation::List itemsToCorrelate;
+    TrackCorrelator::Correlation::List  itemsToCorrelate;
     TrackCorrelator::CorrelationOptions options;
     GeoIface::TrackManager::Track::List fileList;
-    bool doCancel;
-    bool canceled;
+    bool                                doCancel;
+    bool                                canceled;
 
 protected:
 

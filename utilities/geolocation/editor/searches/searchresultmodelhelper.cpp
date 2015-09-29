@@ -50,7 +50,6 @@
 
 #include "searchresultmodel.h"
 #include "gpscommon.h"
-#include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
 
@@ -135,9 +134,9 @@ GeoIface::ModelHelper::Flags SearchResultModelHelper::itemFlags(const QModelInde
 
 void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices)
 {
-    GPSUndoCommand* const undoCommand                = new GPSUndoCommand();
-    SearchResultModel::SearchResultItem targetItem   = d->model->resultItem(targetIndex);
-    const GeoCoordinates& targetCoordinates          = targetItem.result.coordinates;
+    GPSUndoCommand* const undoCommand              = new GPSUndoCommand();
+    SearchResultModel::SearchResultItem targetItem = d->model->resultItem(targetIndex);
+    const GeoCoordinates& targetCoordinates        = targetItem.result.coordinates;
 
     for (int i = 0; i < snappedIndices.count(); ++i)
     {

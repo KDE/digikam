@@ -42,9 +42,9 @@ public:
 
     enum CorrelationFlags
     {
-        CorrelationFlagCoordinates = 1,
+        CorrelationFlagCoordinates  = 1,
         CorrelationFlagInterpolated = 2,
-        CorrelationFlagAltitude = 3
+        CorrelationFlagAltitude     = 3
     };
 
 public:
@@ -66,7 +66,7 @@ public:
         {
         }
 
-        typedef QList<Correlation> List;
+        typedef QList<Correlation>    List;
 
         QDateTime                     dateTime;
         QVariant                      userData;

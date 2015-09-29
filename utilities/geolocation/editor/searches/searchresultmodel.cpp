@@ -39,7 +39,6 @@
 
 #include "searchbackend.h"
 #include "gpscommon.h"
-#include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
 

@@ -359,14 +359,14 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
 
 GPSCorrelatorWidget::~GPSCorrelatorWidget()
 {
-
 }
 
 void GPSCorrelatorWidget::slotLoadTrackFiles()
 {
-    const QList<QUrl> gpxFiles = QFileDialog::getOpenFileUrls(
-        this, i18nc("@title:window", "Select GPX File to Load"),
-        d->gpxFileOpenLastDirectory, i18n("GPS Exchange Format (*.gpx)"));
+    const QList<QUrl> gpxFiles = QFileDialog::getOpenFileUrls(this,
+                                                              i18nc("@title:window", "Select GPX File to Load"),
+                                                              d->gpxFileOpenLastDirectory,
+                                                              i18n("GPS Exchange Format (*.gpx)"));
 
     if (gpxFiles.isEmpty())
         return;
@@ -384,7 +384,7 @@ void GPSCorrelatorWidget::slotAllTrackFilesReady()
     QStringList invalidFiles;
     const QList<QPair<QUrl, QString> > loadErrorFiles = d->trackManager->readLoadErrors();
 
-    for (int i=0; i<loadErrorFiles.count(); ++i)
+    for (int i = 0; i < loadErrorFiles.count(); ++i)
     {
         const QPair<QUrl, QString> currentError = loadErrorFiles.at(i);
         const QString fileErrorString = QStringLiteral("%1: %2")
@@ -475,7 +475,7 @@ void GPSCorrelatorWidget::slotCorrelate()
             timeZoneOffset = (-1) * timeZoneOffset;
         }
 
-        options.secondsOffset+= timeZoneOffset;
+        options.secondsOffset += timeZoneOffset;
     }
 
     if (d->offsetEnabled->isChecked())
@@ -527,10 +527,10 @@ void GPSCorrelatorWidget::slotCorrelate()
 
 void GPSCorrelatorWidget::slotItemsCorrelated(const Digikam::TrackCorrelator::Correlation::List& correlatedItems)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG)<<correlatedItems.count();
-    d->correlationTriedCount+=correlatedItems.count();
+    qCDebug(DIGIKAM_GENERAL_LOG) << correlatedItems.count();
+    d->correlationTriedCount += correlatedItems.count();
 
-    for (int i=0; i<correlatedItems.count(); ++i)
+    for (int i = 0; i < correlatedItems.count(); ++i)
     {
         const TrackCorrelator::Correlation& itemCorrelation = correlatedItems.at(i);
         const QPersistentModelIndex itemIndex               = itemCorrelation.userData.value<QPersistentModelIndex>();
@@ -550,22 +550,22 @@ void GPSCorrelatorWidget::slotItemsCorrelated(const Digikam::TrackCorrelator::Co
             GPSDataContainer newData;
             newData.setCoordinates(itemCorrelation.coordinates);
 
-            if (itemCorrelation.nSatellites>=0)
+            if (itemCorrelation.nSatellites >= 0)
                 newData.setNSatellites(itemCorrelation.nSatellites);
 
             // if hDop is available, use it
-            if (itemCorrelation.hDop>=0)
+            if (itemCorrelation.hDop >= 0)
                 newData.setDop(itemCorrelation.hDop);
 
             // but if pDop is available, prefer pDop over hDop
-            if (itemCorrelation.pDop>=0)
+            if (itemCorrelation.pDop >= 0)
                 newData.setDop(itemCorrelation.pDop);
 
-            if (itemCorrelation.fixType>=0)
+            if (itemCorrelation.fixType >= 0)
             {
                 newData.setFixType(itemCorrelation.fixType);
             }
-            if (itemCorrelation.speed>=0)
+            if (itemCorrelation.speed >= 0)
             {
                 newData.setSpeed(itemCorrelation.speed);
             }
@@ -585,12 +585,12 @@ void GPSCorrelatorWidget::slotItemsCorrelated(const Digikam::TrackCorrelator::Co
 
 void GPSCorrelatorWidget::slotAllItemsCorrelated()
 {
-    if (d->correlationCorrelatedCount==0)
+    if (d->correlationCorrelatedCount == 0)
     {
         QMessageBox::warning(this, i18n("Correlation failed"),
                              i18n("Could not correlate any image - please make sure the timezone and gap settings are correct."));
     }
-    else if (d->correlationCorrelatedCount==d->correlationTotalCount)
+    else if (d->correlationCorrelatedCount == d->correlationTotalCount)
     {
         QMessageBox::information(this, i18n("Correlation succeeded"),
                                  i18n("All images have been correlated. You can now check their position on the map."));
@@ -603,7 +603,7 @@ void GPSCorrelatorWidget::slotAllItemsCorrelated()
                                 d->correlationCorrelatedCount, d->correlationTotalCount));
     }
 
-    if (d->correlationCorrelatedCount==0)
+    if (d->correlationCorrelatedCount == 0)
     {
         delete d->correlationUndoCommand;
     }

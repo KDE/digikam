@@ -71,7 +71,7 @@ public:
     explicit SearchBackend(QObject* const parent = 0);
     ~SearchBackend();
 
-    bool search(const QString& backendName, const QString& searchTerm);
+    bool search(const QString& backendName, const QString& searchTerm) const;
     SearchResult::List getResults() const;
     QString getErrorMessage() const;
     QList<QPair<QString, QString> >  getBackends() const;

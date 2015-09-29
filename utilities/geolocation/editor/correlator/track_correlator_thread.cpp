@@ -80,9 +80,9 @@ void TrackCorrelatorThread::run()
         }
 
         // find the last point before our item:
-        QDateTime lastSmallerTime;
+        QDateTime       lastSmallerTime;
         QPair<int, int> lastIndexPair;
-        QDateTime firstBiggerTime;
+        QDateTime       firstBiggerTime;
         QPair<int, int> firstIndexPair;
 
         for (int f = 0; f < nFiles; ++f)
@@ -142,7 +142,7 @@ void TrackCorrelatorThread::run()
                     if (timeIsBetter)
                     {
                         firstBiggerTime = indexTime;
-                        firstIndexPair = QPair<int, int>(f, index);
+                        firstIndexPair  = QPair<int, int>(f, index);
                     }
 
                     break;
@@ -203,13 +203,13 @@ void TrackCorrelatorThread::run()
             if (indexToUse.first>=0)
             {
                 const GeoIface::TrackManager::TrackPoint& dataPoint = fileList.at(indexToUse.first).points.at(indexToUse.second);
-                correlatedData.coordinates                   = dataPoint.coordinates;
-                correlatedData.flags                         = static_cast<TrackCorrelator::CorrelationFlags>(correlatedData.flags|TrackCorrelator::CorrelationFlagCoordinates);
-                correlatedData.nSatellites                   = dataPoint.nSatellites;
-                correlatedData.hDop                          = dataPoint.hDop;
-                correlatedData.pDop                          = dataPoint.pDop;
-                correlatedData.fixType                       = dataPoint.fixType;
-                correlatedData.speed                         = dataPoint.speed;
+                correlatedData.coordinates                          = dataPoint.coordinates;
+                correlatedData.flags                                = static_cast<TrackCorrelator::CorrelationFlags>(correlatedData.flags|TrackCorrelator::CorrelationFlagCoordinates);
+                correlatedData.nSatellites                          = dataPoint.nSatellites;
+                correlatedData.hDop                                 = dataPoint.hDop;
+                correlatedData.pDop                                 = dataPoint.pDop;
+                correlatedData.fixType                              = dataPoint.fixType;
+                correlatedData.speed                                = dataPoint.speed;
             }
         }
         else

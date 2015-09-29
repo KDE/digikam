@@ -46,16 +46,13 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// GeoIface includes
-
-#include "mapwidget.h"
-
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
 
 // local includes
 
+#include "mapwidget.h"
 #include "searchbackend.h"
 #include "searchresultmodel.h"
 #include "searchresultmodelhelper.h"
@@ -315,7 +312,7 @@ void SearchWidget::slotTriggerSearch()
     slotUpdateActionAvailability();
 }
 
-GeoIface::ModelHelper* SearchWidget::getModelHelper()
+GeoIface::ModelHelper* SearchWidget::getModelHelper() const
 {
     return d->searchResultModelHelper;
 }

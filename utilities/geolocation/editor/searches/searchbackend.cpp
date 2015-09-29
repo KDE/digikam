@@ -70,7 +70,7 @@ SearchBackend::~SearchBackend()
     delete d;
 }
 
-bool SearchBackend::search(const QString& backendName, const QString& searchTerm)
+bool SearchBackend::search(const QString& backendName, const QString& searchTerm) const
 {
     d->searchData.clear();
     d->errorMessage.clear();
@@ -136,7 +136,7 @@ void SearchBackend::slotData(KIO::Job* kioJob, const QByteArray& data)
 
 void SearchBackend::slotResult(KJob* kJob)
 {
-    if (kJob!=d->kioJob)
+    if (kJob != d->kioJob)
     {
         return;
     }
@@ -221,7 +221,7 @@ void SearchBackend::slotResult(KJob* kJob)
         for (QDomNode resultNode = docElement.firstChild(); !resultNode.isNull(); resultNode = resultNode.nextSibling())
         {
             QDomElement resultElement = resultNode.toElement();
-            qCDebug(DIGIKAM_GENERAL_LOG)<<resultElement.tagName();
+            qCDebug(DIGIKAM_GENERAL_LOG) << resultElement.tagName();
 
             if (resultElement.isNull())
             {

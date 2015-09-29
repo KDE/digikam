@@ -46,7 +46,6 @@ public:
       : trackManager(0),
         thread(0)
     {
-
     }
 
     GeoIface::TrackManager* trackManager;

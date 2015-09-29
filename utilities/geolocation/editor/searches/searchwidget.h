@@ -61,10 +61,10 @@ public:
     SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner, GPSImageModel* const kipiImageModel, QItemSelectionModel* const kipiImageSelectionModel, QWidget* parent = 0);
     ~SearchWidget();
 
-    GeoIface::ModelHelper* getModelHelper();
+    GeoIface::ModelHelper* getModelHelper() const;
+
     void saveSettingsToGroup(KConfigGroup* const group);
     void readSettingsFromGroup(const KConfigGroup* const group);
-
     void setPrimaryMapWidget(GeoIface::MapWidget* const mapWidget);
 
 private Q_SLOTS:
