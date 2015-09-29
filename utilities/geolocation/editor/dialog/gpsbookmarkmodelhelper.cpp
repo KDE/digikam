@@ -31,10 +31,9 @@
 
 // KDE includes
 
-#include <kbookmarkmanager.h>
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"

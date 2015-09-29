@@ -33,10 +33,9 @@
 
 #include <kactioncollection.h>
 #include <kbookmarkmenu.h>
-#include <kbookmarkmanager.h>
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "gpsbookmarkmodelhelper.h"
 #include "gpsundocommand.h"

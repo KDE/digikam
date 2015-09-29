@@ -29,11 +29,11 @@
 
 #include <QMenu>
 
-// KDE includes:
+// KDE includes
 
 #include <kbookmarkmanager.h>
 
-// local includes:
+// Local includes
 
 #include "gpsdatacontainer.h"
 

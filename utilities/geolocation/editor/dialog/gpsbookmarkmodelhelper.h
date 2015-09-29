@@ -25,7 +25,7 @@
 #ifndef GPSBOOKMARKMODELHELPER_H
 #define GPSBOOKMARKMODELHELPER_H
 
-// KDE includes:
+// KDE includes
 
 #include <kbookmarkmanager.h>
 
@@ -33,11 +33,9 @@
 
 #include "modelhelper.h"
 
-// local includes:
+// Local includes
 
 #include "gpsdatacontainer.h"
-
-class KBookmarkManager;
 
 namespace Digikam
 {
