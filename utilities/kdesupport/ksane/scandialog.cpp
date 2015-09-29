@@ -44,7 +44,7 @@
 
 // LibKSane includes
 
-#include <ksane.h>
+#include <ksanewidget.h>
 
 // Local includes
 
