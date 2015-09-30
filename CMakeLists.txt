@@ -67,7 +67,7 @@ set(LENSFUN_MIN_VERSION "0.2.6.0")
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
 if(POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
+    cmake_policy(SET CMP0063 OLD)
 endif()
 
 ############## ECM setup ######################
