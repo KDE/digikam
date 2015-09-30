@@ -125,10 +125,10 @@ ColorFxTool::ColorFxTool(QObject* const parent)
     setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
-
+/*
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
-
+*/
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotPreview()));
 
