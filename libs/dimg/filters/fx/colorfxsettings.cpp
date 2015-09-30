@@ -223,9 +223,9 @@ void ColorFXSettings::readSettings(KConfigGroup& group)
     ColorFXContainer prm;
     ColorFXContainer defaultPrm = defaultSettings();
 
-    d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       d->effectType->defaultIndex()));
-    d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         d->levelInput->defaultValue()));
-    d->iterationInput->setValue(group.readEntry(d->configIterationAdjustmentEntry, d->iterationInput->defaultValue()));
+    prm.colorFXType = group.readEntry(d->configEffectTypeEntry,          defaultPrm.colorFXType);
+    prm.level       = group.readEntry(d->configLevelAdjustmentEntry,     defaultPrm.level);
+    prm.iterations  = group.readEntry(d->configIterationAdjustmentEntry, defaultPrm.iterations);
 
     setSettings(prm);
 }
@@ -234,9 +234,9 @@ void ColorFXSettings::writeSettings(KConfigGroup& group)
 {
     ColorFXContainer prm = settings();
 
-    group.writeEntry(d->configEffectTypeEntry,          d->effectType->currentIndex());
-    group.writeEntry(d->configLevelAdjustmentEntry,     d->levelInput->value());
-    group.writeEntry(d->configIterationAdjustmentEntry, d->iterationInput->value());
+    group.writeEntry(d->configEffectTypeEntry,          prm.colorFXType);
+    group.writeEntry(d->configLevelAdjustmentEntry,     prm.level);
+    group.writeEntry(d->configIterationAdjustmentEntry, prm.iterations);
 }
 
 void ColorFXSettings::enable()

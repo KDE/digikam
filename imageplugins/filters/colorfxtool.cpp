@@ -181,9 +181,18 @@ void ColorFxTool::slotColorSelectedFromTarget(const DColor& color)
 void ColorFxTool::preparePreview()
 {
     d->settingsView->disable();
-    ColorFXContainer prm = d->settingsView->settings();
 
-    DImg preview = d->previewWidget->getOriginalRegionImage(true);
+    ColorFXContainer prm    = d->settingsView->settings();
+    bool useDownscaledImage = true;
+
+    // See bug #237719 : we cannot use downscaled image to render preview.
+    if (prm.colorFXType == ColorFXFilter::Neon ||
+        prm.colorFXType == ColorFXFilter::FindEdges)
+    {
+        useDownscaledImage = false;
+    }
+
+    DImg preview = d->previewWidget->getOriginalRegionImage(useDownscaledImage);
 
     setFilter(new ColorFXFilter(&preview, this, prm));
 }
