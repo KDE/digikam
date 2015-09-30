@@ -65,18 +65,16 @@
 #include <klocalizedstring.h>
 #include <kwindowconfig.h>
 
-// GeoIface includes
-
-#include "mapwidget.h"
-#include "itemmarkertiler.h"
-#include "tracks.h"
-
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "digikam_config.h"
+#include "mapwidget.h"
+#include "itemmarkertiler.h"
+#include "tracks.h"
 #include "gpscommon.h"
 #include "gpsimagemodel.h"
 #include "mapdragdrophandler.h"
@@ -88,17 +86,20 @@
 #include "dmessagebox.h"
 #include "gpsundocommand.h"
 #include "rgwidget.h"
-#include "gpsbookmarkowner.h"
-#include "gpsbookmarkmodelhelper.h"
 #include "statusprogressbar.h"
 #include "searchwidget.h"
 #include "backend-rg.h"
 #include "gpsimagedetails.h"
 #include "gpsgeoifacemodelhelper.h"
 
+#ifdef HAVE_KBOOKMARKS
+#include "gpsbookmarkowner.h"
+#include "gpsbookmarkmodelhelper.h"
+#endif
+
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
-#endif /* GPSSYNC_MODELTEST */
+#endif
 
 using namespace KDcrawIface;
 
@@ -170,8 +171,6 @@ public:
         imageModel               = 0;
         selectionModel           = 0;
         uiEnabled                = true;
-        bookmarkOwner            = 0;
-        actionBookmarkVisibility = 0;
         listViewContextMenu      = 0;
         trackManager             = 0;
         fileIOFutureWatcher      = 0;
@@ -205,14 +204,16 @@ public:
         sortMenu                 = 0;
         mapLayout                = MapLayoutOne;
         cbMapLayout              = 0;
+#ifdef HAVE_KBOOKMARKS
+        bookmarkOwner            = 0;
+        actionBookmarkVisibility = 0;
+#endif
     }
 
     // General things
     GPSImageModel*                           imageModel;
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
-    GPSBookmarkOwner*                        bookmarkOwner;
-    QAction*                                 actionBookmarkVisibility;
     GPSImageListContextMenu*                 listViewContextMenu;
     GeoIface::TrackManager*                  trackManager;
 
@@ -262,6 +263,11 @@ public:
     QAction*                                 sortActionYoungestFirst;
     QMenu*                                   sortMenu;
     QComboBox*                               cbMapLayout;
+
+#ifdef HAVE_KBOOKMARKS
+    GPSBookmarkOwner*                        bookmarkOwner;
+    QAction*                                 actionBookmarkVisibility;
+#endif
 };
 
 GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidget* const parent)
@@ -278,24 +284,43 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 
 #ifdef GPSSYNC_MODELTEST
     new ModelTest(d->imageModel, this);
-#endif /* GPSSYNC_MODELTEST */
+#endif
+
+#ifdef HAVE_KBOOKMARKS
+    d->bookmarkOwner = new GPSBookmarkOwner(d->imageModel, this);
+#endif
 
     d->undoStack     = new QUndoStack(this);
-    d->bookmarkOwner = new GPSBookmarkOwner(d->imageModel, this);
     d->stackedWidget = new QStackedWidget();
-    d->searchWidget  = new SearchWidget(d->bookmarkOwner, d->imageModel, d->selectionModel, d->stackedWidget);
+    d->searchWidget  = new SearchWidget(
+#ifdef HAVE_KBOOKMARKS
+                                        d->bookmarkOwner,
+#endif
+                                        d->imageModel,
+                                        d->selectionModel,
+                                        d->stackedWidget
+                                       );
 
     GPSImageItem::setHeaderData(d->imageModel);
     d->mapModelHelper      = new GPSGeoIfaceModelHelper(d->imageModel, d->selectionModel, this);
+
+#ifdef HAVE_KBOOKMARKS
     d->mapModelHelper->addUngroupedModelHelper(d->bookmarkOwner->bookmarkModelHelper());
+#endif
+
     d->mapModelHelper->addUngroupedModelHelper(d->searchWidget->getModelHelper());
     d->mapDragDropHandler  = new MapDragDropHandler(d->imageModel, d->mapModelHelper);
     d->geoifaceMarkerModel = new ItemMarkerTiler(d->mapModelHelper, this);
 
+#ifdef HAVE_KBOOKMARKS
     d->actionBookmarkVisibility = new QAction(this);
     d->actionBookmarkVisibility->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
     d->actionBookmarkVisibility->setToolTip(i18n("Display bookmarked positions on the map."));
     d->actionBookmarkVisibility->setCheckable(true);
+
+    connect(d->actionBookmarkVisibility, SIGNAL(changed()),
+            this, SLOT(slotBookmarkVisibilityToggled()));
+#endif
 
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
@@ -362,9 +387,6 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     d->sortMenu->addAction(d->sortActionYoungestFirst);
     d->sortActionYoungestFirst->setCheckable(true);
 
-    connect(d->actionBookmarkVisibility, SIGNAL(changed()),
-            this, SLOT(slotBookmarkVisibilityToggled()));
-
     QWidget* mapVBox = 0;
     d->mapWidget     = makeMapWidget(&mapVBox);
     d->searchWidget->setPrimaryMapWidget(d->mapWidget);
@@ -383,7 +405,11 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     d->treeView->setSortingEnabled(true);
     d->VSplitter->addWidget(d->treeView);
 
-    d->listViewContextMenu = new GPSImageListContextMenu(d->treeView, d->bookmarkOwner);
+    d->listViewContextMenu = new GPSImageListContextMenu(d->treeView
+#ifdef HAVE_KBOOKMARKS
+                                                         , d->bookmarkOwner
+#endif
+                                                        );
     d->HSplitter->setCollapsible(1, true);
     d->HSplitter->addWidget(d->stackedWidget);
     d->splitterSize        = 0;
@@ -477,9 +503,11 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     connect(d->tabBar, SIGNAL(currentChanged(int)),
             this, SLOT(slotCurrentTabChanged(int)));
 
+#ifdef HAVE_KBOOKMARKS
     connect(d->bookmarkOwner->bookmarkModelHelper(), SIGNAL(signalUndoCommand(GPSUndoCommand*)),
             this, SLOT(slotGPSUndoCommand(GPSUndoCommand*)));
-
+#endif
+    
     connect(d->detailsWidget, SIGNAL(signalUndoCommand(GPSUndoCommand*)),
             this, SLOT(slotGPSUndoCommand(GPSUndoCommand*)));
 
@@ -660,8 +688,10 @@ void GeolocationEdit::readSettings()
         d->mapWidget->setSortKey(0);
     }
 
+#ifdef HAVE_KBOOKMARKS
     d->actionBookmarkVisibility->setChecked(group.readEntry("Bookmarks visible", false));
     slotBookmarkVisibilityToggled();
+#endif
 
     if (group.hasKey("SplitterState V1"))
     {
@@ -735,14 +765,15 @@ void GeolocationEdit::saveSettings()
 
     group.writeEntry("Current Tab",               d->tabBar->currentIndex());
     group.writeEntry("Show oldest images first",  d->sortActionOldestFirst->isChecked());
-    group.writeEntry("Bookmarks visible",         d->actionBookmarkVisibility->isChecked());
     group.writeEntry("SplitterState V1",          d->VSplitter->saveState().toBase64());
     group.writeEntry("SplitterState H1",          d->HSplitter->saveState().toBase64());
     group.writeEntry("Splitter H1 CollapsedSize", d->splitterSize);
     group.writeEntry("Map Layout",                QVariant::fromValue(int(d->mapLayout)));
 
-    // --------------------------
-
+#ifdef HAVE_KBOOKMARKS
+    group.writeEntry("Bookmarks visible",         d->actionBookmarkVisibility->isChecked());
+#endif
+    
     config->sync();
 }
 
@@ -998,7 +1029,9 @@ void GeolocationEdit::slotProgressCancelButtonClicked()
 
 void GeolocationEdit::slotBookmarkVisibilityToggled()
 {
+#ifdef HAVE_KBOOKMARKS
     d->bookmarkOwner->bookmarkModelHelper()->setVisible(d->actionBookmarkVisibility->isChecked());
+#endif
 }
 
 void GeolocationEdit::slotLayoutChanged(int lay)
@@ -1017,7 +1050,9 @@ MapWidget* GeolocationEdit::makeMapWidget(QWidget** const pvbox)
     mapWidget->setMouseMode(MouseModeSelectThumbnail);
     mapWidget->setGroupedModel(d->geoifaceMarkerModel);
     mapWidget->setDragDropHandler(d->mapDragDropHandler);
+#ifdef HAVE_KBOOKMARKS
     mapWidget->addUngroupedModel(d->bookmarkOwner->bookmarkModelHelper());
+#endif
     mapWidget->addUngroupedModel(d->searchWidget->getModelHelper());
     mapWidget->setTrackManager(d->trackManager);
     mapWidget->setSortOptionsMenu(d->sortMenu);
@@ -1025,9 +1060,11 @@ MapWidget* GeolocationEdit::makeMapWidget(QWidget** const pvbox)
     vbox->addWidget(mapWidget);
     vbox->addWidget(mapWidget->getControlWidget());
 
+#ifdef HAVE_KBOOKMARKS
     QToolButton* const bookmarkVisibilityButton = new QToolButton(mapWidget);
     bookmarkVisibilityButton->setDefaultAction(d->actionBookmarkVisibility);
     mapWidget->addWidgetToControlWidget(bookmarkVisibilityButton);
+#endif
 
     *pvbox = dummyWidget;
 

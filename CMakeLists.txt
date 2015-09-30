@@ -208,13 +208,14 @@ DETECT_LIBKSANE(${KSANE_MIN_VERSION})
 find_package(Marble)
 
 if(MARBLE_FOUND)
-    # For geomapiface
+    # For geolocation
 
     find_package(KF5 REQUIRED OPTIONAL_COMPONENTS
                  ItemModels
                  Bookmarks
                 )
-    if(KF5ItemModels_FOUND AND KF5Bookmarks_FOUND)
+    #Note only KItemModels is mandatory, KBookmarks is optional in geolocation editor source code
+    if(KF5ItemModels_FOUND)
         set(MARBLE_FOUND TRUE)
     else()
         set(MARBLE_FOUND FALSE)
@@ -351,6 +352,7 @@ endif()
 
 if(ENABLE_KFILEMETADATASUPPORT)
     find_package(KF5FileMetaData)
+
     if(KF5FileMetaData_FOUND)
         set(KFILEMETADATA_FOUND TRUE)
     else()
@@ -374,6 +376,7 @@ MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
 MACRO_BOOL_TO_01(KF5KFace_FOUND           HAVE_KFACE)
 MACRO_BOOL_TO_01(MARBLE_FOUND             HAVE_MARBLE)
 MACRO_BOOL_TO_01(KFILEMETADATA_FOUND      HAVE_KFILEMETADATA)
+MACRO_BOOL_TO_01(KF5Bookmarks_FOUND       HAVE_KBOOKMARKS)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina

@@ -50,20 +50,23 @@
 
 #include <KDCRAW/RWidgetUtils>
 
-// local includes
+// Local includes
 
 #include "mapwidget.h"
 #include "searchbackend.h"
 #include "searchresultmodel.h"
 #include "searchresultmodelhelper.h"
 #include "gpscommon.h"
-#include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
 
+#ifdef HAVE_KBOOKMARKS
+#include "gpsbookmarkowner.h"
+#endif
+
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
-#endif /* GPSSYNC_MODELTEST */
+#endif
 
 using namespace KDcrawIface;
 
@@ -86,10 +89,13 @@ public:
 
     Private()
     {
-        mapWidget                                     = 0;
+#ifdef HAVE_KBOOKMARKS
         gpsBookmarkOwner                              = 0;
-        kipiImageModel                                = 0;
-        kipiImageSelectionModel                       = 0;
+        actionBookmark                                = 0;
+#endif
+        mapWidget                                     = 0;
+        gpsImageModel                                 = 0;
+        gosImageSelectionModel                        = 0;
         searchTermLineEdit                            = 0;
         searchButton                                  = 0;
         searchBackend                                 = 0;
@@ -103,7 +109,6 @@ public:
         actionKeepOldResults                          = 0;
         actionToggleAllResultsVisibility              = 0;
         actionCopyCoordinates                         = 0;
-        actionBookmark                                = 0;
         actionMoveImagesToThisResult                  = 0;
         actionRemovedSelectedSearchResultsFromList    = 0;
         searchInProgress                              = false;
@@ -112,12 +117,16 @@ public:
     }
 
     // Map
-    GeoIface::MapWidget*      mapWidget;
-    GPSBookmarkOwner*        gpsBookmarkOwner;
-    GPSImageModel*           kipiImageModel;
-    QItemSelectionModel*     kipiImageSelectionModel;
+    GeoIface::MapWidget*     mapWidget;
+    GPSImageModel*           gpsImageModel;
+    QItemSelectionModel*     gosImageSelectionModel;
     QLineEdit*               searchTermLineEdit;
     QPushButton*             searchButton;
+
+#ifdef HAVE_KBOOKMARKS
+    GPSBookmarkOwner*        gpsBookmarkOwner;
+    QAction*                 actionBookmark;
+#endif
 
     // Search: backend
     SearchBackend*           searchBackend;
@@ -133,7 +142,6 @@ public:
     QAction*                 actionKeepOldResults;
     QAction*                 actionToggleAllResultsVisibility;
     QAction*                 actionCopyCoordinates;
-    QAction*                 actionBookmark;
     QAction*                 actionMoveImagesToThisResult;
     QAction*                 actionRemovedSelectedSearchResultsFromList;
     bool                     searchInProgress;
@@ -141,26 +149,33 @@ public:
     QIcon                    actionToggleAllResultsVisibilityIconChecked;
 };
 
-SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
-                           GPSImageModel* const kipiImageModel,
-                           QItemSelectionModel* const kipiImageSelectionModel,
-                           QWidget* const parent)
+SearchWidget::SearchWidget(
+#ifdef HAVE_KBOOKMARKS
+                           GPSBookmarkOwner* const gpsBookmarkOwner,
+#endif
+                           GPSImageModel* const gpsImageModel,
+                           QItemSelectionModel* const gosImageSelectionModel,
+                           QWidget* const parent
+                          )
     : QWidget(parent),
       d(new Private())
 {
-    d->gpsBookmarkOwner        = gpsBookmarkOwner;
-    d->kipiImageModel          = kipiImageModel;
-    d->kipiImageSelectionModel = kipiImageSelectionModel;
-    d->searchBackend           = new SearchBackend(this);
-    d->searchResultsModel      = new SearchResultModel(this);
+#ifdef HAVE_KBOOKMARKS
+    d->gpsBookmarkOwner       = gpsBookmarkOwner;
+#endif
+
+    d->gpsImageModel          = gpsImageModel;
+    d->gosImageSelectionModel = gosImageSelectionModel;
+    d->searchBackend          = new SearchBackend(this);
+    d->searchResultsModel     = new SearchResultModel(this);
 
 #ifdef GPSSYNC_MODELTEST
     new ModelTest(d->searchResultsModel, this);
-#endif /* GPSSYNC_MODELTEST */
+#endif
 
     d->searchResultsSelectionModel = new QItemSelectionModel(d->searchResultsModel);
     d->searchResultsModel->setSelectionModel(d->searchResultsSelectionModel);
-    d->searchResultModelHelper     = new SearchResultModelHelper(d->searchResultsModel, d->searchResultsSelectionModel, d->kipiImageModel, this);
+    d->searchResultModelHelper     = new SearchResultModelHelper(d->searchResultsModel, d->searchResultsSelectionModel, d->gpsImageModel, this);
 
     d->mainVBox = new QVBoxLayout(this);
     setLayout(d->mainVBox);
@@ -227,8 +242,10 @@ SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
     d->treeView->setSelectionModel(d->searchResultsSelectionModel);
     d->treeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
+#ifdef HAVE_KBOOKMARKS
     d->actionBookmark = new QAction(i18n("Bookmarks"), this);
     d->actionBookmark->setMenu(d->gpsBookmarkOwner->getMenu());
+#endif
 
     connect(d->actionMoveImagesToThisResult, SIGNAL(triggered(bool)),
             this, SLOT(slotMoveSelectedImagesToThisResult()));
@@ -351,7 +368,7 @@ void SearchWidget::slotUpdateActionAvailability()
 {
     const int nSelectedResults       = QItemSelectionModel_selectedRowsCount(d->searchResultsSelectionModel);
     const bool haveOneSelectedResult = nSelectedResults == 1;
-    const bool haveSelectedImages    = !d->kipiImageSelectionModel->selectedRows().isEmpty();
+    const bool haveSelectedImages    = !d->gosImageSelectionModel->selectedRows().isEmpty();
 
     d->actionCopyCoordinates->setEnabled(haveOneSelectedResult);
     d->actionMoveImagesToThisResult->setEnabled(haveOneSelectedResult && haveSelectedImages);
@@ -377,7 +394,9 @@ bool SearchWidget::eventFilter(QObject *watched, QEvent *event)
             {
                 const QModelIndex currentIndex                         = d->searchResultsSelectionModel->currentIndex();
                 const SearchResultModel::SearchResultItem searchResult = d->searchResultsModel->resultItem(currentIndex);
+#ifdef HAVE_KBOOKMARKS
                 d->gpsBookmarkOwner->setPositionAndTitle(searchResult.result.coordinates, searchResult.result.name);
+#endif
             }
 
             slotUpdateActionAvailability();
@@ -387,8 +406,10 @@ bool SearchWidget::eventFilter(QObject *watched, QEvent *event)
             menu->addAction(d->actionCopyCoordinates);
             menu->addAction(d->actionMoveImagesToThisResult);
             menu->addAction(d->actionRemovedSelectedSearchResultsFromList);
+#ifdef HAVE_KBOOKMARKS
 //          menu->addAction(d->actionBookmark);
             d->gpsBookmarkOwner->changeAddBookmark(true);
+#endif
 
             QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
             menu->exec(e->globalPos());
@@ -435,7 +456,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
     const QModelIndex currentIndex                        = d->searchResultsSelectionModel->currentIndex();
     const SearchResultModel::SearchResultItem currentItem = d->searchResultsModel->resultItem(currentIndex);
     const GeoIface::GeoCoordinates& targetCoordinates      = currentItem.result.coordinates;
-    const QModelIndexList selectedImageIndices            = d->kipiImageSelectionModel->selectedRows();
+    const QModelIndexList selectedImageIndices            = d->gosImageSelectionModel->selectedRows();
 
     if (selectedImageIndices.isEmpty())
     {
@@ -447,7 +468,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
     for (int i = 0; i < selectedImageIndices.count(); ++i)
     {
         const QPersistentModelIndex itemIndex = selectedImageIndices.at(i);
-        GPSImageItem* const item             = d->kipiImageModel->itemFromIndex(itemIndex);
+        GPSImageItem* const item             = d->gpsImageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
         undoInfo.readOldDataFromItem(item);

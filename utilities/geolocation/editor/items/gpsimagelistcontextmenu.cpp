@@ -41,16 +41,17 @@
 
 #include <klocalizedstring.h>
 
-// GeoIface includes
-
-#include "lookupfactory.h"
-
 // Local includes
 
-#include "gpsbookmarkowner.h"
+#include "digikam_config.h"
 #include "gpsundocommand.h"
 #include "gpscommon.h"
 #include "gpsimageitem.h"
+#include "lookupfactory.h"
+
+#ifdef HAVE_KBOOKMARKS
+#include "gpsbookmarkowner.h"
+#endif
 
 namespace Digikam
 {
@@ -61,15 +62,18 @@ public:
 
     Private()
       : enabled(true),
+
+#ifdef HAVE_KBOOKMARKS
+        actionBookmark(0),
+        bookmarkOwner(0),
+#endif
         actionCopy(0),
         actionPaste(0),
-        actionBookmark(0),
         actionRemoveCoordinates(0),
         actionRemoveAltitude(0),
         actionRemoveUncertainty(0),
         actionRemoveSpeed(0),
         actionLookupMissingAltitudes(0),
-        bookmarkOwner(0),
         imagesList(0),
         altitudeLookup(),
         altitudeUndoCommand(0),
@@ -81,16 +85,18 @@ public:
 
     bool                              enabled;
 
+#ifdef HAVE_KBOOKMARKS
+    QAction*                          actionBookmark;
+    GPSBookmarkOwner*                 bookmarkOwner;
+#endif
+
     QAction*                          actionCopy;
     QAction*                          actionPaste;
-    QAction*                          actionBookmark;
     QAction*                          actionRemoveCoordinates;
     QAction*                          actionRemoveAltitude;
     QAction*                          actionRemoveUncertainty;
     QAction*                          actionRemoveSpeed;
     QAction*                          actionLookupMissingAltitudes;
-
-    GPSBookmarkOwner*                 bookmarkOwner;
 
     GPSImageList*                     imagesList;
 
@@ -101,7 +107,11 @@ public:
     int                               altitudeReceivedCount;
 };
 
-GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList, GPSBookmarkOwner* const bookmarkOwner)
+GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList
+#ifdef HAVE_KBOOKMARKS
+                                                 , GPSBookmarkOwner* const bookmarkOwner
+#endif
+                                                )
     : QObject(imagesList),
       d(new Private)
 {
@@ -138,6 +148,7 @@ GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList,
     connect(d->actionLookupMissingAltitudes, SIGNAL(triggered()),
             this, SLOT(slotLookupMissingAltitudes()));
 
+#ifdef HAVE_KBOOKMARKS
     if (bookmarkOwner)
     {
         d->bookmarkOwner  = bookmarkOwner;
@@ -147,6 +158,7 @@ GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList,
         connect(d->bookmarkOwner, SIGNAL(positionSelected(GPSDataContainer)),
                 this, SLOT(slotBookmarkSelected(GPSDataContainer)));
     }
+#endif
 
     d->imagesList->installEventFilter(this);
 }
@@ -169,7 +181,7 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
         const QList<QModelIndex> selectedIndices  = selectionModel->selectedRows();
         const int nSelected                       = selectedIndices.size();
 
-        // "copy" and "Add bookmark" are only available for one selected image with geo data:
+        // "copy" are only available for one selected image with geo data:
         bool copyAvailable                   = (nSelected == 1);
         bool removeAltitudeAvailable         = false;
         bool removeCoordinatesAvailable      = false;
@@ -201,6 +213,7 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
         d->actionRemoveSpeed->setEnabled(removeSpeedAvailable);
         d->actionLookupMissingAltitudes->setEnabled(lookupMissingAltitudesAvailable);
 
+#ifdef HAVE_KBOOKMARKS
         if (d->bookmarkOwner)
         {
             d->bookmarkOwner->changeAddBookmark(copyAvailable);
@@ -210,7 +223,8 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
             const QString itemFileName = itemUrl.fileName();
             d->bookmarkOwner->setPositionAndTitle(position.getCoordinates(), itemFileName);
         }
-
+#endif
+        
         // "paste" is only available if there is geo data in the clipboard
         // and at least one photo is selected:
         bool pasteAvailable = (nSelected >= 1);
@@ -235,12 +249,14 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
         menu->addAction(d->actionRemoveSpeed);
         menu->addAction(d->actionLookupMissingAltitudes);
 
+#ifdef HAVE_KBOOKMARKS
         if (d->actionBookmark)
         {
             menu->addSeparator();
             menu->addAction(d->actionBookmark);
             d->actionBookmark->setEnabled(nSelected>=1);
         }
+#endif
 
         QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
         menu->exec(e->globalPos());
@@ -475,7 +491,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
 
     if (!foundData)
     {
-        QMessageBox::information(d->imagesList, i18n("GPS Sync"), i18n("Could not find any coordinates on the clipboard."));
+        QMessageBox::information(d->imagesList, i18n("Geolocation Editor"), i18n("Could not find any coordinates on the clipboard."));
         return;
     }
 
@@ -492,7 +508,7 @@ void GPSImageListContextMenu::setGPSDataForSelectedItems(const GPSDataContainer&
 
     for (int i = 0; i < nSelected; ++i)
     {
-        const QModelIndex itemIndex  = selectedIndices.at(i);
+        const QModelIndex itemIndex = selectedIndices.at(i);
         GPSImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
 
         GPSUndoCommand::UndoInfo undoInfo(itemIndex);
@@ -508,9 +524,11 @@ void GPSImageListContextMenu::setGPSDataForSelectedItems(const GPSDataContainer&
     emit(signalUndoCommand(undoCommand));
 }
 
-void GPSImageListContextMenu::slotBookmarkSelected(GPSDataContainer bookmarkPosition)
+void GPSImageListContextMenu::slotBookmarkSelected(GPSDataContainer position)
 {
-    setGPSDataForSelectedItems(bookmarkPosition, i18n("Bookmark selected"));
+#ifdef HAVE_KBOOKMARKS
+    setGPSDataForSelectedItems(position, i18n("Bookmark selected"));
+#endif
 }
 
 bool GPSImageListContextMenu::getCurrentPosition(GPSDataContainer* position, void* mydata)

@@ -29,12 +29,10 @@
 
 #include <QObject>
 
-// GeoIface includes
+// Local includes
 
+#include "digikam_config.h"
 #include "lookupaltitude.h"
-
-// local includes:
-
 #include "gpsdatacontainer.h"
 #include "gpsimagelist.h"
 
@@ -43,8 +41,11 @@ class QUrl;
 namespace Digikam
 {
 
-class GPSBookmarkOwner;
 class GPSUndoCommand;
+
+#ifdef HAVE_KBOOKMARKS
+class GPSBookmarkOwner;
+#endif
 
 class GPSImageListContextMenu : public QObject
 {
@@ -52,7 +53,11 @@ class GPSImageListContextMenu : public QObject
 
 public:
 
-    explicit GPSImageListContextMenu(GPSImageList* const imagesList, GPSBookmarkOwner* const bookmarkOwner = 0);
+    explicit GPSImageListContextMenu(GPSImageList* const imagesList
+#ifdef HAVE_KBOOKMARKS
+                                     , GPSBookmarkOwner* const bookmarkOwner = 0
+#endif
+                                    );
     ~GPSImageListContextMenu();
 
     void setEnabled(const bool state);
@@ -71,7 +76,7 @@ private Q_SLOTS:
 
     void copyActionTriggered();
     void pasteActionTriggered();
-    void slotBookmarkSelected(GPSDataContainer bookmarkPosition);
+    void slotBookmarkSelected(GPSDataContainer position);
     void slotRemoveCoordinates();
     void slotRemoveAltitude();
     void slotRemoveUncertainty();

@@ -140,8 +140,11 @@ endif()
 
 if(MARBLE_FOUND)
     target_link_libraries(digikamcore PRIVATE ${MARBLE_LIBRARIES}
-                                              KF5::Bookmarks
                                               KF5::ItemModels)
+                                              
+    if(KF5Bookmarks_FOUND)
+        target_link_libraries(digikamcore PRIVATE KF5::Bookmarks)
+    endif()
 endif()
 
 if(X11_FOUND)

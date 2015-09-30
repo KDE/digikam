@@ -30,12 +30,10 @@
 #include <QAbstractItemModel>
 #include <QWidget>
 
-// GeoIface includes
+// Local includes
 
+#include "digikam_config.h"
 #include "modelhelper.h"
-
-// local includes
-
 #include "searchbackend.h"
 
 class QEvent;
@@ -49,8 +47,11 @@ namespace GeoIface
 namespace Digikam
 {
 
-class GPSBookmarkOwner;
 class GPSUndoCommand;
+
+#ifdef HAVE_KBOOKMARKS
+class GPSBookmarkOwner;
+#endif
 
 class SearchWidget : public QWidget
 {
@@ -58,7 +59,14 @@ class SearchWidget : public QWidget
 
 public:
 
-    SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner, GPSImageModel* const kipiImageModel, QItemSelectionModel* const kipiImageSelectionModel, QWidget* parent = 0);
+    SearchWidget(
+#ifdef HAVE_KBOOKMARKS
+                 GPSBookmarkOwner* const gpsBookmarkOwner, 
+#endif
+                 GPSImageModel* const gpsImageModel,
+                 QItemSelectionModel* const gpsImageSelectionModel,
+                 QWidget* const parent
+                );
     ~SearchWidget();
 
     GeoIface::ModelHelper* getModelHelper() const;
@@ -81,7 +89,7 @@ private Q_SLOTS:
 
 protected:
 
-    virtual bool eventFilter(QObject *watched, QEvent *event);
+    virtual bool eventFilter(QObject* watched, QEvent* event);
 
 Q_SIGNALS:
 
