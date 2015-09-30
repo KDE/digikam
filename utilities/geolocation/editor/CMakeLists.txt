@@ -37,10 +37,11 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             dialog/gpscommon.cpp
                             dialog/gpsimagedetails.cpp
                             dialog/gpsundocommand.cpp
-                            dialog/gpsbookmarkowner.cpp
-                            dialog/gpsbookmarkmodelhelper.cpp
                             dialog/geolocationedit.cpp
                             dialog/gpsgeoifacemodelhelper.cpp
+
+                            bookmark/gpsbookmarkowner.cpp
+                            bookmark/gpsbookmarkmodelhelper.cpp
    )
 
 include_directories(
