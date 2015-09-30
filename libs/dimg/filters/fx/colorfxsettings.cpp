@@ -55,20 +55,19 @@ public:
     static const QString configLevelAdjustmentEntry;
     static const QString configIterationAdjustmentEntry;
 
-    QLabel*              effectTypeLabel;
-    QLabel*              levelLabel;
-    QLabel*              iterationLabel;
+    QLabel*       effectTypeLabel;
+    QLabel*       levelLabel;
+    QLabel*       iterationLabel;
 
-    RComboBox*           effectType;
+    RComboBox*    effectType;
 
-    RIntNumInput*        levelInput;
-    RIntNumInput*        iterationInput;
+    RIntNumInput* levelInput;
+    RIntNumInput* iterationInput;
 };
 
 const QString ColorFXSettings::Private::configEffectTypeEntry(QLatin1String("EffectType"));
 const QString ColorFXSettings::Private::configLevelAdjustmentEntry(QLatin1String("LevelAdjustment"));
 const QString ColorFXSettings::Private::configIterationAdjustmentEntry(QLatin1String("IterationAdjustment"));
-
 
 // --------------------------------------------------------
 
@@ -76,7 +75,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* const grid = new QGridLayout(parent);
 
     d->effectTypeLabel = new QLabel(i18n("Type:"));
     d->effectType      = new RComboBox();
@@ -215,9 +214,9 @@ void ColorFXSettings::readSettings(KConfigGroup& group)
     ColorFXContainer prm;
     ColorFXContainer defaultPrm = defaultSettings();
 
-    d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       d->effectType->defaultIndex()));
-    d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         d->levelInput->defaultValue()));
-    d->iterationInput->setValue(group.readEntry(d->configIterationAdjustmentEntry, d->iterationInput->defaultValue()));
+    prm.colorFXType = group.readEntry(d->configEffectTypeEntry,          defaultPrm.colorFXType);
+    prm.level       = group.readEntry(d->configLevelAdjustmentEntry,     defaultPrm.level);
+    prm.iterations  = group.readEntry(d->configIterationAdjustmentEntry, defaultPrm.iterations);
 
     setSettings(prm);
 }
@@ -226,9 +225,9 @@ void ColorFXSettings::writeSettings(KConfigGroup& group)
 {
     ColorFXContainer prm = settings();
 
-    group.writeEntry(d->configEffectTypeEntry,          d->effectType->currentIndex());
-    group.writeEntry(d->configLevelAdjustmentEntry,     d->levelInput->value());
-    group.writeEntry(d->configIterationAdjustmentEntry, d->iterationInput->value());
+    group.writeEntry(d->configEffectTypeEntry,          prm.colorFXType);
+    group.writeEntry(d->configLevelAdjustmentEntry,     prm.level);
+    group.writeEntry(d->configIterationAdjustmentEntry, prm.iterations);
 }
 
 void ColorFXSettings::enable()

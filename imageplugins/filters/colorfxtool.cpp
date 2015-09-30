@@ -78,9 +78,9 @@ public:
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
 
-    ImageRegionWidget*   previewWidget;
-    EditorToolSettings*  gboxSettings;
-    ColorFXSettings*     settingsView;
+    ImageRegionWidget*  previewWidget;
+    EditorToolSettings* gboxSettings;
+    ColorFXSettings*    settingsView;
 };
 
 const QString ColorFxTool::Private::configGroupName(QLatin1String("coloreffect Tool"));
@@ -172,9 +172,18 @@ void ColorFxTool::slotColorSelectedFromTarget(const DColor& color)
 void ColorFxTool::preparePreview()
 {
     d->settingsView->disable();
-    ColorFXContainer prm = d->settingsView->settings();
 
-    DImg preview = d->previewWidget->getOriginalRegionImage(true);
+    ColorFXContainer prm    = d->settingsView->settings();
+    bool useDownscaledImage = true;
+
+    // See bug #237719 : we cannot use downscaled image to render preview.
+    if (prm.colorFXType == ColorFXFilter::Neon ||
+        prm.colorFXType == ColorFXFilter::FindEdges)
+    {
+        useDownscaledImage = false;
+    }
+
+    DImg preview = d->previewWidget->getOriginalRegionImage(useDownscaledImage);
 
     setFilter(new ColorFXFilter(&preview, this, prm));
 }
