@@ -101,7 +101,7 @@ KipiInterface::~KipiInterface()
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
 {
-    if(d->albumManager->currentAlbums().isEmpty())
+    if (d->albumManager->currentAlbums().isEmpty())
     {
         return KIPI::ImageCollection(0);
     }
@@ -218,7 +218,7 @@ void KipiInterface::refreshImages(const QList<QUrl>& urls)
 
 int KipiInterface::features() const
 {
-    return(KIPI::CollectionsHaveComments
+    return(  KIPI::CollectionsHaveComments
            | KIPI::CollectionsHaveCategory
            | KIPI::CollectionsHaveCreationDate
            | KIPI::ImagesHasComments
