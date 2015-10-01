@@ -61,7 +61,8 @@ public:
 };
 
 ToolsView::ToolsView(QWidget* const parent)
-    : QTabWidget(parent), d(new Private)
+    : QTabWidget(parent),
+      d(new Private)
 {
     setTabsClosable(false);
 
@@ -142,10 +143,6 @@ void ToolsView::addTool(BatchTool* const tool)
             d->baseTools->addTool(tool);
             break;
 
-        case BatchTool::KipiTool:
-            // TODO
-            break;
-
         default:
             break;
     }
@@ -167,10 +164,6 @@ bool ToolsView::removeTool(BatchTool* const tool)
             case BatchTool::ConvertTool:
             case BatchTool::MetadataTool:
                 ret = d->baseTools->removeTool(tool);
-                break;
-
-            case BatchTool::KipiTool:
-                // TODO
                 break;
 
             default:

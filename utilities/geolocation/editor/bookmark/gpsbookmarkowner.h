@@ -51,7 +51,7 @@ class GPSBookmarkOwner : public QObject, public KBookmarkOwner
 
 public:
 
-    GPSBookmarkOwner(GPSImageModel* const kipiImageModel, QWidget* const parent);
+    GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* const parent);
     virtual ~GPSBookmarkOwner();
 
     QMenu* getMenu() const;

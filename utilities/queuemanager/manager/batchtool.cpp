@@ -112,7 +112,8 @@ class BatchToolObserver : public DImgLoaderObserver
 public:
 
     explicit BatchToolObserver(BatchTool::Private* const priv)
-        : DImgLoaderObserver(), d(priv)
+        : DImgLoaderObserver(),
+          d(priv)
     {
     }
 

@@ -59,31 +59,31 @@ public:
     {
     }
 
-    QWidget*                parent;
-    KActionCollection*      actionCollection;
-    KBookmarkManager*       bookmarkManager;
-    KBookmarkMenu*          bookmarkMenuController;
-    QMenu*                  bookmarkMenu;
-    bool                    addBookmarkEnabled;
-    GPSBookmarkModelHelper* bookmarkModelHelper;
+    QWidget*                 parent;
+    KActionCollection*       actionCollection;
+    KBookmarkManager*        bookmarkManager;
+    KBookmarkMenu*           bookmarkMenuController;
+    QMenu*                   bookmarkMenu;
+    bool                     addBookmarkEnabled;
+    GPSBookmarkModelHelper*  bookmarkModelHelper;
     GeoIface::GeoCoordinates lastCoordinates;
-    QString                 lastTitle;
+    QString                  lastTitle;
 };
 
-GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const kipiImageModel, QWidget* const parent)
+GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* const parent)
     : d(new Private())
 {
     d->parent = parent;
 
     // TODO: where do we save the bookmarks? right now, they are application-specific
     const QString bookmarksFileName = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
-                                      QLatin1Char('/') + QStringLiteral("kipi/geobookmarks.xml");
+                                      QLatin1Char('/') + QStringLiteral("digikam/geobookmarks.xml");
     d->actionCollection             = new KActionCollection(this);
-    d->bookmarkManager              = KBookmarkManager::managerForFile(bookmarksFileName, QStringLiteral("kipigeobookmarks"));
+    d->bookmarkManager              = KBookmarkManager::managerForFile(bookmarksFileName, QStringLiteral("digikamgeobookmarks"));
     d->bookmarkManager->setUpdate(true);
     d->bookmarkMenu                 = new QMenu(parent);
     d->bookmarkMenuController       = new KBookmarkMenu(d->bookmarkManager, this, d->bookmarkMenu, d->actionCollection);
-    d->bookmarkModelHelper          = new GPSBookmarkModelHelper(d->bookmarkManager, kipiImageModel, this);
+    d->bookmarkModelHelper          = new GPSBookmarkModelHelper(d->bookmarkManager, gpsImageModel, this);
 }
 
 GPSBookmarkOwner::~GPSBookmarkOwner()

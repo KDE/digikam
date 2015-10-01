@@ -56,7 +56,7 @@ public:
 
 public:
 
-    GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, GPSImageModel* const kipiImageModel, QObject* const parent = 0);
+    GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, GPSImageModel* const imageModel, QObject* const parent = 0);
     virtual ~GPSBookmarkModelHelper();
 
     void setVisible(const bool state);

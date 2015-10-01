@@ -89,11 +89,6 @@ ToolListViewGroup::ToolListViewGroup(QTreeWidget* const parent, BatchTool::Batch
             setText(0, i18n("Metadata"));
             break;
 
-        case BatchTool::KipiTool:
-            setIcon(0, QIcon::fromTheme(QLatin1String("kipi")));
-            setText(0, i18n("Kipi-plugins"));
-            break;
-
         default:      // User customized tools.
             setIcon(0, QIcon::fromTheme(QLatin1String("user-properties")));
             setText(0, i18n("Custom Tools"));

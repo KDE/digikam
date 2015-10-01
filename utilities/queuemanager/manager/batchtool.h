@@ -61,7 +61,6 @@ public:
     enum BatchToolGroup
     {
         BaseTool = 0,             // digiKam core tools.
-        KipiTool,                 // Exported kipi-plugins tools.
         CustomTool,               // List of tools grouped and customized by users.
 
         ColorTool,                // Tools to manage image colors (Curves, BCG, etc...)
