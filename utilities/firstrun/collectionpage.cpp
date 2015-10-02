@@ -111,7 +111,7 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
     textLabel1->setText(message);
 
     d->rootAlbumPathRequester = new RFileSelector(widget);
-    d->rootAlbumPathRequester->fileDialog()->setFileMode(QFileDialog::Directory);
+    d->rootAlbumPathRequester->setFileDlgMode(QFileDialog::Directory);
     d->rootAlbumPathRequester->lineEdit()->setText(picturesPath);
 
     QLabel* const textLabel3 = new QLabel(widget);
@@ -123,7 +123,7 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
                              "using NFS or Samba.</p>"));
 
     d->dbPathRequester = new RFileSelector(widget);
-    d->dbPathRequester->fileDialog()->setFileMode(QFileDialog::Directory);
+    d->dbPathRequester->setFileDlgMode(QFileDialog::Directory);
     d->dbPathRequester->lineEdit()->setText(picturesPath);
 
     vlayout->addWidget(textLabel1);
@@ -136,10 +136,10 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
     setPageWidget(widget);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("server-database")));
 
-    connect(d->rootAlbumPathRequester->fileDialog(), SIGNAL(urlSelected(QUrl)),
+    connect(d->rootAlbumPathRequester, SIGNAL(signalUrlSelected(QUrl)),
             this, SLOT(slotAlbumRootChanged(QUrl)));
 
-    connect(d->dbPathRequester->fileDialog(), SIGNAL(urlSelected(QUrl)),
+    connect(d->dbPathRequester, SIGNAL(signalUrlSelected(QUrl)),
             this, SLOT(slotDbPathChanged(QUrl)));
 }
 

@@ -97,7 +97,7 @@ void DatabaseWidget::setupMainArea()
     d->databasePathLabel->setWordWrap(true);
 
     databasePathEdit                                 = new RFileSelector(dbPathBox);
-    databasePathEdit->fileDialog()->setFileMode(QFileDialog::Directory);
+    databasePathEdit->setFileDlgMode(QFileDialog::Directory);
 
     QLabel* const databaseTypeLabel                  = new QLabel(i18n("Type"));
     databaseType                                     = new QComboBox();
@@ -260,7 +260,7 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
         databasePathEdit->setVisible(true);
         d->expertSettings->setVisible(false);
 
-        connect(databasePathEdit->fileDialog(), SIGNAL(urlSelected(QUrl)),
+        connect(databasePathEdit, SIGNAL(signalUrlSelected(QUrl)),
                 this, SLOT(slotChangeDatabasePath(QUrl)));
 
         connect(databasePathEdit->lineEdit(), SIGNAL(textChanged(QString)),
@@ -272,7 +272,7 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
         databasePathEdit->setVisible(false);
         d->expertSettings->setVisible(true);
         
-        disconnect(databasePathEdit->fileDialog(), SIGNAL(urlSelected(QUrl)),
+        disconnect(databasePathEdit, SIGNAL(signalUrlSelected(QUrl)),
                    this, SLOT(slotChangeDatabasePath(QUrl)));
 
         disconnect(databasePathEdit->lineEdit(), SIGNAL(textChanged(QString)),

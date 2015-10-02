@@ -458,7 +458,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     d->defaultPathKU            = new RFileSelector;
     d->iccFolderLabel->setBuddy(d->defaultPathKU);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
-    d->defaultPathKU->fileDialog()->setFileMode(QFileDialog::Directory);
+    d->defaultPathKU->setFileDlgMode(QFileDialog::Directory);
     d->defaultPathKU->setWhatsThis(i18n("<p>digiKam searches ICC profiles in default system folders "
                                         "and ships itself a few selected profiles. "
                                         "Store all your additional color profiles in the directory set here.</p>"));
@@ -525,7 +525,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     connect(d->infoWorkProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedWork()));
 
-    connect(d->defaultPathKU->fileDialog(), SIGNAL(urlSelected(QUrl)),
+    connect(d->defaultPathKU, SIGNAL(signalUrlSelected(QUrl)),
             this, SLOT(slotUrlChanged()));
 
     connect(d->defaultPathKU->lineEdit(), SIGNAL(textChanged(QString)),

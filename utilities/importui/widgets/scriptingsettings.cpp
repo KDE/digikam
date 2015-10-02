@@ -88,7 +88,7 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
     d->scriptLabel         = new QLabel(i18n("Execute script for image:"), this);
     RHBox* hbox            = new RHBox(this);
     d->script              = new RFileSelector(hbox);
-    d->script->fileDialog()->setFileMode(QFileDialog::ExistingFile);
+    d->script->setFileDlgMode(QFileDialog::ExistingFile);
     d->script->lineEdit()->setPlaceholderText(i18n("No script selected"));
     d->tooltipToggleButton = new QToolButton(hbox);
     d->tooltipToggleButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
