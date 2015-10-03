@@ -32,8 +32,6 @@
 #include "imagequalitytask.h"
 #include "imagequalitysettings.h"
 
-using namespace Solid;
-
 namespace Digikam
 {
 
