@@ -1383,14 +1383,9 @@ void BackendGoogleMaps::addPointsToTrack(const quint64 trackId, TrackManager::Tr
             jsonBuilder << ',';
         }
 
-        // Pass data in plain array format. In KHTML, this is much slower than
-        // using JSON. In Firefox, the speed is roughly the same.
-//         jsonBuilder /*<< "{\"lat\":" */<< coordinates.latString() << ","
-//                     /*<< "\"lon\":" */<< coordinates.lonString() /*<< "}"*/;
-
         /// @TODO This looks like a lot of text to parse. Is there a more compact way?
         jsonBuilder << "{\"lat\":" << coordinates.latString() << ","
-                    << "\"lon\":" << coordinates.lonString() << "}";
+                    << "\"lon\":"  << coordinates.lonString() << "}";
     }
 
     jsonBuilder << ']';
