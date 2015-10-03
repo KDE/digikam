@@ -39,7 +39,6 @@
 
 // KDE includes
 
-#include <kcolorbutton.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -69,7 +68,7 @@ public:
         buttons(0),
         gamutCheckBox(0),
         maskColorLabel(0),
-        maskColorButton(0),
+        maskColorBtn(0),
         proofingIntentBox(0)
     {
     }
@@ -81,7 +80,7 @@ public:
     QDialogButtonBox*           buttons;
     QCheckBox*                  gamutCheckBox;
     QLabel*                     maskColorLabel;
-    KColorButton*               maskColorButton;
+    RColorSelector*             maskColorBtn;
 
     IccRenderingIntentComboBox* proofingIntentBox;
 };
@@ -145,14 +144,14 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
 
     d->gamutCheckBox   = new QCheckBox(i18n("Highlight out-of-gamut colors"));
     d->maskColorLabel  = new QLabel(i18n("Highlighting color:"));
-    d->maskColorButton = new KColorButton;
-    d->maskColorLabel->setBuddy(d->maskColorButton);
+    d->maskColorBtn = new RColorSelector;
+    d->maskColorLabel->setBuddy(d->maskColorBtn);
 
     optionsGrid->addWidget(intentLabel,          0, 0, 1, 2);
     optionsGrid->addWidget(d->proofingIntentBox, 0, 2, 1, 2);
     optionsGrid->addWidget(d->gamutCheckBox,     1, 0, 1, 4);
     optionsGrid->addWidget(d->maskColorLabel,    2, 1, 1, 1);
-    optionsGrid->addWidget(d->maskColorButton,   2, 2, 1, 2, Qt::AlignLeft);
+    optionsGrid->addWidget(d->maskColorBtn,   2, 2, 1, 2, Qt::AlignLeft);
     optionsGrid->setColumnMinimumWidth(0, 10);
     optionsGrid->setColumnStretch(2, 1);
     optionsBox->setLayout(optionsGrid);
@@ -203,7 +202,7 @@ void SoftProofDialog::updateGamutCheckState()
 {
     bool on = d->gamutCheckBox->isChecked();
     d->maskColorLabel->setEnabled(on);
-    d->maskColorButton->setEnabled(on);
+    d->maskColorBtn->setEnabled(on);
 }
 
 void SoftProofDialog::updateOkButtonState()
@@ -217,7 +216,7 @@ void SoftProofDialog::readSettings()
     d->deviceProfileBox->setCurrentProfile(settings.defaultProofProfile);
     d->proofingIntentBox->setIntent(settings.proofingRenderingIntent);
     d->gamutCheckBox->setChecked(settings.doGamutCheck);
-    d->maskColorButton->setColor(settings.gamutCheckMaskColor);
+    d->maskColorBtn->setColor(settings.gamutCheckMaskColor);
 }
 
 void SoftProofDialog::writeSettings()
@@ -226,7 +225,7 @@ void SoftProofDialog::writeSettings()
     settings.defaultProofProfile     = d->deviceProfileBox->currentProfile().filePath();
     settings.proofingRenderingIntent = d->proofingIntentBox->intent();
     settings.doGamutCheck            = d->gamutCheckBox->isChecked();
-    settings.gamutCheckMaskColor     = d->maskColorButton->color();
+    settings.gamutCheckMaskColor     = d->maskColorBtn->color();
     IccSettings::instance()->setSettings(settings);
 }
 

@@ -37,7 +37,6 @@
 
 // KDE includes
 
-#include <kcolorbutton.h>
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
@@ -75,7 +74,8 @@ public:
         fullScreenSettings(0),
         underExposurePcents(0),
         overExposurePcents(0)
-    {}
+    {
+    }
 
     static const QString  configGroupName;
     static const QString  configUseThemeBackgroundColorEntry;
@@ -92,9 +92,9 @@ public:
     QLabel*             expoPreview;
 
     RHBox*              colorBox;
-    KColorButton*       backgroundColor;
-    KColorButton*       underExposureColor;
-    KColorButton*       overExposureColor;
+    RColorSelector*     backgroundColor;
+    RColorSelector*     underExposureColor;
+    RColorSelector*     overExposureColor;
 
     HistogramWidget*    expoPreviewHisto;
 
@@ -139,7 +139,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     d->colorBox                       = new RHBox(interfaceOptionsGroup);
     QLabel*const backgroundColorlabel = new QLabel(i18n("&Background color:"), d->colorBox);
-    d->backgroundColor                = new KColorButton(d->colorBox);
+    d->backgroundColor                = new RColorSelector(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     d->backgroundColor->setWhatsThis(i18n("Customize the background color to use "
                                           "in the image editor area."));
@@ -160,7 +160,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     RHBox* const underExpoBox             = new RHBox(exposureOptionsGroup);
     QLabel* const underExpoColorlabel     = new QLabel(i18n("&Under-exposure color: "), underExpoBox);
-    d->underExposureColor                 = new KColorButton(underExpoBox);
+    d->underExposureColor                 = new RColorSelector(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                              "under-exposed pixels."));
@@ -177,7 +177,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     RHBox* const overExpoBox         = new RHBox(exposureOptionsGroup);
     QLabel* const overExpoColorlabel = new QLabel(i18n("&Over-exposure color: "), overExpoBox);
-    d->overExposureColor             = new KColorButton(overExpoBox);
+    d->overExposureColor             = new RColorSelector(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                             "over-exposed pixels."));
@@ -241,10 +241,10 @@ SetupEditor::SetupEditor(QWidget* const parent)
     connect(d->expoIndicatorMode, SIGNAL(toggled(bool)),
             this, SLOT(slotExpoSettingsChanged()));
 
-    connect(d->underExposureColor, SIGNAL(changed(QColor)),
+    connect(d->underExposureColor, SIGNAL(signalColorSelected(QColor)),
             this, SLOT(slotExpoSettingsChanged()));
 
-    connect(d->overExposureColor, SIGNAL(changed(QColor)),
+    connect(d->overExposureColor, SIGNAL(signalColorSelected(QColor)),
             this, SLOT(slotExpoSettingsChanged()));
 
     connect(d->underExposurePcents, SIGNAL(valueChanged(double)),

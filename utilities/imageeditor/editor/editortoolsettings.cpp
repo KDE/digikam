@@ -42,7 +42,6 @@
 
 // KDE includes
 
-#include <kcolorbutton.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -109,7 +108,7 @@ public:
     QPushButton*         saveAsBtn;
     QPushButton*         loadBtn;
 
-    KColorButton*        guideColorBt;
+    RColorSelector*      guideColorBt;
 
     ColorGradientWidget* hGradient;
 
@@ -119,7 +118,8 @@ public:
 };
 
 EditorToolSettings::EditorToolSettings(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
@@ -170,7 +170,8 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     new QLabel(i18n("Guide:"), d->guideBox);
     QLabel* const space4 = new QLabel(d->guideBox);
-    d->guideColorBt      = new KColorButton(QColor(Qt::red), d->guideBox);
+    d->guideColorBt      = new RColorSelector(d->guideBox);
+    d->guideColorBt->setColor(QColor(Qt::red));
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
     d->guideSize         = new RIntNumInput(d->guideBox);
     d->guideSize->setSuffix(QLatin1String("px"));
@@ -256,7 +257,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     connect(d->loadBtn, SIGNAL(clicked()),
             this, SIGNAL(signalLoadClicked()));
 
-    connect(d->guideColorBt, SIGNAL(changed(QColor)),
+    connect(d->guideColorBt, SIGNAL(signalColorSelected(QColor)),
             this, SIGNAL(signalColorGuideChanged()));
 
     connect(d->guideSize, SIGNAL(valueChanged(int)),

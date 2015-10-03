@@ -45,7 +45,6 @@
 
 // KDE includes
 
-#include <kcolorbutton.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -101,28 +100,28 @@ public:
     {
     }
 
-    QGroupBox*     textSettingsGroupBox;
-    QGroupBox*     imageSettingsGroupBox;
-    QRadioButton*  useImageRadioButton;
-    QRadioButton*  useTextRadioButton;
-    QCheckBox*     useBackgroundCheckBox;
+    QGroupBox*      textSettingsGroupBox;
+    QGroupBox*      imageSettingsGroupBox;
+    QRadioButton*   useImageRadioButton;
+    QRadioButton*   useTextRadioButton;
+    QCheckBox*      useBackgroundCheckBox;
 
-    RFileSelector* imageFileUrlRequester;
-    QLineEdit*     textEdit;
+    RFileSelector*  imageFileUrlRequester;
+    QLineEdit*      textEdit;
 
-    QComboBox*     comboBox;
-    QFontComboBox* fontChooserWidget;
+    QComboBox*      comboBox;
+    QFontComboBox*  fontChooserWidget;
 
-    KColorButton*  fontColorButton;
-    KColorButton*  backgroundColorButton;
+    RColorSelector* fontColorButton;
+    RColorSelector* backgroundColorButton;
 
-    RIntNumInput*  textOpacity;
-    RIntNumInput*  backgroundOpacity;
-    RIntNumInput*  xMarginInput;
-    RIntNumInput*  yMarginInput;
-    RIntNumInput*  waterMarkSizePercent;
+    RIntNumInput*   textOpacity;
+    RIntNumInput*   backgroundOpacity;
+    RIntNumInput*   xMarginInput;
+    RIntNumInput*   yMarginInput;
+    RIntNumInput*   waterMarkSizePercent;
     
-    bool           changeSettings;
+    bool            changeSettings;
 };
 
 WaterMark::WaterMark(QObject* const parent)
@@ -204,7 +203,8 @@ void WaterMark::registerSettingsWidget()
     textSettingsGroupBoxLayout->addWidget(d->fontChooserWidget);
 
     QLabel* const label3 = new QLabel();
-    d->fontColorButton   = new KColorButton(Qt::black);
+    d->fontColorButton   = new RColorSelector();
+    d->fontColorButton->setColor(Qt::black);
     d->fontColorButton->setWhatsThis(i18n("Set the font color to use here"));
     label3->setText(i18n("Font color:"));
     textSettingsGroupBoxLayout->addWidget(label3);
@@ -229,7 +229,8 @@ void WaterMark::registerSettingsWidget()
     textSettingsGroupBoxLayout->addWidget(useBackgroundHBox);
 
     QLabel* const backgroundColorLabel = new QLabel();
-    d->backgroundColorButton           = new KColorButton(QColor(0xCC, 0xCC, 0xCC));
+    d->backgroundColorButton           = new RColorSelector();
+    d->backgroundColorButton->setColor(QColor(0xCC, 0xCC, 0xCC));
     d->backgroundColorButton->setWhatsThis(i18n("Choose the color of the watermark background"));
     backgroundColorLabel ->setText(i18n("Background color:"));
     textSettingsGroupBoxLayout->addWidget(backgroundColorLabel);
@@ -296,7 +297,7 @@ void WaterMark::registerSettingsWidget()
     connect(d->fontChooserWidget, SIGNAL(currentFontChanged(QFont)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->fontColorButton, SIGNAL(changed(QColor)),
+    connect(d->fontColorButton, SIGNAL(signalColorSelected(QColor)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->textEdit, SIGNAL(textChanged(QString)),
@@ -308,7 +309,7 @@ void WaterMark::registerSettingsWidget()
     connect(d->useBackgroundCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->backgroundColorButton, SIGNAL(changed(QColor)),
+    connect(d->backgroundColorButton, SIGNAL(signalColorSelected(QColor)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->backgroundOpacity, SIGNAL(valueChanged(int)),

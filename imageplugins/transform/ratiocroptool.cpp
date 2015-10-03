@@ -46,7 +46,6 @@
 
 // KDE includes
 
-#include <kcolorbutton.h>
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
@@ -168,7 +167,7 @@ public:
     RIntNumInput*         xInput;
     RIntNumInput*         yInput;
 
-    KColorButton*         guideColorBt;
+    RColorSelector*       guideColorBt;
 
     ImageSelectionWidget* imageSelectionWidget;
     RExpanderBox*         expbox;
@@ -454,7 +453,8 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->flipVerBox->setWhatsThis(i18n("Enable this option to flip the guidelines vertically."));
 
     d->colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
-    d->guideColorBt    = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
+    d->guideColorBt    = new RColorSelector(compositionGuide);
+    d->guideColorBt->setColor(QColor( 250, 250, 255 ));
     d->guideSize       = new RIntNumInput(compositionGuide);
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setDefaultValue(1);
@@ -540,7 +540,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     connect(d->flipVerBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(d->guideColorBt, SIGNAL(changed(QColor)),
+    connect(d->guideColorBt, SIGNAL(signalColorSelected(QColor)),
             d->imageSelectionWidget, SLOT(slotChangeGuideColor(QColor)));
 
     connect(d->guideSize, SIGNAL(valueChanged(int)),

@@ -39,7 +39,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kcolorbutton.h>
 
 // Libkdcraw includes
 
@@ -101,13 +100,14 @@ public:
     QColor               niepceLineColor;
     QColor               solidColor;
 
-    KColorButton*        firstColorButton;
-    KColorButton*        secondColorButton;
+    RColorSelector*      firstColorButton;
+    RColorSelector*      secondColorButton;
 
     RComboBox*           borderType;
     RIntNumInput*        borderPercent;
     RIntNumInput*        borderWidth;
 };
+
 const QString Private::configBorderTypeEntry(QLatin1String("Border Type"));
 const QString Private::configBorderPercentEntry(QLatin1String("Border Percent"));
 const QString Private::configBorderWidthEntry(QLatin1String("Border Width"));
@@ -181,9 +181,11 @@ BorderSettings::BorderSettings(QWidget* parent)
     // -------------------------------------------------------------------
 
     d->labelForeground   = new QLabel();
-    d->firstColorButton  = new KColorButton(QColor(192, 192, 192));
+    d->firstColorButton  = new RColorSelector();
+    d->firstColorButton->setColor(QColor(192, 192, 192));
     d->labelBackground   = new QLabel();
-    d->secondColorButton = new KColorButton(QColor(128, 128, 128));
+    d->secondColorButton = new RColorSelector();
+    d->secondColorButton->setColor(QColor(128, 128, 128));
 
     // -------------------------------------------------------------------
 
@@ -218,10 +220,10 @@ BorderSettings::BorderSettings(QWidget* parent)
     connect(d->borderWidth, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->firstColorButton, SIGNAL(changed(QColor)),
+    connect(d->firstColorButton, SIGNAL(signalColorSelected(QColor)),
             this, SLOT(slotColorForegroundChanged(QColor)));
 
-    connect(d->secondColorButton, SIGNAL(changed(QColor)),
+    connect(d->secondColorButton, SIGNAL(signalColorSelected(QColor)),
             this, SLOT(slotColorBackgroundChanged(QColor)));
 }
 

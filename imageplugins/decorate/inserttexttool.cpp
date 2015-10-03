@@ -47,10 +47,13 @@
 
 // KDE includes
 
-#include <kcolorbutton.h>
 #include <kfontchooser.h>
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
+
+// Libkdcraw includes
+
+#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
@@ -58,6 +61,8 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "inserttextwidget.h"
+
+using namespace KDcrawIface;
 
 namespace DigikamDecorateImagePlugin
 {
@@ -101,7 +106,7 @@ public:
     QFont                textFont;
 
     QComboBox*           textRotation;
-    KColorButton*        fontColorButton;
+    RColorSelector*      fontColorButton;
     KFontChooser*        fontChooserWidget;
     QTextEdit*           textEdit;
 
@@ -207,7 +212,8 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* const label2 = new QLabel(i18nc("font color", "Color:"));
-    d->fontColorButton   = new KColorButton(Qt::black);
+    d->fontColorButton   = new RColorSelector();
+    d->fontColorButton->setColor(Qt::black);
     d->fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
 
     // -------------------------------------------------------------
@@ -245,7 +251,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     connect(d->fontChooserWidget, SIGNAL(fontSelected(QFont)),
             this, SLOT(slotFontPropertiesChanged(QFont)));
 
-    connect(d->fontColorButton, SIGNAL(changed(QColor)),
+    connect(d->fontColorButton, SIGNAL(signalColorSelected(QColor)),
             this, SLOT(slotUpdatePreview()));
 
     connect(d->textEdit, SIGNAL(textChanged()),
