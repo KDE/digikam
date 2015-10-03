@@ -39,7 +39,6 @@
 
 // KDE includes
 
-#include <kcolorbutton.h>
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
