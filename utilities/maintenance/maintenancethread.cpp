@@ -23,10 +23,6 @@
 
 #include "maintenancethread.h"
 
-// KDE includes
-
-#include <solid/device.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -62,7 +58,7 @@ void MaintenanceThread::setUseMultiCore(const bool b)
     }
     else
     {
-        setMaximumNumberOfThreads(qMax(Device::listFromType(DeviceInterface::Processor).count(), 1));
+        defaultMaximumNumberOfThreads();
     }
 }
 
@@ -70,7 +66,7 @@ void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchro
 {
     RJobCollection collection;
 
-    for(int i=0; i < items.size(); i++)
+    for(int i = 0; i < items.size(); i++)
     {
         MetadataTask* const t = new MetadataTask();
         t->setTagsOnly(tagsOnly);
@@ -92,7 +88,7 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
 {
     RJobCollection collection;
 
-    for(int i=0; i < paths.size(); i++)
+    for(int i = 0; i < paths.size(); i++)
     {
         ThumbsTask* const t = new ThumbsTask();
         t->setItem(paths.at(i));
@@ -113,7 +109,7 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
 {
     RJobCollection collection;
 
-    for(int i=0; i < paths.size(); i++)
+    for(int i = 0; i < paths.size(); i++)
     {
         FingerprintsTask* const t = new FingerprintsTask();
         t->setItem(paths.at(i));
@@ -134,7 +130,7 @@ void MaintenanceThread::sortByImageQuality(const QStringList& paths, const Image
 {
     RJobCollection collection;
 
-    for(int i=0; i < paths.size(); i++)
+    for(int i = 0; i < paths.size(); i++)
     {
         ImageQualityTask* const t = new ImageQualityTask();
         t->setItem(paths.at(i), quality);
