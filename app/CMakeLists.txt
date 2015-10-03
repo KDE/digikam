@@ -95,6 +95,8 @@ add_library(digikamcore
 )
 
 target_link_libraries(digikamcore
+                      PUBLIC
+                      dngwriter
 
                       PRIVATE
 
@@ -129,10 +131,6 @@ target_link_libraries(digikamcore
 
                       ${PGF_LIBRARIES}
 )
-
-if(ENABLE_DNGCONVERTER)
-    target_link_libraries(digikamcore PUBLIC dngwriter)
-endif()
 
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::Kipi)

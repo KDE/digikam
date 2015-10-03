@@ -114,7 +114,6 @@ option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server ex
 
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                      OFF)
-option(ENABLE_DNGCONVERTER          "Enable DNG Converter, crashes on some systems (default=OFF)"                      OFF)
 option(ENABLE_KINOTIFY              "Enable embeded Inotify wrapper under Linux to handle album changes (default=OFF)" OFF)
 
 ############## Find Packages ###################
@@ -386,7 +385,6 @@ MACRO_BOOL_TO_01(KF5Bookmarks_FOUND       HAVE_KBOOKMARKS)
 MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
 
 MACRO_BOOL_TO_01(ENABLE_KINOTIFY          USE_KINOTIFY)
-MACRO_BOOL_TO_01(ENABLE_DNGCONVERTER      HAVE_DNGCONVERTER)
 MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER       HAVE_VIDEOPLAYER)
 
 # Set config files accordingly with optional dependencies
@@ -402,7 +400,6 @@ message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http:
 message(STATUS "")
 
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
-PRINT_COMPONENT_COMPILE_STATUS("DNGConverter Support"   ENABLE_DNGCONVERTER)
 PRINT_COMPONENT_COMPILE_STATUS("KInotify Support"       ENABLE_KINOTIFY)
 
 if(ENABLE_MYSQLSUPPORT)

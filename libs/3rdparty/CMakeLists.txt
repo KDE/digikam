@@ -22,12 +22,9 @@ include_directories(
 
 add_library(3rdparty_src OBJECT ${lib3rdparty_SRCS})
 
-if(ENABLE_DNGCONVERTER)
-    include_directories(
-        $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+include_directories(
+    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
 
-        $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-
-    add_subdirectory(dngwriter)
-endif()
+add_subdirectory(dngwriter)
