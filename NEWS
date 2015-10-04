@@ -20,4 +20,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 009 ==> 353155 - Apply face tags to multiple images.
 010 ==> 237719 - Color effects: Neon / Find edges don't take parameters correctly.
 011 ==> 340373 - Crash on scanning video directory.
-012 ==> 
+012 ==> 285052 - SCAN : moving an album from one collection to another one do not update information.
+013 ==> 
