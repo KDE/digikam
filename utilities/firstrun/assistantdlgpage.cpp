@@ -75,7 +75,6 @@ AssistantDlgPage::AssistantDlgPage(AssistantDlg* const dlg, const QString& title
     QWidget* const panel  = new QWidget(sv->viewport());
     sv->setWidget(panel);
     sv->setWidgetResizable(true);
-    sv->setWidget(panel);
 
     d->hlay           = new QHBoxLayout(panel);
     RVBox* const vbox = new RVBox(panel);
