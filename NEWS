@@ -56,4 +56,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 026 ==> 146557 - kio_digikamdate takes the cpu load up when downloading raw files with digiKam.
 027 ==> 109631 - Make digikamtags protocol public KIO-slave.
 028 ==> 224604 - Add internal trash for files deleted in digiKam (as IPhoto).
-029 ==> 
+029 ==> 353621 - Error at startup : couldn't create KIO slave.
+030 ==> 
+
