@@ -47,16 +47,11 @@
 
 #include <KExiv2/KExiv2>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "metadatapanel.h"
 #include "metadatasettings.h"
-
-using namespace KDcrawIface;
+#include "dactivelabel.h"
 
 namespace ShowFoto
 {
@@ -114,9 +109,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     QGridLayout* const grid = new QGridLayout(box);
     box->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    RActiveLabel* const exiv2LogoLabel = new RActiveLabel(QUrl(QLatin1String("http://www.exiv2.org")),
-                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-exiv2.png")),
-                                                          box);
+    Digikam::DActiveLabel* const exiv2LogoLabel = new Digikam::DActiveLabel(QUrl(QLatin1String("http://www.exiv2.org")),
+                                                                            QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-exiv2.png")),
+                                                                            box);
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
     QLabel* const explanation = new QLabel(box);

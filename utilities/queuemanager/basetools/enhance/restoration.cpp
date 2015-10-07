@@ -41,6 +41,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dactivelabel.h"
 
 using namespace KDcrawIface;
 
@@ -65,7 +66,7 @@ void Restoration::registerSettingsWidget()
 {
     RVBox* const vbox = new RVBox;
 
-    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
+    DActiveLabel* const cimgLogoLabel = new DActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-cimg.png")),
                                                          vbox);
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));

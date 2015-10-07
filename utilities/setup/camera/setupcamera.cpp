@@ -49,10 +49,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "albumselectwidget.h"
@@ -67,9 +63,7 @@
 #include "importsettings.h"
 #include "fullscreensettings.h"
 #include "dxmlguiwindow.h"
-
-
-using namespace KDcrawIface;
+#include "dactivelabel.h"
 
 namespace Digikam
 {
@@ -317,7 +311,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
     // -------------------------------------------------------------
 
     QSpacerItem* const spacer           = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    RActiveLabel* const gphotoLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://www.gphoto.org")),
+    DActiveLabel* const gphotoLogoLabel = new DActiveLabel(QUrl(QLatin1String("http://www.gphoto.org")),
                                                            QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-gphoto.png")),
                                                            panel);
     gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));

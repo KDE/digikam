@@ -58,10 +58,6 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "editortoolsettings.h"
@@ -69,8 +65,7 @@
 #include "greycstorationsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-
-using namespace KDcrawIface;
+#include "dactivelabel.h"
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -97,7 +92,8 @@ public:
         settingsWidget(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString    configGroupName;
     static const QString    configFastApproxEntry;
@@ -177,7 +173,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
     d->mainTab               = new QTabWidget(d->gboxSettings->plainPage());
     QWidget* const firstPage = new QWidget(d->mainTab);
 
-    RActiveLabel* const cimgLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
+    DActiveLabel* const cimgLogoLabel = new DActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 

@@ -73,6 +73,7 @@
 #include "dimgthreadedfilter.h"
 #include "greycstorationfilter.h"
 #include "greycstorationsettings.h"
+#include "dactivelabel.h"
 
 using namespace KDcrawIface;
 
@@ -104,7 +105,8 @@ public:
         hpInput(0),
         gboxSettings(0),
         settingsWidget(0)
-    {}
+    {
+    }
 
     static const QString    configGroupName;
     static const QString    configFastApproxEntry;
@@ -136,7 +138,7 @@ public:
 
     QTabWidget*             mainTab;
 
-    RActiveLabel*           cimgLogoLabel;
+    DActiveLabel*           cimgLogoLabel;
 
     ImageGuideWidget*       previewWidget;
 
@@ -237,7 +239,7 @@ ResizeTool::ResizeTool(QObject* const parent)
     d->hpInput->setObjectName(QLatin1String("hpInput"));
     d->hpInput->setWhatsThis( i18n("New image height in percent (%)."));
 
-    d->cimgLogoLabel = new RActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
+    d->cimgLogoLabel = new DActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
                                         QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-cimg.png")),
                                         firstPage);
     d->cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));

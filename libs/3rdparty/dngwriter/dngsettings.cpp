@@ -42,11 +42,11 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RComboBox>
-#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
 #include "dngwriter.h"
+#include "dactivelabel.h"
 
 using namespace KDcrawIface;
 
@@ -81,7 +81,7 @@ DNGSettings::DNGSettings(QWidget* const parent)
 
     QGridLayout* const settingsBoxLayout = new QGridLayout(this);
 
-    RActiveLabel* const dngLogoLabel     = new RActiveLabel(QUrl(), QString(), this);
+    DActiveLabel* const dngLogoLabel     = new DActiveLabel(QUrl(), QString(), this);
     dngLogoLabel->updateData(QUrl(QLatin1String("http://en.wikipedia.org/wiki/Digital_Negative_(file_format)")),
                              QIcon::fromTheme(QLatin1String("dngconverter")).pixmap(96).toImage());
     dngLogoLabel->setAlignment(Qt::AlignRight);

@@ -42,15 +42,10 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "daboutdata.h"
-
-using namespace KDcrawIface;
+#include "dactivelabel.h"
 
 namespace Digikam
 {
@@ -75,7 +70,7 @@ public:
 
     QPixmap       progressPixmap;
 
-    RActiveLabel* urlLabel;
+    DActiveLabel* urlLabel;
 };
 
 DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
@@ -151,7 +146,7 @@ QWidget* DLogoAction::createWidget(QWidget* parent)
 {
     QWidget* const container  = new QWidget(parent);
     QHBoxLayout* const layout = new QHBoxLayout(container);
-    d->urlLabel               = new RActiveLabel(DAboutData::webProjectUrl(), QString(), container);
+    d->urlLabel               = new DActiveLabel(DAboutData::webProjectUrl(), QString(), container);
     d->urlLabel->setToolTip(i18n("Visit digiKam project website"));
     d->urlLabel->updateData(DAboutData::webProjectUrl(), d->progressPixmap.copy(0, 0, 144, 32).toImage());
 
