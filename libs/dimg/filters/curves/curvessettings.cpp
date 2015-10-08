@@ -48,16 +48,15 @@
 
 #include <klocalizedstring.h>
 
-
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
 #include "dimg_debug.h"
+#include "dcombobox.h"
 #include "colorgradientwidget.h"
 
 using namespace KDcrawIface;

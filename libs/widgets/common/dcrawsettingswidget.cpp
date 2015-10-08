@@ -52,10 +52,10 @@
 
 #include <KDCRAW/KDcraw>
 #include <KDCRAW/RNumInput>
-#include <KDCRAW/RComboBox>
 
 // Local includes
 
+#include "dcombobox.h"
 #include "widgets_debug.h"
 
 namespace Digikam
@@ -180,12 +180,12 @@ public:
     RFileSelector*   inIccUrlEdit;
     RFileSelector*   outIccUrlEdit;
 
-    RComboBox*       noiseReductionComboBox;
-    RComboBox*       whiteBalanceComboBox;
-    RComboBox*       RAWQualityComboBox;
-    RComboBox*       unclipColorComboBox;
-    RComboBox*       inputColorSpaceComboBox;
-    RComboBox*       outputColorSpaceComboBox;
+    DComboBox*       noiseReductionComboBox;
+    DComboBox*       whiteBalanceComboBox;
+    DComboBox*       RAWQualityComboBox;
+    DComboBox*       unclipColorComboBox;
+    DComboBox*       inputColorSpaceComboBox;
+    DComboBox*       outputColorSpaceComboBox;
 
     RIntNumInput*    customWhiteBalanceSpinBox;
     RIntNumInput*    reconstructSpinBox;
@@ -277,7 +277,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     line++;
 
     d->RAWQualityLabel    = new QLabel(i18nc("@label:listbox", "Quality:"), d->demosaicingSettings);
-    d->RAWQualityComboBox = new RComboBox(d->demosaicingSettings);
+    d->RAWQualityComboBox = new DComboBox(d->demosaicingSettings);
 
     // Original dcraw demosaicing methods
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::BILINEAR, i18nc("@item:inlistbox Quality", "Bilinear"));
@@ -419,7 +419,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     QGridLayout* const whiteBalanceLayout = new QGridLayout(d->whiteBalanceSettings);
 
     d->whiteBalanceLabel    = new QLabel(i18nc("@label:listbox", "Method:"), d->whiteBalanceSettings);
-    d->whiteBalanceComboBox = new RComboBox(d->whiteBalanceSettings);
+    d->whiteBalanceComboBox = new DComboBox(d->whiteBalanceSettings);
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::NONE,   i18nc("@item:inlistbox", "Default D65"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CAMERA, i18nc("@item:inlistbox", "Camera"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::AUTO,   i18nc("@item:inlistbox set while balance automatically", "Automatic"));
@@ -453,7 +453,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "green component to set magenta color cast removal level.</para>"));
 
     d->unclipColorLabel    = new QLabel(i18nc("@label:listbox", "Highlights:"), d->whiteBalanceSettings);
-    d->unclipColorComboBox = new RComboBox(d->whiteBalanceSettings);
+    d->unclipColorComboBox = new DComboBox(d->whiteBalanceSettings);
     d->unclipColorComboBox->insertItem(0, i18nc("@item:inlistbox", "Solid white"));
     d->unclipColorComboBox->insertItem(1, i18nc("@item:inlistbox", "Unclip"));
     d->unclipColorComboBox->insertItem(2, i18nc("@item:inlistbox", "Blend"));
@@ -588,7 +588,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     QGridLayout* const correctionsLayout = new QGridLayout(d->correctionsSettings);
 
     d->noiseReductionLabel    = new QLabel(i18nc("@label:listbox", "Noise reduction:"), d->correctionsSettings);
-    d->noiseReductionComboBox = new RComboBox(d->colormanSettings);
+    d->noiseReductionComboBox = new DComboBox(d->colormanSettings);
     d->noiseReductionComboBox->insertItem(RawDecodingSettings::NONR,       i18nc("@item:inlistbox Noise Reduction", "None"));
     d->noiseReductionComboBox->insertItem(RawDecodingSettings::WAVELETSNR, i18nc("@item:inlistbox Noise Reduction", "Wavelets"));
     d->noiseReductionComboBox->insertItem(RawDecodingSettings::FBDDNR,     i18nc("@item:inlistbox Noise Reduction", "FBDD"));
@@ -676,7 +676,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     QGridLayout* const colormanLayout = new QGridLayout(d->colormanSettings);
 
     d->inputColorSpaceLabel     = new QLabel(i18nc("@label:listbox", "Camera Profile:"), d->colormanSettings);
-    d->inputColorSpaceComboBox  = new RComboBox(d->colormanSettings);
+    d->inputColorSpaceComboBox  = new DComboBox(d->colormanSettings);
     d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::NOINPUTCS,     i18nc("@item:inlistbox Camera Profile", "None"));
     d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::EMBEDDED,      i18nc("@item:inlistbox Camera Profile", "Embedded"));
     d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMINPUTCS, i18nc("@item:inlistbox Camera Profile", "Custom"));
@@ -695,7 +695,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->inIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc; *.icm)"));
 
     d->outputColorSpaceLabel    = new QLabel(i18nc("@label:listbox", "Workspace:"), d->colormanSettings);
-    d->outputColorSpaceComboBox = new RComboBox( d->colormanSettings );
+    d->outputColorSpaceComboBox = new DComboBox( d->colormanSettings );
     d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::RAWCOLOR,       i18nc("@item:inlistbox Workspace", "Raw (no profile)"));
     d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::SRGB,           i18nc("@item:inlistbox Workspace", "sRGB"));
     d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::ADOBERGB,       i18nc("@item:inlistbox Workspace", "Adobe RGB"));
@@ -747,13 +747,13 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     // ---------------------------------------------------------------
 
-    connect(d->unclipColorComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->unclipColorComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::slotUnclipColorActivated);
 
-    connect(d->whiteBalanceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->whiteBalanceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::slotWhiteBalanceToggled);
 
-    connect(d->noiseReductionComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->noiseReductionComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::slotNoiseReductionChanged);
 
     connect(d->enableCACorrectionBox, &QCheckBox::toggled,
@@ -771,10 +771,10 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->sixteenBitsImage, &QCheckBox::toggled,
             this, &DcrawSettingsWidget::slotsixteenBitsImageToggled);
 
-    connect(d->inputColorSpaceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->inputColorSpaceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::slotInputColorSpaceChanged);
 
-    connect(d->outputColorSpaceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->outputColorSpaceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::slotOutputColorSpaceChanged);
 
     connect(d->expoCorrectionBox, &QCheckBox::toggled,
@@ -791,19 +791,19 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->outIccUrlEdit->lineEdit(), &QLineEdit::textChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->whiteBalanceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->whiteBalanceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->RAWQualityComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->RAWQualityComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::slotRAWQualityChanged);
 
-    connect(d->unclipColorComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->unclipColorComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->inputColorSpaceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->inputColorSpaceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->outputColorSpaceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
+    connect(d->outputColorSpaceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
     connect(d->blackPointCheckBox, &QCheckBox::toggled,

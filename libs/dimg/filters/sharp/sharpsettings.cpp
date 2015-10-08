@@ -45,7 +45,6 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
@@ -54,6 +53,7 @@
 
 #include "dimg_debug.h"
 #include "digikam_config.h"
+#include "dcombobox.h"
 
 #ifdef HAVE_EIGEN3
 #include "refocusfilter.h"
@@ -99,7 +99,7 @@ public:
 
     QStackedWidget*      stack;
 
-    RComboBox*           sharpMethod;
+    DComboBox*           sharpMethod;
 
     // Simple sharp.
     RIntNumInput*        radiusInput;
@@ -139,7 +139,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QGridLayout* const grid = new QGridLayout(parent);
 
     QLabel* const label1 = new QLabel(i18n("Method:"), parent);
-    d->sharpMethod = new RComboBox(parent);
+    d->sharpMethod = new DComboBox(parent);
     d->sharpMethod->addItem(i18n("Simple sharp"));
     d->sharpMethod->addItem(i18n("Unsharp mask"));
 #ifdef HAVE_EIGEN3

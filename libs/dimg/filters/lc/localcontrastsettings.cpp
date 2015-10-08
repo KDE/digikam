@@ -52,13 +52,13 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
 #include "dimg_debug.h"
+#include "dcombobox.h"
 
 using namespace KDcrawIface;
 
@@ -126,7 +126,7 @@ public:
     RIntNumInput*         lowSaturationInput;
     RIntNumInput*         highSaturationInput;
 
-    RComboBox*            functionInput;
+    DComboBox*            functionInput;
 
     RDoubleNumInput*      powerInput1;
     RDoubleNumInput*      blurInput1;
@@ -169,7 +169,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     QGridLayout* const grid1 = new QGridLayout(firstPage);
 
     QLabel* const label1 = new QLabel(i18n("Function:"), firstPage);
-    d->functionInput     = new RComboBox(firstPage);
+    d->functionInput     = new DComboBox(firstPage);
     d->functionInput->addItem(i18n("Power"));
     d->functionInput->addItem(i18n("Linear"));
     d->functionInput->setDefaultIndex(0);

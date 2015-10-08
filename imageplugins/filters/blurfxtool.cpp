@@ -41,12 +41,12 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 
 // Local includes
 
 #include "blurfxfilter.h"
+#include "dcombobox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
@@ -81,7 +81,7 @@ public:
     QLabel*              distanceLabel;
     QLabel*              levelLabel;
 
-    RComboBox*           effectType;
+    DComboBox*           effectType;
 
     RIntNumInput*        distanceInput;
     RIntNumInput*        levelInput;
@@ -121,7 +121,7 @@ BlurFXTool::BlurFXTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->effectTypeLabel = new QLabel(i18n("Type:"));
-    d->effectType      = new RComboBox;
+    d->effectType      = new DComboBox;
     d->effectType->addItem(i18n("Zoom Blur"));
     d->effectType->addItem(i18n("Radial Blur"));
     d->effectType->addItem(i18n("Far Blur"));

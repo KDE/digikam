@@ -33,7 +33,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RNumInput>
-#include <KDCRAW/RComboBox>
+
+// Local includes
+
+#include "dcombobox.h"
 
 namespace Digikam
 {
@@ -59,7 +62,7 @@ public:
     QLabel*       levelLabel;
     QLabel*       iterationLabel;
 
-    RComboBox*    effectType;
+    DComboBox*    effectType;
 
     RIntNumInput* levelInput;
     RIntNumInput* iterationInput;
@@ -78,7 +81,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent)
     QGridLayout* const grid = new QGridLayout(parent);
 
     d->effectTypeLabel = new QLabel(i18n("Type:"));
-    d->effectType      = new RComboBox();
+    d->effectType      = new DComboBox();
     d->effectType->addItem(i18n("Solarize"));
     d->effectType->addItem(i18n("Vivid"));
     d->effectType->addItem(i18n("Neon"));

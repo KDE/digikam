@@ -40,13 +40,10 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RComboBox>
-
 // Local includes
 
 #include "blackframelistview.h"
+#include "dcombobox.h"
 #include "daboutdata.h"
 #include "dimg.h"
 #include "dimgfiltermanager.h"
@@ -57,7 +54,6 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-using namespace KDcrawIface;
 using namespace Digikam;
 
 namespace DigikamEnhanceImagePlugin
@@ -86,7 +82,7 @@ public:
 
     QUrl                 blackFrameURL;
 
-    RComboBox*           filterMethodCombo;
+    DComboBox*           filterMethodCombo;
 
     BlackFrameListView*  blackFrameListView;
     ImageRegionWidget*   previewWidget;
@@ -123,7 +119,7 @@ HotPixelsTool::HotPixelsTool(QObject* const parent)
     QGridLayout* const grid = new QGridLayout(d->gboxSettings->plainPage());
 
     QLabel* const filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
-    d->filterMethodCombo            = new RComboBox(d->gboxSettings->plainPage());
+    d->filterMethodCombo            = new DComboBox(d->gboxSettings->plainPage());
     d->filterMethodCombo->addItem(i18nc("average filter mode", "Average"));
     d->filterMethodCombo->addItem(i18nc("linear filter mode", "Linear"));
     d->filterMethodCombo->addItem(i18nc("quadratic filter mode", "Quadratic"));

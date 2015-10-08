@@ -38,11 +38,11 @@
 
 #include <KDCRAW/RWidgetUtils>
 #include <KDCRAW/RNumInput>
-#include <KDCRAW/RComboBox>
 
 // Local includes
 
 #include "dimg_debug.h"
+#include "dcombobox.h"
 
 using namespace KDcrawIface;
 
@@ -114,9 +114,9 @@ public:
     RAdjustableLabel* makeDescription;
     RAdjustableLabel* modelDescription;
 
-    RComboBox*          make;
-    RComboBox*          model;
-    RComboBox*          lens;
+    DComboBox*          make;
+    DComboBox*          model;
+    DComboBox*          lens;
 
     RDoubleNumInput*    focal;
     RDoubleNumInput*    aperture;
@@ -148,7 +148,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->makeDescription->setWhatsThis(i18n("This is the camera maker description string found in image meta-data. "
                                           "This one is used to query and find relevant camera device information from Lensfun database."));
 
-    d->make              = new RComboBox(this);
+    d->make              = new DComboBox(this);
     d->make->setDefaultIndex(0);
 
     RHBox* const hbox2   = new RHBox(this);
@@ -160,7 +160,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->modelDescription->setWhatsThis(i18n("This is the camera model description string found in image meta-data. "
                                            "This one is used to query and found relevant camera device information from Lensfun database."));
 
-    d->model             = new RComboBox(this);
+    d->model             = new DComboBox(this);
     d->model->setDefaultIndex(0);
 
     RHBox* const hbox3   = new RHBox(this);
@@ -172,7 +172,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
                                           "This one is used to query and found relevant lens information from Lensfun database."));
     hbox3->setStretchFactor(space3, 10);
 
-    d->lens              = new RComboBox(this);
+    d->lens              = new DComboBox(this);
     d->lens->setDefaultIndex(0);
 
     d->metadataUsage->setEnabled(false);

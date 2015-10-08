@@ -39,12 +39,12 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 
 // Local includes
 
 #include "dimg.h"
+#include "dcombobox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
@@ -92,7 +92,7 @@ public:
     static const QString configTextureTypeEntry;
     static const QString configBlendGainEntry;
 
-    RComboBox*           textureType;
+    DComboBox*           textureType;
     RIntNumInput*        blendGain;
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
@@ -120,7 +120,7 @@ TextureTool::TextureTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label1 = new QLabel(i18n("Type:"));
-    d->textureType = new RComboBox;
+    d->textureType = new DComboBox;
     d->textureType->addItem(i18n("Paper"));
     d->textureType->addItem(i18n("Paper 2"));
     d->textureType->addItem(i18n("Fabric"));

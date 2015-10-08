@@ -43,12 +43,12 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RNumInput>
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dcombobox.h"
 #include "dimg_debug.h"
 
 using namespace KDcrawIface;
@@ -103,7 +103,7 @@ public:
     RColorSelector*      firstColorButton;
     RColorSelector*      secondColorButton;
 
-    RComboBox*           borderType;
+    DComboBox*           borderType;
     RIntNumInput*        borderPercent;
     RIntNumInput*        borderWidth;
 };
@@ -129,7 +129,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     QGridLayout* grid = new QGridLayout(parent);
 
     QLabel* label1 = new QLabel(i18n("Type:"));
-    d->borderType  = new RComboBox();
+    d->borderType  = new DComboBox();
     d->borderType->addItem(i18nc("solid border type", "Solid"));
     // NOTE: Niepce is a real name. This is the first guy in the world to have built a camera.
     d->borderType->addItem(QLatin1String("Niepce"));

@@ -44,12 +44,12 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 
 // Local includes
 
 #include "dimg.h"
+#include "dcombobox.h"
 #include "distortionfxfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
@@ -84,7 +84,7 @@ public:
     QLabel*              levelLabel;
     QLabel*              iterationLabel;
 
-    RComboBox*           effectType;
+    DComboBox*           effectType;
 
     RIntNumInput*        levelInput;
     RIntNumInput*        iterationInput;
@@ -123,7 +123,7 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->effectTypeLabel = new QLabel(i18n("Type:"));
-    d->effectType      = new RComboBox();
+    d->effectType      = new DComboBox();
     d->effectType->addItem(i18n("Fish Eyes"));
     d->effectType->addItem(i18n("Twirl"));
     d->effectType->addItem(i18n("Cylindrical Hor."));

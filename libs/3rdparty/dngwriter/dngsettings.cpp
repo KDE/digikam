@@ -39,16 +39,11 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RComboBox>
-
 // Local includes
 
+#include "dcombobox.h"
 #include "dngwriter.h"
 #include "dactivelabel.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -70,7 +65,7 @@ public:
     QCheckBox* compressLossLess;
     QCheckBox* backupOriginalRawFile;
 
-    RComboBox* previewModeCB;
+    DComboBox* previewModeCB;
 };
 
 DNGSettings::DNGSettings(QWidget* const parent)
@@ -94,7 +89,7 @@ DNGSettings::DNGSettings(QWidget* const parent)
     // ------------------------------------------------------------------------
 
     d->previewModeLabel = new QLabel(i18n("JPEG Preview:"), this);
-    d->previewModeCB    = new RComboBox(this);
+    d->previewModeCB    = new DComboBox(this);
     d->previewModeCB->insertItem(DNGWriter::NONE,     i18nc("embedded preview type in dng file", "None"));
     d->previewModeCB->insertItem(DNGWriter::MEDIUM,   i18nc("embedded preview type in dng file", "Medium"));
     d->previewModeCB->insertItem(DNGWriter::FULLSIZE, i18nc("embedded preview type in dng file", "Full size"));

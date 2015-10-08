@@ -41,13 +41,13 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
 #include "dimg_debug.h"
+#include "dcombobox.h"
 
 using namespace KDcrawIface;
 
@@ -74,7 +74,7 @@ public:
 
     RIntNumInput*    angleInput;
     RDoubleNumInput* fineAngleInput;
-    RComboBox*       autoCropCB;
+    DComboBox*       autoCropCB;
 };
 
 const QString FreeRotationSettings::Private::configAutoCropTypeEntry(QLatin1String("Auto Crop Type"));
@@ -111,7 +111,7 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
                                          "In order to smooth the target image, it will be blurred a little."));
 
     QLabel* const label5 = new QLabel(i18n("Auto-crop:"));
-    d->autoCropCB        = new RComboBox;
+    d->autoCropCB        = new DComboBox;
     d->autoCropCB->addItem(i18nc("no autocrop", "None"));
     d->autoCropCB->addItem(i18n("Widest Area"));
     d->autoCropCB->addItem(i18n("Largest Area"));

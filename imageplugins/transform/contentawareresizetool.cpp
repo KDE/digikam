@@ -42,18 +42,17 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-
 #include <ksharedconfig.h>
 
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
 #include "editortoolsettings.h"
+#include "dcombobox.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "contentawarefilter.h"
@@ -143,8 +142,8 @@ public:
     RDoubleNumInput*     mixedRescaleInput;
     RDoubleNumInput*     rigidityInput;
 
-    RComboBox*           funcInput;
-    RComboBox*           resizeOrderInput;
+    DComboBox*           funcInput;
+    DComboBox*           resizeOrderInput;
 
     RExpanderBox*        expanderBox;
 
@@ -331,7 +330,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     QWidget* const energyFunctionsContainer  = new QWidget;
     QGridLayout* const energyFunctionsLayout = new QGridLayout;
 
-    d->funcInput = new RComboBox(d->gboxSettings->plainPage());
+    d->funcInput = new DComboBox(d->gboxSettings->plainPage());
     d->funcInput->addItem(i18n("Norm of brightness gradient"));
     d->funcInput->addItem(i18n("Sum of absolute values of brightness gradients"));
     d->funcInput->addItem(i18n("Absolute value of brightness gradient"));
@@ -402,7 +401,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
                                           "worse performance."));
 
     QLabel* const labelResizeOrder = new QLabel(i18n("Resize Order:"),d->gboxSettings->plainPage());
-    d->resizeOrderInput            = new RComboBox(d->gboxSettings->plainPage());
+    d->resizeOrderInput            = new DComboBox(d->gboxSettings->plainPage());
     d->resizeOrderInput->addItem(i18n("Horizontally first"));
     d->resizeOrderInput->addItem(i18n("Vertically first"));
     d->resizeOrderInput->setDefaultIndex(0);

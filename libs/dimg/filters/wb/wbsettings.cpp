@@ -50,13 +50,13 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
 #include "dimg_debug.h"
+#include "dcombobox.h"
 
 using namespace KDcrawIface;
 
@@ -159,7 +159,7 @@ public:
     QLabel*                 exposureLabel;
     QLabel*                 temperatureLabel;
 
-    RComboBox*              temperaturePresetCB;
+    DComboBox*              temperaturePresetCB;
 
     RDoubleNumInput*        temperatureInput;
     RDoubleNumInput*        darkInput;
@@ -199,7 +199,7 @@ WBSettings::WBSettings(QWidget* const parent)
     d->temperatureInput->setWhatsThis(i18n("Set here the white balance color temperature in Kelvin."));
 
     d->temperaturePresetLabel = new QLabel(i18n("Preset:"));
-    d->temperaturePresetCB    = new RComboBox;
+    d->temperaturePresetCB    = new DComboBox;
     d->temperaturePresetCB->combo()->addItem(i18n("Candle"),                          QVariant(d->Candle));
     d->temperaturePresetCB->combo()->addItem(i18n("40W Lamp"),                        QVariant(d->Lamp40W));
     d->temperaturePresetCB->combo()->addItem(i18n("100W Lamp"),                       QVariant(d->Lamp100W));

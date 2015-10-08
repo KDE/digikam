@@ -41,7 +41,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RNumInput>
-#include <KDCRAW/RComboBox>
+
+// Local includes
+
+#include "dcombobox.h"
 
 using namespace KDcrawIface;
 
@@ -105,7 +108,7 @@ public:
 
     QTabWidget*      parent;
 
-    RComboBox*       interpolationBox;
+    DComboBox*       interpolationBox;
 
     RDoubleNumInput* alphaInput;
     RDoubleNumInput* amplitudeInput;
@@ -227,7 +230,7 @@ GreycstorationSettings::GreycstorationSettings(QTabWidget* parent)
     d->btileInput->setWhatsThis(i18n("Sets the size of each tile border."));
 
     d->interpolationLabel = new QLabel(i18n("Interpolation:"), d->advancedPage);
-    d->interpolationBox   = new RComboBox(d->advancedPage);
+    d->interpolationBox   = new DComboBox(d->advancedPage);
     d->interpolationBox->insertItem(GreycstorationContainer::NearestNeighbor, i18n("Nearest Neighbor"));
     d->interpolationBox->insertItem(GreycstorationContainer::Linear, i18n("Linear"));
     d->interpolationBox->insertItem(GreycstorationContainer::RungeKutta, i18n("Runge-Kutta"));

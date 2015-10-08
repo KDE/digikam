@@ -51,13 +51,13 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RComboBox>
 #include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
 #include "editortoolsettings.h"
+#include "dcombobox.h"
 #include "imageiface.h"
 #include "imageselectionwidget.h"
 #include "histogrambox.h"
@@ -155,9 +155,9 @@ public:
     QCheckBox*            autoOrientation;
     QCheckBox*            preciseCrop;
 
-    RComboBox*            ratioCB;
-    RComboBox*            orientCB;
-    RComboBox*            guideLinesCB;
+    DComboBox*            ratioCB;
+    DComboBox*            orientCB;
+    DComboBox*            guideLinesCB;
 
     RIntNumInput*         customRatioDInput;
     RIntNumInput*         customRatioNInput;
@@ -280,7 +280,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     QWidget* const cropSelection = new QWidget(d->expbox);
 
     QLabel* const label = new QLabel(i18n("Aspect ratio:"), cropSelection);
-    d->ratioCB          = new RComboBox(cropSelection);
+    d->ratioCB          = new DComboBox(cropSelection);
     d->ratioCB->addItem(i18nc("custom aspect ratio crop settings", "Custom"));
     // NOTE: Order is important there. Look ImageSelectionWidget::RatioAspect for details.
     d->ratioCB->addItem(QLatin1String("1:1"));
@@ -326,7 +326,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->preciseCrop->setWhatsThis(i18n("Enable this option to force exact aspect ratio crop."));
 
     d->orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
-    d->orientCB    = new RComboBox( cropSelection );
+    d->orientCB    = new DComboBox( cropSelection );
     d->orientCB->addItem( i18n("Landscape") );
     d->orientCB->addItem( i18n("Portrait") );
     d->orientCB->setWhatsThis(i18n("Select constrained aspect ratio orientation."));
@@ -423,7 +423,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     QGridLayout* const grid2        = new QGridLayout(compositionGuide);
 
     QLabel* const labelGuideLines = new QLabel(i18n("Form:"), compositionGuide);
-    d->guideLinesCB               = new RComboBox(compositionGuide);
+    d->guideLinesCB               = new DComboBox(compositionGuide);
     d->guideLinesCB->addItem(i18n("Rules of Thirds"));
     d->guideLinesCB->addItem(i18n("Diagonal Method"));
     d->guideLinesCB->addItem(i18n("Harmonious Triangles"));

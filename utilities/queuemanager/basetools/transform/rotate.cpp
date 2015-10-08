@@ -36,11 +36,11 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
-#include <KDCRAW/RComboBox>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "dcombobox.h"
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 #include "dmetadata.h"
@@ -73,7 +73,7 @@ public:
 
     QCheckBox*            useExif;
 
-    RComboBox*            comboBox;
+    DComboBox*            comboBox;
 
     FreeRotationSettings* frSettings;
 };
@@ -99,7 +99,7 @@ void Rotate::registerSettingsWidget()
     d->useExif        = new QCheckBox(i18n("Use Exif Orientation"), vbox);
 
     d->label     = new QLabel(vbox);
-    d->comboBox  = new RComboBox(vbox);
+    d->comboBox  = new DComboBox(vbox);
     d->comboBox->insertItem(DImg::ROT90,     i18n("90 degrees"));
     d->comboBox->insertItem(DImg::ROT180,    i18n("180 degrees"));
     d->comboBox->insertItem(DImg::ROT270,    i18n("270 degrees"));
