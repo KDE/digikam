@@ -49,6 +49,10 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
+// Libkdcraw includes
+
+#include <KDCRAW/RWidgetUtils>
+
 // Local includes
 
 #include "dexpanderbox.h"
@@ -59,6 +63,8 @@
 #include "imageselectionwidget.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
+
+using namespace KDcrawIface;
 
 namespace DigikamTransformImagePlugin
 {
@@ -98,7 +104,8 @@ public:
         expbox(0),
         gboxSettings(0),
         histogramBox(0)
-    {}
+    {
+    }
 
     static const QString  configGroupName;
     static const QString  configHorOrientedAspectRatioEntry;

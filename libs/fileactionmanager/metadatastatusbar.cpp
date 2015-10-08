@@ -35,15 +35,10 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "metadatasettings.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
@@ -70,9 +65,8 @@ public:
 
     int               status;
 
-    RAdjustableLabel* info;
+    DAdjustableLabel* info;
     QToolButton*      applyBtn;
-
 };
 
 MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
@@ -81,7 +75,7 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
 {
     QHBoxLayout* const vlay = new QHBoxLayout(this);
 
-    d->info        = new RAdjustableLabel(this);
+    d->info        = new DAdjustableLabel(this);
     d->info->setContextMenuPolicy(Qt::NoContextMenu);
     d->info->setAutoFillBackground(true);
     d->info->setFocusPolicy(Qt::NoFocus);

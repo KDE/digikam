@@ -133,6 +133,7 @@
 #include "undostate.h"
 #include "versionmanager.h"
 #include "kiowrapper.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -668,13 +669,13 @@ void EditorWindow::setupStatusBar()
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel, 100);
 
-    d->infoLabel = new RAdjustableLabel(statusBar());
+    d->infoLabel = new DAdjustableLabel(statusBar());
     d->infoLabel->setAdjustedText(i18n("No selection"));
     d->infoLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(d->infoLabel, 100);
     d->infoLabel->setToolTip(i18n("Information about current image selection"));
 
-    m_resLabel   = new RAdjustableLabel(statusBar());
+    m_resLabel   = new DAdjustableLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip(i18n("Information about image size"));

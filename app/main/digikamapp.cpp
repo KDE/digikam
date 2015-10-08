@@ -553,7 +553,7 @@ void DigikamApp::setupViewConnections()
 
 void DigikamApp::setupStatusBar()
 {
-    d->statusLabel = new RAdjustableLabel(statusBar());
+    d->statusLabel = new DAdjustableLabel(statusBar());
     d->statusLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     statusBar()->addWidget(d->statusLabel, 80);
 

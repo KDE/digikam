@@ -57,8 +57,6 @@
 #include "dimg_debug.h"
 #include "dcombobox.h"
 
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 

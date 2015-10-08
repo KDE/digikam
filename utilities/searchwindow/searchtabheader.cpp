@@ -43,10 +43,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -55,8 +51,7 @@
 #include "searchfolderview.h"
 #include "searchwindow.h"
 #include "searchxml.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
@@ -168,9 +163,9 @@ public:
     QLineEdit*          saveNameEdit;
     QToolButton*        saveButton;
 
-    RAdjustableLabel*   storedKeywordEditName;
+    DAdjustableLabel*   storedKeywordEditName;
     QLineEdit*          storedKeywordEdit;
-    RAdjustableLabel*   storedAdvancedEditName;
+    DAdjustableLabel*   storedAdvancedEditName;
     QPushButton*        storedAdvancedEditLabel;
 
     QTimer*             keywordEditTimer;
@@ -258,7 +253,7 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
     d->editSimpleWidget->setTitle(i18n("Edit Stored Search"));
 
     QVBoxLayout* const vbox1 = new QVBoxLayout;
-    d->storedKeywordEditName = new RAdjustableLabel(this);
+    d->storedKeywordEditName = new DAdjustableLabel(this);
     d->storedKeywordEditName->setElideMode(Qt::ElideRight);
     d->storedKeywordEdit     = new QLineEdit(this);
 
@@ -276,7 +271,7 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
 
     QVBoxLayout* const vbox2   = new QVBoxLayout;
 
-    d->storedAdvancedEditName  = new RAdjustableLabel(this);
+    d->storedAdvancedEditName  = new DAdjustableLabel(this);
     d->storedAdvancedEditName->setElideMode(Qt::ElideRight);
     d->storedAdvancedEditLabel = new QPushButton(i18n("Edit..."), this);
 

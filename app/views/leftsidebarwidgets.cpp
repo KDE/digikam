@@ -46,10 +46,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -71,8 +67,7 @@
 #include "tagsmanager.h"
 #include "albumlabelstreeview.h"
 #include "albumdb.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
@@ -624,7 +619,7 @@ public:
 
     QComboBox*                timeUnitCB;
     QLineEdit*                nameEdit;
-    RAdjustableLabel*       cursorDateLabel;
+    DAdjustableLabel*       cursorDateLabel;
 
     SearchTextBar*            searchDateBar;
     EditableSearchTreeView*   timeLineFolderView;
@@ -717,7 +712,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     d->scrollBar->setMinimum(0);
     d->scrollBar->setSingleStep(1);
 
-    d->cursorDateLabel  = new RAdjustableLabel(panel);
+    d->cursorDateLabel  = new DAdjustableLabel(panel);
     d->cursorCountLabel = new QLabel(panel);
     d->cursorCountLabel->setAlignment(Qt::AlignRight);
 

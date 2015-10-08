@@ -35,11 +35,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RWidgetUtils>
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
@@ -67,7 +65,7 @@ public:
 
     int               status;
 
-    RAdjustableLabel* info;
+    DAdjustableLabel* info;
     QToolButton*      resetBtn;
     QToolButton*      settingsBtn;
 
@@ -75,11 +73,12 @@ public:
 };
 
 FilterStatusBar::FilterStatusBar(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QHBoxLayout* const vlay = new QHBoxLayout(this);
 
-    d->info        = new RAdjustableLabel(this);
+    d->info        = new DAdjustableLabel(this);
     d->info->setContextMenuPolicy(Qt::NoContextMenu);
     d->info->setAutoFillBackground(true);
     d->info->setFocusPolicy(Qt::NoFocus);

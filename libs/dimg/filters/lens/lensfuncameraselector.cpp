@@ -43,6 +43,7 @@
 #include "dimg_debug.h"
 #include "dcombobox.h"
 #include "dnuminput.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -110,9 +111,9 @@ public:
     const QString       orangeStyle;
     const QString       greenStyle;
 
-    RAdjustableLabel* lensDescription;
-    RAdjustableLabel* makeDescription;
-    RAdjustableLabel* modelDescription;
+    DAdjustableLabel* lensDescription;
+    DAdjustableLabel* makeDescription;
+    DAdjustableLabel* modelDescription;
 
     DComboBox*          make;
     DComboBox*          model;
@@ -142,7 +143,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     RHBox* const hbox1   = new RHBox(this);
     d->makeLabel         = new QLabel(i18nc("camera make",  "Make:"),  hbox1);
     QLabel* const space1 = new QLabel(hbox1);
-    d->makeDescription   = new RAdjustableLabel(hbox1);
+    d->makeDescription   = new DAdjustableLabel(hbox1);
     hbox1->setStretchFactor(space1, 10);
     d->makeDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->makeDescription->setWhatsThis(i18n("This is the camera maker description string found in image meta-data. "
@@ -154,7 +155,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     RHBox* const hbox2   = new RHBox(this);
     d->modelLabel        = new QLabel(i18nc("camera model", "Model:"), hbox2);
     QLabel* const space2 = new QLabel(hbox2);
-    d->modelDescription  = new RAdjustableLabel(hbox2);
+    d->modelDescription  = new DAdjustableLabel(hbox2);
     hbox2->setStretchFactor(space2, 10);
     d->modelDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->modelDescription->setWhatsThis(i18n("This is the camera model description string found in image meta-data. "
@@ -166,7 +167,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     RHBox* const hbox3   = new RHBox(this);
     d->lensLabel         = new QLabel(i18nc("camera lens",  "Lens:"),  hbox3);
     QLabel* const space3 = new QLabel(hbox3);
-    d->lensDescription   = new RAdjustableLabel(hbox3);
+    d->lensDescription   = new DAdjustableLabel(hbox3);
     d->lensDescription->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->lensDescription->setWhatsThis(i18n("This is the lens description string found in image meta-data. "
                                           "This one is used to query and found relevant lens information from Lensfun database."));

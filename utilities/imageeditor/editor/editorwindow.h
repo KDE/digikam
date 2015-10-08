@@ -39,10 +39,6 @@
 
 #include <kjob.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_export.h"
@@ -58,11 +54,10 @@ class QAction;
 class KSelectAction;
 class KToolBarPopupAction;
 
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 
+class DAdjustableLabel;
 class DCategorizedView;
 class Canvas;
 class DImageHistory;
@@ -109,7 +104,7 @@ protected:
     bool                      m_setExifOrientationTag;
     bool                      m_editingOriginalImage;
 
-    RAdjustableLabel*         m_resLabel;
+    DAdjustableLabel*         m_resLabel;
 
     QColor                    m_bgColor;
 

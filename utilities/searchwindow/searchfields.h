@@ -46,11 +46,11 @@ class QTimeEdit;
 class QTreeView;
 class QComboBox;
 class QLineEdit;
-class RAdjustableLabel;
 
 namespace Digikam
 {
 
+class DAdjustableLabel;
 class AlbumSelectComboBox;
 class SearchFieldGroup;
 class SqueezedComboBox;

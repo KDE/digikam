@@ -36,11 +36,12 @@
 #include <QListWidget>
 #include <QFontDatabase>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dexpanderbox.h"
 
-using namespace KDcrawIface;
+namespace Digikam
+{
 
 class DTextLabelName : public QLabel
 {
@@ -65,13 +66,13 @@ public:
 
 // -------------------------------------------------------------------
 
-class DTextLabelValue : public RAdjustableLabel
+class DTextLabelValue : public DAdjustableLabel
 {
 
 public:
 
     explicit DTextLabelValue(const QString& value, QWidget* const parent=0)
-        : RAdjustableLabel(parent)
+        : DAdjustableLabel(parent)
     {
         setAdjustedText(value);
         setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -142,5 +143,7 @@ public:
         setFixedHeight(top + bottom + frameWidth() + fontMetrics().lineSpacing()*l);
     };
 };
+
+} // namespace Digikam
 
 #endif /* IMAGEPROPERTIESTXTLABEL_H */

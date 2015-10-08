@@ -39,16 +39,131 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QCheckBox>
+#include <QDesktopWidget>
 
 // KDE includes
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
+// Libkdcraw includes
+
+#include <KDCRAW/RWidgetUtils>
+
 using namespace KDcrawIface;
 
 namespace Digikam
 {
+
+class Q_DECL_HIDDEN DAdjustableLabel::Private
+{
+public:
+
+    Private()
+    {
+        emode = Qt::ElideMiddle;
+    }
+
+    QString           ajdText;
+    Qt::TextElideMode emode;
+};
+
+DAdjustableLabel::DAdjustableLabel(QWidget* const parent)
+    : QLabel(parent),
+      d(new Private)
+{
+    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+}
+
+DAdjustableLabel::~DAdjustableLabel()
+{
+    delete d;
+}
+
+void DAdjustableLabel::resizeEvent(QResizeEvent*)
+{
+    adjustTextToLabel();
+}
+
+QSize DAdjustableLabel::minimumSizeHint() const
+{
+    QSize sh = QLabel::minimumSizeHint();
+    sh.setWidth(-1);
+    return sh;
+}
+
+QSize DAdjustableLabel::sizeHint() const
+{
+    QFontMetrics fm(fontMetrics());    
+    int maxW     = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
+    int currentW = fm.width(d->ajdText);
+
+    return (QSize(currentW > maxW ? maxW : currentW, QLabel::sizeHint().height()));
+}
+
+void DAdjustableLabel::setAdjustedText(const QString& text)
+{
+    d->ajdText = text;
+
+    if (d->ajdText.isNull())
+        QLabel::clear();
+
+    adjustTextToLabel();
+}
+
+QString DAdjustableLabel::adjustedText() const
+{
+    return d->ajdText;
+}
+
+void DAdjustableLabel::setAlignment(Qt::Alignment alignment)
+{
+    QString tmp(d->ajdText);
+    QLabel::setAlignment(alignment);
+    d->ajdText = tmp;
+}
+
+void DAdjustableLabel::setElideMode(Qt::TextElideMode mode)
+{
+    d->emode = mode;
+    adjustTextToLabel();
+}
+
+void DAdjustableLabel::adjustTextToLabel()
+{
+    QFontMetrics fm(fontMetrics());
+    QStringList adjustedLines;
+    int lblW      = size().width();
+    bool adjusted = false;
+
+    Q_FOREACH(const QString& line, d->ajdText.split(QLatin1Char('\n')))
+    {
+        int lineW = fm.width(line);
+
+        if (lineW > lblW)
+        {
+            adjusted = true;
+            adjustedLines << fm.elidedText(line, d->emode, lblW);
+        }
+        else
+        {
+            adjustedLines << line;
+        }
+    }
+
+    if (adjusted)
+    {
+        QLabel::setText(adjustedLines.join(QStringLiteral("\n")));
+        setToolTip(d->ajdText);
+    }
+    else
+    {
+        QLabel::setText(d->ajdText);
+        setToolTip(QString());
+    }
+}
+
+// ------------------------------------------------------------------------------------
 
 DClickLabel::DClickLabel(QWidget* const parent)
     : QLabel(parent)
@@ -111,13 +226,13 @@ void DClickLabel::keyPressEvent(QKeyEvent* e)
 // ------------------------------------------------------------------------
 
 DSqueezedClickLabel::DSqueezedClickLabel(QWidget* const parent)
-    : RAdjustableLabel(parent)
+    : DAdjustableLabel(parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
 
 DSqueezedClickLabel::DSqueezedClickLabel(const QString& text, QWidget* const parent)
-    : RAdjustableLabel(parent)
+    : DAdjustableLabel(parent)
 {
     setAdjustedText(text);
     setCursor(Qt::PointingHandCursor);

@@ -76,6 +76,7 @@
 #include "fingerprintsgenerator.h"
 #include "dhuesaturationselect.h"
 #include "dcolorvalueselector.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -170,8 +171,8 @@ public:
 
     DColorValueSelector*      vSelector;
 
-    RAdjustableLabel*       labelFile;
-    RAdjustableLabel*       labelFolder;
+    DAdjustableLabel*         labelFile;
+    DAdjustableLabel*         labelFolder;
 
     ImageInfo                 imageInfo;
 
@@ -279,9 +280,9 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     // ---------------------------------------------------------------
 
     QLabel* const file   = new QLabel(i18n("<b>File</b>:"));
-    d->labelFile         = new RAdjustableLabel(0);
+    d->labelFile         = new DAdjustableLabel(0);
     QLabel* const folder = new QLabel(i18n("<b>Folder</b>:"));
-    d->labelFolder       = new RAdjustableLabel(0);
+    d->labelFolder       = new DAdjustableLabel(0);
     int hgt              = fontMetrics().height() - 2;
     file->setMaximumHeight(hgt);
     folder->setMaximumHeight(hgt);

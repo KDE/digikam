@@ -49,6 +49,7 @@
 
 #include "tooltipdialog.h"
 #include "digikam_debug.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -80,7 +81,7 @@ public:
 
     QToolButton*        tooltipToggleButton;
 
-    RAdjustableLabel*   customExample;
+    DAdjustableLabel*   customExample;
 
     QComboBox*          folderDateFormat;
 
@@ -115,7 +116,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     QVBoxLayout* const albumVlay = new QVBoxLayout(this);
     d->autoAlbumExtCheck         = new QCheckBox(i18nc("@option:check", "Extension-based sub-albums"), this);
     d->autoAlbumDateCheck        = new QCheckBox(i18nc("@option:check", "Date-based sub-albums"), this);
-    RHBox* hbox1                 = new RHBox(this);
+    RHBox* const hbox1           = new RHBox(this);
     d->folderDateLabel           = new QLabel(i18nc("@label:listbox", "Date format:"), hbox1);
     d->folderDateFormat          = new QComboBox(hbox1);
     d->folderDateFormat->insertItem(IsoDateFormat,    i18nc("@item:inlistbox", "ISO"));
@@ -129,7 +130,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     d->tooltipToggleButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
-    d->customExample       = new RAdjustableLabel(this);
+    d->customExample       = new DAdjustableLabel(this);
 
     albumVlay->addWidget(d->autoAlbumExtCheck);
     albumVlay->addWidget(d->autoAlbumDateCheck);

@@ -36,10 +36,6 @@
 #include <kconfiggroup.h>
 #include <kservice.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -57,8 +53,6 @@ class QWidgetAction;
 
 class KActionCollection;
 
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 
@@ -68,6 +62,7 @@ class EditorToolIface;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class PreviewToolBar;
+class DAdjustableLabel;
 
 class EditorWindow::Private
 {
@@ -155,7 +150,7 @@ public:
     QToolButton*                 underExposureIndicator;
     QToolButton*                 overExposureIndicator;
 
-    RAdjustableLabel*            infoLabel;
+    DAdjustableLabel*            infoLabel;
 
     KActionCollection*           imagepluginsActionCollection;
 

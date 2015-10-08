@@ -48,6 +48,7 @@
 // Local includes
 
 #include "dxmlguiwindow.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -82,7 +83,7 @@ public:
 
     RHBox*            descBox;
 
-    RAdjustableLabel* shortcut;
+    DAdjustableLabel* shortcut;
 };
 
 PickLabelWidget::PickLabelWidget(QWidget* const parent)
@@ -130,7 +131,7 @@ PickLabelWidget::PickLabelWidget(QWidget* const parent)
     d->descBox->setMargin(0);
     d->descBox->setSpacing(0);
     d->desc     = new QLabel(d->descBox);
-    d->shortcut = new RAdjustableLabel(d->descBox);
+    d->shortcut = new DAdjustableLabel(d->descBox);
     QFont fnt = d->shortcut->font();
     fnt.setItalic(true);
     d->shortcut->setFont(fnt);

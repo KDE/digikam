@@ -42,16 +42,53 @@
 
 #include <kconfiggroup.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_export.h"
 
 namespace Digikam
 {
+
+/** A label to show text adjusted to widget size
+ */
+class DIGIKAM_EXPORT DAdjustableLabel : public QLabel
+{
+    Q_OBJECT
+
+public:
+
+    explicit DAdjustableLabel(QWidget* const parent=0);
+    virtual ~DAdjustableLabel();
+
+    QSize minimumSizeHint() const;
+    QSize sizeHint()        const;
+
+    void setAlignment(Qt::Alignment align);
+    void setElideMode(Qt::TextElideMode mode);
+
+    QString adjustedText() const;
+
+public Q_SLOTS:
+
+    void setAdjustedText(const QString& text=QString());
+
+private:
+
+    void resizeEvent(QResizeEvent*);
+    void adjustTextToLabel();
+
+    // Disabled methods from QLabel
+    QString text() const { return QString(); }; // Use adjustedText() instead.
+    void setText(const QString&) {};            // Use setAdjustedText(text) instead.
+    void clear() {};                            // Use setdjustedText(QString()) instead.
+
+private:
+
+    class Private;
+    Private* const d;
+};
+
+// -------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT DClickLabel : public QLabel
 {
@@ -79,7 +116,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT DSqueezedClickLabel : public KDcrawIface::RAdjustableLabel
+class DIGIKAM_EXPORT DSqueezedClickLabel : public DAdjustableLabel
 {
     Q_OBJECT
 

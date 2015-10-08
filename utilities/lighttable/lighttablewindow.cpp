@@ -42,7 +42,6 @@
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
-#include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
@@ -77,6 +76,7 @@
 #include "thumbbardock.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -303,7 +303,7 @@ void LightTableWindow::setupStatusBar()
     d->leftZoomBar->setEnabled(false);
     statusBar()->addWidget(d->leftZoomBar, 1);
 
-    d->leftFileName = new RAdjustableLabel(statusBar());
+    d->leftFileName = new DAdjustableLabel(statusBar());
     d->leftFileName->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     statusBar()->addWidget(d->leftFileName, 10);
 
@@ -311,7 +311,7 @@ void LightTableWindow::setupStatusBar()
     d->statusProgressBar->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(d->statusProgressBar, 10);
 
-    d->rightFileName = new RAdjustableLabel(statusBar());
+    d->rightFileName = new DAdjustableLabel(statusBar());
     d->rightFileName->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     statusBar()->addWidget(d->rightFileName, 10);
 

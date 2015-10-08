@@ -44,18 +44,13 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "widgets_debug.h"
 #include "digikam_globals.h"
 #include "thememanager.h"
 #include "dxmlguiwindow.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
@@ -93,7 +88,8 @@ public:
 };
 
 RatingWidget::RatingWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     slotThemeChanged();
 
@@ -492,13 +488,14 @@ public:
         ratingWidget = 0;
     }
 
-    RAdjustableLabel* shortcut;
+    DAdjustableLabel* shortcut;
 
-    RatingWidget*       ratingWidget;
+    RatingWidget*     ratingWidget;
 };
 
 RatingBox::RatingBox(QWidget* const parent)
-    : RVBox(parent), d(new Private)
+    : RVBox(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
@@ -506,7 +503,7 @@ RatingBox::RatingBox(QWidget* const parent)
     d->ratingWidget = new RatingWidget(this);
     d->ratingWidget->setTracking(false);
 
-    d->shortcut = new RAdjustableLabel(this);
+    d->shortcut = new DAdjustableLabel(this);
     QFont fnt   = d->shortcut->font();
     fnt.setItalic(true);
     d->shortcut->setFont(fnt);

@@ -42,16 +42,11 @@
 #include <klocalizedstring.h>
 #include <kmimetypechooser.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_debug.h"
 #include "filtercombo.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
@@ -78,7 +73,7 @@ public:
 
     QLineEdit*          filterName;
     QCheckBox*          mimeCheckBox;
-    RAdjustableLabel*   mimeLabel;
+    DAdjustableLabel*   mimeLabel;
     QToolButton*        mimeButton;
     QCheckBox*          fileNameCheckBox;
     QLineEdit*          fileNameEdit;
@@ -90,7 +85,8 @@ public:
 // ----------------------------------------------------------------------------------------
 
 ImportFilters::ImportFilters(QWidget* const parent)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     setWindowTitle(i18n("Edit Import Filters"));
 
@@ -115,7 +111,7 @@ ImportFilters::ImportFilters(QWidget* const parent)
     horizontalLayout = new QHBoxLayout();
     spacer           = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
     horizontalLayout->addItem(spacer);
-    d->mimeLabel     = new RAdjustableLabel(page);
+    d->mimeLabel     = new DAdjustableLabel(page);
     horizontalLayout->addWidget(d->mimeLabel);
     d->mimeButton    = new QToolButton(page);
     d->mimeButton->setText(i18n("Select Type Mime..."));

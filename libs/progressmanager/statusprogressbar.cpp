@@ -37,16 +37,11 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_debug.h"
 #include "progressmanager.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
@@ -81,7 +76,7 @@ public:
     QPushButton*        cancelButton;
     QProgressBar*       progressBar;
 
-    RAdjustableLabel*   textLabel;
+    DAdjustableLabel*   textLabel;
 };
 
 StatusProgressBar::StatusProgressBar(QWidget* const parent)
@@ -91,7 +86,7 @@ StatusProgressBar::StatusProgressBar(QWidget* const parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    d->textLabel            = new RAdjustableLabel(this);
+    d->textLabel            = new DAdjustableLabel(this);
     d->progressWidget       = new QWidget(this);
     QHBoxLayout* const hBox = new QHBoxLayout(d->progressWidget);
     d->progressBar          = new QProgressBar(d->progressWidget);

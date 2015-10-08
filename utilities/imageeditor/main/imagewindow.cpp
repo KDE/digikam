@@ -54,7 +54,6 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <kwindowsystem.h>
-
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 
@@ -127,6 +126,7 @@
 #include "undostate.h"
 #include "imagewindow_p.h"
 #include "digikam_debug.h"
+#include "dexpanderbox.h"
 
 namespace Digikam
 {

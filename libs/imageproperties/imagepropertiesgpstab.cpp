@@ -63,6 +63,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 #include "digikam_debug.h"
 #include "imagegpsmodelhelper.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -102,10 +103,10 @@ public:
     QToolButton*               detailsBtn;
     QComboBox*                 detailsCombo;
 
-    RAdjustableLabel*          altitude;
-    RAdjustableLabel*          latitude;
-    RAdjustableLabel*          longitude;
-    RAdjustableLabel*          date;
+    DAdjustableLabel*          altitude;
+    DAdjustableLabel*          latitude;
+    DAdjustableLabel*          longitude;
+    DAdjustableLabel*          date;
 
     GeoIface::MapWidget*       map;
     GeoIface::ItemMarkerTiler* itemMarkerTiler;
@@ -153,10 +154,10 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     d->latLabel         = new QLabel(i18n("<b>Latitude</b>:"),  this);
     d->lonLabel         = new QLabel(i18n("<b>Longitude</b>:"), this);
     d->dateLabel        = new QLabel(i18n("<b>Date</b>:"),      this);
-    d->altitude         = new RAdjustableLabel(this);
-    d->latitude         = new RAdjustableLabel(this);
-    d->longitude        = new RAdjustableLabel(this);
-    d->date             = new RAdjustableLabel(this);
+    d->altitude         = new DAdjustableLabel(this);
+    d->latitude         = new DAdjustableLabel(this);
+    d->longitude        = new DAdjustableLabel(this);
+    d->date             = new DAdjustableLabel(this);
     d->altitude->setAlignment(Qt::AlignRight);
     d->latitude->setAlignment(Qt::AlignRight);
     d->longitude->setAlignment(Qt::AlignRight);

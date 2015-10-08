@@ -29,10 +29,6 @@
 #include <QSplitter>
 #include <QAction>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_globals.h"
@@ -43,10 +39,10 @@
 #include "lighttablethumbbar.h"
 #include "thumbbardock.h"
 
-using namespace KDcrawIface;
-
 namespace Digikam
 {
+
+class DAdjustableLabel;
 
 class LightTableWindow::Private
 {
@@ -130,8 +126,8 @@ public:
     QAction*                  navigateByPairAction;
     QAction*                  clearOnCloseAction;
 
-    RAdjustableLabel*         leftFileName;
-    RAdjustableLabel*         rightFileName;
+    DAdjustableLabel*         leftFileName;
+    DAdjustableLabel*         rightFileName;
 
     SidebarSplitter*          hSplitter;
     ThumbBarDock*             barViewDock;

@@ -41,11 +41,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RWidgetUtils>
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
@@ -70,7 +68,7 @@ public:
     QLabel*           label;
 
     QLabel*           actionPix;
-    RAdjustableLabel* actionLabel;
+    DAdjustableLabel* actionLabel;
 
     QProgressBar*     progress;
     
@@ -91,7 +89,7 @@ DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
     QGridLayout* const grid = new QGridLayout(page);
 
     d->actionPix      = new QLabel(page);
-    d->actionLabel    = new RAdjustableLabel(page);
+    d->actionLabel    = new DAdjustableLabel(page);
     d->logo           = new QLabel(page);
     d->progress       = new QProgressBar(page);
     d->title          = new QLabel(page);

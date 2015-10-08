@@ -39,10 +39,6 @@
 
 #include <kselectaction.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_config.h"
@@ -56,8 +52,6 @@
 
 class KToolBarPopupAction;
 
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 
@@ -65,6 +59,7 @@ class ImportUI;
 class SearchTextBar;
 class FilterStatusBar;
 class TagsActionMngr;
+class DAdjustableLabel;
 
 class ProgressEntry
 {
@@ -327,7 +322,7 @@ public:
     CameraList*                         cameraList;
     TagsActionMngr*                     tagsActionManager;
     DZoomBar*                           zoomBar;
-    RAdjustableLabel*                   statusLabel;
+    DAdjustableLabel*                   statusLabel;
     QString                             statusBarSelectionText;
 
     DigikamModelCollection*             modelCollection;
