@@ -41,12 +41,12 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
 #include "histogrambox.h"
@@ -147,12 +147,12 @@ public:
 
     RExpanderBox*        postProcessSettingsBox;
 
-    RIntNumInput*        contrastInput;
-    RIntNumInput*        brightnessInput;
+    DIntNumInput*        contrastInput;
+    DIntNumInput*        brightnessInput;
 
-    RDoubleNumInput*     gammaInput;
-    RDoubleNumInput*     saturationInput;
-    RDoubleNumInput*     mainExposureInput;
+    DDoubleNumInput*     gammaInput;
+    DDoubleNumInput*     saturationInput;
+    DDoubleNumInput*     mainExposureInput;
 
     DcrawSettingsWidget* decodingSettingsBox;
 };
@@ -207,33 +207,33 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     QGridLayout* const advExposureLayout = new QGridLayout(d->advExposureBox);
 
     d->brightnessLabel = new QLabel(i18n("Brightness:"), d->advExposureBox);
-    d->brightnessInput = new RIntNumInput(d->advExposureBox);
+    d->brightnessInput = new DIntNumInput(d->advExposureBox);
     d->brightnessInput->setRange(-100, 100, 1);
     d->brightnessInput->setDefaultValue(0);
     d->brightnessInput->setWhatsThis(i18n("Set here the brightness adjustment of the image."));
 
     d->contrastLabel = new QLabel(i18n("Contrast:"), d->advExposureBox);
-    d->contrastInput = new RIntNumInput(d->advExposureBox);
+    d->contrastInput = new DIntNumInput(d->advExposureBox);
     d->contrastInput->setRange(-100, 100, 1);
     d->contrastInput->setDefaultValue(0);
     d->contrastInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 
     d->gammaLabel = new QLabel(i18n("Gamma:"), d->advExposureBox);
-    d->gammaInput = new RDoubleNumInput(d->advExposureBox);
+    d->gammaInput = new DDoubleNumInput(d->advExposureBox);
     d->gammaInput->setDecimals(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.0);
     d->gammaInput->setWhatsThis(i18n("Set here the gamma adjustment of the image"));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"), d->advExposureBox);
-    d->saturationInput = new RDoubleNumInput(d->advExposureBox);
+    d->saturationInput = new DDoubleNumInput(d->advExposureBox);
     d->saturationInput->setDecimals(2);
     d->saturationInput->setRange(0.0, 2.0, 0.01);
     d->saturationInput->setDefaultValue(1.0);
     d->saturationInput->setWhatsThis(i18n("Set here the color saturation correction."));
 
     d->fineExposureLabel = new QLabel(i18n("Exposure (E.V):"), d->advExposureBox);
-    d->mainExposureInput = new RDoubleNumInput(d->advExposureBox);
+    d->mainExposureInput = new DDoubleNumInput(d->advExposureBox);
     d->mainExposureInput->setDecimals(2);
     d->mainExposureInput->setRange(-3.0, 3.0, 0.1);
     d->mainExposureInput->setDefaultValue(0.0);

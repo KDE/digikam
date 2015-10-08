@@ -44,18 +44,13 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "lensdistortionfilter.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -82,10 +77,10 @@ public:
 
     QLabel*              maskPreviewLabel;
 
-    RDoubleNumInput*     mainInput;
-    RDoubleNumInput*     edgeInput;
-    RDoubleNumInput*     rescaleInput;
-    RDoubleNumInput*     brightenInput;
+    DDoubleNumInput*     mainInput;
+    DDoubleNumInput*     edgeInput;
+    DDoubleNumInput*     rescaleInput;
+    DDoubleNumInput*     brightenInput;
 
     DImg                 previewRasterImage;
 
@@ -128,7 +123,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     QLabel* const label1 = new QLabel(i18nc("value for amount of distortion", "Main:"), d->gboxSettings->plainPage());
 
-    d->mainInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->mainInput = new DDoubleNumInput(d->gboxSettings->plainPage());
     d->mainInput->setDecimals(1);
     d->mainInput->setRange(-100.0, 100.0, 0.1);
     d->mainInput->setDefaultValue(0.0);
@@ -140,7 +135,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     QLabel* const label2 = new QLabel(i18n("Edge:"), d->gboxSettings->plainPage());
 
-    d->edgeInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->edgeInput = new DDoubleNumInput(d->gboxSettings->plainPage());
     d->edgeInput->setDecimals(1);
     d->edgeInput->setRange(-100.0, 100.0, 0.1);
     d->edgeInput->setDefaultValue(0.0);
@@ -151,7 +146,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     QLabel* const label3 = new QLabel(i18n("Zoom:"), d->gboxSettings->plainPage());
 
-    d->rescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->rescaleInput = new DDoubleNumInput(d->gboxSettings->plainPage());
     d->rescaleInput->setDecimals(1);
     d->rescaleInput->setRange(-100.0, 100.0, 0.1);
     d->rescaleInput->setDefaultValue(0.0);
@@ -161,7 +156,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     QLabel* const label4 = new QLabel(i18n("Brighten:"), d->gboxSettings->plainPage());
 
-    d->brightenInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->brightenInput = new DDoubleNumInput(d->gboxSettings->plainPage());
     d->brightenInput->setDecimals(1);
     d->brightenInput->setRange(-100.0, 100.0, 0.1);
     d->brightenInput->setDefaultValue(0.0);

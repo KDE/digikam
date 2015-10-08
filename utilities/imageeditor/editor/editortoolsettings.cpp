@@ -46,11 +46,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
@@ -114,7 +114,7 @@ public:
 
     HistogramBox*        histogramBox;
 
-    RIntNumInput*        guideSize;
+    DIntNumInput*        guideSize;
 };
 
 EditorToolSettings::EditorToolSettings(QWidget* const parent)
@@ -173,7 +173,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->guideColorBt      = new RColorSelector(d->guideBox);
     d->guideColorBt->setColor(QColor(Qt::red));
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
-    d->guideSize         = new RIntNumInput(d->guideBox);
+    d->guideSize         = new DIntNumInput(d->guideBox);
     d->guideSize->setSuffix(QLatin1String("px"));
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setDefaultValue(1);

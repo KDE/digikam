@@ -39,19 +39,14 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "blurfxfilter.h"
 #include "dcombobox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamFxFiltersImagePlugin
 {
@@ -83,8 +78,8 @@ public:
 
     DComboBox*           effectType;
 
-    RIntNumInput*        distanceInput;
-    RIntNumInput*        levelInput;
+    DIntNumInput*        distanceInput;
+    DIntNumInput*        levelInput;
 
     ImageRegionWidget*   previewWidget;
 
@@ -158,13 +153,13 @@ BlurFXTool::BlurFXTool(QObject* const parent)
                                      "recreates it by filling those cells with average pixel value.</p>"));
 
     d->distanceLabel = new QLabel(i18n("Distance:"));
-    d->distanceInput = new RIntNumInput;
+    d->distanceInput = new DIntNumInput;
     d->distanceInput->setRange(0, 100, 1);
     d->distanceInput->setDefaultValue(3);
     d->distanceInput->setWhatsThis( i18n("Set here the blur distance in pixels."));
 
     d->levelLabel = new QLabel(i18nc("level to use for the effect", "Level:"));
-    d->levelInput = new RIntNumInput;
+    d->levelInput = new DIntNumInput;
     d->levelInput->setRange(0, 360, 1);
     d->levelInput->setDefaultValue(128);
     d->levelInput->setWhatsThis( i18n("This value controls the level to use with the current effect."));

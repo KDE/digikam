@@ -49,11 +49,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "blurfilter.h"
@@ -115,11 +115,11 @@ public:
     RColorSelector* fontColorButton;
     RColorSelector* backgroundColorButton;
 
-    RIntNumInput*   textOpacity;
-    RIntNumInput*   backgroundOpacity;
-    RIntNumInput*   xMarginInput;
-    RIntNumInput*   yMarginInput;
-    RIntNumInput*   waterMarkSizePercent;
+    DIntNumInput*   textOpacity;
+    DIntNumInput*   backgroundOpacity;
+    DIntNumInput*   xMarginInput;
+    DIntNumInput*   yMarginInput;
+    DIntNumInput*   waterMarkSizePercent;
     
     bool            changeSettings;
 };
@@ -212,7 +212,7 @@ void WaterMark::registerSettingsWidget()
 
     QLabel* const textOpacityLabel = new QLabel();
     textOpacityLabel->setText(i18n("Text opacity:"));
-    d->textOpacity                 = new RIntNumInput();
+    d->textOpacity                 = new DIntNumInput();
     d->textOpacity->setRange(0, 100, 1);
     d->textOpacity->setDefaultValue(100);
     d->textOpacity->setWhatsThis(i18n("Set the opacity of the watermark text. 100 is fully opaque, 0 is fully transparent."));
@@ -238,7 +238,7 @@ void WaterMark::registerSettingsWidget()
 
     QLabel* const backgroundOpacityLabel = new QLabel();
     backgroundOpacityLabel->setText(i18n("Background opacity:"));
-    d->backgroundOpacity                 = new RIntNumInput();
+    d->backgroundOpacity                 = new DIntNumInput();
     d->backgroundOpacity->setRange(0, 100, 1);
     d->backgroundOpacity->setDefaultValue(100);
     d->backgroundOpacity->setWhatsThis(i18n("Set the opacity of the watermark background. 100 is fully opaque, 0 is fully transparent."));
@@ -258,21 +258,21 @@ void WaterMark::registerSettingsWidget()
     label4->setText(i18n("Placement:"));
 
     QLabel* const label5    = new QLabel(vbox);
-    d->waterMarkSizePercent = new RIntNumInput(vbox);
+    d->waterMarkSizePercent = new DIntNumInput(vbox);
     d->waterMarkSizePercent->setRange(0, 100, 1);
     d->waterMarkSizePercent->setDefaultValue(30);
     d->waterMarkSizePercent->setWhatsThis(i18n("Size of watermark, as a percentage of the marked image."));
     label5->setText(i18n("Size (%):"));
 
     QLabel* const label6 = new QLabel(vbox);
-    d->xMarginInput      = new RIntNumInput(vbox);
+    d->xMarginInput      = new DIntNumInput(vbox);
     d->xMarginInput->setRange(0, 100, 1);
     d->xMarginInput->setDefaultValue(2);
     d->xMarginInput->setWhatsThis(i18n("Margin from edge in X direction, as a percentage of the marked image"));
     label6->setText(i18n("X margin (%):"));
 
     QLabel* const label7 = new QLabel(vbox);
-    d->yMarginInput      = new RIntNumInput(vbox);
+    d->yMarginInput      = new DIntNumInput(vbox);
     d->yMarginInput->setRange(0, 100, 1);
     d->yMarginInput->setDefaultValue(2);
     d->yMarginInput->setWhatsThis(i18n("Margin from edge in Y direction, as a percentage of the marked image"));

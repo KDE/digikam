@@ -36,11 +36,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RNumInput>
-
-using namespace KDcrawIface;
+#include "dnuminput.h"
 
 namespace Digikam
 {
@@ -61,7 +59,7 @@ public:
 
     QLabel*       labelPNGcompression;
 
-    RIntNumInput* PNGcompression;
+    DIntNumInput* PNGcompression;
 };
 
 PNGSettings::PNGSettings(QWidget* parent)
@@ -70,7 +68,7 @@ PNGSettings::PNGSettings(QWidget* parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->PNGGrid        = new QGridLayout(this);
-    d->PNGcompression = new RIntNumInput(this);
+    d->PNGcompression = new DIntNumInput(this);
     d->PNGcompression->setDefaultValue(6);
     d->PNGcompression->setRange(1, 9, 1);
     d->labelPNGcompression = new QLabel(i18n("PNG compression:"), this);

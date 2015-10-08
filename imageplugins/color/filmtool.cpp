@@ -47,12 +47,9 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "dgradientslider.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
@@ -63,8 +60,6 @@
 #include "imagelevels.h"
 #include "imageregionwidget.h"
 #include "filmfilter_p.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamColorImagePlugin
 {
@@ -120,8 +115,8 @@ public:
 
     FilmContainer        filmContainer;
 
-    RDoubleNumInput*     exposureInput;
-    RDoubleNumInput*     gammaInput;
+    DDoubleNumInput*     exposureInput;
+    DDoubleNumInput*     gammaInput;
     QListWidget*         cnType;
     QCheckBox*           colorBalanceInput;
 
@@ -272,7 +267,7 @@ FilmTool::FilmTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->exposureInput = new RDoubleNumInput();
+    d->exposureInput = new DDoubleNumInput();
     d->exposureInput->setDecimals(2);
     d->exposureInput->setRange(0.0, 40.0, 0.01);
     d->exposureInput->setDefaultValue(1.0);
@@ -280,7 +275,7 @@ FilmTool::FilmTool(QObject* const parent)
     d->exposureInput->setWhatsThis(i18n("Move the slider to higher values until maximum brightness is achieved "
                                         "without clipping any color channel. Use the output histogram to evaluate each channel."));
 
-    d->gammaInput = new RDoubleNumInput();
+    d->gammaInput = new DDoubleNumInput();
     d->gammaInput->setDecimals(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.8);

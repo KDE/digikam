@@ -38,18 +38,13 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "raindropfilter.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamFxFiltersImagePlugin
 {
@@ -71,9 +66,9 @@ public:
     static const QString configAmountAdjustmentEntry;
     static const QString configCoeffAdjustmentEntry;
 
-    RIntNumInput*        dropInput;
-    RIntNumInput*        amountInput;
-    RIntNumInput*        coeffInput;
+    DIntNumInput*        dropInput;
+    DIntNumInput*        amountInput;
+    DIntNumInput*        coeffInput;
 
     ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
@@ -115,7 +110,7 @@ RainDropTool::RainDropTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label1 = new QLabel(i18n("Drop size:"));
-    d->dropInput   = new RIntNumInput;
+    d->dropInput   = new DIntNumInput;
     d->dropInput->setRange(0, 200, 1);
     d->dropInput->setDefaultValue(80);
     d->dropInput->setWhatsThis( i18n("Set here the raindrops' size."));
@@ -123,7 +118,7 @@ RainDropTool::RainDropTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label2 = new QLabel(i18n("Number:"));
-    d->amountInput = new RIntNumInput;
+    d->amountInput = new DIntNumInput;
     d->amountInput->setRange(1, 500, 1);
     d->amountInput->setDefaultValue(150);
     d->amountInput->setWhatsThis( i18n("This value controls the maximum number of raindrops."));
@@ -131,7 +126,7 @@ RainDropTool::RainDropTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label3 = new QLabel(i18n("Fish eyes:"));
-    d->coeffInput  = new RIntNumInput;
+    d->coeffInput  = new DIntNumInput;
     d->coeffInput->setRange(1, 100, 1);
     d->coeffInput->setDefaultValue(30);
     d->coeffInput->setWhatsThis( i18n("This value is the fish-eye-effect optical "

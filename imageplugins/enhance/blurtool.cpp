@@ -35,18 +35,13 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "blurfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -64,7 +59,7 @@ public:
     static const QString configGroupName;
     static const QString configRadiusAdjustmentEntry;
 
-    RIntNumInput*        radiusInput;
+    DIntNumInput*        radiusInput;
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
@@ -89,7 +84,7 @@ BlurTool::BlurTool(QObject* const parent)
     // --------------------------------------------------------
 
     QLabel* const label  = new QLabel(i18n("Smoothness:"));
-    d->radiusInput = new RIntNumInput();
+    d->radiusInput = new DIntNumInput();
     d->radiusInput->setRange(0, 100, 1);
     d->radiusInput->setDefaultValue(0);
     d->radiusInput->setWhatsThis(i18n("A smoothness of 0 has no effect, "

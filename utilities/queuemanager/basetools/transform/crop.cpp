@@ -37,12 +37,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "autocrop.h"
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
@@ -67,10 +64,10 @@ public:
 
     QCheckBox*    autoCrop;
 
-    RIntNumInput* heightInput;
-    RIntNumInput* widthInput;
-    RIntNumInput* xInput;
-    RIntNumInput* yInput;
+    DIntNumInput* heightInput;
+    DIntNumInput* widthInput;
+    DIntNumInput* xInput;
+    DIntNumInput* yInput;
 };
 
 Crop::Crop(QObject* const parent)
@@ -100,12 +97,12 @@ void Crop::registerSettingsWidget()
     QLabel* const positionLabel = new QLabel(i18n("Position:"), m_settingsWidget);
     positionLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
-    d->xInput = new RIntNumInput(m_settingsWidget);
+    d->xInput = new DIntNumInput(m_settingsWidget);
     d->xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     d->xInput->setRange(0, 99999, 1);
     d->xInput->setDefaultValue(50);
 
-    d->yInput = new RIntNumInput(m_settingsWidget);
+    d->yInput = new DIntNumInput(m_settingsWidget);
     d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     d->yInput->setRange(0, 99999, 1);
     d->yInput->setDefaultValue(50);
@@ -115,12 +112,12 @@ void Crop::registerSettingsWidget()
     QLabel* const sizeLabel = new QLabel(i18n("Size:"), m_settingsWidget);
     sizeLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
-    d->widthInput = new RIntNumInput(m_settingsWidget);
+    d->widthInput = new DIntNumInput(m_settingsWidget);
     d->widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
     d->widthInput->setRange(0, 99999, 1);
     d->widthInput->setDefaultValue(800);
 
-    d->heightInput = new RIntNumInput(m_settingsWidget);
+    d->heightInput = new DIntNumInput(m_settingsWidget);
     d->heightInput->setWhatsThis( i18n("Set here the height selection for cropping."));
     d->heightInput->setRange(0, 99999, 1);
     d->heightInput->setDefaultValue(600);

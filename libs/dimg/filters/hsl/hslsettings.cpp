@@ -36,18 +36,13 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 #include "colorgradientwidget.h"
 #include "hspreviewwidget.h"
 #include "dhuesaturationselect.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -73,10 +68,10 @@ public:
 
     DHueSaturationSelector* HSSelector;
 
-    RDoubleNumInput*        hInput;
-    RDoubleNumInput*        sInput;
-    RDoubleNumInput*        vInput;
-    RDoubleNumInput*        lInput;
+    DDoubleNumInput*        hInput;
+    DDoubleNumInput*        sInput;
+    DDoubleNumInput*        vInput;
+    DDoubleNumInput*        lInput;
 
     HSPreviewWidget*        HSPreview;
 };
@@ -104,21 +99,21 @@ HSLSettings::HSLSettings(QWidget* const parent)
     d->HSPreview->setMinimumSize(256, 15);
 
     QLabel* const label2 = new QLabel(i18n("Hue:"));
-    d->hInput            = new RDoubleNumInput();
+    d->hInput            = new DDoubleNumInput();
     d->hInput->setDecimals(0);
     d->hInput->setRange(-180.0, 180.0, 1.0);
     d->hInput->setDefaultValue(0.0);
     d->hInput->setWhatsThis(i18n("Set here the hue adjustment of the image."));
 
     QLabel* const label3 = new QLabel(i18n("Saturation:"));
-    d->sInput            = new RDoubleNumInput();
+    d->sInput            = new DDoubleNumInput();
     d->sInput->setDecimals(2);
     d->sInput->setRange(-100.0, 100.0, 0.01);
     d->sInput->setDefaultValue(0.0);
     d->sInput->setWhatsThis(i18n("Set here the saturation adjustment of the image."));
 
     QLabel* const label4 = new QLabel(i18n("Vibrance:"));
-    d->vInput            = new RDoubleNumInput();
+    d->vInput            = new DDoubleNumInput();
     d->vInput->setDecimals(2);
     d->vInput->setRange(-100.0, 100.0, 0.01);
     d->vInput->setDefaultValue(0.0);
@@ -126,7 +121,7 @@ HSLSettings::HSLSettings(QWidget* const parent)
                                  "Vibrance performs selective saturation on less saturated colors and avoiding skin tones."));
 
     QLabel* const label5 = new QLabel(i18n("Lightness:"));
-    d->lInput            = new RDoubleNumInput();
+    d->lInput            = new DDoubleNumInput();
     d->lInput->setDecimals(2);
     d->lInput->setRange(-100.0, 100.0, 0.01);
     d->lInput->setDefaultValue(0.0);

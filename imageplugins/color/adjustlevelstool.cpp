@@ -49,12 +49,9 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "dgradientslider.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
@@ -65,8 +62,6 @@
 #include "levelsfilter.h"
 #include "imagelevels.h"
 #include "imageregionwidget.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamColorImagePlugin
 {
@@ -130,12 +125,12 @@ public:
 
     QButtonGroup*        pickerType;
 
-    RIntNumInput*        minInput;
-    RIntNumInput*        maxInput;
-    RIntNumInput*        minOutput;
-    RIntNumInput*        maxOutput;
+    DIntNumInput*        minInput;
+    DIntNumInput*        maxInput;
+    DIntNumInput*        minOutput;
+    DIntNumInput*        maxOutput;
 
-    RDoubleNumInput*     gammaInput;
+    DDoubleNumInput*     gammaInput;
 
     HistogramWidget*     levelsHistogramWidget;
 
@@ -222,32 +217,32 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     d->outputLevels->setToolTip( i18n( "Output intensity." ) );
     d->outputLevels->installEventFilter(this);
 
-    d->minInput = new RIntNumInput();
+    d->minInput = new DIntNumInput();
     d->minInput->setRange(0, d->histoSegments, 1);
     d->minInput->setDefaultValue(0);
     d->minInput->setWhatsThis( i18n("Select the minimal input intensity value of the histogram here."));
     d->minInput->setToolTip( i18n( "Minimal input intensity." ) );
 
-    d->gammaInput = new RDoubleNumInput();
+    d->gammaInput = new DDoubleNumInput();
     d->gammaInput->setDecimals(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.0);
     d->gammaInput->setToolTip( i18n( "Gamma input value." ) );
     d->gammaInput->setWhatsThis( i18n("Select the gamma input value here."));
 
-    d->maxInput = new RIntNumInput();
+    d->maxInput = new DIntNumInput();
     d->maxInput->setRange(0, d->histoSegments, 1);
     d->maxInput->setDefaultValue(d->histoSegments);
     d->maxInput->setToolTip( i18n( "Maximal input intensity." ) );
     d->maxInput->setWhatsThis( i18n("Select the maximal input intensity value of the histogram here."));
 
-    d->minOutput = new RIntNumInput();
+    d->minOutput = new DIntNumInput();
     d->minOutput->setRange(0, d->histoSegments, 1);
     d->minOutput->setDefaultValue(0);
     d->minOutput->setToolTip( i18n( "Minimal output intensity." ) );
     d->minOutput->setWhatsThis( i18n("Select the minimal output intensity value of the histogram here."));
 
-    d->maxOutput = new RIntNumInput();
+    d->maxOutput = new DIntNumInput();
     d->maxOutput->setRange(0, d->histoSegments, 1);
     d->maxOutput->setDefaultValue(d->histoSegments);
     d->maxOutput->setToolTip( i18n( "Maximal output intensity." ) );

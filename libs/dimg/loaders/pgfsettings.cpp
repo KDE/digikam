@@ -37,11 +37,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RNumInput>
-
-using namespace KDcrawIface;
+#include "dnuminput.h"
 
 namespace Digikam
 {
@@ -65,7 +63,7 @@ public:
 
     QCheckBox*    PGFLossLess;
 
-    RIntNumInput* PGFcompression;
+    DIntNumInput* PGFcompression;
 };
 
 PGFSettings::PGFSettings(QWidget* const parent)
@@ -80,7 +78,7 @@ PGFSettings::PGFSettings(QWidget* const parent)
                                       "<p>If this option is enabled, a lossless method will be used "
                                       "to compress PGF pictures.</p>"));
 
-    d->PGFcompression = new RIntNumInput(this);
+    d->PGFcompression = new DIntNumInput(this);
     d->PGFcompression->setDefaultValue(3);
     d->PGFcompression->setRange(1, 9, 1);
     d->labelPGFcompression = new QLabel(i18n("PGF quality:"), this);

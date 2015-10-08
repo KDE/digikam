@@ -36,12 +36,9 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
 #include "bcgsettings.h"
 #include "editortoolsettings.h"

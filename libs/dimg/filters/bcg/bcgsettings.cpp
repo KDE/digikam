@@ -41,11 +41,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 
 using namespace KDcrawIface;
@@ -68,10 +68,10 @@ public:
     static const QString configContrastAdjustmentEntry;
     static const QString configGammaAdjustmentEntry;
 
-    RIntNumInput*        bInput;
-    RIntNumInput*        cInput;
+    DIntNumInput*        bInput;
+    DIntNumInput*        cInput;
 
-    RDoubleNumInput*     gInput;
+    DDoubleNumInput*     gInput;
 };
 
 const QString BCGSettings::Private::configBrightnessAdjustmentEntry(QLatin1String("BrightnessAdjustment"));
@@ -87,19 +87,19 @@ BCGSettings::BCGSettings(QWidget* const parent)
     QGridLayout* grid = new QGridLayout(parent);
 
     QLabel* const label2 = new QLabel(i18n("Brightness:"));
-    d->bInput      = new RIntNumInput();
+    d->bInput      = new DIntNumInput();
     d->bInput->setRange(-100, 100, 1);
     d->bInput->setDefaultValue(0);
     d->bInput->setWhatsThis(i18n("Set here the brightness adjustment of the image."));
 
     QLabel* const label3 = new QLabel(i18n("Contrast:"));
-    d->cInput      = new RIntNumInput();
+    d->cInput      = new DIntNumInput();
     d->cInput->setRange(-100, 100, 1);
     d->cInput->setDefaultValue(0);
     d->cInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 
     QLabel* const label4 = new QLabel(i18n("Gamma:"));
-    d->gInput      = new RDoubleNumInput();
+    d->gInput      = new DDoubleNumInput();
     d->gInput->setDecimals(2);
     d->gInput->setRange(0.1, 3.0, 0.01);
     d->gInput->setDefaultValue(1.0);

@@ -46,11 +46,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "editortoolsettings.h"
 #include "dcombobox.h"
 #include "imageiface.h"
@@ -131,16 +131,16 @@ public:
 
     EditorToolSettings*  gboxSettings;
 
-    RIntNumInput*        wInput;
-    RIntNumInput*        hInput;
-    RIntNumInput*        stepInput;
-    RIntNumInput*        maskPenSize;
-    RIntNumInput*        sideSwitchInput;
+    DIntNumInput*        wInput;
+    DIntNumInput*        hInput;
+    DIntNumInput*        stepInput;
+    DIntNumInput*        maskPenSize;
+    DIntNumInput*        sideSwitchInput;
 
-    RDoubleNumInput*     wpInput;
-    RDoubleNumInput*     hpInput;
-    RDoubleNumInput*     mixedRescaleInput;
-    RDoubleNumInput*     rigidityInput;
+    DDoubleNumInput*     wpInput;
+    DDoubleNumInput*     hpInput;
+    DDoubleNumInput*     mixedRescaleInput;
+    DDoubleNumInput*     rigidityInput;
 
     DComboBox*           funcInput;
     DComboBox*           resizeOrderInput;
@@ -208,28 +208,28 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->preserveRatioBox->setChecked(true);
 
     QLabel* const labelWidth = new QLabel(i18n("Width (px):"), d->gboxSettings->plainPage());
-    d->wInput                = new RIntNumInput(d->gboxSettings->plainPage());
+    d->wInput                = new DIntNumInput(d->gboxSettings->plainPage());
     d->wInput->setRange(1, 2*d->orgWidth, 1);
     d->wInput->setDefaultValue(d->orgWidth);
     d->wInput->setObjectName(QLatin1String("wInput"));
     d->wInput->setWhatsThis(i18n("Set here the new image width in pixels."));
 
     QLabel* const labelHeight = new QLabel(i18n("Height (px):"), d->gboxSettings->plainPage());
-    d->hInput                 = new RIntNumInput(d->gboxSettings->plainPage());
+    d->hInput                 = new DIntNumInput(d->gboxSettings->plainPage());
     d->hInput->setRange(1, 2*d->orgHeight, 1);
     d->hInput->setDefaultValue(d->orgHeight);
     d->hInput->setObjectName(QLatin1String("hInput"));
     d->hInput->setWhatsThis(i18n("Set here the new image height in pixels."));
 
     QLabel* const labelWidthP = new QLabel(i18n("Width (%):"), d->gboxSettings->plainPage());
-    d->wpInput                = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->wpInput                = new DDoubleNumInput(d->gboxSettings->plainPage());
     d->wpInput->setRange(1.0, 200.0, 1.0);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName(QLatin1String("wpInput"));
     d->wpInput->setWhatsThis(i18n("New image width, as a percentage (%)."));
 
     QLabel* const labelHeightP = new QLabel(i18n("Height (%):"), d->gboxSettings->plainPage());
-    d->hpInput                 = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->hpInput                 = new DDoubleNumInput(d->gboxSettings->plainPage());
     d->hpInput->setRange(1.0, 200.0, 1.0);
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName(QLatin1String("hpInput"));
@@ -252,7 +252,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     QWidget* const mixedRescaleContainer  = new QWidget;
     QGridLayout* const mixedRescaleLayout = new QGridLayout;
 
-    d->mixedRescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->mixedRescaleInput = new DDoubleNumInput(d->gboxSettings->plainPage());
     d->mixedRescaleInput->setRange(0.0, 100.0, 1.0);
     d->mixedRescaleInput->setDefaultValue(100.0);
     d->mixedRescaleInput->setObjectName(QLatin1String("mixedRescaleInput"));
@@ -307,7 +307,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->maskGroup->addButton(d->eraseMaskTool, Private::eraseMask);
 
     QLabel* const labelMaskPenSize = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
-    d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
+    d->maskPenSize           = new DIntNumInput(d->gboxSettings->plainPage());
     d->maskPenSize->setRange(3, 64, 1);
     d->maskPenSize->setDefaultValue(10);
     d->maskPenSize->setObjectName(QLatin1String("maskPenSize"));
@@ -358,7 +358,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     QGridLayout* const advancedSettingsLayout = new QGridLayout;
 
     QLabel* const labelRigidity = new QLabel(i18n("Overall rigidity of the seams:"), d->gboxSettings->plainPage());
-    d->rigidityInput            = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->rigidityInput            = new DDoubleNumInput(d->gboxSettings->plainPage());
     d->rigidityInput->setRange(0.0, 10.0, 1.0);
     d->rigidityInput->setDefaultValue(0.0);
     d->rigidityInput->setWhatsThis(i18n("Use this value to give a negative bias to the seams which "
@@ -371,7 +371,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
                                         "of 1.5, and summed up for the whole seam."));
 
     QLabel* const labelSteps = new QLabel(i18n("Maximum number of transversal steps:"),d->gboxSettings->plainPage());
-    d->stepInput             = new RIntNumInput(d->gboxSettings->plainPage());
+    d->stepInput             = new DIntNumInput(d->gboxSettings->plainPage());
     d->stepInput->setRange(1, 5, 1);
     d->stepInput->setDefaultValue(1);
     d->stepInput->setWhatsThis(i18n("This option lets you choose the maximum transversal step "
@@ -385,7 +385,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
                                     "to balance the situation, you can use the rigidity setting."));
 
     QLabel* const labelSideSwitch = new QLabel(i18n("Side switch frequency:"),d->gboxSettings->plainPage());
-    d->sideSwitchInput            = new RIntNumInput(d->gboxSettings->plainPage());
+    d->sideSwitchInput            = new DIntNumInput(d->gboxSettings->plainPage());
     d->sideSwitchInput->setRange(1, 20, 1);
     d->sideSwitchInput->setDefaultValue(4);
     d->sideSwitchInput->setWhatsThis(i18n("During the carving process, at each step "

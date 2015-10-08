@@ -45,12 +45,12 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 #include "digikam_config.h"
 #include "dcombobox.h"
@@ -102,20 +102,20 @@ public:
     DComboBox*           sharpMethod;
 
     // Simple sharp.
-    RIntNumInput*        radiusInput;
+    DIntNumInput*        radiusInput;
 
     // Unsharp mask.
-    RDoubleNumInput*     radiusInput2;
-    RDoubleNumInput*     amountInput;
-    RDoubleNumInput*     thresholdInput;
+    DDoubleNumInput*     radiusInput2;
+    DDoubleNumInput*     amountInput;
+    DDoubleNumInput*     thresholdInput;
 
 #ifdef HAVE_EIGEN3
     // Refocus.
-    RDoubleNumInput*     radius;
-    RDoubleNumInput*     correlation;
-    RDoubleNumInput*     noise;
-    RDoubleNumInput*     gauss;
-    RIntNumInput*        matrixSize;
+    DDoubleNumInput*     radius;
+    DDoubleNumInput*     correlation;
+    DDoubleNumInput*     noise;
+    DDoubleNumInput*     gauss;
+    DIntNumInput*        matrixSize;
 #endif // HAVE_EIGEN3
 };
 
@@ -164,7 +164,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QGridLayout* const grid1           = new QGridLayout(simpleSharpSettings);
 
     QLabel* const label  = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
-    d->radiusInput = new RIntNumInput(simpleSharpSettings);
+    d->radiusInput = new DIntNumInput(simpleSharpSettings);
     d->radiusInput->setRange(0, 100, 1);
     d->radiusInput->setDefaultValue(0);
     d->radiusInput->setWhatsThis(i18n("A sharpness of 0 has no effect, "
@@ -185,7 +185,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QGridLayout* const grid2           = new QGridLayout(unsharpMaskSettings);
 
     QLabel* const label2  = new QLabel(i18n("Radius:"), unsharpMaskSettings);
-    d->radiusInput2 = new RDoubleNumInput(unsharpMaskSettings);
+    d->radiusInput2 = new DDoubleNumInput(unsharpMaskSettings);
     d->radiusInput2->setRange(0.1, 12.0, 0.1);
     d->radiusInput2->setDecimals(1);
     d->radiusInput2->setDefaultValue(1.0);
@@ -193,7 +193,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
                                        "used to determines how much to blur the image."));
 
     QLabel* const label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
-    d->amountInput = new RDoubleNumInput(unsharpMaskSettings);
+    d->amountInput = new DDoubleNumInput(unsharpMaskSettings);
     d->amountInput->setDecimals(1);
     d->amountInput->setRange(0.0, 5.0, 0.1);
     d->amountInput->setDefaultValue(1.0);
@@ -201,7 +201,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
                                       "original and the blur image that is added back into the original."));
 
     QLabel* const label4    = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
-    d->thresholdInput = new RDoubleNumInput(unsharpMaskSettings);
+    d->thresholdInput = new DDoubleNumInput(unsharpMaskSettings);
     d->thresholdInput->setDecimals(2);
     d->thresholdInput->setRange(0.0, 1.0, 0.01);
     d->thresholdInput->setDefaultValue(0.05);
@@ -228,7 +228,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QGridLayout* const grid3       = new QGridLayout(refocusSettings);
 
     QLabel* const label5 = new QLabel(i18n("Circular sharpness:"), refocusSettings);
-    d->radius            = new RDoubleNumInput(refocusSettings);
+    d->radius            = new DDoubleNumInput(refocusSettings);
     d->radius->setDecimals(2);
     d->radius->setRange(0.0, 5.0, 0.01);
     d->radius->setDefaultValue(1.0);
@@ -237,7 +237,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
                                  "should give good results. Select a higher value when your image is very blurred."));
 
     QLabel* const label6 = new QLabel(i18n("Correlation:"), refocusSettings);
-    d->correlation       = new RDoubleNumInput(refocusSettings);
+    d->correlation       = new DDoubleNumInput(refocusSettings);
     d->correlation->setDecimals(2);
     d->correlation->setRange(0.0, 1.0, 0.01);
     d->correlation->setDefaultValue(0.5);
@@ -247,7 +247,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
                                       "plugin."));
 
     QLabel* const label7 = new QLabel(i18n("Noise filter:"), refocusSettings);
-    d->noise             = new RDoubleNumInput(refocusSettings);
+    d->noise             = new DDoubleNumInput(refocusSettings);
     d->noise->setDecimals(3);
     d->noise->setRange(0.0, 1.0, 0.001);
     d->noise->setDefaultValue(0.03);
@@ -258,7 +258,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
                                 "effect of the plugin."));
 
     QLabel* const label8 = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
-    d->gauss             = new RDoubleNumInput(refocusSettings);
+    d->gauss             = new DDoubleNumInput(refocusSettings);
     d->gauss->setDecimals(2);
     d->gauss->setRange(0.0, 1.0, 0.01);
     d->gauss->setDefaultValue(0.0);
@@ -268,7 +268,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
                                 "increase the correlation and/or noise filter parameters."));
 
     QLabel* const label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
-    d->matrixSize        = new RIntNumInput(refocusSettings);
+    d->matrixSize        = new DIntNumInput(refocusSettings);
     d->matrixSize->setRange(0, RefocusFilter::maxMatrixSize(), 1);
     d->matrixSize->setDefaultValue(5);
     d->matrixSize->setWhatsThis(i18n("This parameter determines the size of the transformation matrix. "

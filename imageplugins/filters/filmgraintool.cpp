@@ -38,12 +38,9 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "filmgrainfilter.h"

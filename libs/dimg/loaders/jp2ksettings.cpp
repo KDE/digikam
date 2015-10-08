@@ -37,11 +37,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RNumInput>
-
-using namespace KDcrawIface;
+#include "dnuminput.h"
 
 namespace Digikam
 {
@@ -65,7 +63,7 @@ public:
 
     QCheckBox*    JPEG2000LossLess;
 
-    RIntNumInput* JPEG2000compression;
+    DIntNumInput* JPEG2000compression;
 };
 
 JP2KSettings::JP2KSettings(QWidget* const parent)
@@ -80,7 +78,7 @@ JP2KSettings::JP2KSettings(QWidget* const parent)
                                            "<p>If this option is enabled, a lossless method will be used "
                                            "to compress JPEG 2000 pictures.</p>"));
 
-    d->JPEG2000compression = new RIntNumInput(this);
+    d->JPEG2000compression = new DIntNumInput(this);
     d->JPEG2000compression->setDefaultValue(75);
     d->JPEG2000compression->setRange(1, 100, 1);
     d->labelJPEG2000compression = new QLabel(i18n("JPEG 2000 quality:"), this);

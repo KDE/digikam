@@ -43,11 +43,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 
 using namespace KDcrawIface;
@@ -124,19 +124,19 @@ public:
 
     QCheckBox*           photoDistribution;
 
-    RIntNumInput*        grainSizeInput;
-    RIntNumInput*        intensityLumInput;
-    RIntNumInput*        shadowsLumInput;
-    RIntNumInput*        midtonesLumInput;
-    RIntNumInput*        highlightsLumInput;
-    RIntNumInput*        intensityChromaBlueInput;
-    RIntNumInput*        shadowsChromaBlueInput;
-    RIntNumInput*        midtonesChromaBlueInput;
-    RIntNumInput*        highlightsChromaBlueInput;
-    RIntNumInput*        intensityChromaRedInput;
-    RIntNumInput*        shadowsChromaRedInput;
-    RIntNumInput*        midtonesChromaRedInput;
-    RIntNumInput*        highlightsChromaRedInput;
+    DIntNumInput*        grainSizeInput;
+    DIntNumInput*        intensityLumInput;
+    DIntNumInput*        shadowsLumInput;
+    DIntNumInput*        midtonesLumInput;
+    DIntNumInput*        highlightsLumInput;
+    DIntNumInput*        intensityChromaBlueInput;
+    DIntNumInput*        shadowsChromaBlueInput;
+    DIntNumInput*        midtonesChromaBlueInput;
+    DIntNumInput*        highlightsChromaBlueInput;
+    DIntNumInput*        intensityChromaRedInput;
+    DIntNumInput*        shadowsChromaRedInput;
+    DIntNumInput*        midtonesChromaRedInput;
+    DIntNumInput*        highlightsChromaRedInput;
 
     RExpanderBox*        expanderBox;
 };
@@ -173,7 +173,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     QGridLayout* const grid0  = new QGridLayout(commonPage);
 
     d->sizeLabel        = new QLabel(i18n("Grain Size:"), commonPage);
-    d->grainSizeInput   = new RIntNumInput(commonPage);
+    d->grainSizeInput   = new DIntNumInput(commonPage);
     d->grainSizeInput->setRange(1, 5, 1);
     d->grainSizeInput->setDefaultValue(1);
     d->grainSizeInput->setWhatsThis(i18n("Set here the graininess size of film."));
@@ -193,7 +193,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     QGridLayout* const grid1   = new QGridLayout(firstPage);
 
     d->label1            = new QLabel(i18n("Intensity:"), firstPage);
-    d->intensityLumInput = new RIntNumInput(firstPage);
+    d->intensityLumInput = new DIntNumInput(firstPage);
     d->intensityLumInput->setRange(1, 100, 1);
     d->intensityLumInput->setDefaultValue(25);
     d->intensityLumInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
@@ -202,7 +202,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label2          = new QLabel(i18n("Shadows:"), firstPage);
-    d->shadowsLumInput = new RIntNumInput(firstPage);
+    d->shadowsLumInput = new DIntNumInput(firstPage);
     d->shadowsLumInput->setRange(-100, 100, 1);
     d->shadowsLumInput->setDefaultValue(-100);
     d->shadowsLumInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
@@ -210,7 +210,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label3           = new QLabel(i18n("Midtones:"), firstPage);
-    d->midtonesLumInput = new RIntNumInput(firstPage);
+    d->midtonesLumInput = new DIntNumInput(firstPage);
     d->midtonesLumInput->setRange(-100, 100, 1);
     d->midtonesLumInput->setDefaultValue(0);
     d->midtonesLumInput->setWhatsThis(i18n("Set how much the filter affects midtones."));
@@ -218,7 +218,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label4             = new QLabel(i18n("Highlights:"), firstPage);
-    d->highlightsLumInput = new RIntNumInput(firstPage);
+    d->highlightsLumInput = new DIntNumInput(firstPage);
     d->highlightsLumInput->setRange(-100, 100, 1);
     d->highlightsLumInput->setDefaultValue(-100);
     d->highlightsLumInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
@@ -240,7 +240,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     QGridLayout* const grid2  = new QGridLayout(secondPage);
 
     d->label5                   = new QLabel(i18n("Intensity:"), secondPage);
-    d->intensityChromaBlueInput = new RIntNumInput(secondPage);
+    d->intensityChromaBlueInput = new DIntNumInput(secondPage);
     d->intensityChromaBlueInput->setRange(1, 100, 1);
     d->intensityChromaBlueInput->setDefaultValue(25);
     d->intensityChromaBlueInput->setWhatsThis(i18n("Set here the film sensitivity to use for "
@@ -249,7 +249,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label6                 = new QLabel(i18n("Shadows:"), secondPage);
-    d->shadowsChromaBlueInput = new RIntNumInput(secondPage);
+    d->shadowsChromaBlueInput = new DIntNumInput(secondPage);
     d->shadowsChromaBlueInput->setRange(-100, 100, 1);
     d->shadowsChromaBlueInput->setDefaultValue(-100);
     d->shadowsChromaBlueInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
@@ -257,7 +257,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label7                  = new QLabel(i18n("Midtones:"), secondPage);
-    d->midtonesChromaBlueInput = new RIntNumInput(secondPage);
+    d->midtonesChromaBlueInput = new DIntNumInput(secondPage);
     d->midtonesChromaBlueInput->setRange(-100, 100, 1);
     d->midtonesChromaBlueInput->setDefaultValue(0);
     d->midtonesChromaBlueInput->setWhatsThis(i18n("Set how much the filter affects midtones."));
@@ -265,7 +265,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label8                    = new QLabel(i18n("Highlights:"), secondPage);
-    d->highlightsChromaBlueInput = new RIntNumInput(secondPage);
+    d->highlightsChromaBlueInput = new DIntNumInput(secondPage);
     d->highlightsChromaBlueInput->setRange(-100, 100, 1);
     d->highlightsChromaBlueInput->setDefaultValue(-100);
     d->highlightsChromaBlueInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
@@ -287,7 +287,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     QGridLayout* const grid3 = new QGridLayout(thirdPage);
 
     d->label9                  = new QLabel(i18n("Intensity:"), thirdPage);
-    d->intensityChromaRedInput = new RIntNumInput(thirdPage);
+    d->intensityChromaRedInput = new DIntNumInput(thirdPage);
     d->intensityChromaRedInput->setRange(1, 100, 1);
     d->intensityChromaRedInput->setDefaultValue(25);
     d->intensityChromaRedInput->setWhatsThis(i18n("Set here the film sensitivity to use for "
@@ -296,7 +296,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label10               = new QLabel(i18n("Shadows:"), thirdPage);
-    d->shadowsChromaRedInput = new RIntNumInput(thirdPage);
+    d->shadowsChromaRedInput = new DIntNumInput(thirdPage);
     d->shadowsChromaRedInput->setRange(-100, 100, 1);
     d->shadowsChromaRedInput->setDefaultValue(-100);
     d->shadowsChromaRedInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
@@ -304,7 +304,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label11                = new QLabel(i18n("Midtones:"), thirdPage);
-    d->midtonesChromaRedInput = new RIntNumInput(thirdPage);
+    d->midtonesChromaRedInput = new DIntNumInput(thirdPage);
     d->midtonesChromaRedInput->setRange(-100, 100, 1);
     d->midtonesChromaRedInput->setDefaultValue(0);
     d->midtonesChromaRedInput->setWhatsThis(i18n("Set how much the filter affects midtones."));
@@ -312,7 +312,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label12                  = new QLabel(i18n("Highlights:"), thirdPage);
-    d->highlightsChromaRedInput = new RIntNumInput(thirdPage);
+    d->highlightsChromaRedInput = new DIntNumInput(thirdPage);
     d->highlightsChromaRedInput->setRange(-100, 100, 1);
     d->highlightsChromaRedInput->setDefaultValue(-100);
     d->highlightsChromaRedInput->setWhatsThis(i18n("Set how much the filter affects shadows."));

@@ -45,10 +45,10 @@
 
 #include <KDCRAW/RWidgetUtils>
 #include <KDCRAW/RExpanderBox>
-#include <KDCRAW/RNumInput>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "digikam_config.h"
 #include "setup.h"
 #include "albumselectors.h"
@@ -147,7 +147,7 @@ public:
     QComboBox*           faceScannedHandling;
 #endif /* HAVE_KFACE */
 
-    RIntNumInput*        similarity;
+    DIntNumInput*        similarity;
     RExpanderBox*        expanderBox;
     AlbumSelectors*      albumSelectors;
 };
@@ -223,7 +223,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     new QLabel(i18n("Similarity (in percents): "), d->hbox);
     QWidget* const space = new QWidget(d->hbox);
     d->hbox->setStretchFactor(space, 10);
-    d->similarity        = new RIntNumInput(d->hbox);
+    d->similarity        = new DIntNumInput(d->hbox);
     d->similarity->setDefaultValue(90);
     d->similarity->setRange(0, 100, 1);
     d->expanderBox->insertItem(Private::Duplicates, d->hbox, QIcon::fromTheme(QLatin1String("tools-wizard")),

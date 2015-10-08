@@ -37,19 +37,14 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 #include "oilpaintfilter.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamFxFiltersImagePlugin
 {
@@ -69,8 +64,8 @@ public:
     static const QString configBrushSizeEntry;
     static const QString configSmoothAdjustmentEntry;
 
-    RIntNumInput*        brushSizeInput;
-    RIntNumInput*        smoothInput;
+    DIntNumInput*        brushSizeInput;
+    DIntNumInput*        smoothInput;
 
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
@@ -101,7 +96,7 @@ OilPaintTool::OilPaintTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label1    = new QLabel(i18n("Brush size:"));
-    d->brushSizeInput = new RIntNumInput();
+    d->brushSizeInput = new DIntNumInput();
     d->brushSizeInput->setRange(1, 30, 1);
     d->brushSizeInput->setDefaultValue(1);
     d->brushSizeInput->setWhatsThis(i18n("Set here the brush size to use for simulating the oil painting."));
@@ -109,7 +104,7 @@ OilPaintTool::OilPaintTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label2  = new QLabel(i18nc("value of smoothing effect", "Smooth:"));
-    d->smoothInput  = new RIntNumInput();
+    d->smoothInput  = new DIntNumInput();
     d->smoothInput->setRange(10, 255, 1);
     d->smoothInput->setDefaultValue(10);
     d->smoothInput->setWhatsThis(i18n("This value controls the smoothing effect of the brush under the canvas."));

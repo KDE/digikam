@@ -45,11 +45,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "digikam_debug.h"
 
 using namespace KDcrawIface;
@@ -85,12 +85,12 @@ public:
 
     QLabel*               maskPreviewLabel;
 
-    RDoubleNumInput*      densityInput;
-    RDoubleNumInput*      powerInput;
-    RDoubleNumInput*      innerRadiusInput;
-    RDoubleNumInput*      outerRadiusInput;
-    RDoubleNumInput*      xOffsetInput;
-    RDoubleNumInput*      yOffsetInput;
+    DDoubleNumInput*      densityInput;
+    DDoubleNumInput*      powerInput;
+    DDoubleNumInput*      innerRadiusInput;
+    DDoubleNumInput*      outerRadiusInput;
+    DDoubleNumInput*      xOffsetInput;
+    DDoubleNumInput*      yOffsetInput;
 };
 
 const QString AntiVignettingSettings::Private::configAddVignettingAdjustmentEntry(QLatin1String("AddVignettingAdjustment"));
@@ -126,7 +126,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel* const label1 = new QLabel(i18n("Amount:"));
-    d->densityInput      = new RDoubleNumInput();
+    d->densityInput      = new DDoubleNumInput();
     d->densityInput->setDecimals(1);
     d->densityInput->setRange(0.05, 5.0, 0.05);
     d->densityInput->setDefaultValue(1.0);
@@ -136,7 +136,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel* const label2 = new QLabel(i18n("Feather:"));
-    d->powerInput        = new RDoubleNumInput();
+    d->powerInput        = new DDoubleNumInput();
     d->powerInput->setDecimals(1);
     d->powerInput->setRange(1.0, 4.0, 0.05);
     d->powerInput->setDefaultValue(1.5);
@@ -147,7 +147,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel* const label3 = new QLabel(i18n("Inner Radius:"));
-    d->innerRadiusInput  = new RDoubleNumInput();
+    d->innerRadiusInput  = new DDoubleNumInput();
     d->innerRadiusInput->setDecimals(1);
     d->innerRadiusInput->setRange(0.0, 0.9, 0.05);
     d->innerRadiusInput->setDefaultValue(0.5);
@@ -158,7 +158,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel* const label4 = new QLabel(i18n("Outer Radius:"));
-    d->outerRadiusInput  = new RDoubleNumInput();
+    d->outerRadiusInput  = new DDoubleNumInput();
     d->outerRadiusInput->setDecimals(1);
     d->outerRadiusInput->setRange(0.1, 2.0, 0.05);
     d->outerRadiusInput->setDefaultValue(1.0);
@@ -169,7 +169,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel* const label5 = new QLabel(i18n("X offset:"));
-    d->xOffsetInput      = new RDoubleNumInput();
+    d->xOffsetInput      = new DDoubleNumInput();
     d->xOffsetInput->setDecimals(0);
     d->xOffsetInput->setRange(-100, 100, 1);
     d->xOffsetInput->setDefaultValue(0);
@@ -178,7 +178,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     QLabel* const label6 = new QLabel(i18n("Y offset:"));
-    d->yOffsetInput      = new RDoubleNumInput();
+    d->yOffsetInput      = new DDoubleNumInput();
     d->yOffsetInput->setDecimals(0);
     d->yOffsetInput->setRange(-100, 100, 1);
     d->yOffsetInput->setDefaultValue(0);

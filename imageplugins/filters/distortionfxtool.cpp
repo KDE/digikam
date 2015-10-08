@@ -42,20 +42,15 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
 #include "dcombobox.h"
 #include "distortionfxfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamFxFiltersImagePlugin
 {
@@ -86,8 +81,8 @@ public:
 
     DComboBox*           effectType;
 
-    RIntNumInput*        levelInput;
-    RIntNumInput*        iterationInput;
+    DIntNumInput*        levelInput;
+    DIntNumInput*        iterationInput;
 
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
@@ -167,13 +162,13 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
                                     ));
 
     d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"));
-    d->levelInput = new RIntNumInput();
+    d->levelInput = new DIntNumInput();
     d->levelInput->setRange(0, 100, 1);
     d->levelInput->setDefaultValue(50);
     d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
 
     d->iterationLabel = new QLabel(i18n("Iteration:"));
-    d->iterationInput = new RIntNumInput();
+    d->iterationInput = new DIntNumInput();
     d->iterationInput->setRange(0, 100, 1);
     d->iterationInput->setDefaultValue(10);
     d->iterationInput->setWhatsThis( i18n("This value controls the iterations to use for Waves, "

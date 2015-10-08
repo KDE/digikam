@@ -46,11 +46,11 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RExpanderBox>
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 #include "previewlist.h"
 #include "curvesbox.h"
@@ -102,8 +102,8 @@ public:
 
     RExpanderBoxExclusive*     tab;
 
-    KDcrawIface::RIntNumInput* cInput;
-    KDcrawIface::RIntNumInput* strengthInput;
+    DIntNumInput*              cInput;
+    DIntNumInput*              strengthInput;
 
     CurvesBox*                 curvesBox;
 
@@ -283,7 +283,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     QLabel* const label1 = new QLabel(i18n("Strength:"), hbox1);
     label1->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    d->strengthInput     = new RIntNumInput(hbox1);
+    d->strengthInput     = new DIntNumInput(hbox1);
     d->strengthInput->setRange(1, 5, 1);
     d->strengthInput->setDefaultValue(1);
     d->strengthInput->setWhatsThis(i18n("Here, set the strength adjustment of the lens filter."));
@@ -356,7 +356,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     QLabel* const label2 = new QLabel(i18n("Contrast:"), hbox2);
     label2->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    d->cInput = new RIntNumInput(hbox2);
+    d->cInput = new DIntNumInput(hbox2);
     d->cInput->setRange(-100, 100, 1);
     d->cInput->setDefaultValue(0);
     d->cInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));

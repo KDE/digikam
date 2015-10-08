@@ -60,7 +60,7 @@ void Blur::registerSettingsWidget()
 {
     m_settingsWidget = new QWidget;
     QLabel* label    = new QLabel(i18n("Smoothness:"));
-    m_radiusInput    = new RIntNumInput();
+    m_radiusInput    = new DIntNumInput();
     m_radiusInput->setRange(0, 100, 1);
     m_radiusInput->setDefaultValue(0);
     m_radiusInput->setWhatsThis(i18n("A smoothness of 0 has no effect, "

@@ -44,12 +44,9 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "dcolorvalueselector.h"
 #include "dhuesaturationselect.h"
 #include "colorgradientwidget.h"
@@ -60,8 +57,6 @@
 #include "histogrambox.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -101,9 +96,9 @@ public:
     DHueSaturationSelector* HSSelector;
     DColorValueSelector*    VSelector;
 
-    RIntNumInput*           tintLevel;
-    RIntNumInput*           redThreshold;
-    RIntNumInput*           smoothLevel;
+    DIntNumInput*           tintLevel;
+    DIntNumInput*           redThreshold;
+    DIntNumInput*           smoothLevel;
 
     ImageGuideWidget*       previewWidget;
     EditorToolSettings*     gboxSettings;
@@ -144,7 +139,7 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->thresholdLabel = new QLabel(i18n("Sensitivity:"));
-    d->redThreshold   = new RIntNumInput();
+    d->redThreshold   = new DIntNumInput();
     d->redThreshold->setRange(10, 90, 1);
     d->redThreshold->setDefaultValue(20);
     d->redThreshold->setWhatsThis(i18n("<p>Control the red pixel selection threshold.</p>"
@@ -154,7 +149,7 @@ RedEyeTool::RedEyeTool(QObject* const parent)
                                        "Use a high value if other parts of the face have been selected too.</p>"));
 
     d->smoothLabel = new QLabel(i18nc("Smoothness when blurring border of changed pixels", "Smooth:"));
-    d->smoothLevel = new RIntNumInput();
+    d->smoothLevel = new DIntNumInput();
     d->smoothLevel->setRange(0, 5, 1);
     d->smoothLevel->setDefaultValue(1);
     d->smoothLevel->setWhatsThis(i18n("Sets the smoothness value when blurring the border "
@@ -174,7 +169,7 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     d->VSelector->setIndent(false);
 
     QLabel* const label4 = new QLabel(i18n("Tint Level:"));
-    d->tintLevel         = new RIntNumInput();
+    d->tintLevel         = new DIntNumInput();
     d->tintLevel->setRange(1, 200, 1);
     d->tintLevel->setDefaultValue(128);
     d->tintLevel->setWhatsThis(i18n("Set the tint level to adjust the luminosity of "

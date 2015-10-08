@@ -37,18 +37,13 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "editortoolsettings.h"
 #include "embossfilter.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamFxFiltersImagePlugin
 {
@@ -66,7 +61,7 @@ public:
     static const QString configGroupName;
     static const QString configDepthAdjustmentEntry;
 
-    RIntNumInput*        depthInput;
+    DIntNumInput*        depthInput;
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
@@ -93,7 +88,7 @@ EmbossTool::EmbossTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label1 = new QLabel(i18n("Depth:"));
-    d->depthInput  = new RIntNumInput;
+    d->depthInput  = new DIntNumInput;
     d->depthInput->setRange(10, 300, 1);
     d->depthInput->setDefaultValue(30);
     d->depthInput->setWhatsThis( i18n("Set here the depth of the embossing image effect.") );

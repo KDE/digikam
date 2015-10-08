@@ -37,11 +37,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 
@@ -83,7 +83,7 @@ public:
 
     QCheckBox*    useCustom;
 
-    RIntNumInput* customLength;
+    DIntNumInput* customLength;
 
     QComboBox*    comboBox;
     
@@ -153,7 +153,7 @@ void Resize::registerSettingsWidget()
     d->comboBox->insertItem(Private::Huge,   i18np("Huge (1 pixel)",   "Huge (%1 pixels)",   d->presetLengthValue(Private::Huge)));
 
     d->useCustom        = new QCheckBox(i18n("Use Custom Length"), vbox);
-    d->customLength     = new RIntNumInput(vbox);
+    d->customLength     = new DIntNumInput(vbox);
     d->customLength->setDefaultValue(Private::Medium);
     d->customLength->setRange(10, 10000, 1);
 

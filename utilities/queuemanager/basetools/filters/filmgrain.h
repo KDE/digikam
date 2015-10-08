@@ -26,12 +26,6 @@
 
 #include "batchtool.h"
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 

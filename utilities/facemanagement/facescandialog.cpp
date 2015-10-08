@@ -49,11 +49,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "digikam_debug.h"
 #include "albummodel.h"
 #include "albumselectors.h"
@@ -143,7 +143,7 @@ public:
     AlbumSelectors*              albumSelectors;
 
     QToolButton*                 parametersResetButton;
-    RIntNumInput*                accuracyInput;
+    DIntNumInput*                accuracyInput;
 
     QCheckBox*                   useFullCpuButton;
     QCheckBox*                   retrainAllButton;
@@ -400,7 +400,7 @@ void FaceScanDialog::setupUi()
     RHBox* const hbox                   = new RHBox(parametersTab);
     QLabel* const accuracyLabel         = new QLabel(i18nc("@label Two extremities of a scale", "Fast   -   Accurate"), hbox);
     accuracyLabel->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    d->accuracyInput                    = new RIntNumInput(hbox);
+    d->accuracyInput                    = new DIntNumInput(hbox);
     d->accuracyInput->setRange(0, 100, 10);
     d->accuracyInput->setToolTip(i18nc("@info:tooltip",
                                        "Adjust speed versus accuracy: The higher the value, the more accurate the results "

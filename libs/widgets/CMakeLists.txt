@@ -10,6 +10,8 @@ set(libcommonwidgets_SRCS
     common/buttonicondisabler.cpp
     common/colorgradientwidget.cpp
     common/comboboxutilities.cpp
+    common/dsliderspinbox.cpp
+    common/dnuminput.cpp
     common/dcombobox.cpp
     common/dactivelabel.cpp
     common/dfontselect.cpp

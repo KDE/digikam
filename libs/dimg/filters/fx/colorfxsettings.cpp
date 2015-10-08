@@ -30,13 +30,10 @@
 #include <QApplication>
 #include <QStyle>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
 #include "dcombobox.h"
+#include "dnuminput.h"
 
 namespace Digikam
 {
@@ -64,8 +61,8 @@ public:
 
     DComboBox*    effectType;
 
-    RIntNumInput* levelInput;
-    RIntNumInput* iterationInput;
+    DIntNumInput* levelInput;
+    DIntNumInput* iterationInput;
 };
 
 const QString ColorFXSettings::Private::configEffectTypeEntry(QLatin1String("EffectType"));
@@ -96,13 +93,13 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent)
                                      "and their strength.</p>"));
 
     d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"));
-    d->levelInput = new RIntNumInput();
+    d->levelInput = new DIntNumInput();
     d->levelInput->setRange(0, 100, 1);
     d->levelInput->setDefaultValue(0);
     d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
 
     d->iterationLabel = new QLabel(i18n("Iteration:"));
-    d->iterationInput = new RIntNumInput();
+    d->iterationInput = new DIntNumInput();
     d->iterationInput->setRange(0, 100, 1);
     d->iterationInput->setDefaultValue(0);
     d->iterationInput->setWhatsThis(i18n("This value controls the number of iterations "

@@ -36,19 +36,14 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "charcoalfilter.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamFxFiltersImagePlugin
 {
@@ -69,8 +64,8 @@ public:
     static const QString configPencilAdjustmentEntry;
     static const QString configSmoothAdjustmentEntry;
 
-    RIntNumInput*        pencilInput;
-    RIntNumInput*        smoothInput;
+    DIntNumInput*        pencilInput;
+    DIntNumInput*        smoothInput;
 
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
@@ -103,7 +98,7 @@ CharcoalTool::CharcoalTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label1 = new QLabel(i18n("Pencil size:"));
-    d->pencilInput = new RIntNumInput;
+    d->pencilInput = new DIntNumInput;
     d->pencilInput->setRange(1, 100, 1);
     d->pencilInput->setDefaultValue(5);
     d->pencilInput->setWhatsThis( i18n("Set here the charcoal pencil size used to simulate the drawing."));
@@ -111,7 +106,7 @@ CharcoalTool::CharcoalTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label2 = new QLabel(i18nc("smoothing value of the pencil", "Smooth:"));
-    d->smoothInput = new RIntNumInput;
+    d->smoothInput = new DIntNumInput;
     d->smoothInput->setRange(1, 100, 1);
     d->smoothInput->setDefaultValue(10);
     d->smoothInput->setWhatsThis( i18n("This value controls the smoothing effect of the pencil "

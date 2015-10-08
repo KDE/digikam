@@ -37,20 +37,15 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
 #include "dcombobox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 #include "texturefilter.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamDecorateImagePlugin
 {
@@ -93,7 +88,7 @@ public:
     static const QString configBlendGainEntry;
 
     DComboBox*           textureType;
-    RIntNumInput*        blendGain;
+    DIntNumInput*        blendGain;
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
@@ -143,7 +138,7 @@ TextureTool::TextureTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label2 = new QLabel(i18n("Relief:"));
-    d->blendGain   = new RIntNumInput;
+    d->blendGain   = new DIntNumInput;
     d->blendGain->setRange(1, 255, 1);
     d->blendGain->setDefaultValue(200);
     d->blendGain->setWhatsThis(i18n("Set here the relief gain used to merge texture and image."));

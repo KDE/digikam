@@ -59,11 +59,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 #include "imageiface.h"
@@ -142,11 +142,11 @@ public:
 
     ImageGuideWidget*       previewWidget;
 
-    RIntNumInput*           wInput;
-    RIntNumInput*           hInput;
+    DIntNumInput*           wInput;
+    DIntNumInput*           hInput;
 
-    RDoubleNumInput*        wpInput;
-    RDoubleNumInput*        hpInput;
+    DDoubleNumInput*        wpInput;
+    DDoubleNumInput*        hpInput;
 
     EditorToolSettings*     gboxSettings;
     GreycstorationSettings* settingsWidget;
@@ -212,28 +212,28 @@ ResizeTool::ResizeTool(QObject* const parent)
                                             "ratio with new image sizes."));
 
     QLabel* const label1 = new QLabel(i18n("Width:"), firstPage);
-    d->wInput            = new RIntNumInput(firstPage);
+    d->wInput            = new DIntNumInput(firstPage);
     d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1);
     d->wInput->setDefaultValue(d->orgWidth);
     d->wInput->setObjectName(QLatin1String("wInput"));
     d->wInput->setWhatsThis( i18n("Set here the new image width in pixels."));
 
     QLabel* const label2 = new QLabel(i18n("Height:"), firstPage);
-    d->hInput            = new RIntNumInput(firstPage);
+    d->hInput            = new DIntNumInput(firstPage);
     d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1);
     d->hInput->setDefaultValue(d->orgHeight);
     d->hInput->setObjectName(QLatin1String("hInput"));
     d->hInput->setWhatsThis( i18n("New image height in pixels (px)."));
 
     QLabel* const label3 = new QLabel(i18n("Width (%):"), firstPage);
-    d->wpInput           = new RDoubleNumInput(firstPage);
+    d->wpInput           = new DDoubleNumInput(firstPage);
     d->wpInput->setRange(1.0, 999.0, 1.0);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName(QLatin1String("wpInput"));
     d->wpInput->setWhatsThis( i18n("New image width in percent (%)."));
 
     QLabel* const label4 = new QLabel(i18n("Height (%):"), firstPage);
-    d->hpInput           = new RDoubleNumInput(firstPage);
+    d->hpInput           = new DDoubleNumInput(firstPage);
     d->hpInput->setRange(1.0, 999.0, 1.0);
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName(QLatin1String("hpInput"));

@@ -42,12 +42,12 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dcombobox.h"
 #include "dimg_debug.h"
 
@@ -104,8 +104,8 @@ public:
     RColorSelector*      secondColorButton;
 
     DComboBox*           borderType;
-    RIntNumInput*        borderPercent;
-    RIntNumInput*        borderWidth;
+    DIntNumInput*        borderPercent;
+    DIntNumInput*        borderWidth;
 };
 
 const QString Private::configBorderTypeEntry(QLatin1String("Border Type"));
@@ -165,13 +165,13 @@ BorderSettings::BorderSettings(QWidget* parent)
                                               "in pixels."));
 
     d->labelBorderPercent  = new QLabel(i18n("Width (%):"));
-    d->borderPercent       = new RIntNumInput();
+    d->borderPercent       = new DIntNumInput();
     d->borderPercent->setRange(1, 50, 1);
     d->borderPercent->setDefaultValue(10);
     d->borderPercent->setWhatsThis(i18n("Set here the border width as a percentage of the image size."));
 
     d->labelBorderWidth = new QLabel(i18n("Width (pixels):"));
-    d->borderWidth      = new RIntNumInput();
+    d->borderWidth      = new DIntNumInput();
     d->borderWidth->setRange(1, 1000, 1);
     d->borderWidth->setDefaultValue(100);
     d->borderWidth->setWhatsThis(i18n("Set here the border width in pixels to add around the image."));

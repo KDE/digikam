@@ -41,11 +41,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 
 using namespace KDcrawIface;
@@ -68,9 +68,9 @@ public:
     static const QString configGreenAdjustmentEntry;
     static const QString configBlueAdjustmentEntry;
 
-    RIntNumInput*        rInput;
-    RIntNumInput*        gInput;
-    RIntNumInput*        bInput;
+    DIntNumInput*        rInput;
+    DIntNumInput*        gInput;
+    DIntNumInput*        bInput;
 };
 
 const QString CBSettings::Private::configRedAdjustmentEntry(QLatin1String("RedAdjustment"));
@@ -88,7 +88,7 @@ CBSettings::CBSettings(QWidget* const parent)
     QLabel* const labelCyan = new QLabel(i18n("Cyan"));
     labelCyan->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    d->rInput = new RIntNumInput();
+    d->rInput = new DIntNumInput();
     d->rInput->setRange(-100, 100, 1);
     d->rInput->setDefaultValue(0);
     d->rInput->setWhatsThis(i18n("Set here the cyan/red color adjustment of the image."));
@@ -101,7 +101,7 @@ CBSettings::CBSettings(QWidget* const parent)
     QLabel* const labelMagenta = new QLabel(i18n("Magenta"));
     labelMagenta->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    d->gInput = new RIntNumInput();
+    d->gInput = new DIntNumInput();
     d->gInput->setRange(-100, 100, 1);
     d->gInput->setDefaultValue(0);
     d->gInput->setWhatsThis(i18n("Set here the magenta/green color adjustment of the image."));
@@ -117,7 +117,7 @@ CBSettings::CBSettings(QWidget* const parent)
     QLabel* const labelBlue = new QLabel(i18n("Blue"));
     labelBlue->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    d->bInput = new RIntNumInput();
+    d->bInput = new DIntNumInput();
     d->bInput->setRange(-100, 100, 1);
     d->bInput->setDefaultValue(0);
     d->bInput->setWhatsThis(i18n("Set here the yellow/blue color adjustment of the image."));

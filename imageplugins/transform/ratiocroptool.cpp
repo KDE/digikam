@@ -51,11 +51,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "editortoolsettings.h"
 #include "dcombobox.h"
 #include "imageiface.h"
@@ -159,13 +159,13 @@ public:
     DComboBox*            orientCB;
     DComboBox*            guideLinesCB;
 
-    RIntNumInput*         customRatioDInput;
-    RIntNumInput*         customRatioNInput;
-    RIntNumInput*         guideSize;
-    RIntNumInput*         heightInput;
-    RIntNumInput*         widthInput;
-    RIntNumInput*         xInput;
-    RIntNumInput*         yInput;
+    DIntNumInput*         customRatioDInput;
+    DIntNumInput*         customRatioNInput;
+    DIntNumInput*         guideSize;
+    DIntNumInput*         heightInput;
+    DIntNumInput*         widthInput;
+    DIntNumInput*         xInput;
+    DIntNumInput*         yInput;
 
     RColorSelector*       guideColorBt;
 
@@ -339,12 +339,12 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     d->customLabel       = new QLabel(i18n("Custom ratio:"), cropSelection);
     d->customLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
-    d->customRatioNInput = new RIntNumInput(cropSelection);
+    d->customRatioNInput = new DIntNumInput(cropSelection);
     d->customRatioNInput->setRange(1, 10000, 1);
     d->customRatioNInput->setDefaultValue(1);
     d->customRatioNInput->setWhatsThis( i18n("Set here the desired custom aspect numerator value."));
 
-    d->customRatioDInput = new RIntNumInput(cropSelection);
+    d->customRatioDInput = new DIntNumInput(cropSelection);
     d->customRatioDInput->setRange(1, 10000, 1);
     d->customRatioDInput->setDefaultValue(1);
     d->customRatioDInput->setWhatsThis( i18n("Set here the desired custom aspect denominator value."));
@@ -354,12 +354,12 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     QLabel* const positionLabel = new QLabel(i18n("Position:"), cropSelection);
     positionLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
-    d->xInput = new RIntNumInput(cropSelection);
+    d->xInput = new DIntNumInput(cropSelection);
     d->xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
     d->xInput->setDefaultValue(50);
 
-    d->yInput = new RIntNumInput(cropSelection);
+    d->yInput = new DIntNumInput(cropSelection);
     d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
     d->yInput->setDefaultValue(50);
@@ -369,7 +369,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     QLabel* const sizeLabel = new QLabel(i18n("Size:"), cropSelection);
     sizeLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
-    d->widthInput = new RIntNumInput(cropSelection);
+    d->widthInput = new DIntNumInput(cropSelection);
     d->widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
     d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
                             d->imageSelectionWidget->getMaxWidthRange(),
@@ -380,7 +380,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->centerWidth->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/centerwidth.png"))));
     d->centerWidth->setWhatsThis( i18n("Set width position to center."));
 
-    d->heightInput = new RIntNumInput(cropSelection);
+    d->heightInput = new DIntNumInput(cropSelection);
     d->heightInput->setWhatsThis( i18n("Set here the height selection for cropping."));
     d->heightInput->setRange(d->imageSelectionWidget->getMinHeightRange(),
                              d->imageSelectionWidget->getMaxHeightRange(),
@@ -455,7 +455,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
     d->guideColorBt    = new RColorSelector(compositionGuide);
     d->guideColorBt->setColor(QColor( 250, 250, 255 ));
-    d->guideSize       = new RIntNumInput(compositionGuide);
+    d->guideSize       = new DIntNumInput(compositionGuide);
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setDefaultValue(1);
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw composition guides."));

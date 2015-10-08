@@ -40,10 +40,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
-#include <KDCRAW/RNumInput>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
@@ -83,11 +83,11 @@ public:
 
     QCheckBox*           antialiasInput;
 
-    RIntNumInput*        mainHAngleInput;
-    RIntNumInput*        mainVAngleInput;
+    DIntNumInput*        mainHAngleInput;
+    DIntNumInput*        mainVAngleInput;
 
-    RDoubleNumInput*     fineHAngleInput;
-    RDoubleNumInput*     fineVAngleInput;
+    DDoubleNumInput*     fineHAngleInput;
+    DDoubleNumInput*     fineVAngleInput;
 
     ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
@@ -140,25 +140,25 @@ ShearTool::ShearTool(QObject* const parent)
     d->newHeightLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
 
     QLabel* label3     = new QLabel(i18n("Main horizontal angle:"));
-    d->mainHAngleInput = new RIntNumInput;
+    d->mainHAngleInput = new DIntNumInput;
     d->mainHAngleInput->setRange(-45, 45, 1);
     d->mainHAngleInput->setDefaultValue(0);
     d->mainHAngleInput->setWhatsThis( i18n("The main horizontal shearing angle, in degrees."));
 
     QLabel* label4     = new QLabel(i18n("Fine horizontal angle:"));
-    d->fineHAngleInput = new RDoubleNumInput;
+    d->fineHAngleInput = new DDoubleNumInput;
     d->fineHAngleInput->setRange(-1.0, 1.0, 0.01);
     d->fineHAngleInput->setDefaultValue(0);
     d->fineHAngleInput->setWhatsThis( i18n("This value in degrees will be added to main "
                                            "horizontal angle value to set fine adjustments."));
     QLabel* label5     = new QLabel(i18n("Main vertical angle:"));
-    d->mainVAngleInput = new RIntNumInput;
+    d->mainVAngleInput = new DIntNumInput;
     d->mainVAngleInput->setRange(-45, 45, 1);
     d->mainVAngleInput->setDefaultValue(0);
     d->mainVAngleInput->setWhatsThis( i18n("The main vertical shearing angle, in degrees."));
 
     QLabel* label6     = new QLabel(i18n("Fine vertical angle:"));
-    d->fineVAngleInput = new RDoubleNumInput;
+    d->fineVAngleInput = new DDoubleNumInput;
     d->fineVAngleInput->setRange(-1.0, 1.0, 0.01);
     d->fineVAngleInput->setDefaultValue(0);
     d->fineVAngleInput->setWhatsThis( i18n("This value in degrees will be added to main vertical "

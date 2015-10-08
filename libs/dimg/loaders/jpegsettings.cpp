@@ -38,11 +38,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RNumInput>
-
-using namespace KDcrawIface;
+#include "dnuminput.h"
 
 namespace Digikam
 {
@@ -70,7 +68,7 @@ public:
 
     QComboBox*    subSamplingCB;
 
-    RIntNumInput* JPEGcompression;
+    DIntNumInput* JPEGcompression;
 };
 
 JPEGSettings::JPEGSettings(QWidget* const parent)
@@ -80,7 +78,7 @@ JPEGSettings::JPEGSettings(QWidget* const parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->JPEGGrid             = new QGridLayout(this);
-    d->JPEGcompression      = new RIntNumInput(this);
+    d->JPEGcompression      = new DIntNumInput(this);
     d->JPEGcompression->setDefaultValue(75);
     d->JPEGcompression->setRange(1, 100, 1);
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), this);

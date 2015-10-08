@@ -34,12 +34,9 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "colorgradientwidget.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
@@ -48,8 +45,6 @@
 #include "imageregionwidget.h"
 #include "bwsepiafilter.h"
 #include "bwsepiasettings.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamColorImagePlugin
 {
@@ -63,7 +58,8 @@ public:
         bwsepiaSettings(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;

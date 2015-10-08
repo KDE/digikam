@@ -47,11 +47,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 
 using namespace KDcrawIface;
@@ -108,9 +108,9 @@ public:
 
     MixerContainer        mixerSettings;
 
-    RDoubleNumInput*      redGain;
-    RDoubleNumInput*      greenGain;
-    RDoubleNumInput*      blueGain;
+    DDoubleNumInput*      redGain;
+    DDoubleNumInput*      greenGain;
+    DDoubleNumInput*      blueGain;
 };
 
 const QString MixerSettings::Private::configMonochromeEntry(QLatin1String("Monochrome"));
@@ -143,7 +143,7 @@ MixerSettings::MixerSettings(QWidget* const parent)
     d->outChannelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
 
     QLabel* const redLabel = new QLabel(i18n("Red (%):"));
-    d->redGain             = new RDoubleNumInput;
+    d->redGain             = new DDoubleNumInput;
     d->redGain->setDecimals(1);
     d->redGain->setRange(-200.0, 200.0, 1);
     d->redGain->setDefaultValue(0);
@@ -151,7 +151,7 @@ MixerSettings::MixerSettings(QWidget* const parent)
                                   "for the current channel."));
 
     QLabel* const greenLabel = new QLabel(i18n("Green (%):"));
-    d->greenGain             = new RDoubleNumInput;
+    d->greenGain             = new DDoubleNumInput;
     d->greenGain->setDecimals(1);
     d->greenGain->setRange(-200.0, 200.0, 1);
     d->greenGain->setDefaultValue(0);
@@ -159,7 +159,7 @@ MixerSettings::MixerSettings(QWidget* const parent)
                                     "for the current channel."));
 
     QLabel* const blueLabel = new QLabel(i18n("Blue (%):"));
-    d->blueGain             = new RDoubleNumInput;
+    d->blueGain             = new DDoubleNumInput;
     d->blueGain->setDecimals(1);
     d->blueGain->setRange(-200.0, 200.0, 1);
     d->blueGain->setDefaultValue(0);

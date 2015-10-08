@@ -51,10 +51,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
-#include <KDCRAW/RNumInput>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dcombobox.h"
 #include "widgets_debug.h"
 
@@ -187,20 +187,20 @@ public:
     DComboBox*       inputColorSpaceComboBox;
     DComboBox*       outputColorSpaceComboBox;
 
-    RIntNumInput*    customWhiteBalanceSpinBox;
-    RIntNumInput*    reconstructSpinBox;
-    RIntNumInput*    blackPointSpinBox;
-    RIntNumInput*    whitePointSpinBox;
-    RIntNumInput*    NRSpinBox1;
-    RIntNumInput*    NRSpinBox2;
-    RIntNumInput*    medianFilterPassesSpinBox;
+    DIntNumInput*    customWhiteBalanceSpinBox;
+    DIntNumInput*    reconstructSpinBox;
+    DIntNumInput*    blackPointSpinBox;
+    DIntNumInput*    whitePointSpinBox;
+    DIntNumInput*    NRSpinBox1;
+    DIntNumInput*    NRSpinBox2;
+    DIntNumInput*    medianFilterPassesSpinBox;
 
-    RDoubleNumInput* customWhiteBalanceGreenSpinBox;
-    RDoubleNumInput* caRedMultSpinBox;
-    RDoubleNumInput* caBlueMultSpinBox;
-    RDoubleNumInput* brightnessSpinBox;
-    RDoubleNumInput* expoCorrectionShiftSpinBox;
-    RDoubleNumInput* expoCorrectionHighlightSpinBox;
+    DDoubleNumInput* customWhiteBalanceGreenSpinBox;
+    DDoubleNumInput* caRedMultSpinBox;
+    DDoubleNumInput* caBlueMultSpinBox;
+    DDoubleNumInput* brightnessSpinBox;
+    DDoubleNumInput* expoCorrectionShiftSpinBox;
+    DDoubleNumInput* expoCorrectionHighlightSpinBox;
 };
 
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget* const parent, int advSettings)
@@ -376,7 +376,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     demosaicingLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
     line++;
 
-    d->medianFilterPassesSpinBox = new RIntNumInput(d->demosaicingSettings);
+    d->medianFilterPassesSpinBox = new DIntNumInput(d->demosaicingSettings);
     d->medianFilterPassesSpinBox->setRange(0, 10, 1);
     d->medianFilterPassesSpinBox->setDefaultValue(0);
     d->medianFilterPassesLabel   = new QLabel(i18nc("@label:slider", "Pass:"), d->whiteBalanceSettings);
@@ -437,14 +437,14 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<item><emphasis strong='true'>Manual</emphasis>: Set a custom "
                                 "temperature and green level values.</item></list></para>"));
 
-    d->customWhiteBalanceSpinBox = new RIntNumInput(d->whiteBalanceSettings);
+    d->customWhiteBalanceSpinBox = new DIntNumInput(d->whiteBalanceSettings);
     d->customWhiteBalanceSpinBox->setRange(2000, 12000, 10);
     d->customWhiteBalanceSpinBox->setDefaultValue(6500);
     d->customWhiteBalanceLabel   = new QLabel(i18nc("@label:slider", "T(K):"), d->whiteBalanceSettings);
     d->customWhiteBalanceSpinBox->setWhatsThis( i18nc("@info:whatsthis", "<title>Temperature</title>"
                                 "<para>Set here the color temperature in Kelvin.</para>"));
 
-    d->customWhiteBalanceGreenSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
+    d->customWhiteBalanceGreenSpinBox = new DDoubleNumInput(d->whiteBalanceSettings);
     d->customWhiteBalanceGreenSpinBox->setDecimals(2);
     d->customWhiteBalanceGreenSpinBox->setRange(0.2, 2.5, 0.01);
     d->customWhiteBalanceGreenSpinBox->setDefaultValue(1.0);
@@ -471,7 +471,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "highlights using a level value</item></list></para>"));
 
     d->reconstructLabel   = new QLabel(i18nc("@label:slider Highlight reconstruct level", "Level:"), d->whiteBalanceSettings);
-    d->reconstructSpinBox = new RIntNumInput(d->whiteBalanceSettings);
+    d->reconstructSpinBox = new DIntNumInput(d->whiteBalanceSettings);
     d->reconstructSpinBox->setRange(0, 6, 1);
     d->reconstructSpinBox->setDefaultValue(0);
     d->reconstructSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Level</title>"
@@ -483,7 +483,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "correction before interpolation.</para>"));
 
     d->expoCorrectionShiftLabel   = new QLabel(i18nc("@label:slider", "Linear Shift:"), d->whiteBalanceSettings);
-    d->expoCorrectionShiftSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
+    d->expoCorrectionShiftSpinBox = new DDoubleNumInput(d->whiteBalanceSettings);
     d->expoCorrectionShiftSpinBox->setDecimals(2);
     d->expoCorrectionShiftSpinBox->setRange(-2.0, 3.0, 0.01);
     d->expoCorrectionShiftSpinBox->setDefaultValue(0.0);
@@ -491,7 +491,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<para>Linear Shift of exposure correction before interpolation in E.V</para>"));
 
     d->expoCorrectionHighlightLabel   = new QLabel(i18nc("@label:slider", "Highlight:"), d->whiteBalanceSettings);
-    d->expoCorrectionHighlightSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
+    d->expoCorrectionHighlightSpinBox = new DDoubleNumInput(d->whiteBalanceSettings);
     d->expoCorrectionHighlightSpinBox->setDecimals(2);
     d->expoCorrectionHighlightSpinBox->setRange(0.0, 1.0, 0.01);
     d->expoCorrectionHighlightSpinBox->setDefaultValue(0.0);
@@ -509,7 +509,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "and ignore the image histogram to adjust brightness.</para>"));
 
     d->brightnessLabel   = new QLabel(i18nc("@label:slider", "Brightness:"), d->whiteBalanceSettings);
-    d->brightnessSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
+    d->brightnessSpinBox = new DDoubleNumInput(d->whiteBalanceSettings);
     d->brightnessSpinBox->setDecimals(2);
     d->brightnessSpinBox->setRange(0.0, 10.0, 0.01);
     d->brightnessSpinBox->setDefaultValue(1.0);
@@ -528,7 +528,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<para>Use a specific black point value to decode RAW pictures. If "
                                 "you set this option to off, the Black Point value will be "
                                 "automatically computed.</para>"));
-    d->blackPointSpinBox = new RIntNumInput(d->whiteBalanceSettings);
+    d->blackPointSpinBox = new DIntNumInput(d->whiteBalanceSettings);
     d->blackPointSpinBox->setRange(0, 1000, 1);
     d->blackPointSpinBox->setDefaultValue(0);
     d->blackPointSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Black point value</title>"
@@ -539,7 +539,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<para>Use a specific white point value to decode RAW pictures. If "
                                 "you set this option to off, the White Point value will be "
                                 "automatically computed.</para>"));
-    d->whitePointSpinBox = new RIntNumInput(d->whiteBalanceSettings);
+    d->whitePointSpinBox = new DIntNumInput(d->whiteBalanceSettings);
     d->whitePointSpinBox->setRange(0, 20000, 1);
     d->whitePointSpinBox->setDefaultValue(0);
     d->whitePointSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>White point value</title>"
@@ -611,12 +611,12 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<item><emphasis strong='true'>Impulse Denoise</emphasis>: Impulse "
                                 "noise suppression. It's applied after interpolation.</item></list></para>"));
 
-    d->NRSpinBox1 = new RIntNumInput(d->correctionsSettings);
+    d->NRSpinBox1 = new DIntNumInput(d->correctionsSettings);
     d->NRSpinBox1->setRange(100, 1000, 1);
     d->NRSpinBox1->setDefaultValue(100);
     d->NRLabel1   = new QLabel(d->correctionsSettings);
 
-    d->NRSpinBox2 = new RIntNumInput(d->correctionsSettings);
+    d->NRSpinBox2 = new DIntNumInput(d->correctionsSettings);
     d->NRSpinBox2->setRange(100, 1000, 1);
     d->NRSpinBox2->setDefaultValue(100);
     d->NRLabel2   = new QLabel(d->correctionsSettings);
@@ -636,7 +636,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "case, disable this option and tune manually color factors.</para>"));
 
     d->caRedMultLabel   = new QLabel(i18nc("@label:slider", "Red-Green:"), d->correctionsSettings);
-    d->caRedMultSpinBox = new RDoubleNumInput(d->correctionsSettings);
+    d->caRedMultSpinBox = new DDoubleNumInput(d->correctionsSettings);
     d->caRedMultSpinBox->setDecimals(1);
     d->caRedMultSpinBox->setRange(-4.0, 4.0, 0.1);
     d->caRedMultSpinBox->setDefaultValue(0.0);
@@ -644,7 +644,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<para>Set here the amount of correction on red-green axis</para>"));
 
     d->caBlueMultLabel   = new QLabel(i18nc("@label:slider", "Blue-Yellow:"), d->correctionsSettings);
-    d->caBlueMultSpinBox = new RDoubleNumInput(d->correctionsSettings);
+    d->caBlueMultSpinBox = new DDoubleNumInput(d->correctionsSettings);
     d->caBlueMultSpinBox->setDecimals(1);
     d->caBlueMultSpinBox->setRange(-4.0, 4.0, 0.1);
     d->caBlueMultSpinBox->setDefaultValue(0.0);
@@ -780,7 +780,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->expoCorrectionBox, &QCheckBox::toggled,
             this, &DcrawSettingsWidget::slotExposureCorrectionToggled);
 
-    connect(d->expoCorrectionShiftSpinBox, &RDoubleNumInput::valueChanged,
+    connect(d->expoCorrectionShiftSpinBox, &DDoubleNumInput::valueChanged,
             this, &DcrawSettingsWidget::slotExpoCorrectionShiftChanged);
 
     // Wrapper to emit signal when something is changed in settings.
@@ -830,40 +830,40 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->refineInterpolationBox, &QCheckBox::toggled,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->customWhiteBalanceSpinBox, &RIntNumInput::valueChanged,
+    connect(d->customWhiteBalanceSpinBox, &DIntNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->reconstructSpinBox, &RIntNumInput::valueChanged,
+    connect(d->reconstructSpinBox, &DIntNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->blackPointSpinBox, &RIntNumInput::valueChanged,
+    connect(d->blackPointSpinBox, &DIntNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->whitePointSpinBox, &RIntNumInput::valueChanged,
+    connect(d->whitePointSpinBox, &DIntNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->NRSpinBox1, &RIntNumInput::valueChanged,
+    connect(d->NRSpinBox1, &DIntNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->NRSpinBox2, &RIntNumInput::valueChanged,
+    connect(d->NRSpinBox2, &DIntNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
     
-    connect(d->medianFilterPassesSpinBox, &RIntNumInput::valueChanged,
+    connect(d->medianFilterPassesSpinBox, &DIntNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->customWhiteBalanceGreenSpinBox, &RDoubleNumInput::valueChanged,
+    connect(d->customWhiteBalanceGreenSpinBox, &DDoubleNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->caRedMultSpinBox, &RDoubleNumInput::valueChanged,
+    connect(d->caRedMultSpinBox, &DDoubleNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->caBlueMultSpinBox, &RDoubleNumInput::valueChanged,
+    connect(d->caBlueMultSpinBox, &DDoubleNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->brightnessSpinBox, &RDoubleNumInput::valueChanged,
+    connect(d->brightnessSpinBox, &DDoubleNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->expoCorrectionHighlightSpinBox, &RDoubleNumInput::valueChanged,
+    connect(d->expoCorrectionHighlightSpinBox, &DDoubleNumInput::valueChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 }
 

@@ -41,11 +41,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 #include "dcombobox.h"
 
@@ -72,8 +72,8 @@ public:
     
     QCheckBox*       antialiasInput;
 
-    RIntNumInput*    angleInput;
-    RDoubleNumInput* fineAngleInput;
+    DIntNumInput*    angleInput;
+    DDoubleNumInput* fineAngleInput;
     DComboBox*       autoCropCB;
 };
 
@@ -91,7 +91,7 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
     // --------------------------------------------------------
 
     QLabel* const label3 = new QLabel(i18n("Main angle:"));
-    d->angleInput        = new RIntNumInput;
+    d->angleInput        = new DIntNumInput;
     d->angleInput->setRange(-180, 180, 1);
     d->angleInput->setDefaultValue(0);
     d->angleInput->setWhatsThis(i18n("An angle in degrees by which to rotate the image. "
@@ -99,7 +99,7 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
                                      "a negative angle rotates it counter-clockwise."));
 
     QLabel* const label4 = new QLabel(i18n("Fine angle:"));
-    d->fineAngleInput    = new RDoubleNumInput;
+    d->fineAngleInput    = new DDoubleNumInput;
     d->fineAngleInput->setRange(-1.0, 1.0, 0.01);
     d->fineAngleInput->setDefaultValue(0);
     d->fineAngleInput->setWhatsThis(i18n("This value in degrees will be added to main angle value "

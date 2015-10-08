@@ -37,12 +37,12 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
-#include <KDCRAW/RNumInput>
 
 // Local includes
 
 #include "dimg_debug.h"
 #include "dcombobox.h"
+#include "dnuminput.h"
 
 using namespace KDcrawIface;
 
@@ -118,9 +118,9 @@ public:
     DComboBox*          model;
     DComboBox*          lens;
 
-    RDoubleNumInput*    focal;
-    RDoubleNumInput*    aperture;
-    RDoubleNumInput*    distance;
+    DDoubleNumInput*    focal;
+    DDoubleNumInput*    aperture;
+    DDoubleNumInput*    distance;
 
     DMetadata           metadata;
 
@@ -184,17 +184,17 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->aperLabel        = new QLabel(i18n("Aperture:"), this);
     d->distLabel        = new QLabel(i18n("Subject Distance (m):"), this);
 
-    d->focal            = new RDoubleNumInput(this);
+    d->focal            = new DDoubleNumInput(this);
     d->focal->setDecimals(1);
     d->focal->setRange(1.0, 10000.0, 0.01);
     d->focal->setDefaultValue(1.0);
 
-    d->aperture         = new RDoubleNumInput(this);
+    d->aperture         = new DDoubleNumInput(this);
     d->aperture->setDecimals(1);
     d->aperture->setRange(1.1, 256.0, 0.1);
     d->aperture->setDefaultValue(1.1);
 
-    d->distance         = new RDoubleNumInput(this);
+    d->distance         = new DDoubleNumInput(this);
     d->distance->setDecimals(1);
     d->distance->setRange(0.0, 10000.0, 0.1);
     d->distance->setDefaultValue(0.0);

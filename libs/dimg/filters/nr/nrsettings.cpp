@@ -45,11 +45,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 
 using namespace KDcrawIface;
@@ -91,12 +91,12 @@ public:
 
     RExpanderBox*        advExpanderBox;
 
-    RDoubleNumInput*     thrLumInput;
-    RDoubleNumInput*     softLumInput;
-    RDoubleNumInput*     thrCrInput;
-    RDoubleNumInput*     softCrInput;
-    RDoubleNumInput*     thrCbInput;
-    RDoubleNumInput*     softCbInput;
+    DDoubleNumInput*     thrLumInput;
+    DDoubleNumInput*     softLumInput;
+    DDoubleNumInput*     thrCrInput;
+    DDoubleNumInput*     softCrInput;
+    DDoubleNumInput*     thrCbInput;
+    DDoubleNumInput*     softCbInput;
 };
 
 const QString NRSettings::Private::configThrLumInputAdjustmentEntry(QLatin1String("ThrLumAdjustment"));
@@ -138,14 +138,14 @@ NRSettings::NRSettings(QWidget* const parent)
     QGridLayout* const lumLay = new QGridLayout(d->luminanceBox);
 
     QLabel* const label3      = new QLabel(i18n("Threshold:"), d->luminanceBox);
-    d->thrLumInput            = new RDoubleNumInput(d->luminanceBox);
+    d->thrLumInput            = new DDoubleNumInput(d->luminanceBox);
     d->thrLumInput->setDecimals(2);
     d->thrLumInput->setRange(0.0, 10.0, 0.1);
     d->thrLumInput->setDefaultValue(1.2);
     d->thrLumInput->setWhatsThis(thHelp);
 
     QLabel* const label4      = new QLabel(i18n("Softness:"), d->luminanceBox);
-    d->softLumInput           = new RDoubleNumInput(d->luminanceBox);
+    d->softLumInput           = new DDoubleNumInput(d->luminanceBox);
     d->softLumInput->setDecimals(1);
     d->softLumInput->setRange(0.0, 1.0, 0.1);
     d->softLumInput->setDefaultValue(0.9);
@@ -165,14 +165,14 @@ NRSettings::NRSettings(QWidget* const parent)
     QGridLayout* const cRedLay = new QGridLayout(d->chrominanceRedBox);
 
     QLabel* const label5       = new QLabel(i18n("Threshold:"), d->chrominanceRedBox);
-    d->thrCrInput              = new RDoubleNumInput(d->chrominanceRedBox);
+    d->thrCrInput              = new DDoubleNumInput(d->chrominanceRedBox);
     d->thrCrInput->setDecimals(2);
     d->thrCrInput->setRange(0.0, 10.0, 0.1);
     d->thrCrInput->setDefaultValue(1.2);
     d->thrCrInput->setWhatsThis(thHelp);
 
     QLabel* const label6       = new QLabel(i18n("Softness:"), d->chrominanceRedBox);
-    d->softCrInput             = new RDoubleNumInput(d->chrominanceRedBox);
+    d->softCrInput             = new DDoubleNumInput(d->chrominanceRedBox);
     d->softCrInput->setDecimals(1);
     d->softCrInput->setRange(0.0, 1.0, 0.1);
     d->softCrInput->setDefaultValue(0.9);
@@ -192,14 +192,14 @@ NRSettings::NRSettings(QWidget* const parent)
     QGridLayout* const cBlueLay = new QGridLayout(d->chrominanceBlueBox);
 
     QLabel* const label7        = new QLabel(i18n("Threshold:"), d->chrominanceBlueBox);
-    d->thrCbInput               = new RDoubleNumInput(d->chrominanceBlueBox);
+    d->thrCbInput               = new DDoubleNumInput(d->chrominanceBlueBox);
     d->thrCbInput->setDecimals(2);
     d->thrCbInput->setRange(0.0, 10.0, 0.1);
     d->thrCbInput->setDefaultValue(1.2);
     d->thrCbInput->setWhatsThis(thHelp);
 
     QLabel* const label8        = new QLabel(i18n("Softness:"), d->chrominanceBlueBox);
-    d->softCbInput              = new RDoubleNumInput(d->chrominanceBlueBox);
+    d->softCbInput              = new DDoubleNumInput(d->chrominanceBlueBox);
     d->softCbInput->setDecimals(1);
     d->softCbInput->setRange(0.0, 1.0, 0.1);
     d->softCbInput->setDefaultValue(0.9);

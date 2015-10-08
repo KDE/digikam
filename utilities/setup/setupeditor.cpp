@@ -42,11 +42,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
 #include "histogramwidget.h"
 #include "exposurecontainer.h"
@@ -102,8 +102,8 @@ public:
 
     DImg                preview;
 
-    RDoubleNumInput*    underExposurePcents;
-    RDoubleNumInput*    overExposurePcents;
+    DDoubleNumInput*    underExposurePcents;
+    DDoubleNumInput*    overExposurePcents;
 };
 
 const QString SetupEditor::Private::configGroupName(QLatin1String("ImageViewer Settings"));
@@ -167,7 +167,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     RHBox* const underPcentBox        = new RHBox(exposureOptionsGroup);
     QLabel* const underExpoPcentlabel = new QLabel(i18n("Under-exposure percents: "), underPcentBox);
-    d->underExposurePcents            = new RDoubleNumInput(underPcentBox);
+    d->underExposurePcents            = new DDoubleNumInput(underPcentBox);
     d->underExposurePcents->setDecimals(1);
     d->underExposurePcents->setRange(0.1, 5.0, 0.1);
     d->underExposurePcents->setDefaultValue(1.0);
@@ -184,7 +184,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     RHBox* const overPcentBox        = new RHBox(exposureOptionsGroup);
     QLabel* const overExpoPcentlabel = new QLabel(i18n("Over-exposure percents: "), overPcentBox);
-    d->overExposurePcents            = new RDoubleNumInput(overPcentBox);
+    d->overExposurePcents            = new DDoubleNumInput(overPcentBox);
     d->overExposurePcents->setDecimals(1);
     d->overExposurePcents->setRange(0.1, 5.0, 0.1);
     d->overExposurePcents->setDefaultValue(1.0);

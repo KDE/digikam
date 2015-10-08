@@ -41,10 +41,6 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
 #include "colorgradientwidget.h"
@@ -57,8 +53,7 @@
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-
-using namespace KDcrawIface;
+#include "dnuminput.h"
 
 namespace DigikamColorImagePlugin
 {

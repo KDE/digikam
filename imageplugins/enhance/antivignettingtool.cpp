@@ -40,12 +40,9 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
 // Local includes
 
+#include "dnuminput.h"
 #include "antivignettingfilter.h"
 #include "antivignettingsettings.h"
 #include "editortoolsettings.h"

@@ -52,11 +52,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 #include "dcombobox.h"
 
@@ -123,19 +123,19 @@ public:
     QLabel*               label10;
     QLabel*               label11;
 
-    RIntNumInput*         lowSaturationInput;
-    RIntNumInput*         highSaturationInput;
+    DIntNumInput*         lowSaturationInput;
+    DIntNumInput*         highSaturationInput;
 
     DComboBox*            functionInput;
 
-    RDoubleNumInput*      powerInput1;
-    RDoubleNumInput*      blurInput1;
-    RDoubleNumInput*      powerInput2;
-    RDoubleNumInput*      blurInput2;
-    RDoubleNumInput*      powerInput3;
-    RDoubleNumInput*      blurInput3;
-    RDoubleNumInput*      powerInput4;
-    RDoubleNumInput*      blurInput4;
+    DDoubleNumInput*      powerInput1;
+    DDoubleNumInput*      blurInput1;
+    DDoubleNumInput*      powerInput2;
+    DDoubleNumInput*      blurInput2;
+    DDoubleNumInput*      powerInput3;
+    DDoubleNumInput*      blurInput3;
+    DDoubleNumInput*      powerInput4;
+    DDoubleNumInput*      blurInput4;
 
     RExpanderBox*         expanderBox;
 };
@@ -189,7 +189,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     QLabel* const label2   = new QLabel(i18n("Highlights saturation:"), firstPage);
-    d->highSaturationInput = new RIntNumInput(firstPage);
+    d->highSaturationInput = new DIntNumInput(firstPage);
     d->highSaturationInput->setRange(0, 100, 1);
     d->highSaturationInput->setDefaultValue(100);
     d->highSaturationInput->setObjectName(QLatin1String("highSaturationInput"));
@@ -200,7 +200,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     QLabel* const label3  = new QLabel(i18n("Shadow saturation:"), firstPage);
-    d->lowSaturationInput = new RIntNumInput(firstPage);
+    d->lowSaturationInput = new DIntNumInput(firstPage);
     d->lowSaturationInput->setRange(0, 100, 1);
     d->lowSaturationInput->setDefaultValue(100);
     d->lowSaturationInput->setObjectName(QLatin1String("lowSaturationInput"));
@@ -228,7 +228,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label4      = new QLabel(i18n("Power:"), secondPage);
-    d->powerInput1 = new RDoubleNumInput(firstPage);
+    d->powerInput1 = new DDoubleNumInput(firstPage);
     d->powerInput1->setRange(0.0, 100.0, 1.0);
     d->powerInput1->setDefaultValue(30.0);
     d->powerInput1->setObjectName(QLatin1String("powerInput1"));
@@ -237,7 +237,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label5      = new QLabel(i18n("Blur:"), secondPage);
-    d->blurInput1  = new RDoubleNumInput(firstPage);
+    d->blurInput1  = new DDoubleNumInput(firstPage);
     d->blurInput1->setRange(0.0, 1000.0, 1.0);
     d->blurInput1->setDefaultValue(80.0);
     d->blurInput1->setObjectName(QLatin1String("blurInput1"));
@@ -259,7 +259,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label6      = new QLabel(i18n("Power:"), thirdPage);
-    d->powerInput2 = new RDoubleNumInput(thirdPage);
+    d->powerInput2 = new DDoubleNumInput(thirdPage);
     d->powerInput2->setRange(0.0, 100.0, 1.0);
     d->powerInput2->setDefaultValue(30.0);
     d->powerInput2->setObjectName(QLatin1String("powerInput2"));
@@ -268,7 +268,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label7     = new QLabel(i18n("Blur:"), thirdPage);
-    d->blurInput2 = new RDoubleNumInput(thirdPage);
+    d->blurInput2 = new DDoubleNumInput(thirdPage);
     d->blurInput2->setRange(0.0, 1000.0, 1.0);
     d->blurInput2->setDefaultValue(80.0);
     d->blurInput2->setObjectName(QLatin1String("blurInput2"));
@@ -290,7 +290,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label8      = new QLabel(i18n("Power:"), fourthPage);
-    d->powerInput3 = new RDoubleNumInput(fourthPage);
+    d->powerInput3 = new DDoubleNumInput(fourthPage);
     d->powerInput3->setRange(0.0, 100.0, 1.0);
     d->powerInput3->setDefaultValue(30.0);
     d->powerInput3->setObjectName(QLatin1String("powerInput3"));
@@ -299,7 +299,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label9     = new QLabel(i18n("Blur:"), fourthPage);
-    d->blurInput3 = new RDoubleNumInput(fourthPage);
+    d->blurInput3 = new DDoubleNumInput(fourthPage);
     d->blurInput3->setRange(0.0, 1000.0, 1.0);
     d->blurInput3->setDefaultValue(80.0);
     d->blurInput3->setObjectName(QLatin1String("blurInput3"));
@@ -321,7 +321,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label10     = new QLabel(i18n("Power:"), fifthPage);
-    d->powerInput4 = new RDoubleNumInput(fifthPage);
+    d->powerInput4 = new DDoubleNumInput(fifthPage);
     d->powerInput4->setRange(0.0, 100.0, 1.0);
     d->powerInput4->setDefaultValue(30.0);
     d->powerInput4->setObjectName(QLatin1String("powerInput4"));
@@ -330,7 +330,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     // -------------------------------------------------------------
 
     d->label11    = new QLabel(i18n("Blur:"), fifthPage);
-    d->blurInput4 = new RDoubleNumInput(fifthPage);
+    d->blurInput4 = new DDoubleNumInput(fifthPage);
     d->blurInput4->setRange(0.0, 1000.0, 1.0);
     d->blurInput4->setDefaultValue(80.0);
     d->blurInput4->setObjectName(QLatin1String("blurInput4"));

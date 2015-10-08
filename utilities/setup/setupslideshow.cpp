@@ -41,10 +41,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
-#include <KDCRAW/RNumInput>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "digikam_debug.h"
 #include "slideshowsettings.h"
 
@@ -90,7 +90,7 @@ public:
     QCheckBox*    showProgress;
 
     QComboBox*    screenPlacement;
-    RIntNumInput* delayInput;
+    DIntNumInput* delayInput;
 };
 
 // --------------------------------------------------------
@@ -108,7 +108,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     RHBox* const hbox1 = new RHBox(panel);
     QLabel* const lbl1 = new QLabel(i18n("&Delay between images:"), hbox1);
     lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->delayInput      = new RIntNumInput(hbox1);
+    d->delayInput      = new DIntNumInput(hbox1);
     d->delayInput->setDefaultValue(5);
     d->delayInput->setRange(1, 3600, 1);
     d->delayInput->setWhatsThis(i18n("The delay, in seconds, between images."));

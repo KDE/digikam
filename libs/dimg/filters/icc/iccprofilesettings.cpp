@@ -39,11 +39,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg_debug.h"
 #include "iccprofilescombobox.h"
 #include "iccprofileinfodlg.h"

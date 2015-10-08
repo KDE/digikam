@@ -25,12 +25,7 @@
 #define BLUR_H_
 
 #include "batchtool.h"
-
-// Libkdcraw includes
-
-#include <KDCRAW/RNumInput>
-
-using namespace KDcrawIface;
+#include "dnuminput.h"
 
 namespace Digikam
 {
@@ -61,7 +56,7 @@ private Q_SLOTS:
 
 private:
 
-    RIntNumInput* m_radiusInput;
+    DIntNumInput* m_radiusInput;
 };
 
 } // namespace Digikam
