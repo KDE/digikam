@@ -39,16 +39,11 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
 #include "dnuminput.h"
 #include "dimg_debug.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {

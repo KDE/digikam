@@ -45,7 +45,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RExpanderBox>
+#include "dexpanderbox.h"
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes

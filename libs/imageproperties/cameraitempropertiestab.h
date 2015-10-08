@@ -27,27 +27,19 @@
 // Qt includes
 
 #include <QString>
-
-// KDE includes
-
 #include <QUrl>
-
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
 
 // Local includes
 
 #include "digikam_export.h"
 #include "dmetadata.h"
 #include "camiteminfo.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
 
-class CameraItemPropertiesTab : public RExpanderBox
+class CameraItemPropertiesTab : public DExpanderBox
 {
     Q_OBJECT
 

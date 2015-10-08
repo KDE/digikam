@@ -47,12 +47,12 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
 #include "dimg.h"
+#include "dexpanderbox.h"
 #include "editortoolsettings.h"
 #include "freerotationfilter.h"
 #include "freerotationsettings.h"
@@ -96,7 +96,7 @@ public:
 
     FreeRotationSettings* settingsView;
 
-    RExpanderBox*         expanderBox;
+    DExpanderBox*         expanderBox;
     EditorToolSettings*   gboxSettings;
     ImageGuideWidget*     previewWidget;
 };
@@ -212,7 +212,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 
     RLineWidget* const line  = new RLineWidget(Qt::Horizontal);
     d->settingsView          = new FreeRotationSettings(d->gboxSettings->plainPage());
-    d->expanderBox           = new RExpanderBox;
+    d->expanderBox           = new DExpanderBox;
     d->expanderBox->setObjectName(QLatin1String("FreeRotationTool Expander"));
     d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme(QLatin1String("freerotation")), i18n("Automatic Adjustment"),
                             QLatin1String("AutoAdjustContainer"), true);

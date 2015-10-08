@@ -32,12 +32,9 @@
 #include <QIcon>
 #include <QFontDatabase>
 
-// kdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "digikam_debug.h"
 #include "addtagscombobox.h"
 #include "tagscompleter.h"
@@ -124,7 +121,7 @@ public:
     AddTagsLineEdit*           lineEdit;
     QToolButton*               confirmButton;
     QToolButton*               rejectButton;
-    RClickLabel*               clickLabel;
+    DClickLabel*               clickLabel;
 
     bool                       modelsGiven;
     TagModel*                  tagModel;
@@ -272,7 +269,7 @@ void AssignNameWidget::Private::checkWidgets()
 
         case ConfirmedMode:
         {
-            clickLabel = new RClickLabel;
+            clickLabel = new DClickLabel;
             clickLabel->setAlignment(Qt::AlignCenter);
 
             connect(clickLabel, SIGNAL(activated()),

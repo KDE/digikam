@@ -13,6 +13,7 @@ set(libcommonwidgets_SRCS
     common/dsliderspinbox.cpp
     common/dnuminput.cpp
     common/dcombobox.cpp
+    common/dexpanderbox.cpp
     common/dactivelabel.cpp
     common/dfontselect.cpp
     common/dgradientslider.cpp

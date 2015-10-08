@@ -49,12 +49,9 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "editortoolsettings.h"
 #include "dcombobox.h"
@@ -62,8 +59,6 @@
 #include "imageselectionwidget.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamTransformImagePlugin
 {
@@ -170,7 +165,7 @@ public:
     RColorSelector*       guideColorBt;
 
     ImageSelectionWidget* imageSelectionWidget;
-    RExpanderBox*         expbox;
+    DExpanderBox*         expbox;
     EditorToolSettings*   gboxSettings;
     HistogramBox*         histogramBox;
     DImg                  imageSelection;
@@ -252,7 +247,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QVBoxLayout* const vlay = new QVBoxLayout(d->gboxSettings->plainPage());
-    d->expbox               = new RExpanderBox(d->gboxSettings->plainPage());
+    d->expbox               = new DExpanderBox(d->gboxSettings->plainPage());
     d->expbox->setObjectName(QLatin1String("RatioCropTool Expander"));
 
     // -------------------------------------------------------------

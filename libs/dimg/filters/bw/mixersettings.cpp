@@ -45,13 +45,10 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
 #include "dnuminput.h"
+#include "dexpanderbox.h"
 #include "dimg_debug.h"
 
 using namespace KDcrawIface;

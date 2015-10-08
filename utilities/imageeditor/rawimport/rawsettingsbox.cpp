@@ -41,11 +41,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
@@ -145,7 +145,7 @@ public:
 
     ImageDialogPreview*  infoBox;
 
-    RExpanderBox*        postProcessSettingsBox;
+    DExpanderBox*        postProcessSettingsBox;
 
     DIntNumInput*        contrastInput;
     DIntNumInput*        brightnessInput;
@@ -200,7 +200,7 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     // - Post-processing view --------------------------------------------------------------
 
-    d->postProcessSettingsBox            = new RExpanderBox(d->tabView);
+    d->postProcessSettingsBox            = new DExpanderBox(d->tabView);
     d->postProcessSettingsBox->setObjectName(QLatin1String("PostProcessingSettingsBox Expander"));
 
     d->advExposureBox                    = new QWidget(d->postProcessSettingsBox);

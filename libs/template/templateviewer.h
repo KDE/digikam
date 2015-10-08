@@ -28,18 +28,16 @@
 
 #include <QString>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RExpanderBox>
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
 
 class Template;
 
-class TemplateViewer : public RExpanderBox
+class TemplateViewer : public DExpanderBox
 {
     Q_OBJECT
 

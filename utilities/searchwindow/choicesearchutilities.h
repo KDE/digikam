@@ -30,16 +30,11 @@
 #include <QList>
 #include <QVariant>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "searchxml.h"
 #include "comboboxutilities.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -215,7 +210,7 @@ public:
     void setLabelText(const QString& text);
 
     ChoiceSearchModel*   model() const;
-    RSqueezedClickLabel* label() const;
+    DSqueezedClickLabel* label() const;
 
 Q_SIGNALS:
 
@@ -231,7 +226,7 @@ protected:
 
 protected:
 
-    RSqueezedClickLabel* m_label;
+    DSqueezedClickLabel* m_label;
 };
 
 } // namespace Digikam

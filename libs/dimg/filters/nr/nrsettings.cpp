@@ -43,12 +43,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "dimg_debug.h"
 
@@ -89,7 +86,7 @@ public:
 
     QCheckBox*           checkAutoEst;
 
-    RExpanderBox*        advExpanderBox;
+    DExpanderBox*        advExpanderBox;
 
     DDoubleNumInput*     thrLumInput;
     DDoubleNumInput*     softLumInput;
@@ -129,7 +126,7 @@ NRSettings::NRSettings(QWidget* const parent)
     d->checkAutoEst->setWhatsThis( i18n("Compute automatically all noise reduction settings by a parse of "
                                         "noise contained in image."));
 
-    d->advExpanderBox   = new RExpanderBox;
+    d->advExpanderBox   = new DExpanderBox;
     d->advExpanderBox->setObjectName(QLatin1String("Noise Reduction Settings Expander"));
 
     // -------------------------------------------------------------

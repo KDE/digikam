@@ -40,19 +40,14 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "advancedrenameinput.h"
 #include "defaultrenameparser.h"
 #include "dynamiclayout.h"
 #include "tooltipcreator.h"
 #include "tooltipdialog.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -95,7 +90,7 @@ public:
     TooltipDialog*       tooltipDialog;
     AdvancedRenameInput* renameInput;
     Parser*              parser;
-    RLabelExpander*      optionsLabel;
+    DLabelExpander*      optionsLabel;
 
     CWMask               controlWidgetsMask;
     LStyle               layoutStyle;
@@ -366,7 +361,7 @@ void AdvancedRenameWidget::setupWidgets()
     {
         d->btnContainer = new QWidget(this);
 
-        d->optionsLabel = new RLabelExpander(this);
+        d->optionsLabel = new DLabelExpander(this);
         d->optionsLabel->setText(i18n("Renaming Options"));
         d->optionsLabel->setWidget(d->btnContainer);
         d->optionsLabel->setLineVisible(false);

@@ -50,10 +50,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -62,6 +58,7 @@
 #include "squeezedcombobox.h"
 #include "albummanager.h"
 #include "albummodel.h"
+#include "dexpanderbox.h"
 #include "albumselectcombobox.h"
 #include "choicesearchutilities.h"
 #include "dimg.h"
@@ -75,8 +72,6 @@
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
 #include "applicationsettings.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {

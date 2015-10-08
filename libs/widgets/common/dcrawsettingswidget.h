@@ -41,11 +41,11 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RawDecodingSettings>
-#include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dexpanderbox.h"
 #include "digikam_export.h"
 
 using namespace KDcrawIface;
@@ -53,7 +53,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DcrawSettingsWidget : public RExpanderBox
+class DIGIKAM_EXPORT DcrawSettingsWidget : public DExpanderBox
 {
     Q_OBJECT
 

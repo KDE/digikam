@@ -44,10 +44,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
-#include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "digikam_config.h"
 #include "setup.h"
@@ -148,7 +148,7 @@ public:
 #endif /* HAVE_KFACE */
 
     DIntNumInput*        similarity;
-    RExpanderBox*        expanderBox;
+    DExpanderBox*        expanderBox;
     AlbumSelectors*      albumSelectors;
 };
 
@@ -187,7 +187,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->logo                 = new QLabel(page);
     d->logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
-    d->expanderBox          = new RExpanderBox(page);
+    d->expanderBox          = new DExpanderBox(page);
 
     // --------------------------------------------------------------------------------------
 

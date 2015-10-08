@@ -70,11 +70,11 @@
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
-#include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dexpanderbox.h"
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "cameramessagebox.h"
@@ -236,7 +236,7 @@ void ImportUI::setupUserArea()
 
     // -------------------------------------------------------------------------
 
-    d->advBox = new RExpanderBox(d->rightSideBar);
+    d->advBox = new DExpanderBox(d->rightSideBar);
     d->advBox->setObjectName(QLatin1String("Camera Settings Expander"));
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);

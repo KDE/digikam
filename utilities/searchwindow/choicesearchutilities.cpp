@@ -247,7 +247,7 @@ ChoiceSearchModel* ChoiceSearchComboBox::model() const
     return static_cast<ChoiceSearchModel*>(ListViewComboBox::model());
 }
 
-RSqueezedClickLabel* ChoiceSearchComboBox::label() const
+DSqueezedClickLabel* ChoiceSearchComboBox::label() const
 {
     return m_label;
 }
@@ -272,7 +272,7 @@ void ChoiceSearchComboBox::installView(QAbstractItemView* v)
     view()->setAlternatingRowColors(true);
 
     // create the label
-    m_label = new RSqueezedClickLabel;
+    m_label = new DSqueezedClickLabel;
     m_label->setElideMode(Qt::ElideRight);
 
     // set a line edit that carries the label

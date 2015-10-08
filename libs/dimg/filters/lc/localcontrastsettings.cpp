@@ -50,12 +50,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "dimg_debug.h"
 #include "dcombobox.h"
@@ -137,7 +134,7 @@ public:
     DDoubleNumInput*      powerInput4;
     DDoubleNumInput*      blurInput4;
 
-    RExpanderBox*         expanderBox;
+    DExpanderBox*         expanderBox;
 };
 
 const QString LocalContrastSettings::Private::configLowSaturationEntry(QLatin1String("LowSaturation"));
@@ -346,7 +343,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    d->expanderBox = new RExpanderBox;
+    d->expanderBox = new DExpanderBox;
     d->expanderBox->setObjectName(QLatin1String("LocalContrastTool Expander"));
     d->expanderBox->addItem(firstPage, QIcon::fromTheme(QLatin1String("contrast")), i18n("General settings"),
                             QLatin1String("GeneralSettingsContainer"), true);

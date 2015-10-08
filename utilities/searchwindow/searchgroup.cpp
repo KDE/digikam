@@ -425,13 +425,13 @@ public:
     SearchXml::Operator         fieldOp;
     QGridLayout*                layout;
     //QComboBox*                  groupOpBox;
-    RClickLabel*                groupOpLabel;
+    DClickLabel*                groupOpLabel;
     QRadioButton*               allBox;
     QRadioButton*               anyBox;
     QRadioButton*               noneBox;
     QRadioButton*               oneNotBox;
-    RClickLabel*                optionsLabel;
-    RClickLabel*                removeLabel;
+    DClickLabel*                optionsLabel;
+    DClickLabel*                removeLabel;
     QStackedLayout*             stackedLayout;
     SearchViewThemedPartsCache* themeCache;
 };
@@ -481,7 +481,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
         QLabel* const logo = new QLabel;
         logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
-        d->optionsLabel = new RClickLabel;
+        d->optionsLabel = new DClickLabel;
         d->optionsLabel->setObjectName(QLatin1String("SearchGroupLabel_OptionsLabel"));
 
         connect(d->optionsLabel, SIGNAL(activated()),
@@ -524,13 +524,13 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
     }
     else
     {
-        d->groupOpLabel = new RClickLabel;
+        d->groupOpLabel = new DClickLabel;
         d->groupOpLabel->setObjectName(QLatin1String("SearchGroupLabel_GroupOpLabel"));
 
         connect(d->groupOpLabel, SIGNAL(activated()),
                 this, SLOT(toggleGroupOperator()));
 
-        d->removeLabel = new RClickLabel(i18n("Remove Group"));
+        d->removeLabel = new DClickLabel(i18n("Remove Group"));
         d->removeLabel->setObjectName(QLatin1String("SearchGroupLabel_RemoveLabel"));
 
         connect(d->removeLabel, SIGNAL(activated()),

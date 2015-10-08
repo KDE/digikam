@@ -39,16 +39,12 @@
 
 // KDE includes
 
-#include "dimg_debug.h"
-
 #include <klocalizedstring.h>
-
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
 
 // Local includes
 
+#include "dimg_debug.h"
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 

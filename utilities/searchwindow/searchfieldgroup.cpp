@@ -164,7 +164,7 @@ SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget* const parent)
 {
     QGridLayout* const layout = new QGridLayout;
 
-    m_titleLabel              = new RClickLabel;
+    m_titleLabel              = new DClickLabel;
     m_titleLabel->setObjectName(QLatin1String("SearchFieldGroupLabel_Label"));
     m_expandLabel             = new QLabel;
     QFrame* const hline       = new QFrame;

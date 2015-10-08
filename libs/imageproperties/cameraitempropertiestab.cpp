@@ -184,7 +184,7 @@ public:
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
-    : RExpanderBox(parent),
+    : DExpanderBox(parent),
       d(new Private)
 {
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );

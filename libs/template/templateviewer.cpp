@@ -153,7 +153,7 @@ public:
 };
 
 TemplateViewer::TemplateViewer(QWidget* const parent)
-    : RExpanderBox(parent),
+    : DExpanderBox(parent),
       d(new Private)
 {
     setFrameStyle(QFrame::NoFrame);

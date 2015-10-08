@@ -44,13 +44,10 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
 #include "dnuminput.h"
+#include "dexpanderbox.h"
 #include "editortoolsettings.h"
 #include "dcombobox.h"
 #include "imageiface.h"
@@ -145,7 +142,7 @@ public:
     DComboBox*           funcInput;
     DComboBox*           resizeOrderInput;
 
-    RExpanderBox*        expanderBox;
+    DExpanderBox*        expanderBox;
 
     QToolButton*         redMaskTool;
     QToolButton*         greenMaskTool;
@@ -421,7 +418,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->expanderBox = new RExpanderBox;
+    d->expanderBox = new DExpanderBox;
     d->expanderBox->setObjectName(QLatin1String("ContentAwareResizeTool Expander"));
     d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Target size"),
                             QLatin1String("SizeSettingsContainer"), true);

@@ -45,11 +45,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "dimg_debug.h"
 #include "previewlist.h"
@@ -100,7 +100,7 @@ public:
     PreviewList*               bwFilm;
     PreviewList*               bwTone;
 
-    RExpanderBoxExclusive*     tab;
+    DExpanderBoxExclusive*     tab;
 
     DIntNumInput*              cInput;
     DIntNumInput*              strengthInput;
@@ -149,7 +149,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
 
     QGridLayout* const grid = new QGridLayout(parent);
 
-    d->tab = new RExpanderBoxExclusive(this);
+    d->tab = new DExpanderBoxExclusive(this);
 
     PreviewListItem* item;
     d->bwFilm = new PreviewList;

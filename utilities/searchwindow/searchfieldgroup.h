@@ -31,19 +31,14 @@
 #include <QSet>
 #include <QWidget>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "searchxml.h"
 
 class QGridLayout;
 class QLabel;
 class QVBoxLayout;
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -114,7 +109,7 @@ Q_SIGNALS:
 protected:
 
     QString      m_title;
-    RClickLabel* m_titleLabel;
+    DClickLabel* m_titleLabel;
     QLabel*      m_expandLabel;
 };
 

@@ -41,16 +41,11 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "dimg_debug.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -138,7 +133,7 @@ public:
     DIntNumInput*        midtonesChromaRedInput;
     DIntNumInput*        highlightsChromaRedInput;
 
-    RExpanderBox*        expanderBox;
+    DExpanderBox*        expanderBox;
 };
 
 const QString FilmGrainSettings::Private::configGrainSizeEntry(QLatin1String("GrainSizeEntry"));
@@ -330,7 +325,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    d->expanderBox = new RExpanderBox();
+    d->expanderBox = new DExpanderBox();
     d->expanderBox->setObjectName(QLatin1String("Noise Expander"));
 
     d->expanderBox->addItem(commonPage, QIcon::fromTheme(QLatin1String("system-run")),

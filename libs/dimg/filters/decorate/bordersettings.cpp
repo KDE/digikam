@@ -42,11 +42,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "dcombobox.h"
 #include "dimg_debug.h"

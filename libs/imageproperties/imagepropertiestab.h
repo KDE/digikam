@@ -31,18 +31,15 @@
 #include <QUrl>
 #include <QFileInfo>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImagePropertiesTab : public KDcrawIface::RExpanderBox
+class DIGIKAM_EXPORT ImagePropertiesTab : public DExpanderBox
 {
     Q_OBJECT
 

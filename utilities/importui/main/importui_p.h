@@ -37,12 +37,9 @@
 
 #include <kselectaction.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "digikam_config.h"
 #include "camerathumbsctrl.h"
 #include "cameracontroller.h"
@@ -58,8 +55,6 @@
 #include "filterstatusbar.h"
 #include "statusprogressbar.h"
 #include "importview.h"
-
-using namespace KDcrawIface;
 
 class KMessageWidget;
 
@@ -213,7 +208,7 @@ public:
 
     QUrl                          lastDestURL;
 
-    RExpanderBox*                 advBox;
+    DExpanderBox*                 advBox;
 
     SidebarSplitter*              splitter;
 

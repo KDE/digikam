@@ -30,18 +30,13 @@
 #include <QWidget>
 #include <QList>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RExpanderBox>
-
 // Local includes
 
+#include "dexpanderbox.h"
 #include "searchview.h"
 #include "searchxml.h"
 
 class QVBoxLayout;
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {

@@ -204,7 +204,7 @@ public:
 };
 
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget* const parent, int advSettings)
-    : RExpanderBox(parent), d(new Private)
+    : DExpanderBox(parent), d(new Private)
 {
     setup(advSettings);
 }
@@ -1310,7 +1310,7 @@ void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
 {
     RawDecodingSettings prm = settings();
     prm.writeSettings(group);
-    RExpanderBox::writeSettings(group);
+    DExpanderBox::writeSettings(group);
 }
 
 void DcrawSettingsWidget::readSettings(KConfigGroup& group)
@@ -1318,7 +1318,7 @@ void DcrawSettingsWidget::readSettings(KConfigGroup& group)
     RawDecodingSettings prm;
     prm.readSettings(group);
     setSettings(prm);
-    RExpanderBox::readSettings(group);
+    DExpanderBox::readSettings(group);
 }
 
 } // NameSpace Digikam

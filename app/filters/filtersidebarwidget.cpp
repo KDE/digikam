@@ -38,11 +38,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "dexpanderbox.h"
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "colorlabelfilter.h"
@@ -108,7 +108,7 @@ public:
 
     QCheckBox*                             withoutTagCheckBox;
 
-    RExpanderBox*                          expbox;
+    DExpanderBox*                          expbox;
 };
 
 const QString FilterSideBarWidget::Private::configSearchTextFilterFieldsEntry(QLatin1String("Search Text Filter Fields"));
@@ -122,7 +122,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
 {
     setObjectName(QLatin1String("TagFilter Sidebar"));
 
-    d->expbox = new RExpanderBox(this);
+    d->expbox = new DExpanderBox(this);
     d->expbox->setObjectName(QLatin1String("FilterSideBarWidget Expander"));
 
     // --------------------------------------------------------------------------------------------------------
