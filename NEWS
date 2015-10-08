@@ -26,4 +26,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 014 ==> 353614 - Crash shortly after opening application.
 015 ==> 141592 - Position of inserted text is not exact [patch].
 016 ==> 353608 - The preview has blocky artifacts reminiscent of chroma subsampling [patch].
-017 ==> 
+017 ==> 286373 - DNG don't get filtered as raw (group of items relevant).
+018 ==> 
