@@ -45,6 +45,7 @@
 
 #include "multistringsedit.h"
 #include "dmetadata.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -138,7 +139,7 @@ IPTCContent::IPTCContent(QWidget* const parent)
     grid->addWidget(d->captionEdit,                         2, 0, 1, 3);
     grid->addWidget(d->syncJFIFCommentCheck,                3, 0, 1, 3);
     grid->addWidget(d->syncEXIFCommentCheck,                5, 0, 1, 3);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  6, 0, 1, 3);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  6, 0, 1, 3);
     grid->addWidget(d->writerEdit,                          7, 0, 1, 3);
     grid->addWidget(note,                                   8, 0, 1, 3);
     grid->setRowStretch(9, 10);

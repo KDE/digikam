@@ -53,6 +53,7 @@
 #include "multivaluesedit.h"
 #include "dmetadata.h"
 #include "countryselector.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -253,7 +254,7 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
     grid->addWidget(d->setTodayCreatedBtn,                  3, 5, 1, 1);
     grid->addWidget(d->syncEXIFDateCheck,                   5, 0, 1, 6);
     grid->addWidget(d->locationEdit,                        6, 0, 1, 6);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this),   7, 0, 1, 6);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),   7, 0, 1, 6);
     grid->addWidget(d->cityCheck,                           8, 0, 1, 1);
     grid->addWidget(d->cityEdit,                            8, 1, 1, 5);
     grid->addWidget(d->sublocationCheck,                    9, 0, 1, 1);

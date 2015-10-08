@@ -49,6 +49,7 @@
 
 #include "metadatacheckbox.h"
 #include "dmetadata.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -166,7 +167,7 @@ EXIFDevice::EXIFDevice(QWidget* const parent)
     warning->setWordWrap(true);
     warning->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    RLineWidget* const line = new RLineWidget(Qt::Horizontal, this);
+    DLineWidget* const line = new DLineWidget(Qt::Horizontal, this);
 
     // --------------------------------------------------------
 
@@ -225,7 +226,7 @@ EXIFDevice::EXIFDevice(QWidget* const parent)
     d->exposureBiasEdit->setWhatsThis(i18n("Set here the exposure bias value (in APEX units) "
                                            "used by camera to take the picture."));
 
-    RLineWidget* const line2 = new RLineWidget(Qt::Horizontal, this);
+    DLineWidget* const line2 = new DLineWidget(Qt::Horizontal, this);
 
     // --------------------------------------------------------
 

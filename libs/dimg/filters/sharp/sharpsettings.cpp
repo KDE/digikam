@@ -54,6 +54,7 @@
 #include "dimg_debug.h"
 #include "digikam_config.h"
 #include "dcombobox.h"
+#include "dexpanderbox.h"
 
 #ifdef HAVE_EIGEN3
 #include "refocusfilter.h"
@@ -152,7 +153,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
 
     grid->addWidget(label1,                                  0, 0, 1, 1);
     grid->addWidget(d->sharpMethod,                          0, 1, 1, 1);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, parent), 1, 0, 1, 2);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, parent), 1, 0, 1, 2);
     grid->addWidget(d->stack,                                2, 0, 1, 2);
     grid->setRowStretch(3, 10);
     grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));

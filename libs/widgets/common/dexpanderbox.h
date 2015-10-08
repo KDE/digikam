@@ -37,6 +37,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QScrollArea>
+#include <QFrame>
 
 // KDE includes
 
@@ -48,6 +49,21 @@
 
 namespace Digikam
 {
+
+/**
+ * A widget to show an horizontal or vertical line separator 
+ **/
+class DIGIKAM_EXPORT DLineWidget : public QFrame
+{
+    Q_OBJECT
+
+public:
+
+    explicit DLineWidget(Qt::Orientation orientation, QWidget* const parent=0);
+    virtual ~DLineWidget();
+};
+
+// -------------------------------------------------------------------------
 
 /** A label to show text adjusted to widget size
  */

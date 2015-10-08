@@ -58,6 +58,7 @@
 #include "dnuminput.h"
 #include "dimg_debug.h"
 #include "dcombobox.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -243,7 +244,7 @@ WBSettings::WBSettings(QWidget* const parent)
                                           "image used to set the white color balance temperature and "
                                           "green component."));
 
-    RLineWidget* const line = new RLineWidget(Qt::Horizontal);
+    DLineWidget* const line = new DLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
@@ -283,7 +284,7 @@ WBSettings::WBSettings(QWidget* const parent)
     d->greenInput->setWhatsThis(i18n("Set here the green component to control the magenta color "
                                      "cast removal level."));
 
-    RLineWidget* const line2 = new RLineWidget(Qt::Horizontal);
+    DLineWidget* const line2 = new DLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------
 

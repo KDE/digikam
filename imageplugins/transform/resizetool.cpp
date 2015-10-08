@@ -74,6 +74,7 @@
 #include "greycstorationfilter.h"
 #include "greycstorationsettings.h"
 #include "dactivelabel.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -261,7 +262,7 @@ ResizeTool::ResizeTool(QObject* const parent)
     grid->addWidget(d->wpInput,                                 3, 1, 1, 2);
     grid->addWidget(label4,                                     4, 0, 1, 1);
     grid->addWidget(d->hpInput,                                 4, 1, 1, 2);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, firstPage), 5, 0, 1, 3);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, firstPage), 5, 0, 1, 3);
     grid->addWidget(d->cimgLogoLabel,                           6, 0, 3, 1);
     grid->addWidget(d->useGreycstorationBox,                    6, 1, 1, 2);
     grid->addWidget(d->restorationTips,                         7, 1, 1, 2);

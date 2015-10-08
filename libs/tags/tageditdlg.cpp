@@ -56,6 +56,7 @@
 #include "databaseconstants.h"
 #include "digikam_debug.h"
 #include "dxmlguiwindow.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -137,7 +138,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
 
-    RLineWidget* const line  = new RLineWidget(Qt::Horizontal, page);
+    DLineWidget* const line  = new DLineWidget(Qt::Horizontal, page);
 
     // --------------------------------------------------------
 

@@ -51,6 +51,7 @@
 #include "timezonecombobox.h"
 #include "objectattributesedit.h"
 #include "dmetadata.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -270,7 +271,7 @@ IPTCProperties::IPTCProperties(QWidget* const parent)
     grid->addWidget(d->timeExpiredSel,                      3, 2, 1, 1);
     grid->addWidget(d->zoneExpiredSel,                      3, 3, 1, 1);
     grid->addWidget(d->setTodayExpiredBtn,                  3, 5, 1, 1);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  4, 0, 1, 6);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  4, 0, 1, 6);
     grid->addWidget(d->languageCheck,                       5, 0, 1, 1);
     grid->addWidget(d->languageBtn,                         5, 1, 1, 1);
     grid->addWidget(d->priorityCheck,                       6, 0, 1, 1);
@@ -280,9 +281,9 @@ IPTCProperties::IPTCProperties(QWidget* const parent)
     grid->addWidget(d->objectTypeCheck,                     8, 0, 1, 1);
     grid->addWidget(d->objectTypeCB,                        8, 1, 1, 1);
     grid->addWidget(d->objectTypeDescEdit,                  8, 2, 1, 4);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  9, 0, 1, 6);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  9, 0, 1, 6);
     grid->addWidget(d->objectAttribute,                    10, 0, 1, 6);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this), 11, 0, 1, 6);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this), 11, 0, 1, 6);
     grid->addWidget(d->originalTransCheck,                 12, 0, 1, 1);
     grid->addWidget(d->originalTransEdit,                  12, 1, 1, 5);
     grid->addWidget(note,                                  13, 0, 1, 6);

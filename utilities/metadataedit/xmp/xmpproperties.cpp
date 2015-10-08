@@ -51,6 +51,7 @@
 #include "objectattributesedit.h"
 #include "iptcproperties.h"
 #include "dmetadata.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -255,11 +256,11 @@ XMPProperties::XMPProperties(QWidget* const parent)
     grid->addWidget(d->priorityCB,                          1, 1, 1, 1);
     grid->addWidget(d->sceneEdit,                           2, 0, 1, 5);
     grid->addWidget(d->objectTypeEdit,                      3, 0, 1, 5);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  4, 0, 1, 5);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  4, 0, 1, 5);
     grid->addWidget(d->objectAttributeCheck,                5, 0, 1, 1);
     grid->addWidget(d->objectAttributeCB,                   5, 1, 1, 2);
     grid->addWidget(d->objectAttributeEdit,                 5, 3, 1, 2);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  6, 0, 1, 5);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  6, 0, 1, 5);
     grid->addWidget(d->originalTransCheck,                  7, 0, 1, 1);
     grid->addWidget(d->originalTransEdit,                   7, 1, 1, 4);
     grid->setRowStretch(8, 10);

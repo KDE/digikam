@@ -66,6 +66,7 @@
 #include "gpsimageitem.h"
 #include "gpsundocommand.h"
 #include "track_listmodel.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -176,7 +177,7 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
     d->gpxFileList->setHeaderHidden(false);
     d->gpxFileList->setRootIsDecorated(false);
 
-    RLineWidget* const line   = new RLineWidget(Qt::Horizontal, this);
+    DLineWidget* const line   = new DLineWidget(Qt::Horizontal, this);
     QLabel* const maxGapLabel = new QLabel(i18n("Max. time gap (sec.):"), this);
 
     d->maxGapInput            = new QSpinBox(this);

@@ -43,6 +43,7 @@
 // Local includes
 
 #include "dmetadata.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -189,13 +190,13 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
     grid->addWidget(d->setTodayCreatedBtn,                  1, 3, 1, 1);
     grid->addWidget(d->syncXMPDateCheck,                    2, 0, 1, 4);
     grid->addWidget(d->syncIPTCDateCheck,                   3, 0, 1, 4);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  4, 0, 1, 4);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  4, 0, 1, 4);
     grid->addWidget(d->dateOriginalCheck,                   5, 0, 1, 1);
     grid->addWidget(d->dateOriginalSubSecCheck,             5, 1, 1, 3);
     grid->addWidget(d->dateOriginalSel,                     6, 0, 1, 1);
     grid->addWidget(d->dateOriginalSubSecEdit,              6, 1, 1, 1);
     grid->addWidget(d->setTodayOriginalBtn,                 6, 3, 1, 1);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  7, 0, 1, 4);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  7, 0, 1, 4);
     grid->addWidget(d->dateDigitalizedCheck,                8, 0, 1, 1);
     grid->addWidget(d->dateDigitalizedSubSecCheck,          8, 1, 1, 3);
     grid->addWidget(d->dateDigitalizedSel,                  9, 0, 1, 1);

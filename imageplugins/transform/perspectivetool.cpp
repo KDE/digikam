@@ -42,18 +42,13 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "perspectivewidget.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace DigikamTransformImagePlugin
 {
@@ -74,7 +69,8 @@ public:
         inverseTransformation(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configDrawWhileMovingEntry;
@@ -143,7 +139,7 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    RLineWidget* const line  = new RLineWidget (Qt::Horizontal);
+    DLineWidget* const line  = new DLineWidget (Qt::Horizontal);
     QLabel* const angleLabel = new QLabel(i18n("Angles (in degrees):"));
     QLabel* const label3     = new QLabel(i18n("  Top left:"));
     d->topLeftAngleLabel     = new QLabel;
@@ -156,7 +152,7 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    RLineWidget* const line2   = new RLineWidget (Qt::Horizontal);
+    DLineWidget* const line2   = new DLineWidget (Qt::Horizontal);
     d->drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"));
     d->drawGridCheckBox        = new QCheckBox(i18n("Draw grid"));
     d->inverseTransformation   = new QCheckBox(i18n("Inverse transformation"));

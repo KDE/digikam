@@ -153,7 +153,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->borderType->setDefaultIndex(BorderContainer::SolidBorder);
     d->borderType->setWhatsThis(i18n("Select the border type to add around the image here."));
 
-    RLineWidget* line1 = new RLineWidget(Qt::Horizontal);
+    DLineWidget* line1 = new DLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 
@@ -176,7 +176,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->borderWidth->setDefaultValue(100);
     d->borderWidth->setWhatsThis(i18n("Set here the border width in pixels to add around the image."));
 
-    RLineWidget* line2 = new RLineWidget(Qt::Horizontal);
+    DLineWidget* line2 = new DLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 

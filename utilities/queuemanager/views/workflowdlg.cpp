@@ -50,6 +50,7 @@
 // Local includes
 
 #include "dxmlguiwindow.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -101,7 +102,7 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     topLabel->setWordWrap(false);
 
-    RLineWidget* const topLine = new RLineWidget(Qt::Horizontal);
+    DLineWidget* const topLine = new DLineWidget(Qt::Horizontal);
 
     // --------------------------------------------------------
 

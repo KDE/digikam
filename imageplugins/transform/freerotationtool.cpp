@@ -45,10 +45,6 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "dimg.h"
@@ -58,8 +54,7 @@
 #include "freerotationsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace DigikamTransformImagePlugin
 {
@@ -80,7 +75,8 @@ public:
         expanderBox(0),
         gboxSettings(0),
         previewWidget(0)
-    {}
+    {
+    }
 
     const QString         configGroupName;
 
@@ -210,7 +206,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    RLineWidget* const line  = new RLineWidget(Qt::Horizontal);
+    DLineWidget* const line  = new DLineWidget(Qt::Horizontal);
     d->settingsView          = new FreeRotationSettings(d->gboxSettings->plainPage());
     d->expanderBox           = new DExpanderBox;
     d->expanderBox->setObjectName(QLatin1String("FreeRotationTool Expander"));

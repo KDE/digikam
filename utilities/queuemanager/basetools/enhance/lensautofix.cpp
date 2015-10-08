@@ -45,6 +45,7 @@
 #include "lensfunsettings.h"
 #include "lensfuncameraselector.h"
 #include "lensfuniface.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -88,7 +89,7 @@ void LensAutoFix::registerSettingsWidget()
     note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
     d->cameraSelector       = new LensFunCameraSelector();
-    RLineWidget* const line = new RLineWidget(Qt::Horizontal);
+    DLineWidget* const line = new DLineWidget(Qt::Horizontal);
     d->settingsView         = new LensFunSettings();
     d->cameraSelector->setPassiveMetadataUsage(true);
     d->cameraSelector->setEnabledUseMetadata(true);

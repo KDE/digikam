@@ -58,6 +58,7 @@
 #include "albummodel.h"
 #include "albumselectors.h"
 #include "applicationsettings.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -457,7 +458,7 @@ void FaceScanDialog::setupUi()
 
     advancedLayout->addWidget(cpuExplanation,                 0, 0);
     advancedLayout->addWidget(d->useFullCpuButton,            1, 0);
-    advancedLayout->addWidget(new RLineWidget(Qt::Horizontal), 2, 0);
+    advancedLayout->addWidget(new DLineWidget(Qt::Horizontal), 2, 0);
     advancedLayout->addWidget(d->retrainAllButton,            3, 0);
     advancedLayout->addWidget(d->benchmarkDetectionButton,    4, 0);
     advancedLayout->addWidget(d->benchmarkRecognitionButton,  5, 0);

@@ -44,6 +44,7 @@
 
 #include "altlangstringedit.h"
 #include "dmetadata.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -121,7 +122,7 @@ XMPContent::XMPContent(QWidget* const parent)
 
     grid->addWidget(d->headlineCheck,                      0, 0, 1, 1);
     grid->addWidget(d->headlineEdit,                       0, 1, 1, 2);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this), 1, 0, 1, 3);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this), 1, 0, 1, 3);
     grid->addWidget(d->captionEdit,                        2, 0, 1, 3);
     grid->addWidget(syncOptions,                           3, 0, 1, 3);
     grid->addWidget(d->writerCheck,                        4, 0, 1, 1);

@@ -55,6 +55,33 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
+DLineWidget::DLineWidget(Qt::Orientation orientation, QWidget* const parent)
+    : QFrame(parent)
+{
+    setLineWidth(1);
+    setMidLineWidth(0);
+    setFrameShadow(QFrame::Sunken);
+
+    if (orientation == Qt::Vertical)
+    {
+        setFrameShape(QFrame::VLine);
+        setMinimumSize(2, 0);
+    }
+    else
+    {
+        setFrameShape(QFrame::HLine);
+        setMinimumSize(0, 2);
+    }
+
+    updateGeometry();
+}
+
+DLineWidget::~DLineWidget()
+{
+}
+
+// ------------------------------------------------------------------------------------
+    
 class Q_DECL_HIDDEN DAdjustableLabel::Private
 {
 public:
@@ -442,7 +469,7 @@ public:
     QWidget*          containerWidget;
     QGridLayout*      grid;
 
-    RLineWidget*      line;
+    DLineWidget*      line;
     QWidget*          hbox;
 
     DArrowClickLabel* arrow;
@@ -454,7 +481,7 @@ DLabelExpander::DLabelExpander(QWidget* const parent)
       d(new Private)
 {
     d->grid        = new QGridLayout(this);
-    d->line        = new RLineWidget(Qt::Horizontal, this);
+    d->line        = new DLineWidget(Qt::Horizontal, this);
     d->hbox        = new QWidget(this);
     d->arrow       = new DArrowClickLabel(d->hbox);
     d->checkBox    = new QCheckBox(d->hbox);

@@ -49,6 +49,7 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "shearfilter.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -169,7 +170,7 @@ ShearTool::ShearTool(QObject* const parent)
                                           "to the sheared image. "
                                           "To smooth the target image, it will be blurred a little."));
 
-    RLineWidget* line = new RLineWidget(Qt::Horizontal);
+    DLineWidget* line = new DLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------
 

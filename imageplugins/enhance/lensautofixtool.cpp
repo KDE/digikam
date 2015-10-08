@@ -39,10 +39,6 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "dmetadata.h"
@@ -53,8 +49,7 @@
 #include "lensfunfilter.h"
 #include "lensfunsettings.h"
 #include "lensfuncameraselector.h"
-
-using namespace KDcrawIface;
+#include "dexpanderbox.h"
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -72,7 +67,8 @@ public:
         cameraSelector(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     const QString          configGroupName;
     const QString          configShowGrid;
@@ -114,7 +110,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* const parent)
     DImg* const img        = d->previewWidget->imageIface()->original();
     DMetadata meta(img->getMetadata());
     d->cameraSelector->setMetadata(meta);
-    RLineWidget* const line = new RLineWidget(Qt::Horizontal, d->gboxSettings->plainPage());
+    DLineWidget* const line = new DLineWidget(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 

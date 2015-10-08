@@ -55,6 +55,7 @@
 #include "gpsundocommand.h"
 #include "graphicsdimgview.h"
 #include "dimgpreviewitem.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -174,7 +175,7 @@ GPSImageDetails::GPSImageDetails(QWidget* const parent, GPSImageModel* const ima
     d->pbApply = new QPushButton(i18n("Apply"), this);
     formLayout->setWidget(formLayout->rowCount(), QFormLayout::SpanningRole, d->pbApply);
 
-    layout1->addWidget(new RLineWidget(Qt::Horizontal, this));
+    layout1->addWidget(new DLineWidget(Qt::Horizontal, this));
 
     // ----------------------------------
 

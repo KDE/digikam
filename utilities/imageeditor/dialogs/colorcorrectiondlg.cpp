@@ -57,6 +57,7 @@
 #include "iccprofileinfodlg.h"
 #include "iccprofilescombobox.h"
 #include "dxmlguiwindow.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -250,7 +251,7 @@ QLayout* ColorCorrectionDlg::createHeading() const
     QLabel* const logo      = new QLabel;
     logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
 
-    RLineWidget* const line  = new RLineWidget(Qt::Horizontal);
+    DLineWidget* const line  = new DLineWidget(Qt::Horizontal);
 
     QGridLayout* const grid = new QGridLayout;
     grid->addWidget(icon,    0, 0);

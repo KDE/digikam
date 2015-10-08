@@ -62,6 +62,7 @@
 #include "applicationsettings.h"
 #include "databaseaccess.h"
 #include "dxmlguiwindow.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -148,7 +149,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     topLabel->setWordWrap(false);
 
-    RLineWidget* const topLine = new RLineWidget(Qt::Horizontal);
+    DLineWidget* const topLine = new DLineWidget(Qt::Horizontal);
 
     // --------------------------------------------------------
 

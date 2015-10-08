@@ -39,6 +39,7 @@
 // Local includes
 
 #include "assistantdlg.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -89,7 +90,7 @@ AssistantDlgPage::AssistantDlgPage(AssistantDlg* const dlg, const QString& title
     vbox->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     
-    RLineWidget* const line = new RLineWidget(Qt::Vertical, panel);
+    DLineWidget* const line = new DLineWidget(Qt::Vertical, panel);
 
     d->hlay->addWidget(vbox);
     d->hlay->addWidget(line);

@@ -73,6 +73,7 @@
 #include "rgtagmodel.h"
 #include "simpletreemodel.h"
 #include "dmessagebox.h"
+#include "dexpanderbox.h"
 
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
@@ -167,7 +168,7 @@ public:
     QWidget*             LGridContainer;
     QLabel*              serviceLabel;
     QLabel*              languageLabel;
-    RLineWidget*         separator;
+    DLineWidget*         separator;
 
     RGTagModel*          tagModel;
     QTreeView*           tagTreeView;
@@ -338,7 +339,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
 
     d->UGridContainer->setLayout(gridLayout);
 
-    d->separator         = new RLineWidget(Qt::Horizontal, this);
+    d->separator         = new DLineWidget(Qt::Horizontal, this);
     vBoxLayout->addWidget(d->separator);
 
     d->buttonHideOptions = new QPushButton(i18n("Less options"), this);

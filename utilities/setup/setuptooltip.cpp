@@ -47,6 +47,7 @@
 #include "importsettings.h"
 #include "setupcamera.h"
 #include "dfontselect.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -408,7 +409,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showItemDimensionsBox = new QCheckBox(i18n("Show item dimensions"));
     d->showItemDimensionsBox->setWhatsThis(i18n("Set this option to display the item dimensions."));
 
-    RLineWidget* const line  = new RLineWidget(Qt::Horizontal, d->photoSettingBox);
+    DLineWidget* const line  = new DLineWidget(Qt::Horizontal, d->photoSettingBox);
     QLabel* const label      = new QLabel(i18n("Note: these settings require \"Use File Metadata\" option from Camera Setup Behavior page."), d->photoSettingBox);
 
     d->showItemPhotoMakeBox  = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);

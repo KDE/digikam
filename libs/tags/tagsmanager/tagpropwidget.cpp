@@ -51,6 +51,7 @@
 #include "albummanager.h"
 #include "tagsactionmngr.h"
 #include "syncjob.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -85,7 +86,6 @@ public:
     KKeySequenceWidget* keySeqWidget;
     SearchTextBar*      titleEdit;
     bool                changed;
-
 };
 
 TagPropWidget::TagPropWidget(QWidget* const parent)
@@ -100,7 +100,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
 
-    RLineWidget* const line = new RLineWidget(Qt::Horizontal, this);
+    DLineWidget* const line = new DLineWidget(Qt::Horizontal, this);
 
     // --------------------------------------------------------
 

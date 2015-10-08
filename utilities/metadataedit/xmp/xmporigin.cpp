@@ -49,6 +49,7 @@
 #include "timezonecombobox.h"
 #include "dmetadata.h"
 #include "countryselector.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -187,7 +188,7 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
     grid->addWidget(d->zoneCreatedSel,                      3, 3, 1, 1);
     grid->addWidget(d->setTodayCreatedBtn,                  3, 5, 1, 1);
     grid->addWidget(d->syncEXIFDateCheck,                   5, 0, 1, 6);
-    grid->addWidget(new RLineWidget(Qt::Horizontal, this),  6, 0, 1, 6);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  6, 0, 1, 6);
     grid->addWidget(d->cityCheck,                           7, 0, 1, 1);
     grid->addWidget(d->cityEdit,                            7, 1, 1, 5);
     grid->addWidget(d->sublocationCheck,                    8, 0, 1, 1);

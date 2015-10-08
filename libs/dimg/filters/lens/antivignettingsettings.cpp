@@ -184,7 +184,7 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     d->yOffsetInput->setDefaultValue(0);
     d->yOffsetInput->setWhatsThis(i18n("Y offset "));
 
-    RLineWidget* const line = new RLineWidget(Qt::Horizontal);
+    DLineWidget* const line = new DLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
