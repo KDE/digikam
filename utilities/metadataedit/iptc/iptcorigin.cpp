@@ -44,10 +44,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
-#include <KDCRAW/SqueezedComboBox>
 
 // Local includes
 
+#include "squeezedcombobox.h"
 #include "metadatacheckbox.h"
 #include "timezonecombobox.h"
 #include "multivaluesedit.h"

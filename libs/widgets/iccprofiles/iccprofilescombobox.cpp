@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 IccProfilesComboBox::IccProfilesComboBox(QWidget* const parent)
-    : KDcrawIface::SqueezedComboBox( parent )
+    : SqueezedComboBox( parent )
 {
 }
 

@@ -38,15 +38,10 @@
 
 #include <klocalizedstring.h>
 
-// LibKDcraw includes
-
-#include <KDCRAW/SqueezedComboBox>
-
 // Local includes
 
 #include "metadatacheckbox.h"
-
-using namespace KDcrawIface;
+#include "squeezedcombobox.h"
 
 namespace Digikam
 {

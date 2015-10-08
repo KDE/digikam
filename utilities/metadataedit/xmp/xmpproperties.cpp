@@ -40,10 +40,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RWidgetUtils>
-#include <KDCRAW/SqueezedComboBox>
 
 // Local includes
 
+#include "squeezedcombobox.h"
 #include "digikam_debug.h"
 #include "altlangstringedit.h"
 #include "metadatacheckbox.h"

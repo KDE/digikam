@@ -56,11 +56,11 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/SqueezedComboBox>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
 
+#include "squeezedcombobox.h"
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "iccprofileinfodlg.h"

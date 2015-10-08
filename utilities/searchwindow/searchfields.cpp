@@ -52,7 +52,6 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/SqueezedComboBox>
 #include <KDCRAW/RExpanderBox>
 
 // Local includes
@@ -60,6 +59,7 @@
 #include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
+#include "squeezedcombobox.h"
 #include "albummanager.h"
 #include "albummodel.h"
 #include "albumselectcombobox.h"

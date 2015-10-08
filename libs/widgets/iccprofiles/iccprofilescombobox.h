@@ -30,12 +30,9 @@
 #include <QIcon>
 #include <QMenu>
 
-// Libkdcraw includes
-
-#include <KDCRAW/SqueezedComboBox>
-
 // Local includes
 
+#include "squeezedcombobox.h"
 #include "digikam_export.h"
 #include "iccprofile.h"
 
@@ -44,7 +41,7 @@ class QSignalMapper;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT IccProfilesComboBox : public KDcrawIface::SqueezedComboBox
+class DIGIKAM_EXPORT IccProfilesComboBox : public SqueezedComboBox
 {
     Q_OBJECT
 

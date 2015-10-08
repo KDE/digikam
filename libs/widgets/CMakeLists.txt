@@ -27,6 +27,7 @@ set(libcommonwidgets_SRCS
     common/workingwidget.cpp
     common/widgets_debug.cpp
     common/dcrawsettingswidget.cpp
+    common/squeezedcombobox.cpp
 )
 
 set(libimagehistory_SRCS
