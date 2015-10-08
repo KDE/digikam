@@ -44,7 +44,6 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/DcrawSettingsWidget>
 #include <KDCRAW/RWidgetUtils>
 
 // Local includes
@@ -59,6 +58,7 @@
 #include "tiffsettings.h"
 #include "pngsettings.h"
 #include "pgfsettings.h"
+#include "dcrawsettingswidget.h"
 
 #ifdef HAVE_JASPER
 #include "jp2ksettings.h"

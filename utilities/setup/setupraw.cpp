@@ -37,14 +37,10 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/DcrawSettingsWidget>
-#include <libkdcraw_version.h>
-
 // Local includes
 
 #include "drawdecoding.h"
+#include "dcrawsettingswidget.h"
 
 using namespace KDcrawIface;
 

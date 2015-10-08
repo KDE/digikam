@@ -41,7 +41,6 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/DcrawSettingsWidget>
 #include <KDCRAW/RNumInput>
 #include <KDCRAW/RExpanderBox>
 #include <KDCRAW/RWidgetUtils>
@@ -58,6 +57,7 @@
 #include "imagehistogram.h"
 #include "digikam_globals.h"
 #include "digikam_debug.h"
+#include "dcrawsettingswidget.h"
 
 using namespace KDcrawIface;
 

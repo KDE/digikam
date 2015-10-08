@@ -8,9 +8,9 @@
 set(libsetupshowfoto_SRCS
     setupeditor.cpp
     setupiofiles.cpp
-    setupraw.cpp
     setupicc.cpp
     setupslideshow.cpp
+    setupraw.cpp
 )
 
 set(libsetup_SRCS
@@ -26,10 +26,10 @@ set(libsetup_SRCS
     setupmisc.cpp
     setuplighttable.cpp
     setupiofiles.cpp
-    setupraw.cpp
     setupdatabase.cpp
     setupversioning.cpp
     setupimagequalitysorter.cpp
+    setupraw.cpp
 
     metadata/setupmetadata.cpp
     metadata/advancedmetadatatab.cpp
