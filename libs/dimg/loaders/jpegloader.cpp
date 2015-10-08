@@ -300,7 +300,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     if (m_loadFlags & LoadImageData)
     {
         // set decompression parameters
-        cinfo.do_fancy_upsampling = boolean(false);
+        cinfo.do_fancy_upsampling = boolean(true);
         cinfo.do_block_smoothing  = boolean(false);
 
         // handle scaled loading

@@ -25,4 +25,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 013 ==> 353600 - Wrong date (1970-01-01) on rename during raw import from Nikon D750.
 014 ==> 353614 - Crash shortly after opening application.
 015 ==> 141592 - Position of inserted text is not exact [patch].
-016 ==> 
+016 ==> 353608 - The preview has blocky artifacts reminiscent of chroma subsampling [patch].
+017 ==> 
