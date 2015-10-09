@@ -450,7 +450,7 @@ void DcrawSettingsWidget::setup(int advSettings)
         d->refineInterpolationBox->setEnabled(false);
     }
 
-    addItem(d->demosaicingSettings, QIcon::fromTheme(QLatin1String("kdcraw")).pixmap(16, 16), i18nc("@label", "Demosaicing"), QLatin1String("demosaicing"), true);
+    addItem(d->demosaicingSettings, QIcon::fromTheme(QLatin1String("rawbayer)).pixmap(16, 16), i18nc("@label", "Demosaicing"), QLatin1String("demosaicing"), true);
 
     // ---------------------------------------------------------------
     // WHITE BALANCE Settings Panel
@@ -619,7 +619,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     whiteBalanceLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    addItem(d->whiteBalanceSettings, QIcon::fromTheme(QLatin1String("kdcraw")).pixmap(16, 16), i18nc("@label", "White Balance"), QLatin1String("whitebalance"), true);
+    addItem(d->whiteBalanceSettings, QIcon::fromTheme(QLatin1String("rawbayer)).pixmap(16, 16), i18nc("@label", "White Balance"), QLatin1String("whitebalance"), true);
 
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel
@@ -707,7 +707,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     correctionsLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     correctionsLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    addItem(d->correctionsSettings, QIcon::fromTheme(QLatin1String("kdcraw")).pixmap(16, 16), i18nc("@label", "Corrections"), QLatin1String("corrections"), false);
+    addItem(d->correctionsSettings, QIcon::fromTheme(QLatin1String("rawbayer)).pixmap(16, 16), i18nc("@label", "Corrections"), QLatin1String("corrections"), false);
 
     // ---------------------------------------------------------------
     // COLOR MANAGEMENT Settings panel
@@ -778,7 +778,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     colormanLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     colormanLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    addItem(d->colormanSettings, QIcon::fromTheme(QLatin1String("kdcraw")).pixmap(16, 16), i18nc("@label", "Color Management"), QLatin1String("colormanagement"), false);
+    addItem(d->colormanSettings, QIcon::fromTheme(QLatin1String("rawbayer)).pixmap(16, 16), i18nc("@label", "Color Management"), QLatin1String("colormanagement"), false);
 
     if (! (advSettings & COLORSPACE))
         removeItem(COLORMANAGEMENT);

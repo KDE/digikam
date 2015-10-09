@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
-# Copyright (c) 2015, Alexander Potashev, <aspotashev@gmail.com>
+# Copyright (c) 2015,     by Alexander Potashev, <aspotashev@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -379,6 +379,10 @@ ecm_install_icons(
         48-actions-viewimage.png
         64-actions-viewimage.png
         128-actions-viewimage.png
+        32-actions-rawbayer.png
+        48-actions-rawbayer.png
+        64-actions-rawbayer.png
+        128-actions-rawbayer.png
         16-actions-whitebalance.png
         22-actions-whitebalance.png
         32-actions-whitebalance.png
