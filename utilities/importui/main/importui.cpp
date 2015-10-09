@@ -70,10 +70,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
-#include "dwidgetutils.h"
 
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "digikam_debug.h"
 #include "digikam_globals.h"

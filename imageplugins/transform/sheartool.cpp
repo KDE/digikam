@@ -37,12 +37,9 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dnuminput.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
@@ -50,8 +47,6 @@
 #include "imageguidewidget.h"
 #include "shearfilter.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamTransformImagePlugin
 {
@@ -70,7 +65,8 @@ public:
         fineVAngleInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configAntiAliasingEntry;

@@ -57,12 +57,9 @@
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"

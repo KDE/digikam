@@ -54,12 +54,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "squeezedcombobox.h"
 #include "digikam_debug.h"
 #include "applicationsettings.h"

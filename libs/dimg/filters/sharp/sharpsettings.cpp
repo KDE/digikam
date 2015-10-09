@@ -43,13 +43,10 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
 #include "dexpanderbox.h"
 #include "dwidgetutils.h"
-
-// Local includes
-
 #include "dnuminput.h"
 #include "dimg_debug.h"
 #include "digikam_config.h"

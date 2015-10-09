@@ -40,12 +40,9 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dnuminput.h"
 #include "dimg.h"
 #include "histogramwidget.h"

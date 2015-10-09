@@ -44,12 +44,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dnuminput.h"
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"

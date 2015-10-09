@@ -66,7 +66,6 @@
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
-#include "dwidgetutils.h"
 
 // Libkexiv2
 
@@ -74,6 +73,7 @@
 
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"

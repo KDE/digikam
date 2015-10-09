@@ -43,12 +43,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
 

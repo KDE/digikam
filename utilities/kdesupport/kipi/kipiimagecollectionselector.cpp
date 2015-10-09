@@ -38,12 +38,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_debug.h"
 #include "album.h"
 #include "applicationsettings.h"

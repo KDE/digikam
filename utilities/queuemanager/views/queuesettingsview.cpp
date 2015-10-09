@@ -42,12 +42,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "advancedrenamewidget.h"
 #include "defaultrenameparser.h"
 #include "album.h"

@@ -46,12 +46,9 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "mapwidget.h"
 #include "searchbackend.h"
 #include "searchresultmodel.h"

@@ -35,12 +35,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dimg.h"
 #include "lensfunsettings.h"
 #include "lensfuncameraselector.h"

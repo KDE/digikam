@@ -41,12 +41,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "iccprofilescombobox.h"
 #include "iccsettingscontainer.h"
 #include "iccsettings.h"

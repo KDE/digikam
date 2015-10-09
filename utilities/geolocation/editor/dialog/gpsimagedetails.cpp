@@ -45,12 +45,9 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // local includes
 
+#include "dwidgetutils.h"
 #include "gpsimagemodel.h"
 #include "gpsundocommand.h"
 #include "graphicsdimgview.h"

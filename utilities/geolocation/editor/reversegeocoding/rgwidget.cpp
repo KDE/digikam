@@ -52,16 +52,10 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
-// GeoIface includes
-
-#include "geoiface_types.h"
-
 // local includes
 
+#include "geoiface_types.h"
+#include "dwidgetutils.h"
 #include "gpsundocommand.h"
 #include "geolocationedit.h"
 #include "gpsimagemodel.h"

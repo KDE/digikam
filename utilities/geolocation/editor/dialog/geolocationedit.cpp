@@ -65,12 +65,9 @@
 #include <klocalizedstring.h>
 #include <kwindowconfig.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_config.h"
 #include "mapwidget.h"
 #include "itemmarkertiler.h"

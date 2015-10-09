@@ -49,12 +49,9 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "editortoolsettings.h"

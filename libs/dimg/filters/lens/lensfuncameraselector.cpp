@@ -35,12 +35,9 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dimg_debug.h"
 #include "dcombobox.h"
 #include "dnuminput.h"
