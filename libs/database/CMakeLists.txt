@@ -1,7 +1,7 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
-# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
-# Copyright (c) 2015 by Mohamed Anwer, <m dot anwer at gmx dot com>
+# Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015      by Mohamed Anwer, <m dot anwer at gmx dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -20,7 +20,6 @@ set(libdatabasecore_SRCS
     core/sqlquery.cpp
     core/dbactiontype.cpp
     core/tagregion.cpp
-
 )
 
 #this sources must be set in digikam main app
@@ -103,7 +102,6 @@ set(digikamdatabase_LIB_SRCS
         ${libdatabase_SRCS}
         ${libhaar_SRCS}
         ${pgfutils_SRCS}
-
 )
 
 include_directories(

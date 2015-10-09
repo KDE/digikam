@@ -38,6 +38,8 @@
 
 class QRect;
 
+class KConfigGroup;
+
 namespace Digikam
 {
 

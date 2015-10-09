@@ -101,6 +101,9 @@ public:
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
+    static void readSettings(RawDecodingSettings& setting, KConfigGroup& group);
+    static void writeSettings(const RawDecodingSettings& setting, KConfigGroup& group);
+    
 Q_SIGNALS:
 
     void signalSixteenBitsImageToggled(bool);

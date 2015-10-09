@@ -31,6 +31,7 @@
 #include "lensfunfilter.h"
 #include "digikam_export.h"
 
+class KConfigGroup;
 
 namespace Digikam
 {

@@ -37,6 +37,7 @@
 
 // KDE includes
 
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
 // Libkface includes

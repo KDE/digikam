@@ -48,6 +48,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // KDE includes
 
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
 // GeoIface includes
@@ -55,12 +56,9 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include "mapwidget.h"
 #include "itemmarkertiler.h"
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_debug.h"
 #include "imagegpsmodelhelper.h"
 #include "dexpanderbox.h"
@@ -215,9 +213,7 @@ ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
 
 void ImagePropertiesGPSTab::readSettings(const KConfigGroup& group)
 {
-    d->gpsImageInfoSorter->setSortOptions(
-            GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"), int(d->gpsImageInfoSorter->getSortOptions())))
-        );
+    d->gpsImageInfoSorter->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"), int(d->gpsImageInfoSorter->getSortOptions()))));
     setWebGPSLocator(group.readEntry(QLatin1String("Web GPS Locator"), getWebGPSLocator()));
 
     KConfigGroup groupMapWidget = KConfigGroup(&group, QLatin1String("Map Widget"));

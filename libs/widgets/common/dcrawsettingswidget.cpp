@@ -27,6 +27,46 @@
  *
  * ============================================================ */
 
+#define OPTIONFIXCOLORSHIGHLIGHTSENTRY                 "FixColorsHighlights"
+#define OPTIONDECODESIXTEENBITENTRY                    "SixteenBitsImage"
+#define OPTIONWHITEBALANCEENTRY                        "White Balance"
+#define OPTIONCUSTOMWHITEBALANCEENTRY                  "Custom White Balance"
+#define OPTIONCUSTOMWBGREENENTRY                       "Custom White Balance Green"
+#define OPTIONFOURCOLORRGBENTRY                        "Four Color RGB"
+#define OPTIONUNCLIPCOLORSENTRY                        "Unclip Color"
+// Wrong spelling, but do not fix it since it is a configuration key
+// krazy:cond=spelling
+#define OPTIONDONTSTRETCHPIXELSENTRY                   "Dont Stretch Pixels"
+// krazy:endcond=spelling
+#define OPTIONMEDIANFILTERPASSESENTRY                  "Median Filter Passes"
+#define OPTIONNOISEREDUCTIONTYPEENTRY                  "Noise Reduction Type"
+#define OPTIONNOISEREDUCTIONTHRESHOLDENTRY             "Noise Reduction Threshold"
+#define OPTIONUSECACORRECTIONENTRY                     "EnableCACorrection"
+#define OPTIONCAREDMULTIPLIERENTRY                     "caRedMultiplier"
+#define OPTIONCABLUEMULTIPLIERENTRY                    "caBlueMultiplier"
+#define OPTIONAUTOBRIGHTNESSENTRY                      "AutoBrightness"
+#define OPTIONDECODINGQUALITYENTRY                     "Decoding Quality"
+#define OPTIONINPUTCOLORSPACEENTRY                     "Input Color Space"
+#define OPTIONOUTPUTCOLORSPACEENTRY                    "Output Color Space"
+#define OPTIONINPUTCOLORPROFILEENTRY                   "Input Color Profile"
+#define OPTIONOUTPUTCOLORPROFILEENTRY                  "Output Color Profile"
+#define OPTIONBRIGHTNESSMULTIPLIERENTRY                "Brightness Multiplier"
+#define OPTIONUSEBLACKPOINTENTRY                       "Use Black Point"
+#define OPTIONBLACKPOINTENTRY                          "Black Point"
+#define OPTIONUSEWHITEPOINTENTRY                       "Use White Point"
+#define OPTIONWHITEPOINTENTRY                          "White Point"
+
+//-- Extended demosaicing settings ----------------------------------------------------------
+
+#define OPTIONDCBITERATIONSENTRY                       "Dcb Iterations"
+#define OPTIONDCBENHANCEFLENTRY                        "Dcb Enhance Filter"
+#define OPTIONEECIREFINEENTRY                          "Eeci Refine"
+#define OPTIONESMEDPASSESENTRY                         "Es Median Filter Passes"
+#define OPTIONNRCHROMINANCETHRESHOLDENTRY              "Noise Reduction Chrominance Threshold"
+#define OPTIONEXPOCORRECTIONENTRY                      "Expo Correction"
+#define OPTIONEXPOCORRECTIONSHIFTENTRY                 "Expo Correction Shift"
+#define OPTIONEXPOCORRECTIONHIGHLIGHTENTRY             "Expo Correction Highlight"
+
 #include "dcrawsettingswidget.h"
 
 // C++ includes
@@ -1306,19 +1346,97 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     return prm;
 }
 
-void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
-{
-    RawDecodingSettings prm = settings();
-    prm.writeSettings(group);
-    DExpanderBox::writeSettings(group);
-}
-
 void DcrawSettingsWidget::readSettings(KConfigGroup& group)
 {
     RawDecodingSettings prm;
-    prm.readSettings(group);
+    readSettings(prm, group);
+    
     setSettings(prm);
     DExpanderBox::readSettings(group);
 }
 
+void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
+{
+    RawDecodingSettings prm = settings();
+    writeSettings(prm, group);
+
+    DExpanderBox::writeSettings(group);
+}
+
+void DcrawSettingsWidget::readSettings(RawDecodingSettings& prm, KConfigGroup& group)
+{
+    RawDecodingSettings defaultPrm;
+
+    prm.fixColorsHighlights     = group.readEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,                                     defaultPrm.fixColorsHighlights);
+    prm.sixteenBitsImage        = group.readEntry(OPTIONDECODESIXTEENBITENTRY,                                        defaultPrm.sixteenBitsImage);
+    prm.whiteBalance            = (RawDecodingSettings::WhiteBalance)group.readEntry(OPTIONWHITEBALANCEENTRY,         (int)defaultPrm.whiteBalance);
+    prm.customWhiteBalance      = group.readEntry(OPTIONCUSTOMWHITEBALANCEENTRY,                                      defaultPrm.customWhiteBalance);
+    prm.customWhiteBalanceGreen = group.readEntry(OPTIONCUSTOMWBGREENENTRY,                                           defaultPrm.customWhiteBalanceGreen);
+    prm.RGBInterpolate4Colors   = group.readEntry(OPTIONFOURCOLORRGBENTRY,                                            defaultPrm.RGBInterpolate4Colors);
+    prm.unclipColors            = group.readEntry(OPTIONUNCLIPCOLORSENTRY,                                            defaultPrm.unclipColors);
+    prm.DontStretchPixels       = group.readEntry(OPTIONDONTSTRETCHPIXELSENTRY,                                       defaultPrm.DontStretchPixels);
+    prm.NRType                  = (RawDecodingSettings::NoiseReduction)group.readEntry(OPTIONNOISEREDUCTIONTYPEENTRY, (int)defaultPrm.NRType);
+    prm.brightness              = group.readEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,                                    defaultPrm.brightness);
+    prm.enableBlackPoint        = group.readEntry(OPTIONUSEBLACKPOINTENTRY,                                           defaultPrm.enableBlackPoint);
+    prm.blackPoint              = group.readEntry(OPTIONBLACKPOINTENTRY,                                              defaultPrm.blackPoint);
+    prm.enableWhitePoint        = group.readEntry(OPTIONUSEWHITEPOINTENTRY,                                           defaultPrm.enableWhitePoint);
+    prm.whitePoint              = group.readEntry(OPTIONWHITEPOINTENTRY,                                              defaultPrm.whitePoint);
+    prm.medianFilterPasses      = group.readEntry(OPTIONMEDIANFILTERPASSESENTRY,                                      defaultPrm.medianFilterPasses);
+    prm.NRThreshold             = group.readEntry(OPTIONNOISEREDUCTIONTHRESHOLDENTRY,                                 defaultPrm.NRThreshold);
+    prm.enableCACorrection      = group.readEntry(OPTIONUSECACORRECTIONENTRY,                                         defaultPrm.enableCACorrection);
+    prm.caMultiplier[0]         = group.readEntry(OPTIONCAREDMULTIPLIERENTRY,                                         defaultPrm.caMultiplier[0]);
+    prm.caMultiplier[1]         = group.readEntry(OPTIONCABLUEMULTIPLIERENTRY,                                        defaultPrm.caMultiplier[1]);
+    prm.RAWQuality              = (RawDecodingSettings::DecodingQuality)group.readEntry(OPTIONDECODINGQUALITYENTRY,   (int)defaultPrm.RAWQuality);
+    prm.outputColorSpace        = (RawDecodingSettings::OutputColorSpace)group.readEntry(OPTIONOUTPUTCOLORSPACEENTRY, (int)defaultPrm.outputColorSpace);
+    prm.autoBrightness          = group.readEntry(OPTIONAUTOBRIGHTNESSENTRY,                                          defaultPrm.autoBrightness);
+
+    //-- Extended demosaicing settings ----------------------------------------------------------
+
+    prm.dcbIterations           = group.readEntry(OPTIONDCBITERATIONSENTRY,                                           defaultPrm.dcbIterations);
+    prm.dcbEnhanceFl            = group.readEntry(OPTIONDCBENHANCEFLENTRY,                                            defaultPrm.dcbEnhanceFl);
+    prm.eeciRefine              = group.readEntry(OPTIONEECIREFINEENTRY,                                              defaultPrm.eeciRefine);
+    prm.esMedPasses             = group.readEntry(OPTIONESMEDPASSESENTRY,                                             defaultPrm.esMedPasses);
+    prm.NRChroThreshold         = group.readEntry(OPTIONNRCHROMINANCETHRESHOLDENTRY,                                  defaultPrm.NRChroThreshold);
+    prm.expoCorrection          = group.readEntry(OPTIONEXPOCORRECTIONENTRY,                                          defaultPrm.expoCorrection);
+    prm.expoCorrectionShift     = group.readEntry(OPTIONEXPOCORRECTIONSHIFTENTRY,                                     defaultPrm.expoCorrectionShift);
+    prm.expoCorrectionHighlight = group.readEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY,                                 defaultPrm.expoCorrectionHighlight);
+}
+
+void DcrawSettingsWidget::writeSettings(const RawDecodingSettings& prm, KConfigGroup& group)
+{
+    group.writeEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,     prm.fixColorsHighlights);
+    group.writeEntry(OPTIONDECODESIXTEENBITENTRY,        prm.sixteenBitsImage);
+    group.writeEntry(OPTIONWHITEBALANCEENTRY,            (int)prm.whiteBalance);
+    group.writeEntry(OPTIONCUSTOMWHITEBALANCEENTRY,      prm.customWhiteBalance);
+    group.writeEntry(OPTIONCUSTOMWBGREENENTRY,           prm.customWhiteBalanceGreen);
+    group.writeEntry(OPTIONFOURCOLORRGBENTRY,            prm.RGBInterpolate4Colors);
+    group.writeEntry(OPTIONUNCLIPCOLORSENTRY,            prm.unclipColors);
+    group.writeEntry(OPTIONDONTSTRETCHPIXELSENTRY,       prm.DontStretchPixels);
+    group.writeEntry(OPTIONNOISEREDUCTIONTYPEENTRY,      (int)prm.NRType);
+    group.writeEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,    prm.brightness);
+    group.writeEntry(OPTIONUSEBLACKPOINTENTRY,           prm.enableBlackPoint);
+    group.writeEntry(OPTIONBLACKPOINTENTRY,              prm.blackPoint);
+    group.writeEntry(OPTIONUSEWHITEPOINTENTRY,           prm.enableWhitePoint);
+    group.writeEntry(OPTIONWHITEPOINTENTRY,              prm.whitePoint);
+    group.writeEntry(OPTIONMEDIANFILTERPASSESENTRY,      prm.medianFilterPasses);
+    group.writeEntry(OPTIONNOISEREDUCTIONTHRESHOLDENTRY, prm.NRThreshold);
+    group.writeEntry(OPTIONUSECACORRECTIONENTRY,         prm.enableCACorrection);
+    group.writeEntry(OPTIONCAREDMULTIPLIERENTRY,         prm.caMultiplier[0]);
+    group.writeEntry(OPTIONCABLUEMULTIPLIERENTRY,        prm.caMultiplier[1]);
+    group.writeEntry(OPTIONDECODINGQUALITYENTRY,         (int)prm.RAWQuality);
+    group.writeEntry(OPTIONOUTPUTCOLORSPACEENTRY,        (int)prm.outputColorSpace);
+    group.writeEntry(OPTIONAUTOBRIGHTNESSENTRY,          prm.autoBrightness);
+
+    //-- Extended demosaicing settings ----------------------------------------------------------
+
+    group.writeEntry(OPTIONDCBITERATIONSENTRY,           prm.dcbIterations);
+    group.writeEntry(OPTIONDCBENHANCEFLENTRY,            prm.dcbEnhanceFl);
+    group.writeEntry(OPTIONEECIREFINEENTRY,              prm.eeciRefine);
+    group.writeEntry(OPTIONESMEDPASSESENTRY,             prm.esMedPasses);
+    group.writeEntry(OPTIONNRCHROMINANCETHRESHOLDENTRY,  prm.NRChroThreshold);
+    group.writeEntry(OPTIONEXPOCORRECTIONENTRY,          prm.expoCorrection);
+    group.writeEntry(OPTIONEXPOCORRECTIONSHIFTENTRY,     prm.expoCorrectionShift);
+    group.writeEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY, prm.expoCorrectionHighlight);
+}
+    
 } // NameSpace Digikam

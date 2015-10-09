@@ -38,6 +38,7 @@
 #include <QCollator>
 #include <QIcon>
 #include <QLocale>
+#include <QTime>
 #include <QtMath>
 
 // KDE includes

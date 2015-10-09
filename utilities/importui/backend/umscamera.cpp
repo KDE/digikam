@@ -48,6 +48,7 @@ extern "C"
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <kconfiggroup.h>
 
 #include <solid/device.h>
 #include <solid/storageaccess.h>
