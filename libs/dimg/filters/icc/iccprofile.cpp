@@ -174,7 +174,7 @@ IccProfile::IccProfile(const char* const location, const QString& relativePath)
 IccProfile IccProfile::sRGB()
 {
     // The srgb.icm file seems to have a whitepoint of D50, see #133913
-    return IccProfile("data", QLatin1String("libkdcraw/profiles/srgb-d65.icm"));
+    return IccProfile("data", QLatin1String("digikam/profiles/srgb-d65.icm"));
 }
 
 IccProfile IccProfile::adobeRGB()
@@ -183,7 +183,7 @@ IccProfile IccProfile::adobeRGB()
 
     if (path.isEmpty())
     {
-        path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("libkdcraw/profiles/compatibleWithAdobeRGB1998.icc"));
+        path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/profiles/compatibleWithAdobeRGB1998.icc"));
     }
 
     return IccProfile(path);
@@ -191,12 +191,12 @@ IccProfile IccProfile::adobeRGB()
 
 IccProfile IccProfile::wideGamutRGB()
 {
-    return IccProfile("data", QLatin1String("libkdcraw/profiles/widegamut.icm"));
+    return IccProfile("data", QLatin1String("digikam/profiles/widegamut.icm"));
 }
 
 IccProfile IccProfile::proPhotoRGB()
 {
-    return IccProfile("data", QLatin1String("libkdcraw/profiles/prophoto.icm"));
+    return IccProfile("data", QLatin1String("digikam/profiles/prophoto.icm"));
 }
 
 QList<IccProfile> IccProfile::defaultProfiles()
