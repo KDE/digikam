@@ -229,7 +229,7 @@ void DImgFilterManager::Private::setupFilterIcons()
     filterIcons.insert(QLatin1String("digikam:UnsharpMaskFilter"),    QLatin1String("sharpenimage"));
     filterIcons.insert(QLatin1String("digikam:WhiteBalanceFilter"),   QLatin1String("whitebalance"));
 
-    filterIcons.insert(QLatin1String("digikam:RawConverter"),         QLatin1String("rawbayer));
+    filterIcons.insert(QLatin1String("digikam:RawConverter"),         QLatin1String("rawbayer"));
 }
 
 void DImgFilterManager::Private::setupI18nStrings()

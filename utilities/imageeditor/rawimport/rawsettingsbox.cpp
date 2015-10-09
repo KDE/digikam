@@ -301,7 +301,7 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     QIcon::fromTheme(QLatin1String("rawbayer)));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     QIcon::fromTheme(QLatin1String("rawbayer")));
     d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::WHITEBALANCE,    QIcon::fromTheme(QLatin1String("whitebalance")));
     d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::CORRECTIONS,     QIcon::fromTheme(QLatin1String("lensdistortion")));
     d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::COLORMANAGEMENT, QIcon::fromTheme(QLatin1String("colormanagement")));

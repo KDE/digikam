@@ -129,7 +129,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     d->page_raw       = addPage(d->rawPage, i18n("RAW Decoding"));
     d->page_raw->setHeader(i18n("<qt>RAW Files Decoding Settings<br/>"
                                   "<i>Customize default RAW decoding settings</i></qt>"));
-    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("rawbayer)));
+    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("rawbayer")));
 
     d->iccPage        = new Digikam::SetupICC(buttonBox());
     d->page_icc       = addPage(d->iccPage, i18n("Color Management"));

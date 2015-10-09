@@ -256,7 +256,7 @@ Setup::Setup(QWidget* const parent)
     d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
     d->page_raw->setHeader(i18n("<qt>Image Editor: RAW File Decoding<br/>"
                                 "<i>Configure RAW decoding settings of the image editor</i></qt>"));
-    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("rawbayer)));
+    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("rawbayer")));
 
     d->iofilesPage  = new SetupIOFiles();
     d->page_iofiles = addPage(d->iofilesPage, i18n("Saving Images"));

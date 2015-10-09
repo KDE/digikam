@@ -100,7 +100,7 @@ RawPage::RawPage(AssistantDlg* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("rawbayer)));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("rawbayer")));
 }
 
 RawPage::~RawPage()

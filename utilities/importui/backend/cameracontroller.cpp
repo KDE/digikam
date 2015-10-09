@@ -356,7 +356,7 @@ QIcon CameraController::mimeTypeThumbnail(const QString& itemName) const
 
     if (mime.startsWith(QLatin1String("image/x-raw")))
     {
-        return QIcon::fromTheme(QLatin1String("rawbayer));
+        return QIcon::fromTheme(QLatin1String("rawbayer"));
     }
     else if (mime.startsWith(QLatin1String("image/")))
     {

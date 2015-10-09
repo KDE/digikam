@@ -312,7 +312,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QVBoxLayout* const vlayRaw     = new QVBoxLayout(d->rawGB);
 
     QLabel* const rawBehaviorIcon  = new QLabel;
-    rawBehaviorIcon->setPixmap(QIcon::fromTheme(QLatin1String("rawbayer)).pixmap(32));
+    rawBehaviorIcon->setPixmap(QIcon::fromTheme(QLatin1String("rawbayer")).pixmap(32));
     QLabel* const rawBehaviorLabel = new QLabel(i18n("When loading a RAW file with uncalibrated colors"));
     rawBehaviorLabel->setWordWrap(true);
 

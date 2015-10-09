@@ -254,11 +254,11 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     // --------------------------------------------------------
 
     d->rawSettings = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
-    d->rawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("rawbayer)));
+    d->rawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("rawbayer")));
     d->rawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("whitebalance")));
     d->rawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));
 
-    insertTab(Private::RAW, d->rawSettings, QIcon::fromTheme(QLatin1String("rawbayer)), i18n("Raw Decoding"));
+    insertTab(Private::RAW, d->rawSettings, QIcon::fromTheme(QLatin1String("rawbayer")), i18n("Raw Decoding"));
 
     // --------------------------------------------------------
 

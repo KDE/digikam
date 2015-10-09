@@ -140,7 +140,7 @@ SetupRaw::SetupRaw(QWidget* const parent)
     QVBoxLayout* const settingsLayout = new QVBoxLayout;
 
     d->dcrawSettings = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
-    d->dcrawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("rawbayer)));
+    d->dcrawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("rawbayer")));
     d->dcrawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("whitebalance")));
     d->dcrawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));
 
