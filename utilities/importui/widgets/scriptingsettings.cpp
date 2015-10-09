@@ -37,16 +37,11 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_debug.h"
 #include "tooltipdialog.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -64,7 +59,7 @@ public:
     }
 
     QLabel*        scriptLabel;
-    RFileSelector* script;
+    DFileSelector* script;
     TooltipDialog* tooltipDialog;
     QToolButton*   tooltipToggleButton;
 };
@@ -86,8 +81,8 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
 
     QVBoxLayout* vlay      = new QVBoxLayout(this);
     d->scriptLabel         = new QLabel(i18n("Execute script for image:"), this);
-    RHBox* hbox            = new RHBox(this);
-    d->script              = new RFileSelector(hbox);
+    DHBox* hbox            = new DHBox(this);
+    d->script              = new DFileSelector(hbox);
     d->script->setFileDlgMode(QFileDialog::ExistingFile);
     d->script->lineEdit()->setPlaceholderText(i18n("No script selected"));
     d->tooltipToggleButton = new QToolButton(hbox);

@@ -37,7 +37,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -120,7 +120,7 @@ AssignNameWidget* AssignNameOverlay::assignNameWidget() const
 
 QWidget* AssignNameOverlay::createWidget()
 {
-    RVBox* const vbox    = new RVBox(parentWidget());
+    DVBox* const vbox    = new DVBox(parentWidget());
     QWidget* const space = new QWidget(vbox);
     d->assignNameWidget  = new AssignNameWidget(vbox);
     d->assignNameWidget->setMode(AssignNameWidget::UnconfirmedEditMode);

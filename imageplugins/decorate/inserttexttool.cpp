@@ -53,7 +53,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -106,7 +106,7 @@ public:
     QFont                textFont;
 
     QComboBox*           textRotation;
-    RColorSelector*      fontColorButton;
+    DColorSelector*      fontColorButton;
     KFontChooser*        fontChooserWidget;
     QTextEdit*           textEdit;
 
@@ -212,7 +212,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* const label2 = new QLabel(i18nc("font color", "Color:"));
-    d->fontColorButton   = new RColorSelector();
+    d->fontColorButton   = new DColorSelector();
     d->fontColorButton->setColor(Qt::black);
     d->fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
 

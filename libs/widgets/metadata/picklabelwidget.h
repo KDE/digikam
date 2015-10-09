@@ -33,21 +33,16 @@
 #include <QMetaType>
 #include <QMenu>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_globals.h"
 #include "digikam_export.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT PickLabelWidget : public RVBox
+class DIGIKAM_EXPORT PickLabelWidget : public DVBox
 {
     Q_OBJECT
 

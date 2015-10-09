@@ -36,7 +36,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -134,13 +134,13 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->iface                = new LensFunIface();
 
     QGridLayout* const grid = new QGridLayout(this);
-    RHBox* const hbox       = new RHBox(this);
+    DHBox* const hbox       = new DHBox(this);
     d->metadataUsage        = new QCheckBox(i18n("Use Metadata"), hbox);
     QLabel* const space     = new QLabel(hbox);
     d->metadataResult       = new QLabel(hbox);
     hbox->setStretchFactor(space, 10);
 
-    RHBox* const hbox1   = new RHBox(this);
+    DHBox* const hbox1   = new DHBox(this);
     d->makeLabel         = new QLabel(i18nc("camera make",  "Make:"),  hbox1);
     QLabel* const space1 = new QLabel(hbox1);
     d->makeDescription   = new DAdjustableLabel(hbox1);
@@ -152,7 +152,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->make              = new DComboBox(this);
     d->make->setDefaultIndex(0);
 
-    RHBox* const hbox2   = new RHBox(this);
+    DHBox* const hbox2   = new DHBox(this);
     d->modelLabel        = new QLabel(i18nc("camera model", "Model:"), hbox2);
     QLabel* const space2 = new QLabel(hbox2);
     d->modelDescription  = new DAdjustableLabel(hbox2);
@@ -164,7 +164,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->model             = new DComboBox(this);
     d->model->setDefaultIndex(0);
 
-    RHBox* const hbox3   = new RHBox(this);
+    DHBox* const hbox3   = new DHBox(this);
     d->lensLabel         = new QLabel(i18nc("camera lens",  "Lens:"),  hbox3);
     QLabel* const space3 = new QLabel(hbox3);
     d->lensDescription   = new DAdjustableLabel(hbox3);

@@ -177,7 +177,7 @@ public:
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
-    : RVBox(parent),
+    : DVBox(parent),
       d(new Private)
 {
     setMargin(0);
@@ -204,28 +204,28 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->captionsEdit = new CaptionEdit(captionTagsArea);
 
-    RHBox* const dateBox  = new RHBox(captionTagsArea);
+    DHBox* const dateBox  = new DHBox(captionTagsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new DDateTimeEdit(dateBox, QLatin1String("datepicker"));
 
-    RHBox* const pickBox       = new RHBox(captionTagsArea);
+    DHBox* const pickBox       = new DHBox(captionTagsArea);
     new QLabel(i18n("Pick Label:"), pickBox);
     d->pickLabelSelector = new PickLabelSelector(pickBox);
     pickBox->layout()->setAlignment(d->pickLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
 
-    RHBox* const colorBox       = new RHBox(captionTagsArea);
+    DHBox* const colorBox       = new DHBox(captionTagsArea);
     new QLabel(i18n("Color Label:"), colorBox);
     d->colorLabelSelector = new ColorLabelSelector(colorBox);
     colorBox->layout()->setAlignment(d->colorLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
 
-    RHBox* const rateBox  = new RHBox(captionTagsArea);
+    DHBox* const rateBox  = new DHBox(captionTagsArea);
     new QLabel(i18n("Rating:"), rateBox);
     d->ratingWidget = new RatingWidget(rateBox);
     rateBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
 
     // Buttons -----------------------------------------
 
-    RHBox* const applyButtonBox = new RHBox(this);
+    DHBox* const applyButtonBox = new DHBox(this);
     applyButtonBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->applyBtn           = new QPushButton(i18n("Apply"), applyButtonBox);
@@ -234,7 +234,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     //buttonsBox->setStretchFactor(d->applyBtn, 10);
 
-    RHBox* const buttonsBox     = new RHBox(this);
+    DHBox* const buttonsBox     = new DHBox(this);
     buttonsBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->revertBtn          = new QToolButton(buttonsBox);
@@ -293,7 +293,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
                                      "'/' can be used to create a hierarchy of tags. "
                                      "',' can be used to create more than one hierarchy at the same time."));
 
-    RHBox* const tagsSearch = new RHBox(tagsArea);
+    DHBox* const tagsSearch = new DHBox(tagsArea);
     tagsSearch->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, QLatin1String("ImageDescEditTabTagsSearchBar"));
@@ -894,7 +894,7 @@ bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
         }
     }
 
-    return RVBox::eventFilter(o, e);
+    return DVBox::eventFilter(o, e);
 }
 
 void ImageDescEditTab::populateTags()

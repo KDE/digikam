@@ -32,21 +32,16 @@
 
 #include <kconfiggroup.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_export.h"
 #include "iccprofile.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT IccProfilesSettings : public RVBox
+class DIGIKAM_EXPORT IccProfilesSettings : public DVBox
 {
     Q_OBJECT
 

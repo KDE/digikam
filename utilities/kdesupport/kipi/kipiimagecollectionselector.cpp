@@ -40,7 +40,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -154,7 +154,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->iface                 = iface;
     d->tab                   = new QTabWidget(this);
 
-    RVBox* const albumBox = new RVBox(d->tab);
+    DVBox* const albumBox = new DVBox(d->tab);
     d->albumModel         = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
     d->albumTreeView      = new AlbumTreeView(albumBox);
     d->albumTreeView->setAlbumModel(d->albumModel);
@@ -175,7 +175,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // -------------------------------------------------------------------------------
 
-    RVBox* const tagBox = new RVBox(d->tab);
+    DVBox* const tagBox = new DVBox(d->tab);
     d->tagModel         = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, tagBox);
     d->tagTreeView      = new TagTreeView(tagBox);
     d->tagTreeView->setAlbumModel(d->tagModel);
@@ -197,7 +197,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // -------------------------------------------------------------------------------
 
-    RVBox* const searchBox  = new RVBox(d->tab);
+    DVBox* const searchBox  = new DVBox(d->tab);
     d->searchModel          = new SearchModel(searchBox);
     d->searchTreeView       = new SearchTreeView(searchBox);
     d->searchTreeView->setAlbumModel(d->searchModel);
@@ -219,7 +219,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // -------------------------------------------------------------------------------
 
-    RVBox* const labelsBox = new RVBox(d->tab);
+    DVBox* const labelsBox = new DVBox(d->tab);
     d->labelsTree          = new AlbumLabelsTreeView(labelsBox,true);
     d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsTree);
 

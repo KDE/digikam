@@ -34,16 +34,11 @@
 #include <QUrl>
 #include <QCheckBox>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "applicationsettings.h"
 #include "databaseparameters.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -73,7 +68,7 @@ public:
     QSpinBox*      hostPort;
     QCheckBox*     internalServer;
 
-    RFileSelector* databasePathEdit;
+    DFileSelector* databasePathEdit;
 
 public:
 

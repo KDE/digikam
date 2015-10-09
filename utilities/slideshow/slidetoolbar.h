@@ -30,23 +30,18 @@
 #include <QWidget>
 #include <QKeyEvent>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_export.h"
 #include "slideshowsettings.h"
+#include "dwidgetutils.h"
 
 class QAction;
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SlideToolBar : public RHBox
+class DIGIKAM_EXPORT SlideToolBar : public DHBox
 {
     Q_OBJECT
 

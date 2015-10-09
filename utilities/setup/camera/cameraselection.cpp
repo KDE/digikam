@@ -47,17 +47,12 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_config.h"
 #include "gpcamera.h"
 #include "dxmlguiwindow.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -101,7 +96,7 @@ public:
 
     QLineEdit*        titleEdit;
 
-    RFileSelector*    umsMountURL;
+    DFileSelector*    umsMountURL;
 
     SearchTextBar*    searchBar;
 };
@@ -202,7 +197,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     QLabel* const umsMountLabel = new QLabel(umsMountBox);
     umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage cameras."));
 
-    d->umsMountURL = new RFileSelector(umsMountBox);
+    d->umsMountURL = new DFileSelector(umsMountBox);
     d->umsMountURL->lineEdit()->setText(QLatin1String("/mnt/camera"));
     d->umsMountURL->setFileDlgMode(QFileDialog::Directory);
     d->umsMountURL->setWhatsThis(i18n("<p>Set here the mount path to use on your computer. This "

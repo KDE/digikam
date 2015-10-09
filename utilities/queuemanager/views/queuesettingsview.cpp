@@ -44,7 +44,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -154,7 +154,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     // --------------------------------------------------------
 
     QScrollArea* const sv3   = new QScrollArea(this);
-    RVBox* const vbox3       = new RVBox(sv3->viewport());
+    DVBox* const vbox3       = new DVBox(sv3->viewport());
     sv3->setWidget(vbox3);
     sv3->setWidgetResizable(true);
     vbox3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -167,7 +167,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     // --------------------------------------------------------
 
     QScrollArea* const sv2   = new QScrollArea(this);
-    RVBox* const vbox2       = new RVBox(sv2->viewport());
+    DVBox* const vbox2       = new DVBox(sv2->viewport());
     sv2->setWidget(vbox2);
     sv2->setWidgetResizable(true);
 

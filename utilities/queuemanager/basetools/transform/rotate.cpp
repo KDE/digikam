@@ -35,7 +35,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -95,7 +95,7 @@ Rotate::~Rotate()
 void Rotate::registerSettingsWidget()
 {
 
-    RVBox* const vbox = new RVBox;
+    DVBox* const vbox = new DVBox;
     d->useExif        = new QCheckBox(i18n("Use Exif Orientation"), vbox);
 
     d->label     = new QLabel(vbox);

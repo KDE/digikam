@@ -38,11 +38,9 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RWidgetUtils>
-
-using namespace KDcrawIface;
+#include "dwidgetutils.h"
 
 namespace Digikam
 {
@@ -68,7 +66,7 @@ TooltipsPage::TooltipsPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Enabled Contextual Tooltips</b>")),
       d(new Private)
 {
-    RVBox* const vbox    = new RVBox(this);
+    DVBox* const vbox    = new DVBox(this);
     QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"

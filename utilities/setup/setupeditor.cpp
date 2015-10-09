@@ -42,7 +42,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -91,10 +91,10 @@ public:
 
     QLabel*             expoPreview;
 
-    RHBox*              colorBox;
-    RColorSelector*     backgroundColor;
-    RColorSelector*     underExposureColor;
-    RColorSelector*     overExposureColor;
+    DHBox*              colorBox;
+    DColorSelector*     backgroundColor;
+    DColorSelector*     underExposureColor;
+    DColorSelector*     overExposureColor;
 
     HistogramWidget*    expoPreviewHisto;
 
@@ -137,9 +137,9 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use the background theme "
                                                "color in the image editor area."));
 
-    d->colorBox                       = new RHBox(interfaceOptionsGroup);
+    d->colorBox                       = new DHBox(interfaceOptionsGroup);
     QLabel*const backgroundColorlabel = new QLabel(i18n("&Background color:"), d->colorBox);
-    d->backgroundColor                = new RColorSelector(d->colorBox);
+    d->backgroundColor                = new DColorSelector(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
     d->backgroundColor->setWhatsThis(i18n("Customize the background color to use "
                                           "in the image editor area."));
@@ -158,14 +158,14 @@ SetupEditor::SetupEditor(QWidget* const parent)
     QGroupBox* const exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
     QVBoxLayout* const gLayout2           = new QVBoxLayout(exposureOptionsGroup);
 
-    RHBox* const underExpoBox             = new RHBox(exposureOptionsGroup);
+    DHBox* const underExpoBox             = new DHBox(exposureOptionsGroup);
     QLabel* const underExpoColorlabel     = new QLabel(i18n("&Under-exposure color: "), underExpoBox);
-    d->underExposureColor                 = new RColorSelector(underExpoBox);
+    d->underExposureColor                 = new DColorSelector(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                              "under-exposed pixels."));
 
-    RHBox* const underPcentBox        = new RHBox(exposureOptionsGroup);
+    DHBox* const underPcentBox        = new DHBox(exposureOptionsGroup);
     QLabel* const underExpoPcentlabel = new QLabel(i18n("Under-exposure percents: "), underPcentBox);
     d->underExposurePcents            = new DDoubleNumInput(underPcentBox);
     d->underExposurePcents->setDecimals(1);
@@ -175,14 +175,14 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->underExposurePcents->setWhatsThis(i18n("Adjust the percents of the bottom of image histogram "
                                               "which will be used to check under exposed pixels."));
 
-    RHBox* const overExpoBox         = new RHBox(exposureOptionsGroup);
+    DHBox* const overExpoBox         = new DHBox(exposureOptionsGroup);
     QLabel* const overExpoColorlabel = new QLabel(i18n("&Over-exposure color: "), overExpoBox);
-    d->overExposureColor             = new RColorSelector(overExpoBox);
+    d->overExposureColor             = new DColorSelector(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                             "over-exposed pixels."));
 
-    RHBox* const overPcentBox        = new RHBox(exposureOptionsGroup);
+    DHBox* const overPcentBox        = new DHBox(exposureOptionsGroup);
     QLabel* const overExpoPcentlabel = new QLabel(i18n("Over-exposure percents: "), overPcentBox);
     d->overExposurePcents            = new DDoubleNumInput(overPcentBox);
     d->overExposurePcents->setDecimals(1);
@@ -199,7 +199,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
                                             "Otherwise, indicators are turned on when one of the color components matches the condition."));
 
     QLabel* const exampleLabel = new QLabel(i18n("Example:"), exposureOptionsGroup);
-    RHBox* const previewHBox   = new RHBox(exposureOptionsGroup);
+    DHBox* const previewHBox   = new DHBox(exposureOptionsGroup);
     d->expoPreview             = new QLabel(previewHBox);
     QLabel* const space        = new QLabel(previewHBox);
     d->expoPreviewHisto        = new HistogramWidget(256, 128, previewHBox, false, false);

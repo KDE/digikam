@@ -49,7 +49,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -106,14 +106,14 @@ public:
     QRadioButton*   useTextRadioButton;
     QCheckBox*      useBackgroundCheckBox;
 
-    RFileSelector*  imageFileUrlRequester;
+    DFileSelector*  imageFileUrlRequester;
     QLineEdit*      textEdit;
 
     QComboBox*      comboBox;
     QFontComboBox*  fontChooserWidget;
 
-    RColorSelector* fontColorButton;
-    RColorSelector* backgroundColorButton;
+    DColorSelector* fontColorButton;
+    DColorSelector* backgroundColorButton;
 
     DIntNumInput*   textOpacity;
     DIntNumInput*   backgroundOpacity;
@@ -140,11 +140,11 @@ WaterMark::~WaterMark()
 
 void WaterMark::registerSettingsWidget()
 {
-    RVBox* const vbox = new RVBox;
+    DVBox* const vbox = new DVBox;
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox->setMargin(0);
 
-    RHBox* const hbox = new RHBox(vbox);
+    DHBox* const hbox = new DHBox(vbox);
     hbox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     hbox->setSpacing(10);
 
@@ -174,7 +174,7 @@ void WaterMark::registerSettingsWidget()
     d->imageSettingsGroupBox->setLayout(imageSettingsGroupBoxLayout);
 
     QLabel* const label      = new QLabel();
-    d->imageFileUrlRequester = new RFileSelector();
+    d->imageFileUrlRequester = new DFileSelector();
     d->imageFileUrlRequester->lineEdit()->setPlaceholderText(i18n("Click to select watermark image."));
     label->setText(i18n("Watermark image:"));
     imageSettingsGroupBoxLayout->addWidget(label);
@@ -203,7 +203,7 @@ void WaterMark::registerSettingsWidget()
     textSettingsGroupBoxLayout->addWidget(d->fontChooserWidget);
 
     QLabel* const label3 = new QLabel();
-    d->fontColorButton   = new RColorSelector();
+    d->fontColorButton   = new DColorSelector();
     d->fontColorButton->setColor(Qt::black);
     d->fontColorButton->setWhatsThis(i18n("Set the font color to use here"));
     label3->setText(i18n("Font color:"));
@@ -219,7 +219,7 @@ void WaterMark::registerSettingsWidget()
     textSettingsGroupBoxLayout->addWidget(textOpacityLabel);
     textSettingsGroupBoxLayout->addWidget(d->textOpacity);
 
-    RHBox* const useBackgroundHBox   = new RHBox();
+    DHBox* const useBackgroundHBox   = new DHBox();
     useBackgroundHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     useBackgroundHBox->setSpacing(5);
     d->useBackgroundCheckBox         = new QCheckBox(useBackgroundHBox);
@@ -229,7 +229,7 @@ void WaterMark::registerSettingsWidget()
     textSettingsGroupBoxLayout->addWidget(useBackgroundHBox);
 
     QLabel* const backgroundColorLabel = new QLabel();
-    d->backgroundColorButton           = new RColorSelector();
+    d->backgroundColorButton           = new DColorSelector();
     d->backgroundColorButton->setColor(QColor(0xCC, 0xCC, 0xCC));
     d->backgroundColorButton->setWhatsThis(i18n("Choose the color of the watermark background"));
     backgroundColorLabel ->setText(i18n("Background color:"));

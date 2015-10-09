@@ -44,7 +44,7 @@
 
 // LibKDcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -266,7 +266,7 @@ public:
         toolTip         = 0;
         toolTipItem     = 0;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
-        progressPix     = KDcrawIface::WorkingPixmap();
+        progressPix     = DWorkingPixmap();
     }
 
     bool                        showTips;
@@ -286,7 +286,7 @@ public:
 
     QueueListViewItem*          toolTipItem;
 
-    KDcrawIface::WorkingPixmap  progressPix;
+    DWorkingPixmap  progressPix;
 };
 
 QueueListView::QueueListView(QWidget* const parent)

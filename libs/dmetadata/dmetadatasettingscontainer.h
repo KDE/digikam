@@ -30,6 +30,8 @@
 #include <QString>
 #include <QMap>
 
+// KDE includes
+
 #include <klocalizedstring.h>
 
 // Local includes

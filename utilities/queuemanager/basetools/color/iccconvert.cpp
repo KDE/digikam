@@ -60,7 +60,7 @@ IccConvert::~IccConvert()
 
 void IccConvert::registerSettingsWidget()
 {
-    RVBox* const vbox   = new RVBox;
+    DVBox* const vbox   = new DVBox;
     m_settingsView      = new IccProfilesSettings(vbox);
     QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);

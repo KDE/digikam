@@ -31,15 +31,10 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_version.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -47,7 +42,7 @@ namespace Digikam
 WelcomePage::WelcomePage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("Welcome to digiKam %1", QLatin1String(digikam_version_short)))
 {
-    RVBox* const vbox   = new RVBox(this);
+    DVBox* const vbox   = new DVBox(this);
     QLabel* const title = new QLabel(vbox);
     title->setWordWrap(true);
     title->setText(i18n("<qt>"

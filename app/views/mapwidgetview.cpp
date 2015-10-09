@@ -82,7 +82,7 @@ public:
     {
     }
 
-    RVBox*                      vbox;
+    DVBox*                      vbox;
     GeoIface::MapWidget*         mapWidget;
     ImageFilterModel*           imageFilterModel;
     ImageAlbumModel*            imageModel;

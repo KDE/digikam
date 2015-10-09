@@ -38,11 +38,9 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RWidgetUtils>
-
-using namespace KDcrawIface;
+#include "dwidgetutils.h"
 
 namespace Digikam
 {
@@ -68,7 +66,7 @@ RawPage::RawPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")),
       d(new Private)
 {
-    RVBox* const vbox    = new RVBox(this);
+    DVBox* const vbox    = new DVBox(this);
     QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"

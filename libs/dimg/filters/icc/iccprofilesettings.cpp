@@ -69,7 +69,7 @@ const QString IccProfilesSettings::Private::configRecentlyUsedProfilesEntry(QLat
 // --------------------------------------------------------
 
 IccProfilesSettings::IccProfilesSettings(QWidget* const parent)
-    : RVBox(parent),
+    : DVBox(parent),
       d(new Private)
 {
     QLabel* const newProfileLabel  = new QLabel(i18n("Convert to:"), this);

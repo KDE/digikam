@@ -32,16 +32,11 @@
 #include <QStandardPaths>
 #include <QScrollArea>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "assistantdlg.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -78,7 +73,7 @@ AssistantDlgPage::AssistantDlgPage(AssistantDlg* const dlg, const QString& title
     sv->setWidgetResizable(true);
 
     d->hlay           = new QHBoxLayout(panel);
-    RVBox* const vbox = new RVBox(panel);
+    DVBox* const vbox = new DVBox(panel);
     d->logo           = new QLabel(vbox);
     d->logo->setAlignment(Qt::AlignCenter);
     d->logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));

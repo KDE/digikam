@@ -38,16 +38,11 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "imagepropertiestxtlabel.h"
+#include "dwidgetutils.h"
 #include "imagepropertiestab.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {

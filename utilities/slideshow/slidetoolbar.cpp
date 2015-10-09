@@ -42,8 +42,6 @@
 #include "slidehelp.h"
 #include "digikam_debug.h"
 
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 
@@ -71,7 +69,7 @@ public:
 };
 
 SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const parent)
-    : RHBox(parent),
+    : DHBox(parent),
       d(new Private)
 {
     setMouseTracking(true);

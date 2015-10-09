@@ -34,15 +34,10 @@
 #include <QIcon>
 #include <QMenu>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_export.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -115,7 +110,7 @@ private:
 
 // --------------------------------------------------------------------
 
-class DIGIKAM_EXPORT RatingBox : public RVBox
+class DIGIKAM_EXPORT RatingBox : public DVBox
 {
     Q_OBJECT
 

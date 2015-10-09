@@ -494,7 +494,7 @@ public:
 };
 
 RatingBox::RatingBox(QWidget* const parent)
-    : RVBox(parent),
+    : DVBox(parent),
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);

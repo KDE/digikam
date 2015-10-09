@@ -45,7 +45,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -279,7 +279,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
                             "<p>Simulate black and white film exposure using a blue filter. "
                             "This accentuates haze and fog. Used for dye transfer and contrast effects.</p>"));
 
-    RHBox* const hbox1   = new RHBox(vbox);
+    DHBox* const hbox1   = new DHBox(vbox);
     QLabel* const label1 = new QLabel(i18n("Strength:"), hbox1);
     label1->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -352,7 +352,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
 
     // -------------------------------------------------------------
 
-    RHBox* const hbox2   = new RHBox(lumBox);
+    DHBox* const hbox2   = new DHBox(lumBox);
     QLabel* const label2 = new QLabel(i18n("Contrast:"), hbox2);
     label2->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 

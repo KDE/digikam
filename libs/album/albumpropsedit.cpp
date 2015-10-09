@@ -50,12 +50,9 @@
 #include <klocalizedstring.h>
 #include <ktextedit.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "albumdb.h"
 #include "album.h"
 #include "albummanager.h"
@@ -63,8 +60,6 @@
 #include "databaseaccess.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -191,7 +186,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     d->datePicker = new DDatePicker(page);
     dateLabel->setBuddy(d->datePicker);
 
-    RHBox* const buttonRow            = new RHBox(page);
+    DHBox* const buttonRow            = new DHBox(page);
     QPushButton* const dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image", "&Oldest"),  buttonRow);
     QPushButton* const dateAvgButton  = new QPushButton(i18nc("Calculates the average date",          "&Average"), buttonRow);
     QPushButton* const dateHighButton = new QPushButton(i18nc("Selects the date of the newest image", "Newest"),   buttonRow);

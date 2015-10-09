@@ -26,18 +26,13 @@
 #ifndef RATINGFILTER_H
 #define RATINGFILTER_H
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "imagefiltersettings.h"
 #include "ratingwidget.h"
 
 class QAction;
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -83,7 +78,7 @@ private:
 
 // -----------------------------------------------------------------------------
 
-class RatingFilter : public RHBox
+class RatingFilter : public DHBox
 {
     Q_OBJECT
 

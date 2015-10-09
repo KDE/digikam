@@ -61,7 +61,7 @@ public:
 };
 
 CaptionEdit::CaptionEdit(QWidget* const parent)
-    : RVBox(parent),
+    : DVBox(parent),
       d(new Private)
 {
 

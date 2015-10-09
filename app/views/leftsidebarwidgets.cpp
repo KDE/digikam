@@ -718,7 +718,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
 
     // ---------------------------------------------------------------
 
-    RHBox* const hbox2 = new RHBox(panel);
+    DHBox* const hbox2 = new DHBox(panel);
     hbox2->setMargin(0);
     hbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 

@@ -42,17 +42,12 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_debug.h"
 #include "databaseparameters.h"
 #include "digikam_version.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -73,8 +68,8 @@ public:
     QString        rootAlbum;
     QString        dbPath;
 
-    RFileSelector* rootAlbumPathRequester;
-    RFileSelector* dbPathRequester;
+    DFileSelector* rootAlbumPathRequester;
+    DFileSelector* dbPathRequester;
 };
 
 CollectionPage::CollectionPage(AssistantDlg* const dlg)
@@ -110,7 +105,7 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
 
     textLabel1->setText(message);
 
-    d->rootAlbumPathRequester = new RFileSelector(widget);
+    d->rootAlbumPathRequester = new DFileSelector(widget);
     d->rootAlbumPathRequester->setFileDlgMode(QFileDialog::Directory);
     d->rootAlbumPathRequester->lineEdit()->setText(picturesPath);
 
@@ -122,7 +117,7 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
                              "and you cannot use a remote location on a networked server, "
                              "using NFS or Samba.</p>"));
 
-    d->dbPathRequester = new RFileSelector(widget);
+    d->dbPathRequester = new DFileSelector(widget);
     d->dbPathRequester->setFileDlgMode(QFileDialog::Directory);
     d->dbPathRequester->lineEdit()->setText(picturesPath);
 

@@ -35,7 +35,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -61,7 +61,7 @@ Flip::Flip(QObject* parent)
 
 void Flip::registerSettingsWidget()
 {
-    RVBox* const vbox      = new RVBox;
+    DVBox* const vbox      = new DVBox;
     QLabel* const label    = new QLabel(vbox);
     m_comboBox             = new QComboBox(vbox);
     m_comboBox->insertItem(DImg::HORIZONTAL, i18n("Horizontal"));

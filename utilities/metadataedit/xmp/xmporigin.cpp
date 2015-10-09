@@ -38,20 +38,15 @@
 
 #include <klocalizedstring.h>
 
-// LibKDcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "squeezedcombobox.h"
+#include "dwidgetutils.h"
 #include "metadatacheckbox.h"
 #include "timezonecombobox.h"
 #include "dmetadata.h"
 #include "countryselector.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {

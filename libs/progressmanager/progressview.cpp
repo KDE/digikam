@@ -62,7 +62,7 @@ TransactionItemView::TransactionItemView(QWidget* const parent, const QString& n
 {
     setObjectName(name);
     setFrameStyle(NoFrame);
-    m_bigBox = new RVBox(this);
+    m_bigBox = new DVBox(this);
     setWidget(m_bigBox);
     setWidgetResizable(true);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -174,7 +174,7 @@ public:
 };
 
 TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item, bool first)
-    : RVBox(parent),
+    : DVBox(parent),
       d(new Private)
 {
     d->item  = item;
@@ -189,7 +189,7 @@ TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item
     setStretchFactor(d->frame, 3);
     layout()->addWidget(d->frame);
 
-    RHBox* h = new RHBox(this);
+    DHBox* h = new DHBox(this);
     h->setSpacing(5);
     layout()->addWidget(h);
 
@@ -221,7 +221,7 @@ TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item
         h->layout()->addWidget(d->cancelButton);
     }
 
-    h = new RHBox(this);
+    h = new DHBox(this);
     h->setSpacing(5);
     h->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
     layout()->addWidget(h);

@@ -36,7 +36,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -64,7 +64,7 @@ Restoration::~Restoration()
 
 void Restoration::registerSettingsWidget()
 {
-    RVBox* const vbox = new RVBox;
+    DVBox* const vbox = new DVBox;
 
     DActiveLabel* const cimgLogoLabel = new DActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
                                                          QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-cimg.png")),

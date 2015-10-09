@@ -33,7 +33,7 @@ namespace Digikam
 {
 
 OverlayWidget::OverlayWidget(QWidget* const alignWidget, QWidget* const parent, const QString& name)
-    : RHBox(parent),
+    : DHBox(parent),
       mAlignWidget(0)
 {
     setObjectName(name);

@@ -32,11 +32,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RWidgetUtils>
-
-using namespace KDcrawIface;
+#include "dwidgetutils.h"
 
 namespace Digikam
 {
@@ -44,7 +42,7 @@ namespace Digikam
 StartScanPage::StartScanPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
 {
-    RVBox* const vbox  = new RVBox(this);
+    DVBox* const vbox  = new DVBox(this);
     QLabel* const text = new QLabel(vbox);
     text->setWordWrap(true);
     text->setOpenExternalLinks(true);

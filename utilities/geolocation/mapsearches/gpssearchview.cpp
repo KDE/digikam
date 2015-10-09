@@ -149,7 +149,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
 
     // ---------------------------------------------------------------
 
-    RHBox* const hbox = new RHBox(this);
+    DHBox* const hbox = new DHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 

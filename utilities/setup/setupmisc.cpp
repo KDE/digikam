@@ -39,15 +39,10 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "applicationsettings.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -105,7 +100,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    RHBox* const tabStyleHbox = new RHBox(panel);
+    DHBox* const tabStyleHbox = new DHBox(panel);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
     d->sidebarType            = new QComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
@@ -114,7 +109,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    RHBox* const stringComparisonHbox = new RHBox(panel);
+    DHBox* const stringComparisonHbox = new DHBox(panel);
     d->stringComparisonTypeLabel      = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
     d->stringComparisonType           = new QComboBox(stringComparisonHbox);
     d->stringComparisonType->addItem(i18nc("method to compare strings", "Natural"), ApplicationSettings::Natural);
@@ -129,7 +124,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    RHBox* const appStyleHbox = new RHBox(panel);
+    DHBox* const appStyleHbox = new DHBox(panel);
     d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
     d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));

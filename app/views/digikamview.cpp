@@ -249,7 +249,7 @@ void DigikamView::Private::addPageUpDownActions(DigikamView* const q, QWidget* c
 // -------------------------------------------------------------------------------------------
 
 DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const modelCollection)
-    : RHBox(parent),
+    : DHBox(parent),
       d(new Private)
 {
     qRegisterMetaType<SlideShowSettings>("SlideShowSettings");

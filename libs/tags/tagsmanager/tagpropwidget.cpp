@@ -39,10 +39,6 @@
 #include <kkeysequencewidget.h>
 #include <kicondialog.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -52,8 +48,7 @@
 #include "tagsactionmngr.h"
 #include "syncjob.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
+#include "dwidgetutils.h"
 
 namespace Digikam
 {

@@ -45,7 +45,7 @@
 
 // LibKDcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -175,7 +175,7 @@ public:
         hMonitorProfile(0),
         hXFORM(0)
     {
-        progressPix = KDcrawIface::WorkingPixmap();
+        progressPix = DWorkingPixmap();
     }
 
     bool                         profileDataAvailable;
@@ -197,7 +197,7 @@ public:
     QTimer*                      progressTimer;
 
     QPixmap                      pixmap;
-    KDcrawIface::WorkingPixmap   progressPix;
+    DWorkingPixmap   progressPix;
 
     cmsHPROFILE                  hMonitorProfile;
     cmsHTRANSFORM                hXFORM;

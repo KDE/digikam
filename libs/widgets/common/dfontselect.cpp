@@ -67,7 +67,7 @@ public:
 };
 
 DFontSelect::DFontSelect(const QString& text, QWidget* const parent)
-    : RHBox(parent), d(new Private)
+    : DHBox(parent), d(new Private)
 {
     d->label     = new QLabel(this);
     d->label->setText(text);
@@ -142,7 +142,7 @@ bool DFontSelect::event(QEvent* e)
         d->modeCombo->setFont(font());
     }
 
-    return RHBox::event(e);
+    return DHBox::event(e);
 }
 
 void DFontSelect::slotOpenFontDialog()

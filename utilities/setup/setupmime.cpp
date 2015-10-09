@@ -41,17 +41,12 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "albumdb.h"
 #include "applicationsettings.h"
 #include "databaseaccess.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -116,7 +111,7 @@ SetupMime::SetupMime(QWidget* const parent)
     d->imageFileFilterLabel  = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
 
-    RHBox* const hbox1     = new RHBox(imageFileFilterBox);
+    DHBox* const hbox1     = new DHBox(imageFileFilterBox);
     d->imageFileFilterEdit = new QLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis(i18n("<p>Here you can add the extensions of image files (including RAW files) "
                                               "to be displayed in the Album view. Just put \"xyz abc\" "
@@ -152,7 +147,7 @@ SetupMime::SetupMime(QWidget* const parent)
     d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
 
-    RHBox* const hbox2     = new RHBox(movieFileFilterBox);
+    DHBox* const hbox2     = new DHBox(movieFileFilterBox);
     d->movieFileFilterEdit = new QLineEdit(hbox2);
     d->movieFileFilterEdit->setWhatsThis(i18n("<p>Here you can add extra extensions of video files "
                                               "to be displayed in your Album view. Just write \"xyz abc\" "
@@ -190,7 +185,7 @@ SetupMime::SetupMime(QWidget* const parent)
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
 
-    RHBox* const hbox3     = new RHBox(audioFileFilterBox);
+    DHBox* const hbox3     = new DHBox(audioFileFilterBox);
     d->audioFileFilterEdit = new QLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis(i18n("<p>Here you can add extra extensions of audio files "
                                               "to be displayed in your Album view. Just write \"mp7\" "

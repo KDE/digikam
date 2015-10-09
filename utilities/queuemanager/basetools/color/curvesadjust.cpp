@@ -35,7 +35,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -65,8 +65,8 @@ CurvesAdjust::~CurvesAdjust()
 
 void CurvesAdjust::registerSettingsWidget()
 {
-    RVBox* vbox          = new RVBox;
-    RHBox* hbox          = new RHBox(vbox);
+    DVBox* vbox          = new DVBox;
+    DHBox* hbox          = new DHBox(vbox);
     QLabel* channelLabel = new QLabel(hbox);
     channelLabel->setText(i18n("Channel:"));
     m_channelCB          = new QComboBox(hbox);

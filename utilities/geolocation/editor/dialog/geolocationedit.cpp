@@ -67,7 +67,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -325,7 +325,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
-    RHBox* const hboxMain = new RHBox(this);
+    DHBox* const hboxMain = new DHBox(this);
     mainLayout->addWidget(hboxMain);
 
     d->HSplitter          = new QSplitter(Qt::Horizontal, hboxMain);
@@ -333,7 +333,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 
     // ------------------------------------------------------------------------------------------------
 
-    RHBox* const hbox            = new RHBox(this);
+    DHBox* const hbox            = new DHBox(this);
     QLabel* const labelMapLayout = new QLabel(i18n("Layout:"), hbox);
     d->cbMapLayout               = new QComboBox(hbox);
     d->cbMapLayout->addItem(i18n("One map"),               QVariant::fromValue(MapLayoutOne));
@@ -414,7 +414,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     d->HSplitter->addWidget(d->stackedWidget);
     d->splitterSize        = 0;
 
-    RVBox* const vboxTabBar = new RVBox(hboxMain);
+    DVBox* const vboxTabBar = new DVBox(hboxMain);
     vboxTabBar->layout()->setSpacing(0);
     vboxTabBar->layout()->setMargin(0);
 

@@ -35,7 +35,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -65,7 +65,7 @@ RemoveMetadata::~RemoveMetadata()
 
 void RemoveMetadata::registerSettingsWidget()
 {
-    RVBox* const vbox = new RVBox;
+    DVBox* const vbox = new DVBox;
     m_removeExif      = new QCheckBox(i18n("Remove Exif"), vbox);
     m_removeIptc      = new QCheckBox(i18n("Remove Iptc"), vbox);
     m_removeXmp       = new QCheckBox(i18n("Remove Xmp"), vbox);

@@ -30,22 +30,17 @@
 #include <QString>
 #include <QDateTime>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "captionvalues.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
 
 class MsgTextEdit;
 
-class CaptionEdit : public RVBox
+class CaptionEdit : public DVBox
 {
     Q_OBJECT
 

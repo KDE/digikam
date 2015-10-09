@@ -59,7 +59,7 @@ class TAlbum;
  *
  * @author jwienke
  */
-class FilterSideBarWidget : public RVBox, public StateSavingObject
+class FilterSideBarWidget : public DVBox, public StateSavingObject
 {
     Q_OBJECT
 

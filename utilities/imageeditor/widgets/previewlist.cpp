@@ -37,7 +37,7 @@
 
 // LibKDcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -224,14 +224,14 @@ public:
         progressTimer(0),
         wrapper(0)
     {
-        progressPix = KDcrawIface::WorkingPixmap();
+        progressPix = DWorkingPixmap();
     }
 
     int                        progressCount;
 
     QTimer*                    progressTimer;
 
-    KDcrawIface::WorkingPixmap progressPix;
+    DWorkingPixmap progressPix;
 
     PreviewThreadWrapper*      wrapper;
 };

@@ -29,11 +29,10 @@
 
 #include <QDateTime>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -47,7 +46,7 @@ namespace Digikam
  * @image html kdatetimeedit.png "This is how it looks"
  * @author Tom Albers
  */
-class DDateTimeEdit : public RHBox
+class DDateTimeEdit : public DHBox
 {
     Q_OBJECT
 

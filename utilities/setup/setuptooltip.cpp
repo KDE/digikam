@@ -37,19 +37,14 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "applicationsettings.h"
 #include "importsettings.h"
 #include "setupcamera.h"
 #include "dfontselect.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -196,7 +191,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    RVBox* const vbox       = new RVBox(panel);
+    DVBox* const vbox       = new DVBox(panel);
 
     d->showToolTipsBox      = new QCheckBox(i18n("Show icon-view and thumb-bar items' tool-tips"), vbox);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
@@ -346,7 +341,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    RVBox* const vbox2        = new RVBox(panel);
+    DVBox* const vbox2        = new DVBox(panel);
     d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items' tool-tips"), vbox2);
     d->albumSettingBox        = new QGroupBox(i18n("Album Information"), vbox2);
 
@@ -387,7 +382,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    RVBox* const vbox3       = new RVBox(panel);
+    DVBox* const vbox3       = new DVBox(panel);
     d->showImportToolTipsBox = new QCheckBox(i18n("Show import items' tool-tips"), vbox3);
     d->importSettingBox      = new QGroupBox(i18n("Import Information"), vbox3);
 

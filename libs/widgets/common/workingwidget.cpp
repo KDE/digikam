@@ -34,7 +34,7 @@
 
 // LibKDcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 namespace Digikam
 {
@@ -47,10 +47,10 @@ public:
     Private()
     {
         currentPixmap = 0;
-        pixmaps       = KDcrawIface::WorkingPixmap();
+        pixmaps       = DWorkingPixmap();
     }
 
-    KDcrawIface::WorkingPixmap pixmaps;
+    DWorkingPixmap pixmaps;
     int                        currentPixmap;
     QTimer                     timer;
 };

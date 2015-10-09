@@ -45,7 +45,7 @@
 
 // LibKDcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -96,7 +96,7 @@ public:
           animation(0),
           histogramPainter(0)
     {
-        progressPix = KDcrawIface::WorkingPixmap();
+        progressPix = DWorkingPixmap();
     }
 
 public:
@@ -107,8 +107,8 @@ public:
     bool                             inSelected;
     bool                             selectMode;             // If true, a part of the histogram can be selected !
     bool                             showProgress;           // If true, a message will be displayed during histogram computation,
-                                                // else nothing (limit flicker effect in widget especially for small
-                                                // image/computation time).
+                                                             // else nothing (limit flicker effect in widget especially for small
+                                                             // image/computation time).
     int                              renderingType;          // Using full image or image selection for histogram rendering.
     int                              range;
     HistogramState                   state;                  // Clear drawing zone with message.
@@ -125,7 +125,7 @@ public:
 
     int                              animationState;
     QPropertyAnimation*              animation;
-    KDcrawIface::WorkingPixmap       progressPix;
+    DWorkingPixmap       progressPix;
 
     DColor                           colorGuide;
 

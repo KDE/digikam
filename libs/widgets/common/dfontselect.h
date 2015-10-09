@@ -28,20 +28,16 @@
 
 #include <QFont>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_export.h"
 
-using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DFontSelect : public RHBox
+class DIGIKAM_EXPORT DFontSelect : public DHBox
 {
     Q_OBJECT
 

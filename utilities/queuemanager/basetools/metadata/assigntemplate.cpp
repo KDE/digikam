@@ -61,7 +61,7 @@ AssignTemplate::~AssignTemplate()
 
 void AssignTemplate::registerSettingsWidget()
 {
-    RVBox* const vbox  = new RVBox;
+    DVBox* const vbox  = new DVBox;
     m_templateSelector = new TemplateSelector(vbox);
     m_templateViewer   = new TemplateViewer(vbox);
     m_settingsWidget   = vbox;

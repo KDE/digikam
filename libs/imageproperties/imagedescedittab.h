@@ -34,7 +34,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -54,7 +54,7 @@ namespace Digikam
 class ImageInfo;
 class TaggingAction;
 
-class ImageDescEditTab : public RVBox
+class ImageDescEditTab : public DVBox
 {
     Q_OBJECT
 

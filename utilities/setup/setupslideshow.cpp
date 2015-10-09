@@ -38,17 +38,12 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 #include "slideshowsettings.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -105,7 +100,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
 
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
-    RHBox* const hbox1 = new RHBox(panel);
+    DHBox* const hbox1 = new DHBox(panel);
     QLabel* const lbl1 = new QLabel(i18n("&Delay between images:"), hbox1);
     lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->delayInput      = new DIntNumInput(hbox1);
@@ -153,7 +148,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     d->showLabels          = new QCheckBox(i18n("Show image labels"), panel);
     d->showLabels->setWhatsThis(i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
 
-    RHBox* const screenSelectBox = new RHBox(panel);
+    DHBox* const screenSelectBox = new DHBox(panel);
     new QLabel(i18n("Screen placement:"), screenSelectBox);
     d->screenPlacement           = new QComboBox(screenSelectBox);
     d->screenPlacement->setToolTip(i18n("In case of multi-screen computer, select here the monitor to slide contents."));

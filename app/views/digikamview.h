@@ -34,7 +34,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // libkexiv2 includes
 
@@ -61,7 +61,7 @@ class BatchSyncMetadata;
 class FilterStatusBar;
 class SlideShowSettings;
 
-class DigikamView : public RHBox
+class DigikamView : public DHBox
 {
     Q_OBJECT
 

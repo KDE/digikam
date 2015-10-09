@@ -46,11 +46,9 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RWidgetUtils>
-
-using namespace KDcrawIface;
+#include "dwidgetutils.h"
 
 namespace Digikam
 {

@@ -41,15 +41,12 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "showfotosettings.h"
 
-using namespace KDcrawIface;
+using namespace Digikam;
 
 namespace ShowFoto
 {
@@ -116,14 +113,14 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->showCoordinates   = new QCheckBox(i18n("&Show Geolocation Indicator"), miscOptionsGroup);
     d->showCoordinates->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
 
-    RHBox* const tabStyleHbox = new RHBox(miscOptionsGroup);
+    DHBox* const tabStyleHbox = new DHBox(miscOptionsGroup);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
     d->sidebarType            = new QComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
 
-    RHBox* const appStyleHbox = new RHBox(miscOptionsGroup);
+    DHBox* const appStyleHbox = new DHBox(miscOptionsGroup);
     d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
     d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
@@ -149,7 +146,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QGroupBox* const sortOptionsGroup = new QGroupBox(i18n("Sort order for images"), panel);
     QVBoxLayout* const gLayout4       = new QVBoxLayout();
 
-    RHBox* const sortBox = new RHBox(sortOptionsGroup);
+    DHBox* const sortBox = new DHBox(sortOptionsGroup);
     new QLabel(i18n("Sort images by:"), sortBox);
     d->sortOrderComboBox = new QComboBox(sortBox);
     d->sortOrderComboBox->insertItem(SortByDate,     i18nc("sort images by date", "Date"));

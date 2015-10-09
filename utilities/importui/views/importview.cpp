@@ -116,7 +116,7 @@ void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* con
 }
 
 ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
-    : RHBox(parent),
+    : DHBox(parent),
       d(new Private)
 {
     d->parent   = static_cast<ImportUI*>(ui);

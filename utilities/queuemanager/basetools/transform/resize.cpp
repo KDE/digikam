@@ -37,7 +37,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -142,7 +142,7 @@ Resize::~Resize()
 
 void Resize::registerSettingsWidget()
 {
-    RVBox* const vbox   = new RVBox;
+    DVBox* const vbox   = new DVBox;
     d->labelPreset      = new QLabel(i18n("Preset Length:"), vbox);
     d->comboBox         = new QComboBox(vbox);
     d->comboBox->insertItem(Private::Tiny,   i18np("Tiny (1 pixel)",   "Tiny (%1 pixels)",   d->presetLengthValue(Private::Tiny)));

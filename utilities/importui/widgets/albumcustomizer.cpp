@@ -41,17 +41,12 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "tooltipdialog.h"
 #include "digikam_debug.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -116,7 +111,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     QVBoxLayout* const albumVlay = new QVBoxLayout(this);
     d->autoAlbumExtCheck         = new QCheckBox(i18nc("@option:check", "Extension-based sub-albums"), this);
     d->autoAlbumDateCheck        = new QCheckBox(i18nc("@option:check", "Date-based sub-albums"), this);
-    RHBox* const hbox1           = new RHBox(this);
+    DHBox* const hbox1           = new DHBox(this);
     d->folderDateLabel           = new QLabel(i18nc("@label:listbox", "Date format:"), hbox1);
     d->folderDateFormat          = new QComboBox(hbox1);
     d->folderDateFormat->insertItem(IsoDateFormat,    i18nc("@item:inlistbox", "ISO"));
@@ -124,7 +119,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     d->folderDateFormat->insertItem(LocalDateFormat,  i18nc("@item:inlistbox", "Local Settings"));
     d->folderDateFormat->insertItem(CustomDateFormat, i18nc("@item:inlistbox", "Custom"));
 
-    RHBox* const hbox2     = new RHBox(this);
+    DHBox* const hbox2     = new DHBox(this);
     d->customizer          = new QLineEdit(hbox2);
     d->tooltipToggleButton = new QToolButton(hbox2);
     d->tooltipToggleButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));

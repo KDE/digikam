@@ -27,7 +27,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -43,7 +43,7 @@ namespace Digikam
 
 class ImportUI;
 
-class ImportView : public RHBox
+class ImportView : public DHBox
 {
     Q_OBJECT
 

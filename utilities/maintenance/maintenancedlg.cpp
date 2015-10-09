@@ -41,12 +41,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "digikam_config.h"
@@ -56,8 +53,6 @@
 #include "imagequalitysettings.h"
 #include "metadatasynchronizer.h"
 #include "dxmlguiwindow.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -138,12 +133,12 @@ public:
     QPushButton*         metadataSetup;
     QPushButton*         qualitySetup;
     QComboBox*           syncDirection;
-    RHBox*               hbox;
-    RVBox*               vbox;
-    RVBox*               vbox2;
+    DHBox*               hbox;
+    DVBox*               vbox;
+    DVBox*               vbox2;
 
 #ifdef HAVE_KFACE
-    RHBox*               hbox3;
+    DHBox*               hbox3;
     QComboBox*           faceScannedHandling;
 #endif /* HAVE_KFACE */
 
@@ -191,7 +186,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    RVBox* const options    = new RVBox;
+    DVBox* const options    = new DVBox;
     d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, options);
     d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), options);
     d->expanderBox->insertItem(Private::Options, options, QIcon::fromTheme(QLatin1String("configure")), i18n("Common Options"), QLatin1String("Options"), true);
@@ -219,7 +214,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->hbox              = new RHBox;
+    d->hbox              = new DHBox;
     new QLabel(i18n("Similarity (in percents): "), d->hbox);
     QWidget* const space = new QWidget(d->hbox);
     d->hbox->setStretchFactor(space, 10);
@@ -234,7 +229,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
 #ifdef HAVE_KFACE
 
-    d->hbox3               = new RHBox;
+    d->hbox3               = new DHBox;
     new QLabel(i18n("Faces data management: "), d->hbox3);
     QWidget* const space3  = new QWidget(d->hbox3);
     d->hbox3->setStretchFactor(space3, 10);
@@ -250,8 +245,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->vbox               = new RVBox;
-    RHBox* const hbox11   = new RHBox(d->vbox);
+    d->vbox               = new DVBox;
+    DHBox* const hbox11   = new DHBox(d->vbox);
     new QLabel(i18n("Scan Mode: "), hbox11);
     QWidget* const space7 = new QWidget(hbox11);
     hbox11->setStretchFactor(space7, 10);
@@ -260,7 +255,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->qualityScanMode->addItem(i18n("Clean all and re-scan"),  ImageQualitySorter::AllItems);
     d->qualityScanMode->addItem(i18n("Scan non-assigned only"), ImageQualitySorter::NonAssignedItems);
 
-    RHBox* const hbox12   = new RHBox(d->vbox);
+    DHBox* const hbox12   = new DHBox(d->vbox);
     new QLabel(i18n("Check quality sorter setup panel for details: "), hbox12);
     QWidget* const space2 = new QWidget(hbox12);
     hbox12->setStretchFactor(space2, 10);
@@ -271,8 +266,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->vbox2              = new RVBox;
-    RHBox* const hbox21   = new RHBox(d->vbox2);
+    d->vbox2              = new DVBox;
+    DHBox* const hbox21   = new DHBox(d->vbox2);
     new QLabel(i18n("Sync Direction: "), hbox21);
     QWidget* const space5 = new QWidget(hbox21);
     hbox21->setStretchFactor(space5, 10);
@@ -280,7 +275,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->syncDirection->addItem(i18n("From database to image metadata"), MetadataSynchronizer::WriteFromDatabaseToFile);
     d->syncDirection->addItem(i18n("From image metadata to database"), MetadataSynchronizer::ReadFromFileToDatabase);
 
-    RHBox* const hbox22   = new RHBox(d->vbox2);
+    DHBox* const hbox22   = new DHBox(d->vbox2);
     new QLabel(i18n("Check metadata setup panel for details: "), hbox22);
     QWidget* const space6 = new QWidget(hbox22);
     hbox22->setStretchFactor(space6, 10);

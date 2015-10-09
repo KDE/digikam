@@ -50,7 +50,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -160,7 +160,7 @@ public:
     QTimer*                   timerSketch;
     QTimer*                   timerImage;
 
-    RVBox*                    folderView;
+    DVBox*                    folderView;
 
     QLineEdit*                nameEditSketch;
     QLineEdit*                nameEditImage;
@@ -231,7 +231,7 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
 
     // ---------------------------------------------------------------
 
-    d->folderView     = new RVBox();
+    d->folderView     = new DVBox();
     d->searchTreeView = new EditableSearchTreeView(d->folderView, searchModel, searchModificationHelper);
     d->searchTreeView->filteredModel()->listHaarSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
@@ -268,7 +268,7 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
 
 QWidget* FuzzySearchView::setupFindSimilarPanel() const
 {
-    RHBox* const imageBox = new RHBox();
+    DHBox* const imageBox = new DHBox();
     d->imageWidget        = new QLabel(imageBox);
     d->imageWidget->setFixedSize(256, 256);
     d->imageWidget->setText(i18n("<p>Drag & drop an image here<br/>to perform similar<br/>items search.</p>"
@@ -304,7 +304,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     // ---------------------------------------------------------------
 
-    RHBox* const saveBox = new RHBox();
+    DHBox* const saveBox = new DHBox();
     saveBox->setMargin(0);
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -345,7 +345,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
 QWidget* FuzzySearchView::setupSketchPanel() const
 {
-    RHBox* const drawingBox = new RHBox();
+    DHBox* const drawingBox = new DHBox();
     d->sketchWidget         = new SketchWidget(drawingBox);
     drawingBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     drawingBox->setLineWidth(1);
@@ -409,7 +409,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     // ---------------------------------------------------------------
 
-    RHBox* const saveBox = new RHBox();
+    DHBox* const saveBox = new DHBox();
     saveBox->setMargin(0);
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 

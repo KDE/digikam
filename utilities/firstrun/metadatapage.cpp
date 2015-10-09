@@ -36,15 +36,10 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "metadatasettings.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -70,7 +65,7 @@ MetadataPage::MetadataPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Metadata Storage to Files</b>")),
       d(new Private)
 {
-    RVBox* const vbox    = new RVBox(this);
+    DVBox* const vbox    = new DVBox(this);
     QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"

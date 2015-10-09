@@ -48,7 +48,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -180,13 +180,13 @@ SearchWidget::SearchWidget(
     d->mainVBox = new QVBoxLayout(this);
     setLayout(d->mainVBox);
 
-    KDcrawIface::RHBox* const topHBox  = new KDcrawIface::RHBox(this);
+    DHBox* const topHBox  = new DHBox(this);
     d->mainVBox->addWidget(topHBox);
     d->searchTermLineEdit = new QLineEdit(topHBox);
     d->searchTermLineEdit->setClearButtonEnabled(true);
     d->searchButton       = new QPushButton(i18nc("Start the search", "Search"), topHBox);
 
-    KDcrawIface::RHBox* const actionHBox = new KDcrawIface::RHBox(this);
+    DHBox* const actionHBox = new DHBox(this);
     d->mainVBox->addWidget(actionHBox);
 
     d->actionClearResultsList = new QAction(this);

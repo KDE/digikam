@@ -70,7 +70,7 @@
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -210,9 +210,9 @@ ImportUI* ImportUI::instance()
 
 void ImportUI::setupUserArea()
 {
-    RHBox* const widget = new RHBox(this);
+    DHBox* const widget = new DHBox(this);
     d->splitter         = new SidebarSplitter(widget);
-    RVBox* const vbox   = new RVBox(d->splitter);
+    DVBox* const vbox   = new DVBox(d->splitter);
     d->view             = new ImportView(this, vbox);
     d->view->importFilterModel()->setCameraThumbsController(d->camThumbsCtrl);
     d->historyView      = new DHistoryView(vbox);

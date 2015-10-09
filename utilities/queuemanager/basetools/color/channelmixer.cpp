@@ -33,7 +33,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -61,7 +61,7 @@ ChannelMixer::~ChannelMixer()
 
 void ChannelMixer::registerSettingsWidget()
 {
-    RVBox* const vbox    = new RVBox;
+    DVBox* const vbox    = new DVBox;
     m_settingsView       = new MixerSettings(vbox);
     m_settingsView->setMonochromeTipsVisible(false);
     QLabel* const space  = new QLabel(vbox);

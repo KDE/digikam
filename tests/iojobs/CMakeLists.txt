@@ -5,8 +5,11 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 set(IOJobsTest_SRCS iojobstest.cpp)
+
 add_executable(IOJobsTest ${IOJobsTest_SRCS})
+
 ecm_mark_nongui_executable(IOJobsTest)
+
 target_link_libraries(IOJobsTest
                       Qt5::Core
                       Qt5::Test

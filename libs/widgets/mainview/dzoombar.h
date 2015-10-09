@@ -28,22 +28,18 @@
 
 #include <QString>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_export.h"
 
 class QAction;
 
-using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DZoomBar : public RHBox
+class DIGIKAM_EXPORT DZoomBar : public DHBox
 {
     Q_OBJECT
 

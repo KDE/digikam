@@ -40,12 +40,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "dcombobox.h"
@@ -100,8 +97,8 @@ public:
     QColor               niepceLineColor;
     QColor               solidColor;
 
-    RColorSelector*      firstColorButton;
-    RColorSelector*      secondColorButton;
+    DColorSelector*      firstColorButton;
+    DColorSelector*      secondColorButton;
 
     DComboBox*           borderType;
     DIntNumInput*        borderPercent;
@@ -181,10 +178,10 @@ BorderSettings::BorderSettings(QWidget* parent)
     // -------------------------------------------------------------------
 
     d->labelForeground   = new QLabel();
-    d->firstColorButton  = new RColorSelector();
+    d->firstColorButton  = new DColorSelector();
     d->firstColorButton->setColor(QColor(192, 192, 192));
     d->labelBackground   = new QLabel();
-    d->secondColorButton = new RColorSelector();
+    d->secondColorButton = new DColorSelector();
     d->secondColorButton->setColor(QColor(128, 128, 128));
 
     // -------------------------------------------------------------------

@@ -46,7 +46,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -99,7 +99,7 @@ public:
     QLabel*              toolName;
     QLabel*              toolIcon;
 
-    RHBox*               guideBox;
+    DHBox*               guideBox;
 
     QPushButton*         okBtn;
     QPushButton*         cancelBtn;
@@ -108,7 +108,7 @@ public:
     QPushButton*         saveAsBtn;
     QPushButton*         loadBtn;
 
-    RColorSelector*      guideColorBt;
+    DColorSelector*      guideColorBt;
 
     ColorGradientWidget* hGradient;
 
@@ -130,7 +130,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     QGridLayout* const gridSettings = new QGridLayout(d->settingsArea);
     d->plainPage                    = new QWidget;
-    d->guideBox                     = new RHBox;
+    d->guideBox                     = new DHBox;
     d->histogramBox                 = new HistogramBox;
 
     // ---------------------------------------------------------------
@@ -170,7 +170,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     new QLabel(i18n("Guide:"), d->guideBox);
     QLabel* const space4 = new QLabel(d->guideBox);
-    d->guideColorBt      = new RColorSelector(d->guideBox);
+    d->guideColorBt      = new DColorSelector(d->guideBox);
     d->guideColorBt->setColor(QColor(Qt::red));
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
     d->guideSize         = new DIntNumInput(d->guideBox);

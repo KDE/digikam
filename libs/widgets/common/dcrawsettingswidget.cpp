@@ -177,8 +177,8 @@ public:
     QCheckBox*       refineInterpolationBox;
     QCheckBox*       expoCorrectionBox;
 
-    RFileSelector*   inIccUrlEdit;
-    RFileSelector*   outIccUrlEdit;
+    DFileSelector*   inIccUrlEdit;
+    DFileSelector*   outIccUrlEdit;
 
     DComboBox*       noiseReductionComboBox;
     DComboBox*       whiteBalanceComboBox;
@@ -690,7 +690,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<item><emphasis strong='true'>Custom</emphasis>: use a custom "
                                 "input color space profile.</item></list></para>"));
 
-    d->inIccUrlEdit = new RFileSelector(d->colormanSettings);
+    d->inIccUrlEdit = new DFileSelector(d->colormanSettings);
     d->inIccUrlEdit->setFileDlgMode(QFileDialog::ExistingFile);
     d->inIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc; *.icm)"));
 
@@ -724,7 +724,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<item><emphasis strong='true'>Custom</emphasis>: use a custom "
                                 "output color space profile.</item></list></para>"));
 
-    d->outIccUrlEdit = new RFileSelector(d->colormanSettings);
+    d->outIccUrlEdit = new DFileSelector(d->colormanSettings);
     d->outIccUrlEdit->setFileDlgMode(QFileDialog::ExistingFile);
     d->outIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc; *.icm)"));
     
@@ -885,12 +885,12 @@ void DcrawSettingsWidget::updateMinimumWidth()
     setMinimumWidth(width);
 }
 
-RFileSelector* DcrawSettingsWidget::inputProfileUrlEdit() const
+DFileSelector* DcrawSettingsWidget::inputProfileUrlEdit() const
 {
     return d->inIccUrlEdit;
 }
 
-RFileSelector* DcrawSettingsWidget::outputProfileUrlEdit() const
+DFileSelector* DcrawSettingsWidget::outputProfileUrlEdit() const
 {
     return d->outIccUrlEdit;
 }

@@ -47,12 +47,9 @@
 
 #include <klocalizedstring.h>
 
-// LibKDcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dimg.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
@@ -95,7 +92,7 @@ public:
         clearFlag        = HistogramNone;
         progressCount    = 0;
         progressTimer    = 0;
-        progressPix      = KDcrawIface::WorkingPixmap();
+        progressPix      = DWorkingPixmap();
     }
 
     bool                           readOnlyMode;
@@ -115,7 +112,7 @@ public:
 
     QTimer*                        progressTimer;
 
-    KDcrawIface::WorkingPixmap     progressPix;
+    DWorkingPixmap                 progressPix;
 
     DColor                         colorGuide;
 

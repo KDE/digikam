@@ -37,15 +37,10 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "applicationsettings.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -71,7 +66,7 @@ OpenFilePage::OpenFilePage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Open File Behavior</b>")),
       d(new Private)
 {
-    RVBox* const vbox    = new RVBox(this);
+    DVBox* const vbox    = new DVBox(this);
     QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"

@@ -47,20 +47,15 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 #include "albummodel.h"
 #include "albumselectors.h"
 #include "applicationsettings.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -398,7 +393,7 @@ void FaceScanDialog::setupUi()
     d->parametersResetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->parametersResetButton->setToolTip(i18nc("@action:button", "Reset to default values"));
 
-    RHBox* const hbox                   = new RHBox(parametersTab);
+    DHBox* const hbox                   = new DHBox(parametersTab);
     QLabel* const accuracyLabel         = new QLabel(i18nc("@label Two extremities of a scale", "Fast   -   Accurate"), hbox);
     accuracyLabel->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     d->accuracyInput                    = new DIntNumInput(hbox);

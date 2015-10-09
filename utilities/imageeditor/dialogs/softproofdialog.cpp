@@ -43,7 +43,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -81,7 +81,7 @@ public:
     QDialogButtonBox*           buttons;
     QCheckBox*                  gamutCheckBox;
     QLabel*                     maskColorLabel;
-    RColorSelector*             maskColorBtn;
+    DColorSelector*             maskColorBtn;
 
     IccRenderingIntentComboBox* proofingIntentBox;
 };
@@ -145,7 +145,7 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
 
     d->gamutCheckBox   = new QCheckBox(i18n("Highlight out-of-gamut colors"));
     d->maskColorLabel  = new QLabel(i18n("Highlighting color:"));
-    d->maskColorBtn = new RColorSelector;
+    d->maskColorBtn = new DColorSelector;
     d->maskColorLabel->setBuddy(d->maskColorBtn);
 
     optionsGrid->addWidget(intentLabel,          0, 0, 1, 2);

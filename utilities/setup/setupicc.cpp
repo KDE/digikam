@@ -56,7 +56,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -154,7 +154,7 @@ public:
     QGroupBox*                  iccFolderGB;
     QGroupBox*                  advancedSettingsGB;
 
-    RFileSelector*              defaultPathKU;
+    DFileSelector*              defaultPathKU;
 
     IccRenderingIntentComboBox* renderingIntentKC;
 
@@ -456,7 +456,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
                                                  "You can specify an additional folder:"));
     d->iccFolderLabel->setWordWrap(true);
 
-    d->defaultPathKU            = new RFileSelector;
+    d->defaultPathKU            = new DFileSelector;
     d->iccFolderLabel->setBuddy(d->defaultPathKU);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
     d->defaultPathKU->setFileDlgMode(QFileDialog::Directory);

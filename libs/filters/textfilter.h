@@ -24,25 +24,20 @@
 #ifndef TEXTFILTER_H
 #define TEXTFILTER_H
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "searchtextbar.h"
 #include "imagefiltersettings.h"
 
 class QAction;
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
 
 class SearchTextBar;
 
-class TextFilter : public RHBox
+class TextFilter : public DHBox
 {
     Q_OBJECT
 

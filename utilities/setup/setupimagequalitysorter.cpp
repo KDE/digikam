@@ -38,17 +38,12 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "picklabelwidget.h"
 #include "dnuminput.h"
 #include "imagequalitysettings.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -76,7 +71,7 @@ public:
         setCompressionWeight(0)
     {}
 
-    RVBox*        optionsView;
+    DVBox*        optionsView;
     QCheckBox*    enableSorter;
     QCheckBox*    useFullImage;
     QCheckBox*    detectBlur;
@@ -111,14 +106,14 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->enableSorter = new QCheckBox(i18n("Enable Image Quality Sorting (Experimental)"), panel);
     d->enableSorter->setWhatsThis(i18n("Enable this option to assign automatically Pick Labels based on image quality."));
 
-    d->optionsView  = new RVBox(panel);
+    d->optionsView  = new DVBox(panel);
 
     layout->addWidget(d->enableSorter);
     layout->addWidget(d->optionsView);
 
     // ------------------------------------------------------------------------------
 
-    RHBox* const hbox1 = new RHBox(d->optionsView);
+    DHBox* const hbox1 = new DHBox(d->optionsView);
     QLabel* const lbl1 = new QLabel(i18n("Speed:"), hbox1);
     lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setSpeed    = new DIntNumInput(hbox1);
@@ -140,7 +135,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    RHBox* const hlay1      = new RHBox(d->optionsView);
+    DHBox* const hlay1      = new DHBox(d->optionsView);
 
     d->setRejected          = new QCheckBox(i18n("Assign 'Rejected' Label to Low Quality Pictures"), hlay1);
     d->setRejected->setWhatsThis(i18n("Low quality images detected by blur, noise, and compression analysis will be assigned to Rejected label."));
@@ -153,7 +148,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    RHBox* const hlay2      = new RHBox(d->optionsView);
+    DHBox* const hlay2      = new DHBox(d->optionsView);
 
     d->setPending           = new QCheckBox(i18n("Assign 'Pending' Label to Medium Quality Pictures"), hlay2);
     d->setPending->setWhatsThis(i18n("Medium quality images detected by blur, noise, and compression analysis will be assigned to Pending label."));
@@ -166,7 +161,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    RHBox* const hlay3      = new RHBox(d->optionsView);
+    DHBox* const hlay3      = new DHBox(d->optionsView);
 
     d->setAccepted          = new QCheckBox(i18n("Assign 'Accepted' Label to High Quality Pictures"), hlay3);
     d->setAccepted->setWhatsThis(i18n("High quality images detected by blur, noise, and compression analysis will be assigned to Accepted label."));
@@ -179,7 +174,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    RHBox* const hbox2 = new RHBox(d->optionsView);
+    DHBox* const hbox2 = new DHBox(d->optionsView);
     QLabel* const lbl2 = new QLabel(i18n("Rejected threshold:"), hbox2);
     lbl2->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setRejectedThreshold = new DIntNumInput(hbox2);
@@ -187,7 +182,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setRejectedThreshold->setRange(1, 100, 1);
     d->setRejectedThreshold->setWhatsThis(i18n("Threshold below which all pictures are assigned Rejected Label"));
 
-    RHBox* const hbox3 = new RHBox(d->optionsView);
+    DHBox* const hbox3 = new DHBox(d->optionsView);
     QLabel* const lbl3 = new QLabel(i18n("Pending threshold:"), hbox3);
     lbl3->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setPendingThreshold  = new DIntNumInput(hbox3);
@@ -195,7 +190,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setPendingThreshold->setRange(1, 100, 1);
     d->setPendingThreshold->setWhatsThis(i18n("Threshold below which all pictures are assigned Pending Label"));
 
-    RHBox* const hbox4 = new RHBox(d->optionsView);
+    DHBox* const hbox4 = new DHBox(d->optionsView);
     QLabel* const lbl4 = new QLabel(i18n("Accepted threshold:"), hbox4);
     lbl4->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setAcceptedThreshold = new DIntNumInput(hbox4);
@@ -203,7 +198,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setAcceptedThreshold->setRange(1, 100, 1);
     d->setAcceptedThreshold->setWhatsThis(i18n("Threshold above which all pictures are assigned Accepted Label"));
 
-    RHBox* const hbox5 = new RHBox(d->optionsView);
+    DHBox* const hbox5 = new DHBox(d->optionsView);
     QLabel* const lbl5 = new QLabel(i18n("Blur Weight:"), hbox5);
     lbl5->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setBlurWeight        = new DIntNumInput(hbox5);
@@ -211,7 +206,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setBlurWeight->setRange(1, 100, 1);
     d->setBlurWeight->setWhatsThis(i18n("Weight to assign to Blur Algorithm"));
 
-    RHBox* const hbox6 = new RHBox(d->optionsView);
+    DHBox* const hbox6 = new DHBox(d->optionsView);
     QLabel* const lbl6 = new QLabel(i18n("Noise Weight:"), hbox6);
     lbl6->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setNoiseWeight       = new DIntNumInput(hbox6);
@@ -219,7 +214,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setNoiseWeight->setRange(1, 100, 1);
     d->setNoiseWeight->setWhatsThis(i18n("Weight to assign to Noise Algorithm"));
 
-    RHBox* const hbox7 = new RHBox(d->optionsView);
+    DHBox* const hbox7 = new DHBox(d->optionsView);
     QLabel* const lbl7 = new QLabel(i18n("Compression Weight:"), hbox7);
     lbl7->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->setCompressionWeight = new DIntNumInput(hbox7);

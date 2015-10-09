@@ -66,7 +66,7 @@
 // Libkdcraw includes
 
 #include <KDCRAW/KDcraw>
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Libkexiv2
 

@@ -41,16 +41,11 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -81,19 +76,19 @@ public:
     QToolButton*      btnPndg;
     QToolButton*      btnAccpt;
 
-    RHBox*            descBox;
+    DHBox*            descBox;
 
     DAdjustableLabel* shortcut;
 };
 
 PickLabelWidget::PickLabelWidget(QWidget* const parent)
-    : RVBox(parent),
+    : DVBox(parent),
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    RHBox* const hbox = new RHBox(this);
+    DHBox* const hbox = new DHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(0);
 
@@ -127,7 +122,7 @@ PickLabelWidget::PickLabelWidget(QWidget* const parent)
     d->pickBtns->addButton(d->btnPndg,  PendingLabel);
     d->pickBtns->addButton(d->btnAccpt, AcceptedLabel);
 
-    d->descBox  = new RHBox(this);
+    d->descBox  = new DHBox(this);
     d->descBox->setMargin(0);
     d->descBox->setSpacing(0);
     d->desc     = new QLabel(d->descBox);

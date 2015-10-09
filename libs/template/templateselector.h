@@ -24,18 +24,14 @@
 #ifndef TEMPLATESELECTOR_H
 #define TEMPLATESELECTOR_H
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
-using namespace KDcrawIface;
+#include "dwidgetutils.h"
 
 namespace Digikam
 {
 
 class Template;
 
-class TemplateSelector : public RHBox
+class TemplateSelector : public DHBox
 {
     Q_OBJECT
 

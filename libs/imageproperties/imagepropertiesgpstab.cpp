@@ -57,7 +57,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -165,7 +165,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QWidget* const box            = new RHBox(this);
+    QWidget* const box            = new DHBox(this);
     QHBoxLayout* const hBoxLayout = reinterpret_cast<QHBoxLayout*>(box->layout());
 
     if (hBoxLayout)

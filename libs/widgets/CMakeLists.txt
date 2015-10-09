@@ -28,6 +28,7 @@ set(libcommonwidgets_SRCS
     common/workingwidget.cpp
     common/widgets_debug.cpp
     common/dcrawsettingswidget.cpp
+    common/dwidgetutils.cpp
     common/squeezedcombobox.cpp
 )
 
@@ -116,10 +117,11 @@ set(libiccprofileswidgets_SRCS
 )
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
 
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::Completion,INTERFACE_INCLUDE_DIRECTORIES>

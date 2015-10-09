@@ -37,7 +37,7 @@
 
 // LibKDcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -65,7 +65,7 @@ public:
           thumbsWaitingFor(0),
           inSizeHint(false)
     {
-        workingPixmap = KDcrawIface::WorkingPixmap();
+        workingPixmap = DWorkingPixmap();
     }
 
     const int                     categoryExtraSpacing;
@@ -73,7 +73,7 @@ public:
 
     int                           animationState;
     QPropertyAnimation*           animation;
-    KDcrawIface::WorkingPixmap    workingPixmap;
+    DWorkingPixmap    workingPixmap;
     DCategoryDrawer*              categoryDrawer;
     int                           thumbnailSize;
 

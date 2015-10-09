@@ -51,7 +51,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -169,7 +169,7 @@ public:
     DIntNumInput*         xInput;
     DIntNumInput*         yInput;
 
-    RColorSelector*       guideColorBt;
+    DColorSelector*       guideColorBt;
 
     ImageSelectionWidget* imageSelectionWidget;
     DExpanderBox*         expbox;
@@ -455,7 +455,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->flipVerBox->setWhatsThis(i18n("Enable this option to flip the guidelines vertically."));
 
     d->colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
-    d->guideColorBt    = new RColorSelector(compositionGuide);
+    d->guideColorBt    = new DColorSelector(compositionGuide);
     d->guideColorBt->setColor(QColor( 250, 250, 255 ));
     d->guideSize       = new DIntNumInput(compositionGuide);
     d->guideSize->setRange(1, 5, 1);

@@ -50,7 +50,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -152,7 +152,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    RVBox* histoBox    = new RVBox(histogramPage);
+    DVBox* histoBox    = new DVBox(histogramPage);
     d->histogramBox    = new HistogramBox(histoBox, LRGBAC, true);
     d->histogramBox->setStatisticsVisible(false);
 

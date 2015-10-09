@@ -39,7 +39,7 @@ namespace Digikam
 {
 class ProgressItem;
 
-class TransactionItem : public RVBox
+class TransactionItem : public DVBox
 {
     Q_OBJECT
 
@@ -108,7 +108,7 @@ protected:
 
 private:
 
-    RVBox* m_bigBox;
+    DVBox* m_bigBox;
 };
 
 // --------------------------------------------------------------------------------

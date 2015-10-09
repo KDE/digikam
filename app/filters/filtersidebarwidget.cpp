@@ -36,12 +36,9 @@
 #include <QMenu>
 #include <QIcon>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "digikam_debug.h"
 #include "applicationsettings.h"
@@ -51,8 +48,6 @@
 #include "ratingfilter.h"
 #include "mimefilter.h"
 #include "tagfilterview.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -118,7 +113,7 @@ const QString FilterSideBarWidget::Private::configMatchingConditionEntry(QLatin1
 // ---------------------------------------------------------------------------------------------------
 
 FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const tagFilterModel)
-    : RVBox(parent), StateSavingObject(this), d(new Private)
+    : DVBox(parent), StateSavingObject(this), d(new Private)
 {
     setObjectName(QLatin1String("TagFilter Sidebar"));
 

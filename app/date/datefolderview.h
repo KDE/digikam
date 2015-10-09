@@ -31,16 +31,11 @@
 
 #include <QScopedPointer>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "albummanager.h"
 #include "statesavingobject.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -53,7 +48,7 @@ class ImageFilterModel;
 template <class T>
 class AlbumPointer;
 
-class DateFolderView: public RVBox, public StateSavingObject
+class DateFolderView: public DVBox, public StateSavingObject
 {
     Q_OBJECT
 

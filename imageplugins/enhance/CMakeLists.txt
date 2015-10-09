@@ -30,6 +30,7 @@ endif()
 include_directories(
     $<TARGET_PROPERTY:KF5::CoreAddons,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 add_library(digikamimageplugin_enhance MODULE ${digikamimageplugin_enhance_PART_SRCS})

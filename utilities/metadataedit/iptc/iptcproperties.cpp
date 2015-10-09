@@ -41,19 +41,14 @@
 #include <klanguagebutton.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "metadatacheckbox.h"
 #include "timezonecombobox.h"
 #include "objectattributesedit.h"
 #include "dmetadata.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {

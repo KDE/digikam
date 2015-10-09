@@ -35,7 +35,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -67,7 +67,7 @@ AutoCorrection::~AutoCorrection()
 
 void AutoCorrection::registerSettingsWidget()
 {
-    RVBox* const vbox   = new RVBox;
+    DVBox* const vbox   = new DVBox;
     QLabel* const label = new QLabel(vbox);
     m_comboBox          = new QComboBox(vbox);
     m_comboBox->insertItem(AutoLevelsCorrection,      i18n("Auto Levels"));

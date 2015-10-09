@@ -7,7 +7,7 @@
 include_directories(
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
-
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
@@ -19,6 +19,7 @@ target_link_libraries(pgfscaled
                       digikamcore
                       Qt5::Core
                       Qt5::Gui
+                      KF5::I18n
                       KF5::KIOCore
 )
 
@@ -33,6 +34,7 @@ target_link_libraries(qtpgftest
                       Qt5::Core
                       Qt5::Gui
                       KF5::KIOCore
+                      KF5::I18n
 )
 
 #------------------------------------------------------------------------
@@ -46,6 +48,7 @@ target_link_libraries(loadpgfdata
                       Qt5::Core
                       Qt5::Gui
                       KF5::KIOCore
+                      KF5::I18n
 )
 
 #------------------------------------------------------------------------

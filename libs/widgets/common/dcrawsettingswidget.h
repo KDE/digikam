@@ -41,7 +41,7 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RawDecodingSettings>
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -83,8 +83,8 @@ public:
     explicit DcrawSettingsWidget(QWidget* const parent, int advSettings = COLORSPACE);
     virtual ~DcrawSettingsWidget();
 
-    RFileSelector* inputProfileUrlEdit()  const;
-    RFileSelector* outputProfileUrlEdit() const;
+    DFileSelector* inputProfileUrlEdit()  const;
+    DFileSelector* outputProfileUrlEdit() const;
 
     void setup(int advSettings);
 

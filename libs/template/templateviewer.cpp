@@ -34,18 +34,14 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "imagepropertiestxtlabel.h"
 #include "template.h"
 #include "templatemanager.h"
 #include "countryselector.h"
 
-using namespace KDcrawIface;
 using namespace KExiv2Iface;
 
 namespace Digikam
@@ -158,7 +154,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 {
     setFrameStyle(QFrame::NoFrame);
 
-    RVBox* const w1      = new RVBox(this);
+    DVBox* const w1      = new DVBox(this);
     d->names             = new DTextLabelName(i18n("Names:"), w1);
     d->namesList         = new DTextList(QStringList(), w1);
     d->position          = new DTextLabelName(i18n("Position:"), w1);
@@ -188,7 +184,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 
     // ------------------------------------------------------------------
 
-    RVBox* const w2               = new RVBox(this);
+    DVBox* const w2               = new DVBox(this);
     d->locationCity               = new DTextLabelName(i18n("City:"), w2);
     d->labelLocationCity          = new DTextBrowser(QString(), w2);
     d->locationSublocation        = new DTextLabelName(i18n("Sublocation:"), w2);
@@ -208,7 +204,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 
     // ------------------------------------------------------------------
 
-    RVBox* const w3              = new RVBox(this);
+    DVBox* const w3              = new DVBox(this);
     d->contactAddress            = new DTextLabelName(i18n("Address:"), w3);
     d->labelContactAddress       = new DTextBrowser(QString(), w3);
     d->contactPostalCode         = new DTextLabelName(i18n("Postal Code:"), w3);
@@ -248,7 +244,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 
     // ------------------------------------------------------------------
 
-    RVBox* const w4 = new RVBox(this);
+    DVBox* const w4 = new DVBox(this);
     d->subjectsList = new DTextList(QStringList(), w4);
 
     addItem(w4, QIcon::fromTheme(QLatin1String("feed-subscribe")),

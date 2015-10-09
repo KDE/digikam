@@ -10,6 +10,7 @@ set(renamecustomizertest_SRCS
 
 include_directories(
     $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 add_executable(renamecustomizertest ${renamecustomizertest_SRCS})

@@ -43,16 +43,11 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RWidgetUtils>
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -95,19 +90,19 @@ public:
     QToolButton*        btnBlack;
     QToolButton*        btnWhite;
 
-    RHBox*              descBox;
+    DHBox*              descBox;
 
     DAdjustableLabel*   shortcut;
 };
 
 ColorLabelWidget::ColorLabelWidget(QWidget* const parent)
-    : RVBox(parent),
+    : DVBox(parent),
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    RHBox* const hbox = new RHBox(this);
+    DHBox* const hbox = new DHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(0);
 
@@ -183,7 +178,7 @@ ColorLabelWidget::ColorLabelWidget(QWidget* const parent)
     d->colorBtns->addButton(d->btnBlack,   BlackLabel);
     d->colorBtns->addButton(d->btnWhite,   WhiteLabel);
 
-    d->descBox  = new RHBox(this);
+    d->descBox  = new DHBox(this);
     d->descBox->setMargin(0);
     d->descBox->setSpacing(0);
     d->desc     = new QLabel(d->descBox);

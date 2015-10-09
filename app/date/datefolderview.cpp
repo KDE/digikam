@@ -64,7 +64,7 @@ public:
 };
 
 DateFolderView::DateFolderView(QWidget* const parent, DateAlbumModel* const dateAlbumModel)
-    : RVBox(parent), StateSavingObject(this),
+    : DVBox(parent), StateSavingObject(this),
       d(new Private)
 {
     setObjectName(QLatin1String("DateFolderView"));

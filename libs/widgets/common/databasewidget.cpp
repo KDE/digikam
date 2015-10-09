@@ -96,7 +96,7 @@ void DatabaseWidget::setupMainArea()
                                             dbPathBox);
     d->databasePathLabel->setWordWrap(true);
 
-    databasePathEdit                                 = new RFileSelector(dbPathBox);
+    databasePathEdit                                 = new DFileSelector(dbPathBox);
     databasePathEdit->setFileDlgMode(QFileDialog::Directory);
 
     QLabel* const databaseTypeLabel                  = new QLabel(i18n("Type"));

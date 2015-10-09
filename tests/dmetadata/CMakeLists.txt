@@ -16,6 +16,7 @@ target_link_libraries(tagsReadWriteTest
                         Qt5::Test
                         digikamcore
                         KF5::KExiv2
+                        KF5::I18n
                      )
 
 set(testRating_SRCS ratingreadwritetest.cpp)
@@ -26,6 +27,7 @@ target_link_libraries(ratingReadWriteTest
                         Qt5::Test
                         digikamcore
                         KF5::KExiv2
+                        KF5::I18n
                      )
 
 set(testComment_SRCS commentreadwritetest.cpp)
@@ -36,4 +38,5 @@ target_link_libraries(commentReadWriteTest
                         Qt5::Test
                         digikamcore
                         KF5::KExiv2
+                        KF5::I18n
                      )

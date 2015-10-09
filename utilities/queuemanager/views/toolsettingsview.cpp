@@ -40,7 +40,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RWidgetUtils>
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -101,7 +101,7 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------------------------
 
-    RVBox* const vbox            = new RVBox(this);
+    DVBox* const vbox            = new DVBox(this);
     QFrame* const toolDescriptor = new QFrame(vbox);
     d->settingsViewIcon    = new QLabel();
     d->settingsViewTitle   = new QLabel();
