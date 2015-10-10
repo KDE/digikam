@@ -57,8 +57,6 @@
 #include "refocusfilter.h"
 #endif // HAVE_EIGEN3
 
-using namespace KDcrawIface;
-
 namespace Digikam
 {
 
