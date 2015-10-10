@@ -47,7 +47,7 @@
 #include "addtagslineedit.h"
 #include "disjointmetadata.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

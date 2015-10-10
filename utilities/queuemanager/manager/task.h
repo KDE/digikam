@@ -39,7 +39,7 @@
 #include "queuesettings.h"
 #include "batchtoolutils.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

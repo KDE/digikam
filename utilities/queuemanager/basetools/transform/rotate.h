@@ -28,7 +28,7 @@
 
 #include "batchtool.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

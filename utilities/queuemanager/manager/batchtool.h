@@ -40,7 +40,7 @@
 
 class QWidget;
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

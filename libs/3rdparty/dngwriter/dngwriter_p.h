@@ -61,7 +61,7 @@
 
 #include "dngwriter.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

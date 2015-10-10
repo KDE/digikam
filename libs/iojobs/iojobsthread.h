@@ -34,7 +34,7 @@
 #include "iojob.h"
 #include "dtrashiteminfo.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

@@ -32,6 +32,8 @@
 
 #include <KDCRAW/KDcraw>
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 

@@ -36,7 +36,7 @@
 #include "importui.h"
 #include "importstackedview.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

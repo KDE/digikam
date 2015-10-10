@@ -36,7 +36,7 @@
 
 #include "iofilesettings.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

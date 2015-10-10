@@ -50,7 +50,7 @@
 #include "stackedview.h"
 
 using namespace KExiv2Iface;
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

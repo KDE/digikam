@@ -37,7 +37,7 @@
 #include "digikam_export.h"
 #include "filters/rawprocessingfilter.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {
