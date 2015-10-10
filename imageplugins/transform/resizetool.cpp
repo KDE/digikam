@@ -73,7 +73,7 @@
 #include "dactivelabel.h"
 #include "dexpanderbox.h"
 
-using namespace KDcrawIface;
+
 
 namespace DigikamTransformImagePlugin
 {

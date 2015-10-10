@@ -38,7 +38,7 @@
 #include "dimg.h"
 #include "drawdecoding.h"
 
-using namespace KDcrawIface;
+
 using namespace KExiv2Iface;
 
 LoadSaveThreadTest::LoadSaveThreadTest(int& argc, char** argv)

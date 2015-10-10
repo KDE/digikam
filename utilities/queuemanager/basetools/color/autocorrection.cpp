@@ -43,7 +43,7 @@
 #include "autoexpofilter.h"
 #include "normalizefilter.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

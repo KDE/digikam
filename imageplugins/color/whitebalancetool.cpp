@@ -49,7 +49,7 @@
 #include "wbfilter.h"
 #include "wbsettings.h"
 
-using namespace KDcrawIface;
+
 using namespace Digikam;
 
 namespace DigikamColorImagePlugin

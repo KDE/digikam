@@ -56,7 +56,7 @@
 #include "digikam_debug.h"
 #include "dcrawsettingswidget.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

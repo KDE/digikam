@@ -42,7 +42,7 @@
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

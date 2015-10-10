@@ -61,7 +61,7 @@
 #include "histogrambox.h"
 #include "histogramwidget.h"
 
-using namespace KDcrawIface;
+
 
 namespace DigikamTransformImagePlugin
 {

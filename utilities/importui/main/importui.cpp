@@ -117,7 +117,7 @@
 #include "importthumbnailmodel.h"
 #include "kiowrapper.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

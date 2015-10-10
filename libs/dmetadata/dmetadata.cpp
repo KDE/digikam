@@ -54,7 +54,7 @@
 #include "digikam_globals.h"
 #include "dimg.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

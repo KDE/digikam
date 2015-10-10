@@ -54,7 +54,7 @@
 #include "imageguidewidget.h"
 #include "contentawarefilter.h"
 
-using namespace KDcrawIface;
+
 
 namespace DigikamTransformImagePlugin
 {

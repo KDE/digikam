@@ -53,7 +53,7 @@
 #include "tagscache.h"
 #include "searchutilities.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

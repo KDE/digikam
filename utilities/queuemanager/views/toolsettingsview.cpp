@@ -44,7 +44,7 @@
 #include "thememanager.h"
 #include "batchtoolsmanager.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

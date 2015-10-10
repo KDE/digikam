@@ -56,7 +56,7 @@
 #include "dcombobox.h"
 #include "colorgradientwidget.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

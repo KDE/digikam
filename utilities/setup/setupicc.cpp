@@ -66,7 +66,7 @@
 #include "iccsettingscontainer.h"
 #include "dactivelabel.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

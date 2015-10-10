@@ -44,7 +44,7 @@
 #include "lensfuniface.h"
 #include "dexpanderbox.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

@@ -69,7 +69,7 @@
 #include "thumbnaildb.h"
 #include "thumbnailsize.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

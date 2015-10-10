@@ -62,7 +62,7 @@
 #include "imagepropertiestxtlabel.h"
 #include "digikam_globals.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

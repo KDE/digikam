@@ -42,7 +42,7 @@
 
 using namespace Digikam;
 using namespace KExiv2Iface;
-using namespace KDcrawIface;
+
 
 int main(int argc, char** argv)
 {

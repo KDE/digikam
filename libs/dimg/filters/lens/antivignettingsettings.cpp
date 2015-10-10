@@ -49,7 +49,7 @@
 #include "dnuminput.h"
 #include "digikam_debug.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

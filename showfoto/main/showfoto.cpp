@@ -121,7 +121,7 @@ extern "C"
 #include "kiowrapper.h"
 #include "dexpanderbox.h"
 
-using namespace KDcrawIface;
+
 
 namespace ShowFoto
 {

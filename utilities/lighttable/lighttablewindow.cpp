@@ -78,7 +78,7 @@
 #include "thumbnailloadthread.h"
 #include "dexpanderbox.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

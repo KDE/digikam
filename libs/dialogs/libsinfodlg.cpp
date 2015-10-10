@@ -86,7 +86,7 @@ extern "C"
 #endif // HAVE_LENSFUN
 
 using namespace KExiv2Iface;
-using namespace KDcrawIface;
+
 
 #ifdef HAVE_MARBLE
 using namespace GeoIface;

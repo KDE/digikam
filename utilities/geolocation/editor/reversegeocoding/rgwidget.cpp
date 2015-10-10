@@ -73,7 +73,7 @@
 #include <modeltest.h>
 #endif /* GPSSYNC_MODELTEST */
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

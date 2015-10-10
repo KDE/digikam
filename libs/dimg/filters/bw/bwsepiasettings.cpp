@@ -54,7 +54,7 @@
 #include "curveswidget.h"
 #include "imagecurves.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

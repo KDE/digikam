@@ -39,7 +39,7 @@
 #include "dimg.h"
 #include "dmetadata.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

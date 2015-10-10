@@ -55,7 +55,7 @@
 #include "dimg.h"
 #include "blurfilter.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

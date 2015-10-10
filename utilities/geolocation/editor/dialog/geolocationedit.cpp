@@ -98,7 +98,7 @@
 #include <modeltest.h>
 #endif
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

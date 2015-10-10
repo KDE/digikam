@@ -51,7 +51,7 @@
 #include "dexpanderbox.h"
 #include "dimg_debug.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

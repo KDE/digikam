@@ -61,7 +61,7 @@
 #include "jp2ksettings.h"
 #endif // HAVE_JASPER
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

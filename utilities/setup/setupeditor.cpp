@@ -50,7 +50,7 @@
 #include "fullscreensettings.h"
 #include "dxmlguiwindow.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

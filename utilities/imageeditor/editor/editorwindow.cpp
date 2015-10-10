@@ -136,7 +136,7 @@
 #include "kiowrapper.h"
 #include "dexpanderbox.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

@@ -38,7 +38,7 @@
 #include "mixerfilter.h"
 #include "mixersettings.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

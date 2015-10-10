@@ -75,7 +75,7 @@
 #include "dcolorvalueselector.h"
 #include "dexpanderbox.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

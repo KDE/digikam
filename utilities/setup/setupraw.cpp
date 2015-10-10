@@ -42,7 +42,7 @@
 #include "drawdecoding.h"
 #include "dcrawsettingswidget.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

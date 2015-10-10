@@ -49,7 +49,7 @@
 #include "kipiinterface.h"
 #include "albumlabelstreeview.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

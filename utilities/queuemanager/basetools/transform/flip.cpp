@@ -41,7 +41,7 @@
 #include "dimgbuiltinfilter.h"
 #include "jpegutils.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

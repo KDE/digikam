@@ -46,7 +46,7 @@
 #include "freerotationsettings.h"
 #include "loadsavethread.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

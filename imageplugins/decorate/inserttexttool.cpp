@@ -62,7 +62,7 @@
 #include "imageiface.h"
 #include "inserttextwidget.h"
 
-using namespace KDcrawIface;
+
 
 namespace DigikamDecorateImagePlugin
 {

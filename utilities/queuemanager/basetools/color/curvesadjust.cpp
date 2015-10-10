@@ -41,7 +41,7 @@
 #include "curvesfilter.h"
 #include "curvessettings.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {

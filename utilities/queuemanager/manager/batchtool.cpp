@@ -52,7 +52,7 @@
 #include "jpegsettings.h"
 #include "pngsettings.h"
 
-using namespace KDcrawIface;
+
 
 namespace Digikam
 {
