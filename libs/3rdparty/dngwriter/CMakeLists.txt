@@ -221,20 +221,13 @@ target_include_directories(libdng
 
 #------------------------------------------------------------------------------------
 
-set(dngwriter_SRCS
+set(libdngwriter_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dngwriter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dngwriter_p.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dngwriterhost.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dngsettings.cpp
 )
 
-add_library(dngwriter STATIC ${dngwriter_SRCS})
-
-target_link_libraries(dngwriter
-                      PRIVATE
-                      libdng
-)
-
-#add_library(dngwriter_src OBJECT $<TARGET_OBJECTS:dngwriter_SRCS>)
+add_library(dngwriter_src OBJECT ${libdngwriter_SRCS})
 
 add_subdirectory(tests)

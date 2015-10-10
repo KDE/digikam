@@ -20,6 +20,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:dthread_src>
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:3rdparty_src>
+            $<TARGET_OBJECTS:dngwriter_src>
             $<TARGET_OBJECTS:kiowrapper_src>
 
             # widgets
@@ -95,9 +96,6 @@ add_library(digikamcore
 )
 
 target_link_libraries(digikamcore
-                      PUBLIC
-                      dngwriter
-
                       PRIVATE
 
                       Qt5::Core
@@ -130,6 +128,8 @@ target_link_libraries(digikamcore
                       ${PNG_LIBRARIES}
 
                       ${PGF_LIBRARIES}
+
+                      libdng
 )
 
 if(KF5Kipi_FOUND)
@@ -139,7 +139,7 @@ endif()
 if(MARBLE_FOUND)
     target_link_libraries(digikamcore PRIVATE ${MARBLE_LIBRARIES}
                                               KF5::ItemModels)
-                                              
+
     if(KF5Bookmarks_FOUND)
         target_link_libraries(digikamcore PRIVATE KF5::Bookmarks)
     endif()
