@@ -155,6 +155,7 @@ target_link_libraries(digikamdatabase
 
                       KF5::KIOCore
                       KF5::Solid
+                      KF5::I18n
 
                       KF5::KExiv2
                       KF5::KDcraw
