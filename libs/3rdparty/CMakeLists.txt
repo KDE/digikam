@@ -16,10 +16,6 @@ if(ENABLE_KINOTIFY)
        )
 endif()
 
-include_directories(
-    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-)
-
 add_library(3rdparty_src OBJECT ${lib3rdparty_SRCS})
 
 include_directories(
