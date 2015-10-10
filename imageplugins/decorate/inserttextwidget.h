@@ -124,7 +124,7 @@ protected:
                        QFont font, float pointSize, int textRotation, QColor textColor,
                        int alignMode, const QString& textString,
                        bool transparentBackground, QColor backgroundColor,
-                       BorderMode borderMode, int borderWidth, int spacing);
+                       BorderMode borderMode, int borderWidth, int spacing, float fontScale=1.0f);
 
 private:
 

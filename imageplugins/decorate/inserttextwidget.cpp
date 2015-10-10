@@ -24,11 +24,6 @@
 
 #include "inserttextwidget.h"
 
-// C++ includes
-
-#include <cstdio>
-#include <cmath>
-
 // Qt includes
 
 #include <QFont>
@@ -233,8 +228,8 @@ DImg InsertTextWidget::makeInsertText()
     if (d->textRect.isValid())
     {
         // convert from widget to image coordinates, then to original size
-        x = lroundf( (d->textRect.x() - d->rect.x()) * ratioW);
-        y = lroundf( (d->textRect.y() - d->rect.y()) * ratioH);
+        x = qRound((d->textRect.x() - d->rect.x()) * ratioW);
+        y = qRound((d->textRect.y() - d->rect.y()) * ratioH);        
     }
     else
     {
@@ -244,7 +239,7 @@ DImg InsertTextWidget::makeInsertText()
 
     // Get original image
     DImg image      = d->iface->original()->copy();
-    int borderWidth = qMax(1, (int)lroundf(ratioW));
+    int borderWidth = qMax(1, qRound(ratioW));
 
     // compose and draw result on image
     composeImage(&image, 0, x, y,
@@ -294,13 +289,16 @@ void InsertTextWidget::makePixmap()
     // prepare painter for use by compose image
     p.setClipRect(d->rect);
     p.translate(d->rect.x(), d->rect.y());
+    
+    int borderWidth = qMax(1, qRound(ratioW));
 
     // compose image and draw result directly on pixmap, with correct offset
     QRect textRect = composeImage(&image, &p, x, y,
-                                  d->textFont, d->textFont.pointSizeF() * ((ratioW > ratioH) ? ratioW : ratioH),
+                                  d->textFont, d->textFont.pointSizeF(),
                                   d->textRotation, d->textColor, d->alignMode, d->textString,
                                   d->textTransparent, d->backgroundColor,
-                                  d->textBorder ? BORDER_NORMAL : BORDER_SUPPORT, 1, 1);
+                                  d->textBorder ? BORDER_NORMAL : BORDER_SUPPORT, borderWidth, borderWidth,
+                                  (ratioW > ratioH) ? ratioW : ratioH);
 
     p.end();
 
@@ -322,7 +320,7 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
                                      QFont font, float pointSize, int textRotation, QColor textColor,
                                      int alignMode, const QString& textString,
                                      bool transparentBackground, QColor backgroundColor,
-                                     BorderMode borderMode, int borderWidth, int spacing)
+                                     BorderMode borderMode, int borderWidth, int spacing, float fontScale)
 {
     /*
         The problem we have to solve is that we have no pixel access to font rendering,
@@ -330,25 +328,37 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
         cannot be done with QPixmap.
         The current solution cuts out the text area, lets Qt do its drawing, converts back and blits to original.
     */
-    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
-
+    
     int maxWidth, maxHeight;
 
     if (x == -1 && y == -1)
     {
-        maxWidth = image->width();
+        maxWidth  = image->width();
         maxHeight = image->height();
     }
     else
     {
-        maxWidth = image->width() - x;
+        maxWidth  = image->width()  - x;
         maxHeight = image->height() - y;
     }
 
+    fontScale = qMax(0.01f, fontScale);
+    
     // find out size of the area that we are drawing to
     font.setPointSizeF(pointSize);
-    QFontMetrics fontMt( font );
-    QRect fontRect = fontMt.boundingRect(0, 0, maxWidth, maxHeight, 0, textString);
+    QFontMetrics fontMt(font);
+    QRect fontRect = fontMt.boundingRect(0, 0,
+                                         qRound(maxWidth  / fontScale),
+                                         qRound(maxHeight / fontScale),
+                                         alignMode, textString);
+
+    fontRect.setWidth(qRound(fontRect.width()   * fontScale));
+    fontRect.setHeight(qRound(fontRect.height() * fontScale));
+
+    if (!fontRect.isValid())
+    {
+        return QRect();
+    }
 
     int fontWidth, fontHeight;
 
@@ -371,6 +381,9 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
     // x, y == -1 means that we have to find a good initial position for the text here
     if (x == -1 && y == -1)
     {
+        int boxWidth  = fontWidth  + 2 * borderWidth + 2 * spacing;
+        int boxHeight = fontHeight + 2 * borderWidth + 2 * spacing;
+
         // was a valid position hint stored from last use?
         if (d->positionHint.isValid())
         {
@@ -379,60 +392,60 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
             // will be remembered across different image sizes.
 
             // get relative positions
-            float fromTop =          (float)d->positionHint.top()    / 10000.0;
+            float fromTop    =       (float)d->positionHint.top()    / 10000.0;
             float fromBottom = 1.0 - (float)d->positionHint.bottom() / 10000.0;
-            float fromLeft =         (float)d->positionHint.left()   / 10000.0;
-            float fromRight =  1.0 - (float)d->positionHint.right()  / 10000.0;
+            float fromLeft   =       (float)d->positionHint.left()   / 10000.0;
+            float fromRight  = 1.0 - (float)d->positionHint.right()  / 10000.0;
 
             // calculate horizontal position
             if (fromLeft < fromRight)
             {
-                x = (int)(fromLeft * maxWidth);
+                x = qRound(fromLeft * maxWidth);
 
                 // we are placing from the smaller distance,
                 // so if now the larger distance is actually too small,
                 // fall back to standard placement, nothing to lose.
-                if (x + fontWidth > maxWidth)
+                if (x + boxWidth > maxWidth)
                 {
-                    x = qMax( (maxWidth - fontWidth) / 2, 0);
+                    x = qMax( (maxWidth - boxWidth) / 2, 0);
                 }
             }
             else
             {
-                x = maxWidth - (int)(fromRight * maxWidth) - fontWidth;
+                x = maxWidth - qRound(fromRight * maxWidth) - boxWidth;
 
                 if ( x < 0 )
                 {
-                    x = qMax( (maxWidth - fontWidth) / 2, 0);
+                    x = qMax( (maxWidth - boxWidth) / 2, 0);
                 }
             }
 
             // calculate vertical position
             if (fromTop < fromBottom)
             {
-                y = (int)(fromTop * maxHeight);
+                y = qRound(fromTop * maxHeight);
 
-                if (y + fontHeight > maxHeight)
+                if (y + boxHeight > maxHeight)
                 {
-                    y = qMax( (maxHeight - fontHeight) / 2, 0);
+                    y = qMax( (maxHeight - boxHeight) / 2, 0);
                 }
             }
             else
             {
-                y = maxHeight - (int)(fromBottom * maxHeight) - fontHeight;
+                y = maxHeight - qRound(fromBottom * maxHeight) - boxHeight;
 
                 if ( y < 0 )
                 {
-                    y = qMax( (maxHeight - fontHeight) / 2, 0);
+                    y = qMax( (maxHeight - boxHeight) / 2, 0);
                 }
             }
 
-            if (! QRect(x, y, fontWidth, fontHeight).
+            if (! QRect(x, y, boxWidth, boxHeight).
                 intersects(QRect(0, 0, maxWidth, maxHeight)) )
             {
                 // emergency fallback - nothing is visible
-                x = qMax( (maxWidth - fontWidth) / 2, 0);
-                y = qMax( (maxHeight - fontHeight) / 2, 0);
+                x = qMax( (maxWidth - boxWidth)   / 2, 0);
+                y = qMax( (maxHeight - boxHeight) / 2, 0);
             }
 
             // invalidate position hint, use only once
@@ -441,8 +454,8 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
         else
         {
             // use standard position
-            x = qMax( (maxWidth - fontWidth) / 2, 0);
-            y = qMax( (maxHeight - fontHeight) / 2, 0);
+            x = qMax( (maxWidth - boxWidth)   / 2, 0);
+            y = qMax( (maxHeight - boxHeight) / 2, 0);
         }
     }
 
@@ -469,6 +482,8 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
     }
 
     // compose semi-transparent background over textArea
+    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+    
     if (transparentBackground)
     {
         DImg transparentLayer(textAreaBackgroundRect.width(), textAreaBackgroundRect.height(), textArea.sixteenBit(), true);
@@ -513,43 +528,51 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
         pixmap = textNotDrawn.convertToPixmap();
     }
 
-    // paint on pixmap
-    QPainter p(&pixmap);
-    p.setPen( QPen(textColor, 1) ) ;
-    p.setFont( font );
-    p.save();
+    int fontScaleWidth  = qRound(fontWidth  / fontScale);
+    int fontScaleHeight = qRound(fontHeight / fontScale);
 
-    // translate to origin of text, leaving space for the border
-    p.translate(textAreaTextRect.x(), textAreaTextRect.y());
+    QPixmap textPixmap(fontScaleWidth, fontScaleHeight);
+    textPixmap.fill(Qt::transparent);
+
+    QPainter tp(&textPixmap);
+    tp.setPen(QPen(textColor, 1));
+    tp.setFont(font);
 
     switch (textRotation)
     {
         case ROTATION_NONE:
-            p.drawText( 0, 0, textAreaTextRect.width(),
-                        textAreaTextRect.height(), alignMode, textString );
+            tp.drawText(0, 0, fontScaleWidth, fontScaleHeight,
+                         alignMode, textString);
             break;
         case ROTATION_90:
-            p.translate(textAreaTextRect.width(), 0);
-            p.rotate(90.0);
-            p.drawText( 0, 0, textAreaTextRect.height(), textAreaTextRect.width(),
-                        alignMode, textString );
+            tp.translate(fontScaleWidth, 0);
+            tp.rotate(90.0);
+            tp.drawText(0, 0, fontScaleHeight, fontScaleWidth,
+                        alignMode, textString);
             break;
         case ROTATION_180:
-            p.translate(textAreaTextRect.width(), textAreaTextRect.height());
-            p.rotate(180.0);
-            p.drawText( 0, 0, textAreaTextRect.width(), textAreaTextRect.height(),
-                        alignMode, textString );
+            tp.translate(fontScaleWidth, fontScaleHeight);
+            tp.rotate(180.0);
+            tp.drawText(0, 0, fontScaleWidth, fontScaleHeight,
+                        alignMode, textString);
             break;
         case ROTATION_270:
-            p.translate(0, textAreaTextRect.height());
-            p.rotate(270.0);
-            p.drawText( 0, 0, textAreaTextRect.height(), textAreaTextRect.width(),
-                        alignMode, textString );
+            tp.translate(0, fontScaleHeight);
+            tp.rotate(270.0);
+            tp.drawText(0, 0, fontScaleHeight, fontScaleWidth,
+                        alignMode, textString);
             break;
     }
 
-    p.restore();
+    tp.end();
 
+    // paint on pixmap
+    QPainter p(&pixmap);
+    
+    p.drawPixmap(textAreaTextRect, textPixmap.scaled(fontWidth,
+                                                     fontHeight,
+                                                     Qt::IgnoreAspectRatio,
+                                                     Qt::SmoothTransformation));
     // Drawing rectangle around text.
 
     if (borderMode == BORDER_NORMAL)      // Decorative border using text color.
@@ -576,7 +599,7 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
 
         // This does not work: during the conversion, colors are altered significantly (diffs of 1 to 10 in each component),
         // so we cannot find out which pixels have actually been touched.
-        /*
+/*
         // Compare the result of drawing with the previous version.
         // Set all unchanged pixels to transparent
         DColor color, ncolor;
@@ -598,7 +621,7 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
             }
         }
         // convert to 16 bit if needed
-        */
+*/
         textDrawn.convertToDepthOfImage(&textArea);
 
         // now compose to original: only pixels affected by drawing text and border are changed, not whole area
@@ -648,10 +671,10 @@ void InsertTextWidget::resizeEvent(QResizeEvent* e)
         int textWidth  = d->textRect.width();
         int textHeight = d->textRect.height();
 
-        textX      = lroundf(textX      * (float)d->w / (float)old_w);
-        textY      = lroundf(textY      * (float)d->h / (float)old_h);
-        textWidth  = lroundf(textWidth  * (float)d->w / (float)old_w);
-        textHeight = lroundf(textHeight * (float)d->h / (float)old_h);
+        textX      = qRound(textX      * (float)d->w / (float)old_w);
+        textY      = qRound(textY      * (float)d->h / (float)old_h);
+        textWidth  = qRound(textWidth  * (float)d->w / (float)old_w);
+        textHeight = qRound(textHeight * (float)d->h / (float)old_h);
 
         d->textRect.setX(textX + d->rect.x());
         d->textRect.setY(textY + d->rect.y());
@@ -691,6 +714,16 @@ void InsertTextWidget::mouseMoveEvent(QMouseEvent* e)
             uint newypos = e->y();
 
             d->textRect.translate(newxpos - d->xpos, newypos - d->ypos);
+
+            if (d->textRect.x() - d->rect.x() < 0)
+            {
+                d->textRect.setX(d->rect.x());
+            }
+
+            if (d->textRect.y() - d->rect.y() < 0)
+            {
+                d->textRect.setY(d->rect.y());
+            }
 
             makePixmap();
             repaint();
