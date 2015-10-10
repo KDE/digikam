@@ -14,9 +14,11 @@ set(libprogressmanager_SRCS
 )
 
 include_directories(
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+
     $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-
 )
 
 add_library(progressmanager_src OBJECT ${libprogressmanager_SRCS})
