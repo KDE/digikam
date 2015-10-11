@@ -68,12 +68,11 @@
 #include "simpletreemodel.h"
 #include "dmessagebox.h"
 #include "dexpanderbox.h"
+#include "iptcproperties.h"
 
 #ifdef GPSSYNC_MODELTEST
 #include <modeltest.h>
 #endif /* GPSSYNC_MODELTEST */
-
-
 
 namespace Digikam
 {
@@ -270,51 +269,13 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
     d->languageLabel = new QLabel(i18n("Select language:"), d->UGridContainer);
     d->languageEdit  = new QComboBox(d->UGridContainer);
 
-    /// @todo Is there a ready-made widget for this?
-    d->languageEdit->addItem(i18n("English"),       QStringLiteral("en"));
-    d->languageEdit->addItem(i18n("Arabic"),        QStringLiteral("ar"));
-    d->languageEdit->addItem(i18n("Assamese"),      QStringLiteral("as"));
-    d->languageEdit->addItem(i18n("Byelorussian"),  QStringLiteral("be"));
-    d->languageEdit->addItem(i18n("Bulgarian"),     QStringLiteral("bg"));
-    d->languageEdit->addItem(i18n("Bengali"),       QStringLiteral("bn"));
-    d->languageEdit->addItem(i18n("Chinese"),       QStringLiteral("zh"));
-    d->languageEdit->addItem(i18n("Czech"),         QStringLiteral("cs"));
-    d->languageEdit->addItem(i18n("Croatian"),      QStringLiteral("hr"));
-    d->languageEdit->addItem(i18n("Dutch"),         QStringLiteral("nl"));
-    d->languageEdit->addItem(i18n("German"),        QStringLiteral("de"));
-    d->languageEdit->addItem(i18n("Greek"),         QStringLiteral("el"));
-    d->languageEdit->addItem(i18n("Estonian"),      QStringLiteral("et"));
-    d->languageEdit->addItem(i18n("Finnish"),       QStringLiteral("fi"));
-    d->languageEdit->addItem(i18n("French"),        QStringLiteral("fr"));
-    d->languageEdit->addItem(i18n("Georgian"),      QStringLiteral("ka"));
-    d->languageEdit->addItem(i18n("Hebrew"),        QStringLiteral("iw"));
-    d->languageEdit->addItem(i18n("Hindi"),         QStringLiteral("hi"));
-    d->languageEdit->addItem(i18n("Hungarian"),     QStringLiteral("hu"));
-    d->languageEdit->addItem(i18n("Indonesian"),    QStringLiteral("in"));
-    d->languageEdit->addItem(i18n("Icelandic"),     QStringLiteral("is"));
-    d->languageEdit->addItem(i18n("Italian"),       QStringLiteral("it"));
-    d->languageEdit->addItem(i18n("Japanese"),      QStringLiteral("ja"));
-    d->languageEdit->addItem(i18n("Korean"),        QStringLiteral("ko"));
-    d->languageEdit->addItem(i18n("Lithuanian"),    QStringLiteral("lt"));
-    d->languageEdit->addItem(i18n("Macedonian"),    QStringLiteral("mk"));
-    d->languageEdit->addItem(i18n("Mongolian"),     QStringLiteral("mn"));
-    d->languageEdit->addItem(i18n("Moldavian"),     QStringLiteral("mo"));
-    d->languageEdit->addItem(i18n("Nepali"),        QStringLiteral("ne"));
-    d->languageEdit->addItem(i18n("Polish"),        QStringLiteral("pl"));
-    d->languageEdit->addItem(i18n("Portuguese"),    QStringLiteral("pt"));
-    d->languageEdit->addItem(i18n("Romanian"),      QStringLiteral("ro"));
-    d->languageEdit->addItem(i18n("Russian"),       QStringLiteral("ru"));
-    d->languageEdit->addItem(i18n("Slovak"),        QStringLiteral("sk"));
-    d->languageEdit->addItem(i18n("Slovenian"),     QStringLiteral("sl"));
-    d->languageEdit->addItem(i18n("Samoan"),        QStringLiteral("sm"));
-    d->languageEdit->addItem(i18n("Serbian"),       QStringLiteral("sr"));
-    d->languageEdit->addItem(i18n("Sudanese"),      QStringLiteral("su"));
-    d->languageEdit->addItem(i18n("Spanish"),       QStringLiteral("es"));
-    d->languageEdit->addItem(i18n("Swedish"),       QStringLiteral("sv"));
-    d->languageEdit->addItem(i18n("Thai"),          QStringLiteral("th"));
-    d->languageEdit->addItem(i18n("Turkish"),       QStringLiteral("tr"));
-    d->languageEdit->addItem(i18n("Ukrainian"),     QStringLiteral("uk"));
-    d->languageEdit->addItem(i18n("Vietnamese"),    QStringLiteral("vi"));
+    IPTCProperties::CountryCodeMap map = IPTCProperties::countryCodeMap();
+
+    for (IPTCProperties::CountryCodeMap::Iterator it = map.begin(); it != map.end(); ++it)
+    {
+        
+        d->languageEdit->addItem(QString::fromUtf8("%1 - %2").arg(it.key()).arg(it.value()), it.key().toLower());
+    }
 
     d->serviceLabel    = new QLabel(i18n("Select service:"), d->UGridContainer);
     d->serviceComboBox = new QComboBox(d->UGridContainer);
