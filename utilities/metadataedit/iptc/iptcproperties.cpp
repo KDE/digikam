@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <klanguagebutton.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -107,7 +106,7 @@ public:
     QLineEdit*                     objectTypeDescEdit;
     QLineEdit*                     originalTransEdit;
 
-    KLanguageButton*               languageBtn;
+    QComboBox*                     languageBtn;
 
     QDateEdit*                     dateReleasedSel;
     QDateEdit*                     dateExpiredSel;
@@ -175,13 +174,14 @@ IPTCProperties::IPTCProperties(QWidget* const parent)
     // --------------------------------------------------------
 
     d->languageCheck = new MetadataCheckBox(i18n("Language:"), this);
-    d->languageBtn   = new KLanguageButton(this);
+    d->languageBtn   = new QComboBox(this);
 
     CountryCodeMap map = countryCodeMap();
 
     for (CountryCodeMap::Iterator it = map.begin(); it != map.end(); ++it)
     {
-        d->languageBtn->insertLanguage(it.key());
+        
+        d->languageBtn->addItem(QString::fromUtf8("%1 - %2").arg(it.key()).arg(it.value()), it.key());
     }
 
     d->languageBtn->setWhatsThis(i18n("Select here the language of content."));
@@ -667,9 +667,10 @@ void IPTCProperties::readMetadata(QByteArray& iptcData)
 
     if (!data.isNull())
     {
-        if (d->languageBtn->contains(data))
+        int index = d->languageBtn->findData(data);
+        if (index != -1)
         {
-            d->languageBtn->setCurrentItem(data);
+            d->languageBtn->setCurrentIndex(index);
             d->languageCheck->setChecked(true);
         }
         else
@@ -824,7 +825,7 @@ void IPTCProperties::applyMetadata(QByteArray& iptcData)
 
     if (d->languageCheck->isChecked())
     {
-        meta.setIptcTagString("Iptc.Application2.Language", d->languageBtn->current());
+        meta.setIptcTagString("Iptc.Application2.Language", d->languageBtn->currentData().toString());
     }
     else if (d->languageCheck->isValid())
     {
