@@ -28,4 +28,3 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 016 ==> 353608 - The preview has blocky artifacts reminiscent of chroma subsampling [patch].
 017 ==> 286373 - DNG don't get filtered as raw (group of items relevant).
 018 ==> 181813 - digiKam text decoration font size problem.
-019 ==> 
