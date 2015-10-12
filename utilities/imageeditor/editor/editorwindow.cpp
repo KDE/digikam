@@ -78,10 +78,6 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
-// Libkdcraw includes
-
-#include <libkdcraw_version.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -135,8 +131,6 @@
 #include "versionmanager.h"
 #include "kiowrapper.h"
 #include "dexpanderbox.h"
-
-
 
 namespace Digikam
 {

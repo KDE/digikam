@@ -335,15 +335,13 @@ void DcrawSettingsWidget::setup(int advSettings)
     // Extended demosaicing method from GPL3 pack
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::AMAZE,    i18nc("@item:inlistbox Quality", "AMaZE"));
 
-    // If Libraw do not support GPL2 pack, disable entries relevant.
-    if (!KDcraw::librawUseGPL2DemosaicPack())
+    // GPL2 pack support
     {
         for (int i=RawDecodingSettings::DCB ; i <=RawDecodingSettings::LMMSE ; ++i)
             d->RAWQualityComboBox->combo()->setItemData(i, false, Qt::UserRole-1);
     }
 
-    // If Libraw do not support GPL3 pack, disable entries relevant.
-    if (!KDcraw::librawUseGPL3DemosaicPack())
+    // GPL3 pack support
     {
         d->RAWQualityComboBox->combo()->setItemData(RawDecodingSettings::AMAZE, false, Qt::UserRole-1);
     }
@@ -442,8 +440,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "sharpness.</item></list></para>"));
     demosaicingLayout->addWidget(d->refineInterpolationBox, line, 0, 1, 2);
          
-    // If Libraw do not support GPL2 pack, disable options relevant.
-    if (!KDcraw::librawUseGPL2DemosaicPack())
+    // GPL2 pack support
     {
         d->medianFilterPassesLabel->setEnabled(false);
         d->medianFilterPassesSpinBox->setEnabled(false);

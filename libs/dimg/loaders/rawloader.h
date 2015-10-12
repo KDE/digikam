@@ -37,8 +37,6 @@
 #include "digikam_export.h"
 #include "filters/rawprocessingfilter.h"
 
-
-
 namespace Digikam
 {
 

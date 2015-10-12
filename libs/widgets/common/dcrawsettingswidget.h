@@ -41,10 +41,10 @@
 // Libkdcraw includes
 
 #include <KDCRAW/RawDecodingSettings>
-#include "dwidgetutils.h"
 
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "digikam_export.h"
 
