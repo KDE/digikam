@@ -25,16 +25,11 @@
 #ifndef ACTIONTHREAD_H
 #define ACTIONTHREAD_H
 
-// Libkdcraw includes
-
-#include <KDCRAW/RActionThreadBase>
-
 // Local includes
 
 #include "batchtool.h"
 #include "batchtoolutils.h"
-
-
+#include "actionthreadbase.h"
 
 namespace Digikam
 {
@@ -42,7 +37,7 @@ namespace Digikam
 class ActionData;
 class QueueSettings;
 
-class ActionThread : public RActionThreadBase
+class ActionThread : public ActionThreadBase
 {
     Q_OBJECT
 

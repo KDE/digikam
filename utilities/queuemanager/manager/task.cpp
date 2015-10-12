@@ -75,7 +75,7 @@ public:
 // -------------------------------------------------------
 
 Task::Task()
-    : RActionJob(),
+    : ActionJob(),
       d(new Private)
 {
 }

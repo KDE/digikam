@@ -53,7 +53,7 @@ public:
 // -------------------------------------------------------
 
 MetadataTask::MetadataTask()
-    : RActionJob(),
+    : ActionJob(),
       d(new Private)
 {
 }

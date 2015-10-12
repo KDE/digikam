@@ -29,22 +29,17 @@
 
 #include <QUrl>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RActionJob>
-
 // Local includes
 
 #include "actions.h"
 #include "queuesettings.h"
 #include "batchtoolutils.h"
-
-
+#include "actionthreadbase.h"
 
 namespace Digikam
 {
 
-class Task : public RActionJob
+class Task : public ActionJob
 {
     Q_OBJECT
 

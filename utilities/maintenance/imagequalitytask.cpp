@@ -54,7 +54,7 @@ public:
 // -------------------------------------------------------
 
 ImageQualityTask::ImageQualityTask()
-    : RActionJob(),
+    : ActionJob(),
       d(new Private)
 {
 }

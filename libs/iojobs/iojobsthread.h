@@ -24,22 +24,17 @@
 #ifndef IOJOBSTHREAD_H
 #define IOJOBSTHREAD_H
 
-// Libkdcraw includes
-
-#include <KDCRAW/RActionThreadBase>
-
 // Local includes
 
 #include "album.h"
 #include "iojob.h"
 #include "dtrashiteminfo.h"
-
-
+#include "actionthreadbase.h"
 
 namespace Digikam
 {
 
-class IOJobsThread : public RActionThreadBase
+class IOJobsThread : public ActionThreadBase
 {
     Q_OBJECT
 

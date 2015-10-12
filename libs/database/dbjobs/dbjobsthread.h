@@ -24,10 +24,6 @@
 #ifndef DBJOBSTHREAD_H
 #define DBJOBSTHREAD_H
 
-// Libkdcraw Includes
-
-#include <KDCRAW/RActionThreadBase>
-
 // Local includes
 
 #include "databaseparameters.h"
@@ -35,15 +31,14 @@
 #include "dbjob.h"
 #include "haariface.h"
 #include "imagelisterrecord.h"
-
-using namespace KDcrawIface;
+#include "actionthreadbase.h"
 
 namespace Digikam
 {
 
 class DBJob;
 
-class DBJobsThread : public RActionThreadBase
+class DBJobsThread : public ActionThreadBase
 {
     Q_OBJECT
 

@@ -28,23 +28,18 @@
 
 #include <QUrl>
 
-// KDCraw includes
-
-#include <KDCRAW/RActionJob>
-
 // Local includes
 
 #include "dtrashiteminfo.h"
 #include "dtrash.h"
-
-using namespace KDcrawIface;
+#include "actionthreadbase.h"
 
 namespace Digikam
 {
 
 class ImageInfo;
 
-class IOJob : public RActionJob
+class IOJob : public ActionJob
 {
     Q_OBJECT
 

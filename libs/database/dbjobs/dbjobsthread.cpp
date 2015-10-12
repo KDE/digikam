@@ -32,7 +32,7 @@ namespace Digikam
 {
 
 DBJobsThread::DBJobsThread(QObject* const parent)
-    : RActionThreadBase(parent)
+    : ActionThreadBase(parent)
 {
 }
 
@@ -81,7 +81,7 @@ void AlbumsDBJobsThread::albumsListing(const AlbumsDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    if(info.isFoldersJob())
+    if (info.isFoldersJob())
     {
         connect(j, SIGNAL(foldersData(QMap<int, int>)),
                 this, SIGNAL(foldersData(QMap<int, int>)));
@@ -92,7 +92,7 @@ void AlbumsDBJobsThread::albumsListing(const AlbumsDBJobInfo& info)
                 this, SIGNAL(data(QList<ImageListerRecord>)));
     }
 
-    RJobCollection collection;
+    ActionJobCollection collection;
     collection.insert(j,0);
 
     appendJobs(collection);
@@ -115,12 +115,12 @@ void TagsDBJobsThread::tagsListing(const TagsDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    if(info.isFoldersJob())
+    if (info.isFoldersJob())
     {
         connect(j, SIGNAL(foldersData(QMap<int, int>)),
                 this, SIGNAL(foldersData(QMap<int, int>)));
     }
-    else if(info.isFaceFoldersJob())
+    else if (info.isFaceFoldersJob())
     {
         connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)),
                 this, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)));
@@ -131,7 +131,7 @@ void TagsDBJobsThread::tagsListing(const TagsDBJobInfo& info)
                 this, SIGNAL(data(QList<ImageListerRecord>)));
     }
 
-    RJobCollection collection;
+    ActionJobCollection collection;
     collection.insert(j,0);
 
     appendJobs(collection);
@@ -154,7 +154,7 @@ void DatesDBJobsThread::datesListing(const DatesDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    if(info.isFoldersJob())
+    if (info.isFoldersJob())
     {
         connect(j, SIGNAL(foldersData(const QMap<QDateTime, int>&)),
                 this, SIGNAL(foldersData(const QMap<QDateTime, int>&)));
@@ -165,7 +165,7 @@ void DatesDBJobsThread::datesListing(const DatesDBJobInfo& info)
                 this, SIGNAL(data(const QList<ImageListerRecord>&)));
     }
 
-    RJobCollection collection;
+    ActionJobCollection collection;
     collection.insert(j,0);
 
     appendJobs(collection);
@@ -188,7 +188,7 @@ void GPSDBJobsThread::GPSListing(const GPSDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    if(info.isDirectQuery())
+    if (info.isDirectQuery())
     {
         connect(j, SIGNAL(directQueryData(QList<QVariant>)),
                 this, SIGNAL(directQueryData(QList<QVariant>)));
@@ -199,7 +199,7 @@ void GPSDBJobsThread::GPSListing(const GPSDBJobInfo& info)
                 this, SIGNAL(data(QList<ImageListerRecord>)));
     }
 
-    RJobCollection collection;
+    ActionJobCollection collection;
     collection.insert(j,0);
 
     appendJobs(collection);
@@ -222,7 +222,7 @@ void SearchesDBJobsThread::searchesListing(const SearchesDBJobInfo& info)
 
     connectFinishAndErrorSignals(j);
 
-    if(info.isDuplicatesJob())
+    if (info.isDuplicatesJob())
     {
 
         connect(j, SIGNAL(totalSize(int)),
@@ -237,7 +237,7 @@ void SearchesDBJobsThread::searchesListing(const SearchesDBJobInfo& info)
                 this, SIGNAL(data(QList<ImageListerRecord>)));
     }
 
-    RJobCollection collection;
+    ActionJobCollection collection;
     collection.insert(j,0);
 
     appendJobs(collection);

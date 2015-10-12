@@ -28,21 +28,16 @@
 
 #include <QThread>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RActionJob>
-
 // Local includes
 
+#include "actionthreadbase.h"
 #include "imageinfo.h"
 #include "metadatasynchronizer.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class MetadataTask : public RActionJob
+class MetadataTask : public ActionJob
 {
     Q_OBJECT
 

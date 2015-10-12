@@ -62,7 +62,7 @@ public:
 };
 
 IOJobsThread::IOJobsThread(QObject* const parent)
-    : RActionThreadBase(parent),
+    : ActionThreadBase(parent),
       d(new Private)
 {
 }
@@ -74,7 +74,7 @@ IOJobsThread::~IOJobsThread()
 
 void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
 
     foreach (const QUrl& url, srcFiles)
     {
@@ -91,7 +91,7 @@ void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
 
 void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
 
     foreach (const QUrl& url, srcFiles)
     {
@@ -108,7 +108,7 @@ void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
 
 void IOJobsThread::del(const QList<QUrl>& srcsToDelete, bool useTrash)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
 
     foreach (const QUrl& url, srcsToDelete)
     {
@@ -125,7 +125,7 @@ void IOJobsThread::del(const QList<QUrl>& srcsToDelete, bool useTrash)
 
 void IOJobsThread::listDTrashItems(const QString& collectionPath)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
 
     DTrashItemsListingJob* const j = new DTrashItemsListingJob(collectionPath);
 
@@ -182,7 +182,7 @@ void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
 
 void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
     RenameFileJob* const j = new RenameFileJob(srcToRename, newName);
 
     connectOneJob(j);
@@ -212,7 +212,7 @@ QUrl IOJobsThread::oldUrlToRename()
 void IOJobsThread::cancel()
 {
     d->isCanceled = true;
-    RActionThreadBase::cancel();
+    ActionThreadBase::cancel();
 }
 
 bool IOJobsThread::isCanceled()

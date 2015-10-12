@@ -51,7 +51,7 @@ public:
 // --------------------------------------------------------------------------------------
 
 ActionThread::ActionThread(QObject* const parent)
-    : RActionThreadBase(parent), d(new Private)
+    : ActionThreadBase(parent), d(new Private)
 {
     qRegisterMetaType<ActionData>();
 
@@ -84,7 +84,7 @@ void ActionThread::setSettings(const QueueSettings& settings)
 
 void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
 
     for(int i=0; i < items.size(); i++)
     {
@@ -112,7 +112,7 @@ void ActionThread::cancel()
     if (isRunning())
         emit signalCancelTask();
 
-    RActionThreadBase::cancel();
+    ActionThreadBase::cancel();
 }
 
 void ActionThread::slotThreadFinished()

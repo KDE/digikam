@@ -48,7 +48,7 @@ public:
 // -------------------------------------------------------
 
 ThumbsTask::ThumbsTask()
-    : RActionJob(),
+    : ActionJob(),
       d(new Private)
 {
     ThumbnailLoadThread* const thread = new ThumbnailLoadThread;

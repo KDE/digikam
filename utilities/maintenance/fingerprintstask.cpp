@@ -50,7 +50,7 @@ public:
 // -------------------------------------------------------
 
 FingerprintsTask::FingerprintsTask()
-    : RActionJob(), d(new Private)
+    : ActionJob(), d(new Private)
 {
 }
 

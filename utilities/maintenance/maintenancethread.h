@@ -24,25 +24,20 @@
 #ifndef MAINTENANCE_THREAD_H
 #define MAINTENANCE_THREAD_H
 
-// Libkdcraw includes
-
-#include <KDCRAW/RActionThreadBase>
-
 // Local includes
 
+#include "actionthreadbase.h"
 #include "metadatasynchronizer.h"
 #include "imageinfo.h"
 
 class QImage;
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
 
 class ImageQualitySettings;
 
-class MaintenanceThread : public RActionThreadBase
+class MaintenanceThread : public ActionThreadBase
 {
     Q_OBJECT
 

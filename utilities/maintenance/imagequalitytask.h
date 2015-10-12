@@ -28,18 +28,16 @@
 
 #include <QImage>
 
-// Libkdcraw includes
+// Local includes
 
-#include <KDCRAW/RActionJob>
-
-using namespace KDcrawIface;
+#include "actionthreadbase.h"
 
 namespace Digikam
 {
 
 class ImageQualitySettings;
 
-class ImageQualityTask : public RActionJob
+class ImageQualityTask : public ActionJob
 {
     Q_OBJECT
 

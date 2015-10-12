@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 MaintenanceThread::MaintenanceThread(QObject* const parent)
-    : RActionThreadBase(parent)
+    : ActionThreadBase(parent)
 {
     connect(this, SIGNAL(finished()),
             this, SLOT(slotThreadFinished()));
@@ -62,7 +62,7 @@ void MaintenanceThread::setUseMultiCore(const bool b)
 
 void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir, bool tagsOnly)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
 
     for(int i = 0; i < items.size(); i++)
     {
@@ -84,7 +84,7 @@ void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchro
 
 void MaintenanceThread::generateThumbs(const QStringList& paths)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
 
     for(int i = 0; i < paths.size(); i++)
     {
@@ -105,7 +105,7 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
 
 void MaintenanceThread::generateFingerprints(const QStringList& paths)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
 
     for(int i = 0; i < paths.size(); i++)
     {
@@ -126,7 +126,7 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
 
 void MaintenanceThread::sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality)
 {
-    RJobCollection collection;
+    ActionJobCollection collection;
 
     for(int i = 0; i < paths.size(); i++)
     {
@@ -150,7 +150,7 @@ void MaintenanceThread::cancel()
     if (isRunning())
         emit signalCanceled();
 
-    RActionThreadBase::cancel();
+    ActionThreadBase::cancel();
 }
 
 void MaintenanceThread::slotThreadFinished()

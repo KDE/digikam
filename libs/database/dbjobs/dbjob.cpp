@@ -23,10 +23,6 @@
 
 #include "dbjob.h"
 
-// Libkdcraw includes
-
-#include <KDCRAW/RActionJob>
-
 // Local includes
 
 #include "databaseaccess.h"
@@ -41,7 +37,7 @@ namespace Digikam
 {
 
 DBJob::DBJob()
-    : RActionJob()
+    : ActionJob()
 {
 }
 

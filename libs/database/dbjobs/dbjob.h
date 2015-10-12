@@ -24,25 +24,20 @@
 #ifndef DBJOB_H
 #define DBJOB_H
 
-// Libkdcraw includes
-
-#include <KDCRAW/RActionJob>
-
 // Local includes
 
 #include "dbjobinfo.h"
 #include "dbjobsthread.h"
 #include "imagelisterrecord.h"
 #include "duplicatesprogressobserver.h"
-
-using namespace KDcrawIface;
+#include "actionthreadbase.h"
 
 namespace Digikam
 {
 
 class DuplicatesProgressObserver;
 
-class DBJob : public RActionJob
+class DBJob : public ActionJob
 {
     Q_OBJECT
 
