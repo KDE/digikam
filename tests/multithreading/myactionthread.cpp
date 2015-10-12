@@ -32,6 +32,8 @@
 #include <QImage>
 #include <QDebug>
 
+// Libkdcraw includes
+
 #include <KDCRAW/KDcraw>
 
 // Local includes

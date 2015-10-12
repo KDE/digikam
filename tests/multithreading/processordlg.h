@@ -41,7 +41,7 @@ class ProcessorDlg : public QDialog
 
 public:
 
-    ProcessorDlg(const QList<QUrl> &list);
+    ProcessorDlg(const QList<QUrl>& list);
     ~ProcessorDlg();
 
 private :
