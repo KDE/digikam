@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="504" name="showfoto" >
+<gui version="505" name="showfoto" >
 
 <MenuBar>
 
@@ -63,7 +63,6 @@
     </Menu>
 
     <Menu name="Enhance" ><text>Enh&amp;ance</text>
-        <ActionList name="showfoto_bcg" />
     </Menu>
 
     <Menu name="Transform" ><text>Tra&amp;nsform</text>
@@ -80,7 +79,7 @@
     <Menu name="Decorate" ><text>&amp;Decorate</text>
     </Menu>
 
-    <Menu name="Filters" ><text>F&amp;ilters</text>
+    <Menu name="Filters" ><text>Effec&amp;ts</text>
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
