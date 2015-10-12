@@ -51,8 +51,7 @@
 #include "batchtoolutils.h"
 #include "jpegsettings.h"
 #include "pngsettings.h"
-
-
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -377,7 +376,10 @@ bool BatchTool::loadToDImg() const
     {
         QImage img;
         bool   ret = KDcraw::loadRawPreview(img, inputUrl().toLocalFile());
+        DMetadata meta(inputUrl().toLocalFile());
+        meta.setImageDimensions(QSize(img.width(), img.height()));
         d->image   = DImg(img);
+        d->image.setMetadata(meta.data());
         return ret;
     }
 
