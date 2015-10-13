@@ -1,0 +1,31 @@
+*****************************************************************************************************
+digiKam 4.14.0 - Release date: 2015-10-11
+
+NEW FEATURES:
+
+General : Add support of OpenCV 3.x.
+General : Overlay icons are resized accordingly with thumbnails sizes.
+General : New Overlay icon to quickly show an image in full-screen.
+General : Exiv2 mininum version bumped to 0.25 to prevent crash with video files.
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 349601 - digikam compile fine with OpenCV 2.X but not with 3.x.
+002 ==> 261568 - ICONVIEW : scale overlay action icons accordingly with thumb size [patch].
+003 ==> 336331 - Thumbnails size can not be changed in MapView mode.
+004 ==> 339082 - Allow a simpler way to place a photo in full-screen using overlay [patch].
+005 ==> 352338 - Digikam doesn't match Nikon lenses 35mm f/1.8G and 50mm f/1.8G.
+006 ==> 126149 - Album icon view stores both jpeg and raw (nef), handle both as one [patch].
+007 ==> 352919 - Crash on delete into image editor [patch].
+008 ==> 341819 - Auto-creation of date-based sub-albums ignored.
+009 ==> 353155 - Apply face tags to multiple images.
+010 ==> 237719 - Color effects: Neon / Find edges don't take parameters correctly.
+011 ==> 340373 - Crash on scanning video directory.
+012 ==> 285052 - SCAN : moving an album from one collection to another one do not update information.
+013 ==> 353600 - Wrong date (1970-01-01) on rename during raw import from Nikon D750.
+014 ==> 353614 - Crash shortly after opening application.
+015 ==> 141592 - Position of inserted text is not exact [patch].
+016 ==> 353608 - The preview has blocky artifacts reminiscent of chroma subsampling [patch].
+017 ==> 286373 - DNG don't get filtered as raw (group of items relevant).
+018 ==> 181813 - digiKam text decoration font size problem.
+019 ==> 353815 - Using Batch Queue Manager to extract preview images loses metadata.
