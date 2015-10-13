@@ -37,8 +37,8 @@
 namespace Digikam
 {
 
-FileActionMngr::Private::Private(FileActionMngr* const q)
-    : q(q)
+FileActionMngr::Private::Private(FileActionMngr* const qq)
+    : q(qq)
 {
     qRegisterMetaType<MetadataHub*>("MetadataHub*");
     qRegisterMetaType<FileActionImageInfoList>("FileActionImageInfoList");

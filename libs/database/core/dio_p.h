@@ -40,7 +40,7 @@ class DIO::Private : public WorkerObject
 
 public:
 
-    explicit Private(DIO* const q);
+    explicit Private(DIO* const qq);
 
     void albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest);
     void imagesToAlbum(int operation, const QList<ImageInfo> ids, const PAlbum* const dest);

@@ -79,7 +79,7 @@ class FileActionMngr::Private : public QObject
 
 public:
 
-    explicit Private(FileActionMngr* const q);
+    explicit Private(FileActionMngr* const qq);
     ~Private();
 
 Q_SIGNALS:

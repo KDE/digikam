@@ -41,10 +41,10 @@ class SparseModelIndexVector : public QVector<QModelIndex>
 {
 public:
 
-    SparseModelIndexVector(int rowCount, QAbstractItemModel* const model, int column)
+    SparseModelIndexVector(int rowCount, QAbstractItemModel* const model_, int column_)
         : QVector<QModelIndex>(rowCount),
-          model(model),
-          column(column)
+          model(model_),
+          column(column_)
     {
     }
 
@@ -61,7 +61,7 @@ public:
     }
 
 private:
-    
+
     // not to be used
     const QModelIndex& operator[](int i) const
     {

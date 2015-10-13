@@ -36,7 +36,7 @@ class ApplicationSettings::Private
 {
 public:
 
-    Private(ApplicationSettings* const q);
+    Private(ApplicationSettings* const qq);
     ~Private();
 
     void init();

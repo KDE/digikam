@@ -135,7 +135,7 @@ const QString ApplicationSettings::Private::configStringComparisonTypeEntry(QLat
 const QString ApplicationSettings::Private::configFaceDetectionAccuracyEntry(QLatin1String("Detection Accuracy"));
 const QString ApplicationSettings::Private::configApplicationStyleEntry(QLatin1String("Application Style"));
 
-ApplicationSettings::Private::Private(ApplicationSettings* const q)
+ApplicationSettings::Private::Private(ApplicationSettings* const qq)
     : showSplash(false),
       useTrash(false),
       showTrashDeleteDialog(false),
@@ -209,7 +209,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const q)
       syncToBaloo(false),
       faceDetectionAccuracy(0.8),
       stringComparisonType(ApplicationSettings::Natural),
-      q(q)
+      q(qq)
 {
 }
 
