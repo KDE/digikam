@@ -40,6 +40,7 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "albummanager.h"
 #include "loadingdescription.h"
 #include "kipiimagecollectionselector.h"
@@ -78,7 +79,8 @@ public:
 
     void thumbnail(const QUrl& url, int size);
     void thumbnails(const QList<QUrl>& list, int size);
-
+    void preview(const QUrl& url, int minSize);
+    
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
     KIPI::UploadWidget*            uploadWidget(QWidget* parent);
     QAbstractItemModel*            getTagTree() const;
@@ -104,6 +106,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
+    void slotGotImagePreview(const LoadingDescription&, const DImg&);
 
 private:
 

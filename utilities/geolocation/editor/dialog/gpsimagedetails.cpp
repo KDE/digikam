@@ -54,8 +54,6 @@
 #include "dimgpreviewitem.h"
 #include "dexpanderbox.h"
 
-
-
 namespace Digikam
 {
 

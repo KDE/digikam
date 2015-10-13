@@ -52,6 +52,7 @@
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "loadingcacheinterface.h"
+#include "previewloadthread.h"
 #include "filereadwritelock.h"
 #include "scancontroller.h"
 #include "imageattributeswatch.h"
@@ -71,12 +72,14 @@ public:
     Private()
     {
         tagModel        = 0;
+        previewThread   = 0;
         thumbLoadThread = 0;
         albumManager    = 0;
     }
 
     AlbumManager*        albumManager;
     ThumbnailLoadThread* thumbLoadThread;
+    PreviewLoadThread*   previewThread;
     QAbstractItemModel*  tagModel;
 };
 
@@ -84,8 +87,12 @@ KipiInterface::KipiInterface(QObject* const parent, const QString& name)
     : KIPI::Interface(parent, name),
       d(new Private())
 {
+    d->previewThread   = new PreviewLoadThread(this);
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->albumManager    = AlbumManager::instance();
+    
+    connect(d->previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+            this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
     connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
@@ -96,6 +103,7 @@ KipiInterface::KipiInterface(QObject* const parent, const QString& name)
 
 KipiInterface::~KipiInterface()
 {
+    
     delete d;
 }
 
@@ -232,6 +240,7 @@ int KipiInterface::features() const
            | KIPI::HostSupportsReadWriteLock
            | KIPI::HostSupportsPickLabel
            | KIPI::HostSupportsColorLabel
+           | KIPI::HostSupportsPreviews
           );
 }
 
@@ -292,9 +301,26 @@ void KipiInterface::slotCurrentAlbumChanged(QList<Album*> albums)
     emit currentAlbumChanged(!(albums.isEmpty()));
 }
 
+void KipiInterface::preview(const QUrl& url, int minSize)
+{
+    d->previewThread->loadFastButLarge(url.toLocalFile(), minSize);
+}
+
+void KipiInterface::slotGotImagePreview(const LoadingDescription& desc, const DImg& image)
+{
+    QUrl url = QUrl::fromLocalFile(desc.filePath);
+
+    if (desc.isThumbnail() || !url.isValid())
+    {
+        return;
+    }
+
+    emit gotPreview(url, image.copyQImage());
+}
+
 void KipiInterface::thumbnail(const QUrl& url, int /*size*/)
 {
-    // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
+    // NOTE: size is not used here. Cache use the max pixmap size to store thumbs.
     d->thumbLoadThread->find(ImageInfo::fromUrl(url).thumbnailIdentifier());
 }
 
