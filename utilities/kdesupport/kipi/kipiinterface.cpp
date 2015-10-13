@@ -61,6 +61,7 @@
 #include "kipiimageinfo.h"
 #include "kipiimagecollection.h"
 #include "progressmanager.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -72,14 +73,12 @@ public:
     Private()
     {
         tagModel        = 0;
-        previewThread   = 0;
         thumbLoadThread = 0;
         albumManager    = 0;
     }
 
     AlbumManager*        albumManager;
     ThumbnailLoadThread* thumbLoadThread;
-    PreviewLoadThread*   previewThread;
     QAbstractItemModel*  tagModel;
 };
 
@@ -87,13 +86,9 @@ KipiInterface::KipiInterface(QObject* const parent, const QString& name)
     : KIPI::Interface(parent, name),
       d(new Private())
 {
-    d->previewThread   = new PreviewLoadThread(this);
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->albumManager    = AlbumManager::instance();
     
-    connect(d->previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
-            this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
-
     connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
@@ -301,21 +296,9 @@ void KipiInterface::slotCurrentAlbumChanged(QList<Album*> albums)
     emit currentAlbumChanged(!(albums.isEmpty()));
 }
 
-void KipiInterface::preview(const QUrl& url, int minSize)
+QImage KipiInterface::preview(const QUrl& url, int minSize)
 {
-    d->previewThread->loadFastButLarge(url.toLocalFile(), minSize);
-}
-
-void KipiInterface::slotGotImagePreview(const LoadingDescription& desc, const DImg& image)
-{
-    QUrl url = QUrl::fromLocalFile(desc.filePath);
-
-    if (desc.isThumbnail() || !url.isValid())
-    {
-        return;
-    }
-
-    emit gotPreview(url, image.copyQImage());
+    return (PreviewLoadThread::loadFastButLargeSynchronously(url.toLocalFile(), minSize).copyQImage());
 }
 
 void KipiInterface::thumbnail(const QUrl& url, int /*size*/)

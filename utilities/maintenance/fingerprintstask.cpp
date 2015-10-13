@@ -50,7 +50,8 @@ public:
 // -------------------------------------------------------
 
 FingerprintsTask::FingerprintsTask()
-    : ActionJob(), d(new Private)
+    : ActionJob(),
+      d(new Private)
 {
 }
 
@@ -72,11 +73,11 @@ void FingerprintsTask::slotCancel()
 
 void FingerprintsTask::run()
 {
-    if(!d->cancel)
+    if (!d->cancel)
     {
         DImg dimg = PreviewLoadThread::loadFastSynchronously(d->path, HaarIface::preferredSize());
 
-        if(d->cancel)
+        if (d->cancel)
             return;
 
         if (!dimg.isNull())
