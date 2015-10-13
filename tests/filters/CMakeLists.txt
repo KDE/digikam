@@ -5,8 +5,16 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include_directories(
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(testautocrop_SRCS testautocrop.cpp)
@@ -14,15 +22,14 @@ add_executable(testautocrop ${testautocrop_SRCS})
 ecm_mark_nongui_executable(testautocrop)
 
 target_link_libraries(testautocrop
-
                       digikamcore
+
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Test
 
                       KF5::I18n
                       KF5::XmlGui
-
                       KF5::KExiv2
                       KF5::KDcraw
 
@@ -38,17 +45,16 @@ if(LENSFUN_FOUND)
     ecm_mark_nongui_executable(testlensfuniface)
 
     target_link_libraries(testlensfuniface
+                          digikamcore
 
-                      digikamcore
+                          Qt5::Core
 
-                      Qt5::Core
+                          KF5::I18n
+                          KF5::KIOCore
+                          KF5::KExiv2
 
-                      KF5::I18n
-                      KF5::KIOCore
-                      KF5::KExiv2
-
-                      ${LENSFUN_LIBRARIES}
-                      ${OpenCV_LIBRARIES}
+                          ${LENSFUN_LIBRARIES}
+                          ${OpenCV_LIBRARIES}
     )
 
     if(NOT WIN32)
@@ -69,7 +75,6 @@ add_executable (testnrestimate ${testnrestimate_SRCS})
 ecm_mark_nongui_executable(testnrestimate)
 
 target_link_libraries(testnrestimate
-
                       digikamcore
                       digikamdatabase
                       digikamcore

@@ -5,7 +5,13 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include_directories(
+    $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::ItemModels,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
@@ -15,9 +21,11 @@ ecm_mark_as_test(geolocationedit_test_correlator)
 
 target_link_libraries(geolocationedit_test_correlator
                       digikamcore
+
                       Qt5::Test
                       Qt5::Gui
                       Qt5::Xml
+
                       KF5::KIOCore
                       KF5::ItemModels
                      )
@@ -32,8 +40,10 @@ if(NOT WIN32)
 
     target_link_libraries(geolocationedit_test_gpsrgparsing
                           digikamcore
+
                           Qt5::Test
                           Qt5::Gui
+
                           KF5::ItemModels
                          )
 
@@ -47,8 +57,10 @@ ecm_mark_as_test(geolocationedit_test_gpsrgtagmodel)
 
 target_link_libraries(geolocationedit_test_gpsrgtagmodel
                       digikamcore
+
                       Qt5::Test
                       Qt5::Gui
+
                       KF5::ItemModels
                       KF5::I18n
                      )
@@ -61,8 +73,10 @@ ecm_mark_as_test(geolocationedit_test_gpsimageitem)
 
 target_link_libraries(geolocationedit_test_gpsimageitem
                       digikamcore
+
                       Qt5::Test
                       Qt5::Gui
+
                       KF5::ItemModels
                       KF5::KExiv2
                       KF5::KIOCore
@@ -77,6 +91,7 @@ ecm_mark_as_test(geolocationedit_test_simpletreemodel)
 
 target_link_libraries(geolocationedit_test_simpletreemodel
                       digikamcore
+
                       Qt5::Test
                       Qt5::Gui
                      )

@@ -5,9 +5,14 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(timestampupdatetest_SRCS timestampupdatetest.cpp)
@@ -16,14 +21,15 @@ add_test(timestampupdatetest timestampupdatetest)
 ecm_mark_as_test(timestampupdatetest)
 
 target_link_libraries(timestampupdatetest
-
                       digikamdatabase
                       digikamcore
 
                       Qt5::Gui
                       Qt5::Test
                       Qt5::DBus
+                      Qt5::Sql
 
+                      KF5::ConfigCore
                       KF5::I18n
                       KF5::KExiv2
                      )

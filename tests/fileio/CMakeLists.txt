@@ -5,10 +5,15 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include_directories(
+    $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
@@ -45,8 +50,10 @@ ecm_mark_nongui_executable(loadpgfdata)
 
 target_link_libraries(loadpgfdata
                       digikamcore
+
                       Qt5::Core
                       Qt5::Gui
+
                       KF5::KIOCore
                       KF5::I18n
 )
@@ -58,7 +65,6 @@ add_executable(loadsavethreadtest ${loadsavethreadtest_SRCS})
 ecm_mark_nongui_executable(loadsavethreadtest)
 
 target_link_libraries(loadsavethreadtest
-
                       digikamcore
 
                       Qt5::Core
@@ -79,7 +85,6 @@ add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
 ecm_mark_as_test(filesaveoptionsboxtest)
 
 target_link_libraries(filesaveoptionsboxtest
-
                       digikamcore
                       digikamdatabase
 
@@ -98,9 +103,12 @@ ecm_mark_as_test(statesavingobjecttest)
 
 target_link_libraries(statesavingobjecttest
                       digikamcore
+
                       Qt5::Gui
                       Qt5::Test
+
                       KF5::XmlGui
+
                       ${OpenCV_LIBRARIES}
 )
 

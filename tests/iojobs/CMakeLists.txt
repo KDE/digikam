@@ -4,6 +4,11 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+include_directories(
+    $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 set(IOJobsTest_SRCS iojobstest.cpp)
 
 add_executable(IOJobsTest ${IOJobsTest_SRCS})
@@ -11,7 +16,8 @@ add_executable(IOJobsTest ${IOJobsTest_SRCS})
 ecm_mark_nongui_executable(IOJobsTest)
 
 target_link_libraries(IOJobsTest
+                      digikamgui
+
                       Qt5::Core
                       Qt5::Test
-                      digikamgui
                      )
