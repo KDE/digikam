@@ -80,7 +80,7 @@ public:
     void thumbnail(const QUrl& url, int size);
     void thumbnails(const QList<QUrl>& list, int size);
     QImage preview(const QUrl& url, int minSize);
-    
+
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
     KIPI::UploadWidget*            uploadWidget(QWidget* parent);
     QAbstractItemModel*            getTagTree() const;
@@ -94,6 +94,7 @@ public:
     void    progressCompleted(const QString& id);
 
     KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const;
+    KIPI::RawProcessor*      createRawProcessor()                 const;
 
     void aboutToEdit(const QUrl& url, KIPI::EditHints hints);
     void editingFinished(const QUrl& url, KIPI::EditHints hints);

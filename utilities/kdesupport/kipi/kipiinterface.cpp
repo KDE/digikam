@@ -39,6 +39,10 @@
 #include <KIPI/ImageInfoShared>
 #include <KIPI/ImageCollectionShared>
 
+// LibKDcraw includes
+
+#include <KDCRAW/KDcraw>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -88,7 +92,7 @@ KipiInterface::KipiInterface(QObject* const parent, const QString& name)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->albumManager    = AlbumManager::instance();
-    
+
     connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
@@ -98,7 +102,6 @@ KipiInterface::KipiInterface(QObject* const parent, const QString& name)
 
 KipiInterface::~KipiInterface()
 {
-    
     delete d;
 }
 
@@ -236,6 +239,7 @@ int KipiInterface::features() const
            | KIPI::HostSupportsPickLabel
            | KIPI::HostSupportsColorLabel
            | KIPI::HostSupportsPreviews
+           | KIPI::HostSupportsRawProcessing
           );
 }
 
@@ -504,6 +508,57 @@ public:
 KIPI::FileReadWriteLock* KipiInterface::createReadWriteLock(const QUrl& url) const
 {
     return new KipiInterfaceFileReadWriteLock(url.toLocalFile());
+}
+
+// ---------------------------------------------------------------------------------------
+
+class KipiInterfaceRawProcessor : public KIPI::RawProcessor
+{
+public:
+
+    KipiInterfaceRawProcessor()
+    {
+    }
+
+    ~KipiInterfaceRawProcessor()
+    {
+    }
+
+    bool loadRawPreview(const QUrl& url, QImage& image)
+    {
+        return( decoder.loadRawPreview(image, url.toLocalFile()) );
+    }
+
+    bool decodeRawImage(const QUrl& url, QByteArray& imageData, int& width, int& height, int& rgbmax)
+    {
+        return( decoder.decodeRAWImage(url.toLocalFile(), RawDecodingSettings(), imageData, width, height, rgbmax) );
+    }
+
+    void cancel()
+    {
+    }
+    
+    bool isRawFile(const QUrl& url)
+    {
+        QString   rawFilesExt(rawFiles());
+        QFileInfo fileInfo(url.toLocalFile());
+
+        return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
+    }
+    
+    QString rawFiles()
+    {
+        return QLatin1String(decoder.rawFiles());
+    }
+
+private:
+
+    KDcrawIface::KDcraw decoder;
+};
+
+KIPI::RawProcessor* KipiInterface::createRawProcessor() const
+{
+    return new KipiInterfaceRawProcessor;
 }
 
 }  // namespace Digikam
