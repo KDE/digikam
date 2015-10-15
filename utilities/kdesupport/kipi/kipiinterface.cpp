@@ -80,11 +80,13 @@ public:
     {
         tagModel        = 0;
         thumbLoadThread = 0;
+        previewThread   = 0;
         albumManager    = 0;
     }
 
     AlbumManager*        albumManager;
     ThumbnailLoadThread* thumbLoadThread;
+    PreviewLoadThread*   previewThread;
     QAbstractItemModel*  tagModel;
 };
 
@@ -92,6 +94,7 @@ KipiInterface::KipiInterface(QObject* const parent, const QString& name)
     : KIPI::Interface(parent, name),
       d(new Private())
 {
+    d->previewThread   = new PreviewLoadThread(this);
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->albumManager    = AlbumManager::instance();
 
@@ -100,6 +103,9 @@ KipiInterface::KipiInterface(QObject* const parent, const QString& name)
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
+    
+    connect(d->previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+            this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 }
 
 KipiInterface::~KipiInterface()
@@ -307,6 +313,11 @@ QImage KipiInterface::preview(const QUrl& url, int minSize)
     return (PreviewLoadThread::loadFastButLargeSynchronously(url.toLocalFile(), minSize).copyQImage());
 }
 
+void KipiInterface::preview(const QUrl& url, int minSize, int /*TODO resizedTo*/)
+{
+    d->previewThread->loadFastButLarge(url.toLocalFile(), minSize);
+}
+
 void KipiInterface::thumbnail(const QUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs.
@@ -319,6 +330,18 @@ void KipiInterface::thumbnails(const QList<QUrl>& list, int size)
     {
         thumbnail(*it, size);
     }
+}
+
+void KipiInterface::slotGotImagePreview(const LoadingDescription& desc, const DImg& image)
+{
+    QUrl url = QUrl::fromLocalFile(desc.filePath);
+
+    if (desc.isThumbnail() || !url.isValid())
+    {
+        return;
+    }
+
+    emit gotPreview(url, image.copyQImage());
 }
 
 void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
