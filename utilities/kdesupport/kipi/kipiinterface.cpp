@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
 
 // Libkipi includes
 
@@ -49,6 +50,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "applicationsettings.h"
+#include "dcrawsettingswidget.h"
 #include "imageinfo.h"
 #include "metadatasettings.h"
 #include "collectionmanager.h"
@@ -531,7 +533,11 @@ public:
 
     bool decodeRawImage(const QUrl& url, QByteArray& imageData, int& width, int& height, int& rgbmax)
     {
-        return( decoder.decodeRAWImage(url.toLocalFile(), RawDecodingSettings(), imageData, width, height, rgbmax) );
+        RawDecodingSettings settings;
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
+        KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
+        DcrawSettingsWidget::readSettings(settings, group);
+        return( decoder.decodeRAWImage(url.toLocalFile(), settings, imageData, width, height, rgbmax) );
     }
 
     void cancel()

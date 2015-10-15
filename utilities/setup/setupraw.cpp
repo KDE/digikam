@@ -42,8 +42,6 @@
 #include "drawdecoding.h"
 #include "dcrawsettingswidget.h"
 
-
-
 namespace Digikam
 {
 

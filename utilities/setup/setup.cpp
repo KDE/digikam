@@ -252,17 +252,17 @@ Setup::Setup(QWidget* const parent)
                                        "<i>Configure non-destructive editing and versioning</i></qt>"));
     d->page_versioning->setIcon(QIcon::fromTheme(QLatin1String("view-catalog")));
 
-    d->rawPage  = new SetupRaw();
-    d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
-    d->page_raw->setHeader(i18n("<qt>Image Editor: RAW File Decoding<br/>"
-                                "<i>Configure RAW decoding settings of the image editor</i></qt>"));
-    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("rawbayer")));
-
     d->iofilesPage  = new SetupIOFiles();
     d->page_iofiles = addPage(d->iofilesPage, i18n("Saving Images"));
     d->page_iofiles->setHeader(i18n("<qt>Image Editor: Settings for Saving Image Files<br/>"
                                     "<i>Set default configuration used to save images with the image editor</i></qt>"));
     d->page_iofiles->setIcon(QIcon::fromTheme(QLatin1String("document-save-all")));
+
+    d->rawPage  = new SetupRaw();
+    d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
+    d->page_raw->setHeader(i18n("<qt>RAW Files Decoding<br/>"
+                                "<i>Configure RAW files decoding settings and behavior</i></qt>"));
+    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("rawbayer")));
 
     d->iccPage  = new SetupICC(buttonBox());
     d->page_icc = addPage(d->iccPage, i18n("Color Management"));
