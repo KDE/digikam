@@ -24,7 +24,3 @@ include_directories(
 )
 
 add_library(rawengine_srcs OBJECT ${librawengine_SRCS})
-
-if (BUILD_TESTING)
-    #add_subdirectory(tests)
-endif()
