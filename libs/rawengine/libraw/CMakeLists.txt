@@ -22,14 +22,6 @@ add_definitions(-DUSE_LCMS2)
 
 # -- Check dependencies --------------------------------------------------------------------------------
 
-# Jasper library check
-
-# Flag to use libjasper with LibRaw RedCine codec
-if(JASPER_FOUND)
-    add_definitions(-DUSE_JASPER)
-    include_directories(${JASPER_INCLUDE_DIR})
-endif()
-
 # OpenMP library detection (requires CMake >= 2.6.3)
 # NOTE: OpenMP under MacOSX do not support multithreading.
 
@@ -44,7 +36,17 @@ if(NOT APPLE)
         if("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
             set(OPENMP_LDFLAGS "-xopenmp")
         endif()
+        message(STATUS "LibRaw will be compiled with OpenMP support")
     endif()
+endif()
+
+# Jasper library check
+
+# Flag to use libjasper with LibRaw RedCine codec
+if(JASPER_FOUND)
+    add_definitions(-DUSE_JASPER)
+    include_directories(${JASPER_INCLUDE_DIR})
+    message(STATUS "LibRaw will be compiled with RedCine codec")
 endif()
 
 # For RawSpeed Codec Support
@@ -74,6 +76,7 @@ endif()
 
 # Flag to use libjpeg with LibRaw DNG lossy codec
 if(JPEG8_FOUND)
+    message(STATUS "LibRaw will be compiled with DNG lossy codec")
     add_definitions(-DUSE_JPEG)
     add_definitions(-DUSE_JPEG8)
     include_directories(${JPEG_INCLUDE_DIR})
@@ -106,14 +109,14 @@ endif()
 
 if(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed)
-
-    include_directories(${LIBXML2_INCLUDE_DIR} ${PTHREADS_INCLUDE_DIR})
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed
+                        ${LIBXML2_INCLUDE_DIR}
+                        ${PTHREADS_INCLUDE_DIR})
 
     # Flag to include RawSpeed codec with Libraw
-    add_definitions(-DUSE_RAWSPEED)
-
-    add_definitions(${LIBXML2_DEFINITIONS} ${PTHREADS_DEFINITIONS})
+    add_definitions(-DUSE_RAWSPEED
+                    ${LIBXML2_DEFINITIONS}
+                    ${PTHREADS_DEFINITIONS})
 
     set(librawspeed_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/ArwDecoder.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/BitPumpJPEG.cpp
