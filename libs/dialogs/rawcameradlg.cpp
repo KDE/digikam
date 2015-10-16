@@ -135,22 +135,20 @@ void RawCameraDlg::updateHeader(int results)
 
     if (!results)
     {
-        d->header->setText(i18np("<p>Using DRawDecoder library version %2<br/>"
-                                 "Using LibRaw version %3<br/>"
-                                 "1 model on the list</p>",
-                                 "Using LibRaw version %3<br/>"
-                                 "%1 models on the list</p>",
+        d->header->setText(i18np("Using LibRaw version %2<br/>"
+                                 "1 model on the list</p>",                                 
+                                 "Using LibRaw version %2<br/>"
+                                 "%1 models on the list</p>",                                 
                                  list.count(),
                                  librawVer
                                  ));
     }
     else
     {
-        d->header->setText(i18np("<p>Using DRawDecoder library version %2<br/>"
-                                 "Using LibRaw version %3<br/>"
-                                 "1 model on the list (found: %4)</p>",
-                                 "Using LibRaw version %3<br/>"
-                                 "%1 models on the list (found: %4)</p>",
+        d->header->setText(i18np("Using LibRaw version %2<br/>"
+                                 "1 model on the list (found: %3)</p>",
+                                 "Using LibRaw version %2<br/>"
+                                 "%1 models on the list (found: %3)</p>",
                                  list.count(),
                                  librawVer,
                                  results));
