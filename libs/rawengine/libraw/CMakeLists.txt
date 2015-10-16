@@ -22,6 +22,36 @@ add_definitions(-DUSE_LCMS2)
 
 # -- Check dependencies --------------------------------------------------------------------------------
 
+# Jasper library check
+
+# Flag to use libjasper with LibRaw RedCine codec
+if(JASPER_FOUND)
+    add_definitions(-DUSE_JASPER)
+    include_directories(${JASPER_INCLUDE_DIR})
+endif()
+
+# OpenMP library detection (requires CMake >= 2.6.3)
+# NOTE: OpenMP under MacOSX do not support multithreading.
+
+if(NOT APPLE)
+    find_package(OpenMP)
+
+    if(OPENMP_FOUND)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        if("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
+            set(OPENMP_LDFLAGS "-lgomp")
+        endif()
+        if("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
+            set(OPENMP_LDFLAGS "-xopenmp")
+        endif()
+    endif()
+endif()
+
+# For RawSpeed Codec Support
+
+find_package(LibXml2)
+find_package(Pthreads)
+
 # JPEG library check
 
 if(JPEG_FOUND)
@@ -42,43 +72,12 @@ if(JPEG_FOUND)
     endif()
 endif()
 
-#MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" FALSE "80" "needed for the LibRaw DNG lossy codec")
-
 # Flag to use libjpeg with LibRaw DNG lossy codec
 if(JPEG8_FOUND)
     add_definitions(-DUSE_JPEG)
     add_definitions(-DUSE_JPEG8)
     include_directories(${JPEG_INCLUDE_DIR})
 endif()
-
-# OpenMP library detection (requires CMake >= 2.6.3)
-# NOTE: OpenMP under MacOSX do not support multithreading.
-
-if(NOT APPLE)
-    find_package(OpenMP)
-
-    if(OPENMP_FOUND)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        if("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
-            set(OPENMP_LDFLAGS "-lgomp")
-        endif()
-        if("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
-            set(OPENMP_LDFLAGS "-xopenmp")
-        endif()
-    endif()
-endif()
-
-# Jasper library check
-
-# Flag to use libjasper with LibRaw RedCine codec
-if(JASPER_FOUND)
-    add_definitions(-DUSE_JASPER)
-    include_directories(${JASPER_INCLUDE_DIR})
-endif()
-
-# For RawSpeed Codec Support
-find_package(LibXml2)
-find_package(Pthreads)
 
 if(JPEG8_FOUND AND LIBXML2_FOUND AND PTHREADS_FOUND)
 
