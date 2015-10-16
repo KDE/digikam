@@ -40,7 +40,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -217,9 +217,9 @@ void PreviewLoadingTask::execute()
         // If not valid, get original size from LibRaw
         if (!originalSize.isValid())
         {
-            DcrawInfoContainer container;
+            RawInfo container;
 
-            if (KDcrawIface::KDcraw::rawFileIdentify(container, m_loadingDescription.filePath))
+            if (RawEngine::DRawDecoder::rawFileIdentify(container, m_loadingDescription.filePath))
             {
                 originalSize = container.imageSize;
             }
@@ -525,7 +525,7 @@ bool PreviewLoadingTask::loadLibRawPreview(int sizeLimit)
     }
 
     QImage kdcrawPreview;
-    KDcrawIface::KDcraw::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
+    RawEngine::DRawDecoder::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
 
     if (!kdcrawPreview.isNull() &&
         (sizeLimit == -1 || qMax(kdcrawPreview.width(), kdcrawPreview.height()) >= sizeLimit) )
@@ -545,7 +545,7 @@ bool PreviewLoadingTask::loadHalfSizeRaw()
         return false;
     }
 
-    KDcrawIface::KDcraw::loadHalfPreview(m_qimage, m_loadingDescription.filePath);
+    RawEngine::DRawDecoder::loadHalfPreview(m_qimage, m_loadingDescription.filePath);
     return (!m_qimage.isNull());
 }
 

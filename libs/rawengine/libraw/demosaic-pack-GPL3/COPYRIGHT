@@ -1,0 +1,15 @@
+
+AMaZE demosaic algorithm  (Aliasing Minimization and Zipper Elimination)
+copyright (c) 2008-2010  Emil Martinec <ejmartin@uchicago.edu>
+incorporating ideas of Luis Sanz Rodrigues and Paul Lee
+
+amaze_interpolate_RT.cc is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version. See LICENSE.txt for details.
+
+
+LibRaw adaptation and integration Copyright (C) 2010 Christos Stamatopoulos.
+
+
+

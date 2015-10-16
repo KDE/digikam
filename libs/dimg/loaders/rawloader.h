@@ -26,12 +26,9 @@
 #ifndef RAWLOADER_H
 #define RAWLOADER_H
 
-// Libkdcraw includes
-
-#include <KDCRAW/KDcraw>
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "dimgloader.h"
 #include "drawdecoding.h"
 #include "digikam_export.h"
@@ -43,7 +40,7 @@ namespace Digikam
 class DImg;
 class RawProcessingFilter;
 
-class DIGIKAM_EXPORT RAWLoader : public KDcraw, public DImgLoader
+class DIGIKAM_EXPORT RAWLoader : public DRawDecoder, public DImgLoader
 {
     Q_OBJECT
 

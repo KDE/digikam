@@ -40,7 +40,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RawDecodingSettings>
+#include "drawdecodersettings.h"
 
 // Local includes
 
@@ -48,7 +48,7 @@
 #include "dexpanderbox.h"
 #include "digikam_export.h"
 
-using namespace KDcrawIface;
+using namespace RawEngine;
 
 namespace Digikam
 {
@@ -95,14 +95,14 @@ public:
 
     void resetToDefault();
 
-    void setSettings(const RawDecodingSettings& settings);
-    RawDecodingSettings settings() const;
+    void setSettings(const DRawDecoderSettings& settings);
+    DRawDecoderSettings settings() const;
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    static void readSettings(RawDecodingSettings& setting, KConfigGroup& group);
-    static void writeSettings(const RawDecodingSettings& setting, KConfigGroup& group);
+    static void readSettings(DRawDecoderSettings& setting, KConfigGroup& group);
+    static void writeSettings(const DRawDecoderSettings& setting, KConfigGroup& group);
     
 Q_SIGNALS:
 

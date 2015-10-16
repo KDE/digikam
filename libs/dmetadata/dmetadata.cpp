@@ -41,8 +41,8 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/DcrawInfoContainer>
-#include <KDCRAW/KDcraw>
+#include "rawinfo.h"
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -132,9 +132,9 @@ bool DMetadata::applyChanges() const
 
 bool DMetadata::loadUsingDcraw(const QString& filePath) const
 {
-    DcrawInfoContainer identify;
+    RawInfo identify;
 
-    if (KDcraw::rawFileIdentify(identify, filePath))
+    if (DRawDecoder::rawFileIdentify(identify, filePath))
     {
         long int num=1, den=1;
 

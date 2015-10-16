@@ -42,11 +42,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <KDCRAW/KDcraw>
-#include <KDCRAW/RawFiles>
-
 // libkexiv2 includes
 
 #include <KExiv2/KExiv2Previews>
@@ -54,6 +49,8 @@
 
 // Local includes
 
+#include "drawdecoder.h"
+#include "rawfiles.h"
 #include "digikam_debug.h"
 #include "databasebackend.h"
 #include "dimg.h"
@@ -535,7 +532,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load Embedded preview with libraw";
 
-            if (KDcraw::loadEmbeddedPreview(qimage, path))
+            if (DRawDecoder::loadEmbeddedPreview(qimage, path))
             {
                 fromEmbeddedPreview = true;
                 profile             = metadata.getIccProfile();
@@ -547,7 +544,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load half preview with libraw";
 
             //TODO: Use DImg based loader instead?
-            KDcraw::loadHalfPreview(qimage, path);
+            DRawDecoder::loadHalfPreview(qimage, path);
         }
 
         // See bug #339144 : only handle preview if right libkexiv2 version is used.

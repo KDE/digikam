@@ -58,11 +58,11 @@ int main(int argc, char** argv)
     QFileInfo input(QString::fromUtf8(argv[1]));
     QString   outFilePath(input.baseName() + QLatin1String(".cropped.png"));
 
-    RawDecodingSettings settings;
+    DRawDecoderSettings settings;
     settings.halfSizeColorImage    = false;
     settings.sixteenBitsImage      = true;
     settings.RGBInterpolate4Colors = false;
-    settings.RAWQuality            = RawDecodingSettings::BILINEAR;
+    settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
     DImg img(input.filePath(), 0, DRawDecoding(settings));
 

@@ -73,9 +73,10 @@ target_link_libraries(showfoto
                       digikamcore
 
                       Qt5::Core
+
                       KF5::KExiv2
+
                       KF5::I18n
-                      KF5::KDcraw
                       KF5::KIOCore
                       KF5::JobWidgets
                       KF5::XmlGui

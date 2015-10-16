@@ -90,7 +90,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -302,7 +302,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     dcrawVersion->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
     dcrawVersion->setText(QString::fromLatin1("<a href=\"%1\">%2</a>")
                           .arg(QLatin1String("http://www.libraw.org"))
-                          .arg(QString::fromLatin1("libraw %1").arg(KDcraw::librawVersion())));
+                          .arg(QString::fromLatin1("libraw %1").arg(DRawDecoder::librawVersion())));
         
     demosaicingLayout->addWidget(dcrawVersion, 0, 2, 1, 1);
 
@@ -320,34 +320,34 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->RAWQualityComboBox = new DComboBox(d->demosaicingSettings);
 
     // Original dcraw demosaicing methods
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::BILINEAR, i18nc("@item:inlistbox Quality", "Bilinear"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VNG,      i18nc("@item:inlistbox Quality", "VNG"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::PPG,      i18nc("@item:inlistbox Quality", "PPG"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AHD,      i18nc("@item:inlistbox Quality", "AHD"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::BILINEAR, i18nc("@item:inlistbox Quality", "Bilinear"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::VNG,      i18nc("@item:inlistbox Quality", "VNG"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::PPG,      i18nc("@item:inlistbox Quality", "PPG"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::AHD,      i18nc("@item:inlistbox Quality", "AHD"));
 
     // Extended demosaicing method from GPL2 pack
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::DCB,      i18nc("@item:inlistbox Quality", "DCB"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::PL_AHD,   i18nc("@item:inlistbox Quality", "AHD v2"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AFD,      i18nc("@item:inlistbox Quality", "AFD"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD,      i18nc("@item:inlistbox Quality", "VCD"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD_AHD,  i18nc("@item:inlistbox Quality", "VCD & AHD"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::LMMSE,    i18nc("@item:inlistbox Quality", "LMMSE"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::DCB,      i18nc("@item:inlistbox Quality", "DCB"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::PL_AHD,   i18nc("@item:inlistbox Quality", "AHD v2"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::AFD,      i18nc("@item:inlistbox Quality", "AFD"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::VCD,      i18nc("@item:inlistbox Quality", "VCD"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::VCD_AHD,  i18nc("@item:inlistbox Quality", "VCD & AHD"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::LMMSE,    i18nc("@item:inlistbox Quality", "LMMSE"));
     // Extended demosaicing method from GPL3 pack
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AMAZE,    i18nc("@item:inlistbox Quality", "AMaZE"));
+    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::AMAZE,    i18nc("@item:inlistbox Quality", "AMaZE"));
 
     // GPL2 pack support
     {
-        for (int i=RawDecodingSettings::DCB ; i <=RawDecodingSettings::LMMSE ; ++i)
+        for (int i=DRawDecoderSettings::DCB ; i <=DRawDecoderSettings::LMMSE ; ++i)
             d->RAWQualityComboBox->combo()->setItemData(i, false, Qt::UserRole-1);
     }
 
     // GPL3 pack support
     {
-        d->RAWQualityComboBox->combo()->setItemData(RawDecodingSettings::AMAZE, false, Qt::UserRole-1);
+        d->RAWQualityComboBox->combo()->setItemData(DRawDecoderSettings::AMAZE, false, Qt::UserRole-1);
     }
 
-    d->RAWQualityComboBox->setDefaultIndex(RawDecodingSettings::BILINEAR);
-    d->RAWQualityComboBox->setCurrentIndex(RawDecodingSettings::BILINEAR);
+    d->RAWQualityComboBox->setDefaultIndex(DRawDecoderSettings::BILINEAR);
+    d->RAWQualityComboBox->setCurrentIndex(DRawDecoderSettings::BILINEAR);
     d->RAWQualityComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Quality (interpolation)</title>"
                                 "<para>Select here the demosaicing method to use when decoding RAW "
                                 "images. A demosaicing algorithm is a digital image process used to "
@@ -457,11 +457,11 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->whiteBalanceLabel    = new QLabel(i18nc("@label:listbox", "Method:"), d->whiteBalanceSettings);
     d->whiteBalanceComboBox = new DComboBox(d->whiteBalanceSettings);
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::NONE,   i18nc("@item:inlistbox", "Default D65"));
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CAMERA, i18nc("@item:inlistbox", "Camera"));
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::AUTO,   i18nc("@item:inlistbox set while balance automatically", "Automatic"));
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CUSTOM, i18nc("@item:inlistbox set white balance manually", "Manual"));
-    d->whiteBalanceComboBox->setDefaultIndex(RawDecodingSettings::CAMERA);
+    d->whiteBalanceComboBox->insertItem(DRawDecoderSettings::NONE,   i18nc("@item:inlistbox", "Default D65"));
+    d->whiteBalanceComboBox->insertItem(DRawDecoderSettings::CAMERA, i18nc("@item:inlistbox", "Camera"));
+    d->whiteBalanceComboBox->insertItem(DRawDecoderSettings::AUTO,   i18nc("@item:inlistbox set while balance automatically", "Automatic"));
+    d->whiteBalanceComboBox->insertItem(DRawDecoderSettings::CUSTOM, i18nc("@item:inlistbox set white balance manually", "Manual"));
+    d->whiteBalanceComboBox->setDefaultIndex(DRawDecoderSettings::CAMERA);
     d->whiteBalanceComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>White Balance</title>"
                                 "<para>Configure the raw white balance:</para>"
                                 "<para><list><item><emphasis strong='true'>Default D65</emphasis>: "
@@ -626,12 +626,12 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->noiseReductionLabel    = new QLabel(i18nc("@label:listbox", "Noise reduction:"), d->correctionsSettings);
     d->noiseReductionComboBox = new DComboBox(d->colormanSettings);
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::NONR,       i18nc("@item:inlistbox Noise Reduction", "None"));
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::WAVELETSNR, i18nc("@item:inlistbox Noise Reduction", "Wavelets"));
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::FBDDNR,     i18nc("@item:inlistbox Noise Reduction", "FBDD"));
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::LINENR,     i18nc("@item:inlistbox Noise Reduction", "CFA Line Denoise"));
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::IMPULSENR,  i18nc("@item:inlistbox Noise Reduction", "Impulse Denoise"));
-    d->noiseReductionComboBox->setDefaultIndex(RawDecodingSettings::NONR);
+    d->noiseReductionComboBox->insertItem(DRawDecoderSettings::NONR,       i18nc("@item:inlistbox Noise Reduction", "None"));
+    d->noiseReductionComboBox->insertItem(DRawDecoderSettings::WAVELETSNR, i18nc("@item:inlistbox Noise Reduction", "Wavelets"));
+    d->noiseReductionComboBox->insertItem(DRawDecoderSettings::FBDDNR,     i18nc("@item:inlistbox Noise Reduction", "FBDD"));
+    d->noiseReductionComboBox->insertItem(DRawDecoderSettings::LINENR,     i18nc("@item:inlistbox Noise Reduction", "CFA Line Denoise"));
+    d->noiseReductionComboBox->insertItem(DRawDecoderSettings::IMPULSENR,  i18nc("@item:inlistbox Noise Reduction", "Impulse Denoise"));
+    d->noiseReductionComboBox->setDefaultIndex(DRawDecoderSettings::NONR);
     d->noiseReductionComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Noise Reduction</title>"
                                 "<para>Select here the noise reduction method to apply during RAW "
                                 "decoding.</para>"
@@ -714,10 +714,10 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->inputColorSpaceLabel     = new QLabel(i18nc("@label:listbox", "Camera Profile:"), d->colormanSettings);
     d->inputColorSpaceComboBox  = new DComboBox(d->colormanSettings);
-    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::NOINPUTCS,     i18nc("@item:inlistbox Camera Profile", "None"));
-    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::EMBEDDED,      i18nc("@item:inlistbox Camera Profile", "Embedded"));
-    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMINPUTCS, i18nc("@item:inlistbox Camera Profile", "Custom"));
-    d->inputColorSpaceComboBox->setDefaultIndex(RawDecodingSettings::NOINPUTCS);
+    d->inputColorSpaceComboBox->insertItem(DRawDecoderSettings::NOINPUTCS,     i18nc("@item:inlistbox Camera Profile", "None"));
+    d->inputColorSpaceComboBox->insertItem(DRawDecoderSettings::EMBEDDED,      i18nc("@item:inlistbox Camera Profile", "Embedded"));
+    d->inputColorSpaceComboBox->insertItem(DRawDecoderSettings::CUSTOMINPUTCS, i18nc("@item:inlistbox Camera Profile", "Custom"));
+    d->inputColorSpaceComboBox->setDefaultIndex(DRawDecoderSettings::NOINPUTCS);
     d->inputColorSpaceComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Camera Profile</title>"
                                 "<para>Select here the input color space used to decode RAW data.</para>"
                                 "<para><list><item><emphasis strong='true'>None</emphasis>: no "
@@ -733,13 +733,13 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->outputColorSpaceLabel    = new QLabel(i18nc("@label:listbox", "Workspace:"), d->colormanSettings);
     d->outputColorSpaceComboBox = new DComboBox( d->colormanSettings );
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::RAWCOLOR,       i18nc("@item:inlistbox Workspace", "Raw (no profile)"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::SRGB,           i18nc("@item:inlistbox Workspace", "sRGB"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::ADOBERGB,       i18nc("@item:inlistbox Workspace", "Adobe RGB"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::WIDEGAMMUT,     i18nc("@item:inlistbox Workspace", "Wide Gamut"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::PROPHOTO,       i18nc("@item:inlistbox Workspace", "Pro-Photo"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMOUTPUTCS, i18nc("@item:inlistbox Workspace", "Custom"));
-    d->outputColorSpaceComboBox->setDefaultIndex(RawDecodingSettings::SRGB);
+    d->outputColorSpaceComboBox->insertItem(DRawDecoderSettings::RAWCOLOR,       i18nc("@item:inlistbox Workspace", "Raw (no profile)"));
+    d->outputColorSpaceComboBox->insertItem(DRawDecoderSettings::SRGB,           i18nc("@item:inlistbox Workspace", "sRGB"));
+    d->outputColorSpaceComboBox->insertItem(DRawDecoderSettings::ADOBERGB,       i18nc("@item:inlistbox Workspace", "Adobe RGB"));
+    d->outputColorSpaceComboBox->insertItem(DRawDecoderSettings::WIDEGAMMUT,     i18nc("@item:inlistbox Workspace", "Wide Gamut"));
+    d->outputColorSpaceComboBox->insertItem(DRawDecoderSettings::PROPHOTO,       i18nc("@item:inlistbox Workspace", "Pro-Photo"));
+    d->outputColorSpaceComboBox->insertItem(DRawDecoderSettings::CUSTOMOUTPUTCS, i18nc("@item:inlistbox Workspace", "Custom"));
+    d->outputColorSpaceComboBox->setDefaultIndex(DRawDecoderSettings::SRGB);
     d->outputColorSpaceComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Workspace</title>"
                                 "<para>Select here the output color space used to decode RAW data.</para>"
                                 "<para><list><item><emphasis strong='true'>Raw (linear)</emphasis>: "
@@ -934,7 +934,7 @@ DFileSelector* DcrawSettingsWidget::outputProfileUrlEdit() const
 
 void DcrawSettingsWidget::resetToDefault()
 {
-    setSettings(RawDecodingSettings());
+    setSettings(DRawDecoderSettings());
 }
 
 void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
@@ -987,14 +987,14 @@ void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
 
     switch(item)
     {
-        case RawDecodingSettings::WAVELETSNR:
-        case RawDecodingSettings::FBDDNR:
-        case RawDecodingSettings::LINENR:
+        case DRawDecoderSettings::WAVELETSNR:
+        case DRawDecoderSettings::FBDDNR:
+        case DRawDecoderSettings::LINENR:
             d->NRSpinBox2->setVisible(false);
             d->NRLabel2->setVisible(false);
             break;
 
-        case RawDecodingSettings::IMPULSENR:
+        case DRawDecoderSettings::IMPULSENR:
             d->NRLabel1->setText(i18nc("@label", "Luminance:"));
             d->NRSpinBox1->setWhatsThis(i18nc("@info:whatsthis", "<title>Luminance</title>"
                                 "<para>Amount of Luminance impulse noise reduction.</para>"));
@@ -1063,31 +1063,31 @@ void DcrawSettingsWidget::slotExpoCorrectionShiftChanged(double ev)
 
 void DcrawSettingsWidget::slotInputColorSpaceChanged(int item)
 {
-    d->inIccUrlEdit->setEnabled(item == RawDecodingSettings::CUSTOMINPUTCS);
+    d->inIccUrlEdit->setEnabled(item == DRawDecoderSettings::CUSTOMINPUTCS);
 }
 
 void DcrawSettingsWidget::slotOutputColorSpaceChanged(int item)
 {
-    d->outIccUrlEdit->setEnabled(item == RawDecodingSettings::CUSTOMOUTPUTCS);
+    d->outIccUrlEdit->setEnabled(item == DRawDecoderSettings::CUSTOMOUTPUTCS);
 }
 
 void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
 {
-    switch(quality)
+    switch (quality)
     {
-        case RawDecodingSettings::DCB:
-        case RawDecodingSettings::VCD_AHD:
+        case DRawDecoderSettings::DCB:
+        case DRawDecoderSettings::VCD_AHD:
             // These options can be only avaialble if Libraw use GPL2 pack.
-            d->medianFilterPassesLabel->setEnabled(KDcraw::librawUseGPL2DemosaicPack());
-            d->medianFilterPassesSpinBox->setEnabled(KDcraw::librawUseGPL2DemosaicPack());
-            d->refineInterpolationBox->setEnabled(KDcraw::librawUseGPL2DemosaicPack());
+            d->medianFilterPassesLabel->setEnabled(true);
+            d->medianFilterPassesSpinBox->setEnabled(true);
+            d->refineInterpolationBox->setEnabled(true);
             break;
 
-        case RawDecodingSettings::PL_AHD:
-        case RawDecodingSettings::AFD:
-        case RawDecodingSettings::VCD:
-        case RawDecodingSettings::LMMSE:
-        case RawDecodingSettings::AMAZE:
+        case DRawDecoderSettings::PL_AHD:
+        case DRawDecoderSettings::AFD:
+        case DRawDecoderSettings::VCD:
+        case DRawDecoderSettings::LMMSE:
+        case DRawDecoderSettings::AMAZE:
             d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
             d->refineInterpolationBox->setEnabled(false);
@@ -1114,19 +1114,19 @@ bool DcrawSettingsWidget::brightnessSettingsIsEnabled() const
     return d->brightnessSpinBox->isEnabled();
 }
 
-void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
+void DcrawSettingsWidget::setSettings(const DRawDecoderSettings& settings)
 {
     d->sixteenBitsImage->setChecked(settings.sixteenBitsImage);
 
     switch(settings.whiteBalance)
     {
-        case RawDecodingSettings::CAMERA:
+        case DRawDecoderSettings::CAMERA:
             d->whiteBalanceComboBox->setCurrentIndex(1);
             break;
-        case RawDecodingSettings::AUTO:
+        case DRawDecoderSettings::AUTO:
             d->whiteBalanceComboBox->setCurrentIndex(2);
             break;
-        case RawDecodingSettings::CUSTOM:
+        case DRawDecoderSettings::CUSTOM:
             d->whiteBalanceComboBox->setCurrentIndex(3);
             break;
         default:
@@ -1170,36 +1170,15 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
 
     int q = settings.RAWQuality;
 
-    // If Libraw do not support GPL2 pack, reset to BILINEAR.
-    if (!KDcraw::librawUseGPL2DemosaicPack())
-    {
-        for (int i=RawDecodingSettings::DCB ; i <=RawDecodingSettings::LMMSE ; ++i)
-        {
-            if (q == i)
-            {
-                q = RawDecodingSettings::BILINEAR;
-                qCDebug(LOG_WIDGETS) << "Libraw GPL2 pack not avaialble. Raw quality set to Bilinear";
-                break;
-            }
-        }
-    }
-
-    // If Libraw do not support GPL3 pack, reset to BILINEAR.
-    if (!KDcraw::librawUseGPL3DemosaicPack() && (q == RawDecodingSettings::AMAZE))
-    {
-        q = RawDecodingSettings::BILINEAR;
-        qCDebug(LOG_WIDGETS) << "Libraw GPL3 pack not avaialble. Raw quality set to Bilinear";
-    }
-    
     d->RAWQualityComboBox->setCurrentIndex(q);
 
     switch(q)
     {
-        case RawDecodingSettings::DCB:
+        case DRawDecoderSettings::DCB:
             d->medianFilterPassesSpinBox->setValue(settings.dcbIterations);
             d->refineInterpolationBox->setChecked(settings.dcbEnhanceFl);
             break;
-        case RawDecodingSettings::VCD_AHD:
+        case DRawDecoderSettings::VCD_AHD:
             d->medianFilterPassesSpinBox->setValue(settings.eeciRefine);
             d->refineInterpolationBox->setChecked(settings.eeciRefine);
             break;
@@ -1236,24 +1215,24 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->outIccUrlEdit->lineEdit()->setText(settings.outputProfile);
 }
 
-RawDecodingSettings DcrawSettingsWidget::settings() const
+DRawDecoderSettings DcrawSettingsWidget::settings() const
 {
-    RawDecodingSettings prm;
+    DRawDecoderSettings prm;
     prm.sixteenBitsImage = d->sixteenBitsImage->isChecked();
 
     switch(d->whiteBalanceComboBox->currentIndex())
     {
         case 1:
-            prm.whiteBalance = RawDecodingSettings::CAMERA;
+            prm.whiteBalance = DRawDecoderSettings::CAMERA;
             break;
         case 2:
-            prm.whiteBalance = RawDecodingSettings::AUTO;
+            prm.whiteBalance = DRawDecoderSettings::AUTO;
             break;
         case 3:
-            prm.whiteBalance = RawDecodingSettings::CUSTOM;
+            prm.whiteBalance = DRawDecoderSettings::CUSTOM;
             break;
         default:
-            prm.whiteBalance = RawDecodingSettings::NONE;
+            prm.whiteBalance = DRawDecoderSettings::NONE;
             break;
     }
 
@@ -1286,14 +1265,14 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.enableWhitePoint     = d->whitePointCheckBox->isChecked();
     prm.whitePoint           = d->whitePointSpinBox->value();
 
-    prm.RAWQuality           = (RawDecodingSettings::DecodingQuality)d->RAWQualityComboBox->currentIndex();
+    prm.RAWQuality           = (DRawDecoderSettings::DecodingQuality)d->RAWQualityComboBox->currentIndex();
     switch(prm.RAWQuality)
     {
-        case RawDecodingSettings::DCB:
+        case DRawDecoderSettings::DCB:
             prm.dcbIterations      = d->medianFilterPassesSpinBox->value();
             prm.dcbEnhanceFl       = d->refineInterpolationBox->isChecked();
             break;
-        case RawDecodingSettings::VCD_AHD:
+        case DRawDecoderSettings::VCD_AHD:
             prm.esMedPasses        = d->medianFilterPassesSpinBox->value();
             prm.eeciRefine         = d->refineInterpolationBox->isChecked();
             break;
@@ -1302,18 +1281,18 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
             break;
     }
 
-    prm.NRType = (RawDecodingSettings::NoiseReduction)d->noiseReductionComboBox->currentIndex();
+    prm.NRType = (DRawDecoderSettings::NoiseReduction)d->noiseReductionComboBox->currentIndex();
     switch (prm.NRType)
     {
-        case RawDecodingSettings::NONR:
+        case DRawDecoderSettings::NONR:
         {
             prm.NRThreshold     = 0;
             prm.NRChroThreshold = 0;
             break;
         }
-        case RawDecodingSettings::WAVELETSNR:
-        case RawDecodingSettings::FBDDNR:
-        case RawDecodingSettings::LINENR:
+        case DRawDecoderSettings::WAVELETSNR:
+        case DRawDecoderSettings::FBDDNR:
+        case DRawDecoderSettings::LINENR:
         {
             prm.NRThreshold     = d->NRSpinBox1->value();
             prm.NRChroThreshold = 0;
@@ -1335,8 +1314,8 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.expoCorrectionShift     = d->shiftExpoFromEvToLinear(d->expoCorrectionShiftSpinBox->value());
     prm.expoCorrectionHighlight = d->expoCorrectionHighlightSpinBox->value();
 
-    prm.inputColorSpace         = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
-    prm.outputColorSpace        = (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
+    prm.inputColorSpace         = (DRawDecoderSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
+    prm.outputColorSpace        = (DRawDecoderSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
     prm.inputProfile            = d->inIccUrlEdit->lineEdit()->text();
     prm.outputProfile           = d->outIccUrlEdit->lineEdit()->text();
 
@@ -1345,7 +1324,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
 
 void DcrawSettingsWidget::readSettings(KConfigGroup& group)
 {
-    RawDecodingSettings prm;
+    DRawDecoderSettings prm;
     readSettings(prm, group);
     
     setSettings(prm);
@@ -1354,25 +1333,25 @@ void DcrawSettingsWidget::readSettings(KConfigGroup& group)
 
 void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
 {
-    RawDecodingSettings prm = settings();
+    DRawDecoderSettings prm = settings();
     writeSettings(prm, group);
 
     DExpanderBox::writeSettings(group);
 }
 
-void DcrawSettingsWidget::readSettings(RawDecodingSettings& prm, KConfigGroup& group)
+void DcrawSettingsWidget::readSettings(DRawDecoderSettings& prm, KConfigGroup& group)
 {
-    RawDecodingSettings defaultPrm;
+    DRawDecoderSettings defaultPrm;
 
     prm.fixColorsHighlights     = group.readEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,                                     defaultPrm.fixColorsHighlights);
     prm.sixteenBitsImage        = group.readEntry(OPTIONDECODESIXTEENBITENTRY,                                        defaultPrm.sixteenBitsImage);
-    prm.whiteBalance            = (RawDecodingSettings::WhiteBalance)group.readEntry(OPTIONWHITEBALANCEENTRY,         (int)defaultPrm.whiteBalance);
+    prm.whiteBalance            = (DRawDecoderSettings::WhiteBalance)group.readEntry(OPTIONWHITEBALANCEENTRY,         (int)defaultPrm.whiteBalance);
     prm.customWhiteBalance      = group.readEntry(OPTIONCUSTOMWHITEBALANCEENTRY,                                      defaultPrm.customWhiteBalance);
     prm.customWhiteBalanceGreen = group.readEntry(OPTIONCUSTOMWBGREENENTRY,                                           defaultPrm.customWhiteBalanceGreen);
     prm.RGBInterpolate4Colors   = group.readEntry(OPTIONFOURCOLORRGBENTRY,                                            defaultPrm.RGBInterpolate4Colors);
     prm.unclipColors            = group.readEntry(OPTIONUNCLIPCOLORSENTRY,                                            defaultPrm.unclipColors);
     prm.DontStretchPixels       = group.readEntry(OPTIONDONTSTRETCHPIXELSENTRY,                                       defaultPrm.DontStretchPixels);
-    prm.NRType                  = (RawDecodingSettings::NoiseReduction)group.readEntry(OPTIONNOISEREDUCTIONTYPEENTRY, (int)defaultPrm.NRType);
+    prm.NRType                  = (DRawDecoderSettings::NoiseReduction)group.readEntry(OPTIONNOISEREDUCTIONTYPEENTRY, (int)defaultPrm.NRType);
     prm.brightness              = group.readEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,                                    defaultPrm.brightness);
     prm.enableBlackPoint        = group.readEntry(OPTIONUSEBLACKPOINTENTRY,                                           defaultPrm.enableBlackPoint);
     prm.blackPoint              = group.readEntry(OPTIONBLACKPOINTENTRY,                                              defaultPrm.blackPoint);
@@ -1383,8 +1362,8 @@ void DcrawSettingsWidget::readSettings(RawDecodingSettings& prm, KConfigGroup& g
     prm.enableCACorrection      = group.readEntry(OPTIONUSECACORRECTIONENTRY,                                         defaultPrm.enableCACorrection);
     prm.caMultiplier[0]         = group.readEntry(OPTIONCAREDMULTIPLIERENTRY,                                         defaultPrm.caMultiplier[0]);
     prm.caMultiplier[1]         = group.readEntry(OPTIONCABLUEMULTIPLIERENTRY,                                        defaultPrm.caMultiplier[1]);
-    prm.RAWQuality              = (RawDecodingSettings::DecodingQuality)group.readEntry(OPTIONDECODINGQUALITYENTRY,   (int)defaultPrm.RAWQuality);
-    prm.outputColorSpace        = (RawDecodingSettings::OutputColorSpace)group.readEntry(OPTIONOUTPUTCOLORSPACEENTRY, (int)defaultPrm.outputColorSpace);
+    prm.RAWQuality              = (DRawDecoderSettings::DecodingQuality)group.readEntry(OPTIONDECODINGQUALITYENTRY,   (int)defaultPrm.RAWQuality);
+    prm.outputColorSpace        = (DRawDecoderSettings::OutputColorSpace)group.readEntry(OPTIONOUTPUTCOLORSPACEENTRY, (int)defaultPrm.outputColorSpace);
     prm.autoBrightness          = group.readEntry(OPTIONAUTOBRIGHTNESSENTRY,                                          defaultPrm.autoBrightness);
 
     //-- Extended demosaicing settings ----------------------------------------------------------
@@ -1399,7 +1378,7 @@ void DcrawSettingsWidget::readSettings(RawDecodingSettings& prm, KConfigGroup& g
     prm.expoCorrectionHighlight = group.readEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY,                                 defaultPrm.expoCorrectionHighlight);
 }
 
-void DcrawSettingsWidget::writeSettings(const RawDecodingSettings& prm, KConfigGroup& group)
+void DcrawSettingsWidget::writeSettings(const DRawDecoderSettings& prm, KConfigGroup& group)
 {
     group.writeEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,     prm.fixColorsHighlights);
     group.writeEntry(OPTIONDECODESIXTEENBITENTRY,        prm.sixteenBitsImage);

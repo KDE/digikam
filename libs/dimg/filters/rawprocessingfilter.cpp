@@ -24,9 +24,9 @@
 
 #include "rawprocessingfilter.h"
 
-// KDcraw includes
+// DRawDecoder includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 

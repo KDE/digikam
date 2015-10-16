@@ -36,7 +36,6 @@ endif()
 
 include_directories(
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
@@ -50,9 +49,7 @@ include_directories(
 )
 
 if(KF5KFace_FOUND)
-    include_directories(
-        $<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>
-    )
+    include_directories($<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 add_library(maintenance_src OBJECT ${libmaintenance_SRCS})

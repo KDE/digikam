@@ -31,12 +31,9 @@
 #include <QList>
 #include <QMetaType>
 
-// Libkdcraw includes
-
-#include <KDCRAW/RawDecodingSettings>
-
 // Local includes
 
+#include "drawdecodersettings.h"
 #include "digikam_export.h"
 #include "bcgcontainer.h"
 #include "wbcontainer.h"
@@ -44,7 +41,7 @@
 
 class QDomElement;
 
-using namespace KDcrawIface;
+using namespace RawEngine;
 
 namespace Digikam
 {
@@ -58,9 +55,9 @@ public:
      */
     DRawDecoding();
 
-    /** Copy constructor. Creates a copy of a RawDecodingSettings object.
+    /** Copy constructor. Creates a copy of a DRawDecoderSettings object.
      */
-    explicit DRawDecoding(const RawDecodingSettings& prm);
+    explicit DRawDecoding(const DRawDecoderSettings& prm);
 
     /** Standard destructor
      */
@@ -90,14 +87,14 @@ public:
 
     /** Used by BQM to read/store Queue Raw decoding settings from/to configuration file
      */
-    static void decodingSettingsToXml(const RawDecodingSettings& prm, QDomElement& elm);
-    static void decodingSettingsFromXml(const QDomElement& elm, RawDecodingSettings& prm);
+    static void decodingSettingsToXml(const DRawDecoderSettings& prm, QDomElement& elm);
+    static void decodingSettingsFromXml(const QDomElement& elm, DRawDecoderSettings& prm);
 
 public:
 
     /** All Raw decoding settings provided by libkdcraw.
      */
-    RawDecodingSettings rawPrm;
+    DRawDecoderSettings rawPrm;
 
     /// Post Processing settings ----------------------------------------------------
 

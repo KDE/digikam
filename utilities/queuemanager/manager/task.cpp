@@ -153,7 +153,7 @@ void Task::run()
         d->tool->setSettings(set.settings);
         d->tool->setIOFileSettings(d->settings.ioFileSettings);
         d->tool->setRawLoadingRules(d->settings.rawLoadingRule);
-        d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
+        d->tool->setDRawDecoderSettings(d->settings.rawDecodingSettings);
         d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
         d->tool->setLastChainedTool(index == d->tools.m_toolsList.count());
         d->tool->setOutputUrlFromInputUrl();

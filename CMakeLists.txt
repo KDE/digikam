@@ -58,7 +58,6 @@ set(KF5_VERSION         "5.1.0")
 set(REQUIRED_QT_VERSION "5.2.0")
 set(KIPI_MIN_VERSION    "5.0.0")
 set(KEXIV2_MIN_VERSION  "5.0.0")
-set(KDCRAW_MIN_VERSION  "5.0.0")
 set(KFACE_MIN_VERSION   "5.0.0")
 set(KSANE_MIN_VERSION   "5.0.0")
 set(PGF_MIN_VERSION     "6.12.24")
@@ -172,7 +171,6 @@ find_package(EXPAT                  REQUIRED)  # For DNGWriter: XMP SDK need Exp
 find_package(Threads                REQUIRED)  # For DNGWriter: DNG SDK need native threads support.
 
 DETECT_LIBKEXIV2(${KEXIV2_MIN_VERSION})
-DETECT_LIBKDCRAW(${KDCRAW_MIN_VERSION})
 
 # -- check OpenCV --------------------------------------------------------------------------------
 
@@ -427,7 +425,6 @@ PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"   
 PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"                                            "(version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
 PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2" "(version >= ${KEXIV2_MIN_VERSION})" KF5KExiv2_FOUND)
-PRINT_LIBRARY_STATUS("libkdcraw"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw" "(version >= ${KDCRAW_MIN_VERSION})" KF5KDcraw_FOUND)
 PRINT_LIBRARY_STATUS("libexpat"               "http://expat.sourceforge.net"                                     "(version >= 2.0.0)"                 EXPAT_FOUND)
 PRINT_LIBRARY_STATUS("native threads support" ""                                                                 ""                                   CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
 
@@ -456,7 +453,6 @@ if(Qt5_FOUND       AND
    LCMS2_FOUND     AND
    Boost_FOUND     AND
    KF5KExiv2_FOUND AND
-   KF5KDcraw_FOUND AND
    PGF_FOUND       AND
    OpenCV_FOUND    AND
    EXPAT_FOUND     AND

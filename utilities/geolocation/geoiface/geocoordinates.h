@@ -29,9 +29,9 @@
 
 // Qt includes
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QDebug>
+#include <QString>
+#include <QStringList>
+#include <QDebug>
 
 // forward declaration only to declare interoperability operators
 namespace Marble
@@ -42,7 +42,7 @@ namespace Marble
 namespace GeoIface
 {
 
-class  GeoCoordinates
+class GeoCoordinates
 {
 public:
 

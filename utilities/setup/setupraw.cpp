@@ -186,7 +186,7 @@ void SetupRaw::slotSixteenBitsImageToggled(bool)
 
 void SetupRaw::slotBehaviorChanged()
 {
-    RawDecodingSettings settings = d->dcrawSettings->settings();
+    DRawDecoderSettings settings = d->dcrawSettings->settings();
     settings.sixteenBitsImage    = !d->openSimple->isChecked();
     d->dcrawSettings->setSettings(settings);
 }

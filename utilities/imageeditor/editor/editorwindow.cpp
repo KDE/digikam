@@ -1002,17 +1002,17 @@ void EditorWindow::applyIOSettings()
     {
         if (settings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
         {
-            m_IOFileSettings->rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::CUSTOMOUTPUTCS;
+            m_IOFileSettings->rawDecodingSettings.rawPrm.outputColorSpace = DRawDecoderSettings::CUSTOMOUTPUTCS;
             m_IOFileSettings->rawDecodingSettings.rawPrm.outputProfile    = settings.workspaceProfile;
         }
         else
         {
-            m_IOFileSettings->rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::RAWCOLOR;
+            m_IOFileSettings->rawDecodingSettings.rawPrm.outputColorSpace = DRawDecoderSettings::RAWCOLOR;
         }
     }
     else
     {
-        m_IOFileSettings->rawDecodingSettings.rawPrm.outputColorSpace = RawDecodingSettings::SRGB;
+        m_IOFileSettings->rawDecodingSettings.rawPrm.outputColorSpace = DRawDecoderSettings::SRGB;
     }
 }
 

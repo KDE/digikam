@@ -40,9 +40,9 @@
 #include <KIPI/ImageInfoShared>
 #include <KIPI/ImageCollectionShared>
 
-// LibKDcraw includes
+// LibDRawDecoder includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -556,7 +556,7 @@ public:
 
     bool decodeRawImage(const QUrl& url, QByteArray& imageData, int& width, int& height, int& rgbmax)
     {
-        RawDecodingSettings settings;
+        DRawDecoderSettings settings;
         KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
         DcrawSettingsWidget::readSettings(settings, group);
@@ -582,7 +582,7 @@ public:
 
 private:
 
-    KDcrawIface::KDcraw decoder;
+    RawEngine::DRawDecoder decoder;
 };
 
 KIPI::RawProcessor* KipiInterface::createRawProcessor() const

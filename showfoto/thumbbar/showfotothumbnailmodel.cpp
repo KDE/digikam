@@ -29,7 +29,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -253,7 +253,7 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
 
     // RAW files : try to extract embedded thumbnail using libkdcraw
 
-    KDcrawIface::KDcraw::loadRawPreview(thumbnail, path);
+    RawEngine::DRawDecoder::loadRawPreview(thumbnail, path);
 
     if (!thumbnail.isNull())
     {

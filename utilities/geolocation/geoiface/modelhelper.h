@@ -38,15 +38,13 @@
 
 // local includes
 
-
 #include "geoiface_types.h"
 #include "geocoordinates.h"
 
 namespace GeoIface
 {
 
-
-class  ModelHelper : public QObject
+class ModelHelper : public QObject
 {
     Q_OBJECT
 

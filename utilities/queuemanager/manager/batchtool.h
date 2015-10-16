@@ -30,7 +30,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RawDecodingSettings>
+#include "drawdecodersettings.h"
 
 // Local includes
 
@@ -180,11 +180,11 @@ public:
 
     /** Set-up RAW decoding settings no use during tool operations.
      */
-    void setRawDecodingSettings(const RawDecodingSettings& settings);
+    void setDRawDecoderSettings(const DRawDecoderSettings& settings);
 
     /** Return RAW decoding settings used during tool operations.
      */
-    RawDecodingSettings rawDecodingSettings() const;
+    DRawDecoderSettings rawDecodingSettings() const;
 
     /** Set-up IOFile settings no use during tool operations.
      */

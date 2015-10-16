@@ -32,7 +32,7 @@
 #include <QPixmap>
 #include <QIcon>
 
-// LibKDcraw includes
+// LibDRawDecoder includes
 
 #include "dwidgetutils.h"
 

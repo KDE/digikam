@@ -31,16 +31,12 @@
 
 // Qt includes
 
-#include <QtCore/QScopedPointer>
-
-// local includes
-
-
+#include <QScopedPointer>
 
 namespace GeoIface
 {
 
-class  GroupStateComputer
+class GroupStateComputer
 {
 public:
 

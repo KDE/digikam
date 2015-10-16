@@ -36,7 +36,6 @@
 // local includes
 
 #include "geoiface_types.h"
-
 #include "geocoordinates.h"
 
 class TestGPXParsing;

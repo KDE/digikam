@@ -29,22 +29,23 @@
 
 #include <QDomDocument>
 
-// KDcraw includes
+// DRawDecoder includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
 #include "filteraction.h"
+#include "digikam_version.h"
 
 namespace Digikam
 {
 
-class RawDecodingSettingsWriter
+class DRawDecoderSettingsWriter
 {
 public:
 
-    RawDecodingSettingsWriter(const RawDecodingSettings& settings, FilterAction& action, const QString& prefix = QString())
+    DRawDecoderSettingsWriter(const DRawDecoderSettings& settings, FilterAction& action, const QString& prefix = QString())
         : settings(settings),
           action(action),
           prefix(prefix)
@@ -81,17 +82,17 @@ public:
 
 public:
 
-    const RawDecodingSettings& settings;
+    const DRawDecoderSettings& settings;
     FilterAction&              action;
     QString                    prefix;
 
-    RawDecodingSettings        defaultSettings;
-    RawDecodingSettings        timeOptimizedSettings;
+    DRawDecoderSettings        defaultSettings;
+    DRawDecoderSettings        timeOptimizedSettings;
 };
 
-void RawDecodingSettingsWriter::write()
+void DRawDecoderSettingsWriter::write()
 {
-    action.addParameter(QLatin1String("kdcraw-version"), KDcrawIface::KDcraw::version());
+    action.addParameter(QLatin1String("RawDecoder"), QLatin1String(digikam_version_short));
 
     if (settings == defaultSettings)
     {
@@ -112,7 +113,7 @@ void RawDecodingSettingsWriter::write()
 
     AddParameterEnum(whiteBalance);
 
-    if (settings.whiteBalance == KDcrawIface::RawDecodingSettings::CUSTOM)
+    if (settings.whiteBalance == RawEngine::DRawDecoderSettings::CUSTOM)
     {
         AddParameter(customWhiteBalance);
         AddParameter(customWhiteBalanceGreen);
@@ -148,21 +149,21 @@ void RawDecodingSettingsWriter::write()
 
     AddParameterEnum(inputColorSpace);
 
-    if (settings.inputColorSpace == KDcrawIface::RawDecodingSettings::CUSTOMINPUTCS)
+    if (settings.inputColorSpace == RawEngine::DRawDecoderSettings::CUSTOMINPUTCS)
     {
         AddParameter(inputProfile);
     }
 
     AddParameterEnum(outputColorSpace);
 
-    if (settings.outputColorSpace == KDcrawIface::RawDecodingSettings::CUSTOMOUTPUTCS)
+    if (settings.outputColorSpace == RawEngine::DRawDecoderSettings::CUSTOMOUTPUTCS)
     {
         AddParameter(outputProfile);
     }
 
     AddParameterIfNotDefault(deadPixelMap);
 
-    if (settings.whiteBalance == KDcrawIface::RawDecodingSettings::AERA /*sic*/)
+    if (settings.whiteBalance == RawEngine::DRawDecoderSettings::AERA /*sic*/)
     {
         if (!settings.whiteBalanceArea.isNull())
         {
@@ -185,11 +186,11 @@ void RawDecodingSettingsWriter::write()
 
 // --------------------------------------------------------------------------------------------
 
-class RawDecodingSettingsReader
+class DRawDecoderSettingsReader
 {
 public:
 
-    RawDecodingSettingsReader(const FilterAction& action, const QString& prefix = QString())
+    DRawDecoderSettingsReader(const FilterAction& action, const QString& prefix = QString())
         : action(action), prefix(prefix)
     {
     }
@@ -214,10 +215,10 @@ public:
 
     const FilterAction& action;
     QString             prefix;
-    RawDecodingSettings settings;
+    DRawDecoderSettings settings;
 };
 
-void RawDecodingSettingsReader::read()
+void DRawDecoderSettingsReader::read()
 {
     if (action.parameter(QLatin1String("RawDefaultSettings")).toBool())
     {
@@ -237,7 +238,7 @@ void RawDecodingSettingsReader::read()
 
     ReadParameterEnum(whiteBalance);
 
-    if (settings.whiteBalance == KDcrawIface::RawDecodingSettings::CUSTOM)
+    if (settings.whiteBalance == RawEngine::DRawDecoderSettings::CUSTOM)
     {
         ReadParameter(customWhiteBalance);
         ReadParameter(customWhiteBalanceGreen);
@@ -273,14 +274,14 @@ void RawDecodingSettingsReader::read()
 
     ReadParameterEnum(inputColorSpace);
 
-    if (settings.inputColorSpace == KDcrawIface::RawDecodingSettings::CUSTOMINPUTCS)
+    if (settings.inputColorSpace == RawEngine::DRawDecoderSettings::CUSTOMINPUTCS)
     {
         ReadParameter(inputProfile);
     }
 
     ReadParameterEnum(outputColorSpace);
 
-    if (settings.outputColorSpace == KDcrawIface::RawDecodingSettings::CUSTOMOUTPUTCS)
+    if (settings.outputColorSpace == RawEngine::DRawDecoderSettings::CUSTOMOUTPUTCS)
     {
         ReadParameter(outputProfile);
     }
@@ -318,7 +319,7 @@ DRawDecoding::DRawDecoding()
     resetPostProcessingSettings();
 }
 
-DRawDecoding::DRawDecoding(const RawDecodingSettings& prm)
+DRawDecoding::DRawDecoding(const DRawDecoderSettings& prm)
 {
     rawPrm = prm;
 
@@ -361,7 +362,7 @@ DRawDecoding DRawDecoding::fromFilterAction(const FilterAction& action, const QS
 {
     DRawDecoding settings;
 
-    RawDecodingSettingsReader reader(action, prefix);
+    DRawDecoderSettingsReader reader(action, prefix);
     reader.read();
     settings.rawPrm       = reader.settings;
 
@@ -374,7 +375,7 @@ DRawDecoding DRawDecoding::fromFilterAction(const FilterAction& action, const QS
 
 void DRawDecoding::writeToFilterAction(FilterAction& action, const QString& prefix) const
 {
-    RawDecodingSettingsWriter writer(rawPrm, action, prefix);
+    DRawDecoderSettingsWriter writer(rawPrm, action, prefix);
     writer.write();
 
     if (!bcg.isDefault())
@@ -393,7 +394,7 @@ void DRawDecoding::writeToFilterAction(FilterAction& action, const QString& pref
     }
 }
 
-void DRawDecoding::decodingSettingsToXml(const RawDecodingSettings& prm, QDomElement& elm)
+void DRawDecoding::decodingSettingsToXml(const DRawDecoderSettings& prm, QDomElement& elm)
 {
     QDomDocument doc = elm.ownerDocument();
     QDomElement  data;
@@ -555,7 +556,7 @@ void DRawDecoding::decodingSettingsToXml(const RawDecodingSettings& prm, QDomEle
     elm.appendChild(data);
 }
 
-void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, RawDecodingSettings& prm)
+void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, DRawDecoderSettings& prm)
 {
     bool ok = false;
 
@@ -589,15 +590,15 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, RawDecodingSe
         }
         else if (key == QLatin1String("rawquality"))
         {
-            prm.RAWQuality = (RawDecodingSettings::DecodingQuality)val.toInt(&ok);
+            prm.RAWQuality = (DRawDecoderSettings::DecodingQuality)val.toInt(&ok);
         }
         else if (key == QLatin1String("inputcolorspace"))
         {
-            prm.inputColorSpace = (RawDecodingSettings::InputColorSpace)val.toInt(&ok);
+            prm.inputColorSpace = (DRawDecoderSettings::InputColorSpace)val.toInt(&ok);
         }
         else if (key == QLatin1String("outputcolorspace"))
         {
-            prm.outputColorSpace = (RawDecodingSettings::OutputColorSpace)val.toInt(&ok);
+            prm.outputColorSpace = (DRawDecoderSettings::OutputColorSpace)val.toInt(&ok);
         }
         else if (key == QLatin1String("rgbinterpolate4colors"))
         {
@@ -613,7 +614,7 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, RawDecodingSe
         }
         else if (key == QLatin1String("whitebalance"))
         {
-            prm.whiteBalance = (RawDecodingSettings::WhiteBalance)val.toInt(&ok);
+            prm.whiteBalance = (DRawDecoderSettings::WhiteBalance)val.toInt(&ok);
         }
         else if (key == QLatin1String("customwhitebalance"))
         {
@@ -645,7 +646,7 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, RawDecodingSe
         }
         else if (key == QLatin1String("noisereductiontype"))
         {
-            prm.NRType = (RawDecodingSettings::NoiseReduction)val.toInt(&ok);
+            prm.NRType = (DRawDecoderSettings::NoiseReduction)val.toInt(&ok);
         }
         else if (key == QLatin1String("noisereductionthreshold"))
         {

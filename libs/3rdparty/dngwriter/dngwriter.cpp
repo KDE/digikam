@@ -62,9 +62,9 @@ extern "C"
 #include <QIODevice>
 #include <QTemporaryFile>
 
-// LibKDcraw includes
+// LibDRawDecoder includes
 
-#include <libkdcraw_version.h>
+
 
 // Local includes
 
@@ -180,14 +180,14 @@ int DNGWriter::convert()
 
         QFileInfo          outputInfo(dngFilePath);
         QByteArray         rawData;
-        DcrawInfoContainer identify;
-        DcrawInfoContainer identifyMake;
+        RawInfo identify;
+        RawInfo identifyMake;
 
         // -----------------------------------------------------------------------------------------
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "DNGWriter: Loading RAW data from " << inputInfo.fileName() ;
 
-        KDcraw rawProcessor;
+        DRawDecoder rawProcessor;
 
         if (!rawProcessor.rawFileIdentify(identifyMake, inputFile()))
         {
@@ -213,31 +213,11 @@ int DNGWriter::convert()
             outputWidth  = identifyMake.outputSize.width();
         }
 
-
-#if KDCRAW_VERSION < 0x020100
-        bool useFullSensorImage = false;
-
-        // disable general fullsensor image see #240750
-        // seems this bug is fixed with libRaw 0.12beta4
-        if ((identifyMake.make == "Canon") && (identify.filterPattern != QString("")))
-        {
-            useFullSensorImage = true;
-        }
-
-        if (!rawProcessor.extractRAWData(inputFile(), rawData, identify,
-                                         useFullSensorImage,             // arg deprecated with KDCRAW >=0x020001
-                                         0))
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "DNGWriter: Loading RAW data failed. Aborted..." ;
-            return FILENOTSUPPORTED;
-        }
-#else
         if (!rawProcessor.extractRAWData(inputFile(), rawData, identify, 0))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "DNGWriter: Loading RAW data failed. Aborted..." ;
             return FILENOTSUPPORTED;
         }
-#endif
 
         if (d->cancel)
             return PROCESSCANCELED;
@@ -253,10 +233,6 @@ int DNGWriter::convert()
         qCDebug(DIGIKAM_GENERAL_LOG) << "--- Orientation:   " << identify.orientation;
         qCDebug(DIGIKAM_GENERAL_LOG) << "--- Top margin:    " << identify.topMargin;
         qCDebug(DIGIKAM_GENERAL_LOG) << "--- Left margin:   " << identify.leftMargin;
-#if KDCRAW_VERSION < 0x020001
-        qCDebug(DIGIKAM_GENERAL_LOG) << "--- Right margin:  " << identify.rightMargin;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "--- Bottom margin: " << identify.bottomMargin;
-#endif
         qCDebug(DIGIKAM_GENERAL_LOG) << "--- Filter:        " << identify.filterPattern;
         qCDebug(DIGIKAM_GENERAL_LOG) << "--- Colors:        " << identify.rawColors;
         qCDebug(DIGIKAM_GENERAL_LOG) << "--- Black:         " << identify.blackPoint;
@@ -548,19 +524,19 @@ int DNGWriter::convert()
 
         switch (identify.orientation)
         {
-            case DcrawInfoContainer::ORIENTATION_180:
+            case RawInfo::ORIENTATION_180:
                 orientation = dng_orientation::Rotate180();
                 break;
 
-            case DcrawInfoContainer::ORIENTATION_Mirror90CCW:
+            case RawInfo::ORIENTATION_Mirror90CCW:
                 orientation = dng_orientation::Mirror90CCW();
                 break;
 
-            case DcrawInfoContainer::ORIENTATION_90CCW:
+            case RawInfo::ORIENTATION_90CCW:
                 orientation = dng_orientation::Rotate90CCW();
                 break;
 
-            case DcrawInfoContainer::ORIENTATION_90CW:
+            case RawInfo::ORIENTATION_90CW:
                 orientation = dng_orientation::Rotate90CW();
                 break;
 

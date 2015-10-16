@@ -43,7 +43,7 @@
 
 #include <klocalizedstring.h>
 
-// LibKDcraw includes
+// LibDRawDecoder includes
 
 #include "dwidgetutils.h"
 

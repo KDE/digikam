@@ -33,9 +33,9 @@
 #include "dimg.h"
 #include "digikam_export.h"
 
-namespace KDcrawIface
+namespace RawEngine
 {
-    class RawDecodingSettings;
+    class DRawDecoderSettings;
 }
 
 namespace Digikam

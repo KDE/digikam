@@ -30,9 +30,9 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
-using namespace KDcrawIface;
+using namespace RawEngine;
 
 namespace Digikam
 {

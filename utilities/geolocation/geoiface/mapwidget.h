@@ -31,13 +31,12 @@
 
 // Qt includes
 
-#include <QtWidgets/QWidget>
-#include <QtCore/QStringList>
+#include <QWidget>
+#include <QStringList>
 
 // local includes
 
 #include "geoiface_types.h"
-
 #include "geocoordinates.h"
 #include "groupstate.h"
 
@@ -56,7 +55,7 @@ class GeoIfaceSharedData;
 class ModelHelper;
 class TrackManager;
 
-class  MapWidget : public QWidget
+class MapWidget : public QWidget
 {
   Q_OBJECT
 

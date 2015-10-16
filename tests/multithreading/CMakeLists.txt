@@ -5,8 +5,6 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
-
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
@@ -26,6 +24,4 @@ target_link_libraries(multicorerawtopng
                       Qt5::Widgets
                       Qt5::Gui
                       Qt5::Core
-
-                      KF5::KDcraw
 )

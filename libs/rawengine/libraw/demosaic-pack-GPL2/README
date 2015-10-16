@@ -1,0 +1,13 @@
+** LibRaw-demosaic-pack-GPL2 **
+
+This folder contains additional demosaic/image correction methods for
+LibRaw (http://www.libraw.org).
+
+You need LibRaw RAW processing library to use program/algorithm found in this 
+folder.
+
+LibRaw can be downloaded from LibRaw origin site: http://www.libraw.org/download
+or from GitHub (git://github.com/LibRaw/LibRaw.git)
+
+Look into README.demosaic-packs in LibRaw distribution for more details.
+

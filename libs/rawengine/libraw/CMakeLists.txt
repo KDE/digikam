@@ -1,0 +1,280 @@
+#
+# Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+# General definitions rules
+
+# To prevent warnings from M$ compiler
+if(WIN32 AND MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_ATL_SECURE_NO_WARNINGS)
+    add_definitions(-D_AFX_SECURE_NO_WARNINGS)
+endif()
+
+# Under Windows, use specific flag to compile.
+if(WIN32)
+    add_definitions(-DDJGPP)
+endif()
+
+add_definitions(-DUSE_LCMS2)
+
+# -- Check dependencies --------------------------------------------------------------------------------
+
+# JPEG library check
+
+if(JPEG_FOUND)
+    # check version of libjpeg
+    set(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
+    set(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
+    FILE(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
+    set(_jpeglib_version_include_dirs "-Dinclude_directories:STRING=${JPEG_INCLUDE_DIR}")
+
+    TRY_COMPILE(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file}
+                CMAKE_FLAGS "${_jpeglib_version_include_dirs}"
+               )
+    if(_jpeglib_version_compile_result)
+        message(STATUS "Identified libjpeg version less than 80 (too low)")
+        set(JPEG8_FOUND FALSE)
+    else()
+        set(JPEG8_FOUND TRUE)
+    endif()
+endif()
+
+#MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" FALSE "80" "needed for the LibRaw DNG lossy codec")
+
+# Flag to use libjpeg with LibRaw DNG lossy codec
+if(JPEG8_FOUND)
+    add_definitions(-DUSE_JPEG)
+    add_definitions(-DUSE_JPEG8)
+    include_directories(${JPEG_INCLUDE_DIR})
+endif()
+
+# OpenMP library detection (requires CMake >= 2.6.3)
+# NOTE: OpenMP under MacOSX do not support multithreading.
+
+if(NOT APPLE)
+    find_package(OpenMP)
+
+    if(OPENMP_FOUND)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        if("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
+            set(OPENMP_LDFLAGS "-lgomp")
+        endif()
+        if("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
+            set(OPENMP_LDFLAGS "-xopenmp")
+        endif()
+    endif()
+endif()
+
+# Jasper library check
+
+# Flag to use libjasper with LibRaw RedCine codec
+if(JASPER_FOUND)
+    add_definitions(-DUSE_JASPER)
+    include_directories(${JASPER_INCLUDE_DIR})
+endif()
+
+# For RawSpeed Codec Support
+find_package(LibXml2)
+find_package(Pthreads)
+
+if(JPEG8_FOUND AND LIBXML2_FOUND AND PTHREADS_FOUND)
+
+    message(STATUS "LibRaw will be compiled with RawSpeed codec")
+    set(RAWSPEED_SUPPORT_CAN_BE_COMPILED true)
+
+else()
+
+    IF (NOT JPEG8_FOUND)
+        message(STATUS "Libjpeg >= version 8 depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    endif()
+
+    IF (NOT LIBXML2_FOUND)
+        message(STATUS "Libxml2 depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    endif()
+
+    IF (NOT PTHREADS_FOUND)
+        message(STATUS "Pthreads depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    endif()
+
+    set(RAWSPEED_SUPPORT_CAN_BE_COMPILED false)
+
+endif()
+
+# -- Compile RAWSpeed library --------------------------------------------------------------------------------
+
+if(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
+
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed)
+
+    include_directories(${LIBXML2_INCLUDE_DIR} ${PTHREADS_INCLUDE_DIR})
+
+    # Flag to include RawSpeed codec with Libraw
+    add_definitions(-DUSE_RAWSPEED)
+
+    add_definitions(${LIBXML2_DEFINITIONS} ${PTHREADS_DEFINITIONS})
+
+    set(librawspeed_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/ArwDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/BitPumpJPEG.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/BitPumpMSB.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/BitPumpMSB32.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/BitPumpPlain.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/BlackArea.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/ByteStream.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/ByteStreamSwap.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/Camera.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/CameraMetaData.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/CameraMetadataException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/CameraSensorInfo.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/ColorFilterArray.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/Common.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/Cr2Decoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/DngDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/DngDecoderSlices.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/DngOpcodes.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/FileIOException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/FileMap.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/IOException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/LJpegDecompressor.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/LJpegPlain.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/NefDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/NikonDecompressor.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/OrfDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/PefDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/PentaxDecompressor.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/RawDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/RawDecoderException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/RawImage.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/RawImageDataFloat.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/RawImageDataU16.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/RawParser.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/Rw2Decoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/SrwDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/TiffEntry.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/TiffEntryBE.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/TiffIFD.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/TiffIFDBE.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/TiffParser.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/TiffParserException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/TiffParserHeaderless.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/TiffParserOlympus.cpp
+    )
+
+endif()
+
+# -- Compile LibRaw library --------------------------------------------------------------------------------
+
+# Flag to include demosaic pack GPL2
+add_definitions(-DLIBRAW_DEMOSAIC_PACK_GPL2)
+
+# Flag to include demosaic pack GPL3
+add_definitions(-DLIBRAW_DEMOSAIC_PACK_GPL3)
+
+# Flag to debug LibRaw
+add_definitions(-DDCRAW_VERBOSE)
+
+# Flag used by default into LibRaw to not use dedicated external thread
+add_definitions(-DLIBRAW_NOTHREADS)
+
+# Flag to export library symbols
+if(WIN32)
+    add_definitions(-DLIBRAW_BUILDLIB)
+endif()
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/
+                    ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL2
+                    ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL3
+                   )
+
+set(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/internal/dcraw_common.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/internal/dcraw_fileio.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/internal/demosaic_packs.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/src/libraw_cxx.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/src/libraw_c_api.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/src/libraw_datastream.cpp
+   )
+
+if(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
+    set(libraw_LIB_SRCS ${libraw_LIB_SRCS} ${librawspeed_LIB_SRCS})
+endif()
+
+# Disable compilation warnings from LibRaw. Just to be clear on the console.
+# Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (B.K.O: #269903)
+# Use O4 GCC compilation option to prevent artifacts with OpenMP (B.K.O #305382)
+foreach(_curentfile ${libraw_LIB_SRCS})
+    if(WIN32 AND MSVC)
+        set_source_files_properties(${_curentfile} PROPERTIES COMPILE_FLAGS "-w")
+    else()
+        set_source_files_properties(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -fPIC -O4")
+    endif()
+endforeach()
+
+add_library(libraw STATIC ${libraw_LIB_SRCS})
+
+target_link_libraries(libraw
+                      ${MATH_LIBRARY}
+                      ${LCMS2_LIBRARIES}
+                      ${OPENMP_LDFLAGS}
+                     )
+if(JPEG_FOUND)
+    target_link_libraries(libraw ${JPEG_LIBRARY})
+endif()
+
+if(JASPER_FOUND)
+    target_link_libraries(libraw ${JASPER_LIBRARIES})
+endif()
+
+if(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
+    target_link_libraries(libraw ${LIBXML2_LIBRARIES} ${PTHREADS_LIBRARY})
+endif()
+
+# For registration to libraw_config.h
+MACRO_BOOL_TO_01(JPEG8_FOUND LIBRAW_USE_DNGLOSSYCODEC)
+MACRO_BOOL_TO_01(OPENMP_FOUND LIBRAW_USE_OPENMP)
+MACRO_BOOL_TO_01(JASPER_FOUND LIBRAW_USE_REDCINECODEC)
+MACRO_BOOL_TO_01(RAWSPEED_SUPPORT_CAN_BE_COMPILED LIBRAW_USE_RAWSPEED)
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw/libraw_config.h)
+
+# -- Compile LibRaw Samples --------------------------------------------------------------------------------
+
+# add a small macro so that this is a bit cleaner
+macro(LIBRAW_BUILD_SAMPLES)
+
+    set(_filename ${ARGV0})
+    string(REPLACE "." ";" _temp ${_filename})
+    list(GET _temp 0 _target) 
+
+    set(${_target}_SRCS samples/${_filename})
+    set_source_files_properties(${${_target}_SRCS} PROPERTIES COMPILE_FLAGS -w)
+
+    add_executable(${_target} ${${_target}_SRCS})
+
+    target_link_libraries(${_target} libraw ${OPENMP_LDFLAGS})
+
+    if(WIN32)
+        target_link_libraries(${_target} ws2_32)
+    endif()
+
+endmacro()
+
+LIBRAW_BUILD_SAMPLES(simple_dcraw.cpp)
+LIBRAW_BUILD_SAMPLES(mem_image.cpp)
+LIBRAW_BUILD_SAMPLES(dcraw_emu.cpp)
+LIBRAW_BUILD_SAMPLES(4channels.cpp)
+LIBRAW_BUILD_SAMPLES(unprocessed_raw.cpp)
+LIBRAW_BUILD_SAMPLES(raw-identify.cpp)
+LIBRAW_BUILD_SAMPLES(multirender_test.cpp)
+LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp)
+
+# C sample files will be compiled only if LCMS v2 is detected, to prevent broken compilation
+if(LCMS2_FOUND)
+   if(WIN32)
+        LIBRAW_BUILD_SAMPLES(half_mt_win32.c)
+   else()
+        LIBRAW_BUILD_SAMPLES(dcraw_half.c)
+        LIBRAW_BUILD_SAMPLES(half_mt.c)
+   endif()
+endif()

@@ -183,7 +183,6 @@ include_directories(
     ${PGF_INCLUDE_DIRS}
 
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
@@ -195,9 +194,7 @@ include_directories(
 )
 
 if(X11_FOUND)
-    include_directories(
-        $<TARGET_PROPERTY:Qt5::X11Extras,INTERFACE_INCLUDE_DIRECTORIES>
-    )
+    include_directories($<TARGET_PROPERTY:Qt5::X11Extras,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 add_library(dimg_src OBJECT ${libdimgloaders_SRCS} ${libdimgfilters_SRCS} ${libdimg_SRCS})

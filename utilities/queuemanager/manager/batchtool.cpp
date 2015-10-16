@@ -39,7 +39,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -92,7 +92,7 @@ public:
 
     DImg                          image;
 
-    RawDecodingSettings           rawDecodingSettings;
+    DRawDecoderSettings           rawDecodingSettings;
 
     IOFileSettings                ioFileSettings;
 
@@ -282,12 +282,12 @@ bool BatchTool::getBranchHistory() const
     return d->branchHistory;
 }
 
-void BatchTool::setRawDecodingSettings(const RawDecodingSettings& settings)
+void BatchTool::setDRawDecoderSettings(const DRawDecoderSettings& settings)
 {
     d->rawDecodingSettings = settings;
 }
 
-RawDecodingSettings BatchTool::rawDecodingSettings() const
+DRawDecoderSettings BatchTool::rawDecodingSettings() const
 {
     return d->rawDecodingSettings;
 }
@@ -360,7 +360,7 @@ void BatchTool::setOutputUrlFromInputUrl()
 
 bool BatchTool::isRawFile(const QUrl& url) const
 {
-    QString   rawFilesExt(QLatin1String(KDcraw::rawFiles()));
+    QString   rawFilesExt(QLatin1String(DRawDecoder::rawFiles()));
     QFileInfo fileInfo(url.toLocalFile());
     return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
 }
@@ -375,7 +375,7 @@ bool BatchTool::loadToDImg() const
     if (d->rawLoadingRule == QueueSettings::USEEMBEDEDJPEG && isRawFile(inputUrl()))
     {
         QImage img;
-        bool   ret = KDcraw::loadRawPreview(img, inputUrl().toLocalFile());
+        bool   ret = DRawDecoder::loadRawPreview(img, inputUrl().toLocalFile());
         DMetadata meta(inputUrl().toLocalFile());
         meta.setImageDimensions(QSize(img.width(), img.height()));
         d->image   = DImg(img);

@@ -56,7 +56,7 @@ extern "C"
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Libkexiv2 includes
 
@@ -738,7 +738,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         return NONE;
     }
 
-    QString rawFilesExt = QLatin1String(KDcrawIface::KDcraw::rawFiles());
+    QString rawFilesExt = QLatin1String(RawEngine::DRawDecoder::rawFiles());
     QString ext         = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty())
@@ -795,7 +795,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     fclose(f);
 
-    KDcrawIface::DcrawInfoContainer dcrawIdentify;
+    RawEngine::RawInfo dcrawIdentify;
     uchar jpegID[2]    = { 0xFF, 0xD8 };
     uchar tiffBigID[2] = { 0x4D, 0x4D };
     uchar tiffLilID[2] = { 0x49, 0x49 };
@@ -832,7 +832,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         if (file)
             fclose(file);
     }
-    else if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, filePath)
+    else if (RawEngine::DRawDecoder::rawFileIdentify(dcrawIdentify, filePath)
              && dcrawIdentify.isDecodable)
     {
         // RAW File test using dcraw::identify method.

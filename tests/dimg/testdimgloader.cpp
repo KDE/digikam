@@ -52,11 +52,11 @@ int main(int argc, char** argv)
     QFileInfo input(QString::fromUtf8(argv[1]));
     QString   outFilePath(input.baseName() + QLatin1String(".out.png"));
 
-    RawDecodingSettings settings;
+    DRawDecoderSettings settings;
     settings.halfSizeColorImage    = false;
     settings.sixteenBitsImage      = false;
     settings.RGBInterpolate4Colors = false;
-    settings.RAWQuality            = RawDecodingSettings::BILINEAR;
+    settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
     DImg img(input.filePath(), 0, DRawDecoding(settings));
     img.save(outFilePath, QLatin1String("PNG"));

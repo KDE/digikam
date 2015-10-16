@@ -181,7 +181,7 @@ void ProcessorDlg::slotStart()
     d->usedCore->setDisabled(true);
 
     d->thread->setMaximumNumberOfThreads(d->usedCore->value());
-    d->thread->convertRAWtoPNG(d->list, RawDecodingSettings());
+    d->thread->convertRAWtoPNG(d->list, DRawDecoderSettings());
     d->thread->start();
 }
 

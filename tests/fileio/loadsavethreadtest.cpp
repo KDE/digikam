@@ -61,11 +61,11 @@ LoadSaveThreadTest::LoadSaveThreadTest(int& argc, char** argv)
     connect( m_thread, SIGNAL(signalSavingProgress(QString,float)),
              this, SLOT(slotSavingProgress(QString,float)) );
 
-    RawDecodingSettings settings;
+    DRawDecoderSettings settings;
     settings.halfSizeColorImage    = false;
     settings.sixteenBitsImage      = false;
     settings.RGBInterpolate4Colors = false;
-    settings.RAWQuality            = RawDecodingSettings::BILINEAR;
+    settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
     LoadingDescription desc(QString::fromUtf8(argv[1]), DRawDecoding(settings));
 

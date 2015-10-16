@@ -30,7 +30,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/RawDecodingSettings>
+#include "drawdecodersettings.h"
 
 // Local includes
 
@@ -96,7 +96,7 @@ public:
     RenamingRule        renamingRule;
     RawLoadingRule      rawLoadingRule;
 
-    RawDecodingSettings rawDecodingSettings;
+    DRawDecoderSettings rawDecodingSettings;
 
     IOFileSettings      ioFileSettings;
 };

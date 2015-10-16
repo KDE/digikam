@@ -24,11 +24,11 @@ target_link_libraries(digikamimageplugin_fxfilters
                       Qt5::Core
                       Qt5::Gui
 
+                      KF5::KExiv2
+
                       KF5::I18n
                       KF5::XmlGui
                       KF5::KIOCore
-                      KF5::KDcraw
-                      KF5::KExiv2
                       KF5::Notifications
                       KF5::JobWidgets
 )

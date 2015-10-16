@@ -38,7 +38,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -470,7 +470,7 @@ void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStri
                        << QLatin1String("xpm") << QLatin1String("ppm")  << QLatin1String("pnm") << QLatin1String("pgf")
                        << QLatin1String("gif") << QLatin1String("bmp")  << QLatin1String("xcf") << QLatin1String("pcx");
 
-    defaultImageFilter << KDcrawIface::KDcraw::rawFilesList();
+    defaultImageFilter << RawEngine::DRawDecoder::rawFilesList();
 
     defaultVideoFilter << QLatin1String("mpeg") << QLatin1String("mpg")  << QLatin1String("mpo") << QLatin1String("mpe")                                                    // MPEG
                        << QLatin1String("avi")  << QLatin1String("divx")                                                                                                    // RIFF
@@ -488,7 +488,7 @@ bool SchemaUpdater::createFilterSettings()
 
     d->albumDB->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
     d->albumDB->setSetting(QLatin1String("FilterSettingsVersion"),      QString::number(filterSettingsVersion()));
-    d->albumDB->setSetting(QLatin1String("DcrawFilterSettingsVersion"), QString::number(KDcrawIface::KDcraw::rawFilesVersion()));
+    d->albumDB->setSetting(QLatin1String("DcrawFilterSettingsVersion"), QString::number(RawEngine::DRawDecoder::rawFilesVersion()));
 
     return true;
 }
@@ -499,7 +499,7 @@ bool SchemaUpdater::updateFilterSettings()
     QString dcrawFilterVersion = d->albumDB->getSetting(QLatin1String("DcrawFilterSettingsVersion"));
 
     if (filterVersion.toInt() < filterSettingsVersion() ||
-        dcrawFilterVersion.toInt() < KDcrawIface::KDcraw::rawFilesVersion())
+        dcrawFilterVersion.toInt() < RawEngine::DRawDecoder::rawFilesVersion())
     {
         createFilterSettings();
     }

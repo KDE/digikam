@@ -35,10 +35,6 @@
 
 #include <QComboBox>
 
-// Local includes
-
-#include "libkdcraw_export.h"
-
 namespace Digikam
 {
 
@@ -50,7 +46,7 @@ namespace Digikam
  * possible to show the complete item, it will be shortened
  * and "..." will be prepended.
  */
-class LIBKDCRAW_EXPORT SqueezedComboBox : public QComboBox
+class SqueezedComboBox : public QComboBox
 {
     Q_OBJECT
 

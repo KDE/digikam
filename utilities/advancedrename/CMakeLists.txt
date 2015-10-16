@@ -29,7 +29,6 @@ include_directories(common/ parser/options/ parser/options/database/ parser/opti
 
 include_directories(
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
@@ -56,5 +55,4 @@ target_link_libraries(advancedrename
                       KF5::I18n # TODO verify if needed
 
                       KF5::KExiv2
-                      KF5::KDcraw
                      )

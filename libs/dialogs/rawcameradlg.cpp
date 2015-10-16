@@ -39,7 +39,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 namespace Digikam
 {
@@ -64,7 +64,7 @@ RawCameraDlg::RawCameraDlg(QWidget* const parent)
 {
     setWindowTitle(i18n("List of supported RAW cameras"));
 
-    QStringList list = KDcrawIface::KDcraw::supportedCamera();
+    QStringList list = RawEngine::DRawDecoder::supportedCamera();
 
     // --------------------------------------------------------
 
@@ -130,32 +130,29 @@ void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 
 void RawCameraDlg::updateHeader(int results)
 {
-    QString librawVer = KDcrawIface::KDcraw::librawVersion();
-    QString KDcrawVer = KDcrawIface::KDcraw::version();
-    QStringList list  = KDcrawIface::KDcraw::supportedCamera();
+    QString librawVer = RawEngine::DRawDecoder::librawVersion();
+    QStringList list  = RawEngine::DRawDecoder::supportedCamera();
 
     if (!results)
     {
-        d->header->setText(i18np("<p>Using KDcraw library version %2<br/>"
+        d->header->setText(i18np("<p>Using DRawDecoder library version %2<br/>"
                                  "Using LibRaw version %3<br/>"
                                  "1 model on the list</p>",
-                                 "<p>Using KDcraw library version %2<br/>"
                                  "Using LibRaw version %3<br/>"
                                  "%1 models on the list</p>",
                                  list.count(),
-                                 KDcrawVer, librawVer
+                                 librawVer
                                  ));
     }
     else
     {
-        d->header->setText(i18np("<p>Using KDcraw library version %2<br/>"
+        d->header->setText(i18np("<p>Using DRawDecoder library version %2<br/>"
                                  "Using LibRaw version %3<br/>"
                                  "1 model on the list (found: %4)</p>",
-                                 "<p>Using KDcraw library version %2<br/>"
                                  "Using LibRaw version %3<br/>"
                                  "%1 models on the list (found: %4)</p>",
                                  list.count(),
-                                 KDcrawVer, librawVer,
+                                 librawVer,
                                  results));
     }
 }

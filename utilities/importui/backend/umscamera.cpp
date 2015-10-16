@@ -57,7 +57,7 @@ extern "C"
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -283,7 +283,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // RAW files : try to extract embedded thumbnail using libkdcraw
 
-    KDcrawIface::KDcraw::loadRawPreview(thumbnail, path);
+    RawEngine::DRawDecoder::loadRawPreview(thumbnail, path);
 
     if (!thumbnail.isNull())
     {

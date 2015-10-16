@@ -61,46 +61,6 @@ endmacro()
 
 ###########################################################################################################################################"
 
-macro(DETECT_LIBKDCRAW MIN_VERSION)
-
-    if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
-
-        message(STATUS "libkdcraw : search system based library")
-        find_package(KF5KDcraw ${MIN_VERSION})
-
-        if(KF5KDcraw_FOUND)
-            set(KF5KDcraw_LIBRARIES KF5::KDcraw)
-            get_target_property(KF5KDcraw_INCLUDE_DIRS KF5::KDcraw INTERFACE_INCLUDE_DIRECTORIES)
-            set(KF5KDcraw_FOUND TRUE)
-        else()
-            set(KF5KDcraw_FOUND FALSE)
-        endif()
-
-    else()
-
-        message(STATUS "libkdcraw : use local library from ${CMAKE_SOURCE_DIR}/extra/libkdcraw/")
-        find_file(KF5KDcraw_FOUND CMakeLists.txt PATHS ${CMAKE_SOURCE_DIR}/extra/libkdcraw/)
-
-        if(NOT KF5KDcraw_FOUND)
-            message(ERROR "libkdcraw : local library not found")
-            set(KF5KDcraw_FOUND FALSE)
-        else()
-            set(KF5KDcraw_FOUND TRUE)            
-        endif()
-
-        set(KF5KDcraw_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkdcraw/src ${CMAKE_BINARY_DIR}/extra/libkdcraw)
-        set(KF5KDcraw_LIBRARIES KF5KDcraw)
-
-    endif()
-
-    message(STATUS "libkdcraw found       : ${KF5KDcraw_FOUND}")
-    message(STATUS "libkdcraw library     : ${KF5KDcraw_LIBRARIES}")
-    message(STATUS "libkdcraw includes    : ${KF5KDcraw_INCLUDE_DIRS}")
-
-endmacro()
-
-###########################################################################################################################################"
-
 macro(DETECT_LIBKEXIV2 MIN_VERSION)
 
     if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)

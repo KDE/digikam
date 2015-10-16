@@ -27,7 +27,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -36,7 +36,7 @@
 #include "databaseaccess.h"
 #include "albumdb.h"
 
-using namespace KDcrawIface;
+using namespace RawEngine;
 
 namespace Digikam
 {
@@ -90,7 +90,7 @@ QString ApplicationSettings::getAudioFileFilter() const
 
 QString ApplicationSettings::getRawFileFilter() const
 {
-    QStringList supportedRaws = KDcraw::rawFilesList();
+    QStringList supportedRaws = DRawDecoder::rawFilesList();
     QStringList imageSettings;
     DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
 

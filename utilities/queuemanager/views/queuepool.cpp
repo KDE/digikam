@@ -549,17 +549,17 @@ void QueuePool::applySettings()
             {
                 if (ICCSettings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
                 {
-                    prm.rawDecodingSettings.outputColorSpace = RawDecodingSettings::CUSTOMOUTPUTCS;
+                    prm.rawDecodingSettings.outputColorSpace = DRawDecoderSettings::CUSTOMOUTPUTCS;
                     prm.rawDecodingSettings.outputProfile    = ICCSettings.workspaceProfile;
                 }
                 else
                 {
-                    prm.rawDecodingSettings.outputColorSpace = RawDecodingSettings::RAWCOLOR;
+                    prm.rawDecodingSettings.outputColorSpace = DRawDecoderSettings::RAWCOLOR;
                 }
             }
             else
             {
-                prm.rawDecodingSettings.outputColorSpace = RawDecodingSettings::SRGB;
+                prm.rawDecodingSettings.outputColorSpace = DRawDecoderSettings::SRGB;
             }
 
             queue->setSettings(prm);

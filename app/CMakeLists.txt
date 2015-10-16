@@ -22,6 +22,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:3rdparty_src>
             $<TARGET_OBJECTS:dngwriter_src>
             $<TARGET_OBJECTS:kiowrapper_src>
+            $<TARGET_OBJECTS:rawengine_srcs>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src>
@@ -58,7 +59,6 @@ endif()
 include_directories(
     $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
@@ -107,8 +107,6 @@ target_link_libraries(digikamcore
                       Qt5::Concurrent
 
                       KF5::KExiv2
-                      KF5::KDcraw
-
                       KF5::Solid
                       KF5::KIOCore
                       KF5::NotifyConfig
@@ -130,6 +128,7 @@ target_link_libraries(digikamcore
                       ${PGF_LIBRARIES}
 
                       libdng
+                      libraw
 )
 
 if(KF5Kipi_FOUND)
@@ -386,7 +385,6 @@ target_link_libraries(digikamgui
                       Qt5::DBus
 
                       KF5::KExiv2
-                      KF5::KDcraw
 
                       KF5::Solid
                       KF5::KIOCore
@@ -477,12 +475,13 @@ target_link_libraries(digikam
                       Qt5::Widgets
                       Qt5::DBus
 
+                      KF5::KExiv2
+
                       KF5::KIOCore
                       KF5::KIOWidgets
                       KF5::WindowSystem
                       KF5::IconThemes
                       KF5::I18n
-                      KF5::KExiv2
 )
 
 install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})

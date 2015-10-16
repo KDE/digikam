@@ -46,7 +46,6 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
 
 include_directories(
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
@@ -73,5 +72,4 @@ target_link_libraries(geolocationedit
                       Qt5::Concurrent
 
                       KF5::KExiv2
-                      KF5::KDcraw
                     )

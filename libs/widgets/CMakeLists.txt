@@ -118,7 +118,6 @@ set(libiccprofileswidgets_SRCS
 
 include_directories(
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
@@ -136,9 +135,7 @@ include_directories(
 )
 
 if(KF5KFace_FOUND)
-    include_directories(
-        $<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>
-    )
+    include_directories($<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 if(GPHOTO2_FOUND)
@@ -155,6 +152,4 @@ add_library(digikamwidgetscore_src OBJECT
     ${libcolorchooser_SRCS}
 )
 
-add_library(imagehistorywidgets_src OBJECT
-                                    ${libimagehistory_SRCS})
-
+add_library(imagehistorywidgets_src OBJECT ${libimagehistory_SRCS})

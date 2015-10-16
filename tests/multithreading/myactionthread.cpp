@@ -34,7 +34,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -49,7 +49,7 @@ public:
     {
     }
 
-    RawDecodingSettings settings;
+    DRawDecoderSettings settings;
     QString             errString;
     QUrl                fileUrl;
 
@@ -65,7 +65,7 @@ protected:
 
         emit signalProgress(20);
 
-        KDcraw rawProcessor;
+        DRawDecoder rawProcessor;
 
         if (m_cancel) return;
 
@@ -115,7 +115,7 @@ MyActionThread::~MyActionThread()
 {
 }
 
-void MyActionThread::convertRAWtoPNG(const QList<QUrl>& list, const RawDecodingSettings& settings, int priority)
+void MyActionThread::convertRAWtoPNG(const QList<QUrl>& list, const DRawDecoderSettings& settings, int priority)
 {
     ActionJobCollection collection;
 

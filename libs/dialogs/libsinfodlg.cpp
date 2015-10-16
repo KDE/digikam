@@ -41,11 +41,6 @@
 #include <libkexiv2_version.h>
 #include <KExiv2/KExiv2>
 
-// Libkdcraw includes
-
-#include <libkdcraw_version.h>
-#include <KDCRAW/KDcraw>
-
 #ifdef HAVE_MARBLE
 
 #include "mapwidget.h"
@@ -77,6 +72,7 @@ extern "C"
 
 // Local includes
 
+#include "drawdecoder.h"
 #include "greycstorationfilter.h"
 #include "pgfutils.h"
 #include "digikam-lcms.h"
@@ -103,28 +99,18 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     // --------------------------------------------------------
     // By default set a list of common components information used by Showfoto and digiKam.
 
-    static const char* CONTEXT = "Component information, see help->components";
+    static const char* CONTEXT         = "Component information, see help->components";
     static const QString SUPPORTED_YES = i18nc("component is supported/available",     "Yes");
     static const QString SUPPORTED_NO  = i18nc("component is not available/supported", "No");
 
     QMap<QString, QString> list;
     list.insert(i18nc(CONTEXT, "Qt"),                          QLatin1String(qVersion()));
-    list.insert(i18nc(CONTEXT, "KCoreAddons"),                 QLatin1String(KCOREADDONS_VERSION_STRING));
-    list.insert(i18nc(CONTEXT, "KDcraw"),                      KDcraw::version());
-    list.insert(i18nc(CONTEXT, "LibRaw"),                      KDcraw::librawVersion());
+    list.insert(i18nc(CONTEXT, "KDE"),                         QLatin1String(KCOREADDONS_VERSION_STRING));
+    list.insert(i18nc(CONTEXT, "LibRaw"),                      DRawDecoder::librawVersion());
 
-#if KDCRAW_VERSION >= 0x000500
-    list.insert(i18nc(CONTEXT, "Parallelized demosaicing"),    checkTriState(KDcraw::librawUseGomp()));
-#endif
+    list.insert(i18nc(CONTEXT, "Parallelized demosaicing"),    checkTriState(DRawDecoder::librawUseGomp()));
 
-#if KDCRAW_VERSION >= 0x020400
-    list.insert(i18nc(CONTEXT, "Demosaic GPL2 pack support"),  checkTriState(KDcraw::librawUseGPL2DemosaicPack()));
-    list.insert(i18nc(CONTEXT, "Demosaic GPL3 pack support"),  checkTriState(KDcraw::librawUseGPL3DemosaicPack()));
-#endif
-
-#if KDCRAW_VERSION >= 0x020200
-    list.insert(i18nc(CONTEXT, "RawSpeed codec support"),      checkTriState(KDcraw::librawUseRawSpeed()));
-#endif
+    list.insert(i18nc(CONTEXT, "RawSpeed codec support"),      checkTriState(DRawDecoder::librawUseRawSpeed()));
 
 #ifdef HAVE_EIGEN3
     list.insert(i18nc(CONTEXT, "Eigen"),                       QLatin1String(EIGEN3_VERSION_STRING));

@@ -69,7 +69,6 @@ set(libimportui_SRCS
 
 include_directories(
     $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KDcraw,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
@@ -86,23 +85,17 @@ include_directories(
 )
 
 if(ENABLE_MEDIAPLAYER)
-    include_directories(
-        $<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>
-    )
+    include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 if(KF5KFace_FOUND)
-    include_directories(
-        $<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>
-    )
+    include_directories($<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 add_library(importuibackend_src OBJECT ${libimportuibackend_SRCS})
 
-
 add_library(importui_src OBJECT ${libimportui_SRCS})
 
 add_library(importui STATIC $<TARGET_OBJECTS:importui_src>)
-
 
 install(FILES main/importui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

@@ -38,7 +38,7 @@
 
 // Libkdcraw includes
 
-#include <KDCRAW/KDcraw>
+#include "drawdecoder.h"
 
 // Local includes
 
@@ -140,8 +140,8 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
 
     if (mode != QIODevice::WriteOnly)
     {
-        formats << i18n("Raw Images (%1)").arg(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
-        allTypes.append(QLatin1String(KDcrawIface::KDcraw::rawFiles()));
+        formats << i18n("Raw Images (%1)").arg(QLatin1String(RawEngine::DRawDecoder::rawFiles()));
+        allTypes.append(QLatin1String(RawEngine::DRawDecoder::rawFiles()));
         formats << i18n("All supported files (%1)").arg(allTypes);
     }
 
