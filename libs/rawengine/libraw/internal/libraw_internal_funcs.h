@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_internal_funcs.h
- * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  14, 2008
 
 LibRaw is free software; you can redistribute it and/or modify
@@ -25,13 +25,27 @@ it under the terms of the one of three licenses as you choose:
 #else
     /* WF */
     void        wf_bayer4_igauss_filter(int radius,void* src_image, int src_imgmode, void* dst_image, int dst_imgmode);
-    void	wf_bayer4_green_blur   (int mode,void* src_image, int src_imgmode, void* dst_image, int dst_imgmode);
+    void			wf_bayer4_green_blur   (int mode,void* src_image, int src_imgmode, void* dst_image, int dst_imgmode);
     void        wf_bayer4_block_filter (int* radius_list, void* src_image, int src_imgmode, void* dst_image, int dst_imgmode);
     double	wf_filter_energy       (int r1_greenmode, int r1, int r2_greenmode, int r2);
 
 
 // inline functions
     ushort      sget2 (uchar *s);
+    ushort      sget2Rev(uchar *s);
+    void	setCanonBodyFeatures (unsigned id);
+    void 	processCanonCameraInfo (unsigned id, uchar *CameraInfo, unsigned maxlen);
+    void	processNikonLensData (uchar *LensData, unsigned len);
+    void	setOlympusBodyFeatures (unsigned long long id);
+    void	setPhaseOneFeatures (unsigned id);
+    void	setPentaxBodyFeatures (unsigned id);
+    void	PentaxLensInfo (unsigned id, unsigned len);
+    void	setSonyBodyFeatures (unsigned id);
+    void	parseSonyLensType2 (uchar a, uchar b);
+    void 	parseSonyLensFeatures (uchar a, uchar b);
+    void	process_Sony_0x9050 (uchar * buf, unsigned id);
+    void	process_Sony_0x940c (uchar * buf);
+
     ushort      get2();
     unsigned    sget4 (uchar *s);
     unsigned    getint (int type);
@@ -47,8 +61,9 @@ it under the terms of the one of three licenses as you choose:
     void        canon_600_load_raw();
     void        canon_600_correct();
     int         canon_s2is();
-    void        parse_ciff (int offset, int length);
+void        parse_ciff (int offset, int length, int);
     void        ciff_block_1030();
+
 
 // LJPEG decoder
     unsigned    getbithuff (int nbits, ushort *huff);
@@ -56,12 +71,8 @@ it under the terms of the one of three licenses as you choose:
     ushort*     make_decoder (const uchar *source);
     int         ljpeg_start (struct jhead *jh, int info_only);
     void        ljpeg_end(struct jhead *jh);
-    int         ljpeg_diff (ushort *huff); 
-    int         ljpeg_diff_new (LibRaw_bit_buffer& bits, LibRaw_byte_buffer* buf,ushort *huff);
-    int         ljpeg_diff_pef (LibRaw_bit_buffer& bits, LibRaw_byte_buffer* buf,ushort *huff);
+    int         ljpeg_diff (ushort *huff);
     ushort *    ljpeg_row (int jrow, struct jhead *jh);
-    ushort *    ljpeg_row_new (int jrow, struct jhead *jh, LibRaw_bit_buffer& bits,LibRaw_byte_buffer* bytes);
-
     unsigned    ph1_bithuff (int nbits, ushort *huff);
 
 // Canon DSLRs
@@ -71,8 +82,7 @@ void        crw_init_tables (unsigned table, ushort *huff[2]);
     void        lossless_jpeg_load_raw();
     void        canon_sraw_load_raw();
 // Adobe DNG
-    void        adobe_copy_pixel_raw (unsigned int row, unsigned int col, ushort **rp);
-    void        adobe_copy_pixel_color (unsigned int row, unsigned int col, ushort **rp);
+    void        adobe_copy_pixel (unsigned int row, unsigned int col, ushort **rp);
     void        lossless_dng_load_raw();
     void        packed_dng_load_raw();
     void        lossy_dng_load_raw();
@@ -84,7 +94,9 @@ void        crw_init_tables (unsigned table, ushort *huff[2]);
 
 // Nikon (and Minolta Z2)
     void        nikon_load_raw();
-//void        nikon_load_raw();
+    void        nikon_load_sraw();
+    void        nikon_yuv_load_raw();
+    void	nikon_coolscan_load_raw();
     int         nikon_e995();
     int         nikon_e2100();
     void        nikon_3700();
@@ -118,11 +130,15 @@ void        crw_init_tables (unsigned table, ushort *huff[2]);
     void        packed_load_raw();
     float	find_green(int,int,int,int);
     void        unpacked_load_raw();
+    void        unpacked_load_raw_fuji_f700s20();
     void        parse_sinar_ia();
     void        parse_phase_one (int base);
 
 // Misc P&S cameras
     void        nokia_load_raw();
+    void        android_loose_load_raw();
+    void        android_tight_load_raw();
+    void        canon_rmf_load_raw();
     unsigned    pana_bits (int nbits);
     void        panasonic_load_raw();
     void        olympus_load_raw();
@@ -150,8 +166,10 @@ void        crw_init_tables (unsigned table, ushort *huff[2]);
     int         kodak_65000_decode (short *out, int bsize);
     void        kodak_65000_load_raw();
     void        kodak_rgb_load_raw();
-    void        kodak_yrgb_load_raw();
     void        kodak_ycbcr_load_raw();
+//    void        kodak_yrgb_load_raw();
+    void        kodak_c330_load_raw();
+    void        kodak_c603_load_raw();
     void        kodak_rgb_load_thumb();
     void        kodak_ycbcr_load_thumb();
 
@@ -160,14 +178,17 @@ void        crw_init_tables (unsigned table, ushort *huff[2]);
     void        sony_load_raw();
     void        sony_arw_load_raw();
     void        sony_arw2_load_raw();
+    void        samsung_load_raw();
+    void        samsung2_load_raw();
+    void        samsung3_load_raw();
     void        parse_minolta (int base);
 
 // Foveon/Sigma
-
+#ifdef LIBRAW_DEMOSAIC_PACK_GPL2
     void        foveon_sd_load_raw();
     void        foveon_dp_load_raw();
     void        foveon_huff (ushort *huff);
-void        foveon_load_camf();
+    void        foveon_load_camf();
 
     const char* foveon_camf_param (const char *block, const char *param);
     void *      foveon_camf_matrix (unsigned dim[3], const char *name);
@@ -179,12 +200,15 @@ void        foveon_load_camf();
     void        foveon_interpolate();
     char *      foveon_gets (int offset, char *str, int len);
     void        parse_foveon();
-
+#endif
+// We always have x3f code compiled in!
+    void        parse_x3f();
+    void        x3f_load_raw();
+    void        x3f_dpq_interpolate_rg();
+	void        x3f_dpq_interpolate_af(int xstep, int ystep, int scale); // 1x1 af pixels
 
 // CAM/RGB
     void        pseudoinverse (double (*in)[3], double (*out)[3], int size);
-    void        cam_xyz_coeff (double cam_xyz[4][3]);
-    void        adobe_coeff (const char *, const char *);
     void        simple_coeff (int index);
 
 
@@ -192,6 +216,7 @@ void        foveon_load_camf();
     void        tiff_get (unsigned base,unsigned *tag, unsigned *type, unsigned *len, unsigned *save);
     void        parse_thumb_note (int base, unsigned toff, unsigned tlen);
     void        parse_makernote (int base, int uptag);
+		void        parse_makernote_0xc634(int base, int uptag, unsigned dng_writer);
     void        parse_exif (int base);
     void        linear_table (unsigned len);
     void        parse_kodak_ifd (int base);
@@ -199,8 +224,10 @@ void        foveon_load_camf();
     int         parse_tiff (int base);
     void        apply_tiff(void);
     void        parse_gps (int base);
-    void        romm_coeff (float romm_cam[3][3]);
+		void        parse_gps_libraw(int base);
+		void        romm_coeff(float romm_cam[3][3]);
     void        parse_mos (int offset);
+    void        parse_qt (int end);
     void        get_timestamp (int reversed);
 
 // External JPEGs, what cameras uses it ?
@@ -214,10 +241,10 @@ void        foveon_load_camf();
     void        tiff_head (struct tiff_hdr *th, int full);
 
 // splitted AHD code
-#define TS 256
+#define TS 512
     void        ahd_interpolate_green_h_and_v(int top, int left, ushort (*out_rgb)[TS][TS][3]);
-    void ahd_interpolate_r_and_b_in_rgb_and_convert_to_cielab(int top, int left, ushort (*inout_rgb)[TS][3], short (*out_lab)[TS][3], const float (&xyz_cam)[3][4]);
-    void ahd_interpolate_r_and_b_and_convert_to_cielab(int top, int left, ushort (*inout_rgb)[TS][TS][3], short (*out_lab)[TS][TS][3], const float (&xyz_cam)[3][4]);
+    void ahd_interpolate_r_and_b_in_rgb_and_convert_to_cielab(int top, int left, ushort (*inout_rgb)[TS][3], short (*out_lab)[TS][3]);
+    void ahd_interpolate_r_and_b_and_convert_to_cielab(int top, int left, ushort (*inout_rgb)[TS][TS][3], short (*out_lab)[TS][TS][3]);
     void ahd_interpolate_build_homogeneity_map(int top, int left, short (*lab)[TS][TS][3], char (*out_homogeneity_map)[TS][2]);
     void ahd_interpolate_combine_homogeneous_pixels(int top, int left, ushort (*rgb)[TS][TS][3], char (*homogeneity_map)[TS][2]);
 

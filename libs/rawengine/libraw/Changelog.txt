@@ -1,8 +1,290 @@
-2013-05-25 Alex Tutubalin <lexa@lexa.ru>
-  * fixed wrong data maximum calculation for Panasonic files
-  * check for possible buffer overrun in exposure correction code
-  * LibRaw 0.15.1
-      
+2015-08-15  Alex Tutubalin <lexa@lexa.ru>
+
+ * LibRaw 0.17 
+
+ * Fixed dcraw.c ljpeg_start possibly buffer overrun
+
+ * fixed several bugs detected by using American Fuzzy Lop
+
+ * C-API extension to support 3DLut Creator
+
+ * More metadata parsing/extraction:
+    - XMP packet extracted (if exists)
+    - DNG Color information parsed
+    - GPS data (partially) parsed
+    - EXIF/Makernotes parsed for used optics (for both RAW files and DNG converted by Adobe convertor).
+
+ * Exif/Makernotes parser callback (called for each processed tag)
+
+ * Sony ARW2.3 decoder:
+   - params.sony_arw2_hack removed, decoded data are always in 0...17k range (note the difference with dcraw!)
+   - Additional processing options for Sony lossy compression techincal analysis.
+
+ * Dcraw 9.26 imported (but some changes not approved because Libraw do it better) with some exceptions:
+    - no Pentax K3-II frame selection code 
+    - no built-in JPEG decompressor
+
+ * Many improvements in data decoding/processing:
+    - Correct decoding of black level values from metadata for many formats, LibRaw do not rely on hardcoded black levels.
+
+ * 224 camera models added to supported camera list.
+   Some of them are new (released since LibRaw 0.16 come out), some was supported before, but missed from the list.
+   Added cameras are:
+
+  Alcatel 5035D
+  BlackMagic Pocket Cinema Camera, Production Camera 4k
+  Canon PowerShot A550, A3300 IS, G1 X Mark II, G7 X, SD950, SX60 HS, EOS 7D Mark II, EOS 20Da, EOS 60Da, EOS 1200D, EOS-1D C, 5DS, 5DS R, 750D, 760D, M2, M3, G3 X
+  Casio EX-FC300S, EX-FC400S, EX-Z1080, EX-ZR700, EX-ZR710, EX-ZR750, EX-ZR800, EX-ZR850, EX-ZR1000, EX-ZR1100, ZR1200, ZR1300, EX-ZR1500, EX-100, EX-10
+  Digital Bolex D16,D16M
+  DJI 4384x3288,
+  Epson R-D1s, R-D1x
+  FujiFilm E505,S1,S205EXR,HS10,HS11,HS22EXR,HS33EXR,HS35EXR,F505EXR,F605EXR,F775EXR,F900EXR,X100T,X30,X-T1,X-T1 Graphite Silver, XQ2, X-A2, X-T10
+  Hasselblad H5D-60, H5D-50,H5D-50c,H5D-40,H4D-60,H4D-50,H4D-40,H4D-31,H3DII-22,H3DII-31,H3DII-39,H3DII-50,H3D-22,H3D-31,H3D-39,H2D-22,H2D-39,CF-22,CF-31,CF-39,Stellar II,HV
+  HTC UltraPixel
+  Imacon Ixpress 96, 96C, 384, 384C (single shot only),132C,  528C (single shot only)
+  ISG 2020x1520
+  Ikonoskop A-Cam dII Panchromatic, A-Cam dII
+  Kinefinity KineMINI, KineRAW Mini, KineRAW S35
+  Kodak DCS460D, S-1
+  Leaf Credo 50
+  Lenovo a820
+  Leica Digital-Modul-R, D-Lux (Typ 109), M (Typ 240), Monochrom (Typ 240), M-E, M-P, R8, S, T (Typ 701), X (Typ 113), X2, X-E (Typ 102), V-Lux (Typ 114), Monochrom (Typ 246), Q
+  Matrix 4608x3288
+  Nikon D4s, D600, D610, D750, D800, D800E, D810, D3300, D5500, Df, 1 J4, 1 S2, 1 V3, Coolpix P340, Coolscan NEF, D7200, 1 J5,D810A
+  Nokia 1200x1600
+  Olympus E-450, E-600, E-PL6, E-PL7, E-M1, E-M10, E-M5 Mark II, SP565UZ, STYLUS1s, SH-2, TG-4, AIR-A01
+  Panasonic DMC-CM1, DMC-FZ7, DMC-FZ70, DMC-FZ1000, DMC-GF7, DMC-GH4, AG-GH4, DMC-GM1s, DMC-GM5, DMC-LX100, DMC-TZ60/61/SZ40, DMC-TZ70, FZ300/330, GX8
+  Pentax GR, K110D, K-01,  K-S1, Q, QS-1, 645Z, K-S2, K3 II
+  PhaseOne IQ250, IQ260, IQ260 Achromatic, IQ280, Achromatic+, P 20+, P 21, P 25+, P 30+, P 40+
+  Ricoh GXR MOUNT A12, GXR MOUNT A16 24-85mm F3.5-5.5, GXR, S10 24-72mm F2.5-4.4 VC, GXR, GR A12 50mm F2.5 MACRO, GXR, GR LENS A12 28mm F2.5, GXR, GXR P10
+  Samsung GX-1L, NX1, NX5, NX1000, NX1100, NX30, NX300, NX300M, NX3000, NX mini, Galaxy S3, Galaxy Nexus, NX500
+  Sigma dp1 Quattro, dp2 Quattro, dp3 Quattro, dp0 Quattro
+  Sinar eMotion 22, eMotion 54, eSpirit 65, eMotion 75, eVolution 75, Sinarback 54
+  Sony A7 II, A7S, ILCA-77M2 (A77-II), ILCE-3000, ILCE-5000, ILCE-5100, ILCE-6000, ILCE-QX1, DSC-RX100III, DSLR-A560, NEX-VG20, NEX-VG30, NEX-VG900, IMX135-mipi 13mp, IMX135-QCOM, IMX072-mipi, RX100-IV, A7R-II, RX10-II
+
+ * Fujifilm F700/S20Pro second frame support
+
+
+2014-02-01  Alex Tutubalin <lexa@lexa.ru>
+   * Updated Oly E-M10 & Panasonic TZ60/61 color data
+   * Updated foveon SD9-14 white level
+   * Support for 1x1 BlackLevelRepeatDim
+   
+2014-01-31  Alex Tutubalin <lexa@lexa.ru>
+   * imported dcraw 1.461: fixed error in BlackLevelDim handling
+   * Accurate work with pattern black-level (cblack[6+])
+   * Support for Olympus E-M10 and Fujifilm X-T1
+   * Adjusted possbile maximum value for Sigma SD9 small raws
+   
+2014-01-27 Alex Tutubalin <lexa@lexa.ru>
+   * dcraw 1.460:  Nikon D3300, Panasonic DMC-TZ61, Sony  ILCE-5000
+2014-01-25 Alex Tutubalin <lexa@lexa.ru>
+   * PhaseOne IQ250 support (both compressed and uncompressed)
+2014-01-21 Alex Tutubalin <lexa@lexa.ru>
+   * imgdata.params.sony_arw2_hack removed.
+     It always on for ARW2-files.
+   * New imgdata.params.sony_arw2_options processing flags
+     Values:
+       LIBRAW_SONYARW2_NONE - normal processing
+       LIBRAW_SONYARW2_BASEONLY - BASE pixels outputeed, delta pixels set to 0
+       LIBRAW_SONYARW2_DELTAONLY - Delta pixels written to raw data, base pixels zeroed
+       LIBRAW_SONYARW2_DELTAZEROBASE - Only deltas written without base offset
+
+2014-01-20 Alex Tutubalin <lexa@lexa.ru>
+  * Imported dcraw 9.20:
+    - Support for DNG BlackLevelRepeatDim tags
+    - imgdata.color.cblack[] holds variable BlackLevel for DNG files (up to ~4k values)
+    - imgdata.params.use_camera_matrix is now ON by default. Set it to 3 if you want
+      to force use of DNG embedded matrix.
+    - Tone curve for Canon RMF format supported
+    - Color data for Canon C500
+  * Additional camera support:
+     Alcatel 5035D
+     DJI 4384x3288
+     Fujifilm F900EXR 
+     Kodak 12MP
+     Matrix 4608x3288
+     Nokia 1200x1600
+     Olympus E-PL6
+     Panasonic DMC-FZ7
+
+2014-01-17 Alex Tutubalin <lexa@lexa.ru>
+  * Camera support:
+     Added: Fujifilm XE2, XQ1
+     Color data updated: Nikon D4 1 AW1/J3, Fuji X-M2
+     Fixes: Nikon D610 visible image area, Canon A3300 bayer 
+     pattern
+  * RawSpeed support: enabled processing for cameras,
+    unknown to RawSpeed
+  * Fixed error in LibRaw::unpack_thumb()
+  * little improve performance in my_strcasestr
+  * Fix compiler errors for VS2012/OpenMP
+  * Fixed typo which prevents to use Demosaic Pack GPL2
+  * LibRaw 0.16.0-Release
+
+2013-11-15 Alex Tutubalin <lexa@lexa.ru>
+  * New cameras supported
+     Leica C, X VARIO
+     Nikon D5300, D610, Df, 1 AW1
+     Nokia Lumia 1020, 1520
+     Olympus STYLUS1
+     Pentax K-3
+     Sony RX10, A3000 (ILCE-3000), 
+  * Color data updated:
+     Canon S120
+     Nikon P7800, 1 J3
+     Olympus E-M1
+  * Corrected image visible area sizes
+    Canon G16
+    Sigma pre-Merrill cameras: small and medium-sized RAWs
+
+  * Better EXIF parsing:
+     - ISO values for new Nikon cameras (D4, D800)
+     - black level extraction for Nikon D5300
+     - correct Olympus color data conversion
+
+  * Better Visual Studio compatibility (esp. old versions)
+  * Cmake build: added ws2_32 library for MinGW builds
+  * LibRaw 0.16.0-Beta1
+
+2013-10-22 Alex Tutubalin <lexa@lexa.ru>
+  * Support for new cameras:
+    Sony A7, A7R
+    Panasonic GM1
+
+  * Sony RX1R and RX100M2 color data updated.
+
+  * Sony cameras model name is set by SonyModelID EXIF tag
+  
+  * Sony ARW2: black level and color matrix extracted from EXIF data
+
+  * Samsung: black level and color matrix extracted from EXIF; 
+    Camera multipliers are now extracted correctly even if black is not 0
+
+  * Better source compatibility with Mac OS X compilation
+
+  * Better source compatibility with Win32 compilation
+
+  * DNG without Compression tag assumed uncompressed
+
+  * Better X3F-tools based Foveon support:
+    - new Foveon metadata parser based on X3F-tools. So, if LibRaw compiled
+      without demosaic-pack-GPL2, then no dcraw Foveon code used.
+    - Support for Medium resolution RAWs from DPx Merrill and SD1 cameras.
+      RAW data extracted as is (4800x1600 pixels), aspect ratio is set to
+      0.5, so these RAWs are processed to full-size 4800x3200 RGB.
+    - Support for Foveon thumbnail extraction. Only JPEG and bitmap
+      thumbnails extracted, but 'foveon' (RAW) thumbnails are really not used
+      in production cameras.
+    - New imgdata.params.force_foveon_x3f flag
+      Forces use of x3f-tools based code for Foveon processing if LibRaw
+      compiled with demosaic-pack-GPL2 (and does nothing if LibRaw compiled
+      without this pack).
+      New flag -disadcf added to dcraw_emu sample to use this flag.
+    - LibRaw do not calls exit() on broken Foveon files.
+
+  * API/ABI changed, so all code using LibRaw should be recompiled.
+
+  * LibRaw 0.16.0-Alpha3
+    
+
+2013-10-16 Alex Tutubalin <lexa@lexa.ru>
+  * Support for new cameras:
+    Canon S120 (preliminary color data), G16
+    Fujifilm X-A1 (preliminary color data)
+    Hasselblad Lunar, Stellar
+    Nikon P7800 (preliminary color data)
+    Pentax K50, K500, Q7
+    Samsung Galaxy NX (EK-GN120)
+    Sony NEX-5T
+
+  * Updated color data for:
+    Samsung NX300
+    Sony RX1R
+    Sigma SD1, SD1 Merrill, DPxx (only if non-GPL2 foveon decoder used)
+
+  * Image dimensions table for Foveon cameras (only if
+    non-GPL2 foveon decoder used)
+
+  * Fixed memory leak in x3f-tools code (new Foveon decoder)
+  * Fixed DHT-demosaic incompatibility with MS VisualStudio in OpenMP directives
+  * Additional image size checks.
+  * LibRaw 0.16-Alpha2
+
+2013-09-22 Alex Tutubalin <lexa@lexa.ru>
+  * Support for new cameras:
+     Baumer TXG14
+     Blackmagic Cinema
+     Canon EOS 70D, C500
+     Fujifilm X-M1
+     Nikon D5200
+     Olympus E-P5,E-M1
+     OmniVision OV5647 (Raspberry Pi)
+     Panasonic LF1, GX7, GF6
+     Richon GR
+     Samsung NX300, NX1100, NX2000
+     Sony RX100II, RX1R, NEX-3N
+
+  * Support for Foveon sensor based on X3F code by Roland Karlsson
+    BSD-like license, so included in main LibRaw code.
+    No 'foveon intepolation', so no way to get good colors from
+    old Sigma cameras (SD9, SD14, Polaroid x530). For modern Foveon cameras
+    one may try to create ICC profile (not supplied).
+
+    TODO: thumbnail extraction, fast cancelation    
+
+    Old foveon_*_load_raw (from dcraw) code is used if compiled with 
+    LIBRAW_DEMOSAIC_PACK_GPL2
+
+  * API Changes:
+
+    + New parameters in imgdata.params:
+      - imgdata.params.no_interpolation - disables interpolation step in 
+        LibRaw::dcraw_process() call.
+      - imgdata.params.no_auto_scale - disables call to scale_colors() in
+        LibRaw::dcraw_process() call.
+      - imgdata.params.sraw_ycc - disables Canon sRAW YCbCr to RGB conversion
+        in LibRaw::unpack() call (use for RAW analyzers 
+
+    + New Fuji X-Trans handling:
+      - imgdata.iparams.filters value is now 9 for Fuji X-Trans (instead of 2)
+      - imgdata.iparams.xtrans[6][6] matrix contains row/col to color mapping
+        for Fuji X-Trans sensor.
+
+    + LibRaw::setCancelFlag() - use for fast decoder termination
+
+    + LibRaw_abstract_datastream::make_byte_buffer() call is not needed more.
+
+    + New demosaic code: DHT Demosaic by Anton Petrusevich
+      Set params.user_qual=11 to use.
+
+    + New demosaic code: Modified AHD Demosaic by Anton Petrusevich
+      Set params.user_qual=12 to use.
+
+    + New C-API call libraw_COLOR(libraw_data_t *t, int row,int col)
+      (so LibRaw::COLOR(row,col) exposed to C-API users)
+
+  * Removed faster lossless jpeg decoder ported from RawSpeed library
+    some years ago. Build LibRaw with RawSpeed to get fast decoding.
+
+  * Fixed decoding error for some Canon sRAW files.
+
+  * Disabled RawSpeed's bad pixel processing if RawSpeed used.
+
+  * EOS M and EOS 70D added to unique Canon ID table
+
+  * Canon EOS model name normalized by unique ID table
+
+  * Backported 0.15.4 input data checks
+
+  * Support for CMake builds
+
+  * Updated RawSpeed supported camera list
+
+  * Internals changed, so all code using LibRaw should be recompiled.
+
+  * LibRaw 0.16.0-Alpha1
+
 2013-05-23 Alex Tutubalin <lexa@lexa.ru>
 
  LibRaw 0.15-Release

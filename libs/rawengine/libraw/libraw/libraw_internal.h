@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_internal.h
- * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw internal data structures (not visible outside)
@@ -51,7 +51,7 @@ public:
          unsigned bitbuf;
          int vbits, reset;
     }getbits;
-    struct 
+    struct
     {
          UINT64 bitbuf;
          int vbits;
@@ -66,12 +66,17 @@ public:
         uchar buf[0x4000];
         int vbits, padding;
     }pana_bits;
-	uchar jpeg_buffer[4096];
-    void init() 
-        { 
+    uchar jpeg_buffer[4096];
+    struct
+    {
+      float cbrt[0x10000], xyz_cam[3][4];
+    }ahd_data;
+    void init()
+        {
             getbits.bitbuf = 0; getbits.vbits = getbits.reset = 0;
             ph1_bits.bitbuf = 0; ph1_bits.vbits = 0;
             pana_bits.vbits = 0;
+            ahd_data.cbrt[0]=-2.0f;
         }
 };
 
@@ -96,6 +101,7 @@ typedef struct
     char        *meta_data;
     INT64       profile_offset;
     INT64       toffset;
+	unsigned    pana_black[4];
 
 } internal_data_t;
 
@@ -117,7 +123,7 @@ typedef struct
 
 typedef struct
 {
-    short       order; 
+    short       order;
     ushort      sraw_mul[4],cr2_slice[3];
     unsigned    kodak_cbpp;
     INT64       strip_offset, data_offset;
@@ -132,6 +138,7 @@ typedef struct
     unsigned    zero_after_ff;
     unsigned    tile_width, tile_length,load_flags;
     unsigned    data_error;
+	int			hasselblad_parser_flag;
 }unpacker_data_t;
 
 
@@ -139,22 +146,22 @@ typedef struct
 typedef struct
 {
     internal_data_t internal_data;
-    libraw_internal_output_params_t internal_output_params;    
+    libraw_internal_output_params_t internal_output_params;
     output_data_t output_data;
     identify_data_t identify_data;
     unpacker_data_t unpacker_data;
 } libraw_internal_data_t;
 
 
-struct decode 
+struct decode
 {
     struct decode *branch[2];
     int leaf;
 };
 
-struct tiff_ifd_t 
+struct tiff_ifd_t
 {
-    int t_width, t_height, bps, comp, phint, offset, t_flip, samples, bytes,tile_maxbytes;
+    int t_width, t_height, bps, comp, phint, offset, t_flip, samples, bytes;
     int t_tile_width, t_tile_length;
 };
 

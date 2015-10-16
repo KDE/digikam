@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: postprocessing_benchmark.cpp
- * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
  * Created: Jul 13, 2011
  *
  * LibRaw simple C++ API:  creates 8 different renderings from 1 source file. The 1st and 4th one should be identical
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
                 "-s <num>       Select one raw image from input file\n"
                 "-B <x y w h>   Crop output image\n"
                 "-R <num>       Number of repetitions\n"
-				"-c             Dont use rawspeed\n"
+		"-c             Do not use rawspeed\n"
                 ,LibRaw::version(), LibRaw::cameraCount(),
                 argv[0]);
             return 0;

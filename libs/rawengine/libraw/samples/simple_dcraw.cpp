@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: simple_dcraw.cpp
- * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8, 2008
  *
  * LibRaw simple C++ API:  emulates call to "dcraw  [-D]  [-T] [-v] [-e] [-4]"
@@ -60,6 +60,7 @@ int main(int ac, char *av[])
                 " %d cameras supported\n"
                 "Usage: %s [-D] [-T] [-v] [-e] raw-files....\n"
                 "\t-4 - 16-bit mode\n"
+                "\t-L - list supported cameras and exit\n"
                 "\t-v - verbose output\n"
                 "\t-T - output TIFF files instead of .pgm/ppm\n"
                 "\t-e - extract thumbnails (same as dcraw -e in separate run)\n",LibRaw::version(),
@@ -92,6 +93,18 @@ int main(int ac, char *av[])
                         OUT.output_bps=16;
                     if(av[i][1]=='C' && av[i][2]==0)
                         RawProcessor.set_progress_handler(my_progress_callback,NULL);
+                    if(av[i][1]=='L' && av[i][2]==0)
+                      {
+                        const char **clist = LibRaw::cameraList();
+                        const char **cc = clist;
+                        while(*cc)
+                          {
+                            printf("%s\n",*cc);
+                            cc++;
+                          }
+                        
+                        exit(0);
+                      }
                     continue;
                 }
 
@@ -103,7 +116,8 @@ int main(int ac, char *av[])
                     continue; // no recycle b/c open file will recycle itself
                 }
             
-            if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
+            if(!output_thumbs) // No unpack for thumb extraction
+              if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot unpack %s: %s\n",av[i],libraw_strerror(ret));
                     continue;
@@ -132,6 +146,7 @@ int main(int ac, char *av[])
                                         continue; 
                                 }
                         }
+                    continue;
                 }
             
             ret = RawProcessor.dcraw_process();

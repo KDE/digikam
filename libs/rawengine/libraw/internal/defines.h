@@ -1,5 +1,5 @@
 /* 
-  Copyright 2008-2013 LibRaw LLC (info@libraw.org)
+  Copyright 2008-2015 LibRaw LLC (info@libraw.org)
 
 LibRaw is free software; you can redistribute it and/or modify
 it under the terms of the one of three licenses as you choose:
@@ -27,7 +27,8 @@ it under the terms of the one of three licenses as you choose:
 #ifndef USE_JASPER
 #define NO_JASPER
 #endif
-#define DCRAW_VERSION "9.17"
+#define DCRAW_VERSION "9.25"
+
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -45,24 +46,6 @@ it under the terms of the one of three licenses as you choose:
 #include <string.h>
 #include <time.h>
 #include <sys/types.h>
-
-#ifdef NODEPS
-#define NO_JASPER
-#define NO_JPEG
-#define NO_LCMS
-#endif
-#ifndef NO_JASPER
-#include <jasper/jasper.h>	/* Decode RED camera movies */
-#endif
-#ifndef NO_JPEG
-#include <jpeglib.h>		/* Decode compressed Kodak DC120 photos */
-#endif				/* and Adobe Lossy DNGs */
-#ifdef LOCALEDIR
-#include <libintl.h>
-#define _(String) gettext(String)
-#else
-#define _(String) (String)
-#endif
 #ifdef __CYGWIN__
 #include <io.h>
 #endif
@@ -79,6 +62,31 @@ it under the terms of the one of three licenses as you choose:
 #include <netinet/in.h>
 typedef long long INT64;
 typedef unsigned long long UINT64;
+#endif
+
+#ifdef NODEPS
+#define NO_JASPER
+#define NO_JPEG
+#define NO_LCMS
+#endif
+#ifndef NO_JASPER
+#include <jasper/jasper.h>	/* Decode Red camera movies */
+#endif
+#ifndef NO_JPEG
+#include <jpeglib.h>		/* Decode compressed Kodak DC120 photos */
+#endif				/* and Adobe Lossy DNGs */
+#ifndef NO_LCMS
+#ifdef USE_LCMS
+#include <lcms.h>		/* Support color profiles */
+#else
+#include <lcms2.h>		/* Support color profiles */
+#endif
+#endif
+#ifdef LOCALEDIR
+#include <libintl.h>
+#define _(String) gettext(String)
+#else
+#define _(String) (String)
 #endif
 
 #ifdef LJPEG_DECODE
@@ -102,6 +110,8 @@ typedef unsigned long long UINT64;
 #define ULIM(x,y,z) ((y) < (z) ? LIM(x,y,z) : LIM(x,z,y))
 #define CLIP(x) LIM(x,0,65535)
 #define SWAP(a,b) { a=a+b; b=a-b; a=a-b; }
+
+#define my_swap(type, i, j) {type t = i; i = j; j = t;}
 
 /*
    In order to inline this calculation, I make the risky

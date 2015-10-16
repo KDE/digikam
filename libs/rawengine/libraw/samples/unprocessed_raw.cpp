@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: unprocessed_raw.cpp
- * Copyright 2009-2013 LibRaw LLC (info@libraw.org)
+ * Copyright 2009-2015 LibRaw LLC (info@libraw.org)
  * Created: Fri Jan 02, 2009
  *
  * LibRaw sample
@@ -87,7 +87,7 @@ int main(int ac, char *av[])
                     else if(av[i][1]=='s' && av[i][2]==0)
                         {
                             i++;
-                            OUT.shot_select=atoi(av[i]);
+                            OUT.shot_select=av[i]?atoi(av[i]):0;
                         }
                     else
                         goto usage;
@@ -116,9 +116,7 @@ int main(int ac, char *av[])
             if(verbose)
                 printf("Unpacked....\n");
 
-            libraw_decoder_info_t decoder_info;
-            RawProcessor.get_decoder_info(&decoder_info);
-            if(!(decoder_info.decoder_flags & LIBRAW_DECODER_FLATFIELD))
+            if(!(RawProcessor.imgdata.idata.filters || RawProcessor.imgdata.idata.colors == 1))
                 {
                     printf("Only Bayer-pattern RAW files supported, sorry....\n");
                     continue;

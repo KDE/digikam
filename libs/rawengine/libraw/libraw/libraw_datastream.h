@@ -1,6 +1,6 @@
 /* -*- C -*-
  * File: libraw_datastream.h
- * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
  * Created: Sun Jan 18 13:07:35 2009
  *
  * LibRaw Data stream interface
@@ -49,7 +49,6 @@ it under the terms of the one of three licenses as you choose:
 #define IOERROR() do { throw LIBRAW_EXCEPTION_IO_EOF; } while(0)
 
 class LibRaw_buffer_datastream;
-class LibRaw_byte_buffer;
 class LibRaw_bit_buffer;
 
 class DllDef LibRaw_abstract_datastream
@@ -69,11 +68,10 @@ class DllDef LibRaw_abstract_datastream
     virtual void *      make_jas_stream() = 0;
     virtual int         jpeg_src(void *) { return -1; }
     /* Make buffer from current offset */
-    virtual LibRaw_byte_buffer *make_byte_buffer(unsigned int sz);
 
     /* subfile parsing not implemented in base class */
     virtual const char* fname(){ return NULL;};
-#if defined(WIN32) && !defined(__MINGW32__)
+#if defined(_WIN32) && !defined(__MINGW32__) && defined(_MSC_VER) && (_MSC_VER > 1310)
 	virtual const wchar_t* wfname(){ return NULL;};
 	virtual int         subfile_open(const wchar_t*) { return -1;}
 #endif
@@ -106,7 +104,7 @@ class DllDef  LibRaw_file_datastream: public LibRaw_abstract_datastream
   public:
     virtual     ~LibRaw_file_datastream();
                 LibRaw_file_datastream(const char *fname);
-#if defined(WIN32) && !defined(__MINGW32__)
+#if defined(_WIN32) && !defined(__MINGW32__) && defined(_MSC_VER) && (_MSC_VER > 1310)
                 LibRaw_file_datastream(const wchar_t *fname);
 #endif
     virtual void        *make_jas_stream();
@@ -125,7 +123,7 @@ class DllDef  LibRaw_file_datastream: public LibRaw_abstract_datastream
     virtual char*       gets(char *str, int sz); 
     virtual int         scanf_one(const char *fmt, void*val); 
     virtual const char* fname();
-#if  defined(WIN32) && !defined(__MINGW32__)
+#if defined(_WIN32) && !defined(__MINGW32__) && defined(_MSC_VER) && (_MSC_VER > 1310)
     virtual const wchar_t* wfname();
     virtual int         subfile_open(const wchar_t *fn);
 #endif
@@ -142,7 +140,6 @@ class DllDef  LibRaw_buffer_datastream : public LibRaw_abstract_datastream
     virtual int         valid();
     virtual void        *make_jas_stream();
     virtual int         jpeg_src(void *jpegdata);
-    virtual LibRaw_byte_buffer *make_byte_buffer(unsigned int sz);
     virtual int         read(void * ptr,size_t sz, size_t nmemb);
     virtual int         eof();
     virtual int         seek(INT64 o, int whence);
@@ -167,7 +164,7 @@ class DllDef LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
 {
   public:
                         LibRaw_bigfile_datastream(const char *fname);
-#if defined(WIN32) && !defined(__MINGW32__)
+#if defined(_WIN32) && !defined(__MINGW32__) && defined(_MSC_VER) && (_MSC_VER > 1310)
 			LibRaw_bigfile_datastream(const wchar_t *fname);
 #endif
     virtual             ~LibRaw_bigfile_datastream();
@@ -183,7 +180,7 @@ class DllDef LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
     virtual char*       gets(char *str, int sz);
     virtual int         scanf_one(const char *fmt, void*val);
     virtual const char *fname();
-#if defined(WIN32) && !defined(__MINGW32__)
+#if defined(_WIN32) && !defined(__MINGW32__) && defined(_MSC_VER) && (_MSC_VER > 1310)
     virtual const wchar_t* wfname();
     virtual int         subfile_open(const wchar_t *fn);
 #endif

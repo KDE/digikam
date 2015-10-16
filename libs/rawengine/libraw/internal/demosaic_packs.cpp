@@ -36,12 +36,15 @@ it under the terms of the one of three licenses as you choose:
 
 /* WF filtering is allowed to triple libraw license */
 #include "./wf_filtering.cpp"
+/* DHT and AAHD are LGPL licensed, so include them */
+#include "./dht_demosaic.cpp"
+#include "./aahd_demosaic.cpp"
 
 
 #include "internal/var_defines.h"
 
 
-#ifdef LIBRAW_DEMOSAIC_PACK_GPL2_ttt
+#ifdef LIBRAW_DEMOSAIC_PACK_GPL2
 /*AHD-Mod*/
 #include <ahd_interpolate_mod.c>
 /*LMMSE*/
@@ -93,10 +96,4 @@ void CLASS cfa_impulse_gauss(float lclean, float cclean){}
 #endif
 #ifdef LIBRAW_DEMOSAIC_PACK_GPL2
 #include <dcraw_foveon.c>
-#else
-void CLASS foveon_interpolate(){}
-void CLASS foveon_dp_load_raw(){}
-void CLASS foveon_sd_load_raw(){}
-void CLASS foveon_thumb_loader(){}
-void CLASS foveon_thumb(){}
 #endif

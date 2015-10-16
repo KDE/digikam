@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: 4channels.cpp
- * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
  * Created: Mon Feb 09, 2009
  *
  * LibRaw sample
@@ -80,7 +80,7 @@ int main(int ac, char *av[])
                     if(av[i][1]=='s' && av[i][2]==0)
                         {
                             i++;
-                            OUT.shot_select=atoi(av[i]);
+                            OUT.shot_select=av[i]?atoi(av[i]):0;
                         }
                     else if(av[i][1]=='g' && av[i][2]==0)
                         use_gamma = 1;

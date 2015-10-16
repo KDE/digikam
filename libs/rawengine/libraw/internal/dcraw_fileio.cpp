@@ -1,5 +1,5 @@
 /* 
-  Copyright 2008-2013 LibRaw LLC (info@libraw.org)
+  Copyright 2008-2015 LibRaw LLC (info@libraw.org)
 
 LibRaw is free software; you can redistribute it and/or modify
 it under the terms of the one of three licenses as you choose:
@@ -102,7 +102,7 @@ void CLASS subtract (const char *fname)
 
   if (!(fp = fopen (fname, "rb"))) {
 #ifdef DCRAW_VERBOSE
-    perror (fname); 
+    perror (fname);
 #endif
 #ifdef LIBRAW_LIBRARY_BUILD
     imgdata.process_warnings |= LIBRAW_WARN_BAD_DARKFRAME_FILE;
@@ -160,9 +160,6 @@ void CLASS apply_profile (const char *input, const char *output)
   FILE *fp;
   unsigned size;
 
-#ifndef USE_LCMS2
-  cmsErrorAction (LCMS_ERROR_SHOW);
-#endif
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
