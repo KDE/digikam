@@ -28,7 +28,7 @@
 #include <QString>
 #include <QDateTime>
 
-// Libkdcraw includes
+// Local includes
 
 #include "drawdecoder.h"
 

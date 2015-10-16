@@ -28,12 +28,9 @@
 
 #include <QObject>
 
-// Libkdcraw includes
-
-#include "drawdecodersettings.h"
-
 // Local includes
 
+#include "drawdecodersettings.h"
 #include "dimg.h"
 #include "queuesettings.h"
 #include "iofilesettings.h"

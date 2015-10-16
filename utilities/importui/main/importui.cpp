@@ -67,12 +67,9 @@
 #include <kactioncollection.h>
 #include <kmessagewidget.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "digikam_debug.h"

@@ -25,12 +25,9 @@
 #ifndef IMPORTVIEW_H
 #define IMPORTVIEW_H
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "camiteminfo.h"
 #include "sidebarwidget.h"
 #include "importui.h"

@@ -42,12 +42,9 @@
 #include <QTime>
 #include <QWriteLocker>
 
-// Libkdcraw includes
-
-#include "rawfiles.h"
-
 // Local includes
 
+#include "rawfiles.h"
 #include "digikam_debug.h"
 #include "albumdb.h"
 #include "collectionmanager.h"

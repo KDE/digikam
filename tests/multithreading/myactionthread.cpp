@@ -32,13 +32,10 @@
 #include <QImage>
 #include <QDebug>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
 #include "actionthreadbase.h"
+#include "drawdecoder.h"
 
 class Mytask : public ActionJob
 {

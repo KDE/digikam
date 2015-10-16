@@ -28,7 +28,7 @@
 
 #include <QString>
 
-// Libkdcraw includes
+// Local includes
 
 #include "drawdecoder.h"
 

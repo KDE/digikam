@@ -25,12 +25,9 @@
  *
  * ============================================================ */
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "applicationsettings.h"
 #include "applicationsettings_p.h"
 #include "databaseaccess.h"

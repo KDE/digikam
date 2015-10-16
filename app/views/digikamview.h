@@ -32,10 +32,6 @@
 #include <QStringList>
 #include <QUrl>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // libkexiv2 includes
 
 #include <KExiv2/RotationMatrix>
@@ -48,9 +44,9 @@
 #include "digikammodelcollection.h"
 #include "sidebarwidget.h"
 #include "stackedview.h"
+#include "dwidgetutils.h"
 
 using namespace KExiv2Iface;
-
 
 namespace Digikam
 {

@@ -55,12 +55,9 @@ extern "C"
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_debug.h"
 #include "digikam_config.h"
 #include "dimg.h"
@@ -281,7 +278,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         return true;
     }
 
-    // RAW files : try to extract embedded thumbnail using libkdcraw
+    // RAW files : try to extract embedded thumbnail using RawEngine
 
     RawEngine::DRawDecoder::loadRawPreview(thumbnail, path);
 

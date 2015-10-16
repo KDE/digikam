@@ -4,7 +4,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2013-09-07
- * @brief  a command line tool to show libkdcraw info
+ * @brief  a command line tool to show RawEngine info
  *
  * @author Copyright (C) 2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -35,12 +35,9 @@ using namespace RawEngine;
 
 int main(int /*argc*/, char** /*argv*/)
 {
-    qDebug() << "Libkdcraw version : " << DRawDecoder::version(),
     qDebug() << "Libraw version    : " << DRawDecoder::librawVersion();
     qDebug() << "Use OpenMP        : " << DRawDecoder::librawUseGomp();
     qDebug() << "Use RawSpeed      : " << DRawDecoder::librawUseRawSpeed();
-    qDebug() << "Use GPL2 Pack     : " << DRawDecoder::librawUseGPL2DemosaicPack();
-    qDebug() << "Use GPL3 Pack     : " << DRawDecoder::librawUseGPL3DemosaicPack();
     qDebug() << "Raw files list    : " << DRawDecoder::rawFilesList();
     qDebug() << "Raw files version : " << DRawDecoder::rawFilesVersion();
     qDebug() << "Supported camera  : " << DRawDecoder::supportedCamera();

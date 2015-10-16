@@ -88,12 +88,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "dnuminput.h"
 #include "dcombobox.h"
 #include "widgets_debug.h"

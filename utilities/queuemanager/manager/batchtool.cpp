@@ -37,12 +37,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_debug.h"
 #include "dimgbuiltinfilter.h"
 #include "dimgloaderobserver.h"

@@ -5,7 +5,7 @@
  *
  * Date        : 2008-08-06
  * Description : Raw decoding settings for digiKam:
- *               standard libkdcraw parameters plus
+ *               standard RawEngine parameters plus
  *               few customized for post processing.
  *
  * Copyright (C) 2008-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -29,12 +29,9 @@
 
 #include <QDomDocument>
 
-// DRawDecoder includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "filteraction.h"
 #include "digikam_version.h"
 

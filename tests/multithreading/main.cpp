@@ -34,12 +34,9 @@
 #include <QDebug>
 #include <QFileDialog>
 
-// Libkdcraw includes
-
-#include "rawfiles.h"
-
 // Local includes
 
+#include "rawfiles.h"
 #include "processordlg.h"
 
 int main(int argc, char* argv[])

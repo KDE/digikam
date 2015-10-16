@@ -78,12 +78,9 @@ extern "C"
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_globals.h"
 #include "digikam_debug.h"
 #include "canvas.h"

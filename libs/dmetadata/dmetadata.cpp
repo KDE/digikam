@@ -39,13 +39,10 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
 #include "rawinfo.h"
 #include "drawdecoder.h"
-
-// Local includes
-
 #include "digikam_debug.h"
 #include "filereadwritelock.h"
 #include "metadatasettings.h"

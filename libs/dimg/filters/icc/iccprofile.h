@@ -78,7 +78,7 @@ public:
     IccProfile(const QString& filePath);
 
     /**
-     * Returns the profiles available with libkdcraw. You still need to call open() on them.
+     * Returns the profiles available with RawEngine. You still need to call open() on them.
      */
     static IccProfile sRGB();
     static IccProfile adobeRGB();

@@ -485,7 +485,7 @@ QList<IccProfile> IccSettings::allProfiles()
     // check search directories
     profiles << d->scanDirectories(paths);
 
-    // load profiles that come with libkdcraw
+    // load profiles that come with RawEngine
     profiles << IccProfile::defaultProfiles();
 
     QMutexLocker lock(&d->mutex);

@@ -38,12 +38,9 @@
 
 #include <kconfiggroup.h>
 
-// Libkdcraw includes
-
-#include "drawdecodersettings.h"
-
 // Local includes
 
+#include "drawdecodersettings.h"
 #include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "digikam_export.h"

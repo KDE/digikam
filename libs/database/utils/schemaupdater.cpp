@@ -36,12 +36,9 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_debug.h"
 #include "databasebackend.h"
 #include "databasetransaction.h"

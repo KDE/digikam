@@ -51,18 +51,13 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "inserttextwidget.h"
-
-
 
 namespace DigikamDecorateImagePlugin
 {

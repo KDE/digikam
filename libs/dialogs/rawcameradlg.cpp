@@ -37,7 +37,7 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
+// Local includes
 
 #include "drawdecoder.h"
 

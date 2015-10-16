@@ -944,7 +944,7 @@ bool SetupICC::iccRepositoryIsValid()
         return true;
     }
 
-    // can at least libkdcraw profiles be opened?
+    // Can at least RawEngine profiles be opened?
     if (IccProfile::sRGB().open())
     {
         return true;

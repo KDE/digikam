@@ -35,12 +35,9 @@
 #include <QVariant>
 #include <QMatrix>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_debug.h"
 #include "dmetadata.h"
 #include "iccmanager.h"

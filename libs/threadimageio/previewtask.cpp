@@ -38,12 +38,9 @@
 
 #include <KExiv2/KExiv2Previews>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_debug.h"
 #include "dmetadata.h"
 #include "jpegutils.h"

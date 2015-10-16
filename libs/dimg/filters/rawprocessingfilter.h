@@ -46,7 +46,7 @@ class FilterAction;
  * It implements RAW post processing.
  * Additionally, it provides some facilities for use from the DImg Raw loader.
  *
- * The original image shall come from libkdcraw without further modification.
+ * The original image shall come from RawEngine without further modification.
  */
 class DIGIKAM_EXPORT RawProcessingFilter : public DImgThreadedFilter
 {

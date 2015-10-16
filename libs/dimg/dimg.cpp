@@ -54,16 +54,13 @@ extern "C"
 #include <QSysInfo>
 #include <QUuid>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Libkexiv2 includes
 
 #include <KExiv2/RotationMatrix>
 
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_config.h"
 #include "dimagehistory.h"
 #include "pngloader.h"

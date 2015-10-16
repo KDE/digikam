@@ -63,16 +63,13 @@
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Libkexiv2
 
 #include <KExiv2/RotationMatrix>
 
 // Local includes
 
+#include "drawdecoder.h"
 #include "dwidgetutils.h"
 #include "digikam_debug.h"
 #include "album.h"

@@ -27,12 +27,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_debug.h"
 #include "dmetadata.h"
 #include "imagescanner.h"
@@ -251,7 +248,7 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
         return true;
     }
 
-    // RAW files : try to extract embedded thumbnail using libkdcraw
+    // RAW files : try to extract embedded thumbnail using RawEngine
 
     RawEngine::DRawDecoder::loadRawPreview(thumbnail, path);
 

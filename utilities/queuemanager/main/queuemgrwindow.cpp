@@ -45,12 +45,9 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_debug.h"
 #include "actions.h"
 #include "album.h"

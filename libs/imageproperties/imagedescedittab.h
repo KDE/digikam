@@ -32,12 +32,9 @@
 #include <QPixmap>
 #include <QEvent>
 
-// Libkdcraw includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
+#include "dwidgetutils.h"
 #include "digikam_export.h"
 #include "imageinfolist.h"
 #include "albummanager.h"

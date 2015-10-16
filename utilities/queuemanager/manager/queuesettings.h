@@ -28,15 +28,10 @@
 
 #include <QUrl>
 
-// Libkdcraw includes
-
-#include "drawdecodersettings.h"
-
 // Local includes
 
 #include "iofilesettings.h"
-
-
+#include "drawdecodersettings.h"
 
 namespace Digikam
 {

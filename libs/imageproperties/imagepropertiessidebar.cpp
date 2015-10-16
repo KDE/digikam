@@ -40,12 +40,9 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
-// Libkdcraw includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
+#include "drawdecoder.h"
 #include "digikam_config.h"
 #include "digikam_debug.h"
 #include "dimg.h"

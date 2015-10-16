@@ -31,12 +31,9 @@
 
 #include <QUrl>
 
-// Libkdcraw includes
-
-#include "drawdecodersettings.h"
-
 // Local includes
 
+#include "drawdecodersettings.h"
 #include "actionthreadbase.h"
 
 using namespace RawEngine;
