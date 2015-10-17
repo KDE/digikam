@@ -4,9 +4,10 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# General definitions rules
+# -- General definitions rules ------------------------------------------------------------------------
 
 # To prevent warnings from M$ compiler
+
 if(WIN32 AND MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-D_ATL_SECURE_NO_WARNINGS)
@@ -14,9 +15,12 @@ if(WIN32 AND MSVC)
 endif()
 
 # Under Windows, use specific flag to compile.
+
 if(WIN32)
     add_definitions(-DDJGPP)
 endif()
+
+# We always use LCMS version 2
 
 add_definitions(-DUSE_LCMS2)
 
@@ -40,9 +44,8 @@ if(NOT APPLE)
     endif()
 endif()
 
-# Jasper library check
-
 # Flag to use libjasper with LibRaw RedCine codec
+
 if(JASPER_FOUND)
     add_definitions(-DUSE_JASPER)
     include_directories(${JASPER_INCLUDE_DIR})
@@ -75,6 +78,7 @@ if(JPEG_FOUND)
 endif()
 
 # Flag to use libjpeg with LibRaw DNG lossy codec
+
 if(JPEG8_FOUND)
     message(STATUS "LibRaw will be compiled with DNG lossy codec")
     add_definitions(-DUSE_JPEG)
@@ -105,7 +109,7 @@ else()
 
 endif()
 
-# -- Compile RAWSpeed library --------------------------------------------------------------------------------
+# -- RAWSpeed Codec Compilation --------------------------------------------------------------------------------
 
 if(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
@@ -166,7 +170,7 @@ if(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
 endif()
 
-# -- Compile LibRaw library --------------------------------------------------------------------------------
+# -- LibRaw library Compilation --------------------------------------------------------------------------------
 
 # Flag to include demosaic pack GPL2
 add_definitions(-DLIBRAW_DEMOSAIC_PACK_GPL2)
@@ -232,7 +236,8 @@ if(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
     target_link_libraries(libraw ${LIBXML2_LIBRARIES} ${PTHREADS_LIBRARY})
 endif()
 
-# For registration to libraw_config.h
+# Registration of Libraw configuration to a dedicated header
+
 MACRO_BOOL_TO_01(JPEG8_FOUND LIBRAW_USE_DNGLOSSYCODEC)
 MACRO_BOOL_TO_01(OPENMP_FOUND LIBRAW_USE_OPENMP)
 MACRO_BOOL_TO_01(JASPER_FOUND LIBRAW_USE_REDCINECODEC)
@@ -240,9 +245,10 @@ MACRO_BOOL_TO_01(RAWSPEED_SUPPORT_CAN_BE_COMPILED LIBRAW_USE_RAWSPEED)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw/libraw_config.h)
 
-# -- Compile LibRaw Samples --------------------------------------------------------------------------------
+# -- LibRaw CLI Samples Compilation --------------------------------------------------------------------------------
 
-# add a small macro so that this is a bit cleaner
+# A small macro so that this is a bit cleaner
+
 macro(LIBRAW_BUILD_SAMPLES)
 
     set(_filename ${ARGV0})
@@ -271,7 +277,8 @@ LIBRAW_BUILD_SAMPLES(raw-identify.cpp)
 LIBRAW_BUILD_SAMPLES(multirender_test.cpp)
 LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp)
 
-# C sample files will be compiled only if LCMS v2 is detected, to prevent broken compilation
+# C sample files which must be compiled only if LCMS v2 is detected, to prevent broken compilation
+
 if(LCMS2_FOUND)
    if(WIN32)
         LIBRAW_BUILD_SAMPLES(half_mt_win32.c)
