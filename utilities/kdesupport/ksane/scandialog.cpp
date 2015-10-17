@@ -85,7 +85,7 @@ ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
     d->progress->setProgressBarMode(StatusProgressBar::ProgressBarMode);
     d->progress->setProgressTotalSteps(100);
     d->progress->setNotify(true);
-    d->progress->setNotificationTitle(i18n("Scan Imagen"), QIcon::fromTheme(QLatin1String("scanner")));
+    d->progress->setNotificationTitle(i18n("Scan Images"), QIcon::fromTheme(QLatin1String("scanner")));
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(d->saneWidget);
