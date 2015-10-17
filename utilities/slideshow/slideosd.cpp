@@ -274,8 +274,6 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const QUrl& url)
 bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
 {
     if (obj == d->labelsBox                    ||
-        obj == d->toolBar                      ||
-        obj == d->toolBar                      ||
         obj == d->ratingWidget                 ||
         obj == d->clWidget                     ||
         obj == d->plWidget                     ||
