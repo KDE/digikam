@@ -60,17 +60,8 @@ find_package(Pthreads)
 # JPEG library check
 
 if(JPEG_FOUND)
-    # check version of libjpeg
-    set(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
-    set(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
-    FILE(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
-    set(_jpeglib_version_include_dirs "-Dinclude_directories:STRING=${JPEG_INCLUDE_DIR}")
-
-    TRY_COMPILE(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file}
-                CMAKE_FLAGS "${_jpeglib_version_include_dirs}"
-               )
-    if(_jpeglib_version_compile_result)
-        message(STATUS "Identified libjpeg version less than 80 (too low)")
+    # JPEG lib version is done on top level through MacroJPEG.cmake
+    if (${JPEG_LIB_VERSION} LESS 80)
         set(JPEG8_FOUND FALSE)
     else()
         set(JPEG8_FOUND TRUE)
