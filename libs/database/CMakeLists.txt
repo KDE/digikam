@@ -65,7 +65,6 @@ set(libdatabase_SRCS
     item/imagelister.cpp
     item/imagelisterreceiver.cpp
     item/imageposition.cpp
-    item/imagegps.cpp
     item/imagecopyright.cpp
     item/imagequerybuilder.cpp
     item/imagescanner.cpp
@@ -82,6 +81,13 @@ set(libdatabase_SRCS
     utils/tagproperties.cpp
     utils/tagscache.cpp
 )
+
+if(MARBLE_FOUND)
+    set(libdatabase_SRCS
+        ${libdatabase_SRCS}
+        item/imagegps.cpp
+       )
+endif()
 
 # enable exceptions
 kde_source_files_enable_exceptions(imagehistory/imagehistorygraph.cpp imagehistory/imagehistorygraphmodel.cpp)
@@ -126,7 +132,6 @@ add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS} )
 add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} )
 add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasemodels_src>)
 
-
 target_include_directories(digikamdatabase
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
@@ -153,7 +158,7 @@ target_link_libraries(digikamdatabase
                       Qt5::DBus
 
                       KF5::KExiv2
-                      
+
                       KF5::KIOCore
                       KF5::Solid
                       KF5::I18n
