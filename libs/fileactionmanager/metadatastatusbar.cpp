@@ -81,8 +81,8 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
     d->info->setFocusPolicy(Qt::NoFocus);
     d->info->setAdjustedText(i18n("No pending metadata synchronization"));
 
-    d->info->setWhatsThis(i18n("If lazy syncronization is enabled in metadatasettings,"
-                               "The status bar will display the number of items waiting for syncronization"));
+    d->info->setWhatsThis(i18n("If lazy syncronization is enabled in metadata settings, "
+                               "the status bar will display the number of items waiting for syncronization"));
 
     d->applyBtn    = new QToolButton(this);
     d->applyBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));

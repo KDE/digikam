@@ -5,9 +5,15 @@
   <id>digiKam-ImagePlugin_Transform</id>
   <extends>digikam.desktop</extends>
   <name>ImagePlugin-Transform</name>
+  <name xml:lang="bs">ImagePlugin-Transform</name>
   <name xml:lang="ca">Connector d'imatge per a transformar</name>
   <name xml:lang="da">ImagePlugin-Transform</name>
+  <name xml:lang="de">Bildmodul Transformation</name>
+  <name xml:lang="el">ImagePlugin-Transform</name>
   <name xml:lang="en-GB">ImagePlugin-Transform</name>
+  <name xml:lang="es">Complemento de imagen - Transformar</name>
+  <name xml:lang="fr">ImagePlugin-Transform</name>
+  <name xml:lang="it">ImagePlugin-Trasforma</name>
   <name xml:lang="ko">그림 플러그인-변형</name>
   <name xml:lang="nl">ImagePlugin-Transform</name>
   <name xml:lang="pl">WtyczkaObrazu-przekształcanie</name>
@@ -19,12 +25,17 @@
   <name xml:lang="uk">ImagePlugin-Transform</name>
   <name xml:lang="x-test">xxImagePlugin-Transformxx</name>
   <summary>A tool to transform image geometry</summary>
+  <summary xml:lang="bs">Alat za preoblikovanje geometrije slike</summary>
   <summary xml:lang="ca">Una eina per a transformar la geometria d'una imatge</summary>
   <summary xml:lang="cs">Nástroj pro transformaci geometrie obrázku</summary>
   <summary xml:lang="da">Et værktøj til at transformere billeders geometri</summary>
   <summary xml:lang="de">Geometrische Transformation von Bildern</summary>
+  <summary xml:lang="el">Ένα εργαλείο για το μετασχηματισμό της γεωμετρίας της εικόνας</summary>
   <summary xml:lang="en-GB">A tool to transform image geometry</summary>
   <summary xml:lang="es">Una herramienta para transformar la geometría de una imagen</summary>
+  <summary xml:lang="fr">Un outil pour modifier la géométrie d'une image</summary>
+  <summary xml:lang="gl">Unha ferramenta para transformar a xeometría das imaxes</summary>
+  <summary xml:lang="it">Strumento per trasformare la geometria di un'immagine</summary>
   <summary xml:lang="ko">그림 크기를 변형하는 도구</summary>
   <summary xml:lang="nl">Een hulpmiddel voor het transformeren van de geometrie van een afbeelding</summary>
   <summary xml:lang="pl">Narzędzie do przekształcenia geometrii obrazu</summary>
@@ -36,12 +47,17 @@
   <summary xml:lang="uk">Інструмент для геометричного перетворення зображення</summary>
   <summary xml:lang="x-test">xxA tool to transform image geometryxx</summary>
   <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="ast">Proyeutu digiKam</developer_name>
+  <developer_name xml:lang="bs">digiKam Projekt</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>
   <developer_name xml:lang="de">digiKam-Projekt</developer_name>
+  <developer_name xml:lang="el">digiKam Project</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
+  <developer_name xml:lang="fr">Projet digiKam</developer_name>
+  <developer_name xml:lang="it">Progetto digiKam</developer_name>
   <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>

@@ -120,7 +120,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
       d(new Private)
 {
     // to load the rc file from digikam's installation path
-    setComponentName(QLatin1String("digikam"), i18nc("to be displayed in shortcuts dialog", "Enchance plugins"));
+    setComponentName(QLatin1String("digikam"), i18nc("to be displayed in shortcuts dialog", "Enhance plugins"));
 
     KActionCollection *ac = actionCollection();
 

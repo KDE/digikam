@@ -271,7 +271,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
     d->tagTipLabel   = new QLabel(d->page);
     d->tagTipLabel->setTextFormat(Qt::RichText);
     d->tagTipLabel->setWordWrap(true);
-    d->tagTipLabel->setText(i18n("<p>To create new namespaces, you need to specify paramters:</p>"
+    d->tagTipLabel->setText(i18n("<p>To create new namespaces, you need to specify parameters:</p>"
                            "<p><ul><li>Namespace name with dots.<br/>"
                            "Ex.: <i>\"Xmp.digiKam.TagsList\"</i></li>"
                            "<li>Separator parameter, used by tag paths <br/>"
@@ -282,7 +282,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
     d->ratingTipLabel   = new QLabel(d->page);
     d->ratingTipLabel->setTextFormat(Qt::RichText);
     d->ratingTipLabel->setWordWrap(true);
-    d->ratingTipLabel->setText(i18n("<p>To create new rating namespaces, you need to specify paramters:</p>"
+    d->ratingTipLabel->setText(i18n("<p>To create new rating namespaces, you need to specify parameters:</p>"
                            "<p><ul><li>Namespace name with dots.<br/>"
                            "Ex.: <i>\"Xmp.xmp.Rating\"</i></li>"
                            "<li>Rating mappings, if namespace need other values than 0-5 <br/>"
@@ -293,7 +293,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
     d->commentTipLabel   = new QLabel(d->page);
     d->commentTipLabel->setTextFormat(Qt::RichText);
     d->commentTipLabel->setWordWrap(true);
-    d->commentTipLabel->setText(i18n("<p>To create new comment namespaces, you need to specify paramters:</p>"
+    d->commentTipLabel->setText(i18n("<p>To create new comment namespaces, you need to specify parameters:</p>"
                            "<p><ul><li>Namespace name with dots.<br/>"
                            "Ex.: <i>\"Xmp.xmp.Rating\"</i></li>"
                            "<li>Select the correct namespace option from list.</li></ul></p>"
