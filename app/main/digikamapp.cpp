@@ -134,8 +134,6 @@
 #include "baloowrap.h"
 #endif
 
-
-
 namespace Digikam
 {
 
@@ -1361,8 +1359,11 @@ void DigikamApp::initGui()
     d->openWithAction->setEnabled(false);
     d->slideShowSelectionAction->setEnabled(false);
     m_metadataEditAction->setEnabled(false);
-    m_geolocationEditAction->setEnabled(false);
     d->imageAutoExifActionMenu->setEnabled(false);
+
+#ifdef HAVE_MARBLE
+    m_geolocationEditAction->setEnabled(false);
+#endif
 
     d->albumSortAction->setCurrentItem((int)ApplicationSettings::instance()->getAlbumSortRole());
     d->imageSortAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSortOrder());
@@ -1560,10 +1561,13 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->cutItemsAction->setEnabled(selectionCount > 0);
     d->copyItemsAction->setEnabled(selectionCount > 0);
     m_metadataEditAction->setEnabled(selectionCount > 0);
-    m_geolocationEditAction->setEnabled(selectionCount > 0);
     d->openWithAction->setEnabled(selectionCount > 0);
     d->imageAutoExifActionMenu->setEnabled(selectionCount > 0);
 
+#ifdef HAVE_MARBLE
+    m_geolocationEditAction->setEnabled(selectionCount > 0);
+#endif
+    
     if (selectionCount > 0)
     {
         d->imageWriteMetadataAction->setText(i18np("Write Metadata to Image",

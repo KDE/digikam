@@ -435,7 +435,10 @@ void EditorWindow::setupStandardActions()
     createGeolocationEditAction();
     m_ksaneAction->setEnabled(false);
     m_metadataEditAction->setEnabled(false);
+
+#ifdef HAVE_MARBLE    
     m_geolocationEditAction->setEnabled(false);
+#endif
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
@@ -1101,11 +1104,14 @@ void EditorWindow::toggleStandardActions(bool val)
     d->filePrintAction->setEnabled(val);
     m_ksaneAction->setEnabled(val);
     m_metadataEditAction->setEnabled(val);
-    m_geolocationEditAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
     d->slideShowAction->setEnabled(val);
+
+#ifdef HAVE_MARBLE     
+    m_geolocationEditAction->setEnabled(val);
+#endif
 
     // these actions are special: They are turned off if val is false,
     // but if val is true, they may be turned on or off.

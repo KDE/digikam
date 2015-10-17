@@ -75,8 +75,6 @@
 #include "thumbnailloadthread.h"
 #include "dexpanderbox.h"
 
-
-
 namespace Digikam
 {
 
