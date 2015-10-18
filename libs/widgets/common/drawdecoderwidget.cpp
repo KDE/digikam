@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2006-09-13
- * @brief  LibRaw settings widgets
+ * @brief  Raw Decoder settings widgets
  *
  * @author Copyright (C) 2006-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -67,7 +67,7 @@
 #define OPTIONEXPOCORRECTIONSHIFTENTRY                 "Expo Correction Shift"
 #define OPTIONEXPOCORRECTIONHIGHLIGHTENTRY             "Expo Correction Highlight"
 
-#include "dcrawsettingswidget.h"
+#include "drawdecoderwidget.h"
 
 // C++ includes
 
@@ -98,7 +98,7 @@
 namespace Digikam
 {
 
-class Q_DECL_HIDDEN DcrawSettingsWidget::Private
+class Q_DECL_HIDDEN DRawDecoderWidget::Private
 {
 public:
 
@@ -240,13 +240,14 @@ public:
     DDoubleNumInput* expoCorrectionHighlightSpinBox;
 };
 
-DcrawSettingsWidget::DcrawSettingsWidget(QWidget* const parent, int advSettings)
-    : DExpanderBox(parent), d(new Private)
+DRawDecoderWidget::DRawDecoderWidget(QWidget* const parent, int advSettings)
+    : DExpanderBox(parent),
+      d(new Private)
 {
     setup(advSettings);
 }
 
-void DcrawSettingsWidget::setup(int advSettings)
+void DRawDecoderWidget::setup(int advSettings)
 {
     setObjectName( QLatin1String("DCRawSettings Expander" ));
 
@@ -332,16 +333,12 @@ void DcrawSettingsWidget::setup(int advSettings)
     // Extended demosaicing method from GPL3 pack
     d->RAWQualityComboBox->insertItem(DRawDecoderSettings::AMAZE,    i18nc("@item:inlistbox Quality", "AMaZE"));
 
-    // GPL2 pack support
+    for (int i=DRawDecoderSettings::DCB ; i <=DRawDecoderSettings::LMMSE ; ++i)
     {
-        for (int i=DRawDecoderSettings::DCB ; i <=DRawDecoderSettings::LMMSE ; ++i)
-            d->RAWQualityComboBox->combo()->setItemData(i, false, Qt::UserRole-1);
+        d->RAWQualityComboBox->combo()->setItemData(i, false, Qt::UserRole-1);
     }
 
-    // GPL3 pack support
-    {
-        d->RAWQualityComboBox->combo()->setItemData(DRawDecoderSettings::AMAZE, false, Qt::UserRole-1);
-    }
+    d->RAWQualityComboBox->combo()->setItemData(DRawDecoderSettings::AMAZE, false, Qt::UserRole-1);
 
     d->RAWQualityComboBox->setDefaultIndex(DRawDecoderSettings::BILINEAR);
     d->RAWQualityComboBox->setCurrentIndex(DRawDecoderSettings::BILINEAR);
@@ -437,12 +434,9 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "sharpness.</item></list></para>"));
     demosaicingLayout->addWidget(d->refineInterpolationBox, line, 0, 1, 2);
          
-    // GPL2 pack support
-    {
-        d->medianFilterPassesLabel->setEnabled(false);
-        d->medianFilterPassesSpinBox->setEnabled(false);
-        d->refineInterpolationBox->setEnabled(false);
-    }
+    d->medianFilterPassesLabel->setEnabled(false);
+    d->medianFilterPassesSpinBox->setEnabled(false);
+    d->refineInterpolationBox->setEnabled(false);
 
     addItem(d->demosaicingSettings, QIcon::fromTheme(QLatin1String("rawbayer")).pixmap(16, 16), i18nc("@label", "Demosaicing"), QLatin1String("demosaicing"), true);
 
@@ -775,26 +769,28 @@ void DcrawSettingsWidget::setup(int advSettings)
     addItem(d->colormanSettings, QIcon::fromTheme(QLatin1String("rawbayer")).pixmap(16, 16), i18nc("@label", "Color Management"), QLatin1String("colormanagement"), false);
 
     if (! (advSettings & COLORSPACE))
+    {
         removeItem(COLORMANAGEMENT);
+    }
 
     addStretch();
 
     // ---------------------------------------------------------------
 
     connect(d->unclipColorComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::slotUnclipColorActivated);
+            this, &DRawDecoderWidget::slotUnclipColorActivated);
 
     connect(d->whiteBalanceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::slotWhiteBalanceToggled);
+            this, &DRawDecoderWidget::slotWhiteBalanceToggled);
 
     connect(d->noiseReductionComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::slotNoiseReductionChanged);
+            this, &DRawDecoderWidget::slotNoiseReductionChanged);
 
     connect(d->enableCACorrectionBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::slotCACorrectionToggled);
+            this, &DRawDecoderWidget::slotCACorrectionToggled);
 
     connect(d->autoCACorrectionBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::slotAutoCAToggled);
+            this, &DRawDecoderWidget::slotAutoCAToggled);
 
     connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
             d->blackPointSpinBox, SLOT(setEnabled(bool)));
@@ -803,144 +799,146 @@ void DcrawSettingsWidget::setup(int advSettings)
             d->whitePointSpinBox, SLOT(setEnabled(bool)));
 
     connect(d->sixteenBitsImage, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::slotsixteenBitsImageToggled);
+            this, &DRawDecoderWidget::slotsixteenBitsImageToggled);
 
     connect(d->inputColorSpaceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::slotInputColorSpaceChanged);
+            this, &DRawDecoderWidget::slotInputColorSpaceChanged);
 
     connect(d->outputColorSpaceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::slotOutputColorSpaceChanged);
+            this, &DRawDecoderWidget::slotOutputColorSpaceChanged);
 
     connect(d->expoCorrectionBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::slotExposureCorrectionToggled);
+            this, &DRawDecoderWidget::slotExposureCorrectionToggled);
 
     connect(d->expoCorrectionShiftSpinBox, &DDoubleNumInput::valueChanged,
-            this, &DcrawSettingsWidget::slotExpoCorrectionShiftChanged);
+            this, &DRawDecoderWidget::slotExpoCorrectionShiftChanged);
 
     // Wrapper to emit signal when something is changed in settings.
 
     connect(d->inIccUrlEdit->lineEdit(), &QLineEdit::textChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->outIccUrlEdit->lineEdit(), &QLineEdit::textChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->whiteBalanceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->RAWQualityComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::slotRAWQualityChanged);
+            this, &DRawDecoderWidget::slotRAWQualityChanged);
 
     connect(d->unclipColorComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->inputColorSpaceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->outputColorSpaceComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->blackPointCheckBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->whitePointCheckBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->sixteenBitsImage, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->fixColorsHighlightsBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->autoBrightnessBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->fourColorCheckBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->dontStretchPixelsCheckBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->refineInterpolationBox, &QCheckBox::toggled,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->customWhiteBalanceSpinBox, &DIntNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->reconstructSpinBox, &DIntNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->blackPointSpinBox, &DIntNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->whitePointSpinBox, &DIntNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->NRSpinBox1, &DIntNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->NRSpinBox2, &DIntNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
     
     connect(d->medianFilterPassesSpinBox, &DIntNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->customWhiteBalanceGreenSpinBox, &DDoubleNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->caRedMultSpinBox, &DDoubleNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->caBlueMultSpinBox, &DDoubleNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->brightnessSpinBox, &DDoubleNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->expoCorrectionHighlightSpinBox, &DDoubleNumInput::valueChanged,
-            this, &DcrawSettingsWidget::signalSettingsChanged);
+            this, &DRawDecoderWidget::signalSettingsChanged);
 }
 
-DcrawSettingsWidget::~DcrawSettingsWidget()
+DRawDecoderWidget::~DRawDecoderWidget()
 {
     delete d;
 }
 
-void DcrawSettingsWidget::updateMinimumWidth()
+void DRawDecoderWidget::updateMinimumWidth()
 {
     int width = 0;
 
     for (int i = 0; i < count(); i++)
     {
         if (widget(i)->width() > width)
+        {
             width = widget(i)->width();
+        }
     }
 
     setMinimumWidth(width);
 }
 
-DFileSelector* DcrawSettingsWidget::inputProfileUrlEdit() const
+DFileSelector* DRawDecoderWidget::inputProfileUrlEdit() const
 {
     return d->inIccUrlEdit;
 }
 
-DFileSelector* DcrawSettingsWidget::outputProfileUrlEdit() const
+DFileSelector* DRawDecoderWidget::outputProfileUrlEdit() const
 {
     return d->outIccUrlEdit;
 }
 
-void DcrawSettingsWidget::resetToDefault()
+void DRawDecoderWidget::resetToDefault()
 {
     setSettings(DRawDecoderSettings());
 }
 
-void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
+void DRawDecoderWidget::slotsixteenBitsImageToggled(bool b)
 {
     setEnabledBrightnessSettings(!b);
     emit signalSixteenBitsImageToggled(d->sixteenBitsImage->isChecked());
 }
 
-void DcrawSettingsWidget::slotWhiteBalanceToggled(int v)
+void DRawDecoderWidget::slotWhiteBalanceToggled(int v)
 {
     if (v == 3)
     {
@@ -958,7 +956,7 @@ void DcrawSettingsWidget::slotWhiteBalanceToggled(int v)
     }
 }
 
-void DcrawSettingsWidget::slotUnclipColorActivated(int v)
+void DRawDecoderWidget::slotUnclipColorActivated(int v)
 {
     if (v == 3)     // Reconstruct Highlight method
     {
@@ -972,7 +970,7 @@ void DcrawSettingsWidget::slotUnclipColorActivated(int v)
     }
 }
 
-void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
+void DRawDecoderWidget::slotNoiseReductionChanged(int item)
 {
     d->NRSpinBox1->setEnabled(true);
     d->NRLabel1->setEnabled(true);
@@ -1015,13 +1013,13 @@ void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
     emit signalSettingsChanged();
 }
 
-void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
+void DRawDecoderWidget::slotCACorrectionToggled(bool b)
 {
     d->autoCACorrectionBox->setEnabled(b);
     slotAutoCAToggled(d->autoCACorrectionBox->isChecked());
 }
 
-void DcrawSettingsWidget::slotAutoCAToggled(bool b)
+void DRawDecoderWidget::slotAutoCAToggled(bool b)
 {
     if (b)
     {
@@ -1037,7 +1035,7 @@ void DcrawSettingsWidget::slotAutoCAToggled(bool b)
     emit signalSettingsChanged();
 }
 
-void DcrawSettingsWidget::slotExposureCorrectionToggled(bool b)
+void DRawDecoderWidget::slotExposureCorrectionToggled(bool b)
 {
     d->expoCorrectionShiftLabel->setEnabled(b);
     d->expoCorrectionShiftSpinBox->setEnabled(b);
@@ -1047,7 +1045,7 @@ void DcrawSettingsWidget::slotExposureCorrectionToggled(bool b)
     slotExpoCorrectionShiftChanged(d->expoCorrectionShiftSpinBox->value());
 }
 
-void DcrawSettingsWidget::slotExpoCorrectionShiftChanged(double ev)
+void DRawDecoderWidget::slotExpoCorrectionShiftChanged(double ev)
 {
     // Only enable Highligh exposure correction if Shift correction is >= 1.0, else this settings do not take effect.
     bool b = (ev >= 1.0);
@@ -1058,17 +1056,17 @@ void DcrawSettingsWidget::slotExpoCorrectionShiftChanged(double ev)
     emit signalSettingsChanged();
 }
 
-void DcrawSettingsWidget::slotInputColorSpaceChanged(int item)
+void DRawDecoderWidget::slotInputColorSpaceChanged(int item)
 {
     d->inIccUrlEdit->setEnabled(item == DRawDecoderSettings::CUSTOMINPUTCS);
 }
 
-void DcrawSettingsWidget::slotOutputColorSpaceChanged(int item)
+void DRawDecoderWidget::slotOutputColorSpaceChanged(int item)
 {
     d->outIccUrlEdit->setEnabled(item == DRawDecoderSettings::CUSTOMOUTPUTCS);
 }
 
-void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
+void DRawDecoderWidget::slotRAWQualityChanged(int quality)
 {
     switch (quality)
     {
@@ -1100,18 +1098,18 @@ void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
     emit signalSettingsChanged();
 }
 
-void DcrawSettingsWidget::setEnabledBrightnessSettings(bool b)
+void DRawDecoderWidget::setEnabledBrightnessSettings(bool b)
 {
     d->brightnessLabel->setEnabled(b);
     d->brightnessSpinBox->setEnabled(b);
 }
 
-bool DcrawSettingsWidget::brightnessSettingsIsEnabled() const
+bool DRawDecoderWidget::brightnessSettingsIsEnabled() const
 {
     return d->brightnessSpinBox->isEnabled();
 }
 
-void DcrawSettingsWidget::setSettings(const DRawDecoderSettings& settings)
+void DRawDecoderWidget::setSettings(const DRawDecoderSettings& settings)
 {
     d->sixteenBitsImage->setChecked(settings.sixteenBitsImage);
 
@@ -1212,7 +1210,7 @@ void DcrawSettingsWidget::setSettings(const DRawDecoderSettings& settings)
     d->outIccUrlEdit->lineEdit()->setText(settings.outputProfile);
 }
 
-DRawDecoderSettings DcrawSettingsWidget::settings() const
+DRawDecoderSettings DRawDecoderWidget::settings() const
 {
     DRawDecoderSettings prm;
     prm.sixteenBitsImage = d->sixteenBitsImage->isChecked();
@@ -1263,6 +1261,7 @@ DRawDecoderSettings DcrawSettingsWidget::settings() const
     prm.whitePoint           = d->whitePointSpinBox->value();
 
     prm.RAWQuality           = (DRawDecoderSettings::DecodingQuality)d->RAWQualityComboBox->currentIndex();
+
     switch(prm.RAWQuality)
     {
         case DRawDecoderSettings::DCB:
@@ -1279,6 +1278,7 @@ DRawDecoderSettings DcrawSettingsWidget::settings() const
     }
 
     prm.NRType = (DRawDecoderSettings::NoiseReduction)d->noiseReductionComboBox->currentIndex();
+
     switch (prm.NRType)
     {
         case DRawDecoderSettings::NONR:
@@ -1319,7 +1319,7 @@ DRawDecoderSettings DcrawSettingsWidget::settings() const
     return prm;
 }
 
-void DcrawSettingsWidget::readSettings(KConfigGroup& group)
+void DRawDecoderWidget::readSettings(KConfigGroup& group)
 {
     DRawDecoderSettings prm;
     readSettings(prm, group);
@@ -1328,7 +1328,7 @@ void DcrawSettingsWidget::readSettings(KConfigGroup& group)
     DExpanderBox::readSettings(group);
 }
 
-void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
+void DRawDecoderWidget::writeSettings(KConfigGroup& group)
 {
     DRawDecoderSettings prm = settings();
     writeSettings(prm, group);
@@ -1336,7 +1336,7 @@ void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
     DExpanderBox::writeSettings(group);
 }
 
-void DcrawSettingsWidget::readSettings(DRawDecoderSettings& prm, KConfigGroup& group)
+void DRawDecoderWidget::readSettings(DRawDecoderSettings& prm, KConfigGroup& group)
 {
     DRawDecoderSettings defaultPrm;
 
@@ -1375,7 +1375,7 @@ void DcrawSettingsWidget::readSettings(DRawDecoderSettings& prm, KConfigGroup& g
     prm.expoCorrectionHighlight = group.readEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY,                                 defaultPrm.expoCorrectionHighlight);
 }
 
-void DcrawSettingsWidget::writeSettings(const DRawDecoderSettings& prm, KConfigGroup& group)
+void DRawDecoderWidget::writeSettings(const DRawDecoderSettings& prm, KConfigGroup& group)
 {
     group.writeEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,     prm.fixColorsHighlights);
     group.writeEntry(OPTIONDECODESIXTEENBITENTRY,        prm.sixteenBitsImage);

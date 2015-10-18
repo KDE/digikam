@@ -40,7 +40,7 @@
 // Local includes
 
 #include "drawdecoding.h"
-#include "dcrawsettingswidget.h"
+#include "drawdecoderwidget.h"
 
 namespace Digikam
 {
@@ -73,7 +73,7 @@ public:
     QRadioButton*         openDefault;
     QRadioButton*         openTool;
 
-    DcrawSettingsWidget*  dcrawSettings;
+    DRawDecoderWidget*  dcrawSettings;
 };
 
 const QString SetupRaw::Private::configGroupName(QLatin1String("ImageViewer Settings"));
@@ -137,7 +137,7 @@ SetupRaw::SetupRaw(QWidget* const parent)
     d->settingsPanel            = new QWidget;
     QVBoxLayout* const settingsLayout = new QVBoxLayout;
 
-    d->dcrawSettings = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
+    d->dcrawSettings = new DRawDecoderWidget(0, 0 /* no advanced settings shown */);
     d->dcrawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("rawbayer")));
     d->dcrawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("whitebalance")));
     d->dcrawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));

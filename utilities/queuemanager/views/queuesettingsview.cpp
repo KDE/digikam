@@ -55,7 +55,7 @@
 #include "tiffsettings.h"
 #include "pngsettings.h"
 #include "pgfsettings.h"
-#include "dcrawsettingswidget.h"
+#include "drawdecoderwidget.h"
 
 #ifdef HAVE_JASPER
 #include "jp2ksettings.h"
@@ -131,7 +131,7 @@ public:
     AdvancedRenameManager* advancedRenameManager;
     AdvancedRenameWidget*  advancedRenameWidget;
 
-    DcrawSettingsWidget*   rawSettings;
+    DRawDecoderWidget*   rawSettings;
 
     JPEGSettings*          jpgSettings;
     PNGSettings*           pngSettings;
@@ -253,7 +253,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->rawSettings = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
+    d->rawSettings = new DRawDecoderWidget(panel, DRawDecoderWidget::SIXTEENBITS | DRawDecoderWidget::COLORSPACE);
     d->rawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("rawbayer")));
     d->rawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("whitebalance")));
     d->rawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));

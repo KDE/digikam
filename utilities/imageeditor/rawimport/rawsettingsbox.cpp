@@ -54,7 +54,7 @@
 #include "imagehistogram.h"
 #include "digikam_globals.h"
 #include "digikam_debug.h"
-#include "dcrawsettingswidget.h"
+#include "drawdecoderwidget.h"
 
 
 
@@ -151,7 +151,7 @@ public:
     DDoubleNumInput*     saturationInput;
     DDoubleNumInput*     mainExposureInput;
 
-    DcrawSettingsWidget* decodingSettingsBox;
+    DRawDecoderWidget* decodingSettingsBox;
 };
 
 RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
@@ -168,8 +168,8 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     d->rawdecodingBox               = new QWidget(d->tabView);
     QGridLayout* const rawGrid      = new QGridLayout(d->rawdecodingBox);
-    d->decodingSettingsBox          = new DcrawSettingsWidget(d->rawdecodingBox,
-                                                              DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
+    d->decodingSettingsBox          = new DRawDecoderWidget(d->rawdecodingBox,
+                                                              DRawDecoderWidget::SIXTEENBITS | DRawDecoderWidget::COLORSPACE);
     d->decodingSettingsBox->setObjectName(QLatin1String("RawSettingsBox Expander"));
 
     // Note: do not touch the url edit's fileDialog() here.
@@ -301,10 +301,10 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     QIcon::fromTheme(QLatin1String("rawbayer")));
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::WHITEBALANCE,    QIcon::fromTheme(QLatin1String("whitebalance")));
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::CORRECTIONS,     QIcon::fromTheme(QLatin1String("lensdistortion")));
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::COLORMANAGEMENT, QIcon::fromTheme(QLatin1String("colormanagement")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::DEMOSAICING,     QIcon::fromTheme(QLatin1String("rawbayer")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::WHITEBALANCE,    QIcon::fromTheme(QLatin1String("whitebalance")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::CORRECTIONS,     QIcon::fromTheme(QLatin1String("lensdistortion")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::COLORMANAGEMENT, QIcon::fromTheme(QLatin1String("colormanagement")));
     d->decodingSettingsBox->updateMinimumWidth();
 
     d->tabView->insertTab(0, d->rawdecodingBox,         i18n("Raw Decoding"));

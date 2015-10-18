@@ -50,7 +50,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "applicationsettings.h"
-#include "dcrawsettingswidget.h"
+#include "drawdecoderwidget.h"
 #include "imageinfo.h"
 #include "metadatasettings.h"
 #include "collectionmanager.h"
@@ -559,7 +559,7 @@ public:
         DRawDecoderSettings settings;
         KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
-        DcrawSettingsWidget::readSettings(settings, group);
+        DRawDecoderWidget::readSettings(settings, group);
         return( decoder.decodeRAWImage(url.toLocalFile(), settings, imageData, width, height, rgbmax) );
     }
 

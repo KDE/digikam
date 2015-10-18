@@ -94,7 +94,7 @@
 #include "dlogoaction.h"
 #include "dmetadata.h"
 #include "dzoombar.h"
-#include "dcrawsettingswidget.h"
+#include "drawdecoderwidget.h"
 #include "editorstackview.h"
 #include "editortool.h"
 #include "editortoolsettings.h"
@@ -993,7 +993,7 @@ void EditorWindow::applyIOSettings()
     // -- RAW images decoding settings ------------------------------------------------------
 
     m_IOFileSettings->useRAWImport = group.readEntry(d->configUseRawImportToolEntry, false);
-    DcrawSettingsWidget::readSettings(m_IOFileSettings->rawDecodingSettings.rawPrm, group);
+    DRawDecoderWidget::readSettings(m_IOFileSettings->rawDecodingSettings.rawPrm, group);
 
     // Raw Color Management settings:
     // If digiKam Color Management is enabled, no need to correct color of decoded RAW image,

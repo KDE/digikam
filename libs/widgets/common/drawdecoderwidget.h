@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2006-09-13
- * @brief  LibRaw settings widgets
+ * @brief  Raw Decoder settings widgets
  *
  * @author Copyright (C) 2006-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -27,8 +27,8 @@
  *
  * ============================================================ */
 
-#ifndef DCRAW_SETTINGS_WIDGET_H
-#define DCRAW_SETTINGS_WIDGET_H
+#ifndef DRAW_DECODER_WIDGET_H
+#define DRAW_DECODER_WIDGET_H
 
 // Qt includes
 
@@ -50,7 +50,7 @@ using namespace RawEngine;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DcrawSettingsWidget : public DExpanderBox
+class DIGIKAM_EXPORT DRawDecoderWidget : public DExpanderBox
 {
     Q_OBJECT
 
@@ -77,8 +77,8 @@ public:
     /**
      * @param advSettings the default value is COLORSPACE
      */
-    explicit DcrawSettingsWidget(QWidget* const parent, int advSettings = COLORSPACE);
-    virtual ~DcrawSettingsWidget();
+    explicit DRawDecoderWidget(QWidget* const parent, int advSettings = COLORSPACE);
+    virtual ~DRawDecoderWidget();
 
     DFileSelector* inputProfileUrlEdit()  const;
     DFileSelector* outputProfileUrlEdit() const;
@@ -128,4 +128,4 @@ private:
 
 } // NameSpace Digikam
 
-#endif /* DCRAW_SETTINGS_WIDGET_H */
+#endif /* DRAW_DECODER_WIDGET_H */
