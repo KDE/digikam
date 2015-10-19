@@ -66,6 +66,7 @@
 #include "progressmanager.h"
 #include "dimgloaderobserver.h"
 #include "dimg.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -399,11 +400,6 @@ KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget* parent)
     return (new KipiUploadWidget(this, parent));
 }
 
-KIPI::MetadataProcessor* KipiInterface::createMetadataProcessor() const
-{
-    return 0; // TODO
-}
-
 QAbstractItemModel* KipiInterface::getTagTree() const
 {
 
@@ -633,6 +629,203 @@ private:
 KIPI::RawProcessor* KipiInterface::createRawProcessor() const
 {
     return new KipiInterfaceRawProcessor;
+}
+
+// ---------------------------------------------------------------------------------------
+
+class KipiInterfaceMatadataProcessor : public KIPI::MetadataProcessor
+{
+public:
+
+    KipiInterfaceMatadataProcessor()
+    {
+    }
+
+    ~KipiInterfaceMatadataProcessor()
+    {
+    }
+    
+    bool load(const QUrl& url)
+    {
+        return meta.load(url.toLocalFile());
+    }
+
+    bool save(const QUrl& url, bool writeToFileOnly)
+    {
+        if (writeToFileOnly)
+            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+
+        return meta.save(url.toLocalFile());
+    }
+    
+    bool applyChanges()
+    {
+        return meta.applyChanges();
+    }
+    
+    QSize getPixelSize()
+    {
+        return meta.getPixelSize();
+    }
+    
+    bool setImageProgramId(const QString& program, const QString& version)
+    {
+        return meta.setImageProgramId(program, version);
+    }
+    
+    QSize getImageDimensions()
+    {
+        return meta.getImageDimensions();
+    }
+    
+    bool setImageDimensions(const QSize& size)
+    {
+        return meta.setImageDimensions(size);
+    }
+    
+    int getImageOrientation()
+    {
+        return meta.getImageOrientation();
+    }
+    
+    bool setImageOrientation(int orientation)
+    {
+        return meta.setImageOrientation((DMetadata::ImageOrientation)orientation);
+    }
+    
+    bool rotateExifQImage(QImage& img, int orientation)
+    {
+        return meta.rotateExifQImage(img, (DMetadata::ImageOrientation)orientation);
+    }
+    
+    QDateTime getImageDateTime()
+    {
+        return meta.getImageDateTime();
+    }
+    
+    bool setImageDateTime(const QDateTime& dt)
+    {
+        return meta.setImageDateTime(dt);
+    }
+    
+    bool getImagePreview(QImage& img)
+    {
+        return meta.getImagePreview(img);
+    }
+    
+    bool setImagePreview(const QImage& img)
+    {
+        return meta.setImagePreview(img);
+    }
+    
+    bool hasExif()
+    {
+        return meta.hasExif();
+    }
+    
+    bool hasIptc()
+    {
+        return meta.hasIptc();
+    }
+    
+    bool hasXmp()
+    {
+        return meta.hasXmp();
+    }
+    
+    bool supportXmp()
+    {
+        return meta.supportXmp();
+    }
+    
+    bool canWriteXmp(const QUrl& url)
+    {
+        return meta.canWriteXmp(url.toLocalFile());
+    }
+        
+    bool removeExifTag(const QString& tag)
+    {
+        return meta.removeExifTag(tag.toLatin1().constData());
+    }
+    
+    bool removeIptcTag(const QString& tag)
+    {
+        return meta.removeIptcTag(tag.toLatin1().constData());
+    }
+    
+    bool removeXmpTag(const QString& tag)
+    {
+        return meta.removeXmpTag(tag.toLatin1().constData());
+    }
+    
+    bool getGPSInfo(double& alt, double& lat, double& lon)
+    {
+        return meta.getGPSInfo(alt, lat, lon);
+    }
+    
+    bool setGPSInfo(const double alt, const double lat, const double lon)
+    {
+        return meta.setGPSInfo(alt, lat, lon);
+    }
+    
+    bool removeGPSInfo()
+    {
+        return meta.removeGPSInfo();
+    }
+    
+    QString getExifTagString(const QString& tag)
+    {
+        return meta.getExifTagString(tag.toLatin1().constData());
+    }
+    
+    bool setExifTagString(const QString& tag, const QString& val)
+    {
+        return meta.setExifTagString(tag.toLatin1().constData(), val);
+    }
+    
+    bool getExifTagRational(const QString& tag, long int& num, long int& den)
+    {
+        return meta.getExifTagRational(tag.toLatin1().constData(), num, den);
+    }
+    
+    bool setExifTagRational(const QString& tag, long int num, long int den)
+    {
+        return meta.setExifTagRational(tag.toLatin1().constData(), num, den);
+    }
+    
+    QString getXmpTagString(const QString& tag)
+    {
+        return meta.getXmpTagString(tag.toLatin1().constData());
+    }
+    
+    bool setXmpTagString(const QString& tag, const QString& val)
+    {
+        return meta.setXmpTagString(tag.toLatin1().constData(), val);
+    }
+    
+    QStringList getXmpKeywords()
+    {
+        return meta.getXmpKeywords();
+    }
+    
+    bool  setXmpKeywords(const QStringList& keywords)
+    {
+        return meta.setXmpKeywords(keywords);
+    }
+    
+    QVariant getXmpTagVariant(const QString& tag)
+    {
+        return meta.getXmpTagVariant(tag.toLatin1().constData());
+    }
+    
+private:
+
+    DMetadata meta;
+};
+
+KIPI::MetadataProcessor* KipiInterface::createMetadataProcessor() const
+{
+    return new KipiInterfaceMatadataProcessor;
 }
 
 }  // namespace Digikam
