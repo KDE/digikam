@@ -419,9 +419,6 @@ void FilmTool::slotAdjustSliders()
             (double)d->levels->getLevelLowInputValue(BlueChannel) / d->histoSegments);
     d->blueInputLevels->setRightValue(
             (double)d->levels->getLevelHighInputValue(BlueChannel) / d->histoSegments);
-
-    d->gammaInput->setValue(d->filmContainer.gamma());
-    d->exposureInput->setValue(d->filmContainer.exposure());
 }
 
 void FilmTool::setLevelsFromFilm()
