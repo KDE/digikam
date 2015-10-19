@@ -248,6 +248,8 @@ int KipiInterface::features() const
            | KIPI::HostSupportsColorLabel
            | KIPI::HostSupportsPreviews
            | KIPI::HostSupportsRawProcessing
+           | KIPI::HostSupportsMetadataProcessing
+           | KIPI::HostSupportsSaveImages
           );
 }
 
@@ -318,6 +320,14 @@ void KipiInterface::preview(const QUrl& url, int minSize, int /*TODO resizedTo*/
     d->previewThread->loadFastButLarge(url.toLocalFile(), minSize);
 }
 
+bool KipiInterface::saveImage(const QUrl& url, const QString& format,
+                              const QByteArray& data, uint width, uint height,
+                              bool  sixteenBit, bool hasAlpha)
+{
+    DImg img(width, height, sixteenBit, hasAlpha, (uchar*)data.constData(), true);
+    return (img.save(url.toLocalFile(), format));
+}
+
 void KipiInterface::thumbnail(const QUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs.
@@ -357,6 +367,11 @@ KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget* p
 KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget* parent)
 {
     return (new KipiUploadWidget(this, parent));
+}
+
+KIPI::MetadataProcessor* KipiInterface::createMetadataProcessor() const
+{
+    return 0; // TODO
 }
 
 QAbstractItemModel* KipiInterface::getTagTree() const

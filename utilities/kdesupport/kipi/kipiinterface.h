@@ -34,6 +34,7 @@
 #include <QVariant>
 #include <QUrl>
 #include <QImage>
+#include <QByteArray>
 
 // Libkipi includes
 
@@ -84,6 +85,10 @@ public:
     QImage preview(const QUrl& url, int minSize);
     void   preview(const QUrl& url, int minSize, int resizedTo);
 
+    bool saveImage(const QUrl& url, const QString& format,
+                   const QByteArray& data, uint width, uint height,
+                   bool  sixteenBit, bool hasAlpha);
+
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
     KIPI::UploadWidget*            uploadWidget(QWidget* parent);
     QAbstractItemModel*            getTagTree() const;
@@ -98,6 +103,7 @@ public:
 
     KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const;
     KIPI::RawProcessor*      createRawProcessor()                 const;
+    KIPI::MetadataProcessor* createMetadataProcessor()            const;
 
     void aboutToEdit(const QUrl& url, KIPI::EditHints hints);
     void editingFinished(const QUrl& url, KIPI::EditHints hints);
