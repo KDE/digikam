@@ -87,7 +87,8 @@ public:
 
     bool saveImage(const QUrl& url, const QString& format,
                    const QByteArray& data, uint width, uint height,
-                   bool  sixteenBit, bool hasAlpha);
+                   bool  sixteenBit, bool hasAlpha,
+                   bool* cancel);
 
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
     KIPI::UploadWidget*            uploadWidget(QWidget* parent);

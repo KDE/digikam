@@ -40,10 +40,6 @@
 #include <KIPI/ImageInfoShared>
 #include <KIPI/ImageCollectionShared>
 
-// LibDRawDecoder includes
-
-#include "drawdecoder.h"
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -57,6 +53,7 @@
 #include "databaseaccess.h"
 #include "digikamapp.h"
 #include "digikamview.h"
+#include "drawdecoder.h"
 #include "loadingcacheinterface.h"
 #include "previewloadthread.h"
 #include "filereadwritelock.h"
@@ -67,11 +64,40 @@
 #include "kipiimageinfo.h"
 #include "kipiimagecollection.h"
 #include "progressmanager.h"
+#include "dimgloaderobserver.h"
 #include "dimg.h"
 
 namespace Digikam
 {
 
+class KipiDImgObserver : public DImgLoaderObserver
+{
+
+public:
+
+    explicit KipiDImgObserver(bool* cancel)
+        : DImgLoaderObserver(),
+          m_cancel(cancel)
+    {
+    }
+
+    ~KipiDImgObserver()
+    {
+    }
+
+    bool continueQuery(const DImg* const)
+    {
+        if (m_cancel)
+            return (!*m_cancel);
+        
+        return true;
+    }
+
+private:
+
+    bool* m_cancel;
+};
+    
 class KipiInterface::Private
 {
 public:
@@ -322,10 +348,14 @@ void KipiInterface::preview(const QUrl& url, int minSize, int /*TODO resizedTo*/
 
 bool KipiInterface::saveImage(const QUrl& url, const QString& format,
                               const QByteArray& data, uint width, uint height,
-                              bool  sixteenBit, bool hasAlpha)
+                              bool  sixteenBit, bool hasAlpha,
+                              bool* cancel)
 {
+    KipiDImgObserver* const observer = new KipiDImgObserver(cancel);
     DImg img(width, height, sixteenBit, hasAlpha, (uchar*)data.constData(), true);
-    return (img.save(url.toLocalFile(), format));
+    bool ret = img.save(url.toLocalFile(), format, observer);
+    delete observer;
+    return ret;
 }
 
 void KipiInterface::thumbnail(const QUrl& url, int /*size*/)
