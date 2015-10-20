@@ -73,14 +73,15 @@ bool CamItemInfo::isNull() const
 
 QUrl CamItemInfo::url() const
 {
-    QString path = folder;
+    QUrl url;
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + QLatin1Char('/') + (folder));
 
-    if (!path.endsWith(QLatin1Char('/')))
-    {
-        path.append(QLatin1Char('/'));
-    }
+    if (!url.path().endsWith(QLatin1Char('/'))) url.setPath(url.path() + QLatin1Char('/'));
 
-    return QUrl::fromLocalFile(path + name);
+    url = url.adjusted(QUrl::RemoveFilename);
+    url.setPath(url.path() + name);
+    return url;
 }
 
 bool CamItemInfo::operator==(const CamItemInfo& info) const
