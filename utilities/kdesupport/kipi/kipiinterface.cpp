@@ -733,6 +733,36 @@ public:
         return meta.hasXmp();
     }
     
+    QByteArray getExif()
+    {
+        return meta.getExifEncoded();
+    }
+    
+    QByteArray getIptc()
+    {
+        return meta.getIptc();
+    }
+
+    QByteArray getXmp()
+    {
+        return meta.getXmp();
+    }
+    
+    bool setExif(const QByteArray& data)
+    {
+        return meta.setExif(data);
+    }
+
+    bool setIptc(const QByteArray& data)
+    {
+        return meta.setIptc(data);
+    }
+
+    bool setXmp(const QByteArray& data)
+    {
+        return meta.setXmp(data);
+    }
+    
     bool supportXmp()
     {
         return meta.supportXmp();
