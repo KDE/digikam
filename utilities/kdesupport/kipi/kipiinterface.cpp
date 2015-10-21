@@ -778,21 +778,51 @@ public:
         return meta.canWriteXmp(url.toLocalFile());
     }
         
-    bool removeExifTag(const QString& tag)
+    bool removeExifTags(const QStringList& tagFilters)
     {
-        return meta.removeExifTag(tag.toLatin1().constData());
+        DMetadata::MetaDataMap m = meta.getExifTagsDataList(tagFilters);
+        
+        if (m.isEmpty())
+            return false;
+
+        for (DMetadata::MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
+        {
+            meta.removeExifTag(it.key().toLatin1().constData());
+        }
+        
+        return true;
     }
-    
-    bool removeIptcTag(const QString& tag)
+
+    bool removeIptcTags(const QStringList& tagFilters)
     {
-        return meta.removeIptcTag(tag.toLatin1().constData());
+        DMetadata::MetaDataMap m = meta.getIptcTagsDataList(tagFilters);
+        
+        if (m.isEmpty())
+            return false;
+
+        for (DMetadata::MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
+        {
+            meta.removeIptcTag(it.key().toLatin1().constData());
+        }
+        
+        return true;
     }
-    
-    bool removeXmpTag(const QString& tag)
+
+    bool removeXmpTags(const QStringList& tagFilters)
     {
-        return meta.removeXmpTag(tag.toLatin1().constData());
+        DMetadata::MetaDataMap m = meta.getXmpTagsDataList(tagFilters);
+        
+        if (m.isEmpty())
+            return false;
+
+        for (DMetadata::MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
+        {
+            meta.removeXmpTag(it.key().toLatin1().constData());
+        }
+        
+        return true;
     }
-    
+
     bool getGPSInfo(double& alt, double& lat, double& lon)
     {
         return meta.getGPSInfo(alt, lat, lon);
