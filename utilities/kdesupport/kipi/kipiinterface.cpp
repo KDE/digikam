@@ -763,6 +763,11 @@ public:
         return meta.setXmp(data);
     }
     
+    bool registerXmpNameSpace(const QString& uri, const QString& prefix)
+    {
+        return meta.registerXmpNameSpace(uri, prefix);
+    }
+    
     bool supportXmp()
     {
         return meta.supportXmp();
