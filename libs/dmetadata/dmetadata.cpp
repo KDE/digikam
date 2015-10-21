@@ -51,8 +51,6 @@
 #include "digikam_globals.h"
 #include "dimg.h"
 
-
-
 namespace Digikam
 {
 
@@ -1207,7 +1205,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
                 {
                     const std::string myStr = currentNamespace.toStdString();
                     const char* nameSpace   = myStr.data();
-                    
+
                     switch(currentOpts)
                     {
                         case NamespaceEntry::TAG_XMPBAG:
