@@ -140,13 +140,13 @@ void DImgFilterActionTest::showDiff(const Digikam::DImg& orig, const Digikam::DI
 
 void DImgFilterActionTest::initTestCase()
 {
-    // initialize kexiv2 before doing any multitasking
+    // initialize Exiv2 before doing any multitasking
     MetaEngine::initializeExiv2();
 }
 
 void DImgFilterActionTest::cleanupTestCase()
 {
-    // clean up the kexiv2 memory:
+    // clean up the Exiv2 memory:
     MetaEngine::cleanupExiv2();
 }
 

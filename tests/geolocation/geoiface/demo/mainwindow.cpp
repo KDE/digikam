@@ -227,7 +227,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     : QMainWindow(parent),
       d(new Private())
 {
-    // initialize kexiv2 before doing any multitasking
+    // initialize Exiv2 before doing any multitasking
     MetaEngine::initializeExiv2();
 
     d->treeWidget = new MyTreeWidget(this);
@@ -326,7 +326,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
 
 MainWindow::~MainWindow()
 {
-    // clean up the kexiv2 memory:
+    // clean up the Exiv2 memory:
     MetaEngine::cleanupExiv2();
 
     if (d->progressBar)

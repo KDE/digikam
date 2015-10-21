@@ -63,12 +63,9 @@
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
 
-// Libkexiv2
-
-#include "metaengine_rotation.h"
-
 // Local includes
 
+#include "metaengine_rotation.h"
 #include "drawdecoder.h"
 #include "dwidgetutils.h"
 #include "digikam_debug.h"

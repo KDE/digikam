@@ -31,16 +31,11 @@
 #include <QString>
 #include <QImage>
 
-// KExiv2 includes
-
-#include "metaengine_rotation.h"
-
 // Local includes
 
 #include "dmetadata.h"
 #include "digikam_export.h"
-
-
+#include "metaengine_rotation.h"
 
 namespace Digikam
 {

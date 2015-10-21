@@ -2939,7 +2939,6 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
     if (flags & RemoveOldMetadataPreviews || flags & CreateNewMetadataPreview)
     {
         // Clear IPTC preview
-        // NOTE: when depending on a libkexiv2 > Nov 1 2011, consolidate this to meta.setImagePreview(QImage())
         meta.removeIptcTag("Iptc.Application2.Preview");
         meta.removeIptcTag("Iptc.Application2.PreviewFormat");
         meta.removeIptcTag("Iptc.Application2.PreviewVersion");
@@ -2948,7 +2947,6 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         meta.removeExifThumbnail();
 
         // Clear Tiff thumbnail
-        // NOTE: when depending on a libkexiv2 > Nov 1 2011, consolidate this to meta.setTiffThumbnail(QImage())
         MetaEngine::MetaDataMap tiffThumbTags = meta.getExifTagsDataList(QStringList() << QLatin1String("SubImage1"));
 
         for (MetaEngine::MetaDataMap::iterator it = tiffThumbTags.begin(); it != tiffThumbTags.end(); ++it)

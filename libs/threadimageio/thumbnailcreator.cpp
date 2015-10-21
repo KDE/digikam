@@ -542,8 +542,6 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             DRawDecoder::loadHalfPreview(qimage, path);
         }
 
-        // See bug #339144 : only handle preview if right libkexiv2 version is used.
-
         // Special case with DNG file. See bug #338081
         if (qimage.isNull())
         {

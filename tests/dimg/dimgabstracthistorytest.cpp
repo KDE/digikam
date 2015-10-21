@@ -197,7 +197,7 @@ QString DImgAbstractHistoryTest::tempFilePath(const QString& purpose) const
 
 void DImgAbstractHistoryTest::initBaseTestCase()
 {
-    // initialize kexiv2 before doing any multitasking
+    // initialize Exiv2 before doing any multitasking
     MetaEngine::initializeExiv2();
 
     ICCSettingsContainer c = IccSettings::instance()->settings();
@@ -222,7 +222,7 @@ void DImgAbstractHistoryTest::cleanupBaseTestCase()
     QFile file(m_tempFile);
     file.remove();
 
-    // clean up the kexiv2 memory:
+    // clean up the Exiv2 memory:
     MetaEngine::cleanupExiv2();
 }
 

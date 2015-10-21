@@ -578,7 +578,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 
 #endif // (JPEG_LIB_VERSION >= 80)
 
-    // NOTE : Cast is fine here. See libkexiv2/MetaEngineRotation.h for details.
+    // NOTE : Cast is fine here. See metaengine_rotation.h for details.
     transformoption.transform       = (JXFORM_CODE)action;
 
     if (transformoption.transform == JXFORM_NONE)

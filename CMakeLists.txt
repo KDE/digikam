@@ -172,7 +172,7 @@ find_package(Threads                    REQUIRED)  # For DNGWriter: DNG SDK need
 find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 
 set_package_properties("Exiv2"     PROPERTIES
-                       DESCRIPTION "Required to build libkexiv2"
+                       DESCRIPTION "Required to build digiKam"
                        URL         "http://www.exiv2.org"
                        TYPE        RECOMMENDED
                        PURPOSE     "Library to manage image metadata"
