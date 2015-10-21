@@ -43,13 +43,13 @@
 
 #include "rawinfo.h"
 #include "drawdecoder.h"
-#include "digikam_debug.h"
 #include "filereadwritelock.h"
 #include "metadatasettings.h"
 #include "template.h"
+#include "dimg.h"
 #include "digikam_version.h"
 #include "digikam_globals.h"
-#include "dimg.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
