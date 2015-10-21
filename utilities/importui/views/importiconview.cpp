@@ -144,9 +144,9 @@ int ImportIconView::fitToWidthIcons()
 
 CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& file)
 {
-    QUrl url = QUrl::fromLocalFile(folder + QLatin1String("/"));
-    url      = url.adjusted(QUrl::RemoveFilename);
-    url.setPath(url.path() + file);
+    QUrl url = QUrl::fromLocalFile(folder);
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + QLatin1Char('/') + (file));
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
 
     if(indexForCamItemInfo.isValid())
@@ -159,9 +159,9 @@ CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& fi
 
 CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString& file)
 {
-    QUrl url = QUrl::fromLocalFile(folder + QLatin1String("/"));
-    url = url.adjusted(QUrl::RemoveFilename);
-    url.setPath(url.path() + file);
+    QUrl url = QUrl::fromLocalFile(folder);
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + QLatin1Char('/') + (file));
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
     QModelIndex mappedIndex         = importFilterModel()->mapToSource(indexForCamItemInfo);
     return importImageModel()->camItemInfoRef(mappedIndex);

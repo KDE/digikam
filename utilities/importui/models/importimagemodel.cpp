@@ -313,7 +313,7 @@ QModelIndex ImportImageModel::indexForUrl(const QUrl& fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
-        return indexForCamItemId(d->fileUrlHash.value(fileUrl.toDisplayString()));
+        return indexForCamItemId(d->fileUrlHash.value(fileUrl.toLocalFile()));
     }
     else
     {
@@ -335,7 +335,7 @@ QList<QModelIndex> ImportImageModel::indexesForUrl(const QUrl& fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
-        return indexesForCamItemId(d->fileUrlHash.value(fileUrl.toDisplayString()));
+        return indexesForCamItemId(d->fileUrlHash.value(fileUrl.toLocalFile()));
     }
     else
     {
@@ -358,7 +358,7 @@ CamItemInfo ImportImageModel::camItemInfo(const QUrl& fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
-        qlonglong id = d->fileUrlHash.value(fileUrl.toDisplayString());
+        qlonglong id = d->fileUrlHash.value(fileUrl.toLocalFile());
 
         if (id)
         {
@@ -390,7 +390,7 @@ QList<CamItemInfo> ImportImageModel::camItemInfos(const QUrl& fileUrl) const
 
     if (d->keepFileUrlCache)
     {
-        qlonglong id = d->fileUrlHash.value(fileUrl.toDisplayString());
+        qlonglong id = d->fileUrlHash.value(fileUrl.toLocalFile());
 
         if (id)
         {
@@ -512,7 +512,7 @@ bool ImportImageModel::hasImage(qlonglong id) const
 
 bool ImportImageModel::hasImage(const CamItemInfo& info) const
 {
-    return d->fileUrlHash.contains(info.url().toDisplayString());
+    return d->fileUrlHash.contains(info.url().toLocalFile());
 }
 
 void ImportImageModel::emitDataChangedForAll()
@@ -563,7 +563,10 @@ void ImportImageModel::slotFileDeleted(const QString& folder, const QString& fil
 {
     Q_UNUSED(status)
 
-    CamItemInfo info = camItemInfo(QUrl::fromLocalFile(folder + file));
+    QUrl url = QUrl::fromLocalFile(folder);
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + QLatin1Char('/') + (file));
+    CamItemInfo info = camItemInfo(url);
     removeCamItemInfo(info);
 }
 
@@ -640,7 +643,7 @@ void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
 
         if (d->keepFileUrlCache)
         {
-            d->fileUrlHash[info.url().toDisplayString()] = id;
+            d->fileUrlHash[info.url().toLocalFile()] = id;
         }
     }
 

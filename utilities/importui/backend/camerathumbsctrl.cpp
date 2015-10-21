@@ -246,8 +246,7 @@ void CameraThumbsCtrl::procressKDEPreview(const QUrl& item, const QPixmap& pix)
         return;
     }
 
-    QString file   = item.fileName();
-    QString folder = item.toLocalFile().remove(QLatin1String("/") + file);
+    QString file = item.fileName();
     QPixmap thumb;
 
     if (pix.isNull())

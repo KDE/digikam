@@ -173,8 +173,7 @@ QList<qlonglong> ImportSortFilterModel::camItemIds(const QList<QModelIndex>& ind
 
 QModelIndex ImportSortFilterModel::indexForPath(const QString& filePath) const
 {
-    QUrl fileUrl;
-    fileUrl.setPath(filePath);
+    QUrl fileUrl = QUrl::fromLocalFile(filePath);
     return mapFromSourceImportModel(sourceImportModel()->indexForUrl(fileUrl));
 }
 
