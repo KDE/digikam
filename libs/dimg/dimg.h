@@ -26,10 +26,6 @@
 #ifndef DIMG_H
 #define DIMG_H
 
-// KExiv2 includes
-
-#include <KExiv2/KExiv2Data>
-
 // Qt includes
 
 #include <QByteArray>
@@ -47,14 +43,13 @@
 #include "dcolorcomposer.h"
 #include "historyimageid.h"
 #include "iccprofile.h"
+#include "metaengine_data.h"
 
 class QImage;
 class QPixmap;
 
 namespace Digikam
 {
-
-typedef KExiv2Iface::KExiv2Data KExiv2Data;
 
 class ExposureSettingsContainer;
 class DImageHistory;
@@ -333,9 +328,9 @@ public:
 
     /** Metadata manipulation methods
      */
-    KExiv2Data getMetadata()   const;
+    MetaEngineData getMetadata()   const;
     IccProfile getIccProfile() const;
-    void       setMetadata(const KExiv2Data& data);
+    void       setMetadata(const MetaEngineData& data);
     void       setIccProfile(const IccProfile& profile);
 
     void       setAttribute(const QString& key, const QVariant& value);
@@ -570,7 +565,7 @@ public:
     bool       rotateAndFlip(int orientation);
 
     /** Rotates and/or flip the DImg according to the given transform action,
-     *  which is a KExiv2Iface::RotationMatrix::TransformAction.
+     *  which is a MetaEngineRotation::TransformAction.
      *  Returns true if the image was actually rotated or flipped.
      */
     bool       transform(int transformAction);

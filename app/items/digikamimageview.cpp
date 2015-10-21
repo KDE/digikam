@@ -706,13 +706,13 @@ void DigikamImageView::rename()
 void DigikamImageView::slotRotateLeft(const QList<QModelIndex>& indexes)
 {
     FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
-                                          KExiv2Iface::RotationMatrix::Rotate270);
+                                          MetaEngineRotation::Rotate270);
 }
 
 void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
     FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
-                                          KExiv2Iface::RotationMatrix::Rotate90);
+                                          MetaEngineRotation::Rotate90);
 }
 
 void DigikamImageView::slotFullscreen(const QList<QModelIndex>& indexes)

@@ -192,7 +192,7 @@ bool TemplateManager::load()
             }
             else if (name2 == QString::fromLatin1("copyright"))
             {
-                KExiv2::AltLangMap copyrights;
+                MetaEngine::AltLangMap copyrights;
 
                 for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
                 {
@@ -206,7 +206,7 @@ bool TemplateManager::load()
             }
             else if (name2 == QString::fromLatin1("rightusageterms"))
             {
-                KExiv2::AltLangMap usages;
+                MetaEngine::AltLangMap usages;
 
                 for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
                 {
@@ -354,8 +354,8 @@ bool TemplateManager::save()
 
             QDomElement copyright = doc.createElement(QString::fromLatin1("copyright"));
             elem.appendChild(copyright);
-            KExiv2::AltLangMap rights = t.copyright();
-            KExiv2::AltLangMap::const_iterator it;
+            MetaEngine::AltLangMap rights = t.copyright();
+            MetaEngine::AltLangMap::const_iterator it;
 
             for (it = rights.constBegin() ; it != rights.constEnd() ; ++it)
             {
@@ -366,8 +366,8 @@ bool TemplateManager::save()
 
             QDomElement rightusageterms = doc.createElement(QString::fromLatin1("rightusageterms"));
             elem.appendChild(rightusageterms);
-            KExiv2::AltLangMap usages   = t.rightUsageTerms();
-            KExiv2::AltLangMap::const_iterator it2;
+            MetaEngine::AltLangMap usages   = t.rightUsageTerms();
+            MetaEngine::AltLangMap::const_iterator it2;
 
             for (it2 = usages.constBegin() ; it2 != usages.constEnd() ; ++it2)
             {

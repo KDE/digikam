@@ -111,8 +111,6 @@ set(digikamdatabase_LIB_SRCS
 )
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-
     $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::Completion,INTERFACE_INCLUDE_DIRECTORIES>
@@ -156,8 +154,6 @@ target_link_libraries(digikamdatabase
                       Qt5::Gui
                       Qt5::Sql
                       Qt5::DBus
-
-                      KF5::KExiv2
 
                       KF5::KIOCore
                       KF5::Solid

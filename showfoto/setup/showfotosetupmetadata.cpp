@@ -43,12 +43,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "metadatapanel.h"
 #include "metadatasettings.h"
 #include "dactivelabel.h"
@@ -127,7 +124,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
                     "an older standard used in digital photography to store "
                     "photographer information in images.</p>"));
 
-    if (KExiv2Iface::KExiv2::supportXmp())
+    if (MetaEngine::supportXmp())
     {
         txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a> - "
                         "a new standard used in digital photography, designed to replace IPTC.</p>"));

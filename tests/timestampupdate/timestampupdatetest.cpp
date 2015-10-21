@@ -29,12 +29,9 @@
 #include <QFileInfo>
 #include <QDBusConnection>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "dmetadata.h"
 #include "albumdb.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
@@ -113,8 +110,8 @@ void TimeStampUpdateTest::cleanupTestCase()
  */
 void TimeStampUpdateTest::cleanup()
 {
-    KExiv2Iface::KExiv2 meta;
-    meta.setMetadataWritingMode(KExiv2Iface::KExiv2::WRITETOIMAGEONLY);
+    DMetadata meta;
+    meta.setMetadataWritingMode(MetaEngine::WRITETOIMAGEONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
     meta.removeExifTag("Exif.Image.Model", false);
@@ -153,8 +150,8 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
     QVERIFY2(dbModel.at(0).toString().isEmpty(), "Exif.Image.Model should be empty");
 
     // Verify that Exif.Image.Model in image file is empty
-    KExiv2Iface::KExiv2 meta;
-    meta.setMetadataWritingMode(KExiv2Iface::KExiv2::WRITETOIMAGEONLY);
+    DMetadata meta;
+    meta.setMetadataWritingMode(MetaEngine::WRITETOIMAGEONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
     QString model = meta.getExifTagString("Exif.Image.Model");
@@ -199,8 +196,8 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
     QVERIFY2(dbModel.at(0).toString().isEmpty(), "Exif.Image.Model should be empty");
 
     // Verify that Exif.Image.Model in image file is empty
-    KExiv2Iface::KExiv2 meta;
-    meta.setMetadataWritingMode(KExiv2Iface::KExiv2::WRITETOIMAGEONLY);
+    DMetadata meta;
+    meta.setMetadataWritingMode(MetaEngine::WRITETOIMAGEONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
     QString model = meta.getExifTagString("Exif.Image.Model");

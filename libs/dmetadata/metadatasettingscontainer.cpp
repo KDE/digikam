@@ -48,7 +48,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     saveTags              = false;
     writeRawFiles         = false;
     useXMPSidecar4Reading = false;
-    metadataWritingMode   = KExiv2::WRITETOIMAGEONLY;
+    metadataWritingMode   = MetaEngine::WRITETOIMAGEONLY;
     updateFileTimeStamp   = true;
     rescanImageIfModified = false;
     rotationBehavior      = RotatingFlags | RotateByLosslessRotation;
@@ -72,8 +72,8 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
     writeRawFiles         = group.readEntry("Write RAW Files",             false);
     useXMPSidecar4Reading = group.readEntry("Use XMP Sidecar For Reading", false);
-    metadataWritingMode   = (KExiv2::MetadataWritingMode)
-                            group.readEntry("Metadata Writing Mode",       (int)KExiv2::WRITETOIMAGEONLY);
+    metadataWritingMode   = (MetaEngine::MetadataWritingMode)
+                            group.readEntry("Metadata Writing Mode",       (int)MetaEngine::WRITETOIMAGEONLY);
     updateFileTimeStamp   = group.readEntry("Update File Timestamp",       true);
     rescanImageIfModified = group.readEntry("Rescan File If Modified",     false);
     useLazySync           = group.readEntry("Use Lazy Synchronization",    false);

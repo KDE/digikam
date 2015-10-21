@@ -31,16 +31,16 @@
 #include <QStringList>
 #include <QDebug>
 
-// Libkexiv2 includes
+// LibMetaEngine includes
 
-#include <KExiv2/KExiv2>
+#include "metaengine.h"
 
 // Local includes
 
 #include "metadatainfo.h"
 #include "digikam_export.h"
 
-using namespace KExiv2Iface;
+using namespace Digikam;
 
 namespace Digikam
 {
@@ -72,8 +72,8 @@ public:
     void setAuthors(const QStringList& authors);
     void setAuthorsPosition(const QString& authorPosition);
     void setCredit(const QString& credit);
-    void setCopyright(const KExiv2::AltLangMap& copyright);
-    void setRightUsageTerms(const KExiv2::AltLangMap& rightUsageTerms);
+    void setCopyright(const MetaEngine::AltLangMap& copyright);
+    void setRightUsageTerms(const MetaEngine::AltLangMap& rightUsageTerms);
     void setSource(const QString& source);
     void setInstructions(const QString& instructions);
     void setLocationInfo(const IptcCoreLocationInfo& inf);
@@ -83,8 +83,8 @@ public:
     QStringList          authors()         const;
     QString              authorsPosition() const;
     QString              credit()          const;
-    KExiv2::AltLangMap   copyright()       const;
-    KExiv2::AltLangMap   rightUsageTerms() const;
+    MetaEngine::AltLangMap   copyright()       const;
+    MetaEngine::AltLangMap   rightUsageTerms() const;
     QString              source()          const;
     QString              instructions()    const;
     IptcCoreLocationInfo locationInfo()    const;
@@ -116,11 +116,11 @@ protected:
 
     /** Language alternative copyright notices.
      */
-    KExiv2::AltLangMap   m_copyright;
+    MetaEngine::AltLangMap   m_copyright;
 
     /** Language alternative right term usages.
      */
-    KExiv2::AltLangMap   m_rightUsageTerms;
+    MetaEngine::AltLangMap   m_rightUsageTerms;
 
     /** Descriptions of contents source.
      */

@@ -99,7 +99,7 @@ enum Field
     Rating,                           /// Int
     CreationDate,                     /// DateTime
     DigitizationDate,                 /// DateTime
-    Orientation,                      /// Int, enum from libkexiv2
+    Orientation,                      /// Int, enum from libMetaEngine
 
     Make,                             /// String
     Model,                            /// String

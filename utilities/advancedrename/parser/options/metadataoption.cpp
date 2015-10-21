@@ -171,7 +171,7 @@ QString MetadataOption::parseMetadata(const QString& token, ParseSettings& setti
 
     if (!meta.isEmpty())
     {
-        KExiv2::MetaDataMap dataMap;
+        MetaEngine::MetaDataMap dataMap;
 
         if (keyword.startsWith(QLatin1String("exif.")))
         {

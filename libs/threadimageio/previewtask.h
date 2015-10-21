@@ -32,11 +32,7 @@
 // Local includes
 
 #include "loadsavetask.h"
-
-namespace KExiv2Iface
-{
-    class KExiv2Previews;
-}
+#include "metaengine_previews.h"
 
 namespace Digikam
 {
@@ -55,7 +51,7 @@ public:
 
 private:
 
-    bool loadExiv2Preview(KExiv2Iface::KExiv2Previews& previews, int sizeLimit = -1);
+    bool loadExiv2Preview(MetaEnginePreviews& previews, int sizeLimit = -1);
     bool loadLibRawPreview(int sizeLimit = -1);
     bool loadHalfSizeRaw();
     bool needToScale();

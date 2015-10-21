@@ -39,9 +39,9 @@ using namespace Digikam;
 
 void CommentReadWriteTest::initTestCase()
 {
-    KExiv2::AltLangMap authorsMap,  authorsMap2;
-    KExiv2::AltLangMap datesMap,    datesMap2;
-    KExiv2::AltLangMap commentsMap, commentsMap2;
+    MetaEngine::AltLangMap authorsMap,  authorsMap2;
+    MetaEngine::AltLangMap datesMap,    datesMap2;
+    MetaEngine::AltLangMap commentsMap, commentsMap2;
     QString commonAuthor, commonAuthor2;
 
     authorsMap.insert(QLatin1String("x-default"), QLatin1String("Veaceslav"));
@@ -81,7 +81,7 @@ void CommentReadWriteTest::testWriteToDisabledNamespaces()
     DMetadata dmeta;
     dmeta.setFilePath(QLatin1String("random.org"));
 
-    KExiv2::AltLangMap commentsMap;
+    MetaEngine::AltLangMap commentsMap;
     QString commentString;
 
     DMetadataSettingsContainer dmsettings;

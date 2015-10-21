@@ -64,19 +64,19 @@ CaptionsMap::~CaptionsMap()
 {
 }
 
-void CaptionsMap::setData(const KExiv2::AltLangMap& comments,
-                          const KExiv2::AltLangMap& authors,
+void CaptionsMap::setData(const MetaEngine::AltLangMap& comments,
+                          const MetaEngine::AltLangMap& authors,
                           const QString& commonAuthor,
-                          const KExiv2::AltLangMap& dates)
+                          const MetaEngine::AltLangMap& dates)
 {
     fromAltLangMap(comments);
     setAuthorsList(authors, commonAuthor);
     setDatesList(dates);
 }
 
-KExiv2::AltLangMap CaptionsMap::toAltLangMap() const
+MetaEngine::AltLangMap CaptionsMap::toAltLangMap() const
 {
-    KExiv2::AltLangMap map;
+    MetaEngine::AltLangMap map;
 
     for (CaptionsMap::const_iterator it = constBegin(); it != constEnd(); ++it)
     {
@@ -86,11 +86,11 @@ KExiv2::AltLangMap CaptionsMap::toAltLangMap() const
     return map;
 }
 
-void CaptionsMap::fromAltLangMap(const KExiv2::AltLangMap& map)
+void CaptionsMap::fromAltLangMap(const MetaEngine::AltLangMap& map)
 {
     clear();
 
-    for (KExiv2::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
+    for (MetaEngine::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
         CaptionValues val;
         val.caption = it.value();
@@ -98,9 +98,9 @@ void CaptionsMap::fromAltLangMap(const KExiv2::AltLangMap& map)
     }
 }
 
-KExiv2::AltLangMap CaptionsMap::authorsList() const
+MetaEngine::AltLangMap CaptionsMap::authorsList() const
 {
-    KExiv2::AltLangMap map;
+    MetaEngine::AltLangMap map;
 
     for (CaptionsMap::const_iterator it = constBegin(); it != constEnd(); ++it)
     {
@@ -110,11 +110,11 @@ KExiv2::AltLangMap CaptionsMap::authorsList() const
     return map;
 }
 
-void CaptionsMap::setAuthorsList(const KExiv2::AltLangMap& map, const QString& commonAuthor)
+void CaptionsMap::setAuthorsList(const MetaEngine::AltLangMap& map, const QString& commonAuthor)
 {
     for (CaptionsMap::iterator it = begin(); it != end(); ++it)
     {
-        KExiv2::AltLangMap::const_iterator authorIt = map.find(it.key());
+        MetaEngine::AltLangMap::const_iterator authorIt = map.find(it.key());
 
         if (authorIt != map.constEnd())
         {
@@ -127,9 +127,9 @@ void CaptionsMap::setAuthorsList(const KExiv2::AltLangMap& map, const QString& c
     }
 }
 
-KExiv2::AltLangMap CaptionsMap::datesList() const
+MetaEngine::AltLangMap CaptionsMap::datesList() const
 {
-    KExiv2::AltLangMap map;
+    MetaEngine::AltLangMap map;
 
     for (CaptionsMap::const_iterator it = constBegin(); it != constEnd(); ++it)
     {
@@ -139,9 +139,9 @@ KExiv2::AltLangMap CaptionsMap::datesList() const
     return map;
 }
 
-void CaptionsMap::setDatesList(const KExiv2::AltLangMap& map)
+void CaptionsMap::setDatesList(const MetaEngine::AltLangMap& map)
 {
-    for (KExiv2::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
+    for (MetaEngine::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
         CaptionsMap::iterator val = find(it.key());
 

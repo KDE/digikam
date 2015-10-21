@@ -10,7 +10,6 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
@@ -29,7 +28,6 @@ target_link_libraries(testautocrop
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KExiv2
 
                       ${OpenCV_LIBRARIES}
 )
@@ -49,7 +47,6 @@ if(LENSFUN_FOUND)
 
                           KF5::I18n
                           KF5::KIOCore
-                          KF5::KExiv2
 
                           ${LENSFUN_LIBRARIES}
                           ${OpenCV_LIBRARIES}
@@ -83,7 +80,6 @@ target_link_libraries(testnrestimate
 
                       KF5::I18n
                       KF5::KIOCore
-                      KF5::KExiv2
 
                       ${OpenCV_LIBRARIES}
 )

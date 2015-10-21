@@ -797,7 +797,7 @@ IccProfile EditorCore::getEmbeddedICC() const
     return d->image.getIccProfile();
 }
 
-KExiv2Data EditorCore::getMetadata() const
+MetaEngineData EditorCore::getMetadata() const
 {
     return d->image.getMetadata();
 }

@@ -58,8 +58,8 @@ public:
 
     QString languageCode(int index) const;
 
-    void setValues(const KExiv2::AltLangMap& values);
-    KExiv2::AltLangMap& values() const;
+    void setValues(const MetaEngine::AltLangMap& values);
+    MetaEngine::AltLangMap& values() const;
 
     /**
      * Fix lines visibile in text editor to lines. If zero, do not fix layout to number of lines visible.

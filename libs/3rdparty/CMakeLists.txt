@@ -19,6 +19,5 @@ endif()
 add_library(3rdparty_src OBJECT ${lib3rdparty_SRCS})
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )

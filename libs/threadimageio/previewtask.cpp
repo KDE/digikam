@@ -34,10 +34,6 @@
 #include <QVariant>
 #include <QMatrix>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2Previews>
-
 // Local includes
 
 #include "drawdecoder.h"
@@ -207,7 +203,7 @@ void PreviewLoadingTask::execute()
 
     if (format == DImg::RAW)
     {
-        KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
+        MetaEnginePreviews previews(m_loadingDescription.filePath);
         // Check original image size using Exiv2.
         QSize originalSize  = previews.originalSize();
 
@@ -493,7 +489,7 @@ bool PreviewLoadingTask::needToScale()
 
 // -- Exif/IPTC preview extraction using Exiv2 --------------------------------------------------------
 
-bool PreviewLoadingTask::loadExiv2Preview(KExiv2Iface::KExiv2Previews& previews, int sizeLimit)
+bool PreviewLoadingTask::loadExiv2Preview(MetaEnginePreviews& previews, int sizeLimit)
 {
     if (previews.isEmpty() || !continueQuery())
     {

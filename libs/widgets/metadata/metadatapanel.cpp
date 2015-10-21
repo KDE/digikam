@@ -36,12 +36,9 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "metadataselector.h"
 #include "dmetadata.h"
 

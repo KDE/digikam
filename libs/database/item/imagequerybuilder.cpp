@@ -39,12 +39,9 @@
 #include <QLocale>
 #include <QUrlQuery>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "digikam_debug.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
@@ -986,13 +983,13 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             {
                 sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ImageInformation.width >= ImageInformation.height) "
                        "  OR (ImageInformation.orientation >= ? AND ImageInformation.width <= ImageInformation.height) ) ");
-                *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
+                *boundValues << MetaEngine::ORIENTATION_VFLIP << MetaEngine::ORIENTATION_ROT_90_HFLIP;
             }
             else if (pageOrientation == 2)
             {
                 sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ImageInformation.width < ImageInformation.height) "
                        "  OR (ImageInformation.orientation >= ? AND ImageInformation.width > ImageInformation.height) ) ");
-                *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
+                *boundValues << MetaEngine::ORIENTATION_VFLIP << MetaEngine::ORIENTATION_ROT_90_HFLIP;
             }
             else if (pageOrientation == 3 || pageOrientation == 4)
             {
@@ -1006,20 +1003,20 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     else if (name == QLatin1String("width"))
     {
         sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ");
-        *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP;
+        *boundValues << MetaEngine::ORIENTATION_VFLIP;
         fieldQuery.addIntField(QLatin1String("ImageInformation.width"));
         sql += QString::fromUtf8(") OR (ImageInformation.orientation >= ? AND ");
-        *boundValues << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
+        *boundValues << MetaEngine::ORIENTATION_ROT_90_HFLIP;
         fieldQuery.addIntField(QLatin1String("ImageInformation.height"));
         sql += QString::fromUtf8(" ) ) ");
     }
     else if (name == QLatin1String("height"))
     {
         sql += QString::fromUtf8(" ( (ImageInformation.orientation <= ? AND ");
-        *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP;
+        *boundValues << MetaEngine::ORIENTATION_VFLIP;
         fieldQuery.addIntField(QLatin1String("ImageInformation.height"));
         sql += QString::fromUtf8(") OR (ImageInformation.orientation >= ? AND ");
-        *boundValues << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
+        *boundValues << MetaEngine::ORIENTATION_ROT_90_HFLIP;
         fieldQuery.addIntField(QLatin1String("ImageInformation.width"));
         sql += QString::fromUtf8(" ) ) ");
     }

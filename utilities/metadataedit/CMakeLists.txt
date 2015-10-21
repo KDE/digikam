@@ -43,8 +43,6 @@ set(libmetadataedit_SRCS exif/exifeditwidget.cpp
    )
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigWidgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -60,6 +58,4 @@ add_library(metadataedit STATIC $<TARGET_OBJECTS:metadataedit_src>)
 target_link_libraries(metadataedit
                       PRIVATE
                       Qt5::Gui
-
-                      KF5::KExiv2
 )

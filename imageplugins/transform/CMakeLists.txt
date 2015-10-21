@@ -32,8 +32,6 @@ target_link_libraries(digikamimageplugin_transform
 
                       Qt5::Core
                       Qt5::Gui
-                      
-                      KF5::KExiv2
 
                       KF5::I18n
                       KF5::XmlGui

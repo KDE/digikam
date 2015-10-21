@@ -28,8 +28,6 @@ ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 include_directories(common/ parser/options/ parser/options/database/ parser/options/database/keys/ parser/modifiers/)
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
@@ -52,7 +50,5 @@ target_link_libraries(advancedrename
                       Qt5::Widgets
                       Qt5::Sql
 
-                      KF5::I18n # TODO verify if needed
-
-                      KF5::KExiv2
+                      KF5::I18n
                      )

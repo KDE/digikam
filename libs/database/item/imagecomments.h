@@ -41,7 +41,7 @@
 #include "captionvalues.h"
 #include "databaseaccess.h"
 
-using namespace KExiv2Iface;
+
 
 namespace Digikam
 {

@@ -48,12 +48,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "digikam_config.h"
@@ -61,8 +58,6 @@
 #include "metadatasettings.h"
 #include "advancedmetadatatab.h"
 #include "dactivelabel.h"
-
-using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -252,18 +247,18 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->readXMPSidecarBox->setText(i18nc("@option:check", "Read from sidecar files"));
     d->readXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
                                              "Turn on this option to read metadata from XMP sidecar files when reading metadata."));
-    d->readXMPSidecarBox->setEnabled(KExiv2::supportXmp());
+    d->readXMPSidecarBox->setEnabled(MetaEngine::supportXmp());
 
     d->writeXMPSidecarBox = new QCheckBox;
     d->writeXMPSidecarBox->setText(i18nc("@option:check", "Write to sidecar files"));
     d->writeXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
                                               "Turn on this option to save, as specified, metadata to XMP sidecar files."));
-    d->writeXMPSidecarBox->setEnabled(KExiv2::supportXmp());
+    d->writeXMPSidecarBox->setEnabled(MetaEngine::supportXmp());
 
     d->writingModeCombo   = new QComboBox;
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), KExiv2::WRITETOSIDECARONLY4READONLYFILES);
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     KExiv2::WRITETOSIDECARONLY);
-    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                KExiv2::WRITETOSIDECARANDIMAGE);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), MetaEngine::WRITETOSIDECARONLY4READONLYFILES);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     MetaEngine::WRITETOSIDECARONLY);
+    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                MetaEngine::WRITETOSIDECARANDIMAGE);
     d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
     d->writingModeCombo->setEnabled(false);
 
@@ -275,7 +270,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->writeRawFilesBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to write metadata into RAW TIFF/EP files. "
                                             "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
                                             "experimental, and is disabled by default."));
-    d->writeRawFilesBox->setEnabled(KExiv2::supportMetadataWritting(QLatin1String("image/x-raw")));
+    d->writeRawFilesBox->setEnabled(MetaEngine::supportMetadataWritting(QLatin1String("image/x-raw")));
 
     d->updateFileTimeStampBox = new QCheckBox;
     d->updateFileTimeStampBox->setText(i18nc("@option:check", "&Update file timestamp when files are modified"));
@@ -326,7 +321,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                     "an older standard used in digital photography to store "
                     "photographer information in images.</p>"));
 
-    if (KExiv2::supportXmp())
+    if (MetaEngine::supportXmp())
         txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a> - "
                         "a new standard used in digital photography, designed to replace IPTC.</p>"));
 
@@ -616,12 +611,12 @@ void SetupMetadata::applySettings()
 
     if (d->writeXMPSidecarBox->isChecked())
     {
-        set.metadataWritingMode = (KExiv2::MetadataWritingMode)
+        set.metadataWritingMode = (MetaEngine::MetadataWritingMode)
                                   d->writingModeCombo->itemData(d->writingModeCombo->currentIndex()).toInt();
     }
     else
     {
-        set.metadataWritingMode = KExiv2::WRITETOIMAGEONLY;
+        set.metadataWritingMode = MetaEngine::WRITETOIMAGEONLY;
     }
 
     set.updateFileTimeStamp   = d->updateFileTimeStampBox->isChecked();
@@ -693,7 +688,7 @@ void SetupMetadata::readSettings()
     d->updateFileTimeStampBox->setChecked(set.updateFileTimeStamp);
     d->rescanImageIfModifiedBox->setChecked(set.rescanImageIfModified);
 
-    if (set.metadataWritingMode == KExiv2::WRITETOIMAGEONLY)
+    if (set.metadataWritingMode == MetaEngine::WRITETOIMAGEONLY)
     {
         d->writeXMPSidecarBox->setChecked(false);
     }

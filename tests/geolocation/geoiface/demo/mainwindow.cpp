@@ -57,12 +57,9 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// LibKExiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // geoiface includes
 
+#include "dmetadata.h"
 #include "lookupaltitude.h"
 #include "lookupfactory.h"
 #include "mapwidget.h"
@@ -75,6 +72,7 @@
 #include "mytreewidget.h"
 #include "myimageitem.h"
 
+using namespace Digikam;
 using namespace GeoIface;
 
 MarkerModelHelper::MarkerModelHelper(QAbstractItemModel* const itemModel, QItemSelectionModel* const itemSelectionModel)
@@ -230,7 +228,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
       d(new Private())
 {
     // initialize kexiv2 before doing any multitasking
-    KExiv2Iface::KExiv2::initializeExiv2();
+    MetaEngine::initializeExiv2();
 
     d->treeWidget = new MyTreeWidget(this);
     d->treeWidget->setColumnCount(2);
@@ -329,7 +327,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
 MainWindow::~MainWindow()
 {
     // clean up the kexiv2 memory:
-    KExiv2Iface::KExiv2::cleanupExiv2();
+    MetaEngine::cleanupExiv2();
 
     if (d->progressBar)
     {
@@ -387,11 +385,11 @@ MyImageData LoadImageData(const QUrl& urlToLoad)
     imageData.url = urlToLoad;
 
     // TODO: error handling!
-    KExiv2Iface::KExiv2 exiv2Iface;
-    exiv2Iface.load(urlToLoad.path());
+    DMetadata meta;
+    meta.load(urlToLoad.path());
     double lat, lon, alt;
 
-    if (exiv2Iface.getGPSInfo(alt, lat, lon))
+    if (meta.getGPSInfo(alt, lat, lon))
     {
         imageData.coordinates.setLatLon(lat, lon);
         imageData.coordinates.setAlt(alt);

@@ -194,15 +194,15 @@ bool Rotate::toolOperations()
             switch (rotation)
             {
                 case DImg::ROT90:
-                    return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate90);
+                    return rotator.exifTransform(MetaEngineRotation::Rotate90);
                     break;
 
                 case DImg::ROT180:
-                    return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate180);
+                    return rotator.exifTransform(MetaEngineRotation::Rotate180);
                     break;
 
                 case DImg::ROT270:
-                    return rotator.exifTransform(KExiv2Iface::RotationMatrix::Rotate270);
+                    return rotator.exifTransform(MetaEngineRotation::Rotate270);
                     break;
 
                 default:

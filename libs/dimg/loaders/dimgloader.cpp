@@ -212,7 +212,7 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 
     if (!metaDataFromFile.load(filePath))
     {
-        m_image->setMetadata(KExiv2Data());
+        m_image->setMetadata(MetaEngineData());
         return false;
     }
 
@@ -372,20 +372,12 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     if (loadMetadata)
     {
         DMetadata metaDataFromFile(filePath);
-#if KEXIV2_VERSION >= 0x010000
         bv = metaDataFromFile.getExifEncoded();
-#else
-        bv = metaDataFromFile.getExif();
-#endif
     }
     else
     {
         DMetadata metaDataFromImage(img.getMetadata());
-#if KEXIV2_VERSION >= 0x010000
         bv = metaDataFromImage.getExifEncoded();
-#else
-        bv = metaDataFromImage.getExif();
-#endif
     }
 
     // Create the unique ID

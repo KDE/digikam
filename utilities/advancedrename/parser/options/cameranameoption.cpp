@@ -68,7 +68,7 @@ QString CameraNameOption::parseOperation(ParseSettings& settings)
 
         if (!meta.isEmpty())
         {
-            KExiv2::MetaDataMap dataMap;
+            MetaEngine::MetaDataMap dataMap;
             dataMap = meta.getExifTagsDataList(QStringList(), true);
 
             foreach(const QString& key, dataMap.keys())

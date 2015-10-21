@@ -32,12 +32,9 @@
 #include <QStringList>
 #include <QUrl>
 
-// libkexiv2 includes
-
-#include <KExiv2/RotationMatrix>
-
 // Local includes
 
+#include "metaengine_rotation.h"
 #include "digikam_config.h"
 #include "searchtextbar.h"
 #include "imageinfo.h"
@@ -46,10 +43,9 @@
 #include "stackedview.h"
 #include "dwidgetutils.h"
 
-using namespace KExiv2Iface;
-
 namespace Digikam
 {
+
 class AlbumIconItem;
 class ApplicationSettings;
 class Album;
@@ -85,7 +81,7 @@ public:
     void toggleShowBar(bool);
     void setRecurseAlbums(bool recursive);
     void setRecurseTags(bool recursive);
-    void imageTransform(RotationMatrix::TransformationAction transform);
+    void imageTransform(MetaEngineRotation::TransformationAction transform);
 
     void connectIconViewFilter(FilterStatusBar* const filter);
 

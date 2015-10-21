@@ -82,13 +82,14 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 -- DEPENDENCIES -------------------------------------------------------
 
-Name            Version                       URL                                                               Remarks
+Name              Version                       URL                                                               Remarks
 
 Required:
 
 CMake             >= 3.0.0                      http://www.cmake.org
 libqt             >= 5.1.0                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
 kdelibs           >= 5.1.0                      http://www.kde.org
+libexiv2          >= 0.24                       http://www.exiv2.org                                              Exiv2 0.25 recommend
 libjpeg           >= 6b                         http://www.ijg.org
 libtiff           >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng            >= 1.2.0                      http://www.libpng.org/pub/png/libpng.html
@@ -97,7 +98,6 @@ libboostgraph     >= 1.43.0                     http://www.boost.org/doc/libs
 libpgf            >= 6.11.24                    http://www.libpgf.org
 libexpat          >= 2.0.0                      http://expat.sourceforge.net
 libopencv         >= 2.4.9                      http://opencv.willowgarage.com
-libkexiv2         >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
 Optional:
 
 libkipi           >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.

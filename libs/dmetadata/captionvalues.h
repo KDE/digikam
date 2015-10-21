@@ -31,15 +31,15 @@
 #include <QDateTime>
 #include <QDebug>
 
-// Libkexiv2 includes
+// LibMetaEngine includes
 
-#include <KExiv2/KExiv2>
+#include "metaengine.h"
 
 // Local includes
 
 #include "digikam_export.h"
 
-using namespace KExiv2Iface;
+using namespace Digikam;
 
 namespace Digikam
 {
@@ -74,22 +74,22 @@ public:
     CaptionsMap();
     ~CaptionsMap();
 
-    void setData(const KExiv2::AltLangMap& comments,
-                 const KExiv2::AltLangMap& authors,
+    void setData(const MetaEngine::AltLangMap& comments,
+                 const MetaEngine::AltLangMap& authors,
                  const QString& commonAuthor,
-                 const KExiv2::AltLangMap& dates);
+                 const MetaEngine::AltLangMap& dates);
 
-    void fromAltLangMap(const KExiv2::AltLangMap& map);
-    KExiv2::AltLangMap toAltLangMap() const;
+    void fromAltLangMap(const MetaEngine::AltLangMap& map);
+    MetaEngine::AltLangMap toAltLangMap() const;
 
     /** Sets the author for the comments in the specified languages.
      *  If commonAuthor is not null, it will be used to set the author of all comments
      *  for which the author is not specified in the map. */
-    void setAuthorsList(const KExiv2::AltLangMap& map, const QString& commonAuthor = QString());
-    KExiv2::AltLangMap authorsList() const;
+    void setAuthorsList(const MetaEngine::AltLangMap& map, const QString& commonAuthor = QString());
+    MetaEngine::AltLangMap authorsList() const;
 
-    void setDatesList(const KExiv2::AltLangMap& map);
-    KExiv2::AltLangMap datesList() const;
+    void setDatesList(const MetaEngine::AltLangMap& map);
+    MetaEngine::AltLangMap datesList() const;
 };
 
 }  // namespace Digikam

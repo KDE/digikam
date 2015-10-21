@@ -112,11 +112,11 @@ bool Flip::toolOperations()
         switch (flip)
         {
             case DImg::HORIZONTAL:
-                return rotator.exifTransform(KExiv2Iface::RotationMatrix::FlipHorizontal);
+                return rotator.exifTransform(MetaEngineRotation::FlipHorizontal);
                 break;
 
             case DImg::VERTICAL:
-                return rotator.exifTransform(KExiv2Iface::RotationMatrix::FlipVertical);
+                return rotator.exifTransform(MetaEngineRotation::FlipVertical);
                 break;
 
             default:

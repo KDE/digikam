@@ -36,11 +36,6 @@
 #include <kcoreaddons_version.h>
 #include <klocalizedstring.h>
 
-// Libkexiv2 includes
-
-#include <libkexiv2_version.h>
-#include <KExiv2/KExiv2>
-
 #ifdef HAVE_MARBLE
 
 #include "mapwidget.h"
@@ -76,13 +71,11 @@ extern "C"
 #include "greycstorationfilter.h"
 #include "pgfutils.h"
 #include "digikam-lcms.h"
+#include "metaengine.h"
 
 #ifdef HAVE_LENSFUN
 #include "lensfuniface.h"
 #endif // HAVE_LENSFUN
-
-using namespace KExiv2Iface;
-
 
 #ifdef HAVE_MARBLE
 using namespace GeoIface;
@@ -118,19 +111,18 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18nc(CONTEXT, "Eigen support"),               SUPPORTED_NO);
 #endif // HAVE_EIGEN3
 
-    list.insert(i18nc(CONTEXT, "KExiv2"),                      KExiv2::version());
-    list.insert(i18nc(CONTEXT, "Exiv2"),                       KExiv2::Exiv2Version());
-    list.insert(i18nc(CONTEXT, "Exiv2 supports XMP metadata"), KExiv2::supportXmp() ?
+    list.insert(i18nc(CONTEXT, "Exiv2"),                       MetaEngine::Exiv2Version());
+    list.insert(i18nc(CONTEXT, "Exiv2 supports XMP metadata"), MetaEngine::supportXmp() ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jpeg"),     KExiv2::supportMetadataWritting(QLatin1String("image/jpeg")) ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jpeg"),     MetaEngine::supportMetadataWritting(QLatin1String("image/jpeg")) ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Tiff"),     KExiv2::supportMetadataWritting(QLatin1String("image/tiff")) ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Tiff"),     MetaEngine::supportMetadataWritting(QLatin1String("image/tiff")) ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Png"),      KExiv2::supportMetadataWritting(QLatin1String("image/png")) ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Png"),      MetaEngine::supportMetadataWritting(QLatin1String("image/png")) ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jp2"),      KExiv2::supportMetadataWritting(QLatin1String("image/jp2")) ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jp2"),      MetaEngine::supportMetadataWritting(QLatin1String("image/jp2")) ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18nc(CONTEXT, "Exiv2 can write to Pgf"),      KExiv2::supportMetadataWritting(QLatin1String("image/pgf")) ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Pgf"),      MetaEngine::supportMetadataWritting(QLatin1String("image/pgf")) ?
                 i18n("Yes") : i18n("No"));
 
 #ifdef HAVE_LENSFUN

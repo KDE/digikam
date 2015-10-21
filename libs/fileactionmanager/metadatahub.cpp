@@ -31,10 +31,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-// Libkexiv2 includes
-
-#include <libkexiv2_version.h>
-
 // Local includes
 
 #include "digikam_debug.h"

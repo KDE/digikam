@@ -65,7 +65,7 @@
 
 // Libkexiv2
 
-#include <KExiv2/RotationMatrix>
+#include "metaengine_rotation.h"
 
 // Local includes
 
@@ -2952,24 +2952,24 @@ void DigikamApp::slotTransformAction()
 {
     if (sender()->objectName() == QLatin1String("rotate_ccw"))
     {
-        d->view->imageTransform(KExiv2Iface::RotationMatrix::Rotate270);
+        d->view->imageTransform(MetaEngineRotation::Rotate270);
     }
     else if (sender()->objectName() == QLatin1String("rotate_cw"))
     {
-        d->view->imageTransform(KExiv2Iface::RotationMatrix::Rotate90);
+        d->view->imageTransform(MetaEngineRotation::Rotate90);
     }
     else if (sender()->objectName() == QLatin1String("flip_horizontal"))
     {
-        d->view->imageTransform(KExiv2Iface::RotationMatrix::FlipHorizontal);
+        d->view->imageTransform(MetaEngineRotation::FlipHorizontal);
     }
     else if (sender()->objectName() == QLatin1String("flip_vertical"))
     {
-        d->view->imageTransform(KExiv2Iface::RotationMatrix::FlipVertical);
+        d->view->imageTransform(MetaEngineRotation::FlipVertical);
     }
     else if (sender()->objectName() == QLatin1String("image_transform_exif"))
     {
         // special value for FileActionMngr
-        d->view->imageTransform(KExiv2Iface::RotationMatrix::NoTransformation);
+        d->view->imageTransform(MetaEngineRotation::NoTransformation);
     }
 }
 

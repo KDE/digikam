@@ -31,12 +31,9 @@
 #include <QStringList>
 #include <QList>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "metadatainfo.h"
 #include "digikam_export.h"
 
@@ -163,7 +160,7 @@ public:
         return copyrightNotice(languageCode);
     }
 
-    KExiv2Iface::KExiv2::AltLangMap allCopyrightNotices();
+    MetaEngine::AltLangMap allCopyrightNotices();
 
     /** Sets the copyright notice. If you supply a null QString as language code,
      *  this is regarded as an entry for the default language (&ldquo;x-default&rdquo;).
@@ -187,7 +184,7 @@ public:
      *  &ldquo;Free text instructions on how this news object can be legally used.&rdquo;
      */
     QString rightsUsageTerms(const QString& languageCode = QString());
-    KExiv2Iface::KExiv2::AltLangMap allRightsUsageTerms();
+    MetaEngine::AltLangMap allRightsUsageTerms();
 
     void setRightsUsageTerms(const QString& term, const QString& languageCode = QString(),
                              ReplaceMode mode = ReplaceLanguageEntry);
@@ -291,7 +288,7 @@ protected:
 
     void    setSimpleProperty(const QString& property, const QString& value);
     QString readLanguageProperty(const QString& property, const QString& languageCode);
-    KExiv2Iface::KExiv2::AltLangMap readLanguageProperties(const QString& property);
+    MetaEngine::AltLangMap readLanguageProperties(const QString& property);
     void    setLanguageProperty(const QString& property, const QString& value, const QString& languageCode, ReplaceMode mode);
     void    removeProperties(const QString& property);
     void    removeLanguageProperty(const QString& property, const QString& languageCode);

@@ -13,7 +13,6 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
@@ -37,8 +36,6 @@ target_link_libraries(renamecustomizertest
                       KF5::KIOCore
                       KF5::KIOWidgets
                       KF5::I18n
-
-                      KF5::KExiv2
 
                       ${OpenCV_LIBRARIES}
 )
@@ -68,7 +65,6 @@ target_link_libraries(cameranamehelpertest
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KExiv2
 
                       ${OpenCV_LIBRARIES}
 )
@@ -102,7 +98,6 @@ target_link_libraries(advancedrenametest
                       KF5::KIOWidgets
                       KF5::Solid
                       KF5::XmlGui
-                      KF5::KExiv2
 
                       ${OpenCV_LIBRARIES}
 )

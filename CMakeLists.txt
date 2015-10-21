@@ -57,11 +57,11 @@ set(ECM_MIN_VERSION     "1.7.0")
 set(KF5_VERSION         "5.1.0")
 set(REQUIRED_QT_VERSION "5.2.0")
 set(KIPI_MIN_VERSION    "5.0.0")
-set(KEXIV2_MIN_VERSION  "5.0.0")
 set(KFACE_MIN_VERSION   "5.0.0")
 set(KSANE_MIN_VERSION   "5.0.0")
 set(PGF_MIN_VERSION     "6.12.24")
 set(LENSFUN_MIN_VERSION "0.2.6.0")
+set(EXIV2_MIN_VERSION   "0.24"                            )
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
@@ -162,15 +162,21 @@ find_package(KF5 REQUIRED COMPONENTS
 DETECT_JPEG()
 set(DIGIKAM_LIBJPEG_DIR libjpeg-${JPEG_LIB_VERSION})
 
-find_package(TIFF                   REQUIRED)
-find_package(PNG                    REQUIRED)
-find_package(PGF ${PGF_MIN_VERSION} REQUIRED)
-find_package(Boost                  REQUIRED)
-find_package(LCMS2                  REQUIRED)
-find_package(EXPAT                  REQUIRED)  # For DNGWriter: XMP SDK need Expat library to compile.
-find_package(Threads                REQUIRED)  # For DNGWriter: DNG SDK need native threads support.
+find_package(TIFF                       REQUIRED)
+find_package(PNG                        REQUIRED)
+find_package(PGF ${PGF_MIN_VERSION}     REQUIRED)
+find_package(Boost                      REQUIRED)
+find_package(LCMS2                      REQUIRED)
+find_package(EXPAT                      REQUIRED)  # For DNGWriter: XMP SDK need Expat library to compile.
+find_package(Threads                    REQUIRED)  # For DNGWriter: DNG SDK need native threads support.
+find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 
-DETECT_LIBKEXIV2(${KEXIV2_MIN_VERSION})
+set_package_properties("Exiv2"     PROPERTIES
+                       DESCRIPTION "Required to build libkexiv2"
+                       URL         "http://www.exiv2.org"
+                       TYPE        RECOMMENDED
+                       PURPOSE     "Library to manage image metadata"
+)
 
 # -- check OpenCV --------------------------------------------------------------------------------
 
@@ -423,8 +429,8 @@ PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/lib
 PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                                         "(version >= 1.0.0)"                 LCMS2_FOUND)
 PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                                    "(version >= 1.43.0)"                Boost_FOUND)
 PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"                                            "(version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
+PRINT_LIBRARY_STATUS("libexiv2"               "http://www.exiv2.org"                                             "(version >= ${EXIV2_MIN_VERSION})"  EXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
-PRINT_LIBRARY_STATUS("libkexiv2"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2" "(version >= ${KEXIV2_MIN_VERSION})" KF5KExiv2_FOUND)
 PRINT_LIBRARY_STATUS("libexpat"               "http://expat.sourceforge.net"                                     "(version >= 2.0.0)"                 EXPAT_FOUND)
 PRINT_LIBRARY_STATUS("native threads support" ""                                                                 ""                                   CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
 
@@ -452,7 +458,7 @@ if(Qt5_FOUND       AND
    PNG_FOUND       AND
    LCMS2_FOUND     AND
    Boost_FOUND     AND
-   KF5KExiv2_FOUND AND
+   EXIV2_FOUND     AND
    PGF_FOUND       AND
    OpenCV_FOUND    AND
    EXPAT_FOUND     AND

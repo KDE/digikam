@@ -28,10 +28,6 @@
 #include <QString>
 #include <QDebug>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
 #include "dimg.h"
@@ -39,10 +35,9 @@
 #include "nrestimate.h"
 #include "nrfilter.h"
 #include "dimgthreadedfilter.h"
+#include "metaengine.h"
 
 using namespace Digikam;
-using namespace KExiv2Iface;
-
 
 int main(int argc, char** argv)
 {
@@ -53,7 +48,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    KExiv2::initializeExiv2();
+    MetaEngine::initializeExiv2();
 
     QFileInfo input(QString::fromUtf8(argv[1]));
     QString   outFilePath(input.baseName() + QLatin1String(".denoise.png"));
@@ -77,7 +72,7 @@ int main(int argc, char** argv)
     img.putImageData(nrf.getTargetImage().bits());
     img.save(outFilePath, QLatin1String("PNG"));
 
-    KExiv2::cleanupExiv2();
+    MetaEngine::cleanupExiv2();
 
     return 0;
 }

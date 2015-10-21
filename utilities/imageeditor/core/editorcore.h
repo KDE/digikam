@@ -162,7 +162,7 @@ public:
     int                   availableUndoSteps()        const;
     int                   availableRedoSteps()        const;
     IccProfile            getEmbeddedICC()            const;
-    KExiv2Data            getMetadata()               const;
+    MetaEngineData            getMetadata()               const;
     DImageHistory         getImageHistory()           const;
     DImageHistory         getInitialImageHistory()    const;
     DImageHistory         getImageHistoryOfFullRedo() const;

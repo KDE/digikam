@@ -55,25 +55,23 @@ namespace Digikam
 {
 
 DMetadata::DMetadata()
-    : KExiv2()
+    : MetaEngine()
 {
     registerMetadataSettings();
 }
 
 DMetadata::DMetadata(const QString& filePath)
-    : KExiv2()
+    : MetaEngine()
 {
     registerMetadataSettings();
     load(filePath);
 }
 
-#if KEXIV2_VERSION >= 0x010000
-DMetadata::DMetadata(const KExiv2Data& data)
-    : KExiv2(data)
+DMetadata::DMetadata(const MetaEngineData& data)
+    : MetaEngine(data)
 {
     registerMetadataSettings();
 }
-#endif
 
 DMetadata::~DMetadata()
 {
@@ -89,10 +87,7 @@ void DMetadata::setSettings(const MetadataSettingsContainer& settings)
     setUseXMPSidecar4Reading(settings.useXMPSidecar4Reading);
     setWriteRawFiles(settings.writeRawFiles);
     setMetadataWritingMode(settings.metadataWritingMode);
-
-#if KEXIV2_VERSION >= 0x000600
     setUpdateFileTimeStamp(settings.updateFileTimeStamp);
-#endif
 }
 
 bool DMetadata::load(const QString& filePath) const
@@ -102,7 +97,7 @@ bool DMetadata::load(const QString& filePath) const
 
     FileReadLocker lock(filePath);
 
-    if (!KExiv2::load(filePath))
+    if (!MetaEngine::load(filePath))
     {
         if (!loadUsingDcraw(filePath))
         {
@@ -116,13 +111,13 @@ bool DMetadata::load(const QString& filePath) const
 bool DMetadata::save(const QString& filePath) const
 {
     FileWriteLocker lock(filePath);
-    return KExiv2::save(filePath);
+    return MetaEngine::save(filePath);
 }
 
 bool DMetadata::applyChanges() const
 {
     FileWriteLocker lock(getFilePath());
-    return KExiv2::applyChanges();
+    return MetaEngine::applyChanges();
 }
 
 bool DMetadata::loadUsingDcraw(const QString& filePath) const
@@ -249,9 +244,9 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
     }
 
     CaptionsMap        captionsMap;
-    KExiv2::AltLangMap authorsMap;
-    KExiv2::AltLangMap datesMap;
-    KExiv2::AltLangMap commentsMap;
+    MetaEngine::AltLangMap authorsMap;
+    MetaEngine::AltLangMap datesMap;
+    MetaEngine::AltLangMap commentsMap;
     QString            commonAuthor;
 
     // In first try to get captions properties from digiKam XMP namespace
@@ -345,11 +340,11 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
 
 bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSettingsContainer &settings) const
 {
-    //See bug #139313: An empty string is also a valid value
-    /*
+/*
+    // See bug #139313: An empty string is also a valid value
     if (comments.isEmpty())
           return false;
-    */
+*/
 
     qCDebug(LOG_METADATA) << getFilePath() << " ==> Comment: " << comments;
 
@@ -535,9 +530,9 @@ CaptionsMap DMetadata::getImageTitles() const
         return CaptionsMap();
 
     CaptionsMap        captionsMap;
-    KExiv2::AltLangMap authorsMap;
-    KExiv2::AltLangMap datesMap;
-    KExiv2::AltLangMap titlesMap;
+    MetaEngine::AltLangMap authorsMap;
+    MetaEngine::AltLangMap datesMap;
+    MetaEngine::AltLangMap titlesMap;
     QString            commonAuthor;
 
     // Get author name from IPTC DescriptionWriter. Private namespace above gets precedence.
@@ -702,7 +697,7 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
             }
         }
 
-        if(index != -1)
+        if (index != -1)
         {
             return index;
         }
@@ -1537,10 +1532,11 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
 
         faces.insertMulti(person, rect);
     }
+
     /** Read face tags only if libkexiv can write them, otherwise
      *  garbage tags will be generated on image transformation
      */
-#if KEXIV2_VERSION >= 0x020301
+
     // Read face tags as saved by Picasa
     // http://www.exiv2.org/tags-xmp-mwg-rs.html
     const QString mwg_personPathTemplate  = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Name");
@@ -1569,14 +1565,12 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
         faces.insertMulti(person, rect);
         qCDebug(LOG_METADATA) << "Found new rect " << person << " "<< rect;
     }
-#endif
 
     return !faces.isEmpty();
 }
 
 bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool write) const
 {
-#if KEXIV2_VERSION >= 0x020301
     QString qxmpTagName(QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList"));
     QString nameTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Name");
     QString typeTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Type");
@@ -1591,7 +1585,7 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
     QString winRectTagKey  = winQxmpTagName + QLatin1String("[%1]/MPReg:Rectangle");
     QString winNameTagKey  = winQxmpTagName + QLatin1String("[%1]/MPReg:PersonDisplayName");
 
-    if(!write)
+    if (!write)
     {
         QString check = getXmpTagString(nameTagKey.arg(1).toLatin1().constData());
 
@@ -1600,15 +1594,16 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
     }
 
     setXmpTagString(qxmpTagName.toLatin1().constData(),
-                    QString(), KExiv2::XmpTagType(1),false);
+                    QString(), MetaEngine::XmpTagType(1),false);
 
     setXmpTagString(winQxmpTagName.toLatin1().constData(),
-                    QString(), KExiv2::XmpTagType(1),false);
+                    QString(), MetaEngine::XmpTagType(1),false);
 
     QMap<QString,QVariant>::const_iterator it = facesPath.constBegin();
-    int i = 1;
+    int i   = 1;
     bool ok = true;
-    while(it != facesPath.constEnd())
+
+    while (it != facesPath.constEnd())
     {
         qreal x,y,w,h;
         it.value().toRectF().getRect(&x,&y,&w,&h);
@@ -1624,11 +1619,11 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
 
         /** Set tag rect **/
         setXmpTagString(winRectTagKey.arg(i).toLatin1().constData(), rectString,
-                             KExiv2::XmpTagType(0),false);
+                             MetaEngine::XmpTagType(0),false);
         /** Set tag name **/
 
         setXmpTagString(winNameTagKey.arg(i).toLatin1().constData(),it.key(),
-                             KExiv2::XmpTagType(0),false);
+                             MetaEngine::XmpTagType(0),false);
 
         /** Writing rectangle in Metadata Group format **/
         x += w/2;
@@ -1636,45 +1631,40 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
 
         /** Set tag name **/
         ok &= setXmpTagString(nameTagKey.arg(i).toLatin1().constData(),
-                              it.key(),KExiv2::XmpTagType(0),false);
+                              it.key(),MetaEngine::XmpTagType(0),false);
         /** Set tag type as Face **/
         ok &= setXmpTagString(typeTagKey.arg(i).toLatin1().constData(),
-                              QLatin1String("Face"), KExiv2::XmpTagType(0),false);
+                              QLatin1String("Face"), MetaEngine::XmpTagType(0),false);
 
         /** Set tag Area, with xmp type struct **/
         ok &= setXmpTagString(areaTagKey.arg(i).toLatin1().constData(),
-                              QString(), KExiv2::XmpTagType(2),false);
+                              QString(), MetaEngine::XmpTagType(2),false);
 
         /** Set stArea:x inside Area structure **/
         ok &= setXmpTagString(areaxTagKey.arg(i).toLatin1().constData(),
-                              QString::number(x), KExiv2::XmpTagType(0),false);
+                              QString::number(x), MetaEngine::XmpTagType(0),false);
 
         /** Set stArea:y inside Area structure **/
         ok &= setXmpTagString(areayTagKey.arg(i).toLatin1().constData(),
-                              QString::number(y), KExiv2::XmpTagType(0),false);
+                              QString::number(y), MetaEngine::XmpTagType(0),false);
 
         /** Set stArea:w inside Area structure **/
         ok &= setXmpTagString(areawTagKey.arg(i).toLatin1().constData(),
-                              QString::number(w), KExiv2::XmpTagType(0),false);
+                              QString::number(w), MetaEngine::XmpTagType(0),false);
 
         /** Set stArea:h inside Area structure **/
         ok &= setXmpTagString(areahTagKey.arg(i).toLatin1().constData(),
-                              QString::number(h), KExiv2::XmpTagType(0),false);
+                              QString::number(h), MetaEngine::XmpTagType(0),false);
 
         /** Set stArea:unit inside Area structure  as normalized **/
         ok &= setXmpTagString(areanormTagKey.arg(i).toLatin1().constData(),
-                              QLatin1String("normalized"), KExiv2::XmpTagType(0),false);
+                              QLatin1String("normalized"), MetaEngine::XmpTagType(0),false);
 
         ++it;
         ++i;
     }
 
     return ok;
-#else
-    Q_UNUSED(facesPath);
-    Q_UNUSED(write);
-    return false;
-#endif
 }
 
 bool DMetadata::setMetadataTemplate(const Template& t) const
@@ -1693,8 +1683,8 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     QString authorsPosition       = t.authorsPosition();
     QString credit                = t.credit();
     QString source                = t.source();
-    KExiv2::AltLangMap copyright  = t.copyright();
-    KExiv2::AltLangMap rightUsage = t.rightUsageTerms();
+    MetaEngine::AltLangMap copyright  = t.copyright();
+    MetaEngine::AltLangMap rightUsage = t.rightUsageTerms();
     QString instructions          = t.instructions();
 
     qCDebug(LOG_METADATA) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
@@ -2697,7 +2687,7 @@ QVariantList DMetadata::getMetadataFields(const MetadataFields& fields) const
 
 QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field field)
 {
-    KExiv2 exiv2Iface;
+    MetaEngine exiv2Iface;
 
     switch (field)
     {
@@ -2959,7 +2949,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
 
     switch (field)
     {
-        case MetadataInfo::Orientation:                      /// Int, enum from libkexiv2
+        case MetadataInfo::Orientation:                      /// Int, enum from libMetaEngine
             min = ORIENTATION_UNSPECIFIED;
             max = ORIENTATION_ROT_270;
             break;
@@ -3139,9 +3129,9 @@ double DMetadata::apexShutterSpeedToExposureTime(double shutterSpeed)
     return exp( - log(2) * shutterSpeed);
 }
 
-KExiv2::AltLangMap DMetadata::toAltLangMap(const QVariant& var)
+MetaEngine::AltLangMap DMetadata::toAltLangMap(const QVariant& var)
 {
-    KExiv2::AltLangMap map;
+    MetaEngine::AltLangMap map;
 
     if (var.isNull())
     {
@@ -3170,34 +3160,6 @@ KExiv2::AltLangMap DMetadata::toAltLangMap(const QVariant& var)
 
     return map;
 }
-
-#if KEXIV2_VERSION < 0x020300
-
-QUrl DMetadata::sidecarUrl(const QUrl& url)
-{
-    QString sidecarPath = sidecarFilePathForFile(url.path());
-    QUrl sidecarUrl(url);
-    sidecarUrl.setPath(sidecarPath);
-    return sidecarUrl;
-}
-
-QUrl DMetadata::sidecarUrl(const QString& path)
-{
-    return QUrl::fromLocalFile(sidecarFilePathForFile(path));
-}
-
-QString DMetadata::sidecarPath(const QString& path)
-{
-    return sidecarFilePathForFile(path);
-}
-
-bool DMetadata::hasSidecar(const QString& path)
-{
-    return QFileInfo(sidecarFilePathForFile(path)).exists();
-}
-#endif // KEXIV2_VERSION < 0x020300
-
-// ---------- Pushed to libkexiv2 for KDE 4.4 --------------
 
 bool DMetadata::addToXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToAdd,
                                      bool setProgramName) const
@@ -3307,39 +3269,7 @@ bool DMetadata::removeXmpSubjects(const QStringList& subjectsToRemove, bool setP
 {
     return removeFromXmpTagStringBag("Xmp.iptc.SubjectCode", subjectsToRemove, setProgramName);
 }
-// End: Pushed to libkexiv2 for KDE4.4
 
-//------------------------------------------------------------------------------------------------
-// Compatibility for < KDE 4.4.
-#if KEXIV2_VERSION < 0x010000
-DMetadata::DMetadata(const KExiv2Data& data)
-{
-    setData(data);
-}
-
-KExiv2Data DMetadata::data() const
-{
-    KExiv2Data data;
-    data.exifData = getExif();
-    data.iptcData = getIptc();
-    data.xmpData  = getXmp();
-    data.imageComments = getComments();
-    return data;
-}
-
-void DMetadata::setData(const KExiv2Data& data)
-{
-    setExif(data.exifData);
-    setIptc(data.iptcData);
-    setXmp(data.xmpData);
-    setComments(data.imageComments);
-}
-
-#endif
-// End: Compatibility for < KDE 4.4
-//------------------------------------------------------------------------------------------------
-
-// NOTE: this method can be moved to libkexiv2 later...
 bool DMetadata::removeExifColorSpace() const
 {
     bool ret =  true;

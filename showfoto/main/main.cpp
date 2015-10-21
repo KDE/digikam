@@ -33,12 +33,9 @@
 
 #include <klocalizedstring.h>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "daboutdata.h"
 #include "showfoto.h"
 #include "digikam_version.h"
@@ -72,7 +69,7 @@ int main(int argc, char* argv[])
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
-    KExiv2Iface::KExiv2::initializeExiv2();
+    MetaEngine::initializeExiv2();
 
     QList<QUrl> urlList;
     QStringList urls = parser.positionalArguments();
@@ -89,7 +86,7 @@ int main(int argc, char* argv[])
 
     int ret = app.exec();
 
-    KExiv2Iface::KExiv2::cleanupExiv2();
+    MetaEngine::cleanupExiv2();
 
     return ret;
 }

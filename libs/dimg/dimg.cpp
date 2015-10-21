@@ -54,12 +54,9 @@ extern "C"
 #include <QSysInfo>
 #include <QUuid>
 
-// Libkexiv2 includes
-
-#include <KExiv2/RotationMatrix>
-
 // Local includes
 
+#include "metaengine_rotation.h"
 #include "drawdecoder.h"
 #include "digikam_config.h"
 #include "dimagehistory.h"
@@ -278,7 +275,7 @@ void DImg::resetMetaData()
 {
     m_priv->attributes.clear();
     m_priv->embeddedText.clear();
-    m_priv->metaData = KExiv2Data();
+    m_priv->metaData = MetaEngineData();
 }
 
 uchar* DImg::stripImageData()
@@ -995,12 +992,12 @@ void DImg::setIccProfile(const IccProfile& profile)
     m_priv->iccProfile = profile;
 }
 
-KExiv2Data DImg::getMetadata() const
+MetaEngineData DImg::getMetadata() const
 {
     return m_priv->metaData;
 }
 
-void DImg::setMetadata(const KExiv2Data& data)
+void DImg::setMetadata(const MetaEngineData& data)
 {
     m_priv->metaData = data;
 }
@@ -2683,23 +2680,23 @@ bool DImg::transform(int transformAction)
 {
     switch (transformAction)
     {
-        case KExiv2Iface::RotationMatrix::NoTransformation:
+        case MetaEngineRotation::NoTransformation:
         default:
             return false;
             break;
-        case KExiv2Iface::RotationMatrix::FlipHorizontal:
+        case MetaEngineRotation::FlipHorizontal:
             flip(DImg::HORIZONTAL);
             break;
-        case KExiv2Iface::RotationMatrix::FlipVertical:
+        case MetaEngineRotation::FlipVertical:
             flip(DImg::VERTICAL);
             break;
-        case KExiv2Iface::RotationMatrix::Rotate90:
+        case MetaEngineRotation::Rotate90:
             rotate(DImg::ROT90);
             break;
-        case KExiv2Iface::RotationMatrix::Rotate180:
+        case MetaEngineRotation::Rotate180:
             rotate(DImg::ROT180);
             break;
-        case KExiv2Iface::RotationMatrix::Rotate270:
+        case MetaEngineRotation::Rotate270:
             rotate(DImg::ROT270);
             break;
     }
@@ -2952,9 +2949,9 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
 
         // Clear Tiff thumbnail
         // NOTE: when depending on a libkexiv2 > Nov 1 2011, consolidate this to meta.setTiffThumbnail(QImage())
-        KExiv2::MetaDataMap tiffThumbTags = meta.getExifTagsDataList(QStringList() << QLatin1String("SubImage1"));
+        MetaEngine::MetaDataMap tiffThumbTags = meta.getExifTagsDataList(QStringList() << QLatin1String("SubImage1"));
 
-        for (KExiv2::MetaDataMap::iterator it = tiffThumbTags.begin(); it != tiffThumbTags.end(); ++it)
+        for (MetaEngine::MetaDataMap::iterator it = tiffThumbTags.begin(); it != tiffThumbTags.end(); ++it)
         {
             meta.removeExifTag(it.key().toLatin1().constData());
         }

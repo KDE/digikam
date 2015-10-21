@@ -139,7 +139,7 @@ public:
     unsigned char*          data;
     LANCZOS_DATA_TYPE*      lanczos_func;
 
-    KExiv2Data              metaData;
+    MetaEngineData              metaData;
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
     IccProfile              iccProfile;

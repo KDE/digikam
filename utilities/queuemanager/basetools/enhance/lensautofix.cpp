@@ -227,7 +227,7 @@ bool LensAutoFix::toolOperations()
     LensFunFilter filter(&image(), 0L, prm);
     applyFilter(&filter);
 
-    KExiv2Data data = image().getMetadata();
+    MetaEngineData data = image().getMetadata();
     filter.registerSettingsToXmp(data);
     image().setMetadata(data);
 

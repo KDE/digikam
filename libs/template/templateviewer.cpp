@@ -42,7 +42,7 @@
 #include "templatemanager.h"
 #include "countryselector.h"
 
-using namespace KExiv2Iface;
+
 
 namespace Digikam
 {

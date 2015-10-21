@@ -179,7 +179,7 @@ QString ImageCopyright::copyrightNotice(const QString& languageCode)
     return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), languageCode);
 }
 
-KExiv2Iface::KExiv2::AltLangMap ImageCopyright::allCopyrightNotices()
+MetaEngine::AltLangMap ImageCopyright::allCopyrightNotices()
 {
     return readLanguageProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice));
 }
@@ -199,7 +199,7 @@ QString ImageCopyright::rightsUsageTerms(const QString& languageCode)
     return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), languageCode);
 }
 
-KExiv2Iface::KExiv2::AltLangMap ImageCopyright::allRightsUsageTerms()
+MetaEngine::AltLangMap ImageCopyright::allRightsUsageTerms()
 {
     return readLanguageProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms));
 }
@@ -320,16 +320,16 @@ void ImageCopyright::setFromTemplate(const Template& t)
 
     setCredit(t.credit());
 
-    KExiv2::AltLangMap copyrights = t.copyright();
-    KExiv2::AltLangMap::const_iterator it;
+    MetaEngine::AltLangMap copyrights = t.copyright();
+    MetaEngine::AltLangMap::const_iterator it;
 
     for (it = copyrights.constBegin() ; it != copyrights.constEnd() ; ++it)
     {
         setRights(it.value(), it.key(), ImageCopyright::AddEntryToExisting);
     }
 
-    KExiv2::AltLangMap usages = t.rightUsageTerms();
-    KExiv2::AltLangMap::const_iterator it2;
+    MetaEngine::AltLangMap usages = t.rightUsageTerms();
+    MetaEngine::AltLangMap::const_iterator it2;
 
     for (it2 = usages.constBegin() ; it2 != usages.constEnd() ; ++it2)
     {
@@ -428,9 +428,9 @@ QString ImageCopyright::readLanguageProperty(const QString& property, const QStr
     }
 }
 
-KExiv2Iface::KExiv2::AltLangMap ImageCopyright::readLanguageProperties(const QString& property)
+MetaEngine::AltLangMap ImageCopyright::readLanguageProperties(const QString& property)
 {
-    KExiv2Iface::KExiv2::AltLangMap map;
+    MetaEngine::AltLangMap map;
     QList<CopyrightInfo> infos = copyrightInfos(property);
 
     foreach(const CopyrightInfo& info, infos)

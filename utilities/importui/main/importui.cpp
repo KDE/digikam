@@ -2382,7 +2382,7 @@ void ImportUI::autoRotateItems()
         list << ImageInfo(id);
     }
 
-    FileActionMngr::instance()->transform(list, KExiv2Iface::RotationMatrix::NoTransformation);
+    FileActionMngr::instance()->transform(list, MetaEngineRotation::NoTransformation);
 
     ScanController::instance()->resumeCollectionScan();
 

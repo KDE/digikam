@@ -9,7 +9,6 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
 
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
@@ -31,7 +30,6 @@ target_link_libraries(geoiface_demo
                       Qt5::Gui
                       Qt5::Concurrent
 
-                      KF5::KExiv2
                       KF5::ConfigCore
                       KF5::I18n
                      )

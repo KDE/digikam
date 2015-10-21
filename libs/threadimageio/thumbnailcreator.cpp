@@ -42,13 +42,10 @@
 
 #include <klocalizedstring.h>
 
-// libkexiv2 includes
-
-#include <KExiv2/KExiv2Previews>
-#include <KExiv2/RotationMatrix>
-
 // Local includes
 
+#include "metaengine_previews.h"
+#include "metaengine_rotation.h"
 #include "drawdecoder.h"
 #include "rawfiles.h"
 #include "digikam_debug.h"
@@ -65,8 +62,6 @@
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
 #include "thumbnailsize.h"
-
-
 
 namespace Digikam
 {
@@ -554,7 +549,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load Embedded preview with Exiv2";
 
-            KExiv2Iface::KExiv2Previews preview(path);
+            MetaEnginePreviews preview(path);
             qimage = preview.image();
         }
 
@@ -613,7 +608,7 @@ QImage ThumbnailCreator::loadImageDetail(const ThumbnailInfo& info, const DMetad
 {
     const QString& path = info.filePath;
     // Check the first and largest preview (Raw files)
-    KExiv2Iface::KExiv2Previews previews(path);
+    MetaEnginePreviews previews(path);
 
     if (!previews.isEmpty())
     {
@@ -720,7 +715,7 @@ QImage ThumbnailCreator::exifRotate(const QImage& thumb, int orientation) const
         return thumb;
     }
 
-    QMatrix matrix = KExiv2Iface::RotationMatrix::toMatrix((KExiv2::ImageOrientation)orientation);
+    QMatrix matrix = MetaEngineRotation::toMatrix((MetaEngine::ImageOrientation)orientation);
     // transform accordingly
     return thumb.transformed(matrix);
 }

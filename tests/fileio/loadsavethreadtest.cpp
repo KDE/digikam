@@ -29,17 +29,11 @@
 #include <QFileInfo>
 #include <QDebug>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "dimg.h"
 #include "drawdecoding.h"
-
-
-using namespace KExiv2Iface;
 
 LoadSaveThreadTest::LoadSaveThreadTest(int& argc, char** argv)
     : QApplication(argc, argv)
@@ -113,12 +107,12 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    KExiv2::initializeExiv2();
+    MetaEngine::initializeExiv2();
 
     LoadSaveThreadTest app(argc, argv);
     int ret = app.exec();
 
-    KExiv2::cleanupExiv2();
+    MetaEngine::cleanupExiv2();
 
     return ret;
 }

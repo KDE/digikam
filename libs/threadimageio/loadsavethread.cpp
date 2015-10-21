@@ -24,12 +24,9 @@
 
 #include "loadsavethread.h"
 
-// Libkexiv2 includes
-
-#include <KExiv2/RotationMatrix>
-
 // Local includes
 
+#include "metaengine_rotation.h"
 #include "dmetadata.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
@@ -278,7 +275,7 @@ int LoadSaveThread::exifOrientation(const DImg& image, const QString& filePath)
 int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& metadata,
                                     bool isRaw, bool fromRawEmbeddedPreview)
 {
-    int dbOrientation = KExiv2::ORIENTATION_UNSPECIFIED;
+    int dbOrientation = MetaEngine::ORIENTATION_UNSPECIFIED;
 
     if (infoProvider())
     {
@@ -293,22 +290,22 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
     if (isRaw && !fromRawEmbeddedPreview)
     {
         // Did the user apply any additional rotation over the metadata flag?
-        if (dbOrientation == KExiv2::ORIENTATION_UNSPECIFIED || dbOrientation == exifOrientation)
+        if (dbOrientation == MetaEngine::ORIENTATION_UNSPECIFIED || dbOrientation == exifOrientation)
         {
-            return KExiv2::ORIENTATION_NORMAL;
+            return MetaEngine::ORIENTATION_NORMAL;
         }
         // Assume A is the orientation as from metadata, B is an additional operation applied by the user,
         // C is the current orientation in the database.
         // A*B = C and B = A_inv * C
-        QMatrix A = KExiv2Iface::RotationMatrix::toMatrix((KExiv2::ImageOrientation)exifOrientation);
-        QMatrix C = KExiv2Iface::RotationMatrix::toMatrix((KExiv2::ImageOrientation)dbOrientation);
+        QMatrix A = MetaEngineRotation::toMatrix((MetaEngine::ImageOrientation)exifOrientation);
+        QMatrix C = MetaEngineRotation::toMatrix((MetaEngine::ImageOrientation)dbOrientation);
         QMatrix A_inv = A.inverted();
         QMatrix B = A_inv * C;
-        RotationMatrix m(B.m11(), B.m12(), B.m21(), B.m22());
+        MetaEngineRotation m(B.m11(), B.m12(), B.m21(), B.m22());
         return m.exifOrientation();
     }
 
-    if (dbOrientation != KExiv2::ORIENTATION_UNSPECIFIED)
+    if (dbOrientation != MetaEngine::ORIENTATION_UNSPECIFIED)
     {
         return dbOrientation;
     }

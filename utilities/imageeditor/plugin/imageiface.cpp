@@ -314,16 +314,16 @@ IccProfile ImageIface::originalIccProfile() const
     return d->core->getEmbeddedICC();
 }
 
-KExiv2Data ImageIface::originalMetadata() const
+MetaEngineData ImageIface::originalMetadata() const
 {
     DImg* const img = original();
     if (img)
         return (img->getMetadata());
 
-    return KExiv2Data();
+    return MetaEngineData();
 }
 
-void ImageIface::setOriginalMetadata(const KExiv2Data& meta)
+void ImageIface::setOriginalMetadata(const MetaEngineData& meta)
 {
     DImg* const img = original();
     if (img)

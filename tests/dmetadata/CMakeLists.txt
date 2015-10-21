@@ -8,7 +8,6 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
 
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
@@ -16,36 +15,103 @@ set(testTag_SRCS tagsreadwritetest.cpp)
 add_executable(tagsReadWriteTest ${testTag_SRCS})
 ecm_mark_nongui_executable(tagsReadWriteTest)
 target_link_libraries(tagsReadWriteTest
-                        digikamcore
+                      digikamcore
 
-                        Qt5::Core
-                        Qt5::Test
+                      Qt5::Core
+                      Qt5::Test
 
-                        KF5::KExiv2
-                        KF5::I18n
+                      KF5::I18n
                      )
 
 set(testRating_SRCS ratingreadwritetest.cpp)
 add_executable(ratingReadWriteTest ${testRating_SRCS})
 ecm_mark_nongui_executable(ratingReadWriteTest)
 target_link_libraries(ratingReadWriteTest
-                        digikamcore
+                      digikamcore
 
-                        Qt5::Core
-                        Qt5::Test
+                      Qt5::Core
+                      Qt5::Test
 
-                        KF5::KExiv2
-                        KF5::I18n
+                      KF5::I18n
                      )
 
 set(testComment_SRCS commentreadwritetest.cpp)
 add_executable(commentReadWriteTest ${testComment_SRCS})
 ecm_mark_nongui_executable(commentReadWriteTest)
 target_link_libraries(commentReadWriteTest
-                        digikamcore
-                        Qt5::Core
-                        Qt5::Test
+                      digikamcore
+                      Qt5::Core
+                      Qt5::Test
 
-                        KF5::KExiv2
-                        KF5::I18n
+                      KF5::I18n
+                     )
+
+set(setiptcpreview_SRCS setiptcpreview.cpp)
+add_executable(setiptcpreview ${setiptcpreview_SRCS})
+ecm_mark_nongui_executable(setiptcpreview)
+target_link_libraries(setiptcpreview
+                      digikamcore
+                      Qt5::Core
+
+                      KF5::I18n
+                     )
+
+set(loadfromba_SRCS loadfromba.cpp)
+add_executable(loadfromba ${loadfromba_SRCS})
+ecm_mark_nongui_executable(loadfromba)
+target_link_libraries(loadfromba
+                      digikamcore
+                      Qt5::Core
+
+                      KF5::I18n
+                     )
+
+set(erasetag_SRCS erasetag.cpp)
+add_executable(erasetag ${erasetag_SRCS})
+ecm_mark_nongui_executable(erasetag)
+target_link_libraries(erasetag
+                      digikamcore
+                      Qt5::Core
+
+                      KF5::I18n
+                     )
+
+set(printtagslist_SRCS printtagslist.cpp)
+add_executable(printtagslist ${printtagslist_SRCS})
+ecm_mark_nongui_executable(printtagslist)
+target_link_libraries(printtagslist
+                      digikamcore
+                      Qt5::Core
+
+                      KF5::I18n
+                     )
+
+set(usexmpsidecar_SRCS usexmpsidecar.cpp)
+add_executable(usexmpsidecar ${usexmpsidecar_SRCS})
+ecm_mark_nongui_executable(usexmpsidecar)
+target_link_libraries(usexmpsidecar
+                      digikamcore
+                      Qt5::Core
+
+                      KF5::I18n
+                     )
+
+set(readimagewritexmpsidecar_SRCS readimagewritexmpsidecar.cpp)
+add_executable(readimagewritexmpsidecar ${readimagewritexmpsidecar_SRCS})
+ecm_mark_nongui_executable(readimagewritexmpsidecar)
+target_link_libraries(readimagewritexmpsidecar
+                      digikamcore
+                      Qt5::Core
+
+                      KF5::I18n
+                     )
+
+set(setxmpface_SRCS setxmpface.cpp)
+add_executable(setxmpface ${setxmpface_SRCS})
+ecm_mark_nongui_executable(setxmpface)
+target_link_libraries(setxmpface
+                      digikamcore
+                      Qt5::Core
+
+                      KF5::I18n
                      )

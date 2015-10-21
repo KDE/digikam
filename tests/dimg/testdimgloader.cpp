@@ -25,18 +25,13 @@
 #include <QFileInfo>
 #include <QDebug>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "dimg.h"
 #include "drawdecoding.h"
 
 using namespace Digikam;
-using namespace KExiv2Iface;
-
 
 int main(int argc, char** argv)
 {
@@ -47,7 +42,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    KExiv2::initializeExiv2();
+    MetaEngine::initializeExiv2();
 
     QFileInfo input(QString::fromUtf8(argv[1]));
     QString   outFilePath(input.baseName() + QLatin1String(".out.png"));
@@ -61,7 +56,7 @@ int main(int argc, char** argv)
     DImg img(input.filePath(), 0, DRawDecoding(settings));
     img.save(outFilePath, QLatin1String("PNG"));
 
-    KExiv2::cleanupExiv2();
+    MetaEngine::cleanupExiv2();
 
     return 0;
 }

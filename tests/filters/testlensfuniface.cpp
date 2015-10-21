@@ -43,7 +43,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    KExiv2Iface::KExiv2::initializeExiv2();
+    MetaEngine::initializeExiv2();
 
     QString filePath(QString::fromUtf8(argv[1]));
     bool valRet = false;
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
         filter.startFilterDirectly();
         img.putImageData(filter.getTargetImage().bits());
 
-        Digikam::KExiv2Data data = img.getMetadata();
+        Digikam::MetaEngineData data = img.getMetadata();
         filter.registerSettingsToXmp(data);
         img.setMetadata(data);
         img.save(QLatin1String("lensfuniface-output.png"), QLatin1String("PNG"));
@@ -67,7 +67,7 @@ int main(int argc, char** argv)
         valRet = true;
     }
 
-    KExiv2Iface::KExiv2::cleanupExiv2();
+    MetaEngine::cleanupExiv2();
 
     return valRet;
 }

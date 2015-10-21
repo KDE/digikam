@@ -262,6 +262,7 @@ void IPTCContent::applyMetadata(QByteArray& exifData, QByteArray& iptcData)
         meta.removeIptcTag("Iptc.Application2.Caption");
 
     QStringList oldList, newList;
+
     if (d->writerEdit->getValues(oldList, newList))
         meta.setIptcTagsStringList("Iptc.Application2.Writer", 32, oldList, newList);
     else
@@ -272,11 +273,7 @@ void IPTCContent::applyMetadata(QByteArray& exifData, QByteArray& iptcData)
     else
         meta.removeIptcTag("Iptc.Application2.Headline");
 
-#if KEXIV2_VERSION >= 0x010000
     exifData = meta.getExifEncoded();
-#else
-    exifData = meta.getExif();
-#endif
 
     iptcData = meta.getIptc();
 }

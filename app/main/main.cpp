@@ -40,12 +40,9 @@
 #include <klocalizedstring.h>
 #include <kaboutdata.h>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "digikam_debug.h"
 #include "dmessagebox.h"
 #include "albummanager.h"
@@ -94,7 +91,7 @@ int main(int argc, char* argv[])
     parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("detect-camera"),      i18n("Automatically detect and open a connected gphoto2 camera")));
     parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("database-directory"), i18n("Start digikam with the SQLite database file found in the directory <dir>"), QLatin1String("dir")));
 
-    KExiv2Iface::KExiv2::initializeExiv2();
+    MetaEngine::initializeExiv2();
 
     // Check if Qt database plugins are available.
 
@@ -226,7 +223,7 @@ int main(int argc, char* argv[])
 
     DatabaseAccess::cleanUpDatabase();
     ThumbnailDatabaseAccess::cleanUpDatabase();
-    KExiv2Iface::KExiv2::cleanupExiv2();
+    MetaEngine::cleanupExiv2();
 
     return ret;
 }

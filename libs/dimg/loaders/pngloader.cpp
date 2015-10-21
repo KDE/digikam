@@ -43,12 +43,9 @@ extern "C"
 #include <QByteArray>
 #include <QSysInfo>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "dimg_debug.h"
 #include "digikam_config.h"
 #include "digikam_version.h"

@@ -240,7 +240,7 @@ public:
 
     /**
      * Returns the orientation of the image,
-     * (KExiv2::ImageOrientation, EXIF standard)
+     * (MetaEngine::ImageOrientation, EXIF standard)
      */
     int orientation() const;
 

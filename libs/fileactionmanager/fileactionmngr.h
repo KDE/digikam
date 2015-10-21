@@ -25,13 +25,10 @@
 #ifndef FILEACTIONMNGR_H
 #define FILEACTIONMNGR_H
 
-// libkexiv2 includes
-
-#include <KExiv2/RotationMatrix>
-
 // Local includes
 
 #include "imageinfo.h"
+#include "metaengine_rotation.h"
 
 namespace Digikam
 {
@@ -101,7 +98,7 @@ public Q_SLOTS:
 
     /** Flip or rotate. Note: The NoTransformation action is interpreted as Exif auto-rotate
      */
-    void transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action);
+    void transform(const QList<ImageInfo>& infos, MetaEngineRotation::TransformationAction action);
 
     void copyAttributes(const ImageInfo& source, const QStringList& derivedPaths);
     void copyAttributes(const ImageInfo& source, const QString& derivedPath);

@@ -109,12 +109,12 @@ void Template::setCredit(const QString& credit)
     m_credit = credit;
 }
 
-void Template::setCopyright(const KExiv2::AltLangMap& copyright)
+void Template::setCopyright(const MetaEngine::AltLangMap& copyright)
 {
     m_copyright = copyright;
 }
 
-void Template::setRightUsageTerms(const KExiv2::AltLangMap& rightUsageTerms)
+void Template::setRightUsageTerms(const MetaEngine::AltLangMap& rightUsageTerms)
 {
     m_rightUsageTerms = rightUsageTerms;
 }
@@ -160,12 +160,12 @@ QString Template::credit() const
     return m_credit;
 }
 
-KExiv2::AltLangMap Template::copyright() const
+MetaEngine::AltLangMap Template::copyright() const
 {
     return m_copyright;
 }
 
-KExiv2::AltLangMap Template::rightUsageTerms() const
+MetaEngine::AltLangMap Template::rightUsageTerms() const
 {
     return m_rightUsageTerms;
 }

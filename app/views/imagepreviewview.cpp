@@ -518,7 +518,7 @@ void ImagePreviewView::slotRotateLeft()
     d->faceGroup->aboutToSetInfo(ImageInfo());
 #endif /* HAVE_KFACE */
 
-    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), KExiv2Iface::RotationMatrix::Rotate270);
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), MetaEngineRotation::Rotate270);
 }
 
 void ImagePreviewView::slotRotateRight()
@@ -540,7 +540,7 @@ void ImagePreviewView::slotRotateRight()
     d->faceGroup->aboutToSetInfo(ImageInfo());
 #endif /* HAVE_KFACE */
 
-    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), KExiv2Iface::RotationMatrix::Rotate90);
+    FileActionMngr::instance()->transform(QList<ImageInfo>() << d->item->imageInfo(), MetaEngineRotation::Rotate90);
 }
 
 void ImagePreviewView::slotDeleteItem()

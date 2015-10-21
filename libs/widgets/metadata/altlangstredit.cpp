@@ -265,7 +265,7 @@ public:
 
     QComboBox*                     languageCB;
 
-    KExiv2::AltLangMap             values;
+    MetaEngine::AltLangMap             values;
 };
 
 AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
@@ -350,7 +350,7 @@ void AltLangStrEdit::setPlaceholderText(const QString& msg)
 
 void AltLangStrEdit::reset()
 {
-    setValues(KExiv2::AltLangMap());
+    setValues(MetaEngine::AltLangMap());
 }
 
 void AltLangStrEdit::slotDeleteValue()
@@ -384,7 +384,7 @@ void AltLangStrEdit::slotSelectionChanged()
     emit signalSelectionChanged(d->currentLanguage);
 }
 
-void AltLangStrEdit::setValues(const KExiv2::AltLangMap& values)
+void AltLangStrEdit::setValues(const MetaEngine::AltLangMap& values)
 {
     d->values    = values;
     loadLangAltListEntries();
@@ -398,7 +398,7 @@ void AltLangStrEdit::setValues(const KExiv2::AltLangMap& values)
     d->valueEdit->blockSignals(false);
 }
 
-KExiv2::AltLangMap& AltLangStrEdit::values() const
+MetaEngine::AltLangMap& AltLangStrEdit::values() const
 {
     return d->values;
 }

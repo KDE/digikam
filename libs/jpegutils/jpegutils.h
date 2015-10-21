@@ -33,14 +33,14 @@
 
 // KExiv2 includes
 
-#include <KExiv2/RotationMatrix>
+#include "metaengine_rotation.h"
 
 // Local includes
 
 #include "dmetadata.h"
 #include "digikam_export.h"
 
-using namespace KExiv2Iface;
+
 
 namespace Digikam
 {
@@ -48,7 +48,7 @@ namespace Digikam
 namespace JPEGUtils
 {
 
-typedef RotationMatrix::TransformationAction TransformAction;
+typedef MetaEngineRotation::TransformationAction TransformAction;
 
 class DIGIKAM_EXPORT JpegRotator
 {
@@ -64,7 +64,7 @@ public:
      * Per default, the orientation is read from the metadata of the file.
      * You can override this value
      */
-    void setCurrentOrientation(KExiv2::ImageOrientation orientation);
+    void setCurrentOrientation(MetaEngine::ImageOrientation orientation);
 
     /**
      * Set the Exif document name of the destination file.
@@ -96,7 +96,7 @@ public:
      * The matrix describes the final transformation,
      * it is not adjusted by current rotation.
      */
-    bool exifTransform(const RotationMatrix& matrix);
+    bool exifTransform(const MetaEngineRotation& matrix);
 
 protected:
 
@@ -105,11 +105,11 @@ protected:
     QString                  m_documentName;
     QSize                    m_originalSize;
     DMetadata                m_metadata;
-    KExiv2::ImageOrientation m_orientation;
+    MetaEngine::ImageOrientation m_orientation;
 
 protected:
 
-    void updateMetadata(const QString& fileName, const RotationMatrix& matrix);
+    void updateMetadata(const QString& fileName, const MetaEngineRotation& matrix);
     bool performJpegTransform(TransformAction action, const QString& src, const QString& dest);
 };
 

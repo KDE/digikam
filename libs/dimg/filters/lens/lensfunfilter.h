@@ -81,7 +81,7 @@ public:
     explicit LensFunFilter(DImg* const origImage, QObject* const parent, const LensFunContainer& settings);
     ~LensFunFilter();
 
-    bool registerSettingsToXmp(KExiv2Data& data) const;
+    bool registerSettingsToXmp(MetaEngineData& data) const;
     void readParameters(const FilterAction& action);
 
     static QString          FilterIdentifier()

@@ -29,9 +29,9 @@
 #include <QFlags>
 #include <QString>
 
-// Libkexiv2 includes
+// LibMetaEngine includes
 
-#include <KExiv2/KExiv2>
+#include "metaengine.h"
 
 // Local includes
 
@@ -39,7 +39,7 @@
 
 class KConfigGroup;
 
-using namespace KExiv2Iface;
+using namespace Digikam;
 
 namespace Digikam
 {
@@ -106,7 +106,7 @@ public:
     bool                        useXMPSidecar4Reading;
     bool                        useLazySync;
 
-    KExiv2::MetadataWritingMode metadataWritingMode;
+    MetaEngine::MetadataWritingMode metadataWritingMode;
 
     RotationBehaviorFlags       rotationBehavior;
 };

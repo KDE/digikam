@@ -11,7 +11,6 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
@@ -35,7 +34,6 @@ target_link_libraries(testdatabase
                       KF5::I18n
                       KF5::XmlGui
                       KF5::KIOCore
-                      KF5::KExiv2
                       KF5::JobWidgets
                       KF5::Notifications
 
@@ -66,7 +64,6 @@ target_link_libraries(databasefieldstest
                       KF5::I18n
                       KF5::XmlGui
                       KF5::KIOCore
-                      KF5::KExiv2
                       KF5::JobWidgets
                       KF5::Notifications
 )

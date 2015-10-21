@@ -5,25 +5,44 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+kde_enable_exceptions()
+
+add_definitions(${EXIV2_DEFINITIONS})
+
+if( WIN32 )
+    add_definitions( -DEXV_HAVE_DLL )
+endif()
+
 set(libdmetadata_SRCS
+    metaengine.cpp
+    metaengine_p.cpp
+    metaengine_data.cpp
+    metaengine_image.cpp
+    metaengine_comments.cpp
+    metaengine_exif.cpp
+    metaengine_iptc.cpp
+    metaengine_gps.cpp
+    metaengine_xmp.cpp
+    metaengine_previews.cpp
+    metaengine_rotation.cpp
+    dmetadata.cpp
+    dmetadatasettings.cpp
+    dmetadatasettingscontainer.cpp
     metadatasettings.cpp
     metadatasettingscontainer.cpp
     metadatainfo.cpp
     infocontainer.cpp
-    dmetadata.cpp
-    dmetadatasettings.cpp
-    dmetadatasettingscontainer.cpp
     geodetictools.cpp
     template.cpp
     captionvalues.cpp
 )
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
-
+    ${EXIV2_INCLUDE_DIR}
+    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 add_library(dmetadata_src OBJECT ${libdmetadata_SRCS})

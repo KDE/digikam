@@ -50,10 +50,6 @@ extern "C"
 #include <QTextStream>
 #include <QDataStream>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Windows includes
 
 #ifdef WIN32
@@ -70,6 +66,7 @@ extern "C"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "pgfutils.h"
+#include "metaengine.h"
 
 namespace Digikam
 {

@@ -287,7 +287,7 @@ void LensFunFilter::filterImage()
     }
 }
 
-bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
+bool LensFunFilter::registerSettingsToXmp(MetaEngineData& data) const
 {
     // Register in digiKam Xmp namespace all information about Lens corrections.
 

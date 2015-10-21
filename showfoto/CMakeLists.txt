@@ -74,8 +74,6 @@ target_link_libraries(showfoto
 
                       Qt5::Core
 
-                      KF5::KExiv2
-
                       KF5::I18n
                       KF5::KIOCore
                       KF5::JobWidgets

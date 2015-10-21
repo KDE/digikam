@@ -32,12 +32,9 @@
 #include <QTest>
 #include <QDebug>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "dimg.h"
 #include "dimagehistory.h"
 #include "drawdecoding.h"
@@ -144,13 +141,13 @@ void DImgFilterActionTest::showDiff(const Digikam::DImg& orig, const Digikam::DI
 void DImgFilterActionTest::initTestCase()
 {
     // initialize kexiv2 before doing any multitasking
-    KExiv2Iface::KExiv2::initializeExiv2();
+    MetaEngine::initializeExiv2();
 }
 
 void DImgFilterActionTest::cleanupTestCase()
 {
     // clean up the kexiv2 memory:
-    KExiv2Iface::KExiv2::cleanupExiv2();
+    MetaEngine::cleanupExiv2();
 }
 
 QString DImgFilterActionTest::originalImage()

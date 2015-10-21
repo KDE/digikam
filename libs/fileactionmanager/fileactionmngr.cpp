@@ -265,7 +265,7 @@ void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, DisjointMetada
     d->applyMetadata(taskList, hub);
 }
 
-void FileActionMngr::transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action)
+void FileActionMngr::transform(const QList<ImageInfo>& infos, MetaEngineRotation::TransformationAction action)
 {
     FileActionImageInfoList taskList = FileActionImageInfoList::create(infos);
     taskList.schedulingForWrite(i18n("Rotating images"), d->fileProgressCreator());

@@ -2328,7 +2328,7 @@ void DigikamView::slotImageExifOrientation(int orientation)
     FileActionMngr::instance()->setExifOrientation(selectedInfoList(), orientation);
 }
 
-void DigikamView::imageTransform(RotationMatrix::TransformationAction transform)
+void DigikamView::imageTransform(MetaEngineRotation::TransformationAction transform)
 {
     FileActionMngr::instance()->transform(selectedInfoList(), transform);
 }

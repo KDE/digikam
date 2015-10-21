@@ -323,11 +323,11 @@ void ImportContextMenuHelper::slotRotate()
 //TODO: Implement rotate in import tool.
 //    if (sender()->objectName() == "rotate_ccw")
 //    {
-//        FileActionMngr::instance()->transform(CamItemInfoList(d->selectedIds), KExiv2Iface::RotationMatrix::Rotate270);
+//        FileActionMngr::instance()->transform(CamItemInfoList(d->selectedIds), MetaEngineRotation::Rotate270);
 //    }
 //    else
 //    {
-//        FileActionMngr::instance()->transform(CamItemInfoList(d->selectedIds), KExiv2Iface::RotationMatrix::Rotate90);
+//        FileActionMngr::instance()->transform(CamItemInfoList(d->selectedIds), MetaEngineRotation::Rotate90);
 //    }
 }
 

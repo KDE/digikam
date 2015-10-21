@@ -346,7 +346,7 @@ JpegRotator::JpegRotator(const QString& file)
 
 // -----------------------------------------------------------------------------
 
-void JpegRotator::setCurrentOrientation(KExiv2::ImageOrientation orientation)
+void JpegRotator::setCurrentOrientation(MetaEngine::ImageOrientation orientation)
 {
     m_orientation = orientation;
 }
@@ -363,18 +363,18 @@ void JpegRotator::setDestinationFile(const QString& dest)
 
 bool JpegRotator::autoExifTransform()
 {
-    return exifTransform(RotationMatrix::NoTransformation);
+    return exifTransform(MetaEngineRotation::NoTransformation);
 }
 
 bool JpegRotator::exifTransform(TransformAction action)
 {
-    RotationMatrix matrix;
+    MetaEngineRotation matrix;
     matrix *= m_orientation;
     matrix *= action;
     return exifTransform(matrix);
 }
 
-bool JpegRotator::exifTransform(const RotationMatrix& matrix)
+bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
 {
     FileWriteLocker lock(m_destFile);
 
@@ -434,7 +434,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
                 return false;
             }
 
-            if (actions[i] != RotationMatrix::NoTransformation)
+            if (actions[i] != MetaEngineRotation::NoTransformation)
             {
                 srcImg.transform(actions[i]);
             }
@@ -485,7 +485,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
     return true;
 }
 
-void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &matrix)
+void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotation &matrix)
 {
     // Reset the Exif orientation tag of the temp image to normal
     m_metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
@@ -578,7 +578,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 
 #endif // (JPEG_LIB_VERSION >= 80)
 
-    // NOTE : Cast is fine here. See libkexiv2/rotationmatrix.h for details.
+    // NOTE : Cast is fine here. See libkexiv2/MetaEngineRotation.h for details.
     transformoption.transform       = (JXFORM_CODE)action;
 
     if (transformoption.transform == JXFORM_NONE)

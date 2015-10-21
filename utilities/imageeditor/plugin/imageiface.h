@@ -111,8 +111,8 @@ public:
      */
     IccProfile         originalIccProfile() const;
     PhotoInfoContainer originalPhotoInfo()  const;
-    KExiv2Data         originalMetadata()   const;
-    void               setOriginalMetadata(const KExiv2Data& meta);
+    MetaEngineData         originalMetadata()   const;
+    void               setOriginalMetadata(const MetaEngineData& meta);
 
     /** Return a pointer to the DImg object representing the original image.
      *  This object may not be modified or stored. Make copies if you need.

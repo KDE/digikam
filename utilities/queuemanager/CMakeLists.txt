@@ -77,7 +77,6 @@ endif()
 
 include_directories(
     $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
@@ -105,8 +104,6 @@ add_library(queuemanager STATIC $<TARGET_OBJECTS:queuemanager_src>)
 target_link_libraries(queuemanager
                       PRIVATE
                       Qt5::Gui
-
-                      KF5::KExiv2
 )
 
 if(LENSFUN_FOUND)

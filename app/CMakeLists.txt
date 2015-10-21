@@ -58,7 +58,6 @@ endif()
 
 include_directories(
     $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KExiv2,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
@@ -107,7 +106,6 @@ target_link_libraries(digikamcore
                       Qt5::PrintSupport
                       Qt5::Concurrent
 
-                      KF5::KExiv2
                       KF5::Solid
                       KF5::KIOCore
                       KF5::NotifyConfig
@@ -125,7 +123,7 @@ target_link_libraries(digikamcore
 
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}
-
+                      ${EXIV2_LIBRARIES}
                       ${PGF_LIBRARIES}
 
                       libdng
@@ -308,7 +306,6 @@ add_library(digikamgui_src
 ######################### digiKam GUI objects ############################
 
 
-
 # this is only required by Win & OSX
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/apps/*-apps-digikam.png")
 ecm_add_app_icon(digikam_SRCS ICONS ${ICONS_SRCS})
@@ -384,8 +381,6 @@ target_link_libraries(digikamgui
                       Qt5::WebKitWidgets
                       Qt5::PrintSupport
                       Qt5::DBus
-
-                      KF5::KExiv2
 
                       KF5::Solid
                       KF5::KIOCore
@@ -475,8 +470,6 @@ target_link_libraries(digikam
                       Qt5::Gui
                       Qt5::Widgets
                       Qt5::DBus
-
-                      KF5::KExiv2
 
                       KF5::KIOCore
                       KF5::KIOWidgets

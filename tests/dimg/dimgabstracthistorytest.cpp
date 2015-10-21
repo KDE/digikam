@@ -32,12 +32,9 @@
 #include <QTest>
 #include <QDebug>
 
-// Libkexiv2 includes
-
-#include <KExiv2/KExiv2>
-
 // Local includes
 
+#include "metaengine.h"
 #include "digikam_config.h"
 #include "bcgfilter.h"
 #include "curvesfilter.h"
@@ -201,7 +198,7 @@ QString DImgAbstractHistoryTest::tempFilePath(const QString& purpose) const
 void DImgAbstractHistoryTest::initBaseTestCase()
 {
     // initialize kexiv2 before doing any multitasking
-    KExiv2Iface::KExiv2::initializeExiv2();
+    MetaEngine::initializeExiv2();
 
     ICCSettingsContainer c = IccSettings::instance()->settings();
     c.enableCM = false;
@@ -226,7 +223,7 @@ void DImgAbstractHistoryTest::cleanupBaseTestCase()
     file.remove();
 
     // clean up the kexiv2 memory:
-    KExiv2Iface::KExiv2::cleanupExiv2();
+    MetaEngine::cleanupExiv2();
 }
 
 void DImgAbstractHistoryTest::slotImageLoaded(const QString&, bool)

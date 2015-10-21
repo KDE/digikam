@@ -155,7 +155,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
 
         QString path                                = info.filePath();
         QString format                              = info.format();
-        KExiv2::ImageOrientation currentOrientation = (KExiv2::ImageOrientation)info.orientation();
+        MetaEngine::ImageOrientation currentOrientation = (MetaEngine::ImageOrientation)info.orientation();
         bool isRaw                                  = info.format().startsWith(QLatin1String("RAW"));
         bool rotateAsJpeg                           = false;
         bool rotateLossy                            = false;
@@ -193,10 +193,10 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
 
         ajustFaceRectangles(info,action);
 
-        KExiv2Iface::RotationMatrix matrix;
+        MetaEngineRotation matrix;
         matrix                                    *= currentOrientation;
-        matrix                                    *= (KExiv2Iface::RotationMatrix::TransformationAction)action;
-        KExiv2::ImageOrientation finalOrientation  = matrix.exifOrientation();
+        matrix                                    *= (MetaEngineRotation::TransformationAction)action;
+        MetaEngine::ImageOrientation finalOrientation  = matrix.exifOrientation();
         bool rotatedPixels                         = false;
 
         if (rotateAsJpeg)
@@ -204,13 +204,13 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             JPEGUtils::JpegRotator rotator(path);
             rotator.setCurrentOrientation(currentOrientation);
 
-            if (action == KExiv2Iface::RotationMatrix::NoTransformation)
+            if (action == MetaEngineRotation::NoTransformation)
             {
                 rotatedPixels = rotator.autoExifTransform();
             }
             else
             {
-                rotatedPixels = rotator.exifTransform((KExiv2Iface::RotationMatrix::TransformationAction)action);
+                rotatedPixels = rotator.exifTransform((MetaEngineRotation::TransformationAction)action);
             }
 
             if (!rotatedPixels)
@@ -229,7 +229,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             }
             else
             {
-                if (action == KExiv2Iface::RotationMatrix::NoTransformation)
+                if (action == MetaEngineRotation::NoTransformation)
                 {
                     image.rotateAndFlip(currentOrientation);
                 }
@@ -256,7 +256,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         if (rotatedPixels)
         {
             // reset for DB. Metadata is already edited.
-            finalOrientation = KExiv2::ORIENTATION_NORMAL;
+            finalOrientation = MetaEngine::ORIENTATION_NORMAL;
         }
         else if (rotateByMetadata)
         {

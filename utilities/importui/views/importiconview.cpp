@@ -276,7 +276,7 @@ void ImportIconView::slotRotateLeft(const QList<QModelIndex>& /*indexes*/)
         imageInfos << imageInfo;
     }
 
-    FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate270);
+    FileActionMngr::instance()->transform(imageInfos, MetaEngineRotation::Rotate270);
 */
 }
 
@@ -291,7 +291,7 @@ void ImportIconView::slotRotateRight(const QList<QModelIndex>& /*indexes*/)
         imageInfos << imageInfo;
     }
 
-    FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate90);
+    FileActionMngr::instance()->transform(imageInfos, MetaEngineRotation::Rotate90);
 */
 }
 
