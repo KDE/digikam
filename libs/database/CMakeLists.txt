@@ -12,14 +12,14 @@ set(libdatabasecore_SRCS
     core/databasecorebackend.cpp
     core/databaseparameters.cpp
     core/databaseerrorhandler.cpp
-
-    core/thumbnaildatabaseaccess.cpp
-    core/thumbnaildb.cpp
-    core/thumbnailschemaupdater.cpp
     core/databaseconfigelement.cpp
     core/sqlquery.cpp
     core/dbactiontype.cpp
     core/tagregion.cpp
+
+    thumbnails/thumbnaildatabaseaccess.cpp
+    thumbnails/thumbnaildb.cpp
+    thumbnails/thumbnailschemaupdater.cpp
 )
 
 #this sources must be set in digikam main app
@@ -143,6 +143,7 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbnails>
 )
 
 target_link_libraries(digikamdatabase
