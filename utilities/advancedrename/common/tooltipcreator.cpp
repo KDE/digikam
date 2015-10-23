@@ -90,7 +90,7 @@ QString TooltipCreator::getInfoIconResourceName()
 
 QIcon TooltipCreator::getInfoIcon()
 {
-    return QIcon::fromTheme(QLatin1String("lighttable"));
+    return QIcon::fromTheme(QLatin1String("image-stack-open"));
 }
 
 QString TooltipCreator::tooltip(Parser* parser)
