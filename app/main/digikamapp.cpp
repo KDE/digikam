@@ -1823,7 +1823,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         }
 
         Solid::Camera* const camera = device.as<Solid::Camera>();
-        QList<QVariant> list = camera->driverHandle(QLatin1String(QLatin1String("gphoto"))).toList();
+        QList<QVariant> list = camera->driverHandle(QLatin1String("gphoto")).toList();
 
         // all sanity checks have already been done when creating the action
         if (list.size() < 3)
@@ -2725,7 +2725,7 @@ void DigikamApp::updateQuickImportAction()
     }
     else
     {
-        disconnect(d->quickImportMenu, SIGNAL(triggered(QAction*)), 0, 0);
+        disconnect(d->quickImportMenu->menuAction(), SIGNAL(triggered()), 0, 0);
 
         QAction*  primaryAction = 0;
         QDateTime latest;
@@ -2746,7 +2746,7 @@ void DigikamApp::updateQuickImportAction()
             primaryAction = d->quickImportMenu->actions().first();
         }
 
-        connect(d->quickImportMenu, SIGNAL(triggered(QAction*)),
+        connect(d->quickImportMenu->menuAction(), SIGNAL(triggered()),
                 primaryAction, SLOT(trigger()));
     }
 }
