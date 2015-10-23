@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2009-07-15
- * @brief  a text edit widget with click message.
+ * @brief  a text edit widget
  *
  * @author Copyright (C) 2009-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -28,8 +28,8 @@
 
 // Qt includes
 
-#include <QtCore/QString>
-#include <QtWidgets/QWidget>
+#include <QString>
+#include <QWidget>
 
 // KDE includes
 
@@ -50,23 +50,6 @@ public:
 
     MsgTextEdit(QWidget* const parent);
     ~MsgTextEdit();
-
-    void    setClickMessage(const QString& msg);
-    QString clickMessage() const;
-
-    void setText(const QString& txt);
-
-protected:
-
-    void paintEvent(QPaintEvent*);
-    void dropEvent(QDropEvent*);
-    void focusInEvent(QFocusEvent*);
-    void focusOutEvent(QFocusEvent*);
-
-private:
-
-    class Private;
-    Private* const d;
 };
 
 }  // namespace Digikam

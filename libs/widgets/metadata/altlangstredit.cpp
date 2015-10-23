@@ -345,7 +345,7 @@ void AltLangStrEdit::setTitle(const QString& title)
 
 void AltLangStrEdit::setPlaceholderText(const QString& msg)
 {
-    d->valueEdit->setClickMessage(msg);
+    d->valueEdit->setPlaceholderText(msg);
 }
 
 void AltLangStrEdit::reset()
