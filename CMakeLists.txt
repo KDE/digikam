@@ -414,7 +414,7 @@ if(ENABLE_MYSQLSUPPORT)
         if (NOT WIN32)
             PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
         endif()
-    else()OD
+    else()
         message(STATUS " MySQL server found....................... NO  (optional - disabled by user)")
     endif()
 
