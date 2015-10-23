@@ -28,7 +28,6 @@ target_link_libraries(digikamimageplugin_fxfilters
                       KF5::XmlGui
                       KF5::KIOCore
                       KF5::Notifications
-                      KF5::JobWidgets
 )
 
 install(TARGETS digikamimageplugin_fxfilters             DESTINATION ${PLUGIN_INSTALL_DIR})

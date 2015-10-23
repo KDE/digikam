@@ -143,10 +143,12 @@ endif()
 # Note : See include rules to patch later in this file to compile fine if new dependencies are added.
 
 find_package(KF5 REQUIRED COMPONENTS
+             XmlGui
              Config
              NotifyConfig
              Notifications
              KIO
+             Completion
              WindowSystem
              Solid
              IconThemes

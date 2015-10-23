@@ -46,7 +46,6 @@ target_link_libraries(digikamimageplugin_enhance
                       KF5::XmlGui
                       KF5::KIOCore
                       KF5::Notifications
-                      KF5::JobWidgets
                       KF5::ConfigCore
                       KF5::I18n
 )

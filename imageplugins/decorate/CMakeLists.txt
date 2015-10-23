@@ -24,7 +24,6 @@ target_link_libraries(digikamimageplugin_decorate
                       KF5::XmlGui
                       KF5::KIOCore
                       KF5::Notifications
-                      KF5::JobWidgets
 )
 
 install(TARGETS digikamimageplugin_decorate             DESTINATION ${PLUGIN_INSTALL_DIR})

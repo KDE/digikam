@@ -76,7 +76,6 @@ target_link_libraries(showfoto
 
                       KF5::I18n
                       KF5::KIOCore
-                      KF5::JobWidgets
                       KF5::XmlGui
                       KF5::Notifications
 )
