@@ -103,8 +103,8 @@ include(MacroBoolTo01)
 # ==================================================================================================
 
 option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=OFF)"                         OFF)
-option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KFileMetadata support (default=OFF)"                           OFF)
-option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with AkonadiContact support (default=OFF)"                          OFF)
+option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                       OFF)
+option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contact support (default=OFF)"                        OFF)
 option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=OFF)"                            OFF)
 
 # Mysql support options (experimental):

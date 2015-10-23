@@ -98,13 +98,15 @@ libboostgraph     >= 1.43.0                     http://www.boost.org/doc/libs
 libpgf            >= 6.11.24                    http://www.libpgf.org
 libexpat          >= 2.0.0                      http://expat.sourceforge.net
 libopencv         >= 2.4.9                      http://opencv.willowgarage.com
+
 Optional:
 
 libkipi           >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
-libkface          >= 5.0.0                      https://projects.kde.org/projects/extragear/libs/libkface         To support faces detection and recognition.
+libkface          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkface   To support faces detection and recognition.
+libksane          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libksane   To support digital scanner.
 libmarble         >= 0.22.0                     https://projects.kde.org/projects/kde/kdeedu/marble               To support geolocation maps.
 libakonadicontact >= 5.x                        https://projects.kde.org/projects/kde/kdepimlibs                  To support KDE Address Book entries.
-libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/kde/kdelibs/baloo               To support KDE files indexing support.
+libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/frameworks/baloo                To support KDE files indexing support.
 libjasper         >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.
 liblensfun        >= 0.2.6                      http://lensfun.sourceforge.net                                    To support LensCorrection tool.
 liblqr-1          >= 0.4.1                      http://liblqr.wikidot.com                                         To support Liquid Rescale tool.
@@ -118,13 +120,13 @@ Note: all library dependencies require development and binary packages installed
 CMake compilation options to custom digiKam:
 
 Use CMake "-DENABLE_KINOTIFY=on"              flag to compile digiKam with embeded Inotify wrapper for Linux                         (disabled by default).
-Use CMake "-DENABLE_BALOOSUPPORT=on"          flag to compile digiKam with Baloo support                                             (disabled by default).
-Use CMake "-DENABLE_AKONADICONTACTSUPPORT=on" flag to compile digiKam with KdePimLibs support                                        (disabled by default).
+Use CMake "-DENABLE_KFILEMETADATASUPPORT=on"  flag to compile digiKam with KDE files indexer support                                 (disabled by default).
+Use CMake "-DENABLE_AKONADICONTACTSUPPORT=on" flag to compile digiKam with KDE Mail Contacts support                                 (disabled by default).
 Use CMake "-DENABLE_MEDIAPLAYER=on"           flag to compile digiKam with QtMultimedia support                                      (disabled by default).
 Use CMake "-DENABLE_OPENCV3=on"               flag to compile digiKam source code using OpenCV3 instead OpenCV2                      (disabled by default).
                                               OpenCV3 support needs extra contrib modules package, especially 'face'
                                               and 'legacy' components.
-                                          
+
 Mysql support options (experimental):
 
 Use CMake "-DENABLE_MYSQLSUPPORT=on"          flag to compile digiKam with MysSql support                                            (disabled by default).
