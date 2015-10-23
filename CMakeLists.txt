@@ -61,7 +61,7 @@ set(KFACE_MIN_VERSION   "5.0.0")
 set(KSANE_MIN_VERSION   "5.0.0")
 set(PGF_MIN_VERSION     "6.12.24")
 set(LENSFUN_MIN_VERSION "0.2.6.0")
-set(EXIV2_MIN_VERSION   "0.24"                            )
+set(EXIV2_MIN_VERSION   "0.24")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
@@ -414,7 +414,7 @@ if(ENABLE_MYSQLSUPPORT)
         if (NOT WIN32)
             PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
         endif()
-    else()
+    else()OD
         message(STATUS " MySQL server found....................... NO  (optional - disabled by user)")
     endif()
 
