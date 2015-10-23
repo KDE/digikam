@@ -144,10 +144,12 @@ endif()
 
 find_package(KF5 REQUIRED COMPONENTS
              XmlGui
+             CoreAddons
              Config
              NotifyConfig
              Notifications
              KIO
+             Service
              Completion
              WindowSystem
              Solid
