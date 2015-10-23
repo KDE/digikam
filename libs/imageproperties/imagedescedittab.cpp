@@ -76,7 +76,6 @@
 #include "searchtextbar.h"
 #include "disjointmetadata.h"
 #include "altlangstredit.h"
-#include "msgtextedit.h"
 
 namespace Digikam
 {

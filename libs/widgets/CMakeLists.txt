@@ -105,7 +105,6 @@ set(libmetadatawidgets_SRCS
     metadata/altlangstredit.cpp
     metadata/colorlabelwidget.cpp
     metadata/countryselector.cpp
-    metadata/msgtextedit.cpp
     metadata/subjectwidget.cpp
 )
 
@@ -123,7 +122,6 @@ include_directories(
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::Completion,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::TextWidgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::CoreAddons,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
 

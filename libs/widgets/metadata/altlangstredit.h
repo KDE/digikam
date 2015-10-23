@@ -28,8 +28,9 @@
 
 // Qt includes
 
-#include <QtWidgets/QWidget>
-#include <QtCore/QString>
+#include <QWidget>
+#include <QString>
+#include <QTextEdit>
 
 // Local includes
 
@@ -38,8 +39,6 @@
 
 namespace Digikam
 {
-
-class MsgTextEdit;
 
 class DIGIKAM_EXPORT AltLangStrEdit : public QWidget
 {
@@ -82,7 +81,7 @@ public:
      */
     void addCurrent();
 
-    MsgTextEdit* textEdit() const;
+    QTextEdit* textEdit() const;
 
 Q_SIGNALS:
 

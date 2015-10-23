@@ -33,7 +33,6 @@
 
 // Local includes
 
-#include "msgtextedit.h"
 #include "altlangstredit.h"
 #include "digikam_debug.h"
 
@@ -196,7 +195,7 @@ void CaptionEdit::slotAuthorChanged(const QString& text)
     }
 }
 
-MsgTextEdit* CaptionEdit::textEdit() const
+QTextEdit* CaptionEdit::textEdit() const
 {
     return d->altLangStrEdit->textEdit();
 }

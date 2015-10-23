@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QString>
 #include <QDateTime>
+#include <QTextEdit>
 
 // Local includes
 
@@ -37,8 +38,6 @@
 
 namespace Digikam
 {
-
-class MsgTextEdit;
 
 class CaptionEdit : public DVBox
 {
@@ -57,7 +56,7 @@ public:
 
     void reset();
 
-    MsgTextEdit* textEdit() const;
+    QTextEdit* textEdit() const;
 
 Q_SIGNALS:
 

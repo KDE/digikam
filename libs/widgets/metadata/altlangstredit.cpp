@@ -40,10 +40,6 @@
 
 #include <klocalizedstring.h>
 
-// Local includes
-
-#include "msgtextedit.h"
-
 namespace Digikam
 {
 
@@ -261,11 +257,11 @@ public:
 
     QToolButton*                   delValueButton;
 
-    MsgTextEdit*                   valueEdit;
+    QTextEdit*                     valueEdit;
 
     QComboBox*                     languageCB;
 
-    MetaEngine::AltLangMap             values;
+    MetaEngine::AltLangMap         values;
 };
 
 AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
@@ -283,8 +279,8 @@ AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
     d->languageCB->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     d->languageCB->setWhatsThis(i18n("Select item language here."));
 
-    d->valueEdit  = new MsgTextEdit(this);
-    d->valueEdit->setCheckSpellingEnabled(true);
+    d->valueEdit  = new QTextEdit(this);
+    d->valueEdit->setAcceptRichText(false);
 
     // --------------------------------------------------------
 
@@ -307,7 +303,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
     connect(d->delValueButton, &QToolButton::clicked,
             this, &AltLangStrEdit::slotDeleteValue);
 
-    connect(d->valueEdit, &MsgTextEdit::textChanged,
+    connect(d->valueEdit, &QTextEdit::textChanged,
             this, &AltLangStrEdit::slotTextChanged);
 }
 
@@ -323,7 +319,7 @@ QString AltLangStrEdit::currentLanguageCode() const
 
 void AltLangStrEdit::setCurrentLanguageCode(const QString& lang)
 {
-    if(d->currentLanguage.isEmpty())
+    if (d->currentLanguage.isEmpty())
     {
         d->currentLanguage = QString::fromLatin1("x-default");
     }
@@ -368,10 +364,6 @@ void AltLangStrEdit::slotSelectionChanged()
     // so we must block signals here.
 
     d->valueEdit->blockSignals(true);
-
-    QString langISO3066 = d->currentLanguage;
-    langISO3066.replace(QString::fromLatin1("-"), QString::fromLatin1("_"));
-    d->valueEdit->setSpellCheckingLanguage(langISO3066);
 
     QString text = d->values.value(d->currentLanguage);
     d->valueEdit->setText(text);
@@ -524,7 +516,7 @@ void AltLangStrEdit::changeEvent(QEvent* e)
     QWidget::changeEvent(e);
 }
 
-MsgTextEdit* AltLangStrEdit::textEdit() const
+QTextEdit* AltLangStrEdit::textEdit() const
 {
     return d->valueEdit;
 }

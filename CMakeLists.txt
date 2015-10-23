@@ -147,7 +147,6 @@ find_package(KF5 REQUIRED COMPONENTS
              NotifyConfig
              Notifications
              KIO
-             TextWidgets
              WindowSystem
              Solid
              IconThemes

@@ -110,7 +110,6 @@ target_link_libraries(digikamcore
                       KF5::KIOCore
                       KF5::NotifyConfig
                       KF5::WindowSystem
-                      KF5::TextWidgets
                       KF5::KIOWidgets
                       KF5::IconThemes
                       KF5::I18n
@@ -388,7 +387,6 @@ target_link_libraries(digikamgui
                       KF5::Notifications
                       KF5::NotifyConfig
                       KF5::WindowSystem
-                      KF5::TextWidgets
                       KF5::IconThemes
                       KF5::I18n
 
