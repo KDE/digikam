@@ -48,7 +48,6 @@
 
 #include <kdatepicker.h>
 #include <klocalizedstring.h>
-#include <ktextedit.h>
 
 // Local includes
 
@@ -60,6 +59,7 @@
 #include "databaseaccess.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
+#include "msgtextedit.h"
 
 namespace Digikam
 {
@@ -107,7 +107,7 @@ public:
     QComboBox*        categoryCombo;
     QComboBox*        parentCombo;
     QLineEdit*        titleEdit;
-    KTextEdit*        commentsEdit;
+    MsgTextEdit*      commentsEdit;
 
     DDatePicker*      datePicker;
 
@@ -158,6 +158,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     QRegExp titleRx(QLatin1String("[^/]+"));
     QValidator* const titleValidator = new QRegExpValidator(titleRx, this);
     d->titleEdit->setValidator(titleValidator);
+    d->titleEdit->setPlaceholderText(i18n("Enter album title here..."));
 
     QLabel* const categoryLabel = new QLabel(page);
     categoryLabel->setText(i18n("Ca&tegory:"));
@@ -175,10 +176,11 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     QLabel* const commentsLabel = new QLabel(page);
     commentsLabel->setText(i18n("Ca&ption:"));
 
-    d->commentsEdit = new KTextEdit(page);
+    d->commentsEdit = new MsgTextEdit(page);
     commentsLabel->setBuddy(d->commentsEdit);
     d->commentsEdit->setCheckSpellingEnabled(true);
     d->commentsEdit->setWordWrapMode(QTextOption::WordWrap);
+    d->commentsEdit->setPlaceholderText(i18n("Enter album caption here..."));
 
     QLabel* const dateLabel = new QLabel(page);
     dateLabel->setText(i18n("Album &date:"));

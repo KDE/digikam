@@ -176,7 +176,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     QLabel* const iconTextLabel = new QLabel(page);
     iconTextLabel->setText(i18n("&Icon:"));
 
-    d->iconButton         = new QPushButton(page);
+    d->iconButton               = new QPushButton(page);
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
 
