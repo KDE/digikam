@@ -301,10 +301,10 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::DEMOSAICING,     QIcon::fromTheme(QLatin1String("rawbayer")));
-    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::WHITEBALANCE,    QIcon::fromTheme(QLatin1String("whitebalance")));
-    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::CORRECTIONS,     QIcon::fromTheme(QLatin1String("lensdistortion")));
-    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::COLORMANAGEMENT, QIcon::fromTheme(QLatin1String("colormanagement")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::DEMOSAICING,     QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::WHITEBALANCE,    QIcon::fromTheme(QLatin1String("format-stroke-color")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::CORRECTIONS,     QIcon::fromTheme(QLatin1String("zoom-draw")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::COLORMANAGEMENT, QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")));
     d->decodingSettingsBox->updateMinimumWidth();
 
     d->tabView->insertTab(0, d->rawdecodingBox,         i18n("Raw Decoding"));

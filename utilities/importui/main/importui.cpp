@@ -441,7 +441,7 @@ void ImportUI::setupActions()
 
     // --- Icon view, items preview, and map actions ------------------------------------------------------
 
-    d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme(QLatin1String("viewimage")), i18nc("@title:group", "Views"), this);
+    d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme(QLatin1String("view-preview")), i18nc("@title:group", "Views"), this);
     ac->addAction(QLatin1String("importui_view_selection"), d->imageViewSelectionAction);
 
     d->iconViewAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-icons")),
@@ -451,7 +451,7 @@ void ImportUI::setupActions()
     connect(d->iconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->iconViewAction);
 
-    d->camItemPreviewAction = new QAction(QIcon::fromTheme(QLatin1String("viewimage")),
+    d->camItemPreviewAction = new QAction(QIcon::fromTheme(QLatin1String("view-preview")),
                                                 i18nc("@action View the selected image", "Preview Item"), this);
     d->camItemPreviewAction->setCheckable(true);
     ac->addAction(QLatin1String("importui_item_view"), d->camItemPreviewAction);

@@ -102,7 +102,7 @@ OpenFilePage::OpenFilePage(AssistantDlg* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("editimage")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
 }
 
 OpenFilePage::~OpenFilePage()

@@ -51,7 +51,7 @@ IccConvert::IccConvert(QObject* const parent)
 {
     setToolTitle(i18n("ICC Convert"));
     setToolDescription(i18n("Convert image to a color space."));
-    setToolIconName(QLatin1String("colormanagement"));
+    setToolIconName(QLatin1String("preferences-desktop-display-color"));
 }
 
 IccConvert::~IccConvert()

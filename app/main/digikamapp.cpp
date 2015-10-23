@@ -850,7 +850,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme(QLatin1String("viewimage")), i18n("Views"), this);
+    d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme(QLatin1String("view-preview")), i18n("Views"), this);
     ac->addAction(QLatin1String("view_selection"), d->imageViewSelectionAction);
 
     d->imageIconViewAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-icons")),
@@ -860,7 +860,7 @@ void DigikamApp::setupActions()
     connect(d->imageIconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->imageIconViewAction);
 
-    d->imagePreviewAction = new QAction(QIcon::fromTheme(QLatin1String("viewimage")),
+    d->imagePreviewAction = new QAction(QIcon::fromTheme(QLatin1String("view-preview")),
                                         i18nc("View the selected image", "Preview Image"), this);
     d->imagePreviewAction->setCheckable(true);
     ac->addAction(QLatin1String("image_view"), d->imagePreviewAction);
@@ -898,7 +898,7 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("open_with_default_application"), d->openWithAction);
     ac->setDefaultShortcut(d->openWithAction, Qt::META + Qt::Key_F4);
 
-    QAction* const ieAction = new QAction(QIcon::fromTheme(QLatin1String("editimage")), i18n("Image Editor"), this);
+    QAction* const ieAction = new QAction(QIcon::fromTheme(QLatin1String("image-stack")), i18n("Image Editor"), this);
     ieAction->setWhatsThis(i18n("Open the image editor."));
     connect(ieAction, SIGNAL(triggered()), d->view, SLOT(slotEditor()));
     ac->addAction(QLatin1String("imageeditor"), ieAction);

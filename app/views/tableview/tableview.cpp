@@ -240,7 +240,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     // Temporary actions --------------------------------------
 
     QAction* const viewAction = new QAction(i18nc("View the selected image", "Preview"), this);
-    viewAction->setIcon(QIcon::fromTheme(QLatin1String("viewimage")));
+    viewAction->setIcon(QIcon::fromTheme(QLatin1String("view-preview")));
     viewAction->setEnabled(selectedImageIds.count() == 1);
 
     // Creation of the menu -----------------------------------

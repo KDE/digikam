@@ -196,7 +196,7 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
 
     d->about = new DAboutData(this);
 
-    QAction* const rawCameraListAction = new QAction(QIcon::fromTheme(QLatin1String("rawbayer")), i18n("Supported RAW Cameras"), this);
+    QAction* const rawCameraListAction = new QAction(QIcon::fromTheme(QLatin1String("image-x-adobe-dng")), i18n("Supported RAW Cameras"), this);
     connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction(QLatin1String("help_rawcameralist"), rawCameraListAction);
 

@@ -102,7 +102,7 @@ PreviewPage::PreviewPage(AssistantDlg* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("viewimage")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("view-preview")));
 }
 
 PreviewPage::~PreviewPage()

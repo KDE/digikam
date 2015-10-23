@@ -43,7 +43,7 @@ Convert2DNG::Convert2DNG(QObject* const parent)
 
     setToolTitle(i18n("Convert RAW To DNG"));
     setToolDescription(i18n("Convert RAW images to DNG container."));
-    setToolIconName(QLatin1String("dngconverter"));
+    setToolIconName(QLatin1String("image-x-adobe-dng"));
 }
 
 Convert2DNG::~Convert2DNG()

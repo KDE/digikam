@@ -437,7 +437,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay5->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::digiKamProperties,
-               w5, QIcon::fromTheme(QLatin1String("imagecomment")),
+               w5, QIcon::fromTheme(QLatin1String("edit-text-frame-update")),
                i18n("digiKam Properties"), QLatin1String("DigikamProperties"), true);
 
     // --------------------------------------------------

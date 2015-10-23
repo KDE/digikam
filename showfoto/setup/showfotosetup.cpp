@@ -111,13 +111,13 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     d->page_editor    = addPage(d->editorPage, i18n("Image Editor"));
     d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
                                    "<i>Customize image editor behavior</i></qt>"));
-    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("editimage")));
+    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("image-stack")));
 
     d->metadataPage   = new SetupMetadata();
     d->page_metadata  = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
                                      "<i>Setup relations between images and metadata</i></qt>"));
-    d->page_metadata->setIcon(QIcon::fromTheme(QLatin1String("exifinfo"))); // krazy:exclude=iconnames
+    d->page_metadata->setIcon(QIcon::fromTheme(QLatin1String("text-xml"))); // krazy:exclude=iconnames
 
     d->toolTipPage    = new SetupToolTip();
     d->page_tooltip   = addPage(d->toolTipPage, i18n("Tool Tip"));
@@ -129,13 +129,13 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     d->page_raw       = addPage(d->rawPage, i18n("RAW Decoding"));
     d->page_raw->setHeader(i18n("<qt>RAW Files Decoding Settings<br/>"
                                   "<i>Customize default RAW decoding settings</i></qt>"));
-    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("rawbayer")));
+    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
 
     d->iccPage        = new Digikam::SetupICC(buttonBox());
     d->page_icc       = addPage(d->iccPage, i18n("Color Management"));
     d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
                                 "<i>Customize color management settings</i></qt>"));
-    d->page_icc->setIcon(QIcon::fromTheme(QLatin1String("colormanagement")));
+    d->page_icc->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")));
 
     d->iofilesPage    = new Digikam::SetupIOFiles();
     d->page_iofiles   = addPage(d->iofilesPage, i18n("Save Images"));

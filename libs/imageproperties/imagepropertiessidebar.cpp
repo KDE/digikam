@@ -82,7 +82,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
         m_propertiesTab->setVideoInfoDisable(true);
 
     appendTab(m_propertiesTab, QIcon::fromTheme(QLatin1String("document-properties")),   i18n("Properties"));
-    appendTab(m_metadataTab,   QIcon::fromTheme(QLatin1String("exifinfo")),              i18n("Metadata")); // krazy:exclude=iconnames
+    appendTab(m_metadataTab,   QIcon::fromTheme(QLatin1String("text-xml")),              i18n("Metadata")); // krazy:exclude=iconnames
     appendTab(m_colorTab,      QIcon::fromTheme(QLatin1String("format-fill-color")),     i18n("Colors"));
 
 #ifdef HAVE_MARBLE

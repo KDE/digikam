@@ -78,7 +78,7 @@ DNGSettings::DNGSettings(QWidget* const parent)
 
     DActiveLabel* const dngLogoLabel     = new DActiveLabel(QUrl(), QString(), this);
     dngLogoLabel->updateData(QUrl(QLatin1String("http://en.wikipedia.org/wiki/Digital_Negative_(file_format)")),
-                             QIcon::fromTheme(QLatin1String("dngconverter")).pixmap(96).toImage());
+                             QIcon::fromTheme(QLatin1String("image-x-adobe-dng")).pixmap(96).toImage());
     dngLogoLabel->setAlignment(Qt::AlignRight);
 
     // ------------------------------------------------------------------------

@@ -227,9 +227,9 @@ void DImgFilterManager::Private::setupFilterIcons()
     filterIcons.insert(QLatin1String("digikam:TextureFilter"),        QLatin1String("texture"));
     filterIcons.insert(QLatin1String("digikam:TonalityFilter"),       QLatin1String("tonemap"));
     filterIcons.insert(QLatin1String("digikam:UnsharpMaskFilter"),    QLatin1String("sharpenimage"));
-    filterIcons.insert(QLatin1String("digikam:WhiteBalanceFilter"),   QLatin1String("whitebalance"));
+    filterIcons.insert(QLatin1String("digikam:WhiteBalanceFilter"),   QLatin1String("format-stroke-color"));
 
-    filterIcons.insert(QLatin1String("digikam:RawConverter"),         QLatin1String("rawbayer"));
+    filterIcons.insert(QLatin1String("digikam:RawConverter"),         QLatin1String("image-x-adobe-dng"));
 }
 
 void DImgFilterManager::Private::setupI18nStrings()

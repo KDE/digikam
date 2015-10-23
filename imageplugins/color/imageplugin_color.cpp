@@ -156,7 +156,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     connect(d->convertTo16Bits, SIGNAL(triggered(bool)),
             this, SLOT(slotConvertTo16Bits()));
 
-    d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme(QLatin1String("colormanagement")), i18n("Color Space Conversion"), this);
+    d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")), i18n("Color Space Conversion"), this);
     ac->addAction(QLatin1String("imageplugin_colormanagement"), d->profileMenuAction);
     connect(d->profileMenuAction, SIGNAL(triggered(IccProfile)),
             this, SLOT(slotConvertToColorSpace(IccProfile)));
@@ -171,7 +171,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     connect(d->BWAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBW()));
 
-    d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("whitebalance")), i18n("White Balance..."), this);
+    d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("format-stroke-color")), i18n("White Balance..."), this);
     ac->addAction(QLatin1String("imageplugin_whitebalance"), d->whitebalanceAction);
     ac->setDefaultShortcut(d->whitebalanceAction, Qt::CTRL+Qt::SHIFT+Qt::Key_W);
     connect(d->whitebalanceAction, SIGNAL(triggered(bool)),

@@ -179,13 +179,6 @@ ecm_install_icons(
         48-actions-colorfx.png
         64-actions-colorfx.png
         128-actions-colorfx.png
-        16-actions-colormanagement.png
-        22-actions-colormanagement.png
-        32-actions-colormanagement.png
-        48-actions-colormanagement.png
-        64-actions-colormanagement.png
-        128-actions-colormanagement.png
-        sc-actions-colormanagement.svgz
         sc-actions-colorneg.svgz
         16-actions-contrast.png
         22-actions-contrast.png
@@ -215,26 +208,12 @@ ecm_install_icons(
         64-actions-distortionfx.png
         128-actions-distortionfx.png
         sc-actions-distortionfx.svgz
-        16-actions-editimage.png
-        22-actions-editimage.png
-        32-actions-editimage.png
-        48-actions-editimage.png
-        64-actions-editimage.png
-        128-actions-editimage.png
-        sc-actions-editimage.svgz
         16-actions-embosstool.png
         22-actions-embosstool.png
         32-actions-embosstool.png
         48-actions-embosstool.png
         64-actions-embosstool.png
         128-actions-embosstool.png
-        16-actions-exifinfo.png
-        22-actions-exifinfo.png
-        32-actions-exifinfo.png
-        48-actions-exifinfo.png
-        64-actions-exifinfo.png
-        128-actions-exifinfo.png
-        sc-actions-exifinfo.svgz
         16-actions-filmgrain.png
         22-actions-filmgrain.png
         32-actions-filmgrain.png
@@ -256,13 +235,6 @@ ecm_install_icons(
         64-actions-hotpixels.png
         128-actions-hotpixels.png
         sc-actions-hotpixels.svgz
-        16-actions-imagecomment.png
-        22-actions-imagecomment.png
-        32-actions-imagecomment.png
-        48-actions-imagecomment.png
-        64-actions-imagecomment.png
-        128-actions-imagecomment.png
-        sc-actions-imagecomment.svgz
         16-actions-inpainting.png
         22-actions-inpainting.png
         32-actions-inpainting.png
@@ -373,30 +345,6 @@ ecm_install_icons(
         64-actions-tonemap.png
         128-actions-tonemap.png
         sc-actions-tonemap.svgz
-        16-actions-viewimage.png
-        22-actions-viewimage.png
-        32-actions-viewimage.png
-        48-actions-viewimage.png
-        64-actions-viewimage.png
-        128-actions-viewimage.png
-        32-actions-rawbayer.png
-        48-actions-rawbayer.png
-        64-actions-rawbayer.png
-        128-actions-rawbayer.png
-        16-actions-whitebalance.png
-        22-actions-whitebalance.png
-        32-actions-whitebalance.png
-        48-actions-whitebalance.png
-        64-actions-whitebalance.png
-        128-actions-whitebalance.png
-        sc-actions-whitebalance.svgz
-        16-actions-dngconverter.png
-        22-actions-dngconverter.png
-        32-actions-dngconverter.png
-        48-actions-dngconverter.png
-        64-actions-dngconverter.png
-        128-actions-dngconverter.png
-        sc-actions-dngconverter.svgz
         32-actions-zoom-select-fit.png
     DESTINATION ${DATA_INSTALL_DIR}/digikam/icons
 )

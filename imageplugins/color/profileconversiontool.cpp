@@ -106,7 +106,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
 {
     setObjectName(QLatin1String("profile conversion"));
     setToolName(i18n("Color Profile Conversion"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("colormanagement")));
+    setToolIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")));
     //TODO setToolHelp(QLatin1String("colormanagement.anchor"));
 
     // -------------------------------------------------------------

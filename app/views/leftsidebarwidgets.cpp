@@ -371,7 +371,7 @@ void TagViewSideBarWidget::setNoTagsAlbum()
 
 const QIcon TagViewSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme(QLatin1String("tag"));
+    return QIcon::fromTheme(QLatin1String("mail-tagged"));
 }
 
 const QString TagViewSideBarWidget::getCaption()

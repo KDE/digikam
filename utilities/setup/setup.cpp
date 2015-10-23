@@ -226,7 +226,7 @@ Setup::Setup(QWidget* const parent)
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
                                      "<i>Setup relations between images and metadata</i></qt>"));
-    d->page_metadata->setIcon(QIcon::fromTheme(QLatin1String("exifinfo"))); // krazy:exclude=iconnames
+    d->page_metadata->setIcon(QIcon::fromTheme(QLatin1String("text-xml"))); // krazy:exclude=iconnames
 
     d->templatePage  = new SetupTemplate();
     d->page_template = addPage(d->templatePage, i18n("Templates"));
@@ -244,7 +244,7 @@ Setup::Setup(QWidget* const parent)
     d->page_editor = addPage(d->editorPage, i18n("Editor Window"));
     d->page_editor->setHeader(i18n("<qt>Image Editor Window Settings<br/>"
                                    "<i>Customize the image editor window</i></qt>"));
-    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("editimage")));
+    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("image-stack")));
 
     d->versioningPage  = new SetupVersioning();
     d->page_versioning = addPage(d->versioningPage, i18n("Editing Images"));
@@ -262,19 +262,19 @@ Setup::Setup(QWidget* const parent)
     d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
     d->page_raw->setHeader(i18n("<qt>RAW Files Decoding<br/>"
                                 "<i>Configure RAW files decoding settings and behavior</i></qt>"));
-    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("rawbayer")));
+    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
 
     d->iccPage  = new SetupICC(buttonBox());
     d->page_icc = addPage(d->iccPage, i18n("Color Management"));
     d->page_icc->setHeader(i18n("<qt>Settings for Color Management<br/>"
                                 "<i>Customize the color management settings</i></qt>"));
-    d->page_icc->setIcon(QIcon::fromTheme(QLatin1String("colormanagement")));
+    d->page_icc->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")));
 
     d->lighttablePage  = new SetupLightTable();
     d->page_lighttable = addPage(d->lighttablePage, i18n("Light Table"));
     d->page_lighttable->setHeader(i18n("<qt>Light Table Settings<br/>"
                                        "<i>Customize tool used to compare images</i></qt>"));
-    d->page_lighttable->setIcon(QIcon::fromTheme(QLatin1String("lighttable")));
+    d->page_lighttable->setIcon(QIcon::fromTheme(QLatin1String("image-stack-open")));
 
     d->slideshowPage  = new SetupSlideShow();
     d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));

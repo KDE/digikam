@@ -254,11 +254,11 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     // --------------------------------------------------------
 
     d->rawSettings = new DRawDecoderWidget(panel, DRawDecoderWidget::SIXTEENBITS | DRawDecoderWidget::COLORSPACE);
-    d->rawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("rawbayer")));
-    d->rawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("whitebalance")));
-    d->rawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));
+    d->rawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
+    d->rawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("format-stroke-color")));
+    d->rawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("zoom-draw")));
 
-    insertTab(Private::RAW, d->rawSettings, QIcon::fromTheme(QLatin1String("rawbayer")), i18n("Raw Decoding"));
+    insertTab(Private::RAW, d->rawSettings, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")), i18n("Raw Decoding"));
 
     // --------------------------------------------------------
 
