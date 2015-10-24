@@ -101,19 +101,19 @@ libopencv         >= 2.4.9                      http://opencv.willowgarage.com
 
 Optional:
 
-libkipi           >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
-libkface          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkface   To support faces detection and recognition.
-libksane          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libksane   To support digital scanner.
-libmarble         >= 0.22.0                     https://projects.kde.org/projects/kde/kdeedu/marble               To support geolocation maps.
-libakonadicontact >= 5.x                        https://projects.kde.org/projects/kde/kdepimlibs                  To support KDE Address Book entries.
-libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/frameworks/baloo                To support KDE files indexing support.
-libjasper         >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.
-liblensfun        >= 0.2.6                      http://lensfun.sourceforge.net                                    To support LensCorrection tool.
-liblqr-1          >= 0.4.1                      http://liblqr.wikidot.com                                         To support Liquid Rescale tool.
-libeigen3         >= 3.0.0                      http://eigen.tuxfamily.org                                        To support Refocus tool.
-libgphoto2        >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras drivers.
-libusb            >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in bug #268267.
-doxygen           >= 1.8.0                      http://www.doxygen.org                                            To support API documentation building (This does not affect building digiKam in any way).
+libkipi           >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi                                          To support Kipi-plugins.
+libkface          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkface                                         To support faces detection and recognition.
+libksane          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libksane                                         To support digital scanner.
+libmarble         >= 0.22.0                     https://projects.kde.org/projects/kde/kdeedu/marble                                                     To support geolocation maps.
+libakonadicontact >= 5.x                        https://projects.kde.org/projects/kde/kdepimlibs/repository/revisions/master/show/akonadi-contact       To support KDE Address Book entries.
+libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/frameworks/baloo                                                      To support KDE files indexing support.
+libjasper         >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                                                                  To support JPEG2000.
+liblensfun        >= 0.2.6                      http://lensfun.sourceforge.net                                                                          To support LensCorrection tool.
+liblqr-1          >= 0.4.1                      http://liblqr.wikidot.com                                                                               To support Liquid Rescale tool.
+libeigen3         >= 3.0.0                      http://eigen.tuxfamily.org                                                                              To support Refocus tool.
+libgphoto2        >= 2.4.0                      http://www.gphoto.org                                                                                   To support Gphoto2 Cameras drivers.
+libusb            >= 1.0.0                      http://www.libusb.org                                                                                   Required by Gphoto2 as linking dependency. See details in bug #268267.
+doxygen           >= 1.8.0                      http://www.doxygen.org                                                                                  To support API documentation building (This does not affect building digiKam in any way).
 
 Note: all library dependencies require development and binary packages installed on your computer to compile digiKam.
 
