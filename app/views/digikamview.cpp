@@ -1261,9 +1261,16 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
     }
     else if (album->isTrashAlbum())
     {
-        d->trashView->model()->loadItemsForCollection(album->parent()->title());
-        d->filterWidget->setEnabled(false);
-        d->stackedview->setViewMode(StackedView::TrashViewMode);
+        PAlbum* const palbum = d->albumManager->findPAlbum(album->parent()->id());
+
+        if (palbum)
+        {
+            QUrl url = palbum->fileUrl();
+            url = url.adjusted(QUrl::StripTrailingSlash);
+            d->trashView->model()->loadItemsForCollection(url.toLocalFile());
+            d->filterWidget->setEnabled(false);
+            d->stackedview->setViewMode(StackedView::TrashViewMode);
+        }
     }
     else
     {
@@ -1776,11 +1783,11 @@ void DigikamView::slotViewModeChanged()
             //TODO: connect map view's zoom buttons to main status bar zoom buttons
             break;
         case StackedView::TableViewMode:
-            emit signalSwitchedToTrashView();
+            emit signalSwitchedToTableView();
             emit signalThumbSizeChanged(d->trashView->getThumbnailSize().size());
             break;
         case StackedView::TrashViewMode:
-            emit signalSwitchedToIconView();
+            emit signalSwitchedToTrashView();
             break;
     }
 }

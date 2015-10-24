@@ -69,8 +69,8 @@ public:
         PreviewImageMode     = 1,
         WelcomePageMode      = 2,
         TableViewMode        = 3,
-        MapWidgetMode        = 4,
-        TrashViewMode        = 5,
+        TrashViewMode        = 4,
+        MapWidgetMode        = 5,
         MediaPlayerMode      = 6,
         StackedViewModeLast  = 6
     };
