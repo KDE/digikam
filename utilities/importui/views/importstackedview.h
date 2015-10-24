@@ -60,8 +60,13 @@ public:
     {
         PreviewCameraMode = 0, // previewing the set of items on the camera
         PreviewImageMode,
+#ifdef HAVE_VIDEOPLAYER
         MediaPlayerMode,
         MapWidgetMode
+#else
+        MapWidgetMode,
+        MediaPlayerMode
+#endif //HAVE_VIDEOPLAYER
     };
 
 public:

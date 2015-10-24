@@ -687,6 +687,9 @@ void ImportUI::setupConnections()
     connect(d->view, SIGNAL(signalSwitchedToIconView()),
             this, SLOT(slotSwitchedToIconView()));
 
+    connect(d->view, SIGNAL(signalSwitchedToMapView()),
+            this, SLOT(slotSwitchedToMapView()));
+
     connect(d->view, SIGNAL(signalNewSelection(bool)),
             this, SLOT(slotNewSelection(bool)));
 
