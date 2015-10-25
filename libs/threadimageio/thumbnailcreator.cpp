@@ -1124,14 +1124,12 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
         if (qimage.save(tempFileName, "PNG", 0))
         {
-            int ret = 0;
             Q_ASSERT(!tempFileName.isEmpty());
 
             temp.close();
 
 #ifndef Q_OS_WIN
-            ret = QFile::rename(QString::fromUtf8(QFile::encodeName(tempFileName)), QString::fromUtf8(QFile::encodeName(thumbPath)));
-            if (ret != 0)
+            if (!QFile::rename(QString::fromUtf8(QFile::encodeName(tempFileName)), QString::fromUtf8(QFile::encodeName(thumbPath))))
 #else
             if(::MoveFileEx(tempFileName.utf16(), thumbPath.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
 #endif

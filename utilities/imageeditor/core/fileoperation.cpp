@@ -111,7 +111,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
 
     // rename tmp file to dest
     // QFile::rename() takes care of QString -> bytestring encoding
-    if (QFile::rename(orgPath, dest) != 0)
+    if (!QFile::rename(orgPath, dest))
     {
         return false;
     }
