@@ -22,18 +22,14 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMWATCH_H
-#define ALBUMWATCH_H
+#ifndef ALBUM_WATCH_H
+#define ALBUM_WATCH_H
 
 // Qt includes
 
 #include <QThread>
 #include <QString>
 #include <QUrl>
-
-// Local includes
-
-#include "digikam_config.h"
 
 namespace Digikam
 {
@@ -58,15 +54,6 @@ protected Q_SLOTS:
 
     void slotAlbumAdded(Album* album);
     void slotAlbumAboutToBeDeleted(Album* album);
-
-#ifdef USE_KNOTIFY 
-    void slotFileMoved(const QString& path);
-    void slotFileDeleted(const QString& urlString, bool isDir);
-    void slotFileCreated(const QString& path, bool isDir);
-    void slotFileClosedAfterWrite(const QString&);
-    void slotInotifyWatchUserLimitReached();
-#endif
-    
     void slotQFSWatcherDirty(const QString& path);
 
 private:
@@ -75,10 +62,6 @@ private:
     void rescanPath(const QString& path);
     void connectToQFSWatcher();
 
-#ifdef USE_KNOTIFY 
-    void connectToKInotify();
-#endif    
-    
 private:
 
     class Private;
@@ -87,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALBUMWATCH_H
+#endif // ALBUM_WATCH_H

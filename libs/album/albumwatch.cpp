@@ -41,46 +41,25 @@
 #include "databaseparameters.h"
 #include "scancontroller.h"
 
-#ifdef USE_KNOTIFY
-#include "kinotify.h"
-#endif
-
 namespace Digikam
 {
-
-enum Mode
-{
-    InotifyMode,
-    QFSWatcherMode
-};
 
 class AlbumWatch::Private
 {
 public:
 
     explicit Private(AlbumWatch* const q)
-        : mode(InotifyMode),
-#ifdef USE_KNOTIFY
-          inotify(0),
-#endif
-          dirWatch(0),
+        : dirWatch(0),
           q(q)
     {
     }
 
     void             determineMode();
-    bool             isInotifyMode()                  const;
     bool             inBlackList(const QString& path) const;
     bool             inDirWatchParametersBlackList(const QFileInfo& info, const QString& path);
     QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile) const;
 
 public:
-
-    Mode                mode;
-
-#ifdef USE_KNOTIFY
-    KInotify*           inotify;
-#endif
 
     QFileSystemWatcher* dirWatch;
     QStringList         dirWatchAddedDirs;
@@ -91,25 +70,6 @@ public:
 
     AlbumWatch* const   q;
 };
-
-bool AlbumWatch::Private::isInotifyMode() const
-{
-    return (mode == InotifyMode);
-}
-
-void AlbumWatch::Private::determineMode()
-{
-#ifdef USE_KNOTIFY
-    if (KInotify::available())
-    {
-        mode = InotifyMode;
-    }
-    else
-#endif
-    {
-        mode = QFSWatcherMode;
-    }
-}
 
 bool AlbumWatch::Private::inBlackList(const QString& path) const
 {
@@ -198,18 +158,7 @@ AlbumWatch::AlbumWatch(AlbumManager* const parent)
     : QObject(parent),
       d(new Private(this))
 {
-    d->determineMode();
-
-#ifdef USE_KNOTIFY
-    if (d->isInotifyMode())
-    {
-        connectToKInotify();
-    }
-    else
-#endif
-    {
-        connectToQFSWatcher();
-    }
+    connectToQFSWatcher();
 
     connect(parent, SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -234,13 +183,6 @@ void AlbumWatch::clear()
 
         d->dirWatchAddedDirs.clear();
     }
-
-#ifdef USE_KNOTIFY
-    if (d->inotify)
-    {
-        d->inotify->removeAllWatches();
-    }
-#endif
 }
 
 void AlbumWatch::setDatabaseParameters(const DatabaseParameters& params)
@@ -284,19 +226,10 @@ void AlbumWatch::slotAlbumAdded(Album* a)
         return;
     }
 
-#ifdef USE_KNOTIFY
-    if (d->isInotifyMode())
+    if (!d->dirWatch->directories().contains(dir))
     {
-        d->inotify->watchDirectory(dir);
-    }
-    else
-#endif
-    {
-        if (!d->dirWatch->directories().contains(dir))
-        {
-            d->dirWatchAddedDirs << dir;
-            d->dirWatch->addPath(dir);
-        }
+        d->dirWatchAddedDirs << dir;
+        d->dirWatch->addPath(dir);
     }
 }
 
@@ -315,119 +248,14 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
         return;
     }
 
-#ifdef USE_KNOTIFY        
-    if (d->isInotifyMode())
-    {
-        d->inotify->removeDirectory(dir);
-    }
-    else
-#endif
-    {
-        d->dirWatch->removePath(album->folderPath());
-    }
+    d->dirWatch->removePath(album->folderPath());
 }
 
 void AlbumWatch::rescanDirectory(const QString& dir)
 {
-//  qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of directory" << dir;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of directory" << dir;
     ScanController::instance()->scheduleCollectionScanRelaxed(dir);
 }
-
-// -- KInotify ----------------------------------------------------------------------------------
-
-#ifdef USE_KNOTIFY  
-void AlbumWatch::connectToKInotify()
-{
-    if (d->inotify)
-    {
-        return;
-    }
-
-    d->inotify = new KInotify(this);
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumWatch use KInotify";    
-    
-    connect( d->inotify, SIGNAL(movedFrom(QString)),
-             this, SLOT(slotFileMoved(QString)) );
-
-    connect( d->inotify, SIGNAL(movedTo(QString)),
-             this, SLOT(slotFileMoved(QString)) );
-
-/*
-    connect( d->inotify, SIGNAL(moved(QString,QString)),
-             this, SLOT(slotFileMoved(QString,QString)) );
-*/
-
-    connect( d->inotify, SIGNAL(deleted(QString,bool)),
-             this, SLOT(slotFileDeleted(QString,bool)) );
-
-    connect( d->inotify, SIGNAL(created(QString,bool)),
-             this, SLOT(slotFileCreated(QString,bool)) );
-
-    connect( d->inotify, SIGNAL(closedWrite(QString)),
-             this, SLOT(slotFileClosedAfterWrite(QString)) );
-
-    connect( d->inotify, SIGNAL(watchUserLimitReached()),
-             this, SLOT(slotInotifyWatchUserLimitReached()) );
-}
-
-/*
-// Note that moved(QString,QString) is only emitted if both source and target are watched!
-// This does not apply for moving to trash, or files moved from/to non-collection directories
-void AlbumWatch::slotFileMoved(const QString& from, const QString& to)
-{
-    // we could add a copyOrMoveHint here...but identical-file detection seems to work well
-    rescanPath(from);
-    rescanPath(to);
-}
-*/
-
-void AlbumWatch::slotFileMoved(const QString& path)
-{
-    // both movedTo and movedFrom are connected to this slot
-    // moved(QString,QString) is ignored, with it the information about pairing of moves
-    rescanPath(path);
-}
-
-void AlbumWatch::slotFileDeleted(const QString& path, bool isDir)
-{
-    Q_UNUSED(isDir);
-    rescanPath(path);
-}
-
-void AlbumWatch::slotFileCreated(const QString& path, bool isDir)
-{
-    if (isDir)
-    {
-        rescanPath(path);
-    }
-    // for files, rely on ClosedAfterWrite only,
-    // which always comes after create if the operation has finished
-}
-
-void AlbumWatch::slotFileClosedAfterWrite(const QString& path)
-{
-    rescanPath(path);
-}
-
-void AlbumWatch::slotInotifyWatchUserLimitReached()
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Reached Inotify limit";
-}
-
-void AlbumWatch::rescanPath(const QString& path)
-{
-    if (d->inBlackList(path))
-    {
-        return;
-    }
-
-    QUrl url = QUrl::fromLocalFile(path);
-    rescanDirectory(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
-}
-#endif
-
-// -- QFileSystemWatcher ---------------------------------------------------------------------------------------
 
 void AlbumWatch::slotQFSWatcherDirty(const QString& path)
 {

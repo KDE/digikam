@@ -78,9 +78,6 @@
 /* Define to 1 if you want Qt to scale the preview images */
 #cmakedefine USE_QT_SCALING 1
 
-/* Define to 1 if you want to use embeded Inotify wrapper uner Linux with album changes watcher (AlbumWatch class) */
-#cmakedefine USE_KNOTIFY 1
-
 /* Define to 1 if system use X11 */
 #cmakedefine HAVE_X11 1
 

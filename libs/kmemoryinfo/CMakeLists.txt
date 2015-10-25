@@ -5,19 +5,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-set(lib3rdparty_SRCS
-    kmemoryinfo/kmemoryinfo.cpp
-)
+include_directories($<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>)
 
-if(ENABLE_KINOTIFY)
-    set(lib3rdparty_SRCS
-        ${lib3rdparty_SRCS}
-        kinotify/kinotify.cpp
-       )
-endif()
+set(lib3rdparty_SRCS kmemoryinfo.cpp)
 
 add_library(3rdparty_src OBJECT ${lib3rdparty_SRCS})
-
-include_directories(
-    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-)
