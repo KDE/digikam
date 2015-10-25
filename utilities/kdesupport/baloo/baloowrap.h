@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-08-05
- * Description : Find Duplicates tree-view search album.
+ * Description : KDE file indexer interface.
  *
  * Copyright (C) 2014 by Veaeceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
@@ -79,8 +79,8 @@ public:
      * @brief internalPtr - singleton inplementation
      */
     static QPointer<BalooWrap> internalPtr;
-    static BalooWrap* instance();
-    static bool isCreated();
+    static BalooWrap*          instance();
+    static bool                isCreated();
 
     void setTags(const QUrl& url, QStringList* const tags);
 
@@ -103,7 +103,7 @@ public:
      * @param url  - image url
      * @return     - container class for tags, comment, rating
      */
-    BalooInfo getSemanticInfo(const QUrl& url);
+    BalooInfo getSemanticInfo(const QUrl& url) const;
 
     void setSyncToBaloo(bool value);
 
@@ -112,7 +112,6 @@ public:
     void setSyncToDigikam(bool value);
 
     bool getSyncToDigikam() const;
-
 
 private:
 

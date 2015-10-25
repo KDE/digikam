@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-08-05
- * Description : Find Duplicates tree-view search album.
+ * Description : KDE file indexer interface.
  *
  * Copyright (C) 2014 by Veaeceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
@@ -31,15 +31,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-
-
-// KFile Metadata includes
 #include <kfilemetadata/usermetadata.h>
 
 // Local includes
 
 #include "digikam_debug.h"
-
 
 namespace Digikam
 {
@@ -61,20 +57,19 @@ public:
 QPointer<BalooWrap> BalooWrap::internalPtr = QPointer<BalooWrap>();
 
 BalooWrap::BalooWrap(QObject* const parent)
-    : QObject(parent), d(new BalooWrap::Private)
+    : QObject(parent),
+      d(new BalooWrap::Private)
 {
-
 }
 
 BalooWrap::~BalooWrap()
 {
-
     delete d;
 }
 
 bool BalooWrap::isCreated()
 {
-    return !(internalPtr.isNull());
+    return (!internalPtr.isNull());
 }
 
 BalooWrap* BalooWrap::instance()
@@ -105,36 +100,34 @@ void BalooWrap::setRating(const QUrl& url, int rating)
 
 void BalooWrap::setAllData(const QUrl& url, QStringList* const tags, QString* const comment, int rating)
 {
-
-    if(!d->syncFromDigikamToBaloo)
+    if (!d->syncFromDigikamToBaloo)
     {
         return;
     }
 
     KFileMetaData::UserMetaData md(url.path());
 
-    if(tags != NULL)
+    if (tags != NULL)
     {
         md.setTags(*tags);
     }
 
-    if(comment != NULL)
+    if (comment != NULL)
     {
         md.setUserComment(*comment);
     }
 
-    if(rating != -1)
+    if (rating != -1)
     {
         // digiKam store rating as value form 0 to 5
         // while baloo store it as value from 0 to 10
-        md.setRating(rating*2);
+        md.setRating(rating * 2);
     }
-
 }
 
-BalooInfo BalooWrap::getSemanticInfo(const QUrl& url)
+BalooInfo BalooWrap::getSemanticInfo(const QUrl& url) const
 {
-    if(!d->syncFromBalooToDigikam)
+    if (!d->syncFromBalooToDigikam)
     {
         return BalooInfo();
     }
@@ -145,10 +138,10 @@ BalooInfo BalooWrap::getSemanticInfo(const QUrl& url)
     BalooInfo bInfo;
 
     // Baloo have rating from 0 to 10, while digikam have only from 0 to 5
-    bInfo.rating     = md.rating()/2;
-    bInfo.comment    = md.userComment();
+    bInfo.rating  = md.rating() / 2;
+    bInfo.comment = md.userComment();
 
-    Q_FOREACH(QString tag, md.tags().toSet())
+    Q_FOREACH (QString tag, md.tags().toSet())
     {
         bInfo.tags.append(i18n("BalooTags/") + tag);
     }
