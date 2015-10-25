@@ -1813,25 +1813,15 @@ void EditorWindow::setupTempSaveFile(const QUrl& url)
 {
     // if the destination url is on local file system, try to set the temp file
     // location to the destination folder, otherwise use a local default
-    QString tempDir;
+    QString tempDir = url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile();
 
-    if (url.isLocalFile())
-    {
-#ifdef _WIN32
-        QUrl parent(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
-        tempDir = parent.toLocalFile();
-#else
-        tempDir = url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path();
-#endif
-    }
-    else
+    if (!url.isLocalFile() || tempDir.isEmpty())
     {
         tempDir = QDir::tempPath();
     }
 
-    QString path = url.path();
-    int lastDot  = path.lastIndexOf(QLatin1Char('.'));
-    QString suffix = path.mid(lastDot + 1);
+    QFileInfo fi(url.toLocalFile());
+    QString suffix = fi.suffix();
 
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext.saveTempFile = new SafeTemporaryFile(tempDir + QLatin1String("/EditorWindow-XXXXXX.digikamtempfile.") + suffix);
