@@ -66,7 +66,9 @@ public:
 UndoCache::UndoCache()
     : d(new Private)
 {
-    d->cacheDir    = QStandardPaths::locate(QStandardPaths::GenericCacheLocation, QLatin1Char('/') + QApplication::applicationName() + QLatin1Char('/'));
+    d->cacheDir    = QStandardPaths::locate(QStandardPaths::GenericCacheLocation,
+                                            QApplication::applicationName() + QLatin1Char('/'),
+                                            QStandardPaths::LocateDirectory);
 
     d->cachePrefix = QString::fromUtf8("%1undocache-%2")
                      .arg(d->cacheDir)
