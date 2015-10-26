@@ -7,6 +7,6 @@
 
 include_directories($<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>)
 
-set(lib3rdparty_SRCS kmemoryinfo.cpp)
+set(libkmemoryinfo_SRCS kmemoryinfo.cpp)
 
-add_library(3rdparty_src OBJECT ${lib3rdparty_SRCS})
+add_library(kmemoryinfo_src OBJECT ${libkmemoryinfo_SRCS})

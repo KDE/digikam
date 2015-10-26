@@ -19,7 +19,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:pgfutils_src>
             $<TARGET_OBJECTS:dthread_src>
             $<TARGET_OBJECTS:versionmanager_src>
-            $<TARGET_OBJECTS:3rdparty_src>
+            $<TARGET_OBJECTS:kmemoryinfo_src>
             $<TARGET_OBJECTS:dngwriter_src>
             $<TARGET_OBJECTS:kiowrapper_src>
             $<TARGET_OBJECTS:rawengine_srcs>
