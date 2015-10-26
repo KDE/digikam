@@ -1393,12 +1393,12 @@ QString CollectionManager::albumRootPath(int id)
 
 QUrl CollectionManager::albumRoot(const QUrl& fileUrl)
 {
-    return QUrl::fromLocalFile(albumRootPath(QUrl::fromLocalFile(fileUrl.toLocalFile()).adjusted(QUrl::StripTrailingSlash)));
+    return QUrl::fromLocalFile(albumRootPath(fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile()));
 }
 
 QString CollectionManager::albumRootPath(const QUrl& fileUrl)
 {
-    return albumRootPath(QUrl::fromLocalFile(fileUrl.toLocalFile()).adjusted(QUrl::StripTrailingSlash));
+    return albumRootPath(fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile());
 }
 
 QString CollectionManager::albumRootPath(const QString& givenPath)
