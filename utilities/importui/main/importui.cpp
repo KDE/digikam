@@ -2395,12 +2395,12 @@ void ImportUI::autoRotateItems()
 bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
                                const QDate& date, QString& errMsg) const
 {
-    QUrl u(parentURL);
-    u = u.adjusted(QUrl::StripTrailingSlash);
-    u.setPath(u.path() + QLatin1Char('/') + (sub));
+    QUrl url(parentURL);
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + QLatin1Char('/') + (sub));
 
     // first stat to see if the album exists
-    QFileInfo info(u.toLocalFile());
+    QFileInfo info(url.toLocalFile());
 
     if (info.exists())
     {
@@ -2428,13 +2428,14 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
     }
 
     // Create the album, with any parent albums required for the structure
-    QDir albumDir(parentURL.path());
+    QUrl albumUrl(parentURL);
 
     foreach (const QString& folder, sub.split(QLatin1Char('/'), QString::SkipEmptyParts))
     {
-        albumDir.cd(folder);
+        albumUrl = albumUrl.adjusted(QUrl::StripTrailingSlash);
+        albumUrl.setPath(albumUrl.path() + QLatin1Char('/') + (folder));
 
-        PAlbum* album = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(albumDir.path()));
+        PAlbum* album = AlbumManager::instance()->findPAlbum(albumUrl);
 
         if (!album)
         {
