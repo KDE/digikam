@@ -1,16 +1,20 @@
 # - Try to find the Marble Library
 # Once done this will define
 #
-#  MARBLE_FOUND - system has Marble
+#  MARBLE_FOUND       - system has Marble
 #  MARBLE_INCLUDE_DIR - the Marble include directory
-#  MARBLE_LIBRARIES
+#  MARBLE_LIBRARIES   - the marble core libraries
+#  ASTRO_LIBRARIES    - the marble astro libraries
+#
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
 IF ( MARBLE_INCLUDE_DIR AND MARBLE_LIBRARIES )
+
    # in cache already
    SET( MARBLE_FIND_QUIETLY TRUE )
+
 ENDIF ( MARBLE_INCLUDE_DIR AND MARBLE_LIBRARIES )
 
 FIND_PATH( MARBLE_INCLUDE_DIR NAMES marble/MarbleModel.h )
@@ -18,4 +22,10 @@ FIND_LIBRARY( MARBLE_LIBRARIES NAMES marblewidget-qt5 )
 FIND_LIBRARY( ASTRO_LIBRARIES NAMES astro )
 
 INCLUDE( FindPackageHandleStandardArgs )
+
 FIND_PACKAGE_HANDLE_STANDARD_ARGS( marble DEFAULT_MSG MARBLE_INCLUDE_DIR MARBLE_LIBRARIES ASTRO_LIBRARIES)
+
+MESSAGE(STATUS "MARBLE_FOUND       = ${MARBLE_FOUND}")
+MESSAGE(STATUS "MARBLE_INCLUDE_DIR = ${MARBLE_INCLUDE_DIR}")
+MESSAGE(STATUS "MARBLE_LIBRARIES   = ${MARBLE_LIBRARIES}")
+MESSAGE(STATUS "ASTRO_LIBRARIES    = ${ASTRO_LIBRARIES}")
