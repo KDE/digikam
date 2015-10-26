@@ -52,6 +52,8 @@ set(DBCONFIG_XML_VERSION "2")
 
 # =======================================================
 
+cmake_policy(SET CMP0063 NEW)
+
 set(CMAKE_MIN_VERSION   "2.8.12")
 set(ECM_MIN_VERSION     "1.7.0")
 set(KF5_VERSION         "5.1.0")
