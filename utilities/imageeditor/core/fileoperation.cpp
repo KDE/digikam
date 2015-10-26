@@ -109,6 +109,11 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
         }
     }
 
+    // remove dest file if it exist
+    if (orgPath != dest && QFile::exists(orgPath) && QFile::exists(dest))
+    {
+        QFile::remove(dest);
+    }
     // rename tmp file to dest
     // QFile::rename() takes care of QString -> bytestring encoding
     if (!QFile::rename(orgPath, dest))

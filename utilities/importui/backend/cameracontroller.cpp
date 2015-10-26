@@ -900,12 +900,27 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     // move the file to the destination file
     if (DMetadata::hasSidecar(temp))
     {
-        qCDebug(LOG_IMPORTUI) << "File" << temp << " has a sidecar, renaming it to " << DMetadata::sidecarPath(dest);
+        QString sctemp = DMetadata::sidecarPath(temp);
+        QString scdest = DMetadata::sidecarPath(dest);
 
-        if (!QFile::rename(DMetadata::sidecarPath(temp), DMetadata::sidecarPath(dest)))
+        qCDebug(LOG_IMPORTUI) << "File" << temp << " has a sidecar, renaming it to " << scdest;
+
+        // remove scdest file if it exist
+        if (sctemp != scdest && QFile::exists(sctemp) && QFile::exists(scdest))
+        {
+            QFile::remove(scdest);
+        }
+
+        if (!QFile::rename(sctemp, scdest))
         {
             sendLogMsg(xi18n("Failed to save sidecar file for <b>%1</b>", file), DHistoryView::ErrorEntry,  folder, file);
         }
+    }
+
+    // remove dest file if it exist
+    if (temp != dest && QFile::exists(temp) && QFile::exists(dest))
+    {
+        QFile::remove(dest);
     }
 
     if (!QFile::rename(temp, dest))
