@@ -116,7 +116,8 @@ option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debuggi
 
 ############## Find Packages ###################
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+find_package(Qt5 ${REQUIRED_QT_VERSION}
+             REQUIRED NO_MODULE COMPONENTS
              Core
              Concurrent
              Widgets
@@ -127,16 +128,22 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              WebKitWidgets
              DBus
 )
+             
+find_package(Qt5 ${REQUIRED_QT_VERSION}             
+             OPTIONAL_COMPONENTS
+             Multimedia
+             MultimediaWidgets
+)
+
+if(ENABLE_MEDIAPLAYER)
+    if(NOT Qt5Multimedia_FOUND OR NOT Qt5MultimediaWidgets_FOUND)
+        set(ENABLE_MEDIAPLAYER OFF)
+    endif()
+endif()
 
 if(BUILD_TESTING)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
                  Test)
-endif()
-
-if(ENABLE_MEDIAPLAYER)
-    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
-                 Multimedia
-                 MultimediaWidgets)
 endif()
 
 # Note : See include rules to patch later in this file to compile fine if new dependencies are added.
@@ -448,6 +455,9 @@ PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"          "http://liblqr.wikidot.com"   
 PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"                                      "(version >= 3.0.0)"                  "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                  "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"                                          "(version >= 1.8.0)"                  "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
+
+PRINT_OPTIONAL_QTMODULE_STATUS("Qt5 Multimedia"            Qt5Multimedia_FOUND)
+PRINT_OPTIONAL_QTMODULE_STATUS("Qt5 MultimediaWidgets"     Qt5MultimediaWidgets_FOUND)
 
 # ================================================================
 
