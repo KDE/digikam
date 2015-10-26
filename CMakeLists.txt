@@ -128,8 +128,8 @@ find_package(Qt5 ${REQUIRED_QT_VERSION}
              WebKitWidgets
              DBus
 )
-             
-find_package(Qt5 ${REQUIRED_QT_VERSION}             
+
+find_package(Qt5 ${REQUIRED_QT_VERSION}
              OPTIONAL_COMPONENTS
              Multimedia
              MultimediaWidgets
@@ -456,8 +456,10 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"  
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                  "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"                                          "(version >= 1.8.0)"                  "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
 
-PRINT_OPTIONAL_QTMODULE_STATUS("Qt5 Multimedia"            Qt5Multimedia_FOUND)
-PRINT_OPTIONAL_QTMODULE_STATUS("Qt5 MultimediaWidgets"     Qt5MultimediaWidgets_FOUND)
+if(ENABLE_MEDIAPLAYER)
+    PRINT_OPTIONAL_QTMODULE_STATUS("Qt5 Multimedia"        Qt5Multimedia_FOUND)
+    PRINT_OPTIONAL_QTMODULE_STATUS("Qt5 MultimediaWidgets" Qt5MultimediaWidgets_FOUND)
+endif()
 
 # ================================================================
 
