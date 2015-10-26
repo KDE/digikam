@@ -98,6 +98,7 @@ libboostgraph     >= 1.43.0                     http://www.boost.org/doc/libs
 libpgf            >= 6.11.24                    http://www.libpgf.org
 libexpat          >= 2.0.0                      http://expat.sourceforge.net
 libopencv         >= 2.4.9                      http://opencv.willowgarage.com
+libpthread        >= 2.0.0                      http://www.gnu.org/software/hurd/libpthread.html
 
 Optional:
 

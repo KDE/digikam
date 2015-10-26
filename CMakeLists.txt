@@ -146,9 +146,8 @@ if(BUILD_TESTING)
                  Test)
 endif()
 
-# Note : See include rules to patch later in this file to compile fine if new dependencies are added.
-
-find_package(KF5 REQUIRED COMPONENTS
+find_package(KF5 ${KF5_VERSION}
+             REQUIRED COMPONENTS
              XmlGui
              CoreAddons
              Config
@@ -161,6 +160,12 @@ find_package(KF5 REQUIRED COMPONENTS
              Solid
              IconThemes
              I18n
+)
+
+find_package(KF5 ${KF5_VERSION}
+             REQUIRED OPTIONAL_COMPONENTS
+             ItemModels            # For geolocation support (mandatory)
+             Bookmarks             # For geolocation support (optional)
 )
 
 # ==================================================================================================
@@ -220,13 +225,7 @@ DETECT_LIBKSANE(${KSANE_MIN_VERSION})
 find_package(Marble)
 
 if(MARBLE_FOUND)
-    # For geolocation
-
-    find_package(KF5 REQUIRED OPTIONAL_COMPONENTS
-                 ItemModels
-                 Bookmarks
-                )
-    #Note only KItemModels is mandatory, KBookmarks is optional in geolocation editor source code
+    # For geolocation : only KItemModels is mandatory, KBookmarks is optional in geolocation editor source code
     if(KF5ItemModels_FOUND)
         set(MARBLE_FOUND TRUE)
     else()
@@ -439,7 +438,7 @@ PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"           
 PRINT_LIBRARY_STATUS("libexiv2"               "http://www.exiv2.org"                                             "(version >= ${EXIV2_MIN_VERSION})"  EXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
 PRINT_LIBRARY_STATUS("libexpat"               "http://expat.sourceforge.net"                                     "(version >= 2.0.0)"                 EXPAT_FOUND)
-PRINT_LIBRARY_STATUS("native threads support" ""                                                                 ""                                   CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
+PRINT_LIBRARY_STATUS("libpthread"             "http://www.gnu.org/software/hurd/libpthread.html"                 "(version >= 2.0.0)"                 CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
 
 # ================================================================
 
