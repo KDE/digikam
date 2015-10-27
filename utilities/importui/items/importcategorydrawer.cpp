@@ -154,6 +154,9 @@ void ImportCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole
         case CamItemSortSettings::CategoryByFormat:
             textForFormat(index, &header, &subLine);
             break;
+        case CamItemSortSettings::CategoryByDate:
+            textForDate(index, &header, &subLine);
+            break;
     }
 
     p->setPen(qApp->palette().color(QPalette::HighlightedText));
@@ -184,7 +187,8 @@ void ImportCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* hea
     }
 
     CamItemInfo info     = sourceModel->retrieveCamItemInfo(index);
-    if(!info.isNull())
+
+    if (!info.isNull())
     {
         int count            = d->view->categoryRange(index).height();
         QStringList splitted = info.url().toLocalFile().split(QLatin1Char('/'));
@@ -198,20 +202,29 @@ void ImportCategoryDrawer::textForFormat(const QModelIndex& index, QString* head
 {
     QString format = index.data(ImportFilterModel::CategoryFormatRole).toString();
 
-    if(!format.isEmpty())
+    if (!format.isEmpty())
     {
-        format         = format.split(QLatin1Char('/')).at(1);
-        format         = ImageScanner::formatToString(format);
-        *header        = format;
+        format     = format.split(QLatin1Char('/')).at(1);
+        format     = ImageScanner::formatToString(format);
+        *header    = format;
     }
     else
     {
-        format         = i18n("Unknown Format");
-        *header        = format;
+        format     = i18n("Unknown Format");
+        *header    = format;
     }
 
     int count      = d->view->categoryRange(index).height();
     *subLine       = i18np("1 Item", "%1 Items", count);
+}
+
+void ImportCategoryDrawer::textForDate(const QModelIndex& index, QString* header, QString* subLine) const
+{
+    QDate date = index.data(ImportFilterModel::CategoryDateRole).toDate();
+
+    *header    = date.toString(QLatin1String("dd MMM yyyy"));
+    int count  = d->view->categoryRange(index).height();
+    *subLine   = i18np("1 Item", "%1 Items", count);
 }
 
 void ImportCategoryDrawer::updateRectsAndPixmaps(int width)

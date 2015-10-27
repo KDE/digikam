@@ -111,8 +111,11 @@ public:
         /// Returns the format of the index which is used for category.
         CategoryFormatRole           = ImportImageModel::FilterModelRoles + 3,
 
+        /// Returns the date of the index which is used for category.
+        CategoryDateRole             = ImportImageModel::FilterModelRoles + 4,
+
         /// Returns true if the given camera item is a group leader, and the group is opened.
-        //TODO: GroupIsOpenRole            = ImportImageModel::FilterModelRoles + 4
+        //TODO: GroupIsOpenRole            = ImportImageModel::FilterModelRoles + 5
         ImportFilterModelPointerRole = ImportImageModel::FilterModelRoles + 50
     };
 

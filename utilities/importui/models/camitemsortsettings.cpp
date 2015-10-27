@@ -111,6 +111,7 @@ Qt::SortOrder CamItemSortSettings::defaultSortOrderForCategorizationMode(Categor
         case NoCategories:
         case CategoryByFolder:
         case CategoryByFormat:
+        case CategoryByDate:
         default:
             return Qt::AscendingOrder;
     }
@@ -145,6 +146,8 @@ int CamItemSortSettings::compareCategories(const CamItemInfo& left, const CamIte
             return naturalCompare(left.folder, right.folder, currentCategorizationSortOrder, categorizationCaseSensitivity);
         case CategoryByFormat:
             return naturalCompare(left.mime, right.mime, currentCategorizationSortOrder, categorizationCaseSensitivity);
+        case CategoryByDate:
+            return compareByOrder(left.ctime.date(), right.ctime.date(), currentCategorizationSortOrder);
         default:
             return 0;
     }

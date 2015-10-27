@@ -290,6 +290,9 @@ QVariant ImportFilterModel::data(const QModelIndex& index, int role) const
         case CategoryFormatRole:
             return d->importImageModel->camItemInfoRef(mapToSource(index)).mime;
 
+        case CategoryDateRole:
+            return d->importImageModel->camItemInfoRef(mapToSource(index)).ctime;
+
         case ImportFilterModelPointerRole:
             return QVariant::fromValue(const_cast<ImportFilterModel*>(this));
     }
@@ -491,6 +494,8 @@ QString ImportFilterModel::categoryIdentifier(const CamItemInfo& info) const
             return info.folder;
         case CamItemSortSettings::CategoryByFormat:
             return info.mime;
+        case CamItemSortSettings::CategoryByDate:
+            return info.ctime.date().toString(Qt::ISODate);
         default:
             return QString();
     }

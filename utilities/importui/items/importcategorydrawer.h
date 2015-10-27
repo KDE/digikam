@@ -57,6 +57,7 @@ private:
     void updateRectsAndPixmaps(int width);
     void viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const;
     void textForFormat(const QModelIndex& index, QString* header, QString* subLine) const;
+    void textForDate(const QModelIndex& index, QString* header, QString* subLine) const;
 
 private:
 

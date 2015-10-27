@@ -60,4 +60,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 030 ==> 352458 - GPL2 and GPL3 De-Mazing methods not enabled (Configured) on Windows build.
 031 ==> 353927 - Missing local sources for libmediawiki.
 032 ==> 352056 - use standard icons instead of hardcoded icons.
-033 ==> 
+033 ==> 354324 - Add option to group by date during import [patch].
+034 ==> 

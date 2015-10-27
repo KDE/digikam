@@ -531,16 +531,19 @@ void ImportUI::setupActions()
 
     // map to CamItemSortSettings enum
     QAction* const noCategoriesAction  = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "Flat List"));
-    QAction* const CategoryByFolderAction = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Folder"));
+    QAction* const groupByFolderAction = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Folder"));
     QAction* const groupByFormatAction = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Format"));
+    QAction* const groupByDateAction =   d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Date"));
 
-    connect(noCategoriesAction,     SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(CategoryByFolderAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByFormatAction,    SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(noCategoriesAction,  SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(groupByFolderAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(groupByFormatAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(groupByDateAction,   SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
 
-    itemGroupMapper->setMapping(noCategoriesAction,     (int)CamItemSortSettings::NoCategories);
-    itemGroupMapper->setMapping(CategoryByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
-    itemGroupMapper->setMapping(groupByFormatAction,    (int)CamItemSortSettings::CategoryByFormat);
+    itemGroupMapper->setMapping(noCategoriesAction,  (int)CamItemSortSettings::NoCategories);
+    itemGroupMapper->setMapping(groupByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
+    itemGroupMapper->setMapping(groupByFormatAction, (int)CamItemSortSettings::CategoryByFormat);
+    itemGroupMapper->setMapping(groupByDateAction,   (int)CamItemSortSettings::CategoryByDate);
 
     d->itemsGroupAction->setCurrentItem(ImportSettings::instance()->getImageGroupMode());
 

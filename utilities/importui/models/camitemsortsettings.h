@@ -82,7 +82,8 @@ public:
     {
         NoCategories,
         CategoryByFolder,
-        CategoryByFormat
+        CategoryByFormat,
+        CategoryByDate
     };
 
     CategorizationMode  categorizationMode;
