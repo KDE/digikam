@@ -19,4 +19,4 @@
 
 #include "rawengine_debug.h"
 
-Q_LOGGING_CATEGORY(RAWENGINE_LOG, "RawEngine")
+Q_LOGGING_CATEGORY(RAWENGINE_LOG, "digikam.rawengine")

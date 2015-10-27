@@ -22,6 +22,10 @@
 
 #include <QLoggingCategory>
 
-Q_DECLARE_LOGGING_CATEGORY(RAWENGINE_LOG)
+// Local includes
+
+#include "digikam_export.h"
+
+DIGIKAM_EXPORT Q_DECLARE_LOGGING_CATEGORY(RAWENGINE_LOG)
 
 #endif // RAWENGINE_DEBUG_H
