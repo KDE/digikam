@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 #include "dimgpreviewitem.h"
 #include "imagezoomsettings.h"
 #include "paniconwidget.h"

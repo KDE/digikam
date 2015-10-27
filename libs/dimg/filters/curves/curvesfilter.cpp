@@ -27,7 +27,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {

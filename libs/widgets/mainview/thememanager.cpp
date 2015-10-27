@@ -50,7 +50,7 @@
 
 // Local includes
 
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 #include "dxmlguiwindow.h"
 
 namespace Digikam

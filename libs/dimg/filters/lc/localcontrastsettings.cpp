@@ -54,7 +54,7 @@
 
 #include "dexpanderbox.h"
 #include "dnuminput.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "dcombobox.h"
 
 namespace Digikam

@@ -58,7 +58,7 @@ extern "C"
 
 #include "digikam_config.h"
 #include "dimg.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"
 #include "tiffloader.h"     //krazy:exclude=includes

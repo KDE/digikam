@@ -39,7 +39,7 @@
 // Local includes
 
 #include "iccprofile.h"
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 #include "cietonguewidget.h"
 #include "metadatalistview.h"
 

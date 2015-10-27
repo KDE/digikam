@@ -41,7 +41,7 @@
 
 #include "dexpanderbox.h"
 #include "dnuminput.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "iccprofilescombobox.h"
 #include "iccprofileinfodlg.h"
 #include "iccsettings.h"

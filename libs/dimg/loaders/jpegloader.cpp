@@ -42,7 +42,7 @@ extern "C"
 
 #include "digikam_config.h"
 #include "dimg.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "dimgloaderobserver.h"
 
 #ifdef Q_CC_MSVC

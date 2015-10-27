@@ -9,7 +9,6 @@ kde_enable_exceptions()
 
 set(libdimg_SRCS
     dimg.cpp
-    dimg_debug.cpp
     drawdecoding.cpp
     dimgscale.cpp
     dcolor.cpp

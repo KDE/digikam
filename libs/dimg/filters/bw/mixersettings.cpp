@@ -49,7 +49,7 @@
 
 #include "dnuminput.h"
 #include "dexpanderbox.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 
 
 

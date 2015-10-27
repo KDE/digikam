@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "digikam_export.h"
 #include "digikam_globals.h"
 

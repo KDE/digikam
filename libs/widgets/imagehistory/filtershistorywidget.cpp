@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 #include "imagefiltershistorymodel.h"
 #include "imagefiltershistorytreeitem.h"
 #include "imagefiltershistoryitemdelegate.h"

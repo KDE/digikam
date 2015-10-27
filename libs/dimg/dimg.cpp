@@ -74,7 +74,7 @@ extern "C"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
 #include "randomnumbergenerator.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 
 #ifdef HAVE_JASPER
 #include "jp2kloader.h"

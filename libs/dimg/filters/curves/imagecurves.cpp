@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "curvescontainer.h"
 #include "filteraction.h"
 #include "digikam_globals.h"

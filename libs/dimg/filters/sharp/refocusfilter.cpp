@@ -36,7 +36,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "dcolor.h"
 #include "matrix.h"
 

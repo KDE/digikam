@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "digikam_config.h"
 #include "dimgfiltergenerator.h"
 #include "dimgbuiltinfilter.h"

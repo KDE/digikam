@@ -46,7 +46,7 @@ extern "C"
 // Local includes
 
 #include "metaengine.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "digikam_config.h"
 #include "digikam_version.h"
 #include "dimg.h"

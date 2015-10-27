@@ -62,7 +62,7 @@ extern "C"
 
 // Local includes
 
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "pgfutils.h"

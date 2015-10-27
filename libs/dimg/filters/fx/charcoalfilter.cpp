@@ -39,7 +39,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "blurfilter.h"
 #include "stretchfilter.h"
 #include "mixerfilter.h"

@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "nrestimate.h"
 #include "nrfilter.h"
 

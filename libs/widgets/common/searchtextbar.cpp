@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 #include "albumfiltermodel.h"
 #include "modelcompletion.h"
 

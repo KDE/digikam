@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 #include "dcursortracker.h"
 #include "thumbnailsize.h"
 

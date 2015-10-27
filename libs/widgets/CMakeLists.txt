@@ -26,7 +26,6 @@ set(libcommonwidgets_SRCS
     common/statesavingobject.cpp
     common/visibilitycontroller.cpp
     common/workingwidget.cpp
-    common/widgets_debug.cpp
     common/drawdecoderwidget.cpp
     common/dwidgetutils.cpp
     common/squeezedcombobox.cpp

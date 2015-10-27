@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"

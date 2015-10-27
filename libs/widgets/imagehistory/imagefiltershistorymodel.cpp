@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 #include "dimgfiltermanager.h"
 #include "dmetadata.h"
 #include "imagefiltershistorytreeitem.h"

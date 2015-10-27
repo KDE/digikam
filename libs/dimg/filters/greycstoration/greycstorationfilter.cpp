@@ -42,7 +42,7 @@
 
 // Local includes
 
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "dynamicthread.h"
 
 #define cimg_plugin "cimg/greycstoration.h"

@@ -39,7 +39,7 @@
 // Local includes
 
 #include "dnuminput.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "colorgradientwidget.h"
 #include "hspreviewwidget.h"
 #include "dhuesaturationselect.h"

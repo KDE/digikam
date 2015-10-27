@@ -93,7 +93,7 @@
 #include "drawdecoder.h"
 #include "dnuminput.h"
 #include "dcombobox.h"
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {

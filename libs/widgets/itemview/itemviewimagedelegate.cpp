@@ -44,7 +44,7 @@
 
 // Local includes
 
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 #include "imagepropertiestab.h"
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"

@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 
 #define HISTOGRAM_CALC_CUTOFF_MIN    0.1
 #define HISTOGRAM_CALC_CUTOFF_MAX    0.9

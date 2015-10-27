@@ -44,7 +44,7 @@
 // Local includes
 
 #include "dwidgetutils.h"
-#include "dimg_debug.h"
+#include "digikam_debug.h"
 #include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"

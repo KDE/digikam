@@ -50,7 +50,7 @@
 // Local includes
 
 #include "digikam_config.h"
-#include "widgets_debug.h"
+#include "digikam_debug.h"
 #include "iccprofile.h"
 
 namespace Digikam
