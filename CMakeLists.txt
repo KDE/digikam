@@ -514,8 +514,11 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Definitions rules
 
-    add_definitions(-DQT_USE_QSTRINGBUILDER -DQT_USE_FAST_OPERATOR_PLUS)
-
+    # Remove pedantic GCC flag which generate a lots of warnings on the console with qCDebug()
+    while(CMAKE_CXX_FLAGS MATCHES "-pedantic")
+        string(REPLACE "-pedantic" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    endwhile()
+    
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
 
