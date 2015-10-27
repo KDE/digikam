@@ -19,6 +19,8 @@ add_executable(digikamdatabaseserver ${digikamdatabaseserver_SRCS})
 target_link_libraries(digikamdatabaseserver
                       digikamdatabase
                       digikamcore
+                      
+                      libdng
 
                       Qt5::Sql
                       Qt5::DBus

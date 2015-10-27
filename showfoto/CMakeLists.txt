@@ -71,6 +71,8 @@ set_target_properties(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRE
 target_link_libraries(showfoto
                       PRIVATE
                       digikamcore
+                      
+                      libdng
 
                       Qt5::Core
 

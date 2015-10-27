@@ -464,7 +464,10 @@ set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURREN
 
 target_link_libraries(digikam
 
+                      digikamcore
                       digikamgui
+                      
+                      libdng
 
                       Qt5::Core
                       Qt5::Gui
