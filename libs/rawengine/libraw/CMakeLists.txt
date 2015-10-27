@@ -26,7 +26,6 @@ add_definitions(-DUSE_LCMS2)
 
 # -- Check dependencies --------------------------------------------------------------------------------
 
-# OpenMP library detection (requires CMake >= 2.6.3)
 # NOTE: OpenMP under MacOSX do not support multithreading.
 
 if(NOT APPLE)
@@ -41,6 +40,8 @@ if(NOT APPLE)
             set(OPENMP_LDFLAGS "-xopenmp")
         endif()
         message(STATUS "LibRaw will be compiled with OpenMP support")
+    else()
+        message(STATUS "LibRaw will not be compiled with OpenMP support")
     endif()
 endif()
 
@@ -50,6 +51,8 @@ if(JASPER_FOUND)
     add_definitions(-DUSE_JASPER)
     include_directories(${JASPER_INCLUDE_DIR})
     message(STATUS "LibRaw will be compiled with RedCine codec")
+else()
+    message(STATUS "LibRaw will not be compiled with RedCine codec")
 endif()
 
 # For RawSpeed Codec Support
@@ -71,10 +74,12 @@ endif()
 # Flag to use libjpeg with LibRaw DNG lossy codec
 
 if(JPEG8_FOUND)
-    message(STATUS "LibRaw will be compiled with DNG lossy codec")
     add_definitions(-DUSE_JPEG)
     add_definitions(-DUSE_JPEG8)
     include_directories(${JPEG_INCLUDE_DIR})
+    message(STATUS "LibRaw will be compiled with DNG lossy codec")
+else()
+    message(STATUS "LibRaw will not be compiled with DNG lossy codec")
 endif()
 
 if(JPEG8_FOUND AND LIBXML2_FOUND AND PTHREADS_FOUND)
@@ -84,16 +89,16 @@ if(JPEG8_FOUND AND LIBXML2_FOUND AND PTHREADS_FOUND)
 
 else()
 
-    IF (NOT JPEG8_FOUND)
-        message(STATUS "Libjpeg >= version 8 depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    if(NOT JPEG8_FOUND)
+        message(STATUS "LibRaw will not be compiled with RawSpeed codec. Libjpeg >= version 8 not found.")
     endif()
 
-    IF (NOT LIBXML2_FOUND)
-        message(STATUS "Libxml2 depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    if(NOT LIBXML2_FOUND)
+        message(STATUS "LibRaw will not be compiled with RawSpeed codec. Libxml2 not found.")
     endif()
 
-    IF (NOT PTHREADS_FOUND)
-        message(STATUS "Pthreads depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    if(NOT PTHREADS_FOUND)
+        message(STATUS "LibRaw will not be compiled with RawSpeed codec. Pthreads not found.")
     endif()
 
     set(RAWSPEED_SUPPORT_CAN_BE_COMPILED false)
