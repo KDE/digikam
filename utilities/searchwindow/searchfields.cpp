@@ -963,10 +963,6 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout* layout, int row, int c
         QHBoxLayout* const hbox1 = new QHBoxLayout;
         QHBoxLayout* const hbox2 = new QHBoxLayout;
 
-        layout->addLayout(hbox1, row, column);
-        layout->addWidget(m_betweenLabel, row, column + 1, Qt::AlignHCenter);
-        layout->addLayout(hbox2, row, column + 2);
-
         m_firstTimeEdit  = new QTimeEdit;
         m_secondTimeEdit = new QTimeEdit;
 
