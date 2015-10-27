@@ -96,7 +96,7 @@ else()
         message(STATUS "LibRaw will not be compiled with RawSpeed codec. Libxml2 not found.")
     endif()
 
-    if(NOT PTHREADS_FOUND)
+    if(NOT CMAKE_USE_PTHREADS_INIT AND NOT CMAKE_USE_WIN32_THREADS_INIT)
         message(STATUS "LibRaw will not be compiled with RawSpeed codec. Pthreads not found.")
     endif()
 
@@ -109,13 +109,10 @@ endif()
 if(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed
-                        ${LIBXML2_INCLUDE_DIR}
-                        ${PTHREADS_INCLUDE_DIR})
+                        ${LIBXML2_INCLUDE_DIR})
 
     # Flag to include RawSpeed codec with Libraw
-    add_definitions(-DUSE_RAWSPEED
-                    ${LIBXML2_DEFINITIONS}
-                    ${PTHREADS_DEFINITIONS})
+    add_definitions(-DUSE_RAWSPEED ${LIBXML2_DEFINITIONS})
 
     set(librawspeed_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/ArwDecoder.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/BitPumpJPEG.cpp
@@ -228,14 +225,14 @@ if(JASPER_FOUND)
 endif()
 
 if(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
-    target_link_libraries(libraw ${LIBXML2_LIBRARIES} ${PTHREADS_LIBRARY})
+    target_link_libraries(libraw ${LIBXML2_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
 # Registration of Libraw configuration to a dedicated header
 
-MACRO_BOOL_TO_01(JPEG8_FOUND LIBRAW_USE_DNGLOSSYCODEC)
-MACRO_BOOL_TO_01(OPENMP_FOUND LIBRAW_USE_OPENMP)
-MACRO_BOOL_TO_01(JASPER_FOUND LIBRAW_USE_REDCINECODEC)
+MACRO_BOOL_TO_01(JPEG8_FOUND                      LIBRAW_USE_DNGLOSSYCODEC)
+MACRO_BOOL_TO_01(OPENMP_FOUND                     LIBRAW_USE_OPENMP)
+MACRO_BOOL_TO_01(JASPER_FOUND                     LIBRAW_USE_REDCINECODEC)
 MACRO_BOOL_TO_01(RAWSPEED_SUPPORT_CAN_BE_COMPILED LIBRAW_USE_RAWSPEED)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw/libraw_config.h)
@@ -255,7 +252,7 @@ macro(LIBRAW_BUILD_SAMPLES)
 
     add_executable(${_target} ${${_target}_SRCS})
 
-    target_link_libraries(${_target} libraw ${OPENMP_LDFLAGS})
+    target_link_libraries(${_target} libraw ${OPENMP_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT})
 
     if(WIN32)
         target_link_libraries(${_target} ws2_32)
