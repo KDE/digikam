@@ -58,7 +58,6 @@ endif()
 # For RawSpeed Codec Support
 
 find_package(LibXml2)
-find_package(Pthreads)
 
 # JPEG library check
 
