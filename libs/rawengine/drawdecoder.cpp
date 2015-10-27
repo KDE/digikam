@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "rawengine_debug.h"
+#include "digikam_debug.h"
 #include "rawfiles.h"
 
 namespace RawEngine
@@ -84,16 +84,16 @@ bool DRawDecoder::loadEmbeddedPreview(QImage& image, const QString& path)
 
     if ( loadEmbeddedPreview(imgData, path) )
     {
-        qCDebug(RAWENGINE_LOG) << "Preview data size:" << imgData.size();
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "Preview data size:" << imgData.size();
 
         if (image.loadFromData( imgData ))
         {
-            qCDebug(RAWENGINE_LOG) << "Using embedded RAW preview extraction";
+            qCDebug(DIGIKAM_RAWENGINE_LOG) << "Using embedded RAW preview extraction";
             return true;
         }
     }
 
-    qCDebug(RAWENGINE_LOG) << "Failed to load embedded RAW preview";
+    qCDebug(DIGIKAM_RAWENGINE_LOG) << "Failed to load embedded RAW preview";
     return false;
 }
 
@@ -112,7 +112,7 @@ bool DRawDecoder::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -130,7 +130,7 @@ bool DRawDecoder::loadEmbeddedPreview(QByteArray& imgData, const QBuffer& buffer
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run open_buffer: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_buffer: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -147,7 +147,7 @@ bool DRawDecoder::loadHalfPreview(QImage& image, const QString& path)
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    qCDebug(RAWENGINE_LOG) << "Try to use reduced RAW picture extraction";
+    qCDebug(DIGIKAM_RAWENGINE_LOG) << "Try to use reduced RAW picture extraction";
 
     LibRaw raw;
     raw.imgdata.params.use_auto_wb   = 1;         // Use automatic white balance.
@@ -158,7 +158,7 @@ bool DRawDecoder::loadHalfPreview(QImage& image, const QString& path)
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -166,11 +166,11 @@ bool DRawDecoder::loadHalfPreview(QImage& image, const QString& path)
 
     if(!Private::loadHalfPreview(image, raw))
     {
-        qCDebug(RAWENGINE_LOG) << "Failed to get half preview from LibRaw!";
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "Failed to get half preview from LibRaw!";
         return false;
     }
 
-    qCDebug(RAWENGINE_LOG) << "Using reduced RAW picture extraction";
+    qCDebug(DIGIKAM_RAWENGINE_LOG) << "Using reduced RAW picture extraction";
 
     return true;
 }
@@ -184,14 +184,14 @@ bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QString& path)
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    qCDebug(RAWENGINE_LOG) << "Try to use reduced RAW picture extraction";
+    qCDebug(DIGIKAM_RAWENGINE_LOG) << "Try to use reduced RAW picture extraction";
 
     LibRaw raw;
     int ret = raw.open_file((const char*)(QFile::encodeName(path)).constData());
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -200,7 +200,7 @@ bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QString& path)
 
     if (!Private::loadHalfPreview(image, raw))
     {
-        qCDebug(RAWENGINE_LOG) << "DRawDecoder: failed to get half preview: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "DRawDecoder: failed to get half preview: " << libraw_strerror(ret);
         return false;
     }
 
@@ -221,7 +221,7 @@ bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer)
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -230,7 +230,7 @@ bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer)
 
     if (!Private::loadHalfPreview(image, raw))
     {
-        qCDebug(RAWENGINE_LOG) << "DRawDecoder: failed to get half preview: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "DRawDecoder: failed to get half preview: " << libraw_strerror(ret);
         return false;
     }
 
@@ -250,7 +250,7 @@ bool DRawDecoder::loadFullImage(QImage& image, const QString& path, const DRawDe
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    qCDebug(RAWENGINE_LOG) << "Try to load full RAW picture...";
+    qCDebug(DIGIKAM_RAWENGINE_LOG) << "Try to load full RAW picture...";
 
     DRawDecoderSettings prm = settings;
     prm.sixteenBitsImage    = false;
@@ -262,7 +262,7 @@ bool DRawDecoder::loadFullImage(QImage& image, const QString& path, const DRawDe
 
     if (!ret)
     {
-        qCDebug(RAWENGINE_LOG) << "Failled to load full RAW picture";
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "Failled to load full RAW picture";
         return false;
     }
 
@@ -291,7 +291,7 @@ bool DRawDecoder::loadFullImage(QImage& image, const QString& path, const DRawDe
         sptr += 3;
     }
 
-    qCDebug(RAWENGINE_LOG) << "Load full RAW picture done";
+    qCDebug(DIGIKAM_RAWENGINE_LOG) << "Load full RAW picture done";
 
     return true;
 }
@@ -312,7 +312,7 @@ bool DRawDecoder::rawFileIdentify(RawInfo& identify, const QString& path)
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -321,7 +321,7 @@ bool DRawDecoder::rawFileIdentify(RawInfo& identify, const QString& path)
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run adjust_sizes_info_only: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run adjust_sizes_info_only: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -356,7 +356,7 @@ bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, R
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -375,7 +375,7 @@ bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, R
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run unpack: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run unpack: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -392,7 +392,7 @@ bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, R
 
     if (ret != LIBRAW_SUCCESS)
     {
-        qCDebug(RAWENGINE_LOG) << "LibRaw: failed to run raw2image: " << libraw_strerror(ret);
+        qCDebug(DIGIKAM_RAWENGINE_LOG) << "LibRaw: failed to run raw2image: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }

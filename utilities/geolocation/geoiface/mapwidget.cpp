@@ -66,7 +66,7 @@
 #include "tracks.h"
 #include "placeholderwidget.h"
 #include "tilegrouper.h"
-#include "geoiface_debug.h"
+#include "digikam_debug.h"
 #include "abstractmarkertiler.h"
 #include "backendgooglemaps.h"
 #include "backendmarble.h"
@@ -450,7 +450,7 @@ bool MapWidget::setBackend(const QString& backendName)
     {
         if (backend->backendName() == backendName)
         {
-            qCDebug(GEOIFACE_LOG) << QString::fromLatin1("setting backend %1").arg(backendName);
+            qCDebug(DIGIKAM_GEOIFACE_LOG) << QString::fromLatin1("setting backend %1").arg(backendName);
             d->currentBackend     = backend;
             d->currentBackendName = backendName;
 
@@ -510,7 +510,7 @@ void MapWidget::applyCacheToBackend()
 
     setCenter(d->cacheCenterCoordinate);
     /// @todo Only do this if the zoom was changed!
-    qCDebug(GEOIFACE_LOG) << d->cacheZoom;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << d->cacheZoom;
     setZoom(d->cacheZoom);
     d->currentBackend->mouseModeChanged();
     d->currentBackend->regionSelectionChanged();
@@ -551,7 +551,7 @@ void MapWidget::setCenter(const GeoCoordinates& coordinate)
 
 void MapWidget::slotBackendReadyChanged(const QString& backendName)
 {
-    qCDebug(GEOIFACE_LOG) << QString::fromLatin1("backend %1 is ready!").arg(backendName);
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << QString::fromLatin1("backend %1 is ready!").arg(backendName);
 
     if (backendName != d->currentBackendName)
     {
@@ -1211,7 +1211,7 @@ GeoCoordinates::Pair MapWidget::getRegionSelection()
 
 void MapWidget::slotClustersMoved(const QIntList& clusterIndices, const QPair<int, QModelIndex>& snapTarget)
 {
-    qCDebug(GEOIFACE_LOG) << clusterIndices;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << clusterIndices;
 
     /// @todo We actually expect only one clusterindex
     int             clusterIndex      = clusterIndices.first();
@@ -1379,7 +1379,7 @@ void MapWidget::slotLazyReclusteringRequestCallBack()
  */
 void MapWidget::slotClustersClicked(const QIntList& clusterIndices)
 {
-    qCDebug(GEOIFACE_LOG)<<clusterIndices;
+    qCDebug(DIGIKAM_GEOIFACE_LOG)<<clusterIndices;
 
     if ((s->currentMouseMode == MouseModeZoomIntoGroup) ||
         (s->currentMouseMode == MouseModeRegionSelectionFromIcon) )

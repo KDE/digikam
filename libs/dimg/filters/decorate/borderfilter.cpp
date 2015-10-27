@@ -327,7 +327,7 @@ void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
     }
 
     DImg tmp2(width, height, tmp.sixteenBit(), tmp.hasAlpha());
-    qCDebug(LOG_DIMG) << "Border File:" << d->settings.borderPath;
+    qCDebug(DIGIKAM_DIMG_LOG) << "Border File:" << d->settings.borderPath;
     DImg border(d->settings.borderPath);
 
     if (border.isNull())
@@ -444,7 +444,7 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
     int w = d->settings.orgWidth + borderWidth * 2;
     int h = d->settings.orgHeight + borderWidth * 2;
 
-    qCDebug(LOG_DIMG) << "Border File:" << d->settings.borderPath;
+    qCDebug(DIGIKAM_DIMG_LOG) << "Border File:" << d->settings.borderPath;
     DImg border(d->settings.borderPath);
 
     if (border.isNull())

@@ -82,7 +82,7 @@ endif()
 
 if(KF5KFace_FOUND)
     include_directories(
-        $<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:KF5::KFace,INTERFACE_INCLUDE_DIRECTORIES>
     )
 endif()
 
@@ -169,7 +169,7 @@ if(OpenCV_FOUND)
     target_link_libraries(digikamcore PRIVATE ${OpenCV_LIBRARIES})
 endif()
 
-if(${KFILEMETADATA_FOUND})
+if(KF5FileMetaData_FOUND)
     target_link_libraries(digikamcore PRIVATE baloowrap)
 endif()
 
@@ -177,23 +177,20 @@ if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamcore PRIVATE Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
-if(APPLE)
-    target_link_libraries(digikamcore PUBLIC /System/Library/Frameworks/AppKit.framework)
+if(KF5KFace_FOUND)
+    target_link_libraries(digikamcore PRIVATE KF5::KFace)
 endif()
 
-if(${KF5KFace_FOUND})
-    target_link_libraries(digikamcore PRIVATE ${KF5KFace_LIBRARIES})
-endif()
-
-if(${KF5Sane_FOUND})
-    target_link_libraries(digikamcore
-                          PUBLIC
-                          ${LIBKSANE_LIBRARIES}
-                         )
+if(KF5Sane_FOUND)
+    target_link_libraries(digikamcore PUBLIC KF5::Sane)
 endif()
 
 if(KF5AkonadiContact_FOUND)
     target_link_libraries(digikamcore PRIVATE KF5::AkonadiContact)
+endif()
+
+if(APPLE)
+    target_link_libraries(digikamcore PUBLIC /System/Library/Frameworks/AppKit.framework)
 endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
@@ -283,7 +280,7 @@ if(ENABLE_MEDIAPLAYER)
        )
 endif()
 
-if(${KF5KFace_FOUND})
+if(KF5KFace_FOUND)
     set(libdigikamgui_SRCS
         ${libdigikamgui_SRCS}
         items/digikamimagefacedelegate.cpp
@@ -339,14 +336,14 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:dtrash_src>
 )
 
-if(${KF5Kipi_FOUND})
+if(KF5Kipi_FOUND)
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
         $<TARGET_OBJECTS:kipiiface_src>
     )
 endif()
 
-if(${KF5KFace_FOUND})
+if(KF5KFace_FOUND)
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
             $<TARGET_OBJECTS:facemanagement_src>
@@ -398,11 +395,11 @@ target_link_libraries(digikamgui
                       ${OpenCV_LIBRARIES}
 )
 
-if(${KF5KFace_FOUND})
-    target_link_libraries(digikamgui ${KF5KFace_LIBRARIES})
+if(KF5KFace_FOUND)
+    target_link_libraries(digikamgui KF5::KFace)
 endif()
 
-if(${KF5Kipi_FOUND})
+if(KF5Kipi_FOUND)
     target_link_libraries(digikamgui KF5::Kipi)
 endif()
 

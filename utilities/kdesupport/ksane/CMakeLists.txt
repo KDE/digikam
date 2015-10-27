@@ -19,5 +19,5 @@ include_directories(
 add_library(ksaneiface_src OBJECT ${ksaneiface_SRCS})
 add_library(ksaneiface STATIC $<TARGET_OBJECTS:ksaneiface_src>)
 
-target_link_libraries(ksaneiface PRIVATE ${LIBKSANE_LIBRARIES} KF5::I18n)
+target_link_libraries(ksaneiface PRIVATE KF5::Sane KF5::I18n)
 

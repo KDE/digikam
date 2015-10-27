@@ -327,7 +327,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // Finally, we trying to get thumbnail using DImg API (slow).
 
-    qCDebug(LOG_IMPORTUI) << "Use DImg loader to get thumbnail from : " << path;
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Use DImg loader to get thumbnail from : " << path;
 
     DImg dimgThumb;
     // skip loading the data we don't need to speed it up.
@@ -381,14 +381,14 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
     if (!sFile.open(QIODevice::ReadOnly))
     {
-        qCWarning(LOG_IMPORTUI) << "Failed to open source file for reading: " << src;
+        qCWarning(DIGIKAM_IMPORTUI_LOG) << "Failed to open source file for reading: " << src;
         return false;
     }
 
     if (!dFile.open(QIODevice::WriteOnly))
     {
         sFile.close();
-        qCWarning(LOG_IMPORTUI) << "Failed to open destination file for writing: " << dest;
+        qCWarning(DIGIKAM_IMPORTUI_LOG) << "Failed to open destination file for writing: " << dest;
         return false;
     }
 
@@ -486,14 +486,14 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     if (!sFile.open(QIODevice::ReadOnly))
     {
-        qCWarning(LOG_IMPORTUI) << "Failed to open source file for reading: " << src;
+        qCWarning(DIGIKAM_IMPORTUI_LOG) << "Failed to open source file for reading: " << src;
         return false;
     }
 
     if (!dFile.open(QIODevice::WriteOnly))
     {
         sFile.close();
-        qCWarning(LOG_IMPORTUI) << "Failed to open destination file for writing: " << dest;
+        qCWarning(DIGIKAM_IMPORTUI_LOG) << "Failed to open destination file for writing: " << dest;
         return false;
     }
 

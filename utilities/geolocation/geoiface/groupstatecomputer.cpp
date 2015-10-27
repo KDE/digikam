@@ -28,7 +28,7 @@
 
 #include "groupstatecomputer.h"
 #include "geoiface_types.h"
-#include "geoiface_debug.h"
+#include "digikam_debug.h"
 
 namespace GeoIface
 {

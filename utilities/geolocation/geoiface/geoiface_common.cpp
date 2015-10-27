@@ -35,7 +35,7 @@
 // local includes
 
 #include "backends/mapbackend.h"
-#include "geoiface_debug.h"
+#include "digikam_debug.h"
 
 namespace GeoIface
 {
@@ -127,7 +127,7 @@ QPixmap GeoIfaceGlobalObject::getStandardMarkerPixmap()
 QUrl GeoIfaceGlobalObject::locateDataFile(const QString filename)
 {
     const QUrl dataFile = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/geoiface/") + filename));
-    qCDebug(GEOIFACE_LOG) << "located data: " << dataFile;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "located data: " << dataFile;
     return dataFile;
 }
 
@@ -276,7 +276,7 @@ GeoCoordinates::PairList GeoIfaceHelperNormalizeBounds(const GeoCoordinates::Pai
     const qreal bEast  = boundsPair.second.lon();
     const qreal bNorth = boundsPair.second.lat();
     const qreal bSouth = boundsPair.first.lat();
-//     qCDebug(GEOIFACE_LOG) << bWest << bEast << bNorth << bSouth;
+//     qCDebug(DIGIKAM_GEOIFACE_LOG) << bWest << bEast << bNorth << bSouth;
 
     if (bEast<bWest)
     {
@@ -288,7 +288,7 @@ GeoCoordinates::PairList GeoIfaceHelperNormalizeBounds(const GeoCoordinates::Pai
         boundsList << GeoCoordinates::makePair(bSouth, bWest, bNorth, bEast);
     }
 
-//     qCDebug(GEOIFACE_LOG) << boundsList;
+//     qCDebug(DIGIKAM_GEOIFACE_LOG) << boundsList;
     return boundsList;
 }
 
@@ -394,7 +394,7 @@ void GeoIfaceGlobalObject::clearWidgetPool()
     while (!d->internalMapWidgetsPool.isEmpty())
     {
         GeoIfaceInternalWidgetInfo info = d->internalMapWidgetsPool.takeLast();
-        qCDebug(GEOIFACE_LOG) << info.backendName << info.deleteFunction;
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << info.backendName << info.deleteFunction;
 
         if (info.deleteFunction)
         {
@@ -409,7 +409,7 @@ void GeoIface_assert(const char* const condition, const char* const filename, co
 {
     const QString debugString = QString::fromLatin1( "ASSERT: %1 - %2:%3").arg(QLatin1String( condition )).arg(QLatin1String( filename )).arg(lineNumber);
 
-    qCDebug(GEOIFACE_LOG) << debugString;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << debugString;
 }
 
 } /* namespace GeoIface */

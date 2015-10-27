@@ -258,7 +258,7 @@ bool MetaEngine::loadFromData(const QByteArray& imgData) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -314,7 +314,7 @@ bool MetaEngine::load(const QString& filePath) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #ifdef _XMP_SUPPORT_
@@ -345,7 +345,7 @@ bool MetaEngine::load(const QString& filePath) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #endif // _XMP_SUPPORT_
@@ -374,7 +374,7 @@ bool MetaEngine::save(const QString& imageFilePath) const
 
     if (givenFileInfo.isSymLink())
     {
-        qCDebug(LOG_METADATA) << "filePath" << imageFilePath << "is a symlink."
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "filePath" << imageFilePath << "is a symlink."
                                << "Using target" << givenFileInfo.canonicalPath();
 
         regularFilePath = givenFileInfo.canonicalPath();// Walk all the symlinks
@@ -386,7 +386,7 @@ bool MetaEngine::save(const QString& imageFilePath) const
 
     if (!dinfo.isWritable())
     {
-        qCDebug(LOG_METADATA) << "Dir '" << dinfo.filePath() << "' is read-only. Metadata not saved.";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Dir '" << dinfo.filePath() << "' is read-only. Metadata not saved.";
         return false;
     }
 
@@ -396,7 +396,7 @@ bool MetaEngine::save(const QString& imageFilePath) const
     bool writtenToFile                   = false;
     bool writtenToSidecar                = false;
 
-    qCDebug(LOG_METADATA) << "MetaEngine::metadataWritingMode" << d->metadataWritingMode;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "MetaEngine::metadataWritingMode" << d->metadataWritingMode;
 
     switch(d->metadataWritingMode)
     {
@@ -418,23 +418,23 @@ bool MetaEngine::save(const QString& imageFilePath) const
 
     if (writeToFile)
     {
-        qCDebug(LOG_METADATA) << "Will write Metadata to file" << finfo.absoluteFilePath();
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Will write Metadata to file" << finfo.absoluteFilePath();
         writtenToFile = d->saveToFile(finfo);
 
         if (writeToFile)
         {
-            qCDebug(LOG_METADATA) << "Metadata for file" << finfo.fileName() << "written to file.";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "Metadata for file" << finfo.fileName() << "written to file.";
         }
     }
 
     if (writeToSidecar || (writeToSidecarIfFileNotPossible && !writtenToFile))
     {
-        qCDebug(LOG_METADATA) << "Will write XMP sidecar for file" << givenFileInfo.fileName();
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Will write XMP sidecar for file" << givenFileInfo.fileName();
         writtenToSidecar = d->saveToXMPSidecar(imageFilePath);
 
         if (writtenToSidecar)
         {
-            qCDebug(LOG_METADATA) << "Metadata for file '" << givenFileInfo.fileName() << "' written to XMP sidecar.";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "Metadata for file '" << givenFileInfo.fileName() << "' written to XMP sidecar.";
         }
     }
 
@@ -445,7 +445,7 @@ bool MetaEngine::applyChanges() const
 {
     if (d->filePath.isEmpty())
     {
-        qCDebug(LOG_METADATA) << "Failed to apply changes: file path is empty!";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Failed to apply changes: file path is empty!";
         return false;
     }
 

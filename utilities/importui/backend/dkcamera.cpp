@@ -181,14 +181,14 @@ void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta
 
 void DKCamera::printSupportedFeatures()
 {
-    qCDebug(LOG_IMPORTUI) << "Supported features for" << title();
-    qCDebug(LOG_IMPORTUI) << "  Thumbnails:" << thumbnailSupport();
-    qCDebug(LOG_IMPORTUI) << "  Delete:" << deleteSupport();
-    qCDebug(LOG_IMPORTUI) << "  Delete dir:" << delDirSupport();
-    qCDebug(LOG_IMPORTUI) << "  Upload:" << uploadSupport();
-    qCDebug(LOG_IMPORTUI) << "  Mkdir:" << mkDirSupport();
-    qCDebug(LOG_IMPORTUI) << "  Image capture:" << captureImageSupport();
-    qCDebug(LOG_IMPORTUI) << "  Image capture preview (liveview):" << captureImagePreviewSupport();
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Supported features for" << title();
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Thumbnails:" << thumbnailSupport();
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Delete:" << deleteSupport();
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Delete dir:" << delDirSupport();
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Upload:" << uploadSupport();
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Mkdir:" << mkDirSupport();
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Image capture:" << captureImageSupport();
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Image capture preview (liveview):" << captureImagePreviewSupport();
 }
 
 }  // namespace Digikam

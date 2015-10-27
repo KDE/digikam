@@ -73,7 +73,7 @@ void StretchFilter::stretchContrastImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        qCDebug(LOG_DIMG) << "Ref. image and Org. has different bits depth";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Ref. image and Org. has different bits depth";
         return;
     }
 
@@ -87,7 +87,7 @@ void StretchFilter::stretchContrastImage()
     QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage));
     if (histogram.isNull())
     {
-        qCWarning(LOG_DIMG) << ("Unable to allocate memory!");
+        qCWarning(DIGIKAM_DIMG_LOG) << ("Unable to allocate memory!");
         return;
     }
     histogram->calculate();
@@ -97,7 +97,7 @@ void StretchFilter::stretchContrastImage()
 
     if (normalize_map.isNull())
     {
-        qCWarning(LOG_DIMG) << ("Unable to allocate memory!");
+        qCWarning(DIGIKAM_DIMG_LOG) << ("Unable to allocate memory!");
         return;
     }
 

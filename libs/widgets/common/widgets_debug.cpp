@@ -19,4 +19,4 @@
 
 #include "widgets_debug.h"
 
-Q_LOGGING_CATEGORY(LOG_WIDGETS, "digikam.widgets")
+Q_LOGGING_CATEGORY(DIGIKAM_WIDGETS_LOG, "digikam.widgets")

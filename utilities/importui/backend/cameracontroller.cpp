@@ -152,18 +152,18 @@ CameraController::CameraController(QWidget* const parent,
     if (path.startsWith(QLatin1String("camera:/")))
     {
         QUrl url(path);
-        qCDebug(LOG_IMPORTUI) << "path " << path << " " << url <<  " " << url.host();
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "path " << path << " " << url <<  " " << url.host();
         QString xport = url.host();
 
         if (xport.startsWith(QLatin1String("usb:")))
         {
-            qCDebug(LOG_IMPORTUI) << "xport " << xport;
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "xport " << xport;
             QRegExp x = QRegExp(QLatin1String("(usb:[0-9,]*)"));
 
             if (x.indexIn(xport) != -1)
             {
                 QString usbport = x.cap(1);
-                qCDebug(LOG_IMPORTUI) << "USB " << xport << " " << usbport;
+                qCDebug(DIGIKAM_IMPORTUI_LOG) << "USB " << xport << " " << usbport;
                 
                 //if ((xport == usbport) || ((count == 1) && (xport == "usb:")))
                 //{
@@ -618,7 +618,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             tempURL = KIOWrapper::upUrl(tempURL);
             tempURL = tempURL.adjusted(QUrl::StripTrailingSlash);
             tempURL.setPath(tempURL.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp1-%1").arg(getpid()).append(file)));
-            qCDebug(LOG_IMPORTUI) << "Downloading: " << file << " using (" << tempURL << ")";
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Downloading: " << file << " using (" << tempURL << ")";
             QString temp = tempURL.toLocalFile();
 
             bool result  = d->camera->downloadItem(folder, file, tempURL.toLocalFile());
@@ -634,7 +634,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
 
-                qCDebug(LOG_IMPORTUI) << "Set metadata from: " << file << " using (" << tempURL << ")";
+                qCDebug(DIGIKAM_IMPORTUI_LOG) << "Set metadata from: " << file << " using (" << tempURL << ")";
                 DMetadata metadata(tempURL.toLocalFile());
 
                 metadata.setExifTagString("Exif.Image.DocumentName", QFileInfo(dest).fileName());
@@ -664,7 +664,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 if (!templateTitle.isNull() && !templateTitle.isEmpty())
                 {
                     TemplateManager* const tm = TemplateManager::defaultManager();
-                    qCDebug(LOG_IMPORTUI) << "Metadata template title : " << templateTitle;
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Metadata template title : " << templateTitle;
 
                     if (tm && templateTitle == Template::removeTemplateTitle())
                     {
@@ -694,11 +694,11 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     // When converting a file, we need to set the new format extension..
                     // The new extension is already set in importui.cpp.
                     
-                    qCDebug(LOG_IMPORTUI) << "Convert to LossLess: " << file << " using (" << tempURL << ")  destination: " << dest;
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert to LossLess: " << file << " using (" << tempURL << ")  destination: " << dest;
 
                     if (!JPEGUtils::jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))
                     {
-                        qCDebug(LOG_IMPORTUI) << "  Convert failed?! eh";
+                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Convert failed?! eh";
                         // convert failed. delete the temp file
                         unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
                         unlink(QFile::encodeName(tempURL2.toLocalFile()).constData());
@@ -706,7 +706,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     }
                     else
                     {
-                        qCDebug(LOG_IMPORTUI) << "  Done, removing the temp file: " << tempURL;
+                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Done, removing the temp file: " << tempURL;
                         // Else remove only the first temp file.
                         unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
                     }
@@ -785,7 +785,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
         default:
         {
-            qCWarning(LOG_IMPORTUI) << " unknown action specified";
+            qCWarning(DIGIKAM_IMPORTUI_LOG) << " unknown action specified";
             break;
         }
     }
@@ -794,7 +794,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType type,
                                   const QString& folder, const QString& file)
 {
-    qCDebug(LOG_IMPORTUI) << "Log (" << file << " " << folder << ": " << msg;
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Log (" << file << " " << folder << ": " << msg;
 
     if (!d->canceled)
     {
@@ -903,7 +903,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         QString sctemp = DMetadata::sidecarPath(temp);
         QString scdest = DMetadata::sidecarPath(dest);
 
-        qCDebug(LOG_IMPORTUI) << "File" << temp << " has a sidecar, renaming it to " << scdest;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "File" << temp << " has a sidecar, renaming it to " << scdest;
 
         // remove scdest file if it exist
         if (sctemp != scdest && QFile::exists(sctemp) && QFile::exists(scdest))
@@ -925,7 +925,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
     if (!QFile::rename(temp, dest))
     {
-        qCDebug(LOG_IMPORTUI) << "Renaming " << temp << " to " << dest << " failed";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Renaming " << temp << " to " << dest << " failed";
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp).constData());
         emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
@@ -933,7 +933,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     }
     else
     {
-        qCDebug(LOG_IMPORTUI) << "Rename done, emiting downloaded signals:" << file << " info.filename: " << info.fileName();
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Rename done, emiting downloaded signals:" << file << " info.filename: " << info.fileName();
         // TODO why two signals??
         emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
@@ -941,7 +941,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         // Run script
         if (!script.isEmpty())
         {
-            qCDebug(LOG_IMPORTUI) << "Got a script, processing: " << script;
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Got a script, processing: " << script;
             KProcess process;
 
             process.setOutputChannelMode(KProcess::SeparateChannels);
@@ -963,7 +963,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
             }
 
             process.setShellCommand(s);
-            qCDebug(LOG_IMPORTUI) << "Running: " << s;
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Running: " << s;
             int ret = process.execute();
 
             if (ret != 0)
@@ -971,8 +971,8 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
                 sendLogMsg(xi18n("Failed to run script for <b>%1</b>", file), DHistoryView::ErrorEntry,  folder, file);
             }
 
-            qCDebug(LOG_IMPORTUI) << "stdout" << process.readAllStandardOutput();
-            qCDebug(LOG_IMPORTUI) << "stderr" << process.readAllStandardError();
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "stdout" << process.readAllStandardOutput();
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "stderr" << process.readAllStandardError();
         }
     }
 }
@@ -1190,7 +1190,7 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
     cmd->map.insert(QLatin1String("destFile"),    QVariant(destFile));
     cmd->map.insert(QLatin1String("destFolder"),  QVariant(destFolder));
     addCommand(cmd);
-    qCDebug(LOG_IMPORTUI) << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder
                           << "' (" << destFile << ")";
 }
 

@@ -126,7 +126,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
                                           QString::fromLatin1("digikam/metadata/topicset.iptc-subjectcode.xml"));
     
     if (!loadSubjectCodesFromXML(QUrl::fromLocalFile(path)))
-        qCDebug(LOG_WIDGETS) << "Cannot load IPTC/NAA subject codes XML database";
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "Cannot load IPTC/NAA subject codes XML database";
 
     // --------------------------------------------------------
 

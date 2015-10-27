@@ -352,7 +352,7 @@ void CountrySelector::setCountry(const QString& countryCode)
 
     setCurrentIndex(id);
 
-    qCDebug(LOG_WIDGETS) << count() << " :: " << id;
+    qCDebug(DIGIKAM_WIDGETS_LOG) << count() << " :: " << id;
 }
 
 bool CountrySelector::country(QString& countryCode, QString& countryName) const

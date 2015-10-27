@@ -1499,7 +1499,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     if (!pAlbum)
     {
-        qCDebug(LOG_IMPORTUI) << "Destination Album is null";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Destination Album is null";
         return;
     }
 
@@ -1672,7 +1672,7 @@ void ImportUI::slotUpdateDownloadName()
     foreach (CamItemInfo info, list)
     {
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
-        qCDebug(LOG_IMPORTUI) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
 
         QString newName = info.name;
 
@@ -1726,7 +1726,7 @@ void ImportUI::slotUpdateDownloadName()
 
         refInfo.downloadName = newName;
 
-        qCDebug(LOG_IMPORTUI) << "slotDownloadNameChanged, new: " << refInfo.downloadName;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "slotDownloadNameChanged, new: " << refInfo.downloadName;
     }
 
     d->view->updateIconView();
@@ -2091,7 +2091,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         if (settings.autoRotate)
         {
             d->autoRotateItemsList << downloadUrl.toLocalFile();
-            qCDebug(LOG_IMPORTUI) << "autorotating for " << downloadUrl;
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "autorotating for " << downloadUrl;
         }
 
         ++downloadedItems;

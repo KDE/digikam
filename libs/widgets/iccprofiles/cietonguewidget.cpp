@@ -236,7 +236,7 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* const parent, cmsHPROFIL
     dkCmsCloseProfile(hXYZProfile);
 
     if (d->hXFORM == NULL)
-        qCDebug(LOG_WIDGETS) << "Wrong d->hXFORM" ;
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "Wrong d->hXFORM" ;
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
@@ -331,7 +331,7 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
     dkCmsTakeMediaWhitePoint(&(d->MediaWhite), hProfile);
     cmsCIExyY White;
     dkCmsXYZ2xyY(&White, &(d->MediaWhite));
-    qCDebug(LOG_WIDGETS) << "Profile white point : x=" << White.x << " y=" << White.y << " Y=" << White.Y;
+    qCDebug(DIGIKAM_WIDGETS_LOG) << "Profile white point : x=" << White.x << " y=" << White.y << " Y=" << White.Y;
 
     // Get the colorant matrix.
 
@@ -346,12 +346,12 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
         if (dkCmsReadICCMatrixRGB2XYZ(&Mat, hProfile))
         {
 #if defined(USE_LCMS_VERSION_1000)
-            qCDebug(LOG_WIDGETS) << "dkCmsReadICCMatrixRGB2XYZ(1): " \
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "dkCmsReadICCMatrixRGB2XYZ(1): " \
             << "[" << Mat.v[0].n[0] << ", " << Mat.v[0].n[1] << ", " << Mat.v[0].n[2] << "]" \
             << "[" << Mat.v[1].n[0] << ", " << Mat.v[1].n[1] << ", " << Mat.v[1].n[2] << "]" \
             << "[" << Mat.v[2].n[0] << ", " << Mat.v[2].n[1] << ", " << Mat.v[2].n[2] << "]" ;
 #else
-            qCDebug(LOG_WIDGETS) << "dkCmsReadICCMatrixRGB2XYZ(2): " \
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "dkCmsReadICCMatrixRGB2XYZ(2): " \
             << "[" << Mat.Red.X << ", " << Mat.Red.Y << ", " << Mat.Red.Z << "]" \
             << "[" << Mat.Green.X << ", " << Mat.Green.Y << ", " << Mat.Green.Z << "]" \
             << "[" << Mat.Blue.X << ", " << Mat.Blue.Y << ", " << Mat.Blue.Z << "]" ;
@@ -365,21 +365,21 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
                 tmp.X = Mat.v[0].n[0];
                 tmp.Y = Mat.v[1].n[0];
                 tmp.Z = Mat.v[2].n[0];
-                qCDebug(LOG_WIDGETS) << "d->Primaries.Red   : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
+                qCDebug(DIGIKAM_WIDGETS_LOG) << "d->Primaries.Red   : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Red), &tmp);
 
                 tmp.X = Mat.v[0].n[1];
                 tmp.Y = Mat.v[1].n[1];
                 tmp.Z = Mat.v[2].n[1];
-                qCDebug(LOG_WIDGETS) << "d->Primaries.Green : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
+                qCDebug(DIGIKAM_WIDGETS_LOG) << "d->Primaries.Green : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Green), &tmp);
 
                 tmp.X = Mat.v[0].n[2];
                 tmp.Y = Mat.v[1].n[2];
                 tmp.Z = Mat.v[2].n[2];
-                qCDebug(LOG_WIDGETS) << "d->Primaries.Blue  : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
+                qCDebug(DIGIKAM_WIDGETS_LOG) << "d->Primaries.Blue  : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
 #else
@@ -388,21 +388,21 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
                 tmp.X = Mat.Red.X;
                 tmp.Y = Mat.Green.X;
                 tmp.Z = Mat.Blue.X;
-                qCDebug(LOG_WIDGETS) << "d->Primaries.Red   : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
+                qCDebug(DIGIKAM_WIDGETS_LOG) << "d->Primaries.Red   : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Red), &tmp);
 
                 tmp.X = Mat.Red.Y;
                 tmp.Y = Mat.Green.Y;
                 tmp.Z = Mat.Blue.Y;
-                qCDebug(LOG_WIDGETS) << "d->Primaries.Green : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
+                qCDebug(DIGIKAM_WIDGETS_LOG) << "d->Primaries.Green : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Green), &tmp);
 
                 tmp.X = Mat.Red.Z;
                 tmp.Y = Mat.Green.Z;
                 tmp.Z = Mat.Blue.Z;
-                qCDebug(LOG_WIDGETS) << "d->Primaries.Blue  : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
+                qCDebug(DIGIKAM_WIDGETS_LOG) << "d->Primaries.Blue  : X=" << tmp.X << " Y=" << tmp.Y << " Z=" << tmp.Z;
                 // ScaleToWhite(&MediaWhite, &tmp);
                 dkCmsXYZ2xyY(&(d->Primaries.Blue), &tmp);
 #endif

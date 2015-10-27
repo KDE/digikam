@@ -179,7 +179,7 @@ void FilterActionFilter::filterImage()
 
     foreach(const FilterAction& action, d->actions)
     {
-        qCDebug(LOG_DIMG) << "Replaying action" << action.identifier();
+        qCDebug(DIGIKAM_DIMG_LOG) << "Replaying action" << action.identifier();
 
         if (action.isNull())
         {

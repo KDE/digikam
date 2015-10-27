@@ -258,7 +258,7 @@ void SearchesJob::run()
     {
         if (m_jobInfo.albumsIds().isEmpty() && m_jobInfo.tagsIds().isEmpty())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "No album ids passed for duplicates search";
+            qCDebug(DIGIKAM_DBJOB_LOG) << "No album ids passed for duplicates search";
             return;
         }
 

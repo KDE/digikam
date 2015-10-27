@@ -24,6 +24,10 @@
 
 #include <QLoggingCategory>
 
-Q_DECLARE_LOGGING_CATEGORY(LOG_WIDGETS)
+// Local includes
+
+#include "digikam_export.h"
+
+DIGIKAM_EXPORT Q_DECLARE_LOGGING_CATEGORY(DIGIKAM_WIDGETS_LOG)
 
 #endif // WIDGETS_DEBUG_H

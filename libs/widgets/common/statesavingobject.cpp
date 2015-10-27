@@ -53,7 +53,7 @@ public:
 
         if (host->objectName().isEmpty())
         {
-            qCWarning(LOG_WIDGETS) << "Object name for " << host
+            qCWarning(DIGIKAM_WIDGETS_LOG) << "Object name for " << host
                        << " is empty. Returning the default config group";
         }
 
@@ -106,7 +106,7 @@ public:
 
         if (depth == StateSavingObject::DIRECT_CHILDREN)
         {
-            //qCDebug(LOG_WIDGETS) << "Also restoring " << action << " of direct children";
+            //qCDebug(DIGIKAM_WIDGETS_LOG) << "Also restoring " << action << " of direct children";
             for (QObjectList::const_iterator childIt = host->children().begin();
                  childIt != host->children().end(); ++childIt)
             {
@@ -127,7 +127,7 @@ public:
         }
         else if (depth == StateSavingObject::RECURSIVE)
         {
-            //qCDebug(LOG_WIDGETS) << "Also " << action << " state of all children (recursive)";
+            //qCDebug(DIGIKAM_WIDGETS_LOG) << "Also " << action << " state of all children (recursive)";
             recurse(host->children(), save);
         }
     }
@@ -167,7 +167,7 @@ void StateSavingObject::setStateSavingDepth(const StateSavingObject::StateSaving
 
 void StateSavingObject::setConfigGroup(const KConfigGroup& group)
 {
-    //qCDebug(LOG_WIDGETS) << "received new config group: " << group.name();
+    //qCDebug(DIGIKAM_WIDGETS_LOG) << "received new config group: " << group.name();
     d->group    = group;
     d->groupSet = true;
 }
@@ -179,7 +179,7 @@ void StateSavingObject::setEntryPrefix(const QString& prefix)
 
 void StateSavingObject::loadState()
 {
-    //qCDebug(LOG_WIDGETS) << "Loading state";
+    //qCDebug(DIGIKAM_WIDGETS_LOG) << "Loading state";
 
     doLoadState();
 
@@ -188,7 +188,7 @@ void StateSavingObject::loadState()
 
 void StateSavingObject::saveState()
 {
-    //qCDebug(LOG_WIDGETS) << "Saving state";
+    //qCDebug(DIGIKAM_WIDGETS_LOG) << "Saving state";
 
     doSaveState();
 
@@ -199,13 +199,13 @@ KConfigGroup StateSavingObject::getConfigGroup() const
 {
     if (!d->groupSet)
     {
-        //qCDebug(LOG_WIDGETS) << "No config group set, returning one based on object name";
+        //qCDebug(DIGIKAM_WIDGETS_LOG) << "No config group set, returning one based on object name";
         return d->getGroupFromObjectName();
     }
 
     if (!d->group.isValid())
     {
-        qCWarning(LOG_WIDGETS) << "KConfigGroup set via setConfigGroup is invalid. "
+        qCWarning(DIGIKAM_WIDGETS_LOG) << "KConfigGroup set via setConfigGroup is invalid. "
                    << "Using object name based group.";
         return d->getGroupFromObjectName();
     }

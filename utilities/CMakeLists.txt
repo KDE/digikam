@@ -18,7 +18,7 @@ add_subdirectory(searchwindow)
 add_subdirectory(metadataedit)
 add_subdirectory(kdesupport)
 
-if(${KF5KFace_FOUND})
+if(KF5KFace_FOUND)
     add_subdirectory(facemanagement)
 endif()
 

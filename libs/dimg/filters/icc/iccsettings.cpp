@@ -198,7 +198,7 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 
     if (!desktop)
     {
-        qCDebug(LOG_DIMG) << "No desktop widget available for application";
+        qCDebug(DIGIKAM_DIMG_LOG) << "No desktop widget available for application";
         return IccProfile();
     }
 
@@ -248,11 +248,11 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
             profile = bytes;
         }
 
-        qCDebug(LOG_DIMG) << "Found X.org XICC monitor profile " << profile.description();
+        qCDebug(DIGIKAM_DIMG_LOG) << "Found X.org XICC monitor profile " << profile.description();
     }
     else
     {
-        qCDebug(LOG_DIMG) << "No X.org XICC profile installed for screen " << screenNumber;
+        qCDebug(DIGIKAM_DIMG_LOG) << "No X.org XICC profile installed for screen " << screenNumber;
     }
 
     // insert to cache even if null
@@ -409,7 +409,7 @@ QList<IccProfile> IccSettings::Private::scanDirectories(const QStringList& dirs)
     QList<IccProfile> profiles;
     QStringList       filters;
     filters << QLatin1String("*.icc") << QLatin1String("*.icm");
-    qCDebug(LOG_DIMG) << dirs;
+    qCDebug(DIGIKAM_DIMG_LOG) << dirs;
 
     foreach(const QString& dirPath, dirs)
     {
@@ -437,7 +437,7 @@ void IccSettings::Private::scanDirectory(const QString& path, const QStringList&
     {
         if (info.isFile())
         {
-            //qCDebug(LOG_DIMG) << info.filePath() << (info.exists() && info.isReadable());
+            //qCDebug(DIGIKAM_DIMG_LOG) << info.filePath() << (info.exists() && info.isReadable());
             IccProfile profile(info.filePath());
 
             if (profile.open())

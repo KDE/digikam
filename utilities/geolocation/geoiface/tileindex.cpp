@@ -238,7 +238,7 @@ TileIndex TileIndex::fromCoordinates(const GeoIface::GeoCoordinates& coordinate,
 
         if (haveRoundingErrors)
         {
-//             qCDebug(GEOIFACE_LOG) << QString::fromLatin1("Rounding errors at level %1!").arg(l);
+//             qCDebug(DIGIKAM_GEOIFACE_LOG) << QString::fromLatin1("Rounding errors at level %1!").arg(l);
         }
 
         resultIndex.appendLatLonIndex(latIndex, lonIndex);

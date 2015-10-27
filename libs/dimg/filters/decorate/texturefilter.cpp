@@ -87,7 +87,7 @@ void TextureFilter::filterImage()
     int bytesDepth  = m_orgImage.bytesDepth();
     bool sixteenBit = m_orgImage.sixteenBit();
 
-    qCDebug(LOG_DIMG) << "Texture File: " << m_texturePath;
+    qCDebug(DIGIKAM_DIMG_LOG) << "Texture File: " << m_texturePath;
     DImg texture(m_texturePath);
 
     if (texture.isNull())

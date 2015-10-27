@@ -47,12 +47,12 @@ bool MetaEngine::canWriteIptc(const QString& filePath)
     catch(Exiv2::Error& e)
     {
         std::string s(e.what());
-        qCCritical(LOG_METADATA) << "Cannot check Iptc access mode using Exiv2 (Error #"
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Cannot check Iptc access mode using Exiv2 (Error #"
                                   << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -76,7 +76,7 @@ bool MetaEngine::clearIptc() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -109,14 +109,14 @@ QByteArray MetaEngine::getIptc(bool addIrbHeader) const
     {
         if (!d->filePath.isEmpty())
         {
-            qCCritical(LOG_METADATA) << "From file " << d->filePath.toLatin1().constData();
+            qCCritical(DIGIKAM_METAENGINE_LOG) << "From file " << d->filePath.toLatin1().constData();
         }
 
         d->printExiv2ExceptionError(QString::fromLatin1("Cannot get Iptc data using Exiv2 "), e);
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -136,14 +136,14 @@ bool MetaEngine::setIptc(const QByteArray& data) const
     {
         if (!d->filePath.isEmpty())
         {
-            qCCritical(LOG_METADATA) << "From file " << d->filePath.toLatin1().constData();
+            qCCritical(DIGIKAM_METAENGINE_LOG) << "From file " << d->filePath.toLatin1().constData();
         }
 
         d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Iptc data using Exiv2 "), e);
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -251,7 +251,7 @@ MetaEngine::MetaDataMap MetaEngine::getIptcTagsDataList(const QStringList& iptcK
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return MetaDataMap();
@@ -271,7 +271,7 @@ QString MetaEngine::getIptcTagTitle(const char* iptcTagName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -291,7 +291,7 @@ QString MetaEngine::getIptcTagDescription(const char* iptcTagName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -331,7 +331,7 @@ bool MetaEngine::removeIptcTag(const char* iptcTagName, bool setProgramName) con
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -357,7 +357,7 @@ bool MetaEngine::setIptcTagData(const char* iptcTagName, const QByteArray& data,
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -386,7 +386,7 @@ QByteArray MetaEngine::getIptcTagData(const char* iptcTagName) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -418,7 +418,7 @@ QString MetaEngine::getIptcTagString(const char* iptcTagName, bool escapeCR) con
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -443,7 +443,7 @@ bool MetaEngine::setIptcTagString(const char* iptcTagName, const QString& value,
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -482,7 +482,7 @@ QStringList MetaEngine::getIptcTagsStringList(const char* iptcTagName, bool esca
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -500,7 +500,7 @@ bool MetaEngine::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         QStringList oldvals = oldValues;
         QStringList newvals = newValues;
 
-        qCDebug(LOG_METADATA) << d->filePath.toLatin1().constData() << " : " << iptcTagName
+        qCDebug(DIGIKAM_METAENGINE_LOG) << d->filePath.toLatin1().constData() << " : " << iptcTagName
                  << " => " << newvals.join(QString::fromLatin1(",")).toLatin1().constData();
 
         // Remove all old values.
@@ -548,7 +548,7 @@ bool MetaEngine::setIptcTagsStringList(const char* iptcTagName, int maxSize,
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -574,7 +574,7 @@ QStringList MetaEngine::getIptcKeywords() const
                 }
             }
 
-            qCDebug(LOG_METADATA) << d->filePath << " ==> Read Iptc Keywords: " << keywords;
+            qCDebug(DIGIKAM_METAENGINE_LOG) << d->filePath << " ==> Read Iptc Keywords: " << keywords;
 
             return keywords;
         }
@@ -585,7 +585,7 @@ QStringList MetaEngine::getIptcKeywords() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -602,7 +602,7 @@ bool MetaEngine::setIptcKeywords(const QStringList& oldKeywords, const QStringLi
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
 
-        qCDebug(LOG_METADATA) << d->filePath << " ==> New Iptc Keywords: " << newkeys;
+        qCDebug(DIGIKAM_METAENGINE_LOG) << d->filePath << " ==> New Iptc Keywords: " << newkeys;
 
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata());
@@ -649,7 +649,7 @@ bool MetaEngine::setIptcKeywords(const QStringList& oldKeywords, const QStringLi
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -684,7 +684,7 @@ QStringList MetaEngine::getIptcSubjects() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -743,7 +743,7 @@ bool MetaEngine::setIptcSubjects(const QStringList& oldSubjects, const QStringLi
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -778,7 +778,7 @@ QStringList MetaEngine::getIptcSubCategories() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -838,7 +838,7 @@ bool MetaEngine::setIptcSubCategories(const QStringList& oldSubCategories, const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -875,7 +875,7 @@ MetaEngine::TagsMap MetaEngine::getIptcTagsList() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return TagsMap();

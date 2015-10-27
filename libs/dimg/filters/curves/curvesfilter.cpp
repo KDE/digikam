@@ -74,8 +74,8 @@ void CurvesFilter::filterImage()
         curves = depthCurve;
     }
 
-    qCDebug(LOG_DIMG) << "Image 16 bits: " << m_orgImage.sixteenBit();
-    qCDebug(LOG_DIMG) << "Curve 16 bits: " << curves.isSixteenBits();
+    qCDebug(DIGIKAM_DIMG_LOG) << "Image 16 bits: " << m_orgImage.sixteenBit();
+    qCDebug(DIGIKAM_DIMG_LOG) << "Curve 16 bits: " << curves.isSixteenBits();
 
     postProgress(50);
 

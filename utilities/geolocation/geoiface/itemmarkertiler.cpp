@@ -29,7 +29,7 @@
 // local includes
 
 #include "modelhelper.h"
-#include "geoiface_debug.h"
+#include "digikam_debug.h"
 #include "geoiface_common.h"
 
 namespace GeoIface
@@ -193,7 +193,7 @@ QVariant ItemMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>&
 
 void ItemMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
-//     qCDebug(GEOIFACE_LOG)<<selected<<deselected;
+//     qCDebug(DIGIKAM_GEOIFACE_LOG)<<selected<<deselected;
     if (isDirty())
     {
         return;
@@ -223,7 +223,7 @@ void ItemMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const
                     break;
 
                 myTile->selectedCount++;
-//              qCDebug(GEOIFACE_LOG) << l << tileIndex << myTile->selectedCount;
+//              qCDebug(DIGIKAM_GEOIFACE_LOG) << l << tileIndex << myTile->selectedCount;
                 GEOIFACE_ASSERT(myTile->selectedCount <= myTile->markerIndices.count());
 
                 if (myTile->childrenEmpty())
@@ -266,7 +266,7 @@ void ItemMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const
 
 void ItemMarkerTiler::slotSourceModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
-    qCDebug(GEOIFACE_LOG) << topLeft << bottomRight;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << topLeft << bottomRight;
     setDirty();
 
     if (d->activeState)
@@ -325,7 +325,7 @@ void ItemMarkerTiler::slotThumbnailAvailableForIndex(const QPersistentModelIndex
 
 void ItemMarkerTiler::slotSourceModelReset()
 {
-    qCDebug(GEOIFACE_LOG) << "----";
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "----";
     setDirty();
 }
 

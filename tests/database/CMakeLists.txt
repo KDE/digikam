@@ -38,8 +38,8 @@ target_link_libraries(testdatabase
                       ${OpenCV_LIBRARIES}
 )
 
-if(${KF5Kipi_FOUND})
-    target_link_libraries(testdatabase  KF5::Kipi)
+if(KF5Kipi_FOUND)
+    target_link_libraries(testdatabase KF5::Kipi)
 endif()
 
 #------------------------------------------------------------------------

@@ -376,7 +376,7 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
 
 void CurvesWidget::saveCurve(KConfigGroup& group, const QString& prefix)
 {
-    qCDebug(LOG_DIMG) << "Storing curves";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Storing curves";
 
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
@@ -402,11 +402,11 @@ void CurvesWidget::saveCurve(KConfigGroup& group, const QString& prefix)
 
 void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
 {
-    qCDebug(LOG_DIMG) << "Restoring curves";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Restoring curves";
 
     reset();
 
-    qCDebug(LOG_DIMG) << "curves " << curves() << " isSixteenBits = " << isSixteenBits();
+    qCDebug(DIGIKAM_DIMG_LOG) << "curves " << curves() << " isSixteenBits = " << isSixteenBits();
 
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
@@ -436,7 +436,7 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
 
 void CurvesWidget::updateData(const DImg& img)
 {
-    qCDebug(LOG_DIMG) << "updating data";
+    qCDebug(DIGIKAM_DIMG_LOG) << "updating data";
 
     stopHistogramComputation();
 
@@ -612,7 +612,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
     if (!d->imageHistogram)
     {
-        qCWarning(LOG_DIMG) << "Should render a histogram, but did not get one.";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Should render a histogram, but did not get one.";
         return;
     }
 

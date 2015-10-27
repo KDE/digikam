@@ -661,7 +661,7 @@ void MixerSettings::saveAsSettings()
                 break;
 
             default:
-                qCWarning(LOG_DIMG) <<  "Unknown Color channel gains";
+                qCWarning(DIGIKAM_DIMG_LOG) <<  "Unknown Color channel gains";
                 break;
         }
 

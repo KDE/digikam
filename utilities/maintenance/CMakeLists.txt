@@ -26,8 +26,7 @@ set(libmaintenance_SRCS
     maintenancethread.cpp
 )
 
-# TODO figure out how to do this without having separate target_link_libraries later..
-if(${KF5KFace_FOUND})
+if(KF5KFace_FOUND)
     set(libmaintenance_SRCS
         ${libmaintenance_SRCS}
         facesdetector.cpp
@@ -47,7 +46,7 @@ include_directories(
 )
 
 if(KF5KFace_FOUND)
-    include_directories($<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>)
+    include_directories($<TARGET_PROPERTY:KF5::KFace,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 add_library(maintenance_src OBJECT ${libmaintenance_SRCS})

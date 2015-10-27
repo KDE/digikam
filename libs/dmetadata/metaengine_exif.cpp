@@ -59,12 +59,12 @@ bool MetaEngine::canWriteExif(const QString& filePath)
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
-        qCCritical(LOG_METADATA) << "Cannot check Exif access mode using Exiv2 (Error #"
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Cannot check Exif access mode using Exiv2 (Error #"
                     << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -88,7 +88,7 @@ bool MetaEngine::clearExif() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -123,13 +123,13 @@ QByteArray MetaEngine::getExifEncoded(bool addExifHeader) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            qCDebug(LOG_METADATA) << "From file " << d->filePath.toLatin1().constData();
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "From file " << d->filePath.toLatin1().constData();
 
         d->printExiv2ExceptionError(QString::fromLatin1("Cannot get Exif data using Exiv2 "), e);
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -148,13 +148,13 @@ bool MetaEngine::setExif(const QByteArray& data) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            qCCritical(LOG_METADATA) << "From file " << d->filePath.toLatin1().constData();
+            qCCritical(DIGIKAM_METAENGINE_LOG) << "From file " << d->filePath.toLatin1().constData();
 
         d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Exif data using Exiv2 "), e);
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -228,7 +228,7 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return MetaDataMap();
@@ -280,7 +280,7 @@ QString MetaEngine::getExifComment() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -344,7 +344,7 @@ bool MetaEngine::setExifComment(const QString& comment, bool setProgramName) con
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -365,7 +365,7 @@ QString MetaEngine::getExifTagTitle(const char* exifTagName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -386,7 +386,7 @@ QString MetaEngine::getExifTagDescription(const char* exifTagName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -414,7 +414,7 @@ bool MetaEngine::removeExifTag(const char* exifTagName, bool setProgramName) con
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -442,7 +442,7 @@ bool MetaEngine::getExifTagRational(const char* exifTagName, long int& num, long
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -464,7 +464,7 @@ bool MetaEngine::setExifTagLong(const char* exifTagName, long val, bool setProgr
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -486,7 +486,7 @@ bool MetaEngine::setExifTagRational(const char* exifTagName, long int num, long 
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -512,7 +512,7 @@ bool MetaEngine::setExifTagData(const char* exifTagName, const QByteArray& data,
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -577,7 +577,7 @@ bool MetaEngine::setExifTagVariant(const char* exifTagName, const QVariant& val,
             }
             catch(...)
             {
-                qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+                qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
             }
 
             return false;
@@ -674,7 +674,7 @@ QString MetaEngine::createExifUserStringFromValue(const char* exifTagName, const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -705,7 +705,7 @@ bool MetaEngine::getExifTagLong(const char* exifTagName, long& val, int componen
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -735,7 +735,7 @@ QByteArray MetaEngine::getExifTagData(const char* exifTagName) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -820,7 +820,7 @@ QVariant MetaEngine::getExifTagVariant(const char* exifTagName, bool rationalAsL
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QVariant();
@@ -852,7 +852,7 @@ QString MetaEngine::getExifTagString(const char* exifTagName, bool escapeCR) con
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -874,7 +874,7 @@ bool MetaEngine::setExifTagString(const char* exifTagName, const QString& value,
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -908,7 +908,7 @@ QImage MetaEngine::getExifThumbnail(bool fixOrientation) const
                 if (it != exifData.end() && it->count())
                 {
                     long orientation = it->toLong();
-                    qCDebug(LOG_METADATA) << "Exif Thumbnail Orientation: " << (int)orientation;
+                    qCDebug(DIGIKAM_METAENGINE_LOG) << "Exif Thumbnail Orientation: " << (int)orientation;
                     rotateExifQImage(thumbnail, (ImageOrientation)orientation);
                 }
 
@@ -922,7 +922,7 @@ QImage MetaEngine::getExifThumbnail(bool fixOrientation) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return thumbnail;
@@ -967,7 +967,7 @@ bool MetaEngine::setExifThumbnail(const QImage& thumbImage, bool setProgramName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -1026,7 +1026,7 @@ bool MetaEngine::setTiffThumbnail(const QImage& thumbImage, bool setProgramName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -1047,7 +1047,7 @@ bool MetaEngine::removeExifThumbnail() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -1099,7 +1099,7 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return TagsMap();
@@ -1152,7 +1152,7 @@ MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return TagsMap();

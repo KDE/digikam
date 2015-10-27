@@ -39,7 +39,7 @@
 
 #include "geoiface_common.h"
 #include "geoiface_types.h"
-#include "geoiface_debug.h"
+#include "digikam_debug.h"
 
 namespace GeoIface
 {
@@ -103,12 +103,12 @@ HTMLWidget::~HTMLWidget()
 
 void HTMLWidget::progress(int progress)
 {
-    qCDebug(GEOIFACE_LOG) << "Maps Loading Progress: " << progress << "%";
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "Maps Loading Progress: " << progress << "%";
 }
 
 void HTMLWidget::slotHTMLCompleted(bool ok)
 {
-    qCDebug(GEOIFACE_LOG) << "Map Loading Completed: " << ok;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "Map Loading Completed: " << ok;
     d->isReady = ok;
 
     emit(signalJavaScriptReady());
@@ -201,7 +201,7 @@ void HTMLWidget::mouseMoveEvent(QMouseEvent *e)
 
         d->intermediateSelectionScreenPoint = QPoint(e->x(), e->y());
 
-        qCDebug(GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ") << d->intermediateSelectionScreenPoint;
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ") << d->intermediateSelectionScreenPoint;
 
         qreal lonWest, latNorth, lonEast, latSouth;
 
@@ -242,7 +242,7 @@ void HTMLWidget::slotScanForJSMessages(QString message)
     if (message!=QLatin1String("(event)"))
         return;
 
-//    qCDebug(GEOIFACE_LOG) << message;
+//    qCDebug(DIGIKAM_GEOIFACE_LOG) << message;
 
     const QString eventBufferString = runScript(QLatin1String("kgeomapReadEventStrings();")).toString();
 
@@ -264,7 +264,7 @@ QVariant HTMLWidget::runScript(const QString& scriptCode)
     if (!d->isReady)
         return QVariant();
 
-//     qCDebug(GEOIFACE_LOG) << scriptCode;
+//     qCDebug(DIGIKAM_GEOIFACE_LOG) << scriptCode;
     return page()->mainFrame()->evaluateJavaScript(scriptCode);
 }
 
@@ -336,7 +336,7 @@ void HTMLWidget::mouseModeChanged(const MouseModes mouseMode)
 
 void HTMLWidget::centerOn(const qreal west, const qreal north, const qreal east, const qreal south, const bool useSaneZoomLevel)
 {
-//    qCDebug(GEOIFACE_LOG) << "West:" << west << " North:" << north << " East:" << east << " South:" << south;
+//    qCDebug(DIGIKAM_GEOIFACE_LOG) << "West:" << west << " North:" << north << " East:" << east << " South:" << south;
     runScript(QString::fromLatin1("kgeomapSetMapBoundaries(%1, %2, %3, %4, %5);")
               .arg(west)
               .arg(north)

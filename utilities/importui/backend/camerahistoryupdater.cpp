@@ -134,7 +134,7 @@ void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
         return;
     }
 
-    qCDebug(LOG_IMPORTUI) << "Check download state from DB for " << map.count() << " items";
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Check download state from DB for " << map.count() << " items";
 
     QMutexLocker lock(&d->mutex);
     d->running  = true;

@@ -147,7 +147,7 @@ void ThemeManager::slotChangePalette()
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
     qApp->setPalette(KColorScheme::createApplicationPalette(config));
 
-    qCDebug(LOG_WIDGETS) << theme << " :: " << filename;
+    qCDebug(DIGIKAM_WIDGETS_LOG) << theme << " :: " << filename;
 
     emit signalThemeChanged();
 }

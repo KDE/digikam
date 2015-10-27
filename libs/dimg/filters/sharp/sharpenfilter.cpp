@@ -103,7 +103,7 @@ void SharpenFilter::sharpenImage(double radius, double sigma)
 {
     if (m_orgImage.isNull())
     {
-        qCWarning(LOG_DIMG) << "No image data available!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "No image data available!";
         return;
     }
 
@@ -121,7 +121,7 @@ void SharpenFilter::sharpenImage(double radius, double sigma)
 
     if ((int)m_orgImage.width() < kernelWidth)
     {
-        qCWarning(LOG_DIMG) << "Image is smaller than radius!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Image is smaller than radius!";
         return;
     }
 
@@ -129,7 +129,7 @@ void SharpenFilter::sharpenImage(double radius, double sigma)
 
     if (kernel.isNull())
     {
-        qCWarning(LOG_DIMG) << "Unable to allocate memory!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Unable to allocate memory!";
         return;
     }
 
@@ -203,7 +203,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* const 
 
     if ((prm.kernelWidth % 2) == 0)
     {
-        qCWarning(LOG_DIMG) << "Kernel width must be an odd number!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Kernel width must be an odd number!";
         return false;
     }
 
@@ -211,7 +211,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* const 
 
     if (normal_kernel.isNull())
     {
-        qCWarning(LOG_DIMG) << "Unable to allocate memory!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Unable to allocate memory!";
         return false;
     }
 

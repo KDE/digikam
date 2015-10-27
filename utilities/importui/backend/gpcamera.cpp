@@ -115,28 +115,28 @@ public:
 
 #ifdef GPHOTO2_DEBUG
     static void error_func(GPContext*, const char* msg, void*) {
-        qCDebug(LOG_IMPORTUI) << "error:" << msg;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "error:" << msg;
     }
     static void status_func(GPContext*, const char* msg, void*) {
-        qCDebug(LOG_IMPORTUI) << "status:" << msg;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "status:" << msg;
     }
 
     static unsigned int start_func(GPContext*, float target, const char *text, void *data)
     {
         Q_UNUSED(data);
-        qCDebug(LOG_IMPORTUI) << "start:" << target << "- text:" << text;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "start:" << target << "- text:" << text;
         return 0;
 
     }
     static void update_func(GPContext*, unsigned int id, float target, void *data)
     {
         Q_UNUSED(data);
-        qCDebug(LOG_IMPORTUI) << "update:" << id << "- target:" << target;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "update:" << id << "- target:" << target;
     }
     static void stop_func(GPContext*, unsigned int id, void *data)
     {
         Q_UNUSED(data);
-        qCDebug(LOG_IMPORTUI) << "stop:" << id;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "stop:" << id;
     }
 #endif /* GPHOTO2_DEBUG */
 #endif /* HAVE_GPHOTO2 */
@@ -262,7 +262,7 @@ bool GPCamera::doConnect()
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to set camera Abilities!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to set camera Abilities!";
         printGphotoErrorDescription(errorCode);
         gp_camera_unref(d->camera);
         d->camera = 0;
@@ -278,7 +278,7 @@ bool GPCamera::doConnect()
 
         if (errorCode != GP_OK)
         {
-            qCDebug(LOG_IMPORTUI) << "Failed to set camera port!";
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to set camera port!";
             printGphotoErrorDescription(errorCode);
             gp_camera_unref(d->camera);
             d->camera = 0;
@@ -339,7 +339,7 @@ bool GPCamera::doConnect()
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to initialize camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to initialize camera!";
         printGphotoErrorDescription(errorCode);
         gp_camera_unref(d->camera);
         d->camera = 0;
@@ -380,7 +380,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Getting storage information not supported for this camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Getting storage information not supported for this camera!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -392,39 +392,39 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
             switch(sinfos[i].fstype)
             {
                 case GP_STORAGEINFO_FST_UNDEFINED:
-                    qCDebug(LOG_IMPORTUI) << "Storage fstype: undefined";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage fstype: undefined";
                     break;
                 case GP_STORAGEINFO_FST_GENERICFLAT:
-                    qCDebug(LOG_IMPORTUI) << "Storage fstype: flat, all in one directory";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage fstype: flat, all in one directory";
                     break;
                 case GP_STORAGEINFO_FST_GENERICHIERARCHICAL:
-                    qCDebug(LOG_IMPORTUI) << "Storage fstype: generic tree hierarchy";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage fstype: generic tree hierarchy";
                     break;
                 case GP_STORAGEINFO_FST_DCF:
-                    qCDebug(LOG_IMPORTUI) << "DCIM style storage";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "DCIM style storage";
                     break;
             }
         }
 
         if (sinfos[i].fields & GP_STORAGEINFO_LABEL)
         {
-            qCDebug(LOG_IMPORTUI) << "Storage label: " << QString::fromUtf8(sinfos[i].label);
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage label: " << QString::fromUtf8(sinfos[i].label);
         }
 
         if (sinfos[i].fields & GP_STORAGEINFO_DESCRIPTION)
         {
-            qCDebug(LOG_IMPORTUI) << "Storage description: " << QString::fromUtf8(sinfos[i].description);
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage description: " << QString::fromUtf8(sinfos[i].description);
         }
 
         if (sinfos[i].fields & GP_STORAGEINFO_BASE)
         {
-            qCDebug(LOG_IMPORTUI) << "Storage base-dir: " << QString::fromUtf8(sinfos[i].basedir);
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage base-dir: " << QString::fromUtf8(sinfos[i].basedir);
 
             // TODO in order for this to work, the upload dialog needs to be fixed.
 /*
             if(nrofsinfos == 1)
             {
-                qCDebug(LOG_IMPORTUI) << "Only one storage, so setting storage directory to" << sinfos[i].basedir;
+                qCDebug(DIGIKAM_IMPORTUI_LOG) << "Only one storage, so setting storage directory to" << sinfos[i].basedir;
                 m_path = QString(sinfos[i].basedir);
             }
 */
@@ -435,15 +435,15 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
             switch (sinfos[i].access)
             {
                 case GP_STORAGEINFO_AC_READWRITE:
-                    qCDebug(LOG_IMPORTUI) << "Storage access: R/W";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage access: R/W";
                     break;
 
                 case GP_STORAGEINFO_AC_READONLY:
-                    qCDebug(LOG_IMPORTUI) << "Storage access: RO";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage access: RO";
                     break;
 
                 case GP_STORAGEINFO_AC_READONLY_WITH_DELETE:
-                    qCDebug(LOG_IMPORTUI) << "Storage access: RO + Del";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage access: RO + Del";
                     break;
 
                 default:
@@ -456,24 +456,24 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
             switch (sinfos[i].type)
             {
                 case GP_STORAGEINFO_ST_FIXED_ROM:
-                    qCDebug(LOG_IMPORTUI) << "Storage type: fixed ROM";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage type: fixed ROM";
                     break;
 
                 case GP_STORAGEINFO_ST_REMOVABLE_ROM:
-                    qCDebug(LOG_IMPORTUI) << "Storage type: removable ROM";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage type: removable ROM";
                     break;
 
                 case GP_STORAGEINFO_ST_FIXED_RAM:
-                    qCDebug(LOG_IMPORTUI) << "Storage type: fixed RAM";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage type: fixed RAM";
                     break;
 
                 case GP_STORAGEINFO_ST_REMOVABLE_RAM:
-                    qCDebug(LOG_IMPORTUI) << "Storage type: removable RAM";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage type: removable RAM";
                     break;
 
                 case GP_STORAGEINFO_ST_UNKNOWN:
                 default:
-                    qCDebug(LOG_IMPORTUI) << "Storage type: unknown";
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage type: unknown";
                     break;
             }
         }
@@ -481,13 +481,13 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
         if (sinfos[i].fields & GP_STORAGEINFO_MAXCAPACITY)
         {
             kBSize += sinfos[i].capacitykbytes;
-            qCDebug(LOG_IMPORTUI) << "Storage capacity: " << kBSize;
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage capacity: " << kBSize;
         }
 
         if (sinfos[i].fields & GP_STORAGEINFO_FREESPACEKBYTES)
         {
             kBAvail += sinfos[i].freekbytes;
-            qCDebug(LOG_IMPORTUI) << "Storage free-space: " << kBAvail;
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Storage free-space: " << kBAvail;
         }
      }
 
@@ -515,7 +515,7 @@ bool GPCamera::getPreview(QImage& preview)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to initialize camera preview mode!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to initialize camera preview mode!";
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -525,7 +525,7 @@ bool GPCamera::getPreview(QImage& preview)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get preview from camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get preview from camera!";
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -552,7 +552,7 @@ bool GPCamera::capture(CamItemInfo& itemInfo)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to take camera capture!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to take camera capture!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -569,7 +569,7 @@ bool GPCamera::capture(CamItemInfo& itemInfo)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get camera item information!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get camera item information!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -661,7 +661,7 @@ bool GPCamera::getFolders(const QString& folder)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get folders list from camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get folders list from camera!";
         printGphotoErrorDescription(errorCode);
         gp_list_unref(clist);
         return false;
@@ -682,7 +682,7 @@ bool GPCamera::getFolders(const QString& folder)
 
         if (errorCode != GP_OK)
         {
-            qCDebug(LOG_IMPORTUI) << "Failed to get folder name from camera!";
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get folder name from camera!";
             printGphotoErrorDescription(errorCode);
             gp_list_unref(clist);
             return false;
@@ -717,7 +717,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get folder files list from camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get folder files list from camera!";
         printGphotoErrorDescription(errorCode);
         gp_list_unref(clist);
         return false;
@@ -731,7 +731,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 
         if (errorCode != GP_OK)
         {
-            qCDebug(LOG_IMPORTUI) << "Failed to get file name from camera!";
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get file name from camera!";
             printGphotoErrorDescription(errorCode);
             gp_list_unref(clist);
             return false;
@@ -764,7 +764,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItem
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get folder files list from camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get folder files list from camera!";
         printGphotoErrorDescription(errorCode);
         gp_list_unref(clist);
         return false;
@@ -778,7 +778,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItem
 
         if (errorCode != GP_OK)
         {
-            qCDebug(LOG_IMPORTUI) << "Failed to get file name from camera!";
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get file name from camera!";
             printGphotoErrorDescription(errorCode);
             gp_list_unref(clist);
             return false;
@@ -944,7 +944,7 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get camera item!" << folder << itemName;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get camera item!" << folder << itemName;
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -954,7 +954,7 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get thumbnail from camera item!" << folder << itemName;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get thumbnail from camera item!" << folder << itemName;
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -990,7 +990,7 @@ bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMeta
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get camera item!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get camera item!";
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -1000,7 +1000,7 @@ bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMeta
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get Exif data from camera item!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get Exif data from camera item!";
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -1014,7 +1014,7 @@ bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMeta
     // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place
     // to please with Exiv2...
 
-    qCDebug(LOG_IMPORTUI) << "Size of Exif metadata from camera = " << exifData.size();
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Size of Exif metadata from camera = " << exifData.size();
 
     if (!exifData.isEmpty())
     {
@@ -1023,7 +1023,7 @@ bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMeta
 
         if (i != -1)
         {
-            qCDebug(LOG_IMPORTUI) << "Exif header found at position " << i;
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Exif header found at position " << i;
             i = i + sizeof(exifHeader);
             QByteArray data;
             data.resize(exifData.size() - i);
@@ -1054,7 +1054,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
 
     if (!file.open(QIODevice::ReadWrite))
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to open file" << file.fileName() << file.errorString();
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to open file" << file.fileName() << file.errorString();
         return false;
     }
 
@@ -1063,7 +1063,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
 
     if (handle == -1)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to dup file descriptor";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to dup file descriptor";
         return false;
     }
 
@@ -1071,7 +1071,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get camera item!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get camera item!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -1083,7 +1083,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get camera item!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get camera item!";
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -1124,7 +1124,7 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get camera item properties!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get camera item properties!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -1153,7 +1153,7 @@ bool GPCamera::setLockItem(const QString& folder, const QString& itemName, bool 
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to set camera item lock properties!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to set camera item lock properties!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -1177,7 +1177,7 @@ bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to delete camera item!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to delete camera item!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -1204,7 +1204,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to delete camera folder!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to delete camera folder!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -1226,7 +1226,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to init new camera file instance!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to init new camera file instance!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -1235,7 +1235,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to open file!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to open file!";
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -1245,7 +1245,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to rename item from camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to rename item from camera!";
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -1267,7 +1267,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to upload item to camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to upload item to camera!";
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -1284,7 +1284,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get camera item information!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get camera item information!";
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -1381,7 +1381,7 @@ bool GPCamera::cameraSummary(QString& summary)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get camera summary!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get camera summary!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -1434,7 +1434,7 @@ bool GPCamera::cameraManual(QString& manual)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get camera manual!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get camera manual!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -1461,7 +1461,7 @@ bool GPCamera::cameraAbout(QString& about)
 
     if (errorCode != GP_OK)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get information about camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get information about camera!";
         printGphotoErrorDescription(errorCode);
         return false;
     }
@@ -1484,7 +1484,7 @@ bool GPCamera::cameraAbout(QString& about)
 void GPCamera::printGphotoErrorDescription(int errorCode)
 {
 #ifdef HAVE_GPHOTO2
-    qCDebug(LOG_IMPORTUI) << "Libgphoto2 error: " << gp_result_as_string(errorCode)
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Libgphoto2 error: " << gp_result_as_string(errorCode)
                           << " (" << errorCode << ")";
 #else
     Q_UNUSED(errorCode);
@@ -1509,7 +1509,7 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
 
     if (count < 0)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get list of cameras!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get list of cameras!";
         printGphotoErrorDescription(count);
         gp_context_unref(context);
         return;
@@ -1547,7 +1547,7 @@ void GPCamera::getSupportedPorts(QStringList& plist)
 
     if (numPorts < 0)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to get list of port!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get list of port!";
         printGphotoErrorDescription(numPorts);
         gp_port_info_list_free(list);
         return;
@@ -1633,7 +1633,7 @@ int GPCamera::autoDetect(QString& model, QString& port)
 
     if (count <= 0)
     {
-        qCDebug(LOG_IMPORTUI) << "Failed to autodetect camera!";
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to autodetect camera!";
         printGphotoErrorDescription(count);
         gp_list_free(camList);
         return -1;
@@ -1646,14 +1646,14 @@ int GPCamera::autoDetect(QString& model, QString& port)
     {
         if (gp_list_get_name(camList, i, &camModel_) != GP_OK)
         {
-            qCDebug(LOG_IMPORTUI) << "Failed to autodetect camera!";
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to autodetect camera!";
             gp_list_free(camList);
             return -1;
         }
 
         if (gp_list_get_value(camList, i, &camPort_) != GP_OK)
         {
-            qCDebug(LOG_IMPORTUI) << "Failed to autodetect camera!";
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to autodetect camera!";
             gp_list_free(camList);
             return -1;
         }
@@ -1667,7 +1667,7 @@ int GPCamera::autoDetect(QString& model, QString& port)
         }
     }
 
-    qCDebug(LOG_IMPORTUI) << "Failed to autodetect camera!";
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to autodetect camera!";
     gp_list_free(camList);
 #else
     Q_UNUSED(model);
@@ -1775,7 +1775,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     {
        if (cnt > 1)
        {
-          qCWarning(LOG_IMPORTUI) << "More than one camera detected on port " << port
+          qCWarning(DIGIKAM_IMPORTUI_LOG) << "More than one camera detected on port " << port
                                   << ". Due to restrictions in the GPhoto2 API, "
                                   << "only the first camera is used.";
        }
@@ -1786,7 +1786,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     }
     else
     {
-       qCDebug(LOG_IMPORTUI) << "Failed to get information for the listed camera";
+       qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to get information for the listed camera";
     }
 
     gp_list_free(camList);

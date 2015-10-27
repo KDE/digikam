@@ -390,7 +390,7 @@ void AnimationControl::syncProperties(QObject* const o)
 
 void AnimationControl::transitionToVisible(bool show, bool immediately)
 {
-    //qCDebug(LOG_WIDGETS) << "state" << state << "show" << show << items.size();
+    //qCDebug(DIGIKAM_WIDGETS_LOG) << "state" << state << "show" << show << items.size();
 
     if (show)
     {

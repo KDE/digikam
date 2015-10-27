@@ -457,7 +457,7 @@ void LensFunCameraSelector::refreshSettingsView()
     if (d->iface->usedCamera())
     {
         makerIdx = d->make->combo()->findText(d->iface->settings().cameraMake);
-        qCDebug(LOG_DIMG) << "makerIdx: " << makerIdx << " (" << d->iface->settings().cameraMake << ")";
+        qCDebug(DIGIKAM_DIMG_LOG) << "makerIdx: " << makerIdx << " (" << d->iface->settings().cameraMake << ")";
     }
     else
     {
@@ -505,7 +505,7 @@ void LensFunCameraSelector::refreshSettingsView()
     if (d->iface->usedCamera())
     {
         modelIdx = d->model->combo()->findText(d->iface->settings().cameraModel);
-        qCDebug(LOG_DIMG) << "modelIdx: " << modelIdx << " (" << d->iface->settings().cameraModel << ")";
+        qCDebug(DIGIKAM_DIMG_LOG) << "modelIdx: " << modelIdx << " (" << d->iface->settings().cameraModel << ")";
     }
 
     if (modelIdx >= 0)
@@ -540,7 +540,7 @@ void LensFunCameraSelector::refreshSettingsView()
     if (d->iface->usedLens())
     {
         lensIdx = d->lens->combo()->findText(d->iface->settings().lensModel);
-        qCDebug(LOG_DIMG) << "lensIdx: " << lensIdx << " (" << d->iface->settings().lensModel << ")";
+        qCDebug(DIGIKAM_DIMG_LOG) << "lensIdx: " << lensIdx << " (" << d->iface->settings().lensModel << ")";
     }
 
     if (lensIdx >= 0)
@@ -684,21 +684,21 @@ void LensFunCameraSelector::populateLensCombo()
 
     if (!v.isValid() || v.isNull())
     {
-        qCDebug(LOG_DIMG) << "Invalid variant value for device!";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Invalid variant value for device!";
         return;
     }
 
-    qCDebug(LOG_DIMG) << "variant: " << v;
+    qCDebug(DIGIKAM_DIMG_LOG) << "variant: " << v;
 
     LensFunIface::DevicePtr dev = v.value<LensFunIface::DevicePtr>();
 
     if (!dev)
     {
-        qCDebug(LOG_DIMG) << "Device is null!";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Device is null!";
         return;
     }
 
-    qCDebug(LOG_DIMG) << "dev: " << dev->Maker << " :: " << dev->Model << " :: " << dev->CropFactor;
+    qCDebug(DIGIKAM_DIMG_LOG) << "dev: " << dev->Maker << " :: " << dev->Model << " :: " << dev->CropFactor;
 
     d->lens->blockSignals(true);
     const lfLens** lenses     = d->iface->lensFunDataBase()->FindLenses(dev, 0, 0);
@@ -753,7 +753,7 @@ void LensFunCameraSelector::slotLensSelected()
     if (d->iface->usedLens() &&
         settings.cropFactor <= 0.0) // this should not happen
     {
-        qCDebug(LOG_DIMG) << "No crop factor is set for camera, using lens calibration data: " << d->iface->usedLens()->CropFactor;
+        qCDebug(DIGIKAM_DIMG_LOG) << "No crop factor is set for camera, using lens calibration data: " << d->iface->usedLens()->CropFactor;
         settings.cropFactor = d->iface->usedLens()->CropFactor;
     }
 

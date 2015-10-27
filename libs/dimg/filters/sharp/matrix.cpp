@@ -79,7 +79,7 @@ void print_refocus_c_mat(const CMat* const mat)
             output.append(num.setNum(RefocusMatrix::c_mat_elt(mat, x, y)));
         }
 
-        qCDebug(LOG_DIMG) << output;
+        qCDebug(DIGIKAM_DIMG_LOG) << output;
     }
 }
 
@@ -96,7 +96,7 @@ void print_refocus_matrix(Mat* const matrix)
             output.append(num.setNum(RefocusMatrix::mat_elt(matrix, row_idx, col_idx)));
         }
 
-        qCDebug(LOG_DIMG) << output;
+        qCDebug(DIGIKAM_DIMG_LOG) << output;
     }
 }
 #endif // RF_DEBUG
@@ -406,11 +406,11 @@ CMat* RefocusMatrix::compute_g(const CMat* const convolution, const int m, const
     }
 
 #ifdef RF_DEBUG
-    qCDebug(LOG_DIMG) << "Convolution:";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Convolution:";
     print_refocus_c_mat(convolution);
-    qCDebug(LOG_DIMG) << "h_conv_ruv:";
+    qCDebug(DIGIKAM_DIMG_LOG) << "h_conv_ruv:";
     print_refocus_c_mat(&h_conv_ruv);
-    qCDebug(LOG_DIMG) << "Value of s:";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Value of s:";
     print_refocus_matrix(s);
 #endif // RF_DEBUG
 
@@ -441,7 +441,7 @@ CMat* RefocusMatrix::compute_g(const CMat* const convolution, const int m, const
     }
 
 #ifdef RF_DEBUG
-    qCDebug(LOG_DIMG) << "Deconvolution:";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Deconvolution:";
     print_refocus_c_mat(result);
 #endif // RF_DEBUG
 
@@ -458,9 +458,9 @@ CMat* RefocusMatrix::compute_g_matrix(const CMat* const convolution, const int m
                                       const double musq, const bool symmetric)
 {
 #ifdef RF_DEBUG
-    qCDebug(LOG_DIMG) << "matrix size: " << m;
-    qCDebug(LOG_DIMG) << "correlation: " << gamma;
-    qCDebug(LOG_DIMG) << "noise: "       << noise_factor;
+    qCDebug(DIGIKAM_DIMG_LOG) << "matrix size: " << m;
+    qCDebug(DIGIKAM_DIMG_LOG) << "correlation: " << gamma;
+    qCDebug(DIGIKAM_DIMG_LOG) << "noise: "       << noise_factor;
 #endif // RF_DEBUG
 
     CMat* const g = compute_g(convolution, m, gamma, noise_factor, musq, symmetric);
@@ -524,7 +524,7 @@ void RefocusMatrix::make_gaussian_convolution(const double gradius, CMat* const 
     register int x, y;
 
 #ifdef RF_DEBUG
-    qCDebug(LOG_DIMG) << "gauss: " << gradius;
+    qCDebug(DIGIKAM_DIMG_LOG) << "gauss: " << gradius;
 #endif // RF_DEBUG
 
     init_c_mat(convolution, m);
@@ -648,7 +648,7 @@ double RefocusMatrix::circle_intensity(const int x, const int y, const double ra
 void RefocusMatrix::make_circle_convolution(const double radius, CMat* const convolution, const int m)
 {
 #ifdef RF_DEBUG
-    qCDebug(LOG_DIMG) << "radius: " << radius;
+    qCDebug(DIGIKAM_DIMG_LOG) << "radius: " << radius;
 #endif // RF_DEBUG
 
     fill_matrix(convolution, m, circle_intensity, radius);

@@ -14,7 +14,6 @@ set(librawengine_SRCS
     drawdecoder_p.cpp
     drawdecodersettings.cpp
     rawinfo.cpp
-    rawengine_debug.cpp
 )
 
 include_directories(

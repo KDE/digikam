@@ -138,7 +138,7 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -234,7 +234,7 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -308,7 +308,7 @@ bool MetaEngine::getGPSAltitude(double* const altitude) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -366,7 +366,7 @@ bool MetaEngine::initializeGPSInfo(const bool setProgramName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -498,7 +498,7 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -587,7 +587,7 @@ bool MetaEngine::removeGPSInfo(const bool setProgramName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;

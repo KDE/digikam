@@ -88,7 +88,7 @@ MetaEnginePreviews::MetaEnginePreviews(const QString& filePath)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 }
 
@@ -106,7 +106,7 @@ MetaEnginePreviews::MetaEnginePreviews(const QByteArray& imgData)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 }
 
@@ -180,8 +180,8 @@ QByteArray MetaEnginePreviews::data(int index)
 {
     if (index < 0 || index >= size()) return QByteArray();
 
-    qCDebug(LOG_METADATA) << "index: "         << index;
-    qCDebug(LOG_METADATA) << "d->properties: " << count();
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "index: "         << index;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "d->properties: " << count();
 
     try
     {
@@ -195,7 +195,7 @@ QByteArray MetaEnginePreviews::data(int index)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
         return QByteArray();
     }
 }

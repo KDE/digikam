@@ -227,7 +227,7 @@ void HistogramWidget::updateData(const DImg& img, const DImg& sel, bool showProg
     }
     else
     {
-        qCWarning(LOG_DIMG) << "Current histogram is null";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Current histogram is null";
     }
 }
 
@@ -259,7 +259,7 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
 
         if (!nowUsedHistogram)
         {
-            qCWarning(LOG_DIMG) << "Current histogram is null";
+            qCWarning(DIGIKAM_DIMG_LOG) << "Current histogram is null";
             return;
         }
 

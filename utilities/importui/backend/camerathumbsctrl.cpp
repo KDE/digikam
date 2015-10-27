@@ -253,12 +253,12 @@ void CameraThumbsCtrl::procressKDEPreview(const QUrl& item, const QPixmap& pix)
     {
         // This call must be run outside Camera Controller thread.
         thumb = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
-        qCDebug(LOG_IMPORTUI) << "Failed thumb from KDE Preview : " << item;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed thumb from KDE Preview : " << item;
     }
     else
     {
         thumb = pix;
-        qCDebug(LOG_IMPORTUI) << "Got thumb from KDE Preview : " << item;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Got thumb from KDE Preview : " << item;
     }
 
     putItemToCache(url, info, thumb);

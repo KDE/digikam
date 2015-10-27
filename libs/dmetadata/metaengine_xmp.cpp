@@ -48,12 +48,12 @@ bool MetaEngine::canWriteXmp(const QString& filePath)
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
-        qCCritical(LOG_METADATA) << "Cannot check Xmp access mode using Exiv2 (Error #"
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Cannot check Xmp access mode using Exiv2 (Error #"
                     << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -93,7 +93,7 @@ bool MetaEngine::clearXmp() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #endif // _XMP_SUPPORT_
@@ -125,7 +125,7 @@ QByteArray MetaEngine::getXmp() const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #endif // _XMP_SUPPORT_
@@ -153,13 +153,13 @@ bool MetaEngine::setXmp(const QByteArray& data) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            qCCritical(LOG_METADATA) << "From file " << d->filePath.toLatin1().constData();
+            qCCritical(DIGIKAM_METAENGINE_LOG) << "From file " << d->filePath.toLatin1().constData();
 
         d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Xmp data using Exiv2 "), e);
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -275,7 +275,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -304,7 +304,7 @@ QString MetaEngine::getXmpTagTitle(const char* xmpTagName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -331,7 +331,7 @@ QString MetaEngine::getXmpTagDescription(const char* xmpTagName)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -371,7 +371,7 @@ QString MetaEngine::getXmpTagString(const char* xmpTagName, bool escapeCR) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -405,7 +405,7 @@ bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value, b
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -457,7 +457,7 @@ bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value,
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -507,7 +507,7 @@ MetaEngine::AltLangMap MetaEngine::getXmpTagStringListLangAlt(const char* xmpTag
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -557,7 +557,7 @@ bool MetaEngine::setXmpTagStringListLangAlt(const char* xmpTagName, const MetaEn
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -609,7 +609,7 @@ QString MetaEngine::getXmpTagStringLangAlt(const char* xmpTagName, const QString
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -655,7 +655,7 @@ bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& v
                 {
                     const std::string &val((*it).toUtf8().constData());
                     xmpTxtVal->read(val);
-                    qCDebug(LOG_METADATA) << *it;
+                    qCDebug(DIGIKAM_METAENGINE_LOG) << *it;
                 }
             }
         }
@@ -671,7 +671,7 @@ bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& v
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -713,7 +713,7 @@ QStringList MetaEngine::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR
 
                     seq.append(seqValue);
                 }
-                qCDebug(LOG_METADATA) << "XMP String Seq (" << xmpTagName << "): " << seq;
+                qCDebug(DIGIKAM_METAENGINE_LOG) << "XMP String Seq (" << xmpTagName << "): " << seq;
 
                 return seq;
             }
@@ -725,7 +725,7 @@ QStringList MetaEngine::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -773,7 +773,7 @@ bool MetaEngine::setXmpTagStringSeq(const char* xmpTagName, const QStringList& s
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -825,7 +825,7 @@ QStringList MetaEngine::getXmpTagStringBag(const char* xmpTagName, bool escapeCR
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -873,7 +873,7 @@ bool MetaEngine::setXmpTagStringBag(const char* xmpTagName, const QStringList& b
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -1039,7 +1039,7 @@ QVariant MetaEngine::getXmpTagVariant(const char* xmpTagName, bool rationalAsLis
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -1073,7 +1073,7 @@ bool MetaEngine::registerXmpNameSpace(const QString& uri, const QString& prefix)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -1106,7 +1106,7 @@ bool MetaEngine::unregisterXmpNameSpace(const QString& uri)
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -1142,7 +1142,7 @@ bool MetaEngine::removeXmpTag(const char* xmpTagName, bool setProgramName) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else

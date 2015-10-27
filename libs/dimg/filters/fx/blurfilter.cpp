@@ -200,7 +200,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
         }
         else
         {
-            qCDebug(LOG_DIMG) << "Radius too small..."; 
+            qCDebug(DIGIKAM_DIMG_LOG) << "Radius too small..."; 
         }
 
         progress = (int)( ( (double)y * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
@@ -225,7 +225,7 @@ void BlurFilter::filterImage()
 {
     if (d->radius < 1)
     {
-        qCDebug(LOG_DIMG) << "Radius out of range..."; 
+        qCDebug(DIGIKAM_DIMG_LOG) << "Radius out of range..."; 
         return;
     }
 

@@ -245,7 +245,7 @@ void DImgFilterManager::Private::addGenerator(const ImgFilterPtr& generator)
     {
         if (filterMap.contains(id))
         {
-            qCDebug(LOG_DIMG) << "Attempt to register filter identifier" << id << "twice. Ignoring.";
+            qCDebug(DIGIKAM_DIMG_LOG) << "Attempt to register filter identifier" << id << "twice. Ignoring.";
             continue;
         }
 
@@ -479,7 +479,7 @@ bool DImgFilterManager::isRawConversion(const QString& filterIdentifier)
 DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentifier, int version)
 {
     QMutexLocker lock(&d->mutex);
-    qCDebug(LOG_DIMG) << "Creating filter " << filterIdentifier;
+    qCDebug(DIGIKAM_DIMG_LOG) << "Creating filter " << filterIdentifier;
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier).data();
 
     if (gen)

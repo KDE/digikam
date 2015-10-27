@@ -378,7 +378,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
     if (!set)
     {
-        qCDebug(LOG_WIDGETS) << "TURN OFF fullscreen";
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "TURN OFF fullscreen";
 
         // restore menubar
 
@@ -417,7 +417,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
     }
     else
     {
-        qCDebug(LOG_WIDGETS) << "TURN ON fullscreen";
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "TURN ON fullscreen";
 
         // hide menubar
 
@@ -483,7 +483,7 @@ bool DXmlGuiWindow::fullScreenIsActive() const
     if (d->fullScreenAction)
         return d->fullScreenAction->isChecked();
 
-    qCDebug(LOG_WIDGETS) << "FullScreenAction is not initialized";
+    qCDebug(DIGIKAM_WIDGETS_LOG) << "FullScreenAction is not initialized";
     return false;
 }
 

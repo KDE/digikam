@@ -16,7 +16,6 @@ set(libgeoiface_SRCS backends/mapbackend.cpp
                      groupstatecomputer.cpp
                      itemmarkertiler.cpp
                      geoiface_common.cpp
-                     geoiface_debug.cpp
                      lookupaltitude.cpp
                      lookupaltitudegeonames.cpp
                      lookupfactory.cpp

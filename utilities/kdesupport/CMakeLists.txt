@@ -7,11 +7,11 @@
 add_subdirectory(kio)
 add_subdirectory(akonadi)
 
-if(${KF5Kipi_FOUND})
+if(KF5Kipi_FOUND)
     add_subdirectory(kipi)
 endif()
 
-if(${KFILEMETADATA_FOUND})
+if(KF5FileMetaData_FOUND)
     add_subdirectory(baloo)
 endif()
 

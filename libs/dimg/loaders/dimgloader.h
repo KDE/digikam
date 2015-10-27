@@ -149,7 +149,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(quint64 w, quint64 h, ui
 
     if (requested > maximum)
     {
-        qCCritical(LOG_DIMG) << "Requested memory of" << requested*quint64(sizeof(Type))
+        qCCritical(DIGIKAM_DIMG_LOG) << "Requested memory of" << requested*quint64(sizeof(Type))
                                         << "is larger than size_t supported by platform.";
         return 0;
     }
@@ -182,7 +182,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
     }
     catch (std::bad_alloc& ex)
     {
-        qCCritical(LOG_DIMG) << "Failed to allocate chunk of memory of size" << size << ex.what();
+        qCCritical(DIGIKAM_DIMG_LOG) << "Failed to allocate chunk of memory of size" << size << ex.what();
         reserved = 0;
     }
 

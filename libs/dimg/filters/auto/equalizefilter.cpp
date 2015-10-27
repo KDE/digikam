@@ -80,7 +80,7 @@ void EqualizeFilter::equalizeImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        qCDebug(LOG_DIMG) << "Ref. image and Org. has different bits depth";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Ref. image and Org. has different bits depth";
         return;
     }
 
@@ -98,7 +98,7 @@ void EqualizeFilter::equalizeImage()
 
     if (map.isNull() || equalize_map.isNull())
     {
-        qCWarning(LOG_DIMG) << ("Unable to allocate memory!");
+        qCWarning(DIGIKAM_DIMG_LOG) << ("Unable to allocate memory!");
         return;
     }
 

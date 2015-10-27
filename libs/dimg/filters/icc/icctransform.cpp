@@ -537,7 +537,7 @@ bool IccTransform::open(TransformDescription& description)
 
     if (!d->handle)
     {
-        qCDebug(LOG_DIMG) << "LCMS internal error: cannot create a color transform instance";
+        qCDebug(DIGIKAM_DIMG_LOG) << "LCMS internal error: cannot create a color transform instance";
         return false;
     }
 
@@ -572,7 +572,7 @@ bool IccTransform::openProofing(TransformDescription& description)
 
     if (!d->handle)
     {
-        qCDebug(LOG_DIMG) << "LCMS internal error: cannot create a color transform instance";
+        qCDebug(DIGIKAM_DIMG_LOG) << "LCMS internal error: cannot create a color transform instance";
         return false;
     }
 
@@ -583,13 +583,13 @@ bool IccTransform::checkProfiles()
 {
     if (!d->effectiveInputProfile().open())
     {
-        qCDebug(LOG_DIMG) << "Cannot open embedded profile";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Cannot open embedded profile";
         return false;
     }
 
     if (!d->outputProfile.open())
     {
-        qCDebug(LOG_DIMG) << "Cannot open output profile";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Cannot open output profile";
         return false;
     }
 
@@ -597,7 +597,7 @@ bool IccTransform::checkProfiles()
     {
         if (!d->proofProfile.open())
         {
-            qCDebug(LOG_DIMG) << "Cannot open proofing profile";
+            qCDebug(DIGIKAM_DIMG_LOG) << "Cannot open proofing profile";
             return false;
         }
     }
@@ -667,7 +667,7 @@ bool IccTransform::apply(QImage& qimage)
         qimage.format() != QImage::Format_ARGB32 &&
         qimage.format() != QImage::Format_ARGB32_Premultiplied)
     {
-        qCDebug(LOG_DIMG) << "Unsupported QImage format" << qimage.format();
+        qCDebug(DIGIKAM_DIMG_LOG) << "Unsupported QImage format" << qimage.format();
         return false;
     }
 

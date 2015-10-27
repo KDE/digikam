@@ -228,7 +228,7 @@ bool DMetadata::mSecTimeStamp(const char* const exifTagName, int& ms) const
             if (ok)
             {
                 ms = _ms;
-                qCDebug(LOG_METADATA) << "msec timestamp: " << ms;
+                qCDebug(DIGIKAM_METAENGINE_LOG) << "msec timestamp: " << ms;
             }
         }
     }
@@ -346,7 +346,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
           return false;
 */
 
-    qCDebug(LOG_METADATA) << getFilePath() << " ==> Comment: " << comments;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Comment: " << comments;
 
     // In first, set captions properties to digiKam XMP namespace
 
@@ -401,7 +401,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
                         {
                             if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
                             {
-                                qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
+                                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
                                 return false;
                             }
                         }
@@ -578,7 +578,7 @@ CaptionsMap DMetadata::getImageTitles() const
 
 bool DMetadata::setImageTitles(const CaptionsMap& titles) const
 {
-    qCDebug(LOG_METADATA) << getFilePath() << " ==> Title: " << titles;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Title: " << titles;
 
     QString defaultTitle = titles[QLatin1String("x-default")].caption;
 
@@ -710,11 +710,11 @@ bool DMetadata::setImagePickLabel(int pickId) const
 {
     if (pickId < NoPickLabel || pickId > AcceptedLabel)
     {
-        qCDebug(LOG_METADATA) << "Pick Label value to write is out of range!";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Pick Label value to write is out of range!";
         return false;
     }
 
-    qCDebug(LOG_METADATA) << getFilePath() << " ==> Pick Label: " << pickId;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Pick Label: " << pickId;
 
     if (!setProgramId())
     {
@@ -736,11 +736,11 @@ bool DMetadata::setImageColorLabel(int colorId) const
 {
     if (colorId < NoColorLabel || colorId > WhiteLabel)
     {
-        qCDebug(LOG_METADATA) << "Color Label value to write is out of range!";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Color Label value to write is out of range!";
         return false;
     }
 
-    qCDebug(LOG_METADATA) << getFilePath() << " ==> Color Label: " << colorId;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Color Label: " << colorId;
 
     if (!setProgramId())
     {
@@ -771,15 +771,15 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
 
     if (rating < RatingMin || rating > RatingMax)
     {
-        qCDebug(LOG_METADATA) << "Rating value to write is out of range!";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Rating value to write is out of range!";
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << getFilePath() << " ==> Rating: +++++++++++" << rating;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Rating: +++++++++++" << rating;
 
     if (!setProgramId())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Could not set program id";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Could not set program id";
         return false;
     }
     QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_RATING_CONTAINER));
@@ -799,7 +799,7 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
         case NamespaceEntry::XMP:
             if(!setXmpTagString(nameSpace, QString::number(entry.convertRatio.at(rating))))
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
+                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
                 return false;
             }
             break;
@@ -876,7 +876,7 @@ QString DMetadata::getImageHistory() const
     if (hasXmp())
     {
         QString value = getXmpTagString("Xmp.digiKam.ImageHistory", false);
-        qCDebug(LOG_METADATA) << "Loading image history " << value;
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Loading image history " << value;
         return value;
     }
 
@@ -1261,7 +1261,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
                     if (ntp != tagsPath)
                     {
                         tagsPath = ntp;
-                        qCDebug(LOG_METADATA) << "Tags Path imported from Imach: " << tagsPath;
+                        qCDebug(DIGIKAM_METAENGINE_LOG) << "Tags Path imported from Imach: " << tagsPath;
                     }
 
                     return true;
@@ -1346,7 +1346,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
 
                     if (!setXmpTagStringSeq(nameSpace, newList))
                     {
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                        qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
                         return false;
                     }
                     break;
@@ -1355,7 +1355,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
 
                     if (!setXmpTagStringBag(nameSpace, newList))
                     {
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                        qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
                         return false;
                     }
                     break;
@@ -1364,7 +1364,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
 
                     if (!setACDSeeTagsPath(newList))
                     {
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                        qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
                         return false;
                     }
 
@@ -1418,7 +1418,7 @@ bool DMetadata::getACDSeeTagsPath(QStringList &tagsPath) const
 
         if (!tagsPath.isEmpty())
         {
-            qCDebug(LOG_METADATA) << "Tags Path imported from ACDSee: " << tagsPath;
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "Tags Path imported from ACDSee: " << tagsPath;
             return true;
         }
     }
@@ -1477,7 +1477,7 @@ bool DMetadata::setACDSeeTagsPath(const QStringList &tagsPath) const
     }
 
     QString xmlACDSee = QLatin1String("<Categories>") + xmlTags.join(QLatin1String("")) + QLatin1String("</Categories>");
-    qCDebug(DIGIKAM_GENERAL_LOG) << "xmlACDSee" << xmlACDSee;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "xmlACDSee" << xmlACDSee;
     removeXmpTag("Xmp.acdsee.categories");
 
     if (!xmlTags.isEmpty())
@@ -1521,7 +1521,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
 
         if (list.size() < 4)
         {
-            qCDebug(LOG_METADATA) << "Cannot parse WLPG rectangle string" << rectString;
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "Cannot parse WLPG rectangle string" << rectString;
             continue;
         }
 
@@ -1563,7 +1563,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
                     h);
 
         faces.insertMulti(person, rect);
-        qCDebug(LOG_METADATA) << "Found new rect " << person << " "<< rect;
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Found new rect " << person << " "<< rect;
     }
 
     return !faces.isEmpty();
@@ -1687,7 +1687,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     MetaEngine::AltLangMap rightUsage = t.rightUsageTerms();
     QString instructions          = t.instructions();
 
-    qCDebug(LOG_METADATA) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
@@ -2183,7 +2183,7 @@ IccProfile DMetadata::getIccProfile() const
 
     if (!data.isNull())
     {
-        qCDebug(LOG_METADATA) << "Found an ICC profile in Exif metadata";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Found an ICC profile in Exif metadata";
         return data;
     }
 
@@ -2192,13 +2192,13 @@ IccProfile DMetadata::getIccProfile() const
     {
         case DMetadata::WORKSPACE_SRGB:
         {
-            qCDebug(LOG_METADATA) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
             return IccProfile::sRGB();
         }
 
         case DMetadata::WORKSPACE_ADOBERGB:
         {
-            qCDebug(LOG_METADATA) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
             return IccProfile::adobeRGB();
         }
 
@@ -2232,7 +2232,7 @@ bool DMetadata::setIptcTag(const QString& text, int maxLength,
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
-    qCDebug(LOG_METADATA) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
@@ -2982,7 +2982,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
             //more: TODO?
             return map;
         default:
-            qCWarning(LOG_METADATA) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
+            qCWarning(DIGIKAM_METAENGINE_LOG) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
             return map;
     }
 

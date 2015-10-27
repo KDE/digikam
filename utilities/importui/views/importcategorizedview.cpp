@@ -325,7 +325,7 @@ QModelIndex ImportCategorizedView::nextIndexHint(const QModelIndex& anchor, cons
     QModelIndex hint = ItemViewCategorized::nextIndexHint(anchor, removed);
     CamItemInfo info   = d->filterModel->camItemInfo(anchor);
 
-    //qCDebug(LOG_IMPORTUI) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForCamItemInfo(info);
+    //qCDebug(DIGIKAM_IMPORTUI_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForCamItemInfo(info);
 
     // Fixes a special case of multiple (face) entries for the same image.
     // If one is removed, any entry of the same image shall be preferred.
@@ -350,7 +350,7 @@ QModelIndex ImportCategorizedView::nextIndexHint(const QModelIndex& anchor, cons
                 {
                     minDiff = distance;
                     hint = index;
-                    //qCDebug(LOG_IMPORTUI) << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
+                    //qCDebug(DIGIKAM_IMPORTUI_LOG) << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
                 }
             }
         }
@@ -432,7 +432,7 @@ void ImportCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
 
         if (!index.isValid())
         {
-            qCWarning(LOG_IMPORTUI) << "no QModelIndex found for" << *it;
+            qCWarning(DIGIKAM_IMPORTUI_LOG) << "no QModelIndex found for" << *it;
         }
         else
         {

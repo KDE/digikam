@@ -166,7 +166,7 @@ void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 
 void DMetadataSettingsContainer::defaultValues()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Loading default values ++++++++++++++++";
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "Loading default values ++++++++++++++++";
     d->unifyReadWrite = true;
 
     defaultTagValues();

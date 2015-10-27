@@ -166,10 +166,10 @@ target_link_libraries(digikamdatabase
 )
 
 if(KF5KFace_FOUND)
-    target_link_libraries(digikamdatabase PRIVATE ${KF5KFace_LIBRARIES})
+    target_link_libraries(digikamdatabase PRIVATE KF5::KFace)
 endif()
 
-if(${KFILEMETADATA_FOUND})
+if(KF5FileMetaData_FOUND)
     target_link_libraries(digikamdatabase PRIVATE baloowrap)
 endif()
 

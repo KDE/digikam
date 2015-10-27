@@ -88,7 +88,7 @@ if(ENABLE_MEDIAPLAYER)
 endif()
 
 if(KF5KFace_FOUND)
-    include_directories($<TARGET_PROPERTY:${KF5KFace_LIBRARIES},INTERFACE_INCLUDE_DIRECTORIES>)
+    include_directories($<TARGET_PROPERTY:KF5::KFace,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 add_library(importuibackend_src OBJECT ${libimportuibackend_SRCS})

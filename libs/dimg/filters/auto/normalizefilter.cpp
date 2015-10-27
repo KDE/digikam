@@ -75,7 +75,7 @@ void NormalizeFilter::normalizeImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        qCDebug(LOG_DIMG) << "Ref. image and Org. has different bits depth";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Ref. image and Org. has different bits depth";
         return;
     }
 

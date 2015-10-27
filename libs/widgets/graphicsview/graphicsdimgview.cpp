@@ -453,7 +453,7 @@ void GraphicsDImgView::slotPanIconHidden()
 void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
 {
     QRectF zoomRect = item()->zoomSettings()->mapImageToZoom(imageRect);
-    qCDebug(LOG_WIDGETS) << imageRect << zoomRect;
+    qCDebug(DIGIKAM_WIDGETS_LOG) << imageRect << zoomRect;
     centerOn(item()->mapToScene(zoomRect.center()));
 
     if (b)

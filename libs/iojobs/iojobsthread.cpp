@@ -262,7 +262,7 @@ QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColP
     }
 
     QUrl url = QUrl::fromLocalFile(fileInfo.filePath());
-    qCDebug(DIGIKAM_GENERAL_LOG) << "URL USED BEFORE: " << usedUrls.contains(url);
+    qCDebug(DIGIKAM_IOJOB_LOG) << "URL USED BEFORE: " << usedUrls.contains(url);
 
     if (!fileInfo.exists() && !usedUrls.contains(url))
     {

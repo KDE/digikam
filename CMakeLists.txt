@@ -165,7 +165,7 @@ find_package(KF5 ${KF5_VERSION}
 )
 
 find_package(KF5 ${KF5_VERSION}
-             REQUIRED OPTIONAL_COMPONENTS
+             OPTIONAL_COMPONENTS
              ItemModels            # For geolocation support (mandatory)
              Bookmarks             # For geolocation support (optional)
 )
@@ -365,31 +365,24 @@ endif()
 
 if(ENABLE_KFILEMETADATASUPPORT)
     find_package(KF5FileMetaData)
-
-    if(KF5FileMetaData_FOUND)
-        set(KFILEMETADATA_FOUND TRUE)
-    else()
-        set(KFILEMETADATA_FOUND FALSE)
-    endif()
-
 endif()
 
 # -- compilation options definitions -----------------------------------------------------------
 
-MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
 MACRO_BOOL_TO_01(KF5AkonadiContact_FOUND  HAVE_AKONADICONTACT)
 MACRO_BOOL_TO_01(KF5Sane_FOUND            HAVE_KSANE)
-MACRO_BOOL_TO_01(LENSFUN_FOUND            HAVE_LENSFUN)
-MACRO_BOOL_TO_01(LQR-1_FOUND              HAVE_LIBLQR_1)
-MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT      HAVE_MYSQLSUPPORT)
-MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
-MACRO_BOOL_TO_01(JASPER_FOUND             HAVE_JASPER)
-MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
 MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
 MACRO_BOOL_TO_01(KF5KFace_FOUND           HAVE_KFACE)
-MACRO_BOOL_TO_01(MARBLE_FOUND             HAVE_MARBLE)
-MACRO_BOOL_TO_01(KFILEMETADATA_FOUND      HAVE_KFILEMETADATA)
+MACRO_BOOL_TO_01(KF5FileMetaData_FOUND    HAVE_KFILEMETADATA)
 MACRO_BOOL_TO_01(KF5Bookmarks_FOUND       HAVE_KBOOKMARKS)
+MACRO_BOOL_TO_01(LENSFUN_FOUND            HAVE_LENSFUN)
+MACRO_BOOL_TO_01(LQR-1_FOUND              HAVE_LIBLQR_1)
+MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
+MACRO_BOOL_TO_01(JASPER_FOUND             HAVE_JASPER)
+MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
+MACRO_BOOL_TO_01(MARBLE_FOUND             HAVE_MARBLE)
+MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT      HAVE_MYSQLSUPPORT)
+MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -448,7 +441,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/proj
 PRINT_OPTIONAL_LIBRARY_STATUS("libkface"          "https://projects.kde.org/projects/extragear/libs/libkface"       "(version >= ${KFACE_MIN_VERSION})"   "digiKam will be compiled without faces detection and recognition support."   KF5KFace_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libmarble"         "https://projects.kde.org/projects/kde/kdeedu/marble"             "(version >= 0.22.0)"                 "digiKam will be compiled without geolocation maps support."                  MARBLE_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libksane"          "https://projects.kde.org/projects/kde/kdegraphics/libs/libksane" "(version >= ${KSANE_MIN_VERSION})"   "digiKam will be compiled without libksane support."                          KF5Sane_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= 5.0.0)"                  "digiKam will be compiled without KDE file metadata support."                 KFILEMETADATA_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= 5.0.0)"                  "digiKam will be compiled without KDE file metadata support."                 KF5FileMetaData_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= 5.0.0)"                  "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"         "http://www.ece.uvic.ca/~mdadams/jasper"                          "(version >= 1.7.0)"                  "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"        "http://lensfun.sourceforge.net"                                  "(version >= 0.2.6)"                  "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)

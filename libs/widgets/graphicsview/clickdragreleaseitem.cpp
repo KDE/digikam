@@ -187,7 +187,7 @@ void ClickDragReleaseItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e)
 
 void ClickDragReleaseItem::keyPressEvent(QKeyEvent* e)
 {
-    qCDebug(LOG_WIDGETS) << e;
+    qCDebug(DIGIKAM_WIDGETS_LOG) << e;
 
     switch (e->key())
     {

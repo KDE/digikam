@@ -219,7 +219,7 @@ void DFileSelector::slotBtnClicked()
 {
     if (d->fdMode == QFileDialog::ExistingFiles)
     {
-        qCDebug(LOG_WIDGETS) << "Multiple selection is not supported";
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "Multiple selection is not supported";
         return;
     }
 
@@ -259,7 +259,7 @@ DWorkingPixmap::DWorkingPixmap()
 
     if (pix.isNull())
     {
-        qCWarning(LOG_WIDGETS) << "Invalid pixmap specified.";
+        qCWarning(DIGIKAM_WIDGETS_LOG) << "Invalid pixmap specified.";
         return;
     }
 
@@ -270,7 +270,7 @@ DWorkingPixmap::DWorkingPixmap()
 
     if (pix.width() % size.width() || pix.height() % size.height())
     {
-        qCWarning(LOG_WIDGETS) << "Invalid framesize.";
+        qCWarning(DIGIKAM_WIDGETS_LOG) << "Invalid framesize.";
         return;
     }
 
@@ -303,7 +303,7 @@ QSize DWorkingPixmap::frameSize() const
 {
     if (isEmpty())
     {
-        qCWarning(LOG_WIDGETS) << "No frame loaded.";
+        qCWarning(DIGIKAM_WIDGETS_LOG) << "No frame loaded.";
         return QSize();
     }
 
@@ -319,7 +319,7 @@ QPixmap DWorkingPixmap::frameAt(int index) const
 {
     if (isEmpty())
     {
-        qCWarning(LOG_WIDGETS) << "No frame loaded.";
+        qCWarning(DIGIKAM_WIDGETS_LOG) << "No frame loaded.";
         return QPixmap();
     }
 

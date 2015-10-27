@@ -93,7 +93,7 @@ void CharcoalFilter::filterImage()
 {
     if (m_orgImage.isNull())
     {
-        qCWarning(LOG_DIMG) << "No image data available!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "No image data available!";
         return;
     }
 
@@ -110,7 +110,7 @@ void CharcoalFilter::filterImage()
 
     if ((int)m_orgImage.width() < kernelWidth)
     {
-        qCWarning(LOG_DIMG) << "Image is smaller than radius!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Image is smaller than radius!";
         return;
     }
 
@@ -118,7 +118,7 @@ void CharcoalFilter::filterImage()
 
     if (kernel.isNull())
     {
-        qCWarning(LOG_DIMG) << "Unable to allocate memory!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Unable to allocate memory!";
         return;
     }
 
@@ -256,7 +256,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
     if ((kernelWidth % 2) == 0)
     {
-        qCWarning(LOG_DIMG) << "Kernel width must be an odd number!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Kernel width must be an odd number!";
         return false;
     }
 
@@ -267,7 +267,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
     if (!normal_kernel)
     {
-        qCWarning(LOG_DIMG) << "Unable to allocate memory!";
+        qCWarning(DIGIKAM_DIMG_LOG) << "Unable to allocate memory!";
         return false;
     }
 

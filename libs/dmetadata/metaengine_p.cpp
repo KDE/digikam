@@ -109,7 +109,7 @@ bool MetaEngine::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
         return false;
     }
 }
@@ -118,7 +118,7 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
 {
     if (!finfo.isWritable())
     {
-        qCDebug(LOG_METADATA) << "File '" << finfo.fileName().toLatin1().constData() << "' is read only. Metadata not written.";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "File '" << finfo.fileName().toLatin1().constData() << "' is read only. Metadata not written.";
         return false;
     }
 
@@ -158,7 +158,7 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
 
     if (!writeRawFiles && (rawTiffBasedSupported.contains(ext) || rawTiffBasedNotSupported.contains(ext)) )
     {
-        qCDebug(LOG_METADATA) << finfo.fileName()
+        qCDebug(DIGIKAM_METAENGINE_LOG) << finfo.fileName()
                                << "is a TIFF based RAW file, writing to such a file is disabled by current settings.";
         return false;
     }
@@ -166,20 +166,20 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
 /*
     if (rawTiffBasedNotSupported.contains(ext))
     {
-        qCDebug(LOG_METADATA) << finfo.fileName()
+        qCDebug(DIGIKAM_METAENGINE_LOG) << finfo.fileName()
                                << "is TIFF based RAW file not yet supported. Metadata not saved.";
         return false;
     }
 
     if (rawTiffBasedSupported.contains(ext) && !writeRawFiles)
     {
-        qCDebug(LOG_METADATA) << finfo.fileName()
+        qCDebug(DIGIKAM_METAENGINE_LOG) << finfo.fileName()
                                << "is TIFF based RAW file supported but writing mode is disabled. "
                                << "Metadata not saved.";
         return false;
     }
 
-    qCDebug(LOG_METADATA) << "File Extension: " << ext << " is supported for writing mode";
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "File Extension: " << ext << " is supported for writing mode";
 
     bool ret = false;
 */
@@ -197,7 +197,7 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
         return false;
     }
 }
@@ -223,7 +223,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
             wroteComment = true;
         }
 
-        qCDebug(LOG_METADATA) << "wroteComment: " << wroteComment;
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "wroteComment: " << wroteComment;
 
         // Exif metadata ----------------------------------
 
@@ -283,7 +283,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
             wroteEXIF = true;
         }
 
-        qCDebug(LOG_METADATA) << "wroteEXIF: " << wroteEXIF;
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "wroteEXIF: " << wroteEXIF;
 
         // Iptc metadata ----------------------------------
 
@@ -295,7 +295,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
             wroteIPTC = true;
         }
 
-        qCDebug(LOG_METADATA) << "wroteIPTC: " << wroteIPTC;
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "wroteIPTC: " << wroteIPTC;
 
         // Xmp metadata -----------------------------------
 
@@ -309,16 +309,16 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
 #endif
         }
 
-        qCDebug(LOG_METADATA) << "wroteXMP: " << wroteXMP;
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "wroteXMP: " << wroteXMP;
 
         if (!wroteComment && !wroteEXIF && !wroteIPTC && !wroteXMP)
         {
-            qCDebug(LOG_METADATA) << "Writing metadata is not supported for file" << finfo.fileName();
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "Writing metadata is not supported for file" << finfo.fileName();
             return false;
         }
         else if (!wroteEXIF || !wroteIPTC || !wroteXMP)
         {
-            qCDebug(LOG_METADATA) << "Support for writing metadata is limited for file" << finfo.fileName();
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "Support for writing metadata is limited for file" << finfo.fileName();
         }
 
         if (!updateFileTimeStamp)
@@ -341,7 +341,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
                 ::utime(QFile::encodeName(filePath).constData(), &ut);
             }
 
-            qCDebug(LOG_METADATA) << "File time stamp restored";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "File time stamp restored";
         }
         else
         {
@@ -356,7 +356,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -375,13 +375,13 @@ void MetaEngineData::Private::clear()
 void MetaEngine::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
-    qCCritical(LOG_METADATA) << msg.toLatin1().constData() << " (Error #"
+    qCCritical(DIGIKAM_METAENGINE_LOG) << msg.toLatin1().constData() << " (Error #"
                               << e.code() << ": " << s.c_str();
 }
 
 void MetaEngine::Private::printExiv2MessageHandler(int lvl, const char* msg)
 {
-    qCDebug(LOG_METADATA) << "Exiv2 (" << lvl << ") : " << msg;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "Exiv2 (" << lvl << ") : " << msg;
 }
 
 QString MetaEngine::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) const
@@ -433,7 +433,7 @@ QString MetaEngine::Private::convertCommentValue(const Exiv2::Exifdatum& exifDat
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -616,7 +616,7 @@ int MetaEngine::Private::getXMPTagsListFromPrefix(const QString& pf, MetaEngine:
     }
     catch(...)
     {
-        qCCritical(LOG_METADATA) << "Default exception from Exiv2";
+        qCCritical(DIGIKAM_METAENGINE_LOG) << "Default exception from Exiv2";
     }
 
 #else

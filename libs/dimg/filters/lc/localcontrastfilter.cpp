@@ -363,8 +363,8 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
 
     if ((d->par.highSaturation != 100) || (d->par.lowSaturation != 100))
     {
-        qCDebug(LOG_DIMG) << "highSaturation : " << d->par.highSaturation;
-        qCDebug(LOG_DIMG) << "lowSaturation : "  << d->par.lowSaturation;
+        qCDebug(DIGIKAM_DIMG_LOG) << "highSaturation : " << d->par.highSaturation;
+        qCDebug(DIGIKAM_DIMG_LOG) << "lowSaturation : "  << d->par.lowSaturation;
 
         QList <QFuture<void> > tasks;
 

@@ -258,13 +258,13 @@ void ContentAwareFilter::progressCallback(int progress)
         postProgress(progress);
     }
 
-    //qCDebug(LOG_DIMG) << "Content Aware Resizing: " << progress << " %";
+    //qCDebug(DIGIKAM_DIMG_LOG) << "Content Aware Resizing: " << progress << " %";
 }
 
 void ContentAwareFilter::cancelFilter()
 {
     // Handle cancel operations with lqr library.
-    qCDebug(LOG_DIMG) << "Stop LibLqr computation...";
+    qCDebug(DIGIKAM_DIMG_LOG) << "Stop LibLqr computation...";
     lqr_carver_cancel(d->carver);
     DImgThreadedFilter::cancelFilter();
 }

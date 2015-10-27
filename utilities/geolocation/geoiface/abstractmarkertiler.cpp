@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "geoiface_debug.h"
+#include "digikam_debug.h"
 #include "geoiface_common.h"
 
 namespace GeoIface
@@ -219,7 +219,7 @@ AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* con
         startIndex.appendLinearIndex(0);
         endIndex.appendLinearIndex(TileIndex::Tiling*TileIndex::Tiling-1);
     }
-//     qCDebug(GEOIFACE_LOG)<<d->startIndexLinear<<d->endIndexLinear;
+//     qCDebug(DIGIKAM_GEOIFACE_LOG)<<d->startIndexLinear<<d->endIndexLinear;
 
     d->boundsList << QPair<TileIndex, TileIndex>(startIndex, endIndex);
 
@@ -259,7 +259,7 @@ AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* con
         const TileIndex startIndex = TileIndex::fromCoordinates(currentBounds.first, d->level);
         const TileIndex endIndex   = TileIndex::fromCoordinates(currentBounds.second, d->level);
 
-//         qCDebug(GEOIFACE_LOG)<<currentBounds.first.geoUrl()<<startIndex<<currentBounds.second.geoUrl()<<endIndex;
+//         qCDebug(DIGIKAM_GEOIFACE_LOG)<<currentBounds.first.geoUrl()<<startIndex<<currentBounds.second.geoUrl()<<endIndex;
         d->boundsList << QPair<TileIndex, TileIndex>(startIndex, endIndex);
     }
 
@@ -299,7 +299,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
     Q_FOREVER
     {
         const int currentLevel = d->currentIndex.level();
-//         qCDebug(GEOIFACE_LOG) << d->level << currentLevel << d->atStartOfLevel << d->currentIndex;
+//         qCDebug(DIGIKAM_GEOIFACE_LOG) << d->level << currentLevel << d->atStartOfLevel << d->currentIndex;
 
         if (d->atStartOfLevel)
         {
@@ -370,7 +370,7 @@ TileIndex AbstractMarkerTiler::NonEmptyIterator::nextIndex()
 
             GEOIFACE_ASSERT(limitLatBL <= limitLatTR);
             GEOIFACE_ASSERT(limitLonBL <= limitLonTR);
-//             qCDebug(GEOIFACE_LOG) << limitLatBL << limitLonBL << limitLatTR << limitLonTR << compareLevel << currentLevel;
+//             qCDebug(DIGIKAM_GEOIFACE_LOG) << limitLatBL << limitLonBL << limitLatTR << limitLonTR << compareLevel << currentLevel;
 
             int currentLat = d->currentIndex.indexLat(d->currentIndex.level());
             int currentLon = d->currentIndex.indexLon(d->currentIndex.level());

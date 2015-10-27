@@ -58,12 +58,12 @@ void ICCPreviewWidget::slotShowPreview(const QUrl& url)
 
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
     {
-        qCDebug(LOG_WIDGETS) << url << " is a readable local file";
+        qCDebug(DIGIKAM_WIDGETS_LOG) << url << " is a readable local file";
         m_iccProfileWidget->loadFromURL(url);
     }
     else
     {
-        qCDebug(LOG_WIDGETS) << url << " is not a readable local file";
+        qCDebug(DIGIKAM_WIDGETS_LOG) << url << " is not a readable local file";
     }
 }
 
