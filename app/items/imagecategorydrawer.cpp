@@ -267,7 +267,7 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
     QString day   = tmpLocale.toString(date, QLatin1String("dd"));
 
     // short form of the month
-    QString month = tmpLocale.toString(date, QLatin1String("ddd"));
+    QString month = tmpLocale.toString(date, QLatin1String("MMM"));
 
     // long form of the year
     QString year  = tmpLocale.toString(date, QLatin1String("yyyy"));
