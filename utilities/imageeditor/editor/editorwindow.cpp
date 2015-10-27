@@ -77,6 +77,7 @@
 #include <krun.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
+#include <kio_version.h>
 
 // Local includes
 
@@ -2839,7 +2840,11 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
         service = d->servicesMap[name];
     }
 
+#if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
     KRun::run(*service, QList<QUrl>() << url, this);
+#else
+    KRun::runService(*service, QList<QUrl>() << url, this);
+#endif
 }
 
 }  // namespace Digikam

@@ -36,6 +36,7 @@
 #include <kopenwithdialog.h>
 #include <krun.h>
 #include <klocalizedstring.h>
+#include <kio_version.h>
 
 // Local includes
 
@@ -291,7 +292,11 @@ void ImportContextMenuHelper::slotOpenWith(QAction* action)
         service = d->servicesMap[name];
     }
 
+#if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
     KRun::run(*service, list, d->parent);
+#else
+    KRun::runService(*service, list, d->parent);
+#endif
 }
 
 void ImportContextMenuHelper::addRotateMenu(itemIds& /*ids*/)

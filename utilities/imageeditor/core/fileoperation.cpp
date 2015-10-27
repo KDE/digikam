@@ -44,6 +44,7 @@
 
 #include <krun.h>
 #include <kmimetypetrader.h>
+#include <kio_version.h>
 
 // Local includes
 
@@ -172,7 +173,12 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWi
          it != servicesMap.constEnd(); ++it)
     {
         // Run the dedicated app to open the item.
+
+#if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
         KRun::run(*it.key(), it.value(), parentWidget);
+#else
+        KRun::runService(*it.key(), it.value(), parentWidget);
+#endif        
     }
 }
 
