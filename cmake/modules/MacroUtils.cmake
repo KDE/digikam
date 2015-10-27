@@ -1,6 +1,6 @@
 # Some useful macros for printing status information
 #
-# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -157,15 +157,21 @@ macro(PRINT_OPTIONAL_QTMODULE_STATUS NAME)
 
 endmacro()
 
-
 # -------------------------------------------------------------------------
-MACRO(HEADER_DIRECTORIES return_list)
-    FILE(GLOB_RECURSE new_list *.h)
-    SET(dir_list "")
-    FOREACH(file_path ${new_list})
-        GET_FILENAME_COMPONENT(dir_path ${file_path} PATH)
-        SET(dir_list ${dir_list} ${dir_path})
-    ENDFOREACH()
-    LIST(REMOVE_DUPLICATES dir_list)
-    SET(${return_list} ${dir_list})
-ENDMACRO()
+
+macro(HEADER_DIRECTORIES return_list)
+
+    file(GLOB_RECURSE new_list *.h)
+    set(dir_list "")
+
+    foreach(file_path ${new_list})
+
+        get_filename_component(dir_path ${file_path} PATH)
+        set(dir_list ${dir_list} ${dir_path})
+
+    endforeach()
+
+    list(REMOVE_DUPLICATES dir_list)
+    set(${return_list} ${dir_list})
+
+endmacro()
