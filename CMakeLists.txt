@@ -68,10 +68,6 @@ set(EXIV2_MIN_VERSION   "0.24")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
-if(POLICY CMP0063)
-    cmake_policy(SET CMP0063 OLD)
-endif()
-
 ############## ECM setup ######################
 
 find_package(ECM ${ECM_MIN_VERSION} CONFIG REQUIRED)
