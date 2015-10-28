@@ -42,10 +42,11 @@
 
 // Eigen includes
 
-// Pragma directives to reduce warnings from Boost header files.
+// Pragma directives to reduce warnings from Eigen header files.
 #if not defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
 #include <Eigen/Eigen>
