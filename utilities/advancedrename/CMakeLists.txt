@@ -5,7 +5,10 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# sources
+if (POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif (POLICY CMP0063)
+
 file(GLOB libadvancedrename_SRCS
           ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/common/*.cpp
@@ -14,13 +17,12 @@ file(GLOB libadvancedrename_SRCS
           ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/*.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/*.cpp
           ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/database/keys/*.cpp
-    )
+)
 
-# ui files
 file(GLOB libadvancedrename_UI
           ${CMAKE_CURRENT_SOURCE_DIR}/parser/modifiers/*.ui
           ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/*.ui
-    )
+)
 
 ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 
@@ -42,7 +44,6 @@ include_directories(
 add_library(advancedrename_src OBJECT ${libadvancedrename_SRCS})
 add_library(advancedrename STATIC $<TARGET_OBJECTS:advancedrename_src>)
 
-
 target_link_libraries(advancedrename
                       PRIVATE
                       digikamdatabase
@@ -51,4 +52,4 @@ target_link_libraries(advancedrename
                       Qt5::Sql
 
                       KF5::I18n
-                     )
+)

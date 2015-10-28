@@ -51,9 +51,6 @@ set(DIGIKAM_VERSION_STRING
 set(DBCONFIG_XML_VERSION "2")
 
 # =======================================================
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
 
 set(CMAKE_MIN_VERSION   "2.8.12")
 set(ECM_MIN_VERSION     "1.7.0")

@@ -5,9 +5,12 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+if (POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif (POLICY CMP0063)
+
 # We need to include the setup dir for showfoto BEFORE the other include dirs,
 # otherwise the one from the "utilities" dir will be used
-# TODO is this still required?
 include_directories(BEFORE
                     ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar
                     ${CMAKE_CURRENT_SOURCE_DIR}/setup

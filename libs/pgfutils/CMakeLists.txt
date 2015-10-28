@@ -1,12 +1,16 @@
 #
 # Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
-# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# Enable C++ Exceptions support, required by pgfutils
-kde_source_files_enable_exceptions(pgfutils.cpp)
+if (POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif (POLICY CMP0063)
+
+# Libpgf require C++ Exceptions.
+kde_enable_exceptions()
 
 set(libpgfutils_SRCS pgfutils.cpp)
 
@@ -17,5 +21,4 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-# TODO needs exports to build a dynamic lib if wanted.
 add_library(pgfutils_src OBJECT ${libpgfutils_SRCS})
