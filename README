@@ -89,7 +89,7 @@ Required:
 CMake             >= 3.0.0                      http://www.cmake.org
 libqt             >= 5.1.0                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
 kdelibs           >= 5.1.0                      http://www.kde.org
-libexiv2          >= 0.24                       http://www.exiv2.org                                              Exiv2 0.25 recommend
+libexiv2          >= 0.24                       http://www.exiv2.org                                              Exiv2 0.25 recommended
 libjpeg           >= 6b                         http://www.ijg.org
 libtiff           >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng            >= 1.2.0                      http://www.libpng.org/pub/png/libpng.html
@@ -107,7 +107,7 @@ libkface          >= 5.0.0                      https://projects.kde.org/project
 libksane          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libksane                                         To support digital scanner.
 libmarble         >= 0.22.0                     https://projects.kde.org/projects/kde/kdeedu/marble                                                     To support geolocation maps.
 libakonadicontact >= 5.x                        https://projects.kde.org/projects/kde/kdepimlibs/repository/revisions/master/show/akonadi-contact       To support KDE Address Book entries.
-libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/frameworks/baloo                                                      To support KDE files indexing support.
+libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/frameworks/kfilemetadata                                              To support KDE files indexing support.
 libjasper         >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                                                                  To support JPEG2000.
 liblensfun        >= 0.2.6                      http://lensfun.sourceforge.net                                                                          To support LensCorrection tool.
 liblqr-1          >= 0.4.1                      http://liblqr.wikidot.com                                                                               To support Liquid Rescale tool.
