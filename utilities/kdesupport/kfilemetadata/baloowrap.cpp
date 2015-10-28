@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QUrl>
-#include <QDebug>
 
 // KDE includes
 

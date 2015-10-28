@@ -12,7 +12,7 @@ if(KF5Kipi_FOUND)
 endif()
 
 if(KF5FileMetaData_FOUND)
-    add_subdirectory(baloo)
+    add_subdirectory(kfilemetadata)
 endif()
 
 if(KF5Sane_FOUND)
