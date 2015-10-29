@@ -29,21 +29,21 @@
 
 // Qt includes
 
-#include <QtCore/QBitArray>
-#include <QtCore/QObject>
-#include <QtCore/QPoint>
-#include <QtCore/QDebug>
+#include <QBitArray>
+#include <QObject>
+#include <QPoint>
+#include <QDebug>
 
-// local includes
+// Local includes
 
 #include "geocoordinates.h"
 #include "geoiface_types.h"
-
+#include "digikam_export.h"
 
 namespace GeoIface
 {
 
-class  TileIndex
+class DIGIKAM_EXPORT  TileIndex
 {
 public:
 

@@ -28,14 +28,14 @@
 // local includes
 
 #include "geoiface_types.h"
-
+#include "digikam_export.h"
 
 namespace GeoIface
 {
 
 class LookupAltitude;
 
-class  LookupFactory
+class DIGIKAM_EXPORT LookupFactory
 {
 public:
 

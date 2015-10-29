@@ -33,10 +33,14 @@
 
 #include <QScopedPointer>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace GeoIface
 {
 
-class GroupStateComputer
+class DIGIKAM_EXPORT GroupStateComputer
 {
 public:
 

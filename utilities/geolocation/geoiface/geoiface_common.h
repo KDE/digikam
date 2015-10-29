@@ -31,12 +31,12 @@
 
 // Qt includes
 
-#include <QtCore/QPoint>
-#include <QtCore/QPointer>
-#include <QtCore/QSharedData>
-#include <QtCore/QSize>
-#include <QtWidgets/QWidget>
-#include <QtGui/QPixmap>
+#include <QPoint>
+#include <QPointer>
+#include <QSharedData>
+#include <QSize>
+#include <QWidget>
+#include <QPixmap>
 
 // GeoIface includes
 

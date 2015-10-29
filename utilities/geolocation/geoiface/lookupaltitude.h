@@ -27,17 +27,17 @@
 #ifndef LOOKUP_ALTITUDE_H
 #define LOOKUP_ALTITUDE_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 // local includes
 
-
+#include "digikam_export.h"
 #include "geocoordinates.h"
 
 namespace GeoIface
 {
 
-class  LookupAltitude : public QObject
+class DIGIKAM_EXPORT LookupAltitude : public QObject
 {
     Q_OBJECT
 

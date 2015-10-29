@@ -41,8 +41,6 @@
 #include "captionvalues.h"
 #include "databaseaccess.h"
 
-
-
 namespace Digikam
 {
 

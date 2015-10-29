@@ -27,7 +27,9 @@
 #ifndef GROUPSTATE_H
 #define GROUPSTATE_H
 
-#include <QtCore/QFlags>
+// Qt includes
+
+#include <QFlags>
 
 namespace GeoIface
 {

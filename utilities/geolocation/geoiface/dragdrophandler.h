@@ -31,14 +31,14 @@
 
 #include "geocoordinates.h"
 #include "geoiface_types.h"
-
+#include "digikam_export.h"
 
 class QDropEvent;
 
 namespace GeoIface
 {
 
-class  DragDropHandler : public QObject
+class DIGIKAM_EXPORT DragDropHandler : public QObject
 {
     Q_OBJECT
 

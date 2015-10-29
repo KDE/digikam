@@ -27,12 +27,16 @@
 
 // Qt includes
 
-#include <QtWidgets/QFrame>
+#include <QFrame>
+
+// Local includes
+
+#include "digikam_export.h"
 
 namespace GeoIface
 {
 
-class PlaceholderWidget : public QFrame
+class DIGIKAM_EXPORT PlaceholderWidget : public QFrame
 {
     Q_OBJECT
 

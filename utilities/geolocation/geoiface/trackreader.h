@@ -29,18 +29,19 @@
 
 // Qt includes
 
-#include <QtXml/QXmlDefaultHandler>
+#include <QXmlDefaultHandler>
 
 // local includes
 
 #include "tracks.h"
+#include "digikam_export.h"
 
 class TestTracks;
 
 namespace GeoIface
 {
 
-class TrackReader : public QXmlDefaultHandler
+class DIGIKAM_EXPORT TrackReader : public QXmlDefaultHandler
 {
 public:
 

@@ -27,10 +27,14 @@
 
 #include <QWidget>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class DNGSettings : public QWidget
+class DIGIKAM_EXPORT DNGSettings : public QWidget
 {
     Q_OBJECT
 

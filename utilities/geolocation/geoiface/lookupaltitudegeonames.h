@@ -30,20 +30,19 @@
 // local includes
 
 #include "lookupaltitude.h"
+#include "digikam_export.h"
 
-/// @cond false
 namespace KIO
 {
     class Job;
 }
 
 class KJob;
-/// @endcond
 
 namespace GeoIface
 {
 
-class LookupAltitudeGeonames : public LookupAltitude
+class DIGIKAM_EXPORT LookupAltitudeGeonames : public LookupAltitude
 {
     Q_OBJECT
 

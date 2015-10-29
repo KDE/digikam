@@ -25,8 +25,9 @@
 #ifndef TILEGROUPER_H
 #define TILEGROUPER_H
 
-// local includes
+// Local includes
 
+#include "digikam_export.h"
 #include "geoiface_common.h"
 
 namespace GeoIface
@@ -34,7 +35,7 @@ namespace GeoIface
 
 class MapBackend;
 
-class TileGrouper : public QObject
+class DIGIKAM_EXPORT TileGrouper : public QObject
 {
     Q_OBJECT
 

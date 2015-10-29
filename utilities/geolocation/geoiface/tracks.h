@@ -29,21 +29,22 @@
 
 // Qt includes
 
-#include <QtGui/QColor>
-#include <QtCore/QDateTime>
-#include <QtCore/QUrl>
+#include <QColor>
+#include <QDateTime>
+#include <QUrl>
 
 // local includes
 
 #include "geoiface_types.h"
 #include "geocoordinates.h"
+#include "digikam_export.h"
 
 class TestGPXParsing;
 
 namespace GeoIface
 {
 
-class  TrackManager : public QObject
+class DIGIKAM_EXPORT TrackManager : public QObject
 {
     Q_OBJECT
 

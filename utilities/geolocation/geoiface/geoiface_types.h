@@ -29,7 +29,7 @@
 
 // Qt includes
 
-#include <QtCore/QPersistentModelIndex>
+#include <QPersistentModelIndex>
 
 Q_DECLARE_METATYPE(QPersistentModelIndex)
 
