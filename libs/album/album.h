@@ -40,6 +40,7 @@
 // Local includes
 
 #include "albuminfo.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -62,7 +63,7 @@ class DatabaseUrl;
  * This class provides a means of building a tree representation for
  * Albums @see Album::setParent().
  */
-class Album
+class DIGIKAM_EXPORT Album
 {
 public:
 
@@ -342,7 +343,7 @@ private:
  *
  * A Physical Album representation
  */
-class PAlbum : public Album
+class DIGIKAM_EXPORT PAlbum : public Album
 {
 public:
 
@@ -399,7 +400,7 @@ private:
  *
  * A Tag Album representation
  */
-class TAlbum : public Album
+class DIGIKAM_EXPORT TAlbum : public Album
 {
 public:
 
@@ -438,7 +439,7 @@ private:
  *
  * A Date Album representation
  */
-class DAlbum : public Album
+class DIGIKAM_EXPORT DAlbum : public Album
 {
 public:
 
@@ -471,7 +472,7 @@ private:
  *
  * A Search Album representation
  */
-class SAlbum : public Album
+class DIGIKAM_EXPORT SAlbum : public Album
 {
 public:
 
@@ -550,7 +551,7 @@ private:
  *
  *  \warning Do not delete albums using this iterator.
  */
-class AlbumIterator
+class DIGIKAM_EXPORT AlbumIterator
 {
 public:
 

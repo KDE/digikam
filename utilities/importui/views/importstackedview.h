@@ -38,6 +38,7 @@
 #include "thumbbardock.h"
 #include "camiteminfo.h"
 #include "importiconview.h"
+#include "digikam_export.h"
 
 #ifdef HAVE_VIDEOPLAYER
 #include "mediaplayerview.h"
@@ -50,7 +51,7 @@
 namespace Digikam
 {
 
-class ImportStackedView : public QStackedWidget
+class DIGIKAM_EXPORT ImportStackedView : public QStackedWidget
 {
     Q_OBJECT
 

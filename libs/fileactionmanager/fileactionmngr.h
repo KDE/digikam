@@ -29,6 +29,7 @@
 
 #include "imageinfo.h"
 #include "metaengine_rotation.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -37,7 +38,7 @@ class MetadataHub;
 class MetadataHubOnTheRoad;
 class DisjointMetadata;
 
-class FileActionMngr : public QObject
+class DIGIKAM_EXPORT FileActionMngr : public QObject
 {
     Q_OBJECT
 

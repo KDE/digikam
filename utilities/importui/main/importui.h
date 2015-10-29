@@ -46,6 +46,7 @@
 #include "downloadsettings.h"
 #include "importiconview.h"
 #include "dxmlguiwindow.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -57,7 +58,7 @@ class CameraHistoryUpdater;
 class ImportIconView;
 class CameraThumbsCtrl;
 
-class ImportUI : public DXmlGuiWindow
+class DIGIKAM_EXPORT ImportUI : public DXmlGuiWindow
 {
     Q_OBJECT
 

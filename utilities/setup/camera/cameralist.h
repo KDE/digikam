@@ -30,6 +30,10 @@
 #include <QList>
 #include <QObject>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QString;
 class QDateTime;
 class QAction;
@@ -39,7 +43,7 @@ namespace Digikam
 
 class CameraType;
 
-class CameraList : public QObject
+class DIGIKAM_EXPORT CameraList : public QObject
 {
     Q_OBJECT
 

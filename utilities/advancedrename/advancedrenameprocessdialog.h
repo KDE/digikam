@@ -33,6 +33,7 @@
 
 #include "dprogressdlg.h"
 #include "advancedrenamedialog.h"
+#include "digikam_export.h"
 
 class QPixmap;
 class QWidget;
@@ -44,7 +45,7 @@ namespace Digikam
 
 class LoadingDescription;
 
-class AdvancedRenameProcessDialog : public DProgressDlg
+class DIGIKAM_EXPORT AdvancedRenameProcessDialog : public DProgressDlg
 {
     Q_OBJECT
 

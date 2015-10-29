@@ -44,7 +44,7 @@ class SidebarSplitter;
 class CamItemInfo;
 class DMetadata;
 
-class ImagePropertiesSideBarCamGui : public Sidebar
+class DIGIKAM_EXPORT ImagePropertiesSideBarCamGui : public Sidebar
 {
     Q_OBJECT
 

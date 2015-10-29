@@ -32,9 +32,7 @@
 // Local includes
 
 #include "modelhelper.h"
-
-// Local includes
-
+#include "digikam_export.h"
 #include "dcategorizedsortfilterproxymodel.h"
 #include "statesavingobject.h"
 #include "digikam_export.h"
@@ -49,7 +47,7 @@ namespace Digikam
 class AlbumWidgetStack;
 class ImageChangeset;
 
-class MapWidgetView : public QWidget, public StateSavingObject
+class DIGIKAM_EXPORT MapWidgetView : public QWidget, public StateSavingObject
 {
     Q_OBJECT
 

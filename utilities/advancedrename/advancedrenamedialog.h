@@ -92,7 +92,7 @@ private:
 typedef QPair<QUrl, QString> NewNameInfo;
 typedef QList<NewNameInfo>   NewNamesList;
 
-class AdvancedRenameDialog : public QDialog
+class DIGIKAM_EXPORT AdvancedRenameDialog : public QDialog
 {
     Q_OBJECT
 

@@ -28,11 +28,12 @@
 
 #include "infodlg.h"
 #include "databaseconstants.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DBStatDlg : public InfoDlg
+class DIGIKAM_EXPORT DBStatDlg : public InfoDlg
 {
 public:
 

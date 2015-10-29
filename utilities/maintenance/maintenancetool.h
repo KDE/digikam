@@ -32,11 +32,12 @@
 // Local includes
 
 #include "progressmanager.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class MaintenanceTool : public ProgressItem
+class DIGIKAM_EXPORT MaintenanceTool : public ProgressItem
 {
     Q_OBJECT
 
