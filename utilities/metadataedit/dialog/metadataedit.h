@@ -30,6 +30,10 @@
 #include <QUrl>
 #include <QDialog>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QObject;
 class QCloseEvent;
 class Event;
@@ -37,7 +41,7 @@ class Event;
 namespace Digikam
 {
 
-class MetadataEditDialog : public QDialog
+class DIGIKAM_EXPORT MetadataEditDialog : public QDialog
 {
     Q_OBJECT
 

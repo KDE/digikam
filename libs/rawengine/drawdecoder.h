@@ -45,11 +45,12 @@
 
 #include "drawdecodersettings.h"
 #include "rawinfo.h"
+#include "digikam_export.h"
 
 namespace RawEngine
 {
 
-class DRawDecoder : public QObject
+class DIGIKAM_EXPORT DRawDecoder : public QObject
 {
     Q_OBJECT
 

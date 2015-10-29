@@ -33,12 +33,16 @@
 #include <kio/previewjob.h>
 #include <KIOWidgets/kio/renamedialog.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class KJob;
 
 namespace Digikam
 {
 
-class KIOWrapper : public QObject
+class DIGIKAM_EXPORT KIOWrapper : public QObject
 {
     Q_OBJECT
 

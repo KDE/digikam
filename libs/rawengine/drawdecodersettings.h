@@ -36,10 +36,14 @@
 #include <QString>
 #include <QDebug>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace RawEngine
 {
 
-class DRawDecoderSettings
+class DIGIKAM_EXPORT DRawDecoderSettings
 {
 
 public:

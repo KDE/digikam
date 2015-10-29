@@ -17,7 +17,6 @@ include_directories(BEFORE
                     ${CMAKE_CURRENT_SOURCE_DIR}/main
 )
 
-
 include_directories(
     $<TARGET_PROPERTY:KF5::Completion,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -74,7 +73,7 @@ set_target_properties(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRE
 target_link_libraries(showfoto
                       PRIVATE
                       digikamcore
-                      
+
                       libdng
 
                       Qt5::Core

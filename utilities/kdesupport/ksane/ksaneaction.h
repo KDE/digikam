@@ -29,6 +29,10 @@
 #include <QAction>
 #include <QUrl>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace KSaneIface
 {
     class KSaneWidget;
@@ -39,7 +43,7 @@ using namespace KSaneIface;
 namespace Digikam
 {
 
-class KSaneAction : public QAction
+class DIGIKAM_EXPORT KSaneAction : public QAction
 {
     Q_OBJECT
 

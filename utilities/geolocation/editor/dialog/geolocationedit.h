@@ -38,12 +38,13 @@
 #include <QDialog>
 #include <QUrl>
 
-// GeoIface includes
+// Local includes
 
 #include "geoiface_types.h"
 #include "modelhelper.h"
 #include "tracks.h"
 #include "gpsimageitem.h"
+#include "digikam_export.h"
 
 class QAbstractItemModel;
 
@@ -58,7 +59,7 @@ namespace Digikam
 
 class GPSUndoCommand;
 
-class GeolocationEdit : public QDialog
+class DIGIKAM_EXPORT GeolocationEdit : public QDialog
 {
     Q_OBJECT
 
@@ -70,7 +71,7 @@ public:
     /* Populate items in dialog list based on url. To be used in case of non database as with Showfoto.
      */
     void setImages(const QList<QUrl>& images);
-    
+
     /* Populate items in dialog list based dedicated GPSImageItem instances filled with DB info
      */
     void setItems(const QList<GPSImageItem*>& items);
