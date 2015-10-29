@@ -36,11 +36,12 @@
 
 #include "albummodel.h"
 #include "searchtextbar.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class AlbumFilterModel : public QSortFilterProxyModel
+class DIGIKAM_EXPORT AlbumFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
@@ -274,7 +275,7 @@ private:
  * Filter model for checkable album models that allows more filtering options
  * based on check state.
  */
-class CheckableAlbumFilterModel : public AlbumFilterModel
+class DIGIKAM_EXPORT CheckableAlbumFilterModel : public AlbumFilterModel
 {
     Q_OBJECT
 
@@ -305,7 +306,7 @@ protected:
 /**
  * Filter model for searches that can filter by search type
  */
-class SearchFilterModel : public CheckableAlbumFilterModel
+class DIGIKAM_EXPORT SearchFilterModel : public CheckableAlbumFilterModel
 {
     Q_OBJECT
 
@@ -350,7 +351,7 @@ protected:
 /**
  * Filter model for tags that can filter by tag property
  */
-class TagPropertiesFilterModel : public CheckableAlbumFilterModel
+class DIGIKAM_EXPORT TagPropertiesFilterModel : public CheckableAlbumFilterModel
 {
     Q_OBJECT
 
@@ -384,7 +385,7 @@ protected:
 
 // -----------------------------------------------------------------------------------
 
-class TagsManagerFilterModel : public TagPropertiesFilterModel
+class DIGIKAM_EXPORT TagsManagerFilterModel : public TagPropertiesFilterModel
 {
     Q_OBJECT
 
