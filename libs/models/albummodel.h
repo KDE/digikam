@@ -31,11 +31,12 @@
 // Local includes
 
 #include "abstractalbummodel.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class AlbumModel : public AbstractCheckableAlbumModel
+class DIGIKAM_EXPORT AlbumModel : public AbstractCheckableAlbumModel
 {
 public:
 
@@ -53,7 +54,7 @@ protected:
 
 // ------------------------------------------------------------------
 
-class TagModel : public AbstractCheckableAlbumModel
+class DIGIKAM_EXPORT TagModel : public AbstractCheckableAlbumModel
 {
 public:
 
@@ -85,7 +86,7 @@ protected:
 
 // ------------------------------------------------------------------
 
-class SearchModel : public AbstractCheckableAlbumModel
+class DIGIKAM_EXPORT SearchModel : public AbstractCheckableAlbumModel
 {
     Q_OBJECT
 
@@ -129,7 +130,7 @@ protected:
 /**
  * A model for date based albums.
  */
-class DateAlbumModel : public AbstractCountingAlbumModel
+class DIGIKAM_EXPORT DateAlbumModel : public AbstractCountingAlbumModel
 {
     Q_OBJECT
 

@@ -30,15 +30,18 @@
 #include <QObject>
 #include <QPixmap>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
-
 class Album;
 class TAlbum;
 class PAlbum;
 class LoadingDescription;
 
-class AlbumThumbnailLoader : public QObject
+class DIGIKAM_EXPORT AlbumThumbnailLoader : public QObject
 {
     Q_OBJECT
 
