@@ -34,12 +34,13 @@
 // Local includes
 
 #include "imageinfo.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 class Album;
 
-class ImageViewUtilities : public QObject
+class DIGIKAM_EXPORT ImageViewUtilities : public QObject
 {
     Q_OBJECT
 

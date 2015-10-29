@@ -33,7 +33,7 @@
 #include <QMetaType>
 #include <QItemSelectionModel>
 
-// GeoIface includes
+// Local includes
 
 #include "abstractmarkertiler.h"
 #include "mapwidget.h"

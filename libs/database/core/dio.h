@@ -30,13 +30,17 @@
 #include <QObject>
 #include <QUrl>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class PAlbum;
 class ImageInfo;
 
-class DIO : public QObject
+class DIGIKAM_EXPORT DIO : public QObject
 {
     Q_OBJECT
 

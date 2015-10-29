@@ -28,7 +28,7 @@
 
 #include <klocalizedstring.h>
 
-// GeoIface includes
+// Local includes
 
 #include "tracks.h"
 

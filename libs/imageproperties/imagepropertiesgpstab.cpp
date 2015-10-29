@@ -51,7 +51,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// GeoIface includes
+// Local includes
 
 #include "mapwidget.h"
 #include "itemmarkertiler.h"

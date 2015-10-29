@@ -32,6 +32,7 @@
 // Local includes
 
 #include "camerathumbsctrl.h"
+#include "digikam_export.h"
 
 class QDialog;
 class QDialogButtonBox;
@@ -39,7 +40,7 @@ class QDialogButtonBox;
 namespace Digikam
 {
 
-class CameraItem : public QTreeWidgetItem
+class DIGIKAM_EXPORT CameraItem : public QTreeWidgetItem
 {
 
 public:
@@ -60,7 +61,7 @@ private:
 
 // -----------------------------------------------------------
 
-class CameraItemList : public QTreeWidget
+class DIGIKAM_EXPORT CameraItemList : public QTreeWidget
 {
     Q_OBJECT
 
@@ -88,7 +89,7 @@ private:
 
 // -----------------------------------------------------------
 
-class CameraMessageBox
+class DIGIKAM_EXPORT CameraMessageBox
 {
 
 public:

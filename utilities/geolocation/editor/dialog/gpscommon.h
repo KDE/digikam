@@ -30,7 +30,7 @@
 #include <QString>
 #include <QUrl>
 
-// GeoIface includes
+// Local includes
 
 #include "geocoordinates.h"
 

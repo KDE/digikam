@@ -29,7 +29,7 @@
 
 #include <QObject>
 
-// GeoIface includes
+// Local includes
 
 #include "geoiface_types.h"
 

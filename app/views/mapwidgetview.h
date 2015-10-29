@@ -29,7 +29,7 @@
 
 #include <QWidget>
 
-// GeoIface includes
+// Local includes
 
 #include "modelhelper.h"
 

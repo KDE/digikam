@@ -35,7 +35,7 @@
 
 #include <QModelIndex>
 
-// GeoIface includes
+// Local includes
 
 #include "modelhelper.h"
 

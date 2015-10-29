@@ -40,6 +40,7 @@
 #include "dkcamera.h"
 #include "dhistoryview.h"
 #include "thumbnailsize.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -48,7 +49,7 @@ class CameraCommand;
 class RenameResult;
 class DHistoryView;
 
-class CameraController : public QThread
+class DIGIKAM_EXPORT CameraController : public QThread
 {
     Q_OBJECT
 

@@ -30,7 +30,7 @@
 #include <QStandardItemModel>
 #include <QPixmap>
 
-// GeoIface includes
+// Local includes
 
 #include "modelhelper.h"
 

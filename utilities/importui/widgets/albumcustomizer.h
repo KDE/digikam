@@ -33,10 +33,14 @@
 
 #include <kconfiggroup.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class AlbumCustomizer : public QWidget
+class DIGIKAM_EXPORT AlbumCustomizer : public QWidget
 {
     Q_OBJECT
 

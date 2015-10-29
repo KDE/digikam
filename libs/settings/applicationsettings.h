@@ -43,6 +43,7 @@
 #include "sidebar.h"
 #include "databaseparameters.h"
 #include "versionmanager.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -51,7 +52,7 @@ class DatabaseParameters;
 class VersionManagerSettings;
 class PreviewSettings;
 
-class ApplicationSettings : public QObject
+class DIGIKAM_EXPORT ApplicationSettings : public QObject
 {
     Q_OBJECT
 

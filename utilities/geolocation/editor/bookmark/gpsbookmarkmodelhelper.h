@@ -29,7 +29,7 @@
 
 #include <kbookmarkmanager.h>
 
-// GeoIface includes
+// Local includes
 
 #include "modelhelper.h"
 

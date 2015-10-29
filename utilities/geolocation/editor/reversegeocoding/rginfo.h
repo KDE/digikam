@@ -30,13 +30,11 @@
 #include <QPersistentModelIndex>
 #include <QMap>
 
-// GeoIface includes
-
-#include "geoiface_types.h"
-
 // Local includes
 
+#include "geoiface_types.h"
 #include "gpsdatacontainer.h"
+#include "digikam_export.h"
 
 using namespace GeoIface;
 
@@ -49,7 +47,7 @@ namespace Digikam
  * @brief This class contains data needed in reverse geocoding process.
  */
 
-class RGInfo
+class DIGIKAM_EXPORT RGInfo
 {
 public:
 

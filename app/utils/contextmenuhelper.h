@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "digikam_config.h"
 #include "albuminfo.h"
 
@@ -77,7 +78,7 @@ class TAlbum;
  * instead the one from the parent menu. This way signals from
  * special menus can be emitted and connected to the appropriate slots.
  */
-class ContextMenuHelper : public QObject
+class DIGIKAM_EXPORT ContextMenuHelper : public QObject
 {
     Q_OBJECT
 

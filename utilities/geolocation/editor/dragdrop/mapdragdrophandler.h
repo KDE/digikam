@@ -30,7 +30,7 @@
 #include <QAbstractItemModel>
 #include <QMimeData>
 
-// GeoIface includes
+// Local includes
 
 #include "dragdrophandler.h"
 

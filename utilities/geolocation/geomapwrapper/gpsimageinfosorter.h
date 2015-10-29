@@ -31,7 +31,7 @@
 #include <QSize>
 #include <QUrl>
 
-// GeoIface includes
+// Local includes
 
 #include "geocoordinates.h"
 #include "groupstate.h"

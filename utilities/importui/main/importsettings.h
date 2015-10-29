@@ -30,10 +30,14 @@
 #include <QObject>
 #include <QFont>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class ImportSettings : public QObject
+class DIGIKAM_EXPORT ImportSettings : public QObject
 {
     Q_OBJECT
 

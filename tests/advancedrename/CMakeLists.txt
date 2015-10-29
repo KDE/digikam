@@ -30,6 +30,7 @@ ecm_mark_as_test(renamecustomizertest)
 
 target_link_libraries(renamecustomizertest
 
+                      digikamcore
                       digikamgui
 
                       Qt5::Core
@@ -91,6 +92,8 @@ ecm_mark_as_test(advancedrenametest)
 target_link_libraries(advancedrenametest
 
                       advancedrename
+                      digikamdatabase
+                      digikamcore
                       digikamgui
 
                       Qt5::Core

@@ -32,6 +32,7 @@
 // Local includes
 
 #include "rule.h"
+#include "digikam_export.h"
 
 class QMenu;
 
@@ -41,7 +42,7 @@ namespace Digikam
 class ParseSettings;
 class Parser;
 
-class AdvancedRenameWidget : public QWidget
+class DIGIKAM_EXPORT AdvancedRenameWidget : public QWidget
 {
     Q_OBJECT
 

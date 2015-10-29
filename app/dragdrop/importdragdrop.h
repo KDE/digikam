@@ -34,11 +34,12 @@
 #include "abstractitemdragdrophandler.h"
 #include "importimagemodel.h"
 #include "album.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ImportDragDropHandler : public AbstractItemDragDropHandler
+class DIGIKAM_EXPORT ImportDragDropHandler : public AbstractItemDragDropHandler
 {
     Q_OBJECT
 

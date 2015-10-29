@@ -36,13 +36,14 @@
 // Local includes
 
 #include "infocontainer.h"
+#include "digikam_export.h"
 
 class QDataStream;
 
 namespace Digikam
 {
 
-class CamItemInfo
+class DIGIKAM_EXPORT CamItemInfo
 {
 
 public:

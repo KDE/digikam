@@ -34,6 +34,7 @@
 // Local includes
 
 #include "camiteminfo.h"
+#include "digikam_export.h"
 
 class QUrl;
 
@@ -47,7 +48,7 @@ class CameraController;
 
 typedef QPair<CamItemInfo, QPixmap> CachedItem;
 
-class CameraThumbsCtrl : public QObject
+class DIGIKAM_EXPORT CameraThumbsCtrl : public QObject
 {
     Q_OBJECT
 

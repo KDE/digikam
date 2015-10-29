@@ -36,18 +36,18 @@
 
 #include "gpsimageitem.h"
 #include "treebranch.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class RGTagModel : public QAbstractItemModel
+class DIGIKAM_EXPORT RGTagModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
 
     explicit RGTagModel(QAbstractItemModel* const externalTagModel, QObject* const parent = 0);
-
     ~RGTagModel();
 
     // QAbstractItemModel:

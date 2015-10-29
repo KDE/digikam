@@ -29,7 +29,7 @@
 
 #include <QAbstractItemModel>
 
-// GeoIface includes
+// Local includes
 
 #include "modelhelper.h"
 

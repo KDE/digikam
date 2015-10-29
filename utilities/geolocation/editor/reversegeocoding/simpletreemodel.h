@@ -29,7 +29,11 @@
 
 #include <QAbstractItemModel>
 
-class SimpleTreeModel : public QAbstractItemModel
+// Local includes
+
+#include "digikam_export.h"
+
+class DIGIKAM_EXPORT SimpleTreeModel : public QAbstractItemModel
 {
 Q_OBJECT
 

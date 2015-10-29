@@ -32,7 +32,7 @@
 #include <QUrl>
 #include <QWidget>
 
-// GeoIface includes
+// Local includes
 
 #include "geoiface_types.h"
 

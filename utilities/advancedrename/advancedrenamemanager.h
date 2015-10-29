@@ -31,6 +31,10 @@
 #include <QStringList>
 #include <QObject>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
@@ -38,7 +42,7 @@ class AdvancedRenameWidget;
 class Parser;
 class ParseSettings;
 
-class AdvancedRenameManager : public QObject
+class DIGIKAM_EXPORT AdvancedRenameManager : public QObject
 {
     Q_OBJECT
 

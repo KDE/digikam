@@ -32,6 +32,7 @@
 #include "importthumbnailmodel.h"
 #include "imagedelegateoverlay.h"
 #include "camiteminfo.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -39,7 +40,7 @@ namespace Digikam
 class ImportDelegate;
 class ICCSettingsContainer;
 
-class ImportCategorizedView : public ItemViewCategorized
+class DIGIKAM_EXPORT ImportCategorizedView : public ItemViewCategorized
 {
     Q_OBJECT
 

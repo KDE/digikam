@@ -138,12 +138,12 @@ target_link_libraries(digikamcore
 )
 
 if(KF5Kipi_FOUND)
-    target_link_libraries(digikamcore PRIVATE KF5::Kipi)
+    target_link_libraries(digikamcore PUBLIC KF5::Kipi)
 endif()
 
 if(MARBLE_FOUND)
-    target_link_libraries(digikamcore PRIVATE ${MARBLE_LIBRARIES}
-                                              KF5::ItemModels)
+    target_link_libraries(digikamcore PUBLIC ${MARBLE_LIBRARIES}
+                                             KF5::ItemModels)
 
     if(KF5Bookmarks_FOUND)
         target_link_libraries(digikamcore PRIVATE KF5::Bookmarks)
@@ -151,11 +151,11 @@ if(MARBLE_FOUND)
 endif()
 
 if(X11_FOUND)
-    target_link_libraries(digikamcore PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
+    target_link_libraries(digikamcore PUBLIC Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
 if(JASPER_FOUND)
-    target_link_libraries(digikamcore PRIVATE ${JASPER_LIBRARIES})
+    target_link_libraries(digikamcore PUBLIC ${JASPER_LIBRARIES})
 endif()
 
 # LibLqr-1 library rules for content-aware filter
@@ -165,7 +165,7 @@ endif()
 
 if(LENSFUN_FOUND)
     target_include_directories(digikamcore PUBLIC ${LENSFUN_INCLUDE_DIRS})
-    target_link_libraries(digikamcore PRIVATE ${LENSFUN_LIBRARIES})
+    target_link_libraries(digikamcore PUBLIC ${LENSFUN_LIBRARIES})
 endif()
 
 # for nrfilter
@@ -408,11 +408,11 @@ if(KF5KFace_FOUND)
 endif()
 
 if(KF5Kipi_FOUND)
-    target_link_libraries(digikamgui PRIVATE KF5::Kipi)
+    target_link_libraries(digikamgui PUBLIC KF5::Kipi)
 endif()
 
 if(${MARBLE_FOUND})
-     target_link_libraries(digikamgui PRIVATE ${MARBLE_LIBRARIES})
+     target_link_libraries(digikamgui PUBLIC ${MARBLE_LIBRARIES})
 endif()
 
 if(APPLE)
@@ -420,12 +420,12 @@ if(APPLE)
 endif()
 
 if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamgui PRIVATE Qt5::Multimedia Qt5::MultimediaWidgets)
+    target_link_libraries(digikamgui PUBLIC Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(NOT WIN32)
     # To link under Solaris (see bug #274484)
-    target_link_libraries(digikamgui PRIVATE ${MATH_LIBRARY})
+    target_link_libraries(digikamgui PUBLIC ${MATH_LIBRARY})
 endif()
 
 if(WIN32)
@@ -438,11 +438,11 @@ endif()
 
 if(GPHOTO2_FOUND)
     # See bug #258931: libgphoto2 library must be the last arg for linker.
-    target_link_libraries(digikamgui PRIVATE ${GPHOTO2_LIBRARIES})
+    target_link_libraries(digikamgui PUBLIC ${GPHOTO2_LIBRARIES})
 
     if(NOT WIN32)
         # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
-        target_link_libraries(digikamgui PRIVATE ${LibUSB1_LIBRARIES})
+        target_link_libraries(digikamgui PUBLIC ${LibUSB1_LIBRARIES})
     endif()
 endif()
 

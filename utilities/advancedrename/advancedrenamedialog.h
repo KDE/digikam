@@ -36,6 +36,7 @@
 // Local includes
 
 #include "imageinfo.h"
+#include "digikam_export.h"
 
 class QEvent;
 class QMoveEvent;
@@ -47,7 +48,7 @@ namespace Digikam
 
 class Parser;
 
-class AdvancedRenameListItem : public QTreeWidgetItem
+class DIGIKAM_EXPORT AdvancedRenameListItem : public QTreeWidgetItem
 {
 public:
 

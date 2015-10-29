@@ -34,7 +34,7 @@
 
 #include <klocalizedstring.h>
 
-// GeoIface includes
+// Local includes
 
 #include "mapwidget.h"
 

@@ -116,7 +116,7 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::GeoCoordinates::HasFlags)
 
- QDebug operator<<(QDebug debugOut, const GeoIface::GeoCoordinates& coordinate);
+DIGIKAM_EXPORT QDebug operator<<(QDebug debugOut, const GeoIface::GeoCoordinates& coordinate);
 
 Q_DECLARE_TYPEINFO(GeoIface::GeoCoordinates, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(GeoIface::GeoCoordinates)

@@ -46,7 +46,7 @@ class CollectionScanner;
 class SplashScreen;
 class PAlbum;
 
-class ScanController : public QThread, public InitializationObserver
+class DIGIKAM_EXPORT ScanController : public QThread, public InitializationObserver
 {
     Q_OBJECT
 

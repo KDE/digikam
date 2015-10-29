@@ -31,7 +31,7 @@
 #include <QDateTime>
 #include <QUrl>
 
-// GeoIface includes
+// Local includes
 
 #include "geoiface_types.h"
 

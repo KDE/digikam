@@ -32,7 +32,7 @@
 #include <QAbstractItemModel>
 #include <QPersistentModelIndex>
 
-// GeoIface includes
+// Local includes
 
 #include "mapwidget.h"
 #include "itemmarkertiler.h"

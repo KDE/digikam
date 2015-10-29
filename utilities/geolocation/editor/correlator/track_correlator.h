@@ -27,14 +27,15 @@
 #ifndef TRACK_CORRELATOR_H
 #define TRACK_CORRELATOR_H
 
-// GeoIface includes
+// Local includes
 
 #include "tracks.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class TrackCorrelator : public QObject
+class DIGIKAM_EXPORT TrackCorrelator : public QObject
 {
     Q_OBJECT
 

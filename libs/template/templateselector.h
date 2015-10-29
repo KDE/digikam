@@ -24,14 +24,17 @@
 #ifndef TEMPLATESELECTOR_H
 #define TEMPLATESELECTOR_H
 
+// Local includes
+
 #include "dwidgetutils.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
 class Template;
 
-class TemplateSelector : public DHBox
+class DIGIKAM_EXPORT TemplateSelector : public DHBox
 {
     Q_OBJECT
 

@@ -32,7 +32,7 @@
 #include <QRectF>
 #include <QTimer>
 
-// GeoIface includes
+// Local includes
 
 #include "groupstatecomputer.h"
 

@@ -33,10 +33,14 @@
 #include <QSize>
 #include <QDebug>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace RawEngine
 {
 
-class RawInfo
+class DIGIKAM_EXPORT RawInfo
 {
 
 public:

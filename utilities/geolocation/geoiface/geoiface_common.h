@@ -38,11 +38,12 @@
 #include <QWidget>
 #include <QPixmap>
 
-// GeoIface includes
+// Local includes
 
 #include "geoiface_types.h"
 #include "tileindex.h"
 #include "groupstatecomputer.h"
+#include "digikam_export.h"
 
 namespace GeoIface
 {
@@ -59,7 +60,7 @@ class TrackManager;
  *
  * @todo The list of these info structures has to be cleaned up periodically
  */
-class GeoIfaceInternalWidgetInfo
+class DIGIKAM_EXPORT GeoIfaceInternalWidgetInfo
 {
 public:
 
@@ -101,7 +102,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIfaceInternalWidgetInfo::InternalWidgetStates)
 /**
  * @brief Global object for GeoIface to hold items common to all GeoIface Widget instances
  */
-class GeoIfaceGlobalObject : public QObject
+class DIGIKAM_EXPORT GeoIfaceGlobalObject : public QObject
 {
     Q_OBJECT
 
@@ -140,7 +141,7 @@ private:
 
 // ----------------------------------------------------------------------------------------------
 
-class GeoIfaceCluster
+class DIGIKAM_EXPORT GeoIfaceCluster
 {
 
 public:
@@ -201,14 +202,14 @@ const int GeoIfaceMinThumbnailSize           = GeoIfaceMinThumbnailGroupingRadiu
  * @param b Point b
  * @return Square of the distance between a and b
  */
-inline int QPointSquareDistance(const QPoint& a, const QPoint& b)
+DIGIKAM_EXPORT inline int QPointSquareDistance(const QPoint& a, const QPoint& b)
 {
     return (a.x() - b.x()) * (a.x() - b.x()) + (a.y() - b.y()) * (a.y() - b.y());
 }
 
 // ----------------------------------------------------------------------------------------------
 
-class GeoIfaceSharedData : public QSharedData
+class DIGIKAM_EXPORT GeoIfaceSharedData : public QSharedData
 {
 public:
 
@@ -283,12 +284,12 @@ public:
 
 // helper functions:
 
-bool GeoIfaceHelperParseLatLonString(const QString& latLonString, GeoCoordinates* const coordinates);
-bool GeoIfaceHelperParseXYStringToPoint(const QString& xyString, QPoint* const point);
-bool GeoIfaceHelperParseBoundsString(const QString& boundsString, QPair<GeoCoordinates, GeoCoordinates>* const boundsCoordinates);
-GeoCoordinates::PairList GeoIfaceHelperNormalizeBounds(const GeoCoordinates::Pair& boundsPair);
+DIGIKAM_EXPORT bool GeoIfaceHelperParseLatLonString(const QString& latLonString, GeoCoordinates* const coordinates);
+DIGIKAM_EXPORT bool GeoIfaceHelperParseXYStringToPoint(const QString& xyString, QPoint* const point);
+DIGIKAM_EXPORT bool GeoIfaceHelperParseBoundsString(const QString& boundsString, QPair<GeoCoordinates, GeoCoordinates>* const boundsCoordinates);
+DIGIKAM_EXPORT GeoCoordinates::PairList GeoIfaceHelperNormalizeBounds(const GeoCoordinates::Pair& boundsPair);
 
-void GeoIface_assert(const char* const condition, const char* const filename, const int lineNumber);
+DIGIKAM_EXPORT void GeoIface_assert(const char* const condition, const char* const filename, const int lineNumber);
 
 } // namespace GeoIface
 

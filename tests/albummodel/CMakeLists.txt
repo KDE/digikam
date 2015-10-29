@@ -29,7 +29,7 @@ add_test(albummodeltest albummodeltest)
 ecm_mark_as_test(albummodeltest)
 
 target_link_libraries(albummodeltest
-
+                      digikamcore
                       digikamgui
 
                       Qt5::Gui

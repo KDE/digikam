@@ -32,7 +32,7 @@
 // Local includes
 
 #include "dwidgetutils.h"
-
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -46,7 +46,7 @@ namespace Digikam
  * @image html kdatetimeedit.png "This is how it looks"
  * @author Tom Albers
  */
-class DDateTimeEdit : public DHBox
+class DIGIKAM_EXPORT DDateTimeEdit : public DHBox
 {
     Q_OBJECT
 

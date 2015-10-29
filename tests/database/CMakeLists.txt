@@ -25,7 +25,7 @@ set(testdatabase_SRCS testdatabase.cpp)
 add_executable(testdatabase ${testdatabase_SRCS})
 
 target_link_libraries(testdatabase
-
+                      digikamcore
                       digikamgui
 
                       Qt5::DBus

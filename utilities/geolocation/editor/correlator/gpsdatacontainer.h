@@ -25,7 +25,7 @@
 #ifndef GPSDATACONTAINER_H
 #define GPSDATACONTAINER_H
 
-// GeoIface includes
+// Local includes
 
 #include "geocoordinates.h"
 

@@ -29,7 +29,7 @@
 #include <QDateTime>
 #include <QUrl>
 
-// GeoIface includes
+// Local includes
 
 #include "trackreader.h"
 #include "track_correlator.h"
