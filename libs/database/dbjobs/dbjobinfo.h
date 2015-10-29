@@ -31,11 +31,12 @@
 // Local includes
 
 #include "databaseurl.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DBJobInfo
+class DIGIKAM_DATABASE_EXPORT DBJobInfo
 {
 public:
 
@@ -61,7 +62,7 @@ private:
 
 // ---------------------------------------------
 
-class AlbumsDBJobInfo : public DBJobInfo
+class DIGIKAM_DATABASE_EXPORT AlbumsDBJobInfo : public DBJobInfo
 {
 public:
 
@@ -81,7 +82,7 @@ private:
 
 // ---------------------------------------------
 
-class TagsDBJobInfo : public DBJobInfo
+class DIGIKAM_DATABASE_EXPORT TagsDBJobInfo : public DBJobInfo
 {
 public:
 
@@ -105,7 +106,7 @@ private:
 
 // ---------------------------------------------
 
-class GPSDBJobInfo : public DBJobInfo
+class DIGIKAM_DATABASE_EXPORT GPSDBJobInfo : public DBJobInfo
 {
 public:
 
@@ -137,7 +138,7 @@ private:
 
 // ---------------------------------------------
 
-class SearchesDBJobInfo : public DBJobInfo
+class DIGIKAM_DATABASE_EXPORT SearchesDBJobInfo : public DBJobInfo
 {
 public:
 
@@ -169,7 +170,7 @@ public:
 
 // ---------------------------------------------
 
-class DatesDBJobInfo : public DBJobInfo
+class DIGIKAM_DATABASE_EXPORT DatesDBJobInfo : public DBJobInfo
 {
 public:
 

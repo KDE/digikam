@@ -26,13 +26,14 @@
 
 #include "haariface.h"
 #include "dbjob.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
 class SearchesJob;
 
-class DuplicatesProgressObserver : public HaarProgressObserver
+class DIGIKAM_DATABASE_EXPORT DuplicatesProgressObserver : public HaarProgressObserver
 {
 
 public:

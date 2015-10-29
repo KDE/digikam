@@ -190,7 +190,11 @@ if(KF5Sane_FOUND)
 endif()
 
 if(KF5AkonadiContact_FOUND)
-    target_link_libraries(digikamcore PUBLIC KF5::AkonadiContact)
+    target_link_libraries(digikamcore
+                          PUBLIC
+                          KF5::AkonadiContact
+                          KF5::CalendarCore
+    )
 endif()
 
 if(APPLE)

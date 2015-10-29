@@ -335,12 +335,6 @@ if(GPHOTO2_FOUND)
     endif()
 endif()
 
-# -- KDEPim libraries rules -------------------------------------------------------------------
-
-if(ENABLE_AKONADICONTACTSUPPORT)
-    find_package(KF5AkonadiContact)
-endif()
-
 # -- Check LensFun library for Lens auto-correction tool --------------------------------------
 
 find_package(LensFun)
@@ -355,10 +349,23 @@ else()
     set(LENSFUN_FOUND FALSE)
 endif()
 
+# -- KDEPim libraries rules -------------------------------------------------------------------
+
+if(ENABLE_AKONADICONTACTSUPPORT)
+    find_package(KF5                 # no KDE version here because Akonadi still not stable as others frameworks
+                 REQUIRED COMPONENTS
+                 AkonadiContact
+                 CalendarCore        # AkonadiContact needs KCalCore to link.
+    )
+endif()
+
 # -- KFileMetadata libraries rules ---------------------------------------------------------------------
 
 if(ENABLE_KFILEMETADATASUPPORT)
-    find_package(KF5FileMetaData)
+    find_package(KF5 ${KF5_VERSION}
+                 REQUIRED COMPONENTS
+                 FileMetaData
+    )
 endif()
 
 # -- compilation options definitions -----------------------------------------------------------

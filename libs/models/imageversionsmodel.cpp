@@ -35,11 +35,11 @@
 namespace Digikam
 {
 
-class ImageVersionsModel::ImageVersionsModelPriv
+class ImageVersionsModel::Private
 {
 public:
 
-    ImageVersionsModelPriv()
+    Private()
     {
         data      = 0;
         paintTree = false;
@@ -55,7 +55,8 @@ public:
 };
 
 ImageVersionsModel::ImageVersionsModel(QObject* parent)
-    : QAbstractListModel(parent), d(new ImageVersionsModelPriv)
+    : QAbstractListModel(parent),
+      d(new Private)
 {
     d->data = new QList<QPair<QString, int> >;
 }

@@ -31,13 +31,14 @@
 #include "imagelisterrecord.h"
 #include "duplicatesprogressobserver.h"
 #include "actionthreadbase.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
 class DuplicatesProgressObserver;
 
-class DBJob : public ActionJob
+class DIGIKAM_DATABASE_EXPORT DBJob : public ActionJob
 {
     Q_OBJECT
 
@@ -54,7 +55,7 @@ Q_SIGNALS:
 
 // ----------------------------------------------
 
-class AlbumsJob : public DBJob
+class DIGIKAM_DATABASE_EXPORT AlbumsJob : public DBJob
 {
     Q_OBJECT
 
@@ -78,7 +79,7 @@ private:
 
 // ----------------------------------------------
 
-class DatesJob : public DBJob
+class DIGIKAM_DATABASE_EXPORT DatesJob : public DBJob
 {
     Q_OBJECT
 
@@ -102,7 +103,7 @@ private:
 
 // ----------------------------------------------
 
-class GPSJob : public DBJob
+class DIGIKAM_DATABASE_EXPORT GPSJob : public DBJob
 {
     Q_OBJECT
 
@@ -126,7 +127,7 @@ private:
 
 // ----------------------------------------------
 
-class TagsJob : public DBJob
+class DIGIKAM_DATABASE_EXPORT TagsJob : public DBJob
 {
     Q_OBJECT
 
@@ -151,7 +152,7 @@ private:
 
 // ----------------------------------------------
 
-class SearchesJob : public DBJob
+class DIGIKAM_DATABASE_EXPORT SearchesJob : public DBJob
 {
     Q_OBJECT
 

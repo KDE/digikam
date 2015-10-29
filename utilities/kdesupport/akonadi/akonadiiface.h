@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "digikam_config.h"
 
 class KJob;
@@ -39,7 +40,7 @@ class KJob;
 namespace Digikam
 {
 
-class AkonadiIface : public QObject
+class DIGIKAM_EXPORT AkonadiIface : public QObject
 {
     Q_OBJECT
 

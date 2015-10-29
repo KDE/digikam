@@ -32,13 +32,14 @@
 #include "haariface.h"
 #include "imagelisterrecord.h"
 #include "actionthreadbase.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
 class DBJob;
 
-class DBJobsThread : public ActionThreadBase
+class DIGIKAM_DATABASE_EXPORT DBJobsThread : public ActionThreadBase
 {
     Q_OBJECT
 
@@ -87,7 +88,7 @@ private:
 
 // ---------------------------------------------
 
-class AlbumsDBJobsThread : public DBJobsThread
+class DIGIKAM_DATABASE_EXPORT AlbumsDBJobsThread : public DBJobsThread
 {
     Q_OBJECT
 
@@ -110,7 +111,7 @@ Q_SIGNALS:
 
 // ---------------------------------------------
 
-class TagsDBJobsThread : public DBJobsThread
+class DIGIKAM_DATABASE_EXPORT TagsDBJobsThread : public DBJobsThread
 {
     Q_OBJECT
 
@@ -133,7 +134,7 @@ Q_SIGNALS:
 
 // ---------------------------------------------
 
-class DatesDBJobsThread : public DBJobsThread
+class DIGIKAM_DATABASE_EXPORT DatesDBJobsThread : public DBJobsThread
 {
     Q_OBJECT
 
@@ -155,7 +156,7 @@ Q_SIGNALS:
 
 // ---------------------------------------------
 
-class SearchesDBJobsThread : public DBJobsThread
+class DIGIKAM_DATABASE_EXPORT SearchesDBJobsThread : public DBJobsThread
 {
     Q_OBJECT
 
@@ -178,7 +179,7 @@ Q_SIGNALS:
 
 // ---------------------------------------------
 
-class GPSDBJobsThread : public DBJobsThread
+class DIGIKAM_DATABASE_EXPORT GPSDBJobsThread : public DBJobsThread
 {
     Q_OBJECT
 
