@@ -39,6 +39,7 @@
 #include "geoiface_types.h"
 #include "geocoordinates.h"
 #include "groupstate.h"
+#include "digikam_export.h"
 
 class QAction;
 class KConfigGroup;
@@ -55,7 +56,7 @@ class GeoIfaceSharedData;
 class ModelHelper;
 class TrackManager;
 
-class MapWidget : public QWidget
+class DIGIKAM_EXPORT MapWidget : public QWidget
 {
   Q_OBJECT
 

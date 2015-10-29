@@ -35,6 +35,10 @@
 
 #include <QComboBox>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
@@ -46,7 +50,7 @@ namespace Digikam
  * possible to show the complete item, it will be shortened
  * and "..." will be prepended.
  */
-class SqueezedComboBox : public QComboBox
+class DIGIKAM_EXPORT SqueezedComboBox : public QComboBox
 {
     Q_OBJECT
 

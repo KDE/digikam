@@ -31,13 +31,14 @@
 // Local includes
 
 #include "drawdecoder.h"
+#include "digikam_export.h"
 
 using namespace RawEngine;
 
 namespace Digikam
 {
 
-class DNGWriter
+class DIGIKAM_EXPORT DNGWriter
 {
 
 public:

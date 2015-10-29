@@ -30,10 +30,11 @@
 
 // Qt includes
 
-#include <QtCore/QItemSelection>
+#include <QItemSelection>
 
-// local includes
+// Local includes
 
+#include "digikam_export.h"
 #include "abstractmarkertiler.h"
 
 namespace GeoIface
@@ -41,7 +42,7 @@ namespace GeoIface
 
 class ModelHelper;
 
-class  ItemMarkerTiler : public AbstractMarkerTiler
+class DIGIKAM_EXPORT ItemMarkerTiler : public AbstractMarkerTiler
 {
     Q_OBJECT
 

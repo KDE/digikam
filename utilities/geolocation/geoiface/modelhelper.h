@@ -29,22 +29,23 @@
 
 // Qt includes
 
-#include <QtCore/QItemSelectionModel>
-#include <QtGui/QPixmap>
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QPersistentModelIndex>
-#include <QtCore/QPoint>
-#include <QtCore/QString>
+#include <QItemSelectionModel>
+#include <QPixmap>
+#include <QAbstractItemModel>
+#include <QPersistentModelIndex>
+#include <QPoint>
+#include <QString>
 
-// local includes
+// Local includes
 
 #include "geoiface_types.h"
 #include "geocoordinates.h"
+#include "digikam_export.h"
 
 namespace GeoIface
 {
 
-class ModelHelper : public QObject
+class DIGIKAM_EXPORT ModelHelper : public QObject
 {
     Q_OBJECT
 
