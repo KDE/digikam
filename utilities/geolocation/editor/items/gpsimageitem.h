@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "digikam_debug.h"
 #include "gpsdatacontainer.h"
 #include "dmetadata.h"
@@ -75,7 +76,7 @@ public:
         latitude                = 0.0;
         longitude               = 0.0;
     }
-    
+
     bool  shouldRemoveCoordinates;
     bool  shouldWriteCoordinates;
     bool  shouldWriteAltitude;
@@ -86,7 +87,7 @@ public:
 
 class GPSImageModel;
 
-class GPSImageItem
+class DIGIKAM_EXPORT GPSImageItem
 {
 public:
 

@@ -33,6 +33,10 @@
 #include <QStringList>
 #include <QDebug>
 
+// Local includes
+
+#include "digikam_export.h"
+
 // forward declaration only to declare interoperability operators
 namespace Marble
 {
@@ -42,7 +46,7 @@ namespace Marble
 namespace GeoIface
 {
 
-class GeoCoordinates
+class DIGIKAM_EXPORT GeoCoordinates
 {
 public:
 
