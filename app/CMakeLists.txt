@@ -174,15 +174,15 @@ if(OpenCV_FOUND)
 endif()
 
 if(KF5FileMetaData_FOUND)
-    target_link_libraries(digikamcore PRIVATE baloowrap)
+    target_link_libraries(digikamcore PUBLIC baloowrap)
 endif()
 
 if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamcore PRIVATE Qt5::Multimedia Qt5::MultimediaWidgets)
+    target_link_libraries(digikamcore PUBLIC Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(KF5KFace_FOUND)
-    target_link_libraries(digikamcore PRIVATE KF5::KFace)
+    target_link_libraries(digikamcore PUBLIC KF5::KFace)
 endif()
 
 if(KF5Sane_FOUND)
@@ -193,7 +193,6 @@ if(KF5AkonadiContact_FOUND)
     target_link_libraries(digikamcore
                           PUBLIC
                           KF5::AkonadiContact
-                          KF5::CalendarCore
     )
 endif()
 
@@ -374,6 +373,7 @@ add_library(digikamgui
 )
 
 target_link_libraries(digikamgui
+                      PUBLIC
 
                       digikamdatabase
                       digikamcore
@@ -404,28 +404,28 @@ target_link_libraries(digikamgui
 )
 
 if(KF5KFace_FOUND)
-    target_link_libraries(digikamgui KF5::KFace)
+    target_link_libraries(digikamgui PRIVATE KF5::KFace)
 endif()
 
 if(KF5Kipi_FOUND)
-    target_link_libraries(digikamgui KF5::Kipi)
+    target_link_libraries(digikamgui PRIVATE KF5::Kipi)
 endif()
 
 if(${MARBLE_FOUND})
-     target_link_libraries(digikamgui ${MARBLE_LIBRARIES})
+     target_link_libraries(digikamgui PRIVATE ${MARBLE_LIBRARIES})
 endif()
 
 if(APPLE)
-    target_link_libraries(digikamgui /System/Library/Frameworks/AppKit.framework)
+    target_link_libraries(digikamgui PRIVATE /System/Library/Frameworks/AppKit.framework)
 endif()
 
 if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamgui Qt5::Multimedia Qt5::MultimediaWidgets)
+    target_link_libraries(digikamgui PRIVATE Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(NOT WIN32)
     # To link under Solaris (see bug #274484)
-    target_link_libraries(digikamgui ${MATH_LIBRARY})
+    target_link_libraries(digikamgui PRIVATE ${MATH_LIBRARY})
 endif()
 
 if(WIN32)
@@ -433,16 +433,16 @@ if(WIN32)
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
-    target_link_libraries(digikamgui ${KVM_LIBRARY})
+    target_link_libraries(digikamgui PRIVATE ${KVM_LIBRARY})
 endif()
 
 if(GPHOTO2_FOUND)
     # See bug #258931: libgphoto2 library must be the last arg for linker.
-    target_link_libraries(digikamgui ${GPHOTO2_LIBRARIES})
+    target_link_libraries(digikamgui PRIVATE ${GPHOTO2_LIBRARIES})
 
     if(NOT WIN32)
         # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
-        target_link_libraries(digikamgui ${LibUSB1_LIBRARIES})
+        target_link_libraries(digikamgui PRIVATE ${LibUSB1_LIBRARIES})
     endif()
 endif()
 
@@ -460,7 +460,7 @@ add_executable(digikam ${digikam_SRCS})
 
 add_dependencies(digikam digikam-gitversion)
 
-# TO fill plist XML file for OSX ############
+# To fill plist XML file for OSX ############
 
 set(MACOSX_APP_NAME_STRING             "digikam")
 set(MACOSX_APP_DESCRIPTION             "Advanced digital photo management application")
@@ -471,6 +471,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.i
 set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 
 target_link_libraries(digikam
+                      PUBLIC
 
                       digikamcore
                       digikamgui

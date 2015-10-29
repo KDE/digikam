@@ -30,10 +30,14 @@
 #include <QWidget>
 #include <QWizard>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class AssistantDlg : public QWizard
+class DIGIKAM_EXPORT AssistantDlg : public QWizard
 {
     Q_OBJECT
 

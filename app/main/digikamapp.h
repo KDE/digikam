@@ -43,6 +43,7 @@
 #include "digikam_config.h"
 #include "digikam_export.h"
 #include "dxmlguiwindow.h"
+#include "digikam_export.h"
 
 namespace Solid
 {
@@ -60,7 +61,7 @@ class ImageInfo;
 class ImageInfoList;
 class CameraType;
 
-class DigikamApp : public DXmlGuiWindow
+class DIGIKAM_EXPORT DigikamApp : public DXmlGuiWindow
 {
     Q_OBJECT
 

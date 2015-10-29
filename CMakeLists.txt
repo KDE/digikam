@@ -100,7 +100,7 @@ include(MacroBoolTo01)
 
 option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=OFF)"                         OFF)
 option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                       OFF)
-option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contact support (default=OFF)"                        OFF)
+option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts support (default=OFF)"                       OFF)
 option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=OFF)"                            OFF)
 
 # Mysql support options (experimental):
@@ -160,9 +160,19 @@ find_package(KF5 ${KF5_VERSION}
 
 find_package(KF5 ${KF5_VERSION}
              OPTIONAL_COMPONENTS
-             ItemModels            # For geolocation support (mandatory)
-             Bookmarks             # For geolocation support (optional)
+             ItemModels             # For geolocation support (mandatory).
+             Bookmarks              # For geolocation support (optional).
+             AkonadiContact         # For KDE Mail Contacts support.
+             FileMetaData           # For KDE file indexer support.
 )
+
+if(ENABLE_AKONADICONTACTSUPPORT AND NOT KF5AkonadiContact_FOUND)
+    set(ENABLE_KFILEMETADATASUPPORT OFF)
+endif()
+
+if(ENABLE_KFILEMETADATASUPPORT AND NOT KF5FileMetaData_FOUND)
+    set(ENABLE_KFILEMETADATASUPPORT OFF)
+endif()
 
 # ==================================================================================================
 # Dependencies Rules
@@ -349,32 +359,13 @@ else()
     set(LENSFUN_FOUND FALSE)
 endif()
 
-# -- KDEPim libraries rules -------------------------------------------------------------------
-
-if(ENABLE_AKONADICONTACTSUPPORT)
-    find_package(KF5                 # no KDE version here because Akonadi still not stable as others frameworks
-                 REQUIRED COMPONENTS
-                 AkonadiContact
-                 CalendarCore        # AkonadiContact needs KCalCore to link.
-    )
-endif()
-
-# -- KFileMetadata libraries rules ---------------------------------------------------------------------
-
-if(ENABLE_KFILEMETADATASUPPORT)
-    find_package(KF5 ${KF5_VERSION}
-                 REQUIRED COMPONENTS
-                 FileMetaData
-    )
-endif()
-
 # -- compilation options definitions -----------------------------------------------------------
 
-MACRO_BOOL_TO_01(KF5AkonadiContact_FOUND  HAVE_AKONADICONTACT)
-MACRO_BOOL_TO_01(KF5Sane_FOUND            HAVE_KSANE)
 MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
 MACRO_BOOL_TO_01(KF5KFace_FOUND           HAVE_KFACE)
+MACRO_BOOL_TO_01(KF5Sane_FOUND            HAVE_KSANE)
 MACRO_BOOL_TO_01(KF5FileMetaData_FOUND    HAVE_KFILEMETADATA)
+MACRO_BOOL_TO_01(KF5AkonadiContact_FOUND  HAVE_AKONADICONTACT)
 MACRO_BOOL_TO_01(KF5Bookmarks_FOUND       HAVE_KBOOKMARKS)
 MACRO_BOOL_TO_01(LENSFUN_FOUND            HAVE_LENSFUN)
 MACRO_BOOL_TO_01(LQR-1_FOUND              HAVE_LIBLQR_1)
