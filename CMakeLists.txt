@@ -508,7 +508,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     while(CMAKE_CXX_FLAGS MATCHES "-pedantic")
         string(REPLACE "-pedantic" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     endwhile()
-    
+
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
 
