@@ -203,11 +203,13 @@ set_package_properties("Exiv2"     PROPERTIES
 if(ENABLE_OPENCV3)
 
     set(OPENCV_MIN_VERSION "3.0.0")
-    DETECT_OPENCV(${OPENCV_MIN_VERSION} core face highgui objdetect imgproc)
+    DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect imgproc)
 
-    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_LESS 3.0.0)
-        message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.0.0 have been found. Disabled ENABLE_OPENCV3")
-        set(OpenCV_FOUND FALSE)
+    if(${OpenCV_FOUND})
+        if(${OpenCV_VERSION} VERSION_LESS 3.0.0)
+            message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.0.0 have been found. Disabled ENABLE_OPENCV3")
+            set(OpenCV_FOUND FALSE)
+        endif()
     endif()
 
 else()
@@ -215,9 +217,11 @@ else()
     set(OPENCV_MIN_VERSION "2.4.9")
     DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)
 
-    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_GREATER 2.4.99)
-        message(STATUS "ENABLE_OPENCV3 option is disabled and OpenCV >= 3.0.0 have been found. Enabled ENABLE_OPENCV3")
-        set(OpenCV_FOUND FALSE)
+    if(${OpenCV_FOUND})
+        if(${OpenCV_VERSION} VERSION_GREATER 2.4.99)
+            message(STATUS "ENABLE_OPENCV3 option is disabled and OpenCV >= 3.0.0 have been found. Enabled ENABLE_OPENCV3")
+            set(OpenCV_FOUND FALSE)
+        endif()
     endif()
 
 endif()
