@@ -235,19 +235,22 @@ QMap<QString, QString> FaceTags::identityAttributes(int tagId)
 {
     QMap<QString, QString> attributes;
     QString uuid = TagsCache::instance()->propertyValue(tagId, TagPropertyName::kfaceUuid());
+
     if (!uuid.isEmpty())
     {
         attributes[QLatin1String("uuid")] = uuid;
     }
 
     QString fullName = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
+
     if (!fullName.isEmpty())
     {
         attributes[QLatin1String("fullName")] = fullName;
     }
 
     QString kfaceName = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
-    QString tagName = TagsCache::instance()->tagName(tagId);
+    QString tagName   = TagsCache::instance()->tagName(tagId);
+
     if (tagName != kfaceName)
     {
         attributes.insertMulti(QLatin1String("name"), kfaceName);
@@ -311,10 +314,12 @@ int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes
     // Third, look for either name or full name
     // TODO: better support for "fullName"
     QString name = attributes.value(QLatin1String("name"));
+
     if (name.isEmpty())
     {
         name = attributes.value(QLatin1String("fullName"));
     }
+
     if (name.isEmpty())
     {
         return FaceTags::unknownPersonTagId();
@@ -324,6 +329,7 @@ int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes
     {
         return tagId;
     }
+
     if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::person(), name)) )
     {
         return tagId;
