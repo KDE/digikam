@@ -26,23 +26,12 @@ add_definitions(-DUSE_LCMS2)
 
 # -- Check dependencies --------------------------------------------------------------------------------
 
-# NOTE: OpenMP under MacOSX do not support multithreading.
+DETECT_OPENMP()
 
-if(NOT APPLE)
-    find_package(OpenMP)
-
-    if(OPENMP_FOUND)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        if("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
-            set(OPENMP_LDFLAGS "-lgomp")
-        endif()
-        if("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
-            set(OPENMP_LDFLAGS "-xopenmp")
-        endif()
-        message(STATUS "LibRaw will be compiled with OpenMP support")
-    else()
-        message(STATUS "LibRaw will not be compiled with OpenMP support")
-    endif()
+if(OPENMP_FOUND)
+    message(STATUS "LibRaw will be compiled with OpenMP support")
+else()
+    message(STATUS "LibRaw will not be compiled with OpenMP support")
 endif()
 
 # Flag to use libjasper with LibRaw RedCine codec

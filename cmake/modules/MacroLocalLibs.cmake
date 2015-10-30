@@ -29,7 +29,7 @@ macro(DETECT_LIBKIPI MIN_VERSION)
             message(ERROR "libkipi : local library not found")
             set(KF5Kipi_FOUND FALSE)
         else()
-            set(KF5Kipi_FOUND TRUE)            
+            set(KF5Kipi_FOUND TRUE)
         endif()
 
         set(KF5Kipi_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkipi/src ${CMAKE_BINARY_DIR}/extra/libkipi)

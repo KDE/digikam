@@ -1,15 +1,14 @@
 # - Try to find the GLIB2 libraries
 # Once done this will define
 #
-#  GLIB2_FOUND - system has glib2
+#  GLIB2_FOUND       - system has glib2
 #  GLIB2_INCLUDE_DIR - the glib2 include directory
-#  GLIB2_LIBRARIES - glib2 library
-
+#  GLIB2_LIBRARIES   - glib2 library
+#
 # Copyright (c) 2008 Laurent Montel, <montel@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
 
 if(GLIB2_INCLUDE_DIR AND GLIB2_LIBRARIES)
     # Already in cache, be silent
