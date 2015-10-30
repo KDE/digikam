@@ -33,13 +33,14 @@
 #include "dtrashiteminfo.h"
 #include "dtrash.h"
 #include "actionthreadbase.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
 class ImageInfo;
 
-class IOJob : public ActionJob
+class DIGIKAM_EXPORT IOJob : public ActionJob
 {
     Q_OBJECT
 
@@ -54,7 +55,7 @@ Q_SIGNALS:
 
 // ---------------------------------------
 
-class CopyJob : public IOJob
+class DIGIKAM_EXPORT CopyJob : public IOJob
 {
     Q_OBJECT
 
@@ -76,7 +77,7 @@ private:
 
 // ---------------------------------------
 
-class DeleteJob : public IOJob
+class DIGIKAM_EXPORT DeleteJob : public IOJob
 {
     Q_OBJECT
 
@@ -96,7 +97,7 @@ private:
 
 // ---------------------------------------
 
-class RenameFileJob : public IOJob
+class DIGIKAM_EXPORT RenameFileJob : public IOJob
 {
     Q_OBJECT
 
@@ -120,7 +121,7 @@ private:
 
 // ----------------------------------------------
 
-class DTrashItemsListingJob : public IOJob
+class DIGIKAM_EXPORT DTrashItemsListingJob : public IOJob
 {
     Q_OBJECT
 

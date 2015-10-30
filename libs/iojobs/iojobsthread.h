@@ -30,11 +30,12 @@
 #include "iojob.h"
 #include "dtrashiteminfo.h"
 #include "actionthreadbase.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class IOJobsThread : public ActionThreadBase
+class DIGIKAM_EXPORT IOJobsThread : public ActionThreadBase
 {
     Q_OBJECT
 

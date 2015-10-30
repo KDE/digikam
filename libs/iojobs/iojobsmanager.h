@@ -33,11 +33,12 @@
 
 #include "iojobsthread.h"
 #include "dtrashiteminfo.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class IOJobsManager : public QObject
+class DIGIKAM_EXPORT IOJobsManager : public QObject
 {
 
 public:
