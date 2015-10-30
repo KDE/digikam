@@ -93,7 +93,6 @@ include(KDECompilerSettings)
 include(MacroUtils)
 include(MacroLocalLibs)
 include(MacroOpenCV)
-include(MacroOpenMP)
 include(MacroJPEG)
 include(MacroBoolTo01)
 

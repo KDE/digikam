@@ -26,12 +26,18 @@ add_definitions(-DUSE_LCMS2)
 
 # -- Check dependencies --------------------------------------------------------------------------------
 
+message(STATUS "")
+message(STATUS "--------------------------------------------------")
+message(STATUS "digiKam RawEngine dependencies checks:")
+message(STATUS "")
+
+include(MacroOpenMP)
 DETECT_OPENMP()
 
 if(OPENMP_FOUND)
-    message(STATUS "LibRaw will be compiled with OpenMP support")
+    message(STATUS "RawEngine will be compiled with OpenMP support")
 else()
-    message(STATUS "LibRaw will not be compiled with OpenMP support")
+    message(STATUS "RawEngine will not be compiled with OpenMP support")
 endif()
 
 # Flag to use libjasper with LibRaw RedCine codec
@@ -39,17 +45,19 @@ endif()
 if(JASPER_FOUND)
     add_definitions(-DUSE_JASPER)
     include_directories(${JASPER_INCLUDE_DIR})
-    message(STATUS "LibRaw will be compiled with RedCine codec")
+    message(STATUS "RawEngine will be compiled with RedCine codec")
 else()
-    message(STATUS "LibRaw will not be compiled with RedCine codec")
+    message(STATUS "RawEngine will not be compiled with RedCine codec")
 endif()
 
 # For RawSpeed Codec Support
 
+message(STATUS "Looking for LibXml2")
 find_package(LibXml2)
 
 # JPEG library check
 
+message(STATUS "Looking for LibJpeg")
 if(JPEG_FOUND)
     # JPEG lib version is done on top level through MacroJPEG.cmake
     if (${JPEG_LIB_VERSION} LESS 80)
@@ -65,33 +73,41 @@ if(JPEG8_FOUND)
     add_definitions(-DUSE_JPEG)
     add_definitions(-DUSE_JPEG8)
     include_directories(${JPEG_INCLUDE_DIR})
-    message(STATUS "LibRaw will be compiled with DNG lossy codec")
+    message(STATUS "RawEngine will be compiled with DNG lossy codec")
 else()
-    message(STATUS "LibRaw will not be compiled with DNG lossy codec")
+    message(STATUS "RawEngine will not be compiled with DNG lossy codec")
 endif()
+
+message(STATUS "Looking for PThreads")
+set(PTHREADS_FOUND (CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT))
 
 if(JPEG8_FOUND AND LIBXML2_FOUND AND PTHREADS_FOUND)
 
-    message(STATUS "LibRaw will be compiled with RawSpeed codec")
+    message(STATUS "RawEngine will be compiled with RawSpeed codec")
     set(RAWSPEED_SUPPORT_CAN_BE_COMPILED true)
 
 else()
 
+    # Show a detail of missing dependency for RawSpeed Codec support
+
     if(NOT JPEG8_FOUND)
-        message(STATUS "LibRaw will not be compiled with RawSpeed codec. Libjpeg >= version 8 not found.")
+        message(STATUS "RawEngine will not be compiled with RawSpeed codec. Libjpeg >= version 8 not found.")
     endif()
 
     if(NOT LIBXML2_FOUND)
-        message(STATUS "LibRaw will not be compiled with RawSpeed codec. Libxml2 not found.")
+        message(STATUS "RawEngine will not be compiled with RawSpeed codec. Libxml2 not found.")
     endif()
 
-    if(NOT CMAKE_USE_PTHREADS_INIT AND NOT CMAKE_USE_WIN32_THREADS_INIT)
-        message(STATUS "LibRaw will not be compiled with RawSpeed codec. Pthreads not found.")
+    if(NOT PTHREADS_FOUND)
+        message(STATUS "RawEngine will not be compiled with RawSpeed codec. Pthreads not found.")
     endif()
 
     set(RAWSPEED_SUPPORT_CAN_BE_COMPILED false)
 
 endif()
+
+message(STATUS "--------------------------------------------------")
+message(STATUS "")
 
 # -- RAWSpeed Codec Compilation --------------------------------------------------------------------------------
 
