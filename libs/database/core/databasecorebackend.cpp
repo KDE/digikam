@@ -168,6 +168,7 @@ void DatabaseCoreBackendPrivate::init(const QString& name, DatabaseLocking* cons
 QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
 {
     DatabaseThreadData* threadData = 0;
+
     if (!threadDataStorage.hasLocalData())
     {
         threadData = new DatabaseThreadData;
@@ -246,6 +247,7 @@ QSqlError DatabaseCoreBackendPrivate::databaseErrorForThread()
     {
         return threadDataStorage.localData()->lastError;
     }
+
     return QSqlError();
 }
 
