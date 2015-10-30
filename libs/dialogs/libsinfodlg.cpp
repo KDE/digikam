@@ -36,12 +36,6 @@
 #include <kcoreaddons_version.h>
 #include <klocalizedstring.h>
 
-#ifdef HAVE_MARBLE
-
-#include "mapwidget.h"
-
-#endif // HAVE_MARBLE
-
 // C ANSI includes
 
 #ifndef Q_CC_MSVC
@@ -78,6 +72,7 @@ extern "C"
 #endif // HAVE_LENSFUN
 
 #ifdef HAVE_MARBLE
+#include "mapwidget.h"
 using namespace GeoIface;
 #endif // HAVE_MARBLE
 
@@ -156,10 +151,12 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18nc(CONTEXT, "Marble support"),              SUPPORTED_NO);
 #endif // HAVE_MARBLE
 
-// TODO add sqlite versions here? Could be useful for debugging sqlite problems..
+    // TODO: add sqlite versions here? Could be useful for debugging sqlite problems..
 
     int nbcore = QThreadPool::globalInstance()->maxThreadCount();
     list.insert(i18ncp(CONTEXT, "CPU core", "CPU cores", nbcore), QString::fromLatin1("%1").arg(nbcore));
+
+    // TODO: add free memory reported by kmemoryinfo at startup
 
     listView()->setHeaderLabels(QStringList() << i18nc("Name of the component", "Component") << i18nc("Is supported / version of the component", "Info"));
     setInfoMap(list);
