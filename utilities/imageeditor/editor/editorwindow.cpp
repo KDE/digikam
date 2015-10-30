@@ -434,10 +434,12 @@ void EditorWindow::setupStandardActions()
     createKSaneAction();
     createMetadataEditAction();
     createGeolocationEditAction();
-    m_ksaneAction->setEnabled(false);
     m_metadataEditAction->setEnabled(false);
 
-#ifdef HAVE_MARBLE    
+#ifdef HAVE_KSANE
+    m_ksaneAction->setEnabled(false);
+#endif
+#ifdef HAVE_MARBLE
     m_geolocationEditAction->setEnabled(false);
 #endif
 
@@ -1103,14 +1105,16 @@ void EditorWindow::toggleStandardActions(bool val)
     m_saveAsAction->setEnabled(val);
     d->openWithAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
-    m_ksaneAction->setEnabled(val);
     m_metadataEditAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
     d->slideShowAction->setEnabled(val);
 
-#ifdef HAVE_MARBLE     
+#ifdef HAVE_KSANE
+    m_ksaneAction->setEnabled(val);
+#endif
+#ifdef HAVE_MARBLE
     m_geolocationEditAction->setEnabled(val);
 #endif
 
