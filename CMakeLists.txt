@@ -54,8 +54,8 @@ set(DBCONFIG_XML_VERSION "2")
 
 set(CMAKE_MIN_VERSION   "2.8.12")
 set(ECM_MIN_VERSION     "1.7.0")
-set(KF5_VERSION         "5.1.0")
-set(REQUIRED_QT_VERSION "5.2.0")
+set(KF5_MIN_VERSION     "5.1.0")
+set(QT_MIN_VERSION      "5.2.0")
 set(KIPI_MIN_VERSION    "5.0.0")
 set(KFACE_MIN_VERSION   "5.0.0")
 set(KSANE_MIN_VERSION   "5.0.0")
@@ -112,7 +112,7 @@ option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debuggi
 
 ############## Find Packages ###################
 
-find_package(Qt5 ${REQUIRED_QT_VERSION}
+find_package(Qt5 ${QT_MIN_VERSION}
              REQUIRED NO_MODULE COMPONENTS
              Core
              Concurrent
@@ -125,7 +125,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION}
              DBus
 )
 
-find_package(Qt5 ${REQUIRED_QT_VERSION}
+find_package(Qt5 ${QT_MIN_VERSION}
              OPTIONAL_COMPONENTS
              Multimedia
              MultimediaWidgets
@@ -138,11 +138,11 @@ if(ENABLE_MEDIAPLAYER)
 endif()
 
 if(BUILD_TESTING)
-    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+    find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
                  Test)
 endif()
 
-find_package(KF5 ${KF5_VERSION}
+find_package(KF5 ${KF5_MIN_VERSION}
              REQUIRED COMPONENTS
              XmlGui
              CoreAddons
@@ -158,7 +158,7 @@ find_package(KF5 ${KF5_VERSION}
              I18n
 )
 
-find_package(KF5 ${KF5_VERSION}
+find_package(KF5 ${KF5_MIN_VERSION}
              OPTIONAL_COMPONENTS
              ItemModels             # For geolocation support (mandatory).
              Bookmarks              # For geolocation support (optional).
@@ -247,7 +247,7 @@ find_package(Eigen3)
 find_package(X11)
 
 if(X11_FOUND)
-    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+    find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
                  X11Extras
     )
     set(HAVE_X11 TRUE)
@@ -414,7 +414,7 @@ endif()
 # ================================================================
 
 PRINT_LIBRARY_STATUS("libqt"                  "http://www.qtsoftware.com"                                        "(version >= ${QT_MIN_VERSION})"     Qt5_FOUND)
-PRINT_LIBRARY_STATUS("libkde"                 "http://www.kde.org"                                               "(version >= ${KDE_MIN_VERSION})"    KF5_FOUND)
+PRINT_LIBRARY_STATUS("libkde"                 "http://www.kde.org"                                               "(version >= ${KF5_MIN_VERSION})"    KF5_FOUND)
 PRINT_LIBRARY_STATUS("libjpeg"                "http://www.ijg.org"                                               "(version >= 6b)"                    JPEG_FOUND)
 PRINT_LIBRARY_STATUS("libtiff"                "http://www.remotesensing.org/libtiff"                             "(version >= 3.8.2)"                 TIFF_FOUND)
 PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/libpng.html"                        "(version >= 1.2.7)"                 PNG_FOUND)
@@ -432,8 +432,8 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/proj
 PRINT_OPTIONAL_LIBRARY_STATUS("libkface"          "https://projects.kde.org/projects/extragear/libs/libkface"       "(version >= ${KFACE_MIN_VERSION})"   "digiKam will be compiled without faces detection and recognition support."   KF5KFace_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libmarble"         "https://projects.kde.org/projects/kde/kdeedu/marble"             "(version >= 0.22.0)"                 "digiKam will be compiled without geolocation maps support."                  MARBLE_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libksane"          "https://projects.kde.org/projects/kde/kdegraphics/libs/libksane" "(version >= ${KSANE_MIN_VERSION})"   "digiKam will be compiled without libksane support."                          KF5Sane_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= 5.0.0)"                  "digiKam will be compiled without KDE file metadata support."                 KF5FileMetaData_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= 5.0.0)"                  "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= ${KF5_MIN_VERSION})"                  "digiKam will be compiled without KDE file metadata support."                 KF5FileMetaData_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= ${KF5_MIN_VERSION})"                  "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"         "http://www.ece.uvic.ca/~mdadams/jasper"                          "(version >= 1.7.0)"                  "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"        "http://lensfun.sourceforge.net"                                  "(version >= 0.2.6)"                  "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"          "http://liblqr.wikidot.com"                                       "(version >= 0.4.1)"                  "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
