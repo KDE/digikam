@@ -1339,7 +1339,7 @@ void DRawDecoderWidget::readSettings(DRawDecoderSettings& prm, KConfigGroup& gro
     prm.customWhiteBalanceGreen = group.readEntry(OPTIONCUSTOMWBGREENENTRY,                                           defaultPrm.customWhiteBalanceGreen);
     prm.RGBInterpolate4Colors   = group.readEntry(OPTIONFOURCOLORRGBENTRY,                                            defaultPrm.RGBInterpolate4Colors);
     prm.unclipColors            = group.readEntry(OPTIONUNCLIPCOLORSENTRY,                                            defaultPrm.unclipColors);
-    prm.DontStretchPixels       = group.readEntry(OPTIONDONTSTRETCHPIXELSENTRY,                                       defaultPrm.DontStretchPixels);
+    prm.DontStretchPixels       = group.readEntry(OPTIONDONTSTRETCHPIXELSSENTRY,                                       defaultPrm.DontStretchPixels);
     prm.NRType                  = (DRawDecoderSettings::NoiseReduction)group.readEntry(OPTIONNOISEREDUCTIONTYPEENTRY, (int)defaultPrm.NRType);
     prm.brightness              = group.readEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,                                    defaultPrm.brightness);
     prm.enableBlackPoint        = group.readEntry(OPTIONUSEBLACKPOINTENTRY,                                           defaultPrm.enableBlackPoint);
@@ -1376,7 +1376,7 @@ void DRawDecoderWidget::writeSettings(const DRawDecoderSettings& prm, KConfigGro
     group.writeEntry(OPTIONCUSTOMWBGREENENTRY,           prm.customWhiteBalanceGreen);
     group.writeEntry(OPTIONFOURCOLORRGBENTRY,            prm.RGBInterpolate4Colors);
     group.writeEntry(OPTIONUNCLIPCOLORSENTRY,            prm.unclipColors);
-    group.writeEntry(OPTIONDONTSTRETCHPIXELSENTRY,       prm.DontStretchPixels);
+    group.writeEntry(OPTIONDONTSTRETCHPIXELSSENTRY,       prm.DontStretchPixels);
     group.writeEntry(OPTIONNOISEREDUCTIONTYPEENTRY,      (int)prm.NRType);
     group.writeEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,    prm.brightness);
     group.writeEntry(OPTIONUSEBLACKPOINTENTRY,           prm.enableBlackPoint);
