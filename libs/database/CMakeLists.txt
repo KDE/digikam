@@ -75,9 +75,9 @@ set(libdatabase_SRCS
     item/imagetagpair.cpp
     imagehistory/imagehistorygraph.cpp
     imagehistory/imagehistorygraphmodel.cpp
-    faces/databaseface.cpp
-    faces/facetags.cpp
-    faces/facetagseditor.cpp
+    facesiface/databaseface.cpp
+    facesiface/facetags.cpp
+    facesiface/facetagseditor.cpp
     utils/downloadhistory.cpp
     utils/namefilter.cpp
     utils/searchxml.cpp
@@ -144,7 +144,7 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/faces>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/facesiface>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
