@@ -34,9 +34,8 @@
 #define OPTIONCUSTOMWBGREENENTRY                       "Custom White Balance Green"
 #define OPTIONFOURCOLORRGBENTRY                        "Four Color RGB"
 #define OPTIONUNCLIPCOLORSENTRY                        "Unclip Color"
-// Wrong spelling, but do not fix it since it is a configuration key
-// krazy:cond=spelling
-#define OPTIONDONTSTRETCHPIXELSENTRY                   "Dont Stretch Pixels"
+// krazy:endcond=spelling
+#define OPTIONDONTSTRETCHPIXELSSENTRY                  "Dont Stretch Pixels"
 // krazy:endcond=spelling
 #define OPTIONMEDIANFILTERPASSESENTRY                  "Median Filter Passes"
 #define OPTIONNOISEREDUCTIONTYPEENTRY                  "Noise Reduction Type"
@@ -164,7 +163,7 @@ public:
     double shiftExpoFromEvToLinear(double ev) const
     {
         // From GUI : -2.0EV => 0.25
-        //            +3.0EV => 8.00  
+        //            +3.0EV => 8.00
         return (1.55*ev + 3.35);
     }
 
@@ -173,7 +172,7 @@ public:
     double shiftExpoFromLinearToEv(double lin) const
     {
         // From GUI : 0.25 => -2.0EV
-        //            8.00 => +3.0EV  
+        //            8.00 => +3.0EV
         return ((lin-3.35) / 1.55);
     }
 
@@ -301,7 +300,7 @@ void DRawDecoderWidget::setup(int advSettings)
     dcrawVersion->setText(QString::fromLatin1("<a href=\"%1\">%2</a>")
                           .arg(QLatin1String("http://www.libraw.org"))
                           .arg(QString::fromLatin1("libraw %1").arg(DRawDecoder::librawVersion())));
-        
+
     demosaicingLayout->addWidget(dcrawVersion, 0, 2, 1, 1);
 
     d->dontStretchPixelsCheckBox  = new QCheckBox(i18nc("@option:check", "Do not stretch or rotate pixels"), d->demosaicingSettings);
@@ -332,13 +331,6 @@ void DRawDecoderWidget::setup(int advSettings)
     d->RAWQualityComboBox->insertItem(DRawDecoderSettings::LMMSE,    i18nc("@item:inlistbox Quality", "LMMSE"));
     // Extended demosaicing method from GPL3 pack
     d->RAWQualityComboBox->insertItem(DRawDecoderSettings::AMAZE,    i18nc("@item:inlistbox Quality", "AMaZE"));
-
-    for (int i=DRawDecoderSettings::DCB ; i <=DRawDecoderSettings::LMMSE ; ++i)
-    {
-        d->RAWQualityComboBox->combo()->setItemData(i, false, Qt::UserRole-1);
-    }
-
-    d->RAWQualityComboBox->combo()->setItemData(DRawDecoderSettings::AMAZE, false, Qt::UserRole-1);
 
     d->RAWQualityComboBox->setDefaultIndex(DRawDecoderSettings::BILINEAR);
     d->RAWQualityComboBox->setCurrentIndex(DRawDecoderSettings::BILINEAR);
@@ -400,7 +392,7 @@ void DRawDecoderWidget::setup(int advSettings)
                                 "<item><emphasis strong='true'>AMaZE</emphasis>: Aliasing Minimization "
                                 "interpolation and Zipper Elimination to apply color aberration removal "
                                 "from RawTherapee project.</item></list></para>"
-                                
+
                                 "<para>Note: some methods can be unavailable if RAW decoder have been built "
                                 "without extension packs.</para>"));
 
@@ -433,7 +425,7 @@ void DRawDecoderWidget::setup(int advSettings)
                                 "enhanced effective color interpolation (EECI) refine to improve "
                                 "sharpness.</item></list></para>"));
     demosaicingLayout->addWidget(d->refineInterpolationBox, line, 0, 1, 2);
-         
+
     d->medianFilterPassesLabel->setEnabled(false);
     d->medianFilterPassesSpinBox->setEnabled(false);
     d->refineInterpolationBox->setEnabled(false);
@@ -755,7 +747,7 @@ void DRawDecoderWidget::setup(int advSettings)
     d->outIccUrlEdit = new DFileSelector(d->colormanSettings);
     d->outIccUrlEdit->setFileDlgMode(QFileDialog::ExistingFile);
     d->outIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc; *.icm)"));
-    
+
     colormanLayout->addWidget(d->inputColorSpaceLabel,     0, 0, 1, 1);
     colormanLayout->addWidget(d->inputColorSpaceComboBox,  0, 1, 1, 2);
     colormanLayout->addWidget(d->inIccUrlEdit,             1, 0, 1, 3);
@@ -877,7 +869,7 @@ void DRawDecoderWidget::setup(int advSettings)
 
     connect(d->NRSpinBox2, &DIntNumInput::valueChanged,
             this, &DRawDecoderWidget::signalSettingsChanged);
-    
+
     connect(d->medianFilterPassesSpinBox, &DIntNumInput::valueChanged,
             this, &DRawDecoderWidget::signalSettingsChanged);
 
@@ -1052,7 +1044,7 @@ void DRawDecoderWidget::slotExpoCorrectionShiftChanged(double ev)
 
     d->expoCorrectionHighlightLabel->setEnabled(b);
     d->expoCorrectionHighlightSpinBox->setEnabled(b);
-    
+
     emit signalSettingsChanged();
 }
 
@@ -1094,7 +1086,7 @@ void DRawDecoderWidget::slotRAWQualityChanged(int quality)
             d->refineInterpolationBox->setEnabled(false);
             break;
     }
-    
+
     emit signalSettingsChanged();
 }
 
@@ -1323,7 +1315,7 @@ void DRawDecoderWidget::readSettings(KConfigGroup& group)
 {
     DRawDecoderSettings prm;
     readSettings(prm, group);
-    
+
     setSettings(prm);
     DExpanderBox::readSettings(group);
 }
@@ -1411,5 +1403,5 @@ void DRawDecoderWidget::writeSettings(const DRawDecoderSettings& prm, KConfigGro
     group.writeEntry(OPTIONEXPOCORRECTIONSHIFTENTRY,     prm.expoCorrectionShift);
     group.writeEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY, prm.expoCorrectionHighlight);
 }
-    
+
 } // NameSpace Digikam

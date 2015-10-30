@@ -100,7 +100,7 @@ public:
 
     static void readSettings(DRawDecoderSettings& setting, KConfigGroup& group);
     static void writeSettings(const DRawDecoderSettings& setting, KConfigGroup& group);
-    
+
 Q_SIGNALS:
 
     void signalSixteenBitsImageToggled(bool);
