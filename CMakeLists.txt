@@ -375,6 +375,7 @@ MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
 MACRO_BOOL_TO_01(MARBLE_FOUND             HAVE_MARBLE)
 MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT      HAVE_MYSQLSUPPORT)
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
+MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER       HAVE_VIDEOPLAYER)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -382,8 +383,6 @@ MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
 # this, so disable. If other renderers switch to coarser logical
 # pixels, one probably needs this feature on these platforms as well.
 MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
-
-MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER       HAVE_VIDEOPLAYER)
 
 # Set config files accordingly with optional dependencies
 
