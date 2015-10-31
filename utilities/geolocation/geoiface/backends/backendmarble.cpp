@@ -282,7 +282,7 @@ void BackendMarble::releaseWidget(GeoIfaceInternalWidgetInfo* const info)
 #endif
 
     disconnect(d->marbleWidget, SIGNAL(zoomChanged(int)),
-               this, SLOT(slotMarbleZoomChanged(int)));
+               this, SLOT(slotMarbleZoomChanged()));
 
     info->currentOwner = 0;
     info->state        = GeoIfaceInternalWidgetInfo::InternalWidgetReleased;
