@@ -424,7 +424,6 @@ PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/lib
 PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                                         "(version >= 1.0.0)"                 LCMS2_FOUND)
 PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                                    "(version >= 1.43.0)"                Boost_FOUND)
 PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"                                            "(version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
-PRINT_LIBRARY_STATUS("libexiv2"               "http://www.exiv2.org"                                             "(version >= ${EXIV2_MIN_VERSION})"  EXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
 PRINT_LIBRARY_STATUS("libexpat"               "http://expat.sourceforge.net"                                     "(version >= 2.0.0)"                 EXPAT_FOUND)
 PRINT_LIBRARY_STATUS("libpthread"             "http://www.gnu.org/software/hurd/libpthread.html"                 "(version >= 2.0.0)"                 CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
