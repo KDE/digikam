@@ -40,12 +40,9 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Libkface includes
-
-#include <KFace/RecognitionDatabase>
-
 // Local includes
 
+#include "recognitiondatabase.h"
 #include "digikam_debug.h"
 #include "albumdb.h"
 #include "album.h"
@@ -127,7 +124,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     if (settings.task == FaceScanSettings::RetrainAll)
     {
         // clear all training data in the database
-        KFaceIface::RecognitionDatabase::addDatabase().clearAllTraining(QLatin1String("digikam"));
+        FacesEngine::RecognitionDatabase::addDatabase().clearAllTraining(QLatin1String("digikam"));
         d->pipeline.plugRetrainingDatabaseFilter();
         d->pipeline.plugTrainer();
         d->pipeline.construct();

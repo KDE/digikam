@@ -90,18 +90,18 @@ void FaceUtils::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
     }
 }
 
-// --- Convert between KFace results and DatabaseFace ---
+// --- Convert between FacesEngine results and DatabaseFace ---
 
 QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
                                                const QList<QRectF>& detectedFaces,
-                                               const QList<KFaceIface::Identity> recognitionResults,
+                                               const QList<FacesEngine::Identity> recognitionResults,
                                                const QSize& fullSize) const
 {
     QList<DatabaseFace> faces;
 
     for (int i=0; i<detectedFaces.size(); ++i)
     {
-        KFaceIface::Identity identity;
+        FacesEngine::Identity identity;
 
         if (!recognitionResults.isEmpty())
         {
@@ -151,7 +151,7 @@ void FaceUtils::storeThumbnails(ThumbnailLoadThread* const thread, const QString
 
 QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
                                                        const QList<QRectF>& detectedFaces,
-                                                       const QList<KFaceIface::Identity> recognitionResults,
+                                                       const QList<FacesEngine::Identity> recognitionResults,
                                                        const QSize& fullSize)
 {
     // Build list of new entries
@@ -260,18 +260,18 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
     return newFaces;
 }
 
-KFaceIface::Identity FaceUtils::identityForTag(int tagId, KFaceIface::RecognitionDatabase db) const
+FacesEngine::Identity FaceUtils::identityForTag(int tagId, FacesEngine::RecognitionDatabase db) const
 {
     QMap<QString, QString> attributes = FaceTags::identityAttributes(tagId);
-    KFaceIface::Identity identity     = db.findIdentity(attributes);
+    FacesEngine::Identity identity     = db.findIdentity(attributes);
 
     if (!identity.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found kface identity" << identity.id() << "for tag" << tagId;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Found FacesEngine identity" << identity.id() << "for tag" << tagId;
         return identity;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Adding new kface identity with attributes" << attributes;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Adding new FacesEngine identity with attributes" << attributes;
     identity = db.addIdentity(attributes);
 
     FaceTags::applyTagIdentityMapping(tagId, identity.attributesMap());
@@ -279,7 +279,7 @@ KFaceIface::Identity FaceUtils::identityForTag(int tagId, KFaceIface::Recognitio
     return identity;
 }
 
-int FaceUtils::tagForIdentity(const KFaceIface::Identity& identity) const
+int FaceUtils::tagForIdentity(const FacesEngine::Identity& identity) const
 {
     return FaceTags::getOrCreateTagForIdentity(identity.attributesMap());
 }

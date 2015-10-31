@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-08
- * Description : libkface interface, also allowing easy manipulation of face tags
+ * Description : FacesEngine interface, also allowing easy manipulation of face tags
  *
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -29,13 +29,10 @@
 
 #include <QStringList>
 
-// Libkface includes
-
-#include <KFace/Identity>
-#include <KFace/RecognitionDatabase>
-
 // Local includes
 
+#include "identity.h"
+#include "recognitiondatabase.h"
 #include "imageinfo.h"
 #include "facetagseditor.h"
 #include "digikam_export.h"
@@ -75,7 +72,7 @@ public:
      */
     QList<DatabaseFace> writeUnconfirmedResults(qlonglong imageid,
                                                 const QList<QRectF>& detectedFaces,
-                                                const QList<KFaceIface::Identity> recognitionResults,
+                                                const QList<FacesEngine::Identity> recognitionResults,
                                                 const QSize& fullSize);
 
     // --- Status flags ---
@@ -100,7 +97,7 @@ public:
      */
 /*
     void                fillImageInFaces(ThumbnailImageCatcher* const catcher, const QString& filePath,
-                                         QList<KFaceIface::Face>& faceList, const QSize& scaleSize = QSize()) const;
+                                         QList<FacesEngine::Face>& faceList, const QSize& scaleSize = QSize()) const;
 */
 
     /**
@@ -115,7 +112,7 @@ public:
      */
     QList<DatabaseFace> toDatabaseFaces(qlonglong imageid,
                                         const QList<QRectF>& detectedFaces,
-                                        const QList<KFaceIface::Identity> recognitionResults,
+                                        const QList<FacesEngine::Identity> recognitionResults,
                                         const QSize& fullSize) const;
 
     /**
@@ -125,8 +122,8 @@ public:
      */
     static int          faceRectDisplayMargin();
 
-    KFaceIface::Identity identityForTag(int tagId, KFaceIface::RecognitionDatabase db) const;
-    int                  tagForIdentity(const KFaceIface::Identity& identity) const;
+    FacesEngine::Identity identityForTag(int tagId, FacesEngine::RecognitionDatabase db) const;
+    int                  tagForIdentity(const FacesEngine::Identity& identity) const;
 
 protected:
 

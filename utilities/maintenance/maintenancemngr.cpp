@@ -47,10 +47,7 @@
 #include "metadatasynchronizer.h"
 #include "dnotificationwrapper.h"
 #include "progressmanager.h"
-
-#ifdef HAVE_KFACE
 #include "facesdetector.h"
-#endif /* HAVE_KFACE */
 
 namespace Digikam
 {
@@ -68,10 +65,7 @@ public:
         duplicatesFinder      = 0;
         metadataSynchronizer  = 0;
         imageQualitySorter    = 0;
-
-#ifdef HAVE_KFACE
         facesDetector         = 0;
-#endif /* HAVE_KFACE */
     }
 
     bool                   running;
@@ -86,10 +80,7 @@ public:
     DuplicatesFinder*      duplicatesFinder;
     MetadataSynchronizer*  metadataSynchronizer;
     ImageQualitySorter*    imageQualitySorter;
-
-#ifdef HAVE_KFACE
     FacesDetector*         facesDetector;
-#endif /* HAVE_KFACE */
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)
@@ -148,13 +139,11 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
         d->duplicatesFinder = 0;
         stage5();
     }
-#ifdef HAVE_KFACE
     else if (tool == dynamic_cast<ProgressItem*>(d->facesDetector))
     {
         d->facesDetector = 0;
         stage6();
     }
-#endif /* HAVE_KFACE */
    else if (tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
     {
         d->imageQualitySorter = 0;
@@ -173,9 +162,7 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator)       ||
         tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
-#ifdef HAVE_KFACE
         tool == dynamic_cast<ProgressItem*>(d->facesDetector)         ||
-#endif /* HAVE_KFACE */
         tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter)    ||
         tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
@@ -280,7 +267,6 @@ void MaintenanceMngr::stage5()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "stage5";
 
-#ifdef HAVE_KFACE
     if (d->settings.faceManagement)
     {
         // NOTE : Use multi-core CPU option is passed through FaceScanSettings
@@ -290,7 +276,6 @@ void MaintenanceMngr::stage5()
         d->facesDetector->start();
     }
     else
-#endif /* HAVE_KFACE */
     {
         stage6();
     }

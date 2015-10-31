@@ -68,14 +68,9 @@ public:
         Thumbnails,
         FingerPrints,
         Duplicates,
-
-#ifdef HAVE_KFACE
         FaceManagement,
-#endif /* HAVE_KFACE */
-
         ImageQualitySorter,
         MetadataSync,
-
         Stretch
     };
 
@@ -95,12 +90,8 @@ public:
         hbox(0),
         vbox(0),
         vbox2(0),
-
-#ifdef HAVE_KFACE
         hbox3(0),
         faceScannedHandling(0),
-#endif /* HAVE_KFACE */
-
         similarity(0),
         expanderBox(0),
         albumSelectors(0)
@@ -136,12 +127,8 @@ public:
     DHBox*               hbox;
     DVBox*               vbox;
     DVBox*               vbox2;
-
-#ifdef HAVE_KFACE
     DHBox*               hbox3;
     QComboBox*           faceScannedHandling;
-#endif /* HAVE_KFACE */
-
     DIntNumInput*        similarity;
     DExpanderBox*        expanderBox;
     AlbumSelectors*      albumSelectors;
@@ -227,8 +214,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-#ifdef HAVE_KFACE
-
     d->hbox3               = new DHBox;
     new QLabel(i18n("Faces data management: "), d->hbox3);
     QWidget* const space3  = new QWidget(d->hbox3);
@@ -240,8 +225,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->expanderBox->insertItem(Private::FaceManagement, d->hbox3, QIcon::fromTheme(QLatin1String("edit-image-face-detect")),
                                i18n("Detect and recognize Faces (experimental)"), QLatin1String("FaceManagement"), false);
     d->expanderBox->setCheckBoxVisible(Private::FaceManagement, true);
-
-#endif /* HAVE_KFACE */
 
     // --------------------------------------------------------------------------------------
 
@@ -351,13 +334,9 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.scanFingerPrints                    = d->scanFingerPrints->isChecked();
     prm.duplicates                          = d->expanderBox->isChecked(Private::Duplicates);
     prm.similarity                          = d->similarity->value();
-
-#ifdef HAVE_KFACE
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->itemData(d->faceScannedHandling->currentIndex()).toInt();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
-#endif /* HAVE_KFACE */
-
     prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
     prm.qualityScanMode                     = d->qualityScanMode->itemData(d->qualityScanMode->currentIndex()).toInt();
     ImageQualitySettings imgq;
@@ -385,12 +364,8 @@ void MaintenanceDlg::readSettings()
     d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                           prm.scanFingerPrints));
     d->expanderBox->setChecked(Private::Duplicates,         group.readEntry(d->configDuplicates,         prm.duplicates));
     d->similarity->setValue(group.readEntry(d->configSimilarity,                                         prm.similarity));
-
-#ifdef HAVE_KFACE
     d->expanderBox->setChecked(Private::FaceManagement,     group.readEntry(d->configFaceManagement,     prm.faceManagement));
     d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,                (int)prm.faceSettings.alreadyScannedHandling));
-#endif /* HAVE_KFACE */
-
     d->expanderBox->setChecked(Private::ImageQualitySorter, group.readEntry(d->configImageQualitySorter, prm.qualitySort));
     d->qualityScanMode->setCurrentIndex(group.readEntry(d->configQualityScanMode,                        prm.qualityScanMode));
     d->expanderBox->setChecked(Private::MetadataSync,       group.readEntry(d->configMetadataSync,       prm.metadataSync));
@@ -421,12 +396,8 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configScanFingerPrints,    prm.scanFingerPrints);
     group.writeEntry(d->configDuplicates,          prm.duplicates);
     group.writeEntry(d->configSimilarity,          prm.similarity);
-
-#ifdef HAVE_KFACE
     group.writeEntry(d->configFaceManagement,      prm.faceManagement);
     group.writeEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling);
-#endif /* HAVE_KFACE */
-
     group.writeEntry(d->configImageQualitySorter,  prm.qualitySort);
     group.writeEntry(d->configQualityScanMode,     prm.qualityScanMode);
     group.writeEntry(d->configMetadataSync,        prm.metadataSync);
@@ -451,11 +422,9 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
             d->hbox->setEnabled(b);
             break;
 
-#ifdef HAVE_KFACE
         case Private::FaceManagement:
             d->hbox3->setEnabled(b);
             break;
-#endif /* HAVE_KFACE */
 
         case Private::ImageQualitySorter:
             d->vbox->setEnabled(b);

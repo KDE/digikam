@@ -1342,8 +1342,6 @@ const QString GPSSearchSideBarWidget::getCaption()
 
 // -----------------------------------------------------------------------------
 
-#ifdef HAVE_KFACE
-
 class PeopleSideBarWidget::Private : public TagViewSideBarWidget::Private
 {
 public:
@@ -1472,7 +1470,5 @@ const QString PeopleSideBarWidget::getCaption()
 {
     return i18nc("Browse images sorted by depicted people", "People");
 }
-
-#endif /* HAVE_KFACE */
 
 } // namespace Digikam

@@ -40,6 +40,9 @@
 #pragma clang diagnostic ignored "-Wcast-align"
 #endif
 
+// Used to find shared Haar Cascade files.
+#define OPENCV_ROOT_PATH "${OpenCV_DIR}"
+
 // OpenCV includes
 
 #include <opencv2/core/version.hpp>
@@ -60,6 +63,22 @@
 #   include <opencv/highgui.h>
 #   include <opencv2/imgproc.hpp>
 #endif
+
+#if OPENCV_TEST_VERSION(3,0,0)
+#   include <opencv2/core/core.hpp>
+#   include <opencv2/core/internal.hpp>
+#   include <opencv2/contrib/contrib.hpp>
+#else
+#   include <opencv2/face.hpp>
+#   include <opencv2/core.hpp>
+#endif
+
+// for old-style code
+#if OPENCV_VERSION <= OPENCV_MAKE_VERSION(2,4,99)
+#   include <opencv2/legacy/compat.hpp>
+#endif
+
+#include <opencv2/highgui/highgui_c.h>
 
 // Restore warnings
 #if not defined(__APPLE__) && defined(__GNUC__)

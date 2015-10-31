@@ -72,6 +72,7 @@ include_directories(
 
     $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
@@ -81,12 +82,6 @@ if(ENABLE_MEDIAPLAYER)
     include_directories(
         $<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-endif()
-
-if(KF5KFace_FOUND)
-    include_directories(
-        $<TARGET_PROPERTY:KF5::KFace,INTERFACE_INCLUDE_DIRECTORIES>
     )
 endif()
 
@@ -181,10 +176,6 @@ if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamcore PUBLIC Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
-if(KF5KFace_FOUND)
-    target_link_libraries(digikamcore PUBLIC KF5::KFace)
-endif()
-
 if(KF5Sane_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::Sane)
 endif()
@@ -236,7 +227,9 @@ set(libdigikamgui_SRCS
     items/imagethumbnailbar.cpp
     items/imagethumbnaildelegate.cpp
     items/imageviewutilities.cpp
-
+    items/digikamimagefacedelegate.cpp
+    items/overlays/assignnameoverlay.cpp
+    items/overlays/facerejectionoverlay.cpp
     items/overlays/groupindicatoroverlay.cpp
     items/overlays/imagefsoverlay.cpp
     items/overlays/imageratingoverlay.cpp
@@ -287,15 +280,6 @@ if(ENABLE_MEDIAPLAYER)
        )
 endif()
 
-if(KF5KFace_FOUND)
-    set(libdigikamgui_SRCS
-        ${libdigikamgui_SRCS}
-        items/digikamimagefacedelegate.cpp
-        items/overlays/assignnameoverlay.cpp
-        items/overlays/facerejectionoverlay.cpp
-       )
-endif()
-
 if(${MARBLE_FOUND})
     set(libdigikamgui_SRCS
         ${libdigikamgui_SRCS}
@@ -319,6 +303,7 @@ ecm_add_app_icon(digikam_SRCS ICONS ${ICONS_SRCS})
 
 set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:digikamdatabasemain_src>
+            $<TARGET_OBJECTS:digikamfacesengine_src>
             $<TARGET_OBJECTS:digikamgui_src>
             $<TARGET_OBJECTS:digikamdeletedialog_src>
             $<TARGET_OBJECTS:digikamtemplate_src>
@@ -341,19 +326,13 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:imagehistorywidgets_src>
             $<TARGET_OBJECTS:iojobs_src>
             $<TARGET_OBJECTS:dtrash_src>
+            $<TARGET_OBJECTS:facemanagement_src>
 )
 
 if(KF5Kipi_FOUND)
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
         $<TARGET_OBJECTS:kipiiface_src>
-    )
-endif()
-
-if(KF5KFace_FOUND)
-    set(DIGIKAM_OBJECTS
-        ${DIGIKAM_OBJECTS}
-            $<TARGET_OBJECTS:facemanagement_src>
     )
 endif()
 
@@ -402,10 +381,6 @@ target_link_libraries(digikamgui
 
                       ${OpenCV_LIBRARIES}
 )
-
-if(KF5KFace_FOUND)
-    target_link_libraries(digikamgui PRIVATE KF5::KFace)
-endif()
 
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamgui PUBLIC KF5::Kipi)

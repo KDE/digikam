@@ -18,6 +18,7 @@ set(libmaintenance_SRCS
     newitemsfinder.cpp
     thumbsgenerator.cpp
     thumbstask.cpp
+    facesdetector.cpp
     fingerprintsgenerator.cpp
     fingerprintstask.cpp
     imagequalitysorter.cpp
@@ -30,13 +31,6 @@ set(libmaintenance_SRCS
     maintenancethread.cpp
 )
 
-if(KF5KFace_FOUND)
-    set(libmaintenance_SRCS
-        ${libmaintenance_SRCS}
-        facesdetector.cpp
-       )
-endif()
-
 include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
@@ -48,9 +42,5 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
-
-if(KF5KFace_FOUND)
-    include_directories($<TARGET_PROPERTY:KF5::KFace,INTERFACE_INCLUDE_DIRECTORIES>)
-endif()
 
 add_library(maintenance_src OBJECT ${libmaintenance_SRCS})

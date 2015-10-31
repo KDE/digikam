@@ -38,10 +38,7 @@
 #include "imagerotationoverlay.h"
 #include "imagefsoverlay.h"
 #include "applicationsettings.h"
-
-#ifdef HAVE_KFACE
 #include "facepipeline.h"
-#endif /* HAVE_KFACE */
 
 namespace Digikam
 {
@@ -66,9 +63,7 @@ public:
 
     ImageViewUtilities*       utilities;
 
-#ifdef HAVE_KFACE
     FacePipeline              editPipeline;
-#endif /* HAVE_KFACE */
 
     DigikamImageDelegate*     normalDelegate;
     DigikamImageFaceDelegate* faceDelegate;

@@ -34,13 +34,10 @@
 #include <QSharedData>
 #include <QWaitCondition>
 
-// Libkface includes
-
-#include <KFace/FaceDetector>
-#include <KFace/RecognitionDatabase>
-
 // Local includes
 
+#include "facedetector.h"
+#include "recognitiondatabase.h"
 #include "faceutils.h"
 #include "previewloadthread.h"
 #include "thumbnailloadthread.h"
@@ -211,7 +208,7 @@ Q_SIGNALS:
 
 protected:
 
-    KFaceIface::FaceDetector     detector;
+    FacesEngine::FaceDetector     detector;
     FacePipeline::Private* const d;
 };
 
@@ -264,7 +261,7 @@ Q_SIGNALS:
 protected:
 
     FaceImageRetriever              imageRetriever;
-    KFaceIface::RecognitionDatabase database;
+    FacesEngine::RecognitionDatabase database;
     FacePipeline::Private* const    d;
 };
 
@@ -321,7 +318,7 @@ Q_SIGNALS:
 
 protected:
 
-    KFaceIface::RecognitionDatabase database;
+    FacesEngine::RecognitionDatabase database;
     FaceImageRetriever              imageRetriever;
     FacePipeline::Private* const    d;
 };
@@ -393,7 +390,7 @@ protected:
     QMap<int, Statistics> results;
 
     FacePipeline::Private* const d;
-    KFaceIface::RecognitionDatabase database;
+    FacesEngine::RecognitionDatabase database;
 };
 
 // ----------------------------------------------------------------------------------------

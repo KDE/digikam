@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-08
- * Description : libkface interface, also allowing easy manipulation of face tags
+ * Description : FacesEngine interface, also allowing easy manipulation of face tags
  *
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>

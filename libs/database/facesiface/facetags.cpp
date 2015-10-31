@@ -74,15 +74,15 @@ QString FaceTagsHelper::tagPath(const QString& name, int parentId)
 
 void FaceTagsHelper::makeFaceTag(int tagId, const QString& fullName)
 {
-    QString kfaceName  = fullName;
+    QString faceEngineName  = fullName;
     /*
-     *    // find a unique kfaceId
-     *    for (int i=0; d->findFirstTagWithProperty(TagPropertyName::kfaceId(), kfaceId); ++i)
-     *        kfaceId = fullName + QString::fromUtf8(" (%1)").arg(i);
+     *    // find a unique FacesEngineId
+     *    for (int i=0; d->findFirstTagWithProperty(TagPropertyName::FacesEngineId(), FacesEngineId); ++i)
+     *        FacesEngineId = fullName + QString::fromUtf8(" (%1)").arg(i);
      */
     TagProperties props(tagId);
     props.setProperty(TagPropertyName::person(),    fullName);
-    props.setProperty(TagPropertyName::kfaceName(), kfaceName);
+    props.setProperty(TagPropertyName::faceEngineName(), faceEngineName);
 }
 
 int FaceTagsHelper::tagForName(const QString& name, int tagId, int parentId, const QString& givenFullName,
@@ -234,7 +234,7 @@ int FaceTags::scannedForFacesTagId()
 QMap<QString, QString> FaceTags::identityAttributes(int tagId)
 {
     QMap<QString, QString> attributes;
-    QString uuid = TagsCache::instance()->propertyValue(tagId, TagPropertyName::kfaceUuid());
+    QString uuid = TagsCache::instance()->propertyValue(tagId, TagPropertyName::faceEngineUuid());
 
     if (!uuid.isEmpty())
     {
@@ -248,12 +248,12 @@ QMap<QString, QString> FaceTags::identityAttributes(int tagId)
         attributes[QLatin1String("fullName")] = fullName;
     }
 
-    QString kfaceName = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
+    QString faceEngineName = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
     QString tagName   = TagsCache::instance()->tagName(tagId);
 
-    if (tagName != kfaceName)
+    if (tagName != faceEngineName)
     {
-        attributes.insertMulti(QLatin1String("name"), kfaceName);
+        attributes.insertMulti(QLatin1String("name"), faceEngineName);
         attributes.insertMulti(QLatin1String("name"), tagName);
     }
     else
@@ -276,16 +276,16 @@ void FaceTags::applyTagIdentityMapping(int tagId, const QMap<QString, QString>& 
     // we do not change the digikam tag name at this point, but we have this extra tag property
     if (attributes.contains(QLatin1String("name")))
     {
-        props.setProperty(TagPropertyName::kfaceName(), attributes.value(QLatin1String("name")));
+        props.setProperty(TagPropertyName::faceEngineName(), attributes.value(QLatin1String("name")));
     }
 
-    props.setProperty(TagPropertyName::kfaceUuid(), attributes.value(QLatin1String("uuid")));
+    props.setProperty(TagPropertyName::faceEngineUuid(), attributes.value(QLatin1String("uuid")));
 }
 
 int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes)
 {
-    // Attributes from libkface's Identity object.
-    // The text constants are defines in libkface's API docs
+    // Attributes from FacesEngine's Identity object.
+    // The text constants are defines in FacesEngine's API docs
     if (attributes.isEmpty())
     {
         return FaceTags::unknownPersonTagId();
@@ -296,7 +296,7 @@ int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes
     // First, look for UUID
     if (!attributes.value(QLatin1String("uuid")).isEmpty())
     {
-        if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::kfaceUuid(), attributes.value(QLatin1String("uuid")))) )
+        if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::faceEngineUuid(), attributes.value(QLatin1String("uuid")))) )
         {
             return tagId;
         }
@@ -325,7 +325,7 @@ int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes
         return FaceTags::unknownPersonTagId();
     }
 
-    if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::kfaceName(), name)) )
+    if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::faceEngineName(), name)) )
     {
         return tagId;
     }
@@ -335,7 +335,7 @@ int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes
         return tagId;
     }
 
-    // identity is in libkface's database, but not in ours, so create.
+    // identity is in FacesEngine's database, but not in ours, so create.
     tagId = FaceTagsHelper::tagForName(name, 0, -1, attributes.value(QLatin1String("fullName")), true, true);
     applyTagIdentityMapping(tagId, attributes);
     return tagId;

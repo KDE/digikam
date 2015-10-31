@@ -17,10 +17,7 @@ add_subdirectory(maintenance)
 add_subdirectory(searchwindow)
 add_subdirectory(metadataedit)
 add_subdirectory(kdesupport)
-
-if(KF5KFace_FOUND)
-    add_subdirectory(facemanagement)
-endif()
+add_subdirectory(facemanagement)
 
 if(${MARBLE_FOUND})
     add_subdirectory(geolocation)

@@ -122,10 +122,7 @@ public:
         mapView(0),
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_KFACE
         peopleSideBar(0),
-#endif /* HAVE_KFACE */
-
         parent(0),
         iconView(0),
         tableView(0),
@@ -178,10 +175,7 @@ public:
     MapWidgetView*                mapView;
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_KFACE
     PeopleSideBarWidget*          peopleSideBar;
-#endif /* HAVE_KFACE */
-
     DigikamApp*                   parent;
     DigikamImageView*             iconView;
     TableView*                    tableView;
@@ -352,8 +346,6 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->leftSideBarWidgets << d->gpsSearchSideBar;
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_KFACE
-
     // People Sidebar
     d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
                                                d->modelCollection->getTagFacesModel(),
@@ -363,8 +355,6 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
             d->iconView, SLOT(setFaceMode(bool)));
 
     d->leftSideBarWidgets << d->peopleSideBar;
-
-#endif /* HAVE_KFACE */
 
     foreach(SidebarWidget* const leftWidget, d->leftSideBarWidgets)
     {

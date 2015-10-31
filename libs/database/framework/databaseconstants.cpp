@@ -146,10 +146,10 @@ QLatin1String TagPropertyName::unknownPerson()
     return QLatin1String("unknownPerson");
 }
 
-QLatin1String TagPropertyName::kfaceName()
+QLatin1String TagPropertyName::faceEngineName()
 {
     // kept at its historical value for compatibility
-    return QLatin1String("kfaceId");
+    return QLatin1String("faceEngineId");
 }
 
 QLatin1String TagPropertyName::tagKeyboardShortcut()
@@ -157,9 +157,9 @@ QLatin1String TagPropertyName::tagKeyboardShortcut()
     return QLatin1String("tagKeyboardShortcut");
 }
 
-QLatin1String TagPropertyName::kfaceUuid()
+QLatin1String TagPropertyName::faceEngineUuid()
 {
-    return QLatin1String("kfaceUuid");
+    return QLatin1String("faceEngineUuid");
 }
 
 // ----------------------------------------------------------------------------------

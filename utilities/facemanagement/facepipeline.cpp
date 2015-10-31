@@ -576,7 +576,7 @@ RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
     : imageRetriever(d),
       d(d)
 {
-    database = KFaceIface::RecognitionDatabase::addDatabase();
+    database = FacesEngine::RecognitionDatabase::addDatabase();
 }
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
@@ -904,7 +904,7 @@ RecognitionBenchmarker::Statistics::Statistics()
 RecognitionBenchmarker::RecognitionBenchmarker(FacePipeline::Private* const d)
     : d(d)
 {
-    database = KFaceIface::RecognitionDatabase::addDatabase();
+    database = FacesEngine::RecognitionDatabase::addDatabase();
 }
 
 // NOTE: Bench performance code. No need i18n here
@@ -942,7 +942,7 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
 
     for (int i=0; i<package->databaseFaces.size(); i++)
     {
-        KFaceIface::Identity identity = utils.identityForTag(package->databaseFaces[i].tagId(), database);
+        FacesEngine::Identity identity = utils.identityForTag(package->databaseFaces[i].tagId(), database);
         Statistics& result            = results[package->databaseFaces[i].tagId()];
         result.knownFaces++;
 
@@ -958,7 +958,7 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
 
 // ----------------------------------------------------------------------------------------
 
-class MapListTrainingDataProvider : public KFaceIface::TrainingDataProvider
+class MapListTrainingDataProvider : public FacesEngine::TrainingDataProvider
 {
 public:
 
@@ -966,11 +966,11 @@ public:
     {
     }
 
-    KFaceIface::ImageListProvider* newImages(const KFaceIface::Identity& identity)
+    FacesEngine::ImageListProvider* newImages(const FacesEngine::Identity& identity)
     {
         if (imagesToTrain.contains(identity.id()))
         {
-            KFaceIface::QListImageListProvider& provider = imagesToTrain[identity.id()];
+            FacesEngine::QListImageListProvider& provider = imagesToTrain[identity.id()];
             provider.reset();
             return &provider;
         }
@@ -978,7 +978,7 @@ public:
         return &empty;
     }
 
-    KFaceIface::ImageListProvider* images(const KFaceIface::Identity&)
+    FacesEngine::ImageListProvider* images(const FacesEngine::Identity&)
     {
         // Unimplemented. Would be needed if we use a backend with a "holistic" approach that needs all images to train.
         return &empty;
@@ -986,15 +986,15 @@ public:
 
 public:
 
-    KFaceIface::EmptyImageListProvider            empty;
-    QMap<int, KFaceIface::QListImageListProvider> imagesToTrain;
+    FacesEngine::EmptyImageListProvider            empty;
+    QMap<int, FacesEngine::QListImageListProvider> imagesToTrain;
 };
 
 Trainer::Trainer(FacePipeline::Private* const d)
     : imageRetriever(d),
       d(d)
 {
-    database = KFaceIface::RecognitionDatabase::addDatabase();
+    database = FacesEngine::RecognitionDatabase::addDatabase();
 }
 
 void Trainer::process(FacePipelineExtendedPackage::Ptr package)
@@ -1004,7 +1004,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 
     QList<DatabaseFace> toTrain;
     QList<int> identities;
-    QList<KFaceIface::Identity> identitySet;
+    QList<FacesEngine::Identity> identitySet;
     FaceUtils utils;
 
     foreach(const FacePipelineDatabaseFace& face, package->databaseFaces)
@@ -1015,7 +1015,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             dbFace.setType(DatabaseFace::FaceForTraining);
             toTrain << dbFace;
 
-            KFaceIface::Identity identity = utils.identityForTag(dbFace.tagId(), database);
+            FacesEngine::Identity identity = utils.identityForTag(dbFace.tagId(), database);
 
             identities  << identity.id();
 
@@ -1363,7 +1363,7 @@ ThumbnailLoadThread* FacePipeline::Private::createThumbnailLoadThread()
     ThumbnailLoadThread* const thumbnailLoadThread = new ThumbnailLoadThread;
     thumbnailLoadThread->setPixmapRequested(false);
     thumbnailLoadThread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
-    // KFaceIface::Image::recommendedSizeForRecognition()
+    // FacesEngine::Image::recommendedSizeForRecognition()
     thumbnailLoadThread->setPriority(priority);
 
     thumbnailLoadThreads << thumbnailLoadThread;
@@ -1636,7 +1636,7 @@ bool FacePipeline::add(const ImageInfo& info, const QRect& rect, const DImg& ima
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
     package->image                           = image;
     package->detectionImage                  = image;
-    package->faces << KFaceIface::Face(rect);
+    package->faces << FacesEngine::Face(rect);
     d->send(package);
 }
 */

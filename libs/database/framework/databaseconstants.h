@@ -185,9 +185,9 @@ public:
 
     static QLatin1String person();
     static QLatin1String unknownPerson();
-    static QLatin1String kfaceName();
+    static QLatin1String faceEngineName();
     static QLatin1String tagKeyboardShortcut();
-    static QLatin1String kfaceUuid();
+    static QLatin1String faceEngineUuid();
 };
 
 // ----------------------------------------------------------------------------------

@@ -514,7 +514,7 @@ void DatabaseParameters::insertInUrl(QUrl& url) const
     {
         q.addQueryItem(QLatin1String("password"), password);
     }
-    
+
     url.setQuery(q);
 }
 

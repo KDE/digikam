@@ -57,7 +57,6 @@ set(ECM_MIN_VERSION     "1.7.0")
 set(KF5_MIN_VERSION     "5.1.0")
 set(QT_MIN_VERSION      "5.2.0")
 set(KIPI_MIN_VERSION    "5.0.0")
-set(KFACE_MIN_VERSION   "5.0.0")
 set(KSANE_MIN_VERSION   "5.0.0")
 set(PGF_MIN_VERSION     "6.12.24")
 set(LENSFUN_MIN_VERSION "0.2.6.0")
@@ -226,10 +225,11 @@ else()
 
 endif()
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/app/utils/libopencv.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/app/utils/libopencv.h)
+
 # optional
 
 DETECT_LIBKIPI(${KIPI_MIN_VERSION})
-DETECT_LIBKFACE(${KFACE_MIN_VERSION})
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})
 
 find_package(Marble)
@@ -366,7 +366,6 @@ endif()
 # -- compilation options definitions -----------------------------------------------------------
 
 MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
-MACRO_BOOL_TO_01(KF5KFace_FOUND           HAVE_KFACE)
 MACRO_BOOL_TO_01(KF5Sane_FOUND            HAVE_KSANE)
 MACRO_BOOL_TO_01(KF5FileMetaData_FOUND    HAVE_KFILEMETADATA)
 MACRO_BOOL_TO_01(KF5AkonadiContact_FOUND  HAVE_AKONADICONTACT)
@@ -433,7 +432,6 @@ PRINT_LIBRARY_STATUS("libpthread"             "http://www.gnu.org/software/hurd/
 # ================================================================
 
 PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi"  "(version >= ${KIPI_MIN_VERSION})"    "digiKam will be compiled without Kipi-plugins support."                      KF5Kipi_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkface"          "https://projects.kde.org/projects/extragear/libs/libkface"       "(version >= ${KFACE_MIN_VERSION})"   "digiKam will be compiled without faces detection and recognition support."   KF5KFace_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libmarble"         "https://projects.kde.org/projects/kde/kdeedu/marble"             "(version >= 0.22.0)"                 "digiKam will be compiled without geolocation maps support."                  MARBLE_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libksane"          "https://projects.kde.org/projects/kde/kdegraphics/libs/libksane" "(version >= ${KSANE_MIN_VERSION})"   "digiKam will be compiled without libksane support."                          KF5Sane_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= ${KF5_MIN_VERSION})"                  "digiKam will be compiled without KDE file metadata support."                 KF5FileMetaData_FOUND)

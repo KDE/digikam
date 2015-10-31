@@ -29,12 +29,9 @@
 #include <QFlags>
 #include <QThread>
 
-// Libkface includes
-
-#include <KFace/Identity>
-
 // Local includes
 
+#include "identity.h"
 #include "digikam_debug.h"
 #include "databaseface.h"
 #include "dimg.h"
@@ -130,7 +127,7 @@ public:
     ImageInfo                    info;
     DImg                         image;
     QList<QRectF>                detectedFaces;
-    QList<KFaceIface::Identity>  recognitionResults;
+    QList<FacesEngine::Identity> recognitionResults;
     FacePipelineDatabaseFaceList databaseFaces;
 
     ProcessFlags                 processFlags;

@@ -41,14 +41,6 @@
 
 #endif /* HAVE_KIPI */
 
-#ifdef HAVE_KFACE
-
-// Libkface includes
-
-#include <KFace/RecognitionDatabase>
-
-#endif /* HAVE_KFACE */
-
 // Local includes
 
 #include "libsinfodlg.h"
@@ -106,12 +98,6 @@ static inline void showDigikamComponentsInfo()
 #else
     list.insert(i18n("LibKipi support"), i18n("no"));
 #endif /* HAVE_KIPI */
-
-#ifdef HAVE_KFACE
-    list.insert(i18n("LibKface"),     KFaceIface::version());
-#else
-    list.insert(i18n("LibKface support"), i18n("no"));
-#endif /* HAVE_KFACE */
 
     list.insert(i18n("LibOpenCV"),    QLatin1String(CV_VERSION));
 

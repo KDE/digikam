@@ -61,46 +61,6 @@ endmacro()
 
 ###########################################################################################################################################"
 
-macro(DETECT_LIBKFACE MIN_VERSION)
-
-    if (NOT DIGIKAMSC_COMPILE_LIBKFACE)
-
-        message(STATUS "libkface : search system based library")
-        find_package(KF5KFace ${MIN_VERSION})
-
-        if(KF5KFace_FOUND)
-            set(KF5KFace_LIBRARIES KF5::KFace)
-            get_target_property(KF5KFace_INCLUDE_DIRS KF5::KFace INTERFACE_INCLUDE_DIRECTORIES)
-            set(KF5KFace_FOUND TRUE)
-        else()
-            set(KF5KFace_FOUND FALSE)
-        endif()
-
-    else()
-
-        message(STATUS "libkface : use local library from ${CMAKE_SOURCE_DIR}/extra/libkface/")
-        find_file(KF5KFace_FOUND CMakeLists.txt PATHS ${CMAKE_SOURCE_DIR}/extra/libkface/)
-
-        if(NOT KF5KFace_FOUND)
-            message(ERROR "libkface : local library not found")
-            set(KF5KFace_FOUND FALSE)
-        else()
-            set(KF5KFace_FOUND TRUE) 
-        endif()
-
-        set(KF5KFace_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkface/src ${CMAKE_BINARY_DIR}/extra/libkface)
-        set(KF5KFace_LIBRARIES KF5KFace)
-
-    endif()
-
-    message(STATUS "libkface found        : ${KF5KFace_FOUND}")
-    message(STATUS "libkface library      : ${KF5KFace_LIBRARIES}")
-    message(STATUS "libkface includes     : ${KF5KFace_INCLUDE_DIRS}")
-
-endmacro()
-
-###########################################################################################################################################"
-
 macro(DETECT_LIBKSANE MIN_VERSION)
 
     if (NOT DIGIKAMSC_COMPILE_LIBKSANE)

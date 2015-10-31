@@ -92,7 +92,8 @@ public:
      */
     QByteArray hash() const;
 
-    /** Return a set of default parameters for the give type */
+    /** Return a set of default parameters for the given type
+     */
     static DatabaseParameters defaultParameters(const QString databaseType);
 
     static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(),
@@ -104,10 +105,6 @@ public:
     void readFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString());
     void writeToConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString()) const;
 
-    /**
-     * In case of SQLite, the databaseName typically is a file.
-     * With getDatabasePath, you can get the folder.
-     */
     QString getDatabaseNameOrDir() const;
     QString getThumbsDatabaseNameOrDir() const;
 
@@ -124,7 +121,8 @@ public:
     static QString databaseDirectorySQLite(const QString& path);
     static QString thumbnailDatabaseDirectorySQLite(const QString& path);
 
-    /** Replaces databaseName with databaseNameThumbnails. */
+    /** Replaces databaseName with databaseNameThumbnails.
+     */
     DatabaseParameters thumbnailParameters() const;
 
     void legacyAndDefaultChecks(const QString& suggestedPath = QString(), KSharedConfig::Ptr config = KSharedConfig::openConfig());

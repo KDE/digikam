@@ -400,7 +400,7 @@ INSERT INTO "TagProperties" VALUES(37,'internalTag',NULL);
 INSERT INTO "TagProperties" VALUES(38,'internalTag',NULL);
 INSERT INTO "TagProperties" VALUES(39,'internalTag',NULL);
 INSERT INTO "TagProperties" VALUES(40,'person','LadyMars');
-INSERT INTO "TagProperties" VALUES(40,'kfaceId','LadyMars');
+INSERT INTO "TagProperties" VALUES(40,'faceEngineId','LadyMars');
 CREATE TABLE ImageTagProperties
                             (imageid INTEGER,
                              tagid INTEGER,

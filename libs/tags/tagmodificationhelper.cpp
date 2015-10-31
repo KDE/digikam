@@ -192,7 +192,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* t)
             {
                 TagProperties props(tag->id());
                 props.setProperty(TagPropertyName::person(),    title);
-                props.setProperty(TagPropertyName::kfaceName(), title);
+                props.setProperty(TagPropertyName::faceEngineName(), title);
             }
         }
         else
