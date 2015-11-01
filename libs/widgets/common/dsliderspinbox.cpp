@@ -249,9 +249,9 @@ void DAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
 {
     Q_D(DAbstractSliderSpinBox);
 
-    if( e->modifiers() & Qt::ShiftModifier )
+    if (e->modifiers() & Qt::ShiftModifier)
     {
-        if( !d->shiftMode )
+        if (!d->shiftMode)
         {
             d->shiftPercent = pow(double(d->value - d->minimum)/double(d->maximum - d->minimum),
                                   1/double(d->exponentRatio));
@@ -311,12 +311,13 @@ void DAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
     Q_D(DAbstractSliderSpinBox);
 
     int step = d->fastSliderStep;
-    if( e->modifiers() & Qt::ShiftModifier )
+
+    if (e->modifiers() & Qt::ShiftModifier)
     {
         step = d->singleStep;
     }
 
-    if ( e->delta() > 0)
+    if (e->delta() > 0)
     {
         setInternalValue(d->value + step);
     }
@@ -346,6 +347,21 @@ bool DAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
                 return true;
             case Qt::Key_Escape:
                 hideEdit();
+                return true;
+            default:
+                break;
+        }
+    }
+    else if (d->edit->isVisible() && e->type() == QEvent::ShortcutOverride)
+    {
+        QKeyEvent* const keyEvent = static_cast<QKeyEvent*>(e);
+
+        switch (keyEvent->key())
+        {
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+            case Qt::Key_Escape:
+                e->accept();
                 return true;
             default:
                 break;
@@ -747,7 +763,7 @@ double DDoubleSliderSpinBox::value() const
 void DDoubleSliderSpinBox::setValue(double value)
 {
     Q_D(DAbstractSliderSpinBox);
-    setInternalValue(d->value = qRound(value * d->factor));
+    setInternalValue(qRound(value * d->factor));
     update();
 }
 
