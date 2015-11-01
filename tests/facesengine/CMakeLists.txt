@@ -84,18 +84,18 @@ target_link_libraries(traindb
 
 # -----------------------------------------------------------------------------
 
-set(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/faceitem.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/button.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/marquee.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/fancyrect.cpp
+set(facesenginedemo_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/demo/mainwindow.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/demo/faceitem.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/demo/button.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/demo/marquee.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/demo/fancyrect.cpp
 )
 
-qt5_wrap_ui(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
-add_executable(kfacegui ${kfacegui_SRCS})
+qt5_wrap_ui(facesenginedemo_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/demo/mainwindow.ui)
+add_executable(facesenginedemo ${facesenginedemo_SRCS})
 
-target_link_libraries(kfacegui
+target_link_libraries(facesenginedemo
                       digikamcore
                       digikamfacesengine
                       digikamdatabase
