@@ -80,7 +80,7 @@ FlandmarkAligner::FlandmarkAligner()
 
     if (!QFileInfo(modelData).exists())
     {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "Model data for Congealing/Funnel not found. Should be at" << modelData;
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "Model data for Congealing/Funnel not found. Should be at" << modelData;
         return;
     }
 
@@ -111,7 +111,7 @@ cv::Mat FlandmarkAligner::align(const cv::Mat& inputImage)
         image = inputImage;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Detecting" << d->model->data.options.M << "landmarks";
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Detecting" << d->model->data.options.M << "landmarks";
     QVector<double> landmarks(2*d->model->data.options.M);
     // bbox with detected face (format: top_left_col top_left_row bottom_right_col bottom_right_row)
     int bbox[]        = {30,30,120,120}; //{ 0, 0, image.cols, image.rows };
@@ -120,7 +120,7 @@ cv::Mat FlandmarkAligner::align(const cv::Mat& inputImage)
 
     for (int i = 0; i < d->model->data.options.M; i++)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Landmark" << i << landmarks.at(2*i) << ", " << landmarks.at(2*i+1);
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Landmark" << i << landmarks.at(2*i) << ", " << landmarks.at(2*i+1);
     }
 
     return inputImage;

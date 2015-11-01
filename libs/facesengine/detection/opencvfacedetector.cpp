@@ -123,15 +123,15 @@ public:
 
         if (file.isEmpty())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to locate cascade " << fileName << " in " << dirs;
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failed to locate cascade " << fileName << " in " << dirs;
             return;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Loading cascade " << file;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Loading cascade " << file;
 
         if (!load(file.toStdString()))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to load cascade " << file;
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failed to load cascade " << file;
             return;
         }
     }
@@ -295,7 +295,7 @@ OpenCVFaceDetector::OpenCVFaceDetector(const QStringList& cascadeDirs)
 {
     if (cascadeDirs.isEmpty())
     {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "OpenCV Haar Cascade directory cannot be found. Did you install OpenCV XML data files?";
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "OpenCV Haar Cascade directory cannot be found. Did you install OpenCV XML data files?";
         return;
     }
 
@@ -408,7 +408,7 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
     // NOTE: min size is adjusted each time
 
 /*
-    qCDebug(DIGIKAM_GENERAL_LOG) << "updateParameters: accuracy " << d->speedVsAccuracy
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "updateParameters: accuracy " << d->speedVsAccuracy
              << " sensitivity " << d->sensitivityVsSpecificity
              << " - searchIncrement " << d->primaryParams.searchIncrement
              << " grouping " << d->primaryParams.grouping
@@ -418,9 +418,9 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
 
     for (unsigned int i=0; i<d->cascadeProperties.size(); i++)
         if (d->cascadeProperties[i].primaryCascade)
-            qCDebug(DIGIKAM_GENERAL_LOG) << d->cascadeSet->getCascade(i).name << " ";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << d->cascadeSet->getCascade(i).name << " ";
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << " maxDistance " << d->maxDistance << " minDuplicates " << d->minDuplicates;
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << " maxDistance " << d->maxDistance << " minDuplicates " << d->minDuplicates;
 */
 
 /*
@@ -447,14 +447,14 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
     // Check whether the cascade has loaded successfully. Else report and error and quit
     if (cascade.empty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cascade XML data are not loaded.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Cascade XML data are not loaded.";
         return QList<QRect>();
     }
 
     // There can be more than one face in an image. So create a growable sequence of faces.
     // Detect the objects and store them in the sequence
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "detectMultiScale: image size " << inputImage.cols << " " << inputImage.rows
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "detectMultiScale: image size " << inputImage.cols << " " << inputImage.rows
              << " searchIncrement " << params.searchIncrement
              << " grouping " << params.grouping
              << " flags " << params.flags
@@ -475,7 +475,7 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
         results << toQRect(*it);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "detectMultiScale gave " << results;
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "detectMultiScale gave " << results;
     return results;
 }
 
@@ -520,7 +520,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
     for (int i=0; i<d->cascades.size(); ++i)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Verifying face " << face << " using cascade " << i;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Verifying face " << face << " using cascade " << i;
 
         if (d->cascades[i].verifyingCascade)
         {
@@ -532,7 +532,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
                 cv::Rect roi      = d->cascades[i].faceROI(faceRect);
                 cv::Mat  feature  = inputImage(roi);
-                qCDebug(DIGIKAM_GENERAL_LOG) << "feature " << d->cascades[i].roi << toQRect(faceRect) << toQRect(roi);
+                qCDebug(DIGIKAM_FACESENGINE_LOG) << "feature " << d->cascades[i].roi << toQRect(faceRect) << toQRect(roi);
                 foundFaces        = cascadeResult(feature, d->cascades[i], d->verifyingParams);
 
                 if (!foundFaces.isEmpty())
@@ -545,18 +545,18 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                 double factor = cascade.requestedInputScaleFactor(faceSize);
                 IplImage* feature = LibFaceUtils::scaledSection(inputImage, roi, factor);
 
-                // qCDebug(DIGIKAM_GENERAL_LOG) << "Facial feature in roi " << cascade.roi << "scaled up to" << feature->width << feature->height;
+                // qCDebug(DIGIKAM_FACESENGINE_LOG) << "Facial feature in roi " << cascade.roi << "scaled up to" << feature->width << feature->height;
 
                 foundFaces = cascadeResult(feature, cascade.cascade, d->verifyingParams);
 
                 for (vector<Face>::iterator it = foundFaces.begin(); it != foundFaces.end(); ++it)
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Feature face " << it->getX1() << " " << it->getY1() << " " << it->getWidth() << "x" << it->getHeight();
+                    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Feature face " << it->getX1() << " " << it->getY1() << " " << it->getWidth() << "x" << it->getHeight();
 
                     double widthScaled = it->getWidth() / factor;
                     double heightScaled = it->getHeight() / factor;
 
-                    // qCDebug(DIGIKAM_GENERAL_LOG) << "Hit feature size " << widthScaled << " " << heightScaled << " "
+                    // qCDebug(DIGIKAM_FACESENGINE_LOG) << "Hit feature size " << widthScaled << " " << heightScaled << " "
                     //          << (faceSize.width / CascadeProperties::faceToFeatureRelationMin()) << " "
                     //          << (faceSize.width / CascadeProperties::faceToFeatureRelationMax());
 
@@ -569,7 +569,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                         )
                     {
                         facialFeatureVotes++;
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "voting";
+                        qCDebug(DIGIKAM_FACESENGINE_LOG) << "voting";
                         break;
                     }
                 }
@@ -586,7 +586,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                     frontalFaceVotes++;
             }
 
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "Verifying cascade " << cascade.name << " gives " << foundFaces.size();
+            //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Verifying cascade " << cascade.name << " gives " << foundFaces.size();
         }
     }
 
@@ -610,7 +610,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
     }
 
 /*
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Verification finished. Votes: Frontal " << frontalFaceVotes << " Features "
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Verification finished. Votes: Frontal " << frontalFaceVotes << " Features "
              << facialFeatureVotes << ". Face verified: " << verified;
 */
 
@@ -683,7 +683,7 @@ QList<QRect> OpenCVFaceDetector::mergeFaces(const cv::Mat& inputImage, const QLi
         }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Faces parsed: " << ctr << " number of final faces: " << results.size();
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Faces parsed: " << ctr << " number of final faces: " << results.size();
 
     return results;
 }
@@ -740,7 +740,7 @@ QList<QRect> OpenCVFaceDetector::detectFaces(const cv::Mat& inputImage, const cv
 {
     if (inputImage.empty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid image given, not detecting faces.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Invalid image given, not detecting faces.";
         return QList<QRect>();
     }
 

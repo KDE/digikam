@@ -452,7 +452,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             }
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << s;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << s;
     }
     else if (m_statisticsMode == MostNearestNeighbors)
     {
@@ -495,7 +495,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             }
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << s;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << s;
     }
 }
 
@@ -517,7 +517,7 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 
     if (!fr)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot create LBPHFaceRecognizer instance";
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "Cannot create LBPHFaceRecognizer instance";
         return ptr;
     }
 
@@ -525,7 +525,7 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 
     if (ptr.empty())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "LBPHFaceRecognizer instance is empty";
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "LBPHFaceRecognizer instance is empty";
     }
 
     return ptr;

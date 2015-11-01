@@ -482,7 +482,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
         {
             // This situation is not well defined.
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Called addIdentity with a given UUID, and there is such a UUID already in the database."
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Called addIdentity with a given UUID, and there is such a UUID already in the database."
                                          << "The existing identity is returned without adjusting properties!";
 
             return matchByUuid;
@@ -658,12 +658,12 @@ cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
     }
     catch (cv::Exception& e)
     {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "cv::Exception:" << e.what();
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception:" << e.what();
         return cv::Mat();
     }
     catch(...)
     {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "Default exception from OpenCV";
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         return cv::Mat();
     }
 }
@@ -689,11 +689,11 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
         }
         catch (cv::Exception& e)
         {
-            qCCritical(DIGIKAM_GENERAL_LOG) << "cv::Exception:" << e.what();
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception:" << e.what();
         }
         catch(...)
         {
-            qCCritical(DIGIKAM_GENERAL_LOG) << "Default exception from OpenCV";
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         }
 
         if (id == -1)
@@ -727,7 +727,7 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
 {
     ImageListProvider* const images = data->newImages(identity);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Training " << images->size() << " images for identity " << identity.id();
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Training " << images->size() << " images for identity " << identity.id();
 
     for (; !images->atEnd(); images->proceed())
     {
@@ -737,11 +737,11 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
         }
         catch (cv::Exception& e)
         {
-            qCCritical(DIGIKAM_GENERAL_LOG) << "cv::Exception:" << e.what();
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception:" << e.what();
         }
         catch(...)
         {
-            qCCritical(DIGIKAM_GENERAL_LOG) << "Default exception from OpenCV";
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         }
     }
 }
@@ -772,15 +772,15 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
             }
             catch (cv::Exception& e)
             {
-                qCCritical(DIGIKAM_GENERAL_LOG) << "cv::Exception preparing image for LBPH:" << e.what();
+                qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception preparing image for LBPH:" << e.what();
             }
             catch(...)
             {
-                qCCritical(DIGIKAM_GENERAL_LOG) << "Default exception from OpenCV";
+                qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
             }
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Training " << images.size() << " images for identity " << identity.id();
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Training " << images.size() << " images for identity " << identity.id();
 
         try
         {
@@ -788,11 +788,11 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
         }
         catch (cv::Exception& e)
         {
-            qCCritical(DIGIKAM_GENERAL_LOG) << "cv::Exception training LBPH:" << e.what();
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception training LBPH:" << e.what();
         }
         catch(...)
         {
-            qCCritical(DIGIKAM_GENERAL_LOG) << "Default exception from OpenCV";
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         }
     }
 }

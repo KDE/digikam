@@ -144,7 +144,7 @@ int OpenCVLBPHFaceRecognizer::recognize(const cv::Mat& inputImage)
     int predictedLabel = -1;
     double confidence  = 0;
     d->lbph()->predict(inputImage, predictedLabel, confidence);
-    qCDebug(DIGIKAM_GENERAL_LOG) << predictedLabel << confidence;
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << predictedLabel << confidence;
 
     if (confidence > d->threshold)
     {

@@ -30,6 +30,7 @@ Q_LOGGING_CATEGORY(DIGIKAM_DATABASESERVER_LOG, "digikam.databaseserver")
 Q_LOGGING_CATEGORY(DIGIKAM_IMPORTUI_LOG,       "digikam.import")
 Q_LOGGING_CATEGORY(DIGIKAM_METAENGINE_LOG,     "digikam.metaengine")
 Q_LOGGING_CATEGORY(DIGIKAM_RAWENGINE_LOG,      "digikam.rawengine")
+Q_LOGGING_CATEGORY(DIGIKAM_FACESENGINE_LOG,    "digikam.facesengine")
 Q_LOGGING_CATEGORY(DIGIKAM_GEOIFACE_LOG,       "digikam.geoiface")
 
 // NOTE: per default only warnings and more severe messages are logged for other than general category

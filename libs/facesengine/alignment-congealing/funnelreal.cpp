@@ -76,25 +76,25 @@ public:
 /*
         if(outerDimW - innerDimW < 2*windowSize)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "difference between outerDimW and innerDimW is not greater than window size for SIFT descriptor)";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "difference between outerDimW and innerDimW is not greater than window size for SIFT descriptor)";
             return -1;
         }
 
         if( (outerDimW - innerDimW) % 2 != 0)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "shrinking innerDimW by 1 so outerDimW - innerDimW is divisible by 2";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "shrinking innerDimW by 1 so outerDimW - innerDimW is divisible by 2";
             --innerDimW;
         }
 
         if(outerDimH - innerDimH < 2*windowSize)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "difference between outerDimH and innerDimH is not greater than window size for SIFT descriptor)";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "difference between outerDimH and innerDimH is not greater than window size for SIFT descriptor)";
             return -1;
         }
 
         if( (outerDimH - innerDimH) % 2 != 0)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "shrinking innerDimH by 1 so outerDimH - innerDimH is divisible by 2";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "shrinking innerDimH by 1 so outerDimH - innerDimH is divisible by 2";
             --innerDimH;
         }
 */
@@ -170,7 +170,7 @@ FunnelReal::FunnelReal()
 
     if (!QFileInfo(trainingFile).exists())
     {
-        qCritical(DIGIKAM_GENERAL_LOG) << "Training data for Congealing/Funnel not found. Should be at" << trainingFile;
+        qCritical(DIGIKAM_FACESENGINE_LOG) << "Training data for Congealing/Funnel not found. Should be at" << trainingFile;
         return;
     }
 
@@ -270,11 +270,11 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
     }
     catch (const std::ifstream::failure& e)
     {
-        qCritical(DIGIKAM_GENERAL_LOG) << "Error loading Congealing/Funnel training data:" << e.what();
+        qCritical(DIGIKAM_FACESENGINE_LOG) << "Error loading Congealing/Funnel training data:" << e.what();
     }
     catch(...)
     {
-        qCritical(DIGIKAM_GENERAL_LOG) << "Default exception";
+        qCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception";
     }
 
     computeGaussian(Gaussian, windowSize);

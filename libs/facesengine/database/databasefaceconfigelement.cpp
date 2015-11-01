@@ -74,7 +74,7 @@ DatabaseFaceConfigElementLoader::DatabaseFaceConfigElementLoader()
 
     if (!isValid)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << errorMessage;
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << errorMessage;
     }
 }
 
@@ -85,7 +85,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (!databaseElement.hasAttribute(QString::fromLatin1("name")))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing statement attribute <name>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing statement attribute <name>.";
     }
 
     configElement.databaseID = databaseElement.attribute(QString::fromLatin1("name"));
@@ -93,7 +93,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing element <databaseName>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing element <databaseName>.";
     }
 
     configElement.databaseName = element.text();
@@ -101,7 +101,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing element <userName>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing element <userName>.";
     }
 
     configElement.userName = element.text();
@@ -109,7 +109,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing element <password>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing element <password>.";
     }
 
     configElement.password = element.text();
@@ -117,7 +117,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing element <hostName>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing element <hostName>.";
     }
 
     configElement.hostName = element.text();
@@ -125,7 +125,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing element <port>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing element <port>.";
     }
 
     configElement.port = element.text();
@@ -133,7 +133,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing element <connectoptions>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing element <connectoptions>.";
     }
 
     configElement.connectOptions = element.text();
@@ -141,7 +141,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing element <dbservercmd>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing element <dbservercmd>.";
     }
 
     configElement.dbServerCmd = element.text();
@@ -149,7 +149,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing element <dbinitcmd>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing element <dbinitcmd>.";
     }
 
     configElement.dbInitCmd = element.text();
@@ -157,7 +157,7 @@ DatabaseFaceConfigElement DatabaseFaceConfigElementLoader::readDatabase(QDomElem
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Missing element <dbactions>.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing element <dbactions>.";
     }
 
     readDBActions(element, configElement);
@@ -173,12 +173,12 @@ void DatabaseFaceConfigElementLoader::readDBActions(QDomElement& sqlStatementEle
     {
         if (!dbActionElement.hasAttribute(QString::fromLatin1("name")))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Missing statement attribute <name>.";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing statement attribute <name>.";
         }
 
         DatabaseAction action;
         action.name = dbActionElement.attribute(QString::fromLatin1("name"));
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "Getting attribute " << dbActionElement.attribute("name");
+        //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Getting attribute " << dbActionElement.attribute("name");
 
         if (dbActionElement.hasAttribute(QString::fromLatin1("mode")))
         {
@@ -191,7 +191,7 @@ void DatabaseFaceConfigElementLoader::readDBActions(QDomElement& sqlStatementEle
         {
             if (!databaseElement.hasAttribute(QString::fromLatin1("mode")))
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Missing statement attribute <mode>.";
+                qCDebug(DIGIKAM_FACESENGINE_LOG) << "Missing statement attribute <mode>.";
             }
 
             DatabaseActionElement actionElement;
@@ -251,7 +251,7 @@ bool DatabaseFaceConfigElementLoader::readConfig()
     QDomElement versionElement = element.namedItem(QString::fromLatin1("version")).toElement();
     int version = 0;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
 
     if (!versionElement.isNull())
     {

@@ -110,7 +110,7 @@ bool DatabaseFaceSchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version         = d->access->db()->setting(QString::fromLatin1("DBVersion"));
         QString versionRequired = d->access->db()->setting(QString::fromLatin1("DBVersionRequired"));
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Have a database structure version " << version;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Have a database structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && d->access->parameters().isSQLite())
@@ -122,7 +122,7 @@ bool DatabaseFaceSchemaUpdater::startUpdates()
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            qCWarning(DIGIKAM_GENERAL_LOG) << "DBVersion not available! Giving up schema upgrading.";
+            qCWarning(DIGIKAM_FACESENGINE_LOG) << "DBVersion not available! Giving up schema upgrading.";
 
             QString errorMsg = i18n("The database is not valid: "
                                     "the \"DBVersion\" setting does not exist. "
@@ -177,7 +177,7 @@ bool DatabaseFaceSchemaUpdater::startUpdates()
     }
     else
     {
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "No database file available";
+        //qCDebug(DIGIKAM_FACESENGINE_LOG) << "No database file available";
         DatabaseFaceParameters parameters = d->access->parameters();
 
         // No legacy handling: start with a fresh db

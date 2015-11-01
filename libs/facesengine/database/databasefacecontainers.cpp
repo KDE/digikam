@@ -55,12 +55,12 @@ cv::Mat OpenCVMatData::toMat() const
 
     if (data.isEmpty())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Array data to clone is empty.";
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "Array data to clone is empty.";
     }
 
     cv::Mat mat(rows, cols, type, (void*)data.constData());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Clone Array size [" << rows << ", " << cols << "] of type " << type;
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Clone Array size [" << rows << ", " << cols << "] of type " << type;
 
     return mat.clone();
 }

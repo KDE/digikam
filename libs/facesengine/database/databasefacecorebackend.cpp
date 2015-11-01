@@ -101,7 +101,7 @@ DatabaseThreadData::~DatabaseThreadData()
 {
     if (transactionCount)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "WARNING !!! Transaction count is" << transactionCount << "when destroying database!!!";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "WARNING !!! Transaction count is" << transactionCount << "when destroying database!!!";
     }
     closeDatabase();
 }
@@ -188,7 +188,7 @@ QSqlDatabase DatabaseFaceCoreBackendPrivate::databaseForThread()
         }
         else
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error while opening the database. Error was" << threadData->database.lastError();
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Error while opening the database. Error was" << threadData->database.lastError();
         }
     }
 
@@ -325,7 +325,7 @@ bool DatabaseFaceCoreBackendPrivate::checkRetrySQLiteLocqCritical(int retries)
 {
     if (!(retries % 25))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Database is locked. Waited" << retries*10;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Database is locked. Waited" << retries*10;
     }
 
     const int uiMaxRetries = 50;
@@ -335,7 +335,7 @@ bool DatabaseFaceCoreBackendPrivate::checkRetrySQLiteLocqCritical(int retries)
     {
         if (retries > (isInUIThread() ? uiMaxRetries : maxRetries))
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Detected locked database file. There is an active transaction. Waited but giving up now.";
+            qCWarning(DIGIKAM_FACESENGINE_LOG) << "Detected locked database file. There is an active transaction. Waited but giving up now.";
             return false;
         }
     }
@@ -347,7 +347,7 @@ bool DatabaseFaceCoreBackendPrivate::checkRetrySQLiteLocqCritical(int retries)
 
 void DatabaseFaceCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery& query) const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Failure executing query:\n"
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failure executing query:\n"
              << query.executedQuery()
              << "\nError messages:" << query.lastError().driverText() << query.lastError().databaseText()
              << query.lastError().number() << query.lastError().type()
@@ -356,7 +356,7 @@ void DatabaseFaceCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery& que
 
 void DatabaseFaceCoreBackendPrivate::debugOutputFailedTransaction(const QSqlError& error) const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Failure executing transaction. Error messages:\n"
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failure executing transaction. Error messages:\n"
              << error.driverText() << error.databaseText()
              << error.number() << error.type();
 }
@@ -446,7 +446,7 @@ bool DatabaseFaceCoreBackendPrivate::handleWithErrorHandler(const SqlQuery* cons
         }
         else
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
+            qCWarning(DIGIKAM_FACESENGINE_LOG) << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
             operationStatus = DatabaseFaceCoreBackend::AbortQueries;
         }
 
@@ -599,7 +599,7 @@ DatabaseAction DatabaseFaceCoreBackend::getDBAction(const QString& actionName) c
 
     if (action.name.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "No DB action defined for" << actionName << "! Implementation missing for this database type.";
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "No DB action defined for" << actionName << "! Implementation missing for this database type.";
     }
 
     return action;
@@ -633,12 +633,12 @@ DatabaseFaceCoreBackend::QueryState DatabaseFaceCoreBackend::execDBAction(const 
 
     if (action.name.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Attempt to execute null action";
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "Attempt to execute null action";
         return DatabaseFaceCoreBackend::SQLError;
     }
 
 #ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Executing DBAction ["<<  action.name  <<"]";
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
 #endif
 
     bool wrapInTransaction = (action.mode == QString::fromLatin1("transaction"));
@@ -663,13 +663,13 @@ DatabaseFaceCoreBackend::QueryState DatabaseFaceCoreBackend::execDBAction(const 
 
         if (result != DatabaseFaceCoreBackend::NoErrors)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error while executing DBAction ["<<  action.name  <<"] Statement ["<<actionElement.statement<<"]";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Error while executing DBAction ["<<  action.name  <<"] Statement ["<<actionElement.statement<<"]";
             returnResult = result;
 
 /*
             if (wrapInTransaction && !db.rollback())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Error while rollback changes of previous DBAction.";
+                qCDebug(DIGIKAM_FACESENGINE_LOG) << "Error while rollback changes of previous DBAction.";
             }
 */
 
@@ -685,7 +685,7 @@ DatabaseFaceCoreBackend::QueryState DatabaseFaceCoreBackend::execDBAction(const 
 /*
     if (returnResult==DatabaseFaceCoreBackend::NoErrors && wrapInTransaction && !db.commit())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error while committing changes of previous DBAction.";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Error while committing changes of previous DBAction.";
     }
 */
 
@@ -704,7 +704,7 @@ QSqlQuery DatabaseFaceCoreBackend::execDBActionQuery(const DatabaseAction& actio
     QSqlDatabase db = d->databaseForThread();
 
 #ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Executing DBAction ["<<  action.name  <<"]";
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
 #endif
 
     QSqlQuery result;
@@ -717,12 +717,12 @@ QSqlQuery DatabaseFaceCoreBackend::execDBActionQuery(const DatabaseAction& actio
         }
         else
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error, only DBActions with mode 'query' are allowed at this call!";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Error, only DBActions with mode 'query' are allowed at this call!";
         }
 
         if (result.lastError().isValid() && result.lastError().number())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error while executing DBAction [" <<  action.name
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Error while executing DBAction [" <<  action.name
                                   << "] Statement [" << actionElement.statement 
                                   << "] Errornr. [" << result.lastError() << "]";
             break;
@@ -761,7 +761,7 @@ bool DatabaseFaceCoreBackend::open(const DatabaseFaceParameters& parameters)
 
         if (!database.isOpen())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error while opening the database. Trying again.";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Error while opening the database. Trying again.";
 
             if (connectionErrorHandling(retries++))
             {
@@ -857,7 +857,7 @@ QList<QVariant> DatabaseFaceCoreBackend::readToList(SqlQuery& query)
     }
 
 #ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Setting result value list ["<< list <<"]";
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Setting result value list ["<< list <<"]";
 #endif
     return list;
 }
@@ -994,7 +994,7 @@ SqlQuery DatabaseFaceCoreBackend::execQuery(const QString& sql, const QVariant& 
 {
     SqlQuery query = prepareQuery(sql);
 #ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
 #endif
     execQuery(query, boundValue1);
     return query;
@@ -1036,7 +1036,7 @@ SqlQuery DatabaseFaceCoreBackend::execQuery(const QString& sql)
 {
     SqlQuery query = prepareQuery(sql);
 #ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_GENERAL_LOG)<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
+    qCDebug(DIGIKAM_FACESENGINE_LOG)<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
 #endif
     exec(query);
     return query;
@@ -1099,7 +1099,7 @@ SqlQuery DatabaseFaceCoreBackend::execQuery(const QString& sql, const QMap<QStri
     if (!bindingMap.isEmpty())
     {
 #ifdef DATABASCOREBACKEND_DEBUG
-        qCDebug(DIGIKAM_GENERAL_LOG)<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
+        qCDebug(DIGIKAM_FACESENGINE_LOG)<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
 #endif
 
         QRegExp identifierRegExp(QString::fromLatin1(":[A-Za-z0-9]+"));
@@ -1111,7 +1111,7 @@ SqlQuery DatabaseFaceCoreBackend::execQuery(const QString& sql, const QMap<QStri
 
             if (!bindingMap.contains(namedPlaceholder))
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Missing place holder" << namedPlaceholder
+                qCWarning(DIGIKAM_FACESENGINE_LOG) << "Missing place holder" << namedPlaceholder
                                         << "in binding map. The following values are defined for this action:"
                                         << bindingMap.keys() <<". This is a setup error!";
                 //TODO What should we do here? How can we cancel that action?
@@ -1214,7 +1214,7 @@ SqlQuery DatabaseFaceCoreBackend::execQuery(const QString& sql, const QMap<QStri
             else
             {
 #ifdef DATABASCOREBACKEND_DEBUG
-                qCDebug(DIGIKAM_GENERAL_LOG)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
+                qCDebug(DIGIKAM_FACESENGINE_LOG)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
 #endif
 
                 valuesToBind.append(placeHolderValue);
@@ -1227,7 +1227,7 @@ SqlQuery DatabaseFaceCoreBackend::execQuery(const QString& sql, const QMap<QStri
     }
 
 #ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_GENERAL_LOG)<<"Prepared statement ["<< preparedString <<"] values ["<< valuesToBind <<"]";
+    qCDebug(DIGIKAM_FACESENGINE_LOG)<<"Prepared statement ["<< preparedString <<"] values ["<< valuesToBind <<"]";
 #endif
 
     SqlQuery query = prepareQuery(preparedString);
@@ -1404,7 +1404,7 @@ bool DatabaseFaceCoreBackend::exec(SqlQuery& query)
     forever
     {
 #ifdef DATABASCOREBACKEND_DEBUG
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to query ["<<query.lastQuery()<<"] values ["<< query.boundValues() <<"]";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Trying to query ["<<query.lastQuery()<<"] values ["<< query.boundValues() <<"]";
 #endif
 
         if (query.exec())
@@ -1474,7 +1474,7 @@ SqlQuery DatabaseFaceCoreBackend::prepareQuery(const QString& sql)
         }
         else
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Prepare failed!";
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Prepare failed!";
 
             if (queryErrorHandling(query, retries++))
             {
@@ -1492,7 +1492,7 @@ SqlQuery DatabaseFaceCoreBackend::copyQuery(const SqlQuery& old)
 {
     SqlQuery query = getQuery();
 #ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Last query was ["<<old.lastQuery()<<"]";
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Last query was ["<<old.lastQuery()<<"]";
 #endif
     query.prepare(old.lastQuery());
     query.setForwardOnly(old.isForwardOnly());
@@ -1503,7 +1503,7 @@ SqlQuery DatabaseFaceCoreBackend::copyQuery(const SqlQuery& old)
     foreach(const QVariant& value, boundValues)
     {
 #ifdef DATABASCOREBACKEND_DEBUG
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Bind value to query ["<<value<<"]";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Bind value to query ["<<value<<"]";
 #endif
         query.addBindValue(value);
     }
@@ -1591,7 +1591,7 @@ DatabaseFaceCoreBackend::QueryState DatabaseFaceCoreBackend::commitTransaction()
                 }
                 else
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to commit transaction. Starting rollback.";
+                    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failed to commit transaction. Starting rollback.";
                     db.rollback();
 
                     if (lastError.type() == QSqlError::ConnectionError)

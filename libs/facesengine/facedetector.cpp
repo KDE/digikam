@@ -71,7 +71,7 @@ public:
             // Last try to find OpenCV shared files, using cmake env variables.
             cascadeDirs << QString::fromLatin1("%1/haarcascades").arg(QString::fromLatin1(OPENCV_ROOT_PATH));
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Try to find OpenCV Haar Cascade files in these directories: " << cascadeDirs;
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Try to find OpenCV Haar Cascade files in these directories: " << cascadeDirs;
 
             m_backend = new OpenCVFaceDetector(cascadeDirs);
             applyParameters();
@@ -172,11 +172,11 @@ QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& origin
     }
     catch (cv::Exception& e)
     {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "cv::Exception:" << e.what();
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception:" << e.what();
     }
     catch(...)
     {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "Default exception from OpenCV";
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
     }
 
     return result;

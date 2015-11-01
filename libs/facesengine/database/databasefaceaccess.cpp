@@ -202,7 +202,7 @@ bool DatabaseFaceAccess::checkReadyForUse(DatabaseFaceAccessData* const d, Datab
 
     if (!drivers.contains(QString::fromLatin1("QSQLITE")))
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt.");
         return false;
@@ -213,7 +213,7 @@ bool DatabaseFaceAccess::checkReadyForUse(DatabaseFaceAccessData* const d, Datab
 
     if (!d->backend)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "No database backend available in checkReadyForUse. "
+        qCWarning(DIGIKAM_FACESENGINE_LOG) << "No database backend available in checkReadyForUse. "
                       "Did you call setParameters before?";
         return false;
     }
