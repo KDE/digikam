@@ -107,8 +107,16 @@ public:
     RecognitionDatabaseStaticPriv()
         : mutex(QMutex::Recursive)
     {
-        // We will use the same place than main digiKam SQlite DB file to store recognition DB file.
-        defaultPath = Digikam::DatabaseAccess().parameters().getDatabaseNameOrDir();
+        if (Digikam::DatabaseAccess().parameters().isMySQL())
+        {
+            // In case of main digiKam DB is Mysql, store Sqlite file in application data dir from home directory.
+            defaultPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        }
+        else
+        {
+            // We will use the same place than main digiKam SQlite DB file to store recognition DB file.
+            defaultPath = Digikam::DatabaseAccess().parameters().getDatabaseNameOrDir();
+        }
     }
 
     QExplicitlySharedDataPointer<RecognitionDatabase::Private> database(const QString& key);
