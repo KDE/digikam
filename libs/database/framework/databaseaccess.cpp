@@ -56,13 +56,20 @@ class DatabaseAccessStaticPriv
 public:
 
     DatabaseAccessStaticPriv()
-        : backend(0), db(0), databaseWatch(0),
+        : backend(0),
+          db(0),
+          databaseWatch(0),
           initializing(false)
     {
         // create a unique identifier for this application (as an application accessing a database
         applicationIdentifier = QUuid::createUuid();
     };
-    ~DatabaseAccessStaticPriv() {};
+
+    ~DatabaseAccessStaticPriv()
+    {
+    };
+
+public:
 
     DatabaseBackend*    backend;
     AlbumDB*            db;
@@ -80,7 +87,8 @@ class DatabaseAccessMutexLocker : public QMutexLocker
 public:
 
     explicit DatabaseAccessMutexLocker(DatabaseAccessStaticPriv* d)
-        : QMutexLocker(&d->lock.mutex), d(d)
+        : QMutexLocker(&d->lock.mutex),
+          d(d)
     {
         d->lock.lockCount++;
     }
@@ -97,7 +105,9 @@ DatabaseAccessStaticPriv* DatabaseAccess::d = 0;
 
 DatabaseAccess::DatabaseAccess()
 {
-    Q_ASSERT(d/*You will want to call setParameters before constructing DatabaseAccess*/);
+    // You will want to call setParameters before constructing DatabaseAccess
+    Q_ASSERT(d);
+
     d->lock.mutex.lock();
     d->lock.lockCount++;
 
