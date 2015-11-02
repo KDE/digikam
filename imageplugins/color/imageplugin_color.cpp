@@ -157,7 +157,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
             this, SLOT(slotConvertTo16Bits()));
 
     d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")), i18n("Color Space Conversion"), this);
-    ac->addAction(QLatin1String("imageplugin_colormanagement"), d->profileMenuAction);
+    ac->addAction(QLatin1String("imageplugin_colormanagement"), d->profileMenuAction->menuAction());
     connect(d->profileMenuAction, SIGNAL(triggered(IccProfile)),
             this, SLOT(slotConvertToColorSpace(IccProfile)));
 
