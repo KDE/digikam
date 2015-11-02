@@ -16,8 +16,9 @@ set(detect_SRCS detect.cpp)
 add_executable(detect ${detect_SRCS})
 target_link_libraries(detect
                       digikamcore
-                      libdng
                       digikamfacesengine
+                      digikamdatabase
+                      libdng
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
@@ -30,9 +31,9 @@ set(recognize_SRCS recognize.cpp)
 add_executable(recognize ${recognize_SRCS})
 target_link_libraries(recognize
                       digikamcore
-                      libdng
                       digikamfacesengine
                       digikamdatabase
+                      libdng
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
@@ -47,8 +48,9 @@ set(align_SRCS align.cpp
 add_executable(align ${align_SRCS})
 target_link_libraries(align
                       digikamcore
-                      libdng
                       digikamfacesengine
+                      digikamdatabase
+                      libdng
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -62,8 +64,9 @@ set(preprocess_SRCS preprocess.cpp)
 add_executable(preprocess ${preprocess_SRCS})
 target_link_libraries(preprocess
                       digikamcore
-                      libdng
                       digikamfacesengine
+                      digikamdatabase
+                      libdng
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
@@ -76,10 +79,10 @@ set(traindb_SRCS traindb.cpp)
 add_executable(traindb ${traindb_SRCS})
 target_link_libraries(traindb
                       digikamcore
-                      libdng
                       digikamfacesengine
                       digikamdatabase
-                      Qt5::Core 
+                      libdng
+                      Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
                       ${OpenCV_LIBRARIES}
@@ -100,9 +103,9 @@ add_executable(facesenginedemo ${facesenginedemo_SRCS})
 
 target_link_libraries(facesenginedemo
                       digikamcore
-                      libdng
                       digikamfacesengine
                       digikamdatabase
+                      libdng
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
