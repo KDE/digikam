@@ -34,7 +34,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStringList>
-#include <QApplication>
 #include <QStandardPaths>
 #include <QStorageInfo>
 
@@ -66,9 +65,7 @@ public:
 UndoCache::UndoCache()
     : d(new Private)
 {
-    d->cacheDir    = QStandardPaths::locate(QStandardPaths::GenericCacheLocation,
-                                            QApplication::applicationName() + QLatin1Char('/'),
-                                            QStandardPaths::LocateDirectory);
+    d->cacheDir    = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1Char('/');
 
     d->cachePrefix = QString::fromUtf8("%1undocache-%2")
                      .arg(d->cacheDir)
