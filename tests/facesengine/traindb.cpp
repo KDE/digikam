@@ -32,9 +32,17 @@
 #include <QRunnable>
 #include <QDebug>
 
+// KDE includes
+
+#include <ksharedconfig.h>
+
 // Local includes
 
 #include "recognitiondatabase.h"
+#include "databaseaccess.h"
+#include "databaseparameters.h"
+
+using namespace Digikam;
 
 using namespace FacesEngine;
 
