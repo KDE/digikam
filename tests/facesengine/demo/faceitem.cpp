@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-06-21
- * @brief  GUI test program for libkface
+ * @brief  GUI test program for FacesEngine
  *
  * @author Copyright (C) 2010 by Alex Jironkin
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>

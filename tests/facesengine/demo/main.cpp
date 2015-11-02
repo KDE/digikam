@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-06-21
- * @brief  GUI test program for libkface
+ * @brief  GUI test program for FaceEngines
  *
  * @author Copyright (C) 2010 by Alex Jironkin
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
@@ -32,10 +32,19 @@
 // Local includes
 
 #include "mainwindow.h"
+#include "databaseaccess.h"
+#include "databaseparameters.h"
+
+using namespace Digikam;
 
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
+    a.setApplicationName(QString::fromLatin1("digikam"));          // for DB init.
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    DatabaseParameters prm    = DatabaseParameters::parametersFromConfig(config);
+    DatabaseAccess::setParameters(prm, DatabaseAccess::MainApplication);
+    
     MainWindow w;
     w.show();
     return a.exec();

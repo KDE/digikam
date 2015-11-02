@@ -7,7 +7,7 @@
  * @date   2010-06-21
  * @brief  CLI test program for trainign DB
  *
- * @author Copyright (C) 2014 by Gilles Caulier
+ * @author Copyright (C) 2014-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -61,7 +61,7 @@ public:
 
         // Populate database.
 
-        for (int i=number*secondMultiplier ; i < number*secondMultiplier+secondMultiplier; i++)
+        for (int i = number * secondMultiplier ; i < number * secondMultiplier + secondMultiplier; i++)
         {
             QString name      = QString::fromLatin1("face%1").arg(i);
             qDebug() << "Record Identity " << name << " to DB";
@@ -99,7 +99,12 @@ int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
 
-    RecognitionDatabase db = RecognitionDatabase::addDatabase(QDir::currentPath());
+    app.setApplicationName(QString::fromLatin1("digikam"));          // for DB init.
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    DatabaseParameters prm    = DatabaseParameters::parametersFromConfig(config);
+    DatabaseAccess::setParameters(prm, DatabaseAccess::MainApplication);    
+    RecognitionDatabase db    = RecognitionDatabase::addDatabase(QDir::currentPath());
+
     QThreadPool pool;
     pool.setMaxThreadCount(101);
 

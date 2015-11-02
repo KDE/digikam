@@ -92,6 +92,7 @@ public:
         MainApplication,
         DatabaseSlave
     };
+
     /**
       * Set the default parameters.
       * Call this function at least once in the starting phase of your application,

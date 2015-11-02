@@ -49,7 +49,6 @@ target_link_libraries(align
                       digikamcore
                       libdng
                       digikamfacesengine
-                      digikamdatabase
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -65,7 +64,6 @@ target_link_libraries(preprocess
                       digikamcore
                       libdng
                       digikamfacesengine
-                      digikamdatabase
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql

@@ -39,7 +39,10 @@
 // Local includes
 
 #include "recognitiondatabase.h"
+#include "databaseaccess.h"
+#include "databaseparameters.h"
 
+using namespace Digikam;
 using namespace FacesEngine;
 
 // --------------------------------------------------------------------------------------------------
@@ -80,8 +83,11 @@ int main(int argc, char** argv)
     }
 
     QCoreApplication app(argc, argv);
-
-    RecognitionDatabase db = RecognitionDatabase::addDatabase(QDir::currentPath());
+    app.setApplicationName(QString::fromLatin1("digikam"));          // for DB init.
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    DatabaseParameters prm    = DatabaseParameters::parametersFromConfig(config);
+    DatabaseAccess::setParameters(prm, DatabaseAccess::MainApplication);    
+    RecognitionDatabase db    = RecognitionDatabase::addDatabase(QDir::currentPath());
 
     if (QString::fromLatin1(argv[1]) == QString::fromLatin1("identify"))
     {

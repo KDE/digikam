@@ -22,13 +22,6 @@
  *
  * ============================================================ */
 
-/*
-#ifndef DATABASEPARAMETERS_DEBUG
-#define DATABASEPARAMETERS_DEBUG
-#endif
-*/
-
-#include "digikam_config.h"
 #include "databaseparameters.h"
 
 // Qt includes
@@ -45,6 +38,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "digikam_debug.h"
 
 namespace
@@ -71,7 +65,8 @@ namespace Digikam
 {
 
 DatabaseParameters::DatabaseParameters()
-    : port(-1), internalServer(false)
+    : port(-1),
+      internalServer(false)
 {
 }
 
@@ -79,8 +74,8 @@ DatabaseParameters::DatabaseParameters(const QString& type,
                                        const QString& databaseName,
                                        const QString& connectOptions,
                                        const QString& hostName,
-                                       int port,
-                                       bool internalServer,
+                                       int   port,
+                                       bool  internalServer,
                                        const QString& userName,
                                        const QString& password,
                                        const QString& databaseNameThumbnails)
@@ -302,6 +297,7 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 {
     // Additional semantic checks for the database section.
     // If the internal server should be started, then the connection options must be reset
+
     if (databaseType == QLatin1String("QMYSQL") && internalServer)
     {
         const QString miscDir  = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_misc");

@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-06-21
- * @brief  GUI test program for libkface
+ * @brief  GUI test program for FacesEngine
  *
  * @author Copyright (C) 2010 by Alex Jironkin
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
@@ -79,7 +79,8 @@ public:
 };
 
 MainWindow::MainWindow(QWidget* const parent)
-    : QMainWindow(parent), d(new Private)
+    : QMainWindow(parent),
+      d(new Private)
 {
     d->ui = new Ui::MainWindow;
     d->ui->setupUi(this);
@@ -126,7 +127,6 @@ MainWindow::MainWindow(QWidget* const parent)
     d->detector = new FaceDetector();
     d->database = RecognitionDatabase::addDatabase(); // use default DB path
 
-    d->ui->configLocation->setText(QDir::currentPath());
     d->ui->accuracySlider->setValue(80);
     d->ui->sensitivitySlider->setValue(80);
 
@@ -158,7 +158,7 @@ void MainWindow::clearScene()
 {
     QList<QGraphicsItem*> list = d->myScene->items();
 
-    for(int i=0; i<list.size(); i++)
+    for(int i = 0; i < list.size(); i++)
     {
         d->myScene->removeItem(list.at(i));
     }
@@ -203,7 +203,7 @@ void MainWindow::slotDetectFaces()
 
     QList<QRectF> currentFaces = d->detector->detectFaces(d->currentPhoto);
 
-    qDebug() << "libkface detected : " << currentFaces.size() << " faces.";
+    qDebug() << "FacesEngine detected : " << currentFaces.size() << " faces.";
     qDebug() << "Coordinates of detected faces : ";
 
     foreach(const QRectF& r, currentFaces)

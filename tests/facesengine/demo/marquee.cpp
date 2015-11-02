@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-07-23
- * @brief  face marquer widget for libkface
+ * @brief  face marquer widget for FacesEngine
  *
  * @author Copyright (C) 2008 Adrien Bustany
  *         <a href="mailto:madcat at mymadcat dot com">madcat at mymadcat dot com</a>
