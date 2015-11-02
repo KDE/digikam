@@ -24,6 +24,7 @@ add_executable(multicorerawtopng ${multicorerawtopng_SRCS})
 
 target_link_libraries(multicorerawtopng
                       digikamcore
+                      libdng
 
                       Qt5::Widgets
                       Qt5::Gui

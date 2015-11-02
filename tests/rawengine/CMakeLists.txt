@@ -17,6 +17,7 @@ set(raw2png_SRCS raw2png.cpp)
 add_executable(raw2png ${raw2png_SRCS})
 target_link_libraries(raw2png
                       digikamcore
+                      libdng
                       Qt5::Gui
                       Qt5::Core
 )
@@ -25,6 +26,7 @@ set(libinfo_SRCS libinfo.cpp)
 add_executable(libinfo ${libinfo_SRCS})
 target_link_libraries(libinfo
                       digikamcore
+                      libdng
                       Qt5::Gui
                       Qt5::Core
 )

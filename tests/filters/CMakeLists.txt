@@ -25,6 +25,7 @@ ecm_mark_nongui_executable(testautocrop)
 
 target_link_libraries(testautocrop
                       digikamcore
+                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -46,6 +47,7 @@ if(LENSFUN_FOUND)
 
     target_link_libraries(testlensfuniface
                           digikamcore
+                          libdng
 
                           Qt5::Core
 
@@ -77,6 +79,7 @@ target_link_libraries(testnrestimate
                       digikamcore
                       digikamdatabase
                       digikamcore
+                      libdng
 
                       Qt5::Core
                       Qt5::Gui

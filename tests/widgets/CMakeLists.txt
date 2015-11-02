@@ -25,6 +25,7 @@ ecm_mark_as_test(searchtextbartest)
 
 target_link_libraries(searchtextbartest
                       digikamcore
+                      libdng
 
                       Qt5::Test
 

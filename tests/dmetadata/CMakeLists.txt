@@ -20,6 +20,7 @@ add_executable(tagsReadWriteTest ${testTag_SRCS})
 ecm_mark_nongui_executable(tagsReadWriteTest)
 target_link_libraries(tagsReadWriteTest
                       digikamcore
+                      libdng
 
                       Qt5::Core
                       Qt5::Test
@@ -32,6 +33,7 @@ add_executable(ratingReadWriteTest ${testRating_SRCS})
 ecm_mark_nongui_executable(ratingReadWriteTest)
 target_link_libraries(ratingReadWriteTest
                       digikamcore
+                      libdng
 
                       Qt5::Core
                       Qt5::Test
@@ -44,6 +46,8 @@ add_executable(commentReadWriteTest ${testComment_SRCS})
 ecm_mark_nongui_executable(commentReadWriteTest)
 target_link_libraries(commentReadWriteTest
                       digikamcore
+                      libdng
+                      
                       Qt5::Core
                       Qt5::Test
 
@@ -55,6 +59,8 @@ add_executable(setiptcpreview ${setiptcpreview_SRCS})
 ecm_mark_nongui_executable(setiptcpreview)
 target_link_libraries(setiptcpreview
                       digikamcore
+                      libdng
+                      
                       Qt5::Core
 
                       KF5::I18n
@@ -65,6 +71,8 @@ add_executable(loadfromba ${loadfromba_SRCS})
 ecm_mark_nongui_executable(loadfromba)
 target_link_libraries(loadfromba
                       digikamcore
+                      libdng
+                      
                       Qt5::Core
 
                       KF5::I18n
@@ -75,6 +83,8 @@ add_executable(erasetag ${erasetag_SRCS})
 ecm_mark_nongui_executable(erasetag)
 target_link_libraries(erasetag
                       digikamcore
+                      libdng
+                      
                       Qt5::Core
 
                       KF5::I18n
@@ -85,6 +95,8 @@ add_executable(printtagslist ${printtagslist_SRCS})
 ecm_mark_nongui_executable(printtagslist)
 target_link_libraries(printtagslist
                       digikamcore
+                      libdng
+                      
                       Qt5::Core
 
                       KF5::I18n
@@ -95,6 +107,8 @@ add_executable(usexmpsidecar ${usexmpsidecar_SRCS})
 ecm_mark_nongui_executable(usexmpsidecar)
 target_link_libraries(usexmpsidecar
                       digikamcore
+                      libdng
+                      
                       Qt5::Core
 
                       KF5::I18n
@@ -105,6 +119,8 @@ add_executable(readimagewritexmpsidecar ${readimagewritexmpsidecar_SRCS})
 ecm_mark_nongui_executable(readimagewritexmpsidecar)
 target_link_libraries(readimagewritexmpsidecar
                       digikamcore
+                      libdng
+                      
                       Qt5::Core
 
                       KF5::I18n
@@ -115,6 +131,8 @@ add_executable(setxmpface ${setxmpface_SRCS})
 ecm_mark_nongui_executable(setxmpface)
 target_link_libraries(setxmpface
                       digikamcore
+                      libdng
+                      
                       Qt5::Core
 
                       KF5::I18n

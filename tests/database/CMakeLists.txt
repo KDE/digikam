@@ -28,6 +28,8 @@ target_link_libraries(testdatabase
                       digikamcore
                       digikamgui
 
+                      libdng
+                      
                       Qt5::DBus
                       Qt5::Core
                       Qt5::Gui
@@ -57,6 +59,8 @@ target_link_libraries(databasefieldstest
 
                       digikamgui
 
+                      libdng
+                      
                       Qt5::DBus
                       Qt5::Core
                       Qt5::Gui

@@ -20,6 +20,7 @@ add_executable(geoiface_calibrator ${calibrator_sources})
 
 target_link_libraries(geoiface_calibrator
                       digikamcore
+                      libdng
 
                       Qt5::Widgets
 

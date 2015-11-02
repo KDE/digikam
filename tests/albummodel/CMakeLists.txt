@@ -31,6 +31,8 @@ ecm_mark_as_test(albummodeltest)
 target_link_libraries(albummodeltest
                       digikamcore
                       digikamgui
+                      
+                      libdng
 
                       Qt5::Gui
                       Qt5::Test

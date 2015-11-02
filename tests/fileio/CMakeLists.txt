@@ -24,6 +24,7 @@ ecm_mark_nongui_executable(pgfscaled)
 
 target_link_libraries(pgfscaled
                       digikamcore
+                      libdng
                       Qt5::Core
                       Qt5::Gui
                       KF5::I18n
@@ -38,6 +39,7 @@ ecm_mark_nongui_executable(qtpgftest)
 
 target_link_libraries(qtpgftest
                       digikamcore
+                      libdng
                       Qt5::Core
                       Qt5::Gui
                       KF5::KIOCore
@@ -52,6 +54,7 @@ ecm_mark_nongui_executable(loadpgfdata)
 
 target_link_libraries(loadpgfdata
                       digikamcore
+                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -68,6 +71,7 @@ ecm_mark_nongui_executable(loadsavethreadtest)
 
 target_link_libraries(loadsavethreadtest
                       digikamcore
+                      libdng
 
                       Qt5::Core
 
@@ -87,6 +91,8 @@ ecm_mark_as_test(filesaveoptionsboxtest)
 target_link_libraries(filesaveoptionsboxtest
                       digikamcore
                       digikamdatabase
+                      
+                      libdng
 
                       Qt5::Test
 )
@@ -103,6 +109,7 @@ ecm_mark_as_test(statesavingobjecttest)
 
 target_link_libraries(statesavingobjecttest
                       digikamcore
+                      libdng
 
                       Qt5::Gui
                       Qt5::Test

@@ -32,6 +32,8 @@ target_link_libraries(renamecustomizertest
 
                       digikamcore
                       digikamgui
+                      
+                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -63,6 +65,8 @@ target_link_libraries(cameranamehelpertest
                       digikamdatabase
                       digikamcore
                       importui
+                      
+                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -95,6 +99,8 @@ target_link_libraries(advancedrenametest
                       digikamdatabase
                       digikamcore
                       digikamgui
+                      
+                      libdng
 
                       Qt5::Core
                       Qt5::Gui

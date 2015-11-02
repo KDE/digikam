@@ -29,6 +29,7 @@ add_executable(geoiface_demo ${geoiface_demo_SRCS})
 
 target_link_libraries(geoiface_demo
                       digikamcore
+                      libdng
 
                       Qt5::Widgets
                       Qt5::Gui

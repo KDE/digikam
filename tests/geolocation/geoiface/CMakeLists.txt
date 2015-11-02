@@ -28,6 +28,7 @@ ecm_mark_as_test(geoiface_test_primitives)
 
 target_link_libraries(geoiface_test_primitives
                       digikamcore
+                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -44,6 +45,7 @@ ecm_mark_as_test(geoiface_test_geocoordinates)
 
 target_link_libraries(geoiface_test_geocoordinates
                       digikamcore
+                      libdng
 
                       Qt5::Core
                       Qt5::Test
@@ -59,6 +61,7 @@ ecm_mark_as_test(geoiface_test_tileindex)
 
 target_link_libraries(geoiface_test_tileindex
                       digikamcore
+                      libdng
 
                       Qt5::Test
                      )
@@ -91,6 +94,7 @@ if(NOT WIN32)
 
     target_link_libraries(geoiface_test_itemmarkertiler
                           digikamcore
+                          libdng
 
                           Qt5::Core
                           Qt5::Gui
@@ -109,6 +113,7 @@ ecm_mark_as_test(geoiface_test_tracks)
 
 target_link_libraries(geoiface_test_tracks
                       digikamcore
+                      libdng
 
                       Qt5::Core
                       Qt5::Test
@@ -122,6 +127,7 @@ add_executable(loadtrack ${loadtrack_sources})
 
 target_link_libraries(loadtrack
                       digikamcore
+                      libdng
 
                       Qt5::Core
                      )
