@@ -25,7 +25,10 @@
 
 // Qt includes
 
+#include <QDir>
+#include <QFile>
 #include <QApplication>
+#include <QStandardPaths>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
@@ -59,7 +62,6 @@ int main(int argc, char* argv[])
 
     DAboutData::authorsRegistration(aboutData);
 
-
     QCommandLineParser parser;
     KAboutData::setApplicationData(aboutData);
     parser.addVersionOption();
@@ -82,6 +84,13 @@ int main(int argc, char* argv[])
     parser.clearPositionalArguments();
 
     ShowFoto::ShowFoto* const w = new ShowFoto::ShowFoto(urlList);
+
+    // If application cache place in home directory to save cached files do not exist, create it.
+    if (!QFile::exists(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)))
+    {
+        QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
+    }
+
     w->show();
 
     int ret = app.exec();
