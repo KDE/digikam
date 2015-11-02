@@ -25,6 +25,7 @@
 // Qt includes
 
 #include <QFile>
+#include <QDir>
 #include <QFileInfo>
 #include <QSqlDatabase>
 #include <QDBusConnection>
@@ -189,6 +190,13 @@ int main(int argc, char* argv[])
 
     // create main window
     DigikamApp* const digikam = new DigikamApp();
+
+    // If application storage place in home directory to save customized XML settings files do not exist, create it,
+    // else QFile will not able to create new files as well.
+    if (!QFile::exists(QStandardPaths::writableLocation(QStandardPaths::DataLocation)))
+    {
+        QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
+    }
 
     // Bug #247175:
     // Add a connection to the destroyed() signal when the digiKam mainwindow has been
