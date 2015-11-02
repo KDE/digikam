@@ -50,8 +50,6 @@
 #include "fullscreensettings.h"
 #include "dxmlguiwindow.h"
 
-
-
 namespace Digikam
 {
 

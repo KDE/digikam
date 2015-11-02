@@ -44,6 +44,7 @@
 
 #include "cameratype.h"
 #include "gpcamera.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -75,6 +76,7 @@ CameraList::CameraList(QObject* const parent, const QString& file)
       d(new Private)
 {
     d->file = file;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Camera XML data: " << d->file;
 
     if (!m_defaultList)
     {
@@ -173,6 +175,7 @@ bool CameraList::save()
 
     if (!cfile.open(QIODevice::WriteOnly))
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open Camera XML file to save data (" << d->file << ")";
         return false;
     }
 
