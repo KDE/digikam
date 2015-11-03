@@ -38,6 +38,13 @@
 namespace FacesEngine
 {
 
+int DatabaseFaceSchemaUpdater::schemaVersion()
+{
+    return 2;
+}
+
+// -------------------------------------------------------------------------------------
+
 class DatabaseFaceSchemaUpdater::Private
 {
 public:
@@ -72,10 +79,6 @@ DatabaseFaceSchemaUpdater::~DatabaseFaceSchemaUpdater()
     delete d;
 }
 
-int DatabaseFaceSchemaUpdater::schemaVersion()
-{
-    return 2;
-}
 
 void DatabaseFaceSchemaUpdater::setObserver(DatabaseFaceInitObserver* const observer)
 {

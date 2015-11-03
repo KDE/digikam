@@ -34,13 +34,15 @@ class DatabaseFaceSchemaUpdater
 {
 public:
 
+    static int schemaVersion();
+
+public:
+
     DatabaseFaceSchemaUpdater(DatabaseFaceAccess* const access);
     ~DatabaseFaceSchemaUpdater();
 
     bool update();
     void setObserver(DatabaseFaceInitObserver* const observer);
-
-    static int schemaVersion();
 
 private:
 
