@@ -44,6 +44,7 @@ ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const ThumbnailIdenti
 {
     // If code here proves to be a bottleneck we can add custom queries to albumdb to retrieve info all-in-one
     ImageInfo imageinfo;
+
     if (identifier.id)
     {
         imageinfo = ImageInfo(identifier.id);
@@ -57,6 +58,7 @@ ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const ThumbnailIdenti
     {
         return ThumbnailCreator::fileThumbnailInfo(identifier.filePath);
     }
+
     return imageinfo.thumbnailInfo();
 }
 

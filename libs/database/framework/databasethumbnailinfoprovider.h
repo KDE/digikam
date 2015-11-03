@@ -47,7 +47,6 @@ public:
     virtual int orientationHint(const QString& path);
 };
 
-
 }  // namespace Digikam
 
 #endif /* DATABASETHUMBNAILINFOPROVIDER_H */
