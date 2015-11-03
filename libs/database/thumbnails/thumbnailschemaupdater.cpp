@@ -51,6 +51,8 @@ int ThumbnailSchemaUpdater::schemaVersion()
     return 2;
 }
 
+// -------------------------------------------------------------------------------------
+
 ThumbnailSchemaUpdater::ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access)
 {
     m_access         = access;

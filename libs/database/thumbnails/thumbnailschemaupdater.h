@@ -38,9 +38,12 @@ class ThumbnailSchemaUpdater
 {
 public:
 
+    static int schemaVersion();
+
+public:
+
     explicit ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access);
 
-    static int schemaVersion();
     bool update();
     void setObserver(InitializationObserver* observer);
 
