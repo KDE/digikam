@@ -31,7 +31,7 @@
          The number is defined in the toplevel CMakeList.txt file.
          On version mismatch, users will be warned.
     -->
-    <version>${DBCONFIG_XML_VERSION}</version>
+    <version>${DBCORECONFIG_XML_VERSION}</version>
 
     <database name="QSQLITE">
         <hostName>TestHost</hostName>
