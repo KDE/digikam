@@ -10,8 +10,6 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-configure_file(dbconfigversion.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/dbconfigversion.h)
-
 set(libdatabasecore_SRCS
     core/databasecorebackend.cpp
     core/databaseparameters.cpp

@@ -41,7 +41,7 @@
 
 // Local includes
 
-#include "dbconfigversion.h"
+#include "digikam_dbconfig.h"
 #include "digikam_debug.h"
 
 namespace Digikam
@@ -260,14 +260,17 @@ bool DatabaseConfigElementLoader::readConfig()
     QDomElement versionElement = element.namedItem(QLatin1String("version")).toElement();
     int version                = 0;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
+    qCDebug(DIGIKAM_GENERAL_LOG) << versionElement.isNull()
+                                 << versionElement.text()
+                                 << versionElement.text().toInt()
+                                 << dbcoreconfig_xml_version;
 
     if (!versionElement.isNull())
     {
         version = versionElement.text().toInt();
     }
 
-    if (version < dbconfig_xml_version)
+    if (version < dbcoreconfig_xml_version)
     {
         errorMessage = i18n("An old version of the dbconfig.xml file <b>%1</b> "
                             "is found. Please ensure that the version released "

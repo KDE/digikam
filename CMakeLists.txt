@@ -43,12 +43,12 @@ set(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
 )
 
-# Database Schema version
-# We must set this variable here at top level because it is used in both digikam/database and data/database
+# Database Core XML version
+# We must set this variable here at top level because it is used in both libs/database and data/database
 # Version history:
 # 1 : Original database schema
 # 2 : 08-08-2014 : Fix Images.names field size (see bug #327646)
-set(DBCONFIG_XML_VERSION "2")
+set(DBCORECONFIG_XML_VERSION "2")
 
 # =======================================================
 
@@ -539,13 +539,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     include_directories(${DK_LOCAL_INCLUDES})
 
-    include_directories(
-                        # version.h gitversion.h config-digikam.h
-                        ${CMAKE_CURRENT_BINARY_DIR}/app/utils
-
-                        # dbconfigversion.h
-                        ${CMAKE_CURRENT_BINARY_DIR}/app/database
-                       )
+    # for config headers digikam_version.h gitversion.h digikam_config.h digikam_dbconfig.h libopencv.h
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/app/utils)
 
     # ==================================================================================================
     # Common targets parts
