@@ -5,6 +5,7 @@
  * Date        : 02.02.2012
  *
  * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,7 +30,7 @@
 // Local includes
 
 #include "identity.h"
-#include "databasefacecorebackend.h"
+#include "databasefacebackend.h"
 
 using namespace Digikam;
 
@@ -42,7 +43,7 @@ class TrainingDB
 {
 public:
 
-    TrainingDB(DatabaseFaceCoreBackend* const db);
+    TrainingDB(DatabaseFaceBackend* const db);
     ~TrainingDB();
 
     void setSetting(const QString& keyword, const QString& value);

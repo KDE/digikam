@@ -51,7 +51,7 @@ set(facesengine_database_LIB_SRCS database/trainingdb.cpp
                                   database/databasefacecontainers.cpp
                                   database/databasefaceoperationgroup.cpp
                                   database/databasefaceschemaupdater.cpp
-                                  database/databasefacecorebackend.cpp
+                                  database/databasefacebackend.cpp
                                   database/databasefaceconfig.cpp
                                   database/databasefaceaccess.cpp
 )

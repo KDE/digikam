@@ -26,7 +26,6 @@
 
 #include "trainingdb.h"
 #include "digikam_debug.h"
-#include "databasecorebackend.h"
 
 namespace FacesEngine
 {
@@ -40,10 +39,10 @@ public:
     {
     }
 
-    DatabaseFaceCoreBackend* db;
+    DatabaseFaceBackend* db;
 };
 
-TrainingDB::TrainingDB(DatabaseFaceCoreBackend* const db)
+TrainingDB::TrainingDB(DatabaseFaceBackend* const db)
     : d(new Private)
 {
     d->db = db;

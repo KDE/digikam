@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-06-07
- * Description : Abstract database backend
+ * Description : Face database backend
  *
  * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEFACECOREBACKEND_H
-#define DATABASEFACECOREBACKEND_H
+#ifndef _DATABASE_FACE_BACKEND_H_
+#define _DATABASE_FACE_BACKEND_H_
 
 // Qt includes
 
@@ -46,7 +46,7 @@ using namespace Digikam;
 namespace FacesEngine
 {
 
-class DatabaseFaceCoreBackendPrivate;
+class DatabaseFaceBackendPrivate;
 class DatabaseFaceSchemaUpdater;
 
 class DatabaseLocking
@@ -63,7 +63,7 @@ public:
 
 // -----------------------------------------------------------------
 
-class DatabaseFaceCoreBackend : public QObject
+class DatabaseFaceBackend : public QObject
 {
     Q_OBJECT
 
@@ -122,9 +122,9 @@ public:
      *  shall be unique for this backend object.
      *  It will be used to create unique connection names per backend and thread.
      */
-    DatabaseFaceCoreBackend(const QString& backendName, DatabaseLocking* const locking);
-    DatabaseFaceCoreBackend(const QString& backendName, DatabaseLocking* const locking, DatabaseFaceCoreBackendPrivate& dd);
-    ~DatabaseFaceCoreBackend();
+    DatabaseFaceBackend(const QString& backendName, DatabaseLocking* const locking);
+    DatabaseFaceBackend(const QString& backendName, DatabaseLocking* const locking, DatabaseFaceBackendPrivate& dd);
+    ~DatabaseFaceBackend();
 
     /**
      * Checks if the parameters can be used for this database backend.
@@ -157,7 +157,7 @@ public:
     public:
 
         QueryState()
-            : value(DatabaseFaceCoreBackend::NoErrors)
+            : value(DatabaseFaceBackend::NoErrors)
         {
         }
 
@@ -173,7 +173,7 @@ public:
 
         operator bool() const
         {
-            return value == DatabaseFaceCoreBackend::NoErrors;
+            return value == DatabaseFaceBackend::NoErrors;
         }
 
     private:
@@ -301,10 +301,10 @@ public:
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     /**
-     * Checks if there was a connection error. If so DatabaseFaceCoreBackend::ConnectionError is returned.
+     * Checks if there was a connection error. If so DatabaseFaceBackend::ConnectionError is returned.
      * If not, the values are extracted from the query and inserted in the values list,
      * the last insertion id is taken from the query
-     * and DatabaseFaceCoreBackend::NoErrors is returned.
+     * and DatabaseFaceBackend::NoErrors is returned.
      */
     QueryState handleQueryResult(SqlQuery& query, QList<QVariant>* const values, QVariant* const lastInsertId);
 
@@ -405,11 +405,11 @@ public:
     /**
      * Begin a database transaction
      */
-    DatabaseFaceCoreBackend::QueryState beginTransaction();
+    DatabaseFaceBackend::QueryState beginTransaction();
     /**
      * Commit the current database transaction
      */
-    DatabaseFaceCoreBackend::QueryState commitTransaction();
+    DatabaseFaceBackend::QueryState commitTransaction();
     /**
      * Rollback the current database transaction
      */
@@ -471,13 +471,13 @@ public:
 
 protected:
 
-    DatabaseFaceCoreBackendPrivate* const d_ptr;
+    DatabaseFaceBackendPrivate* const d_ptr;
 
 private:
 
-    Q_DECLARE_PRIVATE(DatabaseFaceCoreBackend)
+    Q_DECLARE_PRIVATE(DatabaseFaceBackend)
 };
 
 } // namespace FacesEngine
 
-#endif // DATABASEFACECOREBACKEND_H
+#endif // _DATABASE_FACE_BACKEND_H_

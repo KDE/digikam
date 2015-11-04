@@ -7,6 +7,7 @@
  * Description : Database access wrapper.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +60,7 @@ public:
 
 public:
 
-    DatabaseFaceCoreBackend* backend;
+    DatabaseFaceBackend* backend;
     TrainingDB*              db;
     DatabaseFaceParameters   parameters;
     DatabaseLocking          lock;
@@ -144,7 +145,7 @@ TrainingDB* DatabaseFaceAccess::db() const
     return d->db;
 }
 
-DatabaseFaceCoreBackend* DatabaseFaceAccess::backend() const
+DatabaseFaceBackend* DatabaseFaceAccess::backend() const
 {
     return d->backend;
 }
@@ -191,7 +192,7 @@ void DatabaseFaceAccess::setParameters(DatabaseFaceAccessData* const d, const Da
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseFaceCoreBackend(QString::fromLatin1("database-"), &d->lock);
+        d->backend = new DatabaseFaceBackend(QString::fromLatin1("database-"), &d->lock);
         d->db      = new TrainingDB(d->backend);
     }
 }

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-15
- * Description : Abstract database backend
+ * Description : Face database backend
  *
  * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEFACECOREBACKEND_P_H
-#define DATABASEFACECOREBACKEND_P_H
+#ifndef _DATABASE_FACE_BACKEND_P_H_
+#define _DATABASE_FACE_BACKEND_P_H_
 
 // Qt includes
 
@@ -55,12 +55,12 @@ public:
     QSqlError    lastError;
 };
 
-class DatabaseFaceCoreBackendPrivate : public DatabaseErrorAnswer
+class DatabaseFaceBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 
-    explicit DatabaseFaceCoreBackendPrivate(DatabaseFaceCoreBackend* const backend);
-    virtual ~DatabaseFaceCoreBackendPrivate();
+    explicit DatabaseFaceBackendPrivate(DatabaseFaceBackend* const backend);
+    virtual ~DatabaseFaceBackendPrivate();
 
     void init(const QString& connectionName, DatabaseLocking* const locking);
 
@@ -90,8 +90,8 @@ public:
     bool checkRetrySQLiteLocqCritical(int retries);
     bool checkOperationStatus();
     bool handleWithErrorHandler(const SqlQuery* const query);
-    void setQueryOperationFlag(DatabaseFaceCoreBackend::QueryOperationStatus status);
-    void queryOperationWakeAll(DatabaseFaceCoreBackend::QueryOperationStatus status);
+    void setQueryOperationFlag(DatabaseFaceBackend::QueryOperationStatus status);
+    void queryOperationWakeAll(DatabaseFaceBackend::QueryOperationStatus status);
 
     // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
     virtual void connectionErrorContinueQueries();
@@ -111,15 +111,15 @@ public:
 
     DatabaseFaceParameters                        parameters;
 
-    DatabaseFaceCoreBackend::Status               status;
+    DatabaseFaceBackend::Status               status;
 
     DatabaseLocking*                          lock;
 
-    DatabaseFaceCoreBackend::QueryOperationStatus operationStatus;
+    DatabaseFaceBackend::QueryOperationStatus operationStatus;
 
     QMutex                                    errorLockMutex;
     QWaitCondition                            errorLockCondVar;
-    DatabaseFaceCoreBackend::QueryOperationStatus errorLockOperationStatus;
+    DatabaseFaceBackend::QueryOperationStatus errorLockOperationStatus;
 
     QMutex                                    busyWaitMutex;
     QWaitCondition                            busyWaitCondVar;
@@ -132,7 +132,7 @@ public :
     {
     public:
 
-        explicit AbstractUnlocker(DatabaseFaceCoreBackendPrivate* const d);
+        explicit AbstractUnlocker(DatabaseFaceBackendPrivate* const d);
         ~AbstractUnlocker();
 
         void finishAcquire();
@@ -140,7 +140,7 @@ public :
     protected:
 
         int                               count;
-        DatabaseFaceCoreBackendPrivate* const d;
+        DatabaseFaceBackendPrivate* const d;
     };
 
     friend class AbstractUnlocker;
@@ -151,7 +151,7 @@ public :
     {
     public:
 
-        AbstractWaitingUnlocker(DatabaseFaceCoreBackendPrivate* const d, QMutex* const mutex, QWaitCondition* const condVar);
+        AbstractWaitingUnlocker(DatabaseFaceBackendPrivate* const d, QMutex* const mutex, QWaitCondition* const condVar);
         ~AbstractWaitingUnlocker();
 
         bool wait(unsigned long time = ULONG_MAX);
@@ -168,7 +168,7 @@ public :
     {
     public:
 
-        explicit ErrorLocker(DatabaseFaceCoreBackendPrivate* const d);
+        explicit ErrorLocker(DatabaseFaceBackendPrivate* const d);
         void wait();
     };
 
@@ -178,14 +178,14 @@ public :
     {
     public:
 
-        explicit BusyWaiter(DatabaseFaceCoreBackendPrivate* const d);
+        explicit BusyWaiter(DatabaseFaceBackendPrivate* const d);
     };
 
 public :
 
-    DatabaseFaceCoreBackend* const q;
+    DatabaseFaceBackend* const q;
 };
 
 } // namespace FacesEngine
 
-#endif // DATABASEFACECOREBACKEND_P_H
+#endif // _DATABASE_FACE_BACKEND_P_H_
