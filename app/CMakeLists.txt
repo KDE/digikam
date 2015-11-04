@@ -11,7 +11,7 @@ endif (POLICY CMP0063)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_version.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_version.h)
-               
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/digikam_dbconfig.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_dbconfig.h)
 

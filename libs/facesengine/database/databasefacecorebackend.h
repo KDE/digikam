@@ -35,9 +35,9 @@
 
 // Local includes
 
-#include "databaseconfigelement.h"
 #include "databaseerrorhandler.h"
 #include "databasefaceparameters.h"
+#include "databasefaceconfigelement.h"
 #include "sqlquery.h"
 
 using namespace Digikam;
@@ -207,7 +207,7 @@ public:
       * Return config read from XML,
       * corresponding to this backend's database type.
       */
-    DatabaseConfigElement configElement() const;
+    DatabaseFaceConfigElement configElement() const;
 
     /**
      * Returns a database action with name, specified in actionName,

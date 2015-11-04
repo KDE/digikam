@@ -43,13 +43,6 @@
 namespace FacesEngine
 {
 
-namespace
-{
-    int dbconfig_xml_version = 1;
-}
-
-// ------------------------------------------------------------------
-
 class DatabaseFaceConfigElementLoader
 {
 public:
@@ -208,23 +201,22 @@ void DatabaseFaceConfigElementLoader::readDBActions(QDomElement& sqlStatementEle
 
 bool DatabaseFaceConfigElementLoader::readConfig()
 {
-    QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              QString::fromLatin1("digikam/database/dbfaceconfig.xml"));
-
+    QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/facesengine/dbfaceconfig.xml"));
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Loading SQL code from config file" << filepath;
     QFile file(filepath);
 
     if (!file.exists())
     {
-        errorMessage = i18n("Could not open the dbfaceconfig.xml file. "
+        errorMessage = i18n("Could not open the configuration file <b>%1</b>. "
                             "This file is installed with digiKam "
                             "and is absolutely required to run recognition. "
-                            "Please check your installation.");
+                            "Please check your installation.", filepath);
         return false;
     }
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        errorMessage = i18n("Could not open dbfaceconfig.xml file <filename>%1</filename>", filepath);
+        errorMessage = i18n("Could not open configuration file <b>%1</b>", filepath);
         return false;
     }
 
@@ -233,7 +225,7 @@ bool DatabaseFaceConfigElementLoader::readConfig()
     if (!doc.setContent(&file))
     {
         file.close();
-        errorMessage = i18n("The XML in the dbfaceconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("The XML in the configuration file <b>%1</b> "
                             "is invalid and cannot be read.", filepath);
         return false;
     }
@@ -244,37 +236,71 @@ bool DatabaseFaceConfigElementLoader::readConfig()
 
     if (element.isNull())
     {
-        errorMessage = i18n("The XML in the dbfaceconfig.xml file <filename>%1</filename> "
-                            "is missing the required element <icode>%2</icode>", filepath, element.tagName());
+        errorMessage = i18n("The XML in the configuration file <b>%1</b> "
+                            "is missing the required element <b>%2</b>", filepath, element.tagName());
         return false;
     }
 
     QDomElement versionElement = element.namedItem(QString::fromLatin1("version")).toElement();
-    int version = 0;
+    int version                = 0;
 
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Checking XML version ID: "
+                                     << versionElement.isNull()
+                                     << versionElement.text()
+                                     << versionElement.text().toInt()
+                                     << dbfaceconfig_xml_version;
 
     if (!versionElement.isNull())
     {
         version = versionElement.text().toInt();
     }
 
-    if (version < dbconfig_xml_version)
+    if (version < dbfaceconfig_xml_version)
     {
-        errorMessage = i18n("An old version of the dbfaceconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("An old version of the configuration file <b>%1</b> "
                             "is found. Please ensure that the right version of digiKam "
                             "is installed.", filepath);
         return false;
     }
 
+    //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Default DB Node contains: " << defaultDB.text();
+
     QDomElement databaseElement = element.firstChildElement(QString::fromLatin1("database"));
 
-    for ( ; !databaseElement.isNull(); databaseElement=databaseElement.nextSiblingElement(QString::fromLatin1("database")))
+    for ( ; !databaseElement.isNull(); databaseElement = databaseElement.nextSiblingElement(QString::fromLatin1("database")))
     {
         DatabaseFaceConfigElement l_DBCfgElement = readDatabase(databaseElement);
         databaseConfigs.insert(l_DBCfgElement.databaseID, l_DBCfgElement);
     }
 
+/*
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Found entries: " << databaseConfigs.size();
+
+    foreach(const DatabaseConfigElement& configElement, databaseConfigs )
+    {
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "DatabaseID: "          << configElement.databaseID;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "HostName: "            << configElement.hostName;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "DatabaseName: "        << configElement.databaseName;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "UserName: "            << configElement.userName;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Password: "            << configElement.password;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Port: "                << configElement.port;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "ConnectOptions: "      << configElement.connectOptions;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Database Server CMD: " << configElement.dbServerCmd;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Database Init CMD: "   << configElement.dbInitCmd;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Statements:";
+
+        foreach(const QString actionKey, configElement.sqlStatements.keys())
+        {
+            QList<databaseActionElement> l_DBActionElement = configElement.sqlStatements[actionKey].dBActionElements;
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "DBAction [" << actionKey << "] has [" << l_DBActionElement.size() << "] actions";
+
+            foreach(const databaseActionElement statement, l_DBActionElement)
+            {
+                qCDebug(DIGIKAM_FACESENGINE_LOG) << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
+            }
+        }
+    }
+*/
     return true;
 }
 

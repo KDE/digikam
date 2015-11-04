@@ -53,16 +53,16 @@ public:
 
     DatabaseConfigElementLoader();
 
-    QMap<QString, DatabaseConfigElement> databaseConfigs;
 
-    bool readConfig();
+    bool                  readConfig();
     DatabaseConfigElement readDatabase(QDomElement& databaseElement);
-    void readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
+    void                  readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
 
 public:
 
-    bool    isValid;
-    QString errorMessage;
+    bool                                 isValid;
+    QString                              errorMessage;
+    QMap<QString, DatabaseConfigElement> databaseConfigs;
 };
 
 Q_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
@@ -187,7 +187,7 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
 
         QDomElement databaseElement = dbActionElement.firstChildElement(QLatin1String("statement"));
 
-        for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement(QLatin1String("statement")))
+        for ( ; !databaseElement.isNull();  databaseElement = databaseElement.nextSiblingElement(QLatin1String("statement")))
         {
             if (!databaseElement.hasAttribute(QLatin1String("mode")))
             {
@@ -213,16 +213,16 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (!file.exists())
     {
-        errorMessage = i18n("Could not open the dbconfig.xml file. "
+        errorMessage = i18n("Could not open the configuration file <b>%1</b>. "
                             "This file is installed with the digikam application "
                             "and is absolutely required to run digikam. "
-                            "Please check your installation.");
+                            "Please check your installation.", filepath);
         return false;
     }
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        errorMessage = i18n("Could not open dbconfig.xml file <b>%1</b>", filepath);
+        errorMessage = i18n("Could not open configuration file <b>%1</b>", filepath);
         return false;
     }
 
@@ -231,7 +231,7 @@ bool DatabaseConfigElementLoader::readConfig()
     if (!doc.setContent(&file))
     {
         file.close();
-        errorMessage = i18n("The XML in the dbconfig.xml file <b>%1</b> is invalid and cannot be read.", filepath);
+        errorMessage = i18n("The XML in the configuration file <b>%1</b> is invalid and cannot be read.", filepath);
         return false;
     }
 
@@ -241,7 +241,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (element.isNull())
     {
-        errorMessage = i18n("The XML in the dbconfig.xml file <b>%1</b> "
+        errorMessage = i18n("The XML in the configuration file <b>%1</b> "
                             "is missing the required element <icode>%2</icode>",
                             filepath, element.tagName());
         return false;
@@ -251,8 +251,8 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (defaultDB.isNull())
     {
-        errorMessage = i18n("The XML in the dbconfig.xml file <b>%1</b> "
-                            "is missing the required element <icode>%2</icode>",
+        errorMessage = i18n("The XML in the configuration file <b>%1</b> "
+                            "is missing the required element <b>%2</b>",
                             filepath, element.tagName());
         return false;
     }
@@ -260,7 +260,8 @@ bool DatabaseConfigElementLoader::readConfig()
     QDomElement versionElement = element.namedItem(QLatin1String("version")).toElement();
     int version                = 0;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << versionElement.isNull()
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Checking XML version ID: "
+                                 << versionElement.isNull()
                                  << versionElement.text()
                                  << versionElement.text().toInt()
                                  << dbcoreconfig_xml_version;
@@ -272,41 +273,37 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (version < dbcoreconfig_xml_version)
     {
-        errorMessage = i18n("An old version of the dbconfig.xml file <b>%1</b> "
+        errorMessage = i18n("An old version of the configuration file <b>%1</b> "
                             "is found. Please ensure that the version released "
                             "with the running version of digiKam is installed. ",
                             filepath);
         return false;
     }
 
-#ifdef DATABASEPARAMETERS_DEBUG
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Default DB Node contains: " << defaultDB.text();
-#endif
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Default DB Node contains: " << defaultDB.text();
 
     QDomElement databaseElement = element.firstChildElement(QLatin1String("database"));
 
-    for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement(QLatin1String("database")))
+    for ( ; !databaseElement.isNull(); databaseElement=databaseElement.nextSiblingElement(QLatin1String("database")))
     {
         DatabaseConfigElement l_DBCfgElement = readDatabase(databaseElement);
         databaseConfigs.insert(l_DBCfgElement.databaseID, l_DBCfgElement);
     }
 
-#ifdef DATABASEPARAMETERS_DEBUG
+/*
     qCDebug(DIGIKAM_GENERAL_LOG) << "Found entries: " << databaseConfigs.size();
 
     foreach(const DatabaseConfigElement& configElement, databaseConfigs )
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseID: " << configElement.databaseID;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "HostName: " << configElement.hostName;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseName: " << configElement.databaseName;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "UserName: " << configElement.userName;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Password: " << configElement.password;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Port: " << configElement.port;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "ConnectOptions: " << configElement.connectOptions;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseID: "          << configElement.databaseID;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "HostName: "            << configElement.hostName;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseName: "        << configElement.databaseName;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "UserName: "            << configElement.userName;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Password: "            << configElement.password;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Port: "                << configElement.port;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ConnectOptions: "      << configElement.connectOptions;
         qCDebug(DIGIKAM_GENERAL_LOG) << "Database Server CMD: " << configElement.dbServerCmd;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Database Init CMD: " << configElement.dbInitCmd;
-
-/*
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Database Init CMD: "   << configElement.dbInitCmd;
         qCDebug(DIGIKAM_GENERAL_LOG) << "Statements:";
 
         foreach(const QString actionKey, configElement.sqlStatements.keys())
@@ -319,12 +316,13 @@ bool DatabaseConfigElementLoader::readConfig()
                 qCDebug(DIGIKAM_GENERAL_LOG) << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
             }
         }
-*/
-    }
-#endif
 
+    }
+*/
     return true;
 }
+
+// ------------------------------------------------------------------
 
 DatabaseConfigElement DatabaseConfigElement::element(const QString& databaseType)
 {

@@ -43,12 +43,19 @@ set(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
 )
 
-# Database Core XML version
-# We must set this variable here at top level because it is used in both libs/database and data/database
+# Core Database XML version
+# We must set this variable here at top level because it is used in both libs/database/core and data/database
 # Version history:
-# 1 : Original database schema
-# 2 : 08-08-2014 : Fix Images.names field size (see bug #327646)
+# 1 : Original database XML file, published in production.
+# 2 : 08-08-2014 : Fix Images.names field size (see bug #327646).
 set(DBCORECONFIG_XML_VERSION "2")
+
+# Face Database XML version
+# We must set this variable here at top level because it is used in both libs/facesengine/database and data/faceengines
+# Version history:
+# 1 : Original database XML file not released for production.
+# 2 : First public release.
+set(DBFACECONFIG_XML_VERSION "2")
 
 # =======================================================
 

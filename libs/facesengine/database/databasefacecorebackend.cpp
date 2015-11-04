@@ -587,10 +587,10 @@ DatabaseFaceCoreBackend::~DatabaseFaceCoreBackend()
     delete d;
 }
 
-DatabaseConfigElement DatabaseFaceCoreBackend::configElement() const
+DatabaseFaceConfigElement DatabaseFaceCoreBackend::configElement() const
 {
     Q_D(const DatabaseFaceCoreBackend);
-    return DatabaseConfigElement::element(d->parameters.databaseType);
+    return DatabaseFaceConfigElement::element(d->parameters.databaseType);
 }
 
 DatabaseAction DatabaseFaceCoreBackend::getDBAction(const QString& actionName) const

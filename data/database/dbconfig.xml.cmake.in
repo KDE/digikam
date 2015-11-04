@@ -28,7 +28,7 @@
     <defaultDB>QSQLITE</defaultDB>
 
     <!-- Increment this version number whenever you change this file.
-         The number is defined in the toplevel CMakeList.txt file.
+         The DBCORECONFIG_XML_VERSION value is defined in the toplevel CMakeList.txt file.
          On version mismatch, users will be warned.
     -->
     <version>${DBCORECONFIG_XML_VERSION}</version>

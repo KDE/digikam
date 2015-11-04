@@ -7,7 +7,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-05-13
- * Description : Database statements
+ * Description : FacesEngine Database statements
  *
  * Copyright (C) 2009      by Holger Foerster <hamsi2k at freenet dot de>
  * Copyright (C) 2009-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -30,10 +30,10 @@
     <defaultDB>QSQLITE</defaultDB>
 
     <!-- Increment this version number whenever you change this file.
+         The DBFACECONFIG_XML_VERSION value is defined in the toplevel CMakeList.txt file.
          On version mismatch, users will be warned.
-         Don't forget to update DatabaseFaceSchemaUpdater::schemaVersion()
     -->
-    <version>2</version>
+    <version>${DBFACECONFIG_XML_VERSION}</version>
 
     <database name="QSQLITE">
         <hostName>TestHost</hostName>
