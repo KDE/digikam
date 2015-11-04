@@ -44,42 +44,42 @@
         <dbinitcmd></dbinitcmd>
 
         <dbactions>
-           	<dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
-        		CREATE TRIGGER privcheck_trigger DELETE ON PrivCheck
-        			BEGIN
-                                SELECT * FROM PrivCheck;
-  				END;
-        	</statement>
-        	</dbaction>
+            <dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
+                CREATE TRIGGER privcheck_trigger DELETE ON PrivCheck
+                    BEGIN
+                        SELECT * FROM PrivCheck;
+                    END;
+            </statement>
+            </dbaction>
 
-        	<dbaction name="CheckPriv_DROP_TRIGGER"><statement mode="plain">
-        		DROP TRIGGER privcheck_trigger;
-        	</statement>
-        	</dbaction>
-        	        	
-        	<dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
-        		CREATE TABLE PrivCheck
-        		(
- 				   id   INT,
-    			           name VARCHAR(35)
-				);
-        	</statement>
-        	</dbaction>
+            <dbaction name="CheckPriv_DROP_TRIGGER"><statement mode="plain">
+                DROP TRIGGER privcheck_trigger;
+            </statement>
+            </dbaction>
+                        
+            <dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
+                CREATE TABLE PrivCheck
+                (
+                    id   INT,
+                    name VARCHAR(35)
+                );
+            </statement>
+            </dbaction>
 
-        	<dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
-        		ALTER TABLE PrivCheck ADD COLUMN addedColumn;
-        	</statement>
-			</dbaction>        	
-        	
-        	<dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
-        		DROP TABLE PrivCheck;
-        	</statement>
+            <dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
+                ALTER TABLE PrivCheck ADD COLUMN addedColumn;
+            </statement>
+            </dbaction>            
+            
+            <dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
+                DROP TABLE PrivCheck;
+            </statement>
             </dbaction>
             
             <dbaction name="CheckPriv_Cleanup"><statement mode="plain">
                 DROP TABLE IF EXISTS PrivCheck;
             </statement>
-        	</dbaction>
+            </dbaction>
         
         
             <dbaction name="CreateDB" mode="transaction"><statement mode="plain">CREATE TABLE AlbumRoots
@@ -124,7 +124,7 @@
                             height INTEGER,
                             format TEXT,
                             colorDepth INTEGER,
-                colorModel INTEGER);</statement>
+                            colorModel INTEGER);</statement>
             <statement mode="plain"> CREATE TABLE ImageMetadata
                             (imageid INTEGER PRIMARY KEY,
                             make TEXT,
@@ -765,38 +765,38 @@
         <dbinitcmd>${INITCMD_MYSQL}</dbinitcmd>
 
         <dbactions>
-        	<dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
-        		CREATE TRIGGER privcheck_trigger AFTER DELETE ON PrivCheck
- 				 FOR EACH ROW BEGIN
-  				END;
-        	</statement>
-        	</dbaction>
+            <dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
+                CREATE TRIGGER privcheck_trigger AFTER DELETE ON PrivCheck
+                  FOR EACH ROW BEGIN
+                  END;
+            </statement>
+            </dbaction>
 
-        	<dbaction name="CheckPriv_DROP_TRIGGER"><statement mode="plain">
-        		DROP TRIGGER privcheck_trigger;
-        	</statement>
-        	</dbaction>
-        	        	
-        	<dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
-                        CREATE TABLE IF NOT EXISTS PrivCheck
-        		(
- 				   id   INT,
-    			   name VARCHAR(35)
-				);
-        	</statement>
-        	</dbaction>
+            <dbaction name="CheckPriv_DROP_TRIGGER"><statement mode="plain">
+                DROP TRIGGER privcheck_trigger;
+            </statement>
+            </dbaction>
+                        
+            <dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
+                CREATE TABLE IF NOT EXISTS PrivCheck
+                (
+                   id   INT,
+                   name VARCHAR(35)
+                );
+            </statement>
+            </dbaction>
 
-        	<dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
-        		ALTER TABLE PrivCheck DROP COLUMN name;
-        	</statement>
-			</dbaction>        	
-        	
-        	<dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
-        		DROP TABLE PrivCheck;
-        	</statement>
-        	</dbaction>
-        	
-        	<dbaction name="CheckPriv_Cleanup"><statement mode="plain">
+            <dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
+                ALTER TABLE PrivCheck DROP COLUMN name;
+            </statement>
+            </dbaction>            
+            
+            <dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
+                DROP TABLE PrivCheck;
+            </statement>
+            </dbaction>
+            
+            <dbaction name="CheckPriv_Cleanup"><statement mode="plain">
                 DROP TABLE IF EXISTS PrivCheck;
             </statement>
             </dbaction>
@@ -1189,7 +1189,7 @@ ORDER BY img.name
 
             <dbaction name="getItemIDsInTag">
             <statement mode="query">SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id
-                                WHERE Images.status=1 AND tagid=:tagID;
+                                    WHERE Images.status=1 AND tagid=:tagID;
             </statement>
             </dbaction>
 

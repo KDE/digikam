@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "digikam_dbconfig.h"
 #include "digikam_debug.h"
 
 namespace FacesEngine
