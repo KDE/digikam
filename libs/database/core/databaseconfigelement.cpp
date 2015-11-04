@@ -54,7 +54,6 @@ public:
 
     DatabaseConfigElementLoader();
 
-
     bool                  readConfig();
     DatabaseConfigElement readDatabase(QDomElement& databaseElement);
     void                  readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
