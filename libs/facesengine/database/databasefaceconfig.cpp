@@ -32,14 +32,14 @@
 // Local includes
 
 #include "digikam_dbconfig.h"
-#include "databaseconfigelementloader.h"
+#include "databaseconfigloader.h"
 
 using namespace Digikam;
 
 namespace FacesEngine
 {
 
-Q_GLOBAL_STATIC_WITH_ARGS(DatabaseConfigElementLoader,
+Q_GLOBAL_STATIC_WITH_ARGS(DatabaseConfigLoader,
                           loader,
                           (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/facesengine/dbfaceconfig.xml")),
                            dbfaceconfig_xml_version)

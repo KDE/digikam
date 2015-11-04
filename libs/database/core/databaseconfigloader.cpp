@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databaseconfigelementloader.h"
+#include "databaseconfigloader.h"
 
 // Qt includes
 
@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-DatabaseConfigElementLoader::DatabaseConfigElementLoader(const QString& filepath, int xmlVersion)
+DatabaseConfigLoader::DatabaseConfigLoader(const QString& filepath, int xmlVersion)
 {
     isValid = readConfig(filepath, xmlVersion);
 
@@ -56,7 +56,7 @@ DatabaseConfigElementLoader::DatabaseConfigElementLoader(const QString& filepath
     }
 }
 
-DatabaseConfig DatabaseConfigElementLoader::readDatabase(QDomElement& databaseElement)
+DatabaseConfig DatabaseConfigLoader::readDatabase(QDomElement& databaseElement)
 {
     DatabaseConfig configElement;
     configElement.databaseID = QLatin1String("Unidentified");
@@ -144,7 +144,7 @@ DatabaseConfig DatabaseConfigElementLoader::readDatabase(QDomElement& databaseEl
     return configElement;
 }
 
-void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElements, DatabaseConfig& configElement)
+void DatabaseConfigLoader::readDBActions(QDomElement& sqlStatementElements, DatabaseConfig& configElement)
 {
     QDomElement dbActionElement = sqlStatementElements.firstChildElement(QLatin1String("dbaction"));
 
@@ -184,7 +184,7 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
     }
 }
 
-bool DatabaseConfigElementLoader::readConfig(const QString& filepath, int xmlVersion)
+bool DatabaseConfigLoader::readConfig(const QString& filepath, int xmlVersion)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading SQL code from config file" << filepath;
     QFile file(filepath);

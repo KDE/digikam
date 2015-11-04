@@ -32,12 +32,12 @@
 // Local includes
 
 #include "digikam_dbconfig.h"
-#include "databaseconfigelementloader.h"
+#include "databaseconfigloader.h"
 
 namespace Digikam
 {
 
-Q_GLOBAL_STATIC_WITH_ARGS(DatabaseConfigElementLoader,
+Q_GLOBAL_STATIC_WITH_ARGS(DatabaseConfigLoader,
                           dbcoreloader,
                           (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/dbconfig.xml")),
                            dbcoreconfig_xml_version)

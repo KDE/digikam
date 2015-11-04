@@ -37,11 +37,11 @@ namespace Digikam
 {
 class DatabaseConfig;
 
-class DIGIKAM_EXPORT DatabaseConfigElementLoader
+class DIGIKAM_EXPORT DatabaseConfigLoader
 {
 public:
 
-    DatabaseConfigElementLoader(const QString& filepath, int xmlVersion);
+    DatabaseConfigLoader(const QString& filepath, int xmlVersion);
 
     bool           readConfig(const QString& filepath, int xmlVersion);
     DatabaseConfig readDatabase(QDomElement& databaseElement);
