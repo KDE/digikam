@@ -587,7 +587,7 @@ DatabaseFaceCoreBackend::~DatabaseFaceCoreBackend()
     delete d;
 }
 
-DatabaseFaceConfigElement DatabaseFaceCoreBackend::configElement() const
+DatabaseConfig DatabaseFaceCoreBackend::configElement() const
 {
     Q_D(const DatabaseFaceCoreBackend);
     return DatabaseFaceConfigElement::element(d->parameters.databaseType);

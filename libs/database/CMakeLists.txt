@@ -15,6 +15,7 @@ set(libdatabasecore_SRCS
     core/databaseparameters.cpp
     core/databaseerrorhandler.cpp
     core/databaseconfigelement.cpp
+    core/databaseconfigelementloader.cpp
     core/sqlquery.cpp
     core/dbactiontype.cpp
     core/tagregion.cpp

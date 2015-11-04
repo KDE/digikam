@@ -21,41 +21,37 @@
  *
  * ============================================================ */
 
-#include "databaseconfigelement.h"
+#include "databaseconfig.h"
 
 // Qt includes
 
-#include <QtGlobal>
-#include <QStandardPaths>
+#include <QString>
+#include <QMap>
+#include <QDomElement>
 
 // Local includes
 
-#include "digikam_dbconfig.h"
-#include "databaseconfigelementloader.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
+class DatabaseConfig;
 
-Q_GLOBAL_STATIC_WITH_ARGS(DatabaseConfigElementLoader,
-                          dbcoreloader,
-                          (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/dbconfig.xml")),
-                           dbcoreconfig_xml_version)
-                         )
-
-DatabaseConfig DatabaseConfigElement::element(const QString& databaseType)
+class DIGIKAM_EXPORT DatabaseConfigElementLoader
 {
-    // Unprotected read-only access? Usually accessed under DatabaseAccess protection anyway
-    return dbcoreloader->databaseConfigs.value(databaseType);
-}
+public:
 
-bool DatabaseConfigElement::checkReadyForUse()
-{
-    return dbcoreloader->isValid;
-}
+    DatabaseConfigElementLoader(const QString& filepath, int xmlVersion);
 
-QString DatabaseConfigElement::errorMessage()
-{
-    return dbcoreloader->errorMessage;
-}
+    bool           readConfig(const QString& filepath, int xmlVersion);
+    DatabaseConfig readDatabase(QDomElement& databaseElement);
+    void           readDBActions(QDomElement& sqlStatementElements, DatabaseConfig& configElement);
+
+public:
+
+    bool                          isValid;
+    QString                       errorMessage;
+    QMap<QString, DatabaseConfig> databaseConfigs;
+};
 
 } // namespace Digikam

@@ -207,7 +207,7 @@ public:
       * Return config read from XML,
       * corresponding to this backend's database type.
       */
-    DatabaseFaceConfigElement configElement() const;
+    DatabaseConfig configElement() const;
 
     /**
      * Returns a database action with name, specified in actionName,

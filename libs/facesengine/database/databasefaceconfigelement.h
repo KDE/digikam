@@ -24,13 +24,9 @@
 #ifndef DATABASEFACECONFIGELEMENT_H_
 #define DATABASEFACECONFIGELEMENT_H_
 
-// Qt includes
-
-#include <QMap>
-
 // Local includes
 
-#include "databaseaction.h"
+#include "databaseconfig.h"
 
 using namespace Digikam;
 
@@ -41,22 +37,9 @@ class DatabaseFaceConfigElement
 {
 public:
 
-    static bool                      checkReadyForUse();
-    static QString                   errorMessage();
-    static DatabaseFaceConfigElement element(const QString& databaseType);
-
-public:
-
-    QString                       databaseID;
-    QString                       hostName;
-    QString                       port;
-    QString                       connectOptions;
-    QString                       databaseName;
-    QString                       userName;
-    QString                       password;
-    QString                       dbServerCmd;
-    QString                       dbInitCmd;
-    QMap<QString, DatabaseAction> sqlStatements;
+    static bool           checkReadyForUse();
+    static QString        errorMessage();
+    static DatabaseConfig element(const QString& databaseType);
 };
 
 } // namespace FacesEngine
