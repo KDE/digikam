@@ -65,8 +65,6 @@ public:
     QMap<QString, DatabaseConfigElement> databaseConfigs;
 };
 
-Q_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
-
 DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 {
     isValid = readConfig();
@@ -323,6 +321,8 @@ bool DatabaseConfigElementLoader::readConfig()
 }
 
 // ------------------------------------------------------------------
+
+Q_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
 
 DatabaseConfigElement DatabaseConfigElement::element(const QString& databaseType)
 {
