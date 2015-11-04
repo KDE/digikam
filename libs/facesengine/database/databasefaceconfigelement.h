@@ -63,9 +63,9 @@ class DatabaseFaceConfigElement
 {
 public:
 
-    static bool                   checkReadyForUse();
-    static QString                errorMessage();
-    static DatabaseFaceConfigElement  element(const QString& databaseType);
+    static bool                      checkReadyForUse();
+    static QString                   errorMessage();
+    static DatabaseFaceConfigElement element(const QString& databaseType);
 
 public:
 

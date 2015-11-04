@@ -72,6 +72,8 @@ public:
     static QString                errorMessage();
     static DatabaseConfigElement  element(const QString& databaseType);
 
+public:
+
     QString                       databaseID;
     QString                       hostName;
     QString                       port;
