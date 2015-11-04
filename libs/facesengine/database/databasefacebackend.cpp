@@ -104,12 +104,14 @@ DatabaseThreadData::~DatabaseThreadData()
     {
         qCDebug(DIGIKAM_FACESENGINE_LOG) << "WARNING !!! Transaction count is" << transactionCount << "when destroying database!!!";
     }
+
     closeDatabase();
 }
 
 void DatabaseThreadData::closeDatabase()
 {
     QString connectionToRemove;
+
     if (database.isOpen())
     {
         connectionToRemove = database.connectionName();
@@ -163,6 +165,7 @@ void DatabaseFaceBackendPrivate::init(const QString& name, DatabaseLocking* cons
 QSqlDatabase DatabaseFaceBackendPrivate::databaseForThread()
 {
     DatabaseThreadData* threadData = 0;
+
     if (!threadDataStorage.hasLocalData())
     {
         threadData = new DatabaseThreadData;
@@ -237,6 +240,7 @@ QSqlError DatabaseFaceBackendPrivate::databaseErrorForThread()
     {
         return threadDataStorage.localData()->lastError;
     }
+
     return QSqlError();
 }
 
@@ -349,17 +353,17 @@ bool DatabaseFaceBackendPrivate::checkRetrySQLiteLocqCritical(int retries)
 void DatabaseFaceBackendPrivate::debugOutputFailedQuery(const QSqlQuery& query) const
 {
     qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failure executing query:\n"
-             << query.executedQuery()
-             << "\nError messages:" << query.lastError().driverText() << query.lastError().databaseText()
-             << query.lastError().number() << query.lastError().type()
-             << "\nBound values: " << query.boundValues().values();
+                                     << query.executedQuery()
+                                     << "\nError messages:" << query.lastError().driverText() << query.lastError().databaseText()
+                                     << query.lastError().number() << query.lastError().type()
+                                     << "\nBound values: " << query.boundValues().values();
 }
 
 void DatabaseFaceBackendPrivate::debugOutputFailedTransaction(const QSqlError& error) const
 {
     qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failure executing transaction. Error messages:\n"
-             << error.driverText() << error.databaseText()
-             << error.number() << error.type();
+                                     << error.driverText() << error.databaseText()
+                                     << error.number() << error.type();
 }
 
 void DatabaseFaceBackendPrivate::transactionFinished()
@@ -488,7 +492,8 @@ void DatabaseFaceBackendPrivate::connectionErrorAbortQueries()
 // -----------------------------------------------------------------------------------------
 
 DatabaseFaceBackendPrivate::AbstractUnlocker::AbstractUnlocker(DatabaseFaceBackendPrivate* const d)
-    : count(0), d(d)
+    : count(0),
+      d(d)
 {
     // Why two mutexes? The main mutex is recursive and won't work with a condvar.
 
@@ -529,8 +534,11 @@ DatabaseFaceBackendPrivate::AbstractUnlocker::~AbstractUnlocker()
 // -----------------------------------------------------------------------------------------
 
 DatabaseFaceBackendPrivate::AbstractWaitingUnlocker::AbstractWaitingUnlocker(DatabaseFaceBackendPrivate* const d,
-        QMutex* const mutex, QWaitCondition* const condVar)
-    : AbstractUnlocker(d), mutex(mutex), condVar(condVar)
+                                                                             QMutex* const mutex,
+                                                                             QWaitCondition* const condVar)
+    : AbstractUnlocker(d),
+      mutex(mutex),
+      condVar(condVar)
 {
     // Why two mutexes? The main mutex is recursive and won't work with a condvar.
     // lock condvar mutex (lock only if main mutex is locked)
@@ -638,9 +646,7 @@ DatabaseFaceBackend::QueryState DatabaseFaceBackend::execDBAction(const Database
         return DatabaseFaceBackend::SQLError;
     }
 
-#ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
-#endif
+    // qCDebug(DIGIKAM_FACESENGINE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
 
     bool wrapInTransaction = (action.mode == QString::fromLatin1("transaction"));
 
@@ -704,9 +710,7 @@ QSqlQuery DatabaseFaceBackend::execDBActionQuery(const DatabaseAction& action, c
 
     QSqlDatabase db = d->databaseForThread();
 
-#ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
-#endif
+    //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
 
     QSqlQuery result;
 
@@ -857,9 +861,7 @@ QList<QVariant> DatabaseFaceBackend::readToList(SqlQuery& query)
         }
     }
 
-#ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Setting result value list ["<< list <<"]";
-#endif
+    //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Setting result value list ["<< list <<"]";
     return list;
 }
 
@@ -994,9 +996,7 @@ DatabaseFaceBackend::QueryState DatabaseFaceBackend::execSql(SqlQuery& preparedQ
 SqlQuery DatabaseFaceBackend::execQuery(const QString& sql, const QVariant& boundValue1)
 {
     SqlQuery query = prepareQuery(sql);
-#ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
-#endif
+    //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
     execQuery(query, boundValue1);
     return query;
 }
@@ -1036,9 +1036,7 @@ SqlQuery DatabaseFaceBackend::execQuery(const QString& sql, const QList<QVariant
 SqlQuery DatabaseFaceBackend::execQuery(const QString& sql)
 {
     SqlQuery query = prepareQuery(sql);
-#ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_FACESENGINE_LOG)<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
-#endif
+    //qCDebug(DIGIKAM_FACESENGINE_LOG)<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
     exec(query);
     return query;
 }
@@ -1099,9 +1097,7 @@ SqlQuery DatabaseFaceBackend::execQuery(const QString& sql, const QMap<QString, 
 
     if (!bindingMap.isEmpty())
     {
-#ifdef DATABASCOREBACKEND_DEBUG
-        qCDebug(DIGIKAM_FACESENGINE_LOG)<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
-#endif
+        //qCDebug(DIGIKAM_FACESENGINE_LOG)<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
 
         QRegExp identifierRegExp(QString::fromLatin1(":[A-Za-z0-9]+"));
         int pos = 0;
@@ -1214,9 +1210,7 @@ SqlQuery DatabaseFaceBackend::execQuery(const QString& sql, const QMap<QString, 
             }
             else
             {
-#ifdef DATABASCOREBACKEND_DEBUG
-                qCDebug(DIGIKAM_FACESENGINE_LOG)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
-#endif
+                //qCDebug(DIGIKAM_FACESENGINE_LOG)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
 
                 valuesToBind.append(placeHolderValue);
                 replaceStr = QString::fromLatin1("?");
@@ -1227,9 +1221,7 @@ SqlQuery DatabaseFaceBackend::execQuery(const QString& sql, const QMap<QString, 
         }
     }
 
-#ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_FACESENGINE_LOG)<<"Prepared statement ["<< preparedString <<"] values ["<< valuesToBind <<"]";
-#endif
+    //qCDebug(DIGIKAM_FACESENGINE_LOG)<<"Prepared statement ["<< preparedString <<"] values ["<< valuesToBind <<"]";
 
     SqlQuery query = prepareQuery(preparedString);
 
@@ -1404,9 +1396,7 @@ bool DatabaseFaceBackend::exec(SqlQuery& query)
 
     forever
     {
-#ifdef DATABASCOREBACKEND_DEBUG
-        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Trying to query ["<<query.lastQuery()<<"] values ["<< query.boundValues() <<"]";
-#endif
+        //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Trying to query ["<<query.lastQuery()<<"] values ["<< query.boundValues() <<"]";
 
         if (query.exec())
         {
@@ -1492,9 +1482,7 @@ SqlQuery DatabaseFaceBackend::prepareQuery(const QString& sql)
 SqlQuery DatabaseFaceBackend::copyQuery(const SqlQuery& old)
 {
     SqlQuery query = getQuery();
-#ifdef DATABASCOREBACKEND_DEBUG
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Last query was ["<<old.lastQuery()<<"]";
-#endif
+    //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Last query was ["<<old.lastQuery()<<"]";
     query.prepare(old.lastQuery());
     query.setForwardOnly(old.isForwardOnly());
 
@@ -1503,9 +1491,7 @@ SqlQuery DatabaseFaceBackend::copyQuery(const SqlQuery& old)
 
     foreach(const QVariant& value, boundValues)
     {
-#ifdef DATABASCOREBACKEND_DEBUG
-        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Bind value to query ["<<value<<"]";
-#endif
+        //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Bind value to query ["<<value<<"]";
         query.addBindValue(value);
     }
 

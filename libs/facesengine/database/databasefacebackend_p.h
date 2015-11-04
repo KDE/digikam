@@ -109,7 +109,7 @@ public:
 
     QString                                   backendName;
 
-    DatabaseFaceParameters                        parameters;
+    DatabaseFaceParameters                    parameters;
 
     DatabaseFaceBackend::Status               status;
 
