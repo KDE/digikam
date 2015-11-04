@@ -21,43 +21,46 @@
  *
  * ============================================================ */
 
-#ifndef _DATABASE_CONFIG_ELEMENT_H_
-#define _DATABASE_CONFIG_ELEMENT_H_
+#ifndef _DATABASE_ACTION_H_
+#define _DATABASE_ACTION_H_
 
 // Qt includes
 
-#include <QMap>
+#include <QList>
+#include <QString>
 
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseaction.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseConfigElement
+class DIGIKAM_EXPORT DatabaseActionElement
 {
 public:
 
-    static bool                   checkReadyForUse();
-    static QString                errorMessage();
-    static DatabaseConfigElement  element(const QString& databaseType);
+    DatabaseActionElement()
+        : order(0)
+    {
+    }
 
+    QString mode;
+    int     order;
+    QString statement;
+};
+
+// ---------------------------------------------------------------
+
+class DIGIKAM_EXPORT DatabaseAction
+{
 public:
 
-    QString                       databaseID;
-    QString                       hostName;
-    QString                       port;
-    QString                       connectOptions;
-    QString                       databaseName;
-    QString                       userName;
-    QString                       password;
-    QString                       dbServerCmd;
-    QString                       dbInitCmd;
-    QMap<QString, DatabaseAction> sqlStatements;
+    QString                      name;
+    QString                      mode;
+    QList<DatabaseActionElement> dbActionElements;
 };
 
 } // namespace Digikam
 
-#endif // _DATABASE_CONFIG_ELEMENT_H_
+#endif // _DATABASE_ACTION_H_

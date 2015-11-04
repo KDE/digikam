@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QtGlobal>
 #include <QDir>
 #include <QDomDocument>
 #include <QDomElement>

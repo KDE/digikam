@@ -27,37 +27,15 @@
 // Qt includes
 
 #include <QMap>
-#include <QString>
+
+// Local includes
+
+#include "databaseaction.h"
+
+using namespace Digikam;
 
 namespace FacesEngine
 {
-
-class DatabaseActionElement
-{
-public:
-
-    DatabaseActionElement()
-        : order(0)
-    {
-    }
-
-    QString mode;
-    int     order;
-    QString statement;
-};
-
-// -----------------------------------------------------------------------
-
-class DatabaseAction
-{
-public:
-
-    QString                      name;
-    QString                      mode;
-    QList<DatabaseActionElement> dbActionElements;
-};
-
-// -----------------------------------------------------------------------
 
 class DatabaseFaceConfigElement
 {
