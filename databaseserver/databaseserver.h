@@ -64,8 +64,8 @@ public Q_SLOTS:
 
 private:
 
-    class DatabaseServerPriv;
-    DatabaseServerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

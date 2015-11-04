@@ -7,6 +7,7 @@
  * Description : Abstract database backend
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -590,7 +591,7 @@ DatabaseFaceCoreBackend::~DatabaseFaceCoreBackend()
 DatabaseConfig DatabaseFaceCoreBackend::configElement() const
 {
     Q_D(const DatabaseFaceCoreBackend);
-    return DatabaseFaceConfigElement::element(d->parameters.databaseType);
+    return DatabaseFaceConfig::element(d->parameters.databaseType);
 }
 
 DatabaseAction DatabaseFaceCoreBackend::getDBAction(const QString& actionName) const

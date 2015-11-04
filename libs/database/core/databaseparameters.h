@@ -7,6 +7,7 @@
  * Description : Storage container for database connection parameters.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +38,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseconfigelement.h"
+#include "databasecoreconfig.h"
 
 namespace Digikam
 {

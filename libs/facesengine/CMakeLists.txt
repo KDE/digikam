@@ -16,7 +16,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
-                        
+
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
@@ -52,7 +52,7 @@ set(facesengine_database_LIB_SRCS database/trainingdb.cpp
                                   database/databasefaceoperationgroup.cpp
                                   database/databasefaceschemaupdater.cpp
                                   database/databasefacecorebackend.cpp
-                                  database/databasefaceconfigelement.cpp
+                                  database/databasefaceconfig.cpp
                                   database/databasefaceaccess.cpp
 )
 

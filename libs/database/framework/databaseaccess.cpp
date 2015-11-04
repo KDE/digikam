@@ -7,6 +7,7 @@
  * Description : Database access wrapper.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -263,9 +264,9 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
         return false;
     }
 
-    if (!DatabaseConfigElement::checkReadyForUse())
+    if (!DatabaseCoreConfig::checkReadyForUse())
     {
-        d->lastError = DatabaseConfigElement::errorMessage();
+        d->lastError = DatabaseCoreConfig::errorMessage();
 
         // Make sure the application does not continue to run
         if (observer)

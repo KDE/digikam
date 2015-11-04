@@ -55,11 +55,11 @@
 namespace Digikam
 {
 
-class DatabaseServer::DatabaseServerPriv
+class DatabaseServer::Private
 {
 public:
 
-    DatabaseServerPriv()
+    Private()
     {
         databaseProcess = 0;
         app             = 0;
@@ -75,7 +75,7 @@ public:
 
 DatabaseServer::DatabaseServer(QCoreApplication* const application)
     : QObject(application),
-      d(new DatabaseServerPriv)
+      d(new Private)
 {
     d->app = application;
 
@@ -155,7 +155,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/dbconfig.xml");
 
     //TODO Move the database command outside of the code to the dbconfig.xml file
-    const QString mysqldPath(DatabaseConfigElement::element(dbType).dbServerCmd);
+    const QString mysqldPath(DatabaseCoreConfig::element(dbType).dbServerCmd);
     //const QString mysqldPath("/usr/sbin/mysqld");
 
     if ( mysqldPath.isEmpty() || (mysqldPath.compare(QLatin1String( "SERVERCMD_MYSQL-NOTFOUND" )) == 0))
@@ -179,7 +179,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     * TODO Move the database command outside of the code to the dbconfig.xml file.
     * Offer a variable to the dataDir. E.g. the command definition in the config file has to be: /usr/bin/mysql_install_db --user=digikam --datadir=$dataDir$
     */
-    const QString mysqlInitCmd(QString::fromLatin1("%1 --user=digikam --datadir=%2").arg(DatabaseConfigElement::element(dbType).dbInitCmd, dataDir));
+    const QString mysqlInitCmd(QString::fromLatin1("%1 --user=digikam --datadir=%2").arg(DatabaseCoreConfig::element(dbType).dbInitCmd, dataDir));
 
     if (!QFile::exists(akDir))
     {

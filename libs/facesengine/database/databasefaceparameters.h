@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "databasefaceconfigelement.h"
+#include "databasefaceconfig.h"
 
 namespace FacesEngine
 {

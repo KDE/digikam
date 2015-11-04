@@ -26,14 +26,14 @@ namespace FacesEngine
 {
 
 OpenCVMatData::OpenCVMatData()
-    : type(-1), 
+    : type(-1),
       rows(0),
       cols(0)
 {
 }
 
 OpenCVMatData::OpenCVMatData(const cv::Mat& mat)
-    : type(-1), 
+    : type(-1),
       rows(0),
       cols(0)
 {

@@ -14,7 +14,7 @@ set(libdatabasecore_SRCS
     core/databasecorebackend.cpp
     core/databaseparameters.cpp
     core/databaseerrorhandler.cpp
-    core/databaseconfigelement.cpp
+    core/databasecoreconfig.cpp
     core/databaseconfigelementloader.cpp
     core/sqlquery.cpp
     core/dbactiontype.cpp
