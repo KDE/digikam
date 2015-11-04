@@ -195,7 +195,7 @@ void DImgThreadedFilter::startFilterDirectly()
         {
             QDateTime now = QDateTime::currentDateTime();
             filterImage();
-            qCDebug(DIGIKAM_DIMG_LOG) << m_name << ":: excecution time : " << now.msecsTo(QDateTime::currentDateTime()) << " ms";
+            //qCDebug(DIGIKAM_DIMG_LOG) << m_name << ":: excecution time : " << now.msecsTo(QDateTime::currentDateTime()) << " ms";
         }
         catch (std::bad_alloc& ex)
         {

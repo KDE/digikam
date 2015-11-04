@@ -144,7 +144,7 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
     while (cameras && *cameras)
     {
         DevicePtr cam = *cameras;
-        qCDebug(DIGIKAM_DIMG_LOG) << "Query camera:" << cam->Maker << "-" << cam->Model;
+//      qCDebug(DIGIKAM_DIMG_LOG) << "Query camera:" << cam->Maker << "-" << cam->Model;
 
         if (QString::fromLatin1(cam->Maker).toLower() == make.toLower() && QString::fromLatin1(cam->Model).toLower() == model.toLower())
         {
