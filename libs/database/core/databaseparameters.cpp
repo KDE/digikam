@@ -125,15 +125,15 @@ DatabaseParameters::DatabaseParameters(const QUrl& url)
 
 bool DatabaseParameters::operator==(const DatabaseParameters& other) const
 {
-    return(databaseType   == other.databaseType                   &&
-           databaseName   == other.databaseName                   &&
+    return(databaseType           == other.databaseType           &&
+           databaseName           == other.databaseName           &&
            databaseNameThumbnails == other.databaseNameThumbnails &&
-           connectOptions == other.connectOptions                 &&
-           hostName       == other.hostName                       &&
-           port           == other.port                           &&
-           internalServer == other.internalServer                 &&
-           userName       == other.userName                       &&
-           password       == other.password);
+           connectOptions         == other.connectOptions         &&
+           hostName               == other.hostName               &&
+           port                   == other.port                   &&
+           internalServer         == other.internalServer         &&
+           userName               == other.userName               &&
+           password               == other.password);
 }
 
 bool DatabaseParameters::operator!=(const DatabaseParameters& other) const
@@ -218,19 +218,19 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
 
     if (isSQLite()) // see bug #267131
     {
-        databaseName           = group.readPathEntry(configDatabaseName, QString());
+        databaseName           = group.readPathEntry(configDatabaseName,           QString());
         databaseNameThumbnails = group.readPathEntry(configDatabaseNameThumbnails, QString());
     }
     else
     {
-        databaseName           = group.readEntry(configDatabaseName, QString());
+        databaseName           = group.readEntry(configDatabaseName,           QString());
         databaseNameThumbnails = group.readEntry(configDatabaseNameThumbnails, QString());
     }
 
-    hostName                 = group.readEntry(configDatabaseHostName, QString());
-    port                     = group.readEntry(configDatabasePort, -1);
-    userName                 = group.readEntry(configDatabaseUsername, QString());
-    password                 = group.readEntry(configDatabasePassword, QString());
+    hostName                 = group.readEntry(configDatabaseHostName,       QString());
+    port                     = group.readEntry(configDatabasePort,           -1);
+    userName                 = group.readEntry(configDatabaseUsername,       QString());
+    password                 = group.readEntry(configDatabasePassword,       QString());
     connectOptions           = group.readEntry(configDatabaseConnectOptions, QString());
 #if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     internalServer           = group.readEntry(configInternalDatabaseServer, false);
@@ -301,7 +301,8 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 
     if (databaseType == QLatin1String("QMYSQL") && internalServer)
     {
-        const QString miscDir  = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_misc");
+        const QString miscDir  = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + 
+                                                                  QLatin1Char('/') + QLatin1String("digikam/db_misc");
         databaseType           = QLatin1String("QMYSQL");
         databaseName           = QLatin1String("digikam");
         internalServer         = true;
@@ -442,7 +443,8 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     parameters.userName          = config.userName;
     parameters.password          = config.password;
     parameters.port              = config.port.toInt();
-    const QString miscDir        = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_misc");
+    const QString miscDir        = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + 
+                                                                    QLatin1Char('/') + QLatin1String("digikam/db_misc");
     QString connectOptions       = config.connectOptions;
     connectOptions.replace(QLatin1String("$$DBMISCPATH$$"), miscDir);
 
