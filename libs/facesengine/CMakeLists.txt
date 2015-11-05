@@ -47,12 +47,10 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 )
 
 set(facesengine_database_LIB_SRCS database/trainingdb.cpp
-                                  database/databasefaceparameters.cpp
                                   database/databasefacecontainers.cpp
                                   database/databasefaceoperationgroup.cpp
                                   database/databasefaceschemaupdater.cpp
                                   database/databasefacebackend.cpp
-                                  database/databasefaceconfig.cpp
                                   database/databasefaceaccess.cpp
 )
 

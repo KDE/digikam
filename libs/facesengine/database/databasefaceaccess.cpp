@@ -60,12 +60,12 @@ public:
 
 public:
 
-    DatabaseFaceBackend* backend;
-    TrainingDB*              db;
-    DatabaseFaceParameters   parameters;
-    DatabaseLocking          lock;
-    QString                  lastError;
-    bool                     initializing;
+    DatabaseFaceBackend*   backend;
+    TrainingDB*            db;
+    DatabaseParameters     parameters;
+    DatabaseLocking        lock;
+    QString                lastError;
+    bool                   initializing;
 };
 
 // ----------------------------------------------------------------
@@ -150,14 +150,14 @@ DatabaseFaceBackend* DatabaseFaceAccess::backend() const
     return d->backend;
 }
 
-DatabaseFaceParameters DatabaseFaceAccess::parameters() const
+DatabaseParameters DatabaseFaceAccess::parameters() const
 {
     if (d)
     {
         return d->parameters;
     }
 
-    return DatabaseFaceParameters();
+    return DatabaseParameters();
 }
 
 void DatabaseFaceAccess::initDatabaseErrorHandler(DatabaseFaceAccessData* const d, DatabaseErrorHandler* const errorhandler)
@@ -166,7 +166,7 @@ void DatabaseFaceAccess::initDatabaseErrorHandler(DatabaseFaceAccessData* const 
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
 
-void DatabaseFaceAccess::setParameters(DatabaseFaceAccessData* const d, const DatabaseFaceParameters& parameters)
+void DatabaseFaceAccess::setParameters(DatabaseFaceAccessData* const d, const DatabaseParameters& parameters)
 {
     DatabaseFaceAccessMutexLocker lock(d);
 
@@ -192,7 +192,7 @@ void DatabaseFaceAccess::setParameters(DatabaseFaceAccessData* const d, const Da
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseFaceBackend(QString::fromLatin1("database-"), &d->lock);
+        d->backend = new DatabaseFaceBackend(&d->lock);
         d->db      = new TrainingDB(d->backend);
     }
 }
@@ -229,7 +229,7 @@ bool DatabaseFaceAccess::checkReadyForUse(DatabaseFaceAccessData* const d, Datab
         if (!d->backend->open(d->parameters))
         {
             access.setLastError(i18n("Error opening database backend.\n%1",
-                                     d->backend->lastError().text()));
+                                     d->backend->lastError()));
             return false;
         }
     }

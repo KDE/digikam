@@ -28,7 +28,7 @@
 // Local includes
 
 #include "databasefacebackend.h"
-#include "databasefaceparameters.h"
+#include "databaseparameters.h"
 #include "databaseerrorhandler.h"
 #include "digikam_export.h"
 
@@ -55,15 +55,14 @@ public:
     DatabaseFaceAccess(DatabaseFaceAccessData* const);
     ~DatabaseFaceAccess();
 
-    TrainingDB* db() const;
-
-    DatabaseFaceBackend* backend() const;
-    QString lastError() const;
-    DatabaseFaceParameters parameters() const;
+    TrainingDB* db()                  const;
+    DatabaseFaceBackend* backend()    const;
+    QString              lastError()  const;
+    DatabaseParameters   parameters() const;
 
 
     static void initDatabaseErrorHandler(DatabaseFaceAccessData* const d, DatabaseErrorHandler* const errorhandler);
-    static void setParameters(DatabaseFaceAccessData* const d, const DatabaseFaceParameters& parameters);
+    static void setParameters(DatabaseFaceAccessData* const d, const DatabaseParameters& parameters);
     static bool checkReadyForUse(DatabaseFaceAccessData* const d, DatabaseFaceInitObserver* const observer = 0);
 
     /**
@@ -101,7 +100,7 @@ public:
 private:
 
     DatabaseFaceAccessData* d;
-    int                 count;
+    int                     count;
 };
 
 } // namespace FacesEngine

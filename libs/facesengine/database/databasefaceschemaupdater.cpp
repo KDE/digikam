@@ -181,13 +181,13 @@ bool DatabaseFaceSchemaUpdater::startUpdates()
     else
     {
         //qCDebug(DIGIKAM_FACESENGINE_LOG) << "No database file available";
-        DatabaseFaceParameters parameters = d->access->parameters();
+        DatabaseParameters parameters = d->access->parameters();
 
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
             QString errorMsg = i18n("Failed to create tables in database.\n%1",
-                                    d->access->backend()->lastError().text());
+                                    d->access->backend()->lastError());
             d->access->setLastError(errorMsg);
 
             if (d->observer)
@@ -233,18 +233,18 @@ bool DatabaseFaceSchemaUpdater::createDatabase()
 
 bool DatabaseFaceSchemaUpdater::createTables()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateDB"))) &&
-           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateDBOpenCVLBPH")));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDB"))) &&
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBOpenCVLBPH")));
 }
 
 bool DatabaseFaceSchemaUpdater::createIndices()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateIndices")));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceIndices")));
 }
 
 bool DatabaseFaceSchemaUpdater::createTriggers()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateTriggers")));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceTriggers")));
 }
 
 bool DatabaseFaceSchemaUpdater::updateV1ToV2()

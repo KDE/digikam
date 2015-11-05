@@ -27,17 +27,8 @@
 namespace Digikam
 {
 
-// Core database
 static const int dbcoreconfig_xml_version = @DBCORECONFIG_XML_VERSION@;
 
 } // namespace Digikam
 
-namespace FacesEngine
-{
-
-// Face database
-static const int dbfaceconfig_xml_version = @DBFACECONFIG_XML_VERSION@;
-
-} // namespace FacesEngine
-
-#endif /* DATABASES_CONFIG_DIGIKAM_H */
+#endif // DATABASES_CONFIG_DIGIKAM_H

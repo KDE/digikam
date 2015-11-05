@@ -16,15 +16,6 @@ install(FILES ${files}
 
 # ---------------------------------------------------------------
 
-# NOTE: the DBFACECONFIG_XML_VERSION ID is configured in the toplevel CMakeLists.txt,
-configure_file(dbfaceconfig.xml.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/dbfaceconfig.xml)
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dbfaceconfig.xml
-        DESTINATION ${DATA_INSTALL_DIR}/digikam/facesengine
-)
-
-# ---------------------------------------------------------------
-
 # add_custom_command(OUTPUT face-funnel.data
 #                    COMMAND ${CMAKE_COMMAND} -E tar xz ${CMAKE_CURRENT_SOURCE_DIR}/face-funnel.data.tgz)
 #

@@ -33,6 +33,7 @@
     -->
     <version>${DBCORECONFIG_XML_VERSION}</version>
 
+    <!-- Sqlite DB statements -->
     <database name="QSQLITE">
         <hostName>TestHost</hostName>
         <databaseName>DatabaseName</databaseName>
@@ -44,6 +45,8 @@
         <dbinitcmd></dbinitcmd>
 
         <dbactions>
+
+            <!-- Core Schema DB -->
             <dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
                 CREATE TRIGGER privcheck_trigger DELETE ON PrivCheck
                     BEGIN
@@ -80,7 +83,6 @@
                 DROP TABLE IF EXISTS PrivCheck;
             </statement>
             </dbaction>
-        
         
             <dbaction name="CreateDB" mode="transaction"><statement mode="plain">CREATE TABLE AlbumRoots
                             (id INTEGER PRIMARY KEY,
@@ -487,6 +489,65 @@
                     </statement>
                 </dbaction>
 
+            <!-- Face Schema DB -->
+            <dbaction name="CreateFaceDB" mode="transaction">
+                <statement mode="plain">
+                    CREATE TABLE Settings
+                    (keyword TEXT NOT NULL UNIQUE,
+                    value TEXT)
+                </statement>
+                <statement mode="plain">
+                    CREATE TABLE Identities
+                    (id INTEGER PRIMARY KEY,
+                    type INTEGER)
+                </statement>
+                <statement mode="plain">
+                    CREATE TABLE IdentityAttributes
+                    (id INTEGER,
+                    attribute TEXT,
+                    value TEXT)
+                </statement>
+            </dbaction>
+
+            <dbaction name="CreateFaceDBOpenCVLBPH" mode="transaction">
+                <statement mode="plain">
+                    CREATE TABLE OpenCVLBPHRecognizer
+                    (id INTEGER PRIMARY KEY,
+                    version INTEGER,
+                    radius INTEGER,
+                    neighbors INTEGER,
+                    grid_x INTEGER,
+                    grid_y INTEGER)
+                </statement>
+                <statement mode="plain">
+                    CREATE TABLE OpenCVLBPHistograms
+                    (id INTEGER PRIMARY KEY,
+                    recognizerid INTEGER,
+                    identity INTEGER,
+                    context TEXT,
+                    type INTEGER,
+                    rows INTEGER,
+                    cols INTEGER,
+                    data BLOB)
+                </statement>
+            </dbaction>
+
+            <!-- Indices -->
+            <dbaction name="CreateFaceIndices" mode="transaction">
+                <statement mode="plain">CREATE INDEX attribute_index  ON IdentityAttributes (id);</statement>
+            </dbaction>
+
+            <!-- Triggers -->
+            <dbaction name="CreateFaceTriggers" mode="transaction">
+                <statement mode="plain">
+                    CREATE TRIGGER delete_identities DELETE ON Identities
+                    BEGIN
+                        DELETE FROM IdentityAttributes
+                        WHERE IdentityAttributes.id = OLD.id;
+                    END;
+                </statement>
+            </dbaction>
+                
             <!-- Migration Statements -->
             <!-- Migrate_Cleanup_DB now it's done by the program -->
 
@@ -754,7 +815,10 @@
 
         </dbactions>
     </database>
-        <database name="QMYSQL">
+
+    
+    <!-- MySQL DB statements -->
+    <database name="QMYSQL">
         <hostName></hostName>
         <databaseName>digikam</databaseName>
         <userName>root</userName>
@@ -959,7 +1023,6 @@
                             SELECT id, pid
                             FROM Tags;</statement>
             </dbaction>
-
 
             <!-- Indices -->
             <dbaction name="CreateIndices" mode="transaction">
@@ -1290,6 +1353,7 @@ ORDER BY inf.rating DESC, img.name ASC
                             UPDATE value = GREATEST(VALUES(value), 2)
                     </statement>
             </dbaction>
+            
             <!-- Thumbnails Indexes DB -->
             <dbaction name="CreateThumbnailsDBIndices" mode="transaction">
                 <statement mode="plain">
@@ -1332,6 +1396,65 @@ ORDER BY inf.rating DESC, img.name ASC
             <!-- Thumbnails Trigger DB -->
             <dbaction name="CreateThumbnailsDBTrigger" mode="transaction"></dbaction>
 
+            <!-- Face Schema DB -->
+            <dbaction name="CreateFaceDB" mode="transaction">
+                <statement mode="plain">
+                    CREATE TABLE Settings
+                    (keyword TEXT NOT NULL UNIQUE,
+                    value TEXT)
+                </statement>
+                <statement mode="plain">
+                    CREATE TABLE Identities
+                    (id INTEGER PRIMARY KEY,
+                    type INTEGER)
+                </statement>
+                <statement mode="plain">
+                    CREATE TABLE IdentityAttributes
+                    (id INTEGER,
+                    attribute TEXT,
+                    value TEXT)
+                </statement>
+            </dbaction>
+
+            <dbaction name="CreateFaceDBOpenCVLBPH" mode="transaction">
+                <statement mode="plain">
+                    CREATE TABLE OpenCVLBPHRecognizer
+                    (id INTEGER PRIMARY KEY,
+                    version INTEGER,
+                    radius INTEGER,
+                    neighbors INTEGER,
+                    grid_x INTEGER,
+                    grid_y INTEGER)
+                </statement>
+                <statement mode="plain">
+                    CREATE TABLE OpenCVLBPHistograms
+                    (id INTEGER PRIMARY KEY,
+                    recognizerid INTEGER,
+                    identity INTEGER,
+                    context TEXT,
+                    type INTEGER,
+                    rows INTEGER,
+                    cols INTEGER,
+                    data BLOB)
+                </statement>
+            </dbaction>
+
+            <!-- Indices -->
+            <dbaction name="CreateFaceIndices" mode="transaction">
+                <statement mode="plain">CREATE INDEX attribute_index  ON IdentityAttributes (id);</statement>
+            </dbaction>
+
+            <!-- Triggers -->
+            <dbaction name="CreateFaceTriggers" mode="transaction">
+                <statement mode="plain">
+                    CREATE TRIGGER delete_identities DELETE ON Identities
+                    BEGIN
+                        DELETE FROM IdentityAttributes
+                        WHERE IdentityAttributes.id = OLD.id;
+                    END;
+                </statement>
+            </dbaction>
+            
             <!-- Migration Statements -->
             <!-- Migrate_Cleanup_DB now it's done by the program -->
 
@@ -1529,6 +1652,7 @@ ORDER BY inf.rating DESC, img.name ASC
 
 
             <!-- Migration from DB Version 5 (0.10 - 1.4) to Version 6 (1.5-) -->
+
             <dbaction name="UpdateSchemaFromV5ToV6" mode="transaction">
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
                             (imageid INTEGER PRIMARY KEY,
