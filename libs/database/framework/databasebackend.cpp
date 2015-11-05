@@ -22,20 +22,10 @@
  *
  * ============================================================ */
 
-#include "databasebackend.h"
-#include "databasebackend_p.h"
-
-// Qt includes
-
-#include <QApplication>
-#include <QCoreApplication>
-#include <QHash>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QThread>
-
 // Local includes
 
+#include "databasebackend.h"
+#include "databasebackend_p.h"
 #include "schemaupdater.h"
 #include "databasewatch.h"
 
