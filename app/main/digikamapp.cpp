@@ -311,15 +311,15 @@ DigikamApp::~DigikamApp()
         QueueMgrWindow::queueManagerWindow()->close();
     }
 
-    if(TagsManager::isCreated())
+    if (TagsManager::isCreated())
     {
         TagsManager::instance()->close();
     }
 
 #ifdef HAVE_KFILEMETADATA
-    if(BalooWrap::isCreated())
+    if (BalooWrap::isCreated())
     {
-        delete BalooWrap::instance();
+        BalooWrap::internalPtr.clear();
     }
 #endif
 
