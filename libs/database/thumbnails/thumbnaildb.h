@@ -37,15 +37,13 @@
 
 // Local includes
 
-#include "databasecorebackend.h"
 #include "sqlquery.h"
+#include "thumbnaildatabasebackend.h"
 #include "thumbnaildatabaseaccess.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
-
-class DatabaseCoreBackend;
 
 namespace DatabaseThumbnail
 {
@@ -125,7 +123,7 @@ public:
 
 private:
 
-    explicit ThumbnailDB(DatabaseCoreBackend* const backend);
+    explicit ThumbnailDB(ThumbnailDatabaseBackend* const backend);
     ~ThumbnailDB();
 
 private:

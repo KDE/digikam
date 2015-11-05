@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-15
- * Description : Abstract database backend
+ * Description : Thumbnail database backend
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,58 +22,41 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEBACKEND_H
-#define DATABASEBACKEND_H
+#ifndef THUMBNAIL_DATABASE_BACKEND_H
+#define THUMBNAIL_DATABASE_BACKEND_H
 
 // Local includes
 
 #include "digikam_export.h"
 #include "databasecorebackend.h"
-#include "databasechangesets.h"
 
 namespace Digikam
 {
 
-class SchemaUpdater;
-class DatabaseWatch;
-class DatabaseBackendPrivate;
+class ThumbnailSchemaUpdater;
+class ThumbnailDatabaseBackendPrivate;
 
-class DIGIKAM_DATABASE_EXPORT DatabaseBackend : public DatabaseCoreBackend
+class DIGIKAM_DATABASE_EXPORT ThumbnailDatabaseBackend : public DatabaseCoreBackend
 {
     Q_OBJECT
 
 public:
 
-    explicit DatabaseBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("digikamDatabase-"));
-    ~DatabaseBackend();
-
-    /** Sets the global database watch
-     */
-    void setDatabaseWatch(DatabaseWatch* watch);
+    explicit ThumbnailDatabaseBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("thumbnailDatabase-"));
+    ~ThumbnailDatabaseBackend();
 
     /**
      * Initialize the database schema to the current version,
      * carry out upgrades if necessary.
      * Shall only be called from the thread that called open().
      */
-    bool initSchema(SchemaUpdater* updater);
-
-    /**
-     * Notify all listeners of the changeset
-     */
-    void recordChangeset(const ImageChangeset& changeset);
-    void recordChangeset(const ImageTagChangeset& changeset);
-    void recordChangeset(const CollectionImageChangeset& changeset);
-    void recordChangeset(const AlbumChangeset& changeset);
-    void recordChangeset(const TagChangeset& changeset);
-    void recordChangeset(const AlbumRootChangeset& changeset);
-    void recordChangeset(const SearchChangeset& changeset);
+    bool initSchema(ThumbnailSchemaUpdater* const updater);    
 
 private:
-
-    Q_DECLARE_PRIVATE(DatabaseBackend)
+    
+    Q_DECLARE_PRIVATE(ThumbnailDatabaseBackend)
 };
 
 } // namespace Digikam
 
-#endif // DATABASEBACKEND_H
+#endif // THUMBNAIL_DATABASE_BACKEND_H

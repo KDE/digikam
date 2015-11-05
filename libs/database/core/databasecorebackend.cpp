@@ -44,7 +44,6 @@
 
 #include "digikam_debug.h"
 #include "dbactiontype.h"
-#include "thumbnailschemaupdater.h"
 
 namespace Digikam
 {
@@ -121,7 +120,7 @@ void DatabaseThreadData::closeDatabase()
     }
 
     // Destroy object
-    database = QSqlDatabase();
+    database         = QSqlDatabase();
 
     valid            = 0;
     transactionCount = 0;
@@ -363,17 +362,17 @@ bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
 void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery& query) const
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Failure executing query:\n"
-             << query.executedQuery()
-             << "\nError messages:" << query.lastError().driverText() << query.lastError().databaseText()
-             << query.lastError().number() << query.lastError().type()
-             << "\nBound values: " << query.boundValues().values();
+                                  << query.executedQuery()
+                                  << "\nError messages:" << query.lastError().driverText() << query.lastError().databaseText()
+                                  << query.lastError().number() << query.lastError().type()
+                                  << "\nBound values: " << query.boundValues().values();
 }
 
 void DatabaseCoreBackendPrivate::debugOutputFailedTransaction(const QSqlError& error) const
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Failure executing transaction. Error messages:\n"
-             << error.driverText() << error.databaseText()
-             << error.number() << error.type();
+                                  << error.driverText() << error.databaseText()
+                                  << error.number() << error.type();
 }
 
 void DatabaseCoreBackendPrivate::transactionFinished()
@@ -657,7 +656,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
         return DatabaseCoreBackend::SQLError;
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
 
     bool wrapInTransaction = (action.mode == QLatin1String("transaction"));
 
@@ -701,7 +700,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
     }
 
 /*
-    if (returnResult==DatabaseCoreBackend::NoErrors && wrapInTransaction && !db.commit())
+    if (returnResult == DatabaseCoreBackend::NoErrors && wrapInTransaction && !db.commit())
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "Error while committing changes of previous DBAction.";
     }
@@ -721,7 +720,7 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, c
 
     QSqlDatabase db = d->databaseForThread();
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
+//    qCDebug(DIGIKAM_DATABASE_LOG) << "Executing DBAction ["<<  action.name  <<"]";
 
     QSqlQuery result;
 
@@ -739,7 +738,8 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, c
         if (result.lastError().isValid() && result.lastError().number())
         {
             qCDebug(DIGIKAM_DATABASE_LOG) << "Error while executing DBAction [" <<  action.name
-                     << "] Statement [" << actionElement.statement << "] Errornr. [" << result.lastError() << "]";
+                                          << "] Statement [" << actionElement.statement 
+                                          << "] Errornr. [" << result.lastError() << "]";
             break;
         }
     }
@@ -776,7 +776,7 @@ bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
 
         if (!database.isOpen())
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Error while opening the database. Trying again.";
+            //qCDebug(DIGIKAM_DATABASE_LOG) << "Error while opening the database. Trying again.";
 
             if (connectionErrorHandling(retries++))
             {
@@ -848,7 +848,7 @@ QList<QVariant> DatabaseCoreBackend::readToList(SqlQuery& query)
         }
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Setting result value list ["<< list <<"]";
+//    qCDebug(DIGIKAM_DATABASE_LOG) << "Setting result value list ["<< list <<"]";
 
     return list;
 }
@@ -985,7 +985,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QVariant& boun
 {
     SqlQuery query = prepareQuery(sql);
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
+//    qCDebug(DIGIKAM_DATABASE_LOG) << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
 
     execQuery(query, boundValue1);
     return query;
@@ -1027,7 +1027,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql)
 {
     SqlQuery query = prepareQuery(sql);
 
-    qCDebug(DIGIKAM_DATABASE_LOG)<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
+//    qCDebug(DIGIKAM_DATABASE_LOG)<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
 
     exec(query);
     return query;
@@ -1089,7 +1089,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
     if (!bindingMap.isEmpty())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG)<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
+//        qCDebug(DIGIKAM_DATABASE_LOG) << "Prepare statement [" << preparedString << "] with binding map [" << bindingMap << "]";
 
         QRegExp identifierRegExp(QLatin1String(":[A-Za-z0-9]+"));
         int pos = 0;
@@ -1203,7 +1203,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
             else
             {
 
-                qCDebug(DIGIKAM_DATABASE_LOG) << "Bind key ["<< namedPlaceholder << "] to value [" << bindingMap[namedPlaceholder] << "]";
+//                qCDebug(DIGIKAM_DATABASE_LOG) << "Bind key ["<< namedPlaceholder << "] to value [" << bindingMap[namedPlaceholder] << "]";
 
                 valuesToBind.append(placeHolderValue);
                 replaceStr = QLatin1Char('?');
@@ -1214,7 +1214,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
         }
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Prepared statement [" << preparedString << "] values [" << valuesToBind << "]";
+//    qCDebug(DIGIKAM_DATABASE_LOG) << "Prepared statement [" << preparedString << "] values [" << valuesToBind << "]";
 
     SqlQuery query = prepareQuery(preparedString);
 
@@ -1389,7 +1389,7 @@ bool DatabaseCoreBackend::exec(SqlQuery& query)
 
     forever
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Trying to query ["<<query.lastQuery()<<"] values ["<< query.boundValues() <<"]";
+//        qCDebug(DIGIKAM_DATABASE_LOG) << "Trying to query [" << query.lastQuery() << "] values [" << query.boundValues() << "]";
 
         if (query.exec())
         {
@@ -1476,7 +1476,7 @@ SqlQuery DatabaseCoreBackend::copyQuery(const SqlQuery& old)
 {
     SqlQuery query = getQuery();
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Last query was ["<<old.lastQuery()<<"]";
+//    qCDebug(DIGIKAM_DATABASE_LOG) << "Last query was [" << old.lastQuery() << "]";
 
     query.prepare(old.lastQuery());
     query.setForwardOnly(old.isForwardOnly());
@@ -1486,7 +1486,7 @@ SqlQuery DatabaseCoreBackend::copyQuery(const SqlQuery& old)
 
     foreach(const QVariant& value, boundValues)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Bind value to query ["<<value<<"]";
+//        qCDebug(DIGIKAM_DATABASE_LOG) << "Bind value to query ["<<value<<"]";
 
         query.addBindValue(value);
     }
@@ -1639,29 +1639,6 @@ int DatabaseCoreBackend::maximumBoundValues() const
     {
         return 65535; // MySQL
     }
-}
-
-bool DatabaseCoreBackend::initSchema(ThumbnailSchemaUpdater* const updater)
-{
-    Q_D(DatabaseCoreBackend);
-
-    if (d->status == OpenSchemaChecked)
-    {
-        return true;
-    }
-
-    if (d->status == Unavailable)
-    {
-        return false;
-    }
-
-    if (updater->update())
-    {
-        d->status = OpenSchemaChecked;
-        return true;
-    }
-
-    return false;
 }
 
 }  // namespace Digikam

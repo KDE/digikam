@@ -36,7 +36,6 @@
 
 // Local includes
 
-#include "databasecorebackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 
@@ -53,10 +52,10 @@ public:
     {
     }
 
-    DatabaseCoreBackend* db;
+    ThumbnailDatabaseBackend* db;
 };
 
-ThumbnailDB::ThumbnailDB(DatabaseCoreBackend* const backend)
+ThumbnailDB::ThumbnailDB(ThumbnailDatabaseBackend* const backend)
     : d(new Private)
 {
     d->db = backend;

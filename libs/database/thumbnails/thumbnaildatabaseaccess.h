@@ -7,6 +7,7 @@
  * Description : Thumbnail database access wrapper.
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,10 +34,10 @@
 namespace Digikam
 {
 
-class DatabaseCoreBackend;
 class InitializationObserver;
 class ThumbnailDB;
 class ThumbnailDatabaseAccessStaticPriv;
+class ThumbnailDatabaseBackend;
 
 class DIGIKAM_EXPORT ThumbnailDatabaseAccess
 {
@@ -49,8 +50,8 @@ public:
     ThumbnailDatabaseAccess();
     ~ThumbnailDatabaseAccess();
 
-    ThumbnailDB*         db()      const;
-    DatabaseCoreBackend* backend() const;
+    ThumbnailDB*              db()      const;
+    ThumbnailDatabaseBackend* backend() const;
 
     QString lastError();
 

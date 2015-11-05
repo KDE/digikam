@@ -7,6 +7,7 @@
  * Description : Database access wrapper.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databasecorebackend.h"
+#include "thumbnaildatabasebackend.h"
 #include "thumbnaildb.h"
 #include "thumbnailschemaupdater.h"
 
@@ -57,13 +58,13 @@ public:
     {
     };
 
-    DatabaseCoreBackend* backend;
-    ThumbnailDB*         db;
-    DatabaseParameters   parameters;
-    DatabaseLocking      lock;
-    QString              lastError;
+    ThumbnailDatabaseBackend* backend;
+    ThumbnailDB*              db;
+    DatabaseParameters        parameters;
+    DatabaseLocking           lock;
+    QString                   lastError;
 
-    bool                 initializing;
+    bool                      initializing;
 };
 
 class ThumbnailDatabaseAccessMutexLocker : public QMutexLocker
@@ -125,7 +126,7 @@ ThumbnailDB* ThumbnailDatabaseAccess::db() const
     return d->db;
 }
 
-DatabaseCoreBackend* ThumbnailDatabaseAccess::backend() const
+ThumbnailDatabaseBackend* ThumbnailDatabaseAccess::backend() const
 {
     return d->backend;
 }
@@ -187,7 +188,7 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseCoreBackend(QLatin1String("thumbnailDatabase-"), &d->lock);
+        d->backend = new ThumbnailDatabaseBackend(&d->lock);
         d->db      = new ThumbnailDB(d->backend);
     }
 }

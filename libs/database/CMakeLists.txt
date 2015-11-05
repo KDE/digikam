@@ -20,6 +20,7 @@ set(libdatabasecore_SRCS
     core/dbactiontype.cpp
     core/tagregion.cpp
 
+    thumbnails/thumbnaildatabasebackend.cpp
     thumbnails/thumbnaildatabaseaccess.cpp
     thumbnails/thumbnaildb.cpp
     thumbnails/thumbnailschemaupdater.cpp

@@ -47,7 +47,6 @@ namespace Digikam
 class DatabaseConfig;
 class DatabaseCoreBackendPrivate;
 class DatabaseErrorHandler;
-class ThumbnailSchemaUpdater;
 
 class DIGIKAM_EXPORT DatabaseLocking
 {
@@ -465,15 +464,6 @@ public:
             LastInsertId
     */
 
-public:
-
-    /**
-     * Initialize the database schema to the current version,
-     * carry out upgrades if necessary.
-     * Shall only be called from the thread that called open().
-     */
-    bool initSchema(ThumbnailSchemaUpdater* updater);    
-    
 protected:
 
     DatabaseCoreBackendPrivate* const d_ptr;

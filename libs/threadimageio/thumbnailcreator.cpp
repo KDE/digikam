@@ -49,7 +49,6 @@
 #include "drawdecoder.h"
 #include "rawfiles.h"
 #include "digikam_debug.h"
-#include "databasebackend.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "iccmanager.h"
@@ -61,6 +60,7 @@
 #include "tagregion.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
+#include "thumbnaildatabasebackend.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
