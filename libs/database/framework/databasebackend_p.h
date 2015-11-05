@@ -39,7 +39,7 @@ class DatabaseBackendPrivate : public DatabaseCoreBackendPrivate
 {
 public:
 
-    explicit DatabaseBackendPrivate(DatabaseBackend* backend)
+    explicit DatabaseBackendPrivate(DatabaseBackend* const backend)
         : DatabaseCoreBackendPrivate(backend),
           imageChangesetContainer(this),
           imageTagChangesetContainer(this),
@@ -52,7 +52,11 @@ public:
         watch = 0;
     }
 
-    DatabaseWatch*       watch;
+public:
+
+    DatabaseWatch* watch;
+
+public:
 
     void sendToWatch(const ImageChangeset changeset)
     {
@@ -114,9 +118,13 @@ public:
             changesets.clear();
         }
 
+    public:
+
         QList<T>                      changesets;
         DatabaseBackendPrivate* const d;
     };
+
+public:
 
     ChangesetContainer<ImageChangeset>           imageChangesetContainer;
     ChangesetContainer<ImageTagChangeset>        imageTagChangesetContainer;
@@ -125,6 +133,8 @@ public:
     ChangesetContainer<TagChangeset>             tagChangesetContainer;
     ChangesetContainer<AlbumRootChangeset>       albumRootChangesetContainer;
     ChangesetContainer<SearchChangeset>          searchChangesetContainer;
+
+public:
 
     void transactionFinished()
     {
