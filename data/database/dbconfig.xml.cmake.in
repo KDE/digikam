@@ -9,7 +9,6 @@
  * Description : Core Database statements
  *
  * Copyright (C) 2009 by Holger Foerster <hamsi2k at freenet dot de>
- * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,9 +33,7 @@
     -->
     <version>${DBCORECONFIG_XML_VERSION}</version>
 
-    <!-- -------------------------------------------------------------------------------------------------------------------- -->
-    <!-- Sqlite Database statements -->
-
+    <!-- Sqlite DB statements -->
     <database name="QSQLITE">
         <hostName>TestHost</hostName>
         <databaseName>DatabaseName</databaseName>
@@ -62,7 +59,7 @@
                 DROP TRIGGER privcheck_trigger;
             </statement>
             </dbaction>
-
+                        
             <dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
                 CREATE TABLE PrivCheck
                 (
@@ -75,18 +72,18 @@
             <dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
                 ALTER TABLE PrivCheck ADD COLUMN addedColumn;
             </statement>
-            </dbaction>
-
+            </dbaction>            
+            
             <dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
                 DROP TABLE PrivCheck;
             </statement>
             </dbaction>
-
+            
             <dbaction name="CheckPriv_Cleanup"><statement mode="plain">
                 DROP TABLE IF EXISTS PrivCheck;
             </statement>
             </dbaction>
-
+        
             <dbaction name="CreateDB" mode="transaction"><statement mode="plain">CREATE TABLE AlbumRoots
                             (id INTEGER PRIMARY KEY,
                             label TEXT,
@@ -334,7 +331,7 @@
                     A.pid = NEW.id AND B.id = NEW.pid;
                 END;</statement>
             </dbaction>
-
+            
             <dbaction name="getItemURLsInAlbumByItemName">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name COLLATE NOCASE;</statement>
             </dbaction>
@@ -359,13 +356,13 @@
             </dbaction>
 
             <dbaction name="changeImageInformation" mode="transaction">
-                <statement mode="query">INSERT OR IGNORE INTO ImageInformation ( imageid, :fieldList ) VALUES ( :id, :valueList );</statement>
-                <statement mode="query">UPDATE ImageInformation SET :fieldValueList WHERE imageid=:id;</statement>
+            <statement mode="query">INSERT OR IGNORE INTO ImageInformation ( imageid, :fieldList ) VALUES ( :id, :valueList );</statement>
+            <statement mode="query">UPDATE ImageInformation SET :fieldValueList WHERE imageid=:id;</statement>
             </dbaction>
 
             <dbaction name="changeImageHistory" mode="transaction">
-                <statement mode="query">INSERT OR IGNORE INTO ImageHistory ( imageid, :fieldList ) VALUES ( :id, :valueList );</statement>
-                <statement mode="query">UPDATE ImageHistory SET :fieldValueList WHERE imageid=:id;</statement>
+            <statement mode="query">INSERT OR IGNORE INTO ImageHistory ( imageid, :fieldList ) VALUES ( :id, :valueList );</statement>
+            <statement mode="query">UPDATE ImageHistory SET :fieldValueList WHERE imageid=:id;</statement>
             </dbaction>
 
             <dbaction name="InsertTag">
@@ -383,35 +380,35 @@
             </dbaction>
 
             <dbaction name="deleteAlbumID">
-                <statement mode="query">DELETE FROM Albums WHERE Albums.id=:albumId;</statement>
+            <statement mode="query">DELETE FROM Albums WHERE Albums.id=:albumId;</statement>
             </dbaction>
 
             <dbaction name="GetItemURLsInTagRecursive">
-                <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
-                                        FROM Images JOIN Albums ON Albums.id=Images.album
-                                        WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagID2)  );
-                </statement>
+            <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
+                            FROM Images JOIN Albums ON Albums.id=Images.album
+                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagID2)  );
+            </statement>
             </dbaction>
 
             <dbaction name="GetItemURLsInTag">
-                <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
-                                        FROM Images JOIN Albums ON Albums.id=Images.album
-                                        WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID);
-                </statement>
+            <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
+                            FROM Images JOIN Albums ON Albums.id=Images.album
+                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID);
+            </statement>
             </dbaction>
 
             <dbaction name="getItemIDsInTagRecursive">
-                 <statement mode="query">SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id
-                                         WHERE Images.status=1 AND
-                                         ( tagid=:tagID
-                                         OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID) );
-                 </statement>
+            <statement mode="query">SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id
+                                WHERE Images.status=1 AND
+                                ( tagid=:tagID
+                                OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID) );
+            </statement>
             </dbaction>
 
             <dbaction name="getItemIDsInTag">
-                 <statement mode="query">SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id
-                                         WHERE Images.status=1 AND tagid=:tagID;
-                 </statement>
+            <statement mode="query">SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id
+                                WHERE Images.status=1 AND tagid=:tagID;
+            </statement>
             </dbaction>
 
             <dbaction name="listTagRecursive">
@@ -484,11 +481,11 @@
                 <!-- Thumbnails Trigger DB -->
                 <dbaction name="CreateThumbnailsDBTrigger" mode="transaction">
                     <statement mode="plain">CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails
-                                            BEGIN
-                                            DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id;
-                                            DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id;
-                                            DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = OLD.id;
-                                            END;
+                                BEGIN
+                                DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id;
+                                DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id;
+                                DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = OLD.id;
+                                END;
                     </statement>
                 </dbaction>
 
@@ -550,14 +547,13 @@
                     END;
                 </statement>
             </dbaction>
-
+                
             <!-- Migration Statements -->
             <!-- Migrate_Cleanup_DB now it's done by the program -->
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_AlbumRoots"><statement mode="query">
                 INSERT INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
             </statement></dbaction>
@@ -565,7 +561,6 @@
             <dbaction name="Migrate_Read_Albums"><statement mode="query">
                 SELECT id, albumRoot, relativePath, date, caption, collection, icon FROM Albums;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_Albums"><statement mode="query">
                 INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, :icon);
             </statement></dbaction>
@@ -573,7 +568,6 @@
             <dbaction name="Migrate_Read_Images"><statement mode="query">
                 SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_Images"><statement mode="query">
                 INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
             </statement></dbaction>
@@ -581,7 +575,6 @@
             <dbaction name="Migrate_Read_ImageHaarMatrix"><statement mode="query">
                 SELECT imageid, modificationDate, uniqueHash, matrix FROM ImageHaarMatrix;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageHaarMatrix"><statement mode="query">
                 INSERT INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
             </statement></dbaction>
@@ -589,7 +582,6 @@
             <dbaction name="Migrate_Read_ImageInformation"><statement mode="query">
                 SELECT imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel FROM ImageInformation;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageInformation"><statement mode="query">
                 INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
             </statement></dbaction>
@@ -597,7 +589,6 @@
             <dbaction name="Migrate_Read_ImageMetadata"><statement mode="query">
                 SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageMetadata"><statement mode="query">
                 INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
@@ -605,7 +596,6 @@
             <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
                 SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec FROM VideoMetadata;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_VideoMetadata"><statement mode="query">
                 INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
             </statement></dbaction>
@@ -613,7 +603,6 @@
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
                 SELECT imageid, tagid, property, value FROM ImageTagProperties;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
                 INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
             </statement></dbaction>
@@ -621,7 +610,6 @@
             <dbaction name="Migrate_Read_TagProperties"><statement mode="query">
                 SELECT tagid, property, value FROM TagProperties;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_TagProperties"><statement mode="query">
                 INSERT INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
             </statement></dbaction>
@@ -629,7 +617,6 @@
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
                 SELECT  imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description FROM ImagePositions;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImagePositions"><statement mode="query">
                 INSERT INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
             </statement></dbaction>
@@ -637,7 +624,6 @@
             <dbaction name="Migrate_Read_ImageComments"><statement mode="query">
                 SELECT  id, imageid, type, language, author, date, comment FROM ImageComments;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageComments"><statement mode="query">
                 INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
             </statement></dbaction>
@@ -645,7 +631,6 @@
             <dbaction name="Migrate_Read_ImageCopyright"><statement mode="query">
                 SELECT  id, imageid, property, value, extraValue FROM ImageCopyright;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageCopyright"><statement mode="query">
                 INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
             </statement></dbaction>
@@ -653,7 +638,6 @@
             <dbaction name="Migrate_Read_Tags"><statement mode="query">
                 SELECT  id, pid, name, icon, iconkde FROM Tags WHERE id != 0;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_Tags"><statement mode="query">
                 INSERT INTO Tags (id, pid, name, icon, iconkde) VALUES (:id, :pid, :name, :icon, :iconkde);
             </statement></dbaction>
@@ -661,7 +645,6 @@
             <dbaction name="Migrate_Read_ImageTags"><statement mode="query">
                 SELECT  imageid, tagid FROM ImageTags;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageTags"><statement mode="query">
                 INSERT INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
             </statement></dbaction>
@@ -669,7 +652,6 @@
             <dbaction name="Migrate_Read_ImageProperties"><statement mode="query">
                 SELECT  imageid, property, value FROM ImageProperties;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageProperties"><statement mode="query">
                 INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
             </statement></dbaction>
@@ -677,7 +659,6 @@
             <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
                 SELECT  imageid, uuid, history FROM ImageHistory;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
                 INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
             </statement></dbaction>
@@ -685,7 +666,6 @@
             <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
                 SELECT  subject, object, type FROM ImageRelations;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
                 INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
             </statement></dbaction>
@@ -693,7 +673,6 @@
             <dbaction name="Migrate_Read_Searches"><statement mode="query">
                 SELECT  id, type, name, query FROM Searches;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_Searches"><statement mode="query">
                 INSERT INTO Searches (id, type, name, query) VALUES (:id, :type, :name, :query);
             </statement></dbaction>
@@ -701,7 +680,6 @@
             <dbaction name="Migrate_Read_DownloadHistory"><statement mode="query">
                 SELECT id, identifier, filename, filesize, filedate FROM DownloadHistory;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_DownloadHistory"><statement mode="query">
                 INSERT INTO DownloadHistory (id, identifier, filename, filesize, filedate) VALUES (:id, :identifier, :filename, :filesize, :filedate);
             </statement></dbaction>
@@ -709,7 +687,6 @@
             <dbaction name="Migrate_Read_Settings"><statement mode="query">
                 SELECT keyword, value FROM Settings;
             </statement></dbaction>
-
             <dbaction name="Migrate_Write_Settings"><statement mode="query">
                 INSERT INTO Settings (keyword, value) VALUES (:keyword, :value);
             </statement></dbaction>
@@ -727,7 +704,6 @@
             </statement></dbaction>
 
             <!-- Migration from DB Version 5 (0.10 - 1.4) to Version 6 (1.5-) -->
-
             <dbaction name="UpdateSchemaFromV5ToV6" mode="transaction">
                 <statement mode="plain">CREATE TABLE ImageHistory
                             (imageid INTEGER PRIMARY KEY,
@@ -840,10 +816,8 @@
         </dbactions>
     </database>
 
-    <!-- -------------------------------------------------------------------------------------------------------------------- -->
-
-    <!-- MySQL Database statements -->
-
+    
+    <!-- MySQL DB statements -->
     <database name="QMYSQL">
         <hostName></hostName>
         <databaseName>digikam</databaseName>
@@ -866,7 +840,7 @@
                 DROP TRIGGER privcheck_trigger;
             </statement>
             </dbaction>
-
+                        
             <dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
                 CREATE TABLE IF NOT EXISTS PrivCheck
                 (
@@ -879,18 +853,18 @@
             <dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
                 ALTER TABLE PrivCheck DROP COLUMN name;
             </statement>
-            </dbaction>
-
+            </dbaction>            
+            
             <dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
                 DROP TABLE PrivCheck;
             </statement>
             </dbaction>
-
+            
             <dbaction name="CheckPriv_Cleanup"><statement mode="plain">
                 DROP TABLE IF EXISTS PrivCheck;
             </statement>
             </dbaction>
-
+        
             <dbaction name="CreateDB" mode="transaction">
             <statement mode="plain">  CREATE TABLE IF NOT EXISTS AlbumRoots
             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -993,12 +967,13 @@
                             UNIQUE(imageid, property(110), value(111), extraValue(111)));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Tags
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            pid INTEGER,
+                pid INTEGER,
                             name LONGTEXT CHARACTER SET utf8 NOT NULL,
                             icon INTEGER,
                             iconkde LONGTEXT CHARACTER SET utf8,
                             lft INT NOT NULL,
-                            rgt INT NOT NULL);</statement>
+                rgt INT NOT NULL
+                            );</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
                             (imageid INTEGER NOT NULL,
                             tagid INTEGER NOT NULL,
@@ -1026,22 +1001,22 @@
                             UNIQUE(keyword(255)));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
                             (imageid INTEGER PRIMARY KEY,
-                            uuid VARCHAR(128),
-                            history LONGTEXT CHARACTER SET utf8);</statement>
+                             uuid VARCHAR(128),
+                             history LONGTEXT CHARACTER SET utf8);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
                             (subject INTEGER,
-                            object INTEGER,
-                            type INTEGER,
-                            UNIQUE(subject, object, type));</statement>
+                             object INTEGER,
+                             type INTEGER,
+                             UNIQUE(subject, object, type));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS TagProperties
                             (tagid INTEGER,
-                            property TEXT CHARACTER SET utf8,
-                            value LONGTEXT CHARACTER SET utf8);</statement>
+                             property TEXT CHARACTER SET utf8,
+                             value LONGTEXT CHARACTER SET utf8);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
                             (imageid INTEGER,
-                            tagid INTEGER,
-                            property TEXT CHARACTER SET utf8,
-                            value LONGTEXT CHARACTER SET utf8);</statement>
+                             tagid INTEGER,
+                             property TEXT CHARACTER SET utf8,
+                             value LONGTEXT CHARACTER SET utf8);</statement>
             <statement mode="plain">
                             CREATE OR REPLACE VIEW TagsTree 
                             AS
@@ -1123,11 +1098,11 @@
             </statement>
             <statement mode="plain">DROP TRIGGER IF EXISTS delete_tag;</statement>
             <statement mode="plain">CREATE TRIGGER delete_tag AFTER DELETE ON Tags
-                    FOR EACH ROW BEGIN
-                        DELETE FROM ImageTags          WHERE tagid=OLD.id;
-                        DELETE FROM TagProperties      WHERE tagid=OLD.id;
-                        DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
-                    END;
+            FOR EACH ROW BEGIN
+                DELETE FROM ImageTags          WHERE tagid=OLD.id;
+                DELETE FROM TagProperties      WHERE tagid=OLD.id;
+                DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
+            END;
             </statement>
             <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
 
@@ -1145,7 +1120,7 @@
             </statement>
             <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
             </dbaction>
-
+                       
             <dbaction name="checkIfDatabaseExists">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name;</statement>
             </dbaction>
@@ -1174,11 +1149,11 @@
             </dbaction>
 
             <dbaction name="changeImageInformation">
-                <statement mode="query">INSERT INTO ImageInformation ( imageid, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
+            <statement mode="query">INSERT INTO ImageInformation ( imageid, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
             </dbaction>
 
             <dbaction name="changeImageHistory">
-                <statement mode="query">INSERT INTO ImageHistory( imageid, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
+            <statement mode="query">INSERT INTO ImageHistory( imageid, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
             </dbaction>
 
             <dbaction name="InsertTag" mode="transaction">
@@ -1192,7 +1167,7 @@
             </dbaction>
 
             <dbaction name="DeleteTag" mode="transaction">
-                <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
+            <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
             <statement mode="query">SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1
                         FROM Tags
                         WHERE id = :tagID;</statement>
@@ -1378,7 +1353,7 @@ ORDER BY inf.rating DESC, img.name ASC
                             UPDATE value = GREATEST(VALUES(value), 2)
                     </statement>
             </dbaction>
-
+            
             <!-- Thumbnails Indexes DB -->
             <dbaction name="CreateThumbnailsDBIndices" mode="transaction">
                 <statement mode="plain">
@@ -1479,7 +1454,7 @@ ORDER BY inf.rating DESC, img.name ASC
                     END;
                 </statement>
             </dbaction>
-
+            
             <!-- Migration Statements -->
             <!-- Migrate_Cleanup_DB now it's done by the program -->
 
