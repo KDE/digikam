@@ -35,7 +35,6 @@
 #include "digikam_export.h"
 #include "dcategorizedsortfilterproxymodel.h"
 #include "statesavingobject.h"
-#include "digikam_export.h"
 #include "imagealbummodel.h"
 #include "thumbnailloadthread.h"
 #include "imagefiltermodel.h"

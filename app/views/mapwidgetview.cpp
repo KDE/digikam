@@ -83,7 +83,7 @@ public:
     }
 
     DVBox*                      vbox;
-    GeoIface::MapWidget*         mapWidget;
+    GeoIface::MapWidget*        mapWidget;
     ImageFilterModel*           imageFilterModel;
     ImageAlbumModel*            imageModel;
     ImportFilterModel*          importFilterModel;
