@@ -22,20 +22,10 @@
  *
  * ============================================================ */
 
-#include "thumbnaildatabasebackend.h"
-#include "databasecorebackend_p.h"
-
-// Qt includes
-
-#include <QApplication>
-#include <QCoreApplication>
-#include <QHash>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QThread>
-
 // Local includes
 
+#include "thumbnaildatabasebackend.h"
+#include "databasecorebackend_p.h"
 #include "thumbnailschemaupdater.h"
 
 namespace Digikam
