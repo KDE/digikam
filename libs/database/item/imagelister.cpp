@@ -455,7 +455,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1
     QList<QVariant> boundValues;
     boundValues << lat1 << lat2 << lon1 << lon2;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Listing area" << lat1 << lat2 << lon1 << lon2;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Listing area" << lat1 << lat2 << lon1 << lon2;
 
     DatabaseAccess access;
 
@@ -473,7 +473,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1
                               &values);
 
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Results:" << values.size() / 14;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Results:" << values.size() / 14;
 
     QSet<int> albumRoots = albumRootsToList();
     double    lat, lon;
@@ -551,7 +551,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
         sqlQuery += QString::fromUtf8(" );");
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Search query:\n" << sqlQuery << "\n" << boundValues;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Search query:\n" << sqlQuery << "\n" << boundValues;
 
     bool executionSuccess;
     {
@@ -570,7 +570,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
         return;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Search result:" << values.size();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Search result:" << values.size();
 
     QSet<int> albumRoots = albumRootsToList();
     int       width, height;
@@ -664,7 +664,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
     sqlQuery += builder.buildQuery(xml, &boundValues, &hooks);
     sqlQuery += QString::fromUtf8(" );");
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Search query:\n" << sqlQuery << "\n" << boundValues;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Search query:\n" << sqlQuery << "\n" << boundValues;
 
     bool executionSuccess;
     {
@@ -683,7 +683,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
         return;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Search result:" << values.size();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Search result:" << values.size();
 
     QSet<int> albumRoots = albumRootsToList();
 

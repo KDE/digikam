@@ -509,7 +509,7 @@ void ScanController::scheduleCollectionScanRelaxed(const QString& path)
 void ScanController::slotRelaxedScanning()
 {
     d->relaxedTimer->stop();
-    qCDebug(DIGIKAM_GENERAL_LOG()) << "Starting scan!";
+    qCDebug(DIGIKAM_DATABASE_LOG()) << "Starting scan!";
 
     QMutexLocker lock(&d->mutex);
     d->condVar.wakeAll();
@@ -1039,7 +1039,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const QS
 
     if (location.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath
+        qCWarning(DIGIKAM_DATABASE_LOG) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath
                    << "does not point to an available location.";
         return;
     }
@@ -1143,7 +1143,7 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
         if (changes & DatabaseFields::ModificationDate || changes & DatabaseFields::Orientation)
         {
             ImageInfo info(imageId);
-            //qCDebug(DIGIKAM_GENERAL_LOG) << imageId << info.filePath();
+            //qCDebug(DIGIKAM_DATABASE_LOG) << imageId << info.filePath();
             notifyFileChanged(info.filePath());
         }
     }

@@ -138,13 +138,6 @@ public:
     bool open(const DatabaseParameters& parameters);
 
     /**
-     * Initialize the database schema to the current version,
-     * carry out upgrades if necessary.
-     * Shall only be called from the thread that called open().
-     */
-    bool initSchema(ThumbnailSchemaUpdater* updater);
-
-    /**
      * Close the database connection.
      * Shall only be called from the thread that called open().
      */
@@ -472,6 +465,15 @@ public:
             LastInsertId
     */
 
+public:
+
+    /**
+     * Initialize the database schema to the current version,
+     * carry out upgrades if necessary.
+     * Shall only be called from the thread that called open().
+     */
+    bool initSchema(ThumbnailSchemaUpdater* updater);    
+    
 protected:
 
     DatabaseCoreBackendPrivate* const d_ptr;

@@ -324,7 +324,7 @@ ImageInfo ImageInfo::fromLocalFile(const QString& path)
 
     if (location.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "No location could be retrieved for" << path;
+        qCWarning(DIGIKAM_DATABASE_LOG) << "No location could be retrieved for" << path;
         return ImageInfo();
     }
 
@@ -354,7 +354,7 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
         if (!shortInfo.id)
         {
             info.m_data = 0;
-            qCWarning(DIGIKAM_GENERAL_LOG) << "No itemShortInfo could be retrieved from the database for image" << name;
+            qCWarning(DIGIKAM_DATABASE_LOG) << "No itemShortInfo could be retrieved from the database for image" << name;
             return info;
         }
 
@@ -828,7 +828,7 @@ void ImageInfo::setVisible(bool isVisible)
 
     if (m_data->albumId == 0)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Attempt to make a Removed item visible with ImageInfo::setVisible";
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Attempt to make a Removed item visible with ImageInfo::setVisible";
         return;
     }
 

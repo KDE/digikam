@@ -80,7 +80,7 @@ void SidecarFinder::process(const QList<QUrl>& files)
             if (DMetadata::hasSidecar(url.toLocalFile()))
             {
                 localFiles << DMetadata::sidecarUrl(url);
-                qCDebug(DIGIKAM_GENERAL_LOG)   << "Detected a sidecar" << localFiles.last();
+                qCDebug(DIGIKAM_DATABASE_LOG)   << "Detected a sidecar" << localFiles.last();
             }
 
             localFiles << url;
@@ -231,7 +231,7 @@ void DIO::Private::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
         urls << info.fileUrl();
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting files:" << urls;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Deleting files:" << urls;
 
     emit jobToProcess(useTrash ? Trash : Delete, urls, QUrl());
 }
@@ -295,7 +295,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
     {
         if (src.size() != 1)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid operation: renaming is not 1:1";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Invalid operation: renaming is not 1:1";
             return;
         }
 
@@ -310,7 +310,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
     }
     else // operation == Del
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "SRCS " << src;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "SRCS " << src;
         jobThread = IOJobsManager::instance()->startDelete(src, false);
     }
 

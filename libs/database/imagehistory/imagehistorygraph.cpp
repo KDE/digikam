@@ -123,7 +123,7 @@ bool HistoryVertexProperties::operator==(const HistoryImageId& other) const
     {
         if (ImageScanner::sameReferredImage(id, other))
         {
-            //qCDebug(DIGIKAM_GENERAL_LOG) << id << "is the same as" << other;
+            //qCDebug(DIGIKAM_DATABASE_LOG) << id << "is the same as" << other;
             return true;
         }
     }
@@ -231,13 +231,13 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const HistoryImageId& imag
 
     Vertex v;
     QList<ImageInfo> infos;
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Adding vertex" << imageId.m_uuid.left(6) << imageId.fileName();
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "Adding vertex" << imageId.m_uuid.left(6) << imageId.fileName();
 
     // find by UUID
 
     // find by HistoryImageId (most notably, by UUID)
     v = findVertexByProperties(imageId);
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Found by properties:" << (v.isNull() ? -1 : int(v));
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "Found by properties:" << (v.isNull() ? -1 : int(v));
 
     if (v.isNull())
     {
@@ -245,7 +245,7 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const HistoryImageId& imag
         foreach(qlonglong id, ImageScanner::resolveHistoryImageId(imageId))
         {
             ImageInfo info(id);
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "Found info id:" << info.id();
+            //qCDebug(DIGIKAM_DATABASE_LOG) << "Found info id:" << info.id();
             infos << info;
 
             if (v.isNull())
@@ -256,7 +256,7 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const HistoryImageId& imag
     }
 
     applyProperties(v, infos, QList<HistoryImageId>() << imageId);
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Returning vertex" << v;
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "Returning vertex" << v;
     return v;
 }
 
@@ -274,7 +274,7 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
     // Simply find by image id
     v = findVertexByProperties(info);
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Find by id" << info.id() << ": found" << v.isNull();
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "Find by id" << info.id() << ": found" << v.isNull();
     if (v.isNull())
     {
         // Find by contents
@@ -285,12 +285,12 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
             v = findVertexByProperties(uuid);
         }
 
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "Find by uuid" << uuid << ": found" << v.isNull();
+        //qCDebug(DIGIKAM_DATABASE_LOG) << "Find by uuid" << uuid << ": found" << v.isNull();
         if (v.isNull())
         {
             id = info.historyImageId();
             v  = findVertexByProperties(id);
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "Find by h-i-m" << ": found" << v.isNull();
+            //qCDebug(DIGIKAM_DATABASE_LOG) << "Find by h-i-m" << ": found" << v.isNull();
         }
 
         // Need to add new vertex. Do this through the method which will resolve the history id
@@ -301,7 +301,7 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
     }
 
     applyProperties(v, QList<ImageInfo>() << info, QList<HistoryImageId>() << id);
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Returning vertex" << v << properties(v).infos.size();
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "Returning vertex" << v << properties(v).infos.size();
     return v;
 }
 
@@ -587,7 +587,7 @@ void ImageHistoryGraphData::addHistory(const DImageHistory& history, qlonglong e
                 }
                 else
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Broken history: Same file referred by different entries. Refusing to add a loop.";
+                    qCWarning(DIGIKAM_DATABASE_LOG) << "Broken history: Same file referred by different entries. Refusing to add a loop.";
                 }
             }
 
@@ -621,12 +621,12 @@ void ImageHistoryGraph::addRelations(const QList<QPair<qlonglong, qlonglong> >& 
 
         if (pair.first == pair.second)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Broken relations cloud: Refusing to add a loop.";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Broken relations cloud: Refusing to add a loop.";
         }
 
         v1 = d->addVertex(pair.first);
         v2 = d->addVertex(pair.second);
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "Adding" << v1 << "->" << v2;
+        //qCDebug(DIGIKAM_DATABASE_LOG) << "Adding" << v1 << "->" << v2;
         d->addEdge(v1, v2);
     }
 }
@@ -651,7 +651,7 @@ void ImageHistoryGraph::reduceEdges()
         if (!d->properties(e).actions.isEmpty())
         {
             // TODO: conflict resolution
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Conflicting history information: Edge removed by transitiveReduction is not empty.";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Conflicting history information: Edge removed by transitiveReduction is not empty.";
         }
     }
 

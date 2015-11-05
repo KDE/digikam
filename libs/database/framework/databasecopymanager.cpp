@@ -176,7 +176,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
 bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, 
                                     DatabaseBackend& toDBbackend, const QString& toActionName)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to copy contents from DB with ActionName: [" << fromActionName
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Trying to copy contents from DB with ActionName: [" << fromActionName
                                  << "] to DB with ActionName [" << toActionName << "]";
 
     QMap<QString, QVariant> bindingMap;
@@ -193,7 +193,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Driver doesn't support query size. We try to go to the last row and back to the current.";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Driver doesn't support query size. We try to go to the last row and back to the current.";
         result.last();
         /*
          * Now get the current row. If this is not possible, a value lower than 0 will be returned.
@@ -209,7 +209,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
         }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Result size: ["<< resultSize << "]";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Result size: ["<< resultSize << "]";
 
     /*
      * If the sql query is forward only - perform the query again.
@@ -226,7 +226,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
 
     for (int i=0; i<columnCount; ++i)
     {
-        //            qCDebug(DIGIKAM_GENERAL_LOG) << "Column: ["<< result.record().fieldName(i) << "]";
+        //            qCDebug(DIGIKAM_DATABASE_LOG) << "Column: ["<< result.record().fieldName(i) << "]";
         columnNames.append(result.record().fieldName(i));
     }
 
@@ -234,7 +234,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
 
     while (result.next())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Query isOnValidRow [" << result.isValid() << "] isActive [" << result.isActive()
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Query isOnValidRow [" << result.isValid() << "] isActive [" << result.isActive()
                                      << "] result size: [" << result.size() << "]";
 
         if (m_isStopProcessing == true)
@@ -251,7 +251,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
 
         foreach(QString columnName, columnNames) // krazy:exclude=foreach
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Column: ["<< columnName << "] value ["<<result.value(i)<<"]";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Column: ["<< columnName << "] value ["<<result.value(i)<<"]";
             tempBindingMap.insert(columnName.insert(0, QLatin1Char(':')), result.value(i));
             ++i;
         }
@@ -264,7 +264,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
             toDBbackend.lastSQLError().isValid()              &&
             toDBbackend.lastSQLError().number() != 0)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error while converting table data. Details: " << toDBbackend.lastSQLError();
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Error while converting table data. Details: " << toDBbackend.lastSQLError();
             QString errorMsg = i18n("Error while converting the database.\n Details: %1", toDBbackend.lastSQLError().databaseText());
             emit finished(DatabaseCopyManager::failed, errorMsg);
             return false;

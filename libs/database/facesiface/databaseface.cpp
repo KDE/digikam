@@ -208,7 +208,7 @@ DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>&
     int tagId         = extraValues.at(2).toInt();
     QString attribute = extraValues.at(1).toString();
     QString value     = extraValues.at(0).toString();
-    //qCDebug(DIGIKAM_GENERAL_LOG) << tagId << attribute << value;
+    //qCDebug(DIGIKAM_DATABASE_LOG) << tagId << attribute << value;
 
     return DatabaseFace(attribute,
                         imageId, tagId,

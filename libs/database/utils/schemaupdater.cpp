@@ -131,7 +131,7 @@ const QString SchemaUpdater::getLastErrorMessage()
 
 bool SchemaUpdater::update()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "SchemaUpdater update";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "SchemaUpdater update";
     bool success = startUpdates();
 
     // cancelled?
@@ -204,7 +204,7 @@ bool SchemaUpdater::startUpdates()
 
         if (!checker.checkPrivileges(insufficientRights))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Insufficient rights on databse.";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Insufficient rights on databse.";
             QString errorMsg = i18n(
                                 "You have insufficient privileges on the database.\n"
                                 "Following privileges are not assigned to you:\n %1"
@@ -231,13 +231,13 @@ bool SchemaUpdater::startUpdates()
     {
         // Find out schema version of db file
         readVersionSettings();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Have a database structure version " << d->currentVersion.toInt();
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Have a database structure version " << d->currentVersion.toInt();
 
         // We absolutely require the DBVersion setting
         if (!d->currentVersion.isValid())
         {
             // Something is damaged. Give up.
-            qCDebug(DIGIKAM_GENERAL_LOG) << "DBVersion not available! Giving up schema upgrading.";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "DBVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                                    "The database is not valid: "
                                    "the \"DBVersion\" setting does not exist. "
@@ -289,7 +289,7 @@ bool SchemaUpdater::startUpdates()
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "No database file available";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "No database file available";
         // Legacy handling?
 
         // first test if there are older files that need to be upgraded.
@@ -373,7 +373,7 @@ bool SchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, const QSt
             // error or cancelled?
             if (!d->observer->continueQuery())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Schema update cancelled by user";
+                qCDebug(DIGIKAM_DATABASE_LOG) << "Schema update cancelled by user";
             }
             else if (!d->setError)
             {
@@ -385,14 +385,14 @@ bool SchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, const QSt
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Success updating to v5";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Success updating to v5";
     d->backend->commitTransaction();
     return true;
 }
 
 bool SchemaUpdater::makeUpdates()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "makeUpdates " << d->currentVersion.toInt() << " to " << schemaVersion();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "makeUpdates " << d->currentVersion.toInt() << " to " << schemaVersion();
 
     if (d->currentVersion.toInt() < schemaVersion())
     {
@@ -419,7 +419,7 @@ bool SchemaUpdater::makeUpdates()
                 return false;
             }
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Success updating v4 to v6";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Success updating v4 to v6";
 
             // Still set these even in >= 1.4 because 0.10 - 1.3 may want to apply the updates if not set
             setLegacySettingEntries();
@@ -445,7 +445,7 @@ bool SchemaUpdater::makeUpdates()
                 return false;
             }
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Success updating to v" << d->currentVersion;
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Success updating to v" << d->currentVersion;
         }
 
         // add future updates here
@@ -603,7 +603,7 @@ bool SchemaUpdater::performUpdateToVersion(const QString& actionName, int newVer
 
     if (!d->backend->execDBAction(updateAction))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Schema update to V" << newVersion << "failed!";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Schema update to V" << newVersion << "failed!";
         // resort to default error message, set above
         return false;
     }
@@ -630,7 +630,7 @@ bool SchemaUpdater::updateToVersion(int targetVersion)
 {
     if (d->currentVersion != targetVersion-1)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "updateToVersion performs only incremental updates. Called to update from"
+        qCDebug(DIGIKAM_DATABASE_LOG) << "updateToVersion performs only incremental updates. Called to update from"
                                      << d->currentVersion << "to" << targetVersion << ", aborting.";
         return false;
     }
@@ -647,7 +647,7 @@ bool SchemaUpdater::updateToVersion(int targetVersion)
         // NOTE: If you add a new update step, please check the d->currentVersion at the bottom of updateV4toV7
             // If the update already comes with createTables, createTriggers, we dont need the extra update here
         default:
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported update to version" << targetVersion;
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Unsupported update to version" << targetVersion;
             return false;
     }
 }
@@ -756,7 +756,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
 
 bool SchemaUpdater::updateV4toV7()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "updateV4toV7";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "updateV4toV7";
 
     if (d->observer)
     {
@@ -787,7 +787,7 @@ bool SchemaUpdater::updateV4toV7()
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved tables";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Moved tables";
     // --- Drop some triggers and indices ---
 
     // Don't check for errors here. The "IF EXISTS" clauses seem not supported in SQLite
@@ -810,7 +810,7 @@ bool SchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Prepared table creation"));
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Dropped triggers";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Dropped triggers";
 
     // --- Create new tables ---
 
@@ -837,7 +837,7 @@ bool SchemaUpdater::updateV4toV7()
 
     if (albumLibraryPath.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Album library path from config file is empty. Aborting update.";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Album library path from config file is empty. Aborting update.";
         QString errorMsg    = i18n("No album library path has been found in the configuration file. "
                                    "Giving up the schema updating process. "
                                    "Please try with an empty database, or repair your configuration.");
@@ -857,7 +857,7 @@ bool SchemaUpdater::updateV4toV7()
 
     if (location.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Failure to create a collection location. Aborting update.";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Failure to create a collection location. Aborting update.";
         QString errorMsg    = i18n("There was an error associating your albumLibraryPath (\"%1\") "
                                    "with a storage volume of your system. "
                                    "This problem may indicate that there is a problem with your installation. "
@@ -888,7 +888,7 @@ bool SchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Configured one album root"));
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Inserted album root";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Inserted album root";
 
     // --- With the album root, populate albums ---
 
@@ -914,7 +914,7 @@ bool SchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported albums"));
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Populated albums";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Populated albums";
 
     // --- Add images ---
 
@@ -950,7 +950,7 @@ bool SchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported images information"));
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Populated Images";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Populated Images";
 
     // --- Port searches ---
 
@@ -1001,7 +1001,7 @@ bool SchemaUpdater::updateV4toV7()
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Created triggers";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Created triggers";
 
     // --- Populate name filters ---
 
@@ -1025,7 +1025,7 @@ bool SchemaUpdater::updateV4toV7()
     configAudioFilter.subtract(defaultAudioFilter.toSet());
 
     d->albumDB->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Set initial filter settings with user settings" << configImageFilter;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Set initial filter settings with user settings" << configImageFilter;
 
     if (d->observer)
     {
@@ -1151,7 +1151,7 @@ bool SchemaUpdater::updateV4toV7()
 
     d->currentRequiredVersion = 5;
     d->currentVersion = 7;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Returning true from updating to 5";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Returning true from updating to 5";
     return true;
 }
 

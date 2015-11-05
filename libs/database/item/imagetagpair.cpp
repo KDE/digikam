@@ -86,7 +86,7 @@ ImageTagPairPrivSharedPointer ImageTagPairPriv::createGuarded(qlonglong imageId,
 {
     if (imageId <= 0 || tagId <= 0)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Attempt to create invalid tag pair image id" << imageId << "tag id" << tagId;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Attempt to create invalid tag pair image id" << imageId << "tag id" << tagId;
         return *imageTagPairPrivSharedNull;
     }
 

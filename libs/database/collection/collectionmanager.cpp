@@ -70,7 +70,7 @@ public:
 
     explicit AlbumRootLocation(const AlbumRootInfo& info)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
         m_id         = info.id;
         m_type       = (Type)info.type;
         specificPath = info.specificPath;
@@ -300,9 +300,9 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 {
     QList<SolidVolumeInfo> volumes;
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "listFromType";
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "listFromType";
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "got listFromType";
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "got listFromType";
 
     udisToWatch.clear();
 
@@ -598,7 +598,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
             // bail out if not provided
             if (dirHash.isNull())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "No directory hash specified for the non-unique Label"
+                qCDebug(DIGIKAM_DATABASE_LOG) << "No directory hash specified for the non-unique Label"
                                              << queryItem << "Resorting to returning the first match.";
                 return candidateVolumes.first();
             }
@@ -693,7 +693,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const QUrl& fileUrl, 
 
     if (!volumeMatch)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to detect a storage volume for path " << path << " with Solid";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Failed to detect a storage volume for path " << path << " with Solid";
     }
 
     return volume;
@@ -709,7 +709,7 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
     {
         const QUrl locationPathUrl = QUrl::fromLocalFile(location->albumRootPath());
 
-        //qCDebug(DIGIKAM_GENERAL_LOG) << filePathUrl << locationPathUrl;
+        //qCDebug(DIGIKAM_DATABASE_LOG) << filePathUrl << locationPathUrl;
         // make sure filePathUrl is neither a child nor a parent
         // of an existing collection
         if (!locationPathUrl.isEmpty() &&
@@ -801,7 +801,7 @@ void CollectionManager::setWatchDisabled()
 
 CollectionLocation CollectionManager::addLocation(const QUrl& fileUrl, const QString& label)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "addLocation " << fileUrl;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "addLocation " << fileUrl;
     QString path = fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile();
 
     if (!locationForPath(path).isNull())
@@ -836,15 +836,15 @@ CollectionLocation CollectionManager::addLocation(const QUrl& fileUrl, const QSt
         // Empty volumes indicates that Solid is not working correctly.
         if (volumes.isEmpty())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Solid did not return any storage volumes on your system.";
-            qCDebug(DIGIKAM_GENERAL_LOG) << "This indicates a missing implementation or a problem with your installation";
-            qCDebug(DIGIKAM_GENERAL_LOG) << "On Linux, check that Solid and HAL are working correctly."
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Solid did not return any storage volumes on your system.";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "This indicates a missing implementation or a problem with your installation";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "On Linux, check that Solid and HAL are working correctly."
                                             "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
-            qCDebug(DIGIKAM_GENERAL_LOG) << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
         }
 
         // fall back
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Unable to identify a path with Solid. Adding the location with path only.";
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Unable to identify a path with Solid. Adding the location with path only.";
         ChangingDB changing(d);
         DatabaseAccess().db()->addAlbumRoot(AlbumRoot::VolumeHardWired,
                                             d->volumeIdentifier(path), QLatin1String("/"), label);
@@ -858,7 +858,7 @@ CollectionLocation CollectionManager::addLocation(const QUrl& fileUrl, const QSt
 
 CollectionLocation CollectionManager::addNetworkLocation(const QUrl& fileUrl, const QString& label)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "addLocation " << fileUrl;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "addLocation " << fileUrl;
     QString path = fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile();
 
     if (!locationForPath(path).isNull())
@@ -1677,7 +1677,7 @@ void CollectionManager::updateLocations()
             // Don't touch location->status, do not interfere with "hidden" setting
             location->available = available;
             location->setAbsolutePath(absolutePath);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "location for " << absolutePath << " is available " << available;
+            qCDebug(DIGIKAM_DATABASE_LOG) << "location for " << absolutePath << " is available " << available;
             // set the status depending on "hidden" and "available"
             location->setStatusFromFlags();
         }

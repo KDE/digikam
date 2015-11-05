@@ -66,7 +66,7 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const QUrl& fileUrl,
     
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromFileUrl : " << url.toDisplayString();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseUrl::fromFileUrl : " << url.toDisplayString();
 
     return url;
 }
@@ -100,7 +100,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
     url.setQuery(q);
     url.setParameters(parameters);
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromAlbumAndName : " << url.toDisplayString();
+    //qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseUrl::fromAlbumAndName : " << url.toDisplayString();
 
     return url;
 }
@@ -111,7 +111,7 @@ DatabaseUrl DatabaseUrl::albumUrl(const DatabaseParameters& parameters)
     url.setScheme(QLatin1String("digikamalbums"));
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::albumUrl : " << url.toDisplayString();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseUrl::albumUrl : " << url.toDisplayString();
     return url;
 }
 
@@ -128,7 +128,7 @@ DatabaseUrl DatabaseUrl::fromTagIds(const QList<int>& tagIds,
 
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromTagIds : " << url.toDisplayString();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseUrl::fromTagIds : " << url.toDisplayString();
     return url;
 }
 
@@ -138,7 +138,7 @@ DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters& parameters)
     url.setScheme(QLatin1String("digikamdates"));
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::dateUrl : " << url.toDisplayString();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseUrl::dateUrl : " << url.toDisplayString();
     return url;
 }
 
@@ -167,7 +167,7 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate& startDate,
     url.setPath(startDate.toString(Qt::ISODate) + QLatin1Char('/') + endDate.toString(Qt::ISODate));
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromDateRange : " << url.toDisplayString();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseUrl::fromDateRange : " << url.toDisplayString();
     return url;
 }
 
@@ -177,7 +177,7 @@ DatabaseUrl DatabaseUrl::mapImagesUrl(const DatabaseParameters& parameters)
     url.setScheme(QLatin1String("digikammapimages"));
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::mapImagesUrl : " << url.toDisplayString();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseUrl::mapImagesUrl : " << url.toDisplayString();
     return url;
 }
 
@@ -197,7 +197,7 @@ DatabaseUrl DatabaseUrl::fromAreaRange(const qreal lat1, const qreal lat2,
 
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromAreaRange : " << url.toDisplayString();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseUrl::fromAreaRange : " << url.toDisplayString();
     return url;
 }
 
@@ -212,7 +212,7 @@ DatabaseUrl DatabaseUrl::searchUrl(int id, const DatabaseParameters& parameters)
     
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::searchUrl : " << url.toDisplayString();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseUrl::searchUrl : " << url.toDisplayString();
     return url;
 }
 

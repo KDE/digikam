@@ -93,7 +93,7 @@ public:
 
         if (version != Version)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported binary version of Haar Blob in database";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Unsupported binary version of Haar Blob in database";
             return;
         }
 
@@ -520,7 +520,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData* const querySig, int
 
 /*
     for (QMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
-        qCDebug(DIGIKAM_GENERAL_LOG) << it.key() << it.value();
+        qCDebug(DIGIKAM_DATABASE_LOG) << it.key() << it.value();
 */
 
     return bestMatches.values();
@@ -554,11 +554,11 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData* const 
     // Debug output
     if (bestMatches.count() > 1)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Duplicates with id and score:";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Duplicates with id and score:";
 
         for (QMultiMap<double, qlonglong>::const_iterator it = bestMatches.constBegin(); it != bestMatches.constEnd(); ++it)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << it.value() << QString::number(it.key() * 100) + QLatin1Char('%');
+            qCDebug(DIGIKAM_DATABASE_LOG) << it.value() << QString::number(it.key() * 100) + QLatin1Char('%');
         }
     }
 

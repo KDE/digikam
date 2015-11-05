@@ -190,7 +190,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!drivers.contains(QLatin1String("QSQLITE")))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt4.");
         return false;
@@ -201,7 +201,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!d->backend)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "No database backend available in checkReadyForUse. "
+        qCWarning(DIGIKAM_DATABASE_LOG) << "No database backend available in checkReadyForUse. "
                    "Did you call setParameters before?";
         return false;
     }

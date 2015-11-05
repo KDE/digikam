@@ -603,7 +603,7 @@ public:
         }
         catch (boost::bad_graph& e)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << e.what();
+            qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
             return QList<Vertex>();
         }
 
@@ -638,7 +638,7 @@ public:
         }
         catch (boost::bad_graph& e)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << e.what();
+            qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
             return Graph();
         }
 
@@ -665,7 +665,7 @@ public:
         }
         catch (boost::bad_graph& e)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << e.what();
+            qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
             return Graph();
         }
 
@@ -1235,7 +1235,7 @@ protected:
             }
             catch (boost::bad_graph& e)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << e.what();
+                qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
             }
         }
 
@@ -1260,7 +1260,7 @@ protected:
             }
             catch (boost::bad_graph& e)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << e.what();
+                qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
             }
         }
 
@@ -1292,7 +1292,7 @@ protected:
             }
             catch (boost::bad_graph& e)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << e.what();
+                qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
             }
         }
 
@@ -1322,7 +1322,7 @@ protected:
             }
             catch (boost::bad_graph& e)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << e.what();
+                qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
             }
         }
 
@@ -1348,7 +1348,7 @@ protected:
             }
             catch (boost::bad_graph& e)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << e.what();
+                qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
             }
         }
 
@@ -1370,7 +1370,7 @@ protected:
             }
             catch (boost::bad_graph& e)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << e.what();
+                qCDebug(DIGIKAM_DATABASE_LOG) << e.what();
             }
         }
 

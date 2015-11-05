@@ -152,7 +152,7 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
         }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << sql;
+    qCDebug(DIGIKAM_DATABASE_LOG) << sql;
 
     return sql;
 }
@@ -262,7 +262,7 @@ public:
 
             if (values.size() != 2)
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Relation Interval requires a list of two values";
                 return;
             }
 
@@ -293,7 +293,7 @@ public:
 
             if (values.size() != 2)
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Relation Interval requires a list of two values";
                 return;
             }
 
@@ -333,7 +333,7 @@ public:
 
             if (!date.isValid())
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Date" << reader.value() << "is invalid";
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Date" << reader.value() << "is invalid";
                 return;
             }
 
@@ -387,7 +387,7 @@ public:
 
             if (values.size() != 2)
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Relation Interval requires a list of two values";
                 return;
             }
 
@@ -518,7 +518,7 @@ public:
 
             if (values.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "List for OneOf is empty";
+                qCDebug(DIGIKAM_DATABASE_LOG) << "List for OneOf is empty";
                 return;
             }
 
@@ -624,7 +624,7 @@ public:
 
             if (list.size() != 2)
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation 'Near' requires a list of two values";
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Relation 'Near' requires a list of two values";
                 return;
             }
 
@@ -726,7 +726,7 @@ public:
             // Search type, currently only "rectangle"
             if (type != QLatin1String("rectangle"))
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation 'Inside' supports no other type than 'rectangle'";
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Relation 'Inside' supports no other type than 'rectangle'";
                 return;
             }
 
@@ -736,7 +736,7 @@ public:
 
             if (list.size() != 4)
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation 'Inside' requires a list of four values";
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Relation 'Inside' requires a list of four values";
                 return;
             }
 
@@ -798,7 +798,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (ids.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Relation 'InTree', name 'albumid': No values given";
+                qCDebug(DIGIKAM_DATABASE_LOG) << "Relation 'InTree', name 'albumid': No values given";
                 return false;
             }
 
@@ -868,7 +868,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (ids.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Relation 'InTree', name 'tagid': No values given";
+                qCDebug(DIGIKAM_DATABASE_LOG) << "Relation 'InTree', name 'tagid': No values given";
                 return false;
             }
 
@@ -1069,7 +1069,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (values.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "List for OneOf is empty";
+                qCDebug(DIGIKAM_DATABASE_LOG) << "List for OneOf is empty";
             }
 
             QList<double> ratioValues;
@@ -1123,7 +1123,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
         if (values.size() != 2)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Relation Interval requires a list of two values";
         }
 
         sql += QString::fromUtf8(" ( CAST(VideoMetadata.audioBitRate AS INTEGER)");
@@ -1144,7 +1144,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (values.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "List for OneOf is empty";
+                qCDebug(DIGIKAM_DATABASE_LOG) << "List for OneOf is empty";
             }
 
             foreach(const QString& value, values)
@@ -1194,7 +1194,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
         if (values.size() != 2)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Relation Interval requires a list of two values";
         }
 
         sql += QString::fromUtf8(" ( CAST(VideoMetadata.duration AS INTEGER)");
@@ -1214,7 +1214,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
         if (values.size() != 2)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Relation Interval requires a list of two values";
         }
 
         sql += QString::fromUtf8(" ( CAST(VideoMetadata.frameRate AS REAL)");
@@ -1235,7 +1235,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (values.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "List for OneOf is empty";
+                qCDebug(DIGIKAM_DATABASE_LOG) << "List for OneOf is empty";
             }
 
             foreach(const QString& value, values)
@@ -1405,7 +1405,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (values.size() < 1 || values.size() > 2)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "The imagetagproperty field requires one value (property) or two values (property, value).";
+                qCDebug(DIGIKAM_DATABASE_LOG) << "The imagetagproperty field requires one value (property) or two values (property, value).";
                 return false;
             }
 
@@ -1486,11 +1486,11 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == QLatin1String("similarity"))
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Search field \"similarity\" is not supported by ImageQueryBuilder";
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Search field \"similarity\" is not supported by ImageQueryBuilder";
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Search field" << name << "not known by this version of ImageQueryBuilder";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Search field" << name << "not known by this version of ImageQueryBuilder";
         return false;
     }
 
@@ -1859,7 +1859,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* b
         }
         else
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown rule type: " << key << " passed to kioslave";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Unknown rule type: " << key << " passed to kioslave";
             continue;
         }
 
@@ -1897,7 +1897,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* b
         }
         else
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown op type: " << op << " passed to dbjob";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Unknown op type: " << op << " passed to dbjob";
             continue;
         }
 
@@ -2088,7 +2088,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
         }
         case (KEYWORD):
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "KEYWORD Detected which is not possible";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "KEYWORD Detected which is not possible";
             break;
         }
         case(RATING):

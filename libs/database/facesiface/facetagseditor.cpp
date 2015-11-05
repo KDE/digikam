@@ -90,7 +90,7 @@ QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageid, DatabaseFac
             foreach(const QString& regionString, pair.values(attribute))
             {
                 TagRegion region(regionString);
-                //qCDebug(DIGIKAM_GENERAL_LOG) << "rect found as "<< region << "for attribute" << attribute << "tag" << pair.tagId();
+                //qCDebug(DIGIKAM_DATABASE_LOG) << "rect found as "<< region << "for attribute" << attribute << "tag" << pair.tagId();
 
                 if (!region.isValid())
                 {
@@ -112,7 +112,7 @@ QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, Databas
 
     foreach(const ImageTagPair& pair, ImageTagPair::availablePairs(imageid))
     {
-        //qCDebug(DIGIKAM_GENERAL_LOG) << pair.tagId() << pair.properties();
+        //qCDebug(DIGIKAM_DATABASE_LOG) << pair.tagId() << pair.properties();
         if (!FaceTags::isPerson(pair.tagId()))
         {
             continue;
@@ -204,7 +204,7 @@ DatabaseFace FaceTagsEditor::changeSuggestedName(const DatabaseFace& previousEnt
 {
     if (previousEntry.isConfirmedName())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Refusing to reset a confirmed name to an unconfirmed name";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Refusing to reset a confirmed name to an unconfirmed name";
         return previousEntry;
     }
 
@@ -229,7 +229,7 @@ DatabaseFace FaceTagsEditor::confirmName(const DatabaseFace& face, int tagId, co
 
     if (FaceTags::isTheUnknownPerson(newEntry.tagId()))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Refusing to confirm unknownPerson tag on face";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Refusing to confirm unknownPerson tag on face";
         return face;
     }
 
@@ -256,7 +256,7 @@ DatabaseFace FaceTagsEditor::confirmName(const DatabaseFace& face, int tagId, co
 
 DatabaseFace FaceTagsEditor::add(qlonglong imageId, int tagId, const TagRegion& region, bool trainFace)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Adding face with rectangle  " << region.toRect () << " to database";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Adding face with rectangle  " << region.toRect () << " to database";
     DatabaseFace newEntry(DatabaseFace::ConfirmedName, imageId, tagId, region);
     add(newEntry, trainFace);
     return newEntry;

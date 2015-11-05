@@ -3437,7 +3437,7 @@ QMap<QString, int> AlbumDB::getFormatStatistics(DatabaseItem::Category category)
     }
 
     queryString.append(QString::fromUtf8(" GROUP BY II.format;"));
-    qCDebug(DIGIKAM_GENERAL_LOG) << queryString;
+    qCDebug(DIGIKAM_DATABASE_LOG) << queryString;
 
     SqlQuery query = d->db->prepareQuery(queryString);
 
@@ -4613,7 +4613,7 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
 
     if (values.isEmpty())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << " src album ID " << srcAlbumID << " does not exist";
+        qCWarning(DIGIKAM_DATABASE_LOG) << " src album ID " << srcAlbumID << " does not exist";
         return false;
     }
 

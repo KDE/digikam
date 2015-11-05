@@ -21,6 +21,7 @@
 #include "digikam_debug.h"
 
 Q_LOGGING_CATEGORY(DIGIKAM_GENERAL_LOG,        "digikam.general")
+Q_LOGGING_CATEGORY(DIGIKAM_DATABASE_LOG,       "digikam.database")
 Q_LOGGING_CATEGORY(DIGIKAM_WIDGETS_LOG,        "digikam.widgets")
 Q_LOGGING_CATEGORY(DIGIKAM_DBJOB_LOG,          "digikam.dbjob")
 Q_LOGGING_CATEGORY(DIGIKAM_IOJOB_LOG,          "digikam.iojob")
