@@ -44,6 +44,7 @@ public:
 
     /// Creates a deep copy of the QByteArray
     cv::Mat toMat() const;
+
     /// Creates a deep copy of the cv::Mat
     void setMat(const cv::Mat& mat);
 

@@ -162,7 +162,7 @@ DatabaseParameters DatabaseFaceAccess::parameters() const
 
 void DatabaseFaceAccess::initDatabaseErrorHandler(DatabaseFaceAccessData* const d, DatabaseErrorHandler* const errorhandler)
 {
-    //DatabaseErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
+    //DatabaseErrorHandler* const errorhandler = new DatabaseGUIErrorHandler(d->parameters);
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
 

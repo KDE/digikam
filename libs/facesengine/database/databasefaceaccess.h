@@ -41,16 +41,13 @@ namespace FacesEngine
 class TrainingDB;
 class DatabaseFaceAccessData;
 
+/** This class is written in analogy to DatabaseAccess
+ *  (some features stripped off).
+ *  For documentation, see databaseaccess.h
+ */
 class DIGIKAM_DATABASE_EXPORT DatabaseFaceAccess
 {
 public:
-
-    static DatabaseFaceAccessData* create();
-    static void destroy(DatabaseFaceAccessData* const);
-
-    /** This class is written in analogy to DatabaseFaceAccess
-     *  (some features stripped off).
-     *  For documentation, see databaseaccess.h */
 
     DatabaseFaceAccess(DatabaseFaceAccessData* const);
     ~DatabaseFaceAccess();
@@ -60,15 +57,19 @@ public:
     QString              lastError()  const;
     DatabaseParameters   parameters() const;
 
-
-    static void initDatabaseErrorHandler(DatabaseFaceAccessData* const d, DatabaseErrorHandler* const errorhandler);
-    static void setParameters(DatabaseFaceAccessData* const d, const DatabaseParameters& parameters);
-    static bool checkReadyForUse(DatabaseFaceAccessData* const d, InitializationObserver* const observer = 0);
-
     /**
       * Set the "last error" message. This method is not for public use.
       */
     void setLastError(const QString& error);
+
+public:
+
+    static DatabaseFaceAccessData* create();
+    static void destroy(DatabaseFaceAccessData* const);
+
+    static void initDatabaseErrorHandler(DatabaseFaceAccessData* const d, DatabaseErrorHandler* const errorhandler);
+    static void setParameters(DatabaseFaceAccessData* const d, const DatabaseParameters& parameters);
+    static bool checkReadyForUse(DatabaseFaceAccessData* const d, InitializationObserver* const observer = 0);
 
 private:
 
