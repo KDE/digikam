@@ -41,8 +41,8 @@ namespace FacesEngine
 {
 
 LBPHistogramMetadata::LBPHistogramMetadata()
-    : databaseId(0), 
-      identity(0), 
+    : databaseId(0),
+      identity(0),
       storageStatus(Created)
 {
 }

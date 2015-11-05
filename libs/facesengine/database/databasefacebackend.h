@@ -52,7 +52,7 @@ public:
      * carry out upgrades if necessary.
      * Shall only be called from the thread that called open().
      */
-    bool initSchema(DatabaseFaceSchemaUpdater* const updater);  
+    bool initSchema(DatabaseFaceSchemaUpdater* const updater);
 
 private:
 
