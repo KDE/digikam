@@ -36,7 +36,6 @@
 // Local includes
 
 #include "schemaupdater.h"
-#include "thumbnailschemaupdater.h"
 #include "databasewatch.h"
 
 namespace Digikam
