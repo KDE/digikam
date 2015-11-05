@@ -31,18 +31,8 @@
 namespace Digikam
 {
 
-class ThumbnailDatabaseBackendPrivate : public DatabaseCoreBackendPrivate
-{
-public:
-
-    explicit ThumbnailDatabaseBackendPrivate(ThumbnailDatabaseBackend* const backend)
-        : DatabaseCoreBackendPrivate(backend)
-    {
-    }
-};
-
 ThumbnailDatabaseBackend::ThumbnailDatabaseBackend(DatabaseLocking* const locking, const QString& backendName)
-    : DatabaseCoreBackend(backendName, locking, *new ThumbnailDatabaseBackendPrivate(this))
+    : DatabaseCoreBackend(backendName, locking, *new DatabaseCoreBackendPrivate(this))
 {
 }
 
@@ -52,7 +42,7 @@ ThumbnailDatabaseBackend::~ThumbnailDatabaseBackend()
 
 bool ThumbnailDatabaseBackend::initSchema(ThumbnailSchemaUpdater* const updater)
 {
-    Q_D(ThumbnailDatabaseBackend);
+    Q_D(DatabaseCoreBackend);
 
     if (d->status == OpenSchemaChecked)
     {

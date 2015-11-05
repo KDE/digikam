@@ -31,18 +31,8 @@
 namespace FacesEngine
 {
 
-class DatabaseFaceBackendPrivate : public DatabaseCoreBackendPrivate
-{
-public:
-
-    explicit DatabaseFaceBackendPrivate(DatabaseFaceBackend* const backend)
-        : DatabaseCoreBackendPrivate(backend)
-    {
-    }
-};
-
 DatabaseFaceBackend::DatabaseFaceBackend(DatabaseLocking* const locking, const QString& backendName)
-    : DatabaseCoreBackend(backendName, locking, *new DatabaseFaceBackendPrivate(this))
+    : DatabaseCoreBackend(backendName, locking, *new DatabaseCoreBackendPrivate(this))
 {
 }
 
@@ -52,7 +42,7 @@ DatabaseFaceBackend::~DatabaseFaceBackend()
 
 bool DatabaseFaceBackend::initSchema(DatabaseFaceSchemaUpdater* const updater)
 {
-    Q_D(DatabaseFaceBackend);
+    Q_D(DatabaseCoreBackend);
 
     if (d->status == OpenSchemaChecked)
     {

@@ -34,7 +34,6 @@ namespace Digikam
 {
 
 class ThumbnailSchemaUpdater;
-class ThumbnailDatabaseBackendPrivate;
 
 class DIGIKAM_DATABASE_EXPORT ThumbnailDatabaseBackend : public DatabaseCoreBackend
 {
@@ -54,7 +53,7 @@ public:
 
 private:
     
-    Q_DECLARE_PRIVATE(ThumbnailDatabaseBackend)
+    Q_DECLARE_PRIVATE(DatabaseCoreBackend)
 };
 
 } // namespace Digikam

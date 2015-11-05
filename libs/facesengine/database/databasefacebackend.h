@@ -56,7 +56,7 @@ public:
 
 private:
 
-    Q_DECLARE_PRIVATE(DatabaseFaceBackend)
+    Q_DECLARE_PRIVATE(DatabaseCoreBackend)
 };
 
 } // namespace FacesEngine
