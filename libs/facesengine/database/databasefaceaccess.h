@@ -30,6 +30,7 @@
 #include "databasefacebackend.h"
 #include "databaseparameters.h"
 #include "databaseerrorhandler.h"
+#include "collectionscannerobserver.h"
 #include "digikam_export.h"
 
 using namespace Digikam;
@@ -37,7 +38,6 @@ using namespace Digikam;
 namespace FacesEngine
 {
 
-class DatabaseFaceInitObserver;
 class TrainingDB;
 class DatabaseFaceAccessData;
 
@@ -63,7 +63,7 @@ public:
 
     static void initDatabaseErrorHandler(DatabaseFaceAccessData* const d, DatabaseErrorHandler* const errorhandler);
     static void setParameters(DatabaseFaceAccessData* const d, const DatabaseParameters& parameters);
-    static bool checkReadyForUse(DatabaseFaceAccessData* const d, DatabaseFaceInitObserver* const observer = 0);
+    static bool checkReadyForUse(DatabaseFaceAccessData* const d, InitializationObserver* const observer = 0);
 
     /**
       * Set the "last error" message. This method is not for public use.
