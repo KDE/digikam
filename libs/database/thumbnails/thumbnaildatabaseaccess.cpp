@@ -47,26 +47,32 @@ class ThumbnailDatabaseAccessStaticPriv
 public:
 
     ThumbnailDatabaseAccessStaticPriv()
-        : backend(0), db(0),
+        : backend(0),
+          db(0),
           initializing(false)
-    {}
-    ~ThumbnailDatabaseAccessStaticPriv() {};
+    {
+    }
+
+    ~ThumbnailDatabaseAccessStaticPriv()
+    {
+    };
 
     DatabaseCoreBackend* backend;
-    ThumbnailDB*        db;
-    DatabaseParameters  parameters;
-    DatabaseLocking     lock;
-    QString             lastError;
+    ThumbnailDB*         db;
+    DatabaseParameters   parameters;
+    DatabaseLocking      lock;
+    QString              lastError;
 
-    bool                initializing;
+    bool                 initializing;
 };
 
 class ThumbnailDatabaseAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    explicit ThumbnailDatabaseAccessMutexLocker(ThumbnailDatabaseAccessStaticPriv* d)
-        : QMutexLocker(&d->lock.mutex), d(d)
+    explicit ThumbnailDatabaseAccessMutexLocker(ThumbnailDatabaseAccessStaticPriv* const d)
+        : QMutexLocker(&d->lock.mutex),
+          d(d)
     {
         d->lock.lockCount++;
     }
@@ -75,6 +81,8 @@ public:
     {
         d->lock.lockCount--;
     }
+
+public:
 
     ThumbnailDatabaseAccessStaticPriv* const d;
 };
@@ -180,7 +188,7 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
         delete d->db;
         delete d->backend;
         d->backend = new DatabaseCoreBackend(QLatin1String("thumbnailDatabase-"), &d->lock);
-        d->db = new ThumbnailDB(d->backend);
+        d->db      = new ThumbnailDB(d->backend);
     }
 }
 
@@ -202,7 +210,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     if (!d->backend)
     {
         qCWarning(DIGIKAM_DATABASE_LOG) << "No database backend available in checkReadyForUse. "
-                   "Did you call setParameters before?";
+                                           "Did you call setParameters before?";
         return false;
     }
 

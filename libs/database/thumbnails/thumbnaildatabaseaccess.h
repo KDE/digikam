@@ -49,9 +49,9 @@ public:
     ThumbnailDatabaseAccess();
     ~ThumbnailDatabaseAccess();
 
-    ThumbnailDB* db() const;
-
+    ThumbnailDB*         db()      const;
     DatabaseCoreBackend* backend() const;
+
     QString lastError();
 
     /**
