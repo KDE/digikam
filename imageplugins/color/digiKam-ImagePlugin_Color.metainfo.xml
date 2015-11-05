@@ -71,5 +71,6 @@
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
+  <developer_name xml:lang="zh-CN">digiKam 项目</developer_name>
   <url type="homepage">http://www.digikam.org/</url>
 </component>
