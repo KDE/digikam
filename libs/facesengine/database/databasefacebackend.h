@@ -44,7 +44,7 @@ class DIGIKAM_DATABASE_EXPORT DatabaseFaceBackend : public DatabaseCoreBackend
 
 public:
 
-    explicit DatabaseFaceBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("database-"));
+    explicit DatabaseFaceBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("faceDatabase-"));
     ~DatabaseFaceBackend();
 
     /**
