@@ -38,9 +38,9 @@
 
 #include <QImage>
 
-// local includes
+// Local includes
 
-#include "databasefacecontainers.h"
+#include "opencvmatdata.h"
 
 namespace FacesEngine
 {

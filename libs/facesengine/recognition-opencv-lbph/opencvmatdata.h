@@ -3,8 +3,11 @@
  * This file is a part of digiKam
  *
  * Date        : 2013-05-26
+ * Description : Facilitates cv::Mat storage in Face DB
+ *               (where Qt interface requires Qt types).
  *
  * Copyright (C) 2013 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEFACECONTAINERS_H
-#define DATABASEFACECONTAINERS_H
+#ifndef _OPENCV_MAT_DATA_H_
+#define _OPENCV_MAT_DATA_H_
 
 // OpenCV includes
 
@@ -36,8 +39,6 @@ namespace FacesEngine
 class OpenCVMatData
 {
 public:
-
-    /// Facilitates cv::Mat storage in DB (where Qt interface requires Qt types)
 
     OpenCVMatData();
     OpenCVMatData(const cv::Mat& mat);
@@ -60,4 +61,4 @@ public:
 
 } // namespace FacesEngine
 
-#endif // DATABASEFACECONTAINERS_H
+#endif // _OPENCV_MAT_DATA_H_

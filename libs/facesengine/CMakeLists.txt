@@ -35,6 +35,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          recognition-opencv-lbph/lbphfacemodel.cpp
                          recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
+                         recognition-opencv-lbph/opencvmatdata.cpp
                          recognition-opencv-lbph/facerec_borrowed.cpp
                          facedetector.cpp
                          identity.cpp
@@ -47,7 +48,6 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 )
 
 set(facesengine_database_LIB_SRCS database/trainingdb.cpp
-                                  database/databasefacecontainers.cpp
                                   database/databasefaceoperationgroup.cpp
                                   database/databasefaceschemaupdater.cpp
                                   database/databasefacebackend.cpp

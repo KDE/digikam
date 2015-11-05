@@ -38,9 +38,9 @@
 
 #include <QList>
 
-// local includes
+// Local includes
 
-#include "databasefacecontainers.h"
+#include "opencvmatdata.h"
 #include "facerec_borrowed.h"
 
 namespace FacesEngine
