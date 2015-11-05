@@ -26,6 +26,7 @@
   <name xml:lang="sv">Digikam</name>
   <name xml:lang="uk">digiKam</name>
   <name xml:lang="x-test">xxdigiKamxx</name>
+  <name xml:lang="zh-CN">digiKam</name>
   <description>
     <p>
       digiKam is an advanced digital photo management application, which makes importing and organizing digital photos
@@ -73,6 +74,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
+    <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Organization of photos in albums and sub-albums (with tags and comments support)</li>
       <li xml:lang="bs">Organizacija fotografija u albume i podalbume (sa podrškom za označavanje i komentarisanje)</li>
@@ -306,6 +308,7 @@
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
+  <developer_name xml:lang="zh-CN">digiKam 项目</developer_name>
   <project_group>KDE</project_group>
   <provides>
     <binary>digikam</binary>
