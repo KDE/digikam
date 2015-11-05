@@ -316,7 +316,7 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
     if (databaseType.isEmpty())
     {
         // Empty 1.3 config: migration from older versions
-        KConfigGroup group  = config->group("Album Settings");
+        KConfigGroup group = config->group("Album Settings");
 
         QString databaseFilePath;
 
@@ -335,19 +335,18 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
             databaseFilePath = suggestedPath;
         }
 
-
         if (!databaseFilePath.isEmpty())
         {
             *this = parametersForSQLite(databaseFileSQLite(databaseFilePath));
         }
 
-        // Be aware that schema updating from  <= 0.9 requires reading the "Album Path", so do not remove it here
+        // Be aware that schema updating from version <= 0.9 requires reading the "Album Path", so do not remove it here
     }
 }
 
 void DatabaseParameters::removeLegacyConfig(KSharedConfig::Ptr config)
 {
-    KConfigGroup group  = config->group("Album Settings");
+    KConfigGroup group = config->group("Album Settings");
 
     if (group.hasKey(configDatabaseFilePathEntry))
     {
