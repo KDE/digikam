@@ -53,30 +53,35 @@ public:
         thumbBarDock        = 0;
         importIconView      = 0;
         importPreviewView   = 0;
-#ifdef HAVE_VIDEOPLAYER
-        mediaPlayerView     = 0;
-#endif // HAVE_VIDEOPLAYER
-        syncingSelection    = false;
+
 #ifdef HAVE_MARBLE
         mapWidgetView       = 0;
 #endif // HAVE_MARBLE
-    }
 
-    bool                syncingSelection;
+#ifdef HAVE_VIDEOPLAYER
+        mediaPlayerView     = 0;
+#endif // HAVE_VIDEOPLAYER
+
+        syncingSelection    = false;
+    }
 
     QMainWindow*        dockArea;
     QSplitter*          splitter;
 
-    ImportIconView*     importIconView;
     ImportThumbnailBar* thumbBar;
-    ImportPreviewView*  importPreviewView;
     ThumbBarDock*       thumbBarDock;
-#ifdef HAVE_VIDEOPLAYER
-    MediaPlayerView*    mediaPlayerView; // Reuse of albumgui mediaplayer view.
-#endif // HAVE_VIDEOPLAYER
+    ImportIconView*     importIconView;
+    ImportPreviewView*  importPreviewView;
+
 #ifdef HAVE_MARBLE
     MapWidgetView*      mapWidgetView;
 #endif // HAVE_MARBLE
+
+#ifdef HAVE_VIDEOPLAYER
+    MediaPlayerView*    mediaPlayerView; // Reuse of albumgui mediaplayer view.
+#endif // HAVE_VIDEOPLAYER
+
+    bool                syncingSelection;
 };
 
 ImportStackedView::ImportStackedView(QWidget* const parent)
@@ -94,6 +99,14 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName(QLatin1String("import_thumbbar"));
 
+#ifdef HAVE_MARBLE
+    // TODO refactor MapWidgetView not to require the models on startup?
+    d->mapWidgetView     = new MapWidgetView(d->importIconView->getSelectionModel(),
+                                             d->importIconView->importFilterModel(), this,
+                                             MapWidgetView::ApplicationImportUI);
+    d->mapWidgetView->setObjectName(QLatin1String("import_mapwidgetview"));
+#endif // HAVE_MARBLE
+
 #ifdef HAVE_VIDEOPLAYER
     d->mediaPlayerView   = new MediaPlayerView(this);
 #endif //HAVE_VIDEOPLAYER
@@ -101,19 +114,14 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode,  d->importPreviewView);
 
+#ifdef HAVE_MARBLE
+    insertWidget(MapWidgetMode,     d->mapWidgetView);
+#endif // HAVE_MARBLE
+
 #ifdef HAVE_VIDEOPLAYER
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
 #endif //HAVE_VIDEOPLAYER
 
-#ifdef HAVE_MARBLE
-    // TODO refactor MapWidgetView not to require the models on startup?
-    d->mapWidgetView     = new MapWidgetView(d->importIconView->getSelectionModel(),
-                                             d->importIconView->importFilterModel(), this,
-                                             MapWidgetView::ApplicationImportUI);
-    d->mapWidgetView->setObjectName(QLatin1String("import_mapwidgetview"));
-    insertWidget(MapWidgetMode,     d->mapWidgetView);
-#endif // HAVE_MARBLE
-    
     setAttribute(Qt::WA_DeleteOnClose);
 
     readSettings();

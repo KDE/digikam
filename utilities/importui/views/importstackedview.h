@@ -61,13 +61,13 @@ public:
     {
         PreviewCameraMode = 0, // previewing the set of items on the camera
         PreviewImageMode,
-#ifdef HAVE_VIDEOPLAYER
-        MediaPlayerMode,
-        MapWidgetMode
-#else
+#ifdef HAVE_MARBLE
         MapWidgetMode,
         MediaPlayerMode
-#endif //HAVE_VIDEOPLAYER
+#else
+        MediaPlayerMode,
+        MapWidgetMode
+#endif // HAVE_MARBLE
     };
 
 public:
@@ -82,13 +82,13 @@ public:
     ImportIconView*     importIconView()    const;
     ImportPreviewView*  importPreviewView() const;
 
-#ifdef HAVE_VIDEOPLAYER
-    MediaPlayerView*    mediaPlayerView()   const;
-#endif //HAVE_VIDEOPLAYER
-
 #ifdef HAVE_MARBLE
     MapWidgetView*      mapWidgetView()     const;
 #endif // HAVE_MARBLE
+
+#ifdef HAVE_VIDEOPLAYER
+    MediaPlayerView*    mediaPlayerView()   const;
+#endif //HAVE_VIDEOPLAYER
 
     bool isInSingleFileMode()   const;
     bool isInMultipleFileMode() const;
