@@ -46,13 +46,13 @@ class DIGIKAM_EXPORT TagRegion
 {
 
 public:
-    
+
     enum Type
     {
         Invalid,
         Rect
     };
-    
+
 public:
 
     /**
