@@ -107,6 +107,7 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
 
     d->rootAlbumPathRequester = new DFileSelector(widget);
     d->rootAlbumPathRequester->setFileDlgMode(QFileDialog::Directory);
+    d->rootAlbumPathRequester->setFileDlgOptions(QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog);
     d->rootAlbumPathRequester->lineEdit()->setText(picturesPath);
 
     QLabel* const textLabel3 = new QLabel(widget);
@@ -119,6 +120,7 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
 
     d->dbPathRequester = new DFileSelector(widget);
     d->dbPathRequester->setFileDlgMode(QFileDialog::Directory);
+    d->dbPathRequester->setFileDlgOptions(QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog);
     d->dbPathRequester->lineEdit()->setText(picturesPath);
 
     vlayout->addWidget(textLabel1);
