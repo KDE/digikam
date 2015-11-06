@@ -43,16 +43,15 @@
 namespace Digikam
 {
 
+/**
+ * This class encapsulates all parameters needed to establish
+ * a connection to a database (inspired by the API of QT4::Sql).
+ * The values can be read from and written to a QUrl.
+ */
 class DIGIKAM_EXPORT DatabaseParameters
 {
 
 public:
-
-    /**
-      * This class encapsulates all parameters needed to establish
-      * a connection to a database (inspired by the API of QT SQL of Qt4).
-      * The values can be read from and written to a QUrl.
-      */
 
     DatabaseParameters(const QString& type,
                        const QString& databaseName,
@@ -65,6 +64,7 @@ public:
                        const QString& databaseNameThumbnails = QString());
 
     explicit DatabaseParameters(const QUrl& url);
+
     DatabaseParameters();
 
     void insertInUrl(QUrl& url) const;
@@ -98,7 +98,7 @@ public:
     static DatabaseParameters defaultParameters(const QString databaseType);
 
     static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(),
-            const QString& configGroup = QString());
+                                                   const QString& configGroup = QString());
     /**
      * Read and write parameters from config. You can specify the group,
      * or use the default value.
@@ -106,7 +106,7 @@ public:
     void readFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString());
     void writeToConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString()) const;
 
-    QString getDatabaseNameOrDir() const;
+    QString getDatabaseNameOrDir()       const;
     QString getThumbsDatabaseNameOrDir() const;
 
     /**
@@ -119,6 +119,7 @@ public:
 
     static QString databaseFileSQLite(const QString& folderOrFile);
     static QString thumbnailDatabaseFileSQLite(const QString& folderOrFile);
+
     static QString databaseDirectorySQLite(const QString& path);
     static QString thumbnailDatabaseDirectorySQLite(const QString& path);
 

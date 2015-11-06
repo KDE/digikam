@@ -71,24 +71,24 @@ DatabaseParameters::DatabaseParameters()
 {
 }
 
-DatabaseParameters::DatabaseParameters(const QString& type,
-                                       const QString& databaseName,
-                                       const QString& connectOptions,
-                                       const QString& hostName,
-                                       int   port,
-                                       bool  internalServer,
-                                       const QString& userName,
-                                       const QString& password,
-                                       const QString& databaseNameThumbnails)
-    : databaseType(type),
-      databaseName(databaseName),
-      connectOptions(connectOptions),
-      hostName(hostName),
-      port(port),
-      internalServer(internalServer),
-      userName(userName),
-      password(password),
-      databaseNameThumbnails(databaseNameThumbnails)
+DatabaseParameters::DatabaseParameters(const QString& _type,
+                                       const QString& _databaseName,
+                                       const QString& _connectOptions,
+                                       const QString& _hostName,
+                                       int   _port,
+                                       bool  _internalServer,
+                                       const QString& _userName,
+                                       const QString& _password,
+                                       const QString& _databaseNameThumbnails)
+    : databaseType(_type),
+      databaseName(_databaseName),
+      connectOptions(_connectOptions),
+      hostName(_hostName),
+      port(_port),
+      internalServer(_internalServer),
+      userName(_userName),
+      password(_password),
+      databaseNameThumbnails(_databaseNameThumbnails)
 {
 }
 
@@ -184,6 +184,7 @@ QString DatabaseParameters::SQLiteDatabaseFile() const
 QByteArray DatabaseParameters::hash() const
 {
     QCryptographicHash md5(QCryptographicHash::Md5);
+
     md5.addData(databaseType.toUtf8());
     md5.addData(databaseName.toUtf8());
     md5.addData(connectOptions.toUtf8());
@@ -191,6 +192,7 @@ QByteArray DatabaseParameters::hash() const
     md5.addData((const char*)&port, sizeof(int));
     md5.addData(userName.toUtf8());
     md5.addData(password.toUtf8());
+
     return md5.result().toHex();
 }
 
@@ -448,7 +450,7 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     QString connectOptions       = config.connectOptions;
     connectOptions.replace(QLatin1String("$$DBMISCPATH$$"), miscDir);
 
-    parameters.connectOptions   = connectOptions;
+    parameters.connectOptions    = connectOptions;
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "ConnectOptions "<< parameters.connectOptions;
     return parameters;
@@ -519,6 +521,7 @@ void DatabaseParameters::insertInUrl(QUrl& url) const
 void DatabaseParameters::removeFromUrl(QUrl& url)
 {
     QUrlQuery q(url);
+
     q.removeQueryItem(QLatin1String("databaseType"));
     q.removeQueryItem(QLatin1String("databaseName"));
     q.removeQueryItem(QLatin1String("connectOptions"));
@@ -527,6 +530,7 @@ void DatabaseParameters::removeFromUrl(QUrl& url)
     q.removeQueryItem(QLatin1String("internalServer"));
     q.removeQueryItem(QLatin1String("userName"));
     q.removeQueryItem(QLatin1String("password"));
+
     url.setQuery(q);
 }
 
