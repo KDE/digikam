@@ -106,16 +106,7 @@ public:
     RecognitionDatabaseStaticPriv()
         : mutex(QMutex::Recursive)
     {
-        if (Digikam::DatabaseAccess().parameters().isMySQL())
-        {
-            // In case of main digiKam DB is Mysql, store Sqlite file in application data dir from home directory.
-            defaultPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-        }
-        else
-        {
-            // We will use the same place than main digiKam SQlite DB file to store recognition DB file.
-            defaultPath = Digikam::DatabaseAccess().parameters().getDatabaseNameOrDir();
-        }
+        defaultPath = DatabaseAccess::parameters().faceParameters().getFaceDatabaseNameOrDir();
     }
 
     QExplicitlySharedDataPointer<RecognitionDatabase::Private> database(const QString& key);
@@ -245,15 +236,15 @@ void RecognitionDatabaseStaticPriv::removeDatabase(const QString& key)
 
 // ----------------------------------------------------------------------------------------------
 
-RecognitionDatabase::Private::Private(const QString& configPath)
-    : configPath(configPath),
+RecognitionDatabase::Private::Private(const QString& path)
+    : configPath(path),
       mutex(QMutex::Recursive),
       db(DatabaseFaceAccess::create()),
       opencvlbph(0),
       funnel(0)
 {
-    DatabaseParameters params = DatabaseParameters::parametersForSQLite(configPath + 
-                                QString::fromLatin1("/") + QString::fromLatin1("recognition.db"));
+    DatabaseParameters params = DatabaseAccess::parameters().faceParameters();
+    params.setFaceDatabasePath(configPath);
     DatabaseFaceAccess::setParameters(db, params);
     dbAvailable               = DatabaseFaceAccess::checkReadyForUse(db);
 
@@ -314,9 +305,9 @@ RecognitionDatabase::~RecognitionDatabase()
     // saveConfig() called from Private destructor
 }
 
-RecognitionDatabase RecognitionDatabase::addDatabase(const QString& configurationPath)
+RecognitionDatabase RecognitionDatabase::addDatabase(const QString& path)
 {
-    QExplicitlySharedDataPointer<Private> d = static_d->database(configurationPath);
+    QExplicitlySharedDataPointer<Private> d = static_d->database(path);
     return RecognitionDatabase(d);
 }
 
