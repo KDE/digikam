@@ -109,6 +109,8 @@ void DatabaseWidget::setupMainArea()
     databaseName                                     = new QLineEdit();
     QLabel* const databaseNameThumbnailsLabel        = new QLabel(i18n("Thumbnails<br>Schema Name"));
     databaseNameThumbnails                           = new QLineEdit();
+    QLabel* const databaseNameFaceLabel              = new QLabel(i18n("Face<br>Schema Name"));
+    databaseNameFace                                 = new QLineEdit();
     QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name"));
     hostName                                         = new QLineEdit();
     QLabel* const hostPortLabel                      = new QLabel(i18n("Port"));
@@ -133,16 +135,17 @@ void DatabaseWidget::setupMainArea()
     d->expertSettings->setLayout(expertSettinglayout);
 
 #if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
-    expertSettinglayout->addRow(internalServerLabel, internalServer);
+    expertSettinglayout->addRow(internalServerLabel,         internalServer);
 #endif
 
-    expertSettinglayout->addRow(hostNameLabel, hostName);
-    expertSettinglayout->addRow(hostPortLabel, hostPort);
-    expertSettinglayout->addRow(databaseNameLabel, databaseName);
+    expertSettinglayout->addRow(hostNameLabel,               hostName);
+    expertSettinglayout->addRow(hostPortLabel,               hostPort);
+    expertSettinglayout->addRow(databaseNameLabel,           databaseName);
     expertSettinglayout->addRow(databaseNameThumbnailsLabel, databaseNameThumbnails);
-    expertSettinglayout->addRow(userNameLabel, userName);
-    expertSettinglayout->addRow(passwordLabel, password);
-    expertSettinglayout->addRow(connectionOptionsLabel, connectionOptions);
+    expertSettinglayout->addRow(databaseNameFaceLabel,       databaseNameFace);
+    expertSettinglayout->addRow(userNameLabel,               userName);
+    expertSettinglayout->addRow(passwordLabel,               password);
+    expertSettinglayout->addRow(connectionOptionsLabel,      connectionOptions);
 
     expertSettinglayout->addWidget(checkDatabaseConnectionButton);
 
@@ -204,7 +207,7 @@ void DatabaseWidget::slotChangeDatabasePath(const QUrl& result)
 {
 #ifdef _WIN32
     // Work around bug #189168
-    KTemporaryFile temp;
+    QTemporaryFile temp;
     temp.setFileTemplate(result.toLocalFile(QUrl::AddTrailingSlash) + QLatin1String("XXXXXX"));
     temp.open();
 
@@ -216,8 +219,8 @@ void DatabaseWidget::slotChangeDatabasePath(const QUrl& result)
 #endif
     {
         QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
-                                 i18n("You do not seem to have write access to this database folder.\n"
-                                      "Without this access, the caption and tag features will not work."));
+                              i18n("You do not seem to have write access to this database folder.\n"
+                                   "Without this access, the caption and tag features will not work."));
     }
 
     checkDBPath();
@@ -288,6 +291,7 @@ void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
     hostPort->setEnabled(enableFields == Qt::Unchecked);
     databaseName->setEnabled(enableFields == Qt::Unchecked);
     databaseNameThumbnails->setEnabled(enableFields == Qt::Unchecked);
+    databaseNameFace->setEnabled(enableFields == Qt::Unchecked);
     userName->setEnabled(enableFields == Qt::Unchecked);
     password->setEnabled(enableFields == Qt::Unchecked);
     connectionOptions->setEnabled(enableFields == Qt::Unchecked);
@@ -315,7 +319,7 @@ void DatabaseWidget::checkDatabaseConnection()
     if (result)
     {
         QMessageBox::critical(qApp->activeWindow(), i18n("Database connection test"),
-                                 i18n("Database connection test successful."));
+                              i18n("Database connection test successful."));
     }
     else
     {
@@ -330,16 +334,20 @@ void DatabaseWidget::checkDatabaseConnection()
 
 void DatabaseWidget::checkDBPath()
 {
-//    bool dbOk          = false;
-//    bool pathUnchanged = true;
+/*
+    bool dbOk          = false;
+    bool pathUnchanged = true;
+*/
     QString newPath    = databasePathEdit->lineEdit()->text();
 
     if (!databasePathEdit->lineEdit()->text().isEmpty())
     {
         QDir dbDir(newPath);
         QDir oldDir(originalDbPath);
-//        dbOk          = dbDir.exists();
-//        pathUnchanged = (dbDir == oldDir);
+/*
+        dbOk          = dbDir.exists();
+        pathUnchanged = (dbDir == oldDir);
+*/
     }
 
     //TODO create an Enable button slot, if the path is vald
@@ -359,12 +367,12 @@ void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const 
 #endif
     databaseName->setText(settings->getDatabaseName());
     databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
+    databaseNameFace->setText(settings->getDatabaseNameFace());
     hostName->setText(settings->getDatabaseHostName());
     hostPort->setValue(settings->getDatabasePort());
     connectionOptions->setText(settings->getDatabaseConnectoptions());
 
     userName->setText(settings->getDatabaseUserName());
-
     password->setText(settings->getDatabasePassword());
 
     // Now set the type according the database type from the settings.
@@ -373,7 +381,8 @@ void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const 
     for (int i = 0; i < databaseType->count(); ++i)
     {
         //qCDebug(DIGIKAM_WIDGETS_LOG) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
-        //              << "] with ["<< settings->getDatabaseType() << "]";
+        //                             << "] with ["<< settings->getDatabaseType() << "]";
+
         if (databaseType->itemData(i).toString() == settings->getDatabaseType())
         {
             databaseType->setCurrentIndex(i);
@@ -396,13 +405,16 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
 
         if (parameters.databaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
         {
-            parameters.databaseName = QDir::cleanPath(databasePathEdit->lineEdit()->text() + QLatin1Char('/') + QLatin1String("digikam4.db"));
+            parameters.databaseName           = QDir::cleanPath(databasePathEdit->lineEdit()->text() + 
+                                                QLatin1Char('/') + QLatin1String("digikam4.db"));
             parameters.databaseNameThumbnails = parameters.databaseName;
+            parameters.databaseNameFace       = parameters.databaseName;
         }
         else
         {
-            parameters.databaseName = databaseName->text();
+            parameters.databaseName           = databaseName->text();
             parameters.databaseNameThumbnails = databaseNameThumbnails->text();
+            parameters.databaseNameFace       = databaseNameFace->text();
         }
     }
     else

@@ -80,6 +80,11 @@ QString ApplicationSettings::getDatabaseNameThumbnails() const
     return d->databaseParams.databaseNameThumbnails;
 }
 
+QString ApplicationSettings::getDatabaseNameFace() const
+{
+    return d->databaseParams.databaseNameFace;
+}
+
 QString ApplicationSettings::getDatabaseHostName() const
 {
     return d->databaseParams.hostName;
@@ -118,6 +123,11 @@ void ApplicationSettings::setDatabaseName(const QString& databaseName)
 void ApplicationSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)
 {
     d->databaseParams.databaseNameThumbnails = databaseNameThumbnails;
+}
+
+void ApplicationSettings::setDatabaseNameFace(const QString& databaseNameFace)
+{
+    d->databaseParams.databaseNameFace = databaseNameFace;
 }
 
 void ApplicationSettings::setDatabaseHostName(const QString& hostName)

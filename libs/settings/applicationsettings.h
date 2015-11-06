@@ -140,6 +140,9 @@ public:
     QString getDatabaseNameThumbnails() const;
     void setDatabaseNameThumbnails(const QString& databaseNameThumbnails);
 
+    QString getDatabaseNameFace() const;
+    void setDatabaseNameFace(const QString& databaseNameFace);
+
     QString getDatabaseHostName() const;
     void setDatabaseHostName(const QString& hostName);
 

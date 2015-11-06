@@ -59,6 +59,7 @@ public:
 
     QLineEdit*     databaseName;
     QLineEdit*     databaseNameThumbnails;
+    QLineEdit*     databaseNameFace;
     QLineEdit*     hostName;
     QLineEdit*     connectionOptions;
     QLineEdit*     userName;
