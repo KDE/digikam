@@ -223,7 +223,7 @@ void DFileSelector::slotBtnClicked()
         return;
     }
 
-    QFileDialog* const fileDlg = new QFileDialog(this);
+    QFileDialog* const fileDlg = new QFileDialog();
     fileDlg->setOptions(d->fdOptions);
     fileDlg->setDirectory(QFileInfo(d->edit->text()).filePath());
     fileDlg->setFileMode(d->fdMode);
