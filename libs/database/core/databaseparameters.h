@@ -61,7 +61,9 @@ public:
                        bool  internalServer = false,
                        const QString& userName = QString(),
                        const QString& password = QString(),
-                       const QString& databaseNameThumbnails = QString());
+                       const QString& databaseNameThumbnails = QString(),
+                       const QString& databaseNameFace = QString()
+                      );
 
     explicit DatabaseParameters(const QUrl& url);
 
@@ -108,6 +110,7 @@ public:
 
     QString getDatabaseNameOrDir()       const;
     QString getThumbsDatabaseNameOrDir() const;
+    QString getFaceDatabaseNameOrDir()   const;
 
     /**
      * In case of SQLite, the databaseName typically is a file.
@@ -116,13 +119,16 @@ public:
      */
     void setDatabasePath(const QString& folderOrFileOrName);
     void setThumbsDatabasePath(const QString& folderOrFileOrName);
+    void setFaceDatabasePath(const QString& folderOrFileOrName);
 
     static QString databaseFileSQLite(const QString& folderOrFile);
     static QString thumbnailDatabaseFileSQLite(const QString& folderOrFile);
+    static QString faceDatabaseFileSQLite(const QString& folderOrFile);
 
     static QString databaseDirectorySQLite(const QString& path);
     static QString thumbnailDatabaseDirectorySQLite(const QString& path);
-
+    static QString faceDatabaseDirectorySQLite(const QString& path);
+    
     /** Replaces databaseName with databaseNameThumbnails.
      */
     DatabaseParameters thumbnailParameters() const;
@@ -151,6 +157,7 @@ public:
     QString password;
 
     QString databaseNameThumbnails;
+    QString databaseNameFace;
 };
 
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DatabaseParameters& t);

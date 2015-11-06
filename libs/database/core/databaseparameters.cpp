@@ -49,6 +49,7 @@ static const char* configInternalDatabaseServer = "Internal Database Server";
 static const char* configDatabaseType           = "Database Type";
 static const char* configDatabaseName           = "Database Name";
 static const char* configDatabaseNameThumbnails = "Database Name Thumbnails";
+static const char* configDatabaseNameFace       = "Database Name Face";
 static const char* configDatabaseHostName       = "Database Hostname";
 static const char* configDatabasePort           = "Database Port";
 static const char* configDatabaseUsername       = "Database Username";
@@ -60,6 +61,7 @@ static const char* configAlbumPathEntry         = "Album Path";
 
 static const char* digikam4db                   = "digikam4.db";
 static const char* thumbnails_digikamdb         = "thumbnails-digikam.db";
+static const char* face_digikamdb               = "recognition.db";
 }
 
 namespace Digikam
@@ -79,7 +81,9 @@ DatabaseParameters::DatabaseParameters(const QString& _type,
                                        bool  _internalServer,
                                        const QString& _userName,
                                        const QString& _password,
-                                       const QString& _databaseNameThumbnails)
+                                       const QString& _databaseNameThumbnails,
+                                       const QString& _databaseNameFace
+                                      )
     : databaseType(_type),
       databaseName(_databaseName),
       connectOptions(_connectOptions),
@@ -88,7 +92,8 @@ DatabaseParameters::DatabaseParameters(const QString& _type,
       internalServer(_internalServer),
       userName(_userName),
       password(_password),
-      databaseNameThumbnails(_databaseNameThumbnails)
+      databaseNameThumbnails(_databaseNameThumbnails),
+      databaseNameFace(_databaseNameFace)
 {
 }
 
@@ -99,6 +104,7 @@ DatabaseParameters::DatabaseParameters(const QUrl& url)
     databaseType           = QUrlQuery(url).queryItemValue(QLatin1String("databaseType"));
     databaseName           = QUrlQuery(url).queryItemValue(QLatin1String("databaseName"));
     databaseNameThumbnails = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameThumbnails"));
+    databaseNameFace       = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameFace"));
     connectOptions         = QUrlQuery(url).queryItemValue(QLatin1String("connectOptions"));
     hostName               = QUrlQuery(url).queryItemValue(QLatin1String("hostName"));
     QString queryPort      = QUrlQuery(url).queryItemValue(QLatin1String("port"));
@@ -128,6 +134,7 @@ bool DatabaseParameters::operator==(const DatabaseParameters& other) const
     return(databaseType           == other.databaseType           &&
            databaseName           == other.databaseName           &&
            databaseNameThumbnails == other.databaseNameThumbnails &&
+           databaseNameFace       == other.databaseNameFace       &&
            connectOptions         == other.connectOptions         &&
            hostName               == other.hostName               &&
            port                   == other.port                   &&
@@ -222,11 +229,13 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     {
         databaseName           = group.readPathEntry(configDatabaseName,           QString());
         databaseNameThumbnails = group.readPathEntry(configDatabaseNameThumbnails, QString());
+        databaseNameFace       = group.readPathEntry(configDatabaseNameFace,       QString());
     }
     else
     {
         databaseName           = group.readEntry(configDatabaseName,           QString());
         databaseNameThumbnails = group.readEntry(configDatabaseNameThumbnails, QString());
+        databaseNameFace       = group.readEntry(configDatabaseNameFace,       QString());
     }
 
     hostName                 = group.readEntry(configDatabaseHostName,       QString());
@@ -245,6 +254,7 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
         QString orgName = databaseName;
         setDatabasePath(orgName);
         setThumbsDatabasePath(orgName);
+        setFaceDatabasePath(orgName);
     }
 }
 
@@ -272,6 +282,18 @@ void DatabaseParameters::setThumbsDatabasePath(const QString& folderOrFileOrName
     }
 }
 
+void DatabaseParameters::setFaceDatabasePath(const QString& folderOrFileOrName)
+{
+    if (isSQLite())
+    {
+        databaseNameFace = faceDatabaseFileSQLite(folderOrFileOrName);
+    }
+    else
+    {
+        databaseNameFace = folderOrFileOrName;
+    }
+}
+
 QString DatabaseParameters::databaseFileSQLite(const QString& folderOrFile)
 {
     QFileInfo fileInfo(folderOrFile);
@@ -296,6 +318,18 @@ QString DatabaseParameters::thumbnailDatabaseFileSQLite(const QString& folderOrF
     return QDir::cleanPath(folderOrFile);
 }
 
+QString DatabaseParameters::faceDatabaseFileSQLite(const QString& folderOrFile)
+{
+    QFileInfo fileInfo(folderOrFile);
+
+    if (fileInfo.isDir())
+    {
+        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + QLatin1String(face_digikamdb));
+    }
+
+    return QDir::cleanPath(folderOrFile);
+}
+
 void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KSharedConfig::Ptr config)
 {
     // Additional semantic checks for the database section.
@@ -309,6 +343,7 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         databaseName           = QLatin1String("digikam");
         internalServer         = true;
         databaseNameThumbnails = QLatin1String("digikam");
+        databaseNameFace       = QLatin1String("digikam");
         hostName.clear();
         port                   = -1;
         userName               = QLatin1String("root");
@@ -377,10 +412,12 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
 
     QString dbName       = getDatabaseNameOrDir();
     QString dbNameThumbs = getThumbsDatabaseNameOrDir();
+    QString dbNameFace   = getFaceDatabaseNameOrDir();
 
     group.writeEntry(configDatabaseType,           databaseType);
     group.writeEntry(configDatabaseName,           dbName);
     group.writeEntry(configDatabaseNameThumbnails, dbNameThumbs);
+    group.writeEntry(configDatabaseNameFace,       dbNameFace);
     group.writeEntry(configDatabaseHostName,       hostName);
     group.writeEntry(configDatabasePort,           port);
     group.writeEntry(configDatabaseUsername,       userName);
@@ -409,6 +446,16 @@ QString DatabaseParameters::getThumbsDatabaseNameOrDir() const
     return databaseNameThumbnails;
 }
 
+QString DatabaseParameters::getFaceDatabaseNameOrDir() const
+{
+    if (isSQLite())
+    {
+        return faceDatabaseDirectorySQLite(databaseNameFace);
+    }
+
+    return databaseNameFace;
+}
+
 QString DatabaseParameters::databaseDirectorySQLite(const QString& path)
 {
     if (path.endsWith(QLatin1String(digikam4db)))
@@ -427,6 +474,18 @@ QString DatabaseParameters::thumbnailDatabaseDirectorySQLite(const QString& path
     {
         QString chopped(path);
         chopped.chop(QString(QLatin1String(thumbnails_digikamdb)).length());
+        return chopped;
+    }
+
+    return path;
+}
+
+QString DatabaseParameters::faceDatabaseDirectorySQLite(const QString& path)
+{
+    if (path.endsWith(QLatin1String(face_digikamdb)))
+    {
+        QString chopped(path);
+        chopped.chop(QString(QLatin1String(face_digikamdb)).length());
         return chopped;
     }
 
@@ -453,6 +512,7 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     parameters.connectOptions    = connectOptions;
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "ConnectOptions "<< parameters.connectOptions;
+
     return parameters;
 }
 
@@ -539,17 +599,16 @@ QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
     dbg.nospace() << "DatabaseParameters: [ Type " << p.databaseType           << ", ";
     dbg.nospace() << "Name "                       << p.databaseName           << " ";
     dbg.nospace() << "(Thumbnails Name "           << p.databaseNameThumbnails << "); ";
+    dbg.nospace() << "(Face Name "                 << p.databaseNameFace       << "); ";
 
     if (!p.connectOptions.isEmpty())
     {
-        dbg.nospace() << "ConnectOptions: "
-                      << p.connectOptions << ", ";
+        dbg.nospace() << "ConnectOptions: " << p.connectOptions << ", ";
     }
 
     if (!p.hostName.isEmpty())
     {
-        dbg.nospace() << "Host Name and Port: "
-                      << p.hostName << " " << p.port << "; ";
+        dbg.nospace() << "Host Name and Port: " << p.hostName << " " << p.port << "; ";
     }
 
     if (p.internalServer)
@@ -559,8 +618,7 @@ QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
 
     if (!p.userName.isEmpty())
     {
-        dbg.nospace() << "Username and Password: "
-                      << p.userName << ", " << p.password;
+        dbg.nospace() << "Username and Password: " << p.userName << ", " << p.password;
     }
 
     dbg.nospace() << "] ";
