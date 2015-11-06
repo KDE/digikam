@@ -523,12 +523,20 @@ DatabaseParameters DatabaseParameters::thumbnailParameters() const
     return params;
 }
 
+DatabaseParameters DatabaseParameters::faceParameters() const
+{
+    DatabaseParameters params = *this;
+    params.databaseName       = databaseNameFace;
+    return params;
+}
+
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
 {
     // only the database name is needed
     DatabaseParameters params(QLatin1String("QSQLITE"), databaseFile);
     params.setDatabasePath(databaseFile);
     params.setThumbsDatabasePath(params.getDatabaseNameOrDir());
+    params.setFaceDatabasePath(params.getDatabaseNameOrDir());
     return params;
 }
 

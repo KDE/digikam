@@ -108,15 +108,16 @@ public:
     void readFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString());
     void writeToConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString()) const;
 
+    /**
+     * NOTE: In case of SQLite, the database name typically is a file.
+     * For non-SQLite, this simply sets the database name.
+     */
+
     QString getDatabaseNameOrDir()       const;
     QString getThumbsDatabaseNameOrDir() const;
     QString getFaceDatabaseNameOrDir()   const;
 
-    /**
-     * In case of SQLite, the databaseName typically is a file.
-     * Use this method if you set a file or a folder.
-     * For non-SQLite, this simply sets the database name.
-     */
+    /// Use these methods if you set a file or a folder.
     void setDatabasePath(const QString& folderOrFileOrName);
     void setThumbsDatabasePath(const QString& folderOrFileOrName);
     void setFaceDatabasePath(const QString& folderOrFileOrName);
@@ -132,6 +133,10 @@ public:
     /** Replaces databaseName with databaseNameThumbnails.
      */
     DatabaseParameters thumbnailParameters() const;
+
+    /** Replaces databaseName with databaseNameFace.
+     */
+    DatabaseParameters faceParameters() const;
 
     void legacyAndDefaultChecks(const QString& suggestedPath = QString(), KSharedConfig::Ptr config = KSharedConfig::openConfig());
     void removeLegacyConfig(KSharedConfig::Ptr config);
