@@ -124,7 +124,8 @@ public:
 };
 
 MigrationDlg::MigrationDlg(QWidget* const parent)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     setupMainArea();
 }
@@ -196,7 +197,7 @@ void MigrationDlg::setupMainArea()
     connect(&(d->copyThread->m_copyManager), SIGNAL(smallStepStarted(int,int)),
             this, SLOT(handleSmallStepStarted(int,int)));
 
-    connect(this, SIGNAL(closeClicked()),
+    connect(d->buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
             &(d->copyThread->m_copyManager), SLOT(stopProcessing()));
 
     connect(d->cancelButton, SIGNAL(clicked()),
