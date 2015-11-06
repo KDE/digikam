@@ -44,12 +44,12 @@
 
 #include "databaseaccess.h"
 #include "databaseparameters.h"
-#include "digikam_debug.h"
-#include "recognitiondatabase.h"
 #include "databasefaceaccess.h"
 #include "databasefaceoperationgroup.h"
 #include "dataproviders.h"
+#include "recognitiondatabase.h"
 #include "trainingdb.h"
+#include "digikam_debug.h"
 
 namespace FacesEngine
 {
