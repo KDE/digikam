@@ -166,7 +166,6 @@ void WelcomePageView::slotThemeChanged()
     //qCDebug(DIGIKAM_GENERAL_LOG) << content;
 
     setHtml(content, QUrl::fromLocalFile(locationHtml));
-    show();
 }
 
 }  // namespace Digikam
