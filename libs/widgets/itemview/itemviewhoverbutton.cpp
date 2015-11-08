@@ -147,29 +147,25 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
 
     // draw the icon overlay
     QPixmap icon = m_icon.pixmap(width() - 2, height() - 2);
-    
+
     if (m_isHovered)
     {
-        QPixmap alphaMask(icon.width(), icon.height());
-        const QColor color(127, 127, 127);
-        alphaMask.fill(color);
-        QPainter p(&icon);
-        p.setOpacity(0.1);
-        p.drawPixmap(0, 0, alphaMask);
+        QPixmap hovered = icon;
+        QPainter p(&hovered);
+        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p.fillRect(hovered.rect(), QColor(0, 0, 0, 127));
+        p.setCompositionMode(QPainter::CompositionMode_Plus);
+        p.drawPixmap(0, 0, icon);
         p.end();
-        painter.drawPixmap(1, 1, icon);
+        painter.drawPixmap(1, 1, hovered);
     }
     else
     {
         if (m_fadingValue < 255)
         {
-            // apply an alpha mask respecting the fading value to the icon
-            QPixmap alphaMask(icon.width(), icon.height());
-            const QColor color(m_fadingValue, m_fadingValue, m_fadingValue);
-            alphaMask.fill(color);
             QPainter p(&icon);
-            p.setOpacity(0.2);
-            p.drawPixmap(0, 0, alphaMask);
+            p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+            p.fillRect(icon.rect(), QColor(0, 0, 0, m_fadingValue));
             p.end();
             painter.drawPixmap(1, 1, icon);
         }
