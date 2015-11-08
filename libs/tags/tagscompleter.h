@@ -84,7 +84,7 @@ private:
     void setModel(QAbstractItemModel*);
 
     class Private;
-    Private *d;
+    Private* const d;
 };
 
 } // namespace Digikam
