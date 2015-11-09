@@ -76,10 +76,9 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
     : QLineEdit(parent),
       d(new Private)
 {
-    d->completer = new TagCompleter(); // TagCompleter(this) makes a crash here
+    d->completer = new TagCompleter(parent);
     d->completer->setMaxVisibleItems(15);
     d->completer->setWidget(this);
-    //setCompleter(d->completer); // setWidget(this) makes it already
 
     connect(this, &QLineEdit::returnPressed, this, &AddTagsLineEdit::slotReturnPressed);
     connect(this, &QLineEdit::editingFinished, this, &AddTagsLineEdit::slotEditingFinished);
