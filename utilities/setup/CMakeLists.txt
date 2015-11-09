@@ -54,7 +54,6 @@ set(libsetup_SRCS
 )
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
@@ -64,6 +63,11 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
+
+if(KF5Kipi_FOUND)
+    include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
+    set(libsetup_SRCS ${libsetup_SRCS} ../kdesupport/kipi/setupkipi.cpp)
+endif()
 
 add_library(setup_src OBJECT ${libsetup_SRCS} ${libsetupshowfoto_SRCS})
 

@@ -34,16 +34,6 @@
 
 #include <klocalizedstring.h>
 
-#ifdef HAVE_KIPI
-
-// Libkipi includes
-
-#include <KIPI/ConfigWidget>
-
-using namespace KIPI;
-
-#endif /* HAVE_KIPI */
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -68,6 +58,12 @@ using namespace KIPI;
 #include "setupversioning.h"
 #include "importsettings.h"
 #include "dxmlguiwindow.h"
+
+#ifdef HAVE_KIPI
+
+#include "setupkipi.h"
+
+#endif /* HAVE_KIPI */
 
 namespace Digikam
 {
@@ -122,8 +118,7 @@ public:
         pluginsPage(0),
 #endif /* HAVE_KIPI */
 
-        versioningPage(0),
-        pluginFilter(0)
+        versioningPage(0)
     {
     }
 
@@ -170,12 +165,10 @@ public:
     SetupMisc*               miscPage;
 
 #ifdef HAVE_KIPI
-    ConfigWidget*            pluginsPage;
+    SetupKipi*               pluginsPage;
 #endif /* HAVE_KIPI */
 
     SetupVersioning*         versioningPage;
-
-    SearchTextBar*           pluginFilter;
 
 public:
 
@@ -303,19 +296,12 @@ Setup::Setup(QWidget* const parent)
             this, &Setup::slotOkClicked);
 
 #ifdef HAVE_KIPI
-    d->pluginsPage  = new ConfigWidget();
-    d->pluginFilter = new SearchTextBar(d->pluginsPage, QLatin1String("PluginsSearchBar"));
-    d->pluginsPage->setFilterWidget(d->pluginFilter);
+
+    d->pluginsPage  = new SetupKipi();
     d->page_plugins = addPage(d->pluginsPage, i18n("Kipi Plugins"));
     d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
                                     "<i>Set which plugins will be accessible from the main interface</i></qt>"));
     d->page_plugins->setIcon(QIcon::fromTheme(QLatin1String("kipi")));
-
-    connect(d->pluginFilter, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
-            this, SLOT(slotSearchTextChanged(SearchTextSettings)));
-
-    connect(d->pluginsPage, SIGNAL(signalSearchResult(bool)),
-            d->pluginFilter, SLOT(slotSearchResult(bool)));
 
 #endif /* HAVE_KIPI */
 
@@ -484,15 +470,6 @@ bool Setup::execMetadataFilters(QWidget* const parent, int tab)
     return success;
 }
 
-void Setup::slotSearchTextChanged(const SearchTextSettings& settings)
-{
-#ifdef HAVE_KIPI
-    d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
-#else
-    Q_UNUSED(settings);
-#endif /* HAVE_KIPI */
-}
-
 void Setup::slotOkClicked()
 {
     if (!d->cameraPage->checkSettings())
@@ -522,7 +499,7 @@ void Setup::slotOkClicked()
     d->miscPage->applySettings();
 
 #ifdef HAVE_KIPI
-    d->pluginsPage->apply();
+    d->pluginsPage->applySettings();
 #endif /* HAVE_KIPI */
 
     d->versioningPage->applySettings();

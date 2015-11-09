@@ -99,7 +99,6 @@ public:
 private Q_SLOTS:
 
     void slotHelp();
-    void slotSearchTextChanged(const SearchTextSettings& settings);
     void slotOkClicked();
 
 private:
