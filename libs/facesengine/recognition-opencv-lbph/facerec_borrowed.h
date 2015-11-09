@@ -38,6 +38,10 @@
 
 #include "libopencv.h"
 
+#if !OPENCV_TEST_VERSION(3,0,0)
+#include "face.hpp"
+#endif
+
 // C++ includes
 
 #include <vector>

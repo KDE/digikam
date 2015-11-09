@@ -32,6 +32,16 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
 )
 
+if(ENABLE_OPENCV3)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/opencv3-face)
+
+    set(opencv3face_LIB_SRCS opencv3-face/facerec.cpp
+                             opencv3-face/lbph_faces.cpp
+                             opencv3-face/eigen_faces.cpp
+                             opencv3-face/fisher_faces.cpp
+    )
+endif()
+
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          recognition-opencv-lbph/lbphfacemodel.cpp
                          recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
@@ -54,6 +64,11 @@ set(facesengine_database_LIB_SRCS database/trainingdb.cpp
                                   database/databasefaceaccess.cpp
 )
 
-add_library(digikamfacesengine_src OBJECT ${facesengine_LIB_SRCS} ${facesengine_database_LIB_SRCS} )
+add_library(digikamfacesengine_src
+            OBJECT
+            ${opencv3face_LIB_SRCS}             # Empty with OpenCV2
+            ${facesengine_LIB_SRCS}
+            ${facesengine_database_LIB_SRCS}
+)
 
 add_library(digikamfacesengine STATIC $<TARGET_OBJECTS:digikamfacesengine_src>)

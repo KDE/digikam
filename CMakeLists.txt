@@ -203,7 +203,7 @@ set_package_properties("Exiv2"     PROPERTIES
 if(ENABLE_OPENCV3)
 
     set(OPENCV_MIN_VERSION "3.0.0")
-    DETECT_OPENCV(${OPENCV_MIN_VERSION} core face highgui objdetect imgproc)
+    DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect imgproc)
 
     if(${OpenCV_FOUND})
         if(${OpenCV_VERSION} VERSION_LESS 3.0.0)
