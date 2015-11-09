@@ -65,7 +65,6 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("digikam");
     KLocalizedString::setApplicationDomain("kipiplugins");
-    KLocalizedString::setApplicationDomain("libkipi");
 
     KAboutData aboutData(QString::fromLatin1("digikam"), // component name
                          i18n("digiKam"),                // display name
