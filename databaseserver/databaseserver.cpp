@@ -165,10 +165,6 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     }
 
     // create the database directories if they don't exists
-    //  const QString dataDir     = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam/db_data" ) );
-    //  const QString akDir       = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam/" ) );
-    //  const QString miscDir     = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam/db_misc" ) );
-    //  const QString fileDataDir = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam/file_db_data" ) );
 
     const QString akDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/");
     const QString dataDir     = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_data");
@@ -196,9 +192,9 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         QDir().mkpath(miscDir);
     }
 
-    if (!QFile::exists(miscDir))
+    if (!QFile::exists(fileDataDir))
     {
-        QDir().mkpath(miscDir);
+        QDir().mkpath(fileDataDir);
     }
 
     const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-global.conf"));
@@ -335,11 +331,11 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     if ( !d->databaseProcess->waitForStarted() )
     {
-        QString argumentStr =  arguments.join(QLatin1String(", "));
-        QString  str        =  i18n("Could not start database server.");
-        str                 += i18n("<p>Executable: %1</p>", mysqldPath);
-        str                 += i18n("<p>Arguments: %1</p>", argumentStr);
-        str                 += i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
+        QString argumentStr = arguments.join(QLatin1String(", "));
+        QString  str        = i18n("Could not start database server.");
+        str                += i18n("<p>Executable: %1</p>",    mysqldPath);
+        str                += i18n("<p>Arguments: %1</p>",     argumentStr);
+        str                += i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
 
         delete d->databaseProcess;
@@ -375,17 +371,17 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
             if ( d->databaseProcess->waitForFinished( 500 ) )
             {
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database process exited unexpectedly during initial connection!";
-                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "executable: " << mysqldPath;
-                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "arguments: " << arguments;
-                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "stdout: " << d->databaseProcess->readAllStandardOutput();
-                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "stderr: " << d->databaseProcess->readAllStandardError();
-                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "exit code: " << d->databaseProcess->exitCode();
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "executable: "    << mysqldPath;
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "arguments: "     << arguments;
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "stdout: "        << d->databaseProcess->readAllStandardOutput();
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "stderr: "        << d->databaseProcess->readAllStandardError();
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "exit code: "     << d->databaseProcess->exitCode();
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "process error: " << d->databaseProcess->errorString();
 
-                QString  str = i18n("Database process exited unexpectedly during initial connection."
-                                    "<p>Executable: %1</p>”"
-                                    "<p>Process error: %2</p>",
-                                    mysqldPath, d->databaseProcess->errorString());
+                QString str = i18n("Database process exited unexpectedly during initial connection."
+                                   "<p>Executable: %1</p>”"
+                                   "<p>Process error: %2</p>",
+                                   mysqldPath, d->databaseProcess->errorString());
 
                 return DatabaseServerError(DatabaseServerError::StartError, str);
             }
@@ -449,8 +445,8 @@ DatabaseServerError DatabaseServer::createDatabase()
         if ( !query.exec( QString::fromLatin1( "USE %1" ).arg( d->internalDBName ) ) )
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to use database" << d->internalDBName;
-            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Query error:" << query.lastError().text();
-            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database error:" << db.lastError().text();
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Query error:"           << query.lastError().text();
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database error:"        << db.lastError().text();
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Trying to create database now...";
 
             if ( !query.exec( QLatin1String( "CREATE DATABASE digikam" ) ) )
@@ -486,7 +482,7 @@ void DatabaseServer::stopDatabaseProcess()
     d->databaseProcess->terminate();
     d->databaseProcess->waitForFinished();
     d->databaseProcess->~QProcess();
-    d->databaseProcess = 0;
+    d->databaseProcess  = 0;
     d->pollThread->stop = true;
     d->pollThread->wait();
     d->app->exit(0);

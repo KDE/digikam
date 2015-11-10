@@ -32,14 +32,12 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QDir>
-#include <QProcess>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusReply>
-#include <QThread>
 #include <QSystemSemaphore>
 
 // Local includes
@@ -73,8 +71,8 @@ bool PollThread::checkDigikamInstancesRunning()
 {
     QSystemSemaphore sem(QLatin1String("DigikamDBSrvAccess"), 1, QSystemSemaphore::Open);
     sem.acquire();
-    QDBusConnectionInterface* interface = QDBusConnection::sessionBus().interface();
-    QDBusReply<QStringList> reply       = interface->registeredServiceNames();
+    QDBusConnectionInterface* const interface = QDBusConnection::sessionBus().interface();
+    QDBusReply<QStringList> reply             = interface->registeredServiceNames();
 
     if (reply.isValid())
     {
