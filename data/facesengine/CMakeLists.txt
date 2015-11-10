@@ -4,11 +4,16 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# Under Windows, Haar Cascade XML files used by Face Detection are not installed with OpenCV rules. Why ???
-# Tested with OpenCV 2.4.9 (TODO: Check if it's always true with OpenCV 3.x)
-# So we generalize installation of these files directly through digiKam.
+# Sometime Haar Cascade XML files used by Face Detection are not installed with OpenCV2 rules.
+# With OpenCV3, as cv::face go to contrib repository, XML files can miss.
+# So we always generalize installation of these files directly through digiKam,
+# to be sure that Face Management always work.
 
-file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/haarcascade_*.xml")
+if(ENABLE_OPENCV3)
+    file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/opencv3/haarcascade_*.xml")
+else()
+    file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/opencv2/haarcascade_*.xml")
+endif()
 
 install(FILES ${files}
         DESTINATION ${DATA_INSTALL_DIR}/digikam/facesengine

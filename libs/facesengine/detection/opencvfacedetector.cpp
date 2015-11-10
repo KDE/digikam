@@ -455,10 +455,10 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
     // Detect the objects and store them in the sequence
 
     qCDebug(DIGIKAM_FACESENGINE_LOG) << "detectMultiScale: image size " << inputImage.cols << " " << inputImage.rows
-             << " searchIncrement " << params.searchIncrement
-             << " grouping " << params.grouping
-             << " flags " << params.flags
-             << " min size " << params.minSize.width << " " << params.minSize.height << endl;
+                                     << " searchIncrement " << params.searchIncrement
+                                     << " grouping " << params.grouping
+                                     << " flags " << params.flags
+                                     << " min size " << params.minSize.width << " " << params.minSize.height << endl;
 
     std::vector<cv::Rect> faces;
     cascade.detectMultiScale(inputImage, faces,
