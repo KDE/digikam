@@ -78,7 +78,7 @@
 /* Define to 1 if system use X11 */
 #cmakedefine HAVE_X11 1
 
-#define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
+#define LIBEXEC_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${LIBEXEC_INSTALL_DIR}"
 
 /*
   Disable indeep warnings from Visual Studio C++ 2008 (9.0)
