@@ -8,7 +8,9 @@
  * Date        : 2009-07-28
  * Description : Core Database statements
  *
- * Copyright (C) 2009 by Holger Foerster <hamsi2k at freenet dot de>
+ * Copyright (C) 2009      by Holger Foerster <hamsi2k at freenet dot de>
+ * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,6 +27,7 @@
  -->
 
 <databaseconfig>
+
     <defaultDB>QSQLITE</defaultDB>
 
     <!-- Increment this version number whenever you change this file.
@@ -33,7 +36,10 @@
     -->
     <version>${DBCORECONFIG_XML_VERSION}</version>
 
-    <!-- Sqlite DB statements -->
+
+    <!-- ========================================== SQLITE DATABASE STATEMENTS ========================================== -->
+
+
     <database name="QSQLITE">
         <hostName>TestHost</hostName>
         <databaseName>DatabaseName</databaseName>
@@ -46,7 +52,8 @@
 
         <dbactions>
 
-            <!-- Core Schema DB -->
+            <!-- SQlite Core Schema Database -->
+
             <dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
                 CREATE TRIGGER privcheck_trigger DELETE ON PrivCheck
                     BEGIN
@@ -59,7 +66,7 @@
                 DROP TRIGGER privcheck_trigger;
             </statement>
             </dbaction>
-                        
+
             <dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
                 CREATE TABLE PrivCheck
                 (
@@ -72,18 +79,18 @@
             <dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
                 ALTER TABLE PrivCheck ADD COLUMN addedColumn;
             </statement>
-            </dbaction>            
-            
+            </dbaction>
+
             <dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
                 DROP TABLE PrivCheck;
             </statement>
             </dbaction>
-            
+
             <dbaction name="CheckPriv_Cleanup"><statement mode="plain">
                 DROP TABLE IF EXISTS PrivCheck;
             </statement>
             </dbaction>
-        
+
             <dbaction name="CreateDB" mode="transaction"><statement mode="plain">CREATE TABLE AlbumRoots
                             (id INTEGER PRIMARY KEY,
                             label TEXT,
@@ -238,7 +245,8 @@
                              value TEXT);</statement>
             </dbaction>
 
-            <!-- Indices -->
+            <!-- SQlite Core Indexes -->
+
             <dbaction name="CreateIndices" mode="transaction">
                 <statement mode="plain">CREATE INDEX dir_index  ON Images (album);</statement>
                 <statement mode="plain">CREATE INDEX hash_index ON Images (uniqueHash);</statement>
@@ -257,7 +265,8 @@
                 <statement mode="plain">CREATE INDEX imagetagproperties_tagid_index ON ImageTagProperties (tagid);</statement>
             </dbaction>
 
-            <!-- Triggers -->
+            <!-- SQlite Core Triggers -->
+
             <dbaction name="CreateTriggers" mode="transaction">
                 <statement mode="plain">CREATE TRIGGER delete_albumroot DELETE ON AlbumRoots
                 BEGIN
@@ -331,13 +340,13 @@
                     A.pid = NEW.id AND B.id = NEW.pid;
                 END;</statement>
             </dbaction>
-            
+
             <dbaction name="getItemURLsInAlbumByItemName">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name COLLATE NOCASE;</statement>
             </dbaction>
 
-            <!--Don't collate on the path - this is to maintain the same behavior
-                that happens when sort order is "By Path"
+            <!-- NOTE: Don't collate on the path - this is to maintain the same behavior
+                       that happens when sort order is "By Path"
             -->
             <dbaction name="getItemURLsInAlbumByItemPath">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Albums.relativePath,Images.name;</statement>
@@ -356,8 +365,8 @@
             </dbaction>
 
             <dbaction name="changeImageInformation" mode="transaction">
-            <statement mode="query">INSERT OR IGNORE INTO ImageInformation ( imageid, :fieldList ) VALUES ( :id, :valueList );</statement>
-            <statement mode="query">UPDATE ImageInformation SET :fieldValueList WHERE imageid=:id;</statement>
+                 <statement mode="query">INSERT OR IGNORE INTO ImageInformation ( imageid, :fieldList ) VALUES ( :id, :valueList );</statement>
+                 <statement mode="query">UPDATE ImageInformation SET :fieldValueList WHERE imageid=:id;</statement>
             </dbaction>
 
             <dbaction name="changeImageHistory" mode="transaction">
@@ -380,7 +389,7 @@
             </dbaction>
 
             <dbaction name="deleteAlbumID">
-            <statement mode="query">DELETE FROM Albums WHERE Albums.id=:albumId;</statement>
+                <statement mode="query">DELETE FROM Albums WHERE Albums.id=:albumId;</statement>
             </dbaction>
 
             <dbaction name="GetItemURLsInTagRecursive">
@@ -392,58 +401,59 @@
 
             <dbaction name="GetItemURLsInTag">
             <statement mode="query">SELECT Albums.albumRoot, Albums.relativePath, Images.name
-                            FROM Images JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID);
+                                    FROM Images JOIN Albums ON Albums.id=Images.album
+                                    WHERE Images.status=1 AND Images.id IN (SELECT imageid FROM ImageTags WHERE tagid=:tagID);
             </statement>
             </dbaction>
 
             <dbaction name="getItemIDsInTagRecursive">
             <statement mode="query">SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id
-                                WHERE Images.status=1 AND
-                                ( tagid=:tagID
-                                OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID) );
+                                    WHERE Images.status=1 AND
+                                    ( tagid=:tagID
+                                    OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID) );
             </statement>
             </dbaction>
 
             <dbaction name="getItemIDsInTag">
             <statement mode="query">SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id
-                                WHERE Images.status=1 AND tagid=:tagID;
+                                    WHERE Images.status=1 AND tagid=:tagID;
             </statement>
             </dbaction>
 
             <dbaction name="listTagRecursive">
-            <statement mode="query">  SELECT DISTINCT Images.id, Images.name, Images.album,
+            <statement mode="query">SELECT DISTINCT Images.id, Images.name, Images.album,
                                     Albums.albumRoot,
                                     ImageInformation.rating, Images.category,
                                     ImageInformation.format, ImageInformation.creationDate,
                                     Images.modificationDate, Images.fileSize,
                                     ImageInformation.width, ImageInformation.height
-                            FROM Images
+                                    FROM Images
                                     INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
                                     INNER JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN
+                                    WHERE Images.status=1 AND Images.id IN
                                     (SELECT imageid FROM ImageTags
                                     WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID));
             </statement>
             </dbaction>
 
             <dbaction name="listTag">
-            <statement mode="query">  SELECT DISTINCT Images.id, Images.name, Images.album,
+            <statement mode="query">SELECT DISTINCT Images.id, Images.name, Images.album,
                                     Albums.albumRoot,
                                     ImageInformation.rating, Images.category,
                                     ImageInformation.format, ImageInformation.creationDate,
                                     Images.modificationDate, Images.fileSize,
                                     ImageInformation.width, ImageInformation.height
-                            FROM Images
+                                    FROM Images
                                     INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
                                     INNER JOIN Albums ON Albums.id=Images.album
-                            WHERE Images.status=1 AND Images.id IN
+                                    WHERE Images.status=1 AND Images.id IN
                                     (SELECT imageid FROM ImageTags
                                     WHERE tagid=:tagID );
             </statement>
             </dbaction>
 
-            <!-- Thumbnails Schema DB -->
+            <!-- SQlite Thumbnails Schema Database -->
+
             <dbaction name="CreateThumbnailsDB" mode="transaction">
                     <statement mode="plain">CREATE TABLE Thumbnails
                             (id INTEGER PRIMARY KEY,
@@ -471,14 +481,16 @@
                     </statement>
                 </dbaction>
 
-                <!-- Thumbnails Indexes DB -->
+                <!-- SQlite Thumbnails Indexes -->
+
                 <dbaction name="CreateThumbnailsDBIndices" mode="transaction">
                     <statement mode="plain">CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);</statement>
                     <statement mode="plain">CREATE INDEX id_filePaths ON FilePaths (thumbId);</statement>
                     <statement mode="plain">CREATE INDEX id_customIdentifiers ON CustomIdentifiers (thumbId);</statement>
                 </dbaction>
 
-                <!-- Thumbnails Trigger DB -->
+                <!-- SQlite Thumbnails Trigger -->
+
                 <dbaction name="CreateThumbnailsDBTrigger" mode="transaction">
                     <statement mode="plain">CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails
                                 BEGIN
@@ -489,7 +501,8 @@
                     </statement>
                 </dbaction>
 
-            <!-- Face Schema DB -->
+            <!-- SQlite Face Schema Database -->
+
             <dbaction name="CreateFaceDB" mode="transaction">
                 <statement mode="plain">
                     CREATE TABLE Settings
@@ -532,12 +545,14 @@
                 </statement>
             </dbaction>
 
-            <!-- Indices -->
+            <!-- SQlite Face Indexes -->
+
             <dbaction name="CreateFaceIndices" mode="transaction">
                 <statement mode="plain">CREATE INDEX attribute_index  ON IdentityAttributes (id);</statement>
             </dbaction>
 
-            <!-- Triggers -->
+            <!-- SQlite Face Triggers -->
+
             <dbaction name="CreateFaceTriggers" mode="transaction">
                 <statement mode="plain">
                     CREATE TRIGGER delete_identities DELETE ON Identities
@@ -547,9 +562,10 @@
                     END;
                 </statement>
             </dbaction>
-                
-            <!-- Migration Statements -->
-            <!-- Migrate_Cleanup_DB now it's done by the program -->
+
+            <!-- SQlite Migration Statements -->
+
+            <!-- NOTE: Migrate_Cleanup_DB now it's done by the program -->
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
@@ -703,7 +719,8 @@
                 DELETE FROM Thumbnails WHERE id IN (SELECT thumbId FROM CustomIdentifiers WHERE identifier=:identifier);
             </statement></dbaction>
 
-            <!-- Migration from DB Version 5 (0.10 - 1.4) to Version 6 (1.5-) -->
+            <!-- SQlite Migration from Database Version 5 (0.10 - 1.4) to Version 6 (1.5-) -->
+
             <dbaction name="UpdateSchemaFromV5ToV6" mode="transaction">
                 <statement mode="plain">CREATE TABLE ImageHistory
                             (imageid INTEGER PRIMARY KEY,
@@ -816,8 +833,12 @@
         </dbactions>
     </database>
 
-    
-    <!-- MySQL DB statements -->
+
+
+    <!-- ========================================== MYSQL DATABASE STATEMENTS ========================================== -->
+
+
+
     <database name="QMYSQL">
         <hostName></hostName>
         <databaseName>digikam</databaseName>
@@ -827,6 +848,8 @@
         <connectoptions>UNIX_SOCKET=$$DBMISCPATH$$/mysql.socket</connectoptions>
         <dbservercmd>${SERVERCMD_MYSQL}</dbservercmd>
         <dbinitcmd>${INITCMD_MYSQL}</dbinitcmd>
+
+        <!-- Mysql Core Schema Database -->
 
         <dbactions>
             <dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
@@ -840,7 +863,7 @@
                 DROP TRIGGER privcheck_trigger;
             </statement>
             </dbaction>
-                        
+
             <dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
                 CREATE TABLE IF NOT EXISTS PrivCheck
                 (
@@ -853,18 +876,18 @@
             <dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
                 ALTER TABLE PrivCheck DROP COLUMN name;
             </statement>
-            </dbaction>            
-            
+            </dbaction>
+
             <dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
                 DROP TABLE PrivCheck;
             </statement>
             </dbaction>
-            
+
             <dbaction name="CheckPriv_Cleanup"><statement mode="plain">
                 DROP TABLE IF EXISTS PrivCheck;
             </statement>
             </dbaction>
-        
+
             <dbaction name="CreateDB" mode="transaction">
             <statement mode="plain">  CREATE TABLE IF NOT EXISTS AlbumRoots
             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -967,12 +990,12 @@
                             UNIQUE(imageid, property(110), value(111), extraValue(111)));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Tags
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                pid INTEGER,
+                            pid INTEGER,
                             name LONGTEXT CHARACTER SET utf8 NOT NULL,
                             icon INTEGER,
                             iconkde LONGTEXT CHARACTER SET utf8,
                             lft INT NOT NULL,
-                rgt INT NOT NULL
+                            rgt INT NOT NULL
                             );</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
                             (imageid INTEGER NOT NULL,
@@ -1024,7 +1047,8 @@
                             FROM Tags;</statement>
             </dbaction>
 
-            <!-- Indices -->
+            <!-- Mysql Core Indexes -->
+
             <dbaction name="CreateIndices" mode="transaction">
                 <statement mode="plain">
                     DROP PROCEDURE IF EXISTS create_index_if_not_exists;
@@ -1075,7 +1099,8 @@
                 <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_tagid_index','tagid');</statement>
             </dbaction>
 
-            <!-- Triggers -->
+            <!-- Mysql Core Triggers -->
+
             <dbaction name="CreateTriggers" mode="transaction">
             <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
             <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
@@ -1120,7 +1145,7 @@
             </statement>
             <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
             </dbaction>
-                       
+
             <dbaction name="checkIfDatabaseExists">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name;</statement>
             </dbaction>
@@ -1129,8 +1154,8 @@
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name;</statement>
             </dbaction>
 
-            <!--Don't collate on the path - this is to maintain the same behavior
-                that happens when sort order is "By Path"
+            <!-- NOTE: Don't collate on the path - this is to maintain the same behavior
+                       that happens when sort order is "By Path"
             -->
             <dbaction name="getItemURLsInAlbumByItemPath">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Albums.relativePath,Images.name;</statement>
@@ -1169,8 +1194,8 @@
             <dbaction name="DeleteTag" mode="transaction">
             <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
             <statement mode="query">SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1
-                        FROM Tags
-                        WHERE id = :tagID;</statement>
+                                    FROM Tags
+                                    WHERE id = :tagID;</statement>
             <statement mode="query">DELETE FROM Tags WHERE lft BETWEEN @myLeft AND @myRight;</statement>
             <statement mode="query">UPDATE Tags SET rgt = rgt - @myWidth WHERE rgt > @myRight;</statement>
             <statement mode="query">UPDATE Tags SET lft = lft - @myWidth WHERE lft > @myRight;</statement>
@@ -1310,7 +1335,8 @@ ORDER BY inf.rating DESC, img.name ASC
             </statement>
             </dbaction>
 
-            <!-- Thumbnails Schema DB -->
+            <!-- Mysql Thumbnails Schema Database -->
+
             <dbaction name="CreateThumbnailsDB" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Thumbnails
                             (id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -1353,8 +1379,9 @@ ORDER BY inf.rating DESC, img.name ASC
                             UPDATE value = GREATEST(VALUES(value), 2)
                     </statement>
             </dbaction>
-            
-            <!-- Thumbnails Indexes DB -->
+
+            <!-- Mysql Thumbnails Indexes -->
+
             <dbaction name="CreateThumbnailsDBIndices" mode="transaction">
                 <statement mode="plain">
                     DROP PROCEDURE IF EXISTS create_index_if_not_exists;
@@ -1393,10 +1420,13 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId');</statement>
             </dbaction>
 
-            <!-- Thumbnails Trigger DB -->
+            <!-- Mysql Thumbnails Trigger -->
+
             <dbaction name="CreateThumbnailsDBTrigger" mode="transaction"></dbaction>
 
-            <!-- Face Schema DB -->
+            <!-- Mysql Face Schema Database -->
+
+            <!-- TODO: sql code not yet ported from Sqlite to Mysql -->
             <dbaction name="CreateFaceDB" mode="transaction">
                 <statement mode="plain">
                     CREATE TABLE Settings
@@ -1439,12 +1469,16 @@ ORDER BY inf.rating DESC, img.name ASC
                 </statement>
             </dbaction>
 
-            <!-- Indices -->
+            <!-- Mysql face Indexes -->
+
+            <!-- TODO: sql code not yet ported from Sqlite to Mysql -->
             <dbaction name="CreateFaceIndices" mode="transaction">
                 <statement mode="plain">CREATE INDEX attribute_index  ON IdentityAttributes (id);</statement>
             </dbaction>
 
-            <!-- Triggers -->
+            <!-- Mysql Face Triggers -->
+
+            <!-- TODO: sql code not yet ported from Sqlite to Mysql -->
             <dbaction name="CreateFaceTriggers" mode="transaction">
                 <statement mode="plain">
                     CREATE TRIGGER delete_identities DELETE ON Identities
@@ -1454,9 +1488,10 @@ ORDER BY inf.rating DESC, img.name ASC
                     END;
                 </statement>
             </dbaction>
-            
-            <!-- Migration Statements -->
-            <!-- Migrate_Cleanup_DB now it's done by the program -->
+
+            <!-- Mysql Migration Statements -->
+
+            <!-- NOTE: Migrate_Cleanup_DB now it's done by the program -->
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
@@ -1651,7 +1686,7 @@ ORDER BY inf.rating DESC, img.name ASC
             </dbaction>
 
 
-            <!-- Migration from DB Version 5 (0.10 - 1.4) to Version 6 (1.5-) -->
+            <!-- Mysql Migration from Database Version 5 (0.10 - 1.4) to Version 6 (1.5-) -->
 
             <dbaction name="UpdateSchemaFromV5ToV6" mode="transaction">
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
