@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADDTAGSCOMPLETIONBOX_H
-#define ADDTAGSCOMPLETIONBOX_H
+#ifndef TAGSCOMPLETER_H
+#define TAGSCOMPLETER_H
 
 // Qt includes
 
@@ -30,7 +30,6 @@
 
 // Local includes
 
-#include "modelcompletion.h"
 #include "taggingaction.h"
 
 class QLineEdit;
@@ -89,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ADDTAGSCOMPLETIONBOX_H
+#endif // TAGSCOMPLETER_H
