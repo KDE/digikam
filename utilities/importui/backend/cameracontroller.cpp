@@ -53,12 +53,11 @@ extern "C"
 #include <QUrl>
 #include <QDir>
 #include <QMessageBox>
+#include <QProcess>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kprocess.h>
-#include <kmacroexpander.h>
 
 // Local includes
 
@@ -942,31 +941,29 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         if (!script.isEmpty())
         {
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "Got a script, processing: " << script;
-            KProcess process;
 
-            process.setOutputChannelMode(KProcess::SeparateChannels);
-            QString s;
+            QString s = script;
 
-            if (script.indexOf(QLatin1Char('%')) > -1)
+            if (s.indexOf(QLatin1Char('%')) > -1)
             {
-                QHash<QString, QString> map;
-                map.insert(QLatin1String("file"), dest);
-                map.insert(QLatin1String("filename"), info.fileName());
-                map.insert(QLatin1String("path"), info.path());
-                map.insert(QLatin1String("orgfilename"), file);
-                map.insert(QLatin1String("orgpath"), folder);
-                s = KMacroExpander::expandMacros(script, map);
+                // %filename must be replaced before %file
+                s.replace(QLatin1String("%orgfilename"), file,            Qt::CaseSensitive);
+                s.replace(QLatin1String("%filename"),    info.fileName(), Qt::CaseSensitive);
+                s.replace(QLatin1String("%orgpath"),     folder,          Qt::CaseSensitive);
+                s.replace(QLatin1String("%path"),        info.path(),     Qt::CaseSensitive);
+                s.replace(QLatin1String("%file"),        dest,            Qt::CaseSensitive);
             }
             else
             {
-                s = script + QLatin1String(" \"") + dest + QLatin1String("\"");
+                s.append(QLatin1String(" \"") + dest + QLatin1String("\""));
             }
 
-            process.setShellCommand(s);
-            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Running: " << s;
-            int ret = process.execute();
+            QProcess process;
+            process.setProcessChannelMode(QProcess::SeparateChannels);
 
-            if (ret != 0)
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Running: " << s;
+
+            if (process.execute(s) != 0)
             {
                 sendLogMsg(xi18n("Failed to run script for <b>%1</b>", file), DHistoryView::ErrorEntry,  folder, file);
             }
