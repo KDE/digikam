@@ -1,11 +1,6 @@
 TODO List
 ---------
 
-- MySql setup is not remain between digiKam session. Setup always back to SQlite. DONE
-- Show which DB Qt4 plugin is used into Help/Components Info & DB Stats dialogs.  DONE
-- Add a KDebug aera dedicated to databaseserver.                                  DONE
-- Fix path to database server program to be portable. Use CMake config as well.   DONE
-- Help/Database Stats dialog is broken with MySql.                                DONE
 - Shutdown internal database server when digiKam is down.
 - It's not possible to set-up DB file path with MySql Internal, as with SQlite.
 - Better handling of legacy database setting parameters.
