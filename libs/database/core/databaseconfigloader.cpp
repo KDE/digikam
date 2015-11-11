@@ -239,11 +239,8 @@ bool DatabaseConfigLoader::readConfig(const QString& filepath, int xmlVersion)
     QDomElement versionElement = element.namedItem(QLatin1String("version")).toElement();
     int version                = 0;
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Checking XML version ID: "
-                                 << versionElement.isNull()
-                                 << versionElement.text()
-                                 << versionElement.text().toInt()
-                                 << xmlVersion;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Checking XML version ID => expected: " << xmlVersion
+                                  << " found: " << versionElement.text().toInt();
 
     if (!versionElement.isNull())
     {
