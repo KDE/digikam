@@ -89,7 +89,7 @@ bool DatabaseServerStarter::init()
 {
     if (qDBusRegisterMetaType<DatabaseServerError>() < 0)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG)<<"Error while registering DatabaseServerError class.";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Error while registering DatabaseServerError class.";
         return false;
     }
 
@@ -160,7 +160,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
         QDBusMessage reply = dbus_iface.callWithArgumentList(QDBus::Block, QLatin1String("startDatabaseProcess"), arguments);
 
-        if (QDBusMessage::ErrorMessage==reply.type())
+        if (QDBusMessage::ErrorMessage == reply.type())
         {
             result.setErrorType(DatabaseServerError::StartError);
             result.setErrorText(i18n("<p><b>Error while calling the database server starter.</b></p>"

@@ -316,7 +316,7 @@ public:
         while (!i.atEnd())
         {
             ++i;
-            
+
             if (*i & values)
             {
                 break;

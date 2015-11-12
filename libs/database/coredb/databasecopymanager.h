@@ -54,7 +54,7 @@ public:
     DatabaseCopyManager();
     ~DatabaseCopyManager();
 
-    void copyDatabases(DatabaseParameters fromDBParameters, DatabaseParameters toDBParameters);
+    void copyDatabases(const DatabaseParameters& fromDBParameters, DatabaseParameters& toDBParameters);
 
 Q_SIGNALS:
 

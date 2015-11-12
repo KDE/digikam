@@ -41,6 +41,7 @@ namespace Digikam
 class DIGIKAM_DATABASE_EXPORT DatabaseServerError
 {
 public:
+
     enum DatabaseServerErrorEnum
     {
         /**
@@ -59,6 +60,8 @@ public:
         StartError
     };
 
+public:
+
     explicit DatabaseServerError(DatabaseServerErrorEnum errorType=NoErrors, const QString& errorText = QString());
     DatabaseServerError(const DatabaseServerError& dbServerError);
     ~DatabaseServerError();
@@ -68,13 +71,13 @@ public:
     // Retrieve the DatabaseServerError data from the D-BUS argument
     const DatabaseServerError& operator>>(QDBusArgument& argument) const;
 
-    int                      getErrorType() const;
-    void                     setErrorType(DatabaseServerErrorEnum errorType);
-    QString                  getErrorText() const;
-    void                     setErrorText(const QString& errorText);
-
+    int     getErrorType() const;
+    void    setErrorType(DatabaseServerErrorEnum errorType);
+    QString getErrorText() const;
+    void    setErrorText(const QString& errorText);
 
 private:
+
     QString                     m_ErrorText;
     int                         m_ErrorType;
 };

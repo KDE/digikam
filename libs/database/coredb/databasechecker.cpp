@@ -103,7 +103,7 @@ bool DatabasePrivilegesChecker::checkPriv(DatabaseBackend& dbBackend, const QStr
         dbBackend.lastSQLError().isValid()                &&
         dbBackend.lastSQLError().number() != 0)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Error while creating a trigger. Details: " << dbBackend.lastSQLError();
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: error while creating a trigger. Details: " << dbBackend.lastSQLError();
         return false;
     }
 

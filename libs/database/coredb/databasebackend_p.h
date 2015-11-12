@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-07
- * Description : Abstract database backend
+ * Description : Abstract database backend for core database
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,10 +25,9 @@
 #ifndef DATABASEBACKEND_P_H
 #define DATABASEBACKEND_P_H
 
-#include "databasecorebackend_p.h"
-
 // Local includes
 
+#include "databasecorebackend_p.h"
 #include "databasewatch.h"
 
 namespace Digikam
@@ -154,4 +154,3 @@ public:
 }  // namespace Digikam
 
 #endif // DATABASEBACKEND_P_H
-

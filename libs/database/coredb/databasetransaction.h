@@ -33,24 +33,24 @@ namespace Digikam
 
 class DatabaseAccess;
 
+/**
+ * Convenience class: You can create a DatabaseTransaction object for a scope for which
+ * you want to declare a database commit.
+ * Equivalent to calling beginTransaction and commitTransaction on the album db.
+ */
 class DIGIKAM_DATABASE_EXPORT DatabaseTransaction
 {
 public:
 
     /**
-     * Convenience class: You can create a DatabaseTransaction object for a scope for which
-     * you want to declare a database commit.
-     * Equivalent to calling beginTransaction and commitTransaction on the album db.
-     */
-
-    /**
      * Retrieve a DatabaseAccess object each time when constructing and destructing.
      */
     DatabaseTransaction();
+
     /**
      * Use an existing DatabaseAccess object, which must live as long as this object exists.
      */
-    explicit DatabaseTransaction(DatabaseAccess* access);
+    explicit DatabaseTransaction(DatabaseAccess* const access);
     ~DatabaseTransaction();
 
 private:

@@ -58,7 +58,7 @@ void DatabaseCopyManager::stopProcessing()
     m_isStopProcessing = true;
 }
 
-void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, DatabaseParameters toDBParameters)
+void DatabaseCopyManager::copyDatabases(const DatabaseParameters& fromDBParameters, DatabaseParameters& toDBParameters)
 {
     m_isStopProcessing = false;
     DatabaseLocking fromLocking;
@@ -176,8 +176,8 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
 bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, 
                                     DatabaseBackend& toDBbackend, const QString& toActionName)
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Trying to copy contents from DB with ActionName: [" << fromActionName
-                                 << "] to DB with ActionName [" << toActionName << "]";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: trying to copy contents from DB with ActionName: [" << fromActionName
+                                  << "] to DB with ActionName [" << toActionName << "]";
 
     QMap<QString, QVariant> bindingMap;
 
@@ -193,23 +193,24 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
     }
     else
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Driver doesn't support query size. We try to go to the last row and back to the current.";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: driver doesn't support query size. We try to go to the last row and back to the current.";
         result.last();
         /*
          * Now get the current row. If this is not possible, a value lower than 0 will be returned.
          * To not confuse the log reading user, we reset this value to 0.
          */
         resultSize = (result.at() < 0) ? 0 : result.at();
+
         /*
-        * avoid a misleading error message, query is redone if isForwardOnly
-        */
+         * avoid a misleading error message, query is redone if isForwardOnly
+         */
         if ( ! isForwardOnly)
         {
             result.first();
         }
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Result size: ["<< resultSize << "]";
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: result size: ["<< resultSize << "]";
 
     /*
      * If the sql query is forward only - perform the query again.
@@ -234,8 +235,8 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
 
     while (result.next())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Query isOnValidRow [" << result.isValid() << "] isActive [" << result.isActive()
-                                     << "] result size: [" << result.size() << "]";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: query isOnValidRow [" << result.isValid() << "] isActive [" << result.isActive()
+                                      << "] result size: [" << result.size() << "]";
 
         if (m_isStopProcessing == true)
         {
@@ -251,7 +252,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
 
         foreach(QString columnName, columnNames) // krazy:exclude=foreach
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Column: ["<< columnName << "] value ["<<result.value(i)<<"]";
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: column: ["<< columnName << "] value ["<<result.value(i)<<"]";
             tempBindingMap.insert(columnName.insert(0, QLatin1Char(':')), result.value(i));
             ++i;
         }
@@ -264,7 +265,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
             toDBbackend.lastSQLError().isValid()              &&
             toDBbackend.lastSQLError().number() != 0)
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Error while converting table data. Details: " << toDBbackend.lastSQLError();
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: error while converting table data. Details: " << toDBbackend.lastSQLError();
             QString errorMsg = i18n("Error while converting the database.\n Details: %1", toDBbackend.lastSQLError().databaseText());
             emit finished(DatabaseCopyManager::failed, errorMsg);
             return false;

@@ -156,7 +156,7 @@ public:
      *  DatabaseAccess.
      */
     DatabaseAccessUnlock();
-    explicit DatabaseAccessUnlock(DatabaseAccess* access);
+    explicit DatabaseAccessUnlock(DatabaseAccess* const access);
     ~DatabaseAccessUnlock();
 
 private:

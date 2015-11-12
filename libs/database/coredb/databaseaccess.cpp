@@ -87,7 +87,7 @@ class DatabaseAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    explicit DatabaseAccessMutexLocker(DatabaseAccessStaticPriv* d)
+    explicit DatabaseAccessMutexLocker(DatabaseAccessStaticPriv* const d)
         : QMutexLocker(&d->lock.mutex),
           d(d)
     {
@@ -98,6 +98,8 @@ public:
     {
         d->lock.lockCount--;
     }
+
+public:
 
     DatabaseAccessStaticPriv* const d;
 };
@@ -163,7 +165,7 @@ void DatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler
 {
     if (!d || !d->backend)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Please set parameters before setting a database error handler";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: please set parameters before setting a database error handler";
         return;
     }
 
@@ -258,7 +260,8 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!drivers.contains(QLatin1String("QSQLITE")))
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: no SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt4.");
         return false;
@@ -281,8 +284,8 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!d->backend)
     {
-        qCWarning(DIGIKAM_DATABASE_LOG) << "No database backend available in checkReadyForUse. "
-                   "Did you call setParameters before?";
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Core database: no database backend available in checkReadyForUse. "
+                                           "Did you call setParameters before?";
         return false;
     }
 
@@ -292,6 +295,7 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     }
 
     //TODO: Implement a method to wait until the database is open
+
     if (!d->backend->isOpen())
     {
         if (!d->backend->open(d->parameters))
@@ -354,7 +358,7 @@ void DatabaseAccess::cleanUpDatabase()
     d = 0;
 }
 
-// --------
+// ----------------------------------------------------------------------
 
 DatabaseAccessUnlock::DatabaseAccessUnlock()
 {
@@ -375,7 +379,7 @@ DatabaseAccessUnlock::DatabaseAccessUnlock()
     DatabaseAccess::d->lock.mutex.unlock();
 }
 
-DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess*)
+DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess* const)
 {
     // With the passed pointer, we have assured that the mutex is acquired
     // Store lock count
@@ -384,7 +388,7 @@ DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess*)
     DatabaseAccess::d->lock.lockCount = 0;
 
     // unlock
-    for (int i=0; i<count; ++i)
+    for (int i = 0; i < count; ++i)
     {
         DatabaseAccess::d->lock.mutex.unlock();
     }
@@ -395,7 +399,7 @@ DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess*)
 DatabaseAccessUnlock::~DatabaseAccessUnlock()
 {
     // lock as often as it was locked before
-    for (int i=0; i<count; ++i)
+    for (int i = 0; i < count; ++i)
     {
         DatabaseAccess::d->lock.mutex.lock();
     }

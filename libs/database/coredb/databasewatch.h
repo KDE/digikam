@@ -50,7 +50,7 @@ public:
     };
 
 public:
-   
+
     DatabaseWatch();
 
     void initializeRemote(DatabaseMode mode);

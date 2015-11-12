@@ -39,7 +39,7 @@ DatabaseTransaction::DatabaseTransaction()
     access.backend()->beginTransaction();
 }
 
-DatabaseTransaction::DatabaseTransaction(DatabaseAccess* access)
+DatabaseTransaction::DatabaseTransaction(DatabaseAccess* const access)
     : m_access(access)
 {
     m_access->backend()->beginTransaction();
