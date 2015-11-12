@@ -32,7 +32,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kconfiggroup.h>
 
 // Local includes
 
@@ -55,11 +54,11 @@ int ThumbnailSchemaUpdater::schemaVersion()
 
 ThumbnailSchemaUpdater::ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access)
 {
-    m_access         = access;
-    m_currentVersion = 0;
+    m_access                 = access;
+    m_currentVersion         = 0;
     m_currentRequiredVersion = 0;
-    m_observer       = 0;
-    m_setError       = false;
+    m_observer               = 0;
+    m_setError               = false;
 }
 
 bool ThumbnailSchemaUpdater::update()
@@ -93,7 +92,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
     if (tables.contains(QLatin1String("Thumbnails"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
-        QString version = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersion"));
+        QString version         = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersion"));
         QString versionRequired = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersionRequired"));
         qCDebug(DIGIKAM_DATABASE_LOG) << "Thumbs database: have a structure version " << version;
 
@@ -107,7 +106,9 @@ bool ThumbnailSchemaUpdater::startUpdates()
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            qCCritical(DIGIKAM_DATABASE_LOG) << "DBThumbnailsVersion not available! Giving up schema upgrading.";
+
+            qCCritical(DIGIKAM_DATABASE_LOG) << "Thumbs database: database version not available! Giving up schema upgrading.";
+
             QString errorMsg = i18n(
                                    "The database is not valid: "
                                    "the \"DBThumbnailsVersion\" setting does not exist. "
@@ -139,12 +140,10 @@ bool ThumbnailSchemaUpdater::startUpdates()
             }
             else
             {
-                QString errorMsg = i18n(
-                                       "The database has been used with a more recent version of digiKam "
-                                       "and has been updated to a database schema which cannot be used with this version. "
-                                       "(This means this digiKam version is too old, or the database format is to recent) "
-                                       "Please use the more recent version of digikam that you used before. "
-                                   );
+                QString errorMsg = i18n("The database has been used with a more recent version of digiKam "
+                                        "and has been updated to a database schema which cannot be used with this version. "
+                                        "(This means this digiKam version is too old, or the database format is to recent) "
+                                        "Please use the more recent version of digikam that you used before. ");
                 m_access->setLastError(errorMsg);
 
                 if (m_observer)
@@ -202,11 +201,11 @@ bool ThumbnailSchemaUpdater::makeUpdates()
 
 bool ThumbnailSchemaUpdater::createDatabase()
 {
-    if ( createTables()
-         && createIndices()
-         && createTriggers())
+    if ( createTables()  &&
+         createIndices() &&
+         createTriggers())
     {
-        m_currentVersion = schemaVersion();
+        m_currentVersion         = schemaVersion();
         m_currentRequiredVersion = 1;
         return true;
     }

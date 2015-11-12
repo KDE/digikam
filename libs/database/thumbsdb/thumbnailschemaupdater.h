@@ -24,10 +24,6 @@
 #ifndef THUMBNAILSCHEMAUPDATER_H
 #define THUMBNAILSCHEMAUPDATER_H
 
-// Qt includes
-
-#include <QString>
-
 namespace Digikam
 {
 

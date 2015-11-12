@@ -6,8 +6,8 @@
  * Date        : 2009-05-29
  * Description : database album interface.
  *
- * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,7 +53,7 @@ enum Type
     UndefinedType = 0,
     NoThumbnail,
     PGF,
-    JPEG,              // Warning : no alpha chanel support. Cannot be used as well.
+    JPEG,              // Warning : no alpha channel support. Cannot be used as well.
     JPEG2000,
     PNG
     //FreeDesktopHash
