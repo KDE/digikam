@@ -143,7 +143,7 @@ add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGE
 
 generate_export_header(digikamdatabase
                        BASE_NAME digikam_database
-                       EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/../../app/core/digikam_database_export.h"
+                       EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/../../app/utils/digikam_database_export.h"
 )
 
 target_include_directories(digikamdatabase
