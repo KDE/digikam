@@ -27,10 +27,10 @@
 // Qt includes
 
 #include <QAbstractItemModel>
+#include <QLineEdit>
 
 // KDE includes
 
-#include <klineedit.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -70,7 +70,7 @@ bool DIGIKAM_EXPORT operator==(const SearchTextSettings& a, const SearchTextSett
  * @author Gilles Caulier
  * @author jwienke
  */
-class DIGIKAM_EXPORT SearchTextBar : public KLineEdit, public StateSavingObject
+class DIGIKAM_EXPORT SearchTextBar : public QLineEdit, public StateSavingObject
 {
     Q_OBJECT
 

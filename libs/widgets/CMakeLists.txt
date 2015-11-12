@@ -24,7 +24,7 @@ set(libcommonwidgets_SRCS
     common/dragdropimplementations.cpp
     common/filesaveoptionsbox.cpp
     common/fullscreensettings.cpp
-    common/modelcompletion.cpp
+    common/modelcompleter.cpp
     common/searchtextbar.cpp
     common/splashscreen.cpp
     common/statesavingobject.cpp
@@ -124,7 +124,6 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::Completion,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>

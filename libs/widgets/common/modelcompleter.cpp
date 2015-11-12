@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-06-13
- * Description : A KCompletion for AbstractAlbumModels
+ * Description : A QCompleter for AbstractAlbumModels
  *
  * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
@@ -23,11 +23,12 @@
  *
  * ============================================================ */
 
-#include "modelcompletion.h"
+#include "modelcompleter.h"
 
 // Qt includes
 
 #include <QPointer>
+#include <QStringListModel>
 
 // Local includes
 
@@ -36,13 +37,14 @@
 namespace Digikam
 {
 
-class ModelCompletion::Private
+class ModelCompleter::Private
 {
 public:
 
     Private() :
         displayRole(Qt::DisplayRole),
         uniqueIdRole(Qt::DisplayRole),
+        stringModel(0),
         model(0)
     {
     }
@@ -50,6 +52,7 @@ public:
     int                          displayRole;
     int                          uniqueIdRole;
 
+    QStringListModel*            stringModel;
     QPointer<QAbstractItemModel> model;
 
     /**
@@ -62,27 +65,34 @@ public:
     QMap<int, QString>           idToTextMap;
 };
 
-ModelCompletion::ModelCompletion()
-    : KCompletion(),
+ModelCompleter::ModelCompleter(QObject* parent)
+    : QCompleter(parent),
       d(new Private)
 {
-    setOrder(KCompletion::Sorted);
-    setIgnoreCase(true);
+    d->stringModel = new QStringListModel(this);
+    QCompleter::setModel(d->stringModel);
+
+    setModelSorting(CaseSensitivelySortedModel);
+    setCaseSensitivity(Qt::CaseInsensitive);
+    setCompletionMode(PopupCompletion);
+    setCompletionRole(d->displayRole);
+    setFilterMode(Qt::MatchContains);
+    setCompletionColumn(0);
 }
 
-ModelCompletion::~ModelCompletion()
+ModelCompleter::~ModelCompleter()
 {
     delete d;
 }
 
-void ModelCompletion::setModel(QAbstractItemModel* const model, int uniqueIdRole, int displayRole)
+void ModelCompleter::setModel(QAbstractItemModel* const model, int uniqueIdRole, int displayRole)
 {
     // first release old model
     if (d->model)
     {
         disconnectFromModel(d->model);
         d->idToTextMap.clear();
-        clear();
+        d->stringModel->setStringList(QStringList());
     }
 
     d->model        = model;
@@ -99,7 +109,7 @@ void ModelCompletion::setModel(QAbstractItemModel* const model, int uniqueIdRole
     }
 }
 
-void ModelCompletion::connectToModel(QAbstractItemModel* const model)
+void ModelCompleter::connectToModel(QAbstractItemModel* const model)
 {
     connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SLOT(slotRowsInserted(QModelIndex,int,int)));
@@ -114,16 +124,15 @@ void ModelCompletion::connectToModel(QAbstractItemModel* const model)
             this, SLOT(slotModelReset()));
 }
 
-QAbstractItemModel* ModelCompletion::model() const
+QAbstractItemModel* ModelCompleter::model() const
 {
     return d->model;
 }
 
-void ModelCompletion::slotRowsInserted(const QModelIndex& parent, int start, int end)
+void ModelCompleter::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
     //qCDebug(DIGIKAM_WIDGETS_LOG) << "rowInserted in parent " << parent << ", start = " << start
     //         << ", end = " << end;
-
     for (int i = start; i <= end; ++i)
     {
         // this cannot work if this is called from rowsAboutToBeInserted
@@ -144,7 +153,7 @@ void ModelCompletion::slotRowsInserted(const QModelIndex& parent, int start, int
     }
 }
 
-void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+void ModelCompleter::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     //qCDebug(DIGIKAM_WIDGETS_LOG) << "rows of parent " << parent << " removed, start = " << start
     //         << ", end = " << end;
@@ -164,12 +173,15 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
         {
             QString itemName = d->idToTextMap[id];
             d->idToTextMap.remove(id);
-
             // only delete an item in the completion object if there is no other
             // item with the same display name
             if (d->idToTextMap.keys(itemName).empty())
             {
-                removeItem(itemName);
+                QStringList stringList = d->idToTextMap.values();
+                stringList.removeDuplicates();
+
+                d->stringModel->setStringList(stringList);
+                d->stringModel->sort(0);
             }
         }
         else
@@ -180,12 +192,12 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
     }
 }
 
-void ModelCompletion::slotModelReset()
+void ModelCompleter::slotModelReset()
 {
     sync(d->model);
 }
 
-void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void ModelCompleter::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
     {
@@ -209,41 +221,26 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
         int id           = index.data(d->uniqueIdRole).toInt();
         QString itemName = index.data(d->displayRole).toString();
 
-        if (d->idToTextMap.contains(id))
-        {
-            removeItem(d->idToTextMap.value(id));
-        }
-        else
-        {
-            // FIXME normally this should be a bug. Fortunately we can handle
-            // it and it is a constant case that this happens because of some
-            // kind of race condition between the tree vies and this class.
-            // If the model emits the signal, that a new index was added, it may
-            // be first processed by the tree view. This updates the item
-            // counting based on the expansion state. Unfortunately, this
-            // operations needs a data change which is emitted as a dataChanged
-            // signal which then will arrive at this class before the original
-            // inserted signal arrived at this class.
-            //qCDebug(DIGIKAM_WIDGETS_LOG) << "idToTextMap did not contain an entry for index "
-            //         << index << itemName;
-        }
-
         d->idToTextMap[id] = itemName;
-        addItem(itemName);
+
+        QStringList stringList = d->idToTextMap.values();
+        stringList.removeDuplicates();
+
+        d->stringModel->setStringList(stringList);
+        d->stringModel->sort(0);
     }
 }
 
-void ModelCompletion::disconnectFromModel(QAbstractItemModel* const model)
+void ModelCompleter::disconnectFromModel(QAbstractItemModel* const model)
 {
     disconnect(model);
 }
 
-void ModelCompletion::sync(QAbstractItemModel* const model)
+void ModelCompleter::sync(QAbstractItemModel* const model)
 {
     //qCDebug(DIGIKAM_WIDGETS_LOG) << "Starting sync with model " << model
     //         << ", rowCount for parent: " << model->rowCount();
 
-    clear();
     d->idToTextMap.clear();
 
     for (int i = 0; i < model->rowCount(); ++i)
@@ -251,13 +248,18 @@ void ModelCompletion::sync(QAbstractItemModel* const model)
         const QModelIndex index = model->index(i, 0);
         sync(model, index);
     }
+
+    QStringList stringList = d->idToTextMap.values();
+    stringList.removeDuplicates();
+
+    d->stringModel->setStringList(stringList);
+    d->stringModel->sort(0);
 }
 
-void ModelCompletion::sync(QAbstractItemModel* const model, const QModelIndex& index)
+void ModelCompleter::sync(QAbstractItemModel* const model, const QModelIndex& index)
 {
     QString itemName = index.data(d->displayRole).toString();
     //qCDebug(DIGIKAM_WIDGETS_LOG) << "sync adding item '" << itemName << "' for index " << index;
-    addItem(itemName);
     d->idToTextMap.insert(index.data(d->uniqueIdRole).toInt(), itemName);
 
     for (int i = 0; i < model->rowCount(index); ++i)

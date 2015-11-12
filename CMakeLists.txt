@@ -151,7 +151,6 @@ find_package(KF5 ${KF5_MIN_VERSION}
              Notifications
              KIO
              Service
-             Completion
              WindowSystem
              Solid
              IconThemes

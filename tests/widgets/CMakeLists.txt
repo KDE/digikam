@@ -12,7 +12,6 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::Completion,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(searchtextbartest_SRCS
@@ -30,6 +29,5 @@ target_link_libraries(searchtextbartest
                       Qt5::Test
 
                       KF5::I18n
-                      KF5::Completion
 )
 

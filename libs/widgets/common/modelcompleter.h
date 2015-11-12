@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-06-13
- * Description : A KCompletion for AbstractAlbumModels
+ * Description : A QCompleter for AbstractAlbumModels
  *
  * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
@@ -23,16 +23,13 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMMODELCOMPLETION_H
-#define ALBUMMODELCOMPLETION_H
+#ifndef MODELCOMPLETER_H
+#define MODELCOMPLETER_H
 
 // QT includes
 
 #include <QAbstractItemModel>
-
-// KDE includes
-
-#include <kcompletion.h>
+#include <QCompleter>
 
 // Local includes
 
@@ -41,14 +38,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ModelCompletion : public KCompletion
+class DIGIKAM_EXPORT ModelCompleter : public QCompleter
 {
     Q_OBJECT
 
 public:
 
-    ModelCompletion();
-    ~ModelCompletion();
+    ModelCompleter(QObject* parent = 0);
+    ~ModelCompleter();
 
     /**
      * If the given model is != null, the model is used to populate the
@@ -83,4 +80,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* ALBUMMODELCOMPLETION_H */
+#endif /* MODELCOMPLETER_H */
