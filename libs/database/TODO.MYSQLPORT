@@ -1,9 +1,0 @@
-TODO List
----------
-
-- Shutdown internal database server when digiKam is down.
-- It's not possible to set-up DB file path with MySql Internal, as with SQlite.
-- Better handling of legacy database setting parameters.
-- Write new database setting parameters in FirstRun dialog.
-
-

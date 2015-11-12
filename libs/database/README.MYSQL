@@ -1,0 +1,19 @@
+TODO List
+---------
+
+- Shutdown internal database server when digiKam is down.
+- It's not possible to set-up DB file path with MySql Internal, as with SQlite.
+- Better handling of legacy database setting parameters.
+- Write new database setting parameters in FirstRun dialog.
+- Because digiKam use function declaration, Mysql server need to be prepared before to be used,
+  especially to create database and user with grant privileges :
+
+  CREATE DATABASE digikamdb; GRANT ALL PRIVILEGES ON digikamdb.* TO 'digikamuser'@'localhost' IDENTIFIED BY 'digikamuserpassword'; FLUSH PRIVILEGES;
+  GRANT SUPER ON *.* TO 'digikamuser'@'localhost';FLUSH PRIVILEGES;
+
+  with:
+
+  digikamdb           : the digiKam databse name (in case of we use only one mysql database for all tables)
+  digikamuser         : the name of user account used by digiKAm to access on mysql
+  digikamuserpassword : the password of the account.
+
