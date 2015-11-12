@@ -76,7 +76,7 @@ ModelCompleter::ModelCompleter(QObject* parent)
     setCaseSensitivity(Qt::CaseInsensitive);
     setCompletionMode(PopupCompletion);
     setCompletionRole(d->displayRole);
-    setFilterMode(Qt::MatchContains);
+    setMaxVisibleItems(10);
     setCompletionColumn(0);
 }
 
