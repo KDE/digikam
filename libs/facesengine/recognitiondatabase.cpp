@@ -222,6 +222,8 @@ QExplicitlySharedDataPointer<RecognitionDatabase::Private> RecognitionDatabaseSt
          */
     }
 
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Init Face Database with path: " << configPath;
+
     RecognitionDatabase::Private* const d = new RecognitionDatabase::Private(configPath);
     databases[configPath]                 = d;
 
@@ -481,7 +483,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
             // This situation is not well defined.
 
             qCDebug(DIGIKAM_FACESENGINE_LOG) << "Called addIdentity with a given UUID, and there is such a UUID already in the database."
-                                         << "The existing identity is returned without adjusting properties!";
+                                             << "The existing identity is returned without adjusting properties!";
 
             return matchByUuid;
         }
