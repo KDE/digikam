@@ -112,7 +112,7 @@ bool DatabaseFaceSchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version         = d->access->db()->setting(QString::fromLatin1("DBVersion"));
         QString versionRequired = d->access->db()->setting(QString::fromLatin1("DBVersionRequired"));
-        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Have a database structure version " << version;
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Face database: have a structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && d->access->parameters().isSQLite())
@@ -179,7 +179,8 @@ bool DatabaseFaceSchemaUpdater::startUpdates()
     }
     else
     {
-        //qCDebug(DIGIKAM_FACESENGINE_LOG) << "No database file available";
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Face database: no database file available";
+
         DatabaseParameters parameters = d->access->parameters();
 
         // No legacy handling: start with a fresh db

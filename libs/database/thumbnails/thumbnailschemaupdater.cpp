@@ -95,7 +95,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersion"));
         QString versionRequired = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersionRequired"));
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Have a thumbnail database structure version " << version;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Thumbs database: have a structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && m_access->parameters().isSQLite())
@@ -163,7 +163,8 @@ bool ThumbnailSchemaUpdater::startUpdates()
     }
     else
     {
-        //qCDebug(DIGIKAM_DATABASE_LOG) << "No database file available";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Thumbs database: no database file available";
+
         DatabaseParameters parameters = m_access->parameters();
 
         // No legacy handling: start with a fresh db
@@ -234,7 +235,7 @@ bool ThumbnailSchemaUpdater::updateV1ToV2()
 {
     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("UpdateThumbnailsDBSchemaFromV1ToV2"))))
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Schema upgrade in ThumbnailDB from V1 to V2 failed!";
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Thumbs database: schema upgrade from V1 to V2 failed!";
         return false;
     }
 
