@@ -11,14 +11,15 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libdatabasecore_SRCS
-    core/databasecorebackend.cpp
-    core/databaseparameters.cpp
-    core/databaseerrorhandler.cpp
-    core/databasecoreconfig.cpp
-    core/databaseconfigloader.cpp
-    core/sqlquery.cpp
-    core/dbactiontype.cpp
-    core/tagregion.cpp
+    engine/databasecorebackend.cpp
+    engine/databaseparameters.cpp
+    engine/databaseerrorhandler.cpp
+    engine/databasecoreconfig.cpp
+    engine/databaseconfigloader.cpp
+    engine/sqlquery.cpp
+    engine/dbactiontype.cpp
+
+    tags/tagregion.cpp
 
     thumbnails/thumbnaildatabasebackend.cpp
     thumbnails/thumbnaildatabaseaccess.cpp
@@ -28,12 +29,12 @@ set(libdatabasecore_SRCS
 
 #this sources must be set in digikam main app
 set(libdatabasemain_SRCS
-    core/databaseguierrorhandler.cpp
-    core/dbstatdlg.cpp
-    core/scancontroller.cpp
-    core/dio.cpp
-    core/syncjob.cpp
-    core/imageattributeswatch.cpp
+    engine/databaseguierrorhandler.cpp
+    engine/dbstatdlg.cpp
+    engine/scancontroller.cpp
+    engine/dio.cpp
+    engine/syncjob.cpp
+    engine/imageattributeswatch.cpp
 )
 
 set(libdatabase_SRCS
@@ -42,25 +43,35 @@ set(libdatabase_SRCS
     collection/collectionmanager.cpp
     collection/collectionlocation.cpp
     collection/collectionscannerhints.cpp
-    framework/databaseaccess.cpp
-    framework/databasewatch.cpp
-    framework/databasewatchadaptor.cpp
-    framework/databasebackend.cpp
-    framework/databaseoperationgroup.cpp
-    framework/databasetransaction.cpp
-    framework/databaseurl.cpp
-    framework/databasechangesets.cpp
-    framework/databaseconstants.cpp
-    framework/databasethumbnailinfoprovider.cpp
-    framework/databasechecker.cpp
-    framework/databasecopymanager.cpp
-    framework/databaseserverstarter.cpp
-    framework/databaseservererror.cpp
+
+    core/databaseaccess.cpp
+    core/databasewatch.cpp
+    core/databasewatchadaptor.cpp
+    core/databasebackend.cpp
+    core/databaseoperationgroup.cpp
+    core/databasetransaction.cpp
+    core/databaseurl.cpp
+    core/databasechangesets.cpp
+    core/databaseconstants.cpp
+    core/databasethumbnailinfoprovider.cpp
+    core/databasechecker.cpp
+    core/databasecopymanager.cpp
+    core/databaseserverstarter.cpp
+    core/databaseservererror.cpp
+    core/downloadhistory.cpp
+    core/namefilter.cpp
+    core/searchxml.cpp
+    core/schemaupdater.cpp
+
+    tags/tagproperties.cpp
+    tags/tagscache.cpp
+
     dbjobs/dbjobsthread.cpp
     dbjobs/dbjob.cpp
     dbjobs/dbjobinfo.cpp
     dbjobs/dbjobsmanager.cpp
     dbjobs/duplicatesprogressobserver.cpp
+
     item/imagecomments.cpp
     item/imageextendedproperties.cpp
     item/imageinfo.cpp
@@ -73,17 +84,13 @@ set(libdatabase_SRCS
     item/imagequerybuilder.cpp
     item/imagescanner.cpp
     item/imagetagpair.cpp
+
     imagehistory/imagehistorygraph.cpp
     imagehistory/imagehistorygraphmodel.cpp
+
     facesiface/databaseface.cpp
     facesiface/facetags.cpp
     facesiface/facetagseditor.cpp
-    utils/downloadhistory.cpp
-    utils/namefilter.cpp
-    utils/searchxml.cpp
-    utils/schemaupdater.cpp
-    utils/tagproperties.cpp
-    utils/tagscache.cpp
 )
 
 if(MARBLE_FOUND)
@@ -134,14 +141,14 @@ add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS} )
 add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} )
 add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasemodels_src>)
 
-generate_export_header(digikamdatabase BASE_NAME digikam_database EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/../../app/utils/digikam_database_export.h")
+generate_export_header(digikamdatabase BASE_NAME digikam_database EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/../../app/core/digikam_database_export.h")
 
 target_include_directories(digikamdatabase
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/framework>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/engine>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/facesiface>
