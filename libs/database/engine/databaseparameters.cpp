@@ -604,32 +604,17 @@ void DatabaseParameters::removeFromUrl(QUrl& url)
 
 QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
 {
-    dbg.nospace() << "DatabaseParameters: [ Type " << p.databaseType           << ", ";
-    dbg.nospace() << "Name "                       << p.databaseName           << " ";
-    dbg.nospace() << "(Thumbnails Name "           << p.databaseNameThumbnails << "); ";
-    dbg.nospace() << "(Face Name "                 << p.databaseNameFace       << "); ";
-
-    if (!p.connectOptions.isEmpty())
-    {
-        dbg.nospace() << "ConnectOptions: " << p.connectOptions << ", ";
-    }
-
-    if (!p.hostName.isEmpty())
-    {
-        dbg.nospace() << "Host Name and Port: " << p.hostName << " " << p.port << "; ";
-    }
-
-    if (p.internalServer)
-    {
-        dbg.nospace() << "Using an Internal Server; ";
-    }
-
-    if (!p.userName.isEmpty())
-    {
-        dbg.nospace() << "Username and Password: " << p.userName << ", " << p.password;
-    }
-
-    dbg.nospace() << "] ";
+    dbg.nospace() << "Database Parameters:"                                    << endl;
+    dbg.nospace() << "   Type:            " << p.databaseType                  << endl;
+    dbg.nospace() << "   DB Core Name:    " << p.databaseName                  << endl;
+    dbg.nospace() << "   DB Thumbs Name:  " << p.databaseNameThumbnails        << endl;
+    dbg.nospace() << "   DB Face Name:    " << p.databaseNameFace              << endl;
+    dbg.nospace() << "   ConnectOptions:  " << p.connectOptions                << endl;
+    dbg.nospace() << "   Host Name:       " << p.hostName                      << endl;
+    dbg.nospace() << "   Host port:       " << p.port                          << endl;
+    dbg.nospace() << "   Internal Server: " << p.internalServer                << endl;
+    dbg.nospace() << "   Username:        " << p.userName                      << endl;
+    dbg.nospace() << "   Password:        " << p.password                      << endl;
 
     return dbg.space();
 }
