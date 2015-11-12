@@ -22,8 +22,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
-                    ${CMAKE_CURRENT_SOURCE_DIR}/database
-                    ${CMAKE_CURRENT_SOURCE_DIR}/database/core
+                    ${CMAKE_CURRENT_SOURCE_DIR}/facedb
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
@@ -57,11 +56,11 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 #                        preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
 
-set(facesengine_database_LIB_SRCS database/trainingdb.cpp
-                                  database/databasefaceoperationgroup.cpp
-                                  database/databasefaceschemaupdater.cpp
-                                  database/databasefacebackend.cpp
-                                  database/databasefaceaccess.cpp
+set(facesengine_database_LIB_SRCS facedb/trainingdb.cpp
+                                  facedb/databasefaceoperationgroup.cpp
+                                  facedb/databasefaceschemaupdater.cpp
+                                  facedb/databasefacebackend.cpp
+                                  facedb/databasefaceaccess.cpp
 )
 
 add_library(digikamfacesengine_src

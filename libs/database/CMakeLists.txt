@@ -21,10 +21,10 @@ set(libdatabasecore_SRCS
 
     tags/tagregion.cpp
 
-    thumbnails/thumbnaildatabasebackend.cpp
-    thumbnails/thumbnaildatabaseaccess.cpp
-    thumbnails/thumbnaildb.cpp
-    thumbnails/thumbnailschemaupdater.cpp
+    thumbsdb/thumbnaildatabasebackend.cpp
+    thumbsdb/thumbnaildatabaseaccess.cpp
+    thumbsdb/thumbnaildb.cpp
+    thumbsdb/thumbnailschemaupdater.cpp
 )
 
 #this sources must be set in digikam main app
@@ -44,24 +44,24 @@ set(libdatabase_SRCS
     collection/collectionlocation.cpp
     collection/collectionscannerhints.cpp
 
-    core/databaseaccess.cpp
-    core/databasewatch.cpp
-    core/databasewatchadaptor.cpp
-    core/databasebackend.cpp
-    core/databaseoperationgroup.cpp
-    core/databasetransaction.cpp
-    core/databaseurl.cpp
-    core/databasechangesets.cpp
-    core/databaseconstants.cpp
-    core/databasethumbnailinfoprovider.cpp
-    core/databasechecker.cpp
-    core/databasecopymanager.cpp
-    core/databaseserverstarter.cpp
-    core/databaseservererror.cpp
-    core/downloadhistory.cpp
-    core/namefilter.cpp
-    core/searchxml.cpp
-    core/schemaupdater.cpp
+    coredb/databaseaccess.cpp
+    coredb/databasewatch.cpp
+    coredb/databasewatchadaptor.cpp
+    coredb/databasebackend.cpp
+    coredb/databaseoperationgroup.cpp
+    coredb/databasetransaction.cpp
+    coredb/databaseurl.cpp
+    coredb/databasechangesets.cpp
+    coredb/databaseconstants.cpp
+    coredb/databasethumbnailinfoprovider.cpp
+    coredb/databasechecker.cpp
+    coredb/databasecopymanager.cpp
+    coredb/databaseserverstarter.cpp
+    coredb/databaseservererror.cpp
+    coredb/downloadhistory.cpp
+    coredb/namefilter.cpp
+    coredb/searchxml.cpp
+    coredb/schemaupdater.cpp
 
     tags/tagproperties.cpp
     tags/tagscache.cpp
@@ -145,7 +145,7 @@ generate_export_header(digikamdatabase BASE_NAME digikam_database EXPORT_FILE_NA
 
 target_include_directories(digikamdatabase
                            PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/core>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/coredb>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/engine>
@@ -156,7 +156,7 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbnails>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbsdb>
 )
 
 target_link_libraries(digikamdatabase
