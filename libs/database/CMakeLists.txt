@@ -141,7 +141,10 @@ add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS} )
 add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} )
 add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasemodels_src>)
 
-generate_export_header(digikamdatabase BASE_NAME digikam_database EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/../../app/core/digikam_database_export.h")
+generate_export_header(digikamdatabase
+                       BASE_NAME digikam_database
+                       EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/../../app/core/digikam_database_export.h"
+)
 
 target_include_directories(digikamdatabase
                            PUBLIC
