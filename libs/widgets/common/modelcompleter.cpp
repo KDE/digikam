@@ -70,12 +70,12 @@ ModelCompleter::ModelCompleter(QObject* parent)
       d(new Private)
 {
     d->stringModel = new QStringListModel(this);
-    QCompleter::setModel(d->stringModel);
+    setModel(d->stringModel);
 
     setModelSorting(CaseSensitivelySortedModel);
     setCaseSensitivity(Qt::CaseInsensitive);
     setCompletionMode(PopupCompletion);
-    setCompletionRole(d->displayRole);
+    setCompletionRole(Qt::DisplayRole);
     setMaxVisibleItems(10);
     setCompletionColumn(0);
 }
@@ -85,7 +85,7 @@ ModelCompleter::~ModelCompleter()
     delete d;
 }
 
-void ModelCompleter::setModel(QAbstractItemModel* const model, int uniqueIdRole, int displayRole)
+void ModelCompleter::setItemModel(QAbstractItemModel* const model, int uniqueIdRole, int displayRole)
 {
     // first release old model
     if (d->model)
@@ -124,9 +124,14 @@ void ModelCompleter::connectToModel(QAbstractItemModel* const model)
             this, SLOT(slotModelReset()));
 }
 
-QAbstractItemModel* ModelCompleter::model() const
+QAbstractItemModel* ModelCompleter::itemModel() const
 {
     return d->model;
+}
+
+QStringList ModelCompleter::items() const
+{
+    return d->stringModel->stringList();
 }
 
 void ModelCompleter::slotRowsInserted(const QModelIndex& parent, int start, int end)

@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QAbstractItemModel>
+#include <QStringList>
 #include <QLineEdit>
 
 // KDE includes
@@ -36,6 +37,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "modelcompleter.h"
 #include "statesavingobject.h"
 
 namespace Digikam
@@ -164,6 +166,7 @@ public:
 
     void setSearchTextSettings(const SearchTextSettings& settings);
     SearchTextSettings searchTextSettings() const;
+    ModelCompleter*  completerModel() const;
 
 Q_SIGNALS:
 

@@ -29,6 +29,7 @@
 // QT includes
 
 #include <QAbstractItemModel>
+#include <QStringList>
 #include <QCompleter>
 
 // Local includes
@@ -55,8 +56,9 @@ public:
      * @param uniqueIdRole a role for which the model will return a unique integer for each entry
      * @param displayRole the role to retrieve the text for completion, default is Qt::DisplayRole.
      */
-    void setModel(QAbstractItemModel* const model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
-    QAbstractItemModel* model() const;
+    void setItemModel(QAbstractItemModel* const model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
+    QAbstractItemModel* itemModel() const;
+    QStringList items() const;
 
 private Q_SLOTS:
 

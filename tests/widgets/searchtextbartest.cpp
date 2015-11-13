@@ -142,12 +142,12 @@ void SearchTextBarTest::testModelParsing()
     textBar.setModel(&model, idRole, Qt::DisplayRole);
 
     // check that all entries are in the completion object now
-    //QCOMPARE(textBar.completionObject()->items().size(), 5);
-    //QVERIFY(textBar.completionObject()->items().contains(parent0));
-    //QVERIFY(textBar.completionObject()->items().contains(parent1));
-    //QVERIFY(textBar.completionObject()->items().contains(parent2));
-    //QVERIFY(textBar.completionObject()->items().contains(parent3));
-    //QVERIFY(textBar.completionObject()->items().contains(firstChild));
+    QCOMPARE(textBar.completerModel()->items().size(), 5);
+    QVERIFY(textBar.completerModel()->items().contains(parent0));
+    QVERIFY(textBar.completerModel()->items().contains(parent1));
+    QVERIFY(textBar.completerModel()->items().contains(parent2));
+    QVERIFY(textBar.completerModel()->items().contains(parent3));
+    QVERIFY(textBar.completerModel()->items().contains(firstChild));
 
     /**
      * @todo I can't test inserting new items, because this stub model only
@@ -158,8 +158,8 @@ void SearchTextBarTest::testModelParsing()
 
     // check that deleting an item is mirrored
     model.removeRow(1, QModelIndex());
-    //QCOMPARE(textBar.completionObject()->items().size(), 4);
-    //QVERIFY(!textBar.completionObject()->items().contains(parent1));
+    QCOMPARE(textBar.completerModel()->items().size(), 4);
+    QVERIFY(!textBar.completerModel()->items().contains(parent1));
 
     // ensure that resetting a completely new model works
     QStandardItemModel newModel(2, 1);
@@ -173,7 +173,7 @@ void SearchTextBarTest::testModelParsing()
 
     textBar.setModel(&newModel, idRole, Qt::DisplayRole);
 
-    //QCOMPARE(textBar.completionObject()->items().size(), 2);
-    //QVERIFY(textBar.completionObject()->items().contains(parent0 + QLatin1Char('x')));
-    //QVERIFY(textBar.completionObject()->items().contains(parent1 + QLatin1Char('x')));
+    QCOMPARE(textBar.completerModel()->items().size(), 2);
+    QVERIFY(textBar.completerModel()->items().contains(parent0 + QLatin1Char('x')));
+    QVERIFY(textBar.completerModel()->items().contains(parent1 + QLatin1Char('x')));
 }

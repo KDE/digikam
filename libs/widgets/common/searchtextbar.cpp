@@ -41,7 +41,6 @@
 
 #include "digikam_debug.h"
 #include "albumfiltermodel.h"
-#include "modelcompleter.h"
 
 namespace Digikam
 {
@@ -159,12 +158,12 @@ void SearchTextBar::setHighlightOnResult(bool highlight)
 
 void SearchTextBar::setModel(QAbstractItemModel* model, int uniqueIdRole, int displayRole)
 {
-    d->completer->setModel(model, uniqueIdRole, displayRole);
+    d->completer->setItemModel(model, uniqueIdRole, displayRole);
 }
 
 void SearchTextBar::setModel(AbstractAlbumModel* model)
 {
-    d->completer->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->completer->setItemModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 }
 
 void SearchTextBar::setFilterModel(AlbumFilterModel* filterModel)
@@ -238,6 +237,11 @@ void SearchTextBar::setSearchTextSettings(const SearchTextSettings& settings)
 SearchTextSettings SearchTextBar::searchTextSettings() const
 {
     return d->settings;
+}
+
+ModelCompleter* SearchTextBar::completerModel() const
+{
+    return d->completer;
 }
 
 void SearchTextBar::slotTextChanged(const QString& text)
