@@ -162,7 +162,11 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
         for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
         {
             TAlbum* const tag = static_cast<TAlbum*>(*it);
-            // d->titleEdit->completionObject()->addItem(tag->tagPath());
+
+            if (tag && !tag->isInternalTag())
+            {
+                d->titleEdit->completerModel()->addItem(tag->tagPath());
+            }
         }
     }
     else

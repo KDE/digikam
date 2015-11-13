@@ -58,6 +58,8 @@ public:
      */
     void setItemModel(QAbstractItemModel* const model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
     QAbstractItemModel* itemModel() const;
+
+    void addItem(const QString& item);
     QStringList items() const;
 
 private Q_SLOTS:

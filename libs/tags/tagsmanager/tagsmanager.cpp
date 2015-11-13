@@ -173,12 +173,12 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->tagPixmap->setMaximumWidth(40);
      d->tagPixmap->setPixmap(QIcon::fromTheme(QLatin1String("tag")).pixmap(30,30));
 
-     d->tagMngrView = new TagMngrTreeView(this,d->tagModel);
+     d->tagMngrView = new TagMngrTreeView(this, d->tagModel);
      d->tagMngrView->setConfigGroup(getConfigGroup());
 
      d->searchBar  = new SearchTextBar(this, QLatin1String("DigikamViewTagSearchBar"));
      d->searchBar->setHighlightOnResult(true);
-     d->searchBar->setModel(d->tagModel,
+     d->searchBar->setModel(d->tagMngrView->filteredModel(),
                             AbstractAlbumModel::AlbumIdRole,
                             AbstractAlbumModel::AlbumTitleRole);
      d->searchBar->setMaximumWidth(200);
