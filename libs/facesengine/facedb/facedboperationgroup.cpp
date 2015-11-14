@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databasefaceoperationgroup.h"
+#include "facedboperationgroup.h"
 
 // Qt includes
 
@@ -37,7 +37,7 @@ using namespace Digikam;
 namespace FacesEngine
 {
 
-class DatabaseFaceOperationGroup::Private
+class FaceDbOperationGroup::Private
 {
 public:
 
@@ -96,7 +96,7 @@ public:
     }
 };
 
-DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(FaceDbAccessData* const db)
+FaceDbOperationGroup::FaceDbOperationGroup(FaceDbAccessData* const db)
     : d(new Private)
 {
     d->db = db;
@@ -107,7 +107,7 @@ DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(FaceDbAccessData* const d
     }
 }
 
-DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(FaceDbAccess* const access)
+FaceDbOperationGroup::FaceDbOperationGroup(FaceDbAccess* const access)
     : d(new Private)
 {
     d->access = access;
@@ -118,13 +118,13 @@ DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(FaceDbAccess* const acces
     }
 }
 
-DatabaseFaceOperationGroup::~DatabaseFaceOperationGroup()
+FaceDbOperationGroup::~FaceDbOperationGroup()
 {
     d->release();
     delete d;
 }
 
-void DatabaseFaceOperationGroup::lift()
+void FaceDbOperationGroup::lift()
 {
     if (d->acquired)
     {
@@ -139,17 +139,17 @@ void DatabaseFaceOperationGroup::lift()
     }
 }
 
-void DatabaseFaceOperationGroup::setMaximumTime(int msecs)
+void FaceDbOperationGroup::setMaximumTime(int msecs)
 {
     d->maxTime = msecs;
 }
 
-void DatabaseFaceOperationGroup::resetTime()
+void FaceDbOperationGroup::resetTime()
 {
     d->timeAcquired.start();
 }
 
-void DatabaseFaceOperationGroup::allowLift()
+void FaceDbOperationGroup::allowLift()
 {
     if (d->maxTime && d->timeAcquired.elapsed() > d->maxTime)
     {

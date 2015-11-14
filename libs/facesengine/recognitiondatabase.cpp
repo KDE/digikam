@@ -45,7 +45,7 @@
 #include "databaseaccess.h"
 #include "databaseparameters.h"
 #include "facedbaccess.h"
-#include "databasefaceoperationgroup.h"
+#include "facedboperationgroup.h"
 #include "dataproviders.h"
 #include "recognitiondatabase.h"
 #include "trainingdb.h"
@@ -491,7 +491,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
 
     Identity identity;
     {
-        DatabaseFaceOperationGroup group(d->db);
+        FaceDbOperationGroup group(d->db);
         int id = FaceDbAccess(d->db).db()->addIdentity();
         identity.setId(id);
         identity.setAttributesMap(attributes);

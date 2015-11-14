@@ -57,8 +57,8 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 )
 
 set(facesengine_database_LIB_SRCS facedb/trainingdb.cpp
-                                  facedb/databasefaceoperationgroup.cpp
                                   facedb/databasefacebackend.cpp
+                                  facedb/facedboperationgroup.cpp
                                   facedb/facedbschemaupdater.cpp
                                   facedb/facedbaccess.cpp
 )

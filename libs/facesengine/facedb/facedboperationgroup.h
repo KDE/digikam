@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_FACE_OPERATION_GROUP_H
-#define DATABASE_FACE_OPERATION_GROUP_H
+#ifndef FACE_DATABASE_OPERATION_GROUP_H
+#define FACE_DATABASE_OPERATION_GROUP_H
 
 namespace FacesEngine
 {
@@ -32,26 +32,26 @@ class FaceDbAccessData;
 
 /**
  * When you intend to execute a number of write operations to the database,
- * group them while holding a DatabaseFaceOperationGroup.
+ * group them while holding a FaceDbOperationGroup.
  * For some database systems (SQLite), keeping a transaction across write operations
  * occurring in short time results in enormous speedup (800x).
  * For system that do not need this optimization, this class is a no-op.
  */
-class DatabaseFaceOperationGroup
+class FaceDbOperationGroup
 {
 public:
 
     /**
      * Retrieve a FaceDbAccess object each time when constructing and destructing.
      */
-    DatabaseFaceOperationGroup(FaceDbAccessData* const db);
+    FaceDbOperationGroup(FaceDbAccessData* const db);
 
     /**
      * Use an existing FaceDbAccess object, which must live as long as this object exists.
      */
-    DatabaseFaceOperationGroup(FaceDbAccess* const access);
+    FaceDbOperationGroup(FaceDbAccess* const access);
 
-    ~DatabaseFaceOperationGroup();
+    ~FaceDbOperationGroup();
 
     /**
      * This will - if a transaction is held - commit the transaction and acquire a new one.
@@ -80,4 +80,4 @@ private:
 
 } // namespace FacesEngine
 
-#endif // DATABASE_FACE_OPERATION_GROUP_H
+#endif // FACE_DATABASE_OPERATION_GROUP_H
