@@ -16,6 +16,8 @@ set(libdatabasecore_SRCS
     engine/databaseerrorhandler.cpp
     engine/databasecoreconfig.cpp
     engine/databaseconfigloader.cpp
+    engine/databaseserverstarter.cpp
+    engine/databaseservererror.cpp
     engine/sqlquery.cpp
     engine/dbactiontype.cpp
 
@@ -56,8 +58,6 @@ set(libdatabase_SRCS
     coredb/databaseconstants.cpp
     coredb/databasethumbnailinfoprovider.cpp
     coredb/databasecopymanager.cpp
-    coredb/databaseserverstarter.cpp
-    coredb/databaseservererror.cpp
     coredb/downloadhistory.cpp
     coredb/namefilter.cpp
     coredb/searchxml.cpp
