@@ -58,7 +58,7 @@
 #include "jpegutils.h"
 #include "pgfutils.h"
 #include "tagregion.h"
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 #include "thumbnaildb.h"
 #include "thumbsdbbackend.h"
 #include "thumbnailsize.h"
@@ -781,7 +781,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         }
     }
 
-    ThumbnailDatabaseAccess access;
+    ThumbsDbAccess access;
     DatabaseCoreBackend::QueryState lastQueryState = DatabaseCoreBackend::ConnectionError;
 
     while (lastQueryState == DatabaseCoreBackend::ConnectionError)
@@ -863,7 +863,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
 DatabaseThumbnailInfo ThumbnailCreator::loadDatabaseThumbnailInfo(const ThumbnailInfo& info) const
 {
-    ThumbnailDatabaseAccess access;
+    ThumbsDbAccess access;
     DatabaseThumbnailInfo   dbInfo;
 
     // Custom identifier takes precedence
@@ -990,7 +990,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
 
 void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info) const
 {
-    ThumbnailDatabaseAccess access;
+    ThumbsDbAccess access;
     DatabaseCoreBackend::QueryState lastQueryState=DatabaseCoreBackend::ConnectionError;
 
     while (DatabaseCoreBackend::ConnectionError==lastQueryState)

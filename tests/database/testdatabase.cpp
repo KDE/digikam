@@ -44,7 +44,7 @@
 #include "databaseparameters.h"
 #include "scancontroller.h"
 #include "setup.h"
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 #include "digikam_version.h"
 
 using namespace Digikam;
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
     ScanController::instance()->shutDown();
 
     DatabaseAccess::cleanUpDatabase();
-    ThumbnailDatabaseAccess::cleanUpDatabase();
+    ThumbsDbAccess::cleanUpDatabase();
 
     return 0;
 }

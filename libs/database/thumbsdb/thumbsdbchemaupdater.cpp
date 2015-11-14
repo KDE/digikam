@@ -40,7 +40,7 @@
 #include "collectionscannerobserver.h"
 #include "databasecorebackend.h"
 #include "databasetransaction.h"
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 #include "thumbnaildb.h"
 
 namespace Digikam
@@ -53,7 +53,7 @@ int ThumbsDbSchemaUpdater::schemaVersion()
 
 // -------------------------------------------------------------------------------------
 
-ThumbsDbSchemaUpdater::ThumbsDbSchemaUpdater(ThumbnailDatabaseAccess* access)
+ThumbsDbSchemaUpdater::ThumbsDbSchemaUpdater(ThumbsDbAccess* access)
 {
     m_access                 = access;
     m_currentVersion         = 0;

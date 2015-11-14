@@ -44,7 +44,7 @@
 #include "applicationsettings.h"
 #include "databaseaccess.h"
 #include "imageinfo.h"
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 #include "thumbnaildb.h"
 #include "maintenancethread.h"
 #include "digikam_config.h"
@@ -147,7 +147,7 @@ void ThumbsGenerator::slotStart()
 
     if (!d->rebuildAll)
     {
-        QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getFilePathsWithThumbnail();
+        QHash<QString, int> filePaths = ThumbsDbAccess().db()->getFilePathsWithThumbnail();
         QStringList::iterator it      = d->allPicturesPath.begin();
 
         while (it != d->allPicturesPath.end())

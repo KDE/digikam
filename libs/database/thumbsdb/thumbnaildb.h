@@ -39,7 +39,7 @@
 
 #include "sqlquery.h"
 #include "thumbsdbbackend.h"
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -131,7 +131,7 @@ private:
     class Private;
     Private* const d;
 
-    friend class Digikam::ThumbnailDatabaseAccess;
+    friend class Digikam::ThumbsDbAccess;
 };
 
 }  // namespace Digikam

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 
 // Qt includes
 
@@ -43,18 +43,18 @@
 namespace Digikam
 {
 
-class ThumbnailDatabaseAccessStaticPriv
+class ThumbsDbAccessStaticPriv
 {
 public:
 
-    ThumbnailDatabaseAccessStaticPriv()
+    ThumbsDbAccessStaticPriv()
         : backend(0),
           db(0),
           initializing(false)
     {
     }
 
-    ~ThumbnailDatabaseAccessStaticPriv()
+    ~ThumbsDbAccessStaticPriv()
     {
     };
 
@@ -67,32 +67,32 @@ public:
     bool                      initializing;
 };
 
-class ThumbnailDatabaseAccessMutexLocker : public QMutexLocker
+class ThumbsDbAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    explicit ThumbnailDatabaseAccessMutexLocker(ThumbnailDatabaseAccessStaticPriv* const d)
+    explicit ThumbsDbAccessMutexLocker(ThumbsDbAccessStaticPriv* const d)
         : QMutexLocker(&d->lock.mutex),
           d(d)
     {
         d->lock.lockCount++;
     }
 
-    ~ThumbnailDatabaseAccessMutexLocker()
+    ~ThumbsDbAccessMutexLocker()
     {
         d->lock.lockCount--;
     }
 
 public:
 
-    ThumbnailDatabaseAccessStaticPriv* const d;
+    ThumbsDbAccessStaticPriv* const d;
 };
 
-ThumbnailDatabaseAccessStaticPriv* ThumbnailDatabaseAccess::d = 0;
+ThumbsDbAccessStaticPriv* ThumbsDbAccess::d = 0;
 
-ThumbnailDatabaseAccess::ThumbnailDatabaseAccess()
+ThumbsDbAccess::ThumbsDbAccess()
 {
-    Q_ASSERT(d/*You will want to call setParameters before constructing ThumbnailDatabaseAccess*/);
+    Q_ASSERT(d/*You will want to call setParameters before constructing ThumbsDbAccess*/);
     d->lock.mutex.lock();
     d->lock.lockCount++;
 
@@ -107,13 +107,13 @@ ThumbnailDatabaseAccess::ThumbnailDatabaseAccess()
     }
 }
 
-ThumbnailDatabaseAccess::~ThumbnailDatabaseAccess()
+ThumbsDbAccess::~ThumbsDbAccess()
 {
     d->lock.lockCount--;
     d->lock.mutex.unlock();
 }
 
-ThumbnailDatabaseAccess::ThumbnailDatabaseAccess(bool)
+ThumbsDbAccess::ThumbsDbAccess(bool)
 {
     // private constructor, when mutex is locked and
     // backend should not be checked
@@ -121,17 +121,17 @@ ThumbnailDatabaseAccess::ThumbnailDatabaseAccess(bool)
     d->lock.lockCount++;
 }
 
-ThumbnailDB* ThumbnailDatabaseAccess::db() const
+ThumbnailDB* ThumbsDbAccess::db() const
 {
     return d->db;
 }
 
-ThumbsDbBackend* ThumbnailDatabaseAccess::backend() const
+ThumbsDbBackend* ThumbsDbAccess::backend() const
 {
     return d->backend;
 }
 
-DatabaseParameters ThumbnailDatabaseAccess::parameters()
+DatabaseParameters ThumbsDbAccess::parameters()
 {
     if (d)
     {
@@ -141,30 +141,30 @@ DatabaseParameters ThumbnailDatabaseAccess::parameters()
     return DatabaseParameters();
 }
 
-bool ThumbnailDatabaseAccess::isInitialized()
+bool ThumbsDbAccess::isInitialized()
 {
     return d;
 }
 
-void ThumbnailDatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
+void ThumbsDbAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
 {
     if (!d)
     {
-        d = new ThumbnailDatabaseAccessStaticPriv();
+        d = new ThumbsDbAccessStaticPriv();
     }
 
     //DatabaseErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
 
-void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters)
+void ThumbsDbAccess::setParameters(const DatabaseParameters& parameters)
 {
     if (!d)
     {
-        d = new ThumbnailDatabaseAccessStaticPriv();
+        d = new ThumbsDbAccessStaticPriv();
     }
 
-    ThumbnailDatabaseAccessMutexLocker lock(d);
+    ThumbsDbAccessMutexLocker lock(d);
 
     if (d->parameters == parameters)
     {
@@ -193,7 +193,7 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
     }
 }
 
-bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
+bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
@@ -207,7 +207,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     }
 
     // create an object with private shortcut constructor
-    ThumbnailDatabaseAccess access(false);
+    ThumbsDbAccess access(false);
 
     if (!d->backend)
     {
@@ -231,7 +231,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
         }
     }
 
-    // avoid endless loops (if called methods create new ThumbnailDatabaseAccess objects)
+    // avoid endless loops (if called methods create new ThumbsDbAccess objects)
     d->initializing = true;
 
     // update schema
@@ -249,21 +249,21 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     return d->backend->isReady();
 }
 
-QString ThumbnailDatabaseAccess::lastError()
+QString ThumbsDbAccess::lastError()
 {
     return d->lastError;
 }
 
-void ThumbnailDatabaseAccess::setLastError(const QString& error)
+void ThumbsDbAccess::setLastError(const QString& error)
 {
     d->lastError = error;
 }
 
-void ThumbnailDatabaseAccess::cleanUpDatabase()
+void ThumbsDbAccess::cleanUpDatabase()
 {
     if (d)
     {
-        ThumbnailDatabaseAccessMutexLocker locker(d);
+        ThumbsDbAccessMutexLocker locker(d);
         d->backend->close();
         delete d->db;
         delete d->backend;

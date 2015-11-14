@@ -48,7 +48,7 @@
 #include "albumdb.h"
 #include "imageinfo.h"
 #include "thumbnailloadthread.h"
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 #include "thumbnaildb.h"
 #include "databasewatch.h"
 #include "databasefields.h"

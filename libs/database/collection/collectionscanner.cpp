@@ -61,7 +61,7 @@
 #include "imagescanner.h"
 #include "metadatasettings.h"
 #include "tagscache.h"
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 #include "thumbnaildb.h"
 
 namespace Digikam
@@ -1296,25 +1296,25 @@ void CollectionScanner::scanFileUpdateHashReuseThumbnail(const QFileInfo& info, 
     QString newHash   = scanner.itemScanInfo().uniqueHash;
     qlonglong newSize = scanner.itemScanInfo().fileSize;
 
-    if (ThumbnailDatabaseAccess::isInitialized())
+    if (ThumbsDbAccess::isInitialized())
     {
         if (fileWasEdited)
         {
             // The file was edited in such a way that we know that the pixel content did not change, so we can reuse the thumbnail.
             // We need to add a link to the thumbnail data with the new hash/file size _and_ adjust
             // the file modification date in the data table.
-            DatabaseThumbnailInfo thumbDbInfo = ThumbnailDatabaseAccess().db()->findByHash(oldHash, oldSize);
+            DatabaseThumbnailInfo thumbDbInfo = ThumbsDbAccess().db()->findByHash(oldHash, oldSize);
 
             if (thumbDbInfo.id != -1)
             {
-                ThumbnailDatabaseAccess().db()->insertUniqueHash(newHash, newSize, thumbDbInfo.id);
-                ThumbnailDatabaseAccess().db()->updateModificationDate(thumbDbInfo.id, scanner.itemScanInfo().modificationDate);
+                ThumbsDbAccess().db()->insertUniqueHash(newHash, newSize, thumbDbInfo.id);
+                ThumbsDbAccess().db()->updateModificationDate(thumbDbInfo.id, scanner.itemScanInfo().modificationDate);
                 // TODO: also update details thumbnails (by file path and URL scheme)
             }
         }
         else
         {
-            ThumbnailDatabaseAccess().db()->replaceUniqueHash(oldHash, oldSize,
+            ThumbsDbAccess().db()->replaceUniqueHash(oldHash, oldSize,
                                                               newHash, newSize);
         }
     }

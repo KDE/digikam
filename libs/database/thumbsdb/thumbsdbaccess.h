@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAILDATABASEACCESS_H
-#define THUMBNAILDATABASEACCESS_H
+#ifndef THUMBNAILS_DATABASE_ACCESS_H
+#define THUMBNAILS_DATABASE_ACCESS_H
 
 // Local includes
 
@@ -36,10 +36,10 @@ namespace Digikam
 
 class InitializationObserver;
 class ThumbnailDB;
-class ThumbnailDatabaseAccessStaticPriv;
+class ThumbsDbAccessStaticPriv;
 class ThumbsDbBackend;
 
-class DIGIKAM_EXPORT ThumbnailDatabaseAccess
+class DIGIKAM_EXPORT ThumbsDbAccess
 {
 public:
 
@@ -47,8 +47,8 @@ public:
      *  (some features stripped off).
      *  For documentation, see databaseaccess.h */
 
-    ThumbnailDatabaseAccess();
-    ~ThumbnailDatabaseAccess();
+    ThumbsDbAccess();
+    ~ThumbsDbAccess();
 
     ThumbnailDB*              db()      const;
     ThumbsDbBackend* backend() const;
@@ -70,11 +70,11 @@ public:
 
 private:
 
-    explicit ThumbnailDatabaseAccess(bool);
+    explicit ThumbsDbAccess(bool);
 
-    static ThumbnailDatabaseAccessStaticPriv* d;
+    static ThumbsDbAccessStaticPriv* d;
 };
 
 }  // namespace Digikam
 
-#endif // THUMBNAILDATABASEACCESS_H
+#endif // THUMBNAILS_DATABASE_ACCESS_H

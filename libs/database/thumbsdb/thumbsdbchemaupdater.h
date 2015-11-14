@@ -28,7 +28,7 @@
 namespace Digikam
 {
 
-class ThumbnailDatabaseAccess;
+class ThumbsDbAccess;
 class InitializationObserver;
 
 class ThumbsDbSchemaUpdater
@@ -39,7 +39,7 @@ public:
 
 public:
 
-    explicit ThumbsDbSchemaUpdater(ThumbnailDatabaseAccess* access);
+    explicit ThumbsDbSchemaUpdater(ThumbsDbAccess* access);
 
     bool update();
     void setObserver(InitializationObserver* observer);
@@ -61,7 +61,7 @@ private:
     int                      m_currentVersion;
     int                      m_currentRequiredVersion;
 
-    ThumbnailDatabaseAccess* m_access;
+    ThumbsDbAccess* m_access;
 
     InitializationObserver*  m_observer;
 };

@@ -48,7 +48,7 @@
 #include "iccprofile.h"
 #include "iccsettings.h"
 #include "metadatasettings.h"
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
@@ -210,9 +210,9 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
                  "and these will not be switched to use the database. ";
     }
 
-    ThumbnailDatabaseAccess::setParameters(params);
+    ThumbsDbAccess::setParameters(params);
 
-    if (ThumbnailDatabaseAccess::checkReadyForUse(0))
+    if (ThumbsDbAccess::checkReadyForUse(0))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Thumbnail db ready for use";
         static_d->storageMethod = ThumbnailCreator::ThumbnailDatabase;
@@ -221,7 +221,7 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
     else
     {
         QMessageBox::information(qApp->activeWindow(), i18n("Failed to initialize thumbnail database"),
-                                 i18n("Error message: %1", ThumbnailDatabaseAccess().lastError()));
+                                 i18n("Error message: %1", ThumbsDbAccess().lastError()));
     }
 }
 

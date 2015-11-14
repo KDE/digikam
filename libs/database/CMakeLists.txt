@@ -23,10 +23,10 @@ set(libdatabasecore_SRCS
 
     tags/tagregion.cpp
 
-    thumbsdb/thumbnaildatabaseaccess.cpp
     thumbsdb/thumbnaildb.cpp
     thumbsdb/thumbsdbchemaupdater.cpp
     thumbsdb/thumbsdbbackend.cpp
+    thumbsdb/thumbsdbaccess.cpp
 )
 
 set(libdatabaseutils_SRCS

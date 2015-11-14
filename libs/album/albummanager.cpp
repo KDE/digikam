@@ -94,7 +94,7 @@ extern "C"
 #include "setupcollections.h"
 #include "setup.h"
 #include "tagscache.h"
-#include "thumbnaildatabaseaccess.h"
+#include "thumbsdbaccess.h"
 #include "thumbnailloadthread.h"
 #include "dnotificationwrapper.h"
 #include "dbjobinfo.h"
@@ -1021,8 +1021,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     ThumbnailLoadThread::initializeThumbnailDatabase(DatabaseAccess::parameters().thumbnailParameters(),
                                                      new DatabaseThumbnailInfoProvider());
 
-    DatabaseGUIErrorHandler* const thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbnailDatabaseAccess::parameters());
-    ThumbnailDatabaseAccess::initDatabaseErrorHandler(thumbnailsDBHandler);
+    DatabaseGUIErrorHandler* const thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbsDbAccess::parameters());
+    ThumbsDbAccess::initDatabaseErrorHandler(thumbnailsDBHandler);
 
     QApplication::restoreOverrideCursor();
 
