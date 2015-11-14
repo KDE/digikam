@@ -129,6 +129,13 @@ QAbstractItemModel* ModelCompleter::itemModel() const
     return d->model;
 }
 
+void ModelCompleter::addItem(const QString& item)
+{
+    QStringList stringList = d->stringModel->stringList();
+    d->stringModel->setStringList(stringList << item);
+    d->stringModel->sort(0);
+}
+
 QStringList ModelCompleter::items() const
 {
     return d->stringModel->stringList();
