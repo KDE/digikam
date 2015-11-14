@@ -26,7 +26,7 @@
 
 #include "thumbnaildatabasebackend.h"
 #include "databasecorebackend_p.h"
-#include "thumbnailschemaupdater.h"
+#include "thumbsdbchemaupdater.h"
 
 namespace Digikam
 {
@@ -40,7 +40,7 @@ ThumbnailDatabaseBackend::~ThumbnailDatabaseBackend()
 {
 }
 
-bool ThumbnailDatabaseBackend::initSchema(ThumbnailSchemaUpdater* const updater)
+bool ThumbnailDatabaseBackend::initSchema(ThumbsDbSchemaUpdater* const updater)
 {
     Q_D(DatabaseCoreBackend);
 

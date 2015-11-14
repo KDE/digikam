@@ -26,7 +26,7 @@ set(libdatabasecore_SRCS
     thumbsdb/thumbnaildatabasebackend.cpp
     thumbsdb/thumbnaildatabaseaccess.cpp
     thumbsdb/thumbnaildb.cpp
-    thumbsdb/thumbnailschemaupdater.cpp
+    thumbsdb/thumbsdbchemaupdater.cpp
 )
 
 set(libdatabaseutils_SRCS

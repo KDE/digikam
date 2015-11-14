@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class ThumbnailSchemaUpdater;
+class ThumbsDbSchemaUpdater;
 
 class DIGIKAM_DATABASE_EXPORT ThumbnailDatabaseBackend : public DatabaseCoreBackend
 {
@@ -49,7 +49,7 @@ public:
      * carry out upgrades if necessary.
      * Shall only be called from the thread that called open().
      */
-    bool initSchema(ThumbnailSchemaUpdater* const updater);    
+    bool initSchema(ThumbsDbSchemaUpdater* const updater);    
 
 private:
     

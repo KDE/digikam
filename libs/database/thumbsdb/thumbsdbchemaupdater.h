@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAILSCHEMAUPDATER_H
-#define THUMBNAILSCHEMAUPDATER_H
+#ifndef THUMBSDBCHEMAUPDATER_H
+#define THUMBSDBCHEMAUPDATER_H
 
 namespace Digikam
 {
@@ -31,7 +31,7 @@ namespace Digikam
 class ThumbnailDatabaseAccess;
 class InitializationObserver;
 
-class ThumbnailSchemaUpdater
+class ThumbsDbSchemaUpdater
 {
 public:
 
@@ -39,7 +39,7 @@ public:
 
 public:
 
-    explicit ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access);
+    explicit ThumbsDbSchemaUpdater(ThumbnailDatabaseAccess* access);
 
     bool update();
     void setObserver(InitializationObserver* observer);
@@ -68,4 +68,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // THUMBNAILSCHEMAUPDATER_H
+#endif // THUMBSDBCHEMAUPDATER_H

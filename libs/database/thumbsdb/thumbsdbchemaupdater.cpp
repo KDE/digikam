@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "thumbnailschemaupdater.h"
+#include "thumbsdbchemaupdater.h"
 
 // Qt includes
 
@@ -46,14 +46,14 @@
 namespace Digikam
 {
 
-int ThumbnailSchemaUpdater::schemaVersion()
+int ThumbsDbSchemaUpdater::schemaVersion()
 {
     return 2;
 }
 
 // -------------------------------------------------------------------------------------
 
-ThumbnailSchemaUpdater::ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access)
+ThumbsDbSchemaUpdater::ThumbsDbSchemaUpdater(ThumbnailDatabaseAccess* access)
 {
     m_access                 = access;
     m_currentVersion         = 0;
@@ -62,7 +62,7 @@ ThumbnailSchemaUpdater::ThumbnailSchemaUpdater(ThumbnailDatabaseAccess* access)
     m_setError               = false;
 }
 
-bool ThumbnailSchemaUpdater::update()
+bool ThumbsDbSchemaUpdater::update()
 {
     bool success = startUpdates();
 
@@ -80,12 +80,12 @@ bool ThumbnailSchemaUpdater::update()
     return success;
 }
 
-void ThumbnailSchemaUpdater::setObserver(InitializationObserver* observer)
+void ThumbsDbSchemaUpdater::setObserver(InitializationObserver* observer)
 {
     m_observer = observer;
 }
 
-bool ThumbnailSchemaUpdater::startUpdates()
+bool ThumbsDbSchemaUpdater::startUpdates()
 {
     // First step: do we have an empty database?
     QStringList tables = m_access->backend()->tables();
@@ -133,7 +133,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
 
         if (m_currentVersion > schemaVersion())
         {
-            // trying to open a database with a more advanced than this ThumbnailSchemaUpdater supports
+            // trying to open a database with a more advanced than this ThumbsDbSchemaUpdater supports
             if (!versionRequired.isEmpty() && versionRequired.toInt() <= schemaVersion())
             {
                 // version required may be less than current version
@@ -187,7 +187,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
     }
 }
 
-bool ThumbnailSchemaUpdater::makeUpdates()
+bool ThumbsDbSchemaUpdater::makeUpdates()
 {
     if (m_currentVersion < schemaVersion())
     {
@@ -200,7 +200,7 @@ bool ThumbnailSchemaUpdater::makeUpdates()
     return true;
 }
 
-bool ThumbnailSchemaUpdater::createDatabase()
+bool ThumbsDbSchemaUpdater::createDatabase()
 {
     if ( createTables()  &&
          createIndices() &&
@@ -216,22 +216,22 @@ bool ThumbnailSchemaUpdater::createDatabase()
     }
 }
 
-bool ThumbnailSchemaUpdater::createTables()
+bool ThumbsDbSchemaUpdater::createTables()
 {
     return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("CreateThumbnailsDB")));
 }
 
-bool ThumbnailSchemaUpdater::createIndices()
+bool ThumbsDbSchemaUpdater::createIndices()
 {
     return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("CreateThumbnailsDBIndices")));
 }
 
-bool ThumbnailSchemaUpdater::createTriggers()
+bool ThumbsDbSchemaUpdater::createTriggers()
 {
     return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("CreateThumbnailsDBTrigger")));
 }
 
-bool ThumbnailSchemaUpdater::updateV1ToV2()
+bool ThumbsDbSchemaUpdater::updateV1ToV2()
 {
     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("UpdateThumbnailsDBSchemaFromV1ToV2"))))
     {

@@ -38,7 +38,7 @@
 #include "digikam_debug.h"
 #include "thumbnaildatabasebackend.h"
 #include "thumbnaildb.h"
-#include "thumbnailschemaupdater.h"
+#include "thumbsdbchemaupdater.h"
 
 namespace Digikam
 {
@@ -235,7 +235,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     d->initializing = true;
 
     // update schema
-    ThumbnailSchemaUpdater updater(&access);
+    ThumbsDbSchemaUpdater updater(&access);
     updater.setObserver(observer);
 
     if (!d->backend->initSchema(&updater))
