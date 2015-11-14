@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-15
- * Description : Thumbnail database backend
+ * Description : Thumbnails database backend
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAIL_DATABASE_BACKEND_H
-#define THUMBNAIL_DATABASE_BACKEND_H
+#ifndef THUMBNAILS_DATABASE_BACKEND_H
+#define THUMBNAILS_DATABASE_BACKEND_H
 
 // Local includes
 
@@ -35,21 +35,21 @@ namespace Digikam
 
 class ThumbsDbSchemaUpdater;
 
-class DIGIKAM_DATABASE_EXPORT ThumbnailDatabaseBackend : public DatabaseCoreBackend
+class DIGIKAM_DATABASE_EXPORT ThumbsDbBackend : public DatabaseCoreBackend
 {
     Q_OBJECT
 
 public:
 
-    explicit ThumbnailDatabaseBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("thumbnailDatabase-"));
-    ~ThumbnailDatabaseBackend();
+    explicit ThumbsDbBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("thumbnailDatabase-"));
+    ~ThumbsDbBackend();
 
     /**
      * Initialize the database schema to the current version,
      * carry out upgrades if necessary.
      * Shall only be called from the thread that called open().
      */
-    bool initSchema(ThumbsDbSchemaUpdater* const updater);    
+    bool initSchema(ThumbsDbSchemaUpdater* const updater);
 
 private:
     
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // THUMBNAIL_DATABASE_BACKEND_H
+#endif // THUMBNAILS_DATABASE_BACKEND_H

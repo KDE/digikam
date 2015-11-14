@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-15
- * Description : Abstract database backend
+ * Description : Thumbnails database backend
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,23 +24,23 @@
 
 // Local includes
 
-#include "thumbnaildatabasebackend.h"
+#include "thumbsdbbackend.h"
 #include "databasecorebackend_p.h"
 #include "thumbsdbchemaupdater.h"
 
 namespace Digikam
 {
 
-ThumbnailDatabaseBackend::ThumbnailDatabaseBackend(DatabaseLocking* const locking, const QString& backendName)
+ThumbsDbBackend::ThumbsDbBackend(DatabaseLocking* const locking, const QString& backendName)
     : DatabaseCoreBackend(backendName, locking, *new DatabaseCoreBackendPrivate(this))
 {
 }
 
-ThumbnailDatabaseBackend::~ThumbnailDatabaseBackend()
+ThumbsDbBackend::~ThumbsDbBackend()
 {
 }
 
-bool ThumbnailDatabaseBackend::initSchema(ThumbsDbSchemaUpdater* const updater)
+bool ThumbsDbBackend::initSchema(ThumbsDbSchemaUpdater* const updater)
 {
     Q_D(DatabaseCoreBackend);
 

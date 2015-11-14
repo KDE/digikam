@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "thumbnaildatabasebackend.h"
+#include "thumbsdbbackend.h"
 #include "thumbnaildb.h"
 #include "thumbsdbchemaupdater.h"
 
@@ -58,7 +58,7 @@ public:
     {
     };
 
-    ThumbnailDatabaseBackend* backend;
+    ThumbsDbBackend* backend;
     ThumbnailDB*              db;
     DatabaseParameters        parameters;
     DatabaseLocking           lock;
@@ -126,7 +126,7 @@ ThumbnailDB* ThumbnailDatabaseAccess::db() const
     return d->db;
 }
 
-ThumbnailDatabaseBackend* ThumbnailDatabaseAccess::backend() const
+ThumbsDbBackend* ThumbnailDatabaseAccess::backend() const
 {
     return d->backend;
 }
@@ -188,7 +188,7 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
     {
         delete d->db;
         delete d->backend;
-        d->backend = new ThumbnailDatabaseBackend(&d->lock);
+        d->backend = new ThumbsDbBackend(&d->lock);
         d->db      = new ThumbnailDB(d->backend);
     }
 }

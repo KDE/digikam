@@ -60,7 +60,7 @@
 #include "tagregion.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
-#include "thumbnaildatabasebackend.h"
+#include "thumbsdbbackend.h"
 #include "thumbnailsize.h"
 
 namespace Digikam

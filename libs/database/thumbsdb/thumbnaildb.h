@@ -38,7 +38,7 @@
 // Local includes
 
 #include "sqlquery.h"
-#include "thumbnaildatabasebackend.h"
+#include "thumbsdbbackend.h"
 #include "thumbnaildatabaseaccess.h"
 #include "digikam_export.h"
 
@@ -123,7 +123,7 @@ public:
 
 private:
 
-    explicit ThumbnailDB(ThumbnailDatabaseBackend* const backend);
+    explicit ThumbnailDB(ThumbsDbBackend* const backend);
     ~ThumbnailDB();
 
 private:

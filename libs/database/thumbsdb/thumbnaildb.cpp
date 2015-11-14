@@ -52,10 +52,10 @@ public:
     {
     }
 
-    ThumbnailDatabaseBackend* db;
+    ThumbsDbBackend* db;
 };
 
-ThumbnailDB::ThumbnailDB(ThumbnailDatabaseBackend* const backend)
+ThumbnailDB::ThumbnailDB(ThumbsDbBackend* const backend)
     : d(new Private)
 {
     d->db = backend;
