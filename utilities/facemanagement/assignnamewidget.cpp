@@ -446,7 +446,7 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "  background-color: transparent; "
                     "} "
 
-                    "QComboBox QAbstractItemView, KCompletionBox::item:!selected { "
+                    "QComboBox QAbstractItemView, QListView::item:!selected { "
                     "  color: white; "
                     "  background-color: rgba(0,0,0,80%); "
                     "} "
