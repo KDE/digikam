@@ -53,7 +53,7 @@
 #include "databasewidget.h"
 #include "databasebackend.h"
 #include "databaseparameters.h"
-#include "schemaupdater.h"
+#include "coredbschemaupdater.h"
 #include "databasecopymanager.h"
 
 namespace Digikam

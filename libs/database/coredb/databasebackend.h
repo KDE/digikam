@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class SchemaUpdater;
+class CoreDbSchemaUpdater;
 class DatabaseWatch;
 class DatabaseBackendPrivate;
 
@@ -56,7 +56,7 @@ public:
      * carry out upgrades if necessary.
      * Shall only be called from the thread that called open().
      */
-    bool initSchema(SchemaUpdater* updater);
+    bool initSchema(CoreDbSchemaUpdater* updater);
 
     /**
      * Notify all listeners of the changeset

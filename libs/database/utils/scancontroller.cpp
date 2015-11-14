@@ -59,7 +59,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "album.h"
-#include "schemaupdater.h"
+#include "coredbschemaupdater.h"
 #include "splashscreen.h"
 
 namespace Digikam
@@ -772,7 +772,7 @@ void ScanController::run()
         else if (doUpdateUniqueHash)
         {
             DatabaseAccess access;
-            SchemaUpdater updater(access.db(), access.backend(), access.parameters());
+            CoreDbSchemaUpdater updater(access.db(), access.backend(), access.parameters());
             updater.setDatabaseAccess(&access);
             updater.setObserver(this);
             updater.updateUniqueHash();

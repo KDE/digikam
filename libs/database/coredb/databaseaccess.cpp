@@ -42,7 +42,7 @@
 #include "collectionscannerobserver.h"
 #include "imageinfodata.h"
 #include "imageinfocache.h"
-#include "schemaupdater.h"
+#include "coredbschemaupdater.h"
 #include "collectionmanager.h"
 #include "databasewatch.h"
 #include "databasebackend.h"
@@ -310,7 +310,7 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     d->initializing = true;
 
     // update schema
-    SchemaUpdater updater(access.db(), access.backend(), access.parameters());
+    CoreDbSchemaUpdater updater(access.db(), access.backend(), access.parameters());
     updater.setDatabaseAccess(&access);
 
     updater.setObserver(observer);

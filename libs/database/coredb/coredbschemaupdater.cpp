@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-16
- * Description : Schema update
+ * Description : Core database Schema updater
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "schemaupdater.h"
+#include "coredbschemaupdater.h"
 
 // Qt includes
 
@@ -53,29 +53,29 @@
 namespace Digikam
 {
 
-int SchemaUpdater::schemaVersion()
+int CoreDbSchemaUpdater::schemaVersion()
 {
     return 7;
 }
 
-int SchemaUpdater::filterSettingsVersion()
+int CoreDbSchemaUpdater::filterSettingsVersion()
 {
     return 4;
 }
 
-int SchemaUpdater::uniqueHashVersion()
+int CoreDbSchemaUpdater::uniqueHashVersion()
 {
     return 2;
 }
 
-bool SchemaUpdater::isUniqueHashUpToDate()
+bool CoreDbSchemaUpdater::isUniqueHashUpToDate()
 {
     return DatabaseAccess().db()->getUniqueHashVersion() >= uniqueHashVersion();
 }
 
 // --------------------------------------------------------------------------------------
 
-class SchemaUpdater::Private
+class CoreDbSchemaUpdater::Private
 {
 
 public:
@@ -105,7 +105,7 @@ public:
     InitializationObserver* observer;
 };
 
-SchemaUpdater::SchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters)
+CoreDbSchemaUpdater::CoreDbSchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters)
     : d(new Private)
 {
     d->backend    = backend;
@@ -114,22 +114,22 @@ SchemaUpdater::SchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const back
 
 }
 
-SchemaUpdater::~SchemaUpdater()
+CoreDbSchemaUpdater::~CoreDbSchemaUpdater()
 {
     delete d;
 }
 
-void SchemaUpdater::setDatabaseAccess(DatabaseAccess* const access)
+void CoreDbSchemaUpdater::setDatabaseAccess(DatabaseAccess* const access)
 {
     d->access = access;
 }
 
-const QString SchemaUpdater::getLastErrorMessage()
+const QString CoreDbSchemaUpdater::getLastErrorMessage()
 {
     return d->lastErrorMessage;
 }
 
-bool SchemaUpdater::update()
+bool CoreDbSchemaUpdater::update()
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: running schema update";
     bool success = startUpdates();
@@ -158,7 +158,7 @@ bool SchemaUpdater::update()
     return success;
 }
 
-void SchemaUpdater::setVersionSettings()
+void CoreDbSchemaUpdater::setVersionSettings()
 {
     if (d->currentVersion.isValid())
     {
@@ -183,18 +183,18 @@ static QVariant safeToVariant(const QString& s)
     }
 }
 
-void SchemaUpdater::readVersionSettings()
+void CoreDbSchemaUpdater::readVersionSettings()
 {
     d->currentVersion         = safeToVariant(d->albumDB->getSetting(QLatin1String("DBVersion")));
     d->currentRequiredVersion = safeToVariant(d->albumDB->getSetting(QLatin1String("DBVersionRequired")));
 }
 
-void SchemaUpdater::setObserver(InitializationObserver* const observer)
+void CoreDbSchemaUpdater::setObserver(InitializationObserver* const observer)
 {
     d->observer = observer;
 }
 
-bool SchemaUpdater::startUpdates()
+bool CoreDbSchemaUpdater::startUpdates()
 {
     if (!d->parameters.isSQLite())
     {
@@ -260,7 +260,7 @@ bool SchemaUpdater::startUpdates()
         // schemaVersion is the version required by the program.
         if (d->currentVersion.toInt() > schemaVersion())
         {
-            // trying to open a database with a more advanced than this SchemaUpdater supports
+            // trying to open a database with a more advanced than this CoreDbSchemaUpdater supports
             if (d->currentRequiredVersion.isValid() && d->currentRequiredVersion.toInt() <= schemaVersion())
             {
                 // version required may be less than current version
@@ -345,7 +345,7 @@ bool SchemaUpdater::startUpdates()
     }
 }
 
-bool SchemaUpdater::beginWrapSchemaUpdateStep()
+bool CoreDbSchemaUpdater::beginWrapSchemaUpdateStep()
 {
     if (!d->backend->beginTransaction())
     {
@@ -364,7 +364,7 @@ bool SchemaUpdater::beginWrapSchemaUpdateStep()
     return true;
 }
 
-bool SchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, const QString& errorMsg)
+bool CoreDbSchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, const QString& errorMsg)
 {
     if (!stepOperationSuccess)
     {
@@ -392,7 +392,7 @@ bool SchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, const QSt
     return true;
 }
 
-bool SchemaUpdater::makeUpdates()
+bool CoreDbSchemaUpdater::makeUpdates()
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: makeUpdates " << d->currentVersion.toInt() << " to " << schemaVersion();
 
@@ -456,7 +456,7 @@ bool SchemaUpdater::makeUpdates()
     return true;
 }
 
-void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStringList& defaultVideoFilter,
+void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStringList& defaultVideoFilter,
                                           QStringList& defaultAudioFilter)
 {
     //NOTE for updating:
@@ -480,7 +480,7 @@ void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStri
     defaultAudioFilter << QLatin1String("ogg") << QLatin1String("mp3") << QLatin1String("wma") << QLatin1String("wav");
 }
 
-bool SchemaUpdater::createFilterSettings()
+bool CoreDbSchemaUpdater::createFilterSettings()
 {
     QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter;
     defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
@@ -492,7 +492,7 @@ bool SchemaUpdater::createFilterSettings()
     return true;
 }
 
-bool SchemaUpdater::updateFilterSettings()
+bool CoreDbSchemaUpdater::updateFilterSettings()
 {
     QString filterVersion      = d->albumDB->getSetting(QLatin1String("FilterSettingsVersion"));
     QString dcrawFilterVersion = d->albumDB->getSetting(QLatin1String("DcrawFilterSettingsVersion"));
@@ -506,7 +506,7 @@ bool SchemaUpdater::updateFilterSettings()
     return true;
 }
 
-bool SchemaUpdater::createDatabase()
+bool CoreDbSchemaUpdater::createDatabase()
 {
     if ( createTables() && createIndices() && createTriggers())
     {
@@ -529,24 +529,24 @@ bool SchemaUpdater::createDatabase()
     }
 }
 
-bool SchemaUpdater::createTables()
+bool CoreDbSchemaUpdater::createTables()
 {
     return d->backend->execDBAction(d->backend->getDBAction(QLatin1String("CreateDB")));
 }
 
-bool SchemaUpdater::createIndices()
+bool CoreDbSchemaUpdater::createIndices()
 {
     // TODO: see which more indices are needed
     // create indices
     return d->backend->execDBAction(d->backend->getDBAction(QLatin1String("CreateIndices")));
 }
 
-bool SchemaUpdater::createTriggers()
+bool CoreDbSchemaUpdater::createTriggers()
 {
     return d->backend->execDBAction(d->backend->getDBAction(QLatin1String("CreateTriggers")));
 }
 
-bool SchemaUpdater::updateUniqueHash()
+bool CoreDbSchemaUpdater::updateUniqueHash()
 {
     if (isUniqueHashUpToDate())
     {
@@ -582,7 +582,7 @@ bool SchemaUpdater::updateUniqueHash()
     return true;
 }
 
-bool SchemaUpdater::performUpdateToVersion(const QString& actionName, int newVersion, int newRequiredVersion)
+bool CoreDbSchemaUpdater::performUpdateToVersion(const QString& actionName, int newVersion, int newRequiredVersion)
 {
     if (d->observer)
     {
@@ -628,7 +628,7 @@ bool SchemaUpdater::performUpdateToVersion(const QString& actionName, int newVer
 }
 
 
-bool SchemaUpdater::updateToVersion(int targetVersion)
+bool CoreDbSchemaUpdater::updateToVersion(int targetVersion)
 {
     if (d->currentVersion != targetVersion-1)
     {
@@ -654,7 +654,7 @@ bool SchemaUpdater::updateToVersion(int targetVersion)
     }
 }
 
-bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& currentDBPath)
+bool CoreDbSchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& currentDBPath)
 {
     if (d->observer)
     {
@@ -756,7 +756,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
     return filterList;
 }
 
-bool SchemaUpdater::updateV4toV7()
+bool CoreDbSchemaUpdater::updateV4toV7()
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Core database : running updateV4toV7";
 
@@ -1160,7 +1160,7 @@ bool SchemaUpdater::updateV4toV7()
     return true;
 }
 
-void SchemaUpdater::setLegacySettingEntries()
+void CoreDbSchemaUpdater::setLegacySettingEntries()
 {
     d->albumDB->setSetting(QLatin1String("preAlpha010Update1"), QLatin1String("true"));
     d->albumDB->setSetting(QLatin1String("preAlpha010Update2"), QLatin1String("true"));
@@ -1171,7 +1171,7 @@ void SchemaUpdater::setLegacySettingEntries()
 
 // ---------- Legacy code ------------
 
-void SchemaUpdater::preAlpha010Update1()
+void CoreDbSchemaUpdater::preAlpha010Update1()
 {
     QString hasUpdate = d->albumDB->getSetting(QLatin1String("preAlpha010Update1"));
 
@@ -1234,7 +1234,7 @@ void SchemaUpdater::preAlpha010Update1()
     d->albumDB->setSetting(QLatin1String("preAlpha010Update1"), QLatin1String("true"));
 }
 
-void SchemaUpdater::preAlpha010Update2()
+void CoreDbSchemaUpdater::preAlpha010Update2()
 {
     QString hasUpdate = d->albumDB->getSetting(QLatin1String("preAlpha010Update2"));
 
@@ -1310,7 +1310,7 @@ void SchemaUpdater::preAlpha010Update2()
     d->albumDB->setSetting(QLatin1String("preAlpha010Update2"), QLatin1String("true"));
 }
 
-void SchemaUpdater::preAlpha010Update3()
+void CoreDbSchemaUpdater::preAlpha010Update3()
 {
     QString hasUpdate = d->albumDB->getSetting(QLatin1String("preAlpha010Update3"));
 
@@ -1332,7 +1332,7 @@ void SchemaUpdater::preAlpha010Update3()
     d->albumDB->setSetting(QLatin1String("preAlpha010Update3"), QLatin1String("true"));
 }
 
-void SchemaUpdater::beta010Update1()
+void CoreDbSchemaUpdater::beta010Update1()
 {
     QString hasUpdate = d->albumDB->getSetting(QLatin1String("beta010Update1"));
 
@@ -1372,7 +1372,7 @@ void SchemaUpdater::beta010Update1()
     d->albumDB->setSetting(QLatin1String("beta010Update1"), QLatin1String("true"));
 }
 
-void SchemaUpdater::beta010Update2()
+void CoreDbSchemaUpdater::beta010Update2()
 {
     QString hasUpdate = d->albumDB->getSetting(QLatin1String("beta010Update2"));
 
@@ -1387,7 +1387,7 @@ void SchemaUpdater::beta010Update2()
     d->albumDB->setSetting(QLatin1String("beta010Update2"), QLatin1String("true"));
 }
 
-bool SchemaUpdater::createTablesV3()
+bool CoreDbSchemaUpdater::createTablesV3()
 {
     if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE Albums\n"
                                      " (id INTEGER PRIMARY KEY,\n"

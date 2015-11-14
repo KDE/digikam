@@ -59,7 +59,7 @@
 #include "databasewidget.h"
 #include "databaseparameters.h"
 #include "scancontroller.h"
-#include "schemaupdater.h"
+#include "coredbschemaupdater.h"
 
 namespace Digikam
 {
@@ -90,7 +90,7 @@ SetupDatabase::SetupDatabase(QWidget* const parent)
     d->databaseWidget       = new DatabaseWidget;
     mainLayout->addWidget(d->databaseWidget);
 
-    if (!SchemaUpdater::isUniqueHashUpToDate())
+    if (!CoreDbSchemaUpdater::isUniqueHashUpToDate())
     {
         d->updateBox                    = new QGroupBox(i18nc("@title:group", "Updates"));
         QGridLayout* const updateLayout = new QGridLayout;

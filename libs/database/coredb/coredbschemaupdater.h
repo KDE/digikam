@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-16
- * Description : Schema update
+ * Description : Core database Schema updater
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SCHEMAUPDATER_H
-#define SCHEMAUPDATER_H
+#ifndef COREDBSCHEMAUPDATER_H
+#define COREDBSCHEMAUPDATER_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ namespace Digikam
 class DatabaseAccess;
 class InitializationObserver;
 
-class DIGIKAM_DATABASE_EXPORT SchemaUpdater
+class DIGIKAM_DATABASE_EXPORT CoreDbSchemaUpdater
 {
 public:
 
@@ -53,8 +53,8 @@ public:
 
 public:
 
-    SchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters);
-    ~SchemaUpdater();
+    CoreDbSchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters);
+    ~CoreDbSchemaUpdater();
 
     bool  update();
     bool  updateUniqueHash();
@@ -102,4 +102,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SCHEMAUPDATER_H
+#endif // COREDBSCHEMAUPDATER_H

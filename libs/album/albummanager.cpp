@@ -488,7 +488,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
 
             if (result == QMessageBox::Yes)
             {
-                // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
+                // CoreDbSchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
                 // Restore this situation.
                 KSharedConfigPtr config = KSharedConfig::openConfig();
                 KConfigGroup group      = config->group("Album Settings");
@@ -568,7 +568,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
 
                 if (result == QMessageBox::Yes)
                 {
-                    // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
+                    // CoreDbSchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
                     // Restore this situation.
                     KSharedConfigPtr config = KSharedConfig::openConfig();
                     KConfigGroup group = config->group(QLatin1String("Album Settings"));

@@ -39,7 +39,7 @@
 #include "databasecorebackend.h"
 #include "databaseparameters.h"
 #include "albumdb.h"
-#include "schemaupdater.h"
+#include "coredbschemaupdater.h"
 
 namespace Digikam
 {
@@ -130,7 +130,7 @@ void DatabaseCopyManager::copyDatabases(const DatabaseParameters& fromDBParamete
 
     // then create the schema
     AlbumDB       albumDB(&toDBbackend);
-    SchemaUpdater updater(&albumDB, &toDBbackend, toDBParameters);
+    CoreDbSchemaUpdater updater(&albumDB, &toDBbackend, toDBParameters);
 
     emit stepStarted(i18n("Create Schema..."));
 

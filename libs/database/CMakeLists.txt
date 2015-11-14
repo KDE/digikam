@@ -29,14 +29,13 @@ set(libdatabasecore_SRCS
     thumbsdb/thumbnailschemaupdater.cpp
 )
 
-#this sources must be set in digikam main app
-set(libdatabasemain_SRCS
-    engine/databaseguierrorhandler.cpp
-    engine/dbstatdlg.cpp
-    engine/scancontroller.cpp
-    engine/dio.cpp
-    engine/syncjob.cpp
-    engine/imageattributeswatch.cpp
+set(libdatabaseutils_SRCS
+    utils/scancontroller.cpp
+    utils/databaseguierrorhandler.cpp
+    utils/dbstatdlg.cpp
+    utils/dio.cpp
+    utils/syncjob.cpp
+    utils/imageattributeswatch.cpp
 )
 
 set(libdatabase_SRCS
@@ -61,7 +60,7 @@ set(libdatabase_SRCS
     coredb/downloadhistory.cpp
     coredb/namefilter.cpp
     coredb/searchxml.cpp
-    coredb/schemaupdater.cpp
+    coredb/coredbschemaupdater.cpp
 
     tags/tagproperties.cpp
     tags/tagscache.cpp
@@ -135,9 +134,9 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_library(digikamdatabasemain_src OBJECT ${libdatabasemain_SRCS} ${libimgqsort_SRCS})
-add_library(digikamdatabase_src OBJECT ${digikamdatabase_LIB_SRCS} )
-add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS} )
+add_library(digikamdatabase_src OBJECT      ${digikamdatabase_LIB_SRCS})
+add_library(digikamdatabasemain_src OBJECT  ${libdatabaseutils_SRCS} ${libimgqsort_SRCS})
+add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS})
 add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasemodels_src>)
 
 generate_export_header(digikamdatabase
@@ -159,6 +158,7 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbsdb>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
 )
 
 target_link_libraries(digikamdatabase

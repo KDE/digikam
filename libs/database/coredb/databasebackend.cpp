@@ -26,7 +26,7 @@
 
 #include "databasebackend.h"
 #include "databasebackend_p.h"
-#include "schemaupdater.h"
+#include "coredbschemaupdater.h"
 #include "databasewatch.h"
 
 namespace Digikam
@@ -47,7 +47,7 @@ void DatabaseBackend::setDatabaseWatch(DatabaseWatch* watch)
     d->watch = watch;
 }
 
-bool DatabaseBackend::initSchema(SchemaUpdater* updater)
+bool DatabaseBackend::initSchema(CoreDbSchemaUpdater* updater)
 {
     Q_D(DatabaseBackend);
 
