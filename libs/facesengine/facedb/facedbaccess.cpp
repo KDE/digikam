@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-18
- * Description : Database access wrapper.
+ * Description : Face database access wrapper.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databasefaceaccess.h"
+#include "facedbaccess.h"
 
 // Qt includes
 
@@ -43,18 +43,18 @@
 namespace FacesEngine
 {
 
-class DatabaseFaceAccessData
+class FaceDbAccessData
 {
 public:
 
-    DatabaseFaceAccessData()
+    FaceDbAccessData()
         : backend(0),
           db(0),
           initializing(false)
     {
     }
 
-    ~DatabaseFaceAccessData()
+    ~FaceDbAccessData()
     {
     };
 
@@ -70,36 +70,36 @@ public:
 
 // ----------------------------------------------------------------
 
-class DatabaseFaceAccessMutexLocker : public QMutexLocker
+class FaceDbAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    DatabaseFaceAccessMutexLocker(DatabaseFaceAccessData* const d)
+    FaceDbAccessMutexLocker(FaceDbAccessData* const d)
         : QMutexLocker(&d->lock.mutex), d(d)
     {
         d->lock.lockCount++;
     }
 
-    ~DatabaseFaceAccessMutexLocker()
+    ~FaceDbAccessMutexLocker()
     {
         d->lock.lockCount--;
     }
 
-    DatabaseFaceAccessData* const d;
+    FaceDbAccessData* const d;
 };
 
 // ----------------------------------------------------------------
 
-DatabaseFaceAccessData* DatabaseFaceAccess::create()
+FaceDbAccessData* FaceDbAccess::create()
 {
-    return new DatabaseFaceAccessData;
+    return new FaceDbAccessData;
 }
 
-void DatabaseFaceAccess::destroy(DatabaseFaceAccessData* const d)
+void FaceDbAccess::destroy(FaceDbAccessData* const d)
 {
     if (d)
     {
-        DatabaseFaceAccessMutexLocker locker(d);
+        FaceDbAccessMutexLocker locker(d);
         d->backend->close();
         delete d->db;
         delete d->backend;
@@ -108,7 +108,7 @@ void DatabaseFaceAccess::destroy(DatabaseFaceAccessData* const d)
     delete d;
 }
 
-DatabaseFaceAccess::DatabaseFaceAccess(DatabaseFaceAccessData* const d)
+FaceDbAccess::FaceDbAccess(FaceDbAccessData* const d)
     : d(d)
 {
     d->lock.mutex.lock();
@@ -125,13 +125,13 @@ DatabaseFaceAccess::DatabaseFaceAccess(DatabaseFaceAccessData* const d)
     }
 }
 
-DatabaseFaceAccess::~DatabaseFaceAccess()
+FaceDbAccess::~FaceDbAccess()
 {
     d->lock.lockCount--;
     d->lock.mutex.unlock();
 }
 
-DatabaseFaceAccess::DatabaseFaceAccess(bool, DatabaseFaceAccessData* const d)
+FaceDbAccess::FaceDbAccess(bool, FaceDbAccessData* const d)
     : d(d)
 {
     // private constructor, when mutex is locked and
@@ -140,17 +140,17 @@ DatabaseFaceAccess::DatabaseFaceAccess(bool, DatabaseFaceAccessData* const d)
     d->lock.lockCount++;
 }
 
-TrainingDB* DatabaseFaceAccess::db() const
+TrainingDB* FaceDbAccess::db() const
 {
     return d->db;
 }
 
-DatabaseFaceBackend* DatabaseFaceAccess::backend() const
+DatabaseFaceBackend* FaceDbAccess::backend() const
 {
     return d->backend;
 }
 
-DatabaseParameters DatabaseFaceAccess::parameters() const
+DatabaseParameters FaceDbAccess::parameters() const
 {
     if (d)
     {
@@ -160,15 +160,15 @@ DatabaseParameters DatabaseFaceAccess::parameters() const
     return DatabaseParameters();
 }
 
-void DatabaseFaceAccess::initDatabaseErrorHandler(DatabaseFaceAccessData* const d, DatabaseErrorHandler* const errorhandler)
+void FaceDbAccess::initDatabaseErrorHandler(FaceDbAccessData* const d, DatabaseErrorHandler* const errorhandler)
 {
     //DatabaseErrorHandler* const errorhandler = new DatabaseGUIErrorHandler(d->parameters);
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
 
-void DatabaseFaceAccess::setParameters(DatabaseFaceAccessData* const d, const DatabaseParameters& parameters)
+void FaceDbAccess::setParameters(FaceDbAccessData* const d, const DatabaseParameters& parameters)
 {
-    DatabaseFaceAccessMutexLocker lock(d);
+    FaceDbAccessMutexLocker lock(d);
 
     if (d->parameters == parameters)
     {
@@ -197,7 +197,7 @@ void DatabaseFaceAccess::setParameters(DatabaseFaceAccessData* const d, const Da
     }
 }
 
-bool DatabaseFaceAccess::checkReadyForUse(DatabaseFaceAccessData* const d, InitializationObserver* const observer)
+bool FaceDbAccess::checkReadyForUse(FaceDbAccessData* const d, InitializationObserver* const observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
@@ -210,12 +210,12 @@ bool DatabaseFaceAccess::checkReadyForUse(DatabaseFaceAccessData* const d, Initi
     }
 
     // create an object with private shortcut constructor
-    DatabaseFaceAccess access(false, d);
+    FaceDbAccess access(false, d);
 
     if (!d->backend)
     {
         qCWarning(DIGIKAM_FACESENGINE_LOG) << "No database backend available in checkReadyForUse. "
-                      "Did you call setParameters before?";
+                                              "Did you call setParameters before?";
         return false;
     }
 
@@ -234,7 +234,7 @@ bool DatabaseFaceAccess::checkReadyForUse(DatabaseFaceAccessData* const d, Initi
         }
     }
 
-    // avoid endless loops (if called methods create new DatabaseFaceAccess objects)
+    // avoid endless loops (if called methods create new FaceDbAccess objects)
     d->initializing = true;
 
     // update schema
@@ -252,19 +252,19 @@ bool DatabaseFaceAccess::checkReadyForUse(DatabaseFaceAccessData* const d, Initi
     return d->backend->isReady();
 }
 
-QString DatabaseFaceAccess::lastError() const
+QString FaceDbAccess::lastError() const
 {
     return d->lastError;
 }
 
-void DatabaseFaceAccess::setLastError(const QString& error)
+void FaceDbAccess::setLastError(const QString& error)
 {
     d->lastError = error;
 }
 
 // ---------------------------------------------------------------------------------
 
-DatabaseFaceAccessUnlock::DatabaseFaceAccessUnlock(DatabaseFaceAccessData* const d)
+FaceDbAccessUnlock::FaceDbAccessUnlock(FaceDbAccessData* const d)
     : d(d)
 {
     // acquire lock
@@ -284,7 +284,7 @@ DatabaseFaceAccessUnlock::DatabaseFaceAccessUnlock(DatabaseFaceAccessData* const
     d->lock.mutex.unlock();
 }
 
-DatabaseFaceAccessUnlock::DatabaseFaceAccessUnlock(DatabaseFaceAccess* const access)
+FaceDbAccessUnlock::FaceDbAccessUnlock(FaceDbAccess* const access)
     : d(access->d)
 {
     // With the passed pointer, we have assured that the mutex is acquired
@@ -302,7 +302,7 @@ DatabaseFaceAccessUnlock::DatabaseFaceAccessUnlock(DatabaseFaceAccess* const acc
     // Mutex is now free
 }
 
-DatabaseFaceAccessUnlock::~DatabaseFaceAccessUnlock()
+FaceDbAccessUnlock::~FaceDbAccessUnlock()
 {
     // lock as often as it was locked before
     for (int i=0; i<count; ++i)

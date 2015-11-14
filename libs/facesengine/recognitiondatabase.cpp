@@ -44,7 +44,7 @@
 
 #include "databaseaccess.h"
 #include "databaseparameters.h"
-#include "databasefaceaccess.h"
+#include "facedbaccess.h"
 #include "databasefaceoperationgroup.h"
 #include "dataproviders.h"
 #include "recognitiondatabase.h"
@@ -134,7 +134,7 @@ public:
 
     const QString           configPath;
     QMutex                  mutex;
-    DatabaseFaceAccessData* db;
+    FaceDbAccessData* db;
 
     QVariantMap             parameters;
     QHash<int, Identity>    identityCache;
@@ -241,18 +241,18 @@ void RecognitionDatabaseStaticPriv::removeDatabase(const QString& key)
 RecognitionDatabase::Private::Private(const QString& path)
     : configPath(path),
       mutex(QMutex::Recursive),
-      db(DatabaseFaceAccess::create()),
+      db(FaceDbAccess::create()),
       opencvlbph(0),
       funnel(0)
 {
     DatabaseParameters params = DatabaseAccess::parameters().faceParameters();
     params.setFaceDatabasePath(configPath);
-    DatabaseFaceAccess::setParameters(db, params);
-    dbAvailable               = DatabaseFaceAccess::checkReadyForUse(db);
+    FaceDbAccess::setParameters(db, params);
+    dbAvailable               = FaceDbAccess::checkReadyForUse(db);
 
     if (dbAvailable)
     {
-        foreach (const Identity& identity, DatabaseFaceAccess(db).db()->identities())
+        foreach (const Identity& identity, FaceDbAccess(db).db()->identities())
         {
             identityCache[identity.id()] = identity;
         }
@@ -265,7 +265,7 @@ RecognitionDatabase::Private::~Private()
     delete funnel;
 
     static_d->removeDatabase(configPath);
-    DatabaseFaceAccess::destroy(db);
+    FaceDbAccess::destroy(db);
 }
 
 RecognitionDatabase::Private::CurrentAligner* RecognitionDatabase::Private::aligner()
@@ -492,11 +492,11 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
     Identity identity;
     {
         DatabaseFaceOperationGroup group(d->db);
-        int id = DatabaseFaceAccess(d->db).db()->addIdentity();
+        int id = FaceDbAccess(d->db).db()->addIdentity();
         identity.setId(id);
         identity.setAttributesMap(attributes);
         identity.setAttribute(QString::fromLatin1("uuid"), QUuid::createUuid().toString());
-        DatabaseFaceAccess(d->db).db()->updateIdentity(identity);
+        FaceDbAccess(d->db).db()->updateIdentity(identity);
     }
 
     d->identityCache[identity.id()] = identity;
@@ -520,7 +520,7 @@ void RecognitionDatabase::addIdentityAttributes(int id, const QMap<QString, QStr
         QMap<QString, QString> map = it->attributesMap();
         map.unite(attributes);
         it->setAttributesMap(map);
-        DatabaseFaceAccess(d->db).db()->updateIdentity(*it);
+        FaceDbAccess(d->db).db()->updateIdentity(*it);
     }
 }
 
@@ -539,7 +539,7 @@ void RecognitionDatabase::addIdentityAttribute(int id, const QString& attribute,
         QMap<QString, QString> map = it->attributesMap();
         map.insertMulti(attribute, value);
         it->setAttributesMap(map);
-        DatabaseFaceAccess(d->db).db()->updateIdentity(*it);
+        FaceDbAccess(d->db).db()->updateIdentity(*it);
     }
 }
 
@@ -556,7 +556,7 @@ void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QStr
     if (it != d->identityCache.end())
     {
         it->setAttributesMap(attributes);
-        DatabaseFaceAccess(d->db).db()->updateIdentity(*it);
+        FaceDbAccess(d->db).db()->updateIdentity(*it);
     }
 }
 
@@ -844,11 +844,11 @@ void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer* const, const 
 
     if (idsToClear.isEmpty())
     {
-        DatabaseFaceAccess(db).db()->clearLBPHTraining(trainingContext);
+        FaceDbAccess(db).db()->clearLBPHTraining(trainingContext);
     }
     else
     {
-        DatabaseFaceAccess(db).db()->clearLBPHTraining(idsToClear, trainingContext);
+        FaceDbAccess(db).db()->clearLBPHTraining(idsToClear, trainingContext);
     }
 }
 
@@ -890,7 +890,7 @@ void RecognitionDatabase::deleteIdentity(const Identity& identityToBeDeleted)
 
     QMutexLocker lock(&d->mutex);
 
-    DatabaseFaceAccess(d->db).db()->deleteIdentity(identityToBeDeleted.id());
+    FaceDbAccess(d->db).db()->deleteIdentity(identityToBeDeleted.id());
     d->identityCache.remove(identityToBeDeleted.id());
 }
 

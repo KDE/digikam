@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-29
- * Description : Thumbnail database access wrapper.
+ * Description : Face database access wrapper.
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _DATABASE_FACE_ACCESS_H_
-#define _DATABASE_FACE_ACCESS_H_
+#ifndef _FACE_DATABASE_ACCESS_H_
+#define _FACE_DATABASE_ACCESS_H_
 
 // Local includes
 
@@ -39,18 +39,18 @@ namespace FacesEngine
 {
 
 class TrainingDB;
-class DatabaseFaceAccessData;
+class FaceDbAccessData;
 
 /** This class is written in analogy to DatabaseAccess
  *  (some features stripped off).
  *  For documentation, see databaseaccess.h
  */
-class DIGIKAM_DATABASE_EXPORT DatabaseFaceAccess
+class DIGIKAM_DATABASE_EXPORT FaceDbAccess
 {
 public:
 
-    DatabaseFaceAccess(DatabaseFaceAccessData* const);
-    ~DatabaseFaceAccess();
+    FaceDbAccess(FaceDbAccessData* const);
+    ~FaceDbAccess();
 
     TrainingDB* db()                  const;
     DatabaseFaceBackend* backend()    const;
@@ -64,46 +64,46 @@ public:
 
 public:
 
-    static DatabaseFaceAccessData* create();
-    static void destroy(DatabaseFaceAccessData* const);
+    static FaceDbAccessData* create();
+    static void destroy(FaceDbAccessData* const);
 
-    static void initDatabaseErrorHandler(DatabaseFaceAccessData* const d, DatabaseErrorHandler* const errorhandler);
-    static void setParameters(DatabaseFaceAccessData* const d, const DatabaseParameters& parameters);
-    static bool checkReadyForUse(DatabaseFaceAccessData* const d, InitializationObserver* const observer = 0);
-
-private:
-
-    DatabaseFaceAccess(bool, DatabaseFaceAccessData* const);
+    static void initDatabaseErrorHandler(FaceDbAccessData* const d, DatabaseErrorHandler* const errorhandler);
+    static void setParameters(FaceDbAccessData* const d, const DatabaseParameters& parameters);
+    static bool checkReadyForUse(FaceDbAccessData* const d, InitializationObserver* const observer = 0);
 
 private:
 
-    friend class DatabaseFaceAccessUnlock;
-    DatabaseFaceAccessData* const d;
+    FaceDbAccess(bool, FaceDbAccessData* const);
+
+private:
+
+    friend class FaceDbAccessUnlock;
+    FaceDbAccessData* const d;
 };
 
 // ------------------------------------------------------------------------------------------
 
-class DatabaseFaceAccessUnlock
+class FaceDbAccessUnlock
 {
 public:
 
     /** Acquire an object of this class if you want to assure
-     *  that the DatabaseFaceAccess is _not_ held during the lifetime of the object.
+     *  that the FaceDbAccess is _not_ held during the lifetime of the object.
      *  At creation, the lock is obtained shortly, then all locks are released.
      *  At destruction, all locks are acquired again.
      *  If you need to access any locked structures during lifetime, acquire a new
-     *  DatabaseFaceAccess.
+     *  FaceDbAccess.
      */
-    DatabaseFaceAccessUnlock(DatabaseFaceAccessData* const);
-    DatabaseFaceAccessUnlock(DatabaseFaceAccess* const access);
-    ~DatabaseFaceAccessUnlock();
+    FaceDbAccessUnlock(FaceDbAccessData* const);
+    FaceDbAccessUnlock(FaceDbAccess* const access);
+    ~FaceDbAccessUnlock();
 
 private:
 
-    DatabaseFaceAccessData* d;
+    FaceDbAccessData* d;
     int                     count;
 };
 
 } // namespace FacesEngine
 
-#endif // _DATABASE_FACE_ACCESS_H_
+#endif // _FACE_DATABASE_ACCESS_H_

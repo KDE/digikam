@@ -32,7 +32,7 @@
 
 #include "digikam_debug.h"
 #include "databasecorebackend.h"
-#include "databasefaceaccess.h"
+#include "facedbaccess.h"
 #include "trainingdb.h"
 
 namespace FacesEngine
@@ -63,12 +63,12 @@ public:
     int                     currentVersion;
     int                     currentRequiredVersion;
 
-    DatabaseFaceAccess*     access;
+    FaceDbAccess*     access;
 
     InitializationObserver* observer;
 };
 
-DatabaseFaceSchemaUpdater::DatabaseFaceSchemaUpdater(DatabaseFaceAccess* const access)
+DatabaseFaceSchemaUpdater::DatabaseFaceSchemaUpdater(FaceDbAccess* const access)
     : d(new Private)
 {
     d->access = access;

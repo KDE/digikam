@@ -34,7 +34,7 @@ using namespace Digikam;
 namespace FacesEngine
 {
 
-class DatabaseFaceAccess;
+class FaceDbAccess;
 
 class DatabaseFaceSchemaUpdater
 {
@@ -44,7 +44,7 @@ public:
 
 public:
 
-    DatabaseFaceSchemaUpdater(DatabaseFaceAccess* const access);
+    DatabaseFaceSchemaUpdater(FaceDbAccess* const access);
     ~DatabaseFaceSchemaUpdater();
 
     bool update();

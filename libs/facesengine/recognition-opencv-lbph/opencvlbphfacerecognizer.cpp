@@ -32,7 +32,7 @@
 // local includes
 
 #include "digikam_debug.h"
-#include "databasefaceaccess.h"
+#include "facedbaccess.h"
 #include "libopencv.h"
 #include "lbphfacemodel.h"
 #include "trainingdb.h"
@@ -44,7 +44,7 @@ class OpenCVLBPHFaceRecognizer::Private
 {
 public:
 
-    Private(DatabaseFaceAccessData* const db)
+    Private(FaceDbAccessData* const db)
         : db(db),
           threshold(100),
           loaded(false)
@@ -57,7 +57,7 @@ public:
     {
         if (!loaded)
         {
-            m_lbph = DatabaseFaceAccess(db).db()->lbphFaceModel();
+            m_lbph = FaceDbAccess(db).db()->lbphFaceModel();
             loaded = true;
         }
 
@@ -66,7 +66,7 @@ public:
 
 public:
 
-    DatabaseFaceAccessData* db;
+    FaceDbAccessData* db;
     float               threshold;
 
 private:
@@ -75,7 +75,7 @@ private:
     bool                loaded;
 };
 
-OpenCVLBPHFaceRecognizer::OpenCVLBPHFaceRecognizer(DatabaseFaceAccessData* const db)
+OpenCVLBPHFaceRecognizer::OpenCVLBPHFaceRecognizer(FaceDbAccessData* const db)
     : d(new Private(db))
 {
     setThreshold(0.5);
@@ -163,7 +163,7 @@ void OpenCVLBPHFaceRecognizer::train(const std::vector<cv::Mat>& images, const s
 
     d->lbph().update(images, labels, context);
     // add to database
-    DatabaseFaceAccess(d->db).db()->updateLBPHFaceModel(d->lbph());
+    FaceDbAccess(d->db).db()->updateLBPHFaceModel(d->lbph());
 }
 
 } // namespace FacesEngine

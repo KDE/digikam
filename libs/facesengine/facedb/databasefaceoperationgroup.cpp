@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "databasefaceaccess.h"
+#include "facedbaccess.h"
 #include "databasecorebackend.h"
 
 using namespace Digikam;
@@ -51,8 +51,8 @@ public:
 
 public:
 
-    DatabaseFaceAccess*     access;
-    DatabaseFaceAccessData* db;
+    FaceDbAccess*     access;
+    FaceDbAccessData* db;
     bool                    acquired;
     QTime                   timeAcquired;
     int                     maxTime;
@@ -61,7 +61,7 @@ public:
 
     bool needsTransaction() const
     {
-        return DatabaseFaceAccess(db).parameters().isSQLite();
+        return FaceDbAccess(db).parameters().isSQLite();
     }
 
     void acquire()
@@ -72,7 +72,7 @@ public:
         }
         else
         {
-            DatabaseFaceAccess access(db);
+            FaceDbAccess access(db);
             acquired = access.backend()->beginTransaction();
         }
 
@@ -89,14 +89,14 @@ public:
             }
             else
             {
-                DatabaseFaceAccess access(db);
+                FaceDbAccess access(db);
                 access.backend()->commitTransaction();
             }
         }
     }
 };
 
-DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(DatabaseFaceAccessData* const db)
+DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(FaceDbAccessData* const db)
     : d(new Private)
 {
     d->db = db;
@@ -107,7 +107,7 @@ DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(DatabaseFaceAccessData* c
     }
 }
 
-DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(DatabaseFaceAccess* const access)
+DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(FaceDbAccess* const access)
     : d(new Private)
 {
     d->access = access;
@@ -132,7 +132,7 @@ void DatabaseFaceOperationGroup::lift()
 
         if (d->access)
         {
-            DatabaseFaceAccessUnlock unlock(d->access);
+            FaceDbAccessUnlock unlock(d->access);
         }
 
         d->acquire();
