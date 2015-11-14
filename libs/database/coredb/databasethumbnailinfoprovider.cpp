@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const ThumbnailIdentifier& identifier)
+ThumbnailInfo ThumbsDbInfoProvider::thumbnailInfo(const ThumbnailIdentifier& identifier)
 {
     // If code here proves to be a bottleneck we can add custom queries to albumdb to retrieve info all-in-one
     ImageInfo imageinfo;

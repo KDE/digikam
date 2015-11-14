@@ -41,7 +41,7 @@
 #include "databasecorebackend.h"
 #include "databasetransaction.h"
 #include "thumbsdbaccess.h"
-#include "thumbnaildb.h"
+#include "thumbsdb.h"
 
 namespace Digikam
 {

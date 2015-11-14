@@ -45,7 +45,7 @@
 #include "databaseaccess.h"
 #include "imageinfo.h"
 #include "thumbsdbaccess.h"
-#include "thumbnaildb.h"
+#include "thumbsdb.h"
 #include "maintenancethread.h"
 #include "digikam_config.h"
 

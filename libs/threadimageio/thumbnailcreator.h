@@ -45,7 +45,7 @@ class IccProfile;
 class DImgLoaderObserver;
 class DMetadata;
 class ThumbnailImage;
-class DatabaseThumbnailInfo;
+class ThumbsDbInfo;
 
 class DIGIKAM_EXPORT ThumbnailCreator
 {
@@ -194,7 +194,7 @@ private:
     QImage scaleForStorage(const QImage& qimage) const;
 
     void storeInDatabase(const ThumbnailInfo& info, const ThumbnailImage& image) const;
-    DatabaseThumbnailInfo loadDatabaseThumbnailInfo(const ThumbnailInfo& info) const;
+    ThumbsDbInfo loadThumbsDbInfo(const ThumbnailInfo& info) const;
     ThumbnailImage loadFromDatabase(const ThumbnailInfo& info) const;
     bool isInDatabase(const ThumbnailInfo& info) const;
     void deleteFromDatabase(const ThumbnailInfo& info) const;

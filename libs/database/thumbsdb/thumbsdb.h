@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-29
- * Description : database album interface.
+ * Description : Thumbnails database interface.
  *
  * Copyright (C)      2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAILDB_H
-#define THUMBNAILDB_H
+#ifndef THUMBNAILS_DATABASE_H
+#define THUMBNAILS_DATABASE_H
 
 // Qt includes
 
@@ -61,12 +61,12 @@ enum Type
 
 } // namespace DatabaseThumbnail
 
-class DIGIKAM_EXPORT DatabaseThumbnailInfo
+class DIGIKAM_EXPORT ThumbsDbInfo
 {
 
 public:
 
-    DatabaseThumbnailInfo()
+    ThumbsDbInfo()
         : id(-1),
           type(DatabaseThumbnail::UndefinedType),
           orientationHint(0)
@@ -82,7 +82,7 @@ public:
 
 // ------------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ThumbnailDB
+class DIGIKAM_EXPORT ThumbsDb
 {
 
 public:
@@ -90,16 +90,16 @@ public:
     bool setSetting(const QString& keyword, const QString& value);
     QString getSetting(const QString& keyword);
 
-    DatabaseThumbnailInfo findByHash(const QString& uniqueHash, qlonglong fileSize);
-    DatabaseThumbnailInfo findByFilePath(const QString& path);
-    DatabaseThumbnailInfo findByCustomIdentifier(const QString& id);
+    ThumbsDbInfo findByHash(const QString& uniqueHash, qlonglong fileSize);
+    ThumbsDbInfo findByFilePath(const QString& path);
+    ThumbsDbInfo findByCustomIdentifier(const QString& id);
 
     /** This is findByFilePath with extra security: Pass the uniqueHash which you have.
      *  If an entry is found by file path, and the entry is referenced by any uniqueHash,
      *  which is different from the given hash, a null info is returned.
      *  If uniqueHash is null, equivalent to the simple findByFilePath.
      */
-    DatabaseThumbnailInfo findByFilePath(const QString& path, const QString& uniqueHash);
+    ThumbsDbInfo findByFilePath(const QString& path, const QString& uniqueHash);
 
     DatabaseCoreBackend::QueryState insertUniqueHash(const QString& uniqueHash, qlonglong fileSize, int thumbId);
     DatabaseCoreBackend::QueryState insertFilePath(const QString& path, int thumbId);
@@ -111,8 +111,8 @@ public:
     DatabaseCoreBackend::QueryState removeByFilePath(const QString& path);
     DatabaseCoreBackend::QueryState removeByCustomIdentifier(const QString& id);
 
-    DatabaseCoreBackend::QueryState insertThumbnail(const DatabaseThumbnailInfo& info, QVariant* const lastInsertId = 0);
-    DatabaseCoreBackend::QueryState replaceThumbnail(const DatabaseThumbnailInfo& info);
+    DatabaseCoreBackend::QueryState insertThumbnail(const ThumbsDbInfo& info, QVariant* const lastInsertId = 0);
+    DatabaseCoreBackend::QueryState replaceThumbnail(const ThumbsDbInfo& info);
 
     QHash<QString, int> getFilePathsWithThumbnail();
 
@@ -123,8 +123,8 @@ public:
 
 private:
 
-    explicit ThumbnailDB(ThumbsDbBackend* const backend);
-    ~ThumbnailDB();
+    explicit ThumbsDb(ThumbsDbBackend* const backend);
+    ~ThumbsDb();
 
 private:
 
@@ -136,4 +136,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* THUMBNAILDB_H */
+#endif /* THUMBNAILS_DATABASE_H */

@@ -37,7 +37,7 @@
 
 #include "digikam_debug.h"
 #include "thumbsdbbackend.h"
-#include "thumbnaildb.h"
+#include "thumbsdb.h"
 #include "thumbsdbchemaupdater.h"
 
 namespace Digikam
@@ -59,7 +59,7 @@ public:
     };
 
     ThumbsDbBackend* backend;
-    ThumbnailDB*              db;
+    ThumbsDb*              db;
     DatabaseParameters        parameters;
     DatabaseLocking           lock;
     QString                   lastError;
@@ -121,7 +121,7 @@ ThumbsDbAccess::ThumbsDbAccess(bool)
     d->lock.lockCount++;
 }
 
-ThumbnailDB* ThumbsDbAccess::db() const
+ThumbsDb* ThumbsDbAccess::db() const
 {
     return d->db;
 }
@@ -189,7 +189,7 @@ void ThumbsDbAccess::setParameters(const DatabaseParameters& parameters)
         delete d->db;
         delete d->backend;
         d->backend = new ThumbsDbBackend(&d->lock);
-        d->db      = new ThumbnailDB(d->backend);
+        d->db      = new ThumbsDb(d->backend);
     }
 }
 

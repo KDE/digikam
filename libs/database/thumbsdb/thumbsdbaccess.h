@@ -35,7 +35,7 @@ namespace Digikam
 {
 
 class InitializationObserver;
-class ThumbnailDB;
+class ThumbsDb;
 class ThumbsDbAccessStaticPriv;
 class ThumbsDbBackend;
 
@@ -50,7 +50,7 @@ public:
     ThumbsDbAccess();
     ~ThumbsDbAccess();
 
-    ThumbnailDB*              db()      const;
+    ThumbsDb*              db()      const;
     ThumbsDbBackend* backend() const;
 
     QString lastError();

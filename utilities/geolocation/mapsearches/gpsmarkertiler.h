@@ -49,7 +49,7 @@
 #include "imageinfo.h"
 #include "thumbnailloadthread.h"
 #include "thumbsdbaccess.h"
-#include "thumbnaildb.h"
+#include "thumbsdb.h"
 #include "databasewatch.h"
 #include "databasefields.h"
 #include "imagealbummodel.h"

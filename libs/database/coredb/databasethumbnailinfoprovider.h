@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT DatabaseThumbnailInfoProvider : public ThumbnailInfoProvider
+class DIGIKAM_DATABASE_EXPORT ThumbsDbInfoProvider : public ThumbnailInfoProvider
 {
 public:
 

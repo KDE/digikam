@@ -23,7 +23,7 @@ set(libdatabasecore_SRCS
 
     tags/tagregion.cpp
 
-    thumbsdb/thumbnaildb.cpp
+    thumbsdb/thumbsdb.cpp
     thumbsdb/thumbsdbchemaupdater.cpp
     thumbsdb/thumbsdbbackend.cpp
     thumbsdb/thumbsdbaccess.cpp

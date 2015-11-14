@@ -62,7 +62,7 @@
 #include "metadatasettings.h"
 #include "tagscache.h"
 #include "thumbsdbaccess.h"
-#include "thumbnaildb.h"
+#include "thumbsdb.h"
 
 namespace Digikam
 {
@@ -1303,7 +1303,7 @@ void CollectionScanner::scanFileUpdateHashReuseThumbnail(const QFileInfo& info, 
             // The file was edited in such a way that we know that the pixel content did not change, so we can reuse the thumbnail.
             // We need to add a link to the thumbnail data with the new hash/file size _and_ adjust
             // the file modification date in the data table.
-            DatabaseThumbnailInfo thumbDbInfo = ThumbsDbAccess().db()->findByHash(oldHash, oldSize);
+            ThumbsDbInfo thumbDbInfo = ThumbsDbAccess().db()->findByHash(oldHash, oldSize);
 
             if (thumbDbInfo.id != -1)
             {

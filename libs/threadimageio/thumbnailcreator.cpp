@@ -59,7 +59,7 @@
 #include "pgfutils.h"
 #include "tagregion.h"
 #include "thumbsdbaccess.h"
-#include "thumbnaildb.h"
+#include "thumbsdb.h"
 #include "thumbsdbbackend.h"
 #include "thumbnailsize.h"
 
@@ -724,9 +724,9 @@ QImage ThumbnailCreator::exifRotate(const QImage& thumb, int orientation) const
 
 void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const ThumbnailImage& image) const
 {
-    DatabaseThumbnailInfo dbInfo;
+    ThumbsDbInfo dbInfo;
 
-    // We rely on loadDatabaseThumbnailInfo() being called before, so we do not need to look up
+    // We rely on loadThumbsDbInfo() being called before, so we do not need to look up
     // by filepath of uniqueHash to find out if a thumb need to be replaced.
     dbInfo.id               = d->dbIdForReplacement;
     d->dbIdForReplacement   = -1;
@@ -861,10 +861,10 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     }
 }
 
-DatabaseThumbnailInfo ThumbnailCreator::loadDatabaseThumbnailInfo(const ThumbnailInfo& info) const
+ThumbsDbInfo ThumbnailCreator::loadThumbsDbInfo(const ThumbnailInfo& info) const
 {
     ThumbsDbAccess access;
-    DatabaseThumbnailInfo   dbInfo;
+    ThumbsDbInfo   dbInfo;
 
     // Custom identifier takes precedence
     if (!info.customIdentifier.isEmpty())
@@ -892,7 +892,7 @@ DatabaseThumbnailInfo ThumbnailCreator::loadDatabaseThumbnailInfo(const Thumbnai
 
 bool ThumbnailCreator::isInDatabase(const ThumbnailInfo& info) const
 {
-    DatabaseThumbnailInfo dbInfo = loadDatabaseThumbnailInfo(info);
+    ThumbsDbInfo dbInfo = loadThumbsDbInfo(info);
 
     if (dbInfo.data.isNull())
     {
@@ -910,7 +910,7 @@ bool ThumbnailCreator::isInDatabase(const ThumbnailInfo& info) const
 
 ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) const
 {
-    DatabaseThumbnailInfo dbInfo = loadDatabaseThumbnailInfo(info);
+    ThumbsDbInfo dbInfo = loadThumbsDbInfo(info);
     ThumbnailImage image;
 
     if (dbInfo.data.isNull())
