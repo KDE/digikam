@@ -35,7 +35,7 @@ using namespace Digikam;
 namespace FacesEngine
 {
 
-class DatabaseFaceSchemaUpdater;
+class FaceDbSchemaUpdater;
 class DatabaseFaceBackendPrivate;
 
 class DIGIKAM_DATABASE_EXPORT DatabaseFaceBackend : public DatabaseCoreBackend
@@ -52,7 +52,7 @@ public:
      * carry out upgrades if necessary.
      * Shall only be called from the thread that called open().
      */
-    bool initSchema(DatabaseFaceSchemaUpdater* const updater);
+    bool initSchema(FaceDbSchemaUpdater* const updater);
 
 private:
 

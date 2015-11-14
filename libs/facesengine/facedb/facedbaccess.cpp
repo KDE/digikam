@@ -38,7 +38,7 @@
 #include "digikam_debug.h"
 #include "databasecorebackend.h"
 #include "trainingdb.h"
-#include "databasefaceschemaupdater.h"
+#include "facedbschemaupdater.h"
 
 namespace FacesEngine
 {
@@ -238,7 +238,7 @@ bool FaceDbAccess::checkReadyForUse(FaceDbAccessData* const d, InitializationObs
     d->initializing = true;
 
     // update schema
-    DatabaseFaceSchemaUpdater updater(&access);
+    FaceDbSchemaUpdater updater(&access);
     updater.setObserver(observer);
 
     if (!d->backend->initSchema(&updater))

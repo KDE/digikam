@@ -26,7 +26,7 @@
 
 #include "databasefacebackend.h"
 #include "databasecorebackend_p.h"
-#include "databasefaceschemaupdater.h"
+#include "facedbschemaupdater.h"
 
 namespace FacesEngine
 {
@@ -40,7 +40,7 @@ DatabaseFaceBackend::~DatabaseFaceBackend()
 {
 }
 
-bool DatabaseFaceBackend::initSchema(DatabaseFaceSchemaUpdater* const updater)
+bool DatabaseFaceBackend::initSchema(FaceDbSchemaUpdater* const updater)
 {
     Q_D(DatabaseCoreBackend);
 

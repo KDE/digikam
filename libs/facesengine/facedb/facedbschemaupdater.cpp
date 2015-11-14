@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-16
- * Description : Schema update
+ * Description : Face database schema updater
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databasefaceschemaupdater.h"
+#include "facedbschemaupdater.h"
 
 // KDE includes
 
@@ -38,14 +38,14 @@
 namespace FacesEngine
 {
 
-int DatabaseFaceSchemaUpdater::schemaVersion()
+int FaceDbSchemaUpdater::schemaVersion()
 {
     return 2;
 }
 
 // -------------------------------------------------------------------------------------
 
-class DatabaseFaceSchemaUpdater::Private
+class FaceDbSchemaUpdater::Private
 {
 public:
 
@@ -68,23 +68,23 @@ public:
     InitializationObserver* observer;
 };
 
-DatabaseFaceSchemaUpdater::DatabaseFaceSchemaUpdater(FaceDbAccess* const access)
+FaceDbSchemaUpdater::FaceDbSchemaUpdater(FaceDbAccess* const access)
     : d(new Private)
 {
     d->access = access;
 }
 
-DatabaseFaceSchemaUpdater::~DatabaseFaceSchemaUpdater()
+FaceDbSchemaUpdater::~FaceDbSchemaUpdater()
 {
     delete d;
 }
 
-void DatabaseFaceSchemaUpdater::setObserver(InitializationObserver* const observer)
+void FaceDbSchemaUpdater::setObserver(InitializationObserver* const observer)
 {
     d->observer = observer;
 }
 
-bool DatabaseFaceSchemaUpdater::update()
+bool FaceDbSchemaUpdater::update()
 {
     bool success = startUpdates();
 
@@ -102,7 +102,7 @@ bool DatabaseFaceSchemaUpdater::update()
     return success;
 }
 
-bool DatabaseFaceSchemaUpdater::startUpdates()
+bool FaceDbSchemaUpdater::startUpdates()
 {
     // First step: do we have an empty database?
     QStringList tables = d->access->backend()->tables();
@@ -148,7 +148,7 @@ bool DatabaseFaceSchemaUpdater::startUpdates()
 
         if (d->currentVersion > schemaVersion())
         {
-            // trying to open a database with a more advanced than this DatabaseFaceSchemaUpdater supports
+            // trying to open a database with a more advanced than this FaceDbSchemaUpdater supports
             if (!versionRequired.isEmpty() && versionRequired.toInt() <= schemaVersion())
             {
                 // version required may be less than current version
@@ -203,7 +203,7 @@ bool DatabaseFaceSchemaUpdater::startUpdates()
     }
 }
 
-bool DatabaseFaceSchemaUpdater::makeUpdates()
+bool FaceDbSchemaUpdater::makeUpdates()
 {
     if (d->currentVersion < schemaVersion())
     {
@@ -217,7 +217,7 @@ bool DatabaseFaceSchemaUpdater::makeUpdates()
 }
 
 
-bool DatabaseFaceSchemaUpdater::createDatabase()
+bool FaceDbSchemaUpdater::createDatabase()
 {
     if ( createTables() && createIndices() && createTriggers())
     {
@@ -231,23 +231,23 @@ bool DatabaseFaceSchemaUpdater::createDatabase()
     }
 }
 
-bool DatabaseFaceSchemaUpdater::createTables()
+bool FaceDbSchemaUpdater::createTables()
 {
     return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDB"))) &&
            d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBOpenCVLBPH")));
 }
 
-bool DatabaseFaceSchemaUpdater::createIndices()
+bool FaceDbSchemaUpdater::createIndices()
 {
     return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceIndices")));
 }
 
-bool DatabaseFaceSchemaUpdater::createTriggers()
+bool FaceDbSchemaUpdater::createTriggers()
 {
     return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceTriggers")));
 }
 
-bool DatabaseFaceSchemaUpdater::updateV1ToV2()
+bool FaceDbSchemaUpdater::updateV1ToV2()
 {
 /*
     if (!d->access->backend()->execDBAction(d->access->backend()->getDBAction("UpdateDBSchemaFromV1ToV2")))
