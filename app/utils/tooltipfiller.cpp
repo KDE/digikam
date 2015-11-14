@@ -41,7 +41,7 @@
 #include "collectionmanager.h"
 #include "applicationsettings.h"
 #include "album.h"
-#include "databaseinfocontainers.h"
+#include "coredbinfocontainers.h"
 #include "dimgfiltermanager.h"
 #include "ditemtooltip.h"
 #include "filteraction.h"

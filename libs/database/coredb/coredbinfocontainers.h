@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEINFOCONTAINERS_H
-#define DATABASEINFOCONTAINERS_H
+#ifndef COREDATABASEINFOCONTAINERS_H
+#define COREDATABASEINFOCONTAINERS_H
 
 // Qt includes
 
@@ -115,4 +115,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DATABASEINFOCONTAINERS_H
+#endif // COREDATABASEINFOCONTAINERS_H

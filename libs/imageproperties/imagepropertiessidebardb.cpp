@@ -44,7 +44,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "databaseinfocontainers.h"
+#include "coredbinfocontainers.h"
 #include "databasewatch.h"
 #include "dimg.h"
 #include "imageattributeswatch.h"

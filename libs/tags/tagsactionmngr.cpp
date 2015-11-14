@@ -46,7 +46,7 @@
 #include "databaseaccess.h"
 #include "databaseconstants.h"
 #include "databasewatch.h"
-#include "databaseinfocontainers.h"
+#include "coredbinfocontainers.h"
 #include "digikamapp.h"
 #include "dxmlguiwindow.h"
 #include "digikamview.h"

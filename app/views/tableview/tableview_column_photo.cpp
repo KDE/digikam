@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databaseinfocontainers.h"
+#include "coredbinfocontainers.h"
 #include "imagepropertiestab.h"
 #include "dmetadata.h"
 #include "imageinfo.h"

@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "databaseinfocontainers.h"
+#include "coredbinfocontainers.h"
 #include "imageinfo.h"
 
 namespace

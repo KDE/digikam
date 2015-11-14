@@ -38,7 +38,7 @@
 #include "digikam_globals.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
-#include "databaseinfocontainers.h"
+#include "coredbinfocontainers.h"
 #include "databaseoperationgroup.h"
 #include "dimagehistory.h"
 #include "collectionmanager.h"
