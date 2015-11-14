@@ -39,10 +39,10 @@ public:
     {
     }
 
-    DatabaseFaceBackend* db;
+    FaceDbBackend* db;
 };
 
-TrainingDB::TrainingDB(DatabaseFaceBackend* const db)
+TrainingDB::TrainingDB(FaceDbBackend* const db)
     : d(new Private)
 {
     d->db = db;

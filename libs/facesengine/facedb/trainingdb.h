@@ -30,7 +30,7 @@
 // Local includes
 
 #include "identity.h"
-#include "databasefacebackend.h"
+#include "facedbbackend.h"
 
 using namespace Digikam;
 
@@ -43,7 +43,7 @@ class TrainingDB
 {
 public:
 
-    TrainingDB(DatabaseFaceBackend* const db);
+    TrainingDB(FaceDbBackend* const db);
     ~TrainingDB();
 
     void setSetting(const QString& keyword, const QString& value);

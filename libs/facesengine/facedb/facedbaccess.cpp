@@ -60,7 +60,7 @@ public:
 
 public:
 
-    DatabaseFaceBackend*   backend;
+    FaceDbBackend*   backend;
     TrainingDB*            db;
     DatabaseParameters     parameters;
     DatabaseLocking        lock;
@@ -145,7 +145,7 @@ TrainingDB* FaceDbAccess::db() const
     return d->db;
 }
 
-DatabaseFaceBackend* FaceDbAccess::backend() const
+FaceDbBackend* FaceDbAccess::backend() const
 {
     return d->backend;
 }
@@ -192,7 +192,7 @@ void FaceDbAccess::setParameters(FaceDbAccessData* const d, const DatabaseParame
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseFaceBackend(&d->lock);
+        d->backend = new FaceDbBackend(&d->lock);
         d->db      = new TrainingDB(d->backend);
     }
 }

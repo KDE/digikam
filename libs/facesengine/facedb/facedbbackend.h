@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _DATABASE_FACE_BACKEND_H_
-#define _DATABASE_FACE_BACKEND_H_
+#ifndef _FACE_DATABASE_BACKEND_H_
+#define _FACE_DATABASE_BACKEND_H_
 
 // Local includes
 
@@ -36,16 +36,16 @@ namespace FacesEngine
 {
 
 class FaceDbSchemaUpdater;
-class DatabaseFaceBackendPrivate;
+class FaceDbBackendPrivate;
 
-class DIGIKAM_DATABASE_EXPORT DatabaseFaceBackend : public DatabaseCoreBackend
+class DIGIKAM_DATABASE_EXPORT FaceDbBackend : public DatabaseCoreBackend
 {
     Q_OBJECT
 
 public:
 
-    explicit DatabaseFaceBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("faceDatabase-"));
-    ~DatabaseFaceBackend();
+    explicit FaceDbBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("faceDatabase-"));
+    ~FaceDbBackend();
 
     /**
      * Initialize the database schema to the current version,
@@ -61,4 +61,4 @@ private:
 
 } // namespace FacesEngine
 
-#endif // _DATABASE_FACE_BACKEND_H_
+#endif // _FACE_DATABASE_BACKEND_H_

@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "databasefacebackend.h"
+#include "facedbbackend.h"
 #include "databaseparameters.h"
 #include "databaseerrorhandler.h"
 #include "collectionscannerobserver.h"
@@ -53,7 +53,7 @@ public:
     ~FaceDbAccess();
 
     TrainingDB* db()                  const;
-    DatabaseFaceBackend* backend()    const;
+    FaceDbBackend* backend()    const;
     QString              lastError()  const;
     DatabaseParameters   parameters() const;
 
