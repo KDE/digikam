@@ -91,7 +91,6 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     int          bit_depth, color_type, interlace_type;
     png_structp  png_ptr    = NULL;
     png_infop    info_ptr   = NULL;
-    int          colorModel = DImg::COLORMODELUNKNOWN;
 
     readMetadata(filePath, DImg::PNG);
 
@@ -248,7 +247,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     width  = (int)w32;
     height = (int)h32;
 
-    m_sixteenBit = (bit_depth == 16);
+    int colorModel = DImg::COLORMODELUNKNOWN;
+    m_sixteenBit   = (bit_depth == 16);
 
     switch (color_type)
     {
