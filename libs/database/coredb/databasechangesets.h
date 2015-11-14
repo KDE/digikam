@@ -66,6 +66,8 @@ private:
     DatabaseFields::Set m_changes;
 };
 
+// ----------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT ImageTagChangeset
 {
 public:
@@ -86,6 +88,8 @@ public:
         PropertiesChanged
     };
 
+public:
+
     ImageTagChangeset();
     ImageTagChangeset(QList<qlonglong> ids, QList<int> tags, Operation operation);
     ImageTagChangeset(qlonglong id, QList<int> tags, Operation operation);
@@ -102,20 +106,22 @@ public:
     ImageTagChangeset& operator<<(const QDBusArgument& argument);
     const ImageTagChangeset& operator>>(QDBusArgument& argument) const;
 
-    QList<qlonglong> ids() const;
+    QList<qlonglong> ids()           const;
     bool containsImage(qlonglong id) const;
-    QList<int> tags() const;
-    bool containsTag(int id) const;
-    Operation operation() const;
+    QList<int> tags()                const;
+    bool containsTag(int id)         const;
+    Operation operation()            const;
 
     bool tagsWereAdded() const
     {
         return operation() == Added;
     }
+
     bool tagsWereRemoved() const
     {
         return operation() == Removed || operation() == RemovedAll;
     }
+
     bool propertiesWereChanged() const
     {
         return operation() == PropertiesChanged;
@@ -127,6 +133,8 @@ private:
     QList<int>          m_tags;
     Operation           m_operation;
 };
+
+// ----------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT CollectionImageChangeset
 {
@@ -171,6 +179,8 @@ public:
          */
         Copied
     };
+
+public:
 
     /**
      * An CollectionImageChangeset covers adding and removing an image to/from the collection.
@@ -218,6 +228,8 @@ private:
     Operation           m_operation;
 };
 
+// ----------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT AlbumChangeset
 {
 public:
@@ -230,6 +242,8 @@ public:
         Renamed,
         PropertiesChanged
     };
+
+public:
 
     AlbumChangeset();
     AlbumChangeset(int albumId, Operation operation);
@@ -246,6 +260,8 @@ private:
     Operation m_operation;
 };
 
+// ----------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT TagChangeset
 {
 public:
@@ -260,6 +276,8 @@ public:
         IconChanged,
         PropertiesChanged /// ImageTagProperties Table
     };
+
+public:
 
     TagChangeset();
     TagChangeset(int albumId, Operation operation);
@@ -276,6 +294,8 @@ private:
     Operation m_operation;
 };
 
+// ----------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT AlbumRootChangeset
 {
 public:
@@ -287,6 +307,8 @@ public:
         Deleted,
         PropertiesChanged
     };
+
+public:
 
     AlbumRootChangeset();
     AlbumRootChangeset(int albumRootId, Operation operation);
@@ -303,6 +325,8 @@ private:
     Operation m_operation;
 };
 
+// ----------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT SearchChangeset
 {
 public:
@@ -314,6 +338,8 @@ public:
         Deleted,
         Changed
     };
+
+public:
 
     SearchChangeset();
     SearchChangeset(int searchId, Operation operation);

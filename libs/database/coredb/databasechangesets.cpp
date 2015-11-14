@@ -425,13 +425,13 @@ DatabaseFields::Set& DatabaseFields::Set::operator<<(const QDBusArgument& argume
              >> customEnumInt
              >> videoMetadataInt;
 
-    images = (DatabaseFields::Images)imagesInt;
+    images           = (DatabaseFields::Images)imagesInt;
     imageInformation = (DatabaseFields::ImageInformation)imageInformationInt;
-    imageMetadata = (DatabaseFields::ImageMetadata)imageMetadataInt;
-    imageComments = (DatabaseFields::ImageComments)imageCommentsInt;
-    imagePositions = (DatabaseFields::ImagePositions)imagePositionsInt;
-    customEnum = (DatabaseFields::CustomEnum)customEnumInt;
-    videoMetadata = (DatabaseFields::VideoMetadata)videoMetadataInt;
+    imageMetadata    = (DatabaseFields::ImageMetadata)imageMetadataInt;
+    imageComments    = (DatabaseFields::ImageComments)imageCommentsInt;
+    imagePositions   = (DatabaseFields::ImagePositions)imagePositionsInt;
+    customEnum       = (DatabaseFields::CustomEnum)customEnumInt;
+    videoMetadata    = (DatabaseFields::VideoMetadata)videoMetadataInt;
 
     argument.endStructure();
     return *this;
