@@ -36,7 +36,7 @@
 
 #include "digikam_debug.h"
 #include "databaseaccess.h"
-#include "databaseconstants.h"
+#include "coredbconstants.h"
 #include "databaseoperationgroup.h"
 #include "dimg.h"
 #include "facetags.h"

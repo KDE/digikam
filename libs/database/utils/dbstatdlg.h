@@ -27,7 +27,7 @@
 // Local includes
 
 #include "infodlg.h"
-#include "databaseconstants.h"
+#include "coredbconstants.h"
 #include "digikam_export.h"
 
 namespace Digikam

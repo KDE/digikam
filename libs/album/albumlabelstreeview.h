@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "databaseconstants.h"
+#include "coredbconstants.h"
 #include "album.h"
 #include "statesavingobject.h"
 #include "imagelisterrecord.h"

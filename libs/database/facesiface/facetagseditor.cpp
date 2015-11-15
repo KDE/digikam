@@ -27,7 +27,7 @@
 // Local includes
 
 #include "databaseaccess.h"
-#include "databaseconstants.h"
+#include "coredbconstants.h"
 #include "databaseoperationgroup.h"
 #include "facetags.h"
 #include "imageinfo.h"

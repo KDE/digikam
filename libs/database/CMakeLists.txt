@@ -54,12 +54,12 @@ set(libdatabase_SRCS
     coredb/databasetransaction.cpp
     coredb/databaseurl.cpp
     coredb/databasechangesets.cpp
-    coredb/databaseconstants.cpp
     coredb/databasethumbnailinfoprovider.cpp
     coredb/databasecopymanager.cpp
     coredb/downloadhistory.cpp
     coredb/namefilter.cpp
     coredb/searchxml.cpp
+    coredb/coredbconstants.cpp
     coredb/coredbschemaupdater.cpp
 
     tags/tagproperties.cpp

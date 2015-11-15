@@ -24,7 +24,7 @@
 
 // Local includes
 
-#include "databaseconstants.h"
+#include "coredbconstants.h"
 
 namespace Digikam
 {

@@ -42,7 +42,7 @@
 #include "albuminfo.h"
 #include "coredbfields.h"
 #include "databaseaccess.h"
-#include "databaseconstants.h"
+#include "coredbconstants.h"
 #include "digikam_export.h"
 #include "sqlquery.h"
 

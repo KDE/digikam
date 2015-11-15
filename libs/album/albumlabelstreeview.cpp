@@ -38,7 +38,7 @@
 #include "searchtabheader.h"
 #include "albummanager.h"
 #include "albumtreeview.h"
-#include "databaseconstants.h"
+#include "coredbconstants.h"
 #include "imagelister.h"
 #include "statesavingobject.h"
 #include "databaseaccess.h"

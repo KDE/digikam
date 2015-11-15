@@ -49,7 +49,7 @@
 #include "syncjob.h"
 #include "searchtextbar.h"
 #include "tagsactionmngr.h"
-#include "databaseconstants.h"
+#include "coredbconstants.h"
 #include "digikam_debug.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"

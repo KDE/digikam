@@ -31,7 +31,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databaseconstants.h"
+#include "coredbconstants.h"
 #include "tagscache.h"
 #include "tagregion.h"
 #include "tagproperties.h"
