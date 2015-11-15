@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-12-01
- * Description : Recording changes on the database
+ * Description : Core database recording changes.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASECHANGESETS_H
-#define DATABASECHANGESETS_H
+#ifndef COREDATABASECHANGESETS_H
+#define COREDATABASECHANGESETS_H
 
 // Qt includes
 
@@ -368,4 +368,4 @@ DECLARE_METATYPE_FOR_DBUS(Digikam::SearchChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::AlbumRootChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::DatabaseFields::Set)
 
-#endif //DATABASECHANGESETS_H
+#endif // COREDATABASECHANGESETS_H

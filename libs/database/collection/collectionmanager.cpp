@@ -48,7 +48,7 @@
 
 #include "digikam_debug.h"
 #include "databaseaccess.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "databasetransaction.h"
 #include "albumdb.h"
 #include "collectionscanner.h"

@@ -27,7 +27,7 @@
 
 #include "digikam_debug.h"
 #include "databaseaccess.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "databasewatch.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"

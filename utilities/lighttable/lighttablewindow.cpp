@@ -67,7 +67,7 @@
 #include "syncjob.h"
 #include "lighttablepreview.h"
 #include "albummodel.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "scancontroller.h"
 #include "tagsactionmngr.h"
 #include "thumbbardock.h"

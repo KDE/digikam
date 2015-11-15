@@ -37,7 +37,7 @@
 #include "collectionscannerobserver.h"
 #include "imageinfo.h"
 #include "loadingcache.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 
 namespace Digikam
 {

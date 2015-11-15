@@ -31,7 +31,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "coredbfields.h"
 #include "databasewatch.h"
 #include "imageinfo.h"

@@ -42,7 +42,7 @@
 
 #include "digikam_export.h"
 #include "imageposition.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "imagelister.h"
 #include "databaseaccess.h"
 #include "albumdb.h"

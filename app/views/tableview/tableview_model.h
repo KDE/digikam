@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "tableview_shared.h"
 
 class QMimeData;

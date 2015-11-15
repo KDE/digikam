@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 
 namespace Digikam
 {

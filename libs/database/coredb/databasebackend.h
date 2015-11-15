@@ -29,7 +29,7 @@
 
 #include "digikam_export.h"
 #include "databasecorebackend.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 
 namespace Digikam
 {

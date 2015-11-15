@@ -36,7 +36,7 @@
 #include "digikam_debug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "coredbfields.h"
 #include "databasewatch.h"
 #include "imagefiltermodel.h"

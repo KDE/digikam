@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_CONSTANTS_H
-#define DATABASE_CONSTANTS_H
+#ifndef CORE_DATABASE_CONSTANTS_H
+#define CORE_DATABASE_CONSTANTS_H
 
 // Qt includes
 
@@ -203,4 +203,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DATABASE_CONSTANTS_H
+#endif // CORE_DATABASE_CONSTANTS_H

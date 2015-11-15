@@ -33,7 +33,7 @@
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "databaseface.h"
 #include "databasewatch.h"
 #include "databaseurl.h"

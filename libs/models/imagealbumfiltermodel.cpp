@@ -30,7 +30,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "databasewatch.h"
 #include "imagealbummodel.h"
 

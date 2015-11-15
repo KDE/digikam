@@ -50,7 +50,7 @@
 
 #include "digikam_debug.h"
 #include "albumdb.h"
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 #include "databasewatch.h"
 #include "ddragobjects.h"
 #include "defaultrenameparser.h"

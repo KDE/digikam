@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-12-01
- * Description : Recording changes on the database
+ * Description : Core database recording changes.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databasechangesets.h"
+#include "coredbchangesets.h"
 
 namespace Digikam
 {
