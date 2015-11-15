@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-10-12
- * Description : Convenience object for grouping database operations
+ * Description : Core database convenience object for grouping operations
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databaseoperationgroup.h"
+#include "coredboperationgroup.h"
 
 // Qt includes
 
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class DatabaseOperationGroup::Private
+class CoreDbOperationGroup::Private
 {
 public:
 
@@ -94,7 +94,7 @@ public:
     }
 };
 
-DatabaseOperationGroup::DatabaseOperationGroup()
+CoreDbOperationGroup::CoreDbOperationGroup()
     : d(new Private)
 {
     if (d->needsTransaction())
@@ -103,7 +103,7 @@ DatabaseOperationGroup::DatabaseOperationGroup()
     }
 }
 
-DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess* const access)
+CoreDbOperationGroup::CoreDbOperationGroup(DatabaseAccess* const access)
     : d(new Private)
 {
     d->access = access;
@@ -114,13 +114,13 @@ DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess* const access)
     }
 }
 
-DatabaseOperationGroup::~DatabaseOperationGroup()
+CoreDbOperationGroup::~CoreDbOperationGroup()
 {
     d->release();
     delete d;
 }
 
-void DatabaseOperationGroup::lift()
+void CoreDbOperationGroup::lift()
 {
     if (d->acquired)
     {
@@ -135,17 +135,17 @@ void DatabaseOperationGroup::lift()
     }
 }
 
-void DatabaseOperationGroup::setMaximumTime(int msecs)
+void CoreDbOperationGroup::setMaximumTime(int msecs)
 {
     d->maxTime = msecs;
 }
 
-void DatabaseOperationGroup::resetTime()
+void CoreDbOperationGroup::resetTime()
 {
     d->timeAcquired.start();
 }
 
-void DatabaseOperationGroup::allowLift()
+void CoreDbOperationGroup::allowLift()
 {
     if (d->maxTime && d->timeAcquired.elapsed() > d->maxTime)
     {

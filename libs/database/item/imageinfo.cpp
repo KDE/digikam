@@ -39,7 +39,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "coredbinfocontainers.h"
-#include "databaseoperationgroup.h"
+#include "coredboperationgroup.h"
 #include "dimagehistory.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
@@ -990,7 +990,7 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     }
 
     // Take care: Once we start this, we cannot rely on change notifications and cache invalidation!
-    DatabaseOperationGroup group;
+    CoreDbOperationGroup group;
 
     // Handle grouping on an already grouped image, and prevent circular grouping
     ImageInfo leader;

@@ -31,7 +31,7 @@
 
 #include "digikam_debug.h"
 #include "collectionscanner.h"
-#include "databaseoperationgroup.h"
+#include "coredboperationgroup.h"
 #include "imageinfotasksplitter.h"
 #include "fileactionmngr_p.h"
 #include "scancontroller.h"
@@ -58,7 +58,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
 
     {
         //ScanController::instance()->suspendCollectionScan();
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
         foreach(const ImageInfo& info, infos)
@@ -112,7 +112,7 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
 
     {
         //ScanController::instance()->suspendCollectionScan();
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
         foreach(const ImageInfo& info, infos)
@@ -159,7 +159,7 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
 
     {
         //ScanController::instance()->suspendCollectionScan();
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
         foreach(const ImageInfo& info, infos)
@@ -205,7 +205,7 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
 
     {
         //ScanController::instance()->suspendCollectionScan();
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
         foreach(const ImageInfo& info, infos)
@@ -246,7 +246,7 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
 void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& pick, FileActionImageInfoList infos)
 {
     {
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
         foreach(const ImageInfo& constInfo, infos)
@@ -282,7 +282,7 @@ void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& p
 void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList infos, int orientation)
 {
     {
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
         foreach (ImageInfo info, infos)
@@ -308,7 +308,7 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
 void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, DisjointMetadata *hub)
 {
     {
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         group.setMaximumTime(200);
 
         foreach(const ImageInfo& info, infos)

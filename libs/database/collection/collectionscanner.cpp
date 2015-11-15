@@ -54,7 +54,7 @@
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "coredbtransaction.h"
-#include "databaseoperationgroup.h"
+#include "coredboperationgroup.h"
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageinfo.h"
@@ -344,7 +344,7 @@ void CollectionScanner::Private::finishScanner(ImageScanner& scanner)
 {
     // Perform the actual write operation to the database
     {
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         scanner.commit();
     }
 
@@ -1117,7 +1117,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     if (!itemIdSet.isEmpty())
     {
         QList<qlonglong> ids = itemIdSet.toList();
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         DatabaseAccess().db()->removeItems(ids, QList<int>() << albumID);
         itemsWereRemoved(ids);
     }
@@ -1343,7 +1343,7 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     }
 
     ImageInfo dest(d);
-    DatabaseOperationGroup group;
+    CoreDbOperationGroup group;
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "Copying properties from" << source.id() << "to" << dest.id();
 
@@ -1464,7 +1464,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
             return;
         }
 
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
 
         if (d->recordHistoryIds)
         {
@@ -1492,7 +1492,7 @@ void CollectionScanner::historyScanningStage3(const QList<qlonglong>& ids)
             return;
         }
 
-        DatabaseOperationGroup group;
+        CoreDbOperationGroup group;
         ImageScanner::tagImageHistoryGraph(id);
     }
 }

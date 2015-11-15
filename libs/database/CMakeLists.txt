@@ -49,7 +49,6 @@ set(libdatabase_SRCS
     coredb/databasewatch.cpp
     coredb/databasewatchadaptor.cpp
     coredb/databasebackend.cpp
-    coredb/databaseoperationgroup.cpp
     coredb/databaseurl.cpp
     coredb/downloadhistory.cpp
     coredb/namefilter.cpp
@@ -61,6 +60,7 @@ set(libdatabase_SRCS
     coredb/coredbschemaupdater.cpp
     coredb/coredbchangesets.cpp
     coredb/coredbthumbinfoprovider.cpp
+    coredb/coredboperationgroup.cpp
 
     tags/tagproperties.cpp
     tags/tagscache.cpp

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-10-12
- * Description : Convenience object for grouping database operations
+ * Description : Core database convenience object for grouping operations
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEOPERATIONGROUP_H
-#define DATABASEOPERATIONGROUP_H
+#ifndef COREDATABASEOPERATIONGROUP_H
+#define COREDATABASEOPERATIONGROUP_H
 
 // Qt includes
 
@@ -39,25 +39,25 @@ class DatabaseAccess;
 
 /**
  * When you intend to execute a number of write operations to the database,
- * group them while holding a DatabaseOperationGroup.
+ * group them while holding a CoreDbOperationGroup.
  * For some database systems (SQLite), keeping a transaction across write operations
  * occurring in short time results in enormous speedup (800x).
  * For system that do not need this optimization, this class is a no-op.
  */
-class DIGIKAM_DATABASE_EXPORT DatabaseOperationGroup
+class DIGIKAM_DATABASE_EXPORT CoreDbOperationGroup
 {
 public:
 
     /**
      * Retrieve a DatabaseAccess object each time when constructing and destructing.
      */
-    DatabaseOperationGroup();
+    CoreDbOperationGroup();
 
     /**
      * Use an existing DatabaseAccess object, which must live as long as this object exists.
      */
-    explicit DatabaseOperationGroup(DatabaseAccess* const access);
-    ~DatabaseOperationGroup();
+    explicit CoreDbOperationGroup(DatabaseAccess* const access);
+    ~CoreDbOperationGroup();
 
     /**
      * This will - if a transaction is held - commit the transaction and acquire a new one.
@@ -86,4 +86,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // DATABASETRANSACTION_H
+#endif // COREDATABASEOPERATIONGROUP_H

@@ -28,7 +28,7 @@
 
 #include "databaseaccess.h"
 #include "coredbconstants.h"
-#include "databaseoperationgroup.h"
+#include "coredboperationgroup.h"
 #include "facetags.h"
 #include "imageinfo.h"
 #include "imagetagpair.h"
@@ -421,7 +421,7 @@ void FaceTagsEditor::removeNormalTag(qlonglong imageId, int tagId)
 
 void FaceTagsEditor::removeNormalTags(qlonglong imageId, QList<int> tagIds)
 {
-    DatabaseOperationGroup group;
+    CoreDbOperationGroup group;
     group.setMaximumTime(200);
     ImageInfo info(imageId);
 
