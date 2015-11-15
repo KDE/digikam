@@ -258,7 +258,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
         }
 
         // insert the previous requested values to the toDB
-        DatabaseAction action                            = toDBbackend.getDBAction(toActionName);
+        DbEngineAction action                            = toDBbackend.getDBAction(toActionName);
         DatabaseCoreBackend::QueryState queryStateResult = toDBbackend.execDBAction(action, tempBindingMap);
 
         if (queryStateResult != DatabaseCoreBackend::NoErrors &&

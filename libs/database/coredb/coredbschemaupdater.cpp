@@ -594,7 +594,7 @@ bool CoreDbSchemaUpdater::performUpdateToVersion(const QString& actionName, int 
         d->observer->moreSchemaUpdateSteps(1);
     }
 
-    DatabaseAction updateAction = d->backend->getDBAction(actionName);
+    DbEngineAction updateAction = d->backend->getDBAction(actionName);
 
     if (updateAction.name.isNull())
     {

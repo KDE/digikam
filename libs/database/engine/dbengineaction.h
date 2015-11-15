@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-27
- * Description : Database element configuration
+ * Description : Database engine action
  *
  * Copyright (C) 2009-2010 by Holger Foerster <hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _DATABASE_ACTION_H_
-#define _DATABASE_ACTION_H_
+#ifndef _DATABASE_ENGINE_ACTION_H_
+#define _DATABASE_ENGINE_ACTION_H_
 
 // Qt includes
 
@@ -37,11 +37,11 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseActionElement
+class DIGIKAM_EXPORT DbEngineActionElement
 {
 public:
 
-    DatabaseActionElement()
+    DbEngineActionElement()
         : order(0)
     {
     }
@@ -53,15 +53,15 @@ public:
 
 // ---------------------------------------------------------------
 
-class DIGIKAM_EXPORT DatabaseAction
+class DIGIKAM_EXPORT DbEngineAction
 {
 public:
 
     QString                      name;
     QString                      mode;
-    QList<DatabaseActionElement> dbActionElements;
+    QList<DbEngineActionElement> dbActionElements;
 };
 
 } // namespace Digikam
 
-#endif // _DATABASE_ACTION_H_
+#endif // _DATABASE_ENGINE_ACTION_H_

@@ -156,7 +156,7 @@ void DatabaseConfigLoader::readDBActions(QDomElement& sqlStatementElements, Data
             qCDebug(DIGIKAM_DATABASE_LOG) << "Missing statement attribute <name>.";
         }
 
-        DatabaseAction action;
+        DbEngineAction action;
         action.name = dbActionElement.attribute(QLatin1String("name"));
         //qCDebug(DIGIKAM_DATABASE_LOG) << "Getting attribute " << dbActionElement.attribute("name");
 
@@ -174,7 +174,7 @@ void DatabaseConfigLoader::readDBActions(QDomElement& sqlStatementElements, Data
                 qCDebug(DIGIKAM_DATABASE_LOG) << "Missing statement attribute <mode>.";
             }
 
-            DatabaseActionElement actionElement;
+            DbEngineActionElement actionElement;
             actionElement.mode      = databaseElement.attribute(QLatin1String("mode"));
             actionElement.statement = databaseElement.text();
 

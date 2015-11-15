@@ -206,14 +206,14 @@ public:
      * Returns a database action with name, specified in actionName,
      * for the current database.
      */
-    DatabaseAction getDBAction(const QString& actionName) const;
+    DbEngineAction getDBAction(const QString& actionName) const;
 
     /**
      * Performs the database action on the current database.
      * Queries by the specified parameters mustn't have named parameters.
      * The result values (if any) are stored within the values list.
      */
-    QueryState execDBAction(const DatabaseAction& action, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+    QueryState execDBAction(const DbEngineAction& action, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     QueryState execDBAction(const QString& action, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
@@ -223,7 +223,7 @@ public:
      * substituded with values from the bindingMap parameter.
      * The result values (if any) are stored within the values list.
      */
-    QueryState execDBAction(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap,
+    QueryState execDBAction(const DbEngineAction& action, const QMap<QString, QVariant>& bindingMap,
                             QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     QueryState execDBAction(const QString& action, const QMap<QString, QVariant>& bindingMap,
@@ -237,7 +237,7 @@ public:
      * The first containing the field names, the second one
      * containing the values as QVariants ready for binding.
      */
-    QueryState execUpsertDBAction(const DatabaseAction& action, const QVariant& id,
+    QueryState execUpsertDBAction(const DbEngineAction& action, const QVariant& id,
                                   const QStringList fieldNames, const QList<QVariant>& values);
     QueryState execUpsertDBAction(const QString& action, const QVariant& id,
                                   const QStringList fieldNames, const QList<QVariant>& values);
@@ -249,7 +249,7 @@ public:
      * The result values (if any) are stored within the values list.
      * This method returns the last query, which is used to handle special cases.
      */
-    QSqlQuery execDBActionQuery(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap);
+    QSqlQuery execDBActionQuery(const DbEngineAction& action, const QMap<QString, QVariant>& bindingMap);
 
     QSqlQuery execDBActionQuery(const QString& action, const QMap<QString, QVariant>& bindingMap);
 

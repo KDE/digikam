@@ -612,9 +612,9 @@ DatabaseConfig DatabaseCoreBackend::configElement() const
     return DatabaseCoreConfig::element(d->parameters.databaseType);
 }
 
-DatabaseAction DatabaseCoreBackend::getDBAction(const QString& actionName) const
+DbEngineAction DatabaseCoreBackend::getDBAction(const QString& actionName) const
 {
-    DatabaseAction action = configElement().sqlStatements.value(actionName);
+    DbEngineAction action = configElement().sqlStatements.value(actionName);
 
     if (action.name.isNull())
     {
@@ -624,7 +624,7 @@ DatabaseAction DatabaseCoreBackend::getDBAction(const QString& actionName) const
     return action;
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, QList<QVariant>* const values,
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DbEngineAction& action, QList<QVariant>* const values,
                                                                   QVariant* const lastInsertId)
 {
     return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
@@ -642,7 +642,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const QString&
     return execDBAction(getDBAction(action), bindingMap, values, lastInsertId);
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap,
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DbEngineAction& action, const QMap<QString, QVariant>& bindingMap,
                                                                   QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     Q_D(DatabaseCoreBackend);
@@ -665,7 +665,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
         beginTransaction();
     }
 
-    foreach(const DatabaseActionElement& actionElement, action.dbActionElements)
+    foreach(const DbEngineActionElement& actionElement, action.dbActionElements)
     {
         DatabaseCoreBackend::QueryState result;
 
@@ -714,7 +714,7 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const QString& action, const QM
     return execDBActionQuery(getDBAction(action), bindingMap);
 }
 
-QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap)
+QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DbEngineAction& action, const QMap<QString, QVariant>& bindingMap)
 {
     Q_D(DatabaseCoreBackend);
 
@@ -724,7 +724,7 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, c
 
     QSqlQuery result;
 
-    foreach(const DatabaseActionElement& actionElement, action.dbActionElements)
+    foreach(const DbEngineActionElement& actionElement, action.dbActionElements)
     {
         if (actionElement.mode == QLatin1String("query"))
         {
@@ -1227,7 +1227,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
     return query;
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const DatabaseAction& action, const QVariant& id,
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const DbEngineAction& action, const QVariant& id,
                                                                         const QStringList fieldNames, const QList<QVariant>& values)
 {
     QMap<QString, QVariant> parameters;

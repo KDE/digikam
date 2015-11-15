@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "databaseaction.h"
+#include "dbengineaction.h"
 
 namespace Digikam
 {
@@ -50,7 +50,7 @@ public:
     QString                       password;
     QString                       dbServerCmd;
     QString                       dbInitCmd;
-    QMap<QString, DatabaseAction> sqlStatements;
+    QMap<QString, DbEngineAction> sqlStatements;
 };
 
 } // namespace Digikam
