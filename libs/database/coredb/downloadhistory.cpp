@@ -26,7 +26,7 @@
 // Local includes
 
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 
 namespace Digikam
 {
@@ -34,7 +34,7 @@ namespace Digikam
 DownloadHistory::Status DownloadHistory::status(const QString& identifier, const QString& name,
                                                 qlonglong fileSize, const QDateTime& date)
 {
-    int id = DatabaseAccess().db()->findInDownloadHistory(identifier, name, fileSize, date);
+    int id = CoreDbAccess().db()->findInDownloadHistory(identifier, name, fileSize, date);
 
     if (id != -1)
     {
@@ -49,7 +49,7 @@ DownloadHistory::Status DownloadHistory::status(const QString& identifier, const
 void DownloadHistory::setDownloaded(const QString& identifier, const QString& name,
                                     qlonglong fileSize, const QDateTime& date)
 {
-    DatabaseAccess().db()->addToDownloadHistory(identifier, name, fileSize, date);
+    CoreDbAccess().db()->addToDownloadHistory(identifier, name, fileSize, date);
 }
 
 } // namespace Digikam

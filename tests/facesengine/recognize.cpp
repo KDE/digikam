@@ -39,7 +39,7 @@
 // Local includes
 
 #include "recognitiondatabase.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "databaseparameters.h"
 
 using namespace Digikam;
@@ -86,7 +86,7 @@ int main(int argc, char** argv)
     app.setApplicationName(QString::fromLatin1("digikam"));          // for DB init.
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     DatabaseParameters prm    = DatabaseParameters::parametersFromConfig(config);
-    DatabaseAccess::setParameters(prm, DatabaseAccess::MainApplication);    
+    CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);    
     RecognitionDatabase db    = RecognitionDatabase::addDatabase(QDir::currentPath());
 
     if (QString::fromLatin1(argv[1]) == QString::fromLatin1("identify"))

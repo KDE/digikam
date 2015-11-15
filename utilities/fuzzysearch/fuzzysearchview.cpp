@@ -57,7 +57,7 @@
 #include "albuminfo.h"
 #include "albummanager.h"
 #include "albummodel.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "ddragobjects.h"
 #include "editablesearchtreeview.h"
 #include "findduplicatesview.h"
@@ -598,7 +598,7 @@ void FuzzySearchView::setActive(bool val)
     // at first occasion, warn if no fingerprints are available
     if (val && !d->fingerprintsChecked && isVisible())
     {
-        if (!DatabaseAccess().db()->hasHaarFingerprints())
+        if (!CoreDbAccess().db()->hasHaarFingerprints())
         {
             QString msg = i18n("Image fingerprints have not yet been generated for your collection. "
                                "The Fuzzy Search Tools will not be operational "

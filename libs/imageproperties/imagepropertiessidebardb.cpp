@@ -114,10 +114,10 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     connect(d->desceditTab, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChangeDatabase(ImageChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
             this, SLOT(slotImageTagChanged(ImageTagChangeset)));
 
     connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(QUrl)),

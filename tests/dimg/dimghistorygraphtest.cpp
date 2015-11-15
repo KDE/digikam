@@ -70,8 +70,8 @@ void DImgHistoryGraphTest::initTestCase()
     qDebug() << "Using database path for test: " << dbFile;
 
     DatabaseParameters params(QLatin1String("QSQLITE"), dbFile, QLatin1String("QSQLITE"), dbFile);
-    DatabaseAccess::setParameters(params, DatabaseAccess::MainApplication);
-    QVERIFY(DatabaseAccess::checkReadyForUse(0));
+    CoreDbAccess::setParameters(params, CoreDbAccess::MainApplication);
+    QVERIFY(CoreDbAccess::checkReadyForUse(0));
     QVERIFY(QFile(dbFile).exists());
     CollectionManager::instance()->addLocation(QUrl::fromLocalFile(collectionDir.path()));
     CollectionManager::instance()->addLocation(QUrl::fromLocalFile(imagePath()));
@@ -80,15 +80,15 @@ void DImgHistoryGraphTest::initTestCase()
 
     rescan();
 
-    QList<AlbumShortInfo> albums = DatabaseAccess().db()->getAlbumShortInfos();
+    QList<AlbumShortInfo> albums = CoreDbAccess().db()->getAlbumShortInfos();
     QVERIFY(albums.size() >= 2);
 
     foreach(const AlbumShortInfo& album, albums)
     {
         //qDebug() << album.relativePath << album.id;
         //qDebug() << CollectionManager::instance()->albumRootPath(album.albumRootId);
-        //qDebug() << DatabaseAccess().db()->getItemURLsInAlbum(album.id);
-        readOnlyImages << DatabaseAccess().db()->getItemURLsInAlbum(album.id);
+        //qDebug() << CoreDbAccess().db()->getItemURLsInAlbum(album.id);
+        readOnlyImages << CoreDbAccess().db()->getItemURLsInAlbum(album.id);
     }
 
     foreach(const QString& file, readOnlyImages)

@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class DatabaseAccess;
+class CoreDbAccess;
 
 /**
  * When you intend to execute a number of write operations to the database,
@@ -49,14 +49,14 @@ class DIGIKAM_DATABASE_EXPORT CoreDbOperationGroup
 public:
 
     /**
-     * Retrieve a DatabaseAccess object each time when constructing and destructing.
+     * Retrieve a CoreDbAccess object each time when constructing and destructing.
      */
     CoreDbOperationGroup();
 
     /**
-     * Use an existing DatabaseAccess object, which must live as long as this object exists.
+     * Use an existing CoreDbAccess object, which must live as long as this object exists.
      */
-    explicit CoreDbOperationGroup(DatabaseAccess* const access);
+    explicit CoreDbOperationGroup(CoreDbAccess* const access);
     ~CoreDbOperationGroup();
 
     /**

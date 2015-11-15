@@ -272,7 +272,7 @@ private:
     void updateLocations();
 
     friend class CoreDbWatch;
-    friend class DatabaseAccess;
+    friend class CoreDbAccess;
 
     void clear_locked();
 

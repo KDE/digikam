@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-18
- * Description : Database access wrapper.
+ * Description : Core database access wrapper.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEACCESS_H
-#define DATABASEACCESS_H
+#ifndef COREDATABASEACCESS_H
+#define COREDATABASEACCESS_H
 
 // Local includes
 
@@ -38,15 +38,15 @@ class CoreDbBackend;
 class AlbumDB;
 class CoreDbWatch;
 class InitializationObserver;
-class DatabaseAccessStaticPriv;
+class CoreDbAccessStaticPriv;
 
-class DIGIKAM_DATABASE_EXPORT DatabaseAccess
+class DIGIKAM_DATABASE_EXPORT CoreDbAccess
 {
 public:
 
-    /** The DatabaseAccess provides access to the database:
+    /** The CoreDbAccess provides access to the database:
       * Create an instance of this class on the stack to retrieve a pointer to the database.
-      * While you hold an instance of DatabaseAccess, the database access is locked for other threads,
+      * While you hold an instance of CoreDbAccess, the database access is locked for other threads,
       * but _not_ for other processes. This is due to the fact that while databases allow
       * concurrent access (of course), their client libs may not be thread-safe.
       *
@@ -57,15 +57,15 @@ public:
       */
 
     /**
-      * Create a DatabaseAccess object for the default database.
+      * Create a CoreDbAccess object for the default database.
       * Note that when initializing your app, setParameters need to be called
       * (in a not-yet-multithreaded context) for this to work.
       * If the database is not yet opened, it will be opened.
       * The schema will not be checked, use checkReadyForUse()
       * for a full opening process including schema update and error messages.
       */
-    DatabaseAccess();
-    ~DatabaseAccess();
+    CoreDbAccess();
+    ~CoreDbAccess();
 
     /**
       * Retrieve a pointer to the album database
@@ -102,7 +102,7 @@ public:
       * In a subsequent call, if the parameters are identical, nothing is done.
       * If the parameters change, the current database will be closed.
       * When parameters have been set or changed, the new one will be opened on-demand,
-      * i.e. when the first DatabaseAccess object is constructed.
+      * i.e. when the first CoreDbAccess object is constructed.
       */
     static void setParameters(const DatabaseParameters& parameters);
     static void setParameters(const DatabaseParameters& parameters, ApplicationStatus status);
@@ -136,28 +136,28 @@ public:
 
 private:
 
-    explicit DatabaseAccess(bool);
+    explicit CoreDbAccess(bool);
 
-    friend class DatabaseAccessUnlock;
-    static DatabaseAccessStaticPriv* d;
+    friend class CoreDbAccessUnlock;
+    static CoreDbAccessStaticPriv* d;
 };
 
 // -----------------------------------------------------------------------------
 
-class DatabaseAccessUnlock
+class CoreDbAccessUnlock
 {
 public:
 
     /** Acquire an object of this class if you want to assure
-     *  that the DatabaseAccess is _not_ held during the lifetime of the object.
+     *  that the CoreDbAccess is _not_ held during the lifetime of the object.
      *  At creation, the lock is obtained shortly, then all locks are released.
      *  At destruction, all locks are acquired again.
      *  If you need to access any locked structures during lifetime, acquire a new
-     *  DatabaseAccess.
+     *  CoreDbAccess.
      */
-    DatabaseAccessUnlock();
-    explicit DatabaseAccessUnlock(DatabaseAccess* const access);
-    ~DatabaseAccessUnlock();
+    CoreDbAccessUnlock();
+    explicit CoreDbAccessUnlock(CoreDbAccess* const access);
+    ~CoreDbAccessUnlock();
 
 private:
 
@@ -166,4 +166,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // DATABASEACCESS_H
+#endif // COREDATABASEACCESS_H

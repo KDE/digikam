@@ -3065,7 +3065,7 @@ void AlbumDB::setItemCaption(qlonglong imageID,const QString& caption)
                     caption,
                     imageID );
 
-    DatabaseAccess::attributesWatch()
+    CoreDbAccess::attributesWatch()
             ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageComment);
 }
 
@@ -3833,7 +3833,7 @@ bool AlbumDB::setItemDate(qlonglong imageID,
                      datetime.toString(Qt::ISODate),
                      imageID );
 
-    DatabaseAccess::attributesWatch()
+    CoreDbAccess::attributesWatch()
             ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageDate);
 
     return true;
@@ -3865,7 +3865,7 @@ void AlbumDB::setItemRating(qlonglong imageID, int rating)
                      QString("Rating"),
                      rating );
 
-    DatabaseAccess::attributesWatch()
+    CoreDbAccess::attributesWatch()
             ->sendImageFieldChanged(imageID, DatabaseAttributesWatch::ImageRating);
 }
 
@@ -4635,7 +4635,7 @@ QList<QVariant> AlbumDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1,
     QList<QVariant> boundValues;
     boundValues << lat1 << lat2 << lng1 << lng2;
 
-    //DatabaseAccess access;
+    //CoreDbAccess access;
 
     d->db->execSql(QString::fromUtf8("Select ImageInformation.imageid, ImageInformation.rating, ImagePositions.latitudeNumber, ImagePositions.longitudeNumber"
                            " FROM ImageInformation INNER JOIN ImagePositions"

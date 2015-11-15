@@ -46,7 +46,7 @@
 #include "applicationsettings.h"
 #include "assignnameoverlay.h"
 #include "contextmenuhelper.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "ddragobjects.h"
 #include "digikamapp.h"
 #include "digikamimagedelegate.h"

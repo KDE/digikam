@@ -124,7 +124,7 @@ QString ImageGPS::saveChanges()
         }
 
         QList<int> tagIds = TagsCache::instance()->getOrCreateTags(tagsPath);
-        DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_info.id(), tagIds);
+        CoreDbAccess().db()->addTagsToItems(QList<qlonglong>() << m_info.id(), tagIds);
     }
     
     // Save info to file.

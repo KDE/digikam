@@ -148,7 +148,7 @@ GPSMarkerTiler::GPSMarkerTiler(QObject* const parent, ImageFilterModel* const im
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChange(ImageChangeset)), Qt::QueuedConnection);
 
     connect(d->imageAlbumModel, SIGNAL(imageInfosAdded(QList<ImageInfo>)),

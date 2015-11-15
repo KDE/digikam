@@ -50,7 +50,7 @@
 #include "imageinfo.h"
 #include "metadatasettings.h"
 #include "collectionmanager.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "drawdecoder.h"
@@ -321,7 +321,7 @@ void KipiInterface::delImage(const QUrl& url)
     if (palbum)
     {
         // delete the item from the database
-        DatabaseAccess().db()->deleteItem(palbum->id(), url.fileName());
+        CoreDbAccess().db()->deleteItem(palbum->id(), url.fileName());
     }
     else
     {

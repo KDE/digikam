@@ -25,7 +25,7 @@
 
 // Local includes
 
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbwatch.h"
 
 namespace Digikam
@@ -35,7 +35,7 @@ ImageAttributesWatch* ImageAttributesWatch::m_instance = 0;
 
 ImageAttributesWatch::ImageAttributesWatch()
 {
-    CoreDbWatch* const dbwatch = DatabaseAccess::databaseWatch();
+    CoreDbWatch* const dbwatch = CoreDbAccess::databaseWatch();
 
     connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChange(ImageChangeset)));

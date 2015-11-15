@@ -29,7 +29,7 @@
 #include "imagefiltermodelpriv.h"
 #include "album.h"
 #include "albummanager.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbchangesets.h"
 #include "coredbwatch.h"
 #include "imagealbummodel.h"

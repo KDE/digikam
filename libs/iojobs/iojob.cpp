@@ -38,7 +38,7 @@
 #include "digikam_export.h"
 #include "albumdb.h"
 #include "album.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "databaseparameters.h"
 #include "dtrash.h"
 

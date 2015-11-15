@@ -31,7 +31,7 @@
 // Local includes
 
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "imagescanner.h"
 
 namespace Digikam
@@ -134,7 +134,7 @@ void ImageExtendedProperties::removeLocation()
 
 QString ImageExtendedProperties::readProperty(const QString& property)
 {
-    return DatabaseAccess().db()->getImageProperty(m_id, property);
+    return CoreDbAccess().db()->getImageProperty(m_id, property);
 }
 
 void ImageExtendedProperties::setProperty(const QString& property, const QString& value)
@@ -145,13 +145,13 @@ void ImageExtendedProperties::setProperty(const QString& property, const QString
     }
     else
     {
-        DatabaseAccess().db()->setImageProperty(m_id, property, value);
+        CoreDbAccess().db()->setImageProperty(m_id, property, value);
     }
 }
 
 QStringList ImageExtendedProperties::readFakeListProperty(const QString& property)
 {
-    QString value = DatabaseAccess().db()->getImageProperty(m_id, property);
+    QString value = CoreDbAccess().db()->getImageProperty(m_id, property);
     return value.split(QLatin1Char(';'), QString::SkipEmptyParts);
 }
 
@@ -163,13 +163,13 @@ void ImageExtendedProperties::setFakeListProperty(const QString& property, const
     }
     else
     {
-        DatabaseAccess().db()->setImageProperty(m_id, property, value.join(QLatin1String(";")));
+        CoreDbAccess().db()->setImageProperty(m_id, property, value.join(QLatin1String(";")));
     }
 }
 
 void ImageExtendedProperties::removeProperty(const QString& property)
 {
-    DatabaseAccess().db()->removeImageProperty(m_id, property);
+    CoreDbAccess().db()->removeImageProperty(m_id, property);
 }
 
 } // namespace Digikam

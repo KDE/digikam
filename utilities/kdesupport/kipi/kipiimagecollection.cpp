@@ -37,7 +37,7 @@
 #include "albumdb.h"
 #include "applicationsettings.h"
 #include "collectionmanager.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "imagesortsettings.h"
@@ -226,7 +226,7 @@ QList<QUrl> KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) 
             // ByISize not supported
     }
 
-    QStringList list = DatabaseAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
+    QStringList list = CoreDbAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
     QList<QUrl> urlList;
     NameFilter  nameFilter(imgFilter);
 
@@ -245,7 +245,7 @@ QList<QUrl> KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) 
  */
 QList<QUrl> KipiImageCollection::Private::imagesFromTAlbum(TAlbum* const album) const
 {
-    QStringList list = DatabaseAccess().db()->getItemURLsInTag(album->id());
+    QStringList list = CoreDbAccess().db()->getItemURLsInTag(album->id());
     QList<QUrl> urlList;
     NameFilter  nameFilter(imgFilter);
 

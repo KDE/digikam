@@ -70,8 +70,8 @@ void TimeStampUpdateTest::initTestCase()
     // Create new temporary database
     dbFile = tempFilePath(QLatin1String("database"));
     DatabaseParameters params(QLatin1String("QSQLITE"), dbFile, QLatin1String("QSQLITE"), dbFile);
-    DatabaseAccess::setParameters(params, DatabaseAccess::MainApplication);
-    QVERIFY(DatabaseAccess::checkReadyForUse(0));
+    CoreDbAccess::setParameters(params, CoreDbAccess::MainApplication);
+    QVERIFY(CoreDbAccess::checkReadyForUse(0));
     QVERIFY(QFile(dbFile).exists());
 
     // Add collection and scan
@@ -79,13 +79,13 @@ void TimeStampUpdateTest::initTestCase()
     CollectionScanner().completeScan();
 
     // Verify that the scanned collection is correct
-    QList<AlbumShortInfo> albums = DatabaseAccess().db()->getAlbumShortInfos();
+    QList<AlbumShortInfo> albums = CoreDbAccess().db()->getAlbumShortInfos();
     QVERIFY(albums.size() == 1);
     QStringList readOnlyImages;
 
     foreach(const AlbumShortInfo& album, albums)
     {
-        readOnlyImages << DatabaseAccess().db()->getItemURLsInAlbum(album.id);
+        readOnlyImages << CoreDbAccess().db()->getItemURLsInAlbum(album.id);
     }
 
     foreach(const QString& file, readOnlyImages)
@@ -121,7 +121,7 @@ void TimeStampUpdateTest::cleanup()
     CollectionScanner().scanFile(originalImageFile, CollectionScanner::Rescan);
 
     // Check that Exif.Image.Model in database is empty
-    QVariantList dbModel = DatabaseAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
+    QVariantList dbModel = CoreDbAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
     QVERIFY2(dbModel.at(0).toString().isEmpty(), "Exif.Image.Model should be empty");
 }
 
@@ -146,7 +146,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
     QVERIFY(originalFileInfo.isReadable());
 
     // Check that Exif.Image.Model in database is empty
-    QVariantList dbModel = DatabaseAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
+    QVariantList dbModel = CoreDbAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
     QVERIFY2(dbModel.at(0).toString().isEmpty(), "Exif.Image.Model should be empty");
 
     // Verify that Exif.Image.Model in image file is empty
@@ -167,7 +167,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
     CollectionScanner().completeScan();
 
     // Verify that the change is detected, and no exists in the database
-    dbModel = DatabaseAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
+    dbModel = CoreDbAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
     QVERIFY(dbModel.at(0).toString() == QLatin1String("TimeStampUpdateTestCamera"));
 }
 
@@ -192,7 +192,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
     QVERIFY(originalFileInfo.isReadable());
 
     // Check that Exif.Image.Model in database is empty
-    QVariantList dbModel = DatabaseAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
+    QVariantList dbModel = CoreDbAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
     QVERIFY2(dbModel.at(0).toString().isEmpty(), "Exif.Image.Model should be empty");
 
     // Verify that Exif.Image.Model in image file is empty
@@ -213,6 +213,6 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
     CollectionScanner().completeScan();
 
     // Verify that the changed image did not change the database
-    dbModel = DatabaseAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
+    dbModel = CoreDbAccess().db()->getImageMetadata(ids[0], DatabaseFields::Model);
     QVERIFY(dbModel.at(0).toString().isEmpty());
 }

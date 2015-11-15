@@ -36,7 +36,7 @@
 #include "digikam_export.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredburl.h"
 #include "imagelisterrecord.h"
 #include "imagelisterreceiver.h"

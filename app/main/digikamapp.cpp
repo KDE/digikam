@@ -481,7 +481,7 @@ void DigikamApp::downloadFromUdi(const QString& udi)
 
 QString DigikamApp::currentDatabaseParameters() const
 {
-    DatabaseParameters parameters = DatabaseAccess::parameters();
+    DatabaseParameters parameters = CoreDbAccess::parameters();
     QUrl url;
     parameters.insertInUrl(url);
     return url.url();

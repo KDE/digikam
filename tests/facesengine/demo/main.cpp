@@ -32,7 +32,7 @@
 // Local includes
 
 #include "mainwindow.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "databaseparameters.h"
 
 using namespace Digikam;
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     a.setApplicationName(QString::fromLatin1("digikam"));          // for DB init.
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     DatabaseParameters prm    = DatabaseParameters::parametersFromConfig(config);
-    DatabaseAccess::setParameters(prm, DatabaseAccess::MainApplication);
+    CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);
     
     MainWindow w;
     w.show();

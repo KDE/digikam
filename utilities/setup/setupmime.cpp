@@ -46,7 +46,7 @@
 #include "dwidgetutils.h"
 #include "albumdb.h"
 #include "applicationsettings.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 
 namespace Digikam
 {
@@ -289,7 +289,7 @@ void SetupMime::applySettings()
         }
     }
 
-    DatabaseAccess().db()->setUserFilterSettings(d->imageFileFilterEdit->text(),
+    CoreDbAccess().db()->setUserFilterSettings(d->imageFileFilterEdit->text(),
                                                  d->movieFileFilterEdit->text(),
                                                  d->audioFileFilterEdit->text());
 }
@@ -297,7 +297,7 @@ void SetupMime::applySettings()
 void SetupMime::readSettings()
 {
     QString image, audio, video;
-    DatabaseAccess().db()->getUserFilterSettings(&image, &video, &audio);
+    CoreDbAccess().db()->getUserFilterSettings(&image, &video, &audio);
 
     d->imageFileFilterEdit->setText(image);
     d->movieFileFilterEdit->setText(video);
@@ -322,7 +322,7 @@ void SetupMime::slotRevertAudioFileFilter()
 void SetupMime::slotShowCurrentImageSettings()
 {
     QStringList imageList;
-    DatabaseAccess().db()->getFilterSettings(&imageList, 0, 0);
+    CoreDbAccess().db()->getFilterSettings(&imageList, 0, 0);
     QString text = i18n("<p>Files with these extensions will be recognized as images "
                         "and included into the database:<br/> <code>%1</code></p>",
                         imageList.join(QLatin1String(" ")));
@@ -332,7 +332,7 @@ void SetupMime::slotShowCurrentImageSettings()
 void SetupMime::slotShowCurrentMovieSettings()
 {
     QStringList movieList;
-    DatabaseAccess().db()->getFilterSettings(0, &movieList, 0);
+    CoreDbAccess().db()->getFilterSettings(0, &movieList, 0);
     QString text = i18n("<p>Files with these extensions will be recognized as movie files "
                         "and included into the database:<br/> <code>%1</code></p>",
                         movieList.join(QLatin1String(" ")));
@@ -342,7 +342,7 @@ void SetupMime::slotShowCurrentMovieSettings()
 void SetupMime::slotShowCurrentAudioSettings()
 {
     QStringList audioList;
-    DatabaseAccess().db()->getFilterSettings(0, 0, &audioList);
+    CoreDbAccess().db()->getFilterSettings(0, 0, &audioList);
     QString text = i18n("<p>Files with these extensions will be recognized as audio files "
                         "and included into the database:<br/> <code>%1</code></p>",
                         audioList.join(QLatin1String(" ")));

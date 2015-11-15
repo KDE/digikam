@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-class DatabaseAccess;
+class CoreDbAccess;
 
 /**
  * Convenience class: You can create a CoreDbTransaction object for a scope for which
@@ -43,19 +43,19 @@ class DIGIKAM_DATABASE_EXPORT CoreDbTransaction
 public:
 
     /**
-     * Retrieve a DatabaseAccess object each time when constructing and destructing.
+     * Retrieve a CoreDbAccess object each time when constructing and destructing.
      */
     CoreDbTransaction();
 
     /**
-     * Use an existing DatabaseAccess object, which must live as long as this object exists.
+     * Use an existing CoreDbAccess object, which must live as long as this object exists.
      */
-    explicit CoreDbTransaction(DatabaseAccess* const access);
+    explicit CoreDbTransaction(CoreDbAccess* const access);
     ~CoreDbTransaction();
 
 private:
 
-    DatabaseAccess* m_access;
+    CoreDbAccess* m_access;
 };
 
 }  // namespace Digikam

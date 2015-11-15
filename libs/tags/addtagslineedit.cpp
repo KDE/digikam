@@ -47,7 +47,7 @@
 #include "albumtreeview.h"
 #include "tagscache.h"
 #include "taggingactionfactory.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "albumdb.h"
 
 namespace Digikam

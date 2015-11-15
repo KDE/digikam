@@ -49,7 +49,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "databasewidget.h"
 #include "coredbbackend.h"
 #include "databaseparameters.h"

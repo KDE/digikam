@@ -72,7 +72,7 @@ public:
 
 Q_SIGNALS:
 
-    /** Retrieve the CoreDbWatch object from DatabaseAccess::databaseWatch(). */
+    /** Retrieve the CoreDbWatch object from CoreDbAccess::databaseWatch(). */
 
     /**
      * This does not describe a change of the contents of a table;

@@ -53,7 +53,7 @@
 #include "albummanager.h"
 #include "albummodificationhelper.h"
 #include "abstractalbummodel.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "digikamapp.h"
 #include "fileoperation.h"
 #include "imageinfo.h"
@@ -346,7 +346,7 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
 
     foreach(const qlonglong& id, ids)
     {
-        varList = DatabaseAccess().db()->getImagesFields(id, DatabaseFields::Category);
+        varList = CoreDbAccess().db()->getImagesFields(id, DatabaseFields::Category);
 
         if (varList.isEmpty() ||
             (DatabaseItem::Category)varList.first().toInt() != category)
@@ -478,7 +478,7 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
     // Otherwise enable it regardless if there are tags or not
     if (ids.count() < 250)
     {
-        QList<int> tagIDs = DatabaseAccess().db()->getItemCommonTagIDs(ids);
+        QList<int> tagIDs = CoreDbAccess().db()->getItemCommonTagIDs(ids);
         bool enable       = false;
 
         foreach (int tag, tagIDs)
@@ -669,7 +669,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
     gotoTag->setText(i18n("Tag"));
 
     // Disable the goto Tag popup menu, if there are no tags at all.
-    if (!DatabaseAccess().db()->hasTags(d->selectedIds))
+    if (!CoreDbAccess().db()->hasTags(d->selectedIds))
     {
         gotoTag->setEnabled(false);
     }

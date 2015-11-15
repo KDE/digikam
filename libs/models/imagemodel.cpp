@@ -133,10 +133,10 @@ ImageModel::ImageModel(QObject* parent)
     : QAbstractListModel(parent),
       d(new Private)
 {
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChange(ImageChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
             this, SLOT(slotImageTagChange(ImageTagChangeset)));
 }
 

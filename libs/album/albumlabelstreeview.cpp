@@ -41,7 +41,7 @@
 #include "coredbconstants.h"
 #include "imagelister.h"
 #include "statesavingobject.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "albumdb.h"
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
@@ -653,12 +653,12 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml) const
         if(album)
         {
             id = album->id();
-            DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
+            CoreDbAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
                                                 SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
         }
         else
         {
-            id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
+            id = CoreDbAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
                                                   SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
         }
 
@@ -671,12 +671,12 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml) const
         if(album)
         {
             id = album->id();
-            DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
+            CoreDbAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
                                                 getDefaultTitle(), xml);
         }
         else
         {
-            id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
+            id = CoreDbAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
                                                   getDefaultTitle(), xml);
         }
 

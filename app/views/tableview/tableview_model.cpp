@@ -35,7 +35,7 @@
 
 #include "digikam_debug.h"
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbchangesets.h"
 #include "coredbfields.h"
 #include "coredbwatch.h"
@@ -177,7 +177,7 @@ TableViewModel::TableViewModel(TableViewShared* const sharedObject, QObject* par
 
     // We do not connect to ImageFilterModel::dataChanged, because we monitor changes directly from the database.
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotDatabaseImageChanged(ImageChangeset)), Qt::QueuedConnection);
 
 #ifdef DIGIKAM_ENABLE_MODELTEST

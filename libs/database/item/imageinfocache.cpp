@@ -44,7 +44,7 @@ ImageInfoCache::ImageInfoCache()
     qRegisterMetaType<ImageInfoList>("ImageInfoList");
     qRegisterMetaType<QList<ImageInfo> >("QList<ImageInfo>");
 
-    CoreDbWatch* const dbwatch = DatabaseAccess::databaseWatch();
+    CoreDbWatch* const dbwatch = CoreDbAccess::databaseWatch();
 
     connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChanged(ImageChangeset)),
@@ -107,7 +107,7 @@ void ImageInfoCache::checkAlbums()
     if (m_needUpdateAlbums)
     {
         // list comes sorted from db
-        QList<AlbumShortInfo> infos = DatabaseAccess().db()->getAlbumShortInfos();
+        QList<AlbumShortInfo> infos = CoreDbAccess().db()->getAlbumShortInfos();
         ImageInfoWriteLocker lock;
         m_albums                    = infos;
         m_needUpdateAlbums          = false;

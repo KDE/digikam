@@ -22,7 +22,7 @@
  * ============================================================ */
 
 #include "dbjobsthread.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "dbjobinfo.h"
 #include "dbjob.h"
 #include "duplicatesprogressobserver.h"

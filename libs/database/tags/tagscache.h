@@ -306,7 +306,7 @@ private:
 
 private:
 
-    friend class DatabaseAccess;
+    friend class CoreDbAccess;
     friend class TagsCacheCreator;
     friend class ChangingDB;
 

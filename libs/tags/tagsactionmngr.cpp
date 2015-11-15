@@ -43,7 +43,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbconstants.h"
 #include "coredbwatch.h"
 #include "coredbinfocontainers.h"
@@ -105,7 +105,7 @@ TagsActionMngr::TagsActionMngr(QWidget* const parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
             this, SLOT(slotImageTagChanged(ImageTagChangeset)));
 }
 

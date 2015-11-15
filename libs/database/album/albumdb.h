@@ -41,7 +41,7 @@
 
 #include "albuminfo.h"
 #include "coredbfields.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbconstants.h"
 #include "digikam_export.h"
 #include "sqlquery.h"
@@ -1233,7 +1233,7 @@ public:
 
 public:
 
-    friend class Digikam::DatabaseAccess;
+    friend class Digikam::CoreDbAccess;
 
     /**
      * Constructor

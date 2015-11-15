@@ -31,7 +31,7 @@
 
 #include "digikam_debug.h"
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "imageinfo.h"
 #include "tagscache.h"
 
@@ -109,7 +109,7 @@ void ImageTagPairPriv::checkProperties()
 {
     if (!isNull() && !propertiesLoaded)
     {
-        QList<ImageTagProperty> props = DatabaseAccess().db()->getImageTagProperties(info.id(), tagId);
+        QList<ImageTagProperty> props = CoreDbAccess().db()->getImageTagProperties(info.id(), tagId);
 
         foreach(const ImageTagProperty& p, props)
         {
@@ -176,7 +176,7 @@ QList<ImageTagPair> ImageTagPair::availablePairs(const ImageInfo& info)
         return pairs;
     }
 
-    QList<int> tagIds = DatabaseAccess().db()->getTagIdsWithProperties(info.id());
+    QList<int> tagIds = CoreDbAccess().db()->getTagIdsWithProperties(info.id());
 
     foreach(int tagId, tagIds)
     {
@@ -296,7 +296,7 @@ void ImageTagPair::setProperty(const QString& key, const QString& value)
     // for single entries in db, this can of course be optimized using a single UPDATE WHERE
     removeProperties(key);
     d->properties.replace(key, value);
-    DatabaseAccess().db()->addImageTagProperty(d->info.id(), d->tagId, key, value);
+    CoreDbAccess().db()->addImageTagProperty(d->info.id(), d->tagId, key, value);
 }
 
 void ImageTagPair::addProperty(const QString& key, const QString& value)
@@ -311,7 +311,7 @@ void ImageTagPair::addProperty(const QString& key, const QString& value)
     if (!d->properties.contains(key, value))
     {
         d->properties.insert(key, value);
-        DatabaseAccess().db()->addImageTagProperty(d->info.id(), d->tagId, key, value);
+        CoreDbAccess().db()->addImageTagProperty(d->info.id(), d->tagId, key, value);
     }
 }
 
@@ -326,7 +326,7 @@ void ImageTagPair::removeProperty(const QString& key, const QString& value)
 
     if (d->properties.contains(key, value))
     {
-        DatabaseAccess().db()->removeImageTagProperties(d->info.id(), d->tagId, key, value);
+        CoreDbAccess().db()->removeImageTagProperties(d->info.id(), d->tagId, key, value);
         d->properties.remove(key, value);
     }
 }
@@ -342,7 +342,7 @@ void ImageTagPair::removeProperties(const QString& key)
 
     if (d->properties.contains(key))
     {
-        DatabaseAccess().db()->removeImageTagProperties(d->info.id(), d->tagId, key);
+        CoreDbAccess().db()->removeImageTagProperties(d->info.id(), d->tagId, key);
         d->properties.remove(key);
     }
 }
@@ -359,7 +359,7 @@ void ImageTagPair::clearProperties()
         return;
     }
 
-    DatabaseAccess().db()->removeImageTagProperties(d->info.id(), d->tagId);
+    CoreDbAccess().db()->removeImageTagProperties(d->info.id(), d->tagId);
     d->properties.clear();
     d->propertiesLoaded = true;
 }

@@ -57,7 +57,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "applicationsettings.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
 
@@ -419,7 +419,7 @@ void AlbumPropsEdit::slotDateLowButtonClicked()
 {
     setCursor(Qt::WaitCursor);
 
-    QDate lowDate = DatabaseAccess().db()->getAlbumLowestDate(d->album->id());
+    QDate lowDate = CoreDbAccess().db()->getAlbumLowestDate(d->album->id());
 
     if (lowDate.isValid())
     {
@@ -433,7 +433,7 @@ void AlbumPropsEdit::slotDateHighButtonClicked()
 {
     setCursor(Qt::WaitCursor);
 
-    QDate highDate = DatabaseAccess().db()->getAlbumHighestDate(d->album->id());
+    QDate highDate = CoreDbAccess().db()->getAlbumHighestDate(d->album->id());
 
     if (highDate.isValid())
     {
@@ -447,7 +447,7 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
 {
     setCursor(Qt::WaitCursor);
 
-    QDate avDate = DatabaseAccess().db()->getAlbumAverageDate(d->album->id());
+    QDate avDate = CoreDbAccess().db()->getAlbumAverageDate(d->album->id());
 
     setCursor(Qt::ArrowCursor);
 

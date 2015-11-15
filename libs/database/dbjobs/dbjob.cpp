@@ -25,7 +25,7 @@
 
 // Local includes
 
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "databaseparameters.h"
 #include "albumdb.h"
 #include "imagelister.h"
@@ -62,7 +62,7 @@ void AlbumsJob::run()
 {
     if (m_jobInfo.isFoldersJob())
     {
-        QMap<int, int> albumNumberMap = DatabaseAccess().db()->getNumberOfImagesInAlbums();
+        QMap<int, int> albumNumberMap = CoreDbAccess().db()->getNumberOfImagesInAlbums();
         emit foldersData(albumNumberMap);
     }
     else
@@ -95,7 +95,7 @@ void DatesJob::run()
 {
     if (m_jobInfo.isFoldersJob())
     {
-        QMap<QDateTime, int> dateNumberMap = DatabaseAccess().db()->getAllCreationDatesAndNumberOfImages();
+        QMap<QDateTime, int> dateNumberMap = CoreDbAccess().db()->getAllCreationDatesAndNumberOfImages();
         emit foldersData(dateNumberMap);
     }
     else
@@ -129,7 +129,7 @@ void GPSJob::run()
     if (m_jobInfo.isDirectQuery())
     {
         QList<QVariant> imagesInfoFromArea =
-                DatabaseAccess().db()->getImageIdsFromArea(m_jobInfo.lat1(),
+                CoreDbAccess().db()->getImageIdsFromArea(m_jobInfo.lat1(),
                                                            m_jobInfo.lat2(),
                                                            m_jobInfo.lng1(),
                                                            m_jobInfo.lng2(),
@@ -173,7 +173,7 @@ void TagsJob::run()
 {
     if (m_jobInfo.isFoldersJob())
     {
-        QMap<int, int> tagNumberMap = DatabaseAccess().db()->getNumberOfImagesInTags();
+        QMap<int, int> tagNumberMap = CoreDbAccess().db()->getNumberOfImagesInTags();
         //qCDebug(DIGIKAM_DBJOB_LOG) << tagNumberMap;
         emit foldersData(tagNumberMap);
     }
@@ -181,9 +181,9 @@ void TagsJob::run()
     {
         QMap<QString, QMap<int, int> > facesNumberMap;
         facesNumberMap[ImageTagPropertyName::autodetectedFace()] =
-            DatabaseAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::autodetectedFace());
+            CoreDbAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::autodetectedFace());
         facesNumberMap[ImageTagPropertyName::tagRegion()]        =
-            DatabaseAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::tagRegion());
+            CoreDbAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::tagRegion());
 
         emit faceFoldersData(facesNumberMap);
     }
@@ -232,7 +232,7 @@ void SearchesJob::run()
 {
     if (!m_jobInfo.isDuplicatesJob())
     {
-        SearchInfo info = DatabaseAccess().db()->getSearchInfo(m_jobInfo.searchId());
+        SearchInfo info = CoreDbAccess().db()->getSearchInfo(m_jobInfo.searchId());
 
         ImageLister lister;
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());

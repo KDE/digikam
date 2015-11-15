@@ -136,7 +136,7 @@ void LightTablePreview::dropEvent(QDropEvent* e)
         }
         else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
         {
-            QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+            QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInAlbum(albumID);
 
             emit signalDroppedItems(ImageInfoList(itemIDs));
             e->accept();
@@ -151,7 +151,7 @@ void LightTablePreview::dropEvent(QDropEvent* e)
                 return;
             }
 
-            QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
+            QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInTag(tagIDs.first(), true);
             ImageInfoList imageInfoList;
 
             emit signalDroppedItems(ImageInfoList(itemIDs));

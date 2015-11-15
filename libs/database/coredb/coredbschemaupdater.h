@@ -32,14 +32,14 @@
 // Local includes
 
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbbackend.h"
 #include "databaseparameters.h"
 
 namespace Digikam
 {
 
-class DatabaseAccess;
+class CoreDbAccess;
 class InitializationObserver;
 
 class DIGIKAM_DATABASE_EXPORT CoreDbSchemaUpdater
@@ -60,7 +60,7 @@ public:
     bool  updateUniqueHash();
     void  setObserver(InitializationObserver* const observer);
     const QString getLastErrorMessage();
-    void  setDatabaseAccess(DatabaseAccess* const access);
+    void  setCoreDbAccess(CoreDbAccess* const access);
 
 private:
 

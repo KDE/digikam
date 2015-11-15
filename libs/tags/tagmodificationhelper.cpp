@@ -268,7 +268,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
     }
 
     QString message;
-    QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
+    QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(tag->id());
 
     if (!assignedItems.isEmpty())
     {
@@ -333,7 +333,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
         if(children)
             tagWithChildrens.append(tag->title() + QLatin1String(" "));
 
-        QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
+        QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(tag->id());
 
         if(!assignedItems.isEmpty())
             tagWithImages.append(tag->title() + QLatin1String(" "));

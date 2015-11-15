@@ -36,7 +36,7 @@
 
 #include "digikam_debug.h"
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbwatch.h"
 #include "digikam_globals.h"
 #include "imagepropertiestab.h"
@@ -97,7 +97,7 @@ public:
     {
         if (needUpdateInfos && initialized)
         {
-            QList<TagShortInfo> newInfos = DatabaseAccess().db()->getTagShortInfos();
+            QList<TagShortInfo> newInfos = CoreDbAccess().db()->getTagShortInfos();
             QWriteLocker locker(&lock);
             infos           = newInfos;
             needUpdateInfos = false;
@@ -124,7 +124,7 @@ public:
     {
         if (needUpdateProperties && initialized)
         {
-            QList<TagProperty> props = DatabaseAccess().db()->getTagProperties();
+            QList<TagProperty> props = CoreDbAccess().db()->getTagProperties();
 
             // Ensure not to lock both locks at the same time
             QWriteLocker locker(&lock);
@@ -281,7 +281,7 @@ void TagsCache::initialize()
         return;
     }
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
             this, SLOT(slotTagChanged(TagChangeset)),
             Qt::DirectConnection);
 
@@ -641,7 +641,7 @@ int TagsCache::createTag(const QString& tagPathToCreate)
     }
 
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
 
         foreach(const QString& tagName, tagsToCreate)
         {
@@ -704,7 +704,7 @@ int TagsCache::getOrCreateTag(const QString& tagPath)
         id = createTag(tagPath);
 
         // There is a weakness when createTag is called concurrently.
-        // The attempt coming second to DatabaseAccess will fail, but the tag was created
+        // The attempt coming second to CoreDbAccess will fail, but the tag was created
         // So at least try again finding the tag read-only.
         if (id == -1)
         {

@@ -32,7 +32,7 @@
 
 #include "digikam_debug.h"
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "tagscache.h"
 
 namespace Digikam
@@ -104,7 +104,7 @@ TagProperties::TagProperties(int tagId)
     }
 
     d->tagId                      = tagId;
-    QList<TagProperty> properties = DatabaseAccess().db()->getTagProperties(tagId);
+    QList<TagProperty> properties = CoreDbAccess().db()->getTagProperties(tagId);
     foreach(const TagProperty& p, properties)
     {
         d->properties.insert(p.property, p.value);
@@ -181,7 +181,7 @@ void TagProperties::setProperty(const QString& key, const QString& value)
     // for single entries in db, this can of course be optimized using a single UPDATE WHERE
     removeProperties(key);
     d->properties.insert(key, value);
-    DatabaseAccess().db()->addTagProperty(d->tagId, key, value);
+    CoreDbAccess().db()->addTagProperty(d->tagId, key, value);
 }
 
 void TagProperties::addProperty(const QString& key, const QString& value)
@@ -192,14 +192,14 @@ void TagProperties::addProperty(const QString& key, const QString& value)
     }
 
     d->properties.insert(key, value);
-    DatabaseAccess().db()->addTagProperty(d->tagId, key, value);
+    CoreDbAccess().db()->addTagProperty(d->tagId, key, value);
 }
 
 void TagProperties::removeProperty(const QString& key, const QString& value)
 {
     if (!d->isNull() && d->properties.contains(key, value))
     {
-        DatabaseAccess().db()->removeTagProperties(d->tagId, key, value);
+        CoreDbAccess().db()->removeTagProperties(d->tagId, key, value);
         d->properties.remove(key, value);
     }
 }
@@ -208,7 +208,7 @@ void TagProperties::removeProperties(const QString& key)
 {
     if (!d->isNull() && d->properties.contains(key))
     {
-        DatabaseAccess().db()->removeTagProperties(d->tagId, key);
+        CoreDbAccess().db()->removeTagProperties(d->tagId, key);
         d->properties.remove(key);
     }
 }

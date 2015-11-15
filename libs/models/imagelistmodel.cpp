@@ -26,7 +26,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbchangesets.h"
 #include "coredbwatch.h"
 #include "imageinfo.h"
@@ -38,7 +38,7 @@ namespace Digikam
 ImageListModel::ImageListModel(QObject* parent)
     : ImageThumbnailModel(parent)
 {
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
             this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));
 }
 

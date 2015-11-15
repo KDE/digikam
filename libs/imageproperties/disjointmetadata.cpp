@@ -38,7 +38,7 @@
 #include "template.h"
 #include "templatemanager.h"
 #include "tagscache.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "imagecomments.h"
 #include "imageinfo.h"
 #include "coredbwatch.h"
@@ -153,7 +153,7 @@ void DisjointMetadata::Private::makeConnections(DisjointMetadata *q)
                      q, SLOT(slotTagDeleted(int)),
                      Qt::DirectConnection);
 
-    QObject::connect(DatabaseAccess::databaseWatch(), SIGNAL(databaseChanged()),
+    QObject::connect(CoreDbAccess::databaseWatch(), SIGNAL(databaseChanged()),
                       q, SLOT(slotInvalidate()));
 }
 
@@ -195,7 +195,7 @@ void DisjointMetadata::load(const ImageInfo &info)
     CaptionsMap titleMap;
 
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ImageComments comments = info.imageComments(access);
         commentMap             = comments.toCaptionsMap();
         titleMap               = comments.toCaptionsMap(DatabaseComment::Title);
@@ -415,7 +415,7 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
 
     if (saveTitle && (writeAllFields || d->titlesChanged))
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ImageComments comments = info.imageComments(access);
         comments.replaceComments(d->titles, DatabaseComment::Title);
         changed                = true;
@@ -423,7 +423,7 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
 
     if (saveComment && (writeAllFields || d->commentsChanged))
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ImageComments comments = info.imageComments(access);
         comments.replaceComments(d->comments);
         changed                = true;

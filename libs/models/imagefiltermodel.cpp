@@ -32,7 +32,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbchangesets.h"
 #include "coredbwatch.h"
 #include "imageinfolist.h"

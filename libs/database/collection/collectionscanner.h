@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "albuminfo.h"
 
 class QFileInfo;

@@ -270,14 +270,14 @@ void FacesDetector::slotStart()
     if (palbumCounts.isEmpty() && hasPAlbums)
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        palbumCounts = DatabaseAccess().db()->getNumberOfImagesInAlbums();
+        palbumCounts = CoreDbAccess().db()->getNumberOfImagesInAlbums();
         QApplication::restoreOverrideCursor();
     }
 
     if (talbumCounts.isEmpty() && hasTAlbums)
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        talbumCounts = DatabaseAccess().db()->getNumberOfImagesInTags();
+        talbumCounts = CoreDbAccess().db()->getNumberOfImagesInTags();
         QApplication::restoreOverrideCursor();
     }
 

@@ -40,7 +40,7 @@
 #include "daboutdata.h"
 #include "albumdb.h"
 #include "applicationsettings.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "digikam_config.h"
 
 namespace Digikam
@@ -66,11 +66,11 @@ DBStatDlg::DBStatDlg(QWidget* const parent)
     new QTreeWidgetItem(listView(), QStringList() << i18n("Total Items") << QString::number(total));
 
     // get album statistics
-    int albums = DatabaseAccess().db()->scanAlbums().count();
+    int albums = CoreDbAccess().db()->scanAlbums().count();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Albums") << QString::number(albums));
 
     // get tags statistics
-    int tags = DatabaseAccess().db()->scanTags().count();
+    int tags = CoreDbAccess().db()->scanTags().count();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Tags") << QString::number(tags));
 
     // Database Backend information
@@ -93,7 +93,7 @@ DBStatDlg::~DBStatDlg()
 int DBStatDlg::generateItemsList(DatabaseItem::Category category, const QString& title)
 {
     // get image format statistics
-    QMap<QString, int> stat = DatabaseAccess().db()->getFormatStatistics(category);
+    QMap<QString, int> stat = CoreDbAccess().db()->getFormatStatistics(category);
 
     // do not add items if the map is empty
     if (stat.isEmpty())

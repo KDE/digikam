@@ -322,7 +322,7 @@ void TagsManager::slotDeleteAction()
             tagsWithChildren.append(tag->title());
         }
 
-        QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
+        QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(tag->id());
         if (!assignedItems.isEmpty())
         {
             tagsWithImages.append(tag->title());
@@ -628,7 +628,7 @@ void TagsManager::slotRemoveTagsFromImgs()
             continue;
         }
 
-        QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
+        QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(tag->id());
         ImageInfoList imgList(assignedItems);
         FileActionMngr::instance()->removeTag(imgList, tag->id());
     }
@@ -886,7 +886,7 @@ void TagsManager::slotRemoveNotAssignedTags()
 
             if (t && !t->isRoot() && !t->isInternalTag())
             {
-                QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(t->id());
+                QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(t->id());
 
                 if (assignedItems.isEmpty())
                 {
@@ -918,7 +918,7 @@ void TagsManager::slotRemoveNotAssignedTags()
 
             if (t && !t->isRoot() && !t->isInternalTag())
             {
-                QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(t->id());
+                QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(t->id());
 
                 if (assignedItems.isEmpty() && !toRemove.contains(t))
                 {

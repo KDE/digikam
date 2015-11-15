@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbconstants.h"
 #include "coredboperationgroup.h"
 #include "dimg.h"

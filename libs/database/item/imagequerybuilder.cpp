@@ -43,7 +43,7 @@
 
 #include "metaengine.h"
 #include "digikam_debug.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "albumdb.h"
 #include "geodetictools.h"
 
@@ -812,7 +812,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
                 firstCondition = false;
 
-                DatabaseAccess access;
+                CoreDbAccess access;
                 int rootId           = access.db()->getAlbumRootId(albumID);
                 QString relativePath = access.db()->getAlbumRelativePath(albumID);
 

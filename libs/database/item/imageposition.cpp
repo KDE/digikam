@@ -25,7 +25,7 @@
 
 // Local includes
 
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "albumdb.h"
 #include "coredbfields.h"
 #include "dmetadata.h"
@@ -80,10 +80,10 @@ public:
 
     DatabaseFields::ImagePositions dirtyFields;
 
-    void init(DatabaseAccess& access, qlonglong imageId);
+    void init(CoreDbAccess& access, qlonglong imageId);
 };
 
-void ImagePositionPriv::init(DatabaseAccess& access, qlonglong id)
+void ImagePositionPriv::init(CoreDbAccess& access, qlonglong id)
 {
     imageId = id;
 
@@ -112,11 +112,11 @@ ImagePosition::ImagePosition()
 ImagePosition::ImagePosition(qlonglong imageId)
 {
     d = new ImagePositionPriv;
-    DatabaseAccess access;
+    CoreDbAccess access;
     d->init(access, imageId);
 }
 
-ImagePosition::ImagePosition(DatabaseAccess& access, qlonglong imageId)
+ImagePosition::ImagePosition(CoreDbAccess& access, qlonglong imageId)
 {
     d = new ImagePositionPriv;
     d->init(access, imageId);
@@ -540,12 +540,12 @@ void ImagePosition::apply()
 
     if (d->empty)
     {
-        DatabaseAccess().db()->addImagePosition(d->imageId, values, d->dirtyFields);
+        CoreDbAccess().db()->addImagePosition(d->imageId, values, d->dirtyFields);
         d->empty = false;
     }
     else
     {
-        DatabaseAccess().db()->changeImagePosition(d->imageId, values, d->dirtyFields);
+        CoreDbAccess().db()->changeImagePosition(d->imageId, values, d->dirtyFields);
     }
 
     d->dirtyFields = DatabaseFields::ImagePositionsNone;
@@ -553,7 +553,7 @@ void ImagePosition::apply()
 
 void ImagePosition::remove()
 {
-    DatabaseAccess().db()->removeImagePosition(d->imageId);
+    CoreDbAccess().db()->removeImagePosition(d->imageId);
     d->resetData();
 }
 

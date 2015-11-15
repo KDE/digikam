@@ -326,7 +326,7 @@ QueueListView::QueueListView(QWidget* const parent)
 
     // -----------------------------------------------------------
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
             this, SLOT(slotCollectionImageChange(CollectionImageChangeset)),
             Qt::QueuedConnection);
 
@@ -516,7 +516,7 @@ void QueueListView::dropEvent(QDropEvent* e)
     }
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
     {
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+        QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList;
 
         for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();
@@ -545,7 +545,7 @@ void QueueListView::dropEvent(QDropEvent* e)
             return;
         }
 
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
+        QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInTag(tagIDs.first(), true);
         ImageInfoList imageInfoList;
 
         for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();

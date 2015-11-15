@@ -37,7 +37,7 @@
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbinfocontainers.h"
 #include "coredboperationgroup.h"
 #include "dimagehistory.h"
@@ -288,7 +288,7 @@ ImageInfo::ImageInfo(qlonglong ID)
     if (m_data->albumId == -1)
     {
         // retrieve immutable values now, the rest on demand
-        ItemShortInfo info  = DatabaseAccess().db()->getItemShortInfo(ID);
+        ItemShortInfo info  = CoreDbAccess().db()->getItemShortInfo(ID);
 
         if (info.id)
         {
@@ -349,7 +349,7 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
     if (!info.m_data)
     {
 
-        ItemShortInfo shortInfo = DatabaseAccess().db()->getItemShortInfo(locationId, album, name);
+        ItemShortInfo shortInfo = CoreDbAccess().db()->getItemShortInfo(locationId, album, name);
 
         if (!shortInfo.id)
         {
@@ -458,7 +458,7 @@ uint ImageInfo::hash() const
 
 /**
  * Access rules for all methods in this class:
- * ImageInfoData members shall be accessed only under DatabaseAccess lock.
+ * ImageInfoData members shall be accessed only under CoreDbAccess lock.
  * The id and albumId are the exception to this rule, as they are
  * primitive and will never change during the lifetime of an object.
  */
@@ -526,7 +526,7 @@ qlonglong ImageInfo::fileSize() const
 
     RETURN_IF_CACHED(fileSize)
 
-    QVariantList values = DatabaseAccess().db()->getImagesFields(m_data->id, DatabaseFields::FileSize);
+    QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::FileSize);
 
     STORE_IN_CACHE_AND_RETURN(fileSize, values.first().toLongLong())
 }
@@ -542,7 +542,7 @@ QString ImageInfo::title() const
 
     QString title;
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ImageComments comments(access, m_data->id);
         title = comments.defaultComment(DatabaseComment::Title);
     }
@@ -564,7 +564,7 @@ QString ImageInfo::comment() const
 
     QString comment;
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ImageComments comments(access, m_data->id);
         comment = comments.defaultComment();
     }
@@ -630,7 +630,7 @@ int ImageInfo::rating() const
 
     RETURN_IF_CACHED(rating)
 
-    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Rating);
+    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Rating);
     STORE_IN_CACHE_AND_RETURN(rating, values.first().toLongLong())
 }
 
@@ -642,7 +642,7 @@ QString ImageInfo::format() const
     }
 
     RETURN_IF_CACHED(format)
-    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Format);
+    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Format);
     STORE_IN_CACHE_AND_RETURN(format, values.first().toString())
 }
 
@@ -654,7 +654,7 @@ DatabaseItem::Category ImageInfo::category() const
     }
 
     RETURN_IF_CACHED(category)
-    QVariantList values = DatabaseAccess().db()->getImagesFields(m_data->id, DatabaseFields::Category);
+    QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::Category);
     STORE_IN_CACHE_AND_RETURN(category, (DatabaseItem::Category)values.first().toInt())
 }
 
@@ -666,7 +666,7 @@ QDateTime ImageInfo::dateTime() const
     }
 
     RETURN_IF_CACHED(creationDate)
-    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
+    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::CreationDate);
     STORE_IN_CACHE_AND_RETURN(creationDate, values.first().toDateTime())
 }
 
@@ -678,7 +678,7 @@ QDateTime ImageInfo::modDateTime() const
     }
 
     RETURN_IF_CACHED(modificationDate)
-    QVariantList values = DatabaseAccess().db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
+    QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::ModificationDate);
     STORE_IN_CACHE_AND_RETURN(modificationDate, values.first().toDateTime())
 }
 
@@ -690,7 +690,7 @@ QSize ImageInfo::dimensions() const
     }
 
     RETURN_IF_CACHED(imageSize)
-    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
+    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Width | DatabaseFields::Height);
     ImageInfoWriteLocker lock;
     m_data.constCastData()->imageSizeCached = true;
 
@@ -711,7 +711,7 @@ QList<int> ImageInfo::tagIds() const
 
     RETURN_IF_CACHED(tagIds)
 
-    QList<int> ids = DatabaseAccess().db()->getItemTagIDs(m_data->id);
+    QList<int> ids = CoreDbAccess().db()->getItemTagIDs(m_data->id);
     ImageInfoWriteLocker lock;
     m_data.constCastData()->tagIds       = ids;
     m_data.constCastData()->tagIdsCached = true;
@@ -720,7 +720,7 @@ QList<int> ImageInfo::tagIds() const
 
 void ImageInfoList::loadTagIds() const
 {
-    QVector<QList<int> > allTagIds = DatabaseAccess().db()->getItemsTagIDs(toImageIdList());
+    QVector<QList<int> > allTagIds = CoreDbAccess().db()->getItemsTagIDs(toImageIdList());
 
     ImageInfoWriteLocker lock;
 
@@ -746,7 +746,7 @@ int ImageInfo::orientation() const
         return 0; // ORIENTATION_UNSPECIFIED
     }
 
-    QVariantList values = DatabaseAccess().db()->getImageInformation(m_data->id, DatabaseFields::Orientation);
+    QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Orientation);
 
     if (values.isEmpty())
     {
@@ -809,7 +809,7 @@ bool ImageInfo::isVisible() const
         return false;
     }
 
-    QVariantList value = DatabaseAccess().db()->getImagesFields(m_data->id, DatabaseFields::Status);
+    QVariantList value = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::Status);
 
     if (!value.isEmpty())
     {
@@ -832,7 +832,7 @@ void ImageInfo::setVisible(bool isVisible)
         return;
     }
 
-    DatabaseAccess().db()->setItemStatus(m_data->id, isVisible ? DatabaseItem::Visible : DatabaseItem::Hidden);
+    CoreDbAccess().db()->setItemStatus(m_data->id, isVisible ? DatabaseItem::Visible : DatabaseItem::Hidden);
 }
 
 bool ImageInfo::hasDerivedImages() const
@@ -842,7 +842,7 @@ bool ImageInfo::hasDerivedImages() const
         return false;
     }
 
-    return DatabaseAccess().db()->hasImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom);
+    return CoreDbAccess().db()->hasImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom);
 }
 
 bool ImageInfo::hasAncestorImages() const
@@ -852,7 +852,7 @@ bool ImageInfo::hasAncestorImages() const
         return false;
     }
 
-    return DatabaseAccess().db()->hasImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom);
+    return CoreDbAccess().db()->hasImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom);
 }
 
 QList<ImageInfo> ImageInfo::derivedImages() const
@@ -862,7 +862,7 @@ QList<ImageInfo> ImageInfo::derivedImages() const
         return QList<ImageInfo>();
     }
 
-    return ImageInfoList(DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom));
+    return ImageInfoList(CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom));
 }
 
 QList<ImageInfo> ImageInfo::ancestorImages() const
@@ -872,7 +872,7 @@ QList<ImageInfo> ImageInfo::ancestorImages() const
         return QList<ImageInfo>();
     }
 
-    return ImageInfoList(DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
+    return ImageInfoList(CoreDbAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
 }
 
 QList<QPair<qlonglong, qlonglong> > ImageInfo::relationCloud() const
@@ -882,7 +882,7 @@ QList<QPair<qlonglong, qlonglong> > ImageInfo::relationCloud() const
         return QList<QPair<qlonglong, qlonglong> >();
     }
 
-    return DatabaseAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom);
+    return CoreDbAccess().db()->getRelationCloud(m_data->id, DatabaseRelation::DerivedFrom);
 }
 
 void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
@@ -892,7 +892,7 @@ void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
         return;
     }
 
-    DatabaseAccess().db()->addImageRelation(m_data->id, ancestor.id(), DatabaseRelation::DerivedFrom);
+    CoreDbAccess().db()->addImageRelation(m_data->id, ancestor.id(), DatabaseRelation::DerivedFrom);
 }
 
 bool ImageInfo::hasGroupedImages() const
@@ -909,7 +909,7 @@ int ImageInfo::numberOfGroupedImages() const
 
     RETURN_IF_CACHED(groupedImages)
 
-    int groupedImages                           = DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
+    int groupedImages                           = CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped).size();
     ImageInfoWriteLocker lock;
     m_data.constCastData()->groupedImages       = groupedImages;
     m_data.constCastData()->groupedImagesCached = true;
@@ -925,7 +925,7 @@ qlonglong ImageInfo::groupImageId() const
 
     RETURN_IF_CACHED(groupImage)
 
-    QList<qlonglong> ids = DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::Grouped);
+    QList<qlonglong> ids = CoreDbAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::Grouped);
     // list size should be 0 or 1
     int groupImage       = ids.isEmpty() ? -1 : ids.first();
 
@@ -937,7 +937,7 @@ qlonglong ImageInfo::groupImageId() const
 
 void ImageInfoList::loadGroupImageIds() const
 {
-    QVector<QList<qlonglong> > allGroupIds = DatabaseAccess().db()->getImagesRelatedFrom(toImageIdList(), DatabaseRelation::Grouped);
+    QVector<QList<qlonglong> > allGroupIds = CoreDbAccess().db()->getImagesRelatedFrom(toImageIdList(), DatabaseRelation::Grouped);
     ImageInfoWriteLocker lock;
 
     for (int i=0; i<size(); i++)
@@ -979,7 +979,7 @@ QList<ImageInfo> ImageInfo::groupedImages() const
         return QList<ImageInfo>();
     }
 
-    return ImageInfoList(DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped));
+    return ImageInfoList(CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped));
 }
 
 void ImageInfo::addToGroup(const ImageInfo& givenLeader)
@@ -1021,16 +1021,16 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     }
 
     // All images grouped on this image need a new group leader
-    QList<qlonglong> idsToBeGrouped  = DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped);
+    QList<qlonglong> idsToBeGrouped  = CoreDbAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::Grouped);
     // and finally, this image needs to be grouped
     idsToBeGrouped << m_data->id;
 
     foreach(qlonglong ids, idsToBeGrouped)
     {
         // remove current grouping
-        DatabaseAccess().db()->removeAllImageRelationsFrom(ids, DatabaseRelation::Grouped);
+        CoreDbAccess().db()->removeAllImageRelationsFrom(ids, DatabaseRelation::Grouped);
         // add the new grouping
-        DatabaseAccess().db()->addImageRelation(ids, leader.id(), DatabaseRelation::Grouped);
+        CoreDbAccess().db()->addImageRelation(ids, leader.id(), DatabaseRelation::Grouped);
     }
 }
 
@@ -1046,7 +1046,7 @@ void ImageInfo::removeFromGroup()
         return;
     }
 
-    DatabaseAccess().db()->removeAllImageRelationsFrom(m_data->id, DatabaseRelation::Grouped);
+    CoreDbAccess().db()->removeAllImageRelationsFrom(m_data->id, DatabaseRelation::Grouped);
 }
 
 void ImageInfo::clearGroup()
@@ -1061,10 +1061,10 @@ void ImageInfo::clearGroup()
         return;
     }
 
-    DatabaseAccess().db()->removeAllImageRelationsTo(m_data->id, DatabaseRelation::Grouped);
+    CoreDbAccess().db()->removeAllImageRelationsTo(m_data->id, DatabaseRelation::Grouped);
 }
 
-ImageComments ImageInfo::imageComments(DatabaseAccess& access) const
+ImageComments ImageInfo::imageComments(CoreDbAccess& access) const
 {
     if (!m_data)
     {
@@ -1219,7 +1219,7 @@ DImageHistory ImageInfo::imageHistory() const
         return DImageHistory();
     }
 
-    ImageHistoryEntry entry = DatabaseAccess().db()->getImageHistory(m_data->id);
+    ImageHistoryEntry entry = CoreDbAccess().db()->getImageHistory(m_data->id);
     return DImageHistory::fromXml(entry.history);
 }
 
@@ -1230,7 +1230,7 @@ void ImageInfo::setImageHistory(const DImageHistory& history)
         return;
     }
 
-    DatabaseAccess().db()->setImageHistory(m_data->id, history.toXml());
+    CoreDbAccess().db()->setImageHistory(m_data->id, history.toXml());
 }
 
 bool ImageInfo::hasImageHistory() const
@@ -1240,7 +1240,7 @@ bool ImageInfo::hasImageHistory() const
         return false;
     }
 
-    return DatabaseAccess().db()->hasImageHistory(m_data->id);
+    return CoreDbAccess().db()->hasImageHistory(m_data->id);
 }
 
 QString ImageInfo::uuid() const
@@ -1250,7 +1250,7 @@ QString ImageInfo::uuid() const
         return QString();
     }
 
-    return DatabaseAccess().db()->getImageUuid(m_data->id);
+    return CoreDbAccess().db()->getImageUuid(m_data->id);
 }
 
 void ImageInfo::setUuid(const QString& uuid)
@@ -1260,7 +1260,7 @@ void ImageInfo::setUuid(const QString& uuid)
         return;
     }
 
-    DatabaseAccess().db()->setImageUuid(m_data->id, uuid);
+    CoreDbAccess().db()->setImageUuid(m_data->id, uuid);
 }
 
 HistoryImageId ImageInfo::historyImageId() const
@@ -1275,9 +1275,9 @@ HistoryImageId ImageInfo::historyImageId() const
     id.setFileName(name());
     id.setPathOnDisk(filePath());
 
-    if (DatabaseAccess().db()->isUniqueHashV2())
+    if (CoreDbAccess().db()->isUniqueHashV2())
     {
-        ItemScanInfo info = DatabaseAccess().db()->getItemScanInfo(m_data->id);
+        ItemScanInfo info = CoreDbAccess().db()->getItemScanInfo(m_data->id);
         id.setUniqueHash(info.uniqueHash, info.fileSize);
     }
 
@@ -1561,7 +1561,7 @@ void ImageInfo::setPickLabel(int pickId)
     // Pick Label is an exclusive tag.
     // Perform "switch" operation atomic
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
 
         foreach(int tagId, currentTagIds)
         {
@@ -1592,7 +1592,7 @@ void ImageInfo::setColorLabel(int colorId)
     // Color Label is an exclusive tag.
     // Perform "switch" operation atomic
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
 
         foreach(int tagId, currentTagIds)
         {
@@ -1617,7 +1617,7 @@ void ImageInfo::setRating(int value)
         return;
     }
 
-    DatabaseAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
+    CoreDbAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Rating);
 
     ImageInfoWriteLocker lock;
     m_data->rating       = value;
@@ -1631,7 +1631,7 @@ void ImageInfo::setOrientation(int value)
         return;
     }
 
-    DatabaseAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Orientation);
+    CoreDbAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Orientation);
 }
 
 void ImageInfo::setDateTime(const QDateTime& dateTime)
@@ -1641,7 +1641,7 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
         return;
     }
 
-    DatabaseAccess().db()->changeImageInformation(m_data->id, QVariantList() << dateTime, DatabaseFields::CreationDate);
+    CoreDbAccess().db()->changeImageInformation(m_data->id, QVariantList() << dateTime, DatabaseFields::CreationDate);
 
     ImageInfoWriteLocker lock;
     m_data->creationDate       = dateTime;
@@ -1655,7 +1655,7 @@ void ImageInfo::setTag(int tagID)
         return;
     }
 
-    DatabaseAccess().db()->addItemTag(m_data->id, tagID);
+    CoreDbAccess().db()->addItemTag(m_data->id, tagID);
 }
 
 void ImageInfo::removeTag(int tagID)
@@ -1665,7 +1665,7 @@ void ImageInfo::removeTag(int tagID)
         return;
     }
 
-    DatabaseAccess access;
+    CoreDbAccess access;
     access.db()->removeItemTag(m_data->id, tagID);
     access.db()->removeImageTagProperties(m_data->id, tagID);
 }
@@ -1677,7 +1677,7 @@ void ImageInfo::removeAllTags()
         return;
     }
 
-    DatabaseAccess().db()->removeItemAllTags(m_data->id, tagIds());
+    CoreDbAccess().db()->removeItemAllTags(m_data->id, tagIds());
 }
 
 void ImageInfo::addTagPaths(const QStringList& tagPaths)
@@ -1688,7 +1688,7 @@ void ImageInfo::addTagPaths(const QStringList& tagPaths)
     }
 
     QList<int> tagIds = TagsCache::instance()->tagsForPaths(tagPaths);
-    DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_data->id, tagIds);
+    CoreDbAccess().db()->addTagsToItems(QList<qlonglong>() << m_data->id, tagIds);
 }
 
 ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
@@ -1707,7 +1707,7 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
         }
     }
 
-    int id = DatabaseAccess().db()->copyItem(m_data->albumId, m_data->name, dstAlbumID, dstFileName);
+    int id = CoreDbAccess().db()->copyItem(m_data->albumId, m_data->name, dstAlbumID, dstFileName);
 
     if (id == -1)
     {
@@ -1729,7 +1729,7 @@ bool ImageInfo::isLocationAvailable() const
 
 QList<ImageInfo> ImageInfo::fromUniqueHash(const QString& uniqueHash, qlonglong fileSize)
 {
-    QList<ItemScanInfo> scanInfos = DatabaseAccess().db()->getIdenticalFiles(uniqueHash, fileSize);
+    QList<ItemScanInfo> scanInfos = CoreDbAccess().db()->getIdenticalFiles(uniqueHash, fileSize);
     QList<ImageInfo> infos;
     foreach (const ItemScanInfo& scanInfo, scanInfos)
     {
@@ -1766,7 +1766,7 @@ ThumbnailInfo ImageInfo::thumbnailInfo() const
     thumbinfo.fileName = name();
     thumbinfo.isAccessible = CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
 
-    DatabaseAccess access;
+    CoreDbAccess access;
     values = access.db()->getImagesFields(m_data->id,
                                           DatabaseFields::ModificationDate | DatabaseFields::FileSize | DatabaseFields::UniqueHash);
 
@@ -1824,7 +1824,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
 
         if (missingVideoMetadata)
         {
-            const QVariantList fieldValues = DatabaseAccess().db()->getVideoMetadata(m_data->id, missingVideoMetadata);
+            const QVariantList fieldValues = CoreDbAccess().db()->getVideoMetadata(m_data->id, missingVideoMetadata);
 
             ImageInfoWriteLocker lock;
             if (fieldValues.isEmpty())
@@ -1858,7 +1858,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
 
         if (missingImageMetadata)
         {
-            const QVariantList fieldValues = DatabaseAccess().db()->getImageMetadata(m_data->id, missingImageMetadata);
+            const QVariantList fieldValues = CoreDbAccess().db()->getImageMetadata(m_data->id, missingImageMetadata);
 
             ImageInfoWriteLocker lock;
             if (fieldValues.isEmpty())

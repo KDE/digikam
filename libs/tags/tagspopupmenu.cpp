@@ -469,7 +469,7 @@ void TagsPopupMenu::slotAboutToShow()
             return;
         }
 
-        d->assignedTags = QSet<int>::fromList(DatabaseAccess().db()->getItemCommonTagIDs(d->selectedImageIDs));
+        d->assignedTags = QSet<int>::fromList(CoreDbAccess().db()->getItemCommonTagIDs(d->selectedImageIDs));
 
         if (d->assignedTags.isEmpty())
         {
@@ -510,7 +510,7 @@ void TagsPopupMenu::slotAboutToShow()
     {
         if (d->selectedImageIDs.count() == 1)
         {
-            d->assignedTags = QSet<int>::fromList(DatabaseAccess().db()->getItemCommonTagIDs(d->selectedImageIDs));
+            d->assignedTags = QSet<int>::fromList(CoreDbAccess().db()->getItemCommonTagIDs(d->selectedImageIDs));
         }
     }
     else if (d->mode == RECENTLYASSIGNED)

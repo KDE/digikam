@@ -48,7 +48,7 @@
 #include "digikam_debug.h"
 #include "collectionscanner.h"
 #include "collectionscannerhints.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "filereadwritelock.h"
@@ -702,7 +702,7 @@ void ScanController::run()
         {
             d->continueInitialization = true;
             // pass "this" as InitializationObserver
-            bool success = DatabaseAccess::checkReadyForUse(this);
+            bool success = CoreDbAccess::checkReadyForUse(this);
 
             // If d->advice has not been adjusted to a value indicating failure, do this here
             if (!success && d->advice == Success)
@@ -771,9 +771,9 @@ void ScanController::run()
         }
         else if (doUpdateUniqueHash)
         {
-            DatabaseAccess access;
+            CoreDbAccess access;
             CoreDbSchemaUpdater updater(access.db(), access.backend(), access.parameters());
-            updater.setDatabaseAccess(&access);
+            updater.setCoreDbAccess(&access);
             updater.setObserver(this);
             updater.updateUniqueHash();
             emit completeScanDone();
@@ -1127,7 +1127,7 @@ void ScanController::finishFileMetadataWrite(const ImageInfo& info, bool changed
 
 ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
 {
-    CoreDbWatch* const dbwatch = DatabaseAccess::databaseWatch();
+    CoreDbWatch* const dbwatch = CoreDbAccess::databaseWatch();
 
     // we opt for a queued connection to make stuff a bit relaxed
     connect(dbwatch, SIGNAL(imageChange(ImageChangeset)), this, SLOT(slotImageChanged(ImageChangeset)),

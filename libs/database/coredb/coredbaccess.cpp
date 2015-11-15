@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-18
- * Description : Database access wrapper.
+ * Description : Core database access wrapper.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 
 // Qt includes
 
@@ -52,11 +52,11 @@
 namespace Digikam
 {
 
-class DatabaseAccessStaticPriv
+class CoreDbAccessStaticPriv
 {
 public:
 
-    DatabaseAccessStaticPriv()
+    CoreDbAccessStaticPriv()
         : backend(0),
           db(0),
           databaseWatch(0),
@@ -66,7 +66,7 @@ public:
         applicationIdentifier = QUuid::createUuid();
     };
 
-    ~DatabaseAccessStaticPriv()
+    ~CoreDbAccessStaticPriv()
     {
     };
 
@@ -83,32 +83,32 @@ public:
     bool                initializing;
 };
 
-class DatabaseAccessMutexLocker : public QMutexLocker
+class CoreDbAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    explicit DatabaseAccessMutexLocker(DatabaseAccessStaticPriv* const d)
+    explicit CoreDbAccessMutexLocker(CoreDbAccessStaticPriv* const d)
         : QMutexLocker(&d->lock.mutex),
           d(d)
     {
         d->lock.lockCount++;
     }
 
-    ~DatabaseAccessMutexLocker()
+    ~CoreDbAccessMutexLocker()
     {
         d->lock.lockCount--;
     }
 
 public:
 
-    DatabaseAccessStaticPriv* const d;
+    CoreDbAccessStaticPriv* const d;
 };
 
-DatabaseAccessStaticPriv* DatabaseAccess::d = 0;
+CoreDbAccessStaticPriv* CoreDbAccess::d = 0;
 
-DatabaseAccess::DatabaseAccess()
+CoreDbAccess::CoreDbAccess()
 {
-    // You will want to call setParameters before constructing DatabaseAccess
+    // You will want to call setParameters before constructing CoreDbAccess
     Q_ASSERT(d);
 
     d->lock.mutex.lock();
@@ -127,13 +127,13 @@ DatabaseAccess::DatabaseAccess()
     }
 }
 
-DatabaseAccess::~DatabaseAccess()
+CoreDbAccess::~CoreDbAccess()
 {
     d->lock.lockCount--;
     d->lock.mutex.unlock();
 }
 
-DatabaseAccess::DatabaseAccess(bool)
+CoreDbAccess::CoreDbAccess(bool)
 {
     // private constructor, when mutex is locked and
     // backend should not be checked
@@ -141,17 +141,17 @@ DatabaseAccess::DatabaseAccess(bool)
     d->lock.lockCount++;
 }
 
-AlbumDB* DatabaseAccess::db() const
+AlbumDB* CoreDbAccess::db() const
 {
     return d->db;
 }
 
-CoreDbBackend* DatabaseAccess::backend() const
+CoreDbBackend* CoreDbAccess::backend() const
 {
     return d->backend;
 }
 
-CoreDbWatch* DatabaseAccess::databaseWatch()
+CoreDbWatch* CoreDbAccess::databaseWatch()
 {
     if (d)
     {
@@ -161,7 +161,7 @@ CoreDbWatch* DatabaseAccess::databaseWatch()
     return 0;
 }
 
-void DatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
+void CoreDbAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
 {
     if (!d || !d->backend)
     {
@@ -172,7 +172,7 @@ void DatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
 
-DatabaseParameters DatabaseAccess::parameters()
+DatabaseParameters CoreDbAccess::parameters()
 {
     if (d)
     {
@@ -182,7 +182,7 @@ DatabaseParameters DatabaseAccess::parameters()
     return DatabaseParameters();
 }
 
-void DatabaseAccess::setParameters(const DatabaseParameters& parameters)
+void CoreDbAccess::setParameters(const DatabaseParameters& parameters)
 {
     //TODO 0.11: Refine API
     setParameters(parameters, DatabaseSlave);
@@ -193,14 +193,14 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters)
     }
 }
 
-void DatabaseAccess::setParameters(const DatabaseParameters& parameters, ApplicationStatus status)
+void CoreDbAccess::setParameters(const DatabaseParameters& parameters, ApplicationStatus status)
 {
     if (!d)
     {
-        d = new DatabaseAccessStaticPriv();
+        d = new CoreDbAccessStaticPriv();
     }
 
-    DatabaseAccessMutexLocker lock(d);
+    CoreDbAccessMutexLocker lock(d);
 
     if (d->parameters == parameters)
     {
@@ -254,7 +254,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     CollectionManager::instance()->clear_locked();
 }
 
-bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
+bool CoreDbAccess::checkReadyForUse(InitializationObserver* observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
@@ -280,7 +280,7 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     }
 
     // create an object with private shortcut constructor
-    DatabaseAccess access(false);
+    CoreDbAccess access(false);
 
     if (!d->backend)
     {
@@ -306,12 +306,12 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
         }
     }
 
-    // avoid endless loops (if called methods create new DatabaseAccess objects)
+    // avoid endless loops (if called methods create new CoreDbAccess objects)
     d->initializing = true;
 
     // update schema
     CoreDbSchemaUpdater updater(access.db(), access.backend(), access.parameters());
-    updater.setDatabaseAccess(&access);
+    updater.setCoreDbAccess(&access);
 
     updater.setObserver(observer);
 
@@ -333,21 +333,21 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     return d->backend->isReady();
 }
 
-QString DatabaseAccess::lastError()
+QString CoreDbAccess::lastError()
 {
     return d->lastError;
 }
 
-void DatabaseAccess::setLastError(const QString& error)
+void CoreDbAccess::setLastError(const QString& error)
 {
     d->lastError = error;
 }
 
-void DatabaseAccess::cleanUpDatabase()
+void CoreDbAccess::cleanUpDatabase()
 {
     if (d)
     {
-        DatabaseAccessMutexLocker locker(d);
+        CoreDbAccessMutexLocker locker(d);
         d->backend->close();
         delete d->db;
         delete d->backend;
@@ -360,52 +360,52 @@ void DatabaseAccess::cleanUpDatabase()
 
 // ----------------------------------------------------------------------
 
-DatabaseAccessUnlock::DatabaseAccessUnlock()
+CoreDbAccessUnlock::CoreDbAccessUnlock()
 {
     // acquire lock
-    DatabaseAccess::d->lock.mutex.lock();
+    CoreDbAccess::d->lock.mutex.lock();
     // store lock count
-    count = DatabaseAccess::d->lock.lockCount;
+    count = CoreDbAccess::d->lock.lockCount;
     // set lock count to 0
-    DatabaseAccess::d->lock.lockCount = 0;
+    CoreDbAccess::d->lock.lockCount = 0;
 
     // unlock
     for (int i=0; i<count; ++i)
     {
-        DatabaseAccess::d->lock.mutex.unlock();
+        CoreDbAccess::d->lock.mutex.unlock();
     }
 
     // drop lock acquired in first line. Mutex is now free.
-    DatabaseAccess::d->lock.mutex.unlock();
+    CoreDbAccess::d->lock.mutex.unlock();
 }
 
-DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess* const)
+CoreDbAccessUnlock::CoreDbAccessUnlock(CoreDbAccess* const)
 {
     // With the passed pointer, we have assured that the mutex is acquired
     // Store lock count
-    count = DatabaseAccess::d->lock.lockCount;
+    count = CoreDbAccess::d->lock.lockCount;
     // set lock count to 0
-    DatabaseAccess::d->lock.lockCount = 0;
+    CoreDbAccess::d->lock.lockCount = 0;
 
     // unlock
     for (int i = 0; i < count; ++i)
     {
-        DatabaseAccess::d->lock.mutex.unlock();
+        CoreDbAccess::d->lock.mutex.unlock();
     }
 
     // Mutex is now free
 }
 
-DatabaseAccessUnlock::~DatabaseAccessUnlock()
+CoreDbAccessUnlock::~CoreDbAccessUnlock()
 {
     // lock as often as it was locked before
     for (int i = 0; i < count; ++i)
     {
-        DatabaseAccess::d->lock.mutex.lock();
+        CoreDbAccess::d->lock.mutex.lock();
     }
 
     // update lock count
-    DatabaseAccess::d->lock.lockCount += count;
+    CoreDbAccess::d->lock.lockCount += count;
 }
 
 }  // namespace Digikam

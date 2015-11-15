@@ -35,7 +35,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "collectionmanager.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredburl.h"
 #include "tagscache.h"
 
@@ -407,7 +407,7 @@ void PAlbum::setCaption(const QString& caption)
 {
     m_caption = caption;
 
-    DatabaseAccess access;
+    CoreDbAccess access;
     access.db()->setAlbumCaption(id(), m_caption);
 }
 
@@ -415,7 +415,7 @@ void PAlbum::setCategory(const QString& category)
 {
     m_category = category;
 
-    DatabaseAccess access;
+    CoreDbAccess access;
     access.db()->setAlbumCategory(id(), m_category);
 }
 
@@ -423,7 +423,7 @@ void PAlbum::setDate(const QDate& date)
 {
     m_date = date;
 
-    DatabaseAccess access;
+    CoreDbAccess access;
     access.db()->setAlbumDate(id(), m_date);
 }
 

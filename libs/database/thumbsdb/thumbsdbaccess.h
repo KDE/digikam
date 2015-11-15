@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT ThumbsDbAccess
 {
 public:
 
-    /** This class is written in analogy to DatabaseAccess
+    /** This class is written in analogy to CoreDbAccess
      *  (some features stripped off).
      *  For documentation, see databaseaccess.h */
 

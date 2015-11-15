@@ -69,7 +69,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "componentsinfo.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbwatch.h"
 #include "coredbchangesets.h"
 #include "ddragobjects.h"
@@ -384,7 +384,7 @@ void ImageWindow::setupConnections()
             this, SLOT(slotFileMetadataChanged(QUrl)));
 
 /*
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
             this, SLOT(slotCollectionImageChange(CollectionImageChangeset)),
             Qt::QueuedConnection);
 
@@ -704,7 +704,7 @@ void ImageWindow::slotContextMenu()
         connect(assignTagsMenu, SIGNAL(signalPopupTagsView()),
                 d->rightSideBar, SLOT(slotPopupTagsView()));
 
-        if (!DatabaseAccess().db()->hasTags(idList))
+        if (!CoreDbAccess().db()->hasTags(idList))
         {
             m_contextMenu->menuAction()->setEnabled(false);
         }
@@ -1485,7 +1485,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
     {
         AlbumManager* const man  = AlbumManager::instance();
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+        QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList(itemIDs);
 
         if (imageInfoList.isEmpty())
@@ -1516,7 +1516,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         AlbumManager* const man  = AlbumManager::instance();
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
+        QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInTag(tagIDs.first(), true);
         ImageInfoList imageInfoList(itemIDs);
 
         if (imageInfoList.isEmpty())
@@ -1648,7 +1648,7 @@ void ImageWindow::slotAddedDropedItems(QDropEvent* e)
     }
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
     {
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+        QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInAlbum(albumID);
 
         imgList = ImageInfoList(itemIDs);
     }
@@ -1661,7 +1661,7 @@ void ImageWindow::slotAddedDropedItems(QDropEvent* e)
             return;
         }
 
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
+        QList<qlonglong> itemIDs = CoreDbAccess().db()->getItemIDsInTag(tagIDs.first(), true);
         imgList = ImageInfoList(itemIDs);
     }
 

@@ -42,7 +42,7 @@
 
 // Local includes
 
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "databaseparameters.h"
 #include "facedbaccess.h"
 #include "facedboperationgroup.h"
@@ -106,7 +106,7 @@ public:
     RecognitionDatabaseStaticPriv()
         : mutex(QMutex::Recursive)
     {
-        defaultPath = DatabaseAccess::parameters().faceParameters().getFaceDatabaseNameOrDir();
+        defaultPath = CoreDbAccess::parameters().faceParameters().getFaceDatabaseNameOrDir();
     }
 
     QExplicitlySharedDataPointer<RecognitionDatabase::Private> database(const QString& key);
@@ -245,7 +245,7 @@ RecognitionDatabase::Private::Private(const QString& path)
       opencvlbph(0),
       funnel(0)
 {
-    DatabaseParameters params = DatabaseAccess::parameters().faceParameters();
+    DatabaseParameters params = CoreDbAccess::parameters().faceParameters();
     params.setFaceDatabasePath(configPath);
     FaceDbAccess::setParameters(db, params);
     dbAvailable               = FaceDbAccess::checkReadyForUse(db);

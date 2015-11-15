@@ -51,7 +51,7 @@
 #include "collectionlocation.h"
 #include "collectionscannerhints.h"
 #include "collectionscannerobserver.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbbackend.h"
 #include "coredbtransaction.h"
 #include "coredboperationgroup.h"
@@ -400,7 +400,7 @@ void CollectionScanner::loadNameFilters()
     }
 
     QStringList imageFilter, audioFilter, videoFilter;
-    DatabaseAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
+    CoreDbAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
 
     // three sets to find category of a file
     d->imageFilterSet = imageFilter.toSet();
@@ -463,7 +463,7 @@ void CollectionScanner::completeScan()
     // if we have no hints to follow, clean up all stale albums
     if (!d->hints || !d->hints->hasAlbumHints())
     {
-        DatabaseAccess().db()->deleteStaleAlbums();
+        CoreDbAccess().db()->deleteStaleAlbums();
     }
 
     scanForStaleAlbums(allLocations);
@@ -591,7 +591,7 @@ void CollectionScanner::completeScanCleanupPart()
     {
         // Definitely delete items which are marked as removed.
         // Only do this in a complete scan!
-        DatabaseAccess().db()->deleteRemovedItems();
+        CoreDbAccess().db()->deleteRemovedItems();
         resetDeleteRemovedSettings();
     }
     else
@@ -622,7 +622,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     }
 
 /*
-    if (DatabaseAccess().backend()->isInTransaction())
+    if (CoreDbAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your CoreDbTransaction
         qCDebug(DIGIKAM_DATABASE_LOG) << "Detected an active database transaction when starting a collection scan. "
@@ -646,7 +646,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     // Hint: Rethink with next major db update
     if (!d->hints || !d->hints->hasAlbumHints())
     {
-        DatabaseAccess().db()->deleteStaleAlbums();
+        CoreDbAccess().db()->deleteStaleAlbums();
     }
 
     // Usually, we can restrict stale album scanning to our own location.
@@ -740,7 +740,7 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
     }
 
     int albumId       = checkAlbum(location, album);
-    qlonglong imageId = DatabaseAccess().db()->getImageId(albumId, fileName);
+    qlonglong imageId = CoreDbAccess().db()->getImageId(albumId, fileName);
     imageId           = scanFile(fi, albumId, imageId, mode);
 
     return imageId;
@@ -776,7 +776,7 @@ qlonglong CollectionScanner::scanFile(const QFileInfo& fi, int albumId, qlonglon
     }
     else
     {
-        ItemScanInfo scanInfo = DatabaseAccess().db()->getItemScanInfo(imageId);
+        ItemScanInfo scanInfo = CoreDbAccess().db()->getItemScanInfo(imageId);
 
         switch (mode)
         {
@@ -847,7 +847,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
         emit startScanningForStaleAlbums();
     }
 
-    QList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
+    QList<AlbumShortInfo> albumList = CoreDbAccess().db()->getAlbumShortInfos();
     QList<int> toBeDeleted;
 
 /*
@@ -930,7 +930,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
                     if (fileInfo.exists() && fileInfo.isDir())
                     {
                         // Just set a new root/relativePath to the album. Further scanning will care for all cases or error.
-                        DatabaseAccess().db()->renameAlbum(it.value().albumId, it.key().albumRootId, it.key().relativePath);
+                        CoreDbAccess().db()->renameAlbum(it.value().albumId, it.key().albumRootId, it.key().relativePath);
                         // No need any more to delete the album
                         toBeDeleted.removeAt(toBeDeletedIndex);
                     }
@@ -951,7 +951,7 @@ void CollectionScanner::safelyRemoveAlbums(const QList<int>& albumIds)
 {
     // Remove the items (orphan items, detach them from the album, but keep entries for a certain time)
     // Make album orphan (no album root, keep entries until next application start)
-    DatabaseAccess access;
+    CoreDbAccess access;
     CoreDbTransaction transaction(&access);
 
     foreach(int albumId, albumIds)
@@ -966,7 +966,7 @@ void CollectionScanner::safelyRemoveAlbums(const QList<int>& albumIds)
 int CollectionScanner::checkAlbum(const CollectionLocation& location, const QString& album)
 {
     // get album id if album exists
-    int albumID = DatabaseAccess().db()->getAlbumForPath(location.id(), album, false);
+    int albumID = CoreDbAccess().db()->getAlbumForPath(location.id(), album, false);
 
     d->establishedSourceAlbums.remove(albumID);
 
@@ -974,7 +974,7 @@ int CollectionScanner::checkAlbum(const CollectionLocation& location, const QStr
     if (albumID == -1)
     {
         QFileInfo fi(location.albumRootPath() + album);
-        albumID = DatabaseAccess().db()->addAlbum(location.id(), album, QString(), fi.lastModified().date(), QString());
+        albumID = CoreDbAccess().db()->addAlbum(location.id(), album, QString(), fi.lastModified().date(), QString());
 
         // have album this one was copied from?
         if (d->hints)
@@ -988,7 +988,7 @@ int CollectionScanner::checkAlbum(const CollectionLocation& location, const QStr
             if (!src.isNull())
             {
                 //qCDebug(DIGIKAM_DATABASE_LOG) << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
-                DatabaseAccess().db()->copyAlbumProperties(src.albumId, albumID);
+                CoreDbAccess().db()->copyAlbumProperties(src.albumId, albumID);
                 d->establishedSourceAlbums[albumID] = src.albumId;
             }
         }
@@ -1019,7 +1019,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     }
 
     int albumID                   = checkAlbum(location, album);
-    QList<ItemScanInfo> scanInfos = DatabaseAccess().db()->getItemScanInfos(albumID);
+    QList<ItemScanInfo> scanInfos = CoreDbAccess().db()->getItemScanInfos(albumID);
 
     // create a hash filename -> index in list
     QHash<QString, int> fileNameIndexHash;
@@ -1118,7 +1118,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     {
         QList<qlonglong> ids = itemIdSet.toList();
         CoreDbOperationGroup group;
-        DatabaseAccess().db()->removeItems(ids, QList<int>() << albumID);
+        CoreDbAccess().db()->removeItems(ids, QList<int>() << albumID);
         itemsWereRemoved(ids);
     }
 
@@ -1236,7 +1236,7 @@ qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
         if (srcAlbum)
         {
             // if we have one source album, find out if there is a file with the same name
-            srcId = DatabaseAccess().db()->getImageId(srcAlbum, info.fileName());
+            srcId = CoreDbAccess().db()->getImageId(srcAlbum, info.fileName());
         }
 
         if (srcId != 0)
@@ -1352,11 +1352,11 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
                                                        DatabaseFields::CreationDate |
                                                        DatabaseFields::DigitizationDate;
 
-    QVariantList imageInfos = DatabaseAccess().db()->getImageInformation(source.id(), imageInfoFields);
+    QVariantList imageInfos = CoreDbAccess().db()->getImageInformation(source.id(), imageInfoFields);
 
     if (!imageInfos.isEmpty())
     {
-        DatabaseAccess().db()->changeImageInformation(dest.id(), imageInfos, imageInfoFields);
+        CoreDbAccess().db()->changeImageInformation(dest.id(), imageInfos, imageInfoFields);
     }
 
     // Copy public tags
@@ -1371,16 +1371,16 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     // important: skip other internal tags, such a history tags. Therefore AlbumDB::copyImageTags is not to be used.
 
     // GPS data
-    QVariantList positionData = DatabaseAccess().db()->getImagePosition(source.id(), DatabaseFields::ImagePositionsAll);
+    QVariantList positionData = CoreDbAccess().db()->getImagePosition(source.id(), DatabaseFields::ImagePositionsAll);
 
     if (!positionData.isEmpty())
     {
-        DatabaseAccess().db()->addImagePosition(dest.id(), positionData, DatabaseFields::ImagePositionsAll);
+        CoreDbAccess().db()->addImagePosition(dest.id(), positionData, DatabaseFields::ImagePositionsAll);
     }
 
     // Comments
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ImageComments commentsSource(access, source.id());
         ImageComments commentsDest(access, dest.id());
         commentsDest.replaceFrom(commentsSource);
@@ -1392,7 +1392,7 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     copyrightDest.replaceFrom(source.id());
 
     // Image Properties
-    DatabaseAccess().db()->copyImageProperties(source.id(), dest.id());
+    CoreDbAccess().db()->copyImageProperties(source.id(), dest.id());
 }
 
 void CollectionScanner::itemsWereRemoved(const QList<qlonglong> &removedIds)
@@ -1401,7 +1401,7 @@ void CollectionScanner::itemsWereRemoved(const QList<qlonglong> &removedIds)
     d->removedItems();
 
     // manage relations
-    QList<qlonglong> relatedImages = DatabaseAccess().db()->getOneRelatedImageEach(removedIds, DatabaseRelation::DerivedFrom);
+    QList<qlonglong> relatedImages = CoreDbAccess().db()->getOneRelatedImageEach(removedIds, DatabaseRelation::DerivedFrom);
     qCDebug(DIGIKAM_DATABASE_LOG) << "Removed items:" << removedIds << "related items:" << relatedImages;
 
     if (d->recordHistoryIds)
@@ -1414,7 +1414,7 @@ void CollectionScanner::itemsWereRemoved(const QList<qlonglong> &removedIds)
     else
     {
         int needTaggingTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
-        DatabaseAccess().db()->addTagsToItems(relatedImages, QList<int>() << needTaggingTag);
+        CoreDbAccess().db()->addTagsToItems(relatedImages, QList<int>() << needTaggingTag);
     }
 }
 
@@ -1425,10 +1425,10 @@ void CollectionScanner::completeHistoryScanning()
     int needResolvingTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needResolvingHistory());
     int needTaggingTag   = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
 
-    QList<qlonglong> ids = DatabaseAccess().db()->getItemIDsInTag(needResolvingTag);
+    QList<qlonglong> ids = CoreDbAccess().db()->getItemIDsInTag(needResolvingTag);
     historyScanningStage2(ids);
 
-    ids                  = DatabaseAccess().db()->getItemIDsInTag(needTaggingTag);
+    ids                  = CoreDbAccess().db()->getItemIDsInTag(needTaggingTag);
     qCDebug(DIGIKAM_DATABASE_LOG) << "items to tag" << ids;
     historyScanningStage3(ids);
 }
@@ -1551,13 +1551,13 @@ DatabaseItem::Category CollectionScanner::category(const QFileInfo& info)
 
 void CollectionScanner::markDatabaseAsScanned()
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     access.db()->setSetting(QLatin1String("Scanned"), QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
 bool CollectionScanner::databaseInitialScanDone()
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     return !access.db()->getSetting(QLatin1String("Scanned")).isEmpty();
 }
 
@@ -1567,14 +1567,14 @@ void CollectionScanner::updateRemovedItemsTime()
     // held in d->removedItemsTime to the database
     if (!d->removedItemsTime.isNull())
     {
-        DatabaseAccess().db()->setSetting(QLatin1String("RemovedItemsTime"), d->removedItemsTime.toString(Qt::ISODate));
+        CoreDbAccess().db()->setSetting(QLatin1String("RemovedItemsTime"), d->removedItemsTime.toString(Qt::ISODate));
         d->removedItemsTime = QDateTime();
     }
 }
 
 void CollectionScanner::incrementDeleteRemovedCompleteScanCount()
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     int count = access.db()->getSetting(QLatin1String("DeleteRemovedCompleteScanCount")).toInt();
     ++count;
     access.db()->setSetting(QLatin1String("DeleteRemovedCompleteScanCount"), QString::number(count));
@@ -1582,15 +1582,15 @@ void CollectionScanner::incrementDeleteRemovedCompleteScanCount()
 
 void CollectionScanner::resetDeleteRemovedSettings()
 {
-    DatabaseAccess().db()->setSetting(QLatin1String("RemovedItemsTime"), QString());
-    DatabaseAccess().db()->setSetting(QLatin1String("DeleteRemovedTime"), QDateTime::currentDateTime().toString(Qt::ISODate));
-    DatabaseAccess().db()->setSetting(QLatin1String("DeleteRemovedCompleteScanCount"), QString::number(0));
+    CoreDbAccess().db()->setSetting(QLatin1String("RemovedItemsTime"), QString());
+    CoreDbAccess().db()->setSetting(QLatin1String("DeleteRemovedTime"), QDateTime::currentDateTime().toString(Qt::ISODate));
+    CoreDbAccess().db()->setSetting(QLatin1String("DeleteRemovedCompleteScanCount"), QString::number(0));
 }
 
 bool CollectionScanner::checkDeleteRemoved()
 {
     // returns true if removed items shall be deleted
-    DatabaseAccess access;
+    CoreDbAccess access;
     // retrieve last time an item was removed (not deleted, but set to status removed)
     QString removedItemsTimeString = access.db()->getSetting(QLatin1String("RemovedItemsTime"));
 
@@ -1659,7 +1659,7 @@ void CollectionScanner::scanForStaleAlbums()
 void CollectionScanner::scanForStaleAlbums(const QString& albumRoot)
 {
     Q_UNUSED(albumRoot);
-    QList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
+    QList<AlbumShortInfo> albumList = CoreDbAccess().db()->getAlbumShortInfos();
     QList<AlbumShortInfo> toBeDeleted;
 
     QList<AlbumShortInfo>::const_iterator it;
@@ -1690,7 +1690,7 @@ QStringList CollectionScanner::formattedListOfStaleAlbums()
 
 void CollectionScanner::removeStaleAlbums()
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     CoreDbTransaction transaction(&access);
     QList<AlbumShortInfo>::const_iterator it;
 
@@ -1705,7 +1705,7 @@ QStringList CollectionScanner::formattedListOfStaleFiles()
 {
     QStringList listToBeDeleted;
 
-    DatabaseAccess access;
+    CoreDbAccess access;
     QList< QPair<QString,int> >::const_iterator it;
 
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
@@ -1720,7 +1720,7 @@ QStringList CollectionScanner::formattedListOfStaleFiles()
 
 void CollectionScanner::removeStaleFiles()
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     CoreDbTransaction transaction(&access);
     QList< QPair<QString,int> >::const_iterator it;
 
@@ -1832,15 +1832,15 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
     emit startScanningAlbum(albumRoot, album);
 
     // get album id if album exists
-    int albumID = DatabaseAccess().db()->getAlbumForPath(albumRoot, album, false);
+    int albumID = CoreDbAccess().db()->getAlbumForPath(albumRoot, album, false);
 
     if (albumID == -1)
     {
         QFileInfo fi(albumRoot + album);
-        albumID = DatabaseAccess().db()->addAlbum(albumRoot, album, QString(), fi.lastModified().date(), QString());
+        albumID = CoreDbAccess().db()->addAlbum(albumRoot, album, QString(), fi.lastModified().date(), QString());
     }
 
-    QStringList filesInAlbum = DatabaseAccess().db()->getItemNamesInAlbum( albumID );
+    QStringList filesInAlbum = CoreDbAccess().db()->getItemNamesInAlbum( albumID );
 
     QSet<QString> filesFoundInDB;
 
@@ -1900,11 +1900,11 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
 
 void CollectionScanner::updateItemsWithoutDate()
 {
-    QStringList urls = DatabaseAccess().db()->getAllItemURLsWithoutDate();
+    QStringList urls = CoreDbAccess().db()->getAllItemURLsWithoutDate();
 
     emit totalFilesToScan(urls.count());
 
-    QString albumRoot = DatabaseAccess::albumRoot();
+    QString albumRoot = CoreDbAccess::albumRoot();
 
     {
         CoreDbTransaction transaction;
@@ -1917,7 +1917,7 @@ void CollectionScanner::updateItemsWithoutDate()
             QString albumURL = fi.path();
             albumURL = QDir::cleanPath(albumURL.remove(albumRoot));
 
-            int albumID = DatabaseAccess().db()->getAlbumForPath(albumRoot, albumURL);
+            int albumID = CoreDbAccess().db()->getAlbumForPath(albumRoot, albumURL);
 
             if (albumID <= 0)
             {
@@ -1973,7 +1973,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
 
 void CollectionScanner::markDatabaseAsScanned()
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     access.db()->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
@@ -1981,11 +1981,11 @@ void CollectionScanner::markDatabaseAsScanned()
 
 void CollectionScanner::addItem(int albumID, const QString& albumRoot, const QString& album, const QString& fileName)
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     addItem(access, albumID, albumRoot, album, fileName);
 }
 
-void CollectionScanner::addItem(Digikam::DatabaseAccess& access, int albumID,
+void CollectionScanner::addItem(Digikam::CoreDbAccess& access, int albumID,
                                 const QString& albumRoot, const QString& album, const QString& fileName)
 {
     QString filePath = albumRoot + album + '/' + fileName;
@@ -2029,11 +2029,11 @@ void CollectionScanner::addItem(Digikam::DatabaseAccess& access, int albumID,
 
 void CollectionScanner::updateItemDate(int albumID, const QString& albumRoot, const QString& album, const QString& fileName)
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     updateItemDate(access, albumID, albumRoot, album, fileName);
 }
 
-void CollectionScanner::updateItemDate(Digikam::DatabaseAccess& access, int albumID,
+void CollectionScanner::updateItemDate(Digikam::CoreDbAccess& access, int albumID,
                                        const QString& albumRoot, const QString& album, const QString& fileName)
 {
     QString filePath = albumRoot + album + '/' + fileName;
@@ -2081,7 +2081,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
         QStringList currAlbumList;
 
         // get sub albums, but only direct subalbums (Album/ *, not Album/ * / *)
-        currAlbumList = DatabaseAccess().db()->getSubalbumsForPath(albumRoot, album, true);
+        currAlbumList = CoreDbAccess().db()->getSubalbumsForPath(albumRoot, album, true);
         qCDebug(DIGIKAM_DATABASE_LOG) << "currAlbumList is " << currAlbumList;
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
@@ -2117,7 +2117,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
             qCDebug(DIGIKAM_DATABASE_LOG) << "New Album: " << *it;
 
             QFileInfo fi(albumRoot + *it);
-            DatabaseAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
+            CoreDbAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
 
             scanAlbum(albumRoot, *it);
         }
@@ -2132,7 +2132,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
         QStringList currItemList;
 
         {
-            DatabaseAccess access;
+            CoreDbAccess access;
             albumID = access.db()->getAlbumForPath(albumRoot, album, false);
 
             if (albumID == -1)
@@ -2168,7 +2168,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
             addItem(albumID, albumRoot, album, fi->fileName());
         }
 
-        DatabaseAccess access;
+        CoreDbAccess access;
         // currItemList now contains deleted file list. remove them from db
         for (QStringList::iterator it = currItemList.begin();
              it != currItemList.end(); ++it)
@@ -2180,7 +2180,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
 
 void CollectionScanner::removeInvalidAlbums(const QString& albumRoot)
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
 
     QValueList<AlbumShortInfo> albumList = access.db()->getAlbumShortInfos();
     QValueList<AlbumShortInfo> toBeDeleted;

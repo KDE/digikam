@@ -46,7 +46,7 @@
 #include "jpegutils.h"
 #include "dimg.h"
 #include "imageinfo.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbtransaction.h"
 #include "albumdb.h"
 #include "coredbbackend.h"
@@ -236,7 +236,7 @@ public:
         }
 
         // Variables for data read from DB
-        DatabaseAccess      access;
+        CoreDbAccess      access;
         DatabaseBlob        blob;
         qlonglong           imageid;
         Haar::SignatureData targetSig;
@@ -364,7 +364,7 @@ bool HaarIface::indexImage(qlonglong imageid)
     Haar::SignatureData sig;
     haar.calcHaar(d->data, &sig);
 
-    DatabaseAccess access;
+    CoreDbAccess access;
 
     // Store main entry
     {
@@ -586,7 +586,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
     QMap<qlonglong, double> scores;
 
     // Variables for data read from DB
-    DatabaseAccess      access;
+    CoreDbAccess      access;
     DatabaseBlob        blob;
     qlonglong           imageid;
     Haar::SignatureData targetSig;
@@ -698,7 +698,7 @@ QImage HaarIface::loadQImage(const QString& filename)
 bool HaarIface::retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData* const sig)
 {
     QList<QVariant> values;
-    DatabaseAccess().backend()->execSql(QString::fromUtf8("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
+    CoreDbAccess().backend()->execSql(QString::fromUtf8("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
                                         imageid, &values);
 
     if (values.isEmpty())
@@ -770,7 +770,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QLi
 
     // Write search albums to database
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         CoreDbTransaction transaction(&access);
 
         // delete all old searches
@@ -793,7 +793,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
     // Get all items DB id from all albums and all collections
     foreach(int albumId, albums2Scan)
     {
-        idList.unite(DatabaseAccess().db()->getItemIDsInAlbum(albumId).toSet());
+        idList.unite(CoreDbAccess().db()->getItemIDsInAlbum(albumId).toSet());
     }
 
     return findDuplicates(idList, requiredPercentage, observer);
@@ -809,13 +809,13 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbumsAndTags(con
     // Get all items DB id from all albums and all collections
     foreach(int albumId, albums2Scan)
     {
-        idList.unite(DatabaseAccess().db()->getItemIDsInAlbum(albumId).toSet());
+        idList.unite(CoreDbAccess().db()->getItemIDsInAlbum(albumId).toSet());
     }
 
     // Get all items DB id from all tags
     foreach(int albumId, tags2Scan)
     {
-        idList.unite(DatabaseAccess().db()->getItemIDsInTag(albumId).toSet());
+        idList.unite(CoreDbAccess().db()->getItemIDsInTag(albumId).toSet());
     }
 
     return findDuplicates(idList, requiredPercentage, observer);

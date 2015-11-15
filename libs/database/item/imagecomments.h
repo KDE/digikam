@@ -39,7 +39,7 @@
 #include "digikam_export.h"
 #include "albuminfo.h"
 #include "captionvalues.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 
 namespace Digikam
 {
@@ -94,9 +94,9 @@ public:
 
     /**
      * Create a ImageComments object for the image with the specified id.
-     * The existing DatabaseAccess object will be used to access the database.
+     * The existing CoreDbAccess object will be used to access the database.
      */
-    ImageComments(DatabaseAccess& access, qlonglong imageid);
+    ImageComments(CoreDbAccess& access, qlonglong imageid);
 
     ImageComments(const ImageComments& other);
     ~ImageComments();
@@ -210,7 +210,7 @@ public:
      * Also called in destructor, so you typically do not need to call this.
      */
     void apply();
-    void apply(DatabaseAccess& access);
+    void apply(CoreDbAccess& access);
 
     /**
      * Returns all entries of the given type in a CaptionsMap container.

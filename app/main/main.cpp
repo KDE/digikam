@@ -51,7 +51,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "daboutdata.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "databaseparameters.h"
 #include "digikamapp.h"
 #include "scancontroller.h"
@@ -233,7 +233,7 @@ int main(int argc, char* argv[])
 
     int ret = app.exec();
 
-    DatabaseAccess::cleanUpDatabase();
+    CoreDbAccess::cleanUpDatabase();
     ThumbsDbAccess::cleanUpDatabase();
     MetaEngine::cleanupExiv2();
 

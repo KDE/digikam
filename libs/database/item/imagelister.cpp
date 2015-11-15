@@ -46,7 +46,7 @@
 
 #include "digikam_debug.h"
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbbackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
@@ -168,7 +168,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
 
     if (d->recursive)
     {
-        QList<int> intAlbumIds = DatabaseAccess().db()->getAlbumAndSubalbumsForPath(albumRootId, album);
+        QList<int> intAlbumIds = CoreDbAccess().db()->getAlbumAndSubalbumsForPath(albumRootId, album);
 
         if (intAlbumIds.isEmpty())
         {
@@ -182,7 +182,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
     }
     else
     {
-        int albumId = DatabaseAccess().db()->getAlbumForPath(albumRootId, album, false);
+        int albumId = CoreDbAccess().db()->getAlbumForPath(albumRootId, album, false);
 
         if (albumId == -1)
         {
@@ -206,7 +206,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
     if (d->recursive)
     {
         // SQLite allows no more than 999 parameters
-        const int maxParams = DatabaseAccess().backend()->maximumBoundValues();
+        const int maxParams = CoreDbAccess().backend()->maximumBoundValues();
         for (int i=0; i<albumIds.size(); i++)
         {
             QString q           = query;
@@ -214,7 +214,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
             i                   += ids.count();
 
             QList<QVariant> v;
-            DatabaseAccess  access;
+            CoreDbAccess  access;
             q += QString::fromUtf8("Images.album IN (");
             access.db()->addBoundValuePlaceholders(q, ids.size());
             q += QString::fromUtf8(");");
@@ -225,7 +225,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
     }
     else
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         query += QString::fromUtf8("Images.album = ?;");
         access.backend()->execSql(query, albumIds, &values);
     }
@@ -280,7 +280,7 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds
         parameters.insert(QLatin1String(":tagPID"), *it);
         parameters.insert(QLatin1String(":tagID"),  *it);
 
-        DatabaseAccess access;
+        CoreDbAccess access;
 
         if (d->recursive)
         {
@@ -348,7 +348,7 @@ void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)
 {
     QList<qlonglong> list;
     QList<QVariant>  values;
-    DatabaseAccess   access;
+    CoreDbAccess   access;
 
     access.backend()->execSql(QString::fromUtf8("SELECT Images.id "
                                                 " FROM Images "
@@ -385,7 +385,7 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
     QList<QVariant> values;
 
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         access.backend()->execSql(QString::fromUtf8("SELECT DISTINCT Images.id, Images.name, Images.album, "
                                           "       Albums.albumRoot, "
                                           "       ImageInformation.rating, Images.category, "
@@ -457,7 +457,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "Listing area" << lat1 << lat2 << lon1 << lon2;
 
-    DatabaseAccess access;
+    CoreDbAccess access;
 
     access.backend()->execSql(QString::fromUtf8("SELECT DISTINCT Images.id, "
                                       "       Albums.albumRoot, ImageInformation.rating, ImageInformation.creationDate, "
@@ -555,7 +555,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
 
     bool executionSuccess;
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         executionSuccess = access.backend()->execSql(sqlQuery, boundValues, &values);
 
         if (!executionSuccess)
@@ -668,7 +668,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
 
     bool executionSuccess;
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         executionSuccess = access.backend()->execSql(sqlQuery, boundValues, &values);
 
         if (!executionSuccess)
@@ -823,7 +823,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
             variantIdList << id;
         }
 
-        DatabaseAccess access;
+        CoreDbAccess access;
         QSqlQuery query = access.backend()->prepareQuery(QString::fromUtf8(
                     "SELECT DISTINCT Images.id, Images.name, Images.album, "
                     "       ImageInformation.rating, ImageInformation.creationDate, "
@@ -836,7 +836,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
         query.addBindValue(variantIdList);
         executionSuccess = query.execBatch
 */
-        DatabaseAccess access;
+        CoreDbAccess access;
         SqlQuery query = access.backend()->prepareQuery(QString::fromUtf8(
                              "SELECT DISTINCT Images.id, Images.name, Images.album, "
                              "       Albums.albumRoot, "

@@ -42,7 +42,7 @@
 #include "albuminfo.h"
 #include "albummanager.h"
 #include "applicationsettings.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "imageinfo.h"
 #include "thumbsdbaccess.h"
 #include "thumbsdb.h"
@@ -137,11 +137,11 @@ void ThumbsGenerator::slotStart()
 
         if ((*it)->type() == Album::PHYSICAL)
         {
-            d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+            d->allPicturesPath += CoreDbAccess().db()->getItemURLsInAlbum((*it)->id());
         }
         else if ((*it)->type() == Album::TAG)
         {
-            d->allPicturesPath += DatabaseAccess().db()->getItemURLsInTag((*it)->id());
+            d->allPicturesPath += CoreDbAccess().db()->getItemURLsInTag((*it)->id());
         }
     }
 

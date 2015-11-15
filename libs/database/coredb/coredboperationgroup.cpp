@@ -31,7 +31,7 @@
 
 #include "digikam_debug.h"
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbbackend.h"
 
 namespace Digikam
@@ -50,7 +50,7 @@ public:
 
 public:
 
-    DatabaseAccess* access;
+    CoreDbAccess* access;
     bool            acquired;
     QTime           timeAcquired;
     int             maxTime;
@@ -59,7 +59,7 @@ public:
 
     bool needsTransaction() const
     {
-        return DatabaseAccess::parameters().isSQLite();
+        return CoreDbAccess::parameters().isSQLite();
     }
 
     void acquire()
@@ -70,7 +70,7 @@ public:
         }
         else
         {
-            DatabaseAccess access;
+            CoreDbAccess access;
             acquired = access.backend()->beginTransaction();
         }
 
@@ -87,7 +87,7 @@ public:
             }
             else
             {
-                DatabaseAccess access;
+                CoreDbAccess access;
                 access.backend()->commitTransaction();
             }
         }
@@ -103,7 +103,7 @@ CoreDbOperationGroup::CoreDbOperationGroup()
     }
 }
 
-CoreDbOperationGroup::CoreDbOperationGroup(DatabaseAccess* const access)
+CoreDbOperationGroup::CoreDbOperationGroup(CoreDbAccess* const access)
     : d(new Private)
 {
     d->access = access;
@@ -128,7 +128,7 @@ void CoreDbOperationGroup::lift()
 
         if (d->access)
         {
-            DatabaseAccessUnlock unlock(d->access);
+            CoreDbAccessUnlock unlock(d->access);
         }
 
         d->acquire();

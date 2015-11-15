@@ -267,7 +267,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("File Format"), i18n("Return pictures with the image file format"));
-        QStringList formats = DatabaseAccess().db()->getFormatStatistics().keys();
+        QStringList formats = CoreDbAccess().db()->getFormatStatistics().keys();
         formats += formats;
         formats.sort();
         field->setChoice(formats);

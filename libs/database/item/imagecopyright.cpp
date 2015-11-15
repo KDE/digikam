@@ -35,7 +35,7 @@
 // Local includes
 
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "imagescanner.h"
 #include "template.h"
 
@@ -52,7 +52,7 @@ public:
         // set this as cache
         object->m_cache = this;
         // read all properties
-        infos = DatabaseAccess().db()->getImageCopyright(object->m_id, QString());
+        infos = CoreDbAccess().db()->getImageCopyright(object->m_id, QString());
     }
 
     ~ImageCopyrightCache()
@@ -107,7 +107,7 @@ void ImageCopyright::replaceFrom(const ImageCopyright& source)
         return;
     }
 
-    DatabaseAccess access;
+    CoreDbAccess access;
     access.db()->removeImageCopyrightProperties(m_id);
 
     if (!source.m_id)
@@ -150,7 +150,7 @@ void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
         uniqueness = AlbumDB::PropertyNoConstraint;
     }
 
-    DatabaseAccess().db()->setImageCopyrightProperty(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
+    CoreDbAccess().db()->setImageCopyrightProperty(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
                                                      creator, QString(), uniqueness);
 }
 
@@ -370,7 +370,7 @@ CopyrightInfo ImageCopyright::copyrightInfo(const QString& property) const
     }
     else
     {
-        QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
+        QList<CopyrightInfo> infos = CoreDbAccess().db()->getImageCopyright(m_id, property);
 
         if (!infos.isEmpty())
         {
@@ -399,7 +399,7 @@ QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property) con
     }
     else
     {
-        return DatabaseAccess().db()->getImageCopyright(m_id, property);
+        return CoreDbAccess().db()->getImageCopyright(m_id, property);
     }
 }
 
@@ -410,7 +410,7 @@ QString ImageCopyright::readSimpleProperty(const QString& property) const
 
 void ImageCopyright::setSimpleProperty(const QString& property, const QString& value)
 {
-    DatabaseAccess().db()->setImageCopyrightProperty(m_id, property, value, QString(), AlbumDB::PropertyUnique);
+    CoreDbAccess().db()->setImageCopyrightProperty(m_id, property, value, QString(), AlbumDB::PropertyUnique);
 }
 
 QString ImageCopyright::readLanguageProperty(const QString& property, const QString& languageCode)
@@ -466,7 +466,7 @@ void ImageCopyright::setLanguageProperty(const QString& property, const QString&
         language = QLatin1String("x-default");
     }
 
-    DatabaseAccess().db()->setImageCopyrightProperty(m_id, property, value, language, uniqueness);
+    CoreDbAccess().db()->setImageCopyrightProperty(m_id, property, value, language, uniqueness);
 }
 
 void ImageCopyright::removeProperties(const QString& property)
@@ -477,7 +477,7 @@ void ImageCopyright::removeProperties(const QString& property)
         return;
     }
 
-    DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property);
+    CoreDbAccess().db()->removeImageCopyrightProperties(m_id, property);
 }
 
 void ImageCopyright::removeLanguageProperty(const QString& property, const QString& languageCode)
@@ -487,7 +487,7 @@ void ImageCopyright::removeLanguageProperty(const QString& property, const QStri
         return;
     }
 
-    DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property, languageCode);
+    CoreDbAccess().db()->removeImageCopyrightProperties(m_id, property, languageCode);
 }
 
 int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const

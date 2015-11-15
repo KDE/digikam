@@ -80,7 +80,7 @@ extern "C"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "digikam_config.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "databaseguierrorhandler.h"
 #include "databaseparameters.h"
 #include "databaseserverstarter.h"
@@ -397,7 +397,7 @@ void AlbumManager::cleanUp()
 bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName,
                                  const QString& dbHostName, int dbPort, bool dbInternalServer) const
 {
-    DatabaseParameters params = DatabaseAccess::parameters();
+    DatabaseParameters params = CoreDbAccess::parameters();
 
     return params.databaseType   == dbType          &&
            params.databaseName   == dbName          &&
@@ -507,7 +507,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
 void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
 {
     // if there is no file at the new place, copy old one
-    DatabaseParameters params = DatabaseAccess::parameters();
+    DatabaseParameters params = CoreDbAccess::parameters();
 
     // New database type SQLITE
     if (newParams.isSQLite())
@@ -695,9 +695,9 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     disconnect(CollectionManager::instance(), 0, this, 0);
     CollectionManager::instance()->setWatchDisabled();
 
-    if (DatabaseAccess::databaseWatch())
+    if (CoreDbAccess::databaseWatch())
     {
-        disconnect(DatabaseAccess::databaseWatch(), 0, this, 0);
+        disconnect(CoreDbAccess::databaseWatch(), 0, this, 0);
     }
 
     d->albumWatch->clear();
@@ -744,10 +744,10 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         }
     }
 
-    DatabaseAccess::setParameters(params, DatabaseAccess::MainApplication);
+    CoreDbAccess::setParameters(params, CoreDbAccess::MainApplication);
 
-    DatabaseGUIErrorHandler* const handler = new DatabaseGUIErrorHandler(DatabaseAccess::parameters());
-    DatabaseAccess::initDatabaseErrorHandler(handler);
+    DatabaseGUIErrorHandler* const handler = new DatabaseGUIErrorHandler(CoreDbAccess::parameters());
+    CoreDbAccess::initDatabaseErrorHandler(handler);
 
     if (!handler->checkDatabaseConnection())
     {
@@ -758,7 +758,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
                                    "Please check the database settings in the <b>configuration menu</b>.</p>"
                                   ));
 
-        DatabaseAccess::setParameters(DatabaseParameters(), DatabaseAccess::DatabaseSlave);
+        CoreDbAccess::setParameters(DatabaseParameters(), CoreDbAccess::DatabaseSlave);
         QApplication::restoreOverrideCursor();
         return true;
     }
@@ -779,7 +779,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
         case ScanController::ContinueWithoutDatabase:
         {
-            QString errorMsg = DatabaseAccess().lastError();
+            QString errorMsg = CoreDbAccess().lastError();
 
             if (errorMsg.isEmpty())
             {
@@ -811,7 +811,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     // -- Locale Checking ---------------------------------------------------------
 
     QString currLocale = QString::fromUtf8((QTextCodec::codecForLocale()->name()));
-    QString dbLocale   = DatabaseAccess().db()->getSetting(QLatin1String("Locale"));
+    QString dbLocale   = CoreDbAccess().db()->getSetting(QLatin1String("Locale"));
 
     // guilty until proven innocent
     bool localeChanged = true;
@@ -840,7 +840,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             {
                 dbLocale = currLocale;
                 localeChanged = false;
-                DatabaseAccess().db()->setSetting(QLatin1String("Locale"), dbLocale);
+                CoreDbAccess().db()->setSetting(QLatin1String("Locale"), dbLocale);
             }
         }
         else
@@ -849,7 +849,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             dbLocale = currLocale;
 
             localeChanged = false;
-            DatabaseAccess().db()->setSetting(QLatin1String("Locale"), dbLocale);
+            CoreDbAccess().db()->setSetting(QLatin1String("Locale"), dbLocale);
         }
     }
     else
@@ -885,7 +885,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             exit(0);
         }
 
-        DatabaseAccess().db()->setSetting(QLatin1String("Locale"), currLocale);
+        CoreDbAccess().db()->setSetting(QLatin1String("Locale"), currLocale);
     }
 
     // -- UUID Checking ---------------------------------------------------------
@@ -1018,7 +1018,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    ThumbnailLoadThread::initializeThumbnailDatabase(DatabaseAccess::parameters().thumbnailParameters(),
+    ThumbnailLoadThread::initializeThumbnailDatabase(CoreDbAccess::parameters().thumbnailParameters(),
                                                      new ThumbsDbInfoProvider());
 
     DatabaseGUIErrorHandler* const thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbsDbAccess::parameters());
@@ -1072,20 +1072,20 @@ void AlbumManager::startScan()
     refresh();
 
     // listen to album database changes
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(albumChange(AlbumChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(albumChange(AlbumChangeset)),
             this, SLOT(slotAlbumChange(AlbumChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
             this, SLOT(slotTagChange(TagChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(SearchChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(searchChange(SearchChangeset)),
             this, SLOT(slotSearchChange(SearchChangeset)));
 
     // listen to collection image changes
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
             this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
             this, SLOT(slotImageTagChange(ImageTagChangeset)));
 
     emit signalAllAlbumsLoaded();
@@ -1294,7 +1294,7 @@ void AlbumManager::scanPAlbums()
     }
 
     // scan db and get a list of all albums
-    QList<AlbumInfo> currentAlbums = DatabaseAccess().db()->scanAlbums();
+    QList<AlbumInfo> currentAlbums = CoreDbAccess().db()->scanAlbums();
 
     // sort by relative path so that parents are created before children
     qSort(currentAlbums);
@@ -1426,7 +1426,7 @@ void AlbumManager::updateChangedPAlbums()
     d->updatePAlbumsTimer->stop();
 
     // scan db and get a list of all albums
-    QList<AlbumInfo> currentAlbums = DatabaseAccess().db()->scanAlbums();
+    QList<AlbumInfo> currentAlbums = CoreDbAccess().db()->scanAlbums();
     bool needScanPAlbums           = false;
 
     // Find the AlbumInfo for each id in changedPAlbums
@@ -1535,7 +1535,7 @@ void AlbumManager::scanTAlbums()
     }
 
     // Retrieve the list of tags from the database
-    TagInfo::List tList = DatabaseAccess().db()->scanTags();
+    TagInfo::List tList = CoreDbAccess().db()->scanTags();
 
     // sort the list. needed because we want the tags can be read in any order,
     // but we want to make sure that we are ensure to find the parent TAlbum
@@ -1726,7 +1726,7 @@ void AlbumManager::scanSAlbums()
     }
 
     // scan db and get a list of all albums
-    QList<SearchInfo> currentSearches = DatabaseAccess().db()->scanSearches();
+    QList<SearchInfo> currentSearches = CoreDbAccess().db()->scanSearches();
 
     QList<SearchInfo> newSearches;
 
@@ -2210,7 +2210,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     }
 
     ChangingDB changing(d);
-    int        id = DatabaseAccess().db()->addAlbum(albumRootId, albumPath, caption, date, category);
+    int        id = CoreDbAccess().db()->addAlbum(albumRootId, albumPath, caption, date, category);
 
     if (id == -1)
     {
@@ -2292,7 +2292,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     // now rename the album and subalbums in the database
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ChangingDB changing(d);
         access.db()->renameAlbum(album->id(), album->albumRootId(), album->albumPath());
 
@@ -2345,7 +2345,7 @@ bool AlbumManager::updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& er
     }
 
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ChangingDB changing(d);
         access.db()->setAlbumIcon(album->id(), iconID);
         album->m_iconId = iconID;
@@ -2386,7 +2386,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     }
 
     ChangingDB changing(d);
-    int id = DatabaseAccess().db()->addTag(parent->id(), name, iconkde, 0);
+    int id = CoreDbAccess().db()->addTag(parent->id(), name, iconkde, 0);
 
     if (id == -1)
     {
@@ -2444,7 +2444,7 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
     }
 
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ChangingDB changing(d);
         access.db()->deleteTag(album->id());
 
@@ -2513,7 +2513,7 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
     }
 
     ChangingDB changing(d);
-    DatabaseAccess().db()->setTagName(album->id(), name);
+    CoreDbAccess().db()->setTagName(album->id(), name);
     album->setTitle(name);
     emit signalAlbumRenamed(album);
 
@@ -2563,7 +2563,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
 
     emit signalAlbumAboutToBeAdded(album, newParent, newParent->lastChild());
     ChangingDB changing(d);
-    DatabaseAccess().db()->setTagParentID(album->id(), newParent->id());
+    CoreDbAccess().db()->setTagParentID(album->id(), newParent->id());
     album->setParent(newParent);
     emit signalAlbumAdded(album);
 
@@ -2597,7 +2597,7 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
     }
 
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ChangingDB changing(d);
         access.db()->setTagIcon(album->id(), iconKDE, iconID);
         QString albumRelativePath, iconKDE;
@@ -2612,7 +2612,7 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
 
 AlbumList AlbumManager::getRecentlyAssignedTags(bool includeInternal) const
 {
-    QList<int> tagIDs = DatabaseAccess().db()->getRecentlyAssignedTags();
+    QList<int> tagIDs = CoreDbAccess().db()->getRecentlyAssignedTags();
 
     AlbumList resultList;
 
@@ -2790,7 +2790,7 @@ SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type typ
         return album;
     }
 
-    int id = DatabaseAccess().db()->addSearch(type, name, query);
+    int id = CoreDbAccess().db()->addSearch(type, name, query);
 
     if (id == -1)
     {
@@ -2820,7 +2820,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
     DatabaseSearch::Type newType = (type == DatabaseSearch::UndefinedType) ? album->searchType() : type;
 
     ChangingDB changing(d);
-    DatabaseAccess().db()->updateSearch(album->id(), newType, newName, changedQuery);
+    CoreDbAccess().db()->updateSearch(album->id(), newType, newName, changedQuery);
 
     QString oldName = album->title();
 
@@ -2853,7 +2853,7 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
     emit signalAlbumAboutToBeDeleted(album);
 
     ChangingDB changing(d);
-    DatabaseAccess().db()->deleteSearch(album->id());
+    CoreDbAccess().db()->deleteSearch(album->id());
 
     d->allAlbumsIdHash.remove(album->globalID());
     emit signalAlbumDeleted(album);

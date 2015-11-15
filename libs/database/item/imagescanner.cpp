@@ -37,7 +37,7 @@
 
 #include "digikam_debug.h"
 #include "coredburl.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "albumdb.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
@@ -181,7 +181,7 @@ ImageScanner::ImageScanner(qlonglong imageid)
 {
     ItemShortInfo shortInfo;
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         shortInfo   = access.db()->getItemShortInfo(imageid);
         d->scanInfo = access.db()->getItemScanInfo(imageid);
     }
@@ -367,7 +367,7 @@ bool ImageScanner::scanFromIdenticalFile()
 {
     // Get a list of other images that are identical. Source image shall not be included.
     // When using the Commit functionality, d->scanInfo.id can be null.
-    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles(d->scanInfo.uniqueHash,
+    QList<ItemScanInfo> candidates = CoreDbAccess().db()->getIdenticalFiles(d->scanInfo.uniqueHash,
                                      d->scanInfo.fileSize, d->scanInfo.id);
 
     if (!candidates.isEmpty())
@@ -389,12 +389,12 @@ bool ImageScanner::scanFromIdenticalFile()
 
 void ImageScanner::commitCopyImageAttributes()
 {
-    DatabaseAccess().db()->copyImageAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
+    CoreDbAccess().db()->copyImageAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
 }
 
 bool ImageScanner::copyFromSource(qlonglong srcId)
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
 
     // some basic validity checking
     if (srcId == d->scanInfo.id)
@@ -426,7 +426,7 @@ void ImageScanner::prepareAddImage(int albumId)
 
 void ImageScanner::commitAddImage()
 {
-    d->scanInfo.id = DatabaseAccess().db()->addItem(d->scanInfo.albumID, d->scanInfo.itemName,
+    d->scanInfo.id = CoreDbAccess().db()->addItem(d->scanInfo.albumID, d->scanInfo.itemName,
                                                     d->scanInfo.status, d->scanInfo.category,
                                                     d->scanInfo.modificationDate, d->scanInfo.fileSize,
                                                     d->scanInfo.uniqueHash);
@@ -439,7 +439,7 @@ void ImageScanner::prepareUpdateImage()
 
 void ImageScanner::commitUpdateImage()
 {
-    DatabaseAccess().db()->updateItem(d->scanInfo.id, d->scanInfo.category,
+    CoreDbAccess().db()->updateItem(d->scanInfo.id, d->scanInfo.category,
                                       d->scanInfo.modificationDate, d->scanInfo.fileSize,
                                       d->scanInfo.uniqueHash);
 }
@@ -561,7 +561,7 @@ void ImageScanner::scanImageInformation()
         // Does _not_ update rating and orientation (unless dims were exchanged)!
 /*
         int orientation = d->metadata.getImageOrientation();
-        QVariantList data = DatabaseAccess().db()->getImageInformation(d->scanInfo.id,
+        QVariantList data = CoreDbAccess().db()->getImageInformation(d->scanInfo.id,
                                                                        DatabaseFields::Width |
                                                                        DatabaseFields::Height |
                                                                        DatabaseFields::Orientation);
@@ -593,13 +593,13 @@ void ImageScanner::commitImageInformation()
 {
     if (d->scanMode == NewScan)
     {
-        DatabaseAccess().db()->addImageInformation(d->scanInfo.id,
+        CoreDbAccess().db()->addImageInformation(d->scanInfo.id,
                                                    d->commit.imageInformationInfos,
                                                    d->commit.imageInformationFields);
     }
     else // d->scanMode == Rescan or d->scanMode == ModifiedScan
     {
-        DatabaseAccess().db()->changeImageInformation(d->scanInfo.id,
+        CoreDbAccess().db()->changeImageInformation(d->scanInfo.id,
                                                       d->commit.imageInformationInfos,
                                                       d->commit.imageInformationFields);
     }
@@ -655,7 +655,7 @@ void ImageScanner::scanImageMetadata()
 
 void ImageScanner::commitImageMetadata()
 {
-    DatabaseAccess().db()->addImageMetadata(d->scanInfo.id, d->commit.imageMetadataInfos);
+    CoreDbAccess().db()->addImageMetadata(d->scanInfo.id, d->commit.imageMetadataInfos);
 }
 
 void ImageScanner::scanImagePosition()
@@ -684,7 +684,7 @@ void ImageScanner::scanImagePosition()
 
 void ImageScanner::commitImagePosition()
 {
-    DatabaseAccess().db()->addImagePosition(d->scanInfo.id, d->commit.imagePositionInfos);
+    CoreDbAccess().db()->addImagePosition(d->scanInfo.id, d->commit.imagePositionInfos);
 }
 
 void ImageScanner::scanImageComments()
@@ -721,7 +721,7 @@ void ImageScanner::scanImageComments()
 
 void ImageScanner::commitImageComments()
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     ImageComments comments(access, d->scanInfo.id);
 
     // Description
@@ -901,7 +901,7 @@ void ImageScanner::scanTags()
 
 void ImageScanner::commitTags()
 {
-    QList<int> currentTags = DatabaseAccess().db()->getItemTagIDs(d->scanInfo.id);
+    QList<int> currentTags = CoreDbAccess().db()->getItemTagIDs(d->scanInfo.id);
     QVector<int> colorTags = TagsCache::instance()->colorLabelTags();
     QVector<int> pickTags  = TagsCache::instance()->pickLabelTags();
     QList<int> removeTags;
@@ -917,10 +917,10 @@ void ImageScanner::commitTags()
 
     if (!removeTags.isEmpty())
     {
-        DatabaseAccess().db()->removeTagsFromItems(QList<qlonglong>() << d->scanInfo.id, removeTags);
+        CoreDbAccess().db()->removeTagsFromItems(QList<qlonglong>() << d->scanInfo.id, removeTags);
     }
 
-    DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << d->scanInfo.id, d->commit.tagIds);
+    CoreDbAccess().db()->addTagsToItems(QList<qlonglong>() << d->scanInfo.id, d->commit.tagIds);
 }
 
 void ImageScanner::scanFaces()
@@ -985,24 +985,24 @@ void ImageScanner::commitImageHistory()
 {
     if (!d->commit.historyXml.isEmpty())
     {
-        DatabaseAccess().db()->setImageHistory(d->scanInfo.id, d->commit.historyXml);
+        CoreDbAccess().db()->setImageHistory(d->scanInfo.id, d->commit.historyXml);
         // Delay history resolution by setting this tag:
         // Resolution depends on the presence of other images, possibly only when the scanning process has finished
-        DatabaseAccess().db()->addItemTag(d->scanInfo.id, TagsCache::instance()->
+        CoreDbAccess().db()->addItemTag(d->scanInfo.id, TagsCache::instance()->
                                           getOrCreateInternalTag(InternalTagName::needResolvingHistory()));
         d->hasHistoryToResolve = true;
     }
 
     if (!d->commit.uuid.isNull())
     {
-        DatabaseAccess().db()->setImageUuid(d->scanInfo.id, d->commit.uuid);
+        CoreDbAccess().db()->setImageUuid(d->scanInfo.id, d->commit.uuid);
     }
 }
 
 void ImageScanner::scanImageHistoryIfModified()
 {
     // If a file has a modified history, it must have a new UUID
-    QString previousUuid = DatabaseAccess().db()->getImageUuid(d->scanInfo.id);
+    QString previousUuid = CoreDbAccess().db()->getImageUuid(d->scanInfo.id);
     QString currentUuid  = d->metadata.getImageUniqueId();
 
     if (!currentUuid.isEmpty() && previousUuid != currentUuid)
@@ -1013,7 +1013,7 @@ void ImageScanner::scanImageHistoryIfModified()
 
 bool ImageScanner::resolveImageHistory(qlonglong id, QList<qlonglong>* needTaggingIds)
 {
-    ImageHistoryEntry history = DatabaseAccess().db()->getImageHistory(id);
+    ImageHistoryEntry history = CoreDbAccess().db()->getImageHistory(id);
     return resolveImageHistory(id, history.history, needTaggingIds);
 }
 
@@ -1043,20 +1043,20 @@ bool ImageScanner::resolveImageHistory(qlonglong imageId, const QString& history
     }
 
     QPair<QList<qlonglong>, QList<qlonglong> > cloud = graph.relationCloudParallel();
-    DatabaseAccess().db()->addImageRelations(cloud.first, cloud.second, DatabaseRelation::DerivedFrom);
+    CoreDbAccess().db()->addImageRelations(cloud.first, cloud.second, DatabaseRelation::DerivedFrom);
 
     int needResolvingTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needResolvingHistory());
     int needTaggingTag   = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
 
     // remove the needResolvingHistory tag from all images in graph
-    DatabaseAccess().db()->removeTagsFromItems(graph.allImageIds(), QList<int>() << needResolvingTag);
+    CoreDbAccess().db()->removeTagsFromItems(graph.allImageIds(), QList<int>() << needResolvingTag);
 
     // mark a single image from the graph (sufficient for find the full relation cloud)
     QList<ImageInfo> roots = graph.rootImages();
 
     if (!roots.isEmpty())
     {
-        DatabaseAccess().db()->addItemTag(roots.first().id(), needTaggingTag);
+        CoreDbAccess().db()->addItemTag(roots.first().id(), needTaggingTag);
 
         if (needTaggingIds)
         {
@@ -1090,7 +1090,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     int needTaggingTag         = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
 
     // Remove all relevant tags
-    DatabaseAccess().db()->removeTagsFromItems(graph.allImageIds(), QList<int>() << originalVersionTag
+    CoreDbAccess().db()->removeTagsFromItems(graph.allImageIds(), QList<int>() << originalVersionTag
         << currentVersionTag << intermediateVersionTag << needTaggingTag);
 
     if (!graph.hasEdges())
@@ -1126,17 +1126,17 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
 
     if (!originals.isEmpty())
     {
-        DatabaseAccess().db()->addTagsToItems(originals, QList<int>() << originalVersionTag);
+        CoreDbAccess().db()->addTagsToItems(originals, QList<int>() << originalVersionTag);
     }
 
     if (!intermediates.isEmpty())
     {
-        DatabaseAccess().db()->addTagsToItems(intermediates, QList<int>() << intermediateVersionTag);
+        CoreDbAccess().db()->addTagsToItems(intermediates, QList<int>() << intermediateVersionTag);
     }
 
     if (!currents.isEmpty())
     {
-        DatabaseAccess().db()->addTagsToItems(currents, QList<int>() << currentVersionTag);
+        CoreDbAccess().db()->addTagsToItems(currents, QList<int>() << currentVersionTag);
     }
 }
 
@@ -1235,7 +1235,7 @@ static bool uuidDoesNotDiffer(const HistoryImageId& referenceId, qlonglong id)
 {
     if (referenceId.hasUuid())
     {
-        QString uuid = DatabaseAccess().db()->getImageUuid(id);
+        QString uuid = CoreDbAccess().db()->getImageUuid(id);
 
         if (!uuid.isEmpty())
         {
@@ -1278,7 +1278,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 
     if (historyId.hasUuid())
     {
-        uuidList = DatabaseAccess().db()->getItemsForUuid(historyId.m_uuid);
+        uuidList = CoreDbAccess().db()->getItemsForUuid(historyId.m_uuid);
 
         // If all images had a UUID, we would be finished and could return here with a result:
 /*
@@ -1291,9 +1291,9 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     }
 
     // Second: uniqueHash + fileSize. Sufficient to assume that a file is identical, but subject to frequent change.
-    if (historyId.hasUniqueHashIdentifier() && DatabaseAccess().db()->isUniqueHashV2())
+    if (historyId.hasUniqueHashIdentifier() && CoreDbAccess().db()->isUniqueHashV2())
     {
-        QList<ItemScanInfo> infos = DatabaseAccess().db()->getIdenticalFiles(historyId.m_uniqueHash, historyId.m_fileSize);
+        QList<ItemScanInfo> infos = CoreDbAccess().db()->getIdenticalFiles(historyId.m_uniqueHash, historyId.m_fileSize);
 
         if (!infos.isEmpty())
         {
@@ -1315,7 +1315,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
     // but not to metadata changes.
     if (historyId.hasFileName() && historyId.hasCreationDate())
     {
-        QList<qlonglong> ids = DatabaseAccess().db()->findByNameAndCreationDate(historyId.m_fileName, historyId.m_creationDate);
+        QList<qlonglong> ids = CoreDbAccess().db()->findByNameAndCreationDate(historyId.m_fileName, historyId.m_creationDate);
 
         if (!ids.isEmpty())
         {
@@ -1339,7 +1339,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
             {
                 QString album      = CollectionManager::instance()->album(file.path());
                 QString name       = file.fileName();
-                ItemShortInfo info = DatabaseAccess().db()->getItemShortInfo(location.id(), album, name);
+                ItemShortInfo info = CoreDbAccess().db()->getItemShortInfo(location.id(), album, name);
 
                 if (info.id)
                 {
@@ -1514,7 +1514,7 @@ void ImageScanner::scanVideoMetadata()
 
 void ImageScanner::commitVideoMetadata()
 {
-    DatabaseAccess().db()->addVideoMetadata(d->scanInfo.id, d->commit.imageMetadataInfos);
+    CoreDbAccess().db()->addVideoMetadata(d->scanInfo.id, d->commit.imageMetadataInfos);
 }
 
 // ---------------------------------------------------------------------------------------
@@ -1577,14 +1577,14 @@ QString ImageScanner::uniqueHash() const
     // the QByteArray is an ASCII hex string
     if (d->scanInfo.category == DatabaseItem::Image)
     {
-        if (DatabaseAccess().db()->isUniqueHashV2())
+        if (CoreDbAccess().db()->isUniqueHashV2())
             return QString::fromUtf8(d->img.getUniqueHashV2());
         else
             return QString::fromUtf8(d->img.getUniqueHash());
     }
     else
     {
-        if (DatabaseAccess().db()->isUniqueHashV2())
+        if (CoreDbAccess().db()->isUniqueHashV2())
             return QString::fromUtf8(DImg::getUniqueHashV2(d->fileInfo.filePath()));
         else
             return QString::fromUtf8(DImg::getUniqueHash(d->fileInfo.filePath()));
@@ -1892,7 +1892,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     QVariantList imageInformationFields;
 
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         imagesFields = access.db()->getImagesFields(imageid,
                                                     DatabaseFields::Name             |
                                                     DatabaseFields::ModificationDate |
@@ -1934,7 +1934,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
 void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContainer* const container)
 {
     // read from database
-    QVariantList fields      = DatabaseAccess().db()->getImageMetadata(imageid);
+    QVariantList fields      = CoreDbAccess().db()->getImageMetadata(imageid);
     // check we have at least one valid field
     container->allFieldsNull = !hasValidField(fields);
 
@@ -1968,7 +1968,7 @@ void ImageScanner::fillMetadataContainer(qlonglong imageid, ImageMetadataContain
 void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataContainer* const container)
 {
     // read from database
-    QVariantList fields      = DatabaseAccess().db()->getVideoMetadata(imageid);
+    QVariantList fields      = CoreDbAccess().db()->getVideoMetadata(imageid);
     // check we have at least one valid field
     container->allFieldsNull = !hasValidField(fields);
 

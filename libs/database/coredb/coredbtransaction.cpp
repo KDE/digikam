@@ -26,7 +26,7 @@
 // Local includes
 
 #include "albumdb.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbbackend.h"
 
 namespace Digikam
@@ -35,11 +35,11 @@ namespace Digikam
 CoreDbTransaction::CoreDbTransaction()
     : m_access(0)
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     access.backend()->beginTransaction();
 }
 
-CoreDbTransaction::CoreDbTransaction(DatabaseAccess* const access)
+CoreDbTransaction::CoreDbTransaction(CoreDbAccess* const access)
     : m_access(access)
 {
     m_access->backend()->beginTransaction();
@@ -53,7 +53,7 @@ CoreDbTransaction::~CoreDbTransaction()
     }
     else
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         access.backend()->commitTransaction();
     }
 }

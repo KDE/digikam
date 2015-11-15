@@ -34,7 +34,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbwatch.h"
 #include "imageinfo.h"
 #include "imagecomments.h"
@@ -152,7 +152,7 @@ void MetadataHub::load(const ImageInfo& info)
     CaptionsMap titleMap;
 
     {
-        DatabaseAccess access;
+        CoreDbAccess access;
         ImageComments comments = info.imageComments(access);
         commentMap             = comments.toCaptionsMap();
         titleMap               = comments.toCaptionsMap(DatabaseComment::Title);

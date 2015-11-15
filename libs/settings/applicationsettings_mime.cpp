@@ -30,7 +30,7 @@
 #include "drawdecoder.h"
 #include "applicationsettings.h"
 #include "applicationsettings_p.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "albumdb.h"
 
 using namespace RawEngine;
@@ -40,13 +40,13 @@ namespace Digikam
 
 void ApplicationSettings::addToImageFileFilter(const QString& extensions)
 {
-    DatabaseAccess().db()->addToUserImageFilterSettings(extensions);
+    CoreDbAccess().db()->addToUserImageFilterSettings(extensions);
 }
 
 QString ApplicationSettings::getImageFileFilter() const
 {
     QStringList imageSettings;
-    DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
+    CoreDbAccess().db()->getFilterSettings(&imageSettings, 0, 0);
     QStringList wildcards;
 
     foreach(const QString& suffix, imageSettings)
@@ -60,7 +60,7 @@ QString ApplicationSettings::getImageFileFilter() const
 QString ApplicationSettings::getMovieFileFilter() const
 {
     QStringList movieSettings;
-    DatabaseAccess().db()->getFilterSettings(0, &movieSettings, 0);
+    CoreDbAccess().db()->getFilterSettings(0, &movieSettings, 0);
     QStringList wildcards;
 
     foreach(const QString& suffix, movieSettings)
@@ -74,7 +74,7 @@ QString ApplicationSettings::getMovieFileFilter() const
 QString ApplicationSettings::getAudioFileFilter() const
 {
     QStringList audioSettings;
-    DatabaseAccess().db()->getFilterSettings(0, 0, &audioSettings);
+    CoreDbAccess().db()->getFilterSettings(0, 0, &audioSettings);
     QStringList wildcards;
 
     foreach(const QString& suffix, audioSettings)
@@ -89,7 +89,7 @@ QString ApplicationSettings::getRawFileFilter() const
 {
     QStringList supportedRaws = DRawDecoder::rawFilesList();
     QStringList imageSettings;
-    DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
+    CoreDbAccess().db()->getFilterSettings(&imageSettings, 0, 0);
 
     // form intersection: those extensions that are supported as RAW as well in the list of allowed extensions
     for (QStringList::iterator it = supportedRaws.begin(); it != supportedRaws.end(); )
@@ -117,7 +117,7 @@ QString ApplicationSettings::getRawFileFilter() const
 QString ApplicationSettings::getAllFileFilter() const
 {
     QStringList imageFilter, audioFilter, videoFilter;
-    DatabaseAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
+    CoreDbAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
     QStringList wildcards;
 
     foreach(const QString& suffix, imageFilter)

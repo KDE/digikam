@@ -40,7 +40,7 @@
 #include "albummanager.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "databaseparameters.h"
 #include "scancontroller.h"
 #include "setup.h"
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 
     ScanController::instance()->shutDown();
 
-    DatabaseAccess::cleanUpDatabase();
+    CoreDbAccess::cleanUpDatabase();
     ThumbsDbAccess::cleanUpDatabase();
 
     return 0;

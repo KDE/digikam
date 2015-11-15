@@ -47,7 +47,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "applicationsettings.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "fileactionmngr.h"
 #include "imageattributeswatch.h"
 #include "imagecomments.h"
@@ -200,7 +200,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
             if (p && !newName.isEmpty())
             {
-                DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
+                CoreDbAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
                 _url = KIOWrapper::upUrl(_url);
                 _url.setPath(newName);
             }
@@ -212,7 +212,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         if (attributes.contains(QLatin1String("comment")))
         {
             QString comment        = attributes[QLatin1String("comment")].toString();
-            DatabaseAccess access;
+            CoreDbAccess access;
             ImageComments comments = d->info.imageComments(access);
             // we set a comment with default language, author and date null
             comments.addComment(comment);
@@ -241,7 +241,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         if (attributes.contains(QLatin1String("title")))
         {
             QString title          = attributes[QLatin1String("title")].toString();
-            DatabaseAccess access;
+            CoreDbAccess access;
             ImageComments comments = d->info.imageComments(access);
             // we set a comment with default language, author and date null
             comments.addTitle(title);
@@ -255,7 +255,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
             QStringList tagspaths = attributes[QLatin1String("tagspath")].toStringList();
 
             QList<int> tagIds     = TagsCache::instance()->getOrCreateTags(tagspaths);
-            DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << d->info.id(), tagIds);
+            CoreDbAccess().db()->addTagsToItems(QList<qlonglong>() << d->info.id(), tagIds);
             attributes.remove(QLatin1String("tagspath"));
         }
 
@@ -419,7 +419,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
         // Remove all Comments.
         if (attributes.contains(QLatin1String("comment")))
         {
-            DatabaseAccess access;
+            CoreDbAccess access;
             ImageComments comments = d->info.imageComments(access);
             comments.removeAll(DatabaseComment::Comment);
             attributes.removeAll(QLatin1String("comment"));
@@ -444,7 +444,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
         // Remove all Titles.
         if (attributes.contains(QLatin1String("title")))
         {
-            DatabaseAccess access;
+            CoreDbAccess access;
             ImageComments comments = d->info.imageComments(access);
             comments.removeAll(DatabaseComment::Title);
             attributes.removeAll(QLatin1String("title"));

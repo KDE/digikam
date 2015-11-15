@@ -39,7 +39,7 @@
 #include "dimg.h"
 #include "albumdb.h"
 #include "albummanager.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "maintenancethread.h"
 
 namespace Digikam
@@ -107,7 +107,7 @@ void FingerPrintsGenerator::slotStart()
         d->albumList = AlbumManager::instance()->allPAlbums();
     }
 
-    QStringList dirty = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
+    QStringList dirty = CoreDbAccess().db()->getDirtyOrMissingFingerprintURLs();
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
@@ -118,11 +118,11 @@ void FingerPrintsGenerator::slotStart()
 
         if ((*it)->type() == Album::PHYSICAL)
         {
-            aPaths = DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+            aPaths = CoreDbAccess().db()->getItemURLsInAlbum((*it)->id());
         }
         else if ((*it)->type() == Album::TAG)
         {
-            aPaths = DatabaseAccess().db()->getItemURLsInTag((*it)->id());
+            aPaths = CoreDbAccess().db()->getItemURLsInTag((*it)->id());
         }
 
         if (!d->rebuildAll)

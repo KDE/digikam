@@ -248,10 +248,10 @@ public:
      * Retrieve the ImageComments object for this item.
      * This object allows full read and write access to all comments
      * and their properties.
-     * You need to hold DatabaseAccess to ensure the validity.
+     * You need to hold CoreDbAccess to ensure the validity.
      * For simple, cached read access see comment().
      */
-    ImageComments imageComments(DatabaseAccess& access) const;
+    ImageComments imageComments(CoreDbAccess& access) const;
 
     /**
      * Retrieve the ImageCopyright object for this item.

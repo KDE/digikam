@@ -70,7 +70,7 @@ int CoreDbSchemaUpdater::uniqueHashVersion()
 
 bool CoreDbSchemaUpdater::isUniqueHashUpToDate()
 {
-    return DatabaseAccess().db()->getUniqueHashVersion() >= uniqueHashVersion();
+    return CoreDbAccess().db()->getUniqueHashVersion() >= uniqueHashVersion();
 }
 
 // --------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ public:
     DatabaseParameters      parameters;
 
     // legacy
-    DatabaseAccess*         access;
+    CoreDbAccess*         access;
 
     QString                 lastErrorMessage;
     InitializationObserver* observer;
@@ -119,7 +119,7 @@ CoreDbSchemaUpdater::~CoreDbSchemaUpdater()
     delete d;
 }
 
-void CoreDbSchemaUpdater::setDatabaseAccess(DatabaseAccess* const access)
+void CoreDbSchemaUpdater::setCoreDbAccess(CoreDbAccess* const access)
 {
     d->access = access;
 }
@@ -558,7 +558,7 @@ bool CoreDbSchemaUpdater::updateUniqueHash()
     {
         CoreDbTransaction transaction;
 
-        DatabaseAccess().db()->setUniqueHashVersion(uniqueHashVersion());
+        CoreDbAccess().db()->setUniqueHashVersion(uniqueHashVersion());
 
         CollectionScanner scanner;
         scanner.setNeedFileCount(true);

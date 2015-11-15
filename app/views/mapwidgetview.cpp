@@ -244,7 +244,7 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
             // Note: Here we only monitor changes to the database, because changes to the model
             //       are also sent when thumbnails are generated, and we don't want to update
             //       the marker tiler for that!
-            connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
+            connect(CoreDbAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
                     this, SLOT(slotImageChange(ImageChangeset)), Qt::QueuedConnection);
             break;
 

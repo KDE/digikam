@@ -33,7 +33,7 @@
 #include "albumdb.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "imageinfo.h"
 #include "thumbnailcreator.h"
 

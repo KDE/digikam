@@ -32,7 +32,7 @@
 
 #include "digikam_debug.h"
 #include "albummanager.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "coredbchangesets.h"
 #include "databaseface.h"
 #include "coredbwatch.h"
@@ -97,10 +97,10 @@ ImageAlbumModel::ImageAlbumModel(QObject* const parent)
     connect(this, SIGNAL(readyForIncrementalRefresh()),
             this, SLOT(incrementalRefresh()));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
             this, SLOT(slotCollectionImageChange(CollectionImageChangeset)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(SearchChangeset)),
+    connect(CoreDbAccess::databaseWatch(), SIGNAL(searchChange(SearchChangeset)),
             this, SLOT(slotSearchChange(SearchChangeset)));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),

@@ -38,7 +38,7 @@
 #include "dimg.h"
 #include "albumdb.h"
 #include "albummanager.h"
-#include "databaseaccess.h"
+#include "coredbaccess.h"
 #include "tagscache.h"
 #include "maintenancethread.h"
 
@@ -112,7 +112,7 @@ void ImageQualitySorter::slotStart()
     }
 
     // Get all item in DB which do not have any Pick Label assigned.
-    QStringList dirty = DatabaseAccess().db()->getItemsURLsWithTag(TagsCache::instance()->tagForPickLabel(NoPickLabel));
+    QStringList dirty = CoreDbAccess().db()->getItemsURLsWithTag(TagsCache::instance()->tagForPickLabel(NoPickLabel));
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 
@@ -123,11 +123,11 @@ void ImageQualitySorter::slotStart()
 
         if ((*it)->type() == Album::PHYSICAL)
         {
-            aPaths = DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
+            aPaths = CoreDbAccess().db()->getItemURLsInAlbum((*it)->id());
         }
         else if ((*it)->type() == Album::TAG)
         {
-            aPaths = DatabaseAccess().db()->getItemURLsInTag((*it)->id());
+            aPaths = CoreDbAccess().db()->getItemURLsInTag((*it)->id());
         }
 
         if (d->mode == NonAssignedItems)

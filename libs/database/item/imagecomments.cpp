@@ -49,7 +49,7 @@ public:
     {
     }
 
-    void init(DatabaseAccess& access, qlonglong imageId)
+    void init(CoreDbAccess& access, qlonglong imageId)
     {
         id = imageId;
         infos = access.db()->getImageComments(id);
@@ -159,11 +159,11 @@ ImageComments::ImageComments()
 ImageComments::ImageComments(qlonglong imageid)
     : d(new Private)
 {
-    DatabaseAccess access;
+    CoreDbAccess access;
     d->init(access, imageid);
 }
 
-ImageComments::ImageComments(DatabaseAccess& access, qlonglong imageid)
+ImageComments::ImageComments(CoreDbAccess& access, qlonglong imageid)
     : d(new Private)
 {
     d->init(access, imageid);
@@ -622,11 +622,11 @@ void ImageComments::apply()
         return;
     }
 
-    DatabaseAccess access;
+    CoreDbAccess access;
     apply(access);
 }
 
-void ImageComments::apply(DatabaseAccess& access)
+void ImageComments::apply(CoreDbAccess& access)
 {
     if (!d)
     {

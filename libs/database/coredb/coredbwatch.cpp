@@ -161,7 +161,7 @@ void CoreDbWatch::initializeRemote(DatabaseMode mode)
         QDBusConnection::sessionBus().registerObject(QLatin1String("/ChangesetRelay"), this);
 
         // KIOSlave do not have an event loop which is needed for receiving DBus signals.
-        // See also the event loop in DatabaseAccess::setParameters.
+        // See also the event loop in CoreDbAccess::setParameters.
         d->slaveThread = new DBusSignalListenerThread(this, d);
     }
     else
@@ -195,7 +195,7 @@ void CoreDbWatch::doAnyProcessing()
 {
     // In a slave we have no event loop.
     // This method is called when a slave begins a new operation
-    // (it calls DatabaseAccess::setParameters then).
+    // (it calls CoreDbAccess::setParameters then).
     // Allow here queued signals to proceed that may be caused by CoreDbWatch signals
     // that were send from within the DBus listener thread (see above).
     QEventLoop loop;

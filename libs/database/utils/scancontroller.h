@@ -68,7 +68,7 @@ public:
 
 
     /**
-     * Calls DatabaseAccess::checkReadyForUse(), providing progress
+     * Calls CoreDbAccess::checkReadyForUse(), providing progress
      * feedback if schema updating occurs.
      * Synchronous, returns when ready.
      */
