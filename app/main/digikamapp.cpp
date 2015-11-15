@@ -81,7 +81,7 @@
 #include "collectionscanner.h"
 #include "collectionmanager.h"
 #include "componentsinfo.h"
-#include "databasethumbnailinfoprovider.h"
+#include "coredbthumbinfoprovider.h"
 #include "digikamadaptor.h"
 #include "dio.h"
 #include "dlogoaction.h"
