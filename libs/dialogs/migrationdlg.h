@@ -35,7 +35,7 @@
 
 #include "databasewidget.h"
 #include "databasebackend.h"
-#include "databasecopymanager.h"
+#include "coredbcopymanager.h"
 
 namespace Digikam
 {
@@ -54,7 +54,7 @@ public:
 
 public:
 
-    DatabaseCopyManager m_copyManager;
+    CoreDbCopyManager m_copyManager;
 
 private:
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-14
- * Description : database migration dialog
+ * Description : Core database copy manager for migration operations.
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databasecopymanager.h"
+#include "coredbcopymanager.h"
 
 // Qt includes
 
@@ -44,21 +44,21 @@
 namespace Digikam
 {
 
-DatabaseCopyManager::DatabaseCopyManager()
+CoreDbCopyManager::CoreDbCopyManager()
 {
     m_isStopProcessing = false;
 }
 
-DatabaseCopyManager::~DatabaseCopyManager()
+CoreDbCopyManager::~CoreDbCopyManager()
 {
 }
 
-void DatabaseCopyManager::stopProcessing()
+void CoreDbCopyManager::stopProcessing()
 {
     m_isStopProcessing = true;
 }
 
-void DatabaseCopyManager::copyDatabases(const DatabaseParameters& fromDBParameters, DatabaseParameters& toDBParameters)
+void CoreDbCopyManager::copyDatabases(const DatabaseParameters& fromDBParameters, DatabaseParameters& toDBParameters)
 {
     m_isStopProcessing = false;
     DatabaseLocking fromLocking;
@@ -66,7 +66,7 @@ void DatabaseCopyManager::copyDatabases(const DatabaseParameters& fromDBParamete
 
     if (!fromDBbackend.open(fromDBParameters))
     {
-        emit finished(DatabaseCopyManager::failed, i18n("Error while opening the source database."));
+        emit finished(CoreDbCopyManager::failed, i18n("Error while opening the source database."));
         return;
     }
 
@@ -75,7 +75,7 @@ void DatabaseCopyManager::copyDatabases(const DatabaseParameters& fromDBParamete
 
     if (!toDBbackend.open(toDBParameters))
     {
-        emit finished(DatabaseCopyManager::failed, i18n("Error while opening the target database."));
+        emit finished(CoreDbCopyManager::failed, i18n("Error while opening the target database."));
         fromDBbackend.close();
         return;
     }
@@ -114,7 +114,7 @@ void DatabaseCopyManager::copyDatabases(const DatabaseParameters& fromDBParamete
     {
         if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS %1;").arg(tables[i])) != DatabaseCoreBackend::NoErrors)
         {
-            emit finished(DatabaseCopyManager::failed, i18n("Error while scrubbing the target database."));
+            emit finished(CoreDbCopyManager::failed, i18n("Error while scrubbing the target database."));
             fromDBbackend.close();
             toDBbackend.close();
             return;
@@ -122,7 +122,7 @@ void DatabaseCopyManager::copyDatabases(const DatabaseParameters& fromDBParamete
     }
     if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS Settings;")) != DatabaseCoreBackend::NoErrors)
     {
-        emit finished(DatabaseCopyManager::failed, i18n("Error while scrubbing the target database."));
+        emit finished(CoreDbCopyManager::failed, i18n("Error while scrubbing the target database."));
         fromDBbackend.close();
         toDBbackend.close();
         return;
@@ -136,7 +136,7 @@ void DatabaseCopyManager::copyDatabases(const DatabaseParameters& fromDBParamete
 
     if (!updater.update())
     {
-        emit finished(DatabaseCopyManager::failed, i18n("Error while creating the database schema."));
+        emit finished(CoreDbCopyManager::failed, i18n("Error while creating the database schema."));
         fromDBbackend.close();
         toDBbackend.close();
         return;
@@ -170,10 +170,10 @@ void DatabaseCopyManager::copyDatabases(const DatabaseParameters& fromDBParamete
     fromDBbackend.close();
     toDBbackend.close();
 
-    emit finished(DatabaseCopyManager::success, QString());
+    emit finished(CoreDbCopyManager::success, QString());
 }
 
-bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, 
+bool CoreDbCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, 
                                     DatabaseBackend& toDBbackend, const QString& toActionName)
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: trying to copy contents from DB with ActionName: [" << fromActionName
@@ -267,7 +267,7 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
         {
             qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: error while converting table data. Details: " << toDBbackend.lastSQLError();
             QString errorMsg = i18n("Error while converting the database.\n Details: %1", toDBbackend.lastSQLError().databaseText());
-            emit finished(DatabaseCopyManager::failed, errorMsg);
+            emit finished(CoreDbCopyManager::failed, errorMsg);
             return false;
         }
     }
@@ -275,11 +275,11 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QStrin
     return true;
 }
 
-void DatabaseCopyManager::handleClosing(bool isStopThread, DatabaseBackend& fromDBbackend, DatabaseBackend& toDBbackend)
+void CoreDbCopyManager::handleClosing(bool isStopThread, DatabaseBackend& fromDBbackend, DatabaseBackend& toDBbackend)
 {
     if (isStopThread)
     {
-        emit finished(DatabaseCopyManager::canceled, QLatin1String(""));
+        emit finished(CoreDbCopyManager::canceled, QLatin1String(""));
     }
 
     fromDBbackend.close();

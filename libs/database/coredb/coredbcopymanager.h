@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-14
- * Description : database migration dialog
+ * Description : Core database copy manager for migration operations.
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASECOPYMANAGER_H
-#define DATABASECOPYMANAGER_H
+#ifndef COREDATABASECOPYMANAGER_H
+#define COREDATABASECOPYMANAGER_H
 
 // Qt includes
 
@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT DatabaseCopyManager : public QObject
+class DIGIKAM_DATABASE_EXPORT CoreDbCopyManager : public QObject
 {
     Q_OBJECT
 
@@ -51,8 +51,8 @@ public:
 
 public:
 
-    DatabaseCopyManager();
-    ~DatabaseCopyManager();
+    CoreDbCopyManager();
+    ~CoreDbCopyManager();
 
     void copyDatabases(const DatabaseParameters& fromDBParameters, DatabaseParameters& toDBParameters);
 
@@ -80,4 +80,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DATABASECOPYMANAGER_H
+#endif // COREDATABASECOPYMANAGER_H

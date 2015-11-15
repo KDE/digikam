@@ -51,11 +51,11 @@ set(libdatabase_SRCS
     coredb/databasebackend.cpp
     coredb/databaseoperationgroup.cpp
     coredb/databaseurl.cpp
-    coredb/databasecopymanager.cpp
     coredb/downloadhistory.cpp
     coredb/namefilter.cpp
     coredb/searchxml.cpp
     coredb/coredbchecker.cpp
+    coredb/coredbcopymanager.cpp
     coredb/coredbconstants.cpp
     coredb/coredbtransaction.cpp
     coredb/coredbschemaupdater.cpp

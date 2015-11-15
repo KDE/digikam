@@ -54,7 +54,7 @@
 #include "databasebackend.h"
 #include "databaseparameters.h"
 #include "coredbschemaupdater.h"
-#include "databasecopymanager.h"
+#include "coredbcopymanager.h"
 
 namespace Digikam
 {
@@ -243,15 +243,15 @@ void MigrationDlg::handleFinish(int finishState, const QString& errorMsg)
 {
     switch (finishState)
     {
-        case DatabaseCopyManager::failed:
+        case CoreDbCopyManager::failed:
             QMessageBox::critical(this, qApp->applicationName(), errorMsg);
             unlockInputFields();
             break;
-        case DatabaseCopyManager::success:
+        case CoreDbCopyManager::success:
             QMessageBox::information(this, qApp->applicationName(), i18n("Database copied successfully."));
             unlockInputFields();
             break;
-        case DatabaseCopyManager::canceled:
+        case CoreDbCopyManager::canceled:
             QMessageBox::information(this, qApp->applicationName(), i18n("Database conversion canceled."));
             unlockInputFields();
             break;
