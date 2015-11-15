@@ -58,7 +58,7 @@ extern "C"
 #include "coredbbackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
-#include "dbactiontype.h"
+#include "dbengineactiontype.h"
 #include "tagscache.h"
 
 namespace Digikam

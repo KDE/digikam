@@ -19,7 +19,7 @@ set(libdatabasecore_SRCS
     engine/databaseserverstarter.cpp
     engine/databaseservererror.cpp
     engine/sqlquery.cpp
-    engine/dbactiontype.cpp
+    engine/dbengineactiontype.cpp
 
     tags/tagregion.cpp
 

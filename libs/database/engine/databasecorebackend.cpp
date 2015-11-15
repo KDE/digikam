@@ -43,7 +43,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dbactiontype.h"
+#include "dbengineactiontype.h"
 
 namespace Digikam
 {
@@ -1109,9 +1109,9 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
             QVariant placeHolderValue = bindingMap.value(namedPlaceholder);
             QString replaceStr;
 
-            if (placeHolderValue.userType() == qMetaTypeId<DBActionType>())
+            if (placeHolderValue.userType() == qMetaTypeId<DbEngineActionType>())
             {
-                DBActionType actionType = placeHolderValue.value<DBActionType>();
+                DbEngineActionType actionType = placeHolderValue.value<DbEngineActionType>();
                 bool isValue            = actionType.isValue();
                 QVariant value          = actionType.getActionValue();
 
@@ -1238,9 +1238,9 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const Db
         fieldValueMap.insert(fieldNames.at(i), values.at(i));
     }
 
-    DBActionType fieldValueList = DBActionType::value(fieldValueMap);
-    DBActionType fieldList      = DBActionType::fieldEntry(fieldNames);
-    DBActionType valueList      = DBActionType::value(values);
+    DbEngineActionType fieldValueList = DbEngineActionType::value(fieldValueMap);
+    DbEngineActionType fieldList      = DbEngineActionType::fieldEntry(fieldNames);
+    DbEngineActionType valueList      = DbEngineActionType::value(values);
 
     parameters.insert(QLatin1String(":id"),             id);
     parameters.insert(QLatin1String(":fieldValueList"), qVariantFromValue(fieldValueList));

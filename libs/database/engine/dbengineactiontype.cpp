@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-04-20
- * Description : DBActionType which wrappes other data types
+ * Description : Database Engine container to wrap data types
  *
  * Copyright (C) 2009-2010 by Holger Foerster <hamsi2k at freenet dot de>
  *
@@ -23,12 +23,12 @@
 
 // Local includes
 
-#include "dbactiontype.h"
+#include "dbengineactiontype.h"
 
 namespace Digikam
 {
 
-class DBActionType::Private
+class DbEngineActionType::Private
 {
 
 public:
@@ -41,55 +41,55 @@ public:
     QVariant actionValue;
 };
 
-DBActionType::DBActionType()
+DbEngineActionType::DbEngineActionType()
     : d(new Private)
 {
 }
 
-DBActionType::DBActionType(const DBActionType& actionType)
+DbEngineActionType::DbEngineActionType(const DbEngineActionType& actionType)
     : d(new Private)
 {
     d->isValue     = actionType.d->isValue;
     d->actionValue = actionType.d->actionValue;
 }
 
-DBActionType::~DBActionType()
+DbEngineActionType::~DbEngineActionType()
 {
     delete d;
 }
 
-DBActionType DBActionType::value(const QVariant& value)
+DbEngineActionType DbEngineActionType::value(const QVariant& value)
 {
-    DBActionType actionType;
+    DbEngineActionType actionType;
     actionType.setValue(true);
     actionType.setActionValue(value);
     return actionType;
 }
 
-DBActionType DBActionType::fieldEntry(const QVariant& actionValue)
+DbEngineActionType DbEngineActionType::fieldEntry(const QVariant& actionValue)
 {
-    DBActionType actionType;
+    DbEngineActionType actionType;
     actionType.setValue(false);
     actionType.setActionValue(actionValue);
     return actionType;
 }
 
-QVariant DBActionType::getActionValue()
+QVariant DbEngineActionType::getActionValue()
 {
     return d->actionValue;
 }
 
-void DBActionType::setActionValue(const QVariant& actionValue)
+void DbEngineActionType::setActionValue(const QVariant& actionValue)
 {
     d->actionValue = actionValue;
 }
 
-bool DBActionType::isValue() const
+bool DbEngineActionType::isValue() const
 {
     return d->isValue;
 }
 
-void DBActionType::setValue(bool isValue)
+void DbEngineActionType::setValue(bool isValue)
 {
     d->isValue = isValue;
 }

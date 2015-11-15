@@ -302,9 +302,9 @@ public:
 
     /**
      * Method which accepts a map for named binding.
-     * For special cases it's also possible to add a DBActionType which wraps another
+     * For special cases it's also possible to add a DbEngineActionType which wraps another
      * data object (also lists or maps) which can be used as field entry or as value
-     * (where it's prepared with positional binding). See more on DBActionType class.
+     * (where it's prepared with positional binding). See more on DbEngineActionType class.
      * If the wrapped data object is an instance of list, then the elements are
      * separated by comma.
      * If the wrapped data object is an instance of map, then the elements are

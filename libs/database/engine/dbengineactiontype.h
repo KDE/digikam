@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-04-20
- * Description : DBActionType which wrappes other data types
+ * Description : Database Engine container to wrap data types
  *
  * Copyright (C) 2009-2010 by Holger Foerster <hamsi2k at freenet dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBACTIONTYPE_H
-#define DBACTIONTYPE_H
+#ifndef DATABASE_ENGINE_ACTION_TYPE_H
+#define DATABASE_ENGINE_ACTION_TYPE_H
 
 // Qt includes
 
@@ -35,21 +35,21 @@
 namespace Digikam
 {
 /**
- * The DBActionType is used by the databasecorebackend
+ * The DbEngineActionType is used by the DatabaseCoreBackend
  * to wrap another data object within an sql statement
  * and controls whether it should be used as field entry or as value
  * (prepared to an sql statement with positional binding).
  */
-class DIGIKAM_EXPORT DBActionType
+class DIGIKAM_EXPORT DbEngineActionType
 {
 public:
 
-    DBActionType();
-    DBActionType(const DBActionType& actionType);
-    ~DBActionType();
+    DbEngineActionType();
+    DbEngineActionType(const DbEngineActionType& actionType);
+    ~DbEngineActionType();
 
-    static DBActionType value(const QVariant& value);
-    static DBActionType fieldEntry(const QVariant& actionValue);
+    static DbEngineActionType value(const QVariant& value);
+    static DbEngineActionType fieldEntry(const QVariant& actionValue);
 
     /**
      * Returns the wrapped object.
@@ -82,6 +82,6 @@ private:
 
 }  // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::DBActionType)
+Q_DECLARE_METATYPE(Digikam::DbEngineActionType)
 
-#endif // DBACTIONTYPE_H
+#endif // DATABASE_ENGINE_ACTION_TYPE_H
