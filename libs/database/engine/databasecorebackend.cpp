@@ -606,7 +606,7 @@ DatabaseCoreBackend::~DatabaseCoreBackend()
     delete d;
 }
 
-DatabaseConfig DatabaseCoreBackend::configElement() const
+DbEngineConfig DatabaseCoreBackend::configElement() const
 {
     Q_D(const DatabaseCoreBackend);
     return DatabaseCoreConfig::element(d->parameters.databaseType);

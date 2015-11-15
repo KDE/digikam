@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-class DatabaseConfig;
+class DbEngineConfig;
 class DatabaseCoreBackendPrivate;
 class DatabaseErrorHandler;
 
@@ -200,7 +200,7 @@ public:
       * Return config read from XML,
       * corresponding to this backend's database type.
       */
-    DatabaseConfig configElement() const;
+    DbEngineConfig configElement() const;
 
     /**
      * Returns a database action with name, specified in actionName,

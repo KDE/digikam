@@ -28,7 +28,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseconfig.h"
+#include "dbengineconfig.h"
 
 namespace Digikam
 {
@@ -39,7 +39,7 @@ public:
 
     static bool           checkReadyForUse();
     static QString        errorMessage();
-    static DatabaseConfig element(const QString& databaseType);
+    static DbEngineConfig element(const QString& databaseType);
 };
 
 } // namespace Digikam

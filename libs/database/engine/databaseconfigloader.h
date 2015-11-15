@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databaseconfig.h"
+#include "dbengineconfig.h"
 
 // Qt includes
 
@@ -36,23 +36,23 @@
 
 namespace Digikam
 {
-class DatabaseConfig;
+class DbEngineConfig;
 
-class DIGIKAM_EXPORT DatabaseConfigLoader
+class DIGIKAM_EXPORT DbEngineConfigLoader
 {
 public:
 
-    DatabaseConfigLoader(const QString& filepath, int xmlVersion);
+    DbEngineConfigLoader(const QString& filepath, int xmlVersion);
 
     bool           readConfig(const QString& filepath, int xmlVersion);
-    DatabaseConfig readDatabase(QDomElement& databaseElement);
-    void           readDBActions(QDomElement& sqlStatementElements, DatabaseConfig& configElement);
+    DbEngineConfig readDatabase(QDomElement& databaseElement);
+    void           readDBActions(QDomElement& sqlStatementElements, DbEngineConfig& configElement);
 
 public:
 
     bool                          isValid;
     QString                       errorMessage;
-    QMap<QString, DatabaseConfig> databaseConfigs;
+    QMap<QString, DbEngineConfig> databaseConfigs;
 };
 
 } // namespace Digikam
