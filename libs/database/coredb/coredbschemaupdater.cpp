@@ -42,7 +42,7 @@
 #include "digikam_debug.h"
 #include "databasebackend.h"
 #include "databasetransaction.h"
-#include "databasechecker.h"
+#include "coredbchecker.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "collectionscanner.h"
@@ -200,7 +200,7 @@ bool CoreDbSchemaUpdater::startUpdates()
     {
         // Do we have sufficient privileges
         QStringList insufficientRights;
-        DatabasePrivilegesChecker checker(d->parameters);
+        CoreDbPrivilegesChecker checker(d->parameters);
 
         if (!checker.checkPrivileges(insufficientRights))
         {

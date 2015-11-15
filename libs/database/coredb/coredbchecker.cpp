@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-24
- * Description : Database privileges checker
+ * Description : Core database privileges checker
  *
  * Copyright (C) 2010 by Holger Foerster <hamsi2k at freenet dot de>
  *
@@ -21,16 +21,12 @@
  *
  * ============================================================ */
 
-#include "databasechecker.h"
+#include "coredbchecker.h"
 
 // Qt includes
 
 #include <QSqlDatabase>
 #include <QSqlError>
-
-// KDE includes
-
-#include <klocalizedstring.h>
 
 // Local includes
 
@@ -40,16 +36,16 @@
 namespace Digikam
 {
 
-DatabasePrivilegesChecker::DatabasePrivilegesChecker(const DatabaseParameters& parameters)
+CoreDbPrivilegesChecker::CoreDbPrivilegesChecker(const DatabaseParameters& parameters)
 {
     m_parameters = parameters;
 }
 
-DatabasePrivilegesChecker::~DatabasePrivilegesChecker()
+CoreDbPrivilegesChecker::~CoreDbPrivilegesChecker()
 {
 }
 
-bool DatabasePrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
+bool CoreDbPrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
 {
     bool result = true;
     DatabaseLocking fromLocking;
@@ -92,7 +88,7 @@ bool DatabasePrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
     return result;
 }
 
-bool DatabasePrivilegesChecker::checkPriv(DatabaseBackend& dbBackend, const QString& dbActionName)
+bool CoreDbPrivilegesChecker::checkPriv(DatabaseBackend& dbBackend, const QString& dbActionName)
 {
     QMap<QString, QVariant> bindingMap;
     // now perform the copy action

@@ -46,7 +46,6 @@ set(libdatabase_SRCS
     collection/collectionscannerhints.cpp
 
     coredb/databaseaccess.cpp
-    coredb/databasechecker.cpp
     coredb/databasewatch.cpp
     coredb/databasewatchadaptor.cpp
     coredb/databasebackend.cpp
@@ -58,6 +57,7 @@ set(libdatabase_SRCS
     coredb/downloadhistory.cpp
     coredb/namefilter.cpp
     coredb/searchxml.cpp
+    coredb/coredbchecker.cpp
     coredb/coredbconstants.cpp
     coredb/coredbschemaupdater.cpp
     coredb/coredbchangesets.cpp

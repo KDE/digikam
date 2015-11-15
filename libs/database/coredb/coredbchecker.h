@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-24
- * Description : Database privileges checker
+ * Description : Core database privileges checker
  *
  * Copyright (C) 2010 by Holger Foerster <hamsi2k at freenet dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASECHECKER_H
-#define DATABASECHECKER_H
+#ifndef COREDATABASECHECKER_H
+#define COREDATABASECHECKER_H
 
 // Local includes
 
@@ -33,13 +33,13 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT DatabasePrivilegesChecker
+class DIGIKAM_DATABASE_EXPORT CoreDbPrivilegesChecker
 {
 
 public:
 
-    explicit DatabasePrivilegesChecker(const DatabaseParameters& parameters);
-    ~DatabasePrivilegesChecker();
+    explicit CoreDbPrivilegesChecker(const DatabaseParameters& parameters);
+    ~CoreDbPrivilegesChecker();
 
     bool checkPrivileges(QStringList& insufficientRights);
     bool checkPriv(DatabaseBackend& dbBackend, const QString& dbActionName);
@@ -51,4 +51,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // DATABASECHECKER_H
+#endif // COREDATABASECHECKER_H
