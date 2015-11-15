@@ -32,7 +32,7 @@
 #include "digikam_debug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 
 namespace Digikam
 {

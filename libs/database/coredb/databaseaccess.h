@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class DatabaseBackend;
+class CoreDbBackend;
 class AlbumDB;
 class DatabaseWatch;
 class InitializationObserver;
@@ -75,7 +75,7 @@ public:
     /**
       * Retrieve a pointer to the database backend
       */
-    DatabaseBackend* backend() const;
+    CoreDbBackend* backend() const;
 
     /**
       * Returns the error message for the last error that occurred,

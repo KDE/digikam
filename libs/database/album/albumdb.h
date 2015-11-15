@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-class DatabaseBackend;
+class CoreDbBackend;
 
 class DIGIKAM_DATABASE_EXPORT AlbumDB
 {
@@ -1238,7 +1238,7 @@ public:
     /**
      * Constructor
      */
-    explicit AlbumDB(DatabaseBackend* const backend);
+    explicit AlbumDB(CoreDbBackend* const backend);
 
     /**
      * Destructor

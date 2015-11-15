@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-15
- * Description : Abstract database backend for core database
+ * Description : Core database abstract backend.
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,32 +24,32 @@
 
 // Local includes
 
-#include "databasebackend.h"
-#include "databasebackend_p.h"
+#include "coredbbackend.h"
+#include "coredbbackend_p.h"
 #include "coredbschemaupdater.h"
 #include "databasewatch.h"
 
 namespace Digikam
 {
 
-DatabaseBackend::DatabaseBackend(DatabaseLocking* const locking, const QString& backendName)
-    : DatabaseCoreBackend(backendName, locking, *new DatabaseBackendPrivate(this))
+CoreDbBackend::CoreDbBackend(DatabaseLocking* const locking, const QString& backendName)
+    : DatabaseCoreBackend(backendName, locking, *new CoreDbBackendPrivate(this))
 {
 }
 
-DatabaseBackend::~DatabaseBackend()
+CoreDbBackend::~CoreDbBackend()
 {
 }
 
-void DatabaseBackend::setDatabaseWatch(DatabaseWatch* watch)
+void CoreDbBackend::setDatabaseWatch(DatabaseWatch* watch)
 {
-    Q_D(DatabaseBackend);
+    Q_D(CoreDbBackend);
     d->watch = watch;
 }
 
-bool DatabaseBackend::initSchema(CoreDbSchemaUpdater* updater)
+bool CoreDbBackend::initSchema(CoreDbSchemaUpdater* updater)
 {
-    Q_D(DatabaseBackend);
+    Q_D(CoreDbBackend);
 
     if (d->status == OpenSchemaChecked)
     {
@@ -70,46 +70,46 @@ bool DatabaseBackend::initSchema(CoreDbSchemaUpdater* updater)
     return false;
 }
 
-void DatabaseBackend::recordChangeset(const ImageChangeset& changeset)
+void CoreDbBackend::recordChangeset(const ImageChangeset& changeset)
 {
-    Q_D(DatabaseBackend);
+    Q_D(CoreDbBackend);
     // if we want to do compression of changesets, think about doing this here
     d->imageChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const ImageTagChangeset& changeset)
+void CoreDbBackend::recordChangeset(const ImageTagChangeset& changeset)
 {
-    Q_D(DatabaseBackend);
+    Q_D(CoreDbBackend);
     d->imageTagChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const CollectionImageChangeset& changeset)
+void CoreDbBackend::recordChangeset(const CollectionImageChangeset& changeset)
 {
-    Q_D(DatabaseBackend);
+    Q_D(CoreDbBackend);
     d->collectionImageChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const AlbumChangeset& changeset)
+void CoreDbBackend::recordChangeset(const AlbumChangeset& changeset)
 {
-    Q_D(DatabaseBackend);
+    Q_D(CoreDbBackend);
     d->albumChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const TagChangeset& changeset)
+void CoreDbBackend::recordChangeset(const TagChangeset& changeset)
 {
-    Q_D(DatabaseBackend);
+    Q_D(CoreDbBackend);
     d->tagChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const AlbumRootChangeset& changeset)
+void CoreDbBackend::recordChangeset(const AlbumRootChangeset& changeset)
 {
-    Q_D(DatabaseBackend);
+    Q_D(CoreDbBackend);
     d->albumRootChangesetContainer.recordChangeset(changeset);
 }
 
-void DatabaseBackend::recordChangeset(const SearchChangeset& changeset)
+void CoreDbBackend::recordChangeset(const SearchChangeset& changeset)
 {
-    Q_D(DatabaseBackend);
+    Q_D(CoreDbBackend);
     d->searchChangesetContainer.recordChangeset(changeset);
 }
 

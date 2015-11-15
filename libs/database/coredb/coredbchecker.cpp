@@ -31,7 +31,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 
 namespace Digikam
 {
@@ -49,7 +49,7 @@ bool CoreDbPrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
 {
     bool result = true;
     DatabaseLocking fromLocking;
-    DatabaseBackend fromDBbackend(&fromLocking, QLatin1String("PrivilegesCheckDatabase"));
+    CoreDbBackend fromDBbackend(&fromLocking, QLatin1String("PrivilegesCheckDatabase"));
 
     if (!fromDBbackend.open(m_parameters))
     {
@@ -88,7 +88,7 @@ bool CoreDbPrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
     return result;
 }
 
-bool CoreDbPrivilegesChecker::checkPriv(DatabaseBackend& dbBackend, const QString& dbActionName)
+bool CoreDbPrivilegesChecker::checkPriv(CoreDbBackend& dbBackend, const QString& dbActionName)
 {
     QMap<QString, QVariant> bindingMap;
     // now perform the copy action

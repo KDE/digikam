@@ -27,7 +27,7 @@
 // Local includes
 
 #include "databaseparameters.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -42,7 +42,7 @@ public:
     ~CoreDbPrivilegesChecker();
 
     bool checkPrivileges(QStringList& insufficientRights);
-    bool checkPriv(DatabaseBackend& dbBackend, const QString& dbActionName);
+    bool checkPriv(CoreDbBackend& dbBackend, const QString& dbActionName);
 
 private:
 

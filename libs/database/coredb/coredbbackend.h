@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-15
- * Description : Abstract database backend for core database
+ * Description : Core database abstract backend.
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEBACKEND_H
-#define DATABASEBACKEND_H
+#ifndef COREDATABASEBACKEND_H
+#define COREDATABASEBACKEND_H
 
 // Local includes
 
@@ -36,16 +36,16 @@ namespace Digikam
 
 class CoreDbSchemaUpdater;
 class DatabaseWatch;
-class DatabaseBackendPrivate;
+class CoreDbBackendPrivate;
 
-class DIGIKAM_DATABASE_EXPORT DatabaseBackend : public DatabaseCoreBackend
+class DIGIKAM_DATABASE_EXPORT CoreDbBackend : public DatabaseCoreBackend
 {
     Q_OBJECT
 
 public:
 
-    explicit DatabaseBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("digikamDatabase-"));
-    ~DatabaseBackend();
+    explicit CoreDbBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("digikamDatabase-"));
+    ~CoreDbBackend();
 
     /** Sets the global database watch
      */
@@ -71,9 +71,9 @@ public:
 
 private:
 
-    Q_DECLARE_PRIVATE(DatabaseBackend)
+    Q_DECLARE_PRIVATE(CoreDbBackend)
 };
 
 } // namespace Digikam
 
-#endif // DATABASEBACKEND_H
+#endif // COREDATABASEBACKEND_H

@@ -31,7 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 
 namespace Digikam
 {
@@ -68,10 +68,10 @@ public Q_SLOTS:
 
 private:
 
-    bool copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, 
-                   DatabaseBackend& toDBbackend, const QString &toActionName);
+    bool copyTable(CoreDbBackend& fromDBbackend, const QString& fromActionName, 
+                   CoreDbBackend& toDBbackend, const QString &toActionName);
 
-    void handleClosing(bool isstopThread, DatabaseBackend& fromDBbackend, DatabaseBackend& toDBbackend);
+    void handleClosing(bool isstopThread, CoreDbBackend& fromDBbackend, CoreDbBackend& toDBbackend);
 
 private:
 

@@ -40,7 +40,7 @@
 
 #include "drawdecoder.h"
 #include "digikam_debug.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 #include "coredbtransaction.h"
 #include "coredbchecker.h"
 #include "collectionmanager.h"
@@ -94,7 +94,7 @@ public:
     QVariant                currentVersion;
     QVariant                currentRequiredVersion;
 
-    DatabaseBackend*        backend;
+    CoreDbBackend*        backend;
     AlbumDB*                albumDB;
     DatabaseParameters      parameters;
 
@@ -105,7 +105,7 @@ public:
     InitializationObserver* observer;
 };
 
-CoreDbSchemaUpdater::CoreDbSchemaUpdater(AlbumDB* const albumDB, DatabaseBackend* const backend, DatabaseParameters parameters)
+CoreDbSchemaUpdater::CoreDbSchemaUpdater(AlbumDB* const albumDB, CoreDbBackend* const backend, DatabaseParameters parameters)
     : d(new Private)
 {
     d->backend    = backend;

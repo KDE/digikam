@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-07
- * Description : Abstract database backend for core database
+ * Description : Core database abstract backend.
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEBACKEND_P_H
-#define DATABASEBACKEND_P_H
+#ifndef COREDATABASEBACKEND_P_H
+#define COREDATABASEBACKEND_P_H
 
 // Local includes
 
@@ -35,11 +35,11 @@ namespace Digikam
 
 class DatabaseWatch;
 
-class DatabaseBackendPrivate : public DatabaseCoreBackendPrivate
+class CoreDbBackendPrivate : public DatabaseCoreBackendPrivate
 {
 public:
 
-    explicit DatabaseBackendPrivate(DatabaseBackend* const backend)
+    explicit CoreDbBackendPrivate(CoreDbBackend* const backend)
         : DatabaseCoreBackendPrivate(backend),
           imageChangesetContainer(this),
           imageTagChangesetContainer(this),
@@ -92,7 +92,7 @@ public:
     {
     public:
 
-        explicit ChangesetContainer(DatabaseBackendPrivate* d)
+        explicit ChangesetContainer(CoreDbBackendPrivate* d)
             : d(d)
         {
         }
@@ -121,7 +121,7 @@ public:
     public:
 
         QList<T>                      changesets;
-        DatabaseBackendPrivate* const d;
+        CoreDbBackendPrivate* const d;
     };
 
 public:
@@ -148,9 +148,8 @@ public:
         albumRootChangesetContainer.sendOut();
         searchChangesetContainer.sendOut();
     }
-
 };
 
 }  // namespace Digikam
 
-#endif // DATABASEBACKEND_P_H
+#endif // COREDATABASEBACKEND_P_H

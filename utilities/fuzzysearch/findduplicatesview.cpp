@@ -46,7 +46,7 @@
 #include "albummanager.h"
 #include "albumselectors.h"
 #include "databaseaccess.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 #include "findduplicatesalbum.h"
 #include "findduplicatesalbumitem.h"
 #include "duplicatesfinder.h"

@@ -34,7 +34,7 @@
 // Local includes
 
 #include "databasewidget.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 #include "coredbcopymanager.h"
 
 namespace Digikam

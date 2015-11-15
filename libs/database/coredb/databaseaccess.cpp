@@ -45,7 +45,7 @@
 #include "coredbschemaupdater.h"
 #include "collectionmanager.h"
 #include "databasewatch.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 #include "databaseerrorhandler.h"
 #include "tagscache.h"
 
@@ -72,7 +72,7 @@ public:
 
 public:
 
-    DatabaseBackend*    backend;
+    CoreDbBackend*    backend;
     AlbumDB*            db;
     DatabaseWatch*      databaseWatch;
     DatabaseParameters  parameters;
@@ -146,7 +146,7 @@ AlbumDB* DatabaseAccess::db() const
     return d->db;
 }
 
-DatabaseBackend* DatabaseAccess::backend() const
+CoreDbBackend* DatabaseAccess::backend() const
 {
     return d->backend;
 }
@@ -241,7 +241,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseBackend(&d->lock);
+        d->backend = new CoreDbBackend(&d->lock);
         d->backend->setDatabaseWatch(d->databaseWatch);
         d->db = new AlbumDB(d->backend);
         TagsCache::instance()->initialize();

@@ -55,7 +55,7 @@ extern "C"
 // Local includes
 
 #include "digikam_debug.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "dbactiontype.h"
@@ -78,7 +78,7 @@ public:
     static const QString configGroupName;
     static const QString configRecentlyUsedTags;
 
-    DatabaseBackend*     db;
+    CoreDbBackend*     db;
     QList<int>           recentlyAssignedTags;
 
     int                  uniqueHashVersion;
@@ -160,7 +160,7 @@ QList<qlonglong> AlbumDB::Private::execRelatedImagesQuery(SqlQuery& query, qlong
 
 // --------------------------------------------------------
 
-AlbumDB::AlbumDB(DatabaseBackend* const backend)
+AlbumDB::AlbumDB(CoreDbBackend* const backend)
     : d(new Private)
 {
     d->db = backend;

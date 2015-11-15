@@ -52,7 +52,7 @@
 #include "collectionscannerhints.h"
 #include "collectionscannerobserver.h"
 #include "databaseaccess.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 #include "coredbtransaction.h"
 #include "coredboperationgroup.h"
 #include "imagecomments.h"

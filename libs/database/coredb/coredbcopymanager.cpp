@@ -62,7 +62,7 @@ void CoreDbCopyManager::copyDatabases(const DatabaseParameters& fromDBParameters
 {
     m_isStopProcessing = false;
     DatabaseLocking fromLocking;
-    DatabaseBackend fromDBbackend(&fromLocking, QLatin1String("MigrationFromDatabase"));
+    CoreDbBackend fromDBbackend(&fromLocking, QLatin1String("MigrationFromDatabase"));
 
     if (!fromDBbackend.open(fromDBParameters))
     {
@@ -71,7 +71,7 @@ void CoreDbCopyManager::copyDatabases(const DatabaseParameters& fromDBParameters
     }
 
     DatabaseLocking toLocking;
-    DatabaseBackend toDBbackend(&toLocking, QLatin1String("MigrationToDatabase"));
+    CoreDbBackend toDBbackend(&toLocking, QLatin1String("MigrationToDatabase"));
 
     if (!toDBbackend.open(toDBParameters))
     {
@@ -173,8 +173,8 @@ void CoreDbCopyManager::copyDatabases(const DatabaseParameters& fromDBParameters
     emit finished(CoreDbCopyManager::success, QString());
 }
 
-bool CoreDbCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QString& fromActionName, 
-                                    DatabaseBackend& toDBbackend, const QString& toActionName)
+bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& fromActionName, 
+                                    CoreDbBackend& toDBbackend, const QString& toActionName)
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: trying to copy contents from DB with ActionName: [" << fromActionName
                                   << "] to DB with ActionName [" << toActionName << "]";
@@ -275,7 +275,7 @@ bool CoreDbCopyManager::copyTable(DatabaseBackend& fromDBbackend, const QString&
     return true;
 }
 
-void CoreDbCopyManager::handleClosing(bool isStopThread, DatabaseBackend& fromDBbackend, DatabaseBackend& toDBbackend)
+void CoreDbCopyManager::handleClosing(bool isStopThread, CoreDbBackend& fromDBbackend, CoreDbBackend& toDBbackend)
 {
     if (isStopThread)
     {

@@ -51,7 +51,7 @@
 #include "applicationsettings.h"
 #include "databaseaccess.h"
 #include "databasewidget.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 #include "databaseparameters.h"
 #include "coredbschemaupdater.h"
 #include "coredbcopymanager.h"

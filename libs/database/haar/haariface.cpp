@@ -49,7 +49,7 @@
 #include "databaseaccess.h"
 #include "coredbtransaction.h"
 #include "albumdb.h"
-#include "databasebackend.h"
+#include "coredbbackend.h"
 #include "searchxml.h"
 #include "sqlquery.h"
 
@@ -617,7 +617,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
             return scores;
         }
 
-        // We don't use DatabaseBackend's convenience calls, as the result set is large
+        // We don't use CoreDbBackend's convenience calls, as the result set is large
         // and we try to avoid copying in a temporary QList<QVariant>
         int albumRootId = 0;
 
