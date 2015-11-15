@@ -50,7 +50,6 @@ set(libdatabase_SRCS
     coredb/databasewatchadaptor.cpp
     coredb/databasebackend.cpp
     coredb/databaseoperationgroup.cpp
-    coredb/databasetransaction.cpp
     coredb/databaseurl.cpp
     coredb/databasecopymanager.cpp
     coredb/downloadhistory.cpp
@@ -58,6 +57,7 @@ set(libdatabase_SRCS
     coredb/searchxml.cpp
     coredb/coredbchecker.cpp
     coredb/coredbconstants.cpp
+    coredb/coredbtransaction.cpp
     coredb/coredbschemaupdater.cpp
     coredb/coredbchangesets.cpp
     coredb/coredbthumbinfoprovider.cpp

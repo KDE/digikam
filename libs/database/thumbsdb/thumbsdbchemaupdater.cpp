@@ -39,7 +39,7 @@
 #include "digikam_debug.h"
 #include "collectionscannerobserver.h"
 #include "databasecorebackend.h"
-#include "databasetransaction.h"
+#include "coredbtransaction.h"
 #include "thumbsdbaccess.h"
 #include "thumbsdb.h"
 

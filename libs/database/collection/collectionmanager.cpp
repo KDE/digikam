@@ -49,7 +49,7 @@
 #include "digikam_debug.h"
 #include "databaseaccess.h"
 #include "coredbchangesets.h"
-#include "databasetransaction.h"
+#include "coredbtransaction.h"
 #include "albumdb.h"
 #include "collectionscanner.h"
 #include "collectionlocation.h"
@@ -1141,7 +1141,7 @@ void CollectionManager::removeLocation(const CollectionLocation& location)
         QList<int> albumIds = access.db()->getAlbumsOnAlbumRoot(albumLoc->id());
         ChangingDB changing(d);
         CollectionScanner scanner;
-        DatabaseTransaction transaction(&access);
+        CoreDbTransaction transaction(&access);
         scanner.safelyRemoveAlbums(albumIds);
         access.db()->deleteAlbumRoot(albumLoc->id());
     }

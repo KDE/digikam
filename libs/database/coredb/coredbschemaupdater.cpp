@@ -41,7 +41,7 @@
 #include "drawdecoder.h"
 #include "digikam_debug.h"
 #include "databasebackend.h"
-#include "databasetransaction.h"
+#include "coredbtransaction.h"
 #include "coredbchecker.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
@@ -556,7 +556,7 @@ bool CoreDbSchemaUpdater::updateUniqueHash()
     readVersionSettings();
 
     {
-        DatabaseTransaction transaction;
+        CoreDbTransaction transaction;
 
         DatabaseAccess().db()->setUniqueHashVersion(uniqueHashVersion());
 

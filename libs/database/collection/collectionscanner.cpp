@@ -53,7 +53,7 @@
 #include "collectionscannerobserver.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"
-#include "databasetransaction.h"
+#include "coredbtransaction.h"
 #include "databaseoperationgroup.h"
 #include "imagecomments.h"
 #include "imagecopyright.h"
@@ -433,7 +433,7 @@ void CollectionScanner::completeScan()
     emit startCompleteScan();
 
     // lock database
-    DatabaseTransaction transaction;
+    CoreDbTransaction transaction;
 
     mainEntryPoint(true);
     d->resetRemovedItemsTime();
@@ -508,7 +508,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
     emit startCompleteScan();
 
     {
-        DatabaseTransaction transaction;
+        CoreDbTransaction transaction;
 
         mainEntryPoint(true);
         d->resetRemovedItemsTime();
@@ -575,7 +575,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
         return;
     }
 
-    DatabaseTransaction transaction;
+    CoreDbTransaction transaction;
     completeScanCleanupPart();
 }
 
@@ -624,7 +624,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
 /*
     if (DatabaseAccess().backend()->isInTransaction())
     {
-        // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
+        // Install ScanController::instance()->suspendCollectionScan around your CoreDbTransaction
         qCDebug(DIGIKAM_DATABASE_LOG) << "Detected an active database transaction when starting a collection scan. "
                          "Please report this error.";
         return;
@@ -952,7 +952,7 @@ void CollectionScanner::safelyRemoveAlbums(const QList<int>& albumIds)
     // Remove the items (orphan items, detach them from the album, but keep entries for a certain time)
     // Make album orphan (no album root, keep entries until next application start)
     DatabaseAccess access;
-    DatabaseTransaction transaction(&access);
+    CoreDbTransaction transaction(&access);
 
     foreach(int albumId, albumIds)
     {
@@ -1691,7 +1691,7 @@ QStringList CollectionScanner::formattedListOfStaleAlbums()
 void CollectionScanner::removeStaleAlbums()
 {
     DatabaseAccess access;
-    DatabaseTransaction transaction(&access);
+    CoreDbTransaction transaction(&access);
     QList<AlbumShortInfo>::const_iterator it;
 
     for (it = m_foldersToBeDeleted.constBegin(); it != m_foldersToBeDeleted.constEnd(); ++it)
@@ -1721,7 +1721,7 @@ QStringList CollectionScanner::formattedListOfStaleFiles()
 void CollectionScanner::removeStaleFiles()
 {
     DatabaseAccess access;
-    DatabaseTransaction transaction(&access);
+    CoreDbTransaction transaction(&access);
     QList< QPair<QString,int> >::const_iterator it;
 
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
@@ -1749,7 +1749,7 @@ void CollectionScanner::scanAlbums()
         QDir dir(*it);
         QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
 
-        DatabaseTransaction transaction;
+        CoreDbTransaction transaction;
         foreach(const QString& dir, fileList)
         {
             scanAlbum(*it, '/' + dir);
@@ -1789,7 +1789,7 @@ void CollectionScanner::scan(const QString& albumRoot, const QString& album)
         QDir dir(albumRoot + album);
         QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
 
-        DatabaseTransaction transaction;
+        CoreDbTransaction transaction;
 
         for (QStringList::const_iterator fileIt = fileList.constBegin(); fileIt != fileList.constEnd(); ++fileIt)
         {
@@ -1798,7 +1798,7 @@ void CollectionScanner::scan(const QString& albumRoot, const QString& album)
     }
     else
     {
-        DatabaseTransaction transaction;
+        CoreDbTransaction transaction;
         scanAlbum(albumRoot, album);
     }
 
@@ -1907,7 +1907,7 @@ void CollectionScanner::updateItemsWithoutDate()
     QString albumRoot = DatabaseAccess::albumRoot();
 
     {
-        DatabaseTransaction transaction;
+        CoreDbTransaction transaction;
 
         for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
         {
@@ -2192,7 +2192,7 @@ void CollectionScanner::removeInvalidAlbums(const QString& albumRoot)
             toBeDeleted << (*it);
     }
 
-    DatabaseTransaction transaction(&access);
+    CoreDbTransaction transaction(&access);
     for (QValueList<AlbumShortInfo>::iterator it = toBeDeleted.begin(); it != toBeDeleted.end(); ++it)
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "Removing album " << (*it).albumRoot + '/' + (*it).url;

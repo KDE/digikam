@@ -47,7 +47,7 @@
 #include "dimg.h"
 #include "imageinfo.h"
 #include "databaseaccess.h"
-#include "databasetransaction.h"
+#include "coredbtransaction.h"
 #include "albumdb.h"
 #include "databasebackend.h"
 #include "searchxml.h"
@@ -771,7 +771,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QLi
     // Write search albums to database
     {
         DatabaseAccess access;
-        DatabaseTransaction transaction(&access);
+        CoreDbTransaction transaction(&access);
 
         // delete all old searches
         access.db()->deleteSearches(DatabaseSearch::DuplicatesSearch);

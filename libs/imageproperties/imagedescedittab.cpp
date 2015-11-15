@@ -53,7 +53,7 @@
 #include "albumthumbnailloader.h"
 #include "captionedit.h"
 #include "collectionscanner.h"
-#include "databasetransaction.h"
+#include "coredbtransaction.h"
 #include "dnotificationwrapper.h"
 #include "ddatetimeedit.h"
 #include "digikamapp.h"

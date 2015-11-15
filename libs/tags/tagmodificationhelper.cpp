@@ -39,7 +39,7 @@
 #include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
-#include "databasetransaction.h"
+#include "coredbtransaction.h"
 #include "imageinfo.h"
 #include "metadatahub.h"
 #include "scancontroller.h"

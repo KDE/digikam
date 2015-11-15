@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-23
- * Description : Convenience object for database transactions
+ * Description : Core database convenience object for transactions.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,43 +21,41 @@
  *
  * ============================================================ */
 
-#ifndef DATABASETRANSACTION_H
-#define DATABASETRANSACTION_H
+#include "coredbtransaction.h"
 
 // Local includes
 
-#include "digikam_export.h"
+#include "albumdb.h"
+#include "databaseaccess.h"
+#include "databasebackend.h"
 
 namespace Digikam
 {
 
-class DatabaseAccess;
-
-/**
- * Convenience class: You can create a DatabaseTransaction object for a scope for which
- * you want to declare a database commit.
- * Equivalent to calling beginTransaction and commitTransaction on the album db.
- */
-class DIGIKAM_DATABASE_EXPORT DatabaseTransaction
+CoreDbTransaction::CoreDbTransaction()
+    : m_access(0)
 {
-public:
+    DatabaseAccess access;
+    access.backend()->beginTransaction();
+}
 
-    /**
-     * Retrieve a DatabaseAccess object each time when constructing and destructing.
-     */
-    DatabaseTransaction();
+CoreDbTransaction::CoreDbTransaction(DatabaseAccess* const access)
+    : m_access(access)
+{
+    m_access->backend()->beginTransaction();
+}
 
-    /**
-     * Use an existing DatabaseAccess object, which must live as long as this object exists.
-     */
-    explicit DatabaseTransaction(DatabaseAccess* const access);
-    ~DatabaseTransaction();
-
-private:
-
-    DatabaseAccess* m_access;
-};
+CoreDbTransaction::~CoreDbTransaction()
+{
+    if (m_access)
+    {
+        m_access->backend()->commitTransaction();
+    }
+    else
+    {
+        DatabaseAccess access;
+        access.backend()->commitTransaction();
+    }
+}
 
 }  // namespace Digikam
-
-#endif // DATABASETRANSACTION_H
