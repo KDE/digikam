@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "databasefields.h"
+#include "coredbfields.h"
 #include "imageinfo.h"
 
 namespace Digikam

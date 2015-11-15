@@ -42,7 +42,7 @@
 #include "dshareddata.h"
 #include "databaseurl.h"
 #include "imageinfolist.h"
-#include "databasefields.h"
+#include "coredbfields.h"
 
 namespace Digikam
 {

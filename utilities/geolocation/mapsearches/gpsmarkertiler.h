@@ -51,7 +51,7 @@
 #include "thumbsdbaccess.h"
 #include "thumbsdb.h"
 #include "databasewatch.h"
-#include "databasefields.h"
+#include "coredbfields.h"
 #include "imagealbummodel.h"
 #include "imagefiltermodel.h"
 

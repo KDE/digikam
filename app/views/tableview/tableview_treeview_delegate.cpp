@@ -30,7 +30,7 @@
 
 #include "digikam_debug.h"
 #include "contextmenuhelper.h"
-#include "databasefields.h"
+#include "coredbfields.h"
 #include "databasewatch.h"
 #include "fileactionmngr.h"
 #include "imageinfo.h"

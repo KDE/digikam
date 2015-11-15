@@ -40,7 +40,7 @@
 // Local includes
 
 #include "albuminfo.h"
-#include "databasefields.h"
+#include "coredbfields.h"
 #include "databaseaccess.h"
 #include "databaseconstants.h"
 #include "digikam_export.h"

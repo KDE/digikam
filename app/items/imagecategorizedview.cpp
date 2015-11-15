@@ -33,7 +33,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "applicationsettings.h"
-#include "databasefields.h"
+#include "coredbfields.h"
 #include "iccsettings.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"

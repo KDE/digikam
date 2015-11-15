@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-09-22
- * Description : Enums for database fields
+ * Description : Core database field enumerations.
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEFIELDS_H
-#define DATABASEFIELDS_H
+#ifndef COREDATABASEFIELDS_H
+#define COREDATABASEFIELDS_H
 
 // C++ includes
 
@@ -583,4 +583,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageHistoryInfo)
 
-#endif // DATABASEFIELDS_H
+#endif // COREDATABASEFIELDS_H

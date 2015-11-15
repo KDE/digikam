@@ -27,7 +27,7 @@
 
 #include "databaseaccess.h"
 #include "albumdb.h"
-#include "databasefields.h"
+#include "coredbfields.h"
 #include "dmetadata.h"
 #include "metadatainfo.h"
 

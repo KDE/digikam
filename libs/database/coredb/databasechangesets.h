@@ -34,7 +34,7 @@
 
 #include "dbusutilities.h"
 #include "digikam_export.h"
-#include "databasefields.h"
+#include "coredbfields.h"
 
 namespace Digikam
 {

@@ -33,7 +33,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databasefields.h"
+#include "coredbfields.h"
 #include "digikam_globals.h"
 #include "imageinfo.h"
 
