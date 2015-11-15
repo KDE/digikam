@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "databaseurl.h"
+#include "coredburl.h"
 #include "dshareddata.h"
 #include "albuminfo.h"
 #include "imageinfocache.h"

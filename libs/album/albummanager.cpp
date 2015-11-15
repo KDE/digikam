@@ -85,7 +85,7 @@ extern "C"
 #include "databaseparameters.h"
 #include "databaseserverstarter.h"
 #include "coredbthumbinfoprovider.h"
-#include "databaseurl.h"
+#include "coredburl.h"
 #include "coredbwatch.h"
 #include "dio.h"
 #include "facetags.h"
@@ -2196,7 +2196,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
         child = static_cast<PAlbum*>(child->m_next);
     }
 
-    DatabaseUrl url = parent->databaseUrl();
+    CoreDbUrl url = parent->databaseUrl();
     url             = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + QLatin1Char('/') + name);
     QUrl fileUrl    = url.fileUrl();
@@ -2938,7 +2938,7 @@ void AlbumManager::removePAlbum(PAlbum* album)
     d->albumPathHash.remove(album);
     d->allAlbumsIdHash.remove(album->globalID());
 
-    DatabaseUrl url = album->databaseUrl();
+    CoreDbUrl url = album->databaseUrl();
 
     if(!d->currentAlbums.isEmpty())
     {

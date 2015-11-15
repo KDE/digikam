@@ -756,18 +756,18 @@ int ImageInfo::orientation() const
     return values.first().toInt();
 }
 
-DatabaseUrl ImageInfo::databaseUrl() const
+CoreDbUrl ImageInfo::databaseUrl() const
 {
     if (!m_data)
     {
-        return DatabaseUrl();
+        return CoreDbUrl();
     }
 
     QString album     = ImageInfoStatic::cache()->albumRelativePath(m_data->albumId);
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
 
     ImageInfoReadLocker lock;
-    return DatabaseUrl::fromAlbumAndName(m_data->name, album, QUrl::fromLocalFile(albumRoot), m_data->albumRootId);
+    return CoreDbUrl::fromAlbumAndName(m_data->name, album, QUrl::fromLocalFile(albumRoot), m_data->albumRootId);
 }
 
 QUrl ImageInfo::fileUrl() const

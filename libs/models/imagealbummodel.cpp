@@ -36,7 +36,7 @@
 #include "coredbchangesets.h"
 #include "databaseface.h"
 #include "coredbwatch.h"
-#include "databaseurl.h"
+#include "coredburl.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imagelister.h"
@@ -321,7 +321,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         d->jobThread = 0;
     }
 
-    DatabaseUrl url;
+    CoreDbUrl url;
     QList<int> tagIds;
 
     if (albums.first()->isTrashAlbum())
@@ -336,7 +336,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
             tagIds << (*it)->id();
         }
 
-        url = DatabaseUrl::fromTagIds(tagIds);
+        url = CoreDbUrl::fromTagIds(tagIds);
     }
     else
     {

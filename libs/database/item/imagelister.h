@@ -37,7 +37,7 @@
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "databaseaccess.h"
-#include "databaseurl.h"
+#include "coredburl.h"
 #include "imagelisterrecord.h"
 #include "imagelisterreceiver.h"
 #include "dbjobinfo.h"
@@ -73,7 +73,7 @@ public:
     /**
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
-    void list(ImageListerReceiver* const receiver, const DatabaseUrl& url);
+    void list(ImageListerReceiver* const receiver, const CoreDbUrl& url);
 
     /**
       * List images in the Album (physical album) specified by albumRoot, album.

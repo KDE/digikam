@@ -36,7 +36,7 @@
 #include "albummanager.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
-#include "databaseurl.h"
+#include "coredburl.h"
 #include "tagscache.h"
 
 namespace Digikam
@@ -457,9 +457,9 @@ QString PAlbum::albumPath() const
     return m_parentPath + m_path;
 }
 
-DatabaseUrl PAlbum::databaseUrl() const
+CoreDbUrl PAlbum::databaseUrl() const
 {
-    return DatabaseUrl::fromAlbumAndName(QString(), albumPath(), QUrl::fromLocalFile(albumRootPath()), m_albumRootId);
+    return CoreDbUrl::fromAlbumAndName(QString(), albumPath(), QUrl::fromLocalFile(albumRootPath()), m_albumRootId);
 }
 
 QString PAlbum::prettyUrl() const
@@ -529,9 +529,9 @@ QString TAlbum::prettyUrl() const
     return i18n("Tags") + tagPath(true);
 }
 
-DatabaseUrl TAlbum::databaseUrl() const
+CoreDbUrl TAlbum::databaseUrl() const
 {
-    return DatabaseUrl::fromTagIds(tagIDs());
+    return CoreDbUrl::fromTagIds(tagIDs());
 }
 
 QList<int> TAlbum::tagIDs() const
@@ -619,14 +619,14 @@ DAlbum::Range DAlbum::range() const
     return m_range;
 }
 
-DatabaseUrl DAlbum::databaseUrl() const
+CoreDbUrl DAlbum::databaseUrl() const
 {
     if (m_range == Month)
     {
-        return DatabaseUrl::fromDateForMonth(m_date);
+        return CoreDbUrl::fromDateForMonth(m_date);
     }
 
-    return DatabaseUrl::fromDateForYear(m_date);
+    return CoreDbUrl::fromDateForYear(m_date);
 }
 
 // --------------------------------------------------------------------------
@@ -648,9 +648,9 @@ void SAlbum::setSearch(DatabaseSearch::Type type, const QString& query)
     m_query      = query;
 }
 
-DatabaseUrl SAlbum::databaseUrl() const
+CoreDbUrl SAlbum::databaseUrl() const
 {
-    return DatabaseUrl::searchUrl(id());
+    return CoreDbUrl::searchUrl(id());
 }
 
 QString SAlbum::query() const

@@ -82,7 +82,7 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
     }
 
     // TODO: Drop Database Url usage
-    DatabaseUrl url = album->databaseUrl();
+    CoreDbUrl url = album->databaseUrl();
 
     if(album->type() == Album::DATE)
     {

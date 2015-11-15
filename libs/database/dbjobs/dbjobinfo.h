@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "databaseurl.h"
+#include "coredburl.h"
 #include "digikam_export.h"
 
 namespace Digikam

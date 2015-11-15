@@ -129,7 +129,7 @@ void ImageLister::setAllowExtraValues(bool useExtraValue)
     d->allowExtraValues = useExtraValue;
 }
 
-void ImageLister::list(ImageListerReceiver* const receiver, const DatabaseUrl& url)
+void ImageLister::list(ImageListerReceiver* const receiver, const CoreDbUrl& url)
 {
     if (url.isAlbumUrl())
     {

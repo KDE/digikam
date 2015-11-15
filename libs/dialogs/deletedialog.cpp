@@ -53,7 +53,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "databaseurl.h"
+#include "coredburl.h"
 
 namespace Digikam
 {
@@ -81,7 +81,7 @@ DeleteItem::DeleteItem(QTreeWidget* const parent, const QUrl& url)
 
     if (d->url.scheme() == QLatin1String("digikamalbums"))
     {
-        if (DatabaseUrl(d->url).isAlbumUrl())
+        if (CoreDbUrl(d->url).isAlbumUrl())
         {
             setThumb(QIcon::fromTheme(QLatin1String("folder")).pixmap(parent->iconSize().width()));
         }
@@ -121,7 +121,7 @@ QString DeleteItem::fileUrl() const
     }
     else if (d->url.scheme() == QLatin1String("digikamalbums"))
     {
-        return (DatabaseUrl(d->url).fileUrl().toLocalFile());
+        return (CoreDbUrl(d->url).fileUrl().toLocalFile());
     }
 
     return (d->url.toDisplayString());

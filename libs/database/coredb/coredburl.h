@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-19
- * Description : Handling of database specific URLs
+ * Description : Core database Url interface.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEURL_H
-#define DATABASEURL_H
+#ifndef COREDATABASEURL_H
+#define COREDATABASEURL_H
 
 // Qt includes
 
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT DatabaseUrl : public QUrl
+class DIGIKAM_DATABASE_EXPORT CoreDbUrl : public QUrl
 {
 public:
 
@@ -60,12 +60,12 @@ public:
       *   (if the file is "/media/fotos/Summer 2007/001.jpg", the album root may be "/media/fotos")
       * - The parameters of the database that is referenced
       */
-    static DatabaseUrl fromFileUrl(const QUrl& fileUrl,
+    static CoreDbUrl fromFileUrl(const QUrl& fileUrl,
                                    const QUrl& albumRoot,
                                    int   albumRootId,
                                    const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
-    static DatabaseUrl fromFileUrl(const QUrl& fileUrl,
+    static CoreDbUrl fromFileUrl(const QUrl& fileUrl,
                                    const QUrl& albumRoot,
                                    const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
@@ -74,13 +74,13 @@ public:
      * If name is empty, the album is referenced.
      * Other parameters as above.
      */
-    static DatabaseUrl fromAlbumAndName(const QString& name,
+    static CoreDbUrl fromAlbumAndName(const QString& name,
                                         const QString& album,
                                         const QUrl& albumRoot,
                                         int   albumRootId,
                                         const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
-    static DatabaseUrl fromAlbumAndName(const QString& name,
+    static CoreDbUrl fromAlbumAndName(const QString& name,
                                         const QString& album,
                                         const QUrl& albumRoot,
                                         const DatabaseParameters& parameters = DatabaseAccess::parameters());
@@ -88,33 +88,33 @@ public:
     /**
      * Create an empty digikamalbums:/ url
      */
-    static DatabaseUrl albumUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters());
+    static CoreDbUrl albumUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
      * Create a digikamtags:/ url from a list of tag IDs, where this list is the tag hierarchy
      * of the referenced tag, with the topmost parent first, and the tag last in the list.
      * An empty list references the root tag.
      */
-    static DatabaseUrl fromTagIds(const QList<int>& tagIds,
+    static CoreDbUrl fromTagIds(const QList<int>& tagIds,
                                   const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
      * Create an empty digikamdates:/ url
      */
-    static DatabaseUrl dateUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters());
+    static CoreDbUrl dateUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
      * Create a digikamdates:/ url for the month of the given date.
      * (The whole month of the given date will included in the referenced time span)
      */
-    static DatabaseUrl fromDateForMonth(const QDate& date,
+    static CoreDbUrl fromDateForMonth(const QDate& date,
                                         const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
      * Create a digikamdates:/ url for the year of the given date.
      * (The whole year of the given date will included in the referenced time span)
      */
-    static DatabaseUrl fromDateForYear(const QDate& date,
+    static CoreDbUrl fromDateForYear(const QDate& date,
                                        const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
@@ -122,30 +122,30 @@ public:
      * start date (inclusive) and ends before the end date (exclusive).
      * To cover the whole year of 1984, you would pass 1/1/1984 and 1/1/1985.
      */
-    static DatabaseUrl fromDateRange(const QDate& startDate, const QDate& endDate,
+    static CoreDbUrl fromDateRange(const QDate& startDate, const QDate& endDate,
                                      const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
      * Create an empty digikammapimages:/ url
      */
-    static DatabaseUrl mapImagesUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters());
+    static CoreDbUrl mapImagesUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
-    static DatabaseUrl fromAreaRange(const qreal lat1, const qreal lng1, const qreal lat2, const qreal lng2, const DatabaseParameters& parameters = DatabaseAccess::parameters());
+    static CoreDbUrl fromAreaRange(const qreal lat1, const qreal lng1, const qreal lat2, const qreal lng2, const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
      * Create a digikamsearch: URL for the search with the given id.
      */
-    static DatabaseUrl searchUrl(int searchId, const DatabaseParameters& parameters = DatabaseAccess::parameters());
+    static CoreDbUrl searchUrl(int searchId, const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
-      * Create a DatabaseUrl object from a QUrl, to retrieve the information stored
+      * Create a CoreDbUrl object from a QUrl, to retrieve the information stored
       */
-    DatabaseUrl(const QUrl& digikamUrl);
+    CoreDbUrl(const QUrl& digikamUrl);
 
     /**
      * Create an invalid database URL
      */
-    DatabaseUrl();
+    CoreDbUrl();
 
     /**
      * These test for the protocol of this URL.
@@ -249,14 +249,14 @@ public:
      */
     int searchId() const;
 
-    DatabaseUrl(const DatabaseUrl& url);
+    CoreDbUrl(const CoreDbUrl& url);
 
-    DatabaseUrl& operator=(const QUrl& digikamalbumsUrl);
-    DatabaseUrl& operator=(const DatabaseUrl& url);
+    CoreDbUrl& operator=(const QUrl& digikamalbumsUrl);
+    CoreDbUrl& operator=(const CoreDbUrl& url);
 
     bool operator==(const QUrl& digikamalbumsUrl) const;
 };
 
 }  // namespace Digikam
 
-#endif // DATABASEURL_H
+#endif // COREDATABASEURL_H

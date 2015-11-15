@@ -40,7 +40,7 @@
 #include "albuminfo.h"
 #include "digikam_export.h"
 #include "dshareddata.h"
-#include "databaseurl.h"
+#include "coredburl.h"
 #include "imageinfolist.h"
 #include "coredbfields.h"
 
@@ -156,7 +156,7 @@ public:
      * The returned object can be used as a QUrl.
      * Always use this for KIO operations
      */
-    DatabaseUrl databaseUrl() const;
+    CoreDbUrl databaseUrl() const;
 
     /**
      * Returns the file:// url.

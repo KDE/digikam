@@ -210,7 +210,7 @@ public:
      * Only available (or hidden, but available) album roots are guaranteed to be found.
      */
     bool    isAlbumRoot(const QUrl& fileUrl);
-    /// the file path should not end with the directory slash. Using DatabaseUrl's method is fine.
+    /// the file path should not end with the directory slash. Using CoreDbUrl's method is fine.
     bool    isAlbumRoot(const QString& filePath);
 
     /**

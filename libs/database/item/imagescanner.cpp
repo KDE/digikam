@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databaseurl.h"
+#include "coredburl.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "collectionlocation.h"
@@ -187,7 +187,7 @@ ImageScanner::ImageScanner(qlonglong imageid)
     }
 
     QString albumRootPath = CollectionManager::instance()->albumRootPath(shortInfo.albumRootID);
-    d->fileInfo           = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName,
+    d->fileInfo           = QFileInfo(CoreDbUrl::fromAlbumAndName(shortInfo.itemName,
                                       shortInfo.album, QUrl::fromLocalFile(albumRootPath), shortInfo.albumRootID).fileUrl().toLocalFile());
 }
 
