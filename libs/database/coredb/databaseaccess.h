@@ -36,7 +36,7 @@ namespace Digikam
 
 class CoreDbBackend;
 class AlbumDB;
-class DatabaseWatch;
+class CoreDbWatch;
 class InitializationObserver;
 class DatabaseAccessStaticPriv;
 
@@ -123,9 +123,9 @@ public:
     static void cleanUpDatabase();
 
     /**
-      * Return the DatabaseWatch.
+      * Return the CoreDbWatch.
       */
-    static DatabaseWatch* databaseWatch();
+    static CoreDbWatch* databaseWatch();
 
 
     static void initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler);

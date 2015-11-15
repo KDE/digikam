@@ -41,7 +41,7 @@
 #include "databaseaccess.h"
 #include "imagecomments.h"
 #include "imageinfo.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "metadatahub.h"
 
 namespace Digikam

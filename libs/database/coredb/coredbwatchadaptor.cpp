@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-23
- * Description : Keeping image properties in sync.
+ * Description : Core database DBus interface description
  *
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,9 +21,9 @@
  *
  * ============================================================ */
 
-#include "databasewatchadaptor.h"
+#include "coredbwatchadaptor.h"
 
-Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch* const watch)
+CoreDbWatchAdaptor::CoreDbWatchAdaptor(Digikam::CoreDbWatch* const watch)
     : QDBusAbstractAdaptor(watch)
 {
     setAutoRelaySignals(true);

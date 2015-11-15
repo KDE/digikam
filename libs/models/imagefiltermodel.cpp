@@ -34,7 +34,7 @@
 #include "digikam_debug.h"
 #include "databaseaccess.h"
 #include "coredbchangesets.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "imageinfolist.h"
 #include "imagemodel.h"
 

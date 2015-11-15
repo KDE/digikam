@@ -52,7 +52,7 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "filereadwritelock.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "dprogressdlg.h"
 #include "dmetadata.h"
 #include "applicationsettings.h"
@@ -395,7 +395,7 @@ ScanController::Advice ScanController::databaseInitialization()
     // loop is quit by signal
     d->eventLoop->exec();
 
-    // setup file watch service for LoadingCache - now that we are sure we have a DatabaseWatch
+    // setup file watch service for LoadingCache - now that we are sure we have a CoreDbWatch
     if (!d->fileWatchInstalled)
     {
         d->fileWatchInstalled     = true; // once per application lifetime only
@@ -1127,7 +1127,7 @@ void ScanController::finishFileMetadataWrite(const ImageInfo& info, bool changed
 
 ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
 {
-    DatabaseWatch* const dbwatch = DatabaseAccess::databaseWatch();
+    CoreDbWatch* const dbwatch = DatabaseAccess::databaseWatch();
 
     // we opt for a queued connection to make stuff a bit relaxed
     connect(dbwatch, SIGNAL(imageChange(ImageChangeset)), this, SLOT(slotImageChanged(ImageChangeset)),

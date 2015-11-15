@@ -38,7 +38,7 @@
 #include "databaseaccess.h"
 #include "coredbchangesets.h"
 #include "coredbfields.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "imagefiltermodel.h"
 #include "imagefiltersettings.h"
 #include "imageinfo.h"

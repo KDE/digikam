@@ -35,7 +35,7 @@ namespace Digikam
 {
 
 class CoreDbSchemaUpdater;
-class DatabaseWatch;
+class CoreDbWatch;
 class CoreDbBackendPrivate;
 
 class DIGIKAM_DATABASE_EXPORT CoreDbBackend : public DatabaseCoreBackend
@@ -49,7 +49,7 @@ public:
 
     /** Sets the global database watch
      */
-    void setDatabaseWatch(DatabaseWatch* watch);
+    void setCoreDbWatch(CoreDbWatch* watch);
 
     /**
      * Initialize the database schema to the current version,

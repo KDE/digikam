@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-23
- * Description : Keeping image properties in sync.
+ * Description : Core database image properties synchronizer
  *
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "databasewatch.h"
-#include "databasewatchadaptor.h"
+#include "coredbwatch.h"
+#include "coredbwatchadaptor.h"
 
 // C Ansi includes
 
@@ -36,7 +36,7 @@
 // Local includes
 
 #include "collectionmanager.h"
-#include "databasewatchadaptor.h"
+#include "coredbwatchadaptor.h"
 #include "digikam_config.h"
 
 namespace Digikam
@@ -44,12 +44,12 @@ namespace Digikam
 
 class DBusSignalListenerThread;
 
-class DatabaseWatch::Private
+class CoreDbWatch::Private
 {
 public:
 
     Private() :
-        mode(DatabaseWatch::DatabaseSlave),
+        mode(CoreDbWatch::DatabaseSlave),
         adaptor(0),
         slaveThread(0)
     {
@@ -73,18 +73,18 @@ public:
 public:
 
 
-    DatabaseWatch::DatabaseMode   mode;
-    QString                       databaseId;
-    QString                       applicationId;
+    CoreDbWatch::DatabaseMode   mode;
+    QString                     databaseId;
+    QString                     applicationId;
 
-    Digikam_DatabaseWatchAdaptor* adaptor;
+    CoreDbWatchAdaptor* adaptor;
 
-    DBusSignalListenerThread*     slaveThread;
+    DBusSignalListenerThread*   slaveThread;
 };
 
 // ---------------------------------------------------------------------------------
 
-DBusSignalListenerThread::DBusSignalListenerThread(DatabaseWatch* const q, DatabaseWatch::Private* const d)
+DBusSignalListenerThread::DBusSignalListenerThread(CoreDbWatch* const q, CoreDbWatch::Private* const d)
     : q(q),
       d(d)
 {
@@ -116,19 +116,19 @@ void DBusSignalListenerThread::run()
 
 // ---------------------------------------------------------------------------------
 
-DatabaseWatch::DatabaseWatch()
+CoreDbWatch::CoreDbWatch()
     : d(new Private)
 {
 }
 
-DatabaseWatch::~DatabaseWatch()
+CoreDbWatch::~CoreDbWatch()
 {
     delete d->adaptor;
     delete d->slaveThread;
     delete d;
 }
 
-void DatabaseWatch::initializeRemote(DatabaseMode mode)
+void CoreDbWatch::initializeRemote(DatabaseMode mode)
 {
     d->mode = mode;
 
@@ -157,7 +157,7 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
 
     if (d->mode == DatabaseSlave)
     {
-        d->adaptor = new Digikam_DatabaseWatchAdaptor(this);
+        d->adaptor = new CoreDbWatchAdaptor(this);
         QDBusConnection::sessionBus().registerObject(QLatin1String("/ChangesetRelay"), this);
 
         // KIOSlave do not have an event loop which is needed for receiving DBus signals.
@@ -166,7 +166,7 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
     }
     else
     {
-        d->adaptor = new Digikam_DatabaseWatchAdaptor(this);
+        d->adaptor = new CoreDbWatchAdaptor(this);
         QDBusConnection::sessionBus().registerObject(QLatin1String("/ChangesetRelayForPeers"), this);
 
         // connect DBus signals from slave or peer to our application
@@ -191,28 +191,28 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
             CollectionManager::instance(), SLOT(slotAlbumRootChange(AlbumRootChangeset)));
 }
 
-void DatabaseWatch::doAnyProcessing()
+void CoreDbWatch::doAnyProcessing()
 {
     // In a slave we have no event loop.
     // This method is called when a slave begins a new operation
     // (it calls DatabaseAccess::setParameters then).
-    // Allow here queued signals to proceed that may be caused by DatabaseWatch signals
+    // Allow here queued signals to proceed that may be caused by CoreDbWatch signals
     // that were send from within the DBus listener thread (see above).
     QEventLoop loop;
     loop.processEvents();
 }
 
-void DatabaseWatch::setDatabaseIdentifier(const QString& identifier)
+void CoreDbWatch::setDatabaseIdentifier(const QString& identifier)
 {
     d->databaseId = identifier;
 }
 
-void DatabaseWatch::setApplicationIdentifier(const QString& identifier)
+void CoreDbWatch::setApplicationIdentifier(const QString& identifier)
 {
     d->applicationId = identifier;
 }
 
-void DatabaseWatch::sendDatabaseChanged()
+void CoreDbWatch::sendDatabaseChanged()
 {
     // Note: This is not dispatched by DBus!
     emit databaseChanged();
@@ -220,7 +220,7 @@ void DatabaseWatch::sendDatabaseChanged()
 
 // --- methods to dispatch changes from database to listeners (local and remote) ---
 
-void DatabaseWatch::sendImageChange(const ImageChangeset& cset)
+void CoreDbWatch::sendImageChange(const ImageChangeset& cset)
 {
     // send local signal
     emit imageChange(cset);
@@ -228,37 +228,37 @@ void DatabaseWatch::sendImageChange(const ImageChangeset& cset)
     emit imageChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendImageTagChange(const ImageTagChangeset& cset)
+void CoreDbWatch::sendImageTagChange(const ImageTagChangeset& cset)
 {
     emit imageTagChange(cset);
     emit imageTagChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendCollectionImageChange(const CollectionImageChangeset& cset)
+void CoreDbWatch::sendCollectionImageChange(const CollectionImageChangeset& cset)
 {
     emit collectionImageChange(cset);
     emit collectionImageChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendAlbumChange(const AlbumChangeset& cset)
+void CoreDbWatch::sendAlbumChange(const AlbumChangeset& cset)
 {
     emit albumChange(cset);
     emit albumChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendTagChange(const TagChangeset& cset)
+void CoreDbWatch::sendTagChange(const TagChangeset& cset)
 {
     emit tagChange(cset);
     emit tagChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendAlbumRootChange(const AlbumRootChangeset& cset)
+void CoreDbWatch::sendAlbumRootChange(const AlbumRootChangeset& cset)
 {
     emit albumRootChange(cset);
     emit albumRootChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendSearchChange(const SearchChangeset& cset)
+void CoreDbWatch::sendSearchChange(const SearchChangeset& cset)
 {
     emit searchChange(cset);
     emit searchChange(d->databaseId, d->applicationId, cset);
@@ -266,7 +266,7 @@ void DatabaseWatch::sendSearchChange(const SearchChangeset& cset)
 
 // --- methods to dispatch from slave or peer to local listeners ---
 
-void DatabaseWatch::slotImageChangeDBus(const QString& databaseIdentifier,
+void CoreDbWatch::slotImageChangeDBus(const QString& databaseIdentifier,
                                         const QString& applicationIdentifier,
                                         const ImageChangeset& changeset)
 {
@@ -277,7 +277,7 @@ void DatabaseWatch::slotImageChangeDBus(const QString& databaseIdentifier,
     }
 }
 
-void DatabaseWatch::slotImageTagChangeDBus(const QString& databaseIdentifier,
+void CoreDbWatch::slotImageTagChangeDBus(const QString& databaseIdentifier,
                                            const QString& applicationIdentifier,
                                            const ImageTagChangeset& changeset)
 {
@@ -288,7 +288,7 @@ void DatabaseWatch::slotImageTagChangeDBus(const QString& databaseIdentifier,
     }
 }
 
-void DatabaseWatch::slotCollectionImageChangeDBus(const QString& databaseIdentifier,
+void CoreDbWatch::slotCollectionImageChangeDBus(const QString& databaseIdentifier,
                                                   const QString& applicationIdentifier,
                                                   const CollectionImageChangeset& changeset)
 {
@@ -299,7 +299,7 @@ void DatabaseWatch::slotCollectionImageChangeDBus(const QString& databaseIdentif
     }
 }
 
-void DatabaseWatch::slotAlbumChangeDBus(const QString& databaseIdentifier,
+void CoreDbWatch::slotAlbumChangeDBus(const QString& databaseIdentifier,
                                         const QString& applicationIdentifier,
                                         const AlbumChangeset& changeset)
 {
@@ -310,7 +310,7 @@ void DatabaseWatch::slotAlbumChangeDBus(const QString& databaseIdentifier,
     }
 }
 
-void DatabaseWatch::slotTagChangeDBus(const QString& databaseIdentifier,
+void CoreDbWatch::slotTagChangeDBus(const QString& databaseIdentifier,
                                       const QString& applicationIdentifier,
                                       const TagChangeset& changeset)
 {
@@ -321,7 +321,7 @@ void DatabaseWatch::slotTagChangeDBus(const QString& databaseIdentifier,
     }
 }
 
-void DatabaseWatch::slotAlbumRootChangeDBus(const QString& databaseIdentifier,
+void CoreDbWatch::slotAlbumRootChangeDBus(const QString& databaseIdentifier,
         const QString& applicationIdentifier,
         const AlbumRootChangeset& changeset)
 {
@@ -332,7 +332,7 @@ void DatabaseWatch::slotAlbumRootChangeDBus(const QString& databaseIdentifier,
     }
 }
 
-void DatabaseWatch::slotSearchChangeDBus(const QString& databaseIdentifier,
+void CoreDbWatch::slotSearchChangeDBus(const QString& databaseIdentifier,
                                          const QString& applicationIdentifier,
                                          const SearchChangeset& changeset)
 {

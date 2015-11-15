@@ -46,7 +46,7 @@
 #include "imagemodel.h"
 #include "importfiltermodel.h"
 #include "importimagemodel.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "coredbfields.h"
 #include "imagepropertiessidebardb.h"
 #include "gpsimageinfosorter.h"

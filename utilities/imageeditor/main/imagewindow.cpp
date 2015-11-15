@@ -70,7 +70,7 @@
 #include "collectionmanager.h"
 #include "componentsinfo.h"
 #include "databaseaccess.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "coredbchangesets.h"
 #include "ddragobjects.h"
 #include "deletedialog.h"

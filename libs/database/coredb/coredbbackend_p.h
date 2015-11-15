@@ -28,12 +28,12 @@
 // Local includes
 
 #include "databasecorebackend_p.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 
 namespace Digikam
 {
 
-class DatabaseWatch;
+class CoreDbWatch;
 
 class CoreDbBackendPrivate : public DatabaseCoreBackendPrivate
 {
@@ -54,7 +54,7 @@ public:
 
 public:
 
-    DatabaseWatch* watch;
+    CoreDbWatch* watch;
 
 public:
 

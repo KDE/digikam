@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-23
- * Description : Keeping image properties in sync.
+ * Description : Core database image properties synchronizer
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEWATCH_H
-#define DATABASEWATCH_H
+#ifndef COREDATABASEWATCH_H
+#define COREDATABASEWATCH_H
 
 // Qt includes
 
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT DatabaseWatch : public QObject
+class DIGIKAM_DATABASE_EXPORT CoreDbWatch : public QObject
 {
     Q_OBJECT
 
@@ -51,7 +51,7 @@ public:
 
 public:
 
-    DatabaseWatch();
+    CoreDbWatch();
 
     void initializeRemote(DatabaseMode mode);
     void doAnyProcessing();
@@ -72,7 +72,7 @@ public:
 
 Q_SIGNALS:
 
-    /** Retrieve the DatabaseWatch object from DatabaseAccess::databaseWatch(). */
+    /** Retrieve the CoreDbWatch object from DatabaseAccess::databaseWatch(). */
 
     /**
      * This does not describe a change of the contents of a table;
@@ -95,7 +95,7 @@ Q_SIGNALS:
 
 protected:
 
-    ~DatabaseWatch();
+    ~CoreDbWatch();
 
 protected Q_SLOTS:
 
@@ -169,17 +169,17 @@ class DBusSignalListenerThread : public QThread
 
 public:
 
-    DBusSignalListenerThread(DatabaseWatch* const q, DatabaseWatch::Private* const d);
+    DBusSignalListenerThread(CoreDbWatch* const q, CoreDbWatch::Private* const d);
     ~DBusSignalListenerThread();
 
     virtual void run();
 
 private:
 
-    DatabaseWatch*          q;
-    DatabaseWatch::Private* d;
+    CoreDbWatch*          q;
+    CoreDbWatch::Private* d;
 };
-    
+
 } // namespace Digikam
 
-#endif // DATABASEATTRIBUTESWATCH_H
+#endif // COREDATABASEWATCH_H

@@ -51,7 +51,7 @@
 #include "digikam_debug.h"
 #include "albumdb.h"
 #include "coredbchangesets.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "ddragobjects.h"
 #include "defaultrenameparser.h"
 #include "queuemgrwindow.h"

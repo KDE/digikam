@@ -271,7 +271,7 @@ private:
     static CollectionManager* m_instance;
     void updateLocations();
 
-    friend class DatabaseWatch;
+    friend class CoreDbWatch;
     friend class DatabaseAccess;
 
     void clear_locked();

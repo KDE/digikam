@@ -27,7 +27,7 @@
 #include "coredbbackend.h"
 #include "coredbbackend_p.h"
 #include "coredbschemaupdater.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 
 namespace Digikam
 {
@@ -41,7 +41,7 @@ CoreDbBackend::~CoreDbBackend()
 {
 }
 
-void CoreDbBackend::setDatabaseWatch(DatabaseWatch* watch)
+void CoreDbBackend::setCoreDbWatch(CoreDbWatch* watch)
 {
     Q_D(CoreDbBackend);
     d->watch = watch;

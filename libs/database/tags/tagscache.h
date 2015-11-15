@@ -286,7 +286,7 @@ public:
 Q_SIGNALS:
 
     /** These signals are provided for convenience; for finer grained information
-        use DatabaseWatch. Use a queued connection if you carry out
+        use CoreDbWatch. Use a queued connection if you carry out
         longer operations from slots connected to these signals.
     */
     void tagAdded(int tagId);

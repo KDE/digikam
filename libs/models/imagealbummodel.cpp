@@ -35,7 +35,7 @@
 #include "databaseaccess.h"
 #include "coredbchangesets.h"
 #include "databaseface.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "databaseurl.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"

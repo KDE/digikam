@@ -45,7 +45,7 @@
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "coredbconstants.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "coredbinfocontainers.h"
 #include "digikamapp.h"
 #include "dxmlguiwindow.h"

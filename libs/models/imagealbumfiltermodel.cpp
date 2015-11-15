@@ -31,7 +31,7 @@
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "coredbchangesets.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "imagealbummodel.h"
 
 namespace Digikam

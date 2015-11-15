@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "dshareddata.h"
 
 namespace Digikam

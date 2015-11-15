@@ -773,7 +773,7 @@ CollectionManager::CollectionManager()
             this,
             SLOT(deviceRemoved(QString)));
 
-    // DatabaseWatch slot is connected at construction of DatabaseWatch, which may be later.
+    // CoreDbWatch slot is connected at construction of CoreDbWatch, which may be later.
 }
 
 CollectionManager::~CollectionManager()

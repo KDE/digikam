@@ -33,7 +33,7 @@
 #include "digikam_debug.h"
 #include "coredbchangesets.h"
 #include "coredbfields.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "abstractitemdragdrophandler.h"

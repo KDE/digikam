@@ -44,7 +44,7 @@ ImageInfoCache::ImageInfoCache()
     qRegisterMetaType<ImageInfoList>("ImageInfoList");
     qRegisterMetaType<QList<ImageInfo> >("QList<ImageInfo>");
 
-    DatabaseWatch* const dbwatch = DatabaseAccess::databaseWatch();
+    CoreDbWatch* const dbwatch = DatabaseAccess::databaseWatch();
 
     connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
             this, SLOT(slotImageChanged(ImageChangeset)),

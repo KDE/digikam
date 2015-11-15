@@ -44,7 +44,7 @@
 #include "imageinfocache.h"
 #include "coredbschemaupdater.h"
 #include "collectionmanager.h"
-#include "databasewatch.h"
+#include "coredbwatch.h"
 #include "coredbbackend.h"
 #include "databaseerrorhandler.h"
 #include "tagscache.h"
@@ -74,7 +74,7 @@ public:
 
     CoreDbBackend*    backend;
     AlbumDB*            db;
-    DatabaseWatch*      databaseWatch;
+    CoreDbWatch*      databaseWatch;
     DatabaseParameters  parameters;
     DatabaseLocking     lock;
     QString             lastError;
@@ -151,7 +151,7 @@ CoreDbBackend* DatabaseAccess::backend() const
     return d->backend;
 }
 
-DatabaseWatch* DatabaseAccess::databaseWatch()
+CoreDbWatch* DatabaseAccess::databaseWatch()
 {
     if (d)
     {
@@ -222,16 +222,16 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
 
     if (!d->databaseWatch)
     {
-        d->databaseWatch = new DatabaseWatch();
+        d->databaseWatch = new CoreDbWatch();
         d->databaseWatch->setApplicationIdentifier(d->applicationIdentifier.toString());
 
         if (status == MainApplication)
         {
-            d->databaseWatch->initializeRemote(DatabaseWatch::DatabaseMaster);
+            d->databaseWatch->initializeRemote(CoreDbWatch::DatabaseMaster);
         }
         else
         {
-            d->databaseWatch->initializeRemote(DatabaseWatch::DatabaseSlave);
+            d->databaseWatch->initializeRemote(CoreDbWatch::DatabaseSlave);
         }
     }
 
@@ -242,7 +242,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
         delete d->db;
         delete d->backend;
         d->backend = new CoreDbBackend(&d->lock);
-        d->backend->setDatabaseWatch(d->databaseWatch);
+        d->backend->setCoreDbWatch(d->databaseWatch);
         d->db = new AlbumDB(d->backend);
         TagsCache::instance()->initialize();
     }

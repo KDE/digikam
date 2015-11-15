@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-12-23
- * Description : DBus interface description
+ * Description : Core database DBus interface description
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEWATCHADAPTOR_H
-#define DATABASEWATCHADAPTOR_H
+#ifndef COREDATABASEWATCHADAPTOR_H
+#define COREDATABASEWATCHADAPTOR_H
 
 // Qt includes
 
@@ -32,23 +32,23 @@
 
 // Local includes
 
-#include "databasewatch.h"
+#include "coredbwatch.h"
 
 // qdbuscpp2xml -S -M databasewatchadaptor.h -o org.kde.digikam.DatabaseChangesetRelay.xml
 
-class Digikam_DatabaseWatchAdaptor : public QDBusAbstractAdaptor
+class CoreDbWatchAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.digikam.DatabaseChangesetRelay")
 
 public:
 
-    explicit Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch* const watch);
+    explicit CoreDbWatchAdaptor(Digikam::CoreDbWatch* const watch);
 
 Q_SIGNALS:
 
-    // These signals are the same as declared in DatabaseWatch, setAutoRelaySignals will
-    // automatically connect the DatabaseWatch signals to these, which are then sent over DBus.
+    // These signals are the same as declared in CoreDbWatch, setAutoRelaySignals will
+    // automatically connect the CoreDbWatch signals to these, which are then sent over DBus.
 
     //NOTE:
     // The full qualification with "Digikam::" for the changeset types in the following
@@ -84,4 +84,4 @@ Q_SIGNALS:
                       const Digikam::SearchChangeset& changeset);
 };
 
-#endif // DATABASEWATCHADAPTOR_H
+#endif // COREDATABASEWATCHADAPTOR_H
