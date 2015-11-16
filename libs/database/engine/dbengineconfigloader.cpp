@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-DbEngineConfigLoader::DbEngineConfigLoader(const QString& filepath, int xmlVersion)
+DbEngineConfigSettingsLoader::DbEngineConfigSettingsLoader(const QString& filepath, int xmlVersion)
 {
     isValid = readConfig(filepath, xmlVersion);
 
@@ -56,9 +56,9 @@ DbEngineConfigLoader::DbEngineConfigLoader(const QString& filepath, int xmlVersi
     }
 }
 
-DbEngineConfig DbEngineConfigLoader::readDatabase(QDomElement& databaseElement)
+DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& databaseElement)
 {
-    DbEngineConfig configElement;
+    DbEngineConfigSettings configElement;
     configElement.databaseID = QLatin1String("Unidentified");
 
     if (!databaseElement.hasAttribute(QLatin1String("name")))
@@ -143,7 +143,7 @@ DbEngineConfig DbEngineConfigLoader::readDatabase(QDomElement& databaseElement)
     return configElement;
 }
 
-void DbEngineConfigLoader::readDBActions(QDomElement& sqlStatementElements, DbEngineConfig& configElement)
+void DbEngineConfigSettingsLoader::readDBActions(QDomElement& sqlStatementElements, DbEngineConfigSettings& configElement)
 {
     QDomElement dbActionElement = sqlStatementElements.firstChildElement(QLatin1String("dbaction"));
 
@@ -184,7 +184,7 @@ void DbEngineConfigLoader::readDBActions(QDomElement& sqlStatementElements, DbEn
     }
 }
 
-bool DbEngineConfigLoader::readConfig(const QString& filepath, int xmlVersion)
+bool DbEngineConfigSettingsLoader::readConfig(const QString& filepath, int xmlVersion)
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Loading SQL code from config file" << filepath;
     QFile file(filepath);
@@ -261,14 +261,14 @@ bool DbEngineConfigLoader::readConfig(const QString& filepath, int xmlVersion)
 
     for ( ; !databaseElement.isNull(); databaseElement=databaseElement.nextSiblingElement(QLatin1String("database")))
     {
-        DbEngineConfig l_DBCfgElement = readDatabase(databaseElement);
+        DbEngineConfigSettings l_DBCfgElement = readDatabase(databaseElement);
         databaseConfigs.insert(l_DBCfgElement.databaseID, l_DBCfgElement);
     }
 
 /*
     qCDebug(DIGIKAM_DATABASE_LOG) << "Found entries: " << databaseConfigs.size();
 
-    foreach(const DbEngineConfig& configElement, databaseConfigs )
+    foreach(const DbEngineConfigSettings& configElement, databaseConfigs )
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseID: "          << configElement.databaseID;
         qCDebug(DIGIKAM_DATABASE_LOG) << "HostName: "            << configElement.hostName;

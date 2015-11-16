@@ -40,21 +40,21 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DbEngineConfigLoader
+class DIGIKAM_EXPORT DbEngineConfigSettingsLoader
 {
 public:
 
-    DbEngineConfigLoader(const QString& filepath, int xmlVersion);
+    DbEngineConfigSettingsLoader(const QString& filepath, int xmlVersion);
 
-    bool           readConfig(const QString& filepath, int xmlVersion);
-    DbEngineConfig readDatabase(QDomElement& databaseElement);
-    void           readDBActions(QDomElement& sqlStatementElements, DbEngineConfig& configElement);
+    bool                   readConfig(const QString& filepath, int xmlVersion);
+    DbEngineConfigSettings readDatabase(QDomElement& databaseElement);
+    void                   readDBActions(QDomElement& sqlStatementElements, DbEngineConfigSettings& configElement);
 
 public:
 
-    bool                          isValid;
-    QString                       errorMessage;
-    QMap<QString, DbEngineConfig> databaseConfigs;
+    bool                                  isValid;
+    QString                               errorMessage;
+    QMap<QString, DbEngineConfigSettings> databaseConfigs;
 };
 
 } // namespace Digikam

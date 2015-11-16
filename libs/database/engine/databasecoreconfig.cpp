@@ -37,13 +37,13 @@
 namespace Digikam
 {
 
-Q_GLOBAL_STATIC_WITH_ARGS(DbEngineConfigLoader,
+Q_GLOBAL_STATIC_WITH_ARGS(DbEngineConfigSettingsLoader,
                           dbcoreloader,
                           (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/dbconfig.xml")),
                            dbcoreconfig_xml_version)
                          )
 
-DbEngineConfig DatabaseCoreConfig::element(const QString& databaseType)
+DbEngineConfigSettings DatabaseCoreConfig::element(const QString& databaseType)
 {
     // Unprotected read-only access? Usually accessed under CoreDbAccess protection anyway
     return dbcoreloader->databaseConfigs.value(databaseType);

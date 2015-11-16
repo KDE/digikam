@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class DbEngineConfig
+class DbEngineConfigSettings
 {
 
 public:

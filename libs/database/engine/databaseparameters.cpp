@@ -497,7 +497,7 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     DatabaseParameters parameters;
 
     // only the database name is needed
-    DbEngineConfig config        = DatabaseCoreConfig::element(databaseType);
+    DbEngineConfigSettings config        = DatabaseCoreConfig::element(databaseType);
     parameters.databaseType      = databaseType;
     parameters.databaseName      = config.databaseName;
     parameters.hostName          = config.hostName;

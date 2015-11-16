@@ -37,9 +37,9 @@ class DIGIKAM_EXPORT DatabaseCoreConfig
 {
 public:
 
-    static bool           checkReadyForUse();
-    static QString        errorMessage();
-    static DbEngineConfig element(const QString& databaseType);
+    static bool                  checkReadyForUse();
+    static QString                errorMessage();
+    static DbEngineConfigSettings element(const QString& databaseType);
 };
 
 } // namespace Digikam
