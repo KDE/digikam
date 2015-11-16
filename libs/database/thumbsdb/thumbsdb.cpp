@@ -207,25 +207,25 @@ QHash<QString, int> ThumbsDb::getFilePathsWithThumbnail()
     return filePaths;
 }
 
-DatabaseCoreBackend::QueryState ThumbsDb::insertUniqueHash(const QString& uniqueHash, qlonglong fileSize, int thumbId)
+BdEngineBackend::QueryState ThumbsDb::insertUniqueHash(const QString& uniqueHash, qlonglong fileSize, int thumbId)
 {
     return d->db->execSql(QLatin1String("REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId) VALUES (?,?,?)"),
                           uniqueHash, fileSize, thumbId);
 }
 
-DatabaseCoreBackend::QueryState ThumbsDb::insertFilePath(const QString& path, int thumbId)
+BdEngineBackend::QueryState ThumbsDb::insertFilePath(const QString& path, int thumbId)
 {
     return d->db->execSql(QLatin1String("REPLACE INTO FilePaths (path, thumbId) VALUES (?,?)"),
                           path, thumbId);
 }
 
-DatabaseCoreBackend::QueryState ThumbsDb::insertCustomIdentifier(const QString& path, int thumbId)
+BdEngineBackend::QueryState ThumbsDb::insertCustomIdentifier(const QString& path, int thumbId)
 {
     return d->db->execSql(QLatin1String("REPLACE INTO CustomIdentifiers (identifier, thumbId) VALUES (?,?)"),
                           path, thumbId);
 }
 
-DatabaseCoreBackend::QueryState ThumbsDb::removeByUniqueHash(const QString& uniqueHash, qlonglong fileSize)
+BdEngineBackend::QueryState ThumbsDb::removeByUniqueHash(const QString& uniqueHash, qlonglong fileSize)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
     QMap<QString, QVariant> parameters;
@@ -234,7 +234,7 @@ DatabaseCoreBackend::QueryState ThumbsDb::removeByUniqueHash(const QString& uniq
     return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByUniqueHashId")), parameters);
 }
 
-DatabaseCoreBackend::QueryState ThumbsDb::removeByFilePath(const QString& path)
+BdEngineBackend::QueryState ThumbsDb::removeByFilePath(const QString& path)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
     QMap<QString, QVariant> parameters;
@@ -242,7 +242,7 @@ DatabaseCoreBackend::QueryState ThumbsDb::removeByFilePath(const QString& path)
     return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByPath")), parameters);
 }
 
-DatabaseCoreBackend::QueryState ThumbsDb::removeByCustomIdentifier(const QString& id)
+BdEngineBackend::QueryState ThumbsDb::removeByCustomIdentifier(const QString& id)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
     QMap<QString, QVariant> parameters;
@@ -250,15 +250,15 @@ DatabaseCoreBackend::QueryState ThumbsDb::removeByCustomIdentifier(const QString
     return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByCustomIdentifier")), parameters);
 }
 
-DatabaseCoreBackend::QueryState ThumbsDb::insertThumbnail(const ThumbsDbInfo& info, QVariant* const lastInsertId)
+BdEngineBackend::QueryState ThumbsDb::insertThumbnail(const ThumbsDbInfo& info, QVariant* const lastInsertId)
 {
     QVariant id;
-    DatabaseCoreBackend::QueryState lastQueryState;
+    BdEngineBackend::QueryState lastQueryState;
     lastQueryState = d->db->execSql(QLatin1String("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);"),
                                     info.type, info.modificationDate, info.orientationHint, info.data,
                                     0, &id);
 
-    if (DatabaseCoreBackend::NoErrors == lastQueryState)
+    if (BdEngineBackend::NoErrors == lastQueryState)
     {
         *lastInsertId=id.toInt();
     }
@@ -270,13 +270,13 @@ DatabaseCoreBackend::QueryState ThumbsDb::insertThumbnail(const ThumbsDbInfo& in
     return lastQueryState;
 }
 
-DatabaseCoreBackend::QueryState ThumbsDb::replaceThumbnail(const ThumbsDbInfo& info)
+BdEngineBackend::QueryState ThumbsDb::replaceThumbnail(const ThumbsDbInfo& info)
 {
     return d->db->execSql(QLatin1String("REPLACE INTO Thumbnails (id, type, modificationDate, orientationHint, data) VALUES(?, ?, ?, ?, ?);"),
                           QList<QVariant>() << info.id << info.type << info.modificationDate << info.orientationHint << info.data);
 }
 
-DatabaseCoreBackend::QueryState ThumbsDb::updateModificationDate(int thumbId, const QDateTime& modificationDate)
+BdEngineBackend::QueryState ThumbsDb::updateModificationDate(int thumbId, const QDateTime& modificationDate)
 {
     return d->db->execSql(QLatin1String("UPDATE Thumbnails SET modificationDate=? WHERE id=?;"), modificationDate, thumbId);
 }

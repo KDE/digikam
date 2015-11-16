@@ -25,14 +25,14 @@
 // Local includes
 
 #include "facedbbackend.h"
-#include "databasecorebackend_p.h"
+#include "dbenginebackend_p.h"
 #include "facedbschemaupdater.h"
 
 namespace FacesEngine
 {
 
-FaceDbBackend::FaceDbBackend(DatabaseLocking* const locking, const QString& backendName)
-    : DatabaseCoreBackend(backendName, locking, *new DatabaseCoreBackendPrivate(this))
+FaceDbBackend::FaceDbBackend(DbEngineLocking* const locking, const QString& backendName)
+    : BdEngineBackend(backendName, locking, *new BdEngineBackendPrivate(this))
 {
 }
 
@@ -42,7 +42,7 @@ FaceDbBackend::~FaceDbBackend()
 
 bool FaceDbBackend::initSchema(FaceDbSchemaUpdater* const updater)
 {
-    Q_D(DatabaseCoreBackend);
+    Q_D(BdEngineBackend);
 
     if (d->status == OpenSchemaChecked)
     {

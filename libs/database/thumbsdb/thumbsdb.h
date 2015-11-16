@@ -101,23 +101,23 @@ public:
      */
     ThumbsDbInfo findByFilePath(const QString& path, const QString& uniqueHash);
 
-    DatabaseCoreBackend::QueryState insertUniqueHash(const QString& uniqueHash, qlonglong fileSize, int thumbId);
-    DatabaseCoreBackend::QueryState insertFilePath(const QString& path, int thumbId);
-    DatabaseCoreBackend::QueryState insertCustomIdentifier(const QString& id, int thumbId);
+    BdEngineBackend::QueryState insertUniqueHash(const QString& uniqueHash, qlonglong fileSize, int thumbId);
+    BdEngineBackend::QueryState insertFilePath(const QString& path, int thumbId);
+    BdEngineBackend::QueryState insertCustomIdentifier(const QString& id, int thumbId);
 
     /** Removes thumbnail data associated to the given uniqueHash/fileSize */
-    DatabaseCoreBackend::QueryState removeByUniqueHash(const QString& uniqueHash, qlonglong fileSize);
+    BdEngineBackend::QueryState removeByUniqueHash(const QString& uniqueHash, qlonglong fileSize);
     /** Removes thumbnail data associated to the given file path */
-    DatabaseCoreBackend::QueryState removeByFilePath(const QString& path);
-    DatabaseCoreBackend::QueryState removeByCustomIdentifier(const QString& id);
+    BdEngineBackend::QueryState removeByFilePath(const QString& path);
+    BdEngineBackend::QueryState removeByCustomIdentifier(const QString& id);
 
-    DatabaseCoreBackend::QueryState insertThumbnail(const ThumbsDbInfo& info, QVariant* const lastInsertId = 0);
-    DatabaseCoreBackend::QueryState replaceThumbnail(const ThumbsDbInfo& info);
+    BdEngineBackend::QueryState insertThumbnail(const ThumbsDbInfo& info, QVariant* const lastInsertId = 0);
+    BdEngineBackend::QueryState replaceThumbnail(const ThumbsDbInfo& info);
 
     QHash<QString, int> getFilePathsWithThumbnail();
 
     void replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize, const QString& newUniqueHash, int newFileSize);
-    DatabaseCoreBackend::QueryState updateModificationDate(int thumbId, const QDateTime& modificationDate);
+    BdEngineBackend::QueryState updateModificationDate(int thumbId, const QDateTime& modificationDate);
 
     //QStringList getAllThumbnailPaths();
 

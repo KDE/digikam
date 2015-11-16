@@ -28,20 +28,20 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databasecorebackend.h"
+#include "dbenginebackend.h"
 
 namespace Digikam
 {
 
 class ThumbsDbSchemaUpdater;
 
-class DIGIKAM_DATABASE_EXPORT ThumbsDbBackend : public DatabaseCoreBackend
+class DIGIKAM_DATABASE_EXPORT ThumbsDbBackend : public BdEngineBackend
 {
     Q_OBJECT
 
 public:
 
-    explicit ThumbsDbBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("thumbnailDatabase-"));
+    explicit ThumbsDbBackend(DbEngineLocking* const locking, const QString& backendName = QLatin1String("thumbnailDatabase-"));
     ~ThumbsDbBackend();
 
     /**
@@ -53,7 +53,7 @@ public:
 
 private:
     
-    Q_DECLARE_PRIVATE(DatabaseCoreBackend)
+    Q_DECLARE_PRIVATE(BdEngineBackend)
 };
 
 } // namespace Digikam

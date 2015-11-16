@@ -782,13 +782,13 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     }
 
     ThumbsDbAccess access;
-    DatabaseCoreBackend::QueryState lastQueryState = DatabaseCoreBackend::ConnectionError;
+    BdEngineBackend::QueryState lastQueryState = BdEngineBackend::ConnectionError;
 
-    while (lastQueryState == DatabaseCoreBackend::ConnectionError)
+    while (lastQueryState == BdEngineBackend::ConnectionError)
     {
         lastQueryState = access.backend()->beginTransaction();
 
-        if (DatabaseCoreBackend::NoErrors != lastQueryState)
+        if (BdEngineBackend::NoErrors != lastQueryState)
         {
             continue;
         }
@@ -799,7 +799,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
             QVariant id;
             lastQueryState = access.db()->insertThumbnail(dbInfo, &id);
 
-            if (DatabaseCoreBackend::NoErrors != lastQueryState)
+            if (BdEngineBackend::NoErrors != lastQueryState)
             {
                 continue;
             }
@@ -812,7 +812,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         {
             lastQueryState = access.db()->replaceThumbnail(dbInfo);
 
-            if (DatabaseCoreBackend::NoErrors != lastQueryState)
+            if (BdEngineBackend::NoErrors != lastQueryState)
             {
                 continue;
             }
@@ -823,7 +823,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         {
             lastQueryState = access.db()->insertCustomIdentifier(info.customIdentifier, dbInfo.id);
 
-            if (DatabaseCoreBackend::NoErrors != lastQueryState)
+            if (BdEngineBackend::NoErrors != lastQueryState)
             {
                 continue;
             }
@@ -834,7 +834,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
             {
                 lastQueryState = access.db()->insertUniqueHash(info.uniqueHash, info.fileSize, dbInfo.id);
 
-                if (DatabaseCoreBackend::NoErrors != lastQueryState)
+                if (BdEngineBackend::NoErrors != lastQueryState)
                 {
                     continue;
                 }
@@ -844,7 +844,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
             {
                 lastQueryState = access.db()->insertFilePath(info.filePath, dbInfo.id);
 
-                if (DatabaseCoreBackend::NoErrors != lastQueryState)
+                if (BdEngineBackend::NoErrors != lastQueryState)
                 {
                     continue;
                 }
@@ -853,7 +853,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
         lastQueryState = access.backend()->commitTransaction();
 
-        if (DatabaseCoreBackend::NoErrors != lastQueryState)
+        if (BdEngineBackend::NoErrors != lastQueryState)
         {
             continue;
         }
@@ -991,13 +991,13 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
 void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info) const
 {
     ThumbsDbAccess access;
-    DatabaseCoreBackend::QueryState lastQueryState=DatabaseCoreBackend::ConnectionError;
+    BdEngineBackend::QueryState lastQueryState=BdEngineBackend::ConnectionError;
 
-    while (DatabaseCoreBackend::ConnectionError==lastQueryState)
+    while (BdEngineBackend::ConnectionError==lastQueryState)
     {
         lastQueryState = access.backend()->beginTransaction();
 
-        if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+        if (BdEngineBackend::NoErrors!=lastQueryState)
         {
             continue;
         }
@@ -1006,7 +1006,7 @@ void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info) const
         {
             lastQueryState=access.db()->removeByUniqueHash(info.uniqueHash, info.fileSize);
 
-            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            if (BdEngineBackend::NoErrors!=lastQueryState)
             {
                 continue;
             }
@@ -1016,7 +1016,7 @@ void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info) const
         {
             lastQueryState=access.db()->removeByFilePath(info.filePath);
 
-            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            if (BdEngineBackend::NoErrors!=lastQueryState)
             {
                 continue;
             }
@@ -1024,7 +1024,7 @@ void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info) const
 
         lastQueryState = access.backend()->commitTransaction();
 
-        if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+        if (BdEngineBackend::NoErrors!=lastQueryState)
         {
             continue;
         }

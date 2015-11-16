@@ -28,7 +28,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databasecorebackend.h"
+#include "dbenginebackend.h"
 
 using namespace Digikam;
 
@@ -38,13 +38,13 @@ namespace FacesEngine
 class FaceDbSchemaUpdater;
 class FaceDbBackendPrivate;
 
-class DIGIKAM_DATABASE_EXPORT FaceDbBackend : public DatabaseCoreBackend
+class DIGIKAM_DATABASE_EXPORT FaceDbBackend : public BdEngineBackend
 {
     Q_OBJECT
 
 public:
 
-    explicit FaceDbBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("faceDatabase-"));
+    explicit FaceDbBackend(DbEngineLocking* const locking, const QString& backendName = QLatin1String("faceDatabase-"));
     ~FaceDbBackend();
 
     /**
@@ -56,7 +56,7 @@ public:
 
 private:
 
-    Q_DECLARE_PRIVATE(DatabaseCoreBackend)
+    Q_DECLARE_PRIVATE(BdEngineBackend)
 };
 
 } // namespace FacesEngine

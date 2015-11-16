@@ -220,7 +220,7 @@ void AlbumDB::deleteAlbumRoot(int rootId)
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":albumRoot"), rootId);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRoot")), parameters))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRoot")), parameters))
     {
         return;
     }
@@ -528,7 +528,7 @@ void AlbumDB::deleteAlbum(int albumID)
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":albumId"), albumID);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumID")), parameters))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumID")), parameters))
     {
         return;
     }
@@ -559,7 +559,7 @@ void AlbumDB::makeStaleAlbum(int albumID)
     parameters.insert(QLatin1String(":albumRoot"), 0);
     parameters.insert(QLatin1String(":relativePath"), newRelativePath);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRootPath")), parameters))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRootPath")), parameters))
     {
         return;
     }
@@ -577,7 +577,7 @@ void AlbumDB::deleteStaleAlbums()
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":albumRoot"), 0);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRoot")), parameters))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("deleteAlbumRoot")), parameters))
     {
         return;
     }
@@ -594,7 +594,7 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
     parameters.insert(QLatin1String(":tagPID"), parentTagID);
     parameters.insert(QLatin1String(":tagname"), name);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("InsertTag")), parameters, 0 , &id))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("InsertTag")), parameters, 0 , &id))
     {
         return -1;
     }
@@ -4370,7 +4370,7 @@ void AlbumDB::renameAlbum(int albumID, int newAlbumRoot, const QString& newRelat
     parameters.insert(QString::fromUtf8(":albumRoot"),    newAlbumRoot);
     parameters.insert(QString::fromUtf8(":relativePath"), newRelativePath);
 
-    if (DatabaseCoreBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("deleteAlbumRootPath")), parameters))
+    if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("deleteAlbumRootPath")), parameters))
     {
         return;
     }

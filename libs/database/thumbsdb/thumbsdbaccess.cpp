@@ -61,7 +61,7 @@ public:
     ThumbsDbBackend* backend;
     ThumbsDb*              db;
     DbEngineParameters        parameters;
-    DatabaseLocking           lock;
+    DbEngineLocking           lock;
     QString                   lastError;
 
     bool                      initializing;

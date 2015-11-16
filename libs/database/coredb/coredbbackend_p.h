@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "databasecorebackend_p.h"
+#include "dbenginebackend_p.h"
 #include "coredbwatch.h"
 
 namespace Digikam
@@ -35,12 +35,12 @@ namespace Digikam
 
 class CoreDbWatch;
 
-class CoreDbBackendPrivate : public DatabaseCoreBackendPrivate
+class CoreDbBackendPrivate : public BdEngineBackendPrivate
 {
 public:
 
     explicit CoreDbBackendPrivate(CoreDbBackend* const backend)
-        : DatabaseCoreBackendPrivate(backend),
+        : BdEngineBackendPrivate(backend),
           imageChangesetContainer(this),
           imageTagChangesetContainer(this),
           collectionImageChangesetContainer(this),
@@ -138,7 +138,7 @@ public:
 
     void transactionFinished()
     {
-        DatabaseCoreBackendPrivate::transactionFinished();
+        BdEngineBackendPrivate::transactionFinished();
 
         imageChangesetContainer.sendOut();
         imageTagChangesetContainer.sendOut();

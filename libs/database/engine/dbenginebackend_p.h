@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-15
- * Description : Abstract database backend
+ * Description : Database engine abstract database backend
  *
  * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASECOREBACKEND_P_H
-#define DATABASECOREBACKEND_P_H
+#ifndef DATABASE_ENGINE_BACKEND_P_H
+#define DATABASE_ENGINE_BACKEND_P_H
 
 // Qt includes
 
@@ -42,12 +42,12 @@
 namespace Digikam
 {
 
-class DatabaseThreadData
+class DbEngineThreadData
 {
 public:
 
-    DatabaseThreadData();
-    ~DatabaseThreadData();
+    DbEngineThreadData();
+    ~DbEngineThreadData();
 
     void closeDatabase();
 
@@ -57,14 +57,14 @@ public:
     QSqlError    lastError;
 };
 
-class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DbEngineErrorAnswer
+class DIGIKAM_EXPORT BdEngineBackendPrivate : public DbEngineErrorAnswer
 {
 public:
 
-    explicit DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend);
-    virtual ~DatabaseCoreBackendPrivate();
+    explicit BdEngineBackendPrivate(BdEngineBackend* const backend);
+    virtual ~BdEngineBackendPrivate();
 
-    void init(const QString& connectionName, DatabaseLocking* const locking);
+    void init(const QString& connectionName, DbEngineLocking* const locking);
 
     QString connectionName();
 
@@ -92,8 +92,8 @@ public:
     bool checkRetrySQLiteLockError(int retries);
     bool checkOperationStatus();
     bool handleWithErrorHandler(const SqlQuery* const query);
-    void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
-    void queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status);
+    void setQueryOperationFlag(BdEngineBackend::QueryOperationStatus status);
+    void queryOperationWakeAll(BdEngineBackend::QueryOperationStatus status);
 
     // called by DbEngineErrorHandler, implementing DbEngineErrorAnswer
     virtual void connectionErrorContinueQueries();
@@ -102,9 +102,9 @@ public:
 
 public:
 
-    QThreadStorage<DatabaseThreadData*>       threadDataStorage;
+    QThreadStorage<DbEngineThreadData*>       threadDataStorage;
 
-    // This compares to DatabaseThreadData's valid. If currentValidity is increased and > valid, the db is marked as invalid
+    // This compares to DbEngineThreadData's valid. If currentValidity is increased and > valid, the db is marked as invalid
     int                                       currentValidity;
 
     bool                                      isInTransaction;
@@ -113,15 +113,15 @@ public:
 
     DbEngineParameters                        parameters;
 
-    DatabaseCoreBackend::Status               status;
+    BdEngineBackend::Status                   status;
 
-    DatabaseLocking*                          lock;
+    DbEngineLocking*                          lock;
 
-    DatabaseCoreBackend::QueryOperationStatus operationStatus;
+    BdEngineBackend::QueryOperationStatus     operationStatus;
 
     QMutex                                    errorLockMutex;
     QWaitCondition                            errorLockCondVar;
-    DatabaseCoreBackend::QueryOperationStatus errorLockOperationStatus;
+    BdEngineBackend::QueryOperationStatus     errorLockOperationStatus;
 
     QMutex                                    busyWaitMutex;
     QWaitCondition                            busyWaitCondVar;
@@ -134,7 +134,7 @@ public :
     {
     public:
 
-        explicit AbstractUnlocker(DatabaseCoreBackendPrivate* const d);
+        explicit AbstractUnlocker(BdEngineBackendPrivate* const d);
         ~AbstractUnlocker();
 
         void finishAcquire();
@@ -142,7 +142,7 @@ public :
     protected:
 
         int                               count;
-        DatabaseCoreBackendPrivate* const d;
+        BdEngineBackendPrivate* const d;
     };
 
     friend class AbstractUnlocker;
@@ -153,7 +153,7 @@ public :
     {
     public:
 
-        AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* const d, QMutex* const mutex, QWaitCondition* const condVar);
+        AbstractWaitingUnlocker(BdEngineBackendPrivate* const d, QMutex* const mutex, QWaitCondition* const condVar);
         ~AbstractWaitingUnlocker();
 
         bool wait(unsigned long time = ULONG_MAX);
@@ -170,7 +170,7 @@ public :
     {
     public:
 
-        explicit ErrorLocker(DatabaseCoreBackendPrivate* const d);
+        explicit ErrorLocker(BdEngineBackendPrivate* const d);
         void wait();
     };
 
@@ -180,14 +180,14 @@ public :
     {
     public:
 
-        explicit BusyWaiter(DatabaseCoreBackendPrivate* const d);
+        explicit BusyWaiter(BdEngineBackendPrivate* const d);
     };
 
 public :
 
-    DatabaseCoreBackend* const q;
+    BdEngineBackend* const q;
 };
 
 }  // namespace Digikam
 
-#endif // DATABASECOREBACKEND_P_H
+#endif // DATABASE_ENGINE_BACKEND_P_H

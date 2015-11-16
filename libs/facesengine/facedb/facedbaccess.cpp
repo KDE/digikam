@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databasecorebackend.h"
+#include "dbenginebackend.h"
 #include "trainingdb.h"
 #include "facedbschemaupdater.h"
 
@@ -63,7 +63,7 @@ public:
     FaceDbBackend*   backend;
     TrainingDB*            db;
     DbEngineParameters     parameters;
-    DatabaseLocking        lock;
+    DbEngineLocking        lock;
     QString                lastError;
     bool                   initializing;
 };

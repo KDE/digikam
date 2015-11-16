@@ -36,7 +36,7 @@
 namespace Digikam
 {
 /**
- * The DbEngineActionType is used by the DatabaseCoreBackend
+ * The DbEngineActionType is used by the BdEngineBackend
  * to wrap another data object within an sql statement
  * and controls whether it should be used as field entry or as value
  * (prepared to an sql statement with positional binding).

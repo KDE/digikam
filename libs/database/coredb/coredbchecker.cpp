@@ -48,7 +48,7 @@ CoreDbPrivilegesChecker::~CoreDbPrivilegesChecker()
 bool CoreDbPrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
 {
     bool result = true;
-    DatabaseLocking fromLocking;
+    DbEngineLocking fromLocking;
     CoreDbBackend fromDBbackend(&fromLocking, QLatin1String("PrivilegesCheckDatabase"));
 
     if (!fromDBbackend.open(m_parameters))
@@ -93,9 +93,9 @@ bool CoreDbPrivilegesChecker::checkPriv(CoreDbBackend& dbBackend, const QString&
     QMap<QString, QVariant> bindingMap;
     // now perform the copy action
     QList<QString> columnNames;
-    DatabaseCoreBackend::QueryState queryStateResult = dbBackend.execDBAction(dbBackend.getDBAction(dbActionName), bindingMap);
+    BdEngineBackend::QueryState queryStateResult = dbBackend.execDBAction(dbBackend.getDBAction(dbActionName), bindingMap);
 
-    if (queryStateResult != DatabaseCoreBackend::NoErrors &&
+    if (queryStateResult != BdEngineBackend::NoErrors &&
         dbBackend.lastSQLError().isValid()                &&
         dbBackend.lastSQLError().number() != 0)
     {

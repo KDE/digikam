@@ -31,7 +31,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databasecorebackend.h"
+#include "dbenginebackend.h"
 #include "facedbaccess.h"
 #include "trainingdb.h"
 

@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "databasecorebackend.h"
+#include "dbenginebackend.h"
 #include "dbengineerrorhandler.h"
 
 namespace Digikam

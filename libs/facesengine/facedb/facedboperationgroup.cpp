@@ -30,7 +30,7 @@
 // Local includes
 
 #include "facedbaccess.h"
-#include "databasecorebackend.h"
+#include "dbenginebackend.h"
 
 using namespace Digikam;
 

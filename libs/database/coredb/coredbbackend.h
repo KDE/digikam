@@ -28,7 +28,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databasecorebackend.h"
+#include "dbenginebackend.h"
 #include "coredbchangesets.h"
 
 namespace Digikam
@@ -38,13 +38,13 @@ class CoreDbSchemaUpdater;
 class CoreDbWatch;
 class CoreDbBackendPrivate;
 
-class DIGIKAM_DATABASE_EXPORT CoreDbBackend : public DatabaseCoreBackend
+class DIGIKAM_DATABASE_EXPORT CoreDbBackend : public BdEngineBackend
 {
     Q_OBJECT
 
 public:
 
-    explicit CoreDbBackend(DatabaseLocking* const locking, const QString& backendName = QLatin1String("digikamDatabase-"));
+    explicit CoreDbBackend(DbEngineLocking* const locking, const QString& backendName = QLatin1String("digikamDatabase-"));
     ~CoreDbBackend();
 
     /** Sets the global database watch

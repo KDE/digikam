@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-06-07
- * Description : Abstract database backend
+ * Description : Database engine abstract database backend
  *
  * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASECOREBACKEND_H
-#define DATABASECOREBACKEND_H
+#ifndef DATABASE_ENGINE_BACKEND_H
+#define DATABASE_ENGINE_BACKEND_H
 
 // Qt includes
 
@@ -45,14 +45,14 @@ namespace Digikam
 {
 
 class DbEngineConfigSettings;
-class DatabaseCoreBackendPrivate;
+class BdEngineBackendPrivate;
 class DbEngineErrorHandler;
 
-class DIGIKAM_EXPORT DatabaseLocking
+class DIGIKAM_EXPORT DbEngineLocking
 {
 public:
 
-    DatabaseLocking();
+    DbEngineLocking();
 
 public:
 
@@ -62,7 +62,7 @@ public:
 
 // -----------------------------------------------------------------
 
-class DIGIKAM_EXPORT DatabaseCoreBackend : public QObject
+class DIGIKAM_EXPORT BdEngineBackend : public QObject
 {
     Q_OBJECT
 
@@ -121,9 +121,9 @@ public:
      *  shall be unique for this backend object.
      *  It will be used to create unique connection names per backend and thread.
      */
-    DatabaseCoreBackend(const QString& backendName, DatabaseLocking* const locking);
-    DatabaseCoreBackend(const QString& backendName, DatabaseLocking* const locking, DatabaseCoreBackendPrivate& dd);
-    ~DatabaseCoreBackend();
+    BdEngineBackend(const QString& backendName, DbEngineLocking* const locking);
+    BdEngineBackend(const QString& backendName, DbEngineLocking* const locking, BdEngineBackendPrivate& dd);
+    ~BdEngineBackend();
 
     /**
      * Checks if the parameters can be used for this database backend.
@@ -149,7 +149,7 @@ public:
     public:
 
         QueryState()
-            : value(DatabaseCoreBackend::NoErrors)
+            : value(BdEngineBackend::NoErrors)
         {
         }
 
@@ -165,7 +165,7 @@ public:
 
         operator bool() const
         {
-            return value == DatabaseCoreBackend::NoErrors;
+            return value == BdEngineBackend::NoErrors;
         }
 
     private:
@@ -293,10 +293,10 @@ public:
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     /**
-     * Checks if there was a connection error. If so DatabaseCoreBackend::ConnectionError is returned.
+     * Checks if there was a connection error. If so BdEngineBackend::ConnectionError is returned.
      * If not, the values are extracted from the query and inserted in the values list,
      * the last insertion id is taken from the query
-     * and DatabaseCoreBackend::NoErrors is returned.
+     * and BdEngineBackend::NoErrors is returned.
      */
     QueryState handleQueryResult(SqlQuery& query, QList<QVariant>* const values, QVariant* const lastInsertId);
 
@@ -397,11 +397,11 @@ public:
     /**
      * Begin a database transaction
      */
-    DatabaseCoreBackend::QueryState beginTransaction();
+    BdEngineBackend::QueryState beginTransaction();
     /**
      * Commit the current database transaction
      */
-    DatabaseCoreBackend::QueryState commitTransaction();
+    BdEngineBackend::QueryState commitTransaction();
     /**
      * Rollback the current database transaction
      */
@@ -466,15 +466,15 @@ public:
 
 protected:
 
-    DatabaseCoreBackendPrivate* const d_ptr;
+    BdEngineBackendPrivate* const d_ptr;
 
 private:
 
-    Q_DECLARE_PRIVATE(DatabaseCoreBackend)
+    Q_DECLARE_PRIVATE(BdEngineBackend)
 };
 
 } // namespace Digikam
 
 Q_DECLARE_METATYPE(QSqlError)
 
-#endif // DATABASECOREBACKEND_H
+#endif // DATABASE_ENGINE_BACKEND_H

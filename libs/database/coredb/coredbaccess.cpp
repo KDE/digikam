@@ -76,7 +76,7 @@ public:
     AlbumDB*            db;
     CoreDbWatch*      databaseWatch;
     DbEngineParameters  parameters;
-    DatabaseLocking     lock;
+    DbEngineLocking     lock;
     QString             lastError;
     QUuid               applicationIdentifier;
 

@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databasecorebackend.h"
+#include "dbenginebackend.h"
 #include "dbengineparameters.h"
 #include "albumdb.h"
 #include "coredbschemaupdater.h"
@@ -61,7 +61,7 @@ void CoreDbCopyManager::stopProcessing()
 void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters, DbEngineParameters& toDBParameters)
 {
     m_isStopProcessing = false;
-    DatabaseLocking fromLocking;
+    DbEngineLocking fromLocking;
     CoreDbBackend fromDBbackend(&fromLocking, QLatin1String("MigrationFromDatabase"));
 
     if (!fromDBbackend.open(fromDBParameters))
@@ -70,7 +70,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
         return;
     }
 
-    DatabaseLocking toLocking;
+    DbEngineLocking toLocking;
     CoreDbBackend toDBbackend(&toLocking, QLatin1String("MigrationToDatabase"));
 
     if (!toDBbackend.open(toDBParameters))
@@ -112,7 +112,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
     // Delete all tables
     for (int i=0; m_isStopProcessing || i < tablesSize; ++i)
     {
-        if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS %1;").arg(tables[i])) != DatabaseCoreBackend::NoErrors)
+        if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS %1;").arg(tables[i])) != BdEngineBackend::NoErrors)
         {
             emit finished(CoreDbCopyManager::failed, i18n("Error while scrubbing the target database."));
             fromDBbackend.close();
@@ -120,7 +120,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
             return;
         }
     }
-    if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS Settings;")) != DatabaseCoreBackend::NoErrors)
+    if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS Settings;")) != BdEngineBackend::NoErrors)
     {
         emit finished(CoreDbCopyManager::failed, i18n("Error while scrubbing the target database."));
         fromDBbackend.close();
@@ -259,9 +259,9 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
 
         // insert the previous requested values to the toDB
         DbEngineAction action                            = toDBbackend.getDBAction(toActionName);
-        DatabaseCoreBackend::QueryState queryStateResult = toDBbackend.execDBAction(action, tempBindingMap);
+        BdEngineBackend::QueryState queryStateResult = toDBbackend.execDBAction(action, tempBindingMap);
 
-        if (queryStateResult != DatabaseCoreBackend::NoErrors &&
+        if (queryStateResult != BdEngineBackend::NoErrors &&
             toDBbackend.lastSQLError().isValid()              &&
             toDBbackend.lastSQLError().number() != 0)
         {
