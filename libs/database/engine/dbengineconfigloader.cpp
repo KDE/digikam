@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-27
- * Description : Database element configuration
+ * Description : Database Engine element configuration loader
  *
  * Copyright (C) 2009-2010 by Holger Foerster <hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databaseconfigloader.h"
+#include "dbengineconfigloader.h"
 
 // Qt includes
 
@@ -42,7 +42,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dbengineconfig.h"
 
 namespace Digikam
 {
@@ -68,7 +67,7 @@ DbEngineConfig DbEngineConfigLoader::readDatabase(QDomElement& databaseElement)
     }
 
     configElement.databaseID = databaseElement.attribute(QLatin1String("name"));
-    QDomElement element      =  databaseElement.namedItem(QLatin1String("databaseName")).toElement();
+    QDomElement element      = databaseElement.namedItem(QLatin1String("databaseName")).toElement();
 
     if (element.isNull())
     {
@@ -76,8 +75,7 @@ DbEngineConfig DbEngineConfigLoader::readDatabase(QDomElement& databaseElement)
     }
 
     configElement.databaseName = element.text();
-
-    element =  databaseElement.namedItem(QLatin1String("userName")).toElement();
+    element                    = databaseElement.namedItem(QLatin1String("userName")).toElement();
 
     if (element.isNull())
     {
@@ -158,6 +156,7 @@ void DbEngineConfigLoader::readDBActions(QDomElement& sqlStatementElements, DbEn
 
         DbEngineAction action;
         action.name = dbActionElement.attribute(QLatin1String("name"));
+
         //qCDebug(DIGIKAM_DATABASE_LOG) << "Getting attribute " << dbActionElement.attribute("name");
 
         if (dbActionElement.hasAttribute(QLatin1String("mode")))

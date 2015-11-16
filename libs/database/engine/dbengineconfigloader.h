@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-27
- * Description : Database element configuration
+ * Description : Database Engine element configuration loader
  *
  * Copyright (C) 2009-2010 by Holger Foerster <hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,6 +22,9 @@
  *
  * ============================================================ */
 
+#ifndef _DATABASE_ENGINE_CONFIG_LOADER_H_
+#define _DATABASE_ENGINE_CONFIG_LOADER_H_
+
 #include "dbengineconfig.h"
 
 // Qt includes
@@ -36,7 +39,6 @@
 
 namespace Digikam
 {
-class DbEngineConfig;
 
 class DIGIKAM_EXPORT DbEngineConfigLoader
 {
@@ -56,3 +58,5 @@ public:
 };
 
 } // namespace Digikam
+
+#endif // _DATABASE_ENGINE_CONFIG_LOADER_H_

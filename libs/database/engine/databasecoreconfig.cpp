@@ -32,7 +32,7 @@
 // Local includes
 
 #include "digikam_dbconfig.h"
-#include "databaseconfigloader.h"
+#include "dbengineconfigloader.h"
 
 namespace Digikam
 {
