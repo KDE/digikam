@@ -131,7 +131,7 @@ private:
     class Private;
     Private* const d;
 
-    friend class Digikam::ThumbsDbAccess;
+    friend class ThumbsDbAccess;
 };
 
 }  // namespace Digikam
