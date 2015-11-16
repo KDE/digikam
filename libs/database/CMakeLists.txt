@@ -35,7 +35,6 @@ set(libdatabaseutils_SRCS
     utils/dbstatdlg.cpp
     utils/dio.cpp
     utils/syncjob.cpp
-    utils/imageattributeswatch.cpp
 )
 
 set(libdatabase_SRCS
@@ -83,6 +82,7 @@ set(libdatabase_SRCS
     item/imagequerybuilder.cpp
     item/imagescanner.cpp
     item/imagetagpair.cpp
+    item/imageattributeswatch.cpp
 
     imagehistory/imagehistorygraph.cpp
     imagehistory/imagehistorygraphmodel.cpp

@@ -32,11 +32,12 @@
 // Local includes
 
 #include "coredbchangesets.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ImageAttributesWatch : public QObject
+class DIGIKAM_DATABASE_EXPORT ImageAttributesWatch : public QObject
 {
     Q_OBJECT
 
