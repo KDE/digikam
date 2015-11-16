@@ -609,7 +609,7 @@ DatabaseCoreBackend::~DatabaseCoreBackend()
 DbEngineConfigSettings DatabaseCoreBackend::configElement() const
 {
     Q_D(const DatabaseCoreBackend);
-    return DatabaseCoreConfig::element(d->parameters.databaseType);
+    return DbEngineConfig::element(d->parameters.databaseType);
 }
 
 DbEngineAction DatabaseCoreBackend::getDBAction(const QString& actionName) const

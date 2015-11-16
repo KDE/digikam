@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-27
- * Description : Database core configuration
+ * Description : Database engine configuration
  *
  * Copyright (C) 2009-2010 by Holger Foerster <hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databasecoreconfig.h"
+#include "dbengineconfig.h"
 
 // Qt includes
 
@@ -43,18 +43,18 @@ Q_GLOBAL_STATIC_WITH_ARGS(DbEngineConfigSettingsLoader,
                            dbcoreconfig_xml_version)
                          )
 
-DbEngineConfigSettings DatabaseCoreConfig::element(const QString& databaseType)
+DbEngineConfigSettings DbEngineConfig::element(const QString& databaseType)
 {
     // Unprotected read-only access? Usually accessed under CoreDbAccess protection anyway
     return dbcoreloader->databaseConfigs.value(databaseType);
 }
 
-bool DatabaseCoreConfig::checkReadyForUse()
+bool DbEngineConfig::checkReadyForUse()
 {
     return dbcoreloader->isValid;
 }
 
-QString DatabaseCoreConfig::errorMessage()
+QString DbEngineConfig::errorMessage()
 {
     return dbcoreloader->errorMessage;
 }

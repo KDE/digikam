@@ -267,9 +267,9 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* observer)
         return false;
     }
 
-    if (!DatabaseCoreConfig::checkReadyForUse())
+    if (!DbEngineConfig::checkReadyForUse())
     {
-        d->lastError = DatabaseCoreConfig::errorMessage();
+        d->lastError = DbEngineConfig::errorMessage();
 
         // Make sure the application does not continue to run
         if (observer)

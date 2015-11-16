@@ -14,11 +14,11 @@ set(libdatabasecore_SRCS
     engine/databasecorebackend.cpp
     engine/databaseparameters.cpp
     engine/databaseerrorhandler.cpp
-    engine/databasecoreconfig.cpp
     engine/databaseserverstarter.cpp
     engine/databaseservererror.cpp
     engine/sqlquery.cpp
     engine/dbengineconfigloader.cpp
+    engine/dbengineconfig.cpp
     engine/dbengineactiontype.cpp
 
     tags/tagregion.cpp
