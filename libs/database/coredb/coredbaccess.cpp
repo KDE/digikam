@@ -72,9 +72,9 @@ public:
 
 public:
 
-    CoreDbBackend*    backend;
+    CoreDbBackend*      backend;
     AlbumDB*            db;
-    CoreDbWatch*      databaseWatch;
+    CoreDbWatch*        databaseWatch;
     DbEngineParameters  parameters;
     DbEngineLocking     lock;
     QString             lastError;
@@ -165,7 +165,7 @@ void CoreDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler)
 {
     if (!d || !d->backend)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: please set parameters before setting a database error handler";
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: please set parameters before setting a database error handler";
         return;
     }
 
@@ -260,7 +260,7 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!drivers.contains(QLatin1String("QSQLITE")))
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: no SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: no SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
 
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt4.");
@@ -284,7 +284,7 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!d->backend)
     {
-        qCWarning(DIGIKAM_DATABASE_LOG) << "Core database: no database backend available in checkReadyForUse. "
+        qCWarning(DIGIKAM_COREDB_LOG) << "Core database: no database backend available in checkReadyForUse. "
                                            "Did you call setParameters before?";
         return false;
     }

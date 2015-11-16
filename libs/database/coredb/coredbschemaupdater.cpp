@@ -131,7 +131,7 @@ const QString CoreDbSchemaUpdater::getLastErrorMessage()
 
 bool CoreDbSchemaUpdater::update()
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: running schema update";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: running schema update";
     bool success = startUpdates();
 
     // cancelled?
@@ -204,7 +204,7 @@ bool CoreDbSchemaUpdater::startUpdates()
 
         if (!checker.checkPrivileges(insufficientRights))
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: insufficient rights on database.";
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: insufficient rights on database.";
             QString errorMsg = i18n(
                                 "You have insufficient privileges on the database.\n"
                                 "Following privileges are not assigned to you:\n %1"
@@ -231,13 +231,13 @@ bool CoreDbSchemaUpdater::startUpdates()
     {
         // Find out schema version of db file
         readVersionSettings();
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: have a structure version " << d->currentVersion.toInt();
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: have a structure version " << d->currentVersion.toInt();
 
         // We absolutely require the DBVersion setting
         if (!d->currentVersion.isValid())
         {
             // Something is damaged. Give up.
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: version not available! Giving up schema upgrading.";
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: version not available! Giving up schema upgrading.";
 
             QString errorMsg = i18n(
                                    "The database is not valid: "
@@ -290,7 +290,7 @@ bool CoreDbSchemaUpdater::startUpdates()
     }
     else
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: no database file available";
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: no database file available";
 
         // Legacy handling?
 
@@ -375,7 +375,7 @@ bool CoreDbSchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, con
             // error or cancelled?
             if (!d->observer->continueQuery())
             {
-                qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: schema update cancelled by user";
+                qCDebug(DIGIKAM_COREDB_LOG) << "Core database: schema update cancelled by user";
             }
             else if (!d->setError)
             {
@@ -387,14 +387,14 @@ bool CoreDbSchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, con
         return false;
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: success updating to v5";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to v5";
     d->backend->commitTransaction();
     return true;
 }
 
 bool CoreDbSchemaUpdater::makeUpdates()
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: makeUpdates " << d->currentVersion.toInt() << " to " << schemaVersion();
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: makeUpdates " << d->currentVersion.toInt() << " to " << schemaVersion();
 
     if (d->currentVersion.toInt() < schemaVersion())
     {
@@ -421,7 +421,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
                 return false;
             }
 
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: success updating v4 to v6";
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating v4 to v6";
 
             // Still set these even in >= 1.4 because 0.10 - 1.3 may want to apply the updates if not set
             setLegacySettingEntries();
@@ -447,7 +447,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
                 return false;
             }
 
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: success updating to v" << d->currentVersion;
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to v" << d->currentVersion;
         }
 
         // add future updates here
@@ -605,7 +605,7 @@ bool CoreDbSchemaUpdater::performUpdateToVersion(const QString& actionName, int 
 
     if (!d->backend->execDBAction(updateAction))
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: schema update to V" << newVersion << "failed!";
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: schema update to V" << newVersion << "failed!";
         // resort to default error message, set above
         return false;
     }
@@ -632,7 +632,7 @@ bool CoreDbSchemaUpdater::updateToVersion(int targetVersion)
 {
     if (d->currentVersion != targetVersion-1)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: updateToVersion performs only incremental updates. Called to update from"
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: updateToVersion performs only incremental updates. Called to update from"
                                       << d->currentVersion << "to" << targetVersion << ", aborting.";
         return false;
     }
@@ -649,7 +649,7 @@ bool CoreDbSchemaUpdater::updateToVersion(int targetVersion)
         // NOTE: If you add a new update step, please check the d->currentVersion at the bottom of updateV4toV7
             // If the update already comes with createTables, createTriggers, we dont need the extra update here
         default:
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: unsupported update to version" << targetVersion;
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: unsupported update to version" << targetVersion;
             return false;
     }
 }
@@ -758,7 +758,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
 
 bool CoreDbSchemaUpdater::updateV4toV7()
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database : running updateV4toV7";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database : running updateV4toV7";
 
     if (d->observer)
     {
@@ -789,7 +789,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         return false;
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: moved tables";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: moved tables";
 
     // --- Drop some triggers and indices ---
 
@@ -813,7 +813,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Prepared table creation"));
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: dropped triggers";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: dropped triggers";
 
     // --- Create new tables ---
 
@@ -840,7 +840,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
 
     if (albumLibraryPath.isEmpty())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: Album library path from config file is empty. Aborting update.";
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: Album library path from config file is empty. Aborting update.";
 
         QString errorMsg    = i18n("No album library path has been found in the configuration file. "
                                    "Giving up the schema updating process. "
@@ -861,7 +861,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
 
     if (location.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: failure to create a collection location. Aborting update.";
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: failure to create a collection location. Aborting update.";
 
         QString errorMsg    = i18n("There was an error associating your albumLibraryPath (\"%1\") "
                                    "with a storage volume of your system. "
@@ -893,7 +893,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Configured one album root"));
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: inserted album root";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: inserted album root";
 
     // --- With the album root, populate albums ---
 
@@ -919,7 +919,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported albums"));
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: populated albums";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: populated albums";
 
     // --- Add images ---
 
@@ -955,7 +955,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported images information"));
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: populated Images";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: populated Images";
 
     // --- Port searches ---
 
@@ -1006,7 +1006,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         return false;
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: created triggers";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: created triggers";
 
     // --- Populate name filters ---
 
@@ -1030,7 +1030,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
     configAudioFilter.subtract(defaultAudioFilter.toSet());
 
     d->albumDB->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: set initial filter settings with user settings" << configImageFilter;
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: set initial filter settings with user settings" << configImageFilter;
 
     if (d->observer)
     {
@@ -1156,7 +1156,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
 
     d->currentRequiredVersion = 5;
     d->currentVersion         = 7;
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: returning true from updating to 5";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: returning true from updating to 5";
     return true;
 }
 

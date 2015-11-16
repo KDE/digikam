@@ -89,7 +89,7 @@ bool DatabaseServerStarter::init()
 {
     if (qDBusRegisterMetaType<DatabaseServerError>() < 0)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Error while registering DatabaseServerError class.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while registering DatabaseServerError class.";
         return false;
     }
 
@@ -117,7 +117,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
         if ( dbServerMgrPath.isEmpty() )
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "No path to digikamdatabaseserver set in server manager configuration!";
+            qCDebug(DIGIKAM_DBENGINE_LOG) << "No path to digikamdatabaseserver set in server manager configuration!";
         }
 
         const QStringList arguments;
@@ -126,9 +126,9 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
         if ( !result )
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Could not start database server manager !";
-            qCDebug(DIGIKAM_DATABASE_LOG) << "executable:" << dbServerMgrPath;
-            qCDebug(DIGIKAM_DATABASE_LOG) << "arguments:" << arguments;
+            qCDebug(DIGIKAM_DBENGINE_LOG) << "Could not start database server manager !";
+            qCDebug(DIGIKAM_DBENGINE_LOG) << "executable:" << dbServerMgrPath;
+            qCDebug(DIGIKAM_DBENGINE_LOG) << "arguments:" << arguments;
         }
     }
 

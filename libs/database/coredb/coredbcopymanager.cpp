@@ -176,7 +176,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
 bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& fromActionName, 
                                     CoreDbBackend& toDBbackend, const QString& toActionName)
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: trying to copy contents from DB with ActionName: [" << fromActionName
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: trying to copy contents from DB with ActionName: [" << fromActionName
                                   << "] to DB with ActionName [" << toActionName << "]";
 
     QMap<QString, QVariant> bindingMap;
@@ -193,7 +193,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
     }
     else
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: driver doesn't support query size. We try to go to the last row and back to the current.";
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: driver doesn't support query size. We try to go to the last row and back to the current.";
         result.last();
         /*
          * Now get the current row. If this is not possible, a value lower than 0 will be returned.
@@ -210,7 +210,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
         }
     }
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: result size: ["<< resultSize << "]";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: result size: ["<< resultSize << "]";
 
     /*
      * If the sql query is forward only - perform the query again.
@@ -227,7 +227,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
 
     for (int i=0; i<columnCount; ++i)
     {
-        //            qCDebug(DIGIKAM_DATABASE_LOG) << "Column: ["<< result.record().fieldName(i) << "]";
+        //            qCDebug(DIGIKAM_COREDB_LOG) << "Column: ["<< result.record().fieldName(i) << "]";
         columnNames.append(result.record().fieldName(i));
     }
 
@@ -235,7 +235,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
 
     while (result.next())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: query isOnValidRow [" << result.isValid() << "] isActive [" << result.isActive()
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: query isOnValidRow [" << result.isValid() << "] isActive [" << result.isActive()
                                       << "] result size: [" << result.size() << "]";
 
         if (m_isStopProcessing == true)
@@ -252,7 +252,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
 
         foreach(QString columnName, columnNames) // krazy:exclude=foreach
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: column: ["<< columnName << "] value ["<<result.value(i)<<"]";
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: column: ["<< columnName << "] value ["<<result.value(i)<<"]";
             tempBindingMap.insert(columnName.insert(0, QLatin1Char(':')), result.value(i));
             ++i;
         }
@@ -265,7 +265,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
             toDBbackend.lastSQLError().isValid()              &&
             toDBbackend.lastSQLError().number() != 0)
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Core database: error while converting table data. Details: " << toDBbackend.lastSQLError();
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: error while converting table data. Details: " << toDBbackend.lastSQLError();
             QString errorMsg = i18n("Error while converting the database.\n Details: %1", toDBbackend.lastSQLError().databaseText());
             emit finished(CoreDbCopyManager::failed, errorMsg);
             return false;

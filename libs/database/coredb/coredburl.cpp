@@ -66,7 +66,7 @@ CoreDbUrl CoreDbUrl::fromFileUrl(const QUrl& fileUrl,
 
     url.setParameters(parameters);
 
-//    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDbUrl::fromFileUrl : " << url.toDisplayString();
+//    qCDebug(DIGIKAM_COREDB_LOG) << "CoreDbUrl::fromFileUrl : " << url.toDisplayString();
 
     return url;
 }
@@ -100,7 +100,7 @@ CoreDbUrl CoreDbUrl::fromAlbumAndName(const QString& name,
     url.setQuery(q);
     url.setParameters(parameters);
 
-//    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDbUrl::fromAlbumAndName : " << url.toDisplayString();
+//    qCDebug(DIGIKAM_COREDB_LOG) << "CoreDbUrl::fromAlbumAndName : " << url.toDisplayString();
 
     return url;
 }
@@ -111,7 +111,7 @@ CoreDbUrl CoreDbUrl::albumUrl(const DbEngineParameters& parameters)
     url.setScheme(QLatin1String("digikamalbums"));
     url.setParameters(parameters);
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDbUrl::albumUrl : " << url.toDisplayString();
+    qCDebug(DIGIKAM_COREDB_LOG) << "CoreDbUrl::albumUrl : " << url.toDisplayString();
     return url;
 }
 
@@ -128,7 +128,7 @@ CoreDbUrl CoreDbUrl::fromTagIds(const QList<int>& tagIds,
 
     url.setParameters(parameters);
 
-//    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDbUrl::fromTagIds : " << url.toDisplayString();
+//    qCDebug(DIGIKAM_COREDB_LOG) << "CoreDbUrl::fromTagIds : " << url.toDisplayString();
 
     return url;
 }
@@ -139,7 +139,7 @@ CoreDbUrl CoreDbUrl::dateUrl(const DbEngineParameters& parameters)
     url.setScheme(QLatin1String("digikamdates"));
     url.setParameters(parameters);
 
-//    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDbUrl::dateUrl : " << url.toDisplayString();
+//    qCDebug(DIGIKAM_COREDB_LOG) << "CoreDbUrl::dateUrl : " << url.toDisplayString();
 
     return url;
 }
@@ -169,7 +169,7 @@ CoreDbUrl CoreDbUrl::fromDateRange(const QDate& startDate,
     url.setPath(startDate.toString(Qt::ISODate) + QLatin1Char('/') + endDate.toString(Qt::ISODate));
     url.setParameters(parameters);
 
-//    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDbUrl::fromDateRange : " << url.toDisplayString();
+//    qCDebug(DIGIKAM_COREDB_LOG) << "CoreDbUrl::fromDateRange : " << url.toDisplayString();
 
     return url;
 }
@@ -180,7 +180,7 @@ CoreDbUrl CoreDbUrl::mapImagesUrl(const DbEngineParameters& parameters)
     url.setScheme(QLatin1String("digikammapimages"));
     url.setParameters(parameters);
 
-//    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDbUrl::mapImagesUrl : " << url.toDisplayString();
+//    qCDebug(DIGIKAM_COREDB_LOG) << "CoreDbUrl::mapImagesUrl : " << url.toDisplayString();
 
     return url;
 }
@@ -201,7 +201,7 @@ CoreDbUrl CoreDbUrl::fromAreaRange(const qreal lat1, const qreal lat2,
 
     url.setParameters(parameters);
 
-//    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDbUrl::fromAreaRange : " << url.toDisplayString();
+//    qCDebug(DIGIKAM_COREDB_LOG) << "CoreDbUrl::fromAreaRange : " << url.toDisplayString();
 
     return url;
 }
@@ -217,7 +217,7 @@ CoreDbUrl CoreDbUrl::searchUrl(int id, const DbEngineParameters& parameters)
 
     url.setParameters(parameters);
 
-//    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDbUrl::searchUrl : " << url.toDisplayString();
+//    qCDebug(DIGIKAM_COREDB_LOG) << "CoreDbUrl::searchUrl : " << url.toDisplayString();
 
     return url;
 }

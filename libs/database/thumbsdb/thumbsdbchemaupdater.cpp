@@ -95,7 +95,7 @@ bool ThumbsDbSchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version         = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersion"));
         QString versionRequired = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersionRequired"));
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Thumbs database: have a structure version " << version;
+        qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: have a structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && m_access->parameters().isSQLite())
@@ -108,7 +108,7 @@ bool ThumbsDbSchemaUpdater::startUpdates()
         {
             // Something is damaged. Give up.
 
-            qCCritical(DIGIKAM_DATABASE_LOG) << "Thumbs database: database version not available! Giving up schema upgrading.";
+            qCCritical(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: database version not available! Giving up schema upgrading.";
 
             QString errorMsg = i18n(
                                    "The database is not valid: "
@@ -163,7 +163,7 @@ bool ThumbsDbSchemaUpdater::startUpdates()
     }
     else
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Thumbs database: no database file available";
+        qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: no database file available";
 
         DbEngineParameters parameters = m_access->parameters();
 
@@ -235,7 +235,7 @@ bool ThumbsDbSchemaUpdater::updateV1ToV2()
 {
     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("UpdateThumbnailsDBSchemaFromV1ToV2"))))
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Thumbs database: schema upgrade from V1 to V2 failed!";
+        qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: schema upgrade from V1 to V2 failed!";
         return false;
     }
 

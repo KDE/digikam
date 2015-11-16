@@ -199,7 +199,7 @@ bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!drivers.contains(QLatin1String("QSQLITE")))
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Thumbs database: no SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: no SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
 
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt4.");
@@ -211,7 +211,7 @@ bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!d->backend)
     {
-        qCWarning(DIGIKAM_DATABASE_LOG) << "Thumbs database: no database backend available in checkReadyForUse. "
+        qCWarning(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: no database backend available in checkReadyForUse. "
                                            "Did you call setParameters before?";
         return false;
     }

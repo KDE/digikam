@@ -184,7 +184,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 
             if (data.data.isEmpty())
             {
-                qCWarning(DIGIKAM_FACESENGINE_LOG) << "Histogram data to commit in database are empty for Identity " << metadata.identity;
+                qCWarning(DIGIKAM_FACEDB_LOG) << "Histogram data to commit in database are empty for Identity " << metadata.identity;
             }
             else
             {
@@ -192,7 +192,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 
                 if (compressed.isEmpty())
                 {
-                    qCWarning(DIGIKAM_FACESENGINE_LOG) << "Cannot compress histogram data to commit in database for Identity " << metadata.identity;
+                    qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot compress histogram data to commit in database for Identity " << metadata.identity;
                 }
                 else
                 {
@@ -213,7 +213,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 
                     model.setWrittenToDatabase(i, insertedId.toInt());
 
-                    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Commit compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << compressed.size();
+                    qCDebug(DIGIKAM_FACEDB_LOG) << "Commit compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << compressed.size();
                 }
             }
         }
@@ -223,7 +223,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 LBPHFaceModel TrainingDB::lbphFaceModel() const
 {
     QVariantList values;
-    //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Loading LBPH model";
+    //qCDebug(DIGIKAM_FACEDB_LOG) << "Loading LBPH model";
     d->db->execSql(QString::fromLatin1("SELECT id, version, radius, neighbors, grid_x, grid_y FROM OpenCVLBPHRecognizer"), &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
@@ -231,14 +231,14 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
         LBPHFaceModel model;
         model.databaseId = it->toInt();
         ++it;
-        //qCDebug(DIGIKAM_FACESENGINE_LOG) << "Found model id" << model.databaseId;
+        //qCDebug(DIGIKAM_FACEDB_LOG) << "Found model id" << model.databaseId;
 
         int version      = it->toInt();
         ++it;
 
         if (version > LBPHStorageVersion)
         {
-            qCDebug(DIGIKAM_FACESENGINE_LOG) << "Unsupported LBPH storage version" << version;
+            qCDebug(DIGIKAM_FACEDB_LOG) << "Unsupported LBPH storage version" << version;
             it += 4;
             continue;
         }
@@ -280,11 +280,11 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
 
                 if (data.data.isEmpty())
                 {
-                    qCWarning(DIGIKAM_FACESENGINE_LOG) << "Cannot uncompress histogram data to checkout from database for Identity " << metadata.identity;
+                    qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot uncompress histogram data to checkout from database for Identity " << metadata.identity;
                 }
                 else
                 {
-                    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Checkout compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << cData.size();
+                    qCDebug(DIGIKAM_FACEDB_LOG) << "Checkout compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << cData.size();
 
                     histograms        << data;
                     histogramMetadata << metadata;
@@ -292,7 +292,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
             }
             else
             {
-                qCWarning(DIGIKAM_FACESENGINE_LOG) << "Histogram data to checkout from database are empty for Identity " << metadata.identity;
+                qCWarning(DIGIKAM_FACEDB_LOG) << "Histogram data to checkout from database are empty for Identity " << metadata.identity;
             }
         }
 

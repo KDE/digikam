@@ -1,29 +1,32 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2014 Laurent Montel <montel at kde dot org>
-    Copyright (C) 2015 Mohamed Anwer <m dot anwer at gmx dot com>
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-    Boston, MA 02110-1301, USA.
-*/
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2014-09-08
+ * Description : digiKam debug spaces
+ *
+ * Copyright (C) 2014      by Laurent Montel <montel at kde dot org>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #include "digikam_debug.h"
 
 Q_LOGGING_CATEGORY(DIGIKAM_GENERAL_LOG,        "digikam.general")
-Q_LOGGING_CATEGORY(DIGIKAM_DATABASE_LOG,       "digikam.database")
 Q_LOGGING_CATEGORY(DIGIKAM_WIDGETS_LOG,        "digikam.widgets")
-Q_LOGGING_CATEGORY(DIGIKAM_DBJOB_LOG,          "digikam.dbjob")
 Q_LOGGING_CATEGORY(DIGIKAM_IOJOB_LOG,          "digikam.iojob")
 Q_LOGGING_CATEGORY(DIGIKAM_SHOWFOTO_LOG,       "digikam.showfoto")
 Q_LOGGING_CATEGORY(DIGIKAM_IMAGEPLUGINS_LOG,   "digikam.imageplugins")
@@ -33,6 +36,13 @@ Q_LOGGING_CATEGORY(DIGIKAM_METAENGINE_LOG,     "digikam.metaengine")
 Q_LOGGING_CATEGORY(DIGIKAM_RAWENGINE_LOG,      "digikam.rawengine")
 Q_LOGGING_CATEGORY(DIGIKAM_FACESENGINE_LOG,    "digikam.facesengine")
 Q_LOGGING_CATEGORY(DIGIKAM_GEOIFACE_LOG,       "digikam.geoiface")
+
+Q_LOGGING_CATEGORY(DIGIKAM_DATABASE_LOG,       "digikam.database")
+Q_LOGGING_CATEGORY(DIGIKAM_DBENGINE_LOG,       "digikam.dbengine")
+Q_LOGGING_CATEGORY(DIGIKAM_DBJOB_LOG,          "digikam.dbjob")
+Q_LOGGING_CATEGORY(DIGIKAM_COREDB_LOG,         "digikam.coredb")
+Q_LOGGING_CATEGORY(DIGIKAM_FACEDB_LOG,         "digikam.facedb")
+Q_LOGGING_CATEGORY(DIGIKAM_THUMBSDB_LOG,       "digikam.thumbsdb")
 
 // NOTE: per default only warnings and more severe messages are logged for other than general category
 Q_LOGGING_CATEGORY(DIGIKAM_DIMG_LOG,           "digikam.dimg")

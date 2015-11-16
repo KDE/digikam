@@ -52,7 +52,7 @@ DbEngineConfigSettingsLoader::DbEngineConfigSettingsLoader(const QString& filepa
 
     if (!isValid)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << errorMessage;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << errorMessage;
     }
 }
 
@@ -63,7 +63,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (!databaseElement.hasAttribute(QLatin1String("name")))
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing statement attribute <name>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing statement attribute <name>.";
     }
 
     configElement.databaseID = databaseElement.attribute(QLatin1String("name"));
@@ -71,7 +71,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing element <databaseName>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <databaseName>.";
     }
 
     configElement.databaseName = element.text();
@@ -79,7 +79,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing element <userName>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <userName>.";
     }
 
     configElement.userName = element.text();
@@ -87,7 +87,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing element <password>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <password>.";
     }
 
     configElement.password = element.text();
@@ -95,7 +95,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing element <hostName>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <hostName>.";
     }
 
     configElement.hostName = element.text();
@@ -103,7 +103,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing element <port>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <port>.";
     }
 
     configElement.port = element.text();
@@ -111,7 +111,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing element <connectoptions>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <connectoptions>.";
     }
 
     configElement.connectOptions = element.text();
@@ -119,7 +119,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing element <dbservercmd>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <dbservercmd>.";
     }
 
     configElement.dbServerCmd = element.text();
@@ -127,7 +127,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing element <dbinitcmd>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <dbinitcmd>.";
     }
 
     configElement.dbInitCmd = element.text();
@@ -135,7 +135,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
 
     if (element.isNull())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Missing element <dbactions>.";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <dbactions>.";
     }
 
     readDBActions(element, configElement);
@@ -151,13 +151,13 @@ void DbEngineConfigSettingsLoader::readDBActions(QDomElement& sqlStatementElemen
     {
         if (!dbActionElement.hasAttribute(QLatin1String("name")))
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Missing statement attribute <name>.";
+            qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing statement attribute <name>.";
         }
 
         DbEngineAction action;
         action.name = dbActionElement.attribute(QLatin1String("name"));
 
-        //qCDebug(DIGIKAM_DATABASE_LOG) << "Getting attribute " << dbActionElement.attribute("name");
+        //qCDebug(DIGIKAM_DBENGINE_LOG) << "Getting attribute " << dbActionElement.attribute("name");
 
         if (dbActionElement.hasAttribute(QLatin1String("mode")))
         {
@@ -170,7 +170,7 @@ void DbEngineConfigSettingsLoader::readDBActions(QDomElement& sqlStatementElemen
         {
             if (!databaseElement.hasAttribute(QLatin1String("mode")))
             {
-                qCDebug(DIGIKAM_DATABASE_LOG) << "Missing statement attribute <mode>.";
+                qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing statement attribute <mode>.";
             }
 
             DbEngineActionElement actionElement;
@@ -186,7 +186,7 @@ void DbEngineConfigSettingsLoader::readDBActions(QDomElement& sqlStatementElemen
 
 bool DbEngineConfigSettingsLoader::readConfig(const QString& filepath, int xmlVersion)
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Loading SQL code from config file" << filepath;
+    qCDebug(DIGIKAM_DBENGINE_LOG) << "Loading SQL code from config file" << filepath;
     QFile file(filepath);
 
     if (!file.exists())
@@ -238,7 +238,7 @@ bool DbEngineConfigSettingsLoader::readConfig(const QString& filepath, int xmlVe
     QDomElement versionElement = element.namedItem(QLatin1String("version")).toElement();
     int version                = 0;
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Checking XML version ID => expected: " << xmlVersion
+    qCDebug(DIGIKAM_DBENGINE_LOG) << "Checking XML version ID => expected: " << xmlVersion
                                   << " found: " << versionElement.text().toInt();
 
     if (!versionElement.isNull())
@@ -255,7 +255,7 @@ bool DbEngineConfigSettingsLoader::readConfig(const QString& filepath, int xmlVe
         return false;
     }
 
-    //qCDebug(DIGIKAM_DATABASE_LOG) << "Default DB Node contains: " << defaultDB.text();
+    //qCDebug(DIGIKAM_DBENGINE_LOG) << "Default DB Node contains: " << defaultDB.text();
 
     QDomElement databaseElement = element.firstChildElement(QLatin1String("database"));
 
@@ -266,29 +266,29 @@ bool DbEngineConfigSettingsLoader::readConfig(const QString& filepath, int xmlVe
     }
 
 /*
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Found entries: " << databaseConfigs.size();
+    qCDebug(DIGIKAM_DBENGINE_LOG) << "Found entries: " << databaseConfigs.size();
 
     foreach(const DbEngineConfigSettings& configElement, databaseConfigs )
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseID: "          << configElement.databaseID;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "HostName: "            << configElement.hostName;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "DatabaseName: "        << configElement.databaseName;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "UserName: "            << configElement.userName;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Password: "            << configElement.password;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Port: "                << configElement.port;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "ConnectOptions: "      << configElement.connectOptions;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Database Server CMD: " << configElement.dbServerCmd;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Database Init CMD: "   << configElement.dbInitCmd;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Statements:";
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "DatabaseID: "          << configElement.databaseID;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "HostName: "            << configElement.hostName;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "DatabaseName: "        << configElement.databaseName;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "UserName: "            << configElement.userName;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Password: "            << configElement.password;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Port: "                << configElement.port;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "ConnectOptions: "      << configElement.connectOptions;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Database Server CMD: " << configElement.dbServerCmd;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Database Init CMD: "   << configElement.dbInitCmd;
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Statements:";
 
         foreach(const QString actionKey, configElement.sqlStatements.keys())
         {
             QList<databaseActionElement> l_DBActionElement = configElement.sqlStatements[actionKey].dBActionElements;
-            qCDebug(DIGIKAM_DATABASE_LOG) << "DBAction [" << actionKey << "] has [" << l_DBActionElement.size() << "] actions";
+            qCDebug(DIGIKAM_DBENGINE_LOG) << "DBAction [" << actionKey << "] has [" << l_DBActionElement.size() << "] actions";
 
             foreach(const databaseActionElement statement, l_DBActionElement)
             {
-                qCDebug(DIGIKAM_DATABASE_LOG) << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
+                qCDebug(DIGIKAM_DBENGINE_LOG) << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
             }
         }
 

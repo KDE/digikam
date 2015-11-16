@@ -511,7 +511,7 @@ DbEngineParameters DbEngineParameters::defaultParameters(const QString databaseT
 
     parameters.connectOptions     = connectOptions;
 
-    qCDebug(DIGIKAM_DATABASE_LOG) << "ConnectOptions "<< parameters.connectOptions;
+    qCDebug(DIGIKAM_DBENGINE_LOG) << "ConnectOptions "<< parameters.connectOptions;
 
     return parameters;
 }

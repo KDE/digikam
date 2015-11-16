@@ -109,7 +109,7 @@ void DbEngineConnectionChecker::run()
             {
                 emit failedAttempt();
                 d->success = false;
-                qCDebug(DIGIKAM_DATABASE_LOG) << "Error while opening the database. Error details ["
+                qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while opening the database. Error details ["
                                               << databaseHandler.lastError() << "]";
                 QMutexLocker lock(&d->mutex);
 
