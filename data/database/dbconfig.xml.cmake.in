@@ -505,7 +505,7 @@
 
             <dbaction name="CreateFaceDB" mode="transaction">
                 <statement mode="plain">
-                    CREATE TABLE Settings
+                    CREATE TABLE IF NOT EXISTS Settings
                     (keyword TEXT NOT NULL UNIQUE,
                     value TEXT)
                 </statement>
