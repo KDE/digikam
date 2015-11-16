@@ -68,7 +68,7 @@
 #include "tagregion.h"
 #include "addtagslineedit.h"
 #include "facerejectionoverlay.h"
-#include "databaseface.h"
+#include "facetagsiface.h"
 
 namespace Digikam
 {
@@ -249,7 +249,7 @@ void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
 void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId)
 {
     QList<ImageInfo>    infos;
-    QList<DatabaseFace> faces;
+    QList<FaceTagsIface> faces;
     QList<QModelIndex>  sourceIndexes;
 
     // fast-remove in the "unknown person" view
@@ -283,7 +283,7 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
 void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
 {
     QList<ImageInfo> infos;
-    QList<DatabaseFace> faces;
+    QList<FaceTagsIface> faces;
     QList<QModelIndex> sourceIndexes;
 
     foreach (const QModelIndex& index, indexes)

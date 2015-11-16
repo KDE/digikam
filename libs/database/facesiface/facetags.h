@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACETAGS_H
-#define FACETAGS_H
+#ifndef FACE_TAGS_H
+#define FACE_TAGS_H
 
 // Qt includes
 
@@ -118,4 +118,4 @@ public:
 
 }  // Namespace Digikam
 
-#endif // FACETAGS_H
+#endif // FACE_TAGS_H

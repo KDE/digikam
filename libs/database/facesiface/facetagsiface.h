@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2010-09-27
- * Description : structure for info stored about a face in the database
+ * Description : Interface for info stored about a face tag in the database
  *
- * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010      by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEFACE_H
-#define DATABASEFACE_H
+#ifndef FACE_TAGS_INTERFACE_H
+#define FACE_TAGS_INTERFACE_H
 
 // Qt includes
 
@@ -40,7 +40,7 @@ class QDebug;
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT DatabaseFace
+class DIGIKAM_DATABASE_EXPORT FaceTagsIface
 {
 public:
 
@@ -62,9 +62,9 @@ public:
 
 public:
 
-    DatabaseFace();
-    DatabaseFace(Type type, qlonglong imageId, int tagId, const TagRegion& region);
-    DatabaseFace(const QString& attribute, qlonglong imageId, int tagId, const TagRegion& region);
+    FaceTagsIface();
+    FaceTagsIface(Type type, qlonglong imageId, int tagId, const TagRegion& region);
+    FaceTagsIface(const QString& attribute, qlonglong imageId, int tagId, const TagRegion& region);
 
     bool      isNull() const;
 
@@ -102,7 +102,7 @@ public:
     void setTagId(int tagId);
     void setRegion(const TagRegion& region);
 
-    bool operator==(const DatabaseFace& other) const;
+    bool operator==(const FaceTagsIface& other) const;
 
     /// Returns a list of all image tag properties for which flags are set
     static QStringList attributesForFlags(TypeFlags flags);
@@ -119,13 +119,13 @@ public:
      * Only native QVariant types are used, that is, the QVariant will not have a custom type,
      * thus it can be compared by value by operator==.
      */
-    static DatabaseFace fromVariant(const QVariant& var);
+    static FaceTagsIface fromVariant(const QVariant& var);
     QVariant toVariant() const;
 
     /**
-     * Create a DatabaseFace from the extraValues returned from ImageLister.
+     * Create a FaceTagsIface from the extraValues returned from ImageLister.
      */
-    static DatabaseFace fromListing(qlonglong imageid, const QList<QVariant>& values);
+    static FaceTagsIface fromListing(qlonglong imageid, const QList<QVariant>& values);
 
 protected:
 
@@ -135,10 +135,10 @@ protected:
     TagRegion m_region;
 };
 
-DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug dbg, const DatabaseFace& f);
+DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug dbg, const FaceTagsIface& f);
 
 }  // Namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFace::TypeFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FaceTagsIface::TypeFlags)
 
-#endif // FACEIFACE_H
+#endif // FACE_TAGS_INTERFACE_H

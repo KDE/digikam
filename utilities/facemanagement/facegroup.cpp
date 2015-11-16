@@ -67,8 +67,8 @@ public:
 
     explicit FaceItem(QGraphicsItem* const parent = 0);
 
-    void setFace(const DatabaseFace& face);
-    DatabaseFace face() const;
+    void setFace(const FaceTagsIface& face);
+    FaceTagsIface face() const;
     void setHudWidget(AssignNameWidget* const widget);
     AssignNameWidget* widget() const;
     void switchMode(AssignNameWidget::Mode mode);
@@ -78,7 +78,7 @@ public:
 protected:
 
     AssignNameWidget*   m_widget;
-    DatabaseFace        m_face;
+    FaceTagsIface        m_face;
     HidingStateChanger* m_changer;
 };
 
@@ -91,14 +91,14 @@ FaceItem::FaceItem(QGraphicsItem* const parent)
 {
 }
 
-void FaceItem::setFace(const DatabaseFace& face)
+void FaceItem::setFace(const FaceTagsIface& face)
 {
     m_face = face;
     updateCurrentTag();
     setEditable(!m_face.isConfirmedName());
 }
 
-DatabaseFace FaceItem::face() const
+FaceTagsIface FaceItem::face() const
 {
     return m_face;
 }
@@ -186,10 +186,10 @@ public:
     }
 
     void                       applyVisible();
-    FaceItem*                  createItem(const DatabaseFace& face);
-    FaceItem*                  addItem(const DatabaseFace& face);
-    AssignNameWidget*          createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier);
-    AssignNameWidget::Mode     assignWidgetMode(DatabaseFace::Type type);
+    FaceItem*                  createItem(const FaceTagsIface& face);
+    FaceItem*                  addItem(const FaceTagsIface& face);
+    AssignNameWidget*          createAssignNameWidget(const FaceTagsIface& face, const QVariant& identifier);
+    AssignNameWidget::Mode     assignWidgetMode(FaceTagsIface::Type type);
     void                       checkModels();
     QList<QGraphicsItem*>      hotItems(const QPointF& scenePos);
 
@@ -506,7 +506,7 @@ void FaceGroup::enterEvent(QEvent*)
 {
 }
 
-FaceItem* FaceGroup::Private::createItem(const DatabaseFace& face)
+FaceItem* FaceGroup::Private::createItem(const FaceTagsIface& face)
 {
     FaceItem* const item = new FaceItem(view->previewItem());
     item->setFace(face);
@@ -519,7 +519,7 @@ FaceItem* FaceGroup::Private::createItem(const DatabaseFace& face)
     return item;
 }
 
-FaceItem* FaceGroup::Private::addItem(const DatabaseFace& face)
+FaceItem* FaceGroup::Private::addItem(const FaceTagsIface& face)
 {
     FaceItem* const item                 = createItem(face);
     // for identification, use index in our list
@@ -552,15 +552,15 @@ void FaceGroup::Private::checkModels()
     }
 }
 
-AssignNameWidget::Mode FaceGroup::Private::assignWidgetMode(DatabaseFace::Type type)
+AssignNameWidget::Mode FaceGroup::Private::assignWidgetMode(FaceTagsIface::Type type)
 {
     switch (type)
     {
-        case DatabaseFace::UnknownName:
-        case DatabaseFace::UnconfirmedName:
+        case FaceTagsIface::UnknownName:
+        case FaceTagsIface::UnconfirmedName:
             return AssignNameWidget::UnconfirmedEditMode;
 
-        case DatabaseFace::ConfirmedName:
+        case FaceTagsIface::ConfirmedName:
             return AssignNameWidget::ConfirmedMode;
 
         default:
@@ -568,7 +568,7 @@ AssignNameWidget::Mode FaceGroup::Private::assignWidgetMode(DatabaseFace::Type t
     }
 }
 
-AssignNameWidget* FaceGroup::Private::createAssignNameWidget(const DatabaseFace& face, const QVariant& identifier)
+AssignNameWidget* FaceGroup::Private::createAssignNameWidget(const FaceTagsIface& face, const QVariant& identifier)
 {
     AssignNameWidget* const assignWidget = new AssignNameWidget;
     assignWidget->setMode(assignWidgetMode(face.type()));
@@ -607,10 +607,10 @@ void FaceGroup::load()
         return;
     }
 
-    QList<DatabaseFace> faces = FaceTagsEditor().databaseFaces(d->info.id());
+    QList<FaceTagsIface> faces = FaceTagsEditor().databaseFaces(d->info.id());
     d->visibilityController->clear();
 
-    foreach(const DatabaseFace& face, faces)
+    foreach(const FaceTagsIface& face, faces)
     {
         d->addItem(face);
     }
@@ -644,7 +644,7 @@ void FaceGroup::rejectAll()
 void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, const QVariant& faceIdentifier)
 {
     FaceItem* const item    = d->items[faceIdentifier.toInt()];
-    DatabaseFace face       = item->face();
+    FaceTagsIface face       = item->face();
     TagRegion currentRegion = TagRegion(item->originalRect());
 
     if (!face.isConfirmedName() || face.region() != currentRegion || action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()))
@@ -687,7 +687,7 @@ void FaceGroup::slotRejected(const ImageInfo&, const QVariant& faceIdentifier)
     FaceItem* const item = d->items[faceIdentifier.toInt()];
     d->editPipeline.remove(d->info, item->face());
 
-    item->setFace(DatabaseFace());
+    item->setFace(FaceTagsIface());
     d->visibilityController->hideAndRemoveItem(item);
 }
 
@@ -738,7 +738,7 @@ void FaceGroup::slotAddItemMoving(const QRectF& rect)
 {
     if (!d->manuallyAddedItem)
     {
-        d->manuallyAddedItem = d->createItem(DatabaseFace());
+        d->manuallyAddedItem = d->createItem(FaceTagsIface());
         d->visibilityController->addItem(d->manuallyAddedItem);
         d->visibilityController->showItem(d->manuallyAddedItem);
     }
@@ -751,7 +751,7 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
     if (d->manuallyAddedItem)
     {
         d->manuallyAddedItem->setRectInSceneCoordinatesAdjusted(rect);
-        DatabaseFace face    = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
+        FaceTagsIface face    = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
                                                            TagRegion(d->manuallyAddedItem->originalRect()));
         FaceItem* const item = d->addItem(face);
         d->visibilityController->setItemDirectlyVisible(item, true);

@@ -31,7 +31,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "databaseface.h"
+#include "facetagsiface.h"
 #include "imagemodel.h"
 #include "tagregion.h"
 #include "digikamimagedelegatepriv.h"
@@ -93,16 +93,16 @@ QRect DigikamImageFaceDelegate::largerFaceRect(const QModelIndex& index) const
     return rect.adjusted(-margin, -margin, margin, margin);
 }
 
-DatabaseFace DigikamImageFaceDelegate::face(const QModelIndex& index) const
+FaceTagsIface DigikamImageFaceDelegate::face(const QModelIndex& index) const
 {
     QVariant extraData = index.data(ImageModel::ExtraDataRole);
 
     if (extraData.isNull())
     {
-        return DatabaseFace();
+        return FaceTagsIface();
     }
 
-    DatabaseFace face = DatabaseFace::fromVariant(extraData);
+    FaceTagsIface face = FaceTagsIface::fromVariant(extraData);
     return face;
 }
 

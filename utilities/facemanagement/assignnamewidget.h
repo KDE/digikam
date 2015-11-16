@@ -35,7 +35,7 @@ namespace Digikam
 class AddTagsComboBox;
 class AddTagsLineEdit;
 class CheckableAlbumFilterModel;
-class DatabaseFace;
+class FaceTagsIface;
 class ImageInfo;
 class TAlbum;
 class TaggingAction;
@@ -122,7 +122,7 @@ public Q_SLOTS:
     /** Sets the suggested (UnconfirmedEditMode) or assigned (ConfirmedMode) tag to be displayed. */
     void setCurrentTag(int tagId);
     void setCurrentTag(TAlbum* album);
-    void setCurrentFace(const DatabaseFace& face);
+    void setCurrentFace(const FaceTagsIface& face);
 
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */
     void setParentTag(TAlbum* album);

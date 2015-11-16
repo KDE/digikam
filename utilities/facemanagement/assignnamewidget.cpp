@@ -42,7 +42,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumtreeview.h"
-#include "databaseface.h"
+#include "facetagsiface.h"
 #include "dimg.h"
 #include "imageinfo.h"
 #include "thememanager.h"
@@ -676,7 +676,7 @@ QVariant AssignNameWidget::faceIdentifier() const
     return d->faceIdentifier;
 }
 
-void AssignNameWidget::setCurrentFace(const DatabaseFace& face)
+void AssignNameWidget::setCurrentFace(const FaceTagsIface& face)
 {
     TAlbum* album = 0;
 

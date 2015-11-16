@@ -90,14 +90,14 @@ void FaceUtils::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
     }
 }
 
-// --- Convert between FacesEngine results and DatabaseFace ---
+// --- Convert between FacesEngine results and FaceTagsIface ---
 
-QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
+QList<FaceTagsIface> FaceUtils::toFaceTagsIfaces(qlonglong imageid,
                                                const QList<QRectF>& detectedFaces,
                                                const QList<FacesEngine::Identity> recognitionResults,
                                                const QSize& fullSize) const
 {
-    QList<DatabaseFace> faces;
+    QList<FaceTagsIface> faces;
 
     for (int i=0; i<detectedFaces.size(); ++i)
     {
@@ -111,16 +111,16 @@ QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
         // We'll get the unknownPersonTagId if the identity is null
         int tagId               = FaceTags::getOrCreateTagForIdentity(identity.attributesMap());
         QRect fullSizeRect      = TagRegion::relativeToAbsolute(detectedFaces[i], fullSize);
-        DatabaseFace::Type type = identity.isNull() ? DatabaseFace::UnknownName : DatabaseFace::UnconfirmedName;
+        FaceTagsIface::Type type = identity.isNull() ? FaceTagsIface::UnknownName : FaceTagsIface::UnconfirmedName;
 
         if (!tagId || !fullSizeRect.isValid())
         {
-            faces << DatabaseFace();
+            faces << FaceTagsIface();
             continue;
         }
 
         //qCDebug(DIGIKAM_GENERAL_LOG) << "New Entry" << fullSizeRect << tagId;
-        faces << DatabaseFace(type, imageid, tagId, TagRegion(fullSizeRect));
+        faces << FaceTagsIface(type, imageid, tagId, TagRegion(fullSizeRect));
     }
 
     return faces;
@@ -129,9 +129,9 @@ QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
 // --- Images in faces and thumbnails ---
 
 void FaceUtils::storeThumbnails(ThumbnailLoadThread* const thread, const QString& filePath,
-                                const QList<DatabaseFace>& databaseFaces, const DImg& image)
+                                const QList<FaceTagsIface>& databaseFaces, const DImg& image)
 {
-    foreach(const DatabaseFace& face, databaseFaces)
+    foreach(const FaceTagsIface& face, databaseFaces)
     {
         QList<QRect> rects;
         rects << face.region().toRect();
@@ -149,13 +149,13 @@ void FaceUtils::storeThumbnails(ThumbnailLoadThread* const thread, const QString
 
 // --- Face detection: merging results ------------------------------------------------------------------------------------
 
-QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
+QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
                                                        const QList<QRectF>& detectedFaces,
                                                        const QList<FacesEngine::Identity> recognitionResults,
                                                        const QSize& fullSize)
 {
     // Build list of new entries
-    QList<DatabaseFace> newFaces = toDatabaseFaces(imageid, detectedFaces, recognitionResults, fullSize);
+    QList<FaceTagsIface> newFaces = toFaceTagsIfaces(imageid, detectedFaces, recognitionResults, fullSize);
 
     if (newFaces.isEmpty())
     {
@@ -163,15 +163,15 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
     }
 
     // list of existing entries
-    QList<DatabaseFace> currentFaces = databaseFaces(imageid);
+    QList<FaceTagsIface> currentFaces = databaseFaces(imageid);
 
     // merge new with existing entries
     for (int i = 0; i < newFaces.size(); ++i)
     {
-        DatabaseFace& newFace = newFaces[i];
-        QList<DatabaseFace> overlappingEntries;
+        FaceTagsIface& newFace = newFaces[i];
+        QList<FaceTagsIface> overlappingEntries;
 
-        foreach(const DatabaseFace& oldFace, currentFaces)
+        foreach(const FaceTagsIface& oldFace, currentFaces)
         {
             double minOverlap = oldFace.isConfirmedName() ? 0.25 : 0.5;
 
@@ -193,7 +193,7 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
                 // we have no name in the new face. Do we have one in the old faces?
                 for (int i = 0; i < overlappingEntries.size(); ++i)
                 {
-                    const DatabaseFace& oldFace = overlappingEntries.at(i);
+                    const FaceTagsIface& oldFace = overlappingEntries.at(i);
 
                     if (oldFace.isUnknownName())
                     {
@@ -202,7 +202,7 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
                     else
                     {
                         // skip new entry if any overlapping face has a name, and we do not
-                        newFace = DatabaseFace();
+                        newFace = FaceTagsIface();
                         break;
                     }
                 }
@@ -212,7 +212,7 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
                 // we have a name in the new face. Do we have names in overlapping faces?
                 for (int i = 0; i < overlappingEntries.size(); ++i)
                 {
-                    DatabaseFace& oldFace = overlappingEntries[i];
+                    FaceTagsIface& oldFace = overlappingEntries[i];
 
                     if (oldFace.isUnknownName())
                     {
@@ -225,7 +225,7 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
                             // remove smaller face
                             if (oldFace.region().intersects(newFace.region(), 1))
                             {
-                                newFace = DatabaseFace();
+                                newFace = FaceTagsIface();
                                 break;
                             }
 
@@ -239,7 +239,7 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
                     else if (oldFace.isConfirmedName())
                     {
                         // skip new entry, confirmed has of course priority
-                        newFace = DatabaseFace();
+                        newFace = FaceTagsIface();
                     }
                 }
             }
@@ -253,7 +253,7 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
 
             ImageTagPair pair(imageid, newFace.tagId());
             // UnconfirmedName and UnknownName have the same attribute
-            addFaceAndTag(pair, newFace, DatabaseFace::attributesForFlags(DatabaseFace::UnconfirmedName), false);
+            addFaceAndTag(pair, newFace, FaceTagsIface::attributesForFlags(FaceTagsIface::UnconfirmedName), false);
         }
     }
 

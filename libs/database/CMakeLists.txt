@@ -87,9 +87,9 @@ set(libdatabase_SRCS
     imagehistory/imagehistorygraph.cpp
     imagehistory/imagehistorygraphmodel.cpp
 
-    facesiface/databaseface.cpp
     facesiface/facetags.cpp
     facesiface/facetagseditor.cpp
+    facesiface/facetagsiface.cpp
 )
 
 if(MARBLE_FOUND)

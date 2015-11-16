@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-08
- * Description : FacesEngine interface, also allowing easy manipulation of face tags
+ * Description : Faces tags editor allowing easy manipulation of face tags
  *
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACETAGSEDITOR_H
-#define FACETAGSEDITOR_H
+#ifndef FACE_TAGS_EDITOR_H
+#define FACE_TAGS_EDITOR_H
 
 // Qt includes
 
@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "databaseface.h"
+#include "facetagsiface.h"
 #include "digikam_export.h"
 #include "facetags.h"
 
@@ -57,26 +57,26 @@ public:
     /**
      * Returns the number of faces present in an image.
      */
-    int                 numberOfFaces(qlonglong imageid) const;
+    int                  numberOfFaces(qlonglong imageid) const;
 
     /**
      * Returns the number of faces a particular person has in the specified image
      */
-    int                 faceCountForPersonInImage(qlonglong imageid, int tagId) const;
+    int                  faceCountForPersonInImage(qlonglong imageid, int tagId) const;
 
     /**
-     * Reads the DatabaseFaces for the given image id from the database
+     * Reads the FaceTagsIfaces for the given image id from the database
      */
-    QList<DatabaseFace> databaseFaces(qlonglong imageid) const;
-    QList<DatabaseFace> unconfirmedDatabaseFaces(qlonglong imageid) const;
-    QList<DatabaseFace> databaseFacesForTraining(qlonglong imageid) const;
-    QList<DatabaseFace> confirmedDatabaseFaces(qlonglong imageid) const;
+    QList<FaceTagsIface> databaseFaces(qlonglong imageid) const;
+    QList<FaceTagsIface> unconfirmedFaceTagsIfaces(qlonglong imageid) const;
+    QList<FaceTagsIface> databaseFacesForTraining(qlonglong imageid) const;
+    QList<FaceTagsIface> confirmedFaceTagsIfaces(qlonglong imageid) const;
 
     /**
      * Returns a list of all tag rectangles for the image. Unlike findAndTagFaces, this does not take a DImg,
      * because it returns only a QRect, not a Face, so no need of cropping a face rectangle.
      */
-    QList<QRect>        getTagRects(qlonglong imageid) const;
+    QList<QRect>         getTagRects(qlonglong imageid) const;
 
     // --- Add / Confirm ---
 
@@ -86,14 +86,14 @@ public:
      * If trainFace is true, the face will also be listed in the db as needing training.
      * The tag of the face will, if necessary, be converted to a person tag.
      */
-    void         add(const DatabaseFace& face, bool trainFace = true);
-    DatabaseFace add(qlonglong imageid, int tagId, const TagRegion& region, bool trainFace = true);
-    DatabaseFace addManually(const DatabaseFace& face);
+    void          add(const FaceTagsIface& face, bool trainFace = true);
+    FaceTagsIface add(qlonglong imageid, int tagId, const TagRegion& region, bool trainFace = true);
+    FaceTagsIface addManually(const FaceTagsIface& face);
 
     /**
      * Switches an unknownPersonEntry or unconfirmedEntry to an unconfirmedEntry (with a different suggested name)
      */
-    DatabaseFace        changeSuggestedName(const DatabaseFace& previousEntry, int unconfirmedNameTagId);
+    FaceTagsIface        changeSuggestedName(const FaceTagsIface& previousEntry, int unconfirmedNameTagId);
 
     /**
      * Assign the name tag for given face entry.
@@ -104,18 +104,18 @@ public:
      * The confirmed tag will, if necessary, be converted to a person tag.
      * Returns the newly inserted entry.
      */
-    DatabaseFace        confirmName(const DatabaseFace& face, int tagId = -1, const TagRegion& confirmedRegion = TagRegion());
+    FaceTagsIface        confirmName(const FaceTagsIface& face, int tagId = -1, const TagRegion& confirmedRegion = TagRegion());
 
     /**
      * Returns the entry that would be added if the given face is confirmed.
      */
-    static DatabaseFace confirmedEntry(const DatabaseFace& face, int tagId = -1, const TagRegion& confirmedRegion = TagRegion());
+    static FaceTagsIface confirmedEntry(const FaceTagsIface& face, int tagId = -1, const TagRegion& confirmedRegion = TagRegion());
     /**
      * Returns the entry that would be added if the given face is autodetected.
      * If tagId is -1, the unknown person will be taken.
      */
-    static DatabaseFace unconfirmedEntry(qlonglong imageId, int tagId, const TagRegion& region);
-    static DatabaseFace unknownPersonEntry(qlonglong imageId, const TagRegion& region);
+    static FaceTagsIface unconfirmedEntry(qlonglong imageId, int tagId, const TagRegion& region);
+    static FaceTagsIface unknownPersonEntry(qlonglong imageId, const TagRegion& region);
 
     // --- Remove entries ---
 
@@ -123,8 +123,8 @@ public:
      * Remove the given face.
      * If appropriate, the tag is also removed.
      */
-    void                removeFace(const DatabaseFace& face);
-    void                removeFaces(const QList<DatabaseFace>& faces);
+    void                removeFace(const FaceTagsIface& face);
+    void                removeFaces(const QList<FaceTagsIface>& faces);
 
     /**
      * Unassigns all face tags from the image and sets it's scanned property to false.
@@ -141,17 +141,17 @@ public:
     /**
      * Changes the region of the given entry. Returns the face with the new region set.
      */
-    DatabaseFace        changeRegion(const DatabaseFace& face, const TagRegion& newRegion);
+    FaceTagsIface        changeRegion(const FaceTagsIface& face, const TagRegion& newRegion);
 
     // --- Utilities ---
 
-    QList<DatabaseFace> databaseFaces(qlonglong imageId, DatabaseFace::TypeFlags flags) const;
-    QList<ImageTagPair> faceImageTagPairs(qlonglong imageid, DatabaseFace::TypeFlags flags) const;
+    QList<FaceTagsIface> databaseFaces(qlonglong imageId, FaceTagsIface::TypeFlags flags)     const;
+    QList<ImageTagPair>  faceImageTagPairs(qlonglong imageid, FaceTagsIface::TypeFlags flags) const;
 
 protected:
 
-    void addFaceAndTag(ImageTagPair& pair, const DatabaseFace& face, const QStringList& properties, bool addTag);
-    void removeFaceAndTag(ImageTagPair& pair, const DatabaseFace& face, bool touchTags);
+    void addFaceAndTag(ImageTagPair& pair, const FaceTagsIface& face, const QStringList& properties, bool addTag);
+    void removeFaceAndTag(ImageTagPair& pair, const FaceTagsIface& face, bool touchTags);
 
     virtual void addNormalTag(qlonglong imageid, int tagId);
     virtual void removeNormalTag(qlonglong imageid, int tagId);
@@ -160,4 +160,4 @@ protected:
 
 }  // Namespace Digikam
 
-#endif // FACETAGSEDITOR_H
+#endif // FACE_TAGS_EDITOR_H

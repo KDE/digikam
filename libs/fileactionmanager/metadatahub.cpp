@@ -658,12 +658,12 @@ void Digikam::MetadataHub::loadFaceTags(const ImageInfo& info, const QSize& size
     FaceTagsEditor editor;
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Image Dimensions ----------------" << info.dimensions();
 
-    QList<DatabaseFace> facesList = editor.confirmedDatabaseFaces(info.id());
+    QList<FaceTagsIface> facesList = editor.confirmedFaceTagsIfaces(info.id());
     d->faceTagsList.clear();
 
     if (!facesList.isEmpty())
     {
-        foreach(const DatabaseFace& dface, facesList)
+        foreach(const FaceTagsIface& dface, facesList)
         {
             QString faceName = FaceTags::faceNameForTag(dface.tagId());
 

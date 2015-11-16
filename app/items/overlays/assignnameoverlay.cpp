@@ -43,7 +43,7 @@
 #include "albummodel.h"
 #include "albumfiltermodel.h"
 #include "assignnamewidget.h"
-#include "databaseface.h"
+#include "facetagsiface.h"
 #include "facepipeline.h"
 #include "facetags.h"
 #include "imagedelegate.h"
@@ -222,7 +222,7 @@ void AssignNameOverlay::updateFace()
     }
 
     QVariant extraData = index().data(ImageModel::ExtraDataRole);
-    assignNameWidget()->setCurrentFace(DatabaseFace::fromVariant(extraData));
+    assignNameWidget()->setCurrentFace(FaceTagsIface::fromVariant(extraData));
     assignNameWidget()->setUserData(ImageModel::retrieveImageInfo(index()), extraData);
 }
 
@@ -243,7 +243,7 @@ bool AssignNameOverlay::checkIndex(const QModelIndex& index) const
         return false;
     }
 
-    return DatabaseFace::fromVariant(extraData).isUnconfirmedType();
+    return FaceTagsIface::fromVariant(extraData).isUnconfirmedType();
 }
 
 void AssignNameOverlay::showOnIndex(const QModelIndex& index)
@@ -280,7 +280,7 @@ void AssignNameOverlay::viewportLeaveEvent(QObject* o, QEvent* e)
 void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier)
 {
     Q_UNUSED(info);
-    DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
+    FaceTagsIface face = FaceTagsIface::fromVariant(faceIdentifier);
 
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Confirming" << face << action.shallAssignTag() << action.tagId();
 
@@ -312,7 +312,7 @@ void AssignNameOverlay::slotRejected(const ImageInfo& info, const QVariant& face
 {
     Q_UNUSED(info);
     Q_UNUSED(faceIdentifier);
-    //DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
+    //FaceTagsIface face = FaceTagsIface::fromVariant(faceIdentifier);
     emit removeFaces(affectedIndexes(index()));
     hide();
 }

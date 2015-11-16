@@ -719,7 +719,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
         ++it;
         height                   = (*it).toInt();
         ++it;
-        // sync the following order with the places where it's read, e.g., DatabaseFace
+        // sync the following order with the places where it's read, e.g., FaceTagsIface
         record.extraValues      << (*it); // value
         ++it;
         record.extraValues      << (*it); // property

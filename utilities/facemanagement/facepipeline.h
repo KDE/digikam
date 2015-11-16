@@ -33,14 +33,14 @@
 
 #include "identity.h"
 #include "digikam_debug.h"
-#include "databaseface.h"
+#include "facetagsiface.h"
 #include "dimg.h"
 #include "imageinfo.h"
 
 namespace Digikam
 {
 
-class FacePipelineDatabaseFace : public DatabaseFace
+class FacePipelineFaceTagsIface : public FaceTagsIface
 {
 public:
 
@@ -68,8 +68,8 @@ public:
 
 public:
 
-    FacePipelineDatabaseFace();
-    FacePipelineDatabaseFace(const DatabaseFace& face);
+    FacePipelineFaceTagsIface();
+    FacePipelineFaceTagsIface(const FaceTagsIface& face);
 
 public:
 
@@ -80,22 +80,22 @@ public:
 
 // ------------------------------------------------------------------------------------
 
-class FacePipelineDatabaseFaceList : public QList<FacePipelineDatabaseFace>
+class FacePipelineFaceTagsIfaceList : public QList<FacePipelineFaceTagsIface>
 {
 public:
 
-    FacePipelineDatabaseFaceList();
-    FacePipelineDatabaseFaceList(const QList<DatabaseFace>& faces);
+    FacePipelineFaceTagsIfaceList();
+    FacePipelineFaceTagsIfaceList(const QList<FaceTagsIface>& faces);
 
-    FacePipelineDatabaseFaceList& operator=(const QList<DatabaseFace>& faces);
+    FacePipelineFaceTagsIfaceList& operator=(const QList<FaceTagsIface>& faces);
 
-    void setRole(FacePipelineDatabaseFace::Roles role);
-    void clearRole(FacePipelineDatabaseFace::Roles role);
-    void replaceRole(FacePipelineDatabaseFace::Roles remove, FacePipelineDatabaseFace::Roles add);
+    void setRole(FacePipelineFaceTagsIface::Roles role);
+    void clearRole(FacePipelineFaceTagsIface::Roles role);
+    void replaceRole(FacePipelineFaceTagsIface::Roles remove, FacePipelineFaceTagsIface::Roles add);
 
-    QList<DatabaseFace> toDatabaseFaceList() const;
+    QList<FaceTagsIface> toFaceTagsIfaceList() const;
 
-    FacePipelineDatabaseFaceList facesForRole(FacePipelineDatabaseFace::Roles role) const;
+    FacePipelineFaceTagsIfaceList facesForRole(FacePipelineFaceTagsIface::Roles role) const;
 };
 
 // ------------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ public:
     DImg                         image;
     QList<QRectF>                detectedFaces;
     QList<FacesEngine::Identity> recognitionResults;
-    FacePipelineDatabaseFaceList databaseFaces;
+    FacePipelineFaceTagsIfaceList databaseFaces;
 
     ProcessFlags                 processFlags;
 };
@@ -244,30 +244,30 @@ public Q_SLOTS:
      * it is not yet in the database (connect to signal processed() to react when the processing finished).
      * If a trainer is plugged, the face will be trained.
      */
-    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace& face,
+    FaceTagsIface confirm(const ImageInfo& info, const FaceTagsIface& face,
                          int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());
-    DatabaseFace confirm(const ImageInfo& info, const DatabaseFace& face, const DImg& image,
+    FaceTagsIface confirm(const ImageInfo& info, const FaceTagsIface& face, const DImg& image,
                          int assignedTagId = 0, const TagRegion& assignedRegion = TagRegion());
     /**
      * Train the given faces.
      */
-    void train(const ImageInfo& info, const QList<DatabaseFace>& faces);
-    void train(const ImageInfo& info, const QList<DatabaseFace>& faces, const DImg& image);
+    void train(const ImageInfo& info, const QList<FaceTagsIface>& faces);
+    void train(const ImageInfo& info, const QList<FaceTagsIface>& faces, const DImg& image);
     /**
      * Remove the given face.
      */
-    void remove(const ImageInfo& info, const DatabaseFace& face);
+    void remove(const ImageInfo& info, const FaceTagsIface& face);
 
     /**
      * Add an entry manually.
      */
-    DatabaseFace addManually(const ImageInfo& info, const DImg& image, const TagRegion& assignedRegion);
+    FaceTagsIface addManually(const ImageInfo& info, const DImg& image, const TagRegion& assignedRegion);
     /**
      * Change the given face's region to newRegion.
      * Does not care for training atm.
      */
-    DatabaseFace editRegion(const ImageInfo& info, const DImg& image,
-                            const DatabaseFace& databaseFace, const TagRegion& newRegion);
+    FaceTagsIface editRegion(const ImageInfo& info, const DImg& image,
+                            const FaceTagsIface& databaseFace, const TagRegion& newRegion);
 
     /**
      * Batch processing. If a filter is installed, the skipped() signal
@@ -311,7 +311,7 @@ private:
 } // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::FacePipelinePackage)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelineDatabaseFace::Roles)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelineFaceTagsIface::Roles)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelinePackage::ProcessFlags)
 
 #endif // FACEPIPELINE_H

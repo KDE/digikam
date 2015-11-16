@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-08-08
- * Description : database interface, also allowing easy manipulation of face tags
+ * Description : Faces tags editor allowing easy manipulation of face tags
  *
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -58,30 +58,30 @@ int FaceTagsEditor::faceCountForPersonInImage(qlonglong imageid, int tagId ) con
     return pair.values(ImageTagPropertyName::tagRegion()).size();
 }
 
-QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageId) const
+QList<FaceTagsIface> FaceTagsEditor::databaseFaces(qlonglong imageId) const
 {
-    return databaseFaces(imageId, DatabaseFace::NormalFaces);
+    return databaseFaces(imageId, FaceTagsIface::NormalFaces);
 }
 
-QList<DatabaseFace> FaceTagsEditor::unconfirmedDatabaseFaces(qlonglong imageId) const
+QList<FaceTagsIface> FaceTagsEditor::unconfirmedFaceTagsIfaces(qlonglong imageId) const
 {
-    return databaseFaces(imageId, DatabaseFace::UnconfirmedTypes);
+    return databaseFaces(imageId, FaceTagsIface::UnconfirmedTypes);
 }
 
-QList<DatabaseFace> FaceTagsEditor::databaseFacesForTraining(qlonglong imageId) const
+QList<FaceTagsIface> FaceTagsEditor::databaseFacesForTraining(qlonglong imageId) const
 {
-    return databaseFaces(imageId, DatabaseFace::FaceForTraining);
+    return databaseFaces(imageId, FaceTagsIface::FaceForTraining);
 }
 
-QList<DatabaseFace> FaceTagsEditor::confirmedDatabaseFaces(qlonglong imageId) const
+QList<FaceTagsIface> FaceTagsEditor::confirmedFaceTagsIfaces(qlonglong imageId) const
 {
-    return databaseFaces(imageId, DatabaseFace::ConfirmedName);
+    return databaseFaces(imageId, FaceTagsIface::ConfirmedName);
 }
 
-QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageid, DatabaseFace::TypeFlags flags) const
+QList<FaceTagsIface> FaceTagsEditor::databaseFaces(qlonglong imageid, FaceTagsIface::TypeFlags flags) const
 {
-    QList<DatabaseFace> faces;
-    QStringList         attributes = DatabaseFace::attributesForFlags(flags);
+    QList<FaceTagsIface> faces;
+    QStringList         attributes = FaceTagsIface::attributesForFlags(flags);
 
     foreach(const ImageTagPair& pair, faceImageTagPairs(imageid, flags))
     {
@@ -97,7 +97,7 @@ QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageid, DatabaseFac
                     continue;
                 }
 
-                faces << DatabaseFace(attribute, imageid, pair.tagId(), region);
+                faces << FaceTagsIface(attribute, imageid, pair.tagId(), region);
             }
         }
     }
@@ -105,10 +105,10 @@ QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageid, DatabaseFac
     return faces;
 }
 
-QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, DatabaseFace::TypeFlags flags) const
+QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, FaceTagsIface::TypeFlags flags) const
 {
     QList<ImageTagPair> pairs;
-    QStringList         attributes = DatabaseFace::attributesForFlags(flags);
+    QStringList         attributes = FaceTagsIface::attributesForFlags(flags);
 
     foreach(const ImageTagPair& pair, ImageTagPair::availablePairs(imageid))
     {
@@ -119,7 +119,7 @@ QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, Databas
         }
 
         // UnknownName and UnconfirmedName have the same attribute
-        if (!(flags & DatabaseFace::UnknownName) && FaceTags::isTheUnknownPerson(pair.tagId()))
+        if (!(flags & FaceTagsIface::UnknownName) && FaceTags::isTheUnknownPerson(pair.tagId()))
         {
             continue;
         }
@@ -175,32 +175,32 @@ int FaceTagsEditor::numberOfFaces(qlonglong imageid) const
 
 // --- Confirming and adding ---
 
-DatabaseFace FaceTagsEditor::unknownPersonEntry(qlonglong imageId, const TagRegion& region)
+FaceTagsIface FaceTagsEditor::unknownPersonEntry(qlonglong imageId, const TagRegion& region)
 {
     return unconfirmedEntry(imageId, -1, region);
 }
 
-DatabaseFace FaceTagsEditor::unconfirmedEntry(qlonglong imageId, int tagId, const TagRegion& region)
+FaceTagsIface FaceTagsEditor::unconfirmedEntry(qlonglong imageId, int tagId, const TagRegion& region)
 {
-    return DatabaseFace(DatabaseFace::UnconfirmedName, imageId,
+    return FaceTagsIface(FaceTagsIface::UnconfirmedName, imageId,
                         tagId == -1 ? FaceTags::unknownPersonTagId() : tagId, region);
 }
 
-DatabaseFace FaceTagsEditor::confirmedEntry(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
+FaceTagsIface FaceTagsEditor::confirmedEntry(const FaceTagsIface& face, int tagId, const TagRegion& confirmedRegion)
 {
-    return DatabaseFace(DatabaseFace::ConfirmedName, face.imageId(),
+    return FaceTagsIface(FaceTagsIface::ConfirmedName, face.imageId(),
                         tagId == -1 ? face.tagId() : tagId,
                         confirmedRegion.isValid() ? confirmedRegion : face.region());
 }
 
-DatabaseFace FaceTagsEditor::addManually(const DatabaseFace& face)
+FaceTagsIface FaceTagsEditor::addManually(const FaceTagsIface& face)
 {
     ImageTagPair pair(face.imageId(), face.tagId());
-    addFaceAndTag(pair, face, DatabaseFace::attributesForFlags(face.type()), false);
+    addFaceAndTag(pair, face, FaceTagsIface::attributesForFlags(face.type()), false);
     return face;
 }
 
-DatabaseFace FaceTagsEditor::changeSuggestedName(const DatabaseFace& previousEntry, int unconfirmedNameTagId)
+FaceTagsIface FaceTagsEditor::changeSuggestedName(const FaceTagsIface& previousEntry, int unconfirmedNameTagId)
 {
     if (previousEntry.isConfirmedName())
     {
@@ -208,7 +208,7 @@ DatabaseFace FaceTagsEditor::changeSuggestedName(const DatabaseFace& previousEnt
         return previousEntry;
     }
 
-    DatabaseFace newEntry = unconfirmedEntry(previousEntry.imageId(), unconfirmedNameTagId, previousEntry.region());
+    FaceTagsIface newEntry = unconfirmedEntry(previousEntry.imageId(), unconfirmedNameTagId, previousEntry.region());
 
     if (newEntry == previousEntry)
     {
@@ -219,13 +219,13 @@ DatabaseFace FaceTagsEditor::changeSuggestedName(const DatabaseFace& previousEnt
 
     ImageTagPair pair(newEntry.imageId(), newEntry.tagId());
     // UnconfirmedName and UnknownName have the same attribute
-    addFaceAndTag(pair, newEntry, DatabaseFace::attributesForFlags(DatabaseFace::UnconfirmedName), false);
+    addFaceAndTag(pair, newEntry, FaceTagsIface::attributesForFlags(FaceTagsIface::UnconfirmedName), false);
     return newEntry;
 }
 
-DatabaseFace FaceTagsEditor::confirmName(const DatabaseFace& face, int tagId, const TagRegion& confirmedRegion)
+FaceTagsIface FaceTagsEditor::confirmName(const FaceTagsIface& face, int tagId, const TagRegion& confirmedRegion)
 {
-    DatabaseFace newEntry = confirmedEntry(face, tagId, confirmedRegion);
+    FaceTagsIface newEntry = confirmedEntry(face, tagId, confirmedRegion);
 
     if (FaceTags::isTheUnknownPerson(newEntry.tagId()))
     {
@@ -248,34 +248,34 @@ DatabaseFace FaceTagsEditor::confirmName(const DatabaseFace& face, int tagId, co
 
     // Add new full entry
     addFaceAndTag(pair, newEntry,
-                  DatabaseFace::attributesForFlags(DatabaseFace::ConfirmedName | DatabaseFace::FaceForTraining),
+                  FaceTagsIface::attributesForFlags(FaceTagsIface::ConfirmedName | FaceTagsIface::FaceForTraining),
                   true);
 
     return newEntry;
 }
 
-DatabaseFace FaceTagsEditor::add(qlonglong imageId, int tagId, const TagRegion& region, bool trainFace)
+FaceTagsIface FaceTagsEditor::add(qlonglong imageId, int tagId, const TagRegion& region, bool trainFace)
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Adding face with rectangle  " << region.toRect () << " to database";
-    DatabaseFace newEntry(DatabaseFace::ConfirmedName, imageId, tagId, region);
+    FaceTagsIface newEntry(FaceTagsIface::ConfirmedName, imageId, tagId, region);
     add(newEntry, trainFace);
     return newEntry;
 }
 
-void FaceTagsEditor::add(const DatabaseFace& face, bool trainFace)
+void FaceTagsEditor::add(const FaceTagsIface& face, bool trainFace)
 {
     ImageTagPair pair(face.imageId(), face.tagId());
-    DatabaseFace::TypeFlags flags = DatabaseFace::ConfirmedName;
+    FaceTagsIface::TypeFlags flags = FaceTagsIface::ConfirmedName;
 
     if (trainFace)
     {
-        flags |= DatabaseFace::FaceForTraining;
+        flags |= FaceTagsIface::FaceForTraining;
     }
 
-    addFaceAndTag(pair, face, DatabaseFace::attributesForFlags(flags), true);
+    addFaceAndTag(pair, face, FaceTagsIface::attributesForFlags(flags), true);
 }
 
-void FaceTagsEditor::addFaceAndTag(ImageTagPair& pair, const DatabaseFace& face,
+void FaceTagsEditor::addFaceAndTag(ImageTagPair& pair, const FaceTagsIface& face,
                     const QStringList& properties, bool addTag)
 {
     FaceTags::ensureIsPerson(face.tagId());
@@ -297,9 +297,9 @@ void FaceTagsEditor::addFaceAndTag(ImageTagPair& pair, const DatabaseFace& face,
 void FaceTagsEditor::removeAllFaces(qlonglong imageid)
 {
     QList<int>  tagsToRemove;
-    QStringList attributes = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
+    QStringList attributes = FaceTagsIface::attributesForFlags(FaceTagsIface::AllTypes);
 
-    foreach(ImageTagPair pair, faceImageTagPairs(imageid, DatabaseFace::AllTypes))
+    foreach(ImageTagPair pair, faceImageTagPairs(imageid, FaceTagsIface::AllTypes))
     {
         foreach(const QString& attribute, attributes)
         {
@@ -318,8 +318,8 @@ void FaceTagsEditor::removeAllFaces(qlonglong imageid)
 void FaceTagsEditor::removeFace(qlonglong imageid, const QRect& rect)
 {
     QList<int>          tagsToRemove;
-    QStringList         attributes    = DatabaseFace::attributesForFlags(DatabaseFace::AllTypes);
-    QList<ImageTagPair> pairs         = faceImageTagPairs(imageid, DatabaseFace::AllTypes);
+    QStringList         attributes    = FaceTagsIface::attributesForFlags(FaceTagsIface::AllTypes);
+    QList<ImageTagPair> pairs         = faceImageTagPairs(imageid, FaceTagsIface::AllTypes);
 
     for (int i=0; i<pairs.size(); ++i)
     {
@@ -345,7 +345,7 @@ void FaceTagsEditor::removeFace(qlonglong imageid, const QRect& rect)
     removeNormalTags(imageid, tagsToRemove);
 }
 
-void FaceTagsEditor::removeFace(const DatabaseFace& face)
+void FaceTagsEditor::removeFace(const FaceTagsIface& face)
 {
     if (face.isNull())
     {
@@ -356,9 +356,9 @@ void FaceTagsEditor::removeFace(const DatabaseFace& face)
     removeFaceAndTag(pair, face, true);
 }
 
-void FaceTagsEditor::removeFaces(const QList<DatabaseFace>& faces)
+void FaceTagsEditor::removeFaces(const QList<FaceTagsIface>& faces)
 {
-    foreach(const DatabaseFace& face, faces)
+    foreach(const FaceTagsIface& face, faces)
     {
         if (face.isNull())
         {
@@ -370,26 +370,26 @@ void FaceTagsEditor::removeFaces(const QList<DatabaseFace>& faces)
     }
 }
 
-void FaceTagsEditor::removeFaceAndTag(ImageTagPair& pair, const DatabaseFace& face, bool touchTags)
+void FaceTagsEditor::removeFaceAndTag(ImageTagPair& pair, const FaceTagsIface& face, bool touchTags)
 {
     QString regionString = TagRegion(face.region().toRect()).toXml();
-    pair.removeProperty(DatabaseFace::attributeForType(face.type()), regionString);
+    pair.removeProperty(FaceTagsIface::attributeForType(face.type()), regionString);
 
-    if (face.type() == DatabaseFace::ConfirmedName)
+    if (face.type() == FaceTagsIface::ConfirmedName)
     {
-        pair.removeProperty(DatabaseFace::attributeForType(DatabaseFace::FaceForTraining), regionString);
+        pair.removeProperty(FaceTagsIface::attributeForType(FaceTagsIface::FaceForTraining), regionString);
     }
 
     // Tag assigned and no other entry left?
     if (touchTags            &&
         pair.isAssigned()    &&
-        !pair.hasProperty(DatabaseFace::attributeForType(DatabaseFace::ConfirmedName)))
+        !pair.hasProperty(FaceTagsIface::attributeForType(FaceTagsIface::ConfirmedName)))
     {
         removeNormalTag(face.imageId(), pair.tagId());
     }
 }
 
-DatabaseFace FaceTagsEditor::changeRegion(const DatabaseFace& face, const TagRegion& newRegion)
+FaceTagsIface FaceTagsEditor::changeRegion(const FaceTagsIface& face, const TagRegion& newRegion)
 {
     if (face.isNull() || face.region() == newRegion)
     {
@@ -399,9 +399,9 @@ DatabaseFace FaceTagsEditor::changeRegion(const DatabaseFace& face, const TagReg
     ImageTagPair pair(face.imageId(), face.tagId());
     removeFaceAndTag(pair, face, false);
 
-    DatabaseFace newFace = face;
+    FaceTagsIface newFace = face;
     newFace.setRegion(newRegion);
-    addFaceAndTag(pair, newFace, DatabaseFace::attributesForFlags(face.type()), false);
+    addFaceAndTag(pair, newFace, FaceTagsIface::attributesForFlags(face.type()), false);
     return newFace;
 
     // todo: the Training entry is cleared.

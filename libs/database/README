@@ -11,7 +11,7 @@ collection/         Collections management interface.
 coredb/             Core database implementation based on Database Engine.
 dbjobs/             Database jobs manager.
 engine/             Low Level database engine common to all database interface.
-facesiface/         Faces management interface (not Face database which is located in libs/facesengine/facedb.
+facesiface/         Face tags management interface with database (not Face database which is located in libs/facesengine/facedb).
 haar/               Haar fingerprint algorithms used by Fuzzy Search tool.
 imagehistory/       Image history algorithms.
 imgqsort/           Image Quality algorithms.

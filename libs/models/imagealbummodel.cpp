@@ -34,7 +34,7 @@
 #include "albummanager.h"
 #include "coredbaccess.h"
 #include "coredbchangesets.h"
-#include "databaseface.h"
+#include "facetagsiface.h"
 #include "coredbwatch.h"
 #include "coredburl.h"
 #include "imageinfo.h"
@@ -466,7 +466,7 @@ void ImageAlbumModel::slotData(const QList<ImageListerRecord> &records)
 
             if (d->specialListing == QLatin1String("faces"))
             {
-                DatabaseFace face = DatabaseFace::fromListing(info.id(), record.extraValues);
+                FaceTagsIface face = FaceTagsIface::fromListing(info.id(), record.extraValues);
                 extraValues << face.toVariant();
             }
             else

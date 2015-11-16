@@ -68,9 +68,9 @@ public:
      * The given face list is a result of automatic detection and possibly recognition.
      * The results are written to the database and merged with existing entries.
      * The returned list contains the faces written to the database and has the same size as the given list.
-     * If a face was skipped (because of an existing entry), a null DatabaseFace will be at this place.
+     * If a face was skipped (because of an existing entry), a null FaceTagsIface will be at this place.
      */
-    QList<DatabaseFace> writeUnconfirmedResults(qlonglong imageid,
+    QList<FaceTagsIface> writeUnconfirmedResults(qlonglong imageid,
                                                 const QList<QRectF>& detectedFaces,
                                                 const QList<FacesEngine::Identity> recognitionResults,
                                                 const QSize& fullSize);
@@ -105,12 +105,12 @@ public:
      * when the has already been loaded anyway.
      */
     void                storeThumbnails(ThumbnailLoadThread* const thread, const QString& filePath,
-                                        const QList<DatabaseFace>& databaseFaces, const DImg& image);
+                                        const QList<FaceTagsIface>& databaseFaces, const DImg& image);
 
     /**
      * Conversion
      */
-    QList<DatabaseFace> toDatabaseFaces(qlonglong imageid,
+    QList<FaceTagsIface> toFaceTagsIfaces(qlonglong imageid,
                                         const QList<QRectF>& detectedFaces,
                                         const QList<FacesEngine::Identity> recognitionResults,
                                         const QSize& fullSize) const;

@@ -297,11 +297,11 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
     /**
      *  Get all faces from database and rotate them
      */
-    QList<DatabaseFace> facesList = FaceTagsEditor().databaseFaces(info.id());
+    QList<FaceTagsIface> facesList = FaceTagsEditor().databaseFaces(info.id());
 
     QMap<QString, QRect> ajustedFaces;
 
-    foreach(const DatabaseFace& dface, facesList)
+    foreach(const FaceTagsIface& dface, facesList)
     {
         QString name  = FaceTags::faceNameForTag(dface.tagId());
         QRect oldrect = dface.region().toRect();

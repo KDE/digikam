@@ -130,7 +130,7 @@ public:
 
     FacePipeline::Private* const    d;
     FacePipeline::FilterMode        mode;
-    FacePipelineDatabaseFace::Roles tasks;
+    FacePipelineFaceTagsIface::Roles tasks;
 
 protected Q_SLOTS:
 
@@ -223,8 +223,8 @@ public:
 
     ThumbnailImageCatcher* thumbnailCatcher();
     QList<QImage> getDetails(const DImg& src, const QList<QRectF>& rects);
-    QList<QImage> getDetails(const DImg& src, const QList<DatabaseFace>& faces);
-    QList<QImage> getThumbnails(const QString& filePath, const QList<DatabaseFace>& faces);
+    QList<QImage> getDetails(const DImg& src, const QList<FaceTagsIface>& faces);
+    QList<QImage> getThumbnails(const QString& filePath, const QList<FaceTagsIface>& faces);
 
 protected:
 
@@ -411,9 +411,9 @@ public:
     void receiverFlowControl();
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
-                                                  const FacePipelineDatabaseFace&, const DImg& image);
+                                                  const FacePipelineFaceTagsIface&, const DImg& image);
     FacePipelineExtendedPackage::Ptr buildPackage(const ImageInfo& info,
-                                                  const FacePipelineDatabaseFaceList& faces, const DImg& image);
+                                                  const FacePipelineFaceTagsIfaceList& faces, const DImg& image);
     FacePipelineExtendedPackage::Ptr filterOrBuildPackage(const ImageInfo& info);
 
     bool hasFinished();

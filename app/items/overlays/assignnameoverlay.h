@@ -39,7 +39,7 @@ namespace Digikam
 {
 
 class AssignNameWidget;
-class DatabaseFace;
+class FaceTagsIface;
 class ImageInfo;
 class TaggingAction;
 

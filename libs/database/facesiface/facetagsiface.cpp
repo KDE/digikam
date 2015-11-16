@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2010-09-27
- * Description : structure for info stored about a face in the database
+ * Description : Interface for info stored about a face tag in the database
  *
- * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ * Copyright (C) 2010      by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databaseface.h"
+#include "facetagsiface.h"
 
 // Qt includes
 
@@ -32,69 +32,75 @@
 
 #include "digikam_debug.h"
 #include "coredbconstants.h"
-#include "tagregion.h"
 #include "tagscache.h"
 
 namespace Digikam
 {
 
-DatabaseFace::DatabaseFace()
-    : m_type(InvalidFace), m_imageId(0), m_tagId(0)
+FaceTagsIface::FaceTagsIface()
+    : m_type(InvalidFace),
+      m_imageId(0),
+      m_tagId(0)
 {
 }
 
-DatabaseFace::DatabaseFace(Type type, qlonglong imageId, int tagId, const TagRegion& region)
-    : m_type(type), m_imageId(imageId), m_tagId(tagId), m_region(region)
+FaceTagsIface::FaceTagsIface(Type type, qlonglong imageId, int tagId, const TagRegion& region)
+    : m_type(type),
+      m_imageId(imageId),
+      m_tagId(tagId),
+      m_region(region)
 {
 }
 
-DatabaseFace::DatabaseFace(const QString& attribute, qlonglong imageId, int tagId, const TagRegion& region)
-    : m_imageId(imageId), m_tagId(tagId), m_region(region)
+FaceTagsIface::FaceTagsIface(const QString& attribute, qlonglong imageId, int tagId, const TagRegion& region)
+    : m_imageId(imageId),
+      m_tagId(tagId),
+      m_region(region)
 {
     m_type = typeForAttribute(attribute, tagId);
 }
 
-bool DatabaseFace::isNull() const
+bool FaceTagsIface::isNull() const
 {
     return m_type == InvalidFace;
 }
 
-DatabaseFace::Type DatabaseFace::type() const
+FaceTagsIface::Type FaceTagsIface::type() const
 {
     return m_type;
 }
 
-qlonglong DatabaseFace::imageId() const
+qlonglong FaceTagsIface::imageId() const
 {
     return m_imageId;
 }
 
-int DatabaseFace::tagId() const
+int FaceTagsIface::tagId() const
 {
     return m_tagId;
 }
 
-TagRegion DatabaseFace::region() const
+TagRegion FaceTagsIface::region() const
 {
     return m_region;
 }
 
-void DatabaseFace::setType(Type type)
+void FaceTagsIface::setType(Type type)
 {
     m_type = type;
 }
 
-void DatabaseFace::setTagId(int tagId)
+void FaceTagsIface::setTagId(int tagId)
 {
     m_tagId = tagId;
 }
 
-void DatabaseFace::setRegion(const TagRegion& region)
+void FaceTagsIface::setRegion(const TagRegion& region)
 {
     m_region = region;
 }
 
-bool DatabaseFace::operator==(const DatabaseFace& other) const
+bool FaceTagsIface::operator==(const FaceTagsIface& other) const
 {
     return m_tagId   == other.m_tagId   &&
            m_imageId == other.m_imageId &&
@@ -102,15 +108,15 @@ bool DatabaseFace::operator==(const DatabaseFace& other) const
            m_region  == other.m_region;
 }
 
-QStringList DatabaseFace::attributesForFlags(TypeFlags flags)
+QStringList FaceTagsIface::attributesForFlags(TypeFlags flags)
 {
     QStringList attributes;
 
-    for (int i = DatabaseFace::TypeFirst; i <= DatabaseFace::TypeLast; i <<= 1)
+    for (int i = FaceTagsIface::TypeFirst; i <= FaceTagsIface::TypeLast; i <<= 1)
     {
-        if (flags & DatabaseFace::Type(i))
+        if (flags & FaceTagsIface::Type(i))
         {
-            QString attribute = attributeForType(DatabaseFace::Type(i));
+            QString attribute = attributeForType(FaceTagsIface::Type(i));
 
             if (!attributes.contains(attribute))
             {
@@ -122,19 +128,19 @@ QStringList DatabaseFace::attributesForFlags(TypeFlags flags)
     return attributes;
 }
 
-QString DatabaseFace::attributeForType(Type type)
+QString FaceTagsIface::attributeForType(Type type)
 {
-    if (type == DatabaseFace::UnknownName || type == DatabaseFace::UnconfirmedName)
+    if (type == FaceTagsIface::UnknownName || type == FaceTagsIface::UnconfirmedName)
     {
         return ImageTagPropertyName::autodetectedFace();
     }
 
-    if (type == DatabaseFace::ConfirmedName)
+    if (type == FaceTagsIface::ConfirmedName)
     {
         return ImageTagPropertyName::tagRegion();
     }
 
-    if (type == DatabaseFace::FaceForTraining)
+    if (type == FaceTagsIface::FaceForTraining)
     {
         return ImageTagPropertyName::faceToTrain();
     }
@@ -142,32 +148,32 @@ QString DatabaseFace::attributeForType(Type type)
     return QString();
 }
 
-DatabaseFace::Type DatabaseFace::typeForAttribute(const QString& attribute, int tagId)
+FaceTagsIface::Type FaceTagsIface::typeForAttribute(const QString& attribute, int tagId)
 {
     if (attribute == ImageTagPropertyName::autodetectedFace())
     {
         if (tagId && TagsCache::instance()->hasProperty(tagId, TagPropertyName::unknownPerson()))
         {
-            return DatabaseFace::UnknownName;
+            return FaceTagsIface::UnknownName;
         }
         else
         {
-            return DatabaseFace::UnconfirmedName;
+            return FaceTagsIface::UnconfirmedName;
         }
     }
     else if (attribute == ImageTagPropertyName::tagRegion())
     {
-        return DatabaseFace::ConfirmedName;
+        return FaceTagsIface::ConfirmedName;
     }
     else if (attribute == ImageTagPropertyName::faceToTrain())
     {
-        return DatabaseFace::FaceForTraining;
+        return FaceTagsIface::FaceForTraining;
     }
 
-    return DatabaseFace::InvalidFace;
+    return FaceTagsIface::InvalidFace;
 }
 
-DatabaseFace DatabaseFace::fromVariant(const QVariant& var)
+FaceTagsIface FaceTagsIface::fromVariant(const QVariant& var)
 {
     if (var.type() == QVariant::List)
     {
@@ -175,17 +181,17 @@ DatabaseFace DatabaseFace::fromVariant(const QVariant& var)
 
         if (list.size() == 4)
         {
-            return DatabaseFace((Type)list.at(0).toInt(),
+            return FaceTagsIface((Type)list.at(0).toInt(),
                                 list.at(1).toLongLong(),
                                 list.at(2).toInt(),
                                 TagRegion::fromVariant(list.at(3)));
         }
     }
 
-    return DatabaseFace();
+    return FaceTagsIface();
 }
 
-QVariant DatabaseFace::toVariant() const
+QVariant FaceTagsIface::toVariant() const
 {
     // this is still not perfect, with QList<QVariant> being inefficient
     // we must keep to native types, to make operator== work.
@@ -197,30 +203,31 @@ QVariant DatabaseFace::toVariant() const
     return list;
 }
 
-DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>& extraValues)
+FaceTagsIface FaceTagsIface::fromListing(qlonglong imageId, const QList<QVariant>& extraValues)
 {
     if (extraValues.size() < 3)
     {
-        return DatabaseFace();
+        return FaceTagsIface();
     }
 
     // See imagelister.cpp: value - property - tagId
     int tagId         = extraValues.at(2).toInt();
     QString attribute = extraValues.at(1).toString();
     QString value     = extraValues.at(0).toString();
+
     //qCDebug(DIGIKAM_DATABASE_LOG) << tagId << attribute << value;
 
-    return DatabaseFace(attribute,
+    return FaceTagsIface(attribute,
                         imageId, tagId,
                         TagRegion(value));
 }
 
-QDebug operator<<(QDebug dbg, const DatabaseFace& f)
+QDebug operator<<(QDebug dbg, const FaceTagsIface& f)
 {
-    dbg.nospace() << "DatabaseFace(" << f.type()
-                  << ", image " << f.imageId()
-                  << ", tag " << f.tagId()
-                  << ", region" << f.region();
+    dbg.nospace() << "FaceTagsIface(" << f.type()
+                  << ", image "       << f.imageId()
+                  << ", tag "         << f.tagId()
+                  << ", region"       << f.region();
     return dbg;
 }
 
