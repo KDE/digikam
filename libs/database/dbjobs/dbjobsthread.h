@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "dbjobinfo.h"
 #include "dbjob.h"
 #include "haariface.h"

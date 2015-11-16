@@ -38,7 +38,7 @@
 
 #include "dwidgetutils.h"
 #include "applicationsettings.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 
 namespace Digikam
 {
@@ -74,7 +74,7 @@ public:
 public:
 
     void setParametersFromSettings(const ApplicationSettings* const settings);
-    DatabaseParameters getDatabaseParameters();
+    DbEngineParameters getDbEngineParameters();
 
     QString currentDatabaseType() const;
     void setDatabaseInputFields(const QString&);

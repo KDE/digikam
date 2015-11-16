@@ -28,7 +28,7 @@
 // Local includes
 
 #include "facedbbackend.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "dbengineerrorhandler.h"
 #include "collectionscannerobserver.h"
 #include "digikam_export.h"
@@ -55,7 +55,7 @@ public:
     TrainingDB* db()                  const;
     FaceDbBackend* backend()    const;
     QString              lastError()  const;
-    DatabaseParameters   parameters() const;
+    DbEngineParameters   parameters() const;
 
     /**
       * Set the "last error" message. This method is not for public use.
@@ -68,7 +68,7 @@ public:
     static void destroy(FaceDbAccessData* const);
 
     static void initDbEngineErrorHandler(FaceDbAccessData* const d, DbEngineErrorHandler* const errorhandler);
-    static void setParameters(FaceDbAccessData* const d, const DatabaseParameters& parameters);
+    static void setParameters(FaceDbAccessData* const d, const DbEngineParameters& parameters);
     static bool checkReadyForUse(FaceDbAccessData* const d, InitializationObserver* const observer = 0);
 
 private:

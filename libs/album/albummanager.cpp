@@ -82,7 +82,7 @@ extern "C"
 #include "digikam_config.h"
 #include "coredbaccess.h"
 #include "databaseguierrorhandler.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "databaseserverstarter.h"
 #include "coredbthumbinfoprovider.h"
 #include "coredburl.h"
@@ -397,7 +397,7 @@ void AlbumManager::cleanUp()
 bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName,
                                  const QString& dbHostName, int dbPort, bool dbInternalServer) const
 {
-    DatabaseParameters params = CoreDbAccess::parameters();
+    DbEngineParameters params = CoreDbAccess::parameters();
 
     return params.databaseType   == dbType          &&
            params.databaseName   == dbName          &&
@@ -456,7 +456,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
     // for bug #193522
     QDir               newDir(dbPath);
     QDir               albumDir(albumPath);
-    DatabaseParameters newParams = DatabaseParameters::parametersForSQLiteDefaultFile(newDir.path());
+    DbEngineParameters newParams = DbEngineParameters::parametersForSQLiteDefaultFile(newDir.path());
     QFileInfo          digikam4DB(newParams.SQLiteDatabaseFile());
 
     if (!digikam4DB.exists())
@@ -504,10 +504,10 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
     }
 }
 
-void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
+void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
 {
     // if there is no file at the new place, copy old one
-    DatabaseParameters params = CoreDbAccess::parameters();
+    DbEngineParameters params = CoreDbAccess::parameters();
 
     // New database type SQLITE
     if (newParams.isSQLite())
@@ -672,7 +672,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
     }
 }
 
-bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, const QString suggestedAlbumRoot)
+bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, const QString suggestedAlbumRoot)
 {
     // This is to ensure that the setup does not overrule the command line.
     // TODO: there is a bug that setup is showing something different here.
@@ -758,12 +758,12 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
                                    "Please check the database settings in the <b>configuration menu</b>.</p>"
                                   ));
 
-        CoreDbAccess::setParameters(DatabaseParameters(), CoreDbAccess::DatabaseSlave);
+        CoreDbAccess::setParameters(DbEngineParameters(), CoreDbAccess::DatabaseSlave);
         QApplication::restoreOverrideCursor();
         return true;
     }
 
-    d->albumWatch->setDatabaseParameters(params);
+    d->albumWatch->setDbEngineParameters(params);
 
     // still suspended from above
     ScanController::instance()->resumeCollectionScan();

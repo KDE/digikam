@@ -38,7 +38,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "sqlquery.h"
 
 namespace Digikam
@@ -128,13 +128,13 @@ public:
     /**
      * Checks if the parameters can be used for this database backend.
      */
-    bool isCompatible(const DatabaseParameters& parameters);
+    bool isCompatible(const DbEngineParameters& parameters);
 
     /**
      * Open the database connection.
      * @returns true on success
      */
-    bool open(const DatabaseParameters& parameters);
+    bool open(const DbEngineParameters& parameters);
 
     /**
      * Close the database connection.

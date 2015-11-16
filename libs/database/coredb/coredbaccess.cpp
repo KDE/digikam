@@ -75,7 +75,7 @@ public:
     CoreDbBackend*    backend;
     AlbumDB*            db;
     CoreDbWatch*      databaseWatch;
-    DatabaseParameters  parameters;
+    DbEngineParameters  parameters;
     DatabaseLocking     lock;
     QString             lastError;
     QUuid               applicationIdentifier;
@@ -172,17 +172,17 @@ void CoreDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler)
     d->backend->setDbEngineErrorHandler(errorhandler);
 }
 
-DatabaseParameters CoreDbAccess::parameters()
+DbEngineParameters CoreDbAccess::parameters()
 {
     if (d)
     {
         return d->parameters;
     }
 
-    return DatabaseParameters();
+    return DbEngineParameters();
 }
 
-void CoreDbAccess::setParameters(const DatabaseParameters& parameters)
+void CoreDbAccess::setParameters(const DbEngineParameters& parameters)
 {
     //TODO 0.11: Refine API
     setParameters(parameters, DatabaseSlave);
@@ -193,7 +193,7 @@ void CoreDbAccess::setParameters(const DatabaseParameters& parameters)
     }
 }
 
-void CoreDbAccess::setParameters(const DatabaseParameters& parameters, ApplicationStatus status)
+void CoreDbAccess::setParameters(const DbEngineParameters& parameters, ApplicationStatus status)
 {
     if (!d)
     {

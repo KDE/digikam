@@ -43,7 +43,7 @@
 // Local includes
 
 #include "coredbaccess.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "facedbaccess.h"
 #include "facedboperationgroup.h"
 #include "dataproviders.h"
@@ -245,7 +245,7 @@ RecognitionDatabase::Private::Private(const QString& path)
       opencvlbph(0),
       funnel(0)
 {
-    DatabaseParameters params = CoreDbAccess::parameters().faceParameters();
+    DbEngineParameters params = CoreDbAccess::parameters().faceParameters();
     params.setFaceDatabasePath(configPath);
     FaceDbAccess::setParameters(db, params);
     dbAvailable               = FaceDbAccess::checkReadyForUse(db);

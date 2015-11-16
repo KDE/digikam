@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-CoreDbPrivilegesChecker::CoreDbPrivilegesChecker(const DatabaseParameters& parameters)
+CoreDbPrivilegesChecker::CoreDbPrivilegesChecker(const DbEngineParameters& parameters)
 {
     m_parameters = parameters;
 }

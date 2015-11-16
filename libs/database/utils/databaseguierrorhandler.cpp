@@ -66,10 +66,10 @@ public:
     QMutex             mutex;
     QWaitCondition     condVar;
 
-    DatabaseParameters parameters;
+    DbEngineParameters parameters;
 };
 
-DatabaseConnectionChecker::DatabaseConnectionChecker(const DatabaseParameters& parameters)
+DatabaseConnectionChecker::DatabaseConnectionChecker(const DbEngineParameters& parameters)
     : d(new Private)
 {
     d->parameters = parameters;
@@ -153,11 +153,11 @@ public:
 
     QPointer<QProgressDialog>  dialog;
 
-    DatabaseParameters         parameters;
+    DbEngineParameters         parameters;
     DatabaseConnectionChecker* checker;
 };
 
-DatabaseGUIErrorHandler::DatabaseGUIErrorHandler(const DatabaseParameters& parameters)
+DatabaseGUIErrorHandler::DatabaseGUIErrorHandler(const DbEngineParameters& parameters)
     : d(new Private)
 {
     d->parameters = parameters;

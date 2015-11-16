@@ -36,7 +36,7 @@ namespace Digikam
 
 class Album;
 class AlbumManager;
-class DatabaseParameters;
+class DbEngineParameters;
 
 class AlbumWatch : public QObject
 {
@@ -48,7 +48,7 @@ public:
     ~AlbumWatch();
 
     void clear();
-    void setDatabaseParameters(const DatabaseParameters& params);
+    void setDbEngineParameters(const DbEngineParameters& params);
 
 protected Q_SLOTS:
 

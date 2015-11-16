@@ -69,7 +69,7 @@ void TimeStampUpdateTest::initTestCase()
 
     // Create new temporary database
     dbFile = tempFilePath(QLatin1String("database"));
-    DatabaseParameters params(QLatin1String("QSQLITE"), dbFile, QLatin1String("QSQLITE"), dbFile);
+    DbEngineParameters params(QLatin1String("QSQLITE"), dbFile, QLatin1String("QSQLITE"), dbFile);
     CoreDbAccess::setParameters(params, CoreDbAccess::MainApplication);
     QVERIFY(CoreDbAccess::checkReadyForUse(0));
     QVERIFY(QFile(dbFile).exists());

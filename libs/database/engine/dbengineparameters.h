@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-18
- * Description : Storage container for database connection parameters.
+ * Description : Database Engine storage container for connection parameters.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEPARAMETERS_H
-#define DATABASEPARAMETERS_H
+#ifndef DATABASE_ENGINE_PARAMETERS_H
+#define DATABASE_ENGINE_PARAMETERS_H
 
 // Qt includes
 
@@ -48,12 +48,12 @@ namespace Digikam
  * a connection to a database (inspired by the API of QT4::Sql).
  * The values can be read from and written to a QUrl.
  */
-class DIGIKAM_EXPORT DatabaseParameters
+class DIGIKAM_EXPORT DbEngineParameters
 {
 
 public:
 
-    DatabaseParameters(const QString& type,
+    DbEngineParameters(const QString& type,
                        const QString& databaseName,
                        const QString& connectOptions = QString(),
                        const QString& hostName = QString(),
@@ -65,13 +65,13 @@ public:
                        const QString& databaseNameFace = QString()
                       );
 
-    explicit DatabaseParameters(const QUrl& url);
+    explicit DbEngineParameters(const QUrl& url);
 
-    DatabaseParameters();
+    DbEngineParameters();
 
     void insertInUrl(QUrl& url) const;
-    bool operator==(const DatabaseParameters& other) const;
-    bool operator!=(const DatabaseParameters& other) const;
+    bool operator==(const DbEngineParameters& other) const;
+    bool operator!=(const DbEngineParameters& other) const;
 
     /** Performs basic checks that the parameters are not empty and have the information
      *  required for the databaseType.
@@ -84,7 +84,7 @@ public:
 
     /**
      *  Returns the databaseType designating the said database.
-     *  If you have a DatabaseParameters object already, you can use isSQLite() as well.
+     *  If you have a DbEngineParameters object already, you can use isSQLite() as well.
      *  These strings are identical to the driver identifiers in the Qt SQL module.
      */
     static QString SQLiteDatabaseType();
@@ -97,9 +97,9 @@ public:
 
     /** Return a set of default parameters for the given type
      */
-    static DatabaseParameters defaultParameters(const QString databaseType);
+    static DbEngineParameters defaultParameters(const QString databaseType);
 
-    static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(),
+    static DbEngineParameters parametersFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(),
                                                    const QString& configGroup = QString());
     /**
      * Read and write parameters from config. You can specify the group,
@@ -132,21 +132,21 @@ public:
 
     /** Replaces databaseName with databaseNameThumbnails.
      */
-    DatabaseParameters thumbnailParameters() const;
+    DbEngineParameters thumbnailParameters() const;
 
     /** Replaces databaseName with databaseNameFace.
      */
-    DatabaseParameters faceParameters() const;
+    DbEngineParameters faceParameters() const;
 
     void legacyAndDefaultChecks(const QString& suggestedPath = QString(), KSharedConfig::Ptr config = KSharedConfig::openConfig());
     void removeLegacyConfig(KSharedConfig::Ptr config);
 
     /**
-     * Convenience method to create a DatabaseParameters object for an
+     * Convenience method to create a DbEngineParameters object for an
      * SQLITE 3 database specified by the local file path.
      */
-    static DatabaseParameters parametersForSQLite(const QString& databaseFile);
-    static DatabaseParameters parametersForSQLiteDefaultFile(const QString& directory);
+    static DbEngineParameters parametersForSQLite(const QString& databaseFile);
+    static DbEngineParameters parametersForSQLiteDefaultFile(const QString& directory);
 
     static void removeFromUrl(QUrl& url);
 
@@ -165,8 +165,8 @@ public:
     QString databaseNameFace;
 };
 
-DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DatabaseParameters& t);
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DbEngineParameters& t);
 
 }  // namespace Digikam
 
-#endif // DATABASEPARAMETERS_H
+#endif // DATABASE_ENGINE_PARAMETERS_H

@@ -37,7 +37,7 @@
 
 #include "digikam_debug.h"
 #include "databasecorebackend.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "albumdb.h"
 #include "coredbschemaupdater.h"
 
@@ -58,7 +58,7 @@ void CoreDbCopyManager::stopProcessing()
     m_isStopProcessing = true;
 }
 
-void CoreDbCopyManager::copyDatabases(const DatabaseParameters& fromDBParameters, DatabaseParameters& toDBParameters)
+void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters, DbEngineParameters& toDBParameters)
 {
     m_isStopProcessing = false;
     DatabaseLocking fromLocking;

@@ -96,7 +96,7 @@ public:
 
     CoreDbBackend*        backend;
     AlbumDB*                albumDB;
-    DatabaseParameters      parameters;
+    DbEngineParameters      parameters;
 
     // legacy
     CoreDbAccess*         access;
@@ -105,7 +105,7 @@ public:
     InitializationObserver* observer;
 };
 
-CoreDbSchemaUpdater::CoreDbSchemaUpdater(AlbumDB* const albumDB, CoreDbBackend* const backend, DatabaseParameters parameters)
+CoreDbSchemaUpdater::CoreDbSchemaUpdater(AlbumDB* const albumDB, CoreDbBackend* const backend, DbEngineParameters parameters)
     : d(new Private)
 {
     d->backend    = backend;

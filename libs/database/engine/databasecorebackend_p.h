@@ -36,7 +36,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "dbengineerrorhandler.h"
 
 namespace Digikam
@@ -111,7 +111,7 @@ public:
 
     QString                                   backendName;
 
-    DatabaseParameters                        parameters;
+    DbEngineParameters                        parameters;
 
     DatabaseCoreBackend::Status               status;
 

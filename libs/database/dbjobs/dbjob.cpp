@@ -26,7 +26,7 @@
 // Local includes
 
 #include "coredbaccess.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "albumdb.h"
 #include "imagelister.h"
 #include "digikam_export.h"

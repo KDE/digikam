@@ -39,7 +39,7 @@ namespace Digikam
 
 CoreDbUrl CoreDbUrl::fromFileUrl(const QUrl& fileUrl,
                                  const QUrl& albumRoot,
-                                 const DatabaseParameters& parameters)
+                                 const DbEngineParameters& parameters)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
 
@@ -49,7 +49,7 @@ CoreDbUrl CoreDbUrl::fromFileUrl(const QUrl& fileUrl,
 CoreDbUrl CoreDbUrl::fromFileUrl(const QUrl& fileUrl,
                                  const QUrl& albumRoot,
                                  int   albumRootId,
-                                 const DatabaseParameters& parameters)
+                                 const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
     url.setScheme(QLatin1String("digikamalbums"));
@@ -74,7 +74,7 @@ CoreDbUrl CoreDbUrl::fromFileUrl(const QUrl& fileUrl,
 CoreDbUrl CoreDbUrl::fromAlbumAndName(const QString& name,
                                       const QString& album,
                                       const QUrl& albumRoot,
-                                      const DatabaseParameters& parameters)
+                                      const DbEngineParameters& parameters)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
 
@@ -85,7 +85,7 @@ CoreDbUrl CoreDbUrl::fromAlbumAndName(const QString& name,
                                       const QString& album,
                                       const QUrl& albumRoot,
                                       int   albumRootId,
-                                      const DatabaseParameters& parameters)
+                                      const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
     url.setScheme(QLatin1String("digikamalbums"));
@@ -105,7 +105,7 @@ CoreDbUrl CoreDbUrl::fromAlbumAndName(const QString& name,
     return url;
 }
 
-CoreDbUrl CoreDbUrl::albumUrl(const DatabaseParameters& parameters)
+CoreDbUrl CoreDbUrl::albumUrl(const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
     url.setScheme(QLatin1String("digikamalbums"));
@@ -116,7 +116,7 @@ CoreDbUrl CoreDbUrl::albumUrl(const DatabaseParameters& parameters)
 }
 
 CoreDbUrl CoreDbUrl::fromTagIds(const QList<int>& tagIds,
-                                const DatabaseParameters& parameters)
+                                const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
     url.setScheme(QLatin1String("digikamtags"));
@@ -133,7 +133,7 @@ CoreDbUrl CoreDbUrl::fromTagIds(const QList<int>& tagIds,
     return url;
 }
 
-CoreDbUrl CoreDbUrl::dateUrl(const DatabaseParameters& parameters)
+CoreDbUrl CoreDbUrl::dateUrl(const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
     url.setScheme(QLatin1String("digikamdates"));
@@ -144,7 +144,7 @@ CoreDbUrl CoreDbUrl::dateUrl(const DatabaseParameters& parameters)
     return url;
 }
 
-CoreDbUrl CoreDbUrl::fromDateForMonth(const QDate& date, const DatabaseParameters& parameters)
+CoreDbUrl CoreDbUrl::fromDateForMonth(const QDate& date, const DbEngineParameters& parameters)
 {
     QDate firstDayOfMonth(date.year(), date.month(), 1);
     QDate firstDayOfNextMonth = firstDayOfMonth.addMonths(1);
@@ -152,7 +152,7 @@ CoreDbUrl CoreDbUrl::fromDateForMonth(const QDate& date, const DatabaseParameter
     return ( fromDateRange(firstDayOfMonth, firstDayOfNextMonth, parameters) );
 }
 
-CoreDbUrl CoreDbUrl::fromDateForYear(const QDate& date, const DatabaseParameters& parameters)
+CoreDbUrl CoreDbUrl::fromDateForYear(const QDate& date, const DbEngineParameters& parameters)
 {
     QDate firstDayOfYear(date.year(), 1, 1);
     QDate firstDayOfNextYear = firstDayOfYear.addYears(1);
@@ -162,7 +162,7 @@ CoreDbUrl CoreDbUrl::fromDateForYear(const QDate& date, const DatabaseParameters
 
 CoreDbUrl CoreDbUrl::fromDateRange(const QDate& startDate,
                                    const QDate& endDate,
-                                   const DatabaseParameters& parameters)
+                                   const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
     url.setScheme(QLatin1String("digikamdates"));
@@ -174,7 +174,7 @@ CoreDbUrl CoreDbUrl::fromDateRange(const QDate& startDate,
     return url;
 }
 
-CoreDbUrl CoreDbUrl::mapImagesUrl(const DatabaseParameters& parameters)
+CoreDbUrl CoreDbUrl::mapImagesUrl(const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
     url.setScheme(QLatin1String("digikammapimages"));
@@ -187,7 +187,7 @@ CoreDbUrl CoreDbUrl::mapImagesUrl(const DatabaseParameters& parameters)
 
 CoreDbUrl CoreDbUrl::fromAreaRange(const qreal lat1, const qreal lat2,
                                    const qreal lng1, const qreal lng2,
-                                   const DatabaseParameters& parameters)
+                                   const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
     url.setScheme(QLatin1String("digikammapimages"));
@@ -206,7 +206,7 @@ CoreDbUrl CoreDbUrl::fromAreaRange(const qreal lat1, const qreal lat2,
     return url;
 }
 
-CoreDbUrl CoreDbUrl::searchUrl(int id, const DatabaseParameters& parameters)
+CoreDbUrl CoreDbUrl::searchUrl(int id, const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
     url.setScheme(QLatin1String("digikamsearch"));
@@ -256,7 +256,7 @@ bool CoreDbUrl::operator==(const QUrl& digikamalbumsUrl) const
 }
 
 /*
-CoreDbUrl::operator DatabaseParameters() const
+CoreDbUrl::operator DbEngineParameters() const
 {
     return parameters();
 }
@@ -264,12 +264,12 @@ CoreDbUrl::operator DatabaseParameters() const
 
 // --- Database parameters ---------------------------------------------------------------------
 
-DatabaseParameters CoreDbUrl::parameters() const
+DbEngineParameters CoreDbUrl::parameters() const
 {
-    return DatabaseParameters(*this);
+    return DbEngineParameters(*this);
 }
 
-void CoreDbUrl::setParameters(const DatabaseParameters& parameters)
+void CoreDbUrl::setParameters(const DbEngineParameters& parameters)
 {
     parameters.insertInUrl(*this);
 }

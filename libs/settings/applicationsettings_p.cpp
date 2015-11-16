@@ -38,7 +38,7 @@
 #include "imagefiltersettings.h"
 #include "imagesortsettings.h"
 #include "thumbnailsize.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "versionmanager.h"
 #include "applicationsettings.h"
 #include "applicationsettings_p.h"

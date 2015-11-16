@@ -52,7 +52,7 @@
 #include "coredbaccess.h"
 #include "databasewidget.h"
 #include "coredbbackend.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "coredbschemaupdater.h"
 #include "coredbcopymanager.h"
 
@@ -67,8 +67,8 @@ public:
     {
     }
 
-    DatabaseParameters fromDatabaseParameters;
-    DatabaseParameters toDatabaseParameters;
+    DbEngineParameters fromDbEngineParameters;
+    DbEngineParameters toDbEngineParameters;
 };
 
 DatabaseCopyThread::DatabaseCopyThread(QWidget* const parent)
@@ -84,13 +84,13 @@ DatabaseCopyThread::~DatabaseCopyThread()
 
 void DatabaseCopyThread::run()
 {
-    m_copyManager.copyDatabases(d->fromDatabaseParameters, d->toDatabaseParameters);
+    m_copyManager.copyDatabases(d->fromDbEngineParameters, d->toDbEngineParameters);
 }
 
-void DatabaseCopyThread::init(const DatabaseParameters& fromDatabaseParameters, const DatabaseParameters& toDatabaseParameters)
+void DatabaseCopyThread::init(const DbEngineParameters& fromDbEngineParameters, const DbEngineParameters& toDbEngineParameters)
 {
-    d->fromDatabaseParameters = fromDatabaseParameters;
-    d->toDatabaseParameters   = toDatabaseParameters;
+    d->fromDbEngineParameters = fromDbEngineParameters;
+    d->toDbEngineParameters   = toDbEngineParameters;
 }
 
 // ---------------------------------------------------------------------------
@@ -206,8 +206,8 @@ void MigrationDlg::setupMainArea()
 
 void MigrationDlg::performCopy()
 {
-    DatabaseParameters toDBParameters   = d->toDatabaseWidget->getDatabaseParameters();
-    DatabaseParameters fromDBParameters = d->fromDatabaseWidget->getDatabaseParameters();
+    DbEngineParameters toDBParameters   = d->toDatabaseWidget->getDbEngineParameters();
+    DbEngineParameters fromDBParameters = d->fromDatabaseWidget->getDbEngineParameters();
     d->copyThread->init(fromDBParameters, toDBParameters);
 
     lockInputFields();

@@ -34,7 +34,7 @@
 #include "albumdb.h"
 #include "coredbaccess.h"
 #include "coredbbackend.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 
 namespace Digikam
 {
@@ -53,7 +53,7 @@ public:
 
 public:
 
-    CoreDbSchemaUpdater(AlbumDB* const albumDB, CoreDbBackend* const backend, DatabaseParameters parameters);
+    CoreDbSchemaUpdater(AlbumDB* const albumDB, CoreDbBackend* const backend, DbEngineParameters parameters);
     ~CoreDbSchemaUpdater();
 
     bool  update();

@@ -165,7 +165,7 @@ bool ThumbsDbSchemaUpdater::startUpdates()
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "Thumbs database: no database file available";
 
-        DatabaseParameters parameters = m_access->parameters();
+        DbEngineParameters parameters = m_access->parameters();
 
         // No legacy handling: start with a fresh db
         if (!createDatabase())

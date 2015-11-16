@@ -479,9 +479,9 @@ void DigikamApp::downloadFromUdi(const QString& udi)
     }
 }
 
-QString DigikamApp::currentDatabaseParameters() const
+QString DigikamApp::currentDbEngineParameters() const
 {
-    DatabaseParameters parameters = CoreDbAccess::parameters();
+    DbEngineParameters parameters = CoreDbAccess::parameters();
     QUrl url;
     parameters.insertInUrl(url);
     return url.url();
@@ -2398,7 +2398,7 @@ void DigikamApp::slotSetupChanged()
                                                  ApplicationSettings::instance()->getDatabaseName(), ApplicationSettings::instance()->getDatabaseHostName(),
                                                  ApplicationSettings::instance()->getDatabasePort(), ApplicationSettings::instance()->getInternalDatabaseServer()))
     {
-        AlbumManager::instance()->changeDatabase(ApplicationSettings::instance()->getDatabaseParameters());
+        AlbumManager::instance()->changeDatabase(ApplicationSettings::instance()->getDbEngineParameters());
     }
 
     if (ApplicationSettings::instance()->getShowFolderTreeViewItemsCount())

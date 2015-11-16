@@ -47,7 +47,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "databaseserverstarter.h"
 
 namespace Digikam
@@ -166,10 +166,10 @@ void DatabaseWidget::setupMainArea()
 
     // --------- fill with default values ---------------------
 
-    databaseType->addItem(i18n("SQLite"),               DatabaseParameters::SQLiteDatabaseType());
+    databaseType->addItem(i18n("SQLite"),               DbEngineParameters::SQLiteDatabaseType());
 
 #ifdef HAVE_MYSQLSUPPORT
-    databaseType->addItem(i18n("MySQL (experimental)"), DatabaseParameters::MySQLDatabaseType());
+    databaseType->addItem(i18n("MySQL (experimental)"), DbEngineParameters::MySQLDatabaseType());
 #endif
 
     databaseType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
@@ -182,7 +182,7 @@ void DatabaseWidget::setupMainArea()
 #endif
                                  ));
 
-    setDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
+    setDatabaseInputFields(DbEngineParameters::SQLiteDatabaseType());
 
     // --------------------------------------------------------
 
@@ -257,7 +257,7 @@ void DatabaseWidget::slotHandleDBTypeIndexChanged(int index)
 
 void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
 {
-    if (currentIndexStr == QString(DatabaseParameters::SQLiteDatabaseType()))
+    if (currentIndexStr == QString(DbEngineParameters::SQLiteDatabaseType()))
     {
         d->databasePathLabel->setVisible(true);
         databasePathEdit->setVisible(true);
@@ -305,7 +305,7 @@ void DatabaseWidget::checkDatabaseConnection()
 
     QString databaseID(QLatin1String("ConnectionTest"));
     QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(currentDatabaseType(), databaseID);
-    DatabaseParameters parameters = getDatabaseParameters();
+    DbEngineParameters parameters = getDbEngineParameters();
     testDatabase.setHostName(parameters.hostName);
     testDatabase.setPort(parameters.port);
     testDatabase.setUserName(parameters.userName);
@@ -390,11 +390,11 @@ void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const 
     }
 }
 
-DatabaseParameters DatabaseWidget::getDatabaseParameters()
+DbEngineParameters DatabaseWidget::getDbEngineParameters()
 {
-    DatabaseParameters parameters;
+    DbEngineParameters parameters;
 
-    if (currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
+    if (currentDatabaseType() == QString(DbEngineParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
     {
         parameters.connectOptions = connectionOptions->text();
         parameters.databaseType   = currentDatabaseType();
@@ -403,7 +403,7 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
         parameters.port           = hostPort->text().toInt();
         parameters.userName       = userName->text();
 
-        if (parameters.databaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
+        if (parameters.databaseType == QString(DbEngineParameters::SQLiteDatabaseType()))
         {
             parameters.databaseName           = QDir::cleanPath(databasePathEdit->lineEdit()->text() + 
                                                 QLatin1Char('/') + QLatin1String("digikam4.db"));
@@ -419,7 +419,7 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
     }
     else
     {
-        parameters = DatabaseParameters::defaultParameters(currentDatabaseType());
+        parameters = DbEngineParameters::defaultParameters(currentDatabaseType());
         DatabaseServerStarter::startServerManagerProcess(currentDatabaseType());
     }
 

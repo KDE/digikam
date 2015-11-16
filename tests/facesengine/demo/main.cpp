@@ -33,7 +33,7 @@
 
 #include "mainwindow.h"
 #include "coredbaccess.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 
 using namespace Digikam;
 
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
     QApplication a(argc, argv);
     a.setApplicationName(QString::fromLatin1("digikam"));          // for DB init.
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    DatabaseParameters prm    = DatabaseParameters::parametersFromConfig(config);
+    DbEngineParameters prm    = DbEngineParameters::parametersFromConfig(config);
     CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);
     
     MainWindow w;

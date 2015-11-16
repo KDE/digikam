@@ -221,7 +221,7 @@ public:
     QString                                   currentTheme;
 
     // database settings
-    DatabaseParameters                        databaseParams;
+    DbEngineParameters                        databaseParams;
 
     // album settings
     QStringList                               albumCategoryNames;

@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "coredbbackend.h"
 #include "digikam_export.h"
 
@@ -38,7 +38,7 @@ class DIGIKAM_DATABASE_EXPORT CoreDbPrivilegesChecker
 
 public:
 
-    explicit CoreDbPrivilegesChecker(const DatabaseParameters& parameters);
+    explicit CoreDbPrivilegesChecker(const DbEngineParameters& parameters);
     ~CoreDbPrivilegesChecker();
 
     bool checkPrivileges(QStringList& insufficientRights);
@@ -46,7 +46,7 @@ public:
 
 private:
 
-    DatabaseParameters m_parameters;
+    DbEngineParameters m_parameters;
 };
 
 }  // namespace Digikam

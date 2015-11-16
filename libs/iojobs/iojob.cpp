@@ -39,7 +39,7 @@
 #include "albumdb.h"
 #include "album.h"
 #include "coredbaccess.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "dtrash.h"
 
 namespace Digikam

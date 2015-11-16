@@ -28,7 +28,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "dbengineerrorhandler.h"
 
 namespace Digikam
@@ -86,7 +86,7 @@ public:
     /**
       * Return the default parameters
       */
-    static DatabaseParameters parameters();
+    static DbEngineParameters parameters();
 
     enum ApplicationStatus
     {
@@ -104,8 +104,8 @@ public:
       * When parameters have been set or changed, the new one will be opened on-demand,
       * i.e. when the first CoreDbAccess object is constructed.
       */
-    static void setParameters(const DatabaseParameters& parameters);
-    static void setParameters(const DatabaseParameters& parameters, ApplicationStatus status);
+    static void setParameters(const DbEngineParameters& parameters);
+    static void setParameters(const DbEngineParameters& parameters, ApplicationStatus status);
 
     /**
       * Method to one-time initialize a database when new parameters have been set:

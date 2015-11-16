@@ -41,14 +41,14 @@
 // Local includes
 
 #include "sidebar.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "versionmanager.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DatabaseParameters;
+class DbEngineParameters;
 class VersionManagerSettings;
 class PreviewSettings;
 
@@ -125,8 +125,8 @@ public:
     void setDatabaseFilePath(const QString& path);
     QString getDatabaseFilePath() const;
 
-    DatabaseParameters getDatabaseParameters() const;
-    void setDatabaseParameters(const DatabaseParameters& params);
+    DbEngineParameters getDbEngineParameters() const;
+    void setDbEngineParameters(const DbEngineParameters& params);
 
     QString getDatabaseType() const;
     void setDatabaseType(const QString& databaseType);

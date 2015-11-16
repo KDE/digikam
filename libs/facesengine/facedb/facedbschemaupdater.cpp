@@ -181,7 +181,7 @@ bool FaceDbSchemaUpdater::startUpdates()
     {
         qCDebug(DIGIKAM_FACESENGINE_LOG) << "Face database: no database file available";
 
-        DatabaseParameters parameters = d->access->parameters();
+        DbEngineParameters parameters = d->access->parameters();
 
         // No legacy handling: start with a fresh db
         if (!createDatabase())

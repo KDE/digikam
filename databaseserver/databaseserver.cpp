@@ -49,7 +49,7 @@
 #include "digikam_debug.h"
 #include "pollthread.h"
 #include "databaseserveradaptor.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 
 namespace Digikam
 {
@@ -112,7 +112,7 @@ void DatabaseServer::startPolling()
  */
 bool DatabaseServer::startDatabaseProcess(QDBusVariant& error)
 {
-    return startDatabaseProcess(DatabaseParameters::MySQLDatabaseType(), error);
+    return startDatabaseProcess(DbEngineParameters::MySQLDatabaseType(), error);
 }
 
 /*
@@ -122,7 +122,7 @@ bool DatabaseServer::startDatabaseProcess(QDBusVariant& error)
  */
 bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& error)
 {
-    if (dbType == DatabaseParameters::MySQLDatabaseType())
+    if (dbType == DbEngineParameters::MySQLDatabaseType())
     {
         //        return QVariant::fromValue(startMYSQLDatabaseProcess());
         error = QDBusVariant(QVariant::fromValue(startMYSQLDatabaseProcess()));
@@ -145,8 +145,8 @@ bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& e
 DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 {
     DatabaseServerError result;
-    const QString dbType(DatabaseParameters::MySQLDatabaseType());
-    DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(dbType);
+    const QString dbType(DbEngineParameters::MySQLDatabaseType());
+    DbEngineParameters internalServerParameters = DbEngineParameters::defaultParameters(dbType);
 
     //TODO Don't know if this is needed, because after the thread is finished, the database server manager should close
     d->pollThread->stop = false;
@@ -346,7 +346,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     const QLatin1String initCon( "initConnection" );
 
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase( DatabaseParameters::MySQLDatabaseType(), initCon );
+        QSqlDatabase db = QSqlDatabase::addDatabase( DbEngineParameters::MySQLDatabaseType(), initCon );
         db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir));
         db.setUserName(QLatin1String("root"));
         db.setDatabaseName( QString() ); // might not exist yet, then connecting to the actual db will fail

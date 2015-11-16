@@ -62,7 +62,7 @@ public:
 
     FaceDbBackend*   backend;
     TrainingDB*            db;
-    DatabaseParameters     parameters;
+    DbEngineParameters     parameters;
     DatabaseLocking        lock;
     QString                lastError;
     bool                   initializing;
@@ -150,14 +150,14 @@ FaceDbBackend* FaceDbAccess::backend() const
     return d->backend;
 }
 
-DatabaseParameters FaceDbAccess::parameters() const
+DbEngineParameters FaceDbAccess::parameters() const
 {
     if (d)
     {
         return d->parameters;
     }
 
-    return DatabaseParameters();
+    return DbEngineParameters();
 }
 
 void FaceDbAccess::initDbEngineErrorHandler(FaceDbAccessData* const d, DbEngineErrorHandler* const errorhandler)
@@ -166,7 +166,7 @@ void FaceDbAccess::initDbEngineErrorHandler(FaceDbAccessData* const d, DbEngineE
     d->backend->setDbEngineErrorHandler(errorhandler);
 }
 
-void FaceDbAccess::setParameters(FaceDbAccessData* const d, const DatabaseParameters& parameters)
+void FaceDbAccess::setParameters(FaceDbAccessData* const d, const DbEngineParameters& parameters)
 {
     FaceDbAccessMutexLocker lock(d);
 

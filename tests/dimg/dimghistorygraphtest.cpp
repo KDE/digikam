@@ -69,7 +69,7 @@ void DImgHistoryGraphTest::initTestCase()
 
     qDebug() << "Using database path for test: " << dbFile;
 
-    DatabaseParameters params(QLatin1String("QSQLITE"), dbFile, QLatin1String("QSQLITE"), dbFile);
+    DbEngineParameters params(QLatin1String("QSQLITE"), dbFile, QLatin1String("QSQLITE"), dbFile);
     CoreDbAccess::setParameters(params, CoreDbAccess::MainApplication);
     QVERIFY(CoreDbAccess::checkReadyForUse(0));
     QVERIFY(QFile(dbFile).exists());

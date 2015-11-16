@@ -40,7 +40,7 @@
 
 #include "recognitiondatabase.h"
 #include "coredbaccess.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 
 using namespace Digikam;
 
@@ -109,7 +109,7 @@ int main(int argc, char** argv)
 
     app.setApplicationName(QString::fromLatin1("digikam"));          // for DB init.
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    DatabaseParameters prm    = DatabaseParameters::parametersFromConfig(config);
+    DbEngineParameters prm    = DbEngineParameters::parametersFromConfig(config);
     CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);    
     RecognitionDatabase db    = RecognitionDatabase::addDatabase(QDir::currentPath());
 

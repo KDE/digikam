@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-18
- * Description : Storage container for database connection parameters.
+ * Description : Database Engine storage container for connection parameters.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Holger Foerster <hamsi2k at freenet dot de>
@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 
 // Qt includes
 
@@ -67,13 +67,13 @@ static const char* face_digikamdb               = "recognition.db";
 namespace Digikam
 {
 
-DatabaseParameters::DatabaseParameters()
+DbEngineParameters::DbEngineParameters()
     : port(-1),
       internalServer(false)
 {
 }
 
-DatabaseParameters::DatabaseParameters(const QString& _type,
+DbEngineParameters::DbEngineParameters(const QString& _type,
                                        const QString& _databaseName,
                                        const QString& _connectOptions,
                                        const QString& _hostName,
@@ -97,7 +97,7 @@ DatabaseParameters::DatabaseParameters(const QString& _type,
 {
 }
 
-DatabaseParameters::DatabaseParameters(const QUrl& url)
+DbEngineParameters::DbEngineParameters(const QUrl& url)
     : port(-1),
       internalServer(false)
 {
@@ -129,7 +129,7 @@ DatabaseParameters::DatabaseParameters(const QUrl& url)
     password       = QUrlQuery(url).queryItemValue(QLatin1String("password"));
 }
 
-bool DatabaseParameters::operator==(const DatabaseParameters& other) const
+bool DbEngineParameters::operator==(const DbEngineParameters& other) const
 {
     return(databaseType           == other.databaseType           &&
            databaseName           == other.databaseName           &&
@@ -143,12 +143,12 @@ bool DatabaseParameters::operator==(const DatabaseParameters& other) const
            password               == other.password);
 }
 
-bool DatabaseParameters::operator!=(const DatabaseParameters& other) const
+bool DbEngineParameters::operator!=(const DbEngineParameters& other) const
 {
     return (!operator == (other));
 }
 
-bool DatabaseParameters::isValid() const
+bool DbEngineParameters::isValid() const
 {
     if (isSQLite())
     {
@@ -158,27 +158,27 @@ bool DatabaseParameters::isValid() const
     return false;
 }
 
-bool DatabaseParameters::isSQLite() const
+bool DbEngineParameters::isSQLite() const
 {
     return (databaseType == QLatin1String("QSQLITE"));
 }
 
-bool DatabaseParameters::isMySQL() const
+bool DbEngineParameters::isMySQL() const
 {
     return (databaseType == QLatin1String("QMYSQL"));
 }
 
-QString DatabaseParameters::SQLiteDatabaseType()
+QString DbEngineParameters::SQLiteDatabaseType()
 {
     return QLatin1String("QSQLITE");
 }
 
-QString DatabaseParameters::MySQLDatabaseType()
+QString DbEngineParameters::MySQLDatabaseType()
 {
     return QLatin1String("QMYSQL");
 }
 
-QString DatabaseParameters::SQLiteDatabaseFile() const
+QString DbEngineParameters::SQLiteDatabaseFile() const
 {
     if (isSQLite())
     {
@@ -188,7 +188,7 @@ QString DatabaseParameters::SQLiteDatabaseFile() const
     return QString();
 }
 
-QByteArray DatabaseParameters::hash() const
+QByteArray DbEngineParameters::hash() const
 {
     QCryptographicHash md5(QCryptographicHash::Md5);
 
@@ -203,14 +203,14 @@ QByteArray DatabaseParameters::hash() const
     return md5.result().toHex();
 }
 
-DatabaseParameters DatabaseParameters::parametersFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
+DbEngineParameters DbEngineParameters::parametersFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
 {
-    DatabaseParameters parameters;
+    DbEngineParameters parameters;
     parameters.readFromConfig(config, configGroup);
     return parameters;
 }
 
-void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
+void DbEngineParameters::readFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
 {
     KConfigGroup group;
 
@@ -258,7 +258,7 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     }
 }
 
-void DatabaseParameters::setDatabasePath(const QString& folderOrFileOrName)
+void DbEngineParameters::setDatabasePath(const QString& folderOrFileOrName)
 {
     if (isSQLite())
     {
@@ -270,7 +270,7 @@ void DatabaseParameters::setDatabasePath(const QString& folderOrFileOrName)
     }
 }
 
-void DatabaseParameters::setThumbsDatabasePath(const QString& folderOrFileOrName)
+void DbEngineParameters::setThumbsDatabasePath(const QString& folderOrFileOrName)
 {
     if (isSQLite())
     {
@@ -282,7 +282,7 @@ void DatabaseParameters::setThumbsDatabasePath(const QString& folderOrFileOrName
     }
 }
 
-void DatabaseParameters::setFaceDatabasePath(const QString& folderOrFileOrName)
+void DbEngineParameters::setFaceDatabasePath(const QString& folderOrFileOrName)
 {
     if (isSQLite())
     {
@@ -294,7 +294,7 @@ void DatabaseParameters::setFaceDatabasePath(const QString& folderOrFileOrName)
     }
 }
 
-QString DatabaseParameters::databaseFileSQLite(const QString& folderOrFile)
+QString DbEngineParameters::databaseFileSQLite(const QString& folderOrFile)
 {
     QFileInfo fileInfo(folderOrFile);
 
@@ -306,7 +306,7 @@ QString DatabaseParameters::databaseFileSQLite(const QString& folderOrFile)
     return QDir::cleanPath(folderOrFile);
 }
 
-QString DatabaseParameters::thumbnailDatabaseFileSQLite(const QString& folderOrFile)
+QString DbEngineParameters::thumbnailDatabaseFileSQLite(const QString& folderOrFile)
 {
     QFileInfo fileInfo(folderOrFile);
 
@@ -318,7 +318,7 @@ QString DatabaseParameters::thumbnailDatabaseFileSQLite(const QString& folderOrF
     return QDir::cleanPath(folderOrFile);
 }
 
-QString DatabaseParameters::faceDatabaseFileSQLite(const QString& folderOrFile)
+QString DbEngineParameters::faceDatabaseFileSQLite(const QString& folderOrFile)
 {
     QFileInfo fileInfo(folderOrFile);
 
@@ -330,7 +330,7 @@ QString DatabaseParameters::faceDatabaseFileSQLite(const QString& folderOrFile)
     return QDir::cleanPath(folderOrFile);
 }
 
-void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KSharedConfig::Ptr config)
+void DbEngineParameters::legacyAndDefaultChecks(const QString& suggestedPath, KSharedConfig::Ptr config)
 {
     // Additional semantic checks for the database section.
     // If the internal server should be started, then the connection options must be reset
@@ -382,7 +382,7 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
     }
 }
 
-void DatabaseParameters::removeLegacyConfig(KSharedConfig::Ptr config)
+void DbEngineParameters::removeLegacyConfig(KSharedConfig::Ptr config)
 {
     KConfigGroup group = config->group("Album Settings");
 
@@ -397,7 +397,7 @@ void DatabaseParameters::removeLegacyConfig(KSharedConfig::Ptr config)
     }
 }
 
-void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString& configGroup) const
+void DbEngineParameters::writeToConfig(KSharedConfig::Ptr config, const QString& configGroup) const
 {
     KConfigGroup group;
 
@@ -426,7 +426,7 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
     group.writeEntry(configInternalDatabaseServer, internalServer);
 }
 
-QString DatabaseParameters::getDatabaseNameOrDir() const
+QString DbEngineParameters::getDatabaseNameOrDir() const
 {
     if (isSQLite())
     {
@@ -436,7 +436,7 @@ QString DatabaseParameters::getDatabaseNameOrDir() const
     return databaseName;
 }
 
-QString DatabaseParameters::getThumbsDatabaseNameOrDir() const
+QString DbEngineParameters::getThumbsDatabaseNameOrDir() const
 {
     if (isSQLite())
     {
@@ -446,7 +446,7 @@ QString DatabaseParameters::getThumbsDatabaseNameOrDir() const
     return databaseNameThumbnails;
 }
 
-QString DatabaseParameters::getFaceDatabaseNameOrDir() const
+QString DbEngineParameters::getFaceDatabaseNameOrDir() const
 {
     if (isSQLite())
     {
@@ -456,7 +456,7 @@ QString DatabaseParameters::getFaceDatabaseNameOrDir() const
     return databaseNameFace;
 }
 
-QString DatabaseParameters::databaseDirectorySQLite(const QString& path)
+QString DbEngineParameters::databaseDirectorySQLite(const QString& path)
 {
     if (path.endsWith(QLatin1String(digikam4db)))
     {
@@ -468,7 +468,7 @@ QString DatabaseParameters::databaseDirectorySQLite(const QString& path)
     return path;
 }
 
-QString DatabaseParameters::thumbnailDatabaseDirectorySQLite(const QString& path)
+QString DbEngineParameters::thumbnailDatabaseDirectorySQLite(const QString& path)
 {
     if (path.endsWith(QLatin1String(thumbnails_digikamdb)))
     {
@@ -480,7 +480,7 @@ QString DatabaseParameters::thumbnailDatabaseDirectorySQLite(const QString& path
     return path;
 }
 
-QString DatabaseParameters::faceDatabaseDirectorySQLite(const QString& path)
+QString DbEngineParameters::faceDatabaseDirectorySQLite(const QString& path)
 {
     if (path.endsWith(QLatin1String(face_digikamdb)))
     {
@@ -492,9 +492,9 @@ QString DatabaseParameters::faceDatabaseDirectorySQLite(const QString& path)
     return path;
 }
 
-DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseType)
+DbEngineParameters DbEngineParameters::defaultParameters(const QString databaseType)
 {
-    DatabaseParameters parameters;
+    DbEngineParameters parameters;
 
     // only the database name is needed
     DbEngineConfigSettings config = DbEngineConfig::element(databaseType);
@@ -516,36 +516,36 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     return parameters;
 }
 
-DatabaseParameters DatabaseParameters::thumbnailParameters() const
+DbEngineParameters DbEngineParameters::thumbnailParameters() const
 {
-    DatabaseParameters params = *this;
+    DbEngineParameters params = *this;
     params.databaseName       = databaseNameThumbnails;
     return params;
 }
 
-DatabaseParameters DatabaseParameters::faceParameters() const
+DbEngineParameters DbEngineParameters::faceParameters() const
 {
-    DatabaseParameters params = *this;
+    DbEngineParameters params = *this;
     params.databaseName       = databaseNameFace;
     return params;
 }
 
-DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
+DbEngineParameters DbEngineParameters::parametersForSQLite(const QString& databaseFile)
 {
     // only the database name is needed
-    DatabaseParameters params(QLatin1String("QSQLITE"), databaseFile);
+    DbEngineParameters params(QLatin1String("QSQLITE"), databaseFile);
     params.setDatabasePath(databaseFile);
     params.setThumbsDatabasePath(params.getDatabaseNameOrDir());
     params.setFaceDatabasePath(params.getDatabaseNameOrDir());
     return params;
 }
 
-DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString& directory)
+DbEngineParameters DbEngineParameters::parametersForSQLiteDefaultFile(const QString& directory)
 {
     return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + QLatin1String(digikam4db)));
 }
 
-void DatabaseParameters::insertInUrl(QUrl& url) const
+void DbEngineParameters::insertInUrl(QUrl& url) const
 {
     removeFromUrl(url);
 
@@ -586,7 +586,7 @@ void DatabaseParameters::insertInUrl(QUrl& url) const
     url.setQuery(q);
 }
 
-void DatabaseParameters::removeFromUrl(QUrl& url)
+void DbEngineParameters::removeFromUrl(QUrl& url)
 {
     QUrlQuery q(url);
 
@@ -602,7 +602,7 @@ void DatabaseParameters::removeFromUrl(QUrl& url)
     url.setQuery(q);
 }
 
-QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
+QDebug operator<<(QDebug dbg, const DbEngineParameters& p)
 {
     dbg.nospace() << "Database Parameters:"                                    << endl;
     dbg.nospace() << "   Type:            " << p.databaseType                  << endl;

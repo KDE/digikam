@@ -45,12 +45,12 @@ void ApplicationSettings::setDatabaseFilePath(const QString& path)
     d->databaseParams.setFaceDatabasePath(path);
 }
 
-DatabaseParameters ApplicationSettings::getDatabaseParameters() const
+DbEngineParameters ApplicationSettings::getDbEngineParameters() const
 {
     return d->databaseParams;
 }
 
-void ApplicationSettings::setDatabaseParameters(const DatabaseParameters& params)
+void ApplicationSettings::setDbEngineParameters(const DbEngineParameters& params)
 {
     d->databaseParams = params;
 }

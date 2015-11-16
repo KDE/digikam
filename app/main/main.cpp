@@ -52,7 +52,7 @@
 #include "collectionmanager.h"
 #include "daboutdata.h"
 #include "coredbaccess.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "digikamapp.h"
 #include "scancontroller.h"
 #include "thumbsdbaccess.h"
@@ -95,8 +95,8 @@ int main(int argc, char* argv[])
 
     // Check if Qt database plugins are available.
 
-    if (!QSqlDatabase::isDriverAvailable(DatabaseParameters::SQLiteDatabaseType()) &&
-        !QSqlDatabase::isDriverAvailable(DatabaseParameters::MySQLDatabaseType()))
+    if (!QSqlDatabase::isDriverAvailable(DbEngineParameters::SQLiteDatabaseType()) &&
+        !QSqlDatabase::isDriverAvailable(DbEngineParameters::MySQLDatabaseType()))
     {
         if (QSqlDatabase::drivers().isEmpty())
         {
@@ -143,7 +143,7 @@ int main(int argc, char* argv[])
     KConfigGroup mainConfig   = config->group(QLatin1String("Album Settings"));
 
     QString            firstAlbumPath;
-    DatabaseParameters params;
+    DbEngineParameters params;
 
     // Run the first run assistant if we have no or very old config
     if (!mainConfig.exists() || (version.startsWith(QLatin1String("0.5"))))
@@ -164,11 +164,11 @@ int main(int argc, char* argv[])
     if (!commandLineDBPath.isNull())
     {
         // command line option set?
-        params = DatabaseParameters::parametersForSQLiteDefaultFile(commandLineDBPath);
+        params = DbEngineParameters::parametersForSQLiteDefaultFile(commandLineDBPath);
     }
     else
     {
-        params = DatabaseParameters::parametersFromConfig(config);
+        params = DbEngineParameters::parametersFromConfig(config);
         params.legacyAndDefaultChecks(firstAlbumPath);
         // sync to config, for all first-run or upgrade situations
         params.writeToConfig(config);

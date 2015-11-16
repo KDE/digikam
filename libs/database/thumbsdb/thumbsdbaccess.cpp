@@ -60,7 +60,7 @@ public:
 
     ThumbsDbBackend* backend;
     ThumbsDb*              db;
-    DatabaseParameters        parameters;
+    DbEngineParameters        parameters;
     DatabaseLocking           lock;
     QString                   lastError;
 
@@ -131,14 +131,14 @@ ThumbsDbBackend* ThumbsDbAccess::backend() const
     return d->backend;
 }
 
-DatabaseParameters ThumbsDbAccess::parameters()
+DbEngineParameters ThumbsDbAccess::parameters()
 {
     if (d)
     {
         return d->parameters;
     }
 
-    return DatabaseParameters();
+    return DbEngineParameters();
 }
 
 bool ThumbsDbAccess::isInitialized()
@@ -157,7 +157,7 @@ void ThumbsDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler
     d->backend->setDbEngineErrorHandler(errorhandler);
 }
 
-void ThumbsDbAccess::setParameters(const DatabaseParameters& parameters)
+void ThumbsDbAccess::setParameters(const DbEngineParameters& parameters)
 {
     if (!d)
     {

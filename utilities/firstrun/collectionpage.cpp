@@ -46,7 +46,7 @@
 
 #include "dwidgetutils.h"
 #include "digikam_debug.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "digikam_version.h"
 
 namespace Digikam
@@ -161,7 +161,7 @@ void CollectionPage::saveSettings()
     KConfigGroup group        = config->group("General Settings");
     group.writeEntry("Version", digikam_version);
 
-    DatabaseParameters params = DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath);
+    DbEngineParameters params = DbEngineParameters::parametersForSQLiteDefaultFile(d->dbPath);
     params.writeToConfig(config);
 
     config->sync();

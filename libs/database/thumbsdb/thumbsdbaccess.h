@@ -28,7 +28,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "dbengineerrorhandler.h"
 
 namespace Digikam
@@ -60,10 +60,10 @@ public:
       */
     void setLastError(const QString& error);
 
-    static DatabaseParameters parameters();
+    static DbEngineParameters parameters();
 
     static void initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler);
-    static void setParameters(const DatabaseParameters& parameters);
+    static void setParameters(const DbEngineParameters& parameters);
     static bool checkReadyForUse(InitializationObserver* observer);
     static bool isInitialized();
     static void cleanUpDatabase();

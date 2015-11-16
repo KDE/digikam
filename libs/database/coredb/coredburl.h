@@ -33,7 +33,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "coredbaccess.h"
 
 namespace Digikam
@@ -63,11 +63,11 @@ public:
     static CoreDbUrl fromFileUrl(const QUrl& fileUrl,
                                    const QUrl& albumRoot,
                                    int   albumRootId,
-                                   const DatabaseParameters& parameters = CoreDbAccess::parameters());
+                                   const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     static CoreDbUrl fromFileUrl(const QUrl& fileUrl,
                                    const QUrl& albumRoot,
-                                   const DatabaseParameters& parameters = CoreDbAccess::parameters());
+                                   const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
      * Create a digikamalbums:/ url from an album name and an image in this album.
@@ -78,17 +78,17 @@ public:
                                         const QString& album,
                                         const QUrl& albumRoot,
                                         int   albumRootId,
-                                        const DatabaseParameters& parameters = CoreDbAccess::parameters());
+                                        const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     static CoreDbUrl fromAlbumAndName(const QString& name,
                                         const QString& album,
                                         const QUrl& albumRoot,
-                                        const DatabaseParameters& parameters = CoreDbAccess::parameters());
+                                        const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
      * Create an empty digikamalbums:/ url
      */
-    static CoreDbUrl albumUrl(const DatabaseParameters& parameters = CoreDbAccess::parameters());
+    static CoreDbUrl albumUrl(const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
      * Create a digikamtags:/ url from a list of tag IDs, where this list is the tag hierarchy
@@ -96,26 +96,26 @@ public:
      * An empty list references the root tag.
      */
     static CoreDbUrl fromTagIds(const QList<int>& tagIds,
-                                  const DatabaseParameters& parameters = CoreDbAccess::parameters());
+                                  const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
      * Create an empty digikamdates:/ url
      */
-    static CoreDbUrl dateUrl(const DatabaseParameters& parameters = CoreDbAccess::parameters());
+    static CoreDbUrl dateUrl(const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
      * Create a digikamdates:/ url for the month of the given date.
      * (The whole month of the given date will included in the referenced time span)
      */
     static CoreDbUrl fromDateForMonth(const QDate& date,
-                                        const DatabaseParameters& parameters = CoreDbAccess::parameters());
+                                        const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
      * Create a digikamdates:/ url for the year of the given date.
      * (The whole year of the given date will included in the referenced time span)
      */
     static CoreDbUrl fromDateForYear(const QDate& date,
-                                       const DatabaseParameters& parameters = CoreDbAccess::parameters());
+                                       const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
      * Create a digikamdates:/ url for a specified time span which begin with the
@@ -123,19 +123,19 @@ public:
      * To cover the whole year of 1984, you would pass 1/1/1984 and 1/1/1985.
      */
     static CoreDbUrl fromDateRange(const QDate& startDate, const QDate& endDate,
-                                     const DatabaseParameters& parameters = CoreDbAccess::parameters());
+                                     const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
      * Create an empty digikammapimages:/ url
      */
-    static CoreDbUrl mapImagesUrl(const DatabaseParameters& parameters = CoreDbAccess::parameters());
+    static CoreDbUrl mapImagesUrl(const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
-    static CoreDbUrl fromAreaRange(const qreal lat1, const qreal lng1, const qreal lat2, const qreal lng2, const DatabaseParameters& parameters = CoreDbAccess::parameters());
+    static CoreDbUrl fromAreaRange(const qreal lat1, const qreal lng1, const qreal lat2, const qreal lng2, const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
      * Create a digikamsearch: URL for the search with the given id.
      */
-    static CoreDbUrl searchUrl(int searchId, const DatabaseParameters& parameters = CoreDbAccess::parameters());
+    static CoreDbUrl searchUrl(int searchId, const DbEngineParameters& parameters = CoreDbAccess::parameters());
 
     /**
       * Create a CoreDbUrl object from a QUrl, to retrieve the information stored
@@ -158,16 +158,16 @@ public:
     bool isMapImagesUrl() const;
 
     /**
-     * Returns the DatabaseParameters stored in this URL.
+     * Returns the DbEngineParameters stored in this URL.
      * Applicable to all protocols.
      */
-    DatabaseParameters parameters() const;
+    DbEngineParameters parameters() const;
 
     /**
      * Change the database parameters stored in this URL
      * Applicable to all protocols.
      */
-    void setParameters(const DatabaseParameters& parameters);
+    void setParameters(const DbEngineParameters& parameters);
 
     /**
      * The following methods are only applicable for a certain protocol each.

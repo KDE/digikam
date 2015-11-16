@@ -12,7 +12,6 @@ endif (POLICY CMP0063)
 
 set(libdatabasecore_SRCS
     engine/databasecorebackend.cpp
-    engine/databaseparameters.cpp
     engine/databaseserverstarter.cpp
     engine/databaseservererror.cpp
     engine/sqlquery.cpp
@@ -20,6 +19,7 @@ set(libdatabasecore_SRCS
     engine/dbengineconfig.cpp
     engine/dbengineactiontype.cpp
     engine/dbengineerrorhandler.cpp
+    engine/dbengineparameters.cpp
 
     tags/tagregion.cpp
 

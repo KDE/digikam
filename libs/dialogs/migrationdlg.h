@@ -49,7 +49,7 @@ public:
     explicit DatabaseCopyThread(QWidget* const parent);
     ~DatabaseCopyThread();
 
-    void init(const DatabaseParameters& fromDatabaseWidget, const DatabaseParameters& toDatabaseWidget);
+    void init(const DbEngineParameters& fromDatabaseWidget, const DbEngineParameters& toDatabaseWidget);
     void run();
 
 public:

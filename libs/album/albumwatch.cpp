@@ -38,7 +38,7 @@
 #include "albummanager.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "scancontroller.h"
 
 namespace Digikam
@@ -64,7 +64,7 @@ public:
     QFileSystemWatcher* dirWatch;
     QStringList         dirWatchAddedDirs;
 
-    DatabaseParameters  params;
+    DbEngineParameters  params;
     QStringList         fileNameBlackList;
     QList<QDateTime>    dbPathModificationDateList;
 
@@ -185,7 +185,7 @@ void AlbumWatch::clear()
     }
 }
 
-void AlbumWatch::setDatabaseParameters(const DatabaseParameters& params)
+void AlbumWatch::setDbEngineParameters(const DbEngineParameters& params)
 {
     d->params = params;
 

@@ -40,7 +40,7 @@ class KJob;
 namespace Digikam
 {
 
-class DatabaseParameters;
+class DbEngineParameters;
 class ThumbnailCreator;
 class ThumbnailInfoProvider;
 
@@ -70,7 +70,7 @@ public:
      * This need not be called, then the FreeDesktop standard is used.
      * You can optionally provide a thumbnail info provider.
      */
-    static void initializeThumbnailDatabase(const DatabaseParameters& params, ThumbnailInfoProvider* const provider = 0);
+    static void initializeThumbnailDatabase(const DbEngineParameters& params, ThumbnailInfoProvider* const provider = 0);
 
     /**
      * For color management, this sets the widget the thumbnails will be color managed for.

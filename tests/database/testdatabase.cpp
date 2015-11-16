@@ -41,7 +41,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "coredbaccess.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "scancontroller.h"
 #include "setup.h"
 #include "thumbsdbaccess.h"
@@ -64,8 +64,8 @@ int main(int argc, char** argv)
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
-    DatabaseParameters params;
-    params.databaseType = DatabaseParameters::SQLiteDatabaseType();
+    DbEngineParameters params;
+    params.databaseType = DbEngineParameters::SQLiteDatabaseType();
     params.setDatabasePath(QDir::currentPath() + QLatin1String("/digikam-test.db"));
     params.setThumbsDatabasePath(QDir::currentPath() + QLatin1String("/digikam-thumbs-test.db"));
 

@@ -57,7 +57,7 @@
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "databasewidget.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "scancontroller.h"
 #include "coredbschemaupdater.h"
 
@@ -148,7 +148,7 @@ void SetupDatabase::applySettings()
         return;
     }
 
-    if (d->databaseWidget->currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
+    if (d->databaseWidget->currentDatabaseType() == QString(DbEngineParameters::SQLiteDatabaseType()))
     {
         QString newPath = d->databaseWidget->databasePathEdit->lineEdit()->text();
         QDir oldDir(d->databaseWidget->originalDbPath);
@@ -156,7 +156,7 @@ void SetupDatabase::applySettings()
 
         if (oldDir != newDir || d->databaseWidget->currentDatabaseType() != d->databaseWidget->originalDbType)
         {
-            settings->setDatabaseParameters(DatabaseParameters::parametersForSQLiteDefaultFile(newPath));
+            settings->setDbEngineParameters(DbEngineParameters::parametersForSQLiteDefaultFile(newPath));
 
             // clear other fields
             d->databaseWidget->internalServer->setChecked(false);
@@ -168,7 +168,7 @@ void SetupDatabase::applySettings()
     {
         if (d->databaseWidget->internalServer->isChecked())
         {
-            DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(d->databaseWidget->currentDatabaseType());
+            DbEngineParameters internalServerParameters = DbEngineParameters::defaultParameters(d->databaseWidget->currentDatabaseType());
             settings->setInternalDatabaseServer(true);
             settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
             settings->setDatabaseName(internalServerParameters.databaseName);

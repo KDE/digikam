@@ -43,7 +43,7 @@ class DatabaseConnectionChecker : public QThread
 
 public:
 
-    explicit DatabaseConnectionChecker(const DatabaseParameters& parameters);
+    explicit DatabaseConnectionChecker(const DbEngineParameters& parameters);
     ~DatabaseConnectionChecker();
 
     bool checkSuccessful() const;
@@ -75,7 +75,7 @@ class DatabaseGUIErrorHandler : public DbEngineErrorHandler
 
 public:
 
-    explicit DatabaseGUIErrorHandler(const DatabaseParameters& parameters);
+    explicit DatabaseGUIErrorHandler(const DbEngineParameters& parameters);
     ~DatabaseGUIErrorHandler();
 
     bool checkDatabaseConnection();

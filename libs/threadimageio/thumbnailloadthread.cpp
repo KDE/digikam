@@ -43,7 +43,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "databaseparameters.h"
+#include "dbengineparameters.h"
 #include "iccmanager.h"
 #include "iccprofile.h"
 #include "iccsettings.h"
@@ -201,7 +201,7 @@ void ThumbnailLoadThread::cleanUp()
     // NOTE : Nothing to do with Qt5 and Q_GLOBAL_STATIC. Qt clean up all automatically at end of application instance.
 }
 
-void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& params, ThumbnailInfoProvider* const provider)
+void ThumbnailLoadThread::initializeThumbnailDatabase(const DbEngineParameters& params, ThumbnailInfoProvider* const provider)
 {
     if (static_d->firstThreadCreated)
     {
