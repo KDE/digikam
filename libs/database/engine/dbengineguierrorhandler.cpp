@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-05
- * Description : gui database error handler
+ * Description : Database engine gui error handler
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databaseguierrorhandler.h"
+#include "dbengineguierrorhandler.h"
 
 // Qt includes
 
@@ -44,12 +44,11 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "setup.h"
 
 namespace Digikam
 {
 
-class DatabaseConnectionChecker::Private
+class DbEngineConnectionChecker::Private
 {
 
 public:
@@ -69,18 +68,18 @@ public:
     DbEngineParameters parameters;
 };
 
-DatabaseConnectionChecker::DatabaseConnectionChecker(const DbEngineParameters& parameters)
+DbEngineConnectionChecker::DbEngineConnectionChecker(const DbEngineParameters& parameters)
     : d(new Private)
 {
     d->parameters = parameters;
 }
 
-DatabaseConnectionChecker::~DatabaseConnectionChecker()
+DbEngineConnectionChecker::~DbEngineConnectionChecker()
 {
     delete d;
 }
 
-void DatabaseConnectionChecker::run()
+void DbEngineConnectionChecker::run()
 {
     QString databaseID(QLatin1String("ConnectionTest"));
 
@@ -127,21 +126,21 @@ void DatabaseConnectionChecker::run()
     emit done();
 }
 
-void DatabaseConnectionChecker::stopChecking()
+void DbEngineConnectionChecker::stopChecking()
 {
     QMutexLocker lock(&d->mutex);
     d->stop = true;
     d->condVar.wakeAll();
 }
 
-bool DatabaseConnectionChecker::checkSuccessful() const
+bool DbEngineConnectionChecker::checkSuccessful() const
 {
     return d->success;
 }
 
 // ---------------------------------------------------------------------------------------
 
-class DatabaseGUIErrorHandler::Private
+class DbEngineGuiErrorHandler::Private
 {
 
 public:
@@ -154,30 +153,30 @@ public:
     QPointer<QProgressDialog>  dialog;
 
     DbEngineParameters         parameters;
-    DatabaseConnectionChecker* checker;
+    DbEngineConnectionChecker* checker;
 };
 
-DatabaseGUIErrorHandler::DatabaseGUIErrorHandler(const DbEngineParameters& parameters)
+DbEngineGuiErrorHandler::DbEngineGuiErrorHandler(const DbEngineParameters& parameters)
     : d(new Private)
 {
     d->parameters = parameters;
 }
 
-DatabaseGUIErrorHandler::~DatabaseGUIErrorHandler()
+DbEngineGuiErrorHandler::~DbEngineGuiErrorHandler()
 {
     delete d;
 }
 
-bool DatabaseGUIErrorHandler::checkDatabaseConnection()
+bool DbEngineGuiErrorHandler::checkDatabaseConnection()
 {
     // now we try to connect periodically to the database
-    d->checker = new DatabaseConnectionChecker(d->parameters);
+    d->checker = new DbEngineConnectionChecker(d->parameters);
     QEventLoop loop;
 
-    connect(d->checker, &DatabaseConnectionChecker::failedAttempt,
-            this, &DatabaseGUIErrorHandler::showProgressDialog);
+    connect(d->checker, &DbEngineConnectionChecker::failedAttempt,
+            this, &DbEngineGuiErrorHandler::showProgressDialog);
 
-    connect(d->checker, &DatabaseConnectionChecker::done,
+    connect(d->checker, &DbEngineConnectionChecker::done,
             &loop, &QEventLoop::quit);
 
     d->checker->start();
@@ -193,7 +192,7 @@ bool DatabaseGUIErrorHandler::checkDatabaseConnection()
     return result;
 }
 
-void DatabaseGUIErrorHandler::showProgressDialog()
+void DbEngineGuiErrorHandler::showProgressDialog()
 {
     if (d->dialog || !d->checker)
     {
@@ -217,7 +216,7 @@ void DatabaseGUIErrorHandler::showProgressDialog()
     d->dialog->show();
 }
 
-void DatabaseGUIErrorHandler::connectionError(DbEngineErrorAnswer* answer, const QSqlError&, const QString&)
+void DbEngineGuiErrorHandler::connectionError(DbEngineErrorAnswer* answer, const QSqlError&, const QString&)
 {
     if (checkDatabaseConnection())
     {
@@ -229,7 +228,7 @@ void DatabaseGUIErrorHandler::connectionError(DbEngineErrorAnswer* answer, const
     }
 }
 
-void DatabaseGUIErrorHandler::consultUserForError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString&)
+void DbEngineGuiErrorHandler::consultUserForError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString&)
 {
     //NOTE: not used at all currently.
     QWidget* const parent = QWidget::find(0);

@@ -17,6 +17,7 @@ set(libdatabasecore_SRCS
     engine/dbengineconfig.cpp
     engine/dbengineactiontype.cpp
     engine/dbengineerrorhandler.cpp
+    engine/dbengineguierrorhandler.cpp
     engine/dbengineparameters.cpp
     engine/dbenginebackend.cpp
     engine/dbenginesqlquery.cpp
@@ -31,7 +32,6 @@ set(libdatabasecore_SRCS
 
 set(libdatabaseutils_SRCS
     utils/scancontroller.cpp
-    utils/databaseguierrorhandler.cpp
     utils/dbstatdlg.cpp
     utils/dio.cpp
     utils/syncjob.cpp

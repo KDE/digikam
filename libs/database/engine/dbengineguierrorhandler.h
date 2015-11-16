@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-27
- * Description : gui database error handler
+ * Description : Database engine gui error handler
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEGUIERRORHANDLER_H
-#define DATABASEGUIERRORHANDLER_H
+#ifndef DATABASE_ENGINE_GUI_ERROR_HANDLER_H
+#define DATABASE_ENGINE_GUI_ERROR_HANDLER_H
 
 // Qt includes
 
@@ -33,18 +33,19 @@
 
 #include "dbenginebackend.h"
 #include "dbengineerrorhandler.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DatabaseConnectionChecker : public QThread
+class DIGIKAM_EXPORT DbEngineConnectionChecker : public QThread
 {
     Q_OBJECT
 
 public:
 
-    explicit DatabaseConnectionChecker(const DbEngineParameters& parameters);
-    ~DatabaseConnectionChecker();
+    explicit DbEngineConnectionChecker(const DbEngineParameters& parameters);
+    ~DbEngineConnectionChecker();
 
     bool checkSuccessful() const;
 
@@ -69,14 +70,14 @@ private:
 
 // --------------------------------------------------------------
 
-class DatabaseGUIErrorHandler : public DbEngineErrorHandler
+class DIGIKAM_EXPORT DbEngineGuiErrorHandler : public DbEngineErrorHandler
 {
     Q_OBJECT
 
 public:
 
-    explicit DatabaseGUIErrorHandler(const DbEngineParameters& parameters);
-    ~DatabaseGUIErrorHandler();
+    explicit DbEngineGuiErrorHandler(const DbEngineParameters& parameters);
+    ~DbEngineGuiErrorHandler();
 
     bool checkDatabaseConnection();
 
@@ -97,4 +98,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* DATABASEGUIERRORHANDLER_H */
+#endif /* DATABASE_ENGINE_GUI_ERROR_HANDLER_H */

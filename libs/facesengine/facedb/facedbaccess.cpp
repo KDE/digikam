@@ -162,7 +162,7 @@ DbEngineParameters FaceDbAccess::parameters() const
 
 void FaceDbAccess::initDbEngineErrorHandler(FaceDbAccessData* const d, DbEngineErrorHandler* const errorhandler)
 {
-    //DbEngineErrorHandler* const errorhandler = new DatabaseGUIErrorHandler(d->parameters);
+    //DbEngineErrorHandler* const errorhandler = new DbEngineGuiErrorHandler(d->parameters);
     d->backend->setDbEngineErrorHandler(errorhandler);
 }
 

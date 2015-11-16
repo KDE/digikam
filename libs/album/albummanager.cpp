@@ -81,7 +81,7 @@ extern "C"
 #include "collectionmanager.h"
 #include "digikam_config.h"
 #include "coredbaccess.h"
-#include "databaseguierrorhandler.h"
+#include "dbengineguierrorhandler.h"
 #include "dbengineparameters.h"
 #include "databaseserverstarter.h"
 #include "coredbthumbinfoprovider.h"
@@ -746,7 +746,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
     CoreDbAccess::setParameters(params, CoreDbAccess::MainApplication);
 
-    DatabaseGUIErrorHandler* const handler = new DatabaseGUIErrorHandler(CoreDbAccess::parameters());
+    DbEngineGuiErrorHandler* const handler = new DbEngineGuiErrorHandler(CoreDbAccess::parameters());
     CoreDbAccess::initDbEngineErrorHandler(handler);
 
     if (!handler->checkDatabaseConnection())
@@ -1021,7 +1021,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
     ThumbnailLoadThread::initializeThumbnailDatabase(CoreDbAccess::parameters().thumbnailParameters(),
                                                      new ThumbsDbInfoProvider());
 
-    DatabaseGUIErrorHandler* const thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbsDbAccess::parameters());
+    DbEngineGuiErrorHandler* const thumbnailsDBHandler = new DbEngineGuiErrorHandler(ThumbsDbAccess::parameters());
     ThumbsDbAccess::initDbEngineErrorHandler(thumbnailsDBHandler);
 
     QApplication::restoreOverrideCursor();

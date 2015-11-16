@@ -153,7 +153,7 @@ void ThumbsDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler
         d = new ThumbsDbAccessStaticPriv();
     }
 
-    //DbEngineErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
+    //DbEngineErrorHandler *errorhandler = new DbEngineGuiErrorHandler(d->parameters);
     d->backend->setDbEngineErrorHandler(errorhandler);
 }
 
