@@ -94,12 +94,12 @@ public:
     QVariant                currentVersion;
     QVariant                currentRequiredVersion;
 
-    CoreDbBackend*        backend;
+    CoreDbBackend*          backend;
     AlbumDB*                albumDB;
     DbEngineParameters      parameters;
 
     // legacy
-    CoreDbAccess*         access;
+    CoreDbAccess*           access;
 
     QString                 lastErrorMessage;
     InitializationObserver* observer;
@@ -205,14 +205,14 @@ bool CoreDbSchemaUpdater::startUpdates()
         if (!checker.checkPrivileges(insufficientRights))
         {
             qCDebug(DIGIKAM_COREDB_LOG) << "Core database: insufficient rights on database.";
-            QString errorMsg = i18n(
-                                "You have insufficient privileges on the database.\n"
-                                "Following privileges are not assigned to you:\n %1"
-                                "\nCheck your privileges on the database and restart digiKam.",
-                                insufficientRights.join(QLatin1String(",\n"))
-                            );
 
-            d->lastErrorMessage=errorMsg;
+            QString errorMsg = i18n("You have insufficient privileges on the database.\n"
+                                    "Following privileges are not assigned to you:\n %1\n"
+                                    "Check your privileges on the database and restart digiKam.",
+                                    insufficientRights.join(QLatin1String(",\n"))
+                                   );
+
+            d->lastErrorMessage = errorMsg;
 
             if (d->observer)
             {
@@ -239,12 +239,11 @@ bool CoreDbSchemaUpdater::startUpdates()
             // Something is damaged. Give up.
             qCDebug(DIGIKAM_COREDB_LOG) << "Core database: version not available! Giving up schema upgrading.";
 
-            QString errorMsg = i18n(
-                                   "The database is not valid: "
-                                   "the \"DBVersion\" setting does not exist. "
-                                   "The current database schema version cannot be verified. "
-                                   "Try to start with an empty database. "
-                               );
+            QString errorMsg = i18n("The database is not valid: "
+                                    "the \"DBVersion\" setting does not exist. "
+                                    "The current database schema version cannot be verified. "
+                                    "Try to start with an empty database. "
+                                   );
             d->lastErrorMessage=errorMsg;
 
             if (d->observer)
@@ -414,7 +413,9 @@ bool CoreDbSchemaUpdater::makeUpdates()
                                     "\"%1\" and \"%2\" from the directory \"%3\"). "
                                     "More probably you will want to report this error to the digikam-devel@kde.org "
                                     "mailing list. As well, please have a look at what digiKam prints on the console. ",
-                                    QLatin1String("digikam3.db"), QLatin1String("digikam4.db"), currentDBFile.dir().path());
+                                    QLatin1String("digikam3.db"),
+                                    QLatin1String("digikam4.db"),
+                                    currentDBFile.dir().path());
 
             if (!endWrapSchemaUpdateStep(updateV4toV7(), errorMsg))
             {
@@ -440,7 +441,8 @@ bool CoreDbSchemaUpdater::makeUpdates()
             QString errorMsg = i18n("Failed to update the database schema from version %1 to version %2. "
                                     "Please read the error messages printed on the console and "
                                     "report this error as a bug at bugs.kde.org. ",
-                                    d->currentVersion.toInt(), targetVersion);
+                                    d->currentVersion.toInt(),
+                                    targetVersion);
 
             if (!endWrapSchemaUpdateStep(updateToVersion(targetVersion), errorMsg))
             {
@@ -633,7 +635,7 @@ bool CoreDbSchemaUpdater::updateToVersion(int targetVersion)
     if (d->currentVersion != targetVersion-1)
     {
         qCDebug(DIGIKAM_COREDB_LOG) << "Core database: updateToVersion performs only incremental updates. Called to update from"
-                                      << d->currentVersion << "to" << targetVersion << ", aborting.";
+                                    << d->currentVersion << "to" << targetVersion << ", aborting.";
         return false;
     }
 
@@ -676,9 +678,11 @@ bool CoreDbSchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QStrin
                                 "Error message: \"%3\". "
                                 "Please make sure that the file can be copied, "
                                 "or delete it.",
-                                digikam3DBPath, currentDBPath, oldFile.errorString());
-        d->lastErrorMessage=errorMsg;
-        d->setError = true;
+                                digikam3DBPath,
+                                currentDBPath,
+                                oldFile.errorString());
+        d->lastErrorMessage = errorMsg;
+        d->setError         = true;
 
         if (d->observer)
         {
@@ -700,7 +704,8 @@ bool CoreDbSchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QStrin
                                 "to the new location (\"%2\") but it cannot be opened. "
                                 "Please delete both files and try again, "
                                 "starting with an empty database. ",
-                                digikam3DBPath, currentDBPath);
+                                digikam3DBPath,
+                                currentDBPath);
 
         d->lastErrorMessage = errorMsg;
         d->setError         = true;

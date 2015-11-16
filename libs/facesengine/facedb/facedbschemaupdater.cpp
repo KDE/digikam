@@ -91,12 +91,12 @@ bool FaceDbSchemaUpdater::update()
     // even on failure, try to set current version - it may have incremented
     if (d->currentVersion)
     {
-        d->access->db()->setSetting(QString::fromLatin1("DBVersion"), QString::number(d->currentVersion));
+        d->access->db()->setSetting(QString::fromLatin1("DBFaceVersion"), QString::number(d->currentVersion));
     }
 
     if (d->currentRequiredVersion)
     {
-        d->access->db()->setSetting(QString::fromLatin1("DBVersionRequired"), QString::number(d->currentRequiredVersion));
+        d->access->db()->setSetting(QString::fromLatin1("DBFaceVersionRequired"), QString::number(d->currentRequiredVersion));
     }
 
     return success;
@@ -110,14 +110,14 @@ bool FaceDbSchemaUpdater::startUpdates()
     if (tables.contains(QString::fromLatin1("Settings"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
-        QString version         = d->access->db()->setting(QString::fromLatin1("DBVersion"));
-        QString versionRequired = d->access->db()->setting(QString::fromLatin1("DBVersionRequired"));
+        QString version         = d->access->db()->setting(QString::fromLatin1("DBFaceVersion"));
+        QString versionRequired = d->access->db()->setting(QString::fromLatin1("DBFaceVersionRequired"));
         qCDebug(DIGIKAM_FACEDB_LOG) << "Face database: have a structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && d->access->parameters().isSQLite())
         {
-            version = d->access->db()->setting(QString::fromLatin1("DBVersion"));
+            version = d->access->db()->setting(QString::fromLatin1("DBFaceVersion"));
         }
 
         // We absolutely require the DBVersion setting
@@ -127,7 +127,7 @@ bool FaceDbSchemaUpdater::startUpdates()
             qCWarning(DIGIKAM_FACEDB_LOG) << "DBVersion not available! Giving up schema upgrading.";
 
             QString errorMsg = i18n("The database is not valid: "
-                                    "the \"DBVersion\" setting does not exist. "
+                                    "the \"DBFaceVersion\" setting does not exist. "
                                     "The current database schema version cannot be verified. "
                                     "Try to start with an empty database. ");
 

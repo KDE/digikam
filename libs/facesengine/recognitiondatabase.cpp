@@ -91,6 +91,86 @@ public:
 
 // -----------------------------------------------------------------------------------------------
 
+class RecognitionDatabase::Private : public QSharedData
+{
+public:
+
+    bool                 dbAvailable;
+
+    const QString        configPath;
+    QMutex               mutex;
+    FaceDbAccessData*    db;
+
+    QVariantMap          parameters;
+    QHash<int, Identity> identityCache;
+
+public:
+
+    ~Private();
+
+public:
+
+    template <class T>
+    T* getObjectOrCreate(T* &ptr) const
+    {
+        if (!ptr)
+        {
+            ptr = new T(db);
+        }
+
+        return ptr;
+    }
+
+public:
+
+    // Change these three lines to change CurrentRecognizer
+    typedef OpenCVLBPHFaceRecognizer CurrentRecognizer;
+
+    CurrentRecognizer* recognizer()             { return getObjectOrCreate(opencvlbph); }
+    CurrentRecognizer* recognizerConst()  const { return opencvlbph;                    }
+
+public:
+
+    OpenCVLBPHFaceRecognizer* lbph()            { return getObjectOrCreate(opencvlbph); }
+    OpenCVLBPHFaceRecognizer* lbphConst() const { return opencvlbph;                    }
+
+public:
+
+    typedef FunnelReal CurrentAligner;
+
+    CurrentAligner*    aligner();
+    CurrentAligner*    alignerConst()     const { return funnel;                        }
+
+public:
+
+    void applyParameters();
+
+    void train(OpenCVLBPHFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
+               TrainingDataProvider* const data, const QString& trainingContext);
+    void clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
+
+    cv::Mat preprocessingChain(const QImage& image);
+
+public:
+
+    bool identityContains(const Identity& identity, const QString& attribute, const QString& value) const;
+    Identity findByAttribute(const QString& attribute, const QString& value) const;
+    Identity findByAttributes(const QString& attribute, const QMap<QString, QString>& valueMap) const;
+
+private:
+
+    friend class RecognitionDatabaseStaticPriv;
+    // Protected creation by StaticPriv only
+    Private(const QString& configPath);
+
+private:
+
+    OpenCVLBPHFaceRecognizer* opencvlbph;
+    FunnelReal*               funnel;
+};
+
+// -----------------------------------------------------------------------------------------------
+
 /**
  * The RecognitionDatabaseStaticPriv holds a hash to all exising RecognitionDatabase data,
  * mutex protected.
@@ -123,78 +203,6 @@ public:
 };
 
 Q_GLOBAL_STATIC(RecognitionDatabaseStaticPriv, static_d)
-
-// -----------------------------------------------------------------------------------------------
-
-class RecognitionDatabase::Private : public QSharedData
-{
-public:
-
-    bool                    dbAvailable;
-
-    const QString           configPath;
-    QMutex                  mutex;
-    FaceDbAccessData* db;
-
-    QVariantMap             parameters;
-    QHash<int, Identity>    identityCache;
-
-public:
-
-    ~Private();
-
-    template <class T>
-    T* getObjectOrCreate(T* &ptr) const
-    {
-        if (!ptr)
-        {
-            ptr = new T(db);
-        }
-
-        return ptr;
-    }
-
-    // Change these three lines to change CurrentRecognizer
-    typedef OpenCVLBPHFaceRecognizer CurrentRecognizer;
-    CurrentRecognizer* recognizer()             { return getObjectOrCreate(opencvlbph); }
-    CurrentRecognizer* recognizerConst()  const { return opencvlbph;                    }
-
-    OpenCVLBPHFaceRecognizer* lbph()            { return getObjectOrCreate(opencvlbph); }
-    OpenCVLBPHFaceRecognizer* lbphConst() const { return opencvlbph;                    }
-
-    typedef FunnelReal CurrentAligner;
-    CurrentAligner*    aligner();
-    CurrentAligner*    alignerConst()     const { return funnel;                        }
-
-    void applyParameters();
-
-public:
-
-    void train(OpenCVLBPHFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
-               TrainingDataProvider* const data, const QString& trainingContext);
-    void clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
-
-    cv::Mat preprocessingChain(const QImage& image);
-
-public:
-
-    bool identityContains(const Identity& identity, const QString& attribute, const QString& value) const;
-    Identity findByAttribute(const QString& attribute, const QString& value) const;
-    Identity findByAttributes(const QString& attribute, const QMap<QString, QString>& valueMap) const;
-
-private:
-
-    friend class RecognitionDatabaseStaticPriv;
-    // Protected creation by StaticPriv only
-    Private(const QString& configPath);
-
-private:
-
-    OpenCVLBPHFaceRecognizer* opencvlbph;
-    FunnelReal*               funnel;
-};
-
-// -------------------------------------------------------------------------------------------------
 
 QExplicitlySharedDataPointer<RecognitionDatabase::Private> RecognitionDatabaseStaticPriv::database(const QString& path)
 {

@@ -170,8 +170,8 @@ bool ThumbsDbSchemaUpdater::startUpdates()
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
-            QString errorMsg = i18n("Failed to create tables in database.\n ")
-                               + m_access->backend()->lastError();
+            QString errorMsg = i18n("Failed to create tables in database.\n ") +
+                               m_access->backend()->lastError();
             m_access->setLastError(errorMsg);
 
             if (m_observer)

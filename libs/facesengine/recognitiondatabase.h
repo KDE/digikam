@@ -134,7 +134,9 @@ public:
 
     // ------------ backend parameters --------------
 
-    /// A textual, informative identifier of the backend in use.
+    /**
+     * A textual, informative identifier of the backend in use.
+     */
     QString backendIdentifier() const;
 
     /**
