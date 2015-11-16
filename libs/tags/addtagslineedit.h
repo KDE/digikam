@@ -102,10 +102,6 @@ protected Q_SLOTS:
     void slotEditingFinished();
     void slotTextChanged(const QString& text);
 
-protected:
-
-    void focusInEvent(QFocusEvent* f);
-
 private:
 
     class Private;

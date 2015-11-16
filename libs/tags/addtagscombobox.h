@@ -76,8 +76,7 @@ public:
     QString text() const;
     void setText(const QString& text);
 
-    AddTagsLineEdit* lineEdit()           const;
-    //AddTagsCompletionBox* completionBox() const;
+    AddTagsLineEdit* lineEdit() const;
 
 public Q_SLOTS:
 
@@ -103,7 +102,6 @@ protected Q_SLOTS:
 
 private:
 
-    virtual void installLineEdit();
     // make private
     void setEditable(bool editable);
 

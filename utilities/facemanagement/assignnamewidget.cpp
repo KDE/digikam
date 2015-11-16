@@ -236,7 +236,6 @@ void AssignNameWidget::Private::checkWidgets()
                     if (!lineEdit)
                     {
                         lineEdit = new AddTagsLineEdit(q);
-                        //lineEdit->setClearButtonShown(true);
                         setupAddTagsWidget(lineEdit);
                     }
 
