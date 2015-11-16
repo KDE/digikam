@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-27
- * Description : Database engine element configuration container
+ * Description : Database engine element configuration settings
  *
  * Copyright (C) 2009-2010 by Holger Foerster <hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _DATABASE_ENGINE_CONFIG_H_
-#define _DATABASE_ENGINE_CONFIG_H_
+#ifndef _DATABASE_ENGINE_CONFIG_SETTINGS_H_
+#define _DATABASE_ENGINE_CONFIG_SETTINGS_H_
 
 // Qt includes
 
@@ -55,4 +55,4 @@ public:
 
 } // namespace Digikam
 
-#endif // _DATABASE_ENGINE_CONFIG_H_
+#endif // _DATABASE_ENGINE_CONFIG_SETTINGS_H_

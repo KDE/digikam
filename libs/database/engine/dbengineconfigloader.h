@@ -25,7 +25,7 @@
 #ifndef _DATABASE_ENGINE_CONFIG_LOADER_H_
 #define _DATABASE_ENGINE_CONFIG_LOADER_H_
 
-#include "dbengineconfig.h"
+#include "dbengineconfigsettings.h"
 
 // Qt includes
 

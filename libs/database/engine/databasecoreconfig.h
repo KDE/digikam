@@ -28,7 +28,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "dbengineconfig.h"
+#include "dbengineconfigsettings.h"
 
 namespace Digikam
 {
