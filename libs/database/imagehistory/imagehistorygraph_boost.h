@@ -47,6 +47,7 @@
 
 #include <utility>
 #include <algorithm>
+#include <boost/graph/transitive_reduction.hpp>
 #include <boost/graph/transitive_closure.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topological_sort.hpp>
@@ -60,8 +61,6 @@
 
 // Local includes
 
-// the file shipped with boost does not compile
-#include "transitive_reduction.hpp"
 #include "digikam_debug.h"
 
 /** Install custom property ids, out-of-namespace */
