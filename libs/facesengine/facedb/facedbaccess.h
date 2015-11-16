@@ -52,8 +52,8 @@ public:
     FaceDbAccess(FaceDbAccessData* const);
     ~FaceDbAccess();
 
-    TrainingDB* db()                  const;
-    FaceDbBackend* backend()    const;
+    TrainingDB*          db()         const;
+    FaceDbBackend*       backend()    const;
     QString              lastError()  const;
     DbEngineParameters   parameters() const;
 
@@ -101,7 +101,7 @@ public:
 private:
 
     FaceDbAccessData* d;
-    int                     count;
+    int               count;
 };
 
 } // namespace FacesEngine

@@ -56,16 +56,16 @@ public:
 
     ~FaceDbAccessData()
     {
-    };
+    }
 
 public:
 
-    FaceDbBackend*   backend;
-    TrainingDB*            db;
-    DbEngineParameters     parameters;
-    DbEngineLocking        lock;
-    QString                lastError;
-    bool                   initializing;
+    FaceDbBackend*     backend;
+    TrainingDB*        db;
+    DbEngineParameters parameters;
+    DbEngineLocking    lock;
+    QString            lastError;
+    bool               initializing;
 };
 
 // ----------------------------------------------------------------
@@ -75,7 +75,8 @@ class FaceDbAccessMutexLocker : public QMutexLocker
 public:
 
     FaceDbAccessMutexLocker(FaceDbAccessData* const d)
-        : QMutexLocker(&d->lock.mutex), d(d)
+        : QMutexLocker(&d->lock.mutex),
+          d(d)
     {
         d->lock.lockCount++;
     }
