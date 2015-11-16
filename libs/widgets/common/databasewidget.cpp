@@ -105,7 +105,7 @@ void DatabaseWidget::setupMainArea()
     QLabel* const internalServerLabel                = new QLabel(i18n("Internal Server"));
 #endif
     internalServer                                   = new QCheckBox();
-    QLabel* const databaseNameLabel                  = new QLabel(i18n("Schema Name"));
+    QLabel* const databaseNameLabel                  = new QLabel(i18n("Core<br>Schema Name"));
     databaseName                                     = new QLineEdit();
     QLabel* const databaseNameThumbnailsLabel        = new QLabel(i18n("Thumbnails<br>Schema Name"));
     databaseNameThumbnails                           = new QLineEdit();
@@ -177,7 +177,7 @@ void DatabaseWidget::setupMainArea()
                                   "It is the default and recommended backend.</p>"
 #ifdef HAVE_MYSQLSUPPORT
                                   "<p><b>MySQL</b> backend is a more robust solution especially for remote and shared database storage. "
-                                  "It is also more efficient to manage huge collection sizes. "                       
+                                  "It is also more efficient to manage huge collection sizes. "
                                   "Be careful: this one it is still in experimental stage.</p>"
 #endif
                                  ));
@@ -191,10 +191,12 @@ void DatabaseWidget::setupMainArea()
 
     connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
             this, SLOT(checkDatabaseConnection()));
-    
+
 #if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     connect(internalServer, SIGNAL(stateChanged(int)),
             this, SLOT(slotHandleInternalServerCheckbox(int)));
+
+    slotHandleInternalServerCheckbox(internalServer->checkState());
 #endif
 }
 
@@ -274,7 +276,7 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
         d->databasePathLabel->setVisible(false);
         databasePathEdit->setVisible(false);
         d->expertSettings->setVisible(true);
-        
+
         disconnect(databasePathEdit, SIGNAL(signalUrlSelected(QUrl)),
                    this, SLOT(slotChangeDatabasePath(QUrl)));
 
@@ -295,6 +297,15 @@ void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
     userName->setEnabled(enableFields == Qt::Unchecked);
     password->setEnabled(enableFields == Qt::Unchecked);
     connectionOptions->setEnabled(enableFields == Qt::Unchecked);
+
+    if (enableFields == Qt::Unchecked)
+    {
+        hostPort->setValue(3306);
+    }
+    else
+    {
+        hostPort->setValue(-1);
+    }
 }
 
 void DatabaseWidget::checkDatabaseConnection()
