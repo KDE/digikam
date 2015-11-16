@@ -76,16 +76,30 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
     : QLineEdit(parent),
       d(new Private)
 {
-    d->completer = new TagCompleter(parent);
+    setClearButtonEnabled(true);
+
+    d->completer = new TagCompleter;
     d->completer->setMaxVisibleItems(15);
-    d->completer->setWidget(this);
 
-    connect(this, &QLineEdit::returnPressed, this, &AddTagsLineEdit::slotReturnPressed);
-    connect(this, &QLineEdit::editingFinished, this, &AddTagsLineEdit::slotEditingFinished);
-    connect(this, &QLineEdit::textChanged, this, &AddTagsLineEdit::slotTextChanged);
+    setCompleter(d->completer);
 
-    connect(d->completer, SIGNAL(activated(TaggingAction)), this, SLOT(completerActivated(TaggingAction)));
-    connect(d->completer, SIGNAL(highlighted(TaggingAction)), this, SIGNAL(taggingActionSelected(TaggingAction)));
+    connect(this, SIGNAL(returnPressed()),
+            this, SLOT(slotReturnPressed()));
+
+    connect(this, SIGNAL(editingFinished()),
+            this, SLOT(slotEditingFinished()));
+
+    connect(this, SIGNAL(textChanged(QString)),
+            this, SLOT(slotTextChanged(QString)));
+
+    connect(this, SIGNAL(textEdited(QString)),
+            d->completer, SLOT(slotTextEdited(QString)));
+
+    connect(d->completer, static_cast<void(TagCompleter::*)(const TaggingAction&)>(&TagCompleter::activated),
+            [this](const TaggingAction& action){ completerActivated(action); });
+
+    connect(d->completer, static_cast<void(TagCompleter::*)(const TaggingAction&)>(&TagCompleter::highlighted),
+            [this](const TaggingAction& action){ completerHighlighted(action); });
 }
 
 AddTagsLineEdit::~AddTagsLineEdit()
@@ -114,6 +128,7 @@ void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel* filter
     {
         setFilterModel(filteredModel);
     }
+
     setSupportingTagModel(model);
 }
 
@@ -153,18 +168,6 @@ void AddTagsLineEdit::setAllowExceedBound(bool value)
     // Idea: intercept show event via event filter on completer->popup(); from there, change width.
 }
 
-void AddTagsLineEdit::focusInEvent(QFocusEvent* f)
-{
-    QLineEdit::focusInEvent(f);
-
-    // NOTE: Need to disconnect completer from QLineEdit, otherwise
-    // we won't be able to clear completion after tag was added
-    // See QLineEdit::focusInEvent(QFocusEvent *e) where this connection is made
-
-    disconnect(d->completer, SIGNAL(activated(QString)),
-               this, SLOT(setText(QString)));
-}
-
 // Tagging action is used by facemanagement and assignwidget
 
 void AddTagsLineEdit::slotReturnPressed()
@@ -176,11 +179,6 @@ void AddTagsLineEdit::slotReturnPressed()
         //focus back to mainview
         emit taggingActionFinished();
         return;
-    }
-
-    if (d->currentTaggingAction.shallAssignTag() && d->completer->popup()->isVisible())
-    {
-        setText(d->currentTaggingAction.newTagName());
     }
 
     emit taggingActionActivated(currentTaggingAction());
@@ -199,13 +197,13 @@ void AddTagsLineEdit::slotTextChanged(const QString &text)
     }
 }
 
-void AddTagsLineEdit::completerActivated(const TaggingAction &action)
+void AddTagsLineEdit::completerActivated(const TaggingAction& action)
 {
     setCurrentTaggingAction(action);
     emit taggingActionActivated(action);
 }
 
-void AddTagsLineEdit::completerHighlighted(const TaggingAction &action)
+void AddTagsLineEdit::completerHighlighted(const TaggingAction& action)
 {
     setCurrentTaggingAction(action);
 }

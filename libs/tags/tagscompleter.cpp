@@ -68,8 +68,7 @@ public:
     Private()
         : model(0),
           supportingModel(0),
-          filterModel(0),
-          expectingTextChange()
+          filterModel(0)
     {
     }
     ~Private() {}
@@ -80,21 +79,19 @@ public:
     TagModel*            supportingModel;
     AlbumFilterModel*    filterModel;
 
-    bool                 expectingTextChange;
-
     QModelIndex indexForAlbum(int id)
     {
         if (!supportingModel)
         {
             return QModelIndex();
         }
-        TAlbum* talbum = AlbumManager::instance()->findTAlbum(id);
+        TAlbum* const talbum = AlbumManager::instance()->findTAlbum(id);
         return supportingModel->indexForAlbum(talbum);
     }
 
     virtual bool matches(int id)
     {
-        TAlbum* talbum = AlbumManager::instance()->findTAlbum(id);
+        TAlbum* const talbum = AlbumManager::instance()->findTAlbum(id);
         return filterModel->indexForAlbum(talbum).isValid();
     }
 };
@@ -105,23 +102,21 @@ TagCompleter::TagCompleter(QObject* parent)
 {
     d->model = new QStandardItemModel(this);
     setModel(d->model);
-    setCompletionRole(CompletionRole);
+
     setCompletionMode(UnfilteredPopupCompletion);
+    setCompletionRole(CompletionRole);
     setCompletionColumn(0);
 
-    connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(slotActivated(QModelIndex)));
-    connect(this, SIGNAL(highlighted(QModelIndex)), this, SLOT(slotHighlighted(QModelIndex)));
+    connect(this, SIGNAL(activated(QModelIndex)),
+            this, SLOT(slotActivated(QModelIndex)));
+
+    connect(this, SIGNAL(highlighted(QModelIndex)),
+            this, SLOT(slotHighlighted(QModelIndex)));
 }
 
 TagCompleter::~TagCompleter()
 {
     delete d;
-}
-
-// just to make the method private
-void TagCompleter::setModel(QAbstractItemModel *model)
-{
-    QCompleter::setModel(model);
 }
 
 void TagCompleter::setTagFilterModel(AlbumFilterModel* filterModel)
@@ -179,43 +174,24 @@ void TagCompleter::update(const QString& fragment)
                 item->setIcon(AlbumThumbnailLoader::instance()->getStandardTagIcon());
             }
         }
+
         items << item;
     }
 
     d->model->appendColumn(items);
 }
 
-void TagCompleter::setWidget(QLineEdit *le)
-{
-    if (widget())
-    {
-        disconnect(widget(), SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)));
-        disconnect(widget(), SIGNAL(textEdited(QString)), this, SLOT(textEdited(QString)));
-    }
-
-    le->setCompleter(this);
-
-    connect(le, &QLineEdit::textChanged, this, &TagCompleter::textChanged);
-    connect(le, &QLineEdit::textEdited, this, &TagCompleter::textEdited);
-}
-
-void TagCompleter::slotActivated(const QModelIndex &index)
+void TagCompleter::slotActivated(const QModelIndex& index)
 {
     emit activated(index.data(TaggingActionRole).value<TaggingAction>());
 }
 
-void TagCompleter::slotHighlighted(const QModelIndex &index)
+void TagCompleter::slotHighlighted(const QModelIndex& index)
 {
-    qDebug() << "highlighted" << index;
     emit highlighted(index.data(TaggingActionRole).value<TaggingAction>());
 }
 
-void TagCompleter::textChanged(const QString &)
-{
-    // do not update here (?)
-}
-
-void TagCompleter::textEdited(const QString &text)
+void TagCompleter::slotTextEdited(const QString& text)
 {
     update(text);
 }

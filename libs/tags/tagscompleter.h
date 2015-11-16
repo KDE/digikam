@@ -54,15 +54,13 @@ public:
 
     // Update the completer for the given fragment
     void update(const QString& fragment);
+
     // Set a parent tag which may by the user be considered as a parent for a new tag during completion
     void setContextParentTag(int parentTagId);
+
     // Set a supporting model from which the completer may get data for its display. Optional.
     void setSupportingTagModel(TagModel* supportingModel);
     void setTagFilterModel(AlbumFilterModel* supportingModel);
-
-    // You must call this for the completion to work properly.
-    // This also calls lineEdit->setCompleter, you do not need to call this.
-    void setWidget(QLineEdit* lineEdit);
 
 Q_SIGNALS:
 
@@ -73,14 +71,11 @@ private Q_SLOTS:
 
     void slotActivated(const QModelIndex& index);
     void slotHighlighted(const QModelIndex& index);
-    void textChanged(const QString& text);
-    void textEdited(const QString& text);
+    void slotTextEdited(const QString& text);
     /*void slotInsertRows(QModelIndex index, int start, int end);
     void slotDeleteRows(QModelIndex index, int start, int end);*/
 
 private:
-
-    void setModel(QAbstractItemModel*);
 
     class Private;
     Private* const d;

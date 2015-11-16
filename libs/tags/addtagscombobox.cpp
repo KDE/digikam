@@ -48,11 +48,9 @@ public:
 
     Private()
     {
-        treeView   = 0;
         lineEdit   = 0;
     }
 
-    TagTreeView*     treeView;
     AddTagsLineEdit* lineEdit;
     TaggingAction    viewTaggingAction;
 };
@@ -62,12 +60,13 @@ public:
 AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
     : TagTreeViewSelectComboBox(parent), d(new Private)
 {
-    QComboBox::setAutoCompletion(false);
     setInsertPolicy(QComboBox::NoInsert); // do not let Qt interfere when Enter is pressed
     setCloseOnActivate(true);
     setCheckable(false);
 
     d->lineEdit = new AddTagsLineEdit(this);
+    d->lineEdit->completer()->setCompletionMode(QCompleter::InlineCompletion);
+
     setLineEdit(d->lineEdit);
 
     connect(d->lineEdit, SIGNAL(taggingActionActivated(TaggingAction)),
@@ -75,9 +74,6 @@ AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
 
     connect(d->lineEdit, SIGNAL(taggingActionSelected(TaggingAction)),
             this, SLOT(slotLineEditActionSelected(TaggingAction)));
-
-    // NOTE: Veaceslav edit
-    //d->lineEdit->setClearButtonShown(true);
 
     TagTreeView::Flags flags;
     m_treeView = new TagTreeView(this, flags);
@@ -99,19 +95,10 @@ void AddTagsComboBox::setModel(TagModel* model, TagPropertiesFilterModel* filter
     d->lineEdit->setModel(model, filteredModel, filterModel);
 }
 
-void AddTagsComboBox::installLineEdit()
-{
-}
-
 AddTagsLineEdit* AddTagsComboBox::lineEdit() const
 {
     return d->lineEdit;
 }
-
-//AddTagsCompletionBox* AddTagsComboBox::completionBox() const
-//{
-//    return d->lineEdit->tagCompletionBox();
-//}
 
 void AddTagsComboBox::setTagTreeView(TagTreeView* view)
 {
@@ -159,7 +146,6 @@ void AddTagsComboBox::slotViewIndexActivated(const QModelIndex& index)
 {
     TAlbum* const album = view()->albumForIndex(index);
 
-    //d->lineEdit->selectAll();
     if (album)
     {
         d->lineEdit->setText(album->title());
