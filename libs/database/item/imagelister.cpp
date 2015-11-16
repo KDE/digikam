@@ -53,7 +53,7 @@
 #include "imagequerybuilder.h"
 #include "dmetadata.h"
 #include "haariface.h"
-#include "sqlquery.h"
+#include "dbenginesqlquery.h"
 #include "tagscache.h"
 #include "imagetagpair.h"
 #include "dbjobsthread.h"
@@ -837,7 +837,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
         executionSuccess = query.execBatch
 */
         CoreDbAccess access;
-        SqlQuery query = access.backend()->prepareQuery(QString::fromUtf8(
+        DbEngineSqlQuery query = access.backend()->prepareQuery(QString::fromUtf8(
                              "SELECT DISTINCT Images.id, Images.name, Images.album, "
                              "       Albums.albumRoot, "
                              "       ImageInformation.rating, Images.category, "

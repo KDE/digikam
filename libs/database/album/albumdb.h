@@ -44,7 +44,7 @@
 #include "coredbaccess.h"
 #include "coredbconstants.h"
 #include "digikam_export.h"
-#include "sqlquery.h"
+#include "dbenginesqlquery.h"
 
 namespace Digikam
 {

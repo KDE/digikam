@@ -51,7 +51,7 @@
 #include "albumdb.h"
 #include "coredbbackend.h"
 #include "searchxml.h"
-#include "sqlquery.h"
+#include "dbenginesqlquery.h"
 
 using namespace std;
 
@@ -244,7 +244,7 @@ public:
         // reference for easier access
         SignatureCache& signatureCache = *this->signatureCache;
 
-        SqlQuery query = access.backend()->prepareQuery(signatureQuery);
+        DbEngineSqlQuery query = access.backend()->prepareQuery(signatureQuery);
 
         if (!access.backend()->exec(query))
         {
@@ -610,7 +610,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
             queryText = d->signatureQuery;
         }
 
-        SqlQuery query = access.backend()->prepareQuery(queryText);
+        DbEngineSqlQuery query = access.backend()->prepareQuery(queryText);
 
         if (!access.backend()->exec(query))
         {

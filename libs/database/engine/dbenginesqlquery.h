@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-27
- * Description : gui database error handler
+ * Description : Databse engine SQL query
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SQLQUERY_H
-#define SQLQUERY_H
+#ifndef DATABASE_ENGINE_SQL_QUERY_H
+#define DATABASE_ENGINE_SQL_QUERY_H
 
 // Qt includes
 
@@ -37,16 +37,16 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SqlQuery : public QSqlQuery
+class DIGIKAM_EXPORT DbEngineSqlQuery : public QSqlQuery
 {
 
 public:
 
-    explicit SqlQuery(const QSqlQuery& other);
-    explicit SqlQuery(const QSqlDatabase& db);
-    virtual ~SqlQuery();
+    explicit DbEngineSqlQuery(const QSqlQuery& other);
+    explicit DbEngineSqlQuery(const QSqlDatabase& db);
+    virtual ~DbEngineSqlQuery();
 
-    virtual SqlQuery& operator=(const SqlQuery& other);
+    virtual DbEngineSqlQuery& operator=(const DbEngineSqlQuery& other);
     virtual bool prepare(const QString& query);
     virtual QString lastQuery() const;
 
@@ -57,4 +57,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* SQLQUERY_H */
+#endif /* DATABASE_ENGINE_SQL_QUERY_H */

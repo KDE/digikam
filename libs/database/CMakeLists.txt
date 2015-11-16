@@ -13,13 +13,13 @@ endif (POLICY CMP0063)
 set(libdatabasecore_SRCS
     engine/databaseserverstarter.cpp
     engine/databaseservererror.cpp
-    engine/sqlquery.cpp
     engine/dbengineconfigloader.cpp
     engine/dbengineconfig.cpp
     engine/dbengineactiontype.cpp
     engine/dbengineerrorhandler.cpp
     engine/dbengineparameters.cpp
     engine/dbenginebackend.cpp
+    engine/dbenginesqlquery.cpp
 
     tags/tagregion.cpp
 

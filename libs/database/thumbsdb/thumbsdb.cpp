@@ -185,7 +185,7 @@ ThumbsDbInfo ThumbsDb::findByCustomIdentifier(const QString& id)
 
 QHash<QString, int> ThumbsDb::getFilePathsWithThumbnail()
 {
-    SqlQuery query = d->db->prepareQuery(QString::fromLatin1("SELECT path, id "
+    DbEngineSqlQuery query = d->db->prepareQuery(QString::fromLatin1("SELECT path, id "
                                                              "FROM FilePaths "
                                                              "   INNER JOIN Thumbnails ON FilePaths.thumbId=Thumbnails.id "
                                                              "WHERE type BETWEEN %1 AND %2;")

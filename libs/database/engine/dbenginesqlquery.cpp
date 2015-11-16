@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-27
- * Description : gui database error handler
+ * Description : Databse engine SQL query
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
@@ -21,40 +21,40 @@
  *
  * ============================================================ */
 
-#include "sqlquery.h"
+#include "dbenginesqlquery.h"
 
 namespace Digikam
 {
 
-SqlQuery::SqlQuery(const QSqlQuery& other)
+DbEngineSqlQuery::DbEngineSqlQuery(const QSqlQuery& other)
     : QSqlQuery(other)
 {
 }
 
-SqlQuery::SqlQuery(const QSqlDatabase& db)
+DbEngineSqlQuery::DbEngineSqlQuery(const QSqlDatabase& db)
     : QSqlQuery(db)
 {
 }
 
-SqlQuery::~SqlQuery()
+DbEngineSqlQuery::~DbEngineSqlQuery()
 {
 }
 
-SqlQuery& SqlQuery::operator=(const SqlQuery& other)
+DbEngineSqlQuery& DbEngineSqlQuery::operator=(const DbEngineSqlQuery& other)
 {
     QSqlQuery::operator=(other);
     m_query = other.m_query;
     return *this;
 }
 
-bool SqlQuery::prepare(const QString& query)
+bool DbEngineSqlQuery::prepare(const QString& query)
 {
     bool result = QSqlQuery::prepare(query);
     m_query     = query;
     return result;
 }
 
-QString SqlQuery::lastQuery() const
+QString DbEngineSqlQuery::lastQuery() const
 {
     return m_query;
 }

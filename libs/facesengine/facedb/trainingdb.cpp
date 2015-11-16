@@ -252,7 +252,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
         model.setGridY(it->toInt());
         ++it;
 
-        SqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data "
+        DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data "
                                           "FROM OpenCVLBPHistograms WHERE recognizerid=?"),
                                           model.databaseId);
         QList<OpenCVMatData> histograms;

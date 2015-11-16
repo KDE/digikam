@@ -39,7 +39,7 @@
 
 #include "digikam_export.h"
 #include "dbengineparameters.h"
-#include "sqlquery.h"
+#include "dbenginesqlquery.h"
 
 namespace Digikam
 {
@@ -276,20 +276,20 @@ public:
     QueryState execSql(const QString& sql, const QList<QVariant>& boundValues,
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
-    QueryState execSql(SqlQuery& preparedQuery, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
-    QueryState execSql(SqlQuery& preparedQuery, const QVariant& boundValue1,
+    QueryState execSql(DbEngineSqlQuery& preparedQuery, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+    QueryState execSql(DbEngineSqlQuery& preparedQuery, const QVariant& boundValue1,
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
-    QueryState execSql(SqlQuery& preparedQuery,
+    QueryState execSql(DbEngineSqlQuery& preparedQuery,
                        const QVariant& boundValue1, const QVariant& boundValue2,
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
-    QueryState execSql(SqlQuery& preparedQuery,
+    QueryState execSql(DbEngineSqlQuery& preparedQuery,
                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
-    QueryState execSql(SqlQuery& preparedQuery,
+    QueryState execSql(DbEngineSqlQuery& preparedQuery,
                        const QVariant& boundValue1, const QVariant& boundValue2,
                        const QVariant& boundValue3, const QVariant& boundValue4,
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
-    QueryState execSql(SqlQuery& preparedQuery, const QList<QVariant>& boundValues,
+    QueryState execSql(DbEngineSqlQuery& preparedQuery, const QList<QVariant>& boundValues,
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     /**
@@ -298,7 +298,7 @@ public:
      * the last insertion id is taken from the query
      * and BdEngineBackend::NoErrors is returned.
      */
-    QueryState handleQueryResult(SqlQuery& query, QList<QVariant>* const values, QVariant* const lastInsertId);
+    QueryState handleQueryResult(DbEngineSqlQuery& query, QList<QVariant>* const values, QVariant* const lastInsertId);
 
     /**
      * Method which accepts a map for named binding.
@@ -323,60 +323,60 @@ public:
      * Executes the statement and returns the query object.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      */
-    SqlQuery execQuery(const QString& sql);
-    SqlQuery execQuery(const QString& sql, const QVariant& boundValue1);
-    SqlQuery execQuery(const QString& sql,
+    DbEngineSqlQuery execQuery(const QString& sql);
+    DbEngineSqlQuery execQuery(const QString& sql, const QVariant& boundValue1);
+    DbEngineSqlQuery execQuery(const QString& sql,
                        const QVariant& boundValue1, const QVariant& boundValue2);
-    SqlQuery execQuery(const QString& sql,
+    DbEngineSqlQuery execQuery(const QString& sql,
                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
-    SqlQuery execQuery(const QString& sql,
+    DbEngineSqlQuery execQuery(const QString& sql,
                        const QVariant& boundValue1, const QVariant& boundValue2,
                        const QVariant& boundValue3, const QVariant& boundValue4);
-    SqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
+    DbEngineSqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
 
     /**
      * Binds the values and executes the prepared query.
      */
-    void execQuery(SqlQuery& preparedQuery, const QVariant& boundValue1);
-    void execQuery(SqlQuery& preparedQuery,
+    void execQuery(DbEngineSqlQuery& preparedQuery, const QVariant& boundValue1);
+    void execQuery(DbEngineSqlQuery& preparedQuery,
                    const QVariant& boundValue1, const QVariant& boundValue2);
-    void execQuery(SqlQuery& preparedQuery,
+    void execQuery(DbEngineSqlQuery& preparedQuery,
                    const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
-    void execQuery(SqlQuery& preparedQuery,
+    void execQuery(DbEngineSqlQuery& preparedQuery,
                    const QVariant& boundValue1, const QVariant& boundValue2,
                    const QVariant& boundValue3, const QVariant& boundValue4);
-    void execQuery(SqlQuery& preparedQuery, const QList<QVariant>& boundValues);
+    void execQuery(DbEngineSqlQuery& preparedQuery, const QList<QVariant>& boundValues);
 
     /**
      * Method which accept a hashmap with key, values which are used for named binding
      */
-    SqlQuery execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap);
+    DbEngineSqlQuery execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap);
 
     /**
      * Calls exec/execBatch on the query, and handles debug output if something went wrong
      */
-    bool exec(SqlQuery& query);
-    bool execBatch(SqlQuery& query);
+    bool exec(DbEngineSqlQuery& query);
+    bool execBatch(DbEngineSqlQuery& query);
 
     /**
      * Creates a query object prepared with the statement, waiting for bound values
      */
-    SqlQuery prepareQuery(const QString& sql);
+    DbEngineSqlQuery prepareQuery(const QString& sql);
     /**
      * Creates an empty query object waiting for the statement
      */
-    SqlQuery getQuery();
+    DbEngineSqlQuery getQuery();
     /**
      * Creates a faithful copy of the passed query, with the current db connection.
      */
-    SqlQuery copyQuery(const SqlQuery& old);
+    DbEngineSqlQuery copyQuery(const DbEngineSqlQuery& old);
 
     /**
      * Called with a failed query. Handles certain known errors and debug output.
      * If it returns true, reexecute the query; if it returns false, return it as failed.
      * Pass the number of retries already done for this query to help with some decisions.
      */
-    bool queryErrorHandling(SqlQuery& query, int retries);
+    bool queryErrorHandling(DbEngineSqlQuery& query, int retries);
     bool transactionErrorHandling(const QSqlError& lastError, int retries);
 
     /**
@@ -392,7 +392,7 @@ public:
      * all data elements of a row is read, then the resultset is switched
      * to the next row.
      */
-    QList<QVariant> readToList(SqlQuery& query);
+    QList<QVariant> readToList(DbEngineSqlQuery& query);
 
     /**
      * Begin a database transaction

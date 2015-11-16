@@ -81,17 +81,17 @@ public:
     bool isInUIThread()   const;
 
     bool reconnectOnError()                                       const;
-    bool isSQLiteLockError(const SqlQuery& query)                 const;
+    bool isSQLiteLockError(const DbEngineSqlQuery& query)                 const;
     bool isSQLiteLockTransactionError(const QSqlError& lastError) const;
-    bool isConnectionError(const SqlQuery& query)                 const;
-    bool needToConsultUserForError(const SqlQuery& query)         const;
-    bool needToHandleWithErrorHandler(const SqlQuery& query)      const;
+    bool isConnectionError(const DbEngineSqlQuery& query)                 const;
+    bool needToConsultUserForError(const DbEngineSqlQuery& query)         const;
+    bool needToHandleWithErrorHandler(const DbEngineSqlQuery& query)      const;
     void debugOutputFailedQuery(const QSqlQuery& query)           const;
     void debugOutputFailedTransaction(const QSqlError& error)     const;
 
     bool checkRetrySQLiteLockError(int retries);
     bool checkOperationStatus();
-    bool handleWithErrorHandler(const SqlQuery* const query);
+    bool handleWithErrorHandler(const DbEngineSqlQuery* const query);
     void setQueryOperationFlag(BdEngineBackend::QueryOperationStatus status);
     void queryOperationWakeAll(BdEngineBackend::QueryOperationStatus status);
 
