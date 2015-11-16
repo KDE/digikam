@@ -126,5 +126,4 @@ transitive_reduction(const Graph& g, GraphTR& tr,
 
 } // namespace boost
 
-#endif
-
+#endif // BOOST_GRAPH_TRANSITIVE_REDUCTION_HPP
