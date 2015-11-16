@@ -63,7 +63,7 @@ public:
     int                     currentVersion;
     int                     currentRequiredVersion;
 
-    FaceDbAccess*     access;
+    FaceDbAccess*           access;
 
     InitializationObserver* observer;
 };
@@ -117,14 +117,14 @@ bool FaceDbSchemaUpdater::startUpdates()
         // mini schema update
         if (version.isEmpty() && d->access->parameters().isSQLite())
         {
-            version = d->access->db()->setting(QString::fromLatin1("DBFaceVersion"));
+            version = d->access->db()->setting(QString::fromLatin1("DBVersion"));
         }
 
-        // We absolutely require the DBVersion setting
+        // We absolutely require the DBFaceVersion setting
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            qCWarning(DIGIKAM_FACEDB_LOG) << "DBVersion not available! Giving up schema upgrading.";
+            qCWarning(DIGIKAM_FACEDB_LOG) << "DBFaceVersion not available! Giving up schema upgrading.";
 
             QString errorMsg = i18n("The database is not valid: "
                                     "the \"DBFaceVersion\" setting does not exist. "

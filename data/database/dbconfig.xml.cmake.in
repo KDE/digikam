@@ -1343,28 +1343,28 @@ ORDER BY inf.rating DESC, img.name ASC
                             type INTEGER,
                             modificationDate DATETIME,
                             orientationHint INTEGER,
-                            data LONGBLOB)
+                            data LONGBLOB);
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS UniqueHashes
                             (uniqueHash VARCHAR(128),
                             fileSize INTEGER,
                             thumbId INTEGER,
-                            UNIQUE(uniqueHash, fileSize))
+                            UNIQUE(uniqueHash, fileSize));
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FilePaths
                             (path LONGTEXT CHARACTER SET utf8,
                             thumbId INTEGER,
-                            UNIQUE(path(255)))
+                            UNIQUE(path(255)));
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS CustomIdentifiers
                             (identifier LONGTEXT CHARACTER SET utf8,
                             thumbId INTEGER,
-                            UNIQUE(identifier(255)))
+                            UNIQUE(identifier(255)));
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
                             (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
                             value LONGTEXT CHARACTER SET utf8,
-                            UNIQUE(keyword(255)))
+                            UNIQUE(keyword(255)));
                 </statement>
                     <statement mode="plain">
                             INSERT INTO Settings (keyword, value)
@@ -1426,66 +1426,103 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <!-- Mysql Face Schema Database -->
 
-            <!-- TODO: sql code not yet ported from Sqlite to Mysql -->
             <dbaction name="CreateFaceDB" mode="transaction">
-                <statement mode="plain">
-                    CREATE TABLE Settings
-                    (keyword TEXT NOT NULL UNIQUE,
-                    value TEXT)
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
+                            (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
+                            value LONGTEXT CHARACTER SET utf8,
+                            UNIQUE(keyword(255)));
                 </statement>
                 <statement mode="plain">
-                    CREATE TABLE Identities
-                    (id INTEGER PRIMARY KEY,
-                    type INTEGER)
+                        INSERT INTO Settings (keyword, value)
+                        VALUES('DBFaceVersionRequired','1')
+                        ON DUPLICATE KEY
+                        UPDATE value = GREATEST(VALUES(value), 1);
                 </statement>
                 <statement mode="plain">
-                    CREATE TABLE IdentityAttributes
-                    (id INTEGER,
-                    attribute TEXT,
-                    value TEXT)
+                        INSERT INTO Settings (keyword, value)
+                        VALUES('DBFaceVersion','2')
+                        ON DUPLICATE KEY
+                        UPDATE value = GREATEST(VALUES(value), 2);
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Identities
+                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                            type INTEGER);
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS IdentityAttributes
+                            (id INTEGER,
+                            type INTEGER,
+                            attribute TEXT,
+                            value TEXT);
                 </statement>
             </dbaction>
 
             <dbaction name="CreateFaceDBOpenCVLBPH" mode="transaction">
-                <statement mode="plain">
-                    CREATE TABLE OpenCVLBPHRecognizer
-                    (id INTEGER PRIMARY KEY,
-                    version INTEGER,
-                    radius INTEGER,
-                    neighbors INTEGER,
-                    grid_x INTEGER,
-                    grid_y INTEGER)
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS OpenCVLBPHRecognizer
+                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                            version INTEGER,
+                            radius INTEGER,
+                            neighbors INTEGER,
+                            grid_x INTEGER,
+                            grid_y INTEGER);
                 </statement>
-                <statement mode="plain">
-                    CREATE TABLE OpenCVLBPHistograms
-                    (id INTEGER PRIMARY KEY,
-                    recognizerid INTEGER,
-                    identity INTEGER,
-                    context TEXT,
-                    type INTEGER,
-                    rows INTEGER,
-                    cols INTEGER,
-                    data BLOB)
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS OpenCVLBPHistograms
+                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                            recognizerid INTEGER,
+                            identity INTEGER,
+                            context TEXT,
+                            type INTEGER,
+                            rows INTEGER,
+                            cols INTEGER,
+                            data BLOB);
                 </statement>
             </dbaction>
 
             <!-- Mysql face Indexes -->
 
-            <!-- TODO: sql code not yet ported from Sqlite to Mysql -->
             <dbaction name="CreateFaceIndices" mode="transaction">
-                <statement mode="plain">CREATE INDEX attribute_index  ON IdentityAttributes (id);</statement>
+                <statement mode="plain">
+                    DROP PROCEDURE IF EXISTS create_index_if_not_exists;
+                </statement>
+                <statement mode="plain">
+                    CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
+                    SQL SECURITY INVOKER
+                    BEGIN
+
+                    set @Index_cnt = (
+                        SELECT COUNT(1) cnt
+                        FROM INFORMATION_SCHEMA.STATISTICS
+                        WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
+                        AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                        AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
+                    );
+
+                    IF IFNULL(@Index_cnt, 0) = 0 THEN
+                        set @index_sql = CONCAT( 
+                            CONVERT( 'ALTER TABLE ' USING latin1),
+                            CONVERT( table_name_vc USING latin1),
+                            CONVERT( ' ADD INDEX ' USING latin1),
+                            CONVERT( index_name_vc USING latin1),
+                            CONVERT( '(' USING latin1),
+                            CONVERT( field_list_vc USING latin1),
+                            CONVERT( ');' USING latin1)
+                        );
+                        PREPARE stmt FROM @index_sql;
+                        EXECUTE stmt;
+                        DEALLOCATE PREPARE stmt;
+                    END IF;
+                    END;
+                </statement>
+                <statement mode="plain">CALL create_index_if_not_exists('IdentityAttributes','identityattributes_index','id');</statement>
             </dbaction>
 
             <!-- Mysql Face Triggers -->
 
-            <!-- TODO: sql code not yet ported from Sqlite to Mysql -->
             <dbaction name="CreateFaceTriggers" mode="transaction">
-                <statement mode="plain">
-                    CREATE TRIGGER delete_identities DELETE ON Identities
-                    BEGIN
-                        DELETE FROM IdentityAttributes
-                        WHERE IdentityAttributes.id = OLD.id;
-                    END;
+                <statement mode="plain">DROP TRIGGER IF EXISTS delete_identities;</statement>
+                <statement mode="plain">CREATE TRIGGER delete_identities AFTER DELETE ON Identities
+                FOR EACH ROW BEGIN
+                    DELETE FROM IdentityAttributes WHERE id=OLD.id;
+                END;
                 </statement>
             </dbaction>
 
@@ -1786,7 +1823,7 @@ ORDER BY inf.rating DESC, img.name ASC
                             thumbId INTEGER,
                             UNIQUE(identifier(333)))
                 </statement>
-                <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId')</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId');</statement>
             </dbaction>
 
         </dbactions>
