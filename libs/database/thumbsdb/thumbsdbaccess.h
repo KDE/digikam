@@ -50,7 +50,7 @@ public:
     ThumbsDbAccess();
     ~ThumbsDbAccess();
 
-    ThumbsDb*              db()      const;
+    ThumbsDb*             db() const;
     ThumbsDbBackend* backend() const;
 
     QString lastError();

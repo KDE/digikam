@@ -58,13 +58,13 @@ public:
     {
     };
 
-    ThumbsDbBackend* backend;
-    ThumbsDb*              db;
-    DbEngineParameters        parameters;
-    DbEngineLocking           lock;
-    QString                   lastError;
+    ThumbsDbBackend*   backend;
+    ThumbsDb*          db;
+    DbEngineParameters parameters;
+    DbEngineLocking    lock;
+    QString            lastError;
 
-    bool                      initializing;
+    bool               initializing;
 };
 
 class ThumbsDbAccessMutexLocker : public QMutexLocker
