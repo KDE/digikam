@@ -609,7 +609,7 @@ QDebug operator<<(QDebug dbg, const DbEngineParameters& p)
     dbg.nospace() << "   DB Core Name:    " << p.databaseName                  << endl;
     dbg.nospace() << "   DB Thumbs Name:  " << p.databaseNameThumbnails        << endl;
     dbg.nospace() << "   DB Face Name:    " << p.databaseNameFace              << endl;
-    dbg.nospace() << "   ConnectOptions:  " << p.connectOptions                << endl;
+    dbg.nospace() << "   Connect Options: " << p.connectOptions                << endl;
     dbg.nospace() << "   Host Name:       " << p.hostName                      << endl;
     dbg.nospace() << "   Host port:       " << p.port                          << endl;
     dbg.nospace() << "   Internal Server: " << p.internalServer                << endl;
