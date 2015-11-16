@@ -29,7 +29,7 @@
 
 #include "digikam_export.h"
 #include "databaseparameters.h"
-#include "databaseerrorhandler.h"
+#include "dbengineerrorhandler.h"
 
 namespace Digikam
 {
@@ -62,7 +62,7 @@ public:
 
     static DatabaseParameters parameters();
 
-    static void initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler);
+    static void initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler);
     static void setParameters(const DatabaseParameters& parameters);
     static bool checkReadyForUse(InitializationObserver* observer);
     static bool isInitialized();

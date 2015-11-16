@@ -21,22 +21,22 @@
  *
  * ============================================================ */
 
-#include "databaseerrorhandler.h"
+#include "dbengineerrorhandler.h"
 
 namespace Digikam
 {
 
-DatabaseErrorAnswer::~DatabaseErrorAnswer()
+DbEngineErrorAnswer::~DbEngineErrorAnswer()
 {
 }
 
 // ------------------------------------------------------------------------------------
 
-DatabaseErrorHandler::DatabaseErrorHandler()
+DbEngineErrorHandler::DbEngineErrorHandler()
 {
 }
 
-DatabaseErrorHandler::~DatabaseErrorHandler()
+DbEngineErrorHandler::~DbEngineErrorHandler()
 {
 }
 

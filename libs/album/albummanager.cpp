@@ -747,7 +747,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     CoreDbAccess::setParameters(params, CoreDbAccess::MainApplication);
 
     DatabaseGUIErrorHandler* const handler = new DatabaseGUIErrorHandler(CoreDbAccess::parameters());
-    CoreDbAccess::initDatabaseErrorHandler(handler);
+    CoreDbAccess::initDbEngineErrorHandler(handler);
 
     if (!handler->checkDatabaseConnection())
     {
@@ -1022,7 +1022,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
                                                      new ThumbsDbInfoProvider());
 
     DatabaseGUIErrorHandler* const thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbsDbAccess::parameters());
-    ThumbsDbAccess::initDatabaseErrorHandler(thumbnailsDBHandler);
+    ThumbsDbAccess::initDbEngineErrorHandler(thumbnailsDBHandler);
 
     QApplication::restoreOverrideCursor();
 

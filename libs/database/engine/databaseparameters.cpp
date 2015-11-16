@@ -497,19 +497,19 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     DatabaseParameters parameters;
 
     // only the database name is needed
-    DbEngineConfigSettings config        = DbEngineConfig::element(databaseType);
-    parameters.databaseType      = databaseType;
-    parameters.databaseName      = config.databaseName;
-    parameters.hostName          = config.hostName;
-    parameters.userName          = config.userName;
-    parameters.password          = config.password;
-    parameters.port              = config.port.toInt();
-    const QString miscDir        = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + 
+    DbEngineConfigSettings config = DbEngineConfig::element(databaseType);
+    parameters.databaseType       = databaseType;
+    parameters.databaseName       = config.databaseName;
+    parameters.hostName           = config.hostName;
+    parameters.userName           = config.userName;
+    parameters.password           = config.password;
+    parameters.port               = config.port.toInt();
+    const QString miscDir         = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + 
                                                                     QLatin1Char('/') + QLatin1String("digikam/db_misc");
-    QString connectOptions       = config.connectOptions;
+    QString connectOptions        = config.connectOptions;
     connectOptions.replace(QLatin1String("$$DBMISCPATH$$"), miscDir);
 
-    parameters.connectOptions    = connectOptions;
+    parameters.connectOptions     = connectOptions;
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "ConnectOptions "<< parameters.connectOptions;
 

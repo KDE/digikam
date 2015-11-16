@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEERRORHANDLER_H
-#define DATABASEERRORHANDLER_H
+#ifndef DATABASE_ENGINE_ERROR_HANDLER_H
+#define DATABASE_ENGINE_ERROR_HANDLER_H
 
 // Qt includes
 
@@ -37,26 +37,26 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseErrorAnswer
+class DIGIKAM_EXPORT DbEngineErrorAnswer
 {
 
 public:
 
-    virtual ~DatabaseErrorAnswer();
+    virtual ~DbEngineErrorAnswer();
     virtual void connectionErrorContinueQueries() = 0;
     virtual void connectionErrorAbortQueries() = 0;
 };
 
 // -----------------------------------------------------------------
 
-class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
+class DIGIKAM_EXPORT DbEngineErrorHandler : public QObject
 {
     Q_OBJECT
 
 public:
 
-    DatabaseErrorHandler();
-    ~DatabaseErrorHandler();
+    DbEngineErrorHandler();
+    ~DbEngineErrorHandler();
 
 public Q_SLOTS:
 
@@ -70,7 +70,7 @@ public Q_SLOTS:
      *  or connectionErrorAbortQueries().
      *  The method is guaranteed to be invoked in the UI thread.
      */
-    virtual void connectionError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString& query) = 0;
+    virtual void connectionError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString& query) = 0;
 
     /** In the situation of an error requiring user intervention or information,
      *  all threads will be waiting with their queries
@@ -80,11 +80,11 @@ public Q_SLOTS:
      *  or connectionErrorAbortQueries().
      *  The method is guaranteed to be invoked in the UI thread.
      */
-    virtual void consultUserForError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString& query) = 0;
+    virtual void consultUserForError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString& query) = 0;
 };
 
 } // namespace Digikam
 
-Q_DECLARE_METATYPE(Digikam::DatabaseErrorAnswer*)
+Q_DECLARE_METATYPE(Digikam::DbEngineErrorAnswer*)
 
-#endif // DATABASEERRORHANDLER_H
+#endif // DATABASE_ENGINE_ERROR_HANDLER_H

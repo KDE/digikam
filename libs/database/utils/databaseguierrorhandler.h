@@ -32,7 +32,7 @@
 // Local includes
 
 #include "databasecorebackend.h"
-#include "databaseerrorhandler.h"
+#include "dbengineerrorhandler.h"
 
 namespace Digikam
 {
@@ -69,7 +69,7 @@ private:
 
 // --------------------------------------------------------------
 
-class DatabaseGUIErrorHandler : public DatabaseErrorHandler
+class DatabaseGUIErrorHandler : public DbEngineErrorHandler
 {
     Q_OBJECT
 
@@ -82,8 +82,8 @@ public:
 
 public Q_SLOTS:
 
-    virtual void connectionError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString& query);
-    virtual void consultUserForError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString& query);
+    virtual void connectionError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString& query);
+    virtual void consultUserForError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString& query);
 
 private Q_SLOTS:
 

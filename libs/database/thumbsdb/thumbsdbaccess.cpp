@@ -146,15 +146,15 @@ bool ThumbsDbAccess::isInitialized()
     return d;
 }
 
-void ThumbsDbAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
+void ThumbsDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler)
 {
     if (!d)
     {
         d = new ThumbsDbAccessStaticPriv();
     }
 
-    //DatabaseErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
-    d->backend->setDatabaseErrorHandler(errorhandler);
+    //DbEngineErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
+    d->backend->setDbEngineErrorHandler(errorhandler);
 }
 
 void ThumbsDbAccess::setParameters(const DatabaseParameters& parameters)
@@ -179,7 +179,7 @@ void ThumbsDbAccess::setParameters(const DatabaseParameters& parameters)
     // Kill the old database error handler
     if (d->backend)
     {
-        d->backend->setDatabaseErrorHandler(0);
+        d->backend->setDbEngineErrorHandler(0);
     }
 
     d->parameters = parameters;

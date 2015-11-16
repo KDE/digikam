@@ -46,7 +46,7 @@ namespace Digikam
 
 class DbEngineConfigSettings;
 class DatabaseCoreBackendPrivate;
-class DatabaseErrorHandler;
+class DbEngineErrorHandler;
 
 class DIGIKAM_EXPORT DatabaseLocking
 {
@@ -191,10 +191,10 @@ public:
     }
 
     /**
-     * Add a DatabaseErrorHandler. This object must be created in the main thread.
+     * Add a DbEngineErrorHandler. This object must be created in the main thread.
      * If a database error occurs, this object can handle problem solving and user interaction.
      */
-    void setDatabaseErrorHandler(DatabaseErrorHandler* const handler);
+    void setDbEngineErrorHandler(DbEngineErrorHandler* const handler);
 
     /**
       * Return config read from XML,

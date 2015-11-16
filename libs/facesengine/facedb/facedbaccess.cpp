@@ -160,10 +160,10 @@ DatabaseParameters FaceDbAccess::parameters() const
     return DatabaseParameters();
 }
 
-void FaceDbAccess::initDatabaseErrorHandler(FaceDbAccessData* const d, DatabaseErrorHandler* const errorhandler)
+void FaceDbAccess::initDbEngineErrorHandler(FaceDbAccessData* const d, DbEngineErrorHandler* const errorhandler)
 {
-    //DatabaseErrorHandler* const errorhandler = new DatabaseGUIErrorHandler(d->parameters);
-    d->backend->setDatabaseErrorHandler(errorhandler);
+    //DbEngineErrorHandler* const errorhandler = new DatabaseGUIErrorHandler(d->parameters);
+    d->backend->setDbEngineErrorHandler(errorhandler);
 }
 
 void FaceDbAccess::setParameters(FaceDbAccessData* const d, const DatabaseParameters& parameters)
@@ -183,7 +183,7 @@ void FaceDbAccess::setParameters(FaceDbAccessData* const d, const DatabaseParame
     // Kill the old database error handler
     if (d->backend)
     {
-        d->backend->setDatabaseErrorHandler(0);
+        d->backend->setDbEngineErrorHandler(0);
     }
 
     d->parameters = parameters;

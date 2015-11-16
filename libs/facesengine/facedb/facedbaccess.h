@@ -29,7 +29,7 @@
 
 #include "facedbbackend.h"
 #include "databaseparameters.h"
-#include "databaseerrorhandler.h"
+#include "dbengineerrorhandler.h"
 #include "collectionscannerobserver.h"
 #include "digikam_export.h"
 
@@ -67,7 +67,7 @@ public:
     static FaceDbAccessData* create();
     static void destroy(FaceDbAccessData* const);
 
-    static void initDatabaseErrorHandler(FaceDbAccessData* const d, DatabaseErrorHandler* const errorhandler);
+    static void initDbEngineErrorHandler(FaceDbAccessData* const d, DbEngineErrorHandler* const errorhandler);
     static void setParameters(FaceDbAccessData* const d, const DatabaseParameters& parameters);
     static bool checkReadyForUse(FaceDbAccessData* const d, InitializationObserver* const observer = 0);
 

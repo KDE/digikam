@@ -37,7 +37,7 @@
 
 #include "digikam_export.h"
 #include "databaseparameters.h"
-#include "databaseerrorhandler.h"
+#include "dbengineerrorhandler.h"
 
 namespace Digikam
 {
@@ -57,7 +57,7 @@ public:
     QSqlError    lastError;
 };
 
-class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
+class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DbEngineErrorAnswer
 {
 public:
 
@@ -95,7 +95,7 @@ public:
     void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
     void queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status);
 
-    // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
+    // called by DbEngineErrorHandler, implementing DbEngineErrorAnswer
     virtual void connectionErrorContinueQueries();
     virtual void connectionErrorAbortQueries();
     virtual void transactionFinished();
@@ -126,7 +126,7 @@ public:
     QMutex                                    busyWaitMutex;
     QWaitCondition                            busyWaitCondVar;
 
-    DatabaseErrorHandler*                     errorHandler;
+    DbEngineErrorHandler*                     errorHandler;
 
 public :
 

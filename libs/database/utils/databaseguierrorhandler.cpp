@@ -217,7 +217,7 @@ void DatabaseGUIErrorHandler::showProgressDialog()
     d->dialog->show();
 }
 
-void DatabaseGUIErrorHandler::connectionError(DatabaseErrorAnswer* answer, const QSqlError&, const QString&)
+void DatabaseGUIErrorHandler::connectionError(DbEngineErrorAnswer* answer, const QSqlError&, const QString&)
 {
     if (checkDatabaseConnection())
     {
@@ -229,7 +229,7 @@ void DatabaseGUIErrorHandler::connectionError(DatabaseErrorAnswer* answer, const
     }
 }
 
-void DatabaseGUIErrorHandler::consultUserForError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString&)
+void DatabaseGUIErrorHandler::consultUserForError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString&)
 {
     //NOTE: not used at all currently.
     QWidget* const parent = QWidget::find(0);

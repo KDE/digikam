@@ -46,7 +46,7 @@
 #include "collectionmanager.h"
 #include "coredbwatch.h"
 #include "coredbbackend.h"
-#include "databaseerrorhandler.h"
+#include "dbengineerrorhandler.h"
 #include "tagscache.h"
 
 namespace Digikam
@@ -161,7 +161,7 @@ CoreDbWatch* CoreDbAccess::databaseWatch()
     return 0;
 }
 
-void CoreDbAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
+void CoreDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler)
 {
     if (!d || !d->backend)
     {
@@ -169,7 +169,7 @@ void CoreDbAccess::initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler)
         return;
     }
 
-    d->backend->setDatabaseErrorHandler(errorhandler);
+    d->backend->setDbEngineErrorHandler(errorhandler);
 }
 
 DatabaseParameters CoreDbAccess::parameters()
@@ -215,7 +215,7 @@ void CoreDbAccess::setParameters(const DatabaseParameters& parameters, Applicati
     // Kill the old database error handler
     if (d->backend)
     {
-        d->backend->setDatabaseErrorHandler(0);
+        d->backend->setDbEngineErrorHandler(0);
     }
 
     d->parameters = parameters;

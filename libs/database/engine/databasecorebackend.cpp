@@ -93,7 +93,6 @@ DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate*
 
 // -----------------------------------------------------------------------------------------
 
-
 DatabaseThreadData::DatabaseThreadData()
     : valid(0),
       transactionCount(0)
@@ -157,7 +156,7 @@ void DatabaseCoreBackendPrivate::init(const QString& name, DatabaseLocking* cons
     backendName = name;
     lock        = l;
 
-    qRegisterMetaType<DatabaseErrorAnswer*>("DatabaseErrorAnswer*");
+    qRegisterMetaType<DbEngineErrorAnswer*>("DbEngineErrorAnswer*");
     qRegisterMetaType<QSqlError>();
 }
 
@@ -306,9 +305,11 @@ bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery& query) const
 
 bool DatabaseCoreBackendPrivate::isSQLiteLockTransactionError(const QSqlError& lastError) const
 {
-    return parameters.isSQLite() &&
-           lastError.type()         == QSqlError::TransactionError &&
-           lastError.databaseText() == QLatin1String("database is locked");
+    return (parameters.isSQLite()                                   &&
+            lastError.type()         == QSqlError::TransactionError &&
+            lastError.databaseText() == QLatin1String("database is locked")
+           );
+
     // wouldnt it be great if they gave us the database error number...
 }
 
@@ -320,8 +321,9 @@ bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery& query) const
         return false;
     }
 
-    return query.lastError().type()   == QSqlError::ConnectionError ||
-           query.lastError().number() == 2006;
+    return (query.lastError().type()   == QSqlError::ConnectionError ||
+            query.lastError().number() == 2006
+           );
 }
 
 bool DatabaseCoreBackendPrivate::needToConsultUserForError(const SqlQuery&) const
@@ -438,13 +440,13 @@ bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery* const qu
         if (!query || isConnectionError(*query))
         {
             called = QMetaObject::invokeMethod(errorHandler, "connectionError", Qt::AutoConnection,
-                                               Q_ARG(DatabaseErrorAnswer*, this), Q_ARG(const QSqlError, lastError),
+                                               Q_ARG(DbEngineErrorAnswer*, this), Q_ARG(const QSqlError, lastError),
                                                Q_ARG(const QString, lastQuery));
         }
         else if (needToConsultUserForError(*query))
         {
             called = QMetaObject::invokeMethod(errorHandler, "consultUserForError", Qt::AutoConnection,
-                                               Q_ARG(DatabaseErrorAnswer*, this), Q_ARG(const QSqlError, lastError),
+                                               Q_ARG(DbEngineErrorAnswer*, this), Q_ARG(const QSqlError, lastError),
                                                Q_ARG(const QString, lastQuery));
         }
         else
@@ -461,7 +463,7 @@ bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery* const qu
         }
         else
         {
-            qCWarning(DIGIKAM_DATABASE_LOG) << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Failed to invoke DbEngineErrorHandler. Aborting all queries.";
             operationStatus = DatabaseCoreBackend::AbortQueries;
         }
 
@@ -747,7 +749,7 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DbEngineAction& action, c
     return result;
 }
 
-void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler* const handler)
+void DatabaseCoreBackend::setDbEngineErrorHandler(DbEngineErrorHandler* const handler)
 {
     Q_D(DatabaseCoreBackend);
 

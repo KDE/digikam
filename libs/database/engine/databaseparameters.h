@@ -129,7 +129,7 @@ public:
     static QString databaseDirectorySQLite(const QString& path);
     static QString thumbnailDatabaseDirectorySQLite(const QString& path);
     static QString faceDatabaseDirectorySQLite(const QString& path);
-    
+
     /** Replaces databaseName with databaseNameThumbnails.
      */
     DatabaseParameters thumbnailParameters() const;

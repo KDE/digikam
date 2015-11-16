@@ -29,7 +29,7 @@
 
 #include "digikam_export.h"
 #include "databaseparameters.h"
-#include "databaseerrorhandler.h"
+#include "dbengineerrorhandler.h"
 
 namespace Digikam
 {
@@ -128,7 +128,7 @@ public:
     static CoreDbWatch* databaseWatch();
 
 
-    static void initDatabaseErrorHandler(DatabaseErrorHandler* errorhandler);
+    static void initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler);
     /**
       * Set the "last error" message. This method is not for public use.
       */
