@@ -78,7 +78,7 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
 {
     setClearButtonEnabled(true);
 
-    d->completer = new TagCompleter;
+    d->completer = new TagCompleter(this);
     d->completer->setMaxVisibleItems(15);
 
     setCompleter(d->completer);
