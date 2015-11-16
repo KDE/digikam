@@ -67,6 +67,10 @@ public:
     bool               initializing;
 };
 
+ThumbsDbAccessStaticPriv* ThumbsDbAccess::d = 0;
+
+// -----------------------------------------------------------------------------
+
 class ThumbsDbAccessMutexLocker : public QMutexLocker
 {
 public:
@@ -88,11 +92,13 @@ public:
     ThumbsDbAccessStaticPriv* const d;
 };
 
-ThumbsDbAccessStaticPriv* ThumbsDbAccess::d = 0;
+// -----------------------------------------------------------------------------
 
 ThumbsDbAccess::ThumbsDbAccess()
 {
-    Q_ASSERT(d/*You will want to call setParameters before constructing ThumbsDbAccess*/);
+    // You will want to call setParameters before constructing ThumbsDbAccess.
+    Q_ASSERT(d);
+
     d->lock.mutex.lock();
     d->lock.lockCount++;
 
@@ -146,14 +152,14 @@ bool ThumbsDbAccess::isInitialized()
     return d;
 }
 
-void ThumbsDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler)
+void ThumbsDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* const errorhandler)
 {
     if (!d)
     {
         d = new ThumbsDbAccessStaticPriv();
     }
 
-    //DbEngineErrorHandler *errorhandler = new DbEngineGuiErrorHandler(d->parameters);
+    //DbEngineErrorHandler* const errorhandler = new DbEngineGuiErrorHandler(d->parameters);
     d->backend->setDbEngineErrorHandler(errorhandler);
 }
 
@@ -193,7 +199,7 @@ void ThumbsDbAccess::setParameters(const DbEngineParameters& parameters)
     }
 }
 
-bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* observer)
+bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* const observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
@@ -249,7 +255,7 @@ bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* observer)
     return d->backend->isReady();
 }
 
-QString ThumbsDbAccess::lastError()
+QString ThumbsDbAccess::lastError() const
 {
     return d->lastError;
 }

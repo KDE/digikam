@@ -45,26 +45,26 @@ public:
 
     /** This class is written in analogy to CoreDbAccess
      *  (some features stripped off).
-     *  For documentation, see databaseaccess.h */
-
+     *  For documentation, see coredbaccess.h
+     */
     ThumbsDbAccess();
     ~ThumbsDbAccess();
 
     ThumbsDb*             db() const;
     ThumbsDbBackend* backend() const;
 
-    QString lastError();
+    QString lastError() const;
 
     /**
-      * Set the "last error" message. This method is not for public use.
-      */
+     * Set the "last error" message. This method is not for public use.
+     */
     void setLastError(const QString& error);
 
     static DbEngineParameters parameters();
 
-    static void initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler);
+    static void initDbEngineErrorHandler(DbEngineErrorHandler* const errorhandler);
     static void setParameters(const DbEngineParameters& parameters);
-    static bool checkReadyForUse(InitializationObserver* observer);
+    static bool checkReadyForUse(InitializationObserver* const observer);
     static bool isInitialized();
     static void cleanUpDatabase();
 
