@@ -6,14 +6,28 @@ TODO List
 - Better handling of legacy database setting parameters.
 - Write new database setting parameters in FirstRun dialog.
 - Because digiKam use function declaration, Mysql server need to be prepared before to be used,
-  especially to create database and user with grant privileges :
+  especially to create database and user with grant privileges.
 
-  CREATE DATABASE digikamdb; GRANT ALL PRIVILEGES ON digikamdb.* TO 'digikamuser'@'localhost' IDENTIFIED BY 'digikamuserpassword'; FLUSH PRIVILEGES;
-  GRANT SUPER ON *.* TO 'digikamuser'@'localhost';FLUSH PRIVILEGES;
+  * For a common Mysql database storage :
+
+  CREATE DATABASE digikamdb; GRANT ALL PRIVILEGES ON digikamdb.* TO 'digikam'@'localhost' IDENTIFIED BY 'digikam'; FLUSH PRIVILEGES;
+  GRANT SUPER ON *.* TO 'digikam'@'localhost';FLUSH PRIVILEGES;
 
   with:
 
-  digikamdb           : the digiKam databse name (in case of we use only one mysql database for all tables)
-  digikamuser         : the name of user account used by digiKAm to access on mysql
-  digikamuserpassword : the password of the account.
+  digikamdb       : the common database name (storing Core, Thumbnails, and Face databases).
+  digikam/digikam : the name/password of user account used by digiKam to access on mysql server.
 
+  * For separated Mysql database storages :
+
+  CREATE DATABASE digikamcoredb; GRANT ALL PRIVILEGES ON digikamcoredb.* TO 'digikam'@'localhost' IDENTIFIED BY 'digikam'; FLUSH PRIVILEGES;
+  CREATE DATABASE digikamthumbsdb; GRANT ALL PRIVILEGES ON digikamthumbsdb.* TO 'digikam'@'localhost' IDENTIFIED BY 'digikam'; FLUSH PRIVILEGES;
+  CREATE DATABASE digikamfacedb; GRANT ALL PRIVILEGES ON digikamfacedb.* TO 'digikam'@'localhost' IDENTIFIED BY 'digikam'; FLUSH PRIVILEGES;
+  GRANT SUPER ON *.* TO 'digikam'@'localhost';FLUSH PRIVILEGES;
+
+  with:
+
+  digikamcoredb   : the Core database name.
+  digikamthumbsdb : the Thumbnails database name.
+  digikamfacedb   : the Face database name.
+  digikam/digikam : the name/password of user account used by digiKam to access on mysql server.
