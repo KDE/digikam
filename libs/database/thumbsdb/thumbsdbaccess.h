@@ -50,10 +50,9 @@ public:
     ThumbsDbAccess();
     ~ThumbsDbAccess();
 
-    ThumbsDb*             db() const;
-    ThumbsDbBackend* backend() const;
-
-    QString lastError() const;
+    ThumbsDb*        db()        const;
+    ThumbsDbBackend* backend()   const;
+    QString          lastError() const;
 
     /**
      * Set the "last error" message. This method is not for public use.
@@ -62,6 +61,8 @@ public:
 
     static DbEngineParameters parameters();
 
+public:
+    
     static void initDbEngineErrorHandler(DbEngineErrorHandler* const errorhandler);
     static void setParameters(const DbEngineParameters& parameters);
     static bool checkReadyForUse(InitializationObserver* const observer);
