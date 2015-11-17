@@ -47,7 +47,6 @@
 
 #include <utility>
 #include <algorithm>
-#include <boost/graph/transitive_reduction.hpp>
 #include <boost/graph/transitive_closure.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topological_sort.hpp>
@@ -58,6 +57,7 @@
 #include <boost/graph/dominator_tree.hpp>
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/breadth_first_search.hpp>
+#include <boost/graph/transitive_reduction.hpp>
 
 // Local includes
 
