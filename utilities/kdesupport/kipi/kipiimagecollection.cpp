@@ -65,7 +65,7 @@ public:
     QString                   imgFilter;
     KipiImageCollection::Type type;
     Album*                    album;
-    QList<QUrl>                readyImageUrlList;
+    QList<QUrl>               readyImageUrlList;
 };
 
 KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter, QList<QUrl> imagesUrlList)

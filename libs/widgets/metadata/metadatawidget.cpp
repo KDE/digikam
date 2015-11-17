@@ -436,13 +436,13 @@ QUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& f
     fileSaveDialog->setNameFilter(fileFilter);
 
     QList<QUrl> urls;
-    
+
     // Check for cancel.
     if (fileSaveDialog->exec() == QDialog::Accepted)
     {
         urls = fileSaveDialog->selectedUrls();
     }
-    
+
     delete fileSaveDialog;
     return (!urls.isEmpty() ? urls[0] : QUrl());
 }

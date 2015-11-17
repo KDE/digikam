@@ -1896,7 +1896,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     KConfigGroup group                = config->group(configGroupName());
     const QString optionLastExtension = QLatin1String("LastSavedImageExtension");
     QString ext                       = group.readEntry(optionLastExtension, "png");
-    
+
     Q_FOREACH(QString s, list)
     {
         if (s.contains(QString::fromLatin1("*.%1").arg(ext)))
@@ -1950,7 +1950,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         qCDebug(DIGIKAM_GENERAL_LOG) << "no target url";
         return false;
     }
-        
+
     newURL = urls.first();
     qCDebug(DIGIKAM_GENERAL_LOG) << "Writing file to " << newURL;
 

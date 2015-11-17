@@ -246,7 +246,7 @@ void DFileSelector::slotBtnClicked()
             emit signalUrlSelected(QUrl::fromLocalFile(sel.first()));
         }
     }
-    
+
     delete fileDlg;
 }
 
