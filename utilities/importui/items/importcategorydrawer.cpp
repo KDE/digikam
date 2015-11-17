@@ -186,15 +186,13 @@ void ImportCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* hea
         return;
     }
 
-    CamItemInfo info     = sourceModel->retrieveCamItemInfo(index);
+    CamItemInfo info = sourceModel->retrieveCamItemInfo(index);
 
     if (!info.isNull())
     {
-        int count            = d->view->categoryRange(index).height();
-        QStringList splitted = info.url().toLocalFile().split(QLatin1Char('/'));
-        *header              = splitted.value(splitted.length() - 2);
-
-        *subLine             = i18np("1 Item", "%1 Items", count);
+        *header      = info.url().adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).fileName();
+        int count    = d->view->categoryRange(index).height();
+        *subLine     = i18np("1 Item", "%1 Items", count);
     }
 }
 
