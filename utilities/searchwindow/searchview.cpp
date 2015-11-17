@@ -46,7 +46,7 @@
 #include "searchgroup.h"
 #include "searchutilities.h"
 #include "searchwindow.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "thememanager.h"
 
 namespace Digikam

@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "digikam_export.h"
 
 class QUrl;

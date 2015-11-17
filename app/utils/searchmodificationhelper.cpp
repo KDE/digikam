@@ -40,7 +40,7 @@
 #include "albummanager.h"
 #include "haariface.h"
 #include "imageinfo.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "sketchwidget.h"
 
 namespace Digikam

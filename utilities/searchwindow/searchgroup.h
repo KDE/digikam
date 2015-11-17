@@ -34,7 +34,7 @@
 
 #include "dexpanderbox.h"
 #include "searchview.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 
 class QVBoxLayout;
 

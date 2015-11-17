@@ -34,7 +34,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_globals.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "searchtabheader.h"
 #include "albummanager.h"
 #include "albumtreeview.h"

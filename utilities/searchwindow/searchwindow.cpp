@@ -36,7 +36,7 @@
 // Local includes
 
 #include "searchview.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "thememanager.h"
 
 namespace Digikam

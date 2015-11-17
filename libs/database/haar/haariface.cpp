@@ -50,7 +50,7 @@
 #include "coredbtransaction.h"
 #include "albumdb.h"
 #include "coredbbackend.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "dbenginesqlquery.h"
 
 using namespace std;

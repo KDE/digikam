@@ -48,7 +48,7 @@
 #include "digikam_debug.h"
 #include "editablesearchtreeview.h"
 #include "imageinfojob.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "gpsmarkertiler.h"
 #include "gpsimageinfosorter.h"
 

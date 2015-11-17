@@ -66,7 +66,7 @@
 #include "imagelister.h"
 #include "searchmodificationhelper.h"
 #include "searchtextbar.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "sketchwidget.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"

@@ -75,7 +75,7 @@
 #include "tagmodificationhelper.h"
 #include "imagepropertiesversionstab.h"
 #include "tagscache.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "fileactionprogress.h"
 #include "versionmanagersettings.h"
 #include "tableview.h"

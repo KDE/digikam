@@ -33,7 +33,7 @@
 // Local includes
 
 #include "dexpanderbox.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "comboboxutilities.h"
 
 namespace Digikam

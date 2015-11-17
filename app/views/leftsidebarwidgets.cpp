@@ -59,7 +59,7 @@
 #include "searchfolderview.h"
 #include "searchtabheader.h"
 #include "searchtextbar.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "tagfolderview.h"
 #include "timelinewidget.h"
 #include "facescandialog.h"

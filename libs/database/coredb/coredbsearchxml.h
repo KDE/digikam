@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2008-01-09
- * Description : Reading search XML
+ * Description : Core database searches XML queries manager
  *
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHXML_H
-#define SEARCHXML_H
+#ifndef CORE_DATABASE_SEARCHXML_H
+#define CORE_DATABASE_SEARCHXML_H
 
 // Qt includes
 
@@ -130,6 +131,8 @@ inline SearchXml::Relation standardFieldRelation()
 
 } // namespace SearchXml
 
+// ---------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT SearchXmlReader : public QXmlStreamReader
 {
 public:
@@ -212,6 +215,8 @@ protected:
 
     SearchXml::Operator m_defaultFieldOperator;
 };
+
+// ---------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT SearchXmlWriter : public QXmlStreamWriter
 {
@@ -306,6 +311,8 @@ protected:
     QString m_xml;
 };
 
+// ---------------------------------------------------------------------------------
+
 namespace KeywordSearch
 {
 
@@ -329,6 +336,8 @@ DIGIKAM_DATABASE_EXPORT QString merge(const QString& previousContent, const QStr
 
 } // namespace KeywordSearch
 
+// ---------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT KeywordSearchReader : public SearchXmlReader
 {
 public:
@@ -348,6 +357,8 @@ private:
     QString readField();
 };
 
+// ---------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT KeywordSearchWriter : public SearchXmlWriter
 {
 public:
@@ -356,6 +367,8 @@ public:
 
     QString xml(const QStringList& keywordList);
 };
+
+// ---------------------------------------------------------------------------------
 
 class DIGIKAM_DATABASE_EXPORT SearchXmlCachingReader : public SearchXmlReader
 {
@@ -406,4 +419,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // SEARCHXML_H
+#endif // CORE_DATABASE_SEARCHXML_H

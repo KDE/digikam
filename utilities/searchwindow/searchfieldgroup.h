@@ -34,7 +34,7 @@
 // Local includes
 
 #include "dexpanderbox.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 
 class QGridLayout;
 class QLabel;

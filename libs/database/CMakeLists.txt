@@ -44,7 +44,7 @@ set(libdatabase_SRCS
     collection/collectionlocation.cpp
     collection/collectionscannerhints.cpp
 
-    coredb/searchxml.cpp
+    coredb/coredbsearchxml.cpp
     coredb/coredbchecker.cpp
     coredb/coredbcopymanager.cpp
     coredb/coredbconstants.cpp

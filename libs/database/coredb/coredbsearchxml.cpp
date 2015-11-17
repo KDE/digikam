@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2008-01-09
- * Description : Reading search XML
+ * Description : Core database searches XML queries manager
  *
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 
 namespace Digikam
 {
@@ -75,6 +76,8 @@ SearchXml::Element SearchXmlReader::readNext()
 
     return SearchXml::End;
 }
+
+// ---------------------------------------------------------------------------------
 
 bool SearchXmlReader::isGroupElement() const
 {
@@ -549,7 +552,7 @@ void SearchXmlReader::readToFirstField()
     }
 }
 
-// ---------------------------------------- //
+// ---------------------------------------------------------------------------------
 
 SearchXmlWriter::SearchXmlWriter()
     : QXmlStreamWriter(&m_xml)
@@ -794,7 +797,7 @@ QString SearchXmlWriter::keywordSearch(const QString& keyword)
     return writer.xml();
 }
 
-// ---------------------------------------- //
+// ---------------------------------------------------------------------------------
 
 QStringList KeywordSearch::split(const QString& keywords)
 {
@@ -823,6 +826,7 @@ QStringList KeywordSearch::split(const QString& keywords)
 
         ++quotationMarkCount;
     }
+
     return keywordList;
 }
 
@@ -856,7 +860,7 @@ QString KeywordSearch::merge(const QString& previousContent, const QString& newE
     return pc.append(QLatin1Char(' ')).append(ne);
 }
 
-// ---------------------------------------- //
+// ---------------------------------------------------------------------------------
 
 KeywordSearchReader::KeywordSearchReader(const QString& xml)
     : SearchXmlReader(xml)
@@ -1001,7 +1005,7 @@ bool KeywordSearchReader::isSimpleKeywordSearchGroup()
     return true;
 }
 
-// ---------------------------------------- //
+// ---------------------------------------------------------------------------------
 
 KeywordSearchWriter::KeywordSearchWriter()
     : SearchXmlWriter()
@@ -1025,7 +1029,7 @@ QString KeywordSearchWriter::xml(const QStringList& keywordList)
     return SearchXmlWriter::xml();
 }
 
-// ---------------------------------------- //
+// ---------------------------------------------------------------------------------
 
 SearchXmlCachingReader::SearchXmlCachingReader(const QString& xml)
     : SearchXmlReader(xml),

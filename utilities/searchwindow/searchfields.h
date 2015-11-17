@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "searchutilities.h"
 #include "visibilitycontroller.h"
 

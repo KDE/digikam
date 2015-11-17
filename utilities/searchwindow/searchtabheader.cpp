@@ -50,7 +50,7 @@
 #include "albummanager.h"
 #include "searchfolderview.h"
 #include "searchwindow.h"
-#include "searchxml.h"
+#include "coredbsearchxml.h"
 #include "dexpanderbox.h"
 
 namespace Digikam
