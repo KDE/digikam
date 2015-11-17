@@ -576,7 +576,6 @@ RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
     : imageRetriever(d),
       d(d)
 {
-    database = FacesEngine::RecognitionDatabase::addDatabase();
 }
 
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
@@ -613,7 +612,9 @@ void RecognitionWorker::aboutToDeactivate()
 // ----------------------------------------------------------------------------------------
 
 DatabaseWriter::DatabaseWriter(FacePipeline::WriteMode mode, FacePipeline::Private* const d)
-    : mode(mode), thumbnailLoadThread(d->createThumbnailLoadThread()), d(d)
+    : mode(mode),
+      thumbnailLoadThread(d->createThumbnailLoadThread()),
+      d(d)
 {
 }
 
@@ -898,13 +899,14 @@ QString DetectionBenchmarker::result() const
 // ----------------------------------------------------------------------------------------
 
 RecognitionBenchmarker::Statistics::Statistics()
-: knownFaces(0), correctlyRecognized(0)
-{}
+    : knownFaces(0),
+      correctlyRecognized(0)
+{
+}
 
 RecognitionBenchmarker::RecognitionBenchmarker(FacePipeline::Private* const d)
     : d(d)
 {
-    database = FacesEngine::RecognitionDatabase::addDatabase();
 }
 
 // NOTE: Bench performance code. No need i18n here
@@ -994,7 +996,6 @@ Trainer::Trainer(FacePipeline::Private* const d)
     : imageRetriever(d),
       d(d)
 {
-    database = FacesEngine::RecognitionDatabase::addDatabase();
 }
 
 void Trainer::process(FacePipelineExtendedPackage::Ptr package)

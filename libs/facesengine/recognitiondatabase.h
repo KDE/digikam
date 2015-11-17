@@ -77,23 +77,8 @@ public:
 
 public:
 
-    /**
-     * Returns an instance of RecognitionDatabase for the given configuration path.
-     * When called multiple times with the same path, will return the same database.
-     * The database is closed and configuration written after the last object is destroyed.
-     * @param path The path where the recognition database file will be stored.
-     */
-    static RecognitionDatabase addDatabase(const QString& path = QString());
-
-    /// Constructs a null database
     RecognitionDatabase();
-
-    RecognitionDatabase(const RecognitionDatabase& other);
     ~RecognitionDatabase();
-
-    RecognitionDatabase& operator=(const RecognitionDatabase& other);
-
-    bool isNull() const;
 
     // ------------ Identity management --------------
 
@@ -218,18 +203,10 @@ public:
      */
     void deleteIdentity(const Identity& identityToBeDeleted);
 
-public:
-
-    // Declared as public due to use in private static methods.
-    class Private;
-
 private:
 
-    explicit RecognitionDatabase(QExplicitlySharedDataPointer<Private> d);
-
-    QExplicitlySharedDataPointer<Private> d;
-
-    friend class RecognitionDatabaseStaticPriv;
+    class Private;
+    Private* const d;
 };
 
 } // namespace FacesEngine

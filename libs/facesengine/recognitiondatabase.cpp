@@ -35,7 +35,6 @@
 
 #include <QMutex>
 #include <QMutexLocker>
-#include <QSharedData>
 #include <QUuid>
 #include <QDir>
 #include <QStandardPaths>
@@ -91,7 +90,7 @@ public:
 
 // -----------------------------------------------------------------------------------------------
 
-class RecognitionDatabase::Private : public QSharedData
+class RecognitionDatabase::Private
 {
 public:
 
@@ -99,13 +98,13 @@ public:
 
     const QString        configPath;
     QMutex               mutex;
-    FaceDbAccessData*    db;
 
     QVariantMap          parameters;
     QHash<int, Identity> identityCache;
 
 public:
 
+    Private();
     ~Private();
 
 public:
@@ -115,7 +114,7 @@ public:
     {
         if (!ptr)
         {
-            ptr = new T(db);
+            ptr = new T();
         }
 
         return ptr;
@@ -159,110 +158,28 @@ public:
 
 private:
 
-    friend class RecognitionDatabaseStaticPriv;
-    // Protected creation by StaticPriv only
-    Private(const QString& configPath);
-
-private:
-
     OpenCVLBPHFaceRecognizer* opencvlbph;
     FunnelReal*               funnel;
 };
 
-// -----------------------------------------------------------------------------------------------
-
-/**
- * The RecognitionDatabaseStaticPriv holds a hash to all exising RecognitionDatabase data,
- * mutex protected.
- * When creating a RecognitionDatabase, either a new Private is created,
- * or an existing one is used.
- * When the last RecognitionDatabase referencing a Private is destroyed,
- * the Private is destroyed as well, removing itself from the static hash.
- */
-class RecognitionDatabaseStaticPriv
-{
-public:
-
-    RecognitionDatabaseStaticPriv()
-        : mutex(QMutex::Recursive)
-    {
-        defaultPath = CoreDbAccess::parameters().faceParameters().getFaceDatabaseNameOrDir();
-    }
-
-    QExplicitlySharedDataPointer<RecognitionDatabase::Private> database(const QString& key);
-    void removeDatabase(const QString& key);
-
-public:
-
-    QString                                               defaultPath;
-    QMutex                                                mutex;
-
-    // Important: Do not hold an QExplicitlySharedDataPointer here, or the objects will never be freed!
-    typedef QHash<QString, RecognitionDatabase::Private*> DatabaseHash;
-    DatabaseHash                                          databases;
-};
-
-Q_GLOBAL_STATIC(RecognitionDatabaseStaticPriv, static_d)
-
-QExplicitlySharedDataPointer<RecognitionDatabase::Private> RecognitionDatabaseStaticPriv::database(const QString& path)
-{
-    QMutexLocker lock(&mutex);
-    QString configPath        = path.isNull() ? defaultPath : path;
-    DatabaseHash::iterator it = databases.find(configPath);
-
-    if (it != databases.end())
-    {
-        /* There is a race condition: The last Priv is dereferenced, the destructor called.
-         * Now database() has been called and locks the mutex after this dereferencing, but before removeDatabase is executed.
-         * So we only can use this cached data if its reference count is non-zero.
-         * Atomically to testing, we increase the reference count to reserve it for our usage.
-         */
-
-        if (it.value()->ref.fetchAndAddOrdered(1) != 0)
-        {
-            QExplicitlySharedDataPointer<RecognitionDatabase::Private> p(it.value());
-            it.value()->ref.deref(); // We incremented above
-            return p;
-        }
-
-        /* if the original value is 0, it is currently being deleted, but it must be
-         * safe to access it, because the destructor has not yet completed - otherwise it'd not be in the hash.
-         */
-    }
-
-    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Init Face Database with path: " << configPath;
-
-    RecognitionDatabase::Private* const d = new RecognitionDatabase::Private(configPath);
-    databases[configPath]                 = d;
-
-    return QExplicitlySharedDataPointer<RecognitionDatabase::Private>(d);
-}
-
-void RecognitionDatabaseStaticPriv::removeDatabase(const QString& key)
-{
-    QMutexLocker lock(&mutex);
-    databases.remove(key);
-}
-
 // ----------------------------------------------------------------------------------------------
 
-RecognitionDatabase::Private::Private(const QString& path)
-    : configPath(path),
+RecognitionDatabase::Private::Private()
+    : configPath(CoreDbAccess::parameters().faceParameters().getFaceDatabaseNameOrDir()),
       mutex(QMutex::Recursive),
-      db(FaceDbAccess::create()),
       opencvlbph(0),
       funnel(0)
 {
     DbEngineParameters params = CoreDbAccess::parameters().faceParameters();
     params.setFaceDatabasePath(configPath);
-    FaceDbAccess::setParameters(db, params);
-    dbAvailable               = FaceDbAccess::checkReadyForUse(db);
+    FaceDbAccess::setParameters(params);
+    dbAvailable               = FaceDbAccess::checkReadyForUse(0);
 
     if (dbAvailable)
     {
         qCDebug(DIGIKAM_FACESENGINE_LOG) << "Face database ready for use";
 
-        foreach (const Identity& identity, FaceDbAccess(db).db()->identities())
+        foreach (const Identity& identity, FaceDbAccess().db()->identities())
         {
             identityCache[identity.id()] = identity;
         }
@@ -278,8 +195,7 @@ RecognitionDatabase::Private::~Private()
     delete opencvlbph;
     delete funnel;
 
-    static_d->removeDatabase(configPath);
-    FaceDbAccess::destroy(db);
+    FaceDbAccess::cleanUpDatabase();
 }
 
 RecognitionDatabase::Private::CurrentAligner* RecognitionDatabase::Private::aligner()
@@ -297,39 +213,12 @@ RecognitionDatabase::Private::CurrentAligner* RecognitionDatabase::Private::alig
 // -------------------------------------------------------------------------------------------------
 
 RecognitionDatabase::RecognitionDatabase()
+    : d(new Private)
 {
-}
-
-RecognitionDatabase::RecognitionDatabase(QExplicitlySharedDataPointer<Private> d)
-    : d(d)
-{
-}
-
-RecognitionDatabase::RecognitionDatabase(const RecognitionDatabase& other)
-{
-    d = other.d;
-}
-
-RecognitionDatabase& RecognitionDatabase::operator=(const FacesEngine::RecognitionDatabase& other)
-{
-    d = other.d;
-    return *this;
 }
 
 RecognitionDatabase::~RecognitionDatabase()
 {
-    // saveConfig() called from Private destructor
-}
-
-RecognitionDatabase RecognitionDatabase::addDatabase(const QString& path)
-{
-    QExplicitlySharedDataPointer<Private> d = static_d->database(path);
-    return RecognitionDatabase(d);
-}
-
-bool RecognitionDatabase::isNull() const
-{
-    return !d;
 }
 
 QList<Identity> RecognitionDatabase::allIdentities() const
@@ -505,12 +394,12 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
 
     Identity identity;
     {
-        FaceDbOperationGroup group(d->db);
-        int id = FaceDbAccess(d->db).db()->addIdentity();
+        FaceDbOperationGroup group();
+        int id = FaceDbAccess().db()->addIdentity();
         identity.setId(id);
         identity.setAttributesMap(attributes);
         identity.setAttribute(QString::fromLatin1("uuid"), QUuid::createUuid().toString());
-        FaceDbAccess(d->db).db()->updateIdentity(identity);
+        FaceDbAccess().db()->updateIdentity(identity);
     }
 
     d->identityCache[identity.id()] = identity;
@@ -534,7 +423,7 @@ void RecognitionDatabase::addIdentityAttributes(int id, const QMap<QString, QStr
         QMap<QString, QString> map = it->attributesMap();
         map.unite(attributes);
         it->setAttributesMap(map);
-        FaceDbAccess(d->db).db()->updateIdentity(*it);
+        FaceDbAccess().db()->updateIdentity(*it);
     }
 }
 
@@ -553,7 +442,7 @@ void RecognitionDatabase::addIdentityAttribute(int id, const QString& attribute,
         QMap<QString, QString> map = it->attributesMap();
         map.insertMulti(attribute, value);
         it->setAttributesMap(map);
-        FaceDbAccess(d->db).db()->updateIdentity(*it);
+        FaceDbAccess().db()->updateIdentity(*it);
     }
 }
 
@@ -570,7 +459,7 @@ void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QStr
     if (it != d->identityCache.end())
     {
         it->setAttributesMap(attributes);
-        FaceDbAccess(d->db).db()->updateIdentity(*it);
+        FaceDbAccess().db()->updateIdentity(*it);
     }
 }
 
@@ -597,7 +486,7 @@ void RecognitionDatabase::setParameter(const QString& parameter, const QVariant&
 {
     if (!d || !d->dbAvailable)
     {
-            return;
+        return;
     }
 
     QMutexLocker lock(&d->mutex);
@@ -822,7 +711,7 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
 {
     if (!d || !d->dbAvailable)
     {
-            return;
+        return;
     }
 
     QMutexLocker lock(&d->mutex);
@@ -834,10 +723,8 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
 void RecognitionDatabase::train(const Identity& identityToBeTrained, const QImage& image,
                                 const QString& trainingContext)
 {
-    SimpleTrainingDataProvider* const  data = new SimpleTrainingDataProvider(
-        identityToBeTrained,
-        QList<QImage>() << image
-    );
+    SimpleTrainingDataProvider* const data = new SimpleTrainingDataProvider(identityToBeTrained,
+                                                                            QList<QImage>() << image);
     train(identityToBeTrained, data, trainingContext);
     delete data;
 }
@@ -845,7 +732,7 @@ void RecognitionDatabase::train(const Identity& identityToBeTrained, const QImag
 void RecognitionDatabase::train(const Identity& identityToBeTrained, const QList<QImage>& images,
                                 const QString& trainingContext)
 {
-    SimpleTrainingDataProvider* const  data = new SimpleTrainingDataProvider(identityToBeTrained, images);
+    SimpleTrainingDataProvider* const data = new SimpleTrainingDataProvider(identityToBeTrained, images);
     train(identityToBeTrained, data, trainingContext);
     delete data;
 }
@@ -858,11 +745,11 @@ void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer* const, const 
 
     if (idsToClear.isEmpty())
     {
-        FaceDbAccess(db).db()->clearLBPHTraining(trainingContext);
+        FaceDbAccess().db()->clearLBPHTraining(trainingContext);
     }
     else
     {
-        FaceDbAccess(db).db()->clearLBPHTraining(idsToClear, trainingContext);
+        FaceDbAccess().db()->clearLBPHTraining(idsToClear, trainingContext);
     }
 }
 
@@ -904,7 +791,7 @@ void RecognitionDatabase::deleteIdentity(const Identity& identityToBeDeleted)
 
     QMutexLocker lock(&d->mutex);
 
-    FaceDbAccess(d->db).db()->deleteIdentity(identityToBeDeleted.id());
+    FaceDbAccess().db()->deleteIdentity(identityToBeDeleted.id());
     d->identityCache.remove(identityToBeDeleted.id());
 }
 

@@ -56,11 +56,11 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 #                        preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
 
-set(facesengine_database_LIB_SRCS facedb/trainingdb.cpp
+set(facesengine_database_LIB_SRCS facedb/facedbaccess.cpp
                                   facedb/facedbbackend.cpp
                                   facedb/facedboperationgroup.cpp
                                   facedb/facedbschemaupdater.cpp
-                                  facedb/facedbaccess.cpp
+                                  facedb/trainingdb.cpp
 )
 
 add_library(digikamfacesengine_src

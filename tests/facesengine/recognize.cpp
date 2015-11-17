@@ -87,7 +87,7 @@ int main(int argc, char** argv)
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     DbEngineParameters prm    = DbEngineParameters::parametersFromConfig(config);
     CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);    
-    RecognitionDatabase db    = RecognitionDatabase::addDatabase(QDir::currentPath());
+    RecognitionDatabase db;
 
     if (QString::fromLatin1(argv[1]) == QString::fromLatin1("identify"))
     {
@@ -201,12 +201,6 @@ int main(int argc, char** argv)
             return 0;
         }
 
-        // close previous db
-        RecognitionDatabase();
-
-        // reload db
-        db = RecognitionDatabase::addDatabase(QDir::currentPath());
-
         QTime time;
         time.start();
 
@@ -233,12 +227,6 @@ int main(int argc, char** argv)
         {
             qDebug() << "Training 5/10 or ORL took " << elapsed << " ms, " << ((float)elapsed/totalTrained) << " ms per image";
         }
-
-        // reload db
-        db      = RecognitionDatabase();
-        db      = RecognitionDatabase::addDatabase(QDir::currentPath());
-        elapsed = time.restart();
-        qDebug() << "Reloading database (probably from disk cache) took " << elapsed << " ms";
 
         for (QMap<int, QStringList>::const_iterator it = recognitionImages.constBegin() ; it != recognitionImages.constEnd() ; ++it)
         {

@@ -28,7 +28,6 @@ namespace FacesEngine
 {
 
 class FaceDbAccess;
-class FaceDbAccessData;
 
 /**
  * When you intend to execute a number of write operations to the database,
@@ -44,7 +43,7 @@ public:
     /**
      * Retrieve a FaceDbAccess object each time when constructing and destructing.
      */
-    FaceDbOperationGroup(FaceDbAccessData* const db);
+    FaceDbOperationGroup();
 
     /**
      * Use an existing FaceDbAccess object, which must live as long as this object exists.

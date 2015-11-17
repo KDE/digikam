@@ -111,12 +111,12 @@ int main(int argc, char** argv)
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     DbEngineParameters prm    = DbEngineParameters::parametersFromConfig(config);
     CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);    
-    RecognitionDatabase db    = RecognitionDatabase::addDatabase(QDir::currentPath());
+    RecognitionDatabase db;
 
     QThreadPool pool;
     pool.setMaxThreadCount(101);
 
-    for (int i=0;i<firstMultiplier;i++)
+    for (int i = 0 ; i < firstMultiplier ; i++)
     {
         Runnable* r= new Runnable(i, db);
         pool.start(r);

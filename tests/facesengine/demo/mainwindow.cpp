@@ -101,9 +101,6 @@ MainWindow::MainWindow(QWidget* const parent)
     connect(d->ui->detectFacesBtn, SIGNAL(clicked()),
             this, SLOT(slotDetectFaces()));
 
-    connect(d->ui->openDatabaseBtn, SIGNAL(clicked()),
-            this, SLOT(slotOpenDatabase()));
-
     connect(d->ui->recogniseBtn, SIGNAL(clicked()),
             this, SLOT(slotRecognise()));
 
@@ -125,7 +122,6 @@ MainWindow::MainWindow(QWidget* const parent)
     d->myView->show();
 
     d->detector = new FaceDetector();
-    d->database = RecognitionDatabase::addDatabase(); // use default DB path
 
     d->ui->accuracySlider->setValue(80);
     d->ui->sensitivitySlider->setValue(80);
@@ -241,20 +237,6 @@ void MainWindow::slotUpdateSensitivity()
 {
     int value = d->ui->sensitivitySlider->value();
     d->detector->setParameter(QString::fromLatin1("sensitivity"), value);
-}
-
-void MainWindow::slotOpenDatabase()
-{
-    QString directory = QFileDialog::getExistingDirectory(
-            this,
-            QLatin1String("Select Database Directory"),
-            QDir::currentPath());
-
-    if (directory.isEmpty())
-        return;
-
-    d->ui->configLocation->setText(directory);
-    d->database = RecognitionDatabase::addDatabase(directory);
 }
 
 void MainWindow::slotRecognise()

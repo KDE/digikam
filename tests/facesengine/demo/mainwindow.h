@@ -46,7 +46,6 @@ public:
 public Q_SLOTS:
 
     void slotOpenImage();
-    void slotOpenDatabase();
     void slotDetectFaces();
     void slotUpdateDatabase();
     void slotRecognise();

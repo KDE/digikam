@@ -27,11 +27,10 @@
 
 // Local includes
 
-#include "facedbbackend.h"
+#include "digikam_export.h"
 #include "dbengineparameters.h"
 #include "dbengineerrorhandler.h"
 #include "collectionscannerobserver.h"
-#include "digikam_export.h"
 
 using namespace Digikam;
 
@@ -39,46 +38,45 @@ namespace FacesEngine
 {
 
 class TrainingDB;
-class FaceDbAccessData;
+class FaceDbAccessStaticPriv;
+class FaceDbBackend;
 
-/** This class is written in analogy to CoreDbAccess
- *  (some features stripped off).
- *  For documentation, see databaseaccess.h
- */
 class DIGIKAM_DATABASE_EXPORT FaceDbAccess
 {
 public:
 
-    FaceDbAccess(FaceDbAccessData* const);
+    /** This class is written in analogy to CoreDbAccess
+     *  (some features stripped off).
+     *  For documentation, see coredbaccess.h
+     */
+    FaceDbAccess();
     ~FaceDbAccess();
 
     TrainingDB*          db()         const;
     FaceDbBackend*       backend()    const;
     QString              lastError()  const;
-    DbEngineParameters   parameters() const;
 
     /**
       * Set the "last error" message. This method is not for public use.
       */
     void setLastError(const QString& error);
 
+    static DbEngineParameters parameters();
+    
 public:
 
-    static FaceDbAccessData* create();
-    static void destroy(FaceDbAccessData* const);
-
-    static void initDbEngineErrorHandler(FaceDbAccessData* const d, DbEngineErrorHandler* const errorhandler);
-    static void setParameters(FaceDbAccessData* const d, const DbEngineParameters& parameters);
-    static bool checkReadyForUse(FaceDbAccessData* const d, InitializationObserver* const observer = 0);
-
-private:
-
-    FaceDbAccess(bool, FaceDbAccessData* const);
+    static void initDbEngineErrorHandler(DbEngineErrorHandler* const errorhandler);
+    static void setParameters(const DbEngineParameters& parameters);
+    static bool checkReadyForUse(InitializationObserver* const observer);
+    static bool isInitialized();
+    static void cleanUpDatabase();
 
 private:
+
+    explicit FaceDbAccess(bool);
 
     friend class FaceDbAccessUnlock;
-    FaceDbAccessData* const d;
+    static FaceDbAccessStaticPriv* d;
 };
 
 // ------------------------------------------------------------------------------------------
@@ -94,14 +92,13 @@ public:
      *  If you need to access any locked structures during lifetime, acquire a new
      *  FaceDbAccess.
      */
-    FaceDbAccessUnlock(FaceDbAccessData* const);
+    FaceDbAccessUnlock();
     FaceDbAccessUnlock(FaceDbAccess* const access);
     ~FaceDbAccessUnlock();
 
 private:
-
-    FaceDbAccessData* d;
-    int               count;
+ 
+    int count;
 };
 
 } // namespace FacesEngine

@@ -260,9 +260,9 @@ Q_SIGNALS:
 
 protected:
 
-    FaceImageRetriever              imageRetriever;
+    FaceImageRetriever               imageRetriever;
     FacesEngine::RecognitionDatabase database;
-    FacePipeline::Private* const    d;
+    FacePipeline::Private* const     d;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -319,8 +319,8 @@ Q_SIGNALS:
 protected:
 
     FacesEngine::RecognitionDatabase database;
-    FaceImageRetriever              imageRetriever;
-    FacePipeline::Private* const    d;
+    FaceImageRetriever               imageRetriever;
+    FacePipeline::Private* const     d;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -383,13 +383,15 @@ protected:
     class Statistics
     {
     public:
+
         Statistics();
         int knownFaces;
         int correctlyRecognized;
     };
+
     QMap<int, Statistics> results;
 
-    FacePipeline::Private* const d;
+    FacePipeline::Private* const     d;
     FacesEngine::RecognitionDatabase database;
 };
 
@@ -427,25 +429,25 @@ public:
 
 public:
 
-    ScanStateFilter*     databaseFilter;
-    PreviewLoader*       previewThread;
-    DetectionWorker*     detectionWorker;
-    ParallelPipes*       parallelDetectors;
-    RecognitionWorker*   recognitionWorker;
-    DatabaseWriter*      databaseWriter;
-    Trainer*             trainer;
-    DetectionBenchmarker*  detectionBenchmarker;
-    RecognitionBenchmarker*recognitionBenchmarker;
+    ScanStateFilter*                        databaseFilter;
+    PreviewLoader*                          previewThread;
+    DetectionWorker*                        detectionWorker;
+    ParallelPipes*                          parallelDetectors;
+    RecognitionWorker*                      recognitionWorker;
+    DatabaseWriter*                         databaseWriter;
+    Trainer*                                trainer;
+    DetectionBenchmarker*                   detectionBenchmarker;
+    RecognitionBenchmarker*                 recognitionBenchmarker;
 
-    QList<QObject*>      pipeline;
-    QThread::Priority    priority;
+    QList<QObject*>                         pipeline;
+    QThread::Priority                       priority;
 
-    QList<ThumbnailLoadThread*> thumbnailLoadThreads;
-    bool                 started;
-    int                  infosForFiltering;
-    int                  packagesOnTheRoad;
-    int                  maxPackagesOnTheRoad;
-    int                  totalPackagesAdded;
+    QList<ThumbnailLoadThread*>             thumbnailLoadThreads;
+    bool                                    started;
+    int                                     infosForFiltering;
+    int                                     packagesOnTheRoad;
+    int                                     maxPackagesOnTheRoad;
+    int                                     totalPackagesAdded;
 
     QList<FacePipelineExtendedPackage::Ptr> delayedPackages;
 

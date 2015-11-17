@@ -51,9 +51,9 @@ public:
 public:
 
     CoreDbAccess* access;
-    bool            acquired;
-    QTime           timeAcquired;
-    int             maxTime;
+    bool          acquired;
+    QTime         timeAcquired;
+    int           maxTime;
 
 public:
 

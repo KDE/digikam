@@ -45,8 +45,6 @@
 namespace FacesEngine
 {
 
-class FaceDbAccessData;
-
 class OpenCVLBPHFaceRecognizer
 {
 
@@ -55,7 +53,7 @@ public:
     /**
      *  @brief FaceRecognizer:Master class to control entire recognition using LBPH algorithm
      */
-    OpenCVLBPHFaceRecognizer(FaceDbAccessData* const);
+    OpenCVLBPHFaceRecognizer();
     ~OpenCVLBPHFaceRecognizer();
 
     void setThreshold(float threshold) const;

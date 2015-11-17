@@ -44,9 +44,8 @@ class OpenCVLBPHFaceRecognizer::Private
 {
 public:
 
-    Private(FaceDbAccessData* const db)
-        : db(db),
-          threshold(100),
+    Private()
+        : threshold(100),
           loaded(false)
     {
     }
@@ -57,7 +56,7 @@ public:
     {
         if (!loaded)
         {
-            m_lbph = FaceDbAccess(db).db()->lbphFaceModel();
+            m_lbph = FaceDbAccess().db()->lbphFaceModel();
             loaded = true;
         }
 
@@ -66,17 +65,16 @@ public:
 
 public:
 
-    FaceDbAccessData* db;
-    float               threshold;
+    float             threshold;
 
 private:
 
-    LBPHFaceModel       m_lbph;
-    bool                loaded;
+    LBPHFaceModel     m_lbph;
+    bool              loaded;
 };
 
-OpenCVLBPHFaceRecognizer::OpenCVLBPHFaceRecognizer(FaceDbAccessData* const db)
-    : d(new Private(db))
+OpenCVLBPHFaceRecognizer::OpenCVLBPHFaceRecognizer()
+    : d(new Private)
 {
     setThreshold(0.5);
 }
@@ -163,7 +161,7 @@ void OpenCVLBPHFaceRecognizer::train(const std::vector<cv::Mat>& images, const s
 
     d->lbph().update(images, labels, context);
     // add to database
-    FaceDbAccess(d->db).db()->updateLBPHFaceModel(d->lbph());
+    FaceDbAccess().db()->updateLBPHFaceModel(d->lbph());
 }
 
 } // namespace FacesEngine

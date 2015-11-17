@@ -30,7 +30,7 @@
 // Local includes
 
 #include "facedbaccess.h"
-#include "dbenginebackend.h"
+#include "facedbbackend.h"
 
 using namespace Digikam;
 
@@ -43,7 +43,6 @@ public:
 
     Private()
         : access(0),
-          db(0),
           acquired(false),
           maxTime(0)
     {
@@ -51,17 +50,16 @@ public:
 
 public:
 
-    FaceDbAccess*     access;
-    FaceDbAccessData* db;
-    bool                    acquired;
-    QTime                   timeAcquired;
-    int                     maxTime;
+    FaceDbAccess* access;
+    bool          acquired;
+    QTime         timeAcquired;
+    int           maxTime;
 
 public:
 
     bool needsTransaction() const
     {
-        return FaceDbAccess(db).parameters().isSQLite();
+        return FaceDbAccess().parameters().isSQLite();
     }
 
     void acquire()
@@ -72,7 +70,7 @@ public:
         }
         else
         {
-            FaceDbAccess access(db);
+            FaceDbAccess access;
             acquired = access.backend()->beginTransaction();
         }
 
@@ -89,18 +87,16 @@ public:
             }
             else
             {
-                FaceDbAccess access(db);
+                FaceDbAccess access;
                 access.backend()->commitTransaction();
             }
         }
     }
 };
 
-FaceDbOperationGroup::FaceDbOperationGroup(FaceDbAccessData* const db)
+FaceDbOperationGroup::FaceDbOperationGroup()
     : d(new Private)
 {
-    d->db = db;
-
     if (d->needsTransaction())
     {
         d->acquire();
