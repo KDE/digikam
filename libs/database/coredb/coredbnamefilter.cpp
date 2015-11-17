@@ -4,10 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-02
- * Description : Building complex database SQL queries from search descriptions
+ * Description : Core database file name filters based on file suffixes.
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "namefilter.h"
+#include "coredbnamefilter.h"
 
 // Qt includes
 
@@ -31,7 +32,7 @@
 namespace Digikam
 {
 
-NameFilter::NameFilter(const QString& filter)
+CoreDbNameFilter::CoreDbNameFilter(const QString& filter)
 {
     if ( filter.isEmpty() )
     {
@@ -59,7 +60,7 @@ NameFilter::NameFilter(const QString& filter)
     }
 }
 
-bool NameFilter::matches(const QString& name)
+bool CoreDbNameFilter::matches(const QString& name)
 {
     QList<QRegExp>::const_iterator rit = m_filterList.constBegin();
 

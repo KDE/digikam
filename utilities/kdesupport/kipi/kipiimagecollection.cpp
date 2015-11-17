@@ -41,7 +41,7 @@
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "imagesortsettings.h"
-#include "namefilter.h"
+#include "coredbnamefilter.h"
 #include "digikam_debug.h"
 
 namespace Digikam
@@ -228,7 +228,7 @@ QList<QUrl> KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) 
 
     QStringList list = CoreDbAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
     QList<QUrl> urlList;
-    NameFilter  nameFilter(imgFilter);
+    CoreDbNameFilter  nameFilter(imgFilter);
 
     for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
@@ -247,7 +247,7 @@ QList<QUrl> KipiImageCollection::Private::imagesFromTAlbum(TAlbum* const album) 
 {
     QStringList list = CoreDbAccess().db()->getItemURLsInTag(album->id());
     QList<QUrl> urlList;
-    NameFilter  nameFilter(imgFilter);
+    CoreDbNameFilter  nameFilter(imgFilter);
 
     for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
