@@ -204,10 +204,10 @@ bool FaceDbAccess::checkReadyForUse(FaceDbAccessData* const d, InitializationObs
 
     if (!drivers.contains(QString::fromLatin1("QSQLITE")))
     {
-        qCWarning(DIGIKAM_FACEDB_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCWarning(DIGIKAM_FACEDB_LOG) << "No Sqlite3 driver available. List of QSqlDatabase drivers: " << drivers;
 
-        d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
-                            "digiKam depends on the drivers provided by the SQL module of Qt.");
+        d->lastError = i18n("The driver \"SQLITE\" for Sqlite3 databases is not available.\n"
+                            "digiKam depends on the drivers provided by the Qt::SQL module.");
         return false;
     }
 
@@ -216,7 +216,7 @@ bool FaceDbAccess::checkReadyForUse(FaceDbAccessData* const d, InitializationObs
 
     if (!d->backend)
     {
-        qCWarning(DIGIKAM_FACEDB_LOG) << "No database backend available in checkReadyForUse. "
+        qCWarning(DIGIKAM_FACEDB_LOG) << "Face database: no database backend available in checkReadyForUse. "
                                          "Did you call setParameters before?";
         return false;
     }
@@ -245,6 +245,8 @@ bool FaceDbAccess::checkReadyForUse(FaceDbAccessData* const d, InitializationObs
 
     if (!d->backend->initSchema(&updater))
     {
+        qCWarning(DIGIKAM_FACEDB_LOG) << "Face database: cannot process schema initialization";
+
         d->initializing = false;
         return false;
     }

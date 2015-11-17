@@ -205,10 +205,10 @@ bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* const observer)
 
     if (!drivers.contains(QLatin1String("QSQLITE")))
     {
-        qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: no SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCWarning(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: no Sqlite3 driver available. List of QSqlDatabase drivers: " << drivers;
 
-        d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
-                            "digiKam depends on the drivers provided by the SQL module of Qt4.");
+        d->lastError = i18n("The driver \"SQLITE\" for Sqlite3 databases is not available.\n"
+                            "digiKam depends on the drivers provided by the Qt::SQL module.");
         return false;
     }
 
@@ -231,8 +231,8 @@ bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* const observer)
     {
         if (!d->backend->open(d->parameters))
         {
-            access.setLastError(i18n("Error opening database backend.\n ")
-                                + d->backend->lastError());
+            access.setLastError(i18n("Error opening database backend.\n%1",
+                                d->backend->lastError()));
             return false;
         }
     }
@@ -246,6 +246,8 @@ bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* const observer)
 
     if (!d->backend->initSchema(&updater))
     {
+        qCWarning(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: cannot process schema initialization";
+
         d->initializing = false;
         return false;
     }

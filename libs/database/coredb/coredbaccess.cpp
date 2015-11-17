@@ -161,7 +161,7 @@ CoreDbWatch* CoreDbAccess::databaseWatch()
     return 0;
 }
 
-void CoreDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler)
+void CoreDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* const errorhandler)
 {
     if (!d || !d->backend)
     {
@@ -254,16 +254,16 @@ void CoreDbAccess::setParameters(const DbEngineParameters& parameters, Applicati
     CollectionManager::instance()->clear_locked();
 }
 
-bool CoreDbAccess::checkReadyForUse(InitializationObserver* observer)
+bool CoreDbAccess::checkReadyForUse(InitializationObserver* const observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
     if (!drivers.contains(QLatin1String("QSQLITE")))
     {
-        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: no SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: no Sqlite3 driver available. List of QSqlDatabase drivers: " << drivers;
 
-        d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
-                            "digiKam depends on the drivers provided by the SQL module of Qt4.");
+        d->lastError = i18n("The driver \"SQLITE\" for Sqlite3 databases is not available.\n"
+                            "digiKam depends on the drivers provided by the Qt::SQL module.");
         return false;
     }
 
@@ -276,6 +276,7 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* observer)
         {
             observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
         }
+
         return false;
     }
 
@@ -300,8 +301,8 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* observer)
     {
         if (!d->backend->open(d->parameters))
         {
-            access.setLastError(i18n("Error opening database backend.\n ")
-                                + d->backend->lastError());
+            access.setLastError(i18n("Error opening database backend.\n%1",
+                                d->backend->lastError()));
             return false;
         }
     }
@@ -312,11 +313,12 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* observer)
     // update schema
     CoreDbSchemaUpdater updater(access.db(), access.backend(), access.parameters());
     updater.setCoreDbAccess(&access);
-
     updater.setObserver(observer);
 
     if (!d->backend->initSchema(&updater))
     {
+        qCWarning(DIGIKAM_COREDB_LOG) << "Core database: cannot process schema initialization";
+
         access.setLastError(updater.getLastErrorMessage());
         d->initializing = false;
         return false;

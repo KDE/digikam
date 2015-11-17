@@ -113,7 +113,7 @@ public:
       * If the parameters were not changed, this method has no effect.
       * @returns if the database is ready for use
       */
-    static bool checkReadyForUse(InitializationObserver* observer = 0);
+    static bool checkReadyForUse(InitializationObserver* const observer = 0);
 
     /**
       * Clean up the database access.
@@ -128,7 +128,7 @@ public:
     static CoreDbWatch* databaseWatch();
 
 
-    static void initDbEngineErrorHandler(DbEngineErrorHandler* errorhandler);
+    static void initDbEngineErrorHandler(DbEngineErrorHandler* const errorhandler);
     /**
       * Set the "last error" message. This method is not for public use.
       */
