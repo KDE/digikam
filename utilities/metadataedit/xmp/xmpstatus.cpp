@@ -110,7 +110,7 @@ XMPStatus::XMPStatus(QWidget* const parent)
     grid->addWidget(d->specialInstructionEdit,  4, 0, 1, 3);
     grid->setRowStretch(5, 10);
     grid->setColumnStretch(2, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

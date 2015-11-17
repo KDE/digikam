@@ -127,7 +127,7 @@ CollectionPage::CollectionPage(AssistantDlg* const dlg)
     vlayout->addWidget(d->rootAlbumPathRequester);
     vlayout->addWidget(textLabel3);
     vlayout->addWidget(d->dbPathRequester);
-    vlayout->setMargin(0);
+    vlayout->setContentsMargins(QMargins());
     vlayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(widget);

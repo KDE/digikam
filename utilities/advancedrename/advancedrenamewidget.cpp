@@ -399,8 +399,8 @@ void AdvancedRenameWidget::setupWidgets()
         mainLayout->setColumnStretch(2, 10);
     }
 
-    mainLayout->setMargin(0);
     mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    mainLayout->setContentsMargins(QMargins());
     setLayout(mainLayout);
 
     // --------------------------------------------------------

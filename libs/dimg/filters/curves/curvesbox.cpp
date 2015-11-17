@@ -133,7 +133,7 @@ void CurvesBox::setup()
     curveBoxLayout->addWidget(d->hGradient,    2, 2, 1, 1);
     curveBoxLayout->setRowMinimumHeight(1, 2);
     curveBoxLayout->setColumnMinimumWidth(1, 2);
-    curveBoxLayout->setMargin(0);
+    curveBoxLayout->setContentsMargins(QMargins());
     curveBoxLayout->setSpacing(0);
     curveBox->setLayout(curveBoxLayout);
 
@@ -165,7 +165,7 @@ void CurvesBox::setup()
     QHBoxLayout* typeBoxLayout = new QHBoxLayout;
     typeBoxLayout->addWidget(d->curveFree);
     typeBoxLayout->addWidget(d->curveSmooth);
-    typeBoxLayout->setMargin(0);
+    typeBoxLayout->setContentsMargins(QMargins());
     typeBoxLayout->setSpacing(0);
     typeBox->setLayout(typeBoxLayout);
 
@@ -206,7 +206,7 @@ void CurvesBox::setup()
     pickerBoxLayout->addWidget(d->pickBlack);
     pickerBoxLayout->addWidget(d->pickGray);
     pickerBoxLayout->addWidget(d->pickWhite);
-    pickerBoxLayout->setMargin(0);
+    pickerBoxLayout->setContentsMargins(QMargins());
     pickerBoxLayout->setSpacing(0);
     d->pickerBox->setLayout(pickerBoxLayout);
 
@@ -233,7 +233,7 @@ void CurvesBox::setup()
     mainLayout->addWidget(curveBox, 0, 0, 1, 1);
     mainLayout->addLayout(l3,       1, 0, 1, 1);
     mainLayout->setRowStretch(2, 10);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(QMargins());
     mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     setLayout(mainLayout);
 

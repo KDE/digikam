@@ -214,7 +214,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     vlay2->addWidget(d->demosaicingButton);
     vlay2->addWidget(d->extractJPEGButton);
-    vlay2->setMargin(0);
+    vlay2->setContentsMargins(QMargins());
     vlay2->setSpacing(0);
 
     // -------------
@@ -232,7 +232,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     vlay->addWidget(d->storeDiffButton);
     vlay->addWidget(d->overwriteButton);
-    vlay->setMargin(0);
+    vlay->setContentsMargins(QMargins());
     vlay->setSpacing(0);
 
     d->useMutiCoreCPU          = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), panel);

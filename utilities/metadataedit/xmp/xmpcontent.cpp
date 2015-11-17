@@ -125,7 +125,7 @@ XMPContent::XMPContent(QWidget* const parent)
     grid->addWidget(d->copyrightEdit,                      5, 0, 1, 3);
     grid->setRowStretch(6, 10);
     grid->setColumnStretch(2, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

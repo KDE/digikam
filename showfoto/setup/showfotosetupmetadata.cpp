@@ -141,8 +141,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
 
     // --------------------------------------------------------
 
-    mainLayout->setMargin(0);
     mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setContentsMargins(QMargins());
     mainLayout->addWidget(ExifGroup);
     mainLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mainLayout->addWidget(box);

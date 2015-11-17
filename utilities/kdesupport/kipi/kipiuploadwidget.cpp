@@ -73,7 +73,7 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* const iface, QWidget* const pa
     QVBoxLayout* const vlay = new QVBoxLayout(this);
     d->albumSel             = new AlbumSelectWidget(this);
     vlay->addWidget(d->albumSel);
-    vlay->setMargin(0);
+    vlay->setContentsMargins(QMargins());
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(d->albumSel, SIGNAL(itemSelectionChanged()),

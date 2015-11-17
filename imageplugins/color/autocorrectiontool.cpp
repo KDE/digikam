@@ -178,7 +178,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
     QGridLayout* mainLayout = new QGridLayout();
     mainLayout->addWidget(d->correctionTools, 0, 0, 1, 1);
     mainLayout->setRowStretch(0, 10);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(QMargins());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 

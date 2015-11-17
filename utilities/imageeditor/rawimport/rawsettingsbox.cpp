@@ -330,7 +330,7 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     gridSettings->addWidget(d->tabView, 0, 0, 1, 5);
     gridSettings->setColumnStretch(2, 10);
     gridSettings->setSpacing(spacingHint());
-    gridSettings->setMargin(0);
+    gridSettings->setContentsMargins(QMargins());
 
     // ---------------------------------------------------------------
 

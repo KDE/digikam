@@ -179,7 +179,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     : DVBox(parent),
       d(new Private)
 {
-    setMargin(0);
+    setContentsMargins(QMargins());
     setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->tabWidget           = new QTabWidget(this);
 

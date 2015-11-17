@@ -145,7 +145,7 @@ IPTCCategories::IPTCCategories(QWidget* const parent)
     grid->addWidget(note,                       6, 3, 1, 1);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(7, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

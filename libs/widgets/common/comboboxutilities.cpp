@@ -52,7 +52,7 @@ ProxyLineEdit::ProxyLineEdit(QWidget* const parent)
 {
     m_layout = new QVBoxLayout;
     m_layout->setSpacing(0);
-    m_layout->setMargin(0);
+    m_layout->setContentsMargins(QMargins());
     setLayout(m_layout);
 
     // unset text edit cursor

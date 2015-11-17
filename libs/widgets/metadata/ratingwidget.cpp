@@ -510,7 +510,7 @@ RatingBox::RatingBox(QWidget* const parent)
     d->shortcut->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     d->shortcut->setWordWrap(false);
 
-    setMargin(0);
+    setContentsMargins(QMargins());
     setSpacing(0);
 
     // -------------------------------------------------------------

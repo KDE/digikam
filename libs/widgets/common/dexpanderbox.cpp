@@ -491,7 +491,7 @@ DLabelExpander::DLabelExpander(QWidget* const parent)
     hlay->addWidget(d->checkBox);
     hlay->addWidget(d->pixmapLabel);
     hlay->addWidget(d->clickLabel, 10);
-    hlay->setMargin(0);
+    hlay->setContentsMargins(QMargins());
     hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->pixmapLabel->installEventFilter(this);
@@ -700,8 +700,8 @@ DExpanderBox::DExpanderBox(QWidget* const parent)
     setWidgetResizable(true);
     QWidget* const main = new QWidget(viewport());
     d->vbox             = new QVBoxLayout(main);
-    d->vbox->setMargin(0);
     d->vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->vbox->setContentsMargins(QMargins());
     setWidget(main);
 
     setAutoFillBackground(false);

@@ -241,7 +241,7 @@ RatingFilter::RatingFilter(QWidget* const parent)
     d->optionsBtn->setMenu(d->optionsMenu);
 
     layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
-    setMargin(0);
+    setContentsMargins(QMargins());
     setSpacing(0);
 
     connect(d->optionsMenu, SIGNAL(triggered(QAction*)),

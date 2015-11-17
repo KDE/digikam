@@ -260,7 +260,7 @@ XMPProperties::XMPProperties(QWidget* const parent)
     grid->addWidget(d->originalTransEdit,                   7, 1, 1, 4);
     grid->setRowStretch(8, 10);
     grid->setColumnStretch(4, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

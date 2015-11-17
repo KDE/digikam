@@ -150,7 +150,7 @@ QWidget* DLogoAction::createWidget(QWidget* parent)
     d->urlLabel->setToolTip(i18n("Visit digiKam project website"));
     d->urlLabel->updateData(DAboutData::webProjectUrl(), d->progressPixmap.copy(0, 0, 144, 32).toImage());
 
-    layout->setMargin(0);
+    layout->setContentsMargins(QMargins());
     layout->setSpacing(0);
 
     if (d->alignOnright)

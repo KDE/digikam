@@ -288,7 +288,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     vlay->addWidget(d->bwFilters);
     vlay->addWidget(hbox1);
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vlay->setMargin(0);
+    vlay->setContentsMargins(QMargins());
 
     // -------------------------------------------------------------
 

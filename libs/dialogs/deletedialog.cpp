@@ -289,7 +289,7 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
 
     QHBoxLayout* hbox = new QHBoxLayout();
     hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    hbox->setMargin(0);
+    hbox->setContentsMargins(QMargins());
     hbox->addWidget(logo);
     hbox->addWidget(d->deleteText, 10);
     hbox->addWidget(d->warningIcon);

@@ -303,7 +303,7 @@ IPTCEnvelope::IPTCEnvelope(QWidget* const parent)
     grid->addWidget(note,                  10, 0, 1, 6);
     grid->setColumnStretch(4, 10);
     grid->setRowStretch(11, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

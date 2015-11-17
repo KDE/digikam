@@ -53,8 +53,8 @@ DHBox::DHBox(QWidget* const parent)
     : QFrame(parent)
 {
     QHBoxLayout* const layout = new QHBoxLayout(this);
+    layout->setContentsMargins(QMargins());
     layout->setSpacing(0);
-    layout->setMargin(0);
     setLayout(layout);
 }
 
@@ -62,8 +62,8 @@ DHBox::DHBox(bool /*vertical*/, QWidget* const parent)
     : QFrame(parent)
 {
     QVBoxLayout* const layout = new QVBoxLayout(this);
+    layout->setContentsMargins(QMargins());
     layout->setSpacing(0);
-    layout->setMargin(0);
     setLayout(layout);
 }
 

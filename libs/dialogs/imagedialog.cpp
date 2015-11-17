@@ -88,7 +88,7 @@ ImageDialogPreview::ImageDialogPreview(QWidget* const parent)
     d->infoLabel = new QLabel(this);
     d->infoLabel->setAlignment(Qt::AlignCenter);
 
-    vlay->setMargin(0);
+    vlay->setContentsMargins(QMargins());
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vlay->addWidget(d->imageLabel);
     vlay->addWidget(d->infoLabel);

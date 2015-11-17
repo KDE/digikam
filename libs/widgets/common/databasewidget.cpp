@@ -159,8 +159,8 @@ void DatabaseWidget::setupMainArea()
 
     // --------------------------------------------------------
 
-    layout->setMargin(0);
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setContentsMargins(QMargins());
     layout->addWidget(dbPathBox);
     layout->addStretch();
 

@@ -301,8 +301,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    layout->setMargin(0);
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setContentsMargins(QMargins());
     layout->addWidget(iconViewGroup);
     layout->addWidget(folderViewGroup);
     layout->addWidget(interfaceOptionsGroup);

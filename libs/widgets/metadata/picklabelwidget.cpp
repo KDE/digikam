@@ -89,7 +89,7 @@ PickLabelWidget::PickLabelWidget(QWidget* const parent)
     setFocusPolicy(Qt::NoFocus);
 
     DHBox* const hbox = new DHBox(this);
-    hbox->setMargin(0);
+    hbox->setContentsMargins(QMargins());
     hbox->setSpacing(0);
 
     d->btnNone = new QToolButton(hbox);
@@ -123,7 +123,7 @@ PickLabelWidget::PickLabelWidget(QWidget* const parent)
     d->pickBtns->addButton(d->btnAccpt, AcceptedLabel);
 
     d->descBox  = new DHBox(this);
-    d->descBox->setMargin(0);
+    d->descBox->setContentsMargins(QMargins());
     d->descBox->setSpacing(0);
     d->desc     = new QLabel(d->descBox);
     d->shortcut = new DAdjustableLabel(d->descBox);
@@ -133,8 +133,8 @@ PickLabelWidget::PickLabelWidget(QWidget* const parent)
     d->shortcut->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     d->shortcut->setWordWrap(false);
 
-    setMargin(0);
     setSpacing(0);
+    setContentsMargins(QMargins());
     setPickLabels(QList<PickLabel>() << NoPickLabel);
     setDescriptionBoxVisible(true);
     setButtonsExclusive(true);

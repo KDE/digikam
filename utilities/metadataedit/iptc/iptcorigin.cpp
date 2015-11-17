@@ -261,7 +261,7 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
     grid->addWidget(note,                                  12, 0, 1, 6);
     grid->setColumnStretch(4, 10);
     grid->setRowStretch(13, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

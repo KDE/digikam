@@ -165,7 +165,7 @@ IPTCCredits::IPTCCredits(QWidget* const parent)
     grid->addWidget(note,               6, 0, 1, 3);
     grid->setColumnStretch(2, 10);
     grid->setRowStretch(7, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

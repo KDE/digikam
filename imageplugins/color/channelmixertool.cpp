@@ -116,7 +116,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* const parent)
     d->settingsView   = new MixerSettings(d->gboxSettings->plainPage());
     vbox->addWidget(d->settingsView);
     vbox->addStretch(10);
-    vbox->setMargin(0);
+    vbox->setContentsMargins(QMargins());
     vbox->setSpacing(0);
 
     setToolSettings(d->gboxSettings);

@@ -150,7 +150,7 @@ void RuleDialog::setSettingsWidget(QWidget* const settingsWidget)
     QGridLayout* const l = new QGridLayout(this);
     l->addWidget(settingsWidget);
     l->setSpacing(0);
-    l->setMargin(0);
+    l->setContentsMargins(QMargins());
     d->settingsWidget->setLayout(l);
     d->container->layout()->addWidget(d->settingsWidget);
 }

@@ -505,8 +505,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     d->fullScreenSettings = new FullScreenSettings(FS_IMPORTUI, panel4);
 
-    layout2->setMargin(0);
     layout2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout2->setContentsMargins(QMargins());
     layout2->addWidget(iconViewGroup);
     layout2->addWidget(interfaceOptionsGroup);
     layout2->addWidget(d->fullScreenSettings);

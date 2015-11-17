@@ -138,8 +138,8 @@ WaterMark::~WaterMark()
 void WaterMark::registerSettingsWidget()
 {
     DVBox* const vbox = new DVBox;
+    vbox->setContentsMargins(QMargins());
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox->setMargin(0);
 
     DHBox* const hbox = new DHBox(vbox);
     hbox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

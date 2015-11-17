@@ -106,7 +106,7 @@ DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
     grid->addWidget(d->progress,    2, 1, 1, 2);
     grid->addWidget(d->title,       3, 1, 1, 2);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setColumnStretch(2, 10);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);

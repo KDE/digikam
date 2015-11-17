@@ -301,7 +301,7 @@ FilmTool::FilmTool(QObject* const parent)
     //grid->setRowStretch(7, 10);
     //grid->setColumnStretch(2, 10);
     //grid->setColumnStretch(4, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(grid);
 

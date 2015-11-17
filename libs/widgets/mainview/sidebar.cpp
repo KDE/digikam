@@ -75,7 +75,7 @@ DMultiTabBarFrame::DMultiTabBarFrame(QWidget* const parent, Qt::Edge pos)
     else
         d->mainLayout = new QHBoxLayout(this);
 
-    d->mainLayout->setMargin(0);
+    d->mainLayout->setContentsMargins(QMargins());
     d->mainLayout->setSpacing(0);
     d->mainLayout->addStretch();
     setFrameStyle(NoFrame);
@@ -561,7 +561,7 @@ DMultiTabBar::DMultiTabBar(Qt::Edge pos, QWidget* const parent)
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed/*, true*/);
     }
 
-    d->layout->setMargin(0);
+    d->layout->setContentsMargins(QMargins());
     d->layout->setSpacing(0);
 
     d->internal = new DMultiTabBarFrame(this, pos);

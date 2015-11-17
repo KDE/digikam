@@ -692,12 +692,12 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     logHistoButton->setCheckable(true);
     d->scaleBG->addButton(logHistoButton, TimeLineWidget::LogScale);
 
-    hlay2->setMargin(0);
+    hlay2->setContentsMargins(QMargins());
     hlay2->setSpacing(0);
     hlay2->addWidget(linHistoButton);
     hlay2->addWidget(logHistoButton);
 
-    hlay->setMargin(0);
+    hlay->setContentsMargins(QMargins());
     hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hlay->addWidget(label1);
     hlay->addWidget(d->timeUnitCB);
@@ -719,7 +719,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     // ---------------------------------------------------------------
 
     DHBox* const hbox2 = new DHBox(panel);
-    hbox2->setMargin(0);
+    hbox2->setContentsMargins(QMargins());
     hbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(hbox2);
@@ -768,7 +768,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     vlay->addItem(new QSpacerItem(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing), QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing),
                                   QSizePolicy::Minimum, QSizePolicy::Minimum));
     vlay->addWidget(d->searchDateBar);
-    vlay->setMargin(0);
+    vlay->setContentsMargins(QMargins());
     vlay->setSpacing(0);
 
     // ---------------------------------------------------------------

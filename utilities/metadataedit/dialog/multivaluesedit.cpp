@@ -112,7 +112,7 @@ MultiValuesEdit::MultiValuesEdit(QWidget* const parent, const QString& title, co
     grid->setRowStretch(1, 10);
     grid->setColumnStretch(0, 10);
     grid->setColumnStretch(4, 100);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

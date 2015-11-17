@@ -244,7 +244,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     optionsBoxLayout->addWidget(d->detailLabel, 6, 0, 1, 1);
     optionsBoxLayout->addWidget(m_detailEdit,   6, 1, 1, 4);
     optionsBoxLayout->setColumnStretch(4, 10);
-    optionsBoxLayout->setMargin(0);
+    optionsBoxLayout->setContentsMargins(QMargins());
     optionsBoxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->optionsBox->setLayout(optionsBoxLayout);
 
@@ -261,7 +261,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     mainLayout->addWidget(m_note,              5, 3, 1, 1);
     mainLayout->setRowStretch(6, 10);
     mainLayout->setColumnStretch(2, 1);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(QMargins());
     mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     setLayout(mainLayout);
 

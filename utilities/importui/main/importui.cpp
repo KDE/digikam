@@ -223,7 +223,7 @@ void ImportUI::setupUserArea()
 
     vbox->setStretchFactor(d->view, 10);
     vbox->setStretchFactor(d->historyView,  2);
-    vbox->setMargin(0);
+    vbox->setContentsMargins(QMargins());
     vbox->setSpacing(0);
 
     d->errorWidget = new KMessageWidget(vbox);

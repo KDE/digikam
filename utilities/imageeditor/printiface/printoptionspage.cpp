@@ -131,7 +131,7 @@ public:
         ));
 
         QGridLayout* const layout = new QGridLayout(mPositionFrame);
-        layout->setMargin(0);
+        layout->setContentsMargins(QMargins());
         layout->setSpacing(1);
 
         for (int row = 0; row < 3; ++row)

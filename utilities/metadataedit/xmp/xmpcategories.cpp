@@ -121,7 +121,7 @@ XMPCategories::XMPCategories(QWidget* const parent)
     grid->addWidget(d->repSubCategoryButton, 5, 3, 1, 1);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(6, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

@@ -107,7 +107,7 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
     vlay->addWidget(d->resetBtn);
     vlay->addWidget(d->settingsBtn);
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vlay->setMargin(0);
+    vlay->setContentsMargins(QMargins());
     vlay->setStretchFactor(d->info, 10);
 
     connect(d->resetBtn, SIGNAL(released()),

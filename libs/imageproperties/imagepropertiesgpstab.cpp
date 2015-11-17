@@ -138,7 +138,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     d->gpsImageInfoSorter = new GPSImageInfoSorter(this);
     d->gpsImageInfoSorter->addToMapWidget(d->map);
     vlay2->addWidget(d->map);
-    vlay2->setMargin(0);
+    vlay2->setContentsMargins(QMargins());
     vlay2->setSpacing(0);
 
     // --------------------------------------------------------
@@ -197,8 +197,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     layout->addWidget(box,                        6, 0, 1, 2);
     layout->setRowStretch(0, 10);
     layout->setColumnStretch(1, 10);
+    layout->setContentsMargins(QMargins());
     layout->setSpacing(0);
-    layout->setMargin(0);
 
     // --------------------------------------------------------
 

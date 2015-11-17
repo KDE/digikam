@@ -203,7 +203,7 @@ EXIFLight::EXIFLight(QWidget* const parent)
     grid->addWidget(d->whiteBalanceCB,      3, 2, 1, 1);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(4, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

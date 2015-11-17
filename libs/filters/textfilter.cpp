@@ -110,7 +110,7 @@ TextFilter::TextFilter(QWidget* const parent)
     d->selAllAction->setCheckable(false);
     d->optionsBtn->setMenu(d->optionsMenu);
 
-    setMargin(0);
+    setContentsMargins(QMargins());
     setSpacing(0);
 
     connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),

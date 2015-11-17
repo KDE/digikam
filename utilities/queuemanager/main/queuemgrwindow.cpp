@@ -178,8 +178,8 @@ void QueueMgrWindow::setupUserArea()
     QVBoxLayout* const vlay1   = new QVBoxLayout(queuesBox);
     d->queuePool               = new QueuePool(queuesBox);
     vlay1->addWidget(d->queuePool);
+    vlay1->setContentsMargins(QMargins());
     vlay1->setSpacing(0);
-    vlay1->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
@@ -187,8 +187,8 @@ void QueueMgrWindow::setupUserArea()
     QVBoxLayout* const vlay2          = new QVBoxLayout(queueSettingsBox);
     d->queueSettingsView              = new QueueSettingsView(queueSettingsBox);
     vlay2->addWidget(d->queueSettingsView);
+    vlay2->setContentsMargins(QMargins());
     vlay2->setSpacing(0);
-    vlay2->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
@@ -196,8 +196,8 @@ void QueueMgrWindow::setupUserArea()
     QVBoxLayout* const vlay3  = new QVBoxLayout(toolsBox);
     d->toolsView              = new ToolsView(toolsBox);
     vlay3->addWidget(d->toolsView);
+    vlay3->setContentsMargins(QMargins());
     vlay3->setSpacing(0);
-    vlay3->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
@@ -205,8 +205,8 @@ void QueueMgrWindow::setupUserArea()
     QVBoxLayout* const vlay4   = new QVBoxLayout(assignBox);
     d->assignedList            = new AssignedListView(assignBox);
     vlay4->addWidget(d->assignedList);
+    vlay4->setContentsMargins(QMargins());
     vlay4->setSpacing(0);
-    vlay4->setMargin(0);
 
     // ------------------------------------------------------------------------------
 
@@ -214,8 +214,8 @@ void QueueMgrWindow::setupUserArea()
     QVBoxLayout* const vlay5         = new QVBoxLayout(toolSettingsBox);
     d->toolSettings                  = new ToolSettingsView(toolSettingsBox);
     vlay5->addWidget(d->toolSettings);
+    vlay5->setContentsMargins(QMargins());
     vlay5->setSpacing(0);
-    vlay5->setMargin(0);
 
     // ------------------------------------------------------------------------------
 

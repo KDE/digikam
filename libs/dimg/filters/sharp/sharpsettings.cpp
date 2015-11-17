@@ -170,7 +170,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     grid1->addWidget(label,          0, 0, 1, 2);
     grid1->addWidget(d->radiusInput, 1, 0, 1, 2);
     grid1->setRowStretch(2, 10);
-    grid1->setMargin(0);
+    grid1->setContentsMargins(QMargins());
     grid1->setSpacing(0);
 
     d->stack->insertWidget(SharpContainer::SimpleSharp, simpleSharpSettings);
@@ -211,7 +211,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     grid2->addWidget(label4,            4, 0, 1, 2);
     grid2->addWidget(d->thresholdInput, 5, 0, 1, 2);
     grid2->setRowStretch(6, 10);
-    grid2->setMargin(0);
+    grid2->setContentsMargins(QMargins());
     grid2->setSpacing(0);
 
     d->stack->insertWidget(SharpContainer::UnsharpMask, unsharpMaskSettings);
@@ -282,7 +282,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     grid3->addWidget(label9,         8, 0, 1, 2);
     grid3->addWidget(d->matrixSize,  9, 0, 1, 2);
     grid3->setRowStretch(10, 10);
-    grid3->setMargin(0);
+    grid3->setContentsMargins(QMargins());
     grid3->setSpacing(0);
 
     d->stack->insertWidget(SharpContainer::Refocus, refocusSettings);

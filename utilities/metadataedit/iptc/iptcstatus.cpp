@@ -148,7 +148,7 @@ IPTCStatus::IPTCStatus(QWidget* const parent)
     grid->addWidget(note,                       9, 0, 1, 3);
     grid->setColumnStretch(2, 10);
     grid->setRowStretch(10, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

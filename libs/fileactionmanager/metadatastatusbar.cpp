@@ -94,7 +94,7 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
     vlay->addWidget(d->info);
     vlay->addWidget(d->applyBtn);
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vlay->setMargin(0);
+    vlay->setContentsMargins(QMargins());
     vlay->setStretchFactor(d->info, 10);
 
     connect(MetadataSettings::instance(), SIGNAL(settingsChanged()), this,

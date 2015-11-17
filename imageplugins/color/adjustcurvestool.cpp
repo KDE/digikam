@@ -118,7 +118,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* const parent)
     d->gboxSettings->histogramBox()->setContentsMargins(d->settingsView->curvesLeftOffset(), 0, 0, 0);
     vbox->addWidget(d->settingsView);
     vbox->addStretch(10);
-    vbox->setMargin(0);
+    vbox->setContentsMargins(QMargins());
     vbox->setSpacing(0);
 
     setToolSettings(d->gboxSettings);

@@ -209,7 +209,7 @@ EXIFLens::EXIFLens(QWidget* const parent)
     grid->addWidget(d->maxApertureCB,           4, 2, 1, 1);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(5, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

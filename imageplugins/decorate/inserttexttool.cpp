@@ -185,7 +185,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     alignBlock->setCheckable(true);
     alignBlock->setToolTip(i18n("Align text to a block"));
 
-    hlay->setMargin(0);
+    hlay->setContentsMargins(QMargins());
     hlay->setSpacing(0);
     hlay->addStretch();
     hlay->addWidget(alignLeft);

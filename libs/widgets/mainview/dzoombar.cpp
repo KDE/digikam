@@ -139,7 +139,7 @@ DZoomBar::DZoomBar(QWidget* const parent)
         d->zoomCombo->addItem(QString::fromLatin1("%1%").arg((int)zoom), QVariant(zoom));
     }
 
-    layout()->setMargin(0);
+    layout()->setContentsMargins(QMargins());
     layout()->setSpacing(0);
 
     // -------------------------------------------------------------

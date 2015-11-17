@@ -122,7 +122,7 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
 
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(d->fullScreenSettings);
-    layout->setMargin(0);
+    layout->setContentsMargins(QMargins());
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->addStretch();
 

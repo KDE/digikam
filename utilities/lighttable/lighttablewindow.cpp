@@ -256,7 +256,7 @@ void LightTableWindow::setupUserArea()
     hlay->addWidget(d->hSplitter);
     hlay->addWidget(d->rightSideBar);
     hlay->setSpacing(0);
-    hlay->setMargin(0);
+    hlay->setContentsMargins(QMargins());
     hlay->setStretchFactor(d->hSplitter, 10);
 
     d->hSplitter->setFrameStyle(QFrame::NoFrame);

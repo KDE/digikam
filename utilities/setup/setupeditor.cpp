@@ -225,7 +225,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
     layout->addWidget(d->fullScreenSettings);
     layout->addWidget(exposureOptionsGroup);
     layout->addStretch();
-    layout->setMargin(0);
+    layout->setContentsMargins(QMargins());
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

@@ -199,7 +199,7 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
     grid->addWidget(d->setTodayDigitalizedBtn,              9, 3, 1, 1);
     grid->setColumnStretch(2, 10);
     grid->setRowStretch(10, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

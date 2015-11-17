@@ -123,7 +123,7 @@ InfoDlg::InfoDlg(QWidget* const parent)
     grid->addWidget(d->listView, 2, 0, 1, -1);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(2, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);

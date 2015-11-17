@@ -282,7 +282,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     d->pickerType->addButton(d->pickWhite, Private::WhiteTonal);
 
     QHBoxLayout* pickerBoxLayout = new QHBoxLayout;
-    pickerBoxLayout->setMargin(0);
+    pickerBoxLayout->setContentsMargins(QMargins());
     pickerBoxLayout->setSpacing(0);
     pickerBoxLayout->addWidget(d->pickBlack);
     pickerBoxLayout->addWidget(d->pickGray);
@@ -331,7 +331,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     grid->setRowStretch(7, 10);
     grid->setColumnStretch(2, 10);
     grid->setColumnStretch(4, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(grid);
 

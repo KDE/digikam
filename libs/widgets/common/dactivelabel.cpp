@@ -36,7 +36,7 @@ namespace Digikam
 DActiveLabel::DActiveLabel(const QUrl& url, const QString& imgPath, QWidget* const parent)
     : QLabel(parent)
 {
-    setMargin(0);
+    setContentsMargins(QMargins());
     setScaledContents(false);
     setOpenExternalLinks(true);
     setTextFormat(Qt::RichText);

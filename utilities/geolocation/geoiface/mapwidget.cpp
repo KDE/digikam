@@ -749,7 +749,7 @@ QWidget* MapWidget::getControlWidget()
     {
         d->controlWidget                           = new QWidget(this);
         QHBoxLayout* const controlWidgetHBoxLayout = new QHBoxLayout(d->controlWidget);
-        controlWidgetHBoxLayout->setMargin(0);
+        controlWidgetHBoxLayout->setContentsMargins(QMargins());
 
         QToolButton* const configurationButton = new QToolButton(d->controlWidget);
         controlWidgetHBoxLayout->addWidget(configurationButton);
@@ -791,7 +791,7 @@ QWidget* MapWidget::getControlWidget()
 
         d->mouseModesHolder                           = new QWidget(d->controlWidget);
         QHBoxLayout* const mouseModesHolderHBoxLayout = new QHBoxLayout(d->mouseModesHolder);
-        mouseModesHolderHBoxLayout->setMargin(0);
+        mouseModesHolderHBoxLayout->setContentsMargins(QMargins());
         controlWidgetHBoxLayout->addWidget(d->mouseModesHolder);
 
         QFrame* const vline2 = new QFrame(d->mouseModesHolder);
@@ -841,7 +841,7 @@ QWidget* MapWidget::getControlWidget()
 
         d->hBoxForAdditionalControlWidgetItems = new QWidget(d->controlWidget);
         QHBoxLayout *hBoxForAdditionalControlWidgetItemsHBoxLayout = new QHBoxLayout(d->hBoxForAdditionalControlWidgetItems);
-        hBoxForAdditionalControlWidgetItemsHBoxLayout->setMargin(0);
+        hBoxForAdditionalControlWidgetItemsHBoxLayout->setContentsMargins(QMargins());
         controlWidgetHBoxLayout->addWidget(d->hBoxForAdditionalControlWidgetItems);
 
         setVisibleMouseModes(s->visibleMouseModes);

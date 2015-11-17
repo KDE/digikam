@@ -144,8 +144,8 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
     d->settingsView = new QScrollArea(vbox);
     d->settingsView->setWidgetResizable(true);
 
-    vbox->setMargin(0);
     vbox->setSpacing(0);
+    vbox->setContentsMargins(QMargins());
     vbox->setStretchFactor(d->settingsView, 10);
 
     insertWidget(Private::SettingsView, vbox);

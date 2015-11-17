@@ -194,7 +194,7 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
     grid->addWidget(d->countryCB,                          10, 1, 1, 5);
     grid->setColumnStretch(4, 10);
     grid->setRowStretch(11, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

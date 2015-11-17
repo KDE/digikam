@@ -485,7 +485,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     vlay->addWidget(d->expbox, 10);
     vlay->addStretch();
-    vlay->setMargin(0);
+    vlay->setContentsMargins(QMargins());
     vlay->setSpacing(0);
 
     // -------------------------------------------------------------

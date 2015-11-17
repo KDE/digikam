@@ -172,7 +172,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumT
     grid->addWidget(d->searchBar,     1, 0, 1, 1);
     grid->addWidget(d->newAlbumBtn,   1, 1, 1, 1);
     grid->setRowStretch(0, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // ------------------------------------------------------------------------------------

@@ -255,7 +255,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     mainBoxLayout->setColumnStretch(0, 10);
     mainBoxLayout->setRowStretch(6, 10);
     mainBoxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    mainBoxLayout->setMargin(0);
+    mainBoxLayout->setContentsMargins(QMargins());
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(page);

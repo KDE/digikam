@@ -144,13 +144,13 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     d->sortOrderOptionsHelper->addToMapWidget(d->mapSearchWidget);
 
     vlay2->addWidget(d->mapSearchWidget);
-    vlay2->setMargin(0);
+    vlay2->setContentsMargins(QMargins());
     vlay2->setSpacing(0);
 
     // ---------------------------------------------------------------
 
     DHBox* const hbox = new DHBox(this);
-    hbox->setMargin(0);
+    hbox->setContentsMargins(QMargins());
     hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->nameEdit = new QLineEdit(hbox);
@@ -202,7 +202,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     /// @todo Should we still replace the icons of the actions with text as discussed during the sprint?
     QWidget* const secondActionRow = new QWidget();
     QHBoxLayout* const secondActionRowHBox = new QHBoxLayout();
-    secondActionRowHBox->setMargin(0);
+    secondActionRowHBox->setContentsMargins(QMargins());
     secondActionRow->setLayout(secondActionRowHBox);
 
     QLabel* const secondActionRowLabel = new QLabel(i18n("Search by area:"));
@@ -229,7 +229,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
 
     QWidget* const nonGeolocatedActionRow = new QWidget();
     QVBoxLayout* const thirdActionRowVBox = new QVBoxLayout();
-    thirdActionRowVBox->setMargin(0);
+    thirdActionRowVBox->setContentsMargins(QMargins());
     nonGeolocatedActionRow->setLayout(thirdActionRowVBox);
 
     QPushButton* const nonGeolocatedBtn = new QPushButton(nonGeolocatedActionRow);
@@ -244,13 +244,13 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
 
     vlayTop->addWidget(hbox);
     vlayTop->setStretchFactor(mapPanel, 10);
-    vlayTop->setMargin(0);
+    vlayTop->setContentsMargins(QMargins());
     vlayTop->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     QFrame* const frameBottom     = new QFrame(d->splitter);
     QVBoxLayout* const vlayBottom = new QVBoxLayout(frameBottom);
     vlayBottom->addWidget(d->searchTreeView);
     vlayBottom->addWidget(d->searchGPSBar);
-    vlayBottom->setMargin(0);
+    vlayBottom->setContentsMargins(QMargins());
     vlayBottom->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->splitter->addWidget(frameTop);

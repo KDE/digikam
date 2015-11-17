@@ -109,8 +109,8 @@ HistogramBox::HistogramBox(QWidget* const parent, HistogramBoxType type, bool se
     d->logHistoButton->setCheckable(true);
     d->scaleBG->addButton(d->logHistoButton, LogScaleHistogram);
 
-    hlay->setMargin(0);
     hlay->setSpacing(0);
+    hlay->setContentsMargins(QMargins());
     hlay->addWidget(d->linHistoButton);
     hlay->addWidget(d->logHistoButton);
 
@@ -130,8 +130,8 @@ HistogramBox::HistogramBox(QWidget* const parent, HistogramBoxType type, bool se
 
     histoBoxLayout->addWidget(d->histogramWidget);
     histoBoxLayout->addWidget(d->hGradient);
+    histoBoxLayout->setContentsMargins(QMargins());
     histoBoxLayout->setSpacing(1);
-    histoBoxLayout->setMargin(0);
     d->histoBox->setLayout(histoBoxLayout);
 
     QGridLayout* const mainLayout = new QGridLayout;
@@ -140,8 +140,8 @@ HistogramBox::HistogramBox(QWidget* const parent, HistogramBoxType type, bool se
     mainLayout->addWidget(scaleBox,       0, 3, 1, 2);
     mainLayout->addWidget(d->histoBox,    2, 0, 1, 5);
     mainLayout->setColumnStretch(2, 10);
+    mainLayout->setContentsMargins(QMargins());
     mainLayout->setSpacing(5);
-    mainLayout->setMargin(0);
     setLayout(mainLayout);
 
     // ---------------------------------------------------------------

@@ -241,8 +241,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
         grid->addWidget(buttonRow,        6, 1, 1, 1);
     }
 
-    grid->setMargin(0);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(QMargins());
     page->setLayout(grid);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);

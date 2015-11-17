@@ -175,7 +175,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay3->addWidget(d->tagOptionsBtn,      2, 2, 1, 1);
     lay3->setRowStretch(0, 100);
     lay3->setColumnStretch(1, 10);
-    lay3->setMargin(0);
+    lay3->setContentsMargins(QMargins());
     lay3->setSpacing(0);
 
     d->expbox->addItem(box3, QIcon::fromTheme(QLatin1String("tag-assigned")), i18n("Tags Filter"), QLatin1String("TagsFilter"), true);
@@ -193,7 +193,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay4->addWidget(d->ratingFilter,     1, 2, 1, 1);
     lay4->setColumnStretch(2, 1);
     lay4->setColumnStretch(3, 10);
-    lay4->setMargin(0);
+    lay4->setContentsMargins(QMargins());
     lay4->setSpacing(0);
 
     d->expbox->addItem(box4, QIcon::fromTheme(QLatin1String("favorites")), i18n("Labels Filter"), QLatin1String("LabelsFilter"), true);

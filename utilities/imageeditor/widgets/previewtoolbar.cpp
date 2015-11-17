@@ -85,8 +85,8 @@ PreviewToolBar::PreviewToolBar(QWidget* const parent)
     QHBoxLayout* const hlay = new QHBoxLayout(this);
     d->previewButtons       = new QButtonGroup(this);
     d->previewButtons->setExclusive(true);
+    hlay->setContentsMargins(QMargins());
     hlay->setSpacing(0);
-    hlay->setMargin(0);
 
     d->previewOriginalButton = new QToolButton(this);
     d->previewButtons->addButton(d->previewOriginalButton, PreviewOriginalImage);

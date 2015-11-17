@@ -293,8 +293,8 @@ void ImageWindow::setupUserArea()
 
     hlay->addWidget(m_splitter);
     hlay->addWidget(d->rightSideBar);
+    hlay->setContentsMargins(QMargins());
     hlay->setSpacing(0);
-    hlay->setMargin(0);
 
     m_canvas->makeDefaultEditingCanvas();
     m_stackView->setCanvas(m_canvas);

@@ -81,7 +81,7 @@ TemplateSelector::TemplateSelector(QWidget* const parent)
                                         "Selecting one will assign information as well.</p>"));
 
     setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    setMargin(0);
+    setContentsMargins(QMargins());
     setStretchFactor(d->templateCombo, 10);
 
     connect(d->templateCombo, SIGNAL(activated(int)),

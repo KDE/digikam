@@ -270,7 +270,7 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
     mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QHBoxLayout* const hLayout    = new QHBoxLayout();
-    hLayout->setMargin(0);
+    hLayout->setContentsMargins(QMargins());
     hLayout->setSpacing(-1); // use default spacing
     mainLayout->addLayout(hLayout, 5);
 

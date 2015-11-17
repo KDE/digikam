@@ -274,7 +274,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     grid->addWidget(d->title,                       0, 1, 1, 1);
     grid->addWidget(d->expanderBox,                 5, 0, 3, 2);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(5, 10);
 

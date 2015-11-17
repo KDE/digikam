@@ -102,7 +102,7 @@ StatusProgressBar::StatusProgressBar(QWidget* const parent)
 
     hBox->addWidget(d->progressBar);
     hBox->addWidget(d->cancelButton);
-    hBox->setMargin(0);
+    hBox->setContentsMargins(QMargins());
     hBox->setSpacing(0);
 
     insertWidget(Private::TextLabel,   d->textLabel);

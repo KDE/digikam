@@ -728,7 +728,7 @@ void EditorWindow::setupStatusBar()
     buttonsGrp->addButton(d->cmViewIndicator);
 
     hlay->setSpacing(0);
-    hlay->setMargin(0);
+    hlay->setContentsMargins(QMargins());
     hlay->addWidget(d->underExposureIndicator);
     hlay->addWidget(d->overExposureIndicator);
     hlay->addWidget(d->cmViewIndicator);

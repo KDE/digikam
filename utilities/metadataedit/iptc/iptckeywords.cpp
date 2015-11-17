@@ -130,7 +130,7 @@ IPTCKeywords::IPTCKeywords(QWidget* const parent)
     grid->addWidget(note,                   5, 1, 1, 1);
     grid->setColumnStretch(0, 10);
     grid->setRowStretch(6, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

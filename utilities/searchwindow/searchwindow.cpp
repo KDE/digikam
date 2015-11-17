@@ -83,7 +83,7 @@ SearchWindow::SearchWindow()
 
     layout->addWidget(d->scrollArea);
     layout->addWidget(d->bottomBar);
-    layout->setMargin(0);
+    layout->setContentsMargins(QMargins());
     layout->setSpacing(0);
     setLayout(layout);
 

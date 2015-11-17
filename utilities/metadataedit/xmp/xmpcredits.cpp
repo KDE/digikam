@@ -204,7 +204,7 @@ XMPCredits::XMPCredits(QWidget* const parent)
     grid->addWidget(d->sourceEdit,          4, 1, 1, 2);
     grid->setRowStretch(5, 10);
     grid->setColumnStretch(2, 10);
-    grid->setMargin(0);
+    grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------

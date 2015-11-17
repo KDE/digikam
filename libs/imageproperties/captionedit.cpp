@@ -72,7 +72,7 @@ CaptionEdit::CaptionEdit(QWidget* const parent)
     d->authorEdit->setClearButtonEnabled(true);
     d->authorEdit->setPlaceholderText(i18n("Enter caption author name here."));
 
-    setMargin(0);
+    setContentsMargins(QMargins());
     setSpacing(0);
 
     connect(d->altLangStrEdit, SIGNAL(signalSelectionChanged(QString)),

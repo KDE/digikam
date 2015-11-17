@@ -86,7 +86,7 @@ DFontSelect::DFontSelect(const QString& text, QWidget* const parent)
     d->chooseFontButton = new QPushButton(i18n("Choose..."), this);
 
     setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    setMargin(0);
+    setContentsMargins(QMargins());
     setStretchFactor(d->space, 10);
 
     connect(d->modeCombo, SIGNAL(activated(int)),

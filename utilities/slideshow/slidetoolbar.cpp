@@ -73,7 +73,7 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
       d(new Private)
 {
     setMouseTracking(true);
-    setMargin(0);
+    setContentsMargins(QMargins());
 
     d->playBtn = new QToolButton(this);
     d->prevBtn = new QToolButton(this);

@@ -165,7 +165,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->albumSearchBar->setModel(d->albumModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->albumSearchBar->setFilterModel(d->albumTreeView->albumFilterModel());
 
-    albumBox->setMargin(0);
+    albumBox->setContentsMargins(QMargins());
     albumBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     albumBox->setStretchFactor(d->albumTreeView, 100);
     albumBox->setStretchFactor(d->albumSearchBar, 1);
@@ -187,7 +187,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
                               AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagTreeView->albumFilterModel());
 
-    tagBox->setMargin(0);
+    tagBox->setContentsMargins(QMargins());
     tagBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     tagBox->setStretchFactor(d->tagTreeView, 100);
     tagBox->setStretchFactor(d->tagSearchBar, 1);
@@ -209,7 +209,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->searchSearchBar->setModel(d->searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->searchSearchBar->setFilterModel(d->searchTreeView->albumFilterModel());
 
-    searchBox->setMargin(0);
+    searchBox->setContentsMargins(QMargins());
     searchBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     searchBox->setStretchFactor(d->searchTreeView, 100);
     searchBox->setStretchFactor(d->searchSearchBar, 1);
@@ -220,7 +220,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->labelsTree          = new AlbumLabelsTreeView(labelsBox,true);
     d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsTree);
 
-    labelsBox->setMargin(0);
+    labelsBox->setContentsMargins(QMargins());
     labelsBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     labelsBox->setStretchFactor(d->labelsTree, 100);
 
@@ -233,7 +233,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     QHBoxLayout* const hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
-    hlay->setMargin(0);
+    hlay->setContentsMargins(QMargins());
     hlay->setSpacing(0);
 
     // ------------------------------------------------------------------------------------

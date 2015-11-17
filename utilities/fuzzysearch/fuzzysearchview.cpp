@@ -239,7 +239,7 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
                                 AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->searchFuzzyBar->setFilterModel(d->searchTreeView->albumFilterModel());
     d->folderView->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->folderView->setMargin(0);
+    d->folderView->setContentsMargins(QMargins());
 
     // ---------------------------------------------------------------
 
@@ -247,7 +247,7 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
     QVBoxLayout* const mainLayout = new QVBoxLayout();
     mainLayout->addWidget(d->tabWidget);
     mainLayout->addWidget(d->folderView);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(QMargins());
     mainLayout->setSpacing(0);
     mainWidget->setLayout(mainLayout);
 
@@ -302,7 +302,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     // ---------------------------------------------------------------
 
     DHBox* const saveBox = new DHBox();
-    saveBox->setMargin(0);
+    saveBox->setContentsMargins(QMargins());
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->nameEditImage = new QLineEdit(saveBox);
@@ -401,13 +401,13 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     settingsLayout->addWidget(resultsLabel,     0, 5);
     settingsLayout->addWidget(d->resultsSketch, 0, 6);
     settingsLayout->setColumnStretch(4, 10);
-    settingsLayout->setMargin(0);
+    settingsLayout->setContentsMargins(QMargins());
     settingsLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // ---------------------------------------------------------------
 
     DHBox* const saveBox = new DHBox();
-    saveBox->setMargin(0);
+    saveBox->setContentsMargins(QMargins());
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(saveBox);

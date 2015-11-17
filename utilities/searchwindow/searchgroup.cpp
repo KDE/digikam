@@ -497,7 +497,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
         headerLayout->addStretch(3);
         headerLayout->addWidget(simpleLabel1);
         headerLayout->addStretch(1);
-        headerLayout->setMargin(0);
+        headerLayout->setContentsMargins(QMargins());
         simpleHeader->setLayout(headerLayout);
 
         QWidget* const optionsBox        = new QWidget;
@@ -506,13 +506,13 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
         optionsLayout->addLayout(new RadioButtonHBox(d->anyBox, anyBoxLabel, layoutDirection()),       1, 0);
         optionsLayout->addLayout(new RadioButtonHBox(d->noneBox, noneBoxLabel, layoutDirection()),     0, 1);
         optionsLayout->addLayout(new RadioButtonHBox(d->oneNotBox, oneNotBoxLabel, layoutDirection()), 1, 1);
-        optionsLayout->setMargin(0);
+        optionsLayout->setContentsMargins(QMargins());
         optionsBox->setLayout(optionsLayout);
 
         d->stackedLayout = new QStackedLayout;
         d->stackedLayout->addWidget(simpleHeader);
         d->stackedLayout->addWidget(optionsBox);
-        d->stackedLayout->setMargin(0);
+        d->stackedLayout->setContentsMargins(QMargins());
 
         d->layout->addWidget(mainLabel,        0, 0, 1, 1);
         d->layout->addLayout(d->stackedLayout, 1, 0, 1, 1);

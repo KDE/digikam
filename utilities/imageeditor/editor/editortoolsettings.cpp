@@ -177,8 +177,8 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw dashed guide lines."));
 
     d->guideBox->setStretchFactor(space4, 10);
+    d->guideBox->setContentsMargins(QMargins());
     d->guideBox->setSpacing(spacingHint());
-    d->guideBox->setMargin(0);
 
     // ---------------------------------------------------------------
 

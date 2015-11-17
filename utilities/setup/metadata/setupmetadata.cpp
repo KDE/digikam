@@ -526,8 +526,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    balooLayout->setMargin(0);
     balooLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    balooLayout->setContentsMargins(QMargins());
     balooLayout->addWidget(balooGroup);
     balooLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     balooLayout->addWidget(balooBox);

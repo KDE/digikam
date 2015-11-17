@@ -412,8 +412,8 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     d->splitterSize        = 0;
 
     DVBox* const vboxTabBar = new DVBox(hboxMain);
+    vboxTabBar->layout()->setContentsMargins(QMargins());
     vboxTabBar->layout()->setSpacing(0);
-    vboxTabBar->layout()->setMargin(0);
 
     d->tabBar = new QTabBar(vboxTabBar);
     d->tabBar->setShape(QTabBar::RoundedEast);
