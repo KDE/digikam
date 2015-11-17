@@ -34,7 +34,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "downloadhistory.h"
+#include "coredbdownloadhistory.h"
 
 namespace Digikam
 {
@@ -156,17 +156,17 @@ void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& ma
     do
     {
         // We query database to check if (*it).have been already downloaded from camera.
-        switch (DownloadHistory::status(QString::fromUtf8(id), (*it).name, (*it).size, (*it).ctime))
+        switch (CoreDbDownloadHistory::status(QString::fromUtf8(id), (*it).name, (*it).size, (*it).ctime))
         {
-            case DownloadHistory::NotDownloaded:
+            case CoreDbDownloadHistory::NotDownloaded:
                 (*it).downloaded = CamItemInfo::NewPicture;
                 break;
 
-            case DownloadHistory::Downloaded:
+            case CoreDbDownloadHistory::Downloaded:
                 (*it).downloaded = CamItemInfo::DownloadedYes;
                 break;
 
-            default: // DownloadHistory::StatusUnknown
+            default: // CoreDbDownloadHistory::StatusUnknown
                 (*it).downloaded = CamItemInfo::DownloadUnknown;
                 break;
         }

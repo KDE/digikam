@@ -92,7 +92,7 @@
 #include "collectionscanner.h"
 #include "componentsinfo.h"
 #include "dlogoaction.h"
-#include "downloadhistory.h"
+#include "coredbdownloadhistory.h"
 #include "dzoombar.h"
 #include "fileactionmngr.h"
 #include "freespacewidget.h"
@@ -1550,7 +1550,7 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
 
             d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
-            DownloadHistory::setDownloaded(QString::fromUtf8(d->controller->cameraMD5ID()),
+            CoreDbDownloadHistory::setDownloaded(QString::fromUtf8(d->controller->cameraMD5ID()),
                                            info.name,
                                            info.size,
                                            info.ctime);
@@ -1608,7 +1608,7 @@ void ImportUI::slotMarkAsDownloaded()
     {
         setDownloaded(d->view->camItemInfoRef(info.folder, info.name), CamItemInfo::DownloadedYes);
 
-        DownloadHistory::setDownloaded(QString::fromUtf8(d->controller->cameraMD5ID()),
+        CoreDbDownloadHistory::setDownloaded(QString::fromUtf8(d->controller->cameraMD5ID()),
                                        info.name,
                                        info.size,
                                        info.ctime);

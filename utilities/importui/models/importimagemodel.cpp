@@ -30,7 +30,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "downloadhistory.h"
+#include "coredbdownloadhistory.h"
 #include "cameracontroller.h"
 
 namespace Digikam
@@ -633,7 +633,7 @@ void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
         // TODO move this to a separate thread, see CameraHistoryUpdater
         // TODO this is ugly, using different enums to point the similar status..
         // TODO can we/do we want to differentiate at all between whether the status is unknown and not downloaded?
-        DownloadHistory::Status status = DownloadHistory::status(QString::fromUtf8(d->controller->cameraMD5ID()), info.name, info.size, info.ctime);
+        CoreDbDownloadHistory::Status status = CoreDbDownloadHistory::status(QString::fromUtf8(d->controller->cameraMD5ID()), info.name, info.size, info.ctime);
         info.downloaded  = status;
         // TODO is this safe? if so, is there a need to store this inside idHash separately?
         info.id = i;
