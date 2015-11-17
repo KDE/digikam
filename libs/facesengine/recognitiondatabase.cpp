@@ -260,10 +260,16 @@ RecognitionDatabase::Private::Private(const QString& path)
 
     if (dbAvailable)
     {
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Face database ready for use";
+
         foreach (const Identity& identity, FaceDbAccess(db).db()->identities())
         {
             identityCache[identity.id()] = identity;
         }
+    }
+    else
+    {
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Failed to initialize face database";
     }
 }
 

@@ -214,13 +214,13 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DbEngineParameters& 
 
     if (ThumbsDbAccess::checkReadyForUse(0))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Thumbnail db ready for use";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Thumbnails database ready for use";
         static_d->storageMethod = ThumbnailCreator::ThumbnailDatabase;
         static_d->provider      = provider;
     }
     else
     {
-        QMessageBox::information(qApp->activeWindow(), i18n("Failed to initialize thumbnail database"),
+        QMessageBox::information(qApp->activeWindow(), i18n("Failed to initialize thumbnails database"),
                                  i18n("Error message: %1", ThumbsDbAccess().lastError()));
     }
 }
