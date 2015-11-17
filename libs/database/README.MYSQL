@@ -31,3 +31,14 @@ TODO List
   digikamthumbsdb : the Thumbnails database name.
   digikamfacedb   : the Face database name.
   digikam/digikam : the name/password of user account used by digiKam to access on mysql server.
+
+- To re-init mysql database server under Linux with a clean intall, process as below :
+
+  # su
+  # rm -rf /var/lib/mysql
+  # systemctl restart mysqld
+  # mysql
+    ...
+    Enter SQL code to Mysql prompt in order to init digiKam databases with grant privileges (see previous point).
+    ...
+    quit
