@@ -332,6 +332,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     d->databaseProcess = new QProcess();
     d->databaseProcess->start( mysqldPath, arguments );
 
+    qCDebug(DIGIKAM_DATABASESERVER_LOG) << d->databaseProcess->program() << d->databaseProcess->arguments();
+
     if ( !d->databaseProcess->waitForStarted() )
     {
         QString argumentStr = arguments.join(QLatin1String(", "));
@@ -417,10 +419,10 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
                     }
                     else
                     {
-/*
-                        query.exec( QString::fromLatin1( "GRANT ALL PRIVILEGES ON %1.* TO 'digikam'@'localhost';" ).arg( d->internalDBName ) );
+
+                        query.exec( QString::fromLatin1( "GRANT ALL PRIVILEGES ON %1.* TO 'root';" ).arg( d->internalDBName ) );
                         query.exec( QString::fromLatin1( "FLUSH PRIVILEGES;" ) );
-*/
+
                         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database was successfully created";
                     }
                 }
@@ -475,10 +477,10 @@ DatabaseServerError DatabaseServer::createDatabase()
             }
             else
             {
-/*
-                query.exec( QString::fromLatin1( "GRANT ALL PRIVILEGES ON %1.* TO 'digikam'@'localhost';" ).arg( d->internalDBName ) );
+
+                query.exec( QString::fromLatin1( "GRANT ALL PRIVILEGES ON %1.* TO 'root';" ).arg( d->internalDBName ) );
                 query.exec( QString::fromLatin1( "FLUSH PRIVILEGES;" ) );
-*/
+
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database was successfully created";
             }
         }
