@@ -52,17 +52,17 @@ public:
     FaceDbAccess();
     ~FaceDbAccess();
 
-    TrainingDB*          db()         const;
-    FaceDbBackend*       backend()    const;
-    QString              lastError()  const;
+    TrainingDB*    db()         const;
+    FaceDbBackend* backend()    const;
+    QString        lastError()  const;
 
     /**
-      * Set the "last error" message. This method is not for public use.
-      */
+     * Set the "last error" message. This method is not for public use.
+     */
     void setLastError(const QString& error);
 
     static DbEngineParameters parameters();
-    
+
 public:
 
     static void initDbEngineErrorHandler(DbEngineErrorHandler* const errorhandler);
@@ -97,7 +97,7 @@ public:
     ~FaceDbAccessUnlock();
 
 private:
- 
+
     int count;
 };
 

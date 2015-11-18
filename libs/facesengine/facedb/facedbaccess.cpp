@@ -157,6 +157,7 @@ void FaceDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* const errorhan
     {
         d = new FaceDbAccessStaticPriv();
     }
+
     //DbEngineErrorHandler* const errorhandler = new DbEngineGuiErrorHandler(d->parameters);
     d->backend->setDbEngineErrorHandler(errorhandler);
 }
@@ -167,7 +168,7 @@ void FaceDbAccess::setParameters(const DbEngineParameters& parameters)
     {
         d = new FaceDbAccessStaticPriv();
     }
-    
+
     FaceDbAccessMutexLocker lock(d);
 
     if (d->parameters == parameters)
@@ -291,7 +292,7 @@ FaceDbAccessUnlock::FaceDbAccessUnlock()
     FaceDbAccess::d->lock.lockCount = 0;
 
     // unlock
-    for (int i=0; i<count; ++i)
+    for (int i = 0; i < count; ++i)
     {
         FaceDbAccess::d->lock.mutex.unlock();
     }
