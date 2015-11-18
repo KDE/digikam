@@ -52,7 +52,7 @@ public:
     explicit DatabaseWidget(QWidget* const parent = 0);
     ~DatabaseWidget();
 
-public: 
+public:
 
     QString        originalDbPath;
     QString        originalDbType;
@@ -64,7 +64,7 @@ public:
     QLineEdit*     connectionOptions;
     QLineEdit*     userName;
     QLineEdit*     password;
-    
+
     QComboBox*     databaseType;
     QSpinBox*      hostPort;
     QCheckBox*     internalServer;

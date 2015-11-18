@@ -105,15 +105,15 @@ void DatabaseWidget::setupMainArea()
     QLabel* const internalServerLabel                = new QLabel(i18n("Internal Server"));
 #endif
     internalServer                                   = new QCheckBox();
-    QLabel* const databaseNameLabel                  = new QLabel(i18n("Core<br>Schema Name"));
+    QLabel* const databaseNameLabel                  = new QLabel(i18n("Core<br>Database Name"));
     databaseName                                     = new QLineEdit();
-    QLabel* const databaseNameThumbnailsLabel        = new QLabel(i18n("Thumbnails<br>Schema Name"));
+    QLabel* const databaseNameThumbnailsLabel        = new QLabel(i18n("Thumbnails<br>Database Name"));
     databaseNameThumbnails                           = new QLineEdit();
-    QLabel* const databaseNameFaceLabel              = new QLabel(i18n("Face<br>Schema Name"));
+    QLabel* const databaseNameFaceLabel              = new QLabel(i18n("Face<br>Database Name"));
     databaseNameFace                                 = new QLineEdit();
     QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name"));
     hostName                                         = new QLineEdit();
-    QLabel* const hostPortLabel                      = new QLabel(i18n("Port"));
+    QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port"));
     hostPort                                         = new QSpinBox();
     hostPort->setMaximum(65535);
 
