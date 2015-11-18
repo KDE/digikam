@@ -107,7 +107,7 @@ bool FaceDbSchemaUpdater::startUpdates()
     // First step: do we have an empty database?
     QStringList tables = d->access->backend()->tables();
 
-    if (tables.contains(QString::fromLatin1("Settings"), Qt::CaseInsensitive))
+    if (tables.contains(QString::fromLatin1("Identities"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
         QString version         = d->access->db()->setting(QString::fromLatin1("DBFaceVersion"));
