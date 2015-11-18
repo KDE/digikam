@@ -219,6 +219,7 @@ RecognitionDatabase::RecognitionDatabase()
 
 RecognitionDatabase::~RecognitionDatabase()
 {
+    delete d;
 }
 
 QList<Identity> RecognitionDatabase::allIdentities() const
