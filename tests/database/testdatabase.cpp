@@ -34,20 +34,22 @@
 #include <QCommandLineParser>
 #include <QDebug>
 
-// digiKam includes
+// Local includes
 
 #include "daboutdata.h"
 #include "albummanager.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "coredbaccess.h"
+#include "thumbsdbaccess.h"
+#include "facedbaccess.h"
 #include "dbengineparameters.h"
 #include "scancontroller.h"
 #include "setup.h"
-#include "thumbsdbaccess.h"
 #include "digikam_version.h"
 
 using namespace Digikam;
+using namespace FacesEngine;
 
 int main(int argc, char** argv)
 {
@@ -86,6 +88,7 @@ int main(int argc, char** argv)
 
     CoreDbAccess::cleanUpDatabase();
     ThumbsDbAccess::cleanUpDatabase();
+    FaceDbAccess::cleanUpDatabase();
 
     return 0;
 }

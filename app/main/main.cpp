@@ -51,14 +51,16 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "daboutdata.h"
-#include "coredbaccess.h"
 #include "dbengineparameters.h"
 #include "digikamapp.h"
 #include "scancontroller.h"
+#include "coredbaccess.h"
 #include "thumbsdbaccess.h"
+#include "facedbaccess.h"
 #include "digikam_version.h"
 
 using namespace Digikam;
+using namespace FacesEngine;
 
 int main(int argc, char* argv[])
 {
@@ -235,6 +237,7 @@ int main(int argc, char* argv[])
 
     CoreDbAccess::cleanUpDatabase();
     ThumbsDbAccess::cleanUpDatabase();
+    FaceDbAccess::cleanUpDatabase();
     MetaEngine::cleanupExiv2();
 
     return ret;

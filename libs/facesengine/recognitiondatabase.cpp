@@ -190,8 +190,6 @@ RecognitionDatabase::Private::~Private()
 {
     delete opencvlbph;
     delete funnel;
-
-    FaceDbAccess::cleanUpDatabase();
 }
 
 RecognitionDatabase::Private::CurrentAligner* RecognitionDatabase::Private::aligner()
