@@ -1063,7 +1063,6 @@
                 </statement>
                 <statement mode="plain">
                     CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
-                    SQL SECURITY INVOKER
                     BEGIN
 
                     set @Index_cnt = (
@@ -1374,18 +1373,18 @@ ORDER BY inf.rating DESC, img.name ASC
                             value LONGTEXT CHARACTER SET utf8,
                             UNIQUE(keyword(255)));
                 </statement>
-                    <statement mode="plain">
-                            INSERT INTO Settings (keyword, value)
-                            VALUES('DBThumbnailsVersionRequired','1')
-                            ON DUPLICATE KEY
-                            UPDATE value = GREATEST(VALUES(value), 1)
-                    </statement>
-                    <statement mode="plain">
-                            INSERT INTO Settings (keyword, value)
-                            VALUES('DBThumbnailsVersion','2')
-                            ON DUPLICATE KEY
-                            UPDATE value = GREATEST(VALUES(value), 2)
-                    </statement>
+                <statement mode="plain">
+                        INSERT INTO Settings (keyword, value)
+                        VALUES('DBThumbnailsVersionRequired','1')
+                        ON DUPLICATE KEY
+                        UPDATE value = GREATEST(VALUES(value), 1)
+                </statement>
+                <statement mode="plain">
+                        INSERT INTO Settings (keyword, value)
+                        VALUES('DBThumbnailsVersion','2')
+                        ON DUPLICATE KEY
+                        UPDATE value = GREATEST(VALUES(value), 2)
+                </statement>
             </dbaction>
 
             <!-- Mysql Thumbnails Indexes -->
@@ -1396,7 +1395,6 @@ ORDER BY inf.rating DESC, img.name ASC
                 </statement>
                 <statement mode="plain">
                     CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
-                    SQL SECURITY INVOKER
                     BEGIN
 
                     set @Index_cnt = (
@@ -1435,6 +1433,16 @@ ORDER BY inf.rating DESC, img.name ASC
             <!-- Mysql Face Schema Database -->
 
             <dbaction name="CreateFaceDB" mode="transaction">
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Identities
+                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                            type INTEGER);
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS IdentityAttributes
+                            (id INTEGER,
+                            type INTEGER,
+                            attribute TEXT,
+                            value TEXT);
+                </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
                             (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
                             value LONGTEXT CHARACTER SET utf8,
@@ -1451,16 +1459,6 @@ ORDER BY inf.rating DESC, img.name ASC
                         VALUES('DBFaceVersion','2')
                         ON DUPLICATE KEY
                         UPDATE value = GREATEST(VALUES(value), 2);
-                </statement>
-                <statement mode="plain">CREATE TABLE IF NOT EXISTS Identities
-                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            type INTEGER);
-                </statement>
-                <statement mode="plain">CREATE TABLE IF NOT EXISTS IdentityAttributes
-                            (id INTEGER,
-                            type INTEGER,
-                            attribute TEXT,
-                            value TEXT);
                 </statement>
             </dbaction>
 
@@ -1493,7 +1491,6 @@ ORDER BY inf.rating DESC, img.name ASC
                 </statement>
                 <statement mode="plain">
                     CREATE PROCEDURE create_index_if_not_exists(table_name_vc varchar(50), index_name_vc varchar(50), field_list_vc varchar(1024))
-                    SQL SECURITY INVOKER
                     BEGIN
 
                     set @Index_cnt = (
