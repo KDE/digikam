@@ -60,26 +60,6 @@
 namespace Digikam
 {
 
-// For whatever reason, these methods are "static protected"
-class sotoSleep : public QThread
-{
-
-public:
-
-    static void sleep(unsigned long secs)
-    {
-        QThread::sleep(secs);
-    }
-    static void msleep(unsigned long msecs)
-    {
-        QThread::msleep(msecs);
-    }
-    static void usleep(unsigned long usecs)
-    {
-        QThread::usleep(usecs);
-    }
-};
-
 DatabaseServerStarter::DatabaseServerStarter(QObject* const parent)
     : QObject(parent)
 {
@@ -134,11 +114,11 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
     // wait until the server has successfully registered on DBUS
     // TODO Use another way for that! Sleep isn't good :-/
-    for (int i=0; i<30; ++i)
+    for (int i = 0; i < 30; ++i)
     {
         if (!isServerRegistered())
         {
-            sotoSleep sleepThread;
+            QThread sleepThread;
             sleepThread.msleep(250);
             sleepThread.wait();
         }
