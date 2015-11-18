@@ -6,7 +6,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-07-28
- * Description : Core Database statements
+ * Description : Databases SQL statements
  *
  * Copyright (C) 2009      by Holger Foerster <hamsi2k at freenet dot de>
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -31,7 +31,7 @@
     <defaultDB>QSQLITE</defaultDB>
 
     <!-- Increment this version number whenever you change this file.
-         The DBCORECONFIG_XML_VERSION value is defined in the toplevel CMakeList.txt file.
+         The DBCORECONFIG_XML_VERSION value is defined in the toplevel CMakeLists.txt file.
          On version mismatch, users will be warned.
     -->
     <version>${DBCORECONFIG_XML_VERSION}</version>
@@ -41,6 +41,7 @@
 
 
     <database name="QSQLITE">
+
         <hostName>TestHost</hostName>
         <databaseName>DatabaseName</databaseName>
         <userName>UserName</userName>
@@ -831,6 +832,7 @@
             </dbaction>
 
         </dbactions>
+
     </database>
 
 
@@ -840,6 +842,7 @@
 
 
     <database name="QMYSQL">
+
         <hostName></hostName>
         <databaseName>digikam</databaseName>
         <userName>root</userName>
@@ -1827,5 +1830,7 @@ ORDER BY inf.rating DESC, img.name ASC
             </dbaction>
 
         </dbactions>
+
     </database>
+
 </databaseconfig>
