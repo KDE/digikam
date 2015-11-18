@@ -260,7 +260,7 @@ QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
     return newFaces;
 }
 
-FacesEngine::Identity FaceUtils::identityForTag(int tagId, FacesEngine::RecognitionDatabase db) const
+FacesEngine::Identity FaceUtils::identityForTag(int tagId, FacesEngine::RecognitionDatabase& db) const
 {
     QMap<QString, QString> attributes = FaceTags::identityAttributes(tagId);
     FacesEngine::Identity identity     = db.findIdentity(attributes);

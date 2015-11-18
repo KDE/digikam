@@ -122,7 +122,7 @@ public:
      */
     static int          faceRectDisplayMargin();
 
-    FacesEngine::Identity identityForTag(int tagId, FacesEngine::RecognitionDatabase db) const;
+    FacesEngine::Identity identityForTag(int tagId, FacesEngine::RecognitionDatabase& db) const;
     int                  tagForIdentity(const FacesEngine::Identity& identity) const;
 
 protected:
