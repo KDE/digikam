@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-14
- * Description : database migration dialog
+ * Description : Mysql internal database server 
  *
  * Copyright (C) 2009-2011 by Holger Foerster <Hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -203,6 +203,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     if ( globalConfig.isEmpty() )
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Did not find MySQL server default configuration (mysql-global.conf)";
+
         return DatabaseServerError(DatabaseServerError::StartError, i18n("Did not find MySQL server default configuration (mysql-global.conf)."));
     }
 
@@ -238,7 +239,9 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
             QString  str = i18n("Unable to create MySQL server configuration file.\n"
                                 "This means that either the default configuration file (mysql-global.conf) was not readable\n"
                                 "or the target file (mysql.conf) could not be written.");
+
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
+
             return DatabaseServerError(DatabaseServerError::StartError, str);
         }
     }
@@ -247,7 +250,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // our config file somehow ends up being world-writable on some systems for no
     // apparent reason nevertheless, so fix that
     const QFile::Permissions allowedPerms = actualFile.permissions() &
-                                            (QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther);
+                                            (QFile::ReadOwner | QFile::WriteOwner |
+                                             QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther);
 
     if ( allowedPerms != actualFile.permissions() )
     {
@@ -380,7 +384,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
                 QString str = i18n("Database process exited unexpectedly during initial connection."
                                    "<p>Executable: %1</p>”"
                                    "<p>Process error: %2</p>",
-                                   mysqldPath, d->databaseProcess->errorString());
+                                   mysqldPath,
+                                   d->databaseProcess->errorString());
 
                 return DatabaseServerError(DatabaseServerError::StartError, str);
             }
@@ -394,16 +399,20 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
                 if ( !query.exec( QString::fromLatin1( "USE %1" ).arg( d->internalDBName ) ) )
                 {
                     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to use database" << d->internalDBName;
-                    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Query error:" << query.lastError().text();
-                    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database error:" << db.lastError().text();
+                    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Query error:"           << query.lastError().text();
+                    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database error:"        << db.lastError().text();
                     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Trying to create database now...";
 
                     if ( !query.exec( QLatin1String( "CREATE DATABASE digikam" ) ) )
                     {
                         QString  str = i18n("Failed to create database"
                                             "<p>Query error: %1</p>"
-                                            "<p>Database error: %2</p>", query.lastError().text(), db.lastError().text());
+                                            "<p>Database error: %2</p>",
+                                            query.lastError().text(),
+                                            db.lastError().text());
+
                         qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
+
                         return DatabaseServerError(DatabaseServerError::StartError, str);
                     }
                     else
@@ -452,8 +461,12 @@ DatabaseServerError DatabaseServer::createDatabase()
             {
                 QString str = i18n("Failed to create database"
                                    "<p>Query error: %1</p>"
-                                   "<p>Database error: %2</p>",query.lastError().text(), db.lastError().text());
+                                   "<p>Database error: %2</p>",
+                                   query.lastError().text(),
+                                   db.lastError().text());
+
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
+
                 return DatabaseServerError(DatabaseServerError::StartError, str);
             }
         }

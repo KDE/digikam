@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-01-07
- * Description : start class for database server manager
+ * Description : start class for Mysql internal database server manager
  *
  * Copyright (C) 2010-2011 by Holger Foerster <Hamsi2k at freenet dot de>
  *
@@ -24,10 +24,6 @@
 // Qt includes
 
 #include <QApplication>
-#include <QDBusConnection>
-#include <QDBusInterface>
-#include <QDBusConnectionInterface>
-#include <QDBusReply>
 
 // Local includes
 

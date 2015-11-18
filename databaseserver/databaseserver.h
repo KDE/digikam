@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-14
- * Description : database migration dialog
+ * Description : Mysql internal database server 
  *
  * Copyright (C) 2009-2011 by Holger Foerster <Hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASESERVER_H_
-#define DATABASESERVER_H_
+#ifndef DATABASE_SERVER_H_
+#define DATABASE_SERVER_H_
 
 // QT includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DATABASESERVER_H_ */
+#endif /* DATABASE_SERVER_H_ */
