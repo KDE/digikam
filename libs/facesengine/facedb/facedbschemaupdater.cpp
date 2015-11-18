@@ -33,7 +33,7 @@
 #include "digikam_debug.h"
 #include "dbenginebackend.h"
 #include "facedbaccess.h"
-#include "trainingdb.h"
+#include "facedb.h"
 
 namespace FacesEngine
 {

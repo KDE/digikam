@@ -60,7 +60,7 @@ set(facesengine_database_LIB_SRCS facedb/facedbaccess.cpp
                                   facedb/facedbbackend.cpp
                                   facedb/facedboperationgroup.cpp
                                   facedb/facedbschemaupdater.cpp
-                                  facedb/trainingdb.cpp
+                                  facedb/facedb.cpp
 )
 
 add_library(digikamfacesengine_src

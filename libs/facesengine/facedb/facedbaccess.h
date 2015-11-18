@@ -37,7 +37,7 @@ using namespace Digikam;
 namespace FacesEngine
 {
 
-class TrainingDB;
+class FaceDb;
 class FaceDbAccessStaticPriv;
 class FaceDbBackend;
 
@@ -52,7 +52,7 @@ public:
     FaceDbAccess();
     ~FaceDbAccess();
 
-    TrainingDB*    db()         const;
+    FaceDb*        db()         const;
     FaceDbBackend* backend()    const;
     QString        lastError()  const;
 

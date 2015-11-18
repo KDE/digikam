@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TRAINING_DATABASE_H
-#define TRAINING_DATABASE_H
+#ifndef FACE_DATABASE_TRAINING_INTERFACE_H
+#define FACE_DATABASE_TRAINING_INTERFACE_H
 
 // Qt includes
 
@@ -40,12 +40,12 @@ namespace FacesEngine
 
 class LBPHFaceModel;
 
-class TrainingDB
+class FaceDb
 {
 public:
 
-    TrainingDB(FaceDbBackend* const db);
-    ~TrainingDB();
+    FaceDb(FaceDbBackend* const db);
+    ~FaceDb();
 
     void setSetting(const QString& keyword, const QString& value);
     QString setting(const QString& keyword) const;
@@ -71,4 +71,4 @@ private:
 
 } // namespace FacesEngine
 
-#endif // TRAINING_DATABASE_H
+#endif // FACE_DATABASE_TRAINING_INTERFACE_H

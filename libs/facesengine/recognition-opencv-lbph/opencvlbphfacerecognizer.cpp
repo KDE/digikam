@@ -31,11 +31,11 @@
 
 // local includes
 
-#include "digikam_debug.h"
-#include "facedbaccess.h"
 #include "libopencv.h"
+#include "facedbaccess.h"
+#include "facedb.h"
 #include "lbphfacemodel.h"
-#include "trainingdb.h"
+#include "digikam_debug.h"
 
 namespace FacesEngine
 {

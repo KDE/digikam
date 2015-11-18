@@ -37,7 +37,7 @@
 
 #include "digikam_debug.h"
 #include "facedbbackend.h"
-#include "trainingdb.h"
+#include "facedb.h"
 #include "facedbschemaupdater.h"
 
 namespace FacesEngine
@@ -61,7 +61,7 @@ public:
 public:
 
     FaceDbBackend*     backend;
-    TrainingDB*        db;
+    FaceDb*        db;
     DbEngineParameters parameters;
     DbEngineLocking    lock;
     QString            lastError;
@@ -126,7 +126,7 @@ FaceDbAccess::FaceDbAccess(bool)
     d->lock.lockCount++;
 }
 
-TrainingDB* FaceDbAccess::db() const
+FaceDb* FaceDbAccess::db() const
 {
     return d->db;
 }
@@ -194,7 +194,7 @@ void FaceDbAccess::setParameters(const DbEngineParameters& parameters)
         delete d->db;
         delete d->backend;
         d->backend = new FaceDbBackend(&d->lock);
-        d->db      = new TrainingDB(d->backend);
+        d->db      = new FaceDb(d->backend);
     }
 }
 

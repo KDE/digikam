@@ -47,7 +47,7 @@
 #include "facedboperationgroup.h"
 #include "dataproviders.h"
 #include "recognitiondatabase.h"
-#include "trainingdb.h"
+#include "facedb.h"
 #include "digikam_debug.h"
 
 namespace FacesEngine

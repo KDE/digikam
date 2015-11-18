@@ -26,13 +26,13 @@
 
 // Local includes
 
-#include "trainingdb.h"
+#include "facedb.h"
 #include "digikam_debug.h"
 
 namespace FacesEngine
 {
 
-class TrainingDB::Private
+class FaceDb::Private
 {
 
 public:
@@ -44,24 +44,24 @@ public:
     FaceDbBackend* db;
 };
 
-TrainingDB::TrainingDB(FaceDbBackend* const db)
+FaceDb::FaceDb(FaceDbBackend* const db)
     : d(new Private)
 {
     d->db = db;
 }
 
-TrainingDB::~TrainingDB()
+FaceDb::~FaceDb()
 {
     delete d;
 }
 
-void TrainingDB::setSetting(const QString& keyword, const QString& value)
+void FaceDb::setSetting(const QString& keyword, const QString& value)
 {
     d->db->execSql( QString::fromLatin1("REPLACE into Settings VALUES (?,?);"),
                     keyword, value );
 }
 
-QString TrainingDB::setting(const QString& keyword) const
+QString FaceDb::setting(const QString& keyword) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromLatin1("SELECT value FROM Settings "
@@ -78,14 +78,14 @@ QString TrainingDB::setting(const QString& keyword) const
     }
 }
 
-int TrainingDB::addIdentity() const
+int FaceDb::addIdentity() const
 {
     QVariant id;
     d->db->execSql(QString::fromLatin1("INSERT INTO Identities (type) VALUES (0)"), 0, &id);
     return id.toInt();
 }
 
-void TrainingDB::updateIdentity(const Identity& p)
+void FaceDb::updateIdentity(const Identity& p)
 {
     d->db->execSql(QString::fromLatin1("DELETE FROM IdentityAttributes WHERE id=?"), p.id());
     const QMap<QString, QString> map = p.attributesMap();
@@ -98,13 +98,13 @@ void TrainingDB::updateIdentity(const Identity& p)
     }
 }
 
-void TrainingDB::deleteIdentity(int id)
+void FaceDb::deleteIdentity(int id)
 {
     // Triggers do the rest
     d->db->execSql(QString::fromLatin1("DELETE FROM Identities WHERE id=?"), id);
 }
 
-QList<Identity> TrainingDB::identities() const
+QList<Identity> FaceDb::identities() const
 {
     QList<QVariant> ids;
     QList<Identity> results;
@@ -133,7 +133,7 @@ QList<Identity> TrainingDB::identities() const
     return results;
 }
 
-QList<int> TrainingDB::identityIds() const
+QList<int> FaceDb::identityIds() const
 {
     QList<QVariant> ids;
     d->db->execSql(QString::fromLatin1("SELECT id FROM Identities"), &ids);
@@ -156,7 +156,7 @@ namespace
     };
 }
 
-void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
+void FaceDb::updateLBPHFaceModel(LBPHFaceModel& model)
 {
     QVariantList values;
     values << LBPHStorageVersion << model.radius() << model.neighbors() << model.gridX() << model.gridY();
@@ -222,7 +222,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
     }
 }
 
-LBPHFaceModel TrainingDB::lbphFaceModel() const
+LBPHFaceModel FaceDb::lbphFaceModel() const
 {
     QVariantList values;
     //qCDebug(DIGIKAM_FACEDB_LOG) << "Loading LBPH model";
@@ -305,7 +305,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
     return LBPHFaceModel();
 }
 
-void TrainingDB::clearLBPHTraining(const QString& context)
+void FaceDb::clearLBPHTraining(const QString& context)
 {
     if (context.isNull())
     {
@@ -318,7 +318,7 @@ void TrainingDB::clearLBPHTraining(const QString& context)
     }
 }
 
-void TrainingDB::clearLBPHTraining(const QList<int>& identities, const QString& context)
+void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& context)
 {
     foreach (int id, identities)
     {
