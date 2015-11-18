@@ -95,10 +95,7 @@ class RecognitionDatabase::Private
 public:
 
     bool                 dbAvailable;
-
-    const QString        configPath;
     QMutex               mutex;
-
     QVariantMap          parameters;
     QHash<int, Identity> identityCache;
 
@@ -165,13 +162,12 @@ private:
 // ----------------------------------------------------------------------------------------------
 
 RecognitionDatabase::Private::Private()
-    : configPath(CoreDbAccess::parameters().faceParameters().getFaceDatabaseNameOrDir()),
-      mutex(QMutex::Recursive),
+    : mutex(QMutex::Recursive),
       opencvlbph(0),
       funnel(0)
 {
     DbEngineParameters params = CoreDbAccess::parameters().faceParameters();
-    params.setFaceDatabasePath(configPath);
+    params.setFaceDatabasePath(CoreDbAccess::parameters().faceParameters().getFaceDatabaseNameOrDir());
     FaceDbAccess::setParameters(params);
     dbAvailable               = FaceDbAccess::checkReadyForUse(0);
 
@@ -208,7 +204,7 @@ RecognitionDatabase::Private::CurrentAligner* RecognitionDatabase::Private::alig
     return funnel;
 }
 
-// other RecognitionDatabase::Private methods are to be found below, in the relevant context of the main class
+// NOTE: other RecognitionDatabase::Private methods are to be found below, in the relevant context of the main class
 
 // -------------------------------------------------------------------------------------------------
 
@@ -274,7 +270,7 @@ Identity RecognitionDatabase::Private::findByAttribute(const QString& attribute,
     return Identity();
 }
 
-// Takes care that there may be multiple values of attribute in valueMap
+// NOTE: Takes care that there may be multiple values of attribute in valueMap
 Identity RecognitionDatabase::Private::findByAttributes(const QString& attribute, const QMap<QString, QString>& valueMap) const
 {
     QMap<QString, QString>::const_iterator it = valueMap.find(attribute);
