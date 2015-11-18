@@ -439,14 +439,18 @@ bool BdEngineBackendPrivate::handleWithErrorHandler(const DbEngineSqlQuery* cons
 
         if (!query || isConnectionError(*query))
         {
-            called = QMetaObject::invokeMethod(errorHandler, "connectionError", Qt::AutoConnection,
-                                               Q_ARG(DbEngineErrorAnswer*, this), Q_ARG(const QSqlError, lastError),
+            called = QMetaObject::invokeMethod(errorHandler, "connectionError",
+                                               Qt::AutoConnection,
+                                               Q_ARG(DbEngineErrorAnswer*, this),
+                                               Q_ARG(const QSqlError, lastError),
                                                Q_ARG(const QString, lastQuery));
         }
         else if (needToConsultUserForError(*query))
         {
-            called = QMetaObject::invokeMethod(errorHandler, "consultUserForError", Qt::AutoConnection,
-                                               Q_ARG(DbEngineErrorAnswer*, this), Q_ARG(const QSqlError, lastError),
+            called = QMetaObject::invokeMethod(errorHandler, "consultUserForError",
+                                               Qt::AutoConnection,
+                                               Q_ARG(DbEngineErrorAnswer*, this),
+                                               Q_ARG(const QSqlError, lastError),
                                                Q_ARG(const QString, lastQuery));
         }
         else
@@ -616,11 +620,14 @@ DbEngineConfigSettings BdEngineBackend::configElement() const
 
 DbEngineAction BdEngineBackend::getDBAction(const QString& actionName) const
 {
+    Q_D(const BdEngineBackend);
     DbEngineAction action = configElement().sqlStatements.value(actionName);
 
     if (action.name.isNull())
     {
-        qCWarning(DIGIKAM_DBENGINE_LOG) << "No DB action defined for" << actionName << "! Implementation missing for this database type.";
+        qCWarning(DIGIKAM_DBENGINE_LOG) << "No DB action defined for" << actionName
+                                        << "! Implementation missing for this database type ("
+                                        << d->parameters.databaseType << ").";
     }
 
     return action;
@@ -650,7 +657,7 @@ BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& 
     Q_D(BdEngineBackend);
 
     BdEngineBackend::QueryState returnResult = BdEngineBackend::NoErrors;
-    QSqlDatabase db                              = d->databaseForThread();
+    QSqlDatabase db                          = d->databaseForThread();
 
     if (action.name.isNull())
     {
@@ -682,7 +689,9 @@ BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& 
 
         if (result != BdEngineBackend::NoErrors)
         {
-            qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while executing DBAction ["<<  action.name  <<"] Statement ["<<actionElement.statement<<"]";
+            qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while executing DBAction [" 
+                                          << action.name << "] Statement ["
+                                          << actionElement.statement << "]";
             returnResult = result;
 
 /*
@@ -1103,8 +1112,9 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql, const QMap<QStri
             if (!bindingMap.contains(namedPlaceholder))
             {
                 qCWarning(DIGIKAM_DBENGINE_LOG) << "Missing place holder" << namedPlaceholder
-                           << "in binding map. The following values are defined for this action:"
-                           << bindingMap.keys() <<". This is a setup error!";
+                                                << "in binding map. The following values are defined for this action:"
+                                                << bindingMap.keys() <<". This is a setup error!";
+
                 //TODO What should we do here? How can we cancel that action?
             }
 
@@ -1114,8 +1124,8 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql, const QMap<QStri
             if (placeHolderValue.userType() == qMetaTypeId<DbEngineActionType>())
             {
                 DbEngineActionType actionType = placeHolderValue.value<DbEngineActionType>();
-                bool isValue            = actionType.isValue();
-                QVariant value          = actionType.getActionValue();
+                bool isValue                  = actionType.isValue();
+                QVariant value                = actionType.getActionValue();
 
                 if ( value.type() == QVariant::Map )
                 {
