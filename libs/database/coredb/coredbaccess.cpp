@@ -350,9 +350,13 @@ void CoreDbAccess::cleanUpDatabase()
     if (d)
     {
         CoreDbAccessMutexLocker locker(d);
-        d->backend->close();
-        delete d->db;
-        delete d->backend;
+
+        if (d->backend)
+        {
+            d->backend->close();
+            delete d->db;
+            delete d->backend;
+        }
     }
 
     ImageInfoStatic::destroy();
