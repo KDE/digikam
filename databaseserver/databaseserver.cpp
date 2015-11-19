@@ -151,8 +151,6 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     //TODO Don't know if this is needed, because after the thread is finished, the database server manager should close
     d->pollThread->stop = false;
 
-    // QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/dbconfig.xml");
-
     //TODO Move the database command outside of the code to the dbconfig.xml file
     const QString mysqldPath(DbEngineConfig::element(dbType).dbServerCmd);
     //const QString mysqldPath("/usr/sbin/mysqld");
@@ -172,9 +170,12 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     /*
     * TODO Move the database command outside of the code to the dbconfig.xml file.
-    * Offer a variable to the dataDir. E.g. the command definition in the config file has to be: /usr/bin/mysql_install_db --user=digikam --datadir=$dataDir$
+    * Offer a variable to the dataDir. E.g. the command definition in the config file has to be: /usr/bin/mysql_install_db --user=$USER --datadir=$dataDir$
     */
-    const QString mysqlInitCmd(QString::fromLatin1("%1 --user=digikam --datadir=%2").arg(DbEngineConfig::element(dbType).dbInitCmd, dataDir));
+    const QString mysqlInitCmd(QString::fromLatin1("%1 --user=%2 --datadir=%3")
+                               .arg(DbEngineConfig::element(dbType).dbInitCmd)
+                               .arg(getcurrentAccountUserName())
+                               .arg(dataDir));
 
     if (!QFile::exists(akDir))
     {
@@ -319,12 +320,20 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         QProcess initProcess;
         initProcess.start( mysqlInitCmd );
 
-        if ( !initProcess.waitForFinished())
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << initProcess.program() << initProcess.arguments();
+
+        if ( !initProcess.waitForFinished() || initProcess.exitCode() != 0)
         {
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << initProcess.readAllStandardOutput();
+
             QString  str = i18n("Could not start database init command.\n"
                                 "Executable: %1\n"
-                                "Process error:%2", mysqlInitCmd, initProcess.errorString());
+                                "Process error:%2",
+                                mysqlInitCmd,
+                                initProcess.errorString());
+
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
+
             return DatabaseServerError(DatabaseServerError::StartError, str);
         }
     }
@@ -334,13 +343,16 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << d->databaseProcess->program() << d->databaseProcess->arguments();
 
-    if ( !d->databaseProcess->waitForStarted() )
+    if ( !d->databaseProcess->waitForStarted() || d->databaseProcess->exitCode() != 0)
     {
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << d->databaseProcess->readAllStandardOutput();
+        
         QString argumentStr = arguments.join(QLatin1String(", "));
         QString  str        = i18n("Could not start database server.");
         str                += i18n("<p>Executable: %1</p>",    mysqldPath);
         str                += i18n("<p>Arguments: %1</p>",     argumentStr);
         str                += i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
+
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
 
         delete d->databaseProcess;
@@ -419,10 +431,6 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
                     }
                     else
                     {
-
-                        query.exec( QString::fromLatin1( "GRANT ALL PRIVILEGES ON %1.* TO 'root';" ).arg( d->internalDBName ) );
-                        query.exec( QString::fromLatin1( "FLUSH PRIVILEGES;" ) );
-
                         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database was successfully created";
                     }
                 }
@@ -477,10 +485,6 @@ DatabaseServerError DatabaseServer::createDatabase()
             }
             else
             {
-
-                query.exec( QString::fromLatin1( "GRANT ALL PRIVILEGES ON %1.* TO 'root';" ).arg( d->internalDBName ) );
-                query.exec( QString::fromLatin1( "FLUSH PRIVILEGES;" ) );
-
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database was successfully created";
             }
         }
@@ -525,6 +529,16 @@ bool DatabaseServer::isRunning()
     }
 
     return (d->databaseProcess->state() == QProcess::Running);
+}
+
+QString DatabaseServer::getcurrentAccountUserName() const
+{
+    QString name = QString::fromUtf8(qgetenv("USER"));   // Linux and OSX
+
+    if (name.isEmpty())
+        name = QString::fromUtf8(qgetenv("USERNAME"));   // Windows
+
+    return name;
 }
 
 } // namespace Digikam
