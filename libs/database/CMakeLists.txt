@@ -11,8 +11,9 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libdatabasecore_SRCS
-    engine/databaseserverstarter.cpp
-    engine/databaseservererror.cpp
+    server/databaseserverstarter.cpp
+    server/databaseservererror.cpp
+
     engine/dbengineconfigloader.cpp
     engine/dbengineconfig.cpp
     engine/dbengineactiontype.cpp
@@ -39,6 +40,7 @@ set(libdatabaseutils_SRCS
 
 set(libdatabase_SRCS
     album/albumdb.cpp
+
     collection/collectionscanner.cpp
     collection/collectionmanager.cpp
     collection/collectionlocation.cpp
@@ -134,10 +136,10 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_library(digikamdatabase_src OBJECT      ${digikamdatabase_LIB_SRCS})
-add_library(digikamdatabasemain_src OBJECT  ${libdatabaseutils_SRCS} ${libimgqsort_SRCS})
-add_library(digikamdatabasecore_src OBJECT  ${libdatabasecore_SRCS})
-add_library(digikamdatabase SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasemodels_src>)
+add_library(digikamdatabase_src     OBJECT ${digikamdatabase_LIB_SRCS})
+add_library(digikamdatabasemain_src OBJECT ${libdatabaseutils_SRCS} ${libimgqsort_SRCS})
+add_library(digikamdatabasecore_src OBJECT ${libdatabasecore_SRCS})
+add_library(digikamdatabase         SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasemodels_src>)
 
 generate_export_header(digikamdatabase
                        BASE_NAME digikam_database
@@ -157,6 +159,7 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/server>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbsdb>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
 )

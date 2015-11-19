@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASESERVER_H_
-#define DATABASESERVER_H_
+#ifndef DATABASE_SERVER_STARTER_H_
+#define DATABASE_SERVER_STARTER_H_
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* DATABASESERVER_H_ */
+#endif /* DATABASE_SERVER_STARTER_H_ */

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-04-26
- * Description : class for error reporting
+ * Description : database server error reporting
  *
  * Copyright (C) 2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *

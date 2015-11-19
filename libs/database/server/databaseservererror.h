@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-04-26
- * Description : class for error reporting
+ * Description : database server error reporting
  *
  * Copyright (C) 2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASESERVERERROR_H_
-#define DATABASESERVERERROR_H_
+#ifndef DATABASE_SERVER_ERROR_H_
+#define DATABASE_SERVER_ERROR_H_
 
 // Qt includes
 
@@ -87,4 +87,4 @@ private:
 // custom macro from our dbusutilities.h
 DECLARE_METATYPE_FOR_DBUS(Digikam::DatabaseServerError)
 
-#endif /* DATABASESERVERERROR_H_ */
+#endif /* DATABASE_SERVER_ERROR_H_ */
