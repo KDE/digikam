@@ -226,6 +226,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     fieldsLayout->addWidget(d->saveDateTimeBox,    7, 0, 1, 3);
     fieldsLayout->addWidget(d->saveTemplateBox,    8, 0, 1, 3);
     fieldsLayout->addWidget(d->saveFaceTags,       9 ,0, 1, 3);
+    fieldsLayout->setColumnStretch(3, 10);
     d->fieldsGroup->setLayout(fieldsLayout);
 
     // --------------------------------------------------------
@@ -295,6 +296,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     readWriteLayout->addWidget(d->writeRawFilesBox,         6, 0, 1, 3);
     readWriteLayout->addWidget(d->updateFileTimeStampBox,   7, 0, 1, 3);
     readWriteLayout->addWidget(d->rescanImageIfModifiedBox, 8, 0, 1, 3);
+    readWriteLayout->setColumnStretch(3, 10);
     d->readWriteGroup->setLayout(readWriteLayout);
 
     // --------------------------------------------------------
@@ -331,7 +333,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     infoBoxGrid->addWidget(explanation,    0, 1, 1, 2);
     infoBoxGrid->setColumnStretch(1, 10);
     infoBoxGrid->setRowStretch(1, 10);
-    infoBoxGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     infoBoxGrid->setSpacing(0);
     infoBox->setLayout(infoBoxGrid);
 
@@ -521,15 +522,11 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     balooGrid->addWidget(balooExplanation, 0, 1, 1, 2);
     balooGrid->setColumnStretch(1, 10);
     balooGrid->setRowStretch(1, 10);
-    balooGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     balooGrid->setSpacing(0);
 
     // --------------------------------------------------------
 
-    balooLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    balooLayout->setContentsMargins(QMargins());
     balooLayout->addWidget(balooGroup);
-    balooLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     balooLayout->addWidget(balooBox);
     //balooLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
     balooLayout->addStretch();
