@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "dbusutilities.h"
+#include "dbenginedbusutils.h"
 #include "digikam_export.h"
 #include "coredbfields.h"
 
