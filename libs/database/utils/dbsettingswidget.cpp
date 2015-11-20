@@ -38,6 +38,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QMessageBox>
+#include <QTextBrowser>
 
 // KDE includes
 
@@ -47,6 +48,8 @@
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
+#include "dwidgetutils.h"
+#include "dexpanderbox.h"
 #include "dbengineparameters.h"
 #include "databaseserverstarter.h"
 
@@ -62,10 +65,14 @@ public:
     {
         databasePathLabel = 0;
         expertSettings    = 0;
+        dbNoticeBox       = 0;
+        sqlInit           = 0;
     }
 
-    QLabel*    databasePathLabel;
-    QGroupBox* expertSettings;
+    QLabel*       databasePathLabel;
+    QTextBrowser* sqlInit;
+    QGroupBox*    expertSettings;
+    QGroupBox*    dbNoticeBox;
 };
 
 DatabaseSettingsWidget::DatabaseSettingsWidget(QWidget* const parent)
@@ -87,122 +94,174 @@ void DatabaseSettingsWidget::setupMainArea()
 
     // --------------------------------------------------------
 
-    QGroupBox* const dbPathBox = new QGroupBox(i18n("Database File Path"), this);
-    QVBoxLayout* const vlay    = new QVBoxLayout(dbPathBox);
-    d->databasePathLabel       = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
-                                                 "There is one common database file for all root albums.<br/>"
-                                                 "Write access is required to be able to edit image properties.</p>"
-                                                 "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
-                                            dbPathBox);
+    QGroupBox* const dbConfigBox = new QGroupBox(i18n("Database Configuration"), this);
+    QVBoxLayout* const vlay      = new QVBoxLayout(dbConfigBox);
+    d->databasePathLabel         = new QLabel(i18n("<p>Set here the location where the database files will be stored on your system. "
+                                                   "There are 3 database files : one for all root albums, one for thumnails, "
+                                                   "and one for faces recognition.<br/>"
+                                                   "Write access is required to be able to edit image properties.</p>"
+                                                   "Databases are digiKam core engines. Take a care to use a place hosted by a fast "
+                                                   "hardware (as SSD) with enough free space especially for thumbnails database.</p>"
+                                                   "<p>Note: a remote file system such as NFS, cannot be used here. "
+                                                   "For performance reasons, it's also recommended to not use a removable media.</p>"
+                                                   "<p></p>"), dbConfigBox);
     d->databasePathLabel->setWordWrap(true);
 
-    databasePathEdit                                 = new DFileSelector(dbPathBox);
-    databasePathEdit->setFileDlgMode(QFileDialog::Directory);
+    dbPathEdit                                       = new DFileSelector(dbConfigBox);
+    dbPathEdit->setFileDlgMode(QFileDialog::Directory);
 
-    QLabel* const databaseTypeLabel                  = new QLabel(i18n("Type"));
-    databaseType                                     = new QComboBox();
-#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
-    QLabel* const internalServerLabel                = new QLabel(i18n("Internal Server"));
-#endif
-    internalServer                                   = new QCheckBox();
-    QLabel* const databaseNameLabel                  = new QLabel(i18n("Core<br>Database Name"));
-    databaseName                                     = new QLineEdit();
-    QLabel* const databaseNameThumbnailsLabel        = new QLabel(i18n("Thumbnails<br>Database Name"));
-    databaseNameThumbnails                           = new QLineEdit();
-    QLabel* const databaseNameFaceLabel              = new QLabel(i18n("Face<br>Database Name"));
-    databaseNameFace                                 = new QLineEdit();
-    QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name"));
+    DHBox* const typeHbox                            = new DHBox();
+    QLabel* const databaseTypeLabel                  = new QLabel(typeHbox);
+    dbType                                           = new QComboBox(typeHbox);
+    databaseTypeLabel->setText(i18n("Type:"));
+
+    QLabel* const dbNameCoreLabel                    = new QLabel(i18n("Core Db Name:"));
+    dbNameCore                                       = new QLineEdit();
+    QLabel* const dbNameThumbnailsLabel              = new QLabel(i18n("Thumbs Db Name:"));
+    dbNameThumbnails                                 = new QLineEdit();
+    QLabel* const dbNameFaceLabel                    = new QLabel(i18n("Face Db Name:"));
+    dbNameFace                                       = new QLineEdit();
+    QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
     hostName                                         = new QLineEdit();
-    QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port"));
+    QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
     hostPort                                         = new QSpinBox();
     hostPort->setMaximum(65535);
 
-    QLabel* const connectionOptionsLabel             = new QLabel(i18n("Database<br>Connection<br>Options"));
+    QLabel* const connectionOptionsLabel             = new QLabel(i18n("Connect options:"));
     connectionOptions                                = new QLineEdit();
 
-    QLabel* const userNameLabel                      = new QLabel(i18n("User"));
+    QLabel* const userNameLabel                      = new QLabel(i18n("User:"));
     userName                                         = new QLineEdit();
 
-    QLabel* const passwordLabel                      = new QLabel(i18n("Password"));
+    QLabel* const passwordLabel                      = new QLabel(i18n("Password:"));
     password                                         = new QLineEdit();
     password->setEchoMode(QLineEdit::Password);
 
-    QPushButton* const checkDatabaseConnectionButton = new QPushButton(i18n("Check DB Connection"));
+    QPushButton* const checkDatabaseConnectionButton = new QPushButton(i18n("Check Database Connection"));
 
     d->expertSettings                                = new QGroupBox();
     d->expertSettings->setFlat(true);
     QFormLayout* const expertSettinglayout           = new QFormLayout();
     d->expertSettings->setLayout(expertSettinglayout);
 
-#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
-    expertSettinglayout->addRow(internalServerLabel,         internalServer);
-#endif
-
-    expertSettinglayout->addRow(hostNameLabel,               hostName);
-    expertSettinglayout->addRow(hostPortLabel,               hostPort);
-    expertSettinglayout->addRow(databaseNameLabel,           databaseName);
-    expertSettinglayout->addRow(databaseNameThumbnailsLabel, databaseNameThumbnails);
-    expertSettinglayout->addRow(databaseNameFaceLabel,       databaseNameFace);
-    expertSettinglayout->addRow(userNameLabel,               userName);
-    expertSettinglayout->addRow(passwordLabel,               password);
-    expertSettinglayout->addRow(connectionOptionsLabel,      connectionOptions);
+    expertSettinglayout->addRow(hostNameLabel,          hostName);
+    expertSettinglayout->addRow(hostPortLabel,          hostPort);
+    expertSettinglayout->addRow(dbNameCoreLabel,        dbNameCore);
+    expertSettinglayout->addRow(dbNameThumbnailsLabel,  dbNameThumbnails);
+    expertSettinglayout->addRow(dbNameFaceLabel,        dbNameFace);
+    expertSettinglayout->addRow(userNameLabel,          userName);
+    expertSettinglayout->addRow(passwordLabel,          password);
+    expertSettinglayout->addRow(connectionOptionsLabel, connectionOptions);
 
     expertSettinglayout->addWidget(checkDatabaseConnectionButton);
 
-    vlay->addWidget(databaseTypeLabel);
-    vlay->addWidget(databaseType);
+    vlay->addWidget(typeHbox);
+    vlay->addWidget(new DLineWidget(Qt::Horizontal));
     vlay->addWidget(d->databasePathLabel);
-    vlay->addWidget(databasePathEdit);
+    vlay->addWidget(dbPathEdit);
     vlay->addWidget(d->expertSettings);
-    vlay->setSpacing(0);
+    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+
+    // --------------------------------------------------------
+
+    d->dbNoticeBox           = new QGroupBox(i18n("Database Server Intructions"), this);
+    QVBoxLayout* const vlay2 = new QVBoxLayout(d->dbNoticeBox);
+    QLabel* const notice     = new QLabel(i18n("<p>digiKam expects the above database and user account to already exists. "
+                                               "This user also require full access to the database.<br>"
+                                               "If your database is not already set up, you can use the following SQL commands "
+                                               "(after replacing the password with the correct one)."), d->dbNoticeBox);
+    notice->setWordWrap(true);
+
+    d->sqlInit = new QTextBrowser(d->dbNoticeBox);
+    d->sqlInit->setOpenExternalLinks(false);
+    d->sqlInit->setOpenLinks(false);
+    d->sqlInit->setReadOnly(false);
+    
+    vlay2->addWidget(notice);
+    vlay2->addWidget(d->sqlInit);
+    vlay2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->setContentsMargins(QMargins());
-    layout->addWidget(dbPathBox);
+    layout->addWidget(dbConfigBox);
+    layout->addWidget(d->dbNoticeBox);
     layout->addStretch();
-
+    
     // --------- fill with default values ---------------------
-
-    databaseType->addItem(i18n("SQLite"),               DbEngineParameters::SQLiteDatabaseType());
+    
+    dbType->addItem(i18n("SQLite"),                        SQlite);
 
 #ifdef HAVE_MYSQLSUPPORT
-    databaseType->addItem(i18n("MySQL (experimental)"), DbEngineParameters::MySQLDatabaseType());
+    
+#   ifdef HAVE_INTERNALMYSQL
+    dbType->addItem(i18n("MySQL Internal (experimental)"), MysqlInternal);
+#   endif
+
+    dbType->addItem(i18n("MySQL Server (experimental)"),   MysqlServer);
 #endif
 
-    databaseType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
-                                  "<p><b>SQlite</b> backend is for local database storage with a small and medium collection sizes. "
+    dbType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
+                                  "<p><b>SQlite</b> backend is for local database storage with a small or medium collection sizes. "
                                   "It is the default and recommended backend.</p>"
 #ifdef HAVE_MYSQLSUPPORT
-                                  "<p><b>MySQL</b> backend is a more robust solution especially for remote and shared database storage. "
+
+#   ifdef HAVE_INTERNALMYSQL
+                                  "<p><b>MySQL Internal</b> backend is for local database storage with huge collection sizes. "
+                                  "Be careful: this one still in experimental stage.</p>"
+#   endif
+                                  
+                                  "<p><b>MySQL Server</b> backend is a more robust solution especially for remote and shared database storage. "
                                   "It is also more efficient to manage huge collection sizes. "
-                                  "Be careful: this one it is still in experimental stage.</p>"
+                                  "Be careful: this one still in experimental stage.</p>"
 #endif
                                  ));
 
-    setDatabaseInputFields(DbEngineParameters::SQLiteDatabaseType());
-
     // --------------------------------------------------------
 
-    connect(databaseType, SIGNAL(currentIndexChanged(int)),
+    connect(dbType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHandleDBTypeIndexChanged(int)));
 
     connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
             this, SLOT(checkDatabaseConnection()));
+    
+    connect(dbNameCore, SIGNAL(textChanged(QString)),
+            this, SLOT(slotUpdateSqlInit()));
 
-#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
-    connect(internalServer, SIGNAL(stateChanged(int)),
-            this, SLOT(slotHandleInternalServerCheckbox(int)));
+    connect(dbNameThumbnails, SIGNAL(textChanged(QString)),
+            this, SLOT(slotUpdateSqlInit()));
 
-    slotHandleInternalServerCheckbox(internalServer->checkState());
-#endif
+    connect(dbNameFace, SIGNAL(textChanged(QString)),
+            this, SLOT(slotUpdateSqlInit()));
+
+    connect(userName, SIGNAL(textChanged(QString)),
+            this, SLOT(slotUpdateSqlInit()));
+
+    slotHandleDBTypeIndexChanged(dbType->currentIndex());
 }
 
-QString DatabaseSettingsWidget::currentDatabaseType() const
+int DatabaseSettingsWidget::databaseType() const
 {
-    return databaseType->itemData(databaseType->currentIndex()).toString();
+    return dbType->currentIndex();
+}
+
+QString DatabaseSettingsWidget::databaseBackend() const
+{
+    switch(databaseType())
+    {
+        case MysqlInternal:
+        case MysqlServer:
+        {
+            return DbEngineParameters::MySQLDatabaseType();
+        }
+        default: // SQlite
+        {
+            return DbEngineParameters::SQLiteDatabaseType();
+        }
+    }
 }
 
 void DatabaseSettingsWidget::slotChangeDatabasePath(const QUrl& result)
@@ -235,65 +294,76 @@ void DatabaseSettingsWidget::slotDatabasePathEditedDelayed()
 
 void DatabaseSettingsWidget::slotDatabasePathEdited()
 {
-    QString newPath = databasePathEdit->lineEdit()->text();
+    QString newPath = dbPathEdit->lineEdit()->text();
 
 #ifndef _WIN32
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
-        databasePathEdit->lineEdit()->setText(QDir::homePath() + QLatin1Char('/') + QDir::fromNativeSeparators(newPath));
+        dbPathEdit->lineEdit()->setText(QDir::homePath() + QLatin1Char('/') + QDir::fromNativeSeparators(newPath));
     }
 
 #endif
 
-    databasePathEdit->lineEdit()->setText(QDir::toNativeSeparators(newPath));
+    dbPathEdit->lineEdit()->setText(QDir::toNativeSeparators(newPath));
 
     checkDBPath();
 }
 
 void DatabaseSettingsWidget::slotHandleDBTypeIndexChanged(int index)
 {
-    const QString& dbType = databaseType->itemData(index).toString();
-    setDatabaseInputFields(dbType);
+    setDatabaseInputFields(index);
+    handleInternalServer(index);
+    slotUpdateSqlInit();
 }
 
-void DatabaseSettingsWidget::setDatabaseInputFields(const QString& currentIndexStr)
+void DatabaseSettingsWidget::setDatabaseInputFields(int index)
 {
-    if (currentIndexStr == QString(DbEngineParameters::SQLiteDatabaseType()))
+    switch(index)
     {
-        d->databasePathLabel->setVisible(true);
-        databasePathEdit->setVisible(true);
-        d->expertSettings->setVisible(false);
+        case MysqlInternal:
+        case MysqlServer:
+        {
+            d->databasePathLabel->setVisible(false);
+            dbPathEdit->setVisible(false);
+            d->expertSettings->setVisible(true);
 
-        connect(databasePathEdit, SIGNAL(signalUrlSelected(QUrl)),
-                this, SLOT(slotChangeDatabasePath(QUrl)));
+            disconnect(dbPathEdit, SIGNAL(signalUrlSelected(QUrl)),
+                    this, SLOT(slotChangeDatabasePath(QUrl)));
 
-        connect(databasePathEdit->lineEdit(), SIGNAL(textChanged(QString)),
-                this, SLOT(slotDatabasePathEditedDelayed()));
+            disconnect(dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
+                    this, SLOT(slotDatabasePathEditedDelayed()));
+            
+            d->dbNoticeBox->setVisible(index == MysqlServer);
+            break;
+        }
+        default: // SQlite
+        {
+            d->databasePathLabel->setVisible(true);
+            dbPathEdit->setVisible(true);
+            d->expertSettings->setVisible(false);
+
+            connect(dbPathEdit, SIGNAL(signalUrlSelected(QUrl)),
+                    this, SLOT(slotChangeDatabasePath(QUrl)));
+
+            connect(dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
+                    this, SLOT(slotDatabasePathEditedDelayed()));
+
+            d->dbNoticeBox->setVisible(false);
+            break;
+        }
     }
-    else
-    {
-        d->databasePathLabel->setVisible(false);
-        databasePathEdit->setVisible(false);
-        d->expertSettings->setVisible(true);
-
-        disconnect(databasePathEdit, SIGNAL(signalUrlSelected(QUrl)),
-                   this, SLOT(slotChangeDatabasePath(QUrl)));
-
-        disconnect(databasePathEdit->lineEdit(), SIGNAL(textChanged(QString)),
-                   this, SLOT(slotDatabasePathEditedDelayed()));
-    }
-
-    adjustSize();
 }
 
-void DatabaseSettingsWidget::slotHandleInternalServerCheckbox(int enableFields)
+void DatabaseSettingsWidget::handleInternalServer(int index)
 {
+    bool enableFields = (index == MysqlInternal);
+        
     hostName->setEnabled(enableFields == Qt::Unchecked);
     hostPort->setEnabled(enableFields == Qt::Unchecked);
-    databaseName->setEnabled(enableFields == Qt::Unchecked);
-    databaseNameThumbnails->setEnabled(enableFields == Qt::Unchecked);
-    databaseNameFace->setEnabled(enableFields == Qt::Unchecked);
+    dbNameCore->setEnabled(enableFields == Qt::Unchecked);
+    dbNameThumbnails->setEnabled(enableFields == Qt::Unchecked);
+    dbNameFace->setEnabled(enableFields == Qt::Unchecked);
     userName->setEnabled(enableFields == Qt::Unchecked);
     password->setEnabled(enableFields == Qt::Unchecked);
     connectionOptions->setEnabled(enableFields == Qt::Unchecked);
@@ -308,6 +378,38 @@ void DatabaseSettingsWidget::slotHandleInternalServerCheckbox(int enableFields)
     }
 }
 
+void DatabaseSettingsWidget::slotUpdateSqlInit()
+{
+    QString sql = QString::fromLatin1("CREATE DATABASE %1; "
+                                      "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\' IDENTIFIED BY \'password\'; "
+                                      "FLUSH PRIVILEGES;\n")
+                                      .arg(dbNameCore->text())
+                                      .arg(dbNameCore->text())
+                                      .arg(userName->text());
+
+    if (dbNameThumbnails->text() != dbNameCore->text())
+    {
+        sql += QString::fromLatin1("CREATE DATABASE %1; "
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\' IDENTIFIED BY \'password\'; "
+                                   "FLUSH PRIVILEGES;\n")
+                                   .arg(dbNameThumbnails->text())
+                                   .arg(dbNameThumbnails->text())
+                                   .arg(userName->text());
+    }
+
+    if (dbNameFace->text() != dbNameCore->text())
+    {
+        sql += QString::fromLatin1("CREATE DATABASE %1; "
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\' IDENTIFIED BY \'password\'; "
+                                   "FLUSH PRIVILEGES;\n")
+                                   .arg(dbNameFace->text())
+                                   .arg(dbNameFace->text())
+                                   .arg(userName->text());
+    }
+
+    d->sqlInit->setText(sql);
+}
+
 void DatabaseSettingsWidget::checkDatabaseConnection()
 {
     // TODO : if check DB connection operations can be threaded, use DBusyDlg dialog there...
@@ -315,7 +417,7 @@ void DatabaseSettingsWidget::checkDatabaseConnection()
     qApp->setOverrideCursor(Qt::WaitCursor);
 
     QString databaseID(QLatin1String("ConnectionTest"));
-    QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(currentDatabaseType(), databaseID);
+    QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(databaseBackend(), databaseID);
     DbEngineParameters parameters = getDbEngineParameters();
     testDatabase.setHostName(parameters.hostName);
     testDatabase.setPort(parameters.port);
@@ -349,9 +451,9 @@ void DatabaseSettingsWidget::checkDBPath()
     bool dbOk          = false;
     bool pathUnchanged = true;
 */
-    QString newPath    = databasePathEdit->lineEdit()->text();
+    QString newPath    = dbPathEdit->lineEdit()->text();
 
-    if (!databasePathEdit->lineEdit()->text().isEmpty())
+    if (!dbPathEdit->lineEdit()->text().isEmpty())
     {
         QDir dbDir(newPath);
         QDir oldDir(originalDbPath);
@@ -367,71 +469,74 @@ void DatabaseSettingsWidget::checkDBPath()
 
 void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings* const settings)
 {
-    originalDbPath = settings->getDatabaseFilePath();
-    originalDbType = settings->getDatabaseType();
-    databasePathEdit->lineEdit()->setText(settings->getDatabaseFilePath());
+    originalDbPath    = settings->getDatabaseFilePath();
+    originalDbBackend = settings->getDatabaseType();
+    dbPathEdit->lineEdit()->setText(settings->getDatabaseFilePath());
 
-#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
-    internalServer->setChecked(settings->getInternalDatabaseServer());
-#else
-    internalServer->setChecked(false);
+    if (settings->getDatabaseType() == DbEngineParameters::SQLiteDatabaseType())
+    {
+        dbType->setCurrentIndex(SQlite);
+    }
+#ifdef HAVE_MYSQLSUPPORT
+
+#   ifdef HAVE_INTERNALMYSQL
+    else if (settings->getDatabaseType() == DbEngineParameters::MySQLDatabaseType() && settings->getInternalDatabaseServer())
+    {
+        dbType->setCurrentIndex(MysqlInternal);
+    }
+#   endif
+    else
+    {
+        dbType->setCurrentIndex(MysqlServer);
+    }
 #endif
-    databaseName->setText(settings->getDatabaseName());
-    databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
-    databaseNameFace->setText(settings->getDatabaseNameFace());
+
+    dbNameCore->setText(settings->getDatabaseNameCore());
+    dbNameThumbnails->setText(settings->getDatabaseNameThumbnails());
+    dbNameFace->setText(settings->getDatabaseNameFace());
     hostName->setText(settings->getDatabaseHostName());
     hostPort->setValue(settings->getDatabasePort());
     connectionOptions->setText(settings->getDatabaseConnectoptions());
 
     userName->setText(settings->getDatabaseUserName());
     password->setText(settings->getDatabasePassword());
-
-    // Now set the type according the database type from the settings.
-    // If no item is found, ignore the setting.
-
-    for (int i = 0; i < databaseType->count(); ++i)
-    {
-        //qCDebug(DIGIKAM_WIDGETS_LOG) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
-        //                             << "] with ["<< settings->getDatabaseType() << "]";
-
-        if (databaseType->itemData(i).toString() == settings->getDatabaseType())
-        {
-            databaseType->setCurrentIndex(i);
-        }
-    }
+    
+    slotHandleDBTypeIndexChanged(dbType->currentIndex());
 }
 
 DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
 {
     DbEngineParameters parameters;
 
-    if (currentDatabaseType() == QString(DbEngineParameters::SQLiteDatabaseType()) || !internalServer->isChecked())
+    if ((databaseType() == SQlite) || !(databaseType() == MysqlInternal))
     {
         parameters.connectOptions = connectionOptions->text();
-        parameters.databaseType   = currentDatabaseType();
+        parameters.databaseType   = databaseBackend();
         parameters.hostName       = hostName->text();
         parameters.password       = password->text();
         parameters.port           = hostPort->text().toInt();
         parameters.userName       = userName->text();
 
-        if (parameters.databaseType == QString(DbEngineParameters::SQLiteDatabaseType()))
+        if (parameters.databaseType == DbEngineParameters::SQLiteDatabaseType())
         {
-            parameters.databaseName           = QDir::cleanPath(databasePathEdit->lineEdit()->text() + 
+            parameters.databaseNameCore       = QDir::cleanPath(dbPathEdit->lineEdit()->text() + 
                                                 QLatin1Char('/') + QLatin1String("digikam4.db"));
-            parameters.databaseNameThumbnails = parameters.databaseName;
-            parameters.databaseNameFace       = parameters.databaseName;
+            parameters.databaseNameThumbnails = QDir::cleanPath(dbPathEdit->lineEdit()->text() + 
+                                                QLatin1Char('/') + QLatin1String("thumbnails-digikam.db"));
+            parameters.databaseNameFace       = QDir::cleanPath(dbPathEdit->lineEdit()->text() + 
+                                                QLatin1Char('/') + QLatin1String("recognition.db"));
         }
         else
         {
-            parameters.databaseName           = databaseName->text();
-            parameters.databaseNameThumbnails = databaseNameThumbnails->text();
-            parameters.databaseNameFace       = databaseNameFace->text();
+            parameters.databaseNameCore       = dbNameCore->text();
+            parameters.databaseNameThumbnails = dbNameThumbnails->text();
+            parameters.databaseNameFace       = dbNameFace->text();
         }
     }
     else
     {
-        parameters = DbEngineParameters::defaultParameters(currentDatabaseType());
-        DatabaseServerStarter::startServerManagerProcess(currentDatabaseType());
+        parameters = DbEngineParameters::defaultParameters(databaseBackend());
+        DatabaseServerStarter::startServerManagerProcess(databaseBackend());
     }
 
     return parameters;

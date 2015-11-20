@@ -310,7 +310,7 @@ bool CoreDbSchemaUpdater::startUpdates()
 
         if (d->parameters.isSQLite())
         {
-            QFileInfo currentDBFile(d->parameters.databaseName);
+            QFileInfo currentDBFile(d->parameters.databaseNameCore);
             QFileInfo digikam3DB(currentDBFile.dir(), QLatin1String("digikam3.db"));
 
             if (digikam3DB.exists())
@@ -348,7 +348,7 @@ bool CoreDbSchemaUpdater::beginWrapSchemaUpdateStep()
 {
     if (!d->backend->beginTransaction())
     {
-        QFileInfo currentDBFile(d->parameters.databaseName);
+        QFileInfo currentDBFile(d->parameters.databaseNameCore);
         QString errorMsg = i18n("Failed to open a database transaction on your database file \"%1\". "
                                 "This is unusual. Please check that you can access the file and no "
                                 "other process has currently locked the file. "
@@ -405,7 +405,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
             }
 
             // v4 was always SQLite
-            QFileInfo currentDBFile(d->parameters.databaseName);
+            QFileInfo currentDBFile(d->parameters.databaseNameCore);
             QString errorMsg = i18n("The schema updating process from version 4 to 6 failed, "
                                     "caused by an error that we did not expect. "
                                     "You can try to discard your old database and start with an empty one. "

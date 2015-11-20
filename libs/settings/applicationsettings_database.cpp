@@ -35,12 +35,12 @@ namespace Digikam
 
 QString ApplicationSettings::getDatabaseFilePath() const
 {
-    return d->databaseParams.getDatabaseNameOrDir();
+    return d->databaseParams.getCoreDatabaseNameOrDir();
 }
 
 void ApplicationSettings::setDatabaseFilePath(const QString& path)
 {
-    d->databaseParams.setDatabasePath(path);
+    d->databaseParams.setCoreDatabasePath(path);
     d->databaseParams.setThumbsDatabasePath(path);
     d->databaseParams.setFaceDatabasePath(path);
 }
@@ -70,9 +70,9 @@ QString ApplicationSettings::getDatabaseConnectoptions() const
     return d->databaseParams.connectOptions;
 }
 
-QString ApplicationSettings::getDatabaseName() const
+QString ApplicationSettings::getDatabaseNameCore() const
 {
-    return d->databaseParams.databaseName;
+    return d->databaseParams.databaseNameCore;
 }
 
 QString ApplicationSettings::getDatabaseNameThumbnails() const
@@ -115,9 +115,9 @@ void ApplicationSettings::setDatabaseConnectoptions(const QString& connectoption
     d->databaseParams.connectOptions = connectoptions;
 }
 
-void ApplicationSettings::setDatabaseName(const QString& databaseName)
+void ApplicationSettings::setDatabaseNameCore(const QString& databaseNameCore)
 {
-    d->databaseParams.databaseName = databaseName;
+    d->databaseParams.databaseNameCore = databaseNameCore;
 }
 
 void ApplicationSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)

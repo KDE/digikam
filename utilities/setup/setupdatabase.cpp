@@ -148,32 +148,28 @@ void SetupDatabase::applySettings()
         return;
     }
 
-    if (d->databaseWidget->currentDatabaseType() == QString(DbEngineParameters::SQLiteDatabaseType()))
+    if (d->databaseWidget->databaseBackend() == QString(DbEngineParameters::SQLiteDatabaseType()))
     {
-        QString newPath = d->databaseWidget->databasePathEdit->lineEdit()->text();
+        QString newPath = d->databaseWidget->dbPathEdit->lineEdit()->text();
         QDir oldDir(d->databaseWidget->originalDbPath);
         QDir newDir(newPath);
 
-        if (oldDir != newDir || d->databaseWidget->currentDatabaseType() != d->databaseWidget->originalDbType)
+        if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->originalDbBackend)
         {
             settings->setDbEngineParameters(DbEngineParameters::parametersForSQLiteDefaultFile(newPath));
-
-            // clear other fields
-            d->databaseWidget->internalServer->setChecked(false);
-
             settings->saveSettings();
         }
     }
     else
     {
-        if (d->databaseWidget->internalServer->isChecked())
+        if (d->databaseWidget->databaseType() == DatabaseSettingsWidget::MysqlInternal)
         {
-            DbEngineParameters internalServerParameters = DbEngineParameters::defaultParameters(d->databaseWidget->currentDatabaseType());
+            DbEngineParameters internalServerParameters = DbEngineParameters::defaultParameters(d->databaseWidget->databaseBackend());
             settings->setInternalDatabaseServer(true);
-            settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
-            settings->setDatabaseName(internalServerParameters.databaseName);
-            settings->setDatabaseNameThumbnails(internalServerParameters.databaseName);
-            settings->setDatabaseNameFace(internalServerParameters.databaseName);
+            settings->setDatabaseType(d->databaseWidget->databaseBackend());
+            settings->setDatabaseNameCore(internalServerParameters.databaseNameCore);
+            settings->setDatabaseNameThumbnails(internalServerParameters.databaseNameCore);
+            settings->setDatabaseNameFace(internalServerParameters.databaseNameCore);
             settings->setDatabaseConnectoptions(internalServerParameters.connectOptions);
             settings->setDatabaseHostName(internalServerParameters.hostName);
             settings->setDatabasePort(internalServerParameters.port);
@@ -182,11 +178,11 @@ void SetupDatabase::applySettings()
         }
         else
         {
-            settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
-            settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
-            settings->setDatabaseName(d->databaseWidget->databaseName->text());
-            settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
-            settings->setDatabaseNameFace(d->databaseWidget->databaseNameFace->text());
+            settings->setInternalDatabaseServer(d->databaseWidget->databaseType() == DatabaseSettingsWidget::MysqlInternal);
+            settings->setDatabaseType(d->databaseWidget->databaseBackend());
+            settings->setDatabaseNameCore(d->databaseWidget->dbNameCore->text());
+            settings->setDatabaseNameThumbnails(d->databaseWidget->dbNameThumbnails->text());
+            settings->setDatabaseNameFace(d->databaseWidget->dbNameFace->text());
             settings->setDatabaseConnectoptions(d->databaseWidget->connectionOptions->text());
             settings->setDatabaseHostName(d->databaseWidget->hostName->text());
             settings->setDatabasePort(d->databaseWidget->hostPort->text().toInt());

@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT DbEngineParameters
 public:
 
     DbEngineParameters(const QString& type,
-                       const QString& databaseName,
+                       const QString& databaseNameCore,
                        const QString& connectOptions = QString(),
                        const QString& hostName = QString(),
                        int   port = -1,
@@ -113,20 +113,20 @@ public:
      * For non-SQLite, this simply sets the database name.
      */
 
-    QString getDatabaseNameOrDir()       const;
+    QString getCoreDatabaseNameOrDir()   const;
     QString getThumbsDatabaseNameOrDir() const;
     QString getFaceDatabaseNameOrDir()   const;
 
     /// Use these methods if you set a file or a folder.
-    void setDatabasePath(const QString& folderOrFileOrName);
+    void setCoreDatabasePath(const QString& folderOrFileOrName);
     void setThumbsDatabasePath(const QString& folderOrFileOrName);
     void setFaceDatabasePath(const QString& folderOrFileOrName);
 
-    static QString databaseFileSQLite(const QString& folderOrFile);
+    static QString coreDatabaseFileSQLite(const QString& folderOrFile);
     static QString thumbnailDatabaseFileSQLite(const QString& folderOrFile);
     static QString faceDatabaseFileSQLite(const QString& folderOrFile);
 
-    static QString databaseDirectorySQLite(const QString& path);
+    static QString coreDatabaseDirectorySQLite(const QString& path);
     static QString thumbnailDatabaseDirectorySQLite(const QString& path);
     static QString faceDatabaseDirectorySQLite(const QString& path);
 
@@ -153,7 +153,7 @@ public:
 public:
 
     QString databaseType;
-    QString databaseName;
+    QString databaseNameCore;
     QString connectOptions;
     QString hostName;
     int     port;
@@ -162,7 +162,7 @@ public:
     QString password;
 
     QString databaseNameThumbnails;
-    QString databaseNameFace;
+    QString databaseNameFace;    
 };
 
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DbEngineParameters& t);

@@ -201,7 +201,7 @@ QSqlDatabase BdEngineBackendPrivate::createDatabaseConnection()
         connectOptions += toAdd.join(QLatin1String(";"));
     }
 
-    db.setDatabaseName(parameters.databaseName);
+    db.setDatabaseName(parameters.databaseNameCore);
     db.setConnectOptions(connectOptions);
     db.setHostName(parameters.hostName);
     db.setPort(parameters.port);

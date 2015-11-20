@@ -2395,8 +2395,10 @@ void DigikamApp::slotSetupChanged()
     //  d->view->clearHistory();
 
     if (!AlbumManager::instance()->databaseEqual(ApplicationSettings::instance()->getDatabaseType(),
-                                                 ApplicationSettings::instance()->getDatabaseName(), ApplicationSettings::instance()->getDatabaseHostName(),
-                                                 ApplicationSettings::instance()->getDatabasePort(), ApplicationSettings::instance()->getInternalDatabaseServer()))
+                                                 ApplicationSettings::instance()->getDatabaseNameCore(),
+                                                 ApplicationSettings::instance()->getDatabaseHostName(),
+                                                 ApplicationSettings::instance()->getDatabasePort(),
+                                                 ApplicationSettings::instance()->getInternalDatabaseServer()))
     {
         AlbumManager::instance()->changeDatabase(ApplicationSettings::instance()->getDbEngineParameters());
     }

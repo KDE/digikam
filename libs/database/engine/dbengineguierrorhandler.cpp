@@ -89,7 +89,7 @@ void DbEngineConnectionChecker::run()
 
         databaseHandler.setHostName(d->parameters.hostName);
         databaseHandler.setPort(d->parameters.port);
-        databaseHandler.setDatabaseName(d->parameters.databaseName);
+        databaseHandler.setDatabaseName(d->parameters.databaseNameCore);
         databaseHandler.setUserName(d->parameters.userName);
         databaseHandler.setPassword(d->parameters.password);
         databaseHandler.setConnectOptions(d->parameters.connectOptions);

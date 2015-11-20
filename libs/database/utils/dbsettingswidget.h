@@ -49,6 +49,15 @@ class DIGIKAM_EXPORT DatabaseSettingsWidget : public QWidget
     Q_OBJECT
 
 public:
+    
+    enum DatabaseType
+    {
+        SQlite        = 0,
+        MysqlInternal = 1,
+        MysqlServer   = 2
+    };
+    
+public:
 
     explicit DatabaseSettingsWidget(QWidget* const parent = 0);
     ~DatabaseSettingsWidget();
@@ -56,29 +65,30 @@ public:
 public:
 
     QString        originalDbPath;
-    QString        originalDbType;
+    QString        originalDbBackend;
 
-    QLineEdit*     databaseName;
-    QLineEdit*     databaseNameThumbnails;
-    QLineEdit*     databaseNameFace;
+    QLineEdit*     dbNameCore;
+    QLineEdit*     dbNameThumbnails;
+    QLineEdit*     dbNameFace;
     QLineEdit*     hostName;
     QLineEdit*     connectionOptions;
     QLineEdit*     userName;
     QLineEdit*     password;
 
-    QComboBox*     databaseType;
+    QComboBox*     dbType;
     QSpinBox*      hostPort;
-    QCheckBox*     internalServer;
 
-    DFileSelector* databasePathEdit;
+    DFileSelector* dbPathEdit;
 
 public:
 
     void setParametersFromSettings(const ApplicationSettings* const settings);
     DbEngineParameters getDbEngineParameters() const;
 
-    QString currentDatabaseType() const;
-    void setDatabaseInputFields(const QString&);
+    void setDatabaseType(int type);
+    int  databaseType() const;
+    
+    QString databaseBackend() const;
 
 public Q_SLOTS:
 
@@ -88,14 +98,16 @@ private:
 
     void checkDBPath();
     void setupMainArea();
+    void handleInternalServer(int index);
+    void setDatabaseInputFields(int index);
 
 private Q_SLOTS:
 
-    void slotHandleInternalServerCheckbox(int enableFields);
     void slotHandleDBTypeIndexChanged(int index);
     void slotChangeDatabasePath(const QUrl&);
     void slotDatabasePathEditedDelayed();
     void slotDatabasePathEdited();
+    void slotUpdateSqlInit();
 
 private:
 

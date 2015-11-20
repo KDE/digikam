@@ -68,7 +68,7 @@ int main(int argc, char** argv)
 
     DbEngineParameters params;
     params.databaseType = DbEngineParameters::SQLiteDatabaseType();
-    params.setDatabasePath(QDir::currentPath() + QLatin1String("/digikam-test.db"));
+    params.setCoreDatabasePath(QDir::currentPath() + QLatin1String("/digikam-test.db"));
     params.setThumbsDatabasePath(QDir::currentPath() + QLatin1String("/digikam-thumbs-test.db"));
 
     params.legacyAndDefaultChecks();

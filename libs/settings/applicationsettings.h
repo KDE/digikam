@@ -134,8 +134,8 @@ public:
     QString getDatabaseConnectoptions() const;
     void setDatabaseConnectoptions(const QString& connectoptions);
 
-    QString getDatabaseName() const;
-    void setDatabaseName(const QString& databaseName);
+    QString getDatabaseNameCore() const;
+    void setDatabaseNameCore(const QString& databaseNameCore);
 
     QString getDatabaseNameThumbnails() const;
     void setDatabaseNameThumbnails(const QString& databaseNameThumbnails);
