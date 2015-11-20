@@ -329,8 +329,8 @@ void DatabaseSettingsWidget::checkDatabaseConnection()
 
     if (result)
     {
-        QMessageBox::critical(qApp->activeWindow(), i18n("Database connection test"),
-                              i18n("Database connection test successful."));
+        QMessageBox::information(qApp->activeWindow(), i18n("Database connection test"),
+                                 i18n("Database connection test successful."));
     }
     else
     {
