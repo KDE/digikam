@@ -84,7 +84,6 @@ private Q_SLOTS:
     void handleStepStarted(const QString& stepName);
     void handleSmallStepStarted(int currValue, int maxValue);
 
-
 private:
 
     void setupMainArea();

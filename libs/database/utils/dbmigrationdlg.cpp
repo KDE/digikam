@@ -112,15 +112,15 @@ public:
     {
     }
 
-    DatabaseSettingsWidget*     fromDatabaseSettingsWidget;
-    DatabaseSettingsWidget*     toDatabaseSettingsWidget;
-    QPushButton*        migrateButton;
-    QPushButton*        cancelButton;
-    QLabel*             overallStepTitle;
-    QProgressBar*       progressBar;
-    QProgressBar*       progressBarSmallStep;
-    QDialogButtonBox*   buttons;
-    DatabaseCopyThread* copyThread;
+    DatabaseSettingsWidget* fromDatabaseSettingsWidget;
+    DatabaseSettingsWidget* toDatabaseSettingsWidget;
+    QPushButton*            migrateButton;
+    QPushButton*            cancelButton;
+    QLabel*                 overallStepTitle;
+    QProgressBar*           progressBar;
+    QProgressBar*           progressBarSmallStep;
+    QDialogButtonBox*       buttons;
+    DatabaseCopyThread*     copyThread;
 };
 
 DatabaseMigrationDialog::DatabaseMigrationDialog(QWidget* const parent)
@@ -142,8 +142,8 @@ void DatabaseMigrationDialog::setupMainArea()
     d->buttons->button(QDialogButtonBox::Close)->setDefault(true);
 
     d->copyThread                      = new DatabaseCopyThread(this);
-    d->fromDatabaseSettingsWidget              = new DatabaseSettingsWidget(this);
-    d->toDatabaseSettingsWidget                = new DatabaseSettingsWidget(this);
+    d->fromDatabaseSettingsWidget      = new DatabaseSettingsWidget(this);
+    d->toDatabaseSettingsWidget        = new DatabaseSettingsWidget(this);
     d->migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
     d->cancelButton                    = new QPushButton(i18n("Cancel"), this);
     d->cancelButton->setEnabled(false);
@@ -168,11 +168,11 @@ void DatabaseMigrationDialog::setupMainArea()
     QGridLayout* const layout = new QGridLayout;
     mainWidget->setLayout(layout);
 
-    layout->addWidget(d->fromDatabaseSettingsWidget,   0, 0, 4, 1);
-    layout->addWidget(d->migrateButton,        1, 1);
-    layout->addWidget(d->cancelButton,         2, 1);
-    layout->addWidget(d->toDatabaseSettingsWidget,     0, 2, 4, 1);
-    layout->addWidget(progressBox,             4, 0, 1, 3);
+    layout->addWidget(d->fromDatabaseSettingsWidget, 0, 0, 4, 1);
+    layout->addWidget(d->migrateButton,              1, 1);
+    layout->addWidget(d->cancelButton,               2, 1);
+    layout->addWidget(d->toDatabaseSettingsWidget,   0, 2, 4, 1);
+    layout->addWidget(progressBox,                   4, 0, 1, 3);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(mainWidget);
