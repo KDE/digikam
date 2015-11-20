@@ -140,7 +140,7 @@ void MigrationDlg::setupMainArea()
 {
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->buttons->button(QDialogButtonBox::Close)->setDefault(true);
-    
+
     d->copyThread                      = new DatabaseCopyThread(this);
     d->fromDatabaseWidget              = new DatabaseWidget(this);
     d->toDatabaseWidget                = new DatabaseWidget(this);
@@ -173,7 +173,7 @@ void MigrationDlg::setupMainArea()
     layout->addWidget(d->cancelButton,         2, 1);
     layout->addWidget(d->toDatabaseWidget,     0, 2, 4, 1);
     layout->addWidget(progressBox,             4, 0, 1, 3);
-    
+
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(mainWidget);
     vbx->addWidget(d->buttons);

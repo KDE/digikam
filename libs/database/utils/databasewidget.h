@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-14
- * Description : database migration dialog
+ * Description : database settings widget
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEWIDGET_H
-#define DATABASEWIDGET_H
+#ifndef DATABASE_SETTINGS_WIDGET_H
+#define DATABASE_SETTINGS_WIDGET_H
 
 // Qt includes
 
@@ -36,6 +36,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dwidgetutils.h"
 #include "applicationsettings.h"
 #include "dbengineparameters.h"
@@ -43,7 +44,7 @@
 namespace Digikam
 {
 
-class DatabaseWidget : public QWidget
+class DIGIKAM_EXPORT DatabaseWidget : public QWidget
 {
     Q_OBJECT
 
@@ -104,4 +105,4 @@ private:
 
 } // namespace Digikam
 
-#endif  // DATABASEWIDGET_H
+#endif  // DATABASE_SETTINGS_WIDGET_H

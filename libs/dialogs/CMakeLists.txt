@@ -21,7 +21,6 @@ set(libdialogs_SRCS
 )
 
 set(libdeletedialog_SRCS
-    migrationdlg.cpp # database dependency
     deletedialog.cpp
 )
 

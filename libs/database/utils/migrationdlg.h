@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MIGRATIONDLG_H
-#define MIGRATIONDLG_H
+#ifndef DATABASE_MIGRATION_DIALOG_H
+#define DATABASE_MIGRATION_DIALOG_H
 
 // QT includes
 
@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "databasewidget.h"
 #include "coredbbackend.h"
 #include "coredbcopymanager.h"
@@ -64,7 +65,7 @@ private:
 
 // --------------------------------------------------------------------
 
-class MigrationDlg : public QDialog
+class DIGIKAM_EXPORT MigrationDlg : public QDialog
 {
     Q_OBJECT
 
@@ -97,4 +98,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // MIGRATIONDLG_H
+#endif // DATABASE_MIGRATION_DIALOG_H

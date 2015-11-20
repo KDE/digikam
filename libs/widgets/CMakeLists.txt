@@ -41,8 +41,6 @@ set(libimagehistory_SRCS
     imagehistory/imagefiltershistorymodel.cpp
     imagehistory/imagefiltershistorytreeitem.cpp
     imagehistory/versionswidget.cpp
-
-    common/databasewidget.cpp # FIXME belongs to database target
 )
 
 set(libcolorchooser_SRCS
