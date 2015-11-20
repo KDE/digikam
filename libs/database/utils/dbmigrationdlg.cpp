@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "migrationdlg.h"
+#include "dbmigrationdlg.h"
 
 // QT includes
 
@@ -50,7 +50,7 @@
 #include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "coredbaccess.h"
-#include "databasewidget.h"
+#include "dbsettingswidget.h"
 #include "coredbbackend.h"
 #include "dbengineparameters.h"
 #include "coredbschemaupdater.h"
@@ -95,13 +95,13 @@ void DatabaseCopyThread::init(const DbEngineParameters& fromDbEngineParameters, 
 
 // ---------------------------------------------------------------------------
 
-class MigrationDlg::Private
+class DatabaseMigrationDialog::Private
 {
 public:
 
     Private() :
-        fromDatabaseWidget(0),
-        toDatabaseWidget(0),
+        fromDatabaseSettingsWidget(0),
+        toDatabaseSettingsWidget(0),
         migrateButton(0),
         cancelButton(0),
         overallStepTitle(0),
@@ -112,8 +112,8 @@ public:
     {
     }
 
-    DatabaseWidget*     fromDatabaseWidget;
-    DatabaseWidget*     toDatabaseWidget;
+    DatabaseSettingsWidget*     fromDatabaseSettingsWidget;
+    DatabaseSettingsWidget*     toDatabaseSettingsWidget;
     QPushButton*        migrateButton;
     QPushButton*        cancelButton;
     QLabel*             overallStepTitle;
@@ -123,27 +123,27 @@ public:
     DatabaseCopyThread* copyThread;
 };
 
-MigrationDlg::MigrationDlg(QWidget* const parent)
+DatabaseMigrationDialog::DatabaseMigrationDialog(QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
     setupMainArea();
 }
 
-MigrationDlg::~MigrationDlg()
+DatabaseMigrationDialog::~DatabaseMigrationDialog()
 {
     d->copyThread->wait();
     delete d;
 }
 
-void MigrationDlg::setupMainArea()
+void DatabaseMigrationDialog::setupMainArea()
 {
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->buttons->button(QDialogButtonBox::Close)->setDefault(true);
 
     d->copyThread                      = new DatabaseCopyThread(this);
-    d->fromDatabaseWidget              = new DatabaseWidget(this);
-    d->toDatabaseWidget                = new DatabaseWidget(this);
+    d->fromDatabaseSettingsWidget              = new DatabaseSettingsWidget(this);
+    d->toDatabaseSettingsWidget                = new DatabaseSettingsWidget(this);
     d->migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
     d->cancelButton                    = new QPushButton(i18n("Cancel"), this);
     d->cancelButton->setEnabled(false);
@@ -168,10 +168,10 @@ void MigrationDlg::setupMainArea()
     QGridLayout* const layout = new QGridLayout;
     mainWidget->setLayout(layout);
 
-    layout->addWidget(d->fromDatabaseWidget,   0, 0, 4, 1);
+    layout->addWidget(d->fromDatabaseSettingsWidget,   0, 0, 4, 1);
     layout->addWidget(d->migrateButton,        1, 1);
     layout->addWidget(d->cancelButton,         2, 1);
-    layout->addWidget(d->toDatabaseWidget,     0, 2, 4, 1);
+    layout->addWidget(d->toDatabaseSettingsWidget,     0, 2, 4, 1);
     layout->addWidget(progressBox,             4, 0, 1, 3);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
@@ -204,26 +204,26 @@ void MigrationDlg::setupMainArea()
             &(d->copyThread->m_copyManager), SLOT(stopProcessing()));
 }
 
-void MigrationDlg::performCopy()
+void DatabaseMigrationDialog::performCopy()
 {
-    DbEngineParameters toDBParameters   = d->toDatabaseWidget->getDbEngineParameters();
-    DbEngineParameters fromDBParameters = d->fromDatabaseWidget->getDbEngineParameters();
+    DbEngineParameters toDBParameters   = d->toDatabaseSettingsWidget->getDbEngineParameters();
+    DbEngineParameters fromDBParameters = d->fromDatabaseSettingsWidget->getDbEngineParameters();
     d->copyThread->init(fromDBParameters, toDBParameters);
 
     lockInputFields();
     d->copyThread->start();
 }
 
-void MigrationDlg::dataInit()
+void DatabaseMigrationDialog::dataInit()
 {
-    d->fromDatabaseWidget->setParametersFromSettings(ApplicationSettings::instance());
-    d->toDatabaseWidget->setParametersFromSettings(ApplicationSettings::instance());
+    d->fromDatabaseSettingsWidget->setParametersFromSettings(ApplicationSettings::instance());
+    d->toDatabaseSettingsWidget->setParametersFromSettings(ApplicationSettings::instance());
 }
 
-void MigrationDlg::unlockInputFields()
+void DatabaseMigrationDialog::unlockInputFields()
 {
-    d->fromDatabaseWidget->setEnabled(true);
-    d->toDatabaseWidget->setEnabled(true);
+    d->fromDatabaseSettingsWidget->setEnabled(true);
+    d->toDatabaseSettingsWidget->setEnabled(true);
     d->migrateButton->setEnabled(true);
     d->progressBar->setValue(0);
     d->progressBarSmallStep->setValue(0);
@@ -231,15 +231,15 @@ void MigrationDlg::unlockInputFields()
     d->cancelButton->setEnabled(false);
 }
 
-void MigrationDlg::lockInputFields()
+void DatabaseMigrationDialog::lockInputFields()
 {
-    d->fromDatabaseWidget->setEnabled(false);
-    d->toDatabaseWidget->setEnabled(false);
+    d->fromDatabaseSettingsWidget->setEnabled(false);
+    d->toDatabaseSettingsWidget->setEnabled(false);
     d->migrateButton->setEnabled(false);
     d->cancelButton->setEnabled(true);
 }
 
-void MigrationDlg::handleFinish(int finishState, const QString& errorMsg)
+void DatabaseMigrationDialog::handleFinish(int finishState, const QString& errorMsg)
 {
     switch (finishState)
     {
@@ -258,14 +258,14 @@ void MigrationDlg::handleFinish(int finishState, const QString& errorMsg)
     }
 }
 
-void MigrationDlg::handleStepStarted(const QString& stepName)
+void DatabaseMigrationDialog::handleStepStarted(const QString& stepName)
 {
     int progressBarValue = d->progressBar->value();
     d->overallStepTitle->setText(i18n("Step Progress (%1)", stepName));
     d->progressBar->setValue(++progressBarValue);
 }
 
-void MigrationDlg::handleSmallStepStarted(int currentValue, int maxValue)
+void DatabaseMigrationDialog::handleSmallStepStarted(int currentValue, int maxValue)
 {
     d->progressBarSmallStep->setMaximum(maxValue);
     d->progressBarSmallStep->setValue(currentValue);

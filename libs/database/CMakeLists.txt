@@ -32,11 +32,11 @@ set(libdatabasecore_SRCS
 )
 
 set(libdatabaseutils_SRCS
-    utils/scancontroller.cpp
     utils/dbstatdlg.cpp
-    utils/databasewidget.cpp
-    utils/migrationdlg.cpp
+    utils/dbsettingswidget.cpp
+    utils/dbmigrationdlg.cpp
     utils/dio.cpp
+    utils/scancontroller.cpp
     utils/syncjob.cpp
 )
 

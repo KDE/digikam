@@ -44,14 +44,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseWidget : public QWidget
+class DIGIKAM_EXPORT DatabaseSettingsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit DatabaseWidget(QWidget* const parent = 0);
-    ~DatabaseWidget();
+    explicit DatabaseSettingsWidget(QWidget* const parent = 0);
+    ~DatabaseSettingsWidget();
 
 public:
 

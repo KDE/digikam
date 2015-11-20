@@ -110,7 +110,7 @@
 #include "databaseserverstarter.h"
 #include "metadatasettings.h"
 #include "statusbarprogresswidget.h"
-#include "migrationdlg.h"
+#include "dbmigrationdlg.h"
 #include "progressmanager.h"
 #include "progressview.h"
 #include "maintenancedlg.h"
@@ -2499,7 +2499,7 @@ void DigikamApp::preloadWindows()
 
 void DigikamApp::slotDatabaseMigration()
 {
-    MigrationDlg dlg(this);
+    DatabaseMigrationDialog dlg(this);
     dlg.exec();
 }
 

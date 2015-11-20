@@ -18,4 +18,4 @@ imgqsort/           Image Quality algorithms.
 item/               Image management interface.
 tags/               Tags management interface.
 thumbsdb/           Thumbnails database implementation based on Database Engine.
-utils/              High level implementation based on corebd interface.
+utils/              High level implementation based on corebd interface plus widgets and dialogs.

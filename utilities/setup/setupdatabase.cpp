@@ -56,7 +56,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "databasewidget.h"
+#include "dbsettingswidget.h"
 #include "dbengineparameters.h"
 #include "scancontroller.h"
 #include "coredbschemaupdater.h"
@@ -75,7 +75,7 @@ public:
     {
     }
 
-    DatabaseWidget* databaseWidget;
+    DatabaseSettingsWidget* databaseWidget;
     QGroupBox*      updateBox;
     QPushButton*    hashesButton;
 };
@@ -87,7 +87,7 @@ SetupDatabase::SetupDatabase(QWidget* const parent)
     QWidget* const page     = new QWidget;
     QVBoxLayout* mainLayout = new QVBoxLayout;
 
-    d->databaseWidget       = new DatabaseWidget;
+    d->databaseWidget       = new DatabaseSettingsWidget;
     mainLayout->addWidget(d->databaseWidget);
 
     if (!CoreDbSchemaUpdater::isUniqueHashUpToDate())

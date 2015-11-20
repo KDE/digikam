@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databasewidget.h"
+#include "dbsettingswidget.h"
 
 // Qt includes
 
@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class DatabaseWidget::Private
+class DatabaseSettingsWidget::Private
 {
 
 public:
@@ -68,19 +68,19 @@ public:
     QGroupBox* expertSettings;
 };
 
-DatabaseWidget::DatabaseWidget(QWidget* const parent)
+DatabaseSettingsWidget::DatabaseSettingsWidget(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
     setupMainArea();
 }
 
-DatabaseWidget::~DatabaseWidget()
+DatabaseSettingsWidget::~DatabaseSettingsWidget()
 {
     delete d;
 }
 
-void DatabaseWidget::setupMainArea()
+void DatabaseSettingsWidget::setupMainArea()
 {
     QVBoxLayout* const layout  = new QVBoxLayout();
     setLayout(layout);
@@ -200,12 +200,12 @@ void DatabaseWidget::setupMainArea()
 #endif
 }
 
-QString DatabaseWidget::currentDatabaseType() const
+QString DatabaseSettingsWidget::currentDatabaseType() const
 {
     return databaseType->itemData(databaseType->currentIndex()).toString();
 }
 
-void DatabaseWidget::slotChangeDatabasePath(const QUrl& result)
+void DatabaseSettingsWidget::slotChangeDatabasePath(const QUrl& result)
 {
 #ifdef _WIN32
     // Work around bug #189168
@@ -228,12 +228,12 @@ void DatabaseWidget::slotChangeDatabasePath(const QUrl& result)
     checkDBPath();
 }
 
-void DatabaseWidget::slotDatabasePathEditedDelayed()
+void DatabaseSettingsWidget::slotDatabasePathEditedDelayed()
 {
     QTimer::singleShot(300, this, SLOT(slotDatabasePathEdited()));
 }
 
-void DatabaseWidget::slotDatabasePathEdited()
+void DatabaseSettingsWidget::slotDatabasePathEdited()
 {
     QString newPath = databasePathEdit->lineEdit()->text();
 
@@ -251,13 +251,13 @@ void DatabaseWidget::slotDatabasePathEdited()
     checkDBPath();
 }
 
-void DatabaseWidget::slotHandleDBTypeIndexChanged(int index)
+void DatabaseSettingsWidget::slotHandleDBTypeIndexChanged(int index)
 {
     const QString& dbType = databaseType->itemData(index).toString();
     setDatabaseInputFields(dbType);
 }
 
-void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
+void DatabaseSettingsWidget::setDatabaseInputFields(const QString& currentIndexStr)
 {
     if (currentIndexStr == QString(DbEngineParameters::SQLiteDatabaseType()))
     {
@@ -287,7 +287,7 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
     adjustSize();
 }
 
-void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
+void DatabaseSettingsWidget::slotHandleInternalServerCheckbox(int enableFields)
 {
     hostName->setEnabled(enableFields == Qt::Unchecked);
     hostPort->setEnabled(enableFields == Qt::Unchecked);
@@ -308,7 +308,7 @@ void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
     }
 }
 
-void DatabaseWidget::checkDatabaseConnection()
+void DatabaseSettingsWidget::checkDatabaseConnection()
 {
     // TODO : if check DB connection operations can be threaded, use DBusyDlg dialog there...
 
@@ -343,7 +343,7 @@ void DatabaseWidget::checkDatabaseConnection()
     QSqlDatabase::removeDatabase(databaseID);
 }
 
-void DatabaseWidget::checkDBPath()
+void DatabaseSettingsWidget::checkDBPath()
 {
 /*
     bool dbOk          = false;
@@ -365,7 +365,7 @@ void DatabaseWidget::checkDBPath()
     //d->mainDialog->enableButtonOk(dbOk);
 }
 
-void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const settings)
+void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings* const settings)
 {
     originalDbPath = settings->getDatabaseFilePath();
     originalDbType = settings->getDatabaseType();
@@ -401,7 +401,7 @@ void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const 
     }
 }
 
-DbEngineParameters DatabaseWidget::getDbEngineParameters()
+DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters()
 {
     DbEngineParameters parameters;
 

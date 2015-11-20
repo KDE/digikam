@@ -34,7 +34,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "databasewidget.h"
+#include "dbsettingswidget.h"
 #include "coredbbackend.h"
 #include "coredbcopymanager.h"
 
@@ -50,7 +50,7 @@ public:
     explicit DatabaseCopyThread(QWidget* const parent);
     ~DatabaseCopyThread();
 
-    void init(const DbEngineParameters& fromDatabaseWidget, const DbEngineParameters& toDatabaseWidget);
+    void init(const DbEngineParameters& fromDatabaseSettingsWidget, const DbEngineParameters& toDatabaseSettingsWidget);
     void run();
 
 public:
@@ -65,14 +65,14 @@ private:
 
 // --------------------------------------------------------------------
 
-class DIGIKAM_EXPORT MigrationDlg : public QDialog
+class DIGIKAM_EXPORT DatabaseMigrationDialog : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit MigrationDlg(QWidget* const parent);
-    ~MigrationDlg();
+    explicit DatabaseMigrationDialog(QWidget* const parent);
+    ~DatabaseMigrationDialog();
 
 private Q_SLOTS:
 
