@@ -66,11 +66,11 @@ DBStatDlg::DBStatDlg(QWidget* const parent)
     new QTreeWidgetItem(listView(), QStringList() << i18n("Total Items") << QString::number(total));
 
     // get album statistics
-    int albums = CoreDbAccess().db()->scanAlbums().count();
+    int albums   = CoreDbAccess().db()->scanAlbums().count();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Albums") << QString::number(albums));
 
     // get tags statistics
-    int tags = CoreDbAccess().db()->scanTags().count();
+    int tags     = CoreDbAccess().db()->scanTags().count();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Tags") << QString::number(tags));
 
     // Database Backend information

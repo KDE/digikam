@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBSTATDLG_H
-#define DBSTATDLG_H
+#ifndef DATABASE_STATISTICS_DIALOG_H
+#define DATABASE_STATISTICS_DIALOG_H
 
 // Local includes
 
@@ -47,4 +47,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // DBSTATDLG_H
+#endif  // DATABASE_STATISTICS_DIALOG_H
