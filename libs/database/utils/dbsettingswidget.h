@@ -75,7 +75,7 @@ public:
 public:
 
     void setParametersFromSettings(const ApplicationSettings* const settings);
-    DbEngineParameters getDbEngineParameters();
+    DbEngineParameters getDbEngineParameters() const;
 
     QString currentDatabaseType() const;
     void setDatabaseInputFields(const QString&);

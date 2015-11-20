@@ -361,7 +361,7 @@ void DatabaseSettingsWidget::checkDBPath()
 */
     }
 
-    //TODO create an Enable button slot, if the path is vald
+    //TODO create an Enable button slot, if the path is valid
     //d->mainDialog->enableButtonOk(dbOk);
 }
 
@@ -401,7 +401,7 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     }
 }
 
-DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters()
+DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
 {
     DbEngineParameters parameters;
 
