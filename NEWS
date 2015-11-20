@@ -69,4 +69,9 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 037 ==> 279580 - MYSQL : unable to get database to work after update to 2.0.
 038 ==> 327062 - MYSQL : when a host is set for an user in database, digiKam fail to update.
 039 ==> 283502 - MYSQL : database upgrade v5 to v6 failed.
-040 ==> 
+040 ==> 233762 - SETUP : Provide reasonable defaults and help for the database settings page.
+041 ==> 337443 - SETUP : digikam hangs when opening the preferences window on the collection page using MySQL database.
+042 ==> 262321 - MYSQL : user privileges management.
+043 ==> 342124 - MYSQL : database error while verification at startup.
+044 ==> 
+
