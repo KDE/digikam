@@ -47,18 +47,18 @@ namespace
 static const char* configGroupDatabase          = "Database Settings";
 static const char* configInternalDatabaseServer = "Internal Database Server";
 static const char* configDatabaseType           = "Database Type";
-static const char* configDatabaseName           = "Database Name";
-static const char* configDatabaseNameThumbnails = "Database Name Thumbnails";
-static const char* configDatabaseNameFace       = "Database Name Face";
+static const char* configDatabaseName           = "Database Name";              // For Sqlite the DB file path, for Mysql the DB name
+static const char* configDatabaseNameThumbnails = "Database Name Thumbnails";   // For Sqlite the DB file path, for Mysql the DB name
+static const char* configDatabaseNameFace       = "Database Name Face";         // For Sqlite the DB file path, for Mysql the DB name
 static const char* configDatabaseHostName       = "Database Hostname";
 static const char* configDatabasePort           = "Database Port";
 static const char* configDatabaseUsername       = "Database Username";
 static const char* configDatabasePassword       = "Database Password";
 static const char* configDatabaseConnectOptions = "Database Connectoptions";
-// legacy
+// Legacy for older versions.
 static const char* configDatabaseFilePathEntry  = "Database File Path";
 static const char* configAlbumPathEntry         = "Album Path";
-
+// Sqlite DB file names
 static const char* digikam4db                   = "digikam4.db";
 static const char* thumbnails_digikamdb         = "thumbnails-digikam.db";
 static const char* face_digikamdb               = "recognition.db";
