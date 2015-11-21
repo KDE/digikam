@@ -63,9 +63,9 @@ public Q_SLOTS:
     bool isRunning();
 
 private:
-    
+
     QString getcurrentAccountUserName() const;
-    
+
 private:
 
     class Private;

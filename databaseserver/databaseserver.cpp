@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-14
- * Description : Mysql internal database server 
+ * Description : Mysql internal database server
  *
  * Copyright (C) 2009-2011 by Holger Foerster <Hamsi2k at freenet dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -139,7 +139,7 @@ bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& e
 
 /*
  * Starts the database management server.
- * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
+ * TODO: Ensure that no other digikam databaseserver is running. Re-using this instance instead start a new one.
  * Maybe this can be done by DBUS communication or an PID file.
  */
 DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
@@ -148,12 +148,10 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     const QString dbType(DbEngineParameters::MySQLDatabaseType());
     DbEngineParameters internalServerParameters = DbEngineParameters::defaultParameters(dbType);
 
-    //TODO Don't know if this is needed, because after the thread is finished, the database server manager should close
     d->pollThread->stop = false;
 
     //TODO Move the database command outside of the code to the dbconfig.xml file
     const QString mysqldPath(DbEngineConfig::element(dbType).dbServerCmd);
-    //const QString mysqldPath("/usr/sbin/mysqld");
 
     if ( mysqldPath.isEmpty() || (mysqldPath.compare(QLatin1String( "SERVERCMD_MYSQL-NOTFOUND" )) == 0))
     {
@@ -163,14 +161,15 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     // create the database directories if they don't exists
 
-    const QString akDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/");
-    const QString dataDir     = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_data");
-    const QString miscDir     = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/db_misc");
-    const QString fileDataDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + QLatin1String("digikam/file_db_data");
+    const QString akDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/digikam/");
+    const QString dataDir     = akDir + QLatin1String("db_data");
+    const QString miscDir     = akDir + QLatin1String("db_misc");
+    const QString fileDataDir = akDir + QLatin1String("file_db_data");
 
     /*
     * TODO Move the database command outside of the code to the dbconfig.xml file.
-    * Offer a variable to the dataDir. E.g. the command definition in the config file has to be: /usr/bin/mysql_install_db --user=$USER --datadir=$dataDir$
+    * Offer a variable to the datadir. E.g. the command definition in the config file has to be:
+    * /usr/bin/mysql_install_db --user=$USER --datadir=$dataDir$
     */
     const QString mysqlInitCmd(QString::fromLatin1("%1 --user=%2 --datadir=%3")
                                .arg(DbEngineConfig::element(dbType).dbInitCmd)
@@ -199,13 +198,13 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-global.conf"));
     const QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-local.conf"));
-    const QString actualConfig = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/digikam/mysql.conf");
+    const QString actualConfig = akDir + QLatin1String("mysql.conf");
 
     if ( globalConfig.isEmpty() )
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Did not find MySQL server default configuration (mysql-global.conf)";
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot find MySQL server default configuration (mysql-global.conf)";
 
-        return DatabaseServerError(DatabaseServerError::StartError, i18n("Did not find MySQL server default configuration (mysql-global.conf)."));
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot find MySQL server default configuration (mysql-global.conf)."));
     }
 
     bool confUpdate = false;
@@ -346,7 +345,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     if ( !d->databaseProcess->waitForStarted() || d->databaseProcess->exitCode() != 0)
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << d->databaseProcess->readAllStandardOutput();
-        
+
         QString argumentStr = arguments.join(QLatin1String(", "));
         QString  str        = i18n("Could not start database server.");
         str                += i18n("<p>Executable: %1</p>",    mysqldPath);
@@ -434,8 +433,9 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
                         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database was successfully created";
                     }
                 }
-            } // make sure query is destroyed before we close the db
+            }
 
+            // make sure query is destroyed before we close the db
             db.close();
         }
     }
@@ -531,6 +531,9 @@ bool DatabaseServer::isRunning()
     return (d->databaseProcess->state() == QProcess::Running);
 }
 
+/*
+ * Return the current user account name
+ */
 QString DatabaseServer::getcurrentAccountUserName() const
 {
     QString name = QString::fromUtf8(qgetenv("USER"));   // Linux and OSX
