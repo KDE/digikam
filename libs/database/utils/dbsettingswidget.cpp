@@ -111,7 +111,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                                    "one to store compressed thumbnails, "
                                                    "and one to store faces recognition metadata.<br/>"
                                                    "Write access is required to be able to edit image properties.</p>"
-                                                   "Databases are digiKam core engines. Take a care to use a place hosted by a fast "
+                                                   "<p>Databases are digiKam core engines. Take a care to use a place hosted by a fast "
                                                    "hardware (as SSD) with enough free space especially for thumbnails database.</p>"
                                                    "<p>Note: a remote file system such as NFS, cannot be used here. "
                                                    "For performance reasons, it's also recommended to not use a removable media.</p>"
@@ -172,7 +172,7 @@ void DatabaseSettingsWidget::setupMainArea()
 
     // --------------------------------------------------------
 
-    d->dbNoticeBox           = new QGroupBox(i18n("Database Server Intructions"), this);
+    d->dbNoticeBox           = new QGroupBox(i18n("Database Server Instructions"), this);
     QVBoxLayout* const vlay2 = new QVBoxLayout(d->dbNoticeBox);
     QLabel* const notice     = new QLabel(i18n("<p>digiKam expects the above database and user account to already exists. "
                                                "This user also require full access to the database.<br>"
