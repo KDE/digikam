@@ -604,17 +604,17 @@ void DbEngineParameters::removeFromUrl(QUrl& url)
 
 QDebug operator<<(QDebug dbg, const DbEngineParameters& p)
 {
-    dbg.nospace() << "Database Parameters:"                                    << endl;
-    dbg.nospace() << "   Type:            " << p.databaseType                  << endl;
-    dbg.nospace() << "   DB Core Name:    " << p.databaseNameCore              << endl;
-    dbg.nospace() << "   DB Thumbs Name:  " << p.databaseNameThumbnails        << endl;
-    dbg.nospace() << "   DB Face Name:    " << p.databaseNameFace              << endl;
-    dbg.nospace() << "   Connect Options: " << p.connectOptions                << endl;
-    dbg.nospace() << "   Host Name:       " << p.hostName                      << endl;
-    dbg.nospace() << "   Host port:       " << p.port                          << endl;
-    dbg.nospace() << "   Internal Server: " << p.internalServer                << endl;
-    dbg.nospace() << "   Username:        " << p.userName                      << endl;
-    dbg.nospace() << "   Password:        " << p.password                      << endl;
+    dbg.nospace() << "Database Parameters:"                                                        << endl;
+    dbg.nospace() << "   Type:            " << p.databaseType                                      << endl;
+    dbg.nospace() << "   DB Core Name:    " << p.databaseNameCore                                  << endl;
+    dbg.nospace() << "   DB Thumbs Name:  " << p.databaseNameThumbnails                            << endl;
+    dbg.nospace() << "   DB Face Name:    " << p.databaseNameFace                                  << endl;
+    dbg.nospace() << "   Connect Options: " << p.connectOptions                                    << endl;
+    dbg.nospace() << "   Host Name:       " << p.hostName                                          << endl;
+    dbg.nospace() << "   Host port:       " << p.port                                              << endl;
+    dbg.nospace() << "   Internal Server: " << p.internalServer                                    << endl;
+    dbg.nospace() << "   Username:        " << p.userName                                          << endl;
+    dbg.nospace() << "   Password:        " << QString().fill(QLatin1Char('X'), p.password.size()) << endl;
 
     return dbg.space();
 }
