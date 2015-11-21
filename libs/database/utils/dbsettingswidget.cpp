@@ -98,9 +98,18 @@ void DatabaseSettingsWidget::setupMainArea()
 
     QGroupBox* const dbConfigBox = new QGroupBox(i18n("Database Configuration"), this);
     QVBoxLayout* const vlay      = new QVBoxLayout(dbConfigBox);
+
+    DHBox* const typeHbox                            = new DHBox();
+    QLabel* const databaseTypeLabel                  = new QLabel(typeHbox);
+    d->dbType                                        = new QComboBox(typeHbox);
+    databaseTypeLabel->setText(i18n("Type:"));
+
+    // --------------------------------------------------------
+
     d->dbPathLabel               = new QLabel(i18n("<p>Set here the location where the database files will be stored on your system. "
-                                                   "There are 3 database files : one for all root albums, one for thumnails, "
-                                                   "and one for faces recognition.<br/>"
+                                                   "There are 3 databases : one for all collections properties, "
+                                                   "one to store compressed thumbnails, "
+                                                   "and one to store faces recognition metadata.<br/>"
                                                    "Write access is required to be able to edit image properties.</p>"
                                                    "Databases are digiKam core engines. Take a care to use a place hosted by a fast "
                                                    "hardware (as SSD) with enough free space especially for thumbnails database.</p>"
@@ -108,14 +117,10 @@ void DatabaseSettingsWidget::setupMainArea()
                                                    "For performance reasons, it's also recommended to not use a removable media.</p>"
                                                    "<p></p>"), dbConfigBox);
     d->dbPathLabel->setWordWrap(true);
-
     dbPathEdit                                       = new DFileSelector(dbConfigBox);
     dbPathEdit->setFileDlgMode(QFileDialog::Directory);
 
-    DHBox* const typeHbox                            = new DHBox();
-    QLabel* const databaseTypeLabel                  = new QLabel(typeHbox);
-    d->dbType                                        = new QComboBox(typeHbox);
-    databaseTypeLabel->setText(i18n("Type:"));
+    // --------------------------------------------------------
 
     QLabel* const dbNameCoreLabel                    = new QLabel(i18n("Core Db Name:"));
     dbNameCore                                       = new QLineEdit();
@@ -323,23 +328,8 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
 {
     switch(index)
     {
-        case MysqlInternal:
-        case MysqlServer:
-        {
-            d->dbPathLabel->setVisible(false);
-            dbPathEdit->setVisible(false);
-            d->expertSettings->setVisible(true);
-
-            disconnect(dbPathEdit, SIGNAL(signalUrlSelected(QUrl)),
-                    this, SLOT(slotChangeDatabasePath(QUrl)));
-
-            disconnect(dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
-                    this, SLOT(slotDatabasePathEditedDelayed()));
-
-            d->dbNoticeBox->setVisible(index == MysqlServer);
-            break;
-        }
-        default: // SQlite
+        //case MysqlInternal:
+        case SQlite:
         {
             d->dbPathLabel->setVisible(true);
             dbPathEdit->setVisible(true);
@@ -354,30 +344,37 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
             d->dbNoticeBox->setVisible(false);
             break;
         }
+        default: // MysqlServer
+        {
+            d->dbPathLabel->setVisible(false);
+            dbPathEdit->setVisible(false);
+            d->expertSettings->setVisible(true);
+
+            disconnect(dbPathEdit, SIGNAL(signalUrlSelected(QUrl)),
+                    this, SLOT(slotChangeDatabasePath(QUrl)));
+
+            disconnect(dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
+                    this, SLOT(slotDatabasePathEditedDelayed()));
+
+            d->dbNoticeBox->setVisible(index == MysqlServer);
+            break;
+        }
     }
 }
 
 void DatabaseSettingsWidget::handleInternalServer(int index)
 {
-    bool enableFields = (index == MysqlInternal);
+    bool internal = (index == MysqlInternal);
 
-    hostName->setEnabled(enableFields == Qt::Unchecked);
-    hostPort->setEnabled(enableFields == Qt::Unchecked);
-    dbNameCore->setEnabled(enableFields == Qt::Unchecked);
-    dbNameThumbnails->setEnabled(enableFields == Qt::Unchecked);
-    dbNameFace->setEnabled(enableFields == Qt::Unchecked);
-    userName->setEnabled(enableFields == Qt::Unchecked);
-    password->setEnabled(enableFields == Qt::Unchecked);
-    connectionOptions->setEnabled(enableFields == Qt::Unchecked);
-
-    if (enableFields == Qt::Unchecked)
-    {
-        hostPort->setValue(3306);
-    }
-    else
-    {
-        hostPort->setValue(-1);
-    }
+    hostName->setDisabled(internal);
+    hostPort->setDisabled(internal);
+    dbNameCore->setDisabled(internal);
+    dbNameThumbnails->setDisabled(internal);
+    dbNameFace->setDisabled(internal);
+    userName->setDisabled(internal);
+    password->setDisabled(internal);
+    connectionOptions->setDisabled(internal);
+    hostPort->setValue(internal ? -1 : 3306);
 }
 
 void DatabaseSettingsWidget::slotUpdateSqlInit()
