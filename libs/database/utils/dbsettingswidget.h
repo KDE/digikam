@@ -49,14 +49,14 @@ class DIGIKAM_EXPORT DatabaseSettingsWidget : public QWidget
     Q_OBJECT
 
 public:
-    
+
     enum DatabaseType
     {
         SQlite        = 0,
         MysqlInternal = 1,
         MysqlServer   = 2
     };
-    
+
 public:
 
     explicit DatabaseSettingsWidget(QWidget* const parent = 0);
@@ -75,7 +75,6 @@ public:
     QLineEdit*     userName;
     QLineEdit*     password;
 
-    QComboBox*     dbType;
     QSpinBox*      hostPort;
 
     DFileSelector* dbPathEdit;
@@ -87,7 +86,7 @@ public:
 
     void setDatabaseType(int type);
     int  databaseType() const;
-    
+
     QString databaseBackend() const;
 
 public Q_SLOTS:

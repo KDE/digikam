@@ -63,13 +63,15 @@ public:
 
     Private()
     {
-        databasePathLabel = 0;
-        expertSettings    = 0;
-        dbNoticeBox       = 0;
-        sqlInit           = 0;
+        dbType         = 0;
+        dbPathLabel    = 0;
+        expertSettings = 0;
+        dbNoticeBox    = 0;
+        sqlInit        = 0;
     }
 
-    QLabel*       databasePathLabel;
+    QComboBox*    dbType;
+    QLabel*       dbPathLabel;
     QTextBrowser* sqlInit;
     QGroupBox*    expertSettings;
     QGroupBox*    dbNoticeBox;
@@ -96,7 +98,7 @@ void DatabaseSettingsWidget::setupMainArea()
 
     QGroupBox* const dbConfigBox = new QGroupBox(i18n("Database Configuration"), this);
     QVBoxLayout* const vlay      = new QVBoxLayout(dbConfigBox);
-    d->databasePathLabel         = new QLabel(i18n("<p>Set here the location where the database files will be stored on your system. "
+    d->dbPathLabel               = new QLabel(i18n("<p>Set here the location where the database files will be stored on your system. "
                                                    "There are 3 database files : one for all root albums, one for thumnails, "
                                                    "and one for faces recognition.<br/>"
                                                    "Write access is required to be able to edit image properties.</p>"
@@ -105,14 +107,14 @@ void DatabaseSettingsWidget::setupMainArea()
                                                    "<p>Note: a remote file system such as NFS, cannot be used here. "
                                                    "For performance reasons, it's also recommended to not use a removable media.</p>"
                                                    "<p></p>"), dbConfigBox);
-    d->databasePathLabel->setWordWrap(true);
+    d->dbPathLabel->setWordWrap(true);
 
     dbPathEdit                                       = new DFileSelector(dbConfigBox);
     dbPathEdit->setFileDlgMode(QFileDialog::Directory);
 
     DHBox* const typeHbox                            = new DHBox();
     QLabel* const databaseTypeLabel                  = new QLabel(typeHbox);
-    dbType                                           = new QComboBox(typeHbox);
+    d->dbType                                        = new QComboBox(typeHbox);
     databaseTypeLabel->setText(i18n("Type:"));
 
     QLabel* const dbNameCoreLabel                    = new QLabel(i18n("Core Db Name:"));
@@ -157,7 +159,7 @@ void DatabaseSettingsWidget::setupMainArea()
 
     vlay->addWidget(typeHbox);
     vlay->addWidget(new DLineWidget(Qt::Horizontal));
-    vlay->addWidget(d->databasePathLabel);
+    vlay->addWidget(d->dbPathLabel);
     vlay->addWidget(dbPathEdit);
     vlay->addWidget(d->expertSettings);
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -177,7 +179,7 @@ void DatabaseSettingsWidget::setupMainArea()
     d->sqlInit->setOpenExternalLinks(false);
     d->sqlInit->setOpenLinks(false);
     d->sqlInit->setReadOnly(false);
-    
+
     vlay2->addWidget(notice);
     vlay2->addWidget(d->sqlInit);
     vlay2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -190,44 +192,44 @@ void DatabaseSettingsWidget::setupMainArea()
     layout->addWidget(dbConfigBox);
     layout->addWidget(d->dbNoticeBox);
     layout->addStretch();
-    
+
     // --------- fill with default values ---------------------
-    
-    dbType->addItem(i18n("SQLite"),                        SQlite);
 
-#ifdef HAVE_MYSQLSUPPORT
-    
-#   ifdef HAVE_INTERNALMYSQL
-    dbType->addItem(i18n("MySQL Internal (experimental)"), MysqlInternal);
-#   endif
+    d->dbType->addItem(i18n("SQLite"),                        SQlite);
 
-    dbType->addItem(i18n("MySQL Server (experimental)"),   MysqlServer);
-#endif
-
-    dbType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
-                                  "<p><b>SQlite</b> backend is for local database storage with a small or medium collection sizes. "
-                                  "It is the default and recommended backend.</p>"
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
-                                  "<p><b>MySQL Internal</b> backend is for local database storage with huge collection sizes. "
-                                  "Be careful: this one still in experimental stage.</p>"
+    d->dbType->addItem(i18n("MySQL Internal (experimental)"), MysqlInternal);
 #   endif
-                                  
-                                  "<p><b>MySQL Server</b> backend is a more robust solution especially for remote and shared database storage. "
-                                  "It is also more efficient to manage huge collection sizes. "
-                                  "Be careful: this one still in experimental stage.</p>"
+
+    d->dbType->addItem(i18n("MySQL Server (experimental)"),   MysqlServer);
 #endif
-                                 ));
+
+    d->dbType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
+                               "<p><b>SQlite</b> backend is for local database storage with a small or medium collection sizes. "
+                               "It is the default and recommended backend.</p>"
+#ifdef HAVE_MYSQLSUPPORT
+
+#   ifdef HAVE_INTERNALMYSQL
+                               "<p><b>MySQL Internal</b> backend is for local database storage with huge collection sizes. "
+                               "Be careful: this one still in experimental stage.</p>"
+#   endif
+
+                               "<p><b>MySQL Server</b> backend is a more robust solution especially for remote and shared database storage. "
+                               "It is also more efficient to manage huge collection sizes. "
+                               "Be careful: this one still in experimental stage.</p>"
+#endif
+                              ));
 
     // --------------------------------------------------------
 
-    connect(dbType, SIGNAL(currentIndexChanged(int)),
+    connect(d->dbType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHandleDBTypeIndexChanged(int)));
 
     connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
             this, SLOT(checkDatabaseConnection()));
-    
+
     connect(dbNameCore, SIGNAL(textChanged(QString)),
             this, SLOT(slotUpdateSqlInit()));
 
@@ -240,12 +242,12 @@ void DatabaseSettingsWidget::setupMainArea()
     connect(userName, SIGNAL(textChanged(QString)),
             this, SLOT(slotUpdateSqlInit()));
 
-    slotHandleDBTypeIndexChanged(dbType->currentIndex());
+    slotHandleDBTypeIndexChanged(d->dbType->currentIndex());
 }
 
 int DatabaseSettingsWidget::databaseType() const
 {
-    return dbType->currentIndex();
+    return d->dbType->currentIndex();
 }
 
 QString DatabaseSettingsWidget::databaseBackend() const
@@ -324,7 +326,7 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
         case MysqlInternal:
         case MysqlServer:
         {
-            d->databasePathLabel->setVisible(false);
+            d->dbPathLabel->setVisible(false);
             dbPathEdit->setVisible(false);
             d->expertSettings->setVisible(true);
 
@@ -333,13 +335,13 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
 
             disconnect(dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
                     this, SLOT(slotDatabasePathEditedDelayed()));
-            
+
             d->dbNoticeBox->setVisible(index == MysqlServer);
             break;
         }
         default: // SQlite
         {
-            d->databasePathLabel->setVisible(true);
+            d->dbPathLabel->setVisible(true);
             dbPathEdit->setVisible(true);
             d->expertSettings->setVisible(false);
 
@@ -358,7 +360,7 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
 void DatabaseSettingsWidget::handleInternalServer(int index)
 {
     bool enableFields = (index == MysqlInternal);
-        
+
     hostName->setEnabled(enableFields == Qt::Unchecked);
     hostPort->setEnabled(enableFields == Qt::Unchecked);
     dbNameCore->setEnabled(enableFields == Qt::Unchecked);
@@ -475,19 +477,19 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
 
     if (settings->getDatabaseType() == DbEngineParameters::SQLiteDatabaseType())
     {
-        dbType->setCurrentIndex(SQlite);
+        d->dbType->setCurrentIndex(SQlite);
     }
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
     else if (settings->getDatabaseType() == DbEngineParameters::MySQLDatabaseType() && settings->getInternalDatabaseServer())
     {
-        dbType->setCurrentIndex(MysqlInternal);
+        d->dbType->setCurrentIndex(MysqlInternal);
     }
 #   endif
     else
     {
-        dbType->setCurrentIndex(MysqlServer);
+        d->dbType->setCurrentIndex(MysqlServer);
     }
 #endif
 
@@ -500,8 +502,8 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
 
     userName->setText(settings->getDatabaseUserName());
     password->setText(settings->getDatabasePassword());
-    
-    slotHandleDBTypeIndexChanged(dbType->currentIndex());
+
+    slotHandleDBTypeIndexChanged(d->dbType->currentIndex());
 }
 
 DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
