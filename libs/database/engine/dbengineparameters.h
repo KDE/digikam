@@ -142,13 +142,18 @@ public:
     void removeLegacyConfig(KSharedConfig::Ptr config);
 
     /**
-     * Convenience method to create a DbEngineParameters object for an
+     * Convenience methods to create a DbEngineParameters object for an
      * SQLITE 3 database specified by the local file path.
      */
     static DbEngineParameters parametersForSQLite(const QString& databaseFile);
     static DbEngineParameters parametersForSQLiteDefaultFile(const QString& directory);
 
     static void removeFromUrl(QUrl& url);
+
+    /** Return the hidden path from home directory to store private
+     *  data used by internal Mysql server.
+     */
+    static QString internalServerPrivatePath();
 
 public:
 

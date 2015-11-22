@@ -107,7 +107,7 @@ void DatabaseServer::startPolling()
 
 /*
  * Starts the database management server.
- * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
+ * TODO: Ensure that no other digiKam databaseserver is running. Reusing this instance instead start a new one.
  * Maybe this can be done by DBUS communication or an PID file.
  */
 bool DatabaseServer::startDatabaseProcess(QDBusVariant& error)
@@ -117,7 +117,7 @@ bool DatabaseServer::startDatabaseProcess(QDBusVariant& error)
 
 /*
  * Starts the database management server.
- * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
+ * TODO: Ensure that no other digiKam databaseserver is running. Reusing this instance instead start a new one.
  * Maybe this can be done by DBUS communication or an PID file.
  */
 bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& error)
@@ -139,7 +139,7 @@ bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& e
 
 /*
  * Starts the database management server.
- * TODO: Ensure that no other digikam databaseserver is running. Re-using this instance instead start a new one.
+ * TODO: Ensure that no other digiKam databaseserver is running. Re-using this instance instead start a new one.
  * Maybe this can be done by DBUS communication or an PID file.
  */
 DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
@@ -161,7 +161,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     // create the database directories if they don't exists
 
-    const QString akDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/digikam/");
+    const QString akDir       = DbEngineParameters::internalServerPrivatePath();
     const QString dataDir     = akDir + QLatin1String("db_data");
     const QString miscDir     = akDir + QLatin1String("db_misc");
     const QString fileDataDir = akDir + QLatin1String("file_db_data");
