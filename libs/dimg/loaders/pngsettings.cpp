@@ -67,6 +67,8 @@ PNGSettings::PNGSettings(QWidget* parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->PNGGrid        = new QGridLayout(this);
     d->PNGcompression = new DIntNumInput(this);
     d->PNGcompression->setDefaultValue(6);
@@ -86,8 +88,8 @@ PNGSettings::PNGSettings(QWidget* parent)
     d->PNGGrid->addWidget(d->PNGcompression,      1, 1, 1, 2);
     d->PNGGrid->setColumnStretch(1, 10);
     d->PNGGrid->setRowStretch(2, 10);
-    d->PNGGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->PNGGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->PNGGrid->setContentsMargins(spacing, spacing, spacing, spacing);
+    d->PNGGrid->setSpacing(spacing);
 
     connect(d->PNGcompression, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));

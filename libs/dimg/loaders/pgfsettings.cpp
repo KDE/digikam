@@ -71,6 +71,8 @@ PGFSettings::PGFSettings(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->PGFGrid     = new QGridLayout(this);
     d->PGFLossLess = new QCheckBox(i18n("Lossless PGF files"), this);
 
@@ -98,8 +100,8 @@ PGFSettings::PGFSettings(QWidget* const parent)
     d->PGFGrid->addWidget(d->PGFcompression,      2, 0, 1, 2);
     d->PGFGrid->setColumnStretch(1, 10);
     d->PGFGrid->setRowStretch(3, 10);
-    d->PGFGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->PGFGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->PGFGrid->setContentsMargins(spacing, spacing, spacing, spacing);
+    d->PGFGrid->setSpacing(spacing);
 
     connect(d->PGFLossLess, SIGNAL(toggled(bool)),
             this, SLOT(slotTogglePGFLossLess(bool)));

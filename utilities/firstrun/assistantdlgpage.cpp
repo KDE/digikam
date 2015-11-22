@@ -67,6 +67,8 @@ AssistantDlgPage::AssistantDlgPage(AssistantDlg* const dlg, const QString& title
 {
     setTitle(title);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QScrollArea* const sv = new QScrollArea(this);
     QWidget* const panel  = new QWidget(sv->viewport());
     sv->setWidget(panel);
@@ -82,15 +84,15 @@ AssistantDlgPage::AssistantDlgPage(AssistantDlg* const dlg, const QString& title
     d->leftBottomPix    = new QLabel(vbox);
     d->leftBottomPix->setAlignment(Qt::AlignCenter);
     vbox->setStretchFactor(space, 10);
-    vbox->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox->setContentsMargins(spacing, spacing, spacing, spacing);
+    vbox->setSpacing(spacing);
     
     DLineWidget* const line = new DLineWidget(Qt::Vertical, panel);
 
     d->hlay->addWidget(vbox);
     d->hlay->addWidget(line);
-    d->hlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->hlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    d->hlay->setSpacing(spacing);
     
     QVBoxLayout* const layout = new QVBoxLayout;
     layout->addWidget(sv);

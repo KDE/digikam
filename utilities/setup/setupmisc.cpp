@@ -85,6 +85,8 @@ SetupMisc::SetupMisc(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
@@ -138,8 +140,8 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setContentsMargins(spacing, spacing, spacing, spacing);
+    layout->setSpacing(spacing);
     layout->addWidget(d->showTrashDeleteDialogCheck);
     layout->addWidget(d->showPermanentDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);

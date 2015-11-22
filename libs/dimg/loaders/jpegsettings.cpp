@@ -77,6 +77,8 @@ JPEGSettings::JPEGSettings(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->JPEGGrid             = new QGridLayout(this);
     d->JPEGcompression      = new DIntNumInput(this);
     d->JPEGcompression->setDefaultValue(75);
@@ -127,8 +129,8 @@ JPEGSettings::JPEGSettings(QWidget* const parent)
     d->JPEGGrid->addWidget(d->labelWarning,         4, 0, 1, 1);
     d->JPEGGrid->setColumnStretch(1, 10);
     d->JPEGGrid->setRowStretch(5, 10);
-    d->JPEGGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->JPEGGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->JPEGGrid->setContentsMargins(spacing, spacing, spacing, spacing);
+    d->JPEGGrid->setSpacing(spacing);
 
     connect(d->JPEGcompression, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));

@@ -206,6 +206,8 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
     : QScrollArea(parent), StateSavingObject(this),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->thumbLoadThread          = ThumbnailLoadThread::defaultThread();
     d->searchModel              = searchModel;
     d->searchModificationHelper = searchModificationHelper;
@@ -238,8 +240,8 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
     d->searchFuzzyBar->setModel(d->searchTreeView->filteredModel(),
                                 AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->searchFuzzyBar->setFilterModel(d->searchTreeView->albumFilterModel());
-    d->folderView->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->folderView->setContentsMargins(QMargins());
+    d->folderView->setSpacing(spacing);
 
     // ---------------------------------------------------------------
 
@@ -265,6 +267,8 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
 
 QWidget* FuzzySearchView::setupFindSimilarPanel() const
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     DHBox* const imageBox = new DHBox();
     d->imageWidget        = new QLabel(imageBox);
     d->imageWidget->setFixedSize(256, 256);
@@ -303,7 +307,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     DHBox* const saveBox = new DHBox();
     saveBox->setContentsMargins(QMargins());
-    saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    saveBox->setSpacing(spacing);
 
     d->nameEditImage = new QLineEdit(saveBox);
     d->nameEditImage->setClearButtonEnabled(true);
@@ -333,8 +337,8 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     mainLayout->addWidget(saveBox,        4, 0, 1, 3);
     mainLayout->setRowStretch(5, 10);
     mainLayout->setColumnStretch(1, 10);
-    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
     mainWidget->setLayout(mainLayout);
 
     return mainWidget;
@@ -342,6 +346,8 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
 QWidget* FuzzySearchView::setupSketchPanel() const
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     DHBox* const drawingBox = new DHBox();
     d->sketchWidget         = new SketchWidget(drawingBox);
     drawingBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
@@ -402,13 +408,13 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     settingsLayout->addWidget(d->resultsSketch, 0, 6);
     settingsLayout->setColumnStretch(4, 10);
     settingsLayout->setContentsMargins(QMargins());
-    settingsLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    settingsLayout->setSpacing(spacing);
 
     // ---------------------------------------------------------------
 
     DHBox* const saveBox = new DHBox();
     saveBox->setContentsMargins(QMargins());
-    saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    saveBox->setSpacing(spacing);
 
     d->resetButton = new QToolButton(saveBox);
     d->resetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
@@ -440,8 +446,8 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     mainLayout->addWidget(saveBox,        3, 0, 1, 3);
     mainLayout->setRowStretch(5, 10);
     mainLayout->setColumnStretch(1, 10);
-    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
     mainWidget->setLayout(mainLayout);
 
     return mainWidget;

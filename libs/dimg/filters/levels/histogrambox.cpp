@@ -220,7 +220,7 @@ HistogramWidget* HistogramBox::histogram() const
 
 void HistogramBox::setHistogramMargin(int margin)
 {
-    d->histoBox->layout()->setMargin(margin);
+    d->histoBox->layout()->setContentsMargins(margin, margin, margin, margin);
 }
 
 void HistogramBox::slotChannelChanged()

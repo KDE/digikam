@@ -118,13 +118,15 @@ LensAutoFixTool::LensAutoFixTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     grid->addWidget(d->showGrid,       0, 0, 1, 2);
     grid->addWidget(d->cameraSelector, 1, 0, 1, 2);
     grid->addWidget(line,              2, 0, 1, 2);
     grid->addWidget(d->settingsView,   3, 0, 1, 2);
     grid->setRowStretch(4, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     setToolSettings(d->gboxSettings);
 

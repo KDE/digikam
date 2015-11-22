@@ -264,10 +264,12 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
                                   const QString& ask,
                                   bool* checkboxReturn)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QWidget* const mainWidget     = new QWidget(dialog);
     QVBoxLayout* const mainLayout = new QVBoxLayout(mainWidget);
-    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
 
     QHBoxLayout* const hLayout    = new QHBoxLayout();
     hLayout->setContentsMargins(QMargins());
@@ -286,7 +288,7 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
     iconLayout->addWidget(iconLabel);
     iconLayout->addStretch(5);
     hLayout->addLayout(iconLayout, 0);
-    hLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hLayout->addSpacing(spacing);
 
     //--------------------------------------------------------------------------------
 

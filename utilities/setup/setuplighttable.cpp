@@ -81,6 +81,8 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
@@ -111,7 +113,7 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
     gLayout->addWidget(d->autoSyncPreview);
     gLayout->addWidget(d->autoLoadOnRightPanel);
     gLayout->addWidget(d->clearOnClose);
-    gLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     gLayout->setSpacing(0);
 
     // --------------------------------------------------------
@@ -123,7 +125,7 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(d->fullScreenSettings);
     layout->setContentsMargins(QMargins());
-    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setSpacing(spacing);
     layout->addStretch();
 
     // --------------------------------------------------------

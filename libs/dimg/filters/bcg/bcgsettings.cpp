@@ -79,6 +79,8 @@ BCGSettings::BCGSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* grid = new QGridLayout(parent);
 
     QLabel* const label2 = new QLabel(i18n("Brightness:"));
@@ -109,8 +111,8 @@ BCGSettings::BCGSettings(QWidget* const parent)
     grid->addWidget(label4,    4, 0, 1, 5);
     grid->addWidget(d->gInput, 5, 0, 1, 5);
     grid->setRowStretch(6, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

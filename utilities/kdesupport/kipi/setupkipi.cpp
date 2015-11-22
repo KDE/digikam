@@ -91,6 +91,8 @@ SetupKipi::SetupKipi(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QWidget* const panel        = new QWidget(viewport());
     d->grid                     = new QGridLayout(panel);
 
@@ -147,8 +149,8 @@ SetupKipi::SetupKipi(QWidget* const parent)
     d->grid->addWidget(d->kipiLogoLabel,          0, 6, 2, 1);
     d->grid->addWidget(d->pluginsList,            2, 0, 1, -1);
     d->grid->setColumnStretch(3, 10);
-    d->grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    d->grid->setSpacing(spacing);
 
     // --------------------------------------------------------
 

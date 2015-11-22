@@ -133,13 +133,15 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
     currentProfileDesc->setText(QString::fromUtf8("<b>%1</b>").arg(d->currentProfile.description()));
     currentProfileDesc->setWordWrap(true);
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     grid->addWidget(currentProfileTitle, 0, 0, 1, 5);
     grid->addWidget(currentProfileDesc,  1, 0, 1, 5);
     grid->addWidget(currentProfInfo,     2, 0, 1, 1);
     grid->addWidget(d->profilesBox,      3, 0, 1, 5);
     grid->setRowStretch(4, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

@@ -61,6 +61,8 @@ TIFFSettings::TIFFSettings(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->TIFFGrid        = new QGridLayout(this);
     d->TIFFcompression = new QCheckBox(i18n("Compress TIFF files"), this);
 
@@ -73,8 +75,8 @@ TIFFSettings::TIFFSettings(QWidget* const parent)
     d->TIFFGrid->addWidget(d->TIFFcompression, 0, 0, 1, 2);
     d->TIFFGrid->setColumnStretch(1, 10);
     d->TIFFGrid->setRowStretch(1, 10);
-    d->TIFFGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->TIFFGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->TIFFGrid->setContentsMargins(spacing, spacing, spacing, spacing);
+    d->TIFFGrid->setSpacing(spacing);
 
     connect(d->TIFFcompression, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));

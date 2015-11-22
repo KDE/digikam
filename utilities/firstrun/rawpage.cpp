@@ -66,6 +66,8 @@ RawPage::RawPage(AssistantDlg* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     DVBox* const vbox    = new DVBox(this);
     QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
@@ -88,8 +90,8 @@ RawPage::RawPage(AssistantDlg* const dlg)
 
     vlay->addWidget(d->openDirectly);
     vlay->addWidget(d->useRawImport);
-    vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    vlay->setSpacing(spacing);
 
     QLabel* const label2 = new QLabel(vbox);
     label2->setWordWrap(true);

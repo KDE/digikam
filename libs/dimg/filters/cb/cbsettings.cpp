@@ -80,6 +80,8 @@ CBSettings::CBSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(parent);
 
     QLabel* const labelCyan = new QLabel(i18n("Cyan"));
@@ -130,8 +132,8 @@ CBSettings::CBSettings(QWidget* const parent)
     grid->addWidget(labelYellow,  2, 0, 1, 1);
     grid->addWidget(d->bInput,    2, 1, 1, 1);
     grid->addWidget(labelBlue,    2, 2, 1, 1);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
     grid->setRowStretch(3, 10);
 
     // -------------------------------------------------------------

@@ -115,6 +115,8 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const QString& name)
 {
     setObjectName(name);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->mainLayout = new QGridLayout(this);
 
     // -----------------------------------------------------------------
@@ -171,8 +173,8 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const QString& name)
     d->mainLayout->addWidget(d->view,      1, 0, 1, 5);
     d->mainLayout->setColumnStretch(2, 10);
     d->mainLayout->setRowStretch(1, 10);
+    d->mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     d->mainLayout->setSpacing(0);
-    d->mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -----------------------------------------------------------------
 

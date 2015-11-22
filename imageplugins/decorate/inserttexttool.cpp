@@ -221,6 +221,8 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     QGridLayout* const mainLayout = new QGridLayout();
     mainLayout->addWidget(d->textEdit,             0, 0, 3,-1);
     mainLayout->addWidget(d->fontChooserWidget,    3, 0, 1,-1);
@@ -233,8 +235,8 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     mainLayout->addWidget(d->transparentText,      8, 0, 1,-1);
     mainLayout->setRowStretch(9, 10);
     mainLayout->setColumnStretch(2, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------

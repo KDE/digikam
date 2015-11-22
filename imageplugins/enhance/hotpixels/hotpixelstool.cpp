@@ -135,13 +135,15 @@ HotPixelsTool::HotPixelsTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     grid->addWidget(filterMethodLabel,     0, 0, 1, 1);
     grid->addWidget(d->filterMethodCombo,  0, 1, 1, 1);
     grid->addWidget(d->blackFrameButton,   0, 2, 1, 1);
     grid->addWidget(d->blackFrameListView, 1, 0, 2, 3);
     grid->setRowStretch(3, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

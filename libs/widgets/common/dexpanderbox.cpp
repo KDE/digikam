@@ -478,6 +478,8 @@ DLabelExpander::DLabelExpander(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->grid        = new QGridLayout(this);
     d->line        = new DLineWidget(Qt::Horizontal, this);
     d->hbox        = new QWidget(this);
@@ -492,7 +494,7 @@ DLabelExpander::DLabelExpander(QWidget* const parent)
     hlay->addWidget(d->pixmapLabel);
     hlay->addWidget(d->clickLabel, 10);
     hlay->setContentsMargins(QMargins());
-    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlay->setSpacing(spacing);
 
     d->pixmapLabel->installEventFilter(this);
     d->pixmapLabel->setCursor(Qt::PointingHandCursor);
@@ -503,8 +505,8 @@ DLabelExpander::DLabelExpander(QWidget* const parent)
     d->grid->addWidget(d->line, 0, 0, 1, 3);
     d->grid->addWidget(d->hbox, 1, 0, 1, 3);
     d->grid->setColumnStretch(2, 10);
-    d->grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    d->grid->setSpacing(spacing);
 
     connect(d->arrow, &DArrowClickLabel::leftClicked,
             this, &DLabelExpander::slotToggleContainer);

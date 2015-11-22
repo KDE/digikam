@@ -87,6 +87,8 @@ HSLSettings::HSLSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(parent);
 
     d->HSSelector = new DHueSaturationSelector();
@@ -140,8 +142,8 @@ HSLSettings::HSLSettings(QWidget* const parent)
     grid->addWidget(label5,        5, 0, 1, 1);
     grid->addWidget(d->lInput,     5, 1, 1, 4);
     grid->setRowStretch(6, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

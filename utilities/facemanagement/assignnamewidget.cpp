@@ -372,8 +372,8 @@ void AssignNameWidget::Private::updateLayout()
             layout->addWidget(clickLabel, 0, 0);
             break;
     }
-    
-    layout->setMargin(1);
+
+    layout->setContentsMargins(1, 1, 1, 1);
     layout->setSpacing(1);
     q->setLayout(layout);
 }

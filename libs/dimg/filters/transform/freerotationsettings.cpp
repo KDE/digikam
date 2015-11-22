@@ -83,6 +83,8 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(this);
 
     // --------------------------------------------------------
@@ -125,8 +127,8 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
     grid->addWidget(d->antialiasInput, 4, 0, 1, -1);
     grid->addWidget(label5,            5, 0, 1, 1);
     grid->addWidget(d->autoCropCB,     5, 1, 1, 1);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

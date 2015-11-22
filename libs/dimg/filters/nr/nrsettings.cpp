@@ -110,6 +110,8 @@ NRSettings::NRSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(parent);
 
     QString thHelp = i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
@@ -153,8 +155,8 @@ NRSettings::NRSettings(QWidget* const parent)
     lumLay->addWidget(label4,          1, 0, 1, 1);
     lumLay->addWidget(d->softLumInput, 1, 1, 1, 1);
     lumLay->setRowStretch(2, 10);
+    lumLay->setContentsMargins(spacing, spacing, spacing, spacing);
     lumLay->setSpacing(0);
-    lumLay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -180,8 +182,8 @@ NRSettings::NRSettings(QWidget* const parent)
     cRedLay->addWidget(label6,         1, 0, 1, 1);
     cRedLay->addWidget(d->softCrInput, 1, 1, 1, 1);
     cRedLay->setRowStretch(2, 10);
+    cRedLay->setContentsMargins(spacing, spacing, spacing, spacing);
     cRedLay->setSpacing(0);
-    cRedLay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -207,8 +209,8 @@ NRSettings::NRSettings(QWidget* const parent)
     cBlueLay->addWidget(label8,         1, 0, 1, 1);
     cBlueLay->addWidget(d->softCbInput, 1, 1, 1, 1);
     cBlueLay->setRowStretch(2, 10);
+    cBlueLay->setContentsMargins(spacing, spacing, spacing, spacing);
     cBlueLay->setSpacing(0);
-    cBlueLay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -228,8 +230,8 @@ NRSettings::NRSettings(QWidget* const parent)
     grid->addWidget(d->checkAutoEst,   0, 0, 1, 2);
     grid->addWidget(d->advExpanderBox, 1, 0, 1, 2);
     grid->setRowStretch(1, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

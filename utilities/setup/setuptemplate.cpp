@@ -82,6 +82,8 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->listView = new TemplateList(panel);
     d->listView->setFixedHeight(100);
 
@@ -130,8 +132,8 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     // -------------------------------------------------------------
 
     QGridLayout* const grid = new QGridLayout;
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
     grid->setAlignment(Qt::AlignTop);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(4, 10);

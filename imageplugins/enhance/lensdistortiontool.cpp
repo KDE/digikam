@@ -164,6 +164,8 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     gridSettings->addWidget(d->maskPreviewLabel, 0, 0, 1, 2);
     gridSettings->addWidget(label1,              1, 0, 1, 2);
     gridSettings->addWidget(d->mainInput,        2, 0, 1, 2);
@@ -174,8 +176,8 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
     gridSettings->addWidget(label4,              7, 0, 1, 2);
     gridSettings->addWidget(d->brightenInput,    8, 0, 1, 2);
     gridSettings->setRowStretch(9, 10);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    gridSettings->setContentsMargins(spacing, spacing, spacing, spacing);
+    gridSettings->setSpacing(spacing);
 
     setToolSettings(d->gboxSettings);
 

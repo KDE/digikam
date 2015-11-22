@@ -131,6 +131,8 @@ MixerSettings::MixerSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(this);
 
     d->outChannelLabel = new QLabel(i18n("Output Channel:"));
@@ -212,8 +214,8 @@ MixerSettings::MixerSettings(QWidget* const parent)
     grid->addWidget(d->monochromeTips,     7, 0, 1, 5);
     grid->setRowStretch(8, 10);
     grid->setColumnStretch(2, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

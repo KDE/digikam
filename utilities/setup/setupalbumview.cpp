@@ -135,6 +135,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
@@ -232,8 +234,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid->addWidget(d->leftClickActionComboBox,  7, 1, 1, 1);
     grid->addWidget(d->iconViewFontSelect,       8, 0, 1, 2);
     grid->addWidget(d->largeThumbsBox,           9, 0, 1, 2);
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // --------------------------------------------------------
 
@@ -258,8 +260,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid2->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
     grid2->addWidget(d->treeViewFontSelect,           1, 0, 1, 2);
     grid2->addWidget(d->showFolderTreeViewItemsCount, 2, 0, 1, 2);
-    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid2->setSpacing(spacing);
 
     // --------------------------------------------------------
 
@@ -283,8 +285,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->previewShowIcons = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you do not want to see icons and text in the image preview."));
 
-    grid3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid3->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid3->setSpacing(spacing);
     grid3->addWidget(d->previewFastPreview, 0, 0, 1, 2);
     grid3->addWidget(d->previewFullView,    1, 0, 1, 2);
     grid3->addWidget(rawPreviewLabel,       2, 0, 1, 1);
@@ -301,8 +303,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->setContentsMargins(QMargins());
+    layout->setSpacing(spacing);
     layout->addWidget(iconViewGroup);
     layout->addWidget(folderViewGroup);
     layout->addWidget(interfaceOptionsGroup);

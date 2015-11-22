@@ -123,6 +123,8 @@ BorderSettings::BorderSettings(QWidget* parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* grid = new QGridLayout(parent);
 
     QLabel* label1 = new QLabel(i18n("Type:"));
@@ -200,8 +202,8 @@ BorderSettings::BorderSettings(QWidget* parent)
     grid->addWidget(d->labelBackground,     10, 0, 1, 1);
     grid->addWidget(d->secondColorButton,   10, 1, 1, 2);
     grid->setRowStretch(11, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

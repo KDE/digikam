@@ -75,6 +75,8 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(parent);
 
     d->effectTypeLabel = new QLabel(i18n("Type:"));
@@ -113,8 +115,8 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent)
     grid->addWidget(d->iterationLabel,  4, 0, 1, 5);
     grid->addWidget(d->iterationInput,  5, 0, 1, 5);
     grid->setRowStretch(6, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

@@ -84,14 +84,14 @@ LightTableView::LightTableView(QWidget* const parent)
     d->leftPreview          = new LightTablePreview(this);
     QVBoxLayout* const llay = new QVBoxLayout(d->leftFrame);
     llay->addWidget(d->leftPreview);
-    llay->setMargin(3);
+    llay->setContentsMargins(3, 3, 3, 3);
     llay->setSpacing(0);
 
     d->rightFrame           = new QLabel(this);
     d->rightPreview         = new LightTablePreview(this);
     QVBoxLayout* const rlay = new QVBoxLayout(d->rightFrame);
     rlay->addWidget(d->rightPreview);
-    rlay->setMargin(3);
+    rlay->setContentsMargins(3, 3, 3, 3);
     rlay->setSpacing(0);
 
     d->grid->addWidget(d->leftFrame,  0, 0, 1, 1);

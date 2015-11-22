@@ -182,6 +182,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const vlay = new QVBoxLayout(panel);
 
     d->fontSelect           = new DFontSelect(i18n("Tool-Tips Font:"), panel);
@@ -225,7 +227,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay2->addWidget(d->showImageDimBox);
     vlay2->addWidget(d->showImageARBox);
 
-    vlay2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay2->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay2->setSpacing(0);
 
     // --------------------------------------------------------
@@ -267,7 +269,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay3->addWidget(d->showPhotoModeBox);
     vlay3->addWidget(d->showPhotoFlashBox);
     vlay3->addWidget(d->showPhotoWbBox);
-    vlay3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay3->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay3->setSpacing(0);
 
     // --------------------------------------------------------
@@ -295,7 +297,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay4->addWidget(d->showCommentsBox);
     vlay4->addWidget(d->showTagsBox);
     vlay4->addWidget(d->showLabelsBox);
-    vlay4->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay4->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay4->setSpacing(0);
 
     // --------------------------------------------------------
@@ -331,13 +333,13 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay5->addWidget(d->showVideoDuration);
     vlay5->addWidget(d->showVideoFrameRate);
     vlay5->addWidget(d->showVideoVideoCodec);
-    vlay5->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay5->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay5->setSpacing(0);
 
     QWidget* const space = new QWidget(vbox);
     vbox->setStretchFactor(space, 10);
-    vbox->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox->setContentsMargins(spacing, spacing, spacing, spacing);
+    vbox->setSpacing(spacing);
 
     // --------------------------------------------------------
 
@@ -377,8 +379,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     QWidget* const space2 = new QWidget(vbox2);
     vbox2->setStretchFactor(space2, 10);
-    vbox2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox2->setContentsMargins(spacing, spacing, spacing, spacing);
+    vbox2->setSpacing(spacing);
 
     // --------------------------------------------------------
 
@@ -444,8 +446,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     QWidget* const space3 = new QWidget(vbox3);
     vbox3->setStretchFactor(space3, 10);
-    vbox3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox3->setContentsMargins(spacing, spacing, spacing, spacing);
+    vbox3->setSpacing(spacing);
 
     // --------------------------------------------------------
 
@@ -456,8 +458,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     vlay->addWidget(d->fontSelect);
     vlay->addWidget(d->tab);
     vlay->addStretch();
-    vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    vlay->setSpacing(spacing);
 
     // --------------------------------------------------------
 

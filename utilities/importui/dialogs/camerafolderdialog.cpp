@@ -73,6 +73,8 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     setModal(true);
     setWindowTitle(i18nc("@title:window %1: name of the camera", "%1 - Select Camera Folder", cameraName));
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
     d->buttons->button(QDialogButtonBox::Ok)->setEnabled(false);
@@ -95,8 +97,8 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     grid->addWidget(message,       1, 0, 1, 1);
     grid->addWidget(d->folderView, 0, 1, 3, 1);
     grid->setRowStretch(2, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(page);

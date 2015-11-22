@@ -165,11 +165,13 @@ RestorationTool::RestorationTool(QObject* const parent)
                                             "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns on scanned images.<br/>"
                                             "<b>Custom</b>: Puts settings to most common values, fully customizable.</p>"));
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     grid->addWidget(cimgLogoLabel,        0, 1, 1, 1);
     grid->addWidget(typeLabel,            1, 0, 1, 1);
     grid->addWidget(d->restorationTypeCB, 1, 1, 1, 1);
     grid->setRowStretch(1, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(0);
 
     // -------------------------------------------------------------
@@ -177,8 +179,8 @@ RestorationTool::RestorationTool(QObject* const parent)
     d->settingsWidget = new GreycstorationSettings( d->mainTab );
     gridSettings->addWidget(d->mainTab,                               0, 1, 1, 1);
     gridSettings->addWidget(new QLabel(d->gboxSettings->plainPage()), 1, 1, 1, 1);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    gridSettings->setContentsMargins(spacing, spacing, spacing, spacing);
+    gridSettings->setSpacing(spacing);
     gridSettings->setRowStretch(2, 10);
 
     // -------------------------------------------------------------

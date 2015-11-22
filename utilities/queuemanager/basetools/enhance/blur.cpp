@@ -58,6 +58,8 @@ Blur::~Blur()
 
 void Blur::registerSettingsWidget()
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     m_settingsWidget = new QWidget;
     QLabel* label    = new QLabel(i18n("Smoothness:"));
     m_radiusInput    = new DIntNumInput();
@@ -71,8 +73,8 @@ void Blur::registerSettingsWidget()
     grid->addWidget(label,         0, 0, 1, 2);
     grid->addWidget(m_radiusInput, 1, 0, 1, 2);
     grid->setRowStretch(2, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     connect(m_radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));

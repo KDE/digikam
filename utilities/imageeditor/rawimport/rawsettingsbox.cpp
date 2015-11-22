@@ -188,12 +188,14 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     d->updateBtn->setEnabled(false);
     d->updateBtn->setToolTip(i18n("Generate a Raw image preview using current settings."));
 
+    const int spacing = spacingHint();
+
     rawGrid->addWidget(d->decodingSettingsBox, 0, 0, 1, 3);
     rawGrid->addWidget(d->abortBtn,            1, 0, 1, 1);
     rawGrid->addWidget(d->updateBtn,           1, 2, 1, 1);
     rawGrid->setColumnStretch(1, 10);
-    rawGrid->setSpacing(spacingHint());
-    rawGrid->setMargin(spacingHint());
+    rawGrid->setContentsMargins(spacing, spacing, spacing, spacing);
+    rawGrid->setSpacing(spacing);
 
     // - Post-processing view --------------------------------------------------------------
 
@@ -248,8 +250,8 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     advExposureLayout->addWidget(d->fineExposureLabel, 4, 0, 1, 1);
     advExposureLayout->addWidget(d->mainExposureInput, 4, 1, 1, 2);
     advExposureLayout->setRowStretch(5, 10);
+    advExposureLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     advExposureLayout->setSpacing(0);
-    advExposureLayout->setMargin(spacingHint());
 
     // ---------------------------------------------------------------
 
@@ -283,8 +285,8 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     curveLayout->addWidget(d->resetCurveBtn,      3, 3, 1, 1);
     curveLayout->setRowStretch(4, 10);
     curveLayout->setColumnStretch(2, 10);
+    curveLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     curveLayout->setSpacing(0);
-    curveLayout->setMargin(spacingHint());
 
     // ---------------------------------------------------------------
 
@@ -329,8 +331,8 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     gridSettings->addWidget(d->tabView, 0, 0, 1, 5);
     gridSettings->setColumnStretch(2, 10);
-    gridSettings->setSpacing(spacingHint());
     gridSettings->setContentsMargins(QMargins());
+    gridSettings->setSpacing(spacing);
 
     // ---------------------------------------------------------------
 

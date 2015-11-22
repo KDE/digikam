@@ -76,6 +76,8 @@ LensFunSettings::LensFunSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(this);
 
     QLabel* const title     = new QLabel(i18n("Lens Corrections to Apply:"));
@@ -108,8 +110,8 @@ LensFunSettings::LensFunSettings(QWidget* const parent)
     grid->addWidget(d->filterGEO, 5, 0, 1, 2);
     grid->addWidget(note,         6, 0, 1, 2);
     grid->setRowStretch(7, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     connect(d->filterCCA, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));

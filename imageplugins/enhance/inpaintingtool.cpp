@@ -192,13 +192,15 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     QGridLayout* const firstPageLayout  = new QGridLayout();
     firstPageLayout->addWidget(cimgLogoLabel,       0, 1, 1, 1);
     firstPageLayout->addWidget(typeLabel,           1, 0, 1, 1);
     firstPageLayout->addWidget(d->inpaintingTypeCB, 1, 1, 1, 1);
     firstPageLayout->setRowStretch(1, 10);
-    firstPageLayout->setMargin(d->gboxSettings->spacingHint());
-    firstPageLayout->setSpacing(d->gboxSettings->spacingHint());
+    firstPageLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    firstPageLayout->setSpacing(spacing);
     firstPage->setLayout(firstPageLayout);
 
     d->mainTab->addTab(firstPage, i18n("Preset"));
@@ -214,8 +216,8 @@ InPaintingTool::InPaintingTool(QObject* const parent)
     mainLayout->addWidget(d->mainTab,   0, 1, 1, 1);
     mainLayout->addWidget(spacer,       1, 1, 1, 1);
     mainLayout->setRowStretch(1, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------

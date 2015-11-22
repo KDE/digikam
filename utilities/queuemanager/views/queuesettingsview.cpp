@@ -150,12 +150,14 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QScrollArea* const sv3   = new QScrollArea(this);
     DVBox* const vbox3       = new DVBox(sv3->viewport());
     sv3->setWidget(vbox3);
     sv3->setWidgetResizable(true);
-    vbox3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox3->setContentsMargins(spacing, spacing, spacing, spacing);
+    vbox3->setSpacing(spacing);
 
     d->useOrgAlbum           = new QCheckBox(i18n("Use original Album"), vbox3);
     d->albumSel              = new AlbumSelectWidget(vbox3);
@@ -186,8 +188,8 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     d->renamingButtonGroup->addButton(d->renameManual,   QueueSettings::CUSTOMIZE);
 
     vbox2->setStretchFactor(space, 10);
-    vbox2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox2->setContentsMargins(spacing, spacing, spacing, spacing);
+    vbox2->setSpacing(spacing);
 
     insertTab(Private::RENAMING, sv2, QIcon::fromTheme(QLatin1String("insert-image")), i18n("File Renaming"));
 
@@ -245,8 +247,8 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     layout->addWidget(d->conflictLabel);
     layout->addWidget(conflictBox);
     layout->addWidget(d->useMutiCoreCPU);
-    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setContentsMargins(spacing, spacing, spacing, spacing);
+    layout->setSpacing(spacing);
     layout->addStretch();
 
     insertTab(Private::BEHAVIOR, sv, QIcon::fromTheme(QLatin1String("dialog-information")), i18n("Behavior"));
@@ -305,8 +307,8 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     box5->setLayout(lbox5);
     slay->addWidget(box5);
 
-    slay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    slay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    slay->setContentsMargins(spacing, spacing, spacing, spacing);
+    slay->setSpacing(spacing);
     slay->addStretch();
 
     insertTab(Private::SAVE, sv4, QIcon::fromTheme(QLatin1String("document-save-all")), i18n("Saving Images"));

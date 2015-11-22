@@ -172,6 +172,8 @@ DbKeySelectorView::DbKeySelectorView(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(this);
     d->selector             = new DbKeySelector(this);
     d->searchBar            = new SearchTextBar(this, QLatin1String("DbKeySelectorView"));
@@ -180,8 +182,8 @@ DbKeySelectorView::DbKeySelectorView(QWidget* const parent)
     grid->addWidget(d->searchBar, 1, 0, 1, 1);
     grid->setColumnStretch(0, 10);
     grid->setRowStretch(0, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
             this, SLOT(slotSearchTextChanged(SearchTextSettings)));

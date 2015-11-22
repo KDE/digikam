@@ -129,9 +129,14 @@ void DHBox::setSpacing(int spacing)
     layout()->setSpacing(spacing);
 }
 
-void DHBox::setMargin(int margin)
+void DHBox::setContentsMargins(const QMargins& margins)
 {
-    layout()->setMargin(margin);
+    layout()->setContentsMargins(margins);
+}
+
+void DHBox::setContentsMargins(int left, int top, int right, int bottom)
+{
+    layout()->setContentsMargins(left, top, right, bottom);
 }
 
 void DHBox::setStretchFactor(QWidget* const widget, int stretch)

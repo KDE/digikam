@@ -179,6 +179,8 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     QGridLayout* const mainLayout = new QGridLayout();
     mainLayout->addWidget(d->effectTypeLabel,  0, 0, 1, 3);
     mainLayout->addWidget(d->effectType,       1, 0, 1, 3);
@@ -187,8 +189,8 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     mainLayout->addWidget(d->iterationLabel,   4, 0, 1, 3);
     mainLayout->addWidget(d->iterationInput,   5, 0, 1, 3);
     mainLayout->setRowStretch(6, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------

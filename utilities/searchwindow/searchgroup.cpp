@@ -65,7 +65,7 @@ void SearchGroup::setup(Type type)
     m_groupType = type;
 
     m_layout = new QVBoxLayout;
-    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setContentsMargins(QMargins());
     m_layout->setSpacing(0);
 
     m_label  = new SearchGroupLabel(m_view, m_groupType, this);
@@ -223,7 +223,7 @@ void SearchGroup::setup(Type type)
 
     // prepare subgroup layout
     QHBoxLayout* const indentLayout = new QHBoxLayout;
-    indentLayout->setContentsMargins(0, 0, 0, 0);
+    indentLayout->setContentsMargins(QMargins());
     indentLayout->setSpacing(0);
 
     QStyleOption option;
@@ -233,7 +233,7 @@ void SearchGroup::setup(Type type)
     indentLayout->addSpacing(indent);
 
     m_subgroupLayout = new QVBoxLayout;
-    m_subgroupLayout->setContentsMargins(0, 0, 0, 0);
+    m_subgroupLayout->setContentsMargins(QMargins());
     m_subgroupLayout->setSpacing(0);
 
     indentLayout->addLayout(m_subgroupLayout);

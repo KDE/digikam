@@ -183,6 +183,8 @@ WBSettings::WBSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(parent);
     d->temperatureLabel     = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Color_temperature'>"
                                               "Color Temperature</a> (K): "));
@@ -334,8 +336,8 @@ WBSettings::WBSettings(QWidget* const parent)
     grid->addWidget(d->fineExposureLabel,      12, 0, 1, 2);
     grid->addWidget(d->fineExposureInput,      12, 2, 1, 4);
     grid->setRowStretch(13, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

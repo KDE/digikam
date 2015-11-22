@@ -109,6 +109,8 @@ CameraSelection::CameraSelection(QWidget* const parent)
     setWindowTitle(i18n("Camera Configuration"));
     setModal(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
@@ -145,8 +147,8 @@ CameraSelection::CameraSelection(QWidget* const parent)
                                     "identify this camera.</p>"));
 
     gLayout1->addWidget(d->titleEdit);
-    gLayout1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    gLayout1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout1->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout1->setSpacing(spacing);
 
     // --------------------------------------------------------------
 
@@ -168,8 +170,8 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     gLayout2->addWidget(d->usbButton);
     gLayout2->addWidget(d->serialButton);
-    gLayout2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    gLayout2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout2->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout2->setSpacing(spacing);
 
     // --------------------------------------------------------------
 
@@ -186,8 +188,8 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     gLayout3->addWidget(d->portPathLabel);
     gLayout3->addWidget(d->portPathComboBox);
-    gLayout3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    gLayout3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout3->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout3->setSpacing(spacing);
 
     // --------------------------------------------------------------
 
@@ -206,8 +208,8 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     gLayout4->addWidget(umsMountLabel);
     gLayout4->addWidget(d->umsMountURL);
-    gLayout4->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    gLayout4->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout4->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout4->setSpacing(spacing);
 
     // --------------------------------------------------------------
 
@@ -236,8 +238,8 @@ CameraSelection::CameraSelection(QWidget* const parent)
                               "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
                               "this URL</a>.</p>"));
 
-    gLayout5->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    gLayout5->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout5->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout5->setSpacing(spacing);
     gLayout5->addWidget(logo,        0, 0, 1, 1);
     gLayout5->addWidget(link,        0, 1, 2, 1);
     gLayout5->addWidget(link2,       2, 1, 2, 1);
@@ -254,8 +256,8 @@ CameraSelection::CameraSelection(QWidget* const parent)
     mainBoxLayout->addWidget(box2,         4, 1, 2, 1);
     mainBoxLayout->setColumnStretch(0, 10);
     mainBoxLayout->setRowStretch(6, 10);
-    mainBoxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mainBoxLayout->setContentsMargins(QMargins());
+    mainBoxLayout->setSpacing(spacing);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(page);

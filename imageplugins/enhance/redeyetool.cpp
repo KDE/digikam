@@ -177,6 +177,8 @@ RedEyeTool::RedEyeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     QGridLayout* const mainLayout = new QGridLayout();
     mainLayout->addWidget(d->thresholdLabel, 0, 0, 1, 5);
     mainLayout->addWidget(d->redThreshold,   1, 0, 1, 5);
@@ -189,8 +191,8 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     mainLayout->addWidget(d->tintLevel,      7, 0, 1, 5);
     mainLayout->setRowStretch(8, 10);
     mainLayout->setColumnStretch(3, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------

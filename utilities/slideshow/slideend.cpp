@@ -46,6 +46,8 @@ SlideEnd::SlideEnd(QWidget* const parent)
     setMouseTracking(true);
     setAutoFillBackground(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QPalette palette;
     palette.setColor(backgroundRole(), Qt::black);
     palette.setColor(foregroundRole(), Qt::white);
@@ -81,8 +83,8 @@ SlideEnd::SlideEnd(QWidget* const parent)
     grid->setColumnStretch(2, 10);
     grid->setRowStretch(0, 1);
     grid->setRowStretch(2, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 }
 
 SlideEnd::~SlideEnd()

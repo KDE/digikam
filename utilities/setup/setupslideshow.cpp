@@ -98,6 +98,8 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     DHBox* const hbox1 = new DHBox(panel);
@@ -196,8 +198,8 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     layout->addWidget(d->showLabels);
     layout->addWidget(screenSelectBox);
     layout->addStretch();
-    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setContentsMargins(spacing, spacing, spacing, spacing);
+    layout->setSpacing(spacing);
 
     readSettings();
 }

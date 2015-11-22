@@ -79,6 +79,8 @@ LensAutoFix::~LensAutoFix()
 
 void LensAutoFix::registerSettingsWidget()
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     m_settingsWidget   = new QWidget;
     QLabel* const note = new QLabel(i18n("<b>Use Metadata</b> option will parse images' information at "
                                          "queue run-time to find relevant lens features."));
@@ -97,8 +99,8 @@ void LensAutoFix::registerSettingsWidget()
     grid->addWidget(line,              2, 0, 1, 2);
     grid->addWidget(d->settingsView,   3, 0, 1, 2);
     grid->setRowStretch(4, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));

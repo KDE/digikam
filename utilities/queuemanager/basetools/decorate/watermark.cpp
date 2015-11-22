@@ -137,9 +137,11 @@ WaterMark::~WaterMark()
 
 void WaterMark::registerSettingsWidget()
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     DVBox* const vbox = new DVBox;
     vbox->setContentsMargins(QMargins());
-    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox->setSpacing(spacing);
 
     DHBox* const hbox = new DHBox(vbox);
     hbox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -166,7 +168,7 @@ void WaterMark::registerSettingsWidget()
     d->imageSettingsGroupBox = new QGroupBox(vbox);
     d->imageSettingsGroupBox->setTitle(i18n("Image settings"));
     QVBoxLayout* const imageSettingsGroupBoxLayout = new QVBoxLayout;
-    imageSettingsGroupBoxLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    imageSettingsGroupBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     imageSettingsGroupBoxLayout->addStretch(1);
     d->imageSettingsGroupBox->setLayout(imageSettingsGroupBoxLayout);
 
@@ -180,7 +182,7 @@ void WaterMark::registerSettingsWidget()
     d->textSettingsGroupBox = new QGroupBox(vbox);
     d->textSettingsGroupBox->setTitle(i18n("Text settings"));
     QVBoxLayout* const textSettingsGroupBoxLayout = new QVBoxLayout;
-    textSettingsGroupBoxLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    textSettingsGroupBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     textSettingsGroupBoxLayout->addStretch(1);
     d->textSettingsGroupBox->setLayout(textSettingsGroupBoxLayout);
 

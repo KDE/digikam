@@ -109,14 +109,16 @@ OilPaintTool::OilPaintTool(QObject* const parent)
     d->smoothInput->setDefaultValue(10);
     d->smoothInput->setWhatsThis(i18n("This value controls the smoothing effect of the brush under the canvas."));
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     QGridLayout* mainLayout = new QGridLayout();
     mainLayout->addWidget(label1,            0, 0, 1, 2);
     mainLayout->addWidget(d->brushSizeInput, 1, 0, 1, 2);
     mainLayout->addWidget(label2,            2, 0, 1, 2);
     mainLayout->addWidget(d->smoothInput,    3, 0, 1, 2);
     mainLayout->setRowStretch(4, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------

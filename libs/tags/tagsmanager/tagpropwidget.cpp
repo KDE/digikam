@@ -86,6 +86,9 @@ public:
 TagPropWidget::TagPropWidget(QWidget* const parent)
     : QWidget(parent), d(new Private())
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int cmargin = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+
     QGridLayout* const grid = new QGridLayout(this);
     QLabel* const logo      = new QLabel(this);
 
@@ -101,8 +104,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     QLabel* const titleLabel = new QLabel(this);
     titleLabel->setText(i18n("&Title:"));
-    titleLabel->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
-    titleLabel->setIndent(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    titleLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
+    titleLabel->setIndent(spacing);
 
     d->titleEdit = new SearchTextBar(this, QLatin1String("TagEditDlgTitleEdit"), i18n("Enter tag name here"));
     d->titleEdit->setCaseSensitive(false);
@@ -111,13 +114,13 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const tipLabel = new QLabel(this);
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
-    tipLabel->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
-    tipLabel->setIndent(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    tipLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
+    tipLabel->setIndent(spacing);
 
     QLabel* const iconTextLabel = new QLabel(this);
     iconTextLabel->setText(i18n("&Icon:"));
-    iconTextLabel->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
-    iconTextLabel->setIndent(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    iconTextLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
+    iconTextLabel->setIndent(spacing);
 
     d->iconButton         = new QPushButton(this);
     d->iconButton->setFixedSize(40, 40);
@@ -127,8 +130,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));
-    kscTextLabel->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
-    kscTextLabel->setIndent(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    kscTextLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
+    kscTextLabel->setIndent(spacing);
 
     d->keySeqWidget      = new KKeySequenceWidget(this);
     kscTextLabel->setBuddy(d->keySeqWidget);
@@ -139,8 +142,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     tipLabel2->setWordWrap(true);
     tipLabel2->setText(i18n("<p><b>Note:</b> <i>This shortcut can be used "
                             "to assign or unassign tag to items.</i></p>"));
-    tipLabel2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin) );
-    tipLabel2->setIndent(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    tipLabel2->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
+    tipLabel2->setIndent(spacing);
 
     d->saveButton = new QPushButton(i18n("Save"));
     d->discardButton = new QPushButton(i18n("Discard"));
@@ -163,8 +166,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     grid->addWidget(d->discardButton,   7, 1, 1, 1);
     grid->setRowStretch(8, 10);
     grid->setColumnStretch(3, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
-    grid->setVerticalSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
+    grid->setVerticalSpacing(spacing);
 
     adjustSize();
 

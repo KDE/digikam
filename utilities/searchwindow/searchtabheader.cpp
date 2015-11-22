@@ -183,6 +183,8 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
@@ -217,8 +219,8 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
     grid1->addWidget(searchLabel,          0, 0);
     grid1->addWidget(d->keywordEdit,       0, 1);
     grid1->addWidget(d->advancedEditLabel, 1, 1);
-    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid1->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid1->setSpacing(spacing);
 
     d->newSearchWidget->setLayout(grid1);
 
@@ -242,8 +244,8 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
 
     hbox1->addWidget(d->saveNameEdit);
     hbox1->addWidget(d->saveButton);
-    hbox1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    hbox1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hbox1->setContentsMargins(spacing, spacing, spacing, spacing);
+    hbox1->setSpacing(spacing);
 
     d->saveAsWidget->setLayout(hbox1);
 
@@ -259,8 +261,8 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
 
     vbox1->addWidget(d->storedKeywordEditName);
     vbox1->addWidget(d->storedKeywordEdit);
-    vbox1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox1->setContentsMargins(spacing, spacing, spacing, spacing);
+    vbox1->setSpacing(spacing);
 
     d->editSimpleWidget->setLayout(vbox1);
 

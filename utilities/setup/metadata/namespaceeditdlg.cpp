@@ -397,6 +397,9 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
     d->fiveStars  = new QSpinBox(this);
     d->fiveStars->setValue(5);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int cmargin = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+
     ratingMappingsLayout->addWidget(ratingLabel,            0, 0, 1, 2);
 
     ratingMappingsLayout->addWidget(d->zeroStars,           1, 0, 1, 1);
@@ -433,8 +436,8 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
     d->gridLayout->addWidget(d->ratingMappings,             14, 0, 2, 6);
     d->gridLayout->addWidget(d->tipLabel2,                  15, 0, 1, 6);
 
-    d->gridLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
-    d->gridLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->gridLayout->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
+    d->gridLayout->setSpacing(spacing);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(d->page);

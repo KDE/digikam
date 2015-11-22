@@ -88,6 +88,8 @@ void Crop::registerSettingsWidget()
 {
     m_settingsWidget = new QWidget;
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     // -------------------------------------------------------------
 
     d->autoCrop = new QCheckBox(i18n("Auto-Crop"), m_settingsWidget);
@@ -134,8 +136,8 @@ void Crop::registerSettingsWidget()
     mainLayout->addWidget(d->heightInput,               4, 1, 1, 3);
     mainLayout->addWidget(new QLabel(m_settingsWidget), 5, 1, 1, 3);
     mainLayout->setRowStretch(5, 10);
-    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

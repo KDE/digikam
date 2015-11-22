@@ -105,6 +105,8 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(parent);
 
     d->addVignettingCheck = new QCheckBox(i18n("Add vignetting"));
@@ -201,8 +203,8 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     grid->addWidget(line,                  13, 0, 1, 3);
     grid->addWidget(d->addVignettingCheck, 14, 0, 1, 3);
     grid->setRowStretch(15, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

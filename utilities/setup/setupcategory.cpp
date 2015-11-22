@@ -84,6 +84,8 @@ SetupCategory::SetupCategory(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(panel);
 
     // --------------------------------------------------------
@@ -116,8 +118,8 @@ SetupCategory::SetupCategory(QWidget* const parent)
     grid->addWidget(d->repCategoryButton, 3, 1, 1, 1);
     grid->setRowStretch(4, 10);
     grid->setColumnStretch(0, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // --------------------------------------------------------
 

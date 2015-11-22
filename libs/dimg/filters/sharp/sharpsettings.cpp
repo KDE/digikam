@@ -132,6 +132,8 @@ SharpSettings::SharpSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(parent);
 
     QLabel* const label1 = new QLabel(i18n("Method:"), parent);
@@ -151,8 +153,8 @@ SharpSettings::SharpSettings(QWidget* const parent)
     grid->addWidget(new DLineWidget(Qt::Horizontal, parent), 1, 0, 1, 2);
     grid->addWidget(d->stack,                                2, 0, 1, 2);
     grid->setRowStretch(3, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 

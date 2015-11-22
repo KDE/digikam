@@ -573,6 +573,8 @@ void DRawDecoderWidget::setup(int advSettings)
         d->whitePointSpinBox->hide();
     }
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     whiteBalanceLayout->addWidget(d->whiteBalanceLabel,              0,  0, 1, 1);
     whiteBalanceLayout->addWidget(d->whiteBalanceComboBox,           0,  1, 1, 2);
     whiteBalanceLayout->addWidget(d->customWhiteBalanceLabel,        1,  0, 1, 1);
@@ -596,8 +598,8 @@ void DRawDecoderWidget::setup(int advSettings)
     whiteBalanceLayout->addWidget(d->blackPointSpinBox,              11, 1, 1, 2);
     whiteBalanceLayout->addWidget(d->whitePointCheckBox,             12, 0, 1, 1);
     whiteBalanceLayout->addWidget(d->whitePointSpinBox,              12, 1, 1, 2);
-    whiteBalanceLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    whiteBalanceLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    whiteBalanceLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    whiteBalanceLayout->setSpacing(spacing);
 
     addItem(d->whiteBalanceSettings, QIcon::fromTheme(QLatin1String("format-stroke-color")).pixmap(16, 16), i18nc("@label", "White Balance"), QLatin1String("whitebalance"), true);
 
@@ -684,8 +686,8 @@ void DRawDecoderWidget::setup(int advSettings)
     correctionsLayout->addWidget(d->caBlueMultLabel,        6, 0, 1, 1);
     correctionsLayout->addWidget(d->caBlueMultSpinBox,      6, 1, 1, 2);
     correctionsLayout->setRowStretch(7, 10);
-    correctionsLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    correctionsLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    correctionsLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    correctionsLayout->setSpacing(spacing);
 
     addItem(d->correctionsSettings, QIcon::fromTheme(QLatin1String("document-edit")).pixmap(16, 16), i18nc("@label", "Corrections"), QLatin1String("corrections"), false);
 
@@ -755,8 +757,8 @@ void DRawDecoderWidget::setup(int advSettings)
     colormanLayout->addWidget(d->outputColorSpaceComboBox, 2, 1, 1, 2);
     colormanLayout->addWidget(d->outIccUrlEdit,            3, 0, 1, 3);
     colormanLayout->setRowStretch(4, 10);
-    colormanLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    colormanLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    colormanLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    colormanLayout->setSpacing(spacing);
 
     addItem(d->colormanSettings, QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")).pixmap(16, 16), i18nc("@label", "Color Management"), QLatin1String("colormanagement"), false);
 

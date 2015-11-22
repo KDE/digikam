@@ -87,6 +87,8 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->tooltipDialog = new TooltipDialog(this);
     d->tooltipDialog->setTooltip(i18n("<p>These expressions may be used to customize date format:</p>"
                                       "<p><b>d</b>: The day as a number without a leading zero (1 to 31)</p>"
@@ -133,8 +135,8 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     albumVlay->addWidget(hbox2);
     albumVlay->addWidget(d->customExample);
     albumVlay->addStretch();
-    albumVlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    albumVlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    albumVlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    albumVlay->setSpacing(spacing);
 
     setWhatsThis(i18n("Set how digiKam creates albums automatically when downloading."));
     d->autoAlbumExtCheck->setWhatsThis(i18n("Enable this option if you want to download your "

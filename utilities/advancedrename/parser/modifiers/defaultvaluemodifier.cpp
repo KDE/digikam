@@ -43,6 +43,8 @@ DefaultValueDialog::DefaultValueDialog(Rule* parent)
     : RuleDialog(parent),
       valueInput(0)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QString defaultValueStr = i18n("Default Value");
 
     QLabel* const srcLabel = new QLabel(defaultValueStr + QLatin1Char(':'));
@@ -55,8 +57,8 @@ DefaultValueDialog::DefaultValueDialog(Rule* parent)
     QGridLayout* const mainLayout = new QGridLayout(this);
     mainLayout->addWidget(srcLabel,   0, 0);
     mainLayout->addWidget(valueInput, 0, 1);
-    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
     mainLayout->setRowStretch(1, 10);
     mainWidget->setLayout(mainLayout);
 

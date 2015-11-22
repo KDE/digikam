@@ -96,6 +96,8 @@ void DatabaseSettingsWidget::setupMainArea()
 
     // --------------------------------------------------------
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGroupBox* const dbConfigBox = new QGroupBox(i18n("Database Configuration"), this);
     QVBoxLayout* const vlay      = new QVBoxLayout(dbConfigBox);
 
@@ -167,8 +169,8 @@ void DatabaseSettingsWidget::setupMainArea()
     vlay->addWidget(d->dbPathLabel);
     vlay->addWidget(dbPathEdit);
     vlay->addWidget(d->expertSettings);
-    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    vlay->setSpacing(spacing);
 
     // --------------------------------------------------------
 
@@ -187,13 +189,13 @@ void DatabaseSettingsWidget::setupMainArea()
 
     vlay2->addWidget(notice);
     vlay2->addWidget(d->sqlInit);
-    vlay2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vlay2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay2->setContentsMargins(spacing, spacing, spacing, spacing);
+    vlay2->setSpacing(spacing);
 
     // --------------------------------------------------------
 
-    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->setContentsMargins(QMargins());
+    layout->setSpacing(spacing);
     layout->addWidget(dbConfigBox);
     layout->addWidget(d->dbNoticeBox);
     layout->addStretch();

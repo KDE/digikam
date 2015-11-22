@@ -78,6 +78,8 @@ XMPContent::XMPContent(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const grid = new QGridLayout(this);
 
     // --------------------------------------------------------
@@ -98,8 +100,8 @@ XMPContent::XMPContent(QWidget* const parent)
     d->syncJFIFCommentCheck = new QCheckBox(i18n("Sync JFIF Comment section"), syncOptions);
     d->syncEXIFCommentCheck = new QCheckBox(i18n("Sync EXIF Comment"), syncOptions);
 
-    vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    vlay->setSpacing(spacing);
     vlay->addWidget(d->syncJFIFCommentCheck);
     vlay->addWidget(d->syncEXIFCommentCheck);
 
@@ -126,7 +128,7 @@ XMPContent::XMPContent(QWidget* const parent)
     grid->setRowStretch(6, 10);
     grid->setColumnStretch(2, 10);
     grid->setContentsMargins(QMargins());
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(spacing);
 
     // --------------------------------------------------------
 

@@ -125,6 +125,8 @@ GreycstorationSettings::GreycstorationSettings(QTabWidget* parent)
 {
     d->parent = parent;
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     // -------------------------------------------------------------
 
     d->generalPage     = new QWidget(parent);
@@ -186,8 +188,8 @@ GreycstorationSettings::GreycstorationSettings(QTabWidget* parent)
     grid1->addWidget(d->alphaLabel,         5, 0, 1, 1);
     grid1->addWidget(d->alphaInput,         5, 1, 1, 1);
     grid1->setRowStretch(6, 10);
-    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid1->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid1->setSpacing(spacing);
 
     // -------------------------------------------------------------
 
@@ -248,8 +250,8 @@ GreycstorationSettings::GreycstorationSettings(QTabWidget* parent)
     grid2->addWidget(d->interpolationLabel, 5, 0, 1, 1);
     grid2->addWidget(d->interpolationBox,   5, 1, 1, 1);
     grid2->addWidget(d->fastApproxCBox,     6, 0, 1, 2);
-    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid2->setSpacing(spacing);
 }
 
 GreycstorationSettings::~GreycstorationSettings()

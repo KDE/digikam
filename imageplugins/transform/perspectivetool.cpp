@@ -159,6 +159,8 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     QGridLayout* const grid = new QGridLayout;
     grid->addWidget(label1,                       0, 0, 1, 1);
     grid->addWidget(d->newWidthLabel,             0, 1, 1, 2);
@@ -180,8 +182,8 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
     grid->addWidget(d->inverseTransformation,    11, 0, 1, 3);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(12, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(grid);
 
     // -------------------------------------------------------------

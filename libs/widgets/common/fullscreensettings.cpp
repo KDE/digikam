@@ -63,6 +63,8 @@ public:
 FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
     : QGroupBox(i18n("Full-screen Options"), parent), d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->options               = options;
     QVBoxLayout* const vlay  = new QVBoxLayout(this);
     d->hideToolBars          = new QCheckBox(i18n("H&ide toolbars"),  this);
@@ -77,7 +79,7 @@ FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
     vlay->addWidget(d->hideToolBars);
     vlay->addWidget(d->hideThumbBar);
     vlay->addWidget(d->hideSideBars);
-    vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay->setSpacing(0);
 
     if (!(options & FS_TOOLBARS)) d->hideToolBars->hide();

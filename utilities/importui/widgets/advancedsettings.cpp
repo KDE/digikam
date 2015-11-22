@@ -80,6 +80,8 @@ public:
 AdvancedSettings::AdvancedSettings(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const onFlyVlay = new QVBoxLayout(this);
     d->templateSelector          = new TemplateSelector(this);
     d->fixDateTimeCheck          = new QCheckBox(i18nc("@option:check", "Fix internal date && time"), this);
@@ -103,8 +105,8 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
     onFlyVlay->addWidget(d->convertJpegCheck);
     onFlyVlay->addWidget(hbox2);
     onFlyVlay->addStretch();
-    onFlyVlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    onFlyVlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    onFlyVlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    onFlyVlay->setSpacing(spacing);
 
     setWhatsThis(i18n("Set here all options to fix/transform JPEG files automatically "
                       "as they are downloaded."));

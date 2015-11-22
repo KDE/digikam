@@ -221,14 +221,16 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
+    const int spacing = spacingHint();
+
     gridSettings->addWidget(toolDescriptor,  0, 0, 1, -1);
     gridSettings->addWidget(d->histogramBox, 1, 0, 2, 2);
     gridSettings->addWidget(d->plainPage,    4, 0, 1, 2);
     gridSettings->addWidget(d->guideBox,     5, 0, 1, 2);
     gridSettings->addLayout(hbox2,           6, 0, 1, 2);
     gridSettings->addLayout(hbox1,           7, 0, 1, 2);
-    gridSettings->setSpacing(spacingHint());
-    gridSettings->setMargin(spacingHint());
+    gridSettings->setContentsMargins(spacing, spacing, spacing, spacing);
+    gridSettings->setSpacing(spacing);
 
     // ---------------------------------------------------------------
 

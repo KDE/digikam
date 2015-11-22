@@ -250,6 +250,8 @@ ResizeTool::ResizeTool(QObject* const parent)
                                          "This process can take some time."), firstPage);
     d->restorationTips->setWordWrap(true);
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     grid->addWidget(d->preserveRatioBox,                        0, 0, 1, 3);
     grid->addWidget(label1,                                     1, 0, 1, 1);
     grid->addWidget(d->wInput,                                  1, 1, 1, 2);
@@ -264,8 +266,8 @@ ResizeTool::ResizeTool(QObject* const parent)
     grid->addWidget(d->useGreycstorationBox,                    6, 1, 1, 2);
     grid->addWidget(d->restorationTips,                         7, 1, 1, 2);
     grid->setRowStretch(8, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // -------------------------------------------------------------
 
@@ -275,8 +277,8 @@ ResizeTool::ResizeTool(QObject* const parent)
 
     QGridLayout* grid2 = new QGridLayout();
     grid2->addWidget(d->mainTab, 0, 1, 1, 1);
-    grid2->setMargin(d->gboxSettings->spacingHint());
-    grid2->setSpacing(d->gboxSettings->spacingHint());
+    grid2->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid2->setSpacing(spacing);
     grid2->setRowStretch(1, 10);
     d->gboxSettings->plainPage()->setLayout(grid2);
 

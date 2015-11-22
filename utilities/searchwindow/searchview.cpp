@@ -188,7 +188,7 @@ void SearchView::setup()
     setTheme();
 
     d->layout = new QVBoxLayout;
-    d->layout->setContentsMargins(0, 0, 0, 0);
+    d->layout->setContentsMargins(QMargins());
     d->layout->setSpacing(0);
 
     // add stretch at bottom

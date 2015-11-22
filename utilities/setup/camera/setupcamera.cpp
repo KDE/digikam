@@ -266,6 +266,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
     setWidget(d->tab);
     setWidgetResizable(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QWidget* const panel = new QWidget(d->tab);
 
     QGridLayout* const grid = new QGridLayout(panel);
@@ -324,8 +326,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
     grid->setAlignment(Qt::AlignTop);
     grid->addWidget(d->listView,         0, 0, 6, 1);
     grid->addWidget(d->addButton,        0, 1, 1, 1);
@@ -349,8 +351,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     d->tab->insertTab(1, panel2, i18n("Behavior"));
 
-    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setContentsMargins(spacing, spacing, spacing, spacing);
+    layout->setSpacing(spacing);
     layout->addWidget(d->useFileMetadata);
     layout->addWidget(d->turnHighQualityThumbs);
     layout->addWidget(d->useDefaultTargetAlbum);
@@ -396,8 +398,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->importRemoveButton->setEnabled(false);
     d->importEditButton->setEnabled(false);
 
-    importGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    importGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    importGrid->setContentsMargins(spacing, spacing, spacing, spacing);
+    importGrid->setSpacing(spacing);
     importGrid->setAlignment(Qt::AlignTop);
     importGrid->addWidget(d->importListView,     0, 0, 4, 1);
     importGrid->addWidget(groupBox,              5, 0, 1, 1);
@@ -473,8 +475,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
     grid2->addWidget(leftClickLabel,              5, 0, 1, 1);
     grid2->addWidget(d->leftClickActionComboBox,  5, 1, 1, 1);
     grid2->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
-    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid2->setSpacing(spacing);
 
     // --------------------------------------------------------
 
@@ -495,8 +497,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->previewShowIcons          = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you don't want to see icons and text in the image preview."));
 
-    grid3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid3->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid3->setSpacing(spacing);
     grid3->addWidget(d->previewLoadFullImageSize,  0, 0, 1, 2);
     grid3->addWidget(d->previewItemsWhileDownload, 1, 0, 1, 2);
     grid3->addWidget(d->previewShowIcons,          2, 0, 1, 2);
@@ -505,8 +507,8 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     d->fullScreenSettings = new FullScreenSettings(FS_IMPORTUI, panel4);
 
-    layout2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout2->setContentsMargins(QMargins());
+    layout2->setSpacing(spacing);
     layout2->addWidget(iconViewGroup);
     layout2->addWidget(interfaceOptionsGroup);
     layout2->addWidget(d->fullScreenSettings);
