@@ -67,6 +67,9 @@ set(libdatabase_SRCS
 
     tags/tagproperties.cpp
     tags/tagscache.cpp
+    tags/facetags.cpp
+    tags/facetagseditor.cpp
+    tags/facetagsiface.cpp
 
     dbjobs/dbjobsthread.cpp
     dbjobs/dbjob.cpp
@@ -91,9 +94,6 @@ set(libdatabase_SRCS
     imagehistory/imagehistorygraph.cpp
     imagehistory/imagehistorygraphmodel.cpp
 
-    facesiface/facetags.cpp
-    facesiface/facetagseditor.cpp
-    facesiface/facetagsiface.cpp
 )
 
 if(MARBLE_FOUND)
@@ -156,7 +156,6 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/engine>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/item>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/facesiface>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tags>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
