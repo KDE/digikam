@@ -73,5 +73,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 041 ==> 337443 - SETUP : digikam hangs when opening the preferences window on the collection page using MySQL database.
 042 ==> 262321 - MYSQL : user privileges management.
 043 ==> 342124 - MYSQL : database error while verification at startup.
-044 ==> 
-
+044 ==> 355730 - Batch processing Pentax K-S2 RAW - Item from queue #1 Failed to process item.
+045 ==> 
