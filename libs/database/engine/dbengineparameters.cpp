@@ -110,7 +110,7 @@ DbEngineParameters::DbEngineParameters(const QUrl& url)
       internalServer(false)
 {
     databaseType           = QUrlQuery(url).queryItemValue(QLatin1String("databaseType"));
-    databaseNameCore       = QUrlQuery(url).queryItemValue(QLatin1String("databaseName"));
+    databaseNameCore       = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameCore"));
     databaseNameThumbnails = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameThumbnails"));
     databaseNameFace       = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameFace"));
     connectOptions         = QUrlQuery(url).queryItemValue(QLatin1String("connectOptions"));
@@ -135,6 +135,67 @@ DbEngineParameters::DbEngineParameters(const QUrl& url)
 
     userName       = QUrlQuery(url).queryItemValue(QLatin1String("userName"));
     password       = QUrlQuery(url).queryItemValue(QLatin1String("password"));
+}
+
+void DbEngineParameters::insertInUrl(QUrl& url) const
+{
+    removeFromUrl(url);
+
+    QUrlQuery q(url);
+    q.addQueryItem(QLatin1String("databaseType"),           databaseType);
+    q.addQueryItem(QLatin1String("databaseNameCore"),       databaseNameCore);
+    q.addQueryItem(QLatin1String("databaseNameThumbnails"), databaseNameThumbnails);
+    q.addQueryItem(QLatin1String("databaseNameFace"),       databaseNameFace);
+
+    if (!connectOptions.isNull())
+    {
+        q.addQueryItem(QLatin1String("connectOptions"), connectOptions);
+    }
+
+    if (!hostName.isNull())
+    {
+        q.addQueryItem(QLatin1String("hostName"), hostName);
+    }
+
+    if (port != -1)
+    {
+        q.addQueryItem(QLatin1String("port"), QString::number(port));
+    }
+
+    if (internalServer)
+    {
+        q.addQueryItem(QLatin1String("internalServer"), QLatin1String("true"));
+    }
+
+    if (!userName.isNull())
+    {
+        q.addQueryItem(QLatin1String("userName"), userName);
+    }
+
+    if (!password.isNull())
+    {
+        q.addQueryItem(QLatin1String("password"), password);
+    }
+
+    url.setQuery(q);
+}
+
+void DbEngineParameters::removeFromUrl(QUrl& url)
+{
+    QUrlQuery q(url);
+
+    q.removeQueryItem(QLatin1String("databaseType"));
+    q.removeQueryItem(QLatin1String("databaseNameCore"));
+    q.removeQueryItem(QLatin1String("databaseNameThumbnails"));
+    q.removeQueryItem(QLatin1String("databaseNameFace"));
+    q.removeQueryItem(QLatin1String("connectOptions"));
+    q.removeQueryItem(QLatin1String("hostName"));
+    q.removeQueryItem(QLatin1String("port"));
+    q.removeQueryItem(QLatin1String("internalServer"));
+    q.removeQueryItem(QLatin1String("userName"));
+    q.removeQueryItem(QLatin1String("password"));
+
+    url.setQuery(q);
 }
 
 bool DbEngineParameters::operator==(const DbEngineParameters& other) const
@@ -202,6 +263,8 @@ QByteArray DbEngineParameters::hash() const
 
     md5.addData(databaseType.toUtf8());
     md5.addData(databaseNameCore.toUtf8());
+    md5.addData(databaseNameThumbnails.toUtf8());
+    md5.addData(databaseNameFace.toUtf8());
     md5.addData(connectOptions.toUtf8());
     md5.addData(hostName.toUtf8());
     md5.addData((const char*)&port, sizeof(int));
@@ -549,63 +612,6 @@ DbEngineParameters DbEngineParameters::parametersForSQLite(const QString& databa
 DbEngineParameters DbEngineParameters::parametersForSQLiteDefaultFile(const QString& directory)
 {
     return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + QLatin1String(digikam4db)));
-}
-
-void DbEngineParameters::insertInUrl(QUrl& url) const
-{
-    removeFromUrl(url);
-
-    QUrlQuery q(url);
-    q.addQueryItem(QLatin1String("databaseType"), databaseType);
-    q.addQueryItem(QLatin1String("databaseName"), databaseNameCore);
-
-    if (!connectOptions.isNull())
-    {
-        q.addQueryItem(QLatin1String("connectOptions"), connectOptions);
-    }
-
-    if (!hostName.isNull())
-    {
-        q.addQueryItem(QLatin1String("hostName"), hostName);
-    }
-
-    if (port != -1)
-    {
-        q.addQueryItem(QLatin1String("port"), QString::number(port));
-    }
-
-    if (internalServer)
-    {
-        q.addQueryItem(QLatin1String("internalServer"), QLatin1String("true"));
-    }
-
-    if (!userName.isNull())
-    {
-        q.addQueryItem(QLatin1String("userName"), userName);
-    }
-
-    if (!password.isNull())
-    {
-        q.addQueryItem(QLatin1String("password"), password);
-    }
-
-    url.setQuery(q);
-}
-
-void DbEngineParameters::removeFromUrl(QUrl& url)
-{
-    QUrlQuery q(url);
-
-    q.removeQueryItem(QLatin1String("databaseType"));
-    q.removeQueryItem(QLatin1String("databaseName"));
-    q.removeQueryItem(QLatin1String("connectOptions"));
-    q.removeQueryItem(QLatin1String("hostName"));
-    q.removeQueryItem(QLatin1String("port"));
-    q.removeQueryItem(QLatin1String("internalServer"));
-    q.removeQueryItem(QLatin1String("userName"));
-    q.removeQueryItem(QLatin1String("password"));
-
-    url.setQuery(q);
 }
 
 QDebug operator<<(QDebug dbg, const DbEngineParameters& p)

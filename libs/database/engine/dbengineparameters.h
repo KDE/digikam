@@ -65,11 +65,14 @@ public:
                        const QString& databaseNameFace = QString()
                       );
 
-    explicit DbEngineParameters(const QUrl& url);
-
     DbEngineParameters();
 
+    /** QUrl helpers.
+     */
+    explicit DbEngineParameters(const QUrl& url);
     void insertInUrl(QUrl& url) const;
+    static void removeFromUrl(QUrl& url);
+
     bool operator==(const DbEngineParameters& other) const;
     bool operator!=(const DbEngineParameters& other) const;
 
@@ -147,8 +150,6 @@ public:
      */
     static DbEngineParameters parametersForSQLite(const QString& databaseFile);
     static DbEngineParameters parametersForSQLiteDefaultFile(const QString& directory);
-
-    static void removeFromUrl(QUrl& url);
 
     /** Return the hidden path from home directory to store private
      *  data used by internal Mysql server.
