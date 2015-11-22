@@ -62,6 +62,9 @@ static const char* configAlbumPathEntry         = "Album Path";
 static const char* digikam4db                   = "digikam4.db";
 static const char* thumbnails_digikamdb         = "thumbnails-digikam.db";
 static const char* face_digikamdb               = "recognition.db";
+
+static QString internalServerSettingsPath       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + 
+                                                  QLatin1String("/digikam/");
 }
 
 namespace Digikam
@@ -337,8 +340,7 @@ void DbEngineParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
 
     if (databaseType == QLatin1String("QMYSQL") && internalServer)
     {
-        const QString miscDir  = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + 
-                                                                  QLatin1Char('/') + QLatin1String("digikam/db_misc");
+        const QString miscDir  = internalServerSettingsPath + QLatin1String("db_misc");
         databaseType           = QLatin1String("QMYSQL");
         databaseNameCore       = QLatin1String("digikam");
         internalServer         = true;
@@ -504,8 +506,7 @@ DbEngineParameters DbEngineParameters::defaultParameters(const QString databaseT
     parameters.userName           = config.userName;
     parameters.password           = config.password;
     parameters.port               = config.port.toInt();
-    const QString miscDir         = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + 
-                                                                     QLatin1Char('/') + QLatin1String("digikam/db_misc");
+    const QString miscDir         = internalServerSettingsPath + QLatin1String("db_misc");
     QString connectOptions        = config.connectOptions;
     connectOptions.replace(QLatin1String("$$DBMISCPATH$$"), miscDir);
 
