@@ -213,6 +213,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
     DTextLabelName* label12 = new DTextLabelName(i18n("Source: "), gbox);
     d->labelImageRegion     = new DTextLabelValue(QString(), gbox);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     grid->addWidget(label5,                  0, 0, 1, 1);
     grid->addWidget(d->labelPixelsValue,     0, 1, 1, 1);
     grid->addWidget(label7,                  1, 0, 1, 1);
@@ -231,7 +233,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
     grid->addWidget(d->labelAlphaChannel,    7, 1, 1, 1);
     grid->addWidget(label12,                 8, 0, 1, 1);
     grid->addWidget(d->labelImageRegion,     8, 1, 1, 1);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(0);
 
     // -------------------------------------------------------------
@@ -257,8 +259,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
     topLayout->addWidget(d->blueHistogram,  6, 0, 1, 4);
     topLayout->setRowStretch(7, 10);
     topLayout->setColumnStretch(2, 10);
-    topLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    topLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    topLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    topLayout->setSpacing(spacing);
 
     insertTab(Private::HISTOGRAM, sv, i18n("Histogram"));
 

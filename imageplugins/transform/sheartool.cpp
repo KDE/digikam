@@ -170,6 +170,8 @@ ShearTool::ShearTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     QGridLayout* grid = new QGridLayout;
     grid->setSpacing(0);
     grid->addWidget(label1,              0, 0, 1, 1);
@@ -187,8 +189,8 @@ ShearTool::ShearTool(QObject* const parent)
     grid->addWidget(d->fineVAngleInput, 10, 0, 1, 3);
     grid->addWidget(d->antialiasInput,  11, 0, 1, 3);
     grid->setRowStretch(12, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(grid);
 
     // -------------------------------------------------------------

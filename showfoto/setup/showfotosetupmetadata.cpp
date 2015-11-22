@@ -81,6 +81,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     setWidget(d->tab);
     setWidgetResizable(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QWidget* const panel          = new QWidget(d->tab);
     QVBoxLayout* const mainLayout = new QVBoxLayout(panel);
 
@@ -97,7 +99,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
 
     gLayout1->addWidget(d->exifRotateBox);
     gLayout1->addWidget(d->exifSetOrientationBox);
-    gLayout1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout1->setContentsMargins(spacing, spacing, spacing, spacing);
     gLayout1->setSpacing(0);
 
     // --------------------------------------------------------
@@ -136,15 +138,15 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     grid->addWidget(exiv2LogoLabel, 0, 0, 1, 1);
     grid->addWidget(explanation,    0, 1, 1, 2);
     grid->setColumnStretch(1, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(0);
 
     // --------------------------------------------------------
 
-    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mainLayout->setContentsMargins(QMargins());
+    mainLayout->setSpacing(spacing);
     mainLayout->addWidget(ExifGroup);
-    mainLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->addSpacing(spacing);
     mainLayout->addWidget(box);
     mainLayout->addStretch();
 

@@ -179,8 +179,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     : DVBox(parent),
       d(new Private)
 {
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     setContentsMargins(QMargins());
-    setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    setSpacing(spacing);
     d->tabWidget           = new QTabWidget(this);
 
     d->metadataChangeTimer = new QTimer(this);
@@ -225,7 +227,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     // Buttons -----------------------------------------
 
     DHBox* const applyButtonBox = new DHBox(this);
-    applyButtonBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    applyButtonBox->setSpacing(spacing);
 
     d->applyBtn           = new QPushButton(i18n("Apply"), applyButtonBox);
     d->applyBtn->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
@@ -234,7 +236,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     //buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     DHBox* const buttonsBox     = new DHBox(this);
-    buttonsBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    buttonsBox->setSpacing(spacing);
 
     d->revertBtn          = new QToolButton(buttonsBox);
     d->revertBtn->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
@@ -259,8 +261,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     grid1->addWidget(colorBox,        4, 0, 1, 2);
     grid1->addWidget(rateBox,         5, 0, 1, 2);
     grid1->setRowStretch(1, 10);
-    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid1->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid1->setSpacing(spacing);
 
     d->tabWidget->insertTab(Private::DESCRIPTIONS, sv, i18n("Description"));
 
@@ -293,7 +295,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
                                      "',' can be used to create more than one hierarchy at the same time."));
 
     DHBox* const tagsSearch = new DHBox(tagsArea);
-    tagsSearch->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    tagsSearch->setSpacing(spacing);
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, QLatin1String("ImageDescEditTabTagsSearchBar"));
     d->tagsSearchBar->setModel(d->tagCheckView->filteredModel(),
@@ -339,8 +341,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     grid2->addWidget(d->templateSelector, 0, 0, 1, 2);
     grid2->addWidget(d->templateViewer,   1, 0, 1, 2);
     grid2->setRowStretch(1, 10);
-    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid2->setSpacing(spacing);
 
     d->tabWidget->insertTab(Private::INFOS, sv2, i18n("Information"));
 

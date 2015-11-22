@@ -222,8 +222,10 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
+    grid1->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid1->setSpacing(spacing);
     grid1->setAlignment(Qt::AlignTop);
     grid1->setColumnStretch(1, 10);
     grid1->addWidget(label1,                 0, 0, 1, 1);
@@ -294,8 +296,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     grid2->addWidget(d->locationProvinceStateEdit, 2, 1, 1, 2);
     grid2->addWidget(label12,                      3, 0, 1, 1);
     grid2->addWidget(d->locationCountryCodeEdit,   3, 1, 1, 2);
-    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid2->setSpacing(spacing);
     grid2->setAlignment(Qt::AlignTop);
     grid2->setColumnStretch(1, 10);
     grid2->setRowStretch(4, 10);
@@ -408,8 +410,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     grid3->addWidget(d->contactEmailEdit,         6, 1, 1, 2);
     grid3->addWidget(label20,                     7, 0, 1, 1);
     grid3->addWidget(d->contactWebUrlEdit,        7, 1, 1, 2);
-    grid3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid3->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid3->setSpacing(spacing);
     grid3->setAlignment(Qt::AlignTop);
     grid3->setColumnStretch(1, 10);
     grid3->setRowStretch(8, 10);
@@ -431,8 +433,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     QGridLayout* const grid4 = new QGridLayout(page4);
     d->subjects              = new SubjectEdit(page4);
 
-    grid4->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid4->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid4->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid4->setSpacing(spacing);
     grid4->setAlignment(Qt::AlignTop);
     grid4->addWidget(d->subjects, 0, 0, 1, 1);
     grid4->setRowStretch(1, 10);

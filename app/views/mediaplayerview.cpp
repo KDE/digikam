@@ -139,6 +139,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")),  i18nc("go to previous image", "Back"), this);
     d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),      i18nc("go to next image", "Forward"),  this);
 
@@ -155,8 +157,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     grid->setColumnStretch(2, 10);
     grid->setRowStretch(0, 10);
     grid->setRowStretch(2, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
     d->errorView->setLayout(grid);
 
     insertWidget(Private::ErrorView, d->errorView);
@@ -182,8 +184,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->grid->setColumnStretch(0, 10);
     d->grid->setColumnStretch(2, 10);
     d->grid->setRowStretch(0, 10);
-    d->grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    d->grid->setSpacing(spacing);
     d->playerView->setLayout(d->grid);
 
     insertWidget(Private::PlayerView, d->playerView);

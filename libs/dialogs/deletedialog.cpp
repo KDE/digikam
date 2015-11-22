@@ -270,6 +270,8 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
     resize(540, 370);
     setMinimumSize(QSize(420, 320));
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->checkBoxStack = new QStackedWidget(this);
     QLabel* logo     = new QLabel(this);
     logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
@@ -288,7 +290,7 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
     d->deleteText->setWordWrap(true);
 
     QHBoxLayout* hbox = new QHBoxLayout();
-    hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hbox->setSpacing(spacing);
     hbox->setContentsMargins(QMargins());
     hbox->addWidget(logo);
     hbox->addWidget(d->deleteText, 10);
@@ -319,9 +321,8 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
     d->doNotShowAgain->setText(i18n("Do not &ask again"));
 
     QVBoxLayout* const vbox = new QVBoxLayout(this);
-    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vbox->setContentsMargins(0, 0, 0, 0);
+    vbox->setContentsMargins(QMargins());
+    vbox->setSpacing(spacing);
     vbox->addLayout(hbox);
     vbox->addWidget(d->fileList, 10);
     vbox->addWidget(d->numFiles);

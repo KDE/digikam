@@ -647,6 +647,8 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     d->timer                    = new QTimer(this);
     setAttribute(Qt::WA_DeleteOnClose);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const vlay = new QVBoxLayout(this);
     QFrame* const panel     = new QFrame(this);
     panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
@@ -698,7 +700,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     hlay2->addWidget(logHistoButton);
 
     hlay->setContentsMargins(QMargins());
-    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlay->setSpacing(spacing);
     hlay->addWidget(label1);
     hlay->addWidget(d->timeUnitCB);
     hlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
@@ -720,7 +722,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
 
     DHBox* const hbox2 = new DHBox(panel);
     hbox2->setContentsMargins(QMargins());
-    hbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hbox2->setSpacing(spacing);
 
     d->resetButton = new QToolButton(hbox2);
     d->resetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
@@ -747,8 +749,8 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     grid->addWidget(d->scrollBar,        3, 0, 1, 4);
     grid->addWidget(hbox2,               4, 0, 1, 4);
     grid->setColumnStretch(2, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     // ---------------------------------------------------------------
 
@@ -765,8 +767,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
 
     vlay->addWidget(panel);
     vlay->addWidget(d->timeLineFolderView);
-    vlay->addItem(new QSpacerItem(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing), QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing),
-                                  QSizePolicy::Minimum, QSizePolicy::Minimum));
+    vlay->addItem(new QSpacerItem(spacing, spacing, QSizePolicy::Minimum, QSizePolicy::Minimum));
     vlay->addWidget(d->searchDateBar);
     vlay->setContentsMargins(QMargins());
     vlay->setSpacing(0);

@@ -169,6 +169,8 @@ BlurFXTool::BlurFXTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     QGridLayout* const mainLayout = new QGridLayout;
     mainLayout->addWidget(d->effectTypeLabel, 0, 0, 1, 2);
     mainLayout->addWidget(d->effectType,      1, 0, 1, 2);
@@ -177,8 +179,8 @@ BlurFXTool::BlurFXTool(QObject* const parent)
     mainLayout->addWidget(d->levelLabel,      4, 0, 1, 2);
     mainLayout->addWidget(d->levelInput,      5, 0, 1, 2);
     mainLayout->setRowStretch(6, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------

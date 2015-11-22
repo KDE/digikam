@@ -93,12 +93,14 @@ BlurTool::BlurTool(QObject* const parent)
 
     // --------------------------------------------------------
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     QGridLayout* const grid = new QGridLayout( );
     grid->addWidget(label,          0, 0, 1, 2);
     grid->addWidget(d->radiusInput, 1, 0, 1, 2);
     grid->setRowStretch(2, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(grid);
 
     // --------------------------------------------------------

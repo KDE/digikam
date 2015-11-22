@@ -74,6 +74,8 @@ DNGSettings::DNGSettings(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QGridLayout* const settingsBoxLayout = new QGridLayout(this);
 
     DActiveLabel* const dngLogoLabel     = new DActiveLabel(QUrl(), QString(), this);
@@ -101,8 +103,8 @@ DNGSettings::DNGSettings(QWidget* const parent)
     settingsBoxLayout->addWidget(d->previewModeLabel,      4 ,0, 1, 1);
     settingsBoxLayout->addWidget(d->previewModeCB,         5 ,0 ,1, 1);
     settingsBoxLayout->setRowStretch(9, 10);
-    settingsBoxLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    settingsBoxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    settingsBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    settingsBoxLayout->setSpacing(spacing);
 
     connect(d->backupOriginalRawFile, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));

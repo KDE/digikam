@@ -222,6 +222,9 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
 
     // --------------------------------------------------------
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int cmargin = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+
     grid->addWidget(logo,               0, 0, 1, 1);
     grid->addWidget(d->topLabel,        0, 1, 1, 4);
     grid->addWidget(line,               1, 0, 1, 4);
@@ -236,8 +239,8 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     grid->addWidget(tipLabel2,          6, 0, 1, 4);
     grid->setRowStretch(7, 10);
     grid->setColumnStretch(3, 10);
-    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
-    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
+    grid->setSpacing(spacing);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(page);
@@ -505,6 +508,9 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* const parent, 
     setModal(true);
     setWindowTitle(i18n("Tag creation Error"));
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int cmargin = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, this);
     buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
@@ -520,8 +526,8 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* const parent, 
 
     vLay->addWidget(label);
     vLay->addWidget(listView);
-    vLay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
-    vLay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vLay->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
+    vLay->setSpacing(spacing);
 
     for (QMap<QString, QString>::const_iterator it = errMap.constBegin(); it != errMap.constEnd(); ++it)
     {

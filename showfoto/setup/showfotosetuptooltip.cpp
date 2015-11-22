@@ -98,6 +98,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const layout = new QVBoxLayout(panel);
     d->showToolTipsBox        = new QCheckBox(i18n("Show Thumbbar items' toolti&ps"), panel);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display the image information when "
@@ -131,7 +133,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     gLayout1->addWidget(d->showFileSizeBox);
     gLayout1->addWidget(d->showImageTypeBox);
     gLayout1->addWidget(d->showImageDimBox);
-    gLayout1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout1->setContentsMargins(spacing, spacing, spacing, spacing);
     gLayout1->setSpacing(0);
 
     // --------------------------------------------------------
@@ -173,7 +175,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     gLayout2->addWidget(d->showPhotoModeBox);
     gLayout2->addWidget(d->showPhotoFlashBox);
     gLayout2->addWidget(d->showPhotoWbBox);
-    gLayout2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout2->setContentsMargins(spacing, spacing, spacing, spacing);
     gLayout2->setSpacing(0);
 
     layout->addWidget(d->showToolTipsBox);
@@ -181,8 +183,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     layout->addWidget(d->fileSettingBox);
     layout->addWidget(d->photoSettingBox);
     layout->addStretch();
-    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setContentsMargins(spacing, spacing, spacing, spacing);
+    layout->setSpacing(spacing);
 
     // --------------------------------------------------------
 

@@ -265,11 +265,13 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->resLabel              = new QLabel(cropInfo);
     d->resLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     grid3->addWidget(d->histogramBox, 0, 0, 1, 3);
     grid3->addWidget(resolution,      1, 0, 1, 1);
     grid3->addWidget(d->resLabel,     1, 1, 1, 2);
-    grid3->setMargin(d->gboxSettings->spacingHint());
-    grid3->setSpacing(d->gboxSettings->spacingHint());
+    grid3->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid3->setSpacing(spacing);
 
     d->expbox->addItem(cropInfo, QIcon::fromTheme(QLatin1String("help-about")).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
                        i18n("Crop Information"), QLatin1String("CropInformation"), true);
@@ -410,8 +412,8 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     mainLayout->addWidget(d->centerWidth,       6, 4, 1, 1);
     mainLayout->addWidget(d->heightInput,       7, 1, 1, 3);
     mainLayout->addWidget(d->centerHeight,      7, 4, 1, 1);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    mainLayout->setSpacing(spacing);
 
     d->expbox->addItem(cropSelection, QIcon::fromTheme(QLatin1String("transform-crop-and-resize")).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
                        i18n("Crop Settings"), QLatin1String("CropSelection"), true);
@@ -473,8 +475,8 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     grid2->addWidget(d->colorGuideLabel,        7, 0, 1, 1);
     grid2->addWidget(d->guideColorBt,           7, 1, 1, 1);
     grid2->addWidget(d->guideSize,              7, 2, 1, 1);
-    grid2->setMargin(d->gboxSettings->spacingHint());
-    grid2->setSpacing(d->gboxSettings->spacingHint());
+    grid2->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid2->setSpacing(spacing);
 
     d->expbox->addItem(compositionGuide, QIcon::fromTheme(QLatin1String("tools-wizard")).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)),
                        i18n("Composition Guides"), QLatin1String("CompositionGuide"), true);

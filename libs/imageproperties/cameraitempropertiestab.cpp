@@ -182,10 +182,12 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     : DExpanderBox(parent),
       d(new Private)
 {
-    setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-    setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
+    setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     // --------------------------------------------------
+
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QWidget* w1               = new QWidget(this);
     QGridLayout* glay1        = new QGridLayout(w1);
@@ -237,7 +239,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay1->addWidget(d->downloaded,             10, 0, 1, 1);
     glay1->addWidget(d->labelAlreadyDownloaded, 10, 1, 1, 1);
     glay1->setColumnStretch(1, 10);
-    glay1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    glay1->setContentsMargins(spacing, spacing, spacing, spacing);
     glay1->setSpacing(0);
 
     addItem(w1, QIcon::fromTheme(QLatin1String("dialog-information")),
@@ -295,7 +297,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay2->addWidget(d->whiteBalance,           10, 0, 1, 1);
     glay2->addWidget(d->labelPhotoWhiteBalance, 10, 1, 1, 1);
     glay2->setColumnStretch(1, 10);
-    glay2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    glay2->setContentsMargins(spacing, spacing, spacing, spacing);
     glay2->setSpacing(0);
 
     addItem(w2, QIcon::fromTheme(QLatin1String("camera-photo")),
@@ -336,7 +338,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay3->addWidget(d->labelVideoFrameRate,        5, 1, 1, 1);
     glay3->addWidget(d->videoCodec,                 6, 0, 1, 1);
     glay3->addWidget(d->labelVideoVideoCodec,       6, 1, 1, 1);
-    glay3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    glay3->setContentsMargins(spacing, spacing, spacing, spacing);
     glay3->setSpacing(0);
     glay3->setColumnStretch(1, 10);
 

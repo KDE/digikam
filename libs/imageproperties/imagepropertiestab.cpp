@@ -225,10 +225,12 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     : DExpanderBox(parent),
       d(new Private)
 {
-    setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-    setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
+    setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     // --------------------------------------------------
+
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QWidget* const w1         = new QWidget(this);
     QGridLayout* const glay1  = new QGridLayout(w1);
@@ -259,7 +261,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay1->addWidget(d->labelFileOwner,        4, 1, 1, 1);
     glay1->addWidget(d->permissions,           5, 0, 1, 1);
     glay1->addWidget(d->labelFilePermissions,  5, 1, 1, 1);
-    glay1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    glay1->setContentsMargins(spacing, spacing, spacing, spacing);
     glay1->setSpacing(0);
     glay1->setColumnStretch(1, 10);
 
@@ -294,7 +296,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay2->addWidget(d->labelImageBitDepth,     3, 1, 1, 1);
     glay2->addWidget(d->colorMode,              4, 0, 1, 1);
     glay2->addWidget(d->labelImageColorMode,    4, 1, 1, 1);
-    glay2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    glay2->setContentsMargins(spacing, spacing, spacing, spacing);
     glay2->setSpacing(0);
     glay2->setColumnStretch(1, 10);
 
@@ -354,7 +356,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay3->addWidget(d->whiteBalance,           10, 0, 1, 1);
     glay3->addWidget(d->labelPhotoWhiteBalance, 10, 1, 1, 1);
     glay3->setColumnStretch(1, 10);
-    glay3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    glay3->setContentsMargins(spacing, spacing, spacing, spacing);
     glay3->setSpacing(0);
 
     insertItem(ImagePropertiesTab::Private::PhotoProperties,
@@ -396,7 +398,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay4->addWidget(d->labelVideoAudioChannelType, 5, 1, 1, 1);
     glay4->addWidget(d->audioCompressor,            6, 0, 1, 1);
     glay4->addWidget(d->labelVideoAudioCompressor,  6, 1, 1, 1);
-    glay4->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    glay4->setContentsMargins(spacing, spacing, spacing, spacing);
     glay4->setSpacing(0);
     glay4->setColumnStretch(1, 10);
 
@@ -432,7 +434,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay5->addWidget(d->labelColorLabel, 3, 1, 1, 1);
     glay5->addWidget(d->rating,          4, 0, 1, 1);
     glay5->addWidget(d->labelRating,     4, 1, 1, 1);
-    glay5->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    glay5->setContentsMargins(spacing, spacing, spacing, spacing);
     glay5->setSpacing(0);
     glay5->setColumnStretch(1, 10);
 

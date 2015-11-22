@@ -179,7 +179,7 @@ TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item
 {
     d->item  = item;
     setSpacing(2);
-    setMargin(2);
+    setContentsMargins(2, 2, 2, 2);
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
 
     d->frame = new QFrame(this);

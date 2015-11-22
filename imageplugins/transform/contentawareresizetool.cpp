@@ -433,10 +433,12 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
                             QLatin1String("AdvancedSettingsContainer"), true);
     d->expanderBox->addStretch();
 
+    const int spacing = d->gboxSettings->spacingHint();
+
     grid->addWidget(d->expanderBox, 0, 0, 1, -1);
     grid->setRowStretch(0, 1);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
 
     setToolSettings(d->gboxSettings);
 
