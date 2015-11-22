@@ -126,24 +126,32 @@ void DatabaseSettingsWidget::setupMainArea()
 
     QLabel* const dbNameCoreLabel                    = new QLabel(i18n("Core Db Name:"));
     dbNameCore                                       = new QLineEdit();
+    dbNameCore->setPlaceholderText(i18n("Set the core database name"));
     QLabel* const dbNameThumbnailsLabel              = new QLabel(i18n("Thumbs Db Name:"));
     dbNameThumbnails                                 = new QLineEdit();
+    dbNameThumbnails->setPlaceholderText(i18n("Set the thumbnails database name"));
     QLabel* const dbNameFaceLabel                    = new QLabel(i18n("Face Db Name:"));
     dbNameFace                                       = new QLineEdit();
+    dbNameFace->setPlaceholderText(i18n("Set the face database name"));
     QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
     hostName                                         = new QLineEdit();
+    hostName->setPlaceholderText(i18n("Set the host computer name"));
     QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
     hostPort                                         = new QSpinBox();
+    hostPort->setToolTip(i18n("Set the host computer port"));
     hostPort->setMaximum(65535);
 
     QLabel* const connectionOptionsLabel             = new QLabel(i18n("Connect options:"));
     connectionOptions                                = new QLineEdit();
+    connectionOptions->setPlaceholderText(i18n("Set the database connection options"));
 
     QLabel* const userNameLabel                      = new QLabel(i18n("User:"));
     userName                                         = new QLineEdit();
+    userName->setPlaceholderText(i18n("Set the database user name"));
 
     QLabel* const passwordLabel                      = new QLabel(i18n("Password:"));
     password                                         = new QLineEdit();
+    userName->setPlaceholderText(i18n("Set the database user password"));
     password->setEchoMode(QLineEdit::Password);
 
     QPushButton* const checkDatabaseConnectionButton = new QPushButton(i18n("Check Database Connection"));
