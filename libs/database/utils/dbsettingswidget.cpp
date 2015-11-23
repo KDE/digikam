@@ -91,7 +91,7 @@ DatabaseSettingsWidget::~DatabaseSettingsWidget()
 
 void DatabaseSettingsWidget::setupMainArea()
 {
-    QVBoxLayout* const layout  = new QVBoxLayout();
+    QVBoxLayout* const layout = new QVBoxLayout();
     setLayout(layout);
 
     // --------------------------------------------------------
@@ -127,31 +127,40 @@ void DatabaseSettingsWidget::setupMainArea()
     QLabel* const dbNameCoreLabel                    = new QLabel(i18n("Core Db Name:"));
     dbNameCore                                       = new QLineEdit();
     dbNameCore->setPlaceholderText(i18n("Set the core database name"));
+    dbNameCore->setToolTip(i18n("The core database is lead digiKam container used to store albums, items, and searches metadata."));
     QLabel* const dbNameThumbnailsLabel              = new QLabel(i18n("Thumbs Db Name:"));
     dbNameThumbnails                                 = new QLineEdit();
     dbNameThumbnails->setPlaceholderText(i18n("Set the thumbnails database name"));
+    dbNameThumbnails->setToolTip(i18n("The thumbnails database is used by digiKam to host image thumbs with wavelets compression images. "
+                                      "This one can use quickly a lots of space, especially if you have huge collections."));
     QLabel* const dbNameFaceLabel                    = new QLabel(i18n("Face Db Name:"));
     dbNameFace                                       = new QLineEdit();
     dbNameFace->setPlaceholderText(i18n("Set the face database name"));
+    dbNameFace->setToolTip(i18n("The face database is used by digiKam to host image histograms dedicated to faces recognition process. "
+                                "This one can use quickly a lots of space, especially if you a lots of image with people faces detected and tagged."));
     QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
     hostName                                         = new QLineEdit();
     hostName->setPlaceholderText(i18n("Set the host computer name"));
+    hostName->setToolTip(i18n("This is the computer name running Mysql server. This can be \"localhost\" for a local server, or the network computer "
+                              "name (or IP adress) in case of remote computer."));
     QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
     hostPort                                         = new QSpinBox();
-    hostPort->setToolTip(i18n("Set the host computer port"));
+    hostPort->setToolTip(i18n("Set the host computer port. Usually, Mysql server use port number 3306 by default"));
     hostPort->setMaximum(65535);
 
     QLabel* const connectionOptionsLabel             = new QLabel(i18n("Connect options:"));
     connectionOptions                                = new QLineEdit();
     connectionOptions->setPlaceholderText(i18n("Set the database connection options"));
+    connectionOptions->setToolTip(i18n("Set the Mysql server connection options. For advanced users only."));
 
     QLabel* const userNameLabel                      = new QLabel(i18n("User:"));
     userName                                         = new QLineEdit();
-    userName->setPlaceholderText(i18n("Set the database user name"));
+    userName->setPlaceholderText(i18n("Set the database account name"));
+    userName->setToolTip(i18n("Set the Mysql server account name used by digiKam to be connected to the server."));
 
     QLabel* const passwordLabel                      = new QLabel(i18n("Password:"));
     password                                         = new QLineEdit();
-    userName->setPlaceholderText(i18n("Set the database user password"));
+    userName->setToolTip(i18n("Set the Mysql server account password used by digiKam to be connected to the server."));
     password->setEchoMode(QLineEdit::Password);
 
     QPushButton* const checkDatabaseConnectionButton = new QPushButton(i18n("Check Database Connection"));
