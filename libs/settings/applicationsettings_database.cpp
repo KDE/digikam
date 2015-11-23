@@ -32,129 +32,7 @@
 
 namespace Digikam
 {
-
-QString ApplicationSettings::getDatabaseFilePath() const
-{
-    return d->databaseParams.getCoreDatabaseNameOrDir();
-}
-
-void ApplicationSettings::setDatabaseFilePath(const QString& path)
-{
-    d->databaseParams.setCoreDatabasePath(path);
-    d->databaseParams.setThumbsDatabasePath(path);
-    d->databaseParams.setFaceDatabasePath(path);
-}
-
-DbEngineParameters ApplicationSettings::getDbEngineParameters() const
-{
-    return d->databaseParams;
-}
-
-void ApplicationSettings::setDbEngineParameters(const DbEngineParameters& params)
-{
-    d->databaseParams = params;
-}
-
-QString ApplicationSettings::getDatabaseType() const
-{
-    return d->databaseParams.databaseType;
-}
-
-void ApplicationSettings::setDatabaseType(const QString& databaseType)
-{
-    d->databaseParams.databaseType = databaseType;
-}
-
-QString ApplicationSettings::getDatabaseConnectoptions() const
-{
-    return d->databaseParams.connectOptions;
-}
-
-QString ApplicationSettings::getDatabaseNameCore() const
-{
-    return d->databaseParams.databaseNameCore;
-}
-
-QString ApplicationSettings::getDatabaseNameThumbnails() const
-{
-    return d->databaseParams.databaseNameThumbnails;
-}
-
-QString ApplicationSettings::getDatabaseNameFace() const
-{
-    return d->databaseParams.databaseNameFace;
-}
-
-QString ApplicationSettings::getDatabaseHostName() const
-{
-    return d->databaseParams.hostName;
-}
-
-QString ApplicationSettings::getDatabasePassword() const
-{
-    return d->databaseParams.password;
-}
-
-int ApplicationSettings::getDatabasePort() const
-{
-    return d->databaseParams.port;
-}
-
-QString ApplicationSettings::getDatabaseUserName() const
-{
-    return d->databaseParams.userName;
-}
-
-bool ApplicationSettings::getInternalDatabaseServer() const
-{
-    return d->databaseParams.internalServer;
-}
-
-void ApplicationSettings::setDatabaseConnectoptions(const QString& connectoptions)
-{
-    d->databaseParams.connectOptions = connectoptions;
-}
-
-void ApplicationSettings::setDatabaseNameCore(const QString& databaseNameCore)
-{
-    d->databaseParams.databaseNameCore = databaseNameCore;
-}
-
-void ApplicationSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)
-{
-    d->databaseParams.databaseNameThumbnails = databaseNameThumbnails;
-}
-
-void ApplicationSettings::setDatabaseNameFace(const QString& databaseNameFace)
-{
-    d->databaseParams.databaseNameFace = databaseNameFace;
-}
-
-void ApplicationSettings::setDatabaseHostName(const QString& hostName)
-{
-    d->databaseParams.hostName = hostName;
-}
-
-void ApplicationSettings::setDatabasePassword(const QString& password)
-{
-    d->databaseParams.password = password;
-}
-
-void ApplicationSettings::setDatabasePort(int port)
-{
-    d->databaseParams.port = port;
-}
-
-void ApplicationSettings::setDatabaseUserName(const QString& userName)
-{
-    d->databaseParams.userName = userName;
-}
-
-void ApplicationSettings::setInternalDatabaseServer(const bool useInternalDBServer)
-{
-    d->databaseParams.internalServer = useInternalDBServer;
-}
-
+    
 void ApplicationSettings::setSyncBalooToDigikam(bool val)
 {
     d->syncToDigikam = val;
@@ -175,6 +53,16 @@ void ApplicationSettings::setSyncDigikamToBaloo(bool val)
 bool ApplicationSettings::getSyncDigikamToBaloo() const
 {
     return d->syncToBaloo;
+}
+
+DbEngineParameters ApplicationSettings::getDbEngineParameters() const
+{
+    return d->databaseParams;
+}
+
+void ApplicationSettings::setDbEngineParameters(const DbEngineParameters& params)
+{
+    d->databaseParams = params;
 }
 
 }  // namespace Digikam

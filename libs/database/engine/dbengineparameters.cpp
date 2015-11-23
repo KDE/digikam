@@ -567,18 +567,24 @@ DbEngineParameters DbEngineParameters::defaultParameters(const QString databaseT
     DbEngineParameters parameters;
 
     // only the database name is needed
-    DbEngineConfigSettings config = DbEngineConfig::element(databaseType);
-    parameters.databaseType       = databaseType;
-    parameters.databaseNameCore   = config.databaseName;
-    parameters.hostName           = config.hostName;
-    parameters.userName           = config.userName;
-    parameters.password           = config.password;
-    parameters.port               = config.port.toInt();
-    const QString miscDir         = internalServerPrivatePath() + QLatin1String("db_misc");
-    QString connectOptions        = config.connectOptions;
-    connectOptions.replace(QLatin1String("$$DBMISCPATH$$"), miscDir);
+    DbEngineConfigSettings config     = DbEngineConfig::element(databaseType);
+    parameters.databaseType           = databaseType;
+    parameters.databaseNameCore       = config.databaseName;
+    parameters.databaseNameThumbnails = config.databaseName;
+    parameters.databaseNameFace       = config.databaseName;
+    parameters.hostName               = config.hostName;
+    parameters.userName               = config.userName;
+    parameters.password               = config.password;
+    parameters.port                   = config.port.toInt();
+    parameters.internalServer         = (databaseType == QLatin1String("QMYSQL"));
 
-    parameters.connectOptions     = connectOptions;
+    const QString miscDir             = internalServerPrivatePath() + QLatin1String("db_misc");
+    QString connectOptions            = config.connectOptions;
+    connectOptions.replace(QLatin1String("$$DBMISCPATH$$"),
+                           (databaseType == QLatin1String("QMYSQL")) ? miscDir
+                                                                     : QString()
+                          );
+    parameters.connectOptions         = connectOptions;
 
     qCDebug(DIGIKAM_DBENGINE_LOG) << "ConnectOptions "<< parameters.connectOptions;
 

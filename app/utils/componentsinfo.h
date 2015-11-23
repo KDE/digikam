@@ -103,12 +103,12 @@ static inline void showDigikamComponentsInfo()
 
     // Database Backend information
 
-    QString dbBe = ApplicationSettings::instance()->getDatabaseType();
+    QString dbBe = ApplicationSettings::instance()->getDbEngineParameters().databaseType;
     list.insert(i18n("Database backend"), dbBe);
 
     if (dbBe != QLatin1String("QSQLITE"))
     {
-        QString internal = ApplicationSettings::instance()->getInternalDatabaseServer() ? i18n("Yes") : i18n("No");
+        QString internal = ApplicationSettings::instance()->getDbEngineParameters().internalServer? i18n("Yes") : i18n("No");
         list.insert(i18n("Database internal server"), internal);
     }
 

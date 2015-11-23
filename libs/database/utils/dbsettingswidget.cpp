@@ -487,18 +487,20 @@ void DatabaseSettingsWidget::checkDBPath()
 
 void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings* const settings)
 {
-    originalDbPath    = settings->getDatabaseFilePath();
-    originalDbBackend = settings->getDatabaseType();
-    dbPathEdit->lineEdit()->setText(settings->getDatabaseFilePath());
+    DbEngineParameters prm = settings->getDbEngineParameters();
+    originalDbPath         = prm.getCoreDatabaseNameOrDir();
+    originalDbBackend      = prm.databaseType;
 
-    if (settings->getDatabaseType() == DbEngineParameters::SQLiteDatabaseType())
+    dbPathEdit->lineEdit()->setText(prm.getCoreDatabaseNameOrDir());
+
+    if (prm.databaseType == DbEngineParameters::SQLiteDatabaseType())
     {
         d->dbType->setCurrentIndex(SQlite);
     }
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
-    else if (settings->getDatabaseType() == DbEngineParameters::MySQLDatabaseType() && settings->getInternalDatabaseServer())
+    else if (prm.databaseType == DbEngineParameters::MySQLDatabaseType() && prm.internalServer)
     {
         d->dbType->setCurrentIndex(MysqlInternal);
     }
@@ -509,15 +511,15 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     }
 #endif
 
-    dbNameCore->setText(settings->getDatabaseNameCore());
-    dbNameThumbnails->setText(settings->getDatabaseNameThumbnails());
-    dbNameFace->setText(settings->getDatabaseNameFace());
-    hostName->setText(settings->getDatabaseHostName());
-    hostPort->setValue(settings->getDatabasePort());
-    connectionOptions->setText(settings->getDatabaseConnectoptions());
+    dbNameCore->setText(prm.databaseNameCore);
+    dbNameThumbnails->setText(prm.databaseNameThumbnails);
+    dbNameFace->setText(prm.databaseNameFace);
+    hostName->setText(prm.hostName);
+    hostPort->setValue(prm.port);
+    connectionOptions->setText(prm.connectOptions);
 
-    userName->setText(settings->getDatabaseUserName());
-    password->setText(settings->getDatabasePassword());
+    userName->setText(prm.userName);
+    password->setText(prm.password);
 
     slotHandleDBTypeIndexChanged(d->dbType->currentIndex());
 }

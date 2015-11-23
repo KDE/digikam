@@ -98,7 +98,7 @@ public:
      */
     QByteArray hash() const;
 
-    /** Return a set of default parameters for the given type
+    /** Return a set of default parameters for the given type. For Mysql, it return internal server configuration.
      */
     static DbEngineParameters defaultParameters(const QString databaseType);
 

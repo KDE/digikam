@@ -122,41 +122,8 @@ public:
 
     // -- Database Settings ---------------------------------------------------------
 
-    void setDatabaseFilePath(const QString& path);
-    QString getDatabaseFilePath() const;
-
     DbEngineParameters getDbEngineParameters() const;
     void setDbEngineParameters(const DbEngineParameters& params);
-
-    QString getDatabaseType() const;
-    void setDatabaseType(const QString& databaseType);
-
-    QString getDatabaseConnectoptions() const;
-    void setDatabaseConnectoptions(const QString& connectoptions);
-
-    QString getDatabaseNameCore() const;
-    void setDatabaseNameCore(const QString& databaseNameCore);
-
-    QString getDatabaseNameThumbnails() const;
-    void setDatabaseNameThumbnails(const QString& databaseNameThumbnails);
-
-    QString getDatabaseNameFace() const;
-    void setDatabaseNameFace(const QString& databaseNameFace);
-
-    QString getDatabaseHostName() const;
-    void setDatabaseHostName(const QString& hostName);
-
-    QString getDatabasePassword() const;
-    void setDatabasePassword(const QString& password);
-
-    int getDatabasePort() const;
-    void setDatabasePort(int port);
-
-    QString getDatabaseUserName() const;
-    void setDatabaseUserName(const QString& userName);
-
-    bool getInternalDatabaseServer() const;
-    void setInternalDatabaseServer(const bool useInternalDBServer);
 
     void setSyncBalooToDigikam(bool val);
     bool getSyncBalooToDigikam() const;

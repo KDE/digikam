@@ -74,12 +74,12 @@ DBStatDlg::DBStatDlg(QWidget* const parent)
     new QTreeWidgetItem(listView(), QStringList() << i18n("Tags") << QString::number(tags));
 
     // Database Backend information
-    QString dbBe = ApplicationSettings::instance()->getDatabaseType();
+    QString dbBe = ApplicationSettings::instance()->getDbEngineParameters().databaseType;
     new QTreeWidgetItem(listView(), QStringList() << i18n("Database backend") << dbBe);
 
     if (dbBe != QLatin1String("QSQLITE"))
     {
-        QString internal = ApplicationSettings::instance()->getInternalDatabaseServer() ? i18n("Yes") : i18n("No");
+        QString internal = ApplicationSettings::instance()->getDbEngineParameters().internalServer ? i18n("Yes") : i18n("No");
         new QTreeWidgetItem(listView(), QStringList() << i18n("Database internal server") << internal);
     }
 

@@ -157,37 +157,28 @@ void SetupDatabase::applySettings()
         if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->originalDbBackend)
         {
             settings->setDbEngineParameters(DbEngineParameters::parametersForSQLiteDefaultFile(newPath));
-            settings->saveSettings();
         }
     }
     else
     {
         if (d->databaseWidget->databaseType() == DatabaseSettingsWidget::MysqlInternal)
         {
-            DbEngineParameters internalServerParameters = DbEngineParameters::defaultParameters(d->databaseWidget->databaseBackend());
-            settings->setInternalDatabaseServer(true);
-            settings->setDatabaseType(d->databaseWidget->databaseBackend());
-            settings->setDatabaseNameCore(internalServerParameters.databaseNameCore);
-            settings->setDatabaseNameThumbnails(internalServerParameters.databaseNameCore);
-            settings->setDatabaseNameFace(internalServerParameters.databaseNameCore);
-            settings->setDatabaseConnectoptions(internalServerParameters.connectOptions);
-            settings->setDatabaseHostName(internalServerParameters.hostName);
-            settings->setDatabasePort(internalServerParameters.port);
-            settings->setDatabaseUserName(internalServerParameters.userName);
-            settings->setDatabasePassword(internalServerParameters.password);
+            settings->setDbEngineParameters(DbEngineParameters::defaultParameters(d->databaseWidget->databaseBackend()));
         }
         else
         {
-            settings->setInternalDatabaseServer(d->databaseWidget->databaseType() == DatabaseSettingsWidget::MysqlInternal);
-            settings->setDatabaseType(d->databaseWidget->databaseBackend());
-            settings->setDatabaseNameCore(d->databaseWidget->dbNameCore->text());
-            settings->setDatabaseNameThumbnails(d->databaseWidget->dbNameThumbnails->text());
-            settings->setDatabaseNameFace(d->databaseWidget->dbNameFace->text());
-            settings->setDatabaseConnectoptions(d->databaseWidget->connectionOptions->text());
-            settings->setDatabaseHostName(d->databaseWidget->hostName->text());
-            settings->setDatabasePort(d->databaseWidget->hostPort->text().toInt());
-            settings->setDatabaseUserName(d->databaseWidget->userName->text());
-            settings->setDatabasePassword(d->databaseWidget->password->text());
+            DbEngineParameters serverParameters;
+            serverParameters.internalServer         = (d->databaseWidget->databaseType() == DatabaseSettingsWidget::MysqlInternal);
+            serverParameters.databaseType           = d->databaseWidget->databaseBackend();
+            serverParameters.databaseNameCore       = d->databaseWidget->dbNameCore->text();
+            serverParameters.databaseNameThumbnails = d->databaseWidget->dbNameThumbnails->text();
+            serverParameters.databaseNameFace       = d->databaseWidget->dbNameFace->text();
+            serverParameters.connectOptions         = d->databaseWidget->connectionOptions->text();
+            serverParameters.hostName               = d->databaseWidget->hostName->text();
+            serverParameters.port                   = d->databaseWidget->hostPort->text().toInt();
+            serverParameters.userName               = d->databaseWidget->userName->text();
+            serverParameters.password               = d->databaseWidget->password->text();
+            settings->setDbEngineParameters(serverParameters);  
         }
 
         settings->saveSettings();
