@@ -270,6 +270,7 @@ QByteArray DbEngineParameters::hash() const
     md5.addData((const char*)&port, sizeof(int));
     md5.addData(userName.toUtf8());
     md5.addData(password.toUtf8());
+    md5.addData((const char*)&internalServer, sizeof(bool));
 
     return md5.result().toHex();
 }
