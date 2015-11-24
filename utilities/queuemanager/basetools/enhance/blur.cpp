@@ -93,7 +93,12 @@ BatchToolSettings Blur::defaultSettings()
 
 void Blur::slotAssignSettings2Widget()
 {
-    m_radiusInput->setValue(settings()[QLatin1String("Radius")].toInt());
+    int val = settings()[QLatin1String("Radius")].toInt();
+
+    if (m_radiusInput->value() != val)
+    {
+        m_radiusInput->setValue(val);
+    }
 }
 
 void Blur::slotSettingsChanged()
