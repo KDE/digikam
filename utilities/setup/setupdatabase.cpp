@@ -76,8 +76,8 @@ public:
     }
 
     DatabaseSettingsWidget* databaseWidget;
-    QGroupBox*      updateBox;
-    QPushButton*    hashesButton;
+    QGroupBox*              updateBox;
+    QPushButton*            hashesButton;
 };
 
 SetupDatabase::SetupDatabase(QWidget* const parent)

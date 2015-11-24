@@ -85,8 +85,8 @@ DbEngineParameters::DbEngineParameters(const QString& _type,
                                        const QString& _databaseNameCore,
                                        const QString& _connectOptions,
                                        const QString& _hostName,
-                                       int   _port,
-                                       bool  _internalServer,
+                                       int            _port,
+                                       bool           _internalServer,
                                        const QString& _userName,
                                        const QString& _password,
                                        const QString& _databaseNameThumbnails,
@@ -581,10 +581,8 @@ DbEngineParameters DbEngineParameters::defaultParameters(const QString databaseT
 
     const QString miscDir             = internalServerPrivatePath() + QLatin1String("db_misc");
     QString connectOptions            = config.connectOptions;
-    connectOptions.replace(QLatin1String("$$DBMISCPATH$$"),
-                           (databaseType == QLatin1String("QMYSQL")) ? miscDir
-                                                                     : QString()
-                          );
+    connectOptions.replace(QLatin1String("$$DBMISCPATH$$"), (databaseType == QLatin1String("QMYSQL"))
+                                                            ? miscDir : QString());
     parameters.connectOptions         = connectOptions;
 
     qCDebug(DIGIKAM_DBENGINE_LOG) << "ConnectOptions "<< parameters.connectOptions;

@@ -53,21 +53,22 @@ class DIGIKAM_EXPORT DbEngineParameters
 
 public:
 
-    DbEngineParameters(const QString& type,
-                       const QString& databaseNameCore,
-                       const QString& connectOptions = QString(),
-                       const QString& hostName = QString(),
-                       int   port = -1,
-                       bool  internalServer = false,
-                       const QString& userName = QString(),
-                       const QString& password = QString(),
-                       const QString& databaseNameThumbnails = QString(),
-                       const QString& databaseNameFace = QString()
+    DbEngineParameters(const QString& _type,
+                       const QString& _databaseNameCore,
+                       const QString& _connectOptions = QString(),
+                       const QString& _hostName = QString(),
+                       int            _port = -1,
+                       bool           _internalServer = false,
+                       const QString& _userName = QString(),
+                       const QString& _password = QString(),
+                       const QString& _databaseNameThumbnails = QString(),
+                       const QString& _databaseNameFace = QString()
                       );
 
     DbEngineParameters();
 
-    /** QUrl helpers.
+    /**
+     * QUrl helpers.
      */
     explicit DbEngineParameters(const QUrl& url);
     void insertInUrl(QUrl& url) const;
@@ -76,8 +77,9 @@ public:
     bool operator==(const DbEngineParameters& other) const;
     bool operator!=(const DbEngineParameters& other) const;
 
-    /** Performs basic checks that the parameters are not empty and have the information
-     *  required for the databaseType.
+    /**
+     * Performs basic checks that the parameters are not empty and have the information
+     * required for the databaseType.
      */
     bool    isValid()            const;
 
@@ -98,7 +100,8 @@ public:
      */
     QByteArray hash() const;
 
-    /** Return a set of default parameters for the given type. For Mysql, it return internal server configuration.
+    /**
+     * Return a set of default parameters for the given type. For Mysql, it return internal server configuration.
      */
     static DbEngineParameters defaultParameters(const QString databaseType);
 
@@ -114,6 +117,7 @@ public:
     /**
      * NOTE: In case of SQLite, the database name typically is a file.
      * For non-SQLite, this simply sets the database name.
+     * For Mysql, this simply sets the database name.
      */
 
     QString getCoreDatabaseNameOrDir()   const;
@@ -133,11 +137,13 @@ public:
     static QString thumbnailDatabaseDirectorySQLite(const QString& path);
     static QString faceDatabaseDirectorySQLite(const QString& path);
 
-    /** Replaces databaseName with databaseNameThumbnails.
+    /**
+     * Replaces databaseName with databaseNameThumbnails.
      */
     DbEngineParameters thumbnailParameters() const;
 
-    /** Replaces databaseName with databaseNameFace.
+    /**
+     * Replaces databaseName with databaseNameFace.
      */
     DbEngineParameters faceParameters() const;
 
@@ -146,13 +152,14 @@ public:
 
     /**
      * Convenience methods to create a DbEngineParameters object for an
-     * SQLITE 3 database specified by the local file path.
+     * SQLITE database specified by the local file path.
      */
     static DbEngineParameters parametersForSQLite(const QString& databaseFile);
     static DbEngineParameters parametersForSQLiteDefaultFile(const QString& directory);
 
-    /** Return the hidden path from home directory to store private
-     *  data used by internal Mysql server.
+    /**
+     * Return the hidden path from home directory to store private
+     * data used by internal Mysql server.
      */
     static QString internalServerPrivatePath();
 
@@ -168,7 +175,7 @@ public:
     QString password;
 
     QString databaseNameThumbnails;
-    QString databaseNameFace;    
+    QString databaseNameFace;
 };
 
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DbEngineParameters& t);

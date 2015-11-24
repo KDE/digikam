@@ -98,12 +98,12 @@ void DatabaseSettingsWidget::setupMainArea()
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QGroupBox* const dbConfigBox = new QGroupBox(i18n("Database Configuration"), this);
-    QVBoxLayout* const vlay      = new QVBoxLayout(dbConfigBox);
+    QGroupBox* const dbConfigBox    = new QGroupBox(i18n("Database Configuration"), this);
+    QVBoxLayout* const vlay         = new QVBoxLayout(dbConfigBox);
 
-    DHBox* const typeHbox                            = new DHBox();
-    QLabel* const databaseTypeLabel                  = new QLabel(typeHbox);
-    d->dbType                                        = new QComboBox(typeHbox);
+    DHBox* const typeHbox           = new DHBox();
+    QLabel* const databaseTypeLabel = new QLabel(typeHbox);
+    d->dbType                       = new QComboBox(typeHbox);
     databaseTypeLabel->setText(i18n("Type:"));
 
     // --------------------------------------------------------
