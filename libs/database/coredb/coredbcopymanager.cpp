@@ -7,6 +7,7 @@
  * Description : Core database copy manager for migration operations.
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -80,7 +81,8 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
         return;
     }
 
-    // order may be important, array class must _not_ be sorted
+    // Order may be important, array class must _not_ be sorted
+
     const QStringList tables = QStringList()
         << QLatin1String("AlbumRoots")
         << QLatin1String("Albums")
@@ -110,7 +112,8 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
     QMap<QString, QVariant> bindingMap;
 
     // Delete all tables
-    for (int i=0; m_isStopProcessing || i < tablesSize; ++i)
+
+    for (int i = 0; m_isStopProcessing || i < tablesSize; ++i)
     {
         if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS %1;").arg(tables[i])) != BdEngineBackend::NoErrors)
         {
@@ -120,6 +123,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
             return;
         }
     }
+
     if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS Settings;")) != BdEngineBackend::NoErrors)
     {
         emit finished(CoreDbCopyManager::failed, i18n("Error while scrubbing the target database."));
@@ -128,7 +132,8 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
         return;
     }
 
-    // then create the schema
+    // Then create the schema
+
     AlbumDB       albumDB(&toDBbackend);
     CoreDbSchemaUpdater updater(&albumDB, &toDBbackend, toDBParameters);
 
@@ -142,14 +147,14 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
         return;
     }
 
-    /*
-     * loop copying the tables, stop if an error is met
-     */
+    // loop copying the tables, stop if an error is met
+
     for (int i=0; m_isStopProcessing || i < tablesSize; ++i)
     {
         emit stepStarted(i18n(QString::fromUtf8("Copy %1...").arg(tables[i]).toLatin1().constData()));
 
-        // now perform the copy action
+        // Now perform the copy action
+
         if ( m_isStopProcessing ||
              !copyTable(fromDBbackend, QString::fromUtf8("Migrate_Read_%1").arg(tables[i]),
                         toDBbackend, QString::fromUtf8("Migrate_Write_%1").arg(tables[i]))
@@ -159,9 +164,10 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
             return;
         }
     }
-
 /*
-    if (isStopThread || !copyTable(fromDBbackend, QLatin1String("Migrate_Read_Settings"), toDBbackend, QLatin1String("Migrate_Write_Settings")))
+    if (isStopThread ||
+        !copyTable(fromDBbackend, QLatin1String("Migrate_Read_Settings"),
+                   toDBbackend, QLatin1String("Migrate_Write_Settings")))
     {
         handleClosing(isStopThread, fromDBbackend, toDBbackend);
         return;
@@ -177,7 +183,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
                                     CoreDbBackend& toDBbackend, const QString& toActionName)
 {
     qCDebug(DIGIKAM_COREDB_LOG) << "Core database: trying to copy contents from DB with ActionName: [" << fromActionName
-                                  << "] to DB with ActionName [" << toActionName << "]";
+                                << "] to DB with ActionName [" << toActionName << "]";
 
     QMap<QString, QVariant> bindingMap;
 
@@ -193,17 +199,18 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
     }
     else
     {
-        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: driver doesn't support query size. We try to go to the last row and back to the current.";
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: driver doesn't support query size. "
+                                       "We try to go to the last row and back to the current.";
+        
         result.last();
-        /*
-         * Now get the current row. If this is not possible, a value lower than 0 will be returned.
-         * To not confuse the log reading user, we reset this value to 0.
-         */
+
+        // Now get the current row. If this is not possible, a value lower than 0 will be returned.
+        // To not confuse the log reading user, we reset this value to 0.
+
         resultSize = (result.at() < 0) ? 0 : result.at();
 
-        /*
-         * avoid a misleading error message, query is redone if isForwardOnly
-         */
+        // Avoid a misleading error message, query is redone if isForwardOnly
+
         if ( ! isForwardOnly)
         {
             result.first();
@@ -212,11 +219,10 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
 
     qCDebug(DIGIKAM_COREDB_LOG) << "Core database: result size: ["<< resultSize << "]";
 
-    /*
-     * If the sql query is forward only - perform the query again.
-     * This is not atomic, so it can be tend to different results between
-     * real database entries copied and shown at the progressbar.
-     */
+    // If the sql query is forward only - perform the query again.
+    // This is not atomic, so it can be tend to different results between
+    // real database entries copied and shown at the progressbar.
+
     if (isForwardOnly)
     {
         result.finish();
@@ -227,7 +233,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
 
     for (int i=0; i<columnCount; ++i)
     {
-        //            qCDebug(DIGIKAM_COREDB_LOG) << "Column: ["<< result.record().fieldName(i) << "]";
+        //qCDebug(DIGIKAM_COREDB_LOG) << "Column: ["<< result.record().fieldName(i) << "]";
         columnNames.append(result.record().fieldName(i));
     }
 
@@ -235,8 +241,9 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
 
     while (result.next())
     {
-        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: query isOnValidRow [" << result.isValid() << "] isActive [" << result.isActive()
-                                      << "] result size: [" << result.size() << "]";
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: query isOnValidRow [" << result.isValid()
+                                    << "] isActive [" << result.isActive()
+                                    << "] result size: [" << result.size() << "]";
 
         if (m_isStopProcessing == true)
         {
@@ -244,25 +251,30 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
         }
 
         // Send a signal to the GUI to entertain the user
+
         emit smallStepStarted(++resultCounter, resultSize);
 
-        // read the values from the fromDB into a hash
+        // Read the values from the fromDB into a hash
+
         QMap<QString, QVariant> tempBindingMap;
         int i = 0;
 
         foreach(QString columnName, columnNames) // krazy:exclude=foreach
         {
-            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: column: ["<< columnName << "] value ["<<result.value(i)<<"]";
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: column: ["
+                                        << columnName << "] value ["
+                                        << result.value(i) << "]";
             tempBindingMap.insert(columnName.insert(0, QLatin1Char(':')), result.value(i));
             ++i;
         }
 
-        // insert the previous requested values to the toDB
-        DbEngineAction action                            = toDBbackend.getDBAction(toActionName);
+        // Insert the previous requested values to the DB
+
+        DbEngineAction action                        = toDBbackend.getDBAction(toActionName);
         BdEngineBackend::QueryState queryStateResult = toDBbackend.execDBAction(action, tempBindingMap);
 
         if (queryStateResult != BdEngineBackend::NoErrors &&
-            toDBbackend.lastSQLError().isValid()              &&
+            toDBbackend.lastSQLError().isValid()          &&
             toDBbackend.lastSQLError().number() != 0)
         {
             qCDebug(DIGIKAM_COREDB_LOG) << "Core database: error while converting table data. Details: " << toDBbackend.lastSQLError();
