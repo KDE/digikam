@@ -61,6 +61,7 @@ private:
 private:
 
     PGFSettings* m_settings;
+    bool         m_changeSettings;
 };
 
 }  // namespace Digikam

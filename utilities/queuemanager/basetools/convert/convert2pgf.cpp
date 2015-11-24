@@ -46,6 +46,7 @@ Convert2PGF::Convert2PGF(QObject* const parent)
     : BatchTool(QLatin1String("Convert2PGF"), ConvertTool, parent)
 {
     m_settings = 0;
+    m_changeSettings = true;
 
     setToolTitle(i18n("Convert To PGF"));
     setToolDescription(i18n("Convert images to PGF format."));
@@ -81,16 +82,21 @@ BatchToolSettings Convert2PGF::defaultSettings()
 
 void Convert2PGF::slotAssignSettings2Widget()
 {
+    m_changeSettings = false;
     m_settings->setCompressionValue(settings()[QLatin1String("quality")].toInt());
     m_settings->setLossLessCompression(settings()[QLatin1String("lossless")].toBool());
+    m_changeSettings = true;
 }
 
 void Convert2PGF::slotSettingsChanged()
 {
-    BatchToolSettings settings;
-    settings.insert(QLatin1String("quality"),  m_settings->getCompressionValue());
-    settings.insert(QLatin1String("lossless"), m_settings->getLossLessCompression());
-    BatchTool::slotSettingsChanged(settings);
+    if (m_changeSettings)
+    {
+        BatchToolSettings settings;
+        settings.insert(QLatin1String("quality"),  m_settings->getCompressionValue());
+        settings.insert(QLatin1String("lossless"), m_settings->getLossLessCompression());
+        BatchTool::slotSettingsChanged(settings);
+    }
 }
 
 QString Convert2PGF::outputSuffix() const
