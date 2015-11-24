@@ -47,6 +47,8 @@ Blur::Blur(QObject* const parent)
     : BatchTool(QLatin1String("Blur"), EnhanceTool, parent),
       m_radiusInput(0)
 {
+    m_changeSettings = true;
+
     setToolTitle(i18n("Blur Image"));
     setToolDescription(i18n("Blur images"));
     setToolIconName(QLatin1String("blurimage"));
@@ -85,24 +87,25 @@ void Blur::registerSettingsWidget()
 BatchToolSettings Blur::defaultSettings()
 {
     BatchToolSettings settings;
-
     settings.insert(QLatin1String("Radius"), (int)m_radiusInput->defaultValue());
-
     return settings;
 }
 
 void Blur::slotAssignSettings2Widget()
 {
+    m_changeSettings = false;
     m_radiusInput->setValue(settings()[QLatin1String("Radius")].toInt());
+    m_changeSettings = true;
 }
 
 void Blur::slotSettingsChanged()
 {
-    BatchToolSettings settings;
-
-    settings.insert(QLatin1String("Radius"), (int)m_radiusInput->value());
-
-    BatchTool::slotSettingsChanged(settings);
+    if (m_changeSettings)
+    {
+        BatchToolSettings settings;
+        settings.insert(QLatin1String("Radius"), (int)m_radiusInput->value());
+        BatchTool::slotSettingsChanged(settings);
+    }
 }
 
 bool Blur::toolOperations()
