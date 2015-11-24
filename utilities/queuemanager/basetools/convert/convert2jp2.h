@@ -61,6 +61,7 @@ private:
 private:
 
     JP2KSettings* m_settings;
+    bool          m_changeSettings;
 };
 
 }  // namespace Digikam
