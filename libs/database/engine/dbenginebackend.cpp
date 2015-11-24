@@ -849,6 +849,10 @@ BdEngineBackend::QueryState BdEngineBackend::handleQueryResult(DbEngineSqlQuery&
         {
             return BdEngineBackend::ConnectionError;
         }
+        else
+        {
+            return BdEngineBackend::SQLError;
+        }
     }
 
     if (lastInsertId)
