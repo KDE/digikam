@@ -113,7 +113,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
 
     // Delete all tables
 
-    for (int i = 0; m_isStopProcessing || i < tablesSize; ++i)
+    for (int i=(tablesSize - 1); m_isStopProcessing || i >= 0; --i)
     {
         if (toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS %1;").arg(tables[i])) != BdEngineBackend::NoErrors)
         {
