@@ -61,6 +61,7 @@ private:
 private:
 
     PNGSettings* m_settings;
+    bool         m_changeSettings;
 };
 
 }  // namespace Digikam

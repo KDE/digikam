@@ -46,6 +46,8 @@ Convert2PNG::Convert2PNG(QObject* const parent)
     : BatchTool(QLatin1String("Convert2PNG"), ConvertTool, parent)
 {
     m_settings = 0;
+    m_changeSettings = true;
+
     setToolTitle(i18n("Convert To PNG"));
     setToolDescription(i18n("Convert images to PNG format."));
     setToolIconName(QLatin1String("image-png"));
@@ -78,14 +80,19 @@ BatchToolSettings Convert2PNG::defaultSettings()
 
 void Convert2PNG::slotAssignSettings2Widget()
 {
+    m_changeSettings = false;
     m_settings->setCompressionValue(settings()[QLatin1String("Quality")].toInt());
+    m_changeSettings = true;
 }
 
 void Convert2PNG::slotSettingsChanged()
 {
-    BatchToolSettings settings;
-    settings.insert(QLatin1String("Quality"), m_settings->getCompressionValue());
-    BatchTool::slotSettingsChanged(settings);
+    if (m_changeSettings)
+    {
+        BatchToolSettings settings;
+        settings.insert(QLatin1String("Quality"), m_settings->getCompressionValue());
+        BatchTool::slotSettingsChanged(settings);
+    }
 }
 
 QString Convert2PNG::outputSuffix() const
