@@ -142,7 +142,7 @@ void DatabaseSettingsWidget::setupMainArea()
     hostName                                         = new QLineEdit();
     hostName->setPlaceholderText(i18n("Set the host computer name"));
     hostName->setToolTip(i18n("This is the computer name running Mysql server.\nThis can be \"localhost\" for a local server, or the network computer\n"
-                              "name (or IP adress) in case of remote computer."));
+                              "name (or IP address) in case of remote computer."));
     QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
     hostPort                                         = new QSpinBox();
     hostPort->setToolTip(i18n("Set the host computer port.\nUsually, Mysql server use port number 3306 by default"));

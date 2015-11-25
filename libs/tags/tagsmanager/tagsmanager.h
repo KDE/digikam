@@ -102,7 +102,7 @@ private Q_SLOTS:
 
     /**
      * @brief slotCreateTagAddr - connected to createTagAddr action and
-     *                            will create tags from Adressbook
+     *                            will create tags from Addressbook
      */
     void slotCreateTagAddr();
 
