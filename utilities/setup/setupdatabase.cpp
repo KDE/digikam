@@ -161,6 +161,7 @@ void SetupDatabase::applySettings()
             {
                 settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
                 settings->saveSettings();
+                DatabaseServerStarter::stopServerManagerProcess();
             }
             break;
         }
@@ -175,6 +176,7 @@ void SetupDatabase::applySettings()
         {
             settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
             settings->saveSettings();
+            DatabaseServerStarter::stopServerManagerProcess();
             break;
         }
     }

@@ -48,6 +48,7 @@ public:
 
     explicit DatabaseServerStarter(QObject* const parent=0);
     static DatabaseServerError startServerManagerProcess(const QString& dbType = DbEngineParameters::MySQLDatabaseType());
+    static void stopServerManagerProcess(const QString& dbType = DbEngineParameters::MySQLDatabaseType());
     static void cleanUp();
 
 private:

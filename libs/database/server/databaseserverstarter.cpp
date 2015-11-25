@@ -81,6 +81,7 @@ bool DatabaseServerStarter::__init=DatabaseServerStarter::init();
 DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QString& dbType)
 {
     DatabaseServerError result;
+
     /*
      * TODO:
      * 1. Acquire semaphore lock on "DigikamDBSrvAccess"
@@ -160,6 +161,25 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
     sem.release();
 
     return result;
+}
+
+void DatabaseServerStarter::stopServerManagerProcess(const QString& dbType)
+{
+    QSystemSemaphore sem(QLatin1String("DigikamDBSrvAccess"), 1, QSystemSemaphore::Open);
+    sem.acquire();
+
+    if (isServerRegistered())
+    {
+        QDBusInterface dbus_iface(QLatin1String("org.kde.digikam.DatabaseServer"), QLatin1String("/DatabaseServer"));
+        QDBusMessage stateMsg = dbus_iface.call(QLatin1String("isRunning"));
+        
+        if (stateMsg.arguments().at(0).toBool())
+        {
+            dbus_iface.call(QLatin1String("stopDatabaseProcess"));
+        }
+    }
+    
+    sem.release();
 }
 
 bool DatabaseServerStarter::isServerRegistered()
