@@ -8,6 +8,7 @@
  *               components registered on DBus
  *
  * Copyright (C) 2009-2011 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef POLLTHREAD_H_
-#define POLLTHREAD_H_
+#ifndef _POLL_THREAD_H_
+#define _POLL_THREAD_H_
 
 // Qt includes
 
@@ -42,6 +43,9 @@ public:
     explicit PollThread(QObject* const application);
     void run();
     bool checkDigikamInstancesRunning();
+
+public:
+
     bool stop;
 
 Q_SIGNALS:
@@ -55,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* POLLTHREAD_H_ */
+#endif /* _POLL_THREAD_H_ */
