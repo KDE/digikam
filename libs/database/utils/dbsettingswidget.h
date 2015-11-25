@@ -64,20 +64,19 @@ public:
 
 public:
 
-    QString        originalDbPath;
-    QString        originalDbBackend;
+    DbEngineParameters originalParameters;
 
-    QLineEdit*     dbNameCore;
-    QLineEdit*     dbNameThumbnails;
-    QLineEdit*     dbNameFace;
-    QLineEdit*     hostName;
-    QLineEdit*     connectionOptions;
-    QLineEdit*     userName;
-    QLineEdit*     password;
+    QLineEdit*         dbNameCore;
+    QLineEdit*         dbNameThumbnails;
+    QLineEdit*         dbNameFace;
+    QLineEdit*         hostName;
+    QLineEdit*         connectionOptions;
+    QLineEdit*         userName;
+    QLineEdit*         password;
 
-    QSpinBox*      hostPort;
+    QSpinBox*          hostPort;
 
-    DFileSelector* dbPathEdit;
+    DFileSelector*     dbPathEdit;
 
 public:
 

@@ -474,7 +474,7 @@ void DatabaseSettingsWidget::checkDBPath()
     if (!dbPathEdit->lineEdit()->text().isEmpty())
     {
         QDir dbDir(newPath);
-        QDir oldDir(originalDbPath);
+        QDir oldDir(originalParameters.getCoreDatabaseNameOrDir());
 /*
         dbOk          = dbDir.exists();
         pathUnchanged = (dbDir == oldDir);
@@ -487,20 +487,17 @@ void DatabaseSettingsWidget::checkDBPath()
 
 void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings* const settings)
 {
-    DbEngineParameters prm = settings->getDbEngineParameters();
-    originalDbPath         = prm.getCoreDatabaseNameOrDir();
-    originalDbBackend      = prm.databaseType;
+    originalParameters = settings->getDbEngineParameters();
 
-    dbPathEdit->lineEdit()->setText(prm.getCoreDatabaseNameOrDir());
-
-    if (prm.databaseType == DbEngineParameters::SQLiteDatabaseType())
+    if (originalParameters.databaseType == DbEngineParameters::SQLiteDatabaseType())
     {
+        dbPathEdit->lineEdit()->setText(originalParameters.getCoreDatabaseNameOrDir());
         d->dbType->setCurrentIndex(SQlite);
     }
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
-    else if (prm.databaseType == DbEngineParameters::MySQLDatabaseType() && prm.internalServer)
+    else if (originalParameters.databaseType == DbEngineParameters::MySQLDatabaseType() && originalParameters.internalServer)
     {
         d->dbType->setCurrentIndex(MysqlInternal);
     }
@@ -511,15 +508,15 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     }
 #endif
 
-    dbNameCore->setText(prm.databaseNameCore);
-    dbNameThumbnails->setText(prm.databaseNameThumbnails);
-    dbNameFace->setText(prm.databaseNameFace);
-    hostName->setText(prm.hostName);
-    hostPort->setValue(prm.port);
-    connectionOptions->setText(prm.connectOptions);
+    dbNameCore->setText(originalParameters.databaseNameCore);
+    dbNameThumbnails->setText(originalParameters.databaseNameThumbnails);
+    dbNameFace->setText(originalParameters.databaseNameFace);
+    hostName->setText(originalParameters.hostName);
+    hostPort->setValue(originalParameters.port);
+    connectionOptions->setText(originalParameters.connectOptions);
 
-    userName->setText(prm.userName);
-    password->setText(prm.password);
+    userName->setText(originalParameters.userName);
+    password->setText(originalParameters.password);
 
     slotHandleDBTypeIndexChanged(d->dbType->currentIndex());
 }

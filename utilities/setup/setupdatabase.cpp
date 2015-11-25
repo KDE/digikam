@@ -151,10 +151,10 @@ void SetupDatabase::applySettings()
     if (d->databaseWidget->databaseBackend() == QString(DbEngineParameters::SQLiteDatabaseType()))
     {
         QString newPath = d->databaseWidget->dbPathEdit->lineEdit()->text();
-        QDir oldDir(d->databaseWidget->originalDbPath);
+        QDir oldDir(d->databaseWidget->originalParameters.getCoreDatabaseNameOrDir());
         QDir newDir(newPath);
 
-        if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->originalDbBackend)
+        if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->originalParameters.databaseType)
         {
             settings->setDbEngineParameters(DbEngineParameters::parametersForSQLiteDefaultFile(newPath));
         }
@@ -180,9 +180,9 @@ void SetupDatabase::applySettings()
             serverParameters.password               = d->databaseWidget->password->text();
             settings->setDbEngineParameters(serverParameters);  
         }
-
-        settings->saveSettings();
     }
+
+    settings->saveSettings();
 }
 
 void SetupDatabase::readSettings()
