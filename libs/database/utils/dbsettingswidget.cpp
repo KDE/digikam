@@ -39,6 +39,7 @@
 #include <QStyle>
 #include <QMessageBox>
 #include <QTextBrowser>
+#include <QTabWidget>
 
 // KDE includes
 
@@ -76,6 +77,7 @@ public:
         password       = 0;
         hostPort       = 0;
         dbPathEdit     = 0;
+        tab            = 0;
     }
 
     QLineEdit*         dbNameCore;
@@ -93,9 +95,10 @@ public:
     QTextBrowser*      sqlInit;
     QGroupBox*         expertSettings;
     QGroupBox*         dbNoticeBox;
-    
+    QTabWidget*        tab;
+
     DFileSelector*     dbPathEdit;
-    
+
     DbEngineParameters orgPrms;
 };
 
@@ -145,6 +148,8 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbPathEdit->setFileDlgMode(QFileDialog::Directory);
 
     // --------------------------------------------------------
+
+    d->tab = new QTabWidget(this);
 
     QLabel* const dbNameCoreLabel                    = new QLabel(i18n("Core Db Name:"));
     d->dbNameCore                                    = new QLineEdit();
@@ -203,13 +208,7 @@ void DatabaseSettingsWidget::setupMainArea()
 
     expertSettinglayout->addWidget(checkDatabaseConnectionButton);
 
-    vlay->addWidget(typeHbox);
-    vlay->addWidget(new DLineWidget(Qt::Horizontal));
-    vlay->addWidget(d->dbPathLabel);
-    vlay->addWidget(d->dbPathEdit);
-    vlay->addWidget(d->expertSettings);
-    vlay->setContentsMargins(spacing, spacing, spacing, spacing);
-    vlay->setSpacing(spacing);
+    d->tab->addTab(d->expertSettings, i18n("Remote Server Settings"));
 
     // --------------------------------------------------------
 
@@ -231,12 +230,23 @@ void DatabaseSettingsWidget::setupMainArea()
     vlay2->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay2->setSpacing(spacing);
 
+    d->tab->addTab(d->dbNoticeBox, i18n("Requirements"));
+
+    // --------------------------------------------------------
+
+    vlay->addWidget(typeHbox);
+    vlay->addWidget(new DLineWidget(Qt::Horizontal));
+    vlay->addWidget(d->dbPathLabel);
+    vlay->addWidget(d->dbPathEdit);
+    vlay->addWidget(d->tab);
+    vlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    vlay->setSpacing(spacing);
+
     // --------------------------------------------------------
 
     layout->setContentsMargins(QMargins());
     layout->setSpacing(spacing);
     layout->addWidget(dbConfigBox);
-    layout->addWidget(d->dbNoticeBox);
     layout->addStretch();
 
     // --------- fill with default values ---------------------
@@ -384,7 +394,7 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
         {
             d->dbPathLabel->setVisible(true);
             d->dbPathEdit->setVisible(true);
-            d->expertSettings->setVisible(false);
+            d->tab->setVisible(false);
 
             connect(d->dbPathEdit, SIGNAL(signalUrlSelected(QUrl)),
                     this, SLOT(slotChangeDatabasePath(QUrl)));
@@ -392,22 +402,19 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
             connect(d->dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
                     this, SLOT(slotDatabasePathEditedDelayed()));
 
-            d->dbNoticeBox->setVisible(false);
             break;
         }
         default: // MysqlServer
         {
             d->dbPathLabel->setVisible(false);
             d->dbPathEdit->setVisible(false);
-            d->expertSettings->setVisible(true);
+            d->tab->setVisible(true);
 
             disconnect(d->dbPathEdit, SIGNAL(signalUrlSelected(QUrl)),
                        this, SLOT(slotChangeDatabasePath(QUrl)));
 
             disconnect(d->dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
                        this, SLOT(slotDatabasePathEditedDelayed()));
-
-            d->dbNoticeBox->setVisible(index == MysqlServer);
             break;
         }
     }
@@ -563,7 +570,7 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
         case SQlite:
             prm = DbEngineParameters::parametersForSQLiteDefaultFile(databasePath());
             break;
-            
+
         case MysqlInternal:
             prm = DbEngineParameters::defaultParameters(databaseBackend());
             prm.setInternalServerPath(databasePath());
@@ -582,7 +589,7 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
             prm.password               = d->password->text();
             break;
     }
-    
+
     return prm;
 }
 
