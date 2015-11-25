@@ -64,30 +64,17 @@ public:
 
 public:
 
-    DbEngineParameters originalParameters;
-
-    QLineEdit*         dbNameCore;
-    QLineEdit*         dbNameThumbnails;
-    QLineEdit*         dbNameFace;
-    QLineEdit*         hostName;
-    QLineEdit*         connectionOptions;
-    QLineEdit*         userName;
-    QLineEdit*         password;
-
-    QSpinBox*          hostPort;
-
-    DFileSelector*     dbPathEdit;
-
-public:
-
     void setParametersFromSettings(const ApplicationSettings* const settings);
     DbEngineParameters getDbEngineParameters() const;
 
-    void setDatabaseType(int type);
-    int  databaseType() const;
+    void    setDatabaseType(int type);
+    int     databaseType()    const;
 
     QString databaseBackend() const;
+    QString databasePath()    const;
 
+    DbEngineParameters orgDatabasePrm() const;
+    
 public Q_SLOTS:
 
     void checkDatabaseConnection();

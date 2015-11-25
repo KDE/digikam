@@ -58,6 +58,7 @@
 #include "applicationsettings.h"
 #include "dbsettingswidget.h"
 #include "dbengineparameters.h"
+#include "databaseserverstarter.h"
 #include "scancontroller.h"
 #include "coredbschemaupdater.h"
 
@@ -148,41 +149,35 @@ void SetupDatabase::applySettings()
         return;
     }
 
-    if (d->databaseWidget->databaseBackend() == QString(DbEngineParameters::SQLiteDatabaseType()))
+    switch(d->databaseWidget->databaseType())
     {
-        QString newPath = d->databaseWidget->dbPathEdit->lineEdit()->text();
-        QDir oldDir(d->databaseWidget->originalParameters.getCoreDatabaseNameOrDir());
-        QDir newDir(newPath);
-
-        if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->originalParameters.databaseType)
+        case DatabaseSettingsWidget::SQlite:
         {
-            settings->setDbEngineParameters(DbEngineParameters::parametersForSQLiteDefaultFile(newPath));
+            QString newPath = d->databaseWidget->databasePath();
+            QDir oldDir(d->databaseWidget->orgDatabasePrm().getCoreDatabaseNameOrDir());
+            QDir newDir(newPath);
+
+            if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->orgDatabasePrm().databaseType)
+            {
+                settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+                settings->saveSettings();
+            }
+            break;
+        }
+        case DatabaseSettingsWidget::MysqlInternal:
+        {
+            settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+            settings->saveSettings();
+            DatabaseServerStarter::startServerManagerProcess(d->databaseWidget->databaseBackend());
+            break;
+        }
+        default: // DatabaseSettingsWidget::MysqlServer
+        {
+            settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+            settings->saveSettings();
+            break;
         }
     }
-    else
-    {
-        if (d->databaseWidget->databaseType() == DatabaseSettingsWidget::MysqlInternal)
-        {
-            settings->setDbEngineParameters(DbEngineParameters::defaultParameters(d->databaseWidget->databaseBackend()));
-        }
-        else
-        {
-            DbEngineParameters serverParameters;
-            serverParameters.internalServer         = (d->databaseWidget->databaseType() == DatabaseSettingsWidget::MysqlInternal);
-            serverParameters.databaseType           = d->databaseWidget->databaseBackend();
-            serverParameters.databaseNameCore       = d->databaseWidget->dbNameCore->text();
-            serverParameters.databaseNameThumbnails = d->databaseWidget->dbNameThumbnails->text();
-            serverParameters.databaseNameFace       = d->databaseWidget->dbNameFace->text();
-            serverParameters.connectOptions         = d->databaseWidget->connectionOptions->text();
-            serverParameters.hostName               = d->databaseWidget->hostName->text();
-            serverParameters.port                   = d->databaseWidget->hostPort->text().toInt();
-            serverParameters.userName               = d->databaseWidget->userName->text();
-            serverParameters.password               = d->databaseWidget->password->text();
-            settings->setDbEngineParameters(serverParameters);  
-        }
-    }
-
-    settings->saveSettings();
 }
 
 void SetupDatabase::readSettings()
