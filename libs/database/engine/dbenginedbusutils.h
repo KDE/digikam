@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBENGINE_DBUS_UTILITIES_H
-#define DBENGINE_DBUS_UTILITIES_H
+#ifndef DATABASE_ENGINE_DBUS_UTILITIES_H
+#define DATABASE_ENGINE_DBUS_UTILITIES_H
 
 class QDBusArgument;
 
@@ -41,4 +41,4 @@ inline const QDBusArgument& operator>>(const QDBusArgument& argument, x& changes
     return argument;                                                                \
 }
 
-#endif // DBENGINE_DBUS_UTILITIES_H
+#endif // DATABASE_ENGINE_DBUS_UTILITIES_H

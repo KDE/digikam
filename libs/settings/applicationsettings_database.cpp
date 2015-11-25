@@ -32,7 +32,7 @@
 
 namespace Digikam
 {
-    
+
 void ApplicationSettings::setSyncBalooToDigikam(bool val)
 {
     d->syncToDigikam = val;

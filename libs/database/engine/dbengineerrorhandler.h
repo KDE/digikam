@@ -62,7 +62,9 @@ public:
 public Q_SLOTS:
 
     // NOTE: These all need to be slots, possibly called by queued connection
-    /** In the situation of a connection error,
+
+    /**
+     *  In the situation of a connection error,
      *  all threads will be waiting with their queries
      *  and this method is called.
      *  This method can display an error dialog and try to repair
@@ -73,7 +75,8 @@ public Q_SLOTS:
      */
     virtual void connectionError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString& query) = 0;
 
-    /** In the situation of an error requiring user intervention or information,
+    /**
+     *  In the situation of an error requiring user intervention or information,
      *  all threads will be waiting with their queries
      *  and this method is called.
      *  This method can display an error dialog.
