@@ -163,7 +163,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
     return result;
 }
 
-void DatabaseServerStarter::stopServerManagerProcess(const QString& dbType)
+void DatabaseServerStarter::stopServerManagerProcess()
 {
     QSystemSemaphore sem(QLatin1String("DigikamDBSrvAccess"), 1, QSystemSemaphore::Open);
     sem.acquire();

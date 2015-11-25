@@ -1,7 +1,6 @@
 TODO List
 ---------
 
-- It's not possible to set-up DB file path with MySql Internal, as with SQlite.
 - Better handling of legacy database setting parameters.
 - Write new database setting parameters in FirstRun dialog.
 - Because digiKam use function declaration, Mysql server need to be prepared before to be used,

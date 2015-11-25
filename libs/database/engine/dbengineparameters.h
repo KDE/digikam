@@ -62,7 +62,8 @@ public:
                        const QString& _userName = QString(),
                        const QString& _password = QString(),
                        const QString& _databaseNameThumbnails = QString(),
-                       const QString& _databaseNameFace = QString()
+                       const QString& _databaseNameFace = QString(),
+                       const QString& _internalServerDBPath = QString() 
                       );
 
     DbEngineParameters();
@@ -119,11 +120,10 @@ public:
      * For non-SQLite, this simply sets the database name.
      * For Mysql, this simply sets the database name.
      */
-
     QString getCoreDatabaseNameOrDir()   const;
     QString getThumbsDatabaseNameOrDir() const;
     QString getFaceDatabaseNameOrDir()   const;
-
+    
     /// Use these methods if you set a file or a folder.
     void setCoreDatabasePath(const QString& folderOrFileOrName);
     void setThumbsDatabasePath(const QString& folderOrFileOrName);
@@ -136,6 +136,12 @@ public:
     static QString coreDatabaseDirectorySQLite(const QString& path);
     static QString thumbnailDatabaseDirectorySQLite(const QString& path);
     static QString faceDatabaseDirectorySQLite(const QString& path);
+
+    /**
+     * For Mysql internal server: manage the database path to store database files.
+     */
+    void    setInternalServerPath(const QString& path);
+    QString internalServerPath() const;
 
     /**
      * Replaces databaseName with databaseNameThumbnails.
@@ -176,6 +182,7 @@ public:
 
     QString databaseNameThumbnails;
     QString databaseNameFace;
+    QString internalServerDBPath;
 };
 
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DbEngineParameters& t);

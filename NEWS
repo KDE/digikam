@@ -13,6 +13,7 @@ General            : Isolating KIO calls in KIOWrapper to be able to create a pu
 General            : Add embedded trash support for each collection instead desktop trash.
 
 Database           : Fully integration of face recognition database with Mysql support.
+Database           : Mysql internal server is now configurable as Sqlite to store database files at a customized place.
 
 Batch Queue Manager: New BQM tool to convert RAW to DNG.
 

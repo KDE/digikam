@@ -379,7 +379,7 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
 {
     switch(index)
     {
-        //case MysqlInternal:
+        case MysqlInternal:
         case SQlite:
         {
             d->dbPathLabel->setVisible(true);
@@ -531,6 +531,7 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
 #   ifdef HAVE_INTERNALMYSQL
     else if (d->orgPrms.databaseType == DbEngineParameters::MySQLDatabaseType() && d->orgPrms.internalServer)
     {
+        d->dbPathEdit->lineEdit()->setText(d->orgPrms.internalServerPath());
         d->dbType->setCurrentIndex(MysqlInternal);
     }
 #   endif
@@ -565,7 +566,7 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
             
         case MysqlInternal:
             prm = DbEngineParameters::defaultParameters(databaseBackend());
-            //DatabaseServerStarter::startServerManagerProcess(databaseBackend());
+            prm.setInternalServerPath(databasePath());
             break;
 
         default: // MysqlServer

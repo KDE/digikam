@@ -42,6 +42,7 @@
 
 // KDE includes
 
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -146,7 +147,9 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 {
     DatabaseServerError result;
     const QString dbType(DbEngineParameters::MySQLDatabaseType());
-    DbEngineParameters internalServerParameters = DbEngineParameters::defaultParameters(dbType);
+    DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig(QLatin1String("digikamrc")));
+
+    //qCDebug(DIGIKAM_DATABASESERVER_LOG) << internalServerParameters;
 
     d->pollThread->stop = false;
 
@@ -161,10 +164,23 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     // create the database directories if they don't exists
 
-    const QString akDir       = DbEngineParameters::internalServerPrivatePath();
-    const QString dataDir     = akDir + QLatin1String("db_data");
-    const QString miscDir     = akDir + QLatin1String("db_misc");
-    const QString fileDataDir = akDir + QLatin1String("file_db_data");
+    QString defaultAkDir = DbEngineParameters::internalServerPrivatePath();
+    QString akDir        = defaultAkDir;
+
+    if (internalServerParameters.internalServerPath().isEmpty())
+    {
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Internal Server data path is empty : we will use default path";
+    }
+    else if (internalServerParameters.internalServerPath() != defaultAkDir)
+    {
+        akDir = internalServerParameters.internalServerPath() + QLatin1String("/.mysql.digikam/");
+    }
+
+    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Internal Server data path: " << akDir;
+
+    const QString dataDir     = akDir        + QLatin1String("db_data");
+    const QString miscDir     = defaultAkDir + QLatin1String("db_misc");
+    const QString fileDataDir = defaultAkDir + QLatin1String("file_db_data");
 
     /*
     * TODO Move the database command outside of the code to the dbconfig.xml file.
@@ -175,6 +191,11 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
                                .arg(DbEngineConfig::element(dbType).dbInitCmd)
                                .arg(getcurrentAccountUserName())
                                .arg(dataDir));
+
+    if (!QFile::exists(defaultAkDir))
+    {
+        QDir().mkpath(defaultAkDir);
+    }
 
     if (!QFile::exists(akDir))
     {
@@ -198,7 +219,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-global.conf"));
     const QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-local.conf"));
-    const QString actualConfig = akDir + QLatin1String("mysql.conf");
+    const QString actualConfig = defaultAkDir + QLatin1String("mysql.conf");
 
     if ( globalConfig.isEmpty() )
     {
@@ -309,7 +330,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     // synthesize the mysqld command
     QStringList arguments;
-    arguments << QString::fromLatin1( "--defaults-file=%1/mysql.conf" ).arg( akDir );
+    arguments << QString::fromLatin1( "--defaults-file=%1/mysql.conf" ).arg( defaultAkDir );
     arguments << QString::fromLatin1( "--datadir=%1/" ).arg( dataDir );
     arguments << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
 

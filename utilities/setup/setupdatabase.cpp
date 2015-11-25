@@ -167,9 +167,16 @@ void SetupDatabase::applySettings()
         }
         case DatabaseSettingsWidget::MysqlInternal:
         {
-            settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
-            settings->saveSettings();
-            DatabaseServerStarter::startServerManagerProcess(d->databaseWidget->databaseBackend());
+            QString newPath = d->databaseWidget->databasePath();
+            QDir oldDir(d->databaseWidget->orgDatabasePrm().internalServerPath());
+            QDir newDir(newPath);
+
+            if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->orgDatabasePrm().databaseType)
+            {
+                settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+                settings->saveSettings();
+                DatabaseServerStarter::startServerManagerProcess(d->databaseWidget->databaseBackend());
+            }
             break;
         }
         default: // DatabaseSettingsWidget::MysqlServer
