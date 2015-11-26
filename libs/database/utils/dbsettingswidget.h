@@ -76,20 +76,21 @@ public:
     QString databasePath() const;
 
     DbEngineParameters orgDatabasePrm() const;
-    
+
     /**
      * For Sqlite or MysqlInternal, check properties of local path to store database files.
      * For LysqlServer, check the network connection and database names.
      */
     bool checkDatabaseSettings();
-    
+
 private:
 
     void setupMainArea();
     void handleInternalServer(int index);
     void setDatabaseInputFields(int index);
-    bool checkDatabaseConnection(QString& error);
-    bool checkDatabaseConfiguration(QString& error);
+    bool checkMysqlServerConnection(QString& error);
+    bool checkMysqlServerConnectionConfig(QString& error);
+    bool checkMysqlServerDbNamesConfig(QString& error);
 
 private Q_SLOTS:
 

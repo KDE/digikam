@@ -471,7 +471,7 @@ void DatabaseSettingsWidget::slotCheckMysqlServerConnection()
 {
     QString error;
 
-    if (checkDatabaseConnection(error))
+    if (checkMysqlServerConnection(error))
     {
         QMessageBox::information(qApp->activeWindow(), i18n("Database connection test"),
                                  i18n("Database connection test successful."));
@@ -484,20 +484,25 @@ void DatabaseSettingsWidget::slotCheckMysqlServerConnection()
     }
 }
 
-bool DatabaseSettingsWidget::checkDatabaseConfiguration(QString& error)
+bool DatabaseSettingsWidget::checkMysqlServerConnectionConfig(QString& error)
 {
     if (d->hostName->text().isEmpty())
     {
         error = i18n("The server hostname is empty");
         return false;
     }
-    
+
     if (d->userName->text().isEmpty())
     {
         error = i18n("The server user name is empty");
         return false;
     }
 
+    return true;
+}
+
+bool DatabaseSettingsWidget::checkMysqlServerDbNamesConfig(QString& error)
+{
     if (d->dbNameCore->text().isEmpty())
     {
         error = i18n("The core database name is empty");
@@ -515,12 +520,17 @@ bool DatabaseSettingsWidget::checkDatabaseConfiguration(QString& error)
         error = i18n("The face database name is empty");
         return false;
     }
-    
+
     return true;
 }
-    
-bool DatabaseSettingsWidget::checkDatabaseConnection(QString& error)
+
+bool DatabaseSettingsWidget::checkMysqlServerConnection(QString& error)
 {
+    if (!checkMysqlServerConnectionConfig(error))
+    {
+        return false;
+    }
+
     qApp->setOverrideCursor(Qt::WaitCursor);
 
     QString databaseID(QLatin1String("ConnectionTest"));
@@ -705,16 +715,25 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
         {
             QString error;
 
-            if (!checkDatabaseConfiguration(error))
+            if (!checkMysqlServerConnectionConfig(error))
             {
                 QMessageBox::critical(qApp->activeWindow(), i18n("Database configuration"),
-                                      i18n("The database configuration is not valid. Error is <br/><p>%1</p><br/>"
+                                      i18n("The database connection configuration is not valid. Error is <br/><p>%1</p><br/>"
                                            "Please check your configuration.",
                                            error));
                 return false;
             }
-            
-            if (!checkDatabaseConnection(error))
+
+            if (!checkMysqlServerDbNamesConfig(error))
+            {
+                QMessageBox::critical(qApp->activeWindow(), i18n("Database configuration"),
+                                      i18n("The database names configuration is not valid. Error is <br/><p>%1</p><br/>"
+                                           "Please check your configuration.",
+                                           error));
+                return false;
+            }
+
+            if (!checkMysqlServerConnection(error))
             {
                 QMessageBox::critical(qApp->activeWindow(), i18n("Database connection test"),
                                       i18n("Testing database connection has failed with error<br/><p>%1</p><br/>"
