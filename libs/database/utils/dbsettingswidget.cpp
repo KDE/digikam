@@ -78,6 +78,7 @@ public:
         hostPort       = 0;
         dbPathEdit     = 0;
         tab            = 0;
+        dbDetailsBox   = 0;
     }
 
     QLineEdit*         dbNameCore;
@@ -95,6 +96,7 @@ public:
     QTextBrowser*      sqlInit;
     QGroupBox*         expertSettings;
     QGroupBox*         dbNoticeBox;
+    QGroupBox*         dbDetailsBox;
     QTabWidget*        tab;
 
     DFileSelector*     dbPathEdit;
@@ -231,6 +233,34 @@ void DatabaseSettingsWidget::setupMainArea()
     vlay2->setSpacing(spacing);
 
     d->tab->addTab(d->dbNoticeBox, i18n("Requirements"));
+
+    // --------------------------------------------------------
+
+    d->dbDetailsBox          = new QGroupBox(i18n("Database Server Technical Details"), this);
+    QVBoxLayout* const vlay3 = new QVBoxLayout(d->dbDetailsBox);
+    QLabel* const details    = new QLabel(i18n("<p>Use this configuration view to set all information "
+                                               "to be connected to a remote Mysql database server through the network. "
+                                               "As with Sqlite or Mysql internal server, 3 databases will be stored "
+                                               "on the remote server: one for all collections properties, "
+                                               "one to store compressed thumbnails, and one to store faces "
+                                               "recognition metadata.</p>"
+                                               "<p>Unlike Sqlite or Mysql internal server, you can customize the "
+                                               "database names to simplify your backups.</p>"
+                                               "<p>Databases are digiKam core engines. To prevent performance issues, "
+                                               "take a care to use a fast network link between the client and the server "
+                                               "computers. It's also recommended to host database files on "
+                                               "fast hardware (as SSD) with enough free space, "
+                                               "especially for thumbnails database.</p>"
+                                               "<p>The databases must be create on the remote server by the administrator. "
+                                               "Look in <b>Requirements</b> tab for details.</p>"),
+                                               d->dbDetailsBox);
+    details->setWordWrap(true);
+
+    vlay3->addWidget(details);
+    vlay3->setContentsMargins(spacing, spacing, spacing, spacing);
+    vlay3->setSpacing(spacing);
+
+    d->tab->addTab(d->dbDetailsBox, i18n("Documentation"));
 
     // --------------------------------------------------------
 
