@@ -86,53 +86,55 @@ public:
      */
     //@{
     /**
-    * Initialize. Informs the user about failures.
-    * Returns true on success, false on failure.
-    * A return value of false during startup indicates termination of the program
-    * (user is informed)
-    */
+     * Initialize. Informs the user about failures.
+     * Returns true on success, false on failure.
+     * A return value of false during startup indicates termination of the program
+     * (user is informed)
+     */
     bool setDatabase(const DbEngineParameters& params, bool priority, const QString suggestedAlbumRoot = QString());
 
-    /** Some checks for settings done in first run wizard */
+    /**
+     * Some checks for settings done in first run wizard in case of QSlite Database.
+     */
     static void checkDatabaseDirsAfterFirstRun(const QString& dbPath, const QString& albumPath);
 
     /**
-    * Sets new database when chosen by the user in setup.
-    * Handles user notification about problems.
-    * Call this instead of setDatabase when digikam is up and running.
-    */
+     * Sets new database when chosen by the user in setup.
+     * Handles user notification about problems.
+     * Call this instead of setDatabase when digikam is up and running.
+     */
     void changeDatabase(const DbEngineParameters& params);
 
     /**
-    * Stop ongoing operations, prepare for application shutdown
-    */
+     * Stop ongoing operations, prepare for application shutdown
+     */
     void cleanUp();
 
     /**
-    * Checks if the given database path is equal to the current one
-    */
+     * Checks if the given database path is equal to the current one
+     */
     bool databaseEqual(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort, bool dbInternalServer) const;
 
     /**
-    * starts scanning the libraryPath and listing the albums. If the
-    * libraryPath has not changed since the lastscan, then nothing happens
-    * @see setLibraryPath
-    * @see refresh
-    */
+     * starts scanning the libraryPath and listing the albums. If the
+     * libraryPath has not changed since the lastscan, then nothing happens
+     * @see setLibraryPath
+     * @see refresh
+     */
     void       startScan();
 
     /**
-    * This is similar to startScan, except that it assumes you have run
-    * startScan at least once. It checks the database to see if any new albums
-    * have been added and updates them accordingly. Use this when a change in the
-    * filesystem is detected (but the album library path hasn't changed)
-    * @see startScan
-    */
+     * This is similar to startScan, except that it assumes you have run
+     * startScan at least once. It checks the database to see if any new albums
+     * have been added and updates them accordingly. Use this when a change in the
+     * filesystem is detected (but the album library path hasn't changed)
+     * @see startScan
+     */
     void       refresh();
 
     /**
-    * Ensures that valid item counts for physical and tag albums are available
-    */
+     * Ensures that valid item counts for physical and tag albums are available
+     */
     void       prepareItemCounts();
     //@}
 
@@ -165,14 +167,14 @@ public:
     AlbumList allFAlbums() const;
 
     /**
-    * set current album to @p albums. It's similar to setCurrentAlbum,
-    * but suport multiple selected albums
-    */
+     * set current album to @p albums. It's similar to setCurrentAlbum,
+     * but suport multiple selected albums
+     */
     void setCurrentAlbums(QList<Album*> albums);
 
     /**
-    * @returns current albums, previously set up by setCurrentAlbums
-    */
+     * @returns current albums, previously set up by setCurrentAlbums
+     */
     AlbumList currentAlbums() const;
 
     /**
@@ -356,7 +358,7 @@ public:
      * If no corresponding TAlbum exists, a new one will be created.
      * @param tagPaths A list of tag paths
      * @returns A list of all TAlbums for the list (already existing or newly created)
-    */
+     */
     AlbumList findOrCreateTAlbums(const QStringList& tagPaths);
 
     /**

@@ -117,8 +117,7 @@ public:
 
     /**
      * NOTE: In case of SQLite, the database name typically is a file.
-     * For non-SQLite, this simply sets the database name.
-     * For Mysql, this simply sets the database name.
+     * For non-SQLite, this simply handle the database name.
      */
     QString getCoreDatabaseNameOrDir()   const;
     QString getThumbsDatabaseNameOrDir() const;

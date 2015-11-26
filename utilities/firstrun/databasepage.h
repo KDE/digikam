@@ -32,6 +32,7 @@
 // Local includes
 
 #include "assistantdlgpage.h"
+#include "dbengineparameters.h"
 
 namespace Digikam
 {
@@ -49,15 +50,12 @@ public:
     void saveSettings();
 
     void setDatabasePath(const QString& path);
-    QString databasePath() const;
 
-private Q_SLOTS:
-
-    void slotDbPathChanged(const QUrl& url);
+    DbEngineParameters getDbEngineParameters() const;
 
 private:
 
-    bool checkDatabase(QString& dbFolder);
+    bool checkLocalDatabase(QString& dbFolder);
 
 private:
 

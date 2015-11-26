@@ -149,6 +149,11 @@ void SetupDatabase::applySettings()
         return;
     }
 
+    if (!d->databaseWidget->checkLocalDatabase())
+    {
+        return;
+    }
+        
     switch(d->databaseWidget->databaseType())
     {
         case DatabaseSettingsWidget::SQlite:

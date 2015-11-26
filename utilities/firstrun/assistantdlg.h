@@ -33,6 +33,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dbengineparameters.h"
 
 namespace Digikam
 {
@@ -47,7 +48,7 @@ public:
     ~AssistantDlg();
 
     QString firstAlbumPath() const;
-    QString databasePath()   const;
+    DbEngineParameters getDbEngineParameters() const;
 
 private:
 

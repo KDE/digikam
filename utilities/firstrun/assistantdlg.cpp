@@ -120,9 +120,9 @@ QString AssistantDlg::firstAlbumPath() const
     return d->collectionPage->firstAlbumPath();
 }
 
-QString AssistantDlg::databasePath() const
+DbEngineParameters AssistantDlg::getDbEngineParameters() const
 {
-    return d->databasePage->databasePath();
+    return d->databasePage->getDbEngineParameters();
 }
 
 bool AssistantDlg::validateCurrentPage()

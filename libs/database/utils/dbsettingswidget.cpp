@@ -40,6 +40,11 @@
 #include <QMessageBox>
 #include <QTextBrowser>
 #include <QTabWidget>
+#include <QMessageBox>
+#include <QFileInfo>
+#include <QStandardPaths>
+#include <QDir>
+#include <QUrl>
 
 // KDE includes
 
@@ -161,17 +166,18 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbNameThumbs                                  = new QLineEdit();
     d->dbNameThumbs->setPlaceholderText(i18n("Set the thumbnails database name"));
     d->dbNameThumbs->setToolTip(i18n("The thumbnails database is used by digiKam to host\nimage thumbs with wavelets compression images.\n"
-                                      "This one can use quickly a lots of space,\nespecially if you have huge collections."));
+                                     "This one can use quickly a lots of space,\nespecially if you have huge collections."));
     QLabel* const dbNameFaceLabel                    = new QLabel(i18n("Face Db Name:"));
     d->dbNameFace                                    = new QLineEdit();
     d->dbNameFace->setPlaceholderText(i18n("Set the face database name"));
     d->dbNameFace->setToolTip(i18n("The face database is used by digiKam to host image histograms\ndedicated to faces recognition process.\n"
-                                "This one can use quickly a lots of space, especially\nif you a lots of image with people faces detected and tagged."));
+                                   "This one can use quickly a lots of space, especially\nif you a lots of image with people faces detected "
+                                   "and tagged."));
     QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
     d->hostName                                      = new QLineEdit();
     d->hostName->setPlaceholderText(i18n("Set the host computer name"));
-    d->hostName->setToolTip(i18n("This is the computer name running Mysql server.\nThis can be \"localhost\" for a local server, or the network computer\n"
-                              "name (or IP address) in case of remote computer."));
+    d->hostName->setToolTip(i18n("This is the computer name running Mysql server.\nThis can be \"localhost\" for a local server, "
+                                 "or the network computer\n name (or IP address) in case of remote computer."));
     QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
     d->hostPort                                      = new QSpinBox();
     d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, Mysql server use port number 3306 by default"));
@@ -341,6 +347,11 @@ QString DatabaseSettingsWidget::databasePath() const
     return d->dbPathEdit->lineEdit()->text();
 }
 
+void DatabaseSettingsWidget::setDatabasePath(const QString& path)
+{
+    d->dbPathEdit->lineEdit()->setText(path);
+}
+    
 DbEngineParameters DatabaseSettingsWidget::orgDatabasePrm() const
 {
     return d->orgPrms;
@@ -362,52 +373,6 @@ QString DatabaseSettingsWidget::databaseBackend() const
     }
 }
 
-void DatabaseSettingsWidget::slotChangeDatabasePath(const QUrl& result)
-{
-#ifdef _WIN32
-    // Work around bug #189168
-    QTemporaryFile temp;
-    temp.setFileTemplate(result.toLocalFile(QUrl::AddTrailingSlash) + QLatin1String("XXXXXX"));
-    temp.open();
-
-    if (!result.isEmpty() && !temp.open())
-#else
-    QFileInfo targetPath(result.toLocalFile());
-
-    if (!result.isEmpty() && !targetPath.isWritable())
-#endif
-    {
-        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
-                              i18n("You do not seem to have write access to this database folder.\n"
-                                   "Without this access, the caption and tag features will not work."));
-    }
-
-    checkDBPath();
-}
-
-void DatabaseSettingsWidget::slotDatabasePathEditedDelayed()
-{
-    QTimer::singleShot(300, this, SLOT(slotDatabasePathEdited()));
-}
-
-void DatabaseSettingsWidget::slotDatabasePathEdited()
-{
-    QString newPath = databasePath();
-
-#ifndef _WIN32
-
-    if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
-    {
-        d->dbPathEdit->lineEdit()->setText(QDir::homePath() + QLatin1Char('/') + QDir::fromNativeSeparators(newPath));
-    }
-
-#endif
-
-    d->dbPathEdit->lineEdit()->setText(QDir::toNativeSeparators(newPath));
-
-    checkDBPath();
-}
-
 void DatabaseSettingsWidget::slotHandleDBTypeIndexChanged(int index)
 {
     setDatabaseInputFields(index);
@@ -426,9 +391,6 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
             d->dbPathEdit->setVisible(true);
             d->tab->setVisible(false);
 
-            connect(d->dbPathEdit, SIGNAL(signalUrlSelected(QUrl)),
-                    this, SLOT(slotChangeDatabasePath(QUrl)));
-
             connect(d->dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
                     this, SLOT(slotDatabasePathEditedDelayed()));
 
@@ -439,9 +401,6 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
             d->dbPathLabel->setVisible(false);
             d->dbPathEdit->setVisible(false);
             d->tab->setVisible(true);
-
-            disconnect(d->dbPathEdit, SIGNAL(signalUrlSelected(QUrl)),
-                       this, SLOT(slotChangeDatabasePath(QUrl)));
 
             disconnect(d->dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
                        this, SLOT(slotDatabasePathEditedDelayed()));
@@ -532,28 +491,6 @@ void DatabaseSettingsWidget::checkDatabaseConnection()
     QSqlDatabase::removeDatabase(databaseID);
 }
 
-void DatabaseSettingsWidget::checkDBPath()
-{
-/*
-    bool dbOk          = false;
-    bool pathUnchanged = true;
-*/
-    QString newPath    = databasePath();
-
-    if (!newPath.isEmpty())
-    {
-        QDir dbDir(newPath);
-        QDir oldDir(orgDatabasePrm().getCoreDatabaseNameOrDir());
-/*
-        dbOk          = dbDir.exists();
-        pathUnchanged = (dbDir == oldDir);
-*/
-    }
-
-    //TODO create an Enable button slot, if the path is valid
-    //d->mainDialog->enableButtonOk(dbOk);
-}
-
 void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings* const settings)
 {
     d->orgPrms = settings->getDbEngineParameters();
@@ -621,6 +558,90 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
     }
 
     return prm;
+}
+
+void DatabaseSettingsWidget::slotDatabasePathEditedDelayed()
+{
+    QTimer::singleShot(300, this, SLOT(slotDatabasePathEdited()));
+}
+
+void DatabaseSettingsWidget::slotDatabasePathEdited()
+{
+    QString newPath = databasePath();
+
+#ifndef _WIN32
+
+    if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
+    {
+        d->dbPathEdit->lineEdit()->setText(QDir::homePath() + QLatin1Char('/') + QDir::fromNativeSeparators(newPath));
+    }
+
+#endif
+
+    d->dbPathEdit->lineEdit()->setText(QDir::toNativeSeparators(newPath));
+}
+
+bool DatabaseSettingsWidget::checkLocalDatabase() const
+{
+    if (databaseType() == MysqlServer)
+        return true;
+
+    QString dbFolder = databasePath();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Database directory is : " << dbFolder;
+
+    if (dbFolder.isEmpty())
+    {
+        QMessageBox::information(qApp->activeWindow(), qApp->applicationName(), 
+                                 i18n("You must select a folder for digiKam to "
+                                      "store information and metadata in a database file."));
+        return false;
+    }
+
+    QDir targetPath(dbFolder);
+
+    if (!targetPath.exists())
+    {
+        int rc = QMessageBox::question(qApp->activeWindow(), i18n("Create Database Folder?"),
+                                       i18n("<p>The folder to put your database in does not seem to exist:</p>"
+                                            "<p><b>%1</b></p>"
+                                            "Would you like digiKam to create it for you?", dbFolder));
+
+        if (rc == QMessageBox::No)
+        {
+            return false;
+        }
+
+        if (!targetPath.mkpath(dbFolder))
+        {
+            QMessageBox::information(qApp->activeWindow(), i18n("Create Database Folder Failed"),
+                                     i18n("<p>digiKam could not create the folder to host your database file.\n"
+                                          "Please select a different location.</p>"
+                                          "<p><b>%1</b></p>", dbFolder));
+            return false;
+        }
+    }
+
+    QFileInfo path(dbFolder);
+
+#ifdef _WIN32
+    // Work around bug #189168
+    QTemporaryFile temp;
+    temp.setFileTemplate(dbFolder + QLatin1String("XXXXXX"));
+
+    if (!temp.open())
+#else
+    if (!path.isWritable())
+#endif
+    {
+        QMessageBox::information(qApp->activeWindow(), i18n("No Database Write Access"),
+                                 i18n("<p>You do not seem to have write access "
+                                      "for the folder to host the database file.<br/>"
+                                      "Please select a different location.</p>"
+                                      "<p><b>%1</b></p>", dbFolder));
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace Digikam

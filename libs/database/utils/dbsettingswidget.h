@@ -71,9 +71,16 @@ public:
     int     databaseType()    const;
 
     QString databaseBackend() const;
-    QString databasePath()    const;
+
+    void setDatabasePath(const QString& path);
+    QString databasePath() const;
 
     DbEngineParameters orgDatabasePrm() const;
+    
+    /**
+     * For Sqlite or MysqlInternal, check properties of local path to store database files.
+     */
+    bool checkLocalDatabase() const;
     
 public Q_SLOTS:
 
@@ -81,7 +88,6 @@ public Q_SLOTS:
 
 private:
 
-    void checkDBPath();
     void setupMainArea();
     void handleInternalServer(int index);
     void setDatabaseInputFields(int index);
@@ -89,7 +95,6 @@ private:
 private Q_SLOTS:
 
     void slotHandleDBTypeIndexChanged(int index);
-    void slotChangeDatabasePath(const QUrl&);
     void slotDatabasePathEditedDelayed();
     void slotDatabasePathEdited();
     void slotUpdateSqlInit();
