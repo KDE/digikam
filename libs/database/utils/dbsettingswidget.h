@@ -79,18 +79,17 @@ public:
     
     /**
      * For Sqlite or MysqlInternal, check properties of local path to store database files.
+     * For LysqlServer, check the network connection and database names.
      */
-    bool checkLocalDatabase() const;
+    bool checkDatabaseSettings();
     
-public Q_SLOTS:
-
-    void checkDatabaseConnection();
-
 private:
 
     void setupMainArea();
     void handleInternalServer(int index);
     void setDatabaseInputFields(int index);
+    bool checkDatabaseConnection(QString& error);
+    bool checkDatabaseConfiguration(QString& error);
 
 private Q_SLOTS:
 
@@ -98,6 +97,7 @@ private Q_SLOTS:
     void slotDatabasePathEditedDelayed();
     void slotDatabasePathEdited();
     void slotUpdateSqlInit();
+    void slotCheckMysqlServerConnection();
 
 private:
 

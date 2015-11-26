@@ -149,7 +149,7 @@ void SetupDatabase::applySettings()
         return;
     }
 
-    if (!d->databaseWidget->checkLocalDatabase())
+    if (!d->databaseWidget->checkDatabaseSettings())
     {
         return;
     }

@@ -14,6 +14,7 @@ General            : Add embedded trash support for each collection instead desk
 
 Database           : Fully integration of face recognition database with Mysql support.
 Database           : Mysql internal server is now configurable as Sqlite to store database files at a customized place.
+Database           : Mysql internal/remote server is now configurable with first run assistant.
 
 Batch Queue Manager: New BQM tool to convert RAW to DNG.
 

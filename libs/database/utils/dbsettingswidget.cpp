@@ -157,27 +157,38 @@ void DatabaseSettingsWidget::setupMainArea()
     // --------------------------------------------------------
 
     d->tab = new QTabWidget(this);
+    
+    // Only accept printable Ascii char for database names.
+    QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
+    QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
     QLabel* const dbNameCoreLabel                    = new QLabel(i18n("Core Db Name:"));
     d->dbNameCore                                    = new QLineEdit();
     d->dbNameCore->setPlaceholderText(i18n("Set the core database name"));
     d->dbNameCore->setToolTip(i18n("The core database is lead digiKam container used to store\nalbums, items, and searches metadata."));
+    d->dbNameCore->setValidator(asciiValidator);
+
     QLabel* const dbNameThumbsLabel                  = new QLabel(i18n("Thumbs Db Name:"));
     d->dbNameThumbs                                  = new QLineEdit();
     d->dbNameThumbs->setPlaceholderText(i18n("Set the thumbnails database name"));
     d->dbNameThumbs->setToolTip(i18n("The thumbnails database is used by digiKam to host\nimage thumbs with wavelets compression images.\n"
                                      "This one can use quickly a lots of space,\nespecially if you have huge collections."));
+    d->dbNameThumbs->setValidator(asciiValidator);
+
     QLabel* const dbNameFaceLabel                    = new QLabel(i18n("Face Db Name:"));
     d->dbNameFace                                    = new QLineEdit();
     d->dbNameFace->setPlaceholderText(i18n("Set the face database name"));
     d->dbNameFace->setToolTip(i18n("The face database is used by digiKam to host image histograms\ndedicated to faces recognition process.\n"
                                    "This one can use quickly a lots of space, especially\nif you a lots of image with people faces detected "
                                    "and tagged."));
+    d->dbNameFace->setValidator(asciiValidator);
+
     QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
     d->hostName                                      = new QLineEdit();
     d->hostName->setPlaceholderText(i18n("Set the host computer name"));
     d->hostName->setToolTip(i18n("This is the computer name running Mysql server.\nThis can be \"localhost\" for a local server, "
                                  "or the network computer\n name (or IP address) in case of remote computer."));
+
     QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
     d->hostPort                                      = new QSpinBox();
     d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, Mysql server use port number 3306 by default"));
@@ -320,7 +331,7 @@ void DatabaseSettingsWidget::setupMainArea()
             this, SLOT(slotHandleDBTypeIndexChanged(int)));
 
     connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
-            this, SLOT(checkDatabaseConnection()));
+            this, SLOT(slotCheckMysqlServerConnection()));
 
     connect(d->dbNameCore, SIGNAL(textChanged(QString)),
             this, SLOT(slotUpdateSqlInit()));
@@ -456,26 +467,11 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
     d->sqlInit->setText(sql);
 }
 
-void DatabaseSettingsWidget::checkDatabaseConnection()
+void DatabaseSettingsWidget::slotCheckMysqlServerConnection()
 {
-    // TODO : if check DB connection operations can be threaded, use DBusyDlg dialog there...
+    QString error;
 
-    qApp->setOverrideCursor(Qt::WaitCursor);
-
-    QString databaseID(QLatin1String("ConnectionTest"));
-    QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(databaseBackend(), databaseID);
-    DbEngineParameters parameters = getDbEngineParameters();
-    testDatabase.setHostName(parameters.hostName);
-    testDatabase.setPort(parameters.port);
-    testDatabase.setUserName(parameters.userName);
-    testDatabase.setPassword(parameters.password);
-    testDatabase.setConnectOptions(parameters.connectOptions);
-
-    qApp->restoreOverrideCursor();
-
-    bool result = testDatabase.open();
-
-    if (result)
+    if (checkDatabaseConnection(error))
     {
         QMessageBox::information(qApp->activeWindow(), i18n("Database connection test"),
                                  i18n("Database connection test successful."));
@@ -484,11 +480,70 @@ void DatabaseSettingsWidget::checkDatabaseConnection()
     {
         QMessageBox::critical(qApp->activeWindow(), i18n("Database connection test"),
                               i18n("Database connection test was not successful. <p>Error was: %1</p>",
-                                   testDatabase.lastError().text()) );
+                                   error));
+    }
+}
+
+bool DatabaseSettingsWidget::checkDatabaseConfiguration(QString& error)
+{
+    if (d->hostName->text().isEmpty())
+    {
+        error = i18n("The server hostname is empty");
+        return false;
+    }
+    
+    if (d->userName->text().isEmpty())
+    {
+        error = i18n("The server user name is empty");
+        return false;
     }
 
+    if (d->dbNameCore->text().isEmpty())
+    {
+        error = i18n("The core database name is empty");
+        return false;
+    }
+
+    if (d->dbNameThumbs->text().isEmpty())
+    {
+        error = i18n("The thubnails database name is empty");
+        return false;
+    }
+
+    if (d->dbNameFace->text().isEmpty())
+    {
+        error = i18n("The face database name is empty");
+        return false;
+    }
+    
+    return true;
+}
+    
+bool DatabaseSettingsWidget::checkDatabaseConnection(QString& error)
+{
+    qApp->setOverrideCursor(Qt::WaitCursor);
+
+    QString databaseID(QLatin1String("ConnectionTest"));
+    QSqlDatabase testDatabase = QSqlDatabase::addDatabase(databaseBackend(), databaseID);
+
+    DbEngineParameters prm    = getDbEngineParameters();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Testing DB connection (" << databaseID << ") with these settings:";
+    qCDebug(DIGIKAM_DATABASE_LOG) << prm;
+
+    testDatabase.setHostName(prm.hostName);
+    testDatabase.setPort(prm.port);
+    testDatabase.setUserName(prm.userName);
+    testDatabase.setPassword(prm.password);
+    testDatabase.setConnectOptions(prm.connectOptions);
+
+    bool result = testDatabase.open();
+    error       = testDatabase.lastError().text();
     testDatabase.close();
     QSqlDatabase::removeDatabase(databaseID);
+
+    qApp->restoreOverrideCursor();
+
+    return result;
 }
 
 void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings* const settings)
@@ -581,64 +636,95 @@ void DatabaseSettingsWidget::slotDatabasePathEdited()
     d->dbPathEdit->lineEdit()->setText(QDir::toNativeSeparators(newPath));
 }
 
-bool DatabaseSettingsWidget::checkLocalDatabase() const
+bool DatabaseSettingsWidget::checkDatabaseSettings()
 {
-    if (databaseType() == MysqlServer)
-        return true;
-
-    QString dbFolder = databasePath();
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Database directory is : " << dbFolder;
-
-    if (dbFolder.isEmpty())
+    switch (databaseType())
     {
-        QMessageBox::information(qApp->activeWindow(), qApp->applicationName(), 
-                                 i18n("You must select a folder for digiKam to "
-                                      "store information and metadata in a database file."));
-        return false;
-    }
-
-    QDir targetPath(dbFolder);
-
-    if (!targetPath.exists())
-    {
-        int rc = QMessageBox::question(qApp->activeWindow(), i18n("Create Database Folder?"),
-                                       i18n("<p>The folder to put your database in does not seem to exist:</p>"
-                                            "<p><b>%1</b></p>"
-                                            "Would you like digiKam to create it for you?", dbFolder));
-
-        if (rc == QMessageBox::No)
+        case SQlite:
+        case MysqlInternal:
         {
-            return false;
-        }
+            QString dbFolder = databasePath();
+            qCDebug(DIGIKAM_DATABASE_LOG) << "Database directory is : " << dbFolder;
 
-        if (!targetPath.mkpath(dbFolder))
-        {
-            QMessageBox::information(qApp->activeWindow(), i18n("Create Database Folder Failed"),
-                                     i18n("<p>digiKam could not create the folder to host your database file.\n"
-                                          "Please select a different location.</p>"
-                                          "<p><b>%1</b></p>", dbFolder));
-            return false;
-        }
-    }
+            if (dbFolder.isEmpty())
+            {
+                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(), 
+                                        i18n("You must select a folder for digiKam to "
+                                             "store information and metadata in a database file."));
+                return false;
+            }
 
-    QFileInfo path(dbFolder);
+            QDir targetPath(dbFolder);
+
+            if (!targetPath.exists())
+            {
+                int rc = QMessageBox::question(qApp->activeWindow(), i18n("Create Database Folder?"),
+                                            i18n("<p>The folder to put your database in does not seem to exist:</p>"
+                                                 "<p><b>%1</b></p>"
+                                                 "Would you like digiKam to create it for you?", dbFolder));
+
+                if (rc == QMessageBox::No)
+                {
+                    return false;
+                }
+
+                if (!targetPath.mkpath(dbFolder))
+                {
+                    QMessageBox::information(qApp->activeWindow(), i18n("Create Database Folder Failed"),
+                                            i18n("<p>digiKam could not create the folder to host your database file.\n"
+                                                 "Please select a different location.</p>"
+                                                 "<p><b>%1</b></p>", dbFolder));
+                    return false;
+                }
+            }
+
+            QFileInfo path(dbFolder);
 
 #ifdef _WIN32
-    // Work around bug #189168
-    QTemporaryFile temp;
-    temp.setFileTemplate(dbFolder + QLatin1String("XXXXXX"));
+            // Work around bug #189168
+            QTemporaryFile temp;
+            temp.setFileTemplate(dbFolder + QLatin1String("XXXXXX"));
 
-    if (!temp.open())
+            if (!temp.open())
 #else
-    if (!path.isWritable())
+            if (!path.isWritable())
 #endif
-    {
-        QMessageBox::information(qApp->activeWindow(), i18n("No Database Write Access"),
-                                 i18n("<p>You do not seem to have write access "
-                                      "for the folder to host the database file.<br/>"
-                                      "Please select a different location.</p>"
-                                      "<p><b>%1</b></p>", dbFolder));
-        return false;
+            {
+                QMessageBox::information(qApp->activeWindow(), i18n("No Database Write Access"),
+                                        i18n("<p>You do not seem to have write access "
+                                             "for the folder to host the database file.<br/>"
+                                             "Please select a different location.</p>"
+                                             "<p><b>%1</b></p>", dbFolder));
+                return false;
+            }
+
+            break;
+        }
+
+        default:  // MysqlServer
+        {
+            QString error;
+
+            if (!checkDatabaseConfiguration(error))
+            {
+                QMessageBox::critical(qApp->activeWindow(), i18n("Database configuration"),
+                                      i18n("The database configuration is not valid. Error is <br/><p>%1</p><br/>"
+                                           "Please check your configuration.",
+                                           error));
+                return false;
+            }
+            
+            if (!checkDatabaseConnection(error))
+            {
+                QMessageBox::critical(qApp->activeWindow(), i18n("Database connection test"),
+                                      i18n("Testing database connection has failed with error<br/><p>%1</p><br/>"
+                                           "Please check your configuration.",
+                                           error));
+                return false;
+            }
+
+            break;
+        }
     }
 
     return true;

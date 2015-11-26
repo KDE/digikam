@@ -1,8 +1,6 @@
 TODO List
 ---------
 
-- Better handling of legacy database setting parameters.
-- Write new database setting parameters in FirstRun dialog.
 - Because digiKam use function declaration, Mysql server need to be prepared before to be used,
   especially to create database and user with grant privileges.
 

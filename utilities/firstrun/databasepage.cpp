@@ -96,7 +96,7 @@ void DatabasePage::saveSettings()
 bool DatabasePage::checkSettings()
 {
     // TODO : add checks for Mysql Server.
-    return d->dbsettingswidget->checkLocalDatabase();
+    return d->dbsettingswidget->checkDatabaseSettings();
 }
 
 }   // namespace Digikam
