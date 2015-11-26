@@ -36,6 +36,7 @@
 #include "dxmlguiwindow.h"
 #include "welcomepage.h"
 #include "collectionpage.h"
+#include "databasepage.h"
 #include "rawpage.h"
 #include "metadatapage.h"
 #include "previewpage.h"
@@ -53,6 +54,7 @@ public:
     Private() :
         welcomePage(0),
         collectionPage(0),
+        databasePage(0),
         rawPage(0),
         metadataPage(0),
         previewPage(0),
@@ -64,6 +66,7 @@ public:
 
     WelcomePage*    welcomePage;
     CollectionPage* collectionPage;
+    DatabasePage*   databasePage;
     RawPage*        rawPage;
     MetadataPage*   metadataPage;
     PreviewPage*    previewPage;
@@ -82,6 +85,7 @@ AssistantDlg::AssistantDlg(QWidget* const parent)
 
     d->welcomePage    = new WelcomePage(this);    // First assistant page
     d->collectionPage = new CollectionPage(this);
+    d->databasePage   = new DatabasePage(this);
     d->rawPage        = new RawPage(this);
     d->metadataPage   = new MetadataPage(this);
     d->previewPage    = new PreviewPage(this);
@@ -92,8 +96,8 @@ AssistantDlg::AssistantDlg(QWidget* const parent)
 
     d->startScanPage  = new StartScanPage(this);  // Last assistant page
 
-    resize(500, 500);
-
+    resize(600, 600);
+    
     connect(button(QWizard::FinishButton), SIGNAL(clicked()),
             this, SLOT(slotFinishPressed()));
 
@@ -118,7 +122,7 @@ QString AssistantDlg::firstAlbumPath() const
 
 QString AssistantDlg::databasePath() const
 {
-    return d->collectionPage->databasePath();
+    return d->databasePage->databasePath();
 }
 
 bool AssistantDlg::validateCurrentPage()
@@ -126,6 +130,19 @@ bool AssistantDlg::validateCurrentPage()
     if (currentPage() == d->collectionPage)
     {
         if (!d->collectionPage->checkSettings())
+        {
+            return false;
+        }
+        else
+        {
+            d->databasePage->setDatabasePath(firstAlbumPath());
+        }
+    }
+
+    
+    if (currentPage() == d->databasePage)
+    {
+        if (!d->databasePage->checkSettings())
         {
             return false;
         }
@@ -138,6 +155,7 @@ void AssistantDlg::slotFinishPressed()
 {
     // Save settings to rc files.
     d->collectionPage->saveSettings();
+    d->databasePage->saveSettings();
     d->rawPage->saveSettings();
     d->metadataPage->saveSettings();
     d->previewPage->saveSettings();

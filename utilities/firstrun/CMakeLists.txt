@@ -14,6 +14,7 @@ set(libfirstrun_SRCS
     assistantdlgpage.cpp
     welcomepage.cpp
     collectionpage.cpp
+    databasepage.cpp
     rawpage.cpp
     tooltipspage.cpp
     previewpage.cpp

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLLECTION_PAGE_H
-#define COLLECTION_PAGE_H
+#ifndef DATABASE_PAGE_H
+#define DATABASE_PAGE_H
 
 // Qt includes
 
@@ -36,23 +36,28 @@
 namespace Digikam
 {
 
-class CollectionPage : public AssistantDlgPage
+class DatabasePage : public AssistantDlgPage
 {
     Q_OBJECT
 
 public:
 
-    explicit CollectionPage(AssistantDlg* const dlg);
-    ~CollectionPage();
+    explicit DatabasePage(AssistantDlg* const dlg);
+    ~DatabasePage();
 
     bool checkSettings();
     void saveSettings();
 
-    QString firstAlbumPath() const;
+    void setDatabasePath(const QString& path);
+    QString databasePath() const;
+
+private Q_SLOTS:
+
+    void slotDbPathChanged(const QUrl& url);
 
 private:
 
-    bool checkRootAlbum(QString& rootAlbumFolder);
+    bool checkDatabase(QString& dbFolder);
 
 private:
 
@@ -62,4 +67,4 @@ private:
 
 }   // namespace Digikam
 
-#endif /* COLLECTION_PAGE_H */
+#endif /* DATABASE_PAGE_H */
