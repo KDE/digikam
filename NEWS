@@ -76,4 +76,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 042 ==> 262321 - MYSQL : user privileges management.
 043 ==> 342124 - MYSQL : database error while verification at startup.
 044 ==> 355730 - Batch processing Pentax K-S2 RAW - Item from queue #1 Failed to process item.
-045 ==> 
+045 ==> 233763 - SETUP : Using mysql server with invalid settings is "possible".
+046 ==> 
