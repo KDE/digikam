@@ -187,7 +187,7 @@ void DatabaseSettingsWidget::setupMainArea()
     QWidget* const space                             = new QWidget(phbox);
     phbox->setStretchFactor(space, 10);
     QPushButton* const checkDBConnectBtn             = new QPushButton(i18n("Check Connection"), phbox);
-    checkDBConnectBtn->setToolTip(i18n("Check a basic test to see if settings to be connected to Mysql server is valid."));
+    checkDBConnectBtn->setToolTip(i18n("Run a basic database connection to see if Mysql server settings is valid."));
 
     // Only accept printable Ascii char for database names.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
