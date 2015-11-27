@@ -138,6 +138,36 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbType                       = new QComboBox(typeHbox);
     databaseTypeLabel->setText(i18n("Type:"));
 
+    // --------- fill with default values ---------------------
+
+    d->dbType->addItem(i18n("SQLite"),                        SQlite);
+
+#ifdef HAVE_MYSQLSUPPORT
+
+#   ifdef HAVE_INTERNALMYSQL
+    d->dbType->addItem(i18n("MySQL Internal (experimental)"), MysqlInternal);
+#   endif
+
+    d->dbType->addItem(i18n("MySQL Server (experimental)"),   MysqlServer);
+#endif
+
+    d->dbType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
+                               "<p><b>SQlite</b> backend is for local database storage with a small or medium collection sizes. "
+                               "It is the default and recommended backend for collections with less than 100K items.</p>"
+#ifdef HAVE_MYSQLSUPPORT
+
+#   ifdef HAVE_INTERNALMYSQL
+                               "<p><b>MySQL Internal</b> backend is for local database storage with huge collection sizes. "
+                               "This backend is recommend for local collections with more than 100K items.</p>"
+                               "<p><i>Be careful: this one still in experimental stage.</i></p>"
+#   endif
+
+                               "<p><b>MySQL Server</b> backend is a more robust solution especially for remote and shared database storage. "
+                               "It is also more efficient to manage huge collection sizes with more than 100K items.</p>"
+                               "<p><i>Be careful: this one still in experimental stage.</i></p>"
+#endif
+                              ));
+
     // --------------------------------------------------------
 
     d->dbPathLabel = new QLabel(i18n("<p>Set here the location where the database files will be stored on your system. "
@@ -164,7 +194,9 @@ void DatabaseSettingsWidget::setupMainArea()
     d->hostName->setToolTip(i18n("This is the computer name running Mysql server.\nThis can be \"localhost\" for a local server, "
                                  "or the network computer\n name (or IP address) in case of remote computer."));
 
-    QLabel* const connectOptsLabel                   = new QLabel(i18n("Connect options:"));
+    QLabel* const connectOptsLabel                   = new QLabel(i18n("<a href=\"http://doc.qt.io/qt-5/"
+                                                                       "qsqldatabase.html#setConnectOptions\">Connect options:</a>"));
+    connectOptsLabel->setOpenExternalLinks(true);
     d->connectOpts                                   = new QLineEdit();
     d->connectOpts->setPlaceholderText(i18n("Set the database connection options"));
     d->connectOpts->setToolTip(i18n("Set the Mysql server connection options.\nFor advanced users only."));
@@ -172,11 +204,13 @@ void DatabaseSettingsWidget::setupMainArea()
     QLabel* const userNameLabel                      = new QLabel(i18n("User:"));
     d->userName                                      = new QLineEdit();
     d->userName->setPlaceholderText(i18n("Set the database account name"));
-    d->userName->setToolTip(i18n("Set the Mysql server account name used\nby digiKam to be connected to the server."));
+    d->userName->setToolTip(i18n("Set the Mysql server account name used\nby digiKam to be connected to the server.\n"
+                                 "This acount must be available on the remote Mysql server when database have been created."));
 
     QLabel* const passwordLabel                      = new QLabel(i18n("Password:"));
     d->password                                      = new QLineEdit();
-    d->password->setToolTip(i18n("Set the Mysql server account password used\nby digiKam to be connected to the server."));
+    d->password->setToolTip(i18n("Set the Mysql server account password used\nby digiKam to be connected to the server.\n"
+                                 "You can left this field empty to use an account set without password."));
     d->password->setEchoMode(QLineEdit::Password);
 
     DHBox* const phbox                               = new DHBox();
@@ -187,7 +221,7 @@ void DatabaseSettingsWidget::setupMainArea()
     QWidget* const space                             = new QWidget(phbox);
     phbox->setStretchFactor(space, 10);
     QPushButton* const checkDBConnectBtn             = new QPushButton(i18n("Check Connection"), phbox);
-    checkDBConnectBtn->setToolTip(i18n("Run a basic database connection to see if Mysql server settings is valid."));
+    checkDBConnectBtn->setToolTip(i18n("Run a basic database connection to see if current Mysql server settings is suitable."));
 
     // Only accept printable Ascii char for database names.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
@@ -262,7 +296,10 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbDetailsBox          = new QGroupBox(i18n("Database Server Technical Details"), this);
     QVBoxLayout* const vlay3 = new QVBoxLayout(d->dbDetailsBox);
     QLabel* const details    = new QLabel(i18n("<p>Use this configuration view to set all information "
-                                               "to be connected to a remote Mysql database server through the network. "
+                                               "to be connected to a remote "
+                                               "<a href=\"https://en.wikipedia.org/wiki/MySQL\">Mysql database server</a> "
+                                               "(or <a href=\"https://en.wikipedia.org/wiki/MariaDB\">MariaDB</a>) "
+                                               "through a network. "
                                                "As with Sqlite or Mysql internal server, 3 databases will be stored "
                                                "on the remote server: one for all collections properties, "
                                                "one to store compressed thumbnails, and one to store faces "
@@ -272,9 +309,10 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "<p>Databases are digiKam core engines. To prevent performance issues, "
                                                "take a care to use a fast network link between the client and the server "
                                                "computers. It's also recommended to host database files on "
-                                               "fast hardware (as SSD) with enough free space, "
-                                               "especially for thumbnails database.</p>"
-                                               "<p>The databases must be create on the remote server by the administrator. "
+                                               "fast hardware (as <a href=\"https://en.wikipedia.org/wiki/Solid-state_drive\">SSD</a>) "
+                                               "with enough free space, especially for thumbnails database, even if data are compressed using wavelets image format <a href=\"https://en.wikipedia.org/wiki/Progressive_Graphics_File\">"
+                                               "PGF</a>.</p>"
+                                               "<p>The databases must be created previously on the remote server by the administrator. "
                                                "Look in <b>Requirements</b> tab for details.</p>"),
                                                d->dbDetailsBox);
     details->setWordWrap(true);
@@ -301,35 +339,6 @@ void DatabaseSettingsWidget::setupMainArea()
     layout->setSpacing(spacing);
     layout->addWidget(dbConfigBox);
     layout->addStretch();
-
-    // --------- fill with default values ---------------------
-
-    d->dbType->addItem(i18n("SQLite"),                        SQlite);
-
-#ifdef HAVE_MYSQLSUPPORT
-
-#   ifdef HAVE_INTERNALMYSQL
-    d->dbType->addItem(i18n("MySQL Internal (experimental)"), MysqlInternal);
-#   endif
-
-    d->dbType->addItem(i18n("MySQL Server (experimental)"),   MysqlServer);
-#endif
-
-    d->dbType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
-                               "<p><b>SQlite</b> backend is for local database storage with a small or medium collection sizes. "
-                               "It is the default and recommended backend.</p>"
-#ifdef HAVE_MYSQLSUPPORT
-
-#   ifdef HAVE_INTERNALMYSQL
-                               "<p><b>MySQL Internal</b> backend is for local database storage with huge collection sizes. "
-                               "Be careful: this one still in experimental stage.</p>"
-#   endif
-
-                               "<p><b>MySQL Server</b> backend is a more robust solution especially for remote and shared database storage. "
-                               "It is also more efficient to manage huge collection sizes. "
-                               "Be careful: this one still in experimental stage.</p>"
-#endif
-                              ));
 
     // --------------------------------------------------------
 
