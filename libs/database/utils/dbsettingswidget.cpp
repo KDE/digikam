@@ -536,7 +536,7 @@ bool DatabaseSettingsWidget::checkMysqlServerDbNamesConfig(QString& error)
 
     if (d->dbNameThumbs->text().isEmpty())
     {
-        error = i18n("The thubnails database name is empty");
+        error = i18n("The thumbnails database name is empty");
         return false;
     }
 
