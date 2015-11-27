@@ -158,10 +158,41 @@ void DatabaseSettingsWidget::setupMainArea()
 
     d->tab = new QTabWidget(this);
     
+    QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
+    d->hostName                                      = new QLineEdit();
+    d->hostName->setPlaceholderText(i18n("Set the host computer name"));
+    d->hostName->setToolTip(i18n("This is the computer name running Mysql server.\nThis can be \"localhost\" for a local server, "
+                                 "or the network computer\n name (or IP address) in case of remote computer."));
+
+    QLabel* const connectOptsLabel                   = new QLabel(i18n("Connect options:"));
+    d->connectOpts                                   = new QLineEdit();
+    d->connectOpts->setPlaceholderText(i18n("Set the database connection options"));
+    d->connectOpts->setToolTip(i18n("Set the Mysql server connection options.\nFor advanced users only."));
+
+    QLabel* const userNameLabel                      = new QLabel(i18n("User:"));
+    d->userName                                      = new QLineEdit();
+    d->userName->setPlaceholderText(i18n("Set the database account name"));
+    d->userName->setToolTip(i18n("Set the Mysql server account name used\nby digiKam to be connected to the server."));
+
+    QLabel* const passwordLabel                      = new QLabel(i18n("Password:"));
+    d->password                                      = new QLineEdit();
+    d->password->setToolTip(i18n("Set the Mysql server account password used\nby digiKam to be connected to the server."));
+    d->password->setEchoMode(QLineEdit::Password);
+
+    DHBox* const phbox                               = new DHBox();
+    QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
+    d->hostPort                                      = new QSpinBox(phbox);
+    d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, Mysql server use port number 3306 by default"));
+    d->hostPort->setMaximum(65535);
+    QWidget* const space                             = new QWidget(phbox);
+    phbox->setStretchFactor(space, 10);
+    QPushButton* const checkDBConnectBtn             = new QPushButton(i18n("Check Connection"), phbox);
+    checkDBConnectBtn->setToolTip(i18n("Check a basic test to see if settings to be connected to Mysql server is valid."));
+
     // Only accept printable Ascii char for database names.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
     QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
-
+    
     QLabel* const dbNameCoreLabel                    = new QLabel(i18n("Core Db Name:"));
     d->dbNameCore                                    = new QLineEdit();
     d->dbNameCore->setPlaceholderText(i18n("Set the core database name"));
@@ -182,34 +213,9 @@ void DatabaseSettingsWidget::setupMainArea()
                                    "This one can use quickly a lots of space, especially\nif you a lots of image with people faces detected "
                                    "and tagged."));
     d->dbNameFace->setValidator(asciiValidator);
-
-    QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
-    d->hostName                                      = new QLineEdit();
-    d->hostName->setPlaceholderText(i18n("Set the host computer name"));
-    d->hostName->setToolTip(i18n("This is the computer name running Mysql server.\nThis can be \"localhost\" for a local server, "
-                                 "or the network computer\n name (or IP address) in case of remote computer."));
-
-    QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
-    d->hostPort                                      = new QSpinBox();
-    d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, Mysql server use port number 3306 by default"));
-    d->hostPort->setMaximum(65535);
-
-    QLabel* const connectOptsLabel                   = new QLabel(i18n("Connect options:"));
-    d->connectOpts                                   = new QLineEdit();
-    d->connectOpts->setPlaceholderText(i18n("Set the database connection options"));
-    d->connectOpts->setToolTip(i18n("Set the Mysql server connection options.\nFor advanced users only."));
-
-    QLabel* const userNameLabel                      = new QLabel(i18n("User:"));
-    d->userName                                      = new QLineEdit();
-    d->userName->setPlaceholderText(i18n("Set the database account name"));
-    d->userName->setToolTip(i18n("Set the Mysql server account name used\nby digiKam to be connected to the server."));
-
-    QLabel* const passwordLabel                      = new QLabel(i18n("Password:"));
-    d->password                                      = new QLineEdit();
-    d->password->setToolTip(i18n("Set the Mysql server account password used\nby digiKam to be connected to the server."));
-    d->password->setEchoMode(QLineEdit::Password);
-
-    QPushButton* const checkDatabaseConnectionButton = new QPushButton(i18n("Check Database Connection"));
+    
+    QPushButton* const defaultValuesBtn              = new QPushButton(i18n("Default Settings"));
+    defaultValuesBtn->setToolTip(i18n("Reset database names settings to common default values."));
 
     d->expertSettings                                = new QGroupBox();
     d->expertSettings->setFlat(true);
@@ -217,15 +223,15 @@ void DatabaseSettingsWidget::setupMainArea()
     d->expertSettings->setLayout(expertSettinglayout);
 
     expertSettinglayout->addRow(hostNameLabel,     d->hostName);
-    expertSettinglayout->addRow(hostPortLabel,     d->hostPort);
-    expertSettinglayout->addRow(dbNameCoreLabel,   d->dbNameCore);
-    expertSettinglayout->addRow(dbNameThumbsLabel, d->dbNameThumbs);
-    expertSettinglayout->addRow(dbNameFaceLabel,   d->dbNameFace);
     expertSettinglayout->addRow(userNameLabel,     d->userName);
     expertSettinglayout->addRow(passwordLabel,     d->password);
     expertSettinglayout->addRow(connectOptsLabel,  d->connectOpts);
-
-    expertSettinglayout->addWidget(checkDatabaseConnectionButton);
+    expertSettinglayout->addRow(hostPortLabel,     phbox);
+    expertSettinglayout->addRow(new DLineWidget(Qt::Horizontal, d->expertSettings));
+    expertSettinglayout->addRow(dbNameCoreLabel,   d->dbNameCore);
+    expertSettinglayout->addRow(dbNameThumbsLabel, d->dbNameThumbs);
+    expertSettinglayout->addRow(dbNameFaceLabel,   d->dbNameFace);
+    expertSettinglayout->addRow(new QWidget(),     defaultValuesBtn);
 
     d->tab->addTab(d->expertSettings, i18n("Remote Server Settings"));
 
@@ -330,9 +336,12 @@ void DatabaseSettingsWidget::setupMainArea()
     connect(d->dbType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHandleDBTypeIndexChanged(int)));
 
-    connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
+    connect(checkDBConnectBtn, SIGNAL(clicked()),
             this, SLOT(slotCheckMysqlServerConnection()));
 
+    connect(defaultValuesBtn, SIGNAL(clicked()),
+            this, SLOT(slotResetMysqlServerDBNames()));
+    
     connect(d->dbNameCore, SIGNAL(textChanged(QString)),
             this, SLOT(slotUpdateSqlInit()));
 
@@ -382,6 +391,13 @@ QString DatabaseSettingsWidget::databaseBackend() const
             return DbEngineParameters::SQLiteDatabaseType();
         }
     }
+}
+
+void DatabaseSettingsWidget::slotResetMysqlServerDBNames()
+{
+    d->dbNameCore->setText(QLatin1String("digikam"));
+    d->dbNameThumbs->setText(QLatin1String("digikam"));
+    d->dbNameFace->setText(QLatin1String("digikam"));
 }
 
 void DatabaseSettingsWidget::slotHandleDBTypeIndexChanged(int index)
@@ -714,15 +730,6 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
         default:  // MysqlServer
         {
             QString error;
-
-            if (!checkMysqlServerConnectionConfig(error))
-            {
-                QMessageBox::critical(qApp->activeWindow(), i18n("Database configuration"),
-                                      i18n("The database connection configuration is not valid. Error is <br/><p>%1</p><br/>"
-                                           "Please check your configuration.",
-                                           error));
-                return false;
-            }
 
             if (!checkMysqlServerDbNamesConfig(error))
             {

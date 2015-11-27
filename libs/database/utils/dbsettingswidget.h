@@ -79,7 +79,7 @@ public:
 
     /**
      * For Sqlite or MysqlInternal, check properties of local path to store database files.
-     * For LysqlServer, check the network connection and database names.
+     * For MysqlServer, check the network connection and database names.
      */
     bool checkDatabaseSettings();
 
@@ -99,6 +99,7 @@ private Q_SLOTS:
     void slotDatabasePathEdited();
     void slotUpdateSqlInit();
     void slotCheckMysqlServerConnection();
+    void slotResetMysqlServerDBNames();
 
 private:
 
