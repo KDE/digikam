@@ -153,7 +153,7 @@ void DatabaseMigrationDialog::setupMainArea()
 
     d->progressBar                     = new QProgressBar(progressBox);
     d->progressBar->setTextVisible(true);
-    d->progressBar->setRange(0,13);
+    d->progressBar->setRange(0, 13);
     d->progressBarSmallStep            = new QProgressBar(progressBox);
     d->progressBarSmallStep->setTextVisible(true);
 
@@ -181,21 +181,23 @@ void DatabaseMigrationDialog::setupMainArea()
 
     dataInit();
 
+    // --------------------------------------------------------------------------
+
     connect(d->buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
             this, SLOT(accept()));
 
     connect(d->migrateButton, SIGNAL(clicked()),
-            this, SLOT(performCopy()));
+            this, SLOT(slotPerformCopy()));
 
     // connect signal handlers for copy d->copyThread
     connect(&(d->copyThread->m_copyManager), SIGNAL(finished(int,QString)),
-            this, SLOT(handleFinish(int,QString)));
+            this, SLOT(slotHandleFinish(int,QString)));
 
     connect(&(d->copyThread->m_copyManager), SIGNAL(stepStarted(QString)),
-            this, SLOT(handleStepStarted(QString)));
+            this, SLOT(slotHandleStepStarted(QString)));
 
     connect(&(d->copyThread->m_copyManager), SIGNAL(smallStepStarted(int,int)),
-            this, SLOT(handleSmallStepStarted(int,int)));
+            this, SLOT(slotHandleSmallStepStarted(int,int)));
 
     connect(d->buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
             &(d->copyThread->m_copyManager), SLOT(stopProcessing()));
@@ -204,13 +206,13 @@ void DatabaseMigrationDialog::setupMainArea()
             &(d->copyThread->m_copyManager), SLOT(stopProcessing()));
 }
 
-void DatabaseMigrationDialog::performCopy()
+void DatabaseMigrationDialog::slotPerformCopy()
 {
     DbEngineParameters toDBParameters   = d->toDatabaseSettingsWidget->getDbEngineParameters();
     DbEngineParameters fromDBParameters = d->fromDatabaseSettingsWidget->getDbEngineParameters();
     d->copyThread->init(fromDBParameters, toDBParameters);
 
-    lockInputFields();
+    slotLockInputFields();
     d->copyThread->start();
 }
 
@@ -220,7 +222,7 @@ void DatabaseMigrationDialog::dataInit()
     d->toDatabaseSettingsWidget->setParametersFromSettings(ApplicationSettings::instance());
 }
 
-void DatabaseMigrationDialog::unlockInputFields()
+void DatabaseMigrationDialog::slotUnlockInputFields()
 {
     d->fromDatabaseSettingsWidget->setEnabled(true);
     d->toDatabaseSettingsWidget->setEnabled(true);
@@ -231,7 +233,7 @@ void DatabaseMigrationDialog::unlockInputFields()
     d->cancelButton->setEnabled(false);
 }
 
-void DatabaseMigrationDialog::lockInputFields()
+void DatabaseMigrationDialog::slotLockInputFields()
 {
     d->fromDatabaseSettingsWidget->setEnabled(false);
     d->toDatabaseSettingsWidget->setEnabled(false);
@@ -239,33 +241,33 @@ void DatabaseMigrationDialog::lockInputFields()
     d->cancelButton->setEnabled(true);
 }
 
-void DatabaseMigrationDialog::handleFinish(int finishState, const QString& errorMsg)
+void DatabaseMigrationDialog::slotHandleFinish(int finishState, const QString& errorMsg)
 {
     switch (finishState)
     {
         case CoreDbCopyManager::failed:
             QMessageBox::critical(this, qApp->applicationName(), errorMsg);
-            unlockInputFields();
+            slotUnlockInputFields();
             break;
         case CoreDbCopyManager::success:
             QMessageBox::information(this, qApp->applicationName(), i18n("Database copied successfully."));
-            unlockInputFields();
+            slotUnlockInputFields();
             break;
         case CoreDbCopyManager::canceled:
             QMessageBox::information(this, qApp->applicationName(), i18n("Database conversion canceled."));
-            unlockInputFields();
+            slotUnlockInputFields();
             break;
     }
 }
 
-void DatabaseMigrationDialog::handleStepStarted(const QString& stepName)
+void DatabaseMigrationDialog::slotHandleStepStarted(const QString& stepName)
 {
     int progressBarValue = d->progressBar->value();
     d->overallStepTitle->setText(i18n("Step Progress (%1)", stepName));
     d->progressBar->setValue(++progressBarValue);
 }
 
-void DatabaseMigrationDialog::handleSmallStepStarted(int currentValue, int maxValue)
+void DatabaseMigrationDialog::slotHandleSmallStepStarted(int currentValue, int maxValue)
 {
     d->progressBarSmallStep->setMaximum(maxValue);
     d->progressBarSmallStep->setValue(currentValue);

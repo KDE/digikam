@@ -76,13 +76,13 @@ public:
 
 private Q_SLOTS:
 
-    void performCopy();
-    void unlockInputFields();
-    void lockInputFields();
+    void slotPerformCopy();
+    void slotUnlockInputFields();
+    void slotLockInputFields();
 
-    void handleFinish(int finishState, const QString& errorMsg);
-    void handleStepStarted(const QString& stepName);
-    void handleSmallStepStarted(int currValue, int maxValue);
+    void slotHandleFinish(int finishState, const QString& errorMsg);
+    void slotHandleStepStarted(const QString& stepName);
+    void slotHandleSmallStepStarted(int currValue, int maxValue);
 
 private:
 
