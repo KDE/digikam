@@ -580,6 +580,7 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     {
         d->dbPathEdit->lineEdit()->setText(d->orgPrms.getCoreDatabaseNameOrDir());
         d->dbType->setCurrentIndex(SQlite);
+        slotResetMysqlServerDBNames();
     }
 #ifdef HAVE_MYSQLSUPPORT
 
@@ -588,23 +589,22 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     {
         d->dbPathEdit->lineEdit()->setText(d->orgPrms.internalServerPath());
         d->dbType->setCurrentIndex(MysqlInternal);
+        slotResetMysqlServerDBNames();
     }
 #   endif
     else
     {
         d->dbType->setCurrentIndex(MysqlServer);
+        d->dbNameCore->setText(d->orgPrms.databaseNameCore);
+        d->dbNameThumbs->setText(d->orgPrms.databaseNameThumbnails);
+        d->dbNameFace->setText(d->orgPrms.databaseNameFace);
+        d->hostName->setText(d->orgPrms.hostName);
+        d->hostPort->setValue(d->orgPrms.port);
+        d->connectOpts->setText(d->orgPrms.connectOptions);
+        d->userName->setText(d->orgPrms.userName);
+        d->password->setText(d->orgPrms.password);
     }
 #endif
-
-    d->dbNameCore->setText(d->orgPrms.databaseNameCore);
-    d->dbNameThumbs->setText(d->orgPrms.databaseNameThumbnails);
-    d->dbNameFace->setText(d->orgPrms.databaseNameFace);
-    d->hostName->setText(d->orgPrms.hostName);
-    d->hostPort->setValue(d->orgPrms.port);
-    d->connectOpts->setText(d->orgPrms.connectOptions);
-
-    d->userName->setText(d->orgPrms.userName);
-    d->password->setText(d->orgPrms.password);
 
     slotHandleDBTypeIndexChanged(d->dbType->currentIndex());
 }
