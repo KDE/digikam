@@ -1129,7 +1129,13 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
             temp.close();
 
 #ifndef Q_OS_WIN
-            if (!QFile::rename(QString::fromUtf8(QFile::encodeName(tempFileName)), QString::fromUtf8(QFile::encodeName(thumbPath))))
+            // remove thumbPath file if it exist
+            if (tempFileName != thumbPath && QFile::exists(tempFileName) && QFile::exists(thumbPath))
+            {
+                QFile::remove(thumbPath);
+            }
+
+            if (!QFile::rename(tempFileName, thumbPath))
 #else
             if(::MoveFileEx(tempFileName.utf16(), thumbPath.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
 #endif
