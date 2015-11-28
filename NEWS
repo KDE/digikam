@@ -46,7 +46,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 012 ==> 348173 - digiKam crash during i was browsing photo in a directory.
 013 ==> 349925 - Fail cmake chek if -DENABLE_KFILEMETADATASUPPORT=ON is not set.
 014 ==> 333377 - Show warning messagebox when non-RAW file is added to DNGConverter instead of none.
-015 ==> 122653 - file-dialogue claims that pictures are not on the local-storage, yet they are
+015 ==> 122653 - File-dialogue claims that pictures are not on the local-storage, yet they are
 016 ==> 348347 - Can't create albums - menu is greyed out.
 017 ==> 164168 - Integration of image scanning into showfoto.
 018 ==> 144597 - Metadata editor not accessible from image editor.
@@ -63,7 +63,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 029 ==> 353621 - Error at startup : couldn't create KIO slave.
 030 ==> 352458 - GPL2 and GPL3 De-Mazing methods not enabled (Configured) on Windows build.
 031 ==> 353927 - Missing local sources for libmediawiki.
-032 ==> 352056 - use standard icons instead of hardcoded icons.
+032 ==> 352056 - Use standard icons instead of hardcoded icons.
 033 ==> 354324 - Add option to group by date during import [patch].
 034 ==> 355076 - opencvfacedetector.cpp compile fails with opencv-3.0.0.
 035 ==> 311041 - MYSQL : scan faces fails because of missing table.
@@ -77,5 +77,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 043 ==> 342124 - MYSQL : database error while verification at startup.
 044 ==> 355730 - Batch processing Pentax K-S2 RAW - Item from queue #1 Failed to process item.
 045 ==> 233763 - SETUP : Using mysql server with invalid settings is "possible".
-046 ==> 355900 - save edited file under wrong name on image switch.
-047 ==> 
+046 ==> 355900 - Save edited file under wrong name on image switch.
+047 ==> 277257 - CORE : bad performance when moving images inside digiKam collections.
+048 ==> 
