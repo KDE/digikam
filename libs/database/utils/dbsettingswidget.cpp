@@ -205,7 +205,7 @@ void DatabaseSettingsWidget::setupMainArea()
     d->userName                                      = new QLineEdit();
     d->userName->setPlaceholderText(i18n("Set the database account name"));
     d->userName->setToolTip(i18n("Set the Mysql server account name used\nby digiKam to be connected to the server.\n"
-                                 "This acount must be available on the remote Mysql server when database have been created."));
+                                 "This account must be available on the remote Mysql server when database have been created."));
 
     QLabel* const passwordLabel                      = new QLabel(i18n("Password:"));
     d->password                                      = new QLineEdit();
