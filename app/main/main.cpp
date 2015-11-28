@@ -127,9 +127,9 @@ int main(int argc, char* argv[])
 
     if (parser.isSet(QLatin1String("database-directory")))
     {
-        QFileInfo commandLineDBDir(parser.value(QLatin1String("database-directory")));
+        QDir commandLineDBDir(parser.value(QLatin1String("database-directory")));
 
-        if (!commandLineDBDir.exists() || !commandLineDBDir.isDir())
+        if (!commandLineDBDir.exists())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "The given database-directory does not exist or is not readable. Ignoring." << commandLineDBDir.path();
         }
