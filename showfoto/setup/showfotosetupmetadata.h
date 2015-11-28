@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPMETADATA_H
-#define SETUPMETADATA_H
+#ifndef SHOWFOTOSETUPMETADATA_H
+#define SHOWFOTOSETUPMETADATA_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 }  // namespace ShowFoto
 
-#endif // SETUPMETADATA_H 
+#endif // SHOWFOTOSETUPMETADATA_H

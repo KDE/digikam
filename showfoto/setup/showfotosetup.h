@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_H
-#define SETUP_H
+#ifndef SHOWFOTOSETUP_H
+#define SHOWFOTOSETUP_H
 
 // KDE includes
 
@@ -78,4 +78,4 @@ private:
 
 }   // namespace ShowFoto
 
-#endif  /* SETUP_H  */
+#endif // SHOWFOTOSETUP_H
