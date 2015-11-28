@@ -82,6 +82,7 @@ public:
 
     QSplitter*                       vSplitter;
     QAction*                         fileOpenAction;
+    QUrl                             currentLoadedUrl;
     QUrl                             lastOpenedDirectory;
     QString                          tempFilePath;
     QAction*                         openFilesInFolderAction;

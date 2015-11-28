@@ -107,6 +107,7 @@ private Q_SLOTS:
     void slotFilePrint();
     void slotFileWithDefaultApplication();
     void slotOpenWith(QAction* action=0);
+    void slotShowfotoItemInfoActivated(const ShowfotoItemInfo& info);
 
     void slotOpenFile();
     void slotOpenUrl(const ShowfotoItemInfo& info);

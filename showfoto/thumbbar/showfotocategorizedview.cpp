@@ -284,7 +284,7 @@ QList<QUrl> ShowfotoCategorizedView::selectedUrls() const
 
 void ShowfotoCategorizedView::toIndex(const QUrl& url)
 {
-    ItemViewCategorized::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
+    ItemViewCategorized::toIndex(d->filterModel->indexForUrl(url));
 }
 
 ShowfotoItemInfo ShowfotoCategorizedView::nextInOrder(const ShowfotoItemInfo& startingPoint, int nth)
@@ -380,8 +380,7 @@ void ShowfotoCategorizedView::setCurrentUrl(const QUrl& url)
         return;
     }
 
-    QString path      = url.toLocalFile();
-    QModelIndex index = d->filterModel->indexForPath(path);
+    QModelIndex index = d->filterModel->indexForUrl(url);
 
     if (!index.isValid())
     {
@@ -405,8 +404,7 @@ void ShowfotoCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
 
     for (QList<QUrl>::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
     {
-        const QString path      = it->path();
-        const QModelIndex index = d->filterModel->indexForPath(path);
+        const QModelIndex index = d->filterModel->indexForUrl(*it);
 
         if (!index.isValid())
         {
@@ -501,7 +499,7 @@ void ShowfotoCategorizedView::slotDelayedEnter()
 
 void ShowfotoCategorizedView::slotFileChanged(const QString& filePath)
 {
-    QModelIndex index = d->filterModel->indexForPath(filePath);
+    QModelIndex index = d->filterModel->indexForUrl(QUrl::fromLocalFile(filePath));
 
     if (index.isValid())
     {

@@ -68,7 +68,7 @@ public:
     QList<ShowfotoItemInfo> showfotoItemInfos(const QList<QModelIndex>& indexes) const;
     QList<qlonglong>   showfotoItemIds(const QList<QModelIndex>& indexes)        const;
 
-    QModelIndex indexForPath(const QString& filePath)                  const;
+    QModelIndex indexForUrl(const QUrl& fileUrl)                       const;
     QModelIndex indexForShowfotoItemInfo(const ShowfotoItemInfo& info) const;
     QModelIndex indexForShowfotoItemId(qlonglong id)                   const;
 

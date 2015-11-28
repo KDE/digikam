@@ -118,8 +118,6 @@ extern "C"
 #include "kiowrapper.h"
 #include "dexpanderbox.h"
 
-
-
 namespace ShowFoto
 {
 
@@ -302,7 +300,7 @@ void ShowFoto::setupConnections()
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
 
     connect(d->thumbBar, SIGNAL(showfotoItemInfoActivated(ShowfotoItemInfo)),
-            this, SLOT(slotOpenUrl(ShowfotoItemInfo)));
+            this, SLOT(slotShowfotoItemInfoActivated(ShowfotoItemInfo)));
 
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
@@ -553,9 +551,7 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 {
     if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
     {
-        d->thumbBar->blockSignals(true);
         d->thumbBar->setCurrentUrl(info.url);
-        d->thumbBar->blockSignals(false);
         return;
     }
 
@@ -565,7 +561,7 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
     }
 
     QString localFile;
-    
+
     if (info.url.isLocalFile())
     {
         // file protocol. We do not need the network
@@ -587,7 +583,9 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 
         KIOWrapper::fileCopy(info.url, QUrl::fromLocalFile(localFile), true, this);
     }
-    
+
+    d->currentLoadedUrl = info.url;
+
     m_canvas->load(localFile, m_IOFileSettings);
 
     //TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
@@ -607,6 +605,15 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
     {
         qDebug(DIGIKAM_SHOWFOTO_LOG) << "  Already loaded..";
     }
+}
+
+void ShowFoto::slotShowfotoItemInfoActivated(const ShowfotoItemInfo& info)
+{
+    d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
+
+    slotOpenUrl(info);
+
+    d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
 }
 
 Digikam::ThumbBarDock* ShowFoto::thumbBar() const
@@ -1378,9 +1385,11 @@ void ShowFoto::slotImportedImagefromScanner(const QUrl& url)
 void ShowFoto::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    if ( d->thumbBar->currentInfo().isNull() )
+    if (d->thumbBar->currentInfo().isNull())
+    {
         return;
-    
+    }
+
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(0, QApplication::activeWindow());
     dialog->setImages(QList<QUrl>() << d->thumbBar->currentInfo().url);
     dialog->exec();
@@ -1394,8 +1403,10 @@ void ShowFoto::slotEditGeolocation()
 
 void ShowFoto::slotEditMetadata()
 {
-    if ( d->thumbBar->currentInfo().isNull() )
+    if (d->thumbBar->currentInfo().isNull())
+    {
         return;
+    }
 
     QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(),
                                                                  QList<QUrl>() << d->thumbBar->currentInfo().url);
