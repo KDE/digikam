@@ -139,14 +139,18 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samples_per_pixel);
     TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planar_config);
 
-    if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0
-        || rows_per_strip == 0 || rows_per_strip == (unsigned int) - 1)
+    if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0 || rows_per_strip == 0)
     {
         qCWarning(DIGIKAM_DIMG_LOG_TIFF)  << "TIFF loader: Cannot handle non-stripped images. Loading file "
-                    << filePath;
+                   << filePath;
         TIFFClose(tif);
         loadingFailed();
         return false;
+    }
+
+    if (rows_per_strip > h)
+    {
+        rows_per_strip = h;
     }
 
     if (bits_per_sample   == 0
