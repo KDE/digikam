@@ -815,7 +815,7 @@ bool copyFile(const QString& src, const QString& dst)
 int getJpegQuality(const QString& file)
 {
     // Set a good default quality
-    int quality = 90;
+    volatile int quality = 90;
 
     if (!isJpegImage(file))
     {
