@@ -138,6 +138,11 @@ bool ImageInfoJob::isRunning() const
 
 void ImageInfoJob::slotResult()
 {
+    if (!d->jobThread)
+    {
+        return;
+    }
+
     if (d->jobThread->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << d->jobThread->errorsList().first();
