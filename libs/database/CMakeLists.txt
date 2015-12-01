@@ -41,13 +41,13 @@ set(libdatabaseutils_SRCS
 )
 
 set(libdatabase_SRCS
-    album/albumdb.cpp
 
     collection/collectionscanner.cpp
     collection/collectionmanager.cpp
     collection/collectionlocation.cpp
     collection/collectionscannerhints.cpp
 
+    coredb/albumdb.cpp
     coredb/coredbsearchxml.cpp
     coredb/coredbchecker.cpp
     coredb/coredbcopymanager.cpp
@@ -93,7 +93,6 @@ set(libdatabase_SRCS
 
     imagehistory/imagehistorygraph.cpp
     imagehistory/imagehistorygraphmodel.cpp
-
 )
 
 if(MARBLE_FOUND)
@@ -151,7 +150,6 @@ generate_export_header(digikamdatabase
 target_include_directories(digikamdatabase
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/coredb>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/album>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/collection>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/engine>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dbjobs>

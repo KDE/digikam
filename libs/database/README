@@ -5,8 +5,6 @@ There are more than one database managed by digiKam :
 - Thumbnails database to host image thumbs with wavelets compression images.
 - Face database to host face histogram for faces recognition (located in libs/facesengine/facedb).
 
-
-album/              Albums management interface.
 collection/         Collections management interface.
 coredb/             Core database implementation based on Database Engine.
 dbjobs/             Database jobs manager.
