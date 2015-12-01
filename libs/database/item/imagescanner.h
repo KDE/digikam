@@ -34,7 +34,7 @@
 #include "dimg.h"
 #include "imageinfo.h"
 #include "dmetadata.h"
-#include "albuminfo.h"
+#include "coredbalbuminfo.h"
 #include "coredbinfocontainers.h"
 
 namespace Digikam

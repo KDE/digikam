@@ -39,7 +39,7 @@
 // Local includes
 
 #include "album.h"
-#include "albuminfo.h"
+#include "coredbalbuminfo.h"
 #include "dbengineparameters.h"
 #include "digikam_export.h"
 #include "imagelisterrecord.h"

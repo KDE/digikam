@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-18
- * Description :database album interface.
+ * Description : Core database interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -78,7 +78,7 @@ public:
     static const QString configGroupName;
     static const QString configRecentlyUsedTags;
 
-    CoreDbBackend*     db;
+    CoreDbBackend*       db;
     QList<int>           recentlyAssignedTags;
 
     int                  uniqueHashVersion;

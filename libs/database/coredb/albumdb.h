@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-18
- * Description :database album interface.
+ * Description : Core database interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "albuminfo.h"
+#include "coredbalbuminfo.h"
 #include "coredbfields.h"
 #include "coredbaccess.h"
 #include "coredbconstants.h"

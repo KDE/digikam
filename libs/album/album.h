@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "albuminfo.h"
+#include "coredbalbuminfo.h"
 #include "digikam_export.h"
 
 namespace Digikam

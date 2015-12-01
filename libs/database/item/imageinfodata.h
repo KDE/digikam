@@ -39,7 +39,7 @@
 
 #include "coredburl.h"
 #include "dshareddata.h"
-#include "albuminfo.h"
+#include "coredbalbuminfo.h"
 #include "imageinfocache.h"
 
 namespace Digikam

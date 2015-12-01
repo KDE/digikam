@@ -4,10 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-21
- * Description : Structures to use in AlbumDB
+ * Description : Structures to define Albums used in CoreDb
  *
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,10 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMINFO_H
-#define ALBUMINFO_H
-
-/** @file albuminfo.h */
+#ifndef COREDB_ALBUMINFO_H
+#define COREDB_ALBUMINFO_H
 
 // Qt includes
 
@@ -49,7 +48,12 @@ class AlbumRootInfo
 {
 public:
 
-    AlbumRootInfo() : id(0), type(AlbumRoot::UndefinedType), status(0) {};
+    AlbumRootInfo()
+      : id(0),
+        type(AlbumRoot::UndefinedType),
+        status(0)
+    {
+    };
 
 public:
 
@@ -72,7 +76,12 @@ class AlbumInfo
 {
 public:
 
-    AlbumInfo() : id(0), albumRootId(0), iconId(0) {};
+    AlbumInfo()
+      : id(0),
+        albumRootId(0),
+        iconId(0)
+    {
+    };
 
     typedef QList<AlbumInfo> List;
 
@@ -99,7 +108,6 @@ public:
     QString   category;
     QDate     date;
     qlonglong iconId;
-
 };
 
 // --------------------------------------------------------------------------
@@ -152,7 +160,11 @@ class SearchInfo
 {
 public:
 
-    SearchInfo() : id(0), type(DatabaseSearch::UndefinedType) {};
+    SearchInfo()
+      : id(0),
+        type(DatabaseSearch::UndefinedType)
+    {
+    };
 
     typedef QList<SearchInfo> List;
 
@@ -183,7 +195,11 @@ class AlbumShortInfo
 {
 public:
 
-    AlbumShortInfo() : id(0), albumRootId(0) {};
+    AlbumShortInfo()
+      : id(0),
+        albumRootId(0)
+    {
+    };
 
     bool isNull() const
     {
@@ -203,7 +219,11 @@ class TagShortInfo
 {
 public:
 
-    TagShortInfo() : id(0), pid(0) {};
+    TagShortInfo()
+      : id(0),
+        pid(0)
+    {
+    };
 
     bool isNull() const
     {
@@ -223,7 +243,12 @@ class ItemShortInfo
 {
 public:
 
-    ItemShortInfo() : id(0), albumID(0), albumRootID(0) {};
+    ItemShortInfo()
+      : id(0),
+        albumID(0),
+        albumRootID(0)
+    {
+    };
 
     bool isNull() const
     {
@@ -246,9 +271,13 @@ class ItemScanInfo
 public:
 
     ItemScanInfo()
-        : id(0), albumID(0), status(DatabaseItem::UndefinedStatus),
-          category(DatabaseItem::UndefinedCategory), fileSize(0)
-    {};
+      : id(0),
+        albumID(0),
+        status(DatabaseItem::UndefinedStatus),
+        category(DatabaseItem::UndefinedCategory),
+        fileSize(0)
+    {
+    };
 
     bool isNull() const
     {
@@ -273,7 +302,12 @@ class CommentInfo
 {
 public:
 
-    CommentInfo() : id(-1), imageId(-1), type(DatabaseComment::UndefinedType) {};
+    CommentInfo()
+      : id(-1),
+        imageId(-1),
+        type(DatabaseComment::UndefinedType)
+    {
+    };
 
     bool isNull() const
     {
@@ -297,7 +331,10 @@ class CopyrightInfo
 {
 public:
 
-    CopyrightInfo() : id(-1) {};
+    CopyrightInfo()
+      : id(-1)
+    {
+    };
 
     bool isNull() const
     {
@@ -318,7 +355,10 @@ class ImageHistoryEntry
 {
 public:
 
-    ImageHistoryEntry() : imageId(0) {};
+    ImageHistoryEntry()
+      : imageId(0)
+    {
+    };
 
     bool isNull() const
     {
@@ -338,7 +378,12 @@ class ImageRelation
 {
 public:
 
-    ImageRelation() : subjectId(0), objectId(0), type(DatabaseRelation::UndefinedType) {}
+    ImageRelation()
+      : subjectId(0),
+        objectId(0),
+        type(DatabaseRelation::UndefinedType)
+    {
+    }
 
 public:
 
@@ -353,7 +398,10 @@ class TagProperty
 {
 public:
 
-    TagProperty() : tagId(-1) {};
+    TagProperty()
+      : tagId(-1)
+    {
+    };
 
     bool isNull() const
     {
@@ -373,7 +421,11 @@ class ImageTagProperty
 {
 public:
 
-    ImageTagProperty() : imageId(-1), tagId(-1) {};
+    ImageTagProperty()
+      : imageId(-1),
+        tagId(-1)
+    {
+    };
 
     bool isNull() const
     {
@@ -390,4 +442,4 @@ public:
 
 }  // namespace Digikam
 
-#endif /* ALBUMINFO_H */
+#endif /* COREDB_ALBUMINFO_H */

@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "albuminfo.h"
+#include "coredbalbuminfo.h"
 #include "digikam_export.h"
 #include "dshareddata.h"
 #include "coredburl.h"

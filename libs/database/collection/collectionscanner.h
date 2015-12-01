@@ -36,7 +36,7 @@
 
 #include "digikam_export.h"
 #include "coredbaccess.h"
-#include "albuminfo.h"
+#include "coredbalbuminfo.h"
 
 class QFileInfo;
 

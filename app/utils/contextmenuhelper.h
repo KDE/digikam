@@ -35,7 +35,7 @@
 
 #include "digikam_export.h"
 #include "digikam_config.h"
-#include "albuminfo.h"
+#include "coredbalbuminfo.h"
 
 class QAction;
 class QMenu;
