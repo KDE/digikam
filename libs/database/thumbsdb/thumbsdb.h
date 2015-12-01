@@ -89,6 +89,7 @@ public:
 
     bool setSetting(const QString& keyword, const QString& value);
     QString getSetting(const QString& keyword);
+    QString getLegacySetting(const QString& keyword);
 
     ThumbsDbInfo findByHash(const QString& uniqueHash, qlonglong fileSize);
     ThumbsDbInfo findByFilePath(const QString& path);

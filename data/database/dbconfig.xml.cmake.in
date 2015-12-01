@@ -505,6 +505,20 @@
                     </statement>
                 </dbaction>
 
+                <!-- SQlite Thumbnails Queries -->
+
+                <dbaction name="SelectThumbnailSetting">
+                    <statement mode="query">SELECT value FROM Settings WHERE keyword=:keyword;</statement>
+                </dbaction>
+
+                <dbaction name="SelectThumbnailLegacySetting">
+                    <statement mode="query">SELECT value FROM Settings WHERE keyword=:keyword;</statement>
+                </dbaction>
+
+                <dbaction name="ReplaceThumbnailSetting">
+                    <statement mode="query">REPLACE INTO Settings VALUES (:keyword, :value);</statement>
+                </dbaction>
+
             <!-- SQlite Face Schema Database -->
 
             <dbaction name="CreateFaceDB" mode="transaction">
@@ -842,6 +856,9 @@
                             DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = OLD.id;
                             END;
                 </statement>
+            </dbaction>
+            <dbaction name="UpdateThumbnailsDBSchemaFromV2ToV3" mode="transaction">
+                <!-- Nothing to do for SQLite -->
             </dbaction>
 
         </dbactions>
@@ -1364,28 +1381,31 @@ ORDER BY inf.rating DESC, img.name ASC
                             type INTEGER,
                             modificationDate DATETIME,
                             orientationHint INTEGER,
-                            data LONGBLOB);
+                            data LONGBLOB) ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS UniqueHashes
                             (uniqueHash VARCHAR(128),
                             fileSize INTEGER,
                             thumbId INTEGER,
-                            UNIQUE(uniqueHash, fileSize));
+                            CONSTRAINT UniqueHashes_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            UNIQUE(uniqueHash, fileSize)) ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FilePaths
-                            (path LONGTEXT CHARACTER SET utf8,
+                            (path VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin,
                             thumbId INTEGER,
-                            UNIQUE(path(255)));
+                            CONSTRAINT FilePaths_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            UNIQUE(path(255))) ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS CustomIdentifiers
-                            (identifier LONGTEXT CHARACTER SET utf8,
+                            (identifier VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin,
                             thumbId INTEGER,
-                            UNIQUE(identifier(255)));
+                            CONSTRAINT CustomIdentifiers_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            UNIQUE(identifier(255))) ENGINE InnoDB;
                 </statement>
-                <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
-                            (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
-                            value LONGTEXT CHARACTER SET utf8,
-                            UNIQUE(keyword(255)));
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ThumbSettings
+                            (keyword VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+                            value LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                            UNIQUE(keyword(255))) ENGINE InnoDB;
                 </statement>
             </dbaction>
 
@@ -1431,6 +1451,20 @@ ORDER BY inf.rating DESC, img.name ASC
             <!-- Mysql Thumbnails Trigger -->
 
             <dbaction name="CreateThumbnailsDBTrigger" mode="transaction"></dbaction>
+
+            <!-- Mysql Thumbnails Queries -->
+
+            <dbaction name="SelectThumbnailSetting">
+                <statement mode="query">SELECT value FROM ThumbSettings WHERE keyword=:keyword;</statement>
+            </dbaction>
+
+            <dbaction name="SelectThumbnailLegacySetting">
+                <statement mode="query">SELECT value FROM Settings WHERE keyword=:keyword;</statement>
+            </dbaction>
+
+            <dbaction name="ReplaceThumbnailSetting">
+                <statement mode="query">REPLACE INTO ThumbSettings VALUES (:keyword, :value);</statement>
+            </dbaction>
 
             <!-- Mysql Face Schema Database -->
 
@@ -1824,6 +1858,28 @@ ORDER BY inf.rating DESC, img.name ASC
                             UNIQUE(identifier(333)))
                 </statement>
                 <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId');</statement>
+            </dbaction>
+            <dbaction name="UpdateThumbnailsDBSchemaFromV2ToV3" mode="transaction">
+                <statement mode="plain">ALTER TABLE Settings RENAME ThumbSettings;</statement>
+                <statement mode="plain">ALTER TABLE ThumbSettings
+                                                      MODIFY COLUMN keyword VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin,
+                                                      MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
+                <statement mode="plain">ALTER TABLE ThumbSettings ENGINE InnoDB;</statement>
+                <statement mode="plain">ALTER TABLE Thumbnails ENGINE InnoDB;</statement>
+                <statement mode="plain">ALTER TABLE UniqueHashes ENGINE InnoDB;</statement>
+                <statement mode="plain">ALTER TABLE FilePaths MODIFY COLUMN path VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin;</statement>
+                <statement mode="plain">ALTER TABLE FilePaths ENGINE InnoDB;</statement>
+                <statement mode="plain">ALTER TABLE CustomIdentifiers MODIFY COLUMN identifier VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin;</statement>
+                <statement mode="plain">ALTER TABLE CustomIdentifiers ENGINE InnoDB;</statement>
+                <statement mode="plain">ALTER TABLE UniqueHashes
+                            ADD CONSTRAINT UniqueHashes_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
+                </statement>
+                <statement mode="plain">ALTER TABLE FilePaths
+                            ADD CONSTRAINT FilePaths_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
+                </statement>
+                <statement mode="plain">ALTER TABLE CustomIdentifiers
+                            ADD CONSTRAINT CustomIdentifiers_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
+                </statement>
             </dbaction>
 
         </dbactions>

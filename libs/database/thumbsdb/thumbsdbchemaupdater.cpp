@@ -48,7 +48,7 @@ namespace Digikam
 
 int ThumbsDbSchemaUpdater::schemaVersion()
 {
-    return 2;
+    return 3;
 }
 
 // -------------------------------------------------------------------------------------
@@ -101,6 +101,11 @@ bool ThumbsDbSchemaUpdater::startUpdates()
         if (version.isEmpty() && m_access->parameters().isSQLite())
         {
             version = m_access->db()->getSetting(QLatin1String("DBVersion"));
+        }
+        if (version.isEmpty() && m_access->parameters().isMySQL())
+        {
+            version         = m_access->db()->getLegacySetting(QLatin1String("DBThumbnailsVersion"));
+            versionRequired = m_access->db()->getLegacySetting(QLatin1String("DBThumbnailsVersionRequired"));
         }
 
         // We absolutely require the DBThumbnailsVersion setting
@@ -195,6 +200,10 @@ bool ThumbsDbSchemaUpdater::makeUpdates()
         {
             updateV1ToV2();
         }
+        if (m_currentVersion <= 2)
+        {
+            updateV2ToV3();
+        }
     }
 
     return true;
@@ -240,6 +249,19 @@ bool ThumbsDbSchemaUpdater::updateV1ToV2()
     }
 
     m_currentVersion         = 2;
+    m_currentRequiredVersion = 1;
+    return true;
+}
+
+bool ThumbsDbSchemaUpdater::updateV2ToV3()
+{
+    if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("UpdateThumbnailsDBSchemaFromV2ToV3"))))
+    {
+        qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: schema upgrade from V2 to V3 failed!";
+        return false;
+    }
+
+    m_currentVersion         = 3;
     m_currentRequiredVersion = 1;
     return true;
 }

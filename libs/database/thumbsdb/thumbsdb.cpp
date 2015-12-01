@@ -68,15 +68,38 @@ ThumbsDb::~ThumbsDb()
 
 bool ThumbsDb::setSetting(const QString& keyword, const QString& value )
 {
-    return  d->db->execSql(QLatin1String("REPLACE INTO Settings VALUES (?,?);"),
-                           keyword, value );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(QLatin1String(":keyword"), keyword);
+    parameters.insert(QLatin1String(":value"), value);
+    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("ReplaceThumbnailSetting")), parameters);
+    return (queryStateResult == BdEngineBackend::NoErrors);
 }
 
 QString ThumbsDb::getSetting(const QString& keyword)
 {
+    QMap<QString, QVariant> parameters;
+    parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
-    d->db->execSql(QLatin1String("SELECT value FROM Settings WHERE keyword=?;"),
-                   keyword, &values );
+    // TODO Should really check return status here
+    d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailSetting")), parameters, &values);
+
+    if (values.isEmpty())
+    {
+        return QString();
+    }
+    else
+    {
+        return values.first().toString();
+    }
+}
+
+QString ThumbsDb::getLegacySetting(const QString& keyword)
+{
+    QMap<QString, QVariant> parameters;
+    parameters.insert(QLatin1String(":keyword"), keyword);
+    QList<QVariant> values;
+    // TODO Should really check return status here
+    d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailLegacySetting")), parameters, &values);
 
     if (values.isEmpty())
     {
