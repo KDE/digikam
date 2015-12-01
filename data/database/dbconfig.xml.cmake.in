@@ -567,6 +567,16 @@
                 </statement>
             </dbaction>
 
+            <!-- SQlite Face Queries -->
+
+            <dbaction name="SelectFaceSetting">
+                <statement mode="query">SELECT value FROM Settings WHERE keyword=:keyword;</statement>
+            </dbaction>
+
+            <dbaction name="ReplaceFaceSetting">
+                <statement mode="query">REPLACE INTO Settings VALUES (:keyword, :value);</statement>
+            </dbaction>
+
             <!-- SQlite Migration Statements -->
 
             <!-- NOTE: Migrate_Cleanup_DB now it's done by the program -->
@@ -1427,18 +1437,19 @@ ORDER BY inf.rating DESC, img.name ASC
             <dbaction name="CreateFaceDB" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Identities
                             (id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            type INTEGER);
+                            type INTEGER) ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS IdentityAttributes
                             (id INTEGER,
                             type INTEGER,
-                            attribute TEXT,
-                            value TEXT);
+                            attribute TEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                            value TEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                            CONSTRAINT IdentityAttributes_Identities FOREIGN KEY (id) REFERENCES Identities (id) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE InnoDB;
                 </statement>
-                <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
-                            (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
-                            value LONGTEXT CHARACTER SET utf8,
-                            UNIQUE(keyword(255)));
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS FaceSettings
+                            (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+                            value LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                            UNIQUE(keyword(255))) ENGINE InnoDB;
                 </statement>
             </dbaction>
 
@@ -1449,17 +1460,17 @@ ORDER BY inf.rating DESC, img.name ASC
                             radius INTEGER,
                             neighbors INTEGER,
                             grid_x INTEGER,
-                            grid_y INTEGER);
+                            grid_y INTEGER) ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS OpenCVLBPHistograms
                             (id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             recognizerid INTEGER,
                             identity INTEGER,
-                            context TEXT,
+                            context TEXT CHARACTER SET utf8 COLLATE utf8_bin,
                             type INTEGER,
                             rows INTEGER,
                             cols INTEGER,
-                            data BLOB);
+                            data BLOB) ENGINE InnoDB;
                 </statement>
             </dbaction>
 
@@ -1503,12 +1514,16 @@ ORDER BY inf.rating DESC, img.name ASC
             <!-- Mysql Face Triggers -->
 
             <dbaction name="CreateFaceTriggers" mode="transaction">
-                <statement mode="plain">DROP TRIGGER IF EXISTS delete_identities;</statement>
-                <statement mode="plain">CREATE TRIGGER delete_identities AFTER DELETE ON Identities
-                FOR EACH ROW BEGIN
-                    DELETE FROM IdentityAttributes WHERE id=OLD.id;
-                END;
-                </statement>
+            </dbaction>
+
+            <!-- Mysql Face Queries -->
+
+            <dbaction name="SelectFaceSetting">
+                <statement mode="query">SELECT value FROM FaceSettings WHERE keyword=:keyword;</statement>
+            </dbaction>
+
+            <dbaction name="ReplaceFaceSetting">
+                <statement mode="query">REPLACE INTO FaceSettings VALUES (:keyword, :value);</statement>
             </dbaction>
 
             <!-- Mysql Migration Statements -->

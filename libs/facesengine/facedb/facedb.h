@@ -47,7 +47,7 @@ public:
     FaceDb(FaceDbBackend* const db);
     ~FaceDb();
 
-    void setSetting(const QString& keyword, const QString& value);
+    BdEngineBackend::QueryState setSetting(const QString& keyword, const QString& value);
     QString setting(const QString& keyword) const;
 
     int  addIdentity() const;

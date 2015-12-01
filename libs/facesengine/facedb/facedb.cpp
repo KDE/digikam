@@ -55,18 +55,21 @@ FaceDb::~FaceDb()
     delete d;
 }
 
-void FaceDb::setSetting(const QString& keyword, const QString& value)
+BdEngineBackend::QueryState FaceDb::setSetting(const QString& keyword, const QString& value)
 {
-    d->db->execSql( QString::fromLatin1("REPLACE into Settings VALUES (?,?);"),
-                    keyword, value );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(QLatin1String(":keyword"), keyword);
+    parameters.insert(QLatin1String(":value"), value);
+    return d->db->execDBAction(d->db->getDBAction(QLatin1String("ReplaceFaceSetting")), parameters);
 }
 
 QString FaceDb::setting(const QString& keyword) const
 {
+    QMap<QString, QVariant> parameters;
+    parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
-    d->db->execSql(QString::fromLatin1("SELECT value FROM Settings "
-                           "WHERE keyword=?;"),
-                   keyword, &values);
+    // TODO Should really check return status here
+    d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectFaceSetting")), parameters, &values);
 
     if (values.isEmpty())
     {
