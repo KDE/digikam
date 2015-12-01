@@ -82,4 +82,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 048 ==> 114539 - CORE : removable media management.
 049 ==> 355552 - Use the 1st item in "Open with..." if digiKam does not have embedded support for "preview".
 050 ==> 356080 - digiKam does not open preview for LZW non-stripped TIFFs created by ScanTailor.
-051 ==> 
+051 ==> 354887 - ISO speed rating missing after DNG conversion.
+052 ==> 

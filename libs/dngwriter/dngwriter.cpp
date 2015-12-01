@@ -816,7 +816,7 @@ int DNGWriter::convert()
             if (meta.getExifTagRational("Exif.Nikon3.Lens", num, den, 1))              exif->fLensInfo[1]              = dng_urational(num, den);
             if (meta.getExifTagRational("Exif.Nikon3.Lens", num, den, 2))              exif->fLensInfo[2]              = dng_urational(num, den);
             if (meta.getExifTagRational("Exif.Nikon3.Lens", num, den, 3))              exif->fLensInfo[3]              = dng_urational(num, den);
-            if (meta.getExifTagLong("Exif.Nikon3.ISOSpeed", val, 1))                   exif->fISOSpeedRatings[0]       = (uint32)val;
+            if (meta.getExifTagLong("Exif.Nikon3.ISOSpeed", val, 1))                   exif->fISOSpeedRatings[1]       = (uint32)val;
 
             str = meta.getExifTagString("Exif.Nikon3.SerialNO");
             if (!str.isEmpty()) str = str.replace(QLatin1String("NO="), QLatin1String(""));
@@ -918,7 +918,7 @@ int DNGWriter::convert()
             if (!str.isEmpty()) exif->fFirmware.Set_ASCII(str.trimmed().toLatin1().constData());
 
             str = meta.getExifTagString("Exif.CanonSi.ISOSpeed");
-            if (!str.isEmpty()) exif->fISOSpeedRatings[0] = str.toInt();
+            if (!str.isEmpty()) exif->fISOSpeedRatings[1] = str.toInt();
 
             // Pentax Markernotes
 
