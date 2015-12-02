@@ -614,7 +614,7 @@
 
             <!-- Populate the Albums icon where set. -->
             <dbaction name="Migrate_Read_AlbumsExtra"><statement mode="query">
-                SELECT id, icon FROM Albums where icon IS NOT NULL;
+                SELECT id, icon FROM Albums where icon IS NOT NULL AND icon != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_AlbumsExtra"><statement mode="query">
                 UPDATE Albums set icon = :icon WHERE id = :id;
@@ -691,7 +691,7 @@
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Tags"><statement mode="query">
-                SELECT  id, pid, name, icon, iconkde FROM Tags WHERE id != 0;
+                SELECT  id, pid, name, CASE WHEN icon = 0 THEN NULL ELSE icon END AS icon, iconkde FROM Tags WHERE id != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Tags"><statement mode="query">
                 INSERT INTO Tags (id, pid, name, icon, iconkde) VALUES (:id, :pid, :name, :icon, :iconkde);
@@ -1583,7 +1583,7 @@ ORDER BY inf.rating DESC, img.name ASC
             </statement></dbaction>
             <!-- Populate the Albums icon where set. -->
             <dbaction name="Migrate_Read_AlbumsExtra"><statement mode="query">
-                SELECT id, icon FROM Albums where icon IS NOT NULL;
+                SELECT id, icon FROM Albums where icon IS NOT NULL AND icon != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_AlbumsExtra" mode="transaction"><statement mode="query">
                 UPDATE Albums set icon = :icon WHERE id = :id;
@@ -1659,7 +1659,7 @@ ORDER BY inf.rating DESC, img.name ASC
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Tags"><statement mode="query">
-                SELECT  id, IF(Tags.pid = 0, -1, Tags.pid) AS pid, name, icon, iconkde FROM Tags WHERE id != 0;
+                SELECT  id, IF(Tags.pid = 0, -1, Tags.pid) AS pid, name, CASE WHEN icon = 0 THEN NULL ELSE icon END AS icon, iconkde FROM Tags WHERE id != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Tags" mode="transaction">
                 <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
